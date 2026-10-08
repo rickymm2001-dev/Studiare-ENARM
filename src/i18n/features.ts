@@ -166,13 +166,6 @@ export const featureText = {
       },
       met: 'Meta cumplida',
     },
-    summary: {
-      label: 'Racha, meta y nivel',
-      streak: 'Racha',
-      goal: 'Meta',
-      level: 'Nivel',
-      best: (n: number) => `Récord ${n}`,
-    },
     // Widgets de análisis. Dicen lo mismo que Progreso y el tutor, en chico (9.1)
     weakTopics: {
       hint: 'Los temas con menor dominio estimado, de los que ya hay respuestas suficientes.',

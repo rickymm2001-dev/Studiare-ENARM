@@ -238,10 +238,6 @@ function TodayCard({
           icon={<Clock />}
           label={t.planner.stats.minutes}
           value={`${minutes(today.minutesPlanned)}/${minutes(today.minutesAvailable)}`}
-          srLabel={t.planner.minutesOf(
-            minutes(today.minutesPlanned),
-            minutes(today.minutesAvailable),
-          )}
         >
           <ProgressBar
             value={today.minutesPlanned}

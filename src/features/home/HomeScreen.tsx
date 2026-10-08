@@ -40,14 +40,7 @@ import {
 } from './widgets/AnalysisWidgets';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 import { DEFAULT_HEATMAP, type HeatmapSettings } from './widgets/heatmapSettings';
-import {
-  DailyGoalWidget,
-  LevelWidget,
-  StreakWidget,
-  TodayWidget,
-  SummaryWidget,
-  type SummaryPart,
-} from './widgets/SimpleWidgets';
+import { DailyGoalWidget, LevelWidget, StreakWidget, TodayWidget } from './widgets/SimpleWidgets';
 import { WidgetSettingsForm } from './widgets/WidgetSettingsForm';
 
 export function HomeScreen() {
@@ -93,9 +86,6 @@ function Dashboard({ session }: { session: ReadySession }) {
     now: new Date(),
     activeCardIds: cards,
   });
-
-  const summaryParts = layout.widgets.map((widget) => widget.type).filter(isSummaryPart);
-  const firstSummary = layout.widgets.findIndex((widget) => isSummaryPart(widget.type));
 
   return (
     <>
@@ -160,55 +150,44 @@ function Dashboard({ session }: { session: ReadySession }) {
       {/* En el teléfono racha y meta van lado a lado y lo demás a todo lo ancho (D-078). En
           computadora son dos columnas y el heatmap ocupa las dos */}
       <div className="grid grid-cols-2 gap-3 md:gap-4">
-        {layout.widgets.map((widget, index) => {
-          // Fuera de edición, racha, meta y nivel van juntos donde aparece el primero (D-091)
-          if (!editing && isSummaryPart(widget.type)) {
-            if (index !== firstSummary) return null;
-            return (
-              <SummaryWidget
-                key="resumen"
-                snapshot={snapshot}
-                parts={summaryParts}
-                className="col-span-2 md:col-span-2"
-              />
-            );
-          }
-          return (
-            <WidgetFrame
-              key={widget.id}
-              name={t.widgets.names[widget.type]}
-              className={widgetSpan(widget.type, editing)}
-              editing={editing}
-              first={index === 0}
-              last={index === layout.widgets.length - 1}
-              onMove={(delta) => {
-                save(moveWidget(layout, widget.id, delta));
-              }}
-              onRemove={() => {
-                save(removeWidget(layout, widget.id));
-              }}
-              settingsPanel={
-                WIDGETS_WITH_SETTINGS.has(widget.type) ? (
-                  <WidgetSettingsForm
-                    type={widget.type}
-                    settings={widget.settings}
-                    onChange={(next) => {
-                      save(updateWidgetSettings(layout, widget.id, next));
-                    }}
-                  />
-                ) : null
-              }
-            >
-              <WidgetBody
-                type={widget.type}
-                settings={widget.settings}
-                snapshot={snapshot}
-                session={session}
-                events={events}
-              />
-            </WidgetFrame>
-          );
-        })}
+        {layout.widgets.map((widget, index) => (
+          <WidgetFrame
+            key={widget.id}
+            name={t.widgets.names[widget.type]}
+            className={cn(
+              widgetSpan(widget.type, editing),
+              DARK_WIDGETS.has(widget.type) && DARK_CARD,
+            )}
+            editing={editing}
+            first={index === 0}
+            last={index === layout.widgets.length - 1}
+            onMove={(delta) => {
+              save(moveWidget(layout, widget.id, delta));
+            }}
+            onRemove={() => {
+              save(removeWidget(layout, widget.id));
+            }}
+            settingsPanel={
+              WIDGETS_WITH_SETTINGS.has(widget.type) ? (
+                <WidgetSettingsForm
+                  type={widget.type}
+                  settings={widget.settings}
+                  onChange={(next) => {
+                    save(updateWidgetSettings(layout, widget.id, next));
+                  }}
+                />
+              ) : null
+            }
+          >
+            <WidgetBody
+              type={widget.type}
+              settings={widget.settings}
+              snapshot={snapshot}
+              session={session}
+              events={events}
+            />
+          </WidgetFrame>
+        ))}
       </div>
     </>
   );
@@ -267,8 +246,13 @@ const HALF_ON_PHONE: ReadonlySet<WidgetType> = new Set(['streak', 'daily_goal'])
  * Columnas que ocupa cada widget. Al editar todos van a todo lo ancho para que quepan los botones
  * de subir, bajar y quitar
  */
-const SUMMARY_PARTS: readonly WidgetType[] = ['streak', 'daily_goal', 'level_xp'];
-const isSummaryPart = (type: WidgetType): type is SummaryPart => SUMMARY_PARTS.includes(type);
+/**
+ * Racha, meta y nivel van en tarjeta oscura con degradado, con el mismo contenido de siempre (D-091).
+ * Los colores de adentro se cambian desde la tarjeta para que los widgets no sepan de ella
+ */
+const DARK_WIDGETS: ReadonlySet<WidgetType> = new Set(['streak', 'daily_goal', 'level_xp']);
+const DARK_CARD =
+  'bg-hero border-transparent text-white shadow-raised [&_h2]:text-white [&_.text-fg-muted]:text-white/80 [&_.text-primary]:text-white [&_[role=progressbar]]:bg-white/20 [&_[role=progressbar]>div]:bg-white [&_button]:text-white [&_button:hover]:bg-white/15';
 
 function widgetSpan(type: WidgetType, editing: boolean): string {
   if (editing) return 'col-span-2 md:col-span-1';

@@ -5,7 +5,6 @@ import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { ProgressBar } from '@/ui/components/progress-bar';
-import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import type { Snapshot } from '../snapshot';
 
 function BigNumber({
@@ -117,91 +116,5 @@ export function DailyGoalWidget({ snapshot }: { snapshot: Snapshot }) {
         label={t.widgets.goal.progress(done, goal.value, metric)}
       />
     </div>
-  );
-}
-
-export type SummaryPart = 'streak' | 'daily_goal' | 'level_xp';
-
-/**
- * Racha, meta y nivel en una sola tarjeta oscura con tres cifras, en el orden del tablero (D-091).
- * Solo se ve fuera del modo de edición, donde cada widget conserva su tarjeta para moverlo o quitarlo
- */
-export function SummaryWidget({
-  snapshot,
-  parts,
-  className,
-}: {
-  snapshot: Snapshot;
-  parts: readonly SummaryPart[];
-  className?: string;
-}) {
-  const { streak, goal, level } = snapshot;
-  const done = Math.min(snapshot.todayActivity[goal.metric], goal.value);
-  const metric = t.widgets.goal.metricNames[goal.metric];
-  const text = t.widgets.summary;
-  const cells: Record<SummaryPart, React.ReactNode> = {
-    streak: (
-      <StatCell
-        icon={<Flame />}
-        label={text.streak}
-        value={t.widgets.streak.current(streak.current)}
-        caption={
-          <>
-            {text.best(streak.best)}
-            {streak.freezesAvailable > 0 ? (
-              <span className="ml-1 inline-flex items-center gap-0.5">
-                <Snowflake aria-hidden className="size-3" />
-                <span aria-hidden>{streak.freezesAvailable}</span>
-                <span className="sr-only">{t.widgets.streak.freezes(streak.freezesAvailable)}</span>
-              </span>
-            ) : null}
-          </>
-        }
-      />
-    ),
-    daily_goal: (
-      <StatCell
-        icon={<Target />}
-        label={text.goal}
-        value={`${done}/${goal.value}`}
-        srLabel={t.widgets.goal.progress(done, goal.value, metric)}
-        caption={done >= goal.value ? t.widgets.goal.met : metric}
-      >
-        <ProgressBar
-          className="h-1.5"
-          tone="light"
-          onDark
-          value={done}
-          max={goal.value}
-          label={t.widgets.goal.progress(done, goal.value, metric)}
-        />
-      </StatCell>
-    ),
-    level_xp: (
-      <StatCell
-        icon={<Trophy />}
-        label={text.level}
-        value={t.widgets.level.level(level.level)}
-        caption={level.title}
-      >
-        <ProgressBar
-          className="h-1.5"
-          tone="gold"
-          onDark
-          value={level.xpIntoLevel}
-          max={level.xpForNext}
-          label={t.widgets.level.progress(level.xpIntoLevel, level.xpForNext)}
-        />
-      </StatCell>
-    ),
-  };
-  return (
-    <StatPanel label={text.label} className={className}>
-      {parts.map((part) => (
-        <div key={part} className="min-w-0">
-          {cells[part]}
-        </div>
-      ))}
-    </StatPanel>
   );
 }
