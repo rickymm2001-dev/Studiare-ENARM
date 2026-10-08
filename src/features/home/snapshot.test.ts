@@ -55,4 +55,44 @@ describe('tarjetas por repasar en Inicio', () => {
     expect(snapshotOf(events, new Set([a])).dueCards).toBe(1);
     expect(snapshotOf(events, new Set()).dueCards).toBe(0);
   });
+
+  it('un repaso pospuesto deja de contar hoy y uno adelantado empieza a contar', () => {
+    const late = new Date(minute(60 * 24 * 5)).toISOString();
+    const soon = new Date(minute(1)).toISOString();
+    const moved = (cardId: string, from: string, to: string, at: number) =>
+      event(
+        'cards_rescheduled',
+        { kind: 'postpone', cards: [{ cardId, from, to }], days: 5, undoes: null },
+        at,
+      );
+    const due = new Date(minute(60)).toISOString();
+    // a vence hoy y se pospone. b estaba lejos y se adelanta
+    const far = (cardId: string): AppEvent =>
+      event(
+        'card_reviewed',
+        {
+          cardId,
+          deckId: newId(),
+          source: 'card',
+          rating: 'good',
+          confidence: null,
+          msToReveal: 1000,
+          msToRate: 1000,
+          stateBefore: null,
+          stateAfter: state({ due: late }),
+        },
+        minute(10),
+      );
+    const events = [
+      reviewed(a),
+      far(b),
+      moved(a, due, late, minute(20)),
+      moved(b, late, soon, minute(21)),
+    ];
+    // Sin movimientos solo a cuenta. Posponer a la deja en 0, adelantar b la suma, y con los dos queda 1
+    expect(snapshotOf([reviewed(a), far(b)]).dueCards).toBe(1);
+    expect(snapshotOf([reviewed(a), far(b), moved(a, due, late, minute(20))]).dueCards).toBe(0);
+    expect(snapshotOf([reviewed(a), far(b), moved(b, late, soon, minute(21))]).dueCards).toBe(2);
+    expect(snapshotOf(events).dueCards).toBe(1);
+  });
 });

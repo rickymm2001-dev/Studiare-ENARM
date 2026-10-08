@@ -357,7 +357,7 @@ Etapas
 | Ninguna etiqueta guardada tiene espacios y las rutas conservan su jerarquía | Prueba de saneo con las 42 etiquetas conocidas |
 | Explorar filtra miles de tarjetas sin trabarse | Prueba de rendimiento con 20,000 tarjetas generadas |
 | Repartir, posponer y adelantar no editan la bitácora y se reconstruyen igual | Prueba de reconstrucción de estado derivado con eventos nuevos |
-| Los días fáciles bajan la carga de esos días sin pasar del límite diario | Prueba con la simulación de carga futura |
+| Los días fáciles bajan la carga de esos días sin pasar del límite diario ni subir el pico más de 1.4 veces | Prueba con la simulación de carga futura en 8 semillas |
 | Los apuntes crean, actualizan y borran sus tarjetas sin perder el historial de las que siguen | Prueba de sincronización entre apuntes y tarjetas |
 | El importador rechaza archivos dañados o maliciosos con un mensaje claro | Fixtures generados por código y un zip malicioso |
 | La IA nunca cambia un texto y cada señal explica su motivo con textos de la lista cerrada | Evaluación con casos dorados y prueba de que la señal se quita al verificar y deja un evento |
@@ -383,6 +383,11 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 | Sanguijuela | 8 lapsos, reglas de olvido desde 3 | Anki |
 | Retención deseada | 0.90, de 0.80 a 0.97, sube a 0.93 en los últimos 30 días | J |
 | Límites diarios | 20 nuevas y 200 repasos | J |
+| Ritmo propio de repaso para sugerir nuevas por día | 100 repasos medidos, con 20 tarjetas nuevas medidas para usar su tiempo. Antes usa 10 s por repaso y 30 s por nueva | J |
+| Tiempo para tarjetas dentro de los minutos diarios | 50% de los minutos que declara el alumno, sobre el día más pesado de 30 días | J |
+| Aviso de recuperación por atrasos | 40 vencidas de días anteriores o más, o la mitad del límite diario de repasos, lo que sea mayor | J |
+| Tiempo máximo que se guarda en cada paso de una tarjeta, ver la respuesta y calificar | 120 segundos | J |
+| Días fáciles | Solo mueven repasos de 3 días o más, con ventana de 1 día (3 a 6), 2 (7 a 19), 3 (20 a 59) y 5 (60 o más). Estos radios y el máximo de 200 nuevas de la sugerencia viven en los motores y no en la configuración | J |
 
 ## 8. Riesgos
 

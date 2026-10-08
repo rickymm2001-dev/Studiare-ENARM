@@ -10,8 +10,9 @@ import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
+import { WEEKDAY_KEYS } from '@/engines/easyDays';
 import { clearExamState } from '../exam/examStorage';
-import { fromOption, MAX_INTERVAL_OPTIONS, toOption } from '../review/intervalOptions';
+import { fromOption, maxIntervalOptions, toOption } from '../review/intervalOptions';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -20,7 +21,9 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { SaveBar } from '@/ui/components/save-bar';
 import { PomodoroSettingsForm } from '../pomodoro/Pomodoro';
+import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
+import { CardTimerFields, EasyDaysFields } from './StudyDailyFields';
 
 function Section({
   id,
@@ -69,6 +72,7 @@ export function StudySection({ session }: { session: ReadySession }) {
   return (
     <Card aria-label={t.settings.sections.study}>
       <StudyForm
+        userId={user.id}
         settings={settings}
         onSave={(patch) => updateProfile(api, user, { settings: patch })}
       />
@@ -208,6 +212,9 @@ const draftOf = (settings: UserSettings) => ({
   maxInterval: toOption(settings.maxIntervalDays),
   spacing: settings.spacing,
   newCards: String(settings.newCardsPerDay),
+  unlimitedNewCards: settings.unlimitedNewCards,
+  cardTimer: settings.cardTimer,
+  easyDays: settings.easyDays,
   reviews: String(settings.reviewsPerDay),
   metric: settings.dailyGoal.metric,
   goal: String(settings.dailyGoal.value),
@@ -229,6 +236,9 @@ const patchOf = (draft: StudyDraft) => ({
   maxIntervalDays: fromOption(draft.maxInterval),
   spacing: draft.spacing,
   newCardsPerDay: clamp(draft.newCards, 0, 500),
+  unlimitedNewCards: draft.unlimitedNewCards,
+  cardTimer: draft.cardTimer,
+  easyDays: draft.easyDays,
   reviewsPerDay: clamp(draft.reviews, 0, 5000),
   dailyGoal: { metric: draft.metric, value: clamp(draft.goal, 1, 1000) },
   cardConfidenceStep: draft.cardConfidenceStep,
@@ -248,6 +258,11 @@ function differs(patch: ReturnType<typeof patchOf>, settings: UserSettings) {
       (rating) => patch.spacing[rating] !== settings.spacing[rating],
     ) ||
     patch.newCardsPerDay !== settings.newCardsPerDay ||
+    patch.unlimitedNewCards !== settings.unlimitedNewCards ||
+    patch.cardTimer.enabled !== settings.cardTimer.enabled ||
+    patch.cardTimer.seconds !== settings.cardTimer.seconds ||
+    patch.cardTimer.autoReveal !== settings.cardTimer.autoReveal ||
+    WEEKDAY_KEYS.some((day) => patch.easyDays[day] !== settings.easyDays[day]) ||
     patch.reviewsPerDay !== settings.reviewsPerDay ||
     patch.dailyGoal.metric !== settings.dailyGoal.metric ||
     patch.dailyGoal.value !== settings.dailyGoal.value ||
@@ -263,9 +278,11 @@ function differs(patch: ReturnType<typeof patchOf>, settings: UserSettings) {
  * plegados porque casi nadie los cambia
  */
 function StudyForm({
+  userId,
   settings,
   onSave,
 }: {
+  userId: string;
   settings: UserSettings;
   onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
 }) {
@@ -297,6 +314,7 @@ function StudyForm({
             min={0}
             max={500}
             value={draft.newCards}
+            disabled={draft.unlimitedNewCards}
             onChange={(event) => {
               change({ newCards: event.target.value });
             }}
@@ -335,6 +353,15 @@ function StudyForm({
             }}
           />
         </div>
+        <CheckboxField
+          className="mt-3"
+          label={t.settings.unlimitedNewCards}
+          hint={t.settings.unlimitedNewCardsHint}
+          checked={draft.unlimitedNewCards}
+          onChange={(event) => {
+            change({ unlimitedNewCards: event.target.checked });
+          }}
+        />
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
@@ -373,6 +400,31 @@ function StudyForm({
         />
       </fieldset>
 
+      <FeatureGate userId={userId} feature="cardTimer">
+        <CardTimerFields
+          value={draft.cardTimer}
+          onChange={(cardTimer) => {
+            change({ cardTimer });
+          }}
+        />
+      </FeatureGate>
+
+      <FeatureGate userId={userId} feature="easyDays">
+        <Disclosure
+          title={t.settings.easyDaysTitle}
+          summary={t.settings.easyDaysSummary(
+            WEEKDAY_KEYS.filter((day) => draft.easyDays[day] !== 'normal').length,
+          )}
+        >
+          <EasyDaysFields
+            value={draft.easyDays}
+            onChange={(easyDays) => {
+              change({ easyDays });
+            }}
+          />
+        </Disclosure>
+      </FeatureGate>
+
       <Disclosure
         title={t.settings.advanced}
         summary={t.settings.advancedSummary(
@@ -395,7 +447,7 @@ function StudyForm({
           label={t.settings.maxInterval}
           hint={t.settings.maxIntervalHint}
           value={draft.maxInterval}
-          options={MAX_INTERVAL_OPTIONS.map((value) => ({
+          options={maxIntervalOptions(draft.maxInterval).map((value) => ({
             value,
             label: t.settings.maxIntervalOption(fromOption(value)),
           }))}

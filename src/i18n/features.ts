@@ -277,6 +277,35 @@ export const featureText = {
       days === null ? 'Sin tope, FSRS puro' : days === 21 ? '21 días, recomendado' : `${days} días`,
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
+    unlimitedNewCards: 'Sin límite de tarjetas nuevas',
+    unlimitedNewCardsHint:
+      'Con muchas nuevas juntas, los repasos de los días siguientes se acumulan como una avalancha. Úsalo solo si sabes cuánto tiempo tienes.',
+    cardTimerTitle: 'Temporizador de tarjeta',
+    cardTimerEnabled: 'Mostrar un tiempo sugerido por tarjeta',
+    cardTimerHint:
+      'Apagado por defecto. Solo avisa cuánto tiempo conviene tardar y no califica nada. Lo que se guarda en cada paso, ver la respuesta y calificar, nunca pasa de 2 minutos.',
+    cardTimerSeconds: 'Tiempo sugerido',
+    cardTimerSecondsOption: (seconds: number) => `${seconds} segundos`,
+    cardTimerAutoReveal: 'Mostrar la respuesta sola cuando se acabe el tiempo',
+    easyDaysTitle: 'Días fáciles',
+    easyDaysHint:
+      'Elige los días de la semana en que quieres menos repasos. Al programar el siguiente repaso de una tarjeta, se mueve unos días para evitarlos. Solo cambia lo que programes desde ahora y la memoria de cada tarjeta no se toca. Si marcas varios días seguidos como casi ninguno, los días de al lado se cargan más.',
+    easyDaysSummary: (count: number) =>
+      count === 0
+        ? 'Todos los días normales'
+        : count === 1
+          ? '1 día fácil'
+          : `${count} días fáciles`,
+    easyLevels: { normal: 'Normal', reduced: 'Menos repasos', minimum: 'Casi ninguno' },
+    weekdays: {
+      mon: 'Lunes',
+      tue: 'Martes',
+      wed: 'Miércoles',
+      thu: 'Jueves',
+      fri: 'Viernes',
+      sat: 'Sábado',
+      sun: 'Domingo',
+    },
     studyTitle: 'Estudio',
     cardConfidenceStep: 'Preguntar qué tan seguro estoy antes de ver la respuesta o de responder',
     cardConfidenceStepHint:
@@ -334,6 +363,16 @@ export const featureText = {
     included: 'Incluido',
     notIncluded: 'No incluido',
     comingSoon: 'Próximamente',
+    featureNames: {
+      explore: 'Explorar tus tarjetas',
+      overdueTools: 'Herramientas de atrasos',
+      guideProfile: 'Perfil guía',
+      newPerDaySuggestion: 'Sugerencia de tarjetas nuevas',
+      easyDays: 'Días fáciles',
+      cardTimer: 'Temporizador de tarjeta',
+    },
+    featureLocked: (name: string) => `Tu plan no incluye ${name.toLowerCase()}.`,
+    featureSeePlans: 'Ver planes',
     savings: (percent: number) => `Ahorras ${percent}% contra pagar mes a mes`,
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',
@@ -671,6 +710,44 @@ export const featureText = {
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
     errorCard: 'Error de pregunta',
+    // Tres contadores como en Anki. Siempre con texto, nunca solo con color (D-085, fila 8)
+    counters: {
+      label: 'Lo que falta de la sesión',
+      new: 'Nuevas',
+      learning: 'Aprendizaje',
+      review: 'Programadas',
+      current: 'La tarjeta de ahora cuenta aquí',
+    },
+    timer: {
+      label: 'Tiempo sugerido',
+      left: (seconds: number) => `${seconds} s`,
+      expired: 'Se acabó el tiempo sugerido. Contesta con lo que recuerdes.',
+    },
+    leech: {
+      badge: 'Sanguijuela',
+      title: 'Esta tarjeta es una sanguijuela',
+      body: (lapses: number) =>
+        `La olvidaste ${plural(lapses, 'vez', 'veces')}. Seguir repasándola así gasta tiempo sin enseñarte. Conviene cambiarla.`,
+      suggestionsTitle: 'Qué puedes hacer',
+      suggestions: {
+        split: 'Divídela en tarjetas más chicas, una sola idea en cada una.',
+        shorten: 'Acórtala y deja solo el dato que quieres recordar.',
+        context: 'Dale más contexto al hueco para que se entienda qué se pregunta.',
+        rewrite:
+          'Reescríbela con tus palabras, o agrégale un ejemplo o una imagen que la haga fácil de recordar.',
+      },
+      suspend: 'Suspender',
+      edit: 'Editar tarjeta',
+      keep: 'Seguir con ella',
+      suspended: 'Tarjeta suspendida. La reanudas desde Explorar.',
+      cannotEdit:
+        'Esta tarjeta no es de un mazo hecho por ti y no se edita desde aquí. Puedes suspenderla o seguir con ella.',
+      keys: {
+        suspend: 'suspende',
+        edit: 'edita',
+        keep: 'sigue',
+      },
+    },
   },
   // Tarjetas que salen de las preguntas falladas (7.1). El texto sale del banco, aquí solo van las
   // etiquetas que lo acompañan
@@ -1074,6 +1151,95 @@ export const featureText = {
       `Ver las subespecialidades de ${branch}, ${n} de ${of} marcadas`,
     title: 'Ramas y subespecialidades',
   },
+  // Atrasos y fechas de repaso (D-085, fila 5). Solo cambian la fecha, la memoria de la tarjeta no
+  overdue: {
+    title: 'Atrasos y fechas de repaso',
+    summary: (overdue: number) =>
+      overdue === 0 ? 'Sin atrasos' : plural(overdue, 'atrasada', 'atrasadas'),
+    recoveryTitle: (n: number) => `Tienes ${plural(n, 'tarjeta atrasada', 'tarjetas atrasadas')}`,
+    recoveryBody:
+      'Se juntaron repasos de días anteriores. Repartirlos en varios días evita una avalancha. Tus tarjetas no pierden lo aprendido, solo cambia el día en que las ves.',
+    noOverdue: 'No tienes tarjetas atrasadas.',
+    memoryNote:
+      'La memoria de cada tarjeta no cambia, solo su fecha. En su próximo repaso se toma en cuenta el tiempo que pasó.',
+    spreadTitle: 'Repartir los atrasos',
+    spreadDays: 'Repartir entre',
+    spreadDaysOption: (n: number) => (n === 1 ? '1 día, solo hoy' : `${n} días`),
+    spreadPreview: 'Así quedarían',
+    previewDay: (label: string, count: number) => `${label} ${count.toLocaleString('es-MX')}`,
+    today: 'Hoy',
+    overCapacity:
+      'Son más de las que caben con tu límite de repasos por día. Se reparten parejo de todos modos.',
+    noDays: 'Ya no hay días antes de tu examen para repartir.',
+    spreadButton: (n: number) => `Repartir ${plural(n, 'tarjeta', 'tarjetas')}`,
+    postponeTitle: 'Posponer lo de hoy y lo atrasado',
+    postponeBody: (n: number) =>
+      n === 0
+        ? 'No hay tarjetas que venzan hoy ni antes.'
+        : `${plural(n, 'tarjeta vence', 'tarjetas vencen')} hoy o antes.`,
+    postponeDays: 'Posponer',
+    postponeOption: (n: number) => (n === 1 ? '1 día' : `${n} días`),
+    postponeButton: (n: number) => `Posponer ${plural(n, 'tarjeta', 'tarjetas')}`,
+    advanceTitle: 'Adelantar repasos',
+    advanceBody: (n: number) =>
+      n === 0
+        ? 'No hay repasos programados para los próximos días.'
+        : `Hay ${plural(n, 'repaso programado', 'repasos programados')} para los próximos días.`,
+    advanceCount: 'Cuántos traer a hoy',
+    advanceButton: (n: number) => `Adelantar ${plural(n, 'repaso', 'repasos')}`,
+    undoTitle: 'Deshacer',
+    undoBody: (kind: 'spread' | 'postpone' | 'advance', cards: number) =>
+      `El último cambio fue ${{ spread: 'repartir', postpone: 'posponer', advance: 'adelantar' }[kind]} ${plural(cards, 'tarjeta', 'tarjetas')}. Las que ya repasaste desde entonces no se tocan.`,
+    undoButton: 'Deshacer el último cambio',
+    working: 'Moviendo fechas…',
+    done: {
+      spread: (n: number) => `${plural(n, 'tarjeta repartida', 'tarjetas repartidas')}.`,
+      postpone: (n: number) => `${plural(n, 'tarjeta pospuesta', 'tarjetas pospuestas')}.`,
+      advance: (n: number) => `${plural(n, 'repaso adelantado', 'repasos adelantados')}.`,
+      undo: (n: number) =>
+        `${plural(n, 'tarjeta regresada', 'tarjetas regresadas')} a su fecha de antes.`,
+      nothing: 'No hubo nada que mover.',
+    },
+    error: 'No se pudieron mover las fechas. Intenta de nuevo.',
+  },
+  // Carga diaria. Perfil guía y tarjetas nuevas por día (D-085, fila 6)
+  dailyLoad: {
+    title: 'Carga diaria',
+    guideTitle: 'Perfil guía',
+    guideBody:
+      'Con un toque dejas tu repaso como lo recomienda la guía de Anki. Retención de 90% y repasos que nunca pasan de tu examen.',
+    guideAlready: 'Ya usas el perfil guía.',
+    guideFields: {
+      desiredRetention: 'Retención',
+      maxIntervalDays: 'Intervalo máximo',
+      spacing: 'Botones',
+    },
+    guideChange: (field: string, from: string, to: string) => `${field} pasa de ${from} a ${to}`,
+    guideApply: 'Aplicar perfil guía',
+    guideApplied: 'Listo, aplicamos el perfil guía.',
+    suggestionTitle: 'Tarjetas nuevas por día',
+    calculate: 'Calcular cuántas nuevas me convienen',
+    unlimitedOn:
+      'Tus tarjetas nuevas están sin límite. Entran todas las que haya cada día y los repasos de los días siguientes pueden juntarse.',
+    needsMinutes:
+      'Para calcular cuántas nuevas aguantas necesitamos saber cuántos minutos estudias al día.',
+    goToPlan: 'Poner mis minutos en Plan',
+    noNewCards: 'No tienes tarjetas nuevas por ahora.',
+    suggested: (n: number) =>
+      `Te sugerimos ${plural(n, 'tarjeta nueva', 'tarjetas nuevas')} por día.`,
+    basis: (budget: number) =>
+      `Con ${plural(Math.round(budget), 'minuto', 'minutos')} al día para tarjetas, que es la mitad de tu tiempo de estudio.`,
+    measuredNote: 'Calculado con tu ritmo real de repaso.',
+    calibratingUnit: 'repasos tuyos',
+    referenceTimes: 'Mientras tanto calculamos con tiempos de referencia y no con tu ritmo.',
+    backlogOver:
+      'Con los atrasos de ahora ya pasas el tiempo que tienes. Reparte los atrasos antes de sumar nuevas.',
+    peak: (minutes: number, day: string) =>
+      `El día más pesado sería ${day.toLowerCase()}, con unos ${Math.round(minutes)} minutos de tarjetas.`,
+    use: (n: number) => `Usar ${n}`,
+    applied: 'Listo, guardamos tu nuevo límite de tarjetas nuevas.',
+    current: (n: number) => `Hoy tienes ${n} por día.`,
+  },
   reviewSetup: {
     title: 'Qué quieres repasar',
     hint: 'Elige el modo, tus mazos y las ramas o subespecialidades. Tu avance se guarda en cada tarjeta, así que puedes cambiar cuando quieras.',
@@ -1086,6 +1252,7 @@ export const featureText = {
       `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
     limits: 'Límites de hoy',
     limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
+    limitsSummaryUnlimited: (reviews: number) => `Nuevas sin límite · ${reviews} repasos`,
     limitsHint:
       'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
     limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',
@@ -1097,6 +1264,12 @@ export const featureText = {
     change: 'Cambiar mazo o tema',
     other: 'Repasar otros temas',
     addDeck: 'Agregar mazo',
+    countersLabel: 'Lo que toca con esta selección',
+    leeches: (n: number) =>
+      n === 1
+        ? 'Tienes 1 sanguijuela, una tarjeta que olvidas una y otra vez.'
+        : `Tienes ${n.toLocaleString('es-MX')} sanguijuelas, tarjetas que olvidas una y otra vez.`,
+    seeLeeches: 'Revisarlas en Explorar',
   },
   studyPause: {
     title: 'Estudio pausado',

@@ -67,6 +67,13 @@ export function buildSnapshot(input: {
         entry.cards += 1;
         latestCard.set(event.payload.cardId, event.payload.stateAfter);
         break;
+      case 'cards_rescheduled':
+        // Solo cambia el vencimiento, igual que en latestCardStates
+        for (const moved of event.payload.cards) {
+          const state = latestCard.get(moved.cardId);
+          if (state) latestCard.set(moved.cardId, { ...state, due: moved.to });
+        }
+        break;
       case 'question_answered':
         entry.questions += 1;
         if (!event.payload.correct && day === today) errorsToday += 1;

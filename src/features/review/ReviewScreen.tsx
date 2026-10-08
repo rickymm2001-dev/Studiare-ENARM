@@ -9,20 +9,28 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
+import { draftOf } from '@/data/usecases/manualDecks';
+import { setSuspended } from '@/data/usecases/organize';
 import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
-import type { Card as CardEntity, Note } from '@/data/schemas/decks';
+import type { Card as CardEntity, Deck, Note } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
+import { checkCardQuality } from '@/engines/cardQuality';
+import { canUseFeature } from '@/config/billing';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
   buildDailyQueue,
+  isLeech,
   previewReview,
   scheduleReview,
   type FsrsRating,
   type SchedulerConfig,
 } from '@/engines/fsrs';
+import { leechHit, leechSuggestions } from '@/engines/leech';
 import { studyDayOf } from '@/engines/studyDay';
 import { suspendedCardIds } from '@/engines/suspension';
 import { awardXp } from '@/engines/xp';
@@ -42,14 +50,23 @@ import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
+import { FeatureGate } from '../shared/FeatureGate';
+import { useActivePlan } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
 import { deckPath, selectionUnitId } from '@/engines/deckTree';
+import { DeckEditorDialog } from '../decks/DeckEditorDialog';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
+import { CardTimerBar } from './CardTimerBar';
+import { LeechPanel } from './LeechPanel';
+import { ReviewCounters } from './ReviewCounters';
+import { DailyLoadPanel } from './DailyLoadPanel';
+import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
 import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
+import { useCardTimer } from './useCardTimer';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
   cardFaces,
@@ -63,6 +80,8 @@ import {
 } from './study';
 
 type Confidence = 'dont_know' | 'unsure' | 'sure';
+/** Tope del tiempo que se registra por tarjeta. Una pausa larga no distorsiona los análisis */
+const CARD_TIME_CAP_MS = DEFAULT_THRESHOLDS.daily.cardTimeCapSeconds * 1000;
 type Cause = keyof typeof t.review.causes;
 const RATINGS: FsrsRating[] = ['again', 'hard', 'good', 'easy'];
 /** ENARM 2027 solo agrupa a las ramas, así que no se elige como unidad de repaso */
@@ -104,7 +123,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     content.cards.filter((card) => followed.has(card.deckId) && !suspended.has(card.id)),
     noteById,
   );
-  if (cards.length === 0) {
+  // Con una sesión en curso no se cambia de pantalla aunque suspendas la última tarjeta activa
+  if (cards.length === 0 && selection === null) {
     // Si sigues mazos pero todo está suspendido, el aviso lleva a Explorar y no a Mazos
     const allSuspended = content.cards.some(
       (card) => followed.has(card.deckId) && suspended.has(card.id),
@@ -152,12 +172,32 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     ]),
   );
   const config = schedulerConfig(session);
+  const cardStates = latestCardStates(events);
+  // Las herramientas de atrasos solo sirven si ya hay tarjetas con repasos
+  const hasScheduled = cards.some((card) => {
+    const state = cardStates.get(card.id);
+    return state !== undefined && state.state !== 'new';
+  });
+  // Las tarjetas que tocarían hoy con una selección
+  const queueFor = (candidate: ReviewSelection) =>
+    buildQueue({
+      cards: cards.filter((card) => inSelection(card, topicOfCard.get(card.id) ?? null, candidate)),
+      events,
+      config,
+      timeZone: session.user.timeZone,
+      mode: candidate.mode,
+    });
 
   if (selection === null) {
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <StudyTabs />
+        {hasScheduled ? (
+          <FeatureGate userId={session.user.id} feature="overdueTools">
+            <OverdueTools session={session} cards={cards} events={events} />
+          </FeatureGate>
+        ) : null}
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
@@ -167,18 +207,17 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
             reviewsPerDay: session.settings.reviewsPerDay,
+            unlimitedNewCards: session.settings.unlimitedNewCards,
           }}
+          limitsExtra={<DailyLoadPanel session={session} cards={cards} events={events} />}
           onSaveLimits={(patch) => updateProfile(api, session.user, { settings: patch })}
-          countFor={(candidate) =>
-            buildQueue({
-              cards: cards.filter((card) =>
-                inSelection(card, topicOfCard.get(card.id) ?? null, candidate),
-              ),
-              events,
-              config,
-              timeZone: session.user.timeZone,
-              mode: candidate.mode,
-            }).length
+          countFor={(candidate) => queueFor(candidate).length}
+          countersFor={(candidate) =>
+            remainingCounters(queueFor(candidate), (cardId) => cardStates.get(cardId) ?? null)
+          }
+          leechCount={
+            cards.filter((card) => isLeech(cardStates.get(card.id) ?? null, config.thresholds))
+              .length
           }
           onStart={setSelection}
         />
@@ -192,6 +231,13 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       cards={cards.filter((card) => inSelection(card, topicOfCard.get(card.id) ?? null, selection))}
       mode={selection.mode}
       notes={content.notes}
+      editableDecks={
+        new Map(
+          content.decks
+            .filter((deck) => deck.ownerId === session.user.id && deck.origin === 'manual')
+            .map((deck) => [deck.id, deck]),
+        )
+      }
       deckNames={deckNames}
       initialEvents={events}
       onChangeSelection={() => {
@@ -254,6 +300,7 @@ function ReviewSession({
   cards,
   mode,
   notes,
+  editableDecks,
   deckNames,
   initialEvents,
   onChangeSelection,
@@ -262,6 +309,8 @@ function ReviewSession({
   cards: CardEntity[];
   mode: ReviewMode;
   notes: Note[];
+  /** Mazos hechos a mano por el alumno, los únicos cuyas tarjetas se editan desde aquí */
+  editableDecks: ReadonlyMap<string, Deck>;
   deckNames: Map<string, string>;
   initialEvents: AppEvent[];
   /** Volver a elegir qué repasar. Lo ya calificado queda guardado */
@@ -269,9 +318,13 @@ function ReviewSession({
 }) {
   const api = useDataApi();
   const { user, settings } = session;
+  // Mientras carga el plan se supone el más básico, así el temporizador no aparece sin permiso
+  const timerAllowed = canUseFeature(useActivePlan(user.id) ?? 'free', 'cardTimer');
   const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
   const noteById = useMemo(() => new Map(notes.map((note) => [note.id, note])), [notes]);
-  const cardById = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
+  // Las tarjetas de la sesión se fijan al entrar. Si se suspende una a media sesión, los datos en
+  // vivo la quitan de cards, pero la sesión sigue con las que tenía hasta terminar
+  const [cardById] = useState(() => new Map(cards.map((card) => [card.id, card])));
 
   // La cola se arma una vez al entrar y no cambia mientras se repasa
   const [queue, setQueue] = useState<string[]>(() =>
@@ -279,11 +332,17 @@ function ReviewSession({
   );
   const [states, setStates] = useState(() => latestCardStates(initialEvents));
   const [position, setPosition] = useState(0);
-  const [step, setStep] = useState<'confidence' | 'front' | 'back' | 'cause' | 'done'>(
+  const [step, setStep] = useState<'confidence' | 'front' | 'back' | 'cause' | 'leech' | 'done'>(
     settings.cardConfidenceStep ? 'confidence' : 'front',
   );
   const [confidence, setConfidence] = useState<Confidence | null>(null);
   const [pendingCause, setPendingCause] = useState<string | null>(null);
+  // La tarjeta que acaba de volverse sanguijuela y los olvidos que lleva. Se atiende tras la causa
+  const [leech, setLeech] = useState<{ cardId: string; lapses: number } | null>(null);
+  // Tarjetas que se suspendieron durante esta sesión y ya no deben volver a salir
+  const [removed, setRemoved] = useState<ReadonlySet<string>>(() => new Set());
+  const [editingLeech, setEditingLeech] = useState<{ deck: Deck; noteId: string } | null>(null);
+  const [leechBusy, setLeechBusy] = useState(false);
   const [reviewed, setReviewed] = useState(0);
   const [xpGained, setXpGained] = useState(0);
   const [lastXp, setLastXp] = useState(0);
@@ -302,6 +361,24 @@ function ReviewSession({
   const note = card ? noteById.get(card.noteId) : undefined;
   // Tiempo activo de estudio, con pausa tras 2.5 minutos sin actividad (D-063)
   const study = useStudyClock(step !== 'done' && card !== undefined);
+  // Temporizador opcional. Solo corre mientras se ve la tarjeta y se detiene si el estudio se pausa
+  const timerRuns =
+    settings.cardTimer.enabled &&
+    timerAllowed &&
+    (step === 'front' || step === 'back' || step === 'confidence');
+  const timer = useCardTimer({
+    enabled: timerRuns,
+    seconds: settings.cardTimer.seconds,
+    resetKey: position,
+    paused: study.paused,
+    // Con la opción de mostrar sola la respuesta, al acabarse el tiempo se revela si aún no se veía
+    onExpire: () => {
+      if (settings.cardTimer.autoReveal && step === 'front') {
+        revealedAt.current = clock();
+        setStep('back');
+      }
+    },
+  });
   const ctx = () => ({ userId: user.id, tz: user.timeZone, sessionId: sessionId.current });
 
   const ensureSession = async () => {
@@ -336,8 +413,12 @@ function ReviewSession({
     setStep('done');
   };
 
-  const next = () => {
-    const nextPosition = position + 1;
+  const next = (skipped: ReadonlySet<string> = removed) => {
+    // Salta las tarjetas que se suspendieron en esta sesión
+    let nextPosition = position + 1;
+    while (nextPosition < queue.length && skipped.has(queue[nextPosition] as string)) {
+      nextPosition += 1;
+    }
     setPosition(nextPosition);
     setConfidence(null);
     if (nextPosition >= queue.length) void finish({ reason: 'completed' });
@@ -349,9 +430,9 @@ function ReviewSession({
     await ensureSession();
     const now = new Date();
     const before = states.get(card.id) ?? null;
-    const outcome = scheduleReview(before, rating, now, config);
-    const msToReveal = Math.min(revealedAt.current - shownAt.current, 86_400_000);
-    const msToRate = Math.min(now.getTime() - revealedAt.current, 86_400_000);
+    const outcome = scheduleReview(before, rating, now, config, card.id);
+    const msToReveal = Math.min(revealedAt.current - shownAt.current, CARD_TIME_CAP_MS);
+    const msToRate = Math.min(now.getTime() - revealedAt.current, CARD_TIME_CAP_MS);
     const reviewedEvent = await api.recordEvent(
       createEvent(
         'card_reviewed',
@@ -392,6 +473,10 @@ function ReviewSession({
     if (rating === 'again') {
       setQueue((current) => [...current, card.id]);
       setPendingCause(card.id);
+      // Si este olvido la vuelve sanguijuela se atiende justo después de la causa
+      if (leechHit(before?.lapses ?? 0, outcome.state.lapses, config.thresholds.leechLapses)) {
+        setLeech({ cardId: card.id, lapses: outcome.state.lapses });
+      }
       setStep('cause');
       return;
     }
@@ -405,7 +490,28 @@ function ReviewSession({
       );
     }
     setPendingCause(null);
-    next();
+    if (leech) setStep('leech');
+    else next();
+  };
+
+  const closeLeech = (skipped: ReadonlySet<string> = removed) => {
+    setLeech(null);
+    next(skipped);
+  };
+
+  const suspendLeech = async () => {
+    if (!leech) return;
+    setLeechBusy(true);
+    try {
+      await setSuspended(api, { id: user.id, timeZone: user.timeZone }, [leech.cardId], true, {
+        reason: 'leech',
+      });
+      const skipped = new Set(removed).add(leech.cardId);
+      setRemoved(skipped);
+      closeLeech(skipped);
+    } finally {
+      setLeechBusy(false);
+    }
   };
 
   const showAnswer = () => {
@@ -415,6 +521,14 @@ function ReviewSession({
 
   // Todo el repaso con el teclado (D-087). Espacio o Enter muestra la respuesta, 1 a 4 califican y
   // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 8 eligen la causa y Espacio omite
+  // Datos de la sanguijuela que se está atendiendo. Solo las tarjetas del propio alumno se editan
+  const leechCard = leech ? cardById.get(leech.cardId) : undefined;
+  const leechNote = leechCard ? noteById.get(leechCard.noteId) : undefined;
+  const canEditLeech =
+    leechCard !== undefined &&
+    leechNote !== undefined &&
+    leechNote.origin !== 'preloaded' &&
+    editableDecks.has(leechCard.deckId);
   const keys: Record<string, () => void> = {};
   if (step === 'confidence') {
     (['dont_know', 'unsure', 'sure'] as Confidence[]).forEach((value, index) => {
@@ -436,6 +550,22 @@ function ReviewSession({
       void rate('good');
     };
     keys.enter = keys.space;
+  } else if (step === 'leech' && leech) {
+    keys['1'] = () => {
+      void suspendLeech();
+    };
+    if (canEditLeech) {
+      keys['2'] = () => {
+        const deck = editableDecks.get(leechCard.deckId);
+        if (deck) setEditingLeech({ deck, noteId: leechNote.id });
+      };
+    }
+    const keep = () => {
+      closeLeech();
+    };
+    keys.space = keep;
+    keys.enter = keep;
+    keys.escape = keep;
   } else if (step === 'cause') {
     (Object.keys(t.review.causes) as Cause[]).forEach((cause, index) => {
       keys[String(index + 1)] = () => {
@@ -449,7 +579,10 @@ function ReviewSession({
     keys.enter = skip;
     keys.escape = skip;
   }
-  useShortcuts(keys, card !== undefined && step !== 'done' && !study.paused);
+  useShortcuts(
+    keys,
+    card !== undefined && step !== 'done' && !study.paused && editingLeech === null,
+  );
 
   const sessionActions = (
     <>
@@ -525,13 +658,16 @@ function ReviewSession({
 
   const state = states.get(card.id) ?? null;
   const isNew = state === null || state.state === 'new';
-  const reveal = step === 'back' || step === 'cause';
+  const reveal = step === 'back' || step === 'cause' || step === 'leech';
   const { front, back } = cardFaces(note, card.ordinal);
-  const remainingReviews = queue.slice(position).filter((id) => {
-    const s = states.get(id);
-    return s && s.state !== 'new';
-  }).length;
-  const preview = reveal ? previewReview(state, new Date(), config) : null;
+  // Lo que falta, sin contar las tarjetas que se suspendieron en esta sesión
+  const counters = remainingCounters(
+    queue.slice(position).filter((id) => !removed.has(id)),
+    (id) => states.get(id) ?? null,
+  );
+  const leechBefore = isLeech(state, config.thresholds);
+  const preview = reveal ? previewReview(state, new Date(), config, cardId) : null;
+  const suggestions = leech ? leechSuggestions(checkCardQuality(draftOf(note))) : [];
 
   return (
     <>
@@ -540,9 +676,7 @@ function ReviewSession({
         title={t.screens.review.title}
         meta={
           <>
-            <span>
-              {t.review.remaining(remainingReviews, queue.length - position - remainingReviews)}
-            </span>
+            <ReviewCounters counters={counters} current={counterKindOf(state)} />
             <span aria-live="polite" className="font-semibold text-success">
               {lastXp > 0 ? t.review.xpGained(lastXp) : ''}
             </span>
@@ -573,6 +707,7 @@ function ReviewSession({
             {isNew ? t.review.newCard : t.review.reviewCard}
           </Badge>
           {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
+          {leechBefore ? <Badge variant="danger">{t.review.leech.badge}</Badge> : null}
           {note.isDemo ? <DemoContentLabel /> : null}
           <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
         </div>
@@ -585,7 +720,34 @@ function ReviewSession({
         ) : null}
       </Card>
 
-      {step === 'cause' ? (
+      {timerRuns ? (
+        <div className="lg:max-w-reading">
+          <CardTimerBar
+            remainingMs={timer.remainingMs}
+            totalSeconds={settings.cardTimer.seconds}
+            expired={timer.expired}
+          />
+        </div>
+      ) : null}
+
+      {step === 'leech' && leech ? (
+        <LeechPanel
+          lapses={leech.lapses}
+          suggestions={suggestions}
+          canEdit={canEditLeech}
+          busy={leechBusy}
+          onSuspend={() => {
+            void suspendLeech();
+          }}
+          onEdit={() => {
+            const deck = editableDecks.get(card.deckId);
+            if (deck) setEditingLeech({ deck, noteId: note.id });
+          }}
+          onKeep={() => {
+            closeLeech();
+          }}
+        />
+      ) : step === 'cause' ? (
         <fieldset className="flex flex-col gap-2 lg:max-w-reading">
           <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -687,6 +849,17 @@ function ReviewSession({
           ) : null}
         </ActionDock>
       )}
+      {editingLeech ? (
+        <DeckEditorDialog
+          session={session}
+          deck={editingLeech.deck}
+          initialNoteId={editingLeech.noteId}
+          onClose={() => {
+            setEditingLeech(null);
+            closeLeech();
+          }}
+        />
+      ) : null}
     </>
   );
 }

@@ -116,6 +116,10 @@ function Planner({ session }: { session: ReadySession }) {
       examDate: examDateFor(user),
       priorityTopics: analysis.priorities.map((priority) => priority.topic),
       questionLimit: { today: daily.left, perDay: daily.limit },
+      // Sin límite de nuevas, bajar parte de lo que el alumno tenía guardado y no del tope enorme
+      ...(settings.unlimitedNewCards
+        ? { reduceNewFrom: settings.newCardsPerDay > 0 ? settings.newCardsPerDay : 20 }
+        : {}),
     });
     // Si ya hay temas con dominio listo, el plan apunta al más débil. Si no, dice cuánto falta
     const calibration =
@@ -294,7 +298,10 @@ function OverloadCard({
   const apply = (option: OverloadOption) => {
     const patch =
       option.action === 'reduce_new'
-        ? updateProfile(api, session.user, { settings: { newCardsPerDay: option.value } })
+        ? // Bajar las nuevas también apaga el modo sin límite, si no el número no tendría efecto
+          updateProfile(api, session.user, {
+            settings: { newCardsPerDay: option.value, unlimitedNewCards: false },
+          })
         : updateProfile(api, session.user, { dailyMinutes: Math.min(720, option.value) });
     void patch.then(() => {
       setApplied(true);

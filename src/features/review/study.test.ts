@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { Card, Note } from '@/data/schemas/decks';
+import type { AppEvent } from '@/data/schemas/events';
+import { newId } from '@/data/testing/fixtures';
+import { event, minute, state } from '../tutor/testing/fixtures';
 import {
   cardFaces,
   errorsFirst,
   isQuestionNote,
+  latestCardStates,
   renderCloze,
   reviewEndReason,
   topicFromTags,
@@ -130,5 +134,64 @@ describe('tarjetas de preguntas falladas en la cola', () => {
     expect(topicFromTags(['otra', 'topic:nephrology'])).toBe('nephrology');
     expect(topicFromTags(['otra'])).toBeNull();
     expect(topicFromTags(undefined)).toBeNull();
+  });
+});
+
+describe('estado más reciente de cada tarjeta', () => {
+  const cardId = newId();
+  const review = (stateAfter: ReturnType<typeof state>, at: number): AppEvent =>
+    event(
+      'card_reviewed',
+      {
+        cardId,
+        deckId: newId(),
+        source: 'card',
+        rating: 'good',
+        confidence: null,
+        msToReveal: 1000,
+        msToRate: 1000,
+        stateBefore: null,
+        stateAfter,
+      },
+      at,
+    );
+  const moved = (to: string, at: number, kind: 'postpone' | 'undo' = 'postpone'): AppEvent =>
+    event(
+      'cards_rescheduled',
+      {
+        kind,
+        cards: [{ cardId, from: new Date(minute(0)).toISOString(), to }],
+        days: kind === 'undo' ? null : 3,
+        undoes: kind === 'undo' ? newId() : null,
+      },
+      at,
+    );
+
+  it('un cambio de fecha solo mueve el vencimiento y deja el resto del estado', () => {
+    const reviewed = state({ stability: 12, lapses: 2 });
+    const later = '2026-10-20T10:00:00.000Z';
+    const result = latestCardStates([review(reviewed, minute(1)), moved(later, minute(2))]);
+    expect(result.get(cardId)).toEqual({ ...reviewed, due: later });
+  });
+
+  it('un repaso posterior vuelve a fijar todo el estado, y deshacer vuelve a la fecha de antes', () => {
+    const first = state({ stability: 5 });
+    const second = state({ stability: 9, due: '2026-11-01T10:00:00.000Z' });
+    const events = [
+      review(first, minute(1)),
+      moved('2026-10-20T10:00:00.000Z', minute(2)),
+      review(second, minute(3)),
+    ];
+    expect(latestCardStates(events).get(cardId)).toEqual(second);
+    const undone = [
+      review(first, minute(1)),
+      moved('2026-10-20T10:00:00.000Z', minute(2)),
+      moved(first.due, minute(3), 'undo'),
+    ];
+    expect(latestCardStates(undone).get(cardId)).toEqual(first);
+  });
+
+  it('una tarjeta sin repasos no cambia de estado por un cambio de fecha', () => {
+    expect(latestCardStates([moved('2026-10-20T10:00:00.000Z', minute(1))]).size).toBe(0);
   });
 });

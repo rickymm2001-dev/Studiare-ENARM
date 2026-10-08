@@ -1,5 +1,6 @@
 // Alumno, consentimientos, suscripción simulada y puntaje oficial (6.2).
 import { z } from 'zod';
+import { EASY_DAY_LEVELS, NO_EASY_DAYS } from '../../engines/easyDays';
 import {
   CalendarDateSchema,
   ConsentPurposeSchema,
@@ -9,6 +10,9 @@ import {
   TimeZoneSchema,
   UtcDateTimeSchema,
 } from './common';
+
+/** Máximo de tarjetas nuevas por día que acepta el ajuste. Sin límite se guarda aparte */
+export const MAX_NEW_CARDS_PER_DAY = 500;
 
 /** Ajustes del alumno con los valores por defecto de la especificación */
 export const UserSettingsSchema = z.strictObject({
@@ -24,8 +28,37 @@ export const UserSettingsSchema = z.strictObject({
       easy: z.number().min(0.25).max(3),
     })
     .default({ hard: 1, good: 1, easy: 1 }),
-  newCardsPerDay: z.int().min(0).max(500).default(20),
+  newCardsPerDay: z.int().min(0).max(MAX_NEW_CARDS_PER_DAY).default(20),
   reviewsPerDay: z.int().min(0).max(5000).default(200),
+  /**
+   * Sin límite de tarjetas nuevas por día. Apagado por defecto y se enciende con un aviso, porque
+   * muchas nuevas juntas se vuelven una avalancha de repasos (D-085, fila 6)
+   */
+  unlimitedNewCards: z.boolean().default(false),
+  /**
+   * Temporizador de tarjeta, apagado por defecto para no subir la ansiedad (D-085, fila 8). Con él
+   * encendido muestra cuánto tiempo sugerido queda y, si autoReveal está encendido, muestra la
+   * respuesta al acabarse
+   */
+  cardTimer: z
+    .strictObject({
+      enabled: z.boolean(),
+      seconds: z.int().min(5).max(300),
+      autoReveal: z.boolean(),
+    })
+    .default({ enabled: false, seconds: 30, autoReveal: false }),
+  /** Días fáciles. Todos normales por defecto (D-085, fila 7) */
+  easyDays: z
+    .strictObject({
+      mon: z.enum(EASY_DAY_LEVELS),
+      tue: z.enum(EASY_DAY_LEVELS),
+      wed: z.enum(EASY_DAY_LEVELS),
+      thu: z.enum(EASY_DAY_LEVELS),
+      fri: z.enum(EASY_DAY_LEVELS),
+      sat: z.enum(EASY_DAY_LEVELS),
+      sun: z.enum(EASY_DAY_LEVELS),
+    })
+    .default({ ...NO_EASY_DAYS }),
   /**
    * Preguntar la seguridad antes de ver la respuesta, en tarjetas y en preguntas. Apagado por
    * defecto para estudiar más rápido (D-087). Quien lo enciende alimenta las lecturas de confianza

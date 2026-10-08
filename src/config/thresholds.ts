@@ -65,6 +65,23 @@ export const ThresholdsSchema = z.strictObject({
     /** Optimizar parámetros por alumno desde 1,000 repasos, fuera del prototipo (J) */
     optimizeAfterReviews: z.int().positive().default(1000),
   }),
+  daily: z.strictObject({
+    /** Repasos propios que hacen falta para usar el ritmo del alumno y no el de referencia (J) */
+    minReviewsToMeasure: z.int().positive().default(100),
+    /** Segundos por repaso y por tarjeta nueva mientras el alumno no tiene ritmo propio (J) */
+    referenceSecondsPerReview: z.number().positive().default(10),
+    referenceSecondsPerNew: z.number().positive().default(30),
+    /** Parte de los minutos diarios que va a tarjetas, el resto es de preguntas (J) */
+    cardsTimeShare: z.number().min(0.1).max(1).default(0.5),
+    /** Días de carga futura con los que se calcula cuántas nuevas por día aguantan (J) */
+    suggestionHorizonDays: z.int().positive().default(30),
+    /** Aviso de recuperación con estas vencidas de días anteriores o más (J) */
+    recoveryMinOverdue: z.int().positive().default(40),
+    /** o con esta fracción del límite diario de repasos o más, lo que sea mayor (J) */
+    recoveryOverdueShareOfLimit: z.number().positive().default(0.5),
+    /** Tope del tiempo que se registra en cada paso de una tarjeta, ver la respuesta y calificar, en segundos. Una pausa larga no lo distorsiona (J) */
+    cardTimeCapSeconds: z.int().positive().default(120),
+  }),
   behavior: z.strictObject({
     /** Ritmo mínimo plausible de lectura, en palabras por segundo (J) */
     maxWordsPerSecond: z.number().positive().default(6),
@@ -98,6 +115,7 @@ export const DEFAULT_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
   structure: {},
   forgetting: {},
   fsrs: {},
+  daily: {},
   behavior: {},
   streak: {},
   confidence: {},

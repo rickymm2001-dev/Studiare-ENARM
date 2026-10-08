@@ -2,6 +2,9 @@
 // tocan. Mazos, ramas y límites quedan plegados con un resumen, porque se cambian poco. La última
 // selección se recuerda en este dispositivo.
 import { Play } from 'lucide-react';
+import { Link } from 'react-router';
+import { screenPath } from '@/app/screens';
+import type { DailyCounters } from '@/engines/counters';
 import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
@@ -13,6 +16,7 @@ import { CheckboxField, TextField } from '@/ui/components/field';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import { ReviewCounters } from './ReviewCounters';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
 export function ReviewSetup({
@@ -22,7 +26,10 @@ export function ReviewSetup({
   deckNames,
   topicOfCard,
   countFor,
+  countersFor,
+  leechCount,
   limits,
+  limitsExtra,
   onSaveLimits,
   onStart,
 }: {
@@ -36,8 +43,14 @@ export function ReviewSetup({
   topicOfCard: Map<string, string | null>;
   /** Cuántas tarjetas tocarían hoy con esta selección */
   countFor: (selection: ReviewSelection) => number;
+  /** Cuántas de esas son nuevas, de aprendizaje o programadas */
+  countersFor: (selection: ReviewSelection) => DailyCounters;
+  /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Explorar */
+  leechCount: number;
   /** Límites diarios del alumno. Se cambian aquí mismo y aplican al momento */
-  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
+  /** Ayudas de carga diaria que van dentro de los límites, como la sugerencia de nuevas */
+  limitsExtra?: ReactNode;
   onSaveLimits: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
   onStart: (selection: ReviewSelection) => void;
 }) {
@@ -54,6 +67,7 @@ export function ReviewSetup({
     return map;
   }, [cards, topicOfCard, selection.decks]);
   const total = countFor(selection);
+  const counters = countersFor(selection);
   const text = t.reviewSetup;
 
   return (
@@ -107,6 +121,20 @@ export function ReviewSetup({
           </Button>
           {total === 0 ? <p className="text-sm text-fg-muted">{text.nothing}</p> : null}
         </div>
+        {total > 0 ? (
+          <ReviewCounters counters={counters} current={null} label={text.countersLabel} />
+        ) : null}
+        {leechCount > 0 ? (
+          <p className="text-sm text-fg-muted">
+            {text.leeches(leechCount)}{' '}
+            <Link
+              to={`${screenPath('explore')}?estado=sanguijuelas`}
+              className="font-semibold text-primary underline underline-offset-2"
+            >
+              {text.seeLeeches}
+            </Link>
+          </p>
+        ) : null}
 
         <Disclosure
           title={text.filters}
@@ -156,9 +184,19 @@ export function ReviewSetup({
 
         <Disclosure
           title={text.limits}
-          summary={text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)}
+          summary={
+            limits.unlimitedNewCards
+              ? text.limitsSummaryUnlimited(limits.reviewsPerDay)
+              : text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)
+          }
         >
-          <DailyLimits limits={limits} onSave={onSaveLimits} />
+          {/* La clave rehace el borrador cuando los límites cambian desde fuera, por ejemplo al usar la sugerencia */}
+          <DailyLimits
+            key={`${limits.newCardsPerDay}:${limits.reviewsPerDay}`}
+            limits={limits}
+            onSave={onSaveLimits}
+          />
+          {limitsExtra}
         </Disclosure>
       </div>
     </Card>
@@ -170,7 +208,7 @@ function DailyLimits({
   limits,
   onSave,
 }: {
-  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
   onSave: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
 }) {
   const [newCards, setNewCards] = useState(String(limits.newCardsPerDay));
@@ -192,6 +230,7 @@ function DailyLimits({
           max={500}
           inputMode="numeric"
           value={newCards}
+          disabled={limits.unlimitedNewCards}
           onChange={(event) => {
             setNewCards(event.target.value);
             setSaved(false);

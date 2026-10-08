@@ -18,6 +18,12 @@
  *     y que introduce las nuevas al ritmo de su límite diario
  *   - Intervalo máximo del alumno sobre Bien con compresión suave, 21 días por defecto. Difícil y
  *     Fácil guardan su proporción con Bien y cada botón tiene su multiplicador (D-064, D-067)
+ *   - Días fáciles (D-085). Después del tope y del multiplicador y antes del recorte al ENARM, el
+ *     vencimiento de intervalos de 3 días o más se mueve unos días para esquivar los días que el
+ *     alumno marcó como reduced o minimum. Las reglas viven en easyDays.ts. Solo cambia la fecha,
+ *     la estabilidad y la dificultad de FSRS no se tocan. Ausente o todo normal no cambia nada. La
+ *     semilla de cada elección sale del estado nuevo y, si se pasa, de la clave de la tarjeta, así
+ *     las tarjetas que se aprendieron el mismo día y tienen el mismo estado no se mueven en bloque
  * Umbrales. Retención 0.90 (0.80 a 0.97), 0.93 en los últimos 30 días, sanguijuela con 8 lapsos,
  * 20 nuevas y 200 repasos por día. Optimizar parámetros por alumno desde 1,000 repasos queda fuera
  * del prototipo. El punto de extensión es config.weights.
@@ -25,6 +31,7 @@
 import { createEmptyCard, fsrs, Rating, State, type Card, type FSRS, type Grade } from 'ts-fsrs';
 import type { Thresholds } from '@/config/thresholds';
 import type { FsrsCardState } from '@/data/schemas/common';
+import { applyEasyDays, hasEasyDays, type EasyDays } from './easyDays';
 import type { FsrsRating } from './mcqGrade';
 import { addDays, DAY_MS, daysBetween, studyDayEnd, studyDayOf, studyDayStart } from './studyDay';
 
@@ -51,6 +58,12 @@ export interface SchedulerConfig {
    * 1 es lo recomendado. Ausente es 1 en los tres
    */
   spacing?: Readonly<Record<'hard' | 'good' | 'easy', number>>;
+  /**
+   * Nivel de cada día de la semana, normal, reduced o minimum (D-085, fila 7). El vencimiento de
+   * los intervalos de 3 días o más se mueve unos días para esquivar los días fáciles. Ausente o
+   * todo normal no cambia nada
+   */
+  easyDays?: EasyDays;
 }
 
 /**
@@ -184,11 +197,37 @@ function notBeforeLastReview(state: FsrsCardState | null, now: Date): Date {
   return now;
 }
 
+/**
+ * Semilla de los días fáciles. Sale del estado nuevo de FSRS, de la calificación y de la clave de la
+ * tarjeta, nunca de la hora exacta de now. Así la vista previa de los botones, que se calcula al
+ * abrir la tarjeta, y el repaso real, que se calcula segundos o minutos después, dan el mismo
+ * resultado. La clave separa a las tarjetas que se aprendieron el mismo día, que tienen el mismo
+ * estado, para que no se muevan todas al mismo día. Los decimales se fijan en 6 para que el ruido
+ * de coma flotante no cambie la semilla
+ */
+function easyDaysSeed(
+  state: FsrsCardState,
+  rating: FsrsRating,
+  seedKey: string | undefined,
+): string {
+  const parts = [
+    state.stability.toFixed(6),
+    state.difficulty.toFixed(6),
+    state.reps,
+    state.lapses,
+    rating,
+  ];
+  if (seedKey !== undefined) parts.push(seedKey);
+  return parts.join('|');
+}
+
 export function scheduleReview(
   state: FsrsCardState | null,
   rating: FsrsRating,
   requestedNow: Date,
   config: SchedulerConfig,
+  /** Clave de la tarjeta, por ejemplo su ID. Solo la usan los días fáciles para desempatar */
+  seedKey?: string,
 ): ReviewOutcome {
   const now = notBeforeLastReview(state, requestedNow);
   const { retention, examWindow } = retentionFor(config, now);
@@ -219,8 +258,29 @@ export function scheduleReview(
       };
     }
   }
-  let examCapped = false;
   const deadline = examDeadline(config);
+  const upcomingDeadline = deadline && deadline.getTime() > now.getTime() ? deadline : null;
+  // Días fáciles (D-085). Solo mueve la fecha de vencimiento, nunca la estabilidad ni la dificultad.
+  // Va después del tope y del multiplicador y antes del recorte al ENARM, que sigue mandando
+  if (rating !== 'again' && next.state === 'review' && hasEasyDays(config.easyDays)) {
+    const due = new Date(next.due);
+    const moved = applyEasyDays({
+      due,
+      now,
+      timeZone: config.timeZone,
+      easyDays: config.easyDays,
+      seed: easyDaysSeed(next, rating, seedKey),
+      deadline: upcomingDeadline,
+    });
+    if (moved.getTime() !== due.getTime()) {
+      next = {
+        ...next,
+        due: moved.toISOString(),
+        scheduledDays: Math.max(1, Math.round((moved.getTime() - now.getTime()) / DAY_MS)),
+      };
+    }
+  }
+  let examCapped = false;
   if (deadline && deadline.getTime() > now.getTime() && new Date(next.due) > deadline) {
     next = {
       ...next,
@@ -237,12 +297,13 @@ export function previewReview(
   state: FsrsCardState | null,
   now: Date,
   config: SchedulerConfig,
+  seedKey?: string,
 ): Record<FsrsRating, ReviewOutcome> {
   return {
-    again: scheduleReview(state, 'again', now, config),
-    hard: scheduleReview(state, 'hard', now, config),
-    good: scheduleReview(state, 'good', now, config),
-    easy: scheduleReview(state, 'easy', now, config),
+    again: scheduleReview(state, 'again', now, config, seedKey),
+    hard: scheduleReview(state, 'hard', now, config, seedKey),
+    good: scheduleReview(state, 'good', now, config, seedKey),
+    easy: scheduleReview(state, 'easy', now, config, seedKey),
   };
 }
 
@@ -342,14 +403,30 @@ export interface DayLoad {
 }
 
 /**
+ * Grupos en que se reparten las tarjetas nuevas que se proyectan. Las nuevas que entran el mismo
+ * día son idénticas, y simularlas una por una es lo que más tarda con muchas nuevas por día. Se
+ * simula una por grupo y se multiplica. Cada grupo lleva su propia clave para los días fáciles, así
+ * la carga proyectada también se reparte entre los días vecinos y no se apila en uno
+ */
+export const NEW_CARD_BUCKETS = 8;
+
+const newCardSeedKey = (bucket: number) => `nueva-${bucket}`;
+
+/**
  * Carga futura de los próximos días (7.1). Supone que el alumno repasa cada tarjeta en su
- * vencimiento con Bien y que introduce nuevas al ritmo de su límite diario
+ * vencimiento con Bien y que introduce nuevas al ritmo de su límite diario. Cada tarjeta con
+ * historial se simula con la clave de su ID. Las nuevas se simulan por grupos, ver NEW_CARD_BUCKETS
  */
 export function projectLoad(input: {
   cards: readonly QueueCard[];
   now: Date;
   config: SchedulerConfig;
   days: number;
+  /**
+   * Lugar de la primera tarjeta nueva en la fila de nuevas, que decide su grupo. Solo lo usa
+   * dailyLoad para proyectar una sola tarjeta como si fuera la que sigue en la fila
+   */
+  newIndexOffset?: number;
 }): DayLoad[] {
   const { now, config, days } = input;
   const today = studyDayOf(now, config.timeZone);
@@ -359,38 +436,50 @@ export function projectLoad(input: {
     const day = addDays(today, offset);
     load.set(day, { day, reviews: 0, newCards: 0 });
   }
-  const bump = (instant: Date, field: 'reviews' | 'newCards') => {
+  const bump = (instant: Date, field: 'reviews' | 'newCards', weight: number) => {
     const entry = load.get(studyDayOf(instant, config.timeZone));
-    if (entry) entry[field] += 1;
+    if (entry) entry[field] += weight;
   };
-  const simulate = (start: FsrsCardState, from: Date) => {
+  const simulate = (start: FsrsCardState, from: Date, seedKey: string, weight: number) => {
     let state = start;
     // Tope de seguridad. Una tarjeta no se repasa más de 200 veces en el horizonte
     for (let step = 0; step < 200; step += 1) {
       const dueAt = new Date(Math.max(new Date(state.due).getTime(), from.getTime()));
       if (dueAt.getTime() >= horizon) return;
-      bump(dueAt, 'reviews');
-      state = scheduleReview(state, 'good', dueAt, config).state;
+      bump(dueAt, 'reviews', weight);
+      state = scheduleReview(state, 'good', dueAt, config, seedKey).state;
     }
   };
 
   for (const card of input.cards) {
-    if (card.state !== null && card.state.state !== 'new') simulate(card.state, now);
+    if (card.state !== null && card.state.state !== 'new')
+      simulate(card.state, now, card.cardId, 1);
   }
 
   const unseen = input.cards.filter((card) => card.state === null || card.state.state === 'new');
   const perDay = config.thresholds.newCardsPerDay;
-  unseen.forEach((_, index) => {
-    const offset = perDay === 0 ? days : Math.floor(index / perDay);
-    if (offset >= days) return;
+  const indexOffset = input.newIndexOffset ?? 0;
+  for (let offset = 0; offset < days && perDay > 0; offset += 1) {
+    // Las nuevas entran en fila, perDay por día, hasta que se acaban
+    const entering = Math.min(perDay, unseen.length - offset * perDay);
+    if (entering <= 0) break;
     const day = addDays(today, offset);
     // Se introduce una hora después de empezar su día de estudio, o ahora si es hoy
     const introduced = new Date(
       Math.max(studyDayStart(day, config.timeZone).getTime() + 60 * 60 * 1000, now.getTime()),
     );
-    bump(introduced, 'newCards');
-    simulate(scheduleReview(null, 'good', introduced, config).state, introduced);
-  });
+    bump(introduced, 'newCards', entering);
+    const firstIndex = offset * perDay + indexOffset;
+    const first = scheduleReview(null, 'good', introduced, config).state;
+    for (let bucket = 0; bucket < NEW_CARD_BUCKETS; bucket += 1) {
+      // Cuántas de las que entran hoy caen en este grupo, contando por su lugar en la fila
+      const shift =
+        (bucket - (firstIndex % NEW_CARD_BUCKETS) + NEW_CARD_BUCKETS) % NEW_CARD_BUCKETS;
+      const count =
+        Math.floor(entering / NEW_CARD_BUCKETS) + (shift < entering % NEW_CARD_BUCKETS ? 1 : 0);
+      if (count > 0) simulate(first, introduced, newCardSeedKey(bucket), count);
+    }
+  }
 
   return [...load.values()];
 }
