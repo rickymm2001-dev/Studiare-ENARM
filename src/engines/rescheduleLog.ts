@@ -31,8 +31,7 @@ export function lastUndoableAction(
     const batch = { eventId: event.id, cards: event.payload.cards };
     const last = actions.at(-1);
     if (
-      last &&
-      last.at === event.at &&
+      last?.at === event.at &&
       last.kind === event.payload.kind &&
       last.days === event.payload.days
     ) {
