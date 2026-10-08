@@ -55,7 +55,10 @@ test('contadores, temporizador, atrasos repartidos y deshacer', async ({ page })
   await expect(page.getByRole('button', { name: t.review.show })).toBeHidden({ timeout: 25_000 });
   await expect(page.getByText(t.review.timer.expired)).toBeVisible();
   await rating(page, 'good').click();
-  expect(Number((await counterValues(page))[0]?.replace(/,/g, ''))).toBe(newAtStart - 1);
+  // El contador baja cuando termina de guardarse la calificación, no en el mismo instante del clic
+  await expect
+    .poll(async () => Number((await counterValues(page))[0]?.replace(/,/g, '')))
+    .toBe(newAtStart - 1);
 
   // Dos tarjetas más y se termina, para que haya tarjetas con repasos
   for (let index = 0; index < 2; index += 1) {
@@ -104,9 +107,12 @@ test('el perfil guía y la sugerencia de nuevas viven en los límites de hoy', a
 
   // Quitar el límite apaga el campo y avisa. Volver a ponerlo lo regresa
   const unlimited = suggestion.getByRole('checkbox', { name: t.settings.unlimitedNewCards });
-  await unlimited.check();
+  // El ajuste se guarda en la base y la casilla cambia al terminar, por eso se hace clic y se espera
+  await unlimited.click();
+  await expect(unlimited).toBeChecked();
   await expect(suggestion.getByText(t.dailyLoad.unlimitedOn)).toBeVisible();
   await expect(page.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toBeDisabled();
-  await unlimited.uncheck();
+  await unlimited.click();
+  await expect(unlimited).not.toBeChecked();
   await expect(page.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toBeEnabled();
 });
