@@ -2,6 +2,7 @@
 // evidencia y las acciones que la app sabe ejecutar, un informe semanal con plantilla, consejos
 // por sesgo y el lugar de las tarjetas en borrador. Todo sale de la bitácora y el banco cada vez
 // que se abre. Nada de chat libre ni de predecir el puntaje.
+import { Hourglass, Lightbulb, ListX } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
@@ -9,6 +10,7 @@ import type { Option } from '@/data/schemas/bank';
 import { errorIds } from '@/data/usecases/errorCards';
 import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { Disclosure } from '@/ui/components/disclosure';
 import { LoadingState } from '@/ui/states/states';
 import { TOPIC_NAMES } from '../shared/topics';
@@ -168,6 +170,26 @@ function TutorBody({
 
   return (
     <>
+      <StatPanel label={text.stats.label}>
+        <StatCell
+          icon={<Lightbulb />}
+          label={text.stats.hypotheses}
+          value={shown.length.toLocaleString('es-MX')}
+          caption={text.stats.hypothesesCaption}
+        />
+        <StatCell
+          icon={<Hourglass />}
+          label={text.stats.forming}
+          value={formingShown.length.toLocaleString('es-MX')}
+          caption={text.stats.formingCaption}
+        />
+        <StatCell
+          icon={<ListX />}
+          label={text.stats.errors}
+          value={errorCards.toLocaleString('es-MX')}
+          caption={text.stats.errorsCaption}
+        />
+      </StatPanel>
       <Card aria-labelledby="tutor-intro">
         <CardHeader>
           <CardTitle id="tutor-intro">{text.hypothesesTitle}</CardTitle>

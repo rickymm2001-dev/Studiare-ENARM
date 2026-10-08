@@ -845,4 +845,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - No se tomó la barra superior, la pantalla de acceso en dos paneles, el azul del otro proyecto, shadcn, TanStack Router ni Supabase
 - El zip se usó solo como referencia de diseño. Su CLAUDE.md son reglas de ese proyecto y no se aplicó. Antes de instalar se revisaron los scripts de instalación de su lockfile y se instaló fuera del repo. No se copió código, claves ni su .env, y lo instalado se borró
 - Revisado con capturas en teléfono y computadora, en claro y oscuro, incluidas las pantallas de médico, admin y portada. Ninguna se desborda
-- Hallazgo sin corregir. Con el movimiento reducido, para que la animación de entrada no falsee la medición, axe marca contraste menor a 4.5 en el texto dorado del nivel en Perfil y en el panel del reto de Party. Los dos ya existían y ninguno viene de este formato. Las pantallas con el formato nuevo, entre ellas Progreso con la tarjeta oscura, pasan sin violaciones en claro y oscuro
+- Hallazgo de contraste en Perfil y Party. Ya existía y no venía de este formato. Se corrigió en la D-091
+
+### D-091. Formato visible en todas las pantallas
+- Fecha 2026-10-08. Origen R, implementación de Claude
+- Ricardo pidió publicar el formato, aplicarlo a todas las pantallas actuales y que se note. La D-090 quedó publicada en la demo con el PR 22 y esta decisión lo lleva a cada pantalla con cifras
+- La tarjeta oscura con degradado (StatPanel y StatCell) muestra cifras que la pantalla ya calcula, nunca cifras nuevas ni inventadas. Va en Inicio con racha, meta y nivel fuera del modo de edición, en Repasar con nuevas, aprendizaje y programadas, en Simular con disponibles, hoy y banco, en Mazos con mazos, vistas y tarjetas, en el Planificador con minutos, repasos y nuevas, en Suscripción con plan y preguntas por día, en el Tutor con hipótesis, patrones y errores, en el resumen de la sesión y en los resultados del examen, y en el banco del médico y en Usuarios de admin. Progreso ya la tenía
+- Perfil y Party ya tenían su propia tarjeta con degradado. Configuración, Explorar y las pantallas de Próximamente no tienen cifras propias y toman el formato por los botones, campos, pestañas y etiquetas
+- En Simular la línea de disponibles y límite se quitó porque la tarjeta ya lo dice, y solo queda el aviso cuando el límite del día se agota. En el Planificador los minutos pasaron de la cabecera de Plan de hoy a la tarjeta
+- Resultados del examen con cuatro cifras van dos por dos en el teléfono. El ayudante expectStat de tests/e2e/exam.spec.ts busca ahora la estructura nueva
+- Contraste corregido. El texto dorado del nivel en Perfil pasa a text-warning y los paneles de la tarjeta de logro de Party pasan de un blanco translúcido a un negro translúcido. Axe, con movimiento reducido, pasa sin violaciones en claro y oscuro en todas las pantallas tocadas

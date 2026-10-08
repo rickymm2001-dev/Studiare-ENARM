@@ -80,6 +80,15 @@ const rules: Record<TutorRule, RuleText> = {
 
 export const tutorText = {
   tutor: {
+    stats: {
+      label: 'Tu tutor en cifras',
+      hypotheses: 'Hipótesis',
+      hypothesesCaption: 'por revisar',
+      forming: 'Patrones',
+      formingCaption: 'en formación',
+      errors: 'Errores',
+      errorsCaption: 'en tus tarjetas',
+    },
     intro:
       'Tu tutor revisa tus errores de los últimos 14 días y busca patrones. Lo que ves son hipótesis con su evidencia y no verdades. Dile si te sirven.',
     howItWorks:

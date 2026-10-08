@@ -106,13 +106,13 @@ function AchievementPreview({ card }: { card: AchievementCard }) {
         <p className="mt-2 font-display text-2xl font-extrabold">{card.levelTitle}</p>
         <p className="text-sm text-white/85">{text.level(card.level)}</p>
         <div className="mt-3 grid w-full grid-cols-2 gap-2 text-center">
-          <p className="rounded-xl bg-white/15 px-2 py-2">
+          <p className="rounded-xl bg-black/25 px-2 py-2">
             <span className="block text-xs text-white/85">{text.streakLabel}</span>
             <span className="block font-display text-lg font-extrabold text-[#ffc7a6]">
               {text.streakValue(card.streak)}
             </span>
           </p>
-          <p className="rounded-xl bg-white/15 px-2 py-2">
+          <p className="rounded-xl bg-black/25 px-2 py-2">
             <span className="block text-xs text-white/85">{text.xpLabel}</span>
             <span className="block font-display text-lg font-extrabold text-[#f6d27a]">
               {card.weeklyXp.toLocaleString('es-MX')}
