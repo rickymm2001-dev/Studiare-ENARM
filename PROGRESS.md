@@ -12,6 +12,8 @@
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
+- Formato visual del proyecto ROI Sales Companion aplicado a todas las pantallas (D-090), solo estilo, con la marca y la apariencia de cada alumno intactas. Falta la revisión de Ricardo
+- Hallazgo sin corregir de accesibilidad (D-090). Axe marca contraste menor a 4.5 en el texto dorado del nivel en Perfil y en el panel del reto de Party. Ya existían y no vienen del formato nuevo
 - Auditoría del repaso hecha con Codex el 2026-10-04. Una sesión que llega al final de la cola se cierra como completada y no como abandonada
 - Banco y mazos en pausa por indicación de Ricardo del 2026-10-06. No se escriben ni se corrigen preguntas ni tarjetas, solo se programa
 - Directrices V2 integradas a la memoria del proyecto el 2026-10-06 (D-080, CLAUDE.md y PLAN.md sección 10). Se aplican desde el examen. Quedan por confirmar el LLM de OpenAI y qué cuenta como referido concretado

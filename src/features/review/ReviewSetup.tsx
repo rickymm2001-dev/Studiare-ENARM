@@ -146,7 +146,7 @@ export function ReviewSetup({
           defaultOpen={total === 0}
         >
           <fieldset>
-            <legend className="mb-1 text-sm font-semibold">{text.decks}</legend>
+            <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
             <div className="grid gap-x-3 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
               {deckIds.map((deckId) => (
                 <CheckboxField

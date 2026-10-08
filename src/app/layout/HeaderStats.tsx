@@ -46,9 +46,13 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
           )}`}
           title={t.headerStats.level(level.level, level.title, level.xpIntoLevel, level.xpForNext)}
         >
-          <span className="flex items-baseline justify-between gap-1 text-xs leading-none font-bold">
-            <span className="truncate text-accent">{level.title}</span>
-            <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
+          <span className="flex items-baseline justify-between gap-1 text-[0.65rem] leading-none font-bold">
+            <span className="truncate font-mono tracking-wider text-accent uppercase">
+              {level.title}
+            </span>
+            <span className="font-mono tracking-wider text-fg-muted uppercase">
+              {t.headerStats.short(level.level)}
+            </span>
           </span>
           <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
             <span className="block h-full rounded-full bg-gold" style={{ width: `${percent}%` }} />

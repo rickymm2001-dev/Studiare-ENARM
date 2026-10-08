@@ -1,9 +1,10 @@
-// Campos de formulario accesibles con etiqueta visible, ayuda y error asociados (4.8).
+// Campos de formulario accesibles con etiqueta visible, ayuda y error asociados (4.8). En píldora
+// como el resto de los controles (D-079).
 import { useId, type ComponentProps, type ReactNode } from 'react';
 import { cn } from '@/ui/cn';
 
 const control =
-  'min-h-touch w-full rounded-md border border-line-strong bg-surface px-3 text-base text-fg placeholder:text-fg-muted focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50';
+  'min-h-touch w-full rounded-full border border-line-strong bg-surface px-4 text-base text-fg shadow-card placeholder:text-fg-muted focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50';
 
 interface FieldShell {
   label: string;

@@ -368,9 +368,7 @@ function QuestionCard({
         </div>
         {vignette ? (
           <div className="mt-2 rounded-md bg-muted p-3">
-            <p className="mb-1 text-xs font-semibold uppercase text-fg-muted">
-              {t.simulator.caseLabel}
-            </p>
+            <p className="eyebrow mb-1 text-fg-muted">{t.simulator.caseLabel}</p>
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}
