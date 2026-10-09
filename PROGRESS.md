@@ -12,6 +12,7 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
+- Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -27,6 +28,30 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase F. Endurecer, documentar y dejar lista la demo (D-102)
+
+Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendientes sin preguntar. Cierra con la sección 15.1 y espera la aprobación de Ricardo.
+
+### Bloques
+- [x] F1. JavaScript inicial bajo 300 KB comprimidos. Pasó de 580 a unos 275 KB con las pantallas por ruta, el SDK de Supabase y la sincronización bajados aparte, y los textos del médico y de administración fuera del núcleo. scripts/bundle-budget.ts lo mide y tests/security/build-policy.test.ts lo vigila
+- [x] F2. Política de seguridad de contenido en el build, en index.html y en _headers para Cloudflare Pages, con su prueba
+- [x] F3. npm audit sin vulnerabilidades. concurrently 10.0.6, un override de uuid para exceljs y un trabajo aparte en el CI
+- [x] F4. Pruebas de punta a punta de sin conexión (offline.spec.ts) y de rendimiento con 200 tarjetas y el procesador 4 veces más lento (perf.spec.ts)
+- [x] F5. Revisión contra OWASP ASVS 5.0 en docs/asvs.md
+- [x] F6. README.md con IA real y simulada, datos de demostración y prueba en el teléfono. DEMO.md con el guion de 10 minutos. docs/real-vs-simulado.md, docs/mapa-plan-maestro.md y docs/informe-de-pruebas.md
+- [ ] F7. Cierre según 15.1 y aprobación de Ricardo. Publicar en Cloudflare Pages queda a su aprobación (D-017)
+
+### Bitácora
+- Mover las pantallas a carga por ruta no rompió ninguna prueba unitaria. Lo que más pesaba en lo inicial era el SDK de Supabase, unos 55 KB comprimidos, y se bajó a un archivo aparte que solo se pide con la nube configurada
+- La política de contenido encontró un hallazgo real en la primera corrida. Vite incrusta como data: las fuentes de menos de 4 KB y la política las bloqueaba. Ahora font-src las permite
+- La prueba de sin conexión confirma que una pantalla que nunca se visitó abre sin red, porque el service worker guarda todos los archivos al instalarse
+- Rendimiento con el procesador 4 veces más lento. Mediana de 90 ms por tarjeta, p95 de 147 ms y peor de 301 ms. Los umbrales de la prueba son 150, 350 y 800 ms para no fallar por carga del equipo
+
+### Pendiente
+- El margen del presupuesto es de unos 25 KB. Lo siguiente por ahorrar es partir el resto de los textos de la interfaz por área, quitar tailwind-merge y cargar zod solo donde hace falta
+- Que Ricardo apruebe publicar en Cloudflare Pages y compre el dominio propio
+- Una prueba de penetración externa antes de abrir a alumnos de pago
 
 ## Fase E. Panel del médico, reportes y privacidad (D-099)
 
