@@ -1,0 +1,76 @@
+/* Estilos del editor de apuntes (D-092). Solo se cargan con el editor, que es una pieza diferida */
+.outline-editor {
+  min-height: 18rem;
+  padding: 0.25rem 0.25rem 2rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--enarm-fg);
+  outline: none;
+}
+
+.outline-editor ul {
+  margin: 0;
+  padding-left: 1.4rem;
+  list-style: disc;
+}
+
+.outline-editor ul ul {
+  list-style: circle;
+}
+
+.outline-editor li {
+  padding: 0.125rem 0;
+}
+
+.outline-editor p {
+  margin: 0;
+}
+
+/* La línea vacía donde está el cursor invita a escribir */
+.outline-editor p.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--enarm-fg-muted);
+}
+
+.outline-token {
+  border-radius: 0.25rem;
+  padding: 0 0.125rem;
+}
+
+.outline-token--separator,
+.outline-token--multiline {
+  background: var(--enarm-primary-soft);
+  color: var(--enarm-primary);
+  font-weight: 700;
+}
+
+.outline-token--cloze {
+  background: var(--enarm-accent-soft);
+  color: var(--enarm-warning);
+}
+
+.outline-token--tag {
+  background: var(--enarm-fam-soft);
+  color: var(--enarm-fam-ink);
+}
+
+.outline-token--link {
+  color: var(--enarm-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.outline-badge {
+  margin-left: 0.5rem;
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+  background: var(--enarm-primary-soft);
+  color: var(--enarm-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+}

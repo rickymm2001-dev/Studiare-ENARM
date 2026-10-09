@@ -6,12 +6,14 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
+import { useLiveData } from '@/data/hooks';
 import { isEditableDeck, type Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { createManualDeck, deleteManualDeck, DECK_NAME_MAX } from '@/data/usecases/manualDecks';
 import {
   MAX_DECK_DEPTH,
   deckDepth,
+  descendantIds,
   deckPath,
   deckIndent,
   flattenDeckTree,
@@ -46,6 +48,14 @@ export function OwnDecksCard({
   const [nameError, setNameError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
+  // Los apuntes que viven en un mazo no se borran con él, pero sus tarjetas sí. Se avisa antes
+  const outlines = useLiveData(() => api.repos.outlines.list(), [api.repos]);
+  const outlinesIn = (deckId: string) => {
+    const doomed = descendantIds(decks, deckId);
+    return (outlines ?? []).filter(
+      (outline) => outline.ownerId === session.user.id && doomed.has(outline.deckId),
+    ).length;
+  };
 
   const create = async () => {
     if (name.trim() === '') {
@@ -120,6 +130,11 @@ export function OwnDecksCard({
                 {confirmingId === deck.id ? (
                   <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium">{t.decks.confirmDelete(deck.name)}</p>
+                    {outlinesIn(deck.id) > 0 ? (
+                      <p className="text-sm text-warning">
+                        {t.decks.confirmDeleteOutlines(outlinesIn(deck.id))}
+                      </p>
+                    ) : null}
                     <div className="flex gap-2">
                       <Button
                         size="sm"

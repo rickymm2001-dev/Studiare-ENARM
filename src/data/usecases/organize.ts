@@ -9,6 +9,7 @@ import type { DataApi } from '../context';
 import { createEvent, type Clock } from '../events/createEvent';
 import { isEditableDeck, type Deck, type Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
+import { isFromOutline } from './manualDecks';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 type Actor = Pick<User, 'id' | 'timeZone'>;
@@ -20,7 +21,11 @@ export interface BatchResult {
   skipped: number;
 }
 
-/** Notas que el alumno puede editar. Las de mazos suyos y que no vienen precargadas */
+/**
+ * Notas que el alumno puede editar. Las de mazos suyos, que no vienen precargadas ni salen de un
+ * apunte. Las de un apunte se cambian en el apunte, porque el siguiente guardado del apunte las
+ * dejaría como las manda la línea y revertiría el cambio sin avisar
+ */
 async function editableNotes(
   api: Pick<DataApi, 'repos'>,
   user: Pick<User, 'id'>,
@@ -30,7 +35,10 @@ async function editableNotes(
   const decks = new Map((await api.repos.decks.list()).map((deck) => [deck.id, deck]));
   const found = (await api.repos.notes.list()).filter((note) => wanted.has(note.id));
   const notes = found.filter(
-    (note) => note.origin !== 'preloaded' && decks.get(note.deckId)?.ownerId === user.id,
+    (note) =>
+      note.origin !== 'preloaded' &&
+      !isFromOutline(note) &&
+      decks.get(note.deckId)?.ownerId === user.id,
   );
   return { notes, skipped: wanted.size - notes.length };
 }

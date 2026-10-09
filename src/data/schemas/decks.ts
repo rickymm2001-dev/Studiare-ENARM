@@ -84,6 +84,13 @@ const NoteBaseShape = {
   /** Señal de controversia puesta por la IA. null o ausente si no hay o ya se atendió */
   controversy: ControversySchema.nullable().optional(),
   isDemo: z.boolean(),
+  /**
+   * Apunte en esquema del que sale la nota (Fase C2, Etapa 3) y la línea que la genera. Van juntos.
+   * Ausentes o null en una tarjeta suelta, hecha a mano o importada. El ID de la línea es lo que une
+   * la línea con su nota, así editar el texto o mover la línea conserva las cartas y su historial
+   */
+  outlineId: IdSchema.nullable().optional(),
+  outlineNodeId: IdSchema.nullable().optional(),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,
 };
@@ -117,6 +124,8 @@ export const ClozeNoteSchema = z.strictObject({
   extra: SanitizedHtmlSchema.default(''),
 });
 
+const isSet = (value: string | null | undefined) => typeof value === 'string';
+
 export const NoteSchema = z
   .discriminatedUnion('kind', [BasicNoteSchema, BasicReverseNoteSchema, ClozeNoteSchema])
   // Una tarjeta generada siempre cita la frase y la fuente que la respalda, la pregunta del banco o
@@ -128,7 +137,12 @@ export const NoteSchema = z
         (note.sourceQuestionVersionId !== null ||
           (note.sourceTitle !== null && note.sourceTitle !== undefined))),
     { message: 'Una tarjeta generada cita su fuente', path: ['sourceQuote'] },
-  );
+  )
+  // La nota de un apunte lleva el apunte y la línea juntos, o ninguno de los dos
+  .refine((note) => isSet(note.outlineId) === isSet(note.outlineNodeId), {
+    message: 'Una nota de un apunte lleva el apunte y la línea juntos',
+    path: ['outlineNodeId'],
+  });
 export type Note = z.infer<typeof NoteSchema>;
 
 export const CardSchema = z.strictObject({

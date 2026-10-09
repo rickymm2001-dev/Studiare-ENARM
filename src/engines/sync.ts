@@ -29,7 +29,7 @@ import {
   type Note,
 } from '@/data/schemas/decks';
 import { AppEventSchema, type AppEvent } from '@/data/schemas/events';
-import { OutlinePageSchema, type OutlinePage } from '@/data/schemas/outlines';
+import { OutlineSchema, type Outline } from '@/data/schemas/outlines';
 
 export const SYNC_KINDS = ['deck', 'note', 'card', 'outline', 'widget_layout'] as const;
 export type SyncKind = (typeof SYNC_KINDS)[number];
@@ -49,7 +49,7 @@ export type SyncItem =
   | { kind: 'deck'; value: Deck }
   | { kind: 'note'; value: Note }
   | { kind: 'card'; value: Card }
-  | { kind: 'outline'; value: OutlinePage }
+  | { kind: 'outline'; value: Outline }
   | { kind: 'widget_layout'; value: WidgetLayout };
 
 /** Un registro con la forma que tiene en el servidor */
@@ -121,7 +121,7 @@ export interface LocalData {
   decks: readonly Deck[];
   notes: readonly Note[];
   cards: readonly Card[];
-  outlines: readonly OutlinePage[];
+  outlines: readonly Outline[];
   layout: WidgetLayout | null;
 }
 
@@ -160,7 +160,7 @@ const SCHEMAS = {
   deck: DeckSchema,
   note: NoteSchema,
   card: CardSchema,
-  outline: OutlinePageSchema,
+  outline: OutlineSchema,
   widget_layout: WidgetLayoutSchema,
 } as const satisfies Record<SyncKind, z.ZodType>;
 

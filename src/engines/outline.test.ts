@@ -1,381 +1,430 @@
-import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import {
-  OUTLINE_MAX_DEPTH,
-  analyzeOutline,
-  applyMark,
   backlinks,
-  hasChildren,
-  indentLine,
-  insertLineBelow,
-  moveLine,
-  normalizeDepths,
-  outdentLine,
+  cardCountOf,
+  countNodes,
+  docToOutline,
+  markTokens,
+  normalizeTitle,
+  numberClozeHoles,
+  OUTLINE_LIMITS,
+  outlineDepth,
+  outlineTags,
+  outlineToDoc,
   parseLine,
-  removeLine,
+  pickIdOwners,
+  planCards,
   resolveLinks,
-  subtreeEnd,
-  titleKey,
-  visibleIndexes,
-  type OutlineLineLike,
+  type OutlineNode,
 } from './outline';
 
-const line = (id: string, depth: number, text = id): OutlineLineLike => ({ id, depth, text });
-const shape = (lines: readonly OutlineLineLike[]) =>
-  lines.map((entry) => `${entry.depth}${entry.id}`);
+let counter = 0;
+const makeId = () => `gen-${(counter += 1)}`;
+const node = (id: string, text: string, ...children: OutlineNode[]): OutlineNode => ({
+  id,
+  text,
+  children,
+});
 
-describe('parseLine', () => {
-  it('una línea sin marca no genera tarjeta', () => {
-    const parsed = parseLine('Las ideas sueltas también van en el apunte');
-    expect(parsed.mark).toBe('none');
-    expect(parsed.error).toBeNull();
-  });
-
-  it(':: da una básica con frente y respuesta', () => {
-    const parsed = parseLine(
-      'Triada de Beck :: Hipotensión, ingurgitación yugular y ruidos apagados',
-    );
-    expect(parsed).toMatchObject({
-      mark: 'basic',
-      front: 'Triada de Beck',
-      back: 'Hipotensión, ingurgitación yugular y ruidos apagados',
-      error: null,
-    });
-  });
-
-  it(';; da una básica con tarjeta inversa', () => {
-    expect(parseLine('Metformina ;; Biguanida')).toMatchObject({
-      mark: 'basic_reverse',
-      front: 'Metformina',
-      back: 'Biguanida',
-    });
-  });
-
-  it('usa el primer marcador y deja el resto como respuesta', () => {
-    const parsed = parseLine('A :: B ;; C');
-    expect(parsed).toMatchObject({ mark: 'basic', front: 'A', back: 'B ;; C' });
-  });
-
-  it('un marcador pegado a una palabra no cuenta, así no choca con etiquetas en ruta', () => {
-    expect(parseLine('a::b y c;;d').mark).toBe('none');
-    expect(parseLine('Pregunta :: respuesta #cardio::infarto').tags).toEqual(['cardio::infarto']);
-  });
-
-  it('una pregunta sin respuesta o una respuesta sin pregunta se marca incompleta', () => {
-    expect(parseLine('Pregunta ::')).toMatchObject({ mark: 'basic', error: 'empty_back' });
-    expect(parseLine(':: Respuesta')).toMatchObject({ mark: 'none' });
-    expect(parseLine('x ;; ').error).toBe('empty_back');
-  });
-
-  it('los huecos sin número se numeran en orden y los numerados se respetan', () => {
-    expect(parseLine('La {{metformina}} baja la {{gluconeogénesis}}').cloze).toBe(
-      'La {{c1::metformina}} baja la {{c2::gluconeogénesis}}',
-    );
-    expect(parseLine('{{c3::a}} y {{b}}').cloze).toBe('{{c3::a}} y {{c4::b}}');
-    expect(parseLine('Hueco {{c1::uno}} y {{c1::otro}}').error).toBeNull();
-  });
-
-  it('un hueco sin cerrar o vacío no se acepta, para no dejar la respuesta a la vista', () => {
-    expect(parseLine('Esto {{c1::queda abierto').error).toBe('unclosed_cloze');
-    expect(parseLine('Esto {{c1::}} está vacío').error).toBe('unclosed_cloze');
-    expect(parseLine('Solo llaves {{}}').error).toBe('no_cloze');
-  });
-
-  it('con huecos y :: a la vez manda el hueco', () => {
-    expect(parseLine('Pregunta :: la {{respuesta}}').mark).toBe('cloze');
-  });
-
-  it('saca las etiquetas del texto y las limpia', () => {
-    const parsed = parseLine('Dosis :: 500 mg #Medicina_interna::Cardiología, #urgencias.');
-    expect(parsed.back).toBe('500 mg');
-    expect(parsed.tags).toEqual(['Medicina_interna::Cardiología', 'urgencias']);
-  });
-
-  it('una etiqueta con espacios por escribir mal queda sin espacios', () => {
-    expect(parseLine('a :: b #mieloma::multiple').tags).toEqual(['mieloma::multiple']);
-  });
-
-  it('aplana los enlaces y los junta sin repetir', () => {
-    const parsed = parseLine('Ver [[Diabetes]] y [[diabetes]] o [[ Insulina ]]');
-    expect(parsed.clean).toBe('Ver Diabetes y diabetes o Insulina');
-    expect(parsed.links).toEqual(['Diabetes', 'Insulina']);
-  });
-
-  it('un campo demasiado largo se marca', () => {
-    expect(parseLine(`${'a'.repeat(3001)} :: b`).error).toBe('too_long');
+describe('pickIdOwners, quién conserva un id repetido', () => {
+  it('gana el mayor rango y, entre iguales, el primero', () => {
+    const owners = pickIdOwners([
+      { id: 'a', rank: 0, item: 'vacío' },
+      { id: 'a', rank: 1, item: 'con texto' },
+      { id: 'a', rank: 1, item: 'otro con texto' },
+      { id: 'b', rank: 0, item: 'único' },
+      { id: '', rank: 5, item: 'sin id' },
+    ]);
+    expect(owners.get('a')).toBe('con texto');
+    expect(owners.get('b')).toBe('único');
+    expect(owners.has('')).toBe(false);
   });
 });
 
-describe('analyzeOutline', () => {
-  const lines = [
-    line('a', 0, 'Cardiología #cardio'),
-    line('b', 1, 'Infarto :: Oclusión coronaria #infarto'),
-    line('c', 1, 'El {{troponina}} sube a las 3 horas'),
-    line('d', 2, 'Detalle ;; Otro'),
-    line('e', 0, 'Nefrología'),
-    line('f', 1, 'Incompleta ::'),
-  ];
-  const plan = analyzeOutline(lines, ['ENARM 2027']);
-
-  it('hereda las etiquetas de las líneas de arriba y las del apunte', () => {
-    const byLine = new Map(plan.cards.map((card) => [card.lineId, card]));
-    expect(byLine.get('b')?.tags).toEqual(['ENARM_2027', 'cardio', 'infarto']);
-    expect(byLine.get('d')?.tags).toEqual(['ENARM_2027', 'cardio']);
-    expect(plan.lines.find((entry) => entry.lineId === 'e')?.tags).toEqual(['ENARM_2027']);
-  });
-
-  it('la cloze lleva de contexto el camino de líneas que la contienen', () => {
-    const cloze = plan.cards.find((card) => card.lineId === 'c');
-    expect(cloze?.draft).toEqual({
-      kind: 'cloze',
-      text: 'El {{c1::troponina}} sube a las 3 horas',
-      extra: 'Cardiología',
+describe('parseLine, marcas de una línea', () => {
+  it('>> es una tarjeta hacia delante', () => {
+    expect(parseLine('Primera línea del asma >> Salbutamol').mark).toEqual({
+      type: 'forward',
+      separator: '>>',
+      left: 'Primera línea del asma',
+      right: 'Salbutamol',
     });
   });
 
-  it('cuenta las cartas, separa los problemas y las líneas sin marca', () => {
-    expect(plan.cards.map((card) => [card.lineId, card.cards])).toEqual([
-      ['b', 1],
-      ['c', 1],
-      ['d', 2],
-    ]);
-    expect(plan.problems).toEqual([{ lineId: 'f', error: 'empty_back' }]);
-    expect(plan.unmarked).toEqual(['a', 'e']);
+  it('<< pregunta lo que está a la derecha y <> y :: dan las dos direcciones', () => {
+    expect(parseLine('Salbutamol << Primera línea del asma').mark).toMatchObject({
+      type: 'backward',
+      left: 'Salbutamol',
+      right: 'Primera línea del asma',
+    });
+    expect(parseLine('Disnea <> Dificultad para respirar').mark).toMatchObject({ type: 'both' });
+    expect(parseLine('Asma :: Obstrucción reversible de la vía aérea').mark).toMatchObject({
+      type: 'both',
+      separator: '::',
+    });
   });
 
-  it('un cloze con dos números da dos cartas', () => {
-    const result = analyzeOutline([line('x', 0, 'La {{a}} y la {{b}} y otra {{c1::c}}')]);
-    expect(result.cards[0]?.cards).toBe(3);
-    const same = analyzeOutline([line('y', 0, '{{c1::uno}} y {{c1::dos}}')]);
-    expect(same.cards[0]?.cards).toBe(1);
+  it(';; es un descriptor hacia delante', () => {
+    expect(parseLine('Asma ;; Sibilancias nocturnas').mark).toMatchObject({
+      type: 'forward',
+      separator: ';;',
+    });
   });
 
-  it('junta los enlaces de todo el apunte sin repetir', () => {
-    const result = analyzeOutline([
-      line('a', 0, 'Ver [[Uno]]'),
-      line('b', 1, 'y [[uno]] y [[Dos]]'),
-    ]);
-    expect(result.links).toEqual(['Uno', 'Dos']);
+  it('una marca sin texto de un lado no hace tarjeta', () => {
+    expect(parseLine('>> solo respuesta').mark).toEqual({ type: 'none' });
+    expect(parseLine('solo pregunta >>').mark).toEqual({ type: 'none' });
+    expect(parseLine('   ').mark).toEqual({ type: 'none' });
   });
 
-  it('la sangría de una línea saca de la pila a las que ya cerraron', () => {
-    const result = analyzeOutline([
-      line('a', 0, 'Uno #x'),
-      line('b', 1, 'Dos #y'),
-      line('c', 0, 'Tres'),
-      line('d', 1, 'Cuatro :: algo'),
-    ]);
-    expect(result.cards[0]?.tags).toEqual([]);
-    expect(result.lines[3]?.breadcrumb).toEqual(['Tres']);
-  });
-});
-
-describe('estructura de la lista', () => {
-  const outline = [
-    line('a', 0),
-    line('b', 1),
-    line('c', 2),
-    line('d', 1),
-    line('e', 0),
-    line('f', 1),
-  ];
-
-  it('subtreeEnd y hasChildren siguen la sangría', () => {
-    expect(subtreeEnd(outline, 0)).toBe(4);
-    expect(subtreeEnd(outline, 1)).toBe(3);
-    expect(subtreeEnd(outline, 4)).toBe(6);
-    expect(hasChildren(outline, 2)).toBe(false);
-    expect(hasChildren(outline, 4)).toBe(true);
+  it('los dos puntos de una etiqueta o de un hueco no cuentan como marca', () => {
+    expect(parseLine('Tema #Cardiología::Arritmias').mark).toEqual({ type: 'none' });
+    expect(parseLine('El {{c1::sodio}} es el principal catión').mark).toMatchObject({
+      type: 'cloze',
+    });
+    // Un :: de verdad fuera del hueco sí es marca
+    expect(parseLine('Sodio :: catión principal #Fisiología::Líquidos').mark).toMatchObject({
+      type: 'both',
+      left: 'Sodio',
+      right: 'catión principal',
+    });
   });
 
-  it('indentLine mete la rama un nivel y no pasa de la línea de arriba más uno', () => {
-    expect(shape(indentLine(outline, 3))).toEqual(['0a', '1b', '2c', '2d', '0e', '1f']);
-    // b ya está un nivel más hondo que a, no puede bajar más
-    expect(shape(indentLine(outline, 1))).toEqual(shape(outline));
-    // la primera línea no tiene a quién colgarse
-    expect(shape(indentLine(outline, 0))).toEqual(shape(outline));
-    // e puede colgar de d
-    expect(shape(indentLine(outline, 4))).toEqual(['0a', '1b', '2c', '1d', '1e', '2f']);
+  it('tres signos al final piden la respuesta en las líneas de abajo', () => {
+    expect(parseLine('Causas de insuficiencia cardiaca >>>').mark).toEqual({
+      type: 'multiline',
+      front: 'Causas de insuficiencia cardiaca',
+    });
+    expect(parseLine('>>>').mark).toEqual({ type: 'none' });
+    // A mitad de línea tres signos no son una marca de varias líneas
+    expect(parseLine('a >>> b').mark).toEqual({ type: 'none' });
   });
 
-  it('outdentLine saca la rama completa y mantiene la lista válida', () => {
-    expect(shape(outdentLine(outline, 1))).toEqual(['0a', '0b', '1c', '1d', '0e', '1f']);
-    expect(shape(outdentLine(outline, 0))).toEqual(shape(outline));
-  });
-
-  it('moveLine mueve la rama entera entre hermanas', () => {
-    const down = moveLine(outline, 0, 1);
-    expect(shape(down.lines)).toEqual(['0e', '1f', '0a', '1b', '2c', '1d']);
-    expect(down.index).toBe(2);
-    const up = moveLine(outline, 4, -1);
-    expect(shape(up.lines)).toEqual(['0e', '1f', '0a', '1b', '2c', '1d']);
-    expect(up.index).toBe(0);
-    // sin hermana en esa dirección no pasa nada
-    expect(shape(moveLine(outline, 0, -1).lines)).toEqual(shape(outline));
-    expect(shape(moveLine(outline, 4, 1).lines)).toEqual(shape(outline));
-    expect(shape(moveLine(outline, 2, 1).lines)).toEqual(shape(outline));
-  });
-
-  it('insertLineBelow pone la línea nueva de primera hija si la actual tiene hijas', () => {
-    const make = (depth: number) => line('n', depth);
-    expect(shape(insertLineBelow(outline, 0, make).lines)).toEqual([
-      '0a',
-      '1n',
-      '1b',
-      '2c',
-      '1d',
-      '0e',
-      '1f',
-    ]);
-    const leaf = insertLineBelow(outline, 2, make);
-    expect(shape(leaf.lines)).toEqual(['0a', '1b', '2c', '2n', '1d', '0e', '1f']);
-    expect(leaf.index).toBe(3);
-  });
-
-  it('removeLine quita solo esa línea y sube a sus hijas', () => {
-    expect(shape(removeLine(outline, 1))).toEqual(['0a', '1c', '1d', '0e', '1f']);
-    expect(shape(removeLine(outline, 0))).toEqual(['0b', '1c', '0d', '0e', '1f']);
-  });
-
-  it('visibleIndexes oculta lo que cuelga de una rama plegada', () => {
-    expect(visibleIndexes(outline, new Set())).toEqual([0, 1, 2, 3, 4, 5]);
-    expect(visibleIndexes(outline, new Set(['a']))).toEqual([0, 4, 5]);
-    expect(visibleIndexes(outline, new Set(['b', 'e']))).toEqual([0, 1, 3, 4]);
-    // plegar una línea sin hijas no oculta nada
-    expect(visibleIndexes(outline, new Set(['c']))).toEqual([0, 1, 2, 3, 4, 5]);
-  });
-
-  it('normalizeDepths corrige sangrías imposibles', () => {
-    const messy = [line('a', 3), line('b', 5), line('c', 0), line('d', 99)];
-    expect(shape(normalizeDepths(messy))).toEqual(['0a', '1b', '0c', '1d']);
-  });
-});
-
-describe('propiedades de la estructura', () => {
-  const arbitraryLines = fc
-    .array(fc.integer({ min: 0, max: 12 }), { minLength: 1, maxLength: 30 })
-    .map((depths) => normalizeDepths(depths.map((depth, index) => line(`l${index}`, depth))));
-  const valid = (lines: readonly OutlineLineLike[]) =>
-    lines.every(
-      (entry, index) =>
-        entry.depth >= 0 &&
-        entry.depth <= OUTLINE_MAX_DEPTH &&
-        entry.depth <= (index === 0 ? 0 : (lines[index - 1]?.depth ?? 0) + 1),
+  it('{{texto}} se numera en orden y respeta los números que ya trae', () => {
+    expect(numberClozeHoles('{{a}} y {{b}}')).toBe('{{c1::a}} y {{c2::b}}');
+    expect(numberClozeHoles('{{c2::a}} y {{b}} y {{c1::c}}')).toBe(
+      '{{c2::a}} y {{c3::b}} y {{c1::c}}',
     );
+    expect(numberClozeHoles('sin huecos')).toBeNull();
+    expect(numberClozeHoles('hueco {{ }} vacío')).toBeNull();
+    expect(parseLine('El {{corazón}} bombea la {{sangre}}').mark).toEqual({
+      type: 'cloze',
+      text: 'El {{c1::corazón}} bombea la {{c2::sangre}}',
+    });
+  });
 
-  it('toda operación deja una lista válida y no pierde líneas', () => {
-    fc.assert(
-      fc.property(
-        arbitraryLines,
-        fc.nat(40),
-        fc.constantFrom('in', 'out', 'up', 'down'),
-        (lines, raw, op) => {
-          const index = raw % lines.length;
-          const result =
-            op === 'in'
-              ? indentLine(lines, index)
-              : op === 'out'
-                ? outdentLine(lines, index)
-                : moveLine(lines, index, op === 'up' ? -1 : 1).lines;
-          expect(valid(result)).toBe(true);
-          expect(result.map((entry) => entry.id).sort()).toEqual(
-            lines.map((entry) => entry.id).sort(),
-          );
-        },
+  it('con un separador, las llaves dobles quedan como texto y no hacen cloze', () => {
+    const parsed = parseLine('Fármaco >> {{beta}} bloqueador');
+    expect(parsed.mark.type).toBe('forward');
+  });
+
+  it('saca las etiquetas y los enlaces, y deja el texto limpio', () => {
+    const parsed = parseLine('Ver [[Asma]] y [[Asma]] de nuevo #Neumología::Asma #urgente.');
+    expect(parsed.tags).toEqual(['Neumología::Asma', 'urgente']);
+    expect(parsed.links).toEqual(['Asma']);
+    expect(parsed.plain).toBe('Ver Asma y Asma de nuevo');
+  });
+
+  it('una almohadilla pegada a una palabra no es etiqueta', () => {
+    expect(parseLine('Caso C#3 del examen').tags).toEqual([]);
+  });
+
+  it('una almohadilla con un número no es etiqueta y el texto no pierde el número', () => {
+    const parsed = parseLine('Causa #1 de muerte >> Isquemia');
+    expect(parsed.tags).toEqual([]);
+    expect(parsed.mark).toMatchObject({ type: 'forward', left: 'Causa #1 de muerte' });
+  });
+
+  it('un salto de línea dentro del texto cuenta como espacio al buscar marcas', () => {
+    expect(parseLine('Pregunta\n>> Respuesta').mark).toMatchObject({ type: 'forward' });
+  });
+});
+
+describe('planCards, el plan de tarjetas de un apunte', () => {
+  it('convierte cada marca en el tipo de nota que toca', () => {
+    const { plans, issues } = planCards([
+      node('a', 'Asma >> Obstrucción reversible'),
+      node('b', 'Obstrucción reversible << Asma'),
+      node('c', 'Disnea <> Falta de aire'),
+      node('d', 'El {{corazón}} bombea'),
+      node('e', 'Sin marca'),
+    ]);
+    expect(issues).toEqual([]);
+    expect(plans.map((plan) => [plan.nodeId, plan.draft.kind])).toEqual([
+      ['a', 'basic'],
+      ['b', 'basic'],
+      ['c', 'basic_reverse'],
+      ['d', 'cloze'],
+    ]);
+    // << invierte los lados
+    expect(plans[1]?.draft).toEqual({
+      kind: 'basic',
+      front: 'Asma',
+      back: 'Obstrucción reversible',
+    });
+  });
+
+  it('las etiquetas de una línea pasan a todo lo que cuelga de ella', () => {
+    const { plans } = planCards([
+      node(
+        't',
+        'Cardiología #Cardio',
+        node('x', 'FA >> Arritmia #Arritmias'),
+        node('y', 'IC >> Falla'),
+      ),
+    ]);
+    expect(plans.find((plan) => plan.nodeId === 'x')?.tags).toEqual(['Cardio', 'Arritmias']);
+    expect(plans.find((plan) => plan.nodeId === 'y')?.tags).toEqual(['Cardio']);
+  });
+
+  it('con >>> la respuesta son las líneas de abajo y esas líneas no generan tarjetas', () => {
+    const { plans, issues } = planCards([
+      node(
+        'm',
+        'Causas de IC >>>',
+        node('c1', 'Isquemia'),
+        node('c2', 'Hipertensión', node('c3', 'Crónica')),
+      ),
+    ]);
+    expect(issues).toEqual([]);
+    expect(plans).toHaveLength(1);
+    expect(plans[0]?.draft).toEqual({
+      kind: 'basic',
+      front: 'Causas de IC',
+      back: 'Isquemia\nHipertensión\n  Crónica',
+    });
+  });
+
+  it('avisa si una línea con >>> no tiene respuesta o si sus hijas traían marcas', () => {
+    const empty = planCards([node('m', 'Causas >>>')]);
+    expect(empty.plans).toEqual([]);
+    expect(empty.issues).toEqual([{ nodeId: 'm', code: 'multiline_without_children' }]);
+    const nested = planCards([node('m', 'Causas >>>', node('h', 'A >> B'))]);
+    expect(nested.plans).toHaveLength(1);
+    expect(nested.issues).toEqual([{ nodeId: 'm', code: 'nested_mark_ignored' }]);
+  });
+
+  it('un hueco que no se puede usar no genera tarjeta y se avisa', () => {
+    const { plans, issues } = planCards([node('c', 'Dato {{c1::sin cerrar')]);
+    expect(plans).toEqual([]);
+    expect(issues).toEqual([{ nodeId: 'c', code: 'cloze_unusable' }]);
+    const explicit = planCards([node('d', 'Dato {{c1::}} vacío {{c2::ok}}')]);
+    expect(explicit.issues).toEqual([{ nodeId: 'd', code: 'cloze_unusable' }]);
+  });
+
+  it('respeta los topes de campo, de tarjetas y de profundidad', () => {
+    const long = planCards([node('l', `P >> ${'x'.repeat(OUTLINE_LIMITS.maxFieldLength + 1)}`)]);
+    expect(long.plans).toEqual([]);
+    expect(long.issues).toEqual([{ nodeId: 'l', code: 'too_long' }]);
+
+    const many = planCards(
+      Array.from({ length: OUTLINE_LIMITS.maxCards + 5 }, (_, i) =>
+        node(`n${i}`, `P${i} >> R${i}`),
       ),
     );
+    expect(many.plans).toHaveLength(OUTLINE_LIMITS.maxCards);
+    expect(many.issues.filter((issue) => issue.code === 'too_many_cards')).toHaveLength(5);
+
+    let deep: OutlineNode = node('d9', 'P >> R');
+    for (let level = 8; level >= 1; level -= 1) deep = node(`d${level}`, 'nivel', deep);
+    const result = planCards([deep]);
+    expect(result.issues).toEqual([{ nodeId: 'd9', code: 'too_deep' }]);
   });
 
-  it('borrar una línea deja la lista válida con una menos', () => {
-    fc.assert(
-      fc.property(arbitraryLines, fc.nat(40), (lines, raw) => {
-        const result = removeLine(lines, raw % lines.length);
-        expect(valid(result)).toBe(true);
-        expect(result).toHaveLength(lines.length - 1);
-      }),
-    );
+  it('el plan es el mismo con las mismas líneas, el id de la línea manda y no su posición', () => {
+    const lines = [node('a', 'A >> 1'), node('b', 'B >> 2')];
+    const swapped = [lines[1] as OutlineNode, lines[0] as OutlineNode];
+    const byId = (list: OutlineNode[]) =>
+      Object.fromEntries(planCards(list).plans.map((plan) => [plan.nodeId, plan.draft]));
+    expect(byId(swapped)).toEqual(byId(lines));
   });
 
-  it('sangrar y sacar la misma línea vuelve a la lista de antes', () => {
-    fc.assert(
-      fc.property(arbitraryLines, fc.nat(40), (lines, raw) => {
-        const index = raw % lines.length;
-        const indented = indentLine(lines, index);
-        if (indented.every((entry, position) => entry === lines[position])) return;
-        expect(outdentLine(indented, index).map((entry) => entry.depth)).toEqual(
-          lines.map((entry) => entry.depth),
-        );
-      }),
+  it('cuenta líneas y profundidad', () => {
+    const tree = [node('a', 'a', node('b', 'b', node('c', 'c'))), node('d', 'd')];
+    expect(countNodes(tree)).toBe(4);
+    expect(outlineDepth(tree)).toBe(3);
+    expect(outlineDepth([])).toBe(0);
+  });
+});
+
+describe('conversión entre el árbol y el documento del editor', () => {
+  const tree = [
+    node('a', 'Cardiología #Cardio', node('b', 'FA >> Arritmia'), node('c', '')),
+    node('d', 'Otra'),
+  ];
+
+  it('ida y vuelta conserva texto, orden, niveles e ids', () => {
+    const doc = outlineToDoc(tree, makeId);
+    expect(docToOutline(doc, makeId)).toEqual(tree);
+  });
+
+  it('un apunte vacío trae una línea en blanco para escribir', () => {
+    const doc = outlineToDoc([], makeId);
+    const back = docToOutline(doc, makeId);
+    expect(back).toHaveLength(1);
+    expect(back[0]?.text).toBe('');
+  });
+
+  it('una línea partida con Enter hereda el id y solo la primera lo conserva', () => {
+    const doc = outlineToDoc(tree, makeId);
+    // Se parte la primera línea: la copia queda justo después con el mismo id
+    const list = doc.content?.[0];
+    list?.content?.splice(1, 0, {
+      type: 'listItem',
+      attrs: { nodeId: 'a' },
+      content: [{ type: 'paragraph', content: [{ type: 'text', text: 'mitad nueva' }] }],
+    });
+    const back = docToOutline(doc, makeId);
+    expect(back[0]?.id).toBe('a');
+    expect(back[1]?.text).toBe('mitad nueva');
+    expect(back[1]?.id).not.toBe('a');
+    expect(
+      new Set([...back, ...back.flatMap((item) => item.children)].map((item) => item.id)).size,
+    ).toBe(countNodes(back));
+  });
+
+  it('entre dos líneas con el mismo id lo conserva la que tiene texto, aunque vaya después', () => {
+    const item = (id: string, text: string) => ({
+      type: 'listItem',
+      attrs: { nodeId: id },
+      content: [
+        { type: 'paragraph', ...(text === '' ? {} : { content: [{ type: 'text', text }] }) },
+      ],
+    });
+    // Enter al inicio de la línea a: arriba queda el renglón vacío y abajo el texto, los dos con el id a
+    const back = docToOutline(
+      {
+        type: 'doc',
+        content: [
+          { type: 'bulletList', content: [item('a', ''), item('a', 'Pregunta >> Respuesta')] },
+        ],
+      },
+      makeId,
     );
+    expect(back[0]?.text).toBe('');
+    expect(back[0]?.id).toMatch(/^gen-/);
+    expect(back[1]).toMatchObject({ id: 'a', text: 'Pregunta >> Respuesta' });
+  });
+
+  it('una línea sin id recibe uno nuevo y nunca queda vacío', () => {
+    const back = docToOutline(
+      {
+        type: 'doc',
+        content: [
+          {
+            type: 'bulletList',
+            content: [
+              {
+                type: 'listItem',
+                content: [{ type: 'paragraph', content: [{ type: 'text', text: 'x' }] }],
+              },
+            ],
+          },
+        ],
+      },
+      makeId,
+    );
+    expect(back[0]?.id).toMatch(/^gen-/);
+  });
+
+  it('los saltos suaves del editor pasan a espacio', () => {
+    const back = docToOutline(
+      {
+        type: 'doc',
+        content: [
+          {
+            type: 'bulletList',
+            content: [
+              {
+                type: 'listItem',
+                attrs: { nodeId: 'z' },
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [
+                      { type: 'text', text: 'uno' },
+                      { type: 'hardBreak' },
+                      { type: 'text', text: 'dos' },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      makeId,
+    );
+    expect(back[0]?.text).toBe('uno dos');
   });
 });
 
 describe('enlaces entre apuntes', () => {
-  const pages = [
-    { id: 'p1', title: 'Diabetes mellitus', lines: [line('a', 0, 'Ver [[Insulina]]')] },
-    { id: 'p2', title: 'Insulina', lines: [line('b', 0, 'Relacionada con [[diabetes MELLITUS]]')] },
-    { id: 'p3', title: 'Otro', lines: [line('c', 0, 'sin enlaces')] },
-  ];
+  const asma = { id: 'A', title: 'Asma', nodes: [node('a1', 'Ver [[EPOC]] y [[Tos crónica]]')] };
+  const epoc = { id: 'E', title: 'epoc', nodes: [node('e1', 'Parecido a [[ASMA]]')] };
+  const all = [asma, epoc];
 
-  it('titleKey ignora mayúsculas, acentos y espacios de más', () => {
-    expect(titleKey('  Cardiología   Clínica ')).toBe('cardiologia clinica');
+  it('compara títulos sin mayúsculas, acentos ni espacios de sobra', () => {
+    expect(normalizeTitle('  Insuficiencia   CARDÍACA ')).toBe('insuficiencia cardiaca');
   });
 
-  it('resolveLinks encuentra el apunte o deja null', () => {
-    const resolved = resolveLinks(pages, ['insulina', 'No existe']);
-    expect(resolved.get('insulina')?.id).toBe('p2');
-    expect(resolved.get('No existe')).toBeNull();
+  it('resuelve a dónde enlaza un apunte y cuáles títulos no existen', () => {
+    expect(resolveLinks(asma, all)).toEqual({ targets: ['E'], missing: ['Tos crónica'] });
   });
 
-  it('backlinks lista a quien enlaza y nunca al propio apunte', () => {
-    expect(backlinks(pages, pages[1] as (typeof pages)[number]).map((page) => page.id)).toEqual([
-      'p1',
+  it('un enlace a sí mismo no cuenta', () => {
+    const self = { id: 'S', title: 'Yo', nodes: [node('s', '[[yo]]')] };
+    expect(resolveLinks(self, [self])).toEqual({ targets: [], missing: [] });
+  });
+
+  it('los vínculos de regreso dicen qué línea de qué apunte menciona a este', () => {
+    expect(backlinks(asma, all)).toEqual([
+      { outlineId: 'E', title: 'epoc', nodeId: 'e1', text: 'Parecido a ASMA' },
     ]);
-    expect(backlinks(pages, pages[0] as (typeof pages)[number]).map((page) => page.id)).toEqual([
-      'p2',
+    expect(backlinks(epoc, all)).toEqual([
+      { outlineId: 'A', title: 'Asma', nodeId: 'a1', text: 'Ver EPOC y Tos crónica' },
     ]);
-    expect(backlinks(pages, pages[2] as (typeof pages)[number])).toEqual([]);
+  });
+
+  it('junta las etiquetas de todo el apunte sin repetir', () => {
+    expect(
+      outlineTags([node('a', 'x #B', node('b', 'y #A #B')), node('c', 'z #Cardio::Arritmias')]),
+    ).toEqual(['B', 'A', 'Cardio::Arritmias']);
   });
 });
 
-describe('applyMark', () => {
-  it('pone :: después de lo escrito con un espacio a cada lado', () => {
-    expect(applyMark('Triada de Beck', 14, 14, 'card')).toEqual({
-      text: 'Triada de Beck :: ',
-      caret: 18,
-    });
-    expect(applyMark('Triada de Beck ', 15, 15, 'card').text).toBe('Triada de Beck :: ');
-    expect(applyMark('', 0, 0, 'reverse')).toEqual({ text: ';; ', caret: 3 });
-    // No duplica el espacio de la derecha
-    expect(applyMark('A B', 1, 1, 'card').text).toBe('A :: B');
+describe('markTokens, lo que el editor resalta', () => {
+  const kinds = (text: string) =>
+    markTokens(text).map((token) => [token.kind, text.slice(token.start, token.end)]);
+
+  it('marca el separador y las etiquetas y enlaces', () => {
+    expect(kinds('Asma >> Salbutamol #Neumo [[EPOC]]')).toEqual([
+      ['separator', '>>'],
+      ['tag', '#Neumo'],
+      ['link', '[[EPOC]]'],
+    ]);
   });
 
-  it('el hueco envuelve la selección o deja el cursor adentro', () => {
-    expect(applyMark('La metformina baja', 3, 13, 'hole')).toEqual({
-      text: 'La {{metformina}} baja',
-      caret: 17,
-    });
-    expect(applyMark('La ', 3, 3, 'hole')).toEqual({ text: 'La {{}}', caret: 5 });
+  it('marca los huecos solo si la línea es cloze', () => {
+    expect(kinds('El {{corazón}} bombea')).toEqual([['cloze', '{{corazón}}']]);
+    expect(kinds('Fármaco >> {{beta}} bloqueador')).toEqual([['separator', '>>']]);
   });
 
-  it('el enlace envuelve igual que el hueco', () => {
-    expect(applyMark('Ver diabetes', 4, 12, 'link').text).toBe('Ver [[diabetes]]');
-    expect(applyMark('', 0, 0, 'link')).toEqual({ text: '[[]]', caret: 2 });
+  it('marca los tres signos del final de una línea de varias líneas', () => {
+    expect(kinds('Causas de IC >>>  ')).toEqual([['multiline', '>>>']]);
   });
 
-  it('la etiqueta agrega # con un espacio antes si hace falta', () => {
-    expect(applyMark('Dosis', 5, 5, 'tag')).toEqual({ text: 'Dosis #', caret: 7 });
-    expect(applyMark('', 0, 0, 'tag')).toEqual({ text: '#', caret: 1 });
-    expect(applyMark('Dosis ', 6, 6, 'tag').text).toBe('Dosis #');
+  it('una línea sin marcas no resalta nada', () => {
+    expect(markTokens('Solo texto')).toEqual([]);
   });
+});
 
-  it('una selección al revés o fuera de rango se acomoda', () => {
-    expect(applyMark('abc', 99, 1, 'hole').text).toBe('a{{bc}}');
-    expect(applyMark('abc', -5, 2, 'hole').text).toBe('{{ab}}c');
-  });
-
-  it('el texto con la marca se lee con el motor', () => {
-    const { text } = applyMark('Metformina', 10, 10, 'card');
-    expect(parseLine(`${text}Biguanida`)).toMatchObject({ mark: 'basic', error: null });
+describe('cardCountOf', () => {
+  it('cuenta las tarjetas que da cada tipo de borrador', () => {
+    expect(cardCountOf({ kind: 'basic', front: 'a', back: 'b' })).toBe(1);
+    expect(cardCountOf({ kind: 'basic_reverse', front: 'a', back: 'b' })).toBe(2);
+    expect(
+      cardCountOf({ kind: 'cloze', text: '{{c1::a}} y {{c2::b}} y {{c1::c}}', extra: '' }),
+    ).toBe(2);
   });
 });

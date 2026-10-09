@@ -8,6 +8,7 @@
 // externas, así no hay forma de leer archivos ni de pedir cosas a la red.
 import { parseLine } from '../../engines/outline';
 import { normalizeTags, sanitizeTag } from '../../engines/tagPath';
+import { clozeHoles } from '../content/cloze';
 import { escapeHtml } from '../content/plainText';
 import { IMPORT_LIMITS, type ImportLimits } from './limits';
 import { notesFromRows } from './rows';
@@ -214,30 +215,36 @@ export function parseDocx(
       headings[paragraph.heading - 1] = paragraph.plain;
       continue;
     }
-    // Párrafos con las marcas de Apuntes
-    const line = parseLine(paragraph.plain);
-    if (line.mark === 'none') continue;
-    if (line.error) {
-      errors.push({
-        position,
-        code:
-          line.error === 'empty_front'
-            ? 'empty_front'
-            : line.error === 'empty_back'
-              ? 'empty_back'
-              : line.error === 'too_long'
-                ? 'too_long'
-                : 'cloze_without_holes',
-      });
-      continue;
+    // Párrafos con las marcas de Apuntes. Las líneas que piden respuesta en las líneas de abajo
+    // necesitan un apunte con niveles, y un párrafo suelto no los tiene, así que se saltan
+    const { mark, tags: lineTags } = parseLine(paragraph.plain);
+    let note: Pick<ParsedNote, 'kind' | 'front' | 'back'> | null = null;
+    switch (mark.type) {
+      case 'forward':
+        note = { kind: 'basic', front: mark.left, back: mark.right };
+        break;
+      case 'backward':
+        note = { kind: 'basic', front: mark.right, back: mark.left };
+        break;
+      case 'both':
+        note = { kind: 'basic_reverse', front: mark.left, back: mark.right };
+        break;
+      case 'cloze':
+        if (clozeHoles(mark.text).length === 0) {
+          errors.push({ position, code: 'cloze_without_holes' });
+          continue;
+        }
+        note = { kind: 'cloze', front: mark.text, back: '' };
+        break;
+      default:
+        break;
     }
+    if (!note) continue;
     notes.push({
       guid: null,
-      kind: line.mark,
-      front: line.mark === 'cloze' ? line.cloze : line.front,
-      back: line.mark === 'cloze' ? '' : line.back,
+      ...note,
       html: false,
-      tags: normalizeTags([...(context ? [context] : []), ...line.tags]),
+      tags: normalizeTags([...(context ? [context] : []), ...lineTags]),
       deckPath: [],
       position,
     });

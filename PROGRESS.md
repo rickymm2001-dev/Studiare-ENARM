@@ -10,6 +10,7 @@
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
+- Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 programada (D-099). Falta el bloque E6 de privacidad, ver su sección
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
@@ -129,24 +130,28 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 
 ## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-092)
 
-Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar, así que esta etapa se programó sin esperar la aprobación de la Etapa 2.
-
 ### Bloques
-- [x] B1. Motor puro de apuntes (src/engines/outline.ts) con marcas, etiquetas heredadas, enlaces, estructura de la lista y marcas con botón
-- [x] B2. Tabla outlines (la base sube a la versión 6), caso de uso que mantiene las tarjetas al día y exportar mis datos con lo que el alumno creó
-- [x] B3. Pantalla Apuntes, cuarta pestaña de Repasar y Mazos, con editor en esquema, guardado automático, teclado, barra de botones, enlaces y borrar
-- [x] B4. Pruebas unitarias, de pantalla y e2e, con axe en teléfono y escritorio
+- [x] B1. Motor puro de apuntes (src/engines/outline.ts). Lee las marcas de una línea, arma el plan de tarjetas, convierte el árbol al documento del editor y de vuelta, y resuelve enlaces y vínculos de regreso
+- [x] B2. Capa de datos. Apuntes con su tabla (la base sube a la versión 6), las notas guardan el apunte y la línea de donde salen y los casos de uso crean, guardan, renombran, mueven y borran apuntes sincronizando sus tarjetas sin perder el historial
+- [x] B3. Editor con TipTap 3, pantalla de Apuntes como cuarta pestaña de Repasar, tarjetas del apunte al lado, enlaces y marcas rápidas, y autoguardado
+- [x] B4. Cierre de la etapa según 15.1. Sin aprobación, por indicación de Ricardo del 2026-10-08 de seguir sin detenerse
 
 ### Bitácora
-- Una marca en la línea la vuelve tarjeta. Pregunta :: Respuesta, Término ;; Definición con inversa, {{hueco}} y #etiqueta::ruta que heredan las líneas de abajo. El texto se guarda como texto plano escapado
-- Guardar dos veces lo mismo no escribe nada y las tarjetas conservan su ID y su historial al editar la línea. Una línea incompleta conserva la última tarjeta buena
-- La prueba e2e encontró un defecto real. El guardador se soltaba en cada pintura y guardaba una copia vieja, perdiendo la última línea. Quedó corregido con una prueba de regresión
-- Las esperas de Testing Library suben a 5 segundos para que las pruebas de pantalla no fallen por la carga de la máquina. Una prueba de Explorar había fallado una vez así en la corrida completa
-- No se tocó SQL, así que test:sql no cambia
+- Tres piezas en paralelo. El motor y la interfaz los escribí yo y la capa de datos la hizo un agente en su propia copia, que introdujo errores a propósito en su código para comprobar que sus pruebas los detectan (12 de 12 cazados)
+- Las dos cartas de un mismo concepto no se repasan el mismo día, así que el apunte dice 4 tarjetas y Repasar muestra 3 hoy. El e2e lo verifica
+- Las tarjetas que salen de un apunte ya no se pueden editar ni borrar desde el editor de mazos, solo desde el apunte, que las vuelve a escribir al sincronizar
+- TipTap pesa bastante, así que el editor es una carga diferida y no entra al arranque
+- El registro de pantallas pasa de 29 a 30
 
-### Pendiente con Ricardo para seguir
-- Aprobar las Etapas 2 y 3 en la revisión
-- Decidir qué funciones son gratis y cuáles de pago, con la bandera outlines abierta mientras tanto
+### Evidencia de cierre (15.1)
+- npm run check limpio. Typecheck y lint sin errores y 1,588 pruebas unitarias pasan. En la corrida completa una prueba de seguridad que recorre dist se pasó de sus 5 segundos por la carga en paralelo, pasa sola en 8 segundos y ahora tiene un tope de 60
+- e2e, 158 pasan en móvil y escritorio, con 3 flujos de apuntes nuevos. Escribir marcas y ver las tarjetas en Repasar, partir con Enter al inicio y volver a unir con Backspace comprobando en IndexedDB que la nota y su ID no cambian, y pegar varias líneas
+- Capturas en docs/screenshots/fase-c2-etapa3, la lista de apuntes y un apunte con marcas, en teléfono y escritorio, claro y oscuro
+- Revisión independiente con 14 hallazgos. Se corrigieron los 12 que afectan datos o uso, con pruebas nuevas, y los otros 2 quedaron documentados en D-092 (huecos sin número y un tiempo cuadrático que los topes del editor dejan en menos de 35 ms). Lo más grave era que Enter al inicio y Backspace en los bordes de una línea le quitaban el ID a la tarjeta y se perdía su historial, y que al pasar un tope el guardado rechazaba el apunte entero sin avisar
+- Las pruebas en Playwright necesitan PW_CHROMIUM_PATH=/opt/pw-browsers/chromium en este entorno, porque el Playwright del proyecto espera otra versión del navegador
+
+### Pendiente
+- Siguen las etapas 4 a 6 sin pausas de aprobación, por indicación de Ricardo
 
 ## Fase C2. Etapa 2, carga diaria (D-085 y D-089)
 

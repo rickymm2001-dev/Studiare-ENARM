@@ -26,6 +26,14 @@ export const ACADEMIC_SOURCES = [
     name: 'Normas Oficiales Mexicanas de la Secretaría de Salud',
     branch: null,
   },
+  // Ciencias básicas, que sumó el contrato de tarjetas de la Etapa 5 (D-100)
+  { key: 'guyton', name: 'Guyton y Hall. Tratado de Fisiología Médica', branch: null },
+  {
+    key: 'robbins',
+    name: 'Robbins y Cotran. Patología estructural y funcional',
+    branch: null,
+  },
+  { key: 'katzung', name: 'Katzung. Farmacología básica y clínica', branch: null },
 ] as const;
 
 export type AcademicSourceKey = (typeof ACADEMIC_SOURCES)[number]['key'];
@@ -37,4 +45,14 @@ export const ACADEMIC_SOURCE_KEYS = ACADEMIC_SOURCES.map((source) => source.key)
 
 export function academicSourceName(key: string): string {
   return ACADEMIC_SOURCES.find((source) => source.key === key)?.name ?? key;
+}
+
+/** Si la clave pertenece a la lista cerrada */
+export function isAcademicSourceId(id: string): boolean {
+  return ACADEMIC_SOURCES.some((source) => source.key === id);
+}
+
+/** El nombre de un texto de la lista, o null si no está en ella */
+export function academicSourceTitle(id: string): string | null {
+  return ACADEMIC_SOURCES.find((source) => source.key === id)?.name ?? null;
 }

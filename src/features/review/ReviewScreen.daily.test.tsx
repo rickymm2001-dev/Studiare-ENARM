@@ -28,7 +28,7 @@ afterEach(async () => {
 const NOW = '2026-10-01T15:00:00.000Z';
 
 /** Una tarjeta ya repasada que venció ayer y lleva 7 olvidos, con el mazo propio o generado */
-function seedLeech(options: { editable: boolean; lapses?: number }) {
+function seedLeech(options: { editable: boolean; lapses?: number; outlineId?: string }) {
   return async (api: DataApi, user: User) => {
     const deckId = newId();
     const noteId = newId();
@@ -56,6 +56,7 @@ function seedLeech(options: { editable: boolean; lapses?: number }) {
       kind: 'basic',
       front: '<p>¿Cuál es el tratamiento de primera línea?</p>',
       back: '<p>Amoxicilina</p>',
+      ...(options.outlineId ? { outlineId: options.outlineId, outlineNodeId: newId() } : {}),
     });
     await api.repos.cards.put({ id: cardId, noteId, deckId, ordinal: 0, createdAt: NOW });
     const yesterday = new Date(Date.now() - 86_400_000).toISOString();
@@ -230,6 +231,22 @@ describe('flujo de sanguijuelas', () => {
     const panel = await screen.findByRole('region', { name: t.review.leech.title });
     expect(within(panel).getByText(t.review.leech.cannotEdit)).toBeVisible();
     expect(within(panel).queryByRole('button', { name: t.review.leech.edit })).toBeNull();
+  });
+
+  it('una tarjeta que sale de un apunte no se edita aquí y lleva al apunte', async () => {
+    const typing = userEvent.setup();
+    const outlineId = newId();
+    app = await renderApp(SCREENS.review.path, {
+      seed: seedLeech({ editable: true, outlineId }),
+    });
+    await failLeech(typing);
+    const panel = await screen.findByRole('region', { name: t.review.leech.title });
+    expect(within(panel).getByText(t.outlines.fromOutline.leech)).toBeVisible();
+    expect(within(panel).queryByRole('button', { name: t.review.leech.edit })).toBeNull();
+    expect(within(panel).getByRole('link', { name: t.outlines.fromOutline.open })).toHaveAttribute(
+      'href',
+      `${SCREENS.outlines.path}?apunte=${outlineId}`,
+    );
   });
 
   it('editar abre la tarjeta lista para cambiarla y al cerrar sigue el repaso', async () => {

@@ -38,7 +38,7 @@ export const SCREEN_KEYS = [
   'settings',
   'adminUsers',
   'explore',
-  'notes',
+  'outlines',
   'rewards',
 ] as const;
 
@@ -86,8 +86,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   adminUsers: { number: 28, path: '/admin/usuarios', area: 'admin', phase: 'C' },
   // Explorar tarjetas, tercera pestaña de Repasar y Mazos (D-085)
   explore: { number: 29, path: '/mazos/explorar', area: 'student', phase: 'C' },
-  // Apuntes en esquema, cuarta pestaña de Repasar y Mazos (D-092)
-  notes: { number: 30, path: '/mazos/apuntes', area: 'student', phase: 'C' },
+  // Apuntes en esquema que se vuelven tarjetas, cuarta pestaña de Repasar (D-092)
+  outlines: { number: 30, path: '/apuntes', area: 'student', phase: 'C' },
   // Misiones, liga e insignias (Fase P bloque 6)
   rewards: { number: 31, path: '/logros', area: 'student', phase: 'C' },
 };

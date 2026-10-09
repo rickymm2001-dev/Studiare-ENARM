@@ -10,7 +10,7 @@ const TABS = [
   { key: 'review', path: screenPath('review'), label: t.studyTabs.review },
   { key: 'decks', path: screenPath('decks'), label: t.studyTabs.decks },
   { key: 'explore', path: screenPath('explore'), label: t.studyTabs.explore },
-  { key: 'notes', path: screenPath('notes'), label: t.studyTabs.notes },
+  { key: 'outlines', path: screenPath('outlines'), label: t.studyTabs.outlines },
 ] as const;
 
 export function StudyTabs() {

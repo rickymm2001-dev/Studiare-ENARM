@@ -5,6 +5,7 @@ import type { Phase, ScreenKey } from '@/app/screens';
 import { adminText } from './admin';
 import { examText } from './exam';
 import { featureText } from './features';
+import { outlineText } from './outlines';
 import { physicianText } from './physician';
 import { qualityText } from './quality';
 import { tutorText } from './tutor';
@@ -77,10 +78,10 @@ const screens: Record<ScreenKey, ScreenText> = {
     description:
       'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
   },
-  notes: {
+  outlines: {
     title: 'Apuntes',
     description:
-      'Escribe tus apuntes en esquema. Con una marca en la línea, la línea se vuelve tarjeta.',
+      'Escribe en esquema y vuelve tarjeta cualquier línea con una marca. Enlaza apuntes entre sí.',
   },
   planner: {
     title: 'Planificador',
@@ -160,6 +161,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   ...featureText,
   ...examText,
+  ...outlineText,
   ...qualityText,
   ...tutorText,
   ...adminText,
@@ -181,7 +183,7 @@ export const t = {
     review: 'Repasar',
     decks: 'Mazos',
     explore: 'Explorar',
-    notes: 'Apuntes',
+    outlines: 'Apuntes',
   },
   navItems: {
     home: 'Inicio',

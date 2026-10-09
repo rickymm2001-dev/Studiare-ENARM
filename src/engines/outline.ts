@@ -1,435 +1,595 @@
-// Apuntes en esquema tipo RemNote (D-085, fila 2). Un apunte es una lista de líneas con sangría y
-// cada línea puede volverse una tarjeta con solo escribir una marca. Este motor es puro. Lee las
-// líneas, entiende sus marcas y dice qué tarjetas salen, qué línea tiene un problema y cómo queda
-// la lista al sangrar, mover o borrar. Guardar las tarjetas es trabajo de la capa de datos.
-//
-// Marcas de una línea.
-// - Pregunta :: Respuesta         tarjeta básica, una carta
-// - Término ;; Definición         básica con tarjeta inversa, dos cartas
-// - La {{metformina}} baja ...    cloze, un hueco por cada llave. También vale {{c1::texto}} y los
-//                                 huecos dentro de otros, con las mismas reglas que Anki
-// - #tema::subtema                etiqueta en ruta. Las líneas hijas la heredan
-// - [[Otro apunte]]               enlace a otro apunte por su título
-// Los marcadores :: y ;; llevan espacio a los dos lados para no chocar con las etiquetas en ruta ni
-// con los huecos. Si una línea tiene huecos y también ::, manda el hueco.
-//
-// Una línea con marca pero incompleta, por ejemplo una pregunta sin respuesta todavía, no genera
-// tarjeta nueva y se marca con su problema. Quien guarda conserva la última tarjeta buena.
-import { clozeHoles, clozeOpenings } from './cloze';
-import { normalizeTags, sanitizeTag } from './tagPath';
+/**
+ * Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-092).
+ *
+ * Qué hace. Un apunte es un árbol de líneas, como en RemNote. Escribir una marca en una línea la
+ * vuelve tarjeta. Este motor lee las marcas, arma el plan de tarjetas de todo el apunte, convierte
+ * el árbol a la forma que usa el editor y de vuelta, y resuelve los enlaces entre apuntes. No sabe
+ * nada de React, de TipTap ni de la base de datos.
+ * Entradas. El árbol de líneas (OutlineNode), con un id estable por línea, y una función que da ids
+ * nuevos cuando hacen falta.
+ * Salidas. Para cada línea con marca, una tarjeta propuesta (CardPlan) con el id de la línea, las
+ * etiquetas que le tocan y los problemas encontrados (PlanIssue). El id de la línea es lo que une la
+ * línea con su nota, así editar el texto conserva las cartas y con ellas su historial de repaso.
+ * Marcas, tomadas del centro de ayuda de RemNote (solo las ideas, no su código)
+ *   - Pregunta >> Respuesta, tarjeta que pregunta el frente
+ *   - Respuesta << Pregunta, tarjeta que pregunta lo que está a la derecha
+ *   - Pregunta <> Respuesta, y Concepto :: Definición, dos tarjetas, una por lado
+ *   - Término ;; Descriptor, una tarjeta hacia delante
+ *   - Pregunta >>> al final de la línea, la respuesta son las líneas que cuelgan de ella
+ *   - {{texto}} o {{c2::texto}}, hueco de tarjeta cloze. Los huecos sin número se numeran en orden
+ *   - #etiqueta o #Ruta::subruta, etiqueta que pasa a las tarjetas de la línea y de todo lo que
+ *     cuelga de ella. [[Título]], enlace a otro apunte
+ * Método
+ *   - Primero se enmascaran los huecos, las etiquetas y los enlaces para que los :: de una ruta de
+ *     etiqueta o de {{c1::...}} no se confundan con una marca
+ *   - Una línea con separador no es cloze, y sus llaves dobles quedan como texto
+ *   - Solo la primera marca de la línea cuenta. Las líneas que cuelgan de una con >>> son su
+ *     respuesta y no generan tarjetas propias, y el plan avisa si traían una marca
+ * Umbrales. Hasta 2,000 líneas por apunte, 8 niveles, 3,000 caracteres por campo y 500 tarjetas. Son
+ * topes de seguridad de la interfaz y de la base, no de enseñanza (J).
+ */
+import { clozeHoles, parseCloze } from './cloze';
+import { normalizeTags, sanitizeTag, TAG_MAX_LENGTH } from './tagPath';
 
-export const OUTLINE_MAX_DEPTH = 8;
-export const OUTLINE_LINE_MAX = 1000;
-export const OUTLINE_LINES_MAX = 2000;
-/** Largo máximo de cada campo de una tarjeta, igual que el editor de tarjetas a mano */
-const FIELD_MAX = 3000;
-
-export interface OutlineLineLike {
-  readonly id: string;
-  /** Nivel de sangría. 0 es el nivel de arriba */
-  readonly depth: number;
-  readonly text: string;
+export interface OutlineNode {
+  id: string;
+  text: string;
+  children: OutlineNode[];
 }
 
-export type LineMark = 'none' | 'basic' | 'basic_reverse' | 'cloze';
-export type LineError = 'empty_front' | 'empty_back' | 'no_cloze' | 'unclosed_cloze' | 'too_long';
+export const OUTLINE_LIMITS = {
+  maxNodes: 2000,
+  maxDepth: 8,
+  /** Igual que el tope de campo de las tarjetas hechas a mano */
+  maxFieldLength: 3000,
+  maxCards: 500,
+  maxTitleLength: 120,
+} as const;
+
+export type LineMark =
+  | { type: 'none' }
+  /** Dos tarjetas o una según la dirección. El separador queda para mostrarlo */
+  | {
+      type: 'forward' | 'backward' | 'both';
+      separator: '>>' | '<<' | '<>' | '::' | ';;';
+      left: string;
+      right: string;
+    }
+  | { type: 'multiline'; front: string }
+  | { type: 'cloze'; text: string };
 
 export interface ParsedLine {
   mark: LineMark;
-  /** El texto sin etiquetas y con los enlaces aplanados */
-  clean: string;
-  front: string;
-  back: string;
-  /** El texto con huecos ya numerados, solo en cloze */
-  cloze: string;
+  /** Etiquetas de la línea, ya saneadas */
   tags: string[];
-  /** Títulos enlazados con [[ ]], sin repetir */
+  /** Títulos de los apuntes que enlaza, sin repetir */
   links: string[];
-  error: LineError | null;
+  /** El texto sin etiquetas y con los enlaces sin corchetes. Es lo que se ve en la tarjeta */
+  plain: string;
 }
 
-const TAG_PATTERN = /(^|\s)#([^\s#]+)/g;
-const LINK_PATTERN = /\[\[([^[\]\n]+?)\]\]/g;
-const MARKER_PATTERN = /\s(::|;;)(?:\s|$)/;
-/** Un hueco sin número, {{texto}}. Los que ya traen cN:: se dejan como están */
-const PLAIN_HOLE_PATTERN = /\{\{(?!c\d+::)([^{}]+?)\}\}/g;
-const TRAILING_PUNCTUATION = /[.,;:!?)\]}]+$/;
+// La etiqueta empieza con una letra. Así "Causa #1 de muerte" no se come el número
+const TAG_PATTERN = /(^|\s)#(\p{L}[^\s#]*)/gu;
+const LINK_PATTERN = /\[\[([^[\]]+)\]\]/g;
 
-const collapse = (text: string) => text.replace(/\s+/g, ' ').trim();
-
-/** Clave para comparar títulos sin importar mayúsculas, acentos ni espacios de más */
-export function titleKey(title: string): string {
-  return collapse(title).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+/** Cambia cada carácter de una región por un relleno del mismo largo, para no tocar los índices */
+function maskRegion(text: string, start: number, end: number): string {
+  return text.slice(0, start) + '\u0000'.repeat(end - start) + text.slice(end);
 }
 
-/** Numera los huecos sin número a partir del mayor que ya existe, uno por hueco */
-function numberPlainHoles(text: string): string {
-  let highest = 0;
-  for (const match of text.matchAll(/\{\{c(\d+)::/g)) highest = Math.max(highest, Number(match[1]));
-  return text.replace(PLAIN_HOLE_PATTERN, (_all, inner: string) => {
-    highest += 1;
-    return `{{c${highest}::${inner}}}`;
-  });
+/** Quita la puntuación que se pega al final de una etiqueta al escribir una frase */
+function cleanTag(raw: string): string {
+  return sanitizeTag(raw.replace(/[.,;:)\]]+$/, ''));
 }
 
-/** Lee una línea y dice qué marca tiene, qué etiquetas y enlaces trae y si está completa */
-export function parseLine(raw: string): ParsedLine {
+/** Etiquetas y enlaces de una línea, y el texto limpio. No decide nada sobre las marcas */
+function extractInline(text: string): Pick<ParsedLine, 'tags' | 'links' | 'plain'> {
   const tags: string[] = [];
-  const withoutTags = raw.replace(TAG_PATTERN, (_all, lead: string, tag: string) => {
-    const clean = sanitizeTag(tag.replace(TRAILING_PUNCTUATION, ''));
-    if (clean !== '') tags.push(clean);
+  const links: string[] = [];
+  const withoutLinks = text.replace(LINK_PATTERN, (_all, title: string) => {
+    const clean = title.trim();
+    if (clean !== '' && !links.includes(clean)) links.push(clean);
+    return clean;
+  });
+  const withoutTags = withoutLinks.replace(TAG_PATTERN, (_all, lead: string, raw: string) => {
+    const tag = cleanTag(raw);
+    if (tag !== '' && tag.length <= TAG_MAX_LENGTH) tags.push(tag);
     return lead;
   });
-  const links: string[] = [];
-  const linked = withoutTags.replace(LINK_PATTERN, (_all, title: string) => {
-    const name = collapse(title);
-    if (name !== '' && !links.some((known) => titleKey(known) === titleKey(name))) links.push(name);
-    return name;
-  });
-  const clean = collapse(linked);
-  const result: ParsedLine = {
-    mark: 'none',
-    clean,
-    front: '',
-    back: '',
-    cloze: '',
+  return {
     tags: normalizeTags(tags),
     links,
-    error: null,
+    plain: withoutTags.replace(/[^\S\n]+/g, ' ').trim(),
   };
-  if (clean === '') return result;
-
-  if (clean.includes('{{')) {
-    const text = numberPlainHoles(clean);
-    result.mark = 'cloze';
-    result.cloze = text;
-    if (text.length > FIELD_MAX) result.error = 'too_long';
-    else if (clozeOpenings(text) === 0) result.error = 'no_cloze';
-    else {
-      // Un hueco sin cerrar o sin respuesta dejaría la respuesta a la vista en la tarjeta
-      const usable = clozeHoles(text).filter(
-        (hole) => hole.ordinal >= 1 && hole.ordinal <= 100 && hole.answer.trim() !== '',
-      );
-      if (usable.length !== clozeOpenings(text)) result.error = 'unclosed_cloze';
-    }
-    return result;
-  }
-
-  const marker = MARKER_PATTERN.exec(clean);
-  if (!marker) return result;
-  const front = clean.slice(0, marker.index).trim();
-  const back = clean.slice(marker.index + marker[0].length).trim();
-  result.mark = marker[1] === ';;' ? 'basic_reverse' : 'basic';
-  result.front = front;
-  result.back = back;
-  if (front === '') result.error = 'empty_front';
-  else if (back === '') result.error = 'empty_back';
-  else if (front.length > FIELD_MAX || back.length > FIELD_MAX) result.error = 'too_long';
-  return result;
 }
 
-export type PlannedDraft =
+/** El texto con huecos, etiquetas y enlaces tapados, para buscar marcas sin falsos positivos */
+function maskedForMarks(text: string): string {
+  let masked = text;
+  // Un hueco sin cerrar tapa hasta el final, así su :: no se toma por una marca
+  for (const pattern of [/\{\{[\s\S]*?(?:\}\}|$)/g, LINK_PATTERN, /(^|\s)#[^\s#]+/g]) {
+    const found = [...masked.matchAll(pattern)];
+    for (const match of found) {
+      masked = maskRegion(masked, match.index, match.index + match[0].length);
+    }
+  }
+  return masked;
+}
+
+const SEPARATORS = ['<>', '>>', '<<', '::', ';;'] as const;
+type Separator = (typeof SEPARATORS)[number];
+
+function findSeparator(masked: string): { index: number; separator: Separator } | null {
+  for (let index = 0; index < masked.length; index += 1) {
+    // Tres signos seguidos no son una marca a mitad de línea, la de varias líneas va al final
+    if (masked.startsWith('>>>', index) || masked.startsWith('<<<', index)) {
+      index += 2;
+      continue;
+    }
+    for (const separator of SEPARATORS) {
+      if (masked.startsWith(separator, index)) return { index, separator };
+    }
+  }
+  return null;
+}
+
+const MARK_TYPE: Record<Separator, 'forward' | 'backward' | 'both'> = {
+  '>>': 'forward',
+  '<<': 'backward',
+  '<>': 'both',
+  '::': 'both',
+  ';;': 'forward',
+};
+
+/**
+ * Numera los huecos {{texto}} que no traen número, en orden y sin repetir los que ya se usaron.
+ * Devuelve el texto con huecos al estilo Anki, {{c1::texto}}, o null si no hay ninguno
+ */
+export function numberClozeHoles(text: string): string | null {
+  const blocks = [...text.matchAll(/\{\{([\s\S]*?)\}\}/g)];
+  if (blocks.length === 0) return null;
+  const used = new Set<number>();
+  for (const block of blocks) {
+    const explicit = /^c(\d+)::/.exec(block[1] ?? '');
+    if (explicit) used.add(Number(explicit[1]));
+  }
+  let next = 1;
+  let result = '';
+  let cursor = 0;
+  let any = false;
+  for (const block of blocks) {
+    const inner = block[1] ?? '';
+    result += text.slice(cursor, block.index);
+    cursor = block.index + block[0].length;
+    if (/^c\d+::/.test(inner)) {
+      result += block[0];
+      any = true;
+      continue;
+    }
+    if (inner.trim() === '') {
+      result += block[0];
+      continue;
+    }
+    while (used.has(next)) next += 1;
+    used.add(next);
+    result += `{{c${next}::${inner}}}`;
+    any = true;
+  }
+  result += text.slice(cursor);
+  return any ? result : null;
+}
+
+/** Lee una línea y dice qué marca trae, sus etiquetas y sus enlaces */
+export function parseLine(text: string): ParsedLine {
+  const inline = extractInline(text);
+  const base = { tags: inline.tags, links: inline.links, plain: inline.plain };
+  const line = text.replace(/\r?\n/g, ' ');
+
+  // Con tres signos al final la respuesta son las líneas que cuelgan
+  const masked = maskedForMarks(line);
+  const trimmedEnd = masked.replace(/\s+$/, '');
+  if (trimmedEnd.endsWith('>>>')) {
+    const front = extractInline(line.slice(0, trimmedEnd.length - 3)).plain;
+    return { ...base, mark: front === '' ? { type: 'none' } : { type: 'multiline', front } };
+  }
+
+  const found = findSeparator(masked);
+  if (found) {
+    const left = extractInline(line.slice(0, found.index)).plain;
+    const right = extractInline(line.slice(found.index + found.separator.length)).plain;
+    if (left === '' || right === '') return { ...base, mark: { type: 'none' } };
+    return {
+      ...base,
+      mark: {
+        type: MARK_TYPE[found.separator],
+        separator: found.separator,
+        left,
+        right,
+      },
+    };
+  }
+
+  const numbered = numberClozeHoles(extractInline(line).plain);
+  if (numbered !== null) return { ...base, mark: { type: 'cloze', text: numbered } };
+  return { ...base, mark: { type: 'none' } };
+}
+
+export type TokenKind = 'separator' | 'cloze' | 'tag' | 'link' | 'multiline';
+
+export interface MarkToken {
+  /** Posición en el texto de la línea, de start a end sin incluir end */
+  start: number;
+  end: number;
+  kind: TokenKind;
+}
+
+/**
+ * Las partes de una línea que el editor resalta, en orden. Solo marca lo que de verdad cuenta, así
+ * un {{hueco}} dentro de una línea con >> no se pinta como si fuera a ser un hueco
+ */
+export function markTokens(text: string): MarkToken[] {
+  const tokens: MarkToken[] = [];
+  const line = text.replace(/\n/g, ' ');
+  const parsed = parseLine(line);
+  const masked = maskedForMarks(line);
+
+  if (parsed.mark.type === 'multiline') {
+    const end = masked.replace(/\s+$/, '').length;
+    tokens.push({ start: end - 3, end, kind: 'multiline' });
+  } else if (parsed.mark.type !== 'none' && parsed.mark.type !== 'cloze') {
+    const found = findSeparator(masked);
+    if (found) {
+      tokens.push({
+        start: found.index,
+        end: found.index + found.separator.length,
+        kind: 'separator',
+      });
+    }
+  } else if (parsed.mark.type === 'cloze') {
+    for (const match of line.matchAll(/\{\{[\s\S]*?\}\}/g)) {
+      tokens.push({ start: match.index, end: match.index + match[0].length, kind: 'cloze' });
+    }
+  }
+  for (const match of line.matchAll(TAG_PATTERN)) {
+    const start = match.index + (match[1]?.length ?? 0);
+    tokens.push({ start, end: match.index + match[0].length, kind: 'tag' });
+  }
+  for (const match of line.matchAll(LINK_PATTERN)) {
+    tokens.push({ start: match.index, end: match.index + match[0].length, kind: 'link' });
+  }
+  return tokens.sort((a, b) => a.start - b.start);
+}
+
+export type PlanDraft =
   | { kind: 'basic'; front: string; back: string }
   | { kind: 'basic_reverse'; front: string; back: string }
   | { kind: 'cloze'; text: string; extra: string };
 
-export interface PlannedCard {
-  lineId: string;
-  draft: PlannedDraft;
-  /** Etiquetas de la línea, las heredadas de las líneas de arriba y las del apunte */
-  tags: string[];
-  /** Cuántas cartas da esta línea */
-  cards: number;
-}
-
-export interface LineAnalysis {
-  lineId: string;
-  parsed: ParsedLine;
-  /** Las líneas de arriba, de la raíz a la más cercana, como texto limpio */
-  breadcrumb: string[];
-  tags: string[];
-}
-
-export interface OutlinePlan {
-  lines: LineAnalysis[];
-  cards: PlannedCard[];
-  /** Líneas con una marca incompleta */
-  problems: { lineId: string; error: LineError }[];
-  /** Líneas que ya no tienen ninguna marca */
-  unmarked: string[];
-  links: string[];
-}
-
-/** Cartas que da una línea ya leída */
-function cardsOf(parsed: ParsedLine): number {
-  if (parsed.mark === 'basic') return 1;
-  if (parsed.mark === 'basic_reverse') return 2;
-  if (parsed.mark !== 'cloze') return 0;
-  return new Set(clozeHoles(parsed.cloze).map((hole) => hole.ordinal)).size;
-}
-
-/**
- * Lee todo el apunte. Cada línea hereda las etiquetas de las que tiene arriba y las del apunte, y una
- * tarjeta cloze lleva de contexto el camino de líneas que la contienen
- */
-export function analyzeOutline(
-  lines: readonly OutlineLineLike[],
-  pageTags: readonly string[] = [],
-): OutlinePlan {
-  const base = normalizeTags(pageTags);
-  const stack: { depth: number; clean: string; tags: string[] }[] = [];
-  const analysis: LineAnalysis[] = [];
-  const cards: PlannedCard[] = [];
-  const problems: OutlinePlan['problems'] = [];
-  const unmarked: string[] = [];
-  const links: string[] = [];
-
-  for (const line of lines) {
-    while (stack.length > 0 && (stack.at(-1)?.depth ?? 0) >= line.depth) stack.pop();
-    const parsed = parseLine(line.text);
-    const inherited = stack.flatMap((entry) => entry.tags);
-    const tags = normalizeTags([...base, ...inherited, ...parsed.tags]);
-    const breadcrumb = stack.map((entry) => entry.clean).filter((text) => text !== '');
-    analysis.push({ lineId: line.id, parsed, breadcrumb, tags });
-    stack.push({ depth: line.depth, clean: parsed.clean, tags: parsed.tags });
-    for (const title of parsed.links)
-      if (!links.some((known) => titleKey(known) === titleKey(title))) links.push(title);
-
-    if (parsed.mark === 'none') {
-      unmarked.push(line.id);
-      continue;
-    }
-    if (parsed.error) {
-      problems.push({ lineId: line.id, error: parsed.error });
-      continue;
-    }
-    const draft: PlannedDraft =
-      parsed.mark === 'cloze'
-        ? { kind: 'cloze', text: parsed.cloze, extra: breadcrumb.join(' › ').slice(0, FIELD_MAX) }
-        : { kind: parsed.mark, front: parsed.front, back: parsed.back };
-    cards.push({ lineId: line.id, draft, tags, cards: cardsOf(parsed) });
+/** Cuántas tarjetas da un borrador. Dos con tarjeta inversa y una por número de hueco en un cloze */
+export function cardCountOf(draft: PlanDraft): number {
+  switch (draft.kind) {
+    case 'basic':
+      return 1;
+    case 'basic_reverse':
+      return 2;
+    case 'cloze':
+      return new Set(clozeHoles(draft.text).map((hole) => hole.ordinal)).size;
   }
-  return { lines: analysis, cards, problems, unmarked, links };
 }
 
-// ---------------------------------------------------------------------------------------------
-// Estructura de la lista
+export interface CardPlan {
+  /** La línea de la que sale la tarjeta. Une la línea con su nota */
+  nodeId: string;
+  draft: PlanDraft;
+  tags: string[];
+}
 
-/** Una línea nunca queda más de un nivel por debajo de la de arriba ni pasa del tope */
-export function normalizeDepths<T extends OutlineLineLike>(lines: readonly T[]): T[] {
-  let previous = -1;
-  return lines.map((line) => {
-    const depth = Math.max(0, Math.min(line.depth, previous + 1, OUTLINE_MAX_DEPTH));
-    previous = depth;
-    return depth === line.depth ? line : { ...line, depth };
+export type PlanIssueCode =
+  | 'multiline_without_children'
+  | 'nested_mark_ignored'
+  | 'cloze_unusable'
+  | 'too_long'
+  | 'too_many_cards'
+  | 'too_many_nodes'
+  | 'too_deep';
+
+export interface PlanIssue {
+  nodeId: string;
+  code: PlanIssueCode;
+}
+
+/** Las líneas que cuelgan de una con >>> como texto de respuesta, con sangría de dos espacios */
+function answerLines(children: readonly OutlineNode[], depth = 0): string[] {
+  return children.flatMap((child) => {
+    const plain = extractInline(child.text).plain;
+    const own = plain === '' ? [] : [`${'  '.repeat(depth)}${plain}`];
+    return [...own, ...answerLines(child.children, depth + 1)];
   });
 }
 
-/** Dónde acaba, sin incluirla, la rama que empieza en esta línea */
-export function subtreeEnd(lines: readonly OutlineLineLike[], index: number): number {
-  const depth = lines[index]?.depth ?? 0;
-  let end = index + 1;
-  while (end < lines.length && (lines[end]?.depth ?? 0) > depth) end += 1;
-  return end;
-}
-
-export function hasChildren(lines: readonly OutlineLineLike[], index: number): boolean {
-  return subtreeEnd(lines, index) > index + 1;
-}
-
-const shift = <T extends OutlineLineLike>(line: T, delta: number): T => ({
-  ...line,
-  depth: line.depth + delta,
-});
-
-/** Mete la línea y lo que cuelga de ella un nivel. No puede quedar más hondo que la de arriba + 1 */
-export function indentLine<T extends OutlineLineLike>(lines: readonly T[], index: number): T[] {
-  const line = lines[index];
-  const previous = lines[index - 1];
-  if (!line || !previous) return [...lines];
-  if (line.depth >= previous.depth + 1 || line.depth >= OUTLINE_MAX_DEPTH) return [...lines];
-  const end = subtreeEnd(lines, index);
-  return lines.map((entry, position) =>
-    position >= index && position < end ? shift(entry, 1) : entry,
+function hasMarkDeep(nodes: readonly OutlineNode[]): boolean {
+  return nodes.some(
+    (node) => parseLine(node.text).mark.type !== 'none' || hasMarkDeep(node.children),
   );
 }
 
-/** Saca la línea y lo que cuelga de ella un nivel. En el nivel 0 no hace nada */
-export function outdentLine<T extends OutlineLineLike>(lines: readonly T[], index: number): T[] {
-  const line = lines[index];
-  if (!line || line.depth === 0) return [...lines];
-  const end = subtreeEnd(lines, index);
-  const moved = lines.map((entry, position) =>
-    position >= index && position < end ? shift(entry, -1) : entry,
-  );
-  return normalizeDepths(moved);
+/** Cuántas líneas tiene el árbol, para el tope de seguridad */
+export function countNodes(nodes: readonly OutlineNode[]): number {
+  return nodes.reduce((total, node) => total + 1 + countNodes(node.children), 0);
 }
+
+/** Qué tan hondo llega el árbol. Un árbol de una línea tiene profundidad 1 */
+export function outlineDepth(nodes: readonly OutlineNode[]): number {
+  return nodes.reduce((deepest, node) => Math.max(deepest, 1 + outlineDepth(node.children)), 0);
+}
+
+function clozeUsable(text: string): boolean {
+  const { openings } = parseCloze(text);
+  // Un hueco sin cerrar o sin respuesta dejaría la respuesta a la vista en la pregunta
+  const usable = clozeHoles(text).filter(
+    (hole) => hole.ordinal >= 1 && hole.ordinal <= 100 && hole.answer.trim() !== '',
+  );
+  return openings > 0 && usable.length === openings;
+}
+
+/** El plan de tarjetas de todo el apunte, en el orden en que aparecen las líneas */
+export function planCards(nodes: readonly OutlineNode[]): {
+  plans: CardPlan[];
+  issues: PlanIssue[];
+} {
+  const plans: CardPlan[] = [];
+  const issues: PlanIssue[] = [];
+  let visited = 0;
+
+  const visit = (list: readonly OutlineNode[], inherited: readonly string[], depth: number) => {
+    for (const node of list) {
+      visited += 1;
+      if (visited > OUTLINE_LIMITS.maxNodes) {
+        if (visited === OUTLINE_LIMITS.maxNodes + 1)
+          issues.push({ nodeId: node.id, code: 'too_many_nodes' });
+        return;
+      }
+      if (depth > OUTLINE_LIMITS.maxDepth) {
+        issues.push({ nodeId: node.id, code: 'too_deep' });
+        continue;
+      }
+      const parsed = parseLine(node.text);
+      const tags = normalizeTags([...inherited, ...parsed.tags]);
+      const { mark } = parsed;
+      let draft: PlanDraft | null = null;
+      let descend = true;
+      switch (mark.type) {
+        case 'none':
+          // Llaves dobles que no llegaron a ser un hueco usable, para avisar en vez de callar
+          if (node.text.includes('{{')) issues.push({ nodeId: node.id, code: 'cloze_unusable' });
+          break;
+        case 'forward':
+          draft = { kind: 'basic', front: mark.left, back: mark.right };
+          break;
+        case 'backward':
+          draft = { kind: 'basic', front: mark.right, back: mark.left };
+          break;
+        case 'both':
+          draft = { kind: 'basic_reverse', front: mark.left, back: mark.right };
+          break;
+        case 'multiline': {
+          descend = false;
+          const lines = answerLines(node.children);
+          if (lines.length === 0) {
+            issues.push({ nodeId: node.id, code: 'multiline_without_children' });
+          } else {
+            if (hasMarkDeep(node.children))
+              issues.push({ nodeId: node.id, code: 'nested_mark_ignored' });
+            draft = { kind: 'basic', front: mark.front, back: lines.join('\n') };
+          }
+          break;
+        }
+        case 'cloze':
+          if (clozeUsable(mark.text)) draft = { kind: 'cloze', text: mark.text, extra: '' };
+          else issues.push({ nodeId: node.id, code: 'cloze_unusable' });
+          break;
+      }
+      if (draft) {
+        const fields =
+          draft.kind === 'cloze' ? [draft.text, draft.extra] : [draft.front, draft.back];
+        if (fields.some((field) => field.length > OUTLINE_LIMITS.maxFieldLength)) {
+          issues.push({ nodeId: node.id, code: 'too_long' });
+        } else if (plans.length >= OUTLINE_LIMITS.maxCards) {
+          issues.push({ nodeId: node.id, code: 'too_many_cards' });
+        } else {
+          plans.push({ nodeId: node.id, draft, tags });
+        }
+      }
+      if (descend) visit(node.children, tags, depth + 1);
+    }
+  };
+  visit(nodes, [], 1);
+  return { plans, issues };
+}
+
+/** Forma del documento del editor, la de ProseMirror, sin depender de su paquete */
+export interface DocNode {
+  type: string;
+  attrs?: { nodeId?: unknown; [key: string]: unknown };
+  content?: DocNode[];
+  text?: string;
+}
+
+function itemOf(node: OutlineNode): DocNode {
+  const paragraph: DocNode = {
+    type: 'paragraph',
+    ...(node.text === '' ? {} : { content: [{ type: 'text', text: node.text }] }),
+  };
+  const content: DocNode[] = [paragraph];
+  if (node.children.length > 0) content.push(listOf(node.children));
+  return { type: 'listItem', attrs: { nodeId: node.id }, content };
+}
+
+function listOf(nodes: readonly OutlineNode[]): DocNode {
+  return { type: 'bulletList', content: nodes.map(itemOf) };
+}
+
+/** El árbol de líneas como documento del editor. Un apunte vacío trae una línea en blanco */
+export function outlineToDoc(nodes: readonly OutlineNode[], makeId: () => string): DocNode {
+  const list = nodes.length > 0 ? nodes : [{ id: makeId(), text: '', children: [] }];
+  return { type: 'doc', content: [listOf(list)] };
+}
+
+function textOf(node: DocNode): string {
+  if (node.type === 'text') return node.text ?? '';
+  if (node.type === 'hardBreak') return ' ';
+  return (node.content ?? []).map(textOf).join('');
+}
+
+/** Forma de un id de línea válido, la misma que exige el esquema de datos (un ULID) */
+export const NODE_ID_PATTERN = /^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$/;
 
 /**
- * Mueve la rama de una línea sobre su hermana anterior (-1) o siguiente (1). Si no tiene hermana en
- * esa dirección no pasa nada. Devuelve la lista y dónde quedó la línea
+ * Entre líneas con el mismo id, la que lo conserva. Gana la de mayor rango y, entre iguales, la
+ * primera en el orden del documento. El rango lo da quien llama, con el texto como lo primero, así al
+ * partir una línea con Enter al inicio el id se queda con el texto y no con la línea vacía de arriba,
+ * y la tarjeta no pierde su historial
  */
-export function moveLine<T extends OutlineLineLike>(
-  lines: readonly T[],
-  index: number,
-  direction: -1 | 1,
-): { lines: T[]; index: number } {
-  const line = lines[index];
-  if (!line) return { lines: [...lines], index };
-  const end = subtreeEnd(lines, index);
-  const block = lines.slice(index, end);
-  if (direction === -1) {
-    // La hermana de arriba es la línea previa más cercana con la misma sangría
-    let sibling = index - 1;
-    while (sibling >= 0 && (lines[sibling]?.depth ?? 0) > line.depth) sibling -= 1;
-    if (sibling < 0 || (lines[sibling]?.depth ?? 0) < line.depth)
-      return { lines: [...lines], index };
-    return {
-      lines: [
-        ...lines.slice(0, sibling),
-        ...block,
-        ...lines.slice(sibling, index),
-        ...lines.slice(end),
-      ],
-      index: sibling,
-    };
+export function pickIdOwners<T>(
+  items: readonly { id: string; rank: number; item: T }[],
+): Map<string, T> {
+  const best = new Map<string, { rank: number; item: T }>();
+  for (const entry of items) {
+    if (entry.id === '') continue;
+    const current = best.get(entry.id);
+    if (!current || entry.rank > current.rank) {
+      best.set(entry.id, { rank: entry.rank, item: entry.item });
+    }
   }
-  const next = lines[end];
-  if (!next || next.depth !== line.depth) return { lines: [...lines], index };
-  const nextEnd = subtreeEnd(lines, end);
-  return {
-    lines: [
-      ...lines.slice(0, index),
-      ...lines.slice(end, nextEnd),
-      ...block,
-      ...lines.slice(nextEnd),
-    ],
-    index: index + (nextEnd - end),
-  };
+  return new Map([...best].map(([id, value]) => [id, value.item]));
+}
+
+function itemText(item: DocNode): string {
+  return (item.content ?? [])
+    .filter((part) => part.type === 'paragraph')
+    .map(textOf)
+    .join(' ')
+    .replace(/[^\S\n]+/g, ' ')
+    .trim();
 }
 
 /**
- * Agrega una línea nueva debajo de la actual. Si la actual tiene hijas la nueva entra de primera
- * hija, para que las hijas no se vuelvan suyas. Si no, queda al mismo nivel
+ * El documento del editor como árbol de líneas. El id de cada línea sale de su atributo nodeId.
+ * Una línea sin id o con un id que otra se queda, como la que nace al partir una con Enter, recibe
+ * uno nuevo. Entre dos con el mismo id lo conserva la que tiene texto y, si ambas, la primera
  */
-export function insertLineBelow<T extends OutlineLineLike>(
-  lines: readonly T[],
-  index: number,
-  make: (depth: number) => T,
-): { lines: T[]; index: number } {
-  const current = lines[index];
-  if (!current) return { lines: [...lines, make(0)], index: lines.length };
-  const depth = hasChildren(lines, index)
-    ? Math.min(current.depth + 1, OUTLINE_MAX_DEPTH)
-    : current.depth;
-  return {
-    lines: [...lines.slice(0, index + 1), make(depth), ...lines.slice(index + 1)],
-    index: index + 1,
+export function docToOutline(doc: DocNode, makeId: () => string): OutlineNode[] {
+  const declaredOf = (item: DocNode): string => {
+    const declared = item.attrs?.nodeId;
+    return typeof declared === 'string' ? declared : '';
   };
+  const candidates: { id: string; rank: number; item: DocNode }[] = [];
+  const collect = (item: DocNode): void => {
+    candidates.push({ id: declaredOf(item), rank: itemText(item) === '' ? 0 : 1, item });
+    for (const part of item.content ?? []) {
+      if (part.type === 'bulletList' || part.type === 'orderedList') {
+        for (const child of part.content ?? []) collect(child);
+      }
+    }
+  };
+  const isList = (part: DocNode) => part.type === 'bulletList' || part.type === 'orderedList';
+  const lists = (doc.content ?? []).filter(isList);
+  for (const list of lists) for (const item of list.content ?? []) collect(item);
+  const owners = pickIdOwners(candidates);
+
+  const readItem = (item: DocNode): OutlineNode => {
+    const declared = declaredOf(item);
+    const id = declared !== '' && owners.get(declared) === item ? declared : makeId();
+    const nested = (item.content ?? []).filter(isList);
+    return {
+      id,
+      text: itemText(item),
+      children: nested.flatMap((list) => (list.content ?? []).map(readItem)),
+    };
+  };
+  return lists.flatMap((list) => (list.content ?? []).map(readItem));
 }
 
-/**
- * Quita solo esa línea. Las que cuelgan de ella suben un nivel y siguen colgando de la de arriba, así
- * no se pierde nada por accidente
- */
-export function removeLine<T extends OutlineLineLike>(lines: readonly T[], index: number): T[] {
-  const line = lines[index];
-  if (!line) return [...lines];
-  const end = subtreeEnd(lines, index);
-  const promoted = lines.slice(index + 1, end).map((entry) => shift(entry, -1));
-  return normalizeDepths([...lines.slice(0, index), ...promoted, ...lines.slice(end)]);
+/** Título comparable de un apunte, sin mayúsculas, acentos ni espacios de sobra */
+export function normalizeTitle(title: string): string {
+  return title
+    .normalize('NFD')
+    .replace(/\p{M}+/gu, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-/** Las líneas que se ven cuando algunas ramas están plegadas */
-export function visibleIndexes(
-  lines: readonly OutlineLineLike[],
-  collapsed: ReadonlySet<string>,
-): number[] {
-  const visible: number[] = [];
-  let hiddenBelow = Infinity;
-  lines.forEach((line, index) => {
-    if (line.depth > hiddenBelow) return;
-    hiddenBelow = Infinity;
-    visible.push(index);
-    if (collapsed.has(line.id) && hasChildren(lines, index)) hiddenBelow = line.depth;
+export interface OutlineRef {
+  id: string;
+  title: string;
+  nodes: readonly OutlineNode[];
+}
+
+/** Todas las líneas de un apunte con los títulos que enlazan, en orden */
+function linkedLines(
+  nodes: readonly OutlineNode[],
+): { nodeId: string; text: string; links: string[] }[] {
+  return nodes.flatMap((node) => {
+    const parsed = parseLine(node.text);
+    const own =
+      parsed.links.length > 0 ? [{ nodeId: node.id, text: parsed.plain, links: parsed.links }] : [];
+    return [...own, ...linkedLines(node.children)];
   });
-  return visible;
 }
 
-// ---------------------------------------------------------------------------------------------
-// Enlaces entre apuntes
-
-export interface TitledPage {
-  readonly id: string;
-  readonly title: string;
-}
-
-/** A qué apunte lleva cada título enlazado. Los que no existen quedan en null */
-export function resolveLinks<T extends TitledPage>(
-  pages: readonly T[],
-  titles: readonly string[],
-): Map<string, T | null> {
-  const byKey = new Map(pages.map((page) => [titleKey(page.title), page] as const));
-  return new Map(titles.map((title) => [title, byKey.get(titleKey(title)) ?? null] as const));
-}
-
-/** Los apuntes que enlazan a este título, sin contarse a sí mismo */
-export function backlinks<T extends TitledPage & { readonly lines: readonly OutlineLineLike[] }>(
-  pages: readonly T[],
-  target: TitledPage,
-): T[] {
-  const key = titleKey(target.title);
-  return pages.filter(
-    (page) =>
-      page.id !== target.id &&
-      page.lines.some((line) =>
-        parseLine(line.text).links.some((title) => titleKey(title) === key),
-      ),
-  );
-}
-
-// ---------------------------------------------------------------------------------------------
-// Marcas con un botón
-
-export type MarkKind = 'card' | 'reverse' | 'hole' | 'link' | 'tag';
-
-/**
- * Pone una marca en el texto de una línea según donde está el cursor o la selección. Los botones de
- * la barra la usan, para que quien no tiene teclado de computadora también pueda escribir marcas.
- * Devuelve el texto nuevo y dónde queda el cursor
- */
-export function applyMark(
-  text: string,
-  start: number,
-  end: number,
-  mark: MarkKind,
-): { text: string; caret: number } {
-  const from = Math.max(0, Math.min(start, end, text.length));
-  const to = Math.max(from, Math.min(Math.max(start, end), text.length));
-  const before = text.slice(0, from);
-  const selected = text.slice(from, to);
-  const after = text.slice(to);
-
-  if (mark === 'hole' || mark === 'link') {
-    const [open, close] = mark === 'hole' ? ['{{', '}}'] : ['[[', ']]'];
-    const next = `${before}${open}${selected}${close}${after}`;
-    // Con selección el cursor queda después del cierre. Sin ella, adentro para escribir
-    return {
-      text: next,
-      caret: from + open.length + (selected === '' ? 0 : selected.length + close.length),
-    };
+/** A qué apuntes enlaza el apunte, resueltos por título. Los títulos que no existen salen aparte */
+export function resolveLinks(
+  outline: OutlineRef,
+  all: readonly OutlineRef[],
+): { targets: string[]; missing: string[] } {
+  const byTitle = new Map(all.map((entry) => [normalizeTitle(entry.title), entry.id]));
+  const targets = new Set<string>();
+  const missing = new Set<string>();
+  for (const line of linkedLines(outline.nodes)) {
+    for (const title of line.links) {
+      const target = byTitle.get(normalizeTitle(title));
+      if (target !== undefined && target !== outline.id) targets.add(target);
+      else if (target === undefined) missing.add(title);
+    }
   }
-  if (mark === 'tag') {
-    const lead = before === '' || /\s$/.test(before) ? '' : ' ';
-    return { text: `${before}${lead}#${after}`, caret: before.length + lead.length + 1 };
-  }
-  // La marca va después de lo seleccionado, con un espacio a cada lado sin duplicar los que ya hay
-  const marker = mark === 'card' ? '::' : ';;';
-  const head = `${before}${selected}`;
-  const lead = head === '' || /\s$/.test(head) ? '' : ' ';
-  const tail = after.startsWith(' ') ? '' : ' ';
-  return {
-    text: `${head}${lead}${marker}${tail}${after}`,
-    caret: head.length + lead.length + marker.length + 1,
+  return { targets: [...targets], missing: [...missing] };
+}
+
+export interface Backlink {
+  outlineId: string;
+  title: string;
+  nodeId: string;
+  /** La línea donde se menciona */
+  text: string;
+}
+
+/** Los apuntes y líneas que mencionan a este apunte por su título */
+export function backlinks(target: OutlineRef, all: readonly OutlineRef[]): Backlink[] {
+  const wanted = normalizeTitle(target.title);
+  return all
+    .filter((entry) => entry.id !== target.id)
+    .flatMap((entry) =>
+      linkedLines(entry.nodes)
+        .filter((line) => line.links.some((title) => normalizeTitle(title) === wanted))
+        .map((line) => ({
+          outlineId: entry.id,
+          title: entry.title,
+          nodeId: line.nodeId,
+          text: line.text,
+        })),
+    );
+}
+
+/** Las etiquetas de todo el apunte, sin repetir, para listarlas y buscar */
+export function outlineTags(nodes: readonly OutlineNode[]): string[] {
+  const found: string[] = [];
+  const walk = (list: readonly OutlineNode[]) => {
+    for (const node of list) {
+      found.push(...parseLine(node.text).tags);
+      walk(node.children);
+    }
   };
+  walk(nodes);
+  return normalizeTags(found);
 }

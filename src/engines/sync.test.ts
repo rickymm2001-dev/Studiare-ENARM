@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { WidgetLayout } from '@/data/schemas/activity';
 import type { Card, Deck, Note } from '@/data/schemas/decks';
 import { createEvent } from '@/data/events/createEvent';
-import type { OutlinePage } from '@/data/schemas/outlines';
+import type { Outline } from '@/data/schemas/outlines';
 import {
   MAX_CLOCK_SKEW_MS,
   PAGE_SIZE,
@@ -80,14 +80,13 @@ function card(noteId: string, deckId: string, overrides: Partial<Card> = {}): Ca
   return { id: nextId(), noteId, deckId, ordinal: 0, createdAt: T0, updatedAt: T0, ...overrides };
 }
 
-function outline(deckId: string, overrides: Partial<OutlinePage> = {}): OutlinePage {
+function outline(deckId: string, overrides: Partial<Outline> = {}): Outline {
   return {
     id: nextId(),
     ownerId: USER,
     title: 'Apunte',
     deckId,
-    tags: [],
-    lines: [{ id: nextId(), depth: 0, text: 'Hola', noteId: null }],
+    nodes: [{ id: nextId(), text: 'Hola', children: [] }],
     createdAt: T0,
     updatedAt: T0,
     ...overrides,

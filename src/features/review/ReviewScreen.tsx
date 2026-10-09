@@ -9,7 +9,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
-import { draftOf } from '@/data/usecases/manualDecks';
+import { draftOf, isFromOutline } from '@/data/usecases/manualDecks';
 import { setSuspended } from '@/data/usecases/organize';
 import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
@@ -536,6 +536,7 @@ function ReviewSession({
     leechCard !== undefined &&
     leechNote !== undefined &&
     leechNote.origin !== 'preloaded' &&
+    !isFromOutline(leechNote) &&
     editableDecks.has(leechCard.deckId);
   const keys: Record<string, () => void> = {};
   if (step === 'confidence') {
@@ -763,6 +764,7 @@ function ReviewSession({
           lapses={leech.lapses}
           suggestions={suggestions}
           canEdit={canEditLeech}
+          outlineId={isFromOutline(note) ? note.outlineId : null}
           busy={leechBusy}
           onSuspend={() => {
             void suspendLeech();

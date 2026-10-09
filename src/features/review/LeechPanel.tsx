@@ -1,7 +1,9 @@
 // Panel de sanguijuela (D-085, fila 8). Aparece justo después de olvidar una tarjeta que ya se olvidó
 // muchas veces. Explica por qué conviene cambiarla, sugiere cómo según lo que revela su calidad y
 // ofrece suspenderla o editarla. Nunca cambia el texto por su cuenta y seguir con ella siempre se puede.
-import { Pencil, Pause, Play } from 'lucide-react';
+import { BookOpen, Pencil, Pause, Play } from 'lucide-react';
+import { Link } from 'react-router';
+import { screenPath } from '@/app/screens';
 import type { LeechSuggestion } from '@/engines/leech';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -12,6 +14,7 @@ export function LeechPanel({
   lapses,
   suggestions,
   canEdit,
+  outlineId = null,
   busy,
   onSuspend,
   onEdit,
@@ -21,6 +24,8 @@ export function LeechPanel({
   suggestions: readonly LeechSuggestion[];
   /** Solo las tarjetas del propio alumno se editan. Las precargadas no */
   canEdit: boolean;
+  /** El apunte de donde sale la tarjeta. Esas tarjetas se editan en el apunte y no aquí */
+  outlineId?: string | null;
   busy: boolean;
   onSuspend: () => void;
   onEdit: () => void;
@@ -42,7 +47,11 @@ export function LeechPanel({
             ))}
           </ul>
         </div>
-        {canEdit ? null : <p className="text-sm text-fg-muted">{text.cannotEdit}</p>}
+        {canEdit ? null : (
+          <p className="text-sm text-fg-muted">
+            {outlineId ? t.outlines.fromOutline.leech : text.cannotEdit}
+          </p>
+        )}
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" aria-keyshortcuts="1" disabled={busy} onClick={onSuspend}>
             <Pause aria-hidden />
@@ -52,6 +61,14 @@ export function LeechPanel({
             <Button variant="secondary" aria-keyshortcuts="2" disabled={busy} onClick={onEdit}>
               <Pencil aria-hidden />
               {text.edit}
+            </Button>
+          ) : null}
+          {!canEdit && outlineId ? (
+            <Button asChild variant="secondary" disabled={busy}>
+              <Link to={`${screenPath('outlines')}?apunte=${outlineId}`}>
+                <BookOpen aria-hidden />
+                {t.outlines.fromOutline.open}
+              </Link>
             </Button>
           ) : null}
           <Button aria-keyshortcuts="Space Enter" disabled={busy} onClick={onKeep}>

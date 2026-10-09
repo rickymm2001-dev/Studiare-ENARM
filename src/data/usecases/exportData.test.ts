@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, expect, it } from 'vitest';
-import { makeUser, testApi } from '../testing/fixtures';
+import { makeUser, newId, testApi } from '../testing/fixtures';
 import { exportUserData } from './exportData';
 import { createOutline, saveOutline } from './outlines';
 
@@ -16,12 +16,14 @@ it('exporta lo que el alumno creó y nada de lo de otra persona', async () => {
   const other = makeUser();
   await api.repos.users.put(user);
   const mine = await createOutline(api, user, { title: 'Mío' });
-  await saveOutline(api, user, mine.id, {
-    lines: [{ id: mine.lines[0]?.id ?? '', depth: 0, text: 'A :: B', noteId: null }],
+  await saveOutline(api, user, {
+    outlineId: mine.id,
+    nodes: [{ id: newId(), text: 'A >> B', children: [] }],
   });
   const theirs = await createOutline(api, other, { title: 'De otra persona' });
-  await saveOutline(api, other, theirs.id, {
-    lines: [{ id: theirs.lines[0]?.id ?? '', depth: 0, text: 'C :: D', noteId: null }],
+  await saveOutline(api, other, {
+    outlineId: theirs.id,
+    nodes: [{ id: newId(), text: 'C >> D', children: [] }],
   });
 
   const data = await exportUserData(api.repos, user.id);

@@ -17,8 +17,8 @@ import {
   ContentReportSchema,
   ReviewAssignmentSchema,
 } from '../../schemas/bank';
-import { CardSchema, DeckSchema, NoteSchema } from '../../schemas/decks';
-import { OutlinePageSchema } from '../../schemas/outlines';
+import { DeckSchema } from '../../schemas/decks';
+import { OutlineSchema } from '../../schemas/outlines';
 import { SyncStateSchema } from '../../schemas/sync';
 import {
   ConsentSchema,
@@ -31,7 +31,9 @@ import type { Repositories } from '../types';
 import {
   createDexieAppendOnlyRepo,
   createDexieCacheReader,
+  createDexieCardRepo,
   createDexieEntityRepo,
+  createDexieNoteRepo,
   createDexieOptionRepo,
   createDexieQuestionRepo,
   createDexieSyncableRepo,
@@ -48,9 +50,9 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     subscriptions: createDexieEntityRepo(db.subscriptions, SubscriptionSchema),
     officialScores: createDexieEntityRepo(db.officialScores, OfficialScoreSchema),
     decks: createDexieSyncableRepo(db.decks, DeckSchema),
-    notes: createDexieSyncableRepo(db.notes, NoteSchema),
-    cards: createDexieSyncableRepo(db.cards, CardSchema),
-    outlines: createDexieSyncableRepo(db.outlines, OutlinePageSchema),
+    notes: createDexieNoteRepo(db),
+    cards: createDexieCardRepo(db),
+    outlines: createDexieSyncableRepo(db.outlines, OutlineSchema),
     syncState: createDexieEntityRepo(db.syncState, SyncStateSchema),
     cases: createDexieAppendOnlyRepo(db.cases, ClinicalCaseSchema),
     questions: createDexieQuestionRepo(db),

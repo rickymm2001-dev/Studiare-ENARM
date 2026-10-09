@@ -32,7 +32,7 @@ import {
 } from '../schemas/caches';
 import { CardSchema, DeckSchema, NoteSchema } from '../schemas/decks';
 import { AppEventSchema } from '../schemas/events';
-import { OutlinePageSchema } from '../schemas/outlines';
+import { OutlineSchema } from '../schemas/outlines';
 import { SyncStateSchema } from '../schemas/sync';
 import {
   AccountSchema,
@@ -60,10 +60,11 @@ export const TABLES = {
   officialScores: { schema: OfficialScoreSchema, indexes: 'userId', kind: 'entity' },
 
   decks: { schema: DeckSchema, indexes: 'id, ownerId, origin, parentId', kind: 'entity' },
-  notes: { schema: NoteSchema, indexes: 'id, deckId, *tags', kind: 'entity' },
+  // outlineId busca las notas de un apunte, también las marcadas como borradas (D-092)
+  notes: { schema: NoteSchema, indexes: 'id, deckId, outlineId, *tags', kind: 'entity' },
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
-  // Apuntes en esquema que generan tarjetas (D-092)
-  outlines: { schema: OutlinePageSchema, indexes: 'id, ownerId, deckId', kind: 'entity' },
+  // Apuntes en esquema (Fase C2, Etapa 3). Sus líneas con marca son notas y tarjetas
+  outlines: { schema: OutlineSchema, indexes: 'id, ownerId, deckId, updatedAt', kind: 'entity' },
   // Hasta dónde llegó la sincronización entre dispositivos en este navegador (D-095)
   syncState: { schema: SyncStateSchema, indexes: 'userId', kind: 'entity' },
 

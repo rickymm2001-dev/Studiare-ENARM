@@ -360,7 +360,7 @@ Etapas
 | Explorar filtra miles de tarjetas sin trabarse | Prueba de rendimiento con 20,000 tarjetas generadas |
 | Repartir, posponer y adelantar no editan la bitácora y se reconstruyen igual | Prueba de reconstrucción de estado derivado con eventos nuevos |
 | Los días fáciles bajan la carga de esos días sin pasar del límite diario ni subir el pico más de 1.4 veces | Prueba con la simulación de carga futura en 8 semillas |
-| Los apuntes crean, actualizan y borran sus tarjetas sin perder el historial de las que siguen | Prueba de sincronización entre apuntes y tarjetas |
+| Los apuntes crean, actualizan y borran sus tarjetas sin perder el historial de las que siguen | Pruebas de sincronización entre apuntes y tarjetas (src/data/usecases/outlines.test.ts) y e2e de Apuntes |
 | El importador rechaza archivos dañados o maliciosos con un mensaje claro | Fixtures generados por código y un zip malicioso |
 | La IA nunca cambia un texto y cada señal explica su motivo con textos de la lista cerrada | Evaluación con casos dorados y prueba de que la señal se quita al verificar y deja un evento |
 | Dos dispositivos que editan lo mismo conservan la edición más reciente | Prueba de conflicto con fecha de modificación |

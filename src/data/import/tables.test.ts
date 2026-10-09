@@ -242,14 +242,16 @@ describe('Word', () => {
       ),
       'apuntes.docx',
     );
+    // Las marcas son las de Apuntes. :: pide las dos direcciones y ;; solo la de ida
     expect(parsed.notes.map((note) => [note.kind, note.tags])).toEqual([
-      ['basic', ['Nefrología', 'urgencias']],
-      ['basic_reverse', ['Nefrología']],
+      ['basic_reverse', ['Nefrología', 'urgencias']],
+      ['basic', ['Nefrología']],
       ['cloze', ['Nefrología']],
-      ['basic', ['Otro_tema']],
+      ['basic_reverse', ['Otro_tema']],
     ]);
     expect(parsed.notes[2]?.front).toBe('La {{c1::creatinina}} sube en la lesión renal');
-    expect(parsed.errors).toEqual([{ position: 6, code: 'empty_back' }]);
+    // Una marca sin respuesta no es una tarjeta, así que se salta sin error
+    expect(parsed.errors).toEqual([]);
   });
 
   it('conserva negritas y cursivas de las celdas y escapa el resto', () => {

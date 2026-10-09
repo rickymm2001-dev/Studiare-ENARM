@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { PAGE_SIZE } from '@/engines/sync';
 import { createEvent } from '../events/createEvent';
 import type { Card, Deck, Note } from '../schemas/decks';
-import type { OutlinePage } from '../schemas/outlines';
+import type { Outline } from '../schemas/outlines';
 import { newId, testApi } from '../testing/fixtures';
 import { runSync, type SyncResult } from './runSync';
 import { createMemoryServer, memoryTransport, type MemoryServer } from './testing/memoryTransport';
@@ -95,15 +95,14 @@ function cardOf(d: Device, note: Note): Card {
   };
 }
 
-function outlineOf(d: Device, deckId: string): OutlinePage {
+function outlineOf(d: Device, deckId: string): Outline {
   const stamp = at(d.clock.seconds).toISOString();
   return {
     id: newId(),
     ownerId: d.userId,
     title: 'Apunte',
     deckId,
-    tags: [],
-    lines: [{ id: newId(), depth: 0, text: 'Pregunta :: Respuesta', noteId: null }],
+    nodes: [{ id: newId(), text: 'Pregunta >> Respuesta', children: [] }],
     createdAt: stamp,
     updatedAt: stamp,
   };

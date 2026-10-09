@@ -4,12 +4,12 @@ import { createBrowserRouter, type RouteObject } from 'react-router';
 import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
 import { DecksScreen } from '@/features/decks/DecksScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
-import { NotesScreen } from '@/features/notes/NotesScreen';
 import { ExamResultsScreen } from '@/features/exam/ExamResultsScreen';
 import { ExamScreen } from '@/features/exam/ExamScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
+import { OutlinesScreen } from '@/features/outlines/OutlinesScreen';
 import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
 import { AdminSettingsScreen } from '@/features/admin/AdminSettingsScreen';
@@ -50,7 +50,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   examResults: ExamResultsScreen,
   decks: DecksScreen,
   explore: ExploreScreen,
-  notes: NotesScreen,
+  outlines: OutlinesScreen,
   planner: PlannerScreen,
   tutor: TutorScreen,
   subscription: SubscriptionScreen,
