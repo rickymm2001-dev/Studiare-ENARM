@@ -26,6 +26,18 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase E. Panel del médico, reportes y privacidad (D-099)
+
+Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendientes sin preguntar. Las pantallas 18 a 22 del médico y la privacidad del alumno.
+
+### Bloques
+- [x] E1. Vocabulario sesgos o trampas y pantalla 19 de doble etiquetado con kappa. El alumno ve trampas hasta que haya 30 pares con dos etiquetas y kappa de 0.40 o más. El médico etiqueta a ciegas desde su cola y el admin ve el tablero
+- [ ] E2. Pantalla 18, editor de pregunta con versiones y estados
+- [ ] E3. Pantalla 21, reportes de contenido, del alumno al médico
+- [ ] E4. Pantalla 20, cola de borradores de IA y preguntas reestructuradas
+- [ ] E5. Pantalla 22, importador del banco desde CSV, Excel o JSON
+- [ ] E6. Privacidad, borrar cuenta con eventos, copia en la nube y puntaje oficial voluntario
+
 ## Fase D. Motores de IA y evaluaciones (D-098)
 
 Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No hay clave de IA en este entorno, así que todo corre en modo simulado y con un cliente falso del SDK. Con la clave de Ricardo se mide el costo y la latencia reales con npm run eval-ai y la bandera real.

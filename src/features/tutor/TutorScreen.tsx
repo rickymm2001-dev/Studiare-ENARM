@@ -34,6 +34,7 @@ import { BiasTipsCard, DraftCardsCard, FormingPatterns, WeeklyReportCard } from 
 import { AiAnalysisCard } from './AiAnalysisCard';
 import type { ItemTexts } from './aiInputs';
 import { useTutorAi } from './useTutorAi';
+import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 
 /** Hipótesis abiertas de entrada. Con mucha actividad salen decenas y no se pueden leer todas */
 const TOP_HYPOTHESES = 3;
@@ -144,6 +145,7 @@ function TutorBody({
     answersThisWeek: view.answersThisWeek,
   });
   const [turningOn, setTurningOn] = useState(false);
+  const vocabulary = useBiasVocabulary();
 
   const run = async (hypothesis: Hypothesis, job: () => Promise<string | undefined>) => {
     setBusyKey(hypothesis.key);
@@ -300,7 +302,12 @@ function TutorBody({
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <WeeklyReportCard report={view.report} ai={tutorAi.report} />
         <div className="flex flex-col gap-3">
-          <BiasTipsCard tips={view.biasTips} calibration={view.biasCalibration} ai={tutorAi.tips} />
+          <BiasTipsCard
+            tips={view.biasTips}
+            calibration={view.biasCalibration}
+            ai={tutorAi.tips}
+            vocabulary={vocabulary}
+          />
           <DraftCardsCard errorCards={errorCards} />
         </div>
       </div>

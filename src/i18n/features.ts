@@ -114,7 +114,7 @@ export const featureText = {
       today: 'Para hoy',
       weak_topics: 'Temas débiles',
       exam_countdown: 'Cuenta regresiva (retirada)',
-      bias_pattern: 'Patrón de sesgo',
+      bias_pattern: 'Patrón de trampa',
       future_load: 'Carga futura',
       daily_goal: 'Meta diaria',
       party_challenge: 'Reto de Party',

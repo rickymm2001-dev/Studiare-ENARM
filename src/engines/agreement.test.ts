@@ -45,6 +45,37 @@ describe('acuerdo del etiquetado (7.11)', () => {
     expect(report.vocabulary).toBe('trap');
   });
 
+  it('con pocos pares sigue calibrando y habla de trampas aunque kappa salga alto', () => {
+    const report = computeAgreement(labels(10, 1, 'pocos'), thresholds);
+    expect(report.pairs).toBe(10);
+    expect(report.global?.kappa).toBeGreaterThan(0.9);
+    expect(report).toMatchObject({ calibrating: true, vocabulary: 'trap' });
+    // Con justo el mínimo de pares ya habla de sesgos
+    const enough = computeAgreement(labels(thresholds.minLabeledPairs, 1, 'justos'), thresholds);
+    expect(enough).toMatchObject({ calibrating: false, vocabulary: 'bias' });
+  });
+
+  it('kappa de 0.39 habla de trampas y de 0.40 habla de sesgos (4.4)', () => {
+    // 100 pares con 4 etiquetas parejas, así el acuerdo esperado por azar es 0.25 y kappa = (po - 0.25) / 0.75
+    const tags = ['a', 'b', 'c', 'd'];
+    const build = (agreements: number): LabelRecord[] =>
+      Array.from({ length: 100 }, (_, index) => {
+        const first = tags[index % 4] as string;
+        const second = index < agreements ? first : (tags[(index + 1) % 4] as string);
+        return [
+          { optionId: `o${index}`, physicianId: 'medico-a', tag: first },
+          { optionId: `o${index}`, physicianId: 'medico-b', tag: second },
+        ];
+      }).flat();
+    // 55 coincidencias dan kappa de 0.40 y 54 dan 0.3867
+    const at = computeAgreement(build(55), thresholds);
+    const below = computeAgreement(build(54), thresholds);
+    expect(at.global?.kappa).toBeCloseTo(0.4, 6);
+    expect(at.vocabulary).toBe('bias');
+    expect(below.global?.kappa).toBeCloseTo(0.3867, 3);
+    expect(below.vocabulary).toBe('trap');
+  });
+
   it('sin doble etiquetado sigue calibrando y habla de trampas', () => {
     const report = computeAgreement(
       [{ optionId: 'o1', physicianId: 'medico-a', tag: 'anchoring' }],

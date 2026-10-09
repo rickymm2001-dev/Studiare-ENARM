@@ -5,8 +5,10 @@ import type { Phase, ScreenKey } from '@/app/screens';
 import { adminText } from './admin';
 import { examText } from './exam';
 import { featureText } from './features';
+import { physicianText } from './physician';
 import { qualityText } from './quality';
 import { tutorText } from './tutor';
+import { vocabularyText } from './vocabulary';
 
 interface ScreenText {
   title: string;
@@ -45,7 +47,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   simulatorSetup: {
     title: 'Simular',
     description:
-      'Arma un simulador por rama, dificultad, sesgo, estructura o mezcla, en práctica o examen completo.',
+      'Arma un simulador por rama, dificultad, trampa, estructura o mezcla, en práctica o examen completo.',
   },
   exam: {
     title: 'Examen completo',
@@ -54,17 +56,17 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   examResults: {
     title: 'Resultados del examen',
-    description: 'Resultados por rama, estructura y sesgo. Tus errores pasan al repaso.',
+    description: 'Resultados por rama, estructura y trampa. Tus errores pasan al repaso.',
   },
   progress: {
     title: 'Progreso',
     description:
-      'Temas, sesgos, estructura, conducta, calibración, dificultad y carga futura, cada uno con su estado.',
+      'Temas, trampas, estructura, conducta, calibración, dificultad y carga futura, cada uno con su estado.',
   },
   tutor: {
     title: 'Tutor',
     description:
-      'Hipótesis sobre tus errores con su evidencia, informe semanal, consejos por sesgo y tarjetas en borrador.',
+      'Hipótesis sobre tus errores con su evidencia, informe semanal, consejos por trampa y tarjetas en borrador.',
   },
   decks: {
     title: 'Mazos',
@@ -161,6 +163,8 @@ export const t = {
   ...qualityText,
   ...tutorText,
   ...adminText,
+  ...physicianText,
+  ...vocabularyText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',

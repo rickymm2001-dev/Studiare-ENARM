@@ -203,6 +203,10 @@ export const adminText = {
         label: 'Doble etiquetado',
         hint: 'Fracción de las preguntas que etiquetan dos médicos (J).',
       },
+      'bias.minLabeledPairs': {
+        label: 'Pares para fiarse de kappa',
+        hint: 'Opciones etiquetadas por dos médicos antes de hablar de sesgos (J).',
+      },
       'topics.maxIntervalWidth': {
         label: 'Dominio por tema',
         hint: 'Ancho máximo del intervalo de 95% para mostrar el dominio (J).',

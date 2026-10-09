@@ -8,8 +8,10 @@
  * Salidas. La muestra, kappa global y por etiqueta con intervalo, y el vocabulario.
  * Método. Muestra sin reemplazo con semilla. Por opción se usan los dos primeros médicos en orden
  * de ID. Kappa de stats/kappa. Con kappa global menor a 0.4, o sin kappa todavía, la interfaz dice
- * trampas, porque no se puede afirmar que los médicos coinciden en el sesgo (4.4).
- * Umbrales. 20% de doble etiquetado y kappa de 0.4 (J).
+ * trampas, porque no se puede afirmar que los médicos coinciden en el sesgo (4.4). Con menos de 30
+ * pares el acuerdo sigue calibrando aunque kappa salga alto, porque con pocos pares es ruido.
+ * Umbrales. 20% de doble etiquetado, kappa de 0.4 y 30 opciones con dos etiquetas antes de fiarse
+ * de kappa (J).
  */
 import type { Thresholds } from '@/config/thresholds';
 import { createRng } from './random';
@@ -39,7 +41,7 @@ export interface AgreementReport {
   byTag: Record<string, KappaResult | null>;
   /** Palabra que usa la interfaz del alumno */
   vocabulary: 'bias' | 'trap';
-  /** Todavía no hay pares suficientes para calcular kappa */
+  /** Todavía no hay pares suficientes para fiarse de kappa */
   calibrating: boolean;
 }
 
@@ -62,12 +64,13 @@ export function computeAgreement(
       pairs.push([(physicians[0] as LabelRecord).tag, (physicians[1] as LabelRecord).tag]);
   }
   const global = cohenKappa(pairs);
+  const calibrating = global === null || pairs.length < thresholds.minLabeledPairs;
   return {
     pairs: pairs.length,
     global,
     byTag: kappaByCategory(pairs),
     vocabulary:
-      global !== null && global.kappa >= thresholds.minKappaForBiasLanguage ? 'bias' : 'trap',
-    calibrating: global === null,
+      !calibrating && global.kappa >= thresholds.minKappaForBiasLanguage ? 'bias' : 'trap',
+    calibrating,
   };
 }

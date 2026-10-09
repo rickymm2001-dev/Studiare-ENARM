@@ -19,6 +19,7 @@ export const THRESHOLD_FIELDS: readonly ThresholdField[] = [
   { group: 'bias', key: 'minTaggedErrors', kind: 'int', step: 1 },
   { group: 'bias', key: 'minKappaForBiasLanguage', kind: 'float', step: 0.05 },
   { group: 'bias', key: 'doubleLabelShare', kind: 'float', step: 0.05 },
+  { group: 'bias', key: 'minLabeledPairs', kind: 'int', step: 1 },
   { group: 'topics', key: 'maxIntervalWidth', kind: 'float', step: 0.01 },
   { group: 'structure', key: 'minResponsesPerCategory', kind: 'int', step: 1 },
   { group: 'forgetting', key: 'findingsForPattern', kind: 'int', step: 1 },

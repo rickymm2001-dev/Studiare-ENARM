@@ -169,7 +169,7 @@ export const tutorText = {
     },
 
     biasTips: {
-      title: 'Consejos por sesgo',
+      title: 'Consejos por trampa',
       hint: 'Aparecen cuando una trampa ya se repite en tus errores. Son borradores pendientes de revisión médica.',
       draftLabel: 'Borrador pendiente de revisión médica',
       unit: 'errores con trampa etiquetada',

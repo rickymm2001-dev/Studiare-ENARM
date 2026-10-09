@@ -25,6 +25,8 @@ export const ThresholdsSchema = z.strictObject({
     minKappaForBiasLanguage: z.number().min(-1).max(1).default(0.4),
     /** Doble etiquetado del 20% de las preguntas (J) */
     doubleLabelShare: z.number().min(0).max(1).default(0.2),
+    /** Opciones etiquetadas por dos médicos antes de fiarse de kappa y hablar de sesgos (J) */
+    minLabeledPairs: z.int().positive().default(30),
   }),
   topics: z.strictObject({
     /** Fuerza del prior beta-binomial, equivalente a unas 10 respuestas (J) */

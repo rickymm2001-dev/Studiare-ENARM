@@ -11,6 +11,7 @@ import { CalibratingNote } from '@/ui/states/states';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import { DraftBadge } from '../shared/DraftBadge';
 import { TOPIC_NAMES } from '../shared/topics';
+import type { Vocabulary } from '@/i18n/vocabulary';
 import type { BiasTipAi, ReportAi } from './aiContent';
 import { reportRefOf } from './aiInputs';
 import { AiWritten } from './AiWritten';
@@ -174,7 +175,10 @@ export function BiasTipsCard({
   tips,
   calibration,
   ai,
+  vocabulary = 'trap',
 }: {
+  /** Habla de sesgos solo cuando los médicos coinciden al etiquetar (4.4) */
+  vocabulary?: Vocabulary;
   tips: readonly BiasTip[];
   /** Lo que redactó la IA por trampa. Falta la que todavía no se pide */
   ai?: ReadonlyMap<string, BiasTipAi> | undefined;
@@ -187,7 +191,7 @@ export function BiasTipsCard({
       <CardHeader className="mb-3">
         <CardTitle id="consejos-sesgo" className="flex items-center gap-2 [&_svg]:size-5">
           <Lightbulb aria-hidden className="text-accent" />
-          {text.title}
+          {t.vocabulary[vocabulary].biasTipsTitle}
         </CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
