@@ -16,6 +16,7 @@ import {
   DEMO_STUDENT_ALIAS,
 } from '@/demo/constants';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
@@ -33,7 +34,7 @@ type Phase =
   | { kind: 'error' };
 
 export function DemoDataScreen() {
-  const text = t.adminDemo;
+  const text = adminText.adminDemo;
   const { repos, demo } = useDataApi();
   const counts = useLiveData(async () => {
     const [users, truths] = await Promise.all([

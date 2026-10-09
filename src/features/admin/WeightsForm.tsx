@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { topicTaxonomy } from '@/demo/content';
 import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
-import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -18,7 +18,7 @@ import {
 } from './weightsDraft';
 
 export function WeightsForm() {
-  const text = t.adminConfig.weightsForm;
+  const text = adminText.adminConfig.weightsForm;
   const [draft, setDraft] = useState<WeightsDraft>(currentDraft);
   const [message, setMessage] = useState<'saved' | 'reset' | 'failed' | null>(null);
 

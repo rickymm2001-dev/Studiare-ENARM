@@ -1,7 +1,7 @@
 // Cliente de Supabase (Fase P, bloque 9, D-075). Solo usa la URL del proyecto y la llave pública,
 // que viajan al navegador por diseño. La seguridad la dan los permisos por fila del esquema
 // (D-069). Sin las dos variables la app sigue funcionando completa en el navegador.
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { jwtRole } from './keyRole';
 
 export interface CloudConfig {
@@ -25,23 +25,46 @@ export function readCloudConfig(
   return { url, publicKey };
 }
 
-let client: SupabaseClient | null | undefined;
+let client: SupabaseClient | null = null;
+let loading: Promise<SupabaseClient | null> | undefined;
 
-/** Cliente único. null si la nube no está configurada */
-export function getCloud(): SupabaseClient | null {
-  if (client !== undefined) return client;
+async function createCloud(): Promise<SupabaseClient | null> {
   const config = readCloudConfig();
-  client = config
-    ? createClient(config.url, config.publicKey, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-          // implicit deja abrir el enlace del correo en otro navegador o en el teléfono
-          flowType: 'implicit',
-        },
-      })
-    : null;
+  if (!config) return null;
+  // El SDK de Supabase pesa más de 100 KB comprimidos y solo hace falta con la nube configurada.
+  // Se baja aparte, justo después de pintar la primera pantalla, y no cuenta en el JavaScript
+  // inicial (14.4)
+  const { createClient } = await import('@supabase/supabase-js');
+  client = createClient(config.url, config.publicKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      // implicit deja abrir el enlace del correo en otro navegador o en el teléfono
+      flowType: 'implicit',
+    },
+  });
+  return client;
+}
+
+/**
+ * Baja el SDK y crea el cliente único. Resuelve null si la nube no está configurada o si el SDK no
+ * se pudo bajar, y en ese caso la siguiente llamada lo intenta otra vez
+ */
+export function loadCloud(): Promise<SupabaseClient | null> {
+  loading ??= createCloud().catch(() => {
+    loading = undefined;
+    return null;
+  });
+  return loading;
+}
+
+/**
+ * El cliente, solo si ya se bajó. Con la sesión de la nube abierta siempre está, porque quien la
+ * abre lo bajó antes. Para preguntar si la nube está configurada se usa cloudConfigured, que no
+ * espera al SDK
+ */
+export function getCloud(): SupabaseClient | null {
   return client;
 }
 

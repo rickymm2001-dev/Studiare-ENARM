@@ -13,6 +13,7 @@ import { newId } from '@/data/testing/fixtures';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { buildNextVersion, draftFromVersion } from './editorDraft';
 
 vi.setConfig({ testTimeout: 60_000 });
@@ -25,7 +26,7 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 30_000 };
-const text = t.reportsScreen;
+const text = physicianText.reportsScreen;
 const [first, second] = buildDemoBank().questions;
 if (!first || !second) throw new Error('El banco demo no alcanza para la prueba');
 

@@ -1,9 +1,10 @@
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { BRAND } from './src/config/brand.ts';
+import { buildHeadersFile, buildMetaCsp, supabaseOriginOf } from './src/config/csp.ts';
 
 // Puerto local del proxy de IA. Debe coincidir con server/src/config.ts
 const PROXY_TARGET = 'http://127.0.0.1:8787';
@@ -22,15 +23,45 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+ * Política de seguridad de contenido (14.3). Solo en el build, porque el servidor de desarrollo
+ * necesita scripts en línea para recargar en caliente. Pone la política en una etiqueta meta de
+ * index.html, que protege en cualquier alojamiento, y escribe el archivo _headers para Cloudflare
+ * Pages, donde además vale frame-ancestors
+ */
+const CSP_MARKER = '<!--csp-->';
+
+function contentSecurityPolicy(supabaseUrl: string | undefined): Plugin {
+  const options = { supabaseOrigin: supabaseOriginOf(supabaseUrl) };
+  return {
+    name: 'enarm-content-security-policy',
+    apply: 'build',
+    // El marcador va en index.html justo después del charset, que debe ir primero. La política queda
+    // antes que cualquier script o recurso, porque solo vale para lo que se carga después de ella
+    transformIndexHtml: {
+      order: 'post',
+      handler: (html) =>
+        html.replace(
+          CSP_MARKER,
+          `<meta http-equiv="Content-Security-Policy" content="${buildMetaCsp(options)}" />`,
+        ),
+    },
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: '_headers', source: buildHeadersFile(options) });
+    },
+  };
+}
+
 const apiProxy = {
   '/api': { target: PROXY_TARGET, rewrite: (path: string) => path.replace(/^\/api/, '') },
 };
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base: BASE_PATH,
   plugins: [
     react(),
     tailwindcss(),
+    contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL),
     // Instalación opcional como PWA y modo sin conexión básico (4.11, 14.4)
     VitePWA({
       registerType: 'prompt',
@@ -132,4 +163,4 @@ export default defineConfig({
     strictPort: true,
     proxy: apiProxy,
   },
-});
+}));

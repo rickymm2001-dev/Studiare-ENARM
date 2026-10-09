@@ -9,7 +9,7 @@ import type { Option, Question } from '@/data/schemas/bank';
 import { biasTaxonomy, structureDictionary, topicTaxonomy } from '@/demo/content';
 import { stableUlid } from '@/demo/stableId';
 import { analyzeStructure } from '@/engines/structure';
-import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { bankTaxonomy } from './bankTaxonomy';
 import {
   buildNextVersion,
@@ -112,14 +112,14 @@ export async function planImport(
     const issues = validateDraft(draft, bankTaxonomy);
     if (issues.length > 0) {
       for (const issue of issues) {
-        const message = t.questionEditor.issues[issue.code] ?? issue.code;
+        const message = physicianText.questionEditor.issues[issue.code] ?? issue.code;
         problems.push({
           rowNumber,
           id: question.key,
           message:
             issue.option === undefined
               ? message
-              : t.questionEditor.issueAt(issue.option + 1, message),
+              : physicianText.questionEditor.issueAt(issue.option + 1, message),
         });
       }
       continue;

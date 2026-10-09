@@ -3,6 +3,7 @@
 // navegación (D-059, D-068), y la raíz sin sesión es la portada de venta.
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import {
   expect,
   expectNoSeriousA11yViolations,
@@ -71,14 +72,18 @@ test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', asyn
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.contentReports.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(physicianText.reportsScreen.empty.openTitle)).toBeVisible({
+    timeout: 60_000,
+  });
   await expectNoSeriousA11yViolations(page);
 
   await page.goto(SCREENS.agreement.path);
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.agreement.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.agreementScreen.vocabulary.title)).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(physicianText.agreementScreen.vocabulary.title)).toBeVisible({
+    timeout: 60_000,
+  });
   await expectNoSeriousA11yViolations(page);
 });
 

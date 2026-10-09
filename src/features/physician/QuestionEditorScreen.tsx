@@ -16,6 +16,7 @@ import type { Question } from '@/data/schemas/bank';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { analyzeStructure } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { useBankReady } from '../shared/useBankReady';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
@@ -48,7 +49,7 @@ const options = (entries: Record<string, string>) =>
 const sameDraft = (a: QuestionDraft, b: QuestionDraft) => JSON.stringify(a) === JSON.stringify(b);
 
 export function QuestionEditorScreen() {
-  const text = t.questionEditor;
+  const text = physicianText.questionEditor;
   const api = useDataApi();
   const role = usePreferences((state) => state.role);
   const session = useSession();
@@ -190,7 +191,7 @@ function EditorForm({
   notice: string;
   onNotice: (notice: string) => void;
 }) {
-  const text = t.questionEditor;
+  const text = physicianText.questionEditor;
   const api = useDataApi();
   const [draft, setDraft] = useState(initial);
   const [issues, setIssues] = useState<DraftIssue[]>([]);

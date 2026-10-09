@@ -32,6 +32,20 @@ jobs:
       # Permisos por fila y roles del esquema de Supabase contra un Postgres local temporal (D-069)
       - run: npm run test:sql
 
+  # Vulnerabilidades altas o críticas en las dependencias (14.3). Va aparte porque un aviso nuevo de npm
+  # puede aparecer cualquier día y no debe tapar el resultado de las pruebas
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run audit:high
+
   # Pruebas de punta a punta en Chromium, en teléfono y escritorio, contra el build de producción y
   # con el proxy de IA en modo simulado (14.1). Los navegadores van dentro del proyecto (D-033)
   e2e:

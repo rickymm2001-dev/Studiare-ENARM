@@ -7,7 +7,7 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Question } from '@/data/schemas/bank';
 import { biasTaxonomy } from '@/demo/content';
-import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Button } from '@/ui/components/button';
 
 const biasName = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias.name]));
@@ -32,7 +32,7 @@ export function QuestionPreview({
         {(options ?? []).map((option) => (
           <li key={option.id} className={option.isCorrect ? 'font-semibold' : undefined}>
             {option.text}
-            {option.isCorrect ? ` · ${t.questionEditor.options.key}` : ''}
+            {option.isCorrect ? ` · ${physicianText.questionEditor.options.key}` : ''}
             {option.biasTag ? (
               <span className="ml-2 text-xs text-fg-muted">
                 ({biasName.get(option.biasTag) ?? option.biasTag})
@@ -47,7 +47,7 @@ export function QuestionPreview({
           <Button asChild variant="secondary" size="sm">
             <Link to={`${SCREENS.questionEditor.path}?pregunta=${question.questionId}`}>
               <Pencil aria-hidden />
-              {t.questionEditor.edit}
+              {physicianText.questionEditor.edit}
             </Link>
           </Button>
         </div>

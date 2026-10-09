@@ -2,7 +2,7 @@
 // sin pintar nada.
 import type { DemoAdjustments } from '@/data/context';
 import { DEMO_COHORT_MAX, DEMO_COHORT_MIN } from '@/demo/constants';
-import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 
 const SEED_PATTERN = /^[A-Za-z0-9_-]{1,40}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -25,7 +25,7 @@ export function readAdjustments(fields: DemoFields): {
   adjust: DemoAdjustments;
   errors: Partial<Record<keyof DemoFields, string>>;
 } {
-  const text = t.adminDemo.fields;
+  const text = adminText.adminDemo.fields;
   const errors: Partial<Record<keyof DemoFields, string>> = {};
   const size = Number(fields.cohortSize);
   if (!Number.isInteger(size) || size < DEMO_COHORT_MIN || size > DEMO_COHORT_MAX) {

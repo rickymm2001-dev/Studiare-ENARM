@@ -5,6 +5,7 @@ import { useId } from 'react';
 import type { Question } from '@/data/schemas/bank';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -34,7 +35,7 @@ export function OptionsEditor({
   issues: readonly DraftIssue[];
   onChange: (options: DraftOption[]) => void;
 }) {
-  const text = t.questionEditor.options;
+  const text = physicianText.questionEditor.options;
   const uid = useId();
   const patch = (index: number, change: Partial<DraftOption>) => {
     onChange(options.map((option, at) => (at === index ? { ...option, ...change } : option)));
@@ -53,7 +54,9 @@ export function OptionsEditor({
   return (
     <Card aria-labelledby={`${uid}-opciones`}>
       <CardHeader>
-        <CardTitle id={`${uid}-opciones`}>{t.questionEditor.sections.options}</CardTitle>
+        <CardTitle id={`${uid}-opciones`}>
+          {physicianText.questionEditor.sections.options}
+        </CardTitle>
         <CardDescription>
           {text.count(options.length)}. {text.hint}
         </CardDescription>
@@ -73,7 +76,7 @@ export function OptionsEditor({
                         {option.isCorrect ? text.key : text.distractor}
                       </Badge>
                       {problems > 0 ? (
-                        <Badge variant="danger">{t.questionEditor.save.invalid}</Badge>
+                        <Badge variant="danger">{physicianText.questionEditor.save.invalid}</Badge>
                       ) : null}
                     </span>
                   }
@@ -219,12 +222,12 @@ export function GpcEditor({
   refs: QuestionDraft['gpcRefs'];
   onChange: (refs: QuestionDraft['gpcRefs']) => void;
 }) {
-  const text = t.questionEditor.gpc;
+  const text = physicianText.questionEditor.gpc;
   const uid = useId();
   return (
     <Card aria-labelledby={`${uid}-gpc`}>
       <CardHeader>
-        <CardTitle id={`${uid}-gpc`}>{t.questionEditor.sections.gpc}</CardTitle>
+        <CardTitle id={`${uid}-gpc`}>{physicianText.questionEditor.sections.gpc}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
       {refs.length === 0 ? <p className="mb-3 text-sm text-fg-muted">{text.none}</p> : null}
@@ -301,7 +304,7 @@ export function CluesEditor({
   clues: DraftClue[];
   onChange: (clues: DraftClue[]) => void;
 }) {
-  const text = t.questionEditor.meta;
+  const text = physicianText.questionEditor.meta;
   return (
     <Disclosure title={text.clues} summary={String(clues.length)}>
       <p className="text-sm text-fg-muted">{text.cluesHint}</p>
@@ -369,12 +372,12 @@ export function HistoryCard({
   versions: readonly Question[];
   drafts: ReadonlyMap<string, QuestionDraft>;
 }) {
-  const text = t.questionEditor.history;
+  const text = physicianText.questionEditor.history;
   const ordered = [...versions].reverse();
   return (
     <Card aria-labelledby="editor-historial">
       <CardHeader>
-        <CardTitle id="editor-historial">{t.questionEditor.sections.history}</CardTitle>
+        <CardTitle id="editor-historial">{physicianText.questionEditor.sections.history}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
       <ol className="flex flex-col divide-y divide-line">
@@ -386,7 +389,7 @@ export function HistoryCard({
           return (
             <li key={version.id} className="flex flex-col gap-1 py-2">
               <p className="flex flex-wrap items-center gap-2 font-semibold">
-                {t.questionEditor.status.version(version.version)}
+                {physicianText.questionEditor.status.version(version.version)}
                 <Badge variant={version.editorialStatus === 'approved' ? 'success' : 'neutral'}>
                   {t.bank.status[version.editorialStatus]}
                 </Badge>

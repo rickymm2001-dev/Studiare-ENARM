@@ -14,6 +14,7 @@ const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
 vi.mock('@/data/cloud/client', () => ({
   getCloud: () => holder.cloud,
   cloudConfigured: () => holder.cloud !== null,
+  loadCloud: () => Promise.resolve(holder.cloud),
 }));
 
 const AUTH_ID = '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10';

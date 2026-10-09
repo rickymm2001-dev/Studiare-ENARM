@@ -1,9 +1,10 @@
 // Pago real en modo prueba desde Suscripción, cuando la cuenta de la nube está conectada (Fase P
 // bloque 5, D-096). El alumno elige la pasarela, la función del servidor crea el pago y el navegador
 // lo abre. Al volver, la app revisa el plan con la nube hasta que el aviso del pago lo confirme.
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { getCloud } from '@/data/cloud/client';
+import { loadCloud } from '@/data/cloud/client';
 import { PLANS, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
@@ -37,7 +38,7 @@ export function CloudCheckoutCard({
   const [error, setError] = useState<string | null>(null);
 
   const go = async () => {
-    const cloud = getCloud();
+    const cloud = await loadCloud();
     if (!cloud) {
       setError(text.errors.failed);
       return;
@@ -121,12 +122,10 @@ export function PaymentReturnNotice({
 
   useEffect(() => {
     if (result !== 'ok') return;
-    const cloud = getCloud();
-    if (!cloud) return;
     let stopped = false;
     let tries = 0;
     let timer: ReturnType<typeof setTimeout> | null = null;
-    const check = async () => {
+    const check = async (cloud: SupabaseClient) => {
       tries += 1;
       const cloudPlan = await refreshCloudPlan(apiRef.current, cloud, userId);
       if (stopped) return;
@@ -139,10 +138,13 @@ export function PaymentReturnNotice({
         return;
       }
       timer = setTimeout(() => {
-        void check();
+        void check(cloud);
       }, RETURN_CHECK_MS);
     };
-    void check();
+    // Al volver de la pasarela la página recién abre y el SDK puede estar bajándose todavía
+    void loadCloud().then((cloud) => {
+      if (cloud && !stopped) void check(cloud);
+    });
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);

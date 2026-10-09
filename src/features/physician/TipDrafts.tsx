@@ -5,7 +5,7 @@ import { useDataApi } from '@/data/context';
 import type { AiArtifact } from '@/data/schemas/activity';
 import type { User } from '@/data/schemas/people';
 import { biasTaxonomy, biasTips } from '@/demo/content';
-import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -23,12 +23,12 @@ export function TipDrafts({
   physician: Pick<User, 'id'>;
   artifacts: readonly AiArtifact[];
 }) {
-  const text = t.draftsScreen.tips;
+  const text = physicianText.draftsScreen.tips;
   const reviews = tipReviewsFrom(artifacts);
   return (
     <Card aria-labelledby="borradores-consejos">
       <CardHeader>
-        <CardTitle id="borradores-consejos">{t.draftsScreen.sections.tips}</CardTitle>
+        <CardTitle id="borradores-consejos">{physicianText.draftsScreen.sections.tips}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
       <ul className="flex flex-col gap-2">
@@ -61,7 +61,7 @@ function TipRow({
   review: TipReview | undefined;
   physician: Pick<User, 'id'>;
 }) {
-  const text = t.draftsScreen.tips;
+  const text = physicianText.draftsScreen.tips;
   const api = useDataApi();
   const status = review?.status ?? 'draft';
   const [value, setValue] = useState(review && review.status !== 'rejected' ? review.tip : baseTip);

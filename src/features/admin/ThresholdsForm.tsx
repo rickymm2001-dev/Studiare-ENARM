@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { DEFAULT_THRESHOLDS, FACTORY_THRESHOLDS } from '@/config/thresholds';
 import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
-import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
@@ -12,7 +12,7 @@ import { THRESHOLD_FIELDS, fieldId, readThreshold } from './thresholdFields';
 import { initialDraft, patchFromDraft, validateDraft, type ThresholdDraft } from './thresholdDraft';
 
 export function ThresholdsForm() {
-  const text = t.adminConfig.thresholdsForm;
+  const text = adminText.adminConfig.thresholdsForm;
   const [draft, setDraft] = useState<ThresholdDraft>(initialDraft);
   const [message, setMessage] = useState<'saved' | 'reset' | 'failed' | null>(null);
   const errors = validateDraft(draft);
@@ -52,7 +52,8 @@ export function ThresholdsForm() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {THRESHOLD_FIELDS.map((field) => {
           const id = fieldId(field);
-          const info = t.adminConfig.thresholds[id as keyof typeof t.adminConfig.thresholds];
+          const info =
+            adminText.adminConfig.thresholds[id as keyof typeof adminText.adminConfig.thresholds];
           return (
             <TextField
               key={id}

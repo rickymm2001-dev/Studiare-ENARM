@@ -1,7 +1,7 @@
 // Estado de la cuenta en la nube (D-075). Lo actualiza CloudBridge y lo leen las pantallas.
 import { create } from 'zustand';
 import type { CloudIdentity } from '@/data/cloud/account';
-import { getCloud } from '@/data/cloud/client';
+import { cloudConfigured, getCloud } from '@/data/cloud/client';
 import type { DataApi } from '@/data/context';
 import { pushLocalAccount } from '@/data/usecases/cloudLink';
 
@@ -22,7 +22,7 @@ export type CloudState =
 
 export const useCloud = create<{ state: CloudState; set: (state: CloudState) => void }>()(
   (set) => ({
-    state: getCloud() ? { status: 'checking' } : { status: 'off' },
+    state: cloudConfigured() ? { status: 'checking' } : { status: 'off' },
     set: (state) => {
       set({ state });
     },

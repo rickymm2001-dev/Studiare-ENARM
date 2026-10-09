@@ -9,7 +9,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { requestEmailLink, type LinkResult } from '@/data/cloud/account';
-import { getCloud } from '@/data/cloud/client';
+import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { AccountSchema } from '@/data/schemas/people';
@@ -34,7 +34,7 @@ const validEmail = (email: string) => AccountSchema.shape.email.safeParse(email.
 const redirectTo = () => new URL(import.meta.env.BASE_URL, window.location.origin).toString();
 
 async function sendLink(email: string, alias?: string): Promise<LinkResult | null> {
-  const cloud = getCloud();
+  const cloud = await loadCloud();
   if (!cloud) return null;
   return requestEmailLink(cloud, {
     email: email.trim().toLowerCase(),
@@ -94,7 +94,7 @@ export function OnboardingScreen() {
       </div>
       {tab === 'create' ? <CreateAccountForm onCreated={enter} /> : <LoginForm onFound={enter} />}
       <p className="text-center text-xs text-fg-muted">
-        {getCloud() ? t.cloud.loginNote : t.session.simulatedLogin}
+        {cloudConfigured() ? t.cloud.loginNote : t.session.simulatedLogin}
       </p>
     </>
   );
@@ -256,7 +256,7 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState<LinkResult | null>(null);
-  const cloud = getCloud();
+  const cloud = cloudConfigured();
   // Perfiles de este navegador creados antes de las cuentas con correo
   const legacy = useLiveData(async () => {
     const [users, accounts] = await Promise.all([

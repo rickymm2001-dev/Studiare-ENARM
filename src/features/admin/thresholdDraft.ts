@@ -6,7 +6,7 @@ import {
   mergeThresholds,
   type ThresholdsPatch,
 } from '@/config/thresholds';
-import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { THRESHOLD_FIELDS, fieldId, readThreshold } from './thresholdFields';
 
 export type ThresholdDraft = Record<string, string>;
@@ -37,9 +37,9 @@ export function validateDraft(draft: ThresholdDraft): Record<string, string> {
     const raw = draft[fieldId(field)] ?? '';
     const value = Number(raw);
     if (raw.trim() === '' || !Number.isFinite(value)) {
-      errors[fieldId(field)] = t.adminConfig.thresholdsForm.notNumber;
+      errors[fieldId(field)] = adminText.adminConfig.thresholdsForm.notNumber;
     } else if (field.kind === 'int' && !Number.isInteger(value)) {
-      errors[fieldId(field)] = t.adminConfig.thresholdsForm.notInteger;
+      errors[fieldId(field)] = adminText.adminConfig.thresholdsForm.notInteger;
     }
   }
   if (Object.keys(errors).length > 0) return errors;

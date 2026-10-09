@@ -10,6 +10,7 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { biasTips } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Button } from '@/ui/components/button';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -25,7 +26,7 @@ type Section = 'questions' | 'tips' | 'cards';
 const SECTIONS: readonly Section[] = ['questions', 'tips', 'cards'];
 
 export function AiDraftsScreen() {
-  const text = t.draftsScreen;
+  const text = physicianText.draftsScreen;
   const api = useDataApi();
   const role = usePreferences((state) => state.role);
   const session = useSession();

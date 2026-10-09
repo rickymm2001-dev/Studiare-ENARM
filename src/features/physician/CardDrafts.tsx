@@ -5,6 +5,7 @@ import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
 import type { Note } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -19,7 +20,7 @@ const faces = (note: Note) =>
     : { front: htmlToText(note.front), back: htmlToText(note.back) };
 
 export function CardDrafts({ pending }: { pending: readonly PendingNote[] }) {
-  const text = t.draftsScreen.cards;
+  const text = physicianText.draftsScreen.cards;
   const api = useDataApi();
   const [shown, setShown] = useState(PAGE);
   const [message, setMessage] = useState('');
@@ -42,7 +43,7 @@ export function CardDrafts({ pending }: { pending: readonly PendingNote[] }) {
   return (
     <Card aria-labelledby="borradores-tarjetas">
       <CardHeader>
-        <CardTitle id="borradores-tarjetas">{t.draftsScreen.sections.cards}</CardTitle>
+        <CardTitle id="borradores-tarjetas">{physicianText.draftsScreen.sections.cards}</CardTitle>
         <CardDescription>
           {text.hint} {text.remaining(pending.length)}.
         </CardDescription>
@@ -62,7 +63,7 @@ export function CardDrafts({ pending }: { pending: readonly PendingNote[] }) {
             <li key={note.id} className="flex flex-col gap-2 py-3">
               <p className="flex flex-wrap items-center gap-2 text-xs text-fg-muted">
                 <Badge variant="neutral">{deck.name}</Badge>
-                <Badge variant="warning">{t.draftsScreen.draftLabel}</Badge>
+                <Badge variant="warning">{physicianText.draftsScreen.draftLabel}</Badge>
               </p>
               <p className="text-sm">
                 <span className="font-semibold">{text.front}. </span>

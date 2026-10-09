@@ -7,6 +7,7 @@ import type { AdminConfig } from '@/ai/admin';
 import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
 import { AI_ENGINES } from '@/engines/aiContracts';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -16,7 +17,7 @@ import { EFFORTS, draftOf, patchOf, validateAiDraft, type AiDraft } from './aiCo
 import type { AiAdmin } from './useAiAdmin';
 
 export function AiConfigForm({ admin }: { admin: AiAdmin }) {
-  const text = t.adminConfig.aiForm;
+  const text = adminText.adminConfig.aiForm;
   const config = admin.config?.config;
   // El borrador nace de la configuración del proxy y se vuelve a armar cuando ella cambia
   const [draftState, setDraft] = useState<{ source: AdminConfig | null; draft: AiDraft | null }>({
@@ -144,7 +145,9 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
             const row = draft.models[engine];
             return (
               <fieldset key={engine} className="rounded-lg border border-line p-3">
-                <legend className="px-1 font-semibold">{t.adminCosts.engines[engine]}</legend>
+                <legend className="px-1 font-semibold">
+                  {adminText.adminCosts.engines[engine]}
+                </legend>
                 <p className="mb-2 text-xs text-fg-muted">
                   {text.promptVersion(admin.config?.prompts[engine] ?? '—')}
                 </p>

@@ -16,6 +16,7 @@ import { buildDemoBank } from '@/demo/content/bank';
 import { guardRestructure } from '@/engines/aiGuards';
 import { mockRestructure } from '@/engines/aiMock';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { tipReviewId } from '../shared/tipReviews';
 import { draftFromVersion } from './editorDraft';
 import { buildRestructureInput } from './restructure';
@@ -30,7 +31,7 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 30_000 };
-const text = t.draftsScreen;
+const text = physicianText.draftsScreen;
 const entries = buildDemoBank().questions;
 // Una pregunta suelta cuya propuesta de ejemplo pasa las guardas
 const target = entries.find((entry) => {
@@ -139,8 +140,10 @@ describe('cola de borradores de IA (pantalla 20)', () => {
     // Las completa una por una. Abre cada opción con problema
     const groups = within(form).getAllByRole('group', { name: /^Opción \d+$/ });
     for (const group of groups) {
-      const tag = within(group).queryByLabelText(t.questionEditor.options.tag);
-      const rationale = within(group).getByLabelText(t.questionEditor.options.rationale);
+      const tag = within(group).queryByLabelText(physicianText.questionEditor.options.tag);
+      const rationale = within(group).getByLabelText(
+        physicianText.questionEditor.options.rationale,
+      );
       if (!(rationale as HTMLTextAreaElement).value) {
         await typing.type(rationale, 'Justificación escrita por el médico.');
       }

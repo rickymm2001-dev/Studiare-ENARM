@@ -12,6 +12,7 @@ import { newId } from '@/data/testing/fixtures';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { sampleQuestionIds } from './agreementView';
 
 vi.setConfig({ testTimeout: 60_000 });
@@ -24,7 +25,7 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 30_000 };
-const text = t.questionEditor;
+const text = physicianText.questionEditor;
 const demo = buildDemoBank();
 const entries = demo.questions;
 const sample = new Set(sampleQuestionIds(entries.map((entry) => entry.question)));

@@ -10,6 +10,7 @@ import { useDataApi } from '@/data/context';
 import { BankFileError, readBankFile } from '@/data/content/bankFiles';
 import { newId } from '@/data/ids';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -45,7 +46,7 @@ const prefixOf = (fileName: string) =>
     .replace(/^-|-$/g, '') || 'banco';
 
 export function BankImportScreen() {
-  const text = t.importScreen;
+  const text = physicianText.importScreen;
   const api = useDataApi();
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });
   const [error, setError] = useState('');
@@ -243,7 +244,7 @@ function Review({
   onReport: (problems: readonly RowProblem[]) => void;
   onAgain: () => void;
 }) {
-  const text = t.importScreen;
+  const text = physicianText.importScreen;
   const created = plan.planned.filter((item) => item.action === 'new').length;
   const versions = plan.planned.filter((item) => item.action === 'new_version').length;
   const unchanged = plan.planned.filter((item) => item.action === 'unchanged').length;

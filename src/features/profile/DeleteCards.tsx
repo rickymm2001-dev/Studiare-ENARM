@@ -28,10 +28,13 @@ interface DeleteProps {
   onDone: () => void;
 }
 
-/** Nube a usar. Solo con la cuenta conectada, porque sin ella no hay copia que borrar */
-function useLinkedCloud(cloud: Cloud | null): Cloud | null {
+/**
+ * Con la cuenta en la nube conectada, borrar exige la nube. Si por algo el cliente no está, borrar
+ * falla y no deja el dispositivo vacío con la copia en la nube intacta
+ */
+function useCloudTarget(cloud: Cloud | null): { linked: boolean; cloud: Cloud | null } {
   const linked = useCloud((store) => store.state.status === 'linked');
-  return linked ? cloud : null;
+  return { linked, cloud };
 }
 
 interface PanelProps {
@@ -62,12 +65,13 @@ function ErrorLine({ reason }: { reason: EraseFailure | null }) {
 
 /** Corre el borrado de la nube y, si salió bien, lo local. Devuelve por qué falló, o null si terminó */
 async function eraseAll(
-  cloud: Cloud | null,
+  target: { linked: boolean; cloud: Cloud | null },
   step: (cloud: Cloud) => Promise<EraseResult>,
   wipeLocal: () => Promise<void>,
 ): Promise<EraseFailure | null> {
-  if (cloud) {
-    const result = await step(cloud);
+  if (target.linked) {
+    if (!target.cloud) return 'network';
+    const result = await step(target.cloud);
     if (!result.ok) return result.reason;
   }
   await wipeLocal();
@@ -79,11 +83,11 @@ export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<EraseFailure | null>(null);
-  const linkedCloud = useLinkedCloud(cloud);
+  const target = useCloudTarget(cloud);
   const run = () => {
     setBusy(true);
     setFailure(null);
-    void eraseAll(linkedCloud, eraseCloudData, wipeLocal)
+    void eraseAll(target, eraseCloudData, wipeLocal)
       .then((reason) => {
         if (reason) setFailure(reason);
         else onDone();
@@ -98,11 +102,11 @@ export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
       title={t.settings.deleteTitle}
       description={t.settings.deleteDescription}
     >
-      {linkedCloud ? <p className="text-sm text-fg-muted">{t.settings.deleteCloudNote}</p> : null}
+      {target.linked ? <p className="text-sm text-fg-muted">{t.settings.deleteCloudNote}</p> : null}
       {confirming ? (
         <div className="flex flex-col gap-3">
           <p className="text-sm">
-            {linkedCloud ? t.settings.deleteCloudConfirmText : t.settings.deleteConfirmText}
+            {target.linked ? t.settings.deleteCloudConfirmText : t.settings.deleteConfirmText}
           </p>
           <ErrorLine reason={failure} />
           <div className="flex flex-wrap gap-2">
@@ -142,9 +146,9 @@ export function DeleteAccountCard({ cloud, wipeLocal, onDone }: DeleteProps) {
   const [word, setWord] = useState('');
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<EraseFailure | null>(null);
-  const linkedCloud = useLinkedCloud(cloud);
+  const target = useCloudTarget(cloud);
   // Sin cuenta en la nube no hay cuenta que eliminar. Para el dispositivo está Borrar mis datos
-  if (!linkedCloud) return null;
+  if (!target.linked) return null;
   const confirmed = word.trim() === t.settings.accountDeleteWord;
   return (
     <Panel
@@ -160,7 +164,7 @@ export function DeleteAccountCard({ cloud, wipeLocal, onDone }: DeleteProps) {
           if (!confirmed || busy) return;
           setBusy(true);
           setFailure(null);
-          void eraseAll(linkedCloud, deleteCloudAccount, wipeLocal)
+          void eraseAll(target, deleteCloudAccount, wipeLocal)
             .then((reason) => {
               if (reason) setFailure(reason);
               else onDone();

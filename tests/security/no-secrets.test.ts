@@ -1,27 +1,17 @@
 // Ningún secreto en el build del cliente (criterio de la Fase A, 14.3).
 // Construye la app en una carpeta temporal y busca el nombre de la variable de la clave,
 // el nombre prohibido, el prefijo sk-ant- y, si existe server/.env.local, el valor de la clave.
-import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { defaultNeedles, findSecrets, findServiceKeys } from '../../scripts/secrets.ts';
+import { buildApp, ROOT } from './buildApp.ts';
 
-const ROOT = join(import.meta.dirname, '..', '..');
-const VITE_BIN = join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
 let buildDir = '';
 
 beforeAll(() => {
-  buildDir = mkdtempSync(join(tmpdir(), 'enarm-build-'));
-  // Vitest corre con NODE_ENV=test, que armaría un build de desarrollo más grande que el que se
-  // publica y pasaría el límite de tamaño de lo que el service worker guarda. Se construye como
-  // producción, que es lo que interesa revisar
-  execFileSync(process.execPath, [VITE_BIN, 'build', '--outDir', buildDir, '--emptyOutDir'], {
-    cwd: ROOT,
-    stdio: 'pipe',
-    env: { ...process.env, NODE_ENV: 'production' },
-  });
+  buildDir = buildApp();
 }, 180_000);
 
 afterAll(() => {
