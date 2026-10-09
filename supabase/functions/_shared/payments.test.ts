@@ -6,18 +6,22 @@ import {
   STRIPE_TOLERANCE_SECONDS,
   corsHeaders,
   handleCreateCheckout,
+  handleCreatePortal,
   handleMercadoPagoWebhook,
   handleStripeWebhook,
   noticeFromMercadoPagoPayment,
   noticeFromStripeEvent,
   parseExternalReference,
   safeEqual,
+  stripeCustomerLink,
+  stripeRefundFromEvent,
   verifyMercadoPagoSignature,
   verifyStripeSignature,
   type CheckoutDeps,
   type FunctionEnv,
   type PaymentDeps,
   type PaymentNotice,
+  type PortalDeps,
 } from './payments.ts';
 
 const USER = '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f';
@@ -75,6 +79,7 @@ const sessionEvent = (overrides: Record<string, unknown> = {}) => ({
       currency: 'mxn',
       subscription: 'sub_1',
       invoice: 'in_1',
+      customer: 'cus_1',
       ...overrides,
     },
   },
@@ -292,6 +297,62 @@ describe('eventos de Stripe', () => {
   });
 });
 
+const refundEvent = (overrides: Record<string, unknown> = {}) => ({
+  id: 'evt_reembolso',
+  type: 'charge.refunded',
+  data: {
+    object: {
+      id: 'ch_1',
+      amount: 15000,
+      amount_refunded: 15000,
+      refunded: true,
+      currency: 'mxn',
+      customer: 'cus_1',
+      ...overrides,
+    },
+  },
+});
+
+describe('cliente y reembolsos de Stripe', () => {
+  it('un pago verificado con el alumno puesto por nosotros liga al alumno con su cliente', () => {
+    expect(stripeCustomerLink(sessionEvent())).toEqual({ userId: USER, customerId: 'cus_1' });
+    // También con el cliente expandido como objeto
+    expect(stripeCustomerLink(sessionEvent({ customer: { id: 'cus_2' } }))).toEqual({
+      userId: USER,
+      customerId: 'cus_2',
+    });
+  });
+
+  it('no liga sin cliente, sin alumno propio, sin pago o con un cobro fallido', () => {
+    expect(stripeCustomerLink(sessionEvent({ customer: null }))).toBeNull();
+    expect(stripeCustomerLink(sessionEvent({ client_reference_id: 'no-es-uuid' }))).toBeNull();
+    expect(stripeCustomerLink(sessionEvent({ payment_status: 'unpaid' }))).toBeNull();
+    expect(
+      stripeCustomerLink({ id: 'e', type: 'invoice.payment_failed', data: { object: {} } }),
+    ).toBeNull();
+    expect(stripeCustomerLink(null)).toBeNull();
+  });
+
+  it('un cargo devuelto por completo trae el cliente y el monto cobrado', () => {
+    expect(stripeRefundFromEvent(refundEvent())).toMatchObject({
+      eventId: 'evt_reembolso',
+      customerId: 'cus_1',
+      amountMxn: 150,
+    });
+  });
+
+  it('un reembolso parcial, sin cliente o de otra moneda se ignora', () => {
+    expect(
+      stripeRefundFromEvent(refundEvent({ refunded: false, amount_refunded: 5000 })),
+    ).toBeNull();
+    expect(stripeRefundFromEvent(refundEvent({ customer: null }))).toBeNull();
+    expect(stripeRefundFromEvent(refundEvent({ currency: 'usd' }))).toBeNull();
+    expect(stripeRefundFromEvent(refundEvent({ amount: 0 }))).toBeNull();
+    expect(stripeRefundFromEvent({ ...refundEvent(), type: 'charge.succeeded' })).toBeNull();
+    expect(stripeRefundFromEvent('nada')).toBeNull();
+  });
+});
+
 describe('pagos de Mercado Pago', () => {
   const payment = (overrides: Record<string, unknown> = {}) => ({
     id: 12345,
@@ -344,6 +405,7 @@ describe('pagos de Mercado Pago', () => {
 
 function paymentDeps(overrides: Partial<PaymentDeps> = {}) {
   const applied: PaymentNotice[] = [];
+  const linked: { userId: string; customerId: string }[] = [];
   const deps: PaymentDeps = {
     env,
     fetch: () => Promise.reject(new Error('no debía llamar a fetch')),
@@ -352,9 +414,14 @@ function paymentDeps(overrides: Partial<PaymentDeps> = {}) {
       applied.push(notice);
       return Promise.resolve('applied');
     },
+    linkCustomer: (link) => {
+      linked.push(link);
+      return Promise.resolve();
+    },
+    userOfCustomer: (customerId) => Promise.resolve(customerId === 'cus_1' ? USER : null),
     ...overrides,
   };
-  return { deps, applied };
+  return { deps, applied, linked };
 }
 
 describe('aviso de Stripe', () => {
@@ -419,6 +486,87 @@ describe('aviso de Stripe', () => {
     const { deps } = paymentDeps({ env: { ...env, STRIPE_WEBHOOK_SECRET: undefined } });
     expect((await send('{}', null, deps)).status).toBe(503);
     expect((await send('{}', null, paymentDeps().deps, 'GET')).status).toBe(405);
+  });
+});
+
+describe('aviso de Stripe con cliente y reembolso', () => {
+  const send = (body: string, deps: PaymentDeps) =>
+    handleStripeWebhook(
+      new Request('https://f.supabase.co/functions/v1/payment-webhook-stripe', {
+        method: 'POST',
+        headers: { 'stripe-signature': stripeHeader(body) },
+        body,
+      }),
+      deps,
+    );
+
+  it('un pago liga al alumno con su cliente antes de aplicarse', async () => {
+    const order: string[] = [];
+    const { deps } = paymentDeps({
+      linkCustomer: () => {
+        order.push('liga');
+        return Promise.resolve();
+      },
+      applyNotice: () => {
+        order.push('aplica');
+        return Promise.resolve('applied');
+      },
+    });
+    const reply = await send(JSON.stringify(sessionEvent()), deps);
+    expect(reply.status).toBe(200);
+    expect(order).toEqual(['liga', 'aplica']);
+  });
+
+  it('manda el alumno y el cliente a la base', async () => {
+    const { deps, linked } = paymentDeps();
+    await send(JSON.stringify(sessionEvent()), deps);
+    expect(linked).toEqual([{ userId: USER, customerId: 'cus_1' }]);
+  });
+
+  it('si no se puede ligar contesta 500 para que Stripe reintente y no aplica el aviso', async () => {
+    const { deps, applied } = paymentDeps({
+      linkCustomer: () => Promise.reject(new Error('caída')),
+    });
+    expect((await send(JSON.stringify(sessionEvent()), deps)).status).toBe(500);
+    expect(applied).toHaveLength(0);
+  });
+
+  it('un reembolso completo se aplica al alumno de ese cliente, sin id de pago', async () => {
+    const { deps, applied } = paymentDeps();
+    const reply = await send(JSON.stringify(refundEvent()), deps);
+    expect(reply.status).toBe(200);
+    expect(applied).toEqual([
+      expect.objectContaining({
+        provider: 'stripe',
+        eventId: 'evt_reembolso',
+        kind: 'refunded',
+        userId: USER,
+        providerPaymentId: null,
+        amountMxn: 150,
+      }),
+    ]);
+  });
+
+  it('un reembolso de un cliente que no conocemos se asienta sin alumno, para que alguien lo vea', async () => {
+    const { deps, applied } = paymentDeps();
+    await send(JSON.stringify(refundEvent({ customer: 'cus_desconocido' })), deps);
+    expect(applied).toHaveLength(1);
+    expect(applied[0]).toMatchObject({ kind: 'refunded', userId: null });
+  });
+
+  it('un reembolso parcial se ignora con 200 y no toca la base', async () => {
+    const { deps, applied } = paymentDeps();
+    const reply = await send(
+      JSON.stringify(refundEvent({ refunded: false, amount_refunded: 5000 })),
+      deps,
+    );
+    expect(reply.status).toBe(200);
+    expect(applied).toHaveLength(0);
+  });
+
+  it('si la base falla al buscar al alumno contesta 500', async () => {
+    const { deps } = paymentDeps({ userOfCustomer: () => Promise.reject(new Error('caída')) });
+    expect((await send(JSON.stringify(refundEvent()), deps)).status).toBe(500);
   });
 });
 
@@ -830,6 +978,131 @@ describe('crear el pago', () => {
       checkoutDeps(),
     );
     expect(get.status).toBe(405);
+  });
+});
+
+describe('portal de facturación', () => {
+  const sent: { url: string; init?: RequestInit }[] = [];
+  const logs: string[] = [];
+  function portalDeps(overrides: Partial<PortalDeps> = {}): PortalDeps {
+    return {
+      env,
+      now: () => NOW,
+      fetch: ((url: string, init?: RequestInit) => {
+        sent.push({ url, init });
+        return Promise.resolve(
+          new Response(JSON.stringify({ url: 'https://billing.stripe.com/p/session/test_1' })),
+        );
+      }) as typeof fetch,
+      authenticate: () => Promise.resolve({ id: USER, email: 'alumna@ejemplo.mx' }),
+      customerOf: () => Promise.resolve('cus_1'),
+      log: (line) => {
+        logs.push(line);
+      },
+      ...overrides,
+    };
+  }
+  const ask = (deps: PortalDeps, init: RequestInit = {}) =>
+    handleCreatePortal(
+      new Request('https://f.supabase.co/functions/v1/create-portal-session', {
+        method: 'POST',
+        headers: { authorization: 'Bearer token', origin: 'https://app.ejemplo.mx' },
+        body: '{}',
+        ...init,
+      }),
+      deps,
+    );
+
+  it('abre el portal del cliente del alumno y vuelve a Suscripción', async () => {
+    sent.length = 0;
+    const reply = await ask(portalDeps());
+    expect(reply.status).toBe(200);
+    expect(await reply.json()).toEqual({ url: 'https://billing.stripe.com/p/session/test_1' });
+    expect(sent[0]?.url).toBe('https://api.stripe.com/v1/billing_portal/sessions');
+    expect(new Headers(sent[0]?.init?.headers).get('authorization')).toBe(
+      'Bearer llave-de-prueba-stripe',
+    );
+    expect(Object.fromEntries(new URLSearchParams(bodyText(sent[0]?.init)))).toEqual({
+      customer: 'cus_1',
+      return_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion',
+    });
+  });
+
+  it('el cliente sale del servidor y no de lo que mande el navegador', async () => {
+    sent.length = 0;
+    await ask(portalDeps(), { body: JSON.stringify({ customer: 'cus_de_otra_persona' }) });
+    expect(new URLSearchParams(bodyText(sent[0]?.init)).get('customer')).toBe('cus_1');
+  });
+
+  it('sin sesión contesta 401 y no llama a Stripe', async () => {
+    sent.length = 0;
+    const reply = await ask(portalDeps({ authenticate: () => Promise.resolve(null) }));
+    expect(reply.status).toBe(401);
+    expect(sent).toHaveLength(0);
+  });
+
+  it('quien nunca pagó con Stripe recibe 404 no_customer', async () => {
+    sent.length = 0;
+    const reply = await ask(portalDeps({ customerOf: () => Promise.resolve(null) }));
+    expect(reply.status).toBe(404);
+    expect(await reply.json()).toEqual({ error: 'no_customer' });
+    expect(sent).toHaveLength(0);
+  });
+
+  it('sin llave de Stripe o sin dirección de la app contesta 503', async () => {
+    expect((await ask(portalDeps({ env: { ...env, STRIPE_SECRET_KEY: undefined } }))).status).toBe(
+      503,
+    );
+    expect((await ask(portalDeps({ env: { ...env, APP_URL: undefined } }))).status).toBe(503);
+  });
+
+  it('si Stripe lo rechaza contesta 502 y deja constancia sin llaves', async () => {
+    logs.length = 0;
+    const reply = await ask(
+      portalDeps({
+        fetch: () =>
+          Promise.resolve(
+            new Response(
+              JSON.stringify({
+                error: {
+                  type: 'invalid_request_error',
+                  message: 'Falta guardar la configuración del portal',
+                },
+              }),
+              { status: 400 },
+            ),
+          ),
+      }),
+    );
+    expect(reply.status).toBe(502);
+    expect(logs.join(' ')).toContain('invalid_request_error');
+    expect(logs.join(' ')).toContain('400');
+    expect(logs.join(' ')).not.toContain('llave-de-prueba-stripe');
+  });
+
+  it('si la base o la red fallan contesta 502', async () => {
+    expect(
+      (await ask(portalDeps({ customerOf: () => Promise.reject(new Error('caída')) }))).status,
+    ).toBe(502);
+    expect((await ask(portalDeps({ fetch: () => Promise.reject(new Error('red')) }))).status).toBe(
+      502,
+    );
+  });
+
+  it('una respuesta sin dirección contesta 502', async () => {
+    const reply = await ask(portalDeps({ fetch: () => Promise.resolve(new Response('{}')) }));
+    expect(reply.status).toBe(502);
+  });
+
+  it('solo la página de la app puede llamar desde el navegador, y contesta la consulta previa', async () => {
+    const good = await ask(portalDeps());
+    expect(good.headers.get('access-control-allow-origin')).toBe('https://app.ejemplo.mx');
+    const other = await ask(portalDeps(), {
+      headers: { authorization: 'Bearer t', origin: 'https://malo.mx' },
+    });
+    expect(other.headers.get('access-control-allow-origin')).toBeNull();
+    expect((await ask(portalDeps(), { method: 'OPTIONS', body: undefined })).status).toBe(204);
+    expect((await ask(portalDeps(), { method: 'GET', body: undefined })).status).toBe(405);
   });
 });
 

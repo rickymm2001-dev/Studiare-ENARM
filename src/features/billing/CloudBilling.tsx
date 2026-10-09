@@ -9,6 +9,7 @@ import { PLANS, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { startCheckout, type PaidPlanKey, type PaymentProvider } from '@/data/payments/checkout';
+import { openBillingPortal } from '@/data/payments/portal';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -89,6 +90,64 @@ export function CloudCheckoutCard({
         </Button>
         <Button variant="secondary" disabled={busy} onClick={onBack}>
           {text.back}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+/**
+ * Para quien ya paga. Abre el portal de Stripe, donde cancela, cambia su tarjeta o ve sus facturas.
+ * La cancelación llega al servidor como un aviso de Stripe, y el plan cambia con él (D-106)
+ */
+export function BillingPortalCard({
+  open = (url: string) => {
+    window.location.assign(url);
+  },
+}: {
+  /** Cómo se abre el portal. Se puede cambiar en las pruebas */
+  open?: (url: string) => void;
+}) {
+  const portal = text.portal;
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const go = async () => {
+    setError(null);
+    setBusy(true);
+    const cloud = await loadCloud();
+    if (!cloud) {
+      setBusy(false);
+      setError(portal.errors.failed);
+      return;
+    }
+    const result = await openBillingPortal(cloud);
+    if (result.ok) {
+      open(result.url);
+      return;
+    }
+    setBusy(false);
+    setError(portal.errors[result.reason]);
+  };
+
+  return (
+    <Card aria-labelledby="portal-titulo">
+      <CardHeader>
+        <CardTitle id="portal-titulo">{portal.title}</CardTitle>
+        <CardDescription>{portal.description}</CardDescription>
+      </CardHeader>
+      <p role="status" className="mb-2 min-h-5 text-sm text-fg-muted">
+        {busy ? portal.opening : error}
+      </p>
+      <div>
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            void go();
+          }}
+        >
+          {portal.go}
         </Button>
       </div>
     </Card>

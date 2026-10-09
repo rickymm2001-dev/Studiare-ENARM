@@ -38,7 +38,7 @@ Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta
 - [x] G1. Proxy de IA alojado (D-103). Verifica la sesión de Supabase, exige plan de pago o rol médico o admin, y cuenta límites, presupuesto y bitácora en Postgres. Dockerfile, sexta migración y docs/IA_ALOJADA.md
 - [x] G2. Aviso de privacidad y términos como páginas públicas (D-104). Un solo texto en src/i18n/legal.ts, exportable a docs/legal para el abogado
 - [x] G3. Configuración del admin en el servidor (D-105). platform_settings, clave admin_overrides, guardada desde la pantalla 25, copiada al navegador al abrir y con aviso para recargar. Pruebas SQL (settings_test.sql), de cliente y del puente con la nube
-- [ ] G4. Stripe, portal para cancelar y reembolsos automáticos
+- [x] G4. Portal de Stripe para cancelar y cambiar tarjeta, y reembolsos completos que quitan el plan (D-106). Séptima migración, función create-portal-session, pruebas SQL (billing_portal_test.sql), de las funciones y de la pantalla. Sin probar contra Stripe real
 - [ ] G5. HSTS y registro de errores del cliente en Supabase
 - [ ] G6. Diseño del banco en la nube y lista de lo que necesito de Ricardo
 

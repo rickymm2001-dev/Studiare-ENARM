@@ -390,7 +390,7 @@ export const featureText = {
     accountDeleteDescription:
       'Quita tu cuenta en la nube con tu correo, tu bitácora, tu plan, tus pagos en Studiare y tus referidos, y borra los datos de este dispositivo. Tu correo queda libre para registrarte otra vez. No se puede deshacer.',
     accountDeletePayments:
-      'Los cobros que ya hizo la pasarela de pagos se conservan allá, porque la ley pide guardar las facturas. Para pedir que los quiten, habla con la pasarela.',
+      'Los cobros que ya hizo la pasarela de pagos se conservan allá, porque la ley pide guardar las facturas. Para pedir que los quiten, habla con la pasarela. Si pagas una suscripción con tarjeta, cancélala antes en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros.',
     accountDeleteConfirmLabel: 'Para confirmar, escribe ELIMINAR',
     accountDeleteWord: 'ELIMINAR',
     accountDeleteAction: 'Eliminar mi cuenta para siempre',
@@ -431,8 +431,22 @@ export const featureText = {
         slow: 'Tu pago sigue sin confirmarse. Puede tardar unos minutos. Si pasa más tiempo, escribe al equipo.',
         canceled: 'Cancelaste el pago. No se cobró nada.',
       },
-      cancelNote:
-        'Cancelar desde la app llega con la gestión de pagos. Mientras tanto, pídelo al equipo de Studiare por el medio donde te dieron acceso.',
+      cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
+      portal: {
+        title: 'Administrar suscripción',
+        description:
+          'Se abre el portal seguro de Stripe, donde puedes cancelar tu suscripción, cambiar tu tarjeta y ver tus facturas. Si cancelas, tu plan cambia cuando Stripe nos avise.',
+        go: 'Abrir el portal',
+        opening: 'Abriendo el portal…',
+        errors: {
+          no_customer:
+            'No encontramos una suscripción con Stripe en tu cuenta. Si pagaste con Mercado Pago, tu plan no se renueva solo y termina en la fecha indicada. Si es un mes gratis por referido, termina solo.',
+          not_configured:
+            'La administración de suscripciones todavía no está activada. Escribe al equipo de Studiare.',
+          unsafe_url: 'Stripe mandó una dirección que no reconocemos. No la abrimos.',
+          failed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
+        },
+      },
       refresh: 'Revisar mi plan',
     },
     current: (plan: string) => `Tu plan actual es ${plan}.`,

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { PaymentNotice } from './payments.ts';
-import { applyNoticeViaRest, authenticateUser, founderSeatsLeftViaRest } from './supabase.ts';
+import {
+  applyNoticeViaRest,
+  authenticateUser,
+  customerOfUserViaRest,
+  founderSeatsLeftViaRest,
+  linkCustomerViaRest,
+  userOfCustomerViaRest,
+} from './supabase.ts';
 
 const bodyText = (init: RequestInit | undefined): string =>
   typeof init?.body === 'string' ? init.body : '';
@@ -127,5 +134,46 @@ describe('lugares de Fundador', () => {
       ),
     ).toBeNull();
     expect(await founderSeatsLeftViaRest(env, () => Promise.reject(new Error('red')))).toBeNull();
+  });
+});
+
+describe('clientes de Stripe por REST', () => {
+  it('liga al alumno con su cliente usando la llave de servicio', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('linked')));
+    await linkCustomerViaRest(env, { userId: notice.userId ?? '', customerId: 'cus_1' }, fetchImpl);
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/record_billing_customer');
+    expect(new Headers(calls[0]?.init?.headers).get('authorization')).toBe(
+      'Bearer servicio-de-prueba',
+    );
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_customer_id: 'cus_1',
+      p_user: notice.userId,
+    });
+  });
+
+  it('busca el cliente de un alumno y el alumno de un cliente', async () => {
+    const customer = recorder(() => new Response(JSON.stringify('cus_1')));
+    expect(await customerOfUserViaRest(env, 'u1', customer.fetchImpl)).toBe('cus_1');
+    expect(customer.calls[0]?.url).toContain('/rpc/billing_customer_of_user');
+    expect(JSON.parse(bodyText(customer.calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_user: 'u1',
+    });
+    const user = recorder(() => new Response(JSON.stringify('u1')));
+    expect(await userOfCustomerViaRest(env, 'cus_1', user.fetchImpl)).toBe('u1');
+    expect(user.calls[0]?.url).toContain('/rpc/billing_user_of_customer');
+  });
+
+  it('sin resultado devuelve null y si la base falla lanza', async () => {
+    const empty = recorder(() => new Response('null'));
+    expect(await customerOfUserViaRest(env, 'u1', empty.fetchImpl)).toBeNull();
+    expect(await userOfCustomerViaRest(env, 'cus_x', empty.fetchImpl)).toBeNull();
+    const broken = recorder(() => new Response('x', { status: 500 }));
+    await expect(userOfCustomerViaRest(env, 'cus_1', broken.fetchImpl)).rejects.toThrow('500');
+    await expect(
+      linkCustomerViaRest(env, { userId: 'u1', customerId: 'c' }, broken.fetchImpl),
+    ).rejects.toThrow('500');
+    await expect(customerOfUserViaRest(env, 'u1', broken.fetchImpl)).rejects.toThrow('500');
   });
 });

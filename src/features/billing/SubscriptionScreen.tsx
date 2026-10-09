@@ -15,7 +15,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
-import { CloudCheckoutCard, PaymentReturnNotice } from './CloudBilling';
+import { BillingPortalCard, CloudCheckoutCard, PaymentReturnNotice } from './CloudBilling';
 import { useUserEvents } from '../shared/useUserEvents';
 
 /** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
@@ -243,6 +243,7 @@ function Billing({ session }: { session: ReadySession }) {
       <p role="status" className="text-sm text-fg-muted">
         {message}
       </p>
+      {inCloud && current !== 'free' && !checkout ? <BillingPortalCard /> : null}
       <Card aria-labelledby="recibos-titulo">
         <CardHeader>
           <CardTitle id="recibos-titulo">{t.billing.receiptsTitle}</CardTitle>

@@ -1037,3 +1037,15 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La clave la lee cualquiera, incluso sin sesión, por diseño de platform_settings. No debe llevar secretos
 - Límite conocido. Entre guardar y que cada alumno recargue hay un lapso en que conviven valores viejos y nuevos. Los umbrales de funciones que muestran calibrando solo cambian cuándo aparecen, no borran datos
 
+### D-106. Portal de facturación y reembolsos de Stripe
+- Fecha 2026-10-10. Origen C, Fase G bloque G4. El alumno no tenía cómo cancelar desde la app y un reembolso de Stripe no quitaba el plan
+- Qué hay. Una función nueva, create-portal-session, abre el portal de Stripe del alumno con sesión abierta. Una tabla nueva, billing_customers, liga a cada alumno con su cliente de Stripe a partir de un pago verificado. Es la séptima migración
+- Por qué el portal de Stripe y no un cancelar propio. Stripe ya resuelve cancelar, cambiar tarjeta y facturas, y así Studiare no toca datos de tarjeta ni cobros. Un cancelar propio habría obligado a llamar a su API de suscripciones sin poder probarla contra Stripe aquí
+- Verificado en la documentación de Stripe por búsqueda. El portal se crea con POST /v1/billing_portal/sessions con el cliente y la dirección de regreso, y devuelve una dirección. La pantalla del portal necesita guardar su configuración en el panel. Stripe quitó en su versión basil el vínculo del cargo con la factura, por eso el reembolso se identifica por cliente y monto
+- No se pudo abrir docs.stripe.com desde este entorno, la red lo bloquea. Lo de los reembolsos no se probó contra eventos reales de Stripe. Falta un reembolso de prueba
+- Reembolso. Solo los completos quitan el plan. El pago a devolver sale por cliente y monto, el más reciente. Un cliente desconocido deja el aviso guardado sin alumno
+- Un cobro que quedó en needs_refund porque el cupo Fundador se llenó, al devolverse solo cambia a refunded y no quita otro plan del alumno
+- Devolución automática desde la app no se hizo. Stripe no entrega ya la factura en el cargo y emitir un reembolso con datos que no se pudieron comprobar es riesgo de dinero real. Se devuelve a mano en el panel y el aviso hace el resto
+- Eliminar la cuenta no cancela la suscripción en Stripe. La pantalla lo avisa y pide cancelar antes
+- Pendiente con Ricardo. Activar el portal en el panel de Stripe, aplicar la séptima migración, publicar la función y hacer un pago y un reembolso de prueba
+
