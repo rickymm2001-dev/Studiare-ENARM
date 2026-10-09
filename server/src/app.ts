@@ -1,9 +1,10 @@
-// App de Hono del proxy de IA. En la Fase A solo existe /health. Las rutas de cada motor
-// llegan en la Fase D con validación zod, filtro de datos personales y bitácora de costo (8.1).
+// App de Hono del proxy de IA. /health dice el modo y /ai atiende los cinco motores con validación
+// zod, filtro de datos personales, límites y bitácora de costo (8.1).
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
 import { ALLOWED_HOSTNAMES, ALLOWED_ORIGINS, MAX_BODY_BYTES, PROXY_VERSION } from './config.ts';
+import { createAiRoutes, type AiRoutesDeps } from './ai/route.ts';
 import type { AiMode } from './env.ts';
 
 export interface HealthResponse {
@@ -19,7 +20,7 @@ function hostnameOf(hostHeader: string | undefined): string | null {
   return match?.[1] ?? null;
 }
 
-export function createApp(options: { mode: AiMode }) {
+export function createApp(options: { mode: AiMode; ai?: AiRoutesDeps }) {
   const app = new Hono();
 
   app.use(secureHeaders());
@@ -63,6 +64,8 @@ export function createApp(options: { mode: AiMode }) {
     const body: HealthResponse = { status: 'ok', mode: options.mode, version: PROXY_VERSION };
     return c.json(body);
   });
+
+  if (options.ai) app.route('/ai', createAiRoutes(options.ai));
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404));
 

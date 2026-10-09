@@ -7,7 +7,7 @@ import { SUSPEND_BATCH, inBatches } from '../../engines/suspension';
 import { TAGS_PER_NOTE_MAX, normalizeTags, sanitizeTag } from '../../engines/tagPath';
 import type { DataApi } from '../context';
 import { createEvent, type Clock } from '../events/createEvent';
-import type { Deck, Note } from '../schemas/decks';
+import { isEditableDeck, type Deck, type Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
 import { isFromOutline } from './manualDecks';
 
@@ -49,8 +49,8 @@ async function ownManualDeck(
   deckId: string,
 ): Promise<Deck> {
   const deck = await api.repos.decks.get(deckId);
-  if (deck?.ownerId !== user.id || deck.origin !== 'manual')
-    throw new Error('Solo puedes cambiar los mazos que creaste tú');
+  if (!deck || !isEditableDeck(deck, user.id))
+    throw new Error('Solo puedes cambiar los mazos que creaste o importaste tú');
   return deck;
 }
 

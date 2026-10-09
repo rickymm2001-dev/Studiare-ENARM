@@ -46,7 +46,7 @@ export default defineConfig({
   webServer: [
     {
       // El proxy corre forzado en modo simulado para que las pruebas no dependan de una clave
-      command: 'node server/src/main.ts --mock',
+      command: 'node server/src/main.ts --mock --ephemeral',
       url: `${PROXY_URL}/health`,
       // Nunca reusar un proxy abierto, que podría estar en modo real con clave (D-040)
       reuseExistingServer: false,

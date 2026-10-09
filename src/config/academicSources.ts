@@ -1,50 +1,58 @@
-// Lista cerrada de textos académicos fundamentales del ENARM (Fase C2, Etapa 5, D-085 y D-093). La IA
-// solo puede apoyar una señal de controversia en estos textos y nunca en otro. Es una lista
-// PROVISIONAL que Ricardo o un médico deben confirmar. Este archivo no importa nada, así lo leen
-// igual la app y el proxy de IA.
-export interface AcademicSource {
-  /** Identificador estable que viaja entre la app y el proxy */
-  id: string;
-  /** Nombre como se muestra al alumno */
-  title: string;
-  /** Área donde suele ser la referencia */
-  area: string;
-}
+// Textos académicos fundamentales del ENARM (D-085). Cuando la IA marca una controversia en una
+// tarjeta generada, su explicación solo puede apoyarse en estos textos, nunca en otra cosa. La lista
+// es cerrada y por ahora provisional. La confirma Ricardo o un médico, y agregar un texto es agregar
+// una fila aquí. La IA nunca corrige la tarjeta por su cuenta, solo la señala con una de estas fuentes.
 
-export const ACADEMIC_SOURCES_PROVISIONAL = true;
-
-export const ACADEMIC_SOURCES: readonly AcademicSource[] = [
-  { id: 'harrison', title: 'Harrison. Principios de Medicina Interna', area: 'Medicina interna' },
-  { id: 'williams', title: 'Williams. Obstetricia', area: 'Ginecología y obstetricia' },
-  { id: 'nelson', title: 'Nelson. Tratado de Pediatría', area: 'Pediatría' },
-  { id: 'schwartz', title: 'Schwartz. Principios de Cirugía', area: 'Cirugía' },
-  { id: 'guyton', title: 'Guyton y Hall. Tratado de Fisiología Médica', area: 'Ciencias básicas' },
+export const ACADEMIC_SOURCES = [
   {
-    id: 'robbins',
-    title: 'Robbins y Cotran. Patología estructural y funcional',
-    area: 'Ciencias básicas',
+    key: 'harrison',
+    name: 'Harrison. Principios de Medicina Interna',
+    branch: 'internal_medicine',
   },
-  { id: 'katzung', title: 'Katzung. Farmacología básica y clínica', area: 'Farmacología' },
+  { key: 'cecil', name: 'Cecil. Tratado de Medicina Interna', branch: 'internal_medicine' },
+  { key: 'nelson', name: 'Nelson. Tratado de Pediatría', branch: 'pediatrics' },
+  { key: 'williams', name: 'Williams. Obstetricia', branch: 'obstetrics_gynecology' },
+  { key: 'berek', name: 'Berek y Novak. Ginecología', branch: 'obstetrics_gynecology' },
+  { key: 'schwartz', name: 'Schwartz. Principios de Cirugía', branch: 'general_surgery' },
+  { key: 'sabiston', name: 'Sabiston. Tratado de Cirugía', branch: 'general_surgery' },
+  { key: 'tintinalli', name: 'Tintinalli. Medicina de Urgencias', branch: 'emergency_medicine' },
   {
-    id: 'gpc_cenetec',
-    title: 'Guías de Práctica Clínica del CENETEC vigentes',
-    area: 'Guías mexicanas',
+    key: 'gpc_cenetec',
+    name: 'Guías de Práctica Clínica del CENETEC',
+    branch: null,
   },
   {
-    id: 'nom',
-    title: 'Normas Oficiales Mexicanas de la Secretaría de Salud vigentes',
-    area: 'Normas mexicanas',
+    key: 'nom',
+    name: 'Normas Oficiales Mexicanas de la Secretaría de Salud',
+    branch: null,
   },
+  // Ciencias básicas, que sumó el contrato de tarjetas de la Etapa 5 (D-100)
+  { key: 'guyton', name: 'Guyton y Hall. Tratado de Fisiología Médica', branch: null },
+  {
+    key: 'robbins',
+    name: 'Robbins y Cotran. Patología estructural y funcional',
+    branch: null,
+  },
+  { key: 'katzung', name: 'Katzung. Farmacología básica y clínica', branch: null },
 ] as const;
 
-const IDS: ReadonlySet<string> = new Set(ACADEMIC_SOURCES.map((source) => source.id));
+export type AcademicSourceKey = (typeof ACADEMIC_SOURCES)[number]['key'];
 
-/** Si el id pertenece a la lista cerrada */
+export const ACADEMIC_SOURCE_KEYS = ACADEMIC_SOURCES.map((source) => source.key) as [
+  AcademicSourceKey,
+  ...AcademicSourceKey[],
+];
+
+export function academicSourceName(key: string): string {
+  return ACADEMIC_SOURCES.find((source) => source.key === key)?.name ?? key;
+}
+
+/** Si la clave pertenece a la lista cerrada */
 export function isAcademicSourceId(id: string): boolean {
-  return IDS.has(id);
+  return ACADEMIC_SOURCES.some((source) => source.key === id);
 }
 
 /** El nombre de un texto de la lista, o null si no está en ella */
 export function academicSourceTitle(id: string): string | null {
-  return ACADEMIC_SOURCES.find((source) => source.id === id)?.title ?? null;
+  return ACADEMIC_SOURCES.find((source) => source.key === id)?.name ?? null;
 }

@@ -157,14 +157,59 @@ describe('versiones de la base', () => {
     }
   });
 
-  it('una base nueva queda en la versión 6, con la tabla de apuntes y el índice de apunte en las notas', async () => {
+  it('una base de la versión 6 sube a la 7, gana el avance de la sincronización y conserva sus datos', async () => {
+    const name = `migracion7-${newId()}`;
+    names.push(name);
+    // La versión 6 todavía no tenía la tabla del avance de la sincronización
+    const stores = Object.fromEntries(
+      Object.entries(storesFor('real')).filter(([table]) => table !== 'syncState'),
+    );
+    const old = new Dexie(name);
+    old.version(6).stores(stores);
+    await old.open();
+    const stamp = '2026-10-08T10:00:00.000Z';
+    const deckId = newId();
+    await old.table('decks').put({
+      id: deckId,
+      name: 'Mazo de la versión 6',
+      description: '',
+      ownerId: newId(),
+      origin: 'manual',
+      visibility: 'private',
+      isDemo: false,
+      parentId: null,
+      createdAt: stamp,
+      updatedAt: stamp,
+    });
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    expect(db.verno).toBe(DB_VERSION);
+    expect(await db.decks.get(deckId)).toMatchObject({ name: 'Mazo de la versión 6' });
+    expect(await db.syncState.count()).toBe(0);
+    const userId = newId();
+    await db.syncState.put({
+      userId,
+      authId: 'cuenta',
+      recordsCursor: 5,
+      eventsCursor: 9,
+      recordsWatermark: stamp,
+      eventsWatermark: null,
+      lastSyncAt: stamp,
+    });
+    expect(await db.syncState.get(userId)).toMatchObject({ recordsCursor: 5, eventsCursor: 9 });
+  });
+
+  it('una base nueva queda en la versión 7, con la tabla de apuntes y el índice de apunte en las notas', async () => {
     const name = `nueva-${newId()}`;
     names.push(name);
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(DB_VERSION).toBe(6);
-    expect(db.verno).toBe(6);
+    expect(DB_VERSION).toBe(7);
+    expect(db.verno).toBe(7);
     expect(db.tables.map((table) => table.name)).toContain('outlines');
     expect(db.table('outlines').schema.indexes.map((index) => index.name)).toEqual([
       'ownerId',
@@ -236,7 +281,7 @@ describe('versiones de la base', () => {
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(db.verno).toBe(6);
+    expect(db.verno).toBe(DB_VERSION);
     // Nada de lo que ya estaba cambió, ni una nota ni su fecha de modificación
     const after = JSON.stringify([
       await db.users.toArray(),

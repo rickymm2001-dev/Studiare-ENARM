@@ -24,6 +24,7 @@ export interface PlanAccess {
 export const GATED_FEATURES = [
   'explore',
   'outlines',
+  'aiCards',
   'overdueTools',
   'guideProfile',
   'newPerDaySuggestion',
@@ -36,6 +37,7 @@ export type FeatureAccess = Record<GatedFeature, boolean>;
 const ALL_FEATURES_OPEN: FeatureAccess = {
   explore: true,
   outlines: true,
+  aiCards: true,
   overdueTools: true,
   guideProfile: true,
   newPerDaySuggestion: true,
@@ -50,6 +52,12 @@ export interface PlanDef {
   access: PlanAccess;
   /** Funciones de la carga diaria abiertas en este plan */
   features: FeatureAccess;
+  /**
+   * Generaciones de tarjetas con IA por día. Cada texto o PDF que se manda al generador cuenta una.
+   * 0 en el plan Gratis, que no incluye la función (D-085, fila 14). El mismo tope se aplica en el
+   * servidor, porque la bandera del navegador no basta
+   */
+  aiCardsPerDay: number;
 }
 
 /**
@@ -58,30 +66,38 @@ export interface PlanDef {
  * los primeros usuarios y su monto de 79 lo confirmó Ricardo el 2026-10-07 (D-087). El anual sigue
  * provisional hasta que Ricardo fije su precio
  */
+/** Generaciones de tarjetas con IA por día en los planes de pago. Juicio de diseño, ajustable */
+export const AI_CARDS_PER_DAY_PAID = 20;
+
 export const PLANS: Record<PlanKey, PlanDef> = {
   free: {
     key: 'free',
     priceMxn: 0,
     access: { dailyQuestions: 20, fullExam: false, aiTutor: false, importDecks: true, party: true },
-    features: ALL_FEATURES_OPEN,
+    // La IA con textos y PDF es de pago (D-085, fila 14)
+    features: { ...ALL_FEATURES_OPEN, aiCards: false },
+    aiCardsPerDay: 0,
   },
   founder: {
     key: 'founder',
     priceMxn: 79,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
     features: ALL_FEATURES_OPEN,
+    aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
   monthly: {
     key: 'monthly',
     priceMxn: 150,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
     features: ALL_FEATURES_OPEN,
+    aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
   annual: {
     key: 'annual',
     priceMxn: 1200,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
     features: ALL_FEATURES_OPEN,
+    aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
 };
 

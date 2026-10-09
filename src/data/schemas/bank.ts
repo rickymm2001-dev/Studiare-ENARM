@@ -84,6 +84,11 @@ export const QuestionSchema = z
     clues: z.array(ClueSchema).max(20).optional(),
     /** Dificultad que estima el médico, de 1 a 5 (7.7) */
     physicianDifficulty: z.int().min(1).max(5),
+    /**
+     * ID estable de la pregunta de la que sale esta variante reestructurada (8.6). Ausente en las
+     * preguntas originales. Una variante no entra al puntaje del examen hasta su umbral
+     */
+    variantOf: IdSchema.optional(),
     /** Set canónico. La correcta y los distractores estándar, en IDs de opción de esta versión (7.8) */
     canonicalOptionIds: z.array(IdSchema).min(2).max(10),
     editorialStatus: EditorialStatusSchema,

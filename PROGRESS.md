@@ -8,8 +8,11 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. Las etapas 1 y 2 están aprobadas y publicadas (PR 20 y PR 21). La Etapa 3, apuntes, está programada y con su cierre de 15.1 hecho, ver su sección. Ricardo pidió seguir con las etapas 4 a 6 sin pausas de aprobación
-- Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
+- Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
+- Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
+- Fase E con las pantallas del médico 18 a 22 programada (D-099). Falta el bloque E6 de privacidad, ver su sección
+- Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
 - Formato visual del proyecto ROI Sales Companion publicado en la demo (D-090, PR 22) y llevado a todas las pantallas con cifras, con tarjeta oscura y datos reales (D-091). Axe pasa en claro y oscuro. Falta la revisión de Ricardo
@@ -24,6 +27,106 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase E. Panel del médico, reportes y privacidad (D-099)
+
+Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendientes sin preguntar. Las pantallas 18 a 22 del médico y la privacidad del alumno.
+
+### Bloques
+- [x] E1. Vocabulario sesgos o trampas y pantalla 19 de doble etiquetado con kappa. El alumno ve trampas hasta que haya 30 pares con dos etiquetas y kappa de 0.40 o más. El médico etiqueta a ciegas desde su cola y el admin ve el tablero
+- [x] E2. Pantalla 18, editor de pregunta con versiones y estados. Cada guardado crea una versión nueva en borrador, las opciones conservan su ID estable, el médico edita solo lo asignado y primero etiqueta a ciegas si la pregunta está en la muestra
+- [x] E3. Pantalla 21, reportes de contenido, del alumno al médico. Agrupados por pregunta con lo más grave primero, con versión anterior marcada y resolver, descartar o reabrir. El alumno no repite un reporte abierto
+- [x] E4. Pantalla 20, cola de borradores de IA. Preguntas reestructuradas con el original al lado, que al aprobarse crean una variante fuera del examen hasta tener 200 exposiciones por distractor. Consejos por sesgo revisados por el médico, que el Tutor muestra sin la marca de borrador. Tarjetas de mazos públicos con aprobar y rechazar
+- [x] E5. Pantalla 22, importador del banco desde CSV, Excel o JSON. Convertidor compartido con el script de Node, reporte de errores por fila, borradores sin duplicar con un ID por fila y guía en docs/bank-import.md
+- [ ] E6. Privacidad, borrar cuenta con eventos, copia en la nube y puntaje oficial voluntario
+
+## Fase D. Motores de IA y evaluaciones (D-098)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No hay clave de IA en este entorno, así que todo corre en modo simulado y con un cliente falso del SDK. Con la clave de Ricardo se mide el costo y la latencia reales con npm run eval-ai y la bandera real.
+
+### Bloques
+- [x] B1. Núcleo de anclaje sin alias, contratos y guardas de los cinco motores, y respuestas fijas que las cumplen
+- [x] B2. Ruta de IA del proxy con el SDK oficial, límites por alumno y por motor, presupuesto diario, filtro de datos, reintento con el motivo, bitácora de costo y prompts versionados
+- [x] B3. Cliente de IA que vuelve a validar, tarjetas por la misma ruta con costo real, y análisis con IA en el Tutor con consentimiento, plan de pago, borrador y plantilla de respaldo
+- [x] B4. 60 casos dorados y npm run eval-ai con la bandera de respuestas fijas o con el modelo real
+- [x] B5. Pantallas de admin 23 costos de IA, 24 datos de demostración y 25 configuración
+- [x] B6. Documentos y cierre (D-098)
+
+### Bitácora
+- Las metas de la sección 8.7 se cumplen en 100 % con las respuestas fijas. Esquema válido en el primer intento, anclaje y rechazo de lo que no se puede sostener
+- La prueba entre el cliente y el proxy encontró un campo del costo de las fallas que el esquema del error no admitía. Los casos dorados encontraron un texto del que el generador simulado no sacaba tarjetas
+- Los umbrales y los pesos del ENARM editados desde admin se guardan en el navegador y se aplican al recargar, con prueba de que un conjunto inválido no entra
+- El tutor, que decía Próximamente en los planes, ya está. El examen completo sigue marcado
+
+### Pendiente
+- Que Ricardo agregue la clave en server/.env.local y corra npm run eval-ai con la bandera real, para el costo y la latencia verdaderos
+- Revisar los prompts de server/prompts y pegar su prompt maestro de tarjetas
+- Confirmar el segundo proveedor de IA y qué modelo prefiere por motor
+- La cola de borradores del médico para las preguntas reestructuradas, que va en la Fase E
+
+## Fase C2. Etapa 6, sincronización entre dispositivos (D-085 y D-095)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No se aplicó ninguna migración en su proyecto de Supabase, queda la guía en docs/SUPABASE.md.
+
+### Bloques
+- [x] B1. Migración 20261008000002_sync.sql con la tabla de registros, las funciones de subida y el contador de la bitácora, y sus pruebas SQL contra Postgres local
+- [x] B2. Motor puro de sincronización con la regla de la fecha más reciente, las marcas de agua y el control del reloj, con pruebas de propiedades de dos dispositivos
+- [x] B3. Transporte con Supabase y en memoria, tabla syncState (base versión 7) y runSync por páginas con avance guardado
+- [x] B4. Programador de la sincronización, puente con la nube, tarjeta de estado en Configuración y aviso de la copia en la nube al borrar
+- [x] B5. Guía para aplicar la migración, D-095 y cierre
+
+### Bitácora
+- La simulación de dos dispositivos con operaciones al azar converge siempre, y rompiendo a propósito la regla de empate la prueba falla
+- Las pruebas encontraron dos fallos de diseño que se corrigieron, un envío que no avanzaba cuando muchos registros comparten la misma hora y una bitácora que se reenviaba completa en cada sincronización
+- Se agrega el uso de la tabla syncState en la base local y un caso de migración de la versión 6 a la 7 con datos
+- El JavaScript inicial pasó de unos 495 a unos 500 KB comprimido, contra un presupuesto de 300 KB. Reducirlo con carga diferida por rutas sigue como pendiente de la Fase F
+- La política de lectura de sync_records sube de 22 a 23 las políticas con la barrera del dispositivo único. La prueba SQL de cobertura y la guía ya lo dicen
+
+### Pendiente
+- Que Ricardo aplique la migración y la pruebe con dos navegadores, con la guía
+- Borrar también la copia en la nube con Borrar mis datos, en la Fase E
+- Sincronizar sesiones de estudio, hallazgos y ajustes personales, en IDEAS.md
+
+## Fase C2. Etapa 5, tarjetas con IA desde PDF y textos (D-085 y D-094)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No hay clave de IA en este entorno, así que la etapa corre completa con el generador simulado y deja lista la entrada para el modelo real.
+
+### Bloques
+- [x] B1. Filtro de datos personales, lista cerrada de fuentes académicas y motor de generación con validador (puros)
+- [x] B2. Lector de PDF con pdf.js en carga diferida y generador de IA con cuota por plan
+- [x] B3. Guardado en borrador, señal de controversia con eventos de verificar o editar, y tarjeta en Mazos
+- [x] B4. Señal en el repaso y en Explorar, pruebas unitarias, de pantalla y e2e con la app compilada
+
+### Bitácora
+- El validador descarta lo que no pasa y el alumno nunca lo ve. Se probó con propiedades que una cita inventada, una dosis que la cita no trae y una fuente fuera de la lista no llegan nunca a las propuestas
+- La prueba e2e con la app compilada confirma que pdf.js y su worker funcionan en el build real, que un PDF sin texto muestra su mensaje y que el plan de pago genera, guarda, marca la controversia y la quita al verificar
+- pdf.js y su worker (unos 1.7 MB) no entran al precache de la PWA. Tienen su propia caché al usarse
+- El JavaScript inicial pasó de unos 480 a unos 495 KB comprimido por las pantallas nuevas, contra un presupuesto de 300 KB. Reducirlo con carga diferida por rutas sigue como pendiente de la Fase F
+- Se agrega pdfjs-dist. El motor de simulación local no llama a ningún servicio
+- Un cambio chico en la espera de las pruebas de pantalla (asyncUtilTimeout de 5 s) ya estaba desde la Etapa 3
+
+### Pendiente
+- La ruta /api/ai/flashcards del servidor y el modelo real, con la Fase D
+- Reconocimiento de caracteres para PDF escaneados, en IDEAS.md
+- Que Ricardo o un médico confirmen la lista de fuentes, la cuota diaria y el prompt maestro
+
+## Fase C2. Etapa 4, importar y exportar (D-085 y D-093)
+
+### Bloques
+- [x] B1. Lectores con límites y rutas seguras. Paquetes .apkg de los dos formatos con sql.js y zstd, CSV, Excel y Word
+- [x] B2. Guardar la importación como mazo privado con árbol de mazos, sin duplicar, y exportar a CSV con identificador por nota
+- [x] B3. Worker del importador, tarjetas de Subir y Exportar en Mazos, caché propia del motor y la suscripción ya no dice Próximamente
+- [x] B4. Fixtures generados por código, pruebas de lectores, de seguridad, de guardado y de pantalla, y e2e con la app compilada en teléfono y escritorio
+
+### Bitácora
+- Los fixtures se arman con código y no se guardan como binarios. Un .apkg viejo con sql.js, uno nuevo con un marco zstd de bloques sin comprimir, hojas de Excel, documentos de Word, y zips hechos para fallar con tamaños declarados falsos, rutas con .., bombas zstd con y sin tamaño declarado y un XML con entidad externa
+- La prueba e2e con la app compilada confirma que el Worker y el motor de SQLite funcionan en el build real, con un .apkg viejo y uno nuevo
+- El JavaScript inicial ya medía unos 464 KB comprimido antes de las Etapas 3 y 4 y ahora mide unos 480 KB, contra un presupuesto de 300 KB. El importador vive en su propio Worker y no suma al inicial, y lo que sumaron las dos etapas son sus pantallas. Reducirlo con carga diferida por rutas queda como pendiente de la Fase F
+- Se agregan papaparse, read-excel-file, sql.js y fzstd, todas MIT y sin scripts de instalación. npm audit sin las dependencias de desarrollo da 0 vulnerabilidades
+
+### Pendiente con Ricardo para seguir
+- Aprobar las Etapas 2, 3 y 4 en la revisión
+- Decidir si quiere imágenes y audios en las importaciones (IDEAS.md)
 
 ## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-092)
 
@@ -143,11 +246,13 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 - [x] 2. Portada de venta, registro con correo, datos de cuenta y foto o avatar (D-068)
 - [x] 3. Esquema de Supabase con permisos por fila y roles, probado en Postgres local (D-069)
 - [x] 4. Usuarios con roles por nivel y asignaciones a médicos, banco del médico solo con lo asignado (D-070)
-- [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
-- [~] 6. Plan del día (D-081), duelos y compartir logro (D-084) listos. Faltan misiones, ligas e insignias
+- [x] 5. Pagos con Stripe y Mercado Pago en modo prueba (D-096). Funciones, migración y pruebas listas. Falta un pago de prueba real con las llaves de Ricardo
+- [x] 6. Plan del día (D-081), duelos y compartir logro (D-084), misiones, ligas e insignias en Logros (D-097)
 - [x] 7. Progreso con estadísticas de técnica, Conócete (D-074), carga futura y dificultad (D-083)
-- [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
-- [~] 9. Sincronización con el servidor. Cuenta en la nube con enlace al correo y rol del servidor listos (D-075), falta subir la bitácora y el banco
+- [x] 8. Subir mazos desde otras apps, CSV, Excel y Word (D-093)
+- [x] 9. Sincronización con el servidor. Cuenta en la nube (D-075) y sincronización de mazos, apuntes, Inicio y bitácora (D-095). Falta subir el banco, que espera la revisión médica
+- [x] 10. Plan Gratis aplicado en el servidor con permisos por fila (D-096)
+- [x] 11. Referidos con mes gratis desde el servidor (D-096)
 
 ### Bitácora
 - Bienvenida simple, un solo aviso de privacidad y sin cambio de rol (D-059). Análisis en docs/ANALISIS_PLATAFORMA.md y entrevista (D-060)
@@ -176,6 +281,8 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
   - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
   - [x] 5. Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos. Una sola barra de guardar por sección que aparece solo con cambios, el tema junto con la apariencia, retención, tope e intervalos por botón plegados en Opciones avanzadas, tamaño del texto como control segmentado y fuentes en cuadrícula de 2. En el teléfono pasó de 5283 px a secciones de 844 a 1244 px
   - [x] 6. Inicio y Mazos. En el teléfono racha y meta diaria van lado a lado y el heatmap ocupa todo el ancho, y Editar tablero pasa al encabezado. Cada mazo es una tarjeta compacta con sus temas plegados y Sube tu mazo y Crear mazo quedan en una sola tarjeta. Inicio pasó de 1422 a 1082 px de alto en el teléfono y Mazos de 1820 a 1376
+- Pagos en modo prueba con Stripe y Mercado Pago, plan Gratis aplicado en el servidor y referidos con mes gratis (D-096). Tres funciones del servidor con firmas verificadas, migración 20261008000003 con 4 bloques de pruebas SQL y 51 pruebas de las funciones. La guía para Ricardo está en docs/SUPABASE.md
+- Misiones, insignias y ligas en la pantalla Logros y tres widgets de Inicio (D-097). Motor puro con pruebas de propiedades y e2e con accesibilidad
 - Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo con alarmas de tiempo, descarte de opciones y tipologías de reactivo (D-080), tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan (hechos), y cerrar la fase con 15.1 (en curso, falta la aprobación de Ricardo). 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)

@@ -169,7 +169,7 @@ export const EventPayloadSchemas = {
   }),
   deck_imported: z.strictObject({
     deckId: IdSchema,
-    format: z.enum(['apkg_legacy', 'apkg_new']),
+    format: z.enum(['apkg_legacy', 'apkg_new', 'csv', 'xlsx', 'docx']),
     notes: z.int().nonnegative(),
     cards: z.int().nonnegative(),
     media: z.int().nonnegative(),
@@ -215,6 +215,14 @@ export const EventPayloadSchemas = {
   }),
   cards_unsuspended: z.strictObject({
     cardIds: z.array(IdSchema).min(1).max(500),
+  }),
+  /**
+   * El alumno atendió la señal de controversia de una tarjeta generada por la IA (D-085). Marcó que ya
+   * la verificó o la editó. La señal se quita de la tarjeta y este evento queda como constancia
+   */
+  card_controversy_resolved: z.strictObject({
+    noteId: IdSchema,
+    resolution: z.enum(['verified', 'edited']),
   }),
   /**
    * Cambio de fecha de repaso de tarjetas (D-085, fila 5). Repartir atrasos, posponer, adelantar o
@@ -305,6 +313,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('cards_suspended'),
   eventSchemaFor('cards_unsuspended'),
   eventSchemaFor('cards_rescheduled'),
+  eventSchemaFor('card_controversy_resolved'),
 ]);
 
 export type AppEvent = z.infer<typeof AppEventSchema>;

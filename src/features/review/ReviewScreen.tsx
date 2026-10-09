@@ -15,7 +15,13 @@ import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
-import type { Card as CardEntity, Deck, Note } from '@/data/schemas/decks';
+import {
+  isAiNote,
+  isEditableDeck,
+  type Card as CardEntity,
+  type Deck,
+  type Note,
+} from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
@@ -45,11 +51,13 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
+import { resolveControversy } from '@/data/usecases/aiCards';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
+import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
 import { useActivePlan } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -234,7 +242,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       editableDecks={
         new Map(
           content.decks
-            .filter((deck) => deck.ownerId === session.user.id && deck.origin === 'manual')
+            .filter((deck) => isEditableDeck(deck, session.user.id))
             .map((deck) => [deck.id, deck]),
         )
       }
@@ -710,6 +718,7 @@ function ReviewSession({
           {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
           {leechBefore ? <Badge variant="danger">{t.review.leech.badge}</Badge> : null}
           {note.isDemo ? <DemoContentLabel /> : null}
+          {isAiNote(note) ? <Badge variant="warning">{t.aiCards.draftLabel}</Badge> : null}
           <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
         </div>
         <CardHtml html={front} />
@@ -720,6 +729,25 @@ function ReviewSession({
           </>
         ) : null}
       </Card>
+
+      {note.controversy ? (
+        <div className="lg:max-w-reading">
+          <ControversySignal
+            controversy={note.controversy}
+            onVerify={async () => {
+              await resolveControversy(api, user, note.id, 'verified');
+            }}
+            {...(editableDecks.has(card.deckId)
+              ? {
+                  onEdit: () => {
+                    const deck = editableDecks.get(card.deckId);
+                    if (deck) setEditingLeech({ deck, noteId: note.id });
+                  },
+                }
+              : {})}
+          />
+        </div>
+      ) : null}
 
       {timerRuns ? (
         <div className="lg:max-w-reading">

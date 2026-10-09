@@ -73,9 +73,9 @@ describe('contrato de tarjetas con IA', () => {
 
 describe('lista cerrada de textos académicos', () => {
   it('tiene ids únicos y nombres, y solo reconoce los suyos', () => {
-    const ids = ACADEMIC_SOURCES.map((source) => source.id);
+    const ids = ACADEMIC_SOURCES.map((source) => source.key);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ACADEMIC_SOURCES.every((source) => source.title.length > 5)).toBe(true);
+    expect(ACADEMIC_SOURCES.every((source) => source.name.length > 5)).toBe(true);
     expect(isAcademicSourceId('harrison')).toBe(true);
     expect(isAcademicSourceId('wikipedia')).toBe(false);
     expect(academicSourceTitle('nelson')).toContain('Nelson');

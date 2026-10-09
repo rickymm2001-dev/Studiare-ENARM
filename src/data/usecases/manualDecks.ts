@@ -13,7 +13,7 @@ import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
 import { newId } from '../ids';
-import { isLive, type Card, type Deck, type Note } from '../schemas/decks';
+import { isEditableDeck, isLive, type Card, type Deck, type Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
 
 export type NoteDraft =
@@ -102,6 +102,13 @@ export function draftOf(note: Note): NoteDraft {
   }
 }
 
+/** Si dos borradores son la misma tarjeta, del mismo tipo y con el mismo texto */
+export function sameDraft(a: NoteDraft, b: NoteDraft): boolean {
+  if (a.kind !== b.kind) return false;
+  if (a.kind === 'cloze' && b.kind === 'cloze') return a.text === b.text && a.extra === b.extra;
+  return a.kind !== 'cloze' && b.kind !== 'cloze' && a.front === b.front && a.back === b.back;
+}
+
 /** Los campos de la nota con el texto ya escapado, para guardarlo como HTML (14.3) */
 export function contentOf(draft: NoteDraft) {
   switch (draft.kind) {
@@ -145,8 +152,8 @@ export async function ownManualDeck(
   deckId: string,
 ): Promise<Deck> {
   const deck = await api.repos.decks.get(deckId);
-  if (deck?.ownerId !== user.id || deck.origin !== 'manual')
-    throw new Error('Solo puedes cambiar los mazos que creaste tú');
+  if (!deck || !isEditableDeck(deck, user.id))
+    throw new Error('Solo puedes cambiar los mazos que creaste o importaste tú');
   return deck;
 }
 
@@ -189,6 +196,8 @@ export function manualNoteOf(args: {
   draft: NoteDraft;
   tags: readonly string[];
   outline: OutlineLink | null;
+  /** El texto cambió de verdad, así que la señal de controversia de la IA ya se atendió */
+  edited?: boolean;
   stamp: string;
 }): Note {
   const { existing, outline, stamp } = args;
@@ -196,11 +205,15 @@ export function manualNoteOf(args: {
     id: existing?.id ?? newId(),
     deckId: args.deckId,
     tags: [...args.tags],
-    origin: 'manual',
-    editorialStatus: 'draft',
-    sourceQuote: null,
-    sourceQuestionVersionId: null,
-    isDemo: false,
+    // Una tarjeta importada o generada conserva su origen, su cita y su identificador al editarla
+    origin: existing?.origin ?? 'manual',
+    editorialStatus: existing?.editorialStatus ?? 'draft',
+    sourceQuote: existing?.sourceQuote ?? null,
+    sourceQuestionVersionId: existing?.sourceQuestionVersionId ?? null,
+    ...(existing?.sourceGuid ? { sourceGuid: existing.sourceGuid } : {}),
+    ...(existing?.sourceTitle ? { sourceTitle: existing.sourceTitle } : {}),
+    ...(existing?.controversy && !args.edited ? { controversy: existing.controversy } : {}),
+    isDemo: existing?.isDemo ?? false,
     // Una tarjeta suelta no lleva estos campos, para no cambiar lo que ya se guardaba
     ...(outline ? { outlineId: outline.outlineId, outlineNodeId: outline.nodeId } : {}),
     createdAt: existing?.createdAt ?? stamp,
@@ -296,6 +309,10 @@ export async function saveManualNote(
     throw new Error(FROM_OUTLINE);
   const stamp = now.toISOString();
   const draft = input.draft;
+  // Editar no cambia de dónde viene la tarjeta. Una importada o generada conserva su origen, su
+  // cita y su identificador. Si el texto cambió de verdad, la señal de controversia de la IA se va,
+  // porque el alumno ya atendió esa tarjeta (D-085). Si solo se guardó igual, la señal sigue
+  const edited = existing !== undefined && !sameDraft(draftOf(existing), draft);
   const kept: OutlineLink | null =
     typeof existing?.outlineId === 'string' && typeof existing.outlineNodeId === 'string'
       ? { outlineId: existing.outlineId, nodeId: existing.outlineNodeId }
@@ -306,6 +323,7 @@ export async function saveManualNote(
     draft,
     tags: input.tags ? normalizeTags(input.tags) : (existing?.tags ?? []),
     outline: input.outline ?? kept,
+    edited,
     stamp,
   });
   await api.repos.notes.put(note);

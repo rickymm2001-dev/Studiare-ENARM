@@ -11,6 +11,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { ensureDemoBank } from '@/data/usecases/bank';
+import { listStudentPool } from '@/data/usecases/studentBank';
 import { updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -55,7 +56,8 @@ function Setup({ session }: { session: ReadySession }) {
       setReady(true);
     });
   }, [api]);
-  const questions = useLiveData(() => api.repos.questions.listLatest(), [api.repos, ready]);
+  const pool = useLiveData(() => listStudentPool(api), [api.repos, ready]);
+  const questions = pool?.practice;
   const subscription = useLiveData(
     () => api.repos.subscriptions.get(session.user.id).then((value) => value ?? null),
     [api.repos, session.user.id],
@@ -280,7 +282,7 @@ function Setup({ session }: { session: ReadySession }) {
           </Disclosure>
         </div>
       </Card>
-      <ExamSetupCard session={session} questions={questions} plan={plan} left={left} />
+      <ExamSetupCard session={session} questions={pool?.exam ?? []} plan={plan} left={left} />
     </>
   );
 }

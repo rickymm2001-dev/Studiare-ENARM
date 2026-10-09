@@ -20,6 +20,7 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { updateProfile } from '@/data/usecases/profile';
+import { listStudentPool } from '@/data/usecases/studentBank';
 import { topicTaxonomy } from '@/demo/content';
 import { analyzeTopics, type TopicResponse } from '@/engines/topics';
 import { suspendedCardIds } from '@/engines/suspension';
@@ -65,7 +66,10 @@ function Planner({ session }: { session: ReadySession }) {
     const [decks, cards] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
     return { decks, cards };
   }, [api.repos]);
-  const questions = useLiveData(() => api.repos.questions.listLatest(), [api.repos]);
+  const questions = useLiveData(
+    () => listStudentPool(api).then((pool) => pool.practice),
+    [api.repos],
+  );
   const subscription = useLiveData(
     () => api.repos.subscriptions.get(user.id).then((value) => value ?? null),
     [api.repos, user.id],

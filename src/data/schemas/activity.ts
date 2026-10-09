@@ -100,6 +100,8 @@ export type AiArtifact = z.infer<typeof AiArtifactSchema>;
 
 export const AiCallLogSchema = z.strictObject({
   id: IdSchema,
+  /** Alumno que hizo la llamada, para los límites por alumno. Ausente en llamadas viejas */
+  userId: IdSchema.nullable().optional(),
   engine: z.enum(['forgetting', 'weekly_report', 'flashcards', 'bias_tips', 'restructure']),
   mode: AiModeSchema,
   model: z.string().min(1).max(80),
@@ -164,7 +166,7 @@ export const ChallengeSchema = z
   );
 export type Challenge = z.infer<typeof ChallengeSchema>;
 
-/** Los 12 widgets de 9.1 */
+/** Los 12 widgets de 9.1 y los tres de logros (Fase P bloque 6) */
 export const WidgetTypeSchema = z.enum([
   'heatmap',
   'pomodoro',
@@ -178,6 +180,9 @@ export const WidgetTypeSchema = z.enum([
   'daily_goal',
   'party_challenge',
   'latest_hypothesis',
+  'missions',
+  'league',
+  'badges',
 ]);
 
 export const WidgetLayoutSchema = z.strictObject({

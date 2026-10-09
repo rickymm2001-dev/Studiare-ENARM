@@ -2,6 +2,8 @@
 // sin trabarse con miles de tarjetas, y sobre la que se actúa por lote. La tercera pestaña de
 // Repasar y Mazos. El texto buscado se aplaza un instante para que escribir nunca se sienta lento.
 import { Link, useSearchParams } from 'react-router';
+import { useDataApi } from '@/data/context';
+import { resolveControversy } from '@/data/usecases/aiCards';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -48,6 +50,7 @@ const STATUS_PARAMS: Record<string, ExploreStatus> = {
 };
 
 function Explore({ session }: { session: ReadySession }) {
+  const api = useDataApi();
   const data = useExploreData(session);
   const [params] = useSearchParams();
   const [view, setView] = useState<ExploreView>(() => {
@@ -238,6 +241,9 @@ function Explore({ session }: { session: ReadySession }) {
               onToggle={toggle}
               openId={openId}
               onOpen={setOpenId}
+              onVerify={async (noteId) => {
+                await resolveControversy(api, session.user, noteId, 'verified');
+              }}
               facesOf={data.facesOf}
               timeZone={session.user.timeZone}
               now={now}

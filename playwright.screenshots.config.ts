@@ -36,7 +36,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'node server/src/main.ts --mock',
+      command: 'node server/src/main.ts --mock --ephemeral',
       url: `${PROXY_URL}/health`,
       reuseExistingServer: false,
       timeout: 30_000,

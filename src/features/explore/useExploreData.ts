@@ -4,7 +4,7 @@
 import { useMemo } from 'react';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import type { Card, Deck, Note } from '@/data/schemas/decks';
+import { isAiNote, type Card, type Deck, type Note } from '@/data/schemas/decks';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { buildExploreRows, type ExploreRow, type ExploreSource } from '@/engines/explore';
 import { deckChain } from '@/engines/deckTree';
@@ -75,6 +75,8 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
         createdAt: card.createdAt,
         updatedAt: card.updatedAt ?? card.createdAt,
         state: states.get(card.id) ?? null,
+        controversy: note.controversy ?? null,
+        aiDraft: isAiNote(note),
       });
     }
     const rows = buildExploreRows(

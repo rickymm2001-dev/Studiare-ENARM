@@ -1,6 +1,6 @@
 // Entrega a la interfaz los repositorios de la base activa. Las pantallas nunca ven Dexie.
 import { useMemo, type ReactNode } from 'react';
-import { DataContext, type DataApi } from './context';
+import { DataContext, type DataApi, type DemoAdjustments } from './context';
 import { createEnarmDb } from './db/database';
 import type { DatabaseKind } from './databases';
 import { rebuildDerivedState } from './derive/derivations';
@@ -8,25 +8,29 @@ import { createDexieRepositories } from './repos/dexie/createRepositories';
 import { studyDayOf } from '@/engines/studyDay';
 import { DEFAULT_TIME_ZONE } from './schemas/common';
 import { recordEvent } from './usecases/recordEvent';
-import { resetDemoDatabase, seedDemoDatabase } from './usecases/seedDemo';
+import { clearDemoDatabase, resetDemoDatabase, seedDemoDatabase } from './usecases/seedDemo';
 import type { EnarmDb } from './db/database';
 
 /** El generador corre en un worker que se carga bajo demanda (14.4) */
-async function buildDemoRecords() {
+async function buildDemoRecords(adjust: DemoAdjustments = {}) {
   const { simulateWorker } = await import('@/workers/simulateClient');
   const now = new Date();
   // Nada de la bitácora simulada puede quedar en el futuro
   return simulateWorker().buildSeed({
     endDay: studyDayOf(now, DEFAULT_TIME_ZONE),
     notAfter: now.toISOString(),
+    ...(adjust.cohortSize !== undefined ? { cohortSize: adjust.cohortSize } : {}),
+    ...(adjust.seed !== undefined ? { seed: adjust.seed } : {}),
+    ...(adjust.examDate !== undefined ? { examDate: adjust.examDate } : {}),
   });
 }
 
 function demoActions(db: EnarmDb): DataApi['demo'] {
   if (db.kind !== 'demo') return null;
   return {
-    generate: async () => seedDemoDatabase(db, await buildDemoRecords()),
-    regenerate: async () => resetDemoDatabase(db, await buildDemoRecords()),
+    generate: async (adjust) => seedDemoDatabase(db, await buildDemoRecords(adjust)),
+    regenerate: async (adjust) => resetDemoDatabase(db, await buildDemoRecords(adjust)),
+    clear: () => clearDemoDatabase(db),
   };
 }
 

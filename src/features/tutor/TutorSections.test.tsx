@@ -18,6 +18,33 @@ describe('consejos por sesgo', () => {
     expect(screen.queryByText(t.tutor.biasTips.none)).toBeNull();
   });
 
+  it('el título dice trampas por defecto y sesgos cuando los médicos coinciden', () => {
+    const { rerender } = render(<BiasTipsCard tips={[]} calibration={null} />);
+    expect(screen.getByRole('heading', { name: 'Consejos por trampa' })).toBeVisible();
+    rerender(<BiasTipsCard tips={[]} calibration={null} vocabulary="bias" />);
+    expect(screen.getByRole('heading', { name: 'Consejos por sesgo' })).toBeVisible();
+  });
+
+  it('un consejo que un médico revisó sale sin la marca de borrador', () => {
+    render(
+      <BiasTipsCard
+        tips={[
+          {
+            tag: 'anchoring',
+            name: 'Sesgo de anclaje',
+            tip: 'Texto revisado.',
+            level: 'focus',
+            examples: [],
+            reviewed: true,
+          },
+        ]}
+        calibration={null}
+      />,
+    );
+    expect(screen.getByText(t.tutor.biasTips.reviewedLabel)).toBeVisible();
+    expect(screen.queryByText(t.tutor.biasTips.draftLabel)).toBeNull();
+  });
+
   it('con datos suficientes y sin trampas repetidas lo dice', () => {
     render(<BiasTipsCard tips={[]} calibration={null} />);
     expect(screen.getByText(t.tutor.biasTips.none)).toBeVisible();
@@ -27,7 +54,13 @@ describe('consejos por sesgo', () => {
     render(
       <BiasTipsCard
         tips={[
-          { tag: 'anchoring', name: 'Sesgo de anclaje', tip: 'Nombra el dato.', level: 'focus' },
+          {
+            tag: 'anchoring',
+            name: 'Sesgo de anclaje',
+            tip: 'Nombra el dato.',
+            level: 'focus',
+            examples: [],
+          },
         ]}
         calibration={null}
       />,

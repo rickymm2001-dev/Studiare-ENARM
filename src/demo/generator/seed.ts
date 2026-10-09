@@ -19,6 +19,7 @@ import { UserSchema, UserSettingsSchema, type User } from '@/data/schemas/people
 import type { DemoBank } from '../content/bank';
 import { buildDeckEntities } from '../content/deckEntities';
 import { bankTaxonomy } from './bankTaxonomy';
+import { DEMO_COHORT_DEFAULT, DEMO_SEED_DEFAULT } from '../constants';
 import { DEMO_CONTENT_TIME } from '../stableId';
 import { generateCohort, generateDemoStudent, type Cohort, type SimStudent } from './cohort';
 import { syntheticIds, toEvents } from './events';
@@ -45,8 +46,8 @@ export interface DemoSeedOptions {
 }
 
 export const DEFAULT_DEMO_SEED: Omit<DemoSeedOptions, 'endDay' | 'examDate'> = {
-  seed: 'enarm-demo-1',
-  cohortSize: 300,
+  seed: DEMO_SEED_DEFAULT,
+  cohortSize: DEMO_COHORT_DEFAULT,
   cohortDays: 90,
   demoDays: 60,
 };

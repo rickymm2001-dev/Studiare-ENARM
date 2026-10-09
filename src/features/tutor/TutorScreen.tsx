@@ -1,13 +1,15 @@
-// Tutor (pantalla 11, 8.2 a 8.5). Sin IA todavía. Hipótesis sobre los errores del alumno con su
-// evidencia y las acciones que la app sabe ejecutar, un informe semanal con plantilla, consejos
-// por sesgo y el lugar de las tarjetas en borrador. Todo sale de la bitácora y el banco cada vez
-// que se abre. Nada de chat libre ni de predecir el puntaje.
+// Tutor (pantalla 11, 8.2 a 8.5). Hipótesis sobre los errores del alumno con su evidencia y las
+// acciones que la app sabe ejecutar, un informe semanal, consejos por sesgo y el lugar de las
+// tarjetas en borrador. Todo sale de reglas sobre la bitácora y el banco cada vez que se abre. Con el
+// análisis con IA encendido, la IA solo redacta la explicación de esos mismos resultados y, si algo
+// falla, queda la plantilla. Nada de chat libre ni de predecir el puntaje.
 import { Hourglass, Lightbulb, ListX } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
 import type { Option } from '@/data/schemas/bank';
 import { errorIds } from '@/data/usecases/errorCards';
+import { setConsent } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -29,6 +31,10 @@ import { confusedPairs, pickTop, type Hypothesis, type TutorAction } from './tut
 import { useTutorData, useTutorView, type TutorData } from './useTutorData';
 import { cardLabel } from './cardLabel';
 import { BiasTipsCard, DraftCardsCard, FormingPatterns, WeeklyReportCard } from './TutorSections';
+import { AiAnalysisCard } from './AiAnalysisCard';
+import type { ItemTexts } from './aiInputs';
+import { useTutorAi } from './useTutorAi';
+import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 
 /** Hipótesis abiertas de entrada. Con mucha actividad salen decenas y no se pueden leer todas */
 const TOP_HYPOTHESES = 3;
@@ -114,6 +120,33 @@ function TutorBody({
     },
   };
 
+  // Solo unas cuantas van abiertas, de reglas distintas, y el resto en una lista que se abre
+  const { top, rest } = pickTop(shown, TOP_HYPOTHESES);
+
+  // El texto completo de lo que forma cada hipótesis, para la IA. La pantalla usa una versión corta
+  const texts: ItemTexts = {
+    textOf: (kind, itemId) => {
+      if (kind === 'question') {
+        const question = questionById.get(itemId);
+        if (!question) return undefined;
+        return question.vignette ? `${question.vignette} ${question.prompt}` : question.prompt;
+      }
+      const card = content.cards.find((entry) => entry.id === itemId);
+      const note = card ? noteById.get(card.noteId) : undefined;
+      return note && card ? cardLabel(note, card.ordinal) : undefined;
+    },
+  };
+  const tutorAi = useTutorAi({
+    session,
+    view,
+    hypotheses: top,
+    artifacts,
+    texts,
+    answersThisWeek: view.answersThisWeek,
+  });
+  const [turningOn, setTurningOn] = useState(false);
+  const vocabulary = useBiasVocabulary();
+
   const run = async (hypothesis: Hypothesis, job: () => Promise<string | undefined>) => {
     setBusyKey(hypothesis.key);
     try {
@@ -144,8 +177,6 @@ function TutorBody({
       return message;
     });
 
-  // Solo unas cuantas van abiertas, de reglas distintas, y el resto en una lista que se abre
-  const { top, rest } = pickTop(shown, TOP_HYPOTHESES);
   const card = (hypothesis: Hypothesis, compact: boolean) => (
     <HypothesisCard
       key={hypothesis.key}
@@ -156,6 +187,7 @@ function TutorBody({
       message={messages[hypothesis.key]}
       busy={busyKey === hypothesis.key}
       compact={compact}
+      ai={tutorAi.hypotheses.get(hypothesis.key)}
       onAction={(action) => {
         void apply(hypothesis, action);
       }}
@@ -205,6 +237,17 @@ function TutorBody({
           </p>
         ) : null}
       </Card>
+
+      <AiAnalysisCard
+        state={tutorAi}
+        busy={turningOn}
+        onTurnOn={() => {
+          setTurningOn(true);
+          void setConsent(api, user, 'ai_analysis', true).finally(() => {
+            setTurningOn(false);
+          });
+        }}
+      />
 
       {top.map((hypothesis) => card(hypothesis, false))}
 
@@ -257,9 +300,14 @@ function TutorBody({
       ) : null}
 
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
-        <WeeklyReportCard report={view.report} />
+        <WeeklyReportCard report={view.report} ai={tutorAi.report} />
         <div className="flex flex-col gap-3">
-          <BiasTipsCard tips={view.biasTips} calibration={view.biasCalibration} />
+          <BiasTipsCard
+            tips={view.biasTips}
+            calibration={view.biasCalibration}
+            ai={tutorAi.tips}
+            vocabulary={vocabulary}
+          />
           <DraftCardsCard errorCards={errorCards} />
         </div>
       </div>

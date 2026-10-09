@@ -23,5 +23,5 @@
     "noUnusedParameters": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["server", "scripts", "vite.config.ts", "vitest.config.ts"]
+  "include": ["server", "scripts", "supabase/functions", "vite.config.ts", "vitest.config.ts"]
 }

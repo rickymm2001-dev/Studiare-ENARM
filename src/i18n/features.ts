@@ -114,11 +114,14 @@ export const featureText = {
       today: 'Para hoy',
       weak_topics: 'Temas débiles',
       exam_countdown: 'Cuenta regresiva (retirada)',
-      bias_pattern: 'Patrón de sesgo',
+      bias_pattern: 'Patrón de trampa',
       future_load: 'Carga futura',
       daily_goal: 'Meta diaria',
       party_challenge: 'Reto de Party',
       latest_hypothesis: 'Última hipótesis del tutor',
+      missions: 'Misiones de hoy',
+      league: 'Liga de la semana',
+      badges: 'Insignias recientes',
     },
     heatmap: {
       range: 'Rango',
@@ -333,6 +336,9 @@ export const featureText = {
     deleteConfirm: 'Sí, borrar todo',
     deleteConfirmText:
       'Se borran todos los perfiles y su historial de Mi cuenta. La demostración no se toca.',
+    // Con la cuenta en la nube conectada y la sincronización encendida (D-095)
+    deleteCloudNote:
+      'Tu copia en la nube sigue ahí y se vuelve a bajar si entras otra vez con tu correo. Borrar también la nube queda para una siguiente versión.',
     cancel: 'Cancelar',
     deleted: 'Tus datos se borraron.',
     subscriptionTitle: 'Suscripción',
@@ -341,6 +347,39 @@ export const featureText = {
   billing: {
     simulatedNotice:
       'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
+    // Con la cuenta en la nube conectada el plan lo decide el servidor (Fase P bloque 5, D-096)
+    cloud: {
+      notice:
+        'Tu plan lo confirma el servidor cuando la pasarela avisa del pago. Los pagos están en modo prueba y no se cobra dinero real hasta que Studiare los active.',
+      source: {
+        payment: 'Tu plan viene de un pago confirmado.',
+        referral: 'Tu plan viene de un mes gratis por referido.',
+        none: 'Todavía no tienes un plan de pago.',
+      },
+      validUntil: (date: string) => `Vale hasta el ${date}.`,
+      checkoutTitle: 'Pagar con la pasarela',
+      provider: 'Pasarela de pago',
+      providers: { stripe: 'Tarjeta con Stripe', mercadopago: 'Mercado Pago' },
+      testMode: 'Modo prueba. Usa una tarjeta de prueba de la pasarela, no una tuya.',
+      go: 'Ir a pagar',
+      opening: 'Abriendo la pasarela…',
+      back: 'Volver a los planes',
+      errors: {
+        founder_full: 'Los lugares del plan Fundador ya se llenaron. Elige otro plan.',
+        not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
+        unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
+        failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
+      },
+      returning: {
+        ok: 'Estamos confirmando tu pago. Esto tarda unos segundos.',
+        confirmed: 'Tu plan ya está activo. Gracias.',
+        slow: 'Tu pago sigue sin confirmarse. Puede tardar unos minutos. Si pasa más tiempo, escribe al equipo.',
+        canceled: 'Cancelaste el pago. No se cobró nada.',
+      },
+      cancelNote:
+        'Cancelar desde la app llega con la gestión de pagos. Mientras tanto, pídelo al equipo de Studiare por el medio donde te dieron acceso.',
+      refresh: 'Revisar mi plan',
+    },
     current: (plan: string) => `Tu plan actual es ${plan}.`,
     stats: {
       plan: 'Plan',
@@ -372,6 +411,7 @@ export const featureText = {
     featureNames: {
       explore: 'Explorar tus tarjetas',
       outlines: 'Apuntes en esquema',
+      aiCards: 'Tarjetas con IA',
       overdueTools: 'Herramientas de atrasos',
       guideProfile: 'Perfil guía',
       newPerDaySuggestion: 'Sugerencia de tarjetas nuevas',
@@ -502,6 +542,312 @@ export const featureText = {
         `${plural(n, 'nota no se edita', 'notas no se editan')} porque ${n === 1 ? 'es precargada o sale de un apunte' : 'son precargadas o salen de un apunte'}. Las de un apunte se cambian en el apunte y todas se pueden suspender.`,
       nothingChanged: 'No hubo nada que cambiar.',
     },
+  },
+  // Apuntes en esquema (D-092). Una línea con una marca se vuelve tarjeta
+  notes: {
+    loading: 'Cargando tus apuntes…',
+    summary: {
+      label: 'Tus apuntes en cifras',
+      pages: 'Apuntes',
+      pagesCaption: 'escritos',
+      lines: 'Líneas',
+      linesCaption: 'en total',
+      cards: 'Tarjetas',
+      cardsCaption: 'que salen de ellos',
+    },
+    listTitle: 'Tus apuntes',
+    listLabel: 'Lista de apuntes',
+    empty:
+      'Todavía no tienes apuntes. Crea el primero y escribe una marca en una línea para que se vuelva tarjeta.',
+    createTitle: 'Nuevo apunte',
+    createBody:
+      'Cada apunte tiene su propio mazo dentro de Apuntes, así sus tarjetas entran al repaso y a Explorar.',
+    titleLabel: 'Título del apunte',
+    create: 'Crear apunte',
+    creating: 'Creando…',
+    titleEmpty: 'Escribe un título para el apunte.',
+    titleTaken: 'Ya tienes un apunte con ese título.',
+    createError: 'No se pudo crear el apunte. Intenta de nuevo.',
+    open: (title: string) => `Abrir el apunte ${title}`,
+    pageMeta: (lines: number, cards: number) =>
+      `${plural(lines, 'línea', 'líneas')} · ${plural(cards, 'tarjeta', 'tarjetas')}`,
+    back: 'Todos los apuntes',
+    missingTitle: 'No encontramos ese apunte',
+    missingBody: 'Puede que lo hayas borrado. Vuelve a la lista para elegir otro.',
+    renameLabel: 'Título',
+    rename: 'Cambiar título',
+    renamed: 'Título cambiado.',
+    renameError: 'No se pudo cambiar el título.',
+    editorLabel: 'Esquema del apunte',
+    // Atajos de teclado, se ven solo donde hay teclado
+    keys: {
+      shift: 'Mayús',
+      indent: 'mete un nivel,',
+      outdent: 'lo saca,',
+      enter: 'crea una línea,',
+      move: 'mueven la línea.',
+      arrows: 'y flechas',
+      escape: 'y luego',
+      leave: 'sale del esquema.',
+    },
+    lineLabel: (n: number, level: number) => `Línea ${n}, nivel ${level}`,
+    linePlaceholder: 'Escribe aquí',
+    toolbar: {
+      label: 'Herramientas de la línea',
+      outdent: 'Sacar un nivel',
+      indent: 'Meter un nivel',
+      up: 'Subir',
+      down: 'Bajar',
+      card: 'Pregunta y respuesta',
+      reverse: 'Con inversa',
+      hole: 'Hueco',
+      link: 'Enlace',
+      tag: 'Etiqueta',
+      remove: 'Borrar línea',
+      add: 'Línea nueva',
+    },
+    badges: {
+      basic: 'Tarjeta',
+      basic_reverse: 'Tarjeta doble',
+      cloze: (n: number) => plural(n, 'hueco', 'huecos'),
+    },
+    problems: {
+      empty_front: 'Falta la pregunta',
+      empty_back: 'Falta la respuesta',
+      no_cloze: 'Falta el hueco',
+      unclosed_cloze: 'Hueco sin cerrar',
+      too_long: 'Demasiado largo',
+    },
+    collapse: (text: string) => `Ocultar lo que cuelga de ${text}`,
+    expand: (text: string) => `Mostrar lo que cuelga de ${text}`,
+    emptyLine: 'línea vacía',
+    save: {
+      saved: 'Guardado',
+      saving: 'Guardando…',
+      dirty: 'Cambios sin guardar',
+      error: 'No se pudo guardar. Tus cambios siguen aquí.',
+      retry: 'Reintentar',
+      now: 'Guardar ahora',
+    },
+    tagsLabel: 'Etiquetas del apunte',
+    tagsHint:
+      'Separadas por espacio. Las heredan todas las tarjetas y los niveles van con ::, como cardio::infarto.',
+    help: {
+      title: 'Cómo escribir',
+      summary: 'Marcas para crear tarjetas',
+      items: [
+        ['Pregunta :: Respuesta', 'crea una tarjeta de pregunta y respuesta.'],
+        ['Término ;; Definición', 'crea la tarjeta y también su inversa.'],
+        ['La {{metformina}} baja la glucosa', 'crea una tarjeta con hueco por cada par de llaves.'],
+        ['#cardio::infarto', 'pone una etiqueta. Las líneas de abajo la heredan.'],
+        ['[[Otro apunte]]', 'enlaza a otro apunte por su título.'],
+      ] as readonly (readonly [string, string])[],
+      keys: 'Tab mete un nivel, Mayús y Tab lo sacan, Enter crea una línea, Alt y flechas mueven la línea. Esc y luego Tab sale del esquema.',
+      unfinished:
+        'Una línea con marca incompleta no cambia la última tarjeta buena. Quitar la marca borra la tarjeta.',
+    },
+    links: {
+      title: 'Enlaces',
+      open: (title: string) => `Abrir ${title}`,
+      missing: (title: string) => `Crear el apunte ${title}`,
+      missingHint: (title: string) => `${title} todavía no existe`,
+      backlinks: 'Apuntes que enlazan aquí',
+      none: 'Este apunte no enlaza a otros todavía.',
+      noBacklinks: 'Ningún otro apunte enlaza aquí.',
+    },
+    remove: {
+      button: 'Borrar apunte',
+      confirm: (title: string) => `¿Borrar "${title}" con todas sus tarjetas?`,
+      yes: 'Sí, borrar',
+      no: 'Cancelar',
+      error: 'No se pudo borrar el apunte.',
+    },
+  },
+  // Importar y exportar tarjetas (D-093)
+  importer: {
+    title: 'Sube tu mazo',
+    intro:
+      'Trae tus tarjetas de otra app o de un archivo. Aceptamos paquetes .apkg de Anki, CSV, Excel (.xlsx) y Word (.docx). Tu mazo queda privado y las tarjetas empiezan como nuevas.',
+    fileLabel: 'Archivo para importar',
+    fileHint: 'Hasta 600 MB en un paquete y 50 MB en una hoja o un documento.',
+    reading: 'Leyendo tu archivo…',
+    readError: 'No se pudo leer el archivo.',
+    errors: {
+      too_large: 'El archivo pesa más de lo permitido o contiene demasiado al descomprimirse.',
+      too_many_files: 'El paquete tiene más archivos de los permitidos.',
+      unsafe_path: 'El paquete tiene rutas que no son seguras, así que no se importó.',
+      corrupt: 'El archivo está dañado o no se pudo abrir.',
+      unsupported:
+        'Ese tipo de archivo no se puede importar. Usa .apkg, CSV, Excel (.xlsx) o Word (.docx).',
+      no_collection: 'El paquete no trae una colección de Anki.',
+      empty: 'El archivo no trae tarjetas.',
+    } as Record<string, string>,
+    previewTitle: 'Esto es lo que vamos a importar',
+    previewSource: (source: string, file: string) => `${source} · ${file}`,
+    sources: { apkg: 'Paquete de Anki', csv: 'Texto con columnas', xlsx: 'Excel', docx: 'Word' },
+    kinds: { basic: 'Pregunta y respuesta', basic_reverse: 'Con inversa', cloze: 'Con huecos' },
+    summary: (notes: number, decks: number) =>
+      `${plural(notes, 'nota', 'notas')} en ${plural(decks, 'mazo', 'mazos')}`,
+    warnings: {
+      media_skipped: (n: number) =>
+        `${plural(n, 'imagen o audio', 'imágenes o audios')} no se importan todavía.`,
+      image_occlusion: (n: number) =>
+        `${plural(n, 'nota de oclusión de imagen', 'notas de oclusión de imagen')} se importan como pregunta y respuesta, sin la máscara.`,
+      extra_templates: (n: number) =>
+        `${plural(n, 'nota con más de dos plantillas', 'notas con más de dos plantillas')} se importan como pregunta y respuesta.`,
+      extra_columns: (n: number) =>
+        `${plural(n, 'columna sin uso', 'columnas sin uso')}. Los campos de más de una nota de Anki van al reverso.`,
+      deck_too_deep: (n: number) =>
+        `${plural(n, 'nota está', 'notas están')} en mazos de demasiados niveles y se acomodan en el último nivel permitido.`,
+      revlog_ignored: (n: number) =>
+        `Los ${n.toLocaleString('es-MX')} repasos del archivo no se importan. Todas las tarjetas empiezan como nuevas.`,
+    } as Record<string, (n: number) => string>,
+    rowErrors: {
+      empty_front: 'sin frente',
+      empty_back: 'sin reverso',
+      cloze_without_holes: 'cloze sin huecos',
+      too_long: 'demasiado largo',
+      too_many_notes: 'pasa el máximo de notas por archivo',
+    } as Record<string, string>,
+    rowErrorsTitle: (n: number) =>
+      plural(n, 'fila no se puede importar', 'filas no se pueden importar'),
+    rowError: (position: number | null, reason: string) =>
+      position === null ? reason : `Fila ${position}, ${reason}`,
+    moreErrors: (n: number) => `y ${plural(n, 'más', 'más')}`,
+    sample: 'Así se ven las primeras',
+    deckName: 'Nombre de tu mazo importado',
+    deckNameHint:
+      'Si ya tienes un mazo importado con este nombre, las tarjetas nuevas se suman a él.',
+    rights: 'Tengo derecho a usar este contenido',
+    rightsHint: 'Solo importa material tuyo o que tengas permiso de usar.',
+    rightsRequired: 'Confirma que tienes derecho a usar este contenido.',
+    nameRequired: 'Escribe un nombre para el mazo.',
+    import: (n: number) => `Importar ${plural(n, 'nota', 'notas')}`,
+    importing: 'Importando…',
+    cancel: 'Elegir otro archivo',
+    saveError:
+      'No se pudo guardar la importación. Lo que ya se guardó no se repite al intentar de nuevo.',
+    nothing: 'No hay nada que importar. Revisa las filas con problemas.',
+    doneTitle: 'Importación lista',
+    done: (notes: number, cards: number) =>
+      `${plural(notes, 'nota importada', 'notas importadas')} con ${plural(cards, 'tarjeta', 'tarjetas')}.`,
+    doneDuplicates: (n: number) =>
+      `${plural(n, 'nota ya estaba y se omitió', 'notas ya estaban y se omitieron')}.`,
+    doneRepaired: (n: number) =>
+      `${plural(n, 'tarjeta faltante se completó', 'tarjetas faltantes se completaron')}.`,
+    doneRejected: (n: number) => `${plural(n, 'fila quedó fuera', 'filas quedaron fuera')}.`,
+    again: 'Importar otro archivo',
+    help: {
+      title: 'Cómo preparar tu archivo',
+      summary: 'Columnas, encabezados y marcas',
+      items: [
+        'En CSV y Excel, la primera fila puede ser el encabezado. Entendemos Frente, Reverso, Texto, Extra, Etiquetas, Mazo, Tipo e ID, también en inglés.',
+        'Sin encabezado, la columna 1 es el frente, la 2 el reverso y la 3 las etiquetas.',
+        'Un CSV de Anki con sus líneas que empiezan con # también se entiende, con el tipo de nota, el mazo y el identificador.',
+        'En Word, cada fila de una tabla con dos columnas o más es una tarjeta, y los párrafos con Pregunta :: Respuesta, Término ;; Definición o {{huecos}} también. Los títulos pasan a etiquetas.',
+        'Con un identificador por fila, volver a importar el mismo archivo no duplica nada.',
+      ],
+    },
+  },
+  exporter: {
+    title: 'Exporta tus tarjetas',
+    intro:
+      'Descarga lo que creaste o importaste en un CSV con encabezados y un identificador por nota. Si lo vuelves a importar no se duplica, y Anki lo entiende.',
+    deckLabel: 'Qué exportar',
+    all: 'Todos mis mazos',
+    button: 'Descargar CSV',
+    working: 'Preparando…',
+    done: (notes: number, file: string) =>
+      `${plural(notes, 'nota exportada', 'notas exportadas')} en ${file}.`,
+    empty: 'No hay notas tuyas para exportar todavía.',
+    error: 'No se pudo preparar el archivo. Intenta de nuevo.',
+    noDecks: 'Crea o importa un mazo para poder exportarlo.',
+  },
+  // Tarjetas con IA desde un texto o PDF del alumno (D-085)
+  aiCards: {
+    title: 'Crea tarjetas con IA',
+    intro:
+      'Pega un texto o sube un PDF. La IA propone tarjetas y cada una trae la frase exacta de tu material que la respalda. Todo queda en borrador y sin validar por un médico hasta que lo revises.',
+    modes: {
+      template: 'IA simulada. Las tarjetas salen de reglas y no de un modelo de IA.',
+      real: 'IA conectada.',
+    },
+    left: (n: number, perDay: number) =>
+      n === 0
+        ? `Ya usaste tus ${perDay} generaciones de hoy. Vuelven mañana a las 4 a. m.`
+        : `Te quedan ${plural(n, 'generación', 'generaciones')} hoy de ${perDay}.`,
+    textLabel: 'Texto de tu material',
+    textHint:
+      'Pega apuntes, un resumen o un fragmento de guía. Los datos personales se ocultan antes de procesarlo.',
+    fileLabel: 'O sube un PDF o un archivo de texto',
+    fileHint: 'Un PDF debe tener texto que se pueda seleccionar. Los escaneados todavía no.',
+    sourceName: 'Nombre de la fuente',
+    sourceNameHint: 'Se guarda en cada tarjeta para que sepas de dónde salió.',
+    defaultSource: 'Texto pegado',
+    readingFile: 'Leyendo el archivo…',
+    fileErrors: {
+      too_large: 'El PDF pesa demasiado o tiene demasiadas páginas.',
+      corrupt: 'El archivo está dañado o no se pudo leer.',
+      no_text:
+        'Este PDF no tiene texto que se pueda seleccionar, probablemente es un escaneo. Todavía no lo sabemos leer.',
+      empty: 'El archivo no trae texto.',
+    } as Record<string, string>,
+    pdfTruncated: 'El PDF era muy largo y se leyó solo una parte.',
+    generate: 'Generar tarjetas',
+    generating: 'Generando…',
+    textRequired: 'Escribe o pega un texto, o sube un archivo.',
+    textTooShort: 'El texto es muy corto para proponer tarjetas.',
+    limitReached: 'Ya usaste tus generaciones de hoy.',
+    error: 'No se pudieron generar las tarjetas. Intenta de nuevo.',
+    resultTitle: 'Tarjetas propuestas',
+    resultSummary: (n: number, sections: number) =>
+      `${plural(n, 'tarjeta propuesta', 'tarjetas propuestas')} de ${plural(sections, 'sección', 'secciones')}.`,
+    scrubbed: (n: number) =>
+      `Se ocultaron ${plural(n, 'dato personal', 'datos personales')} antes de procesar el texto.`,
+    rejected: (n: number) =>
+      `${plural(n, 'propuesta se descartó', 'propuestas se descartaron')} porque no pasaron la revisión contra tu texto. No se te muestran.`,
+    cut: (n: number) =>
+      `Se procesaron solo las primeras ${plural(n, 'sección', 'secciones')} del texto.`,
+    fellBack: 'La IA no respondió y se usó el modo simulado.',
+    nothing:
+      'No salieron tarjetas de este texto. Prueba con un texto más largo y con datos concretos, como definiciones, dosis o criterios.',
+    draftLabel: 'Borrador, no validada por médico',
+    kinds: { basic: 'Pregunta y respuesta', cloze: 'Con huecos' },
+    quote: 'Frase de tu material que la respalda',
+    front: 'Frente',
+    back: 'Reverso',
+    section: (title: string) => `Sección ${title}`,
+    duplicate: 'Ya tienes una tarjeta igual o muy parecida.',
+    select: (n: number) => `Elegir la tarjeta ${n}`,
+    selectAll: 'Elegir todas',
+    selectNone: 'Quitar todas',
+    edit: 'Editar',
+    editedIssues: 'Tu edición agrega algo que la frase no dice. Revísalo.',
+    save: (n: number) => `Guardar ${plural(n, 'tarjeta', 'tarjetas')} en borrador`,
+    saving: 'Guardando…',
+    saveError: 'No se pudieron guardar las tarjetas. Intenta de nuevo.',
+    savedTitle: 'Tarjetas guardadas',
+    saved: (n: number, flagged: number) =>
+      flagged > 0
+        ? `${plural(n, 'tarjeta guardada', 'tarjetas guardadas')} en Tarjetas con IA, ${plural(flagged, 'con señal de controversia', 'con señal de controversia')}.`
+        : `${plural(n, 'tarjeta guardada', 'tarjetas guardadas')} en Tarjetas con IA.`,
+    again: 'Generar con otro texto',
+    seeInExplore: 'Verlas en Explorar',
+    rules:
+      'La IA nunca cambia tu texto ni corrige. Si algo le parece dudoso lo señala con una explicación y fuentes, y tú decides.',
+  },
+  // Señal de controversia de la IA (D-085)
+  controversy: {
+    title: 'La IA marcó una posible controversia',
+    simulated: 'Señal del modo simulado',
+    notChanged: 'La IA no cambió esta tarjeta. Solo la señala para que la revises.',
+    sources: 'Revisa en',
+    verify: 'Ya lo verifiqué',
+    verified: 'Señal quitada. Quedó registrado que la verificaste.',
+    edit: 'Editar la tarjeta',
+    error: 'No se pudo quitar la señal. Intenta de nuevo.',
+    badge: 'Con señal de la IA',
+    editHint: 'Si editas la tarjeta, la señal también se quita.',
   },
   decks: {
     emptyBranches: (names: string) => `Todavía sin mazos en ${names}.`,
@@ -976,6 +1322,7 @@ export const featureText = {
     statsLabel: 'Preguntas por estado',
     assignedTo: (names: string) => `Asignada a ${names}`,
     unassigned: 'Sin asignar',
+    importBank: 'Importar banco',
     more: (n: number) => `Y ${n} más`,
   },
   admin: {
@@ -1492,6 +1839,159 @@ export const featureText = {
     },
     // Aparece cuando el servidor no dejó cambiar de dispositivo por el límite de cambios al día
     deviceLimit: deviceLimitText,
+    // Sincronización entre dispositivos (D-095). Se muestra con la cuenta en la nube conectada
+    sync: {
+      title: 'Sincronización entre dispositivos',
+      scope:
+        'Se sincronizan tus mazos propios, notas, tarjetas, apuntes, la distribución de tu Inicio y tu historial de repaso. Lo precargado viene con la app y tu apariencia es de cada dispositivo.',
+      never: 'Todavía no se ha sincronizado en este navegador.',
+      running: 'Sincronizando…',
+      ok: (when: string) => `Todo al día. Última sincronización ${when}.`,
+      okChanges: (pulled: number, pushed: number) =>
+        `Se bajaron ${String(pulled)} y se subieron ${String(pushed)} cambios.`,
+      rejected: (count: number) =>
+        count === 1
+          ? 'Un registro de la nube no se guardó porque no se pudo validar.'
+          : `${String(count)} registros de la nube no se guardaron porque no se pudieron validar.`,
+      network:
+        'No hay conexión con la nube. Tus cambios siguen en este navegador y se subirán cuando vuelva la conexión.',
+      auth: 'Tu sesión venció. Entra de nuevo con tu correo para seguir sincronizando.',
+      device: 'Otro dispositivo tiene tu cuenta en este momento, así que aquí no se sincroniza.',
+      server: 'La nube respondió con un error. Se vuelve a intentar en unos minutos.',
+      local: 'Algo falló al guardar en este navegador. Se vuelve a intentar en unos minutos.',
+      clock:
+        'La nube rechazó cambios con una fecha en el futuro. Activa la fecha y hora automáticas de este dispositivo.',
+      clockSkew: (minutes: number) =>
+        `La hora de este dispositivo difiere ${String(minutes)} minutos de la de la nube. Activa la fecha y hora automáticas para poder sincronizar.`,
+      lastWas: (when: string) => `La última sincronización buena fue ${when}.`,
+      syncNow: 'Sincronizar ahora',
+    },
+  },
+  // Misiones, insignias y ligas (Fase P bloque 6)
+  rewards: {
+    statLeague: 'Liga',
+    statMissions: 'Misiones de hoy',
+    statBadges: 'Insignias',
+    missionsToday: 'Misiones de hoy',
+    missionsWeek: 'Misiones de la semana',
+    leagueTitle: 'Liga de la semana',
+    badgesTitle: 'Insignias',
+    recentTitle: 'Ganadas hace poco',
+    noRecent: 'Todavía no ganas ninguna insignia. La primera llega pronto.',
+    progress: (current: number, target: number) => `${current} de ${target}`,
+    done: 'Cumplida',
+    pending: 'Pendiente',
+    calibrating: (have: number, need: number) =>
+      `Calibrando. Llevas ${have} de ${need} preguntas para medir tus aciertos.`,
+    missions: {
+      dailyCards: (n: number) => `Repasa ${plural(n, 'tarjeta', 'tarjetas')}`,
+      dailyQuestions: (n: number) => `Responde ${plural(n, 'pregunta', 'preguntas')}`,
+      dailyMinutes: (n: number) => `Estudia ${plural(n, 'minuto', 'minutos')}`,
+      weeklyDays: (n: number) => `Estudia ${plural(n, 'día', 'días')} esta semana`,
+      weeklyXp: (n: number) => `Suma ${n.toLocaleString('es-MX')} XP esta semana`,
+      weeklyAccuracy: (n: number) => `Acierta ${n} % de tus preguntas de la semana`,
+    },
+    leagues: {
+      bronze: 'Bronce',
+      silver: 'Plata',
+      gold: 'Oro',
+      sapphire: 'Zafiro',
+      ruby: 'Rubí',
+      diamond: 'Diamante',
+    },
+    leagueNow: (name: string, xp: number) =>
+      `Vas en la liga ${name} con ${xp.toLocaleString('es-MX')} XP esta semana.`,
+    leagueNext: (missing: number, name: string) =>
+      `Te faltan ${missing.toLocaleString('es-MX')} XP para la liga ${name}.`,
+    leagueTop: 'Ya estás en la liga más alta.',
+    leagueMovement: {
+      up: (name: string) => `Subiste de liga. La semana pasada estabas en ${name}.`,
+      down: (name: string) => `Bajaste de liga. La semana pasada estabas en ${name}.`,
+      same: (name: string) => `Sigues en la misma liga que la semana pasada, ${name}.`,
+    },
+    leagueBest: (name: string) => `Tu mejor liga hasta hoy es ${name}.`,
+    leagueNote:
+      'La liga sube con el XP de la semana, de lunes a lunes a las 4 a. m. No da XP extra. Los umbrales son provisionales.',
+    tiers: ['Bronce', 'Plata', 'Oro', 'Platino', 'Diamante'],
+    tierOf: (family: string, tier: string) => `${family}, nivel ${tier}`,
+    earnedOn: (day: string) => `Ganada el ${day}`,
+    locked: 'Por ganar',
+    nextTier: (current: number, target: number) => `Siguiente nivel. ${current} de ${target}`,
+    allTiers: 'Tienes todos los niveles',
+    families: {
+      reviews: {
+        name: 'Repasos',
+        goal: (n: number) => `Repasa ${n.toLocaleString('es-MX')} tarjetas en total`,
+      },
+      answers: {
+        name: 'Preguntas',
+        goal: (n: number) => `Responde ${n.toLocaleString('es-MX')} preguntas en total`,
+      },
+      focus: {
+        name: 'Enfoque',
+        goal: (n: number) => `Estudia ${n.toLocaleString('es-MX')} minutos en total`,
+      },
+      streak: {
+        name: 'Constancia',
+        goal: (n: number) => `Llega a una racha de ${n} días`,
+      },
+      level: { name: 'Nivel', goal: (n: number) => `Llega al nivel ${n}` },
+      exams: {
+        name: 'Exámenes',
+        goal: (n: number) => `Termina ${plural(n, 'examen completo', 'exámenes completos')}`,
+      },
+      duels: {
+        name: 'Duelos',
+        goal: (n: number) => `Termina ${plural(n, 'duelo', 'duelos')}`,
+      },
+      imports: {
+        name: 'Tus mazos',
+        goal: (n: number) => `Importa ${plural(n, 'mazo', 'mazos')} de otra app`,
+      },
+      verifications: {
+        name: 'Verificación',
+        goal: (n: number) =>
+          `Atiende ${plural(n, 'señal de controversia', 'señales de controversia')}`,
+      },
+      aiCards: {
+        name: 'Tarjetas con IA',
+        goal: (n: number) =>
+          `Aprueba ${plural(n, 'tarjeta propuesta', 'tarjetas propuestas')} por la IA`,
+      },
+    },
+    note: 'Las misiones y las ligas no dan XP extra ni predicen tu puntaje del ENARM. Marcan tu avance y salen de tu bitácora.',
+    widgetGo: 'Ver todos los logros',
+    widgetMore: (n: number) => `${n} más`,
+  },
+  // Referidos con mes gratis (Fase P bloque 11)
+  referrals: {
+    title: 'Invita a un compañero',
+    description:
+      'Comparte tu código. Cuando tu referido haga su primer pago confirmado, tú ganas un mes gratis.',
+    needsCloud:
+      'Los referidos necesitan tu cuenta en la nube, porque el mes gratis lo da el servidor. Entra con tu correo para usarlos.',
+    yourCode: 'Tu código',
+    copy: 'Copiar código',
+    copied: 'Código copiado',
+    pending: (n: number) => plural(n, 'referido pendiente', 'referidos pendientes'),
+    completed: (n: number) => plural(n, 'referido concretado', 'referidos concretados'),
+    months: (n: number) => plural(n, 'mes gratis ganado', 'meses gratis ganados'),
+    until: (date: string) => `Tu mes gratis vale hasta el ${date}.`,
+    rule: 'Un referido cuenta cuando hace su primer pago confirmado, no al registrarse.',
+    redeemTitle: 'Tengo un código',
+    redeemLabel: 'Código de quien te invitó',
+    redeem: 'Canjear código',
+    redeemed: 'Listo. Cuando hagas tu primer pago, quien te invitó gana su mes gratis.',
+    alreadyReferred: 'Ya canjeaste el código de quien te invitó.',
+    results: {
+      invalid: 'Ese código no existe. Revísalo.',
+      own: 'No puedes canjear tu propio código.',
+      already: 'Ya canjeaste un código antes.',
+      too_late: 'Ya pasó el tiempo para canjear un código con esta cuenta.',
+      already_paid: 'Ya hiciste un pago, así que no puedes entrar como referido.',
+      failed: 'No pudimos canjear el código. Intenta de nuevo en unos minutos.',
+    },
+    loadFailed: 'No pudimos cargar tus referidos. Intenta de nuevo en unos minutos.',
   },
   insights: insightText,
 } as const;

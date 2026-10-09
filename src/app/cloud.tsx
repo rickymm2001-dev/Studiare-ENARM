@@ -6,11 +6,16 @@ import { readCloudIdentity, recordPrivacyAcceptance } from '@/data/cloud/account
 import { getCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
+import { runSync } from '@/data/sync/runSync';
+import { refreshCloudPlan } from '@/data/payments/cloudPlan';
+import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
 import { PRIVACY_NOTICE_VERSION } from '@/data/usecases/profile';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
 import { usePreferences } from './preferences';
+import { startSyncScheduler, type SyncScheduler } from './syncScheduler';
+import { useSyncStatus } from './syncState';
 
 /** Va dentro de DataProvider. No pinta nada */
 export function CloudBridge() {
@@ -29,9 +34,18 @@ export function CloudBridge() {
     // Un solo vigilante por cuenta. Supabase repite SIGNED_IN al volver a enfocar la pestaña y
     // cada sync no debe reclamar otra vez ni abrir otra revisión
     let guard: { authId: string; handle: DeviceGuard } | null = null;
+    // La sincronización vive mientras viva el vigilante. Si otro dispositivo gana la cuenta o se
+    // cierra la sesión, deja de subir y de bajar en el acto (D-095)
+    let syncing: { authId: string; handle: SyncScheduler } | null = null;
+    const stopSync = () => {
+      syncing?.handle.stop();
+      syncing = null;
+      useSyncStatus.getState().reset();
+    };
     const stopGuard = () => {
       guard?.handle.stop();
       guard = null;
+      stopSync();
     };
     // Mientras la sesión de la nube termina de cerrarse, un SIGNED_IN rezagado no debe volver a abrir
     // el perfil local ni reclamar la cuenta de nuevo. Se apaga cuando llega el SIGNED_OUT
@@ -42,6 +56,7 @@ export function CloudBridge() {
     // navegador (signOutCloud usa alcance local)
     const leaveWith = (state: CloudState) => {
       leaving = true;
+      stopSync();
       setCloud(state);
       forgetDeviceClaim();
       signOut();
@@ -87,6 +102,26 @@ export function CloudBridge() {
         }
         await recordPrivacyAcceptance(cloud, identity.authId, PRIVACY_NOTICE_VERSION);
         await pushLocalAccount(api, cloud, identity.authId, userId);
+        if (stopped() || isLeaving()) return;
+        if (syncing?.authId !== identity.authId) {
+          syncing?.handle.stop();
+          const status = useSyncStatus.getState();
+          const handle = startSyncScheduler({
+            run: async () => {
+              // El plan lo decide el servidor, así que se refleja aquí en cada ciclo (D-096)
+              await refreshCloudPlan(api, cloud, userId);
+              return runSync({
+                api,
+                transport: createSupabaseTransport(cloud),
+                userId,
+                authId: identity.authId,
+              });
+            },
+            report: status.set,
+          });
+          syncing = { authId: identity.authId, handle };
+          status.setSyncNow(() => handle.syncNow());
+        }
       } catch {
         if (!stopped()) setCloud({ status: 'error' });
       }

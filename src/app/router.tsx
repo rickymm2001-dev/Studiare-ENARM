@@ -12,8 +12,17 @@ import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { OutlinesScreen } from '@/features/outlines/OutlinesScreen';
 import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
+import { AdminSettingsScreen } from '@/features/admin/AdminSettingsScreen';
+import { AiCostsScreen } from '@/features/admin/AiCostsScreen';
+import { DemoDataScreen } from '@/features/admin/DemoDataScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
+import { RewardsScreen } from '@/features/rewards/RewardsScreen';
+import { AgreementScreen } from '@/features/physician/AgreementScreen';
+import { AiDraftsScreen } from '@/features/physician/AiDraftsScreen';
+import { BankImportScreen } from '@/features/physician/BankImportScreen';
 import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
+import { QuestionEditorScreen } from '@/features/physician/QuestionEditorScreen';
+import { ReportsScreen } from '@/features/physician/ReportsScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
@@ -46,11 +55,20 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   tutor: TutorScreen,
   subscription: SubscriptionScreen,
   party: PartyScreen,
+  rewards: RewardsScreen,
   profile: ProfileScreen,
   progress: ProgressScreen,
   settings: SettingsScreen,
   adminUsers: AdminUsersScreen,
+  aiCosts: AiCostsScreen,
+  demoData: DemoDataScreen,
+  adminSettings: AdminSettingsScreen,
   questionBank: QuestionBankScreen,
+  agreement: AgreementScreen,
+  questionEditor: QuestionEditorScreen,
+  contentReports: ReportsScreen,
+  aiDrafts: AiDraftsScreen,
+  bankImport: BankImportScreen,
   roleSelector: RoleSelectorScreen,
 };
 

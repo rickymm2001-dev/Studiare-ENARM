@@ -32,6 +32,7 @@ import type {
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent } from '../schemas/events';
 import type { Outline } from '../schemas/outlines';
+import type { SyncState } from '../schemas/sync';
 import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import { normalizeTags } from '../../engines/tagPath';
 import { DATABASE_NAMES, type DatabaseKind } from '../databases';
@@ -49,6 +50,7 @@ export interface EnarmTables {
   notes: StrictTable<Note, 'id'>;
   cards: StrictTable<Card, 'id'>;
   outlines: StrictTable<Outline, 'id'>;
+  syncState: StrictTable<SyncState, 'userId'>;
   cases: StrictTable<ClinicalCase, 'id'>;
   questions: StrictTable<Question, 'id'>;
   options: StrictTable<Option, 'id'>;
@@ -87,8 +89,9 @@ export class ImmutableEventError extends Error {
 // 2 agrega accounts (D-068) y 3 agrega reviewAssignments (D-070). Dexie crea las tablas nuevas sin
 // tocar los datos. 4 apaga una vez la pregunta de confianza previa (D-087). 5 agrega el índice del
 // mazo padre y llena las fechas de modificación y las etiquetas sin espacios (D-085). 6 agrega la tabla
-// de apuntes y el índice outlineId de las notas (D-092). Solo suma, no toca ningún dato que ya exista
-export const DB_VERSION = 6;
+// de apuntes y el índice outlineId de las notas (D-092). 7 agrega syncState, el avance de la
+// sincronización entre dispositivos (D-095). Las dos solo suman y Dexie las crea sin tocar los datos
+export const DB_VERSION = 7;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {
   const db = new Dexie(options?.name ?? DATABASE_NAMES[kind]) as EnarmDb;
@@ -131,8 +134,8 @@ export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): 
           card.updatedAt ??= card.createdAt;
         });
     });
-  // Sin función de migración. Dexie crea la tabla outlines y el índice outlineId, y las notas que ya
-  // existen quedan como estaban, sin apunte, que es lo que son
+  // Las versiones 6 y 7 no llevan función de migración. Dexie crea las tablas y los índices nuevos y
+  // lo que ya existe queda como estaba
   db.version(DB_VERSION).stores(storesFor(kind));
   db.use({
     stack: 'dbcore',

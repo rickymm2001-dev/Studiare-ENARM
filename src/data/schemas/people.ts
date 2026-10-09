@@ -171,8 +171,13 @@ export const SubscriptionSchema = z.strictObject({
   userId: IdSchema,
   plan: z.enum(['free', 'founder', 'monthly', 'annual']),
   status: z.enum(['none', 'active', 'canceled']),
-  /** Todo pago del prototipo es simulado (3.2) */
-  isSimulated: z.literal(true),
+  /**
+   * true en el pago simulado local (3.2). false cuando el plan viene de la nube, ya verificado por el
+   * servidor con el aviso de la pasarela (Fase P bloque 5, D-096)
+   */
+  isSimulated: z.boolean(),
+  /** Hasta cuándo vale el plan que dio el servidor. Ausente en el simulado local */
+  periodEnd: UtcDateTimeSchema.nullable().optional(),
   updatedAt: UtcDateTimeSchema,
 });
 export type Subscription = z.infer<typeof SubscriptionSchema>;

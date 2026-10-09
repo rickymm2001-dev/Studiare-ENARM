@@ -19,11 +19,13 @@ export default defineConfig({
     include: [
       'src/**/*.test.{ts,tsx}',
       'server/**/*.test.ts',
+      'supabase/functions/**/*.test.ts',
       'tests/security/**/*.test.ts',
       'tests/architecture/**/*.test.ts',
       'tests/recovery/**/*.test.ts',
       'tests/demo/**/*.test.ts',
       'tests/content/**/*.test.ts',
+      'tests/integration/**/*.test.ts',
     ],
     setupFiles: ['./tests/setup/vitest.setup.ts'],
     restoreMocks: true,

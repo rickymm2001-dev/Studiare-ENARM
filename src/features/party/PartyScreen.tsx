@@ -28,6 +28,7 @@ import { reservedByStoredExam } from '../exam/examStorage';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { ReferralCard } from './ReferralCard';
 import { AchievementShare } from './AchievementShare';
 import { ChallengeRow } from './ChallengeRow';
 import { DuelRow } from './DuelRow';
@@ -107,6 +108,7 @@ function Party({ session }: { session: ReadySession }) {
         <CreateGroupCard session={session} first={myGroups.length === 0} />
         <JoinGroupCard session={session} />
       </div>
+      <ReferralCard />
     </>
   );
 }

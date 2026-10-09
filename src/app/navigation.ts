@@ -16,6 +16,7 @@ import {
   Scale,
   Settings,
   SlidersHorizontal,
+  Trophy,
   UserRound,
   Users,
   type LucideIcon,
@@ -65,6 +66,7 @@ const studentNav: readonly NavItem[] = [
   { path: screenPath('planner'), label: t.navItems.planner, icon: CalendarDays, railOnly: true },
   { path: screenPath('tutor'), label: t.navItems.tutor, icon: GraduationCap, railOnly: true },
   { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper, railOnly: true },
+  { path: screenPath('rewards'), label: t.navItems.rewards, icon: Trophy, railOnly: true },
   profile,
   settingsItem,
 ];

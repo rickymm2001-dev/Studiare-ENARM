@@ -33,6 +33,7 @@ import {
 import { CardSchema, DeckSchema, NoteSchema } from '../schemas/decks';
 import { AppEventSchema } from '../schemas/events';
 import { OutlineSchema } from '../schemas/outlines';
+import { SyncStateSchema } from '../schemas/sync';
 import {
   AccountSchema,
   ConsentSchema,
@@ -64,6 +65,8 @@ export const TABLES = {
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
   // Apuntes en esquema (Fase C2, Etapa 3). Sus líneas con marca son notas y tarjetas
   outlines: { schema: OutlineSchema, indexes: 'id, ownerId, deckId, updatedAt', kind: 'entity' },
+  // Hasta dónde llegó la sincronización entre dispositivos en este navegador (D-095)
+  syncState: { schema: SyncStateSchema, indexes: 'userId', kind: 'entity' },
 
   cases: { schema: ClinicalCaseSchema, indexes: 'id', kind: 'entity' },
   questions: {

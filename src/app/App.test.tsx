@@ -24,12 +24,12 @@ afterEach(() => {
 });
 
 describe('rutas', () => {
-  it('registra las 26 pantallas de la sección 10 más Configuración, Usuarios, Explorar y Apuntes con rutas únicas', () => {
-    expect(SCREEN_KEYS).toHaveLength(30);
+  it('registra las 26 pantallas de la sección 10 más Configuración, Usuarios, Explorar, Apuntes y Logros con rutas únicas', () => {
+    expect(SCREEN_KEYS).toHaveLength(31);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(30);
+    expect(new Set(paths).size).toBe(31);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number).sort((a, b) => a - b);
-    expect(numbers).toEqual(Array.from({ length: 30 }, (_, index) => index + 1));
+    expect(numbers).toEqual(Array.from({ length: 31 }, (_, index) => index + 1));
   });
 
   it('sin sesión la raíz es la portada de venta, sin navegación (D-068)', async () => {
@@ -38,16 +38,17 @@ describe('rutas', () => {
     expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
   });
 
-  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
+  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party, Logros y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
     const items = nav.querySelectorAll('li');
-    expect(items).toHaveLength(9);
+    expect(items).toHaveLength(10);
     expect([...items].filter((item) => !item.className.includes('hidden'))).toHaveLength(5);
-    expect(items[8]).toHaveTextContent(t.navItems.settings);
+    expect(items[9]).toHaveTextContent(t.navItems.settings);
+    expect(nav).toHaveTextContent(t.navItems.rewards);
     expect(nav).toHaveTextContent(t.navItems.planner);
     expect(nav).toHaveTextContent(t.navItems.tutor);
     // Mazos ya no es una sección aparte, es una pestaña de Repasar

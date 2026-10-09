@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  AI_CARDS_PER_DAY_PAID,
   canUseFeature,
   FOUNDER_SEATS,
   GATED_FEATURES,
@@ -41,9 +42,18 @@ describe('planes y precios', () => {
 });
 
 describe('banderas de acceso por función de carga diaria', () => {
-  it('hoy todas las funciones están abiertas en todos los planes', () => {
+  it('todas las funciones están abiertas en todos los planes, menos las tarjetas con IA, que son de pago', () => {
     for (const key of Object.keys(PLANS) as PlanKey[]) {
-      for (const feature of GATED_FEATURES) expect(canUseFeature(key, feature)).toBe(true);
+      for (const feature of GATED_FEATURES) {
+        expect(canUseFeature(key, feature)).toBe(feature === 'aiCards' ? key !== 'free' : true);
+      }
+    }
+  });
+
+  it('el plan Gratis no genera tarjetas con IA y los de pago tienen un tope diario', () => {
+    expect(PLANS.free.aiCardsPerDay).toBe(0);
+    for (const key of ['founder', 'monthly', 'annual'] as const) {
+      expect(PLANS[key].aiCardsPerDay).toBe(AI_CARDS_PER_DAY_PAID);
     }
   });
 

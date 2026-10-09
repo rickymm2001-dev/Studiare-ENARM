@@ -64,6 +64,10 @@ export interface FakeCloud {
   checks: number;
   filters: [column: string, value: unknown][];
   signOuts: unknown[];
+  /** Nombre de cada función de la base que se llamó con rpc, en orden */
+  rpcCalls: string[];
+  /** ok responde a las funciones de sincronización como el servidor. off las trata como inexistentes */
+  sync: 'off' | 'ok';
   /** Cuánto tarda signOut en quitar la sesión y avisar SIGNED_OUT, como la red de verdad */
   signOutDelay: number;
   /** Dispara un evento de Supabase Auth como si hubiera pasado en el navegador */
@@ -90,6 +94,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     checks: 0,
     filters: [],
     signOuts: [],
+    rpcCalls: [],
+    sync: 'off',
     signOutDelay: 0,
     emit: (event) => {
       listeners.forEach((listener) => {
@@ -120,6 +126,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         if (name === 'device_sessions') fake.filters.push([column, value]);
         return chain;
       },
+      gt: () => chain,
+      order: () => chain,
       limit: () => chain,
       update: () => chain,
       insert: () => chain,
@@ -168,6 +176,13 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     },
     from: table,
     rpc: (name: string, args: { p_device_id: string; p_label: string }) => {
+      fake.rpcCalls.push(name);
+      if (name.startsWith('sync_') && fake.sync === 'ok') {
+        return Promise.resolve({
+          data: name === 'sync_clock' ? new Date().toISOString() : 0,
+          error: null,
+        });
+      }
       if (name === 'log_rejected_claim') {
         if (fake.failReport === 'hang') return new Promise(() => undefined);
         return Promise.resolve(

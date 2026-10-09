@@ -17,8 +17,10 @@ import { LoadingState } from '@/ui/states/states';
 import { useSession } from '@/app/session';
 import { LandingScreen } from '../landing/LandingScreen';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import { useUserEvents } from '../shared/useUserEvents';
 import { PartyWidget } from '../party/PartyWidget';
+import { BadgesWidget, LeagueWidget, MissionsWidget } from '../rewards/RewardWidgets';
 import {
   addWidget,
   ALL_WIDGETS,
@@ -66,6 +68,9 @@ function Dashboard({ session }: { session: ReadySession }) {
   }, [api.repos, session.isDemo, session.user.id, session.settings.followedDecks.join(',')]);
   const [editing, setEditing] = useState(false);
   const [toAdd, setToAdd] = useState<WidgetType>('heatmap');
+  const vocabulary = useBiasVocabulary();
+  const widgetName = (type: WidgetType) =>
+    type === 'bias_pattern' ? t.vocabulary[vocabulary].patternWidget : t.widgets.names[type];
 
   if (events === undefined || stored === undefined || cards === undefined) return <LoadingState />;
   const saved: WidgetLayout = stored ?? layoutFromPreset(user.id, 'essential');
@@ -129,7 +134,7 @@ function Dashboard({ session }: { session: ReadySession }) {
                 className="flex-1"
                 label={t.home.addLabel}
                 value={toAdd}
-                options={ALL_WIDGETS.map((type) => ({ value: type, label: t.widgets.names[type] }))}
+                options={ALL_WIDGETS.map((type) => ({ value: type, label: widgetName(type) }))}
                 onChange={(event) => {
                   setToAdd(event.target.value as WidgetType);
                 }}
@@ -153,7 +158,7 @@ function Dashboard({ session }: { session: ReadySession }) {
         {layout.widgets.map((widget, index) => (
           <WidgetFrame
             key={widget.id}
-            name={t.widgets.names[widget.type]}
+            name={widgetName(widget.type)}
             className={cn(
               widgetSpan(widget.type, editing),
               DARK_WIDGETS.has(widget.type) && DARK_CARD,
@@ -233,6 +238,12 @@ function WidgetBody({
       return <FutureLoadWidget session={session} events={events} settings={settings} />;
     case 'latest_hypothesis':
       return <LatestHypothesisWidget session={session} events={events} settings={settings} />;
+    case 'missions':
+      return <MissionsWidget session={session} />;
+    case 'league':
+      return <LeagueWidget session={session} />;
+    case 'badges':
+      return <BadgesWidget session={session} />;
     default:
       // El Pomodoro y la cuenta regresiva ya no son widgets y el tablero los filtra
       return null;

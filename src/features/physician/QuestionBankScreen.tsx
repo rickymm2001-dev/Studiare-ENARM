@@ -1,18 +1,20 @@
 // Banco de preguntas (pantalla 17). Primera versión (D-070). El médico ve solo las preguntas que un
 // admin le asignó. El admin y el dueño ven todo el banco con a quién está asignada cada pregunta.
 // Búsqueda, filtros por rama, subespecialidad y estado, y páginas de 25 (D-076). El editor con
-// versiones, etiquetas y decisiones llega en la Fase E.
-import { useEffect, useState } from 'react';
+// versiones, etiquetas y decisiones vive en la pantalla 18 (Fase E) y se abre con Editar.
+import { useState } from 'react';
+import { Link } from 'react-router';
+import { SCREENS } from '@/app/screens';
 import { usePreferences } from '@/app/preferences';
 import { BadgeCheck, FilePen, Hourglass } from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useSession } from '@/app/session';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import { ensureDemoBank } from '@/data/usecases/bank';
 import type { Question } from '@/data/schemas/bank';
-import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
+import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
+import { useBankReady } from '../shared/useBankReady';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -21,6 +23,7 @@ import { SelectField, TextField } from '@/ui/components/field';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { EmptyState, LoadingState } from '@/ui/states/states';
+import { QuestionPreview } from './QuestionPreview';
 
 const topicName = new Map(
   topicTaxonomy.branches.flatMap((branch) =>
@@ -29,19 +32,13 @@ const topicName = new Map(
 );
 
 const branchName = new Map(topicTaxonomy.branches.map((branch) => [branch.key, branch.name]));
-const biasName = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias.name]));
 
 export function QuestionBankScreen() {
   const api = useDataApi();
   const role = usePreferences((state) => state.role);
   const session = useSession();
   const me = session.status === 'ready' ? session.user.id : null;
-  const [bankReady, setBankReady] = useState(false);
-  useEffect(() => {
-    void ensureDemoBank(api).then(() => {
-      setBankReady(true);
-    });
-  }, [api]);
+  const bankReady = useBankReady();
   const data = useLiveData(async () => {
     const [questions, assignments, users] = await Promise.all([
       api.repos.questions.listLatest(),
@@ -56,6 +53,11 @@ export function QuestionBankScreen() {
       title={t.screens.questionBank.title}
       description={role === 'physician' ? t.bank.physicianHint : t.bank.adminHint}
       badges={<DemoContentLabel />}
+      actions={
+        <Button asChild variant="secondary" size="sm">
+          <Link to={SCREENS.bankImport.path}>{t.bank.importBank}</Link>
+        </Button>
+      }
     />
   );
   // Espera a que el banco termine de guardarse, así las asignaciones lo ven completo
@@ -243,7 +245,7 @@ function BankList({
                   ) : null}
                 </span>
               </summary>
-              <QuestionDetail question={question} />
+              <QuestionPreview question={question} />
             </details>
           </li>
         ))}
@@ -274,34 +276,5 @@ function BankList({
         </nav>
       ) : null}
     </Card>
-  );
-}
-
-function QuestionDetail({ question }: { question: Question }) {
-  const api = useDataApi();
-  const options = useLiveData(
-    () => api.repos.options.listForQuestionVersion(question.id),
-    [api.repos, question.id],
-  );
-  return (
-    <div className="mt-2 flex flex-col gap-2 rounded-md bg-muted p-3 text-sm">
-      {question.vignette ? <p>{question.vignette}</p> : null}
-      <ol className="flex flex-col gap-1">
-        {(options ?? []).map((option) => (
-          <li
-            key={option.id}
-            className={option.isCorrect ? 'font-semibold text-success' : undefined}
-          >
-            {option.text}
-            {option.biasTag ? (
-              <span className="ml-2 text-xs text-fg-muted">
-                ({biasName.get(option.biasTag) ?? option.biasTag})
-              </span>
-            ) : null}
-          </li>
-        ))}
-      </ol>
-      <p className="text-fg-muted">{question.explanation}</p>
-    </div>
   );
 }

@@ -1243,7 +1243,7 @@ describe('exportar los datos', () => {
     await start(api, makeUser(), 'De otro');
     await saveOutline(api, user, { outlineId: mine.id, nodes: [line('Dato >> Valor')] }, at(2));
     const data = await exportUserData(api.repos, user.id);
-    expect(data.outlines.map((outline: Outline) => outline.title)).toEqual(['Mío']);
-    expect(data.outlines[0]?.nodes).toHaveLength(1);
+    expect(data.content.outlines.map((outline: Outline) => outline.title)).toEqual(['Mío']);
+    expect(data.content.outlines[0]?.nodes).toHaveLength(1);
   });
 });

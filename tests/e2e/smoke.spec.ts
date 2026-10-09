@@ -62,19 +62,24 @@ test('navega con la barra inferior entre las 5 secciones', async ({ page }) => {
   }
 });
 
-// Los estados reutilizables se ven en las pantallas que todavía son esqueleto. Hoy la más lejana es
-// la del importador del banco. Cuando se construya, esta prueba pasa a la siguiente pantalla
-test('cada estado reutilizable se ve y pasa axe', async ({ page }) => {
+// Ya no queda ninguna pantalla en esqueleto, así que los estados reutilizables se comprueban donde
+// de verdad aparecen. El estado vacío en la bandeja de reportes y calibrando en el acuerdo del
+// etiquetado, los dos con axe. Cargando, error y sin conexión se prueban en states.test.tsx
+test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', async ({ page }) => {
   await presetPreferences(page, { role: 'admin' });
-  for (const state of ['vacio', 'cargando', 'error', 'sin-conexion', 'calibrando']) {
-    await page.goto(`${SCREENS.bankImport.path}?estado=${state}`);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.bankImport.title);
-    await expectNoSeriousA11yViolations(page);
-  }
+  await page.goto(SCREENS.contentReports.path);
   await expect(
-    page.getByText(t.states.calibrating.remaining(28, t.states.exampleUnit)),
+    page.getByRole('heading', { level: 1, name: t.screens.contentReports.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.labels.simulatedData)).toBeVisible();
+  await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible({ timeout: 60_000 });
+  await expectNoSeriousA11yViolations(page);
+
+  await page.goto(SCREENS.agreement.path);
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.agreement.title }),
+  ).toBeVisible();
+  await expect(page.getByText(t.agreementScreen.vocabulary.title)).toBeVisible({ timeout: 60_000 });
+  await expectNoSeriousA11yViolations(page);
 });
 
 test('el tema oscuro se aplica y se recuerda al recargar', async ({ page }) => {

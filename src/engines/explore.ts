@@ -25,6 +25,16 @@ export interface ExploreSource {
   createdAt: string;
   updatedAt: string;
   state: FsrsCardState | null;
+  /** Señal de controversia que puso la IA, o null */
+  controversy?: ExploreControversy | null;
+  /** La propuso la IA a partir de un texto del alumno y sigue en borrador */
+  aiDraft?: boolean;
+}
+
+export interface ExploreControversy {
+  reason: string;
+  sources: readonly { key: string; locator: string | null }[];
+  simulated: boolean;
 }
 
 export interface ExploreRow {
@@ -46,6 +56,8 @@ export interface ExploreRow {
   lapses: number;
   suspended: boolean;
   leech: boolean;
+  controversy: ExploreControversy | null;
+  aiDraft: boolean;
   /** Texto en minúsculas y sin acentos, donde se busca */
   search: string;
 }
@@ -92,6 +104,8 @@ export function buildExploreRows(
       lapses,
       suspended: suspended.has(source.cardId),
       leech: lapses >= leechLapses,
+      controversy: source.controversy ?? null,
+      aiDraft: source.aiDraft ?? false,
       search: foldText(`${front} ${back} ${source.tags.join(' ')}`),
     };
   });
