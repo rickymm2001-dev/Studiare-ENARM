@@ -1,5 +1,6 @@
 // Panel del médico de la Fase E. Pantalla 19, acuerdo del etiquetado. Sin etiquetas mide nada y dice
 // que el alumno ve trampas. El médico sin preguntas asignadas no tiene cola y el admin no etiqueta.
+// Pantalla 18, editor de pregunta con versiones.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
@@ -38,4 +39,39 @@ test('acuerdo del etiquetado. El admin ve el tablero y no etiqueta', async ({ pa
   await expect(queue.getByText(text.queue.adminNote)).toBeVisible();
   await expect(queue.getByRole('combobox')).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
+});
+
+test('editor de pregunta. Se abre desde el banco, guarda una versión nueva y la lista en el historial', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.questionBank.path);
+  const list = page.getByRole('region', { name: t.bank.listTitle });
+  const first = list.getByRole('listitem').first();
+  await expect(first).toBeVisible({ timeout: 90_000 });
+  await first.locator('summary').click();
+  await first.getByRole('link', { name: t.questionEditor.edit }).click();
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.questionEditor.title }),
+  ).toBeVisible();
+  const explanation = page.getByLabel(t.questionEditor.meta.explanation, { exact: true });
+  await expect(explanation).toBeVisible({ timeout: 60_000 });
+  await expectNoSeriousA11yViolations(page);
+
+  await explanation.fill('Explicación revisada en la prueba de punta a punta.');
+  await page.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(page.getByText(t.questionEditor.save.saved)).toBeVisible();
+  const history = page.getByRole('region', { name: t.questionEditor.sections.history });
+  await expect(history.getByText(t.questionEditor.status.version(2))).toBeVisible();
+  await expect(
+    history.getByText(
+      t.questionEditor.history.changed([t.questionEditor.history.parts.explanation ?? '']),
+    ),
+  ).toBeVisible();
+  await expect(page.getByLabel(t.questionEditor.meta.explanation, { exact: true })).toHaveValue(
+    'Explicación revisada en la prueba de punta a punta.',
+  );
 });

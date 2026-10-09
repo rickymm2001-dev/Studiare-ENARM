@@ -1,8 +1,11 @@
 // Banco de preguntas (pantalla 17). Primera versión (D-070). El médico ve solo las preguntas que un
 // admin le asignó. El admin y el dueño ven todo el banco con a quién está asignada cada pregunta.
 // Búsqueda, filtros por rama, subespecialidad y estado, y páginas de 25 (D-076). El editor con
-// versiones, etiquetas y decisiones llega en la Fase E.
+// versiones, etiquetas y decisiones vive en la pantalla 18 (Fase E) y se abre con Editar.
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { Pencil } from 'lucide-react';
+import { SCREENS } from '@/app/screens';
 import { usePreferences } from '@/app/preferences';
 import { BadgeCheck, FilePen, Hourglass } from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -302,6 +305,14 @@ function QuestionDetail({ question }: { question: Question }) {
         ))}
       </ol>
       <p className="text-fg-muted">{question.explanation}</p>
+      <div>
+        <Button asChild variant="secondary" size="sm">
+          <Link to={`${SCREENS.questionEditor.path}?pregunta=${question.questionId}`}>
+            <Pencil aria-hidden />
+            {t.questionEditor.edit}
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }
