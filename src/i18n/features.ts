@@ -2,6 +2,7 @@
 // Se integran en t desde es-MX.ts.
 import { deviceLimitText } from './device';
 import { insightText } from './insights';
+import { legalText } from './legal';
 
 export const branchNames: Record<string, string> = {
   internal_medicine: 'Medicina interna',
@@ -57,10 +58,9 @@ export const featureText = {
     goalMetric: 'Meta diaria para tu racha',
     goalValue: 'Cantidad',
     goalMetrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de estudio' },
-    privacyTitle: 'Aviso de privacidad (simulado)',
-    privacyBody:
-      'Un solo aviso cubre todo. Usamos tus datos para darte tu plan de estudio, tus estadísticas y el análisis de tus respuestas con IA, para mostrar tu alias, XP, nivel y racha en los grupos a los que te unas, y para mejorar la plataforma con datos sin tu identidad. A la IA solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo. Puedes exportar o borrar tus datos cuando quieras. Este aviso es un ejemplo del prototipo.',
-    privacyAccept: 'Leí y acepto el aviso de privacidad',
+    privacyTitle: 'Aviso de privacidad y términos',
+    privacyBody: legalText.onboarding.summary,
+    privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
     consentsTitle: 'Consentimientos por finalidad',
     consentsDescription: 'Son opcionales y los puedes cambiar en Perfil.',

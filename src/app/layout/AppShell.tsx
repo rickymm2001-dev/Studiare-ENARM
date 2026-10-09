@@ -30,9 +30,11 @@ export function AppShell() {
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const { pathname } = useLocation();
   const session = useSession();
+  // Sin sesión, el aviso de privacidad y los términos también van sin navegación
+  const legal = pathname === screenPath('privacyNotice') || pathname === screenPath('terms');
   const bare =
     pathname === screenPath('onboarding') ||
-    (pathname === screenPath('home') && session.status === 'signed-out');
+    ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
   const rail = bare ? '' : 'lg:pl-rail';
 
   return (

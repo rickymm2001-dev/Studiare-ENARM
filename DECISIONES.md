@@ -1017,3 +1017,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Dos códigos de error nuevos en el contrato de la IA. unauthorized y plan_required. El mensaje del servidor llega tal cual al alumno
 - Borrar mis datos quita el uso anterior y la bitácora de IA, pero conserva el uso de hoy, para que no sirva de truco contra el límite diario
 - Pendiente con Ricardo. Elegir alojamiento y poner las variables de docs/IA_ALOJADA.md, aplicar la sexta migración, poner VITE_AI_URL en GitHub y correr npm run eval-ai con la clave para medir el costo real
+
+### D-104. Aviso de privacidad y términos como páginas de la app
+- Fecha 2026-10-10. Origen C, Fase G bloque G2. Hacía falta un aviso real y unos términos antes de abrir a alumnos de pago, y el aviso que había era un ejemplo marcado como simulado
+- Qué hay. Dos páginas públicas, /privacidad y /terminos, que se leen sin sesión y se enlazan desde la portada, desde la bienvenida y desde Configuración, Privacidad. Siempre dicen arriba que son un borrador pendiente de revisión de un abogado
+- Un solo texto. Vive en src/i18n/legal.ts y sirve a la página y al archivo para el abogado. npm run legal:export lo escribe en docs/legal, y una prueba falla si el archivo se queda atrás
+- El responsable. Su nombre o razón social, su domicilio y su correo vienen de VITE_LEGAL_NAME, VITE_LEGAL_ADDRESS y VITE_SUPPORT_EMAIL, que son públicos por diseño. Sin ellos el texto dice pendiente de completar y no inventa nada. Lo mismo con la política de reembolsos y los tribunales competentes
+- El texto dice solo lo que la plataforma hace. A la IA viajan IDs seudónimos y texto del banco. No hay chat libre ni predicción del puntaje. Retirar la mejora anónima borra el puntaje oficial. Los datos de tarjeta nunca los ve la plataforma. El borrado quita la copia de la nube
+- La versión del aviso pasó a ser 2026-10-10 y vive en src/config/legal.ts. Es la que se guarda al aceptar. Quien ya aceptó la anterior seguirá con ella guardada, y todavía no hay una pantalla que pida aceptar la nueva
+- Edad mínima de 18 años, como supuesto que el abogado debe confirmar
+- Pendiente con Ricardo. Decidir el responsable, el domicilio y el correo de privacidad, pasar los textos a un abogado, definir reembolsos y tribunales, y poner las variables en GitHub

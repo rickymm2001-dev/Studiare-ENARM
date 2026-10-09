@@ -29,8 +29,10 @@ for (const key of SCREEN_KEYS) {
     } else {
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
       await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
-      if (key === 'onboarding') await expect(nav).toHaveCount(0);
-      else await expect(nav).toBeVisible();
+      // El aviso de privacidad y los términos también se leen sin sesión y sin navegación (Fase G)
+      if (key === 'onboarding' || key === 'privacyNotice' || key === 'terms') {
+        await expect(nav).toHaveCount(0);
+      } else await expect(nav).toBeVisible();
     }
     await expectNoSeriousA11yViolations(page);
   });

@@ -2,6 +2,7 @@
 // privacidad. Un solo aviso cubre todas las finalidades, por decisión de Ricardo (D-059), y se
 // guarda como aceptación de cada finalidad con la versión del aviso. Sin contraseña, porque el inicio de sesión del prototipo es
 // simulado (3.2). En producción lo reemplaza la cuenta real con la misma interfaz.
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
 import { newId } from '../ids';
@@ -19,8 +20,7 @@ import type { z } from 'zod';
 
 type ConsentPurpose = z.infer<typeof ConsentPurposeSchema>;
 
-/** Versión del aviso de privacidad simulado que acepta el alumno */
-export const PRIVACY_NOTICE_VERSION = '2026-10-01';
+export { PRIVACY_NOTICE_VERSION };
 
 export interface NewProfile {
   alias: string;

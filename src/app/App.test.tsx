@@ -24,12 +24,12 @@ afterEach(() => {
 });
 
 describe('rutas', () => {
-  it('registra las 26 pantallas de la sección 10 más Configuración, Usuarios, Explorar, Apuntes y Logros con rutas únicas', () => {
-    expect(SCREEN_KEYS).toHaveLength(31);
+  it('registra las 26 pantallas de la sección 10 más Configuración, Usuarios, Explorar, Apuntes, Logros, el aviso de privacidad y los términos con rutas únicas', () => {
+    expect(SCREEN_KEYS).toHaveLength(33);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(31);
+    expect(new Set(paths).size).toBe(33);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number).sort((a, b) => a - b);
-    expect(numbers).toEqual(Array.from({ length: 31 }, (_, index) => index + 1));
+    expect(numbers).toEqual(Array.from({ length: 33 }, (_, index) => index + 1));
   });
 
   it('sin sesión la raíz es la portada de venta, sin navegación (D-068)', async () => {

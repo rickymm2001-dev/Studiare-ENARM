@@ -20,6 +20,7 @@ import {
   type AccountDetails,
 } from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
+import { legalText } from '@/i18n/legal';
 import { celebrate } from '@/ui/celebrate';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -230,6 +231,27 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
             {t.onboarding.privacyTitle}
           </h3>
           <p className="text-sm text-fg-muted">{t.onboarding.privacyBody}</p>
+          {/* Se abren en otra pestaña para no perder lo que ya escribió en el formulario */}
+          <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+            <Link
+              to={screenPath('privacyNotice')}
+              target="_blank"
+              rel="noopener"
+              className="underline underline-offset-4"
+            >
+              {legalText.onboarding.read}
+              <span className="sr-only"> ({legalText.onboarding.newTab})</span>
+            </Link>
+            <Link
+              to={screenPath('terms')}
+              target="_blank"
+              rel="noopener"
+              className="underline underline-offset-4"
+            >
+              {legalText.onboarding.readTerms}
+              <span className="sr-only"> ({legalText.onboarding.newTab})</span>
+            </Link>
+          </p>
           <CheckboxField
             label={t.onboarding.privacyAccept}
             checked={privacy}

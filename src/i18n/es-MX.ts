@@ -149,6 +149,15 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Configuración',
     description: 'Umbrales, pesos del ENARM, precios y modelos por motor.',
   },
+  privacyNotice: {
+    title: 'Aviso de privacidad',
+    description:
+      'Quién trata tus datos, para qué, con quién se comparten y cómo ejerces tus derechos.',
+  },
+  terms: {
+    title: 'Términos y condiciones',
+    description: 'Las reglas para usar Studiare, tus planes y tus pagos.',
+  },
   roleSelector: {
     title: 'Cambiar de rol',
     description:

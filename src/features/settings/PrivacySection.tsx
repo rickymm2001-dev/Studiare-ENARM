@@ -2,6 +2,8 @@
 // consentimiento cuando quiera, y guarda de forma voluntaria su puntaje oficial del ENARM, que solo
 // se admite con el permiso de mejora anónima y se borra al retirarlo.
 import { useState, type SyntheticEvent } from 'react';
+import { Link } from 'react-router';
+import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { ConsentPurposeSchema } from '@/data/schemas/common';
@@ -13,6 +15,7 @@ import {
 } from '@/data/usecases/privacy';
 import { currentConsents } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
+import { legalText } from '@/i18n/legal';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, TextField } from '@/ui/components/field';
@@ -86,6 +89,14 @@ function ConsentsCard({ session }: { session: ReadySession }) {
       </fieldset>
       <p role="status" className="text-sm text-fg-muted">
         {status}
+      </p>
+      <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+        <Link to={screenPath('privacyNotice')} className="underline underline-offset-4">
+          {legalText.links.privacy}
+        </Link>
+        <Link to={screenPath('terms')} className="underline underline-offset-4">
+          {legalText.links.terms}
+        </Link>
       </p>
     </Card>
   );
