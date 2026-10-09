@@ -1,9 +1,15 @@
 // Panel del médico de la Fase E. Pantalla 19, acuerdo del etiquetado. Sin etiquetas mide nada y dice
 // que el alumno ve trampas. El médico sin preguntas asignadas no tiene cola y el admin no etiqueta.
-// Pantalla 18, editor de pregunta con versiones.
+// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import {
+  answerPracticeQuestion,
+  expect,
+  expectNoSeriousA11yViolations,
+  signUp,
+  test,
+} from './support/fixtures';
 import type { Page } from '@playwright/test';
 
 const text = t.agreementScreen;
@@ -74,4 +80,41 @@ test('editor de pregunta. Se abre desde el banco, guarda una versión nueva y la
   await expect(page.getByLabel(t.questionEditor.meta.explanation, { exact: true })).toHaveValue(
     'Explicación revisada en la prueba de punta a punta.',
   );
+});
+
+test('reportes. El alumno reporta un error y desde la bandeja se resuelve', async ({ page }) => {
+  test.setTimeout(240_000);
+  await signUp(page);
+  await page.goto(SCREENS.simulatorSetup.path);
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const start = practice.getByRole('button', { name: t.simulator.start });
+  await expect(start).toBeEnabled({ timeout: 90_000 });
+  await start.click();
+  for (let index = 1; index <= 5; index += 1) await answerPracticeQuestion(page, index, 5);
+
+  // Reporta desde la revisión del resumen
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
+  const answers = page.getByRole('region', { name: t.simulator.review });
+  const row = answers
+    .getByRole('listitem')
+    .filter({ has: page.locator('details') })
+    .first();
+  if ((await row.locator(':scope > details').getAttribute('open')) === null) {
+    await row.locator('summary').first().click();
+  }
+  await row.locator('summary', { hasText: t.simulator.report }).click();
+  await row.getByRole('button', { name: t.simulator.sendReport }).click();
+  await expect(row.getByText(t.simulator.reported)).toBeVisible();
+
+  // El reporte llega a la bandeja y se resuelve
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.contentReports.path);
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.contentReports.title }),
+  ).toBeVisible();
+  await expect(page.getByText(t.reportsScreen.group.open(1))).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+  await page.getByRole('button', { name: t.reportsScreen.row.resolve }).click();
+  await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible();
 });

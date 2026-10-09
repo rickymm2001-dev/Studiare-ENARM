@@ -20,6 +20,7 @@ import { RewardsScreen } from '@/features/rewards/RewardsScreen';
 import { AgreementScreen } from '@/features/physician/AgreementScreen';
 import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
 import { QuestionEditorScreen } from '@/features/physician/QuestionEditorScreen';
+import { ReportsScreen } from '@/features/physician/ReportsScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
@@ -63,6 +64,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   questionBank: QuestionBankScreen,
   agreement: AgreementScreen,
   questionEditor: QuestionEditorScreen,
+  contentReports: ReportsScreen,
   roleSelector: RoleSelectorScreen,
 };
 

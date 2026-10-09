@@ -6,8 +6,8 @@ import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
-import { newId } from '@/data/ids';
 import type { ContentReport } from '@/data/schemas/bank';
+import { submitContentReport } from '@/data/usecases/contentReports';
 import { biasTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -65,23 +65,22 @@ export function AnswerReview({
   };
 
   const submitReport = async () => {
-    const report = await api.repos.contentReports.put({
-      id: newId(),
+    const { report, created } = await submitContentReport(api, {
       reporterId: session.user.id,
       targetKind: 'question',
       targetId: question.id,
       reason,
-      status: 'open',
-      createdAt: new Date().toISOString(),
-      resolvedAt: null,
     });
-    await api.recordEvent(
-      createEvent(
-        'report_submitted',
-        { reportId: report.id, targetKind: 'question', targetId: question.id, reason },
-        ctx,
-      ),
-    );
+    // Un reporte repetido mientras el primero sigue abierto no suma otro evento
+    if (created) {
+      await api.recordEvent(
+        createEvent(
+          'report_submitted',
+          { reportId: report.id, targetKind: 'question', targetId: question.id, reason },
+          ctx,
+        ),
+      );
+    }
     setReported(true);
   };
 

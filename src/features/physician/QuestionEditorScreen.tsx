@@ -3,7 +3,7 @@
 // e historial de versiones. Cada guardado crea una versión nueva en borrador y las anteriores no
 // cambian (6.1). El médico edita solo lo que le asignaron y, si la pregunta está en el doble
 // etiquetado, primero etiqueta a ciegas (7.11).
-import { useEffect, useMemo, useState, type SyntheticEvent } from 'react';
+import { useMemo, useState, type SyntheticEvent } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { usePreferences } from '@/app/preferences';
@@ -13,11 +13,11 @@ import { useSession } from '@/app/session';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Question } from '@/data/schemas/bank';
-import { ensureDemoBank } from '@/data/usecases/bank';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { analyzeStructure } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
+import { useBankReady } from '../shared/useBankReady';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -61,15 +61,10 @@ export function QuestionEditorScreen() {
   const me = session.status === 'ready' ? session.user.id : null;
   const [params] = useSearchParams();
   const questionId = params.get('pregunta');
-  const [bankReady, setBankReady] = useState(false);
+  const bankReady = useBankReady();
   // El aviso vive aquí y no en el formulario, porque al guardar sale una versión y el formulario
   // se vuelve a armar con ella
   const [notice, setNotice] = useState('');
-  useEffect(() => {
-    void ensureDemoBank(api).then(() => {
-      setBankReady(true);
-    });
-  }, [api]);
 
   const data = useLiveData(async () => {
     if (!questionId) return null;

@@ -3,7 +3,7 @@
 // distractores sin ver lo que puso el autor ni otro médico, y kappa dice cuánto coinciden. Con
 // kappa menor a 0.4 o pocos pares, la interfaz del alumno habla de trampas y no de sesgos.
 import { Gauge, ListChecks, Scale, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useSession } from '@/app/session';
@@ -11,9 +11,9 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Option } from '@/data/schemas/bank';
-import { ensureDemoBank } from '@/data/usecases/bank';
 import { removeLabel, saveLabel, TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { t } from '@/i18n/es-MX';
+import { useBankReady } from '../shared/useBankReady';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -35,12 +35,7 @@ export function AgreementScreen() {
   const role = usePreferences((state) => state.role);
   const session = useSession();
   const me = session.status === 'ready' ? session.user.id : null;
-  const [bankReady, setBankReady] = useState(false);
-  useEffect(() => {
-    void ensureDemoBank(api).then(() => {
-      setBankReady(true);
-    });
-  }, [api]);
+  const bankReady = useBankReady();
 
   const data = useLiveData(async () => {
     const [questions, labels, assignments] = await Promise.all([

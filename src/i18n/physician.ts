@@ -254,4 +254,61 @@ export const physicianText = {
     } as Record<string, string>,
     issueAt: (n: number, message: string) => `Opción ${n}. ${message}`,
   },
+
+  reportsScreen: {
+    stats: {
+      label: 'Reportes por estado',
+      open: 'Abiertos',
+      resolved: 'Resueltos',
+      dismissed: 'Descartados',
+    },
+    hintPhysician: 'Errores que los alumnos reportan en las preguntas que te asignaron.',
+    hintAdmin: 'Errores que los alumnos reportan en cualquier pregunta del banco.',
+    filter: {
+      label: 'Qué reportes ver',
+      open: 'Abiertos',
+      resolved: 'Resueltos',
+      dismissed: 'Descartados',
+      all: 'Todos',
+    },
+    empty: {
+      openTitle: 'No hay reportes abiertos',
+      openDescription: 'Cuando un alumno reporte un error en una pregunta, lo verás aquí.',
+      otherTitle: 'No hay reportes en esta vista',
+      otherDescription: 'Cambia el filtro para ver los demás.',
+    },
+    notes: (n: number) =>
+      n === 1
+        ? 'Hay un reporte de un apunte de alumno. Los apuntes son privados y no se revisan aquí.'
+        : `Hay ${num(n)} reportes de apuntes de alumnos. Los apuntes son privados y no se revisan aquí.`,
+    group: {
+      title: 'Reportes de una pregunta',
+      open: (n: number) => plural(n, 'abierto', 'abiertos'),
+      total: (n: number) => plural(n, 'reporte', 'reportes'),
+      edit: 'Abrir en el editor',
+      showQuestion: 'Ver la pregunta',
+      resolveOpen: (n: number) => `Resolver ${num(n)} abiertos`,
+      dismissOpen: (n: number) => `Descartar ${num(n)} abiertos`,
+      outdatedHint:
+        'Algunos reportes son de una versión anterior. Si ya corregiste la pregunta, resuélvelos.',
+    },
+    row: {
+      reportedOn: (date: string) => `Reportado el ${date}`,
+      version: (n: number | null) => (n === null ? 'Versión que ya no está' : `Versión ${n}`),
+      outdated: 'Versión anterior',
+      resolve: 'Resolver',
+      dismiss: 'Descartar',
+      reopen: 'Reabrir',
+      status: { open: 'Abierto', resolved: 'Resuelto', dismissed: 'Descartado' } as Record<
+        string,
+        string
+      >,
+      resolvedOn: (date: string) => `Cerrado el ${date}`,
+    },
+    changed: (n: number, status: string) =>
+      n === 1
+        ? `Un reporte quedó como ${status.toLowerCase()}.`
+        : `${num(n)} reportes quedaron como ${status.toLowerCase()}.`,
+    failed: 'No se pudo guardar el cambio. Intenta de nuevo.',
+  },
 };
