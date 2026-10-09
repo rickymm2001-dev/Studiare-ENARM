@@ -14,7 +14,7 @@ import {
   type AiErrorCode,
 } from '../../../src/engines/aiContracts.ts';
 import { AiConfigPatchSchema, mergeConfig, saveAiConfig, type AiConfig } from './config.ts';
-import type { Ledger } from './ledger.ts';
+import type { LedgerPort } from './ledger.ts';
 import { findPersonalData, hasPersonalData } from './pii.ts';
 import type { PromptSets } from './prompts.ts';
 import type { AiProvider } from './provider.ts';
@@ -27,7 +27,9 @@ export interface AiRoutesDeps {
   setConfig: (next: AiConfig) => void;
   /** Archivo donde se guardan los cambios de configuración. null no guarda */
   configFile: string | null;
-  ledger: Ledger;
+  /** Otra forma de guardar los cambios, como la base de datos del proxy alojado. Manda sobre configFile */
+  saveConfig?: (next: AiConfig) => Promise<void>;
+  ledger: LedgerPort;
   sourceKeys: ReadonlySet<string>;
   clock?: () => number;
 }
@@ -41,6 +43,8 @@ const STATUS: Record<AiErrorCode, ContentfulStatusCode> = {
   rate_limited: 429,
   invalid_output: 502,
   provider_error: 502,
+  unauthorized: 401,
+  plan_required: 403,
 };
 
 const MESSAGES: Record<
@@ -55,8 +59,16 @@ const MESSAGES: Record<
   budget_exceeded: 'La IA está en pausa por hoy. Vuelve mañana.',
 };
 
-export function createAiRoutes(deps: AiRoutesDeps): Hono {
-  const routes = new Hono();
+/**
+ * Lo que el proxy alojado deja en cada petición después de verificar la sesión. Si hay un usuario,
+ * él es el alumno de la llamada, y no el que diga el cliente en su sobre
+ */
+export interface AiVariables {
+  aiUser?: { id: string };
+}
+
+export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariables }> {
+  const routes = new Hono<{ Variables: AiVariables }>();
 
   routes.use(async (c, next) => {
     await next();
@@ -78,11 +90,11 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono {
     }),
   );
 
-  routes.get('/usage', (c) =>
+  routes.get('/usage', async (c) =>
     c.json({
       mode: deps.provider.mode,
       limits: deps.config().limits,
-      usage: deps.ledger.summary(),
+      usage: await deps.ledger.summary(),
     }),
   );
 
@@ -97,7 +109,8 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono {
     if (!patch.success) return fail(c, 'invalid_request');
     try {
       const next = mergeConfig(deps.config(), patch.data);
-      if (deps.configFile) saveAiConfig(deps.configFile, next);
+      if (deps.saveConfig) await deps.saveConfig(next);
+      else if (deps.configFile) saveAiConfig(deps.configFile, next);
       deps.setConfig(next);
       return c.json({ mode: deps.provider.mode, config: next });
     } catch {
@@ -128,8 +141,9 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono {
     }
 
     const { limits } = deps.config();
-    const studentRef = request.data.studentRef;
-    const admission = deps.ledger.admit({
+    // Con sesión verificada, el alumno es la cuenta y no lo que diga el sobre
+    const studentRef = c.get('aiUser')?.id ?? request.data.studentRef;
+    const admission = await deps.ledger.admit({
       studentRef,
       engine,
       perStudentPerDay: limits.perStudentPerDay[engine],
@@ -152,16 +166,36 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono {
       );
     } catch (error) {
       // Un error nuestro, no del modelo. Se devuelve el cupo y lo maneja onError
-      deps.ledger.release({ studentRef, engine });
+      await deps.ledger.release({ studentRef, engine });
       throw error;
     }
 
     const real = deps.provider.mode === 'real';
     if (result.ok) {
-      deps.ledger.settle({ engine, costUsd: result.meta.estimatedCostUsd, real });
+      await deps.ledger.settle({
+        engine,
+        costUsd: result.meta.estimatedCostUsd,
+        real,
+        studentRef,
+        model: result.meta.model,
+        ok: true,
+        inputTokens: result.meta.inputTokens,
+        outputTokens: result.meta.outputTokens,
+        latencyMs: result.meta.latencyMs,
+      });
       return c.json({ output: result.output, meta: result.meta });
     }
-    deps.ledger.settle({ engine, costUsd: result.cost.estimatedCostUsd, real });
+    await deps.ledger.settle({
+      engine,
+      costUsd: result.cost.estimatedCostUsd,
+      real,
+      studentRef,
+      model: result.cost.model,
+      ok: false,
+      inputTokens: result.cost.inputTokens,
+      outputTokens: result.cost.outputTokens,
+      latencyMs: result.cost.latencyMs,
+    });
     return c.json(
       { error: result.error, message: result.message, cost: result.cost },
       STATUS[result.error],

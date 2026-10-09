@@ -495,6 +495,37 @@ select
 - Si el alumno borra desde un dispositivo que ya no es el activo, el servidor lo rechaza y la app le dice que entre desde el activo o que tome la cuenta aquí
 - El puntaje oficial del ENARM vive por ahora solo en el navegador y entra al archivo que el alumno exporta. No se sube a la nube, y su evento solo lleva el año
 
+## IA alojada
+
+### Qué hace
+
+- Crea las tablas ai_usage_day, ai_spend_day, ai_call_log y ai_config, y las funciones del libro de IA, para que el proxy de IA alojado cuente los límites por alumno, el presupuesto del día y la bitácora de costos en la base de datos. Ver docs/IA_ALOJADA.md
+- Ni el navegador ni un alumno leen ni escriben esas tablas ni llaman a esas funciones. Solo el servidor del proxy, con la llave de servicio
+- Vuelve a definir Borrar mis datos para que también quite el uso anterior y la bitácora de IA del alumno. El uso de hoy se conserva, así que borrar los datos no sirve para saltarse el límite diario
+
+### Cómo aplicar la sexta migración
+
+No necesitas terminal. Aplica primero las cinco anteriores. Mientras no apliques esta, la demo sigue con la IA simulada o con el proxy local.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261010000001_ai_hosted.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('service_role', 'public.ai_admit(uuid, text, integer, numeric)', 'execute') as servicio_admite,
+  has_function_privilege('authenticated', 'public.ai_admit(uuid, text, integer, numeric)', 'execute') as alumno_admite,
+  has_function_privilege('anon', 'public.ai_usage_summary()', 'execute') as anon_lee_resumen,
+  has_table_privilege('authenticated', 'public.ai_call_log', 'select') as alumno_lee_bitacora,
+  has_table_privilege('authenticated', 'public.ai_config', 'select') as alumno_lee_configuracion,
+  (select relrowsecurity from pg_class where oid = 'public.ai_usage_day'::regclass) as uso_con_seguridad_por_fila;
+```
+
+7. Debe salir servicio_admite en true, alumno_admite, anon_lee_resumen, alumno_lee_bitacora y alumno_lee_configuracion en false, y uso_con_seguridad_por_fila en true. Si alguno de los false sale en true, avísame antes de abrir a alumnos
+
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora

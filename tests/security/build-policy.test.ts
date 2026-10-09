@@ -14,15 +14,21 @@ import { buildApp } from './buildApp.ts';
 
 let withoutCloud = '';
 let withCloud = '';
+let withAi = '';
 
 beforeAll(() => {
   withoutCloud = buildApp({ VITE_SUPABASE_URL: '' });
   withCloud = buildApp({ VITE_SUPABASE_URL: 'https://abcd1234.supabase.co' });
+  withAi = buildApp({
+    VITE_SUPABASE_URL: 'https://abcd1234.supabase.co',
+    VITE_AI_URL: 'https://ia.studiare.mx',
+  });
 }, 240_000);
 
 afterAll(() => {
-  for (const dir of [withoutCloud, withCloud])
+  for (const dir of [withoutCloud, withCloud, withAi]) {
     if (dir) rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 const read = (dir: string, file: string) => readFileSync(join(dir, file), 'utf8');
@@ -62,6 +68,13 @@ describe('política de seguridad de contenido en el build', () => {
     expect(directive(metaPolicy(read(withCloud, 'index.html')), 'connect-src')).toBe(
       "'self' https://abcd1234.supabase.co",
     );
+  });
+
+  it('con el proxy de IA alojado suma su origen exacto, en el HTML y en _headers', () => {
+    const expected = "'self' https://abcd1234.supabase.co https://ia.studiare.mx";
+    expect(directive(metaPolicy(read(withAi, 'index.html')), 'connect-src')).toBe(expected);
+    const policy = /Content-Security-Policy: (.+)/.exec(read(withAi, '_headers'))?.[1];
+    expect(directive(policy, 'connect-src')).toBe(expected);
   });
 
   it('_headers lleva la misma política más frame-ancestors, y los demás encabezados', () => {

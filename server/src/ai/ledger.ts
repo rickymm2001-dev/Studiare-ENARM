@@ -41,7 +41,37 @@ export interface UsageSummary {
 
 export type Admission = { ok: true } | { ok: false; reason: 'student_limit' | 'budget_exceeded' };
 
-export class Ledger {
+/** Lo que el servidor sabe de una llamada ya hecha, para asentar su gasto y su renglón de bitácora */
+export interface Settlement {
+  engine: AiEngine;
+  costUsd: number;
+  real: boolean;
+  /** Quién la pidió. Solo lo usa el libro alojado, que guarda la bitácora en la base */
+  studentRef?: string;
+  model?: string;
+  ok?: boolean;
+  inputTokens?: number;
+  outputTokens?: number;
+  latencyMs?: number;
+}
+
+/**
+ * Lo que las rutas necesitan del libro. El libro local es síncrono y vive en memoria o en un
+ * archivo. El alojado vive en Postgres y es asíncrono, así que las rutas esperan a los dos
+ */
+export interface LedgerPort {
+  admit(input: {
+    studentRef: string;
+    engine: AiEngine;
+    perStudentPerDay: number;
+    dailyBudgetUsd: number;
+  }): Admission | Promise<Admission>;
+  settle(input: Settlement): void | Promise<void>;
+  release(input: { studentRef: string; engine: AiEngine }): void | Promise<void>;
+  summary(): UsageSummary | Promise<UsageSummary>;
+}
+
+export class Ledger implements LedgerPort {
   private state: State;
   private readonly options: { file?: string | null; now?: () => Date };
 
@@ -116,7 +146,7 @@ export class Ledger {
   }
 
   /** Suma el gasto real de una llamada ya hecha. Las simuladas no gastan */
-  settle(input: { engine: AiEngine; costUsd: number; real: boolean }): void {
+  settle(input: Settlement): void {
     this.roll();
     if (!input.real || input.costUsd <= 0) return;
     this.state.spentUsd = Math.round((this.state.spentUsd + input.costUsd) * 1e6) / 1e6;

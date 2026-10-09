@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { buildHeaderCsp, buildHeadersFile, buildMetaCsp, supabaseOriginOf } from './csp';
+import {
+  aiOriginOf,
+  buildHeaderCsp,
+  buildHeadersFile,
+  buildMetaCsp,
+  supabaseOriginOf,
+} from './csp';
 
 const directive = (policy: string, name: string) =>
   policy
@@ -31,6 +37,28 @@ describe('supabaseOriginOf', () => {
   });
 });
 
+describe('aiOriginOf', () => {
+  it('acepta un origen https y quita la diagonal final', () => {
+    expect(aiOriginOf('https://ia.studiare.mx')).toBe('https://ia.studiare.mx');
+    expect(aiOriginOf(' https://ia.studiare.mx:8443/ ')).toBe('https://ia.studiare.mx:8443');
+  });
+
+  it('rechaza http, comodines, rutas, espacios y texto que no es una dirección', () => {
+    for (const url of [
+      undefined,
+      '',
+      'http://ia.studiare.mx',
+      'https://*.studiare.mx',
+      'https://ia.studiare.mx/ia',
+      'https://ia studiare.mx',
+      'https://ia.studiare.mx; script-src *',
+      'javascript:alert(1)',
+    ]) {
+      expect(aiOriginOf(url)).toBeUndefined();
+    }
+  });
+});
+
 describe('política de seguridad de contenido', () => {
   it('no permite scripts en línea ni eval, solo scripts propios y WebAssembly', () => {
     for (const policy of [buildMetaCsp(), buildHeaderCsp()]) {
@@ -47,6 +75,19 @@ describe('política de seguridad de contenido', () => {
     expect(
       directive(buildMetaCsp({ supabaseOrigin: 'https://abcd1234.supabase.co' }), 'connect-src'),
     ).toBe("'self' https://abcd1234.supabase.co");
+  });
+
+  it('con el proxy de IA alojado suma su origen exacto, junto a Supabase', () => {
+    const policy = buildMetaCsp({
+      supabaseOrigin: 'https://abcd1234.supabase.co',
+      aiOrigin: 'https://ia.studiare.mx',
+    });
+    expect(directive(policy, 'connect-src')).toBe(
+      "'self' https://abcd1234.supabase.co https://ia.studiare.mx",
+    );
+    expect(directive(buildMetaCsp({ aiOrigin: 'https://ia.studiare.mx' }), 'connect-src')).toBe(
+      "'self' https://ia.studiare.mx",
+    );
   });
 
   it('frame-ancestors va solo en los encabezados, porque en una etiqueta meta se ignora', () => {

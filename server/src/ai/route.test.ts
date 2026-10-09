@@ -250,7 +250,7 @@ describe('fallas del modelo', () => {
     expect(body.error).toBe('invalid_output');
     expect(body.cost.inputTokens).toBe(2000);
     // El intento fallido también gastó y cuenta contra el presupuesto
-    expect(ai.ledger.summary().spentUsd).toBe(body.cost.estimatedCostUsd);
+    expect((await ai.ledger.summary()).spentUsd).toBe(body.cost.estimatedCostUsd);
   });
 
   it('nunca devuelve la clave, el detalle de la API ni los datos del alumno', async () => {

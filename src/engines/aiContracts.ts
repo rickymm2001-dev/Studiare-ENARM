@@ -304,6 +304,10 @@ export const AI_ERROR_CODES = [
   'rate_limited',
   'invalid_output',
   'provider_error',
+  // Solo en el proxy alojado. Sin sesión válida o desde un dispositivo que ya no es el activo
+  'unauthorized',
+  // Solo en el proxy alojado. La IA es de los planes de pago para los alumnos
+  'plan_required',
 ] as const;
 export type AiErrorCode = (typeof AI_ERROR_CODES)[number];
 

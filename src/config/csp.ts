@@ -7,6 +7,8 @@
 export interface CspOptions {
   /** Origen del proyecto de Supabase, por ejemplo https://abc.supabase.co. Sin él no se permite ninguno */
   supabaseOrigin?: string | undefined;
+  /** Origen del proxy de IA alojado, por ejemplo https://ia.studiare.mx. Sin él, solo el propio sitio */
+  aiOrigin?: string | undefined;
 }
 
 /**
@@ -18,8 +20,19 @@ export function supabaseOriginOf(url: string | undefined): string | undefined {
   return match ? match[0].replace(/\/$/, '') : undefined;
 }
 
+/**
+ * Origen del proxy de IA a partir de la dirección que se configura al construir. Solo acepta un
+ * origen https sin ruta ni comodines, así una variable mal puesta no abre la política a otro dominio
+ */
+export function aiOriginOf(url: string | undefined): string | undefined {
+  const match = /^https:\/\/[a-z0-9]([a-z0-9.-]*[a-z0-9])?(:\d{1,5})?\/?$/i.exec(
+    (url ?? '').trim(),
+  );
+  return match ? match[0].replace(/\/$/, '') : undefined;
+}
+
 /** Directivas que funcionan en una etiqueta meta y en un encabezado */
-function sharedDirectives({ supabaseOrigin }: CspOptions): [string, string][] {
+function sharedDirectives({ supabaseOrigin, aiOrigin }: CspOptions): [string, string][] {
   return [
     ['default-src', "'self'"],
     // wasm-unsafe-eval deja compilar WebAssembly, que usa el lector de mazos de Anki (sql.js). No
@@ -31,8 +44,9 @@ function sharedDirectives({ supabaseOrigin }: CspOptions): [string, string][] {
     // Vite incrusta como data: las fuentes más chicas de 4 KB, y la política las bloquearía sin esto
     ['font-src', "'self' data:"],
     ['media-src', "'self' data: blob:"],
-    // Solo el servidor propio (el proxy de IA vive bajo /api) y, si está configurado, Supabase
-    ['connect-src', ["'self'", supabaseOrigin].filter(Boolean).join(' ')],
+    // Solo el servidor propio (el proxy de IA local vive bajo /api) y, si están configurados,
+    // Supabase y el proxy de IA alojado
+    ['connect-src', ["'self'", supabaseOrigin, aiOrigin].filter(Boolean).join(' ')],
     // Los lectores de archivos corren en workers del propio sitio, y canvas-confetti usa uno de blob
     ['worker-src', "'self' blob:"],
     ['manifest-src', "'self'"],

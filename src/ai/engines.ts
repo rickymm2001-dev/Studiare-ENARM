@@ -17,8 +17,9 @@ import { GUARD_MESSAGES, guardFlashcards, guardOutput } from '@/engines/aiGuards
 import { MOCK_MODEL, mockOutput } from '@/engines/aiMock';
 import { scrubPersonalData } from '@/engines/piiFilter';
 import type { AiStatus } from './client';
+import { AI_BASE_URL, aiAuthHeaders } from './endpoint';
 
-export const ENGINE_URL = '/api/ai';
+export const ENGINE_URL = `${AI_BASE_URL}/ai`;
 const TIMEOUT_MS = 40_000;
 const SOURCE_KEYS: ReadonlySet<string> = new Set(ACADEMIC_SOURCE_KEYS);
 
@@ -171,7 +172,11 @@ export async function callEngine<E extends AiEngine>(
   try {
     response = await fetchImpl(`${ENGINE_URL}/${engine}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        ...(await aiAuthHeaders()),
+      },
       body: JSON.stringify({
         studentRef: options.studentRef,
         promptVersion: `${engine}.local.v1`,

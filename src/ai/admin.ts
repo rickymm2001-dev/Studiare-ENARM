@@ -5,8 +5,9 @@
 import { z } from 'zod';
 import { AI_ENGINES } from '@/engines/aiContracts';
 import type { AiStatus } from './client';
+import { AI_BASE_URL, aiAuthHeaders } from './endpoint';
 
-export const ADMIN_URL = '/api/ai';
+export const ADMIN_URL = `${AI_BASE_URL}/ai`;
 const TIMEOUT_MS = 5000;
 
 const EngineRecord = <T extends z.ZodType>(value: T) => z.record(z.enum(AI_ENGINES), value);
@@ -71,7 +72,7 @@ async function getJson<S extends z.ZodType>(
 ): Promise<z.infer<S> | null> {
   try {
     const response = await fetchImpl(`${ADMIN_URL}${path}`, {
-      headers: { accept: 'application/json' },
+      headers: { accept: 'application/json', ...(await aiAuthHeaders()) },
       cache: 'no-store',
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
@@ -111,7 +112,11 @@ export async function saveAdminConfig(
   try {
     const response = await fetchImpl(`${ADMIN_URL}/config`, {
       method: 'PUT',
-      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        ...(await aiAuthHeaders()),
+      },
       body: JSON.stringify(patch),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });

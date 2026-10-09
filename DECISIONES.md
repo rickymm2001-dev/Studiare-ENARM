@@ -1005,3 +1005,15 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Sin conexión. Una prueba abre sin red pantallas que nunca se habían visitado y confirma que la IA avisa que necesita conexión
 - Revisión ASVS 5.0 por capítulo en docs/asvs.md. Es una revisión propia y no sustituye una prueba de penetración. Los requisitos numerados se recorren antes de una auditoría externa
 - Pendiente con Ricardo. Aprobar la publicación en Cloudflare Pages (D-017), comprar el dominio propio, y decidir si el margen de 25 KB justifica seguir recortando el JavaScript inicial
+
+### D-103. Proxy de IA alojado
+- Fecha 2026-10-10. Origen C, dentro de lo que Ricardo pidió el mismo día, construir todo lo que haga falta para que la plataforma funcione de verdad (Fase G)
+- Qué es. El proxy local de siempre, con un modo alojado que pide la sesión de Supabase en cada llamada, deja usar la IA solo con un plan de pago, o siendo médico, admin o dueño, y cuenta los límites por alumno, el presupuesto del día y la bitácora de costos en Postgres. Corre en cualquier alojamiento que ejecute Docker o Node
+- Por qué no una función de Supabase. Habría que reescribir las rutas, los prompts y las guardas para otro entorno de ejecución y probarlas sin poder correrlas aquí. El proxy ya tiene 150 pruebas. Con un Dockerfile se reutiliza todo tal cual y el costo es un servicio más, de unos pocos dólares al mes
+- Lo que se pidió con una desviación. CLAUDE.md dice que la clave de IA vive solo en server/.env.local. Un servicio alojado no tiene ese archivo, así que la misma clave, con el mismo nombre ENARM_ANTHROPIC_KEY, vive como secreto del alojamiento. Sigue sin estar en el código, en el repositorio, en la imagen ni en el navegador. El proxy la quita del entorno al arrancar. Pendiente con Ricardo. Confirmar que le parece bien y, si sí, ajustar esa línea de CLAUDE.md
+- El proxy alojado usa también la llave de servicio de Supabase, solo para el libro de IA. Vive como secreto del alojamiento, nunca en GitHub, y el escáner del build sigue buscándola
+- La verificación de la sesión se hace preguntando a Supabase con el token del alumno y la llave pública. Así no se guarda ninguna llave de firma. my_plan trae la barrera del dispositivo único, así que un dispositivo desplazado tampoco usa la IA. Un token verificado se recuerda 30 segundos y una falla nunca se recuerda
+- El alumno de cada llamada es la cuenta verificada, no lo que diga el sobre. La configuración y el gasto son solo del admin y del dueño
+- Dos códigos de error nuevos en el contrato de la IA. unauthorized y plan_required. El mensaje del servidor llega tal cual al alumno
+- Borrar mis datos quita el uso anterior y la bitácora de IA, pero conserva el uso de hoy, para que no sirva de truco contra el límite diario
+- Pendiente con Ricardo. Elegir alojamiento y poner las variables de docs/IA_ALOJADA.md, aplicar la sexta migración, poner VITE_AI_URL en GitHub y correr npm run eval-ai con la clave para medir el costo real
