@@ -1,6 +1,6 @@
 # Mapa de lo que falta contra las rebanadas del plan maestro
 
-Fase F, sección 17 de la especificación. Compara cada rebanada del plan maestro de Ricardo con lo que deja listo el prototipo hoy y lo que falta para producción. Parte de la tabla de la especificación y la actualiza con lo que se construyó después. Fecha de esta versión, 2026-10-09.
+Fase F, sección 17 de la especificación. Compara cada rebanada del plan maestro de Ricardo con lo que deja listo el prototipo hoy y lo que falta para producción. Parte de la tabla de la especificación y la actualiza con lo que se construyó después. Fecha de esta versión, 2026-10-10.
 
 Las funciones marcadas con la nube dependen de que Ricardo aplique las migraciones de Supabase y configure el proyecto con docs/SUPABASE.md.
 
@@ -37,10 +37,11 @@ Las funciones marcadas con la nube dependen de que Ricardo aplique las migracion
 - Plan Gratis aplicado en el servidor y referidos (D-096)
 - Variantes de preguntas reestructuradas por la IA, que no llegan al examen hasta tener 200 exposiciones por distractor (D-099)
 - Presupuesto de JavaScript inicial, política de seguridad de contenido y revisión contra ASVS (Fase F)
+- Proxy de IA alojado con sesión y plan, textos legales como páginas, configuración del admin en el servidor, portal de Stripe, reembolsos que quitan el plan, HSTS y registro de errores del navegador (Fase G, D-103 a D-107)
 
 ## Lo que decide Ricardo
 
-- Aplicar las migraciones de Supabase y probar con una cuenta de prueba
+- Aplicar las migraciones de Supabase y probar con una cuenta de prueba. Ahora son nueve archivos, y la lista completa y lo demás que falta están en docs/PENDIENTES_DE_RICARDO.md
 - Poner la clave de IA en server/.env.local y correr npm run eval-ai con la clave
 - Confirmar la lista de textos académicos, el segundo proveedor de IA y qué cuenta como referido concretado
 - Aprobar la publicación en Cloudflare Pages (D-017)

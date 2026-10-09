@@ -18,6 +18,10 @@ Este repositorio es público desde D-055. Todo el contenido clínico de demostra
 - docs/informe-de-pruebas.md reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA
 - docs/asvs.md es la revisión contra OWASP ASVS 5.0
 - docs/SUPABASE.md guía a Ricardo para conectar la nube, paso a paso y sin terminal
+- docs/PENDIENTES_DE_RICARDO.md lista, en orden, lo que falta de Ricardo para que la plataforma funcione completa
+- docs/IA_ALOJADA.md explica cómo poner el proxy de IA en un alojamiento
+- docs/BANCO_EN_LA_NUBE.md es el diseño para pasar el banco de preguntas a Supabase
+- docs/legal tiene el aviso de privacidad y los términos para el abogado
 
 Para continuar el trabajo en una sesión nueva basta con pedir a Claude Code que lea CLAUDE.md, PLAN.md y PROGRESS.md y siga donde se quedó.
 

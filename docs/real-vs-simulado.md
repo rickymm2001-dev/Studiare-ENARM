@@ -1,6 +1,6 @@
 # Real contra simulado, función por función
 
-Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-09.
+Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-10. Incluye la Fase G.
 
 ## Cómo leer las etiquetas
 
@@ -55,7 +55,7 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 
 | Función | Hoy | Etiqueta | Qué falta para producción |
 |---|---|---|---|
-| Proxy de IA | Local, en 127.0.0.1, con límites por alumno y por motor, presupuesto diario y filtro de datos personales | Real | Un proxy alojado, si la IA se ofrece fuera del equipo del desarrollador |
+| Proxy de IA | Local, en 127.0.0.1, con límites por alumno y por motor, presupuesto diario y filtro de datos personales. Alojado, pide la sesión de Supabase y un plan de pago o un rol de médico, y lleva sus límites y su bitácora en Postgres (D-103) | Real el local. El alojado está programado y probado con un servidor falso | Elegir alojamiento, poner las variables de docs/IA_ALOJADA.md, aplicar la sexta migración y probar con la clave de Ricardo |
 | Hipótesis de olvidos, informe semanal, tarjetas, consejos por sesgo y preguntas reestructuradas | Sin clave corren con respuestas fijas que cumplen los mismos contratos. Con la clave de Ricardo llaman al modelo | Simulado, y real con la clave | Correr npm run eval-ai con la clave para medir costo y latencia reales, y la compuerta 1 del plan maestro con dos médicos |
 | Tarjetas desde PDF y texto | Cada tarjeta cita la frase literal que la respalda y queda en borrador | Simulado, y real con la clave | Revisión médica |
 | Textos académicos de las señales de controversia | Lista cerrada provisional | Pendiente de Ricardo | Que Ricardo o un médico confirmen la lista |
@@ -68,10 +68,11 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 |---|---|---|---|
 | Suscripción y checkout | Sin nube, planes y recibo simulados, marcados como tal | Simulado | Conectar la nube |
 | Pagos con Stripe y Mercado Pago | Funciones del servidor que crean el pago, verifican la firma del aviso y activan el plan | Modo prueba | Desplegar las funciones, llaves de producción y probar con un pago de prueba real |
+| Cancelar y cambiar tarjeta | El botón Administrar suscripción abre el portal de Stripe del alumno (D-106) | Programado, sin probar contra Stripe | Activar el portal en el panel de Stripe, aplicar la séptima migración, publicar la función y probarlo con un pago de prueba |
 | Plan Gratis | Tope de 20 preguntas distintas por día aplicado en la base de datos | Real con la nube | Conectar el banco a Supabase |
 | Referidos y mes gratis | Código por alumno, mes gratis al primer pago verificado | Real con la nube | Confirmar con Ricardo qué cuenta como referido concretado |
 | Renovación automática con Mercado Pago | No está. Cobra un pago único del periodo | Pendiente | Suscripciones de Mercado Pago |
-| Reembolsos | Los de Mercado Pago quitan el plan. Los de Stripe se resuelven a mano | Pendiente | Reembolso automático de Stripe |
+| Reembolsos | Un reembolso completo de Stripe o de Mercado Pago marca el pago como devuelto y quita el plan. Uno parcial lo atiende una persona. La devolución misma se hace a mano en la pasarela | Programado, sin probar contra Stripe | Probar con un reembolso de prueba real. Decidir si se quiere devolver desde la app |
 
 ## Médicos y administración
 
@@ -82,7 +83,15 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 | Cola de borradores de IA | El médico aprueba o rechaza preguntas reestructuradas, consejos y tarjetas | Real | Nada en lo funcional |
 | Importador del banco | CSV, Excel o JSON con reporte de errores por fila | Real | Importar casos seriados |
 | Usuarios y asignaciones | El administrador nombra médicos y asigna preguntas | Real con la nube | Nada en lo funcional |
-| Costos de IA, datos de demostración y configuración | Gasto real y teórico, siembra de alumnos simulados, umbrales y pesos | Real | Que la configuración viva en el servidor y no en el navegador de quien la cambia |
+| Costos de IA, datos de demostración y configuración | Gasto real y teórico, siembra de alumnos simulados, umbrales y pesos. Con la nube, la configuración vive en el servidor y vale para todos (D-105) | Real, y real con la nube | Nada en lo funcional |
+
+## Textos legales y errores
+
+| Función | Hoy | Etiqueta | Qué falta para producción |
+|---|---|---|---|
+| Aviso de privacidad y términos | Dos páginas públicas con un solo texto que también sale en docs/legal. Dicen arriba que son un borrador (D-104) | Borrador | Responsable, domicilio y correo de privacidad, y revisión de un abogado |
+| HSTS | Va en el archivo de encabezados del build por un año (D-107) | Real en Cloudflare Pages | Publicar en Cloudflare Pages y dominio propio |
+| Errores del navegador | Se reportan sin datos personales, solo con el permiso de mejora anónima, y los ve el admin en la pantalla 25 (D-107) | Real con la nube | Aplicar la octava migración. No sustituye un monitoreo con alertas |
 
 ## Plataforma
 
