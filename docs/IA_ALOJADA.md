@@ -58,6 +58,9 @@ Si falta algo o está mal, el proxy no arranca y dice cuáles variables fallan, 
 - La llave de servicio solo la usa el proxy, para el libro de IA. Nunca llega al navegador ni a GitHub. El escáner del build busca llaves con rol de servicio y falla si encuentra alguna
 - La clave de IA solo vive como secreto del alojamiento. El proxy la quita del entorno al arrancar para que no la hereden procesos hijos
 - El proxy solo contesta a los orígenes de APP_ORIGINS y exige sesión en todas las rutas de IA. /health es público y solo dice el modo
+- Solo las llamadas POST a un motor piden plan de pago. Cualquier otra ruta, incluida la configuración y el gasto, pide ser admin o dueño, aunque la dirección llegue codificada o con rodeos
+- El presupuesto diario es un tope blando. Cada llamada se descuenta cuando termina, así que varias llamadas que van al mismo tiempo cerca del tope pueden pasarse un poco. El exceso máximo es el costo de las llamadas que caben en ese instante, y los límites por alumno y por motor lo acotan
+- El proxy no limita las peticiones con token falso antes de preguntarle a Supabase. Pon un límite de peticiones por IP en el alojamiento o delante de él, por ejemplo con el firewall de Cloudflare
 - La política de seguridad de contenido de la app permite conectarse a la dirección de VITE_AI_URL y a ninguna otra aparte de Supabase
 - La imagen de Docker no lleva ninguna llave. Una prueba revisa el Dockerfile y que copie todo lo que el proxy importa
 

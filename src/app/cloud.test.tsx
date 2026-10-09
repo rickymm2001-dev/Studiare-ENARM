@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEVICE_CLAIM_STORAGE_KEY, forgetDeviceClaim, getDeviceId } from '@/data/cloud/device';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { OVERRIDES_KEY } from '@/config/overridesStore';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
@@ -337,6 +338,19 @@ describe('CloudBridge y el dispositivo único', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(useCloud.getState().state).toEqual({ status: 'off' });
     expect(usePreferences.getState().sessionUserId).toBeNull();
+  });
+});
+
+describe('CloudBridge y el aviso de privacidad', () => {
+  it('registra la versión del aviso bajo la que se creó su perfil en este dispositivo, una sola vez', async () => {
+    const fake = useFake(makeFakeCloud());
+    mount();
+    await waitFor(() => {
+      expect(fake.claims).toHaveLength(1);
+    });
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
   });
 });
 

@@ -364,6 +364,50 @@ describe('proxy alojado', () => {
     }
   });
 
+  it('un alumno de pago no llega a la configuración ni al gasto con la dirección codificada ni con rodeos', async () => {
+    const saved: AiConfig[] = [];
+    const { app } = hostedApp(student('monthly'), { saved });
+    for (const path of [
+      '/ai/%63onfig',
+      '/ai/%75sage',
+      '/ai/%43onfig',
+      '/ai/config/',
+      '/ai//config',
+      '/ai/./config',
+      '/ai/x/../config',
+      '/ai/%2e%2e/ai/usage',
+    ]) {
+      const read = await app.request(path, { headers: headers() });
+      expect(read.status, `GET ${path}`).not.toBe(200);
+      const write = await app.request(path, {
+        method: 'PUT',
+        headers: headers(),
+        body: JSON.stringify({ limits: { dailyBudgetUsd: 100000 } }),
+      });
+      expect(write.status, `PUT ${path}`).not.toBe(200);
+    }
+    expect(saved).toHaveLength(0);
+    // La forma codificada sí es de admin, igual que la normal
+    const admin = hostedApp({ id: USER_ID, role: 'admin', plan: 'free' });
+    expect((await admin.app.request('/ai/%63onfig', { headers: headers() })).status).toBe(200);
+  });
+
+  it('lo que no es una llamada de motor pide ser admin, y un POST a un motor sigue pidiendo plan', async () => {
+    const paid = hostedApp(student('monthly')).app;
+    for (const [method, path] of [
+      ['GET', '/ai/forgetting'],
+      ['DELETE', '/ai/config'],
+      ['POST', '/ai/config'],
+      ['POST', '/ai/usage'],
+      ['POST', '/ai/forgetting/extra'],
+    ] as const) {
+      const response = await paid.request(path, { method, headers: headers() });
+      expect(response.status, `${method} ${path}`).toBe(403);
+    }
+    const free = hostedApp(student('free')).app;
+    expect((await post(free)).status).toBe(403);
+  });
+
   it('el admin cambia la configuración y se guarda en la base, no en un archivo', async () => {
     const saved: AiConfig[] = [];
     const { app } = hostedApp({ id: USER_ID, role: 'admin', plan: 'free' }, { saved });

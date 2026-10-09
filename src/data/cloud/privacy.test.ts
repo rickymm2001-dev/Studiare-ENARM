@@ -30,6 +30,13 @@ describe('borrar la copia en la nube', () => {
       ),
     ).toEqual({ ok: false, reason: 'owner' });
     expect(
+      await deleteCloudAccount(
+        cloud({
+          error: { code: 'FR002', message: 'Cancela tu suscripción antes de eliminar tu cuenta' },
+        }),
+      ),
+    ).toEqual({ ok: false, reason: 'active_subscription' });
+    expect(
       await eraseCloudData(cloud({ error: { code: '28000', message: 'Sin sesión' } })),
     ).toEqual({
       ok: false,

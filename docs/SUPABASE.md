@@ -427,7 +427,7 @@ select
 Esto sí pide un poco de terminal, para publicar las cuatro funciones del servidor. Puedo guiarte paso a paso cuando quieras. Ninguna llave se la pasas a nadie ni se escribe en el repo. Se guardan solo en los Secrets de Supabase (Edge Functions, Secrets).
 
 1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio mensual en pesos. Fundador 79, Mensual 150 y Anual 1,200 (el anual cobrado cada 12 meses). Copia el Price ID de cada uno (empieza con price_)
-2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos. checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.deleted y charge.refunded. Copia el secreto de firma (empieza con whsec_)
+2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos. checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, customer.subscription.deleted y charge.refunded. Copia el secreto de firma (empieza con whsec_)
 3. En Mercado Pago, en tu aplicación, activa las credenciales de prueba. Copia el Access Token de prueba. En Webhooks agrega la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-mercadopago, marca el tema Pagos y copia la clave secreta que te da
 4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú
 5. Con la CLI de Supabase conectada a tu proyecto, desde la carpeta del repo, corre estas cuatro líneas. Los avisos de las pasarelas no llevan sesión de Supabase y se identifican con su firma, por eso llevan la bandera.
@@ -457,11 +457,13 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 - En Suscripción, quien ya paga ve Administrar suscripción. Abre el portal de Stripe, donde cancela, cambia su tarjeta y ve sus facturas. Studiare no guarda datos de tarjeta en ningún momento
 - Para abrir el portal Stripe pide el id del cliente. Al confirmarse un pago, el servidor guarda con qué cliente pagó cada alumno en la tabla billing_customers. Esa tabla no la lee ni la escribe nadie de la app, ni siquiera el admin. Solo las funciones del servidor, con la llave de servicio
 - El id del cliente sale siempre de la cuenta con sesión abierta y nunca de lo que mande el navegador, así que nadie puede abrir el portal de otra persona
-- Cuando el alumno cancela en el portal, Stripe manda el aviso customer.subscription.deleted y el plan queda como cancelado. Sigue vigente hasta que termine el periodo ya pagado
-- Un reembolso completo de Stripe llega con el cliente y el monto, y no con el alumno ni la factura. El servidor busca al alumno por su cliente y marca como devuelto su pago más reciente de ese monto. Después le quita el plan. Si el cliente no se reconoce, el aviso se guarda sin alumno en payment_webhook_events para que una persona lo revise
+- Cuando el alumno cancela en el portal, Stripe manda el aviso customer.subscription.updated con la cancelación al final del periodo, y el plan queda como cancelado desde ese momento. Sigue vigente hasta que termine el periodo ya pagado. Al terminar llega customer.subscription.deleted
+- Un reembolso completo de Stripe llega con el cliente, el monto y la hora del cobro, y no con el alumno ni la factura. El servidor busca al alumno por su cliente y marca como devuelto su pago de ese monto que esté más cerca de esa hora. Después le quita el plan, salvo que tenga un pago más reciente que sigue vigente. Si el cliente no se reconoce, el aviso se guarda sin alumno en payment_webhook_events para que una persona lo revise
+- Un aviso de pago tardío o repetido de un pago que ya se devolvió se ignora y no reactiva el plan
+- Un alumno que vuelve a pagar usa su mismo cliente de Stripe, para que sus facturas, su portal y un reembolso no queden repartidos. Si el cliente guardado ya no existe en Stripe, por ejemplo porque se borró o porque se cambió de llaves de prueba a reales, el pago se reintenta una vez como alumno nuevo
 - Un reembolso parcial se ignora a propósito, para no quitar el plan por una devolución chica
 - Quien pagó con Mercado Pago no tiene portal. Su pago es único y no se renueva, así que al abrir Administrar suscripción la app le explica que su plan termina en la fecha indicada
-- Eliminar la cuenta no cancela la suscripción en Stripe. Por eso la pantalla de eliminar pide cancelarla antes
+- Eliminar la cuenta no cancela la suscripción en Stripe. Por eso la base se niega a eliminarla mientras haya una suscripción de Stripe activa, y la pantalla le dice al alumno que la cancele antes. Una ya cancelada, con el periodo pagado, sí se puede eliminar
 
 ### Cómo aplicar la séptima migración
 
@@ -500,7 +502,7 @@ Esto lo haces tú en el panel de Stripe, una vez en modo prueba y otra cuando pa
 ### Qué conviene saber
 
 - Los campos de Stripe que lee el servidor para esto salen de su documentación de la API. Se confirmó el endpoint del portal, que pide el cliente y la dirección de regreso. De los eventos de reembolso se leen el cliente, el monto y si fue completo, y se dejó de depender del vínculo del cargo con la factura, que Stripe quitó en su versión basil. Falta confirmarlo con un reembolso de prueba real
-- Un reembolso se empareja con el pago más reciente de ese monto. Si un alumno tuviera dos pagos del mismo monto y Stripe devolviera el más viejo, quedaría marcado el más nuevo. El plan se quita igual y el monto devuelto es el mismo, pero el registro quedaría cambiado de lugar
+- Un reembolso de Stripe se empareja por monto y por la hora del cobro, porque Stripe ya no liga el cargo con la factura. Si dos pagos del mismo monto se cobraron con minutos de diferencia, podría marcarse el equivocado. Devolver un cobro no cancela la suscripción en Stripe, así que cuando devuelvas un cobro de una suscripción que sigue viva, cancélala también en Stripe, porque si no seguirá cobrando
 - El cliente de Stripe se guarda al primer pago confirmado después de aplicar esta migración. Quien ya pagó antes no tiene cliente guardado hasta su siguiente cobro, y mientras tanto la app le dice que no encontró su suscripción. Se resuelve en el siguiente cobro, o a mano con record_billing_customer desde el editor de SQL
 
 ## Registro de errores del navegador

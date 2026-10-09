@@ -240,7 +240,13 @@ export function noticeFromStripeEvent(event: unknown): PaymentNotice | null {
     };
   }
 
-  if (type === 'customer.subscription.deleted') {
+  // Cancelar desde el portal casi siempre es al final del periodo ya pagado. Stripe lo avisa aquí
+  // desde el momento de cancelar, y la suscripción como tal se borra hasta que acaba el periodo.
+  // Sin esto la plataforma seguiría viéndola activa, y eso estorba, por ejemplo, para eliminar la cuenta
+  if (
+    type === 'customer.subscription.deleted' ||
+    (type === 'customer.subscription.updated' && object.cancel_at_period_end === true)
+  ) {
     const { userId } = ownMetadata(object.metadata);
     return {
       ...base,
@@ -486,6 +492,8 @@ export interface CheckoutDeps extends CoreDeps {
   ) => Promise<{ id: string; email: string | null } | null>;
   /** Cuántos lugares de Fundador quedan. null si no se pudo saber */
   founderSeatsLeft: () => Promise<number | null>;
+  /** El cliente de Stripe del alumno, si ya pagó antes. null si no se sabe o si falla */
+  customerOf: (userId: string) => Promise<string | null>;
 }
 
 const STRIPE_PRICE_ENV: Record<PaidPlan, keyof FunctionEnv> = {
@@ -579,15 +587,26 @@ export async function handleCreateCheckout(
         'subscription_data[metadata][user_id]': user.id,
         'subscription_data[metadata][plan]': plan,
       });
-      if (user.email) form.set('customer_email', user.email);
-      const reply = await deps.fetch('https://api.stripe.com/v1/checkout/sessions', {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${key}`,
-          'content-type': 'application/x-www-form-urlencoded',
-        },
-        body: form,
-      });
+      // Quien ya pagó antes vuelve a su mismo cliente de Stripe, para que sus facturas, su portal y
+      // un reembolso no queden repartidos en dos clientes. Si no tiene, Stripe crea uno con su correo
+      const known = await deps.customerOf(user.id).catch(() => null);
+      const open = async (customer: string | null) => {
+        const body = new URLSearchParams(form);
+        if (customer) body.set('customer', customer);
+        else if (user.email) body.set('customer_email', user.email);
+        return deps.fetch('https://api.stripe.com/v1/checkout/sessions', {
+          method: 'POST',
+          headers: {
+            authorization: `Bearer ${key}`,
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        });
+      };
+      let reply = await open(known);
+      // El cliente guardado puede ya no existir, por ejemplo si se borró en Stripe o si se cambió de
+      // llaves de prueba a las reales. Entonces se reintenta una vez como alumno nuevo
+      if (!reply.ok && known) reply = await open(null);
       if (!reply.ok) return json({ error: 'provider' }, 502, cors);
       const url = asString(asRecord(await reply.json()).url);
       return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);

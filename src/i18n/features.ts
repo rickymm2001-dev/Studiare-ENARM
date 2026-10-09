@@ -382,6 +382,8 @@ export const featureText = {
       not_active_device:
         'Este no es el dispositivo activo de tu cuenta. Abre Studiare en el dispositivo donde usaste tu cuenta por última vez, o entra aquí de nuevo para tomarla.',
       owner: 'La cuenta del dueño de la plataforma no se puede borrar desde aquí.',
+      active_subscription:
+        'Tienes una suscripción con tarjeta activa. Cancélala primero en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros. No se borró nada.',
       no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
       network: 'No hay conexión con el servidor. No se borró nada. Inténtalo de nuevo.',
       unknown: 'El servidor no pudo borrar tus datos. No se borró nada. Inténtalo más tarde.',

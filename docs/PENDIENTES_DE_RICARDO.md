@@ -31,14 +31,14 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 
 - Activar tu cuenta de Stripe. Pide verificar tu negocio y tu cuenta bancaria en México. Puede tardar días
 - Crear en Stripe los tres productos con su precio. Fundador 79, Mensual 150 y Anual 1,200 pesos
-- Agregar el webhook de Stripe con los cinco eventos de docs/SUPABASE.md, incluido charge.refunded
+- Agregar el webhook de Stripe con los seis eventos de docs/SUPABASE.md, incluidos customer.subscription.updated y charge.refunded
 - Guardar y activar el portal del cliente en Stripe, Settings, Billing, Customer portal, con Cancel subscriptions encendido. Sin esto el botón Administrar suscripción no abre
 - Poner los secretos en Supabase, Edge Functions, Secrets, y publicar las cuatro funciones con la CLI de Supabase. Puedo guiarte paso a paso cuando quieras
 - Activar Mercado Pago de la misma forma, con su token y su clave de webhook
 - Hacer un pago de prueba y un reembolso de prueba de punta a punta en cada pasarela. Es lo único que falta para confiar en los cobros, porque no pude abrir la documentación de Stripe desde mi entorno y la lectura de sus eventos no se ha visto con uno real
 - Después pasar de llaves de prueba a llaves reales
 - Stripe y Mercado Pago no cobran mensualidad. Cobran un porcentaje por cada pago, que sale de lo que paga el alumno. Revisa la tarifa vigente de cada una antes de fijar precios
-- Un reembolso completo desde el panel de Stripe ya quita el plan solo. Uno parcial no, y lo atiendes tú
+- Un reembolso completo desde el panel de Stripe ya quita el plan solo. Uno parcial no, y lo atiendes tú. Devolver un cobro no cancela la suscripción en Stripe, así que cuando devuelvas el cobro de una suscripción que sigue viva, cancélala también ahí
 
 ## 5. Textos legales
 

@@ -4,7 +4,8 @@
 // puede deshacer, así que quien llama pide confirmación antes.
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-export type EraseFailure = 'not_active_device' | 'owner' | 'no_session' | 'network' | 'unknown';
+export type EraseFailure =
+  'not_active_device' | 'owner' | 'active_subscription' | 'no_session' | 'network' | 'unknown';
 
 export type EraseResult = { ok: true } | { ok: false; reason: EraseFailure };
 
@@ -27,6 +28,8 @@ export function failureOf(error: RpcError): EraseFailure {
   if (error.code === '42501') {
     return /dueño/i.test(error.message ?? '') ? 'owner' : 'not_active_device';
   }
+  // La base se niega a eliminar la cuenta mientras haya una suscripción con tarjeta activa (D-106)
+  if (error.code === 'FR002') return 'active_subscription';
   if (error.code === '28000') return 'no_session';
   // Sin código es que la petición ni llegó al servidor
   if (!error.code) return 'network';

@@ -56,6 +56,7 @@ No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a ope
 - Supabase, que aloja la base de datos y el inicio de sesión.
 - Stripe y Mercado Pago, que procesan los pagos. Reciben lo que necesitan para cobrar y no lo usamos para otra cosa.
 - Anthropic, solo si encendiste el análisis con IA, con lo que se explicó arriba.
+- El servicio que aloja el proxy de IA, solo si encendiste el análisis con IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.
 - El proveedor que envía los correos de acceso a tu cuenta.
 - El servicio que aloja la página, como GitHub Pages o Cloudflare, que ve datos técnicos de tu conexión, como la dirección IP.
 - Autoridades, cuando una ley o una orden de autoridad competente lo exija.

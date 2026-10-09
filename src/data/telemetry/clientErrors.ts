@@ -25,6 +25,8 @@ const STACK_LINES = 8;
 
 // Se aplican en este orden. Las claves y los tokens van antes que los números largos
 const REDACTIONS: readonly [RegExp, string][] = [
+  // El motor del navegador copia un pedazo del texto que no pudo leer como JSON, y puede ser del alumno
+  [/"[^"]*" is not valid JSON/g, '"[texto]" is not valid JSON'],
   [/eyJ[\w-]+\.[\w-]+\.[\w-]+/g, '[token]'],
   [/\b(?:sk|pk|rk|whsec|sb_secret|sb_publishable)[-_][\w-]{8,}/gi, '[clave]'],
   [/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '[correo]'],

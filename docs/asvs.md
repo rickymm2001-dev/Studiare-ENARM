@@ -190,7 +190,7 @@ Parcial.
 - Cada llamada a la IA deja su renglón con el modelo, los tokens y el costo, también las que fallan
 - Los cambios de rol, los reclamos de dispositivo y los avisos de pago quedan guardados
 - Los errores no muestran detalles al usuario ni guardan datos personales. El proxy solo registra el nombre del error
-- Los errores del navegador se reportan a una tabla sin usuario, ni correo, ni IP, solo si el alumno dio el permiso de mejora anónima. Se limpian de correos, ids, claves y números largos antes de salir y otra vez en la base, tienen un tope de 500 distintos por día y se guardan 14 días. Solo los lee un admin
+- Los errores del navegador se reportan a una tabla sin usuario, ni correo, ni IP, solo si el alumno dio el permiso de mejora anónima. Se limpian de correos, ids, claves, tokens y números largos antes de salir y otra vez en la base, tienen un tope de 500 distintos por día y se guardan 14 días. Solo los lee un admin
 - Parcial. No hay un registro de seguridad del lado del servidor con alertas, por ejemplo de muchos intentos fallidos. Para producción se necesita un servicio de monitoreo
 
 ## V17. WebRTC

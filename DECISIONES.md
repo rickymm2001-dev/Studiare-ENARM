@@ -1016,6 +1016,8 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - El alumno de cada llamada es la cuenta verificada, no lo que diga el sobre. La configuración y el gasto son solo del admin y del dueño
 - Dos códigos de error nuevos en el contrato de la IA. unauthorized y plan_required. El mensaje del servidor llega tal cual al alumno
 - Borrar mis datos quita el uso anterior y la bitácora de IA, pero conserva el uso de hoy, para que no sirva de truco contra el límite diario
+- Corregido tras la revisión independiente. Las rutas de configuración y gasto se decidían con la dirección cruda, y una dirección codificada como /ai/%63onfig se saltaba la regla y dejaba a un alumno de pago cambiar el presupuesto. Ahora se decide con la ruta que usa el enrutador, y solo un POST a un motor es una llamada de motor. Todo lo demás pide ser admin
+- Límites conocidos. El presupuesto diario es un tope blando bajo llamadas simultáneas, y no hay límite de peticiones con token falso antes de preguntar a Supabase. Se documentaron en docs/IA_ALOJADA.md y el segundo se resuelve con un límite por IP en el alojamiento
 - Pendiente con Ricardo. Elegir alojamiento y poner las variables de docs/IA_ALOJADA.md, aplicar la sexta migración, poner VITE_AI_URL en GitHub y correr npm run eval-ai con la clave para medir el costo real
 
 ### D-104. Aviso de privacidad y términos como páginas de la app
@@ -1026,6 +1028,7 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - El texto dice solo lo que la plataforma hace. A la IA viajan IDs seudónimos y texto del banco. No hay chat libre ni predicción del puntaje. Retirar la mejora anónima borra el puntaje oficial. Los datos de tarjeta nunca los ve la plataforma. El borrado quita la copia de la nube
 - La versión del aviso pasó a ser 2026-10-10 y vive en src/config/legal.ts. Es la que se guarda al aceptar. Quien ya aceptó la anterior seguirá con ella guardada, y todavía no hay una pantalla que pida aceptar la nueva
 - Edad mínima de 18 años, como supuesto que el abogado debe confirmar
+- La aceptación que se registra en la nube es la versión del aviso bajo la que el alumno decidió en su dispositivo, no la que trae la app. Antes se registraba la versión nueva sin que la hubiera visto. Se corrigió tras la revisión independiente
 - Pendiente con Ricardo. Decidir el responsable, el domicilio y el correo de privacidad, pasar los textos a un abogado, definir reembolsos y tribunales, y poner las variables en GitHub
 
 ### D-105. Configuración del admin en el servidor
@@ -1047,16 +1050,18 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Un cobro que quedó en needs_refund porque el cupo Fundador se llenó, al devolverse solo cambia a refunded y no quita otro plan del alumno
 - Devolución automática desde la app no se hizo. Stripe no entrega ya la factura en el cargo y emitir un reembolso con datos que no se pudieron comprobar es riesgo de dinero real. Se devuelve a mano en el panel y el aviso hace el resto
 - Eliminar la cuenta no cancela la suscripción en Stripe. La pantalla lo avisa y pide cancelar antes
+- Corregido tras la revisión independiente. Un aviso de pago tardío de un pago ya devuelto no reactiva el plan. Un reembolso de un cobro viejo no quita el plan si hay un pago más reciente vigente, y sin id de pago se elige el cobro por monto y por la hora del cobro. La base se niega a eliminar la cuenta con una suscripción de Stripe activa. Cancelar al final del periodo se avisa desde que se cancela, con customer.subscription.updated. Un alumno que vuelve a pagar usa su mismo cliente de Stripe, con un reintento como alumno nuevo si el cliente ya no existe
 - Pendiente con Ricardo. Activar el portal en el panel de Stripe, aplicar la séptima migración, publicar la función y hacer un pago y un reembolso de prueba
 
 ### D-107. HSTS y registro de errores del navegador
 - Fecha 2026-10-10. Origen C, Fase G bloque G5. Producción necesitaba HSTS y alguna forma de enterarse de lo que se rompe en los navegadores de los alumnos
 - HSTS. El archivo _headers del build lleva Strict-Transport-Security con un año y sin includeSubDomains ni preload, que son difíciles de deshacer y podrían comprometer otros subdominios. Solo vale en alojamientos que lean _headers, como Cloudflare Pages. GitHub Pages ya lo impone por su cuenta
 - Errores del navegador. Una tabla nueva, client_errors, y una función report_client_error que cualquiera puede llamar. Es la octava migración
-- Sin identidad. La tabla no tiene usuario, ni correo, ni IP. Una prueba SQL lo vigila mirando las columnas. El navegador quita correos, ids, claves, tokens y números largos, y la base lo limpia otra vez
+- Sin identidad. La tabla no tiene usuario, ni correo, ni IP. Una prueba SQL lo vigila mirando las columnas. El navegador quita correos, ids, claves, tokens, números largos y el pedazo de texto que copia el navegador al fallar al leer un JSON, y la base hace lo mismo otra vez con client_errors_scrub, porque cualquiera con la llave pública puede llamar a la función con lo que quiera
 - Con permiso. Solo se manda si el alumno con sesión dio el permiso de mejora anónima, que ya existía. Se descartó una opción nueva en Configuración para no sumar un permiso más. El aviso de privacidad ya lo dice. Quien no tiene sesión o no dio el permiso no manda nada
 - Contra abuso. Tope de 500 errores distintos por día, 14 días de conservación, un error cuenta una vez por sesión y 5 distintos por sesión como máximo
 - Lo ve solo el admin, en la pantalla 25
 - Limitación. Esto no es monitoreo del servidor ni manda alertas. Los errores del proxy de IA y de las funciones de pago se leen en los logs de su alojamiento
+- Corregido tras la revisión independiente. La limpieza de datos personales ahora también ocurre en la base, y la llave de la lista de errores usa la huella
 - Pendiente con Ricardo. Aplicar la octava migración y decidir si quiere un servicio de alertas
 

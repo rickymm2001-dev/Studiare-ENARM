@@ -28,6 +28,7 @@ export async function sendClientError(
 
 const RowSchema = z.object({
   day: z.string(),
+  fingerprint: z.string(),
   kind: z.enum(['error', 'rejection', 'render']),
   message: z.string(),
   stack: z.string().nullable(),
@@ -48,7 +49,7 @@ export async function fetchClientErrors(
   try {
     const reply = await cloud
       .from('client_errors')
-      .select('day,kind,message,stack,screen,version,occurrences,first_seen,last_seen')
+      .select('day,fingerprint,kind,message,stack,screen,version,occurrences,first_seen,last_seen')
       .order('last_seen', { ascending: false })
       .limit(CLIENT_ERROR_ROWS);
     if (reply.error) return null;

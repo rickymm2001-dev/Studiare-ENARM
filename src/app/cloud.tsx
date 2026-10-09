@@ -12,7 +12,7 @@ import { runSync } from '@/data/sync/runSync';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
-import { PRIVACY_NOTICE_VERSION } from '@/data/usecases/profile';
+import { acceptedNoticeVersion } from '@/data/usecases/profile';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
@@ -108,7 +108,10 @@ export function CloudBridge() {
             const first = await handle.first;
             if (first.status === 'other' || first.status === 'limit' || stopped()) return;
           }
-          await recordPrivacyAcceptance(cloud, identity.authId, PRIVACY_NOTICE_VERSION);
+          // Se registra la versión del aviso que el alumno aceptó de verdad en este dispositivo y no la
+          // que trae la app ahora. Una versión nueva se registra cuando la acepte (D-104)
+          const accepted = await acceptedNoticeVersion(api, userId);
+          if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
           await pushLocalAccount(api, cloud, identity.authId, userId);
           if (stopped() || isLeaving()) return;
           if (syncing?.authId !== identity.authId) {

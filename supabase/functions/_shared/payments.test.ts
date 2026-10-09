@@ -287,6 +287,22 @@ describe('eventos de Stripe', () => {
     });
   });
 
+  it('cancelar al final del periodo se avisa desde que se cancela, y otra actualización no', () => {
+    const updated = (object: Record<string, unknown>) => ({
+      id: 'evt_u',
+      type: 'customer.subscription.updated',
+      data: { object: { id: 'sub_1', metadata: { user_id: USER, plan: 'monthly' }, ...object } },
+    });
+    expect(noticeFromStripeEvent(updated({ cancel_at_period_end: true }))).toMatchObject({
+      kind: 'canceled',
+      userId: USER,
+      providerSubscriptionId: 'sub_1',
+    });
+    // Renovar o cambiar la tarjeta no es una cancelación
+    expect(noticeFromStripeEvent(updated({ cancel_at_period_end: false }))).toBeNull();
+    expect(noticeFromStripeEvent(updated({}))).toBeNull();
+  });
+
   it('lo que no se entiende se ignora', () => {
     expect(
       noticeFromStripeEvent({ id: 'e', type: 'customer.created', data: { object: {} } }),
@@ -777,6 +793,7 @@ describe('crear el pago', () => {
       }) as typeof fetch,
       authenticate: () => Promise.resolve({ id: USER, email: 'alumna@ejemplo.mx' }),
       founderSeatsLeft: () => Promise.resolve(10),
+      customerOf: () => Promise.resolve(null),
       ...overrides,
     };
   }
@@ -813,6 +830,74 @@ describe('crear el pago', () => {
       success_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
       cancel_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=cancelado',
     });
+  });
+
+  it('quien ya pagó vuelve a su mismo cliente de Stripe y no manda el correo', async () => {
+    sent.length = 0;
+    await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({ customerOf: () => Promise.resolve('cus_1') }),
+    );
+    const form = new URLSearchParams(bodyText(sent[0]?.init));
+    expect(form.get('customer')).toBe('cus_1');
+    expect(form.has('customer_email')).toBe(false);
+    expect(form.get('client_reference_id')).toBe(USER);
+  });
+
+  it('quien no ha pagado entra con su correo para que Stripe cree su cliente', async () => {
+    sent.length = 0;
+    await ask({ plan: 'monthly', provider: 'stripe' }, checkoutDeps());
+    const form = new URLSearchParams(bodyText(sent[0]?.init));
+    expect(form.has('customer')).toBe(false);
+    expect(form.get('customer_email')).toBe('alumna@ejemplo.mx');
+  });
+
+  it('si el cliente guardado ya no existe en Stripe reintenta como alumno nuevo', async () => {
+    sent.length = 0;
+    let calls = 0;
+    const reply = await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({
+        customerOf: () => Promise.resolve('cus_borrado'),
+        fetch: ((url: string, init?: RequestInit) => {
+          sent.push({ url, init });
+          calls += 1;
+          return Promise.resolve(
+            calls === 1
+              ? new Response(JSON.stringify({ error: { message: 'No such customer' } }), {
+                  status: 400,
+                })
+              : new Response(JSON.stringify({ url: 'https://checkout.stripe.com/c/pay/cs_2' })),
+          );
+        }) as typeof fetch,
+      }),
+    );
+    expect(reply.status).toBe(200);
+    expect(sent).toHaveLength(2);
+    expect(new URLSearchParams(bodyText(sent[0]?.init)).get('customer')).toBe('cus_borrado');
+    const retry = new URLSearchParams(bodyText(sent[1]?.init));
+    expect(retry.has('customer')).toBe(false);
+    expect(retry.get('customer_email')).toBe('alumna@ejemplo.mx');
+  });
+
+  it('si Stripe rechaza también sin cliente contesta 502, y si la base falla al buscar el cliente sigue sin él', async () => {
+    const failing = (() =>
+      Promise.resolve(new Response('{}', { status: 400 }))) as unknown as typeof fetch;
+    expect(
+      (
+        await ask(
+          { plan: 'monthly', provider: 'stripe' },
+          checkoutDeps({ customerOf: () => Promise.resolve('cus_1'), fetch: failing }),
+        )
+      ).status,
+    ).toBe(502);
+    sent.length = 0;
+    const reply = await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({ customerOf: () => Promise.reject(new Error('caída')) }),
+    );
+    expect(reply.status).toBe(200);
+    expect(new URLSearchParams(bodyText(sent[0]?.init)).has('customer')).toBe(false);
   });
 
   it('cada plan usa su precio de Stripe', async () => {

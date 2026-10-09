@@ -2,8 +2,9 @@
 --
 -- Reglas que se hacen cumplir aquí y no en el navegador
 --   - No se guarda quién fue. La tabla no tiene usuario, ni correo, ni IP. Solo qué falló, en qué
---     pantalla, en qué versión de la app y cuántas veces. El navegador ya quita correos, ids y números
---     largos del texto antes de mandarlo, y aquí se vuelve a recortar y limpiar
+--     pantalla, en qué versión de la app y cuántas veces. El navegador ya quita correos, ids, claves y
+--     números largos del texto antes de mandarlo, y aquí se vuelve a hacer lo mismo, porque cualquiera
+--     con la llave pública puede llamar a la función con lo que quiera
 --   - Lo puede mandar cualquiera, incluso sin sesión, porque un error puede ocurrir antes de entrar.
 --     Para que no sirva de basurero hay un tope de filas distintas por día. Pasado el tope, los errores
 --     nuevos se descartan y los que ya estaban solo suman su conteo
@@ -38,6 +39,25 @@ language sql immutable set search_path = public, pg_temp as $$ select 500 $$;
 create or replace function public.client_errors_keep_days() returns integer
 language sql immutable set search_path = public, pg_temp as $$ select 14 $$;
 
+-- Quita de un texto libre lo que puede identificar a alguien. Es la misma lista que usa el navegador
+-- en src/data/telemetry/clientErrors.ts, en el mismo orden
+create or replace function public.client_errors_scrub(p_text text) returns text
+language plpgsql immutable set search_path = public, pg_temp as $$
+declare
+  v text := coalesce(p_text, '');
+begin
+  v := regexp_replace(v, '"[^"]*" is not valid JSON', '"[texto]" is not valid JSON', 'g');
+  v := regexp_replace(v, 'eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', '[token]', 'g');
+  v := regexp_replace(v, '\m(sk|pk|rk|whsec|sb_secret|sb_publishable)[-_][A-Za-z0-9_-]{8,}', '[clave]', 'gi');
+  v := regexp_replace(v, '[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+', '[correo]', 'g');
+  v := regexp_replace(v, '\m[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\M', '[id]', 'g');
+  v := regexp_replace(v, '\m[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}\M', '[id]', 'g');
+  v := regexp_replace(v, '([?#])[^[:space:])''"]+', '\1[q]', 'g');
+  v := regexp_replace(v, '[0-9]{8,}', '[n]', 'g');
+  return v;
+end;
+$$;
+
 -- Devuelve recorded, counted, full o invalid. Nunca lanza por datos raros, para que un error al
 -- reportar un error no cause otro
 create or replace function public.report_client_error(
@@ -60,9 +80,9 @@ begin
      or p_fingerprint is null or p_fingerprint !~ '^[0-9a-f]{8,64}$' then
     return 'invalid';
   end if;
-  v_message := left(btrim(regexp_replace(coalesce(p_message, ''), '[[:cntrl:]]+', ' ', 'g')), 300);
-  v_stack := left(regexp_replace(coalesce(p_stack, ''), '[^[:print:]' || chr(10) || ']+', ' ', 'g'), 1500);
-  v_screen := left(regexp_replace(coalesce(p_screen, ''), '[[:cntrl:]]+', ' ', 'g'), 80);
+  v_message := left(btrim(regexp_replace(public.client_errors_scrub(p_message), '[[:cntrl:]]+', ' ', 'g')), 300);
+  v_stack := left(regexp_replace(public.client_errors_scrub(p_stack), '[^[:print:]' || chr(10) || ']+', ' ', 'g'), 1500);
+  v_screen := left(regexp_replace(public.client_errors_scrub(p_screen), '[[:cntrl:]]+', ' ', 'g'), 80);
   v_version := left(regexp_replace(coalesce(p_version, ''), '[[:cntrl:]]+', ' ', 'g'), 40);
   if v_message = '' then return 'invalid'; end if;
 
@@ -92,3 +112,4 @@ revoke all on function public.report_client_error(text, text, text, text, text, 
 grant execute on function public.report_client_error(text, text, text, text, text, text) to anon, authenticated;
 revoke all on function public.client_errors_daily_cap() from public, anon, authenticated, service_role;
 revoke all on function public.client_errors_keep_days() from public, anon, authenticated, service_role;
+revoke all on function public.client_errors_scrub(text) from public, anon, authenticated, service_role;

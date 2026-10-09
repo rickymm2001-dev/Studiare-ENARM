@@ -56,6 +56,7 @@ describe('mandar un error', () => {
 
 const row = {
   day: '2026-10-10',
+  fingerprint: 'aaaaaaaa11111111',
   kind: 'error',
   message: 'TypeError: x',
   stack: null,

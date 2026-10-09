@@ -72,7 +72,7 @@ export function ClientErrorsCard() {
             <ul className="flex flex-col gap-2">
               {state.rows.map((row) => (
                 <li
-                  key={`${row.day}-${row.message}-${row.screen}-${row.version}`}
+                  key={`${row.day}-${row.fingerprint}`}
                   className="flex flex-col gap-1 rounded-md border border-line p-3 text-sm"
                 >
                   <div className="flex flex-wrap items-center gap-2">

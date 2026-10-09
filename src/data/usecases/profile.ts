@@ -100,6 +100,22 @@ export async function updateProfile(
   return next;
 }
 
+/**
+ * La versión más reciente del aviso de privacidad bajo la que este alumno decidió algo en este
+ * dispositivo, o null si todavía no decidió nada. Es la que de verdad vio y aceptó, y no la que trae
+ * la app ahora, que puede ser más nueva (D-104)
+ */
+export async function acceptedNoticeVersion(
+  api: Pick<DataApi, 'repos'>,
+  userId: string,
+): Promise<string | null> {
+  const versions = (await api.repos.consents.list())
+    .filter((consent) => consent.userId === userId)
+    .map((consent) => consent.noticeVersion)
+    .sort();
+  return versions.at(-1) ?? null;
+}
+
 /** Estado actual de cada finalidad, con la decisión más reciente */
 export async function currentConsents(
   api: Pick<DataApi, 'repos'>,

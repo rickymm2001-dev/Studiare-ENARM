@@ -243,6 +243,26 @@ describe('Eliminar mi cuenta', () => {
     expect(onDone).toHaveBeenCalledTimes(1);
   });
 
+  it('con una suscripción con tarjeta activa explica que hay que cancelarla antes y no borra nada', async () => {
+    link();
+    const user = userEvent.setup();
+    const { loadCloud, wipeLocal, onDone } = setup({
+      error: { code: 'FR002', message: 'Cancela tu suscripción antes de eliminar tu cuenta' },
+    });
+    render(<DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={onDone} />);
+    await user.type(
+      screen.getByLabelText(t.settings.accountDeleteConfirmLabel),
+      t.settings.accountDeleteWord,
+    );
+    await user.click(screen.getByRole('button', { name: t.settings.accountDeleteAction }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      t.settings.eraseErrors.active_subscription,
+    );
+    expect(wipeLocal).not.toHaveBeenCalled();
+    expect(onDone).not.toHaveBeenCalled();
+  });
+
   it('el dueño no puede eliminarse y no se borra nada', async () => {
     link();
     const user = userEvent.setup();

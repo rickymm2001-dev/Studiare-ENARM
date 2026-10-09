@@ -60,6 +60,7 @@ export function checkoutDeps(): CheckoutDeps {
     now: () => Date.now(),
     authenticate: (authorization) => authenticateUser(supabase, authorization),
     founderSeatsLeft: () => founderSeatsLeftViaRest(supabase),
+    customerOf: (userId) => customerOfUserViaRest(supabase, userId),
   };
 }
 

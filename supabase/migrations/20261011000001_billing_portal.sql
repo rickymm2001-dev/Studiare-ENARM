@@ -9,6 +9,10 @@
 --     es. El reembolso marca el pago como devuelto y quita el plan, igual que el de Mercado Pago
 --   - Un reembolso completo de un cobro que había quedado en needs_refund, porque el cupo Fundador
 --     se llenó, solo marca ese pago como devuelto. No quita un plan que el alumno no tenía por ese cobro
+--   - Un reembolso de un cobro viejo no quita el plan si el alumno tiene un pago más reciente que sigue
+--     vigente. Y un aviso de pago tardío o repetido de un pago que ya se devolvió no reactiva el plan
+--   - No se puede eliminar la cuenta mientras haya una suscripción de Stripe activa, porque eliminarla
+--     no detiene los cobros en Stripe y el alumno quedaría cobrado sin cuenta
 --
 -- Es idempotente. Se corre después de 20261010000001_ai_hosted.sql. No edita las migraciones anteriores
 
@@ -95,6 +99,8 @@ declare
   v_payments integer;
   v_pay text;
   v_pay_status text;
+  v_pay_at timestamptz;
+  v_charged_at timestamptz;
 begin
   if p_provider not in ('stripe', 'mercadopago') then
     raise exception 'Procesador de pago desconocido' using errcode = '22023';
@@ -143,6 +149,16 @@ begin
       end if;
     end if;
 
+    -- Un aviso tardío o repetido de un pago que ya se devolvió no vuelve a activar nada. Stripe
+    -- reintenta durante días y no garantiza el orden
+    if exists (
+      select 1 from public.payments
+      where provider = p_provider and provider_payment_id = p_provider_payment_id and status = 'refunded'
+    ) then
+      update public.payment_webhook_events set processed_at = now() where provider = p_provider and event_id = p_event_id;
+      return 'ignored';
+    end if;
+
     insert into public.payments (user_id, provider, provider_payment_id, amount_mxn, status)
       values (p_user, p_provider, p_provider_payment_id, p_amount_mxn, 'paid')
       on conflict (provider, provider_payment_id) do nothing;
@@ -171,26 +187,41 @@ begin
     update public.subscriptions set status = 'canceled', updated_at = now()
       where user_id = p_user and provider = p_provider and status in ('active', 'past_due');
   else
-    -- Reembolso. Primero el pago que dice el aviso. Si no viene o no existe, el último pago del
-    -- alumno con ese monto que siga sin devolverse
+    -- Reembolso. Primero el pago que dice el aviso. Si no viene o no existe, el pago del alumno con
+    -- ese monto que siga sin devolverse y esté más cerca de la hora en que Stripe dice que se cobró
+    -- (data.object.created, en segundos). Sin esa hora, el más reciente
     v_pay := null;
+    v_pay_status := null;
+    v_pay_at := null;
     if p_provider_payment_id is not null then
-      select provider_payment_id, status into v_pay, v_pay_status from public.payments
+      select provider_payment_id, status, created_at into v_pay, v_pay_status, v_pay_at from public.payments
         where provider = p_provider and provider_payment_id = p_provider_payment_id and user_id = p_user;
     end if;
     if v_pay is null then
-      select provider_payment_id, status into v_pay, v_pay_status from public.payments
+      v_charged_at := case
+        when (p_payload #>> '{data,object,created}') ~ '^[0-9]{9,11}$'
+          then to_timestamp((p_payload #>> '{data,object,created}')::bigint)
+      end;
+      select provider_payment_id, status, created_at into v_pay, v_pay_status, v_pay_at from public.payments
         where provider = p_provider and user_id = p_user and status in ('paid', 'needs_refund')
           and (p_amount_mxn is null or amount_mxn = p_amount_mxn)
-        order by created_at desc, id desc
+        order by case when v_charged_at is null then 0 else abs(extract(epoch from created_at - v_charged_at)) end,
+                 created_at desc, id desc
         limit 1;
     end if;
     if v_pay is not null then
       update public.payments set status = 'refunded'
         where provider = p_provider and provider_payment_id = v_pay and user_id = p_user;
     end if;
-    -- Devolver un cobro que nunca activó nada no quita el plan que el alumno tenga por otro pago
-    if v_pay_status is distinct from 'needs_refund' then
+    -- Devolver un cobro que nunca activó nada, o uno viejo cuando hay un pago más reciente que sigue
+    -- vigente, no quita el plan que el alumno tiene pagado
+    if v_pay_status is distinct from 'needs_refund'
+       and not (
+         v_pay_at is not null and exists (
+           select 1 from public.payments
+           where user_id = p_user and provider = p_provider and status = 'paid' and created_at > v_pay_at
+         )
+       ) then
       update public.subscriptions
         set status = 'canceled', current_period_end = least(coalesce(current_period_end, now()), now()), updated_at = now()
         where user_id = p_user and provider = p_provider;
@@ -206,3 +237,39 @@ revoke all on function public.apply_payment_notice(text, text, jsonb, text, uuid
   from public, anon, authenticated, service_role;
 grant execute on function public.apply_payment_notice(text, text, jsonb, text, uuid, text, text, text, numeric, timestamptz)
   to service_role;
+
+-- ===================================================================== Eliminar la cuenta
+-- Igual que en 20261009000001_privacy.sql, más un freno. Eliminar la cuenta no cancela la suscripción
+-- en Stripe, que seguiría cobrando a alguien que ya no tiene cuenta. Mientras haya una suscripción de
+-- Stripe activa, la base pide cancelarla antes (FR002). Una cancelada con el periodo ya pagado sí se puede
+create or replace function public.delete_my_account() returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_user uuid := auth.uid();
+begin
+  if v_user is null then
+    raise exception 'Hace falta iniciar sesión' using errcode = '28000';
+  end if;
+  if not public.is_active_device() then
+    raise exception 'Este dispositivo no es el activo de la cuenta' using errcode = '42501';
+  end if;
+  if public.current_app_role() = 'owner' then
+    raise exception 'El dueño no puede borrar su propia cuenta' using errcode = '42501';
+  end if;
+  if exists (
+    select 1 from public.subscriptions s
+    where s.user_id = v_user and s.provider = 'stripe' and s.status in ('active', 'past_due')
+      and (s.current_period_end is null or s.current_period_end > now())
+  ) then
+    raise exception 'Cancela tu suscripción antes de eliminar tu cuenta' using errcode = 'FR002';
+  end if;
+
+  perform pg_advisory_xact_lock(hashtextextended('sync:' || v_user::text, 0));
+  perform set_config('app.erasing_user', v_user::text, true);
+  delete from auth.users where id = v_user;
+  perform set_config('app.erasing_user', '', true);
+end;
+$$;
+
+revoke all on function public.delete_my_account() from public, anon, authenticated, service_role;
+grant execute on function public.delete_my_account() to authenticated;

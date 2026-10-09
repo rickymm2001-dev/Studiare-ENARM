@@ -40,6 +40,9 @@ const FAILURES: Record<AuthFailure, { status: 401 | 403 | 503; message: string }
   },
 };
 
+/** Una llamada de motor. /ai/config y /ai/usage son de admin aunque lleguen con otro método */
+const ENGINE_CALL = /^\/ai\/(?!config\/?$|usage\/?$)[a-z_]+\/?$/;
+
 export function createHostedApp(options: HostedOptions) {
   const app = new Hono<{ Variables: AiVariables }>();
 
@@ -93,9 +96,11 @@ export function createHostedApp(options: HostedOptions) {
       return c.json({ error: 'unauthorized', message: failure.message }, failure.status);
     }
     const { user } = result;
-    const path = new URL(c.req.url).pathname;
-    const isAdminRoute = /\/ai\/(config|usage)\/?$/.test(path);
-    if (isAdminRoute) {
+    // Se decide con la misma ruta que usa el enrutador, ya decodificada. Con la dirección cruda,
+    // /ai/%63onfig se salta la regla y el enrutador la entiende como /ai/config. Además solo es una
+    // llamada de motor un POST a /ai/<motor>. Todo lo demás, sea lo que sea, pide ser admin
+    const isEngineCall = c.req.method === 'POST' && ENGINE_CALL.test(c.req.path);
+    if (!isEngineCall) {
       if (!canAdminister(user)) return c.json({ error: 'forbidden' }, 403);
     } else if (!canUseEngines(user)) {
       return c.json(

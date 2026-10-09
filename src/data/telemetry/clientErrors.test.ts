@@ -24,6 +24,12 @@ describe('quitar datos de personas', () => {
     );
   });
 
+  it('quita el pedazo de texto que el navegador copia al fallar al leer un JSON', () => {
+    expect(
+      scrub(`SyntaxError: Unexpected token 'a', "texto privado del alumno" is not valid JSON`, 300),
+    ).toBe(`SyntaxError: Unexpected token 'a', "[texto]" is not valid JSON`);
+  });
+
   it('quita lo que va detrás de ? y # en una dirección', () => {
     expect(scrub('GET https://x.mx/a?token=abc&email=u@x.mx#sec falló', 300)).toBe(
       'GET https://x.mx/a?[q] falló',

@@ -93,6 +93,36 @@ select pg_temp.expect(
   'E4. Dejó caracteres de control en el mensaje'
 );
 
+-- ===================================================================== E4b. Quita datos personales aunque el navegador no lo haya hecho
+select public.report_client_error(
+  'aaaaaaaa66666666', 'error',
+  E'falló para alumna@ejemplo.mx con 3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f y tarjeta 01J9Z0000000000000000000A1 tel 5512345678 Bearer eyJhbGciOi.eyJzdWIiOiIxIn0.firma_abc llave sk-ant-api03-abcdefghijkl',
+  E'at f (https://x.mx/a.js?token=secreto&correo=u@x.mx:10:200)\nUnexpected token ''a'', "texto privado del alumno" is not valid JSON',
+  '/mazos/3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f', 'v'
+);
+select pg_temp.expect(
+  (select message from public.client_errors where fingerprint = 'aaaaaaaa66666666')
+    = 'falló para [correo] con [id] y tarjeta [id] tel [n] Bearer [token] llave [clave]',
+  'E4b. El mensaje conservó datos personales: ' || (select message from public.client_errors where fingerprint = 'aaaaaaaa66666666')
+);
+select pg_temp.expect(
+  (select stack from public.client_errors where fingerprint = 'aaaaaaaa66666666') not like '%secreto%'
+  and (select stack from public.client_errors where fingerprint = 'aaaaaaaa66666666') not like '%u@x.mx%'
+  and (select stack from public.client_errors where fingerprint = 'aaaaaaaa66666666') not like '%texto privado%'
+  and (select stack from public.client_errors where fingerprint = 'aaaaaaaa66666666') like '%a.js?[q]%',
+  'E4b. La traza conservó datos personales: ' || (select stack from public.client_errors where fingerprint = 'aaaaaaaa66666666')
+);
+select pg_temp.expect(
+  (select screen from public.client_errors where fingerprint = 'aaaaaaaa66666666') = '/mazos/[id]',
+  'E4b. La pantalla conservó un id'
+);
+-- Las líneas y columnas del código no se confunden con números largos
+select public.report_client_error('aaaaaaaa77777777', 'error', 'x', 'at f (https://x.mx/a.js:1:2345678)', '/', 'v');
+select pg_temp.expect(
+  (select stack from public.client_errors where fingerprint = 'aaaaaaaa77777777') = 'at f (https://x.mx/a.js:1:2345678)',
+  'E4b. Cambió una columna del código por un número largo'
+);
+
 -- ===================================================================== E5. Tope de filas por día
 delete from public.client_errors;
 insert into public.client_errors (day, fingerprint, kind, message, screen, version)
@@ -135,6 +165,7 @@ begin;
 select pg_temp.as_anon();
 select pg_temp.expect(pg_temp.is_blocked('select count(*) from public.client_errors'), 'E7. anon leyó client_errors');
 select pg_temp.expect(pg_temp.is_blocked($q$select public.client_errors_daily_cap()$q$), 'E7. anon ejecutó una función interna');
+select pg_temp.expect(pg_temp.is_blocked($q$select public.client_errors_scrub('x')$q$), 'E7. anon ejecutó client_errors_scrub');
 rollback;
 begin;
 select pg_temp.as_user('92000000-0000-0000-0000-000000000002');

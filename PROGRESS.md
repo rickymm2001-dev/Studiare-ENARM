@@ -40,7 +40,14 @@ Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta
 - [x] G3. Configuración del admin en el servidor (D-105). platform_settings, clave admin_overrides, guardada desde la pantalla 25, copiada al navegador al abrir y con aviso para recargar. Pruebas SQL (settings_test.sql), de cliente y del puente con la nube
 - [x] G4. Portal de Stripe para cancelar y cambiar tarjeta, y reembolsos completos que quitan el plan (D-106). Séptima migración, función create-portal-session, pruebas SQL (billing_portal_test.sql), de las funciones y de la pantalla. Sin probar contra Stripe real
 - [x] G5. HSTS en _headers y registro de errores del navegador sin datos personales y solo con el permiso de mejora anónima (D-107). Octava migración, pruebas SQL (client_errors_test.sql), del reporte, del permiso y de la tarjeta en la pantalla 25
-- [ ] G6. Diseño del banco en la nube y lista de lo que necesito de Ricardo
+- [x] G6. Diseño del banco en la nube (docs/BANCO_EN_LA_NUBE.md), conversión sin pérdida entre ULID y uuid (cloudIds) y lista de lo que falta de Ricardo (docs/PENDIENTES_DE_RICARDO.md)
+
+### Revisión independiente (15.1, paso 3)
+- Un subagente que no escribió el código revisó G1 a G5 en solo lectura. Encontró 1 crítico, 4 importantes y 6 menores. Se verificó cada uno antes de actuar
+- Crítico, corregido. /ai/%63onfig y /ai/%75sage se saltaban la regla de admin del proxy alojado y dejaban a un alumno de pago leer y cambiar la configuración y el presupuesto de IA. Ahora se decide con la ruta del enrutador y todo lo que no sea un POST a un motor pide ser admin. Hay pruebas que fallan con el código anterior
+- Importantes, corregidos. Un aviso de pago tardío de un pago devuelto ya no reactiva el plan. Un reembolso de un cobro viejo ya no quita un mes vigente, y sin id de pago se elige el cobro por monto y hora. La base se niega a eliminar la cuenta con una suscripción de Stripe activa. La app ya no registra como aceptada una versión del aviso que el alumno no vio
+- Menores, corregidos. Cancelar al final del periodo se avisa desde que se cancela. El alumno que vuelve a pagar usa su mismo cliente de Stripe. La lista de errores usa la huella como llave. La limpieza de datos personales de los errores ocurre también en la base. El aviso de privacidad lista el alojamiento del proxy de IA
+- Menores, documentados y no corregidos. El presupuesto diario de IA es un tope blando bajo llamadas simultáneas y el proxy no limita peticiones con token falso, que se resuelve con un límite por IP en el alojamiento. Ver docs/IA_ALOJADA.md
 
 ## Fase F. Endurecer, documentar y dejar lista la demo (D-102)
 

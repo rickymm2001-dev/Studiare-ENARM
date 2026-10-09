@@ -28,7 +28,11 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('91000000-0000-0000-0000-000000000001', 'b1@x.mx', '{"alias":"Uno"}'),
   ('91000000-0000-0000-0000-000000000002', 'b2@x.mx', '{"alias":"Dos"}'),
   ('91000000-0000-0000-0000-000000000003', 'b3@x.mx', '{"alias":"Tres"}'),
-  ('91000000-0000-0000-0000-000000000004', 'b4@x.mx', '{"alias":"Cuatro"}');
+  ('91000000-0000-0000-0000-000000000004', 'b4@x.mx', '{"alias":"Cuatro"}'),
+  ('91000000-0000-0000-0000-000000000005', 'b5@x.mx', '{"alias":"Cinco"}'),
+  ('91000000-0000-0000-0000-000000000006', 'b6@x.mx', '{"alias":"Seis"}'),
+  ('91000000-0000-0000-0000-000000000007', 'b7@x.mx', '{"alias":"Siete"}'),
+  ('91000000-0000-0000-0000-000000000008', 'b8@x.mx', '{"alias":"Ocho"}');
 
 -- ===================================================================== C1. Ligar al alumno con su cliente
 select pg_temp.expect(
@@ -183,6 +187,83 @@ select pg_temp.expect(
   (select count(*) from public.payments where user_id = '91000000-0000-0000-0000-000000000004' and status = 'refunded') = 1
   and (select status from public.subscriptions where user_id = '91000000-0000-0000-0000-000000000004') = 'canceled',
   'C9. Un reembolso sin pago que coincida se aplicó mal'
+);
+
+-- ===================================================================== C6b. Con la hora del cobro se elige el pago correcto
+-- Dos cobros del mismo monto. Stripe devuelve el viejo y dice cuándo se cobró. Se marca el viejo y el
+-- plan se queda, porque el más nuevo sigue pagado
+select public.apply_payment_notice('stripe', 'evt-pay-5a', '{}', 'paid', '91000000-0000-0000-0000-000000000005', 'monthly', 'in_cinco_a', 'sub_cinco', 150, null);
+update public.payments set created_at = now() - interval '40 days' where provider_payment_id = 'in_cinco_a';
+select public.apply_payment_notice('stripe', 'evt-pay-5b', '{}', 'paid', '91000000-0000-0000-0000-000000000005', 'monthly', 'in_cinco_b', 'sub_cinco', 150, null);
+select public.apply_payment_notice(
+  'stripe', 'evt-ref-5',
+  jsonb_build_object('data', jsonb_build_object('object', jsonb_build_object('created', floor(extract(epoch from now() - interval '40 days'))::bigint + 60))),
+  'refunded', '91000000-0000-0000-0000-000000000005', null, null, null, 150, null
+);
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_cinco_a') = 'refunded'
+  and (select status from public.payments where provider_payment_id = 'in_cinco_b') = 'paid',
+  'C6b. La hora del cobro no eligió el pago correcto'
+);
+select pg_temp.expect(
+  (select status from public.subscriptions where user_id = '91000000-0000-0000-0000-000000000005') = 'active',
+  'C6b. Devolver el cobro viejo quitó el plan que el cobro nuevo mantiene'
+);
+
+-- ===================================================================== C6c. Un cobro viejo devuelto por id tampoco quita el plan
+select public.apply_payment_notice('stripe', 'evt-pay-6a', '{}', 'paid', '91000000-0000-0000-0000-000000000006', 'monthly', 'in_seis_a', 'sub_seis', 150, null);
+update public.payments set created_at = now() - interval '60 days' where provider_payment_id = 'in_seis_a';
+select public.apply_payment_notice('stripe', 'evt-pay-6b', '{}', 'paid', '91000000-0000-0000-0000-000000000006', 'monthly', 'in_seis_b', 'sub_seis', 150, null);
+select public.apply_payment_notice('stripe', 'evt-ref-6', '{}', 'refunded', '91000000-0000-0000-0000-000000000006', null, 'in_seis_a', null, 150, null);
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_seis_a') = 'refunded'
+  and (select status from public.payments where provider_payment_id = 'in_seis_b') = 'paid'
+  and (select status from public.subscriptions where user_id = '91000000-0000-0000-0000-000000000006') = 'active'
+  and public.user_plan('91000000-0000-0000-0000-000000000006') = 'monthly',
+  'C6c. Devolver un cobro viejo dejó sin plan a quien tiene un mes pagado'
+);
+
+-- ===================================================================== C6d. Un aviso tardío no reactiva un pago devuelto
+select public.apply_payment_notice('stripe', 'evt-pay-7', '{}', 'paid', '91000000-0000-0000-0000-000000000007', 'monthly', 'in_siete', 'sub_siete', 150, null);
+select public.apply_payment_notice('stripe', 'evt-ref-7', '{}', 'refunded', '91000000-0000-0000-0000-000000000007', null, 'in_siete', null, 150, null);
+select pg_temp.expect(
+  public.apply_payment_notice('stripe', 'evt-pay-7-reintento', '{}', 'paid', '91000000-0000-0000-0000-000000000007', 'monthly', 'in_siete', 'sub_siete', 150, null) = 'ignored',
+  'C6d. Un aviso tardío de un pago devuelto no se ignoró'
+);
+select pg_temp.expect(
+  (select status from public.subscriptions where user_id = '91000000-0000-0000-0000-000000000007') = 'canceled'
+  and (select status from public.payments where provider_payment_id = 'in_siete') = 'refunded'
+  and public.user_plan('91000000-0000-0000-0000-000000000007') = 'free',
+  'C6d. Un aviso tardío reactivó un plan devuelto'
+);
+
+-- ===================================================================== C9b. No se elimina la cuenta con una suscripción de Stripe activa
+select public.apply_payment_notice('stripe', 'evt-pay-8', '{}', 'paid', '91000000-0000-0000-0000-000000000008', 'monthly', 'in_ocho', 'sub_ocho', 150, null);
+begin;
+select pg_temp.as_user('91000000-0000-0000-0000-000000000008');
+do $$
+begin
+  begin
+    perform public.delete_my_account();
+    raise exception 'FALLA C9b. Eliminó la cuenta con una suscripción de Stripe activa';
+  exception when sqlstate 'FR002' then
+    null;
+  end;
+end $$;
+rollback;
+select pg_temp.expect(
+  (select count(*) from auth.users where id = '91000000-0000-0000-0000-000000000008') = 1,
+  'C9b. La cuenta desapareció aunque la función se negó'
+);
+-- Ya cancelada, con el periodo pagado, sí se puede
+select public.apply_payment_notice('stripe', 'evt-can-8', '{}', 'canceled', '91000000-0000-0000-0000-000000000008', null, null, 'sub_ocho', null, null);
+begin;
+select pg_temp.as_user('91000000-0000-0000-0000-000000000008');
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  (select count(*) from auth.users where id = '91000000-0000-0000-0000-000000000008') = 0,
+  'C9b. No pudo eliminar la cuenta una vez cancelada la suscripción'
 );
 
 -- ===================================================================== C10. Al eliminar la cuenta se va el cliente
