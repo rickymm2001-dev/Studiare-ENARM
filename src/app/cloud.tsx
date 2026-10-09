@@ -4,6 +4,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
 import { readCloudIdentity, recordPrivacyAcceptance } from '@/data/cloud/account';
+import { mirrorRemoteOverrides } from '@/data/cloud/adminSettings';
 import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
@@ -12,6 +13,7 @@ import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
 import { PRIVACY_NOTICE_VERSION } from '@/data/usecases/profile';
+import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
 import { usePreferences } from './preferences';
@@ -86,6 +88,11 @@ export function CloudBridge() {
           signIn(userId);
           setRole(identity.role);
           setCloud({ status: 'linked', identity });
+          // La configuración que el admin fijó en el servidor manda sobre la de este navegador. Los
+          // motores la leen al abrir la app, así que si cambió se pide recargar
+          void mirrorRemoteOverrides(cloud).then((result) => {
+            if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
+          });
           if (guard?.authId !== identity.authId) {
             stopGuard();
             const handle = startDeviceGuard({

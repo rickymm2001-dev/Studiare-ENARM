@@ -12,6 +12,7 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
+- Fase G en curso (D-103 a D-105). Proxy de IA alojado, textos legales y configuración del admin en el servidor listos en la rama de trabajo. Ver su sección
 - Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
@@ -28,6 +29,18 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase G. Que la plataforma funcione de verdad (D-103 a D-105)
+
+Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta y decirle qué necesito de él. Lo que depende de sus cuentas y llaves queda programado y probado con servidores falsos. Nada de esto está en main. Vive en la rama main-y84jz2 hasta que Ricardo pida el PR.
+
+### Bloques
+- [x] G1. Proxy de IA alojado (D-103). Verifica la sesión de Supabase, exige plan de pago o rol médico o admin, y cuenta límites, presupuesto y bitácora en Postgres. Dockerfile, sexta migración y docs/IA_ALOJADA.md
+- [x] G2. Aviso de privacidad y términos como páginas públicas (D-104). Un solo texto en src/i18n/legal.ts, exportable a docs/legal para el abogado
+- [x] G3. Configuración del admin en el servidor (D-105). platform_settings, clave admin_overrides, guardada desde la pantalla 25, copiada al navegador al abrir y con aviso para recargar. Pruebas SQL (settings_test.sql), de cliente y del puente con la nube
+- [ ] G4. Stripe, portal para cancelar y reembolsos automáticos
+- [ ] G5. HSTS y registro de errores del cliente en Supabase
+- [ ] G6. Diseño del banco en la nube y lista de lo que necesito de Ricardo
 
 ## Fase F. Endurecer, documentar y dejar lista la demo (D-102)
 

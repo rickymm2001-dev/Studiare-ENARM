@@ -1027,3 +1027,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La versión del aviso pasó a ser 2026-10-10 y vive en src/config/legal.ts. Es la que se guarda al aceptar. Quien ya aceptó la anterior seguirá con ella guardada, y todavía no hay una pantalla que pida aceptar la nueva
 - Edad mínima de 18 años, como supuesto que el abogado debe confirmar
 - Pendiente con Ricardo. Decidir el responsable, el domicilio y el correo de privacidad, pasar los textos a un abogado, definir reembolsos y tribunales, y poner las variables en GitHub
+
+### D-105. Configuración del admin en el servidor
+- Fecha 2026-10-10. Origen C, Fase G bloque G3. Los umbrales, los pesos y la estimación de costo que el admin cambiaba en la pantalla 25 solo valían en su navegador, así que no cambiaban nada para los alumnos
+- Qué hay. Los cambios se guardan en platform_settings, clave admin_overrides, que ya existía con permiso de lectura para todos y de escritura solo para el admin. No hace falta migración nueva. Con la cuenta de la nube conectada se guarda primero en el servidor y solo si salió bien en el navegador. Sin ella, como en la demostración, se guarda solo en el navegador
+- Al abrir la app, el puente con la nube copia lo que dice el servidor. Con la cuenta conectada manda el servidor, y si no tiene cambios se borran los del navegador. Si algo cambió aparece un aviso para recargar. No recarga solo, porque el alumno puede ir a media sesión
+- Por qué recargar. Los motores leen los umbrales una vez, al cargar el módulo, para que los motores se mantengan como funciones puras sin leer el estado de la app. Aplicar en caliente habría obligado a cambiar todos
+- Un valor del servidor que no cumpla el formato se ignora completo, igual que uno guardado en el navegador. Los números siguen validándose contra el esquema de umbrales antes de usarse
+- La clave la lee cualquiera, incluso sin sesión, por diseño de platform_settings. No debe llevar secretos
+- Límite conocido. Entre guardar y que cada alumno recargue hay un lapso en que conviven valores viejos y nuevos. Los umbrales de funciones que muestran calibrando solo cambian cuándo aparecen, no borran datos
+

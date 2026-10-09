@@ -57,6 +57,8 @@ export interface FakeCloud {
   failReport: FakeReportFailure;
   /** Hora de reintento que manda el error de límite en su detalle. null si el servidor no la manda */
   limitRetryAt: string | null;
+  /** Valor de la clave admin_overrides en platform_settings. null si el admin no ha cambiado nada */
+  overrides: unknown;
   claims: { p_device_id: string; p_label: string }[];
   /** Reclamos rechazados que el cliente reportó con log_rejected_claim */
   rejections: { p_device_id: string; p_label: string }[];
@@ -89,6 +91,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     failCheck: 'none',
     failReport: 'none',
     limitRetryAt: '2030-01-02T09:30:00Z',
+    overrides: null,
     claims: [],
     rejections: [],
     checks: 0,
@@ -118,6 +121,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       }
       if (name === 'user_roles') return { data: { role: 'student' }, error: null };
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
+      if (name === 'platform_settings') {
+        return { data: fake.overrides === null ? null : { value: fake.overrides }, error: null };
+      }
       return { data: null, error: null };
     };
     const chain: Record<string, unknown> = {

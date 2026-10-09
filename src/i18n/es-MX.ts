@@ -330,6 +330,12 @@ export const t = {
       offline: 'Las funciones de IA necesitan conexión. Lo demás sigue funcionando.',
     },
   },
+  configUpdate: {
+    title: 'Hay una configuración nueva',
+    body: 'La plataforma actualizó su configuración. Recarga para aplicarla cuando termines lo que estás haciendo.',
+    reload: 'Recargar ahora',
+    later: 'Después',
+  },
   pwa: {
     updateAvailable: 'Hay una versión nueva de la app.',
     offlineReady: 'Lista. La app ya abre sin conexión en este dispositivo.',

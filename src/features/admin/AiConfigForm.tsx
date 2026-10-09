@@ -4,7 +4,8 @@
 // vive en este navegador y sirve para comparar en la pantalla de costos.
 import { useState } from 'react';
 import type { AdminConfig } from '@/ai/admin';
-import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
+import { readStoredOverrides } from '@/config/overridesStore';
+import { commitOverrides } from './commitOverrides';
 import { AI_ENGINES } from '@/engines/aiContracts';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
@@ -35,11 +36,11 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
   const estimateValid =
     estimate.trim() === '' ||
     (Number.isFinite(Number(estimate)) && Number(estimate) >= 0 && Number(estimate) <= 1000);
-  const saveEstimate = () => {
+  const saveEstimate = async () => {
     const { aiCostEstimateUsd: _old, ...rest } = readStoredOverrides() ?? {};
     const next = estimate.trim() === '' ? rest : { ...rest, aiCostEstimateUsd: Number(estimate) };
     setEstimateMessage(
-      writeStoredOverrides(Object.keys(next).length > 0 ? next : null) ? 'saved' : 'failed',
+      (await commitOverrides(Object.keys(next).length > 0 ? next : null)) ? 'saved' : 'failed',
     );
   };
 
@@ -64,7 +65,12 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
             setEstimate(event.target.value);
           }}
         />
-        <Button disabled={!estimateValid} onClick={saveEstimate}>
+        <Button
+          disabled={!estimateValid}
+          onClick={() => {
+            void saveEstimate();
+          }}
+        >
           {text.estimate.save}
         </Button>
       </div>

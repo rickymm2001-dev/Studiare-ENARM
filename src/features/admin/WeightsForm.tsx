@@ -3,7 +3,8 @@
 // hasta que haya los oficiales. Se guardan en este navegador y se aplican al abrir la app.
 import { useState } from 'react';
 import { topicTaxonomy } from '@/demo/content';
-import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
+import { readStoredOverrides } from '@/config/overridesStore';
+import { commitOverrides } from './commitOverrides';
 import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -30,18 +31,18 @@ export function WeightsForm() {
     Object.entries(draft.branches).some(([key, raw]) => raw !== running.branches[key]) ||
     Object.entries(draft.topics).some(([key, raw]) => raw !== running.topics[key]);
 
-  const save = () => {
+  const save = async () => {
     const patch = weightsPatch(draft);
     const hasChanges = Object.keys(patch.branches).length + Object.keys(patch.topics).length > 0;
     const { weights: _old, ...rest } = readStoredOverrides() ?? {};
-    const ok = writeStoredOverrides(
+    const ok = await commitOverrides(
       hasChanges ? { ...rest, weights: patch } : Object.keys(rest).length > 0 ? rest : null,
     );
     setMessage(ok ? 'saved' : 'failed');
   };
-  const reset = () => {
+  const reset = async () => {
     const { weights: _old, ...rest } = readStoredOverrides() ?? {};
-    const ok = writeStoredOverrides(Object.keys(rest).length > 0 ? rest : null);
+    const ok = await commitOverrides(Object.keys(rest).length > 0 ? rest : null);
     setDraft(factoryDraft());
     setMessage(ok ? 'reset' : 'failed');
   };
@@ -102,10 +103,20 @@ export function WeightsForm() {
         ))}
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button disabled={invalid || !differs} onClick={save}>
+        <Button
+          disabled={invalid || !differs}
+          onClick={() => {
+            void save();
+          }}
+        >
           {text.save}
         </Button>
-        <Button variant="ghost" onClick={reset}>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            void reset();
+          }}
+        >
           {text.reset}
         </Button>
         {message === 'saved' ? (

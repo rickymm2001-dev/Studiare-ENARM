@@ -526,6 +526,23 @@ select
 
 7. Debe salir servicio_admite en true, alumno_admite, anon_lee_resumen, alumno_lee_bitacora y alumno_lee_configuracion en false, y uso_con_seguridad_por_fila en true. Si alguno de los false sale en true, avísame antes de abrir a alumnos
 
+## Configuración del admin en el servidor
+
+### Qué hace
+
+- Los umbrales, los pesos del ENARM y la estimación de costo que el admin cambia en la pantalla 25 se guardan en la tabla platform_settings, en la clave admin_overrides. Así un cambio vale para todos los alumnos y no solo para el navegador de quien lo hizo
+- No necesita una migración nueva. Usa la tabla y los permisos de la primera. Todos la leen, incluso sin sesión, y solo un admin o el dueño la escribe
+- Al abrir la app con la cuenta de la nube conectada, el navegador copia lo que dice el servidor. Si cambió, aparece un aviso para recargar y aplicarlo, porque los motores leen sus umbrales al abrir. Sin cuenta conectada, como en la demostración, los cambios siguen guardándose solo en el navegador
+- Si el servidor no tiene cambios, se borran los que haya en el navegador, porque con la nube conectada manda el servidor
+- Si el servidor no responde, el navegador conserva su copia y nada se rompe
+- Restablecer valores de fábrica borra la clave en el servidor
+
+### Qué conviene saber
+
+- La clave la lee cualquiera. No pongas ahí nada secreto. Solo lleva números de umbrales, pesos y una estimación de costo en dólares
+- Un alumno que intente escribirla desde la consola del navegador es rechazado por la base. Lo cubre supabase/tests/settings_test.sql
+- Un valor guardado que no cumpla el formato se ignora completo y la app usa los valores de fábrica
+
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora

@@ -3,7 +3,8 @@
 // la app. Un conjunto que rompa una regla, como una retención fuera de rango, no se guarda.
 import { useState } from 'react';
 import { DEFAULT_THRESHOLDS, FACTORY_THRESHOLDS } from '@/config/thresholds';
-import { readStoredOverrides, writeStoredOverrides } from '@/config/overridesStore';
+import { readStoredOverrides } from '@/config/overridesStore';
+import { commitOverrides } from './commitOverrides';
 import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -21,17 +22,17 @@ export function ThresholdsForm() {
     (field) => Number(draft[fieldId(field)]) !== readThreshold(DEFAULT_THRESHOLDS, field),
   );
 
-  const save = () => {
+  const save = async () => {
     const patch = patchFromDraft(draft);
     const { thresholds: _old, ...rest } = readStoredOverrides() ?? {};
     const next = Object.keys(patch).length > 0 ? { ...rest, thresholds: patch } : rest;
     setMessage(
-      writeStoredOverrides(Object.keys(next).length > 0 ? next : null) ? 'saved' : 'failed',
+      (await commitOverrides(Object.keys(next).length > 0 ? next : null)) ? 'saved' : 'failed',
     );
   };
-  const reset = () => {
+  const reset = async () => {
     const { thresholds: _removed, ...rest } = readStoredOverrides() ?? {};
-    const ok = writeStoredOverrides(Object.keys(rest).length > 0 ? rest : null);
+    const ok = await commitOverrides(Object.keys(rest).length > 0 ? rest : null);
     setDraft(
       Object.fromEntries(
         THRESHOLD_FIELDS.map((field) => [
@@ -73,10 +74,21 @@ export function ThresholdsForm() {
         })}
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button disabled={Object.keys(errors).length > 0 || !differsFromRunning} onClick={save}>
+        <Button
+          disabled={Object.keys(errors).length > 0 || !differsFromRunning}
+          onClick={() => {
+            void save();
+          }}
+        >
           {text.save}
         </Button>
-        <Button variant="ghost" disabled={!changed && !differsFromRunning} onClick={reset}>
+        <Button
+          variant="ghost"
+          disabled={!changed && !differsFromRunning}
+          onClick={() => {
+            void reset();
+          }}
+        >
           {text.reset}
         </Button>
         {message === 'saved' ? (
