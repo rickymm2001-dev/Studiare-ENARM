@@ -12,6 +12,9 @@ import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
+import { AdminSettingsScreen } from '@/features/admin/AdminSettingsScreen';
+import { AiCostsScreen } from '@/features/admin/AiCostsScreen';
+import { DemoDataScreen } from '@/features/admin/DemoDataScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
 import { RewardsScreen } from '@/features/rewards/RewardsScreen';
 import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
@@ -52,6 +55,9 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   progress: ProgressScreen,
   settings: SettingsScreen,
   adminUsers: AdminUsersScreen,
+  aiCosts: AiCostsScreen,
+  demoData: DemoDataScreen,
+  adminSettings: AdminSettingsScreen,
   questionBank: QuestionBankScreen,
   roleSelector: RoleSelectorScreen,
 };

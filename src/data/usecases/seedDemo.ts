@@ -83,3 +83,14 @@ export async function resetDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Pro
   await db.open();
   return seedDemoDatabase(db, seed);
 }
+
+/**
+ * Borra la base de demostración completa sin volver a sembrar. Es la misma excepción a la bitácora
+ * inmutable que regenerar (PLAN.md 2.2, D-052) y por la misma razón, no tiene datos reales
+ */
+export async function clearDemoDatabase(db: EnarmDb): Promise<void> {
+  if (db.kind !== 'demo') throw new DemoOnlyError();
+  db.close();
+  await db.delete();
+  await db.open();
+}

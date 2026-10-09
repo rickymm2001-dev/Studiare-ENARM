@@ -9,6 +9,7 @@
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
+- Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -24,6 +25,30 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase D. Motores de IA y evaluaciones (D-098)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No hay clave de IA en este entorno, así que todo corre en modo simulado y con un cliente falso del SDK. Con la clave de Ricardo se mide el costo y la latencia reales con npm run eval-ai y la bandera real.
+
+### Bloques
+- [x] B1. Núcleo de anclaje sin alias, contratos y guardas de los cinco motores, y respuestas fijas que las cumplen
+- [x] B2. Ruta de IA del proxy con el SDK oficial, límites por alumno y por motor, presupuesto diario, filtro de datos, reintento con el motivo, bitácora de costo y prompts versionados
+- [x] B3. Cliente de IA que vuelve a validar, tarjetas por la misma ruta con costo real, y análisis con IA en el Tutor con consentimiento, plan de pago, borrador y plantilla de respaldo
+- [x] B4. 60 casos dorados y npm run eval-ai con la bandera de respuestas fijas o con el modelo real
+- [x] B5. Pantallas de admin 23 costos de IA, 24 datos de demostración y 25 configuración
+- [x] B6. Documentos y cierre (D-098)
+
+### Bitácora
+- Las metas de la sección 8.7 se cumplen en 100 % con las respuestas fijas. Esquema válido en el primer intento, anclaje y rechazo de lo que no se puede sostener
+- La prueba entre el cliente y el proxy encontró un campo del costo de las fallas que el esquema del error no admitía. Los casos dorados encontraron un texto del que el generador simulado no sacaba tarjetas
+- Los umbrales y los pesos del ENARM editados desde admin se guardan en el navegador y se aplican al recargar, con prueba de que un conjunto inválido no entra
+- El tutor, que decía Próximamente en los planes, ya está. El examen completo sigue marcado
+
+### Pendiente
+- Que Ricardo agregue la clave en server/.env.local y corra npm run eval-ai con la bandera real, para el costo y la latencia verdaderos
+- Revisar los prompts de server/prompts y pegar su prompt maestro de tarjetas
+- Confirmar el segundo proveedor de IA y qué modelo prefiere por motor
+- La cola de borradores del médico para las preguntas reestructuradas, que va en la Fase E
 
 ## Fase C2. Etapa 6, sincronización entre dispositivos (D-085 y D-095)
 

@@ -2,6 +2,7 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { adminText } from './admin';
 import { examText } from './exam';
 import { featureText } from './features';
 import { qualityText } from './quality';
@@ -159,6 +160,7 @@ export const t = {
   ...examText,
   ...qualityText,
   ...tutorText,
+  ...adminText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',

@@ -6,6 +6,7 @@ import { buildDemoSeed } from '@/demo/generator/seed';
 import type { EnarmDb } from '../db/database';
 import { freshDb } from '../testing/fixtures';
 import {
+  clearDemoDatabase,
   DemoAlreadySeededError,
   DemoOnlyError,
   isDemoSeeded,
@@ -76,6 +77,19 @@ describe('siembra de la demo (11.2, 11.3)', () => {
     expect(summary.events).toBe(seed.events.length);
     expect(await db.events.count()).toBe(seed.events.length);
     expect(await db.users.count()).toBe(5);
+  });
+
+  it('borrar deja la demo vacía y lista para generar de nuevo, y no toca la base real', async () => {
+    const db = freshDb('demo');
+    const real = freshDb('real');
+    openDbs.push(db, real);
+    await seedDemoDatabase(db, seed);
+    await clearDemoDatabase(db);
+    expect(await db.users.count()).toBe(0);
+    expect(await db.events.count()).toBe(0);
+    expect(await isDemoSeeded(db, seed.demoUserId)).toBe(false);
+    expect((await seedDemoDatabase(db, seed)).events).toBe(seed.events.length);
+    await expect(clearDemoDatabase(real)).rejects.toThrow(DemoOnlyError);
   });
 
   it('sembrar sobre una demo con datos falla, aunque sea con otra fecha', async () => {

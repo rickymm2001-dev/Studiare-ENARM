@@ -254,6 +254,8 @@ Bloques
 
 ### Fase D. Motores de IA y evaluaciones
 
+Programada el 2026-10-08 en modo simulado (D-098). Falta la clave de Ricardo para medir costo y latencia reales. La cola del médico para las preguntas reestructuradas va en la Fase E.
+
 Bloques
 1. Cliente del proxy, filtro de datos personales, límites por alumno y por día, timeout y reintentos con espera exponencial, bitácora de costo
 2. Motor de olvidos por patrón y tarjeta de hipótesis con ver evidencia, aplicar acción y no me ayuda

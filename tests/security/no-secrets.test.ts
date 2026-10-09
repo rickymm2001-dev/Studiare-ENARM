@@ -14,9 +14,13 @@ let buildDir = '';
 
 beforeAll(() => {
   buildDir = mkdtempSync(join(tmpdir(), 'enarm-build-'));
+  // Vitest corre con NODE_ENV=test, que armaría un build de desarrollo más grande que el que se
+  // publica y pasaría el límite de tamaño de lo que el service worker guarda. Se construye como
+  // producción, que es lo que interesa revisar
   execFileSync(process.execPath, [VITE_BIN, 'build', '--outDir', buildDir, '--emptyOutDir'], {
     cwd: ROOT,
     stdio: 'pipe',
+    env: { ...process.env, NODE_ENV: 'production' },
   });
 }, 180_000);
 

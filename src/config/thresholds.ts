@@ -1,7 +1,8 @@
 // Umbrales por defecto de la sección 12 y de los motores de la sección 7. Los motores los reciben
-// como parámetro, y en la Fase D se podrán editar desde admin (pantalla 25). La marca entre
-// paréntesis viene de la especificación. (V) verificado, (J) juicio de diseño ajustable.
+// como parámetro. El admin los edita en la pantalla 25 y los cambios se aplican al abrir la app. La
+// marca entre paréntesis viene de la especificación. (V) verificado, (J) juicio de diseño ajustable.
 import { z } from 'zod';
+import { readStoredOverrides } from './overridesStore';
 
 export const ThresholdsSchema = z.strictObject({
   difficulty: z.strictObject({
@@ -107,7 +108,8 @@ export const ThresholdsSchema = z.strictObject({
 
 export type Thresholds = z.infer<typeof ThresholdsSchema>;
 
-export const DEFAULT_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
+/** Los umbrales de fábrica, sin los cambios del admin */
+export const FACTORY_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
   difficulty: {},
   sampling: {},
   bias: {},
@@ -120,3 +122,43 @@ export const DEFAULT_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
   streak: {},
   confidence: {},
 });
+
+export type ThresholdsPatch = Readonly<Record<string, Readonly<Record<string, number>>>>;
+
+/**
+ * Los umbrales con los cambios encima. Se vuelve a validar el conjunto completo, así un cambio que
+ * rompa una regla, como una retención fuera de rango, no entra
+ */
+export function mergeThresholds(
+  base: Thresholds,
+  patch: ThresholdsPatch,
+): { ok: true; value: Thresholds } | { ok: false; issues: string[] } {
+  const unknown = Object.keys(patch).filter((group) => !(group in base));
+  if (unknown.length > 0) {
+    return { ok: false, issues: unknown.map((group) => `${group}: grupo desconocido`) };
+  }
+  const merged = Object.fromEntries(
+    Object.entries(base).map(([group, values]) => [
+      group,
+      { ...(values as Record<string, number>), ...patch[group] },
+    ]),
+  );
+  const parsed = ThresholdsSchema.safeParse(merged);
+  return parsed.success
+    ? { ok: true, value: parsed.data }
+    : {
+        ok: false,
+        issues: parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`),
+      };
+}
+
+const stored = readStoredOverrides()?.thresholds;
+const withStored = stored ? mergeThresholds(FACTORY_THRESHOLDS, stored) : null;
+
+/**
+ * Los umbrales que usa la app. Los de fábrica con los cambios que el admin guardó en este navegador,
+ * si son válidos. Se calculan una vez al abrir la app, así que un cambio se ve al recargar
+ */
+export const DEFAULT_THRESHOLDS: Thresholds = withStored?.ok
+  ? withStored.value
+  : FACTORY_THRESHOLDS;

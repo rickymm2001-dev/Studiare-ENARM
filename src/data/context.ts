@@ -4,12 +4,24 @@ import type { Repositories } from './repos/types';
 import type { AppEvent } from './schemas/events';
 import type { SeedSummary } from './usecases/seedDemo';
 
-/** Generar y regenerar los datos de demostración (11.2, 11.3). Solo existe en enarm_demo */
+/** Lo que el admin puede ajustar al generar los datos de demostración (pantalla 24) */
+export interface DemoAdjustments {
+  /** Alumnos simulados. 300 por omisión (11.2) */
+  cohortSize?: number;
+  /** Semilla del generador. La misma semilla da siempre los mismos datos */
+  seed?: string;
+  /** Fecha del ENARM del alumno de la demo, o null para quitarla (11.3) */
+  examDate?: string | null;
+}
+
+/** Generar, borrar y regenerar los datos de demostración (11.2, 11.3). Solo existe en enarm_demo */
 export interface DemoDataActions {
   /** Genera la cohorte y el alumno de la demo en un worker y los siembra */
-  generate: () => Promise<SeedSummary>;
+  generate: (adjust?: DemoAdjustments) => Promise<SeedSummary>;
   /** Borra la base demo completa y la vuelve a sembrar desde cero */
-  regenerate: () => Promise<SeedSummary>;
+  regenerate: (adjust?: DemoAdjustments) => Promise<SeedSummary>;
+  /** Borra la base demo completa sin volver a sembrarla. Lo real no se toca */
+  clear: () => Promise<void>;
 }
 
 /** Lo que la interfaz puede usar. La base de Dexie queda escondida en src/data */
