@@ -78,7 +78,7 @@ describe('editor de pregunta (pantalla 18)', () => {
 
     await typing.clear(explanation);
     await typing.type(explanation, 'Explicación corregida por el médico.');
-    await typing.click(await screen.findByRole('button', { name: t.settings.saveChanges }));
+    await typing.click(await screen.findByRole('button', { name: t.settings.saveChanges }, WAIT));
 
     await waitFor(async () => {
       expect(await rendered.api.repos.questions.listVersions(question.questionId)).toHaveLength(2);
@@ -114,13 +114,15 @@ describe('editor de pregunta (pantalla 18)', () => {
         'in_review',
       );
     }, WAIT);
-    await typing.click(await screen.findByRole('button', { name: text.status.move.approved }));
+    await typing.click(
+      await screen.findByRole('button', { name: text.status.move.approved }, WAIT),
+    );
     await waitFor(async () => {
       expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
         'approved',
       );
     }, WAIT);
-    expect(await screen.findByRole('button', { name: text.status.reopen })).toBeVisible();
+    expect(await screen.findByRole('button', { name: text.status.reopen }, WAIT)).toBeVisible();
     // Aprobada no pasa directo a otra cosa que no sea reabrir la revisión
     expect(screen.queryByRole('button', { name: text.status.move.rejected })).toBeNull();
   });
@@ -131,7 +133,7 @@ describe('editor de pregunta (pantalla 18)', () => {
     const rendered = await open('admin', question.questionId);
     const prompt = await screen.findByLabelText(text.case.prompt, undefined, WAIT);
     await typing.clear(prompt);
-    await typing.click(await screen.findByRole('button', { name: t.settings.saveChanges }));
+    await typing.click(await screen.findByRole('button', { name: t.settings.saveChanges }, WAIT));
     const alert = await screen.findByRole('alert', undefined, WAIT);
     expect(within(alert).getByText(text.issues.prompt_empty ?? '')).toBeVisible();
     expect(await rendered.api.repos.questions.listVersions(question.questionId)).toHaveLength(1);

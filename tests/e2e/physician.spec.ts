@@ -1,7 +1,8 @@
 // Panel del médico de la Fase E. Pantalla 19, acuerdo del etiquetado. Sin etiquetas mide nada y dice
 // que el alumno ve trampas. El médico sin preguntas asignadas no tiene cola y el admin no etiqueta.
-// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido. Pantalla 20, borradores de IA.
+// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido. Pantalla 20, borradores de IA. Pantalla 22, importador del banco.
 import { SCREENS } from '@/app/screens';
+import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
 import {
   answerPracticeQuestion,
@@ -153,4 +154,75 @@ test('borradores de IA. Se pide una propuesta, llega como borrador con el origin
   await form.getByRole('button', { name: t.draftsScreen.questions.reject }).click();
   await expect(page.getByText(t.draftsScreen.questions.rejectedNotice)).toBeVisible();
   await expect(page.getByText(t.draftsScreen.questions.pendingEmpty)).toBeVisible();
+});
+
+test('importador. Revisa el archivo, reporta la fila con problema e importa solo lo bueno', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.bankImport.path);
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.bankImport.title }),
+  ).toBeVisible();
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const columns = [
+    ...Object.values(HEADERS),
+    ...letters.flatMap((letter) => Object.values(optionHeaders(letter))),
+  ];
+  const record = (id: string, branch: string): Record<string, string> => ({
+    [HEADERS.id]: id,
+    [HEADERS.branch]: branch,
+    [HEADERS.topic]: 'Cardiología',
+    [HEADERS.subtopic]: 'Hipertensión arterial sistémica',
+    [HEADERS.difficulty]: '3',
+    [HEADERS.vignette]: 'Hombre de 58 años con cefalea occipital y presión de 190/110 mmHg.',
+    [HEADERS.prompt]: '¿Cuál es el diagnóstico de la prueba de importación?',
+    [HEADERS.correct]: 'A',
+    [HEADERS.explanation]:
+      'Una presión muy elevada sin daño a órgano blanco es una urgencia hipertensiva.',
+    [HEADERS.refs]: 'GPC Hipertensión arterial',
+    ...Object.fromEntries(
+      letters.flatMap((letter, index) => [
+        [optionHeaders(letter).text, `Opción de texto ${letter}`],
+        [optionHeaders(letter).rationale, `Razón de la opción ${letter}.`],
+        [
+          optionHeaders(letter).bias,
+          index === 0
+            ? ''
+            : (['anchoring', 'premature_closure', 'framing_effect'][index - 1] ?? ''),
+        ],
+      ]),
+    ),
+  });
+  const csv = [
+    columns,
+    ...[record('imp-1', 'Medicina interna'), record('imp-2', 'Brujería')].map((row) =>
+      columns.map((column) => JSON.stringify(row[column] ?? '')),
+    ),
+  ]
+    .map((line) => line.join(','))
+    .join('\n');
+  await page
+    .getByLabel(t.importScreen.file.label)
+    .setInputFiles({ name: 'banco-prueba.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+
+  const summary = page.getByRole('region', { name: t.importScreen.summary.title });
+  await expect(summary.getByText(t.importScreen.summary.newQuestions(1))).toBeVisible();
+  const problems = page.getByRole('region', { name: new RegExp(t.importScreen.problems.title) });
+  await expect(problems.getByText(/Brujería/)).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+
+  await page.getByRole('button', { name: t.importScreen.run.import(1) }).click();
+  await expect(page.getByText(t.importScreen.done.created(1))).toBeVisible();
+  await page.getByRole('link', { name: t.importScreen.done.goBank }).click();
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.questionBank.title }),
+  ).toBeVisible();
+  await page.getByLabel(t.bank.search).fill('prueba de importación');
+  await expect(page.getByText('¿Cuál es el diagnóstico de la prueba de importación?')).toBeVisible({
+    timeout: 60_000,
+  });
 });

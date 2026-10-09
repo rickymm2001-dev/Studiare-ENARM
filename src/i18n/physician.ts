@@ -425,4 +425,73 @@ export const physicianText = {
       failed: 'No se pudo guardar. Intenta de nuevo.',
     },
   },
+
+  importScreen: {
+    hint: 'Sube el banco que llenaste con la plantilla. Antes de guardar nada ves qué entra, qué se omite y por qué.',
+    template: {
+      title: 'Plantilla',
+      hint: 'El Excel trae listas desplegables con los temas y los sesgos, y una fila de ejemplo que se omite. El CSV y el JSON usan los mismos encabezados.',
+      excel: 'Plantilla de Excel',
+      csv: 'Plantilla CSV',
+      json: 'Plantilla JSON',
+      guide: 'La guía de columnas está en docs/bank-import.md.',
+    },
+    file: {
+      title: 'Archivo',
+      label: 'Archivo del banco',
+      hint: 'Excel (.xlsx), CSV o JSON, hasta 50 MB. Un ID en cada fila evita duplicados si lo subes otra vez.',
+      reading: 'Leyendo el archivo',
+    },
+    errors: {
+      unsupported: 'Ese formato no se puede leer. Usa Excel (.xlsx), CSV o JSON.',
+      too_large: 'El archivo pasa de 50 MB. Divídelo en partes.',
+      corrupt: 'No se pudo abrir el archivo. Revisa que no esté dañado.',
+      empty: 'El archivo no tiene filas con datos.',
+      too_many_rows: 'El archivo trae más de 20,000 filas. Divídelo en partes.',
+      other: 'No se pudo leer el archivo. Intenta de nuevo.',
+    } as Record<string, string>,
+    summary: {
+      title: 'Esto pasaría al importar',
+      label: 'Resumen de la importación',
+      rows: 'Filas leídas',
+      ready: 'Listas',
+      problems: 'Con problemas',
+      unchanged: 'Sin cambios',
+      newQuestions: (n: number) => plural(n, 'pregunta nueva', 'preguntas nuevas'),
+      newVersions: (n: number) => plural(n, 'versión nueva de una pregunta', 'versiones nuevas'),
+      unchangedDetail: (n: number) =>
+        `${plural(n, 'ya está igual', 'ya están iguales')} en el banco.`,
+      examples: (n: number) =>
+        `Se omitió ${plural(n, 'fila de ejemplo', 'filas de ejemplo')} de la plantilla.`,
+      draftNote: 'Todo entra como borrador. Un médico lo aprueba después desde el banco.',
+    },
+    problems: {
+      title: 'Filas con problemas',
+      hint: 'No se importan. Corrígelas en el archivo y vuelve a subirlo. Las que ya entraron no se duplican.',
+      row: (n: number) => `Fila ${n}`,
+      table: 'Archivo',
+      id: 'ID',
+      message: 'Problema',
+      showMore: (n: number) => `Mostrar ${num(n)} más`,
+      download: 'Descargar el reporte de errores',
+      reportColumns: ['Fila', 'ID', 'Problema'] as const,
+      reportFile: 'reporte-de-errores-del-banco.csv',
+    },
+    run: {
+      import: (n: number) => `Importar ${num(n)} ${n === 1 ? 'pregunta' : 'preguntas'}`,
+      nothing: 'No hay filas listas para importar.',
+      importing: (done: number, total: number) => `Guardando ${num(done)} de ${num(total)}`,
+      again: 'Revisar otro archivo',
+    },
+    done: {
+      title: 'Importación terminada',
+      created: (n: number) => `${plural(n, 'pregunta nueva', 'preguntas nuevas')} en el banco.`,
+      newVersions: (n: number) =>
+        `${plural(n, 'versión nueva', 'versiones nuevas')} de preguntas que ya estaban.`,
+      unchanged: (n: number) => `${plural(n, 'pregunta sin cambios', 'preguntas sin cambios')}.`,
+      failed: (n: number) =>
+        `${plural(n, 'pregunta no se pudo guardar', 'preguntas no se pudieron guardar')}. Vuelve a subir el archivo para intentarlas otra vez.`,
+      goBank: 'Ver el banco',
+    },
+  },
 };

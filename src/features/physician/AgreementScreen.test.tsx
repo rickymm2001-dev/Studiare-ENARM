@@ -112,7 +112,7 @@ describe('acuerdo del etiquetado (pantalla 19)', () => {
     const definition =
       TAGGABLE_BIASES.find((bias) => bias.key === tagB)?.distractorDefinition ?? '';
     expect(await within(queue).findByText(definition)).toBeVisible();
-    expect(within(queue).getByText(text.queue.saved)).toBeVisible();
+    expect(await within(queue).findByText(text.queue.saved, undefined, WAIT)).toBeVisible();
 
     // Quitar la etiqueta la borra
     await typing.selectOptions(selects[0] as HTMLElement, '');
@@ -133,7 +133,7 @@ describe('acuerdo del etiquetado (pantalla 19)', () => {
     expect(within(queue).getByText(text.queue.adminNote)).toBeVisible();
     expect(within(queue).queryAllByRole('combobox')).toHaveLength(0);
     const stats = screen.getByRole('region', { name: text.stats.label });
-    expect(within(stats).getByText(String(sample.length))).toBeVisible();
+    expect(await within(stats).findByText(String(sample.length), undefined, WAIT)).toBeVisible();
   });
 
   it('sin pares calibra y dice que el alumno ve trampas', async () => {

@@ -1318,6 +1318,7 @@ export const featureText = {
     statsLabel: 'Preguntas por estado',
     assignedTo: (names: string) => `Asignada a ${names}`,
     unassigned: 'Sin asignar',
+    importBank: 'Importar banco',
     more: (n: number) => `Y ${n} más`,
   },
   admin: {

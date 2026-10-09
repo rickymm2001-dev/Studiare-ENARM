@@ -3,6 +3,8 @@
 // Búsqueda, filtros por rama, subespecialidad y estado, y páginas de 25 (D-076). El editor con
 // versiones, etiquetas y decisiones vive en la pantalla 18 (Fase E) y se abre con Editar.
 import { useState } from 'react';
+import { Link } from 'react-router';
+import { SCREENS } from '@/app/screens';
 import { usePreferences } from '@/app/preferences';
 import { BadgeCheck, FilePen, Hourglass } from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -51,6 +53,11 @@ export function QuestionBankScreen() {
       title={t.screens.questionBank.title}
       description={role === 'physician' ? t.bank.physicianHint : t.bank.adminHint}
       badges={<DemoContentLabel />}
+      actions={
+        <Button asChild variant="secondary" size="sm">
+          <Link to={SCREENS.bankImport.path}>{t.bank.importBank}</Link>
+        </Button>
+      }
     />
   );
   // Espera a que el banco termine de guardarse, así las asignaciones lo ven completo

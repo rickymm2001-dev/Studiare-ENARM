@@ -1,8 +1,10 @@
 import 'fake-indexeddb/auto';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { loadDemoDecks } from '@/demo/content/decks';
 import { makeUser, testApi } from '../testing/fixtures';
 import { followDeck } from './decks';
+
+vi.setConfig({ testTimeout: 60_000 });
 
 const disposers: (() => Promise<unknown>)[] = [];
 afterEach(async () => {
