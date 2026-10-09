@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router';
+import { reportClientError } from '@/app/errorReporter';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
@@ -23,7 +25,11 @@ export function NotFoundScreen() {
 
 export function RouteErrorScreen() {
   const error = useRouteError();
-  if (isRouteErrorResponse(error) && error.status === 404) {
+  const notFound = isRouteErrorResponse(error) && error.status === 404;
+  useEffect(() => {
+    if (!notFound) reportClientError('render', error);
+  }, [error, notFound]);
+  if (notFound) {
     return <NotFoundScreen />;
   }
   console.error(error);

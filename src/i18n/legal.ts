@@ -76,7 +76,7 @@ const privacy: LegalDoc = {
       bullets: [
         'Party. Compartir tu alias, XP, nivel y racha con los grupos a los que te unas.',
         'Análisis con IA. Usar tus errores para que el tutor te dé hipótesis y un informe con IA.',
-        'Mejora anónima. Usar tus datos sin identidad para mejorar el banco de preguntas y medir si lo que se estudia se parece al examen. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra.',
+        'Mejora anónima. Usar tus datos sin identidad para mejorar el banco de preguntas y medir si lo que se estudia se parece al examen. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
       ],
     },
     {

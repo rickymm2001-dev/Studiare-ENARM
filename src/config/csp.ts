@@ -72,6 +72,8 @@ export function buildHeadersFile(options: CspOptions = {}): string {
   return [
     '/*',
     `  Content-Security-Policy: ${buildHeaderCsp(options)}`,
+    // Un año y sin includeSubDomains ni preload, para no comprometer otros subdominios del dominio
+    '  Strict-Transport-Security: max-age=31536000',
     '  X-Content-Type-Options: nosniff',
     '  Referrer-Policy: strict-origin-when-cross-origin',
     '  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()',

@@ -26,11 +26,11 @@ Fase F, sección 14.3 de la especificación. Revisa cada capítulo de OWASP ASVS
 | V9 Tokens autocontenidos | Cumple | Solo los de Supabase. Ninguna llave de servicio en el navegador |
 | V10 OAuth y OIDC | No aplica | No hay inicio de sesión con terceros |
 | V11 Criptografía | Cumple | No hay criptografía propia. Todo lo hacen la plataforma y Supabase |
-| V12 Comunicación segura | Producción | HTTPS lo da el alojamiento. HSTS depende del dominio propio |
+| V12 Comunicación segura | Cumple | HTTPS lo da el alojamiento. El archivo de encabezados lleva HSTS por un año, que vale en Cloudflare Pages |
 | V13 Configuración | Cumple | Escaneo de secretos en el build, encabezados y auditoría de dependencias |
 | V14 Protección de datos | Parcial | Consentimientos, exportar y borrar listos. Los datos locales no van cifrados |
 | V15 Código y arquitectura seguros | Cumple | TypeScript estricto, lint, motores puros y dependencias bloqueadas |
-| V16 Registro de eventos y errores | Parcial | Bitácora de solo agregar. Falta un registro de seguridad del lado del servidor |
+| V16 Registro de eventos y errores | Parcial | Bitácora de solo agregar y registro de errores del navegador sin datos personales. Falta un registro de seguridad del lado del servidor |
 | V17 WebRTC | No aplica | No se usa |
 
 ## V1. Codificación y saneamiento
@@ -141,11 +141,12 @@ Cumple.
 
 ## V12. Comunicación segura
 
-Producción.
+Cumple, con una salvedad.
 
 - El alojamiento da HTTPS. GitHub Pages lo obliga y Cloudflare Pages también
 - La política de contenido impide que la app se conecte por http a otro lugar
-- Producción. Activar HSTS en el dominio propio cuando exista, y revisar que el proyecto de Supabase solo acepte HTTPS (lo hace por defecto)
+- HSTS por un año (Strict-Transport-Security max-age=31536000) en el archivo _headers del build, sin includeSubDomains ni preload, que son difíciles de deshacer. Vale en Cloudflare Pages y en Netlify. GitHub Pages no lee _headers, pero ya impone HTTPS y manda su propio HSTS
+- Producción. Revisar que el proyecto de Supabase solo acepte HTTPS (lo hace por defecto). Subir a includeSubDomains y preload solo cuando todo el dominio propio esté en HTTPS
 - El proxy de IA es local y por http en 127.0.0.1. La demo publicada no lo usa y trabaja con respuestas fijas
 
 ## V13. Configuración
@@ -189,6 +190,7 @@ Parcial.
 - Cada llamada a la IA deja su renglón con el modelo, los tokens y el costo, también las que fallan
 - Los cambios de rol, los reclamos de dispositivo y los avisos de pago quedan guardados
 - Los errores no muestran detalles al usuario ni guardan datos personales. El proxy solo registra el nombre del error
+- Los errores del navegador se reportan a una tabla sin usuario, ni correo, ni IP, solo si el alumno dio el permiso de mejora anónima. Se limpian de correos, ids, claves y números largos antes de salir y otra vez en la base, tienen un tope de 500 distintos por día y se guardan 14 días. Solo los lee un admin
 - Parcial. No hay un registro de seguridad del lado del servidor con alertas, por ejemplo de muchos intentos fallidos. Para producción se necesita un servicio de monitoreo
 
 ## V17. WebRTC
@@ -206,7 +208,7 @@ No aplica. La app no usa WebRTC.
 ## Lo que queda para producción
 
 - Proveedor de correo propio para los enlaces de acceso, y segundo factor para médicos y administradores
-- HSTS y dominio propio
+- Dominio propio, y subir HSTS a includeSubDomains y preload cuando todo el dominio esté en HTTPS
 - Aviso de privacidad revisado por un abogado y plazos de conservación
 - Monitoreo y alertas del lado del servidor
 - Cifrado de los datos locales, si se decide que hace falta

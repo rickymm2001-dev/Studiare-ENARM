@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
+import { installErrorReporter } from './app/errorReporter';
 // Fuentes servidas desde la app para que funcionen sin conexión (D-061)
 import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/plus-jakarta-sans';
@@ -14,6 +15,9 @@ const container = document.getElementById('root');
 if (!container) {
   throw new Error('No existe el elemento raíz #root en index.html');
 }
+
+// Escucha los errores desde el principio. Los manda solo con el permiso del alumno (D-107)
+installErrorReporter();
 
 createRoot(container).render(
   <StrictMode>

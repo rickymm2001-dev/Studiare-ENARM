@@ -503,6 +503,49 @@ Esto lo haces tú en el panel de Stripe, una vez en modo prueba y otra cuando pa
 - Un reembolso se empareja con el pago más reciente de ese monto. Si un alumno tuviera dos pagos del mismo monto y Stripe devolviera el más viejo, quedaría marcado el más nuevo. El plan se quita igual y el monto devuelto es el mismo, pero el registro quedaría cambiado de lugar
 - El cliente de Stripe se guarda al primer pago confirmado después de aplicar esta migración. Quien ya pagó antes no tiene cliente guardado hasta su siguiente cobro, y mientras tanto la app le dice que no encontró su suscripción. Se resuelve en el siguiente cobro, o a mano con record_billing_customer desde el editor de SQL
 
+## Registro de errores del navegador
+
+### Qué hace
+
+- Cuando la app falla en el navegador de un alumno, por un error sin atrapar, una promesa rechazada o una pantalla que se cae, manda un resumen técnico a la tabla client_errors. Eso te dice qué se rompe en producción sin esperar a que alguien lo reporte
+- Solo se manda si el alumno tiene la sesión abierta y dio el permiso de mejora anónima en Configuración, Privacidad. Sin permiso, o sin sesión, el error se descarta en el navegador y no sale
+- El resumen no lleva usuario, correo ni IP, y la tabla no tiene columnas para eso. Lleva el tipo de error, su mensaje, las primeras líneas de la traza, la pantalla con los ids cambiados por :id, la versión de la app (los primeros 7 caracteres del commit) y cuántas veces pasó
+- Antes de salir, el navegador quita correos, ids, claves, tokens, números largos y lo que va detrás de un signo de pregunta en una dirección. La base lo limpia y recorta otra vez
+- Un mismo error cuenta una vez por sesión y se mandan a lo mucho 5 distintos por sesión
+- Para que nadie la use de basurero, la base acepta hasta 500 errores distintos por día. Pasado el tope, los nuevos se descartan y los que ya estaban solo suman. Se guardan 14 días y lo viejo se borra al primer reporte de cada día
+- Los ves en la pantalla 25, Configuración, al final, en Errores del navegador. Hace falta la cuenta de la nube conectada como admin o dueño. Nadie más puede leer la tabla
+
+### Cómo aplicar la octava migración
+
+No necesitas terminal. Aplica primero las siete anteriores. Mientras no apliques esta, los errores no se guardan en ningún lado y la pantalla 25 dice que no pudo leerlos.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261012000001_client_errors.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('anon', 'public.report_client_error(text, text, text, text, text, text)', 'execute') as anon_reporta,
+  has_table_privilege('anon', 'public.client_errors', 'select') as anon_lee,
+  has_table_privilege('authenticated', 'public.client_errors', 'insert') as alumno_escribe_directo,
+  (select relrowsecurity from pg_class where oid = 'public.client_errors'::regclass) as errores_con_seguridad_por_fila,
+  exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'client_errors' and column_name in ('user_id', 'email', 'ip')
+  ) as guarda_quien_fue;
+```
+
+7. Debe salir anon_reporta en true, errores_con_seguridad_por_fila en true, y anon_lee, alumno_escribe_directo y guarda_quien_fue en false. Si alguno de los false sale en true, avísame antes de abrir a alumnos
+
+### Qué conviene saber
+
+- Cualquiera con la llave pública puede mandar reportes falsos, hasta el tope diario. No dañan nada, pero pueden llenar la lista de ruido. Si pasa, se ve en la pantalla 25 y se sube el filtro o se baja el tope en la función client_errors_daily_cap
+- Los errores del navegador no sustituyen un monitoreo de servidor con alertas. Si quieres avisos al celular cuando algo se rompe, conviene agregar un servicio aparte
+- El texto del aviso de privacidad ya dice que la mejora anónima incluye estos reportes
+
 ## Privacidad, borrar mis datos y mi cuenta
 
 ### Qué hace

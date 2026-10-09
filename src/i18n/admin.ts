@@ -169,6 +169,25 @@ export const adminText = {
     error: 'No se pudo completar la acción. Intenta de nuevo.',
   },
 
+  // Errores del navegador (Fase G, G5, D-107)
+  clientErrors: {
+    title: 'Errores del navegador',
+    description:
+      'Fallas que la app detectó en los navegadores de alumnos que dieron el permiso de mejora anónima. No traen nombres, correos ni ids. Se guardan 14 días y hay un tope de 500 distintos por día.',
+    needsCloud: 'Para verlos, conecta la cuenta de la nube de un admin.',
+    refresh: 'Actualizar',
+    loading: 'Cargando los errores…',
+    empty:
+      'No hay errores registrados. Puede ser que todo vaya bien o que todavía nadie dé el permiso de mejora anónima.',
+    failed:
+      'No pudimos leer los errores. Puede faltar aplicar la octava migración de Supabase, o tu cuenta no es admin.',
+    kinds: { error: 'Error', rejection: 'Promesa rechazada', render: 'Pantalla caída' },
+    times: (n: number) => plural(n, 'vez', 'veces'),
+    meta: (screen: string, version: string, last: string) =>
+      `Pantalla ${screen}. Versión ${version}. Última vez ${last}.`,
+    stack: 'Ver detalle técnico',
+  },
+
   adminConfig: {
     thresholds: {
       'difficulty.provisionalResponses': {

@@ -154,6 +154,13 @@ export default defineConfig(({ mode }) => ({
   },
   // Solo variables con prefijo VITE_ llegan al cliente. La clave de IA nunca usa ese prefijo
   envPrefix: 'VITE_',
+  // Los primeros 7 caracteres del commit, que son públicos. Van en cada reporte de error para saber
+  // qué versión de la app lo causó
+  define: {
+    'import.meta.env.VITE_BUILD_ID': JSON.stringify(
+      (process.env.GITHUB_SHA ?? '').slice(0, 7) || 'local',
+    ),
+  },
   server: {
     host: '127.0.0.1',
     port: 5173,

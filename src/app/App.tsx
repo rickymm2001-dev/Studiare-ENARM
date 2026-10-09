@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router/dom';
 import { cloudConfigured } from '@/data/cloud/client';
 import { DataProvider } from '@/data/DataProvider';
 import { useCloud } from './cloudState';
+import { ErrorReportingGate } from './ErrorReportingGate';
 import { usePreferences } from './preferences';
 import { createAppRouter } from './router';
 
@@ -27,6 +28,7 @@ export function App() {
   const database = usePreferences((state) => state.database);
   return (
     <DataProvider kind={database}>
+      <ErrorReportingGate />
       {cloudConfigured() ? (
         <Suspense fallback={null}>
           <CloudBridge />

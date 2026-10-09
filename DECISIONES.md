@@ -1049,3 +1049,14 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Eliminar la cuenta no cancela la suscripción en Stripe. La pantalla lo avisa y pide cancelar antes
 - Pendiente con Ricardo. Activar el portal en el panel de Stripe, aplicar la séptima migración, publicar la función y hacer un pago y un reembolso de prueba
 
+### D-107. HSTS y registro de errores del navegador
+- Fecha 2026-10-10. Origen C, Fase G bloque G5. Producción necesitaba HSTS y alguna forma de enterarse de lo que se rompe en los navegadores de los alumnos
+- HSTS. El archivo _headers del build lleva Strict-Transport-Security con un año y sin includeSubDomains ni preload, que son difíciles de deshacer y podrían comprometer otros subdominios. Solo vale en alojamientos que lean _headers, como Cloudflare Pages. GitHub Pages ya lo impone por su cuenta
+- Errores del navegador. Una tabla nueva, client_errors, y una función report_client_error que cualquiera puede llamar. Es la octava migración
+- Sin identidad. La tabla no tiene usuario, ni correo, ni IP. Una prueba SQL lo vigila mirando las columnas. El navegador quita correos, ids, claves, tokens y números largos, y la base lo limpia otra vez
+- Con permiso. Solo se manda si el alumno con sesión dio el permiso de mejora anónima, que ya existía. Se descartó una opción nueva en Configuración para no sumar un permiso más. El aviso de privacidad ya lo dice. Quien no tiene sesión o no dio el permiso no manda nada
+- Contra abuso. Tope de 500 errores distintos por día, 14 días de conservación, un error cuenta una vez por sesión y 5 distintos por sesión como máximo
+- Lo ve solo el admin, en la pantalla 25
+- Limitación. Esto no es monitoreo del servidor ni manda alertas. Los errores del proxy de IA y de las funciones de pago se leen en los logs de su alojamiento
+- Pendiente con Ricardo. Aplicar la octava migración y decidir si quiere un servicio de alertas
+

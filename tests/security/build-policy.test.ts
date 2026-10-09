@@ -83,6 +83,9 @@ describe('política de seguridad de contenido en el build', () => {
     const policy = /Content-Security-Policy: (.+)/.exec(headers)?.[1];
     expect(policy?.startsWith(metaPolicy(read(withoutCloud, 'index.html')) ?? '#')).toBe(true);
     expect(directive(policy, 'frame-ancestors')).toBe("'none'");
+    // HSTS por un año y sin preload ni subdominios, que no se pueden deshacer a la ligera
+    expect(headers).toContain('Strict-Transport-Security: max-age=31536000\n');
+    expect(headers).not.toMatch(/preload|includeSubDomains/i);
     expect(headers).toContain('X-Content-Type-Options: nosniff');
     expect(headers).toContain('Referrer-Policy: strict-origin-when-cross-origin');
     expect(headers).toContain('Permissions-Policy:');
