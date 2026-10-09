@@ -77,7 +77,7 @@ export async function submitOfficialScore(
   await api.recordEvent(
     createEvent(
       'official_score_submitted',
-      { year: input.year, score },
+      { year: input.year },
       { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
     ),
   );

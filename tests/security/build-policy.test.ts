@@ -1,6 +1,6 @@
 // Política de seguridad de contenido y presupuesto del JavaScript inicial en el build (14.3 y 14.4,
 // Fase F). Construye la app como producción en una carpeta temporal y revisa lo que se publica.
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -85,12 +85,23 @@ describe('presupuesto del JavaScript inicial', () => {
     expect(report.budgetBytes).toBe(INITIAL_JS_BUDGET_BYTES);
   });
 
-  it('con la nube configurada el JavaScript inicial es el mismo, porque el SDK se baja aparte', () => {
-    const base = measureInitialBundle(withoutCloud);
-    const cloud = measureInitialBundle(withCloud);
-    expect(cloud.withinBudget, formatReport(cloud)).toBe(true);
-    // Solo cambia lo que se hornea del URL, nunca el tamaño relevante
-    expect(Math.abs(cloud.totalGzipBytes - base.totalGzipBytes)).toBeLessThan(2_000);
+  it('el SDK de Supabase y la sincronización no están en lo inicial, con o sin la nube configurada', () => {
+    for (const dir of [withoutCloud, withCloud]) {
+      const report = measureInitialBundle(dir);
+      expect(report.withinBudget, formatReport(report)).toBe(true);
+      const initial = initialScripts(read(dir, 'index.html')).map((file) => read(dir, file));
+      // Textos que solo existen en el SDK y en la sincronización
+      for (const marker of ['AuthApiError', 'sync_push_records']) {
+        const found = initial.some((code) => code.includes(marker));
+        expect(found, `"${marker}" no debería estar en el JavaScript inicial`).toBe(false);
+      }
+    }
+    // Y sí existen en algún archivo del build, para que la búsqueda no pase en vacío
+    const all = readdirSync(join(withCloud, 'assets'))
+      .filter((file) => file.endsWith('.js'))
+      .map((file) => read(withCloud, join('assets', file)));
+    expect(all.some((code) => code.includes('AuthApiError'))).toBe(true);
+    expect(all.some((code) => code.includes('sync_push_records'))).toBe(true);
   });
 
   it('el panel médico, el de administración y el importador no están en lo inicial', () => {

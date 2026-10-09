@@ -188,10 +188,12 @@ select pg_temp.expect(
 );
 
 -- ===================================================================== P6. Un admin se da de baja sin romper la auditoría
+-- V4 cambió el rol de V3. El registro de auditoría debe sobrevivir cuando V4 se dé de baja
+insert into public.role_audit (user_id, old_role, new_role, changed_by)
+  values ('e0000000-0000-0000-0000-000000000003', 'student', 'student', 'e0000000-0000-0000-0000-000000000004');
 select pg_temp.expect(
-  (select count(*) from public.role_audit where changed_by = 'e0000000-0000-0000-0000-000000000004') = 0
-  or true,
-  'P6. Preparación'
+  (select count(*) from public.role_audit where changed_by = 'e0000000-0000-0000-0000-000000000004') >= 1,
+  'P6. Preparación, la auditoría apunta al admin antes de que se dé de baja'
 );
 begin;
 select pg_temp.as_user('e0000000-0000-0000-0000-000000000004');
@@ -204,6 +206,11 @@ select pg_temp.expect(
 select pg_temp.expect(
   (select count(*) from public.role_audit where changed_by = 'e0000000-0000-0000-0000-000000000004') = 0,
   'P6. La auditoría sigue apuntando a un usuario que ya no existe'
+);
+select pg_temp.expect(
+  (select count(*) from public.role_audit
+    where user_id = 'e0000000-0000-0000-0000-000000000003' and changed_by is null) >= 1,
+  'P6. El registro de auditoría se fue con el admin en lugar de quedarse sin su nombre'
 );
 
 -- ===================================================================== P7. El dueño no se da de baja
@@ -240,6 +247,23 @@ select pg_temp.expect(
       and connamespace = 'public'::regnamespace and confdeltype = 'a'
   ),
   'P8. Queda una llave hacia auth.users sin regla al borrar'
+);
+
+-- ===================================================================== P9. Un administrador quita a un usuario desde el panel
+-- Borrar al usuario de auth.users, sin pasar por las funciones, también arrastra su bitácora
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('e0000000-0000-0000-0000-000000000006', 'v6@x.mx', '{"alias":"Seis"}');
+insert into public.events (id, user_id, type, at, tz, payload)
+  values ('priv-evt-v6', 'e0000000-0000-0000-0000-000000000006', 'card_reviewed', now(), 'America/Merida', '{}');
+-- Mientras el usuario existe, su bitácora sigue cerrada
+select pg_temp.expect(
+  pg_temp.fails_with($q$delete from public.events where user_id = 'e0000000-0000-0000-0000-000000000006'$q$) = '42501',
+  'P9. Se pudo borrar la bitácora de un usuario que sigue existiendo'
+);
+delete from auth.users where id = 'e0000000-0000-0000-0000-000000000006';
+select pg_temp.expect(
+  (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000006') = 0,
+  'P9. La bitácora de un usuario dado de baja por un administrador no se fue con él'
 );
 
 select 'TODAS LAS PRUEBAS DE PRIVACIDAD PASARON' as resultado;

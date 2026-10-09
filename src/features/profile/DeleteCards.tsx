@@ -5,6 +5,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Trash2, UserX } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
+import { pauseSync, resumeSync } from '@/app/syncState';
 import { useCloud } from '@/app/cloudState';
 import {
   deleteCloudAccount,
@@ -19,9 +20,12 @@ import { TextField } from '@/ui/components/field';
 
 type Cloud = Pick<SupabaseClient, 'rpc'>;
 
+/** Por qué falló un borrado. local es que la nube sí se borró y este dispositivo no */
+type DeleteFailure = EraseFailure | 'local';
+
 interface DeleteProps {
-  /** Cliente de la nube, o null si no está configurada. Solo se usa con la cuenta conectada */
-  cloud: Cloud | null;
+  /** Baja el cliente de la nube, o null si no está configurada o no se pudo bajar */
+  loadCloud: () => Promise<Cloud | null>;
   /** Borra lo de este dispositivo. Lo pone quien conoce la base */
   wipeLocal: () => Promise<void>;
   /** Qué hacer al terminar, normalmente salir de la sesión */
@@ -29,12 +33,27 @@ interface DeleteProps {
 }
 
 /**
- * Con la cuenta en la nube conectada, borrar exige la nube. Si por algo el cliente no está, borrar
- * falla y no deja el dispositivo vacío con la copia en la nube intacta
+ * Qué se puede borrar según el estado de la nube. Con la sesión abierta se borra la nube y luego el
+ * dispositivo. Mientras se comprueba la cuenta se espera, para no borrar solo el dispositivo por
+ * error. Sin sesión, o si no se pudo comprobar, solo se borra el dispositivo y se avisa que la copia
+ * en la nube se queda
  */
-function useCloudTarget(cloud: Cloud | null): { linked: boolean; cloud: Cloud | null } {
-  const linked = useCloud((store) => store.state.status === 'linked');
-  return { linked, cloud };
+type Mode = 'device' | 'cloud' | 'wait';
+
+function useMode(): { mode: Mode; note: string | null } {
+  const status = useCloud((store) => store.state.status);
+  switch (status) {
+    case 'linked':
+      return { mode: 'cloud', note: t.settings.deleteCloudNote };
+    case 'checking':
+      return { mode: 'wait', note: t.settings.deleteCloudChecking };
+    case 'signed-out':
+      return { mode: 'device', note: t.settings.deleteSignedOutNote };
+    case 'error':
+      return { mode: 'device', note: t.settings.deleteCloudUnknownNote };
+    case 'off':
+      return { mode: 'device', note: null };
+  }
 }
 
 interface PanelProps {
@@ -55,7 +74,8 @@ function Panel({ id, title, description, children }: PanelProps) {
     </Card>
   );
 }
-function ErrorLine({ reason }: { reason: EraseFailure | null }) {
+
+function ErrorLine({ reason }: { reason: DeleteFailure | null }) {
   return reason ? (
     <p role="alert" className="text-sm text-danger">
       {t.settings.eraseErrors[reason]}
@@ -63,31 +83,46 @@ function ErrorLine({ reason }: { reason: EraseFailure | null }) {
   ) : null;
 }
 
-/** Corre el borrado de la nube y, si salió bien, lo local. Devuelve por qué falló, o null si terminó */
+/**
+ * Con la nube, la sincronización se frena, se borra allá y luego aquí. Devuelve por qué falló, o
+ * null si terminó. Si algo falla la sincronización se reanuda. Si todo sale bien se queda frenada
+ * hasta que la sesión se cierre, porque no debe volver a subir lo que se acaba de borrar
+ */
 async function eraseAll(
-  target: { linked: boolean; cloud: Cloud | null },
+  mode: Mode,
+  loadCloud: DeleteProps['loadCloud'],
   step: (cloud: Cloud) => Promise<EraseResult>,
   wipeLocal: () => Promise<void>,
-): Promise<EraseFailure | null> {
-  if (target.linked) {
-    if (!target.cloud) return 'network';
-    const result = await step(target.cloud);
-    if (!result.ok) return result.reason;
+): Promise<DeleteFailure | null> {
+  if (mode === 'wait') return 'network';
+  if (mode === 'cloud') {
+    await pauseSync();
+    const cloud = await loadCloud();
+    const result = cloud ? await step(cloud) : null;
+    if (!result?.ok) {
+      resumeSync();
+      return result ? result.reason : 'network';
+    }
   }
-  await wipeLocal();
+  try {
+    await wipeLocal();
+  } catch {
+    if (mode === 'cloud') resumeSync();
+    return 'local';
+  }
   return null;
 }
 
 /** Borra los datos del dispositivo y, con la nube conectada, también la copia de allá */
-export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
+export function DeleteDataCard({ loadCloud, wipeLocal, onDone }: DeleteProps) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [failure, setFailure] = useState<EraseFailure | null>(null);
-  const target = useCloudTarget(cloud);
+  const [failure, setFailure] = useState<DeleteFailure | null>(null);
+  const { mode, note } = useMode();
   const run = () => {
     setBusy(true);
     setFailure(null);
-    void eraseAll(target, eraseCloudData, wipeLocal)
+    void eraseAll(mode, loadCloud, eraseCloudData, wipeLocal)
       .then((reason) => {
         if (reason) setFailure(reason);
         else onDone();
@@ -102,15 +137,15 @@ export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
       title={t.settings.deleteTitle}
       description={t.settings.deleteDescription}
     >
-      {target.linked ? <p className="text-sm text-fg-muted">{t.settings.deleteCloudNote}</p> : null}
+      {note ? <p className="text-sm text-fg-muted">{note}</p> : null}
       {confirming ? (
         <div className="flex flex-col gap-3">
           <p className="text-sm">
-            {target.linked ? t.settings.deleteCloudConfirmText : t.settings.deleteConfirmText}
+            {mode === 'cloud' ? t.settings.deleteCloudConfirmText : t.settings.deleteConfirmText}
           </p>
           <ErrorLine reason={failure} />
           <div className="flex flex-wrap gap-2">
-            <Button variant="danger" disabled={busy} onClick={run}>
+            <Button variant="danger" disabled={busy || mode === 'wait'} onClick={run}>
               {busy ? t.settings.deleting : t.settings.deleteConfirm}
             </Button>
             <Button
@@ -129,6 +164,7 @@ export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
         <Button
           variant="danger"
           className="self-start"
+          disabled={mode === 'wait'}
           onClick={() => {
             setConfirming(true);
           }}
@@ -142,13 +178,13 @@ export function DeleteDataCard({ cloud, wipeLocal, onDone }: DeleteProps) {
 }
 
 /** Elimina la cuenta en la nube. Pide escribir la palabra para no hacerlo por un toque de más */
-export function DeleteAccountCard({ cloud, wipeLocal, onDone }: DeleteProps) {
+export function DeleteAccountCard({ loadCloud, wipeLocal, onDone }: DeleteProps) {
   const [word, setWord] = useState('');
   const [busy, setBusy] = useState(false);
-  const [failure, setFailure] = useState<EraseFailure | null>(null);
-  const target = useCloudTarget(cloud);
-  // Sin cuenta en la nube no hay cuenta que eliminar. Para el dispositivo está Borrar mis datos
-  if (!target.linked) return null;
+  const [failure, setFailure] = useState<DeleteFailure | null>(null);
+  const { mode } = useMode();
+  // Sin cuenta en la nube conectada no hay cuenta que eliminar. Para el dispositivo está Borrar mis datos
+  if (mode !== 'cloud') return null;
   const confirmed = word.trim() === t.settings.accountDeleteWord;
   return (
     <Panel
@@ -164,7 +200,7 @@ export function DeleteAccountCard({ cloud, wipeLocal, onDone }: DeleteProps) {
           if (!confirmed || busy) return;
           setBusy(true);
           setFailure(null);
-          void eraseAll(target, deleteCloudAccount, wipeLocal)
+          void eraseAll(mode, loadCloud, deleteCloudAccount, wipeLocal)
             .then((reason) => {
               if (reason) setFailure(reason);
               else onDone();

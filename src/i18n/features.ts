@@ -367,10 +367,18 @@ export const featureText = {
     // Con la cuenta en la nube conectada. Borrar los datos también quita la copia de allá (D-101)
     deleteCloudNote:
       'Como tienes tu cuenta en la nube conectada, también se borra tu copia allá, con tu bitácora, tarjetas, apuntes y grupos. Tu correo y tu plan se quedan.',
+    deleteCloudChecking:
+      'Estamos comprobando tu cuenta en la nube. Espera unos segundos para borrar, así se borra también tu copia allá.',
+    deleteSignedOutNote:
+      'No tienes la sesión de la nube abierta, así que solo se borra este dispositivo y tu copia en la nube se queda. Entra con tu correo antes si quieres borrarla también.',
+    deleteCloudUnknownNote:
+      'No pudimos comprobar tu cuenta en la nube, así que solo se borra este dispositivo y tu copia allá se queda. Entra con conexión si quieres borrarla también.',
     deleteCloudConfirmText:
       'Se borran los perfiles y el historial de este dispositivo y tu copia en la nube. No se puede deshacer.',
     deleting: 'Borrando…',
     eraseErrors: {
+      local:
+        'Se borró tu copia en la nube, pero no se pudo borrar este dispositivo. Inténtalo otra vez.',
       not_active_device:
         'Este no es el dispositivo activo de tu cuenta. Abre Studiare en el dispositivo donde usaste tu cuenta por última vez, o entra aquí de nuevo para tomarla.',
       owner: 'La cuenta del dueño de la plataforma no se puede borrar desde aquí.',

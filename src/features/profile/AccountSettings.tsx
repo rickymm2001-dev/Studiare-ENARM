@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 import { pushAccountIfLinked, useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
-import { getCloud } from '@/data/cloud/client';
+import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
@@ -105,7 +105,6 @@ export function DataSection({ session }: { session: ReadySession }) {
   const { deleteAllData } = api;
   const { user } = session;
   const signOut = usePreferences((state) => state.signOut);
-  const cloud = getCloud();
   // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay que leer
   // los perfiles antes, porque con la base borrada ya no se sabe de quién eran
   const wipeLocal = async () => {
@@ -142,8 +141,8 @@ export function DataSection({ session }: { session: ReadySession }) {
       </Section>
       {deleteAllData ? (
         <>
-          <DeleteDataCard cloud={cloud} wipeLocal={wipeLocal} onDone={signOut} />
-          <DeleteAccountCard cloud={cloud} wipeLocal={wipeLocal} onDone={signOut} />
+          <DeleteDataCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={signOut} />
+          <DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={signOut} />
         </>
       ) : null}
     </>

@@ -490,9 +490,10 @@ select
 ### Qué conviene saber
 
 - Borrar es definitivo. La app pide confirmación, pero no hay forma de recuperar lo borrado, ni siquiera desde Supabase, porque no se guarda una copia
-- Una sincronización a medias no revive lo borrado. La función toma el mismo candado que la subida y la bajada
+- Una sincronización a medias no revive lo borrado. La función toma el mismo candado que la subida y la bajada, y la app además frena la sincronización y espera a la que esté corriendo antes de llamar a la función
+- Si un administrador quita a un usuario desde el panel de Supabase, su bitácora se va con él. El freno solo lo permite cuando el usuario ya no existe
 - Si el alumno borra desde un dispositivo que ya no es el activo, el servidor lo rechaza y la app le dice que entre desde el activo o que tome la cuenta aquí
-- El puntaje oficial del ENARM vive por ahora solo en el navegador y entra al archivo que el alumno exporta. No se sube a la nube
+- El puntaje oficial del ENARM vive por ahora solo en el navegador y entra al archivo que el alumno exporta. No se sube a la nube, y su evento solo lleva el año
 
 ## Antes de abrir a alumnos
 

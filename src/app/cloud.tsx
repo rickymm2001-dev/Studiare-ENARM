@@ -119,6 +119,7 @@ export function CloudBridge() {
                 });
               },
               report: status.set,
+              paused: () => useSyncStatus.getState().paused,
             });
             syncing = { authId: identity.authId, handle };
             status.setSyncNow(() => handle.syncNow());

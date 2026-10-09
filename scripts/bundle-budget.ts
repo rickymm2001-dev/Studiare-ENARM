@@ -1,7 +1,7 @@
 // Presupuesto del JavaScript inicial (14.4, Fase F). Mide lo que el navegador descarga para pintar
 // la primera pantalla, que es el script de entrada y los módulos que declara index.html con
 // modulepreload, comprimido con gzip. Lo cargado después, por ruta o al usarse, no cuenta. Lo usan
-// npm run budget y tests/security/build.test.ts.
+// npm run budget y tests/security/build-policy.test.ts.
 // Uso: node scripts/bundle-budget.ts dist
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';

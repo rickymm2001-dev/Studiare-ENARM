@@ -60,6 +60,19 @@ export function loadCloud(): Promise<SupabaseClient | null> {
 }
 
 /**
+ * Quita del navegador la sesión que guardó Supabase, sin el SDK. Sirve para cerrar sesión cuando el
+ * SDK no se pudo bajar, porque sin esto la sesión se restauraría sola en la siguiente carga
+ */
+export function forgetStoredCloudSession(storage: Pick<Storage, 'length' | 'key' | 'removeItem'>) {
+  const keys: string[] = [];
+  for (let i = 0; i < storage.length; i += 1) {
+    const key = storage.key(i);
+    if (key && /^sb-[a-z0-9-]+-auth-token/.test(key)) keys.push(key);
+  }
+  for (const key of keys) storage.removeItem(key);
+}
+
+/**
  * El cliente, solo si ya se bajó. Con la sesión de la nube abierta siempre está, porque quien la
  * abre lo bajó antes. Para preguntar si la nube está configurada se usa cloudConfigured, que no
  * espera al SDK

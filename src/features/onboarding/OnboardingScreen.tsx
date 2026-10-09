@@ -35,7 +35,8 @@ const redirectTo = () => new URL(import.meta.env.BASE_URL, window.location.origi
 
 async function sendLink(email: string, alias?: string): Promise<LinkResult | null> {
   const cloud = await loadCloud();
-  if (!cloud) return null;
+  // null es que la nube no está configurada. Si lo está y el SDK no se pudo bajar, es una falla
+  if (!cloud) return cloudConfigured() ? { ok: false, reason: 'failed' } : null;
   return requestEmailLink(cloud, {
     email: email.trim().toLowerCase(),
     ...(alias ? { alias } : {}),

@@ -8,7 +8,9 @@
 --
 -- Cómo se resuelve sin abrir la bitácora
 --   El freno sigue rechazando toda edición y todo borrado, salvo el borrado de las filas de UN
---   usuario mientras una de las dos funciones de abajo lo está borrando. Esas funciones marcan la
+--   usuario mientras una de las dos funciones de abajo lo está borrando, o en cascada cuando el
+--   usuario ya no existe en auth.users (por ejemplo, si un administrador lo quita desde el panel de
+--   Supabase). Como events apunta a auth.users, nadie puede borrar la bitácora de quien sigue vivo. Esas funciones marcan la
 --   transacción con app.erasing_user, que solo vale hasta el final de ella. Ni el navegador ni la
 --   API pueden marcarla, porque no ejecutan SQL propio y set_config no está expuesta como función
 --   pública. Quien borra a un usuario borra sus filas, nunca las de otro
@@ -34,12 +36,19 @@
 
 -- ===================================================================== Freno de la bitácora
 create or replace function public.forbid_event_changes() returns trigger
-language plpgsql as $$
+language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  -- Solo el borrado de las filas del usuario que una función de borrado está dando de baja
-  if tg_op = 'DELETE'
-     and coalesce(current_setting('app.erasing_user', true), '') = old.user_id::text then
-    return old;
+  if tg_op = 'DELETE' then
+    -- Solo el borrado de las filas del usuario que una función de borrado está dando de baja
+    if coalesce(current_setting('app.erasing_user', true), '') = old.user_id::text then
+      return old;
+    end if;
+    -- O el borrado en cascada de un usuario que ya no existe, por ejemplo cuando un administrador lo
+    -- quita desde el panel de Supabase. Las filas de events apuntan a auth.users, así que no hay
+    -- forma de borrar la bitácora de alguien que sigue existiendo
+    if not exists (select 1 from auth.users where id = old.user_id) then
+      return old;
+    end if;
   end if;
   raise exception 'La bitácora solo se agrega' using errcode = '42501';
 end;

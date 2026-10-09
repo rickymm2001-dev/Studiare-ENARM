@@ -80,7 +80,8 @@ describe('puntaje oficial', () => {
       userId: user.id,
       types: ['official_score_submitted'],
     });
-    expect(event?.payload).toEqual({ year: 2025, score: 71.46 });
+    // El puntaje no entra a la bitácora, que solo se agrega y viaja a la nube
+    expect(event?.payload).toEqual({ year: 2025 });
   });
 
   it('el segundo reemplaza al primero, porque se guarda uno por alumno', async () => {
