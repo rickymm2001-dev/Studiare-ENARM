@@ -40,7 +40,13 @@ Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendie
 - [x] F4. Pruebas de punta a punta de sin conexión (offline.spec.ts) y de rendimiento con 200 tarjetas y el procesador 4 veces más lento (perf.spec.ts)
 - [x] F5. Revisión contra OWASP ASVS 5.0 en docs/asvs.md
 - [x] F6. README.md con IA real y simulada, datos de demostración y prueba en el teléfono. DEMO.md con el guion de 10 minutos. docs/real-vs-simulado.md, docs/mapa-plan-maestro.md y docs/informe-de-pruebas.md
-- [ ] F7. Cierre según 15.1 y aprobación de Ricardo. Publicar en Cloudflare Pages queda a su aprobación (D-017)
+- [x] F7. Cierre según 15.1. check y e2e pasan, capturas en docs/screenshots/fase-e-f, revisión de un subagente independiente atendida y informe en docs/informe-de-pruebas.md
+- [ ] F8. Aprobación de Ricardo. Publicar en Cloudflare Pages queda a su aprobación (D-017)
+
+### Evidencia del cierre
+- 2,400 pruebas unitarias y de integración pasan y 2 se omiten a propósito, en 242 archivos. 204 pruebas de punta a punta pasan, 102 en teléfono y 102 en escritorio. Las cinco suites de SQL pasan. npm audit sin vulnerabilidades. JavaScript inicial de 275.7 KB
+- La revisión independiente no encontró nada crítico y sí seis puntos importantes, todos corregidos, ver D-101. Después de los arreglos corrieron otra vez las pruebas unitarias, las de SQL y 100 de punta a punta
+- Desviación. Los textos del médico y de administración salieron del objeto t y cada pantalla los importa directo, para bajar el JavaScript inicial
 
 ### Bitácora
 - Mover las pantallas a carga por ruta no rompió ninguna prueba unitaria. Lo que más pesaba en lo inicial era el SDK de Supabase, unos 55 KB comprimidos, y se bajó a un archivo aparte que solo se pide con la nube configurada
