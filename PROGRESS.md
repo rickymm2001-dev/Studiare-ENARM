@@ -34,7 +34,7 @@ Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendie
 - [x] E1. Vocabulario sesgos o trampas y pantalla 19 de doble etiquetado con kappa. El alumno ve trampas hasta que haya 30 pares con dos etiquetas y kappa de 0.40 o más. El médico etiqueta a ciegas desde su cola y el admin ve el tablero
 - [x] E2. Pantalla 18, editor de pregunta con versiones y estados. Cada guardado crea una versión nueva en borrador, las opciones conservan su ID estable, el médico edita solo lo asignado y primero etiqueta a ciegas si la pregunta está en la muestra
 - [x] E3. Pantalla 21, reportes de contenido, del alumno al médico. Agrupados por pregunta con lo más grave primero, con versión anterior marcada y resolver, descartar o reabrir. El alumno no repite un reporte abierto
-- [ ] E4. Pantalla 20, cola de borradores de IA y preguntas reestructuradas
+- [x] E4. Pantalla 20, cola de borradores de IA. Preguntas reestructuradas con el original al lado, que al aprobarse crean una variante fuera del examen hasta tener 200 exposiciones por distractor. Consejos por sesgo revisados por el médico, que el Tutor muestra sin la marca de borrador. Tarjetas de mazos públicos con aprobar y rechazar
 - [ ] E5. Pantalla 22, importador del banco desde CSV, Excel o JSON
 - [ ] E6. Privacidad, borrar cuenta con eventos, copia en la nube y puntaje oficial voluntario
 

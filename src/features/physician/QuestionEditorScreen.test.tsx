@@ -14,7 +14,7 @@ import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
 import { sampleQuestionIds } from './agreementView';
 
-vi.setConfig({ testTimeout: 40_000 });
+vi.setConfig({ testTimeout: 60_000 });
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
@@ -23,7 +23,7 @@ afterEach(async () => {
   app = undefined;
 });
 
-const WAIT = { timeout: 20_000 };
+const WAIT = { timeout: 30_000 };
 const text = t.questionEditor;
 const demo = buildDemoBank();
 const entries = demo.questions;

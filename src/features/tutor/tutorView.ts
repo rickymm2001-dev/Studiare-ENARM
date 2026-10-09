@@ -19,6 +19,8 @@ export interface BiasTip {
   /** Texto base del consejo. Es un borrador pendiente de revisión médica */
   tip: string;
   level: 'watch' | 'focus';
+  /** Un médico ya revisó el texto, así que deja de ser un borrador (pantalla 20) */
+  reviewed?: boolean;
   /** Las preguntas más recientes donde el alumno cayó en esta trampa, hasta 3 */
   examples: readonly string[];
 }

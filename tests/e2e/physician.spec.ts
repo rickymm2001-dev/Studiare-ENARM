@@ -1,6 +1,6 @@
 // Panel del médico de la Fase E. Pantalla 19, acuerdo del etiquetado. Sin etiquetas mide nada y dice
 // que el alumno ve trampas. El médico sin preguntas asignadas no tiene cola y el admin no etiqueta.
-// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido.
+// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido. Pantalla 20, borradores de IA.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import {
@@ -13,6 +13,11 @@ import {
 import type { Page } from '@playwright/test';
 
 const text = t.agreementScreen;
+
+// Una pregunta del banco demo cuya propuesta de ejemplo pasa las revisiones. Las de salud mental no
+// pasan a propósito y el proxy contesta con error, que el navegador anota en la consola
+const RESTRUCTURABLE =
+  'Todos los siguientes son criterios para el diagnóstico de diabetes mellitus';
 
 async function enterAs(page: Page, role: 'physician' | 'admin') {
   await page.goto(SCREENS.roleSelector.path);
@@ -117,4 +122,35 @@ test('reportes. El alumno reporta un error y desde la bandeja se resuelve', asyn
   await expectNoSeriousA11yViolations(page);
   await page.getByRole('button', { name: t.reportsScreen.row.resolve }).click();
   await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible();
+});
+
+test('borradores de IA. Se pide una propuesta, llega como borrador con el original y se rechaza', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.aiDrafts.path);
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.aiDrafts.title }),
+  ).toBeVisible();
+  await expect(page.getByText(t.draftsScreen.questions.pendingEmpty)).toBeVisible({
+    timeout: 90_000,
+  });
+
+  await page.getByLabel(t.draftsScreen.questions.search).fill(RESTRUCTURABLE);
+  const pick = page.getByRole('button', { name: new RegExp(`^${t.draftsScreen.questions.pick}`) });
+  await expect(pick.first()).toBeVisible();
+  await pick.first().click();
+  await page.getByRole('button', { name: t.draftsScreen.questions.ask }).click();
+
+  const form = page.getByRole('form');
+  await expect(form).toBeVisible({ timeout: 30_000 });
+  await expect(form.getByText(t.draftsScreen.draftLabel)).toBeVisible();
+  await expect(form.getByText(t.draftsScreen.questions.original)).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+
+  await form.getByRole('button', { name: t.draftsScreen.questions.reject }).click();
+  await expect(page.getByText(t.draftsScreen.questions.rejectedNotice)).toBeVisible();
+  await expect(page.getByText(t.draftsScreen.questions.pendingEmpty)).toBeVisible();
 });

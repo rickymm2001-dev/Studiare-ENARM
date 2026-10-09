@@ -8,6 +8,7 @@ import type { Challenge, Group, Membership } from '@/data/schemas/activity';
 import type { User } from '@/data/schemas/people';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { createDuel } from '@/data/usecases/party';
+import { listStudentPool } from '@/data/usecases/studentBank';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
@@ -20,7 +21,7 @@ export async function challengeToDuel(
   opponent: Pick<Membership, 'id' | 'alias'>,
 ): Promise<Challenge | null> {
   await ensureDemoBank(api);
-  const questions = await api.repos.questions.listLatest();
+  const { practice: questions } = await listStudentPool(api);
   if (questions.length === 0) return null;
   const id = newId();
   // La semilla es el id del duelo, así las preguntas salen en el mismo orden para quien las juegue

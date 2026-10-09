@@ -14,6 +14,7 @@ import { studyDayOf } from '@/engines/studyDay';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { cardFaces, topicFromTags } from '../review/study';
 import type { ReadySession } from '../shared/RequireSession';
+import { applyTipReviews, tipReviewsFrom, type TipReview } from '../shared/tipReviews';
 import type { CardFact } from './errorContexts';
 import { hypothesisArtifactId } from './hypothesisStore';
 import type { Hypothesis } from './tutorModel';
@@ -25,6 +26,8 @@ export interface TutorData {
   content: { cards: Card[]; notes: Note[] };
   /** Lo del tutor que ya tiene artefacto. Hipótesis, informes semanales y consejos por sesgo */
   artifacts: AiArtifact[];
+  /** Los consejos que un médico ya revisó, por clave de sesgo */
+  tipReviews: ReadonlyMap<string, TipReview>;
 }
 
 export function useTutorData(
@@ -72,8 +75,12 @@ export function useTutorData(
       ),
     [api.repos, userId],
   );
-  if (!catalog || !bank || !content || !artifacts) return undefined;
-  return { catalog, bank, content, artifacts };
+  const tipReviews = useLiveData(
+    async () => tipReviewsFrom(await api.repos.aiArtifacts.list()),
+    [api.repos],
+  );
+  if (!catalog || !bank || !content || !artifacts || !tipReviews) return undefined;
+  return { catalog, bank, content, artifacts, tipReviews };
 }
 
 /** La vista del tutor con los datos cargados. Se recalcula solo cuando algo cambia */
@@ -105,7 +112,7 @@ export function useTutorView(
       }),
     );
     const now = new Date();
-    return buildTutorView({
+    const base = buildTutorView({
       now,
       events,
       bank: {
@@ -121,6 +128,8 @@ export function useTutorView(
       desiredRetention: settings.desiredRetention,
       thresholds: DEFAULT_THRESHOLDS,
     });
+    // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
+    return { ...base, biasTips: applyTipReviews(base.biasTips, data.tipReviews) };
   }, [events, data, user.timeZone, settings.desiredRetention]);
 }
 

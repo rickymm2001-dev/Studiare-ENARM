@@ -172,6 +172,7 @@ export const tutorText = {
       title: 'Consejos por trampa',
       hint: 'Aparecen cuando una trampa ya se repite en tus errores. Son borradores pendientes de revisión médica.',
       draftLabel: 'Borrador pendiente de revisión médica',
+      reviewedLabel: 'Revisado por un médico',
       unit: 'errores con trampa etiquetada',
       none: 'Ninguna trampa se repite lo bastante en tus errores como para darte un consejo.',
     },

@@ -11,9 +11,20 @@ import { updateProfile } from './profile';
 /** Guarda mazos, notas y tarjetas de los archivos con sus IDs estables. Repetirlo no duplica nada */
 async function saveDeckFiles(api: Pick<DataApi, 'repos'>, files: readonly DemoDeckFile[]) {
   const entities = buildDeckEntities(files);
+  // La decisión de un médico sobre una tarjeta (aprobada o rechazada) sobrevive a volver a seguir el
+  // mazo, que si no la regresaría a borrador
+  const decided = new Map(
+    (await api.repos.notes.list())
+      .filter((note) => note.editorialStatus === 'approved' || note.editorialStatus === 'rejected')
+      .map((note) => [note.id, note.editorialStatus] as const),
+  );
+  const notes = entities.notes.map((note) => {
+    const status = decided.get(note.id);
+    return status ? { ...note, editorialStatus: status } : note;
+  });
   // Los mazos van al final porque ensurePreloadedTree los usa para saber si ya está todo en su lugar.
   // Si la pestaña se cierra a la mitad, el mazo sigue sin su padre y la próxima vez se repite
-  await api.repos.notes.putMany(entities.notes);
+  await api.repos.notes.putMany(notes);
   await api.repos.cards.putMany(entities.cards.map((entry) => entry.card));
   await api.repos.decks.putMany(entities.decks);
 }

@@ -4,6 +4,7 @@ import { Lightbulb, Play, Target } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
@@ -205,7 +206,11 @@ export function BiasTipsCard({
             <li key={tip.tag} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold">{tip.name}</span>
-                {ai?.has(tip.tag) ? null : <DraftBadge />}
+                {tip.reviewed ? (
+                  <Badge variant="success">{text.reviewedLabel}</Badge>
+                ) : ai?.has(tip.tag) ? null : (
+                  <DraftBadge />
+                )}
               </div>
               <p className="text-sm">{ai?.get(tip.tag)?.tip ?? tip.tip}</p>
               {ai?.has(tip.tag) ? <AiWritten mode={ai.get(tip.tag)?.mode ?? 'mock'} /> : null}

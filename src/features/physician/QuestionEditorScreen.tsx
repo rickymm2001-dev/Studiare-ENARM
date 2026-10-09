@@ -13,7 +13,6 @@ import { useSession } from '@/app/session';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Question } from '@/data/schemas/bank';
-import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { analyzeStructure } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
@@ -30,7 +29,6 @@ import {
   draftFromVersion,
   isBlindLocked,
   STATUS_FLOW,
-  taxonomyViewFrom,
   type DraftIssue,
   type QuestionDraft,
 } from './editorDraft';
@@ -41,12 +39,8 @@ import {
   StaleVersionError,
 } from './editorActions';
 import { sampleQuestionIds } from './agreementView';
+import { bankTaxonomy } from './bankTaxonomy';
 import { CluesEditor, GpcEditor, HistoryCard, OptionsEditor } from './EditorSections';
-
-const taxonomy = taxonomyViewFrom({
-  branches: topicTaxonomy.branches,
-  taggable: TAGGABLE_BIASES.map((bias) => bias.key),
-});
 
 const options = (entries: Record<string, string>) =>
   Object.entries(entries).map(([value, label]) => ({ value, label }));
@@ -226,7 +220,7 @@ function EditorForm({
     setBusy(true);
     setError('');
     try {
-      await saveQuestionVersion(api, { current: latest, draft, taxonomy });
+      await saveQuestionVersion(api, { current: latest, draft, taxonomy: bankTaxonomy });
       setIssues([]);
       setNotice(text.save.saved);
     } catch (caught) {

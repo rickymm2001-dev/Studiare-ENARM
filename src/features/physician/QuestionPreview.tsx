@@ -30,11 +30,9 @@ export function QuestionPreview({
       {question.vignette ? <p>{question.vignette}</p> : null}
       <ol className="flex flex-col gap-1">
         {(options ?? []).map((option) => (
-          <li
-            key={option.id}
-            className={option.isCorrect ? 'font-semibold text-success' : undefined}
-          >
+          <li key={option.id} className={option.isCorrect ? 'font-semibold' : undefined}>
             {option.text}
+            {option.isCorrect ? ` · ${t.questionEditor.options.key}` : ''}
             {option.biasTag ? (
               <span className="ml-2 text-xs text-fg-muted">
                 ({biasName.get(option.biasTag) ?? option.biasTag})

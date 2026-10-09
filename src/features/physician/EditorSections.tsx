@@ -1,6 +1,7 @@
 // Secciones del editor de pregunta (pantalla 18). Opciones con su etiqueta y su definición a la
 // vista, referencias de GPC, datos del caso y el historial de versiones.
 import { Plus, Trash2 } from 'lucide-react';
+import { useId } from 'react';
 import type { Question } from '@/data/schemas/bank';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { t } from '@/i18n/es-MX';
@@ -34,6 +35,7 @@ export function OptionsEditor({
   onChange: (options: DraftOption[]) => void;
 }) {
   const text = t.questionEditor.options;
+  const uid = useId();
   const patch = (index: number, change: Partial<DraftOption>) => {
     onChange(options.map((option, at) => (at === index ? { ...option, ...change } : option)));
   };
@@ -49,9 +51,9 @@ export function OptionsEditor({
     );
   };
   return (
-    <Card aria-labelledby="editor-opciones">
+    <Card aria-labelledby={`${uid}-opciones`}>
       <CardHeader>
-        <CardTitle id="editor-opciones">{t.questionEditor.sections.options}</CardTitle>
+        <CardTitle id={`${uid}-opciones`}>{t.questionEditor.sections.options}</CardTitle>
         <CardDescription>
           {text.count(options.length)}. {text.hint}
         </CardDescription>
@@ -88,7 +90,7 @@ export function OptionsEditor({
                   <label className="flex items-center gap-3 font-medium">
                     <input
                       type="radio"
-                      name="opcion-correcta"
+                      name={`${uid}-correcta`}
                       className="size-5 accent-[var(--color-primary)]"
                       checked={option.isCorrect}
                       onChange={() => {
@@ -218,10 +220,11 @@ export function GpcEditor({
   onChange: (refs: QuestionDraft['gpcRefs']) => void;
 }) {
   const text = t.questionEditor.gpc;
+  const uid = useId();
   return (
-    <Card aria-labelledby="editor-gpc">
+    <Card aria-labelledby={`${uid}-gpc`}>
       <CardHeader>
-        <CardTitle id="editor-gpc">{t.questionEditor.sections.gpc}</CardTitle>
+        <CardTitle id={`${uid}-gpc`}>{t.questionEditor.sections.gpc}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
       {refs.length === 0 ? <p className="mb-3 text-sm text-fg-muted">{text.none}</p> : null}

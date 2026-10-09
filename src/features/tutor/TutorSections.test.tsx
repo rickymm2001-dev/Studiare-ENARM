@@ -25,6 +25,26 @@ describe('consejos por sesgo', () => {
     expect(screen.getByRole('heading', { name: 'Consejos por sesgo' })).toBeVisible();
   });
 
+  it('un consejo que un médico revisó sale sin la marca de borrador', () => {
+    render(
+      <BiasTipsCard
+        tips={[
+          {
+            tag: 'anchoring',
+            name: 'Sesgo de anclaje',
+            tip: 'Texto revisado.',
+            level: 'focus',
+            examples: [],
+            reviewed: true,
+          },
+        ]}
+        calibration={null}
+      />,
+    );
+    expect(screen.getByText(t.tutor.biasTips.reviewedLabel)).toBeVisible();
+    expect(screen.queryByText(t.tutor.biasTips.draftLabel)).toBeNull();
+  });
+
   it('con datos suficientes y sin trampas repetidas lo dice', () => {
     render(<BiasTipsCard tips={[]} calibration={null} />);
     expect(screen.getByText(t.tutor.biasTips.none)).toBeVisible();
