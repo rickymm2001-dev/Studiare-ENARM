@@ -1,6 +1,6 @@
 // Configuración (pantalla 27, D-065). Separada de Perfil. En secciones con pestañas (D-078). Estudio
-// con metas y repaso, Apariencia con tema y estilo, Pomodoro, y Cuenta con la base activa,
-// el modo de IA, exportar y borrar.
+// con metas y repaso, Apariencia con tema y estilo, Pomodoro, Privacidad con los consentimientos y el
+// puntaje oficial, y Cuenta con la base activa, el modo de IA, exportar y borrar.
 import { FlaskConical, UserRound } from 'lucide-react';
 import { Tabs } from 'radix-ui';
 import { useSearchParams } from 'react-router';
@@ -18,6 +18,7 @@ import { RadioCards } from '@/ui/components/radio-cards';
 import { useSession } from '@/app/session';
 import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
+import { PrivacySection } from './PrivacySection';
 import { DemoDataPanel } from './DemoDataPanel';
 
 const DATABASE_OPTIONS = [
@@ -35,7 +36,7 @@ const DATABASE_OPTIONS = [
   },
 ] as const;
 
-const SECTIONS = ['study', 'appearance', 'pomodoro', 'account'] as const;
+const SECTIONS = ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const;
 type SectionKey = (typeof SECTIONS)[number];
 const isSection = (value: string | null): value is SectionKey =>
   SECTIONS.includes(value as SectionKey);
@@ -98,6 +99,12 @@ export function SettingsScreen() {
         {ready ? (
           <Tabs.Content value="pomodoro" className="outline-none">
             <PomodoroSection session={ready} />
+          </Tabs.Content>
+        ) : null}
+
+        {ready ? (
+          <Tabs.Content value="privacy" className="outline-none">
+            <PrivacySection session={ready} />
           </Tabs.Content>
         ) : null}
 

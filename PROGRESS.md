@@ -11,7 +11,7 @@
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
-- Fase E con las pantallas del médico 18 a 22 programada (D-099). Falta el bloque E6 de privacidad, ver su sección
+- Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -38,7 +38,7 @@ Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendie
 - [x] E3. Pantalla 21, reportes de contenido, del alumno al médico. Agrupados por pregunta con lo más grave primero, con versión anterior marcada y resolver, descartar o reabrir. El alumno no repite un reporte abierto
 - [x] E4. Pantalla 20, cola de borradores de IA. Preguntas reestructuradas con el original al lado, que al aprobarse crean una variante fuera del examen hasta tener 200 exposiciones por distractor. Consejos por sesgo revisados por el médico, que el Tutor muestra sin la marca de borrador. Tarjetas de mazos públicos con aprobar y rechazar
 - [x] E5. Pantalla 22, importador del banco desde CSV, Excel o JSON. Convertidor compartido con el script de Node, reporte de errores por fila, borradores sin duplicar con un ID por fila y guía en docs/bank-import.md
-- [ ] E6. Privacidad, borrar cuenta con eventos, copia en la nube y puntaje oficial voluntario
+- [x] E6. Privacidad. Migración quinta que deja borrar datos y cuenta con la bitácora de solo agregar, borrado de la nube desde la app, sección Privacidad con los tres consentimientos y puntaje oficial voluntario (D-101)
 
 ## Fase D. Motores de IA y evaluaciones (D-098)
 
@@ -62,7 +62,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 - Que Ricardo agregue la clave en server/.env.local y corra npm run eval-ai con la bandera real, para el costo y la latencia verdaderos
 - Revisar los prompts de server/prompts y pegar su prompt maestro de tarjetas
 - Confirmar el segundo proveedor de IA y qué modelo prefiere por motor
-- La cola de borradores del médico para las preguntas reestructuradas, que va en la Fase E
+- La cola de borradores del médico para las preguntas reestructuradas. Resuelta en la Fase E, pantalla 20 (D-099)
 
 ## Fase C2. Etapa 6, sincronización entre dispositivos (D-085 y D-095)
 
@@ -84,7 +84,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 
 ### Pendiente
 - Que Ricardo aplique la migración y la pruebe con dos navegadores, con la guía
-- Borrar también la copia en la nube con Borrar mis datos, en la Fase E
+- Borrar también la copia en la nube con Borrar mis datos. Resuelto en la Fase E, bloque E6 (D-101)
 - Sincronizar sesiones de estudio, hallazgos y ajustes personales, en IDEAS.md
 
 ## Fase C2. Etapa 5, tarjetas con IA desde PDF y textos (D-085 y D-094)
@@ -213,7 +213,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 ### Pendiente con Ricardo para seguir
 - Aprobar la Etapa 1 para pasar a la Etapa 2, carga diaria
 - Preguntas abiertas. Qué funciones son gratis y cuáles de pago (se propone gratis para mazos en árbol, etiquetas, Explorar y calidad). Si en Repasar prefiere que elegir un mazo propio traiga todos sus submazos, que es lo que hace ahora
-- Bug anterior a esta etapa. Borrar una cuenta que ya tiene eventos falla en la base, porque el disparador de solo agregar de events bloquea el borrado en cascada. Afecta el derecho a cancelar la cuenta y se atiende en la Fase E
+- Bug anterior a esta etapa. Borrar una cuenta que ya tiene eventos falla en la base, porque el disparador de solo agregar de events bloquea el borrado en cascada. Afecta el derecho a cancelar la cuenta. Resuelto en la Fase E, bloque E6, con la quinta migración (D-101)
 
 ## Reunión del equipo del 2026-10-07 (D-087)
 

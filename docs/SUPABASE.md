@@ -379,7 +379,7 @@ Cubre
 
 No cubre
 
-- Borrar mis datos en Configuración borra solo lo del navegador. La copia en la nube se vuelve a bajar si el alumno entra otra vez. Borrar también la nube queda para la Fase E, junto con el borrado de cuenta
+- Borrar mis datos en Configuración con la cuenta conectada ya borra también la copia en la nube. Ver la sección Privacidad, borrar mis datos y mi cuenta, que necesita la quinta migración. Sin ella, la app borra solo lo del navegador y la copia en la nube se vuelve a bajar
 - Las sesiones de estudio, los hallazgos del tutor y los ajustes personales no se sincronizan todavía. Las cifras del tutor y de Progreso se reconstruyen con la bitácora, que sí viaja
 - Dos dispositivos que editen lo mismo a la vez sin conexión conservan la edición más reciente completa. No se mezclan campo por campo
 - Los medios de las tarjetas no existen todavía, así que tampoco viajan
@@ -449,6 +449,51 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 - Cancelar desde la app llega con la gestión de pagos. Mientras tanto, la app lo dice
 - Si el cupo de Fundador se llena entre que el alumno elige y paga, el cobro queda en payments con el estado needs_refund y no se activa nada. Ese pago hay que devolverlo a mano en la pasarela
 
+## Privacidad, borrar mis datos y mi cuenta
+
+### Qué hace
+
+- Borrar mis datos, en Configuración, Cuenta, borra primero la copia en la nube y, solo si salió bien, lo de este dispositivo. Si el servidor falla, la app lo dice y no borra nada, para no dejar el dispositivo vacío con la nube llena
+- Eliminar mi cuenta, en el mismo lugar y solo con la cuenta conectada, pide escribir ELIMINAR. Quita la cuenta con tu correo, la bitácora, el plan, los pagos y los referidos de la plataforma, y borra lo del dispositivo. El correo queda libre para registrarse otra vez
+- Las dos funciones del servidor, delete_my_data y delete_my_account, solo las puede llamar una persona con sesión y desde su dispositivo activo. Un anónimo no puede ni llamarlas, y cada quien borra solo lo suyo
+- La bitácora de estudio sigue siendo de solo agregar para todo lo demás. El freno acepta el borrado de las filas de un usuario únicamente dentro de la transacción de una de esas dos funciones, que la marca con el usuario que se da de baja. Ni el navegador ni la API pueden poner esa marca
+- El dueño de la plataforma no se puede eliminar a sí mismo desde la app. Si hace falta, se transfiere el rol antes
+- Los cobros que ya hizo cada pasarela se conservan en Stripe y en Mercado Pago, porque la ley pide guardar las facturas. Aquí se borra la copia de la plataforma. Quien pida lo contrario habla con la pasarela
+- Retirar el permiso de mejora anónima, en Configuración, Privacidad, borra el puntaje oficial del ENARM que el alumno capturó con él
+
+### Cómo aplicar la quinta migración
+
+No necesitas terminal. Aplica primero las cuatro anteriores. Mientras no apliques esta, Borrar mis datos falla con un aviso claro y no borra nada del dispositivo cuando la cuenta está conectada.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261009000001_privacy.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.delete_my_data()', 'execute') as alumno_borra_sus_datos,
+  has_function_privilege('authenticated', 'public.delete_my_account()', 'execute') as alumno_borra_su_cuenta,
+  has_function_privilege('anon', 'public.delete_my_data()', 'execute') as anon_borra_datos,
+  has_function_privilege('anon', 'public.delete_my_account()', 'execute') as anon_borra_cuenta,
+  has_function_privilege('service_role', 'public.delete_my_account()', 'execute') as servicio_borra_cuenta,
+  (select count(*) from pg_constraint c
+    where c.contype = 'f' and c.confrelid = 'auth.users'::regclass
+      and c.confdeltype = 'a' and c.connamespace = 'public'::regnamespace) as llaves_sin_regla;
+```
+
+7. Debe salir alumno_borra_sus_datos y alumno_borra_su_cuenta en true, anon_borra_datos, anon_borra_cuenta y servicio_borra_cuenta en false, y llaves_sin_regla en 0. Si anon sale en true, avísame antes de abrir a alumnos
+8. Probar con una cuenta de prueba, no con la tuya. Crea un alumno nuevo, estudia unas tarjetas, entra a Configuración, Cuenta, y elige Eliminar mi cuenta. En Authentication, Users, el correo ya no debe aparecer, y en Table Editor, events no debe quedar ninguna fila de ese alumno
+
+### Qué conviene saber
+
+- Borrar es definitivo. La app pide confirmación, pero no hay forma de recuperar lo borrado, ni siquiera desde Supabase, porque no se guarda una copia
+- Una sincronización a medias no revive lo borrado. La función toma el mismo candado que la subida y la bajada
+- Si el alumno borra desde un dispositivo que ya no es el activo, el servidor lo rechaza y la app le dice que entre desde el activo o que tome la cuenta aquí
+- El puntaje oficial del ENARM vive por ahora solo en el navegador y entra al archivo que el alumno exporta. No se sube a la nube
+
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora
@@ -465,7 +510,7 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 | El dueño es fijo | Solo el dueño nombra o quita admins y nadie puede quitarle el rol |
 | Cada cambio de rol queda registrado | Bitácora de auditoría con quién y cuándo |
 | Los datos personales no se comparten | El correo y los datos de cuenta los ven solo su dueño y el admin |
-| La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base |
+| La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base. La única excepción es que su dueño borre sus propias filas al eliminar sus datos o su cuenta, desde las funciones del servidor |
 | Los pagos no se falsean | Solo el servidor con la llave secreta activa suscripciones |
 | Una cuenta, un dispositivo | Cada quien lee solo su fila de dispositivo y solo la función claim_device la escribe. Un anónimo no puede llamarla |
 | El dispositivo desplazado queda bloqueado en el servidor | Las tablas con datos del alumno exigen que el token sea el de la sesión ganadora. Cambiar de dispositivo está limitado a 3 veces en 24 horas y cada reclamo queda en una bitácora que nadie edita |

@@ -9,6 +9,7 @@ import type { ConsentPurposeSchema } from '../schemas/common';
 import { DEFAULT_TIME_ZONE } from '../schemas/common';
 import {
   ConsentSchema,
+  type Consent,
   UserSchema,
   UserSettingsSchema,
   type User,
@@ -122,18 +123,17 @@ export async function setConsent(
   user: User,
   purpose: ConsentPurpose,
   granted: boolean,
-): Promise<void> {
+): Promise<Consent> {
   const status = granted ? 'granted' : 'revoked';
-  await api.repos.consents.put(
-    ConsentSchema.parse({
-      id: newId(),
-      userId: user.id,
-      purpose,
-      noticeVersion: PRIVACY_NOTICE_VERSION,
-      status,
-      decidedAt: new Date().toISOString(),
-    }),
-  );
+  const consent = ConsentSchema.parse({
+    id: newId(),
+    userId: user.id,
+    purpose,
+    noticeVersion: PRIVACY_NOTICE_VERSION,
+    status,
+    decidedAt: new Date().toISOString(),
+  });
+  await api.repos.consents.put(consent);
   await api.recordEvent(
     createEvent(
       'consent_changed',
@@ -141,4 +141,5 @@ export async function setConsent(
       { userId: user.id, tz: user.timeZone },
     ),
   );
+  return consent;
 }

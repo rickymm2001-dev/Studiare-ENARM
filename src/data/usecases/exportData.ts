@@ -4,19 +4,31 @@
 import type { Repositories } from '../repos/types';
 
 export async function exportUserData(repos: Repositories, userId: string) {
-  const [user, account, consents, events, layout, subscription, decks, notes, cards, outlines] =
-    await Promise.all([
-      repos.users.get(userId),
-      repos.accounts.get(userId),
-      repos.consents.list().then((list) => list.filter((consent) => consent.userId === userId)),
-      repos.events.query({ userId }),
-      repos.widgetLayouts.get(userId),
-      repos.subscriptions.get(userId),
-      repos.decks.list(),
-      repos.notes.list(),
-      repos.cards.list(),
-      repos.outlines.list(),
-    ]);
+  const [
+    user,
+    account,
+    consents,
+    events,
+    layout,
+    subscription,
+    decks,
+    notes,
+    cards,
+    outlines,
+    officialScore,
+  ] = await Promise.all([
+    repos.users.get(userId),
+    repos.accounts.get(userId),
+    repos.consents.list().then((list) => list.filter((consent) => consent.userId === userId)),
+    repos.events.query({ userId }),
+    repos.widgetLayouts.get(userId),
+    repos.subscriptions.get(userId),
+    repos.decks.list(),
+    repos.notes.list(),
+    repos.cards.list(),
+    repos.outlines.list(),
+    repos.officialScores.get(userId),
+  ]);
   const ownDecks = decks.filter((deck) => deck.ownerId === userId);
   const ownDeckIds = new Set(ownDecks.map((deck) => deck.id));
   return {
@@ -26,6 +38,7 @@ export async function exportUserData(repos: Repositories, userId: string) {
     account: account ?? null,
     consents,
     subscription: subscription ?? null,
+    officialScore: officialScore ?? null,
     widgetLayout: layout ?? null,
     // Lo que el alumno creó. Las notas y las cartas van por el mazo que es suyo
     content: {
