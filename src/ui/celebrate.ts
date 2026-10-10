@@ -41,7 +41,22 @@ function playNotes(notes: number[]): void {
   }
 }
 
+let canvasOk: boolean | undefined;
+
+/** Hay un lienzo donde dibujar. Algunos navegadores lo bloquean por privacidad y las pruebas no lo tienen */
+function canvasAvailable(): boolean {
+  canvasOk ??= (() => {
+    try {
+      return document.createElement('canvas').getContext('2d') !== null;
+    } catch {
+      return false;
+    }
+  })();
+  return canvasOk;
+}
+
 async function burst(kind: CelebrationKind): Promise<void> {
+  if (!canvasAvailable()) return;
   const { default: confetti } = await import('canvas-confetti');
   const big = kind === 'level' || kind === 'goal';
   const base = { colors: COLORS, disableForReducedMotion: true, zIndex: 60 };

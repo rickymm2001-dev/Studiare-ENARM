@@ -83,7 +83,9 @@ describe('aviso al ganar una insignia', () => {
       await screen.findByText(t.rewards.toast.title(1), {}, { timeout: 25_000 }),
     ).toBeVisible();
     expect(screen.getByText(bronzeReviews)).toBeVisible();
-    expect(celebrate).toHaveBeenCalledWith('badge');
+    await waitFor(() => {
+      expect(celebrate).toHaveBeenCalledWith('badge');
+    });
     expect(screen.getByRole('link', { name: t.rewards.toast.see })).toHaveAttribute(
       'href',
       expect.stringContaining(SCREENS.rewards.path),
