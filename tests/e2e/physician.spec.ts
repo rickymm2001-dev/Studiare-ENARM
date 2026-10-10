@@ -39,7 +39,8 @@ test('acuerdo del etiquetado. El médico sin asignaciones no tiene cola y el tab
     page.getByRole('heading', { level: 1, name: t.screens.agreement.title }),
   ).toBeVisible();
   const queue = page.getByRole('region', { name: text.queue.title });
-  await expect(queue.getByText(text.queue.empty)).toBeVisible();
+  // La pantalla espera a que el banco demo termine de sembrarse la primera vez, y eso puede tardar
+  await expect(queue.getByText(text.queue.empty)).toBeVisible({ timeout: 45_000 });
   await expect(page.getByText(text.vocabulary.title)).toBeVisible();
   await expect(page.getByText(text.vocabulary.trap, { exact: false })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
@@ -49,7 +50,7 @@ test('acuerdo del etiquetado. El admin ve el tablero y no etiqueta', async ({ pa
   await enterAs(page, 'admin');
   await page.goto(SCREENS.agreement.path);
   const queue = page.getByRole('region', { name: text.queue.title });
-  await expect(queue.getByText(text.queue.adminNote)).toBeVisible();
+  await expect(queue.getByText(text.queue.adminNote)).toBeVisible({ timeout: 45_000 });
   await expect(queue.getByRole('combobox')).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 });

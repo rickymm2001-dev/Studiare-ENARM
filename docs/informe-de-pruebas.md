@@ -1,18 +1,19 @@
 # Informe de pruebas
 
-Fase F, sección 17 de la especificación, actualizado al cierre de la Fase G. Reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA con su costo. Fecha de esta versión, 2026-10-10. Los números salieron de correr las pruebas en esta rama, no de memoria.
+Fase F, sección 17 de la especificación, actualizado al cierre de la Fase H. Reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA con su costo. Fecha de esta versión, 2026-10-10. Los números salieron de correr las pruebas en esta rama, no de memoria.
 
 ## Resumen
 
 | Revisión | Resultado |
 |---|---|
-| Pruebas unitarias y de integración (Vitest) | 2,588 pasan y 2 se omiten a propósito, en 258 archivos |
-| Pruebas de punta a punta (Playwright, teléfono y escritorio) | 214 pasan, 107 por cada tamaño de pantalla |
-| Pruebas del esquema de Supabase contra Postgres local | Pasan las nueve suites, con la última migración corrida dos veces |
+| Pruebas unitarias y de integración (Vitest) | 2,626 pasan y 2 se omiten a propósito, en 263 archivos |
+| Pruebas de punta a punta (Playwright, teléfono y escritorio) | 218 pasan, 109 por cada tamaño de pantalla |
+| Auditoría funcional por recorrido (npm run audit:ui) | 10 recorridos de 32 pantallas, 10 flujos con interrupciones y la prueba de nube caída, todos sin hallazgos. Ver docs/auditoria-2026-10-10 |
+| Pruebas del esquema de Supabase contra Postgres local | Pasan las diez suites, con la última migración corrida dos veces |
 | Pruebas de seguridad del build | 18 pasan. Sin secretos, con política de contenido y HSTS, dentro del presupuesto y con una imagen de Docker sin llaves |
 | Accesibilidad (axe) | Pasa en las pantallas que recorren las pruebas de punta a punta, en claro y oscuro |
 | npm audit con nivel high | 0 vulnerabilidades |
-| JavaScript inicial | 281.5 KB comprimidos contra un presupuesto de 300 KB. Subió unos 6 KB con la Fase G |
+| JavaScript inicial | 282.5 KB comprimidos contra un presupuesto de 300 KB. Subió 1 KB con la Fase H |
 | Rendimiento con 200 tarjetas y el procesador 4 veces más lento | Mediana de 90 ms, p95 de 147 ms y peor de 301 ms |
 | Evaluaciones de IA con respuestas fijas | 60 casos, 100% en esquema, anclaje y rechazos |
 
@@ -22,26 +23,28 @@ Medida con npm run check, que corre las pruebas con cobertura de v8.
 
 | Medida | Resultado |
 |---|---|
-| Líneas | 86.6% |
+| Líneas | 86.7% |
 | Instrucciones | 86.0% |
-| Funciones | 79.6% |
-| Ramas | 78.8% |
+| Funciones | 79.7% |
+| Ramas | 78.9% |
 | Motores (src/engines) | 90% o más en líneas, instrucciones, funciones y ramas. Es una meta que el CI hace cumplir |
 
 Lo que queda con poca cobertura son los workers y el componente del avatar generado, que se prueban por la vía de punta a punta y no con pruebas unitarias.
 
 ## Pruebas de punta a punta
 
-- 214 pruebas, 107 en teléfono y 107 en escritorio, contra el build de producción y con el proxy de IA en modo simulado
+- 218 pruebas, 109 en teléfono y 109 en escritorio, contra el build de producción y con el proxy de IA en modo simulado
 - Toda prueba falla ante cualquier error en la consola del navegador. Por eso la política de contenido, que reporta sus bloqueos como errores, queda vigilada por toda la suite
 - Flujos de la sección 14.1 cubiertos, entre otros, cuenta y sesión, repaso con confianza y causa, práctica, examen completo, planificador, Party, importar y exportar, panel del médico, reportes, privacidad, administración y sin conexión
 - Nuevas en la Fase F. offline.spec.ts abre sin red pantallas que nunca se habían visitado y confirma que la IA avisa que necesita conexión. perf.spec.ts repasa 200 tarjetas con el procesador 4 veces más lento
 - Nueva en la Fase E. privacy.spec.ts guarda un puntaje oficial, lo recarga y lo ve borrarse al retirar el permiso
 - Nueva en la Fase G. legal.spec.ts abre el aviso de privacidad y los términos sin sesión y confirma que dicen que son un borrador
+- Nuevas en la Fase H. offline.spec.ts confirma que en la primera visita, sin recargar, el service worker toma el control y una pantalla nueva abre sin red. practice.spec.ts recarga a media práctica y la retoma donde iba
+- Ajustadas en la Fase H. El aviso de demostración ahora es una región con nombre y no una nota, y las pruebas del médico esperan más la siembra del banco demo, que en esta máquina tarda cerca de lo que antes era el plazo
 
 ## Esquema de Supabase
 
-Corre con npm run test:sql contra un Postgres 16 temporal. Nueve suites.
+Corre con npm run test:sql contra un Postgres 16 temporal. Diez suites.
 
 - rls_test.sql. Permisos por fila, roles, dueño fijo y bitácora de cambios de rol
 - device_barrier_test.sql. Un solo dispositivo por cuenta y límite de cambios
@@ -52,6 +55,7 @@ Corre con npm run test:sql contra un Postgres 16 temporal. Nueve suites.
 - settings_test.sql. La configuración del admin la lee cualquiera y solo la escribe un admin
 - billing_portal_test.sql. Clientes de Stripe, reembolsos por cliente y monto, pagos tardíos de un pago devuelto, plan que se conserva con un pago más reciente y la negativa a eliminar la cuenta con una suscripción activa
 - client_errors_test.sql. Errores del navegador sin identidad, limpieza de datos personales, tope diario, 14 días de conservación y permisos
+- admin_users_test.sql. La lista de usuarios y el cambio de rol solo los hace un admin o el dueño, con búsqueda sin comodines, filtro por rol, páginas con tope, nadie cambia su propio rol, el rol de dueño no se asigna y solo el dueño nombra o quita admins
 
 ## Seguridad
 
@@ -60,6 +64,17 @@ Corre con npm run test:sql contra un Postgres 16 temporal. Nueve suites.
 - npm run audit:high sin vulnerabilidades, con un trabajo propio en el CI
 - Revisión contra OWASP ASVS 5.0 en docs/asvs.md
 - Revisión independiente de un subagente que no escribió el código, sobre la privacidad y la Fase F. Encontró seis puntos importantes, todos corregidos, y ninguno crítico. Ver D-101
+
+## Fase H
+
+Pruebas nuevas de esta fase, además de las que ya había.
+
+- Usuarios reales con la nube. Lista con búsqueda, filtro y páginas, mapeo de los rechazos del servidor a mensajes claros y la pantalla que cambia sola entre la lista de la nube y la local
+- Rol sin conexión. Un médico o un admin conserva su rol si el servidor no responde, la sesión se reintenta con espera creciente y al volver la red, y sin sesión nadie conserva un rol
+- Token vencido sin red. Supabase responde sin sesión y con un error de red, y la app no lo toma por sesión cerrada. La prueba falla sin el arreglo
+- Aviso de privacidad con versión. Aceptar una versión nueva, registrar la que de verdad se aceptó y el aviso para quien aceptó una anterior
+- Práctica en la sesión de la pestaña. Se guarda solo con identificadores, se retoma al recargar, se descarta si lo guardado no cuadra y sigue en memoria si el navegador bloquea el almacenamiento
+- Auditoría por recorrido. Ver docs/auditoria-2026-10-10/README.md. Encontró cinco problemas reales que ya están corregidos y probados
 
 ## Fase G
 
