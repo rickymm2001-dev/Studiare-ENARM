@@ -1,6 +1,6 @@
 # Lo que falta de Ricardo para que la plataforma funcione completa
 
-Escrito el 2026-10-10 y puesto al día al cerrar la Fase H. Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
+Escrito el 2026-10-10 y puesto al día al conectar el proyecto real de Supabase (Fase J). Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
 
 Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_role o secret), la contraseña de la base de datos ni claves secretas de Stripe, Mercado Pago o Anthropic por el chat. Esas viven solo en los secretos de cada servicio. A mí me sirven la dirección del proyecto y la llave pública (anon o publishable).
 
@@ -14,9 +14,10 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 
 ## 2. Supabase
 
-- Crear o confirmar el proyecto Studiare en supabase.com
-- Aplicar en el editor de SQL las migraciones que falten, en este orden. 20261002000001_platform, 20261007000001_single_device, 20261008000001_device_barrier, 20261008000002_sync, 20261008000003_payments_referrals, 20261009000001_privacy, 20261010000001_ai_hosted, 20261011000001_billing_portal, 20261012000001_client_errors y 20261013000001_admin_users. La última es la que hace que la pantalla Usuarios muestre las cuentas reales y que puedas nombrar médicos desde la app. Cada una trae su guía paso a paso y su consulta de comprobación en docs/SUPABASE.md
-- Pasarme la dirección del proyecto y la llave pública. Con eso pongo VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en las variables de GitHub, o las pones tú siguiendo docs/SUPABASE.md
+- El proyecto Studiare ya existe y Claude lo tiene conectado desde el 2026-10-10 (D-113). Las migraciones 1 a 11 están aplicadas, salvo seis piezas que tienen delete o drop
+- Pegar supabase/manual/ejecutar-en-sql-editor.sql en el SQL Editor y ejecutarlo una vez. Es lo único de la base que falta. Sin esto no se puede activar el plan Fundador y no funcionan borrar datos, borrar cuenta, liberar un dispositivo ni el reporte de errores. Después corre la consulta de comprobación de docs/SUPABASE.md, sección Proyecto real conectado
+- Decidir cuándo conectar la demo pública a este proyecto. Ya tengo la dirección y la llave pública, y poner VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en las variables de GitHub es un minuto. Recomiendo esperar a tener correo propio, textos legales revisados y dominio, porque desde ese momento cualquiera puede crear una cuenta real
+- Activar la protección contra contraseñas filtradas en Authentication. Puede requerir el plan de pago de Supabase
 - Conectar un proveedor de correo propio en Authentication, SMTP Settings. El correo de fábrica de Supabase solo envía al equipo del proyecto y pocas veces por hora. Resend, Brevo o Amazon SES sirven
 - Para producción conviene el plan de pago de Supabase, que da respaldos y no pausa el proyecto por inactividad. Al escribir esto cuesta unos 25 dólares al mes. Verifícalo en su página de precios
 
@@ -36,7 +37,7 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 - Crear en Stripe los tres productos con su precio. Fundador 79, Mensual 150 y Anual 1,200 pesos
 - Agregar el webhook de Stripe con los seis eventos de docs/SUPABASE.md, incluidos customer.subscription.updated y charge.refunded
 - Guardar y activar el portal del cliente en Stripe, Settings, Billing, Customer portal, con Cancel subscriptions encendido. Sin esto el botón Administrar suscripción no abre
-- Poner los secretos en Supabase, Edge Functions, Secrets, y publicar las cuatro funciones con la CLI de Supabase. Puedo guiarte paso a paso cuando quieras
+- Poner los secretos en Supabase, Edge Functions, Secrets. Son STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL. Tres funciones ya están desplegadas en tu proyecto (create-checkout, create-portal-session y payment-webhook-stripe), así que ya no hace falta la CLI. La dirección del webhook de Stripe es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe y FUNCTIONS_URL vale https://bkjbcdwglyllizupokqm.supabase.co/functions/v1. La cuarta función, la de Mercado Pago, se despliega cuando exista esa cuenta
 - Activar Mercado Pago de la misma forma, con su token y su clave de webhook
 - Hacer un pago de prueba y un reembolso de prueba de punta a punta en cada pasarela. Es lo único que falta para confiar en los cobros, porque no pude abrir la documentación de Stripe desde mi entorno y la lectura de sus eventos no se ha visto con uno real
 - Después pasar de llaves de prueba a llaves reales
@@ -88,5 +89,6 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 ## Qué está publicado
 
 - La Fase G (PR 26) y la Fase H (PR 27) están juntadas en main. Eso incluye el proxy alojado, los textos legales, la configuración del admin, el portal de Stripe, los reembolsos, HSTS, los errores del navegador, la lista real de usuarios, el rol sin conexión y la auditoría
-- Nada de eso funciona contra servicios reales hasta que hagas lo de arriba. La demo pública sigue siendo la versión sin nube
+- Tu proyecto de Supabase ya tiene el esquema aplicado y tres funciones de pago desplegadas (D-113). Falta tu parte del SQL y los secretos de Stripe, ver las secciones 2 y 4
+- La demo pública sigue siendo la versión sin nube, y el proxy de IA, los pagos reales y los textos legales siguen esperando lo de arriba
 - Lo que no está construido a propósito es el banco en la nube, que espera tu respuesta a las decisiones 2, 3 y 4 de docs/BANCO_EN_LA_NUBE.md y un banco aprobado por médicos

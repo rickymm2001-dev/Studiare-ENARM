@@ -672,6 +672,48 @@ select
 - Un alumno que intente escribirla desde la consola del navegador es rechazado por la base. Lo cubre supabase/tests/settings_test.sql
 - Un valor guardado que no cumpla el formato se ignora completo y la app usa los valores de fábrica
 
+## Proyecto real conectado
+
+Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
+
+### Qué quedó aplicado
+
+- Las migraciones 20261007000001 a 20261014000001, además de la primera que ya estaba. Se aplicaron con el conector, salvo las seis piezas de la lista de abajo
+- La migración 20261014000001_function_grants cierra permisos que el chequeo de seguridad de Supabase marcó. set_user_role ya no la puede llamar un anónimo, los triggers handle_new_user y forbid_event_changes no son ejecutables por la API, payment_webhook_events no tiene permisos de tabla para la API y ai_day y ai_check_engine fijan su search_path
+- Tres Edge Functions desplegadas, create-checkout y create-portal-session con verificación de JWT, y payment-webhook-stripe sin ella porque quien llama es Stripe y se identifica con su firma. Se comprobó que arrancan, que el webhook contesta 405 a un GET y 503 a un POST mientras no exista el secreto, y que las otras dos rechazan una llave anónima
+- Falta desplegar payment-webhook-mercadopago, que espera la cuenta de Mercado Pago
+
+### Lo que te toca pegar a mano
+
+La herramienta del conector pide una confirmación humana para toda sentencia con delete o drop, y una sesión en la nube no tiene dónde darla. Esas seis piezas están reunidas en supabase/manual/ejecutar-en-sql-editor.sql. Pégalo completo en el SQL Editor y ejecútalo una vez. Es repetible.
+
+- Liberar la cuenta de un alumno (admin_release_device)
+- Aceptar el plan Fundador en la tabla de suscripciones. Sin esto no se puede activar ese plan
+- Quitar las llaves foráneas sin regla, para poder borrar a un médico o a un admin
+- Borrar mis datos y borrar mi cuenta (delete_my_data y delete_my_account)
+- Guardar los errores del navegador (report_client_error)
+
+Comprobación. Debe salir true en las tres columnas.
+
+```sql
+select
+  (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and p.proname in ('admin_release_device', 'delete_my_data', 'delete_my_account', 'report_client_error')) = 4 as funciones,
+  (select pg_get_constraintdef(oid) like '%founder%' from pg_constraint where conname = 'subscriptions_plan_check') as plan_fundador,
+  (select count(*) from pg_constraint c
+    where c.contype = 'f' and c.confrelid = 'auth.users'::regclass
+      and c.confdeltype = 'a' and c.connamespace = 'public'::regnamespace) = 0 as llaves_con_regla;
+```
+
+### Qué conviene saber
+
+- La primera migración se aplicó pegándola en el SQL Editor, por eso la lista de migraciones del panel no la muestra. Las demás sí aparecen. No uses supabase db push en este proyecto sin antes registrar la primera con supabase migration repair, porque intentaría aplicarla otra vez
+- Las funciones se subieron con el conector, con los módulos de supabase/functions/_shared incluidos. El repo manda. Si cambias algo ahí, vuelve a desplegar con supabase functions deploy o pídemelo
+- Los secretos de las funciones (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL) los pones tú en Edge Functions, Secrets. FUNCTIONS_URL es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1 y el webhook de Stripe apunta a esa dirección con /payment-webhook-stripe al final
+- El chequeo de seguridad todavía marca avisos que son a propósito. Ocho tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama
+- Falta activar la protección contra contraseñas filtradas en Authentication. Es un interruptor del panel y puede requerir el plan de pago de Supabase
+
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora

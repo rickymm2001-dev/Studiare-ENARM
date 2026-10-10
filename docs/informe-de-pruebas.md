@@ -9,7 +9,7 @@ Fase F, sección 17 de la especificación, actualizado al cierre de la Fase I. R
 | Pruebas unitarias y de integración (Vitest) | 2,644 pasan y 2 se omiten a propósito, en 266 archivos |
 | Pruebas de punta a punta (Playwright, teléfono y escritorio) | 218 pasan, 109 por cada tamaño de pantalla |
 | Auditoría funcional por recorrido (npm run audit:ui) | 10 recorridos de 32 pantallas, 10 flujos con interrupciones y la prueba de nube caída, todos sin hallazgos. Ver docs/auditoria-2026-10-10 |
-| Pruebas del esquema de Supabase contra Postgres local | Pasan las diez suites, con la última migración corrida dos veces |
+| Pruebas del esquema de Supabase contra Postgres local | Pasan las once suites, con la última migración y el archivo manual corridos dos veces |
 | Pruebas de seguridad del build | 18 pasan. Sin secretos, con política de contenido y HSTS, dentro del presupuesto y con una imagen de Docker sin llaves |
 | Accesibilidad (axe) | Pasa en las pantallas que recorren las pruebas de punta a punta, en claro y oscuro |
 | npm audit con nivel high | 0 vulnerabilidades |
@@ -44,7 +44,7 @@ Lo que queda con poca cobertura son los workers y el componente del avatar gener
 
 ## Esquema de Supabase
 
-Corre con npm run test:sql contra un Postgres 16 temporal. Diez suites.
+Corre con npm run test:sql contra un Postgres 16 temporal. Once suites.
 
 - rls_test.sql. Permisos por fila, roles, dueño fijo y bitácora de cambios de rol
 - device_barrier_test.sql. Un solo dispositivo por cuenta y límite de cambios
@@ -56,6 +56,9 @@ Corre con npm run test:sql contra un Postgres 16 temporal. Diez suites.
 - billing_portal_test.sql. Clientes de Stripe, reembolsos por cliente y monto, pagos tardíos de un pago devuelto, plan que se conserva con un pago más reciente y la negativa a eliminar la cuenta con una suscripción activa
 - client_errors_test.sql. Errores del navegador sin identidad, limpieza de datos personales, tope diario, 14 días de conservación y permisos
 - admin_users_test.sql. La lista de usuarios y el cambio de rol solo los hace un admin o el dueño, con búsqueda sin comodines, filtro por rol, páginas con tope, nadie cambia su propio rol, el rol de dueño no se asigna y solo el dueño nombra o quita admins
+- function_grants_test.sql. Un anónimo no ejecuta set_user_role, los triggers de alta y de bitácora no son ejecutables por la API, payment_webhook_events no tiene permisos de tabla para la API y las funciones de IA fijan su search_path. El alta de cuentas y los avisos de pago siguen funcionando sin esos permisos
+
+Además, run.sh ejecuta dos veces supabase/manual/ejecutar-en-sql-editor.sql sobre la base ya migrada, para comprobar que las piezas que se pegan a mano son SQL válido y repetible.
 
 ## Seguridad
 
