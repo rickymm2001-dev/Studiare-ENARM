@@ -12,7 +12,8 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
-- Fase G en curso (D-103 a D-107). Proxy de IA alojado, textos legales y configuración del admin en el servidor listos en la rama de trabajo. Ver su sección
+- Fase H programada (D-108 y D-109). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
+- Fase G en main (D-103 a D-107, PR 26). Proxy de IA alojado, textos legales y configuración del admin en el servidor. Ver su sección
 - Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
@@ -30,9 +31,31 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase H. Usuarios reales, roles y auditoría funcional (D-108 y D-109)
+
+Nace de dos peticiones de Ricardo del 2026-10-10. Preguntó cómo se define el tipo de cuenta de cada usuario, con los tres tipos que tiene en mente, y pidió una auditoría de todas las funcionalidades. La Fase G ya está en main (PR 26). Ricardo autorizó abrir y juntar los PR a main sin pedirle aprobación.
+
+### Bloques
+- [x] H1. Usuarios reales con la nube (D-108). Novena migración con admin_list_users, pantalla Usuarios que cambia sola entre la lista de la nube y la local, y cambio de rol con las reglas del servidor. Pruebas SQL (admin_users_test.sql), de cliente y de pantalla. docs/ROLES.md explica los cuatro roles y los planes
+- [x] H2. Rol sin conexión y aviso de privacidad con versión (D-108). El rol no baja a alumno por perder la red, el puente reintenta con espera creciente y al volver la red, y una versión nueva del aviso se pide de nuevo y se registra la que de verdad se aceptó
+- [x] H3. Auditoría por recorrido (D-109). tests/audit con el recorrido de 4 roles, 2 tamaños y 32 pantallas, los flujos con interrupciones y la prueba de nube caída. npm run audit:ui. Informe en docs/auditoria-2026-10-10
+- [x] H4. Correcciones que salieron de la auditoría (D-109). Foco visible en Configuración, aviso de demostración como región con nombre, service worker que toma el control en la primera visita, práctica que se retoma al recargar y sesión que no se da por cerrada cuando el token vence sin red
+
+### Cierre de 15.1
+- Paso 1. Typecheck, lint y pruebas unitarias con cobertura pasan, 2,626 pruebas y 2 omitidas a propósito. Las 10 suites SQL pasan. Cobertura de líneas 86.7%
+- Paso 2. Auditoría completa sin hallazgos, 10 recorridos y 10 flujos. e2e completo, ver docs/informe-de-pruebas.md
+- Paso 3. La revisión independiente de la Fase G ya cubrió el proxy, los pagos y los errores. Los cambios de la Fase H son cliente y una migración con pruebas SQL propias
+- Paso 4. Este archivo, docs/informe-de-pruebas.md, docs/real-vs-simulado.md, DECISIONES.md (D-108 y D-109) y docs/ROLES.md al día
+- Paso 5. Commit, push y PR a main
+
+### Pendiente con Ricardo
+- Aplicar la novena migración de Supabase para que Usuarios muestre las cuentas reales
+- Decidir si prefiere tres roles o cuatro. Hoy son cuatro porque el dueño y el admin son niveles distintos
+- Lo demás sigue en docs/PENDIENTES_DE_RICARDO.md
+
 ## Fase G. Que la plataforma funcione de verdad (D-103 a D-107)
 
-Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta y decirle qué necesito de él. Lo que depende de sus cuentas y llaves queda programado y probado con servidores falsos. Nada de esto está en main. Vive en la rama main-y84jz2 hasta que Ricardo pida el PR.
+Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta y decirle qué necesito de él. Lo que depende de sus cuentas y llaves queda programado y probado con servidores falsos. Quedó en main con el PR 26.
 
 ### Bloques
 - [x] G1. Proxy de IA alojado (D-103). Verifica la sesión de Supabase, exige plan de pago o rol médico o admin, y cuenta límites, presupuesto y bitácora en Postgres. Dockerfile, sexta migración y docs/IA_ALOJADA.md
