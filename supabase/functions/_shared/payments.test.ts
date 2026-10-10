@@ -827,9 +827,60 @@ describe('crear el pago', () => {
       'subscription_data[metadata][user_id]': USER,
       'subscription_data[metadata][plan]': 'monthly',
       customer_email: 'alumna@ejemplo.mx',
+      locale: 'es-419',
       success_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
       cancel_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=cancelado',
     });
+  });
+
+  it('sin activar Stripe Tax no pide impuesto ni dirección', async () => {
+    sent.length = 0;
+    await ask({ plan: 'monthly', provider: 'stripe' }, checkoutDeps());
+    const form = new URLSearchParams(bodyText(sent[0]?.init));
+    expect(form.has('automatic_tax[enabled]')).toBe(false);
+    expect(form.has('billing_address_collection')).toBe(false);
+    expect(form.has('tax_id_collection[enabled]')).toBe(false);
+  });
+
+  it('con Stripe Tax activado calcula el impuesto y pide la dirección y el RFC si lo quieren', async () => {
+    sent.length = 0;
+    await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({ env: { ...env, STRIPE_AUTOMATIC_TAX: 'true' } }),
+    );
+    const form = new URLSearchParams(bodyText(sent[0]?.init));
+    expect(form.get('automatic_tax[enabled]')).toBe('true');
+    expect(form.get('billing_address_collection')).toBe('required');
+    expect(form.get('tax_id_collection[enabled]')).toBe('true');
+    // Cliente nuevo por correo. Sin cliente guardado no hay a quién actualizar
+    expect(form.has('customer_update[address]')).toBe(false);
+  });
+
+  it('con Stripe Tax y un cliente que ya existe deja que Stripe actualice su dirección y su nombre', async () => {
+    sent.length = 0;
+    await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({
+        env: { ...env, STRIPE_AUTOMATIC_TAX: 'true' },
+        customerOf: () => Promise.resolve('cus_1'),
+      }),
+    );
+    const form = new URLSearchParams(bodyText(sent[0]?.init));
+    expect(form.get('customer')).toBe('cus_1');
+    expect(form.get('customer_update[address]')).toBe('auto');
+    expect(form.get('customer_update[name]')).toBe('auto');
+  });
+
+  it('Stripe Tax solo se activa con la palabra true y no con cualquier valor', async () => {
+    for (const value of ['1', 'si', 'TRUE', 'false', '']) {
+      sent.length = 0;
+      await ask(
+        { plan: 'monthly', provider: 'stripe' },
+        checkoutDeps({ env: { ...env, STRIPE_AUTOMATIC_TAX: value } }),
+      );
+      const form = new URLSearchParams(bodyText(sent[0]?.init));
+      expect(form.has('automatic_tax[enabled]'), value).toBe(false);
+    }
   });
 
   it('quien ya pagó vuelve a su mismo cliente de Stripe y no manda el correo', async () => {

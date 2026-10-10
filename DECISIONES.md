@@ -1089,3 +1089,21 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Presupuesto de IA. La pantalla de costos del admin avisa con una alerta cuando el presupuesto diario se llenó, que es cuando la IA se pausa y los alumnos siguen con plantillas, y con un aviso desde el 80%. Un aviso al correo o al celular sigue pendiente porque pide un servicio de alertas, que Ricardo no ha decidido
 - Se quedó fuera a propósito. Elegir la hoja de Excel al importar mazos pide pasar la elección por el procesador de importación y una pantalla de vista previa, y no vale la complejidad todavía. Sigue en IDEAS.md
 - Pendiente con Ricardo. Nada nuevo
+
+### D-111. Mazos de Pediatría y Cirugía de Paco
+- Fecha 2026-10-10. Decisión de Ricardo. Pidió subir todos los mazos de Paco y dijo tener su aprobación escrita, porque Paco trabaja con él. El documento no está en el repositorio y lo conserva Ricardo
+- Ya estaban en el repositorio Medicina interna, Ginecología y obstetricia y Urgencias (D-053), con la autorización de Paco para tenerlos públicos. Faltan Pediatría (Pedia.apkg, unos 90 MB) y Cirugía (Cirugia.apkg, unos 34 MB), en la carpeta Paco del Drive de Ricardo. Esa carpeta trae además un zip con los dos juntos y un PDF de estadísticas de Anki, que no se usan
+- Bloqueo técnico. La herramienta de Drive solo baja archivos de hasta 10 MB y esta sesión no puede abrir drive.google.com porque la política de red del entorno lo bloquea. Urgencias, de 1.7 MB, sí se pudo bajar y salió idéntico en tamaño, así que la vía funciona para archivos chicos
+- Qué hace falta. Que el entorno permita drive.google.com y drive.usercontent.google.com, y que los dos archivos estén compartidos con cualquier persona con el enlace mientras se bajan. Se puede revocar el enlace al terminar
+- Cuando lleguen los archivos. Correr scripts/content/import-paco-decks.ts con los dos .apkg, agregar sus raíces de etiqueta a DECKS, que el script pide si no las reconoce, actualizar las pruebas que cuentan las 3,771 notas de Paco y los textos que dicen tres mazos, y repetir la prueba de migración a mazos en árbol
+- Peso. Las imágenes se copian tal cual, como en los tres primeros. Sumarán unos 120 MB a public/demo-media, que hoy pesa 47 MB. No entran a la precarga del service worker
+- Alcance de la autorización. Cubre la demo pública con la etiqueta Demostración y el crédito a Paco. Si el documento de Paco también cubre su uso dentro del plan de pago, Ricardo lo confirma, porque D-053 solo cubría la demostración y el mazo de Fer sigue fuera (D-008)
+- Pendiente con Ricardo. Permitir los dos dominios en el entorno y compartir los dos archivos, o pasarlos de otra forma
+
+### D-112. Revisión de la integración con Stripe
+- Fecha 2026-10-10. Ricardo pidió ayuda para construir sobre Stripe con Billing, Facturas e Impuestos, y pegó en el chat una llave publicable y una secreta de prueba. La integración ya existía (D-106), así que se revisó en vez de rehacerla. El resultado está en docs/STRIPE.md
+- La llave secreta no se guardó en ningún archivo ni commit, y no se usó, porque la red del entorno bloquea api.stripe.com. Se le recomendó cambiarla. El plugin oficial no estaba en el marketplace con ese nombre, se instaló el de anthropic-plugin-directory, y el servidor MCP de Stripe y su planeador no se pudieron usar por la red
+- Cambios. Checkout se abre con locale es-419. Stripe Tax queda listo detrás del secreto STRIPE_AUTOMATIC_TAX, apagado por defecto, porque con Stripe Tax sin configurar Stripe rechaza abrir el pago. Un script crea los productos de prueba con los precios con el impuesto incluido, y rechaza llaves reales. El revisor de secretos del build ahora marca las llaves sk_ y rk_ de Stripe
+- Sin cambiar a propósito. No se fijó la versión de la API ni se agregó idempotencia al crear la sesión, porque no se pudo verificar contra la documentación de Stripe. Quedan como recomendaciones
+- Límite. Nada de esto se probó contra Stripe real. Las pruebas usan servidores falsos
+- Pendiente con Ricardo. Cambiar la llave, crear los productos, configurar el webhook y los secretos, y revisar con su contador el IVA y las facturas con RFC
