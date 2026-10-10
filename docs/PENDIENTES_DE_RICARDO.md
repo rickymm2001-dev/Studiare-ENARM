@@ -4,12 +4,13 @@ Escrito el 2026-10-10 y puesto al día al cerrar la Fase H. Todo lo de programac
 
 Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_role o secret), la contraseña de la base de datos ni claves secretas de Stripe, Mercado Pago o Anthropic por el chat. Esas viven solo en los secretos de cada servicio. A mí me sirven la dirección del proyecto y la llave pública (anon o publishable).
 
-## 1. Decisión sobre los mazos de Drive
+## 1. Mazos de Drive
 
-- Los mazos de Fer y de Paco no se subieron al repositorio. El repositorio es público. Por D-008 el mazo de Fer no entra al repositorio, y Paco autorizó un repositorio privado y no uno público (D-053). Además el de Fer pesa 328 MB
-- Mi recomendación es que cada alumno importe sus mazos en su navegador desde Mazos, Importar. Ya funciona con .apkg
-- Si quieres que Pedia y Cirugía de Paco vengan precargados, necesito su visto bueno por escrito para publicarlos en un repositorio público, o pasar el repositorio a privado
-- Un catálogo compartido para todos los alumnos pide autorización escrita de los autores y construirlo. No lo hago sin eso
+- Mazos de Paco. Ya están en la demo Medicina interna, Ginecología y obstetricia y Urgencias (D-053). Ricardo dijo que tiene la aprobación escrita de Paco para subir todos sus mazos, así que faltan Pediatría y Cirugía (D-111)
+- Qué hace falta para subirlos. Esta sesión no puede bajar archivos de más de 10 MB de Drive y la red del entorno bloquea drive.google.com. Hay que permitir drive.google.com y drive.usercontent.google.com en el acceso a la red del entorno, y compartir Pedia.apkg y Cirugia.apkg con cualquier persona con el enlace. Al terminar se revoca el enlace
+- Confirma si el documento de Paco también cubre el uso dentro del plan de pago, porque D-053 solo cubría la demostración
+- El mazo de Fer sigue fuera del repositorio (D-008) y pesa 328 MB. Mi recomendación es que cada alumno importe sus mazos en su navegador desde Mazos, Importar. Ya funciona con .apkg
+- Un catálogo compartido para todos los alumnos con mazos de terceros pide autorización escrita de sus autores. No lo hago sin eso
 
 ## 2. Supabase
 
