@@ -1065,3 +1065,19 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Corregido tras la revisión independiente. La limpieza de datos personales ahora también ocurre en la base, y la llave de la lista de errores usa la huella
 - Pendiente con Ricardo. Aplicar la octava migración y decidir si quiere un servicio de alertas
 
+### D-108. Usuarios reales y roles con la nube
+- Fecha 2026-10-10. Origen C, Fase H. Ricardo preguntó cómo se define el tipo de cuenta, y al revisarlo apareció que la pantalla Usuarios solo veía los perfiles del navegador y nunca llamaba a set_user_role. Con la nube conectada no se podía nombrar a un médico de verdad sin escribir SQL
+- Qué hay. Una función nueva de Supabase, admin_list_users, que solo contesta a un admin o al dueño y devuelve alias, correo, rol, plan y fecha de alta con búsqueda, filtro por rol y páginas de 25. Es la novena migración. Con la cuenta de la nube conectada la pantalla Usuarios muestra esas cuentas y cambia el rol con set_user_role. Sin la nube sigue con los perfiles locales
+- Los roles siguen siendo cuatro. Alumno, médico, admin y dueño. El dueño es el administrador general y el admin es un nivel que el dueño puede delegar. Se dejó así porque separa quién puede nombrar admins. Si Ricardo prefiere solo tres, se quita el rol admin sin cambiar nada más
+- Asignar preguntas a un médico sigue siendo local. Pide que el banco viva en la nube y la pantalla lo dice
+- Rol sin conexión. Antes, si fallaba la lectura del rol, la app bajaba a alumno a un médico o un admin que solo perdió la conexión. Ahora se queda con el último rol verificado, avisa que la nube falló y reintenta con espera creciente y al volver la conexión. Sin sesión el rol es alumno, aunque el dispositivo guarde otro
+- Pendiente con Ricardo. Aplicar la novena migración y decidir si prefiere tres roles o cuatro
+
+
+### D-109. Auditoría funcional, primera visita sin conexión y práctica que se retoma
+- Fecha 2026-10-10. Origen C, Fase H. Ricardo pidió una auditoría de todas las funcionalidades. Se hizo como código repetible en tests/audit (npm run audit:ui), con el informe en docs/auditoria-2026-10-10
+- Primera visita sin conexión. El service worker se instalaba pero no tomaba el control de la página abierta, así que una pantalla no visitada fallaba si la red se cortaba antes de recargar. Se activó clientsClaim. Con el aviso de versión nueva (registerType prompt) no hay recarga sorpresa, porque ese aviso solo reacciona a las actualizaciones y no a la primera instalación
+- Práctica que se retoma. La práctica se guarda en la sesión de la pestaña con zustand persist. Solo lleva identificadores de preguntas y de opciones, nunca nombres ni correos, desaparece al cerrar la pestaña, se valida con zod al leerla y se descarta entera si no cuadra. Si el navegador bloquea el almacenamiento, sigue en memoria. Se eligió sesión de la pestaña y no almacenamiento local para no dejar rastros de un alumno en un dispositivo compartido. Una práctica de otro alumno se ignora por su userId
+- Token vencido sin red. Supabase responde sin sesión y con un error de red cuando no puede renovar el token. Eso ya no se lee como sesión cerrada, falla y el puente reintenta, así que un médico no pierde su área por abrir la app sin conexión. Se revisa el nombre del error y no se importa el SDK, que se baja aparte del JavaScript inicial
+- Límite. La auditoría corrió en Chromium, con una nube y una IA simuladas. Safari, Firefox, lector de pantalla, dispositivos reales y Supabase real quedan fuera y están dichos en el informe
+- Pendiente con Ricardo. Nada nuevo. Sigue la lista de PENDIENTES_DE_RICARDO.md

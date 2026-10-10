@@ -354,6 +354,78 @@ describe('CloudBridge y el aviso de privacidad', () => {
   });
 });
 
+describe('CloudBridge y el rol de la cuenta', () => {
+  it('aplica el rol que da el servidor', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.role = 'physician';
+    mount();
+    await waitFor(() => {
+      expect(usePreferences.getState().role).toBe('physician');
+    });
+    expect(linked()).toBe(true);
+  });
+
+  it('si no se puede leer el rol no baja a alumno a un médico que solo perdió la conexión', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failRole = 'error';
+    usePreferences.setState({ role: 'physician' });
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('error');
+    });
+    expect(usePreferences.getState().role).toBe('physician');
+  });
+
+  it('con el token vencido y sin red no cierra la sesión ni baja de rol, y se reconecta al volver la red', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failSession = true;
+    fake.role = 'physician';
+    usePreferences.setState({ role: 'physician' });
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('error');
+    });
+    expect(usePreferences.getState().role).toBe('physician');
+    fake.failSession = false;
+    act(() => {
+      window.dispatchEvent(new Event('online'));
+    });
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(usePreferences.getState().role).toBe('physician');
+  });
+
+  it('cuando vuelve la conexión lee el rol y se conecta sin recargar', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failRole = 'throw';
+    fake.role = 'admin';
+    usePreferences.setState({ role: 'admin' });
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('error');
+    });
+    fake.failRole = 'none';
+    act(() => {
+      window.dispatchEvent(new Event('online'));
+    });
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(usePreferences.getState().role).toBe('admin');
+  });
+
+  it('sin sesión nadie tiene un rol, aunque este dispositivo guarde otro', async () => {
+    useFake(makeFakeCloud({ session: null }));
+    usePreferences.setState({ role: 'admin' });
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('signed-out');
+    });
+    expect(usePreferences.getState().role).toBe('student');
+  });
+});
+
 describe('CloudBridge y la configuración del admin', () => {
   it('copia la configuración del servidor al navegador y pide recargar para aplicarla', async () => {
     const fake = useFake(makeFakeCloud());

@@ -35,7 +35,8 @@
     "budget": "node scripts/bundle-budget.ts dist",
     "legal:export": "node scripts/legal-export.ts",
     "audit:high": "npm audit --audit-level=high",
-    "test:sql": "bash supabase/tests/run.sh"
+    "test:sql": "bash supabase/tests/run.sh",
+    "audit:ui": "node scripts/playwright.ts test --config playwright.audit.config.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.132.1",

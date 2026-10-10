@@ -87,32 +87,29 @@ export function SettingsScreen() {
         </Tabs.List>
 
         {ready ? (
-          <Tabs.Content value="study" className="outline-none">
+          <Tabs.Content value="study">
             <StudySection session={ready} />
           </Tabs.Content>
         ) : null}
 
-        <Tabs.Content value="appearance" className="outline-none">
+        <Tabs.Content value="appearance">
           <AppearanceSettings />
         </Tabs.Content>
 
         {ready ? (
-          <Tabs.Content value="pomodoro" className="outline-none">
+          <Tabs.Content value="pomodoro">
             <PomodoroSection session={ready} />
           </Tabs.Content>
         ) : null}
 
         {ready ? (
-          <Tabs.Content value="privacy" className="outline-none">
+          <Tabs.Content value="privacy">
             <PrivacySection session={ready} />
           </Tabs.Content>
         ) : null}
 
         {/* En computadora las tarjetas van en dos columnas (D-057) */}
-        <Tabs.Content
-          value="account"
-          className="grid grid-cols-1 items-start gap-3 outline-none lg:grid-cols-2"
-        >
+        <Tabs.Content value="account" className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
           <Card>
             <RadioCards
               legend={t.database.legend}

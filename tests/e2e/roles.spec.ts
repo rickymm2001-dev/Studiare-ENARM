@@ -40,14 +40,16 @@ test('Demostración marca Datos simulados en toda pantalla y se puede volver', a
 
   for (const key of ['home', 'review', 'progress', 'tutor'] as const) {
     await page.goto(SCREENS[key].path);
-    const banner = page.getByRole('note');
+    const banner = page.getByRole('region', { name: t.labels.simulatedData, exact: true });
     await expect(banner).toContainText(t.labels.simulatedData);
     await expect(banner).toContainText(t.database.banner);
   }
   await expectNoSeriousA11yViolations(page);
 
   await page.getByRole('button', { name: t.database.backToReal }).click();
-  await expect(page.getByRole('note')).toHaveCount(0);
+  await expect(page.getByRole('region', { name: t.labels.simulatedData, exact: true })).toHaveCount(
+    0,
+  );
   await page.goto(ACCOUNT_SETTINGS);
   await expect(page.getByText(t.database.storedIn('enarm_real'))).toBeVisible();
 });

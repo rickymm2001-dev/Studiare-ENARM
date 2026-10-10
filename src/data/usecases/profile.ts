@@ -116,6 +116,31 @@ export async function acceptedNoticeVersion(
   return versions.at(-1) ?? null;
 }
 
+/** Si el alumno decidió bajo una versión del aviso anterior a la que trae la app ahora */
+export async function noticeNeedsAcceptance(
+  api: Pick<DataApi, 'repos'>,
+  userId: string,
+): Promise<boolean> {
+  const accepted = await acceptedNoticeVersion(api, userId);
+  // Sin ninguna decisión todavía, el aviso se acepta al crear el perfil, no aquí
+  return accepted !== null && accepted < PRIVACY_NOTICE_VERSION;
+}
+
+/**
+ * Acepta la versión actual del aviso. Vuelve a registrar la decisión de cada finalidad tal como está,
+ * ahora bajo la versión nueva, así queda constancia de bajo qué texto se tomó. No cambia ninguna
+ * decisión. Una finalidad sin decisión previa queda como retirada
+ */
+export async function acceptCurrentNotice(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+): Promise<void> {
+  const current = await currentConsents(api, user.id);
+  for (const purpose of Object.keys(current) as ConsentPurpose[]) {
+    await setConsent(api, user, purpose, current[purpose]);
+  }
+}
+
 /** Estado actual de cada finalidad, con la decisión más reciente */
 export async function currentConsents(
   api: Pick<DataApi, 'repos'>,

@@ -89,7 +89,7 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
   for (const key of screens) {
     await page.goto(SCREENS[key].path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    const banner = page.getByRole('note');
+    const banner = page.getByRole('region', { name: t.labels.simulatedData, exact: true });
     await expect(banner, SCREENS[key].path).toContainText(t.labels.simulatedData);
     await expect(banner, SCREENS[key].path).toContainText(t.database.banner);
   }

@@ -330,6 +330,16 @@ export const t = {
       offline: 'Las funciones de IA necesitan conexión. Lo demás sigue funcionando.',
     },
   },
+  // Cuando cambia el aviso de privacidad, como el propio aviso promete (Fase H)
+  noticeUpdate: {
+    title: 'Actualizamos el aviso de privacidad',
+    body: (version: string) =>
+      `Cambió el texto con el que decidiste qué usamos de tus datos. Léelo y acéptalo para dejar constancia. La versión nueva es la del ${version}. Tus permisos siguen como estaban.`,
+    read: 'Leer el aviso',
+    accept: 'Aceptar la versión nueva',
+    saving: 'Guardando…',
+    failed: 'No se pudo guardar. Inténtalo de nuevo.',
+  },
   configUpdate: {
     title: 'Hay una configuración nueva',
     body: 'La plataforma actualizó su configuración. Recarga para aplicarla cuando termines lo que estás haciendo.',

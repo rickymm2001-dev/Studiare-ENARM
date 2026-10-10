@@ -14,6 +14,7 @@ import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
+import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
@@ -75,8 +76,8 @@ export function AppShell() {
       {/* Aviso de demostración en una sola línea delgada. Es la etiqueta visible de Datos
           simulados para toda la pantalla, así que las pantallas ya no repiten la suya (D-078) */}
       {database === 'demo' ? (
-        <div
-          role="note"
+        <section
+          aria-label={t.labels.simulatedData}
           className={`flex items-center justify-center gap-x-3 border-b border-sim-line bg-sim px-4 text-xs text-sim-fg sm:text-sm ${rail}`}
         >
           <span className="flex min-w-0 items-center gap-1.5">
@@ -95,7 +96,7 @@ export function AppShell() {
           >
             {t.database.backToReal}
           </button>
-        </div>
+        </section>
       ) : null}
 
       {online ? null : (
@@ -111,6 +112,7 @@ export function AppShell() {
       <OtherDeviceNotice className={rail} />
       <DeviceLimitNotice className={rail} />
       <ConfigUpdateNotice className={rail} />
+      <NoticeUpdateNotice className={rail} />
       <OrganizationSync />
 
       <div className={rail}>
