@@ -44,6 +44,15 @@ describe('secretos en el build', () => {
     expect(findServiceKeys(`const k="sb_secret_${'a'.repeat(24)}";`)).toEqual([
       'llave secreta de Supabase (sb_secret_)',
     ]);
+    expect(findServiceKeys(`const k="sk_test_${'a'.repeat(30)}";`)).toEqual([
+      'llave secreta de Stripe (sk_ o rk_)',
+    ]);
+    expect(findServiceKeys(`const k="rk_live_${'B'.repeat(30)}";`)).toEqual([
+      'llave secreta de Stripe (sk_ o rk_)',
+    ]);
+    // La publicable es pública por diseño y solo mencionar el prefijo no es una llave
+    expect(findServiceKeys(`const k="pk_test_${'a'.repeat(30)}";`)).toEqual([]);
+    expect(findServiceKeys("if (key.startsWith('sk_test_')) return false;")).toEqual([]);
     // La llave pública anterior es un JWT con rol anon y puede ir en el build. El texto del guardia
     // del cliente, que solo nombra el prefijo, tampoco cuenta
     expect(findServiceKeys(`const k="${jwt('anon')}";`)).toEqual([]);

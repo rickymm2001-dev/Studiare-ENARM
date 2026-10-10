@@ -1099,3 +1099,11 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Peso. Las imágenes se copian tal cual, como en los tres primeros. Sumarán unos 120 MB a public/demo-media, que hoy pesa 47 MB. No entran a la precarga del service worker
 - Alcance de la autorización. Cubre la demo pública con la etiqueta Demostración y el crédito a Paco. Si el documento de Paco también cubre su uso dentro del plan de pago, Ricardo lo confirma, porque D-053 solo cubría la demostración y el mazo de Fer sigue fuera (D-008)
 - Pendiente con Ricardo. Permitir los dos dominios en el entorno y compartir los dos archivos, o pasarlos de otra forma
+
+### D-112. Revisión de la integración con Stripe
+- Fecha 2026-10-10. Ricardo pidió ayuda para construir sobre Stripe con Billing, Facturas e Impuestos, y pegó en el chat una llave publicable y una secreta de prueba. La integración ya existía (D-106), así que se revisó en vez de rehacerla. El resultado está en docs/STRIPE.md
+- La llave secreta no se guardó en ningún archivo ni commit, y no se usó, porque la red del entorno bloquea api.stripe.com. Se le recomendó cambiarla. El plugin oficial no estaba en el marketplace con ese nombre, se instaló el de anthropic-plugin-directory, y el servidor MCP de Stripe y su planeador no se pudieron usar por la red
+- Cambios. Checkout se abre con locale es-419. Stripe Tax queda listo detrás del secreto STRIPE_AUTOMATIC_TAX, apagado por defecto, porque con Stripe Tax sin configurar Stripe rechaza abrir el pago. Un script crea los productos de prueba con los precios con el impuesto incluido, y rechaza llaves reales. El revisor de secretos del build ahora marca las llaves sk_ y rk_ de Stripe
+- Sin cambiar a propósito. No se fijó la versión de la API ni se agregó idempotencia al crear la sesión, porque no se pudo verificar contra la documentación de Stripe. Quedan como recomendaciones
+- Límite. Nada de esto se probó contra Stripe real. Las pruebas usan servidores falsos
+- Pendiente con Ricardo. Cambiar la llave, crear los productos, configurar el webhook y los secretos, y revisar con su contador el IVA y las facturas con RFC

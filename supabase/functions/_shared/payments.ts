@@ -350,6 +350,12 @@ export interface FunctionEnv {
   STRIPE_PRICE_FOUNDER?: string;
   STRIPE_PRICE_MONTHLY?: string;
   STRIPE_PRICE_ANNUAL?: string;
+  /**
+   * Con true, Checkout calcula el impuesto con Stripe Tax y pide dirección y RFC opcional. Se deja
+   * apagado hasta activar Stripe Tax en el panel y poner el domicilio fiscal, porque con Stripe Tax
+   * sin configurar Stripe rechaza abrir el pago
+   */
+  STRIPE_AUTOMATIC_TAX?: string;
   MERCADOPAGO_ACCESS_TOKEN?: string;
   MERCADOPAGO_WEBHOOK_SECRET?: string;
   /** Dirección pública de la app, con la que se arman las URL de regreso y el CORS */
@@ -580,6 +586,8 @@ export async function handleCreateCheckout(
         'line_items[0][quantity]': '1',
         success_url: back('ok'),
         cancel_url: back('cancelado'),
+        // La página de pago en el español de América Latina, como la app
+        locale: 'es-419',
         client_reference_id: user.id,
         'metadata[user_id]': user.id,
         'metadata[plan]': plan,
@@ -590,10 +598,23 @@ export async function handleCreateCheckout(
       // Quien ya pagó antes vuelve a su mismo cliente de Stripe, para que sus facturas, su portal y
       // un reembolso no queden repartidos en dos clientes. Si no tiene, Stripe crea uno con su correo
       const known = await deps.customerOf(user.id).catch(() => null);
+      const withTax = deps.env.STRIPE_AUTOMATIC_TAX === 'true';
+      if (withTax) {
+        form.set('automatic_tax[enabled]', 'true');
+        form.set('billing_address_collection', 'required');
+        form.set('tax_id_collection[enabled]', 'true');
+      }
       const open = async (customer: string | null) => {
         const body = new URLSearchParams(form);
-        if (customer) body.set('customer', customer);
-        else if (user.email) body.set('customer_email', user.email);
+        if (customer) {
+          body.set('customer', customer);
+          // Con un cliente que ya existe, Stripe pide permiso para guardar en él la dirección y el
+          // nombre que se capturen para calcular el impuesto
+          if (withTax) {
+            body.set('customer_update[address]', 'auto');
+            body.set('customer_update[name]', 'auto');
+          }
+        } else if (user.email) body.set('customer_email', user.email);
         return deps.fetch('https://api.stripe.com/v1/checkout/sessions', {
           method: 'POST',
           headers: {

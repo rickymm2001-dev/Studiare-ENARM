@@ -30,6 +30,8 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 
 ## 4. Cobros
 
+- La guía de Stripe con lo revisado, lo mejorado y lo que falta está en docs/STRIPE.md. Cambia la llave secreta de prueba que pegaste en el chat (Developers, API keys, Roll key) cuando termines de configurar
+
 - Activar tu cuenta de Stripe. Pide verificar tu negocio y tu cuenta bancaria en México. Puede tardar días
 - Crear en Stripe los tres productos con su precio. Fundador 79, Mensual 150 y Anual 1,200 pesos
 - Agregar el webhook de Stripe con los seis eventos de docs/SUPABASE.md, incluidos customer.subscription.updated y charge.refunded
