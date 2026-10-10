@@ -1073,3 +1073,11 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Rol sin conexión. Antes, si fallaba la lectura del rol, la app bajaba a alumno a un médico o un admin que solo perdió la conexión. Ahora se queda con el último rol verificado, avisa que la nube falló y reintenta con espera creciente y al volver la conexión. Sin sesión el rol es alumno, aunque el dispositivo guarde otro
 - Pendiente con Ricardo. Aplicar la novena migración y decidir si prefiere tres roles o cuatro
 
+
+### D-109. Auditoría funcional, primera visita sin conexión y práctica que se retoma
+- Fecha 2026-10-10. Origen C, Fase H. Ricardo pidió una auditoría de todas las funcionalidades. Se hizo como código repetible en tests/audit (npm run audit:ui), con el informe en docs/auditoria-2026-10-10
+- Primera visita sin conexión. El service worker se instalaba pero no tomaba el control de la página abierta, así que una pantalla no visitada fallaba si la red se cortaba antes de recargar. Se activó clientsClaim. Con el aviso de versión nueva (registerType prompt) no hay recarga sorpresa, porque ese aviso solo reacciona a las actualizaciones y no a la primera instalación
+- Práctica que se retoma. La práctica se guarda en la sesión de la pestaña con zustand persist. Solo lleva identificadores de preguntas y de opciones, nunca nombres ni correos, desaparece al cerrar la pestaña, se valida con zod al leerla y se descarta entera si no cuadra. Si el navegador bloquea el almacenamiento, sigue en memoria. Se eligió sesión de la pestaña y no almacenamiento local para no dejar rastros de un alumno en un dispositivo compartido. Una práctica de otro alumno se ignora por su userId
+- Token vencido sin red. Supabase responde sin sesión y con un error de red cuando no puede renovar el token. Eso ya no se lee como sesión cerrada, falla y el puente reintenta, así que un médico no pierde su área por abrir la app sin conexión. Se revisa el nombre del error y no se importa el SDK, que se baja aparte del JavaScript inicial
+- Límite. La auditoría corrió en Chromium, con una nube y una IA simuladas. Safari, Firefox, lector de pantalla, dispositivos reales y Supabase real quedan fuera y están dichos en el informe
+- Pendiente con Ricardo. Nada nuevo. Sigue la lista de PENDIENTES_DE_RICARDO.md
