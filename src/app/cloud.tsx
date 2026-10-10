@@ -71,6 +71,21 @@ export function CloudBridge() {
         leaveWith({ status: 'signed-out', reason: 'device_limit', retryAt });
       };
 
+      // Reintentos de sync cuando falla, con espera creciente de 15 segundos a 5 minutos
+      const retry: { failures: number; timer: ReturnType<typeof setTimeout> | null } = {
+        failures: 0,
+        timer: null,
+      };
+      const scheduleRetry = () => {
+        if (retry.timer) clearTimeout(retry.timer);
+        const wait = Math.min(15_000 * 2 ** retry.failures, 300_000);
+        retry.failures += 1;
+        retry.timer = setTimeout(() => {
+          retry.timer = null;
+          void sync();
+        }, wait);
+      };
+
       const sync = async () => {
         try {
           const identity = await readCloudIdentity(cloud);
@@ -79,6 +94,8 @@ export function CloudBridge() {
             leaving = false;
             stopGuard();
             forgetDeviceClaim();
+            // Sin sesión nadie tiene un rol. Lo que haya en este dispositivo no vale (D-108)
+            setRole('student');
             setCloud(signedOutState(useCloud.getState().state));
             return;
           }
@@ -134,11 +151,21 @@ export function CloudBridge() {
             syncing = { authId: identity.authId, handle };
             status.setSyncNow(() => handle.syncNow());
           }
+          retry.failures = 0;
         } catch {
-          if (!stopped()) setCloud({ status: 'error' });
+          if (stopped()) return;
+          // Sin conexión o con el servidor caído. Se queda con el rol de la última vez que se
+          // verificó, se avisa que la nube falló y se vuelve a intentar con espera creciente
+          setCloud({ status: 'error' });
+          scheduleRetry();
         }
       };
       void sync();
+      const onOnline = () => {
+        retry.failures = 0;
+        void sync();
+      };
+      window.addEventListener('online', onOnline);
       const { data } = cloud.auth.onAuthStateChange((event) => {
         // Supabase pide no esperar llamadas dentro del aviso, así que se agenda aparte
         if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
@@ -147,6 +174,8 @@ export function CloudBridge() {
       });
       return () => {
         run.active = false;
+        if (retry.timer) clearTimeout(retry.timer);
+        window.removeEventListener('online', onOnline);
         stopGuard();
         data.subscription.unsubscribe();
       };

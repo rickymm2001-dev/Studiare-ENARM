@@ -46,6 +46,9 @@ export async function readCloudIdentity(cloud: SupabaseClient): Promise<CloudIde
     cloud.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
     cloud.from('profiles').select('alias').eq('id', user.id).maybeSingle(),
   ]);
+  // Si no se pudo leer el rol no se sabe quién es, y volver alumno a un médico o a un admin que solo
+  // perdió la conexión lo dejaría sin sus pantallas hasta recargar. Falla y el puente reintenta
+  if (roleRow.error) throw new Error('No se pudo leer el rol de la cuenta');
   const roleData = roleRow.data as { role?: unknown } | null;
   const profileData = profileRow.data as { alias?: unknown } | null;
   return {

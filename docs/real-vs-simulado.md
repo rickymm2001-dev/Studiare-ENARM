@@ -1,6 +1,6 @@
 # Real contra simulado, función por función
 
-Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-10. Incluye la Fase G.
+Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-10. Incluye las Fases G y H.
 
 ## Cómo leer las etiquetas
 
@@ -82,7 +82,9 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 | Doble etiquetado con acuerdo | A ciegas, con kappa por etiqueta y su intervalo | Real | Médicos reales etiquetando |
 | Cola de borradores de IA | El médico aprueba o rechaza preguntas reestructuradas, consejos y tarjetas | Real | Nada en lo funcional |
 | Importador del banco | CSV, Excel o JSON con reporte de errores por fila | Real | Importar casos seriados |
-| Usuarios y asignaciones | El administrador nombra médicos y asigna preguntas | Real con la nube | Nada en lo funcional |
+| Usuarios y roles | Con la nube conectada lista las cuentas reales de Supabase, con su correo, plan y rol, y cambia el rol con las reglas del servidor (D-108). Sin la nube trabaja sobre los perfiles del navegador | Real con la nube | Aplicar la novena migración |
+| Asignar preguntas a un médico | El admin elige subespecialidades y se le asignan sus preguntas. Hoy vive en el navegador donde se hace | Real sin la nube. No llega a la nube | Que el banco viva en Supabase (docs/BANCO_EN_LA_NUBE.md) |
+| Aviso de privacidad nuevo | Cuando cambia la versión, una franja pide aceptarla de nuevo y deja constancia sin cambiar los permisos | Real | Nada en lo funcional |
 | Costos de IA, datos de demostración y configuración | Gasto real y teórico, siembra de alumnos simulados, umbrales y pesos. Con la nube, la configuración vive en el servidor y vale para todos (D-105) | Real, y real con la nube | Nada en lo funcional |
 
 ## Textos legales y errores

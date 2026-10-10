@@ -29,5 +29,10 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["tests", "playwright.config.ts", "playwright.screenshots.config.ts"]
+  "include": [
+    "tests",
+    "playwright.config.ts",
+    "playwright.screenshots.config.ts",
+    "playwright.audit.config.ts"
+  ]
 }

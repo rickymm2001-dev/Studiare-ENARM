@@ -1,8 +1,10 @@
 // Usuarios (pantalla 28, D-070). El admin y el dueño ven las cuentas, cambian roles según las
-// reglas de engines/roles y asignan subespecialidades del banco a cada médico. En el prototipo
-// trabaja sobre los perfiles de este navegador. Con Supabase usa set_user_role (D-069).
+// reglas de engines/roles y asignan subespecialidades del banco a cada médico. Sin la nube trabaja
+// sobre los perfiles de este navegador. Con la cuenta de la nube conectada muestra las cuentas
+// reales de Supabase y cambia los roles con set_user_role (D-069, D-108).
 import { ClipboardCheck, Crown, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useSession } from '@/app/session';
@@ -20,8 +22,15 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SelectField } from '@/ui/components/field';
 import { LoadingState } from '@/ui/states/states';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
+import { CloudUsers } from './CloudUsers';
 
 export function AdminUsersScreen() {
+  const linked = useCloud((store) => store.state.status === 'linked');
+  return linked ? <CloudUsers /> : <LocalUsers />;
+}
+
+/** Los perfiles de este navegador. Es lo que hay sin la nube y en la demostración */
+function LocalUsers() {
   const api = useDataApi();
   const callerRole = usePreferences((state) => state.role);
   const session = useSession();

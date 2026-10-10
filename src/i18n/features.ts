@@ -1415,6 +1415,39 @@ export const featureText = {
       cannot_remove_owner: 'Nadie puede quitar al dueño.',
       only_owner_manages_admins: 'Solo el dueño nombra o quita admins.',
     },
+    // Con la cuenta de la nube conectada la lista son las cuentas reales de Supabase (D-108)
+    cloud: {
+      notice:
+        'Estas son las cuentas reales de Supabase. Cada cambio de rol lo aplica el servidor con sus reglas y queda en la bitácora de auditoría. Nombrar o quitar admins es solo del dueño.',
+      search: 'Buscar por alias o correo',
+      searchAction: 'Buscar',
+      roleFilter: 'Filtrar por rol',
+      roleOf: (alias: string) => `Rol de ${alias}`,
+      allRoles: 'Todos los roles',
+      count: (n: number) => `${n.toLocaleString('es-MX')} cuentas`,
+      pageOf: (page: number, pages: number) => `Página ${page} de ${pages}`,
+      previous: 'Anterior',
+      next: 'Siguiente',
+      loading: 'Cargando las cuentas…',
+      empty: 'Ninguna cuenta coincide con esa búsqueda.',
+      joined: (date: string) => `Se registró el ${date}`,
+      plan: (plan: string) => `Plan ${plan}`,
+      assignmentsNote:
+        'Asignar preguntas a un médico llega cuando el banco viva en la nube. Hasta entonces las asignaciones solo existen en el navegador donde se hicieron.',
+      errors: {
+        not_admin:
+          'Tu cuenta no es admin ni dueño en el servidor, así que no puede ver las cuentas.',
+        no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
+        network: 'No hay conexión con el servidor. Inténtalo de nuevo.',
+        unknown:
+          'El servidor no pudo contestar. Puede faltar aplicar la novena migración de Supabase.',
+      },
+      roleErrors: {
+        no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
+        network: 'No hay conexión con el servidor. No se cambió nada.',
+        unknown: 'El servidor no pudo cambiar el rol. No se cambió nada.',
+      },
+    },
     assignedCount: (n: number) =>
       n === 0 ? 'Sin preguntas asignadas' : `${n.toLocaleString('es-MX')} preguntas asignadas`,
     assign: 'Asignar preguntas',

@@ -1065,3 +1065,11 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Corregido tras la revisión independiente. La limpieza de datos personales ahora también ocurre en la base, y la llave de la lista de errores usa la huella
 - Pendiente con Ricardo. Aplicar la octava migración y decidir si quiere un servicio de alertas
 
+### D-108. Usuarios reales y roles con la nube
+- Fecha 2026-10-10. Origen C, Fase H. Ricardo preguntó cómo se define el tipo de cuenta, y al revisarlo apareció que la pantalla Usuarios solo veía los perfiles del navegador y nunca llamaba a set_user_role. Con la nube conectada no se podía nombrar a un médico de verdad sin escribir SQL
+- Qué hay. Una función nueva de Supabase, admin_list_users, que solo contesta a un admin o al dueño y devuelve alias, correo, rol, plan y fecha de alta con búsqueda, filtro por rol y páginas de 25. Es la novena migración. Con la cuenta de la nube conectada la pantalla Usuarios muestra esas cuentas y cambia el rol con set_user_role. Sin la nube sigue con los perfiles locales
+- Los roles siguen siendo cuatro. Alumno, médico, admin y dueño. El dueño es el administrador general y el admin es un nivel que el dueño puede delegar. Se dejó así porque separa quién puede nombrar admins. Si Ricardo prefiere solo tres, se quita el rol admin sin cambiar nada más
+- Asignar preguntas a un médico sigue siendo local. Pide que el banco viva en la nube y la pantalla lo dice
+- Rol sin conexión. Antes, si fallaba la lectura del rol, la app bajaba a alumno a un médico o un admin que solo perdió la conexión. Ahora se queda con el último rol verificado, avisa que la nube falló y reintenta con espera creciente y al volver la conexión. Sin sesión el rol es alumno, aunque el dispositivo guarde otro
+- Pendiente con Ricardo. Aplicar la novena migración y decidir si prefiere tres roles o cuatro
+

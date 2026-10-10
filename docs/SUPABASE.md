@@ -548,6 +548,36 @@ select
 - Los errores del navegador no sustituyen un monitoreo de servidor con alertas. Si quieres avisos al celular cuando algo se rompe, conviene agregar un servicio aparte
 - El texto del aviso de privacidad ya dice que la mejora anónima incluye estos reportes
 
+## Usuarios y roles
+
+### Qué hace
+
+- La pantalla Usuarios (28) muestra las cuentas reales de Supabase cuando la cuenta de la nube está conectada. Antes solo veía los perfiles del navegador y no podía nombrar a un médico de verdad
+- Cada cuenta se ve con su alias, su correo, su plan y su rol, con búsqueda por alias o correo, filtro por rol y páginas de 25
+- Cambiar el rol llama a set_user_role. El servidor aplica las reglas y deja el cambio en la bitácora de auditoría. Un admin nombra médicos y el dueño además nombra admins
+- La lista solo la ve un admin o el dueño. Un alumno o un médico recibe un rechazo del servidor, y quien no ha entrado ni siquiera puede llamarla. La página tiene tope de 100 filas, para que no sirva de descarga masiva de correos
+- Asignar preguntas a un médico sigue siendo local, porque pide el banco en la nube. Ver docs/BANCO_EN_LA_NUBE.md
+- Los roles y los planes están explicados en docs/ROLES.md
+
+### Cómo aplicar la novena migración
+
+No necesitas terminal. Aplica primero las ocho anteriores. Mientras no apliques esta, la pantalla Usuarios con la nube conectada dice que no pudo leer las cuentas.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261013000001_admin_users.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.admin_list_users(text, text, integer, integer)', 'execute') as sesion_puede_llamarla,
+  has_function_privilege('anon', 'public.admin_list_users(text, text, integer, integer)', 'execute') as anon_puede_llamarla;
+```
+
+7. Debe salir sesion_puede_llamarla en true y anon_puede_llamarla en false. La función revisa por dentro que quien llama sea admin o dueño
+
 ## Privacidad, borrar mis datos y mi cuenta
 
 ### Qué hace
