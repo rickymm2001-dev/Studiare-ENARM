@@ -272,6 +272,30 @@ export function badgesFor(
   });
 }
 
+/** Llave de un nivel de insignia ganado, por ejemplo answers:2. Sirve para saber cuáles ya se avisaron */
+export function badgeTierKey(family: BadgeFamily, tier: number): string {
+  return `${family}:${tier}`;
+}
+
+/** Todos los niveles ganados ahora mismo */
+export function earnedBadgeKeys(badges: readonly BadgeStatus[]): string[] {
+  return badges.flatMap((badge) =>
+    badge.tiers.filter((tier) => tier.earned).map((tier) => badgeTierKey(badge.family, tier.tier)),
+  );
+}
+
+/** Niveles ganados que el alumno todavía no ha visto, en el orden de las familias y sus niveles */
+export function unseenBadgeTiers(
+  badges: readonly BadgeStatus[],
+  seen: ReadonlySet<string>,
+): { family: BadgeFamily; tier: number }[] {
+  return badges.flatMap((badge) =>
+    badge.tiers
+      .filter((tier) => tier.earned && !seen.has(badgeTierKey(badge.family, tier.tier)))
+      .map((tier) => ({ family: badge.family, tier: tier.tier })),
+  );
+}
+
 // ---------------------------------------------------------------------------------------------
 // Liga
 

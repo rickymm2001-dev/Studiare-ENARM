@@ -35,6 +35,10 @@ export const adminText = {
       hint: 'Lo que el proxy lleva contado del día, que es lo que frena los límites. Se cuenta en hora de México.',
       spent: (spent: string, budget: string) => `Van ${spent} de ${budget} del presupuesto diario`,
       spentLabel: 'Presupuesto diario gastado',
+      paused:
+        'La IA está pausada por hoy porque se llegó al presupuesto diario. Los alumnos siguen estudiando con las plantillas. Vuelve a funcionar al empezar el día, o puedes subir el tope en la configuración de IA de esta pantalla.',
+      nearLimit: (percent: number) =>
+        `Llevas ${percent}% del presupuesto diario. Si se llena, la IA se pausa por hoy y los alumnos siguen con las plantillas.`,
       calls: (calls: number, students: number) =>
         `${plural(calls, 'llamada', 'llamadas')} de ${plural(students, 'alumno', 'alumnos')} hoy`,
       mockNote: 'El proxy está en modo simulado. Sus llamadas no gastan.',

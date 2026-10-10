@@ -14,6 +14,7 @@ import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
+import { BadgeToast } from './BadgeToast';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
 import { OrganizationSync } from './OrganizationSync';
@@ -114,6 +115,7 @@ export function AppShell() {
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
       <OrganizationSync />
+      <BadgeToast />
 
       <div className={rail}>
         <main
