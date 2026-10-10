@@ -13,7 +13,7 @@ Fase F, sección 17 de la especificación, actualizado al cierre de la Fase I. R
 | Pruebas de seguridad del build | 18 pasan. Sin secretos, con política de contenido y HSTS, dentro del presupuesto y con una imagen de Docker sin llaves |
 | Accesibilidad (axe) | Pasa en las pantallas que recorren las pruebas de punta a punta, en claro y oscuro |
 | npm audit con nivel high | 0 vulnerabilidades |
-| JavaScript inicial | 282.5 KB comprimidos contra un presupuesto de 300 KB. Subió 1 KB con la Fase H |
+| JavaScript inicial | 282.6 KB comprimidos contra un presupuesto de 300 KB. Subió 1 KB con la Fase H y el aviso de insignias de la Fase I se carga aparte |
 | Rendimiento con 200 tarjetas y el procesador 4 veces más lento | Mediana de 90 ms, p95 de 147 ms y peor de 301 ms |
 | Evaluaciones de IA con respuestas fijas | 60 casos, 100% en esquema, anclaje y rechazos |
 

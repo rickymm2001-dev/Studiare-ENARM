@@ -43,7 +43,7 @@ Nace de la instrucción de Ricardo de seguir con lo que quede pendiente de progr
 - [x] I4. Prueba de punta a punta de apuntes sin el parpadeo que la hacía fallar una de cada cuatro veces, también en main
 
 ### Cierre de 15.1
-- Paso 1. Typecheck, lint y 2,644 pruebas unitarias con cobertura de líneas de 86.8% pasan. Las 10 suites SQL no cambiaron. JavaScript inicial en 282.5 KB de 300
+- Paso 1. Typecheck, lint y 2,644 pruebas unitarias con cobertura de líneas de 86.8% pasan. Las 10 suites SQL no cambiaron. JavaScript inicial en 282.6 KB de 300, con el aviso de insignias cargado aparte
 - Paso 2. e2e completo, 218 pruebas. En la última corrida completa pasaron 217 y falló la de apuntes por un parpadeo que ya existía en main, que se corrigió y pasa 14 de 14
 - Paso 3. Los cambios son de cliente y no tocan permisos, dinero ni la base, así que no hubo revisión independiente
 - Paso 4. Este archivo, docs/informe-de-pruebas.md, IDEAS.md y DECISIONES.md (D-110) al día

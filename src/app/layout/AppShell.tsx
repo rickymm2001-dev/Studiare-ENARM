@@ -1,6 +1,6 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
 import { FlaskConical, WifiOff } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
@@ -14,12 +14,16 @@ import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
-import { BadgeToast } from './BadgeToast';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
+
+// El aviso de insignias trae el cálculo de logros, que no hace falta para pintar la primera pantalla
+const BadgeToast = lazy(() =>
+  import('./BadgeToast').then((module) => ({ default: module.BadgeToast })),
+);
 
 export function AppShell() {
   const theme = usePreferences((state) => state.theme);
@@ -115,7 +119,9 @@ export function AppShell() {
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
       <OrganizationSync />
-      <BadgeToast />
+      <Suspense fallback={null}>
+        <BadgeToast />
+      </Suspense>
 
       <div className={rail}>
         <main
