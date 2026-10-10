@@ -42,6 +42,13 @@ Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta
 - [x] G5. HSTS en _headers y registro de errores del navegador sin datos personales y solo con el permiso de mejora anónima (D-107). Octava migración, pruebas SQL (client_errors_test.sql), del reporte, del permiso y de la tarjeta en la pantalla 25
 - [x] G6. Diseño del banco en la nube (docs/BANCO_EN_LA_NUBE.md), conversión sin pérdida entre ULID y uuid (cloudIds) y lista de lo que falta de Ricardo (docs/PENDIENTES_DE_RICARDO.md)
 
+### Cierre de 15.1
+- Paso 1. Typecheck, lint y pruebas unitarias con cobertura pasan, 2,588 pruebas. Las 9 suites SQL pasan con la última migración corrida dos veces. npm audit sin vulnerabilidades y JavaScript inicial en 281.5 KB de 300
+- Paso 2. e2e completo, 214 pasan, y capturas de aviso de privacidad, términos, configuración del admin y Suscripción en docs/screenshots/fase-g, en teléfono y escritorio, claro y oscuro
+- Paso 3. Revisión independiente, abajo
+- Paso 4. Este archivo, docs/informe-de-pruebas.md, docs/real-vs-simulado.md, docs/mapa-plan-maestro.md y DECISIONES.md (D-103 a D-107) al día
+- Paso 5. Commit y push a main-y84jz2. No hay pull request porque no se pidió. Espera la aprobación de Ricardo
+
 ### Revisión independiente (15.1, paso 3)
 - Un subagente que no escribió el código revisó G1 a G5 en solo lectura. Encontró 1 crítico, 4 importantes y 6 menores. Se verificó cada uno antes de actuar
 - Crítico, corregido. /ai/%63onfig y /ai/%75sage se saltaban la regla de admin del proxy alojado y dejaban a un alumno de pago leer y cambiar la configuración y el presupuesto de IA. Ahora se decide con la ruta del enrutador y todo lo que no sea un POST a un motor pide ser admin. Hay pruebas que fallan con el código anterior
