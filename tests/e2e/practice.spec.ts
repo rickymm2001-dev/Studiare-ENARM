@@ -157,7 +157,9 @@ test('recargar a media práctica la retoma donde iba y no pierde lo contestado',
   await page.getByRole('radio').first().check();
   await page.getByRole('button', { name: t.simulator.answerAndFinish }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
-  await expect(
-    page.getByRole('region', { name: t.simulator.review }).getByRole('listitem'),
-  ).toHaveCount(5);
+  const rows = page
+    .getByRole('region', { name: t.simulator.review })
+    .getByRole('listitem')
+    .filter({ has: page.locator('details') });
+  await expect(rows).toHaveCount(5);
 });
