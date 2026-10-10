@@ -376,6 +376,26 @@ describe('CloudBridge y el rol de la cuenta', () => {
     expect(usePreferences.getState().role).toBe('physician');
   });
 
+  it('con el token vencido y sin red no cierra la sesión ni baja de rol, y se reconecta al volver la red', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failSession = true;
+    fake.role = 'physician';
+    usePreferences.setState({ role: 'physician' });
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('error');
+    });
+    expect(usePreferences.getState().role).toBe('physician');
+    fake.failSession = false;
+    act(() => {
+      window.dispatchEvent(new Event('online'));
+    });
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(usePreferences.getState().role).toBe('physician');
+  });
+
   it('cuando vuelve la conexión lee el rol y se conecta sin recargar', async () => {
     const fake = useFake(makeFakeCloud());
     fake.failRole = 'throw';

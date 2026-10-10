@@ -31,6 +31,15 @@ export async function requestEmailLink(
   return { ok: false, reason: error.status === 429 ? 'rate_limited' : 'failed' };
 }
 
+function isRetryableNetworkError(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'name' in error &&
+    error.name === 'AuthRetryableFetchError'
+  );
+}
+
 /** Rol que guarda el servidor. Alumno si no hay fila o si el valor no se reconoce */
 export function parseRole(value: unknown): Role {
   const parsed = RoleSchema.safeParse(value);
@@ -39,7 +48,14 @@ export function parseRole(value: unknown): Role {
 
 /** Quién entró y con qué rol. null sin sesión en la nube */
 export async function readCloudIdentity(cloud: SupabaseClient): Promise<CloudIdentity | null> {
-  const { data } = await cloud.auth.getSession();
+  const { data, error } = await cloud.auth.getSession();
+  // Con el token vencido y sin red, Supabase no puede renovarlo y responde sin sesión y con un error
+  // de red. Eso no es haber cerrado sesión, y tratarlo así volvería alumno a un médico o a un admin
+  // que solo abrió la app sin conexión. Falla y el puente reintenta. Se revisa el nombre del error y
+  // no se importa el SDK, que se baja aparte del JavaScript inicial
+  if (!data.session && isRetryableNetworkError(error)) {
+    throw new Error('No se pudo renovar la sesión por falta de red');
+  }
   const user = data.session?.user;
   if (!user?.email) return null;
   const [roleRow, profileRow] = await Promise.all([

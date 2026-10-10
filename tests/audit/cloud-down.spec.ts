@@ -66,10 +66,46 @@ test('nube caída. Se crea la cuenta en el navegador y todas las pantallas abren
     }
   }
 
+  // Un médico que ya había entrado, con la sesión vencida por las horas que pasaron, abre la app sin
+  // que la nube responda. Supabase no puede renovar el token y la app no debe darlo por salido ni
+  // quitarle su área
+  current = 'sesión vencida';
+  await page.evaluate(() => {
+    const preferences = JSON.parse(localStorage.getItem('enarm.preferences.v1') ?? '{}') as object;
+    localStorage.setItem(
+      'enarm.preferences.v1',
+      JSON.stringify({ ...preferences, role: 'physician' }),
+    );
+    const issued = Math.floor(Date.now() / 1000) - 7200;
+    localStorage.setItem(
+      'sb-nube-caida-auditoria-auth-token',
+      JSON.stringify({
+        access_token: 'a.b.c',
+        token_type: 'bearer',
+        expires_in: 3600,
+        expires_at: issued + 3600,
+        refresh_token: 'renovacion-vencida',
+        user: {
+          id: '00000000-0000-4000-8000-000000000001',
+          aud: 'authenticated',
+          email: 'medico@ejemplo.mx',
+          app_metadata: {},
+          user_metadata: {},
+          created_at: new Date(issued * 1000).toISOString(),
+        },
+      }),
+    );
+  });
+
   // La cuenta dice con claridad que la nube no respondió y que lo estudiado sigue en el navegador
   current = 'perfil';
   await page.goto(SCREENS.profile.path);
   await expect(page.getByText(t.cloud.error)).toBeVisible({ timeout: 30_000 });
+
+  // Y el médico conserva su área mientras la nube no responde
+  current = 'área del médico';
+  await page.goto(SCREENS.questionBank.path);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.questionBank.title);
 
   // El rol no se puede cambiar a mano con la nube configurada
   current = 'rol';

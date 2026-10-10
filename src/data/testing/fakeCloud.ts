@@ -61,6 +61,8 @@ export interface FakeCloud {
   role: 'student' | 'physician' | 'admin' | 'owner';
   /** Cómo falla la lectura del rol. error responde con error de red y throw lanza la excepción */
   failRole: FakeFailure;
+  /** Con true, leer la sesión falla por falta de red, como con el token vencido y sin conexión */
+  failSession: boolean;
   /** Valor de la clave admin_overrides en platform_settings. null si el admin no ha cambiado nada */
   overrides: unknown;
   /** Versiones del aviso de privacidad que la app registró como aceptadas, en orden */
@@ -99,6 +101,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     limitRetryAt: '2030-01-02T09:30:00Z',
     role: 'student',
     failRole: 'none',
+    failSession: false,
     overrides: null,
     acceptances: [],
     claims: [],
@@ -165,13 +168,17 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     auth: {
       getSession: () =>
         Promise.resolve({
+          error: fake.failSession
+            ? { name: 'AuthRetryableFetchError', message: 'Failed to fetch', status: 0 }
+            : null,
           data: {
-            session: fake.session
-              ? {
-                  access_token: fakeAccessToken(fake.session.sessionId),
-                  user: { id: fake.session.id, email: fake.session.email },
-                }
-              : null,
+            session:
+              fake.session && !fake.failSession
+                ? {
+                    access_token: fakeAccessToken(fake.session.sessionId),
+                    user: { id: fake.session.id, email: fake.session.email },
+                  }
+                : null,
           },
         }),
       onAuthStateChange: (listener: (event: AuthChangeEvent) => void) => {
