@@ -13,6 +13,7 @@ import { useLiveData } from '@/data/hooks';
 import { setReportsStatus, type ReportStatus } from '@/data/usecases/contentReports';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { useBankReady } from '../shared/useBankReady';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
@@ -42,7 +43,7 @@ const reasonName = t.simulator.reportReasons;
 const date = (iso: string) => new Date(iso).toLocaleDateString('es-MX');
 
 export function ReportsScreen() {
-  const text = t.reportsScreen;
+  const text = physicianText.reportsScreen;
   const api = useDataApi();
   const role = usePreferences((state) => state.role);
   const session = useSession();
@@ -182,7 +183,7 @@ function GroupCard({
   group: ReportGroup;
   onChange: (ids: readonly string[], to: ReportStatus) => Promise<void>;
 }) {
-  const text = t.reportsScreen;
+  const text = physicianText.reportsScreen;
   const { latest } = group;
   const openIds = group.rows
     .filter((row) => row.report.status === 'open')

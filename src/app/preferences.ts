@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import { create } from 'zustand';
 import { signOutCloud } from '@/data/cloud/account';
-import { getCloud } from '@/data/cloud/client';
+import { cloudConfigured, forgetStoredCloudSession, loadCloud } from '@/data/cloud/client';
 import { RoleSchema } from '@/data/schemas/common';
 import { AppearanceSchema, DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { THEME_PREFERENCES } from '@/ui/theme';
@@ -91,10 +91,20 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
       update({ sessionUserId: userId });
     },
     signOut: () => {
-      const cloud = getCloud();
       // Con cuenta en la nube el rol lo da el servidor, así que al salir vuelve a alumno (D-075)
-      update(cloud ? { sessionUserId: null, role: 'student' } : { sessionUserId: null });
-      void signOutCloud(cloud);
+      update(
+        cloudConfigured() ? { sessionUserId: null, role: 'student' } : { sessionUserId: null },
+      );
+      // Si el SDK aún no se bajaba, se espera, para que la sesión de la nube sí se cierre. Si no
+      // se pudo bajar, se quita la sesión guardada para que no vuelva a abrirse sola
+      void loadCloud().then(async (cloud) => {
+        if (cloud) {
+          await signOutCloud(cloud);
+          return;
+        }
+        const storage = safeLocalStorage();
+        if (cloudConfigured() && storage) forgetStoredCloudSession(storage);
+      });
     },
   };
 });

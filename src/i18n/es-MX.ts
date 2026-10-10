@@ -2,11 +2,9 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
-import { adminText } from './admin';
 import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
-import { physicianText } from './physician';
 import { qualityText } from './quality';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
@@ -151,6 +149,15 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Configuración',
     description: 'Umbrales, pesos del ENARM, precios y modelos por motor.',
   },
+  privacyNotice: {
+    title: 'Aviso de privacidad',
+    description:
+      'Quién trata tus datos, para qué, con quién se comparten y cómo ejerces tus derechos.',
+  },
+  terms: {
+    title: 'Términos y condiciones',
+    description: 'Las reglas para usar Studiare, tus planes y tus pagos.',
+  },
   roleSelector: {
     title: 'Cambiar de rol',
     description:
@@ -164,8 +171,6 @@ export const t = {
   ...outlineText,
   ...qualityText,
   ...tutorText,
-  ...adminText,
-  ...physicianText,
   ...vocabularyText,
   app: {
     name: BRAND.name,
@@ -324,6 +329,12 @@ export const t = {
         'No hay proxy local, como en la demo publicada. Las respuestas de IA son fijas, de demostración.',
       offline: 'Las funciones de IA necesitan conexión. Lo demás sigue funcionando.',
     },
+  },
+  configUpdate: {
+    title: 'Hay una configuración nueva',
+    body: 'La plataforma actualizó su configuración. Recarga para aplicarla cuando termines lo que estás haciendo.',
+    reload: 'Recargar ahora',
+    later: 'Después',
   },
   pwa: {
     updateAvailable: 'Hay una versión nueva de la app.',

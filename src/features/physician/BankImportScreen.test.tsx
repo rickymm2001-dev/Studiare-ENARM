@@ -8,6 +8,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { importedQuestionId } from './bankImport';
 
 vi.setConfig({ testTimeout: 60_000 });
@@ -20,7 +21,7 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 30_000 };
-const text = t.importScreen;
+const text = physicianText.importScreen;
 
 const COLUMNS = [
   ...Object.values(HEADERS),

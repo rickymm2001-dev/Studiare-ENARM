@@ -9,7 +9,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { requestEmailLink, type LinkResult } from '@/data/cloud/account';
-import { getCloud } from '@/data/cloud/client';
+import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { AccountSchema } from '@/data/schemas/people';
@@ -20,6 +20,7 @@ import {
   type AccountDetails,
 } from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
+import { legalText } from '@/i18n/legal';
 import { celebrate } from '@/ui/celebrate';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -34,8 +35,9 @@ const validEmail = (email: string) => AccountSchema.shape.email.safeParse(email.
 const redirectTo = () => new URL(import.meta.env.BASE_URL, window.location.origin).toString();
 
 async function sendLink(email: string, alias?: string): Promise<LinkResult | null> {
-  const cloud = getCloud();
-  if (!cloud) return null;
+  const cloud = await loadCloud();
+  // null es que la nube no está configurada. Si lo está y el SDK no se pudo bajar, es una falla
+  if (!cloud) return cloudConfigured() ? { ok: false, reason: 'failed' } : null;
   return requestEmailLink(cloud, {
     email: email.trim().toLowerCase(),
     ...(alias ? { alias } : {}),
@@ -94,7 +96,7 @@ export function OnboardingScreen() {
       </div>
       {tab === 'create' ? <CreateAccountForm onCreated={enter} /> : <LoginForm onFound={enter} />}
       <p className="text-center text-xs text-fg-muted">
-        {getCloud() ? t.cloud.loginNote : t.session.simulatedLogin}
+        {cloudConfigured() ? t.cloud.loginNote : t.session.simulatedLogin}
       </p>
     </>
   );
@@ -229,6 +231,27 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
             {t.onboarding.privacyTitle}
           </h3>
           <p className="text-sm text-fg-muted">{t.onboarding.privacyBody}</p>
+          {/* Se abren en otra pestaña para no perder lo que ya escribió en el formulario */}
+          <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+            <Link
+              to={screenPath('privacyNotice')}
+              target="_blank"
+              rel="noopener"
+              className="underline underline-offset-4"
+            >
+              {legalText.onboarding.read}
+              <span className="sr-only"> ({legalText.onboarding.newTab})</span>
+            </Link>
+            <Link
+              to={screenPath('terms')}
+              target="_blank"
+              rel="noopener"
+              className="underline underline-offset-4"
+            >
+              {legalText.onboarding.readTerms}
+              <span className="sr-only"> ({legalText.onboarding.newTab})</span>
+            </Link>
+          </p>
           <CheckboxField
             label={t.onboarding.privacyAccept}
             checked={privacy}
@@ -256,7 +279,7 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState<LinkResult | null>(null);
-  const cloud = getCloud();
+  const cloud = cloudConfigured();
   // Perfiles de este navegador creados antes de las cuentas con correo
   const legacy = useLiveData(async () => {
     const [users, accounts] = await Promise.all([

@@ -71,6 +71,8 @@ export interface SyncScheduler {
 export interface SchedulerDeps {
   run: () => Promise<SyncResult>;
   report: (state: SyncUiState) => void;
+  /** Si devuelve true no se arranca ninguna sincronización. Se vuelve a pedir al reanudar */
+  paused?: () => boolean;
   env?: SyncEnvironment;
   now?: () => number;
 }
@@ -153,7 +155,7 @@ export function startSyncScheduler(deps: SchedulerDeps): SyncScheduler {
   };
 
   function trigger(): Promise<void> {
-    if (stopped) return Promise.resolve();
+    if (stopped || deps.paused?.()) return Promise.resolve();
     if (running) {
       again = true;
       return running;

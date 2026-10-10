@@ -10,6 +10,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { DataProvider } from '@/data/DataProvider';
 import { t } from '@/i18n/es-MX';
 import {
+  BillingPortalCard,
   CloudCheckoutCard,
   PaymentReturnNotice,
   RETURN_CHECKS,
@@ -23,6 +24,7 @@ const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
 vi.mock('@/data/cloud/client', () => ({
   getCloud: () => holder.cloud,
   cloudConfigured: () => holder.cloud !== null,
+  loadCloud: () => Promise.resolve(holder.cloud),
 }));
 
 interface FakeState {
@@ -193,6 +195,102 @@ describe('tarjeta de pago', () => {
     render_(vi.fn(), onBack);
     await typing.click(screen.getByRole('button', { name: t.billing.cloud.back }));
     expect(onBack).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('administrar la suscripción', () => {
+  const portal = t.billing.cloud.portal;
+  const PORTAL_URL = 'https://billing.stripe.com/p/session/test_1';
+  const withBody = (body: unknown, status: number) => ({
+    data: null,
+    error: { context: new Response(JSON.stringify(body), { status }) },
+  });
+
+  it('abre el portal de Stripe con la dirección que devolvió el servidor', async () => {
+    const state = fakeCloudFor({
+      invoke: () => Promise.resolve({ data: { url: PORTAL_URL }, error: null }),
+    });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={open} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    await waitFor(() => {
+      expect(open).toHaveBeenCalledWith(PORTAL_URL);
+    });
+    expect(state.invokeCalls).toEqual([{ body: {} }]);
+  });
+
+  it('quien no pagó con Stripe recibe una explicación y puede volver a intentar', async () => {
+    fakeCloudFor({ invoke: () => Promise.resolve(withBody({ error: 'no_customer' }, 404)) });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={open} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    expect(await screen.findByText(portal.errors.no_customer)).toBeVisible();
+    expect(open).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: portal.go })).toBeEnabled();
+  });
+
+  it('no abre una dirección que no es del portal', async () => {
+    fakeCloudFor({
+      invoke: () => Promise.resolve({ data: { url: 'https://malo.example/portal' }, error: null }),
+    });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={open} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    expect(await screen.findByText(portal.errors.unsafe_url)).toBeVisible();
+    expect(open).not.toHaveBeenCalled();
+  });
+
+  it('sin la nube cargada dice que no pudo abrir el portal', async () => {
+    holder.cloud = null;
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={vi.fn()} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    expect(await screen.findByText(portal.errors.failed)).toBeVisible();
+  });
+
+  it('la pantalla Suscripción lo ofrece solo a quien ya paga y con la nube conectada', async () => {
+    fakeCloudFor({ plan: 'monthly' });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'monthly',
+          status: 'active',
+          isSimulated: false,
+          periodEnd: null,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    expect(await screen.findByRole('heading', { name: portal.title })).toBeVisible();
+  });
+
+  it('un alumno del plan Gratis no ve el portal', async () => {
+    fakeCloudFor();
+    app = await renderApp(SCREENS.subscription.path);
+    await screen.findByRole('heading', { name: t.screens.subscription.title });
+    expect(screen.queryByRole('heading', { name: portal.title })).toBeNull();
+  });
+
+  it('sin la nube conectada tampoco, porque el plan simulado se cambia en la misma pantalla', async () => {
+    useCloud.setState({ state: { status: 'off' } });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'monthly',
+          status: 'active',
+          isSimulated: true,
+          periodEnd: null,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    await screen.findByRole('heading', { name: t.screens.subscription.title });
+    expect(screen.queryByRole('heading', { name: portal.title })).toBeNull();
   });
 });
 

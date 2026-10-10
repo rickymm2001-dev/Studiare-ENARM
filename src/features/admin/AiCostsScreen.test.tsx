@@ -10,6 +10,7 @@ import { writeStoredOverrides } from '@/config/overridesStore';
 import type { AiCallLog } from '@/data/schemas/activity';
 import { newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { formatUsd } from './format';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -50,7 +51,7 @@ async function open(calls: AiCallLog[]) {
       await api.repos.aiCallLog.putMany(calls);
     },
   });
-  await screen.findByRole('heading', { level: 1, name: t.adminCosts.title }, WAIT);
+  await screen.findByRole('heading', { level: 1, name: adminText.adminCosts.title }, WAIT);
   return app;
 }
 
@@ -70,8 +71,8 @@ function enough(): AiCallLog[] {
 describe('costos de IA (pantalla 23)', () => {
   it('sin llamadas dice que todavía no hay y no proyecta', async () => {
     await open([]);
-    expect(await screen.findByText(t.adminCosts.empty.title)).toBeVisible();
-    expect(screen.queryByRole('region', { name: t.adminCosts.log.title })).toBeNull();
+    expect(await screen.findByText(adminText.adminCosts.empty.title)).toBeVisible();
+    expect(screen.queryByRole('region', { name: adminText.adminCosts.log.title })).toBeNull();
   });
 
   it('separa el gasto real del teórico y lo dice con texto', async () => {
@@ -81,18 +82,18 @@ describe('costos de IA (pantalla 23)', () => {
       call({ mode: 'mock', estimatedCostUsd: 3 }),
       call({ mode: 'template', estimatedCostUsd: 0 }),
     ]);
-    const stats = await screen.findByRole('region', { name: t.adminCosts.stats.label });
+    const stats = await screen.findByRole('region', { name: adminText.adminCosts.stats.label });
     expect(within(stats).getByText(formatUsd(0.75))).toBeVisible();
     expect(within(stats).getByText(formatUsd(3))).toBeVisible();
-    expect(within(stats).getByText(t.adminCosts.stats.simulatedCaption(2))).toBeVisible();
-    expect(within(stats).getByText(t.adminCosts.stats.realCaption(2))).toBeVisible();
+    expect(within(stats).getByText(adminText.adminCosts.stats.simulatedCaption(2))).toBeVisible();
+    expect(within(stats).getByText(adminText.adminCosts.stats.realCaption(2))).toBeVisible();
   });
 
   it('con pocas llamadas la proyección calibra y dice cuántas faltan', async () => {
     await open([call(), call()]);
     expect(
       await screen.findByText(
-        t.states.calibrating.remaining(28, t.adminCosts.projection.units.calls),
+        t.states.calibrating.remaining(28, adminText.adminCosts.projection.units.calls),
       ),
     ).toBeVisible();
   });
@@ -100,21 +101,23 @@ describe('costos de IA (pantalla 23)', () => {
   it('con suficientes proyecta por alumno al mes y la compara con la estimación del plan maestro', async () => {
     writeStoredOverrides({ aiCostEstimateUsd: 0.5 });
     await open(enough());
-    const card = await screen.findByRole('region', { name: t.adminCosts.projection.title });
+    const card = await screen.findByRole('region', { name: adminText.adminCosts.projection.title });
     expect(within(card).getByText(/^USD .+ por alumno al mes$/)).toBeVisible();
-    expect(within(card).getByText(t.adminCosts.projection.above(formatUsd(0.5)))).toBeVisible();
+    expect(
+      within(card).getByText(adminText.adminCosts.projection.above(formatUsd(0.5))),
+    ).toBeVisible();
   });
 
   it('sin estimación del plan maestro lo dice', async () => {
     await open(enough());
-    const card = await screen.findByRole('region', { name: t.adminCosts.projection.title });
-    expect(within(card).getByText(t.adminCosts.projection.noEstimate)).toBeVisible();
+    const card = await screen.findByRole('region', { name: adminText.adminCosts.projection.title });
+    expect(within(card).getByText(adminText.adminCosts.projection.noEstimate)).toBeVisible();
   });
 
   it('si solo hay llamadas simuladas la proyección es teórica y lo avisa', async () => {
     await open(enough().map((entry) => ({ ...entry, mode: 'mock' as const })));
-    const card = await screen.findByRole('region', { name: t.adminCosts.projection.title });
-    expect(within(card).getByText(t.adminCosts.projection.simulatedNote)).toBeVisible();
+    const card = await screen.findByRole('region', { name: adminText.adminCosts.projection.title });
+    expect(within(card).getByText(adminText.adminCosts.projection.simulatedNote)).toBeVisible();
   });
 
   it('la bitácora se filtra por motor, modo y resultado', async () => {
@@ -124,18 +127,24 @@ describe('costos de IA (pantalla 23)', () => {
       call({ engine: 'flashcards', outcome: 'fallback' }),
       call({ engine: 'flashcards', mode: 'mock' }),
     ]);
-    const log = await screen.findByRole('region', { name: t.adminCosts.log.title });
+    const log = await screen.findByRole('region', { name: adminText.adminCosts.log.title });
     const rows = () => within(log).getAllByRole('row').length - 1;
     expect(rows()).toBe(3);
     await typing.selectOptions(
-      within(log).getByLabelText(t.adminCosts.log.filterEngine),
+      within(log).getByLabelText(adminText.adminCosts.log.filterEngine),
       'flashcards',
     );
     expect(rows()).toBe(2);
-    await typing.selectOptions(within(log).getByLabelText(t.adminCosts.log.filterMode), 'real');
+    await typing.selectOptions(
+      within(log).getByLabelText(adminText.adminCosts.log.filterMode),
+      'real',
+    );
     expect(rows()).toBe(1);
-    await typing.selectOptions(within(log).getByLabelText(t.adminCosts.log.filterOutcome), 'ok');
-    expect(within(log).getByText(t.adminCosts.log.none)).toBeVisible();
+    await typing.selectOptions(
+      within(log).getByLabelText(adminText.adminCosts.log.filterOutcome),
+      'ok',
+    );
+    expect(within(log).getByText(adminText.adminCosts.log.none)).toBeVisible();
   });
 
   it('la bitácora muestra el modelo, los tokens y el resultado de cada llamada, y solo el final del ID del alumno', async () => {
@@ -149,12 +158,12 @@ describe('costos de IA (pantalla 23)', () => {
         outcome: 'retried_ok',
       }),
     ]);
-    const log = await screen.findByRole('region', { name: t.adminCosts.log.title });
+    const log = await screen.findByRole('region', { name: adminText.adminCosts.log.title });
     const [, row] = within(log).getAllByRole('row');
     if (!row) throw new Error('Sin renglón');
     expect(within(row).getByText('claude-sonnet-5-5')).toBeVisible();
-    expect(within(row).getByText(t.adminCosts.log.tokens(1500, 80))).toBeVisible();
-    expect(within(row).getByText(t.adminCosts.outcomes.retried_ok)).toBeVisible();
+    expect(within(row).getByText(adminText.adminCosts.log.tokens(1500, 80))).toBeVisible();
+    expect(within(row).getByText(adminText.adminCosts.outcomes.retried_ok)).toBeVisible();
     expect(within(row).getByText('0000AA')).toBeVisible();
     expect(within(log).queryByText('01HZX0000000000000000000AA')).toBeNull();
   });
@@ -190,22 +199,22 @@ describe('costos de IA (pantalla 23)', () => {
       }),
     );
     await open([call()]);
-    const today = await screen.findByRole('region', { name: t.adminCosts.today.title });
+    const today = await screen.findByRole('region', { name: adminText.adminCosts.today.title });
     expect(
       await within(today).findByText(
-        t.adminCosts.today.spent(formatUsd(1.25), formatUsd(5)),
+        adminText.adminCosts.today.spent(formatUsd(1.25), formatUsd(5)),
         undefined,
         WAIT,
       ),
     ).toBeVisible();
-    expect(within(today).getByText(t.adminCosts.today.calls(7, 2))).toBeVisible();
+    expect(within(today).getByText(adminText.adminCosts.today.calls(7, 2))).toBeVisible();
   });
 
   it('sin proxy dice que la bitácora es la de este navegador', async () => {
     await open([call()]);
-    const today = await screen.findByRole('region', { name: t.adminCosts.today.title });
+    const today = await screen.findByRole('region', { name: adminText.adminCosts.today.title });
     expect(
-      await within(today).findByText(t.adminCosts.today.noProxy, undefined, WAIT),
+      await within(today).findByText(adminText.adminCosts.today.noProxy, undefined, WAIT),
     ).toBeVisible();
   });
 });

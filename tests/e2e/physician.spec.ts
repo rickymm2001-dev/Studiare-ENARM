@@ -4,6 +4,7 @@
 import { SCREENS } from '@/app/screens';
 import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import {
   answerPracticeQuestion,
   expect,
@@ -13,7 +14,7 @@ import {
 } from './support/fixtures';
 import type { Page } from '@playwright/test';
 
-const text = t.agreementScreen;
+const text = physicianText.agreementScreen;
 
 // Una pregunta del banco demo cuya propuesta de ejemplo pasa las revisiones. Las de salud mental no
 // pasan a propósito y el proxy contesta con error, que el navegador anota en la consola
@@ -64,28 +65,32 @@ test('editor de pregunta. Se abre desde el banco, guarda una versión nueva y la
   const first = list.getByRole('listitem').first();
   await expect(first).toBeVisible({ timeout: 90_000 });
   await first.locator('summary').click();
-  await first.getByRole('link', { name: t.questionEditor.edit }).click();
+  await first.getByRole('link', { name: physicianText.questionEditor.edit }).click();
 
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.questionEditor.title }),
   ).toBeVisible();
-  const explanation = page.getByLabel(t.questionEditor.meta.explanation, { exact: true });
+  const explanation = page.getByLabel(physicianText.questionEditor.meta.explanation, {
+    exact: true,
+  });
   await expect(explanation).toBeVisible({ timeout: 60_000 });
   await expectNoSeriousA11yViolations(page);
 
   await explanation.fill('Explicación revisada en la prueba de punta a punta.');
   await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(t.questionEditor.save.saved)).toBeVisible();
-  const history = page.getByRole('region', { name: t.questionEditor.sections.history });
-  await expect(history.getByText(t.questionEditor.status.version(2))).toBeVisible();
+  await expect(page.getByText(physicianText.questionEditor.save.saved)).toBeVisible();
+  const history = page.getByRole('region', { name: physicianText.questionEditor.sections.history });
+  await expect(history.getByText(physicianText.questionEditor.status.version(2))).toBeVisible();
   await expect(
     history.getByText(
-      t.questionEditor.history.changed([t.questionEditor.history.parts.explanation ?? '']),
+      physicianText.questionEditor.history.changed([
+        physicianText.questionEditor.history.parts.explanation ?? '',
+      ]),
     ),
   ).toBeVisible();
-  await expect(page.getByLabel(t.questionEditor.meta.explanation, { exact: true })).toHaveValue(
-    'Explicación revisada en la prueba de punta a punta.',
-  );
+  await expect(
+    page.getByLabel(physicianText.questionEditor.meta.explanation, { exact: true }),
+  ).toHaveValue('Explicación revisada en la prueba de punta a punta.');
 });
 
 test('reportes. El alumno reporta un error y desde la bandeja se resuelve', async ({ page }) => {
@@ -119,10 +124,10 @@ test('reportes. El alumno reporta un error y desde la bandeja se resuelve', asyn
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.contentReports.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.reportsScreen.group.open(1))).toBeVisible();
+  await expect(page.getByText(physicianText.reportsScreen.group.open(1))).toBeVisible();
   await expectNoSeriousA11yViolations(page);
-  await page.getByRole('button', { name: t.reportsScreen.row.resolve }).click();
-  await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible();
+  await page.getByRole('button', { name: physicianText.reportsScreen.row.resolve }).click();
+  await expect(page.getByText(physicianText.reportsScreen.empty.openTitle)).toBeVisible();
 });
 
 test('borradores de IA. Se pide una propuesta, llega como borrador con el original y se rechaza', async ({
@@ -135,25 +140,27 @@ test('borradores de IA. Se pide una propuesta, llega como borrador con el origin
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.aiDrafts.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.draftsScreen.questions.pendingEmpty)).toBeVisible({
+  await expect(page.getByText(physicianText.draftsScreen.questions.pendingEmpty)).toBeVisible({
     timeout: 90_000,
   });
 
-  await page.getByLabel(t.draftsScreen.questions.search).fill(RESTRUCTURABLE);
-  const pick = page.getByRole('button', { name: new RegExp(`^${t.draftsScreen.questions.pick}`) });
+  await page.getByLabel(physicianText.draftsScreen.questions.search).fill(RESTRUCTURABLE);
+  const pick = page.getByRole('button', {
+    name: new RegExp(`^${physicianText.draftsScreen.questions.pick}`),
+  });
   await expect(pick.first()).toBeVisible();
   await pick.first().click();
-  await page.getByRole('button', { name: t.draftsScreen.questions.ask }).click();
+  await page.getByRole('button', { name: physicianText.draftsScreen.questions.ask }).click();
 
   const form = page.getByRole('form');
   await expect(form).toBeVisible({ timeout: 30_000 });
-  await expect(form.getByText(t.draftsScreen.draftLabel)).toBeVisible();
-  await expect(form.getByText(t.draftsScreen.questions.original)).toBeVisible();
+  await expect(form.getByText(physicianText.draftsScreen.draftLabel)).toBeVisible();
+  await expect(form.getByText(physicianText.draftsScreen.questions.original)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
-  await form.getByRole('button', { name: t.draftsScreen.questions.reject }).click();
-  await expect(page.getByText(t.draftsScreen.questions.rejectedNotice)).toBeVisible();
-  await expect(page.getByText(t.draftsScreen.questions.pendingEmpty)).toBeVisible();
+  await form.getByRole('button', { name: physicianText.draftsScreen.questions.reject }).click();
+  await expect(page.getByText(physicianText.draftsScreen.questions.rejectedNotice)).toBeVisible();
+  await expect(page.getByText(physicianText.draftsScreen.questions.pendingEmpty)).toBeVisible();
 });
 
 test('importador. Revisa el archivo, reporta la fila con problema e importa solo lo bueno', async ({
@@ -206,18 +213,20 @@ test('importador. Revisa el archivo, reporta la fila con problema e importa solo
     .map((line) => line.join(','))
     .join('\n');
   await page
-    .getByLabel(t.importScreen.file.label)
+    .getByLabel(physicianText.importScreen.file.label)
     .setInputFiles({ name: 'banco-prueba.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
 
-  const summary = page.getByRole('region', { name: t.importScreen.summary.title });
-  await expect(summary.getByText(t.importScreen.summary.newQuestions(1))).toBeVisible();
-  const problems = page.getByRole('region', { name: new RegExp(t.importScreen.problems.title) });
+  const summary = page.getByRole('region', { name: physicianText.importScreen.summary.title });
+  await expect(summary.getByText(physicianText.importScreen.summary.newQuestions(1))).toBeVisible();
+  const problems = page.getByRole('region', {
+    name: new RegExp(physicianText.importScreen.problems.title),
+  });
   await expect(problems.getByText(/Brujería/)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
-  await page.getByRole('button', { name: t.importScreen.run.import(1) }).click();
-  await expect(page.getByText(t.importScreen.done.created(1))).toBeVisible();
-  await page.getByRole('link', { name: t.importScreen.done.goBank }).click();
+  await page.getByRole('button', { name: physicianText.importScreen.run.import(1) }).click();
+  await expect(page.getByText(physicianText.importScreen.done.created(1))).toBeVisible();
+  await page.getByRole('link', { name: physicianText.importScreen.done.goBank }).click();
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.questionBank.title }),
   ).toBeVisible();

@@ -16,6 +16,7 @@ import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { FOUNDER_SEATS, PLANS, type PlanKey } from '@/config/billing';
 import { t } from '@/i18n/es-MX';
+import { legalText } from '@/i18n/legal';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -183,6 +184,15 @@ export function LandingScreen() {
           <Link to={screenPath('onboarding')}>{text.cta}</Link>
         </Button>
       </section>
+
+      <footer className="flex flex-wrap justify-center gap-x-4 gap-y-1 pb-2 text-sm text-fg-muted">
+        <Link to={screenPath('privacyNotice')} className="underline underline-offset-4">
+          {legalText.links.privacy}
+        </Link>
+        <Link to={screenPath('terms')} className="underline underline-offset-4">
+          {legalText.links.terms}
+        </Link>
+      </footer>
     </div>
   );
 }

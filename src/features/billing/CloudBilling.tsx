@@ -1,13 +1,15 @@
 // Pago real en modo prueba desde Suscripción, cuando la cuenta de la nube está conectada (Fase P
 // bloque 5, D-096). El alumno elige la pasarela, la función del servidor crea el pago y el navegador
 // lo abre. Al volver, la app revisa el plan con la nube hasta que el aviso del pago lo confirme.
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { getCloud } from '@/data/cloud/client';
+import { loadCloud } from '@/data/cloud/client';
 import { PLANS, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { startCheckout, type PaidPlanKey, type PaymentProvider } from '@/data/payments/checkout';
+import { openBillingPortal } from '@/data/payments/portal';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -37,7 +39,7 @@ export function CloudCheckoutCard({
   const [error, setError] = useState<string | null>(null);
 
   const go = async () => {
-    const cloud = getCloud();
+    const cloud = await loadCloud();
     if (!cloud) {
       setError(text.errors.failed);
       return;
@@ -95,6 +97,64 @@ export function CloudCheckoutCard({
 }
 
 /**
+ * Para quien ya paga. Abre el portal de Stripe, donde cancela, cambia su tarjeta o ve sus facturas.
+ * La cancelación llega al servidor como un aviso de Stripe, y el plan cambia con él (D-106)
+ */
+export function BillingPortalCard({
+  open = (url: string) => {
+    window.location.assign(url);
+  },
+}: {
+  /** Cómo se abre el portal. Se puede cambiar en las pruebas */
+  open?: (url: string) => void;
+}) {
+  const portal = text.portal;
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const go = async () => {
+    setError(null);
+    setBusy(true);
+    const cloud = await loadCloud();
+    if (!cloud) {
+      setBusy(false);
+      setError(portal.errors.failed);
+      return;
+    }
+    const result = await openBillingPortal(cloud);
+    if (result.ok) {
+      open(result.url);
+      return;
+    }
+    setBusy(false);
+    setError(portal.errors[result.reason]);
+  };
+
+  return (
+    <Card aria-labelledby="portal-titulo">
+      <CardHeader>
+        <CardTitle id="portal-titulo">{portal.title}</CardTitle>
+        <CardDescription>{portal.description}</CardDescription>
+      </CardHeader>
+      <p role="status" className="mb-2 min-h-5 text-sm text-fg-muted">
+        {busy ? portal.opening : error}
+      </p>
+      <div>
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            void go();
+          }}
+        >
+          {portal.go}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+/**
  * Lo que se ve al volver de la pasarela con ?pago=ok o ?pago=cancelado. En el primer caso revisa el
  * plan en la nube cada pocos segundos hasta que cambie, porque el aviso del pago llega aparte
  */
@@ -121,12 +181,10 @@ export function PaymentReturnNotice({
 
   useEffect(() => {
     if (result !== 'ok') return;
-    const cloud = getCloud();
-    if (!cloud) return;
     let stopped = false;
     let tries = 0;
     let timer: ReturnType<typeof setTimeout> | null = null;
-    const check = async () => {
+    const check = async (cloud: SupabaseClient) => {
       tries += 1;
       const cloudPlan = await refreshCloudPlan(apiRef.current, cloud, userId);
       if (stopped) return;
@@ -139,10 +197,13 @@ export function PaymentReturnNotice({
         return;
       }
       timer = setTimeout(() => {
-        void check();
+        void check(cloud);
       }, RETURN_CHECK_MS);
     };
-    void check();
+    // Al volver de la pasarela la página recién abre y el SDK puede estar bajándose todavía
+    void loadCloud().then((cloud) => {
+      if (cloud && !stopped) void check(cloud);
+    });
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);

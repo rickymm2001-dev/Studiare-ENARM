@@ -13,6 +13,7 @@ import { useLiveData } from '@/data/hooks';
 import type { Option } from '@/data/schemas/bank';
 import { removeLabel, saveLabel, TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { useBankReady } from '../shared/useBankReady';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -30,7 +31,7 @@ const biasDefinition = new Map(
 const fixed = (value: number) => value.toLocaleString('es-MX', { maximumFractionDigits: 2 });
 
 export function AgreementScreen() {
-  const text = t.agreementScreen;
+  const text = physicianText.agreementScreen;
   const api = useDataApi();
   const role = usePreferences((state) => state.role);
   const session = useSession();
@@ -226,7 +227,7 @@ function Queue({
   pending: QueueItem[];
   myLabels: ReadonlyMap<string, string>;
 }) {
-  const text = t.agreementScreen.queue;
+  const text = physicianText.agreementScreen.queue;
   const api = useDataApi();
   const [shown, setShown] = useState(PAGE);
   const [message, setMessage] = useState<'saved' | 'failed' | null>(null);

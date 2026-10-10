@@ -88,3 +88,69 @@ export async function founderSeatsLeftViaRest(
     return null;
   }
 }
+
+const serviceHeaders = (env: SupabaseEnv) => ({
+  apikey: env.serviceKey,
+  authorization: `Bearer ${env.serviceKey}`,
+  'content-type': 'application/json',
+});
+
+/** Llama a una función de la base con la llave de servicio. Lanza si la base no contesta bien */
+async function callRpc(
+  env: SupabaseEnv,
+  name: string,
+  args: Record<string, unknown>,
+  fetchImpl: typeof fetch,
+): Promise<unknown> {
+  const reply = await fetchImpl(`${env.url}/rest/v1/rpc/${name}`, {
+    method: 'POST',
+    headers: serviceHeaders(env),
+    body: JSON.stringify(args),
+  });
+  if (!reply.ok) throw new Error(`${name} respondió ${reply.status}`);
+  return reply.json();
+}
+
+/** Guarda con qué cliente de Stripe pagó el alumno. Lanza si la base falla */
+export async function linkCustomerViaRest(
+  env: SupabaseEnv,
+  link: { userId: string; customerId: string },
+  fetchImpl: typeof fetch = fetch,
+): Promise<void> {
+  await callRpc(
+    env,
+    'record_billing_customer',
+    { p_provider: 'stripe', p_customer_id: link.customerId, p_user: link.userId },
+    fetchImpl,
+  );
+}
+
+/** El cliente de Stripe de un alumno. null si no se ligó. Lanza si la base falla */
+export async function customerOfUserViaRest(
+  env: SupabaseEnv,
+  userId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string | null> {
+  const result = await callRpc(
+    env,
+    'billing_customer_of_user',
+    { p_provider: 'stripe', p_user: userId },
+    fetchImpl,
+  );
+  return typeof result === 'string' && result !== '' ? result : null;
+}
+
+/** El alumno de un cliente de Stripe. null si no se ligó. Lanza si la base falla */
+export async function userOfCustomerViaRest(
+  env: SupabaseEnv,
+  customerId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string | null> {
+  const result = await callRpc(
+    env,
+    'billing_user_of_customer',
+    { p_provider: 'stripe', p_customer_id: customerId },
+    fetchImpl,
+  );
+  return typeof result === 'string' && result !== '' ? result : null;
+}

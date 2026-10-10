@@ -201,9 +201,10 @@ export const EventPayloadSchemas = {
     receiptId: IdSchema.nullable(),
     simulated: z.literal(true),
   }),
+  // Solo el año. El puntaje vive en officialScores y se borra al retirar el permiso. La bitácora solo
+  // se agrega y sube a la nube, así que el puntaje no puede entrar a ella (D-101)
   official_score_submitted: z.strictObject({
     year: z.int().min(2000).max(2100),
-    score: z.number().min(0).max(100),
   }),
   /**
    * El alumno saca tarjetas del repaso sin borrarlas (D-085). Un lote lleva hasta 500 tarjetas. El

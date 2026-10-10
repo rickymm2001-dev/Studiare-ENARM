@@ -2,6 +2,7 @@
 // privacidad. Un solo aviso cubre todas las finalidades, por decisión de Ricardo (D-059), y se
 // guarda como aceptación de cada finalidad con la versión del aviso. Sin contraseña, porque el inicio de sesión del prototipo es
 // simulado (3.2). En producción lo reemplaza la cuenta real con la misma interfaz.
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
 import { newId } from '../ids';
@@ -9,6 +10,7 @@ import type { ConsentPurposeSchema } from '../schemas/common';
 import { DEFAULT_TIME_ZONE } from '../schemas/common';
 import {
   ConsentSchema,
+  type Consent,
   UserSchema,
   UserSettingsSchema,
   type User,
@@ -18,8 +20,7 @@ import type { z } from 'zod';
 
 type ConsentPurpose = z.infer<typeof ConsentPurposeSchema>;
 
-/** Versión del aviso de privacidad simulado que acepta el alumno */
-export const PRIVACY_NOTICE_VERSION = '2026-10-01';
+export { PRIVACY_NOTICE_VERSION };
 
 export interface NewProfile {
   alias: string;
@@ -99,6 +100,22 @@ export async function updateProfile(
   return next;
 }
 
+/**
+ * La versión más reciente del aviso de privacidad bajo la que este alumno decidió algo en este
+ * dispositivo, o null si todavía no decidió nada. Es la que de verdad vio y aceptó, y no la que trae
+ * la app ahora, que puede ser más nueva (D-104)
+ */
+export async function acceptedNoticeVersion(
+  api: Pick<DataApi, 'repos'>,
+  userId: string,
+): Promise<string | null> {
+  const versions = (await api.repos.consents.list())
+    .filter((consent) => consent.userId === userId)
+    .map((consent) => consent.noticeVersion)
+    .sort();
+  return versions.at(-1) ?? null;
+}
+
 /** Estado actual de cada finalidad, con la decisión más reciente */
 export async function currentConsents(
   api: Pick<DataApi, 'repos'>,
@@ -122,18 +139,17 @@ export async function setConsent(
   user: User,
   purpose: ConsentPurpose,
   granted: boolean,
-): Promise<void> {
+): Promise<Consent> {
   const status = granted ? 'granted' : 'revoked';
-  await api.repos.consents.put(
-    ConsentSchema.parse({
-      id: newId(),
-      userId: user.id,
-      purpose,
-      noticeVersion: PRIVACY_NOTICE_VERSION,
-      status,
-      decidedAt: new Date().toISOString(),
-    }),
-  );
+  const consent = ConsentSchema.parse({
+    id: newId(),
+    userId: user.id,
+    purpose,
+    noticeVersion: PRIVACY_NOTICE_VERSION,
+    status,
+    decidedAt: new Date().toISOString(),
+  });
+  await api.repos.consents.put(consent);
   await api.recordEvent(
     createEvent(
       'consent_changed',
@@ -141,4 +157,5 @@ export async function setConsent(
       { userId: user.id, tz: user.timeZone },
     ),
   );
+  return consent;
 }

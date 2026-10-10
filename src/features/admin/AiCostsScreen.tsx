@@ -13,6 +13,7 @@ import { useLiveData } from '@/data/hooks';
 import { AI_ENGINES, type AiEngine } from '@/engines/aiContracts';
 import { projectMonthlyPerStudent, summarizeCosts, type CallMode } from '@/engines/aiCosts';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { Badge } from '@/ui/components/badge';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
@@ -29,7 +30,7 @@ const MODES: readonly CallMode[] = ['real', 'mock', 'template'];
 const OUTCOMES = ['ok', 'retried_ok', 'fallback', 'error'] as const;
 
 export function AiCostsScreen() {
-  const text = t.adminCosts;
+  const text = adminText.adminCosts;
   const api = useDataApi();
   const session = useSession();
   const timeZone = session.status === 'ready' ? session.user.timeZone : DEFAULT_TIME_ZONE;

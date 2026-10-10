@@ -11,7 +11,9 @@
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
-- Fase E con las pantallas del médico 18 a 22 programada (D-099). Falta el bloque E6 de privacidad, ver su sección
+- Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
+- Fase G en curso (D-103 a D-107). Proxy de IA alojado, textos legales y configuración del admin en el servidor listos en la rama de trabajo. Ver su sección
+- Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -28,6 +30,62 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase G. Que la plataforma funcione de verdad (D-103 a D-107)
+
+Nace de la petición de Ricardo del 2026-10-10, construir todo lo que haga falta y decirle qué necesito de él. Lo que depende de sus cuentas y llaves queda programado y probado con servidores falsos. Nada de esto está en main. Vive en la rama main-y84jz2 hasta que Ricardo pida el PR.
+
+### Bloques
+- [x] G1. Proxy de IA alojado (D-103). Verifica la sesión de Supabase, exige plan de pago o rol médico o admin, y cuenta límites, presupuesto y bitácora en Postgres. Dockerfile, sexta migración y docs/IA_ALOJADA.md
+- [x] G2. Aviso de privacidad y términos como páginas públicas (D-104). Un solo texto en src/i18n/legal.ts, exportable a docs/legal para el abogado
+- [x] G3. Configuración del admin en el servidor (D-105). platform_settings, clave admin_overrides, guardada desde la pantalla 25, copiada al navegador al abrir y con aviso para recargar. Pruebas SQL (settings_test.sql), de cliente y del puente con la nube
+- [x] G4. Portal de Stripe para cancelar y cambiar tarjeta, y reembolsos completos que quitan el plan (D-106). Séptima migración, función create-portal-session, pruebas SQL (billing_portal_test.sql), de las funciones y de la pantalla. Sin probar contra Stripe real
+- [x] G5. HSTS en _headers y registro de errores del navegador sin datos personales y solo con el permiso de mejora anónima (D-107). Octava migración, pruebas SQL (client_errors_test.sql), del reporte, del permiso y de la tarjeta en la pantalla 25
+- [x] G6. Diseño del banco en la nube (docs/BANCO_EN_LA_NUBE.md), conversión sin pérdida entre ULID y uuid (cloudIds) y lista de lo que falta de Ricardo (docs/PENDIENTES_DE_RICARDO.md)
+
+### Cierre de 15.1
+- Paso 1. Typecheck, lint y pruebas unitarias con cobertura pasan, 2,588 pruebas. Las 9 suites SQL pasan con la última migración corrida dos veces. npm audit sin vulnerabilidades y JavaScript inicial en 281.5 KB de 300
+- Paso 2. e2e completo, 214 pasan, y capturas de aviso de privacidad, términos, configuración del admin y Suscripción en docs/screenshots/fase-g, en teléfono y escritorio, claro y oscuro
+- Paso 3. Revisión independiente, abajo
+- Paso 4. Este archivo, docs/informe-de-pruebas.md, docs/real-vs-simulado.md, docs/mapa-plan-maestro.md y DECISIONES.md (D-103 a D-107) al día
+- Paso 5. Commit y push a main-y84jz2. No hay pull request porque no se pidió. Espera la aprobación de Ricardo
+
+### Revisión independiente (15.1, paso 3)
+- Un subagente que no escribió el código revisó G1 a G5 en solo lectura. Encontró 1 crítico, 4 importantes y 6 menores. Se verificó cada uno antes de actuar
+- Crítico, corregido. /ai/%63onfig y /ai/%75sage se saltaban la regla de admin del proxy alojado y dejaban a un alumno de pago leer y cambiar la configuración y el presupuesto de IA. Ahora se decide con la ruta del enrutador y todo lo que no sea un POST a un motor pide ser admin. Hay pruebas que fallan con el código anterior
+- Importantes, corregidos. Un aviso de pago tardío de un pago devuelto ya no reactiva el plan. Un reembolso de un cobro viejo ya no quita un mes vigente, y sin id de pago se elige el cobro por monto y hora. La base se niega a eliminar la cuenta con una suscripción de Stripe activa. La app ya no registra como aceptada una versión del aviso que el alumno no vio
+- Menores, corregidos. Cancelar al final del periodo se avisa desde que se cancela. El alumno que vuelve a pagar usa su mismo cliente de Stripe. La lista de errores usa la huella como llave. La limpieza de datos personales de los errores ocurre también en la base. El aviso de privacidad lista el alojamiento del proxy de IA
+- Menores, documentados y no corregidos. El presupuesto diario de IA es un tope blando bajo llamadas simultáneas y el proxy no limita peticiones con token falso, que se resuelve con un límite por IP en el alojamiento. Ver docs/IA_ALOJADA.md
+
+## Fase F. Endurecer, documentar y dejar lista la demo (D-102)
+
+Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendientes sin preguntar. Cierra con la sección 15.1 y espera la aprobación de Ricardo.
+
+### Bloques
+- [x] F1. JavaScript inicial bajo 300 KB comprimidos. Pasó de 580 a unos 275 KB con las pantallas por ruta, el SDK de Supabase y la sincronización bajados aparte, y los textos del médico y de administración fuera del núcleo. scripts/bundle-budget.ts lo mide y tests/security/build-policy.test.ts lo vigila
+- [x] F2. Política de seguridad de contenido en el build, en index.html y en _headers para Cloudflare Pages, con su prueba
+- [x] F3. npm audit sin vulnerabilidades. concurrently 10.0.6, un override de uuid para exceljs y un trabajo aparte en el CI
+- [x] F4. Pruebas de punta a punta de sin conexión (offline.spec.ts) y de rendimiento con 200 tarjetas y el procesador 4 veces más lento (perf.spec.ts)
+- [x] F5. Revisión contra OWASP ASVS 5.0 en docs/asvs.md
+- [x] F6. README.md con IA real y simulada, datos de demostración y prueba en el teléfono. DEMO.md con el guion de 10 minutos. docs/real-vs-simulado.md, docs/mapa-plan-maestro.md y docs/informe-de-pruebas.md
+- [x] F7. Cierre según 15.1. check y e2e pasan, capturas en docs/screenshots/fase-e-f, revisión de un subagente independiente atendida y informe en docs/informe-de-pruebas.md
+- [ ] F8. Aprobación de Ricardo. Publicar en Cloudflare Pages queda a su aprobación (D-017)
+
+### Evidencia del cierre
+- 2,400 pruebas unitarias y de integración pasan y 2 se omiten a propósito, en 242 archivos. 204 pruebas de punta a punta pasan, 102 en teléfono y 102 en escritorio. Las cinco suites de SQL pasan. npm audit sin vulnerabilidades. JavaScript inicial de 275.7 KB
+- La revisión independiente no encontró nada crítico y sí seis puntos importantes, todos corregidos, ver D-101. Después de los arreglos corrieron otra vez las pruebas unitarias, las de SQL y 100 de punta a punta
+- Desviación. Los textos del médico y de administración salieron del objeto t y cada pantalla los importa directo, para bajar el JavaScript inicial
+
+### Bitácora
+- Mover las pantallas a carga por ruta no rompió ninguna prueba unitaria. Lo que más pesaba en lo inicial era el SDK de Supabase, unos 55 KB comprimidos, y se bajó a un archivo aparte que solo se pide con la nube configurada
+- La política de contenido encontró un hallazgo real en la primera corrida. Vite incrusta como data: las fuentes de menos de 4 KB y la política las bloqueaba. Ahora font-src las permite
+- La prueba de sin conexión confirma que una pantalla que nunca se visitó abre sin red, porque el service worker guarda todos los archivos al instalarse
+- Rendimiento con el procesador 4 veces más lento. Mediana de 90 ms por tarjeta, p95 de 147 ms y peor de 301 ms. Los umbrales de la prueba son 150, 350 y 800 ms para no fallar por carga del equipo
+
+### Pendiente
+- El margen del presupuesto es de unos 25 KB. Lo siguiente por ahorrar es partir el resto de los textos de la interfaz por área, quitar tailwind-merge y cargar zod solo donde hace falta
+- Que Ricardo apruebe publicar en Cloudflare Pages y compre el dominio propio
+- Una prueba de penetración externa antes de abrir a alumnos de pago
+
 ## Fase E. Panel del médico, reportes y privacidad (D-099)
 
 Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendientes sin preguntar. Las pantallas 18 a 22 del médico y la privacidad del alumno.
@@ -38,7 +96,7 @@ Sigue la misma instrucción de Ricardo del 2026-10-08, ejecutar todos los pendie
 - [x] E3. Pantalla 21, reportes de contenido, del alumno al médico. Agrupados por pregunta con lo más grave primero, con versión anterior marcada y resolver, descartar o reabrir. El alumno no repite un reporte abierto
 - [x] E4. Pantalla 20, cola de borradores de IA. Preguntas reestructuradas con el original al lado, que al aprobarse crean una variante fuera del examen hasta tener 200 exposiciones por distractor. Consejos por sesgo revisados por el médico, que el Tutor muestra sin la marca de borrador. Tarjetas de mazos públicos con aprobar y rechazar
 - [x] E5. Pantalla 22, importador del banco desde CSV, Excel o JSON. Convertidor compartido con el script de Node, reporte de errores por fila, borradores sin duplicar con un ID por fila y guía en docs/bank-import.md
-- [ ] E6. Privacidad, borrar cuenta con eventos, copia en la nube y puntaje oficial voluntario
+- [x] E6. Privacidad. Migración quinta que deja borrar datos y cuenta con la bitácora de solo agregar, borrado de la nube desde la app, sección Privacidad con los tres consentimientos y puntaje oficial voluntario (D-101)
 
 ## Fase D. Motores de IA y evaluaciones (D-098)
 
@@ -62,7 +120,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 - Que Ricardo agregue la clave en server/.env.local y corra npm run eval-ai con la bandera real, para el costo y la latencia verdaderos
 - Revisar los prompts de server/prompts y pegar su prompt maestro de tarjetas
 - Confirmar el segundo proveedor de IA y qué modelo prefiere por motor
-- La cola de borradores del médico para las preguntas reestructuradas, que va en la Fase E
+- La cola de borradores del médico para las preguntas reestructuradas. Resuelta en la Fase E, pantalla 20 (D-099)
 
 ## Fase C2. Etapa 6, sincronización entre dispositivos (D-085 y D-095)
 
@@ -84,7 +142,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 
 ### Pendiente
 - Que Ricardo aplique la migración y la pruebe con dos navegadores, con la guía
-- Borrar también la copia en la nube con Borrar mis datos, en la Fase E
+- Borrar también la copia en la nube con Borrar mis datos. Resuelto en la Fase E, bloque E6 (D-101)
 - Sincronizar sesiones de estudio, hallazgos y ajustes personales, en IDEAS.md
 
 ## Fase C2. Etapa 5, tarjetas con IA desde PDF y textos (D-085 y D-094)
@@ -213,7 +271,7 @@ Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin pregunta
 ### Pendiente con Ricardo para seguir
 - Aprobar la Etapa 1 para pasar a la Etapa 2, carga diaria
 - Preguntas abiertas. Qué funciones son gratis y cuáles de pago (se propone gratis para mazos en árbol, etiquetas, Explorar y calidad). Si en Repasar prefiere que elegir un mazo propio traiga todos sus submazos, que es lo que hace ahora
-- Bug anterior a esta etapa. Borrar una cuenta que ya tiene eventos falla en la base, porque el disparador de solo agregar de events bloquea el borrado en cascada. Afecta el derecho a cancelar la cuenta y se atiende en la Fase E
+- Bug anterior a esta etapa. Borrar una cuenta que ya tiene eventos falla en la base, porque el disparador de solo agregar de events bloquea el borrado en cascada. Afecta el derecho a cancelar la cuenta. Resuelto en la Fase E, bloque E6, con la quinta migración (D-101)
 
 ## Reunión del equipo del 2026-10-07 (D-087)
 

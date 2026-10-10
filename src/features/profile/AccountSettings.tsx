@@ -1,12 +1,13 @@
 // Ajustes del alumno. La cuenta y la suscripción van en Perfil. Metas y repaso, estudio, Pomodoro,
 // exportar y borrar datos van en las secciones de Configuración (D-065, D-078). Cada cambio queda
 // como evento settings_changed.
-import { CreditCard, Download, LogOut, Trash2 } from 'lucide-react';
+import { CreditCard, Download, LogOut } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { pushAccountIfLinked, useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
+import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
@@ -23,6 +24,7 @@ import { SaveBar } from '@/ui/components/save-bar';
 import { PomodoroSettingsForm } from '../pomodoro/Pomodoro';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
+import { DeleteAccountCard, DeleteDataCard } from './DeleteCards';
 import { CardTimerFields, EasyDaysFields } from './StudyDailyFields';
 import { SyncStatus } from './SyncStatus';
 
@@ -103,6 +105,14 @@ export function DataSection({ session }: { session: ReadySession }) {
   const { deleteAllData } = api;
   const { user } = session;
   const signOut = usePreferences((state) => state.signOut);
+  // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay que leer
+  // los perfiles antes, porque con la base borrada ya no se sabe de quién eran
+  const wipeLocal = async () => {
+    if (!deleteAllData) return;
+    const users = await api.repos.users.list();
+    await deleteAllData();
+    for (const { id } of users) clearExamState(id);
+  };
   return (
     <>
       <Section
@@ -130,16 +140,10 @@ export function DataSection({ session }: { session: ReadySession }) {
         </Button>
       </Section>
       {deleteAllData ? (
-        <DeleteCard
-          onDelete={async () => {
-            // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay
-            // que leer los perfiles antes, porque con la base borrada ya no se sabe de quién eran
-            const users = await api.repos.users.list();
-            await deleteAllData();
-            for (const { id } of users) clearExamState(id);
-          }}
-          onDeleted={signOut}
-        />
+        <>
+          <DeleteDataCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={signOut} />
+          <DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={signOut} />
+        </>
       ) : null}
     </>
   );
@@ -504,60 +508,6 @@ function StudyForm({
         }}
       />
     </form>
-  );
-}
-
-function DeleteCard({
-  onDelete,
-  onDeleted,
-}: {
-  onDelete: () => Promise<void>;
-  onDeleted: () => void;
-}) {
-  const [confirming, setConfirming] = useState(false);
-  const cloudLinked = useCloud((store) => store.state.status === 'linked');
-  return (
-    <Section
-      id="borrar-titulo"
-      title={t.settings.deleteTitle}
-      description={t.settings.deleteDescription}
-    >
-      {cloudLinked ? <p className="text-sm text-fg-muted">{t.settings.deleteCloudNote}</p> : null}
-      {confirming ? (
-        <div className="flex flex-col gap-3">
-          <p className="text-sm">{t.settings.deleteConfirmText}</p>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="danger"
-              onClick={() => {
-                void onDelete().then(onDeleted);
-              }}
-            >
-              {t.settings.deleteConfirm}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                setConfirming(false);
-              }}
-            >
-              {t.settings.cancel}
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <Button
-          variant="danger"
-          className="self-start"
-          onClick={() => {
-            setConfirming(true);
-          }}
-        >
-          <Trash2 aria-hidden />
-          {t.settings.delete}
-        </Button>
-      )}
-    </Section>
   );
 }
 

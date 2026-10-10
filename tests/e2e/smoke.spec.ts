@@ -3,6 +3,7 @@
 // navegación (D-059, D-068), y la raíz sin sesión es la portada de venta.
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import {
   expect,
   expectNoSeriousA11yViolations,
@@ -28,8 +29,10 @@ for (const key of SCREEN_KEYS) {
     } else {
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
       await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
-      if (key === 'onboarding') await expect(nav).toHaveCount(0);
-      else await expect(nav).toBeVisible();
+      // El aviso de privacidad y los términos también se leen sin sesión y sin navegación (Fase G)
+      if (key === 'onboarding' || key === 'privacyNotice' || key === 'terms') {
+        await expect(nav).toHaveCount(0);
+      } else await expect(nav).toBeVisible();
     }
     await expectNoSeriousA11yViolations(page);
   });
@@ -71,14 +74,18 @@ test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', asyn
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.contentReports.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.reportsScreen.empty.openTitle)).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(physicianText.reportsScreen.empty.openTitle)).toBeVisible({
+    timeout: 60_000,
+  });
   await expectNoSeriousA11yViolations(page);
 
   await page.goto(SCREENS.agreement.path);
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.agreement.title }),
   ).toBeVisible();
-  await expect(page.getByText(t.agreementScreen.vocabulary.title)).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(physicianText.agreementScreen.vocabulary.title)).toBeVisible({
+    timeout: 60_000,
+  });
   await expectNoSeriousA11yViolations(page);
 });
 

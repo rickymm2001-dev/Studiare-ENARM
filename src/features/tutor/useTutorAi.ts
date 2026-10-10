@@ -37,6 +37,8 @@ const STOPPING: ReadonlySet<string> = new Set([
   'student_limit',
   'budget_exceeded',
   'rate_limited',
+  'unauthorized',
+  'plan_required',
   'offline',
   'network',
 ]);

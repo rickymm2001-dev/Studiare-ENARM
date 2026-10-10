@@ -13,6 +13,7 @@ import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
+import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
@@ -30,9 +31,11 @@ export function AppShell() {
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const { pathname } = useLocation();
   const session = useSession();
+  // Sin sesión, el aviso de privacidad y los términos también van sin navegación
+  const legal = pathname === screenPath('privacyNotice') || pathname === screenPath('terms');
   const bare =
     pathname === screenPath('onboarding') ||
-    (pathname === screenPath('home') && session.status === 'signed-out');
+    ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
   const rail = bare ? '' : 'lg:pl-rail';
 
   return (
@@ -107,6 +110,7 @@ export function AppShell() {
 
       <OtherDeviceNotice className={rail} />
       <DeviceLimitNotice className={rail} />
+      <ConfigUpdateNotice className={rail} />
       <OrganizationSync />
 
       <div className={rail}>

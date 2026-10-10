@@ -8,6 +8,7 @@ import { DataContext, type DataApi, type DemoDataActions } from '@/data/context'
 import { makeUser, testApi } from '@/data/testing/fixtures';
 import { DEMO_STUDENT_ALIAS } from '@/demo/constants';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { DemoDataScreen } from './DemoDataScreen';
 
 const disposers: (() => Promise<unknown>)[] = [];
@@ -56,7 +57,7 @@ function setup(options: { seeded?: boolean; demo?: boolean; failWith?: Error } =
   return { actions, api, ready };
 }
 
-const text = t.adminDemo;
+const text = adminText.adminDemo;
 
 describe('datos de demostración (pantalla 24)', () => {
   it('en Mi cuenta explica que la demostración es otra base y lleva a cambiarla', async () => {

@@ -379,7 +379,7 @@ Cubre
 
 No cubre
 
-- Borrar mis datos en Configuración borra solo lo del navegador. La copia en la nube se vuelve a bajar si el alumno entra otra vez. Borrar también la nube queda para la Fase E, junto con el borrado de cuenta
+- Borrar mis datos en Configuración con la cuenta conectada ya borra también la copia en la nube. Ver la sección Privacidad, borrar mis datos y mi cuenta, que necesita la quinta migración. Sin ella, la app borra solo lo del navegador y la copia en la nube se vuelve a bajar
 - Las sesiones de estudio, los hallazgos del tutor y los ajustes personales no se sincronizan todavía. Las cifras del tutor y de Progreso se reconstruyen con la bitácora, que sí viaja
 - Dos dispositivos que editen lo mismo a la vez sin conexión conservan la edición más reciente completa. No se mezclan campo por campo
 - Los medios de las tarjetas no existen todavía, así que tampoco viajan
@@ -424,16 +424,17 @@ select
 
 ### Cómo preparar los pagos en modo prueba
 
-Esto sí pide un poco de terminal, para publicar las tres funciones del servidor. Puedo guiarte paso a paso cuando quieras. Ninguna llave se la pasas a nadie ni se escribe en el repo. Se guardan solo en los Secrets de Supabase (Edge Functions, Secrets).
+Esto sí pide un poco de terminal, para publicar las cuatro funciones del servidor. Puedo guiarte paso a paso cuando quieras. Ninguna llave se la pasas a nadie ni se escribe en el repo. Se guardan solo en los Secrets de Supabase (Edge Functions, Secrets).
 
 1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio mensual en pesos. Fundador 79, Mensual 150 y Anual 1,200 (el anual cobrado cada 12 meses). Copia el Price ID de cada uno (empieza con price_)
-2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos: checkout.session.completed, invoice.paid, invoice.payment_failed y customer.subscription.deleted. Copia el secreto de firma (empieza con whsec_)
+2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos. checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, customer.subscription.deleted y charge.refunded. Copia el secreto de firma (empieza con whsec_)
 3. En Mercado Pago, en tu aplicación, activa las credenciales de prueba. Copia el Access Token de prueba. En Webhooks agrega la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-mercadopago, marca el tema Pagos y copia la clave secreta que te da
 4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú
-5. Con la CLI de Supabase conectada a tu proyecto, desde la carpeta del repo, corre estas tres líneas. Los avisos de las pasarelas no llevan sesión de Supabase y se identifican con su firma, por eso llevan la bandera.
+5. Con la CLI de Supabase conectada a tu proyecto, desde la carpeta del repo, corre estas cuatro líneas. Los avisos de las pasarelas no llevan sesión de Supabase y se identifican con su firma, por eso llevan la bandera.
 
 ```bash
 supabase functions deploy create-checkout
+supabase functions deploy create-portal-session
 supabase functions deploy payment-webhook-stripe --no-verify-jwt
 supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 ```
@@ -445,9 +446,201 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 
 - Mercado Pago cobra un pago único del periodo y no renueva solo. La renovación automática con Mercado Pago queda para después
 - Los campos de Stripe y de Mercado Pago que lee el servidor salen de sus guías de webhooks. En este entorno no se pudo abrir su documentación, así que la lectura acepta las dos formas de la factura de Stripe (la anterior y la de parent.subscription_details) y falta confirmarla con un pago de prueba real. Si algún evento no activa el plan, el cuerpo del aviso queda guardado tal cual en payment_webhook_events para revisarlo
-- Un reembolso hecho desde el panel de Stripe no quita el plan solo. Para cortar el acceso hay que cancelar la suscripción en Stripe, y el aviso de cancelación deja el plan vigente hasta que termine el periodo pagado. Los reembolsos de Mercado Pago sí quitan el plan en el acto
-- Cancelar desde la app llega con la gestión de pagos. Mientras tanto, la app lo dice
-- Si el cupo de Fundador se llena entre que el alumno elige y paga, el cobro queda en payments con el estado needs_refund y no se activa nada. Ese pago hay que devolverlo a mano en la pasarela
+- Un reembolso completo hecho desde el panel de Stripe o de Mercado Pago quita el plan en el acto y marca el pago como devuelto. Uno parcial no cambia nada y lo atiende una persona. Ver la sección siguiente
+- Cancelar la suscripción lo hace el alumno desde Suscripción, Administrar suscripción. Ver la sección siguiente
+- Si el cupo de Fundador se llena entre que el alumno elige y paga, el cobro queda en payments con el estado needs_refund y no se activa nada. Ese pago hay que devolverlo a mano en la pasarela, y al devolverlo el pago pasa a refunded sin quitar ningún otro plan del alumno. La suscripción en Stripe también hay que cancelarla a mano, si no seguirá cobrando
+
+## Portal de facturación y reembolsos
+
+### Qué hace
+
+- En Suscripción, quien ya paga ve Administrar suscripción. Abre el portal de Stripe, donde cancela, cambia su tarjeta y ve sus facturas. Studiare no guarda datos de tarjeta en ningún momento
+- Para abrir el portal Stripe pide el id del cliente. Al confirmarse un pago, el servidor guarda con qué cliente pagó cada alumno en la tabla billing_customers. Esa tabla no la lee ni la escribe nadie de la app, ni siquiera el admin. Solo las funciones del servidor, con la llave de servicio
+- El id del cliente sale siempre de la cuenta con sesión abierta y nunca de lo que mande el navegador, así que nadie puede abrir el portal de otra persona
+- Cuando el alumno cancela en el portal, Stripe manda el aviso customer.subscription.updated con la cancelación al final del periodo, y el plan queda como cancelado desde ese momento. Sigue vigente hasta que termine el periodo ya pagado. Al terminar llega customer.subscription.deleted
+- Un reembolso completo de Stripe llega con el cliente, el monto y la hora del cobro, y no con el alumno ni la factura. El servidor busca al alumno por su cliente y marca como devuelto su pago de ese monto que esté más cerca de esa hora. Después le quita el plan, salvo que tenga un pago más reciente que sigue vigente. Si el cliente no se reconoce, el aviso se guarda sin alumno en payment_webhook_events para que una persona lo revise
+- Un aviso de pago tardío o repetido de un pago que ya se devolvió se ignora y no reactiva el plan
+- Un alumno que vuelve a pagar usa su mismo cliente de Stripe, para que sus facturas, su portal y un reembolso no queden repartidos. Si el cliente guardado ya no existe en Stripe, por ejemplo porque se borró o porque se cambió de llaves de prueba a reales, el pago se reintenta una vez como alumno nuevo
+- Un reembolso parcial se ignora a propósito, para no quitar el plan por una devolución chica
+- Quien pagó con Mercado Pago no tiene portal. Su pago es único y no se renueva, así que al abrir Administrar suscripción la app le explica que su plan termina en la fecha indicada
+- Eliminar la cuenta no cancela la suscripción en Stripe. Por eso la base se niega a eliminarla mientras haya una suscripción de Stripe activa, y la pantalla le dice al alumno que la cancele antes. Una ya cancelada, con el periodo pagado, sí se puede eliminar
+
+### Cómo aplicar la séptima migración
+
+No necesitas terminal. Aplica primero las seis anteriores. Mientras no apliques esta, los pagos siguen como estaban y Administrar suscripción responde que no está activado.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261011000001_billing_portal.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_table_privilege('authenticated', 'public.billing_customers', 'select') as alumno_lee_clientes,
+  has_table_privilege('anon', 'public.billing_customers', 'select') as anon_lee_clientes,
+  has_function_privilege('authenticated', 'public.billing_user_of_customer(text, text)', 'execute') as alumno_busca_clientes,
+  has_function_privilege('service_role', 'public.record_billing_customer(text, text, uuid)', 'execute') as servicio_liga_clientes,
+  (select relrowsecurity from pg_class where oid = 'public.billing_customers'::regclass) as clientes_con_seguridad_por_fila;
+```
+
+7. Debe salir servicio_liga_clientes en true y clientes_con_seguridad_por_fila en true. Los otros tres deben salir en false. Si alguno de los false sale en true, avísame antes de abrir a alumnos
+
+### Cómo activar el portal en Stripe
+
+Esto lo haces tú en el panel de Stripe, una vez en modo prueba y otra cuando pases a producción. Sin esto Stripe rechaza abrir el portal y la app dice que no pudo abrirlo.
+
+1. En Stripe, con el modo prueba encendido, entra a Settings, Billing, Customer portal
+2. Activa Cancel subscriptions. Si quieres que el alumno pueda cambiar su tarjeta y ver sus facturas, deja activadas esas opciones
+3. Guarda los cambios
+4. En Webhooks agrega el evento charge.refunded al endpoint que ya tienes, si no lo habías marcado
+5. Publica la función nueva con supabase functions deploy create-portal-session
+6. Prueba. Paga un plan con una tarjeta de prueba, entra a Suscripción, da clic en Abrir el portal y cancela. Debe llegar el aviso y el plan quedar como cancelado. Después paga otra vez, devuelve el cobro desde el panel de Stripe y comprueba que el plan se quita y que el pago queda como refunded
+7. Si el portal no abre, mira en Supabase, Edge Functions, create-portal-session, Logs. La función deja ahí el motivo que dio Stripe, sin llaves
+
+### Qué conviene saber
+
+- Los campos de Stripe que lee el servidor para esto salen de su documentación de la API. Se confirmó el endpoint del portal, que pide el cliente y la dirección de regreso. De los eventos de reembolso se leen el cliente, el monto y si fue completo, y se dejó de depender del vínculo del cargo con la factura, que Stripe quitó en su versión basil. Falta confirmarlo con un reembolso de prueba real
+- Un reembolso de Stripe se empareja por monto y por la hora del cobro, porque Stripe ya no liga el cargo con la factura. Si dos pagos del mismo monto se cobraron con minutos de diferencia, podría marcarse el equivocado. Devolver un cobro no cancela la suscripción en Stripe, así que cuando devuelvas un cobro de una suscripción que sigue viva, cancélala también en Stripe, porque si no seguirá cobrando
+- El cliente de Stripe se guarda al primer pago confirmado después de aplicar esta migración. Quien ya pagó antes no tiene cliente guardado hasta su siguiente cobro, y mientras tanto la app le dice que no encontró su suscripción. Se resuelve en el siguiente cobro, o a mano con record_billing_customer desde el editor de SQL
+
+## Registro de errores del navegador
+
+### Qué hace
+
+- Cuando la app falla en el navegador de un alumno, por un error sin atrapar, una promesa rechazada o una pantalla que se cae, manda un resumen técnico a la tabla client_errors. Eso te dice qué se rompe en producción sin esperar a que alguien lo reporte
+- Solo se manda si el alumno tiene la sesión abierta y dio el permiso de mejora anónima en Configuración, Privacidad. Sin permiso, o sin sesión, el error se descarta en el navegador y no sale
+- El resumen no lleva usuario, correo ni IP, y la tabla no tiene columnas para eso. Lleva el tipo de error, su mensaje, las primeras líneas de la traza, la pantalla con los ids cambiados por :id, la versión de la app (los primeros 7 caracteres del commit) y cuántas veces pasó
+- Antes de salir, el navegador quita correos, ids, claves, tokens, números largos y lo que va detrás de un signo de pregunta en una dirección. La base lo limpia y recorta otra vez
+- Un mismo error cuenta una vez por sesión y se mandan a lo mucho 5 distintos por sesión
+- Para que nadie la use de basurero, la base acepta hasta 500 errores distintos por día. Pasado el tope, los nuevos se descartan y los que ya estaban solo suman. Se guardan 14 días y lo viejo se borra al primer reporte de cada día
+- Los ves en la pantalla 25, Configuración, al final, en Errores del navegador. Hace falta la cuenta de la nube conectada como admin o dueño. Nadie más puede leer la tabla
+
+### Cómo aplicar la octava migración
+
+No necesitas terminal. Aplica primero las siete anteriores. Mientras no apliques esta, los errores no se guardan en ningún lado y la pantalla 25 dice que no pudo leerlos.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261012000001_client_errors.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('anon', 'public.report_client_error(text, text, text, text, text, text)', 'execute') as anon_reporta,
+  has_table_privilege('anon', 'public.client_errors', 'select') as anon_lee,
+  has_table_privilege('authenticated', 'public.client_errors', 'insert') as alumno_escribe_directo,
+  (select relrowsecurity from pg_class where oid = 'public.client_errors'::regclass) as errores_con_seguridad_por_fila,
+  exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'client_errors' and column_name in ('user_id', 'email', 'ip')
+  ) as guarda_quien_fue;
+```
+
+7. Debe salir anon_reporta en true, errores_con_seguridad_por_fila en true, y anon_lee, alumno_escribe_directo y guarda_quien_fue en false. Si alguno de los false sale en true, avísame antes de abrir a alumnos
+
+### Qué conviene saber
+
+- Cualquiera con la llave pública puede mandar reportes falsos, hasta el tope diario. No dañan nada, pero pueden llenar la lista de ruido. Si pasa, se ve en la pantalla 25 y se sube el filtro o se baja el tope en la función client_errors_daily_cap
+- Los errores del navegador no sustituyen un monitoreo de servidor con alertas. Si quieres avisos al celular cuando algo se rompe, conviene agregar un servicio aparte
+- El texto del aviso de privacidad ya dice que la mejora anónima incluye estos reportes
+
+## Privacidad, borrar mis datos y mi cuenta
+
+### Qué hace
+
+- Borrar mis datos, en Configuración, Cuenta, borra primero la copia en la nube y, solo si salió bien, lo de este dispositivo. Si el servidor falla, la app lo dice y no borra nada, para no dejar el dispositivo vacío con la nube llena
+- Eliminar mi cuenta, en el mismo lugar y solo con la cuenta conectada, pide escribir ELIMINAR. Quita la cuenta con tu correo, la bitácora, el plan, los pagos y los referidos de la plataforma, y borra lo del dispositivo. El correo queda libre para registrarse otra vez
+- Las dos funciones del servidor, delete_my_data y delete_my_account, solo las puede llamar una persona con sesión y desde su dispositivo activo. Un anónimo no puede ni llamarlas, y cada quien borra solo lo suyo
+- La bitácora de estudio sigue siendo de solo agregar para todo lo demás. El freno acepta el borrado de las filas de un usuario únicamente dentro de la transacción de una de esas dos funciones, que la marca con el usuario que se da de baja. Ni el navegador ni la API pueden poner esa marca
+- El dueño de la plataforma no se puede eliminar a sí mismo desde la app. Si hace falta, se transfiere el rol antes
+- Los cobros que ya hizo cada pasarela se conservan en Stripe y en Mercado Pago, porque la ley pide guardar las facturas. Aquí se borra la copia de la plataforma. Quien pida lo contrario habla con la pasarela
+- Retirar el permiso de mejora anónima, en Configuración, Privacidad, borra el puntaje oficial del ENARM que el alumno capturó con él
+
+### Cómo aplicar la quinta migración
+
+No necesitas terminal. Aplica primero las cuatro anteriores. Mientras no apliques esta, Borrar mis datos falla con un aviso claro y no borra nada del dispositivo cuando la cuenta está conectada.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261009000001_privacy.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.delete_my_data()', 'execute') as alumno_borra_sus_datos,
+  has_function_privilege('authenticated', 'public.delete_my_account()', 'execute') as alumno_borra_su_cuenta,
+  has_function_privilege('anon', 'public.delete_my_data()', 'execute') as anon_borra_datos,
+  has_function_privilege('anon', 'public.delete_my_account()', 'execute') as anon_borra_cuenta,
+  has_function_privilege('service_role', 'public.delete_my_account()', 'execute') as servicio_borra_cuenta,
+  (select count(*) from pg_constraint c
+    where c.contype = 'f' and c.confrelid = 'auth.users'::regclass
+      and c.confdeltype = 'a' and c.connamespace = 'public'::regnamespace) as llaves_sin_regla;
+```
+
+7. Debe salir alumno_borra_sus_datos y alumno_borra_su_cuenta en true, anon_borra_datos, anon_borra_cuenta y servicio_borra_cuenta en false, y llaves_sin_regla en 0. Si anon sale en true, avísame antes de abrir a alumnos
+8. Probar con una cuenta de prueba, no con la tuya. Crea un alumno nuevo, estudia unas tarjetas, entra a Configuración, Cuenta, y elige Eliminar mi cuenta. En Authentication, Users, el correo ya no debe aparecer, y en Table Editor, events no debe quedar ninguna fila de ese alumno
+
+### Qué conviene saber
+
+- Borrar es definitivo. La app pide confirmación, pero no hay forma de recuperar lo borrado, ni siquiera desde Supabase, porque no se guarda una copia
+- Una sincronización a medias no revive lo borrado. La función toma el mismo candado que la subida y la bajada, y la app además frena la sincronización y espera a la que esté corriendo antes de llamar a la función
+- Si un administrador quita a un usuario desde el panel de Supabase, su bitácora se va con él. El freno solo lo permite cuando el usuario ya no existe
+- Si el alumno borra desde un dispositivo que ya no es el activo, el servidor lo rechaza y la app le dice que entre desde el activo o que tome la cuenta aquí
+- El puntaje oficial del ENARM vive por ahora solo en el navegador y entra al archivo que el alumno exporta. No se sube a la nube, y su evento solo lleva el año
+
+## IA alojada
+
+### Qué hace
+
+- Crea las tablas ai_usage_day, ai_spend_day, ai_call_log y ai_config, y las funciones del libro de IA, para que el proxy de IA alojado cuente los límites por alumno, el presupuesto del día y la bitácora de costos en la base de datos. Ver docs/IA_ALOJADA.md
+- Ni el navegador ni un alumno leen ni escriben esas tablas ni llaman a esas funciones. Solo el servidor del proxy, con la llave de servicio
+- Vuelve a definir Borrar mis datos para que también quite el uso anterior y la bitácora de IA del alumno. El uso de hoy se conserva, así que borrar los datos no sirve para saltarse el límite diario
+
+### Cómo aplicar la sexta migración
+
+No necesitas terminal. Aplica primero las cinco anteriores. Mientras no apliques esta, la demo sigue con la IA simulada o con el proxy local.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261010000001_ai_hosted.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('service_role', 'public.ai_admit(uuid, text, integer, numeric)', 'execute') as servicio_admite,
+  has_function_privilege('authenticated', 'public.ai_admit(uuid, text, integer, numeric)', 'execute') as alumno_admite,
+  has_function_privilege('anon', 'public.ai_usage_summary()', 'execute') as anon_lee_resumen,
+  has_table_privilege('authenticated', 'public.ai_call_log', 'select') as alumno_lee_bitacora,
+  has_table_privilege('authenticated', 'public.ai_config', 'select') as alumno_lee_configuracion,
+  (select relrowsecurity from pg_class where oid = 'public.ai_usage_day'::regclass) as uso_con_seguridad_por_fila;
+```
+
+7. Debe salir servicio_admite en true, alumno_admite, anon_lee_resumen, alumno_lee_bitacora y alumno_lee_configuracion en false, y uso_con_seguridad_por_fila en true. Si alguno de los false sale en true, avísame antes de abrir a alumnos
+
+## Configuración del admin en el servidor
+
+### Qué hace
+
+- Los umbrales, los pesos del ENARM y la estimación de costo que el admin cambia en la pantalla 25 se guardan en la tabla platform_settings, en la clave admin_overrides. Así un cambio vale para todos los alumnos y no solo para el navegador de quien lo hizo
+- No necesita una migración nueva. Usa la tabla y los permisos de la primera. Todos la leen, incluso sin sesión, y solo un admin o el dueño la escribe
+- Al abrir la app con la cuenta de la nube conectada, el navegador copia lo que dice el servidor. Si cambió, aparece un aviso para recargar y aplicarlo, porque los motores leen sus umbrales al abrir. Sin cuenta conectada, como en la demostración, los cambios siguen guardándose solo en el navegador
+- Si el servidor no tiene cambios, se borran los que haya en el navegador, porque con la nube conectada manda el servidor
+- Si el servidor no responde, el navegador conserva su copia y nada se rompe
+- Restablecer valores de fábrica borra la clave en el servidor
+
+### Qué conviene saber
+
+- La clave la lee cualquiera. No pongas ahí nada secreto. Solo lleva números de umbrales, pesos y una estimación de costo en dólares
+- Un alumno que intente escribirla desde la consola del navegador es rechazado por la base. Lo cubre supabase/tests/settings_test.sql
+- Un valor guardado que no cumpla el formato se ignora completo y la app usa los valores de fábrica
 
 ## Antes de abrir a alumnos
 
@@ -465,7 +658,7 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 | El dueño es fijo | Solo el dueño nombra o quita admins y nadie puede quitarle el rol |
 | Cada cambio de rol queda registrado | Bitácora de auditoría con quién y cuándo |
 | Los datos personales no se comparten | El correo y los datos de cuenta los ven solo su dueño y el admin |
-| La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base |
+| La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base. La única excepción es que su dueño borre sus propias filas al eliminar sus datos o su cuenta, desde las funciones del servidor |
 | Los pagos no se falsean | Solo el servidor con la llave secreta activa suscripciones |
 | Una cuenta, un dispositivo | Cada quien lee solo su fila de dispositivo y solo la función claim_device la escribe. Un anónimo no puede llamarla |
 | El dispositivo desplazado queda bloqueado en el servidor | Las tablas con datos del alumno exigen que el token sea el de la sesión ganadora. Cambiar de dispositivo está limitado a 3 veces en 24 horas y cada reclamo queda en una bitácora que nadie edita |

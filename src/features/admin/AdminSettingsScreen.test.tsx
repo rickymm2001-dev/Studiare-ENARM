@@ -10,6 +10,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { readStoredOverrides } from '@/config/overridesStore';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 
 vi.setConfig({ testTimeout: 30_000 });
 
@@ -94,57 +95,61 @@ function stubProxy() {
 describe('umbrales', () => {
   it('muestra los umbrales de la sección 12 con su valor de fábrica', async () => {
     await open();
-    const card = screen.getByRole('region', { name: t.adminConfig.thresholdsForm.title });
+    const card = screen.getByRole('region', { name: adminText.adminConfig.thresholdsForm.title });
     const field = within(card).getByLabelText(
-      t.adminConfig.thresholds['bias.minTaggedErrors'].label,
+      adminText.adminConfig.thresholds['bias.minTaggedErrors'].label,
     );
     expect(field).toHaveValue(40);
     expect(
-      within(card).getByRole('button', { name: t.adminConfig.thresholdsForm.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.thresholdsForm.save }),
     ).toBeDisabled();
   });
 
   it('un valor fuera de regla muestra el motivo y no deja guardar', async () => {
     await open();
-    const card = screen.getByRole('region', { name: t.adminConfig.thresholdsForm.title });
+    const card = screen.getByRole('region', { name: adminText.adminConfig.thresholdsForm.title });
     fireEvent.change(
-      within(card).getByLabelText(t.adminConfig.thresholds['fsrs.desiredRetention'].label),
+      within(card).getByLabelText(adminText.adminConfig.thresholds['fsrs.desiredRetention'].label),
       { target: { value: '0.5' } },
     );
     expect(
-      within(card).getByRole('button', { name: t.adminConfig.thresholdsForm.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.thresholdsForm.save }),
     ).toBeDisabled();
     fireEvent.change(
-      within(card).getByLabelText(t.adminConfig.thresholds['bias.minTaggedErrors'].label),
+      within(card).getByLabelText(adminText.adminConfig.thresholds['bias.minTaggedErrors'].label),
       { target: { value: '12.5' } },
     );
-    expect(await within(card).findByText(t.adminConfig.thresholdsForm.notInteger)).toBeVisible();
+    expect(
+      await within(card).findByText(adminText.adminConfig.thresholdsForm.notInteger),
+    ).toBeVisible();
   });
 
   it('guarda solo lo que cambió en este navegador y se puede restablecer', async () => {
     const typing = userEvent.setup();
     await open();
-    const card = screen.getByRole('region', { name: t.adminConfig.thresholdsForm.title });
+    const card = screen.getByRole('region', { name: adminText.adminConfig.thresholdsForm.title });
     fireEvent.change(
-      within(card).getByLabelText(t.adminConfig.thresholds['bias.minTaggedErrors'].label),
+      within(card).getByLabelText(adminText.adminConfig.thresholds['bias.minTaggedErrors'].label),
       { target: { value: '25' } },
     );
     await typing.click(
-      within(card).getByRole('button', { name: t.adminConfig.thresholdsForm.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.thresholdsForm.save }),
     );
-    expect(await within(card).findByText(t.adminConfig.thresholdsForm.saved)).toBeVisible();
+    expect(await within(card).findByText(adminText.adminConfig.thresholdsForm.saved)).toBeVisible();
     expect(readStoredOverrides()?.thresholds).toEqual({ bias: { minTaggedErrors: 25 } });
     expect(
-      within(card).getByRole('button', { name: t.adminConfig.thresholdsForm.reload }),
+      within(card).getByRole('button', { name: adminText.adminConfig.thresholdsForm.reload }),
     ).toBeVisible();
 
     await typing.click(
-      within(card).getByRole('button', { name: t.adminConfig.thresholdsForm.reset }),
+      within(card).getByRole('button', { name: adminText.adminConfig.thresholdsForm.reset }),
     );
-    expect(await within(card).findByText(t.adminConfig.thresholdsForm.resetDone)).toBeVisible();
+    expect(
+      await within(card).findByText(adminText.adminConfig.thresholdsForm.resetDone),
+    ).toBeVisible();
     expect(readStoredOverrides()).toBeNull();
     expect(
-      within(card).getByLabelText(t.adminConfig.thresholds['bias.minTaggedErrors'].label),
+      within(card).getByLabelText(adminText.adminConfig.thresholds['bias.minTaggedErrors'].label),
     ).toHaveValue(40);
   });
 });
@@ -153,34 +158,40 @@ describe('pesos del ENARM', () => {
   it('dice que son provisionales y guarda solo los pesos que cambian', async () => {
     const typing = userEvent.setup();
     await open();
-    const card = screen.getByRole('region', { name: t.adminConfig.weightsForm.title });
-    expect(within(card).getByText(t.adminConfig.weightsForm.provisional)).toBeVisible();
+    const card = screen.getByRole('region', { name: adminText.adminConfig.weightsForm.title });
+    expect(within(card).getByText(adminText.adminConfig.weightsForm.provisional)).toBeVisible();
     // Abre la primera rama
     await typing.click(within(card).getByText(FIRST_BRANCH));
     const [weight] = within(card).getAllByLabelText(/^Peso de la rama/);
     if (!weight) throw new Error('Sin peso de rama');
     fireEvent.change(weight, { target: { value: '2' } });
-    await typing.click(within(card).getByRole('button', { name: t.adminConfig.weightsForm.save }));
-    expect(await within(card).findByText(t.adminConfig.weightsForm.saved)).toBeVisible();
+    await typing.click(
+      within(card).getByRole('button', { name: adminText.adminConfig.weightsForm.save }),
+    );
+    expect(await within(card).findByText(adminText.adminConfig.weightsForm.saved)).toBeVisible();
     const stored = readStoredOverrides()?.weights;
     expect(Object.values(stored?.branches ?? {})).toEqual([2]);
     expect(stored?.topics).toEqual({});
-    await typing.click(within(card).getByRole('button', { name: t.adminConfig.weightsForm.reset }));
-    expect(await within(card).findByText(t.adminConfig.weightsForm.resetDone)).toBeVisible();
+    await typing.click(
+      within(card).getByRole('button', { name: adminText.adminConfig.weightsForm.reset }),
+    );
+    expect(
+      await within(card).findByText(adminText.adminConfig.weightsForm.resetDone),
+    ).toBeVisible();
     expect(readStoredOverrides()).toBeNull();
   });
 
   it('un peso que no es positivo no deja guardar', async () => {
     const typing = userEvent.setup();
     await open();
-    const card = screen.getByRole('region', { name: t.adminConfig.weightsForm.title });
+    const card = screen.getByRole('region', { name: adminText.adminConfig.weightsForm.title });
     await typing.click(within(card).getByText(FIRST_BRANCH));
     const [weight] = within(card).getAllByLabelText(/^Peso de la rama/);
     if (!weight) throw new Error('Sin peso de rama');
     fireEvent.change(weight, { target: { value: '0' } });
-    expect(await within(card).findByText(t.adminConfig.weightsForm.invalid)).toBeVisible();
+    expect(await within(card).findByText(adminText.adminConfig.weightsForm.invalid)).toBeVisible();
     expect(
-      within(card).getByRole('button', { name: t.adminConfig.weightsForm.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.weightsForm.save }),
     ).toBeDisabled();
   });
 });
@@ -189,22 +200,26 @@ describe('modelos, precios y límites de la IA', () => {
   it('sin proxy dice dónde vive la configuración y deja guardar la estimación del plan maestro', async () => {
     const typing = userEvent.setup();
     await open();
-    expect(await screen.findByText(t.adminConfig.aiForm.noProxy, undefined, WAIT)).toBeVisible();
-    const card = screen.getByRole('region', { name: t.adminConfig.aiForm.estimate.title });
-    fireEvent.change(within(card).getByLabelText(t.adminConfig.aiForm.estimate.label), {
+    expect(
+      await screen.findByText(adminText.adminConfig.aiForm.noProxy, undefined, WAIT),
+    ).toBeVisible();
+    const card = screen.getByRole('region', { name: adminText.adminConfig.aiForm.estimate.title });
+    fireEvent.change(within(card).getByLabelText(adminText.adminConfig.aiForm.estimate.label), {
       target: { value: '1.5' },
     });
     await typing.click(
-      within(card).getByRole('button', { name: t.adminConfig.aiForm.estimate.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.aiForm.estimate.save }),
     );
-    expect(await within(card).findByText(t.adminConfig.aiForm.estimate.saved)).toBeVisible();
+    expect(
+      await within(card).findByText(adminText.adminConfig.aiForm.estimate.saved),
+    ).toBeVisible();
     expect(readStoredOverrides()?.aiCostEstimateUsd).toBe(1.5);
     // Vaciarla la quita
-    fireEvent.change(within(card).getByLabelText(t.adminConfig.aiForm.estimate.label), {
+    fireEvent.change(within(card).getByLabelText(adminText.adminConfig.aiForm.estimate.label), {
       target: { value: '' },
     });
     await typing.click(
-      within(card).getByRole('button', { name: t.adminConfig.aiForm.estimate.save }),
+      within(card).getByRole('button', { name: adminText.adminConfig.aiForm.estimate.save }),
     );
     await waitFor(() => {
       expect(readStoredOverrides()).toBeNull();
@@ -214,16 +229,20 @@ describe('modelos, precios y límites de la IA', () => {
   it('con proxy muestra el modelo de cada motor y la versión de su prompt', async () => {
     stubProxy();
     await open();
-    const card = await screen.findByRole('region', { name: t.adminConfig.aiForm.title }, WAIT);
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
     const fieldsets = await within(card).findAllByRole('group');
     expect(fieldsets).toHaveLength(5);
     expect(
       within(fieldsets[0] as HTMLElement).getByText(
-        t.adminConfig.aiForm.promptVersion('forgetting.base.v1'),
+        adminText.adminConfig.aiForm.promptVersion('forgetting.base.v1'),
       ),
     ).toBeVisible();
     expect(
-      within(fieldsets[2] as HTMLElement).getByLabelText(t.adminConfig.aiForm.model),
+      within(fieldsets[2] as HTMLElement).getByLabelText(adminText.adminConfig.aiForm.model),
     ).toHaveValue('claude-sonnet-5-5');
   });
 
@@ -231,27 +250,43 @@ describe('modelos, precios y límites de la IA', () => {
     const typing = userEvent.setup();
     const puts = stubProxy();
     await open();
-    const card = await screen.findByRole('region', { name: t.adminConfig.aiForm.title }, WAIT);
-    const budget = await within(card).findByLabelText(t.adminConfig.aiForm.budget);
-    expect(within(card).getByRole('button', { name: t.adminConfig.aiForm.save })).toBeDisabled();
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
+    const budget = await within(card).findByLabelText(adminText.adminConfig.aiForm.budget);
+    expect(
+      within(card).getByRole('button', { name: adminText.adminConfig.aiForm.save }),
+    ).toBeDisabled();
     fireEvent.change(budget, { target: { value: '2.5' } });
-    await typing.click(within(card).getByRole('button', { name: t.adminConfig.aiForm.save }));
-    expect(await within(card).findByText(t.adminConfig.aiForm.saved)).toBeVisible();
+    await typing.click(
+      within(card).getByRole('button', { name: adminText.adminConfig.aiForm.save }),
+    );
+    expect(await within(card).findByText(adminText.adminConfig.aiForm.saved)).toBeVisible();
     expect(puts).toEqual([{ limits: { dailyBudgetUsd: 2.5 } }]);
     // Ya guardado, el botón vuelve a apagarse
     await waitFor(() => {
-      expect(within(card).getByRole('button', { name: t.adminConfig.aiForm.save })).toBeDisabled();
+      expect(
+        within(card).getByRole('button', { name: adminText.adminConfig.aiForm.save }),
+      ).toBeDisabled();
     });
   });
 
   it('un tope fuera de rango muestra su error y no deja guardar', async () => {
     stubProxy();
     await open();
-    const card = await screen.findByRole('region', { name: t.adminConfig.aiForm.title }, WAIT);
-    const [tokens] = await within(card).findAllByLabelText(t.adminConfig.aiForm.maxTokens);
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
+    const [tokens] = await within(card).findAllByLabelText(adminText.adminConfig.aiForm.maxTokens);
     if (!tokens) throw new Error('Sin campo');
     fireEvent.change(tokens, { target: { value: '5' } });
-    expect(await within(card).findByText(t.adminConfig.aiForm.tokensError)).toBeVisible();
-    expect(within(card).getByRole('button', { name: t.adminConfig.aiForm.save })).toBeDisabled();
+    expect(await within(card).findByText(adminText.adminConfig.aiForm.tokensError)).toBeVisible();
+    expect(
+      within(card).getByRole('button', { name: adminText.adminConfig.aiForm.save }),
+    ).toBeDisabled();
   });
 });

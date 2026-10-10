@@ -9,7 +9,7 @@ import { useLiveData } from '@/data/hooks';
 import type { AiArtifact } from '@/data/schemas/activity';
 import type { Question } from '@/data/schemas/bank';
 import type { User } from '@/data/schemas/people';
-import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -48,7 +48,7 @@ export function QuestionDrafts({
   notice: string;
   onNotice: (message: string) => void;
 }) {
-  const text = t.draftsScreen.questions;
+  const text = physicianText.draftsScreen.questions;
   const proposals = artifacts.filter((artifact) => artifact.kind === 'restructured_question');
   const pending = proposals.filter((artifact) => artifact.status === 'draft');
   const decided = proposals
@@ -124,7 +124,7 @@ function RequestCard({
   questions: readonly Question[];
   onNotice: (message: string) => void;
 }) {
-  const text = t.draftsScreen.questions;
+  const text = physicianText.draftsScreen.questions;
   const api = useDataApi();
   const status = useAiStatus();
   const [query, setQuery] = useState('');
@@ -242,7 +242,7 @@ function ProposalCard({
   physician: Person;
   onNotice: (message: string) => void;
 }) {
-  const text = t.draftsScreen.questions;
+  const text = physicianText.draftsScreen.questions;
   const api = useDataApi();
   const content = readContent(artifact);
   const original = useLiveData(async () => {
@@ -307,7 +307,7 @@ function ProposalForm({
   physician: Person;
   onNotice: (message: string) => void;
 }) {
-  const text = t.draftsScreen.questions;
+  const text = physicianText.draftsScreen.questions;
   const api = useDataApi();
   const [draft, setDraft] = useState<QuestionDraft>(() =>
     draftFromProposal({
@@ -362,7 +362,7 @@ function ProposalForm({
           <CardTitle id={titleId} className="flex flex-wrap items-center gap-2 text-base">
             {text.transforms[content.transform]}
             <Badge variant="warning" className="whitespace-normal">
-              {t.draftsScreen.draftLabel}
+              {physicianText.draftsScreen.draftLabel}
             </Badge>
             <Badge variant="neutral">{text.modes[artifact.mode]}</Badge>
           </CardTitle>
@@ -377,7 +377,7 @@ function ProposalForm({
                 {content.original.options.map((option) => (
                   <li key={option.label} className={option.isKey ? 'font-semibold' : undefined}>
                     {option.label}. {option.text}
-                    {option.isKey ? ` · ${t.questionEditor.options.key}` : ''}
+                    {option.isKey ? ` · ${physicianText.questionEditor.options.key}` : ''}
                   </li>
                 ))}
               </ol>
@@ -396,7 +396,7 @@ function ProposalForm({
               </p>
               {original.question.vignette ? (
                 <TextAreaField
-                  label={t.questionEditor.case.vignette}
+                  label={physicianText.questionEditor.case.vignette}
                   rows={3}
                   value={draft.vignette}
                   onChange={(event) => {
@@ -405,7 +405,7 @@ function ProposalForm({
                 />
               ) : null}
               <TextAreaField
-                label={t.questionEditor.case.prompt}
+                label={physicianText.questionEditor.case.prompt}
                 rows={2}
                 value={draft.prompt}
                 onChange={(event) => {
@@ -413,7 +413,7 @@ function ProposalForm({
                 }}
               />
               <TextAreaField
-                label={t.questionEditor.meta.explanation}
+                label={physicianText.questionEditor.meta.explanation}
                 rows={3}
                 value={draft.explanation}
                 onChange={(event) => {
@@ -434,15 +434,15 @@ function ProposalForm({
         </div>
         {issues.length > 0 ? (
           <div role="alert" className="mt-3 rounded-md border border-danger p-3">
-            <p className="font-semibold">{t.questionEditor.save.invalid}</p>
+            <p className="font-semibold">{physicianText.questionEditor.save.invalid}</p>
             <ul className="list-disc pl-5 text-sm">
               {issues.map((issue, index) => (
                 <li key={index}>
                   {issue.option === undefined
-                    ? t.questionEditor.issues[issue.code]
-                    : t.questionEditor.issueAt(
+                    ? physicianText.questionEditor.issues[issue.code]
+                    : physicianText.questionEditor.issueAt(
                         issue.option + 1,
-                        t.questionEditor.issues[issue.code] ?? issue.code,
+                        physicianText.questionEditor.issues[issue.code] ?? issue.code,
                       )}
                 </li>
               ))}

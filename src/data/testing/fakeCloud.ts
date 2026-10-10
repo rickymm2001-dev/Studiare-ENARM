@@ -57,6 +57,10 @@ export interface FakeCloud {
   failReport: FakeReportFailure;
   /** Hora de reintento que manda el error de límite en su detalle. null si el servidor no la manda */
   limitRetryAt: string | null;
+  /** Valor de la clave admin_overrides en platform_settings. null si el admin no ha cambiado nada */
+  overrides: unknown;
+  /** Versiones del aviso de privacidad que la app registró como aceptadas, en orden */
+  acceptances: string[];
   claims: { p_device_id: string; p_label: string }[];
   /** Reclamos rechazados que el cliente reportó con log_rejected_claim */
   rejections: { p_device_id: string; p_label: string }[];
@@ -89,6 +93,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     failCheck: 'none',
     failReport: 'none',
     limitRetryAt: '2030-01-02T09:30:00Z',
+    overrides: null,
+    acceptances: [],
     claims: [],
     rejections: [],
     checks: 0,
@@ -118,6 +124,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       }
       if (name === 'user_roles') return { data: { role: 'student' }, error: null };
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
+      if (name === 'platform_settings') {
+        return { data: fake.overrides === null ? null : { value: fake.overrides }, error: null };
+      }
       return { data: null, error: null };
     };
     const chain: Record<string, unknown> = {
@@ -130,7 +139,12 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       order: () => chain,
       limit: () => chain,
       update: () => chain,
-      insert: () => chain,
+      insert: (row: { notice_version?: unknown }) => {
+        if (name === 'privacy_acceptances' && typeof row.notice_version === 'string') {
+          fake.acceptances.push(row.notice_version);
+        }
+        return chain;
+      },
       maybeSingle: () => Promise.resolve(single()),
       // Esperar la cadena sin maybeSingle devuelve una lista vacía, como una consulta sin filas
       then: (resolve: (value: unknown) => unknown) =>

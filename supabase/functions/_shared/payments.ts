@@ -240,7 +240,13 @@ export function noticeFromStripeEvent(event: unknown): PaymentNotice | null {
     };
   }
 
-  if (type === 'customer.subscription.deleted') {
+  // Cancelar desde el portal casi siempre es al final del periodo ya pagado. Stripe lo avisa aquí
+  // desde el momento de cancelar, y la suscripción como tal se borra hasta que acaba el periodo.
+  // Sin esto la plataforma seguiría viéndola activa, y eso estorba, por ejemplo, para eliminar la cuenta
+  if (
+    type === 'customer.subscription.deleted' ||
+    (type === 'customer.subscription.updated' && object.cancel_at_period_end === true)
+  ) {
     const { userId } = ownMetadata(object.metadata);
     return {
       ...base,
@@ -254,6 +260,43 @@ export function noticeFromStripeEvent(event: unknown): PaymentNotice | null {
     };
   }
   return null;
+}
+
+/** El id del cliente de Stripe, que llega como texto o como objeto expandido */
+function customerIdOf(value: unknown): string | null {
+  return asString(value) ?? asString(asRecord(value).id);
+}
+
+/**
+ * Con qué cliente de Stripe pagó el alumno. Solo sale de un pago verificado que trae el id del alumno
+ * puesto por create-checkout. Con él se abre después el portal donde cancela o cambia su tarjeta
+ */
+export function stripeCustomerLink(event: unknown): { userId: string; customerId: string } | null {
+  const notice = noticeFromStripeEvent(event);
+  if (notice?.kind !== 'paid' || notice.userId === null) return null;
+  const object = asRecord(asRecord(asRecord(event).data).object);
+  const customerId = customerIdOf(object.customer);
+  return customerId === null ? null : { userId: notice.userId, customerId };
+}
+
+/**
+ * Un cargo devuelto por completo. Stripe no dice a qué alumno ni a qué factura corresponde, solo el
+ * cliente y el monto cobrado, y de ahí se resuelve el alumno con lo que se ligó al pagar. Los
+ * reembolsos parciales se ignoran, porque quitar el plan por una devolución chica sería injusto. Esos
+ * los atiende una persona
+ */
+export function stripeRefundFromEvent(
+  event: unknown,
+): { eventId: string; customerId: string; amountMxn: number; payload: Json } | null {
+  const root = asRecord(event);
+  const eventId = asString(root.id);
+  const object = asRecord(asRecord(root.data).object);
+  if (!eventId || root.type !== 'charge.refunded' || object.refunded !== true) return null;
+  const customerId = customerIdOf(object.customer);
+  const amountMxn = mxnFromCents(object.amount, object.currency);
+  return customerId === null || amountMxn === null || amountMxn <= 0
+    ? null
+    : { eventId, customerId, amountMxn, payload: root };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -315,12 +358,19 @@ export interface FunctionEnv {
   FUNCTIONS_URL?: string;
 }
 
-export interface PaymentDeps {
+interface CoreDeps {
   env: FunctionEnv;
   fetch: typeof fetch;
   now: () => number;
+}
+
+export interface PaymentDeps extends CoreDeps {
   /** Llama a apply_payment_notice con la llave de servicio. Devuelve su resultado */
   applyNotice: (notice: PaymentNotice) => Promise<string>;
+  /** Guarda con qué cliente de Stripe pagó el alumno. Lanza si la base falla */
+  linkCustomer: (link: { userId: string; customerId: string }) => Promise<void>;
+  /** De qué alumno es un cliente de Stripe. null si no se ligó a nadie */
+  userOfCustomer: (customerId: string) => Promise<string | null>;
 }
 
 /** El cuerpo como objeto, o uno vacío si no llegó o no es JSON */
@@ -354,11 +404,35 @@ export async function handleStripeWebhook(request: Request, deps: PaymentDeps): 
   } catch {
     return text('Cuerpo inválido', 400);
   }
-  const notice = noticeFromStripeEvent(event);
-  if (!notice) return text('Ignorado', 200);
   try {
-    const result = await deps.applyNotice(notice);
-    return text(result, 200);
+    const refund = stripeRefundFromEvent(event);
+    if (refund) {
+      // El alumno puede no estar ligado todavía. Entonces el aviso se asienta sin alumno, para que
+      // una persona lo vea en payment_webhook_events, en lugar de perderse
+      const userId = await deps.userOfCustomer(refund.customerId);
+      return text(
+        await deps.applyNotice({
+          provider: 'stripe',
+          eventId: refund.eventId,
+          kind: 'refunded',
+          userId,
+          plan: null,
+          providerPaymentId: null,
+          providerSubscriptionId: null,
+          amountMxn: refund.amountMxn,
+          periodEnd: null,
+          payload: refund.payload,
+        }),
+        200,
+      );
+    }
+    const notice = noticeFromStripeEvent(event);
+    if (!notice) return text('Ignorado', 200);
+    // Se liga antes de aplicar. Si algo falla se contesta 500 y Stripe reintenta, y las dos cosas
+    // son seguras de repetir
+    const link = stripeCustomerLink(event);
+    if (link) await deps.linkCustomer(link);
+    return text(await deps.applyNotice(notice), 200);
   } catch {
     return text('No se pudo aplicar', 500);
   }
@@ -411,13 +485,15 @@ export async function handleMercadoPagoWebhook(
 // ---------------------------------------------------------------------------------------------
 // Crear el pago
 
-export interface CheckoutDeps extends Omit<PaymentDeps, 'applyNotice'> {
+export interface CheckoutDeps extends CoreDeps {
   /** Quién es el usuario del token que llegó. null si no es válido */
   authenticate: (
     authorization: string | null,
   ) => Promise<{ id: string; email: string | null } | null>;
   /** Cuántos lugares de Fundador quedan. null si no se pudo saber */
   founderSeatsLeft: () => Promise<number | null>;
+  /** El cliente de Stripe del alumno, si ya pagó antes. null si no se sabe o si falla */
+  customerOf: (userId: string) => Promise<string | null>;
 }
 
 const STRIPE_PRICE_ENV: Record<PaidPlan, keyof FunctionEnv> = {
@@ -432,6 +508,14 @@ function originOf(value: string | undefined): string {
   } catch {
     return '';
   }
+}
+
+/** La pantalla Suscripción de la app, con el resultado del pago si lo hay */
+function subscriptionUrl(appUrl: string, result?: 'ok' | 'cancelado'): string {
+  const target = new URL(appUrl);
+  target.pathname = `${target.pathname.replace(/\/+$/, '')}/suscripcion`;
+  if (result) target.searchParams.set('pago', result);
+  return target.toString();
 }
 
 /** Solo la página de la app puede llamar a la función desde el navegador */
@@ -483,12 +567,7 @@ export async function handleCreateCheckout(
     const left = await deps.founderSeatsLeft();
     if (left !== null && left <= 0) return json({ error: 'founder_full' }, 409, cors);
   }
-  const back = (result: 'ok' | 'cancelado') => {
-    const target = new URL(appUrl);
-    target.pathname = `${target.pathname.replace(/\/+$/, '')}/suscripcion`;
-    target.searchParams.set('pago', result);
-    return target.toString();
-  };
+  const back = (result: 'ok' | 'cancelado') => subscriptionUrl(appUrl, result);
 
   try {
     if (provider === 'stripe') {
@@ -508,15 +587,26 @@ export async function handleCreateCheckout(
         'subscription_data[metadata][user_id]': user.id,
         'subscription_data[metadata][plan]': plan,
       });
-      if (user.email) form.set('customer_email', user.email);
-      const reply = await deps.fetch('https://api.stripe.com/v1/checkout/sessions', {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${key}`,
-          'content-type': 'application/x-www-form-urlencoded',
-        },
-        body: form,
-      });
+      // Quien ya pagó antes vuelve a su mismo cliente de Stripe, para que sus facturas, su portal y
+      // un reembolso no queden repartidos en dos clientes. Si no tiene, Stripe crea uno con su correo
+      const known = await deps.customerOf(user.id).catch(() => null);
+      const open = async (customer: string | null) => {
+        const body = new URLSearchParams(form);
+        if (customer) body.set('customer', customer);
+        else if (user.email) body.set('customer_email', user.email);
+        return deps.fetch('https://api.stripe.com/v1/checkout/sessions', {
+          method: 'POST',
+          headers: {
+            authorization: `Bearer ${key}`,
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        });
+      };
+      let reply = await open(known);
+      // El cliente guardado puede ya no existir, por ejemplo si se borró en Stripe o si se cambió de
+      // llaves de prueba a las reales. Entonces se reintenta una vez como alumno nuevo
+      if (!reply.ok && known) reply = await open(null);
       if (!reply.ok) return json({ error: 'provider' }, 502, cors);
       const url = asString(asRecord(await reply.json()).url);
       return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
@@ -550,6 +640,56 @@ export async function handleCreateCheckout(
     const created = asRecord(await reply.json());
     // En modo prueba Mercado Pago devuelve también una dirección de sandbox
     const url = asString(created.init_point) ?? asString(created.sandbox_init_point);
+    return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
+  } catch {
+    return json({ error: 'provider' }, 502, cors);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Portal de facturación
+
+export interface PortalDeps extends CoreDeps {
+  authenticate: CheckoutDeps['authenticate'];
+  /** El cliente de Stripe del alumno. null si nunca pagó con Stripe */
+  customerOf: (userId: string) => Promise<string | null>;
+  /** Deja constancia de por qué falló Stripe, sin llaves, para que se pueda diagnosticar */
+  log: (line: string) => void;
+}
+
+/**
+ * Abre el portal de Stripe donde el alumno cancela su suscripción, cambia su tarjeta o ve sus
+ * facturas. El cliente sale de lo que se ligó al pagar y nunca de lo que mande el navegador, así que
+ * nadie puede abrir el portal de otra persona. La cancelación llega después como un aviso normal
+ */
+export async function handleCreatePortal(request: Request, deps: PortalDeps): Promise<Response> {
+  const cors = corsHeaders(deps.env, request.headers.get('origin'));
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+  if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
+  const user = await deps.authenticate(request.headers.get('authorization'));
+  if (!user) return json({ error: 'unauthorized' }, 401, cors);
+  const key = deps.env.STRIPE_SECRET_KEY ?? '';
+  const appUrl = deps.env.APP_URL ?? '';
+  if (key === '' || appUrl === '') return json({ error: 'not_configured' }, 503, cors);
+  try {
+    const customer = await deps.customerOf(user.id);
+    if (customer === null) return json({ error: 'no_customer' }, 404, cors);
+    const reply = await deps.fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${key}`,
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ customer, return_url: subscriptionUrl(appUrl) }),
+    });
+    if (!reply.ok) {
+      const failure = asRecord(asRecord(await reply.json().catch(() => ({}))).error);
+      deps.log(
+        `Stripe rechazó el portal. estado ${reply.status}, tipo ${asString(failure.type) ?? '?'}, mensaje ${asString(failure.message) ?? '?'}`,
+      );
+      return json({ error: 'provider' }, 502, cors);
+    }
+    const url = asString(asRecord(await reply.json()).url);
     return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
   } catch {
     return json({ error: 'provider' }, 502, cors);

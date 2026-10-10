@@ -13,6 +13,7 @@ import { newId } from '@/data/testing/fixtures';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { sampleQuestionIds } from './agreementView';
 
 vi.setConfig({ testTimeout: 60_000 });
@@ -28,7 +29,7 @@ const WAIT = { timeout: 30_000 };
 const demo = buildDemoBank();
 const questions = demo.questions.map((entry) => entry.question);
 const sample = sampleQuestionIds(questions);
-const text = t.agreementScreen;
+const text = physicianText.agreementScreen;
 const [tagA, tagB, tagC, tagD] = TAGGABLE_BIASES.map((bias) => bias.key) as [
   string,
   string,

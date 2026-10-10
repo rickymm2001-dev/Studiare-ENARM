@@ -3,6 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it } from 'vitest';
 import { newId, testApi } from '../testing/fixtures';
 import { isAllowedCheckoutUrl, startCheckout } from './checkout';
+import { isAllowedPortalUrl, openBillingPortal } from './portal';
 import {
   fetchCloudPlan,
   mirrorCloudPlan,
@@ -70,6 +71,67 @@ describe('dirección de pago', () => {
     expect(isAllowedCheckoutUrl('https://checkout.stripe.com/x', 'mercadopago')).toBe(false);
     expect(isAllowedCheckoutUrl('javascript:alert(1)', 'stripe')).toBe(false);
     expect(isAllowedCheckoutUrl('no es una url', 'stripe')).toBe(false);
+  });
+});
+
+describe('portal de facturación', () => {
+  const withBody = (body: unknown, status: number) => ({
+    error: { context: new Response(JSON.stringify(body), { status }) },
+  });
+
+  it('solo se abre una dirección https del portal de Stripe', () => {
+    expect(isAllowedPortalUrl('https://billing.stripe.com/p/session/test_1')).toBe(true);
+    expect(isAllowedPortalUrl('http://billing.stripe.com/p/session/test_1')).toBe(false);
+    expect(isAllowedPortalUrl('https://billing.stripe.com.malo.example/x')).toBe(false);
+    expect(isAllowedPortalUrl('https://checkout.stripe.com/c/pay/cs_1')).toBe(false);
+    expect(isAllowedPortalUrl('https://usuario:clave@billing.stripe.com/x')).toBe(false);
+    expect(isAllowedPortalUrl('no es una url')).toBe(false);
+  });
+
+  it('pide la dirección al servidor sin mandar ningún cliente', async () => {
+    const { cloud, calls } = fakeCloud({
+      invoke: { data: { url: 'https://billing.stripe.com/p/session/test_1' } },
+    });
+    expect(await openBillingPortal(cloud)).toEqual({
+      ok: true,
+      url: 'https://billing.stripe.com/p/session/test_1',
+    });
+    expect(calls.invoke).toEqual([['create-portal-session', { body: {} }]]);
+  });
+
+  it('no abre una dirección que no es del portal', async () => {
+    const { cloud } = fakeCloud({ invoke: { data: { url: 'https://malo.example/portal' } } });
+    expect(await openBillingPortal(cloud)).toEqual({ ok: false, reason: 'unsafe_url' });
+  });
+
+  it('traduce los errores del servidor', async () => {
+    expect(
+      await openBillingPortal(fakeCloud({ invoke: withBody({ error: 'no_customer' }, 404) }).cloud),
+    ).toEqual({ ok: false, reason: 'no_customer' });
+    expect(
+      await openBillingPortal(
+        fakeCloud({ invoke: withBody({ error: 'not_configured' }, 503) }).cloud,
+      ),
+    ).toEqual({ ok: false, reason: 'not_configured' });
+    expect(
+      await openBillingPortal(fakeCloud({ invoke: withBody({ error: 'provider' }, 502) }).cloud),
+    ).toEqual({ ok: false, reason: 'failed' });
+    expect(
+      await openBillingPortal(fakeCloud({ invoke: { error: new Error('red') } }).cloud),
+    ).toEqual({ ok: false, reason: 'failed' });
+    expect(await openBillingPortal(fakeCloud({ invoke: { data: {} } }).cloud)).toEqual({
+      ok: false,
+      reason: 'failed',
+    });
+  });
+
+  it('una excepción es un fallo y no tira la pantalla', async () => {
+    const { cloud } = fakeCloud({
+      invoke: () => {
+        throw new Error('sin red');
+      },
+    });
+    expect(await openBillingPortal(cloud)).toEqual({ ok: false, reason: 'failed' });
   });
 });
 

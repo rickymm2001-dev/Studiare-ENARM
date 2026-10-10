@@ -3,6 +3,7 @@
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { t } from '@/i18n/es-MX';
 import { AiConfigForm } from './AiConfigForm';
+import { ClientErrorsCard } from './ClientErrorsCard';
 import { ThresholdsForm } from './ThresholdsForm';
 import { WeightsForm } from './WeightsForm';
 import { useAiAdmin } from './useAiAdmin';
@@ -18,6 +19,7 @@ export function AdminSettingsScreen() {
       <ThresholdsForm />
       <WeightsForm />
       <AiConfigForm admin={admin} />
+      <ClientErrorsCard />
     </>
   );
 }

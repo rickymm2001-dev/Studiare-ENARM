@@ -5,8 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEVICE_CLAIM_STORAGE_KEY, forgetDeviceClaim, getDeviceId } from '@/data/cloud/device';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
+import { OVERRIDES_KEY } from '@/config/overridesStore';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
+import { useConfigUpdate } from './configUpdate';
 import { DEFAULT_PREFERENCES, usePreferences } from './preferences';
 
 // getCloud devuelve el cliente falso que cada prueba arma. Sin él es como no tener nube configurada
@@ -14,6 +17,7 @@ const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
 vi.mock('@/data/cloud/client', () => ({
   getCloud: () => holder.cloud,
   cloudConfigured: () => holder.cloud !== null,
+  loadCloud: () => Promise.resolve(holder.cloud),
 }));
 
 const AUTH_ID = '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10';
@@ -38,10 +42,12 @@ beforeEach(() => {
   forgetDeviceClaim();
   usePreferences.setState(DEFAULT_PREFERENCES);
   useCloud.setState({ state: { status: 'checking' } });
+  useConfigUpdate.setState({ pending: false });
 });
 
 afterEach(() => {
   cleanup();
+  useConfigUpdate.setState({ pending: false });
   holder.cloud = null;
   localStorage.clear();
   forgetDeviceClaim();
@@ -332,5 +338,54 @@ describe('CloudBridge y el dispositivo único', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(useCloud.getState().state).toEqual({ status: 'off' });
     expect(usePreferences.getState().sessionUserId).toBeNull();
+  });
+});
+
+describe('CloudBridge y el aviso de privacidad', () => {
+  it('registra la versión del aviso bajo la que se creó su perfil en este dispositivo, una sola vez', async () => {
+    const fake = useFake(makeFakeCloud());
+    mount();
+    await waitFor(() => {
+      expect(fake.claims).toHaveLength(1);
+    });
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
+  });
+});
+
+describe('CloudBridge y la configuración del admin', () => {
+  it('copia la configuración del servidor al navegador y pide recargar para aplicarla', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.overrides = { aiCostEstimateUsd: 4 };
+    mount();
+    await waitFor(() => {
+      expect(useConfigUpdate.getState().pending).toBe(true);
+    });
+    expect(JSON.parse(localStorage.getItem(OVERRIDES_KEY) ?? 'null')).toEqual({
+      aiCostEstimateUsd: 4,
+    });
+  });
+
+  it('si el navegador ya tiene la misma configuración no pide recargar', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.overrides = { aiCostEstimateUsd: 4 };
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify({ aiCostEstimateUsd: 4 }));
+    mount();
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useConfigUpdate.getState().pending).toBe(false);
+  });
+
+  it('si el servidor no tiene cambios borra los que quedaron en el navegador', async () => {
+    useFake(makeFakeCloud());
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify({ aiCostEstimateUsd: 9 }));
+    mount();
+    await waitFor(() => {
+      expect(useConfigUpdate.getState().pending).toBe(true);
+    });
+    expect(localStorage.getItem(OVERRIDES_KEY)).toBeNull();
   });
 });

@@ -1,5 +1,6 @@
 // Registro de las 26 pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
-// Explorar (D-085), Apuntes (D-092) y Logros (Fase P), con su ruta, área y fase.
+// Explorar (D-085), Apuntes (D-092), Logros (Fase P) y el aviso de privacidad y los términos
+// (Fase G), con su ruta, área y fase.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
 
@@ -40,6 +41,8 @@ export const SCREEN_KEYS = [
   'explore',
   'outlines',
   'rewards',
+  'privacyNotice',
+  'terms',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -90,6 +93,9 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   outlines: { number: 30, path: '/apuntes', area: 'student', phase: 'C' },
   // Misiones, liga e insignias (Fase P bloque 6)
   rewards: { number: 31, path: '/logros', area: 'student', phase: 'C' },
+  // Aviso de privacidad y términos, públicos y sin sesión (Fase G, G2)
+  privacyNotice: { number: 32, path: '/privacidad', area: 'shared', phase: 'F' },
+  terms: { number: 33, path: '/terminos', area: 'shared', phase: 'F' },
 };
 
 export function screenPath(key: ScreenKey): string {

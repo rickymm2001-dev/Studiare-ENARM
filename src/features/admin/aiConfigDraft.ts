@@ -2,7 +2,7 @@
 // mandan al proxy. Aparte del formulario para poder probarlo sin pintar nada.
 import type { AdminConfig, AdminConfigPatch } from '@/ai/admin';
 import { AI_ENGINES, type AiEngine } from '@/engines/aiContracts';
-import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 
 export type Effort = AdminConfig['models'][AiEngine]['effort'];
 export const EFFORTS: readonly Effort[] = [null, 'low', 'medium', 'high'];
@@ -49,7 +49,7 @@ const isMoney = (raw: string) => {
 
 /** Los errores del borrador, por campo. Vacío si todo se puede guardar */
 export function validateAiDraft(draft: AiDraft, config: AdminConfig): Record<string, string> {
-  const text = t.adminConfig.aiForm;
+  const text = adminText.adminConfig.aiForm;
   const errors: Record<string, string> = {};
   const known = new Set(Object.keys(config.prices));
   const adding = draft.newModel.id.trim() !== '';

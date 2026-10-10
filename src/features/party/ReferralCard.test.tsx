@@ -10,6 +10,7 @@ const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
 vi.mock('@/data/cloud/client', () => ({
   getCloud: () => holder.cloud,
   cloudConfigured: () => holder.cloud !== null,
+  loadCloud: () => Promise.resolve(holder.cloud),
 }));
 
 const base = {

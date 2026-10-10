@@ -2,6 +2,7 @@
 // Se integran en t desde es-MX.ts.
 import { deviceLimitText } from './device';
 import { insightText } from './insights';
+import { legalText } from './legal';
 
 export const branchNames: Record<string, string> = {
   internal_medicine: 'Medicina interna',
@@ -57,10 +58,9 @@ export const featureText = {
     goalMetric: 'Meta diaria para tu racha',
     goalValue: 'Cantidad',
     goalMetrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de estudio' },
-    privacyTitle: 'Aviso de privacidad (simulado)',
-    privacyBody:
-      'Un solo aviso cubre todo. Usamos tus datos para darte tu plan de estudio, tus estadísticas y el análisis de tus respuestas con IA, para mostrar tu alias, XP, nivel y racha en los grupos a los que te unas, y para mejorar la plataforma con datos sin tu identidad. A la IA solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo. Puedes exportar o borrar tus datos cuando quieras. Este aviso es un ejemplo del prototipo.',
-    privacyAccept: 'Leí y acepto el aviso de privacidad',
+    privacyTitle: 'Aviso de privacidad y términos',
+    privacyBody: legalText.onboarding.summary,
+    privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
     consentsTitle: 'Consentimientos por finalidad',
     consentsDescription: 'Son opcionales y los puedes cambiar en Perfil.',
@@ -255,6 +255,7 @@ export const featureText = {
       study: 'Estudio',
       appearance: 'Apariencia',
       pomodoro: 'Pomodoro',
+      privacy: 'Privacidad',
       account: 'Cuenta',
     },
     sectionsLabel: 'Secciones de Configuración',
@@ -323,8 +324,35 @@ export const featureText = {
     errorsToReview: 'Mandar mis errores de preguntas al repaso',
     optionsShown: 'Opciones por pregunta',
     pomodoroTitle: 'Pomodoro',
-    privacyTitle: 'Privacidad',
-    privacyDescription: 'Aceptaste el aviso de privacidad al crear tu perfil.',
+    // Consentimientos y puntaje oficial voluntario (Fase E bloque E6, D-101)
+    privacy: {
+      consentsTitle: 'Tus consentimientos',
+      consentsDescription:
+        'Aceptaste el aviso de privacidad al crear tu perfil. Aquí das o retiras cada permiso cuando quieras, y cada cambio queda en tu bitácora.',
+      consentSaved: 'Guardamos tu decisión.',
+      consentError: 'No pudimos guardar el cambio. Inténtalo de nuevo.',
+      revokeScoreWarning: 'Si retiras la mejora anónima, también se borra tu puntaje oficial.',
+      scoreTitle: 'Puntaje oficial del ENARM',
+      scoreDescription:
+        'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso de mejora anónima.',
+      scoreNeedsConsent:
+        'Para guardar tu puntaje, activa antes la mejora anónima en tus consentimientos.',
+      year: 'Año de la convocatoria',
+      score: 'Puntaje obtenido',
+      scoreHint: 'De 0 a 100, con hasta dos decimales.',
+      saveScore: 'Guardar puntaje',
+      removeScore: 'Quitar mi puntaje',
+      current: (year: number, score: number) =>
+        `Tienes guardado un puntaje de ${String(score)} en la convocatoria ${String(year)}.`,
+      none: 'Todavía no guardas ningún puntaje.',
+      scoreSaved: 'Guardamos tu puntaje.',
+      scoreRemoved: 'Quitamos tu puntaje oficial.',
+      scoreErrors: {
+        invalid_year: 'Escribe un año entre 2000 y 2100.',
+        invalid_score: 'El puntaje va de 0 a 100.',
+        no_consent: 'Activa antes la mejora anónima.',
+      },
+    },
     exportTitle: 'Exportar mis datos',
     exportDescription:
       'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON.',
@@ -336,9 +364,38 @@ export const featureText = {
     deleteConfirm: 'Sí, borrar todo',
     deleteConfirmText:
       'Se borran todos los perfiles y su historial de Mi cuenta. La demostración no se toca.',
-    // Con la cuenta en la nube conectada y la sincronización encendida (D-095)
+    // Con la cuenta en la nube conectada. Borrar los datos también quita la copia de allá (D-101)
     deleteCloudNote:
-      'Tu copia en la nube sigue ahí y se vuelve a bajar si entras otra vez con tu correo. Borrar también la nube queda para una siguiente versión.',
+      'Como tienes tu cuenta en la nube conectada, también se borra tu copia allá, con tu bitácora, tarjetas, apuntes y grupos. Tu correo y tu plan se quedan.',
+    deleteCloudChecking:
+      'Estamos comprobando tu cuenta en la nube. Espera unos segundos para borrar, así se borra también tu copia allá.',
+    deleteSignedOutNote:
+      'No tienes la sesión de la nube abierta, así que solo se borra este dispositivo y tu copia en la nube se queda. Entra con tu correo antes si quieres borrarla también.',
+    deleteCloudUnknownNote:
+      'No pudimos comprobar tu cuenta en la nube, así que solo se borra este dispositivo y tu copia allá se queda. Entra con conexión si quieres borrarla también.',
+    deleteCloudConfirmText:
+      'Se borran los perfiles y el historial de este dispositivo y tu copia en la nube. No se puede deshacer.',
+    deleting: 'Borrando…',
+    eraseErrors: {
+      local:
+        'Se borró tu copia en la nube, pero no se pudo borrar este dispositivo. Inténtalo otra vez.',
+      not_active_device:
+        'Este no es el dispositivo activo de tu cuenta. Abre Studiare en el dispositivo donde usaste tu cuenta por última vez, o entra aquí de nuevo para tomarla.',
+      owner: 'La cuenta del dueño de la plataforma no se puede borrar desde aquí.',
+      active_subscription:
+        'Tienes una suscripción con tarjeta activa. Cancélala primero en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros. No se borró nada.',
+      no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
+      network: 'No hay conexión con el servidor. No se borró nada. Inténtalo de nuevo.',
+      unknown: 'El servidor no pudo borrar tus datos. No se borró nada. Inténtalo más tarde.',
+    },
+    accountDeleteTitle: 'Eliminar mi cuenta',
+    accountDeleteDescription:
+      'Quita tu cuenta en la nube con tu correo, tu bitácora, tu plan, tus pagos en Studiare y tus referidos, y borra los datos de este dispositivo. Tu correo queda libre para registrarte otra vez. No se puede deshacer.',
+    accountDeletePayments:
+      'Los cobros que ya hizo la pasarela de pagos se conservan allá, porque la ley pide guardar las facturas. Para pedir que los quiten, habla con la pasarela. Si pagas una suscripción con tarjeta, cancélala antes en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros.',
+    accountDeleteConfirmLabel: 'Para confirmar, escribe ELIMINAR',
+    accountDeleteWord: 'ELIMINAR',
+    accountDeleteAction: 'Eliminar mi cuenta para siempre',
     cancel: 'Cancelar',
     deleted: 'Tus datos se borraron.',
     subscriptionTitle: 'Suscripción',
@@ -376,8 +433,22 @@ export const featureText = {
         slow: 'Tu pago sigue sin confirmarse. Puede tardar unos minutos. Si pasa más tiempo, escribe al equipo.',
         canceled: 'Cancelaste el pago. No se cobró nada.',
       },
-      cancelNote:
-        'Cancelar desde la app llega con la gestión de pagos. Mientras tanto, pídelo al equipo de Studiare por el medio donde te dieron acceso.',
+      cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
+      portal: {
+        title: 'Administrar suscripción',
+        description:
+          'Se abre el portal seguro de Stripe, donde puedes cancelar tu suscripción, cambiar tu tarjeta y ver tus facturas. Si cancelas, tu plan cambia cuando Stripe nos avise.',
+        go: 'Abrir el portal',
+        opening: 'Abriendo el portal…',
+        errors: {
+          no_customer:
+            'No encontramos una suscripción con Stripe en tu cuenta. Si pagaste con Mercado Pago, tu plan no se renueva solo y termina en la fecha indicada. Si es un mes gratis por referido, termina solo.',
+          not_configured:
+            'La administración de suscripciones todavía no está activada. Escribe al equipo de Studiare.',
+          unsafe_url: 'Stripe mandó una dirección que no reconocemos. No la abrimos.',
+          failed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
+        },
+      },
       refresh: 'Revisar mi plan',
     },
     current: (plan: string) => `Tu plan actual es ${plan}.`,

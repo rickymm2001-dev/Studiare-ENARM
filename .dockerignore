@@ -1,0 +1,13 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+content-drafts
+docs
+.git
+.github
+**/.env*
+server/.env.local
+server/ai-config.local.json
+server/.ai-ledger.json
