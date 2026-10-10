@@ -12,7 +12,8 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
-- Fase H programada (D-108 y D-109). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
+- Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
+- Fase H en main (D-108 y D-109, PR 27). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
 - Fase G en main (D-103 a D-107, PR 26). Proxy de IA alojado, textos legales y configuración del admin en el servidor. Ver su sección
 - Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
 - Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
@@ -30,6 +31,23 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase I. Pendientes de programación sin Ricardo (D-110)
+
+Nace de la instrucción de Ricardo de seguir con lo que quede pendiente de programación. Se tomaron de IDEAS.md los que no dependen de sus cuentas ni de sus decisiones. El banco en la nube no se tocó porque espera su respuesta, ver docs/BANCO_EN_LA_NUBE.md.
+
+### Bloques
+- [x] I1. Practicar de nuevo lo fallado en un examen. Tarjeta en los resultados que abre una práctica con las preguntas falladas, respetando el límite diario del plan Gratis. startPracticeWithQuestions en src/features/simulator/practiceStart.ts, con pruebas unitarias y en el e2e del examen
+- [x] I2. Aviso al ganar una insignia. Franja con celebración, enlace a Logros y cierre solo, que recuerda en el navegador qué niveles ya vio. La lógica de qué es nuevo es pura y vive en src/engines/rewards.ts con prueba de propiedades. El confeti ya no falla cuando el navegador no da lienzo
+- [x] I3. Aviso de presupuesto de IA en la pantalla de costos del admin. Alerta si se llenó, aviso desde el 80%
+- [x] I4. Prueba de punta a punta de apuntes sin el parpadeo que la hacía fallar una de cada cuatro veces, también en main
+
+### Cierre de 15.1
+- Paso 1. Typecheck, lint y 2,644 pruebas unitarias con cobertura de líneas de 86.8% pasan. Las 10 suites SQL no cambiaron. JavaScript inicial en 282.5 KB de 300
+- Paso 2. e2e completo, 218 pruebas. En la última corrida completa pasaron 217 y falló la de apuntes por un parpadeo que ya existía en main, que se corrigió y pasa 14 de 14
+- Paso 3. Los cambios son de cliente y no tocan permisos, dinero ni la base, así que no hubo revisión independiente
+- Paso 4. Este archivo, docs/informe-de-pruebas.md, IDEAS.md y DECISIONES.md (D-110) al día
+- Paso 5. Commit, push y PR a main
 
 ## Fase H. Usuarios reales, roles y auditoría funcional (D-108 y D-109)
 

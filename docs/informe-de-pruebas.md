@@ -1,12 +1,12 @@
 # Informe de pruebas
 
-Fase F, sección 17 de la especificación, actualizado al cierre de la Fase H. Reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA con su costo. Fecha de esta versión, 2026-10-10. Los números salieron de correr las pruebas en esta rama, no de memoria.
+Fase F, sección 17 de la especificación, actualizado al cierre de la Fase I. Reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA con su costo. Fecha de esta versión, 2026-10-10. Los números salieron de correr las pruebas en esta rama, no de memoria.
 
 ## Resumen
 
 | Revisión | Resultado |
 |---|---|
-| Pruebas unitarias y de integración (Vitest) | 2,626 pasan y 2 se omiten a propósito, en 263 archivos |
+| Pruebas unitarias y de integración (Vitest) | 2,644 pasan y 2 se omiten a propósito, en 266 archivos |
 | Pruebas de punta a punta (Playwright, teléfono y escritorio) | 218 pasan, 109 por cada tamaño de pantalla |
 | Auditoría funcional por recorrido (npm run audit:ui) | 10 recorridos de 32 pantallas, 10 flujos con interrupciones y la prueba de nube caída, todos sin hallazgos. Ver docs/auditoria-2026-10-10 |
 | Pruebas del esquema de Supabase contra Postgres local | Pasan las diez suites, con la última migración corrida dos veces |
@@ -23,7 +23,7 @@ Medida con npm run check, que corre las pruebas con cobertura de v8.
 
 | Medida | Resultado |
 |---|---|
-| Líneas | 86.7% |
+| Líneas | 86.8% |
 | Instrucciones | 86.0% |
 | Funciones | 79.7% |
 | Ramas | 78.9% |
@@ -64,6 +64,16 @@ Corre con npm run test:sql contra un Postgres 16 temporal. Diez suites.
 - npm run audit:high sin vulnerabilidades, con un trabajo propio en el CI
 - Revisión contra OWASP ASVS 5.0 en docs/asvs.md
 - Revisión independiente de un subagente que no escribió el código, sobre la privacidad y la Fase F. Encontró seis puntos importantes, todos corregidos, y ninguno crítico. Ver D-101
+
+## Fase I
+
+Pruebas nuevas de esta fase, además de las que ya había.
+
+- Practicar lo fallado. Armar la práctica con las preguntas dadas y en su orden, no hacer nada con una lista vacía y no armarla si la bitácora falla. El e2e del examen empieza la práctica desde los resultados con el límite del plan Gratis
+- Aviso de insignias. Qué niveles son nuevos, con prueba de propiedades, y el componente completo. Avisa, deja constancia al cerrar, no avisa de golpe la primera vez en un dispositivo y no repite lo ya visto
+- Confeti. Con lienzo lo lanza, sin lienzo o si el navegador lanza al pedirlo no falla, y apagado en los ajustes ni lo pide
+- Presupuesto de IA. La alerta cuando se llenó, el aviso desde el 80% y que con margen no aparezca ninguno
+- Apuntes. La prueba de punta a punta esperaba al cursor con teclas rápidas y fallaba una de cada cuatro veces desde antes de esta fase. Ahora comprueba dónde está el cursor antes de borrar y pasa 14 de 14
 
 ## Fase H
 
