@@ -3,12 +3,13 @@
 // entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Son
 // cifras de este examen. No predicen el puntaje del ENARM y los patrones acumulados siguen
 // calibrando en Progreso.
-import { CheckCheck, CircleDashed, Clock, Flag, Layers, Target } from 'lucide-react';
+import { CheckCheck, CircleDashed, Clock, Flag, Layers, RotateCcw, Target } from 'lucide-react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router';
+import { Link, Navigate, useNavigate } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
+import { useLiveData } from '@/data/hooks';
 import { biasTaxonomy } from '@/demo/content';
 import type { ExamScore } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
@@ -19,9 +20,11 @@ import { DemoContentLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingNote, LoadingState } from '@/ui/states/states';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
+import { startPracticeWithQuestions } from '../simulator/practiceStart';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { formatClock } from './clock';
 import { ExamReview } from './ExamReview';
@@ -140,6 +143,7 @@ function ExamResults({ session }: { session: ReadySession }) {
         }}
       />
       <ErrorsCard state={state} score={score} sending={settings.errorsToReview} saving={saving} />
+      <RetryCard session={session} score={score} events={events} saving={saving} />
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-start">
         <BranchCard score={score} />
         <StructureCard score={score} />
@@ -283,6 +287,81 @@ function ErrorsCard({
           <Link to={screenPath('review')}>{text.reviewNow}</Link>
         </Button>
       ) : null}
+    </Card>
+  );
+}
+
+/**
+ * Volver a practicar lo que se falló, sin la respuesta anterior a la vista. Respeta el límite diario
+ * del plan Gratis, igual que la configuración del simulador
+ */
+function RetryCard({
+  session,
+  score,
+  events,
+  saving,
+}: {
+  session: ReadySession;
+  score: ExamScore;
+  events: Parameters<typeof dailyQuestions>[0]['events'] | undefined;
+  saving: boolean;
+}) {
+  const api = useDataApi();
+  const navigate = useNavigate();
+  const text = t.examResults;
+  const subscription = useLiveData(
+    () => api.repos.subscriptions.get(session.user.id).then((value) => value ?? null),
+    [api.repos, session.user.id],
+  );
+  const [starting, setStarting] = useState(false);
+  if (score.missedIds.length === 0 || events === undefined || subscription === undefined) {
+    return null;
+  }
+  const { left } = dailyQuestions({
+    events,
+    subscription,
+    timeZone: session.user.timeZone,
+    now: new Date(),
+  });
+  const count = Math.min(score.missedIds.length, left ?? Number.POSITIVE_INFINITY);
+  const start = () => {
+    setStarting(true);
+    void startPracticeWithQuestions(
+      api,
+      session.user,
+      score.missedIds.slice(0, count),
+      'exam_missed',
+    ).then(
+      (started) => {
+        if (started) void navigate(screenPath('question'));
+        else setStarting(false);
+      },
+      () => {
+        setStarting(false);
+      },
+    );
+  };
+  return (
+    <Card aria-labelledby="examen-reintentar">
+      <CardHeader>
+        <CardTitle id="examen-reintentar" className="flex items-center gap-2">
+          <RotateCcw aria-hidden className="size-5 text-primary" />
+          {text.retryTitle}
+        </CardTitle>
+        <CardDescription>{text.retryBody}</CardDescription>
+      </CardHeader>
+      {count === 0 ? (
+        <p className="text-sm text-fg-muted">{text.retryNoLeft}</p>
+      ) : (
+        <>
+          {count < score.missedIds.length ? (
+            <p className="mb-2 text-sm text-fg-muted">{text.retryLimited(count)}</p>
+          ) : null}
+          <Button className="self-start" disabled={saving || starting} onClick={start}>
+            {text.retryButton(count)}
+          </Button>
+        </>
+      )}
     </Card>
   );
 }

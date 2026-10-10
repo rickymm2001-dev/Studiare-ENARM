@@ -2020,6 +2020,11 @@ export const featureText = {
       'La liga sube con el XP de la semana, de lunes a lunes a las 4 a. m. No da XP extra. Los umbrales son provisionales.',
     tiers: ['Bronce', 'Plata', 'Oro', 'Platino', 'Diamante'],
     tierOf: (family: string, tier: string) => `${family}, nivel ${tier}`,
+    toast: {
+      title: (n: number) => (n === 1 ? 'Ganaste una insignia' : `Ganaste ${n} insignias`),
+      see: 'Ver logros',
+      dismiss: 'Cerrar el aviso',
+    },
     earnedOn: (day: string) => `Ganada el ${day}`,
     locked: 'Por ganar',
     nextTier: (current: number, target: number) => `Siguiente nivel. ${current} de ${target}`,

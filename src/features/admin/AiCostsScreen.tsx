@@ -117,6 +117,10 @@ export function AiCostsScreen() {
               max={admin.usage.limits.dailyBudgetUsd}
               label={text.today.spentLabel}
             />
+            <BudgetNotice
+              spent={admin.usage.usage.spentUsd}
+              budget={admin.usage.limits.dailyBudgetUsd}
+            />
             <p className="text-sm text-fg-muted">
               {text.today.calls(admin.usage.usage.calls, admin.usage.usage.students)}
             </p>
@@ -376,4 +380,26 @@ export function AiCostsScreen() {
       )}
     </>
   );
+}
+
+/** Avisa cuando el presupuesto diario se llenó, que es cuando la IA se pausa, y desde el 80% que ya casi */
+export function BudgetNotice({ spent, budget }: { spent: number; budget: number }) {
+  const text = adminText.adminCosts.today;
+  if (budget <= 0) return null;
+  const share = spent / budget;
+  if (share >= 1) {
+    return (
+      <p role="alert" className="rounded-md bg-danger-soft p-3 text-sm font-medium text-danger">
+        {text.paused}
+      </p>
+    );
+  }
+  if (share >= 0.8) {
+    return (
+      <p role="status" className="rounded-md bg-warning-soft p-3 text-sm font-medium text-warning">
+        {text.nearLimit(Math.floor(share * 100))}
+      </p>
+    );
+  }
+  return null;
 }

@@ -5,13 +5,16 @@ import { LEAGUES, MISSION_TARGETS } from '@/config/rewards';
 import { createEvent } from '@/data/events/createEvent';
 import type { AppEvent, EventPayload, EventType } from '@/data/schemas/events';
 import {
+  badgeTierKey,
   badgesFor,
   buildRewards,
   dayTotals,
+  earnedBadgeKeys,
   isStudyDay,
   leagueFor,
   leagueOfXp,
   missionsFor,
+  unseenBadgeTiers,
 } from './rewards';
 
 const nextId = monotonicFactory();
@@ -320,6 +323,71 @@ describe('insignias', () => {
       { numRuns: 60 },
     );
   }, 30_000);
+});
+
+describe('avisos de insignias', () => {
+  const reviewsOf = (count: number) =>
+    badgesFor(dayTotals(Array.from({ length: count }, () => card(at('2026-10-06')))), 0);
+
+  it('sin actividad no hay niveles ganados ni nada que avisar', () => {
+    const badges = reviewsOf(0);
+    expect(earnedBadgeKeys(badges)).toEqual([]);
+    expect(unseenBadgeTiers(badges, new Set())).toEqual([]);
+  });
+
+  it('cada nivel ganado tiene su llave y las llaves no se repiten', () => {
+    const keys = earnedBadgeKeys(reviewsOf(1200));
+    expect(keys).toContain(badgeTierKey('reviews', 1));
+    expect(keys).toContain(badgeTierKey('reviews', 2));
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('avisa solo de los niveles ganados que no se han visto', () => {
+    const badges = reviewsOf(1200);
+    const seen = new Set([badgeTierKey('reviews', 1)]);
+    expect(unseenBadgeTiers(badges, seen)).toEqual([{ family: 'reviews', tier: 2 }]);
+  });
+
+  it('cuando ya vio todo lo ganado no hay aviso, y un nivel nuevo sí lo provoca', () => {
+    const before = reviewsOf(120);
+    const seen = new Set(earnedBadgeKeys(before));
+    expect(unseenBadgeTiers(before, seen)).toEqual([]);
+    expect(unseenBadgeTiers(reviewsOf(1200), seen)).toEqual([{ family: 'reviews', tier: 2 }]);
+  });
+
+  it('la racha también avisa, aunque no tenga un día de logro', () => {
+    const badges = badgesFor(dayTotals([]), 7);
+    const unseen = unseenBadgeTiers(badges, new Set());
+    expect(unseen.some((item) => item.family === 'streak')).toBe(true);
+  });
+
+  it('propiedad. lo no visto nunca incluye algo ya visto y lo visto cubre todo lo ganado', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: 12_000 }),
+        fc.integer({ min: 0, max: 400 }),
+        fc.integer({ min: 0, max: 5 }),
+        (reviews, streak, keep) => {
+          const badges = badgesFor(
+            dayTotals(
+              Array.from({ length: Math.min(reviews, 1500) }, () => card(at('2026-10-06'))),
+            ),
+            streak,
+          );
+          const all = earnedBadgeKeys(badges);
+          const seen = new Set(all.slice(0, keep));
+          const unseen = unseenBadgeTiers(badges, seen).map((item) =>
+            badgeTierKey(item.family, item.tier),
+          );
+          return (
+            unseen.every((key) => !seen.has(key)) &&
+            [...seen, ...unseen].sort().join() === [...all].sort().join()
+          );
+        },
+      ),
+      { numRuns: 40 },
+    );
+  });
 });
 
 describe('liga', () => {

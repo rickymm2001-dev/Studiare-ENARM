@@ -57,8 +57,19 @@ test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', asyn
   await page.keyboard.type(' inhalado');
   await expect(page.getByText(t.outlines.preview.count(4))).toBeVisible();
   // Quitar los dos puntos del primer renglón deja esa línea sin marca
-  await editorOf(page).getByText('Obstrucción reversible').click();
-  await page.keyboard.press('Home');
+  // El cursor tiene que quedar al principio de esa línea antes de borrar. Sin esperarlo, los Delete a
+  // veces caían al final de la línea de abajo y se llevaban su salto de línea. Si el clic no llegó
+  // a tiempo, se repite
+  const caret = () =>
+    page.evaluate(() => {
+      const selection = window.getSelection();
+      return `${selection?.anchorOffset ?? -1}|${selection?.anchorNode?.textContent ?? ''}`;
+    });
+  await expect(async () => {
+    await editorOf(page).getByText('Obstrucción reversible').click();
+    await page.keyboard.press('Home');
+    expect(await caret()).toMatch(/^0\|Asma /);
+  }).toPass({ timeout: 15_000 });
   for (const key of Array.from('Asma ::', () => 'Delete')) await page.keyboard.press(key);
   await expect(page.getByText(t.outlines.preview.count(2))).toBeVisible();
   await saved(page);

@@ -39,7 +39,7 @@ Cada una trae mi recomendación. Si Ricardo no responde distinto, esto es lo que
 
 Cada paso queda terminado con sus pruebas antes de empezar el siguiente.
 
-1. Migración novena. question_catalog, la columna y tabla que faltan para opciones y etiquetas de médicos, fetch_questions con sus topes, una bitácora de lecturas sin identidad del alumno para medir uso y el retiro del select directo. Pruebas SQL con un alumno Gratis, uno de pago, un médico, un admin y alguien sin sesión. Se prueba que el Gratis no pase de su tope, que el de pago no pase del suyo, que nadie lea borradores y que un lote repetido no duplique
+1. Migración décima, porque la novena ya es la de usuarios del admin. question_catalog, la columna y tabla que faltan para opciones y etiquetas de médicos, fetch_questions con sus topes, una bitácora de lecturas sin identidad del alumno para medir uso y el retiro del select directo. Pruebas SQL con un alumno Gratis, uno de pago, un médico, un admin y alguien sin sesión. Se prueba que el Gratis no pase de su tope, que el de pago no pase del suyo, que nadie lea borradores y que un lote repetido no duplique
 2. Fuente de preguntas en la app. Una interfaz QuestionSource con dos implementaciones, la local que existe y la de la nube, y los motores sin cambios, porque ya reciben datos y no saben de dónde vienen. Pruebas con una nube falsa, igual que las del dispositivo único
 3. Descarga incremental del catálogo. Solo lo que cambió desde la última vez, con versión del catálogo
 4. Publicación desde la pantalla 22. El importador gana un destino nube para el admin

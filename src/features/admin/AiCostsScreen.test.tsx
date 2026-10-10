@@ -208,6 +208,54 @@ describe('costos de IA (pantalla 23)', () => {
       ),
     ).toBeVisible();
     expect(within(today).getByText(adminText.adminCosts.today.calls(7, 2))).toBeVisible();
+    // Con 1.25 de 5 todavía hay margen y no hay aviso
+    expect(within(today).queryByText(adminText.adminCosts.today.paused)).toBeNull();
+    expect(within(today).queryByText(adminText.adminCosts.today.nearLimit(25))).toBeNull();
+  });
+
+  it.each([
+    [5, 'paused'],
+    [4.2, 'nearLimit'],
+  ] as const)('con gasto de %s de 5 avisa que la IA %s', async (spentUsd, expected) => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) => {
+        if (url.endsWith('/api/health')) {
+          return Promise.resolve(Response.json({ status: 'ok', mode: 'real', version: 1 }));
+        }
+        if (url.endsWith('/api/ai/usage')) {
+          return Promise.resolve(
+            Response.json({
+              mode: 'real',
+              limits: {
+                perStudentPerDay: {
+                  forgetting: 12,
+                  weekly_report: 4,
+                  flashcards: 240,
+                  bias_tips: 12,
+                  restructure: 20,
+                },
+                dailyBudgetUsd: 5,
+                timeoutMs: 30000,
+                maxRetries: 2,
+              },
+              usage: { day: '2026-10-08', calls: 7, students: 2, spentUsd, byEngine: {} },
+            }),
+          );
+        }
+        return Promise.resolve(new Response('', { status: 404 }));
+      }),
+    );
+    await open([call()]);
+    const today = await screen.findByRole('region', { name: adminText.adminCosts.today.title });
+    const text = adminText.adminCosts.today;
+    const notice = await within(today).findByText(
+      expected === 'paused' ? text.paused : text.nearLimit(84),
+      undefined,
+      WAIT,
+    );
+    expect(notice).toBeVisible();
+    expect(notice).toHaveAttribute('role', expected === 'paused' ? 'alert' : 'status');
   });
 
   it('sin proxy dice que la bitácora es la de este navegador', async () => {

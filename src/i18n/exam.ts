@@ -197,6 +197,13 @@ export const examText = {
       'Tus errores no pasan al repaso porque lo apagaste en tus ajustes. Puedes volver a encenderlo en Cuenta.',
     errorsNone: 'No tuviste errores que mandar al repaso.',
     reviewNow: 'Repasar ahora',
+    retryTitle: 'Vuelve a intentarlas',
+    retryBody:
+      'Practica de nuevo lo que fallaste, sin ver tu respuesta anterior. Si ahora las contestas bien, ya empezaste a aprenderlas.',
+    retryButton: (n: number) => `Practicar ${plural(n, 'pregunta fallada', 'preguntas falladas')}`,
+    retryLimited: (n: number) =>
+      `En el plan Gratis hoy te alcanza para ${plural(n, 'pregunta', 'preguntas')}, así que la práctica será de ${n}.`,
+    retryNoLeft: 'Llegaste al límite de preguntas de hoy del plan Gratis.',
     readTitle: 'Cómo leer este resultado',
     readBody:
       'Un examen difícil no es un veredicto. En el ENARM de verdad habrá preguntas que no sabes. Lo que se entrena aquí es qué haces con ellas, descartar lo falso, elegir lo más probable y seguir avanzando. Lo que fallaste ya es la lista de lo que más te conviene repasar.',

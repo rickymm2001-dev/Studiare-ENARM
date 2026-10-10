@@ -159,6 +159,14 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
   // El último examen dice cuántas acertó del total y no cuántas contestó
   await expect(setup.getByText(t.exam.lastTitle)).toBeVisible();
   await expect(setup.getByText(t.exam.lastBody(QUESTIONS - 1 - missed, QUESTIONS))).toBeVisible();
+
+  // Practicar de nuevo lo fallado. Del límite del plan Gratis solo queda una pregunta de hoy
+  await page.goto(SCREENS.examResults.path);
+  const retry = page.getByRole('region', { name: t.examResults.retryTitle });
+  if (missed > 1) await expect(retry.getByText(t.examResults.retryLimited(1))).toBeVisible();
+  await retry.getByRole('button', { name: t.examResults.retryButton(1) }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.question.path}$`));
+  await expect(page.getByText(t.simulator.progress(1, 1), { exact: true })).toBeVisible();
 });
 
 test('con poco tiempo avisa y al acabarse cierra solo', async ({ page }) => {

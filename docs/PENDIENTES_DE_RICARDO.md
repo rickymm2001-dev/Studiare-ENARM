@@ -1,6 +1,6 @@
 # Lo que falta de Ricardo para que la plataforma funcione completa
 
-Escrito el 2026-10-10, al cerrar la Fase G. Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
+Escrito el 2026-10-10 y puesto al día al cerrar la Fase H. Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
 
 Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_role o secret), la contraseña de la base de datos ni claves secretas de Stripe, Mercado Pago o Anthropic por el chat. Esas viven solo en los secretos de cada servicio. A mí me sirven la dirección del proyecto y la llave pública (anon o publishable).
 
@@ -14,7 +14,7 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 ## 2. Supabase
 
 - Crear o confirmar el proyecto Studiare en supabase.com
-- Aplicar en el editor de SQL las migraciones que falten, en este orden. 20261002000001_platform, 20261007000001_single_device, 20261008000001_device_barrier, 20261008000002_sync, 20261008000003_payments_referrals, 20261009000001_privacy, 20261010000001_ai_hosted, 20261011000001_billing_portal y 20261012000001_client_errors. Cada una trae su guía paso a paso y su consulta de comprobación en docs/SUPABASE.md
+- Aplicar en el editor de SQL las migraciones que falten, en este orden. 20261002000001_platform, 20261007000001_single_device, 20261008000001_device_barrier, 20261008000002_sync, 20261008000003_payments_referrals, 20261009000001_privacy, 20261010000001_ai_hosted, 20261011000001_billing_portal, 20261012000001_client_errors y 20261013000001_admin_users. La última es la que hace que la pantalla Usuarios muestre las cuentas reales y que puedas nombrar médicos desde la app. Cada una trae su guía paso a paso y su consulta de comprobación en docs/SUPABASE.md
 - Pasarme la dirección del proyecto y la llave pública. Con eso pongo VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en las variables de GitHub, o las pones tú siguiendo docs/SUPABASE.md
 - Conectar un proveedor de correo propio en Authentication, SMTP Settings. El correo de fábrica de Supabase solo envía al equipo del proyecto y pocas veces por hora. Resend, Brevo o Amazon SES sirven
 - Para producción conviene el plan de pago de Supabase, que da respaldos y no pausa el proyecto por inactividad. Al escribir esto cuesta unos 25 dólares al mes. Verifícalo en su página de precios
@@ -75,7 +75,15 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 - Con los pagos de prueba hechos, reviso en los registros que los eventos se leyeron bien y corrijo lo que no
 - Con el banco aprobado, construyo los pasos de docs/BANCO_EN_LA_NUBE.md
 
-## Qué no está publicado
+## Tu cuenta de dueño
 
-- Todo lo de la Fase G (proxy alojado, textos legales, configuración del admin, portal de Stripe, reembolsos, HSTS y errores del navegador) está solo en la rama main-y84jz2. No está en main ni en la demo pública
-- Para publicarlo hace falta abrir un pull request y juntarlo a main. No lo hice porque no lo pediste
+- Después de aplicar las migraciones, entra una vez a la app con tu correo para que se cree tu cuenta
+- Márcala como dueña con el SQL del paso 3 de docs/SUPABASE.md. La app no puede asignar ese rol, a propósito
+- Desde ahí, en Usuarios, nombras médicos. Solo tú nombras admins. Cómo funcionan los roles está en docs/ROLES.md
+- Decide si prefieres tres roles (alumno, médico y admin general) o los cuatro de hoy. Hoy el dueño y el admin son niveles distintos, para que puedas delegar tareas de admin sin darle a nadie tu cuenta
+
+## Qué está publicado
+
+- La Fase G (PR 26) y la Fase H (PR 27) están juntadas en main. Eso incluye el proxy alojado, los textos legales, la configuración del admin, el portal de Stripe, los reembolsos, HSTS, los errores del navegador, la lista real de usuarios, el rol sin conexión y la auditoría
+- Nada de eso funciona contra servicios reales hasta que hagas lo de arriba. La demo pública sigue siendo la versión sin nube
+- Lo que no está construido a propósito es el banco en la nube, que espera tu respuesta a las decisiones 2, 3 y 4 de docs/BANCO_EN_LA_NUBE.md y un banco aprobado por médicos
