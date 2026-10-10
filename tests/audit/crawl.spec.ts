@@ -338,7 +338,7 @@ for (const role of ROLES) {
         stats.push(`${key}=${clicks}`);
       }
       const name = `${role}-${mode}-${info.project.name}`;
-      writeFileSync(join(OUT_DIR, `${name}.json`), JSON.stringify(findings, null, 2));
+      writeFileSync(join(OUT_DIR, `${name}.json`), `${JSON.stringify(findings, null, 2)}\n`);
       console.log(`RECORRIDO ${name} hallazgos ${findings.length}`);
       console.log(`  clics por pantalla ${stats.join(' ')}`);
       for (const finding of findings.slice(0, 60)) {
