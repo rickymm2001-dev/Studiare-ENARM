@@ -12,6 +12,7 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
+- Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema aplicado y tres funciones de pago desplegadas. Falta que pegue supabase/manual/ejecutar-en-sql-editor.sql y que ponga los secretos de Stripe. Ver su sección
 - Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
 - Fase H en main (D-108 y D-109, PR 27). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
 - Fase G en main (D-103 a D-107, PR 26). Proxy de IA alojado, textos legales y configuración del admin en el servidor. Ver su sección
@@ -31,6 +32,25 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase J. Proyecto real de Supabase (D-113)
+
+Nace de que Ricardo conectó su proyecto Studiare como conector y autorizó aplicar las migraciones 2 a 10. Todo lo hecho contra el proyecto real se hizo con ese conector, sin leer ni escribir ninguna llave secreta.
+
+### Bloques
+- [x] J1. Lectura del estado real. Solo estaba la primera migración, con 23 tablas y 2 usuarios, y ninguna función
+- [x] J2. Migraciones 2 a 10 aplicadas en orden y por trozos. Lo que tiene delete o drop quedó en supabase/manual/ejecutar-en-sql-editor.sql porque el conector pide una confirmación humana que una sesión en la nube no puede dar
+- [x] J3. Migración 11 (function_grants) con su prueba SQL. Cierra permisos que el chequeo de seguridad de Supabase marcó. Aplicada al proyecto real
+- [x] J4. Despliegue de create-checkout, create-portal-session y payment-webhook-stripe, con comprobación de que arrancan
+- [ ] J5. Que Ricardo pegue el archivo manual. Comprobación en docs/SUPABASE.md, sección Proyecto real conectado
+- [ ] J6. Secretos de Stripe y función de Mercado Pago, que esperan las cuentas de Ricardo
+
+### Cierre de 15.1
+- Paso 1. Las 11 suites SQL pasan en Postgres local, con la última migración y el archivo manual corridos dos veces. No hubo cambios de TypeScript
+- Paso 2. No aplica e2e, no cambió la app
+- Paso 3. Toca permisos y dinero, así que se revisó a mano cada función contra su migración antes de subirla. Se comprobó contra el proyecto real que los permisos quedaron como en las pruebas locales y que las funciones arrancan
+- Paso 4. Este archivo, DECISIONES.md (D-113), docs/SUPABASE.md y docs/PENDIENTES_DE_RICARDO.md al día
+- Paso 5. Commit, push y PR a main
 
 ## Fase I. Pendientes de programación sin Ricardo (D-110)
 

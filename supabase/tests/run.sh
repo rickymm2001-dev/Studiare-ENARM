@@ -21,6 +21,10 @@ for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
 # Las migraciones que siguen al freno son idempotentes. Se corre la última otra vez para comprobarlo
 psql_run -f "$(ls "$here"/../migrations/*.sql | tail -1)"
+# Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
+# y repetirse sin daño sobre una base ya migrada
+psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
+psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
 psql_run -f "$here/rls_test.sql"
 psql_run -f "$here/device_barrier_test.sql"
 psql_run -f "$here/sync_test.sql"
@@ -31,3 +35,4 @@ psql_run -f "$here/settings_test.sql"
 psql_run -f "$here/billing_portal_test.sql"
 psql_run -f "$here/client_errors_test.sql"
 psql_run -f "$here/admin_users_test.sql"
+psql_run -f "$here/function_grants_test.sql"
