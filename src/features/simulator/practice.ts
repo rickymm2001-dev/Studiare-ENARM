@@ -1,6 +1,10 @@
 // Práctica en curso del simulador. Vive en memoria mientras el alumno pasa de la pregunta a la
-// retroalimentación y al resumen (pantallas 4, 5 y 6).
+// retroalimentación y al resumen (pantallas 4, 5 y 6). Además se guarda en la sesión de la pestaña, para
+// que una recarga o un cierre por accidente a media práctica retome donde iba. Lo guardado son solo
+// identificadores de preguntas y de opciones, nunca nombres, y desaparece al cerrar la pestaña.
 import { create } from 'zustand';
+import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
+import { z } from 'zod';
 
 export type McqConfidence = 'guessed' | 'unsure' | 'sure';
 
@@ -40,21 +44,92 @@ export interface PracticeState {
   set: (patch: Partial<Omit<PracticeState, 'set'>>) => void;
 }
 
-export const usePractice = create<PracticeState>()((set) => ({
-  sessionId: null,
-  userId: null,
-  questionIds: [],
-  index: 0,
-  answers: [],
-  startedAt: 0,
-  ended: false,
-  kind: 'practice',
-  duelId: null,
-  targetTags: [],
-  set: (patch) => {
-    set(patch);
+const answerSchema = z.object({
+  questionVersionId: z.string(),
+  optionVersionId: z.string(),
+  correct: z.boolean(),
+  confidence: z.enum(['guessed', 'unsure', 'sure']).nullable(),
+  msToAnswer: z.number(),
+  xp: z.number(),
+  shownOptionIds: z.array(z.string()),
+  eliminatedOptionIds: z.array(z.string()),
+  correctPosition: z.number(),
+  sentToReview: z.boolean(),
+});
+
+const savedPracticeSchema = z.object({
+  sessionId: z.string().nullable(),
+  userId: z.string().nullable(),
+  questionIds: z.array(z.string()),
+  index: z.number().int().min(0),
+  answers: z.array(answerSchema),
+  startedAt: z.number(),
+  ended: z.boolean(),
+  kind: z.enum(['practice', 'challenge']),
+  duelId: z.string().nullable(),
+  targetTags: z.array(z.string()),
+});
+
+export const PRACTICE_STORAGE_KEY = 'enarm.practice.v1';
+
+/**
+ * La sesión de la pestaña puede no estar disponible (modo privado, datos del sitio bloqueados) o llenarse.
+ * En ese caso guardar no hace nada y la práctica sigue viviendo en memoria, en vez de romper la pregunta
+ */
+const tabSession: StateStorage = {
+  getItem: (name) => {
+    try {
+      return sessionStorage.getItem(name);
+    } catch {
+      return null;
+    }
   },
-}));
+  setItem: (name, value) => {
+    try {
+      sessionStorage.setItem(name, value);
+    } catch {
+      // Sin espacio o sin acceso. Se sigue en memoria
+    }
+  },
+  removeItem: (name) => {
+    try {
+      sessionStorage.removeItem(name);
+    } catch {
+      // Igual que arriba
+    }
+  },
+};
+
+export const usePractice = create<PracticeState>()(
+  persist(
+    (set) => ({
+      sessionId: null,
+      userId: null,
+      questionIds: [],
+      index: 0,
+      answers: [],
+      startedAt: 0,
+      ended: false,
+      kind: 'practice',
+      duelId: null,
+      targetTags: [],
+      set: (patch) => {
+        set(patch);
+      },
+    }),
+    {
+      name: PRACTICE_STORAGE_KEY,
+      storage: createJSONStorage(() => tabSession),
+      version: 1,
+      partialize: ({ set: _set, ...saved }) => saved,
+      // Lo guardado se revisa antes de usarlo. Si no cuadra con la forma esperada se descarta entero
+      merge: (saved, current) => {
+        const parsed = savedPracticeSchema.safeParse(saved);
+        return parsed.success ? { ...current, ...parsed.data } : current;
+      },
+    },
+  ),
+);
 
 export function formatDuration(ms: number): string {
   const total = Math.max(0, Math.round(ms / 1000));

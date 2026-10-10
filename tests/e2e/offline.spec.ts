@@ -57,3 +57,34 @@ test('sin conexión abre pantallas que nunca se habían visitado y la IA avisa q
   await context.setOffline(false);
   await expect(page.getByText(t.offlineBanner)).toHaveCount(0);
 });
+
+test('en la primera visita, sin recargar, el service worker toma el control y las pantallas nuevas abren sin red', async ({
+  page,
+  context,
+}) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  // Sin recargar. Antes de clientsClaim, la primera visita quedaba sin control y cortar la red
+  // dejaba fuera todo lo que aún no se había visitado
+  await expect
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
+    .toBe(true);
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const precache = (await caches.keys()).find((name) => name.includes('precache'));
+        if (!precache) return 0;
+        return (await (await caches.open(precache)).keys()).length;
+      }),
+    )
+    .toBeGreaterThan(40);
+
+  await context.setOffline(true);
+  // Navegación dentro de la app, que baja el archivo de la pantalla con una importación diferida
+  await page
+    .getByRole('navigation', { name: t.nav.label })
+    .getByRole('link', { name: t.navItems.progress })
+    .click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
+  await context.setOffline(false);
+});

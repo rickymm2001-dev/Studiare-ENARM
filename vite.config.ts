@@ -143,6 +143,11 @@ export default defineConfig(({ mode }) => ({
         // Las llamadas al proxy de IA nunca se sirven desde caché
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
+        // Sin esto, el service worker de la primera visita no controla la página que ya estaba abierta
+        // y las pantallas que no se habían visitado fallan si se pierde la red antes de recargar. Con
+        // el aviso de versión nueva (registerType prompt) no hay recarga sorpresa, porque ese aviso solo
+        // reacciona a las actualizaciones y no a la primera instalación
+        clientsClaim: true,
       },
       devOptions: { enabled: false },
     }),

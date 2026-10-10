@@ -128,3 +128,36 @@ test('la práctica se contesta con el teclado y la retroalimentación llega al f
   await expect(first.getByText(t.simulator.explanation)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
+
+test('recargar a media práctica la retoma donde iba y no pierde lo contestado', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+  await startPractice(page);
+  for (const number of [1, 2]) {
+    await expect(page.getByText(t.simulator.progress(number, 5), { exact: true })).toBeVisible();
+    await page.getByRole('radio').first().check();
+    await page.getByRole('button', { name: t.simulator.answerAndNext }).click();
+  }
+  await expect(page.getByText(t.simulator.progress(3, 5), { exact: true })).toBeVisible();
+
+  await page.reload();
+  // Sigue en la pregunta 3 y no pide empezar de nuevo
+  await expect(page.getByText(t.simulator.progress(3, 5), { exact: true })).toBeVisible();
+  await expect(page.getByText(t.simulator.noActive)).toHaveCount(0);
+
+  // Y se puede terminar con el resumen de las cinco
+  await page.getByRole('radio').first().check();
+  await page.getByRole('button', { name: t.simulator.answerAndNext }).click();
+  await expect(page.getByText(t.simulator.progress(4, 5), { exact: true })).toBeVisible();
+  await page.getByRole('radio').first().check();
+  await page.getByRole('button', { name: t.simulator.answerAndNext }).click();
+  await expect(page.getByText(t.simulator.progress(5, 5), { exact: true })).toBeVisible();
+  await page.getByRole('radio').first().check();
+  await page.getByRole('button', { name: t.simulator.answerAndFinish }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
+  await expect(
+    page.getByRole('region', { name: t.simulator.review }).getByRole('listitem'),
+  ).toHaveCount(5);
+});

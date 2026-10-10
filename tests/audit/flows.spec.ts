@@ -67,6 +67,10 @@ test('sin conexión se puede terminar una práctica y ver su resumen', async ({ 
   test.setTimeout(240_000);
   await signUp(page);
   await startPractice(page, 5);
+  // Un alumno que abre la app por primera vez ya tiene el service worker al empezar a practicar
+  await expect
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
+    .toBe(true);
   await context.setOffline(true);
   await expect(page.getByText(t.offlineBanner)).toBeVisible();
   for (let number = 1; number <= 5; number += 1) await answerPracticeQuestion(page, number, 5);
