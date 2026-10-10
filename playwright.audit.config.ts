@@ -50,7 +50,10 @@ export default defineConfig({
       command:
         process.env.AUDIT_DEV === '1'
           ? 'npx vite --host 127.0.0.1 --port 4173 --strictPort'
-          : 'npm run build && npm run preview',
+          : process.env.AUDIT_CLOUD === 'down'
+            ? // La nube configurada pero que no responde. .invalid nunca resuelve, así que falla de inmediato
+              'VITE_SUPABASE_URL=https://nube-inalcanzable.invalid VITE_SUPABASE_ANON_KEY=sb_publishable_auditoria npm run build && npm run preview'
+            : 'npm run build && npm run preview',
       url: PREVIEW_URL,
       reuseExistingServer: false,
       timeout: 180_000,

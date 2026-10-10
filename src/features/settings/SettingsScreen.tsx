@@ -109,10 +109,7 @@ export function SettingsScreen() {
         ) : null}
 
         {/* En computadora las tarjetas van en dos columnas (D-057) */}
-        <Tabs.Content
-          value="account"
-          className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2"
-        >
+        <Tabs.Content value="account" className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
           <Card>
             <RadioCards
               legend={t.database.legend}

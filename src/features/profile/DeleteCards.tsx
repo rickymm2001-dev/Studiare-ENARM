@@ -192,6 +192,7 @@ export function DeleteAccountCard({ loadCloud, wipeLocal, onDone }: DeleteProps)
       title={t.settings.accountDeleteTitle}
       description={t.settings.accountDeleteDescription}
     >
+      <p className="text-sm text-fg-muted">{t.settings.accountDeleteExportHint}</p>
       <p className="text-sm text-fg-muted">{t.settings.accountDeletePayments}</p>
       <form
         className="flex flex-col gap-3"

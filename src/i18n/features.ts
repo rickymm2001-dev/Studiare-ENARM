@@ -393,6 +393,8 @@ export const featureText = {
       'Quita tu cuenta en la nube con tu correo, tu bitácora, tu plan, tus pagos en Studiare y tus referidos, y borra los datos de este dispositivo. Tu correo queda libre para registrarte otra vez. No se puede deshacer.',
     accountDeletePayments:
       'Los cobros que ya hizo la pasarela de pagos se conservan allá, porque la ley pide guardar las facturas. Para pedir que los quiten, habla con la pasarela. Si pagas una suscripción con tarjeta, cancélala antes en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros.',
+    accountDeleteExportHint:
+      'Antes de eliminar, descarga tus datos con el botón de arriba. Después de eliminar no se pueden recuperar.',
     accountDeleteConfirmLabel: 'Para confirmar, escribe ELIMINAR',
     accountDeleteWord: 'ELIMINAR',
     accountDeleteAction: 'Eliminar mi cuenta para siempre',

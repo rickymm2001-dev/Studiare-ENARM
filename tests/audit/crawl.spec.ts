@@ -173,18 +173,21 @@ async function checkKeyboard(page: Page, findings: Finding[], where: string) {
     const info = await page.evaluate(() => {
       const element = document.activeElement;
       if (!element || element === document.body) {
-        return { id: 'body', visible: true, outline: true };
+        return { id: 'body', visible: true, outline: true, parts: 3 };
       }
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
       const outline = style.outlineStyle !== 'none' || style.boxShadow !== 'none';
       const label = (element.textContent || '').trim().slice(0, 30);
       const id = `${element.tagName}|${label}|${Math.round(rect.top)}|${Math.round(rect.left)}`;
-      return { id, visible: rect.width > 0 && rect.height > 0, outline };
+      // Un campo de fecha o de hora tiene varias paradas del teclado adentro, una por parte
+      const type = element.getAttribute('type') ?? '';
+      const parts = ['date', 'time', 'datetime-local', 'month', 'week'].includes(type) ? 6 : 3;
+      return { id, visible: rect.width > 0 && rect.height > 0, outline, parts };
     });
     if (info.id === previous) {
       stuck += 1;
-      if (stuck >= 3) {
+      if (stuck >= info.parts) {
         findings.push({
           where,
           kind: 'trampa de teclado',
