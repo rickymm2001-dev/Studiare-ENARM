@@ -6,6 +6,7 @@ import {
   customerOfUserViaRest,
   founderSeatsLeftViaRest,
   linkCustomerViaRest,
+  subscriptionOfUserViaRest,
   userOfCustomerViaRest,
 } from './supabase.ts';
 
@@ -175,5 +176,66 @@ describe('clientes de Stripe por REST', () => {
       linkCustomerViaRest(env, { userId: 'u1', customerId: 'c' }, broken.fetchImpl),
     ).rejects.toThrow('500');
     await expect(customerOfUserViaRest(env, 'u1', broken.fetchImpl)).rejects.toThrow('500');
+  });
+});
+
+describe('suscripción del alumno por REST', () => {
+  it('lee plan, estado y fin del periodo con la llave de servicio', async () => {
+    const { calls, fetchImpl } = recorder(
+      () =>
+        new Response(
+          JSON.stringify([
+            {
+              plan: 'annual',
+              status: 'active',
+              current_period_end: '2027-10-11T19:03:51.46643+00:00',
+            },
+          ]),
+        ),
+    );
+    expect(await subscriptionOfUserViaRest(env, 'u1', fetchImpl)).toEqual({
+      plan: 'annual',
+      status: 'active',
+      current_period_end: '2027-10-11T19:03:51.46643+00:00',
+    });
+    const url = new URL(calls[0]?.url ?? '');
+    expect(url.pathname).toBe('/rest/v1/subscriptions');
+    expect(url.searchParams.get('user_id')).toBe('eq.u1');
+    expect(url.searchParams.get('select')).toBe('plan,status,current_period_end');
+    expect(new Headers(calls[0]?.init?.headers).get('authorization')).toBe(
+      'Bearer servicio-de-prueba',
+    );
+  });
+
+  it('sin fila devuelve null y sin fecha la deja en null', async () => {
+    expect(
+      await subscriptionOfUserViaRest(env, 'u1', recorder(() => new Response('[]')).fetchImpl),
+    ).toBeNull();
+    expect(
+      await subscriptionOfUserViaRest(
+        env,
+        'u1',
+        recorder(
+          () =>
+            new Response(
+              JSON.stringify([{ plan: 'monthly', status: 'active', current_period_end: null }]),
+            ),
+        ).fetchImpl,
+      ),
+    ).toEqual({ plan: 'monthly', status: 'active', current_period_end: null });
+  });
+
+  it('si la base falla o responde algo raro lanza, para no abrir el pago a ciegas', async () => {
+    const cases = [
+      new Response('x', { status: 500 }),
+      new Response('{}'),
+      new Response('[{"plan":"annual"}]'),
+      new Response('[null]'),
+    ];
+    for (const reply of cases) {
+      await expect(
+        subscriptionOfUserViaRest(env, 'u1', recorder(() => reply).fetchImpl),
+      ).rejects.toThrow();
+    }
   });
 });

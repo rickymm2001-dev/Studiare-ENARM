@@ -428,6 +428,8 @@ export const featureText = {
       errors: {
         founder_full:
           'Los lugares del precio Fundador ya se llenaron. Puedes continuar con el precio regular.',
+        already_subscribed:
+          'Ya tienes un plan pagado vigente. Para cambiar de plan, cancela el tuyo en Administrar suscripción y contrata el nuevo cuando termine tu periodo.',
         not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
         unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
         failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
@@ -439,6 +441,9 @@ export const featureText = {
         canceled: 'Cancelaste el pago. No se cobró nada.',
       },
       cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
+      // Con un plan pagado vigente no se ofrece otro pago, que sería un segundo cobro (D-116)
+      changePlanNote:
+        'Para cambiarte a este plan, cancela el tuyo en Administrar suscripción y contrátalo cuando termine tu periodo.',
       portal: {
         title: 'Administrar suscripción',
         description:
