@@ -47,7 +47,7 @@ Sesión del 2026-10-11. Este bloque quedó a medias porque se acababa el límite
 - create-checkout desplegada en el proyecto real como versión 15. El webhook y el portal no se volvieron a desplegar a propósito, porque su código no cambió desde la Fase J salvo los precios de Mercado Pago, que está oculto
 
 ### Dónde se quedó
-- Falta verificar que la versión 15 arranca bien. Revisar en los registros de Supabase que un POST a create-checkout ya no da error de arranque, o pedir a Ricardo que intente comprar otro plan con su cuenta de prueba y que vea el aviso de plan vigente
+- La versión 15 arranca. Un POST con la llave anónima respondió 401 unauthorized desde el propio código. Falta verla bloquear con una cuenta real, que Ricardo intente comprar otro plan con su cuenta de prueba antes de limpiarla y vea el aviso de plan vigente
 - Falta limpiar la cuenta de prueba en Stripe. Ricardo debe cancelar las dos suscripciones de su cliente de prueba con Cancel subscription, Immediately y reembolso del último pago. Con los avisos de Stripe la base queda en Gratis sola, sin editar filas a mano. Después verificar en payment_webhook_events, payments y subscriptions
 - Desde este entorno no se puede llamar a Stripe (api.stripe.com y mcp.stripe.com bloqueados por la red)
 
