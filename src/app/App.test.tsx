@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -35,7 +35,11 @@ describe('rutas', () => {
   it('sin sesión la raíz es la portada de venta, sin navegación (D-068)', async () => {
     renderAt('/');
     expect(await screen.findByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
-    expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
+    // La portada y el marco leen la sesión cada uno por su lado. En una máquina lenta el título
+    // aparece un instante antes de que el marco quite la navegación
+    await waitFor(() => {
+      expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
+    });
   });
 
   it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party, Logros y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
