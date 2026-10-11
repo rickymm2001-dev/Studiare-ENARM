@@ -1115,6 +1115,26 @@ describe('crear el pago', () => {
     expect(opaque[0]).toContain('estado 500');
   });
 
+  it('si el secreto trae el ID del producto y no el del precio, lo dice sin llamar a Stripe', async () => {
+    const lines: string[] = [];
+    let calls = 0;
+    const misconfigured = checkoutDeps({
+      env: { ...env, STRIPE_PRICE_FOUNDER: ' prod_VPyZIGFoNYjwrb ' },
+      log: (line) => lines.push(line),
+      fetch: () => {
+        calls += 1;
+        return Promise.resolve(new Response('{}', { status: 200 }));
+      },
+    });
+    const reply = await ask({ plan: 'founder', provider: 'stripe' }, misconfigured);
+    expect(reply.status).toBe(503);
+    expect(await reply.json()).toEqual({ error: 'not_configured' });
+    expect(calls).toBe(0);
+    expect(lines).toEqual([
+      'STRIPE_PRICE_FOUNDER no es un Price ID. Debe empezar con price_ y empieza con prod_. Cópialo de la sección Pricing del producto en Stripe',
+    ]);
+  });
+
   it('si no hay red hacia la pasarela también deja una línea en el registro', async () => {
     const lines: string[] = [];
     const offline = checkoutDeps({

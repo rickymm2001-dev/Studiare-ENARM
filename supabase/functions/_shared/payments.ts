@@ -595,8 +595,16 @@ export async function handleCreateCheckout(
   try {
     if (provider === 'stripe') {
       const key = deps.env.STRIPE_SECRET_KEY ?? '';
-      const price = deps.env[STRIPE_PRICE_ENV[plan]] ?? '';
+      const price = (deps.env[STRIPE_PRICE_ENV[plan]] ?? '').trim();
       if (key === '' || price === '') return json({ error: 'not_configured' }, 503, cors);
+      // En el panel de Stripe el ID del producto (prod_) se ve antes que el del precio (price_), y
+      // Stripe rechaza el producto. Se avisa sin llamar a Stripe y diciendo qué secreto cambiar
+      if (!price.startsWith('price_')) {
+        deps.log?.(
+          `${STRIPE_PRICE_ENV[plan]} no es un Price ID. Debe empezar con price_ y empieza con ${price.split('_')[0] ?? '?'}_. Cópialo de la sección Pricing del producto en Stripe`,
+        );
+        return json({ error: 'not_configured' }, 503, cors);
+      }
       const form = new URLSearchParams({
         mode: 'subscription',
         'line_items[0][price]': price,

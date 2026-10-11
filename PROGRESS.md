@@ -39,7 +39,7 @@
 Nace de que Ricardo no pudo abrir la página de pago ni en su teléfono ni en su computadora, de que confirmar el correo en un dispositivo dejaba al otro sin sesión y de su cambio de precios del 2026-10-11.
 
 ### Bloques
-- [x] K1. create-checkout registra el motivo de todo pago que no abre, sin llaves. Versión 9 desplegada en el proyecto real
+- [x] K1. create-checkout registra el motivo de todo pago que no abre, sin llaves. Con eso se encontró la causa del rechazo, un ID de producto en STRIPE_PRICE_FOUNDER. El servidor ahora lo detecta antes de llamar a Stripe. Versión 10 desplegada en el proyecto real
 - [x] K2. Suscripción sin ningún pago, ni el simulado, cuando la nube está configurada y el navegador no está conectado. Explica qué falta y deja pedir otro correo
 - [x] K3. Entrar con el código del correo (verifyOtp con tipo email) al crear cuenta, en Ya tengo cuenta y en Suscripción, con pruebas de punta a punta del puente
 - [x] K4. Precios 149 y 1,499, Fundador de 79 como promoción del mensual con el regular tachado, ahorro del anual de 16% y salida al precio regular si el cupo se llenó. Migración 20261015000001 aplicada al proyecto real
