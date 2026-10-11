@@ -3,8 +3,9 @@
 // Con Supabase configurado la cuenta también se guarda en la nube y se entra con un enlace al
 // correo, sin contraseña (D-075). Sin Supabase la cuenta vive solo en este navegador (D-060).
 import { LogIn, MailCheck, UserPlus } from 'lucide-react';
-import { useState, type SyntheticEvent } from 'react';
+import { useEffect, useRef, useState, type SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
@@ -27,6 +28,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { AccountDetailsFields } from '../profile/AccountDetailsFields';
+import { EmailCodeForm } from '../shared/EmailCodeForm';
 
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
@@ -67,6 +69,11 @@ export function OnboardingScreen() {
     celebrate('small');
     void navigate(screenPath('home'));
   };
+  // Con el código del correo, la sesión local la abre el puente de la nube al unir la cuenta
+  const enterLinked = () => {
+    celebrate('small');
+    void navigate(screenPath('home'));
+  };
 
   return (
     <>
@@ -94,7 +101,11 @@ export function OnboardingScreen() {
           </button>
         ))}
       </div>
-      {tab === 'create' ? <CreateAccountForm onCreated={enter} /> : <LoginForm onFound={enter} />}
+      {tab === 'create' ? (
+        <CreateAccountForm onCreated={enter} />
+      ) : (
+        <LoginForm onFound={enter} onLinked={enterLinked} />
+      )}
       <p className="text-center text-xs text-fg-muted">
         {cloudConfigured() ? t.cloud.loginNote : t.session.simulatedLogin}
       </p>
@@ -150,6 +161,9 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
         email={email}
         result={sent.result}
         onContinue={() => {
+          onCreated(sent.userId);
+        }}
+        onCode={() => {
           onCreated(sent.userId);
         }}
       />
@@ -274,12 +288,27 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
   );
 }
 
-function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
+function LoginForm({
+  onFound,
+  onLinked,
+}: {
+  onFound: (userId: string) => void;
+  onLinked: () => void;
+}) {
   const api = useDataApi();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState<LinkResult | null>(null);
+  const [verified, setVerified] = useState(false);
+  const linked = useCloud((store) => store.state.status === 'linked');
   const cloud = cloudConfigured();
+  // El código abre la sesión de la nube. Se entra cuando el puente ya unió la cuenta con este navegador
+  const entered = useRef(false);
+  useEffect(() => {
+    if (!verified || !linked || entered.current) return;
+    entered.current = true;
+    onLinked();
+  }, [verified, linked, onLinked]);
   // Perfiles de este navegador creados antes de las cuentas con correo
   const legacy = useLiveData(async () => {
     const [users, accounts] = await Promise.all([
@@ -312,6 +341,9 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
         result={sent}
         onRetry={() => {
           setSent(null);
+        }}
+        onCode={() => {
+          setVerified(true);
         }}
       />
     );
@@ -374,11 +406,14 @@ function LinkSentCard({
   result,
   onContinue,
   onRetry,
+  onCode,
 }: {
   email: string;
   result: LinkResult;
   onContinue?: () => void;
   onRetry?: () => void;
+  /** Se llama cuando el código del correo abrió la sesión */
+  onCode: () => void;
 }) {
   const ok = result.ok;
   return (
@@ -406,6 +441,7 @@ function LinkSentCard({
           </Button>
         ) : null}
       </div>
+      {ok ? <EmailCodeForm email={email} onVerified={onCode} /> : null}
     </Card>
   );
 }

@@ -12,7 +12,8 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
-- Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema aplicado y tres funciones de pago desplegadas. Falta que pegue supabase/manual/ejecutar-en-sql-editor.sql y que ponga los secretos de Stripe. Ver su sección
+- Fase K (D-114 y D-115). Precios 79 Fundador como promoción del mensual, 149 mensual y 1,499 anual, entrada con el código del correo desde otro dispositivo, Mercado Pago oculto y registro del motivo cuando un pago no abre. Falta que Ricardo cree los precios nuevos en Stripe y agregue el código a las plantillas de correo. Ver su sección
+- Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema completo, tres funciones de pago desplegadas y los secretos de Stripe puestos. Ver su sección
 - Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
 - Fase H en main (D-108 y D-109, PR 27). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
 - Fase G en main (D-103 a D-107, PR 26). Proxy de IA alojado, textos legales y configuración del admin en el servidor. Ver su sección
@@ -33,6 +34,25 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase K. Entrar desde otro dispositivo y precios nuevos (D-114 y D-115)
+
+Nace de que Ricardo no pudo abrir la página de pago ni en su teléfono ni en su computadora, de que confirmar el correo en un dispositivo dejaba al otro sin sesión y de su cambio de precios del 2026-10-11.
+
+### Bloques
+- [x] K1. create-checkout registra el motivo de todo pago que no abre, sin llaves. Con eso se encontró la causa del rechazo, un ID de producto en STRIPE_PRICE_FOUNDER. El servidor ahora lo detecta antes de llamar a Stripe. Versión 10 desplegada en el proyecto real
+- [x] K2. Suscripción sin ningún pago, ni el simulado, cuando la nube está configurada y el navegador no está conectado. Explica qué falta y deja pedir otro correo
+- [x] K3. Entrar con el código del correo (verifyOtp con tipo email) al crear cuenta, en Ya tengo cuenta y en Suscripción, con pruebas de punta a punta del puente
+- [x] K4. Precios 149 y 1,499, Fundador de 79 como promoción del mensual con el regular tachado, ahorro del anual de 16% y salida al precio regular si el cupo se llenó. Migración 20261015000001 aplicada al proyecto real
+- [x] K5. Mercado Pago oculto hasta que exista su cuenta
+- [ ] K6. Que Ricardo cree los precios nuevos en Stripe, agregue {{ .Token }} a las plantillas y haga un pago de prueba. Si Stripe vuelve a rechazar, leo el motivo en los registros
+
+### Cierre de 15.1
+- Paso 1. npm run check pasa. test:sql pasa con la suite nueva de precios
+- Paso 2. e2e corrido con la app compilada
+- Paso 3. Se revisó a mano el camino real de cuenta y pago contra el proyecto de Supabase (registros de las funciones, precios en platform_settings, versión de create-checkout)
+- Paso 4. Este archivo, DECISIONES.md (D-114 y D-115), docs/SUPABASE.md, docs/STRIPE.md y docs/PENDIENTES_DE_RICARDO.md al día
+- Paso 5. Commit, push y PR a main
+
 ## Fase J. Proyecto real de Supabase (D-113)
 
 Nace de que Ricardo conectó su proyecto Studiare como conector y autorizó aplicar las migraciones 2 a 10. Todo lo hecho contra el proyecto real se hizo con ese conector, sin leer ni escribir ninguna llave secreta.
@@ -42,8 +62,8 @@ Nace de que Ricardo conectó su proyecto Studiare como conector y autorizó apli
 - [x] J2. Migraciones 2 a 10 aplicadas en orden y por trozos. Lo que tiene delete o drop quedó en supabase/manual/ejecutar-en-sql-editor.sql porque el conector pide una confirmación humana que una sesión en la nube no puede dar
 - [x] J3. Migración 11 (function_grants) con su prueba SQL. Cierra permisos que el chequeo de seguridad de Supabase marcó. Aplicada al proyecto real
 - [x] J4. Despliegue de create-checkout, create-portal-session y payment-webhook-stripe, con comprobación de que arrancan
-- [ ] J5. Que Ricardo pegue el archivo manual. Comprobación en docs/SUPABASE.md, sección Proyecto real conectado
-- [ ] J6. Secretos de Stripe y función de Mercado Pago, que esperan las cuentas de Ricardo
+- [x] J5. Ricardo pegó el archivo manual y la comprobación dio true en las tres columnas
+- [x] J6. Secretos de Stripe puestos por Ricardo. La función de Mercado Pago espera su cuenta y la app no la ofrece mientras tanto (D-114)
 
 ### Cierre de 15.1
 - Paso 1. Las 11 suites SQL pasan en Postgres local, con la última migración y el archivo manual corridos dos veces. No hubo cambios de TypeScript

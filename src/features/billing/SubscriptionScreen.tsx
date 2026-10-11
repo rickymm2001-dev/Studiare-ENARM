@@ -4,7 +4,17 @@ import { Check, Crown, Gauge, Minus, Receipt } from 'lucide-react';
 import { useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useCloud } from '@/app/cloudState';
-import { FOUNDER_SEATS, PLANS, type PlanAccess, type PlanKey } from '@/config/billing';
+import {
+  annualSavingsPercent,
+  checkoutPlanFor,
+  FOUNDER_PROMO_ACTIVE,
+  PLANS,
+  VISIBLE_PLANS,
+  visiblePlanOf,
+  type PlanAccess,
+  type PlanKey,
+} from '@/config/billing';
+import { cloudConfigured } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { changePlan } from '@/data/usecases/subscription';
@@ -15,7 +25,13 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
-import { BillingPortalCard, CloudCheckoutCard, PaymentReturnNotice } from './CloudBilling';
+import {
+  BillingPortalCard,
+  CloudCheckoutCard,
+  CloudRequiredCard,
+  PaymentReturnNotice,
+} from './CloudBilling';
+import { PlanPrice } from './PlanPrice';
 import { useUserEvents } from '../shared/useUserEvents';
 
 /** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
@@ -51,6 +67,9 @@ function Billing({ session }: { session: ReadySession }) {
   const current: PlanKey = subscription?.status === 'active' ? subscription.plan : 'free';
   // Con la nube conectada el plan lo decide el servidor y no hay pago simulado (D-096)
   const inCloud = useCloud((store) => store.state.status === 'linked');
+  // Con la nube configurada y este navegador sin sesión, el servidor no sabe quién paga. No se ofrece
+  // ningún pago, ni el real ni el simulado, que no cobraría nada pero haría creer que sí
+  const needsCloud = cloudConfigured() && !inCloud;
   const receipts = (events ?? []).flatMap((event) =>
     event.type === 'subscription_changed' && event.payload.receiptId
       ? [{ at: event.at, ...event.payload }]
@@ -61,8 +80,9 @@ function Billing({ session }: { session: ReadySession }) {
     <>
       <ScreenHeader
         title={t.screens.subscription.title}
-        description={inCloud ? t.billing.cloud.notice : t.billing.simulatedNotice}
+        description={inCloud || needsCloud ? t.billing.cloud.notice : t.billing.simulatedNotice}
       />
+      {needsCloud ? <CloudRequiredCard userId={user.id} /> : null}
       {inCloud ? (
         <PaymentReturnNotice
           userId={user.id}
@@ -104,7 +124,7 @@ function Billing({ session }: { session: ReadySession }) {
             setCheckout(null);
           }}
         />
-      ) : checkout ? (
+      ) : checkout && !needsCloud ? (
         <Card aria-labelledby="checkout-titulo">
           <CardHeader>
             <CardTitle id="checkout-titulo">{t.billing.checkoutTitle}</CardTitle>
@@ -144,10 +164,11 @@ function Billing({ session }: { session: ReadySession }) {
           </div>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {(Object.keys(PLANS) as PlanKey[]).map((key) => {
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {VISIBLE_PLANS.map((key) => {
             const plan = PLANS[key];
-            const isCurrent = key === current;
+            // Quien paga el Fundador tiene el mensual, con su precio de promoción
+            const isCurrent = key === visiblePlanOf(current);
             return (
               <Card
                 key={key}
@@ -159,22 +180,10 @@ function Billing({ session }: { session: ReadySession }) {
                     <CardTitle id={`plan-${key}`}>{t.billing.plans[key]}</CardTitle>
                     {isCurrent ? <Badge variant="info">{t.billing.currentPlan}</Badge> : null}
                   </div>
-                  <p>
-                    <span className="text-2xl font-bold">{t.billing.price(plan.priceMxn)}</span>{' '}
-                    <span className="text-sm text-fg-muted">{t.billing.periods[key]}</span>
-                  </p>
-                  {key === 'founder' ? (
-                    <p className="text-sm font-semibold text-success">
-                      {t.billing.founderNote(FOUNDER_SEATS)}
-                    </p>
-                  ) : null}
+                  <PlanPrice plan={key} promo={FOUNDER_PROMO_ACTIVE && current !== 'monthly'} />
                   {key === 'annual' ? (
                     <p className="text-sm font-semibold text-success">
-                      {t.billing.savings(
-                        Math.round(
-                          (1 - PLANS.annual.priceMxn / (PLANS.monthly.priceMxn * 12)) * 100,
-                        ),
-                      )}
+                      {t.billing.savings(annualSavingsPercent())}
                     </p>
                   ) : null}
                 </CardHeader>
@@ -211,7 +220,7 @@ function Billing({ session }: { session: ReadySession }) {
                     );
                   })}
                 </ul>
-                {isCurrent ? null : key === 'free' ? (
+                {isCurrent || needsCloud ? null : key === 'free' ? (
                   inCloud ? (
                     <p className="text-sm text-fg-muted">{t.billing.cloud.cancelNote}</p>
                   ) : (
@@ -229,7 +238,7 @@ function Billing({ session }: { session: ReadySession }) {
                 ) : (
                   <Button
                     onClick={() => {
-                      setCheckout(key);
+                      setCheckout(checkoutPlanFor(key));
                     }}
                   >
                     {t.billing.choose(t.billing.plans[key])}

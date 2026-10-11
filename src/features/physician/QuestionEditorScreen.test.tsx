@@ -15,7 +15,8 @@ import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { sampleQuestionIds } from './agreementView';
 
-vi.setConfig({ testTimeout: 60_000 });
+// Cada prueba encadena varias esperas de hasta 30 segundos, y en el CI el banco demo tarda en cargar
+vi.setConfig({ testTimeout: 120_000 });
 
 let app: RenderedApp | undefined;
 afterEach(async () => {

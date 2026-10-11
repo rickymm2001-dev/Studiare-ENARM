@@ -1,17 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import {
   AI_CARDS_PER_DAY_PAID,
+  annualSavingsPercent,
   canUseFeature,
+  checkoutPlanFor,
   FOUNDER_SEATS,
   GATED_FEATURES,
+  PAYMENT_PROVIDERS,
   PLANS,
+  VISIBLE_PLANS,
+  visiblePlanOf,
   type FeatureAccess,
   type PlanKey,
 } from './billing';
 
 describe('planes y precios', () => {
-  it('el mensual estándar cuesta 150 pesos', () => {
-    expect(PLANS.monthly.priceMxn).toBe(150);
+  it('el mensual cuesta 149 pesos y el anual 1,499 (D-114)', () => {
+    expect(PLANS.monthly.priceMxn).toBe(149);
+    expect(PLANS.annual.priceMxn).toBe(1499);
   });
 
   it('el Fundador es más barato que el mensual, es para 100 usuarios y da lo mismo que el de pago', () => {
@@ -24,6 +30,27 @@ describe('planes y precios', () => {
 
   it('el anual sale más barato que pagar 12 meses', () => {
     expect(PLANS.annual.priceMxn).toBeLessThan(PLANS.monthly.priceMxn * 12);
+  });
+
+  it('el ahorro del anual es 16% contra 12 meses al precio regular, sin redondear hacia arriba', () => {
+    expect(annualSavingsPercent()).toBe(16);
+    const plans = { ...PLANS, monthly: { priceMxn: 100 }, annual: { priceMxn: 1000 } };
+    // 1 - 1000 / 1200 es 16.67%, y se dice 16
+    expect(annualSavingsPercent(plans)).toBe(16);
+    expect(annualSavingsPercent({ ...plans, annual: { priceMxn: 1500 } })).toBe(0);
+  });
+
+  it('el Fundador es una promoción del mensual y no una tarjeta aparte', () => {
+    expect(VISIBLE_PLANS).toEqual(['free', 'monthly', 'annual']);
+    expect(checkoutPlanFor('monthly', true)).toBe('founder');
+    expect(checkoutPlanFor('monthly', false)).toBe('monthly');
+    expect(checkoutPlanFor('annual', true)).toBe('annual');
+    expect(visiblePlanOf('founder')).toBe('monthly');
+    expect(visiblePlanOf('annual')).toBe('annual');
+  });
+
+  it('solo se ofrece Stripe mientras Mercado Pago no esté configurado', () => {
+    expect(PAYMENT_PROVIDERS).toEqual(['stripe']);
   });
 
   it('el plan Gratis limita las preguntas y deja fuera el examen completo y el tutor con IA', () => {

@@ -4,7 +4,7 @@ Escrito el 2026-10-10. Qué hay hoy de Billing, Facturas e Impuestos con Stripe,
 
 ## Dónde está hoy
 
-- **Billing.** El alumno elige un plan en Suscripción y pasa a Stripe Checkout, la página de pago de Stripe, en modo suscripción con un Price por plan (Fundador 79, Mensual 150 y Anual 1,200 pesos). Studiare no toca datos de tarjeta
+- **Billing.** El alumno elige un plan en Suscripción y pasa a Stripe Checkout, la página de pago de Stripe, en modo suscripción con un Price por plan (Fundador 79 como promoción del mensual, Mensual 149 y Anual 1,499 pesos, D-114). Studiare no toca datos de tarjeta
 - **Cliente único.** Quien paga otra vez vuelve a su mismo cliente de Stripe, para que sus facturas, su portal y un reembolso no queden repartidos
 - **Avisos de Stripe.** El webhook verifica la firma con tolerancia de tiempo, compara sin atajos, y cada evento se aplica una sola vez aunque Stripe lo reenvíe. Entiende las dos formas de la factura que usa Stripe según su versión
 - **Portal del cliente.** Cancelar, cambiar la tarjeta y ver las facturas. Se abre desde Suscripción

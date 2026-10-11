@@ -69,8 +69,8 @@ describe('configuración de Stripe en modo prueba', () => {
     const prices = stripe.calls.filter((c) => c.method === 'POST' && c.path === '/v1/prices');
     expect(prices.map((c) => Object.fromEntries(c.form ?? []))).toMatchObject([
       { currency: 'mxn', unit_amount: '7900', 'recurring[interval]': 'month' },
-      { currency: 'mxn', unit_amount: '15000', 'recurring[interval]': 'month' },
-      { currency: 'mxn', unit_amount: '120000', 'recurring[interval]': 'year' },
+      { currency: 'mxn', unit_amount: '14900', 'recurring[interval]': 'month' },
+      { currency: 'mxn', unit_amount: '149900', 'recurring[interval]': 'year' },
     ]);
     // El precio queda con el impuesto incluido, como se muestra al consumidor en México
     expect(prices.every((c) => c.form?.get('tax_behavior') === 'inclusive')).toBe(true);

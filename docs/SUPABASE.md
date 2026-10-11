@@ -57,6 +57,20 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 2. En Site URL pon https://rickymm2001-dev.github.io/Studiare-ENARM/
 3. En Redirect URLs agrega esa misma dirección y http://localhost:5173/**
 
+## Paso 6b. Código en los correos de acceso (D-115)
+
+El enlace del correo solo abre la sesión en el navegador donde se abre. Para que el alumno pueda leer el correo en su teléfono y entrar en su computadora, el mismo correo trae un código que se escribe en la app. Supabase lo manda solo si la plantilla lo incluye.
+
+1. En Supabase abre Authentication, Emails, y la pestaña de plantillas
+2. Abre Magic Link. Debajo del enlace agrega la línea de abajo y guarda
+3. Haz lo mismo en Confirm signup, que es el correo que recibe quien entra por primera vez
+
+```html
+<p>Si abriste este correo en otro dispositivo, escribe en la app este código <strong>{{ .Token }}</strong></p>
+```
+
+El código dura lo mismo que el enlace y cada correo nuevo invalida el anterior. La app acepta de 6 a 10 dígitos, que es el rango que permite Supabase en Email OTP Length.
+
 ## Paso 7. Probar tu cuenta y hacerte dueño
 
 1. Abre la página, Crear cuenta, con el mismo correo con el que entraste a Supabase
@@ -419,14 +433,14 @@ select
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 ```
 
-7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 150 y annual 1200, y politicas_con_barrera en 26. Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
+7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 149 y annual 1499 (150 y 1200 si todavía no aplicas la migración 20261015000001), y politicas_con_barrera en 26. Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
 8. Si cambiaste los precios en platform_settings antes, esta migración no los pisa. Solo cambia el valor viejo de ejemplo
 
 ### Cómo preparar los pagos en modo prueba
 
 Esto sí pide un poco de terminal, para publicar las cuatro funciones del servidor. Puedo guiarte paso a paso cuando quieras. Ninguna llave se la pasas a nadie ni se escribe en el repo. Se guardan solo en los Secrets de Supabase (Edge Functions, Secrets).
 
-1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio mensual en pesos. Fundador 79, Mensual 150 y Anual 1,200 (el anual cobrado cada 12 meses). Copia el Price ID de cada uno (empieza con price_)
+1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio recurrente en pesos. Fundador 79 cada mes, Mensual 149 cada mes y Anual 1,499 cada año (D-114). Copia el Price ID de cada uno (empieza con price_)
 2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos. checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, customer.subscription.deleted y charge.refunded. Copia el secreto de firma (empieza con whsec_)
 3. En Mercado Pago, en tu aplicación, activa las credenciales de prueba. Copia el Access Token de prueba. En Webhooks agrega la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-mercadopago, marca el tema Pagos y copia la clave secreta que te da
 4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). Opcional, STRIPE_AUTOMATIC_TAX con el valor true cuando actives Stripe Tax, ver docs/STRIPE.md. SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú
@@ -681,7 +695,8 @@ Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (ref
 - Las migraciones 20261007000001 a 20261014000001, además de la primera que ya estaba. Se aplicaron con el conector, salvo las seis piezas de la lista de abajo
 - La migración 20261014000001_function_grants cierra permisos que el chequeo de seguridad de Supabase marcó. set_user_role ya no la puede llamar un anónimo, los triggers handle_new_user y forbid_event_changes no son ejecutables por la API, payment_webhook_events no tiene permisos de tabla para la API y ai_day y ai_check_engine fijan su search_path
 - Tres Edge Functions desplegadas, create-checkout y create-portal-session con verificación de JWT, y payment-webhook-stripe sin ella porque quien llama es Stripe y se identifica con su firma. Se comprobó que arrancan, que el webhook contesta 405 a un GET y 503 a un POST mientras no exista el secreto, y que las otras dos rechazan una llave anónima
-- Falta desplegar payment-webhook-mercadopago, que espera la cuenta de Mercado Pago
+- Falta desplegar payment-webhook-mercadopago, que espera la cuenta de Mercado Pago. Mientras tanto la app no ofrece Mercado Pago (D-114)
+- 2026-10-11, Fase K. La migración 20261015000001_plan_prices deja los precios en 79, 149 y 1,499. create-checkout va en la versión 10. Escribe en sus registros el motivo de cualquier pago que no se pueda abrir, sin llaves ni datos del alumno, y revisa que cada Price ID empiece con price_. Se lee en Edge Functions, create-checkout, Logs, buscando Stripe rechazó, No se pudo crear o no es un Price ID
 
 ### Lo que te toca pegar a mano
 

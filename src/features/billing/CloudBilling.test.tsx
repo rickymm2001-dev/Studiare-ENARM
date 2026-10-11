@@ -8,6 +8,9 @@ import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { DataProvider } from '@/data/DataProvider';
+import { PLANS } from '@/config/billing';
+import type { PaidPlanKey, PaymentProvider } from '@/data/payments/checkout';
+import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
 import {
   BillingPortalCard,
@@ -32,6 +35,8 @@ interface FakeState {
   invoke: () => Promise<{ data: unknown; error: unknown }>;
   rpcCalls: string[];
   invokeCalls: unknown[];
+  otpCalls: unknown[];
+  verifyCalls: unknown[];
 }
 
 function fakeCloudFor(overrides: Partial<FakeState> = {}) {
@@ -44,9 +49,21 @@ function fakeCloudFor(overrides: Partial<FakeState> = {}) {
       }),
     rpcCalls: [],
     invokeCalls: [],
+    otpCalls: [],
+    verifyCalls: [],
     ...overrides,
   };
   holder.cloud = {
+    auth: {
+      signInWithOtp: (args: unknown) => {
+        state.otpCalls.push(args);
+        return Promise.resolve({ error: null });
+      },
+      verifyOtp: (args: unknown) => {
+        state.verifyCalls.push(args);
+        return Promise.resolve({ data: { session: { access_token: 'x' } }, error: null });
+      },
+    },
     rpc: (name: string) => {
       state.rpcCalls.push(name);
       return Promise.resolve({
@@ -113,21 +130,123 @@ describe('pago real desde Suscripción', () => {
     );
     expect(await screen.findByText(t.billing.confirm)).toBeVisible();
   });
+
+  it('con la nube configurada y este navegador sin sesión no ofrece ningún pago y explica qué falta', async () => {
+    fakeCloudFor();
+    useCloud.setState({ state: { status: 'signed-out' } });
+    app = await renderApp(SCREENS.subscription.path);
+    expect(
+      await screen.findByRole('heading', { name: t.billing.cloud.needLink.title }),
+    ).toBeVisible();
+    expect(screen.getByText(t.billing.cloud.needLink.body)).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
+    ).toBeNull();
+    expect(screen.queryByRole('button', { name: t.billing.cancel })).toBeNull();
+    expect(screen.queryByText(t.billing.confirm)).toBeNull();
+    expect(screen.queryByText(t.billing.simulatedNotice)).toBeNull();
+  });
+
+  it('pide un enlace nuevo con el correo de la cuenta y dice que se abra en este navegador', async () => {
+    const fake = fakeCloudFor();
+    useCloud.setState({ state: { status: 'signed-out' } });
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: async (api, user) => {
+        await api.repos.accounts.put({
+          userId: user.id,
+          email: 'ana@x.mx',
+          ...EMPTY_DETAILS,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    const send = await screen.findByRole('button', { name: t.billing.cloud.needLink.send });
+    // El botón espera a que se lea el correo de la cuenta
+    await waitFor(() => {
+      expect(send).toBeEnabled();
+    });
+    await typing.click(send);
+    expect(await screen.findByText(t.billing.cloud.needLink.sent('ana@x.mx'))).toBeVisible();
+    expect(fake.otpCalls).toEqual([expect.objectContaining({ email: 'ana@x.mx' })]);
+  });
+
+  it('deja entrar con el código del correo abierto en otro dispositivo', async () => {
+    const fake = fakeCloudFor();
+    useCloud.setState({ state: { status: 'signed-out' } });
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: async (api, user) => {
+        await api.repos.accounts.put({
+          userId: user.id,
+          email: 'Ana@X.mx',
+          ...EMPTY_DETAILS,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    await typing.type(await screen.findByLabelText(t.cloud.code.label), '12345678');
+    await typing.click(screen.getByRole('button', { name: t.cloud.code.submit }));
+    expect(await screen.findByText(t.cloud.code.verified)).toBeVisible();
+    expect(fake.verifyCalls).toEqual([{ email: 'ana@x.mx', token: '12345678', type: 'email' }]);
+  });
+
+  it('si otro dispositivo tomó la cuenta lo dice y deja pedir el enlace', async () => {
+    fakeCloudFor();
+    useCloud.setState({ state: { status: 'signed-out', reason: 'other_device' } });
+    app = await renderApp(SCREENS.subscription.path);
+    expect(await screen.findByText(t.billing.cloud.needLink.otherDevice)).toBeVisible();
+    expect(screen.getByRole('button', { name: t.billing.cloud.needLink.send })).toBeVisible();
+  });
+
+  it('mientras revisa la conexión no ofrece pago ni enlace', async () => {
+    fakeCloudFor();
+    useCloud.setState({ state: { status: 'checking' } });
+    app = await renderApp(SCREENS.subscription.path);
+    expect(await screen.findByText(t.cloud.checking)).toBeVisible();
+    expect(screen.queryByRole('button', { name: t.billing.cloud.needLink.send })).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
+    ).toBeNull();
+  });
 });
 
 describe('tarjeta de pago', () => {
-  const render_ = (open: (url: string) => void, onBack = () => undefined) =>
+  const render_ = (
+    open: (url: string) => void,
+    onBack = () => undefined,
+    options: { plan?: PaidPlanKey; providers?: readonly PaymentProvider[] } = {},
+  ) =>
     render(
       <DataProvider kind="real">
-        <CloudCheckoutCard plan="annual" onBack={onBack} open={open} />
+        <CloudCheckoutCard
+          plan={options.plan ?? 'annual'}
+          onBack={onBack}
+          open={open}
+          providers={options.providers}
+        />
       </DataProvider>,
     );
 
-  it('abre la pasarela elegida con la dirección que devolvió el servidor', async () => {
+  it('con una sola pasarela no pide elegir y abre Stripe con la dirección del servidor', async () => {
     const state = fakeCloudFor();
     const open = vi.fn();
     const typing = userEvent.setup();
     render_(open);
+    expect(screen.queryByLabelText(t.billing.cloud.provider)).toBeNull();
+    expect(screen.getByText(t.billing.cloud.singleProvider)).toBeVisible();
+    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
+    await waitFor(() => {
+      expect(open).toHaveBeenCalledWith('https://checkout.stripe.com/c/pay/cs_test_1');
+    });
+    expect(state.invokeCalls).toEqual([{ body: { plan: 'annual', provider: 'stripe' } }]);
+  });
+
+  it('con varias pasarelas abre la elegida', async () => {
+    const state = fakeCloudFor();
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render_(open, undefined, { providers: ['stripe', 'mercadopago'] });
     await typing.selectOptions(screen.getByLabelText(t.billing.cloud.provider), 'stripe');
     await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
     await waitFor(() => {
@@ -146,7 +265,7 @@ describe('tarjeta de pago', () => {
     });
     const open = vi.fn();
     const typing = userEvent.setup();
-    render_(open);
+    render_(open, undefined, { providers: ['stripe', 'mercadopago'] });
     await typing.selectOptions(screen.getByLabelText(t.billing.cloud.provider), 'mercadopago');
     await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
     await waitFor(() => {
@@ -174,6 +293,44 @@ describe('tarjeta de pago', () => {
     expect(await screen.findByText(t.billing.cloud.errors.founder_full)).toBeVisible();
     expect(open).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: t.billing.cloud.go })).toBeEnabled();
+  });
+
+  it('si el cupo Fundador se llenó deja seguir con el mensual al precio regular', async () => {
+    let calls = 0;
+    const state = fakeCloudFor({
+      invoke: () => {
+        calls += 1;
+        return Promise.resolve(
+          calls === 1
+            ? {
+                data: null,
+                error: {
+                  context: new Response(JSON.stringify({ error: 'founder_full' }), {
+                    status: 409,
+                  }),
+                },
+              }
+            : { data: { url: 'https://checkout.stripe.com/c/pay/cs_test_2' }, error: null },
+        );
+      },
+    });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render_(open, undefined, { plan: 'founder' });
+    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
+    const regular = await screen.findByRole('button', {
+      name: t.billing.cloud.regularInstead(
+        `${t.billing.price(PLANS.monthly.priceMxn)} ${t.billing.periods.monthly}`,
+      ),
+    });
+    await typing.click(regular);
+    await waitFor(() => {
+      expect(open).toHaveBeenCalledWith('https://checkout.stripe.com/c/pay/cs_test_2');
+    });
+    expect(state.invokeCalls).toEqual([
+      { body: { plan: 'founder', provider: 'stripe' } },
+      { body: { plan: 'monthly', provider: 'stripe' } },
+    ]);
   });
 
   it('no abre una dirección que no es de la pasarela', async () => {
