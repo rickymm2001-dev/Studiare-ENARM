@@ -61,10 +61,10 @@ export interface PlanDef {
 }
 
 /**
- * Precios en pesos mexicanos. El mensual es el estándar de la reunión del 2026-10-07 y el anual
- * conserva el descuento que ya tenía sobre 12 meses. El Fundador es un precio fijo de por vida para
- * los primeros usuarios y su monto de 79 lo confirmó Ricardo el 2026-10-07 (D-087). El anual sigue
- * provisional hasta que Ricardo fije su precio
+ * Precios en pesos mexicanos que fijó Ricardo el 2026-10-11 (D-114). El mensual cuesta 149 y el anual
+ * 1,499. El Fundador no es otro plan a la vista del alumno sino una promoción del mensual, a 79 de por
+ * vida para los primeros FOUNDER_SEATS. Por dentro sigue siendo el plan founder, con su propio precio
+ * en la pasarela y su cupo que el servidor cuenta al cobrar (D-087)
  */
 /** Generaciones de tarjetas con IA por día en los planes de pago. Juicio de diseño, ajustable */
 export const AI_CARDS_PER_DAY_PAID = 20;
@@ -87,19 +87,56 @@ export const PLANS: Record<PlanKey, PlanDef> = {
   },
   monthly: {
     key: 'monthly',
-    priceMxn: 150,
+    priceMxn: 149,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
   annual: {
     key: 'annual',
-    priceMxn: 1200,
+    priceMxn: 1499,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
 };
+
+/** Planes que ve el alumno. El Fundador no tiene tarjeta propia, va dentro del mensual (D-114) */
+export const VISIBLE_PLANS: readonly PlanKey[] = ['free', 'monthly', 'annual'];
+
+/**
+ * Si se ofrece la promoción Fundador en el mensual. El cupo real lo cuenta el servidor al cobrar, y si
+ * ya se llenó la app ofrece el precio regular. Para terminar la promoción basta con ponerlo en false.
+ * Va como boolean y no como true, para que las pantallas sigan cubriendo los dos casos
+ */
+export const FOUNDER_PROMO_ACTIVE = true as boolean;
+
+/** El plan que se cobra al elegir uno visible. El mensual se cobra como Fundador mientras dure la promoción */
+export function checkoutPlanFor(key: PlanKey, founderPromo: boolean = FOUNDER_PROMO_ACTIVE): PlanKey {
+  return key === 'monthly' && founderPromo ? 'founder' : key;
+}
+
+/** El plan visible que corresponde a un plan cobrado. Quien paga el Fundador tiene el mensual */
+export function visiblePlanOf(key: PlanKey): PlanKey {
+  return key === 'founder' ? 'monthly' : key;
+}
+
+/**
+ * Cuánto ahorra el anual contra 12 meses del mensual al precio regular, en porcentaje entero. Se
+ * redondea hacia abajo para no prometer de más. Con 149 y 1,499 da 16
+ */
+export function annualSavingsPercent(plans: Record<PlanKey, Pick<PlanDef, 'priceMxn'>> = PLANS): number {
+  const twelveMonths = plans.monthly.priceMxn * 12;
+  if (twelveMonths <= 0) return 0;
+  return Math.max(0, Math.floor((1 - plans.annual.priceMxn / twelveMonths) * 100));
+}
+
+/**
+ * Pasarelas que la app ofrece. Mercado Pago queda fuera hasta que su cuenta esté activa y su función de
+ * avisos desplegada, porque hoy el servidor respondería que no está configurado (D-114). Para
+ * activarla basta con agregarla aquí
+ */
+export const PAYMENT_PROVIDERS: readonly ('stripe' | 'mercadopago')[] = ['stripe'];
 
 /** Si el plan abre la función. Recibe la tabla de planes para poder probar con otra */
 export function canUseFeature(

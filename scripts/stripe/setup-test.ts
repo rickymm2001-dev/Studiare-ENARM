@@ -30,17 +30,18 @@ export const PLAN_SPECS: readonly PlanSpec[] = [
   {
     plan: 'monthly',
     name: 'Studiare. Plan mensual',
-    amountMxn: 150,
+    amountMxn: 149,
     interval: 'month',
-    lookupKey: 'studiare_monthly_mxn_month',
+    // La clave lleva el monto, porque un Price de Stripe no cambia de monto y uno nuevo necesita otra
+    lookupKey: 'studiare_monthly_149_mxn_month',
     env: 'STRIPE_PRICE_MONTHLY',
   },
   {
     plan: 'annual',
     name: 'Studiare. Plan anual',
-    amountMxn: 1200,
+    amountMxn: 1499,
     interval: 'year',
-    lookupKey: 'studiare_annual_mxn_year',
+    lookupKey: 'studiare_annual_1499_mxn_year',
     env: 'STRIPE_PRICE_ANNUAL',
   },
 ];

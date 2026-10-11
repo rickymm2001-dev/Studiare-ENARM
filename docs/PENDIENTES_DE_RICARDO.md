@@ -1,6 +1,6 @@
 # Lo que falta de Ricardo para que la plataforma funcione completa
 
-Escrito el 2026-10-10 y puesto al día al conectar el proyecto real de Supabase (Fase J). Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
+Escrito el 2026-10-10 y puesto al día el 2026-10-11 con la Fase K (precios nuevos y entrada con código). Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
 
 Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_role o secret), la contraseña de la base de datos ni claves secretas de Stripe, Mercado Pago o Anthropic por el chat. Esas viven solo en los secretos de cada servicio. A mí me sirven la dirección del proyecto y la llave pública (anon o publishable).
 
@@ -14,9 +14,13 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 
 ## 2. Supabase
 
-- El proyecto Studiare ya existe y Claude lo tiene conectado desde el 2026-10-10 (D-113). Las migraciones 1 a 11 están aplicadas, salvo seis piezas que tienen delete o drop
-- Pegar supabase/manual/ejecutar-en-sql-editor.sql en el SQL Editor y ejecutarlo una vez. Es lo único de la base que falta. Sin esto no se puede activar el plan Fundador y no funcionan borrar datos, borrar cuenta, liberar un dispositivo ni el reporte de errores. Después corre la consulta de comprobación de docs/SUPABASE.md, sección Proyecto real conectado
-- Decidir cuándo conectar la demo pública a este proyecto. Ya tengo la dirección y la llave pública, y poner VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en las variables de GitHub es un minuto. Recomiendo esperar a tener correo propio, textos legales revisados y dominio, porque desde ese momento cualquiera puede crear una cuenta real
+- El proyecto Studiare ya existe y Claude lo tiene conectado desde el 2026-10-10 (D-113). Las migraciones 1 a 12 están aplicadas y el archivo manual ya lo corriste
+- La demo pública ya está conectada a este proyecto. Desde ahora cualquiera puede crear una cuenta real, así que conviene tener pronto el correo propio y los textos legales revisados
+- **Agregar el código a los correos de acceso (D-115).** En Authentication, Emails (o Email Templates), abre la plantilla Magic Link y después Confirm signup. En cada una, debajo del enlace, agrega esta línea y guarda
+
+  `<p>Si abriste este correo en otro dispositivo, escribe en la app este código <strong>{{ .Token }}</strong></p>`
+
+  Sin esa línea el correo no trae el código y solo funciona el enlace en el mismo navegador
 - Activar la protección contra contraseñas filtradas en Authentication. Puede requerir el plan de pago de Supabase
 - Conectar un proveedor de correo propio en Authentication, SMTP Settings. El correo de fábrica de Supabase solo envía al equipo del proyecto y pocas veces por hora. Resend, Brevo o Amazon SES sirven
 - Para producción conviene el plan de pago de Supabase, que da respaldos y no pausa el proyecto por inactividad. Al escribir esto cuesta unos 25 dólares al mes. Verifícalo en su página de precios
@@ -34,7 +38,10 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 - La guía de Stripe con lo revisado, lo mejorado y lo que falta está en docs/STRIPE.md. Cambia la llave secreta de prueba que pegaste en el chat (Developers, API keys, Roll key) cuando termines de configurar
 
 - Activar tu cuenta de Stripe. Pide verificar tu negocio y tu cuenta bancaria en México. Puede tardar días
-- Crear en Stripe los tres productos con su precio. Fundador 79, Mensual 150 y Anual 1,200 pesos
+- **Precios nuevos (D-114).** En Stripe, Product catalog, crea dos precios nuevos. En el producto Mensual uno de 149 MXN recurrente cada mes, y en el Anual uno de 1,499 MXN recurrente cada año. Un precio de Stripe no se puede editar, por eso son nuevos. Copia cada Price ID (empieza con price_) y pégalo en Supabase, Edge Functions, Secrets, en STRIPE_PRICE_MONTHLY y STRIPE_PRICE_ANNUAL. Archiva los de 150 y 1,200
+- Revisa que el precio Fundador sea de 79 MXN recurrente cada mes, y que en STRIPE_PRICE_FOUNDER esté su Price ID (price_) y no el del producto (prod_)
+- En Edge Functions quedó una función vacía llamada stripe-config-check, de un diagnóstico que no se llegó a usar. No hace nada y puedes borrarla (Edge Functions, stripe-config-check, Delete function)
+- **Pago de prueba con el registro nuevo.** Cuando lo hagas, si Stripe vuelve a rechazar el pago, ahora queda escrito el motivo exacto en los registros de create-checkout. Avísame y lo leo yo
 - Agregar el webhook de Stripe con los seis eventos de docs/SUPABASE.md, incluidos customer.subscription.updated y charge.refunded
 - Guardar y activar el portal del cliente en Stripe, Settings, Billing, Customer portal, con Cancel subscriptions encendido. Sin esto el botón Administrar suscripción no abre
 - Poner los secretos en Supabase, Edge Functions, Secrets. Son STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL. Tres funciones ya están desplegadas en tu proyecto (create-checkout, create-portal-session y payment-webhook-stripe), así que ya no hace falta la CLI. La dirección del webhook de Stripe es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe y FUNCTIONS_URL vale https://bkjbcdwglyllizupokqm.supabase.co/functions/v1. La cuarta función, la de Mercado Pago, se despliega cuando exista esa cuenta
@@ -89,6 +96,7 @@ Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_ro
 ## Qué está publicado
 
 - La Fase G (PR 26) y la Fase H (PR 27) están juntadas en main. Eso incluye el proxy alojado, los textos legales, la configuración del admin, el portal de Stripe, los reembolsos, HSTS, los errores del navegador, la lista real de usuarios, el rol sin conexión y la auditoría
-- Tu proyecto de Supabase ya tiene el esquema aplicado y tres funciones de pago desplegadas (D-113). Falta tu parte del SQL y los secretos de Stripe, ver las secciones 2 y 4
-- La demo pública sigue siendo la versión sin nube, y el proxy de IA, los pagos reales y los textos legales siguen esperando lo de arriba
+- Tu proyecto de Supabase tiene el esquema completo y tres funciones de pago desplegadas (D-113). Los secretos de Stripe ya están puestos
+- La demo pública ya usa la nube. Con la Fase K se entra con el enlace o con el código del correo, Mercado Pago queda oculto hasta configurarlo y los precios son 79 Fundador, 149 mensual y 1,499 anual
+- El proxy de IA y los textos legales siguen esperando lo de arriba
 - Lo que no está construido a propósito es el banco en la nube, que espera tu respuesta a las decisiones 2, 3 y 4 de docs/BANCO_EN_LA_NUBE.md y un banco aprobado por médicos

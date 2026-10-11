@@ -1079,6 +1079,52 @@ describe('crear el pago', () => {
     expect((await ask({ plan: 'monthly', provider: 'stripe' }, broken)).status).toBe(502);
   });
 
+  it('si Stripe rechaza el pago deja el motivo en el registro, sin la llave', async () => {
+    const lines: string[] = [];
+    const rejected = checkoutDeps({
+      log: (line) => lines.push(line),
+      fetch: () =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              error: {
+                type: 'invalid_request_error',
+                code: 'resource_missing',
+                param: 'line_items[0][price]',
+                message: 'No such price',
+              },
+            }),
+            { status: 400 },
+          ),
+        ),
+    });
+    expect((await ask({ plan: 'founder', provider: 'stripe' }, rejected)).status).toBe(502);
+    expect(lines).toEqual([
+      'Stripe rechazó el pago del plan founder. estado 400, tipo invalid_request_error, código resource_missing, parámetro line_items[0][price], mensaje No such price',
+    ]);
+    expect(lines.join(' ')).not.toContain('llave-de-prueba-stripe');
+    // Sin cuerpo legible igual deja una línea útil
+    const opaque: string[] = [];
+    await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({
+        log: (line) => opaque.push(line),
+        fetch: () => Promise.resolve(new Response('no es json', { status: 500 })),
+      }),
+    );
+    expect(opaque[0]).toContain('estado 500');
+  });
+
+  it('si no hay red hacia la pasarela también deja una línea en el registro', async () => {
+    const lines: string[] = [];
+    const offline = checkoutDeps({
+      log: (line) => lines.push(line),
+      fetch: () => Promise.reject(new TypeError('error sending request')),
+    });
+    expect((await ask({ plan: 'annual', provider: 'stripe' }, offline)).status).toBe(502);
+    expect(lines).toEqual(['No se pudo crear el pago del plan annual con stripe. TypeError']);
+  });
+
   it('solo la página de la app puede llamar desde el navegador', async () => {
     const ok = await ask({ plan: 'monthly', provider: 'stripe' }, checkoutDeps());
     expect(ok.headers.get('access-control-allow-origin')).toBe('https://app.ejemplo.mx');

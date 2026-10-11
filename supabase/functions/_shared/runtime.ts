@@ -62,6 +62,9 @@ export function checkoutDeps(): CheckoutDeps {
     authenticate: (authorization) => authenticateUser(supabase, authorization),
     founderSeatsLeft: () => founderSeatsLeftViaRest(supabase),
     customerOf: (userId) => customerOfUserViaRest(supabase, userId),
+    log: (line) => {
+      console.error(line);
+    },
   };
 }
 

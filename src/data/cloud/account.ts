@@ -31,6 +31,45 @@ export async function requestEmailLink(
   return { ok: false, reason: error.status === 429 ? 'rate_limited' : 'failed' };
 }
 
+export type CodeResult =
+  | { ok: true }
+  | { ok: false; reason: 'invalid' | 'rate_limited' | 'failed' };
+
+/** El código del correo trae de 6 a 10 dígitos, según la configuración del proyecto de Supabase */
+export const EMAIL_CODE = /^\d{6,10}$/;
+
+/** Deja solo los dígitos, para aceptar el código pegado con espacios o guiones */
+export function normalizeEmailCode(raw: string): string {
+  return raw.replace(/\D/g, '');
+}
+
+/**
+ * Entra con el código que viene en el mismo correo del enlace (D-115). El enlace solo abre sesión en
+ * el navegador donde se abre. Con el código, el alumno lee el correo en el teléfono y entra en la
+ * computadora, o al revés. Al abrirse la sesión, el puente de la nube une la cuenta como con el enlace
+ */
+export async function verifyEmailCode(
+  cloud: SupabaseClient,
+  input: { email: string; code: string },
+): Promise<CodeResult> {
+  try {
+    const { data, error } = await cloud.auth.verifyOtp({
+      email: input.email,
+      token: input.code,
+      type: 'email',
+    });
+    if (!error && data.session) return { ok: true };
+    if (error?.status === 429) return { ok: false, reason: 'rate_limited' };
+    // Un código vencido, ya usado o mal escrito responde con un error 4xx
+    if (error?.status !== undefined && error.status >= 400 && error.status < 500) {
+      return { ok: false, reason: 'invalid' };
+    }
+    return { ok: false, reason: 'failed' };
+  } catch {
+    return { ok: false, reason: 'failed' };
+  }
+}
+
 function isRetryableNetworkError(error: unknown): boolean {
   return (
     typeof error === 'object' &&

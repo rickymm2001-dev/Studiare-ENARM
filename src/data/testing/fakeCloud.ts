@@ -80,6 +80,11 @@ export interface FakeCloud {
   sync: 'off' | 'ok';
   /** Cuánto tarda signOut en quitar la sesión y avisar SIGNED_OUT, como la red de verdad */
   signOutDelay: number;
+  /** Correos que se pidieron con signInWithOtp, en orden */
+  otpRequests: { email: string }[];
+  /** Código que acepta verifyOtp. Al aceptarlo abre la sesión de codeSession y avisa SIGNED_IN */
+  validCode: string;
+  codeSession: FakeSession;
   /** Dispara un evento de Supabase Auth como si hubiera pasado en el navegador */
   emit: (event: AuthChangeEvent) => void;
 }
@@ -112,6 +117,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     rpcCalls: [],
     sync: 'off',
     signOutDelay: 0,
+    otpRequests: [],
+    validCode: '123456',
+    codeSession: { id: '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10', email: 'rick@example.com' },
     emit: (event) => {
       listeners.forEach((listener) => {
         listener(event);
@@ -192,6 +200,30 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
             },
           },
         };
+      },
+      signInWithOtp: (params: { email: string }) => {
+        fake.otpRequests.push({ email: params.email });
+        return Promise.resolve({ data: {}, error: null });
+      },
+      // Como Supabase, un código correcto deja la sesión guardada y avisa SIGNED_IN
+      verifyOtp: (params: { email: string; token: string }) => {
+        if (params.token !== fake.validCode || params.email !== fake.codeSession.email) {
+          return Promise.resolve({
+            data: { session: null, user: null },
+            error: { status: 403, code: 'otp_expired', message: 'Token has expired or is invalid' },
+          });
+        }
+        fake.session = fake.codeSession;
+        setTimeout(() => {
+          fake.emit('SIGNED_IN');
+        }, 0);
+        return Promise.resolve({
+          data: {
+            session: { access_token: fakeAccessToken(fake.codeSession.sessionId) },
+            user: { id: fake.codeSession.id, email: fake.codeSession.email },
+          },
+          error: null,
+        });
       },
       signOut: (signOutOptions?: unknown) => {
         fake.signOuts.push(signOutOptions);

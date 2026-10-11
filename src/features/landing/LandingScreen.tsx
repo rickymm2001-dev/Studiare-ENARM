@@ -14,7 +14,14 @@ import {
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import { FOUNDER_SEATS, PLANS, type PlanKey } from '@/config/billing';
+import {
+  annualSavingsPercent,
+  FOUNDER_PROMO_ACTIVE,
+  PLANS,
+  VISIBLE_PLANS,
+} from '@/config/billing';
+import { cloudConfigured } from '@/data/cloud/client';
+import { PlanPrice } from '@/features/billing/PlanPrice';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { cn } from '@/ui/cn';
@@ -112,12 +119,16 @@ export function LandingScreen() {
           <h2 id="precios" className="text-2xl font-extrabold sm:text-3xl">
             {text.pricingTitle}
           </h2>
-          <p className="text-sm text-fg-muted">{t.billing.simulatedNotice}</p>
+          <p className="text-sm text-fg-muted">
+            {cloudConfigured() ? t.billing.cloud.notice : t.billing.simulatedNotice}
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {(Object.keys(PLANS) as PlanKey[]).map((key) => {
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          {VISIBLE_PLANS.map((key) => {
             const plan = PLANS[key];
-            const highlighted = key === 'annual';
+            // Durante la promoción Fundador el mensual a 79 sale más barato que el anual, así que se
+            // destaca el mensual. Sin promoción, el anual es el mejor precio
+            const highlighted = FOUNDER_PROMO_ACTIVE ? key === 'monthly' : key === 'annual';
             return (
               <Card
                 key={key}
@@ -125,19 +136,14 @@ export function LandingScreen() {
               >
                 {highlighted ? (
                   <span className="bg-gold self-start rounded-full px-2.5 py-0.5 text-xs font-bold text-accent-fg">
-                    {text.bestValue}
+                    {FOUNDER_PROMO_ACTIVE ? text.founderBadge : text.bestValue}
                   </span>
                 ) : null}
                 <h3 className="text-lg font-bold">{t.billing.plans[key]}</h3>
-                <p>
-                  <span className="font-display text-3xl font-extrabold">
-                    {t.billing.price(plan.priceMxn)}
-                  </span>{' '}
-                  <span className="text-sm text-fg-muted">{t.billing.periods[key]}</span>
-                </p>
-                {key === 'founder' ? (
+                <PlanPrice plan={key} />
+                {key === 'annual' ? (
                   <p className="text-sm font-semibold text-success">
-                    {t.billing.founderNote(FOUNDER_SEATS)}
+                    {t.billing.savings(annualSavingsPercent())}
                   </p>
                 ) : null}
                 <ul className="flex flex-col gap-1 text-sm">

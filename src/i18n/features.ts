@@ -420,11 +420,14 @@ export const featureText = {
       provider: 'Pasarela de pago',
       providers: { stripe: 'Tarjeta con Stripe', mercadopago: 'Mercado Pago' },
       testMode: 'Modo prueba. Usa una tarjeta de prueba de la pasarela, no una tuya.',
+      singleProvider: 'Pagas con tarjeta en la página segura de Stripe.',
+      regularInstead: (price: string) => `Continuar con el precio regular de ${price}`,
       go: 'Ir a pagar',
       opening: 'Abriendo la pasarela…',
       back: 'Volver a los planes',
       errors: {
-        founder_full: 'Los lugares del plan Fundador ya se llenaron. Elige otro plan.',
+        founder_full:
+          'Los lugares del precio Fundador ya se llenaron. Puedes continuar con el precio regular.',
         not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
         unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
         failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
@@ -452,6 +455,20 @@ export const featureText = {
         },
       },
       refresh: 'Revisar mi plan',
+      // Con la nube configurada pero este navegador sin sesión. El servidor no sabe quién paga, así que
+      // no se ofrece pago alguno, ni el real ni el simulado
+      needLink: {
+        title: 'Conecta tu cuenta para pagar',
+        body: 'Para pagar, este navegador tiene que estar conectado a tu cuenta en la nube. Pide un correo nuevo y abre el enlace aquí, o escribe abajo el código que trae si lo abres en tu teléfono.',
+        otherDevice:
+          'Tu cuenta se abrió en otro dispositivo. Para pagar aquí, pide un correo nuevo y entra con el enlace o el código. Eso cerrará la sesión del otro dispositivo.',
+        send: 'Enviarme un correo nuevo',
+        sending: 'Enviando el correo…',
+        sent: (email: string) =>
+          `Te enviamos un correo a ${email}. Abre el enlace en este navegador o escribe abajo el código que trae. Si no lo ves, revisa la carpeta de spam.`,
+        noAccount:
+          'No encontramos el correo de tu cuenta en este navegador. Sal y vuelve a entrar desde la pantalla de acceso.',
+      },
     },
     current: (plan: string) => `Tu plan actual es ${plan}.`,
     stats: {
@@ -460,7 +477,10 @@ export const featureText = {
       dailyCaption: 'por día',
       unlimited: 'sin límite',
     },
-    plans: { free: 'Gratis', founder: 'Fundador', monthly: 'Mensual', annual: 'Anual' },
+    plans: { free: 'Gratis', founder: 'Mensual Fundador', monthly: 'Mensual', annual: 'Anual' },
+    // Lo lee un lector de pantalla, que no anuncia el tachado
+    regularPrice: 'Precio regular',
+    promoPrice: 'Precio Fundador',
     periods: {
       free: 'para siempre',
       founder: 'al mes, de por vida',
@@ -468,7 +488,7 @@ export const featureText = {
       annual: 'al año',
     },
     founderNote: (seats: number) =>
-      `Para los primeros ${seats} usuarios. El precio no sube mientras conserves tu suscripción. El cupo se confirma al cobrar.`,
+      `Precio Fundador para los primeros ${seats} usuarios. No sube mientras conserves tu suscripción. El cupo se confirma al cobrar.`,
     price: (mxn: number) => (mxn === 0 ? '$0' : `$${mxn.toLocaleString('es-MX')} MXN`),
     access: {
       dailyQuestions: (n: number | null) =>
@@ -493,7 +513,7 @@ export const featureText = {
     },
     featureLocked: (name: string) => `Tu plan no incluye ${name.toLowerCase()}.`,
     featureSeePlans: 'Ver planes',
-    savings: (percent: number) => `Ahorras ${percent}% contra pagar mes a mes`,
+    savings: (percent: number) => `Ahorras ${percent}% contra 12 meses al precio regular`,
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',
     checkoutTitle: 'Checkout simulado',
@@ -1510,6 +1530,7 @@ export const featureText = {
     ],
     pricingTitle: 'Planes',
     bestValue: 'Mejor precio',
+    founderBadge: 'Promoción Fundador',
     startWith: (plan: string) => `Empezar con ${plan}`,
     faqTitle: 'Preguntas frecuentes',
     faq: [
@@ -1916,13 +1937,13 @@ export const featureText = {
   },
   cloud: {
     loginNote:
-      'Tu cuenta se guarda en la nube. Entras con un enlace que te llega al correo, sin contraseña.',
+      'Tu cuenta se guarda en la nube. Entras con un enlace o un código que te llega al correo, sin contraseña.',
     signInDescription:
-      'Escribe tu correo y te enviamos un enlace para entrar. Ábrelo en este u otro dispositivo.',
+      'Escribe tu correo y te enviamos un enlace y un código para entrar. Abre el enlace en este dispositivo o escribe aquí el código.',
     sendLink: 'Enviarme el enlace',
     sentTitle: 'Revisa tu correo',
     sentBody: (email: string) =>
-      `Te enviamos un enlace a ${email}. Ábrelo para confirmar tu cuenta y entrar desde cualquier dispositivo. Si no lo ves, revisa la carpeta de spam.`,
+      `Te enviamos un correo a ${email} con un enlace y un código. Si lo abres en este dispositivo, usa el enlace. Si lo abres en otro, como tu teléfono, escribe aquí el código. Si no lo ves, revisa la carpeta de spam.`,
     failedTitle: 'No pudimos enviar el enlace',
     failedBody: 'Intenta de nuevo en unos minutos. Tu cuenta ya quedó guardada en este navegador.',
     rateLimited:
@@ -1930,10 +1951,26 @@ export const featureText = {
     continue: 'Empezar a estudiar',
     continueLocal: 'Seguir en este navegador',
     retry: 'Usar otro correo',
+    // Código del mismo correo, para entrar en un dispositivo distinto del que abrió el correo (D-115)
+    code: {
+      formLabel: 'Entrar con el código del correo',
+      label: 'Código del correo',
+      hint: 'Viene en el mismo correo, debajo del enlace. Úsalo si abriste el correo en otro dispositivo.',
+      submit: 'Entrar con el código',
+      verifying: 'Revisando el código…',
+      verified: 'Código correcto. Conectando tu cuenta…',
+      format: 'Escribe el código de 6 a 10 dígitos que viene en el correo.',
+      errors: {
+        invalid:
+          'El código no es válido o ya venció. Usa el del correo más reciente o pide uno nuevo.',
+        rate_limited: 'Hiciste demasiados intentos. Espera unos minutos e intenta de nuevo.',
+        failed: 'No pudimos revisar el código. Revisa tu conexión e intenta de nuevo.',
+      },
+    },
     statusTitle: 'Cuenta en la nube',
     linked: (email: string) => `Conectada como ${email}.`,
     notLinked:
-      'Aún no confirmas tu correo. Entra con el enlace que te enviamos para guardar tu cuenta en la nube.',
+      'Aún no confirmas tu correo. Entra con el enlace o el código que te enviamos para guardar tu cuenta en la nube.',
     checking: 'Revisando tu cuenta en la nube…',
     error: 'No pudimos conectar con la nube. Tu avance sigue guardado en este navegador.',
     roleFromCloud: 'Tu rol viene de tu cuenta en la nube y solo un administrador lo puede cambiar.',

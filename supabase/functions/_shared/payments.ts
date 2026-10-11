@@ -41,8 +41,8 @@ export interface PaymentNotice {
 /** Precios en pesos y nombre de cada plan. Una prueba confirma que coinciden con src/config/billing.ts */
 export const PLAN_PRICES_MXN: Record<PaidPlan, number> = {
   founder: 79,
-  monthly: 150,
-  annual: 1200,
+  monthly: 149,
+  annual: 1499,
 };
 export const PLAN_TITLES: Record<PaidPlan, string> = {
   founder: 'Studiare. Plan Fundador',
@@ -500,6 +500,23 @@ export interface CheckoutDeps extends CoreDeps {
   founderSeatsLeft: () => Promise<number | null>;
   /** El cliente de Stripe del alumno, si ya pagó antes. null si no se sabe o si falla */
   customerOf: (userId: string) => Promise<string | null>;
+  /** Deja constancia de por qué la pasarela no abrió el pago, sin llaves, para poder diagnosticarlo */
+  log?: (line: string) => void;
+}
+
+/**
+ * Por qué Stripe rechazó una petición, en una línea y sin llaves. Stripe responde con un objeto error
+ * que trae el tipo, el código, el parámetro que no le gustó y un mensaje en inglés
+ */
+async function stripeFailure(reply: Response): Promise<string> {
+  const failure = asRecord(asRecord(await reply.json().catch(() => ({}))).error);
+  return [
+    `estado ${String(reply.status)}`,
+    `tipo ${asString(failure.type) ?? '?'}`,
+    `código ${asString(failure.code) ?? '?'}`,
+    `parámetro ${asString(failure.param) ?? '?'}`,
+    `mensaje ${asString(failure.message) ?? '?'}`,
+  ].join(', ');
 }
 
 const STRIPE_PRICE_ENV: Record<PaidPlan, keyof FunctionEnv> = {
@@ -628,9 +645,14 @@ export async function handleCreateCheckout(
       // El cliente guardado puede ya no existir, por ejemplo si se borró en Stripe o si se cambió de
       // llaves de prueba a las reales. Entonces se reintenta una vez como alumno nuevo
       if (!reply.ok && known) reply = await open(null);
-      if (!reply.ok) return json({ error: 'provider' }, 502, cors);
+      if (!reply.ok) {
+        deps.log?.(`Stripe rechazó el pago del plan ${plan}. ${await stripeFailure(reply)}`);
+        return json({ error: 'provider' }, 502, cors);
+      }
       const url = asString(asRecord(await reply.json()).url);
-      return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
+      if (url) return json({ url }, 200, cors);
+      deps.log?.(`Stripe creó el pago del plan ${plan} pero no mandó la dirección`);
+      return json({ error: 'provider' }, 502, cors);
     }
 
     const token = deps.env.MERCADOPAGO_ACCESS_TOKEN ?? '';
@@ -657,12 +679,19 @@ export async function handleCreateCheckout(
       headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
       body: JSON.stringify(preference),
     });
-    if (!reply.ok) return json({ error: 'provider' }, 502, cors);
+    if (!reply.ok) {
+      deps.log?.(`Mercado Pago rechazó el pago del plan ${plan}. estado ${String(reply.status)}`);
+      return json({ error: 'provider' }, 502, cors);
+    }
     const created = asRecord(await reply.json());
     // En modo prueba Mercado Pago devuelve también una dirección de sandbox
     const url = asString(created.init_point) ?? asString(created.sandbox_init_point);
     return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
-  } catch {
+  } catch (error) {
+    // Sin red hacia la pasarela, o una respuesta que no se pudo leer. Solo el tipo de error, que no
+    // lleva llaves ni datos del alumno
+    const kind = error instanceof Error ? error.name : typeof error;
+    deps.log?.(`No se pudo crear el pago del plan ${plan} con ${provider}. ${kind}`);
     return json({ error: 'provider' }, 502, cors);
   }
 }
