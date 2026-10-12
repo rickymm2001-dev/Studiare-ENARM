@@ -49,7 +49,8 @@ export default defineConfig({
     {
       command: 'npm run build && npm run preview',
       url: PREVIEW_URL,
-      reuseExistingServer: !process.env.CI,
+      // Nunca reusar una vista previa abierta, que podría ser de una compilación anterior
+      reuseExistingServer: false,
       timeout: 180_000,
     },
   ],

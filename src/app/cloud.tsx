@@ -89,6 +89,11 @@ export function CloudBridge() {
 
       const sync = async () => {
         try {
+          // Las banderas de lanzamiento del servidor valen también para quien no ha entrado, porque la
+          // tabla las deja leer sin sesión. Mandan sobre el entorno y se aplican al recargar (D-119)
+          void mirrorRemoteFlags(cloud).then((result) => {
+            if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
+          });
           const identity = await readCloudIdentity(cloud);
           if (stopped()) return;
           if (!identity) {
@@ -109,10 +114,6 @@ export function CloudBridge() {
           // La configuración que el admin fijó en el servidor manda sobre la de este navegador. Los
           // motores la leen al abrir la app, así que si cambió se pide recargar
           void mirrorRemoteOverrides(cloud).then((result) => {
-            if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
-          });
-          // Las banderas de lanzamiento del servidor también mandan y se aplican al recargar (D-119)
-          void mirrorRemoteFlags(cloud).then((result) => {
             if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
           });
           if (guard?.authId !== identity.authId) {

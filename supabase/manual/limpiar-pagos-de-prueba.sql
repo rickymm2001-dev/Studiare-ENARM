@@ -9,8 +9,9 @@
 -- Cuándo correrlo
 --   Después de cancelar en Stripe las suscripciones de esas dos cuentas (Customers, la cuenta,
 --   Cancel subscription, Immediately, con reembolso del último pago) y de ver que los avisos de Stripe
---   ya llegaron a payment_webhook_events. Si se corre antes, los avisos que lleguen después no
---   encuentran filas y no pasa nada, pero conviene el orden para que la base cuente la historia completa.
+--   ya llegaron a payment_webhook_events. Los avisos de cancelación y de reembolso que lleguen después
+--   solo actualizan filas, así que sin filas no hacen nada. Un cobro nuevo sí volvería a crear filas, por
+--   eso primero se cancela en Stripe y después se corre esto.
 --
 -- Por qué está aquí y no lo hizo Claude
 --   La herramienta con la que Claude escribe en la base pide una confirmación humana para toda

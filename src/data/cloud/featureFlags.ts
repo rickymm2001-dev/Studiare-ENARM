@@ -29,8 +29,9 @@ export async function fetchRemoteFlags(cloud: Cloud): Promise<RemoteFlags> {
     const row = data as { value?: unknown } | null;
     if (row === null) return { ok: true, flags: null };
     const parsed = StoredFlagsSchema.safeParse(row.value);
-    // Un valor que no cumple el formato se ignora completo, igual que uno guardado en el navegador
-    return { ok: true, flags: parsed.success ? parsed.data : null };
+    // Un valor que no cumple el formato cuenta como no leído, no como sin banderas. Así un error de
+    // dedo del admin no borra la copia de todos los navegadores en silencio
+    return parsed.success ? { ok: true, flags: parsed.data } : { ok: false };
   } catch {
     return { ok: false };
   }

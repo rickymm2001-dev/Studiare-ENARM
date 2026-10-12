@@ -65,6 +65,8 @@ export interface FakeCloud {
   failSession: boolean;
   /** Valor de la clave admin_overrides en platform_settings. null si el admin no ha cambiado nada */
   overrides: unknown;
+  /** Valor de la clave feature_flags en platform_settings. null si el servidor no fija banderas */
+  flags: unknown;
   /** Versiones del aviso de privacidad que la app registró como aceptadas, en orden */
   acceptances: string[];
   claims: { p_device_id: string; p_label: string }[];
@@ -108,6 +110,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     failRole: 'none',
     failSession: false,
     overrides: null,
+    flags: null,
     acceptances: [],
     claims: [],
     rejections: [],
@@ -134,6 +137,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   };
 
   const table = (name: string) => {
+    // La clave que pidió la consulta a platform_settings, para servir la fila que toca
+    let settingKey: unknown = null;
     const single = (): unknown => {
       if (name === 'device_sessions') {
         fake.checks += 1;
@@ -144,7 +149,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       }
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
       if (name === 'platform_settings') {
-        return { data: fake.overrides === null ? null : { value: fake.overrides }, error: null };
+        const value = settingKey === 'feature_flags' ? fake.flags : fake.overrides;
+        return { data: value === null ? null : { value }, error: null };
       }
       return { data: null, error: null };
     };
@@ -152,6 +158,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       select: () => chain,
       eq: (column: string, value: unknown) => {
         if (name === 'device_sessions') fake.filters.push([column, value]);
+        if (name === 'platform_settings' && column === 'key') settingKey = value;
         return chain;
       },
       gt: () => chain,

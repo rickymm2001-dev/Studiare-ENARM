@@ -15,13 +15,14 @@ function fakeCloud(reply: { data?: unknown; error?: unknown } | 'throws') {
     reply === 'throws' ? Promise.reject(new Error('red')) : Promise.resolve(reply);
   const eq = vi.fn().mockImplementation(settle);
   const maybeSingle = vi.fn().mockImplementation(settle);
+  const selectEq = vi.fn().mockReturnValue({ maybeSingle });
   const table = {
-    select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ maybeSingle }) }),
+    select: vi.fn().mockReturnValue({ eq: selectEq }),
     delete: vi.fn().mockReturnValue({ eq }),
     upsert: vi.fn().mockImplementation(settle),
   };
   const from = vi.fn().mockReturnValue(table);
-  return { cloud: { from } as never, from, table, eq };
+  return { cloud: { from } as never, from, table, eq, selectEq };
 }
 
 afterEach(() => {
@@ -30,13 +31,14 @@ afterEach(() => {
 
 describe('leer las banderas del servidor', () => {
   it('lee la clave feature_flags de platform_settings', async () => {
-    const { cloud, from, table } = fakeCloud({
+    const { cloud, from, table, selectEq } = fakeCloud({
       data: { value: { demoTools: false } },
       error: null,
     });
     expect(await fetchRemoteFlags(cloud)).toEqual({ ok: true, flags: { demoTools: false } });
     expect(from).toHaveBeenCalledWith('platform_settings');
     expect(table.select).toHaveBeenCalledWith('value');
+    expect(selectEq).toHaveBeenCalledWith('key', FLAGS_SETTING_KEY);
   });
 
   it('sin fila no hay cambios y valen los valores del entorno', async () => {
@@ -46,12 +48,12 @@ describe('leer las banderas del servidor', () => {
     });
   });
 
-  it('un valor que no cumple el formato se ignora completo, y una bandera desconocida se descarta', async () => {
+  it('un valor que no cumple el formato cuenta como no leído, y una bandera desconocida se descarta', async () => {
     expect(
       await fetchRemoteFlags(
         fakeCloud({ data: { value: { demoTools: 'sí' } }, error: null }).cloud,
       ),
-    ).toEqual({ ok: true, flags: null });
+    ).toEqual({ ok: false });
     expect(
       await fetchRemoteFlags(
         fakeCloud({ data: { value: { demoTools: true, delFuturo: false } }, error: null }).cloud,
@@ -106,9 +108,12 @@ describe('copiar al navegador', () => {
     expect(localStorage.getItem(FLAGS_KEY)).toBeNull();
   });
 
-  it('con el servidor caído no toca la copia', async () => {
+  it('con el servidor caído o con un valor que no cumple el formato no toca la copia', async () => {
     writeStoredFlags({ demoTools: false });
     expect(await mirrorRemoteFlags(fakeCloud('throws').cloud)).toBe('unavailable');
+    expect(
+      await mirrorRemoteFlags(fakeCloud({ data: { value: { demoTools: 1 } }, error: null }).cloud),
+    ).toBe('unavailable');
     expect(readStoredFlags()).toEqual({ demoTools: false });
   });
 

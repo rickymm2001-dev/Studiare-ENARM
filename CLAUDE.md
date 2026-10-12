@@ -42,7 +42,7 @@ En desarrollo, un servidor local pequeño en la carpeta server hace de proxy hac
 - Sigue pendiente qué cuenta como referido concretado. Mientras tanto se concreta con el primer pago verificado del referido, que con la prueba gratis es el primer cobro después de la prueba
 
 # Flujo
-- Trabaja por fases. Al cerrar cada fase sigue la sección 15.1 de la especificación y detente a esperar aprobación
+- Trabaja por fases. Al cerrar cada fase sigue la sección 15.1 de la especificación y detente a esperar aprobación, salvo durante el plan del cambio V3, que sigue 0.1 y 0.3 de docs/PLAN_DEL_CAMBIO.md y no se detiene entre bloques
 - En fases grandes haz commit y actualiza PROGRESS.md al terminar cada bloque, para poder seguir después de un /clear, de una compactación o de un límite de uso
 - Si fallas dos veces en corregir lo mismo, detente, documenta en PROGRESS.md y pregunta
 - Ideas fuera del alcance van a IDEAS.md, no al código

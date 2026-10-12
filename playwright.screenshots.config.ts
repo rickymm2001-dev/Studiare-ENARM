@@ -16,6 +16,8 @@ const desktop = { ...devices['Desktop Chrome'], viewport: { width: 1280, height:
 
 export default defineConfig({
   testDir: './tests/screenshots',
+  // Las capturas del plan V3 tienen su propia configuración con tres anchos (npm run screenshots:v3)
+  testIgnore: ['**/v3/**'],
   tsconfig: './tsconfig.tests.json',
   fullyParallel: true,
   reporter: [['list']],
