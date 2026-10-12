@@ -104,7 +104,14 @@ describe('Inicio con el diseño fijo', () => {
     expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
     const party = screen.getByRole('region', { name: t.widgets.names.party_challenge });
     expect(await within(party).findByText(t.widgets.party.empty)).toBeVisible();
-    expect(screen.getByRole('region', { name: t.widgets.names.heatmap })).toBeVisible();
+    const heatmap = screen.getByRole('region', { name: t.widgets.names.heatmap });
+    expect(heatmap).toBeVisible();
+    // Las iniciales de lunes a domingo van a la izquierda de las filas
+    expect(
+      within(heatmap)
+        .getAllByText(/^[LMJVSD]$/)
+        .map((letter) => letter.textContent),
+    ).toEqual(['L', 'M', 'M', 'J', 'V', 'S', 'D']);
 
     // Ya no hay tablero que editar
     expect(screen.queryByRole('button', { name: 'Editar tablero' })).toBeNull();

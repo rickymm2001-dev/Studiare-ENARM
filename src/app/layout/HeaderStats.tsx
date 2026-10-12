@@ -1,6 +1,7 @@
 // Arriba a la derecha, siempre a la vista. Racha, nivel con su barra de XP y nombre, y la foto de
-// perfil que lleva a Perfil (D-062).
-import { Flame } from 'lucide-react';
+// perfil que lleva a Perfil (D-062). En la barra de computadora el nivel va en una línea, con su
+// título junto al número y la barra más larga, como en el diseño de Ricardo (D-117).
+import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
 import { buildSnapshot } from '@/features/home/snapshot';
@@ -37,7 +38,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
       <LevelLadderDialog totalXp={totalXp}>
         <button
           type="button"
-          className="flex w-24 min-w-0 flex-col gap-1 rounded-md text-left sm:w-48"
+          className="flex w-24 min-w-0 flex-col gap-1 rounded-md text-left sm:w-48 lg:w-auto lg:flex-row lg:items-center lg:gap-3"
           aria-label={`${t.headerStats.openLevels}. ${t.headerStats.level(
             level.level,
             level.title,
@@ -46,22 +47,34 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
           )}`}
           title={t.headerStats.level(level.level, level.title, level.xpIntoLevel, level.xpForNext)}
         >
-          <span className="flex items-baseline justify-between gap-1 text-[0.65rem] leading-none font-bold">
-            <span className="truncate font-mono tracking-wider text-accent uppercase">
+          <span
+            aria-hidden
+            className="hidden items-center gap-1.5 text-sm font-semibold whitespace-nowrap text-fg lg:flex"
+          >
+            <Star aria-hidden className="size-4 text-accent" />
+            {t.headerStats.titled(level.level, level.title)}
+          </span>
+          <span className="flex items-baseline justify-between gap-1 text-[0.65rem] leading-none font-bold lg:hidden">
+            <span className="truncate font-mono tracking-wider text-accent-ink uppercase">
               {level.title}
             </span>
             <span className="font-mono tracking-wider text-fg-muted uppercase">
               {t.headerStats.short(level.level)}
             </span>
           </span>
-          <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
-            <span className="block h-full rounded-full bg-gold" style={{ width: `${percent}%` }} />
-          </span>
-          <span
-            aria-hidden
-            className="hidden truncate text-[0.65rem] leading-none text-fg-muted sm:block"
-          >
-            {t.headerStats.left(level.xpForNext - level.xpIntoLevel, level.level + 1)}
+          <span className="flex min-w-0 flex-col gap-1 lg:w-40 xl:w-56">
+            <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
+              <span
+                className="block h-full rounded-full bg-gold"
+                style={{ width: `${percent}%` }}
+              />
+            </span>
+            <span
+              aria-hidden
+              className="hidden truncate text-[0.65rem] leading-none text-fg-muted sm:block lg:text-xs"
+            >
+              {t.headerStats.left(level.xpForNext - level.xpIntoLevel, level.level + 1)}
+            </span>
           </span>
         </button>
       </LevelLadderDialog>

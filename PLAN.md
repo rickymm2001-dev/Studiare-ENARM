@@ -243,6 +243,7 @@ Bloques
 | Flujo 2, repaso con confianza, causa y XP | e2e review.spec.ts |
 | Flujo 4, examen corto de 20 con resultados y errores al repaso | e2e exam.spec.ts |
 | Flujo 5, Inicio con el diseño fijo (D-116) | e2e home.spec.ts |
+| Barra superior y menú lateral que se oculta (D-117) | e2e home.spec.ts y src/app/layout/AppShell.test.tsx |
 | Flujo 6, Party | e2e party.spec.ts |
 | Todos los flujos en teléfono y escritorio | proyectos de Playwright mobile (390 por 844) y desktop |
 | Cero violaciones serias o críticas | axe en cada spec |

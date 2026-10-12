@@ -2,29 +2,32 @@
 // alumno, de dos meses atrás a dos adelante, con el promedio por día de este mes y un enlace a la
 // carga completa en Progreso. Los colores salen de los tokens de la gráfica, validados para
 // daltonismo en claro y en oscuro. Para el lector de pantalla hay una tabla con los mismos datos.
-import { useId, useState } from 'react';
+// La gráfica mide su espacio y lo llena todo, sin estirar el texto (D-117).
+import { useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { MonthlyLoad, MonthlyLoadPoint } from '@/engines/monthlyLoad';
 import { t } from '@/i18n/es-MX';
-import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card } from '@/ui/components/card';
+import { useElementSize } from '@/ui/hooks/use-element-size';
 import { niceMax } from './chartScale';
 
 const text = t.home.load;
 const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 const monthName = (month: string) => MONTHS[Number(month.slice(5, 7)) - 1] ?? month;
 
-const WIDTH = 320;
-const HEIGHT = 168;
-const PAD = { top: 12, right: 16, bottom: 24, left: 34 };
+/** Medida mientras no hay cómo medir, como en las pruebas con jsdom */
+const FALLBACK = { width: 320, height: 200 };
+const PAD = { top: 12, right: 16, bottom: 28, left: 42 };
 
 export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
   const titleId = useId();
   return (
-    <Card aria-labelledby={titleId} className="flex flex-col">
-      <CardHeader>
-        <CardTitle id={titleId}>{text.title}</CardTitle>
-      </CardHeader>
+    <Card aria-labelledby={titleId} className="flex flex-col p-5">
+      {/* h3 como las demás tarjetas de Tus repasos, que ya tiene su h2 */}
+      <h3 id={titleId} className="mb-2 text-lg font-bold text-fg sm:text-xl">
+        {text.title}
+      </h3>
       <p className="text-sm sm:text-base">
         {load.averagePerDayThisMonth > 0
           ? text.average(load.averagePerDayThisMonth)
@@ -42,7 +45,9 @@ export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
       {load.hasData ? (
         <LoadChart points={load.points} />
       ) : (
-        <p className="mt-3 rounded-md bg-muted px-3 py-2 text-sm text-fg-muted">{text.empty}</p>
+        <p className="mt-3 flex grow items-center justify-center rounded-md border border-dashed border-line-strong bg-muted/60 px-4 py-6 text-center text-sm text-fg-muted">
+          {text.empty}
+        </p>
       )}
     </Card>
   );
@@ -50,6 +55,8 @@ export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
 
 function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
   const [hover, setHover] = useState<number | null>(null);
+  const box = useRef<HTMLDivElement>(null);
+  const { width: WIDTH, height: HEIGHT } = useElementSize(box, FALLBACK);
   const max = niceMax(
     Math.max(0, ...points.map((point) => Math.max(point.scheduled, point.done ?? 0))),
   );
@@ -69,13 +76,16 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
   const active = hover === null ? null : points[hover];
 
   return (
-    <figure className="mt-3 flex flex-col gap-2">
-      <div className="relative">
+    <figure className="mt-3 flex grow flex-col gap-2">
+      {/* La caja crece con la tarjeta y la gráfica se dibuja a su medida exacta */}
+      <div ref={box} className="relative min-h-48 grow">
         <svg
-          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          width={WIDTH}
+          height={HEIGHT}
+          viewBox={`0 0 ${String(WIDTH)} ${String(HEIGHT)}`}
           role="img"
           aria-label={text.chartLabel}
-          className="h-auto w-full overflow-visible"
+          className="absolute inset-0 overflow-visible"
           onMouseLeave={() => {
             setHover(null);
           }}
@@ -95,7 +105,7 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
                 y={y(tick)}
                 textAnchor="end"
                 dominantBaseline="middle"
-                className="fill-fg-muted text-[10px] tabular-nums"
+                className="fill-fg-muted text-xs tabular-nums"
               >
                 {Math.round(tick).toLocaleString('es-MX')}
               </text>
@@ -105,9 +115,9 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
             <text
               key={point.month}
               x={x(index)}
-              y={HEIGHT - 6}
+              y={HEIGHT - 8}
               textAnchor="middle"
-              className="fill-fg-muted text-[10px]"
+              className="fill-fg-muted text-xs"
             >
               {monthName(point.month)}
             </text>

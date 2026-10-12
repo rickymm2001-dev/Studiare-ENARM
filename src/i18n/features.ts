@@ -164,6 +164,8 @@ export const featureText = {
       summary: (active: number, total: number, sum: number, metric: string) =>
         `${active} de ${total} días con actividad. ${sum.toLocaleString('es-MX')} ${metric} en total.`,
       cell: (day: string, value: number, metric: string) => `${day}, ${value} ${metric}`,
+      /** Inicial de cada día, de lunes a domingo, a la izquierda de las filas */
+      weekdays: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
       less: 'Menos',
       more: 'Más',
     },
@@ -1859,6 +1861,7 @@ export const featureText = {
     level: (level: number, title: string, into: number, next: number) =>
       `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
     short: (level: number) => `Nivel ${level}`,
+    titled: (level: number, title: string) => `Nivel ${level} · ${title}`,
     left: (xp: number, next: number) => `${xp.toLocaleString('es-MX')} XP para el nivel ${next}`,
     profile: 'Tu perfil',
     openLevels: 'Ver niveles y títulos',
