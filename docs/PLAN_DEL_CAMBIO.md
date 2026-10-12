@@ -1,6 +1,6 @@
 # Plan del cambio de Studiare
 
-Es la versión 3 de la plataforma. Se escribió el 2026-10-12 con las 102 respuestas del cuestionario de Ricardo, sus 18 comentarios y una revisión del repo, de su Google Sheet del banco y de la estructura del ENARM.
+Es la versión 3 de la plataforma. Se escribió el 2026-10-12 con las 102 respuestas del cuestionario de Ricardo, sus 19 comentarios y una revisión del repo, de su Google Sheet del banco y de la estructura del ENARM.
 
 ## Cómo se usa
 
@@ -15,7 +15,7 @@ Es la versión 3 de la plataforma. Se escribió el 2026-10-12 con las 102 respue
 0. Reglas para la sesión que ejecuta
 1. Resumen
 2. Decisiones del cuestionario
-3. Los 18 comentarios de Ricardo
+3. Los 19 comentarios de Ricardo
 4. Choques y cómo se resuelven
 5. Lo que Ricardo pidió que se le explicara
 6. Estructura del ENARM
@@ -76,7 +76,7 @@ Hay una prueba que falla a veces cuando la máquina está cargada. Es "un SIGNED
 - Rediseño completo para que Studiare se vea como un producto hecho por un equipo experto, sin degradados y con un solo color de acción, #156082
 - Navegación más simple. Configuración abajo con un engrane, Perfil dentro de Configuración, Apuntes en el menú, y sin Plan, sin Logros y sin ligas
 - Revisión del examen que convierte preguntas en tarjetas y pregunta por qué fallaste
-- Pagos completos. Prueba gratis de 7 días, Fundador anual a 749, cambio de plan con prorrateo, OXXO, SPEI, Mercado Pago, códigos de influencer y factura a pedido
+- Pagos completos. Prueba gratis de 7 días, Fundador anual a 749, cambio de plan con prorrateo, Apple Pay, Google Pay, OXXO, SPEI, Mercado Pago, códigos de influencer y factura a pedido
 - Banco real en la nube sincronizado con el Google Sheet de los médicos, con Salud pública e Inglés médico
 - IA real dentro de Supabase con los cinco motores, y OpenAI solo para comparar calidad
 - Un modelo del alumno que aprende de repasos, simuladores, apuntes y motivos de error, con comparación contra otros alumnos y por especialidad, sin predecir el puntaje
@@ -252,7 +252,7 @@ La pregunta completa y sus opciones están en el anexo A. Donde la respuesta dic
 | 101 | A. Guardar en docs | El cuestionario es el anexo A |
 | 102 | E. Nadie más contesta | |
 
-## 3. Los 18 comentarios de Ricardo
+## 3. Los 19 comentarios de Ricardo
 
 Ricardo pidió que todos se consideren tal y como los escribió. El texto literal está al final del anexo A. Aquí va qué se hace con cada uno y en qué bloque.
 
@@ -276,6 +276,7 @@ Ricardo pidió que todos se consideren tal y como los escribió. El texto litera
 | 16 | Perfil de solo lectura con un botón Editar perfil | B3 |
 | 17 | Auditar a fondo todos los procesos y subprocesos y dejarlos impecables | B1 y B19 |
 | 18 | Que toda la apariencia parezca hecha por un humano experto | B2 |
+| 19 | Infraestructura para pagar con Google Pay y Apple Pay | B10 y B17 (4.29) |
 
 ## 4. Choques y cómo se resuelven
 
@@ -336,6 +337,8 @@ Si Ricardo no dice otra cosa antes del mensaje de arranque, rige lo que dice cad
 **4.27 Consentimientos del registro.** Hoy el registro da todos los permisos solos. Eso choca con la analítica con permiso (respuesta 78) y con calibrar solo con quien dio permiso (respuesta 87). Cada uso opcional se pide por separado y empieza apagado.
 
 **4.28 Navegación en el teléfono.** Hoy lo que no cabe en la barra de abajo se alcanza desde la tarjeta Accesos de Perfil, que desaparece con el comentario 6. La barra del teléfono queda con Inicio, Repasar, Simular, Progreso y Más. Más abre Apuntes, Tutor, Party y Configuración.
+
+**4.29 Comentario 19, Apple Pay y Google Pay.** Según la página de soporte de Stripe para México, los dos se aceptan, y la página de pago de Stripe los muestra sola cuando están activados y el teléfono o el navegador los tiene. La documentación de Mercado Pago México no los lista entre sus medios de pago, así que van solo por Stripe. Se hace en dos partes. La primera en B10, en la página de pago de Stripe, sin depender del dominio. La segunda en B17, con botones de un toque dentro de la pantalla Suscripción, que piden registrar el dominio propio en Stripe. Se confirma en la documentación vigente de Stripe y de Mercado Pago antes de construir.
 
 ## 5. Lo que Ricardo pidió que se le explicara
 
@@ -687,6 +690,7 @@ El objetivo es que se pueda pagar como el alumno quiera, con prueba gratis, camb
 - Cambio de plan con prorrateo (respuesta 9). En el portal de Stripe, con dos configuraciones, una para Fundadores (79 y 749) y otra para precios regulares (149 y 1,499). create-portal-session elige la que le toca al alumno. Subir de plan cobra al momento la diferencia (proration_behavior always_invoice) y bajar se programa al final del periodo (schedule_at_period_end). El webhook lee customer.subscription.updated y cambia el plan según el Price ID
 - Formas de pago (respuesta 7 y 4.4)
   - Tarjeta, con renovación automática y prueba gratis
+  - Apple Pay y Google Pay, primera parte (comentario 19 y 4.29). Se activan en Stripe, en Settings, Payment methods. La sesión de pago de create-checkout no fija payment_method_types, así que la página de Stripe los muestra sola en los dispositivos que los tienen, también con la prueba gratis y la renovación automática. Una prueba revisa que la sesión no limite los medios de pago y deje fuera las billeteras. La pantalla Suscripción dice que se puede pagar con tarjeta, Apple Pay o Google Pay
   - OXXO y transferencia SPEI como pago único de 1 mes (149) o de 1 año (1,499), sin renovación ni prueba, con un correo 3 días antes de que venza. Se confirman después de pagar, así que el webhook atiende checkout.session.async_payment_succeeded y checkout.session.async_payment_failed. Pagar otro periodo antes de que venza suma desde la fecha de fin
   - Mercado Pago (respuesta 8) con su suscripción con tarjeta y su pago único. Faltan su función de avisos con validación de firma, su renovación y su cuenta. El alumno elige Stripe o Mercado Pago en Suscripción (4.11)
 - Códigos de influencer (respuesta 21). Cupones de Stripe con descuento solo en el primer pago y un código promocional por influencer, con allow_promotion_codes en el pago. Se guarda el código en payments y el admin ve cuántos pagos trae cada uno. En Mercado Pago no hay códigos al inicio
@@ -697,9 +701,10 @@ Se acepta cuando
 - Hay pruebas unitarias y SQL de cada estado (trialing, active, past_due, canceled y pase de un solo pago) y de los lugares Fundador
 - Hay e2e con pasarela simulada de cada camino. Prueba gratis, cancelar en la prueba, subir de mensual a anual, bajar al final del periodo, OXXO pagado y vencido, SPEI, Mercado Pago, código de descuento y pedir factura
 - Hay una corrida real en modo prueba de Stripe con la llave del entorno, incluidos OXXO y SPEI con sus herramientas de prueba
+- La página de pago muestra Apple Pay en un iPhone con Safari y Google Pay en un Android con Chrome, en modo prueba. Según Stripe, en modo prueba no se cobra la tarjeta real de la billetera. Se confirma en su documentación
 - docs/STRIPE.md está al día
 
-Necesita de Ricardo la llave de prueba de Stripe en el entorno, OXXO y SPEI activados en Stripe y la cuenta de Mercado Pago (sección 9).
+Necesita de Ricardo la llave de prueba de Stripe en el entorno, OXXO, SPEI, Apple Pay y Google Pay activados en Stripe, la cuenta de Mercado Pago y una prueba en su teléfono (sección 9).
 
 ### B11. Banco en la nube y Google Sheets (respuestas 46, 47, 49, 55 a 60, 64 a 68, 91 y 92)
 
@@ -813,10 +818,11 @@ Se acepta cuando los textos de docs/legal están listos para el abogado, con la 
 - Correo propio con Resend (respuestas 24 y 25), con SPF, DKIM y DMARC en el dominio, conectado al SMTP de Supabase y a las funciones
 - Supabase de pago antes de abrir a alumnos de pago (respuesta 27), con la protección de contraseñas filtradas (respuesta 28)
 - La portada queda lista para los textos de la agencia o del influencer (respuesta 53), con lugares marcados, Open Graph, imagen para compartir, sitemap y robots
+- Apple Pay y Google Pay, segunda parte (comentario 19 y 4.29). Con el dominio funcionando, la sesión lo registra en Stripe como dominio de medios de pago (Payment Method Domains). Si Apple no lo verifica solo, publica su archivo en `/.well-known/apple-developer-merchantid-domain-association` desde Cloudflare Pages. Después pone los botones de un toque de Stripe (Express Checkout Element) en la pantalla Suscripción, con Stripe.js cargado solo en esa pantalla para seguir bajo 300 KB, la CSP ajustada a lo que pidan Stripe, Apple y Google, y detrás de una bandera que se prende después de probarlos en teléfonos reales. Si la documentación vigente lo permite, usa la variante de Checkout Sessions con Elements, para reusar la prueba gratis, los códigos, los metadatos y el webhook que ya existen
 
-Se acepta cuando la app abre en el dominio con HTTPS, entra con correo y con Google, paga en modo prueba y manda correos desde el dominio.
+Se acepta cuando la app abre en el dominio con HTTPS, entra con correo y con Google, paga en modo prueba, también con Apple Pay y Google Pay desde la pantalla Suscripción, y manda correos desde el dominio.
 
-Necesita de Ricardo el dominio, Cloudflare, Resend y el plan de pago de Supabase.
+Necesita de Ricardo el dominio, Cloudflare, Resend, el plan de pago de Supabase y una prueba en su iPhone y en un Android.
 
 ### B18. Primeros alumnos (respuestas 62 y 63)
 
@@ -870,7 +876,7 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
    - Comparte tu Sheet Banco de preguntas con el correo de la cuenta de servicio como Lector, sin notificar. Deja apagado que los editores puedan compartir y el acceso general en Restringido
 10. **Resend** (B15 y B17). Crea la cuenta, agrega tu dominio y pon en tu DNS los registros SPF, DKIM y DMARC que te da. En Supabase, Authentication, SMTP Settings, pon sus datos. Crea una clave de API y pégala en Supabase, Edge Functions, Secrets, como RESEND_API_KEY
 11. **Mercado Pago** (B10). Cuenta de negocio de tu empresa. Sus credenciales de prueba van al entorno de la sesión (MP_ACCESS_TOKEN) y a los secretos de Supabase (MP_ACCESS_TOKEN y MP_WEBHOOK_SECRET)
-12. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO y transferencias bancarias de México. La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con su llave
+12. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO, transferencias bancarias de México, Apple Pay y Google Pay (comentario 19). La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con su llave. Cuando te avise, prueba el pago en tu iPhone con Safari y en un Android con Chrome
 13. **PostHog** (B15). Crea la cuenta y un proyecto. Su clave pública va como variable VITE_POSTHOG_KEY, junto con su dirección, en GitHub y después en Cloudflare
 14. **Sentry** (B15). Crea la cuenta y un proyecto. Su DSN va como variable VITE_SENTRY_DSN. Pon tu correo en sus alertas. Crea un token para subir los mapas de código y guárdalo como secreto de GitHub SENTRY_AUTH_TOKEN
 15. **Secreto de GitHub para la calibración** (B14). En Supabase crea una llave secreta dedicada a ese proceso y guárdala en GitHub, Settings, Secrets and variables, Actions, como SUPABASE_CALIBRATION_KEY
@@ -905,7 +911,7 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
   - api.cloudflare.com, cuando tengas Cloudflare
   - La documentación que la sesión debe leer antes de usar cada servicio. docs.stripe.com, www.mercadopago.com.mx, supabase.com, developers.google.com, resend.com, posthog.com, docs.sentry.io y developers.cloudflare.com
 - **Secretos del entorno.** En Network secrets o como variables de entorno, con estos nombres exactos. Nunca en el chat
-  - STRIPE_SECRET_KEY, con una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en productos, precios, cupones, códigos promocionales, clientes, suscripciones, sesiones de pago, configuraciones del portal y reembolsos, y de lectura en eventos
+  - STRIPE_SECRET_KEY, con una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en productos, precios, cupones, códigos promocionales, clientes, suscripciones, sesiones de pago, configuraciones del portal, dominios de medios de pago y reembolsos, y de lectura en eventos
   - MP_ACCESS_TOKEN, con la credencial de prueba de Mercado Pago
   - ENARM_ANTHROPIC_KEY, con tu clave de Anthropic. Nunca con el nombre ANTHROPIC_API_KEY
   - ENARM_OPENAI_KEY, para comparar calidad en las evaluaciones
@@ -928,6 +934,7 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
 - Se borran todos los datos de pago de prueba antes de cambiar a llaves reales, porque los clientes de prueba no existen en modo real y el cupo Fundador cuenta filas
 - Stripe en modo real. Cuenta activada, precios reales (79, 149, 1,499 y 749), configuraciones del portal, webhook con sus eventos (los seis de hoy más customer.subscription.trial_will_end, checkout.session.async_payment_succeeded y checkout.session.async_payment_failed), secretos reales en Supabase y una compra real chica con su reembolso
 - Mercado Pago en modo real con la misma prueba
+- Apple Pay y Google Pay probados en modo real con una compra chica en un iPhone y en un Android
 - Dominio con HTTPS, correo propio, entrada con Google y segundo factor funcionando
 - Supabase de pago con respaldos
 - Analítica y alertas prendidas
@@ -1794,4 +1801,6 @@ Ricardo escribió "Mis comentarios adicionales = TODOS DEBEN SER CONSIDERADOS TA
 17. ES SUMAMENTE IMPORTANTE QUE REVISES DE FORMA MUY MINUCIOSA LOS PROCESOS Y SUBPROCESOS QUE SIGUE ACTUALMENTE MI PÁGINA Y LOS AUDITES, CORRIJAS EN CASO DE SER NECESARIO, OPTIMICES, MEJORES, Y EN GENERAL LOS DEJES IMPECABLES. QUIERO UNA PÁGINA COMPLETAMENTE FUNCIONAL.
 18. También quiero que agregues que quiero que cambie toda la apariencia de mi página para que parezca que realmente la hizo un humano experto en programación
 
-El comentario 18 llegó en un mensaje aparte el mismo 2026-10-12, mientras se escribía este plan.
+19. Agrega también que quiero que agreguemos la infraestructura para usar google y apple pay
+
+El comentario 18 llegó en un mensaje aparte el mismo 2026-10-12, mientras se escribía este plan. El 19 llegó ese mismo día, después de subir la primera versión.
