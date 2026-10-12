@@ -51,10 +51,10 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   // Inicio ya cuenta las tres tarjetas y el XP
   await page.goto('/');
   await expect(page.getByText(t.widgets.today.done(3, 0))).toBeVisible();
-  // La carga de repaso ya dibuja la gráfica con lo de este mes
+  // La carga de repaso dibuja lo que toca cada uno de los próximos 7 días del mazo que sigue
   await expect(
     page
       .getByRole('region', { name: t.home.load.title })
-      .getByRole('img', { name: t.home.load.chartLabel }),
+      .getByRole('img', { name: /^Tarjetas por día de los próximos 7 días/ }),
   ).toBeVisible();
 });

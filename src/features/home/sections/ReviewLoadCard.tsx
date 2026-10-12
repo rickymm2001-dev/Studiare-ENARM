@@ -1,236 +1,176 @@
-// Carga de repaso en Inicio (D-116). Por mes, cuántos repasos estaban programados y cuántos hizo el
-// alumno, de dos meses atrás a dos adelante, con el promedio por día de este mes y un enlace a la
-// carga completa en Progreso. Los colores salen de los tokens de la gráfica, validados para
-// daltonismo en claro y en oscuro. Para el lector de pantalla hay una tabla con los mismos datos.
-// La gráfica mide su espacio y lo llena todo, sin estirar el texto (D-117).
-import { useId, useRef, useState } from 'react';
+// Carga de repaso en Inicio (D-118). Una columna por cada uno de los próximos 7 días, hoy incluido,
+// con las tarjetas que te tocan ese día, repasos y nuevas juntas. Sale de la misma proyección y los
+// mismos límites que la carga futura de Progreso y el planificador, así las cifras coinciden. Cada
+// columna dice su cifra arriba, al pasar el cursor se ve el desglose y para el lector de pantalla hay
+// una tabla con los mismos datos. Sustituye a la gráfica de repasos programados y realizados por mes
+// de D-116, que no se entendía.
+import { useId, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import type { MonthlyLoad, MonthlyLoadPoint } from '@/engines/monthlyLoad';
+import type { DayLoad } from '@/engines/fsrs';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
+import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
-import { useElementSize } from '@/ui/hooks/use-element-size';
-import { niceMax } from './chartScale';
+import type { FutureLoad } from '../../progress/futureLoad';
 
 const text = t.home.load;
-const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-const monthName = (month: string) => MONTHS[Number(month.slice(5, 7)) - 1] ?? month;
 
-/** Medida mientras no hay cómo medir, como en las pruebas con jsdom */
-const FALLBACK = { width: 320, height: 200 };
-const PAD = { top: 12, right: 16, bottom: 28, left: 42 };
+/** Días que muestra la gráfica, hoy incluido */
+export const LOAD_DAYS = 7;
 
-export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
+// Los días son de calendario, así que se formatean en UTC para que no se corran
+const asDate = (day: string) => new Date(`${day}T12:00:00Z`);
+const weekdayFormat = new Intl.DateTimeFormat('es-MX', { weekday: 'short', timeZone: 'UTC' });
+const dayNumberFormat = new Intl.DateTimeFormat('es-MX', { day: 'numeric', timeZone: 'UTC' });
+const longDayFormat = new Intl.DateTimeFormat('es-MX', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+});
+const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
+const shortDay = (day: string) => capitalize(weekdayFormat.format(asDate(day)).replace('.', ''));
+const longDay = (day: string) => capitalize(longDayFormat.format(asDate(day)));
+const totalOf = (day: DayLoad) => day.reviews + day.newCards;
+
+export function ReviewLoadCard({ load }: { load: FutureLoad | null }) {
   const titleId = useId();
+  const days = load?.days.slice(0, LOAD_DAYS) ?? [];
+  const total = days.reduce((sum, day) => sum + totalOf(day), 0);
   return (
     <Card aria-labelledby={titleId} className="flex flex-col p-5">
       {/* h3 como las demás tarjetas de Tus repasos, que ya tiene su h2 */}
       <h3 id={titleId} className="mb-2 text-lg font-bold text-fg sm:text-xl">
         {text.title}
       </h3>
-      <p className="text-sm sm:text-base">
-        {load.averagePerDayThisMonth > 0
-          ? text.average(load.averagePerDayThisMonth)
-          : text.averageNone}{' '}
-        {text.linkBefore}
-        <Link
-          to={screenPath('progress')}
-          aria-label={text.linkLabel}
-          className="font-semibold text-primary underline underline-offset-4"
-        >
-          {text.link}
-        </Link>
-        {text.linkAfter}
-      </p>
-      {load.hasData ? (
-        <LoadChart points={load.points} />
+      {load === null ? (
+        <div className="mt-1 flex grow flex-col items-center justify-center gap-3 rounded-md border border-dashed border-line-strong bg-muted/60 px-4 py-6 text-center">
+          <p className="text-sm text-fg-muted">{text.empty}</p>
+          <Button asChild variant="secondary" size="sm">
+            <Link to={screenPath('decks')}>{text.goToDecks}</Link>
+          </Button>
+        </div>
       ) : (
-        <p className="mt-3 flex grow items-center justify-center rounded-md border border-dashed border-line-strong bg-muted/60 px-4 py-6 text-center text-sm text-fg-muted">
-          {text.empty}
-        </p>
+        <>
+          <p className="text-sm sm:text-base">
+            {total > 0 ? text.summary(total, Math.round(total / days.length)) : text.none}{' '}
+            {text.linkBefore}
+            <Link
+              to={screenPath('progress')}
+              aria-label={text.linkLabel}
+              className="font-semibold text-primary underline underline-offset-4"
+            >
+              {text.link}
+            </Link>
+            {text.linkAfter}
+          </p>
+          <DayColumns days={days} total={total} />
+        </>
       )}
     </Card>
   );
 }
 
-function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
+/** Columnas por día. Una sola serie, así que no lleva leyenda. El título de la tarjeta la nombra */
+function DayColumns({ days, total }: { days: readonly DayLoad[]; total: number }) {
   const [hover, setHover] = useState<number | null>(null);
-  const box = useRef<HTMLDivElement>(null);
-  const { width: WIDTH, height: HEIGHT } = useElementSize(box, FALLBACK);
-  const max = niceMax(
-    Math.max(0, ...points.map((point) => Math.max(point.scheduled, point.done ?? 0))),
-  );
-  const innerWidth = WIDTH - PAD.left - PAD.right;
-  const innerHeight = HEIGHT - PAD.top - PAD.bottom;
-  const step = points.length > 1 ? innerWidth / (points.length - 1) : 0;
-  const x = (index: number) => PAD.left + index * step;
-  const y = (value: number) => PAD.top + innerHeight - (value / max) * innerHeight;
-  const ticks = [0, max / 4, max / 2, (max * 3) / 4, max];
-  const line = (values: (number | null)[]) =>
-    values
-      .map((value, index) => (value === null ? null : `${x(index)},${y(value)}`))
-      .filter((value): value is string => value !== null)
-      .join(' ');
-  const scheduled = points.map((point) => point.scheduled);
-  const done = points.map((point) => point.done);
-  const active = hover === null ? null : points[hover];
+  const totals = days.map(totalOf);
+  const max = Math.max(1, ...totals);
+  const peak = totals.indexOf(Math.max(0, ...totals));
+  const peakDay = days[peak];
+  const dayName = (index: number, day: string) => (index === 0 ? text.today : longDay(day));
+  const label =
+    total > 0 && peakDay
+      ? text.chartLabel(total, dayName(peak, peakDay.day), totals[peak] ?? 0)
+      : text.chartEmpty;
+  const active = hover === null ? undefined : days[hover];
 
   return (
-    <figure className="mt-3 flex grow flex-col gap-2">
-      {/* La caja crece con la tarjeta y la gráfica se dibuja a su medida exacta */}
-      <div ref={box} className="relative min-h-48 grow">
-        <svg
-          width={WIDTH}
-          height={HEIGHT}
-          viewBox={`0 0 ${String(WIDTH)} ${String(HEIGHT)}`}
-          role="img"
-          aria-label={text.chartLabel}
-          className="absolute inset-0 overflow-visible"
-          onMouseLeave={() => {
-            setHover(null);
-          }}
-        >
-          {ticks.map((tick) => (
-            <g key={tick}>
-              <line
-                x1={PAD.left}
-                x2={WIDTH - PAD.right}
-                y1={y(tick)}
-                y2={y(tick)}
-                className="stroke-line"
-                strokeWidth={1}
-              />
-              <text
-                x={PAD.left - 6}
-                y={y(tick)}
-                textAnchor="end"
-                dominantBaseline="middle"
-                className="fill-fg-muted text-xs tabular-nums"
+    <figure className="mt-4 flex grow flex-col gap-2">
+      <div
+        role="img"
+        aria-label={label}
+        className="relative min-h-44 grow"
+        onMouseLeave={() => {
+          setHover(null);
+        }}
+      >
+        <div className="absolute inset-0 flex border-b border-line">
+          {days.map((day, index) => {
+            const value = totals[index] ?? 0;
+            return (
+              // La zona de la columna entera responde al cursor, más grande que la barra
+              <div
+                key={day.day}
+                className="relative flex min-w-0 flex-1 flex-col items-center justify-end"
+                onMouseEnter={() => {
+                  setHover(index);
+                }}
               >
-                {Math.round(tick).toLocaleString('es-MX')}
-              </text>
-            </g>
-          ))}
-          {points.map((point, index) => (
-            <text
-              key={point.month}
-              x={x(index)}
-              y={HEIGHT - 8}
-              textAnchor="middle"
-              className="fill-fg-muted text-xs"
-            >
-              {monthName(point.month)}
-            </text>
-          ))}
-          {hover !== null ? (
-            <line
-              x1={x(hover)}
-              x2={x(hover)}
-              y1={PAD.top}
-              y2={PAD.top + innerHeight}
-              className="stroke-line-strong"
-              strokeWidth={1}
-            />
-          ) : null}
-          <polyline
-            points={line(scheduled)}
-            fill="none"
-            className="stroke-chart-scheduled"
-            strokeWidth={2}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-          <polyline
-            points={line(done)}
-            fill="none"
-            className="stroke-chart-done"
-            strokeWidth={2}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-          {scheduled.map((value, index) => (
-            <circle
-              key={`s-${String(index)}`}
-              cx={x(index)}
-              cy={y(value)}
-              r={4}
-              className="fill-chart-scheduled stroke-surface"
-              strokeWidth={2}
-            />
-          ))}
-          {done.map((value, index) =>
-            value === null ? null : (
-              <circle
-                key={`d-${String(index)}`}
-                cx={x(index)}
-                cy={y(value)}
-                r={4}
-                className="fill-chart-done stroke-surface"
-                strokeWidth={2}
-              />
-            ),
-          )}
-          {/* Zonas de toque más anchas que las marcas, una por mes */}
-          {points.map((point, index) => (
-            <rect
-              key={`h-${point.month}`}
-              x={x(index) - step / 2}
-              y={PAD.top}
-              width={Math.max(step, 24)}
-              height={innerHeight}
-              fill="transparent"
-              onMouseEnter={() => {
-                setHover(index);
-              }}
-            />
-          ))}
-        </svg>
+                <span className="mb-1 text-xs font-semibold text-fg tabular-nums">
+                  {value.toLocaleString('es-MX')}
+                </span>
+                {/* Barra de 24 px como máximo, con la punta redondeada y pegada a la base */}
+                <span
+                  className={cn(
+                    'w-3/5 max-w-6 rounded-t-[4px] bg-primary transition-opacity',
+                    hover !== null && hover !== index && 'opacity-60',
+                  )}
+                  style={{ height: `calc((100% - 1.25rem) * ${String(value / max)})` }}
+                />
+              </div>
+            );
+          })}
+        </div>
         {active && hover !== null ? (
           <div
             aria-hidden
-            className="pointer-events-none absolute top-0 rounded-md border border-line bg-surface px-2 py-1 text-xs shadow-card"
-            style={{
-              left: `${(x(hover) / WIDTH) * 100}%`,
-              transform: `translateX(${hover > points.length / 2 ? '-105%' : '5%'})`,
-            }}
+            className="pointer-events-none absolute top-0 z-10 w-max max-w-48 rounded-md border border-line bg-surface px-2 py-1 text-xs shadow-card"
+            style={
+              hover < days.length / 2
+                ? { left: `${String((hover / days.length) * 100)}%` }
+                : { right: `${String(((days.length - hover - 1) / days.length) * 100)}%` }
+            }
           >
-            <p className="font-semibold">{monthName(active.month)}</p>
-            <p className="flex items-center gap-1.5">
-              <span className="inline-block h-0.5 w-3 rounded-full bg-chart-scheduled" />
-              {text.scheduled} {active.scheduled.toLocaleString('es-MX')}
-            </p>
-            <p className="flex items-center gap-1.5">
-              <span className="inline-block h-0.5 w-3 rounded-full bg-chart-done" />
-              {text.done} {active.done === null ? text.notYet : active.done.toLocaleString('es-MX')}
-            </p>
+            <p className="font-semibold">{dayName(hover, active.day)}</p>
+            <p className="tabular-nums">{text.dayTotal(totalOf(active))}</p>
+            <p className="text-fg-muted">{text.dayDetail(active.reviews, active.newCards)}</p>
           </div>
         ) : null}
       </div>
-      <figcaption className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-fg-muted">
-        <span className="flex items-center gap-1.5">
-          <span aria-hidden className="inline-block h-0.5 w-4 rounded-full bg-chart-scheduled" />
-          {text.scheduled}
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span aria-hidden className="inline-block h-0.5 w-4 rounded-full bg-chart-done" />
-          {text.done}
-        </span>
-      </figcaption>
+      <div aria-hidden className="flex">
+        {days.map((day, index) => (
+          <span
+            key={day.day}
+            className={cn(
+              'flex min-w-0 flex-1 flex-col items-center text-xs leading-tight text-fg-muted',
+              index === 0 && 'font-semibold text-fg',
+            )}
+          >
+            <span className="truncate">{index === 0 ? text.today : shortDay(day.day)}</span>
+            <span className="tabular-nums">{dayNumberFormat.format(asDate(day.day))}</span>
+          </span>
+        ))}
+      </div>
+      <figcaption className="text-xs text-fg-muted">{text.estimate}</figcaption>
       <table className="sr-only">
-        <caption>{text.chartLabel}</caption>
+        <caption>{label}</caption>
         <thead>
           <tr>
-            <th scope="col">{text.month}</th>
-            <th scope="col">{text.scheduled}</th>
-            <th scope="col">{text.done}</th>
+            <th scope="col">{text.day}</th>
+            <th scope="col">{text.reviews}</th>
+            <th scope="col">{text.fresh}</th>
+            <th scope="col">{text.total}</th>
           </tr>
         </thead>
         <tbody>
-          {points.map((point) => (
-            <tr key={point.month}>
-              <th scope="row">{monthName(point.month)}</th>
-              <td>{point.scheduled}</td>
-              <td>{point.done ?? text.notYet}</td>
+          {days.map((day, index) => (
+            <tr key={day.day}>
+              <th scope="row">{dayName(index, day.day)}</th>
+              <td>{day.reviews}</td>
+              <td>{day.newCards}</td>
+              <td>{totalOf(day)}</td>
             </tr>
           ))}
         </tbody>

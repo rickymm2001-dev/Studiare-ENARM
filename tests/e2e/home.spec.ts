@@ -28,7 +28,7 @@ test('Inicio muestra cada parte del diseño y el plan lleva a Suscripción', asy
     t.home.plan.title,
     t.widgets.names.missions,
     t.widgets.names.party_challenge,
-    t.widgets.names.heatmap,
+    t.home.calendarTitle,
   ]) {
     await expect(page.getByRole('region', { name })).toBeVisible();
   }
@@ -64,7 +64,7 @@ test('en computadora el saludo va en la barra, el menú se oculta y el heatmap c
   expect((await level.boundingBox())?.y ?? 999).toBeLessThan(64);
 
   // El año entero cabe sin desplazarse y las celdas llenan el ancho de la tarjeta
-  const heatmap = page.getByRole('region', { name: t.widgets.names.heatmap });
+  const heatmap = page.getByRole('region', { name: t.home.calendarTitle });
   await expect(heatmap.getByText('L', { exact: true })).toBeVisible();
   const fits = await heatmap
     .locator('.overflow-x-auto')

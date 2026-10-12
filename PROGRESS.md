@@ -4,6 +4,7 @@
 
 - Inicio con el diseño fijo de Ricardo del 2026-10-12 (D-116). Saludo, Tus repasos con la carga de repaso por mes, Tus simuladores, el plan actual con su botón para mejorarlo siempre a la vista, misiones, Party y el heatmap del año. Ya no es un tablero editable
 - Barra superior blanca con el saludo y el nivel, menú de tres barras que oculta el menú lateral y se recuerda, medio centímetro de separación en todos lados, gráfica de carga que llena su tarjeta y heatmap a todo el ancho con las iniciales de los días (D-117)
+- Carga de repaso de Inicio como columnas de lo que toca cada uno de los próximos 7 días, con la proyección de Progreso. Calendario con título y cuadros con más aire, y 0.8 cm de separación en computadora (D-118)
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A

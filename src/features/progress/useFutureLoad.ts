@@ -10,13 +10,13 @@ import { followedDeckIds } from '../decks/followed';
 import { schedulerConfig } from '../review/schedulerConfig';
 import { latestCardStates, reviewedToday } from '../review/study';
 import type { ReadySession } from '../shared/RequireSession';
-import { futureLoad, type FutureLoad, type LoadHorizon } from './futureLoad';
+import { futureLoad, type FutureLoad } from './futureLoad';
 
 export function useFutureLoad(
   session: ReadySession,
   events: readonly AppEvent[],
   content: { decks: readonly Deck[]; cards: readonly Card[] },
-  horizon: LoadHorizon,
+  horizon: number,
 ): FutureLoad | null {
   return useMemo(() => {
     const followed = followedDeckIds(session, content.decks);

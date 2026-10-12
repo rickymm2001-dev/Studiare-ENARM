@@ -94,7 +94,7 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       { exact: false },
     ),
   ).toBeVisible();
-  // La carga de repaso no dibuja una gráfica vacía
+  // Sin mazos que seguir, la carga de repaso no dibuja una gráfica vacía
   await expect(
     page.getByRole('region', { name: t.home.load.title }).getByText(t.home.load.empty),
   ).toBeVisible();

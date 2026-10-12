@@ -23,7 +23,8 @@ export interface LoadWeek {
 }
 
 export interface FutureLoad {
-  horizon: LoadHorizon;
+  /** Días proyectados. Progreso usa 30 o 60 e Inicio los próximos 7 (D-118) */
+  horizon: number;
   days: DayLoad[];
   weeks: LoadWeek[];
   totalReviews: number;
@@ -44,7 +45,7 @@ export function futureLoad(input: {
   cards: readonly QueueCard[];
   /** Lo que ya repasó hoy, para no contarlo otra vez en el día de hoy */
   reviewedToday: ReviewedToday;
-  horizon: LoadHorizon;
+  horizon: number;
 }): FutureLoad {
   const { config, horizon } = input;
   const days = applyLimits(

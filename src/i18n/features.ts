@@ -90,32 +90,39 @@ export const featureText = {
           ? `¡Bienvenido, ${alias}!`
           : `¡Te damos la bienvenida, ${alias}!`,
     reviewsTitle: 'Tus repasos',
+    calendarTitle: 'Tu calendario',
     simulatorsTitle: 'Tus simuladores',
     topicsTitle: 'Temas para reforzar',
     dueTitle: 'Tienes…',
     dueCaption: (n: number) => (n === 1 ? 'Tarjeta vencida' : 'Tarjetas vencidas'),
     dueLabel: (n: number) => plural(n, 'tarjeta vencida', 'tarjetas vencidas'),
     nothingDue: 'Nada vencido por ahora. Aprende tarjetas nuevas o practica preguntas.',
+    // Carga de repaso de Inicio (D-118). Lo que te toca cada uno de los próximos 7 días
     load: {
       title: 'Carga de repaso',
-      average: (n: number) =>
-        `Este mes hiciste ${plural(n, 'repaso', 'repasos')} en promedio por día.`,
-      averageNone: 'Este mes todavía no repasas tarjetas.',
+      summary: (total: number, average: number) =>
+        average >= 1
+          ? `En los próximos 7 días te tocan ${plural(total, 'tarjeta', 'tarjetas')}, en promedio ${average.toLocaleString('es-MX')} al día.`
+          : `En los próximos 7 días te tocan ${plural(total, 'tarjeta', 'tarjetas')}.`,
+      none: 'En los próximos 7 días no te toca ninguna tarjeta.',
       linkBefore: 'Da clic ',
       link: 'aquí',
       linkLabel: 'Ver tu carga completa en Progreso',
       linkAfter: ' para ver tu carga completa.',
-      empty:
-        'Cuando repases tus primeras tarjetas verás aquí cuántos repasos tenías programados y cuántos hiciste cada mes.',
-      scheduled: 'Programados',
-      done: 'Realizados',
-      month: 'Mes',
-      chartLabel: 'Repasos programados y realizados por mes',
-      point: (month: string, scheduled: number, done: number | null) =>
-        done === null
-          ? `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')}`
-          : `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')} y ${plural(done, 'realizado', 'realizados')}`,
-      notYet: 'Todavía no llega',
+      empty: 'Cuando sigas un mazo verás aquí cuántas tarjetas te tocan cada día de la semana.',
+      goToDecks: 'Ir a Mazos',
+      today: 'Hoy',
+      estimate: 'Estimado con tu límite de nuevas por día y si contestas Bien.',
+      chartLabel: (total: number, peakDay: string, peak: number) =>
+        `Tarjetas por día de los próximos 7 días. ${plural(total, 'tarjeta', 'tarjetas')} en total y el día más cargado es ${peakDay} con ${peak.toLocaleString('es-MX')}.`,
+      chartEmpty: 'Tarjetas por día de los próximos 7 días. No te toca ninguna.',
+      day: 'Día',
+      reviews: 'Repasos',
+      fresh: 'Nuevas',
+      total: 'Total',
+      dayTotal: (n: number) => plural(n, 'tarjeta', 'tarjetas'),
+      dayDetail: (reviews: number, fresh: number) =>
+        `${plural(reviews, 'repaso', 'repasos')} y ${plural(fresh, 'nueva', 'nuevas')}`,
     },
     plan: {
       title: 'Plan actual',
