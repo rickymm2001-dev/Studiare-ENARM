@@ -92,6 +92,8 @@ test.describe('Cuenta en la nube', () => {
     await page.getByRole('tab', { name: t.onboarding.loginTab }).click();
     await page.getByLabel(t.account.email, { exact: true }).fill(EMAIL);
     await page.getByRole('button', { name: t.cloud.sendLink }).click();
+    // El correo existe en el servidor simulado cuando la app ya confirmó el envío
+    await expect(page.getByRole('heading', { name: t.cloud.sentTitle })).toBeVisible();
     const email = cloud.lastEmail(EMAIL);
     if (!email) throw new Error('El servidor simulado no registró el correo');
 
