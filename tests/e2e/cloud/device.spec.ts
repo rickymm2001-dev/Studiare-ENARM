@@ -7,6 +7,7 @@ import { t } from '@/i18n/es-MX';
 import {
   enterWithLink,
   expect,
+  openEmailLink,
   openSecondDevice,
   retryTimeLabel,
   test,
@@ -85,7 +86,7 @@ test.describe('Dispositivo único por cuenta', () => {
     const secondDevice = cloud.deviceSessionOf(EMAIL)?.deviceId;
 
     // El primero vuelve a entrar con un correo nuevo. Sería el segundo cambio del día
-    await page.goto(cloud.issueMagicLink(EMAIL));
+    await openEmailLink(page, cloud.issueMagicLink(EMAIL));
     const notice = page.getByRole('alert').filter({ hasText: t.cloud.deviceLimit.title });
     await expect(notice).toBeVisible({ timeout: 20_000 });
     const retryAt = cloud.deviceLimitRetryAt(EMAIL);

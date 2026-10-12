@@ -59,6 +59,16 @@ export async function expectHome(page: Page): Promise<void> {
 }
 
 /**
+ * Abre el enlace del correo como lo haría el navegador al venir del correo, cargando la página de nuevo.
+ * Si la página ya está en la app con la misma ruta, ir directo al enlace solo cambiaría el hash sin
+ * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva
+ */
+export async function openEmailLink(page: Page, link: string): Promise<void> {
+  if (page.url() !== 'about:blank') await page.goto('about:blank');
+  await page.goto(link);
+}
+
+/**
  * Entra con el enlace del correo, como quien abre el correo en este mismo navegador. Crea la cuenta
  * en la nube si no existe. El puente de la nube une la cuenta con un perfil local y abre la sesión
  */
@@ -68,7 +78,7 @@ export async function enterWithLink(
   email: string,
   alias?: string,
 ): Promise<void> {
-  await page.goto(cloud.issueMagicLink(email, alias));
+  await openEmailLink(page, cloud.issueMagicLink(email, alias));
   await expectHome(page);
 }
 

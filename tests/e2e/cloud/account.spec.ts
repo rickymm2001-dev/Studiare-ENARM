@@ -3,7 +3,7 @@
 // Supabase simulado guarda lo que "se mandó" y la prueba lo lee de ahí
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { expect, expectHome, test } from '../support/cloudFixtures';
+import { expect, expectHome, openEmailLink, test } from '../support/cloudFixtures';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
 const EMAIL = 'ana@ejemplo.mx';
@@ -31,7 +31,7 @@ test.describe('Cuenta en la nube', () => {
     expect(cloud.userByEmail(EMAIL)?.alias).toBe('Ana');
 
     // Abrir el enlace en este navegador une la cuenta y abre la sesión
-    await page.goto(first.link);
+    await openEmailLink(page, first.link);
     await expectHome(page);
     await page.goto(SCREENS.profile.path);
     await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
