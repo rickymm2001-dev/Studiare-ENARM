@@ -248,7 +248,7 @@ export const adminText = {
       },
       'fsrs.optimizeAfterReviews': {
         label: 'Optimizar FSRS por alumno',
-        hint: 'Repasos para optimizar los parámetros de cada alumno. Fuera del prototipo (J).',
+        hint: 'Repasos para optimizar los parámetros de cada alumno. Por ahora FSRS va de fábrica para todos (J, respuesta 90).',
       },
       'fsrs.desiredRetention': {
         label: 'Retención deseada',

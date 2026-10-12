@@ -1,6 +1,6 @@
 // Llamadas de las funciones a Supabase con fetch, sin librerías (Fase P bloque 5, D-096). La llave
 // de servicio solo existe en el entorno de la función y jamás sale de ella ni llega al navegador.
-import type { PaymentNotice } from './payments.ts';
+import type { PaymentNotice, SubscriptionRow } from './payments.ts';
 
 export interface SupabaseEnv {
   url: string;
@@ -153,4 +153,36 @@ export async function userOfCustomerViaRest(
     fetchImpl,
   );
   return typeof result === 'string' && result !== '' ? result : null;
+}
+
+/**
+ * La suscripción del alumno como está en la base, para que create-checkout no abra un segundo cobro.
+ * null si no tiene. Lanza si la base falla, y entonces no se abre el pago
+ */
+export async function subscriptionOfUserViaRest(
+  env: SupabaseEnv,
+  userId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<SubscriptionRow | null> {
+  const query = new URLSearchParams({
+    user_id: `eq.${userId}`,
+    select: 'plan,status,current_period_end',
+  });
+  const reply = await fetchImpl(`${env.url}/rest/v1/subscriptions?${query}`, {
+    headers: { apikey: env.serviceKey, authorization: `Bearer ${env.serviceKey}` },
+  });
+  if (!reply.ok) throw new Error(`subscriptions respondió ${reply.status}`);
+  const rows: unknown = await reply.json();
+  if (!Array.isArray(rows)) throw new Error('subscriptions no devolvió una lista');
+  const row: unknown = rows[0];
+  if (row === undefined) return null;
+  const { plan, status, current_period_end } = (row ?? {}) as Record<string, unknown>;
+  if (typeof plan !== 'string' || typeof status !== 'string') {
+    throw new Error('subscriptions devolvió una fila incompleta');
+  }
+  return {
+    plan,
+    status,
+    current_period_end: typeof current_period_end === 'string' ? current_period_end : null,
+  };
 }

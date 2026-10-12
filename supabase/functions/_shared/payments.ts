@@ -500,8 +500,32 @@ export interface CheckoutDeps extends CoreDeps {
   founderSeatsLeft: () => Promise<number | null>;
   /** El cliente de Stripe del alumno, si ya pagó antes. null si no se sabe o si falla */
   customerOf: (userId: string) => Promise<string | null>;
+  /** La suscripción del alumno tal como está en la base. null si no tiene. Lanza si la base falla */
+  subscriptionOf: (userId: string) => Promise<SubscriptionRow | null>;
   /** Deja constancia de por qué la pasarela no abrió el pago, sin llaves, para poder diagnosticarlo */
   log?: (line: string) => void;
+}
+
+/** Lo que se lee de public.subscriptions para saber si ya hay un plan pagado vigente */
+export interface SubscriptionRow {
+  plan: string;
+  status: string;
+  current_period_end: string | null;
+}
+
+const IN_FORCE_STATUSES = new Set(['active', 'past_due', 'canceled']);
+
+/**
+ * El plan pagado que el alumno todavía tiene, con la misma regla que public.user_plan en la base. La
+ * cancelada y la de cobro fallido siguen valiendo hasta el fin del periodo ya pagado. Un mes regalado
+ * por referido no vive en subscriptions y no cuenta, porque no es un cobro. Una fecha que no se pueda
+ * leer cuenta como vigente, para que en la duda no se abra un segundo cobro
+ */
+export function planInForce(row: SubscriptionRow | null, nowMs: number): PaidPlan | null {
+  if (!row || !isPaidPlan(row.plan) || !IN_FORCE_STATUSES.has(row.status)) return null;
+  if (row.current_period_end === null) return row.status === 'active' ? row.plan : null;
+  const end = Date.parse(row.current_period_end);
+  return Number.isNaN(end) || end > nowMs ? row.plan : null;
 }
 
 /**
@@ -585,6 +609,20 @@ export async function handleCreateCheckout(
   }
   const appUrl = deps.env.APP_URL ?? '';
   if (appUrl === '') return json({ error: 'not_configured' }, 503, cors);
+
+  // Con un plan pagado vigente, otro pago abriría una segunda suscripción que cobra aparte, y la base
+  // solo guarda una. Cambiar de plan se hace al terminar el periodo (D-118). Si no se puede revisar,
+  // no se abre el pago, porque un doble cobro es peor que pedir que lo intente de nuevo
+  let inForce: PaidPlan | null;
+  try {
+    inForce = planInForce(await deps.subscriptionOf(user.id), deps.now());
+  } catch {
+    deps.log?.(
+      `No se pudo revisar si ya hay un plan pagado antes de abrir el pago del plan ${plan}`,
+    );
+    return json({ error: 'provider' }, 502, cors);
+  }
+  if (inForce !== null) return json({ error: 'already_subscribed' }, 409, cors);
 
   if (plan === 'founder') {
     const left = await deps.founderSeatsLeft();

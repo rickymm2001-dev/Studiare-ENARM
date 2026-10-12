@@ -2,39 +2,86 @@
 
 ## Estado actual
 
-- Inicio con el diseño fijo de Ricardo del 2026-10-12 (D-116). Saludo, Tus repasos con la carga de repaso por mes, Tus simuladores, el plan actual con su botón para mejorarlo siempre a la vista, misiones, Party y el heatmap del año. Ya no es un tablero editable
-- Barra superior blanca con el saludo y el nivel, menú de tres barras que oculta el menú lateral y se recuerda, medio centímetro de separación en todos lados, gráfica de carga que llena su tarjeta y heatmap a todo el ancho con las iniciales de los días (D-117)
-- Fase 0 aprobada por Ricardo el 2026-10-01
-- Fase A aprobada por Ricardo el 2026-10-02
-- Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
-- Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
-- Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
-- Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
-- Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
-- Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
-- Fase K (D-114 y D-115). Precios 79 Fundador como promoción del mensual, 149 mensual y 1,499 anual, entrada con el código del correo desde otro dispositivo, Mercado Pago oculto y registro del motivo cuando un pago no abre. Falta que Ricardo cree los precios nuevos en Stripe y agregue el código a las plantillas de correo. Ver su sección
-- Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema completo, tres funciones de pago desplegadas y los secretos de Stripe puestos. Ver su sección
-- Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
-- Fase H en main (D-108 y D-109, PR 27). Usuarios reales con la nube, rol sin conexión, aviso de privacidad con versión y auditoría funcional sin hallazgos pendientes. Ver su sección
-- Fase G en main (D-103 a D-107, PR 26). Proxy de IA alojado, textos legales y configuración del admin en el servidor. Ver su sección
-- Fase F programada (D-102). JavaScript inicial de unos 275 KB, política de seguridad de contenido, auditoría limpia, pruebas de sin conexión y de rendimiento y los entregables de la sección 17. Espera el cierre de 15.1 y la aprobación de Ricardo
-- Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
-- Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
-- Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
-- Formato visual del proyecto ROI Sales Companion publicado en la demo (D-090, PR 22) y llevado a todas las pantallas con cifras, con tarjeta oscura y datos reales (D-091). Axe pasa en claro y oscuro. Falta la revisión de Ricardo
-- Auditoría del repaso hecha con Codex el 2026-10-04. Una sesión que llega al final de la cola se cierra como completada y no como abandonada
-- Banco y mazos en pausa por indicación de Ricardo del 2026-10-06. No se escriben ni se corrigen preguntas ni tarjetas, solo se programa
-- Directrices V2 integradas a la memoria del proyecto el 2026-10-06 (D-080, CLAUDE.md y PLAN.md sección 10). Se aplican desde el examen. Quedan por confirmar el LLM de OpenAI y qué cuenta como referido concretado
-- Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
-- Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
-- Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
-- Repo remoto en https://github.com/rickymm2001-dev/Studiare-ENARM, público por decisión de Ricardo (D-048 y D-055)
-- Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-055). Falta el dominio propio, que Ricardo todavía no compra
-- Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
-- Marco más ancho en computadora con tarjetas en dos columnas (D-057)
-- Ícono de la pestaña con el símbolo de Studiare (D-058)
+- Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
+- Bloques. B0 arranque hecho, ver su sección. Siguen B1 auditoría inicial, B2 rediseño visual, B3 navegación y Configuración, B4 Repasar y Buscar tarjetas, B5 revisión del examen, B6 apuntes, B7 Party real, B8 plan Gratis, B9 cuentas, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
+- Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
+- Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
+- Nube. El proyecto real de Supabase tiene el esquema completo, con las migraciones 1 a 12 y el archivo manual, tres funciones de pago desplegadas (create-checkout versión 15 con D-118, create-portal-session y payment-webhook-stripe) y los secretos de Stripe de prueba (D-113, D-118). La base todavía tiene las filas de la prueba de pagos de las dos cuentas de Ricardo, que se borran después de cancelar en Stripe
+- Inicio con el diseño fijo de Ricardo (D-116) y la barra superior con el menú lateral que se oculta (D-117)
+- Historia. Las fases 0 a L de abajo quedaron cerradas con la respuesta 98. Sus secciones se conservan como registro de lo hecho y de su evidencia, aunque digan que esperan aprobación
+
+## Plan del cambio V3 (D-119)
+
+Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 del plan. Cada bloque cierra con 0.3 del plan. Las e2e de cada bloque corren en teléfono y computadora, las capturas van a docs/screenshots/v3 con una carpeta por bloque y un subagente que no escribió el código revisa el diff.
+
+### Bloques
+- [x] B0. Arranque
+- [ ] B1. Auditoría inicial de procesos
+- [ ] B2. Sistema de diseño y rediseño visual
+- [ ] B3. Navegación, Configuración y Perfil
+- [ ] B4. Repasar y Buscar tarjetas
+- [ ] B5. Revisión del examen y motivos de error
+- [ ] B6. Apuntes y mazos
+- [ ] B7. Party real y lo que se queda o se va
+- [ ] B8. Plan Gratis
+- [ ] B9. Cuentas y acceso
+- [ ] B10. Pagos completos
+- [ ] B11. Banco en la nube y Google Sheets
+- [ ] B12. IA real
+- [ ] B13. Inglés médico
+- [ ] B14. Datos y modelo del alumno
+- [ ] B15. Analítica, errores, recordatorios y recorrido
+- [ ] B16. Legal y privacidad
+- [ ] B17. Publicación
+- [ ] B18. Primeros alumnos
+- [ ] B19. Auditoría final y lanzamiento
+
+### B0. Arranque
+
+Hecho
+- La rama claude/lucid-noether-odfkau se unió con main sin conflictos. Trae D-118, un solo plan pagado a la vez, que ya estaba desplegado como create-checkout versión 15
+- CLAUDE.md ajustado (respuestas 34, 35 y 38). La clave ENARM_ANTHROPIC_KEY vive en server/.env.local en desarrollo y como secreto de las Edge Functions en producción, el proxy de IA de producción corre como Edge Function, OpenAI solo compara calidad en las evaluaciones, el referido se concreta con el primer pago verificado y el plan del cambio manda sobre PLAN.md
+- D-119 registrado con el resumen del plan, los 29 choques de la sección 4 y las explicaciones de la sección 5
+- Marca Studiare (respuesta 54) en src/config/brand.ts, index.html, README.md y los textos de la interfaz que decían prototipo. BRAND.themeColor y backgroundColor coinciden ahora con los tokens, con src/config/brand.test.ts que lo vigila. index.html lleva una descripción neutra y etiquetas Open Graph para Google y WhatsApp (4.17). El identificador de exportación enarm-prototipo-export-v2 se queda
+- Banderas de lanzamiento en src/config/featureFlags.ts, con un valor por entorno (VITE_APP_ENV, que el workflow de Pages fija en demo) y respaldo en platform_settings, clave feature_flags, que CloudBridge copia al navegador como los umbrales del admin. Primera bandera, demoTools. Pruebas unitarias en src/config/featureFlags.test.ts y src/data/cloud/featureFlags.test.ts
+- IDEAS.md con el piloto universitario, WhatsApp, la prueba de penetración y FSRS por alumno
+- docs/PENDIENTES_DE_RICARDO.md reescrito con la sección 9 del plan y lo que salió de este bloque
+- Capturas en docs/screenshots/v3/b0 con npm run screenshots:v3, en 390, 1280 y 1920 px, claro y oscuro
+
+No se pudo
+- Limpiar la prueba de pagos (respuestas 1 y 2). La credencial de Stripe del entorno es la llave publicable (pk_test_) y Stripe no acepta con ella llamadas de servidor. El camino alterno, una función temporal en Supabase con la llave que ya vive en sus secretos, lo bloqueó el modo Auto. Quedan los pasos exactos en docs/PENDIENTES_DE_RICARDO.md y el SQL en supabase/manual/limpiar-pagos-de-prueba.sql
+- Borrar stripe-config-check. El token de api.supabase.com del entorno no es válido (JWT could not be decoded) y el conector no borra funciones. Sigue en la lista de Ricardo
+
+Evidencia
+- npm run check. Typecheck y lint limpios. 2,725 pruebas unitarias en 275 archivos, 2,723 pasan y 2 se omiten a propósito. Una prueba del servidor (server/src/env.test.ts) dependía de que la variable de la clave no existiera en el entorno de la sesión y ahora compara sin imprimir valores
+- e2e. pwa, smoke, labels y roles, 96 pruebas en teléfono y computadora, todas pasan. Capturas en docs/screenshots/v3/b0, 18 imágenes en tres anchos, claro y oscuro
+- Revisión independiente. Un subagente que no escribió el código revisó el diff contra el plan y CLAUDE.md. Sin hallazgos críticos ni altos. Dos medios (la evidencia de este archivo estaba pendiente y una prueba no verificaba la clave de lectura) y ocho bajos, todos corregidos. Lo más útil, las banderas se copian también a quien no ha entrado y un valor inválido del servidor ya no borra la copia local
+- PR 35 a main con check, e2e y audit del CI
+
+### Preguntas para Ricardo
+- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado como D-120 y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
+- El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
+
+## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
+
+Sesión del 2026-10-11. Este bloque quedó a medias porque se acababa el límite semanal de Ricardo. Lo de abajo dice qué está hecho y qué sigue.
+
+### Hecho
+- Diagnóstico con los registros de Supabase. STRIPE_PRICE_ANNUAL y STRIPE_PRICE_FOUNDER tenían el ID del producto (prod_) y no el del precio. Ricardo los cambió y create-checkout abrió el pago
+- El webhook rechazaba los avisos por firma inválida. Ricardo volvió a copiar el secreto de firma del endpoint y reenvió los eventos. Desde las 19.03 UTC responde 200 y el pago quedó en la base (pago, suscripción y cliente de Stripe ligados)
+- En la prueba, la misma cuenta pagó el Anual (1,499) y después el Fundador (79). Quedaron dos suscripciones en Stripe y una sola fila en la base, mezclada (plan founder con la fecha del anual)
+- Corrección programada y desplegada (commit c5fc502). create-checkout responde 409 already_subscribed si ya hay un plan pagado vigente, con la regla de user_plan. La pantalla Suscripción no ofrece otro plan a quien paga. El mes por referido sí deja pagar. npm run check pasa con 2,689 pruebas
+- create-checkout desplegada en el proyecto real como versión 15. El webhook y el portal no se volvieron a desplegar a propósito, porque su código no cambió desde la Fase J salvo los precios de Mercado Pago, que está oculto
+
+### Dónde se quedó
+- La versión 15 arranca. Un POST con la llave anónima respondió 401 unauthorized desde el propio código. Falta verla bloquear con una cuenta real, que Ricardo intente comprar otro plan con su cuenta de prueba antes de limpiarla y vea el aviso de plan vigente
+- Falta limpiar la cuenta de prueba en Stripe. Ricardo debe cancelar las dos suscripciones de su cliente de prueba con Cancel subscription, Immediately y reembolso del último pago. Con los avisos de Stripe la base queda en Gratis sola, sin editar filas a mano. Después verificar en payment_webhook_events, payments y subscriptions
+- Desde este entorno no se puede llamar a Stripe (api.stripe.com y mcp.stripe.com bloqueados por la red)
+
+### Pendiente para antes de lanzar
+- Borrar los datos de prueba de subscriptions, payments y billing_customers. El conteo del cupo Fundador cuenta toda fila con plan founder, también las canceladas, así que una prueba ocupa un lugar
+- Decidir con Ricardo si un Fundador que cancela conserva su lugar
+- Cambiar de plan desde el portal todavía no se refleja en la plataforma. Hoy el alumno cancela y contrata el otro plan al terminar su periodo
 
 ## Fase K. Entrar desde otro dispositivo y precios nuevos (D-114 y D-115)
 

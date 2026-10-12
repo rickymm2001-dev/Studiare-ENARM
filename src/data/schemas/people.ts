@@ -178,6 +178,11 @@ export const SubscriptionSchema = z.strictObject({
   isSimulated: z.boolean(),
   /** Hasta cuándo vale el plan que dio el servidor. Ausente en el simulado local */
   periodEnd: UtcDateTimeSchema.nullable().optional(),
+  /**
+   * De dónde viene el plan que dio el servidor, un pago o un mes regalado por referido. Con un pago
+   * vigente no se ofrece otro (D-118). Ausente en el simulado local y en Gratis
+   */
+  source: z.enum(['payment', 'referral']).optional(),
   updatedAt: UtcDateTimeSchema,
 });
 export type Subscription = z.infer<typeof SubscriptionSchema>;

@@ -70,6 +70,9 @@ function Billing({ session }: { session: ReadySession }) {
   // Con la nube configurada y este navegador sin sesión, el servidor no sabe quién paga. No se ofrece
   // ningún pago, ni el real ni el simulado, que no cobraría nada pero haría creer que sí
   const needsCloud = cloudConfigured() && !inCloud;
+  // Con un plan pagado vigente otro pago abriría una segunda suscripción que cobra aparte. No se ofrece
+  // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-118)
+  const paidInForce = inCloud && current !== 'free' && subscription?.source === 'payment';
   const receipts = (events ?? []).flatMap((event) =>
     event.type === 'subscription_changed' && event.payload.receiptId
       ? [{ at: event.at, ...event.payload }]
@@ -235,6 +238,8 @@ function Billing({ session }: { session: ReadySession }) {
                       {t.billing.cancel}
                     </Button>
                   )
+                ) : paidInForce ? (
+                  <p className="text-sm text-fg-muted">{t.billing.cloud.changePlanNote}</p>
                 ) : (
                   <Button
                     onClick={() => {

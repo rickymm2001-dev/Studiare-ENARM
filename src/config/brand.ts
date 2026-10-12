@@ -1,9 +1,13 @@
-// Marca provisional en un solo lugar (D-016). Cambiarla aquí cambia toda la app y el manifest.
+// Marca en un solo lugar (D-016, D-119). Cambiarla aquí cambia toda la app y el manifest. Studiare es
+// la marca definitiva (respuesta 54 del cuestionario). La descripción es un texto neutro mientras
+// llegan los textos de venta del influencer o de la agencia (4.17 del plan del cambio).
 export const BRAND = {
-  name: 'Prototipo ENARM',
-  shortName: 'ENARM',
-  description: 'Prototipo de una plataforma para preparar el ENARM',
-  // Debe coincidir con --enarm-primary y --enarm-canvas de src/ui/tokens.css
-  themeColor: '#1f5f73',
-  backgroundColor: '#f6f6f3',
+  name: 'Studiare',
+  shortName: 'Studiare',
+  description:
+    'Studiare, la plataforma para preparar el ENARM. Repaso espaciado, simuladores tipo ENARM y seguimiento de tu técnica de examen.',
+  // Deben coincidir con --enarm-primary y --enarm-canvas del modo claro de src/ui/tokens.css. Lo
+  // vigila src/config/brand.test.ts
+  themeColor: '#0e5a6b',
+  backgroundColor: '#f5f2ec',
 } as const;

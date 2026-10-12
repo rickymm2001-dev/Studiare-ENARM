@@ -6,6 +6,7 @@ import { DEVICE_CLAIM_STORAGE_KEY, forgetDeviceClaim, getDeviceId } from '@/data
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
+import { FLAGS_KEY } from '@/config/featureFlags';
 import { OVERRIDES_KEY } from '@/config/overridesStore';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
@@ -459,5 +460,50 @@ describe('CloudBridge y la configuración del admin', () => {
       expect(useConfigUpdate.getState().pending).toBe(true);
     });
     expect(localStorage.getItem(OVERRIDES_KEY)).toBeNull();
+  });
+});
+
+describe('CloudBridge y las banderas de lanzamiento (D-119)', () => {
+  it('copia las banderas del servidor al navegador y pide recargar para aplicarlas', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.flags = { demoTools: false };
+    mount();
+    await waitFor(() => {
+      expect(JSON.parse(localStorage.getItem(FLAGS_KEY) ?? 'null')).toEqual({ demoTools: false });
+    });
+    await waitFor(() => {
+      expect(useConfigUpdate.getState().pending).toBe(true);
+    });
+  });
+
+  it('también las recibe quien no ha entrado, porque la tabla se lee sin sesión', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.session = null;
+    fake.flags = { demoTools: false };
+    mount();
+    await waitFor(() => {
+      expect(JSON.parse(localStorage.getItem(FLAGS_KEY) ?? 'null')).toEqual({ demoTools: false });
+    });
+    expect(linked()).toBe(false);
+  });
+
+  it('con las mismas banderas en el navegador no pide recargar, y sin banderas en el servidor borra la copia', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.flags = { demoTools: true };
+    localStorage.setItem(FLAGS_KEY, JSON.stringify({ demoTools: true }));
+    mount();
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useConfigUpdate.getState().pending).toBe(false);
+
+    cleanup();
+    localStorage.setItem(FLAGS_KEY, JSON.stringify({ demoTools: false }));
+    useFake(makeFakeCloud());
+    mount();
+    await waitFor(() => {
+      expect(localStorage.getItem(FLAGS_KEY)).toBeNull();
+    });
   });
 });

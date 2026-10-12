@@ -32,6 +32,8 @@ vi.mock('@/data/cloud/client', () => ({
 
 interface FakeState {
   plan: string;
+  /** De dónde viene el plan según my_plan. Sin valor, un pago si el plan no es Gratis */
+  source?: 'payment' | 'referral';
   invoke: () => Promise<{ data: unknown; error: unknown }>;
   rpcCalls: string[];
   invokeCalls: unknown[];
@@ -69,7 +71,7 @@ function fakeCloudFor(overrides: Partial<FakeState> = {}) {
       return Promise.resolve({
         data: {
           plan: state.plan,
-          source: state.plan === 'free' ? 'none' : 'payment',
+          source: state.plan === 'free' ? 'none' : (state.source ?? 'payment'),
           status: 'active',
           provider: 'stripe',
           periodEnd: null,
@@ -295,6 +297,26 @@ describe('tarjeta de pago', () => {
     expect(screen.getByRole('button', { name: t.billing.cloud.go })).toBeEnabled();
   });
 
+  it('si ya hay un plan pagado vigente lo explica y no abre la pasarela', async () => {
+    fakeCloudFor({
+      invoke: () =>
+        Promise.resolve({
+          data: null,
+          error: {
+            context: new Response(JSON.stringify({ error: 'already_subscribed' }), {
+              status: 409,
+            }),
+          },
+        }),
+    });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render_(open);
+    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
+    expect(await screen.findByText(t.billing.cloud.errors.already_subscribed)).toBeVisible();
+    expect(open).not.toHaveBeenCalled();
+  });
+
   it('si el cupo Fundador se llenó deja seguir con el mensual al precio regular', async () => {
     let calls = 0;
     const state = fakeCloudFor({
@@ -448,6 +470,41 @@ describe('administrar la suscripción', () => {
     });
     await screen.findByRole('heading', { name: t.screens.subscription.title });
     expect(screen.queryByRole('heading', { name: portal.title })).toBeNull();
+  });
+});
+
+describe('un solo plan pagado a la vez', () => {
+  const seedPlan =
+    (plan: 'annual' | 'monthly', source: 'payment' | 'referral') =>
+    async (api: RenderedApp['api'], user: { id: string }) => {
+      await api.repos.subscriptions.put({
+        userId: user.id,
+        plan,
+        status: 'active',
+        isSimulated: false,
+        periodEnd: null,
+        source,
+        updatedAt: new Date().toISOString(),
+      });
+    };
+
+  it('con un pago vigente no ofrece comprar otro plan y explica cómo cambiarse', async () => {
+    fakeCloudFor({ plan: 'annual' });
+    app = await renderApp(SCREENS.subscription.path, { seed: seedPlan('annual', 'payment') });
+    expect(await screen.findByText(t.billing.cloud.changePlanNote)).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
+    ).toBeNull();
+    expect(screen.getByRole('heading', { name: t.billing.cloud.portal.title })).toBeVisible();
+  });
+
+  it('con un mes regalado por referido sí deja pagar', async () => {
+    fakeCloudFor({ plan: 'monthly', source: 'referral' });
+    app = await renderApp(SCREENS.subscription.path, { seed: seedPlan('monthly', 'referral') });
+    expect(
+      await screen.findByRole('button', { name: t.billing.choose(t.billing.plans.annual) }),
+    ).toBeVisible();
+    expect(screen.queryByText(t.billing.cloud.changePlanNote)).toBeNull();
   });
 });
 

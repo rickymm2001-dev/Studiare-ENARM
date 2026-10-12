@@ -161,7 +161,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   roleSelector: {
     title: 'Cambiar de rol',
     description:
-      'Sin inicio de sesión en el prototipo. Elige con qué rol quieres ver la app en este dispositivo.',
+      'Sin inicio de sesión en la nube. Elige con qué rol quieres ver la app en este dispositivo.',
   },
 };
 
@@ -272,7 +272,7 @@ export const t = {
     },
     legend: 'Rol en este dispositivo',
     notice:
-      'En el prototipo no hay inicio de sesión. El rol solo cambia lo que ves en este dispositivo.',
+      'Sin la nube conectada no hay inicio de sesión. El rol solo cambia lo que ves en este dispositivo.',
     enterAs: (roleName: string) => `Entrar como ${roleName}`,
     current: (roleName: string) => `Rol actual, ${roleName}`,
     change: 'Cambiar de rol',

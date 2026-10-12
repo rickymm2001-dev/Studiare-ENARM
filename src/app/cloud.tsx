@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
 import { readCloudIdentity, recordPrivacyAcceptance } from '@/data/cloud/account';
 import { mirrorRemoteOverrides } from '@/data/cloud/adminSettings';
+import { mirrorRemoteFlags } from '@/data/cloud/featureFlags';
 import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
@@ -88,6 +89,11 @@ export function CloudBridge() {
 
       const sync = async () => {
         try {
+          // Las banderas de lanzamiento del servidor valen también para quien no ha entrado, porque la
+          // tabla las deja leer sin sesión. Mandan sobre el entorno y se aplican al recargar (D-119)
+          void mirrorRemoteFlags(cloud).then((result) => {
+            if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
+          });
           const identity = await readCloudIdentity(cloud);
           if (stopped()) return;
           if (!identity) {

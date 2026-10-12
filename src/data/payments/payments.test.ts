@@ -168,6 +168,12 @@ describe('iniciar el pago', () => {
       }),
     ).toEqual({ ok: false, reason: 'founder_full' });
     expect(
+      await startCheckout(
+        fakeCloud({ invoke: withBody({ error: 'already_subscribed' }, 409) }).cloud,
+        { plan: 'annual', provider: 'stripe' },
+      ),
+    ).toEqual({ ok: false, reason: 'already_subscribed' });
+    expect(
       await startCheckout(fakeCloud({ invoke: withBody({ error: 'not_configured' }, 503) }).cloud, {
         plan: 'monthly',
         provider: 'stripe',
@@ -253,8 +259,13 @@ describe('plan de la nube', () => {
       isSimulated: false,
       periodEnd: '2026-11-08T00:00:00.000Z',
     });
+    expect(subscription.source).toBe(monthly.source);
     const free = subscriptionFromCloud(newId(), { plan: 'free', source: 'none', status: 'none' });
     expect(free).toMatchObject({ plan: 'free', status: 'none', periodEnd: null });
+    expect(free).not.toHaveProperty('source');
+    expect(subscriptionFromCloud(newId(), { ...monthly, source: 'referral' }).source).toBe(
+      'referral',
+    );
     expect(subscriptionFromCloud(newId(), { ...monthly, periodEnd: 'ayer' }).periodEnd).toBeNull();
   });
 
@@ -280,6 +291,9 @@ describe('plan de la nube', () => {
     ).toBe(false);
     expect(await mirrorCloudPlan(api, userId, monthly)).toBe(true);
     expect(await mirrorCloudPlan(api, userId, monthly)).toBe(false);
+    // El mismo plan que pasa de mes regalado a pagado también se refleja
+    expect(await mirrorCloudPlan(api, userId, { ...monthly, source: 'referral' })).toBe(true);
+    expect(await mirrorCloudPlan(api, userId, monthly)).toBe(true);
     expect(await api.repos.subscriptions.get(userId)).toMatchObject({
       plan: 'monthly',
       status: 'active',
