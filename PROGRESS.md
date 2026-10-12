@@ -53,12 +53,14 @@ No se pudo
 - Borrar stripe-config-check. El token de api.supabase.com del entorno no es válido (JWT could not be decoded) y el conector no borra funciones. Sigue en la lista de Ricardo
 
 Evidencia
-- npm run check. PENDIENTE_CHECK
-- e2e. PENDIENTE_E2E
-- Revisión independiente. PENDIENTE_REVISION
+- npm run check. Typecheck y lint limpios. 2,725 pruebas unitarias en 275 archivos, 2,723 pasan y 2 se omiten a propósito. Una prueba del servidor (server/src/env.test.ts) dependía de que la variable de la clave no existiera en el entorno de la sesión y ahora compara sin imprimir valores
+- e2e. pwa, smoke, labels y roles, 96 pruebas en teléfono y computadora, todas pasan. Capturas en docs/screenshots/v3/b0, 18 imágenes en tres anchos, claro y oscuro
+- Revisión independiente. Un subagente que no escribió el código revisó el diff contra el plan y CLAUDE.md. Sin hallazgos críticos ni altos. Dos medios (la evidencia de este archivo estaba pendiente y una prueba no verificaba la clave de lectura) y ocho bajos, todos corregidos. Lo más útil, las banderas se copian también a quien no ha entrado y un valor inválido del servidor ya no borra la copia local
+- PR 35 a main con check, e2e y audit del CI
 
 ### Preguntas para Ricardo
-- Ninguna que frene. Las dudas de cada bloque se irán sumando aquí
+- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado como D-120 y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
+- El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 
