@@ -24,6 +24,8 @@ const ENGINE_FORBIDDEN_IMPORT_REGEX = `^(?!(?:${ENGINE_ALLOWED_IMPORTS.join('|')
 export default defineConfig([
   globalIgnores([
     'dist',
+    // Build de las e2e de nube, con el Supabase simulado (B1 del plan del cambio)
+    'dist-cloud',
     'dev-dist',
     'coverage',
     'playwright-report',

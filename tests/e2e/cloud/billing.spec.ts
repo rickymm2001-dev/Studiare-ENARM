@@ -112,8 +112,8 @@ test.describe('Pago en la nube', () => {
       ),
     });
     await expect(regular).toBeVisible();
-    // Aquí no se revisa la accesibilidad. En teléfono, el botón del precio regular no parte su texto
-    // (whitespace-nowrap del Button) y desborda la pantalla. Pendiente de corregir en la app
+    // El botón del precio regular parte su texto en el teléfono en lugar de desbordar (H27 de B1)
+    await expectNoSeriousA11yViolations(page);
 
     // Con un plan pagado vigente el servidor rechaza abrir otro cobro
     cloud.checkoutError = 'already_subscribed';

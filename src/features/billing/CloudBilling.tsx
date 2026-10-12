@@ -101,6 +101,8 @@ export function CloudCheckoutCard({
         {error === 'founder_full' && plan === 'founder' ? (
           <Button
             disabled={busy}
+            // El texto es largo y en el teléfono se parte en dos renglones en lugar de salirse (H27)
+            className="h-auto min-h-11 whitespace-normal"
             onClick={() => {
               setPlan('monthly');
               void go('monthly');
