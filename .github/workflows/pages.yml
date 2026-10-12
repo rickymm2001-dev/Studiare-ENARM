@@ -34,6 +34,8 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # La demo publicada. Las herramientas de demostración se ven aquí y se esconden en producción (D-119)
+          VITE_APP_ENV: demo
           # URL del proyecto y llave pública de Supabase. Son públicas por diseño (D-069, D-075)
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}

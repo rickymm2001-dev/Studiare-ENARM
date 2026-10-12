@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
 import { readCloudIdentity, recordPrivacyAcceptance } from '@/data/cloud/account';
 import { mirrorRemoteOverrides } from '@/data/cloud/adminSettings';
+import { mirrorRemoteFlags } from '@/data/cloud/featureFlags';
 import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
@@ -108,6 +109,10 @@ export function CloudBridge() {
           // La configuración que el admin fijó en el servidor manda sobre la de este navegador. Los
           // motores la leen al abrir la app, así que si cambió se pide recargar
           void mirrorRemoteOverrides(cloud).then((result) => {
+            if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
+          });
+          // Las banderas de lanzamiento del servidor también mandan y se aplican al recargar (D-119)
+          void mirrorRemoteFlags(cloud).then((result) => {
             if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
           });
           if (guard?.authId !== identity.authId) {

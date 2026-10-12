@@ -1,102 +1,80 @@
-# Lo que falta de Ricardo para que la plataforma funcione completa
+# Lo que falta de Ricardo
 
-Escrito el 2026-10-10 y puesto al día el 2026-10-11 con la Fase K (precios nuevos y entrada con código). Todo lo de programación que se podía hacer sin cuentas externas ya está hecho y probado con servidores falsos. Lo que sigue depende de cuentas, llaves, decisiones y personas. Está en el orden en que conviene hacerlo.
+Es la sección 9 del plan del cambio V3 (docs/PLAN_DEL_CAMBIO.md), puesta al día por la sesión que lo ejecuta. La última vez fue el 2026-10-12, al cerrar el bloque B0. Va en el orden en que conviene hacerla. Cada bloque del plan que espera algo de aquí se deja listo y apagado mientras tanto.
 
-Regla que no cambia. Nunca me pases la llave de servicio de Supabase (service_role o secret), la contraseña de la base de datos ni claves secretas de Stripe, Mercado Pago o Anthropic por el chat. Esas viven solo en los secretos de cada servicio. A mí me sirven la dirección del proyecto y la llave pública (anon o publishable).
+Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega directo en el servicio o en los secretos del entorno. A la sesión le sirven la dirección del proyecto y la llave pública (anon o publishable), nada más.
 
-## 1. Mazos de Drive
+## Lo que salió del bloque B0
 
-- Mazos de Paco. Ya están en la demo Medicina interna, Ginecología y obstetricia y Urgencias (D-053). Ricardo dijo que tiene la aprobación escrita de Paco para subir todos sus mazos, así que faltan Pediatría y Cirugía (D-111)
-- Qué hace falta para subirlos. Esta sesión no puede bajar archivos de más de 10 MB de Drive y la red del entorno bloquea drive.google.com. Hay que permitir drive.google.com y drive.usercontent.google.com en el acceso a la red del entorno, y compartir Pedia.apkg y Cirugia.apkg con cualquier persona con el enlace. Al terminar se revoca el enlace
-- Confirma si el documento de Paco también cubre el uso dentro del plan de pago, porque D-053 solo cubría la demostración
-- El mazo de Fer sigue fuera del repositorio (D-008) y pesa 328 MB. Mi recomendación es que cada alumno importe sus mazos en su navegador desde Mazos, Importar. Ya funciona con .apkg
-- Un catálogo compartido para todos los alumnos con mazos de terceros pide autorización escrita de sus autores. No lo hago sin eso
+1. **Limpia la prueba de pagos en Stripe.** No se pudo desde la sesión (ver abajo por qué). En Stripe, en modo prueba, abre Customers y busca los dos clientes de tus cuentas de prueba, cus_VQIKjhh9C1h6BU (pagó el Anual y el Fundador el 11 de octubre) y cus_VQPXetXjcQNKay (pagó el Fundador el 11 en la noche). En cada suscripción elige Cancel subscription, Immediately, y marca que se reembolse el último pago. Si el reembolso no sale ahí, hazlo desde Payments, el cobro, Refund. Con eso los avisos de Stripe dejan la base en Gratis solos
+2. **Borra las filas de prueba de la base.** Después del paso 1, pega supabase/manual/limpiar-pagos-de-prueba.sql en Supabase, SQL Editor, y ejecútalo una vez. Quita las filas de subscriptions, payments y billing_customers de tus dos cuentas, porque el cupo Fundador cuenta toda fila founder y un cliente de prueba de Stripe rompe el pago en modo real. La consulta del final debe dar ceros
+3. **Cambia la llave de Stripe del entorno.** La que está hoy en los secretos del entorno de la sesión es la publicable (empieza con pk_test_) y con ella no se puede cancelar, reembolsar ni crear precios. Pon en su lugar una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en productos, precios, cupones, códigos promocionales, clientes, suscripciones, sesiones de pago, configuraciones del portal, dominios de medios de pago y reembolsos, y de lectura en eventos. Se crea en Stripe, Developers, API keys, Create restricted key. Sin ella los pasos de Stripe de B10 quedan en esta lista en lugar de hacerse solos
+4. **Revisa SUPABASE_ACCESS_TOKEN si lo pusiste.** El entorno inyecta algo en api.supabase.com, pero Supabase lo rechaza con JWT could not be decoded. Es opcional. Si quieres que la sesión configure correos, plantillas y secretos sin preguntarte, genera uno nuevo en supabase.com, Account, Access Tokens, y reemplázalo. Con el conector de Supabase que ya está, la base y las funciones sí se alcanzan
 
-## 2. Supabase
+## Esta semana
 
-- El proyecto Studiare ya existe y Claude lo tiene conectado desde el 2026-10-10 (D-113). Las migraciones 1 a 12 están aplicadas y el archivo manual ya lo corriste
-- La demo pública ya está conectada a este proyecto. Desde ahora cualquiera puede crear una cuenta real, así que conviene tener pronto el correo propio y los textos legales revisados
-- **Agregar el código a los correos de acceso (D-115).** En Authentication, Emails (o Email Templates), abre la plantilla Magic Link y después Confirm signup. En cada una, debajo del enlace, agrega esta línea y guarda
+5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar
+6. **Agrega el código a los correos de acceso** (respuesta 23). En Supabase, Authentication, Emails, abre la plantilla Magic Link y después Confirm signup. Debajo del enlace agrega esta línea y guarda
 
-  `<p>Si abriste este correo en otro dispositivo, escribe en la app este código <strong>{{ .Token }}</strong></p>`
+   `<p>Si abriste este correo en otro dispositivo, escribe en la app este código <strong>{{ .Token }}</strong></p>`
+7. **Empieza la activación de Stripe** a nombre de Plexus Medica S. de R.L. de C.V. (respuestas 5, 6 y 42). Te pedirá el RFC de la empresa, el domicilio fiscal, los datos del representante legal y la CLABE de una cuenta de la empresa. Puede tardar días
+8. **Platica con tu contador** (respuestas 6, 12, 13 y 14). Que la empresa cobre y facture, facturas a mano a quien las pida, precios con IVA incluido y si conviene Stripe Tax más adelante
+9. **Crea tu cuenta de Anthropic y carga saldo** (respuesta 33). En console.anthropic.com crea una clave y pégala tú en Supabase, Edge Functions, Secrets, con el nombre ENARM_ANTHROPIC_KEY. En el entorno de la sesión ya hay una con ese nombre
+10. **Dile a la sesión cuál es tu dominio** (respuesta 50) y empieza a pasarlo a nombre de tu empresa (respuesta 24)
+11. **Crea los correos de privacidad y de soporte** en tu dominio (pregunta 43), por ejemplo privacidad y soporte arroba tu dominio. Después van como variables VITE_SUPPORT_EMAIL, VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS en GitHub y luego en Cloudflare
 
-  Sin esa línea el correo no trae el código y solo funciona el enlace en el mismo navegador
-- Activar la protección contra contraseñas filtradas en Authentication. Puede requerir el plan de pago de Supabase
-- Conectar un proveedor de correo propio en Authentication, SMTP Settings. El correo de fábrica de Supabase solo envía al equipo del proyecto y pocas veces por hora. Resend, Brevo o Amazon SES sirven
-- Para producción conviene el plan de pago de Supabase, que da respaldos y no pausa el proyecto por inactividad. Al escribir esto cuesta unos 25 dólares al mes. Verifícalo en su página de precios
+## Entorno de la sesión (sección 10 del plan)
 
-## 3. IA en producción
+12. **Red, secretos, conectores y modo Auto.** Ya están GitHub, Supabase y Google Drive como conectores, y en la red api.stripe.com, api.supabase.com y api.cloudflare.com. Faltan o hay que corregir
+    - STRIPE_SECRET_KEY con la llave restringida de prueba (paso 3)
+    - MP_ACCESS_TOKEN con la credencial de prueba de Mercado Pago, cuando exista la cuenta (paso 15)
+    - ENARM_OPENAI_KEY para comparar calidad en las evaluaciones (B12)
+    - CLOUDFLARE_API_TOKEN junto al CLOUDFLARE_ACCOUNT_ID que ya está (paso 20)
+    - En Allowed domains, api.mercadopago.com, drive.google.com y drive.usercontent.google.com, y la documentación que la sesión debe leer antes de usar cada servicio. docs.stripe.com, www.mercadopago.com.mx, supabase.com, developers.google.com, resend.com, posthog.com, docs.sentry.io y developers.cloudflare.com
+    - Los secretos y conectores nuevos solo se leen al abrir una sesión. Ponlos antes del siguiente mensaje de arranque
 
-- Elegir dónde corre el proxy de IA. Cualquier servicio que ejecute Docker o Node sirve, como Fly.io, Render, Railway o Google Cloud Run. Recomiendo el que ya conozcas. Cuesta unos pocos dólares al mes
-- Poner en ese servicio las variables SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, ENARM_ANTHROPIC_KEY y APP_ORIGINS. La tabla completa está en docs/IA_ALOJADA.md. Las dos llaves secretas se pegan directo en los secretos del servicio
-- Poner VITE_AI_URL en las variables de GitHub con la dirección del proxy y volver a publicar
-- Crear la clave de Anthropic y cargar saldo en console.anthropic.com. Es pago por uso. Con la clave puesta, corro npm run eval-ai y te digo el costo real por alumno, que hoy es una estimación
-- Confirmar la desviación de D-103. CLAUDE.md dice que la clave vive solo en server/.env.local. En un servicio alojado vive como secreto del servicio, con el mismo nombre. Si te parece bien, ajusto esa línea de CLAUDE.md
+## Cuentas que solo tú puedes crear
 
-## 4. Cobros
+Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código listo y apagado con una bandera.
 
-- La guía de Stripe con lo revisado, lo mejorado y lo que falta está en docs/STRIPE.md. Cambia la llave secreta de prueba que pegaste en el chat (Developers, API keys, Roll key) cuando termines de configurar
+13. **Google Cloud** (B9 y B11). Un proyecto Studiare
+    - Pantalla de consentimiento de OAuth con la marca Studiare y tu dominio
+    - Cliente OAuth de tipo web. Copia su Client ID y su secreto en Supabase, Authentication, Providers, Google
+    - Activa la API de Google Sheets, crea una cuenta de servicio sin roles y crea una llave JSON. Bájala una sola vez
+    - Pega tú la llave en Supabase, Edge Functions, Secrets, como GOOGLE_SA_KEY, y el ID de tu Sheet como GOOGLE_BANK_SHEET_ID. Después borra el archivo bajado
+    - Comparte tu Sheet Banco de preguntas con el correo de la cuenta de servicio como Lector, sin notificar. Deja apagado que los editores puedan compartir y el acceso general en Restringido
+14. **Resend** (B15 y B17). Crea la cuenta, agrega tu dominio y pon en tu DNS los registros SPF, DKIM y DMARC que te da. En Supabase, Authentication, SMTP Settings, pon sus datos. Crea una clave de API y pégala en Supabase, Edge Functions, Secrets, como RESEND_API_KEY
+15. **Mercado Pago** (B10). Cuenta de negocio de tu empresa. Sus credenciales de prueba van al entorno de la sesión (MP_ACCESS_TOKEN) y a los secretos de Supabase (MP_ACCESS_TOKEN y MP_WEBHOOK_SECRET)
+16. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO, transferencias bancarias de México, Apple Pay y Google Pay (comentario 19). La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con la llave restringida del paso 3. Cuando te avise, prueba el pago en tu iPhone con Safari y en un Android con Chrome
+17. **PostHog** (B15). Crea la cuenta y un proyecto. Su clave pública va como variable VITE_POSTHOG_KEY, junto con su dirección, en GitHub y después en Cloudflare
+18. **Sentry** (B15). Crea la cuenta y un proyecto. Su DSN va como variable VITE_SENTRY_DSN. Pon tu correo en sus alertas. Crea un token para subir los mapas de código y guárdalo como secreto de GitHub SENTRY_AUTH_TOKEN
+19. **Secreto de GitHub para la calibración** (B14). En Supabase crea una llave secreta dedicada a ese proceso y guárdala en GitHub, Settings, Secrets and variables, Actions, como SUPABASE_CALIBRATION_KEY
+20. **Cloudflare** (B17). Crea la cuenta, conecta tu dominio y crea un token con permiso solo para Pages y DNS. Va al entorno de la sesión como CLOUDFLARE_API_TOKEN, junto con CLOUDFLARE_ACCOUNT_ID
+21. **Supabase de pago** antes de abrir a alumnos de pago (respuesta 27). Después activa la protección de contraseñas filtradas en Authentication (respuesta 28)
+22. **Repo privado** al pasar a Cloudflare (respuesta 48). En GitHub, Settings, Danger zone, Change visibility
 
-- Activar tu cuenta de Stripe. Pide verificar tu negocio y tu cuenta bancaria en México. Puede tardar días
-- **Precios nuevos (D-114).** En Stripe, Product catalog, crea dos precios nuevos. En el producto Mensual uno de 149 MXN recurrente cada mes, y en el Anual uno de 1,499 MXN recurrente cada año. Un precio de Stripe no se puede editar, por eso son nuevos. Copia cada Price ID (empieza con price_) y pégalo en Supabase, Edge Functions, Secrets, en STRIPE_PRICE_MONTHLY y STRIPE_PRICE_ANNUAL. Archiva los de 150 y 1,200
-- **Esto es lo que impide pagar hoy.** En STRIPE_PRICE_FOUNDER pegaste el ID del producto (empieza con prod_) y Stripe pide el ID del precio (empieza con price_). En Stripe abre Product catalog, el producto Fundador, y en la sección Pricing haz clic en el precio de 79. Ahí aparece su ID con price_ al inicio. Cópialo y pégalo en el secreto STRIPE_PRICE_FOUNDER en Supabase, Edge Functions, Secrets. Revisa que el precio sea recurrente cada mes. Haz lo mismo con STRIPE_PRICE_MONTHLY y STRIPE_PRICE_ANNUAL, que seguramente tienen el mismo detalle
-- En Edge Functions quedó una función vacía llamada stripe-config-check, de un diagnóstico que no se llegó a usar. No hace nada y puedes borrarla (Edge Functions, stripe-config-check, Delete function)
-- **Pago de prueba con el registro nuevo.** Cuando lo hagas, si Stripe vuelve a rechazar el pago, ahora queda escrito el motivo exacto en los registros de create-checkout. Avísame y lo leo yo
-- Agregar el webhook de Stripe con los seis eventos de docs/SUPABASE.md, incluidos customer.subscription.updated y charge.refunded
-- Guardar y activar el portal del cliente en Stripe, Settings, Billing, Customer portal, con Cancel subscriptions encendido. Sin esto el botón Administrar suscripción no abre
-- Poner los secretos en Supabase, Edge Functions, Secrets. Son STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL. Tres funciones ya están desplegadas en tu proyecto (create-checkout, create-portal-session y payment-webhook-stripe), así que ya no hace falta la CLI. La dirección del webhook de Stripe es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe y FUNCTIONS_URL vale https://bkjbcdwglyllizupokqm.supabase.co/functions/v1. La cuarta función, la de Mercado Pago, se despliega cuando exista esa cuenta
-- Activar Mercado Pago de la misma forma, con su token y su clave de webhook
-- Hacer un pago de prueba y un reembolso de prueba de punta a punta en cada pasarela. Es lo único que falta para confiar en los cobros, porque no pude abrir la documentación de Stripe desde mi entorno y la lectura de sus eventos no se ha visto con uno real
-- Después pasar de llaves de prueba a llaves reales
-- Stripe y Mercado Pago no cobran mensualidad. Cobran un porcentaje por cada pago, que sale de lo que paga el alumno. Revisa la tarifa vigente de cada una antes de fijar precios
-- Un reembolso completo desde el panel de Stripe ya quita el plan solo. Uno parcial no, y lo atiendes tú. Devolver un cobro no cancela la suscripción en Stripe, así que cuando devuelvas el cobro de una suscripción que sigue viva, cancélala también ahí
+## Personas
 
-## 5. Textos legales
+23. **Médicos.** Los dos de la compuerta 1 (respuesta 40). De 3 a 5 revisores con pago por pregunta revisada (respuestas 57 y 58). Acuerda la tarifa
+24. **Tu Sheet** (sección 7 del plan). Que los médicos llenen Explicación y Referencias, corrijan Subespecialidad y Subtema según la lista, confirmen el Tipo de reactivo De control y sigan escribiendo hasta 300 preguntas en las siete ramas y en inglés
+25. **Influencers.** Sus nombres y el descuento de cada código (respuesta 21), y quién escribe los textos de venta (respuesta 53)
+26. **Fer.** Su autorización escrita para el catálogo compartido (respuesta 49)
+27. **Paco.** Que comparta Pedia.apkg y Cirugia.apkg con tu cuenta de Drive o con cualquiera con el enlace mientras se suben (respuesta 47). Al terminar se revoca el enlace
+28. **Abogado.** Revisa el aviso, los términos y los reembolsos cuando B16 los deje listos (respuesta 44)
+29. **Tus 5 aspirantes.** Invítalos desde la pantalla de invitaciones cuando exista (B9 y B18)
 
-- Decidir quién es el responsable. Su nombre o razón social, su domicilio y el correo de privacidad
-- Ponerlos como variables de GitHub. VITE_LEGAL_NAME, VITE_LEGAL_ADDRESS y VITE_SUPPORT_EMAIL
-- Pasar docs/legal a un abogado. Quedan para él la política de reembolsos, los tribunales competentes, la edad mínima de 18 años y los plazos de conservación
-- Hasta que el abogado los revise, las páginas dicen arriba que son un borrador. No abras a alumnos de pago con ese aviso
+## Al lanzar y después
 
-## 6. Dominio y alojamiento de la app
+30. **Stripe y Mercado Pago en modo real**, con la lista de lanzamiento de la sección 11 del plan
+31. **Más adelante.** La prueba de penetración al crecer (respuesta 31) y el piloto con una universidad (respuesta 94)
 
-- Comprar el dominio propio. Cuesta unos pocos dólares al año
-- Aprobar la publicación en Cloudflare Pages (D-017). Allí valen los encabezados de seguridad, incluido HSTS. En GitHub Pages el HTTPS ya está, pero no leen mi archivo de encabezados
-- Cuando todo el dominio esté en HTTPS, subir HSTS a subdominios y preload
+## De la lista anterior, que sigue vivo
 
-## 7. Contenido y médicos
+- **Tu cuenta de dueño.** Si todavía no lo hiciste, márcala con el SQL del paso 3 de docs/SUPABASE.md. La app no puede asignar ese rol, a propósito
+- **Portal del cliente de Stripe.** Que esté guardado y activo en Settings, Billing, Customer portal, con Cancel subscriptions encendido. B10 lo reconfigura con dos configuraciones, una para Fundadores y otra para precios regulares
+- **Webhook de Stripe.** Hoy tiene seis eventos. B10 pide agregar customer.subscription.trial_will_end, checkout.session.async_payment_succeeded y checkout.session.async_payment_failed. La sesión te dirá cuándo
 
-- Un banco real revisado por médicos. Hoy todo el contenido es de demostración y lo dice la etiqueta
-- Compuerta 1 del plan maestro. Dos médicos auditan 300 textos que genera la IA antes de abrir a alumnos
-- Confirmar con Paco que está bien que el repositorio sea público (D-053 y D-055)
-- La lista cerrada de textos académicos fundamentales del ENARM en la que se apoya la señal de controversia
-- Decidir sobre el banco en la nube. Las decisiones están en docs/BANCO_EN_LA_NUBE.md y pido tu respuesta a las número 2, 3 y 4
+## Por qué la limpieza de pagos no la hizo la sesión
 
-## 8. Decisiones abiertas de producto
-
-- Un segundo proveedor de IA (OpenAI) y qué cuenta como referido concretado (D-080). Hoy rige que el referido se concreta con su primer pago verificado
-- Adoptar la tendencia como método de fatiga y redefinir su meta sobre alumnos con efecto apreciable (D-054)
-- Si quieres un servicio de alertas al celular cuando algo se rompe. Hoy los errores del navegador se ven en la pantalla 25 y los del servidor en sus registros
-- Antes de abrir, una prueba de penetración externa y el segundo factor para médicos y administradores (docs/asvs.md)
-
-## Qué hago yo cuando me des cada cosa
-
-- Con la dirección y la llave pública de Supabase, las pongo en las variables y verifico la nube de punta a punta
-- Con la dirección del proxy de IA, corro las evaluaciones con la clave y te doy el costo real
-- Con los pagos de prueba hechos, reviso en los registros que los eventos se leyeron bien y corrijo lo que no
-- Con el banco aprobado, construyo los pasos de docs/BANCO_EN_LA_NUBE.md
-
-## Tu cuenta de dueño
-
-- Después de aplicar las migraciones, entra una vez a la app con tu correo para que se cree tu cuenta
-- Márcala como dueña con el SQL del paso 3 de docs/SUPABASE.md. La app no puede asignar ese rol, a propósito
-- Desde ahí, en Usuarios, nombras médicos. Solo tú nombras admins. Cómo funcionan los roles está en docs/ROLES.md
-- Decide si prefieres tres roles (alumno, médico y admin general) o los cuatro de hoy. Hoy el dueño y el admin son niveles distintos, para que puedas delegar tareas de admin sin darle a nadie tu cuenta
-
-## Qué está publicado
-
-- La Fase G (PR 26) y la Fase H (PR 27) están juntadas en main. Eso incluye el proxy alojado, los textos legales, la configuración del admin, el portal de Stripe, los reembolsos, HSTS, los errores del navegador, la lista real de usuarios, el rol sin conexión y la auditoría
-- Tu proyecto de Supabase tiene el esquema completo y tres funciones de pago desplegadas (D-113). Los secretos de Stripe ya están puestos
-- La demo pública ya usa la nube. Con la Fase K se entra con el enlace o con el código del correo, Mercado Pago queda oculto hasta configurarlo y los precios son 79 Fundador, 149 mensual y 1,499 anual
-- El proxy de IA y los textos legales siguen esperando lo de arriba
-- Lo que no está construido a propósito es el banco en la nube, que espera tu respuesta a las decisiones 2, 3 y 4 de docs/BANCO_EN_LA_NUBE.md y un banco aprobado por médicos
+- La credencial de Stripe que el entorno inyecta en api.stripe.com es la llave publicable (pk_test_). Stripe contesta que con ella no se pueden hacer llamadas de servidor, y cancelar o reembolsar lo son
+- El camino alterno, una función temporal en Supabase que usara la llave que ya vive en los secretos del proyecto, lo bloqueó el modo Auto de la sesión por tocar recursos compartidos. Por eso quedan los pasos 1 y 2 arriba

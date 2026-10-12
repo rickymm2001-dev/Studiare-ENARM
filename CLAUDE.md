@@ -1,13 +1,13 @@
 # Proyecto
-Prototipo funcional de una plataforma integral para preparar el ENARM, en español de México.
-La especificación completa vive en docs/PROMPT_PROTOTIPO.md. El plan vigente vive en PLAN.md, el avance en PROGRESS.md y las decisiones en DECISIONES.md.
+Studiare, plataforma integral para preparar el ENARM, en español de México. Nació como prototipo y va camino a producción con el plan del cambio V3.
+La especificación completa vive en docs/PROMPT_PROTOTIPO.md. El plan del cambio V3 vive en docs/PLAN_DEL_CAMBIO.md (D-119) y manda sobre PLAN.md y sobre la especificación donde no coincidan. El avance está en PROGRESS.md y las decisiones en DECISIONES.md.
 La guía de Anki y la Fase C2 (organización, carga diaria, apuntes, importación) están en docs/ANALISIS_GUIA_ANKI.md.
 Si algo es ambiguo o contradice la especificación, pregunta a Ricardo antes de suponer.
 
 # Stack
 Página web (PWA) con Vite, React y TypeScript estricto. FSRS con ts-fsrs. Datos locales en IndexedDB con Dexie y esquemas con zod.
 Tailwind y componentes accesibles. Vitest para pruebas unitarias y Playwright para pruebas de punta a punta.
-Un servidor local pequeño en la carpeta server hace de proxy hacia la API de Claude. La clave vive solo ahí.
+En desarrollo, un servidor local pequeño en la carpeta server hace de proxy hacia la API de Claude. En producción el proxy de IA corre como Edge Function de Supabase, con la misma lógica.
 
 # Comandos
 - npm run dev levanta la app y el proxy juntos
@@ -16,7 +16,7 @@ Un servidor local pequeño en la carpeta server hace de proxy hacia la API de Cl
 - npm run eval-ai corre las evaluaciones de los motores de IA
 
 # Reglas que no se rompen
-- IMPORTANT. Ningún secreto en el código, en el repo ni en el bundle del cliente. La clave se llama ENARM_ANTHROPIC_KEY y vive en server/.env.local
+- IMPORTANT. Ningún secreto en el código, en el repo ni en el bundle del cliente. La clave se llama ENARM_ANTHROPIC_KEY y vive en server/.env.local en desarrollo y como secreto de las Edge Functions de Supabase en producción, puesta por Ricardo. Ninguna sesión la lee ni la pide por el chat
 - IMPORTANT. Nunca crees, leas ni sugieras la variable ANTHROPIC_API_KEY
 - Los eventos de repaso y de respuesta solo se agregan, nunca se editan ni se borran
 - Todo texto médico que genere la IA va anclado al banco o, desde la Fase C2 (D-085), a un PDF o texto que aporta el alumno. Cita la frase literal que lo respalda y queda en borrador, con la etiqueta de no validada por médico, hasta que alguien lo apruebe
@@ -38,7 +38,8 @@ Un servidor local pequeño en la carpeta server hace de proxy hacia la API de Cl
 - La IA opera detrás de la base de datos sobre datos que el médico ya etiquetó, incluidos los sesgos. Nunca clasifica datos en bruto en tiempo real
 - El plan Gratis tiene límites estrictos al banco y se aplican también en el servidor. Los referidos viven en Party y dan un mes gratis automático desde el servidor
 - Antes de proponer un bloque de código, un esquema o validar un lote, revisa en silencio que soporte la imperfección y los sesgos, que integre freemium y referidos, y que evite el código espagueti. Resume a Ricardo cómo se aplica al bloque
-- Pendiente de confirmar con Ricardo en D-080 el LLM de OpenAI como segundo proveedor y qué cuenta como referido concretado. Mientras tanto rigen las reglas de arriba
+- OpenAI entra como segundo proveedor solo para comparar calidad en las evaluaciones (npm run eval-ai), con la clave ENARM_OPENAI_KEY fuera del repo y nunca en producción. Al modelo solo viajan IDs seudónimos y texto del banco (respuesta 38, D-119)
+- Sigue pendiente qué cuenta como referido concretado. Mientras tanto se concreta con el primer pago verificado del referido, que con la prueba gratis es el primer cobro después de la prueba
 
 # Flujo
 - Trabaja por fases. Al cerrar cada fase sigue la sección 15.1 de la especificación y detente a esperar aprobación

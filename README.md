@@ -1,20 +1,21 @@
-# Prototipo ENARM
+# Studiare
 
-Prototipo funcional de una plataforma integral para preparar el ENARM, en español de México. Es una página web (PWA) con Vite, React y TypeScript, datos locales en el navegador y un proxy pequeño hacia la API de Claude.
+Studiare es una plataforma integral para preparar el ENARM, en español de México. Es una página web (PWA) con Vite, React y TypeScript, datos locales en el navegador, una nube opcional en Supabase y un proxy pequeño hacia la API de Claude.
 
-Este repositorio es público desde D-055. Todo el contenido clínico de demostración está escrito por IA, lleva etiqueta visible de demo y espera revisión médica.
+Este repositorio es público desde D-055 y pasará a privado al publicarse en Cloudflare Pages (respuesta 48 del cuestionario). Todo el contenido clínico de demostración está escrito por IA y espera revisión médica. El banco real llega desde el Google Sheet de los médicos con el plan del cambio V3.
 
 ## Por dónde empezar
 
 - CLAUDE.md tiene las reglas del proyecto. Claude Code lo lee al iniciar cada sesión
-- PLAN.md es el plan vigente por fases
+- docs/PLAN_DEL_CAMBIO.md es el plan del cambio V3, que manda sobre PLAN.md donde no coincidan (D-119)
+- PLAN.md es el plan original por fases
 - PROGRESS.md dice en qué bloque vamos y cuál es el siguiente paso
 - DECISIONES.md guarda cada decisión con su motivo
 - docs/PROMPT_PROTOTIPO.md es la especificación completa
 - docs/contenido-demo.md explica cómo escribir, validar y revisar las preguntas demo
 - DEMO.md es el guion de 10 minutos que recorre cada motor y cada gadget
 - docs/real-vs-simulado.md dice, función por función, qué es real, qué es de demostración y qué falta para producción
-- docs/mapa-plan-maestro.md compara el prototipo con las rebanadas del plan maestro
+- docs/mapa-plan-maestro.md compara la plataforma con las rebanadas del plan maestro
 - docs/informe-de-pruebas.md reúne los conteos de pruebas, la cobertura, la recuperación de parámetros y las evaluaciones de IA
 - docs/asvs.md es la revisión contra OWASP ASVS 5.0
 - docs/SUPABASE.md guía a Ricardo para conectar la nube, paso a paso y sin terminal
@@ -23,7 +24,7 @@ Este repositorio es público desde D-055. Todo el contenido clínico de demostra
 - docs/BANCO_EN_LA_NUBE.md es el diseño para pasar el banco de preguntas a Supabase
 - docs/legal tiene el aviso de privacidad y los términos para el abogado
 
-Para continuar el trabajo en una sesión nueva basta con pedir a Claude Code que lea CLAUDE.md, PLAN.md y PROGRESS.md y siga donde se quedó.
+Para continuar el trabajo en una sesión nueva basta con pedir a Claude Code que lea CLAUDE.md, docs/PLAN_DEL_CAMBIO.md y PROGRESS.md y siga donde se quedó.
 
 ## Requisitos
 
@@ -40,7 +41,7 @@ npm ci
 npm run dev
 ```
 
-El comando levanta la app y el proxy juntos. Sin clave de API el proxy corre en modo simulado, y así funciona todo el prototipo.
+El comando levanta la app y el proxy juntos. Sin clave de API el proxy corre en modo simulado, y así funciona toda la app.
 
 ## Cambiar entre IA real y simulada
 

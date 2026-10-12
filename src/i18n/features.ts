@@ -29,7 +29,7 @@ export const featureText = {
     goToProfile: 'Ir a Configuración',
     signOut: 'Cerrar sesión',
     simulatedLogin:
-      'Inicio de sesión simulado. En el prototipo no hay contraseña ni servidor. En producción entrarás con tu cuenta.',
+      'Inicio de sesión simulado. Sin la nube conectada no hay contraseña ni servidor, y entras con la cuenta de este navegador.',
   },
   onboarding: {
     intro: 'Crea tu cuenta en un minuto o entra con tu correo.',
@@ -439,7 +439,7 @@ export const featureText = {
   },
   billing: {
     simulatedNotice:
-      'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
+      'Pagos simulados. En esta demostración no se cobra nada ni se piden datos de tarjeta.',
     // Con la cuenta en la nube conectada el plan lo decide el servidor (Fase P bloque 5, D-096)
     cloud: {
       notice:
@@ -1465,7 +1465,7 @@ export const featureText = {
       staff: 'Equipo',
     },
     notice:
-      'En el prototipo trabajas sobre las cuentas de este navegador. Con Supabase estas mismas reglas las aplica el servidor y cada cambio queda en la bitácora de auditoría.',
+      'Sin la nube conectada trabajas sobre las cuentas de este navegador. Con Supabase estas mismas reglas las aplica el servidor y cada cambio queda en la bitácora de auditoría.',
     role: 'Rol',
     noEmail: 'Sin correo',
     roleChanged: (alias: string, role: string) => `${alias} ahora es ${role}.`,
