@@ -180,8 +180,8 @@ export function AppShell() {
             className={
               bare
                 ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
-                : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
-                  'flex w-full flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
+                : // 20 px de orilla en el teléfono y 0.8 cm (1.875rem) en computadora (D-117 y D-118)
+                  'flex w-full flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:gap-7.5 lg:px-7.5 lg:pt-7.5 lg:pb-7.5'
             }
           >
             <Outlet />

@@ -17,5 +17,5 @@ export function useInTopBar(): boolean {
  */
 export const TOP_BAR_SLOT = [
   'max-lg:-mx-5 max-lg:border-b max-lg:border-line max-lg:bg-surface max-lg:px-5 max-lg:py-3 max-lg:first:-mt-5',
-  'lg:fixed lg:top-0 lg:right-0 lg:left-[calc(var(--spacing-rail)+var(--spacing-topbar-logo))] lg:z-30 lg:h-topbar lg:flex-row lg:flex-nowrap lg:items-center lg:gap-3 lg:pr-5',
+  'lg:fixed lg:top-0 lg:right-0 lg:left-[calc(var(--spacing-rail)+var(--spacing-topbar-logo))] lg:z-30 lg:h-topbar lg:flex-row lg:flex-nowrap lg:items-center lg:gap-3 lg:pr-7.5',
 ].join(' ');

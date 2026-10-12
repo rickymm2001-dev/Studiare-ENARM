@@ -14,14 +14,19 @@ import type { HeatmapSettings } from './heatmapSettings';
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
 const LEVELS = ['bg-muted', 'bg-primary/25', 'bg-primary/50', 'bg-primary/75', 'bg-primary'];
-/** Separación entre celdas, en px */
-const CELL_GAP = 3;
+/**
+ * Separación entre celdas y entre meses cuando las celdas se estiran. Crece con la pantalla, así
+ * en las anchas los cuadros quedan más chicos y con más aire, y el calendario no se ve saturado
+ * (D-118)
+ */
+const FLUID_GAPS =
+  '[--cell-gap:3px] [--month-gap:8px] xl:[--cell-gap:4px] xl:[--month-gap:12px] 2xl:[--cell-gap:6px] 2xl:[--month-gap:16px]';
 /**
  * Ancho mínimo de un mes que se estira. Las celdas miden al menos 12 px en el teléfono, donde el
  * calendario se desplaza, y 8 px en computadora, para que el año quepa desde 1024 px
  */
 const MONTH_MIN =
-  'min-w-[calc(var(--weeks)*12px_+_(var(--weeks)_-_1)*3px)] lg:min-w-[calc(var(--weeks)*8px_+_(var(--weeks)_-_1)*3px)]';
+  'min-w-[calc(var(--weeks)*12px_+_(var(--weeks)_-_1)*var(--cell-gap))] lg:min-w-[calc(var(--weeks)*8px_+_(var(--weeks)_-_1)*var(--cell-gap))]';
 
 export function HeatmapWidget({
   snapshot,
@@ -106,20 +111,30 @@ export function HeatmapWidget({
     <div className="flex flex-col gap-2">
       {summaryAtEnd ? null : summary}
       <div ref={scroller} className="overflow-x-auto" aria-hidden>
-        <div className={cn('flex gap-2', fluid && 'w-full')}>
-          {/* Inicial de cada día. Se estira a la altura de los meses y reparte siete filas iguales,
-              así cada letra queda frente a su fila aunque las celdas cambien de tamaño. Se queda
-              pegada a la izquierda cuando el calendario se desplaza en el teléfono */}
-          <div className="sticky left-0 z-10 flex shrink-0 flex-col gap-1 bg-surface pr-0.5">
-            <span className="h-3" />
+        <div
+          className={cn(
+            // Mide todo el calendario y no solo lo visible, para que la columna de los días se quede
+            // pegada a la izquierda al desplazarse
+            'flex w-max min-w-full gap-2',
+            fluid && ['gap-[var(--month-gap)]', FLUID_GAPS],
+          )}
+        >
+          {/* Inicial de cada día. Va encima de la altura que ya tienen los meses, sin sumar la suya,
+              y reparte siete filas iguales, así cada letra queda frente a su fila aunque las celdas
+              midan menos que la letra. Se queda pegada a la izquierda cuando el calendario se
+              desplaza en el teléfono */}
+          <div className="sticky left-0 z-10 w-3.5 shrink-0 bg-surface">
             <div
-              className="grid grow gap-[3px]"
+              className={cn(
+                'absolute inset-x-0 top-4 bottom-0 grid',
+                fluid ? 'gap-[var(--cell-gap)]' : 'gap-[3px]',
+              )}
               style={{ gridTemplateRows: 'repeat(7, minmax(0, 1fr))' }}
             >
               {t.widgets.heatmap.weekdays.map((letter, index) => (
                 <span
                   key={index}
-                  className="flex items-center justify-end text-[0.65rem] leading-none font-semibold text-fg-muted"
+                  className="flex items-center justify-end pr-0.5 text-[0.65rem] leading-none font-semibold text-fg-muted"
                 >
                   {letter}
                 </span>
@@ -131,7 +146,7 @@ export function HeatmapWidget({
             // Cada mes crece en proporción a sus semanas, así todas las celdas miden lo mismo
             const grow: CSSProperties | undefined = fluid
               ? ({
-                  flex: `${String(weeks)} 1 ${String((weeks - 1) * CELL_GAP)}px`,
+                  flex: `${String(weeks)} 1 calc(${String(weeks - 1)} * var(--cell-gap))`,
                   '--weeks': weeks,
                 } as CSSProperties)
               : undefined;
@@ -146,7 +161,7 @@ export function HeatmapWidget({
                 </span>
                 {fluid ? (
                   <div
-                    className="grid grid-flow-col gap-[3px]"
+                    className="grid grid-flow-col gap-[var(--cell-gap)]"
                     style={{
                       gridTemplateColumns: `repeat(${String(weeks)}, minmax(0, 1fr))`,
                       gridTemplateRows: 'repeat(7, auto)',

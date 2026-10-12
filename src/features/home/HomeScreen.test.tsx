@@ -20,6 +20,40 @@ afterEach(async () => {
   app = undefined;
 });
 
+/** Un mazo propio, que siempre cuenta como seguido, con tarjetas básicas nuevas */
+async function seedOwnDeck(api: DataApi, user: User, count: number) {
+  const deckId = newId();
+  const createdAt = new Date().toISOString();
+  await api.repos.decks.put({
+    id: deckId,
+    name: 'Mi mazo de prueba',
+    description: '',
+    ownerId: user.id,
+    origin: 'manual',
+    visibility: 'private',
+    isDemo: false,
+    createdAt,
+  });
+  for (let index = 0; index < count; index += 1) {
+    const noteId = newId();
+    await api.repos.notes.put({
+      id: noteId,
+      deckId,
+      tags: [],
+      origin: 'manual',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt,
+      kind: 'basic',
+      front: `<p>Pregunta ${String(index + 1)}</p>`,
+      back: '<p>Respuesta</p>',
+    });
+    await api.repos.cards.put({ id: newId(), noteId, deckId, ordinal: 0, createdAt });
+  }
+}
+
 /** Repasos hechos hoy, cada uno con su siguiente fecha en dos semanas */
 async function reviewToday(api: DataApi, user: User, count: number) {
   const now = new Date();
@@ -77,14 +111,14 @@ describe('Inicio con el diseño fijo', () => {
       SCREENS.review.path,
     );
 
-    // Sin repasos la gráfica no se pinta y dice qué va a mostrar
+    // Sin mazos que seguir la gráfica no se pinta, dice qué va a mostrar y lleva a Mazos
     const load = screen.getByRole('region', { name: t.home.load.title });
     expect(within(load).getByText(t.home.load.empty)).toBeVisible();
-    expect(within(load).getByText(t.home.load.averageNone, { exact: false })).toBeVisible();
-    expect(within(load).getByRole('link', { name: t.home.load.linkLabel })).toHaveAttribute(
+    expect(within(load).getByRole('link', { name: t.home.load.goToDecks })).toHaveAttribute(
       'href',
-      SCREENS.progress.path,
+      SCREENS.decks.path,
     );
+    expect(within(load).queryByRole('img')).toBeNull();
 
     // Los análisis calibran mientras no hay respuestas suficientes
     const bias = screen.getByRole('region', { name: t.vocabulary.trap.homeTitle });
@@ -104,7 +138,10 @@ describe('Inicio con el diseño fijo', () => {
     expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
     const party = screen.getByRole('region', { name: t.widgets.names.party_challenge });
     expect(await within(party).findByText(t.widgets.party.empty)).toBeVisible();
-    const heatmap = screen.getByRole('region', { name: t.widgets.names.heatmap });
+    const heatmap = screen.getByRole('region', { name: t.home.calendarTitle });
+    expect(
+      within(heatmap).getByRole('heading', { level: 2, name: t.home.calendarTitle }),
+    ).toBeVisible();
     expect(heatmap).toBeVisible();
     // Las iniciales de lunes a domingo van a la izquierda de las filas
     expect(
@@ -156,20 +193,35 @@ describe('Inicio con el diseño fijo', () => {
     ).toBeVisible();
   });
 
-  it('con repasos hechos la carga muestra la gráfica, su tabla y el promedio del mes', async () => {
+  it('con un mazo la carga muestra lo que toca cada uno de los próximos 7 días', async () => {
     app = await renderApp(SCREENS.home.path, {
       seed: async (api, user) => {
+        await seedOwnDeck(api, user, 3);
         await reviewToday(api, user, 3);
       },
     });
     const load = await screen.findByRole('region', { name: t.home.load.title });
-    expect(await within(load).findByRole('img', { name: t.home.load.chartLabel })).toBeVisible();
-    // La tabla para el lector de pantalla trae los cinco meses
+    // Las tres nuevas tocan hoy, dentro del límite de nuevas por día. Si las contesta Bien vuelven
+    // en los días siguientes, así que la semana suma más de tres
+    const chart = await within(load).findByRole('img', { name: /^Tarjetas por día/ });
+    expect(chart).toBeVisible();
+    expect(within(load).getByText(/^En los próximos 7 días te tocan/)).toBeVisible();
+    expect(within(load).getByRole('link', { name: t.home.load.linkLabel })).toHaveAttribute(
+      'href',
+      SCREENS.progress.path,
+    );
+    // La tabla para el lector de pantalla trae los siete días, hoy primero
     const table = within(load).getByRole('table');
-    expect(within(table).getAllByRole('row')).toHaveLength(6);
+    const rows = within(table).getAllByRole('row');
+    expect(rows).toHaveLength(8);
+    expect(within(rows[1] as HTMLElement).getByRole('rowheader')).toHaveTextContent(
+      t.home.load.today,
+    );
     expect(
-      within(load).getByText(t.home.load.scheduled, { selector: 'figcaption span' }),
-    ).toBeVisible();
+      within(rows[1] as HTMLElement)
+        .getAllByRole('cell')
+        .at(-1),
+    ).toHaveTextContent('3');
     // Las tres tarjetas cuentan hoy y ninguna está vencida
     const due = screen.getByRole('region', { name: t.home.dueTitle });
     expect(within(due).getByText(t.widgets.today.done(3, 0))).toBeVisible();
