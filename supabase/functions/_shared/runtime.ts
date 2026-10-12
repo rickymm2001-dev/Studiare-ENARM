@@ -7,6 +7,7 @@ import {
   customerOfUserViaRest,
   founderSeatsLeftViaRest,
   linkCustomerViaRest,
+  subscriptionOfUserViaRest,
   userOfCustomerViaRest,
   type SupabaseEnv,
 } from './supabase.ts';
@@ -62,6 +63,7 @@ export function checkoutDeps(): CheckoutDeps {
     authenticate: (authorization) => authenticateUser(supabase, authorization),
     founderSeatsLeft: () => founderSeatsLeftViaRest(supabase),
     customerOf: (userId) => customerOfUserViaRest(supabase, userId),
+    subscriptionOf: (userId) => subscriptionOfUserViaRest(supabase, userId),
     log: (line) => {
       console.error(line);
     },

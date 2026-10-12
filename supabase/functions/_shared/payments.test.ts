@@ -12,6 +12,7 @@ import {
   noticeFromMercadoPagoPayment,
   noticeFromStripeEvent,
   parseExternalReference,
+  planInForce,
   safeEqual,
   stripeCustomerLink,
   stripeRefundFromEvent,
@@ -794,6 +795,7 @@ describe('crear el pago', () => {
       authenticate: () => Promise.resolve({ id: USER, email: 'alumna@ejemplo.mx' }),
       founderSeatsLeft: () => Promise.resolve(10),
       customerOf: () => Promise.resolve(null),
+      subscriptionOf: () => Promise.resolve(null),
       ...overrides,
     };
   }
@@ -1026,6 +1028,65 @@ describe('crear el pago', () => {
         )
       ).status,
     ).toBe(200);
+  });
+
+  it('con un plan pagado vigente contesta 409 y no llama a la pasarela', async () => {
+    const lines: string[] = [];
+    for (const provider of ['stripe', 'mercadopago'] as const) {
+      sent.length = 0;
+      const reply = await ask(
+        { plan: 'annual', provider },
+        checkoutDeps({
+          env: { ...env, MERCADOPAGO_ACCESS_TOKEN: 'token-mp' },
+          subscriptionOf: () =>
+            Promise.resolve({
+              plan: 'founder',
+              status: 'active',
+              current_period_end: '2026-11-08T16:00:00.000Z',
+            }),
+          log: (line) => lines.push(line),
+        }),
+      );
+      expect(reply.status).toBe(409);
+      expect(await reply.json()).toEqual({ error: 'already_subscribed' });
+      expect(sent).toHaveLength(0);
+    }
+    expect(lines).toEqual([]);
+  });
+
+  it('con un plan que ya terminó deja pagar de nuevo', async () => {
+    sent.length = 0;
+    const reply = await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({
+        subscriptionOf: () =>
+          Promise.resolve({
+            plan: 'founder',
+            status: 'canceled',
+            current_period_end: '2026-10-01T00:00:00.000Z',
+          }),
+      }),
+    );
+    expect(reply.status).toBe(200);
+    expect(sent).toHaveLength(1);
+  });
+
+  it('si no puede revisar el plan no abre el pago y deja el motivo en el registro', async () => {
+    sent.length = 0;
+    const lines: string[] = [];
+    const reply = await ask(
+      { plan: 'monthly', provider: 'stripe' },
+      checkoutDeps({
+        subscriptionOf: () => Promise.reject(new Error('caída')),
+        log: (line) => lines.push(line),
+      }),
+    );
+    expect(reply.status).toBe(502);
+    expect(await reply.json()).toEqual({ error: 'provider' });
+    expect(sent).toHaveLength(0);
+    expect(lines).toEqual([
+      'No se pudo revisar si ya hay un plan pagado antes de abrir el pago del plan monthly',
+    ]);
   });
 
   it('sin llaves o sin dirección de la app contesta 503', async () => {
@@ -1313,5 +1374,39 @@ describe('precios', () => {
     expect(PLAN_PRICES_MXN.founder).toBe(PLANS.founder.priceMxn);
     expect(PLAN_PRICES_MXN.monthly).toBe(PLANS.monthly.priceMxn);
     expect(PLAN_PRICES_MXN.annual).toBe(PLANS.annual.priceMxn);
+  });
+});
+
+describe('plan pagado vigente', () => {
+  const row = (status: string, end: string | null, plan = 'annual') => ({
+    plan,
+    status,
+    current_period_end: end,
+  });
+  const LATER = '2026-11-08T16:00:00.000Z';
+  const EARLIER = '2026-10-01T00:00:00.000Z';
+
+  it('sigue la regla de user_plan en la base', () => {
+    // Activa, con cobro fallido o cancelada valen hasta el fin del periodo ya pagado
+    expect(planInForce(row('active', LATER), NOW)).toBe('annual');
+    expect(planInForce(row('past_due', LATER), NOW)).toBe('annual');
+    expect(planInForce(row('canceled', LATER), NOW)).toBe('annual');
+    expect(planInForce(row('active', EARLIER), NOW)).toBeNull();
+    expect(planInForce(row('canceled', EARLIER), NOW)).toBeNull();
+    // Sin fecha solo cuenta la activa
+    expect(planInForce(row('active', null), NOW)).toBe('annual');
+    expect(planInForce(row('past_due', null), NOW)).toBeNull();
+    expect(planInForce(row('canceled', null), NOW)).toBeNull();
+  });
+
+  it('no cuenta Gratis, estados desconocidos ni la falta de fila', () => {
+    expect(planInForce(null, NOW)).toBeNull();
+    expect(planInForce(row('active', LATER, 'free'), NOW)).toBeNull();
+    expect(planInForce(row('unpaid', LATER), NOW)).toBeNull();
+  });
+
+  it('lee la fecha como la manda PostgREST y en la duda la cuenta como vigente', () => {
+    expect(planInForce(row('active', '2027-10-11T19:03:51.46643+00:00'), NOW)).toBe('annual');
+    expect(planInForce(row('active', 'no es fecha'), NOW)).toBe('annual');
   });
 });

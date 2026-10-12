@@ -11,7 +11,10 @@ export type PaidPlanKey = Exclude<PlanKey, 'free'>;
 
 export type CheckoutResult =
   | { ok: true; url: string }
-  | { ok: false; reason: 'founder_full' | 'not_configured' | 'unsafe_url' | 'failed' };
+  | {
+      ok: false;
+      reason: 'founder_full' | 'already_subscribed' | 'not_configured' | 'unsafe_url' | 'failed';
+    };
 
 const ReplySchema = z.object({ url: z.string() });
 
@@ -55,6 +58,7 @@ export async function startCheckout(
     if (reply.error) {
       const code = await errorCodeOf(reply.error);
       if (code === 'founder_full') return { ok: false, reason: 'founder_full' };
+      if (code === 'already_subscribed') return { ok: false, reason: 'already_subscribed' };
       if (code === 'not_configured') return { ok: false, reason: 'not_configured' };
       return { ok: false, reason: 'failed' };
     }

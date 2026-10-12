@@ -14,6 +14,7 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
+- Fase L en curso (D-118). Primer pago de prueba real de punta a punta y un solo plan pagado a la vez. Ver su sección, que dice dónde se quedó
 - Fase K (D-114 y D-115). Precios 79 Fundador como promoción del mensual, 149 mensual y 1,499 anual, entrada con el código del correo desde otro dispositivo, Mercado Pago oculto y registro del motivo cuando un pago no abre. Falta que Ricardo cree los precios nuevos en Stripe y agregue el código a las plantillas de correo. Ver su sección
 - Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema completo, tres funciones de pago desplegadas y los secretos de Stripe puestos. Ver su sección
 - Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
@@ -35,6 +36,27 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
+
+Sesión del 2026-10-11. Este bloque quedó a medias porque se acababa el límite semanal de Ricardo. Lo de abajo dice qué está hecho y qué sigue.
+
+### Hecho
+- Diagnóstico con los registros de Supabase. STRIPE_PRICE_ANNUAL y STRIPE_PRICE_FOUNDER tenían el ID del producto (prod_) y no el del precio. Ricardo los cambió y create-checkout abrió el pago
+- El webhook rechazaba los avisos por firma inválida. Ricardo volvió a copiar el secreto de firma del endpoint y reenvió los eventos. Desde las 19.03 UTC responde 200 y el pago quedó en la base (pago, suscripción y cliente de Stripe ligados)
+- En la prueba, la misma cuenta pagó el Anual (1,499) y después el Fundador (79). Quedaron dos suscripciones en Stripe y una sola fila en la base, mezclada (plan founder con la fecha del anual)
+- Corrección programada y desplegada (commit c5fc502). create-checkout responde 409 already_subscribed si ya hay un plan pagado vigente, con la regla de user_plan. La pantalla Suscripción no ofrece otro plan a quien paga. El mes por referido sí deja pagar. npm run check pasa con 2,689 pruebas
+- create-checkout desplegada en el proyecto real como versión 15. El webhook y el portal no se volvieron a desplegar a propósito, porque su código no cambió desde la Fase J salvo los precios de Mercado Pago, que está oculto
+
+### Dónde se quedó
+- La versión 15 arranca. Un POST con la llave anónima respondió 401 unauthorized desde el propio código. Falta verla bloquear con una cuenta real, que Ricardo intente comprar otro plan con su cuenta de prueba antes de limpiarla y vea el aviso de plan vigente
+- Falta limpiar la cuenta de prueba en Stripe. Ricardo debe cancelar las dos suscripciones de su cliente de prueba con Cancel subscription, Immediately y reembolso del último pago. Con los avisos de Stripe la base queda en Gratis sola, sin editar filas a mano. Después verificar en payment_webhook_events, payments y subscriptions
+- Desde este entorno no se puede llamar a Stripe (api.stripe.com y mcp.stripe.com bloqueados por la red)
+
+### Pendiente para antes de lanzar
+- Borrar los datos de prueba de subscriptions, payments y billing_customers. El conteo del cupo Fundador cuenta toda fila con plan founder, también las canceladas, así que una prueba ocupa un lugar
+- Decidir con Ricardo si un Fundador que cancela conserva su lugar
+- Cambiar de plan desde el portal todavía no se refleja en la plataforma. Hoy el alumno cancela y contrata el otro plan al terminar su periodo
 
 ## Fase K. Entrar desde otro dispositivo y precios nuevos (D-114 y D-115)
 
