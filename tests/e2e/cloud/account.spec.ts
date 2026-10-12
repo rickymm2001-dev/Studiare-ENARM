@@ -7,6 +7,8 @@ import { expect, expectHome, openEmailLink, test } from '../support/cloudFixture
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
 const EMAIL = 'ana@ejemplo.mx';
+/** Lo que dice la sincronización cuando salió bien, sin la fecha */
+const SYNC_OK_PREFIX = t.cloud.sync.ok('§').split('§')[0]?.trim() ?? '';
 
 test.describe('Cuenta en la nube', () => {
   test('crea la cuenta con el enlace del correo y vuelve a entrar con el código de seis dígitos', async ({
@@ -79,6 +81,9 @@ test.describe('Cuenta en la nube', () => {
     await expectHome(page);
     await page.goto(SCREENS.profile.path);
     await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
+    // Volver a entrar en el mismo navegador es un reclamo refresh con la sesión nueva, y el servidor
+    // lo acepta, así que este navegador sigue siendo el activo y la sincronización termina bien
+    await expect(page.getByText(SYNC_OK_PREFIX)).toBeVisible({ timeout: 15_000 });
   });
 
   test('un código que ya se usó no vuelve a abrir la sesión', async ({ page, cloud }) => {

@@ -756,7 +756,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         );
       }
     }
-    const sessionId = kind === 'refresh' ? (held?.sessionId ?? session.id) : session.id;
+    // Como en la SQL (coalesce(sid, held.session_id)), en un refresh gana la sesión del token actual
+    // y la guardada es solo respaldo. Los tokens del simulado siempre traen session_id, así que aquí
+    // se reduce a la del token. Salir y volver a entrar en el mismo navegador registra el refresh
+    const sessionId = session.id;
     deviceSessions.set(user.id, {
       deviceId: input.deviceId,
       label: input.label,

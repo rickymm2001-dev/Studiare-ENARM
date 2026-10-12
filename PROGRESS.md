@@ -63,7 +63,7 @@ Evidencia
 Hecho
 - Inventario de los 17 procesos de la lista mínima más 5 fuera de ella en docs/auditoria-v3/procesos.md, con pantallas, archivos, tablas, eventos, estados y las pruebas que cubren cada uno
 - Recorrido automático de las 32 pantallas con cuatro roles, en teléfono y computadora (npm run audit:ui). 10 recorridos con 0 hallazgos y 10 flujos con interrupciones en verde. Resultados en docs/auditoria-v3/recorrido
-- 23 hallazgos en docs/auditoria-v3/hallazgos.md, ninguno crítico. Los altos corregidos aquí o asignados con su motivo al bloque que toca esa pantalla
+- 27 hallazgos en docs/auditoria-v3/hallazgos.md, ninguno crítico. Los altos corregidos aquí o asignados con su motivo al bloque que toca esa pantalla
 - Correcciones. Los consentimientos opcionales empiezan apagados (4.27). El examen completo ya no dice Próximamente en Suscripción ni en la portada. La retroalimentación ya no promete un botón que no existe. La prueba del SIGNED_IN rezagado ya no depende de un temporizador
 - Supabase simulado dentro de Playwright (tests/e2e/support/fakeSupabase.ts, fakeGateway.ts, cloudFixtures.ts) y proyectos cloud-desktop y cloud-mobile con su propio build hacia un origen falso. Atiende auth, PostgREST, RPC, las Edge Functions de pago y una pasarela y un portal de mentira. Cinco specs en tests/e2e/cloud (cuenta con enlace y código, dispositivo único, pagos, borrar cuenta y referidos), 22 pruebas en teléfono y computadora. Encontraron un desborde real en Suscripción con el cupo Fundador lleno, corregido (H27). Qué simula y qué no está en tests/e2e/cloud/README.md
 - E2E nuevas de los procesos que no tenían camino feliz. Nueve specs (pomodoro, review-tools, full-exam, practice-filters, retry-missed, export-data, tutor-ai, physician-labeling y admin-users), 30 pruebas en teléfono y computadora, cada una con su camino feliz y su falla o límite, más tests/e2e/support/b1.ts con los ayudantes. Encontraron un desborde real en el teléfono con la píldora del Pomodoro abierta, corregido (H24)
@@ -73,7 +73,7 @@ Evidencia
 - PENDIENTE_EVIDENCIA_B1
 
 ### Preguntas para Ricardo
-- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado como D-120 y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
+- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado con el número de decisión que siga y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)

@@ -92,7 +92,7 @@ export default defineConfig({
     {
       // El mismo build con la nube configurada hacia el proyecto falso, en su propia carpeta y puerto.
       // El escáner de secretos revisa también este build, porque la llave falsa queda dentro de él
-      name: 'nube',
+      name: 'cloud',
       command: `npx vite build --outDir dist-cloud && node scripts/secrets.ts dist-cloud && npx vite preview --outDir dist-cloud --port ${CLOUD_PREVIEW_PORT} --strictPort`,
       env: {
         VITE_SUPABASE_URL: FAKE_SUPABASE_URL,

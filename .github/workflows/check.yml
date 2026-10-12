@@ -50,7 +50,8 @@ jobs:
   # con el proxy de IA en modo simulado (14.1). Los navegadores van dentro del proyecto (D-033)
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Cuatro proyectos y dos builds desde B1 (los de nube con el Supabase simulado)
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

@@ -5,6 +5,8 @@ Escrito el 2026-10-12 al arrancar el bloque B1 (D-119). Sale de leer el código 
 
 Rama claude/keen-hopper-4oj3c2 al cerrar B0. Las rutas son relativas a la raíz del repo.
 
+Nota del cierre de B1 (2026-10-12). Este inventario es la foto de antes de las correcciones del bloque. Lo que dice la sección 0 sobre el build de las e2e sin Supabase, la sección 3 sobre los huecos sin e2e y la sección 4 sobre los hallazgos vigentes cambió en B1. El estado vigente de cada hallazgo, lo corregido y lo asignado, vive en hallazgos.md. Desde B1 las e2e de nube corren contra un Supabase simulado en los proyectos cloud-desktop y cloud-mobile (tests/e2e/cloud/README.md).
+
 ## 0. Lo que vale para todos los procesos
 
 - **Datos en el navegador.**
