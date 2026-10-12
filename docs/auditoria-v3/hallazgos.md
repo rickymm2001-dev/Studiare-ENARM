@@ -47,7 +47,7 @@ Corrido el 2026-10-12 sobre el build de B1 con npm run audit:ui, en 18 minutos.
 |---|---|
 | Recorridos por pantalla | 10, cinco roles o estados por tamaño (alumno con base vacía, y alumno, médico, admin y dueño con la demo), 32 pantallas cada uno. Los 10 con 0 hallazgos. Los JSON están en recorrido/ |
 | Flujos con interrupciones | 10 pasan, cinco por tamaño. Recargar a media práctica, volver con el navegador, sin conexión, doble clic al contestar y dos perfiles en el mismo dispositivo |
-| Nube caída | PENDIENTE_NUBE_CAIDA |
+| Nube caída | 1 pasa en computadora, con 0 hallazgos. El build apunta a un proyecto de Supabase que no responde, se crea la cuenta en el navegador, abren las 32 pantallas y un médico con la sesión vencida entra sin red (AUDIT_CLOUD=down) |
 
 Lo que el recorrido no distingue. Un alumno de pago, porque la demo no da planes de pago; eso lo cubren las e2e de tutor con IA y examen de 280. Cuentas reales de la nube, que cubren las e2e del proyecto cloud con el Supabase simulado.
 
