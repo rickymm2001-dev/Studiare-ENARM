@@ -30,11 +30,16 @@ describe('lectura de server/.env.local', () => {
   });
 
   it('con la clave corre en modo real y no la copia a process.env', () => {
+    // En una sesión en la nube la variable puede existir ya con la clave real (sección 10 del plan del
+    // cambio). Solo se revisa que leer el archivo no la ponga ni la cambie, comparando con booleanos
+    // para que una falla jamás imprima su valor
+    const before = process.env[KEY_VARIABLE];
     const credentials = loadAiCredentials({
       envFile: envFileWith(`${KEY_VARIABLE}=${FAKE_KEY}\n`),
     });
     expect(credentials).toEqual({ mode: 'real', apiKey: FAKE_KEY });
-    expect(process.env[KEY_VARIABLE]).toBeUndefined();
+    expect(process.env[KEY_VARIABLE] === before).toBe(true);
+    expect(process.env[KEY_VARIABLE] === FAKE_KEY).toBe(false);
   });
 
   it('con la clave vacía o con otras variables corre en modo simulado', () => {
