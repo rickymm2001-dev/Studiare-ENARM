@@ -66,7 +66,7 @@ Hecho
 - 23 hallazgos en docs/auditoria-v3/hallazgos.md, ninguno crítico. Los altos corregidos aquí o asignados con su motivo al bloque que toca esa pantalla
 - Correcciones. Los consentimientos opcionales empiezan apagados (4.27). El examen completo ya no dice Próximamente en Suscripción ni en la portada. La retroalimentación ya no promete un botón que no existe. La prueba del SIGNED_IN rezagado ya no depende de un temporizador
 - Supabase simulado dentro de Playwright y proyecto cloud para las e2e de nube. PENDIENTE_CLOUD
-- E2E nuevas de los procesos que no tenían camino feliz. PENDIENTE_LOCALES
+- E2E nuevas de los procesos que no tenían camino feliz. Nueve specs (pomodoro, review-tools, full-exam, practice-filters, retry-missed, export-data, tutor-ai, physician-labeling y admin-users), 30 pruebas en teléfono y computadora, cada una con su camino feliz y su falla o límite, más tests/e2e/support/b1.ts con los ayudantes. Encontraron un desborde real en el teléfono con la píldora del Pomodoro abierta, corregido (H24)
 - Capturas en docs/screenshots/v3/b1
 
 Evidencia

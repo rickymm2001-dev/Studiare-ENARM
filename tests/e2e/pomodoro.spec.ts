@@ -6,7 +6,13 @@ import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { followSmallestDeck, readTable } from './support/b1';
-import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import {
+  expect,
+  expectNoHorizontalOverflow,
+  expectNoSeriousA11yViolations,
+  signUp,
+  test,
+} from './support/fixtures';
 
 const MINUTE_MS = 60_000;
 
@@ -64,11 +70,12 @@ test('un bloque corto se inicia, se pausa, se salta y el descanso termina solo, 
   await expect(settings.getByText(t.pomodoro.saved)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
-  // axe corre con la píldora minimizada, como empieza. Abierta, en el teléfono el encabezado de la
-  // sesión se sale de la pantalla (hallazgo de B1 en SessionHeader, pendiente de corregir en src)
   await startReviewSession(page);
   await expectNoSeriousA11yViolations(page);
   const pill = await openPomodoro(page);
+  // Abierta, con el reloj y sus botones, el encabezado de la sesión se parte en dos renglones en el
+  // teléfono en lugar de salirse de la pantalla (hallazgo H24 de B1)
+  await expectNoHorizontalOverflow(page);
 
   // Iniciar y pausar. En pausa el botón ofrece continuar y al continuar vuelve a ofrecer pausar
   await pill.getByRole('button', { name: t.pomodoro.start }).click();

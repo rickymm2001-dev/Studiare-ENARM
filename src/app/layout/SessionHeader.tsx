@@ -36,7 +36,7 @@ export function SessionHeader({ title, meta, badges, actions }: SessionHeaderPro
       ) : null}
       {badges ? <div className="flex shrink-0 flex-wrap gap-2">{badges}</div> : null}
       {actions ? (
-        <div className="ml-auto flex shrink-0 flex-wrap items-center gap-2 lg:flex-nowrap">
+        <div className="ml-auto flex max-w-full min-w-0 flex-wrap items-center justify-end gap-2 lg:flex-nowrap">
           {actions}
         </div>
       ) : null}
