@@ -71,7 +71,7 @@ function Billing({ session }: { session: ReadySession }) {
   // ningún pago, ni el real ni el simulado, que no cobraría nada pero haría creer que sí
   const needsCloud = cloudConfigured() && !inCloud;
   // Con un plan pagado vigente otro pago abriría una segunda suscripción que cobra aparte. No se ofrece
-  // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-116)
+  // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-118)
   const paidInForce = inCloud && current !== 'free' && subscription?.source === 'payment';
   const receipts = (events ?? []).flatMap((event) =>
     event.type === 'subscription_changed' && event.payload.receiptId

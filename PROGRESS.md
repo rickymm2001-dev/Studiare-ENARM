@@ -12,7 +12,7 @@
 - Fase D con sus cinco motores de IA, el proxy con límites y costos, las evaluaciones y las pantallas de admin 23 a 25 programada en modo simulado (D-098). Falta la clave de Ricardo para medir el costo real
 - Apuntes (Etapa 3) quedó con la versión que ya estaba en main y se integró el trabajo en paralelo (D-100)
 - Fase E con las pantallas del médico 18 a 22 y la privacidad del alumno programada (D-099 y D-101). Falta que Ricardo aplique la quinta migración de Supabase, ver docs/SUPABASE.md
-- Fase L en curso (D-116). Primer pago de prueba real de punta a punta y un solo plan pagado a la vez. Ver su sección, que dice dónde se quedó
+- Fase L en curso (D-118). Primer pago de prueba real de punta a punta y un solo plan pagado a la vez. Ver su sección, que dice dónde se quedó
 - Fase K (D-114 y D-115). Precios 79 Fundador como promoción del mensual, 149 mensual y 1,499 anual, entrada con el código del correo desde otro dispositivo, Mercado Pago oculto y registro del motivo cuando un pago no abre. Falta que Ricardo cree los precios nuevos en Stripe y agregue el código a las plantillas de correo. Ver su sección
 - Fase J (D-113). El proyecto real de Supabase de Ricardo tiene el esquema completo, tres funciones de pago desplegadas y los secretos de Stripe puestos. Ver su sección
 - Fase I programada (D-110). Practicar lo fallado de un examen, aviso al ganar insignias y aviso de presupuesto de IA lleno. Ver su sección
@@ -35,7 +35,7 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
-## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-116)
+## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 
 Sesión del 2026-10-11. Este bloque quedó a medias porque se acababa el límite semanal de Ricardo. Lo de abajo dice qué está hecho y qué sigue.
 

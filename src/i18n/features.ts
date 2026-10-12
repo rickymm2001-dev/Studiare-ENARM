@@ -441,7 +441,7 @@ export const featureText = {
         canceled: 'Cancelaste el pago. No se cobró nada.',
       },
       cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
-      // Con un plan pagado vigente no se ofrece otro pago, que sería un segundo cobro (D-116)
+      // Con un plan pagado vigente no se ofrece otro pago, que sería un segundo cobro (D-118)
       changePlanNote:
         'Para cambiarte a este plan, cancela el tuyo en Administrar suscripción y contrátalo cuando termine tu periodo.',
       portal: {

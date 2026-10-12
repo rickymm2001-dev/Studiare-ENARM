@@ -611,7 +611,7 @@ export async function handleCreateCheckout(
   if (appUrl === '') return json({ error: 'not_configured' }, 503, cors);
 
   // Con un plan pagado vigente, otro pago abriría una segunda suscripción que cobra aparte, y la base
-  // solo guarda una. Cambiar de plan se hace al terminar el periodo (D-116). Si no se puede revisar,
+  // solo guarda una. Cambiar de plan se hace al terminar el periodo (D-118). Si no se puede revisar,
   // no se abre el pago, porque un doble cobro es peor que pedir que lo intente de nuevo
   let inForce: PaidPlan | null;
   try {

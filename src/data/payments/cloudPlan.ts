@@ -41,7 +41,7 @@ export function subscriptionFromCloud(
     status: cloudPlan.plan === 'free' ? 'none' : 'active',
     isSimulated: false,
     periodEnd: periodEnd && !Number.isNaN(periodEnd.getTime()) ? periodEnd.toISOString() : null,
-    // Con un pago vigente la pantalla Suscripción no ofrece otro (D-116)
+    // Con un pago vigente la pantalla Suscripción no ofrece otro (D-118)
     ...(cloudPlan.plan !== 'free' && cloudPlan.source !== 'none'
       ? { source: cloudPlan.source }
       : {}),
