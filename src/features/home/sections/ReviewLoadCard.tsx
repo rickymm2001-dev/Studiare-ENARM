@@ -31,6 +31,9 @@ const longDayFormat = new Intl.DateTimeFormat('es-MX', {
 });
 const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
 const shortDay = (day: string) => capitalize(weekdayFormat.format(asDate(day)).replace('.', ''));
+/** Inicial del día, L a D, la misma que usa el calendario */
+const initialDay = (day: string) =>
+  t.widgets.heatmap.weekdays[(asDate(day).getUTCDay() + 6) % 7] ?? shortDay(day);
 const longDay = (day: string) => capitalize(longDayFormat.format(asDate(day)));
 const totalOf = (day: DayLoad) => day.reviews + day.newCards;
 
@@ -87,7 +90,8 @@ function DayColumns({ days, total }: { days: readonly DayLoad[]; total: number }
   const active = hover === null ? undefined : days[hover];
 
   return (
-    <figure className="mt-4 flex grow flex-col gap-2">
+    // Contenedor para que los nombres de los días se acorten cuando la tarjeta es angosta
+    <figure className="@container mt-4 flex grow flex-col gap-2">
       <div
         role="img"
         aria-label={label}
@@ -144,11 +148,19 @@ function DayColumns({ days, total }: { days: readonly DayLoad[]; total: number }
           <span
             key={day.day}
             className={cn(
-              'flex min-w-0 flex-1 flex-col items-center text-xs leading-tight text-fg-muted',
+              'flex min-w-0 flex-1 flex-col items-center text-[0.6875rem] leading-tight text-fg-muted @2xs:text-xs',
               index === 0 && 'font-semibold text-fg',
             )}
           >
-            <span className="truncate">{index === 0 ? text.today : shortDay(day.day)}</span>
+            {index === 0 ? (
+              <span>{text.today}</span>
+            ) : (
+              <>
+                {/* En una tarjeta angosta va la inicial y con espacio la abreviatura */}
+                <span className="@2xs:hidden">{initialDay(day.day)}</span>
+                <span className="hidden @2xs:inline">{shortDay(day.day)}</span>
+              </>
+            )}
             <span className="tabular-nums">{dayNumberFormat.format(asDate(day.day))}</span>
           </span>
         ))}
