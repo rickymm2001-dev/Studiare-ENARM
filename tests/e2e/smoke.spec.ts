@@ -57,7 +57,9 @@ test('navega con la barra inferior entre las 5 secciones', async ({ page }) => {
   ] as const) {
     await nav.getByRole('link', { name: label, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${SCREENS[key].path}$`));
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
+    // Cada pantalla pone su nombre en la pestaña. Inicio saluda en su h1 (D-116)
+    await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expect(nav.getByRole('link', { name: label, exact: true })).toHaveAttribute(
       'aria-current',
       'page',

@@ -1,7 +1,6 @@
-// Widgets de análisis de Inicio (9.1). Temas débiles, patrón de sesgo, carga futura y última hipótesis
-// del tutor. Cada uno dice lo mismo que su pantalla pero en chico, usa los mismos motores y muestra
-// calibrando, con cuánto falta, hasta tener datos suficientes (4.3). Solo cargan lo que necesitan
-// cuando están en el tablero.
+// Análisis de Inicio (D-116). Temas para reforzar y sesgos o trampas que te hacen fallar. Cada uno dice
+// lo mismo que Progreso pero en chico, usa los mismos motores y muestra calibrando, con cuánto falta,
+// hasta tener datos suficientes (4.3).
 import { Play } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -15,24 +14,12 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote } from '@/ui/states/states';
-import { useDecksAndCards } from '../../decks/useDecksAndCards';
 import { topicsCalibration } from '../../progress/analysis';
-import { LoadBars } from '../../progress/FutureLoadCard';
 import { biasCalibration, biasProfileRows } from '../../progress/focusItems';
-import { formatDay, loadSummary } from '../../progress/loadFormat';
 import { masteryChip } from '../../progress/masteryChip';
 import { useAnalysis } from '../../progress/useAnalysis';
-import { useFutureLoad } from '../../progress/useFutureLoad';
 import type { ReadySession } from '../../shared/RequireSession';
-import { TOPIC_NAMES } from '../../shared/topics';
-import { latestHypothesis } from '../../tutor/tutorModel';
-import {
-  artifactStatuses,
-  useTutorData,
-  useTutorView,
-  type TutorData,
-} from '../../tutor/useTutorData';
-import { ALL_BRANCHES, readFutureLoadSettings, readWeakTopicsSettings } from './analysisSettings';
+import { ALL_BRANCHES, readWeakTopicsSettings } from './analysisSettings';
 
 interface AnalysisWidgetProps {
   session: ReadySession;
@@ -156,116 +143,6 @@ export function BiasPatternWidget({ session, events }: AnalysisWidgetProps) {
         ))}
       </ul>
       <SeeAll to={screenPath('progress')}>{text.seeAll}</SeeAll>
-    </div>
-  );
-}
-
-/** Mientras carga, la proyección no ve ningún mazo. Esta referencia fija evita recalcular */
-const NO_CONTENT = { decks: [], cards: [] } as const;
-
-export function FutureLoadWidget({ session, events, settings }: AnalysisWidgetProps) {
-  const text = t.widgets.futureLoad;
-  const content = useDecksAndCards();
-  const { days } = readFutureLoadSettings(settings);
-  const load = useFutureLoad(session, events, content ?? NO_CONTENT, days);
-  if (content === undefined) return <WidgetLoading />;
-
-  if (load === null || load.cardCount === 0)
-    return (
-      <div className="flex flex-col gap-2">
-        <p className="text-sm text-fg-muted">{text.empty}</p>
-        <Button asChild variant="secondary" size="sm" className="self-start">
-          <Link to={screenPath('decks')}>{text.goToDecks}</Link>
-        </Button>
-      </div>
-    );
-
-  const { peakText, average } = loadSummary(load);
-  return (
-    <div className="flex flex-col gap-2">
-      <LoadBars load={load} className="h-16" />
-      <div aria-hidden className="flex justify-between text-xs text-fg-muted">
-        <span>{formatDay(load.days[0]?.day ?? '')}</span>
-        <span>{formatDay(load.days.at(-1)?.day ?? '')}</span>
-      </div>
-      <p className="text-sm">{text.summary(average, peakText)}</p>
-      <SeeAll to={screenPath('progress')}>{text.seeAll}</SeeAll>
-    </div>
-  );
-}
-
-export function LatestHypothesisWidget({ session, events }: AnalysisWidgetProps) {
-  // El tutor carga el banco completo para buscar confusiones, por eso se separa en dos pasos
-  const data = useTutorData(session.user.id, events);
-  if (!data) return <WidgetLoading />;
-  return <LatestHypothesis session={session} events={events} data={data} />;
-}
-
-function LatestHypothesis({
-  session,
-  events,
-  data,
-}: {
-  session: ReadySession;
-  events: readonly AppEvent[];
-  data: TutorData;
-}) {
-  const tutor = t.tutor;
-  const text = t.widgets.latestHypothesis;
-  const view = useTutorView(session, events, data);
-  const statuses = artifactStatuses(session.user.id, data.artifacts, [
-    ...view.confirmed,
-    ...view.forming,
-  ]);
-  // Una que el alumno descartó no se le vuelve a mostrar
-  const latest = latestHypothesis(
-    view.confirmed.filter((hypothesis) => statuses.get(hypothesis.key) !== 'rejected'),
-  );
-  // Una que el alumno descartó no vuelve a salir, ni siquiera como patrón que se está formando
-  const forming = view.forming.find((hypothesis) => statuses.get(hypothesis.key) !== 'rejected');
-  const areaName = (area: string) => TOPIC_NAMES.get(area) ?? area;
-
-  if (latest) {
-    const rule = tutor.rules[latest.rule as keyof typeof tutor.rules];
-    return (
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="info">{tutor.confirmedBadge}</Badge>
-          <Badge variant="neutral">{tutor.confidence[latest.confidence]}</Badge>
-          <span className="text-xs text-fg-muted">{tutor.findings(latest.recentFindings)}</span>
-        </div>
-        <p className="leading-snug font-semibold">{rule.title}</p>
-        <p className="text-sm">{rule.hypothesis(areaName(latest.area))}</p>
-        {statuses.get(latest.key) === 'approved' ? (
-          <p className="text-xs text-fg-muted">{text.helpful}</p>
-        ) : null}
-        <SeeAll to={screenPath('tutor')}>{text.open}</SeeAll>
-      </div>
-    );
-  }
-
-  if (forming) {
-    const title = tutor.rules[forming.rule as keyof typeof tutor.rules].title;
-    const need = forming.recentFindings + forming.findingsNeeded;
-    const label = tutor.formingRow(title, areaName(forming.area), forming.recentFindings, need);
-    return (
-      <div className="flex flex-col gap-2">
-        <Badge variant="neutral" className="self-start">
-          {text.forming}
-        </Badge>
-        <p className="text-sm">{label}</p>
-        <ProgressBar value={forming.recentFindings} max={need} label={label} className="h-2" />
-        <SeeAll to={screenPath('tutor')}>{text.open}</SeeAll>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-2">
-      <p role="status" className="rounded-md bg-primary-soft px-3 py-2 text-sm text-primary">
-        {tutor.calibrating(view.recentErrors)}
-      </p>
-      <SeeAll to={screenPath('tutor')}>{text.open}</SeeAll>
     </div>
   );
 }

@@ -59,11 +59,11 @@ export function LevelLadderDialog({
           </div>
 
           {next ? (
-            <p className="rounded-lg bg-accent-soft p-3 text-sm font-semibold text-accent">
+            <p className="rounded-lg bg-accent-soft p-3 text-sm font-semibold text-accent-ink">
               {text.nextTitle(next.step.title, next.step.fromLevel, fmt(next.xpLeft))}
             </p>
           ) : (
-            <p className="rounded-lg bg-accent-soft p-3 text-sm font-semibold text-accent">
+            <p className="rounded-lg bg-accent-soft p-3 text-sm font-semibold text-accent-ink">
               {text.maxTitle}
             </p>
           )}
@@ -104,7 +104,9 @@ export function LevelLadderDialog({
                     </td>
                     <td className="py-2 pr-2">
                       {step.title}
-                      {isCurrent ? <span className="ml-1 text-accent">· {text.you}</span> : null}
+                      {isCurrent ? (
+                        <span className="ml-1 text-accent-ink">· {text.you}</span>
+                      ) : null}
                     </td>
                     <td className="py-2 text-right tabular-nums">{fmt(step.xpFrom)}</td>
                   </tr>

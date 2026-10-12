@@ -6,8 +6,6 @@ import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
-const names = t.widgets.names;
-
 test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget', async ({
   page,
 }) => {
@@ -79,32 +77,26 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
   ).toBeVisible();
   await expect(practice.getByRole('checkbox', { name: t.simulator.targeted.label })).toHaveCount(0);
 
-  // Inicio. Los cuatro widgets de análisis dicen cuánto falta
+  // Inicio. Temas para reforzar y sesgos o trampas dicen cuánto falta
   await page.goto('/');
-  await page.getByRole('button', { name: t.home.edit }).click();
-  for (const type of ['weak_topics', 'bias_pattern', 'future_load', 'latest_hypothesis']) {
-    await page.getByLabel(t.home.addLabel).selectOption(type);
-    await page.getByRole('button', { name: t.home.add, exact: true }).click();
-  }
-  await page.getByRole('button', { name: t.home.doneEditing }).click();
-
-  const weak = page.getByRole('region', { name: names.weak_topics });
+  const weak = page.getByRole('region', { name: t.home.topicsTitle });
   await expect(weak.getByText(t.states.calibrating.title)).toBeVisible({ timeout: 30_000 });
   await expect(weak.getByText(/Faltan \d+ respuestas en un tema/)).toBeVisible();
-  const bias = page.getByRole('region', { name: names.bias_pattern });
+  const bias = page.getByRole('region', {
+    name: new RegExp(`${t.vocabulary.bias.homeTitle}|${t.vocabulary.trap.homeTitle}`),
+  });
   await expect(
     bias.getByText(
       t.states.calibrating.remaining(
         DEFAULT_THRESHOLDS.bias.minTaggedErrors,
         t.widgets.biasPattern.unit,
       ),
+      { exact: false },
     ),
   ).toBeVisible();
+  // La carga de repaso no dibuja una gráfica vacía
   await expect(
-    page.getByRole('region', { name: names.future_load }).getByText(t.widgets.futureLoad.empty),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('region', { name: names.latest_hypothesis }).getByText(t.tutor.calibrating(0)),
+    page.getByRole('region', { name: t.home.load.title }).getByText(t.home.load.empty),
   ).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });

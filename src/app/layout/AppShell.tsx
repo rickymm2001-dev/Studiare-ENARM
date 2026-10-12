@@ -1,10 +1,11 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
-import { FlaskConical, WifiOff } from 'lucide-react';
+import { FlaskConical, Menu, WifiOff } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
@@ -12,13 +13,14 @@ import { HOME_BY_ROLE, NAV_BY_ROLE } from '../navigation';
 import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
-import { BottomNav } from './BottomNav';
+import { BottomNav, NAV_ID } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
+import { TopBarContext } from './TopBarContext';
 
 // El aviso de insignias trae el cálculo de logros, que no hace falta para pintar la primera pantalla
 const BadgeToast = lazy(() =>
@@ -30,6 +32,8 @@ export function AppShell() {
   const role = usePreferences((state) => state.role);
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
+  const navCollapsed = usePreferences((state) => state.navCollapsed);
+  const setNavCollapsed = usePreferences((state) => state.setNavCollapsed);
   useApplyTheme(theme);
   useApplyAppearance(usePreferences((state) => state.appearance));
   const online = useOnlineStatus();
@@ -42,7 +46,8 @@ export function AppShell() {
   const bare =
     pathname === screenPath('onboarding') ||
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
-  const rail = bare ? '' : 'lg:pl-rail';
+  // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
+  const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
 
   return (
     <div className="min-h-dvh text-fg">
@@ -53,27 +58,71 @@ export function AppShell() {
         {t.app.skipToContent}
       </a>
 
-      {/* En el teléfono una barra delgada con el logo. En computadora el logo va en el riel (D-071) */}
+      {/* En el teléfono una barra delgada con el logo. En computadora es la barra blanca de arriba,
+          con el botón que oculta o muestra el menú lateral, el símbolo de Studiare y, encima, el
+          título de la pantalla con la racha y el nivel, que pone ScreenHeader (D-117) */}
       <header
-        className={`sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur ${bare ? '' : 'lg:hidden'}`}
+        className={cn(
+          'sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur',
+          !bare && 'lg:h-topbar lg:bg-surface lg:backdrop-blur-none',
+        )}
       >
-        <div className="flex min-h-12 items-center gap-2 px-4 py-1.5">
-          <Link to={HOME_BY_ROLE[role]} className="mr-auto shrink-0 rounded-sm">
-            {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas */}
+        <div
+          className={cn(
+            'flex min-h-12 items-center gap-2 px-4 py-1.5',
+            !bare && 'lg:h-full lg:gap-0 lg:p-0',
+          )}
+        >
+          {bare ? null : (
+            <button
+              type="button"
+              aria-label={t.nav.toggle}
+              aria-expanded={!navCollapsed}
+              aria-controls={NAV_ID}
+              title={navCollapsed ? t.nav.show : t.nav.hide}
+              onClick={() => {
+                setNavCollapsed(!navCollapsed);
+              }}
+              className="hidden h-full w-rail shrink-0 items-center justify-center bg-primary text-primary-fg transition-colors hover:bg-primary-hover lg:flex [&_svg]:size-7"
+            >
+              <Menu aria-hidden strokeWidth={2.4} />
+            </button>
+          )}
+          <Link
+            to={HOME_BY_ROLE[role]}
+            className={cn(
+              'mr-auto shrink-0 rounded-sm',
+              !bare && 'lg:mr-0 lg:flex lg:w-topbar-logo lg:items-center lg:justify-center',
+            )}
+          >
+            {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas. En la barra de
+                computadora va solo el símbolo, junto al botón del menú */}
             <img
               src={logoUrl}
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="h-6 w-auto sm:h-8 dark:hidden"
+              className={cn('h-6 w-auto sm:h-8 dark:hidden', !bare && 'lg:hidden')}
             />
             <img
               src={logoDarkUrl}
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="hidden h-6 w-auto sm:h-8 dark:block"
+              className={cn(
+                'hidden h-6 w-auto sm:h-8 dark:block',
+                !bare && 'lg:hidden dark:lg:hidden',
+              )}
             />
+            {bare ? null : (
+              <img
+                src={`${import.meta.env.BASE_URL}favicon-64x64.png`}
+                alt={t.app.logoAlt}
+                width={64}
+                height={64}
+                className="hidden size-9 lg:block"
+              />
+            )}
           </Link>
         </div>
       </header>
@@ -124,20 +173,23 @@ export function AppShell() {
       </Suspense>
 
       <div className={rail}>
-        <main
-          id="contenido"
-          tabIndex={-1}
-          className={
-            bare
-              ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
-              : 'flex w-full flex-col gap-3 px-4 pt-3 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1rem)] outline-none lg:px-6 lg:pt-5 lg:pb-8'
-          }
-        >
-          <Outlet />
-        </main>
+        <TopBarContext value={!bare}>
+          <main
+            id="contenido"
+            tabIndex={-1}
+            className={
+              bare
+                ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
+                : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
+                  'flex w-full flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
+            }
+          >
+            <Outlet />
+          </main>
+        </TopBarContext>
       </div>
 
-      {bare ? null : <BottomNav items={NAV_BY_ROLE[role]} homePath={HOME_BY_ROLE[role]} />}
+      {bare ? null : <BottomNav items={NAV_BY_ROLE[role]} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
     </div>
   );

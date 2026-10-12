@@ -107,5 +107,5 @@ test('dos perfiles en el mismo dispositivo no se ven los datos', async ({ page }
   await expect(page.getByRole('region', { name: t.simulator.review })).toHaveCount(0);
   console.log(`PERFILES progreso de Ana ${anaText.length} caracteres, de Beto ${betoText.length}`);
   await page.goto(SCREENS.home.path);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.home.title);
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 });

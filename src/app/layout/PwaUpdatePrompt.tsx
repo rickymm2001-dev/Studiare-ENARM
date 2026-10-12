@@ -42,7 +42,7 @@ export function PwaUpdatePrompt() {
   return (
     <div
       role="status"
-      className="fixed inset-x-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-40 mx-auto flex max-w-reading items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-raised lg:top-6 lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md"
+      className="fixed inset-x-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-40 mx-auto flex max-w-reading items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-raised lg:top-[calc(var(--spacing-topbar)+0.75rem)] lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md"
     >
       <p className="flex-1 text-sm text-fg">
         {needRefresh ? t.pwa.updateAvailable : t.pwa.offlineReady}

@@ -70,18 +70,14 @@ test('pantallas del alumno con la demostración', async ({ page }, info) => {
   await panel.getByRole('button', { name: t.demoData.generate }).click();
   await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 200_000 });
 
-  // Inicio con el acomodo Analítico y la última hipótesis del tutor
+  // Inicio con el diseño fijo y los datos de la demo
   await page.goto('/');
-  await page.getByRole('button', { name: t.home.edit }).click();
-  await page.getByLabel(t.home.presetLabel).selectOption('analytic');
-  await page.getByLabel(t.home.addLabel).selectOption('latest_hypothesis');
-  await page.getByRole('button', { name: t.home.add, exact: true }).click();
-  await page.getByRole('button', { name: t.home.doneEditing }).click();
   await page
-    .getByRole('region', { name: t.widgets.names.latest_hypothesis })
-    .getByText(t.tutor.confirmedBadge)
+    .getByRole('region', { name: t.home.topicsTitle })
+    .getByRole('link', { name: /^Practicar / })
+    .first()
     .waitFor({ timeout: 60_000 });
-  await capture(page, '01-inicio-analitico', project);
+  await capture(page, '01-inicio', project);
 
   const screens: [string, string, string][] = [
     ['02-repasar', SCREENS.review.path, t.screens.review.title],

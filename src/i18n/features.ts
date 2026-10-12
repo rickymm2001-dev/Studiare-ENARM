@@ -82,22 +82,54 @@ export const featureText = {
   },
   home: {
     greeting: (alias: string) => `Hola, ${alias}`,
-    edit: 'Editar tablero',
-    doneEditing: 'Listo',
-    presetLabel: 'Acomodo predefinido',
-    presets: {
-      essential: 'Esencial',
-      analytic: 'Analítico',
-      competitive: 'Competitivo',
-      custom: 'Personalizado',
+    // El saludo concuerda con el sexo que el alumno declaró. Sin dato se usa una forma neutra
+    welcome: (alias: string, sex: 'female' | 'male' | 'other' | 'undisclosed' | null) =>
+      sex === 'female'
+        ? `¡Bienvenida, ${alias}!`
+        : sex === 'male'
+          ? `¡Bienvenido, ${alias}!`
+          : `¡Te damos la bienvenida, ${alias}!`,
+    reviewsTitle: 'Tus repasos',
+    simulatorsTitle: 'Tus simuladores',
+    topicsTitle: 'Temas para reforzar',
+    dueTitle: 'Tienes…',
+    dueCaption: (n: number) => (n === 1 ? 'Tarjeta vencida' : 'Tarjetas vencidas'),
+    dueLabel: (n: number) => plural(n, 'tarjeta vencida', 'tarjetas vencidas'),
+    nothingDue: 'Nada vencido por ahora. Aprende tarjetas nuevas o practica preguntas.',
+    load: {
+      title: 'Carga de repaso',
+      average: (n: number) =>
+        `Este mes hiciste ${plural(n, 'repaso', 'repasos')} en promedio por día.`,
+      averageNone: 'Este mes todavía no repasas tarjetas.',
+      linkBefore: 'Da clic ',
+      link: 'aquí',
+      linkLabel: 'Ver tu carga completa en Progreso',
+      linkAfter: ' para ver tu carga completa.',
+      empty:
+        'Cuando repases tus primeras tarjetas verás aquí cuántos repasos tenías programados y cuántos hiciste cada mes.',
+      scheduled: 'Programados',
+      done: 'Realizados',
+      month: 'Mes',
+      chartLabel: 'Repasos programados y realizados por mes',
+      point: (month: string, scheduled: number, done: number | null) =>
+        done === null
+          ? `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')}`
+          : `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')} y ${plural(done, 'realizado', 'realizados')}`,
+      notYet: 'Todavía no llega',
     },
-    addLabel: 'Agregar widget',
-    add: 'Agregar',
-    moveUp: (name: string) => `Subir ${name}`,
-    moveDown: (name: string) => `Bajar ${name}`,
-    remove: (name: string) => `Quitar ${name}`,
-    settings: (name: string) => `Ajustes de ${name}`,
-    empty: 'Tu tablero está vacío. Agrega un widget o elige un acomodo.',
+    plan: {
+      title: 'Plan actual',
+      change: 'Cambiar tu plan',
+      upgrade: 'Mejorar tu plan',
+    },
+    // Frases para la meta diaria. Una por día, la misma todo el día
+    quotes: [
+      { text: 'Caminante, no hay camino, se hace camino al andar.', author: 'Antonio Machado' },
+      { text: 'La vida es breve y el arte es largo.', author: 'Hipócrates' },
+      { text: 'No es que tengamos poco tiempo, es que perdemos mucho.', author: 'Séneca' },
+      { text: 'Gota a gota se llena el vaso.', author: 'Refrán popular' },
+      { text: 'Poco a poco se anda lejos.', author: 'Refrán popular' },
+    ],
   },
   widgets: {
     party: {
@@ -132,6 +164,8 @@ export const featureText = {
       summary: (active: number, total: number, sum: number, metric: string) =>
         `${active} de ${total} días con actividad. ${sum.toLocaleString('es-MX')} ${metric} en total.`,
       cell: (day: string, value: number, metric: string) => `${day}, ${value} ${metric}`,
+      /** Inicial de cada día, de lunes a domingo, a la izquierda de las filas */
+      weekdays: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
       less: 'Menos',
       more: 'Más',
     },
@@ -1832,6 +1866,7 @@ export const featureText = {
     level: (level: number, title: string, into: number, next: number) =>
       `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
     short: (level: number) => `Nivel ${level}`,
+    titled: (level: number, title: string) => `Nivel ${level} · ${title}`,
     left: (xp: number, next: number) => `${xp.toLocaleString('es-MX')} XP para el nivel ${next}`,
     profile: 'Tu perfil',
     openLevels: 'Ver niveles y títulos',

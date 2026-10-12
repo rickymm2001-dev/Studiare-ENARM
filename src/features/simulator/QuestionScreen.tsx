@@ -413,7 +413,7 @@ function QuestionCard({
 
         {/* Responder queda pegado a las opciones y siempre en el mismo lugar. En el teléfono va fijo
             arriba de la navegación (D-078 y D-087) */}
-        <ActionDock className="mt-3 -mb-4 rounded-b-xl lg:mt-4 lg:mb-0 lg:rounded-none">
+        <ActionDock className="mt-3 -mx-4 -mb-4 rounded-b-xl px-4 lg:mt-4 lg:mb-0 lg:rounded-none">
           {settings.cardConfidenceStep ? (
             <fieldset className="flex flex-col gap-1.5">
               <legend className="text-sm font-medium">{t.simulator.confidenceQuestion}</legend>

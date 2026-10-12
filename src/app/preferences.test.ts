@@ -14,13 +14,20 @@ describe('preferencias del dispositivo', () => {
       database: 'real',
       sessionUserId: null,
       appearance: DEFAULT_APPEARANCE,
+      navCollapsed: false,
     });
     expect(readStoredPreferences(undefined)).toEqual(DEFAULT_PREFERENCES);
     expect(readStoredPreferences(storageWith(null))).toEqual(DEFAULT_PREFERENCES);
   });
 
   it('lee lo guardado', () => {
-    const stored = { theme: 'dark', role: 'physician', database: 'demo', sessionUserId: 'abc' };
+    const stored = {
+      theme: 'dark',
+      role: 'physician',
+      database: 'demo',
+      sessionUserId: 'abc',
+      navCollapsed: true,
+    };
     expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual({
       ...stored,
       appearance: DEFAULT_APPEARANCE,
@@ -33,6 +40,7 @@ describe('preferencias del dispositivo', () => {
       role: 'admin',
       database: 'otra',
       appearance: { font: 'comic', size: 'lg', animations: false },
+      navCollapsed: 'sí',
     };
     expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual({
       theme: 'system',
@@ -40,6 +48,7 @@ describe('preferencias del dispositivo', () => {
       database: 'real',
       sessionUserId: null,
       appearance: { ...DEFAULT_APPEARANCE, size: 'lg', animations: false },
+      navCollapsed: false,
     });
   });
 
