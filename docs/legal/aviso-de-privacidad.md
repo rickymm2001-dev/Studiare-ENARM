@@ -1,6 +1,6 @@
 # Aviso de privacidad
 
-Versión 2026-10-10. Última actualización, 10 de octubre de 2026
+Versión 2026-10-12. Última actualización, 10 de octubre de 2026
 
 > Borrador pendiente de revisión de un abogado. Todavía no es el texto legal definitivo.
 
@@ -35,7 +35,7 @@ Para lo que necesitamos hacer para darte el servicio.
 
 ## Lo que solo hacemos si lo permites
 
-Estas finalidades son opcionales. Las das al crear tu perfil y las cambias cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.
+Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.
 
 - Party. Compartir tu alias, XP, nivel y racha con los grupos a los que te unas.
 - Análisis con IA. Usar tus errores para que el tutor te dé hipótesis y un informe con IA.

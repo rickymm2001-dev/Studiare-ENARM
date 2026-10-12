@@ -22,6 +22,9 @@ async function setup() {
     alias: 'Ana',
     dailyGoal: { metric: 'cards', value: 20 },
   });
+  // Las finalidades opcionales empiezan apagadas (4.27 del plan del cambio). El puntaje oficial
+  // pide la mejora anónima, así que estas pruebas la prenden como lo haría el alumno en Privacidad
+  await changeConsent(api, user, 'anonymized_improvement', true);
   return { api, user };
 }
 
@@ -37,16 +40,18 @@ const reasonOf = async (action: Promise<unknown>) => {
 describe('consentimientos', () => {
   it('retirar y volver a dar un permiso cambia el estado vigente y deja un evento cada vez', async () => {
     const { api, user } = await setup();
-    await changeConsent(api, user, 'party', false);
+    // Empieza apagado (4.27)
     expect((await currentConsents(api, user.id)).party).toBe(false);
     await changeConsent(api, user, 'party', true);
     expect((await currentConsents(api, user.id)).party).toBe(true);
+    await changeConsent(api, user, 'party', false);
+    expect((await currentConsents(api, user.id)).party).toBe(false);
 
     const changes = (await api.repos.events.query({ userId: user.id, types: ['consent_changed'] }))
       .flatMap((event) => (event.type === 'consent_changed' ? [event.payload] : []))
       .filter((payload) => payload.purpose === 'party');
-    // Uno al crear el perfil y uno por cada cambio
-    expect(changes.map((payload) => payload.status)).toEqual(['granted', 'revoked', 'granted']);
+    // Uno al crear el perfil, apagado, y uno por cada cambio
+    expect(changes.map((payload) => payload.status)).toEqual(['revoked', 'granted', 'revoked']);
   });
 
   it('retirar la mejora anónima borra el puntaje oficial y retirar otro permiso no lo toca', async () => {
@@ -137,6 +142,7 @@ describe('puntaje oficial', () => {
       alias: 'Beto',
       dailyGoal: { metric: 'cards', value: 20 },
     });
+    await changeConsent(api, other, 'anonymized_improvement', true);
     await submitOfficialScore(api, other, { year: 2025, score: 88 });
     expect((await exportUserData(api.repos, user.id)).officialScore).toBeNull();
   });

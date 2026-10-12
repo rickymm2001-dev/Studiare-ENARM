@@ -1,0 +1,128 @@
+// Fixtures de las pruebas de nube (tests/e2e/cloud). Extienden las fixtures compartidas con el
+// Supabase simulado ya instalado en el contexto y con ayudas para entrar con el enlace del correo y
+// para abrir un segundo navegador con la misma nube, que es como se prueba el dispositivo único.
+import type { Browser, BrowserContext, ConsoleMessage, Page } from '@playwright/test';
+import { t } from '@/i18n/es-MX';
+import { installFakeSupabase, type FakeSupabaseServer } from './fakeSupabase';
+import { FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN, FAKE_SUPABASE_URL } from './fakeSupabaseConfig';
+import { expect, test as base } from './fixtures';
+
+const FAKE_ORIGINS = [FAKE_SUPABASE_URL, FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN];
+
+/**
+ * Chromium escribe en la consola una línea "Failed to load resource" por cada respuesta 4xx, y el
+ * servidor falso contesta así a propósito en los caminos de falla, como un código incorrecto, el
+ * límite de dispositivos o una suscripción activa, porque supabase-js y la app deciden con ese
+ * estado. Esa línea la pone el navegador y no la app, así que no cuenta como error. Cualquier otro
+ * error de consola o excepción sigue tumbando la prueba, igual que en el resto de las e2e
+ */
+export function isExpectedResourceError(message: ConsoleMessage): boolean {
+  return (
+    message.text().startsWith('Failed to load resource') &&
+    FAKE_ORIGINS.some((origin) => message.location().url.startsWith(origin))
+  );
+}
+
+/** Junta los errores de consola de una página. Para las páginas de otros contextos de la misma prueba */
+export function watchConsole(page: Page, errors: string[]): void {
+  page.on('console', (message) => {
+    if (message.type() === 'error' && !isExpectedResourceError(message)) {
+      errors.push(message.text());
+    }
+  });
+  page.on('pageerror', (error) => {
+    errors.push(error.message);
+  });
+}
+
+export const test = base.extend<{ consoleErrors: string[]; cloud: FakeSupabaseServer }>({
+  // Sustituye a la fixture compartida con el mismo nombre. Sigue siendo automática, eso lo hereda
+  consoleErrors: async ({ page }, use) => {
+    const errors: string[] = [];
+    watchConsole(page, errors);
+    await use(errors);
+    expect(errors, 'errores en la consola del navegador').toEqual([]);
+  },
+  // El Supabase simulado de esta prueba. Cada prueba tiene el suyo, con su estado en memoria
+  cloud: async ({ context }, use) => {
+    await use(await installFakeSupabase(context));
+  },
+});
+
+export { expect };
+
+/** Inicio con sesión abierta. Es lo primero que se ve al entrar con la cuenta */
+export async function expectHome(page: Page): Promise<void> {
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible({
+    timeout: 20_000,
+  });
+}
+
+/**
+ * Abre el enlace del correo como lo haría el navegador al venir del correo, cargando la página de nuevo.
+ * Si la página ya está en la app con la misma ruta, ir directo al enlace solo cambiaría el hash sin
+ * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva
+ */
+export async function openEmailLink(page: Page, link: string): Promise<void> {
+  if (page.url() !== 'about:blank') await page.goto('about:blank');
+  await page.goto(link);
+}
+
+/**
+ * Entra con el enlace del correo, como quien abre el correo en este mismo navegador. Crea la cuenta
+ * en la nube si no existe. El puente de la nube une la cuenta con un perfil local y abre la sesión
+ */
+export async function enterWithLink(
+  page: Page,
+  cloud: FakeSupabaseServer,
+  email: string,
+  alias?: string,
+): Promise<void> {
+  await openEmailLink(page, cloud.issueMagicLink(email, alias));
+  await expectHome(page);
+}
+
+export interface SecondDevice {
+  context: BrowserContext;
+  page: Page;
+}
+
+/**
+ * Otro navegador con la misma nube, con las mismas opciones del proyecto (tamaño, idioma y zona
+ * horaria). Sus errores de consola también tumban la prueba. Quien lo abre lo cierra al terminar
+ */
+export async function openSecondDevice(
+  browser: Browser,
+  cloud: FakeSupabaseServer,
+  consoleErrors: string[],
+): Promise<SecondDevice> {
+  const use = test.info().project.use;
+  const context = await browser.newContext({
+    baseURL: use.baseURL,
+    viewport: use.viewport,
+    deviceScaleFactor: use.deviceScaleFactor,
+    isMobile: use.isMobile,
+    hasTouch: use.hasTouch,
+    userAgent: use.userAgent,
+    locale: use.locale,
+    timezoneId: use.timezoneId,
+    reducedMotion: use.reducedMotion,
+    serviceWorkers: use.serviceWorkers,
+  });
+  await cloud.attach(context);
+  const page = await context.newPage();
+  watchConsole(page, consoleErrors);
+  return { context, page };
+}
+
+/** Hora de reintento como la dice el aviso del límite, HH:MM en la zona horaria del navegador de prueba */
+export function retryTimeLabel(retryAt: number, timeZone: string): string {
+  // El aviso redondea hacia arriba al minuto (src/i18n/device.ts)
+  const rounded = Math.ceil(retryAt / 60_000) * 60_000;
+  return new Intl.DateTimeFormat('es-MX', {
+    timeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).format(new Date(rounded));
+}

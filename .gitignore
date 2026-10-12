@@ -1,6 +1,7 @@
 # Dependencias y builds
 node_modules/
 dist/
+dist-cloud/
 dev-dist/
 coverage/
 *.tsbuildinfo

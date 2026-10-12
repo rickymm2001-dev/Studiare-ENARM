@@ -1,4 +1,4 @@
-// Rutas de las pantallas, todas con carga diferida. Las que todavía son esqueleto usan ScreenPlaceholder.
+// Rutas de las pantallas, todas con carga diferida. Las 33 tienen componente propio; ya no hay esqueletos.
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';

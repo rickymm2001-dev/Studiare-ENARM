@@ -71,7 +71,7 @@ const privacy: LegalDoc = {
       id: 'opcionales',
       title: 'Lo que solo hacemos si lo permites',
       paragraphs: [
-        'Estas finalidades son opcionales. Las das al crear tu perfil y las cambias cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.',
+        'Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.',
       ],
       bullets: [
         'Party. Compartir tu alias, XP, nivel y racha con los grupos a los que te unas.',
