@@ -20,7 +20,8 @@ test.describe('Pago en la nube', () => {
   }) => {
     await enterWithLink(page, cloud, EMAIL, 'Ana');
     await page.goto(SCREENS.subscription.path);
-    await expect(page.getByText(text.notice)).toBeVisible();
+    // La descripción de la pantalla dice que el plan lo confirma el servidor. En computadora va oculta
+    await expect(page.getByText(text.notice)).toBeAttached();
     await expect(
       page.getByRole('region', { name: t.billing.current(t.billing.plans.free) }),
     ).toBeVisible();
