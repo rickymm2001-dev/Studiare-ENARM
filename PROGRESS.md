@@ -70,7 +70,12 @@ Hecho
 - Capturas en docs/screenshots/v3/b1
 
 Evidencia
-- PENDIENTE_EVIDENCIA_B1
+- npm run check. Typecheck y lint limpios. 2,725 pruebas unitarias en 275 archivos, 2,723 pasan y 2 se omiten a propósito
+- e2e completo contra el build de producción. 272 pruebas en cuatro proyectos (teléfono, computadora y los dos de nube con el Supabase simulado), 271 pasan y 1 se omite a propósito, en 18 minutos. Después de los ajustes de la revisión se repitieron los dos proyectos de nube y las specs de legal y privacidad, en verde
+- Auditoría de recorridos. 10 recorridos con 0 hallazgos, 10 flujos con interrupciones y la nube caída en verde
+- Capturas en docs/screenshots/v3/b1, 18 imágenes en tres anchos, claro y oscuro. Portada y Suscripción sin Próximamente, y Privacidad con los permisos apagados
+- Revisión independiente de un subagente que no escribió el código, con tsc, eslint y 79 pruebas unitarias corridas por él. Sin hallazgos críticos ni altos. Tres medios y siete bajos, todos atendidos. Lo más útil, el Supabase simulado invertía la regla de los reclamos refresh del dispositivo, el aviso de privacidad seguía diciendo que los permisos se daban al crear el perfil, y faltaban las capturas
+- PR 36 a main con check, e2e y audit del CI
 
 ### Preguntas para Ricardo
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado con el número de decisión que siga y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
