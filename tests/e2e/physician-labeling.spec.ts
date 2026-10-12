@@ -93,13 +93,15 @@ test('el admin asigna temas a una médica, ella etiqueta su cola y con pares de 
   // La pregunta se ancla por su enunciado, porque al completarla sale de la cola y la primera pasa a
   // ser otra
   const first = queue.locator('details').first();
+  // Los selects de una pregunta plegada no están en el árbol de accesibilidad. Se abre antes de contar
+  await first.locator('summary').click();
+  await expect(first.getByRole('combobox').first()).toBeVisible();
   const distractors = await first.getByRole('combobox').count();
-  expect(distractors).toBeGreaterThan(0);
   const progress = (done: number) => text.queue.progress(done, distractors);
   await expect(first.locator('summary')).toContainText(progress(0));
   const prompt = (await first.locator('summary').innerText()).replace(progress(0), '').trim();
   const question = queue.locator('details').filter({ hasText: prompt });
-  await question.locator('summary').click();
+  await expect(question).toHaveCount(1);
   for (let index = 0; index < distractors; index += 1) {
     await question
       .getByRole('combobox')
