@@ -77,7 +77,7 @@ async function setupRole(page: Page, role: Role, mode: Mode) {
     await page.getByLabel(t.account.email, { exact: true }).fill('auditoria@ejemplo.mx');
     await page.getByLabel(t.onboarding.privacyAccept).check();
     await page.getByRole('button', { name: t.onboarding.create }).click();
-    await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
   }
 }
 

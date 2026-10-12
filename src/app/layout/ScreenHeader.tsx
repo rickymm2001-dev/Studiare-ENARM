@@ -6,6 +6,8 @@ import { HeaderStats } from './HeaderStats';
 
 interface ScreenHeaderProps {
   title: string;
+  /** Título de la pestaña del navegador, si es distinto del h1. Inicio saluda en el h1 (D-116) */
+  documentTitle?: string;
   description?: string;
   badges?: ReactNode;
   /** Controles a la derecha del título, a su misma altura */
@@ -20,6 +22,7 @@ interface ScreenHeaderProps {
  */
 export function ScreenHeader({
   title,
+  documentTitle,
   description,
   badges,
   actions,
@@ -29,7 +32,7 @@ export function ScreenHeader({
   const infoId = useId();
   return (
     <header className="animate-rise flex flex-col gap-1.5">
-      <title>{t.app.documentTitle(title)}</title>
+      <title>{t.app.documentTitle(documentTitle ?? title)}</title>
       {badges ? <div className="flex flex-wrap gap-2">{badges}</div> : null}
       <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3">
         <div className="flex min-w-0 items-center gap-0.5 sm:gap-1">

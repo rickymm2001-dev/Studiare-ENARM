@@ -2,6 +2,7 @@
 
 ## Estado actual
 
+- Inicio con el diseño fijo de Ricardo del 2026-10-12 (D-116). Saludo, Tus repasos con la carga de repaso por mes, Tus simuladores, el plan actual con su botón para mejorarlo siempre a la vista, misiones, Party y el heatmap del año. Ya no es un tablero editable
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A

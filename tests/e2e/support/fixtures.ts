@@ -85,7 +85,7 @@ export async function signUp(page: Page, alias = 'Ana'): Promise<void> {
   await page.getByLabel(t.account.email, { exact: true }).fill(`${alias.toLowerCase()}@ejemplo.mx`);
   await page.getByLabel(t.onboarding.privacyAccept).check();
   await page.getByRole('button', { name: t.onboarding.create }).click();
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 }
 
 /**

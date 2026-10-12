@@ -19,15 +19,11 @@ test('un alumno nuevo ve sus misiones en cero y la liga de partida', async ({ pa
   await expectNoSeriousA11yViolations(page);
 });
 
-test('los widgets de logros se agregan al tablero de Inicio', async ({ page }) => {
+test('las misiones de hoy salen en Inicio sin agregarlas', async ({ page }) => {
   await signUp(page);
   await page.goto(SCREENS.home.path);
-  await page.getByRole('button', { name: t.home.edit }).click();
-  for (const type of ['missions', 'league', 'badges'] as const) {
-    await page.getByLabel(t.home.addLabel).selectOption(type);
-    await page.getByRole('button', { name: t.home.add }).click();
-    await expect(page.getByRole('region', { name: t.widgets.names[type] })).toBeVisible();
-  }
-  await page.getByRole('button', { name: t.home.doneEditing }).click();
+  const missions = page.getByRole('region', { name: t.widgets.names.missions });
+  await expect(missions).toBeVisible();
+  await expect(missions.getByRole('progressbar').first()).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
