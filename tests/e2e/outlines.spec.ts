@@ -59,14 +59,16 @@ test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', asyn
   // Quitar los dos puntos del primer renglón deja esa línea sin marca
   // El cursor tiene que quedar al principio de esa línea antes de borrar. Sin esperarlo, los Delete a
   // veces caían al final de la línea de abajo y se llevaban su salto de línea. Si el clic no llegó
-  // a tiempo, se repite
+  // a tiempo, se repite. El clic va al primer renglón visual de la línea, porque en el teléfono se
+  // parte en dos y Home solo lleva al principio del renglón donde quedó el cursor
   const caret = () =>
     page.evaluate(() => {
       const selection = window.getSelection();
       return `${selection?.anchorOffset ?? -1}|${selection?.anchorNode?.textContent ?? ''}`;
     });
+  const firstLine = editorOf(page).locator('p').filter({ hasText: 'Obstrucción reversible' });
   await expect(async () => {
-    await editorOf(page).getByText('Obstrucción reversible').click();
+    await firstLine.click({ position: { x: 4, y: 6 } });
     await page.keyboard.press('Home');
     expect(await caret()).toMatch(/^0\|Asma /);
   }).toPass({ timeout: 15_000 });
