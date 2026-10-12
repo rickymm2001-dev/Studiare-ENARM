@@ -41,7 +41,15 @@ Gravedad. Crítico es pérdida de datos, dinero o seguridad sin salida. Alto es 
 
 ## Recorrido automático
 
-PENDIENTE_RECORRIDO
+Corrido el 2026-10-12 sobre el build de B1 con npm run audit:ui, en 18 minutos.
+
+| Qué | Resultado |
+|---|---|
+| Recorridos por pantalla | 10, cinco roles o estados por tamaño (alumno con base vacía, y alumno, médico, admin y dueño con la demo), 32 pantallas cada uno. Los 10 con 0 hallazgos. Los JSON están en recorrido/ |
+| Flujos con interrupciones | 10 pasan, cinco por tamaño. Recargar a media práctica, volver con el navegador, sin conexión, doble clic al contestar y dos perfiles en el mismo dispositivo |
+| Nube caída | PENDIENTE_NUBE_CAIDA |
+
+Lo que el recorrido no distingue. Un alumno de pago, porque la demo no da planes de pago; eso lo cubren las e2e de tutor con IA y examen de 280. Cuentas reales de la nube, que cubren las e2e del proyecto cloud con el Supabase simulado.
 
 ## Qué no se auditó
 
