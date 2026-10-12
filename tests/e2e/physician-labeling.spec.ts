@@ -90,19 +90,30 @@ test('el admin asigna temas a una médica, ella etiqueta su cola y con pares de 
   await expectNoSeriousA11yViolations(page);
 
   // Etiqueta a ciegas cada distractor de la primera pregunta. Cada etiqueta se guarda al elegirla
+  // La pregunta se ancla por su enunciado, porque al completarla sale de la cola y la primera pasa a
+  // ser otra
   const first = queue.locator('details').first();
-  await first.locator('summary').click();
-  const selects = first.getByRole('combobox');
-  const distractors = await selects.count();
+  const distractors = await first.getByRole('combobox').count();
   expect(distractors).toBeGreaterThan(0);
-  await expect(first.locator('summary')).toContainText(text.queue.progress(0, distractors));
+  const progress = (done: number) => text.queue.progress(done, distractors);
+  await expect(first.locator('summary')).toContainText(progress(0));
+  const prompt = (await first.locator('summary').innerText()).replace(progress(0), '').trim();
+  const question = queue.locator('details').filter({ hasText: prompt });
+  await question.locator('summary').click();
   for (let index = 0; index < distractors; index += 1) {
-    const select = selects.nth(index);
-    await select.selectOption({ index: 1 + (index % 2) });
+    await question
+      .getByRole('combobox')
+      .nth(index)
+      .selectOption({ index: 1 + (index % 2) });
     await expect(queue.getByRole('status')).toHaveText(text.queue.saved);
-    await expect(select).not.toHaveValue('');
+    // El avance cambia cuando la etiqueta ya está en la base. Con la última, la pregunta sale de la cola
+    if (index < distractors - 1) {
+      await expect(question.locator('summary')).toContainText(progress(index + 1));
+    } else {
+      await expect(question).toHaveCount(0);
+    }
   }
-  // Completa, la pregunta sale de la cola y el tablero cuenta sus etiquetas
+  // Completa, el tablero cuenta sus etiquetas
   await expect(queue.getByText(text.queue.remaining(sample - 1))).toBeVisible();
   await expect(statValue(page, text.stats.label, text.stats.mine)).toHaveText(
     new RegExp(`^${distractors}/\\d+$`),
