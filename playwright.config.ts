@@ -1,7 +1,32 @@
 import { defineConfig, devices } from '@playwright/test';
+import {
+  CLOUD_PREVIEW_PORT,
+  CLOUD_PREVIEW_URL,
+  FAKE_SUPABASE_ANON_KEY,
+  FAKE_SUPABASE_URL,
+} from './tests/e2e/support/fakeSupabaseConfig';
 
 const PREVIEW_URL = 'http://127.0.0.1:4173';
 const PROXY_URL = 'http://127.0.0.1:8787';
+
+/** Las pruebas de nube viven aparte y solo corren contra el build con la nube configurada */
+const CLOUD_TESTS = /tests[\\/]e2e[\\/]cloud[\\/].*\.spec\.ts$/;
+
+const MOBILE = {
+  browserName: 'chromium',
+  viewport: { width: 390, height: 844 },
+  deviceScaleFactor: 2,
+  isMobile: true,
+  hasTouch: true,
+} as const;
+const DESKTOP = { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } };
+
+/**
+ * Opciones de los proyectos de nube. El build apunta a un proyecto de Supabase que no existe y un
+ * servidor simulado dentro de Playwright atiende sus peticiones (tests/e2e/support/fakeSupabase.ts).
+ * El service worker se bloquea para que toda petición pase por ese servidor y no por su caché
+ */
+const CLOUD = { baseURL: CLOUD_PREVIEW_URL, serviceWorkers: 'block' } as const;
 
 // Los navegadores viven dentro del proyecto (PLAYWRIGHT_BROWSERS_PATH=0). Ver scripts/playwright.ts
 export default defineConfig({
@@ -29,17 +54,23 @@ export default defineConfig({
   projects: [
     {
       name: 'mobile',
-      use: {
-        browserName: 'chromium',
-        viewport: { width: 390, height: 844 },
-        deviceScaleFactor: 2,
-        isMobile: true,
-        hasTouch: true,
-      },
+      testIgnore: CLOUD_TESTS,
+      use: MOBILE,
     },
     {
       name: 'desktop',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+      testIgnore: CLOUD_TESTS,
+      use: DESKTOP,
+    },
+    {
+      name: 'cloud-desktop',
+      testMatch: CLOUD_TESTS,
+      use: { ...DESKTOP, ...CLOUD },
+    },
+    {
+      name: 'cloud-mobile',
+      testMatch: CLOUD_TESTS,
+      use: { ...MOBILE, ...CLOUD },
     },
   ],
   // Las pruebas corren contra el build de producción, porque el service worker solo existe ahí
@@ -57,6 +88,19 @@ export default defineConfig({
       url: PREVIEW_URL,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
+    },
+    {
+      // El mismo build con la nube configurada hacia el proyecto falso, en su propia carpeta y puerto.
+      // El escáner de secretos revisa también este build, porque la llave falsa queda dentro de él
+      name: 'nube',
+      command: `npx vite build --outDir dist-cloud && node scripts/secrets.ts dist-cloud && npx vite preview --outDir dist-cloud --port ${CLOUD_PREVIEW_PORT} --strictPort`,
+      env: {
+        VITE_SUPABASE_URL: FAKE_SUPABASE_URL,
+        VITE_SUPABASE_ANON_KEY: FAKE_SUPABASE_ANON_KEY,
+      },
+      url: CLOUD_PREVIEW_URL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 240_000,
     },
   ],
 });
