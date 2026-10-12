@@ -182,6 +182,9 @@ export const t = {
   nav: {
     label: 'Navegación principal',
     more: 'Más secciones',
+    toggle: 'Menú lateral',
+    hide: 'Ocultar el menú lateral',
+    show: 'Mostrar el menú lateral',
   },
   studyTabs: {
     label: 'Repasar, mazos, explorar y apuntes',

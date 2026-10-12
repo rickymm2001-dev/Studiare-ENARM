@@ -3,6 +3,8 @@
 // vencidas), Tus simuladores (sesgos o trampas y temas para reforzar, con calibrando), una columna con
 // el plan actual y el botón para cambiarlo, las misiones de hoy y el reto de Party, y el heatmap del
 // año abajo. Cada cifra sale de la bitácora con los mismos motores que el resto de la app.
+// Medio centímetro (gap-5) entre todo, columnas que terminan a la misma altura y el heatmap a todo
+// el ancho (D-117).
 import { CreditCard, Layers, Target } from 'lucide-react';
 import { useId, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -84,17 +86,19 @@ function Dashboard({ session }: { session: ReadySession }) {
         description={t.screens.home.description}
       />
       {/* En el teléfono va todo en una columna, con el plan antes del heatmap para que cambiar de
-          plan quede a la mano. En computadora son las tres columnas del diseño */}
+          plan quede a la mano. En computadora son las tres columnas del diseño y el heatmap abajo,
+          de orilla a orilla, para que no quede espacio en blanco bajo la columna del plan */}
       <div
         className={cn(
-          'grid grid-cols-1 gap-6 [grid-template-areas:"repasos"_"simuladores"_"lateral"_"heatmap"]',
+          'grid grid-cols-1 gap-5 [grid-template-areas:"repasos"_"simuladores"_"lateral"_"heatmap"]',
           'lg:grid-cols-[minmax(0,5fr)_minmax(0,4fr)] lg:[grid-template-areas:"repasos_simuladores"_"lateral_lateral"_"heatmap_heatmap"]',
-          'xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(15rem,17rem)] xl:[grid-template-areas:"repasos_simuladores_lateral"_"heatmap_heatmap_lateral"]',
+          'xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(15rem,17rem)] xl:[grid-template-areas:"repasos_simuladores_lateral"_"heatmap_heatmap_heatmap"]',
         )}
       >
         <Group title={text.reviewsTitle} className="[grid-area:repasos]">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-4">
+          {/* Las tarjetas crecen hasta la altura de la fila, para que nada quede en blanco */}
+          <div className="grid grow grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-5">
               <DailyGoalCard snapshot={snapshot} />
               <DueCard snapshot={snapshot} />
             </div>
@@ -104,7 +108,7 @@ function Dashboard({ session }: { session: ReadySession }) {
 
         <Group
           title={text.simulatorsTitle}
-          className="[grid-area:simuladores] lg:border-l lg:border-line lg:pl-6"
+          className="[grid-area:simuladores] lg:border-l lg:border-line lg:pl-5"
         >
           <AnalysisCard title={t.vocabulary[vocabulary].homeTitle}>
             <BiasPatternWidget session={session} events={events} settings={NO_SETTINGS} />
@@ -114,7 +118,7 @@ function Dashboard({ session }: { session: ReadySession }) {
           </AnalysisCard>
         </Group>
 
-        <aside className="grid grid-cols-1 gap-6 [grid-area:lateral] md:grid-cols-3 xl:grid-cols-1 xl:content-start xl:border-l xl:border-line xl:pl-6">
+        <aside className="grid grid-cols-1 gap-5 [grid-area:lateral] md:grid-cols-3 xl:grid-cols-1 xl:content-start xl:border-l xl:border-line xl:pl-5">
           <PlanCard userId={user.id} />
           <MissionsSection session={session} />
           <SideSection title={t.widgets.names.party_challenge}>
@@ -122,13 +126,13 @@ function Dashboard({ session }: { session: ReadySession }) {
           </SideSection>
         </aside>
 
-        <Card aria-label={t.widgets.names.heatmap} className="[grid-area:heatmap]">
+        <Card aria-label={t.widgets.names.heatmap} className="p-5 [grid-area:heatmap]">
           <HeatmapWidget
             snapshot={snapshot}
             since={studyDayOf(new Date(user.createdAt), user.timeZone)}
             settings={{ range: 365, metric: 'cards' }}
             summaryAtEnd
-            large
+            fluid
           />
         </Card>
       </div>
@@ -148,7 +152,7 @@ function Group({
 }) {
   const id = useId();
   return (
-    <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-4', className)}>
+    <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-5', className)}>
       <h2 id={id} className="text-xl font-medium text-fg sm:text-2xl">
         {title}
       </h2>
@@ -175,7 +179,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
   const dayNumber = Math.floor(Date.parse(`${snapshot.today}T12:00:00Z`) / 86_400_000);
   const quote = text.quotes[dayNumber % text.quotes.length] ?? text.quotes[0];
   return (
-    <Card aria-labelledby={id} className="flex flex-col gap-2">
+    <Card aria-labelledby={id} className="flex grow flex-col gap-2 p-5">
       <CardHeading id={id}>{t.widgets.names.daily_goal}</CardHeading>
       <div className="flex items-center gap-3">
         <Target aria-hidden className="size-8 shrink-0 text-primary sm:size-9" />
@@ -193,6 +197,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
         <figcaption className="text-xs text-fg-muted">{quote.author}</figcaption>
       </figure>
       <ProgressBar
+        className="mt-auto"
         value={Math.min(done, goal.value)}
         max={goal.value}
         label={t.widgets.goal.progress(done, goal.value, metric)}
@@ -204,7 +209,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
 function DueCard({ snapshot }: { snapshot: Snapshot }) {
   const id = useId();
   return (
-    <Card aria-labelledby={id} className="flex flex-col gap-3">
+    <Card aria-labelledby={id} className="flex grow flex-col gap-3 p-5">
       <CardHeading id={id}>{text.dueTitle}</CardHeading>
       <div>
         <p className="sr-only">{text.dueLabel(snapshot.dueCards)}</p>
@@ -222,7 +227,8 @@ function DueCard({ snapshot }: { snapshot: Snapshot }) {
       <p className="text-sm text-fg-muted">
         {t.widgets.today.done(snapshot.todayActivity.cards, snapshot.todayActivity.questions)}
       </p>
-      <Button asChild className="w-full">
+      {/* El botón queda abajo aunque la tarjeta crezca */}
+      <Button asChild className="mt-auto w-full">
         <Link to={screenPath('review')}>{t.widgets.today.review}</Link>
       </Button>
     </Card>
@@ -232,7 +238,7 @@ function DueCard({ snapshot }: { snapshot: Snapshot }) {
 function AnalysisCard({ title, children }: { title: string; children: ReactNode }) {
   const id = useId();
   return (
-    <Card aria-labelledby={id} className="flex flex-col">
+    <Card aria-labelledby={id} className="flex grow flex-col p-5">
       <CardHeading id={id}>{title}</CardHeading>
       {children}
     </Card>
@@ -244,7 +250,7 @@ function PlanCard({ userId }: { userId: string }) {
   const id = useId();
   const plan = useActivePlan(userId);
   return (
-    <Card aria-labelledby={id} className="flex flex-col gap-3 self-start">
+    <Card aria-labelledby={id} className="flex flex-col gap-3 self-start p-5">
       <h2 id={id} className="text-lg font-bold text-fg sm:text-xl">
         {text.plan.title}
       </h2>

@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
+import { TOP_BAR_SLOT, useInTopBar } from './TopBarContext';
 
 interface SessionHeaderProps {
   title: string;
@@ -16,17 +18,28 @@ interface SessionHeaderProps {
  * solo el título, el avance y las acciones, para que el caso clínico quede arriba
  */
 export function SessionHeader({ title, meta, badges, actions }: SessionHeaderProps) {
+  // Dentro del marco va en la barra blanca de arriba, igual que ScreenHeader (D-117)
+  const inBar = useInTopBar();
   return (
-    <header className="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <header className={cn('flex flex-wrap items-center gap-x-3 gap-y-1', inBar && TOP_BAR_SLOT)}>
       <title>{t.app.documentTitle(title)}</title>
-      <h1 tabIndex={-1} className="text-lg font-extrabold text-fg outline-none sm:text-xl">
+      <h1
+        tabIndex={-1}
+        className="shrink-0 text-lg font-extrabold text-fg outline-none sm:text-xl lg:text-2xl"
+      >
         {title}
       </h1>
       {meta ? (
-        <div className="flex flex-wrap items-center gap-x-3 text-sm text-fg-muted">{meta}</div>
+        <div className="flex min-w-0 flex-wrap items-center gap-x-3 text-sm text-fg-muted">
+          {meta}
+        </div>
       ) : null}
-      {badges ? <div className="flex flex-wrap gap-2">{badges}</div> : null}
-      {actions ? <div className="ml-auto flex flex-wrap items-center gap-2">{actions}</div> : null}
+      {badges ? <div className="flex shrink-0 flex-wrap gap-2">{badges}</div> : null}
+      {actions ? (
+        <div className="ml-auto flex shrink-0 flex-wrap items-center gap-2 lg:flex-nowrap">
+          {actions}
+        </div>
+      ) : null}
     </header>
   );
 }

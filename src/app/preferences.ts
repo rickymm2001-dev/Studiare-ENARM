@@ -21,6 +21,8 @@ export const DevicePreferencesSchema = z.object({
   sessionUserId: z.string().max(40).nullable().catch(null),
   /** Fuente, tamaño, fondo y movimiento que elige el alumno (D-061) */
   appearance: AppearanceSchema.catch(DEFAULT_APPEARANCE),
+  /** Riel lateral oculto en computadora con el botón de menú (D-117). Es comodidad de esta pantalla */
+  navCollapsed: z.boolean().catch(false),
 });
 export type DevicePreferences = z.infer<typeof DevicePreferencesSchema>;
 
@@ -63,6 +65,7 @@ interface PreferencesState extends DevicePreferences {
   setRole: (role: DevicePreferences['role']) => void;
   setDatabase: (database: DevicePreferences['database']) => void;
   setAppearance: (patch: Partial<DevicePreferences['appearance']>) => void;
+  setNavCollapsed: (navCollapsed: boolean) => void;
   signIn: (userId: string) => void;
   signOut: () => void;
 }
@@ -70,8 +73,8 @@ interface PreferencesState extends DevicePreferences {
 export const usePreferences = create<PreferencesState>()((set, get) => {
   const update = (patch: Partial<DevicePreferences>) => {
     set(patch);
-    const { theme, role, database, sessionUserId, appearance } = get();
-    writeStoredPreferences({ theme, role, database, sessionUserId, appearance });
+    const { theme, role, database, sessionUserId, appearance, navCollapsed } = get();
+    writeStoredPreferences({ theme, role, database, sessionUserId, appearance, navCollapsed });
   };
   return {
     ...readStoredPreferences(safeLocalStorage()),
@@ -86,6 +89,9 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
     },
     setAppearance: (patch) => {
       update({ appearance: { ...get().appearance, ...patch } });
+    },
+    setNavCollapsed: (navCollapsed) => {
+      update({ navCollapsed });
     },
     signIn: (userId) => {
       update({ sessionUserId: userId });

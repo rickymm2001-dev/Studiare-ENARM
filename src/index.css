@@ -79,6 +79,16 @@
     background-attachment: fixed;
   }
 
+  /* Lo que recibe el foco o se ancla no queda debajo de la barra fija de arriba (D-117) */
+  html {
+    scroll-padding-top: 3.5rem;
+  }
+  @media (width >= 64rem) {
+    html {
+      scroll-padding-top: calc(var(--spacing-topbar) + 0.5rem);
+    }
+  }
+
   /* Foco visible y consistente para teclado (4.8) */
   :focus-visible {
     outline: 3px solid var(--color-focus);

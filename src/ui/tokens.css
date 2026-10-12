@@ -30,6 +30,8 @@
 
   /* Acento de juego. Oro para XP, niveles y logros */
   --enarm-accent: #b7791f;
+  /* El dorado para texto chico. El de arriba no llega a 4.5 a 1 sobre blanco (D-117) */
+  --enarm-accent-ink: #8f5d12;
   --enarm-accent-soft: #fbefd6;
   --enarm-accent-fg: #ffffff;
   /* Racha */
@@ -107,6 +109,7 @@
     --enarm-primary-soft: #11302f;
     --enarm-focus: #7ee0d6;
     --enarm-accent: #f2c14e;
+    --enarm-accent-ink: #f2c14e;
     --enarm-accent-soft: #3a2c0d;
     --enarm-accent-fg: #241900;
     --enarm-streak: #ff8a4c;
@@ -171,6 +174,7 @@
   --enarm-primary-soft: #11302f;
   --enarm-focus: #7ee0d6;
   --enarm-accent: #f2c14e;
+  --enarm-accent-ink: #f2c14e;
   --enarm-accent-soft: #3a2c0d;
   --enarm-accent-fg: #241900;
   --enarm-streak: #ff8a4c;
@@ -257,6 +261,8 @@
   --color-sim-line: var(--enarm-sim-line);
 
   --color-accent: var(--enarm-accent);
+
+  --color-accent-ink: var(--enarm-accent-ink);
   --color-accent-soft: var(--enarm-accent-soft);
   --color-accent-fg: var(--enarm-accent-fg);
   --color-streak: var(--enarm-streak);
@@ -313,6 +319,9 @@
   --spacing-touch: 2.75rem;
   --spacing-nav: 4.25rem;
   --spacing-rail: 5.5rem;
+  /* Barra superior en computadora, con el botón del menú, el logo, el saludo y el nivel (D-117) */
+  --spacing-topbar: 4rem;
+  --spacing-topbar-logo: 4rem;
   --container-reading: 44rem;
   /* Ancho máximo del marco de la app en computadora. Los textos largos siguen en el ancho de lectura (D-057) */
   --container-app: 88rem;

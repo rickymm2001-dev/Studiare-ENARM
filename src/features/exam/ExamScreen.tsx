@@ -356,7 +356,7 @@ function ExamRunner({
         {banner ? (
           <div
             className={cn(
-              'fixed inset-x-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-40 mx-auto flex max-w-reading items-start gap-3 rounded-lg border p-3 shadow-raised lg:top-6 lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md',
+              'fixed inset-x-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-40 mx-auto flex max-w-reading items-start gap-3 rounded-lg border p-3 shadow-raised lg:top-[calc(var(--spacing-topbar)+0.75rem)] lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md',
               banner.alert.severity === 'critical'
                 ? 'border-danger bg-danger-soft text-fg'
                 : banner.alert.severity === 'warning'

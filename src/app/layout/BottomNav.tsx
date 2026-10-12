@@ -1,8 +1,12 @@
 // Navegación inferior en teléfono y riel lateral en pantallas anchas, con las mismas secciones.
+// En computadora el riel empieza bajo la barra superior y se oculta con su botón de menú (D-117).
 import { Link, useLocation } from 'react-router';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import type { NavItem } from '../navigation';
+
+/** Para que el botón del menú diga qué controla */
+export const NAV_ID = 'menu-lateral';
 
 /**
  * La sección está activa en su ruta y en las que declara, por ejemplo Mazos dentro de Repasar. Con
@@ -14,25 +18,26 @@ function isActive(item: NavItem, pathname: string): boolean {
   return within(item.path) || (item.alsoActive ?? []).some(within);
 }
 
-export function BottomNav({ items, homePath }: { items: readonly NavItem[]; homePath: string }) {
+export function BottomNav({
+  items,
+  collapsed = false,
+}: {
+  items: readonly NavItem[];
+  /** Solo en computadora. En el teléfono la navegación inferior siempre está */
+  collapsed?: boolean;
+}) {
   const mobileCount = items.filter((item) => !item.railOnly).length;
   const { pathname } = useLocation();
   return (
     <nav
+      id={NAV_ID}
       aria-label={t.nav.label}
       className={cn(
         'fixed inset-x-0 bottom-0 z-20 border-t border-line/70 bg-surface/90 pb-[env(safe-area-inset-bottom)] shadow-nav backdrop-blur-md',
-        'lg:inset-y-0 lg:right-auto lg:left-0 lg:w-rail lg:overflow-y-auto lg:border-t-0 lg:border-r lg:pt-3 lg:pb-3 lg:shadow-none',
+        'lg:top-topbar lg:right-auto lg:bottom-0 lg:left-0 lg:w-rail lg:overflow-y-auto lg:border-t-0 lg:border-r lg:bg-surface lg:pt-3 lg:pb-3 lg:shadow-none lg:backdrop-blur-none',
+        collapsed && 'lg:hidden',
       )}
     >
-      {/* Símbolo de Studiare arriba del riel en computadora (D-071) */}
-      <Link
-        to={homePath}
-        aria-label={t.app.logoAlt}
-        className="mx-auto mb-3 hidden size-12 items-center justify-center rounded-xl lg:flex"
-      >
-        <img src={`${import.meta.env.BASE_URL}favicon-64x64.png`} alt="" className="size-9" />
-      </Link>
       <ul
         className="grid lg:flex lg:flex-col lg:gap-1"
         style={{ gridTemplateColumns: `repeat(${mobileCount}, minmax(0, 1fr))` }}
