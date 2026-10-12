@@ -16,7 +16,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 
 ### Bloques
 - [x] B0. Arranque
-- [ ] B1. Auditoría inicial de procesos
+- [ ] B1. Auditoría inicial de procesos (en cierre)
 - [ ] B2. Sistema de diseño y rediseño visual
 - [ ] B3. Navegación, Configuración y Perfil
 - [ ] B4. Repasar y Buscar tarjetas
@@ -57,6 +57,20 @@ Evidencia
 - e2e. pwa, smoke, labels y roles, 96 pruebas en teléfono y computadora, todas pasan. Capturas en docs/screenshots/v3/b0, 18 imágenes en tres anchos, claro y oscuro
 - Revisión independiente. Un subagente que no escribió el código revisó el diff contra el plan y CLAUDE.md. Sin hallazgos críticos ni altos. Dos medios (la evidencia de este archivo estaba pendiente y una prueba no verificaba la clave de lectura) y ocho bajos, todos corregidos. Lo más útil, las banderas se copian también a quien no ha entrado y un valor inválido del servidor ya no borra la copia local
 - PR 35 a main con check, e2e y audit del CI
+
+### B1. Auditoría inicial de procesos (D-120)
+
+Hecho
+- Inventario de los 17 procesos de la lista mínima más 5 fuera de ella en docs/auditoria-v3/procesos.md, con pantallas, archivos, tablas, eventos, estados y las pruebas que cubren cada uno
+- Recorrido automático de las 32 pantallas con cuatro roles, en teléfono y computadora (npm run audit:ui). 10 recorridos con 0 hallazgos y 10 flujos con interrupciones en verde. Resultados en docs/auditoria-v3/recorrido
+- 23 hallazgos en docs/auditoria-v3/hallazgos.md, ninguno crítico. Los altos corregidos aquí o asignados con su motivo al bloque que toca esa pantalla
+- Correcciones. Los consentimientos opcionales empiezan apagados (4.27). El examen completo ya no dice Próximamente en Suscripción ni en la portada. La retroalimentación ya no promete un botón que no existe. La prueba del SIGNED_IN rezagado ya no depende de un temporizador
+- Supabase simulado dentro de Playwright y proyecto cloud para las e2e de nube. PENDIENTE_CLOUD
+- E2E nuevas de los procesos que no tenían camino feliz. PENDIENTE_LOCALES
+- Capturas en docs/screenshots/v3/b1
+
+Evidencia
+- PENDIENTE_EVIDENCIA_B1
 
 ### Preguntas para Ricardo
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado como D-120 y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
