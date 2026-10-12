@@ -154,27 +154,31 @@ function DayColumns({ days, total }: { days: readonly DayLoad[]; total: number }
         ))}
       </div>
       <figcaption className="text-xs text-fg-muted">{text.estimate}</figcaption>
-      <table className="sr-only">
-        <caption>{label}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{text.day}</th>
-            <th scope="col">{text.reviews}</th>
-            <th scope="col">{text.fresh}</th>
-            <th scope="col">{text.total}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {days.map((day, index) => (
-            <tr key={day.day}>
-              <th scope="row">{dayName(index, day.day)}</th>
-              <td>{day.reviews}</td>
-              <td>{day.newCards}</td>
-              <td>{totalOf(day)}</td>
+      {/* La tabla va dentro de un div oculto. Una tabla no se deja encoger a 1 px y ensancharía la
+          página en el teléfono */}
+      <div className="sr-only">
+        <table>
+          <caption>{label}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{text.day}</th>
+              <th scope="col">{text.reviews}</th>
+              <th scope="col">{text.fresh}</th>
+              <th scope="col">{text.total}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {days.map((day, index) => (
+              <tr key={day.day}>
+                <th scope="row">{dayName(index, day.day)}</th>
+                <td>{day.reviews}</td>
+                <td>{day.newCards}</td>
+                <td>{totalOf(day)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }
