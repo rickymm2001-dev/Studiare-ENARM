@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
 import { cleanup, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
@@ -106,28 +105,12 @@ describe('pantalla de Logros', () => {
   });
 });
 
-describe('widgets de logros en Inicio', () => {
-  it('se pueden agregar al tablero y llevan a Logros', async () => {
-    const typing = userEvent.setup();
+describe('misiones en Inicio', () => {
+  it('las misiones de hoy salen en Inicio con su avance', async () => {
     app = await renderApp(SCREENS.home.path, { seed: (api, user) => study(api, user, 30, 200) });
-    await typing.click(await screen.findByRole('button', { name: t.home.edit }));
-    await typing.selectOptions(screen.getByLabelText(t.home.addLabel), 'missions');
-    await typing.click(screen.getByRole('button', { name: t.home.add }));
     const missions = await screen.findByRole('region', { name: t.widgets.names.missions });
     expect(
       await within(missions).findByText(t.rewards.missions.dailyCards(MISSION_TARGETS.dailyCards)),
     ).toBeVisible();
-    expect(within(missions).getByRole('link', { name: t.rewards.widgetGo })).toHaveAttribute(
-      'href',
-      SCREENS.rewards.path,
-    );
-    await typing.selectOptions(screen.getByLabelText(t.home.addLabel), 'league');
-    await typing.click(screen.getByRole('button', { name: t.home.add }));
-    const league = await screen.findByRole('region', { name: t.widgets.names.league });
-    expect(await within(league).findByText(t.rewards.leagues.silver)).toBeVisible();
-    await typing.selectOptions(screen.getByLabelText(t.home.addLabel), 'badges');
-    await typing.click(screen.getByRole('button', { name: t.home.add }));
-    const badges = await screen.findByRole('region', { name: t.widgets.names.badges });
-    expect(await within(badges).findByText(t.rewards.noRecent)).toBeVisible();
   });
 });

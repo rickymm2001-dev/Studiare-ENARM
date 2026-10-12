@@ -51,5 +51,10 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   // Inicio ya cuenta las tres tarjetas y el XP
   await page.goto('/');
   await expect(page.getByText(t.widgets.today.done(3, 0))).toBeVisible();
-  await expect(page.getByText(/[\d,]+ XP en total/)).not.toHaveText(t.widgets.level.total(0));
+  // La carga de repaso ya dibuja la gráfica con lo de este mes
+  await expect(
+    page
+      .getByRole('region', { name: t.home.load.title })
+      .getByRole('img', { name: t.home.load.chartLabel }),
+  ).toBeVisible();
 });

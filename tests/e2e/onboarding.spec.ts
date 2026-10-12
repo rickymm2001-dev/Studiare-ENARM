@@ -29,7 +29,7 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
   await page.getByLabel(t.onboarding.privacyAccept).check();
   await page.getByRole('button', { name: t.onboarding.create }).click();
 
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
   const goal = page.getByRole('region', { name: t.widgets.names.daily_goal });
   await expect(goal).toContainText(t.widgets.goal.ratio(0, 12));
   await expect(goal).toContainText(t.widgets.goal.metricNames.questions);
@@ -37,7 +37,7 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
 
   // La sesión se recuerda al recargar
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 
   // Cerrar sesión lleva a la portada, y con el correo se vuelve a entrar al mismo perfil
   await page.goto(SCREENS.profile.path);
@@ -48,5 +48,5 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
   await page.getByRole('tab', { name: t.onboarding.loginTab }).click();
   await page.getByLabel(t.account.email, { exact: true }).fill('ana@ejemplo.mx');
   await page.getByRole('button', { name: t.onboarding.signIn }).click();
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 });

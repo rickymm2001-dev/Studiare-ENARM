@@ -9,10 +9,12 @@ export const vocabularyText = {
     trap: {
       biasTipsTitle: 'Consejos por trampa',
       patternWidget: 'Patrón de trampa',
+      homeTitle: 'Trampas que te hacen fallar',
     },
     bias: {
       biasTipsTitle: 'Consejos por sesgo',
       patternWidget: 'Patrón de sesgo',
+      homeTitle: 'Sesgos cognitivos que te hacen fallar',
     },
   },
 };

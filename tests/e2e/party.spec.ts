@@ -90,10 +90,11 @@ test('crea un grupo, ve la tabla, se une con su código y completa un reto', asy
   await expect(group.getByText(t.party.oneClaimPerDay)).toBeVisible();
   await expect(group.getByRole('button', { name: t.party.claim })).toHaveCount(0);
 
-  // Los 100 XP del reto y las tarjetas repasadas ya cuentan en Inicio, y una sola vez
+  // Los 100 XP del reto y las tarjetas repasadas ya cuentan en el nivel de arriba, y una sola vez
   await page.goto('/');
-  // El renglón también dice cuánto de eso fue esta semana
-  await expect(page.getByText(/^1\d\d XP en total · 1\d\d XP esta semana$/)).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: /Nivel 1, .+\. 1\d\d de [\d,]+ XP para el siguiente nivel/ }),
+  ).toBeVisible();
 
   // Salir del grupo lo quita de la lista y el mismo código lo vuelve a abrir
   await page.goto(SCREENS.party.path);
@@ -131,9 +132,11 @@ test('reta a un compañero a un duelo, lo juega y ve quién ganó', async ({ pag
 
   // En Inicio el duelo aparece como pendiente
   await page.goto('/');
-  await page.getByRole('button', { name: t.home.edit }).click();
-  await page.getByLabel(t.home.presetLabel).selectOption('competitive');
-  await expect(page.getByText(t.widgets.party.duelsPending(1))).toBeVisible();
+  await expect(
+    page
+      .getByRole('region', { name: t.widgets.names.party_challenge })
+      .getByText(t.widgets.party.duelsPending(1)),
+  ).toBeVisible();
 
   // Se juegan las 20 preguntas con el simulador de siempre
   await page.goto(SCREENS.party.path);

@@ -35,7 +35,7 @@ test('nube caída. Se crea la cuenta en el navegador y todas las pantallas abren
   await expect(page.getByText(t.cloud.failedTitle)).toBeVisible({ timeout: 60_000 });
   await expect(page.getByText(t.cloud.failedBody)).toBeVisible();
   await page.getByRole('button', { name: t.cloud.continueLocal }).click();
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 
   // Todas las pantallas abren, con título y sin pantalla de error ni desborde
   for (const key of SCREEN_KEYS) {
