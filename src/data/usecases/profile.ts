@@ -1,7 +1,8 @@
 // Perfiles locales del alumno. Crear un perfil guarda el usuario y la aceptación del aviso de
-// privacidad. Un solo aviso cubre todas las finalidades, por decisión de Ricardo (D-059), y se
-// guarda como aceptación de cada finalidad con la versión del aviso. Sin contraseña, porque el inicio de sesión del prototipo es
-// simulado (3.2). En producción lo reemplaza la cuenta real con la misma interfaz.
+// privacidad. Un solo aviso explica todas las finalidades (D-059), pero las opcionales empiezan
+// apagadas y el alumno las prende cuando quiera en Configuración, Privacidad (4.27 del plan del
+// cambio, D-119). Cada una se registra bajo la versión del aviso que aceptó, así queda constancia de
+// qué texto vio. Sin contraseña; con la nube, la cuenta real usa la misma interfaz.
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
@@ -29,6 +30,12 @@ export interface NewProfile {
 
 const PURPOSES: ConsentPurpose[] = ['party', 'ai_analysis', 'anonymized_improvement'];
 
+/**
+ * Estado inicial de cada finalidad opcional. Apagada, porque usar los datos para algo opcional pide
+ * un permiso aparte que empieza en no (4.27). Antes se daban todas al crear el perfil
+ */
+const INITIAL_CONSENT_STATUS = 'revoked' as const;
+
 export async function createProfile(
   api: Pick<DataApi, 'repos' | 'recordEvent'>,
   input: NewProfile,
@@ -46,7 +53,7 @@ export async function createProfile(
   });
   await api.repos.users.put(user);
   for (const purpose of PURPOSES) {
-    const status = 'granted';
+    const status = INITIAL_CONSENT_STATUS;
     await api.repos.consents.put(
       ConsentSchema.parse({
         id: newId(),

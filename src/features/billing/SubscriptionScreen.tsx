@@ -34,8 +34,11 @@ import {
 import { PlanPrice } from './PlanPrice';
 import { useUserEvents } from '../shared/useUserEvents';
 
-/** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
-const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam']);
+/**
+ * Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076).
+ * Hoy ninguna, porque el examen completo ya existe (hallazgo de B1, D-119)
+ */
+const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set();
 
 const ACCESS_KEYS: (keyof PlanAccess)[] = [
   'dailyQuestions',

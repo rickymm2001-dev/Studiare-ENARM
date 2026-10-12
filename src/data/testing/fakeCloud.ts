@@ -82,6 +82,13 @@ export interface FakeCloud {
   sync: 'off' | 'ok';
   /** Cuánto tarda signOut en quitar la sesión y avisar SIGNED_OUT, como la red de verdad */
   signOutDelay: number;
+  /**
+   * Con true, signOut no termina solo. La prueba decide cuándo, con releaseSignOut, y así no
+   * depende de que un temporizador gane una carrera cuando la máquina está cargada
+   */
+  holdSignOut: boolean;
+  /** Termina los signOut detenidos por holdSignOut, quita la sesión y avisa SIGNED_OUT */
+  releaseSignOut: () => void;
   /** Correos que se pidieron con signInWithOtp, en orden */
   otpRequests: { email: string }[];
   /** Código que acepta verifyOtp. Al aceptarlo abre la sesión de codeSession y avisa SIGNED_IN */
@@ -95,6 +102,8 @@ const NETWORK_ERROR = { message: 'Failed to fetch', status: 0 };
 
 export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   const listeners = new Set<(event: AuthChangeEvent) => void>();
+  // Cierres de sesión detenidos por holdSignOut, en orden
+  const heldSignOuts: (() => void)[] = [];
   const fake: FakeCloud = {
     cloud: undefined as unknown as SupabaseClient,
     row: options.row ?? null,
@@ -120,6 +129,10 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     rpcCalls: [],
     sync: 'off',
     signOutDelay: 0,
+    holdSignOut: false,
+    releaseSignOut: () => {
+      for (const finish of heldSignOuts.splice(0)) finish();
+    },
     otpRequests: [],
     validCode: '123456',
     codeSession: { id: '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10', email: 'rick@example.com' },
@@ -235,10 +248,12 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       signOut: (signOutOptions?: unknown) => {
         fake.signOuts.push(signOutOptions);
         // Supabase quita la sesión local y avisa SIGNED_OUT cuando termina de cerrarla
-        setTimeout(() => {
+        const finish = () => {
           fake.session = null;
           fake.emit('SIGNED_OUT');
-        }, fake.signOutDelay);
+        };
+        if (fake.holdSignOut) heldSignOuts.push(finish);
+        else setTimeout(finish, fake.signOutDelay);
         return Promise.resolve({ error: null });
       },
     },

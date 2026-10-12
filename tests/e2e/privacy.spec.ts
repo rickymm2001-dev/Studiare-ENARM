@@ -14,8 +14,13 @@ test('el puntaje oficial se guarda, sobrevive a recargar y se borra al retirar l
   await signUp(page);
   await page.goto(section);
   await expect(page.getByRole('heading', { name: text.consentsTitle })).toBeVisible();
-  await expect(page.getByText(text.none)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
+  // La mejora anónima empieza apagada (4.27 del plan del cambio). Sin ella no hay captura del puntaje
+  await expect(page.getByLabel(text.score, { exact: true })).toHaveCount(0);
+  await page
+    .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
+    .check();
+  await expect(page.getByText(text.none)).toBeVisible();
 
   // Un puntaje fuera de rango se frena con el aviso en español y no se guarda
   await page.getByLabel(text.score, { exact: true }).fill('150');

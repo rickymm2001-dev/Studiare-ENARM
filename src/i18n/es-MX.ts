@@ -36,8 +36,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   feedback: {
     title: 'Retroalimentación',
-    description:
-      'Explicación, por qué atrae la opción que elegiste, causa del error y botón para generar tarjetas.',
+    description: 'Explicación, por qué atrae la opción que elegiste y la causa del error.',
   },
   sessionSummary: {
     title: 'Resumen de sesión',

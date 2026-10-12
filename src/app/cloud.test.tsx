@@ -134,12 +134,18 @@ describe('CloudBridge y el dispositivo único', () => {
 
   it('un SIGNED_IN rezagado mientras se cierra la sesión no reabre el perfil ni reclama de nuevo', async () => {
     const fake = useFake(makeFakeCloud({ row: { device_id: 'otro-navegador' } }));
-    fake.signOutDelay = 60;
+    // El cierre de la sesión no termina hasta que la prueba lo suelte. Así el SIGNED_IN rezagado
+    // llega siempre a la mitad del cierre, sin depender de un temporizador que pierde la carrera
+    // cuando la máquina está cargada (B1 del plan del cambio)
+    fake.holdSignOut = true;
     localStorage.setItem(DEVICE_CLAIM_STORAGE_KEY, AUTH_ID);
     usePreferences.setState({ sessionUserId: 'perfil-local' });
     mount();
     await waitFor(() => {
       expect(useCloud.getState().state).toEqual({ status: 'signed-out', reason: 'other_device' });
+    });
+    await waitFor(() => {
+      expect(fake.signOuts).toHaveLength(1);
     });
     // La sesión de la nube sigue en el almacenamiento y Supabase repite SIGNED_IN
     expect(fake.session).not.toBeNull();
@@ -150,6 +156,9 @@ describe('CloudBridge y el dispositivo único', () => {
     expect(usePreferences.getState().sessionUserId).toBeNull();
     expect(fake.claims).toHaveLength(0);
     // Al llegar el SIGNED_OUT el motivo sigue ahí
+    act(() => {
+      fake.releaseSignOut();
+    });
     await waitFor(() => {
       expect(fake.session).toBeNull();
     });

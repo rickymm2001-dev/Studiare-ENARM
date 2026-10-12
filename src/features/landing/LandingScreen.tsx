@@ -14,12 +14,7 @@ import {
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import {
-  annualSavingsPercent,
-  FOUNDER_PROMO_ACTIVE,
-  PLANS,
-  VISIBLE_PLANS,
-} from '@/config/billing';
+import { annualSavingsPercent, FOUNDER_PROMO_ACTIVE, PLANS, VISIBLE_PLANS } from '@/config/billing';
 import { cloudConfigured } from '@/data/cloud/client';
 import { PlanPrice } from '@/features/billing/PlanPrice';
 import { t } from '@/i18n/es-MX';
@@ -157,9 +152,6 @@ export function LandingScreen() {
                       <li key={feature} className="flex items-center gap-2">
                         <Check aria-hidden className="size-4 text-success" />
                         {t.billing.access[feature]}
-                        {feature === 'fullExam' ? (
-                          <span className="text-xs text-fg-muted">({t.billing.comingSoon})</span>
-                        ) : null}
                       </li>
                     ))}
                 </ul>
