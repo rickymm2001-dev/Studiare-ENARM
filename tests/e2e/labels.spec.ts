@@ -5,7 +5,7 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { generateDemo } from './support/b1';
+import { generateDemo, switchDatabase } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -128,8 +128,9 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
 });
 
 test('los compañeros y los duelos de Party van marcados como simulados', async ({ page }) => {
-  test.setTimeout(120_000);
-  await signUp(page);
+  test.setTimeout(300_000);
+  // Los compañeros simulados solo existen en la base de demostración (B7 del plan del cambio)
+  await generateDemo(page);
   await page.goto(SCREENS.party.path);
   await page.getByLabel(t.party.groupName).fill('Guardia de los lunes');
   await page.getByRole('button', { name: t.party.create }).click();
@@ -146,6 +147,9 @@ test('los compañeros y los duelos de Party van marcados como simulados', async 
   await group.getByRole('button', { name: t.party.duel.create }).click();
   const duel = group.getByRole('listitem').filter({ hasText: /^Duelo contra/ });
   await expect(duel.getByText(t.labels.simulatedData)).toBeVisible({ timeout: 60_000 });
+  await switchDatabase(page, 'real');
+  await signUp(page);
+  await page.goto(SCREENS.party.path);
   // En una cuenta real la tarjeta de logro no lleva la etiqueta de demostración
   await expect(page.getByRole('figure', { name: t.party.share.previewLabel })).not.toContainText(
     t.party.share.simulatedBanner,
