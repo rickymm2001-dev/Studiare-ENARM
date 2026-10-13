@@ -1,6 +1,7 @@
 // Resumen de sesión (pantalla 6). Exactitud, XP, tiempo, exactitud por confianza y la revisión de
 // cada respuesta con su retroalimentación (D-087). Registra el fin de la sesión una sola vez. En modo
-// enfoque (respuesta 82, B7) no muestra el XP ni el enlace al duelo, que es un reto.
+// enfoque (respuesta 82, B7) no muestra el XP. El enlace al resultado del duelo se queda, porque los
+// duelos siguen a la vista en modo enfoque, como un compromiso de uno a uno que el alumno eligió.
 import { CheckCircle2, Sparkles, Swords, Target, Timer, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -131,7 +132,7 @@ function Summary({ session }: { session: ReadySession }) {
             {t.simulator.summaryErrors(sentToReview)}
           </p>
         ) : null}
-        {practice.duelId && !focus ? (
+        {practice.duelId ? (
           <Button asChild className="mt-3 self-start">
             <Link to={screenPath('party')}>
               <Swords aria-hidden />

@@ -67,7 +67,15 @@ describe('referidos', () => {
   });
 
   it('canjea un código y traduce cada respuesta del servidor', async () => {
-    for (const result of ['ok', 'invalid', 'own', 'already', 'too_late', 'already_paid'] as const) {
+    for (const result of [
+      'ok',
+      'invalid',
+      'own',
+      'already',
+      'circular',
+      'too_late',
+      'already_paid',
+    ] as const) {
       const { cloud, calls } = fakeCloud({ redeem_referral_code: { data: result } });
       expect(await redeemReferralCode(cloud, 'abcd 2345')).toBe(result);
       expect(calls[0]).toEqual(['redeem_referral_code', { p_code: 'ABCD2345' }]);

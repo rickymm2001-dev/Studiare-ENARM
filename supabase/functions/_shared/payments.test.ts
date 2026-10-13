@@ -1417,19 +1417,35 @@ describe('plan pagado vigente', () => {
 describe('referidos con la prueba gratis y el primer cobro', () => {
   /**
    * Lo que hace la base con cada aviso, reducido a lo que importa para el referido. Sigue las reglas de
-   * apply_payment_notice y complete_referral (supabase/migrations/20261019000001_referral_first_charge.sql).
-   * Un aviso repetido se reconoce por su id, un pago de 0 pesos o sin plan se ignora, el mismo cobro no
-   * se cuenta dos veces y el referido se concreta con el primer cobro, una sola vez. La regla de verdad
-   * la prueba supabase/tests/referral_first_charge_test.sql contra Postgres
+   * apply_payment_notice, complete_referral y revert_referral
+   * (supabase/migrations/20261019000001_referral_first_charge.sql). Un aviso repetido se reconoce por su
+   * id, un pago de 0 pesos o sin plan se ignora, el mismo cobro no se cuenta dos veces y el referido se
+   * concreta con el primer cobro, una sola vez. Un reembolso completo de ese cobro, que de Stripe llega
+   * sin id de pago y se reconoce por el monto, lo revierte y quita el mes. La regla de verdad la prueba
+   * supabase/tests/referral_first_charge_test.sql contra Postgres
    */
   function ledger() {
     const events = new Set<string>();
-    const charges = new Set<string>();
-    const state = { referral: 'pending' as 'pending' | 'completed', months: 0 };
+    const charges = new Map<string, number>();
+    const state = { referral: 'pending' as 'pending' | 'completed' | 'reverted', months: 0 };
+    // El cobro que concretó el referido, como completed_payment_id en la base
+    let concretedBy: string | null = null;
     const applyNotice = (notice: PaymentNotice): Promise<string> => {
       const key = `${notice.provider}:${notice.eventId}`;
       if (events.has(key)) return Promise.resolve('duplicate');
       events.add(key);
+      if (notice.kind === 'refunded') {
+        // Sin id de pago, el cobro de ese monto
+        const refunded =
+          notice.providerPaymentId ??
+          [...charges].find(([, amount]) => amount === notice.amountMxn)?.[0] ??
+          null;
+        if (refunded !== null && refunded === concretedBy && state.referral === 'completed') {
+          state.referral = 'reverted';
+          state.months -= 1;
+        }
+        return Promise.resolve('applied');
+      }
       if (notice.kind !== 'paid') return Promise.resolve('applied');
       if (
         notice.userId === null ||
@@ -1440,14 +1456,21 @@ describe('referidos con la prueba gratis y el primer cobro', () => {
       ) {
         return Promise.resolve('ignored');
       }
-      charges.add(notice.providerPaymentId);
+      charges.set(notice.providerPaymentId, notice.amountMxn);
       if (state.referral === 'pending') {
         state.referral = 'completed';
         state.months += 1;
+        concretedBy = notice.providerPaymentId;
       }
       return Promise.resolve('applied');
     };
-    return { applyNotice, state, charges };
+    return {
+      applyNotice,
+      state,
+      get charges() {
+        return new Set(charges.keys());
+      },
+    };
   }
 
   const send = (event: unknown, deps: PaymentDeps) => {
@@ -1538,6 +1561,27 @@ describe('referidos con la prueba gratis y el primer cobro', () => {
     await send(invoice('in_cobro2', 'evt_cobro2', 14_900, 'subscription_cycle'), deps);
     expect(db.state.months).toBe(1);
     expect([...db.charges]).toEqual(['in_cobro1', 'in_cobro2']);
+  });
+
+  it('un reembolso completo del primer cobro revierte el referido y uno parcial ni llega a la base', async () => {
+    const db = ledger();
+    const { deps } = paymentDeps({ applyNotice: db.applyNotice });
+    await send(invoice('in_cobro1', 'evt_cobro1', 15_000, 'subscription_create'), deps);
+    expect(db.state).toEqual({ referral: 'completed', months: 1 });
+
+    // Un reembolso parcial lo ignora el aviso, así que el referido sigue concretado
+    const partial = await send(refundEvent({ refunded: false, amount_refunded: 5_000 }), deps);
+    expect(partial.status).toBe(200);
+    expect(db.state).toEqual({ referral: 'completed', months: 1 });
+
+    // La garantía de 7 días devuelve todo el primer cobro. El mes de quien invitó se cae
+    const full = await send(refundEvent(), deps);
+    expect(await full.text()).toBe('applied');
+    expect(db.state).toEqual({ referral: 'reverted', months: 0 });
+
+    // Stripe reenvía el mismo reembolso. No pasa nada más
+    expect(await (await send(refundEvent(), deps)).text()).toBe('duplicate');
+    expect(db.state).toEqual({ referral: 'reverted', months: 0 });
   });
 
   it('sin prueba, el primer pago confirmado da el mes y su factura no se cuenta dos veces', async () => {

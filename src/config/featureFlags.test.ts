@@ -8,7 +8,9 @@ import {
   isFeatureEnabled,
   readAppEnv,
   readStoredFlags,
+  resolveFlag,
   writeStoredFlags,
+  type FlagDef,
 } from './featureFlags';
 
 afterEach(() => {
@@ -58,14 +60,51 @@ describe('banderas de lanzamiento', () => {
   });
 
   it('lo que dice el servidor manda sobre el valor del entorno', () => {
-    expect(
-      isFeatureEnabled('demoTools', { appEnv: 'production', stored: { demoTools: true } }),
-    ).toBe(true);
+    expect(isFeatureEnabled('demoTools', { appEnv: 'demo', stored: { demoTools: false } })).toBe(
+      false,
+    );
     expect(
       isFeatureEnabled('demoTools', { appEnv: 'development', stored: { demoTools: false } }),
     ).toBe(false);
+    expect(
+      isFeatureEnabled('demoBank', { appEnv: 'production', stored: { demoBank: false } }),
+    ).toBe(false);
     // Una copia sin esa bandera deja el valor del entorno
     expect(isFeatureEnabled('demoTools', { appEnv: 'production', stored: {} })).toBe(false);
+  });
+
+  it('en producción nadie prende las herramientas de demostración desde su navegador (B7)', () => {
+    expect(FEATURE_FLAGS.demoTools.remoteEnable).toBe(false);
+    expect(
+      isFeatureEnabled('demoTools', { appEnv: 'production', stored: { demoTools: true } }),
+    ).toBe(false);
+    // Lo mismo con la copia que alguien escribe a mano en localStorage
+    localStorage.setItem(FLAGS_KEY, JSON.stringify({ demoTools: true }));
+    expect(isFeatureEnabled('demoTools', { appEnv: 'production' })).toBe(false);
+    // Fuera de producción la copia sigue mandando en los dos sentidos
+    expect(isFeatureEnabled('demoTools', { appEnv: 'demo', stored: { demoTools: true } })).toBe(
+      true,
+    );
+  });
+
+  it('una bandera sin remoteEnable se prende desde el servidor también en producción', () => {
+    // Como googleSignIn o requireMfa, que se prenden desde platform_settings el día que toque
+    const launch: FlagDef = {
+      description: 'Bandera que se prende desde el servidor',
+      defaults: { development: false, demo: false, production: false },
+    };
+    expect(resolveFlag(launch, 'production', true)).toBe(true);
+    expect(resolveFlag(launch, 'production', false)).toBe(false);
+    expect(resolveFlag(launch, 'production', undefined)).toBe(false);
+    // Con remoteEnable en false la copia solo la apaga, aunque el entorno la tenga prendida
+    const lockedOn: FlagDef = {
+      ...launch,
+      defaults: { development: true, demo: true, production: true },
+      remoteEnable: false,
+    };
+    expect(resolveFlag(lockedOn, 'production', false)).toBe(false);
+    expect(resolveFlag(lockedOn, 'production', true)).toBe(true);
+    expect(resolveFlag({ ...lockedOn, defaults: launch.defaults }, 'production', true)).toBe(false);
   });
 
   it('sin opciones lee la copia guardada en el navegador', () => {

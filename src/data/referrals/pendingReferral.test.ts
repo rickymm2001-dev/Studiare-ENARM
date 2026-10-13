@@ -104,7 +104,7 @@ describe('canje del código al conectar la cuenta', () => {
   });
 
   it('si el servidor lo rechaza también lo borra, porque repetirlo daría lo mismo', async () => {
-    for (const answer of ['invalid', 'own', 'already', 'too_late', 'already_paid']) {
+    for (const answer of ['invalid', 'own', 'already', 'circular', 'too_late', 'already_paid']) {
       const storage = memoryStorage();
       storePendingReferral('ABCD2345', storage);
       const { cloud } = cloudAnswering({ data: answer });

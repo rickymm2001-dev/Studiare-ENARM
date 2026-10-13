@@ -2,16 +2,21 @@
 // código o un enlace, la tabla de la semana con el alias y el XP de cada miembro, retos del grupo y
 // duelos entre dos alumnos que contestan las mismas preguntas cuando cada uno puede. Antes de compartir
 // nada pide el permiso de Party (4.27). Con el modo enfoque se ocultan la tabla, el XP y los retos y
-// se quedan los grupos, las invitaciones y los duelos (respuesta 82). Si el servidor contesta que el
-// plan ya no incluye Party, como cuando acaba de vencer, se ve el mismo candado de Gratis (B8).
-import { Copy, Link2, LogOut } from 'lucide-react';
+// se quedan los grupos, las invitaciones y los duelos, que son un compromiso de uno a uno que el alumno
+// eligió (respuesta 82). Quien administra el grupo cambia el código, quita miembros y borra retos, y
+// quien creó un reto también lo borra, siempre con confirmación. Si el servidor contesta que el plan
+// ya no incluye Party, como cuando acaba de vencer, se ve el mismo candado de Gratis (B8).
+import { Copy, KeyRound, Link2, LogOut, UserMinus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getCloud } from '@/data/cloud/client';
 import { uuidToUlid } from '@/data/cloud/cloudIds';
 import {
   createPartyChallenge,
   createPartyDuel,
+  deletePartyChallenge,
   fetchPartyOverview,
+  removePartyMember,
+  rotatePartyCode,
   type PartyChallenge,
   type PartyGroup,
 } from '@/data/cloud/party';
@@ -32,6 +37,7 @@ import { studyDayOf, weekStartOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Disclosure } from '@/ui/components/disclosure';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { ErrorState } from '@/ui/states/states';
 import type { Snapshot } from '../home/snapshot';
@@ -43,6 +49,7 @@ import { CloudDuelRow } from './CloudDuelRow';
 import { contributionTo } from './cloudNumbers';
 import { pickDuelQuestionIds } from './duelActions';
 import {
+  ConfirmAction,
   CreateGroupCard,
   JoinGroupCard,
   LeaderboardTable,
@@ -166,6 +173,7 @@ function CloudGroups({ session, events, snapshot, focus, inviteCode }: CloudPart
   const { user } = session;
   const { state, reload } = useCloudParty({
     enabled: true,
+    userId: user.id,
     snapshot,
     events,
     timeZone: user.timeZone,
@@ -270,6 +278,7 @@ export function CloudGroupCard({
   const { user } = session;
   const [copied, setCopied] = useState('');
   const [message, setMessage] = useState('');
+  const [notice, setNotice] = useState('');
   const headingId = `grupo-${group.id}`;
   const members = group.members.map((member) => ({
     key: member.userId,
@@ -282,6 +291,7 @@ export function CloudGroupCard({
   const rivals = group.members
     .filter((member) => !member.isSelf)
     .map((member) => ({ id: member.userId, alias: member.alias }));
+  const admin = text.admin;
 
   const copy = async (value: string, done: string) => {
     try {
@@ -311,6 +321,33 @@ export function CloudGroupCard({
     const reply = await createPartyChallenge(cloud, { groupId: group.id, ...input });
     if (!reply.ok) return text.failures[reply.reason];
     if (reply.value.status === 'limit') return text.challengeLimit;
+    onChanged();
+    return null;
+  };
+  // Lo que solo hace quien administra el grupo. Cada una devuelve null si salió bien o el mensaje
+  const rotateCode = async () => {
+    const cloud = getCloud();
+    if (!cloud) return text.failures.network;
+    const reply = await rotatePartyCode(cloud, group.id);
+    if (!reply.ok) return text.failures[reply.reason];
+    setNotice(admin.rotated);
+    onChanged();
+    return null;
+  };
+  const removeMember = async (memberId: string, alias: string) => {
+    const cloud = getCloud();
+    if (!cloud) return text.failures.network;
+    const reply = await removePartyMember(cloud, { groupId: group.id, memberId });
+    if (!reply.ok) return text.failures[reply.reason];
+    setNotice(admin.removed(alias));
+    onChanged();
+    return null;
+  };
+  const deleteChallenge = async (challengeId: string) => {
+    const cloud = getCloud();
+    if (!cloud) return text.failures.network;
+    const reply = await deletePartyChallenge(cloud, challengeId);
+    if (!reply.ok) return text.failures[reply.reason];
     onChanged();
     return null;
   };
@@ -370,6 +407,18 @@ export function CloudGroupCard({
             {copied}
           </span>
         </div>
+        {group.isOwner ? (
+          <div className="mt-2 flex flex-col gap-2 text-sm">
+            <p className="text-fg-muted">{admin.youAdminister}</p>
+            <ConfirmAction
+              label={admin.rotateCode}
+              icon={<KeyRound aria-hidden />}
+              confirmText={admin.rotateConfirm}
+              confirmLabel={admin.rotateYes}
+              onConfirm={rotateCode}
+            />
+          </div>
+        ) : null}
       </CardHeader>
 
       {focus ? (
@@ -397,6 +446,11 @@ export function CloudGroupCard({
                   events={events}
                   snapshot={snapshot}
                   onClaimed={onChanged}
+                  onDelete={
+                    group.isOwner || challenge.createdBySelf
+                      ? () => deleteChallenge(challenge.id)
+                      : undefined
+                  }
                 />
               ))}
             </ul>
@@ -424,6 +478,25 @@ export function CloudGroupCard({
       )}
       <NewDuelForm rivals={rivals} onCreate={newDuel} emptyText={text.duels.noRivals} />
 
+      {group.isOwner && rivals.length > 0 ? (
+        <Disclosure title={admin.membersTitle} className="mt-4">
+          <ul className="flex flex-col gap-3">
+            {rivals.map((member) => (
+              <li key={member.id} className="flex flex-col gap-1">
+                <span className="text-sm font-medium">{member.alias}</span>
+                <ConfirmAction
+                  label={admin.remove(member.alias)}
+                  icon={<UserMinus aria-hidden />}
+                  confirmText={admin.removeConfirm(member.alias)}
+                  confirmLabel={admin.removeYes}
+                  onConfirm={() => removeMember(member.id, member.alias)}
+                />
+              </li>
+            ))}
+          </ul>
+        </Disclosure>
+      ) : null}
+
       <Button
         variant="ghost"
         size="sm"
@@ -438,6 +511,11 @@ export function CloudGroupCard({
       {message ? (
         <p role="alert" className="text-sm text-danger">
           {message}
+        </p>
+      ) : null}
+      {notice ? (
+        <p role="status" className="text-sm">
+          {notice}
         </p>
       ) : null}
     </Card>
@@ -455,6 +533,7 @@ function CloudChallengeRow({
   events,
   snapshot,
   onClaimed,
+  onDelete,
 }: {
   challenge: PartyChallenge;
   groupId: string;
@@ -462,6 +541,8 @@ function CloudChallengeRow({
   events: AppEvent[];
   snapshot: Snapshot;
   onClaimed: () => void;
+  /** Solo para quien administra el grupo o quien creó el reto */
+  onDelete?: () => Promise<string | null>;
 }) {
   const own = contributionTo(challenge, snapshot, session.user.timeZone);
   const challengeId = uuidToUlid(challenge.id);
@@ -481,6 +562,7 @@ function CloudChallengeRow({
       session={session}
       snapshot={snapshot}
       onClaimed={onClaimed}
+      onDelete={onDelete}
     />
   );
 }

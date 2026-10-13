@@ -5,11 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
+import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import {
+  createPartyChallenge,
   createPartyDuel,
   createPartyGroup,
+  joinPartyGroup,
   publishPartyNumbers,
+  startPartyDuel,
   submitPartyDuelResult,
 } from '@/data/cloud/party';
 import type { AppEvent } from '@/data/schemas/events';
@@ -18,6 +22,7 @@ import { newId } from '@/data/testing/fixtures';
 import { setConsent } from '@/data/usecases/profile';
 import { studyDayOf, weekStartOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
+import { usePractice } from '../simulator/practice';
 import { answered, event, option, question } from '../tutor/testing/fixtures';
 import type * as DuelActions from './duelActions';
 
@@ -83,6 +88,72 @@ async function brunoGroup(xp = 70): Promise<{ code: string; groupId: string }> {
 const withConsent = async (api: RenderedApp['api'], user: RenderedApp['user']) => {
   await setConsent(api, user, 'party', true);
 };
+
+/** Ana entra al grupo de Bruno y Bruno la reta. Devuelve el duelo y sus preguntas */
+async function brunoChallengesAna() {
+  const { groupId, code } = await brunoGroup();
+  await joinPartyGroup(fake.cloud, code);
+  fake.session = { id: BRUNO, email: 'bruno@ejemplo.mx' };
+  const questions = Array.from({ length: 20 }, () => question({ id: newId() }));
+  const created = await createPartyDuel(fake.cloud, {
+    groupId,
+    opponentId: ANA,
+    questionIds: questions.map((item) => item.id),
+  });
+  if (!created.ok || created.value.status !== 'created') throw new Error('no se creó el duelo');
+  fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
+  return { groupId, code, duelId: created.value.duelId, questions };
+}
+
+/** El intento de Ana en su bitácora. answeredCount respuestas, las primeras correct correctas */
+function attemptEvents(input: {
+  duelId: string;
+  sessionId: string;
+  questions: ReturnType<typeof question>[];
+  answeredCount: number;
+  correct: number;
+  ended: boolean;
+}): AppEvent[] {
+  const right = option(newId(), true, 'Correcta');
+  const at = Date.now() - 3_600_000;
+  return [
+    event(
+      'session_started',
+      { kind: 'challenge', config: { duelId: input.duelId, count: input.questions.length } },
+      at,
+      input.sessionId,
+    ),
+    ...input.questions
+      .slice(0, input.answeredCount)
+      .map((item, index) =>
+        answered(
+          item,
+          right.id,
+          index < input.correct,
+          at + (index + 1) * 60_000,
+          { msToAnswer: 30_000 },
+          input.sessionId,
+        ),
+      ),
+    ...(input.ended
+      ? [
+          event(
+            'session_ended',
+            {
+              kind: 'challenge',
+              reason: input.answeredCount === input.questions.length ? 'completed' : 'abandoned',
+              items: input.answeredCount,
+              correct: input.correct,
+              durationMs: input.answeredCount * 30_000,
+              xp: 0,
+            },
+            at + 30 * 60_000,
+            input.sessionId,
+          ),
+        ]
+      : []),
+  ];
+}
 
 describe('Party en la nube', () => {
   it('pide el permiso antes de compartir, crea un grupo y lo muestra con su código', async () => {
@@ -197,62 +268,26 @@ describe('Party en la nube', () => {
   });
 
   it('manda el resultado del duelo jugado aquí y muestra quién ganó cuando los dos terminan', async () => {
-    const { groupId, code } = await brunoGroup();
-    // Ana entra al grupo y Bruno la reta y juega primero
-    await (async () => {
-      const { joinPartyGroup } = await import('@/data/cloud/party');
-      await joinPartyGroup(fake.cloud, code);
-    })();
+    const { duelId, questions } = await brunoChallengesAna();
+    // Bruno juega primero
     fake.session = { id: BRUNO, email: 'bruno@ejemplo.mx' };
-    const questions = Array.from({ length: 20 }, () => question({ id: newId() }));
-    const created = await createPartyDuel(fake.cloud, {
-      groupId,
-      opponentId: ANA,
-      questionIds: questions.map((item) => item.id),
-    });
-    if (!created.ok || created.value.status !== 'created') throw new Error('no se creó el duelo');
-    const duelId = created.value.duelId;
+    await startPartyDuel(fake.cloud, duelId);
     await submitPartyDuelResult(fake.cloud, { duelId, correct: 12, totalMs: 900_000 });
+    // Ana empezó su duelo en el servidor al tocar Jugar y lo terminó en este dispositivo, pero su
+    // resultado todavía no llega al servidor
     fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
-
-    // Ana ya jugó su duelo en este dispositivo, pero su resultado todavía no llega al servidor
+    await startPartyDuel(fake.cloud, duelId);
     app = await renderApp('/party', {
       seed: async (api, user) => {
         await withConsent(api, user);
-        const sessionId = newId();
-        const right = option(newId(), true, 'Correcta');
-        const at = Date.now() - 3_600_000;
-        const played: AppEvent[] = [
-          event(
-            'session_started',
-            { kind: 'challenge', config: { duelId, count: 20 } },
-            at,
-            sessionId,
-          ),
-          ...questions.map((item, index) =>
-            answered(
-              item,
-              right.id,
-              index < 15,
-              at + (index + 1) * 60_000,
-              { msToAnswer: 30_000 },
-              sessionId,
-            ),
-          ),
-          event(
-            'session_ended',
-            {
-              kind: 'challenge',
-              reason: 'completed',
-              items: 20,
-              correct: 15,
-              durationMs: 900_000,
-              xp: 0,
-            },
-            at + 30 * 60_000,
-            sessionId,
-          ),
-        ].map((item) => ({ ...item, userId: user.id }));
+        const played = attemptEvents({
+          duelId,
+          sessionId: newId(),
+          questions,
+          answeredCount: 20,
+          correct: 15,
+          ended: true,
+        }).map((item) => ({ ...item, userId: user.id }));
         for (const item of played) await api.repos.events.append(item);
       },
     });
@@ -270,6 +305,167 @@ describe('Party en la nube', () => {
       correct: 15,
       totalMs: 600_000,
     });
+  });
+
+  it('un duelo dejado a medias cuenta como su intento, sin volver a ofrecer jugar', async () => {
+    const { duelId, questions } = await brunoChallengesAna();
+    await startPartyDuel(fake.cloud, duelId);
+    app = await renderApp('/party', {
+      seed: async (api, user) => {
+        await withConsent(api, user);
+        // Contestó 3, acertó 2 y cerró la pestaña sin llegar al resumen
+        const halfway = attemptEvents({
+          duelId,
+          sessionId: newId(),
+          questions,
+          answeredCount: 3,
+          correct: 2,
+          ended: false,
+        }).map((item) => ({ ...item, userId: user.id }));
+        for (const item of halfway) await api.repos.events.append(item);
+      },
+    });
+    const group = await screen.findByRole('region', { name: 'Guardia' });
+    const row = (await within(group).findByText(t.party.duel.title('Bruno'))).closest(
+      'li',
+    ) as HTMLElement;
+    expect(await within(row).findByText(text.duels.yourResult(2, 20, '1:30'))).toBeVisible();
+    expect(within(row).queryByRole('button', { name: t.party.duel.play })).toBeNull();
+    await waitFor(() => {
+      expect(fake.party.duelResults(ANA)).toContainEqual({
+        duelId,
+        userId: ANA,
+        correct: 2,
+        totalMs: 90_000,
+      });
+    });
+  });
+
+  it('a medias en esta pestaña deja continuar y todavía no manda nada', async () => {
+    const { duelId, questions } = await brunoChallengesAna();
+    await startPartyDuel(fake.cloud, duelId);
+    app = await renderApp('/party', {
+      seed: async (api, user) => {
+        await withConsent(api, user);
+        const sessionId = newId();
+        const halfway = attemptEvents({
+          duelId,
+          sessionId,
+          questions,
+          answeredCount: 2,
+          correct: 1,
+          ended: false,
+        }).map((item) => ({ ...item, userId: user.id }));
+        for (const item of halfway) await api.repos.events.append(item);
+        usePractice.getState().set({
+          sessionId,
+          userId: user.id,
+          questionIds: questions.map((item) => item.id),
+          index: 2,
+          answers: [],
+          startedAt: Date.now(),
+          ended: false,
+          kind: 'challenge',
+          duelId,
+          targetTags: [],
+        });
+      },
+    });
+    const group = await screen.findByRole('region', { name: 'Guardia' });
+    const row = (await within(group).findByText(t.party.duel.title('Bruno'))).closest(
+      'li',
+    ) as HTMLElement;
+    expect(await within(row).findByText(text.duels.inProgress)).toBeVisible();
+    expect(within(row).getByRole('link', { name: text.duels.continue })).toHaveAttribute(
+      'href',
+      SCREENS.question.path,
+    );
+    expect(within(row).queryByRole('button', { name: t.party.duel.play })).toBeNull();
+    expect(fake.party.duelResults(ANA).filter((item) => item.userId === ANA)).toEqual([]);
+    act(() => {
+      usePractice.getState().set({ sessionId: null, userId: null, duelId: null, kind: 'practice' });
+    });
+  });
+
+  it('un duelo empezado en otro dispositivo ya no se juega en este', async () => {
+    const { duelId } = await brunoChallengesAna();
+    await startPartyDuel(fake.cloud, duelId);
+    app = await renderApp('/party', { seed: withConsent });
+    const group = await screen.findByRole('region', { name: 'Guardia' });
+    const row = (await within(group).findByText(t.party.duel.title('Bruno'))).closest(
+      'li',
+    ) as HTMLElement;
+    expect(await within(row).findByText(text.duels.startedElsewhere)).toBeVisible();
+    expect(within(row).queryByRole('button', { name: t.party.duel.play })).toBeNull();
+  });
+
+  it('quien administra cambia el código y quita a un miembro, con confirmación', async () => {
+    // Ana crea el grupo y Bruno entra
+    fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
+    const created = await createPartyGroup(fake.cloud, 'Guardia');
+    if (!created.ok || created.value.status !== 'created') throw new Error('sin grupo');
+    fake.session = { id: BRUNO, email: 'bruno@ejemplo.mx' };
+    await joinPartyGroup(fake.cloud, created.value.inviteCode);
+    fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
+    app = await renderApp('/party', { seed: withConsent });
+    const group = await screen.findByRole('region', { name: 'Guardia' });
+    expect(within(group).getByText(text.admin.youAdminister)).toBeVisible();
+
+    // Cambiar el código pide confirmación y se puede cancelar
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.rotateCode }));
+    expect(within(group).getByText(text.admin.rotateConfirm)).toBeVisible();
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.cancel }));
+    expect(fake.party.codeOf('Guardia')).toBe(created.value.inviteCode);
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.rotateCode }));
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.rotateYes }));
+    expect(await within(group).findByText(text.admin.rotated)).toBeVisible();
+    const fresh = fake.party.codeOf('Guardia') ?? '';
+    expect(fresh).not.toBe(created.value.inviteCode);
+    await waitFor(() => {
+      expect(within(group).getByTestId('party-invite-code')).toHaveTextContent(fresh);
+    });
+
+    // Quitar a Bruno
+    await userEvent.click(within(group).getByText(text.admin.membersTitle));
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.remove('Bruno') }));
+    expect(within(group).getByText(text.admin.removeConfirm('Bruno'))).toBeVisible();
+    await userEvent.click(within(group).getByRole('button', { name: text.admin.removeYes }));
+    expect(await within(group).findByText(text.admin.removed('Bruno'))).toBeVisible();
+    expect(fake.party.activeMembers('Guardia')).toEqual([ANA]);
+  });
+
+  it('quien no administra no ve las acciones de moderación y borra solo sus retos', async () => {
+    const { groupId, code } = await brunoGroup();
+    await joinPartyGroup(fake.cloud, code);
+    fake.session = { id: BRUNO, email: 'bruno@ejemplo.mx' };
+    await createPartyChallenge(fake.cloud, {
+      groupId,
+      title: 'De Bruno',
+      metric: 'cards',
+      target: 50,
+    });
+    fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
+    await createPartyChallenge(fake.cloud, {
+      groupId,
+      title: 'De Ana',
+      metric: 'cards',
+      target: 50,
+    });
+    app = await renderApp('/party', { seed: withConsent });
+    const group = await screen.findByRole('region', { name: 'Guardia' });
+    await within(group).findByText('De Ana');
+    expect(within(group).queryByText(text.admin.youAdminister)).toBeNull();
+    expect(within(group).queryByRole('button', { name: text.admin.rotateCode })).toBeNull();
+    expect(within(group).queryByText(text.admin.membersTitle)).toBeNull();
+    const deletes = within(group).getAllByRole('button', { name: text.admin.deleteChallenge });
+    expect(deletes).toHaveLength(1);
+    const own = within(group).getByText('De Ana').closest('li') as HTMLElement;
+    await userEvent.click(within(own).getByRole('button', { name: text.admin.deleteChallenge }));
+    await userEvent.click(within(own).getByRole('button', { name: text.admin.deleteChallengeYes }));
+    await waitFor(() => {
+      expect(within(group).queryByText('De Ana')).toBeNull();
+    });
+    expect(within(group).getByText('De Bruno')).toBeVisible();
   });
 });
 

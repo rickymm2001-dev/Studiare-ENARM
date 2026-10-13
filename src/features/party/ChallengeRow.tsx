@@ -1,8 +1,9 @@
 // Un reto colectivo en la lista de retos de un grupo (9.6). La barra suma lo de todos los miembros. En
 // la demostración entran los compañeros simulados, marcados, y en la nube (B7) lo que publicó cada
 // miembro. El premio de 100 XP exige aporte propio y se da uno por día, porque los compañeros pueden
-// cumplir la meta por sí solos (claims.ts). El premio queda en la bitácora del alumno.
-import { Trophy } from 'lucide-react';
+// cumplir la meta por sí solos (claims.ts). El premio queda en la bitácora del alumno. En la nube,
+// quien administra el grupo o quien creó el reto lo puede borrar, con confirmación.
+import { Trash2, Trophy } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
@@ -18,6 +19,7 @@ import { ProgressBar } from '@/ui/components/progress-bar';
 import type { Snapshot } from '../home/snapshot';
 import type { ReadySession } from '../shared/RequireSession';
 import { claimedOn, claimStatus, wasClaimed } from './claims';
+import { ConfirmAction } from './GroupParts';
 import { challengeContributions } from './stats';
 
 export function ChallengeRow({
@@ -33,6 +35,7 @@ export function ChallengeRow({
   session,
   snapshot,
   onClaimed,
+  onDelete,
 }: {
   title: string;
   metric: Challenge['metric'];
@@ -52,6 +55,8 @@ export function ChallengeRow({
   snapshot: Snapshot;
   /** Avisa que se reclamó el premio, para que la nube publique el XP nuevo */
   onClaimed?: () => void;
+  /** Borra el reto para todo el grupo. Solo para quien administra el grupo o quien lo creó */
+  onDelete?: () => Promise<string | null>;
 }) {
   const api = useDataApi();
   const { user } = session;
@@ -126,6 +131,15 @@ export function ChallengeRow({
         >
           {t.party.claim}
         </Button>
+      ) : null}
+      {onDelete ? (
+        <ConfirmAction
+          label={t.partyCloud.admin.deleteChallenge}
+          icon={<Trash2 aria-hidden />}
+          confirmText={t.partyCloud.admin.deleteChallengeConfirm}
+          confirmLabel={t.partyCloud.admin.deleteChallengeYes}
+          onConfirm={onDelete}
+        />
       ) : null}
     </li>
   );

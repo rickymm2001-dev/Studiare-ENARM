@@ -195,7 +195,7 @@ describe('Inicio con el diseño fijo', () => {
     expect(screen.getByRole('region', { name: t.widgets.names.party_challenge })).toBeVisible();
   });
 
-  it('en modo enfoque no hay racha, nivel, XP ni reto de Party, y las misiones se quedan', async () => {
+  it('en modo enfoque no hay racha, nivel, XP, misiones de hoy ni reto de Party', async () => {
     const { usePreferences } = await import('@/app/preferences');
     usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
     app = await renderApp(SCREENS.home.path);
@@ -211,7 +211,8 @@ describe('Inicio con el diseño fijo', () => {
     ).toBeNull();
     expect(screen.queryByText(/\bXP\b/)).toBeNull();
     expect(screen.queryByRole('region', { name: t.widgets.names.party_challenge })).toBeNull();
-    // Las misiones de hoy no son retos y se quedan (4.12)
-    expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
+    // El modo enfoque oculta también las misiones de hoy (4.12). El plan se queda
+    expect(screen.queryByRole('region', { name: t.widgets.names.missions })).toBeNull();
+    expect(screen.getByRole('region', { name: t.home.plan.title })).toBeVisible();
   });
 });

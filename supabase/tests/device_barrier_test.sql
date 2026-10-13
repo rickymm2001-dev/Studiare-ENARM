@@ -819,10 +819,10 @@ begin
     where schemaname = 'public'
       and coalesce(qual, '') || ' ' || coalesce(with_check, '') like '%is_active_device%';
   -- 22 de la barrera, 1 de la sincronización (sync_records_select, migración 20261008000002), 3 de
-  -- referidos y meses regalados (migración 20261008000003) y 4 de Party en la nube (XP de la semana,
-  -- aportes a los retos, duelos y sus resultados, migración 20261018000001)
-  if protected <> 30 then
-    raise exception 'FALLA B11. Debían ser 30 políticas con la barrera y hay %', protected;
+  -- referidos y meses regalados (migración 20261008000003) y 5 de Party en la nube (XP de la semana,
+  -- aportes a los retos, duelos, sus inicios y sus resultados, migración 20261018000001)
+  if protected <> 31 then
+    raise exception 'FALLA B11. Debían ser 31 políticas con la barrera y hay %', protected;
   end if;
 end $$;
 

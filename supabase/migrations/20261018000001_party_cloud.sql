@@ -9,16 +9,45 @@
 --
 -- Qué se comparte y con quién
 --   - Solo los miembros activos de un grupo lo ven, con el alias y el XP de la semana de cada miembro.
---     El alias sale de profiles, que ya deja verlo a quien comparte un grupo (shares_group)
+--     El alias sale de profiles, que deja ver la fila a quien comparte un grupo (shares_group). Por
+--     columnas la API solo lee id y alias de cualquier perfil, así un compañero no ve la zona horaria,
+--     los ajustes ni la fecha de alta. La foto de perfil, si el alumno subió una, también la ven sus
+--     compañeros (20261016000001_avatars.sql), y el permiso de Party lo dice
 --   - Nadie lee el correo de otro alumno. private_accounts conserva su política de siempre, la fila
 --     propia o el admin, y nada de esta migración la lee ni la expone
 --   - Cada miembro publica su propio XP de la semana y su aporte a los retos. Los calcula su navegador
 --     con su bitácora, que el grupo nunca ve, solo estas cifras. Las funciones escriben siempre a
---     nombre de quien llama, así que nadie publica por otro
+--     nombre de quien llama, así que nadie publica por otro. Los aportes y el XP de quien ya no es
+--     miembro activo dejan de verse
 --   - En un duelo cada participante manda su resultado una sola vez, con sus aciertos y su tiempo. El
 --     del rival solo se ve después de mandar el propio, así nadie juega sabiendo cuánto sacó el otro
 --   - Salir de un grupo quita el acceso en el acto. Borrar mis datos borra las membresías, y con ellas,
---     en cascada, el XP publicado, los aportes y los duelos de esa persona
+--     en cascada, el XP publicado, los aportes y los duelos de esa persona. party_export_mine le
+--     devuelve a cada quien sus propias filas de Party para Exportar mis datos
+--
+-- Duelos de un solo intento
+--   El duelo se empieza con party_start_duel, que deja el inicio en el servidor, uno por participante.
+--   party_submit_duel_result solo acepta el resultado de quien ya lo empezó. Así nadie juega, ve las
+--   respuestas en la retroalimentación y vuelve a empezar. El navegador cuenta la primera sesión que
+--   empezó y las preguntas sin contestar como incorrectas
+--
+-- Cifras con tope (PT004)
+--   Las cifras las manda el navegador de cada quien, así que el servidor rechaza las imposibles. Un
+--   duelo pide al menos 3 segundos por acierto, el XP de la semana llega hasta 50,000 y el aporte a un
+--   reto no pasa de su meta. Con el tope de 1,500 XP diarios por volumen y la racha, una semana real
+--   queda muy por debajo
+--
+-- Moderación
+--   Quien administra el grupo, owner_id, cambia el código de invitación (party_rotate_code), quita a
+--   un miembro (party_remove_member) y borra retos. Un reto lo borra también quien lo creó
+--   (party_delete_challenge). Borrar un reto lo marca con deleted_at y no borra la fila, así esta
+--   migración sigue sin sentencias delete. Si quien administra borra su cuenta, el grupo pasa al
+--   miembro activo más antiguo, y solo se borra si ya no queda nadie. Eso cambia una llave foránea y
+--   vive en supabase/manual/party-dueno-al-borrar-cuenta.sql, que se pega a mano
+--
+-- Códigos de error propios
+--   PT001 Party cerrada para la cuenta, PT002 no es miembro o no participa, PT003 el duelo no se ha
+--   empezado, PT004 cifras imposibles y PT005 solo quien administra el grupo, o quien creó el reto
 --
 -- Por qué las escrituras pasan por funciones
 --   La primera migración dejaba insertar membresías directo. Con eso alguien podía entrar a un grupo
@@ -52,10 +81,15 @@
 -- challenges nació sin autor. Queda vacío si esa persona borra su cuenta
 alter table public.challenges
   add column if not exists created_by uuid references auth.users (id) on delete set null;
+-- Un reto borrado queda marcado y deja de verse. Sus aportes se quedan ocultos con él
+alter table public.challenges add column if not exists deleted_at timestamptz;
+alter table public.challenges
+  add column if not exists deleted_by uuid references auth.users (id) on delete set null;
 -- Para que los aportes apunten al reto y a su grupo a la vez, sin poder mezclar grupos
 create unique index if not exists challenges_id_group on public.challenges (id, group_id);
 create index if not exists challenges_group_ends on public.challenges (group_id, ends_at desc);
 create index if not exists challenges_created_by on public.challenges (created_by);
+create index if not exists challenges_deleted_by on public.challenges (deleted_by) where deleted_by is not null;
 create index if not exists memberships_user_active on public.memberships (user_id) where left_at is null;
 create index if not exists groups_owner_created on public.groups (owner_id, created_at desc);
 
@@ -120,13 +154,26 @@ create table if not exists public.party_duel_results (
 );
 create index if not exists party_duel_results_user on public.party_duel_results (user_id);
 
+-- Cuándo empezó cada participante su duelo. Uno por participante y no se edita. Sin él no se acepta
+-- el resultado, y con él la app ya no ofrece jugar otra vez
+create table if not exists public.party_duel_starts (
+  duel_id uuid not null references public.party_duels (id) on delete cascade,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  started_at timestamptz not null default now(),
+  primary key (duel_id, user_id)
+);
+create index if not exists party_duel_starts_user on public.party_duel_starts (user_id);
+
+-- El inicio y el resultado de un duelo se registran una sola vez
 create or replace function public.party_forbid_result_changes() returns trigger
 language plpgsql set search_path = public, pg_temp as $$
 begin
-  raise exception 'El resultado de un duelo se manda una sola vez' using errcode = '42501';
+  raise exception 'El inicio y el resultado de un duelo se registran una sola vez' using errcode = '42501';
 end;
 $$;
 create or replace trigger party_duel_results_once before update on public.party_duel_results
+  for each row execute function public.party_forbid_result_changes();
+create or replace trigger party_duel_starts_once before update on public.party_duel_starts
   for each row execute function public.party_forbid_result_changes();
 
 -- ===================================================================== Intentos fallidos de entrar
@@ -146,16 +193,25 @@ alter table public.party_weekly_xp enable row level security;
 alter table public.party_challenge_progress enable row level security;
 alter table public.party_duels enable row level security;
 alter table public.party_duel_results enable row level security;
+alter table public.party_duel_starts enable row level security;
 alter table public.party_join_attempts enable row level security;
 
 revoke all on public.groups, public.memberships, public.challenges from anon, authenticated;
 grant select on public.groups, public.memberships, public.challenges to authenticated;
 revoke all on public.party_weekly_xp, public.party_challenge_progress, public.party_duels,
-  public.party_duel_results, public.party_join_attempts
+  public.party_duel_results, public.party_duel_starts, public.party_join_attempts
   from public, anon, authenticated, service_role;
 grant select on public.party_weekly_xp, public.party_challenge_progress, public.party_duels,
-  public.party_duel_results to authenticated;
+  public.party_duel_results, public.party_duel_starts to authenticated;
 revoke all on sequence public.party_join_attempts_id_seq from public, anon, authenticated, service_role;
+
+-- ===================================================================== Perfiles de los compañeros
+-- profiles_select deja ver la fila de quien comparte un grupo. Por columnas, la API solo lee id y
+-- alias de cualquier perfil, el propio incluido, que es lo único que la app lee. La zona horaria, los
+-- ajustes y la fecha de alta no salen por la API. Las funciones del servidor que los usan, como la
+-- lista de usuarios del admin, corren como su dueño y no cambian. Escribir el alias propio sigue igual
+revoke select on public.profiles from anon, authenticated;
+grant select (id, alias) on public.profiles to authenticated;
 
 -- ===================================================================== Un solo lugar para el plan
 -- Party abierta para quien llama. B8 del plan del cambio agrega aquí la condición del plan, porque
@@ -208,7 +264,8 @@ begin
 end;
 $$;
 
--- Los topes de Party, en un solo lugar
+-- Los topes de Party, en un solo lugar. Los dos últimos son las cifras imposibles (PT004). El
+-- navegador usa los mismos números en src/data/cloud/party.ts (PARTY_CAPS)
 create or replace function public.party_limit(p_name text) returns integer
 language sql immutable set search_path = public, pg_temp as $$
   select case p_name
@@ -218,6 +275,8 @@ language sql immutable set search_path = public, pg_temp as $$
     when 'join_failures_per_hour' then 10
     when 'open_challenges_per_group' then 10
     when 'waiting_duels_per_member' then 10
+    when 'weekly_xp' then 50000
+    when 'duel_ms_per_correct' then 3000
   end
 $$;
 
@@ -252,6 +311,9 @@ $$;
 -- Cada una pide is_active_device(), como las demás tablas con datos del alumno (20261008000001)
 alter policy groups_select on public.groups
   using (public.is_group_member(id) and (select public.is_active_device()));
+-- Un reto borrado deja de verse
+alter policy challenges_select on public.challenges
+  using (public.is_group_member(group_id) and deleted_at is null and (select public.is_active_device()));
 
 do $$
 begin
@@ -277,9 +339,36 @@ begin
     where schemaname = 'public' and tablename = 'party_challenge_progress'
       and policyname = 'party_challenge_progress_select'
   ) then
+    -- Como el XP, el aporte de quien ya salió del grupo deja de verse. El de un reto borrado también
     create policy party_challenge_progress_select on public.party_challenge_progress for select
       to authenticated
-      using (public.is_group_member(group_id) and (select public.is_active_device()));
+      using (
+        public.is_group_member(group_id)
+        and exists (
+          select 1 from public.memberships m
+          where m.group_id = party_challenge_progress.group_id
+            and m.user_id = party_challenge_progress.user_id
+            and m.left_at is null
+        )
+        and exists (
+          select 1 from public.challenges c
+          where c.id = party_challenge_progress.challenge_id and c.deleted_at is null
+        )
+        and (select public.is_active_device())
+      );
+  end if;
+
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'party_duel_starts' and policyname = 'party_duel_starts_select'
+  ) then
+    -- Cada quien ve solo su propio inicio, de un duelo que todavía ve
+    create policy party_duel_starts_select on public.party_duel_starts for select to authenticated
+      using (
+        user_id = (select auth.uid())
+        and exists (select 1 from public.party_duels d where d.id = party_duel_starts.duel_id)
+        and (select public.is_active_device())
+      );
   end if;
 
   if not exists (
@@ -425,11 +514,70 @@ begin
 end;
 $$;
 
+-- ===================================================================== Moderación
+-- Si quien llama administra el grupo y sigue en él. Lo piden las funciones de moderación
+create or replace function public.party_assert_owner(p_group uuid, p_uid uuid) returns void
+language plpgsql stable set search_path = public, pg_temp as $$
+begin
+  if not public.is_group_member(p_group) then
+    raise exception 'No eres miembro de ese grupo' using errcode = 'PT002';
+  end if;
+  if not exists (select 1 from public.groups where id = p_group and owner_id = p_uid) then
+    raise exception 'Solo quien administra el grupo puede hacer esto' using errcode = 'PT005';
+  end if;
+end;
+$$;
+
+-- Cambia el código de invitación. El código y el enlace de antes dejan de servir y quien ya está en
+-- el grupo se queda. Devuelve {status: rotated, inviteCode}
+create or replace function public.party_rotate_code(p_group uuid) returns jsonb
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := public.party_caller();
+  v_code text;
+begin
+  perform public.party_assert_owner(p_group, v_uid);
+  loop
+    v_code := public.party_new_invite_code();
+    -- Tiene que ser otro código, aunque salga el mismo por azar
+    continue when v_code = (select invite_code from public.groups where id = p_group);
+    begin
+      update public.groups set invite_code = v_code where id = p_group;
+      exit;
+    exception when unique_violation then
+      -- Otro grupo tenía ese código. Se prueba con otro
+      null;
+    end;
+  end loop;
+  return jsonb_build_object('status', 'rotated', 'inviteCode', v_code);
+end;
+$$;
+
+-- Quita a un miembro del grupo. Deja de ver el grupo en el acto, como si saliera. Con el código puede
+-- volver a entrar, por eso la app sugiere cambiarlo. Quien administra no se quita a sí mismo, para eso
+-- está salir del grupo. Devuelve true si estaba dentro
+create or replace function public.party_remove_member(p_group uuid, p_member uuid) returns boolean
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := public.party_caller();
+begin
+  perform public.party_assert_owner(p_group, v_uid);
+  if p_member is null or p_member = v_uid then
+    raise exception 'Para irte del grupo usa salir del grupo' using errcode = '22023';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('party-group:' || p_group::text, 0));
+  update public.memberships set left_at = now()
+    where group_id = p_group and user_id = p_member and left_at is null;
+  return found;
+end;
+$$;
+
 -- ===================================================================== Cifras de cada quien
 -- Publica el XP de la semana de quien llama en todos sus grupos activos y su aporte a los retos que
 -- siguen abiertos. p_progress es un arreglo de hasta 50 {challengeId, amount}. Un reto de un grupo
--- donde no está o que ya terminó hace más de un día se ignora. Devuelve cuántas filas cambiaron.
--- La semana tiene que ser un lunes cercano a la semana de estudio del servidor
+-- donde no está, que ya terminó hace más de un día o que se borró se ignora. Devuelve cuántas filas
+-- cambiaron. La semana tiene que ser un lunes cercano a la semana de estudio del servidor. Un XP de
+-- la semana arriba del tope o un aporte más grande que la meta del reto se rechazan con PT004
 create or replace function public.party_publish(p_week_start date, p_xp integer, p_progress jsonb)
 returns integer
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -440,6 +588,9 @@ declare
   v_items jsonb := coalesce(p_progress, '[]'::jsonb);
   v_item jsonb;
   v_amount numeric;
+  v_challenge uuid;
+  v_group uuid;
+  v_target numeric;
   v_rows integer := 0;
   v_changed integer;
 begin
@@ -447,8 +598,12 @@ begin
      or p_week_start not between v_week - 7 and v_week + 7 then
     raise exception 'La semana no es válida' using errcode = '22023';
   end if;
-  if p_xp is null or p_xp not between 0 and 1000000 then
+  if p_xp is null or p_xp < 0 then
     raise exception 'El XP no es válido' using errcode = '22023';
+  end if;
+  if p_xp > public.party_limit('weekly_xp') then
+    raise exception 'El XP de la semana pasa del tope de %', public.party_limit('weekly_xp')
+      using errcode = 'PT004';
   end if;
   if jsonb_typeof(v_items) <> 'array' or jsonb_array_length(v_items) > 50 then
     raise exception 'Se esperaba un arreglo de hasta 50 aportes' using errcode = '22023';
@@ -477,11 +632,21 @@ begin
     if not coalesce(v_amount = trunc(v_amount) and v_amount between 0 and 1000000, false) then
       raise exception 'Aporte inválido' using errcode = '22023';
     end if;
-    insert into public.party_challenge_progress as p (challenge_id, group_id, user_id, amount, updated_at)
-      select c.id, c.group_id, v_uid, v_amount::integer, now()
+    -- Sin fila, las tres variables quedan vacías y el aporte se ignora
+    select c.id, c.group_id, c.target into v_challenge, v_group, v_target
       from public.challenges c
       join public.memberships m on m.group_id = c.group_id and m.user_id = v_uid and m.left_at is null
       where c.id = (v_item ->> 'challengeId')::uuid and c.ends_at > now() - interval '1 day'
+        and c.deleted_at is null;
+    if v_challenge is null then
+      continue;
+    end if;
+    -- Nadie aporta más que la meta de todo el grupo
+    if v_amount > v_target then
+      raise exception 'El aporte pasa de la meta del reto' using errcode = 'PT004';
+    end if;
+    insert into public.party_challenge_progress as p (challenge_id, group_id, user_id, amount, updated_at)
+      values (v_challenge, v_group, v_uid, v_amount::integer, now())
     on conflict (challenge_id, user_id) do update
       set amount = excluded.amount, updated_at = excluded.updated_at
       where p.amount is distinct from excluded.amount;
@@ -516,7 +681,8 @@ begin
     raise exception 'El reto no es válido' using errcode = '22023';
   end if;
   perform pg_advisory_xact_lock(hashtextextended('party-group:' || p_group::text, 0));
-  if (select count(*) from public.challenges where group_id = p_group and ends_at > now())
+  if (select count(*) from public.challenges
+        where group_id = p_group and ends_at > now() and deleted_at is null)
        >= public.party_limit('open_challenges_per_group') then
     return jsonb_build_object('status', 'limit');
   end if;
@@ -524,6 +690,31 @@ begin
     values (p_group, v_title, p_metric, p_target, now(), now() + interval '7 days', v_uid)
     returning id into v_id;
   return jsonb_build_object('status', 'created', 'challengeId', v_id);
+end;
+$$;
+
+-- Borra un reto del grupo. Lo puede borrar quien administra el grupo o quien lo creó, mientras sigan
+-- en el grupo. El reto queda marcado y deja de verse con sus aportes. Devuelve true si lo borró y
+-- false si ya estaba borrado
+create or replace function public.party_delete_challenge(p_challenge uuid) returns boolean
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := public.party_caller();
+  v_challenge public.challenges%rowtype;
+begin
+  select * into v_challenge from public.challenges where id = p_challenge;
+  if not found or not public.is_group_member(v_challenge.group_id) then
+    raise exception 'No eres miembro de ese grupo' using errcode = 'PT002';
+  end if;
+  if v_challenge.created_by is distinct from v_uid and not exists (
+    select 1 from public.groups where id = v_challenge.group_id and owner_id = v_uid
+  ) then
+    raise exception 'Solo quien administra el grupo o quien creó el reto puede borrarlo'
+      using errcode = 'PT005';
+  end if;
+  update public.challenges set deleted_at = now(), deleted_by = v_uid
+    where id = p_challenge and deleted_at is null;
+  return found;
 end;
 $$;
 
@@ -580,8 +771,31 @@ begin
 end;
 $$;
 
--- Manda el resultado propio de un duelo, una sola vez. answered son las preguntas del duelo. Devuelve
--- saved, o already si ya lo había mandado, sin cambiar el primero
+-- Empieza el duelo de quien llama. Queda registrado una sola vez y desde ahí cuenta su intento, aunque
+-- no lo termine. Devuelve started la primera vez y already si ya lo había empezado
+create or replace function public.party_start_duel(p_duel uuid) returns text
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := public.party_caller();
+  v_duel public.party_duels%rowtype;
+  v_rows integer;
+begin
+  select * into v_duel from public.party_duels where id = p_duel;
+  if not found or v_uid not in (v_duel.challenger_id, v_duel.opponent_id)
+     or not public.is_group_member(v_duel.group_id) then
+    raise exception 'No participas en ese duelo' using errcode = 'PT002';
+  end if;
+  insert into public.party_duel_starts (duel_id, user_id) values (p_duel, v_uid)
+    on conflict (duel_id, user_id) do nothing;
+  get diagnostics v_rows = row_count;
+  return case when v_rows = 1 then 'started' else 'already' end;
+end;
+$$;
+
+-- Manda el resultado propio de un duelo, una sola vez, después de empezarlo con party_start_duel
+-- (PT003 si no). answered son las preguntas del duelo. Pide al menos 3 segundos por acierto (PT004).
+-- El piso va por acierto y no por pregunta, porque las que no contestó cuentan como incorrectas sin
+-- sumar tiempo. Devuelve saved, o already si ya lo había mandado, sin cambiar el primero
 create or replace function public.party_submit_duel_result(
   p_duel uuid,
   p_correct integer,
@@ -604,6 +818,12 @@ begin
      or p_total_ms is null or p_total_ms not between 0 and 86400000 then
     raise exception 'El resultado no es válido' using errcode = '22023';
   end if;
+  if not exists (select 1 from public.party_duel_starts where duel_id = p_duel and user_id = v_uid) then
+    raise exception 'Primero empieza el duelo' using errcode = 'PT003';
+  end if;
+  if p_total_ms < p_correct * public.party_limit('duel_ms_per_correct') then
+    raise exception 'El tiempo no alcanza para tantos aciertos' using errcode = 'PT004';
+  end if;
   insert into public.party_duel_results (duel_id, user_id, correct, answered, total_ms)
     values (p_duel, v_uid, p_correct, v_answered, p_total_ms)
     on conflict (duel_id, user_id) do nothing;
@@ -615,8 +835,9 @@ $$;
 -- ===================================================================== Lo que ve el alumno
 -- Sus grupos activos con sus miembros (alias y XP de la semana p_week_start), sus retos activos o
 -- terminados en los últimos 7 días con el total del grupo y su propio aporte, y los duelos donde
--- participa. Corre con los permisos de quien llama, así lo que devuelve es exactamente lo que las
--- políticas le dejan ver, sin repetir las reglas aquí
+-- participa, con la hora en que él lo empezó. Corre con los permisos de quien llama, así lo que
+-- devuelve es exactamente lo que las políticas le dejan ver, sin repetir las reglas aquí. Un grupo
+-- puede quedar sin quien lo administre (owner_id vacío) y entonces isOwner es false para todos
 create or replace function public.party_overview(p_week_start date) returns jsonb
 language plpgsql stable set search_path = public, pg_temp as $$
 declare
@@ -631,7 +852,7 @@ begin
       'id', g.id,
       'name', g.name,
       'inviteCode', g.invite_code,
-      'isOwner', g.owner_id = v_uid,
+      'isOwner', coalesce(g.owner_id = v_uid, false),
       'joinedAt', mine.joined_at,
       'members', (
         select coalesce(jsonb_agg(
@@ -672,7 +893,7 @@ begin
           ) order by c.starts_at desc, c.id), '[]'::jsonb)
         from (
           select * from public.challenges
-          where group_id = g.id and ends_at > now() - interval '7 days'
+          where group_id = g.id and ends_at > now() - interval '7 days' and deleted_at is null
           order by starts_at desc
           limit 20
         ) c
@@ -685,6 +906,11 @@ begin
             'opponentId', d.opponent_id,
             'questionIds', to_jsonb(d.question_ids),
             'createdAt', d.created_at,
+            -- Cuándo lo empezó quien llama. Con esto la app ya no ofrece jugarlo otra vez
+            'startedAt', (
+              select s.started_at from public.party_duel_starts s
+              where s.duel_id = d.id and s.user_id = v_uid
+            ),
             'mine', (
               select jsonb_build_object(
                 'correct', r.correct, 'answered', r.answered, 'totalMs', r.total_ms,
@@ -717,6 +943,85 @@ begin
 end;
 $$;
 
+-- ===================================================================== Exportar mis datos
+-- Las filas de Party de quien llama, para Exportar mis datos. Sus membresías, también las de grupos de
+-- los que salió, el XP que publicó, sus aportes, los retos que creó y sus duelos con su inicio y su
+-- resultado. De los demás no trae nada, ni el id del rival ni su resultado. El nombre del grupo solo va
+-- si sigue en él, como en Party. No pide que Party esté abierta, porque ver los datos propios es un
+-- derecho del alumno con cualquier plan
+create or replace function public.party_export_mine() returns jsonb
+language plpgsql stable security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := public.party_caller(false);
+begin
+  return jsonb_build_object(
+    'memberships', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'groupId', m.group_id,
+        'groupName', case when m.left_at is null then g.name end,
+        'isOwner', coalesce(g.owner_id = v_uid, false),
+        'joinedAt', m.joined_at,
+        'leftAt', m.left_at
+      ) order by m.joined_at, m.group_id)
+      from public.memberships m
+      left join public.groups g on g.id = m.group_id
+      where m.user_id = v_uid
+    ), '[]'::jsonb),
+    'weeklyXp', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'groupId', w.group_id,
+        'weekStart', w.week_start,
+        'xp', w.xp,
+        'updatedAt', w.updated_at
+      ) order by w.week_start, w.group_id)
+      from public.party_weekly_xp w
+      where w.user_id = v_uid
+    ), '[]'::jsonb),
+    'challengeContributions', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'challengeId', p.challenge_id,
+        'groupId', p.group_id,
+        'amount', p.amount,
+        'updatedAt', p.updated_at
+      ) order by p.updated_at, p.challenge_id)
+      from public.party_challenge_progress p
+      where p.user_id = v_uid
+    ), '[]'::jsonb),
+    'challengesCreated', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'challengeId', c.id,
+        'groupId', c.group_id,
+        'title', c.title,
+        'metric', c.metric,
+        'target', c.target,
+        'startsAt', c.starts_at,
+        'endsAt', c.ends_at,
+        'deletedAt', c.deleted_at
+      ) order by c.starts_at, c.id)
+      from public.challenges c
+      where c.created_by = v_uid
+    ), '[]'::jsonb),
+    'duels', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'duelId', d.id,
+        'groupId', d.group_id,
+        'role', case when d.challenger_id = v_uid then 'challenger' else 'opponent' end,
+        'questionCount', cardinality(d.question_ids),
+        'createdAt', d.created_at,
+        'startedAt', s.started_at,
+        'result', case when r.duel_id is null then null else jsonb_build_object(
+          'correct', r.correct, 'answered', r.answered, 'totalMs', r.total_ms,
+          'finishedAt', r.finished_at) end
+      ) order by d.created_at, d.id)
+      from public.party_duels d
+      left join public.party_duel_starts s on s.duel_id = d.id and s.user_id = v_uid
+      left join public.party_duel_results r on r.duel_id = d.id and r.user_id = v_uid
+      where v_uid in (d.challenger_id, d.opponent_id)
+    ), '[]'::jsonb)
+  );
+end;
+$$;
+
 -- ===================================================================== Permisos de las funciones
 -- En Supabase anon recibe permiso de ejecución por defecto, por eso se le quita de forma explícita.
 -- Las ayudas internas no las ejecuta nadie por la API. party_open, party_caller y
@@ -725,6 +1030,7 @@ $$;
 revoke all on function public.party_forbid_result_changes() from public, anon, authenticated, service_role;
 revoke all on function public.party_limit(text) from public, anon, authenticated, service_role;
 revoke all on function public.party_new_invite_code() from public, anon, authenticated, service_role;
+revoke all on function public.party_assert_owner(uuid, uuid) from public, anon, authenticated, service_role;
 revoke all on function public.party_open() from public, anon, service_role;
 grant execute on function public.party_open() to authenticated;
 revoke all on function public.party_caller(boolean) from public, anon, service_role;
@@ -747,5 +1053,15 @@ revoke all on function public.party_create_duel(uuid, uuid, text[]) from public,
 grant execute on function public.party_create_duel(uuid, uuid, text[]) to authenticated;
 revoke all on function public.party_submit_duel_result(uuid, integer, integer) from public, anon, service_role;
 grant execute on function public.party_submit_duel_result(uuid, integer, integer) to authenticated;
+revoke all on function public.party_start_duel(uuid) from public, anon, service_role;
+grant execute on function public.party_start_duel(uuid) to authenticated;
+revoke all on function public.party_rotate_code(uuid) from public, anon, service_role;
+grant execute on function public.party_rotate_code(uuid) to authenticated;
+revoke all on function public.party_remove_member(uuid, uuid) from public, anon, service_role;
+grant execute on function public.party_remove_member(uuid, uuid) to authenticated;
+revoke all on function public.party_delete_challenge(uuid) from public, anon, service_role;
+grant execute on function public.party_delete_challenge(uuid) to authenticated;
 revoke all on function public.party_overview(date) from public, anon, service_role;
 grant execute on function public.party_overview(date) to authenticated;
+revoke all on function public.party_export_mine() from public, anon, service_role;
+grant execute on function public.party_export_mine() to authenticated;

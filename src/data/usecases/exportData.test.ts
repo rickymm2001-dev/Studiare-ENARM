@@ -35,3 +35,46 @@ it('exporta lo que el alumno creó y nada de lo de otra persona', async () => {
   expect(data.content.decks.map((deck) => deck.name).sort()).toEqual(['Apuntes', 'Mío']);
   expect(JSON.stringify(data)).not.toContain('De otra persona');
 });
+
+it('incluye lo de Party que vive solo en la nube, y sin la nube el archivo sale igual', async () => {
+  const api = testApi('real');
+  disposers.push(api.dispose);
+  const user = makeUser();
+  await api.repos.users.put(user);
+
+  // Sin la nube conectada no hay nada de Party en la nube
+  expect((await exportUserData(api.repos, user.id)).partyCloud).toBeNull();
+  expect(
+    (await exportUserData(api.repos, user.id, { partyCloud: () => Promise.resolve(null) }))
+      .partyCloud,
+  ).toBeNull();
+
+  // Con la nube, las filas propias de Party
+  const data = {
+    memberships: [
+      {
+        groupId: '1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
+        groupName: 'Guardia',
+        isOwner: true,
+        joinedAt: '2026-10-12T15:00:00.000+00:00',
+        leftAt: null,
+      },
+    ],
+    weeklyXp: [],
+    challengeContributions: [],
+    challengesCreated: [],
+    duels: [],
+  };
+  const included = await exportUserData(api.repos, user.id, {
+    partyCloud: () => Promise.resolve({ status: 'included', data }),
+  });
+  expect(included.partyCloud).toEqual({ status: 'included', data });
+  expect(included.user?.id).toBe(user.id);
+
+  // Si la nube falla, el resto del archivo sale y dice por qué falta Party
+  const failed = await exportUserData(api.repos, user.id, {
+    partyCloud: () => Promise.reject(new Error('sin red')),
+  });
+  expect(failed.partyCloud).toEqual({ status: 'unavailable', reason: 'network' });
+  expect(failed.user?.id).toBe(user.id);
+});

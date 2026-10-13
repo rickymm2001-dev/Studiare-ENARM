@@ -9,7 +9,7 @@ Escrito el 2026-10-10. Qué hay hoy de Billing, Facturas e Impuestos con Stripe,
 - **Avisos de Stripe.** El webhook verifica la firma con tolerancia de tiempo, compara sin atajos, y cada evento se aplica una sola vez aunque Stripe lo reenvíe. Entiende las dos formas de la factura que usa Stripe según su versión
 - **Portal del cliente.** Cancelar, cambiar la tarjeta y ver las facturas. Se abre desde Suscripción
 - **Reembolsos.** Uno completo desde el panel de Stripe quita el plan solo. Uno parcial lo atiendes tú
-- **Referidos.** El mes gratis por referido lo da la base con el primer cobro del referido, la primera factura pagada de más de 0 pesos. La factura de 0 pesos con la que Stripe abre una prueba gratis (B10) no cuenta, el mismo cobro con otro aviso no se cuenta dos veces y un aviso repetido no da otro mes (migración 20261019000001, bloque B7)
+- **Referidos.** El mes gratis por referido lo da la base con el primer cobro del referido, la primera factura pagada de más de 0 pesos. La factura de 0 pesos con la que Stripe abre una prueba gratis (B10) no cuenta, el mismo cobro con otro aviso no se cuenta dos veces y un aviso repetido no da otro mes. Si ese primer cobro se devuelve completo, por ejemplo con la garantía de 7 días, el referido queda revertido, sin borrar nada, y el mes de quien invitó termina en ese momento. Los meses que venían encadenados después se recorren para no dejar un hueco. Dos alumnos no se pueden referir entre sí (migración 20261019000001, bloque B7)
 - **Facturas.** Stripe genera una factura por cada cobro de una suscripción y la deja en el portal. No hay nada que programar en la app
 - **Impuestos.** Hasta esta sesión no había cálculo de impuestos
 

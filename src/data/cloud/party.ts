@@ -16,6 +16,12 @@ export type PartyFailure =
   | 'closed'
   /** Ya no está en ese grupo o no participa en ese duelo */
   | 'not_member'
+  /** El duelo no se ha empezado en el servidor, así que todavía no acepta su resultado */
+  | 'not_started'
+  /** Cifras que no se pueden estudiar de verdad, como más XP que el tope de la semana */
+  | 'implausible'
+  /** Solo quien administra el grupo, o quien creó el reto, puede hacerlo */
+  | 'not_owner'
   /** El servidor rechazó los datos */
   | 'invalid'
   /** La migración de Party todavía no está aplicada en el proyecto */
@@ -37,11 +43,25 @@ export function partyFailureOf(error: RpcError): PartyFailure {
   if (code === '42501') return 'other_device';
   if (code === 'PT001') return 'closed';
   if (code === 'PT002') return 'not_member';
+  if (code === 'PT003') return 'not_started';
+  if (code === 'PT004') return 'implausible';
+  if (code === 'PT005') return 'not_owner';
   if (code === '22023' || code === '22P02') return 'invalid';
   if (code === 'PGRST202') return 'unavailable';
   if (code === '') return 'network';
   return 'unknown';
 }
+
+/**
+ * Los topes de las cifras que manda cada alumno, los mismos de party_limit en el servidor. Pasarlos
+ * da PT004. La app nunca los pasa, porque recorta antes de mandar
+ */
+export const PARTY_CAPS = {
+  /** XP de la semana. Con el tope de 1,500 XP diarios por volumen y la racha, una semana real queda lejos */
+  weeklyXp: 50_000,
+  /** Un acierto de un duelo pide al menos este tiempo, en milisegundos */
+  duelMsPerCorrect: 3_000,
+} as const;
 
 /** Postgres manda las fechas con zona, por ejemplo 2026-10-13T15:00:00.123456+00:00 */
 const TimestampSchema = z.iso.datetime({ offset: true });
@@ -93,6 +113,8 @@ export const PartyDuelSchema = z.object({
   opponentId: CloudIdSchema,
   questionIds: z.array(z.string().min(1).max(64)).min(1).max(40),
   createdAt: TimestampSchema,
+  /** Cuándo lo empezó quien llama, en cualquier dispositivo. null si todavía no lo empieza */
+  startedAt: TimestampSchema.nullable().default(null),
   /** El resultado propio. null mientras no juega */
   mine: DuelScoreSchema.nullable(),
   /** El del rival. El servidor lo manda solo después del propio */
@@ -258,6 +280,17 @@ export function createPartyDuel(
   );
 }
 
+/**
+ * Empieza el duelo en el servidor. Desde ahí cuenta su intento, aunque no lo termine. started la
+ * primera vez y already si ya lo había empezado, en este o en otro dispositivo
+ */
+export function startPartyDuel(
+  cloud: Rpc,
+  duelId: string,
+): Promise<PartyReply<'started' | 'already'>> {
+  return call(cloud, 'party_start_duel', { p_duel: duelId }, z.enum(['started', 'already']));
+}
+
 /** saved la primera vez y already si el servidor ya tenía el resultado, que no cambia */
 export function submitPartyDuelResult(
   cloud: Rpc,
@@ -269,4 +302,109 @@ export function submitPartyDuelResult(
     { p_duel: input.duelId, p_correct: input.correct, p_total_ms: input.totalMs },
     z.enum(['saved', 'already']),
   );
+}
+
+// ---------------------------------------------------------------------------------------------
+// Moderación. Solo quien administra el grupo, y para borrar un reto también quien lo creó
+
+const RotateCodeSchema = z.object({
+  status: z.literal('rotated'),
+  inviteCode: CloudInviteCodeSchema,
+});
+
+/** Cambia el código de invitación. El de antes y su enlace dejan de servir */
+export function rotatePartyCode(
+  cloud: Rpc,
+  groupId: string,
+): Promise<PartyReply<z.infer<typeof RotateCodeSchema>>> {
+  return call(cloud, 'party_rotate_code', { p_group: groupId }, RotateCodeSchema);
+}
+
+/** Quita a un miembro del grupo. true si estaba dentro */
+export function removePartyMember(
+  cloud: Rpc,
+  input: { groupId: string; memberId: string },
+): Promise<PartyReply<boolean>> {
+  return call(
+    cloud,
+    'party_remove_member',
+    { p_group: input.groupId, p_member: input.memberId },
+    z.boolean(),
+  );
+}
+
+/** Borra un reto para todo el grupo. true si lo borró y false si ya estaba borrado */
+export function deletePartyChallenge(
+  cloud: Rpc,
+  challengeId: string,
+): Promise<PartyReply<boolean>> {
+  return call(cloud, 'party_delete_challenge', { p_challenge: challengeId }, z.boolean());
+}
+
+// ---------------------------------------------------------------------------------------------
+// Exportar mis datos. Las filas propias de Party, que viven solo en la nube
+
+const ExportScoreSchema = z.object({
+  correct: z.number().int().nonnegative(),
+  answered: z.number().int().positive(),
+  totalMs: z.number().int().nonnegative(),
+  finishedAt: TimestampSchema,
+});
+
+export const PartyExportSchema = z.object({
+  memberships: z.array(
+    z.object({
+      groupId: CloudIdSchema,
+      /** Solo de los grupos donde sigue */
+      groupName: z.string().nullable(),
+      isOwner: z.boolean(),
+      joinedAt: TimestampSchema,
+      leftAt: TimestampSchema.nullable(),
+    }),
+  ),
+  weeklyXp: z.array(
+    z.object({
+      groupId: CloudIdSchema,
+      weekStart: z.iso.date(),
+      xp: z.number().int().nonnegative(),
+      updatedAt: TimestampSchema,
+    }),
+  ),
+  challengeContributions: z.array(
+    z.object({
+      challengeId: CloudIdSchema,
+      groupId: CloudIdSchema,
+      amount: z.number().int().nonnegative(),
+      updatedAt: TimestampSchema,
+    }),
+  ),
+  challengesCreated: z.array(
+    z.object({
+      challengeId: CloudIdSchema,
+      groupId: CloudIdSchema,
+      title: z.string(),
+      metric: PartyChallengeMetricSchema,
+      target: z.number().positive(),
+      startsAt: TimestampSchema,
+      endsAt: TimestampSchema,
+      deletedAt: TimestampSchema.nullable(),
+    }),
+  ),
+  duels: z.array(
+    z.object({
+      duelId: CloudIdSchema,
+      groupId: CloudIdSchema,
+      role: z.enum(['challenger', 'opponent']),
+      questionCount: z.number().int().positive(),
+      createdAt: TimestampSchema,
+      startedAt: TimestampSchema.nullable(),
+      result: ExportScoreSchema.nullable(),
+    }),
+  ),
+});
+export type PartyExport = z.infer<typeof PartyExportSchema>;
+
+/** Las filas de Party de quien llama, sin nada de los demás. No pide que Party esté abierta */
+export function fetchMyPartyExport(cloud: Rpc): Promise<PartyReply<PartyExport>> {
+  return call(cloud, 'party_export_mine', undefined, PartyExportSchema);
 }

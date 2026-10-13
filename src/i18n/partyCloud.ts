@@ -8,6 +8,9 @@ const failures: Record<PartyFailure, string> = {
   other_device: 'Tu cuenta está abierta en otro dispositivo. Party funciona en el que está activo.',
   closed: 'Party no está incluida en tu plan.',
   not_member: 'Ya no estás en ese grupo.',
+  not_started: 'Ese duelo todavía no se empieza. Ábrelo desde Party.',
+  implausible: 'Esas cifras no se pueden estudiar en una semana, así que no se guardaron.',
+  not_owner: 'Solo quien administra el grupo puede hacer esto.',
   invalid: 'No se aceptaron los datos. Revísalos e intenta de nuevo.',
   unavailable: 'Party en la nube todavía no está lista. Intenta más tarde.',
   network: 'No hay conexión con la nube. Intenta de nuevo en un momento.',
@@ -16,10 +19,11 @@ const failures: Record<PartyFailure, string> = {
 
 export const partyCloudText = {
   privacy:
-    'En un grupo compartes tu alias y tu XP de la semana. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu correo, tu exactitud por tema, tus sesgos ni tu conducta de estudio.',
+    'En un grupo compartes tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu correo, tu exactitud por tema, tus sesgos ni tu conducta de estudio.',
   privacyDemo:
-    'En la demostración los grupos viven en este navegador y los compañeros son simulados. Con una cuenta real Party vive en la nube y compartes solo tu alias y tu XP de la semana.',
-  focusNote: 'Modo enfoque activo. La tabla, el XP y los retos están ocultos.',
+    'En la demostración los grupos viven en este navegador y los compañeros son simulados. Con una cuenta real Party vive en la nube y compartes solo tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos.',
+  focusNote:
+    'Modo enfoque activo. La tabla, el XP y los retos están ocultos. Tus duelos se quedan.',
   needsCloud: {
     title: 'Party en la nube',
     off: 'Party es para estudiar con otras personas, así que necesita una cuenta en la nube. Esta versión guarda todo solo en tu navegador.',
@@ -30,7 +34,7 @@ export const partyCloudText = {
   },
   consent: {
     title: 'Activa Party',
-    body: 'Party comparte con tus grupos tu alias y tu XP de la semana, y en un duelo tus aciertos y tu tiempo. Nunca tu correo.',
+    body: 'Party comparte con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos, y en un duelo tus aciertos y tu tiempo. Nunca tu correo.',
     hint: 'Lo puedes quitar cuando quieras en Configuración, Privacidad. Al quitarlo sales de tus grupos.',
     allow: 'Activar Party',
     failed: 'No se pudo guardar tu permiso. Intenta de nuevo.',
@@ -89,6 +93,32 @@ export const partyCloudText = {
       limit: 'Ya tienes 10 duelos esperando a tu rival. Espera a que jueguen.',
     },
     playFailed: 'No se pudo abrir el duelo. Intenta de nuevo en un momento.',
+    // Un solo intento. Desde que se empieza, cuenta aunque no se termine
+    inProgress: 'Tienes este duelo a medias. Termínalo, porque es un solo intento.',
+    continue: 'Continuar mi duelo',
+    alreadyStarted:
+      'Ya empezaste este duelo. Es un solo intento, así que cuenta lo que contestaste la primera vez.',
+    startedElsewhere:
+      'Ya empezaste este duelo. Es un solo intento, así que aquí no se vuelve a jugar. Tu resultado se manda desde el dispositivo donde lo jugaste.',
+  },
+  // Moderación. Solo quien administra el grupo, y para borrar un reto también quien lo creó
+  admin: {
+    youAdminister: 'Tú administras este grupo.',
+    rotateCode: 'Cambiar código',
+    rotateConfirm:
+      'El código y el enlace de ahora dejan de servir. Quien ya está en el grupo se queda. Comparte el nuevo con quien quieras invitar.',
+    rotateYes: 'Sí, cambiar el código',
+    rotated: 'Listo. El grupo tiene un código nuevo.',
+    membersTitle: 'Administrar miembros',
+    remove: (alias: string) => `Quitar a ${alias}`,
+    removeConfirm: (alias: string) =>
+      `${alias} deja de ver el grupo y sus duelos contigo quedan sin decidir. Si todavía tiene el código puede volver a entrar, así que cambia el código si no quieres que vuelva.`,
+    removeYes: 'Sí, quitar del grupo',
+    removed: (alias: string) => `Listo. ${alias} ya no está en el grupo.`,
+    deleteChallenge: 'Borrar reto',
+    deleteChallengeConfirm: 'El reto se borra para todo el grupo, con lo que aportó cada quien.',
+    deleteChallengeYes: 'Sí, borrar el reto',
+    cancel: 'Cancelar',
   },
   widget: {
     needsCloud: 'Party funciona con tu cuenta en la nube.',

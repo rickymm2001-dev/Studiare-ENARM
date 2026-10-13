@@ -1,4 +1,5 @@
-// Un duelo de Party (9.6). Antes de jugar dice las reglas y deja jugar, sin mostrar nada del rival. Ya
+// Un duelo de Party (9.6). Antes de jugar dice las reglas y deja jugar, sin mostrar nada del rival. Es
+// un solo intento. A medias deja continuar en la misma pestaña, sin ofrecer empezar de nuevo. Ya
 // jugado muestra los dos resultados y quién ganó. Aquí vive el duelo de la demostración, con un rival
 // simulado marcado como tal (D-028), y las piezas que comparte con el duelo de la nube (CloudDuelRow).
 import { Swords, Trophy } from 'lucide-react';
@@ -15,7 +16,12 @@ import { SimulatedDataLabel } from '@/ui/components/labels';
 import { formatDuration } from '../simulator/practice';
 import type { ReadySession } from '../shared/RequireSession';
 import { duelView, verdictFor, type DuelVerdict } from './duels';
-import { startDuel, type DuelToPlay } from './duelActions';
+import {
+  startDuel,
+  useActiveDuelSession,
+  type DuelStartClaim,
+  type DuelToPlay,
+} from './duelActions';
 
 const text = t.party.duel;
 
@@ -102,9 +108,27 @@ export function DuelScoreTable({
   );
 }
 
+/** El duelo está a medias en esta pestaña. Se continúa donde iba, nunca se empieza de nuevo */
+export function DuelInProgress() {
+  return (
+    <div className="mt-1 flex flex-col gap-2">
+      <p role="status" className="text-sm">
+        {t.partyCloud.duels.inProgress}
+      </p>
+      <Button asChild size="sm" className="self-start">
+        <Link to={screenPath('question')}>
+          <Swords aria-hidden />
+          {t.partyCloud.duels.continue}
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
 /**
  * Las reglas y el botón para jugar. Sin las preguntas que pide el duelo en el plan Gratis, en lugar
- * del botón lleva a los planes. note es una línea más sobre el rival, si hace falta
+ * del botón lleva a los planes. note es una línea más sobre el rival, si hace falta. En la nube,
+ * claimStart registra el inicio en el servidor antes de abrir la práctica
  */
 export function DuelPlayArea({
   duel,
@@ -112,6 +136,7 @@ export function DuelPlayArea({
   questionsLeft,
   canPlay,
   note,
+  claimStart,
 }: {
   duel: DuelToPlay;
   session: ReadySession;
@@ -120,23 +145,24 @@ export function DuelPlayArea({
   /** false si el duelo ya no se puede jugar, por ejemplo porque el rival salió del grupo */
   canPlay: boolean;
   note?: string | null;
+  claimStart?: () => Promise<DuelStartClaim>;
 }) {
   const api = useDataApi();
   const navigate = useNavigate();
-  const [failed, setFailed] = useState(false);
+  const [problem, setProblem] = useState<'failed' | 'already' | null>(null);
   const [busy, setBusy] = useState(false);
   const size = duel.questionIds.length;
   const enough = questionsLeft === null || questionsLeft >= size;
 
   const play = async () => {
-    setFailed(false);
+    setProblem(null);
     setBusy(true);
     try {
-      const started = await startDuel(api, session.user, duel);
-      if (started) void navigate(screenPath('question'));
-      else setFailed(true);
+      const outcome = await startDuel(api, session.user, duel, claimStart);
+      if (outcome === 'started') void navigate(screenPath('question'));
+      else setProblem(outcome === 'already_started' ? 'already' : 'failed');
     } catch {
-      setFailed(true);
+      setProblem('failed');
     } finally {
       setBusy(false);
     }
@@ -147,7 +173,7 @@ export function DuelPlayArea({
       <p className="text-sm text-fg-muted">{text.rules(size)}</p>
       <p className="text-sm text-fg-muted">{text.oneTry}</p>
       {note ? <p className="text-sm">{note}</p> : null}
-      {!canPlay ? null : enough ? (
+      {!canPlay || problem === 'already' ? null : enough ? (
         <Button
           size="sm"
           className="self-start"
@@ -169,9 +195,14 @@ export function DuelPlayArea({
           </Button>
         </div>
       )}
-      {failed ? (
+      {problem === 'failed' ? (
         <p role="alert" className="text-sm text-danger">
           {t.partyCloud.duels.playFailed}
+        </p>
+      ) : null}
+      {problem === 'already' ? (
+        <p role="status" className="text-sm">
+          {t.partyCloud.duels.alreadyStarted}
         </p>
       ) : null}
     </div>
@@ -196,8 +227,9 @@ export function DuelRow({
   /** Preguntas que le quedan hoy según su plan. null es sin límite */
   questionsLeft: number | null;
 }) {
+  const activeSessionId = useActiveDuelSession(session.user.id);
   const view = rival
-    ? duelView({ events, challenge, selfId: self.id, opponent: rival })
+    ? duelView({ events, challenge, selfId: self.id, opponent: rival, activeSessionId })
     : ({ status: 'pending' } as const);
 
   return (
@@ -209,6 +241,8 @@ export function DuelRow({
           rivalAlias={rival.alias}
           rivalSimulated
         />
+      ) : view.status === 'in_progress' ? (
+        <DuelInProgress />
       ) : (
         <DuelPlayArea
           duel={{ id: challenge.id, questionIds: challenge.questionIds ?? [] }}

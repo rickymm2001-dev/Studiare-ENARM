@@ -987,6 +987,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (referrer === undefined) return json('invalid');
     if (referrer === user.id) return json('own');
     if (referrals.some((referral) => referral.referredId === user.id)) return json('already');
+    // Dos alumnos no se refieren entre sí (20261019000001)
+    if (
+      referrals.some(
+        (referral) => referral.referrerId === user.id && referral.referredId === referrer,
+      )
+    ) {
+      return json('circular');
+    }
     // Quien ya tuvo un cobro no entra como referido. Una prueba sin cobro no cuenta (20261019000001)
     if (payments.some((payment) => payment.userId === user.id && payment.amountMxn > 0)) {
       return json('already_paid');
@@ -1277,7 +1285,12 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       case 'party_publish':
       case 'party_create_challenge':
       case 'party_create_duel':
+      case 'party_start_duel':
       case 'party_submit_duel_result':
+      case 'party_rotate_code':
+      case 'party_remove_member':
+      case 'party_delete_challenge':
+      case 'party_export_mine':
         return requireActiveDevice() ?? partyReply(name, user, args);
       default:
         return pgError(
@@ -1312,12 +1325,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
           updated_by: null,
         }));
       case 'profiles':
+        // Por columnas la API solo lee id y alias de cualquier perfil (20261018000001)
         return (user ? (isAdmin(user) ? [...users.values()] : [user]) : []).map((item) => ({
           id: item.id,
           alias: item.alias,
-          time_zone: 'America/Merida',
-          settings: {},
-          created_at: item.createdAt,
         }));
       case 'private_accounts':
         return user && active ? [accounts.get(user.id) ?? {}] : [];

@@ -66,7 +66,10 @@ export const featureText = {
     consentsTitle: 'Consentimientos por finalidad',
     consentsDescription: 'Son opcionales y los puedes cambiar en Perfil.',
     consents: {
-      party: ['Party', 'Compartir alias, XP, nivel y racha con tus grupos.'],
+      party: [
+        'Party',
+        'Compartir con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana, tu aporte a los retos y tus duelos.',
+      ],
       ai_analysis: [
         'Análisis con IA',
         'Usar tus errores para hipótesis del tutor, con IDs seudónimos.',
@@ -378,7 +381,7 @@ export const featureText = {
     },
     exportTitle: 'Exportar mis datos',
     exportDescription:
-      'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON.',
+      'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON. Con tu cuenta en la nube incluye también lo tuyo de Party, tus grupos, tu XP publicado, tus aportes a los retos y tus duelos.',
     export: 'Descargar mis datos',
     deleteTitle: 'Borrar mis datos',
     deleteDescription:
@@ -2020,6 +2023,8 @@ export const featureText = {
       invalid: 'Ese código no existe. Revísalo.',
       own: 'No puedes canjear tu propio código.',
       already: 'Ya canjeaste un código antes.',
+      circular:
+        'Esa persona entró con tu código, así que no puedes entrar con el suyo. Dos compañeros no se invitan entre sí.',
       too_late: 'Ya pasó el tiempo para canjear un código con esta cuenta.',
       already_paid: 'Ya hiciste un pago, así que no puedes entrar como referido.',
       failed: 'No pudimos canjear el código. Intenta de nuevo en unos minutos.',

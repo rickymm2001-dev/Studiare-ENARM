@@ -1,7 +1,8 @@
 // Lo que el alumno hace con un duelo desde Party (9.6). Crearlo fija sus preguntas y empezarlo abre la
-// práctica con esas preguntas como una sesión de tipo reto. El resultado sale de la bitácora
-// (duels.ts). En la demostración el rival es simulado. En la nube (B7) el rival es otro alumno y el
-// resultado se manda al servidor una sola vez.
+// práctica con esas preguntas como una sesión de tipo reto. Es un solo intento. Una vez empezado no se
+// vuelve a abrir, y en la nube el inicio queda también en el servidor (party_start_duel), que sin él
+// no acepta el resultado. El resultado sale de la bitácora (duels.ts). En la demostración el rival es
+// simulado. En la nube (B7) el rival es otro alumno y el resultado se manda al servidor una sola vez.
 import type { DataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
@@ -13,7 +14,8 @@ import { isVariant, listStudentPool } from '@/data/usecases/studentBank';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
-import { clock, usePractice } from '../simulator/practice';
+import { clock, usePractice, type PracticeState } from '../simulator/practice';
+import { duelAttemptSession } from './duels';
 
 /**
  * Las preguntas de un duelo, siempre las mismas con la misma semilla. Solo entran las del banco de
@@ -54,21 +56,46 @@ export interface DuelToPlay {
   questionIds: readonly string[];
 }
 
+/** Cómo terminó el intento de abrir un duelo */
+export type StartDuelOutcome =
+  /** La práctica del duelo quedó abierta */
+  | 'started'
+  /** Ya lo había empezado, en este o en otro dispositivo. Es un solo intento */
+  | 'already_started'
+  /** No tiene preguntas o alguna no está en el banco de este dispositivo */
+  | 'unavailable'
+  /** El servidor no contestó */
+  | 'failed';
+
+/** Lo que contesta el servidor al registrar el inicio. failed si no contestó */
+export type DuelStartClaim = 'started' | 'already' | 'failed';
+
 /**
- * Abre la práctica del duelo. false si no tiene preguntas o si alguna no está en el banco de este
- * dispositivo, porque entonces los dos no contestarían lo mismo
+ * Abre la práctica del duelo, una sola vez. Si la bitácora ya tiene una sesión de ese duelo no la abre
+ * otra vez. Tampoco si le faltan preguntas en el banco de este dispositivo, porque entonces los dos no
+ * contestarían lo mismo. En la nube, claimStart registra el inicio en el servidor antes de abrirla, y si
+ * el servidor dice que ya lo había empezado en otro dispositivo tampoco la abre
  */
 export async function startDuel(
   api: Pick<DataApi, 'repos' | 'recordEvent'>,
   user: Pick<User, 'id' | 'timeZone'>,
   duel: DuelToPlay,
-): Promise<boolean> {
+  claimStart?: () => Promise<DuelStartClaim>,
+): Promise<StartDuelOutcome> {
   const questionIds = [...duel.questionIds];
-  if (questionIds.length === 0) return false;
+  if (questionIds.length === 0) return 'unavailable';
+  // La pantalla puede ir un paso atrás. Antes de abrir se revisa la bitácora guardada
+  const stored = await api.repos.events.query({ userId: user.id });
+  if (duelAttemptSession(stored, duel.id) !== null) return 'already_started';
   // Quien recibe el reto puede no haber abierto nunca el simulador en este dispositivo
   await ensureDemoBank(api);
   const present = await Promise.all(questionIds.map((id) => api.repos.questions.get(id)));
-  if (present.some((question) => question === undefined)) return false;
+  if (present.some((question) => question === undefined)) return 'unavailable';
+  if (claimStart) {
+    const claim = await claimStart();
+    if (claim === 'already') return 'already_started';
+    if (claim === 'failed') return 'failed';
+  }
   const sessionId = newId();
   await api.recordEvent(
     createEvent(
@@ -89,5 +116,26 @@ export async function startDuel(
     duelId: duel.id,
     targetTags: [],
   });
-  return true;
+  return 'started';
+}
+
+/**
+ * La sesión del duelo que el alumno tiene abierta ahora en esta pestaña, o null. Mientras no la
+ * termine se puede continuar y su resultado todavía no se manda
+ */
+export function activeDuelSessionOf(
+  state: Pick<PracticeState, 'sessionId' | 'userId' | 'kind' | 'duelId' | 'ended'>,
+  userId: string,
+): string | null {
+  return state.userId === userId &&
+    state.kind === 'challenge' &&
+    state.duelId !== null &&
+    !state.ended
+    ? state.sessionId
+    : null;
+}
+
+/** La sesión del duelo abierta en esta pestaña, al día con la práctica */
+export function useActiveDuelSession(userId: string): string | null {
+  return usePractice((state) => activeDuelSessionOf(state, userId));
 }

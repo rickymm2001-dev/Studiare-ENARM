@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { newId } from '@/data/testing/fixtures';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { answered, event, minute, option, question } from '../tutor/testing/fixtures';
-import { duelSize, duelView, playerDuelResult, simulatedDuelResult, verdictFor } from './duels';
+import {
+  duelAttemptSession,
+  duelSize,
+  duelView,
+  playerDuelResult,
+  simulatedDuelResult,
+  verdictFor,
+} from './duels';
 
 const duelId = newId();
 const questions = Array.from({ length: 3 }, () => question({ id: newId() }));
@@ -33,10 +40,39 @@ const answer = (index: number, correct: boolean, ms: number, session: string, at
   );
 
 describe('resultado del alumno en un duelo', () => {
-  it('sin jugar no hay resultado', () => {
+  it('sin empezar no hay resultado', () => {
     expect(playerDuelResult([], challenge, SELF)).toBeNull();
-    // Empezó pero no terminó, así que todavía puede jugarlo
-    expect(playerDuelResult([started(sessionA, minute(0))], challenge, SELF)).toBeNull();
+    expect(duelAttemptSession([], duelId)).toBeNull();
+  });
+
+  it('empezar ya es su intento. Sin terminar y sin contestar, cuenta cero de todas', () => {
+    expect(playerDuelResult([started(sessionA, minute(0))], challenge, SELF)).toEqual({
+      memberId: SELF,
+      correct: 0,
+      answered: 3,
+      totalMs: 0,
+    });
+  });
+
+  it('cuenta el primer intento aunque haya empezado otro después', () => {
+    // Juega a medias, ve las respuestas en la retroalimentación y empieza de nuevo
+    const events = [
+      started(sessionB, minute(10)),
+      answer(0, true, 5_000, sessionB, minute(11)),
+      answer(1, true, 5_000, sessionB, minute(12)),
+      answer(2, true, 5_000, sessionB, minute(13)),
+      ended(sessionB, minute(14)),
+      // Llega después en la bitácora, pero empezó antes
+      started(sessionA, minute(0)),
+      answer(0, false, 20_000, sessionA, minute(1)),
+    ];
+    expect(duelAttemptSession(events, duelId)).toBe(sessionA);
+    expect(playerDuelResult(events, challenge, SELF)).toEqual({
+      memberId: SELF,
+      correct: 0,
+      answered: 3,
+      totalMs: 20_000,
+    });
   });
 
   it('cuenta aciertos y suma lo que tardó en contestar, no la sesión completa', () => {
@@ -197,6 +233,21 @@ describe('vista del duelo', () => {
     expect(view.self).toEqual({ memberId: SELF, correct: 3, answered: 3, totalMs: 30_000 });
     expect(view.rival).toEqual(simulatedDuelResult(rival, challenge));
     expect(view.verdict).toEqual(verdictFor(view.self, view.rival));
+  });
+
+  it('a medias en esta pestaña no revela al rival y se puede continuar', () => {
+    const events = [started(sessionA, minute(0)), answer(0, true, 10_000, sessionA, minute(1))];
+    expect(
+      duelView({ events, challenge, selfId: SELF, opponent: rival, activeSessionId: sessionA }),
+    ).toEqual({ status: 'in_progress' });
+    // Dejado a medias, en otra pestaña o con otra práctica abierta, ya es su resultado
+    const view = duelView({ events, challenge, selfId: SELF, opponent: rival });
+    expect(view.status).toBe('decided');
+    if (view.status === 'decided') expect(view.self).toMatchObject({ correct: 1, answered: 3 });
+    expect(
+      duelView({ events, challenge, selfId: SELF, opponent: rival, activeSessionId: sessionB })
+        .status,
+    ).toBe('decided');
   });
 
   it('el mismo duelo da siempre el mismo veredicto al volver a abrirlo', () => {
