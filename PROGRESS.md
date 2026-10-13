@@ -18,7 +18,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
-- [ ] B3. Navegación, Configuración y Perfil (en cierre)
+- [x] B3. Navegación, Configuración y Perfil (PR en curso)
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
 - [ ] B6. Apuntes y mazos
@@ -87,6 +87,16 @@ Evidencia
 - Hallazgo nuevo H29, un dispositivo nuevo puede sobrescribir en la nube datos opcionales de la cuenta con vacíos. Asignado a B9
 - Evidencia. npm run check con typecheck y lint limpios y 2,798 pruebas que pasan; las 5 que fallaron fueron por tiempo con la máquina a carga 11 en 4 núcleos y pasan solas (102 de 102). Pruebas SQL en verde con el esqueleto de Storage que copia la protección del proyecto real. tutor.spec y theme-dark.spec en verde en teléfono y computadora. JavaScript inicial de 283 KB de 300
 - Capturas de antes en docs/screenshots/v3/antes y de después en docs/screenshots/v3/b2, ya con las correcciones, en calidad 60 para que pesen menos
+
+### B3. Navegación, Configuración y Perfil (D-122)
+- Hecho. Menú por rol con riel en computadora y barra de cinco en el teléfono con Más, que abre Apuntes, Tutor, Party y Configuración (4.28). Rutas viejas de Perfil, Planificador y Logros redirigen sin dejar historial. Apuntes con lugar propio en el menú
+- Configuración en una sola página con Perfil, Apariencia y Privacidad. Perfil con Tu plan, Tus datos de solo lectura, Editar perfil con Guardar y Cancelar y aviso de cambios sin guardar, y Tu sesión
+- Ajustes del repaso en un panel de Repasar con todo lo que se guarda del repaso y el Pomodoro, con un solo lugar por ajuste. Atrás lo cierra y pregunta antes de perder cambios
+- Progreso recibe la semana del planificador y el puntaje oficial. Logros, insignias y ligas se quitan sin tocar eventos, y quedan las tres misiones de hoy en Inicio (4.12)
+- Lo de demostración que estaba en Cuenta pasa a Datos de demostración del admin detrás de demoTools
+- Revisión independiente con 15 hallazgos, todos corregidos. La e2e de la cuenta encontró una carrera real, el puente con la nube reabría una sesión recién cerrada, y ya no pasa. El botón de borrar pasa el contraste al pasar el puntero
+- Evidencia. npm run check con typecheck y lint limpios y 2,875 pruebas que pasan (2 omitidas que solo corren con su variable de entorno). E2e del bloque en teléfono y computadora, 194 pasan en la última corrida completa y la única falla, un selector ambiguo de práctica, quedó corregida y pasó 8 de 8 sola. Nube 22 de 22. perf.spec pasa con la máquina tranquila y su límite es justo con otros agentes corriendo (mediana de 123 a 155 ms, sin regresión contra la versión anterior)
+- Capturas en docs/screenshots/v3/b3
 
 ### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
