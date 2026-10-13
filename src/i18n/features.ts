@@ -521,6 +521,9 @@ export const featureText = {
         n === null ? 'Preguntas sin límite' : `${n} preguntas al día`,
       fullExam: 'Examen completo',
       aiTutor: 'Tutor con IA',
+      // Apuntes y el catálogo también se comparan en la tabla de planes (B8 del plan del cambio)
+      outlines: 'Apuntes que se vuelven tarjetas',
+      deckCatalog: 'Mazos precargados del catálogo',
       importDecks: 'Importar tus mazos',
       party: 'Party con tus amigos',
     },

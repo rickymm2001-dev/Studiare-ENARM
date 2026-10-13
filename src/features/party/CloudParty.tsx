@@ -2,7 +2,8 @@
 // código o un enlace, la tabla de la semana con el alias y el XP de cada miembro, retos del grupo y
 // duelos entre dos alumnos que contestan las mismas preguntas cuando cada uno puede. Antes de compartir
 // nada pide el permiso de Party (4.27). Con el modo enfoque se ocultan la tabla, el XP y los retos y
-// se quedan los grupos, las invitaciones y los duelos (respuesta 82).
+// se quedan los grupos, las invitaciones y los duelos (respuesta 82). Si el servidor contesta que el
+// plan ya no incluye Party, como cuando acaba de vencer, se ve el mismo candado de Gratis (B8).
 import { Copy, Link2, LogOut } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getCloud } from '@/data/cloud/client';
@@ -50,6 +51,7 @@ import {
 } from './GroupParts';
 import { forgetInviteCode, inviteLink, inviteStore } from './inviteLink';
 import { NewDuelForm } from './NewDuelForm';
+import { PartyLocked } from './PartyLocked';
 import { useCloudParty } from './useCloudParty';
 
 const text = t.partyCloud;
@@ -181,6 +183,8 @@ function CloudGroups({ session, events, snapshot, focus, inviteCode }: CloudPart
     );
   }
   if (state.status === 'failed') {
+    // El plan de este navegador todavía dice que es de pago, pero el servidor ya cerró Party
+    if (state.reason === 'closed') return <PartyLocked />;
     return (
       <Card>
         <ErrorState description={text.failures[state.reason]} onRetry={reload} />

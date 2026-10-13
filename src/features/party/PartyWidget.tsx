@@ -1,7 +1,8 @@
 // Widget de Party para Inicio (9.1). Tu lugar en la tabla de tu primer grupo, su reto colectivo más
 // reciente y los duelos que esperan tu turno. En la demostración sale de los grupos simulados de este
 // navegador y con la nube de tus grupos reales, que de paso publica tus cifras al día (B7). Con el modo
-// enfoque no muestra el lugar ni el reto (respuesta 82). Sin nube dice que Party la necesita.
+// enfoque no muestra el lugar ni el reto (respuesta 82). Sin nube dice que Party la necesita. En el
+// plan Gratis lleva el aviso corto del candado y no le pide nada al servidor (respuesta 20, B8).
 import { Link } from 'react-router';
 import { useCloud } from '@/app/cloudState';
 import { screenPath } from '@/app/screens';
@@ -16,9 +17,11 @@ import { Button } from '@/ui/components/button';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import type { Snapshot } from '../home/snapshot';
+import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { contributionTo, localDuelResult } from './cloudNumbers';
 import { duelView } from './duels';
+import { PartyWidgetLocked } from './PartyLocked';
 import { partyModeOf } from './partyMode';
 import { challengeContributions, memberStats } from './stats';
 import { useCloudParty } from './useCloudParty';
@@ -30,6 +33,14 @@ interface WidgetProps {
 }
 
 export function PartyWidget(props: WidgetProps) {
+  return (
+    <FeatureGate userId={props.session.user.id} feature="party" locked={<PartyWidgetLocked />}>
+      <PartyWidgetByMode {...props} />
+    </FeatureGate>
+  );
+}
+
+function PartyWidgetByMode(props: WidgetProps) {
   const cloudStatus = useCloud((store) => store.state.status);
   const mode = partyModeOf(props.session.isDemo, cloudStatus);
   if (mode === 'demo') return <DemoPartyWidget {...props} />;
@@ -166,7 +177,11 @@ function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
   const { user } = session;
   const { state } = useCloudParty({ enabled: true, snapshot, events, timeZone: user.timeZone });
   if (state.status === 'loading') return <SkeletonRows label={t.partyCloud.loading} rows={2} />;
-  if (state.status === 'failed') return <WidgetNote note={t.partyCloud.widget.failed} />;
+  if (state.status === 'failed') {
+    // El servidor dice que el plan ya no incluye Party, por ejemplo porque venció hace un momento
+    if (state.reason === 'closed') return <PartyWidgetLocked />;
+    return <WidgetNote note={t.partyCloud.widget.failed} />;
+  }
   const group = state.overview.groups[0];
   if (!group) return <WidgetNote note={t.widgets.party.empty} />;
   const rows = weeklyLeaderboard(

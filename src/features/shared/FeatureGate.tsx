@@ -1,19 +1,19 @@
 // Deja ver una función solo si el plan del alumno la incluye (D-085, fila 14). Cada punto de entrada
-// pregunta, así que decidir cuáles son de pago es cambiar la tabla de planes y no la interfaz. Una
-// función cerrada puede mostrar su propia vista previa con candado en lugar del aviso corto (B6).
-import { Lock } from 'lucide-react';
+// pregunta, así que decidir cuáles son de pago es cambiar la tabla de planes y no la interfaz. Cierra
+// las funciones de la carga diaria y también las banderas de acceso de sí o no, como Party, Subir
+// mazos o el catálogo de mazos (B8 del plan del cambio). Una función cerrada puede mostrar su propia
+// vista previa con candado en lugar del aviso corto (B6). Los dos llevan el botón de los candados.
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
-import { screenPath } from '@/app/screens';
 import {
-  canUseFeature,
+  canUse,
+  isGatedFeature,
   PLANS,
-  type GatedFeature,
   type PlanDef,
   type PlanKey,
+  type PlanLock,
 } from '@/config/billing';
 import { t } from '@/i18n/es-MX';
-import { Button } from '@/ui/components/button';
+import { LockedNote } from './LockedPreview';
 import { useActivePlan } from './useActivePlan';
 
 export function FeatureGate({
@@ -24,7 +24,7 @@ export function FeatureGate({
   plans = PLANS,
 }: {
   userId: string;
-  feature: GatedFeature;
+  feature: PlanLock;
   children: ReactNode;
   /**
    * Lo que se ve en lugar de la función cuando el plan no la incluye, como una vista previa con su
@@ -32,22 +32,17 @@ export function FeatureGate({
    */
   locked?: ReactNode;
   /** Tabla de planes. Solo cambia en las pruebas */
-  plans?: Record<PlanKey, Pick<PlanDef, 'features'>>;
+  plans?: Record<PlanKey, Pick<PlanDef, 'features' | 'access'>>;
 }) {
   const plan = useActivePlan(userId);
   if (plan === undefined) return null;
-  if (canUseFeature(plan, feature, plans)) return <>{children}</>;
+  if (canUse(plan, feature, plans)) return <>{children}</>;
   if (locked !== undefined) return <>{locked}</>;
   return (
-    <div
-      role="status"
-      className="flex flex-wrap items-center gap-3 rounded-lg bg-muted p-3 text-sm"
-    >
-      <Lock aria-hidden className="size-4 shrink-0 text-fg-muted" />
-      <p className="flex-1">{t.billing.featureLocked(t.billing.featureNames[feature])}</p>
-      <Button asChild size="sm" variant="secondary">
-        <Link to={screenPath('subscription')}>{t.billing.featureSeePlans}</Link>
-      </Button>
-    </div>
+    <LockedNote>
+      {isGatedFeature(feature)
+        ? t.billing.featureLocked(t.billing.featureNames[feature])
+        : t.freePlan.accessLocked[feature]}
+    </LockedNote>
   );
 }
