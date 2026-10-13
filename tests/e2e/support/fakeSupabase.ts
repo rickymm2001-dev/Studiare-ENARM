@@ -8,12 +8,15 @@
 //
 // Lo que NO simula queda dicho en tests/e2e/cloud/README.md. Reglas que sí hace cumplir, iguales a
 // las de la base: un solo dispositivo activo por cuenta con su límite de cambios (DV001), el plan lo
-// decide el servidor con el pago, el mes gratis por referido llega con el primer pago, y borrar la
-// cuenta se rechaza con una suscripción de Stripe activa (FR002).
+// decide el servidor con el pago, el mes gratis por referido llega con el primer pago, borrar la
+// cuenta se rechaza con una suscripción de Stripe activa (FR002), y Party en la nube (B7) con sus
+// grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
+// (src/data/testing/fakePartyServer.ts).
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
 import type { Role } from '@/data/schemas/common';
+import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
 import {
   GATEWAY_CANCEL_PATH,
   GATEWAY_PAY_PATH,
@@ -121,6 +124,10 @@ export interface FakeSupabaseServer {
   referralsOf(email: string): { pending: number; completed: number };
   readonly calls: readonly RecordedCall[];
   rpcCalls(name: string): RecordedCall[];
+  /** Party en la nube, para revisar desde la prueba los grupos, los miembros y los duelos */
+  readonly party: FakePartyServer;
+  /** El id de la cuenta con ese correo, como lo ve el servidor */
+  userIdOf(email: string): string | undefined;
   deviceLimits: DeviceLimits;
   founderSeats: number;
   checkoutError: CheckoutFailure | null;
@@ -507,6 +514,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const privacyAcceptances: Json[] = [];
   const clientErrors: ClientErrorRow[] = [];
   const calls: RecordedCall[] = [];
+  // Party en la nube. El alias sale de profiles, como en la base
+  const party = createFakePartyServer({ aliasOf: (userId) => users.get(userId)?.alias ?? null });
   let counter = 0;
   let serverSeq = 0;
   let eventSeq = 0;
@@ -656,6 +665,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const isAdmin = (user: FakeUser) => user.role === 'admin' || user.role === 'owner';
 
   function deleteUser(userId: string): void {
+    party.forgetUser(userId);
     users.delete(userId);
     accounts.delete(userId);
     for (const [token, session] of sessions) if (session.userId === userId) sessions.delete(token);
@@ -1038,12 +1048,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const left = events.filter((event) => event.user_id !== user.id);
     events.length = 0;
     events.push(...left);
+    // Borrar las membresías se lleva en cascada lo de Party de esa cuenta
+    const memberships = party.forgetMemberships(user.id);
     return json({
       events: before - left.length,
       records,
       artifacts: 0,
       reports: 0,
-      memberships: 0,
+      memberships,
       decks: 0,
     });
   }
@@ -1144,6 +1156,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return json('recorded');
   }
 
+  // ------------------------------------------------------------------ Party
+
+  /** Las funciones party_* con el doble compartido, con la forma de error de PostgREST */
+  function partyReply(name: string, user: FakeUser, args: Json): Reply {
+    const reply = party.call(name, user.id, args);
+    if (reply === null) {
+      return pgError('PGRST202', `Could not find the function public.${name} in the schema cache`);
+    }
+    return 'error' in reply ? pgError(reply.error.code, reply.error.message) : json(reply.data);
+  }
+
   // ------------------------------------------------------------------ rpc
 
   function handleRpc(name: string, auth: Auth, body: unknown): Reply {
@@ -1185,6 +1208,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         return adminListUsers(user, args);
       case 'set_user_role':
         return setUserRole(user, args);
+      case 'party_open':
+      case 'party_overview':
+      case 'party_create_group':
+      case 'party_join_group':
+      case 'party_leave_group':
+      case 'party_leave_all':
+      case 'party_publish':
+      case 'party_create_challenge':
+      case 'party_create_duel':
+      case 'party_submit_duel_result':
+        return requireActiveDevice() ?? partyReply(name, user, args);
       default:
         return pgError(
           'PGRST202',
@@ -1718,6 +1752,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     calls,
     rpcCalls(name) {
       return calls.filter((call) => call.path.startsWith(`/rest/v1/rpc/${name}`));
+    },
+    party,
+    userIdOf(email) {
+      return emailOf(email)?.id;
     },
     get deviceLimits() {
       return server.deviceLimits;

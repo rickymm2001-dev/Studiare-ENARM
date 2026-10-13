@@ -13,8 +13,8 @@
 --   - Nadie lee el correo de otro alumno. private_accounts conserva su política de siempre, la fila
 --     propia o el admin, y nada de esta migración la lee ni la expone
 --   - Cada miembro publica su propio XP de la semana y su aporte a los retos. Los calcula su navegador
---     con su bitácora, que nunca sale del dispositivo salvo como estas cifras. Las funciones escriben
---     siempre a nombre de quien llama, así que nadie publica por otro
+--     con su bitácora, que el grupo nunca ve, solo estas cifras. Las funciones escriben siempre a
+--     nombre de quien llama, así que nadie publica por otro
 --   - En un duelo cada participante manda su resultado una sola vez, con sus aciertos y su tiempo. El
 --     del rival solo se ve después de mandar el propio, así nadie juega sabiendo cuánto sacó el otro
 --   - Salir de un grupo quita el acceso en el acto. Borrar mis datos borra las membresías, y con ellas,

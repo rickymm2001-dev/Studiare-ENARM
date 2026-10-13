@@ -188,7 +188,7 @@ select
   (select value from public.platform_settings where key = 'device_limits') as limite;
 ```
 
-8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización y 26 con la de pagos), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
+8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización, 26 con la de pagos y 30 con la de Party en la nube), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
 9. Para que el aviso del límite lleve un enlace de ayuda, crea en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, la variable VITE_SUPPORT_EMAIL con el correo donde quieres recibir las dudas. Es público, lo verán los alumnos. Después corre de nuevo la publicación en Actions, con el flujo pages y Run workflow. Sin esa variable el aviso no muestra enlace y pide al alumno que consulte al equipo por el medio donde le dieron acceso
 
 ### Cómo probarlo con dos navegadores
@@ -433,7 +433,7 @@ select
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 ```
 
-7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 149 y annual 1499 (150 y 1200 si todavía no aplicas la migración 20261015000001), y politicas_con_barrera en 26. Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
+7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 149 y annual 1499 (150 y 1200 si todavía no aplicas la migración 20261015000001), y politicas_con_barrera en 26 (30 si ya aplicaste la de Party en la nube). Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
 8. Si cambiaste los precios en platform_settings antes, esta migración no los pisa. Solo cambia el valor viejo de ejemplo
 
 ### Cómo preparar los pagos en modo prueba
@@ -686,6 +686,51 @@ select
 - Un alumno que intente escribirla desde la consola del navegador es rechazado por la base. Lo cubre supabase/tests/settings_test.sql
 - Un valor guardado que no cumpla el formato se ignora completo y la app usa los valores de fábrica
 
+## Party en la nube
+
+### Qué hace
+
+- Party deja de vivir solo en el navegador (B7 del plan del cambio). Con la cuenta en la nube, los grupos son reales. Quien crea un grupo recibe un código de 6 caracteres sin 0, O, 1, I ni L y un enlace que lo lleva, y sus compañeros entran con cualquiera de los dos
+- La tabla de la semana muestra el alias y el XP de cada miembro. Cada alumno publica su propio XP y su aporte a los retos, que su navegador calcula con su bitácora. El grupo nunca ve la bitácora, solo esas cifras
+- Los duelos son entre dos alumnos reales. Quien reta elige 20 preguntas del banco que tienen los dos y quedan fijas. Cada quien juega cuando puede y manda su resultado una sola vez, con sus aciertos y su tiempo. El resultado del otro solo se ve después de mandar el propio
+- Solo los miembros activos ven su grupo, a sus compañeros y su XP. Nadie lee el correo de otro alumno. Salir del grupo quita el acceso en el acto y Borrar mis datos se lleva lo de Party de esa persona
+- Toda escritura pasa por funciones. Ya no se puede insertar una membresía directo, que antes dejaba entrar a un grupo sin su código con solo conocer su id
+- Hay topes contra el abuso. 50 miembros por grupo, 10 grupos por alumno, 5 grupos nuevos al día, 10 retos activos por grupo, 10 duelos propios esperando al rival y 10 códigos fallidos por hora
+- En la base de demostración Party sigue en el navegador con sus compañeros simulados, marcados como tales. Sin la nube, Party solo explica que la necesita
+- Antes de compartir nada la app pide el permiso de Party, que empieza apagado. Quitarlo en Configuración, Privacidad, saca al alumno de todos sus grupos
+- Party se cierra en Gratis en el bloque B8. La condición del plan va en una sola función, party_open, que ya usan todas las políticas y funciones de Party
+
+### Cómo aplicar la migración
+
+No necesitas terminal. Aplica primero las anteriores. Mientras no apliques esta, Party con la cuenta en la nube dice que todavía no está lista. La migración no tiene sentencias delete ni drop, así que también se puede aplicar con el conector.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261018000001_party_cloud.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  to_regclass('public.party_duels') as duelos,
+  has_function_privilege('authenticated', 'public.party_join_group(text)', 'execute') as alumno_entra,
+  has_function_privilege('anon', 'public.party_join_group(text)', 'execute') as anon_entra,
+  has_table_privilege('authenticated', 'public.memberships', 'insert') as alumno_inserta_membresias,
+  has_table_privilege('authenticated', 'public.party_weekly_xp', 'insert') as alumno_publica_directo,
+  (select count(*) from pg_policies
+    where schemaname = 'public'
+      and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
+```
+
+7. Debe salir duelos con el valor party_duels, alumno_entra en true, anon_entra, alumno_inserta_membresias y alumno_publica_directo en false, y politicas_con_barrera en 30. Si cualquiera de los false sale en true, avísame antes de abrir a alumnos
+
+### Qué conviene saber
+
+- La tabla se actualiza cuando cada quien abre Party o Inicio, porque ahí su navegador publica su XP. Quien no abre la app esa semana aparece con 0
+- Si quien creó un grupo borra su cuenta, el grupo se borra para todos, porque así lo dejó la primera migración. Cambiarlo pide quitar una llave foránea, y queda para cuando haga falta
+- Las preguntas de un duelo salen hoy del banco de demostración, igual en todos los navegadores. Con el banco real en la nube (B11) las elegirá el servidor
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
@@ -749,4 +794,5 @@ select
 | La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base. La única excepción es que su dueño borre sus propias filas al eliminar sus datos o su cuenta, desde las funciones del servidor |
 | Los pagos no se falsean | Solo el servidor con la llave secreta activa suscripciones |
 | Una cuenta, un dispositivo | Cada quien lee solo su fila de dispositivo y solo la función claim_device la escribe. Un anónimo no puede llamarla |
+| Party solo para sus miembros | Solo los miembros activos ven su grupo, el alias y el XP de sus compañeros. Se entra con el código y toda escritura pasa por funciones que revisan la membresía. Nadie lee correos ajenos |
 | El dispositivo desplazado queda bloqueado en el servidor | Las tablas con datos del alumno exigen que el token sea el de la sesión ganadora. Cambiar de dispositivo está limitado a 3 veces en 24 horas y cada reclamo queda en una bitácora que nadie edita |

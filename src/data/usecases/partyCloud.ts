@@ -1,7 +1,7 @@
 // Party en la nube (B7 del plan del cambio, respuestas 69 y 77). Lo que hace el alumno con sus grupos
 // reales, sobre las llamadas de src/data/cloud/party.ts. Crear, entrar y salir quedan también en su
-// bitácora, como en la Party de la demostración. Las cifras que publica salen de su bitácora, que
-// nunca sale del dispositivo, y solo se mandan cuando cambian.
+// bitácora, como en la Party de la demostración. Las cifras que publica salen de su bitácora, que el
+// grupo nunca ve, y solo se mandan cuando cambian.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { isValidInviteCode } from '@/engines/party';
 import { uuidToUlid } from '../cloud/cloudIds';
