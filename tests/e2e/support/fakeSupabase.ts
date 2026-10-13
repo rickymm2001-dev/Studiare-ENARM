@@ -1642,12 +1642,19 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       body: parseJsonBody(request),
       status: reply.status,
     });
-    await route.fulfill({
-      status: reply.status,
-      headers: { ...(withCors ? corsHeaders(request) : {}), ...reply.headers },
-      ...(reply.body === undefined ? {} : { body: reply.body }),
-      ...(reply.contentType === undefined ? {} : { contentType: reply.contentType }),
-    });
+    try {
+      await route.fulfill({
+        status: reply.status,
+        headers: { ...(withCors ? corsHeaders(request) : {}), ...reply.headers },
+        ...(reply.body === undefined ? {} : { body: reply.body }),
+        ...(reply.contentType === undefined ? {} : { contentType: reply.contentType }),
+      });
+    } catch (error) {
+      // La página ya cerró o navegó y la petición se fue. Se intenta abortar para que no quede
+      // colgada esperando una respuesta, y si tampoco se puede, no hay nada que atender
+      console.warn(`Supabase simulado no pudo responder ${url.pathname}. ${String(error)}`);
+      await route.abort().catch(() => undefined);
+    }
   }
 
   const emailOf = (email: string): FakeUser | undefined => userByEmail(email);

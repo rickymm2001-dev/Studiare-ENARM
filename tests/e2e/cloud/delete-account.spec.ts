@@ -85,6 +85,10 @@ test.describe('Borrar la cuenta con la nube', () => {
 
     await expect.poll(() => cloud.rpcCalls('delete_my_data')).toHaveLength(1);
     expect(cloud.userByEmail(EMAIL)).toBeDefined();
+    // El borrado local y el cierre de sesión siguen después de la llamada. Se espera a que este
+    // navegador quede sin sesión antes de recargar, porque recargar a medias deja la sesión guardada
+    // y la app volvería a entrar con un perfil nuevo
+    await expect(card).toHaveCount(0);
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
   });
