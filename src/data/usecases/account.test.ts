@@ -5,13 +5,14 @@ import { createDexieRepositories } from '../repos/dexie/createRepositories';
 import { freshDb } from '../testing/fixtures';
 import {
   addAccountToProfile,
+  completeSignup,
   EMPTY_DETAILS,
   findAccountByEmail,
   registerAccount,
   sameAvatarChoice,
   updateAccount,
 } from './account';
-import { createProfile } from './profile';
+import { createProfile, currentConsents } from './profile';
 
 const openDbs: EnarmDb[] = [];
 afterEach(async () => {
@@ -161,5 +162,89 @@ describe('fecha de la elección de foto (B2)', () => {
       details: EMPTY_DETAILS,
     });
     expect(initials.avatarChangedAt).toBeUndefined();
+  });
+});
+
+describe('fecha de los datos opcionales y lo que pide el registro (H29, B9)', () => {
+  const register = (api: ReturnType<typeof setup>['api'], details = EMPTY_DETAILS) =>
+    registerAccount(api, {
+      alias: 'Rick',
+      email: 'rick@example.com',
+      dailyGoal: { metric: 'cards', value: 20 },
+      details,
+      signup: {
+        adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+        heardFrom: { channel: 'university', influencerCode: null },
+        consents: { ai_analysis: true, party: false },
+      },
+    });
+
+  it('una cuenta nueva sin datos no trae fecha y con algún dato sí', async () => {
+    const empty = setup();
+    const created = await register(empty.api);
+    if (!created.ok) throw new Error('no se creó');
+    const account = await empty.api.repos.accounts.get(created.user.id);
+    expect(account?.detailsChangedAt).toBeUndefined();
+    expect(account?.adultConfirmedAt).toBe('2026-10-13T09:00:00.000Z');
+    expect(account?.heardFrom).toMatchObject({ channel: 'university', influencerCode: null });
+    expect(account?.heardFrom?.recordedAt).toBeUndefined();
+
+    const withData = setup();
+    const filled = await register(withData.api, { ...EMPTY_DETAILS, targetSpecialty: 'urology' });
+    if (!filled.ok) throw new Error('no se creó');
+    expect((await withData.api.repos.accounts.get(filled.user.id))?.detailsChangedAt).toBeDefined();
+  });
+
+  it('solo los permisos que marcó en el registro quedan prendidos (4.27)', async () => {
+    const { api } = setup();
+    const created = await register(api);
+    if (!created.ok) throw new Error('no se creó');
+    expect(await currentConsents(api, created.user.id)).toEqual({
+      party: false,
+      ai_analysis: true,
+      anonymized_improvement: false,
+    });
+  });
+
+  it('guardar un dato distinto cambia la fecha y guardar lo mismo no', async () => {
+    const { api } = setup();
+    const created = await register(api);
+    if (!created.ok) throw new Error('no se creó');
+    const account = await api.repos.accounts.get(created.user.id);
+    if (!account) throw new Error('falta la cuenta');
+    const same = await updateAccount(api, account, { birthYear: null, sex: null });
+    expect(same.detailsChangedAt).toBeUndefined();
+    const changed = await updateAccount(api, account, { birthYear: 1990 });
+    expect(changed.detailsChangedAt).toBeDefined();
+    // Borrar un dato también es una elección que gana en los otros dispositivos
+    const cleared = await updateAccount(api, changed, { birthYear: null });
+    expect(cleared.detailsChangedAt).toBeDefined();
+  });
+
+  it('completar el registro guarda la edad y la respuesta, y no cambia una fecha ya puesta', async () => {
+    const { api } = setup();
+    await createProfile(api, { alias: 'Gugle', dailyGoal: { metric: 'cards', value: 20 } });
+    const user = (await api.repos.users.list())[0];
+    if (!user) throw new Error('falta el perfil');
+    const account = await addAccountToProfile(api, {
+      userId: user.id,
+      email: 'gugle@example.com',
+      details: EMPTY_DETAILS,
+    });
+    expect(account.detailsChangedAt).toBeUndefined();
+    const completed = await completeSignup(api, account, {
+      adultConfirmedAt: '2026-10-13T10:00:00.000Z',
+      heardFrom: { channel: 'google', influencerCode: 'GUGLE' },
+    });
+    expect(completed).toMatchObject({
+      adultConfirmedAt: '2026-10-13T10:00:00.000Z',
+      heardFrom: { channel: 'google', influencerCode: 'GUGLE' },
+    });
+    const again = await completeSignup(api, completed, {
+      adultConfirmedAt: '2027-01-01T00:00:00.000Z',
+      heardFrom: { channel: 'tiktok', influencerCode: null },
+    });
+    expect(again.adultConfirmedAt).toBe('2026-10-13T10:00:00.000Z');
+    expect(again.heardFrom?.channel).toBe('google');
   });
 });

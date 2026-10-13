@@ -48,6 +48,18 @@ describe('banderas de lanzamiento', () => {
     expect(isFeatureEnabled('demoBank', { appEnv: 'production', stored: null })).toBe(true);
   });
 
+  it('Google y el segundo factor nacen apagados en todos lados y los prende el servidor (B9)', () => {
+    for (const appEnv of APP_ENVS) {
+      // Sin la clave, el servidor tampoco pide segundo factor (staff_mfa_required), así que coinciden
+      expect(isFeatureEnabled('googleSignIn', { appEnv, stored: null })).toBe(false);
+      expect(isFeatureEnabled('requireMfa', { appEnv, stored: null })).toBe(false);
+      expect(isFeatureEnabled('requireMfa', { appEnv, stored: { requireMfa: true } })).toBe(true);
+      expect(isFeatureEnabled('googleSignIn', { appEnv, stored: { googleSignIn: true } })).toBe(
+        true,
+      );
+    }
+  });
+
   it('lo que dice el servidor manda sobre el valor del entorno', () => {
     expect(
       isFeatureEnabled('demoTools', { appEnv: 'production', stored: { demoTools: true } }),

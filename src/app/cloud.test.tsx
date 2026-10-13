@@ -3,11 +3,14 @@ import 'fake-indexeddb/auto';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEVICE_CLAIM_STORAGE_KEY, forgetDeviceClaim, getDeviceId } from '@/data/cloud/device';
+import { PENDING_SIGNUP_KEY, savePendingSignup } from '@/data/cloud/pendingSignup';
+import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { FLAGS_KEY } from '@/config/featureFlags';
 import { OVERRIDES_KEY } from '@/config/overridesStore';
+import { useAccess } from './accessState';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
 import { useConfigUpdate } from './configUpdate';
@@ -514,5 +517,155 @@ describe('CloudBridge y las banderas de lanzamiento (D-119)', () => {
     await waitFor(() => {
       expect(localStorage.getItem(FLAGS_KEY)).toBeNull();
     });
+  });
+});
+
+describe('CloudBridge y el acceso (B9)', () => {
+  /** Prende el segundo factor del equipo en el servidor y en la copia del navegador */
+  const requireMfa = (fake: FakeCloud) => {
+    fake.flags = { requireMfa: true };
+    localStorage.setItem(FLAGS_KEY, JSON.stringify({ requireMfa: true }));
+  };
+
+  afterEach(() => {
+    useAccess.setState({ mfa: { status: 'not-required' }, signupFor: null, oauthError: null });
+    sessionStorage.clear();
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('con la bandera, un médico sin factor ve el alta y uno con factor ve el código', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.role = 'physician';
+    requireMfa(fake);
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'enroll' });
+    });
+
+    cleanup();
+    useAccess.setState({ mfa: { status: 'not-required' } });
+    fake.mfa.factors = [{ id: 'f1', factor_type: 'totp', status: 'verified' }];
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'challenge', factorId: 'f1' });
+    });
+  });
+
+  it('una sesión que ya dio su código no se vuelve a bloquear', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.role = 'admin';
+    fake.mfa.level = 'aal2';
+    fake.mfa.factors = [{ id: 'f1', factor_type: 'totp', status: 'verified' }];
+    requireMfa(fake);
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'verified' });
+    });
+  });
+
+  it('el alumno nunca pasa por el segundo factor, y sin la bandera tampoco el equipo', async () => {
+    const student = useFake(makeFakeCloud());
+    requireMfa(student);
+    mount();
+    await waitFor(() => {
+      expect(student.claims).toHaveLength(1);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useAccess.getState().mfa).toEqual({ status: 'not-required' });
+    expect(student.mfa.enrollCalls).toBe(0);
+
+    cleanup();
+    localStorage.clear();
+    const admin = useFake(makeFakeCloud());
+    admin.role = 'admin';
+    mount();
+    await waitFor(() => {
+      expect(admin.claims).toHaveLength(1);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useAccess.getState().mfa).toEqual({ status: 'not-required' });
+  });
+
+  // Cada prueba con su propio correo, porque los perfiles de este navegador quedan entre pruebas
+  const googleSession = (email: string) =>
+    makeFakeCloud({ session: { id: AUTH_ID, email, provider: 'google' } });
+
+  it('una cuenta de Google nace con lo que el alumno llenó en Crear cuenta antes de ir a Google', async () => {
+    const fake = useFake(googleSession('nueva.google@example.com'));
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: { ...EMPTY_DETAILS, targetSpecialty: 'pediatrics' },
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: { channel: 'friend', influencerCode: null },
+      consents: {},
+    });
+    mount();
+    await waitFor(() => {
+      expect(fake.accountUpdates.length).toBeGreaterThan(0);
+    });
+    const userId = usePreferences.getState().sessionUserId ?? '';
+    expect(useAccess.getState().signupFor).toBeNull();
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+    // La confirmación de edad llega a la nube y el aviso queda aceptado
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
+    expect(
+      fake.accountUpdates.some((row) => row.adult_confirmed_at === '2026-10-13T09:00:00.000Z'),
+    ).toBe(true);
+    expect(userId).not.toBe('');
+  });
+
+  it('una cuenta de Google sin pasar por Crear cuenta debe completar su registro antes de aceptar el aviso', async () => {
+    const fake = useFake(googleSession('sin.registro@example.com'));
+    fake.remoteAccount = { adult_confirmed_at: null };
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().signupFor).not.toBeNull();
+    });
+    expect(useAccess.getState().signupFor).toBe(usePreferences.getState().sessionUserId);
+    expect(fake.acceptances).toEqual([]);
+  });
+
+  it('un registro pendiente no se aplica a una cuenta que entró con el correo', async () => {
+    useFake(makeFakeCloud());
+    savePendingSignup({
+      alias: 'Intruso',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: EMPTY_DETAILS,
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    mount();
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+  });
+
+  it('si Google regresó con un error lo deja para el aviso, olvida el registro pendiente y limpia la dirección', async () => {
+    useFake(makeFakeCloud({ session: null }));
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: EMPTY_DETAILS,
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    window.history.replaceState(
+      null,
+      '',
+      '/?error=server_error&error_description=no+tiene+una+(invitation_required)#error=server_error&error_description=no+tiene+una+(invitation_required)',
+    );
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().oauthError).toBe('invitation_required');
+    });
+    expect(window.location.search).toBe('');
+    expect(window.location.hash).toBe('');
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
   });
 });

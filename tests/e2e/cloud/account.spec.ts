@@ -20,6 +20,7 @@ test.describe('Cuenta en la nube', () => {
     await expect(page.getByText(t.cloud.loginNote)).toBeVisible();
     await page.getByLabel(t.onboarding.alias, { exact: true }).fill('Ana');
     await page.getByLabel(t.account.email, { exact: true }).fill(EMAIL);
+    await page.getByLabel(t.accounts.signup.adultAccept(18)).check();
     await page.getByLabel(t.onboarding.privacyAccept).check();
     await page.getByRole('button', { name: t.onboarding.create }).click();
 

@@ -1,8 +1,17 @@
 // Usuarios con la cuenta de la nube conectada (pantalla 28, Fase H, D-108). Lista las cuentas reales de
 // Supabase con su rol y su plan, y cambia el rol con set_user_role. Las reglas de quién puede cambiar a
 // quién las aplica el servidor. Aquí solo se ofrecen las opciones que engines/roles permite, para que
-// el admin no vea botones que el servidor va a rechazar.
-import { Crown, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
+// el admin no vea botones que el servidor va a rechazar. Desde B9 también las invitaciones del registro,
+// cómo nos conocieron en conteos, liberar el dispositivo de una cuenta (H17) y, solo para el dueño,
+// restablecer el segundo factor de alguien del equipo.
+import {
+  Crown,
+  GraduationCap,
+  KeyRound,
+  MonitorSmartphone,
+  ShieldCheck,
+  Stethoscope,
+} from 'lucide-react';
 import { useEffect, useState, type SyntheticEvent } from 'react';
 import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -10,10 +19,12 @@ import { loadCloud } from '@/data/cloud/client';
 import {
   USERS_PAGE_SIZE,
   listCloudUsers,
+  releaseUserDevice,
   setCloudUserRole,
   type CloudUser,
   type UsersFailure,
 } from '@/data/cloud/adminUsers';
+import { needsMfaRole, resetUserMfa } from '@/data/cloud/mfa';
 import type { Role } from '@/data/schemas/common';
 import { assignableRoles } from '@/engines/roles';
 import { t } from '@/i18n/es-MX';
@@ -23,6 +34,8 @@ import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
 import { LoadingState } from '@/ui/states/states';
+import { InvitationsCard } from './InvitationsCard';
+import { SignupSourcesCard } from './SignupSourcesCard';
 
 type State =
   | { status: 'loading' }
@@ -110,6 +123,32 @@ export function CloudUsers() {
     );
   };
 
+  // Libera el dispositivo de una cuenta, por ejemplo de quien llegó al límite de cambios (H17)
+  const releaseDevice = async (user: CloudUser) => {
+    const cloud = await loadCloud();
+    const result = cloud
+      ? await releaseUserDevice(cloud, user.id)
+      : ({ ok: false, reason: 'network' } as const);
+    const device = t.accounts.admin.device;
+    setMessage(
+      result.ok
+        ? result.hadDevice
+          ? device.released(user.alias)
+          : device.noDevice(user.alias)
+        : device.failed,
+    );
+  };
+
+  // Solo el dueño, y el servidor lo vuelve a revisar con su propio segundo factor (B9)
+  const resetMfa = async (user: CloudUser) => {
+    const cloud = await loadCloud();
+    const result = cloud
+      ? await resetUserMfa(cloud, user.id)
+      : ({ ok: false, reason: 'failed' } as const);
+    const reset = t.accounts.admin.mfaReset;
+    setMessage(result.ok ? reset.done(user.alias) : reset.errors[result.reason]);
+  };
+
   const pages =
     state.status === 'ready' ? Math.max(1, Math.ceil(state.total / USERS_PAGE_SIZE)) : 1;
 
@@ -117,6 +156,7 @@ export function CloudUsers() {
     <>
       {header}
       <p className="text-sm text-fg-muted">{text.notice}</p>
+      <InvitationsCard />
       <form className="flex flex-wrap items-end gap-3" onSubmit={search} role="search">
         <TextField
           label={text.search}
@@ -172,6 +212,8 @@ export function CloudUsers() {
                     callerRole={caller?.role ?? 'student'}
                     isSelf={user.id === caller?.authId}
                     onRole={(next) => changeRole(user, next)}
+                    onReleaseDevice={() => releaseDevice(user)}
+                    onResetMfa={() => resetMfa(user)}
                   />
                 </li>
               ))}
@@ -205,6 +247,7 @@ export function CloudUsers() {
           <p className="text-sm text-fg-muted">{text.assignmentsNote}</p>
         </>
       ) : null}
+      <SignupSourcesCard />
     </>
   );
 }
@@ -214,12 +257,30 @@ function UserLine({
   callerRole,
   isSelf,
   onRole,
+  onReleaseDevice,
+  onResetMfa,
 }: {
   user: CloudUser;
   callerRole: Role;
   isSelf: boolean;
   onRole: (next: Role) => Promise<void>;
+  onReleaseDevice: () => Promise<void>;
+  onResetMfa: () => Promise<void>;
 }) {
+  const access = t.accounts.admin;
+  // Cada acción que cierra sesiones pide confirmarla en la misma fila
+  const [confirming, setConfirming] = useState<'device' | 'mfa' | null>(null);
+  const [busy, setBusy] = useState(false);
+  const run = async (action: () => Promise<void>) => {
+    setBusy(true);
+    try {
+      await action();
+    } finally {
+      setBusy(false);
+      setConfirming(null);
+    }
+  };
+  const canResetMfa = callerRole === 'owner' && !isSelf && needsMfaRole(user.role);
   const options = assignableRoles(callerRole, user.role, isSelf);
   const Icon = ROLE_ICONS[user.role];
   const planName = t.billing.plans[user.plan as keyof typeof t.billing.plans] as string | undefined;
@@ -256,6 +317,74 @@ function UserLine({
           <Icon aria-hidden className="size-3.5" />
           {t.roles.names[user.role]}
         </Badge>
+      )}
+      {isSelf ? null : (
+        <div className="flex w-full flex-wrap gap-2">
+          {confirming ? (
+            <div
+              role="group"
+              aria-label={
+                confirming === 'device'
+                  ? access.device.releaseLabel(user.alias)
+                  : access.mfaReset.label(user.alias)
+              }
+              className="flex w-full flex-col gap-2 rounded-md bg-muted p-3"
+            >
+              <p className="text-sm">
+                {confirming === 'device'
+                  ? access.device.confirm(user.alias)
+                  : access.mfaReset.confirm(user.alias)}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant="danger"
+                  disabled={busy}
+                  onClick={() => void run(confirming === 'device' ? onReleaseDevice : onResetMfa)}
+                >
+                  {access.confirm}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={busy}
+                  onClick={() => {
+                    setConfirming(null);
+                  }}
+                >
+                  {access.cancel}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <Button
+                size="sm"
+                variant="secondary"
+                aria-label={access.device.releaseLabel(user.alias)}
+                onClick={() => {
+                  setConfirming('device');
+                }}
+              >
+                <MonitorSmartphone aria-hidden />
+                {access.device.release}
+              </Button>
+              {canResetMfa ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  aria-label={access.mfaReset.label(user.alias)}
+                  onClick={() => {
+                    setConfirming('mfa');
+                  }}
+                >
+                  <KeyRound aria-hidden />
+                  {access.mfaReset.action}
+                </Button>
+              ) : null}
+            </>
+          )}
+        </div>
       )}
     </Card>
   );

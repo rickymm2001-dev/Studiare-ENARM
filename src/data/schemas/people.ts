@@ -1,5 +1,6 @@
 // Alumno, consentimientos, suscripción simulada y puntaje oficial (6.2).
 import { z } from 'zod';
+import { HEARD_FROM_CHANNELS, INFLUENCER_CODE } from '../../config/signup';
 import { EASY_DAY_LEVELS, NO_EASY_DAYS } from '../../engines/easyDays';
 import {
   CalendarDateSchema,
@@ -168,9 +169,40 @@ export const AccountSchema = z.strictObject({
    * gana la más reciente (B2). Falta en cuentas que nunca eligieron, que no la conocen
    */
   avatarChangedAt: UtcDateTimeSchema.optional(),
+  /**
+   * Cuándo guardó el alumno sus datos opcionales (año de nacimiento, sexo, estado, situación, intento
+   * y especialidad). Entre dispositivos gana la versión más reciente, y una cuenta sin fecha nunca
+   * borra en la nube lo que otro dispositivo ya guardó (H29, B9). Falta si nunca los guardó aquí
+   */
+  detailsChangedAt: UtcDateTimeSchema.optional(),
+  /** Cuándo confirmó que tiene la edad mínima para crear la cuenta (pregunta 45, B9) */
+  adultConfirmedAt: UtcDateTimeSchema.optional(),
+  /**
+   * Cómo nos conoció, opcional (respuesta 22, B9). Se manda una sola vez a la tabla privada de la
+   * nube, y recordedAt dice cuándo, para no volver a mandarla. Nunca va a la analítica
+   */
+  heardFrom: z
+    .strictObject({
+      channel: z.enum(HEARD_FROM_CHANNELS),
+      influencerCode: z.string().regex(INFLUENCER_CODE).nullable(),
+      answeredAt: UtcDateTimeSchema,
+      recordedAt: UtcDateTimeSchema.optional(),
+    })
+    .optional(),
   updatedAt: UtcDateTimeSchema,
 });
 export type Account = z.infer<typeof AccountSchema>;
+
+/** Los datos opcionales que viajan juntos con detailsChangedAt. La foto va aparte, con su propia fecha */
+export const ACCOUNT_DETAIL_KEYS = [
+  'birthYear',
+  'sex',
+  'state',
+  'situation',
+  'attempt',
+  'targetSpecialty',
+] as const satisfies readonly (keyof Account)[];
+export type AccountDetailKey = (typeof ACCOUNT_DETAIL_KEYS)[number];
 
 export const ConsentSchema = z.strictObject({
   id: IdSchema,

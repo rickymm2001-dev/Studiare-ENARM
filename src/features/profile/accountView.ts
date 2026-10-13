@@ -30,10 +30,20 @@ export const sameDetails = (a: AccountDetails, b: AccountDetails): boolean =>
 const nameIn = (list: readonly (readonly [string, string])[], key: string | null) =>
   key === null ? null : (list.find(([value]) => value === key)?.[1] ?? null);
 
-/** Las filas de datos de la cuenta, con su etiqueta y su valor ya en texto. null es sin dato */
-export function accountRows(details: AccountDetails): { label: string; value: string | null }[] {
+/** El nombre de la especialidad que busca, o null si no eligió */
+export const specialtyName = (details: Pick<AccountDetails, 'targetSpecialty'>) =>
+  nameIn(SPECIALTIES, details.targetSpecialty);
+
+/**
+ * Las filas de datos de la cuenta, con su etiqueta y su valor ya en texto. null es sin dato. Sin la
+ * especialidad cuando ya se muestra aparte, a la vista (B9)
+ */
+export function accountRows(
+  details: AccountDetails,
+  options: { withSpecialty?: boolean } = {},
+): { label: string; value: string | null }[] {
   const text = t.account;
-  return [
+  const rows = [
     { label: text.sex, value: details.sex === null ? null : text.sexes[details.sex] },
     {
       label: text.birthYear,
@@ -48,8 +58,9 @@ export function accountRows(details: AccountDetails): { label: string; value: st
       label: text.attempt,
       value: details.attempt === null ? null : text.attempts(details.attempt),
     },
-    { label: text.targetSpecialty, value: nameIn(SPECIALTIES, details.targetSpecialty) },
+    { label: text.targetSpecialty, value: specialtyName(details) },
   ];
+  return options.withSpecialty === false ? rows.slice(0, -1) : rows;
 }
 
 /**

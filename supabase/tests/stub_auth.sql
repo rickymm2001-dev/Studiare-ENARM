@@ -33,3 +33,9 @@ grant execute on function auth.jwt() to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
+-- El rol con el que Supabase Auth corre los ganchos de Postgres, como Before User Created (B9). En el
+-- proyecto real ya existe. Aquí se crea si falta, para probar sus permisos
+do $$ begin
+  create role supabase_auth_admin nologin noinherit;
+exception when duplicate_object then null;
+end $$;

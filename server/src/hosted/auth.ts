@@ -1,8 +1,10 @@
 // Quién llama al proxy alojado (D-103, Fase G bloque G1). La app manda el token de la sesión de
 // Supabase y aquí se verifica con Supabase mismo, sin guardar ninguna llave para validar firmas. Se
 // lee el plan con my_plan, que usa la barrera del dispositivo único, así que un dispositivo que ya
-// no es el activo de la cuenta tampoco usa la IA. El rol sale de user_roles. Todo se pide con el
-// token del alumno y su llave pública, nunca con la llave de servicio.
+// no es el activo de la cuenta tampoco usa la IA. El rol sale de current_app_role, la misma regla de
+// los permisos por fila, que con la bandera requireMfa solo da el rol del equipo a una sesión con
+// segundo factor (B9). Todo se pide con el token del alumno y su llave pública, nunca con la llave
+// de servicio.
 import { z } from 'zod';
 import { RoleSchema, type Role } from '../../../src/data/schemas/common.ts';
 
@@ -26,7 +28,6 @@ export type Authenticate = (token: string) => Promise<AuthResult>;
 
 const UserSchema = z.object({ id: z.uuid() });
 const PlanSchema = z.object({ plan: z.enum(['free', 'founder', 'monthly', 'annual']) });
-const RoleRowsSchema = z.array(z.object({ role: z.unknown() }));
 
 /**
  * Los alumnos usan la IA solo con un plan de pago, como pide el Tutor y la generación de tarjetas.
@@ -88,7 +89,7 @@ export function createSupabaseAuthenticator(options: Options): Authenticate {
 
       const [planResponse, roleResponse] = await Promise.all([
         call('/rest/v1/rpc/my_plan', token, { method: 'POST', body: '{}' }),
-        call(`/rest/v1/user_roles?select=role&user_id=eq.${id}`, token),
+        call('/rest/v1/rpc/current_app_role', token, { method: 'POST', body: '{}' }),
       ]);
       if (!planResponse.ok) {
         const body = (await planResponse.json().catch(() => null)) as { code?: unknown } | null;
@@ -104,11 +105,10 @@ export function createSupabaseAuthenticator(options: Options): Authenticate {
       const plan = PlanSchema.safeParse(await planResponse.json());
       if (!plan.success) return { ok: false, failure: 'unavailable' };
 
-      // Sin fila o con un valor que no se reconoce, la cuenta es de alumno
+      // Con un valor que no se reconoce o si no contesta, la cuenta es de alumno
       let role: Role = 'student';
       if (roleResponse.ok) {
-        const rows = RoleRowsSchema.safeParse(await roleResponse.json());
-        const parsed = RoleSchema.safeParse(rows.success ? rows.data[0]?.role : undefined);
+        const parsed = RoleSchema.safeParse(await roleResponse.json().catch(() => null));
         if (parsed.success) role = parsed.data;
       }
       return { ok: true, user: { id, role, plan: plan.data.plan } };

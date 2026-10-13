@@ -2,6 +2,7 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { accountsText } from './accounts';
 import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
@@ -332,6 +333,7 @@ export const t = {
     saving: 'Guardando…',
     failed: 'No se pudo guardar. Inténtalo de nuevo.',
   },
+  accounts: accountsText,
   configUpdate: {
     title: 'Hay una configuración nueva',
     body: 'La plataforma actualizó su configuración. Recarga para aplicarla cuando termines lo que estás haciendo.',
