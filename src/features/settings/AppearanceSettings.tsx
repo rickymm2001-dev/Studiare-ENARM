@@ -113,7 +113,7 @@ export function AppearanceSettings() {
   };
 
   return (
-    <Card aria-label={text.title}>
+    <Card>
       <div className="flex flex-col gap-5">
         <RadioCards
           legend={t.theme.legend}

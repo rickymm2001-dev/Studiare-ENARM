@@ -12,7 +12,6 @@ export const settingsPageText = {
   // Sin sesión solo queda Apariencia y esta frase
   signedOut: {
     body: 'Entra a tu cuenta para ver tu perfil, tu plan y tu privacidad.',
-    link: 'Ir a la bienvenida',
   },
   // Con la base de demostración vacía no hay alumno que mostrar
   demoEmpty: {

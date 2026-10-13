@@ -25,7 +25,14 @@ const STUDENT_MAIN = [
 ];
 const STUDENT_BAR = [t.navItems.home, t.navItems.review, t.navItems.simulate, t.navItems.progress];
 const STUDENT_MORE = [t.navItems.outlines, t.navItems.tutor, t.navItems.party];
-const ADMIN_GROUP = [t.navItems.users, t.navItems.costs, t.navItems.platform, t.navItems.bank];
+// Datos de demostración aparece porque el build de las pruebas es la demo, con demoTools prendida (5.4)
+const ADMIN_GROUP = [
+  t.navItems.users,
+  t.navItems.costs,
+  t.navItems.platform,
+  t.navItems.bank,
+  t.screens.demoData.title,
+];
 const PHYSICIAN_MAIN = [
   t.navItems.bank,
   t.navItems.agreement,

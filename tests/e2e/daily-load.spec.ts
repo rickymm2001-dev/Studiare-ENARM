@@ -96,7 +96,7 @@ test('el perfil guía, la sugerencia de nuevas y el límite viven en Ajustes del
   await signUp(page);
   await followSmallestDeck(page);
   await page.goto(SCREENS.review.path);
-  await page.getByRole('button', { name: t.settingsPage.reviewSettings.open }).click();
+  await page.getByRole('button', { name: t.settingsPage.reviewSettings.open, exact: true }).click();
   const panel = settingsPanel(page);
 
   const guide = panel.getByRole('region', { name: t.dailyLoad.guideTitle });

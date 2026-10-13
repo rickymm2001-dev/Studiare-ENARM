@@ -228,17 +228,18 @@ describe('Configuración en una sola página', () => {
     expect((await app.api.repos.users.get(app.user.id))?.alias).toBe('Ana');
   });
 
-  it('sin sesión solo queda Apariencia y una frase con el enlace a la bienvenida', async () => {
+  it('sin sesión quedan el aviso para entrar, como en las otras pantallas, y Apariencia', async () => {
     app = await open();
     await profile();
     act(() => {
       usePreferences.setState({ sessionUserId: null });
     });
-    expect(await screen.findByRole('link', { name: page.signedOut.link }, WAIT)).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: t.session.goToWelcome }, WAIT)).toHaveAttribute(
       'href',
       SCREENS.onboarding.path,
     );
     expect(screen.getAllByRole('heading', { level: 2 }).map((title) => title.textContent)).toEqual([
+      t.session.signedOutTitle,
       page.sections.appearance,
     ]);
     expect(screen.queryByRole('region', { name: page.sections.profile })).toBeNull();

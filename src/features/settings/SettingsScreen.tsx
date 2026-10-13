@@ -4,6 +4,7 @@
 // los enlaces viejos con ?seccion= siguen funcionando. Estudio y Pomodoro pasaron a Ajustes del
 // repaso, en Repasar. La base de demostración, su panel y el modo de la IA pasaron a Datos de
 // demostración del admin (5.4). Sin sesión solo queda Apariencia.
+import { LogIn } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -11,6 +12,8 @@ import { screenPath } from '@/app/screens';
 import { useSession } from '@/app/session';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
+import { Button } from '@/ui/components/button';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { scrollToElement } from '@/ui/scroll';
 import { LoadingState } from '@/ui/states/states';
 import { AccountDataCard } from '../profile/AccountDataCard';
@@ -47,20 +50,34 @@ export function SettingsScreen() {
     );
   }
   if (session.status !== 'ready') {
-    const text =
-      session.status === 'demo-empty' ? t.settingsPage.demoEmpty : t.settingsPage.signedOut;
     return (
       <>
         {header}
-        <p className="text-fg-muted">
-          {text.body}{' '}
-          <Link
-            to={screenPath(session.status === 'demo-empty' ? 'demoData' : 'onboarding')}
-            className="font-semibold text-primary-ink underline underline-offset-2"
-          >
-            {text.link}
-          </Link>
-        </p>
+        {session.status === 'demo-empty' ? (
+          <p className="text-fg-muted">
+            {t.settingsPage.demoEmpty.body}{' '}
+            <Link
+              to={screenPath('demoData')}
+              className="font-semibold text-primary-ink underline underline-offset-2"
+            >
+              {t.settingsPage.demoEmpty.link}
+            </Link>
+          </p>
+        ) : (
+          // El mismo aviso que el resto de las pantallas con sesión, para entrar desde aquí
+          <Card aria-labelledby="configuracion-sin-sesion">
+            <CardHeader>
+              <CardTitle id="configuracion-sin-sesion">{t.session.signedOutTitle}</CardTitle>
+              <CardDescription>{t.settingsPage.signedOut.body}</CardDescription>
+            </CardHeader>
+            <Button asChild className="self-start">
+              <Link to={screenPath('onboarding')}>
+                <LogIn aria-hidden />
+                {t.session.goToWelcome}
+              </Link>
+            </Button>
+          </Card>
+        )}
         <SettingsSectionBlock id="apariencia" title={t.settingsPage.sections.appearance} first>
           <AppearanceSettings />
         </SettingsSectionBlock>
