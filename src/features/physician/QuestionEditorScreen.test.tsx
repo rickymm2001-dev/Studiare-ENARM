@@ -107,24 +107,38 @@ describe('editor de pregunta (pantalla 18)', () => {
   it('lleva la versión por borrador, revisión y aprobación', async () => {
     const typing = userEvent.setup();
     const { question } = outOfSample;
+    const t0 = performance.now();
+    const lap = (label: string) => { process.stderr.write(`LAP ${label} ${String(Math.round(performance.now() - t0))}\n`); };
     const rendered = await open('admin', question.questionId);
-    await typing.click(
-      await screen.findByRole('button', { name: text.status.move.in_review }, WAIT),
-    );
+    lap('open');
+    const b1 = await screen.findByRole('button', { name: text.status.move.in_review }, WAIT);
+    lap('found in_review');
+    await typing.click(b1);
+    lap('clicked in_review');
     await waitFor(async () => {
       expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
         'in_review',
       );
     }, WAIT);
-    await typing.click(
-      await screen.findByRole('button', { name: text.status.move.approved }, WAIT),
-    );
+    lap('db in_review');
+    await waitFor(() => {
+      const found = [...document.querySelectorAll('button')].some((b) => b.textContent === text.status.move.approved);
+      expect(found).toBe(true);
+    }, WAIT);
+    lap('dom has approved (cheap)');
+    process.stderr.write(`LAP dom size ${String(document.querySelectorAll('*').length)}\n`);
+    const b2 = await screen.findByRole('button', { name: text.status.move.approved }, WAIT);
+    lap('found approved');
+    await typing.click(b2);
+    lap('clicked approved');
     await waitFor(async () => {
       expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
         'approved',
       );
     }, WAIT);
+    lap('db approved');
     expect(await screen.findByRole('button', { name: text.status.reopen }, WAIT)).toBeVisible();
+    lap('found reopen');
     // Aprobada no pasa directo a otra cosa que no sea reabrir la revisión
     expect(screen.queryByRole('button', { name: text.status.move.rejected })).toBeNull();
   });

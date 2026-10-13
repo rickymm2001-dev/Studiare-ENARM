@@ -1,15 +1,14 @@
 // Tarjeta de una hipótesis del tutor (8.2). Dice qué cree, con su confianza, deja ver la evidencia,
 // ofrece las acciones que la app sabe ejecutar y guarda si le sirvió al alumno. Nunca afirma, solo
 // propone, y cada línea de evidencia es un error real del alumno.
-import { ChevronDown, GraduationCap, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { useState } from 'react';
+import { GraduationCap, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
+import { Disclosure } from '@/ui/components/disclosure';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { HypothesisAi } from './aiContent';
 import { AiWritten } from './AiWritten';
@@ -68,8 +67,6 @@ export function HypothesisCard({
       : null;
   const actions = ai && ai.actions.length > 0 ? ai.actions : hypothesis.actions;
   const id = `hipotesis-${hypothesis.key.replace(/[^a-z0-9]+/gi, '-')}`;
-  const evidenceId = `${id}-evidencia`;
-  const [evidenceOpen, setEvidenceOpen] = useState(false);
 
   const Frame = compact ? 'section' : Card;
   return (
@@ -109,49 +106,32 @@ export function HypothesisCard({
         </p>
       ) : null}
 
-      {/* Botón de texto que despliega la evidencia justo debajo, sin marco, para no poner una caja
-          dentro de la tarjeta (H06 de la revisión de B2) */}
-      <div className="mt-2">
-        <Button
-          type="button"
-          variant="link"
-          size="sm"
-          className="px-0 [&_svg]:size-4"
-          aria-expanded={evidenceOpen}
-          aria-controls={evidenceId}
-          onClick={() => {
-            setEvidenceOpen((open) => !open);
-          }}
-        >
-          {text.showEvidence}
-          <ChevronDown
-            aria-hidden
-            className={cn('transition-transform', evidenceOpen && 'rotate-180')}
-          />
-        </Button>
-        <div id={evidenceId} hidden={!evidenceOpen} className="mt-1 flex flex-col gap-2">
-          <p className="text-sm font-medium">{text.evidenceTitle}</p>
-          <ul className="flex flex-col gap-2 text-sm">
-            {hypothesis.items.map((item) => {
-              const label = lookup.labelOf(item.kind, item.itemId);
-              const other = item.confusedWithItemId
-                ? lookup.labelOf('question', item.confusedWithItemId)
-                : undefined;
-              return (
-                <li key={item.eventId} className="flex flex-col">
-                  <span className="text-xs text-fg-muted">
-                    {text.evidenceKind[item.kind]} · {dayFormat.format(new Date(item.at))}
-                  </span>
-                  <span>{label ?? text.evidenceMissing}</span>
-                  {other ? (
-                    <span className="text-fg-muted">{text.evidenceConfused(other)}</span>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      <Disclosure
+        className="mt-3"
+        title={text.showEvidence}
+        summary={text.findings(hypothesis.items.length)}
+      >
+        <p className="text-sm font-medium">{text.evidenceTitle}</p>
+        <ul className="flex flex-col gap-1.5 text-sm">
+          {hypothesis.items.map((item) => {
+            const label = lookup.labelOf(item.kind, item.itemId);
+            const other = item.confusedWithItemId
+              ? lookup.labelOf('question', item.confusedWithItemId)
+              : undefined;
+            return (
+              <li key={item.eventId} className="flex flex-col rounded-md bg-muted px-2 py-1.5">
+                <span className="text-xs text-fg-muted">
+                  {text.evidenceKind[item.kind]} · {dayFormat.format(new Date(item.at))}
+                </span>
+                <span>{label ?? text.evidenceMissing}</span>
+                {other ? (
+                  <span className="text-fg-muted">{text.evidenceConfused(other)}</span>
+                ) : null}
+              </li>
+            );
+          })}
+        </ul>
+      </Disclosure>
 
       {status === 'rejected' ? null : (
         <>
