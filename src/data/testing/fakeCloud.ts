@@ -2,7 +2,8 @@
 // que usa la app. claim_device guarda el dispositivo como lo haría el servidor, con el session_id
 // del token, y device_sessions devuelve esa fila. Puede rechazar el reclamo por el límite de cambios
 // con el mismo error que lanza la base. También imita Storage para la foto de perfil (B2), con los
-// objetos en memoria, y la fila de private_accounts. Solo lo usan las pruebas.
+// objetos en memoria, y la fila de private_accounts, que cambia con cada update como en el servidor.
+// Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
 
 export interface FakeCloudOptions {
@@ -27,6 +28,12 @@ export interface FakeSession {
 }
 
 export type FakeFailure = 'none' | 'error' | 'throw';
+/** server responde con un error del servidor, con estado HTTP, en lugar de uno de red */
+export type FakeStorageFailure = FakeFailure | 'server';
+export type FakeStorageOperation = 'upload' | 'download' | 'remove';
+/** Respuesta fija de una función de la base. throw rechaza la llamada como sin red */
+export type FakeRpcReply =
+  { data?: unknown; error: { code?: string; message?: string } | null } | 'throw';
 /** limit rechaza el reclamo con el error de límite de cambios. hang deja la llamada sin responder */
 export type FakeClaimFailure = FakeFailure | 'limit';
 export type FakeReportFailure = FakeFailure | 'hang';
@@ -97,12 +104,18 @@ export interface FakeCloud {
   codeSession: FakeSession;
   /** Fila de private_accounts que devuelve el servidor al leer la cuenta. null si no hay */
   remoteAccount: Record<string, unknown> | null;
-  /** Filas que la app mandó a private_accounts con update, en orden */
+  /** Cómo falla leer private_accounts. error responde con error de red y throw lanza la excepción */
+  failAccountRead: FakeFailure;
+  /** Filas que la app mandó a private_accounts con update, en orden. Se aplican a remoteAccount */
   accountUpdates: Record<string, unknown>[];
   /** Objetos de Storage por bucket/ruta, como avatars/<authId>/avatar.jpg */
   objects: Map<string, Blob>;
-  /** Cómo falla Storage. error responde con error y throw lanza la excepción */
-  failStorage: FakeFailure;
+  /** Cómo falla Storage. error responde con error de red, server con uno del servidor y throw lanza */
+  failStorage: FakeStorageFailure;
+  /** Si se da, failStorage vale solo para esa operación y las demás responden bien */
+  failStorageOnly: FakeStorageOperation | null;
+  /** Respuestas de otras funciones de la base, como delete_my_account. Sin una, la función no existe */
+  rpcReplies: Record<string, FakeRpcReply>;
   /** Llamadas a Storage en orden, como upload:avatars/ruta, download:avatars/ruta o remove:avatars/ruta */
   storageCalls: string[];
   /** Dispara un evento de Supabase Auth como si hubiera pasado en el navegador */
@@ -110,6 +123,7 @@ export interface FakeCloud {
 }
 
 const NETWORK_ERROR = { message: 'Failed to fetch', status: 0 };
+const SERVER_ERROR = { message: 'Internal Server Error', status: 500 };
 
 export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   const listeners = new Set<(event: AuthChangeEvent) => void>();
@@ -148,9 +162,12 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     validCode: '123456',
     codeSession: { id: '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10', email: 'rick@example.com' },
     remoteAccount: null,
+    failAccountRead: 'none',
     accountUpdates: [],
     objects: new Map(),
     failStorage: 'none',
+    failStorageOnly: null,
+    rpcReplies: {},
     storageCalls: [],
     emit: (event) => {
       listeners.forEach((listener) => {
@@ -163,6 +180,18 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     if (failure === 'throw') throw new Error('Failed to fetch');
     if (failure === 'error') return { data: null, error: NETWORK_ERROR };
     return ok();
+  };
+  // Como Storage. server responde con el error y el estado HTTP que manda la API
+  const storageOutcome = <T>(
+    operation: FakeStorageOperation,
+    ok: () => T,
+  ): T | { data: null; error: unknown } => {
+    const failure =
+      fake.failStorageOnly === null || fake.failStorageOnly === operation
+        ? fake.failStorage
+        : 'none';
+    if (failure === 'server') return { data: null, error: SERVER_ERROR };
+    return outcome(failure, ok);
   };
 
   const table = (name: string) => {
@@ -177,7 +206,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         return outcome(fake.failRole, () => ({ data: { role: fake.role }, error: null }));
       }
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
-      if (name === 'private_accounts') return { data: fake.remoteAccount, error: null };
+      if (name === 'private_accounts') {
+        return outcome(fake.failAccountRead, () => ({ data: fake.remoteAccount, error: null }));
+      }
       if (name === 'platform_settings') {
         const value = settingKey === 'feature_flags' ? fake.flags : fake.overrides;
         return { data: value === null ? null : { value }, error: null };
@@ -195,7 +226,11 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       order: () => chain,
       limit: () => chain,
       update: (row: Record<string, unknown>) => {
-        if (name === 'private_accounts') fake.accountUpdates.push(row);
+        if (name === 'private_accounts') {
+          fake.accountUpdates.push(row);
+          // Sin fila no hay nada que cambiar, como en el servidor
+          if (fake.remoteAccount) fake.remoteAccount = { ...fake.remoteAccount, ...row };
+        }
         return chain;
       },
       insert: (row: { notice_version?: unknown }) => {
@@ -285,7 +320,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         upload: (path: string, body: Blob) => {
           fake.storageCalls.push(`upload:${bucket}/${path}`);
           return Promise.resolve(
-            outcome(fake.failStorage, () => {
+            storageOutcome('upload', () => {
               fake.objects.set(`${bucket}/${path}`, body);
               return { data: { id: path, path, fullPath: `${bucket}/${path}` }, error: null };
             }),
@@ -294,7 +329,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         download: (path: string) => {
           fake.storageCalls.push(`download:${bucket}/${path}`);
           return Promise.resolve(
-            outcome(fake.failStorage, () => {
+            storageOutcome('download', () => {
               const blob = fake.objects.get(`${bucket}/${path}`);
               return blob
                 ? { data: blob, error: null }
@@ -305,7 +340,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         remove: (paths: string[]) => {
           for (const path of paths) fake.storageCalls.push(`remove:${bucket}/${path}`);
           return Promise.resolve(
-            outcome(fake.failStorage, () => {
+            storageOutcome('remove', () => {
               for (const path of paths) fake.objects.delete(`${bucket}/${path}`);
               return { data: [], error: null };
             }),
@@ -315,6 +350,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     },
     rpc: (name: string, args: { p_device_id: string; p_label: string }) => {
       fake.rpcCalls.push(name);
+      const reply = fake.rpcReplies[name];
+      if (reply === 'throw') return Promise.reject(new TypeError('Failed to fetch'));
+      if (reply) return Promise.resolve({ data: reply.data ?? null, error: reply.error });
       if (name.startsWith('sync_') && fake.sync === 'ok') {
         return Promise.resolve({
           data: name === 'sync_clock' ? new Date().toISOString() : 0,

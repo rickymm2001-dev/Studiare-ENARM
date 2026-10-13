@@ -83,22 +83,27 @@ export function useTutorData(
   return { catalog, bank, content, artifacts, tipReviews };
 }
 
-/** La vista del tutor con los datos cargados. Se recalcula solo cuando algo cambia */
+/**
+ * La vista del tutor con los datos cargados. Se recalcula solo cuando algo cambia. La parte pesada
+ * depende de la bitácora, el banco y las tarjetas, no de los artefactos, así responder una
+ * hipótesis o revisar un consejo no la vuelve a calcular completa
+ */
 export function useTutorView(
   session: ReadySession,
   events: readonly AppEvent[],
   data: TutorData,
 ): TutorView {
   const { user, settings } = session;
-  return useMemo(() => {
-    const noteById = new Map(data.content.notes.map((note) => [note.id, note]));
+  const { catalog, bank, content, tipReviews } = data;
+  const base = useMemo(() => {
+    const noteById = new Map(content.notes.map((note) => [note.id, note]));
     const catalogTopic = new Map(
-      data.catalog.flatMap((file) =>
+      catalog.flatMap((file) =>
         file.notes.map((note) => [deckIds.note(note.key), note.topic] as const),
       ),
     );
     const cards = new Map<string, CardFact>(
-      data.content.cards.map((card) => {
+      content.cards.map((card) => {
         const note = noteById.get(card.noteId);
         return [
           card.id,
@@ -112,25 +117,28 @@ export function useTutorView(
       }),
     );
     const now = new Date();
-    const base = buildTutorView({
+    return buildTutorView({
       now,
       events,
       bank: {
-        questions: new Map(data.bank.questions.map((question) => [question.id, question])),
-        options: new Map(data.bank.options.map((option) => [option.id, option])),
-        cases: new Map(data.bank.cases.map((item) => [item.id, item])),
+        questions: new Map(bank.questions.map((question) => [question.id, question])),
+        options: new Map(bank.options.map((option) => [option.id, option])),
+        cases: new Map(bank.cases.map((item) => [item.id, item])),
       },
-      questions: data.bank.questions,
-      options: data.bank.options,
+      questions: bank.questions,
+      options: bank.options,
       cards,
       timeZone: user.timeZone,
       today: studyDayOf(now, user.timeZone),
       desiredRetention: settings.desiredRetention,
       thresholds: DEFAULT_THRESHOLDS,
     });
-    // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
-    return { ...base, biasTips: applyTipReviews(base.biasTips, data.tipReviews) };
-  }, [events, data, user.timeZone, settings.desiredRetention]);
+  }, [events, catalog, bank, content, user.timeZone, settings.desiredRetention]);
+  // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
+  return useMemo(
+    () => ({ ...base, biasTips: applyTipReviews(base.biasTips, tipReviews) }),
+    [base, tipReviews],
+  );
 }
 
 /** Estado de respuesta de cada hipótesis por su clave. Sin respuesta no aparece */

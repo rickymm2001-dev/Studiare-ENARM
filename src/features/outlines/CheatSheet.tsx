@@ -10,7 +10,7 @@ export function CheatSheet() {
       <dl className="flex flex-col gap-2 text-sm">
         {text.rows.map((row) => (
           <div key={row.mark} className="flex flex-col gap-0.5">
-            <dt className="font-mono font-semibold text-primary-ink">{row.mark}</dt>
+            <dt className="font-mono font-semibold text-fg">{row.mark}</dt>
             <dd className="text-fg-muted">{row.what}</dd>
           </div>
         ))}

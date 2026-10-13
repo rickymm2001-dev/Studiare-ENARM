@@ -3,9 +3,23 @@
 // dispositivo nuevo. La bitácora todavía vive en el navegador y se sincroniza en el bloque 9.
 import type { DataApi } from '@/data/context';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { readCloudAvatar, saveCloudAccount, type CloudIdentity } from '@/data/cloud/account';
-import { downloadAvatar } from '@/data/cloud/avatars';
-import { EMPTY_DETAILS, findAccountByEmail, registerAccount } from './account';
+import {
+  readCloudAvatar,
+  saveCloudAccount,
+  type CloudAvatarRead,
+  type CloudIdentity,
+} from '@/data/cloud/account';
+import {
+  avatarPath,
+  downloadAvatar,
+  photoHash,
+  planAvatarSync,
+  pushAvatar,
+  type CloudAvatarColumns,
+  type RemoteAvatarState,
+} from '@/data/cloud/avatars';
+import type { Account } from '@/data/schemas/people';
+import { EMPTY_DETAILS, findAccountByEmail, registerAccount, sameAvatarChoice } from './account';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
@@ -42,17 +56,81 @@ export async function linkCloudIdentity(api: Api, identity: CloudIdentity): Prom
 }
 
 /**
- * Sube el alias y los datos de cuenta locales a la nube. false si algo falló. Con pullPhoto, que
- * CloudBridge pasa solo cuando el perfil local acaba de nacer en un dispositivo nuevo, antes baja la
- * foto de perfil que la nube tenga y la guarda en este navegador. Fuera de ese caso lo local manda,
- * porque un alumno que eligió iniciales no debe recuperar la foto sin querer (B2 del plan del cambio)
+ * Trae a este navegador la elección de foto de la nube, con su fecha. Si la foto no se pudo bajar no
+ * cambia nada y se reintenta en la siguiente sincronización. Si el alumno guardó otra elección aquí
+ * mientras tanto, la suya es más reciente y tampoco se toca
+ */
+async function pullAvatar(
+  api: Pick<DataApi, 'repos'>,
+  cloud: SupabaseClient,
+  authId: string,
+  read: Account,
+  remote: RemoteAvatarState,
+): Promise<void> {
+  let avatar: Account['avatar'] = { kind: 'initials' };
+  if (remote.avatar?.kind === 'photo') {
+    const { hash } = remote.avatar;
+    if (read.avatar.kind === 'photo' && photoHash(read.avatar.dataUrl) === hash) {
+      avatar = read.avatar;
+    } else {
+      // Siempre de la carpeta del alumno, diga lo que diga la fila
+      const dataUrl = await downloadAvatar(cloud, avatarPath(authId));
+      if (!dataUrl) return;
+      avatar = { kind: 'photo', dataUrl };
+    }
+  }
+  const fresh = await api.repos.accounts.get(read.userId);
+  if (
+    !fresh ||
+    fresh.avatarChangedAt !== read.avatarChangedAt ||
+    !sameAvatarChoice(fresh.avatar, read.avatar)
+  ) {
+    return;
+  }
+  await api.repos.accounts.put({
+    ...fresh,
+    avatar,
+    ...(remote.changedAt ? { avatarChangedAt: remote.changedAt } : {}),
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * Pone de acuerdo la foto de este navegador y la de la nube (B2). Gana la elección más reciente,
+ * según la fecha que solo cambia cuando el alumno guarda otra foto o pasa a iniciales en Tus datos.
+ * Devuelve las columnas de la foto para la fila, o null para no tocarlas. Si la nube no se pudo leer
+ * no toca nada, ni la fila ni Storage, porque no se sabe qué elección es la más reciente
+ */
+async function reconcileAvatar(
+  api: Pick<DataApi, 'repos'>,
+  cloud: SupabaseClient,
+  authId: string,
+  account: Account,
+  remote: CloudAvatarRead,
+): Promise<CloudAvatarColumns | null> {
+  if (remote.status === 'failed') return null;
+  const local = { avatar: account.avatar, changedAt: account.avatarChangedAt ?? null };
+  switch (planAvatarSync(local, remote)) {
+    case 'push':
+      return pushAvatar(cloud, authId, local, remote.avatar);
+    case 'pull':
+      await pullAvatar(api, cloud, authId, account, remote);
+      return null;
+    case 'none':
+      return null;
+  }
+}
+
+/**
+ * Sube el alias y los datos de cuenta locales a la nube. false si algo falló. Antes pone de acuerdo
+ * la foto de perfil con la nube, así un dispositivo nuevo o uno que se quedó atrás baja la elección
+ * más reciente, y uno donde el alumno acaba de elegir la sube o la quita
  */
 export async function pushLocalAccount(
   api: Pick<DataApi, 'repos'>,
   cloud: SupabaseClient,
   authId: string,
   userId: string,
-  options: { pullPhoto?: boolean } = {},
 ): Promise<boolean> {
   const [user, account] = await Promise.all([
     api.repos.users.get(userId),
@@ -60,16 +138,6 @@ export async function pushLocalAccount(
   ]);
   if (!user || !account) return false;
   const remote = await readCloudAvatar(cloud, authId);
-  let current = account;
-  if (options.pullPhoto && account.avatar.kind !== 'photo' && remote?.kind === 'photo') {
-    const dataUrl = await downloadAvatar(cloud, remote.path);
-    if (dataUrl) {
-      current = await api.repos.accounts.put({
-        ...account,
-        avatar: { kind: 'photo', dataUrl },
-        updatedAt: new Date().toISOString(),
-      });
-    }
-  }
-  return saveCloudAccount(cloud, authId, current, user.alias, remote);
+  const avatar = await reconcileAvatar(api, cloud, authId, account, remote);
+  return saveCloudAccount(cloud, authId, account, user.alias, avatar);
 }

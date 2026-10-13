@@ -234,7 +234,7 @@ function Summary({
       ) : null}
       <p className="mt-2 text-sm text-fg-muted">{text.notPrediction}</p>
       {saving && !error ? (
-        <p role="status" className="mt-2 text-sm font-medium text-primary-ink">
+        <p role="status" className="mt-2 text-sm font-medium text-fg-muted">
           {text.saving}
         </p>
       ) : null}
@@ -268,7 +268,7 @@ function ErrorsCard({
     <Card aria-labelledby="examen-errores">
       <CardHeader>
         <CardTitle id="examen-errores" className="flex items-center gap-2">
-          <Layers aria-hidden className="size-5 text-primary-ink" />
+          <Layers aria-hidden className="size-5 text-fg-muted" />
           {text.errorsTitle}
         </CardTitle>
         <CardDescription>
@@ -344,7 +344,7 @@ function RetryCard({
     <Card aria-labelledby="examen-reintentar">
       <CardHeader>
         <CardTitle id="examen-reintentar" className="flex items-center gap-2">
-          <RotateCcw aria-hidden className="size-5 text-primary-ink" />
+          <RotateCcw aria-hidden className="size-5 text-fg-muted" />
           {text.retryTitle}
         </CardTitle>
         <CardDescription>{text.retryBody}</CardDescription>

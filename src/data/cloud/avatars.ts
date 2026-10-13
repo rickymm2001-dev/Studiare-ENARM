@@ -1,7 +1,11 @@
 // Foto de perfil en Supabase Storage (B2 del plan del cambio, comentario 15). Vive en el bucket privado
-// avatars, en la carpeta del auth.uid() del alumno, como <authId>/avatar.jpg. Las políticas de la
-// migración 20261016000001 dejan verla solo a él, a sus compañeros de Party y a los admins. A Storage
-// viaja únicamente el JPEG. El correo y el alias nunca.
+// avatars, en la carpeta del auth.uid() del alumno, como <authId>/avatar.jpg. Las políticas de las
+// migraciones 20261016000001 y 20261017000001 dejan verla solo a él y a sus compañeros de un grupo
+// activo de Party. A Storage viaja únicamente el JPEG. El correo y el alias nunca.
+//
+// Entre los dispositivos del alumno gana la elección más reciente. La fecha la pone la app solo cuando
+// el alumno guarda una foto distinta o pasa a iniciales en Tus datos, y viaja en la fila de
+// private_accounts. Así un dispositivo con una copia vieja no impone la suya (revisión de B2).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { AVATAR_DATA_URL_MAX, AVATAR_DATA_URL_PREFIX, type Account } from '@/data/schemas/people';
@@ -84,6 +88,41 @@ function describe(error: unknown): string {
   return 'error desconocido';
 }
 
+/** true si el servidor respondió. Sin estado HTTP la petición ni llegó */
+function answered(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    typeof error.status === 'number' &&
+    error.status > 0
+  );
+}
+
+/** Storage no pudo con la foto. network dice que la petición ni llegó al servidor */
+export class AvatarStorageError extends Error {
+  readonly network: boolean;
+  constructor(error: unknown) {
+    super(describe(error));
+    this.name = 'AvatarStorageError';
+    this.network = !answered(error);
+  }
+}
+
+/** Corre una llamada a Storage y la convierte en AvatarStorageError si responde con error o se cae */
+async function storageCall<T>(
+  call: () => PromiseLike<{ data: T | null; error: unknown }>,
+): Promise<T> {
+  let result: { data: T | null; error: unknown };
+  try {
+    result = await call();
+  } catch (error) {
+    throw new AvatarStorageError(error);
+  }
+  if (result.error || result.data === null) throw new AvatarStorageError(result.error);
+  return result.data;
+}
+
 /** Deja constancia en consola de qué falló en Storage. Sin ruta, correo ni alias */
 function warnStorage(action: string, error: unknown): void {
   console.warn(`La foto de perfil no se pudo ${action}. ${describe(error)}`);
@@ -96,58 +135,115 @@ export async function uploadAvatar(
   dataUrl: string,
 ): Promise<string> {
   const path = avatarPath(authId);
-  const { error } = await cloud.storage
-    .from(AVATAR_BUCKET)
-    .upload(path, dataUrlToBlob(dataUrl), { upsert: true, contentType: 'image/jpeg' });
-  if (error) throw new Error(describe(error));
+  await storageCall(() =>
+    cloud.storage
+      .from(AVATAR_BUCKET)
+      .upload(path, dataUrlToBlob(dataUrl), { upsert: true, contentType: 'image/jpeg' }),
+  );
   return path;
 }
 
 /** Baja la foto como dataUrl. null si no existe, no se pudo bajar o no cabe en el esquema */
 export async function downloadAvatar(cloud: CloudStorage, path: string): Promise<string | null> {
   if (!AVATAR_PATH.test(path)) return null;
-  const { data, error } = await cloud.storage.from(AVATAR_BUCKET).download(path);
-  if (error) return null;
-  const dataUrl = await blobToDataUrl(data);
-  return dataUrl.length > AVATAR_DATA_URL_MAX ? null : dataUrl;
-}
-
-/** Quita la foto del bucket. Lanza si falló */
-export async function removeAvatar(cloud: CloudStorage, path: string): Promise<void> {
-  const { error } = await cloud.storage.from(AVATAR_BUCKET).remove([path]);
-  if (error) throw new Error(describe(error));
+  try {
+    const blob = await storageCall(() => cloud.storage.from(AVATAR_BUCKET).download(path));
+    const dataUrl = await blobToDataUrl(blob);
+    return dataUrl.length > AVATAR_DATA_URL_MAX ? null : dataUrl;
+  } catch {
+    return null;
+  }
 }
 
 /**
- * Qué guardar en private_accounts.avatar para que la nube refleje la elección local, y lo que eso
- * implica en Storage. Con foto, la sube si la huella cambió. Sin foto, borra la que hubiera. Si
- * Storage falla, la cuenta se guarda igual con lo que la nube ya tenía y se vuelve a intentar en la
- * siguiente sincronización. El motivo queda solo en consola
+ * Quita la foto del alumno de su ruta fija, sin depender de lo que diga la fila. Quitar una foto que
+ * no existe no falla, así que se puede repetir. Lanza AvatarStorageError si Storage falló
  */
-export async function syncAvatarToStorage(
+export async function removeAvatar(cloud: CloudStorage, authId: string): Promise<void> {
+  await storageCall(() => cloud.storage.from(AVATAR_BUCKET).remove([avatarPath(authId)]));
+}
+
+/** La foto de un lado y cuándo se eligió. changedAt es null si no se sabe, en cuentas de antes */
+export interface AvatarSide<T> {
+  avatar: T;
+  changedAt: string | null;
+}
+export type LocalAvatar = AvatarSide<Account['avatar']>;
+/** Lo que dice la fila. avatar es null sin fila o con un valor que no se reconoce */
+export type RemoteAvatarState = AvatarSide<RemoteAvatar | null>;
+
+/** Columnas de la foto en private_accounts */
+export interface CloudAvatarColumns {
+  avatar: RemoteAvatar;
+  avatar_changed_at: string | null;
+}
+
+/** true si la nube ya tiene la misma elección que este navegador. generated cuenta como iniciales */
+export function sameAvatar(local: Account['avatar'], remote: RemoteAvatar | null): boolean {
+  if (local.kind === 'photo') {
+    return remote?.kind === 'photo' && remote.hash === photoHash(local.dataUrl);
+  }
+  return remote?.kind !== 'photo';
+}
+
+/**
+ * Qué hacer con la foto. push lleva a la nube la elección de este navegador, pull trae a este
+ * navegador la de la nube y none es que ya coinciden o que no hay con qué decidir
+ */
+export type AvatarPlan = 'push' | 'pull' | 'none';
+
+const timeOf = (value: string | null): number | null => {
+  if (value === null) return null;
+  const time = Date.parse(value);
+  return Number.isNaN(time) ? null : time;
+};
+
+/**
+ * Decide quién manda con la fecha de la elección. Gana la más reciente, y una fecha conocida gana a
+ * una desconocida. Con la misma fecha y distinta foto manda este navegador, que es el dispositivo
+ * activo, para reparar la nube. Sin fecha en ningún lado, como en cuentas de antes de B2, una foto
+ * gana a las iniciales y la de la nube gana a otra foto, para que todos los dispositivos terminen con
+ * la misma. Una fila que no se reconoce nunca se copia a este navegador
+ */
+export function planAvatarSync(local: LocalAvatar, remote: RemoteAvatarState): AvatarPlan {
+  const localTime = timeOf(local.changedAt);
+  const remoteTime = timeOf(remote.changedAt);
+  if (localTime !== null && (remoteTime === null || localTime > remoteTime)) return 'push';
+  if (remoteTime !== null && (localTime === null || remoteTime > localTime)) {
+    return remote.avatar ? 'pull' : 'none';
+  }
+  if (sameAvatar(local.avatar, remote.avatar)) return 'none';
+  if (localTime !== null) return 'push';
+  if (remote.avatar?.kind === 'photo') return 'pull';
+  return local.avatar.kind === 'photo' ? 'push' : 'none';
+}
+
+/**
+ * Lleva a la nube la elección de este navegador. Con foto la sube si la nube no tiene esa misma. Con
+ * iniciales quita la foto de su ruta fija, aunque la fila no diga que hay una. Devuelve las columnas
+ * para la fila, con la fecha local, o null si Storage falló, para no tocar la fila y volver a
+ * intentarlo en la siguiente sincronización. El motivo queda solo en consola
+ */
+export async function pushAvatar(
   cloud: CloudStorage,
   authId: string,
-  local: Account['avatar'],
+  local: LocalAvatar,
   remote: RemoteAvatar | null,
-): Promise<RemoteAvatar> {
-  if (local.kind !== 'photo') {
-    if (remote?.kind === 'photo') {
-      try {
-        await removeAvatar(cloud, remote.path);
-      } catch (error) {
-        warnStorage('quitar', error);
-        return remote;
-      }
-    }
-    return { kind: 'initials' };
-  }
-  const hash = photoHash(local.dataUrl);
-  if (remote?.kind === 'photo' && remote.hash === hash) return remote;
+): Promise<CloudAvatarColumns | null> {
+  const { avatar } = local;
   try {
-    const path = await uploadAvatar(cloud, authId, local.dataUrl);
-    return { kind: 'photo', path, hash };
+    if (avatar.kind === 'photo') {
+      const hash = photoHash(avatar.dataUrl);
+      if (!sameAvatar(avatar, remote)) await uploadAvatar(cloud, authId, avatar.dataUrl);
+      return {
+        avatar: { kind: 'photo', path: avatarPath(authId), hash },
+        avatar_changed_at: local.changedAt,
+      };
+    }
+    await removeAvatar(cloud, authId);
+    return { avatar: { kind: 'initials' }, avatar_changed_at: local.changedAt };
   } catch (error) {
-    warnStorage('subir', error);
-    return remote?.kind === 'photo' ? remote : { kind: 'initials' };
+    warnStorage(avatar.kind === 'photo' ? 'subir' : 'quitar', error);
+    return null;
   }
 }

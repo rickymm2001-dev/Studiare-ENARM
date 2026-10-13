@@ -1608,7 +1608,7 @@ export const featureText = {
     uploadPhoto: 'Subir foto',
     avatarChangePhoto: 'Cambiar foto',
     avatarNote:
-      'La foto se recorta en círculo. La ves tú y, si compartes un grupo de Party, también tus compañeros.',
+      'La foto se recorta en círculo y se guarda en un espacio privado de tu cuenta en la nube. La ves tú y, mientras compartan un grupo activo de Party, tus compañeros. Se borra al eliminar tu cuenta.',
     avatarLoading: 'Abriendo la foto…',
     avatarOpenError: 'No pudimos abrir esa imagen. Prueba con una foto JPG o PNG.',
     avatarTooBig: 'No pudimos reducir la foto lo suficiente. Prueba con otra más sencilla.',

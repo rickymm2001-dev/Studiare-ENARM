@@ -7,7 +7,8 @@ import { createProfile } from './profile';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
-export type AccountDetails = Omit<Account, 'userId' | 'email' | 'updatedAt'>;
+/** Lo que el alumno edita en Tus datos. La fecha de la elección de foto la pone la app */
+export type AccountDetails = Omit<Account, 'userId' | 'email' | 'updatedAt' | 'avatarChangedAt'>;
 
 export const EMPTY_DETAILS: AccountDetails = {
   birthYear: null,
@@ -20,6 +21,21 @@ export const EMPTY_DETAILS: AccountDetails = {
 };
 
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+/** true si dos elecciones de foto se ven igual. Un avatar generado de antes se ve como iniciales */
+export function sameAvatarChoice(a: Account['avatar'], b: Account['avatar']): boolean {
+  if (a.kind === 'photo' || b.kind === 'photo') {
+    return a.kind === 'photo' && b.kind === 'photo' && a.dataUrl === b.dataUrl;
+  }
+  return true;
+}
+
+/**
+ * Fecha de la elección de foto de una cuenta nueva. Una foto es una elección del alumno y la lleva.
+ * Las iniciales son lo de siempre, así que no, y la nube puede traer una elección más reciente (B2)
+ */
+const firstAvatarChoice = (avatar: Account['avatar'], now: string) =>
+  avatar.kind === 'photo' ? { avatarChangedAt: now } : {};
 
 export async function findAccountByEmail(api: Pick<DataApi, 'repos'>, email: string) {
   const wanted = normalizeEmail(email);
@@ -42,19 +58,49 @@ export async function registerAccount(
   const email = normalizeEmail(input.email);
   AccountSchema.shape.email.parse(email);
   const user = await createProfile(api, { alias: input.alias, dailyGoal: input.dailyGoal });
+  const now = new Date().toISOString();
   await api.repos.accounts.put({
     userId: user.id,
     email,
     ...input.details,
-    updatedAt: new Date().toISOString(),
+    ...firstAvatarChoice(input.details.avatar, now),
+    updatedAt: now,
   });
   return { ok: true, user };
 }
 
+/** Agrega el correo, y con él la cuenta, a un perfil viejo que no la tenía (D-068) */
+export async function addAccountToProfile(
+  api: Pick<DataApi, 'repos'>,
+  input: { userId: string; email: string; details: AccountDetails },
+): Promise<Account> {
+  const now = new Date().toISOString();
+  return api.repos.accounts.put({
+    userId: input.userId,
+    email: input.email,
+    ...input.details,
+    ...firstAvatarChoice(input.details.avatar, now),
+    updatedAt: now,
+  });
+}
+
+/**
+ * Guarda lo que el alumno cambió en Tus datos. Si eligió otra foto o pasó a iniciales, cambia la
+ * fecha de la elección, y con ella esta elección gana en sus otros dispositivos (B2). Guardar sin
+ * tocar la foto no la cambia, para no pisar una elección más reciente hecha en otro dispositivo
+ */
 export async function updateAccount(
   api: Pick<DataApi, 'repos'>,
   account: Account,
   patch: Partial<AccountDetails>,
 ): Promise<Account> {
-  return api.repos.accounts.put({ ...account, ...patch, updatedAt: new Date().toISOString() });
+  const now = new Date().toISOString();
+  const avatarChanged =
+    patch.avatar !== undefined && !sameAvatarChoice(account.avatar, patch.avatar);
+  return api.repos.accounts.put({
+    ...account,
+    ...patch,
+    ...(avatarChanged ? { avatarChangedAt: now } : {}),
+    updatedAt: now,
+  });
 }

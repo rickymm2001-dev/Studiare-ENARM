@@ -92,7 +92,7 @@ export function ExamQuestion({
           id="examen-pregunta-frase"
           ref={promptRef}
           tabIndex={-1}
-          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
         >
           <span className="sr-only">{position}. </span>
           <HighlightedPrompt text={question.prompt} ranges={ranges} />

@@ -387,7 +387,7 @@ function ProposalForm({
           {part(
             text.proposal,
             <div className="flex flex-col gap-3">
-              <p className="rounded-md bg-primary-soft p-3 text-sm">
+              <p className="rounded-md bg-muted p-3 text-sm">
                 <span className="font-semibold">{text.rationale}. </span>
                 {content.proposal.rationale}
               </p>

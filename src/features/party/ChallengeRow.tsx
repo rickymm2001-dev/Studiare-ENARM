@@ -96,7 +96,7 @@ export function ChallengeRow({
         aria-valuemax={100}
         aria-valuenow={percent}
       >
-        <div className="h-full bg-primary" style={{ width: `${percent}%` }} />
+        <div className="h-full bg-indicator" style={{ width: `${percent}%` }} />
       </div>
       <p className="mt-1 text-sm text-fg-muted">
         {t.party.progress(progress.total, progress.target, t.party.metrics[challenge.metric])}

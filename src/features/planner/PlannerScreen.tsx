@@ -277,7 +277,7 @@ function TodayCard({
               key={row.key}
               className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-line p-3"
             >
-              <span aria-hidden className="text-primary-ink [&_svg]:size-5">
+              <span aria-hidden className="text-fg-muted [&_svg]:size-5">
                 {row.icon}
               </span>
               <span className="min-w-0 flex-1 font-medium">{row.text}</span>
@@ -515,7 +515,7 @@ function WeekCard({ week, today }: { week: readonly DayPlan[]; today: string }) 
               key={day.day}
               className={cn(
                 'flex flex-col gap-1.5 rounded-lg border border-line p-3',
-                day.day === today && 'border-primary bg-primary-soft',
+                day.day === today && 'border-indicator bg-primary-soft',
               )}
             >
               <div className="flex items-baseline justify-between gap-2">

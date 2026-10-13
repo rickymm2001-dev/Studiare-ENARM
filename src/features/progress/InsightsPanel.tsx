@@ -64,7 +64,7 @@ export function WeeklyFocus({
     <Card aria-labelledby="focos-titulo">
       <CardHeader className="mb-3">
         <CardTitle id="focos-titulo" className="flex items-center gap-2 [&_svg]:size-5">
-          <Target aria-hidden className="text-primary-ink" />
+          <Target aria-hidden className="text-fg-muted" />
           {t.progress.focusTitle(items.length)}
         </CardTitle>
       </CardHeader>
@@ -99,7 +99,8 @@ export function WeeklyFocus({
                   </Button>
                 </div>
                 <p className="text-sm text-fg-muted">{item.action}</p>
-                {item.draft ? <DraftBadge /> : null}
+                {/* Del ancho de su texto y no de la columna */}
+                {item.draft ? <DraftBadge className="self-start" /> : null}
               </div>
             </li>
           ))}
@@ -207,7 +208,7 @@ function InsightRow({ insight }: { insight: Insight }) {
     >
       <p>{body}</p>
       <p className="flex gap-1.5 rounded-md bg-muted p-2 [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0">
-        <Lightbulb aria-hidden className="text-primary-ink" />
+        <Lightbulb aria-hidden className="text-fg-muted" />
         <span>
           <span className="sr-only">{text.whatToDo}. </span>
           {action}
@@ -248,11 +249,7 @@ function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   if (rows.length === 0) return null;
   return (
     <li>
-      <Row
-        lead={<ListOrdered className="text-primary-ink" />}
-        title={text.profileTitle}
-        tail={null}
-      >
+      <Row lead={<ListOrdered className="text-fg-muted" />} title={text.profileTitle} tail={null}>
         <p className="text-fg-muted">{text.profileHint}</p>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (

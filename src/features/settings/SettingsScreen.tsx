@@ -16,7 +16,7 @@ import { cn } from '@/ui/cn';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
-import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
+import { segmentedList, segmentedTabItem } from '@/ui/components/segmented-classes';
 import { useSession } from '@/app/session';
 import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
@@ -74,7 +74,7 @@ export function SettingsScreen() {
         className="flex flex-col gap-3"
       >
         {/* Misma forma que el control segmentado (H01 de B2). Radix marca la pestaña activa con
-            data-state, así que la activa se pinta con esa variante y no con segmentedItem(true) */}
+            data-state, así que usa segmentedTabItem y no segmentedItem */}
         <Tabs.List
           aria-label={t.settings.sectionsLabel}
           className={cn(segmentedList, 'self-start')}
@@ -83,10 +83,7 @@ export function SettingsScreen() {
             <Tabs.Trigger
               key={key}
               value={key}
-              className={segmentedItem(
-                false,
-                'whitespace-nowrap data-[state=active]:border-line data-[state=active]:bg-surface data-[state=active]:text-fg',
-              )}
+              className={cn(segmentedTabItem, 'whitespace-nowrap')}
             >
               {t.settings.sections[key]}
             </Tabs.Trigger>

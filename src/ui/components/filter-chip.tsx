@@ -28,7 +28,7 @@ export function FilterChip({
       className={cn(
         'inline-flex min-h-9 items-center gap-1.5 rounded-md border px-3 text-sm font-semibold transition-colors',
         pressed
-          ? 'border-primary bg-primary-soft text-primary-ink'
+          ? 'border-indicator bg-primary-soft text-primary-ink'
           : 'border-line bg-surface text-fg hover:bg-muted',
         className,
       )}

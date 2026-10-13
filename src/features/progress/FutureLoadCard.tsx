@@ -30,7 +30,7 @@ export function LoadBars({ load, className }: { load: FutureLoad; className?: st
         return (
           <div key={day.day} className="flex h-full min-w-0 flex-1 flex-col justify-end">
             <div className="w-full rounded-t-sm bg-accent/60" style={{ height: `${fresh}%` }} />
-            <div className="w-full bg-primary" style={{ height: `${reviews}%` }} />
+            <div className="w-full bg-indicator" style={{ height: `${reviews}%` }} />
           </div>
         );
       })}
@@ -87,7 +87,7 @@ export function FutureLoadCard({
         </div>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-muted">
           <li className="flex items-center gap-1.5">
-            <span aria-hidden className="size-3 rounded-sm bg-primary" />
+            <span aria-hidden className="size-3 rounded-sm bg-indicator" />
             {text.reviews}
           </li>
           <li className="flex items-center gap-1.5">

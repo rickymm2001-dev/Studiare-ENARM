@@ -110,7 +110,7 @@ export function OwnDecksCard({
           const manual = isEditableDeck(deck, session.user.id);
           return (
             <li key={deck.id} className="flex items-start gap-3">
-              <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
+              <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-fg-muted" />
               <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
                 <span className="flex flex-wrap items-center gap-2 font-semibold">{deck.name}</span>
                 {deck.parentId ? (
@@ -202,7 +202,7 @@ export function OwnDecksCard({
           );
         })}
         <li className="flex items-start gap-3">
-          <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
+          <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-fg-muted" />
           <form
             className="flex min-w-0 flex-1 flex-col gap-2"
             onSubmit={(event) => {

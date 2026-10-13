@@ -1,5 +1,6 @@
 // Etiqueta chica. Neutra por omisión y con color solo en los estados que permite 4.7 del plan del
-// cambio (correcto, aviso y error), siempre con texto.
+// cambio (correcto, aviso y error), siempre con texto. Una etiqueta no es un botón, así que nunca
+// lleva el color de acción (comentario 10).
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentProps } from 'react';
 import { cn } from '@/ui/cn';
@@ -10,14 +11,12 @@ const badgeVariants = cva(
     variants: {
       variant: {
         neutral: 'border-line bg-muted text-fg-muted',
-        info: 'border-transparent bg-primary-soft text-primary-ink',
+        // Lo informativo, como el plan actual, una tarjeta nueva o la IA real, también va neutro. El
+        // nombre se queda para que quien lo usa diga qué tipo de etiqueta es
+        info: 'border-line bg-muted text-fg-muted',
         success: 'border-transparent bg-success-soft text-success',
         warning: 'border-transparent bg-warning-soft text-warning',
         danger: 'border-transparent bg-danger-soft text-danger',
-        // Lo que era dorado o naranja va neutro
-        accent: 'border-line bg-muted text-fg-muted',
-        streak: 'border-line bg-muted text-fg-muted',
-        demo: 'border-demo-line bg-demo text-demo-fg',
         simulated: 'border-sim-line bg-sim text-sim-fg',
       },
     },

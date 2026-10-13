@@ -7,10 +7,12 @@
 --   - Cada alumno guarda una sola foto en su carpeta, <auth.uid()>/avatar.jpg. La sube, la
 --     reemplaza, la borra y la lee solo él, desde su dispositivo activo, igual que private_accounts
 --   - La leen también quienes comparten con él un grupo activo de Party (shares_group), desde su
---     dispositivo activo como con los perfiles, y los admins (is_admin). Nadie más, ni sin sesión
---   - Al borrarse una cuenta de auth.users, por borrar mi cuenta o desde el panel, se va su foto.
---     Queda inaccesible para todos menos para los admins mientras tanto, porque las políticas
---     dependen de un alumno y de un grupo que ya no existen
+--     dispositivo activo como con los perfiles, y los admins (is_admin). Nadie más, ni sin sesión.
+--     20261017000001 quitó a los admins, como pide el plan
+--   - Al borrarse una cuenta de auth.users, por borrar mi cuenta o desde el panel, se intenta quitar
+--     su foto. Storage no lo deja hacer con SQL (ver Borrado de la cuenta), así que la app la quita
+--     con la API antes de eliminar la cuenta. Una foto que quede queda inaccesible para todos, porque
+--     las políticas dependen de un alumno y de un grupo que ya no existen
 --
 -- Qué no cambia
 --   private_accounts.avatar sigue siendo jsonb. Con foto guarda
@@ -109,9 +111,13 @@ begin
 end $$;
 
 -- ===================================================================== Borrado de la cuenta
--- Al borrar una cuenta de auth.users se va su foto. security definer porque quien borra puede ser el
--- servicio de Auth, que no tiene permisos sobre storage.objects. Si algo fallara, el borrado de la
--- cuenta sigue, porque darse de baja es un derecho del alumno. El aviso queda en la bitácora de Postgres
+-- Solo un respaldo inofensivo. Supabase Storage tiene el disparador protect_objects_delete
+-- (storage.protect_delete), que frena todo borrado de filas de storage.objects hecho con SQL para no
+-- dejar archivos huérfanos en su almacén. Por eso aquí el borrado falla, queda un aviso en la bitácora
+-- de Postgres y la cuenta se borra igual, porque darse de baja es un derecho del alumno. La foto la
+-- quita la app con la API de Storage y la sesión del alumno antes de eliminar la cuenta
+-- (20261017000001). security definer porque quien borra puede ser el servicio de Auth, que no tiene
+-- permisos sobre storage.objects
 create or replace function public.delete_user_avatar() returns trigger
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin

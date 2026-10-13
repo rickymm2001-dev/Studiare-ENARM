@@ -232,7 +232,7 @@ export function DeckEditorDialog({
                     key={kind}
                     className={segmentedItem(
                       draft.kind === kind,
-                      'grow cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
+                      'grow cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus',
                     )}
                   >
                     <input
@@ -344,7 +344,7 @@ export function DeckEditorDialog({
                     key={note.id}
                     className={cn(
                       'flex flex-wrap items-center gap-2 rounded-md border border-line p-2',
-                      editingId === note.id && 'border-primary bg-primary-soft',
+                      editingId === note.id && 'border-indicator bg-primary-soft',
                     )}
                   >
                     <span className="min-w-0 flex-1 text-sm">

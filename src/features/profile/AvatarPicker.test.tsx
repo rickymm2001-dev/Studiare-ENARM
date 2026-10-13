@@ -173,7 +173,7 @@ describe('elegir la foto de perfil', () => {
   it('las flechas del teclado mueven la foto desde la vista previa', async () => {
     const { input } = show();
     const { use } = await openCropper(input);
-    const preview = screen.getByRole('img', { name: crop.preview });
+    const preview = screen.getByRole('group', { name: crop.preview });
     preview.focus();
     fireEvent.keyDown(preview, { key: 'ArrowLeft' });
     fireEvent.keyDown(preview, { key: 'ArrowUp' });
@@ -185,7 +185,7 @@ describe('elegir la foto de perfil', () => {
   it('arrastrar con el puntero mueve la foto', async () => {
     const { input } = show();
     const { use } = await openCropper(input);
-    const preview = screen.getByRole('img', { name: crop.preview });
+    const preview = screen.getByRole('group', { name: crop.preview });
     fireEvent.pointerDown(preview, { pointerId: 1, clientX: 100, clientY: 100 });
     fireEvent.pointerMove(preview, { pointerId: 1, clientX: 130, clientY: 100 });
     fireEvent.pointerUp(preview, { pointerId: 1, clientX: 130, clientY: 100 });

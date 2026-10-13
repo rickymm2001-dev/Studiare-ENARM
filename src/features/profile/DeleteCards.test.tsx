@@ -2,13 +2,20 @@
 // Borrar mis datos y eliminar mi cuenta (D-101). Con la nube conectada se borra primero la copia de
 // allá y solo si sale bien se limpia el dispositivo. Si falla, no se toca nada y se dice por qué.
 // Con la cuenta sin comprobar no se borra, y sin sesión solo se borra el dispositivo y se avisa.
+// Eliminar la cuenta quita antes la foto de perfil de Storage (B2).
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { useSyncStatus } from '@/app/syncState';
+import { dataUrlToBlob, photoHash } from '@/data/cloud/avatars';
+import { makeFakeCloud } from '@/data/testing/fakeCloud';
 import { t } from '@/i18n/es-MX';
 import { DeleteAccountCard, DeleteDataCard } from './DeleteCards';
+
+const AUTH_ID = '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10';
+const PHOTO = `avatars/${AUTH_ID}/avatar.jpg`;
+const JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRg==';
 
 interface RpcResult {
   error: { code?: string; message?: string } | null;
@@ -20,15 +27,38 @@ function setup(result: RpcResult | 'throw' = { error: null }) {
   );
   const wipeLocal = vi.fn(() => Promise.resolve());
   const onDone = vi.fn();
-  const loadCloud = vi.fn(() => Promise.resolve({ rpc } as never));
-  return { loadCloud, rpc, wipeLocal, onDone };
+  // Storage en memoria del cliente falso y la fila de la cuenta, para la foto de perfil
+  const storage = makeFakeCloud();
+  storage.remoteAccount = { avatar: { kind: 'initials' }, avatar_changed_at: null };
+  const from = (table: string) => storage.cloud.from(table);
+  const loadCloud = vi.fn(() =>
+    Promise.resolve({ rpc, storage: storage.cloud.storage, from } as never),
+  );
+  return { loadCloud, rpc, wipeLocal, onDone, storage };
 }
+
+/** La cuenta con foto, en la fila y en Storage */
+const givePhoto = (storage: ReturnType<typeof setup>['storage']) => {
+  storage.remoteAccount = {
+    avatar: { kind: 'photo', path: `${AUTH_ID}/avatar.jpg`, hash: photoHash(JPEG) },
+    avatar_changed_at: '2026-10-13T10:00:00.000Z',
+  };
+  storage.objects.set(PHOTO, dataUrlToBlob(JPEG));
+};
 
 const link = () => {
   useCloud.getState().set({
     status: 'linked',
-    identity: { authId: 'a1', email: 'ana@example.com', role: 'student', alias: null },
+    identity: { authId: AUTH_ID, email: 'ana@example.com', role: 'student', alias: null },
   });
+};
+
+const confirmAccountDelete = async (user: ReturnType<typeof userEvent.setup>) => {
+  await user.type(
+    screen.getByLabelText(t.settings.accountDeleteConfirmLabel),
+    t.settings.accountDeleteWord,
+  );
+  await user.click(screen.getByRole('button', { name: t.settings.accountDeleteAction }));
 };
 
 beforeEach(() => {
@@ -279,5 +309,74 @@ describe('Eliminar mi cuenta', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(t.settings.eraseErrors.owner);
     expect(wipeLocal).not.toHaveBeenCalled();
     expect(onDone).not.toHaveBeenCalled();
+  });
+
+  it('quita la foto de perfil de Storage antes de eliminar la cuenta', async () => {
+    link();
+    const user = userEvent.setup();
+    const { loadCloud, rpc, wipeLocal, onDone, storage } = setup();
+    givePhoto(storage);
+    const order: string[] = [];
+    rpc.mockImplementation(() => {
+      order.push(`nube, foto en Storage ${String(storage.objects.has(PHOTO))}`);
+      return Promise.resolve({ error: null });
+    });
+    render(<DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={onDone} />);
+    await confirmAccountDelete(user);
+
+    expect(rpc).toHaveBeenCalledWith('delete_my_account');
+    expect(order).toEqual(['nube, foto en Storage false']);
+    expect(storage.storageCalls).toContain(`remove:${PHOTO}`);
+    expect(wipeLocal).toHaveBeenCalledTimes(1);
+    expect(onDone).toHaveBeenCalledTimes(1);
+  });
+
+  it('si la foto no se pudo quitar no elimina la cuenta, no toca el dispositivo y lo dice', async () => {
+    link();
+    const user = userEvent.setup();
+    const { loadCloud, rpc, wipeLocal, onDone, storage } = setup();
+    givePhoto(storage);
+    storage.failStorage = 'error';
+    render(<DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={onDone} />);
+    await confirmAccountDelete(user);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.settings.eraseErrors.network);
+    expect(rpc).not.toHaveBeenCalled();
+    expect(wipeLocal).not.toHaveBeenCalled();
+    expect(onDone).not.toHaveBeenCalled();
+    expect(storage.objects.has(PHOTO)).toBe(true);
+    expect(useSyncStatus.getState().paused).toBe(false);
+  });
+
+  it('si la base no deja eliminar la cuenta, la foto vuelve a Storage', async () => {
+    link();
+    const user = userEvent.setup();
+    const { loadCloud, wipeLocal, onDone, storage } = setup({
+      error: { code: 'FR002', message: 'Cancela tu suscripción antes de eliminar tu cuenta' },
+    });
+    givePhoto(storage);
+    render(<DeleteAccountCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={onDone} />);
+    await confirmAccountDelete(user);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      t.settings.eraseErrors.active_subscription,
+    );
+    expect(storage.objects.has(PHOTO)).toBe(true);
+    expect(wipeLocal).not.toHaveBeenCalled();
+  });
+});
+
+describe('Borrar mis datos y la foto de perfil', () => {
+  it('borrar mis datos deja la cuenta, así que no toca la foto de Storage', async () => {
+    link();
+    const user = userEvent.setup();
+    const { loadCloud, rpc, wipeLocal, onDone, storage } = setup();
+    render(<DeleteDataCard loadCloud={loadCloud} wipeLocal={wipeLocal} onDone={onDone} />);
+    await user.click(screen.getByRole('button', { name: t.settings.delete }));
+    await user.click(screen.getByRole('button', { name: t.settings.deleteConfirm }));
+
+    expect(rpc).toHaveBeenCalledWith('delete_my_data');
+    expect(storage.storageCalls).toEqual([]);
+    expect(onDone).toHaveBeenCalledTimes(1);
   });
 });
