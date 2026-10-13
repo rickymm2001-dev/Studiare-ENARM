@@ -2,8 +2,10 @@
 // que usa la app. claim_device guarda el dispositivo como lo haría el servidor, con el session_id
 // del token, y device_sessions devuelve esa fila. Puede rechazar el reclamo por el límite de cambios
 // con el mismo error que lanza la base. También imita Storage para la foto de perfil (B2), con los
-// objetos en memoria, y la fila de private_accounts. Solo lo usan las pruebas.
+// objetos en memoria, la fila de private_accounts y Party en la nube (B7), con las funciones party_* a
+// nombre de la sesión abierta. Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
+import { createFakePartyServer, type FakePartyServer } from './fakePartyServer';
 
 export interface FakeCloudOptions {
   /** Fila inicial de device_sessions. null si nadie ha reclamado la cuenta */
@@ -107,6 +109,15 @@ export interface FakeCloud {
   storageCalls: string[];
   /** Dispara un evento de Supabase Auth como si hubiera pasado en el navegador */
   emit: (event: AuthChangeEvent) => void;
+  /**
+   * Party en la nube (B7). Las funciones party_* van a nombre de session.id, así una prueba cambia de
+   * alumno cambiando la sesión
+   */
+  party: FakePartyServer;
+  /** Alias de cada cuenta en profiles. Sin entrada, la cuenta se llama Rick, como el perfil de la sesión */
+  aliases: Map<string, string>;
+  /** Cómo fallan las funciones de Party. error responde con error de red y throw lanza la excepción */
+  failParty: FakeFailure;
 }
 
 const NETWORK_ERROR = { message: 'Failed to fetch', status: 0 };
@@ -157,6 +168,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         listener(event);
       });
     },
+    party: createFakePartyServer({ aliasOf: (userId) => fake.aliases.get(userId) ?? 'Rick' }),
+    aliases: new Map(),
+    failParty: 'none',
   };
 
   const outcome = <T>(failure: FakeFailure, ok: () => T): T | { data: null; error: unknown } => {
@@ -313,8 +327,28 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         },
       }),
     },
-    rpc: (name: string, args: { p_device_id: string; p_label: string }) => {
+    rpc: (name: string, rawArgs?: Record<string, unknown>) => {
       fake.rpcCalls.push(name);
+      const args = (rawArgs ?? {}) as { p_device_id: string; p_label: string };
+      if (name.startsWith('party_')) {
+        return Promise.resolve(
+          outcome(fake.failParty, () => {
+            if (!fake.session) {
+              return { data: null, error: { code: '28000', message: 'Hace falta iniciar sesión' } };
+            }
+            const reply = fake.party.call(name, fake.session.id, rawArgs ?? {});
+            if (reply === null) {
+              return {
+                data: null,
+                error: { code: 'PGRST202', message: `Función ${name} no existe` },
+              };
+            }
+            return 'error' in reply
+              ? { data: null, error: reply.error }
+              : { data: reply.data, error: null };
+          }),
+        );
+      }
       if (name.startsWith('sync_') && fake.sync === 'ok') {
         return Promise.resolve({
           data: name === 'sync_clock' ? new Date().toISOString() : 0,

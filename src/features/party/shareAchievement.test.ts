@@ -1,15 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { t } from '@/i18n/es-MX';
-import type { AchievementCard } from './achievement';
-import { shareAchievement, type ShareDeps } from './shareAchievement';
+import type { WeekShareCard } from './achievement';
+import { shareWeek, type ShareDeps } from './shareAchievement';
 
-const card: AchievementCard = {
+const card: WeekShareCard = {
   brand: 'Marca',
   alias: null,
-  level: 7,
-  levelTitle: 'R2',
-  streak: 12,
-  weeklyXp: 1240,
+  weekStart: '2026-10-12',
+  studyDays: 4,
+  reviews: 120,
+  questions: 35,
+  streak: 6,
   simulated: false,
 };
 const render = () => Promise.resolve(new Blob(['png'], { type: 'image/png' }));
@@ -21,29 +22,39 @@ function deps(overrides: Partial<ShareDeps> = {}) {
   return { value, share, download };
 }
 
-describe('compartir la tarjeta de logro', () => {
+describe('compartir el resumen de la semana', () => {
   it('con el menú del sistema comparte la imagen con su texto y no descarga nada', async () => {
     const { value, share, download } = deps();
-    await expect(shareAchievement(card, render, value)).resolves.toBe('shared');
+    await expect(shareWeek(card, render, value)).resolves.toBe('shared');
     expect(share).toHaveBeenCalledTimes(1);
     const data = share.mock.calls[0]?.[0];
-    expect(data?.title).toBe(t.party.share.shareTitle);
-    expect(data?.text).toContain('nivel 7');
+    expect(data?.title).toBe(t.b7.weekShare.shareTitle);
+    expect(data?.text).toContain('4 días de estudio');
+    expect(data?.text).toContain('120 repasos');
     expect(data?.files).toHaveLength(1);
-    expect(data?.files?.[0]).toMatchObject({ name: t.party.share.fileName, type: 'image/png' });
+    expect(data?.files?.[0]).toMatchObject({ name: t.b7.weekShare.fileName, type: 'image/png' });
     expect(download).not.toHaveBeenCalled();
+  });
+
+  it('pregunta al navegador si puede compartir esa imagen antes de abrir el menú', async () => {
+    const canShare = vi.fn<(data: ShareData) => boolean>(() => true);
+    const { value } = deps({ canShare });
+    await shareWeek(card, render, value);
+    expect(canShare).toHaveBeenCalledWith(
+      expect.objectContaining({ files: [expect.objectContaining({ type: 'image/png' })] }),
+    );
   });
 
   it('sin Web Share API descarga la imagen', async () => {
     const { value, download } = deps({ share: undefined, canShare: undefined });
-    await expect(shareAchievement(card, render, value)).resolves.toBe('downloaded');
+    await expect(shareWeek(card, render, value)).resolves.toBe('downloaded');
     expect(download).toHaveBeenCalledTimes(1);
-    expect(download.mock.calls[0]?.[0].name).toBe(t.party.share.fileName);
+    expect(download.mock.calls[0]?.[0].name).toBe(t.b7.weekShare.fileName);
   });
 
   it('si el navegador no puede compartir archivos descarga la imagen', async () => {
     const { value, share, download } = deps({ canShare: () => false });
-    await expect(shareAchievement(card, render, value)).resolves.toBe('downloaded');
+    await expect(shareWeek(card, render, value)).resolves.toBe('downloaded');
     expect(share).not.toHaveBeenCalled();
     expect(download).toHaveBeenCalledTimes(1);
   });
@@ -52,7 +63,7 @@ describe('compartir la tarjeta de logro', () => {
     const { value, download } = deps({
       share: () => Promise.reject(new DOMException('cancelado', 'AbortError')),
     });
-    await expect(shareAchievement(card, render, value)).resolves.toBe('cancelled');
+    await expect(shareWeek(card, render, value)).resolves.toBe('cancelled');
     expect(download).not.toHaveBeenCalled();
   });
 
@@ -60,14 +71,14 @@ describe('compartir la tarjeta de logro', () => {
     const { value, download } = deps({
       share: () => Promise.reject(new DOMException('no permitido', 'NotAllowedError')),
     });
-    await expect(shareAchievement(card, render, value)).resolves.toBe('downloaded');
+    await expect(shareWeek(card, render, value)).resolves.toBe('downloaded');
     expect(download).toHaveBeenCalledTimes(1);
   });
 
   it('si no se puede dibujar la imagen no comparte ni descarga nada', async () => {
     const { value, share, download } = deps();
     await expect(
-      shareAchievement(card, () => Promise.reject(new Error('sin canvas')), value),
+      shareWeek(card, () => Promise.reject(new Error('sin canvas')), value),
     ).resolves.toBe('failed');
     expect(share).not.toHaveBeenCalled();
     expect(download).not.toHaveBeenCalled();
@@ -80,6 +91,6 @@ describe('compartir la tarjeta de logro', () => {
         throw new Error('sin descargas');
       },
     });
-    await expect(shareAchievement(card, render, value)).resolves.toBe('failed');
+    await expect(shareWeek(card, render, value)).resolves.toBe('failed');
   });
 });

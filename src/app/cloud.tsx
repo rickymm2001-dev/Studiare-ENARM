@@ -11,6 +11,7 @@ import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
 import { runSync } from '@/data/sync/runSync';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
+import { redeemPendingReferral } from '@/data/referrals/pendingReferral';
 import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion } from '@/data/usecases/profile';
@@ -141,6 +142,9 @@ export function CloudBridge() {
             pullPhoto: linked.created,
           });
           if (stopped() || isLeaving()) return;
+          // El código del enlace de invitación que se abrió en este navegador se canjea ya con el
+          // dispositivo reclamado. Sin código guardado no hace nada (respuesta 77, B7)
+          void redeemPendingReferral(cloud);
           if (syncing?.authId !== identity.authId) {
             syncing?.handle.stop();
             const status = useSyncStatus.getState();

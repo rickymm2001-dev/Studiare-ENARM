@@ -8,12 +8,15 @@
 //
 // Lo que NO simula queda dicho en tests/e2e/cloud/README.md. Reglas que sí hace cumplir, iguales a
 // las de la base: un solo dispositivo activo por cuenta con su límite de cambios (DV001), el plan lo
-// decide el servidor con el pago, el mes gratis por referido llega con el primer pago, y borrar la
-// cuenta se rechaza con una suscripción de Stripe activa (FR002).
+// decide el servidor con el pago, el mes gratis por referido llega con el primer pago, borrar la
+// cuenta se rechaza con una suscripción de Stripe activa (FR002), y Party en la nube (B7) con sus
+// grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
+// (src/data/testing/fakePartyServer.ts).
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
 import type { Role } from '@/data/schemas/common';
+import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
 import {
   GATEWAY_CANCEL_PATH,
   GATEWAY_PAY_PATH,
@@ -73,6 +76,20 @@ export interface DeviceLimits {
 
 /** Lo que create-checkout contesta en lugar de abrir el pago, para probar cada aviso de la app */
 export type CheckoutFailure = 'founder_full' | 'already_subscribed' | 'not_configured' | 'provider';
+
+/**
+ * Un aviso de pago verificado de la pasarela, como lo recibe apply_payment_notice. Sirve para mandar la
+ * factura de 0 pesos de una prueba gratis o repetir un aviso (B7 del plan del cambio)
+ */
+export interface FakePaymentNotice {
+  eventId: string;
+  email: string;
+  plan: PaidPlan;
+  /** El id del cobro en la pasarela, la factura en Stripe */
+  paymentId: string;
+  amountMxn: number;
+}
+export type FakeNoticeResult = 'applied' | 'duplicate' | 'ignored';
 export type PortalFailure = 'no_customer' | 'not_configured' | 'provider';
 
 export interface RecordedCall {
@@ -119,8 +136,16 @@ export interface FakeSupabaseServer {
   setSubscription(email: string, subscription: FakeSubscription): void;
   referralCodeOf(email: string): string;
   referralsOf(email: string): { pending: number; completed: number };
+  /** Aplica un aviso de pago como apply_payment_notice y devuelve lo que contestaría la base */
+  paymentNotice(notice: FakePaymentNotice): FakeNoticeResult;
+  /** El último aviso de pago que se aplicó a esa cuenta, por ejemplo el del botón Pagar */
+  lastPaymentNotice(email: string): FakePaymentNotice | null;
   readonly calls: readonly RecordedCall[];
   rpcCalls(name: string): RecordedCall[];
+  /** Party en la nube, para revisar desde la prueba los grupos, los miembros y los duelos */
+  readonly party: FakePartyServer;
+  /** El id de la cuenta con ese correo, como lo ve el servidor */
+  userIdOf(email: string): string | undefined;
   deviceLimits: DeviceLimits;
   founderSeats: number;
   checkoutError: CheckoutFailure | null;
@@ -400,6 +425,8 @@ interface Payment {
   userId: string;
   plan: PaidPlan;
   provider: Provider;
+  /** El id del cobro en la pasarela. El mismo cobro no se cuenta dos veces */
+  providerPaymentId: string;
   amountMxn: number;
   paidAt: string;
 }
@@ -502,11 +529,19 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const referralCodes = new Map<string, string>();
   const referrals: Referral[] = [];
   const grants: Grant[] = [];
+  // Avisos de pago ya aplicados, por procesador e id de evento, y el último de cada cuenta
+  const noticeEvents = new Set<string>();
+  const lastNotices = new Map<
+    string,
+    Omit<FakePaymentNotice, 'email'> & { userId: string; provider: Provider }
+  >();
   const syncRecords = new Map<string, SyncRecordRow>();
   const events: EventRow[] = [];
   const privacyAcceptances: Json[] = [];
   const clientErrors: ClientErrorRow[] = [];
   const calls: RecordedCall[] = [];
+  // Party en la nube. El alias sale de profiles, como en la base
+  const party = createFakePartyServer({ aliasOf: (userId) => users.get(userId)?.alias ?? null });
   let counter = 0;
   let serverSeq = 0;
   let eventSeq = 0;
@@ -656,6 +691,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const isAdmin = (user: FakeUser) => user.role === 'admin' || user.role === 'owner';
 
   function deleteUser(userId: string): void {
+    party.forgetUser(userId);
     users.delete(userId);
     accounts.delete(userId);
     for (const [token, session] of sessions) if (session.userId === userId) sessions.delete(token);
@@ -876,27 +912,58 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     });
   }
 
-  /** Lo que haría apply_payment_notice con un aviso de pago verificado */
-  function applyPayment(checkout: CheckoutSession): void {
-    const periodDays = checkout.plan === 'annual' ? 365 : 30;
-    subscriptions.set(checkout.userId, {
-      plan: checkout.plan,
+  /**
+   * Lo que haría apply_payment_notice con un aviso de pago verificado (20261019000001). Un aviso
+   * repetido se reconoce por su id, la factura de 0 pesos de una prueba gratis no es un cobro, el mismo
+   * cobro no se cuenta dos veces y el referido se concreta con el primer cobro, una sola vez
+   */
+  function applyNotice(
+    notice: Omit<FakePaymentNotice, 'email'> & { userId: string; provider: Provider },
+  ): FakeNoticeResult {
+    const key = `${notice.provider}:${notice.eventId}`;
+    if (noticeEvents.has(key)) return 'duplicate';
+    noticeEvents.add(key);
+    lastNotices.set(notice.userId, notice);
+    if (notice.amountMxn <= 0) return 'ignored';
+    const periodDays = notice.plan === 'annual' ? 365 : 30;
+    subscriptions.set(notice.userId, {
+      plan: notice.plan,
       status: 'active',
-      provider: checkout.provider,
+      provider: notice.provider,
       currentPeriodEnd: new Date(now() + periodDays * DAY_MS).toISOString(),
     });
-    payments.push({
-      id: nextId('pay'),
+    const counted = payments.some(
+      (payment) =>
+        payment.provider === notice.provider && payment.providerPaymentId === notice.paymentId,
+    );
+    if (!counted) {
+      payments.push({
+        id: nextId('pay'),
+        userId: notice.userId,
+        plan: notice.plan,
+        provider: notice.provider,
+        providerPaymentId: notice.paymentId,
+        amountMxn: notice.amountMxn,
+        paidAt: new Date(now()).toISOString(),
+      });
+    }
+    if (notice.provider === 'stripe' && !stripeCustomers.has(notice.userId)) {
+      stripeCustomers.set(notice.userId, nextId('cus_fake'));
+    }
+    completeReferral(notice.userId);
+    return 'applied';
+  }
+
+  /** El botón Pagar de la pasarela simulada. Cobra el precio del plan con un aviso propio */
+  function applyPayment(checkout: CheckoutSession): void {
+    applyNotice({
+      eventId: `evt_${checkout.id}`,
       userId: checkout.userId,
       plan: checkout.plan,
       provider: checkout.provider,
+      paymentId: `in_${checkout.id}`,
       amountMxn: PLAN_PRICES_MXN[checkout.plan],
-      paidAt: new Date(now()).toISOString(),
     });
-    if (checkout.provider === 'stripe' && !stripeCustomers.has(checkout.userId)) {
-      stripeCustomers.set(checkout.userId, nextId('cus_fake'));
-    }
-    completeReferral(checkout.userId);
     checkout.status = 'paid';
   }
 
@@ -920,7 +987,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (referrer === undefined) return json('invalid');
     if (referrer === user.id) return json('own');
     if (referrals.some((referral) => referral.referredId === user.id)) return json('already');
-    if (payments.some((payment) => payment.userId === user.id)) return json('already_paid');
+    // Quien ya tuvo un cobro no entra como referido. Una prueba sin cobro no cuenta (20261019000001)
+    if (payments.some((payment) => payment.userId === user.id && payment.amountMxn > 0)) {
+      return json('already_paid');
+    }
     if (Date.parse(user.createdAt) < now() - REFERRAL_RULES.redeemWindowDays * DAY_MS) {
       return json('too_late');
     }
@@ -1038,12 +1108,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const left = events.filter((event) => event.user_id !== user.id);
     events.length = 0;
     events.push(...left);
+    // Borrar las membresías se lleva en cascada lo de Party de esa cuenta
+    const memberships = party.forgetMemberships(user.id);
     return json({
       events: before - left.length,
       records,
       artifacts: 0,
       reports: 0,
-      memberships: 0,
+      memberships,
       decks: 0,
     });
   }
@@ -1144,6 +1216,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return json('recorded');
   }
 
+  // ------------------------------------------------------------------ Party
+
+  /** Las funciones party_* con el doble compartido, con la forma de error de PostgREST */
+  function partyReply(name: string, user: FakeUser, args: Json): Reply {
+    const reply = party.call(name, user.id, args);
+    if (reply === null) {
+      return pgError('PGRST202', `Could not find the function public.${name} in the schema cache`);
+    }
+    return 'error' in reply ? pgError(reply.error.code, reply.error.message) : json(reply.data);
+  }
+
   // ------------------------------------------------------------------ rpc
 
   function handleRpc(name: string, auth: Auth, body: unknown): Reply {
@@ -1185,6 +1268,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         return adminListUsers(user, args);
       case 'set_user_role':
         return setUserRole(user, args);
+      case 'party_open':
+      case 'party_overview':
+      case 'party_create_group':
+      case 'party_join_group':
+      case 'party_leave_group':
+      case 'party_leave_all':
+      case 'party_publish':
+      case 'party_create_challenge':
+      case 'party_create_duel':
+      case 'party_submit_duel_result':
+        return requireActiveDevice() ?? partyReply(name, user, args);
       default:
         return pgError(
           'PGRST202',
@@ -1715,9 +1809,38 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         completed: mine.filter((referral) => referral.status === 'completed').length,
       };
     },
+    paymentNotice(notice) {
+      const user = emailOf(notice.email);
+      if (!user) throw new Error(`No hay una cuenta con el correo ${notice.email}`);
+      return applyNotice({
+        eventId: notice.eventId,
+        userId: user.id,
+        plan: notice.plan,
+        provider: 'stripe',
+        paymentId: notice.paymentId,
+        amountMxn: notice.amountMxn,
+      });
+    },
+    lastPaymentNotice(email) {
+      const user = emailOf(email);
+      const notice = user ? lastNotices.get(user.id) : undefined;
+      return user && notice
+        ? {
+            eventId: notice.eventId,
+            email: user.email,
+            plan: notice.plan,
+            paymentId: notice.paymentId,
+            amountMxn: notice.amountMxn,
+          }
+        : null;
+    },
     calls,
     rpcCalls(name) {
       return calls.filter((call) => call.path.startsWith(`/rest/v1/rpc/${name}`));
+    },
+    party,
+    userIdOf(email) {
+      return emailOf(email)?.id;
     },
     get deviceLimits() {
       return server.deviceLimits;

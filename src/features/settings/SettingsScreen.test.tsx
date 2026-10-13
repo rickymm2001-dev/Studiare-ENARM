@@ -97,10 +97,11 @@ describe('Configuración en una sola página', () => {
       'href',
       SCREENS.subscription.path,
     );
-    // El plan va antes que tus datos y tu sesión
+    // El plan va antes que tus datos y tu sesión, con Invita y gana un mes junto al plan (B7)
     const cards = within(section).getAllByRole('region');
     expect(cards.map((card) => card.getAttribute('aria-labelledby'))).toEqual([
       'plan-titulo',
+      'referidos-titulo',
       'datos-titulo',
       'sesion-titulo',
     ]);
@@ -312,5 +313,37 @@ describe('Perfil del alumno de demostración', () => {
     expect(within(data).getByText(page.profile.demoNote)).toBeVisible();
     expect(within(data).queryByRole('combobox')).toBeNull();
     expect(within(data).queryByRole('button', { name: t.account.uploadPhoto })).toBeNull();
+  });
+});
+
+// Bloque B7 del plan del cambio. Referidos en Perfil (respuesta 77 y 4.3) y modo enfoque (respuesta 82)
+describe('Configuración con lo nuevo de B7', () => {
+  it('Perfil tiene Invita y gana un mes también en el plan Gratis', async () => {
+    app = await open();
+    const section = await profile();
+    const plan = within(section).getByRole('region', { name: page.plan.title });
+    expect(within(plan).getByText(t.billing.plans.free)).toBeVisible();
+    const referral = within(section).getByRole('region', { name: t.b7.referral.title });
+    expect(
+      within(referral).getByRole('heading', { level: 3, name: t.b7.referral.title }),
+    ).toBeVisible();
+    // Sin la cuenta en la nube explica qué hace falta, sin candado de plan
+    expect(within(referral).getByText(t.referrals.needsCloud)).toBeVisible();
+  });
+
+  it('el modo enfoque es un interruptor de Apariencia que se aplica al guardar', async () => {
+    const typing = userEvent.setup();
+    app = await open();
+    const toggle = await screen.findByRole('switch', { name: t.b7.focusMode.label }, WAIT);
+    const appearance = document.getElementById('apariencia') as HTMLElement;
+    expect(appearance).toContainElement(toggle);
+    expect(toggle).not.toBeChecked();
+    expect(within(appearance).getByText(t.b7.focusMode.hint)).toBeVisible();
+    await typing.click(toggle);
+    expect(toggle).toBeChecked();
+    // Aún no se guarda
+    expect(usePreferences.getState().appearance.focusMode).toBe(false);
+    await typing.click(within(appearance).getByRole('button', { name: t.settings.saveChanges }));
+    expect(usePreferences.getState().appearance.focusMode).toBe(true);
   });
 });
