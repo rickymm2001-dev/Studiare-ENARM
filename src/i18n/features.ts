@@ -46,7 +46,8 @@ export const featureText = {
     examOn: (date: string) => `ENARM el ${date}`,
     noExamDate: 'Sin fecha de ENARM',
     createTitle: 'Crea tu cuenta',
-    createDescription: 'Todo lo puedes cambiar después en Configuración.',
+    createDescription:
+      'Tu alias y tus datos los cambias después en Configuración, y tu meta diaria en Ajustes del repaso, en Repasar.',
     alias: 'Alias',
     aliasHint: 'Así te verán en Party. No uses tu nombre completo.',
     aliasError: 'Escribe un alias de 1 a 40 caracteres.',
@@ -63,8 +64,6 @@ export const featureText = {
     privacyBody: legalText.onboarding.summary,
     privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
-    consentsTitle: 'Consentimientos por finalidad',
-    consentsDescription: 'Son opcionales y los puedes cambiar en Perfil.',
     consents: {
       party: ['Party', 'Compartir alias, XP, nivel y racha con tus grupos.'],
       ai_analysis: [
@@ -1509,13 +1508,19 @@ export const featureText = {
     personas: [
       ['Si estudias todo el día', 'Te decimos si tu esfuerzo rinde y cuándo te estás cansando.'],
       ['Si estudias porque toca', 'Misiones cortas y una racha que no vas a querer romper.'],
-      ['Si te va bien sin matarte', 'Duelos, ligas y preguntas que suben de nivel contigo.'],
+      [
+        'Si te va bien sin matarte',
+        'Duelos con tus amigos y preguntas que suben de nivel contigo.',
+      ],
       ['Si estás de guardia', 'Sesiones de 5 minutos que funcionan sin conexión.'],
       [
         'Si vas por segunda vez',
         'Evidencia de por qué fallaste y tu avance contra tu intento anterior.',
       ],
-      ['Si estudias en grupo', 'Retos de grupo y logros para compartir con tu generación.'],
+      [
+        'Si estudias en grupo',
+        'Grupos con tu generación, tabla semanal, retos y duelos para estudiar juntos.',
+      ],
     ],
     pricingTitle: 'Planes',
     bestValue: 'Mejor precio',
@@ -1740,7 +1745,8 @@ export const featureText = {
     guideChange: (field: string, from: string, to: string) => `${field} pasa de ${from} a ${to}`,
     guideApply: 'Aplicar perfil guía',
     guideApplied: 'Listo, aplicamos el perfil guía.',
-    suggestionTitle: 'Tarjetas nuevas por día',
+    // Distinto del campo Tarjetas nuevas por día, que desde B3 vive en el mismo panel
+    suggestionTitle: 'Sugerencia de tarjetas nuevas',
     calculate: 'Calcular cuántas nuevas me convienen',
     unlimitedOn:
       'Tus tarjetas nuevas están sin límite. Entran todas las que haya cada día y los repasos de los días siguientes pueden juntarse.',
@@ -1773,7 +1779,6 @@ export const featureText = {
     filters: 'Mazos y temas',
     filtersSummary: (decks: number, topics: number, of: number) =>
       `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
-    limits: 'Límites de hoy',
     untagged: 'Incluir tarjetas sin subespecialidad',
     untaggedHint: 'Algunas notas no traen su subespecialidad. Entran con su mazo si lo marcaste.',
     start: (n: number) =>
@@ -2003,20 +2008,15 @@ export const featureText = {
       syncNow: 'Sincronizar ahora',
     },
   },
-  // Misiones de hoy en Inicio (Fase P bloque 6, 4.12 del plan del cambio). Logros, sus insignias y
-  // sus ligas se quitaron en B3 (comentario 14)
+  // Misiones de hoy en Inicio (Fase P bloque 6, 4.12 del plan del cambio). Logros, sus insignias, sus
+  // ligas y las misiones de la semana se quitaron en B3 (comentario 14)
   missions: {
     progress: (current: number, target: number) => `${current} de ${target}`,
     done: 'Cumplida',
-    calibrating: (have: number, need: number) =>
-      `Calibrando. Llevas ${have} de ${need} preguntas para medir tus aciertos.`,
     titles: {
       dailyCards: (n: number) => `Repasa ${plural(n, 'tarjeta', 'tarjetas')}`,
       dailyQuestions: (n: number) => `Responde ${plural(n, 'pregunta', 'preguntas')}`,
       dailyMinutes: (n: number) => `Estudia ${plural(n, 'minuto', 'minutos')}`,
-      weeklyDays: (n: number) => `Estudia ${plural(n, 'día', 'días')} esta semana`,
-      weeklyXp: (n: number) => `Suma ${n.toLocaleString('es-MX')} XP esta semana`,
-      weeklyAccuracy: (n: number) => `Acierta ${n} % de tus preguntas de la semana`,
     },
   },
   // Referidos con mes gratis (Fase P bloque 11)

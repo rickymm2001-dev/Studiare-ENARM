@@ -1,5 +1,6 @@
-// Configuración del programador de repasos de un alumno. La comparten Repasar, el planificador y
-// la carga futura, para que todos proyecten con las mismas reglas (7.1, D-064, D-067).
+// Configuración del programador de repasos de un alumno. La comparten Repasar, la semana y la carga
+// futura de Progreso, para que todos proyecten con las mismas reglas (7.1, D-064, D-067). La semana
+// vivía en el planificador, que se quitó en B3 del plan del cambio (comentario 13).
 import { examDateFor } from '@/config/exam';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { SchedulerConfig } from '@/engines/fsrs';
@@ -7,7 +8,7 @@ import type { ReadySession } from '../shared/RequireSession';
 
 /**
  * Tope práctico de nuevas por día cuando el alumno apaga el límite (D-085, fila 6). Es mayor que
- * cualquier mazo real y deja la cola, el planificador y la carga futura con la misma cuenta
+ * cualquier mazo real y deja la cola, la semana de Progreso y la carga futura con la misma cuenta
  */
 export const UNLIMITED_NEW_CARDS_PER_DAY = 100_000;
 

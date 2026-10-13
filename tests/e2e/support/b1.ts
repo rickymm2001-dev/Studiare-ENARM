@@ -1,8 +1,8 @@
 // Ayudantes de las e2e que cierran los huecos de la auditoría inicial (B1, D-119). Cambiar de rol
 // con /rol, suscribirse con el pago simulado, seguir el mazo más chico, salir y volver a entrar,
-// cambiar de base y generar la demostración desde Datos de demostración del admin (B3), leer y
-// sembrar tablas de IndexedDB y dejar umbrales del admin guardados antes de que cargue la app. Nada
-// de aquí toca src ni fixtures.ts
+// cambiar de base y generar la demostración desde Datos de demostración del admin (B3), elegir cuándo
+// llega la retroalimentación en Ajustes del repaso (B3), leer y sembrar tablas de IndexedDB y dejar
+// umbrales del admin guardados antes de que cargue la app. Nada de aquí toca src ni fixtures.ts
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { OVERRIDES_KEY, type StoredOverrides } from '@/config/overridesStore';
@@ -89,6 +89,28 @@ export async function generateDemo(page: Page, timeout = 150_000): Promise<void>
     { timeout },
   );
   await enterAs(page, 'student');
+}
+
+/** Ajustes del repaso, el panel de Repasar con todo lo que se guarda del repaso (B3) */
+export const reviewSettingsPanel = (page: Page): Locator =>
+  page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+
+/**
+ * Elige cuándo llega la retroalimentación de la práctica. Se cambia solo en Ajustes del repaso y
+ * Simular la muestra de solo lectura (B3 del plan del cambio). Abre el panel con su dirección y, si
+ * el valor cambió, lo guarda
+ */
+export async function setPracticeFeedback(page: Page, feedback: 'end' | 'each'): Promise<void> {
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const panel = reviewSettingsPanel(page);
+  const field = panel.getByRole('combobox', { name: t.settings.practiceFeedback });
+  await field.selectOption(feedback);
+  await expect(field).toHaveValue(feedback);
+  const save = panel.getByRole('button', { name: t.settings.saveChanges });
+  if (await save.isVisible()) {
+    await save.click();
+    await expect(panel.getByText(t.settings.saved, { exact: true })).toBeVisible();
+  }
 }
 
 /**

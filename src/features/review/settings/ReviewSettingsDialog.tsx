@@ -2,18 +2,21 @@
 // en este panel de Repasar y en ningún otro lugar. Metas del día, al estudiar, temporizador, días
 // fáciles, repaso avanzado de FSRS, las ayudas de carga diaria y el Pomodoro. En el teléfono ocupa
 // toda la pantalla y en computadora es una hoja a la derecha. Lo que se elige para una sola sesión,
-// como el modo o los mazos, se queda en Qué quieres repasar.
+// como el modo o los mazos, se queda en Qué quieres repasar. Cerrar con cambios sin guardar pregunta
+// antes, igual que Editar perfil, con Escape, la X, el fondo o el botón de atrás.
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
-import { useEffect, useRef, type ReactNode, type Ref } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { useDataApi } from '@/data/context';
 import { updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
+import { useReturnFocus } from '@/ui/hooks/use-return-focus';
 import { scrollToElement } from '@/ui/scroll';
 import { PomodoroSettingsForm } from '../../pomodoro/Pomodoro';
 import type { ReadySession } from '../../shared/RequireSession';
-import type { ReviewSettingsFocus } from './panelParam';
+import { UnsavedChangesGuard } from '../../shared/UnsavedChangesGuard';
+import { leavesReviewSettings, type ReviewSettingsFocus } from './panelParam';
 import { StudySettingsForm } from './StudySettingsForm';
 
 /** Dentro del panel no hay barra de navegación abajo, así que la barra de guardar va cerca del borde */
@@ -43,6 +46,9 @@ export function ReviewSettingsDialog({
   dailyLoad?: ReactNode;
 }) {
   const text = t.settingsPage.reviewSettings;
+  // Se abre con varios botones y con la dirección, sin un Trigger de Radix. Al cerrar, el foco vuelve
+  // al botón que lo abrió
+  const returnFocus = useReturnFocus();
   return (
     <Dialog.Root
       open={focus !== null}
@@ -52,7 +58,13 @@ export function ReviewSettingsDialog({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed inset-0 z-50 flex flex-col bg-surface shadow-raised sm:left-auto sm:w-full sm:max-w-2xl sm:border-l sm:border-line">
+        <Dialog.Content
+          onOpenAutoFocus={returnFocus.onOpenAutoFocus}
+          onCloseAutoFocus={(event) => {
+            returnFocus.onCloseAutoFocus(event);
+          }}
+          className="fixed inset-0 z-50 flex flex-col bg-surface shadow-raised sm:left-auto sm:w-full sm:max-w-2xl sm:border-l sm:border-line"
+        >
           <div className="flex items-start justify-between gap-3 border-b border-line px-4 py-3">
             <div className="flex min-w-0 flex-col gap-0.5">
               <Dialog.Title className="text-lg font-bold">{text.title}</Dialog.Title>
@@ -87,17 +99,30 @@ function PanelBody({
   const api = useDataApi();
   const { user, settings } = session;
   const pomodoro = useRef<HTMLElement>(null);
+  // Cada formulario dice si tiene cambios sin guardar. Con alguno, cerrar el panel pregunta antes
+  const [studyDirty, setStudyDirty] = useState(false);
+  const [pomodoroDirty, setPomodoroDirty] = useState(false);
   // Abierto desde el engrane del Pomodoro, el panel empieza en sus ajustes
   useEffect(() => {
     if (focus === 'pomodoro') scrollToElement(pomodoro.current);
   }, [focus]);
   return (
     <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+      {/* Cerrar es quitar ?ajustes de la dirección, así que el aviso del router lo detiene. Solo
+          pregunta dentro de la app. Al recargar, la dirección vuelve a abrir el panel con lo guardado,
+          sin el aviso del navegador */}
+      <UnsavedChangesGuard
+        dirty={studyDirty || pomodoroDirty}
+        leaves={leavesReviewSettings}
+        text={t.settingsPage.reviewSettings.unsaved}
+        warnOnUnload={false}
+      />
       <PanelSection id="ajustes-metas" title={t.settings.goalsTitle}>
         <StudySettingsForm
           userId={user.id}
           settings={settings}
           saveBarClassName={PANEL_SAVE_BAR}
+          onDirtyChange={setStudyDirty}
           onSave={(patch) => updateProfile(api, user, { settings: patch })}
         />
       </PanelSection>
@@ -110,6 +135,7 @@ function PanelBody({
         <PomodoroSettingsForm
           value={settings.pomodoro}
           saveBarClassName={PANEL_SAVE_BAR}
+          onDirtyChange={setPomodoroDirty}
           onSave={async (next) => {
             await updateProfile(api, user, { settings: { pomodoro: next } });
           }}

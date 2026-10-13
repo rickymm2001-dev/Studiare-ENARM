@@ -1,7 +1,8 @@
 // Costos de IA y bitácora de llamadas (pantalla 23, 8.1). Admin y dueño ven cuánto se ha gastado, cuánto
 // por motor y por día, cuánto costaría un alumno al mes y cada llamada con su modelo, sus tokens, su
 // costo, su latencia y cómo terminó. El gasto de las respuestas simuladas es teórico y se dice con
-// texto. Antes de proyectar espera a tener llamadas y días suficientes.
+// texto. Antes de proyectar espera a tener llamadas y días suficientes. Arriba, siempre, en qué modo
+// está la IA, real, simulada o sin conexión (B3 del plan del cambio).
 import { Coins, Gauge, Layers, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 import { useSession } from '@/app/session';
@@ -20,6 +21,7 @@ import { SelectField } from '@/ui/components/field';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingState, EmptyState, LoadingState } from '@/ui/states/states';
+import { AiModeCard } from './AiModeCard';
 import { formatDateTime, formatInt, formatUsd, shortId } from './format';
 import { useAiAdmin } from './useAiAdmin';
 
@@ -41,7 +43,12 @@ export function AiCostsScreen() {
   const [mode, setMode] = useState(ALL);
   const [outcome, setOutcome] = useState(ALL);
 
-  const header = <ScreenHeader title={text.title} description={t.screens.aiCosts.description} />;
+  const header = (
+    <>
+      <ScreenHeader title={text.title} description={t.screens.aiCosts.description} />
+      <AiModeCard />
+    </>
+  );
   if (calls === undefined) {
     return (
       <>

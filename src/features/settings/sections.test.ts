@@ -19,10 +19,13 @@ describe('secciones de Configuración', () => {
     expect(requestedSection('#otra', 'nada')).toBeNull();
   });
 
-  it('Estudio y Pomodoro mandan a Ajustes del repaso y lo demás se queda', () => {
+  it('Estudio manda a Ajustes del repaso, Pomodoro a su parte del panel y lo demás se queda', () => {
     expect(legacyRedirect('study')).toBe(`${SCREENS.review.path}?ajustes=1`);
-    expect(legacyRedirect('pomodoro')).toBe(`${SCREENS.review.path}?ajustes=1`);
+    expect(legacyRedirect('pomodoro')).toBe(`${SCREENS.review.path}?ajustes=pomodoro`);
     expect(legacyRedirect('account')).toBeNull();
     expect(legacyRedirect(null)).toBeNull();
+    // Un nombre que existe en cualquier objeto no es una pestaña de antes
+    expect(legacyRedirect('constructor')).toBeNull();
+    expect(requestedSection('', 'constructor')).toBeNull();
   });
 });

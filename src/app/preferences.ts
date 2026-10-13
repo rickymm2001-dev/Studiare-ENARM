@@ -60,6 +60,13 @@ function writeStoredPreferences(prefs: DevicePreferences): void {
   }
 }
 
+/**
+ * Cuántas veces se cerró la sesión en esta pestaña. El puente de la nube lo compara antes de abrir la
+ * sesión, para que una revisión que empezó antes de cerrarla no la vuelva a abrir al terminar
+ */
+let signOuts = 0;
+export const signOutCount = (): number => signOuts;
+
 interface PreferencesState extends DevicePreferences {
   setTheme: (theme: DevicePreferences['theme']) => void;
   setRole: (role: DevicePreferences['role']) => void;
@@ -97,6 +104,7 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
       update({ sessionUserId: userId });
     },
     signOut: () => {
+      signOuts += 1;
       // Con cuenta en la nube el rol lo da el servidor, así que al salir vuelve a alumno (D-075)
       update(
         cloudConfigured() ? { sessionUserId: null, role: 'student' } : { sessionUserId: null },

@@ -105,7 +105,7 @@ test('el perfil guía, la sugerencia de nuevas y el límite viven en Ajustes del
   await expect(guide.getByText(t.dailyLoad.guideApplied)).toBeVisible();
   await expect(guide.getByText(t.dailyLoad.guideAlready)).toBeVisible();
 
-  // Sin minutos de estudio la sugerencia manda a Plan
+  // Sin minutos de estudio la sugerencia manda a ponerlos en la semana de Progreso
   const suggestion = panel.getByRole('region', { name: t.dailyLoad.suggestionTitle });
   await suggestion.getByRole('button', { name: t.dailyLoad.calculate }).click();
   const needsMinutes = suggestion.getByText(t.dailyLoad.needsMinutes);

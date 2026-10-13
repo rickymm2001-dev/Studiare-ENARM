@@ -12,11 +12,5 @@ export function missionTitle(mission: Mission): string {
       return titles.dailyQuestions(mission.target);
     case 'dailyMinutes':
       return titles.dailyMinutes(mission.target);
-    case 'weeklyDays':
-      return titles.weeklyDays(mission.target);
-    case 'weeklyXp':
-      return titles.weeklyXp(mission.target);
-    case 'weeklyAccuracy':
-      return titles.weeklyAccuracy(mission.target);
   }
 }

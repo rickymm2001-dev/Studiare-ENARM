@@ -133,6 +133,8 @@ describe('carga diaria en Ajustes del repaso', () => {
     const section = await within(dialog).findByRole('region', {
       name: t.dailyLoad.suggestionTitle,
     });
+    // La sugerencia y el campo viven en el mismo panel y cada uno tiene su propio nombre
+    expect(within(dialog).getAllByLabelText(t.settings.newCardsPerDay)).toHaveLength(1);
     await typing.click(within(section).getByRole('button', { name: t.dailyLoad.calculate }));
     // Hay 8 nuevas por ver, la sugerencia no pasa de ahí
     const use = await within(section).findByRole('button', { name: t.dailyLoad.use(8) });

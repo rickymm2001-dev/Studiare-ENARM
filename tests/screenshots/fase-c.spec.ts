@@ -7,6 +7,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
+import { generateDemo, setPracticeFeedback } from '../e2e/support/b1';
 import { signUp } from '../e2e/support/fixtures';
 
 const OUT_DIR = join(import.meta.dirname, '..', '..', 'docs', 'screenshots', 'fase-c');
@@ -47,14 +48,15 @@ async function answerPractice(page: Page, number: number, total: number) {
   if (!last) await page.getByText(t.simulator.progress(number + 1, total)).waitFor();
 }
 
-/** Empieza una práctica de 5 preguntas. feedback each la muestra después de cada pregunta */
+/**
+ * Empieza una práctica de 5 preguntas. feedback each la muestra después de cada pregunta. Se elige en
+ * Ajustes del repaso, su único lugar desde B3 del plan del cambio
+ */
 async function startPractice(page: Page, feedback: 'end' | 'each') {
+  await setPracticeFeedback(page, feedback);
   await page.goto(SCREENS.simulatorSetup.path);
   const practice = page.getByRole('region', { name: t.simulator.setupTitle });
   await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
-  await practice
-    .getByRole('combobox', { name: t.settings.practiceFeedback })
-    .selectOption(feedback);
   const start = practice.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
@@ -64,11 +66,8 @@ async function startPractice(page: Page, feedback: 'end' | 'each') {
 test('pantallas del alumno con la demostración', async ({ page }, info) => {
   test.setTimeout(300_000);
   const project = info.project.name;
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-  const panel = page.getByRole('region', { name: t.demoData.title });
-  await panel.getByRole('button', { name: t.demoData.generate }).click();
-  await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 200_000 });
+  // La demostración se genera en Datos de demostración del admin desde B3 del plan del cambio (5.4)
+  await generateDemo(page, 200_000);
 
   // Inicio con el diseño fijo y los datos de la demo
   await page.goto('/');

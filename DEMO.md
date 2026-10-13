@@ -78,6 +78,6 @@ Recorre cada motor y cada gadget del prototipo. No necesitas ayuda ni terminal s
 
 ## Si algo no sale
 
-- La demo se ve vacía. Falta Generar datos de demostración, en Configuración, Cuenta, con Demostración activa
+- La demo se ve vacía. Falta Generar datos de demostración, en Datos de demostración del admin, con Demostración activa. Como alumno, el aviso de la demo vacía te regresa a Mi cuenta
 - No ves a un médico o administrador. En la demostración y en Mi cuenta sin nube el rol se cambia en Cambiar de rol. Con una cuenta en la nube, el rol lo da el servidor
 - Quieres empezar de cero. En Datos de demostración da clic en Regenerar desde cero. Tu cuenta real no se toca

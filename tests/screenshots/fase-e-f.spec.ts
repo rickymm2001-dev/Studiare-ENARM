@@ -33,17 +33,27 @@ test('privacidad y borrado en Configuración', async ({ page }, info) => {
   test.setTimeout(120_000);
   await signUp(page);
 
-  await page.goto(`${SCREENS.settings.path}?seccion=privacy`);
+  // Desde B3 del plan del cambio el puntaje oficial se captura en Progreso y solo con la mejora
+  // anónima, que se da en Privacidad. Configuración es una sola página y sus datos están en Perfil
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
   await expect(page.getByRole('heading', { name: t.settings.privacy.consentsTitle })).toBeVisible();
-  await page.getByLabel(t.settings.privacy.score, { exact: true }).fill('72.5');
-  await page.getByRole('button', { name: t.settings.privacy.saveScore }).click();
+  await page
+    .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
+    .check();
+  await expect(page.getByText(t.settings.privacy.consentSaved)).toBeVisible();
+  await page.goto(SCREENS.progress.path);
+  const score = page.getByRole('region', { name: t.settings.privacy.scoreTitle });
+  await score.getByLabel(t.settings.privacy.score, { exact: true }).fill('72.5');
+  await score.getByRole('button', { name: t.settings.privacy.saveScore }).click();
   await expect(
-    page.getByText(t.settings.privacy.current(new Date().getFullYear(), 72.5)),
+    score.getByText(t.settings.privacy.current(new Date().getFullYear(), 72.5)),
   ).toBeVisible();
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
+  await expect(page.getByRole('heading', { name: t.settings.deleteTitle })).toBeVisible();
   await capture(page, 'configuracion-privacidad', info.project.name);
 
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await expect(page.getByRole('heading', { name: t.settings.deleteTitle })).toBeVisible();
+  await page.goto(`${SCREENS.settings.path}#perfil`);
+  await expect(page.getByRole('heading', { name: t.settingsPage.profile.title })).toBeVisible();
   await capture(page, 'configuracion-cuenta', info.project.name);
 });
 

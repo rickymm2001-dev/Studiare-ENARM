@@ -16,6 +16,8 @@ import { routes } from '../router';
 export interface RenderedApp {
   api: DataApi;
   user: User;
+  /** El router en memoria, para ir atrás o adelante como con los botones del navegador */
+  router: ReturnType<typeof createMemoryRouter>;
 }
 
 /** Corre la siembra una sola vez y solo entonces muestra la ruta */
@@ -66,7 +68,7 @@ export async function renderApp(
     };
     wait();
   });
-  return { api: captured as DataApi, user };
+  return { api: captured as DataApi, user, router };
 }
 
 /** Deja la base, las preferencias, la práctica y el navegador como al empezar */

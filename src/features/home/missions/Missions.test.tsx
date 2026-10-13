@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-// Misiones de hoy en Inicio (Fase P bloque 6). Logros se quitó en B3 del plan del cambio y las
-// misiones se quedan en Inicio (4.12).
+// Misiones de hoy en Inicio (Fase P bloque 6). Logros y las misiones de la semana se quitaron en B3
+// del plan del cambio y las de hoy se quedan en Inicio (4.12).
 import 'fake-indexeddb/auto';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -70,11 +70,9 @@ async function study(api: DataApi, user: User, cards: number, xpAmount: number) 
 }
 
 const mission = (overrides: Partial<Mission> & Pick<Mission, 'key'>): Mission => ({
-  scope: 'daily',
   current: 0,
   target: 10,
   done: false,
-  calibrating: null,
   ...overrides,
 });
 
@@ -100,33 +98,8 @@ describe('lista de misiones', () => {
     );
   });
 
-  it('una misión que calibra lo dice y no muestra una barra que no se puede medir', () => {
-    render(
-      <MissionList
-        label={t.widgets.names.missions}
-        missions={[
-          mission({
-            key: 'weeklyAccuracy',
-            scope: 'weekly',
-            target: 70,
-            calibrating: { have: 4, need: 30 },
-          }),
-        ]}
-      />,
-    );
-    expect(screen.getByText(t.missions.calibrating(4, 30))).toBeVisible();
-    expect(screen.queryByRole('progressbar')).toBeNull();
-  });
-
   it('cada clave de misión tiene su título', () => {
-    const keys: Mission['key'][] = [
-      'dailyCards',
-      'dailyQuestions',
-      'dailyMinutes',
-      'weeklyDays',
-      'weeklyXp',
-      'weeklyAccuracy',
-    ];
+    const keys: Mission['key'][] = ['dailyCards', 'dailyQuestions', 'dailyMinutes'];
     const titles = keys.map((key) => missionTitle(mission({ key, target: 5 })));
     expect(new Set(titles).size).toBe(keys.length);
     expect(titles.every((title) => title.length > 0 && !title.includes('undefined'))).toBe(true);

@@ -3,7 +3,7 @@
 // abre Ajustes del repaso en la parte del Pomodoro, el único lugar donde se guardan sus ajustes (B3
 // del plan del cambio). Al terminar una fase aparece un aviso con el botón para empezar la siguiente.
 import { Maximize2, Minimize2, Pause, Play, Settings2, SkipForward, Timer, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -166,14 +166,21 @@ export function PomodoroSettingsForm({
   value,
   onSave,
   saveBarClassName,
+  onDirtyChange,
 }: {
   value: ReadySession['settings']['pomodoro'];
   onSave: (next: ReadySession['settings']['pomodoro']) => Promise<void>;
   /** Distancia de la barra de guardar al borde, que dentro de Ajustes del repaso es otra */
   saveBarClassName?: string;
+  /** Avisa si hay cambios sin guardar, para preguntar antes de cerrar el panel */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const [draft, setDraft] = useState(value);
   const [status, setStatus] = useState('');
+  const dirty = JSON.stringify(draft) !== JSON.stringify(value);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
   const number = (
     key: 'focusMinutes' | 'shortBreakMinutes' | 'longBreakMinutes' | 'cyclesBeforeLong',
     label: string,
@@ -246,7 +253,7 @@ export function PomodoroSettingsForm({
         }}
       />
       <SaveBar
-        dirty={JSON.stringify(draft) !== JSON.stringify(value)}
+        dirty={dirty}
         status={status}
         className={saveBarClassName}
         onDiscard={() => {

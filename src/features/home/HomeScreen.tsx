@@ -291,7 +291,7 @@ function MissionsSection({ session }: { session: ReadySession }) {
   return (
     <SideSection title={t.widgets.names.missions}>
       {missions ? (
-        <MissionList missions={missions.daily} label={t.widgets.names.missions} />
+        <MissionList missions={missions} label={t.widgets.names.missions} />
       ) : (
         // Las tres misiones del día, cada una con su línea y su barra (H04)
         <SkeletonRows

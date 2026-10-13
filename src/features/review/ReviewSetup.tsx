@@ -190,7 +190,7 @@ export function ReviewSetup({
               onClick={onOpenSettings}
               className="font-semibold text-primary-ink underline underline-offset-2"
             >
-              {panelText.changeLimits}
+              {panelText.change}
             </button>
           </p>
         </div>

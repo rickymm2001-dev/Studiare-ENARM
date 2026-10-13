@@ -9,14 +9,17 @@ export const settingsPageText = {
     appearance: 'Apariencia',
     privacy: 'Privacidad',
   },
-  // Sin sesión solo queda Apariencia y esta frase
+  // Sin sesión quedan el aviso para entrar, como en las otras pantallas, y Apariencia
   signedOut: {
     body: 'Entra a tu cuenta para ver tu perfil, tu plan y tu privacidad.',
   },
-  // Con la base de demostración vacía no hay alumno que mostrar
+  // Con la base de demostración vacía no hay alumno que mostrar. Solo el admin o el dueño con las
+  // herramientas de demostración pueden generarla. Los demás vuelven a Mi cuenta (5.4)
   demoEmpty: {
     body: 'Genera los datos de demostración en la pantalla Datos de demostración del admin para ver esta pantalla con datos simulados.',
     link: 'Ir a Datos de demostración',
+    bodyBack:
+      'La demostración todavía no tiene datos. Vuelve a Mi cuenta para seguir con tus propios datos.',
   },
   plan: {
     title: 'Tu plan',
@@ -78,7 +81,20 @@ export const settingsPageText = {
       `Cada día entran ${newCards.toLocaleString('es-MX')} nuevas y hasta ${reviews.toLocaleString('es-MX')} repasos.`,
     limitsUnlimited: (reviews: number) =>
       `Cada día entran todas las nuevas y hasta ${reviews.toLocaleString('es-MX')} repasos.`,
-    changeLimits: 'Cambiar en Ajustes del repaso',
+    // Simular solo muestra cuándo llega la retroalimentación. Se cambia en el panel, su único lugar
+    practiceFeedback: (each: boolean) =>
+      each
+        ? 'La retroalimentación de la práctica llega después de cada pregunta.'
+        : 'La retroalimentación de la práctica llega al final de la sesión.',
+    // Enlace de lo que aquí solo se lee, como los límites en Repasar y la retroalimentación en Simular
+    change: 'Cambiar en Ajustes del repaso',
+    // Aviso al cerrar el panel con cambios sin guardar
+    unsaved: {
+      title: 'Tienes cambios sin guardar',
+      body: 'Si cierras ahora, se pierden los cambios de tus ajustes del repaso.',
+      stay: 'Seguir editando',
+      leave: 'Cerrar sin guardar',
+    },
   },
   // Lo que pasó de Configuración a Datos de demostración del admin (5.4 del plan del cambio)
   demoTools: {

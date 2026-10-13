@@ -48,7 +48,16 @@ test('Demostración marca Datos simulados en toda pantalla y se puede volver', a
   }
   await expectNoSeriousA11yViolations(page);
 
-  await page.getByRole('button', { name: t.database.backToReal }).click();
+  // La demostración sigue vacía, así que el alumno ve el aviso que lo regresa a Mi cuenta y no uno que
+  // lo mande a Datos de demostración, que no puede abrir
+  const empty = page.getByRole('region', { name: t.session.demoEmptyTitle });
+  await expect(empty.getByRole('link', { name: t.settingsPage.demoEmpty.link })).toHaveCount(0);
+  await expect(empty.getByRole('button', { name: t.database.backToReal })).toBeVisible();
+  // Se vuelve desde la franja de arriba
+  await page
+    .getByRole('region', { name: t.labels.simulatedData, exact: true })
+    .getByRole('button', { name: t.database.backToReal })
+    .click();
   await expect(page.getByRole('region', { name: t.labels.simulatedData, exact: true })).toHaveCount(
     0,
   );

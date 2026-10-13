@@ -112,7 +112,10 @@ export const VISIBLE_PLANS: readonly PlanKey[] = ['free', 'monthly', 'annual'];
 export const FOUNDER_PROMO_ACTIVE = true as boolean;
 
 /** El plan que se cobra al elegir uno visible. El mensual se cobra como Fundador mientras dure la promoción */
-export function checkoutPlanFor(key: PlanKey, founderPromo: boolean = FOUNDER_PROMO_ACTIVE): PlanKey {
+export function checkoutPlanFor(
+  key: PlanKey,
+  founderPromo: boolean = FOUNDER_PROMO_ACTIVE,
+): PlanKey {
   return key === 'monthly' && founderPromo ? 'founder' : key;
 }
 
@@ -125,7 +128,9 @@ export function visiblePlanOf(key: PlanKey): PlanKey {
  * Cuánto ahorra el anual contra 12 meses del mensual al precio regular, en porcentaje entero. Se
  * redondea hacia abajo para no prometer de más. Con 149 y 1,499 da 16
  */
-export function annualSavingsPercent(plans: Record<PlanKey, Pick<PlanDef, 'priceMxn'>> = PLANS): number {
+export function annualSavingsPercent(
+  plans: Record<PlanKey, Pick<PlanDef, 'priceMxn'>> = PLANS,
+): number {
   const twelveMonths = plans.monthly.priceMxn * 12;
   if (twelveMonths <= 0) return 0;
   return Math.max(0, Math.floor((1 - plans.annual.priceMxn / twelveMonths) * 100));

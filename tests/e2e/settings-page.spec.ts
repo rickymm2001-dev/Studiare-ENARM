@@ -7,6 +7,7 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { emailOf } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import { isPhone, mainNav } from './support/navigation';
 
 const text = t.settingsPage;
 const SECTIONS = [text.sections.profile, text.sections.appearance, text.sections.privacy];
@@ -100,11 +101,27 @@ test('salir con cambios sin guardar avisa y deja seguir editando o salir', async
   await expect(warning).toContainText(text.unsaved.body);
   await expectNoSeriousA11yViolations(page);
 
-  // Seguir editando deja todo como estaba
+  // Seguir editando deja todo como estaba y el foco vuelve al enlace que intentó salir
   await warning.getByRole('button', { name: text.unsaved.stay }).click();
   await expect(warning).toHaveCount(0);
   await expect(page).toHaveURL(new RegExp(`${SCREENS.settings.path}$`));
   await expect(card.getByLabel(t.onboarding.alias, { exact: true })).toHaveValue('Ana Luisa');
+  await expect(page.getByRole('link', { name: text.plan.change })).toBeFocused();
+
+  // En el teléfono, una sección de Más también pregunta y, al seguir editando, el foco vuelve a Más
+  if (isPhone(page)) {
+    const more = mainNav(page).getByRole('button', { name: t.navItems.more });
+    await more.click();
+    await page
+      .getByRole('dialog', { name: t.nav.more })
+      .getByRole('link', { name: t.navItems.tutor })
+      .click();
+    await expect(warning).toBeVisible();
+    await warning.getByRole('button', { name: text.unsaved.stay }).click();
+    await expect(warning).toHaveCount(0);
+    await expect(more).toBeFocused();
+    await expect(page).toHaveURL(new RegExp(`${SCREENS.settings.path}$`));
+  }
 
   // Salir sin guardar sí sale y lo escrito se pierde
   await page.getByRole('link', { name: text.plan.change }).click();

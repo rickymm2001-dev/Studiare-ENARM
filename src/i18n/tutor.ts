@@ -186,7 +186,6 @@ export const tutorText = {
       turnOn: 'Encender análisis con IA',
       turningOn: 'Encendiendo…',
       on: 'Encendido. Lo que redacta la IA va en borrador, con la etiqueta de que ningún médico lo ha validado, y se actualiza cada 7 días.',
-      turnOff: 'Apagar en Perfil',
       working: 'Redactando tus explicaciones…',
       offline: 'Sin conexión. Tu tutor sigue con plantillas fijas.',
       notice: (message: string) => `No se pudo usar la IA ahora. ${message}`,

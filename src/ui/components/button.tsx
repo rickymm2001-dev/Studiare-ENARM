@@ -14,9 +14,11 @@ const buttonVariants = cva(
         primary: 'bg-primary text-primary-fg hover:bg-primary-hover active:bg-primary-active',
         secondary: 'border border-line-strong bg-surface text-fg hover:bg-muted',
         ghost: 'text-fg hover:bg-muted',
-        // Acciones que borran o cierran. Es un color de estado permitido por 4.7
-        danger: 'bg-danger text-danger-fg hover:opacity-90',
-        link: 'text-primary-ink underline underline-offset-4 hover:opacity-80',
+        // Acciones que borran o cierran. Es un color de estado permitido por 4.7. Al pasar el
+        // puntero cambia de tono y no de opacidad, que dejaba el texto abajo del 4.5 a 1
+        danger: 'bg-danger text-danger-fg hover:bg-danger-hover',
+        // Igual aquí. La opacidad bajaba el texto a 4.4 a 1, así que se engruesa el subrayado
+        link: 'text-primary-ink underline underline-offset-4 hover:decoration-2',
       },
       size: {
         md: 'min-h-touch px-4 text-base',

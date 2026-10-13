@@ -3,7 +3,9 @@
 // las páginas sin sesión, en docs/screenshots/v3/b2. El recorrido completo va en teléfono claro y
 // computadora clara y oscura, y las pantallas clave además en 1920 y en el teléfono oscuro, para
 // cubrir los tres anchos en claro y en oscuro que pide 0.3 del plan sin cargar el repo de imágenes.
-// Plan, Logros y Perfil se quitaron en B3 y ya no se capturan
+// Plan, Logros y Perfil se quitaron en B3 y ya no se capturan. Las pestañas de Configuración pasaron
+// a una sola página y Estudio y Pomodoro a Ajustes del repaso, en Repasar, con los mismos nombres de
+// captura para comparar con antes
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -12,6 +14,8 @@ import {
   enterAs,
   finishExam,
   generateDemo,
+  reviewSettingsPanel,
+  setPracticeFeedback,
   startExam,
 } from '../../e2e/support/b1';
 import { signUp } from '../../e2e/support/fixtures';
@@ -21,10 +25,29 @@ const OUT_DIR = outDirFor('b2');
 
 const FULL_WALK = (project: string) => !project.startsWith('1920') && project !== '390-oscuro';
 
-/** Abre una ruta, espera su título y captura. Un retraso en una región opcional no detiene el resto */
+/**
+ * Las capturas de las pestañas de Configuración de antes y su lugar ahora. Configuración es una sola
+ * página con anclas y Estudio y Pomodoro viven en Ajustes del repaso, el panel de Repasar (B3)
+ */
+const SETTINGS_SHOTS = [
+  ['study', `${SCREENS.review.path}?ajustes=1`],
+  ['appearance', `${SCREENS.settings.path}#apariencia`],
+  ['pomodoro', `${SCREENS.review.path}?ajustes=pomodoro`],
+  ['privacy', `${SCREENS.settings.path}#privacidad`],
+  ['account', `${SCREENS.settings.path}#perfil`],
+] as const;
+
+/**
+ * Abre una ruta, espera su título y captura. Un retraso en una región opcional no detiene el resto.
+ * Con Ajustes del repaso abierto el resto de la página queda oculto para el lector de pantalla, así
+ * que se espera el panel y no el h1
+ */
 async function shot(page: Page, project: string, name: string, path: string, settle?: string) {
   await page.goto(path);
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 60_000 });
+  const ready = path.includes('?ajustes=')
+    ? reviewSettingsPanel(page)
+    : page.getByRole('heading', { level: 1 });
+  await expect(ready).toBeVisible({ timeout: 60_000 });
   if (settle) {
     await page
       .getByRole('region', { name: settle })
@@ -51,21 +74,16 @@ test('todas las pantallas después del rediseño', async ({ page }, info) => {
   await shot(page, project, '09-tutor', SCREENS.tutor.path, t.tutor.report.title);
   await shot(page, project, '10-party', SCREENS.party.path);
   await shot(page, project, '13-suscripcion', SCREENS.subscription.path);
-  for (const section of ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const) {
-    await shot(
-      page,
-      project,
-      `14-configuracion-${section}`,
-      `${SCREENS.settings.path}?seccion=${section}`,
-    );
+  for (const [section, path] of SETTINGS_SHOTS) {
+    await shot(page, project, `14-configuracion-${section}`, path);
   }
   await shot(page, project, '15-cambiar-rol', SCREENS.roleSelector.path);
 
-  // Práctica con la retroalimentación después de cada pregunta
+  // Práctica con la retroalimentación después de cada pregunta, que se elige en Ajustes del repaso
+  await setPracticeFeedback(page, 'each');
   await page.goto(SCREENS.simulatorSetup.path);
   const practice = page.getByRole('region', { name: t.simulator.setupTitle });
   await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
-  await practice.getByRole('combobox', { name: t.settings.practiceFeedback }).selectOption('each');
   const start = practice.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
@@ -137,10 +155,5 @@ test('pantallas clave en 1920 y en el teléfono oscuro', async ({ page }, info) 
   await shot(page, project, '02-repasar', SCREENS.review.path);
   await shot(page, project, '06-simular', SCREENS.simulatorSetup.path, t.exam.cardTitle);
   await shot(page, project, '07-progreso', SCREENS.progress.path, t.progress.futureLoad.title);
-  await shot(
-    page,
-    project,
-    '14-configuracion-appearance',
-    `${SCREENS.settings.path}?seccion=appearance`,
-  );
+  await shot(page, project, '14-configuracion-appearance', `${SCREENS.settings.path}#apariencia`);
 });

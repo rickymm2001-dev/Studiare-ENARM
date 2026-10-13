@@ -3,7 +3,7 @@
 // alumno, así que los valores guardados se conservan y cada cambio sigue quedando como evento
 // settings_changed. Una sola barra de guardar que aparece al haber cambios (D-078). Retención, tope
 // e intervalos por botón quedan plegados porque casi nadie los cambia.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { WEEKDAY_KEYS } from '@/engines/easyDays';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
@@ -30,12 +30,15 @@ export function StudySettingsForm({
   settings,
   onSave,
   saveBarClassName,
+  onDirtyChange,
 }: {
   userId: string;
   settings: UserSettings;
   onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
   /** Distancia de la barra de guardar al borde, que dentro del panel es otra */
   saveBarClassName?: string;
+  /** Avisa si hay cambios sin guardar, para preguntar antes de cerrar el panel */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   // base es lo guardado cuando se armó el borrador. Sirve para saber qué tocó el alumno
   const [state, setState] = useState(() => {
@@ -56,6 +59,9 @@ export function StudySettingsForm({
   };
   const patch = patchOf(draft);
   const dirty = differs(patch, settings);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
   return (
     <form
       className="flex flex-col gap-4"

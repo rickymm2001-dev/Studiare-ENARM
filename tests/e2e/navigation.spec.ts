@@ -56,18 +56,20 @@ async function expectMenu(
   if (!isPhone(page)) {
     await expect(nav.getByRole('link')).toHaveText([...menu.rail, t.navItems.settings]);
     await expect(nav.getByRole('button', { name: t.navItems.more })).toHaveCount(0);
-    // Configuración, sola abajo a la izquierda y debajo de todo lo demás
+    // Configuración, sola abajo a la izquierda y debajo de todo lo demás. Con el grupo del admin las
+    // secciones no caben en 800 px y se desplazan dentro del riel, así que la última se lleva a la
+    // vista antes de medir. Configuración sigue fija abajo
     const viewport = page.viewportSize();
+    const lastLink = nav.getByRole('link', { name: menu.rail.at(-1) ?? '', exact: true });
+    await lastLink.scrollIntoViewIfNeeded();
     const settings = await nav.getByRole('link', { name: t.navItems.settings }).boundingBox();
-    const last = await nav
-      .getByRole('link', { name: menu.rail.at(-1) ?? '', exact: true })
-      .boundingBox();
+    const last = await lastLink.boundingBox();
     expect(settings).not.toBeNull();
     expect(settings?.x ?? 999).toBeLessThan(100);
     expect((settings?.y ?? 0) + (settings?.height ?? 0)).toBeGreaterThan(
       (viewport?.height ?? 0) - 40,
     );
-    expect(settings?.y ?? 0).toBeGreaterThan(last?.y ?? 999);
+    expect(settings?.y ?? 0).toBeGreaterThanOrEqual((last?.y ?? 999) + (last?.height ?? 0));
     return;
   }
   await expect(nav.getByRole('link')).toHaveText([...menu.bar]);

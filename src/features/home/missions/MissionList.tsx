@@ -1,6 +1,6 @@
-// Lista de misiones de Misiones de hoy en Inicio (Fase P bloque 6). Cada una con su avance y su barra,
-// o con calibrando mientras no hay datos para medirla. Logros se quitó en B3 del plan del cambio y las
-// misiones se quedan en Inicio (4.12).
+// Lista de misiones de Misiones de hoy en Inicio (Fase P bloque 6). Cada una con su avance y su barra.
+// Logros y las misiones de la semana se quitaron en B3 del plan del cambio y las de hoy se quedan en
+// Inicio (4.12).
 import { CheckCircle2, Circle } from 'lucide-react';
 import type { Mission } from '@/engines/rewards';
 import { t } from '@/i18n/es-MX';
@@ -25,22 +25,16 @@ function MissionRow({ mission }: { mission: Mission }) {
             {title}
           </span>
           <span className="text-xs text-fg-muted">
-            {mission.calibrating
-              ? text.calibrating(mission.calibrating.have, mission.calibrating.need)
-              : mission.done
-                ? text.done
-                : text.progress(mission.current, mission.target)}
+            {mission.done ? text.done : text.progress(mission.current, mission.target)}
           </span>
         </div>
       </div>
-      {mission.calibrating ? null : (
-        <ProgressBar
-          value={mission.current}
-          max={mission.target}
-          label={`${title}. ${text.progress(mission.current, mission.target)}`}
-          tone={mission.done ? 'neutral' : 'primary'}
-        />
-      )}
+      <ProgressBar
+        value={mission.current}
+        max={mission.target}
+        label={`${title}. ${text.progress(mission.current, mission.target)}`}
+        tone={mission.done ? 'neutral' : 'primary'}
+      />
     </li>
   );
 }

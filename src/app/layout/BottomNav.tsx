@@ -7,7 +7,7 @@
 import { Ellipsis, X, type LucideIcon } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useId, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import {
@@ -139,9 +139,12 @@ function MoreSheet({
   // atrás, ya no está abierta
   const [openedAt, setOpenedAt] = useState<string | null>(null);
   const open = openedAt === pathname;
-  // Al elegir otra pantalla el foco no vuelve a Más. El marco lo pone en el título de la pantalla
-  // nueva (4.8)
-  const leaving = useRef(false);
+  // La pantalla que se eligió en la hoja. Se navega cuando la hoja ya se cerró y el foco volvió a Más.
+  // Si la pantalla nueva abre, el marco lleva el foco a su título (4.8). Si el aviso de cambios sin
+  // guardar detiene el cambio y el alumno sigue editando, el foco vuelve a Más y no se pierde
+  const target = useRef<string | null>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
   const id = useId();
 
   // La hoja es del teléfono. Si la ventana se ensancha hasta el riel, se cierra
@@ -166,6 +169,7 @@ function MoreSheet({
     >
       <Dialog.Trigger asChild>
         <button
+          ref={trigger}
           type="button"
           aria-current={active ? 'true' : undefined}
           className={cn(itemClass(active), 'w-full')}
@@ -179,9 +183,12 @@ function MoreSheet({
         <Dialog.Content
           aria-describedby={undefined}
           onCloseAutoFocus={(event) => {
-            if (!leaving.current) return;
-            leaving.current = false;
+            const next = target.current;
+            if (next === null) return;
+            target.current = null;
             event.preventDefault();
+            trigger.current?.focus();
+            void navigate(next);
           }}
           className="animate-rise fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] flex-col gap-3 overflow-y-auto rounded-t-xl border-t border-line bg-surface px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+1rem)] shadow-raised lg:hidden"
         >
@@ -217,8 +224,19 @@ function MoreSheet({
                         <Link
                           to={item.path}
                           aria-current={current ? 'page' : undefined}
-                          onClick={() => {
-                            leaving.current = item.path !== pathname;
+                          onClick={(event) => {
+                            // Con una tecla especial el navegador la abre en otra pestaña o ventana
+                            if (
+                              event.button !== 0 ||
+                              event.metaKey ||
+                              event.altKey ||
+                              event.ctrlKey ||
+                              event.shiftKey
+                            ) {
+                              return;
+                            }
+                            event.preventDefault();
+                            target.current = item.path === pathname ? null : item.path;
                             setOpenedAt(null);
                           }}
                           className={cn(

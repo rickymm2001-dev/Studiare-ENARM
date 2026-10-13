@@ -43,10 +43,10 @@ test('sin conexión abre pantallas que nunca se habían visitado y la IA avisa q
     await expect(page.getByText(t.offlineBanner)).toBeVisible();
   }
 
-  // El modo de la IA, en Datos de demostración del admin, dice que la IA necesita conexión y que lo
-  // demás sigue (B3 del plan del cambio, 5.4). Cambiar de rol también funciona sin red
+  // El modo de la IA, en Costos de IA del admin, dice que la IA necesita conexión y que lo demás
+  // sigue (B3 del plan del cambio). Cambiar de rol también funciona sin red
   await enterAs(page, 'admin');
-  await page.goto(SCREENS.demoData.path);
+  await page.goto(SCREENS.aiCosts.path);
   await expect(page.getByText(t.ai.detail.offline)).toBeVisible();
   await expect(page.getByText(t.ai.badge.offline)).toBeVisible();
 

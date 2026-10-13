@@ -56,3 +56,74 @@ test('un ajuste del repaso se cambia en el panel de Repasar y se conserva al rec
   );
   expect(change?.payload.value).toBe(35);
 });
+
+test('Simular solo muestra cuándo llega la retroalimentación y lleva al panel para cambiarla', async ({
+  page,
+}) => {
+  await signUp(page);
+  await page.goto(SCREENS.simulatorSetup.path);
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await expect(practice.getByText(text.practiceFeedback(false))).toBeVisible({ timeout: 60_000 });
+  // Un solo lugar para cada ajuste. En Simular no hay campo para cambiarlo
+  await expect(practice.getByRole('combobox', { name: t.settings.practiceFeedback })).toHaveCount(
+    0,
+  );
+
+  await practice.getByRole('link', { name: text.change }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}\\?ajustes=1$`));
+  const panel = page.getByRole('dialog', { name: text.title });
+  await panel.getByRole('combobox', { name: t.settings.practiceFeedback }).selectOption('each');
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(panel.getByText(t.settings.saved, { exact: true })).toBeVisible();
+
+  // Cerrar el panel regresa a Simular, de donde vino, ya con el valor nuevo
+  await panel.getByRole('button', { name: text.close }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.simulatorSetup.path}$`));
+  await expect(
+    page
+      .getByRole('region', { name: t.simulator.setupTitle })
+      .getByText(text.practiceFeedback(true)),
+  ).toBeVisible({ timeout: 60_000 });
+});
+
+test('el botón de atrás cierra el panel sin salir de Repasar y los cambios sin guardar piden confirmación', async ({
+  page,
+}) => {
+  await signUp(page);
+  await page.goto(SCREENS.review.path);
+  const opener = page.getByRole('button', { name: text.open, exact: true });
+  await opener.click();
+  const panel = page.getByRole('dialog', { name: text.title });
+  await expect(panel).toBeVisible();
+
+  // Sin cambios, atrás cierra el panel y deja Repasar como estaba
+  await page.goBack();
+  await expect(panel).toHaveCount(0);
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}$`));
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.review.title);
+
+  // Con un cambio sin guardar, Escape pregunta antes de cerrar
+  await opener.click();
+  const newCards = panel.getByRole('spinbutton', { name: t.settings.newCardsPerDay });
+  await newCards.fill('35');
+  await page.keyboard.press('Escape');
+  const warning = page.getByRole('alertdialog', { name: text.unsaved.title });
+  await expect(warning).toBeVisible();
+  await expect(warning).toContainText(text.unsaved.body);
+  await expectNoSeriousA11yViolations(page);
+  await warning.getByRole('button', { name: text.unsaved.stay }).click();
+  await expect(warning).toHaveCount(0);
+  await expect(newCards).toHaveValue('35');
+
+  // Atrás también pregunta. Cerrar sin guardar cierra el panel y no guarda nada
+  await page.goBack();
+  await expect(warning).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}\\?ajustes=1$`));
+  await warning.getByRole('button', { name: text.unsaved.leave }).click();
+  await expect(panel).toHaveCount(0);
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}$`));
+  await opener.click();
+  await expect(panel.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toHaveValue(
+    '20',
+  );
+});

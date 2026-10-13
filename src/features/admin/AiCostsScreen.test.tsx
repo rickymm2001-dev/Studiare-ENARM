@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { writeStoredFlags } from '@/config/featureFlags';
 import { writeStoredOverrides } from '@/config/overridesStore';
 import type { AiCallLog } from '@/data/schemas/activity';
 import { newId } from '@/data/testing/fixtures';
@@ -69,6 +70,24 @@ function enough(): AiCallLog[] {
 }
 
 describe('costos de IA (pantalla 23)', () => {
+  it('dice en qué modo está la IA aunque las herramientas de demostración estén apagadas', async () => {
+    writeStoredFlags({ demoTools: false });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) =>
+        Promise.resolve(
+          url.endsWith('/api/health')
+            ? Response.json({ status: 'ok', mode: 'mock', version: 1 })
+            : new Response('', { status: 404 }),
+        ),
+      ),
+    );
+    await open([]);
+    const card = screen.getByRole('region', { name: t.ai.cardTitle });
+    expect(await within(card).findByText(t.ai.badge.mock, undefined, WAIT)).toBeVisible();
+    expect(within(card).getByText(t.ai.detail.mock)).toBeVisible();
+  });
+
   it('sin llamadas dice que todavía no hay y no proyecta', async () => {
     await open([]);
     expect(await screen.findByText(adminText.adminCosts.empty.title)).toBeVisible();

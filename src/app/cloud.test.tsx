@@ -167,6 +167,41 @@ describe('CloudBridge y el dispositivo único', () => {
     expect(fake.claims).toHaveLength(0);
   });
 
+  it('cerrar sesión mientras la revisión de la nube espera respuesta no la vuelve a abrir', async () => {
+    const fake = useFake(makeFakeCloud());
+    // La nube tarda en responder a la primera revisión, como al abrir la app con una red lenta
+    fake.holdSession = true;
+    usePreferences.setState({ sessionUserId: 'perfil-local' });
+    mount();
+    await waitFor(() => {
+      expect(fake.heldSessionReads).toBe(1);
+    });
+    // El alumno cierra la sesión antes de que llegue la respuesta, que todavía trae su sesión
+    fake.holdSession = false;
+    act(() => {
+      usePreferences.getState().signOut();
+    });
+    await waitFor(() => {
+      expect(fake.signOuts).toEqual([{ scope: 'local' }]);
+    });
+    await waitFor(() => {
+      expect(useCloud.getState().state).toEqual({ status: 'signed-out' });
+    });
+    // Llega la respuesta de la primera revisión, que sí traía la sesión y lee el rol de la cuenta
+    act(() => {
+      fake.releaseSession();
+    });
+    await waitFor(() => {
+      expect(fake.roleReads).toBe(1);
+    });
+    // Unir la cuenta con el perfil local tarda lo que tarda la base del navegador, así que se le da
+    // tiempo de sobra para que, si la revisión siguiera, se notara
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    expect(usePreferences.getState().sessionUserId).toBeNull();
+    expect(fake.claims).toHaveLength(0);
+    expect(useCloud.getState().state).toEqual({ status: 'signed-out' });
+  });
+
   it('si la red falla al revisar o al reclamar no saca al alumno', async () => {
     const fake = useFake(makeFakeCloud({ row: { device_id: 'otro-navegador' } }));
     fake.failCheck = 'error';

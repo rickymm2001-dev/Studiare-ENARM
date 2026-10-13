@@ -1,6 +1,7 @@
 // Análisis con IA del tutor (8.1). Dice en qué estado está, con texto y no solo con color. Apagado por
 // omisión, porque exige el consentimiento de análisis con IA, y solo en los planes que lo incluyen.
-// Encenderlo guarda el consentimiento con su evento, igual que en Perfil.
+// Encenderlo guarda el consentimiento con su evento, igual que en Configuración, sección Privacidad,
+// donde también se apaga.
 import { Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';

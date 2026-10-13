@@ -12,7 +12,6 @@ import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { listStudentPool } from '@/data/usecases/studentBank';
-import { updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -30,6 +29,7 @@ import { ExamSetupCard } from '../exam/ExamSetupCard';
 import { reservedByStoredExam } from '../exam/examStorage';
 import { useAnalysis } from '../progress/useAnalysis';
 import { targetBiasTags } from '../progress/focusItems';
+import { reviewSettingsLinkState, reviewSettingsPath } from '../review/settings/panelParam';
 import { clock, usePractice } from './practice';
 import { pickQuestions } from './pickQuestions';
 import { TargetedSamplingField } from './TargetedSamplingField';
@@ -183,7 +183,7 @@ function Setup({ session }: { session: ReadySession }) {
         </CardHeader>
         <div className="flex flex-col gap-3">
           {/* Una columna en el teléfono para que ninguna opción se corte (H09 de la revisión de B2) */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}
@@ -214,21 +214,21 @@ function Setup({ session }: { session: ReadySession }) {
                 setStructure(event.target.value as Structure);
               }}
             />
-            {/* Se guarda en el perfil, así la próxima práctica ya lo trae (D-087) */}
-            <SelectField
-              label={t.settings.practiceFeedback}
-              value={session.settings.practiceFeedback}
-              options={(['end', 'each'] as const).map((value) => ({
-                value,
-                label: t.settings.practiceFeedbackOptions[value],
-              }))}
-              onChange={(event) => {
-                void updateProfile(api, session.user, {
-                  settings: { practiceFeedback: event.target.value as 'end' | 'each' },
-                });
-              }}
-            />
           </div>
+          {/* Cuándo llega la retroalimentación se guarda en el perfil (D-087). Aquí solo se lee y se
+              cambia en Ajustes del repaso, su único lugar, como los límites en Repasar (B3 del plan) */}
+          <p className="text-sm text-fg-muted">
+            {t.settingsPage.reviewSettings.practiceFeedback(
+              session.settings.practiceFeedback === 'each',
+            )}{' '}
+            <Link
+              to={reviewSettingsPath()}
+              state={reviewSettingsLinkState}
+              className="font-semibold text-primary-ink underline underline-offset-2"
+            >
+              {t.settingsPage.reviewSettings.change}
+            </Link>
+          </p>
           <TargetedSamplingField
             report={analysis?.report}
             checked={targeted}

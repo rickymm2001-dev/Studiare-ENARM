@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 // Menú de cada rol en computadora y en el teléfono (B3 del plan del cambio). jsdom no aplica los
 // estilos, así que lo que solo se ve en un ancho se revisa por sus clases, como el resto de la app.
-import { act, render, screen, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, useLocation } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { describe, expect, it } from 'vitest';
 import type { Role } from '@/data/schemas/common';
+import { UnsavedChangesGuard } from '@/features/shared/UnsavedChangesGuard';
 import { t } from '@/i18n/es-MX';
 import { NAV_BY_ROLE } from '../navigation';
 import { SCREENS } from '../screens';
@@ -228,7 +229,10 @@ describe('barra del teléfono', () => {
         name: t.navItems.tutor,
       }),
     );
-    expect(screen.getByRole('status', { name: 'ruta' })).toHaveTextContent(SCREENS.tutor.path);
+    // Se navega cuando la hoja ya se cerró y el foco volvió a Más
+    await waitFor(() => {
+      expect(screen.getByRole('status', { name: 'ruta' })).toHaveTextContent(SCREENS.tutor.path);
+    });
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(more).toHaveAttribute('aria-current', 'true');
     // Inicio ya no es la activa
@@ -253,6 +257,56 @@ describe('barra del teléfono', () => {
     expect(within(nav).getByRole('button', { name: t.navItems.more })).not.toHaveAttribute(
       'aria-current',
     );
+  });
+
+  it('si el aviso de cambios sin guardar detiene la sección elegida, seguir editando regresa el foco a Más', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        {
+          path: '*',
+          element: (
+            <>
+              <Where />
+              {/* Como Editar perfil con cambios sin guardar */}
+              <UnsavedChangesGuard dirty />
+              <BottomNav nav={NAV_BY_ROLE.student} />
+            </>
+          ),
+        },
+      ],
+      { initialEntries: [SCREENS.settings.path] },
+    );
+    render(<RouterProvider router={router} />);
+    const more = screen.getByRole('button', { name: t.navItems.more });
+    await user.click(more);
+    await user.click(
+      within(screen.getByRole('dialog', { name: t.nav.more })).getByRole('link', {
+        name: t.navItems.tutor,
+      }),
+    );
+    const warning = await screen.findByRole('alertdialog', { name: t.settingsPage.unsaved.title });
+    await user.click(within(warning).getByRole('button', { name: t.settingsPage.unsaved.stay }));
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).toBeNull();
+    });
+    await waitFor(() => {
+      expect(more).toHaveFocus();
+    });
+    expect(screen.getByRole('status', { name: 'ruta' })).toHaveTextContent(SCREENS.settings.path);
+
+    // Salir sin guardar sí lleva a la sección elegida
+    await user.click(more);
+    await user.click(
+      within(screen.getByRole('dialog', { name: t.nav.more })).getByRole('link', {
+        name: t.navItems.tutor,
+      }),
+    );
+    const again = await screen.findByRole('alertdialog', { name: t.settingsPage.unsaved.title });
+    await user.click(within(again).getByRole('button', { name: t.settingsPage.unsaved.leave }));
+    await waitFor(() => {
+      expect(screen.getByRole('status', { name: 'ruta' })).toHaveTextContent(SCREENS.tutor.path);
+    });
   });
 
   it('la hoja se cierra si la pantalla cambia por otro camino, como el botón de atrás', async () => {

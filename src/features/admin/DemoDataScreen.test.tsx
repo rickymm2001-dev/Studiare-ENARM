@@ -69,10 +69,11 @@ describe('datos de demostración (pantalla 24)', () => {
     setup({ demo: false });
     expect(await screen.findByText(text.notDemo.title)).toBeVisible();
     expect(screen.queryByRole('button', { name: text.generate })).toBeNull();
-    // El selector de base y el modo de la IA pasaron de Configuración a esta pantalla (B3, 5.4)
+    // El selector de base pasó de Configuración a esta pantalla (B3, 5.4). El modo de la IA no es
+    // de la demostración y se ve en Costos de IA
     const demoRadio = screen.getByRole('radio', { name: new RegExp(t.database.demo) });
     expect(screen.getByRole('radio', { name: new RegExp(t.database.real) })).toBeChecked();
-    expect(screen.getByRole('heading', { name: t.ai.cardTitle })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: t.ai.cardTitle })).toBeNull();
     await typing.click(demoRadio);
     expect(usePreferences.getState().database).toBe('demo');
   });

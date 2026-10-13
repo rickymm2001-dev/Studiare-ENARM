@@ -24,6 +24,9 @@ test('costos de IA. Sin llamadas dice que no hay y con el proxy simulado lee el 
   await expect(page.getByText(adminText.adminCosts.empty.title)).toBeVisible();
   const today = page.getByRole('region', { name: adminText.adminCosts.today.title });
   await expect(today.getByText(adminText.adminCosts.today.mockNote)).toBeVisible();
+  // El modo de la IA va aquí y siempre se ve, con o sin las herramientas de demostración (B3)
+  const ai = page.getByRole('region', { name: t.ai.cardTitle });
+  await expect(ai.getByText(t.ai.badge.mock)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
 
@@ -109,8 +112,9 @@ test('datos de demostración. En Mi cuenta pide cambiar de base ahí mismo y en 
   await becomeAdmin(page);
   await page.goto(SCREENS.demoData.path);
   await expect(page.getByText(adminText.adminDemo.notDemo.title)).toBeVisible();
-  // El selector de base y el modo de la IA pasaron aquí desde Configuración (B3 del plan, 5.4)
-  await expect(page.getByRole('region', { name: t.ai.cardTitle })).toBeVisible();
+  // El selector de base pasó aquí desde Configuración (B3 del plan, 5.4). El modo de la IA no es de
+  // la demostración y vive en Costos de IA
+  await expect(page.getByRole('region', { name: t.ai.cardTitle })).toHaveCount(0);
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   await expect(page.getByText(t.database.storedIn('enarm_demo'))).toBeVisible();
 

@@ -287,23 +287,6 @@ export const t = {
       count === 1 ? '1 perfil guardado' : `${count.toLocaleString('es-MX')} perfiles guardados`,
     openError: 'No se pudo abrir la base local. Revisa que el navegador permita guardar datos.',
   },
-  demoData: {
-    title: 'Datos de demostración',
-    empty:
-      'La demostración está vacía. Genera al alumno de demostración con 60 días de historial, 300 alumnos simulados y los mazos de Paco. Tarda unos segundos.',
-    ready: (profiles: number) =>
-      `Hay ${profiles.toLocaleString('es-MX')} perfiles simulados, el alumno de demostración con 60 días de historial y los alumnos simulados con sus parámetros verdaderos. Los mazos precargados son de Paco, compartidos con su autorización.`,
-    generate: 'Generar datos de demostración',
-    regenerate: 'Regenerar desde cero',
-    confirm: 'Sí, borrar y regenerar',
-    cancel: 'Cancelar',
-    confirmText:
-      'Se borra toda la base de demostración y se vuelve a generar igual. Tu cuenta real no se toca.',
-    working: 'Generando datos simulados…',
-    done: (events: number) =>
-      `Listo. Se guardaron ${events.toLocaleString('es-MX')} eventos simulados.`,
-    error: 'No se pudieron generar los datos de demostración. Intenta de nuevo.',
-  },
   ai: {
     cardTitle: 'Inteligencia artificial',
     badge: {

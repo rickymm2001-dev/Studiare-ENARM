@@ -2,8 +2,9 @@
 // Privacidad, cada una con su subtítulo y una línea entre ellas, sin pestañas (B3 del plan del
 // cambio, comentarios 5, 6 y 16). Las anclas #perfil, #apariencia y #privacidad llevan a cada una y
 // los enlaces viejos con ?seccion= siguen funcionando. Estudio y Pomodoro pasaron a Ajustes del
-// repaso, en Repasar. La base de demostración, su panel y el modo de la IA pasaron a Datos de
-// demostración del admin (5.4). Sin sesión solo queda Apariencia.
+// repaso, en Repasar. La base de demostración y su panel pasaron a Datos de demostración del admin y el
+// modo de la IA a Costos de IA (5.4). Sin sesión o con la demostración vacía quedan el aviso de las
+// demás pantallas y Apariencia.
 import { LogIn } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
@@ -20,6 +21,7 @@ import { AccountDataCard } from '../profile/AccountDataCard';
 import { PlanCard } from '../profile/PlanCard';
 import { SessionCard } from '../profile/SessionCard';
 import { useSubscription } from '../profile/useSubscription';
+import { DemoEmptyCard } from '../shared/DemoEmptyCard';
 import type { ReadySession } from '../shared/RequireSession';
 import { useAccount } from '../shared/useAccount';
 import { AppearanceSettings } from './AppearanceSettings';
@@ -54,15 +56,7 @@ export function SettingsScreen() {
       <>
         {header}
         {session.status === 'demo-empty' ? (
-          <p className="text-fg-muted">
-            {t.settingsPage.demoEmpty.body}{' '}
-            <Link
-              to={screenPath('demoData')}
-              className="font-semibold text-primary-ink underline underline-offset-2"
-            >
-              {t.settingsPage.demoEmpty.link}
-            </Link>
-          </p>
+          <DemoEmptyCard />
         ) : (
           // El mismo aviso que el resto de las pantallas con sesión, para entrar desde aquí
           <Card aria-labelledby="configuracion-sin-sesion">

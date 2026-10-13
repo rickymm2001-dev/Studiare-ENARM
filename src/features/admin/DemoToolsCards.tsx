@@ -1,16 +1,14 @@
-// Herramientas de la demostración que antes vivían en Configuración, en la pestaña Cuenta, y no son
-// del alumno (5.4 y B3 del plan del cambio). El selector de base real o de demostración, que dice
-// dónde se guardan los datos y cuántos perfiles hay, y el modo de la IA. Solo con la bandera
-// demoTools, que en producción está apagada.
+// Herramienta de la demostración que antes vivía en Configuración, en la pestaña Cuenta, y no es del
+// alumno (5.4 y B3 del plan del cambio). El selector de base real o de demostración, que dice dónde se
+// guardan los datos y cuántos perfiles hay. Solo con la bandera demoTools, que en producción está
+// apagada. El modo de la IA no es de la demostración y vive en Costos de IA (AiModeCard.tsx).
 import { FlaskConical, UserRound } from 'lucide-react';
-import { AiModeBadge } from '@/ai/AiModeBadge';
-import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
 import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
 
@@ -72,21 +70,5 @@ function DatabaseStatus() {
         {repos.kind === 'demo' ? <SimulatedDataLabel /> : null}
       </div>
     </div>
-  );
-}
-
-/** En qué modo está la IA, real con clave en el proxy, simulada o sin conexión */
-export function AiModeCard() {
-  const aiStatus = useAiStatus();
-  return (
-    <Card aria-labelledby="ia-titulo">
-      <CardHeader className="mb-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-          <AiModeBadge status={aiStatus} />
-        </div>
-        <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-      </CardHeader>
-    </Card>
   );
 }
