@@ -162,6 +162,12 @@ export const AccountSchema = z.strictObject({
       dataUrl: z.string().startsWith(AVATAR_DATA_URL_PREFIX).max(AVATAR_DATA_URL_MAX),
     }),
   ]),
+  /**
+   * Cuándo eligió el alumno su foto o sus iniciales. Cambia solo cuando guarda una elección distinta
+   * en Tus datos, y al tomar la elección de la nube se copia la fecha de allá. Entre dispositivos
+   * gana la más reciente (B2). Falta en cuentas que nunca eligieron, que no la conocen
+   */
+  avatarChangedAt: UtcDateTimeSchema.optional(),
   updatedAt: UtcDateTimeSchema,
 });
 export type Account = z.infer<typeof AccountSchema>;

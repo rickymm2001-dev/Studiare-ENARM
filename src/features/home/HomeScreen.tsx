@@ -142,8 +142,8 @@ function Dashboard({ session }: { session: ReadySession }) {
 }
 
 /**
- * Un grupo del diseño con su título, como Tus repasos. Va un paso arriba del título de las tarjetas
- * y abajo del saludo, que es el único título fuerte de la pantalla (H05 de la revisión de B2)
+ * Un grupo del diseño con su título, como Tus repasos. Mide lo mismo que el saludo y va en negritas,
+ * como pidió Ricardo en el comentario 7 (manda sobre H05 de la revisión de B2)
  */
 function Group({
   title,
@@ -157,7 +157,7 @@ function Group({
   const id = useId();
   return (
     <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-5', className)}>
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {title}
       </h2>
       {children}
@@ -189,7 +189,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
     <Card aria-labelledby={id} className="flex grow flex-col gap-2 p-5">
       <CardHeading id={id}>{t.widgets.names.daily_goal}</CardHeading>
       <div className="flex items-center gap-3">
-        <Target aria-hidden className="size-8 shrink-0 text-primary-ink sm:size-9" />
+        <Target aria-hidden className="size-8 shrink-0 text-fg-muted sm:size-9" />
         <div className="flex min-w-0 flex-col">
           <span className="text-2xl font-extrabold sm:text-3xl">
             {t.widgets.goal.ratio(Math.min(done, goal.value), goal.value)}
@@ -221,7 +221,7 @@ function DueCard({ snapshot }: { snapshot: Snapshot }) {
       <div>
         <p className="sr-only">{text.dueLabel(snapshot.dueCards)}</p>
         <p aria-hidden className="flex items-center gap-3">
-          <Layers className="size-9 shrink-0 text-primary-ink sm:size-10" />
+          <Layers className="size-9 shrink-0 text-fg-muted sm:size-10" />
           <span className="text-4xl font-extrabold sm:text-5xl">
             {snapshot.dueCards.toLocaleString('es-MX')}
           </span>
@@ -258,7 +258,7 @@ function PlanCard({ userId }: { userId: string }) {
   const plan = useActivePlan(userId);
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3 self-start p-5">
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {text.plan.title}
       </h2>
       {plan === undefined ? (
@@ -272,7 +272,7 @@ function PlanCard({ userId }: { userId: string }) {
       ) : (
         <>
           <p className="flex items-center gap-3">
-            <CreditCard aria-hidden className="size-8 shrink-0 text-primary-ink" />
+            <CreditCard aria-hidden className="size-8 shrink-0 text-fg-muted" />
             <span className="text-xl font-bold text-fg">{t.billing.plans[plan]}</span>
           </p>
           <Button asChild className="w-full">
@@ -310,7 +310,7 @@ function SideSection({ title, children }: { title: string; children: ReactNode }
   const id = useId();
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {title}
       </h2>
       {children}

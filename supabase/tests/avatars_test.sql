@@ -1,7 +1,8 @@
--- Pruebas del bucket de fotos de perfil (migración 20261016000001). Corre después de
--- plan_prices_test.sql sobre la misma base, con usuarios propios. Simula lo que hace la API de
--- Storage, que lee y escribe storage.objects con el rol y el token de quien llama. Cada bloque falla
--- con un error si algo no cumple.
+-- Pruebas del bucket de fotos de perfil (migraciones 20261016000001 y 20261017000001). Corre después
+-- de plan_prices_test.sql sobre la misma base, con usuarios propios. Simula lo que hace la API de
+-- Storage, que lee y escribe storage.objects con el rol y el token de quien llama, y que marca sus
+-- borrados con storage.allow_delete_query porque Storage frena los borrados hechos con SQL (el
+-- esqueleto lo imita). Cada bloque falla con un error si algo no cumple.
 \set ON_ERROR_STOP on
 
 -- ===================================================================== Ayudas de prueba
@@ -45,6 +46,12 @@ begin
   execute stmt;
   get diagnostics n = row_count;
   return n;
+end $$;
+
+-- Lo que hace la API de Storage antes de borrar. Sin esto el freno de Storage rechaza el borrado
+create or replace function pg_temp.as_storage_api() returns void language plpgsql as $$
+begin
+  perform set_config('storage.allow_delete_query', 'true', true);
 end $$;
 
 -- cuántas fotos ve quien consulta
@@ -111,6 +118,7 @@ commit;
 -- ===================================================================== A3. Otro alumno no la ve ni la toca
 begin;
 select pg_temp.as_user('fa000000-0000-0000-0000-000000000002');
+select pg_temp.as_storage_api();
 select pg_temp.expect(pg_temp.visible_photos() = 0, 'A3. Un alumno ajeno vio la foto');
 select pg_temp.expect(
   pg_temp.rows_changed($q$update storage.objects set metadata = '{}' where bucket_id = 'avatars'$q$) = 0,
@@ -125,6 +133,7 @@ rollback;
 -- ===================================================================== A4. Un compañero de grupo la ve, pero no la cambia
 begin;
 select pg_temp.as_user('fa000000-0000-0000-0000-000000000003');
+select pg_temp.as_storage_api();
 select pg_temp.expect(pg_temp.visible_photos() = 1, 'A4. El compañero de grupo no ve la foto');
 select pg_temp.expect(
   pg_temp.rows_changed($q$update storage.objects set metadata = '{}' where bucket_id = 'avatars'$q$) = 0,
@@ -147,10 +156,11 @@ select pg_temp.expect(
 );
 rollback;
 
--- ===================================================================== A6. El admin la ve
+-- ===================================================================== A6. El admin no la ve
+-- La ven solo el alumno y su grupo de Party (20261017000001). Ser admin no basta
 begin;
 select pg_temp.as_user('fa000000-0000-0000-0000-000000000004');
-select pg_temp.expect(pg_temp.visible_photos() = 1, 'A6. El admin no ve la foto');
+select pg_temp.expect(pg_temp.visible_photos() = 0, 'A6. El admin ve la foto de un alumno');
 rollback;
 
 -- ===================================================================== A7. Al salir del grupo deja de verla
@@ -185,6 +195,7 @@ rollback;
 -- ===================================================================== A9. El dueño borra la suya
 begin;
 select pg_temp.as_user('fa000000-0000-0000-0000-000000000001', 's-nuevo');
+select pg_temp.as_storage_api();
 select pg_temp.expect(
   pg_temp.rows_changed($q$delete from storage.objects where bucket_id = 'avatars'
     and name = 'fa000000-0000-0000-0000-000000000001/avatar.jpg'$q$) = 1,
@@ -192,15 +203,23 @@ select pg_temp.expect(
 );
 rollback;
 
--- ===================================================================== A10. Al borrarse la cuenta se va la foto
+-- ===================================================================== A10. El respaldo de la base no frena el borrado de la cuenta
+-- Storage no deja que la base borre sus filas con SQL, así que el disparador de respaldo solo deja un
+-- aviso, que aquí se calla, y la cuenta se borra igual. La foto la quita la app con la API (A13)
 select pg_temp.expect(
   (select count(*) from storage.objects where name like 'fa000000-0000-0000-0000-000000000001/%') = 1,
   'A10. Preparación, la foto debía seguir ahí'
 );
+set client_min_messages = error;
 delete from auth.users where id = 'fa000000-0000-0000-0000-000000000001';
+reset client_min_messages;
 select pg_temp.expect(
-  (select count(*) from storage.objects where name like 'fa000000-0000-0000-0000-000000000001/%') = 0,
-  'A10. La foto sobrevivió a la cuenta'
+  not exists (select 1 from auth.users where id = 'fa000000-0000-0000-0000-000000000001'),
+  'A10. El respaldo de la foto frenó el borrado de la cuenta'
+);
+select pg_temp.expect(
+  (select count(*) from storage.objects where name like 'fa000000-0000-0000-0000-000000000001/%') = 1,
+  'A10. La base borró la foto con SQL. Storage no lo permite y el esqueleto debe imitarlo'
 );
 
 -- ===================================================================== A11. Las rutas raras no rompen las políticas
@@ -213,6 +232,70 @@ select pg_temp.expect(
     and public.avatar_owner('fa000000-0000-0000-0000-000000000002/otra.jpg') is null
     and public.avatar_owner('avatar.jpg') is null,
   'A11. avatar_owner acepta rutas que no son de una foto'
+);
+
+-- ===================================================================== A12. La fecha de la elección de foto
+-- Vive en la fila de la cuenta, nace vacía y la cambia solo el dueño desde su dispositivo activo
+select pg_temp.expect(
+  exists (
+    select 1 from public.private_accounts
+    where user_id = 'fa000000-0000-0000-0000-000000000003' and avatar_changed_at is null
+  ),
+  'A12. Una cuenta nueva ya traía una fecha de elección de foto'
+);
+begin;
+select pg_temp.as_user('fa000000-0000-0000-0000-000000000003');
+select pg_temp.expect(
+  pg_temp.rows_changed($q$update public.private_accounts
+    set avatar = '{"kind":"initials"}', avatar_changed_at = '2026-10-13T10:00:00.123Z'
+    where user_id = auth.uid()$q$) = 1,
+  'A12. El dueño no pudo guardar la fecha de su elección'
+);
+select pg_temp.expect(
+  (select avatar_changed_at from public.private_accounts where user_id = auth.uid())
+    = '2026-10-13T10:00:00.123Z'::timestamptz,
+  'A12. La fecha no quedó como la mandó el dueño'
+);
+commit;
+begin;
+select pg_temp.as_user('fa000000-0000-0000-0000-000000000002');
+select pg_temp.expect(
+  pg_temp.rows_changed($q$update public.private_accounts set avatar_changed_at = now()
+    where user_id = 'fa000000-0000-0000-0000-000000000003'$q$) = 0,
+  'A12. Otro alumno cambió la fecha de la elección ajena'
+);
+rollback;
+
+-- ===================================================================== A13. Eliminar la cuenta como lo hace la app
+-- Primero la API de Storage quita la foto con la sesión del alumno y después delete_my_account. Son
+-- peticiones distintas, así que van en transacciones distintas
+begin;
+select pg_temp.as_user('fa000000-0000-0000-0000-000000000002');
+insert into storage.objects (bucket_id, name, owner, owner_id, metadata)
+  values ('avatars', 'fa000000-0000-0000-0000-000000000002/avatar.jpg', auth.uid(), auth.uid()::text,
+          '{"mimetype":"image/jpeg","size":1}');
+commit;
+begin;
+select pg_temp.as_user('fa000000-0000-0000-0000-000000000002');
+select pg_temp.as_storage_api();
+select pg_temp.expect(
+  pg_temp.rows_changed($q$delete from storage.objects where bucket_id = 'avatars'
+    and name = 'fa000000-0000-0000-0000-000000000002/avatar.jpg'$q$) = 1,
+  'A13. El alumno no pudo quitar su foto con la API antes de eliminar su cuenta'
+);
+commit;
+begin;
+select pg_temp.as_user('fa000000-0000-0000-0000-000000000002');
+-- El respaldo de la base ya no encuentra foto, pero su aviso de que Storage no lo deja se calla igual
+set local client_min_messages = error;
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  not exists (select 1 from auth.users where id = 'fa000000-0000-0000-0000-000000000002')
+    and not exists (
+      select 1 from storage.objects where name like 'fa000000-0000-0000-0000-000000000002/%'
+    ),
+  'A13. Quedó la cuenta o quedó la foto'
 );
 
 select 'TODAS LAS PRUEBAS DE FOTOS DE PERFIL PASARON' as resultado;

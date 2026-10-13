@@ -1,7 +1,7 @@
 // Etiquetas visibles (4.6 y 4.1 del plan del cambio). Mientras el banco es de demostración hay un
 // solo aviso global, Versión de demostración, y ninguna pantalla repite su etiqueta. La base de
-// demostración marca Datos simulados en toda pantalla del alumno y los amigos, los duelos y la
-// tarjeta de logro de Party también. Las etiquetas llevan texto, nunca solo color
+// demostración marca Datos simulados en toda pantalla del alumno, en esa misma línea, y los amigos,
+// los duelos y la tarjeta de logro de Party también. Las etiquetas llevan texto, nunca solo color
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -113,7 +113,8 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
     const banner = page.getByRole('region', { name: t.labels.simulatedData, exact: true });
     await expect(banner, SCREENS[key].path).toContainText(t.labels.simulatedData);
     await expect(banner, SCREENS[key].path).toContainText(t.database.banner);
-    // Un solo aviso. El de Versión de demostración no se apila encima del de datos simulados
+    // Un solo aviso. Versión de demostración va en la misma línea y no en otra región encima
+    await expect(banner, SCREENS[key].path).toContainText(t.labels.demoVersion);
     await expect(demoVersion(page), SCREENS[key].path).toHaveCount(0);
   }
 

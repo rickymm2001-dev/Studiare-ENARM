@@ -1,7 +1,8 @@
 // Borrar mis datos y eliminar mi cuenta (D-101, Fase E bloque E6). Con la cuenta en la nube
 // conectada, primero se borra la copia de allá y, solo si salió bien, lo de este dispositivo. Así,
-// si el servidor falla, no queda el dispositivo vacío con la nube llena ni al revés. Ninguna de las
-// dos se puede deshacer, por eso piden confirmación.
+// si el servidor falla, no queda el dispositivo vacío con la nube llena ni al revés. Eliminar la
+// cuenta quita antes la foto de perfil de Storage (B2). Borrar mis datos la deja, porque la cuenta
+// se queda. Ninguna de las dos se puede deshacer, por eso piden confirmación.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Trash2, UserX } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
@@ -18,7 +19,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 
-type Cloud = Pick<SupabaseClient, 'rpc'>;
+type Cloud = Pick<SupabaseClient, 'rpc' | 'storage' | 'from'>;
 
 /** Por qué falló un borrado. local es que la nube sí se borró y este dispositivo no */
 type DeleteFailure = EraseFailure | 'local';
@@ -185,8 +186,12 @@ export function DeleteAccountCard({ loadCloud, wipeLocal, onDone }: DeleteProps)
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<DeleteFailure | null>(null);
   const { mode } = useMode();
+  // La foto de perfil vive en la carpeta de la cuenta de la nube
+  const authId = useCloud((store) =>
+    store.state.status === 'linked' ? store.state.identity.authId : null,
+  );
   // Sin cuenta en la nube conectada no hay cuenta que eliminar. Para el dispositivo está Borrar mis datos
-  if (mode !== 'cloud') return null;
+  if (mode !== 'cloud' || !authId) return null;
   const confirmed = word.trim() === t.settings.accountDeleteWord;
   return (
     <Panel
@@ -203,7 +208,7 @@ export function DeleteAccountCard({ loadCloud, wipeLocal, onDone }: DeleteProps)
           if (!confirmed || busy) return;
           setBusy(true);
           setFailure(null);
-          void eraseAll(mode, loadCloud, deleteCloudAccount, wipeLocal)
+          void eraseAll(mode, loadCloud, (cloud) => deleteCloudAccount(cloud, authId), wipeLocal)
             .then((reason) => {
               if (reason) setFailure(reason);
               else onDone();

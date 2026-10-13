@@ -1,6 +1,7 @@
-// Reglas del sistema de diseño (B2 del plan del cambio, D-121). Sin degradados en src, el color de
-// acción es exactamente #156082 en claro y en los dos modos oscuros, los tokens y utilidades de
-// degradado y dorado ya no existen y el botón no tiene variante dorada.
+// Reglas del sistema de diseño (B2 del plan del cambio, D-121). Sin degradados en src (CSS, canvas,
+// utilidades de Tailwind ni SVG), el color de acción es exactamente #156082 en claro y en los dos
+// modos oscuros, los tokens y utilidades de degradado y dorado ya no existen y el botón no tiene
+// variante dorada.
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,6 +27,20 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
     const offenders = sourceFiles(SRC)
       .filter((file) => pattern.test(readFileSync(file, 'utf8')))
       .map((file) => file.slice(SRC.length));
+    expect(offenders).toEqual([]);
+  });
+
+  it('no hay utilidades de degradado de Tailwind ni degradados de SVG', () => {
+    // bg-linear, bg-radial y bg-conic son las de Tailwind 4 y bg-gradient-to las de antes. En SVG un
+    // degradado se declara con linearGradient o radialGradient
+    const pattern = /\bbg-(?:linear|radial|conic)\b|\bbg-gradient-to-|<(?:linear|radial)Gradient\b/;
+    const offenders = sourceFiles(SRC).flatMap((file) =>
+      readFileSync(file, 'utf8')
+        .split('\n')
+        .flatMap((line, index) =>
+          pattern.test(line) ? [`${file.slice(SRC.length)}:${String(index + 1)}`] : [],
+        ),
+    );
     expect(offenders).toEqual([]);
   });
 

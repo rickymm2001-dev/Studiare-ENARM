@@ -9,6 +9,7 @@ import { pushAccountIfLinked } from '@/app/cloudState';
 import { useDataApi } from '@/data/context';
 import { AccountSchema, type Account } from '@/data/schemas/people';
 import {
+  addAccountToProfile,
   EMPTY_DETAILS,
   findAccountByEmail,
   normalizeEmail,
@@ -113,12 +114,8 @@ export function AccountDataCard({
           await updateAccount(api, account, draft.details);
         }
       } else if (!session.isDemo && email !== '') {
-        await api.repos.accounts.put({
-          userId: user.id,
-          email,
-          ...draft.details,
-          updatedAt: new Date().toISOString(),
-        });
+        // La fecha de la elección de foto la pone el caso de uso, solo si eligió foto (B2)
+        await addAccountToProfile(api, { userId: user.id, email, details: draft.details });
       }
       void pushAccountIfLinked(api, user.id);
       leaveEditing(text.saved);

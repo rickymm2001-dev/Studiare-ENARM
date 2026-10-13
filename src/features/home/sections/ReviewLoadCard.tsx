@@ -45,9 +45,9 @@ export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
       {load.hasData ? (
         <LoadChart points={load.points} />
       ) : (
-        <p className="mt-3 flex grow items-center justify-center rounded-md border border-dashed border-line-strong bg-muted/60 px-4 py-6 text-center text-sm text-fg-muted">
-          {text.empty}
-        </p>
+        // Alineado a la izquierda y sin marco punteado, como EmptyState (H17 de la revisión de B2).
+        // Ocupa el lugar de la gráfica para que la tarjeta siga a la altura de su fila (D-117)
+        <p className="mt-3 grow text-sm text-fg-muted">{text.empty}</p>
       )}
     </Card>
   );

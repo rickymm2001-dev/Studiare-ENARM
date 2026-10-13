@@ -78,7 +78,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
         </button>
       </LevelLadderDialog>
       <Link to={screenPath('settings')} aria-label={t.headerStats.profile} className="rounded-full">
-        <Avatar name={user.alias} seed={user.id} avatar={account?.avatar} />
+        <Avatar name={user.alias} avatar={account?.avatar} />
       </Link>
     </div>
   );

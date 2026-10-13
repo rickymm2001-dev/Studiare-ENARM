@@ -18,7 +18,7 @@ import { LoadingState } from '@/ui/states/states';
 import { TOPIC_NAMES } from '../shared/topics';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { HypothesisCard, type EvidenceLookup } from './HypothesisCard';
+import { HypothesisCard, type ArtifactStatus, type EvidenceLookup } from './HypothesisCard';
 import { createContrastCards } from './contrastCards';
 import {
   hypothesisArtifactId,
@@ -78,7 +78,16 @@ function TutorBody({
   const { user } = session;
   const { bank, content, artifacts } = data;
   const [messages, setMessages] = useState<Record<string, string>>({});
-  const [busyKey, setBusyKey] = useState<string | null>(null);
+  // Hipótesis con una escritura en curso. Sus botones quedan desactivados hasta que termine
+  const [pending, setPending] = useState<ReadonlySet<string>>(() => new Set());
+  // Lo que el alumno respondió en esta visita. Manda sobre lo guardado mientras la pantalla siga
+  // abierta, porque responder escribe dos veces el artefacto y tres eventos, y con mucha actividad
+  // las consultas tardan segundos en ponerse al día y pasan por los estados intermedios. Así la
+  // tarjeta cambia en el mismo toque, no parpadea y no vuelve a ofrecer los botones mientras tanto,
+  // que dejarían responder dos veces
+  const [answers, setAnswers] = useState<ReadonlyMap<string, ArtifactStatus>>(() => new Map());
+  // Aviso de lo último que respondió fuera de la tarjeta, porque una descartada se va de la lista
+  const [notice, setNotice] = useState<string | null>(null);
   const text = t.tutor;
   const view = useTutorView(session, events, data);
 
@@ -100,7 +109,7 @@ function TutorBody({
 
   const statusOf = new Map(artifacts.map((artifact) => [artifact.id, artifact.status]));
   const statusFor = (hypothesis: Hypothesis) =>
-    statusOf.get(hypothesisArtifactId(user.id, hypothesis.key));
+    answers.get(hypothesis.key) ?? statusOf.get(hypothesisArtifactId(user.id, hypothesis.key));
   const shown = view.confirmed.filter((hypothesis) => statusFor(hypothesis) !== 'rejected');
   const dismissed = view.confirmed.filter((hypothesis) => statusFor(hypothesis) === 'rejected');
   // Una que descartó no se le vuelve a mostrar, ni siquiera como patrón que se está formando
@@ -147,16 +156,70 @@ function TutorBody({
   const [turningOn, setTurningOn] = useState(false);
   const vocabulary = useBiasVocabulary();
 
-  const run = async (hypothesis: Hypothesis, job: () => Promise<string | undefined>) => {
-    setBusyKey(hypothesis.key);
+  const run = async (
+    hypothesis: Hypothesis,
+    job: () => Promise<string | undefined>,
+    onFail?: () => void,
+  ) => {
+    const { key } = hypothesis;
+    setPending((current) => new Set(current).add(key));
     try {
       const message = await job();
-      setMessages((current) => ({ ...current, [hypothesis.key]: message ?? '' }));
+      setMessages((current) => ({ ...current, [key]: message ?? '' }));
     } catch {
-      setMessages((current) => ({ ...current, [hypothesis.key]: text.actionFailed }));
+      onFail?.();
+      setMessages((current) => ({ ...current, [key]: text.actionFailed }));
     } finally {
-      setBusyKey(null);
+      setPending((current) => {
+        const next = new Set(current);
+        next.delete(key);
+        return next;
+      });
     }
+  };
+
+  const answer = (key: string, status: ArtifactStatus) => {
+    setAnswers((current) => new Map(current).set(key, status));
+  };
+  const forget = (key: string) => {
+    setAnswers((current) => {
+      const next = new Map(current);
+      next.delete(key);
+      return next;
+    });
+  };
+
+  /** Me sirve o No me ayuda. Si no se pudo guardar, la tarjeta vuelve como estaba y lo dice */
+  const respond = (hypothesis: Hypothesis, helpful: boolean) => {
+    answer(hypothesis.key, helpful ? 'approved' : 'rejected');
+    setNotice(helpful ? null : text.answered.rejected);
+    void run(
+      hypothesis,
+      async () => {
+        await respondToHypothesis(api, user, hypothesis, helpful);
+        return undefined;
+      },
+      () => {
+        forget(hypothesis.key);
+        setNotice(null);
+      },
+    );
+  };
+
+  const reopen = (hypothesis: Hypothesis) => {
+    answer(hypothesis.key, 'draft');
+    setNotice(null);
+    void run(
+      hypothesis,
+      async () => {
+        await reopenHypothesis(api, user, hypothesis);
+        return undefined;
+      },
+      () => {
+        forget(hypothesis.key);
+        setNotice(text.actionFailed);
+      },
+    );
   };
 
   const apply = (hypothesis: Hypothesis, action: TutorAction) =>
@@ -185,17 +248,14 @@ function TutorBody({
       lookup={lookup}
       baseTopic={view.baseTopics.get(hypothesis.area)}
       message={messages[hypothesis.key]}
-      busy={busyKey === hypothesis.key}
+      busy={pending.has(hypothesis.key)}
       compact={compact}
       ai={tutorAi.hypotheses.get(hypothesis.key)}
       onAction={(action) => {
         void apply(hypothesis, action);
       }}
       onRespond={(helpful) => {
-        void run(hypothesis, async () => {
-          await respondToHypothesis(api, user, hypothesis, helpful);
-          return helpful ? undefined : text.answered.rejected;
-        });
+        respond(hypothesis, helpful);
       }}
     />
   );
@@ -229,10 +289,7 @@ function TutorBody({
         </CardHeader>
         <p className="text-sm text-fg-muted">{text.howItWorks}</p>
         {shown.length === 0 && dismissed.length === 0 ? (
-          <p
-            role="status"
-            className="mt-2 rounded-md bg-primary-soft px-3 py-2 text-sm text-primary-ink"
-          >
+          <p role="status" className="mt-2 rounded-md bg-muted px-3 py-2 text-sm text-fg">
             {text.calibrating(view.recentErrors)}
           </p>
         ) : null}
@@ -250,6 +307,11 @@ function TutorBody({
       />
 
       {top.map((hypothesis) => card(hypothesis, false))}
+      {notice ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {notice}
+        </p>
+      ) : null}
 
       {rest.length > 0 ? (
         <Disclosure title={text.moreTitle(rest.length)} summary={text.moreHint}>
@@ -284,10 +346,11 @@ function TutorBody({
                   <span className="min-w-0 flex-1">{rule.title}</span>
                   <button
                     type="button"
-                    className="min-h-touch rounded-md px-3 font-semibold text-primary-ink hover:bg-muted"
+                    className="min-h-touch rounded-md px-3 font-semibold text-primary-ink hover:bg-muted disabled:opacity-50"
                     aria-label={`${text.reopen}. ${rule.title}`}
+                    disabled={pending.has(hypothesis.key)}
                     onClick={() => {
-                      void reopenHypothesis(api, user, hypothesis);
+                      reopen(hypothesis);
                     }}
                   >
                     {text.reopen}

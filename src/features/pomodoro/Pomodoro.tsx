@@ -45,7 +45,7 @@ export function PomodoroPill({
             aria-hidden
             className={cn(
               'absolute top-1.5 right-1.5 size-2.5 animate-pulse rounded-full',
-              isBreak ? 'bg-cir' : 'bg-primary',
+              isBreak ? 'bg-cir' : 'bg-indicator',
             )}
           />
         ) : null}
@@ -59,14 +59,14 @@ export function PomodoroPill({
       aria-label={t.pomodoro.label}
       className={cn(
         'flex items-center gap-1 rounded-full border bg-surface py-1 pr-1 pl-3 shadow-card',
-        isBreak ? 'border-cir/40' : 'border-primary/30',
+        isBreak ? 'border-cir/40' : 'border-indicator/30',
       )}
     >
       <span
         aria-hidden
         className={cn(
           'size-2.5 rounded-full',
-          isBreak ? 'bg-cir' : 'bg-primary',
+          isBreak ? 'bg-cir' : 'bg-indicator',
           running && 'animate-pulse',
         )}
       />
@@ -74,9 +74,7 @@ export function PomodoroPill({
         <span className="font-mono text-lg font-bold tabular-nums" aria-hidden>
           {formatClock(left)}
         </span>
-        <span className="text-[0.65rem] font-semibold tracking-wide text-fg-muted">
-          {phaseName}
-        </span>
+        <span className="text-xs font-semibold tracking-wide text-fg-muted">{phaseName}</span>
       </span>
       <span className="sr-only">{t.pomodoro.remaining(formatClock(left), phaseName)}</span>
       <Button
@@ -133,7 +131,7 @@ export function PomodoroNotice({ session }: { session: ReadySession }) {
       role="status"
       className={cn(
         'animate-rise flex flex-wrap items-center gap-3 rounded-xl border p-3 shadow-card',
-        isBreak ? 'border-cir/40 bg-cir-soft' : 'border-primary/30 bg-primary-soft',
+        isBreak ? 'border-cir/40 bg-cir-soft' : 'border-indicator/30 bg-primary-soft',
       )}
     >
       <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary-ink')} />

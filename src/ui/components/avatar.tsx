@@ -1,6 +1,7 @@
 // Foto de perfil (D-068, B2 del plan del cambio). Foto propia recortada en círculo o iniciales sobre
-// el tono suave del color de acción. Los avatares generados y los colores fijos por alumno se quitaron
-// en B2. Una cuenta vieja que todavía guarde un avatar generado se ve como iniciales.
+// gris. Las iniciales no llevan el color de acción porque no son un botón (comentario 10). Los
+// avatares generados y los colores fijos por alumno se quitaron en B2. Una cuenta vieja que todavía
+// guarde un avatar generado se ve como iniciales.
 import type { Account } from '@/data/schemas/people';
 import { cn } from '@/ui/cn';
 
@@ -19,7 +20,10 @@ export function Avatar({
   className,
 }: {
   name: string;
-  /** Ya no cambia nada. Los colores fijos por alumno se quitaron en B2 y quien lo pasa puede dejar de hacerlo */
+  /**
+   * No cambia nada desde B2, que quitó los colores fijos por alumno. Sigue opcional solo mientras
+   * Perfil y Configuración lo pasen; nadie más debe usarlo
+   */
   seed?: string;
   src?: string | null;
   /** Lo que eligió el alumno. Si falta, se usan src o las iniciales */
@@ -40,7 +44,7 @@ export function Avatar({
     <span
       aria-hidden
       className={cn(
-        'flex size-9 items-center justify-center rounded-full bg-primary-soft text-sm font-semibold text-primary-ink ring-2 ring-surface',
+        'flex size-9 items-center justify-center rounded-full bg-muted text-sm font-semibold text-fg ring-2 ring-surface',
         className,
       )}
     >

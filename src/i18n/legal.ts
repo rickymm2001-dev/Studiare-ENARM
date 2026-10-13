@@ -27,7 +27,7 @@ export interface LegalDoc {
 const privacy: LegalDoc = {
   title: 'Aviso de privacidad',
   version: PRIVACY_NOTICE_VERSION,
-  updated: '10 de octubre de 2026',
+  updated: '13 de octubre de 2026',
   intro: [
     'En Studiare cuidamos tus datos. Este aviso explica quién los trata, cuáles son, para qué los usamos, con quién se comparten y cómo ejerces tus derechos. Si algo no queda claro, escríbenos.',
   ],
@@ -44,9 +44,10 @@ const privacy: LegalDoc = {
       id: 'datos',
       title: 'Qué datos tratamos',
       bullets: [
-        'Cuenta. Tu alias, tu correo, y de forma opcional tu año de nacimiento, sexo, estado, situación, intento del examen y especialidad que buscas, además del avatar que elijas.',
+        'Cuenta. Tu alias, tu correo, y de forma opcional tu año de nacimiento, sexo, estado, situación, intento del examen y especialidad que buscas.',
+        'Foto de perfil. Es opcional. Si subes una, la guardamos en Supabase Storage, en un espacio privado de tu cuenta. La ves tú y, mientras compartan un grupo activo de Party, los miembros de ese grupo. Si eliges tus iniciales la quitamos de la nube, y se borra al eliminar tu cuenta.',
         'Estudio. Tus respuestas a preguntas y tarjetas, los tiempos, la confianza que marcas, las causas de tus errores, tus mazos y apuntes, tus metas y tus ajustes.',
-        'Puntaje oficial. Solo si tú decides capturarlo, con tu permiso de mejora anónima.',
+        'Puntaje oficial. Solo si tú decides capturarlo en Progreso, con tu permiso de mejora anónima, que das o retiras en Configuración, sección Privacidad.',
         'Pagos. El identificador y el estado de tus pagos y de tu plan. Nunca vemos ni guardamos los datos de tu tarjeta, que viven en la pasarela de pagos.',
         'Técnicos. Qué dispositivo tiene activa tu cuenta, la zona horaria y los avisos de seguridad de tu sesión.',
       ],
@@ -71,10 +72,10 @@ const privacy: LegalDoc = {
       id: 'opcionales',
       title: 'Lo que solo hacemos si lo permites',
       paragraphs: [
-        'Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.',
+        'Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, sección Privacidad. Decir que no a una no te quita el resto del servicio.',
       ],
       bullets: [
-        'Party. Compartir tu alias, XP, nivel y racha con los grupos a los que te unas.',
+        'Party. Compartir tu alias, tu foto de perfil si subiste una, XP, nivel y racha con los miembros de los grupos a los que te unas.',
         'Análisis con IA. Usar tus errores para que el tutor te dé hipótesis y un informe con IA.',
         'Mejora anónima. Usar tus datos sin identidad para mejorar el banco de preguntas y medir si lo que se estudia se parece al examen. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
       ],
@@ -95,7 +96,7 @@ const privacy: LegalDoc = {
         'No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a operar la plataforma, y solo lo necesario para su tarea.',
       ],
       bullets: [
-        'Supabase, que aloja la base de datos y el inicio de sesión.',
+        'Supabase, que aloja la base de datos, el inicio de sesión y los archivos, como tu foto de perfil en Supabase Storage.',
         'Stripe y Mercado Pago, que procesan los pagos. Reciben lo que necesitan para cobrar y no lo usamos para otra cosa.',
         'Anthropic, solo si encendiste el análisis con IA, con lo que se explicó arriba.',
         'El servicio que aloja el proxy de IA, solo si encendiste el análisis con IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.',
@@ -111,10 +112,10 @@ const privacy: LegalDoc = {
         'Tienes derecho a acceder a tus datos, rectificarlos, cancelarlos y oponerte a que se usen, y a retirar tu consentimiento. Casi todo lo haces tú solo en la app.',
       ],
       bullets: [
-        'Acceder. En Configuración, Cuenta, descargas todos tus datos en un archivo.',
-        'Rectificar. Cambias tu alias, tus datos de cuenta y tus ajustes en Perfil y Configuración.',
-        'Cancelar. En Configuración, Cuenta, borras tus datos de estudio, y también puedes eliminar tu cuenta completa. Se borran del dispositivo y de la nube.',
-        'Oponerte o retirar un permiso. En Configuración, Privacidad.',
+        'Acceder. En Configuración, sección Privacidad, descargas todos tus datos en un archivo.',
+        'Rectificar. Cambias tu alias, tu foto y tus datos de cuenta en Configuración, sección Perfil, y tus ajustes de estudio en Repasar.',
+        'Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio, y también puedes eliminar tu cuenta completa con tu foto de perfil. Se borran del dispositivo y de la nube.',
+        'Oponerte o retirar un permiso. En Configuración, sección Privacidad.',
         'Por correo. Si prefieres, escribe a {correo} con tu nombre y lo que pides, y respondemos en un plazo razonable.',
       ],
     },
@@ -122,7 +123,7 @@ const privacy: LegalDoc = {
       id: 'conservacion',
       title: 'Cuánto tiempo los conservamos',
       paragraphs: [
-        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base. Los cobros que ya procesó la pasarela de pagos se conservan allá el tiempo que la ley fiscal exige, y a nosotros nos queda solo el registro de que existieron.',
+        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. Los cobros que ya procesó la pasarela de pagos se conservan allá el tiempo que la ley fiscal exige, y a nosotros nos queda solo el registro de que existieron.',
       ],
     },
     {

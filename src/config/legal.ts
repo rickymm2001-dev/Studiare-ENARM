@@ -5,7 +5,7 @@
 import { readSupportEmail } from './support.ts';
 
 /** Versión del aviso de privacidad que acepta el alumno. Cambia cuando cambia el texto */
-export const PRIVACY_NOTICE_VERSION = '2026-10-12';
+export const PRIVACY_NOTICE_VERSION = '2026-10-13';
 
 export interface LegalIdentity {
   name: string | null;

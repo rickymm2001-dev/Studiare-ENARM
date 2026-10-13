@@ -1,7 +1,8 @@
 // Selector de archivo en español con la forma de los botones de la app (H07 de la revisión de diseño
 // de B2). El input nativo queda oculto porque su botón y su texto salen en el idioma del navegador.
 // La etiqueta con forma de botón lo abre y el foco del input se dibuja en ella. El nombre accesible
-// viene de la etiqueta visible del campo, así getByLabel y setInputFiles siguen funcionando.
+// es la etiqueta visible del campo seguida del texto del botón, así incluye lo que se ve (WCAG
+// 2.5.3) y getByLabel con la etiqueta del campo sigue funcionando, igual que setInputFiles.
 import { FolderOpen } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Button } from '@/ui/components/button';
@@ -19,7 +20,7 @@ export function FileChooser({
   onChoose,
 }: {
   id: string;
-  /** Id de la etiqueta visible del campo, que le da su nombre */
+  /** Id de la etiqueta visible del campo, que va primero en su nombre */
   labelledBy: string;
   /** Id de la ayuda del campo, si la hay */
   describedBy?: string;
@@ -33,6 +34,7 @@ export function FileChooser({
   onChoose: (file: File | undefined) => void | Promise<void>;
 }) {
   const nameId = `${id}-elegido`;
+  const chooseId = `${id}-boton`;
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
       <input
@@ -40,7 +42,7 @@ export function FileChooser({
         type="file"
         accept={accept}
         disabled={disabled}
-        aria-labelledby={labelledBy}
+        aria-labelledby={`${labelledBy} ${chooseId}`}
         aria-describedby={describedBy ? `${describedBy} ${nameId}` : nameId}
         className="peer sr-only"
         onChange={(event) => {
@@ -51,13 +53,15 @@ export function FileChooser({
           });
         }}
       />
+      {/* La etiqueta con forma de botón queda fuera del árbol de accesibilidad para no leerse dos
+          veces. Su texto entra al nombre del input por aria-labelledby */}
       <Button
         asChild
         variant="secondary"
         size="sm"
         className="cursor-pointer peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus peer-disabled:pointer-events-none peer-disabled:opacity-50"
       >
-        <label htmlFor={id} aria-hidden>
+        <label id={chooseId} htmlFor={id} aria-hidden>
           {icon}
           {chooseText}
         </label>

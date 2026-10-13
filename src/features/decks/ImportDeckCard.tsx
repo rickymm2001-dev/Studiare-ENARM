@@ -127,7 +127,7 @@ export function ImportDeckCard({
     <Card aria-labelledby="importar-titulo">
       <CardHeader>
         <CardTitle id="importar-titulo" className="flex items-center gap-2">
-          <FileUp aria-hidden className="size-5 text-primary-ink" />
+          <FileUp aria-hidden className="size-5 text-fg-muted" />
           {t.importer.title}
         </CardTitle>
         <CardDescription>{t.importer.intro}</CardDescription>
@@ -196,11 +196,8 @@ export function ImportDeckCard({
 }
 
 /**
- * Elegir un archivo con un botón propio en español (H07 de la revisión de B2). El input del
- * navegador dice Choose File en inglés, así que queda oculto pero sigue en el orden del teclado,
- * con el nombre de la etiqueta del campo. El botón visible es otra etiqueta del mismo input, la
- * sigue en el DOM para tomar su foco y su estado desactivado, y abre el selector sin código. Al
- * lado va el nombre del último archivo elegido. También lo usa la tarjeta de tarjetas con IA
+ * Vista previa antes de importar. Cuántas notas y mazos trae el archivo y de qué tipo, los avisos y
+ * errores de lectura y una muestra, con el nombre del mazo nuevo y la confirmación de derechos
  */
 function ImportPreview({
   parsed,

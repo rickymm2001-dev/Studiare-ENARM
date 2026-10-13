@@ -1,8 +1,16 @@
 // Borrar la copia en la nube (D-101, Fase E bloque E6). Las dos funciones del servidor hacen el
 // trabajo y aquí solo se llaman y se traduce su error. Borrar mis datos deja la cuenta y el plan.
-// Borrar la cuenta quita además el correo, los pagos de la plataforma y los referidos. Ninguna se
-// puede deshacer, así que quien llama pide confirmación antes.
+// Borrar la cuenta quita además el correo, los pagos de la plataforma y los referidos, y antes la
+// foto de perfil de Storage (B2). Ninguna se puede deshacer, así que quien llama pide confirmación.
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { readCloudAvatar } from './account';
+import {
+  AvatarStorageError,
+  avatarPath,
+  downloadAvatar,
+  removeAvatar,
+  uploadAvatar,
+} from './avatars';
 
 export type EraseFailure =
   'not_active_device' | 'owner' | 'active_subscription' | 'no_session' | 'network' | 'unknown';
@@ -51,6 +59,44 @@ async function call(
 /** Borra el estudio del alumno en la nube. La cuenta, el plan y los pagos se quedan */
 export const eraseCloudData = (cloud: Pick<SupabaseClient, 'rpc'>) => call(cloud, 'delete_my_data');
 
-/** Borra la cuenta completa. Después de esto el correo queda libre */
-export const deleteCloudAccount = (cloud: Pick<SupabaseClient, 'rpc'>) =>
-  call(cloud, 'delete_my_account');
+/** La foto que tiene la cuenta, para devolverla si no se pudo eliminar. null si la fila no dice que hay */
+async function currentPhoto(
+  cloud: Pick<SupabaseClient, 'from' | 'storage'>,
+  authId: string,
+): Promise<string | null> {
+  const remote = await readCloudAvatar(cloud, authId);
+  if (remote.status !== 'ok' || remote.avatar?.kind !== 'photo') return null;
+  return downloadAvatar(cloud, avatarPath(authId));
+}
+
+/**
+ * Borra la cuenta completa. Después de esto el correo queda libre. Antes quita la foto de perfil con
+ * la API de Storage y la sesión del alumno, porque Storage no deja que la base borre sus archivos y la
+ * foto quedaría huérfana. Se quita de su ruta fija aunque la fila no diga que hay una. Si no se pudo
+ * quitar no se borra nada. Si después la base no deja eliminar la cuenta, como con una suscripción
+ * activa, la foto vuelve a su lugar
+ */
+export async function deleteCloudAccount(
+  cloud: Pick<SupabaseClient, 'rpc' | 'storage' | 'from'>,
+  authId: string,
+): Promise<EraseResult> {
+  const backup = await currentPhoto(cloud, authId);
+  try {
+    await removeAvatar(cloud, authId);
+  } catch (error) {
+    const answered = error instanceof AvatarStorageError && !error.network;
+    return { ok: false, reason: answered ? 'unknown' : 'network' };
+  }
+  const result = await call(cloud, 'delete_my_account');
+  if (!result.ok && backup) {
+    try {
+      await uploadAvatar(cloud, authId, backup);
+    } catch (error) {
+      // Queda solo en consola. Sus dispositivos conservan la foto y vuelve al elegir otra
+      console.warn(
+        `La foto de perfil no se pudo devolver a Storage. ${error instanceof Error ? error.message : ''}`,
+      );
+    }
+  }
+  return result;
+}

@@ -125,37 +125,52 @@ export function AppShell() {
         </div>
       </header>
 
-      {/* Un solo aviso global en una línea delgada. Con la base de demostración es la etiqueta de
-          Datos simulados para toda la pantalla (D-078). Con el banco de demostración, en cualquier
-          base, dice Versión de demostración y se va con el banco real (4.1 del plan, D-121) */}
-      {database === 'demo' ? (
+      {/* Un solo aviso global en una línea delgada (4.1 del plan, D-121). Con el banco de
+          demostración dice Versión de demostración y se va con el banco real. Con la base de
+          demostración dice además Datos simulados para toda la pantalla (D-078), en la misma línea
+          para no apilar dos avisos, y la región conserva ese nombre */}
+      {database === 'demo' || (demoBank && !bare) ? (
         <section
-          aria-label={t.labels.simulatedData}
-          className={`flex min-h-8 items-center justify-center gap-x-3 border-b border-sim-line bg-sim px-4 text-xs text-sim-fg sm:text-sm ${rail}`}
+          aria-label={database === 'demo' ? t.labels.simulatedData : t.labels.demoVersion}
+          className={cn(
+            // En el teléfono el botón de volver pasa abajo y el renglón de arriba toma aire
+            'flex min-h-8 flex-wrap items-center justify-center gap-x-3 border-b px-4 pt-1 text-xs sm:pt-0 sm:text-sm',
+            database === 'demo'
+              ? 'border-sim-line bg-sim text-sim-fg'
+              : 'border-demo-line bg-demo text-demo-fg',
+            rail,
+          )}
         >
-          <span className="flex min-w-0 items-center gap-1.5">
-            <FlaskConical aria-hidden className="size-3.5 shrink-0 sm:size-4" />
-            <span className="font-semibold">{t.labels.simulatedData}</span>
-            <span className="sr-only sm:not-sr-only sm:truncate">{t.database.banner}</span>
-          </span>
-          <button
-            type="button"
-            className="min-h-8 shrink-0 rounded-sm px-1 font-semibold underline underline-offset-4"
-            onClick={() => {
-              setDatabase('real');
-            }}
-          >
-            {t.database.backToReal}
-          </button>
-        </section>
-      ) : demoBank && !bare ? (
-        <section
-          aria-label={t.labels.demoVersion}
-          className={`flex min-h-8 items-center justify-center gap-x-1.5 border-b border-demo-line bg-demo px-4 text-xs text-demo-fg sm:text-sm ${rail}`}
-        >
-          <Info aria-hidden className="size-3.5 shrink-0 sm:size-4" />
-          <span className="font-semibold">{t.labels.demoVersion}</span>
-          <span className="sr-only sm:not-sr-only sm:truncate">{t.labels.demoVersionHint}</span>
+          {/* Sin sesión no hay aviso del banco */}
+          {demoBank && !bare ? (
+            <span className="flex min-w-0 items-center gap-1.5">
+              <Info aria-hidden className="size-3.5 shrink-0 sm:size-4" />
+              <span className="font-semibold">{t.labels.demoVersion}</span>
+              {database === 'demo' ? null : (
+                <span className="sr-only sm:not-sr-only sm:truncate">
+                  {t.labels.demoVersionHint}
+                </span>
+              )}
+            </span>
+          ) : null}
+          {database === 'demo' ? (
+            <>
+              <span className="flex min-w-0 items-center gap-1.5">
+                <FlaskConical aria-hidden className="size-3.5 shrink-0 sm:size-4" />
+                <span className="font-semibold">{t.labels.simulatedData}</span>
+                <span className="sr-only sm:not-sr-only sm:truncate">{t.database.banner}</span>
+              </span>
+              <button
+                type="button"
+                className="min-h-8 shrink-0 rounded-sm px-1 font-semibold underline underline-offset-4"
+                onClick={() => {
+                  setDatabase('real');
+                }}
+              >
+                {t.database.backToReal}
+              </button>
+            </>
+          ) : null}
         </section>
       ) : null}
 

@@ -61,7 +61,7 @@ export function RadioCards<T extends string>({
             className={cn(
               'flex min-h-touch w-full items-center gap-3 rounded-md border border-line bg-surface px-3 py-2 text-left text-fg',
               layout === 'row' && 'flex-col justify-center gap-1 px-2 text-center',
-              'hover:bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-primary-soft',
+              'hover:bg-muted data-[state=checked]:border-indicator data-[state=checked]:bg-primary-soft',
             )}
           >
             <span
@@ -71,7 +71,7 @@ export function RadioCards<T extends string>({
                 layout === 'row' && 'sr-only',
               )}
             >
-              <RadioGroup.Indicator className="size-2.5 rounded-full bg-primary" />
+              <RadioGroup.Indicator className="size-2.5 rounded-full bg-indicator" />
             </span>
             {option.icon ? (
               <span aria-hidden className="text-fg-muted [&_svg]:size-5">

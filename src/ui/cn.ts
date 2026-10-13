@@ -30,6 +30,7 @@ const twMerge = extendTailwindMerge({
         'chart-scheduled',
         'chart-done',
         'focus',
+        'indicator',
         'success',
         'success-soft',
         'warning',

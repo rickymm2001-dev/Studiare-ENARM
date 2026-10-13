@@ -5,7 +5,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RoleSchema, type Role } from '@/data/schemas/common';
 import type { Account } from '@/data/schemas/people';
-import { parseRemoteAvatar, syncAvatarToStorage, type RemoteAvatar } from './avatars';
+import { parseRemoteAvatar, type CloudAvatarColumns, type RemoteAvatarState } from './avatars';
 
 export interface CloudIdentity {
   authId: string;
@@ -116,10 +116,11 @@ export async function readCloudIdentity(cloud: SupabaseClient): Promise<CloudIde
 }
 
 /**
- * Datos de cuenta en el formato de la tabla private_accounts. La foto nunca va en la fila. avatar es
- * lo que decidió syncAvatarToStorage, iniciales o la ruta de la foto en Storage
+ * Datos de cuenta en el formato de la tabla private_accounts. La foto nunca va en la fila. avatar son
+ * las columnas de la foto que decidió pushAvatar, iniciales o la ruta de la foto en Storage con la
+ * fecha de la elección, o null para no tocarlas
  */
-export function toCloudAccount(account: Account, avatar: RemoteAvatar) {
+export function toCloudAccount(account: Account, avatar: CloudAvatarColumns | null) {
   return {
     birth_year: account.birthYear,
     sex: account.sex,
@@ -127,39 +128,62 @@ export function toCloudAccount(account: Account, avatar: RemoteAvatar) {
     situation: account.situation,
     attempt: account.attempt,
     target_specialty: account.targetSpecialty,
-    avatar,
+    ...avatar,
     updated_at: new Date().toISOString(),
   };
 }
 
-/** Lo que la nube guarda como foto de perfil. null si no hay fila, no se pudo leer o no se reconoce */
-export async function readCloudAvatar(
-  cloud: SupabaseClient,
-  authId: string,
-): Promise<RemoteAvatar | null> {
-  const { data, error } = await cloud
-    .from('private_accounts')
-    .select('avatar')
-    .eq('user_id', authId)
-    .maybeSingle();
-  if (error) return null;
-  const row = data as { avatar?: unknown } | null;
-  return parseRemoteAvatar(row?.avatar);
+/** La fecha de la fila con el formato de la cuenta local, o null si no hay o no se entiende */
+function utcOrNull(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const time = Date.parse(value);
+  return Number.isNaN(time) ? null : new Date(time).toISOString();
 }
 
 /**
- * Guarda alias y datos de cuenta. Con foto, primero la sube a Storage y en la fila queda su ruta. Si
- * Storage falla, la cuenta se guarda igual. remoteAvatar es lo que la nube tenía, para no volver a
- * subir la misma foto y para quitar la anterior al pasar a iniciales. null si no se sabe
+ * Lo que la nube sabe de la foto de perfil. failed si no se pudo leer, y entonces quien llama no
+ * toca la foto ni Storage, porque no sabe qué elección es la más reciente
+ */
+export type CloudAvatarRead = ({ status: 'ok' } & RemoteAvatarState) | { status: 'failed' };
+
+/**
+ * Lee la foto que guarda la nube y cuándo se eligió. Sin fila responde ok sin foto ni fecha, como una
+ * cuenta que nunca eligió. Un valor que no se reconoce cuenta como sin foto
+ */
+export async function readCloudAvatar(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+): Promise<CloudAvatarRead> {
+  try {
+    const { data, error } = await cloud
+      .from('private_accounts')
+      .select('avatar, avatar_changed_at')
+      .eq('user_id', authId)
+      .maybeSingle();
+    if (error) return { status: 'failed' };
+    const row = data as { avatar?: unknown; avatar_changed_at?: unknown } | null;
+    return {
+      status: 'ok',
+      avatar: parseRemoteAvatar(row?.avatar),
+      changedAt: utcOrNull(row?.avatar_changed_at),
+    };
+  } catch {
+    return { status: 'failed' };
+  }
+}
+
+/**
+ * Guarda alias y datos de cuenta. avatar son las columnas de la foto, o null para dejar la que ya
+ * tiene la nube, como cuando no se pudo leer, cuando manda la elección de la nube o cuando Storage
+ * falló y se reintenta después
  */
 export async function saveCloudAccount(
   cloud: SupabaseClient,
   authId: string,
   account: Account,
   alias: string,
-  remoteAvatar: RemoteAvatar | null = null,
+  avatar: CloudAvatarColumns | null = null,
 ): Promise<boolean> {
-  const avatar = await syncAvatarToStorage(cloud, authId, account.avatar, remoteAvatar);
   const [accountResult, profileResult] = await Promise.all([
     cloud.from('private_accounts').update(toCloudAccount(account, avatar)).eq('user_id', authId),
     cloud.from('profiles').update({ alias }).eq('id', authId),

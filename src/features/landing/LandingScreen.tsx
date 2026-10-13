@@ -72,7 +72,7 @@ export function LandingScreen() {
             <Card key={feature.key} className="flex flex-col gap-2">
               <span
                 aria-hidden
-                className="flex size-10 items-center justify-center rounded-md bg-primary-soft text-primary-ink [&_svg]:size-5"
+                className="flex size-10 items-center justify-center rounded-md bg-muted text-fg-muted [&_svg]:size-5"
               >
                 {feature.icon}
               </span>
@@ -90,7 +90,7 @@ export function LandingScreen() {
         <div className="grid gap-3 sm:grid-cols-2">
           {text.personas.map(([who, what]) => (
             <div key={who} className="flex gap-3 rounded-lg border border-line bg-surface p-4">
-              <Users aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
+              <Users aria-hidden className="mt-0.5 size-5 shrink-0 text-fg-muted" />
               <p>
                 <span className="font-bold">{who}.</span>{' '}
                 <span className="text-fg-muted">{what}</span>
@@ -120,7 +120,7 @@ export function LandingScreen() {
                 key={key}
                 className={cn(
                   'flex flex-col gap-3',
-                  highlighted && 'border-primary ring-1 ring-primary',
+                  highlighted && 'border-indicator ring-1 ring-indicator',
                 )}
               >
                 {highlighted ? (

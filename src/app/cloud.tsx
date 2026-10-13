@@ -136,10 +136,9 @@ export function CloudBridge() {
           // que trae la app ahora. Una versión nueva se registra cuando la acepte (D-104)
           const accepted = await acceptedNoticeVersion(api, userId);
           if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
-          // En un dispositivo nuevo la foto de perfil de la nube baja antes de subir la cuenta (B2)
-          await pushLocalAccount(api, cloud, identity.authId, userId, {
-            pullPhoto: linked.created,
-          });
+          // Antes de subir la cuenta se pone de acuerdo la foto de perfil. Gana la elección más
+          // reciente, así un dispositivo nuevo o uno que se quedó atrás baja la de la nube (B2)
+          await pushLocalAccount(api, cloud, identity.authId, userId);
           if (stopped() || isLeaving()) return;
           if (syncing?.authId !== identity.authId) {
             syncing?.handle.stop();

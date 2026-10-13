@@ -56,7 +56,7 @@ export function AvatarPicker({
           ref={input}
           type="file"
           accept="image/*"
-          className="sr-only"
+          className="peer sr-only"
           aria-label={t.account.uploadPhoto}
           onChange={(event) => {
             const file = event.target.files?.[0];
@@ -70,10 +70,12 @@ export function AvatarPicker({
             setPending((current) => ({ id: (current?.id ?? 0) + 1, file }));
           }}
         />
+        {/* El input oculto también recibe el foco del teclado. Su foco se dibuja en este botón */}
         <Button
           type="button"
           variant="secondary"
           size="sm"
+          className="peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus"
           onClick={() => {
             input.current?.click();
           }}

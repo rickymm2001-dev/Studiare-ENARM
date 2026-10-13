@@ -225,7 +225,7 @@ function UserLine({
   const planName = t.billing.plans[user.plan as keyof typeof t.billing.plans] as string | undefined;
   return (
     <Card className="flex flex-wrap items-center gap-3 p-4">
-      <Avatar name={user.alias} seed={user.id} className="size-11" />
+      <Avatar name={user.alias} className="size-11" />
       <div className="min-w-0 flex-1">
         <p className="flex items-center gap-1 font-bold">
           {user.alias}

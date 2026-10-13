@@ -27,7 +27,7 @@ export function CardTimerBar({
       </div>
       <div aria-hidden className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className={cn('h-full rounded-full', expired ? 'bg-warning' : 'bg-primary')}
+          className={cn('h-full rounded-full', expired ? 'bg-warning' : 'bg-indicator')}
           style={{ width: `${(share * 100).toFixed(1)}%` }}
         />
       </div>

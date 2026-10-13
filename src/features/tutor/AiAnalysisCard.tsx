@@ -25,7 +25,7 @@ export function AiAnalysisCard({
     <Card aria-labelledby="analisis-ia">
       <CardHeader className="mb-2">
         <CardTitle id="analisis-ia" className="flex flex-wrap items-center gap-2 [&_svg]:size-5">
-          <Sparkles aria-hidden className="text-primary-ink" />
+          <Sparkles aria-hidden className="text-fg-muted" />
           {text.title}
           {state.access === 'on' ? <AiModeBadge status={state.status} /> : null}
         </CardTitle>

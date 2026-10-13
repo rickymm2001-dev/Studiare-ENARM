@@ -41,9 +41,9 @@ export function ExamNavigator({
                 className={cn(
                   'relative flex size-9 w-full items-center justify-center rounded-md border text-sm font-semibold',
                   answer.optionId !== null
-                    ? 'border-primary bg-primary-soft text-primary-ink'
+                    ? 'border-indicator bg-primary-soft text-primary-ink'
                     : 'border-line bg-surface text-fg-muted hover:bg-muted',
-                  isCurrent && 'ring-2 ring-primary ring-offset-1 ring-offset-surface',
+                  isCurrent && 'ring-2 ring-indicator ring-offset-1 ring-offset-surface',
                 )}
               >
                 {index + 1}
@@ -60,7 +60,10 @@ export function ExamNavigator({
       </ol>
       <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-muted">
         <li className="flex items-center gap-1.5">
-          <span aria-hidden className="size-3.5 rounded-sm border border-primary bg-primary-soft" />
+          <span
+            aria-hidden
+            className="size-3.5 rounded-sm border border-indicator bg-primary-soft"
+          />
           {t.exam.legend.answered}
         </li>
         <li className="flex items-center gap-1.5">
@@ -74,7 +77,7 @@ export function ExamNavigator({
         <li className="flex items-center gap-1.5">
           <span
             aria-hidden
-            className="size-3.5 rounded-sm border border-line bg-surface ring-2 ring-primary"
+            className="size-3.5 rounded-sm border border-line bg-surface ring-2 ring-indicator"
           />
           {t.exam.legend.current}
         </li>

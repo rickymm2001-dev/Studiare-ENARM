@@ -166,9 +166,10 @@ export function AvatarCropper({
         </p>
       </div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-        {/* El único círculo del rediseño es el de la foto. Es el círculo */}
+        {/* El único círculo del rediseño es el de la foto. Es un grupo y no una imagen, porque
+            recibe el foco y las flechas del teclado la mueven */}
         <div
-          role="img"
+          role="group"
           aria-label={text.preview}
           aria-describedby={hintId}
           tabIndex={0}
@@ -177,7 +178,7 @@ export function AvatarCropper({
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className="relative size-56 shrink-0 cursor-move touch-none overflow-hidden rounded-full border border-line bg-muted select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="relative size-56 shrink-0 cursor-move touch-none overflow-hidden rounded-full border border-line bg-muted select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
           {source ? (
             <img

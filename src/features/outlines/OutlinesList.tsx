@@ -152,7 +152,7 @@ export function OutlinesList({
                     aria-label={text.open(outline.title)}
                     className="flex min-h-touch items-center gap-3 py-2 hover:bg-muted"
                   >
-                    <FileText aria-hidden className="size-5 shrink-0 text-primary-ink" />
+                    <FileText aria-hidden className="size-5 shrink-0 text-fg-muted" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">{outline.title}</span>
                       <span className="block text-sm text-fg-muted">

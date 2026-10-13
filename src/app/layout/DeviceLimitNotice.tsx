@@ -40,9 +40,11 @@ function LimitAlert({ retryAt, className }: { retryAt: number | null; className:
         {support ? (
           <p>
             {text.helpQuestion}{' '}
+            {/* Al pasar el cursor engrosa el subrayado y no cambia de color. El tono de hover del
+                color de acción quedaba en 2.6 a 1 sobre este aviso en oscuro */}
             <a
               href={supportMailto(support, text.helpMailSubject)}
-              className="font-semibold text-primary-ink underline underline-offset-4 hover:text-primary-hover"
+              className="font-semibold text-primary-ink underline underline-offset-4 hover:decoration-2"
             >
               {text.helpLink}
             </a>

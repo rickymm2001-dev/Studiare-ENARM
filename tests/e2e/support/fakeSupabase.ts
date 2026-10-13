@@ -9,7 +9,8 @@
 // Lo que NO simula queda dicho en tests/e2e/cloud/README.md. Reglas que sí hace cumplir, iguales a
 // las de la base: un solo dispositivo activo por cuenta con su límite de cambios (DV001), el plan lo
 // decide el servidor con el pago, el mes gratis por referido llega con el primer pago, y borrar la
-// cuenta se rechaza con una suscripción de Stripe activa (FR002).
+// cuenta se rechaza con una suscripción de Stripe activa (FR002). De Storage atiende solo el bucket
+// de la foto de perfil (B2).
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -132,7 +133,8 @@ export interface FakeSupabaseServer {
 
 interface Reply {
   status: number;
-  body?: string;
+  /** Bytes para los archivos de Storage, texto para todo lo demás */
+  body?: string | Buffer;
   contentType?: string;
   headers?: Record<string, string>;
 }
@@ -251,6 +253,37 @@ function parseJsonBody(request: Request): unknown {
   } catch {
     return null;
   }
+}
+
+/** Un error con la forma de la API de Storage, que responde 400 y pone el estado real en statusCode */
+const storageError = (statusCode: string, error: string, message: string): Reply =>
+  json({ statusCode, error, message }, 400);
+
+/**
+ * El archivo de una subida a Storage. supabase-js lo manda como la parte con nombre de archivo de un
+ * formulario multipart. Sin formulario, el cuerpo es el archivo
+ */
+function uploadedFile(request: Request): Buffer | null {
+  const body = request.postDataBuffer();
+  if (!body) return null;
+  const type = request.headers()['content-type'] ?? '';
+  const boundary = /boundary=(?:"([^"]+)"|([^;\s]+))/i.exec(type);
+  const marker = boundary?.[1] ?? boundary?.[2];
+  if (!marker) return body;
+  const delimiter = Buffer.from(`--${marker}`);
+  let start = body.indexOf(delimiter);
+  while (start !== -1) {
+    const next = body.indexOf(delimiter, start + delimiter.length);
+    if (next === -1) return null;
+    const part = body.subarray(start + delimiter.length, next);
+    const headersEnd = part.indexOf('\r\n\r\n');
+    if (headersEnd !== -1 && /filename=/i.test(part.subarray(0, headersEnd).toString('latin1'))) {
+      // Sin el salto de línea que la separa del siguiente delimitador
+      return part.subarray(headersEnd + 4, part.length - 2);
+    }
+    start = next;
+  }
+  return null;
 }
 
 /** Qué columnas pidió select. null es todas */
@@ -506,6 +539,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const events: EventRow[] = [];
   const privacyAcceptances: Json[] = [];
   const clientErrors: ClientErrorRow[] = [];
+  /** Fotos de perfil del bucket avatars, por ruta <id>/avatar.jpg */
+  const avatarObjects = new Map<string, Buffer>();
   const calls: RecordedCall[] = [];
   let counter = 0;
   let serverSeq = 0;
@@ -552,6 +587,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       attempt: null,
       target_specialty: null,
       avatar: { kind: 'initials' },
+      avatar_changed_at: null,
       updated_at: user.createdAt,
     });
     return user;
@@ -1453,6 +1489,49 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   // ------------------------------------------------------------------ edge functions
 
+  /**
+   * Storage, solo el bucket privado avatars de la foto de perfil (B2), con sus políticas reducidas a
+   * lo propio. Cada alumno con sesión sube, baja y quita solo su <id>/avatar.jpg desde su dispositivo
+   * activo. Como la API real, quitar lo que no existe o lo ajeno responde una lista vacía y bajar lo
+   * que no se ve responde 400 con not_found. Borrar la cuenta no quita la foto, porque Storage no deja
+   * que la base lo haga. La quita la app antes con la API
+   */
+  function handleStorage(path: string, auth: Auth, request: Request): Reply {
+    const own =
+      auth.kind === 'user' && isActiveDevice(auth.user, auth.session)
+        ? `${auth.user.id}/avatar.jpg`
+        : null;
+    const method = request.method();
+    if (method === 'DELETE' && path === '/object/avatars') {
+      const body = parseJsonBody(request);
+      const prefixes: unknown[] =
+        isRecord(body) && Array.isArray(body.prefixes) ? body.prefixes : [];
+      const removed = prefixes.filter(
+        (name): name is string =>
+          typeof name === 'string' && name === own && avatarObjects.delete(name),
+      );
+      return json(removed.map((name) => ({ name, bucket_id: 'avatars' })));
+    }
+    const match = /^\/object\/avatars\/(.+)$/.exec(path);
+    const name = match?.[1] ? decodeURIComponent(match[1]) : null;
+    if (name !== null && method === 'GET') {
+      const file = name === own ? avatarObjects.get(name) : undefined;
+      return file
+        ? { status: 200, body: file, contentType: 'image/jpeg' }
+        : storageError('404', 'not_found', 'Object not found');
+    }
+    if (name !== null && (method === 'POST' || method === 'PUT')) {
+      if (name !== own) {
+        return storageError('403', 'Unauthorized', 'new row violates row-level security policy');
+      }
+      const file = uploadedFile(request);
+      if (!file) return storageError('400', 'InvalidRequest', 'No llegó el archivo');
+      avatarObjects.set(name, file);
+      return json({ Id: randomUUID(), Key: `avatars/${name}` });
+    }
+    return storageError('404', 'not_found', `Ruta de Storage sin simular: ${method} ${path}`);
+  }
+
   function handleFunction(name: string, auth: Auth, request: Request): Reply {
     if (request.method() !== 'POST') return json({ error: 'method' }, 405);
     if (auth.kind !== 'user') return json({ error: 'unauthorized' }, 401);
@@ -1619,6 +1698,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     }
     if (path.startsWith('/functions/v1/')) {
       return handleFunction(path.slice('/functions/v1/'.length), auth, request);
+    }
+    if (path.startsWith('/storage/v1/')) {
+      return handleStorage(path.slice('/storage/v1'.length), auth, request);
     }
     return json({ message: `Ruta sin simular: ${path}` }, 404);
   }

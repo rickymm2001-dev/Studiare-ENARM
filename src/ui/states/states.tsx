@@ -12,7 +12,7 @@ interface StateFrameProps {
   icon: ReactNode;
   title: string;
   description?: string | undefined;
-  tone?: 'neutral' | 'danger' | 'info';
+  tone?: 'neutral' | 'danger';
   children?: ReactNode;
   role?: 'status' | 'alert';
   className?: string | undefined;
@@ -37,7 +37,6 @@ function StateFrame({
           className={cn(
             'flex shrink-0 [&_svg]:size-5',
             tone === 'danger' && 'text-danger',
-            tone === 'info' && 'text-primary-ink',
             tone === 'neutral' && 'text-fg-muted',
           )}
         >
@@ -159,7 +158,6 @@ export function CalibratingState({
   return (
     <StateFrame
       role="status"
-      tone="info"
       icon={<Gauge />}
       title={title}
       description={description}
@@ -176,7 +174,8 @@ export function CalibratingState({
 
 /**
  * Versión corta de calibrando para tarjetas y renglones donde no cabe el cuadro completo. Dice
- * cuánto falta, como pide 4.3, en una sola línea con su barra
+ * cuánto falta, como pide 4.3, en una sola línea con su barra. En gris, porque no es una acción
+ * (comentario 10)
  */
 export function CalibratingNote({
   current,
@@ -195,18 +194,19 @@ export function CalibratingNote({
     <div
       role="status"
       className={cn(
-        'flex flex-col gap-1.5 rounded-md bg-primary-soft px-3 py-2 text-sm',
+        'flex flex-col gap-1.5 rounded-md bg-muted px-3 py-2 text-sm text-fg',
         className,
       )}
     >
-      <p className="flex flex-wrap items-center gap-x-2 text-primary-ink">
-        <Gauge aria-hidden className="size-4 shrink-0" />
+      <p className="flex flex-wrap items-center gap-x-2">
+        <Gauge aria-hidden className="size-4 shrink-0 text-fg-muted" />
         <span className="font-semibold">{t.states.calibrating.title}</span>
         <span>
           {progress}. {t.states.calibrating.remaining(missing, unit)}
         </span>
       </p>
-      <ProgressBar value={current} max={target} label={progress} className="h-1.5" />
+      {/* El riel va sobre superficie para que se vea dentro del recuadro gris */}
+      <ProgressBar value={current} max={target} label={progress} className="h-1.5 bg-surface" />
     </div>
   );
 }

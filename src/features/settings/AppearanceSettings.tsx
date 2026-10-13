@@ -50,7 +50,7 @@ function ChoiceButton({
       className={cn(
         'flex min-h-touch flex-col items-start gap-1 rounded-md border p-3 text-left transition-colors',
         selected
-          ? 'border-primary bg-primary-soft ring-1 ring-primary'
+          ? 'border-indicator bg-primary-soft ring-1 ring-indicator'
           : 'border-line bg-surface hover:border-line-strong',
         className,
       )}
@@ -164,8 +164,9 @@ export function AppearanceSettings() {
                 }}
                 className={cn(
                   'flex min-h-touch flex-col items-center justify-center gap-0.5 border-line px-1 py-1.5 transition-colors not-first:border-l',
+                  // El borde interior del indicador marca la elegida, como en el control segmentado
                   draft.size === size
-                    ? 'bg-primary-soft text-primary-ink'
+                    ? 'bg-primary-soft text-primary-ink ring-2 ring-indicator ring-inset'
                     : 'bg-surface hover:bg-muted',
                 )}
               >
