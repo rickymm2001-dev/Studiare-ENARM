@@ -15,7 +15,11 @@ interface WeekTotals {
 }
 
 /** Suma de actividad entre dos días de estudio, ambos incluidos */
-export function totalsBetween(snapshot: Snapshot, from: string, to: string): WeekTotals {
+export function totalsBetween(
+  snapshot: Pick<Snapshot, 'activity'>,
+  from: string,
+  to: string,
+): WeekTotals {
   const totals: WeekTotals = { cards: 0, questions: 0, xp: 0 };
   for (const [day, summary] of Object.entries(snapshot.activity)) {
     if (day < from || day > to) continue;

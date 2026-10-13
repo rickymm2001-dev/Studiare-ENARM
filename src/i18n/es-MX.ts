@@ -5,6 +5,7 @@ import type { Phase, ScreenKey } from '@/app/screens';
 import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
+import { partyCloudText } from './partyCloud';
 import { qualityText } from './quality';
 import { settingsPageText } from './settingsPage';
 import { tutorText } from './tutor';
@@ -162,6 +163,7 @@ export const t = {
   ...tutorText,
   ...vocabularyText,
   weekPlan: weekPlanText,
+  partyCloud: partyCloudText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',

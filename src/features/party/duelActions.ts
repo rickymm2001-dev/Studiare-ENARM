@@ -1,6 +1,7 @@
 // Lo que el alumno hace con un duelo desde Party (9.6). Crearlo fija sus preguntas y empezarlo abre la
-// práctica con esas preguntas como una sesión de tipo reto. El resultado nunca se guarda aparte, sale
-// de la bitácora (duels.ts).
+// práctica con esas preguntas como una sesión de tipo reto. El resultado sale de la bitácora
+// (duels.ts). En la demostración el rival es simulado. En la nube (B7) el rival es otro alumno y el
+// resultado se manda al servidor una sola vez.
 import type { DataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
@@ -8,58 +9,84 @@ import type { Challenge, Group, Membership } from '@/data/schemas/activity';
 import type { User } from '@/data/schemas/people';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { createDuel } from '@/data/usecases/party';
-import { listStudentPool } from '@/data/usecases/studentBank';
+import { isVariant, listStudentPool } from '@/data/usecases/studentBank';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
 import { clock, usePractice } from '../simulator/practice';
 
-/** Reta a un compañero con las mismas preguntas para los dos. null si el banco no tiene preguntas */
+/**
+ * Las preguntas de un duelo, siempre las mismas con la misma semilla. Solo entran las del banco de
+ * demostración sin variantes, que es el banco que tienen igual los dos jugadores en cualquier
+ * navegador. Con el banco real en la nube (B11) las elige el servidor. Vacío si no hay banco
+ */
+export async function pickDuelQuestionIds(
+  api: Pick<DataApi, 'repos'>,
+  seed: string,
+): Promise<string[]> {
+  await ensureDemoBank(api);
+  const { practice } = await listStudentPool(api);
+  const shared = practice.filter((question) => question.isDemo && !isVariant(question));
+  return pickQuestions(shared, seed, DUEL_QUESTIONS).map((question) => question.id);
+}
+
+/** Reta a un compañero simulado de la demostración. null si el banco no tiene preguntas */
 export async function challengeToDuel(
   api: Pick<DataApi, 'repos'>,
   group: Group,
   opponent: Pick<Membership, 'id' | 'alias'>,
 ): Promise<Challenge | null> {
-  await ensureDemoBank(api);
-  const { practice: questions } = await listStudentPool(api);
-  if (questions.length === 0) return null;
   const id = newId();
   // La semilla es el id del duelo, así las preguntas salen en el mismo orden para quien las juegue
-  const picked = pickQuestions(questions, `duel|${id}`, DUEL_QUESTIONS);
+  const questionIds = await pickDuelQuestionIds(api, `duel|${id}`);
+  if (questionIds.length === 0) return null;
   return createDuel(api, group, {
     id,
     title: t.party.duel.title(opponent.alias),
     opponent,
-    questionIds: picked.map((question) => question.id),
+    questionIds,
   });
 }
 
-/** Abre la práctica del duelo. false si el reto no es un duelo con preguntas */
+/** Un duelo listo para jugar. En la demostración es un reto local y en la nube un duelo del servidor */
+export interface DuelToPlay {
+  id: string;
+  questionIds: readonly string[];
+}
+
+/**
+ * Abre la práctica del duelo. false si no tiene preguntas o si alguna no está en el banco de este
+ * dispositivo, porque entonces los dos no contestarían lo mismo
+ */
 export async function startDuel(
-  api: Pick<DataApi, 'recordEvent'>,
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
   user: Pick<User, 'id' | 'timeZone'>,
-  challenge: Challenge,
+  duel: DuelToPlay,
 ): Promise<boolean> {
-  const questionIds = challenge.questionIds;
-  if (challenge.kind !== 'duel' || !questionIds?.length) return false;
+  const questionIds = [...duel.questionIds];
+  if (questionIds.length === 0) return false;
+  // Quien recibe el reto puede no haber abierto nunca el simulador en este dispositivo
+  await ensureDemoBank(api);
+  const present = await Promise.all(questionIds.map((id) => api.repos.questions.get(id)));
+  if (present.some((question) => question === undefined)) return false;
   const sessionId = newId();
   await api.recordEvent(
     createEvent(
       'session_started',
-      { kind: 'challenge', config: { duelId: challenge.id, count: questionIds.length } },
+      { kind: 'challenge', config: { duelId: duel.id, count: questionIds.length } },
       { userId: user.id, tz: user.timeZone, sessionId },
     ),
   );
   usePractice.getState().set({
     sessionId,
     userId: user.id,
-    questionIds: [...questionIds],
+    questionIds,
     index: 0,
     answers: [],
     startedAt: clock(),
     ended: false,
     kind: 'challenge',
-    duelId: challenge.id,
+    duelId: duel.id,
     targetTags: [],
   });
   return true;
