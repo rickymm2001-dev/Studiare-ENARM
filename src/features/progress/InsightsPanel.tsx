@@ -21,7 +21,7 @@ import {
   type InsightReport,
 } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
-import { cn } from '@/ui/cn';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
@@ -35,14 +35,12 @@ import {
 } from './focusItems';
 
 const text = t.insights;
-const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: string }> = {
-  strength: {
-    icon: <CheckCircle2 aria-hidden />,
-    chip: 'bg-success-soft text-success',
-    color: 'text-success',
-  },
-  watch: { icon: <Eye aria-hidden />, chip: 'bg-warning-soft text-warning', color: 'text-warning' },
-  focus: { icon: <Target aria-hidden />, chip: 'bg-danger-soft text-danger', color: 'text-danger' },
+// El color del nivel queda solo en el ícono de cada fila y la palabra va en una etiqueta neutra
+// (H02 de la revisión de diseño de B2)
+const levelStyle: Record<InsightLevel, { icon: ReactNode; color: string }> = {
+  strength: { icon: <CheckCircle2 aria-hidden />, color: 'text-success' },
+  watch: { icon: <Eye aria-hidden />, color: 'text-warning' },
+  focus: { icon: <Target aria-hidden />, color: 'text-danger' },
 };
 const levelOrder: Record<InsightLevel, number> = { focus: 0, watch: 1, strength: 2 };
 
@@ -63,10 +61,10 @@ export function WeeklyFocus({
 }) {
   const items = weeklyFocusItems(report, weakTopics);
   return (
-    <Card aria-labelledby="focos-titulo" className="border-l-4 border-l-danger">
+    <Card aria-labelledby="focos-titulo">
       <CardHeader className="mb-3">
         <CardTitle id="focos-titulo" className="flex items-center gap-2 [&_svg]:size-5">
-          <Target aria-hidden className="text-danger" />
+          <Target aria-hidden className="text-primary-ink" />
           {t.progress.focusTitle(items.length)}
         </CardTitle>
       </CardHeader>
@@ -82,7 +80,7 @@ export function WeeklyFocus({
             <li key={item.key} className="flex items-start gap-3">
               <span
                 aria-hidden
-                className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-danger-soft text-xs font-bold text-danger"
+                className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-fg"
               >
                 {index + 1}
               </span>
@@ -205,11 +203,7 @@ function InsightRow({ insight }: { insight: Insight }) {
     <Row
       lead={<span className={style.color}>{style.icon}</span>}
       title={title}
-      tail={
-        <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-xs font-bold', style.chip)}>
-          {text.levels[insight.state.level]}
-        </span>
-      }
+      tail={<Badge className="shrink-0">{text.levels[insight.state.level]}</Badge>}
     >
       <p>{body}</p>
       <p className="flex gap-1.5 rounded-md bg-muted p-2 [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0">
