@@ -31,7 +31,7 @@ export function OptionChoice({
     <li
       className={cn(
         'flex items-stretch rounded-md border border-line',
-        selected && 'border-primary bg-primary-soft',
+        selected && 'border-indicator bg-primary-soft',
         discarded && 'bg-muted',
       )}
     >

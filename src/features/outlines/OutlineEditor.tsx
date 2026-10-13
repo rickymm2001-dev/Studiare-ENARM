@@ -203,7 +203,7 @@ export function OutlineEditor({
           </Button>
         ))}
       </div>
-      <div className="rounded-lg border border-line-strong bg-surface p-3 focus-within:outline-2 focus-within:outline-primary">
+      <div className="rounded-lg border border-line-strong bg-surface p-3 focus-within:outline-2 focus-within:outline-focus">
         <EditorContent editor={editor} />
       </div>
       <p role="status" className="text-sm font-medium text-warning">

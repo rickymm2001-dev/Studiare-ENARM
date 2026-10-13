@@ -1,8 +1,9 @@
 -- Esqueleto mínimo de Supabase Storage para probar en un Postgres local las políticas del bucket de
 -- fotos de perfil (B2 del plan del cambio). Imita storage.buckets, storage.objects y las funciones
 -- storage.foldername y storage.filename como las crea Supabase, con los mismos permisos de tabla
--- para anon, authenticated y service_role. Los permisos por fila deciden qué objetos ve cada quien.
--- Corre después de stub_auth.sql y antes de las migraciones.
+-- para anon, authenticated y service_role, y el freno que impide borrar sus filas con SQL. Los
+-- permisos por fila deciden qué objetos ve cada quien. Corre después de stub_auth.sql y antes de las
+-- migraciones.
 create schema storage;
 
 create table storage.buckets (
@@ -44,6 +45,22 @@ begin
   select string_to_array(name, '/') into parts;
   return parts[array_length(parts, 1)];
 end $$;
+
+-- Como en el proyecto real, Storage no deja borrar sus filas con SQL. Solo su API, que marca sus
+-- propios borrados con storage.allow_delete_query. Copia de storage.protect_delete de Supabase,
+-- leída del proyecto el 2026-10-13. Un borrado directo dejaría el archivo huérfano en el almacén
+create function storage.protect_delete() returns trigger language plpgsql as $$
+begin
+  if coalesce(current_setting('storage.allow_delete_query', true), 'false') != 'true' then
+    raise exception 'Direct deletion from storage tables is not allowed. Use the Storage API instead.'
+      using hint = 'This prevents accidental data loss from orphaned objects.', errcode = '42501';
+  end if;
+  return null;
+end $$;
+create trigger protect_buckets_delete before delete on storage.buckets
+  for each statement execute function storage.protect_delete();
+create trigger protect_objects_delete before delete on storage.objects
+  for each statement execute function storage.protect_delete();
 
 alter table storage.buckets enable row level security;
 alter table storage.objects enable row level security;

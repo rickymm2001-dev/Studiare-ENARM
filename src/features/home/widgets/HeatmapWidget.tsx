@@ -13,7 +13,13 @@ import type { HeatmapSettings } from './heatmapSettings';
 
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-const LEVELS = ['bg-muted', 'bg-primary/25', 'bg-primary/50', 'bg-primary/75', 'bg-primary'];
+const LEVELS = [
+  'bg-muted',
+  'bg-indicator/25',
+  'bg-indicator/50',
+  'bg-indicator/75',
+  'bg-indicator',
+];
 /** Separación entre celdas, en px */
 const CELL_GAP = 3;
 /**
@@ -119,7 +125,7 @@ export function HeatmapWidget({
               {t.widgets.heatmap.weekdays.map((letter, index) => (
                 <span
                   key={index}
-                  className="flex items-center justify-end text-[0.65rem] leading-none font-semibold text-fg-muted"
+                  className="flex items-center justify-end text-xs leading-none font-semibold text-fg-muted"
                 >
                   {letter}
                 </span>
@@ -141,7 +147,7 @@ export function HeatmapWidget({
                 className={cn('flex flex-col gap-1', fluid && MONTH_MIN)}
                 style={grow}
               >
-                <span className="h-3 text-[0.65rem] leading-3 font-semibold tracking-wide text-fg-muted">
+                <span className="h-3 text-xs leading-3 font-semibold tracking-wide text-fg-muted">
                   {month.label}
                 </span>
                 {fluid ? (

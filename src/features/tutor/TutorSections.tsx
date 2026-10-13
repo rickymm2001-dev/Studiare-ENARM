@@ -81,7 +81,7 @@ export function WeeklyReportCard({
     <Card aria-labelledby="informe-semana">
       <CardHeader className="mb-3">
         <CardTitle id="informe-semana" className="flex items-center gap-2 [&_svg]:size-5">
-          <Target aria-hidden className="text-primary-ink" />
+          <Target aria-hidden className="text-fg-muted" />
           {text.title}
         </CardTitle>
         <CardDescription>{text.hint}</CardDescription>
@@ -109,7 +109,7 @@ export function WeeklyReportCard({
                   <li key={item.key} className="flex items-start gap-3">
                     <span
                       aria-hidden
-                      className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary-ink"
+                      className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-fg"
                     >
                       {index + 1}
                     </span>

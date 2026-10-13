@@ -127,7 +127,7 @@ export function ImportDeckCard({
     <Card aria-labelledby="importar-titulo">
       <CardHeader>
         <CardTitle id="importar-titulo" className="flex items-center gap-2">
-          <FileUp aria-hidden className="size-5 text-primary-ink" />
+          <FileUp aria-hidden className="size-5 text-fg-muted" />
           {t.importer.title}
         </CardTitle>
         <CardDescription>{t.importer.intro}</CardDescription>

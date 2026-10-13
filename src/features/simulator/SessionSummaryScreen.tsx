@@ -122,7 +122,7 @@ function Summary({ session }: { session: ReadySession }) {
           />
         </StatPanel>
         {sentToReview > 0 ? (
-          <p className="mt-3 text-sm font-medium text-primary-ink">
+          <p className="mt-3 text-sm font-medium text-fg">
             {t.simulator.summaryErrors(sentToReview)}
           </p>
         ) : null}

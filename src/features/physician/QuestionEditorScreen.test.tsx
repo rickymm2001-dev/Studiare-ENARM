@@ -105,40 +105,33 @@ describe('editor de pregunta (pantalla 18)', () => {
   });
 
   it('lleva la versión por borrador, revisión y aprobación', async () => {
-    const typing = userEvent.setup();
+    // Sin las pausas de user-event entre acciones, que bajo carga solo suman espera
+    const typing = userEvent.setup({ delay: null });
     const { question } = outOfSample;
-    const t0 = performance.now();
-    const lap = (label: string) => { process.stderr.write(`LAP ${label} ${String(Math.round(performance.now() - t0))}\n`); };
     const rendered = await open('admin', question.questionId);
-    lap('open');
-    const b1 = await screen.findByRole('button', { name: text.status.move.in_review }, WAIT);
-    lap('found in_review');
-    await typing.click(b1);
-    lap('clicked in_review');
+    // El editor tiene unas 1,800 etiquetas. Buscar un botón por su rol en toda la página una y otra
+    // vez mientras se espera ocupa el hilo y retrasa la consulta que vuelve a pintar el estado, y
+    // bajo carga pasaba de 30 segundos. Se espera al editor con una búsqueda barata y los botones se
+    // buscan solo dentro de la tarjeta del estado, que sigue montada al cambiar de estado
+    await screen.findByLabelText(text.meta.explanation, undefined, WAIT);
+    const card = screen.getByRole('region', {
+      name: (name) => name.startsWith(text.status.title),
+    });
+    const statusButton = (name: string) => within(card).findByRole('button', { name }, WAIT);
+
+    await typing.click(await statusButton(text.status.move.in_review ?? ''));
     await waitFor(async () => {
       expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
         'in_review',
       );
     }, WAIT);
-    lap('db in_review');
-    await waitFor(() => {
-      const found = [...document.querySelectorAll('button')].some((b) => b.textContent === text.status.move.approved);
-      expect(found).toBe(true);
-    }, WAIT);
-    lap('dom has approved (cheap)');
-    process.stderr.write(`LAP dom size ${String(document.querySelectorAll('*').length)}\n`);
-    const b2 = await screen.findByRole('button', { name: text.status.move.approved }, WAIT);
-    lap('found approved');
-    await typing.click(b2);
-    lap('clicked approved');
+    await typing.click(await statusButton(text.status.move.approved ?? ''));
     await waitFor(async () => {
       expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
         'approved',
       );
     }, WAIT);
-    lap('db approved');
-    expect(await screen.findByRole('button', { name: text.status.reopen }, WAIT)).toBeVisible();
-    lap('found reopen');
+    expect(await statusButton(text.status.reopen)).toBeVisible();
     // Aprobada no pasa directo a otra cosa que no sea reabrir la revisión
     expect(screen.queryByRole('button', { name: text.status.move.rejected })).toBeNull();
   });

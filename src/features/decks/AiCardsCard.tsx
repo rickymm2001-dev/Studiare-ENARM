@@ -196,7 +196,7 @@ function AiCards({ session }: { session: ReadySession }) {
     <Card aria-labelledby="ia-tarjetas-titulo">
       <CardHeader>
         <CardTitle id="ia-tarjetas-titulo" className="flex items-center gap-2">
-          <Sparkles aria-hidden className="size-5 text-primary-ink" />
+          <Sparkles aria-hidden className="size-5 text-fg-muted" />
           {t.aiCards.title}
         </CardTitle>
         <CardDescription>{t.aiCards.intro}</CardDescription>

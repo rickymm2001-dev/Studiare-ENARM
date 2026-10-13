@@ -50,7 +50,7 @@ function ChoiceButton({
       className={cn(
         'flex min-h-touch flex-col items-start gap-1 rounded-md border p-3 text-left transition-colors',
         selected
-          ? 'border-primary bg-primary-soft ring-1 ring-primary'
+          ? 'border-indicator bg-primary-soft ring-1 ring-indicator'
           : 'border-line bg-surface hover:border-line-strong',
         className,
       )}

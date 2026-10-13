@@ -16,7 +16,9 @@
   --enarm-surface: #ffffff;
   --enarm-muted: #eef0f2;
   --enarm-line: #dde2e6;
-  --enarm-line-strong: #98a3ad;
+  /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos, 3.6 sobre blanco, 3.3 sobre el
+     lienzo y 3.2 sobre muted */
+  --enarm-line-strong: #7d8892;
 
   /* Texto */
   --enarm-fg: #16212b;
@@ -31,6 +33,11 @@
   --enarm-primary-ink: #156082;
   --enarm-primary-soft: #e7eff4;
   --enarm-focus: #156082;
+  /* Indicadores que no son texto ni botón. El borde o el anillo de lo elegido, las barras y el
+     relleno de las gráficas y el heatmap. En claro es el color de acción. En oscuro va un tono
+     claro, porque #156082 queda abajo del 3 a 1 que piden los gráficos (2.5 sobre la superficie,
+     2.7 sobre el lienzo y 2.2 sobre el fondo de las barras) */
+  --enarm-indicator: #156082;
 
   /* Lo que antes era dorado y naranja (nivel, XP y racha) pasa a neutro (4.7) */
   --enarm-accent: #576570;
@@ -97,7 +104,7 @@
     --enarm-surface: #171d24;
     --enarm-muted: #202831;
     --enarm-line: #2d3741;
-    --enarm-line-strong: #5f6d79;
+    --enarm-line-strong: #66747f;
     --enarm-fg: #e8edf1;
     --enarm-fg-muted: #a3aeb8;
     --enarm-primary: #156082;
@@ -107,6 +114,7 @@
     --enarm-primary-ink: #7fc1de;
     --enarm-primary-soft: #16303e;
     --enarm-focus: #7fc1de;
+    --enarm-indicator: #7fc1de;
     --enarm-accent: #a3aeb8;
     --enarm-accent-ink: #c4ccd3;
     --enarm-accent-soft: #202831;
@@ -159,7 +167,7 @@
   --enarm-surface: #171d24;
   --enarm-muted: #202831;
   --enarm-line: #2d3741;
-  --enarm-line-strong: #5f6d79;
+  --enarm-line-strong: #66747f;
   --enarm-fg: #e8edf1;
   --enarm-fg-muted: #a3aeb8;
   --enarm-primary: #156082;
@@ -169,6 +177,7 @@
   --enarm-primary-ink: #7fc1de;
   --enarm-primary-soft: #16303e;
   --enarm-focus: #7fc1de;
+  --enarm-indicator: #7fc1de;
   --enarm-accent: #a3aeb8;
   --enarm-accent-ink: #c4ccd3;
   --enarm-accent-soft: #202831;
@@ -239,6 +248,7 @@
   --color-primary-ink: var(--enarm-primary-ink);
   --color-primary-soft: var(--enarm-primary-soft);
   --color-focus: var(--enarm-focus);
+  --color-indicator: var(--enarm-indicator);
   --color-success: var(--enarm-success);
   --color-success-soft: var(--enarm-success-soft);
   --color-warning: var(--enarm-warning);

@@ -179,7 +179,7 @@ function Billing({ session }: { session: ReadySession }) {
               <Card
                 key={key}
                 aria-labelledby={`plan-${key}`}
-                className={cn(isCurrent && 'border-primary')}
+                className={cn(isCurrent && 'border-indicator')}
               >
                 <CardHeader>
                   <div className="flex items-center justify-between gap-2">

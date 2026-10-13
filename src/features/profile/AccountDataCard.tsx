@@ -6,6 +6,7 @@ import { pushAccountIfLinked } from '@/app/cloudState';
 import { useDataApi } from '@/data/context';
 import { AccountSchema, type Account } from '@/data/schemas/people';
 import {
+  addAccountToProfile,
   EMPTY_DETAILS,
   findAccountByEmail,
   normalizeEmail,
@@ -45,6 +46,7 @@ export function AccountDataCard({
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('');
 
+  // La fecha de la elección de foto la ponen los casos de uso, solo si la foto cambió (B2)
   const save = async () => {
     if (account) {
       await updateAccount(api, account, details);
@@ -61,12 +63,7 @@ export function AccountDataCard({
       setStatus(t.account.emailTaken);
       return;
     }
-    await api.repos.accounts.put({
-      userId: user.id,
-      email: clean,
-      ...details,
-      updatedAt: new Date().toISOString(),
-    });
+    await addAccountToProfile(api, { userId: user.id, email: clean, details });
     setStatus(t.account.saved);
   };
 

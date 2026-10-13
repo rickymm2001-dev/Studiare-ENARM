@@ -189,7 +189,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
     <Card aria-labelledby={id} className="flex grow flex-col gap-2 p-5">
       <CardHeading id={id}>{t.widgets.names.daily_goal}</CardHeading>
       <div className="flex items-center gap-3">
-        <Target aria-hidden className="size-8 shrink-0 text-primary-ink sm:size-9" />
+        <Target aria-hidden className="size-8 shrink-0 text-fg-muted sm:size-9" />
         <div className="flex min-w-0 flex-col">
           <span className="text-2xl font-extrabold sm:text-3xl">
             {t.widgets.goal.ratio(Math.min(done, goal.value), goal.value)}
@@ -221,7 +221,7 @@ function DueCard({ snapshot }: { snapshot: Snapshot }) {
       <div>
         <p className="sr-only">{text.dueLabel(snapshot.dueCards)}</p>
         <p aria-hidden className="flex items-center gap-3">
-          <Layers className="size-9 shrink-0 text-primary-ink sm:size-10" />
+          <Layers className="size-9 shrink-0 text-fg-muted sm:size-10" />
           <span className="text-4xl font-extrabold sm:text-5xl">
             {snapshot.dueCards.toLocaleString('es-MX')}
           </span>
@@ -272,7 +272,7 @@ function PlanCard({ userId }: { userId: string }) {
       ) : (
         <>
           <p className="flex items-center gap-3">
-            <CreditCard aria-hidden className="size-8 shrink-0 text-primary-ink" />
+            <CreditCard aria-hidden className="size-8 shrink-0 text-fg-muted" />
             <span className="text-xl font-bold text-fg">{t.billing.plans[plan]}</span>
           </p>
           <Button asChild className="w-full">

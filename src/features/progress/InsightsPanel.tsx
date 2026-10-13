@@ -64,7 +64,7 @@ export function WeeklyFocus({
     <Card aria-labelledby="focos-titulo">
       <CardHeader className="mb-3">
         <CardTitle id="focos-titulo" className="flex items-center gap-2 [&_svg]:size-5">
-          <Target aria-hidden className="text-primary-ink" />
+          <Target aria-hidden className="text-fg-muted" />
           {t.progress.focusTitle(items.length)}
         </CardTitle>
       </CardHeader>
@@ -207,7 +207,7 @@ function InsightRow({ insight }: { insight: Insight }) {
     >
       <p>{body}</p>
       <p className="flex gap-1.5 rounded-md bg-muted p-2 [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0">
-        <Lightbulb aria-hidden className="text-primary-ink" />
+        <Lightbulb aria-hidden className="text-fg-muted" />
         <span>
           <span className="sr-only">{text.whatToDo}. </span>
           {action}
@@ -249,7 +249,7 @@ function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   return (
     <li>
       <Row
-        lead={<ListOrdered className="text-primary-ink" />}
+        lead={<ListOrdered className="text-fg-muted" />}
         title={text.profileTitle}
         tail={null}
       >

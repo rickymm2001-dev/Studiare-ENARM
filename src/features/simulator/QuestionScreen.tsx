@@ -373,7 +373,7 @@ function QuestionCard({
           id="pregunta-frase"
           ref={titleRef}
           tabIndex={-1}
-          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
         >
           <HighlightedPrompt text={question.prompt} ranges={ranges} />
         </CardTitle>

@@ -177,7 +177,7 @@ export function AvatarCropper({
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className="relative size-56 shrink-0 cursor-move touch-none overflow-hidden rounded-full border border-line bg-muted select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="relative size-56 shrink-0 cursor-move touch-none overflow-hidden rounded-full border border-line bg-muted select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
           {source ? (
             <img
