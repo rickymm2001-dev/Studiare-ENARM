@@ -89,6 +89,12 @@ Evidencia
 - Capturas de antes en docs/screenshots/v3/antes y de después en docs/screenshots/v3/b2, ya con las correcciones, en calidad 60 para que pesen menos
 
 ### Preguntas para Ricardo
+- B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
+- B4. La tabla de nombres legibles de los mazos de Paco necesita la revisión de un médico. Algunas elecciones son Hongos como Micosis, Térmicos como Alteraciones por temperatura, GW como Granulomatosis con poliangitis y UNM como Enfermedades neuromusculares. Está en src/demo/content/topicDisplayNames.ts
+- B5. Los eventos viejos con Otra razón quedan sin motivo, porque no dicen cuál de los siete aplica. Si prefieres que cuenten como Conocimiento es una línea. Las preguntas que quedaron en blanco en el examen no piden motivo por ahora (lo típico ahí sería Tiempo)
+- B7. Si el referido pide reembolso dentro de la garantía de 7 días (B10), hoy quien lo invitó conserva su mes. Las opciones son quitarlo con el reembolso completo del primer cobro o concretar el referido hasta que pase la garantía
+- B7. El resumen semanal cubre la semana en curso desde el lunes, como la tabla de Party, así que el lunes muestra un solo día. La otra opción son los últimos 7 días
+- B2. Quedaron con color las fases del Pomodoro (enfoque en el color de acción y descanso en un tono de rama) y el contador de Nuevas en Repasar. Si los quieres neutros, solo cambian sus clases
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 
