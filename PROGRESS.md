@@ -96,7 +96,8 @@ Evidencia
 - Lo de demostración que estaba en Cuenta pasa a Datos de demostración del admin detrás de demoTools
 - Revisión independiente con 15 hallazgos, todos corregidos. La e2e de la cuenta encontró una carrera real, el puente con la nube reabría una sesión recién cerrada, y ya no pasa. El botón de borrar pasa el contraste al pasar el puntero
 - Evidencia. npm run check con typecheck y lint limpios y 2,875 pruebas que pasan (2 omitidas que solo corren con su variable de entorno). E2e del bloque en teléfono y computadora, 194 pasan en la última corrida completa y la única falla, un selector ambiguo de práctica, quedó corregida y pasó 8 de 8 sola. Nube 22 de 22. perf.spec pasa con la máquina tranquila y su límite es justo con otros agentes corriendo (mediana de 123 a 155 ms, sin regresión contra la versión anterior)
-- Capturas en docs/screenshots/v3/b3
+- JavaScript inicial de 284.8 KB de 300
+- Capturas en docs/screenshots/v3/b3, en teléfono, 1280 y 1920, en claro y en oscuro
 
 ### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
