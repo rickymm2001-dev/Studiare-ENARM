@@ -57,9 +57,11 @@ test('estado cargando y error', async ({ page }, info) => {
   await capture(page, '91-estado-error', info.project.name);
 });
 
+// La base de demostración se elige en Datos de demostración del admin desde B3 del plan del cambio
+// (5.4). La captura conserva su nombre de la Fase A
 test('demostración con datos simulados', async ({ page }, info) => {
-  await preset(page, { database: 'demo' });
-  await page.goto(SCREENS.profile.path);
+  await preset(page, { role: 'admin', database: 'demo' });
+  await page.goto(SCREENS.demoData.path);
   await page.getByText(t.database.storedIn('enarm_demo')).waitFor();
   await capture(page, '92-perfil-demostracion', info.project.name);
 });

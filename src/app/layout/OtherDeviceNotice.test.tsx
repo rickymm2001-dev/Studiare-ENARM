@@ -92,7 +92,7 @@ describe('aviso de otro dispositivo', () => {
 
 describe('aviso de otro dispositivo en el marco de la app', () => {
   it('aparece en una pantalla con sesión cuando cambia el estado de la nube', async () => {
-    app = await renderApp(SCREENS.profile.path);
+    app = await renderApp(SCREENS.settings.path);
     expect(await screen.findByRole('heading', { level: 1 })).toBeVisible();
     expect(screen.queryByRole('alert')).toBeNull();
     setCloudState(OTHER_DEVICE);

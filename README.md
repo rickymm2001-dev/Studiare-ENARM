@@ -77,7 +77,7 @@ La clave se llama ENARM_ANTHROPIC_KEY y vive solo en server/.env.local, que no s
 - npm run eval-ai corre las evaluaciones de los motores de IA
 - npm run screenshots genera las capturas de las pantallas
 - npm run recovery-report corre la recuperación de parámetros con 3 semillas y escribe docs/recovery-report.md
-- npm run demo-seed genera la siembra de la demo fuera del navegador y reporta conteos. La siembra real se hace en la app, en Perfil con Demostración activa
+- npm run demo-seed genera la siembra de la demo fuera del navegador y reporta conteos. La siembra real se hace en la app, en Datos de demostración, con la base de demostración activa
 - npm run demo-reset explica cómo regenerar la demo desde la app
 - node scripts/content/import-paco-decks.ts <archivos .apkg> vuelve a convertir los mazos de Paco (D-053)
 - node scripts/content/check-draft.ts valida borradores de preguntas demo

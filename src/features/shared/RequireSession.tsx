@@ -1,6 +1,7 @@
 // Muestra la pantalla solo con sesión. Sin sesión invita a entrar y con la demo vacía invita a
-// generarla. Así cada pantalla del alumno trabaja siempre con un usuario real de la base activa.
-import { LogIn, Sparkles } from 'lucide-react';
+// generarla a quien puede y a los demás a volver a Mi cuenta. Así cada pantalla del alumno trabaja
+// siempre con un usuario real de la base activa.
+import { LogIn } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -10,6 +11,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { LoadingState } from '@/ui/states/states';
+import { DemoEmptyCard } from './DemoEmptyCard';
 
 export type ReadySession = Extract<SessionState, { status: 'ready' }>;
 
@@ -49,18 +51,7 @@ export function RequireSession({
     return (
       <>
         {header}
-        <Card aria-labelledby="demo-vacia">
-          <CardHeader>
-            <CardTitle id="demo-vacia">{t.session.demoEmptyTitle}</CardTitle>
-            <CardDescription>{t.session.demoEmptyBody}</CardDescription>
-          </CardHeader>
-          <Button asChild className="self-start">
-            <Link to={screenPath('settings')}>
-              <Sparkles aria-hidden />
-              {t.session.goToProfile}
-            </Link>
-          </Button>
-        </Card>
+        <DemoEmptyCard />
       </>
     );
   }

@@ -6,12 +6,15 @@
  * día o subir minutos, con el efecto estimado de cada opción.
  * Entradas. Fecha del ENARM y hoy, minutos declarados y minutos reales de enfoque (Pomodoro), la
  * carga por día del motor fsrs, la carga con menos nuevas por día, los temas a reforzar del motor
- * topics y los segundos estimados por tipo.
+ * topics, los minutos que el alumno ya estudió hoy y los segundos estimados por tipo.
  * Salidas. Plan de hoy, plan de la semana y avisos con sus opciones.
  * Método
  *   - Minutos disponibles. Los reales si hay al menos 3 días con Pomodoro, si no los declarados (J)
  *   - Hoy primero van los repasos, luego las nuevas, luego el simulador del tema más prioritario y
  *     al final un reto, cada uno mientras quepa
+ *   - Hoy solo se reparte el tiempo que queda. Los minutos que el alumno ya estudió se descuentan,
+ *     igual que la carga ya descuenta las tarjetas que repasó, así lo hecho más lo planeado no pasa
+ *     de su tiempo del día
  *   - Sobrecarga si el promedio de minutos de repaso de los próximos 7 días pasa del disponible.
  *     El efecto de bajar nuevas es la diferencia de minutos promedio entre ambas proyecciones. El de
  *     subir minutos es cuántos faltan
@@ -44,8 +47,12 @@ export interface DayPlan {
   /** Tema del simulador, el primero de las prioridades de topics */
   simulatorTopic: string | null;
   challenge: boolean;
+  /** Minutos que toma lo planeado. Hoy es solo lo que falta */
   minutesPlanned: number;
+  /** Tiempo del día completo */
   minutesAvailable: number;
+  /** Minutos que el alumno ya estudió ese día y que no se vuelven a planear. Solo hoy tiene */
+  minutesUsed: number;
 }
 
 export interface OverloadOption {
@@ -82,8 +89,11 @@ function planDay(
   timing: PlannerTiming,
   /** Tope de preguntas de simulador de este día. null es sin tope */
   questionCap: number | null,
+  /** Minutos ya estudiados ese día, que salen del tiempo por repartir */
+  minutesUsed: number,
 ): DayPlan {
-  let remaining = minutesAvailable * 60;
+  const budget = Math.max(0, minutesAvailable - minutesUsed) * 60;
+  let remaining = budget;
   const reviews = Math.min(load.reviews, Math.floor(remaining / timing.secondsPerReview));
   remaining -= reviews * timing.secondsPerReview;
   const newCards = Math.min(
@@ -104,8 +114,9 @@ function planDay(
     simulatorCapped: simulatorQuestions < fitting,
     simulatorTopic: simulatorQuestions > 0 ? topic : null,
     challenge,
-    minutesPlanned: (minutesAvailable * 60 - remaining) / 60,
+    minutesPlanned: (budget - remaining) / 60,
     minutesAvailable,
+    minutesUsed,
   };
 }
 
@@ -126,8 +137,14 @@ export function buildPlan(input: {
    * límite diario completo. null es sin límite. Así el plan no propone más práctica de la permitida
    */
   questionLimit?: { today: number | null; perDay: number | null };
+  /**
+   * Minutos que el alumno ya estudió hoy. Solo cambian el plan de hoy, que reparte lo que queda. El
+   * aviso de sobrecarga mira los 7 días completos y no los usa
+   */
+  minutesUsedToday?: number;
 }): PlannerOutput {
   const timing = input.timing ?? DEFAULT_TIMING;
+  const usedToday = Math.max(0, input.minutesUsedToday ?? 0);
   const usePomodoro = input.pomodoroMinutes.length >= 3;
   const minutesAvailable = usePomodoro
     ? input.pomodoroMinutes.reduce((sum, value) => sum + value, 0) / input.pomodoroMinutes.length
@@ -141,6 +158,7 @@ export function buildPlan(input: {
         input.priorityTopics[index % Math.max(input.priorityTopics.length, 1)] ?? null,
         timing,
         (index === 0 ? input.questionLimit?.today : input.questionLimit?.perDay) ?? null,
+        index === 0 ? usedToday : 0,
       ),
     );
   const emptyDay: DayLoad = { day: input.today, reviews: 0, newCards: 0 };
@@ -152,6 +170,7 @@ export function buildPlan(input: {
       input.priorityTopics[0] ?? null,
       timing,
       input.questionLimit?.today ?? null,
+      usedToday,
     );
 
   const average = (loads: readonly DayLoad[]) => {

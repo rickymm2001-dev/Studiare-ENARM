@@ -1,7 +1,8 @@
-// Carga diaria (D-085, fila 6). Dos ayudas dentro de los límites de hoy. El perfil guía deja tus
-// ajustes de repaso como los recomienda la guía de Anki y la sugerencia calcula cuántas tarjetas
-// nuevas por día aguantas según tus repasos que vienen y los minutos que estudias. También permite
-// quitar el límite de nuevas, con su aviso. Nada se aplica solo, cada cambio sale de un botón.
+// Carga diaria (D-085, fila 6). Dos ayudas en Ajustes del repaso (B3 del plan del cambio). El
+// perfil guía deja tus ajustes de repaso como los recomienda la guía de Anki y la sugerencia calcula
+// cuántas tarjetas nuevas por día aguantas según tus repasos que vienen y los minutos que estudias.
+// Nada se aplica solo, cada cambio sale de un botón. Quitar el límite de nuevas está una sola vez,
+// junto al campo de tarjetas nuevas del mismo panel, y aquí solo se avisa si está quitado.
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -17,7 +18,6 @@ import { guideProfile, guideProfileChanges } from '@/engines/guideProfile';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
-import { CheckboxField } from '@/ui/components/field';
 import { CalibratingNote } from '@/ui/states/states';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
@@ -154,12 +154,6 @@ function NewPerDay({
     };
   }, [requested, settings.unlimitedNewCards, session, cards, events, user]);
 
-  const setUnlimited = (unlimitedNewCards: boolean) => {
-    setSaved(false);
-    setRequested(false);
-    void updateProfile(api, user, { settings: { unlimitedNewCards } });
-  };
-
   const suggestion = result?.suggestion;
   // La sugerencia no puede pasar de las nuevas que existen ni del máximo que acepta el ajuste
   const useValue =
@@ -171,14 +165,6 @@ function NewPerDay({
     <FeatureGate userId={user.id} feature="newPerDaySuggestion">
       <section aria-label={text.suggestionTitle} className="flex flex-col gap-2">
         <h3 className="font-semibold">{text.suggestionTitle}</h3>
-        <CheckboxField
-          label={t.settings.unlimitedNewCards}
-          hint={t.settings.unlimitedNewCardsHint}
-          checked={settings.unlimitedNewCards}
-          onChange={(event) => {
-            setUnlimited(event.target.checked);
-          }}
-        />
         {settings.unlimitedNewCards ? (
           <p className="text-sm text-warning">{text.unlimitedOn}</p>
         ) : (
@@ -200,7 +186,7 @@ function NewPerDay({
               <div className="flex flex-col items-start gap-2">
                 <p className="text-sm">{text.needsMinutes}</p>
                 <Button asChild variant="secondary" size="sm">
-                  <Link to={screenPath('planner')}>{text.goToPlan}</Link>
+                  <Link to={screenPath('progress')}>{text.goToPlan}</Link>
                 </Button>
               </div>
             ) : null}

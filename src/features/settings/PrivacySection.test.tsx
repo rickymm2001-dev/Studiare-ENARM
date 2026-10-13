@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-// Configuración, sección Privacidad (D-101). Los consentimientos se dan y se retiran con su evento, y
-// el puntaje oficial solo se captura con el permiso de mejora anónima y se borra al retirarlo.
+// Configuración, sección Privacidad (D-101, B3 del plan del cambio). Los consentimientos se dan y se
+// retiran con su evento, y aquí mismo se exportan y se borran los datos. La captura del puntaje
+// oficial pasó a Progreso (sus pruebas están en OfficialScoreCard.test.tsx) y su permiso se queda.
 import 'fake-indexeddb/auto';
-import { cleanup, screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
@@ -10,6 +11,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { newId } from '@/data/testing/fixtures';
 import { currentConsents } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
+import { legalText } from '@/i18n/legal';
 
 vi.setConfig({ testTimeout: 60_000 });
 const WAIT = { timeout: 30_000 };
@@ -29,7 +31,7 @@ const [PARTY, AI, IMPROVEMENT] = [
 
 /** El alumno de la prueba con los tres permisos dados, como al crear su perfil */
 const open = () =>
-  renderApp(`${SCREENS.settings.path}?seccion=privacy`, {
+  renderApp(`${SCREENS.settings.path}#privacidad`, {
     seed: async (api, user) => {
       for (const purpose of ['party', 'ai_analysis', 'anonymized_improvement'] as const) {
         await api.repos.consents.put({
@@ -64,54 +66,27 @@ describe('Privacidad en Configuración', () => {
     }, WAIT);
   });
 
-  it('guarda el puntaje oficial con el permiso y lo borra al retirar la mejora anónima', async () => {
-    const typing = userEvent.setup();
-    const { api, user } = (app = await open());
-    expect(await screen.findByText(t.settings.privacy.none, {}, WAIT)).toBeInTheDocument();
-
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    await typing.type(score, '72.5');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    expect(
-      await screen.findByText(t.settings.privacy.current(new Date().getFullYear(), 72.5), {}, WAIT),
-    ).toBeInTheDocument();
-    expect((await api.repos.officialScores.get(user.id))?.score).toBe(72.5);
-
-    await typing.click(screen.getByRole('checkbox', { name: IMPROVEMENT }));
-    expect(
-      await screen.findByText(t.settings.privacy.scoreNeedsConsent, {}, WAIT),
-    ).toBeInTheDocument();
-    expect(screen.queryByLabelText(t.settings.privacy.score)).not.toBeInTheDocument();
-    await waitFor(async () => {
-      expect(await api.repos.officialScores.get(user.id)).toBeUndefined();
-    }, WAIT);
-    expect(await screen.findByText(t.settings.privacy.none, {}, WAIT)).toBeInTheDocument();
-  });
-
-  it('un puntaje fuera de rango muestra el error y no se guarda', async () => {
-    const typing = userEvent.setup();
+  it('trae exportar, borrar y el aviso de privacidad, y el puntaje oficial ya no se captura aquí', async () => {
     app = await open();
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    // La validación es la nuestra y no la del navegador, así el aviso sale en español
-    await typing.type(score, '101');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    expect(
-      await screen.findByText(t.settings.privacy.scoreErrors.invalid_score, {}, WAIT),
-    ).toBeInTheDocument();
-    expect(await app.api.repos.officialScores.get(app.user.id)).toBeUndefined();
-  });
-
-  it('quitar el puntaje lo borra sin tocar el permiso', async () => {
-    const typing = userEvent.setup();
-    app = await open();
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    await typing.type(score, '65');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    await typing.click(
-      await screen.findByRole('button', { name: t.settings.privacy.removeScore }, WAIT),
+    const privacy = await screen.findByRole(
+      'region',
+      { name: t.settingsPage.sections.privacy },
+      WAIT,
     );
-    expect(await screen.findByText(t.settings.privacy.scoreRemoved, {}, WAIT)).toBeInTheDocument();
-    expect(await app.api.repos.officialScores.get(app.user.id)).toBeUndefined();
-    expect(screen.getByRole('checkbox', { name: IMPROVEMENT })).toBeChecked();
+    expect(
+      within(privacy).getByRole('heading', { level: 3, name: t.settings.privacy.consentsTitle }),
+    ).toBeVisible();
+    expect(within(privacy).getByRole('button', { name: t.settings.export })).toBeVisible();
+    expect(within(privacy).getByRole('button', { name: t.settings.delete })).toBeVisible();
+    expect(within(privacy).getByRole('link', { name: legalText.links.privacy })).toHaveAttribute(
+      'href',
+      SCREENS.privacyNotice.path,
+    );
+    // El permiso de la mejora anónima sigue aquí y el puntaje se captura en Progreso
+    expect(within(privacy).getByRole('checkbox', { name: IMPROVEMENT })).toBeInTheDocument();
+    expect(screen.queryByLabelText(t.settings.privacy.score)).toBeNull();
+    expect(
+      within(privacy).getByRole('link', { name: t.settingsPage.privacy.goToProgress }),
+    ).toHaveAttribute('href', SCREENS.progress.path);
   });
 });

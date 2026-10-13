@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { DEFAULT_PREFERENCES, usePreferences } from '@/app/preferences';
+import { writeStoredFlags } from '@/config/featureFlags';
 import { DataContext, type DataApi, type DemoDataActions } from '@/data/context';
 import { makeUser, testApi } from '@/data/testing/fixtures';
 import { DEMO_STUDENT_ALIAS } from '@/demo/constants';
@@ -15,6 +17,8 @@ const disposers: (() => Promise<unknown>)[] = [];
 afterEach(async () => {
   cleanup();
   await Promise.all(disposers.splice(0).map((dispose) => dispose()));
+  writeStoredFlags(null);
+  usePreferences.setState(DEFAULT_PREFERENCES);
 });
 
 const SUMMARY = { questions: 60, users: 11, events: 1234, cards: 200 };
@@ -60,14 +64,27 @@ function setup(options: { seeded?: boolean; demo?: boolean; failWith?: Error } =
 const text = adminText.adminDemo;
 
 describe('datos de demostración (pantalla 24)', () => {
-  it('en Mi cuenta explica que la demostración es otra base y lleva a cambiarla', async () => {
+  it('en Mi cuenta explica que la demostración es otra base y deja cambiarla aquí mismo', async () => {
+    const typing = userEvent.setup();
     setup({ demo: false });
     expect(await screen.findByText(text.notDemo.title)).toBeVisible();
-    expect(screen.getByRole('link', { name: text.notDemo.go })).toHaveAttribute(
-      'href',
-      '/configuracion?seccion=account',
-    );
     expect(screen.queryByRole('button', { name: text.generate })).toBeNull();
+    // El selector de base pasó de Configuración a esta pantalla (B3, 5.4). El modo de la IA no es
+    // de la demostración y se ve en Costos de IA
+    const demoRadio = screen.getByRole('radio', { name: new RegExp(t.database.demo) });
+    expect(screen.getByRole('radio', { name: new RegExp(t.database.real) })).toBeChecked();
+    expect(screen.queryByRole('heading', { name: t.ai.cardTitle })).toBeNull();
+    await typing.click(demoRadio);
+    expect(usePreferences.getState().database).toBe('demo');
+  });
+
+  it('con la bandera demoTools apagada no deja cambiar de base ni generar', async () => {
+    writeStoredFlags({ demoTools: false });
+    setup();
+    expect(await screen.findByText(t.settingsPage.demoTools.off.title)).toBeVisible();
+    expect(screen.queryByRole('radio')).toBeNull();
+    expect(screen.queryByRole('button', { name: text.generate })).toBeNull();
+    expect(screen.queryByText(t.ai.cardTitle)).toBeNull();
   });
 
   it('vacía ofrece generar con los ajustes de fábrica y deja un mensaje al terminar', async () => {
@@ -156,7 +173,8 @@ describe('datos de demostración (pantalla 24)', () => {
 
   it('lo marca como datos simulados y cuenta alumnos y al de la demo', async () => {
     setup({ seeded: true });
-    expect(await screen.findByText(t.labels.simulatedData)).toBeVisible();
+    const adjust = await screen.findByRole('region', { name: text.adjust.title });
+    expect(within(adjust).getByText(t.labels.simulatedData)).toBeVisible();
     expect(screen.getByText(text.stats.yes)).toBeVisible();
   });
 });

@@ -17,7 +17,7 @@ import { acceptedNoticeVersion } from '@/data/usecases/profile';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
-import { usePreferences } from './preferences';
+import { signOutCount, usePreferences } from './preferences';
 import { startSyncScheduler, type SyncScheduler } from './syncScheduler';
 import { useSyncStatus } from './syncState';
 
@@ -88,6 +88,10 @@ export function CloudBridge() {
       };
 
       const sync = async () => {
+        // Si el alumno cierra la sesión mientras esta revisión espera a la nube, la revisión no la
+        // vuelve a abrir ni sigue a su nombre. El SIGNED_OUT que llega después hace su propia revisión
+        const signOutsAtStart = signOutCount();
+        const signedOutMeanwhile = () => signOutCount() !== signOutsAtStart;
         try {
           // Las banderas de lanzamiento del servidor valen también para quien no ha entrado, porque la
           // tabla las deja leer sin sesión. Mandan sobre el entorno y se aplican al recargar (D-119)
@@ -105,9 +109,9 @@ export function CloudBridge() {
             setCloud(signedOutState(useCloud.getState().state));
             return;
           }
-          if (isLeaving()) return;
+          if (isLeaving() || signedOutMeanwhile()) return;
           const linked = await linkCloudIdentity(api, identity);
-          if (stopped() || isLeaving()) return;
+          if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           const { userId } = linked;
           signIn(userId);
           setRole(identity.role);
@@ -131,6 +135,7 @@ export function CloudBridge() {
             // a nombre de la cuenta
             const first = await handle.first;
             if (first.status === 'other' || first.status === 'limit' || stopped()) return;
+            if (signedOutMeanwhile()) return;
           }
           // Se registra la versión del aviso que el alumno aceptó de verdad en este dispositivo y no la
           // que trae la app ahora. Una versión nueva se registra cuando la acepte (D-104)
@@ -139,7 +144,7 @@ export function CloudBridge() {
           // Antes de subir la cuenta se pone de acuerdo la foto de perfil. Gana la elección más
           // reciente, así un dispositivo nuevo o uno que se quedó atrás baja la de la nube (B2)
           await pushLocalAccount(api, cloud, identity.authId, userId);
-          if (stopped() || isLeaving()) return;
+          if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           if (syncing?.authId !== identity.authId) {
             syncing?.handle.stop();
             const status = useSyncStatus.getState();

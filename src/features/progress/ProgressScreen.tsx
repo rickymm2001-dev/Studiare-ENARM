@@ -24,8 +24,10 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { DifficultyCard } from './DifficultyCard';
 import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
+import { WeekPlanCard } from './WeekPlanCard';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
 import { masteryDot } from './masteryChip';
+import { OfficialScoreCard } from './OfficialScoreCard';
 import { useAnalysis } from './useAnalysis';
 
 export function ProgressScreen() {
@@ -152,7 +154,9 @@ function Progress({ session }: { session: ReadySession }) {
           })}
         />
         <FutureLoadSection session={session} events={events} content={content} />
+        <WeekPlanCard session={session} events={events} content={content} />
       </div>
+      <OfficialScoreCard session={session} />
     </>
   );
 }

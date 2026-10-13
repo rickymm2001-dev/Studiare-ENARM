@@ -129,7 +129,7 @@ export const tutorText = {
       enable_highlight:
         'Listo. El resaltado de negaciones quedó encendido en práctica y en examen.',
       suggest_break: (focus: number, rest: number) =>
-        `Listo. Tu Pomodoro quedó en ${focus} minutos de enfoque y ${rest} de descanso. Lo cambias en Configuración.`,
+        `Listo. Tu Pomodoro quedó en ${focus} minutos de enfoque y ${rest} de descanso. Lo cambias en Repasar, Ajustes del repaso.`,
       create_contrast_card: (n: number) =>
         n === 0
           ? 'Esas tarjetas de contraste ya estaban en Mis errores.'
@@ -186,7 +186,6 @@ export const tutorText = {
       turnOn: 'Encender análisis con IA',
       turningOn: 'Encendiendo…',
       on: 'Encendido. Lo que redacta la IA va en borrador, con la etiqueta de que ningún médico lo ha validado, y se actualiza cada 7 días.',
-      turnOff: 'Apagar en Perfil',
       working: 'Redactando tus explicaciones…',
       offline: 'Sin conexión. Tu tutor sigue con plantillas fijas.',
       notice: (message: string) => `No se pudo usar la IA ahora. ${message}`,

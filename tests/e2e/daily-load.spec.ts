@@ -1,7 +1,7 @@
 // Carga diaria (D-085, Etapa 2). Con un mazo precargado seguido: los tres contadores bajan al
-// calificar, el temporizador opcional se enciende en Configuración y muestra la respuesta solo, y
-// con el reloj tres días adelante las tarjetas repasadas quedan atrasadas, se reparten y se deshace
-// el cambio. Todo cambio de fecha es un evento nuevo, la bitácora no se edita.
+// calificar, el temporizador opcional se enciende en Ajustes del repaso y muestra la respuesta solo,
+// y con el reloj tres días adelante las tarjetas repasadas quedan atrasadas, se reparten y se
+// deshace el cambio. Todo cambio de fecha es un evento nuevo, la bitácora no se edita.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -19,6 +19,10 @@ async function followSmallestDeck(page: Page) {
 const rating = (page: Page, value: keyof typeof t.review.ratings) =>
   page.getByRole('button', { name: new RegExp(`^${t.review.ratings[value]}`) });
 
+/** Ajustes del repaso, el panel de Repasar con todos los ajustes que se guardan (B3) */
+const settingsPanel = (page: Page) =>
+  page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+
 const counterValues = async (page: Page) =>
   page
     .getByRole('list', { name: t.review.counters.label })
@@ -31,13 +35,14 @@ test('contadores, temporizador, atrasos repartidos y deshacer', async ({ page })
   await signUp(page);
   await followSmallestDeck(page);
 
-  // El temporizador viene apagado. Se enciende en Configuración con el tiempo más corto
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
-  await page.getByRole('checkbox', { name: t.settings.cardTimerEnabled }).check();
-  await page.getByRole('combobox', { name: t.settings.cardTimerSeconds }).selectOption('10');
-  await page.getByRole('checkbox', { name: t.settings.cardTimerAutoReveal }).check();
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(t.settings.saved)).toBeVisible();
+  // El temporizador viene apagado. Se enciende en Ajustes del repaso con el tiempo más corto
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const panel = settingsPanel(page);
+  await panel.getByRole('checkbox', { name: t.settings.cardTimerEnabled }).check();
+  await panel.getByRole('combobox', { name: t.settings.cardTimerSeconds }).selectOption('10');
+  await panel.getByRole('checkbox', { name: t.settings.cardTimerAutoReveal }).check();
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(panel.getByText(t.settings.saved)).toBeVisible();
 
   // Tres contadores con los números de la selección y el de la tarjeta actual subrayado
   await page.goto(SCREENS.review.path);
@@ -84,35 +89,40 @@ test('contadores, temporizador, atrasos repartidos y deshacer', async ({ page })
   await expect(page.getByText(/a su fecha de antes\.$/)).toBeVisible();
 });
 
-test('el perfil guía y la sugerencia de nuevas viven en los límites de hoy', async ({ page }) => {
+test('el perfil guía, la sugerencia de nuevas y el límite viven en Ajustes del repaso', async ({
+  page,
+}) => {
   test.setTimeout(180_000);
   await signUp(page);
   await followSmallestDeck(page);
   await page.goto(SCREENS.review.path);
-  await page.getByText(t.reviewSetup.limits, { exact: true }).first().click();
+  await page.getByRole('button', { name: t.settingsPage.reviewSettings.open, exact: true }).click();
+  const panel = settingsPanel(page);
 
-  const guide = page.getByRole('region', { name: t.dailyLoad.guideTitle });
+  const guide = panel.getByRole('region', { name: t.dailyLoad.guideTitle });
   await expect(guide).toBeVisible();
   await guide.getByRole('button', { name: t.dailyLoad.guideApply }).click();
   await expect(guide.getByText(t.dailyLoad.guideApplied)).toBeVisible();
   await expect(guide.getByText(t.dailyLoad.guideAlready)).toBeVisible();
 
-  // Sin minutos de estudio la sugerencia manda a Plan
-  const suggestion = page.getByRole('region', { name: t.dailyLoad.suggestionTitle });
+  // Sin minutos de estudio la sugerencia manda a ponerlos en la semana de Progreso
+  const suggestion = panel.getByRole('region', { name: t.dailyLoad.suggestionTitle });
   await suggestion.getByRole('button', { name: t.dailyLoad.calculate }).click();
   const needsMinutes = suggestion.getByText(t.dailyLoad.needsMinutes);
   const ready = suggestion.getByText(/^Te sugerimos/);
   await expect(needsMinutes.or(ready)).toBeVisible({ timeout: 30_000 });
   await expectNoSeriousA11yViolations(page);
 
-  // Quitar el límite apaga el campo y avisa. Volver a ponerlo lo regresa
-  const unlimited = suggestion.getByRole('checkbox', { name: t.settings.unlimitedNewCards });
-  // El ajuste se guarda en la base y la casilla cambia al terminar, por eso se hace clic y se espera
-  await unlimited.click();
-  await expect(unlimited).toBeChecked();
+  // Quitar el límite apaga el campo y, al guardar, la sugerencia avisa. Volver a ponerlo lo regresa.
+  // La casilla está una sola vez, junto al campo de tarjetas nuevas
+  const unlimited = panel.getByRole('checkbox', { name: t.settings.unlimitedNewCards });
+  const newCards = panel.getByRole('spinbutton', { name: t.settings.newCardsPerDay });
+  await unlimited.check();
+  await expect(newCards).toBeDisabled();
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
   await expect(suggestion.getByText(t.dailyLoad.unlimitedOn)).toBeVisible();
-  await expect(page.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toBeDisabled();
-  await unlimited.click();
-  await expect(unlimited).not.toBeChecked();
-  await expect(page.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toBeEnabled();
+  await unlimited.uncheck();
+  await expect(newCards).toBeEnabled();
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(suggestion.getByText(t.dailyLoad.unlimitedOn)).toHaveCount(0);
 });

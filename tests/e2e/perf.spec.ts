@@ -87,10 +87,12 @@ test('una sesión de 200 tarjetas con el procesador 4 veces más lento sigue flu
   await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
     timeout: 120_000,
   });
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
-  await page.getByLabel(t.settings.newCardsPerDay).fill('250');
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(t.settings.saved)).toBeVisible();
+  // El límite de nuevas vive en Ajustes del repaso, en Repasar (B3 del plan del cambio)
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const panel = page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+  await panel.getByLabel(t.settings.newCardsPerDay).fill('250');
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(panel.getByText(t.settings.saved)).toBeVisible();
 
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();

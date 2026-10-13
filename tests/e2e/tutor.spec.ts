@@ -5,19 +5,16 @@
 import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { t } from '@/i18n/es-MX';
+import { generateDemo } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import { openFromMenu } from './support/navigation';
 
 test('sin datos el tutor calibra, no inventa hipótesis y se abre desde el menú', async ({
   page,
 }) => {
   await signUp(page);
-  // En el teléfono el tutor se abre desde Accesos en Perfil y en computadora desde el riel lateral
-  const phone = (page.viewportSize()?.width ?? 0) < 1024;
-  await page.goto(phone ? SCREENS.profile.path : '/');
-  const scope = phone
-    ? page.getByRole('main')
-    : page.getByRole('navigation', { name: t.nav.label });
-  await scope.getByRole('link', { name: t.navItems.tutor, exact: true }).click();
+  // En computadora el tutor está en el riel lateral y en el teléfono se abre desde Más (4.28)
+  await openFromMenu(page, t.navItems.tutor);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.tutor.title);
 
   await expect(page.getByText(t.tutor.calibrating(0))).toBeVisible();
@@ -46,11 +43,8 @@ test('con la demo salen hipótesis con evidencia, se responden, el informe trae 
   page,
 }) => {
   test.setTimeout(240_000);
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-  const panel = page.getByRole('region', { name: t.demoData.title });
-  await panel.getByRole('button', { name: t.demoData.generate }).click();
-  await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 150_000 });
+  // La demostración se genera en Datos de demostración del admin (B3 del plan del cambio, 5.4)
+  await generateDemo(page);
 
   await page.goto(SCREENS.tutor.path);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.tutor.title);

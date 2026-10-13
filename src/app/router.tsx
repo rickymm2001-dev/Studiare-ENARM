@@ -1,10 +1,11 @@
-// Rutas de las pantallas, todas con carga diferida. Las 33 tienen componente propio; ya no hay esqueletos.
+// Rutas de las pantallas, todas con carga diferida. Todas tienen componente propio; ya no hay
+// esqueletos. Las rutas de las pantallas que se quitaron llevan a donde quedó lo suyo (B3).
 import type { ComponentType } from 'react';
-import { createBrowserRouter, type RouteObject } from 'react-router';
+import { createBrowserRouter, replace, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
 import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
-import { SCREEN_KEYS, SCREENS, type ScreenKey } from './screens';
+import { LEGACY_REDIRECTS, SCREEN_KEYS, SCREENS, screenPath, type ScreenKey } from './screens';
 
 /**
  * Pantallas que ya tienen componente propio. Cada una vive en su propio archivo, que el navegador
@@ -36,13 +37,10 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
   explore: () => import('@/features/explore/ExploreScreen').then((module) => module.ExploreScreen),
   outlines: () =>
     import('@/features/outlines/OutlinesScreen').then((module) => module.OutlinesScreen),
-  planner: () => import('@/features/planner/PlannerScreen').then((module) => module.PlannerScreen),
   tutor: () => import('@/features/tutor/TutorScreen').then((module) => module.TutorScreen),
   subscription: () =>
     import('@/features/billing/SubscriptionScreen').then((module) => module.SubscriptionScreen),
   party: () => import('@/features/party/PartyScreen').then((module) => module.PartyScreen),
-  rewards: () => import('@/features/rewards/RewardsScreen').then((module) => module.RewardsScreen),
-  profile: () => import('@/features/profile/ProfileScreen').then((module) => module.ProfileScreen),
   progress: () =>
     import('@/features/progress/ProgressScreen').then((module) => module.ProgressScreen),
   settings: () =>
@@ -86,6 +84,15 @@ function routeFor(key: ScreenKey): RouteObject {
 const keysIn = (area: 'student' | 'physician' | 'admin' | 'shared') =>
   SCREEN_KEYS.filter((key) => SCREENS[key].area === area);
 
+/**
+ * Una ruta vieja lleva a la pantalla nueva antes de pintar nada y reemplaza la entrada del historial,
+ * así el botón de atrás no vuelve a la ruta vieja y no se queda dando vueltas
+ */
+const legacyRedirects: RouteObject[] = Object.entries(LEGACY_REDIRECTS).map(([path, key]) => ({
+  path,
+  loader: () => replace(screenPath(key)),
+}));
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -111,6 +118,7 @@ export const routes: RouteObject[] = [
         },
         children: keysIn('admin').map(routeFor),
       },
+      ...legacyRedirects,
       { path: '*', Component: NotFoundScreen },
     ],
   },

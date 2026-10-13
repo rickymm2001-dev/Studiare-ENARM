@@ -1,5 +1,5 @@
-// Herramientas del repaso (D-085, filas 5, 7 y 8). Días fáciles en Configuración, con su resumen y su
-// evento. Sanguijuela, con el umbral del admin en un olvido para que la primera tarjeta repasada que
+// Herramientas del repaso (D-085, filas 5, 7 y 8). Días fáciles en Ajustes del repaso, con su resumen
+// y su evento. Sanguijuela, con el umbral del admin en un olvido para que la primera tarjeta repasada que
 // se falla la marque, sugiera qué hacer y se suspenda. Y atrasos, adelantar y posponer con deshacer,
 // más el límite de que sin tarjetas vencidas posponer no ofrece nada. daily-load.spec ya cubre
 // repartir y deshacer el reparto, así que aquí no se repite.
@@ -36,34 +36,35 @@ interface SettingsEvent {
   payload: { key?: string; value?: unknown; reason?: string };
 }
 
-test('días fáciles. Se marcan en Configuración, el resumen los cuenta al recargar y el cambio queda como evento', async ({
+test('días fáciles. Se marcan en Ajustes del repaso, el resumen los cuenta al recargar y el cambio queda como evento', async ({
   page,
 }) => {
   await signUp(page);
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
-  const disclosure = page.locator('summary', { hasText: t.settings.easyDaysTitle });
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const panel = page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+  const disclosure = panel.locator('summary', { hasText: t.settings.easyDaysTitle });
   await expect(disclosure).toContainText(t.settings.easyDaysSummary(0));
   await disclosure.click();
-  await expect(page.getByText(t.settings.easyDaysHint)).toBeVisible();
+  await expect(panel.getByText(t.settings.easyDaysHint)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
   // El sábado casi sin repasos y el domingo con menos. El resumen cambia al momento
-  await page.getByRole('combobox', { name: t.settings.weekdays.sat }).selectOption('minimum');
-  await page.getByRole('combobox', { name: t.settings.weekdays.sun }).selectOption('reduced');
+  await panel.getByRole('combobox', { name: t.settings.weekdays.sat }).selectOption('minimum');
+  await panel.getByRole('combobox', { name: t.settings.weekdays.sun }).selectOption('reduced');
   await expect(disclosure).toContainText(t.settings.easyDaysSummary(2));
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(t.settings.saved, { exact: true })).toBeVisible();
+  await panel.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(panel.getByText(t.settings.saved, { exact: true })).toBeVisible();
 
-  // Se recuerda al recargar
+  // Se recuerda al recargar. La dirección conserva el panel abierto
   await page.reload();
-  await expect(page.locator('summary', { hasText: t.settings.easyDaysTitle })).toContainText(
+  await expect(panel.locator('summary', { hasText: t.settings.easyDaysTitle })).toContainText(
     t.settings.easyDaysSummary(2),
   );
-  await page.locator('summary', { hasText: t.settings.easyDaysTitle }).click();
-  await expect(page.getByRole('combobox', { name: t.settings.weekdays.sat })).toHaveValue(
+  await panel.locator('summary', { hasText: t.settings.easyDaysTitle }).click();
+  await expect(panel.getByRole('combobox', { name: t.settings.weekdays.sat })).toHaveValue(
     'minimum',
   );
-  await expect(page.getByRole('combobox', { name: t.settings.weekdays.sun })).toHaveValue(
+  await expect(panel.getByRole('combobox', { name: t.settings.weekdays.sun })).toHaveValue(
     'reduced',
   );
 

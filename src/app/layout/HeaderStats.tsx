@@ -1,8 +1,9 @@
 // Arriba a la derecha, siempre a la vista. Racha, nivel con su barra de XP y nombre, y la foto de
-// perfil que lleva a Perfil (D-062). En la barra de computadora el nivel va en una línea, con su
-// título junto al número y la barra más larga, como en el diseño de Ricardo (D-117). Racha, nivel y
-// XP van en neutro, sin dorado ni naranja (4.7 del plan del cambio, D-121). El texto chico mide 12 px
-// (H19 de la revisión de B2) y el relleno de la barra es fg-muted, que pasa 3 a 1 sobre muted (H12).
+// perfil que lleva a Configuración, donde vive el Perfil (D-062, B3 del plan del cambio). En la barra
+// de computadora el nivel va en una línea, con su título junto al número y la barra más larga, como
+// en el diseño de Ricardo (D-117). Racha, nivel y XP van en neutro, sin dorado ni naranja (4.7 del
+// plan del cambio, D-121). El texto chico mide 12 px (H19 de la revisión de B2) y el relleno de la
+// barra es fg-muted, que pasa 3 a 1 sobre muted (H12).
 import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
@@ -76,7 +77,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
           </span>
         </button>
       </LevelLadderDialog>
-      <Link to={screenPath('profile')} aria-label={t.headerStats.profile} className="rounded-full">
+      <Link to={screenPath('settings')} aria-label={t.headerStats.profile} className="rounded-full">
         <Avatar name={user.alias} avatar={account?.avatar} />
       </Link>
     </div>

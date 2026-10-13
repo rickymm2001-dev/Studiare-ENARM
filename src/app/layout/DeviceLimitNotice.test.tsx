@@ -126,7 +126,7 @@ describe('aviso del límite de cambios de dispositivo', () => {
 
 describe('aviso del límite en el marco de la app', () => {
   it('aparece en una pantalla cuando cambia el estado de la nube', async () => {
-    app = await renderApp(SCREENS.profile.path);
+    app = await renderApp(SCREENS.settings.path);
     expect(await screen.findByRole('heading', { level: 1 })).toBeVisible();
     expect(screen.queryByRole('alert')).toBeNull();
     setCloudState(LIMIT);

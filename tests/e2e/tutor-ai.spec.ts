@@ -74,7 +74,7 @@ test('con un plan de pago el análisis se enciende desde el tutor, llega simulad
   expect(new Set(generated.map((artifact) => artifact.kind))).toContain('weekly_report');
 
   // El consentimiento se ve encendido en Configuración, Privacidad, con su evento
-  await page.goto(`${SCREENS.settings.path}?seccion=privacy`);
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
   await expect(
     page.getByRole('checkbox', { name: t.onboarding.consents.ai_analysis[0] }),
   ).toBeChecked();

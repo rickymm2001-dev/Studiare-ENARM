@@ -41,7 +41,7 @@ Si falta algo o está mal, el proxy no arranca y dice cuáles variables fallan, 
 3. Pon como comprobación de salud la ruta /health. Debe contestar con el modo, real o simulado
 4. Anota la dirección pública del servicio, por ejemplo https://ia.studiare.mx
 5. En GitHub, en Settings, Secrets and variables, Actions, pestaña Variables, crea VITE_AI_URL con esa dirección. Es pública por diseño, como la de Supabase. Vuelve a publicar la app
-6. Entra a la app con una cuenta de pago y abre el Tutor. La insignia de IA en Configuración, Cuenta, debe decir IA real
+6. Entra a la app con una cuenta de pago y abre el Tutor. La insignia de IA del Tutor debe decir IA real, y la de Costos de IA, en el menú del admin, también
 7. Entra con una cuenta del plan Gratis. El Tutor debe decir que la IA es de los planes de pago
 
 ## Qué pasa en cada falla
