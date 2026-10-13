@@ -1,12 +1,13 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { OUTLINE_LIMITS, type OutlineNode } from '../../engines/outline';
-import { latestCardStates } from '../../features/review/study';
+import { ENARM_TOPIC_TAG_PREFIX, OUTLINE_LIMITS, type OutlineNode } from '../../engines/outline';
+import { latestCardStates, topicFromTags } from '../../features/review/study';
 import type { FsrsCardState } from '../schemas/common';
 import { isLive, type Card, type Note } from '../schemas/decks';
 import type { Outline } from '../schemas/outlines';
 import type { User } from '../schemas/people';
 import { fixedClock, makeEvent, makeUser, newId, testApi } from '../testing/fixtures';
+import { TOPIC_TAG_PREFIX } from './errorCards';
 import { exportUserData } from './exportData';
 import {
   createManualDeck,
@@ -20,11 +21,13 @@ import {
   OutlineConflictError,
   createOutline,
   deleteOutline,
+  isAutomaticOutlineDeck,
   isFromOutline,
   moveOutline,
   renameOutline,
   saveOutline,
   syncOutlineCards,
+  updateOutlineSettings,
 } from './outlines';
 
 const disposers: (() => Promise<void>)[] = [];
@@ -1245,5 +1248,178 @@ describe('exportar los datos', () => {
     const data = await exportUserData(api.repos, user.id);
     expect(data.content.outlines.map((outline: Outline) => outline.title)).toEqual(['Mío']);
     expect(data.content.outlines[0]?.nodes).toHaveLength(1);
+  });
+});
+
+describe('mazo y tema de cada apunte (B6)', () => {
+  const cardiology = { kind: 'enarm', branch: 'internal_medicine', topic: 'cardiology' } as const;
+
+  it('el prefijo del tema es el mismo que leen Repasar y el tutor', () => {
+    expect(ENARM_TOPIC_TAG_PREFIX).toBe(TOPIC_TAG_PREFIX);
+  });
+
+  it('con un tema del ENARM todas sus tarjetas llevan topic: y Repasar lee el tema', async () => {
+    const { api, user } = setup();
+    const outline = await createOutline(
+      api,
+      user,
+      { title: 'Arritmias', subject: cardiology },
+      at(0),
+    );
+    expect(outline.subject).toEqual(cardiology);
+    await saveOutline(
+      api,
+      user,
+      {
+        outlineId: outline.id,
+        nodes: [line('FA :: Fibrilación auricular #Ritmo', [line('Tratamiento >> Anticoagular')])],
+      },
+      at(1),
+    );
+    const notes = [...(await notesOf(api, outline.id)).values()];
+    expect(notes).toHaveLength(2);
+    for (const note of notes) {
+      // La etiqueta del tema va primero y las de las líneas se conservan
+      expect(note.tags[0]).toBe('topic:cardiology');
+      expect(note.tags).toContain('Ritmo');
+      expect(topicFromTags(note.tags)).toBe('cardiology');
+    }
+  });
+
+  it('el modo clase con una materia libre nunca da topic:, así no cuenta en el ENARM', async () => {
+    const { api, user } = setup();
+    const nodes = [line('Ideas clave', [line('El húmero :: Hueso del brazo')])];
+    const outline = await createOutline(
+      api,
+      user,
+      { title: 'Anatomía, clase 3', subject: { kind: 'free', name: 'Anatomía' }, nodes },
+      at(0),
+    );
+    // Nació con la plantilla y ya trae su tarjeta
+    expect(outline.nodes).toEqual(nodes);
+    const [note] = [...(await notesOf(api, outline.id)).values()];
+    expect(note?.tags).toEqual(['Materia::Anatomía']);
+    expect(topicFromTags(note?.tags)).toBeNull();
+    expect(note?.tags.some((tag) => tag.startsWith(TOPIC_TAG_PREFIX))).toBe(false);
+  });
+
+  it('un tema que no cumple el esquema no crea nada', async () => {
+    const { api, user } = setup();
+    await expect(
+      createOutline(api, user, { title: 'Mal', subject: { kind: 'free', name: '   ' } }, at(0)),
+    ).rejects.toThrow(RangeError);
+    await expect(
+      createOutline(
+        api,
+        user,
+        { title: 'Mal', subject: { kind: 'enarm', branch: 'no válida', topic: 'x' } },
+        at(0),
+      ),
+    ).rejects.toThrow(RangeError);
+    expect(await api.repos.decks.list()).toEqual([]);
+    expect(await api.repos.outlines.list()).toEqual([]);
+  });
+
+  it('cambiar el mazo y el tema mueve las tarjetas con sus IDs y cambia su etiqueta', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user);
+    await saveOutline(api, user, { outlineId: outline.id, nodes: [line('A >> B')] }, at(1));
+    const [before] = [...(await notesOf(api, outline.id)).values()];
+    const cardsBefore = idsOf(await cardsOf(api, before?.id ?? ''));
+    const other = await createManualDeck(api, user, { name: 'Cardiología' }, at(2));
+
+    const moved = await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: other.id }, subject: cardiology },
+      at(3),
+    );
+    expect(moved.outline).toMatchObject({ deckId: other.id, subject: cardiology });
+    expect(moved.sync.updated).toBe(1);
+    const [after] = [...(await notesOf(api, outline.id)).values()];
+    expect(after).toMatchObject({ id: before?.id, deckId: other.id, tags: ['topic:cardiology'] });
+    const cardsAfter = await cardsOf(api, after?.id ?? '', { live: true });
+    expect(idsOf(cardsAfter)).toEqual(cardsBefore);
+    expect(cardsAfter.every((card) => card.deckId === other.id)).toBe(true);
+
+    // Lo mismo otra vez no escribe nada
+    const snap = await snapshot(api);
+    await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: other.id }, subject: cardiology },
+      at(4),
+    );
+    expect(await snapshot(api)).toBe(snap);
+
+    // Quitar el tema quita la etiqueta
+    await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: other.id }, subject: null },
+      at(5),
+    );
+    const [plain] = [...(await notesOf(api, outline.id)).values()];
+    expect(plain?.tags).toEqual([]);
+  });
+
+  it('el mazo automático se reutiliza si ya está en uno y si no se crea con el título', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user, 'Asma');
+    const automatic = outline.deckId;
+    // Ya está en su mazo automático, así que no se crea otro
+    const same = await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'automatic' }, subject: null },
+      at(1),
+    );
+    expect(same.outline.deckId).toBe(automatic);
+    expect(isAutomaticOutlineDeck(await api.repos.decks.list(), automatic, user)).toBe(true);
+
+    const own = await createManualDeck(api, user, { name: 'Neumología' }, at(2));
+    expect(isAutomaticOutlineDeck(await api.repos.decks.list(), own.id, user)).toBe(false);
+    await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: own.id }, subject: null },
+      at(3),
+    );
+    const back = await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'automatic' }, subject: null },
+      at(4),
+    );
+    const decks = await api.repos.decks.list();
+    const fresh = decks.find((deck) => deck.id === back.outline.deckId);
+    expect(fresh?.id).not.toBe(own.id);
+    expect(fresh?.name).toBe('Asma');
+    expect(isAutomaticOutlineDeck(decks, back.outline.deckId, user)).toBe(true);
+  });
+
+  it('no deja elegir un mazo ajeno ni cambiar el apunte de otro, y no escribe nada', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user);
+    const stranger = makeUser();
+    const theirs = await createManualDeck(api, stranger, { name: 'Ajeno' }, at(1));
+    const snap = await snapshot(api);
+    await expect(
+      updateOutlineSettings(
+        api,
+        user,
+        { outlineId: outline.id, deck: { kind: 'deck', deckId: theirs.id }, subject: null },
+        at(2),
+      ),
+    ).rejects.toThrow();
+    await expect(
+      updateOutlineSettings(
+        api,
+        stranger,
+        { outlineId: outline.id, deck: { kind: 'automatic' }, subject: null },
+        at(2),
+      ),
+    ).rejects.toThrow();
+    expect(await snapshot(api)).toBe(snap);
   });
 });

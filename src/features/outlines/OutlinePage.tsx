@@ -1,9 +1,12 @@
 // Un apunte abierto. El editor en esquema a la izquierda y, a un lado, las tarjetas que salen de él,
-// sus enlaces y las marcas rápidas. Todo se guarda solo. El editor es una pieza de carga diferida
-// porque TipTap pesa y no hace falta fuera de esta pantalla.
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import { lazy, Suspense, useDeferredValue, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+// las tarjetas con IA, sus enlaces y las marcas rápidas. Todo se guarda solo. El editor es una pieza
+// de carga diferida porque TipTap pesa y no hace falta fuera de esta pantalla.
+//
+// B6 del plan del cambio. Arriba del editor van el mazo y el tema del apunte y su esquema para saltar
+// a una sección. El modo clase deja solo el editor, a todo lo ancho, para escribir rápido.
+import { ArrowLeft, Maximize2, Minimize2, Trash2 } from 'lucide-react';
+import { lazy, Suspense, useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import type { Deck } from '@/data/schemas/decks';
@@ -12,21 +15,33 @@ import {
   OutlineConflictError,
   createOutline,
   deleteOutline,
-  moveOutline,
   saveOutline,
+  updateOutlineSettings,
+  type OutlineDeckChoice,
 } from '@/data/usecases/outlines';
 import { deckPath } from '@/engines/deckTree';
-import { backlinks, planCards, resolveLinks, type OutlineNode } from '@/engines/outline';
+import {
+  backlinks,
+  freeSubjects,
+  planCards,
+  resolveLinks,
+  type OutlineNode,
+  type OutlineSubject,
+} from '@/engines/outline';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
-import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
+import { CheckboxField, TextField } from '@/ui/components/field';
 import { LoadingState } from '@/ui/states/states';
 import type { ReadySession } from '../shared/RequireSession';
 import { CardPreview } from './CardPreview';
 import { CheatSheet } from './CheatSheet';
 import { lineBadge } from './lineBadge';
+import { OutlineAiCards } from './OutlineAiCards';
 import { OutlineLinks } from './OutlineLinks';
+import { OutlineSettings } from './OutlineSettings';
+import { OutlineStructure } from './OutlineStructure';
 import { useOutlineAutosave, type SaveStatus } from './useOutlineAutosave';
 
 const OutlineEditor = lazy(() =>
@@ -45,16 +60,21 @@ export function OutlinePage({
   outline,
   outlines,
   decks,
+  initialLine = null,
 }: {
   session: ReadySession;
   outline: Outline;
-  /** Todos los apuntes del alumno, para resolver enlaces */
+  /** Todos los apuntes del alumno, para resolver enlaces y sugerir materias */
   outlines: readonly Outline[];
   decks: readonly Deck[];
+  /** Línea donde queda el cursor al abrir, como la de un resultado de la búsqueda */
+  initialLine?: string | null;
 }) {
   const api = useDataApi();
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
   const text = t.outlines;
+  const classMode = params.get('modo') === 'clase';
 
   // El editor y el título se alimentan una sola vez del apunte guardado y de ahí en adelante mandan
   // ellos. Si no, cada guardado volvería a cargar el editor y le quitaría el cursor
@@ -65,6 +85,12 @@ export function OutlinePage({
   const [problem, setProblem] = useState<string | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [keepCards, setKeepCards] = useState(false);
+  // El editor deja aquí cómo saltar a una línea. Así esta pantalla no carga ProseMirror, que llega
+  // con el editor en su pieza diferida
+  const jumpRef = useRef<((nodeId: string) => void) | null>(null);
+  const jump = useCallback((nodeId: string) => {
+    jumpRef.current?.(nodeId);
+  }, []);
 
   // La fecha del apunte que esta ventana tiene abierto. Si otra ventana lo guardó después, guardar
   // aquí lo pisaría, así que el guardado avisa en lugar de escribir
@@ -87,6 +113,7 @@ export function OutlinePage({
     () => outlines.filter((entry) => entry.id !== outline.id),
     [outlines, outline.id],
   );
+  const suggestions = useMemo(() => freeSubjects(outlines), [outlines]);
   const links = useMemo(() => {
     const current = { id: outline.id, title, nodes: deferredNodes };
     const resolved = resolveLinks(current, [current, ...others]);
@@ -101,16 +128,7 @@ export function OutlinePage({
   }, [outline.id, title, deferredNodes, others]);
 
   const deck = decks.find((entry) => entry.id === outline.deckId);
-  const ownDecks = useMemo(
-    () =>
-      decks
-        .filter((entry) => entry.ownerId === session.user.id && entry.origin === 'manual')
-        .map((entry) => ({ value: entry.id, label: deckPath(decks, entry.id).join(' › ') }))
-        .sort((a, b) => a.label.localeCompare(b.label, 'es')),
-    [decks, session.user.id],
-  );
-  const [pickedDeck, setPickedDeck] = useState('');
-  const targetDeck = pickedDeck || (deck ? deck.id : '');
+  const deckName = deck ? deckPath(decks, deck.id).join(' › ') : '';
 
   // Un título vacío no se guarda, el anterior se queda hasta que se escriba otro
   const onNodes = (next: OutlineNode[]) => {
@@ -125,23 +143,34 @@ export function OutlinePage({
     if (clean !== '') schedule({ nodes, title: clean });
   };
 
-  const moveDeck = async () => {
-    if (targetDeck === '' || targetDeck === outline.deckId) return;
+  const saveSettings = async (choice: OutlineDeckChoice, subject: OutlineSubject | null) => {
     setBusy(true);
     setProblem(null);
     try {
-      // Primero se guarda lo pendiente, así el cambio de mazo ve lo último que escribiste
+      // Primero se guarda lo pendiente, así el cambio de mazo y tema ve lo último que escribiste
       await flush();
-      const moved = await moveOutline(api, session.user, outline.id, targetDeck);
-      baseUpdatedAt.current = moved.outline.updatedAt;
-      setPickedDeck('');
+      const updated = await updateOutlineSettings(api, session.user, {
+        outlineId: outline.id,
+        deck: choice,
+        subject,
+      });
+      baseUpdatedAt.current = updated.outline.updatedAt;
       // Si algo no se pudo guardar por el mazo, ahora sí se guarda
       void flush();
+      return true;
     } catch {
-      setProblem(text.editor.deckMoveFailed);
+      return false;
     } finally {
       setBusy(false);
     }
+  };
+
+  const setClassMode = (on: boolean) => {
+    const next = new URLSearchParams(params);
+    if (on) next.set('modo', 'clase');
+    else next.delete('modo');
+    next.delete('linea');
+    setParams(next, { replace: true });
   };
 
   const createMissing = async (missingTitle: string) => {
@@ -189,6 +218,19 @@ export function OutlinePage({
             ? text.editor.saveInvalid
             : STATUS_TEXT[status]}
         </p>
+        <Button
+          type="button"
+          variant="secondary"
+          className="ml-auto"
+          aria-pressed={classMode}
+          title={text.editor.classModeHint}
+          onClick={() => {
+            setClassMode(!classMode);
+          }}
+        >
+          {classMode ? <Minimize2 aria-hidden /> : <Maximize2 aria-hidden />}
+          {text.editor.classMode}
+        </Button>
       </div>
       {conflict ? (
         <div role="alert" className="flex flex-col items-start gap-2 text-sm text-danger">
@@ -206,8 +248,13 @@ export function OutlinePage({
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-        <Card className="gap-3" aria-label={title}>
+      <div
+        className={cn(
+          'grid gap-4',
+          !classMode && 'lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start',
+        )}
+      >
+        <Card className="flex min-w-0 flex-col gap-3 p-3 sm:p-4" aria-label={title}>
           <TextField
             label={text.editor.titleLabel}
             value={title}
@@ -224,60 +271,57 @@ export function OutlinePage({
               {text.editor.deckMissing}
             </p>
           )}
-          {ownDecks.length === 0 ? (
-            <p className="text-sm text-fg-muted">{text.editor.deckNone}</p>
-          ) : (
-            // Con el mazo en su lugar el selector queda plegado. Si el mazo ya no existe sale abierto
-            <details open={!deck} className="text-sm">
-              <summary className="min-h-touch w-fit cursor-pointer py-2 font-medium text-primary-ink">
-                {text.editor.deckChange}
-              </summary>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                <SelectField
-                  className="min-w-0 flex-1"
-                  label={text.editor.deckLabel}
-                  value={targetDeck}
-                  onChange={(event) => {
-                    setPickedDeck(event.target.value);
-                  }}
-                  options={[...(deck ? [] : [{ value: '', label: '—' }]), ...ownDecks]}
-                />
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="self-start sm:self-auto"
-                  disabled={busy || targetDeck === '' || targetDeck === outline.deckId}
-                  onClick={() => {
-                    void moveDeck();
-                  }}
-                >
-                  {busy ? text.editor.deckMoving : text.editor.deckMove}
-                </Button>
-              </div>
-            </details>
-          )}
+          <OutlineSettings
+            outline={outline}
+            decks={decks}
+            userId={session.user.id}
+            suggestions={suggestions}
+            busy={busy}
+            onSave={saveSettings}
+          />
+          <OutlineStructure nodes={deferredNodes} onJump={jump} />
           <Suspense fallback={<LoadingState label={text.loading} />}>
-            <OutlineEditor nodes={nodes} onChange={onNodes} badgeOf={lineBadge} />
+            <OutlineEditor
+              nodes={nodes}
+              onChange={onNodes}
+              badgeOf={lineBadge}
+              autoFocus={classMode}
+              initialLine={initialLine}
+              jumpRef={jumpRef}
+            />
           </Suspense>
         </Card>
 
-        <div className="flex flex-col gap-4">
-          <Card>
-            <CardPreview plans={plan.plans} issues={plan.issues} />
-          </Card>
-          <Card>
-            <OutlineLinks
-              targets={links.targets}
-              missing={links.missing}
-              backlinks={links.backlinks}
-              busy={busy}
-              onCreate={(missingTitle) => {
-                void createMissing(missingTitle);
-              }}
-            />
-          </Card>
-          <CheatSheet />
-        </div>
+        {classMode ? null : (
+          <div className="flex min-w-0 flex-col gap-4">
+            <Card>
+              <CardPreview plans={plan.plans} issues={plan.issues} />
+            </Card>
+            <Card>
+              <OutlineAiCards
+                session={session}
+                outline={outline}
+                nodes={deferredNodes}
+                deckName={deckName}
+                onJump={jump}
+              />
+            </Card>
+            <Card>
+              <OutlineLinks
+                targets={links.targets}
+                missing={links.missing}
+                backlinks={links.backlinks}
+                busy={busy}
+                onCreate={(missingTitle) => {
+                  void createMissing(missingTitle);
+                }}
+              />
+            </Card>
+            <Card>
+              <CheatSheet />
+            </Card>
+          </div>
+        )}
       </div>
 
       {problem ? (

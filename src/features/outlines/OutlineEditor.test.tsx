@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-// Editor de apuntes. Escribir, partir líneas con Enter, meter con Tab y las insignias de marca.
+// Editor de apuntes. Escribir, partir líneas con Enter, meter con Tab y las insignias de marca. Y,
+// desde B6, volver tarjeta la línea del cursor con el botón de la línea o el de la barra.
 import type { Editor } from '@tiptap/core';
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { countNodes, type OutlineNode, type ParsedLine } from '@/engines/outline';
@@ -196,23 +197,137 @@ describe('OutlineEditor', () => {
     await waitFor(() => {
       expect(lastCall(onChange)[0]?.children).toHaveLength(1);
     });
-    // Insertar una marca escribe el separador en la línea donde está el cursor
-    await typing.click(screen.getByRole('button', { name: t.outlines.editor.insertForward }));
+    // El botón Tarjeta de la barra abre los tipos y escribe la marca en la línea del cursor
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.cardLabel }));
+    const menu = await screen.findByRole('group', { name: t.outlines.editor.lineCard.title });
+    await typing.click(
+      within(menu).getByRole('button', { name: t.outlines.editor.lineCard.kinds.forward }),
+    );
     await waitFor(() => {
-      expect(lastCall(onChange)[0]?.children[0]?.text).toContain('>>');
+      expect(lastCall(onChange)[0]?.children[0]).toMatchObject({ id: B, text: 'Dos >>' });
     });
+    // Elegir cierra el menú
+    expect(screen.queryByRole('group', { name: t.outlines.editor.lineCard.title })).toBeNull();
   });
 
-  it('el botón de hueco envuelve el texto seleccionado', async () => {
+  it('con hueco tapa el texto seleccionado', async () => {
     const typing = userEvent.setup();
     const { editor, onChange } = await mount([node(A, 'El corazón bombea')]);
     // Selecciona la palabra corazón. La línea empieza en la posición 3 del documento
     act(() => {
       editor.commands.setTextSelection({ from: 6, to: 13 });
     });
-    await typing.click(screen.getByRole('button', { name: t.outlines.editor.insertCloze }));
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.cardLabel }));
+    await typing.click(
+      await screen.findByRole('button', { name: t.outlines.editor.lineCard.kinds.cloze }),
+    );
     await waitFor(() => {
-      expect(lastCall(onChange)[0]?.text).toBe('El {{corazón}} bombea');
+      expect(lastCall(onChange)[0]).toMatchObject({ id: A, text: 'El {{corazón}} bombea' });
+    });
+  });
+
+  it('el botón de la línea sale en la línea del cursor, cambia el tipo y conserva el id', async () => {
+    const typing = userEvent.setup();
+    const { editor, onChange } = await mount([node(A, 'Tratamiento: salbutamol'), node(B, '')]);
+    // Sin foco no hay botón en la línea
+    expect(screen.queryByRole('button', { name: t.outlines.editor.lineButton })).toBeNull();
+    act(() => {
+      editor.commands.focus();
+      editor.commands.setTextSelection(posIn(editor, 0, 4));
+    });
+    const lineButton = await screen.findByRole('button', { name: t.outlines.editor.lineButton });
+    await typing.click(lineButton);
+    const kinds = t.outlines.editor.lineCard.kinds;
+    // Los dos puntos parten la línea en pregunta y respuesta
+    await typing.click(await screen.findByRole('button', { name: kinds.both }));
+    await waitFor(() => {
+      expect(lastCall(onChange)[0]).toMatchObject({ id: A, text: 'Tratamiento :: salbutamol' });
+    });
+    // El menú marca el tipo que ya tiene y deja quitar la tarjeta, que regresa los dos puntos
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.lineButton }));
+    expect(await screen.findByRole('button', { name: kinds.both })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await typing.click(screen.getByRole('button', { name: kinds.none }));
+    await waitFor(() => {
+      expect(lastCall(onChange)[0]).toMatchObject({ id: A, text: 'Tratamiento: salbutamol' });
+    });
+  });
+
+  it('en una línea en blanco no sale el botón y en la barra los tipos esperan texto', async () => {
+    const typing = userEvent.setup();
+    const { editor } = await mount([node(A, '')]);
+    act(() => {
+      editor.commands.focus();
+      editor.commands.setTextSelection(posIn(editor, 0, 0));
+    });
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.cardLabel }));
+    expect(await screen.findByText(t.outlines.editor.lineCard.emptyLine)).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: t.outlines.editor.lineCard.kinds.forward }),
+    ).toBeDisabled();
+    expect(screen.queryByRole('button', { name: t.outlines.editor.lineButton })).toBeNull();
+  });
+
+  it('Respuesta abajo deja la marca >>> y pasa la respuesta a una línea nueva debajo', async () => {
+    const typing = userEvent.setup();
+    const { editor, onChange } = await mount([node(A, 'Causas de pancreatitis >> Litiasis')]);
+    act(() => {
+      editor.commands.setTextSelection(posIn(editor, 0, 3));
+    });
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.cardLabel }));
+    await typing.click(
+      await screen.findByRole('button', { name: t.outlines.editor.lineCard.kinds.multiline }),
+    );
+    await waitFor(() => {
+      expect(outline(lastCall(onChange))).toHaveLength(2);
+    });
+    const [line] = lastCall(onChange);
+    expect(line).toMatchObject({ id: A, text: 'Causas de pancreatitis >>>' });
+    expect(line?.children[0]?.text).toBe('Litiasis');
+    // El cursor queda en la línea nueva, lista para seguir con la respuesta
+    expect(editor.state.selection.$head.parent.textContent).toBe('Litiasis');
+  });
+
+  it('con el teclado el menú recibe el foco y Esc lo cierra y regresa al editor', async () => {
+    const { editor } = await mount([node(A, 'Pregunta')]);
+    act(() => {
+      editor.commands.setTextSelection(posIn(editor, 0, 8));
+    });
+    // Un clic con detail 0 es el de Enter o Espacio sobre el botón
+    fireEvent.click(screen.getByRole('button', { name: t.outlines.editor.cardLabel }), {
+      detail: 0,
+    });
+    const first = await screen.findByRole('button', {
+      name: t.outlines.editor.lineCard.kinds.forward,
+    });
+    await waitFor(() => {
+      expect(first).toHaveFocus();
+    });
+    fireEvent.keyDown(first, { key: 'Escape' });
+    expect(screen.queryByRole('group', { name: t.outlines.editor.lineCard.title })).toBeNull();
+    await waitFor(() => {
+      expect(editor.isFocused).toBe(true);
+    });
+  });
+
+  it('abre con el cursor en la línea pedida, como la de un resultado de búsqueda', async () => {
+    let instance: Editor | undefined;
+    render(
+      <OutlineEditor
+        nodes={[node(A, 'Uno'), node(B, 'Dos', node(C, 'Tres'))]}
+        onChange={vi.fn()}
+        badgeOf={badgeOf}
+        initialLine={C}
+        onReady={(editor) => {
+          instance = editor;
+        }}
+      />,
+    );
+    await screen.findByRole('textbox', { name: t.outlines.editor.label });
+    await waitFor(() => {
+      expect(instance?.state.selection.$head.parent.textContent).toBe('Tres');
     });
   });
 
@@ -394,9 +509,9 @@ describe('OutlineEditor', () => {
     });
   });
 
-  it('Esc lleva el foco a la barra de herramientas', async () => {
+  it('Esc lleva el foco a la barra de herramientas, a su botón Tarjeta', async () => {
     const { view } = await mount([node(A, 'Uno')]);
     fireEvent.keyDown(view, { key: 'Escape' });
-    expect(screen.getByRole('button', { name: t.outlines.editor.indent })).toHaveFocus();
+    expect(screen.getByRole('button', { name: t.outlines.editor.cardLabel })).toHaveFocus();
   });
 });

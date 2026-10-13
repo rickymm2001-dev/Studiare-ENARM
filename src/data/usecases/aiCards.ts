@@ -6,7 +6,7 @@
 import { ACADEMIC_SOURCE_KEYS, type AcademicSourceKey } from '../../config/academicSources';
 import { PLANS, type PlanKey } from '../../config/billing';
 import { studyDayOf } from '../../engines/studyDay';
-import { sanitizeTag } from '../../engines/tagPath';
+import { normalizeTags, sanitizeTag } from '../../engines/tagPath';
 import type { CallMeta } from '../../ai/engines';
 import type { FlashcardProposal, GenerationResult } from '../../ai/flashcards';
 import { textToHtml } from '../content/plainText';
@@ -16,7 +16,7 @@ import { newId } from '../ids';
 import type { AiArtifact, AiCallLog } from '../schemas/activity';
 import type { Card, Controversy, Deck, Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
-import { clozeOrdinals, saveManualNote } from './manualDecks';
+import { clozeOrdinals, ownManualDeck, saveManualNote } from './manualDecks';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 type Person = Pick<User, 'id' | 'timeZone'>;
@@ -161,6 +161,12 @@ export interface SaveProposalsInput {
   artifactId: string;
   /** Si lo generó el simulado, la señal de controversia lo dice */
   simulated: boolean;
+  /**
+   * Mazo propio donde se guardan, como el de un apunte (B6). Sin él van al mazo Tarjetas con IA
+   */
+  deckId?: string;
+  /** Etiquetas que llevan todas, como la del tema del apunte (B6) */
+  tags?: readonly string[];
 }
 
 export interface SavedProposals {
@@ -170,17 +176,8 @@ export interface SavedProposals {
   flagged: number;
 }
 
-/**
- * Guarda las tarjetas que el alumno eligió. Siempre en borrador y con su cita. Van al mazo Tarjetas
- * con IA, que es un mazo propio del alumno y por eso se puede editar y borrar como los demás
- */
-export async function saveProposals(
-  api: Api,
-  user: Person,
-  input: SaveProposalsInput,
-  now: Date = new Date(),
-): Promise<SavedProposals> {
-  const stamp = now.toISOString();
+/** El mazo Tarjetas con IA del alumno. Se crea si no existe */
+async function aiDeck(api: Api, user: Person, stamp: string): Promise<Deck> {
   const decks = await api.repos.decks.list();
   const existing = decks.find(
     (deck) =>
@@ -189,7 +186,8 @@ export async function saveProposals(
       !deck.parentId &&
       deck.name === AI_DECK_NAME,
   );
-  const deck: Deck = existing ?? {
+  if (existing) return existing;
+  const deck: Deck = {
     id: newId(),
     name: AI_DECK_NAME,
     description:
@@ -202,7 +200,28 @@ export async function saveProposals(
     createdAt: stamp,
     updatedAt: stamp,
   };
-  if (!existing) await api.repos.decks.put(deck);
+  await api.repos.decks.put(deck);
+  return deck;
+}
+
+/**
+ * Guarda las tarjetas que el alumno eligió. Siempre en borrador y con su cita. Van al mazo Tarjetas
+ * con IA, que es un mazo propio del alumno y por eso se puede editar y borrar como los demás, o al
+ * mazo propio que se pida, como el de un apunte. Se pueden guardar de una en una con el mismo
+ * artefacto, que lleva la cuenta de cuántas se guardaron
+ */
+export async function saveProposals(
+  api: Api,
+  user: Person,
+  input: SaveProposalsInput,
+  now: Date = new Date(),
+): Promise<SavedProposals> {
+  const stamp = now.toISOString();
+  const deck =
+    input.deckId === undefined
+      ? await aiDeck(api, user, stamp)
+      : await ownManualDeck(api, user, input.deckId);
+  const extraTags = input.tags ?? [];
 
   const notes: Note[] = [];
   const cards: Card[] = [];
@@ -212,7 +231,7 @@ export async function saveProposals(
     const base = {
       id: newId(),
       deckId: deck.id,
-      tags: [AI_TAG, ...(titleTag ? [titleTag] : [])],
+      tags: normalizeTags([...extraTags, AI_TAG, ...(titleTag ? [titleTag] : [])]),
       origin: 'generated' as const,
       editorialStatus: 'draft' as const,
       sourceQuote: proposal.quote,
@@ -254,25 +273,69 @@ export async function saveProposals(
   await api.repos.notes.putMany(notes);
   await api.repos.cards.putMany(cards);
 
-  // El artefacto sale de borrador porque el alumno lo decidió, y queda en la bitácora
+  // El artefacto sale de borrador porque el alumno lo decidió, y queda en la bitácora. Si ya había
+  // salido, por una tarjeta guardada antes, solo suma las nuevas
   const artifact = await api.repos.aiArtifacts.get(input.artifactId);
-  if (artifact?.status === 'draft') {
+  if (artifact && artifact.status !== 'rejected') {
+    const before = typeof artifact.content.saved === 'number' ? artifact.content.saved : 0;
+    const content = { ...artifact.content, saved: before + notes.length };
+    if (artifact.status === 'draft') {
+      await api.repos.aiArtifacts.put({
+        ...artifact,
+        status: 'approved',
+        decidedAt: stamp,
+        decidedBy: user.id,
+        content,
+      });
+      await api.recordEvent(
+        createEvent(
+          'ai_artifact_approved',
+          { artifactId: artifact.id, kind: 'flashcard' },
+          { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
+        ),
+      );
+    } else {
+      await api.repos.aiArtifacts.put({ ...artifact, content });
+    }
+  }
+  return { deckId: deck.id, notes: notes.length, cards: cards.length, flagged };
+}
+
+/**
+ * El alumno descartó una tarjeta propuesta (B6). Nada se guarda de ella, solo la cuenta en el
+ * artefacto. Si ya no quedan propuestas por decidir y no guardó ninguna, el artefacto queda
+ * rechazado y deja su evento
+ */
+export async function discardProposal(
+  api: Api,
+  user: Person,
+  input: { artifactId: string; pending: number },
+  now: Date = new Date(),
+): Promise<void> {
+  const artifact = await api.repos.aiArtifacts.get(input.artifactId);
+  if (!artifact) return;
+  const before = typeof artifact.content.discarded === 'number' ? artifact.content.discarded : 0;
+  const content = { ...artifact.content, discarded: before + 1 };
+  const saved = typeof artifact.content.saved === 'number' ? artifact.content.saved : 0;
+  if (artifact.status === 'draft' && input.pending <= 0 && saved === 0) {
+    const stamp = now.toISOString();
     await api.repos.aiArtifacts.put({
       ...artifact,
-      status: 'approved',
+      status: 'rejected',
       decidedAt: stamp,
       decidedBy: user.id,
-      content: { ...artifact.content, saved: notes.length },
+      content,
     });
     await api.recordEvent(
       createEvent(
-        'ai_artifact_approved',
+        'ai_artifact_rejected',
         { artifactId: artifact.id, kind: 'flashcard' },
         { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
       ),
     );
+    return;
   }
-  return { deckId: deck.id, notes: notes.length, cards: cards.length, flagged };
+  await api.repos.aiArtifacts.put({ ...artifact, content });
 }
 
 /**
