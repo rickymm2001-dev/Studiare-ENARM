@@ -90,7 +90,7 @@ Evidencia
 
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
-- B4. La tabla de nombres legibles de los mazos de Paco necesita la revisión de un médico. Algunas elecciones son Hongos como Micosis, Térmicos como Alteraciones por temperatura, GW como Granulomatosis con poliangitis y UNM como Enfermedades neuromusculares. Está en src/demo/content/topicDisplayNames.ts
+- B4. La tabla de nombres legibles de los mazos de Paco necesita la revisión de un médico. La lista completa, con las elecciones que piden ojo, está en docs/revisiones/b4-nombres-de-temas.md
 - B5. Los eventos viejos con Otra razón quedan sin motivo, porque no dicen cuál de los siete aplica. Si prefieres que cuenten como Conocimiento es una línea. Las preguntas que quedaron en blanco en el examen no piden motivo por ahora (lo típico ahí sería Tiempo)
 - B7. Si el referido pide reembolso dentro de la garantía de 7 días (B10), hoy quien lo invitó conserva su mes. Las opciones son quitarlo con el reembolso completo del primer cobro o concretar el referido hasta que pase la garantía
 - B7. El resumen semanal cubre la semana en curso desde el lunes, como la tabla de Party, así que el lunes muestra un solo día. La otra opción son los últimos 7 días
