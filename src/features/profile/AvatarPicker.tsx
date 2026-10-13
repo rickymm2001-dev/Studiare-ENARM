@@ -40,7 +40,7 @@ export function AvatarPicker({
       }}
       className={cn(
         'rounded-full p-0.5 ring-2 transition-colors',
-        selected ? 'ring-primary' : 'ring-transparent hover:ring-line-strong',
+        selected ? 'ring-indicator' : 'ring-transparent hover:ring-line-strong',
       )}
     >
       <Avatar name={name} avatar={choice} className="size-12 text-base" />

@@ -23,17 +23,21 @@ const STUDENT: readonly (readonly [ScreenKey, string?])[] = [
   ['outlines'],
   ['simulatorSetup', t.exam.cardTitle],
   ['progress', t.progress.futureLoad.title],
-  ['planner'],
   ['tutor', t.tutor.report.title],
   ['party'],
-  ['rewards'],
-  ['profile'],
   ['subscription'],
   ['roleSelector'],
 ];
 
-/** Configuración muestra una sección a la vez, así que se abre cada una */
-const SETTINGS_SECTIONS = ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const;
+/**
+ * Configuración es una sola página desde B3 y los ajustes del repaso viven en un panel de Repasar
+ * que se abre con ?ajustes=1 y ?ajustes=pomodoro
+ */
+const EXTRA_PATHS = [
+  SCREENS.settings.path,
+  `${SCREENS.review.path}?ajustes=1`,
+  `${SCREENS.review.path}?ajustes=pomodoro`,
+] as const;
 
 /** Solo existen con una práctica o un examen en curso o recién terminado */
 const FLOWS: readonly ScreenKey[] = [
@@ -81,9 +85,7 @@ test('en oscuro las pantallas con los datos de demostración pasan axe', async (
   test.setTimeout(900_000);
   await generateDemo(page);
   for (const [key, settle] of STUDENT) await checkScreen(page, SCREENS[key].path, settle);
-  for (const section of SETTINGS_SECTIONS) {
-    await checkScreen(page, `${SCREENS.settings.path}?seccion=${section}`);
-  }
+  for (const path of EXTRA_PATHS) await checkScreen(page, path);
 
   await enterAs(page, 'physician');
   for (const key of PHYSICIAN) await checkScreen(page, SCREENS[key].path);
