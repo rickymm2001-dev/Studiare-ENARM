@@ -5,7 +5,7 @@
 // que solo se editan las tarjetas del alumno. Las precargadas y las que arma la app solo se
 // suspenden o se reinician, que son eventos que se suman a la bitácora sin tocar el contenido.
 import { Pause, Pencil, Play, RotateCcw, X } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -79,8 +79,20 @@ export function CardPanel({
   const [busy, setBusy] = useState(false);
   const [confirmingReset, setConfirmingReset] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
+  const resetRef = useRef<HTMLButtonElement>(null);
+  const confirmResetRef = useRef<HTMLButtonElement>(null);
   const actor = { id: session.user.id, timeZone: session.user.timeZone };
   const locked = lockReason(note, deck, session.user.id);
+
+  // Reiniciar nunca se deshabilita, porque un botón deshabilitado pierde el foco. Al pedir la
+  // confirmación el foco pasa a Sí, reiniciar, y al terminarla regresa a Reiniciar
+  useEffect(() => {
+    if (confirmingReset) confirmResetRef.current?.focus();
+  }, [confirmingReset]);
+  const endResetConfirm = () => {
+    setConfirmingReset(false);
+    resetRef.current?.focus();
+  };
 
   const run = async (action: () => Promise<string>) => {
     if (busy) return;
@@ -329,10 +341,11 @@ export function CardPanel({
                 {text.edit}
               </Button>
             ) : null}
+            {/* Suspender tampoco se deshabilita mientras trabaja, igual que Reiniciar, para no
+                perder el foco al tocarlo. run no hace nada si ya hay una acción en curso */}
             <Button
               size="sm"
               variant="secondary"
-              disabled={busy}
               onClick={() => {
                 void run(async () => {
                   await setSuspended(api, actor, [row.cardId], !row.suspended);
@@ -344,12 +357,13 @@ export function CardPanel({
               {row.suspended ? text.resume : text.suspend}
             </Button>
             <Button
+              ref={resetRef}
               size="sm"
               variant="secondary"
-              disabled={busy || confirmingReset}
               aria-expanded={confirmingReset}
               onClick={() => {
-                setConfirmingReset(true);
+                if (confirmingReset) confirmResetRef.current?.focus();
+                else setConfirmingReset(true);
               }}
             >
               <RotateCcw aria-hidden />
@@ -361,11 +375,12 @@ export function CardPanel({
               <p className="text-sm">{text.resetConfirm}</p>
               <div className="flex flex-wrap gap-2">
                 <Button
+                  ref={confirmResetRef}
                   size="sm"
                   variant="danger"
                   disabled={busy}
                   onClick={() => {
-                    setConfirmingReset(false);
+                    endResetConfirm();
                     void run(async () => {
                       await resetCards(api, actor, [row.cardId]);
                       return text.wasReset;
@@ -374,13 +389,7 @@ export function CardPanel({
                 >
                   {text.resetYes}
                 </Button>
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => {
-                    setConfirmingReset(false);
-                  }}
-                >
+                <Button size="sm" variant="secondary" onClick={endResetConfirm}>
                   {text.resetNo}
                 </Button>
               </div>

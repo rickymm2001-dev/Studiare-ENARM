@@ -7,8 +7,13 @@
 // rendimiento exige menos de 100 ms (cardSearch.performance.test.ts).
 // La búsqueda de texto no distingue acentos ni mayúsculas. Las palabras van con Y, las comillas
 // buscan una frase y un guion delante excluye la palabra, como en Explorar.
+// La ruta de temas llega hasta la misma profundidad que los temas de cada mazo (TOPIC_OUTLINE_DEPTH,
+// rama, materia y tema), así la columna, la lista, el panel y el filtro dicen lo mismo que Repasar.
+// Los niveles de más abajo, como Linfoma de Hodgkin debajo de Linfomas, solo sirven para buscar.
+// Las columnas de texto se ordenan como el español, con Intl.Collator es-MX sin distinguir acentos.
 import type { FsrsCardState } from '@/data/schemas/common';
 import { htmlToPlain } from './cardText';
+import { TOPIC_OUTLINE_DEPTH } from './deckTopics';
 import { tagUnder } from './tagPath';
 
 /** Estados de una tarjeta que se eligen en el chip de estado. Se aceptan con O */
@@ -80,8 +85,9 @@ export interface CardSearchRow {
   controversy: CardControversy | null;
   aiDraft: boolean;
   deckLabel: string;
+  /** Temas de la rama hacia abajo, hasta TOPIC_OUTLINE_DEPTH niveles, como en Repasar */
   topicPath: readonly string[];
-  /** El tema más fino, para la columna de tema. Cadena vacía si no tiene */
+  /** El tema más fino de esa ruta, para la columna de tema. Cadena vacía si no tiene */
   topic: string;
   /** Claves de cada tramo de la ruta de temas, para filtrar por cualquier nivel */
   topicKeys: readonly string[];
@@ -101,9 +107,24 @@ export function foldText(text: string): string {
     .toLowerCase();
 }
 
-/** Clave para ordenar como el español sin acentos. La ñ queda después de toda la n */
+/** Orden del español sin distinguir acentos ni mayúsculas. La ñ va después de toda la n */
+const collator = new Intl.Collator('es-MX', { sensitivity: 'base' });
+
+/**
+ * Clave para ordenar un texto. Sin la marca de los huecos ({{c1:: y }}) y sin lo que va antes de la
+ * primera letra o número, como el ¿ de una pregunta, así ¿Cuál? va con la c y no después de la z.
+ * Las claves se comparan con compareSortKeys
+ */
 export function sortKey(text: string): string {
-  return foldText(text.replace(/[ñÑ]/g, 'n~'));
+  return text
+    .replace(/\{\{c\d+::/giu, '')
+    .replace(/\}\}/gu, '')
+    .replace(/^[^\p{L}\p{N}]+/u, '');
+}
+
+/** Compara dos claves de sortKey como el español, sin distinguir acentos ni mayúsculas */
+export function compareSortKeys(a: string, b: string): number {
+  return collator.compare(a, b);
 }
 
 /** La clave de un tramo de la ruta de temas, la misma que usan los chips para filtrar */
@@ -138,7 +159,9 @@ export function buildSearchRows(
     const lapses = source.state?.lapses ?? 0;
     const due = source.state && source.state.state !== 'new' ? source.state.due : null;
     const deckLabel = source.deckPath.join(PATH_SEPARATOR);
-    const topicPath = source.topicPath;
+    // Se ignoran los niveles vacíos, como en el árbol de temas de cada mazo
+    const fullTopicPath = source.topicPath.map((name) => name.trim()).filter((name) => name !== '');
+    const topicPath = fullTopicPath.slice(0, TOPIC_OUTLINE_DEPTH);
     return {
       cardId: source.cardId,
       noteId: source.noteId,
@@ -164,7 +187,7 @@ export function buildSearchRows(
       topic: topicPath.at(-1) ?? '',
       topicKeys: topicPath.map((_, index) => topicKey(topicPath.slice(0, index + 1))),
       search: foldText(
-        `${front} ${back} ${source.tags.join(' ')} ${deckLabel} ${topicPath.join(' ')}`,
+        `${front} ${back} ${source.tags.join(' ')} ${deckLabel} ${fullTopicPath.join(' ')}`,
       ),
       sortFront: sortKey(front),
       sortDeck: sortKey(deckLabel),
@@ -363,6 +386,7 @@ function statusRank(row: CardSearchRow): number {
   return STATUS_RANK[row.fsrs] + (row.suspended ? 10 : 0);
 }
 
+/** Compara por caracteres lo que no se lee, como los IDs y las fechas ISO */
 const compareText = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 /** Compara dos números que pueden faltar. Lo que falta va al final en los dos sentidos */
@@ -380,14 +404,14 @@ export function sortCards(rows: readonly CardSearchRow[], sort: CardSort): CardS
   const compare = (a: CardSearchRow, b: CardSearchRow): number => {
     switch (sort.key) {
       case 'front':
-        return factor * compareText(a.sortFront, b.sortFront);
+        return factor * compareSortKeys(a.sortFront, b.sortFront);
       case 'deck':
-        return factor * compareText(a.sortDeck, b.sortDeck);
+        return factor * compareSortKeys(a.sortDeck, b.sortDeck);
       case 'topic':
         // Sin tema al final, como las fechas que faltan
         if (a.sortTopic === '' || b.sortTopic === '')
           return compareOptional(a.sortTopic === '' ? null : 0, b.sortTopic === '' ? null : 0, 1);
-        return factor * compareText(a.sortTopic, b.sortTopic);
+        return factor * compareSortKeys(a.sortTopic, b.sortTopic);
       case 'status':
         return factor * (statusRank(a) - statusRank(b));
       case 'due':

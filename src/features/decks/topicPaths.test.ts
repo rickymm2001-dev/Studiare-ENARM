@@ -37,7 +37,7 @@ describe('ruta de temas de una tarjeta', () => {
       'Ginecología',
       'Anticonceptivos y métodos de planificación familiar',
       'Dispositivo intrauterino',
-      'Cobre',
+      'DIU de cobre',
     ]);
   });
 
@@ -61,6 +61,44 @@ describe('ruta de temas de una tarjeta', () => {
       'alto rendimiento',
     ]);
     expect(noteTopicPath({ tags: [], origin: 'manual' }, [])).toEqual([]);
+  });
+
+  it('la tabla de Paco no renombra los niveles de un mazo importado o propio', () => {
+    // Primarias es Amenorreas primarias solo en los mazos de Paco
+    expect(
+      noteTopicPath({ tags: ['Neurología::Cefaleas::Primarias'], origin: 'imported' }, []),
+    ).toEqual(['Neurología', 'Cefaleas', 'Primarias']);
+    expect(noteTopicPath({ tags: ['Hematología::Linfoma::LH'], origin: 'manual' }, [])).toEqual([
+      'Hematología',
+      'Linfoma',
+      'LH',
+    ]);
+    expect(
+      noteTopicPath({ tags: ['Medicina-Interna::Reumatología::AR'], origin: 'generated' }, []),
+    ).toEqual(['Medicina-Interna', 'Reumatología', 'AR']);
+    // Solo los guiones bajos vuelven a ser espacios
+    expect(
+      noteTopicPath({ tags: ['Cardio_Pediátrica::Soplos_inocentes'], origin: 'imported' }, []),
+    ).toEqual(['Cardio Pediátrica', 'Soplos inocentes']);
+  });
+
+  it('en una nota precargada y en el catálogo sí se aplica, en todos los niveles', () => {
+    expect(
+      noteTopicPath({ tags: ['Ginecología::Amenorreas::Primarias::HSC'], origin: 'preloaded' }, [
+        'Amenorreas',
+      ]),
+    ).toEqual([
+      'Ginecología',
+      'Amenorreas',
+      'Amenorreas primarias',
+      'Hiperplasia suprarrenal congénita',
+    ]);
+    expect(catalogTopicPath({ sourceTag: 'Medicina-Interna::Hematología::Linfoma::LH' })).toEqual([
+      'Medicina interna',
+      'Hematología',
+      'Linfomas',
+      'Linfoma de Hodgkin',
+    ]);
   });
 });
 

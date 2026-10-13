@@ -56,6 +56,8 @@ export function buildInsightInput(input: {
   type Draft = Omit<AnswerFact, 'misread'>;
   const drafts: Draft[] = [];
   const reviews: ReviewFact[] = [];
+  /** Dónde están en reviews los repasos de cada tarjeta, para reiniciarla */
+  const reviewsOfCard = new Map<string, number[]>();
   const sessionMinutes: number[] = [];
   const studyDays = new Set<string>();
   let firstDay: string | null = null;
@@ -80,6 +82,9 @@ export function buildInsightInput(input: {
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);
         firstDay ??= day;
+        const indexes = reviewsOfCard.get(event.payload.cardId) ?? [];
+        indexes.push(reviews.length);
+        reviewsOfCard.set(event.payload.cardId, indexes);
         reviews.push({
           rating: event.payload.rating,
           stateBefore: event.payload.stateBefore?.state ?? null,
@@ -88,6 +93,18 @@ export function buildInsightInput(input: {
         });
         break;
       }
+      case 'cards_reset':
+        // Reiniciar vuelve nueva a la tarjeta y sin olvidos (B4). Sus repasos de antes siguen
+        // contando para la retención, pero ya no la hacen sanguijuela hasta que se vuelva a olvidar.
+        // Solo cambian los hechos que se arman aquí. La bitácora no se toca
+        for (const cardId of event.payload.cardIds) {
+          for (const index of reviewsOfCard.get(cardId) ?? []) {
+            const review = reviews[index];
+            if (review) reviews[index] = { ...review, lapsesAfter: 0 };
+          }
+          reviewsOfCard.delete(cardId);
+        }
+        break;
       case 'question_answered': {
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);

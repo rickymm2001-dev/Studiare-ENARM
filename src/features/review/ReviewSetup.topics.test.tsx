@@ -106,13 +106,16 @@ describe('temas de cada mazo en Repasar', () => {
     await screen.findByText(t.reviewSetup.title, undefined, { timeout: 15_000 });
     await typing.click(screen.getByText(t.reviewSetup.filters));
     expect(screen.getByLabelText('Medicina interna (Paco)')).toBeChecked();
-    expect(
-      screen.getByText(`· ${t.deckTopics.summary(['Medicina interna'], 3)}`),
-    ).toBeInTheDocument();
 
+    // Al abrir Mazos y temas la lista de cada mazo ya está abierta, sin un segundo pliegue
     const topics = screen.getByRole('list', {
       name: t.deckTopics.listLabel('Medicina interna (Paco)'),
     });
+    expect(topics).toBeVisible();
+    expect(topics.closest('details')?.querySelector(':scope > summary')).toHaveTextContent(
+      t.reviewSetup.filters,
+    );
+    expect(screen.queryByText(t.deckTopics.title)).toBeNull();
     const rheumatology = within(topics).getByRole('list', { name: 'Reumatología' });
     expect(
       within(rheumatology)

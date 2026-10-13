@@ -85,7 +85,10 @@ describe('revisión de la práctica (B5)', () => {
         { targetKind: 'question', targetId: question.id, cause: 'fatigue' },
       ]);
     });
-    // Y la pregunta se puede volver tarjeta desde aquí
-    expect(screen.getByRole('button', { name: t.examReview.createCard.button })).toBeVisible();
+    // Y la pregunta se puede volver tarjeta desde aquí. En el resumen hay una revisión por pregunta,
+    // así que el botón lleva su número para no sonar igual que los demás
+    const create = screen.getByRole('button', { name: t.examReview.createCard.buttonLabel('1') });
+    expect(create).toBeVisible();
+    expect(create).toHaveTextContent(t.examReview.createCard.button);
   });
 });

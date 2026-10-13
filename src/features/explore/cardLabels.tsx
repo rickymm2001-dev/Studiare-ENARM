@@ -19,7 +19,10 @@ export function StatusBadges({ row }: { row: CardSearchRow }) {
   );
 }
 
-/** Próximo repaso, con Vencida si ya toca. Una tarjeta nueva no tiene fecha */
+/**
+ * Próximo repaso, con Vencida si ya toca. Una tarjeta nueva no tiene fecha. La fecha y el intervalo
+ * pueden partirse en renglones, así en una columna angosta no se enciman con la de al lado
+ */
 export function DueText({
   row,
   nowMs,
@@ -32,7 +35,7 @@ export function DueText({
   if (row.due === null) return <NoValue />;
   return (
     <span className="flex flex-col">
-      <span className="whitespace-nowrap">{formatDate(row.due, timeZone)}</span>
+      <span>{formatDate(row.due, timeZone)}</span>
       {isDue(row, nowMs) ? (
         <span className="text-xs font-semibold text-warning">{t.cardSearch.overdue}</span>
       ) : null}
@@ -43,7 +46,7 @@ export function DueText({
 /** Días entre el último repaso y el próximo */
 export function IntervalText({ row }: { row: CardSearchRow }) {
   if (row.interval === null) return <NoValue />;
-  return <span className="whitespace-nowrap">{t.cardSearch.intervalDays(row.interval)}</span>;
+  return <span>{t.cardSearch.intervalDays(row.interval)}</span>;
 }
 
 /** Una raya para la vista y Sin fecha para el lector de pantalla */

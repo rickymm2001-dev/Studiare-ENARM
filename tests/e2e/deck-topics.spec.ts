@@ -58,7 +58,7 @@ async function shownShape(list: Locator): Promise<Shape[]> {
   });
 }
 
-/** Abre los temas del mazo de una fila y devuelve su lista */
+/** Abre los temas plegados del mazo de una fila, como en Mazos, y devuelve su lista */
 async function openTopics(page: Page, row: Locator, deckName: string): Promise<Locator> {
   await row.getByText(t.deckTopics.title, { exact: true }).click();
   const list = page.getByRole('list', { name: t.deckTopics.listLabel(deckName) });
@@ -113,13 +113,16 @@ test('Mazos y Repasar dicen todos los temas de los mazos de Paco, agrupados por 
       timeout: 120_000,
     });
   }
+  // En Repasar basta abrir Mazos y temas. La lista de cada mazo ya está abierta, sin otro pliegue
   await page.goto(SCREENS.review.path);
   await page.getByText(t.reviewSetup.filters, { exact: true }).click({ timeout: 60_000 });
   for (const file of files) {
     const row = deckRow(page, file.name);
     await expect(row.getByLabel(file.name, { exact: true })).toBeChecked();
-    const list = await openTopics(page, row, file.name);
+    const list = page.getByRole('list', { name: t.deckTopics.listLabel(file.name) });
+    await expect(list).toBeVisible();
     expect(await shownShape(list), file.key).toEqual(expectedShape(file));
   }
+  await expect(page.getByText(t.deckTopics.title, { exact: true })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 });

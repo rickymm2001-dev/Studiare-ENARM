@@ -117,7 +117,8 @@ async function seed(api: DataApi, user: User): Promise<Seeded> {
       deckId: PRELOADED_DECK,
       front: 'Precargada sobre diuréticos',
       back: 'Furosemida',
-      tags: ['Medicina-Interna::Nefrología::Sx-Nefrótico'],
+      // Cuatro niveles, como muchas notas de Paco. El tema que se ve llega hasta el tercero
+      tags: ['Medicina-Interna::Nefrología::Sx-Nefrótico::Cambios_Mínimos'],
       origin: 'preloaded' as const,
     },
   ];
@@ -375,6 +376,13 @@ describe('Buscar tarjetas', () => {
     expect(within(panel).getByText('Gluconato de calcio')).toBeVisible();
     expect(within(panel).getByText('Renal › Electrolitos')).toBeVisible();
     expect(table()).toBeVisible();
+    // Con el panel abierto la tabla deja Intervalo y Fallos, que el panel ya dice
+    const sortButton = (column: keyof typeof text.columns) =>
+      within(table()).queryByRole('button', { name: text.sortBy(text.columns[column]) });
+    expect(sortButton('interval')).toBeNull();
+    expect(sortButton('lapses')).toBeNull();
+    expect(sortButton('due')).toBeVisible();
+    expect(within(panel).getByText(text.panel.lapses)).toBeVisible();
 
     await typing.click(within(panel).getByRole('button', { name: text.panel.edit }));
     const front = within(panel).getByLabelText(t.decks.editor.front);
@@ -393,12 +401,14 @@ describe('Buscar tarjetas', () => {
       notes?.find((note) => note.kind === 'basic' && note.front.includes('Manejo'))?.tags,
     ).toEqual(['Renal::Electrolitos', 'Urgencias']);
 
-    // Escape cierra el panel y la tabla sigue igual
+    // Escape cierra el panel y la tabla sigue igual, otra vez con todas sus columnas
     fireEvent.keyDown(document.body, { key: 'Escape' });
     await waitFor(() => {
       expect(screen.queryByRole('region', { name: text.panel.label })).toBeNull();
     });
     expect(tableFronts()).toHaveLength(4);
+    expect(sortButton('interval')).toBeVisible();
+    expect(sortButton('lapses')).toBeVisible();
   });
 
   it('una precargada se ve en el panel pero no se edita, solo se suspende o se reinicia', async () => {
@@ -411,13 +421,51 @@ describe('Buscar tarjetas', () => {
     const panel = await screen.findByRole('region', { name: text.panel.label });
     expect(within(panel).getByText(text.panel.preloaded)).toBeVisible();
     expect(within(panel).queryByRole('button', { name: text.panel.edit })).toBeNull();
-    // Su tema sale de la etiqueta con nombres legibles
+    // Su tema sale de la etiqueta con nombres legibles, hasta el tercer nivel como en Repasar, en el
+    // panel y en la columna de tema
     expect(
       within(panel).getByText('Medicina interna › Nefrología › Síndrome nefrótico'),
     ).toBeVisible();
+    const row = within(table())
+      .getAllByRole('row')
+      .find((candidate) =>
+        within(candidate).queryByRole('button', { name: 'Precargada sobre diuréticos' }),
+      );
+    expect(row && within(row).getByText('Síndrome nefrótico')).toBeVisible();
+    expect(screen.queryByText(/Cambios Mínimos/)).toBeNull();
     await typing.click(within(panel).getByRole('button', { name: text.panel.suspend }));
     expect(await within(panel).findByText(text.panel.suspended)).toBeVisible();
     expect(within(panel).getByRole('button', { name: text.panel.resume })).toBeVisible();
+  });
+
+  it('reiniciar desde el panel no pierde el foco', async () => {
+    asDesktop();
+    const typing = userEvent.setup();
+    const { cards } = await openSearch();
+    await typing.click(
+      within(table()).getByRole('button', { name: 'Causa de síndrome nefrótico en niños' }),
+    );
+    const panel = await screen.findByRole('region', { name: text.panel.label });
+    const reset = within(panel).getByRole('button', { name: text.panel.reset });
+
+    // Al pedir la confirmación el foco pasa a Sí, reiniciar. Reiniciar no se deshabilita
+    await typing.click(reset);
+    expect(within(panel).getByRole('button', { name: text.panel.resetYes })).toHaveFocus();
+    expect(reset).toBeEnabled();
+    expect(reset).toHaveAttribute('aria-expanded', 'true');
+    // Cancelar la regresa a Reiniciar
+    await typing.click(within(panel).getByRole('button', { name: text.panel.resetNo }));
+    expect(reset).toHaveFocus();
+    expect(within(panel).queryByRole('button', { name: text.panel.resetYes })).toBeNull();
+
+    // Con el teclado, confirmar también la regresa a Reiniciar
+    await typing.keyboard('{Enter}');
+    expect(within(panel).getByRole('button', { name: text.panel.resetYes })).toHaveFocus();
+    await typing.keyboard('{Enter}');
+    expect(await within(panel).findByText(text.panel.wasReset)).toBeVisible();
+    expect(within(panel).getByRole('button', { name: text.panel.reset })).toHaveFocus();
+    const events = (await app?.api.repos.events.query({ userId: app.user.id })) ?? [];
+    expect(events.at(-1)?.payload).toEqual({ cardIds: [cards.nephrotic] });
   });
 
   it('suspende varias por lote con eventos y se pueden reanudar', async () => {

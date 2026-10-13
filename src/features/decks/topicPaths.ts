@@ -5,13 +5,15 @@
 //   que se leen Medicina interna, Reumatología y Artritis reumatoide con la tabla de nombres
 // - Mis errores. Las claves de la taxonomía que guarda la nota en su etiqueta topic:, rama y tema
 // - Mazos importados y propios. Los submazos debajo del mazo, o si la tarjeta no está en un submazo,
-//   los niveles de su etiqueta
+//   los niveles de su etiqueta. La tabla de Paco no se les aplica, porque un nivel suyo que se llame
+//   igual, como Neurología::Cefaleas::Primarias, no es Amenorreas primarias. Solo los guiones bajos
+//   vuelven a ser espacios
 import type { DemoDeckNote } from '@/data/schemas/content';
 import type { Card, Deck, Note } from '@/data/schemas/decks';
 import { TOPIC_TAG_PREFIX } from '@/data/usecases/errorCards';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
-import { topicDisplayName } from '@/demo/content/topicDisplayNames';
+import { plainTopicName, topicDisplayName } from '@/demo/content/topicDisplayNames';
 import { buildTopicOutline, type TopicOutline } from '@/engines/deckTopics';
 import { deckChain, type DeckLike } from '@/engines/deckTree';
 import { sanitizeTag, TAG_SEPARATOR, tagSegments } from '@/engines/tagPath';
@@ -26,15 +28,20 @@ const TAXONOMY_PATHS = new Map<string, readonly string[]>(
   ),
 );
 
-/** Los niveles de una etiqueta con su nombre legible */
-export function tagTopicPath(tag: string): string[] {
+/** Los niveles de una etiqueta de un mazo precargado, con su nombre de la tabla de Paco */
+function preloadedTagPath(tag: string): string[] {
   return tagSegments(tag).map(topicDisplayName);
+}
+
+/** Los niveles de una etiqueta de un mazo importado o propio, como los escribió el alumno */
+function plainTagPath(tag: string): string[] {
+  return tagSegments(tag).map(plainTopicName);
 }
 
 /** Ruta de temas de una nota del catálogo de mazos precargados, aunque el alumno no lo siga */
 export function catalogTopicPath(note: Pick<DemoDeckNote, 'sourceTag'>): string[] {
   const tag = sanitizeTag(note.sourceTag);
-  return tag === '' ? [] : tagTopicPath(tag);
+  return tag === '' ? [] : preloadedTagPath(tag);
 }
 
 /**
@@ -51,11 +58,11 @@ export function noteTopicPath(
   }
   if (note.origin === 'preloaded') {
     const tag = note.tags[0];
-    return tag === undefined ? [] : tagTopicPath(tag);
+    return tag === undefined ? [] : preloadedTagPath(tag);
   }
   if (below.length > 0) return [...below];
   const tag = note.tags.find((entry) => entry.includes(TAG_SEPARATOR)) ?? note.tags[0];
-  return tag === undefined ? [] : tagTopicPath(tag);
+  return tag === undefined ? [] : plainTagPath(tag);
 }
 
 export interface DeckPlace {

@@ -116,6 +116,11 @@ describe('por qué fallaste en la revisión del examen (B5, comentario 2)', () =
     await waitFor(async () => {
       expect(await motiveEvents(api, user)).toEqual(['knowledge', 'overconfidence']);
     });
+    // Cada motivo queda en la sesión del examen, como sus respuestas
+    const examId = loadExamState(user.id)?.examId;
+    expect(examId).toBeDefined();
+    const reported = await api.repos.events.query({ userId: user.id, types: ['cause_reported'] });
+    expect(reported.map((event) => event.sessionId)).toEqual([examId, examId]);
 
     // Al volver a abrir los resultados se lee de la bitácora y sigue el último
     cleanup();
@@ -232,6 +237,8 @@ describe('crear tarjeta desde la revisión del examen (B5, comentario 1)', () =>
 
     await typing.click(within(first).getByRole('button', { name: t.examReview.ai.useLabel(1) }));
     expect(within(dialog).getByText(t.examReview.ai.using)).toBeVisible();
+    // Sin cambios no hay aviso, porque el generador ya la revisó contra su cita
+    expect(within(dialog).queryByText(t.aiCards.editedIssues)).toBeNull();
     const select = within(dialog).getByRole('combobox', { name: t.examReview.createCard.deck });
     await typing.selectOptions(select, within(select).getByRole('option', { name: 'Cardiología' }));
     await typing.click(within(dialog).getByRole('button', { name: t.examReview.createCard.save }));
@@ -248,5 +255,58 @@ describe('crear tarjeta desde la revisión del examen (B5, comentario 1)', () =>
       types: ['question_card_created'],
     });
     expect(created?.payload).toMatchObject({ source: 'ai' });
+  });
+
+  it('una propuesta de la IA editada se revisa contra su cita y, si se guarda así, queda en borrador con el aviso', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.examResults.path, {
+      seed: seedFailedExam({ plan: 'monthly', deckName: 'Cardiología' }),
+    });
+    const row = await openFailed(typing);
+    await typing.click(
+      within(row).getByRole('button', { name: t.examReview.createCard.buttonLabel('1') }),
+    );
+    const dialog = await screen.findByRole('dialog', { name: t.examReview.createCard.title });
+    const suggest = await within(dialog).findByRole(
+      'button',
+      { name: t.examReview.ai.button },
+      WAIT,
+    );
+    await waitFor(() => {
+      expect(suggest).toBeEnabled();
+    }, WAIT);
+    await typing.click(suggest);
+    const proposals = await within(dialog).findByRole(
+      'list',
+      { name: t.examReview.ai.proposalsTitle },
+      WAIT,
+    );
+    const first = within(proposals).getAllByRole('listitem')[0] as HTMLElement;
+    await typing.click(within(first).getByRole('button', { name: t.examReview.ai.useLabel(1) }));
+    expect(within(dialog).queryByText(t.aiCards.editedIssues)).toBeNull();
+
+    // Una dosis que la frase citada no dice. El reverso es la nota extra si la propuesta tiene huecos
+    const back =
+      within(dialog).queryByLabelText(t.decks.editor.extra) ??
+      within(dialog).getByLabelText(t.decks.editor.reverseBack);
+    await typing.type(back, ' Repetir 80 mg en una hora.');
+    expect(within(dialog).getByText(t.aiCards.editedIssues)).toBeVisible();
+
+    // La IA no corrige nada. Si el alumno la guarda así, queda como la dejó, en borrador, con su cita
+    // y con el aviso a la vista
+    const select = within(dialog).getByRole('combobox', { name: t.examReview.createCard.deck });
+    await typing.selectOptions(select, within(select).getByRole('option', { name: 'Cardiología' }));
+    await typing.click(within(dialog).getByRole('button', { name: t.examReview.createCard.save }));
+    await within(dialog).findByText(t.examReview.createCard.saved('Cardiología'));
+    expect(within(dialog).getByText(t.aiCards.editedIssues)).toBeVisible();
+    // La etiqueta de borrador de arriba, antes de las de cada propuesta
+    expect(within(dialog).getAllByText(t.aiCards.draftLabel)[0]).toBeVisible();
+
+    const [note, ...others] = await createdNotes(app.api);
+    expect(others).toHaveLength(0);
+    expect(note).toMatchObject({ origin: 'generated', editorialStatus: 'draft' });
+    expect(note && isAiNote(note)).toBe(true);
+    expect(JSON.stringify(note)).toContain('Repetir 80 mg en una hora.');
+    expect(EXPLANATION).toContain(note?.sourceQuote ?? '¿sin cita?');
   });
 });

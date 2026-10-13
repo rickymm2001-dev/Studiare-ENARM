@@ -1,8 +1,9 @@
 // Temas de un mazo (B4 del plan del cambio, comentario 8). Debajo de cada mazo, en Repasar y en Mazos,
-// van sus ramas y todos sus temas en orden alfabético del español, sin repetidos y sin recortes. El
-// resumen dice las ramas y cuántos temas hay, y al abrirlo se ve la lista completa, rama por rama,
-// como Reumatología con Artritis reumatoide y Lupus eritematoso sistémico debajo. Los nombres largos
-// se parten en renglones y nunca se cortan.
+// van sus ramas y todos sus temas en orden alfabético del español, sin repetidos y sin recortes. En
+// Mazos el resumen dice las ramas y cuántos temas hay, y al abrirlo se ve la lista completa, rama por
+// rama, como Reumatología con Artritis reumatoide y Lupus eritematoso sistémico debajo. En Repasar la
+// lista va abierta dentro de Mazos y temas. Los nombres largos se parten en renglones y nunca se
+// cortan. Se muestran tres niveles, rama, materia y tema (TOPIC_OUTLINE_DEPTH).
 import { ChevronDown } from 'lucide-react';
 import type { TopicNode, TopicOutline } from '@/engines/deckTopics';
 import { t } from '@/i18n/es-MX';
@@ -63,19 +64,32 @@ function Subject({ node }: { node: TopicNode }) {
 }
 
 /**
- * Los temas de un mazo plegados bajo su resumen, que ya dice sus ramas y cuántos temas tiene. No
- * pinta nada si el mazo no tiene temas
+ * Los temas de un mazo. En Mazos van plegados bajo su resumen, que ya dice sus ramas y cuántos temas
+ * tiene, para que la lista de mazos no se haga larga. Sin pliegue, como dentro de Mazos y temas de
+ * Repasar, que ya es un pliegue, la lista va abierta. No pinta nada si el mazo no tiene temas
  */
 export function DeckTopics({
   deckName,
   outline,
   className,
+  collapsible = true,
 }: {
   deckName: string;
   outline: TopicOutline | undefined;
   className?: string;
+  /** false muestra la lista abierta, sin un segundo pliegue */
+  collapsible?: boolean;
 }) {
   if (!outline || outline.branches.length === 0) return null;
+  if (!collapsible) {
+    return (
+      <TopicOutlineList
+        label={t.deckTopics.listLabel(deckName)}
+        outline={outline}
+        className={cn('min-w-0', className)}
+      />
+    );
+  }
   return (
     <details className={cn('group min-w-0', className)}>
       <summary className="flex min-h-8 cursor-pointer list-none items-start gap-1 py-1 text-sm [&::-webkit-details-marker]:hidden">

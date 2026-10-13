@@ -1,10 +1,13 @@
 // Nombres legibles de las ramas, materias y temas de los mazos de Paco (B4 del plan del cambio,
 // comentario 8 y hallazgo H11). Las etiquetas de Paco traen nombres pegados, como AnticonceptivosyMPF
-// o Hemorragias1T, y siglas, como AR o LES. Esta tabla dice cómo se leen. Es solo datos, para que
-// Ricardo o un médico la revisen y la corrijan sin tocar código. La clave es el nivel de la etiqueta
-// tal como viene en el mazo y el valor es el nombre que ve el alumno. Cubre los tres primeros niveles,
-// rama, materia y tema, que son los que se muestran. topicDisplayNames.test.ts revisa
-// que cada nivel de los mazos de demostración tenga su nombre aquí.
+// o Hemorragias1T, siglas, como AR o LES, y palabras unidas con guion en lugar de espacio, como
+// Hipertensión-Portal. Esta tabla dice cómo se leen. Es solo datos, para que Ricardo o un médico la
+// revisen y la corrijan sin tocar código. La clave es el nivel de la etiqueta tal como viene en el
+// mazo y el valor es el nombre que ve el alumno. Se aplica solo a las notas precargadas.
+// Cubre todos los niveles de los tres primeros, rama, materia y tema, que son los que se muestran
+// (TOPIC_OUTLINE_DEPTH), y de los niveles cuarto y quinto los nombres pegados, para que cualquier
+// lugar que los muestre se lea bien. Los nombres de abajo que ya se leen bien, como Dengue o
+// Guillain-Barré, se quedan como vienen. topicDisplayNames.test.ts revisa las dos cosas.
 
 export const TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   // Ramas, el primer nivel de la etiqueta
@@ -73,6 +76,47 @@ export const TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   ATR: 'Acidosis tubular renal',
   PKD: 'Enfermedad renal poliquística',
 
+  // Medicina interna, niveles cuarto y quinto. Solo los nombres pegados
+  VCholerae: 'Vibrio cholerae',
+  EColi: 'Escherichia coli',
+  HepatitisA: 'Hepatitis A',
+  HepatitisB: 'Hepatitis B',
+  HepatitisC: 'Hepatitis C',
+  HepatitisD: 'Hepatitis D',
+  HepatitisE: 'Hepatitis E',
+  'Hepatitis-Autoinmune': 'Hepatitis autoinmune',
+  EHGNA: 'Enfermedad por hígado graso no alcohólico',
+  EHA: 'Enfermedad hepática alcohólica',
+  'Absceso-Piógeno': 'Absceso hepático piógeno',
+  'Absceso-Amebiano': 'Absceso hepático amebiano',
+  'Hipertensión-Portal': 'Hipertensión portal',
+  'Encefalopatía-Hepática': 'Encefalopatía hepática',
+  'Ca-Esófago': 'Cáncer de esófago',
+  'Ca-Gástrico': 'Cáncer gástrico',
+  'Ca-Páncreas': 'Cáncer de páncreas',
+  'Ca-Colorrectal': 'Cáncer colorrectal',
+  LLA: 'Leucemia linfoblástica aguda',
+  LMA: 'Leucemia mieloide aguda',
+  LMC: 'Leucemia mieloide crónica',
+  LH: 'Linfoma de Hodgkin',
+  LNH: 'Linfoma no Hodgkin',
+  EvW: 'Enfermedad de von Willebrand',
+  SMD: 'Síndromes mielodisplásicos',
+  'Policitemia-Vera': 'Policitemia vera',
+  'Minero-Carbón': 'Neumoconiosis de los mineros del carbón',
+  'Proteinosis-Alveolar': 'Proteinosis alveolar pulmonar',
+  'Fiebre-Manchada': 'Fiebre manchada de las Montañas Rocosas',
+  Isag: 'Enfermedad vascular cerebral isquémica aguda',
+  HSA: 'Hemorragia subaracnoidea',
+  HIC: 'Hemorragia intracerebral',
+  'Temblor-Esencial': 'Temblor esencial',
+  'Esclerosis-Múltiple': 'Esclerosis múltiple',
+  ELA: 'Esclerosis lateral amiotrófica',
+  'Trigémino-Autonómica': 'Cefaleas trigémino-autonómicas',
+  'Neuralgia-Trigémino': 'Neuralgia del trigémino',
+  'Deterioro-Cognitivo': 'Deterioro cognitivo',
+  DFT: 'Demencia frontotemporal',
+
   // Ginecología
   Menopausia: 'Menopausia',
   'Menopausia-Climaterio': 'Menopausia y climaterio',
@@ -110,6 +154,13 @@ export const TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   CCU: 'Cáncer cervicouterino',
   Torsion_Ovarica: 'Torsión ovárica',
   Patología_Mamaria: 'Patología mamaria',
+
+  // Ginecología, cuarto nivel. Los nombres pegados y Cobre, para que se lea igual que su vecino LNG
+  Cobre: 'DIU de cobre',
+  LNG: 'DIU de levonorgestrel',
+  OTB: 'Oclusión tubaria bilateral',
+  HSC: 'Hiperplasia suprarrenal congénita',
+  Himen_Imperforado: 'Himen imperforado',
 
   // Obstetricia
   Control_Prenatal: 'Control prenatal',
@@ -164,11 +215,21 @@ export const TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
 };
 
 /**
- * Nombre legible de un nivel de etiqueta. Primero la tabla. Si no está, como en un mazo importado,
- * los guiones bajos vuelven a ser espacios, que es como sanitizeTag guardó los espacios
+ * Un nivel de etiqueta sin la tabla, como en los mazos importados y propios. Los guiones bajos
+ * vuelven a ser espacios, que es como sanitizeTag guardó los espacios, y lo demás queda como el
+ * alumno lo escribió
+ */
+export function plainTopicName(segment: string): string {
+  return segment.replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/** La tabla en un Map, así un nivel como constructor no lee lo que hereda un objeto */
+const DISPLAY_NAMES = new Map(Object.entries(TOPIC_DISPLAY_NAMES));
+
+/**
+ * Nombre legible de un nivel de etiqueta de un mazo precargado. Primero la tabla y, si no está, el
+ * nivel con espacios en lugar de guiones bajos
  */
 export function topicDisplayName(segment: string): string {
-  const known = TOPIC_DISPLAY_NAMES[segment];
-  if (known !== undefined) return known;
-  return segment.replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();
+  return DISPLAY_NAMES.get(segment) ?? plainTopicName(segment);
 }

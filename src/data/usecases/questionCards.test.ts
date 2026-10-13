@@ -5,6 +5,7 @@ import { makeQuestionWithOptions, makeUser, newId, testApi } from '../testing/fi
 import { AI_TAG } from './aiCards';
 import { errorIds, TOPIC_TAG_PREFIX } from './errorCards';
 import { createManualDeck, deleteManualNote, type NoteDraft } from './manualDecks';
+import { moveDeck, renameDeck } from './organize';
 import {
   createQuestionCard,
   isLayerDeck,
@@ -243,6 +244,61 @@ describe('tarjeta desde una pregunta del banco (B5, comentario 1)', () => {
     expect(
       (await api.repos.decks.list()).filter((deck) => deck.parentId === preloaded.id),
     ).toHaveLength(1);
+  });
+
+  it('respeta la capa que el alumno renombró o movió, y si la movió arma otra debajo del precargado', async () => {
+    const { api, user } = setup();
+    const preloaded = await preloadedDeck(api);
+    const [one, two, three] = [1, 2, 3].map(() => makeQuestionWithOptions().question);
+    if (!one || !two || !three) throw new Error('Faltan preguntas');
+    const toPreloaded = { kind: 'deck', deckId: preloaded.id } as const;
+    const later = (minutes: number) => new Date(NOW.getTime() + minutes * 60_000);
+
+    const first = await createQuestionCard(api, user, input(one, toPreloaded), NOW);
+    const moved = questionCardIds.layer(user.id, preloaded.id);
+    expect(first.deckId).toBe(moved);
+
+    // Le cambia el nombre y la deja donde está. La siguiente tarjeta va ahí y el nombre se queda
+    await renameDeck(api, user, moved, 'Urgencias que fallé', later(1));
+    const second = await createQuestionCard(api, user, input(two, toPreloaded), later(2));
+    expect(second.deckId).toBe(moved);
+    expect((await api.repos.decks.get(moved))?.name).toBe('Urgencias que fallé');
+
+    // La mueve a primer nivel. Ya no regresa al precargado y la siguiente tarjeta va a una capa
+    // nueva, con un ID que sale del de la anterior
+    expect(await moveDeck(api, user, moved, null, later(3))).toBeNull();
+    const third = await createQuestionCard(api, user, input(three, toPreloaded), later(4));
+    const fresh = questionCardIds.nextLayer(moved);
+    expect(third).toMatchObject({ status: 'created', deckId: fresh, layer: true });
+    expect(await api.repos.decks.get(fresh)).toMatchObject({
+      name: LAYER.name,
+      ownerId: user.id,
+      origin: 'manual',
+      parentId: preloaded.id,
+    });
+    expect(await api.repos.decks.get(moved)).toMatchObject({
+      name: 'Urgencias que fallé',
+      parentId: null,
+    });
+    // Sus tarjetas se quedan en la capa que movió y la misma pregunta no se duplica
+    expect((await api.repos.notes.get(first.noteId))?.deckId).toBe(moved);
+    expect((await api.repos.notes.get(second.noteId))?.deckId).toBe(moved);
+    const again = await createQuestionCard(api, user, input(one, toPreloaded), later(5));
+    expect(again).toMatchObject({ status: 'exists', noteId: first.noteId, deckId: moved });
+    expect(
+      (await api.repos.decks.list()).filter((deck) => deck.parentId === preloaded.id),
+    ).toHaveLength(1);
+
+    // Si también mueve la nueva, la que sigue sale de ella
+    expect(await moveDeck(api, user, fresh, moved, later(6))).toBeNull();
+    const fourth = await createQuestionCard(
+      api,
+      user,
+      input(makeQuestionWithOptions().question, toPreloaded),
+      later(7),
+    );
+    expect(fourth.deckId).toBe(questionCardIds.nextLayer(fresh));
+    expect((await api.repos.decks.get(fresh))?.parentId).toBe(moved);
   });
 
   it('la capa de otro alumno no se mezcla con la suya', async () => {

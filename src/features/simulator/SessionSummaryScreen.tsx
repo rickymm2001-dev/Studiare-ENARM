@@ -265,6 +265,12 @@ function AnswerDetail({
   if (bundle === undefined) return <LoadingState />;
   if (bundle === null) return null;
   return (
-    <AnswerReview bundle={bundle} answer={answer} session={session} idPrefix={`resp-${index}`} />
+    <AnswerReview
+      bundle={bundle}
+      answer={answer}
+      session={session}
+      idPrefix={`resp-${index}`}
+      questionNumber={index + 1}
+    />
   );
 }

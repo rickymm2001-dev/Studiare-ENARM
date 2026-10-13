@@ -58,5 +58,29 @@ describe('temas de un mazo', () => {
       <DeckTopics deckName="Vacío" outline={buildTopicOutline([[], []])} />,
     );
     expect(container).toBeEmptyDOMElement();
+    cleanup();
+    const open = render(
+      <DeckTopics deckName="Vacío" outline={buildTopicOutline([[]])} collapsible={false} />,
+    );
+    expect(open.container).toBeEmptyDOMElement();
+  });
+
+  it('sin pliegue, como dentro de Mazos y temas de Repasar, la lista va abierta', () => {
+    const { container } = render(
+      <DeckTopics deckName="Medicina interna (Paco)" outline={outline} collapsible={false} />,
+    );
+    const all = screen.getByRole('list', {
+      name: t.deckTopics.listLabel('Medicina interna (Paco)'),
+    });
+    expect(all).toBeVisible();
+    expect(container.querySelector('details')).toBeNull();
+    expect(screen.queryByText(t.deckTopics.title)).toBeNull();
+    const rheumatology = within(all).getByRole('list', { name: 'Reumatología' });
+    expect(
+      within(rheumatology)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual(['Artritis reumatoide', LONG, 'Lupus eritematoso sistémico']);
+    expect(screen.getByText(t.deckTopics.untagged(1))).toBeVisible();
   });
 });

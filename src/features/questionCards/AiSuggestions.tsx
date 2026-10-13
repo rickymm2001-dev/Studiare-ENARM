@@ -51,7 +51,15 @@ export function AiSuggestions({
 }: {
   session: ReadySession;
   bundle: QuestionBundle;
-  onUse: (draft: NoteDraft, source: Extract<QuestionCardSource, { kind: 'ai' }>) => void;
+  /**
+   * El alumno eligió una propuesta. sourceText es la explicación tal como la leyó el generador, ya
+   * sin datos personales, para revisar la tarjeta contra su cita si el alumno la edita
+   */
+  onUse: (
+    draft: NoteDraft,
+    source: Extract<QuestionCardSource, { kind: 'ai' }>,
+    sourceText: string,
+  ) => void;
 }) {
   const api = useDataApi();
   const status = useAiStatus();
@@ -164,17 +172,21 @@ export function AiSuggestions({
                   className="self-start"
                   aria-label={text.useLabel(index + 1)}
                   onClick={() => {
-                    onUse(draftOf(proposal), {
-                      kind: 'ai',
-                      quote: proposal.quote,
-                      sourceTitle: step.sourceTitle,
-                      artifactId: step.artifactId,
-                      controversy: controversyOf(
-                        proposal,
-                        step.result.mode !== 'real',
-                        new Date().toISOString(),
-                      ),
-                    });
+                    onUse(
+                      draftOf(proposal),
+                      {
+                        kind: 'ai',
+                        quote: proposal.quote,
+                        sourceTitle: step.sourceTitle,
+                        artifactId: step.artifactId,
+                        controversy: controversyOf(
+                          proposal,
+                          step.result.mode !== 'real',
+                          new Date().toISOString(),
+                        ),
+                      },
+                      step.result.processedText,
+                    );
                   }}
                 >
                   {text.use}

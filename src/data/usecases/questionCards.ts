@@ -33,7 +33,14 @@ import {
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 type Person = Pick<User, 'id' | 'timeZone'>;
 
-/** Momento fijo de los IDs. Lo que cambia entre alumnos, preguntas y mazos es la parte aleatoria */
+/**
+ * Momento fijo de los IDs. Lo que cambia entre alumnos, preguntas y mazos es la parte aleatoria.
+ * Es a propósito que sea anterior al contenido precargado (DEMO_CONTENT_TIME) y a todo lo que se crea
+ * con la fecha del día. Repasar toma las tarjetas nuevas en el orden de su ID, así que las que el
+ * alumno hizo con una pregunta van primero entre sus nuevas. Las creó porque quiere estudiarlas y le
+ * sirve verlas pronto, mientras recuerda la pregunta. tests/e2e/exam-review.spec.ts cuenta con este
+ * orden para encontrarlas entre las primeras del repaso
+ */
 const ID_TIME = Date.UTC(2026, 0, 1);
 
 export const questionCardIds = {
@@ -45,6 +52,8 @@ export const questionCardIds = {
   /** La capa del alumno en un mazo precargado */
   layer: (userId: string, preloadedDeckId: string) =>
     stableUlid(`layer-deck|${userId}|${preloadedDeckId}`, ID_TIME),
+  /** La capa que sigue cuando el alumno movió la anterior a otro lado. Sale del ID de la anterior */
+  nextLayer: (previousLayerId: string) => stableUlid(`layer-deck-next|${previousLayerId}`, ID_TIME),
 };
 
 /**
@@ -109,7 +118,11 @@ export class QuestionCardTargetError extends Error {
   }
 }
 
-/** La capa del alumno en un mazo precargado. La crea si falta y la revive si la había borrado */
+/**
+ * La capa del alumno en un mazo precargado. La crea si falta y la revive si la había borrado. Si el
+ * alumno movió su capa a otro lado, se respeta lo que hizo. Se queda donde la dejó, con el nombre que
+ * le haya puesto, y se arma otra debajo del precargado con un ID que sale del de la anterior
+ */
 async function ensureLayer(
   api: Pick<DataApi, 'repos'>,
   user: Person,
@@ -117,13 +130,20 @@ async function ensureLayer(
   input: Pick<QuestionCardInput, 'layer' | 'question'>,
   stamp: string,
 ): Promise<Deck> {
+  const decks = await api.repos.decks.list();
   // Una capa que llegó de otro dispositivo trae otro ID, porque el ID del alumno es de cada navegador
-  const found = (await api.repos.decks.list()).find(
+  const found = decks.find(
     (deck) => deck.parentId === preloaded.id && isEditableDeck(deck, user.id),
   );
   if (found) return found;
-  const id = questionCardIds.layer(user.id, preloaded.id);
-  const stored = await api.repos.decks.getRaw(id);
+  let id = questionCardIds.layer(user.id, preloaded.id);
+  let stored = await api.repos.decks.getRaw(id);
+  // Cada vuelta salta una capa viva que el alumno movió, así que no puede haber más vueltas que mazos
+  for (let moved = 0; stored && isLive(stored) && stored.parentId !== preloaded.id; moved += 1) {
+    if (moved > decks.length) throw new QuestionCardTargetError();
+    id = questionCardIds.nextLayer(id);
+    stored = await api.repos.decks.getRaw(id);
+  }
   return api.repos.decks.put({
     id,
     name: stored?.name ?? input.layer.name,

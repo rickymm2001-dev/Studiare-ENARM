@@ -2,7 +2,9 @@
 // de la práctica. El alumno elige el mazo entre los suyos, los precargados que sigue y uno nuevo. La
 // tarjeta llega armada con el texto del banco, sin IA, y la puede cambiar antes de guardarla. En los
 // planes de pago también puede pedir una propuesta a la IA, anclada a la explicación y en borrador.
-// Guardar dos veces no duplica la tarjeta y el diálogo lo dice.
+// Si edita la propuesta, se vuelve a revisar contra su cita con el mismo validador del generador y
+// se avisa cuando ya no se apoya en ella. Si la guarda así, queda en borrador con el aviso a la
+// vista, como en Crear tarjetas con IA. Guardar dos veces no duplica la tarjeta y el diálogo lo dice.
 import { BookPlus, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useMemo, useRef, useState } from 'react';
@@ -19,6 +21,7 @@ import {
   type QuestionCardSource,
 } from '@/data/usecases/questionCards';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
+import { checkCard, type ProposedCard } from '@/engines/cardGen';
 import { deckPath } from '@/engines/deckTree';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
@@ -38,6 +41,13 @@ type From = 'exam_review' | 'practice_review';
 const CONTAINERS: ReadonlySet<string> = new Set([deckIds.deck(ROOT_DECK_KEY)]);
 
 const EMPTY_DRAFT: NoteDraft = { kind: 'basic', front: '', back: '' };
+
+/** La tarjeta como la revisa el validador de la IA. El reverso de una con huecos es su nota extra */
+function proposalOf(draft: NoteDraft, quote: string): ProposedCard {
+  return draft.kind === 'cloze'
+    ? { kind: 'cloze', front: draft.text, back: draft.extra, quote }
+    : { kind: 'basic', front: draft.front, back: draft.back, quote };
+}
 
 /** El botón que abre el diálogo. El diálogo solo existe mientras está abierto */
 export function CreateCardButton({
@@ -102,6 +112,8 @@ export function CreateCardDialog({
   const [newDeckId] = useState(newId);
   const [draft, setDraft] = useState<NoteDraft>(bankDraft ?? EMPTY_DRAFT);
   const [source, setSource] = useState<QuestionCardSource>({ kind: 'bank' });
+  // La explicación tal como la leyó el generador, para revisar la propuesta contra su cita
+  const [aiSourceText, setAiSourceText] = useState('');
   const [problem, setProblem] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<QuestionCardResult | null>(null);
@@ -134,6 +146,12 @@ export function CreateCardDialog({
   );
   const noPreloaded =
     decks !== undefined && !choices.some((choice) => choice.group === 'preloaded');
+  // La propuesta de la IA se revisa contra su cita con cada cambio. Sin cambios siempre pasa, porque
+  // el generador ya la revisó. Lo que se agregue y la frase no diga se avisa, y no se corrige solo
+  const aiIssues = useMemo(
+    () => (source.kind === 'ai' ? checkCard(proposalOf(draft, source.quote), aiSourceText) : []),
+    [source, draft, aiSourceText],
+  );
 
   const save = async () => {
     if (busy.current) return;
@@ -265,6 +283,11 @@ export function CreateCardDialog({
                 setResult(null);
               }}
             />
+            {aiIssues.length > 0 ? (
+              <p role="status" className="text-sm text-warning">
+                {t.aiCards.editedIssues}
+              </p>
+            ) : null}
 
             {problem ? (
               <p role="alert" className="text-sm font-medium text-danger">
@@ -298,9 +321,10 @@ export function CreateCardDialog({
               <AiSuggestions
                 session={session}
                 bundle={bundle}
-                onUse={(next, chosen) => {
+                onUse={(next, chosen, sourceText) => {
                   setDraft(next);
                   setSource(chosen);
+                  setAiSourceText(sourceText);
                   setResult(null);
                   setProblem(null);
                 }}

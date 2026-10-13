@@ -3,6 +3,7 @@ import type { FsrsCardState } from '@/data/schemas/common';
 import {
   EMPTY_QUERY,
   buildSearchRows,
+  compareSortKeys,
   foldText,
   parseTextQuery,
   plainText,
@@ -74,9 +75,18 @@ describe('texto de las tarjetas', () => {
 
   it('busca y ordena sin importar acentos ni mayúsculas, con la ñ después de la n', () => {
     expect(foldText('Infectología')).toBe('infectologia');
-    expect(sortKey('Ñandú') > sortKey('Nube')).toBe(true);
-    expect(sortKey('Ñandú') < sortKey('Oído')).toBe(true);
+    expect(compareSortKeys(sortKey('Ñandú'), sortKey('Nube'))).toBeGreaterThan(0);
+    expect(compareSortKeys(sortKey('Ñandú'), sortKey('Oído'))).toBeLessThan(0);
+    expect(compareSortKeys(sortKey('Álamo'), sortKey('alamo'))).toBe(0);
     expect(topicKey(['Medicina interna', 'Reumatología'])).toBe('medicina interna › reumatologia');
+  });
+
+  it('la clave de orden no lleva la puntuación del principio ni la marca de los huecos', () => {
+    expect(sortKey('¿Cuál es el tratamiento?')).toBe('Cuál es el tratamiento?');
+    expect(sortKey('¡Atención! Dosis')).toBe('Atención! Dosis');
+    expect(sortKey('{{c1::Amiodarona}} en arritmias')).toBe('Amiodarona en arritmias');
+    expect(sortKey('[…] es el fármaco de elección')).toBe('es el fármaco de elección');
+    expect(sortKey('5 mg de {{c2::haloperidol}}')).toBe('5 mg de haloperidol');
   });
 });
 
@@ -95,6 +105,25 @@ describe('filas', () => {
     expect(fresh?.interval).toBeNull();
     expect(fresh?.due).toBeNull();
     expect(fresh?.topic).toBe('');
+  });
+
+  it('el tema llega hasta el tercer nivel, como los temas de cada mazo, y los de abajo se buscan', () => {
+    const rows = rowsOf([
+      source('h', {
+        front: 'Patrón de incidencia',
+        topicPath: ['Medicina interna', 'Hematología', 'Linfomas', ' ', 'Linfoma de Hodgkin'],
+      }),
+    ]);
+    const [row] = rows;
+    expect(row?.topicPath).toEqual(['Medicina interna', 'Hematología', 'Linfomas']);
+    expect(row?.topic).toBe('Linfomas');
+    expect(row?.topicKeys).toEqual([
+      'medicina interna',
+      'medicina interna › hematologia',
+      'medicina interna › hematologia › linfomas',
+    ]);
+    // El nivel de abajo no es un tema que se filtre, pero sí se encuentra al buscarlo
+    expect(found(rows, { text: 'hodgkin' })).toEqual(['h']);
   });
 
   it('el intervalo sigue a un cambio de fecha y sin último repaso usa el programado', () => {
@@ -296,6 +325,28 @@ describe('orden por columna', () => {
     expect(order('front', 'desc')).toEqual(['c', 'a', 'b']);
     // Ñu va después de Medicina y antes de Urgencias
     expect(order('deck', 'asc')).toEqual(['b', 'c', 'a']);
+  });
+
+  it('el frente sigue el orden del español aunque empiece con ¿ o con un hueco', () => {
+    const fronts = rowsOf([
+      source('zinc', { front: 'Zinc en la dieta' }),
+      source('cual', { front: '<p>¿Cuál es el tratamiento de elección?</p>' }),
+      source('hueco', { front: '{{c1::Amiodarona}} en la fibrilación auricular' }),
+      source('arbol', { front: 'árbol bronquial' }),
+      source('nandu', { front: 'Ñandú' }),
+      source('nube', { front: 'Nube' }),
+    ]);
+    expect(sortCards(fronts, { key: 'front', direction: 'asc' }).map((row) => row.cardId)).toEqual([
+      'hueco',
+      'arbol',
+      'cual',
+      'nube',
+      'nandu',
+      'zinc',
+    ]);
+    expect(sortCards(fronts, { key: 'front', direction: 'desc' }).map((row) => row.cardId)).toEqual(
+      ['zinc', 'nandu', 'nube', 'cual', 'arbol', 'hueco'],
+    );
   });
 
   it('por tema, con las tarjetas sin tema siempre al final', () => {

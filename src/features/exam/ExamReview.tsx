@@ -214,8 +214,15 @@ function ReviewItem({
                   { kind: 'question', ids: [question.id, question.questionId] },
                   new Date(state.startedAtMs).toISOString(),
                 )}
+                // El motivo queda en la sesión del examen, como sus respuestas
                 onChange={(motive) =>
-                  reportMotive(api, session.user, { kind: 'question', id: question.id }, motive)
+                  reportMotive(
+                    api,
+                    session.user,
+                    { kind: 'question', id: question.id },
+                    motive,
+                    state.examId,
+                  )
                 }
               />
             ) : null}

@@ -142,7 +142,11 @@ test('crea una tarjeta en un mazo propio y otra en uno precargado, las dos entra
   );
   expect(layers).toHaveLength(1);
 
-  // Las dos aparecen en Repasar
+  // Las dos aparecen en Repasar. La búsqueda recorre solo las primeras tarjetas a propósito. Las que
+  // salen de una pregunta llevan IDs con el momento fijo ID_TIME de src/data/usecases/questionCards.ts,
+  // anterior al de los mazos precargados, y Repasar toma las nuevas en el orden de su ID, así que van
+  // primero entre las nuevas. Es una decisión, no un accidente, y esta prueba depende de ella. Si ese
+  // orden cambia, hay que elegir solo sus mazos en Mazos y temas o recorrer la sesión completa
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
   const seen = new Set<string>();

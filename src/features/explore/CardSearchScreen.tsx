@@ -403,6 +403,7 @@ function CardSearch({ session }: { session: ReadySession }) {
                 allSelected={allSelected}
                 someSelected={selectedRows.length > 0}
                 onToggleAll={toggleAll}
+                compact={panel !== null}
               />
             ) : (
               <ResultsList {...resultsProps} />
@@ -417,11 +418,13 @@ function CardSearch({ session }: { session: ReadySession }) {
           ) : null}
           {bulk && !desktop ? <ActionDock>{bulk}</ActionDock> : null}
         </section>
+        {/* El panel crece hasta 28 rem solo en pantallas muy anchas. En 1280 se queda en 24 rem
+            para que la tabla quepa sin desplazarse de lado */}
         {desktop && panel ? (
           <section
             id={panelId}
             aria-label={t.cardSearch.panel.label}
-            className="sticky top-[calc(var(--spacing-topbar)+1.25rem)] max-h-[calc(100dvh-var(--spacing-topbar)-2.5rem)] w-[24rem] shrink-0 overflow-y-auto rounded-lg border border-line bg-surface p-4 xl:w-[28rem]"
+            className="sticky top-[calc(var(--spacing-topbar)+1.25rem)] max-h-[calc(100dvh-var(--spacing-topbar)-2.5rem)] w-[24rem] shrink-0 overflow-y-auto rounded-lg border border-line bg-surface p-4 2xl:w-[28rem]"
           >
             {panel}
           </section>

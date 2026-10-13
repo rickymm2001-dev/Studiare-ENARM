@@ -34,11 +34,17 @@ export function AnswerReview({
   answer,
   session,
   idPrefix = 'resp',
+  questionNumber,
 }: {
   bundle: QuestionBundle;
   answer: PracticeAnswer;
   session: ReadySession;
   idPrefix?: string;
+  /**
+   * El número de la pregunta en la sesión, cuando hay varias revisiones en la página, como en el
+   * resumen. Nombra su botón Crear tarjeta para que el lector de pantalla no oiga varios iguales
+   */
+  questionNumber?: number;
 }) {
   const api = useDataApi();
   const practice = usePractice();
@@ -190,7 +196,16 @@ export function AnswerReview({
           ) : null}
           {!answer.correct && !chosen ? causePicker : null}
           <div className="mt-3 border-t border-line pt-3">
-            <CreateCardButton session={session} bundle={bundle} from="practice_review" />
+            <CreateCardButton
+              session={session}
+              bundle={bundle}
+              from="practice_review"
+              label={
+                questionNumber === undefined
+                  ? undefined
+                  : t.examReview.createCard.buttonLabel(String(questionNumber))
+              }
+            />
           </div>
           {/* El reporte para revisión médica queda plegado para no ocupar una tarjeta entera */}
           <details className="mt-3 border-t border-line pt-3">

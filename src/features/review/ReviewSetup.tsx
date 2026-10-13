@@ -1,8 +1,9 @@
 // Qué quieres repasar (D-072, D-078). Arriba el modo y el botón de empezar con cuántas tarjetas
-// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco, y cada mazo dice sus
-// ramas y todos sus temas (B4 del plan del cambio, comentario 8). La última selección se recuerda en
-// este dispositivo. Aquí solo se elige lo de esta sesión. Los límites de cada día se leen aquí y se
-// cambian en Ajustes del repaso, el único lugar de cada ajuste (B3 del plan).
+// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco, y al abrirlos cada
+// mazo dice sus ramas y todos sus temas ya abiertos, sin un segundo pliegue (B4 del plan del cambio,
+// comentario 8). La última selección se recuerda en este dispositivo. Aquí solo se elige lo de esta
+// sesión. Los límites de cada día se leen aquí y se cambian en Ajustes del repaso, el único lugar de
+// cada ajuste (B3 del plan).
 import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -168,6 +169,7 @@ export function ReviewSetup({
                     <DeckTopics
                       deckName={deckNames.get(deckId) ?? deckId}
                       outline={deckTopics.get(deckId)}
+                      collapsible={false}
                       className="pl-8"
                     />
                   </li>
