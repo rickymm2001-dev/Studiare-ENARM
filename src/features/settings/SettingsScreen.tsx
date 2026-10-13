@@ -1,9 +1,8 @@
-// Configuración (pantalla 27, D-065). Separada de Perfil. En secciones con pestañas (D-078). Estudio
-// con metas y repaso, Apariencia con tema y estilo, Pomodoro, Privacidad con los consentimientos y el
-// puntaje oficial, y Cuenta con la base activa, el modo de IA, exportar y borrar.
+// Configuración (pantalla 27, D-065). Separada de Perfil.
+// Rediseñada en B3: una sola página sin pestañas, con exactamente tres secciones
+// (Perfil, Apariencia, Privacidad) separadas por una línea horizontal (D-078).
+// Herramientas de demo/admin se muestran al final únicamente para administradores o dueños.
 import { FlaskConical, UserRound } from 'lucide-react';
-import { Tabs } from 'radix-ui';
-import { useSearchParams } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
@@ -12,15 +11,13 @@ import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
-import { cn } from '@/ui/cn';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
-import { segmentedList, segmentedTabItem } from '@/ui/components/segmented-classes';
 import { useSession } from '@/app/session';
-import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
 import { PrivacySection } from './PrivacySection';
+import { ProfileSection } from './ProfileSection';
 import { DemoDataPanel } from './DemoDataPanel';
 
 const DATABASE_OPTIONS = [
@@ -38,25 +35,14 @@ const DATABASE_OPTIONS = [
   },
 ] as const;
 
-const SECTIONS = ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const;
-type SectionKey = (typeof SECTIONS)[number];
-const isSection = (value: string | null): value is SectionKey =>
-  SECTIONS.includes(value as SectionKey);
-
 export function SettingsScreen() {
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
+  const role = usePreferences((state) => state.role);
   const aiStatus = useAiStatus();
   const session = useSession();
-  // La sección abierta vive en la dirección, para volver a ella o enlazarla (D-078)
-  const [params, setParams] = useSearchParams();
-  const requested = params.get('seccion');
   const ready = session.status === 'ready' ? session : null;
-  const available = SECTIONS.filter(
-    (key) => ready !== null || key === 'appearance' || key === 'account',
-  );
-  const section: SectionKey =
-    isSection(requested) && available.includes(requested) ? requested : (available[0] ?? 'account');
+  const isAdmin = role === 'admin' || role === 'owner';
 
   return (
     <>
@@ -66,80 +52,99 @@ export function SettingsScreen() {
         stats={false}
       />
 
-      <Tabs.Root
-        value={section}
-        onValueChange={(value) => {
-          setParams({ seccion: value }, { replace: true });
-        }}
-        className="flex flex-col gap-3"
-      >
-        {/* Misma forma que el control segmentado (H01 de B2). Radix marca la pestaña activa con
-            data-state, así que usa segmentedTabItem y no segmentedItem */}
-        <Tabs.List
-          aria-label={t.settings.sectionsLabel}
-          className={cn(segmentedList, 'self-start')}
+      <div className="flex flex-col gap-8">
+        {/* Sección 1: Perfil */}
+        <section
+          id="seccion-perfil"
+          aria-labelledby="perfil-seccion-titulo"
+          className="flex flex-col gap-4"
         >
-          {available.map((key) => (
-            <Tabs.Trigger
-              key={key}
-              value={key}
-              className={cn(segmentedTabItem, 'whitespace-nowrap')}
-            >
-              {t.settings.sections[key]}
-            </Tabs.Trigger>
-          ))}
-        </Tabs.List>
+          <div className="flex flex-col gap-1">
+            <h2 id="perfil-seccion-titulo" className="text-xl font-bold">
+              {t.settings.sections.profile}
+            </h2>
+            <p className="text-sm text-fg-muted">{t.screens.profile.description}</p>
+          </div>
+          {ready ? <ProfileSection session={ready} /> : null}
+        </section>
 
-        {ready ? (
-          <Tabs.Content value="study">
-            <StudySection session={ready} />
-          </Tabs.Content>
-        ) : null}
+        <hr className="border-line" />
 
-        <Tabs.Content value="appearance">
+        {/* Sección 2: Apariencia */}
+        <section
+          id="seccion-apariencia"
+          aria-labelledby="apariencia-seccion-titulo"
+          className="flex flex-col gap-4"
+        >
+          <div className="flex flex-col gap-1">
+            <h2 id="apariencia-seccion-titulo" className="text-xl font-bold">
+              {t.settings.sections.appearance}
+            </h2>
+            <p className="text-sm text-fg-muted">{t.appearance.description}</p>
+          </div>
           <AppearanceSettings />
-        </Tabs.Content>
+        </section>
 
-        {ready ? (
-          <Tabs.Content value="pomodoro">
-            <PomodoroSection session={ready} />
-          </Tabs.Content>
-        ) : null}
+        <hr className="border-line" />
 
-        {ready ? (
-          <Tabs.Content value="privacy">
-            <PrivacySection session={ready} />
-          </Tabs.Content>
-        ) : null}
+        {/* Sección 3: Privacidad */}
+        <section
+          id="seccion-privacidad"
+          aria-labelledby="privacidad-seccion-titulo"
+          className="flex flex-col gap-4"
+        >
+          <div className="flex flex-col gap-1">
+            <h2 id="privacidad-seccion-titulo" className="text-xl font-bold">
+              {t.settings.sections.privacy}
+            </h2>
+            <p className="text-sm text-fg-muted">{t.settings.privacy.consentsDescription}</p>
+          </div>
+          {ready ? <PrivacySection session={ready} /> : null}
+        </section>
 
-        {/* En computadora las tarjetas van en dos columnas (D-057) */}
-        <Tabs.Content value="account" className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
-          <Card>
-            <RadioCards
-              legend={t.database.legend}
-              description={t.database.description}
-              value={database}
-              options={DATABASE_OPTIONS}
-              onValueChange={setDatabase}
-            />
-            <DatabaseStatus />
-          </Card>
-
-          {database === 'demo' ? <DemoDataPanel /> : null}
-
-          <Card aria-labelledby="ia-titulo">
-            <CardHeader className="mb-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-                <AiModeBadge status={aiStatus} />
+        {/* Herramientas de desarrollo / demo para administradores */}
+        {isAdmin ? (
+          <>
+            <hr className="border-line" />
+            <section
+              id="seccion-admin"
+              aria-labelledby="admin-herramientas-titulo"
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1">
+                <h2 id="admin-herramientas-titulo" className="text-xl font-bold">
+                  {t.navItems.admin}
+                </h2>
+                <p className="text-sm text-fg-muted">{t.screens.adminSettings.description}</p>
               </div>
-              <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-            </CardHeader>
-          </Card>
+              <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
+                <Card>
+                  <RadioCards
+                    legend={t.database.legend}
+                    description={t.database.description}
+                    value={database}
+                    options={DATABASE_OPTIONS}
+                    onValueChange={setDatabase}
+                  />
+                  <DatabaseStatus />
+                </Card>
 
-          {ready ? <DataSection session={ready} /> : null}
-        </Tabs.Content>
-      </Tabs.Root>
+                {database === 'demo' ? <DemoDataPanel /> : null}
+
+                <Card aria-labelledby="ia-titulo">
+                  <CardHeader className="mb-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
+                      <AiModeBadge status={aiStatus} />
+                    </div>
+                    <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
+            </section>
+          </>
+        ) : null}
+      </div>
     </>
   );
 }
@@ -155,8 +160,7 @@ function DatabaseStatus() {
       ),
     [repos],
   );
-  // La base y el conteo van en dos renglones a propósito. En una fila con salto, el conteo bajaba
-  // solo y el renglón empezaba con el punto medio en el teléfono (H21 de la revisión de B2)
+
   return (
     <div className="mt-3 flex flex-col gap-1 text-sm text-fg-muted" aria-live="polite">
       <span className="font-mono">{t.database.storedIn(DATABASE_NAMES[repos.kind])}</span>

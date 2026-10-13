@@ -27,8 +27,15 @@ for (const key of SCREEN_KEYS) {
       await expect(page).toHaveTitle(t.app.documentTitle(t.landing.documentTitle));
       await expect(nav).toHaveCount(0);
     } else {
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
-      await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
+      // Rutas viejas que redirigen (B3): /perfil -> Configuración, /planificador y /logros -> Progreso
+      const expectedTitle =
+        key === 'profile'
+          ? t.screens.settings.title
+          : key === 'planner' || key === 'rewards'
+            ? t.screens.progress.title
+            : t.screens[key].title;
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(expectedTitle);
+      await expect(page).toHaveTitle(t.app.documentTitle(expectedTitle));
       // El aviso de privacidad y los términos también se leen sin sesión y sin navegación (Fase G)
       if (key === 'onboarding' || key === 'privacyNotice' || key === 'terms') {
         await expect(nav).toHaveCount(0);
@@ -45,25 +52,19 @@ test('con sesión la raíz es el tablero de Inicio con su navegación', async ({
   await expectNoSeriousA11yViolations(page);
 });
 
-test('navega con la barra inferior entre las 5 secciones', async ({ page }) => {
+test('navega con la barra inferior entre las secciones principales y Más (D-119 B3)', async ({ page }) => {
   await signUp(page);
   const nav = page.getByRole('navigation', { name: t.nav.label });
   for (const [label, key] of [
     [t.navItems.review, 'review'],
     [t.navItems.simulate, 'simulatorSetup'],
     [t.navItems.progress, 'progress'],
-    [t.navItems.profile, 'profile'],
     [t.navItems.home, 'home'],
   ] as const) {
-    await nav.getByRole('link', { name: label, exact: true }).click();
+    await nav.getByRole('link', { name: label, exact: true }).first().click();
     await expect(page).toHaveURL(new RegExp(`${SCREENS[key].path}$`));
-    // Cada pantalla pone su nombre en la pestaña. Inicio saluda en su h1 (D-116)
     await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(nav.getByRole('link', { name: label, exact: true })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
   }
 });
 

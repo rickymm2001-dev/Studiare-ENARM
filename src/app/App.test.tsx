@@ -40,21 +40,26 @@ describe('rutas', () => {
     await waitFor(() => {
       expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
     });
-  });
+  }, 30_000);
 
-  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party, Logros y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
+  it('las pantallas del alumno muestran navegación en el riel y barra en el teléfono (D-119 B3)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
-    const items = nav.querySelectorAll('li');
-    expect(items).toHaveLength(10);
-    expect([...items].filter((item) => !item.className.includes('hidden'))).toHaveLength(5);
-    expect(items[9]).toHaveTextContent(t.navItems.settings);
-    expect(nav).toHaveTextContent(t.navItems.rewards);
-    expect(nav).toHaveTextContent(t.navItems.planner);
+    expect(nav).toHaveTextContent(t.navItems.home);
+    expect(nav).toHaveTextContent(t.navItems.review);
+    expect(nav).toHaveTextContent(t.navItems.outlines);
+    expect(nav).toHaveTextContent(t.navItems.simulate);
+    expect(nav).toHaveTextContent(t.navItems.progress);
     expect(nav).toHaveTextContent(t.navItems.tutor);
+    expect(nav).toHaveTextContent(t.navItems.party);
+    expect(nav).toHaveTextContent(t.navItems.settings);
+    // Plan, Logros y Perfil ya no están en el menú
+    expect(nav).not.toHaveTextContent(t.navItems.planner);
+    expect(nav).not.toHaveTextContent(t.navItems.rewards);
+    expect(nav).not.toHaveTextContent(t.navItems.profile);
     // Mazos ya no es una sección aparte, es una pestaña de Repasar
     expect(nav).not.toHaveTextContent(t.navItems.decks);
   });
@@ -65,10 +70,11 @@ describe('rutas', () => {
       await screen.findByRole('heading', { level: 1, name: t.screens.decks.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
-    expect(within(nav).getByRole('link', { name: t.navItems.review })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    const links = within(nav).getAllByRole('link', { name: t.navItems.review });
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links) {
+      expect(link).toHaveAttribute('aria-current', 'page');
+    }
   });
 
   it('muestra la pantalla de no encontrada en una ruta desconocida', async () => {

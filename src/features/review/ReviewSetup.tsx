@@ -16,6 +16,9 @@ import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import type { UserSettings } from '@/data/schemas/people';
+import type { ReadySession } from '../shared/RequireSession';
+import { ReviewSettingsPanel } from './ReviewSettingsPanel';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
 const MODES: readonly ReviewMode[] = ['today', 'due', 'new'];
@@ -32,6 +35,8 @@ export function ReviewSetup({
   limitsExtra,
   onSaveLimits,
   onStart,
+  session,
+  onSaveSettings,
 }: {
   /** Atajo para agregar un mazo, junto al título */
   addDeck?: ReactNode;
@@ -51,6 +56,8 @@ export function ReviewSetup({
   limitsExtra?: ReactNode;
   onSaveLimits: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
   onStart: (selection: ReviewSelection) => void;
+  session?: ReadySession;
+  onSaveSettings?: (patch: Partial<UserSettings>) => Promise<unknown>;
 }) {
   const deckIds = useMemo(() => [...new Set(cards.map((card) => card.deckId))], [cards]);
   const [selection, setSelection] = useState<ReviewSelection>(() =>
@@ -196,6 +203,13 @@ export function ReviewSetup({
               onSave={onSaveLimits}
             />
             {limitsExtra}
+            {session && onSaveSettings ? (
+              <ReviewSettingsPanel
+                key={`${limits.newCardsPerDay}:${limits.reviewsPerDay}:${session.settings.desiredRetention}`}
+                session={session}
+                onSave={onSaveSettings}
+              />
+            ) : null}
           </Disclosure>
         </div>
       </Card>

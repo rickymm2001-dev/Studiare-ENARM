@@ -17,8 +17,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 ### Bloques
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
-- [ ] B2. Sistema de diseño y rediseño visual (en cierre, PR desde la rama ccr-60b5d3a7-f40uky)
-- [ ] B3. Navegación, Configuración y Perfil
+- [x] B2. Sistema de diseño y rediseño visual (en cierre, PR desde la rama ccr-60b5d3a7-f40uky)
+- [x] B3. Navegación, Configuración y Perfil
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
 - [ ] B6. Apuntes y mazos
@@ -87,6 +87,19 @@ Evidencia
 - Hallazgo nuevo H29, un dispositivo nuevo puede sobrescribir en la nube datos opcionales de la cuenta con vacíos. Asignado a B9
 - Evidencia. npm run check con typecheck y lint limpios y 2,798 pruebas que pasan; las 5 que fallaron fueron por tiempo con la máquina a carga 11 en 4 núcleos y pasan solas (102 de 102). Pruebas SQL en verde con el esqueleto de Storage que copia la protección del proyecto real. tutor.spec y theme-dark.spec en verde en teléfono y computadora. JavaScript inicial de 283 KB de 300
 - Capturas de antes en docs/screenshots/v3/antes y de después en docs/screenshots/v3/b2, ya con las correcciones, en calidad 60 para que pesen menos
+
+### B3. Navegación, Configuración y Perfil (D-122)
+- Hecho. Riel lateral en computadora con 7 accesos arriba y Configuración fijo abajo a la izquierda. Barra inferior en teléfono con exactamente 5 casillas: Inicio, Repasar, Simular, Progreso y botón Más que abre hoja accesible para el resto de rutas según el rol.
+- Configuración en una sola página sin pestañas (0 pestañas, ?seccion= retirado), dividida en exactamente 3 secciones: Perfil, Apariencia y Privacidad. Controles de desarrollo y demo ocultos para el alumno.
+- Sección Perfil con tarjeta del plan actual (precio, vencimiento/renovación y botón Cambiar tu plan), datos de perfil y cuenta unificados en solo lectura por omisión, modo edición con formulario completo, aviso Radix de confirmación de descarte de cambios si hay modificaciones sin guardar al cancelar, diálogo de solicitud de factura CFDI con validaciones, y botón de cerrar sesión.
+- Ajustes de estudio movidos a Repasar (`ReviewSettingsPanel`) dentro del pliegue de Límites diarios con barra de guardado al modificar.
+- Semana de 7 días del planificador (planificado vs realizado y sobrecarga) movida a Progreso (`PlannerWeekSection`), junto con la captura del puntaje oficial del ENARM (`OfficialScoreCard`).
+- Eliminación de ligas, insignias y logros: recompensas reducidas a misiones y XP; rutas `/logros` y `/planificador` redirigidas a `/progreso`, y `/perfil` a `/configuracion`.
+- Evidencia:
+  - Unit tests: 34 pruebas en 8 archivos pasan en verde (`BottomNav.test.tsx`, `ReviewSettingsPanel.test.tsx`, `SettingsScreen.test.tsx`, `PlannerScreen.test.tsx`, `ProgressScreen.test.tsx`, `rewards.test.ts`, `celebrate.test.ts`, `App.test.tsx`).
+  - E2E: 8 pruebas en `tests/e2e/b3-navigation-settings.spec.ts` pasan en verde en escritorio y móvil cubriendo los 4 criterios de aceptación de B3.
+  - Smoke: 76 pruebas en `tests/e2e/smoke.spec.ts` verificadas en escritorio y móvil.
+  - Build: `tsc -b` limpio, Vite build limpio ("Sin secretos en dist"), ESLint limpio (0 errores).
 
 ### Preguntas para Ricardo
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro

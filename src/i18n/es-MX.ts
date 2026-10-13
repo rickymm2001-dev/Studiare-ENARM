@@ -212,6 +212,8 @@ export const t = {
     tutor: 'Tutor',
     party: 'Party',
     rewards: 'Logros',
+    outlines: 'Apuntes',
+    more: 'Más',
     admin: 'Administración',
   },
   screens,

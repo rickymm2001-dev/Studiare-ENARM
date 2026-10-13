@@ -1,5 +1,5 @@
-// Datos opcionales de la cuenta (D-068). Se usan al registrarse y en Perfil.
 import type { AccountDetails } from '@/data/usecases/account';
+import { HOW_HEARD_CHANNELS, type HowHeardChannel } from '@/data/schemas/people';
 import { MEXICAN_STATES } from '@/config/mexico';
 import { SPECIALTIES } from '@/config/specialties';
 import { t } from '@/i18n/es-MX';
@@ -82,6 +82,19 @@ export function AccountDetailsFields({
         options={optional(SPECIALTIES.map(([key, name]) => ({ value: key, label: name })))}
         onChange={(event) => {
           set({ targetSpecialty: event.target.value || null });
+        }}
+      />
+      <SelectField
+        label={text.howHeard}
+        value={value.howHeard ?? NONE}
+        options={optional(
+          HOW_HEARD_CHANNELS.map((channel) => ({
+            value: channel,
+            label: text.howHeards[channel],
+          })),
+        )}
+        onChange={(event) => {
+          set({ howHeard: (event.target.value || null) as HowHeardChannel | null });
         }}
       />
     </div>

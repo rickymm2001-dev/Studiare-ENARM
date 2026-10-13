@@ -16,17 +16,11 @@
  * Umbrales. Todos en src/config/rewards.ts y provisionales.
  */
 import {
-  BADGE_FAMILIES,
-  BADGE_FAMILY_KEYS,
-  LEAGUES,
   MISSION_TARGETS,
   STUDY_DAY_MIN,
-  type BadgeFamily,
-  type LeagueKey,
 } from '@/config/rewards';
 import type { AppEvent } from '@/data/schemas/events';
 import { addDays, studyDayOf, weekStartOf } from './studyDay';
-import { levelFor } from './xp';
 
 export interface DayTotals {
   cards: number;
@@ -190,205 +184,19 @@ export function missionsFor(
 }
 
 // ---------------------------------------------------------------------------------------------
-// Insignias
-
-export interface BadgeTier {
-  /** Número de nivel, desde 1 */
-  tier: number;
-  threshold: number;
-  /** Primer día en que se alcanzó. null si todavía no, o si no se sabe el día (la racha) */
-  earnedOn: string | null;
-  earned: boolean;
-}
-
-export interface BadgeStatus {
-  family: BadgeFamily;
-  /** Valor actual del contador de la familia */
-  current: number;
-  tiers: BadgeTier[];
-  /** Niveles ganados */
-  level: number;
-  /** El siguiente nivel por ganar, o null si ya los ganó todos */
-  next: BadgeTier | null;
-}
-
-function counterByDay(
-  totals: ReadonlyMap<string, DayTotals>,
-  family: BadgeFamily,
-): { days: [string, number][]; total: number } {
-  const field = {
-    reviews: 'cards',
-    answers: 'questions',
-    focus: 'minutes',
-    exams: 'exams',
-    duels: 'duels',
-    imports: 'imports',
-    verifications: 'verifications',
-    aiCards: 'aiCards',
-  } as const;
-  const days: [string, number][] = [];
-  let total = 0;
-  for (const day of [...totals.keys()].sort()) {
-    const entry = totals.get(day);
-    if (!entry) continue;
-    if (family === 'level') {
-      total += entry.xp;
-    } else if (family !== 'streak') {
-      total += entry[field[family]];
-    }
-    days.push([day, total]);
-  }
-  return { days, total };
-}
-
-export function badgesFor(
-  totals: ReadonlyMap<string, DayTotals>,
-  streakBest: number,
-): BadgeStatus[] {
-  return BADGE_FAMILY_KEYS.map((family) => {
-    const thresholds: readonly number[] = BADGE_FAMILIES[family].tiers;
-    const { days, total } = counterByDay(totals, family);
-    // El contador del nivel es el nivel que da el XP acumulado. El de la racha, su mejor valor
-    const valueOf = (cumulative: number) =>
-      family === 'level' ? levelFor(cumulative).level : cumulative;
-    const current = family === 'streak' ? streakBest : valueOf(total);
-    const tiers = thresholds.map((threshold, index): BadgeTier => {
-      const earned = current >= threshold;
-      const first = days.find(([, cumulative]) => valueOf(cumulative) >= threshold);
-      return {
-        tier: index + 1,
-        threshold,
-        earned,
-        earnedOn: earned && family !== 'streak' ? (first?.[0] ?? null) : null,
-      };
-    });
-    return {
-      family,
-      current,
-      tiers,
-      level: tiers.filter((tier) => tier.earned).length,
-      next: tiers.find((tier) => !tier.earned) ?? null,
-    };
-  });
-}
-
-/** Llave de un nivel de insignia ganado, por ejemplo answers:2. Sirve para saber cuáles ya se avisaron */
-export function badgeTierKey(family: BadgeFamily, tier: number): string {
-  return `${family}:${tier}`;
-}
-
-/** Todos los niveles ganados ahora mismo */
-export function earnedBadgeKeys(badges: readonly BadgeStatus[]): string[] {
-  return badges.flatMap((badge) =>
-    badge.tiers.filter((tier) => tier.earned).map((tier) => badgeTierKey(badge.family, tier.tier)),
-  );
-}
-
-/** Niveles ganados que el alumno todavía no ha visto, en el orden de las familias y sus niveles */
-export function unseenBadgeTiers(
-  badges: readonly BadgeStatus[],
-  seen: ReadonlySet<string>,
-): { family: BadgeFamily; tier: number }[] {
-  return badges.flatMap((badge) =>
-    badge.tiers
-      .filter((tier) => tier.earned && !seen.has(badgeTierKey(badge.family, tier.tier)))
-      .map((tier) => ({ family: badge.family, tier: tier.tier })),
-  );
-}
-
-// ---------------------------------------------------------------------------------------------
-// Liga
-
-export interface LeagueStatus {
-  /** Liga de la semana en curso según el XP de hoy */
-  current: LeagueKey;
-  weeklyXp: number;
-  /** La siguiente liga y el XP que falta, o null si ya está en la más alta */
-  next: { key: LeagueKey; missingXp: number } | null;
-  /** Liga de la semana anterior, o null si esa semana no hubo actividad */
-  previous: LeagueKey | null;
-  /** Subió, bajó o sigue igual frente a la semana anterior. null sin semana anterior */
-  movement: 'up' | 'down' | 'same' | null;
-  /** La liga más alta que alcanzó en cualquier semana */
-  best: LeagueKey;
-}
-
-export function leagueOfXp(xp: number): LeagueKey {
-  let current: LeagueKey = LEAGUES[0].key;
-  for (const league of LEAGUES) if (xp >= league.fromXp) current = league.key;
-  return current;
-}
-
-const leagueIndex = (key: LeagueKey) => LEAGUES.findIndex((league) => league.key === key);
-
-export function leagueFor(totals: ReadonlyMap<string, DayTotals>, today: string): LeagueStatus {
-  const weekly = new Map<string, number>();
-  for (const [day, entry] of totals) {
-    const week = weekStartOf(day);
-    weekly.set(week, (weekly.get(week) ?? 0) + entry.xp);
-  }
-  const thisWeek = weekStartOf(today);
-  const lastWeek = addDays(thisWeek, -7);
-  const weeklyXp = weekly.get(thisWeek) ?? 0;
-  const current = leagueOfXp(weeklyXp);
-  const index = leagueIndex(current);
-  const upcoming = LEAGUES[index + 1];
-  const previousXp = weekly.get(lastWeek);
-  const previous = previousXp === undefined ? null : leagueOfXp(previousXp);
-  let best: LeagueKey = current;
-  for (const xp of weekly.values()) {
-    const key = leagueOfXp(xp);
-    if (leagueIndex(key) > leagueIndex(best)) best = key;
-  }
-  return {
-    current,
-    weeklyXp,
-    next: upcoming ? { key: upcoming.key, missingXp: upcoming.fromXp - weeklyXp } : null,
-    previous,
-    movement:
-      previous === null
-        ? null
-        : index > leagueIndex(previous)
-          ? 'up'
-          : index < leagueIndex(previous)
-            ? 'down'
-            : 'same',
-    best,
-  };
-}
-
-// ---------------------------------------------------------------------------------------------
 
 export interface Rewards {
   missions: { daily: Mission[]; weekly: Mission[] };
-  badges: BadgeStatus[];
-  league: LeagueStatus;
-  /** Insignias con al menos un nivel ganado, de la ganada más recientemente a la más antigua */
-  recentBadges: { family: BadgeFamily; tier: number; earnedOn: string }[];
 }
 
 export function buildRewards(input: {
   events: readonly AppEvent[];
   now: Date;
   timeZone: string;
-  streakBest: number;
 }): Rewards {
   const totals = dayTotals(input.events);
   const today = studyDayOf(input.now, input.timeZone);
-  const badges = badgesFor(totals, input.streakBest);
-  const recentBadges: Rewards['recentBadges'] = [];
-  for (const badge of badges) {
-    for (const tier of badge.tiers) {
-      if (tier.earnedOn !== null) {
-        recentBadges.push({ family: badge.family, tier: tier.tier, earnedOn: tier.earnedOn });
-      }
-    }
-  }
-  recentBadges.sort((a, b) => (a.earnedOn < b.earnedOn ? 1 : a.earnedOn > b.earnedOn ? -1 : 0));
   return {
     missions: missionsFor(totals, today),
-    badges,
-    league: leagueFor(totals, today),
-    recentBadges,
   };
 }
