@@ -15,8 +15,6 @@ import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { useBankReady } from '../shared/useBankReady';
-import { toneClasses } from '@/ui/branches';
-import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -195,14 +193,7 @@ function GroupCard({
           {latest.prompt}
         </CardTitle>
         <CardDescription className="flex flex-wrap items-center gap-2">
-          <span
-            className={cn(
-              'rounded-full px-2 py-0.5 text-xs font-semibold',
-              toneClasses(latest.branch).chip,
-            )}
-          >
-            {branchName.get(latest.branch) ?? latest.branch}
-          </span>
+          <Badge>{branchName.get(latest.branch) ?? latest.branch}</Badge>
           <span>{topicName.get(latest.topic) ?? latest.topic}</span>
           <span>· {text.group.total(group.rows.length)}</span>
           {group.openCount > 0 ? (

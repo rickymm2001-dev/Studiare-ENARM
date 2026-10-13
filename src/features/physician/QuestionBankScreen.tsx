@@ -15,8 +15,7 @@ import type { Question } from '@/data/schemas/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { useBankReady } from '../shared/useBankReady';
-import { toneClasses } from '@/ui/branches';
-import { cn } from '@/ui/cn';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
@@ -222,14 +221,7 @@ function BankList({
                   <span className="line-clamp-1 text-xs text-fg-muted">{question.vignette}</span>
                 ) : null}
                 <span className="flex flex-wrap items-center gap-2 text-xs text-fg-muted">
-                  <span
-                    className={cn(
-                      'rounded-full px-2 py-0.5 font-semibold',
-                      toneClasses(question.branch).chip,
-                    )}
-                  >
-                    {branchName.get(question.branch) ?? question.branch}
-                  </span>
+                  <Badge>{branchName.get(question.branch) ?? question.branch}</Badge>
                   <span>{topicName.get(question.topic) ?? question.topic}</span>
                   <span>· {t.bank.difficulty(question.physicianDifficulty)}</span>
                   <span>· {t.bank.status[question.editorialStatus]}</span>

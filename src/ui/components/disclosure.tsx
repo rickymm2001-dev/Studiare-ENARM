@@ -25,7 +25,10 @@ export function Disclosure({
   // Solo cuenta al montar. Después el alumno abre y cierra, y React no vuelve a tocar el atributo
   const [initialOpen] = useState(defaultOpen);
   return (
-    <details className={cn('group rounded-lg border border-line', className)} open={initialOpen}>
+    <details
+      className={cn('group rounded-lg border border-line bg-surface', className)}
+      open={initialOpen}
+    >
       <summary className="flex min-h-touch cursor-pointer list-none items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted [&::-webkit-details-marker]:hidden">
         <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-2">
           <span className="font-semibold">{title}</span>
