@@ -46,9 +46,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas, cambiar su fecha de repaso, atender una controversia y crear una tarjeta con una pregunta', () => {
-    expect(EVENT_TYPES).toHaveLength(37);
-    expect(AppEventSchema.options).toHaveLength(37);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas, cambiar su fecha de repaso, atender una controversia y crear una tarjeta con una pregunta y reiniciar tarjetas', () => {
+    expect(EVENT_TYPES).toHaveLength(38);
+    expect(AppEventSchema.options).toHaveLength(38);
   });
 
   it('un motivo de error se escribe con los siete de hoy y se lee también con las causas de antes (4.23)', () => {
