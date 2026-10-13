@@ -36,11 +36,12 @@ interface SettingsEvent {
   payload: { key?: string; value?: unknown; reason?: string };
 }
 
-test('días fáciles. Se marcan en Configuración, el resumen los cuenta al recargar y el cambio queda como evento', async ({
+test('días fáciles. Se marcan en Repasar, el resumen los cuenta al recargar y el cambio queda como evento', async ({
   page,
 }) => {
   await signUp(page);
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
+  await page.goto(SCREENS.review.path);
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
   const disclosure = page.locator('summary', { hasText: t.settings.easyDaysTitle });
   await expect(disclosure).toContainText(t.settings.easyDaysSummary(0));
   await disclosure.click();
@@ -56,6 +57,7 @@ test('días fáciles. Se marcan en Configuración, el resumen los cuenta al reca
 
   // Se recuerda al recargar
   await page.reload();
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
   await expect(page.locator('summary', { hasText: t.settings.easyDaysTitle })).toContainText(
     t.settings.easyDaysSummary(2),
   );

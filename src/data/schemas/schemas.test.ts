@@ -148,6 +148,7 @@ describe('esquemas y tablas', () => {
         sound: true,
         notifications: false,
       },
+      emailReminders: { enabled: false, time: '08:00' },
     });
     expect(() => UserSettingsSchema.parse({ desiredRetention: 0.99 })).toThrow();
     expect(UserSchema.parse(makeUser()).timeZone).toBe('America/Merida');

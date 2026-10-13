@@ -31,8 +31,9 @@ test('contadores, temporizador, atrasos repartidos y deshacer', async ({ page })
   await signUp(page);
   await followSmallestDeck(page);
 
-  // El temporizador viene apagado. Se enciende en Configuración con el tiempo más corto
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
+  // El temporizador viene apagado. Se enciende en Repasar con el tiempo más corto
+  await page.goto(SCREENS.review.path);
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
   await page.getByRole('checkbox', { name: t.settings.cardTimerEnabled }).check();
   await page.getByRole('combobox', { name: t.settings.cardTimerSeconds }).selectOption('10');
   await page.getByRole('checkbox', { name: t.settings.cardTimerAutoReveal }).check();

@@ -18,6 +18,7 @@ export const EMPTY_DETAILS: AccountDetails = {
   attempt: null,
   targetSpecialty: null,
   avatar: { kind: 'initials' },
+  howHeard: null,
 };
 
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();

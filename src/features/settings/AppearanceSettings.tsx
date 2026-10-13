@@ -208,6 +208,14 @@ export function AppearanceSettings() {
               change({ sounds: event.target.checked });
             }}
           />
+          <CheckboxField
+            label="Modo enfoque"
+            hint="Oculta tablas, XP, nivel, racha y retos en toda la app."
+            checked={draft.focusMode}
+            onChange={(event) => {
+              change({ focusMode: event.target.checked });
+            }}
+          />
           <Button
             variant="secondary"
             size="sm"

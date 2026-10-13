@@ -21,10 +21,9 @@ afterEach(async () => {
   app = undefined;
 });
 
-const [PARTY, AI, IMPROVEMENT] = [
+const [PARTY, AI] = [
   t.onboarding.consents.party[0],
   t.onboarding.consents.ai_analysis[0],
-  t.onboarding.consents.anonymized_improvement[0],
 ];
 
 /** El alumno de la prueba con los tres permisos dados, como al crear su perfil */
@@ -62,56 +61,5 @@ describe('Privacidad en Configuración', () => {
     await waitFor(() => {
       expect(screen.getByRole('checkbox', { name: PARTY })).not.toBeChecked();
     }, WAIT);
-  });
-
-  it('guarda el puntaje oficial con el permiso y lo borra al retirar la mejora anónima', async () => {
-    const typing = userEvent.setup();
-    const { api, user } = (app = await open());
-    expect(await screen.findByText(t.settings.privacy.none, {}, WAIT)).toBeInTheDocument();
-
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    await typing.type(score, '72.5');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    expect(
-      await screen.findByText(t.settings.privacy.current(new Date().getFullYear(), 72.5), {}, WAIT),
-    ).toBeInTheDocument();
-    expect((await api.repos.officialScores.get(user.id))?.score).toBe(72.5);
-
-    await typing.click(screen.getByRole('checkbox', { name: IMPROVEMENT }));
-    expect(
-      await screen.findByText(t.settings.privacy.scoreNeedsConsent, {}, WAIT),
-    ).toBeInTheDocument();
-    expect(screen.queryByLabelText(t.settings.privacy.score)).not.toBeInTheDocument();
-    await waitFor(async () => {
-      expect(await api.repos.officialScores.get(user.id)).toBeUndefined();
-    }, WAIT);
-    expect(await screen.findByText(t.settings.privacy.none, {}, WAIT)).toBeInTheDocument();
-  });
-
-  it('un puntaje fuera de rango muestra el error y no se guarda', async () => {
-    const typing = userEvent.setup();
-    app = await open();
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    // La validación es la nuestra y no la del navegador, así el aviso sale en español
-    await typing.type(score, '101');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    expect(
-      await screen.findByText(t.settings.privacy.scoreErrors.invalid_score, {}, WAIT),
-    ).toBeInTheDocument();
-    expect(await app.api.repos.officialScores.get(app.user.id)).toBeUndefined();
-  });
-
-  it('quitar el puntaje lo borra sin tocar el permiso', async () => {
-    const typing = userEvent.setup();
-    app = await open();
-    const score = await screen.findByLabelText(t.settings.privacy.score, {}, WAIT);
-    await typing.type(score, '65');
-    await typing.click(screen.getByRole('button', { name: t.settings.privacy.saveScore }));
-    await typing.click(
-      await screen.findByRole('button', { name: t.settings.privacy.removeScore }, WAIT),
-    );
-    expect(await screen.findByText(t.settings.privacy.scoreRemoved, {}, WAIT)).toBeInTheDocument();
-    expect(await app.api.repos.officialScores.get(app.user.id)).toBeUndefined();
-    expect(screen.getByRole('checkbox', { name: IMPROVEMENT })).toBeChecked();
   });
 });

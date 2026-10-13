@@ -217,6 +217,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           }}
           limitsExtra={<DailyLoadPanel session={session} cards={cards} events={events} />}
           onSaveLimits={(patch) => updateProfile(api, session.user, { settings: patch })}
+          session={session}
+          onSaveSettings={(patch) => updateProfile(api, session.user, { settings: patch })}
           countFor={(candidate) => queueFor(candidate).length}
           countersFor={(candidate) =>
             remainingCounters(queueFor(candidate), (cardId) => cardStates.get(cardId) ?? null)

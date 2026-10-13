@@ -10,7 +10,6 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { Link } from 'react-router';
-import { StudyTabs } from '../review/StudyTabs';
 import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { OutlinePage } from './OutlinePage';
@@ -46,7 +45,6 @@ function Outlines({ session }: { session: ReadySession }) {
   return (
     <>
       <ScreenHeader title={t.screens.outlines.title} description={t.screens.outlines.description} />
-      <StudyTabs />
       {data === undefined ? (
         <LoadingState label={t.outlines.loading} />
       ) : openId && !opened ? (

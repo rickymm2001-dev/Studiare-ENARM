@@ -87,9 +87,9 @@ test('una sesión de 200 tarjetas con el procesador 4 veces más lento sigue flu
   await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
     timeout: 120_000,
   });
-  await page.goto(`${SCREENS.settings.path}?seccion=study`);
+  await page.goto(SCREENS.review.path);
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
   await page.getByLabel(t.settings.newCardsPerDay).fill('250');
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
   await expect(page.getByText(t.settings.saved)).toBeVisible();
 
   await page.goto(SCREENS.review.path);

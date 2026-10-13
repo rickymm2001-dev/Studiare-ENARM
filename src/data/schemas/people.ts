@@ -105,6 +105,13 @@ export const UserSettingsSchema = z.strictObject({
       sound: true,
       notifications: false,
     }),
+  /** Recordatorios diarios de repaso por correo (respuesta 81) */
+  emailReminders: z
+    .strictObject({
+      enabled: z.boolean(),
+      time: z.string().default('08:00'),
+    })
+    .default({ enabled: false, time: '08:00' }),
 });
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
 
@@ -125,6 +132,19 @@ export type User = z.infer<typeof UserSchema>;
 export const AVATAR_DATA_URL_PREFIX = 'data:image/jpeg;base64,';
 /** Lo más que mide la foto como dataUrl. Unos 300 KB de JPEG, que caben en la fila y en el bucket */
 export const AVATAR_DATA_URL_MAX = 400_000;
+
+export const HOW_HEARD_CHANNELS = [
+  'instagram',
+  'tiktok',
+  'facebook',
+  'youtube',
+  'influencer',
+  'friend',
+  'google',
+  'university',
+  'other',
+] as const;
+export type HowHeardChannel = (typeof HOW_HEARD_CHANNELS)[number];
 
 /**
  * Datos de cuenta del alumno (D-068). Viven aparte de User para que nunca viajen a la IA ni a
@@ -149,6 +169,8 @@ export const AccountSchema = z.strictObject({
     .string()
     .regex(/^[a-z_]{2,48}$/)
     .nullable(),
+  /** Cómo nos conoció el alumno (respuesta 22) */
+  howHeard: z.enum(HOW_HEARD_CHANNELS).nullable().optional(),
   /**
    * Foto de perfil. initials o una foto propia recortada en círculo y comprimida. generated son los
    * avatares médicos de D-068, que B2 quitó. Se sigue aceptando para leer cuentas viejas y se ve

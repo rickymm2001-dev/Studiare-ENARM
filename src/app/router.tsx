@@ -1,6 +1,6 @@
 // Rutas de las pantallas, todas con carga diferida. Las 33 tienen componente propio; ya no hay esqueletos.
 import type { ComponentType } from 'react';
-import { createBrowserRouter, type RouteObject } from 'react-router';
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
 import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
@@ -75,6 +75,15 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
 };
 
 function routeFor(key: ScreenKey): RouteObject {
+  if (key === 'profile') {
+    return { path: SCREENS.profile.path, element: <Navigate to={SCREENS.settings.path} replace /> };
+  }
+  if (key === 'planner') {
+    return { path: SCREENS.planner.path, element: <Navigate to={SCREENS.progress.path} replace /> };
+  }
+  if (key === 'rewards') {
+    return { path: SCREENS.rewards.path, element: <Navigate to={SCREENS.progress.path} replace /> };
+  }
   const load = BUILT_SCREENS[key];
   if (!load) return { path: SCREENS[key].path, element: <ScreenPlaceholder screenKey={key} /> };
   return {

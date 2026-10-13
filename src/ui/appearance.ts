@@ -20,6 +20,8 @@ export const AppearanceSchema = z.object({
   confetti: z.boolean().catch(true),
   /** Sonidos al ganar y del Pomodoro */
   sounds: z.boolean().catch(true),
+  /** Modo enfoque que oculta tablas, XP, nivel, racha y retos en toda la app (respuesta 82) */
+  focusMode: z.boolean().catch(false),
 });
 export type Appearance = z.infer<typeof AppearanceSchema>;
 

@@ -512,7 +512,7 @@ function StudyForm({
 }
 
 /** Estado de la cuenta en la nube. Solo aparece si Supabase está configurado (D-075) */
-function CloudStatus() {
+export function CloudStatus() {
   const state = useCloud((store) => store.state);
   if (state.status === 'off') return null;
   const text =
