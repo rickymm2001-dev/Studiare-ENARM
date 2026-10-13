@@ -290,4 +290,10 @@ test('un examen sin terminar aparta las preguntas del día del plan Gratis', asy
   await expect(practice.getByText(t.simulator.limitUsedByExam)).toBeVisible({ timeout: 60_000 });
   await expect(practice.getByRole('link', { name: t.simulator.goToOpenExam })).toBeVisible();
   await expect(practice.getByRole('button', { name: t.simulator.start })).toHaveCount(0);
+
+  // La semana de Progreso tampoco propone más práctica de la que permite el plan Gratis
+  await page.goto(SCREENS.progress.path);
+  const week = page.getByRole('region', { name: t.planner.weekTitle });
+  await expect(week.getByRole('list', { name: t.weekPlan.daysLabel })).toBeVisible();
+  await expect(week.getByText(t.planner.limitNote(20))).toBeVisible();
 });

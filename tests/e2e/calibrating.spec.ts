@@ -54,6 +54,14 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       ),
   ).toBeVisible();
 
+  // La semana de Progreso. Los minutos de estudio calibran hasta tener 3 días de estudio
+  await page.goto(SCREENS.progress.path);
+  await expect(
+    page
+      .getByRole('region', { name: t.planner.minutesTitle })
+      .getByText(t.states.calibrating.remaining(3, t.planner.minutesUnit)),
+  ).toBeVisible();
+
   // Simular. Dirigir las opciones a mis trampas calibra y no ofrece nada hasta tener errores
   // etiquetados. El banco demo se siembra la primera vez que se entra y puede tardar
   await page.goto(SCREENS.simulatorSetup.path);
