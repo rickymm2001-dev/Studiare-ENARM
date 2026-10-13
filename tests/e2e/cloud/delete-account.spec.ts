@@ -7,7 +7,8 @@ import { enterWithLink, expect, test } from '../support/cloudFixtures';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
 const EMAIL = 'ana@ejemplo.mx';
-const ACCOUNT_SECTION = `${SCREENS.settings.path}?seccion=account`;
+// Exportar y borrar viven en Privacidad, en la página única de Configuración (B3 del plan del cambio)
+const ACCOUNT_SECTION = `${SCREENS.settings.path}#privacidad`;
 
 test.describe('Borrar la cuenta con la nube', () => {
   test('elimina la cuenta en la nube y los datos de este dispositivo', async ({ page, cloud }) => {

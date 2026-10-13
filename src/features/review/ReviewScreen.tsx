@@ -11,7 +11,6 @@ import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { draftOf, isFromOutline } from '@/data/usecases/manualDecks';
 import { setSuspended } from '@/data/usecases/organize';
-import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
@@ -71,6 +70,8 @@ import { ReviewCounters } from './ReviewCounters';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
+import { useReviewSettingsPanel } from './settings/panelParam';
+import { ReviewSettingsButton, ReviewSettingsDialog } from './settings/ReviewSettingsDialog';
 import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
 import { useCardTimer } from './useCardTimer';
@@ -120,6 +121,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   }, [api.repos]);
   const catalog = useDeckCatalog();
   const [selection, setSelection] = useState<ReviewSelection | null>(null);
+  // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
+  const panel = useReviewSettingsPanel();
   if (events === undefined || content === undefined || catalog === undefined)
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
@@ -130,6 +133,21 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     content.cards.filter((card) => followed.has(card.deckId) && !suspended.has(card.id)),
     noteById,
   );
+  const settingsButton = (
+    <ReviewSettingsButton
+      onOpen={() => {
+        panel.open();
+      }}
+    />
+  );
+  const settingsPanel = (
+    <ReviewSettingsDialog
+      session={session}
+      focus={panel.focus}
+      onClose={panel.close}
+      dailyLoad={<DailyLoadPanel session={session} cards={cards} events={events} />}
+    />
+  );
   // Con una sesión en curso no se cambia de pantalla aunque suspendas la última tarjeta activa
   if (cards.length === 0 && selection === null) {
     // Si sigues mazos pero todo está suspendido, el aviso lleva a Explorar y no a Mazos
@@ -138,8 +156,13 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     );
     return (
       <>
-        <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <ScreenHeader
+          title={t.screens.review.title}
+          description={t.screens.review.description}
+          actions={settingsButton}
+        />
         <StudyTabs />
+        {settingsPanel}
         <Card aria-labelledby="sin-mazos">
           <CardHeader>
             <CardTitle id="sin-mazos">
@@ -198,8 +221,13 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   if (selection === null) {
     return (
       <>
-        <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <ScreenHeader
+          title={t.screens.review.title}
+          description={t.screens.review.description}
+          actions={settingsButton}
+        />
         <StudyTabs />
+        {settingsPanel}
         {hasScheduled ? (
           <FeatureGate userId={session.user.id} feature="overdueTools">
             <OverdueTools session={session} cards={cards} events={events} />
@@ -215,8 +243,9 @@ function ReviewLoader({ session }: { session: ReadySession }) {
             reviewsPerDay: session.settings.reviewsPerDay,
             unlimitedNewCards: session.settings.unlimitedNewCards,
           }}
-          limitsExtra={<DailyLoadPanel session={session} cards={cards} events={events} />}
-          onSaveLimits={(patch) => updateProfile(api, session.user, { settings: patch })}
+          onOpenSettings={() => {
+            panel.open();
+          }}
           countFor={(candidate) => queueFor(candidate).length}
           countersFor={(candidate) =>
             remainingCounters(queueFor(candidate), (cardId) => cardStates.get(cardId) ?? null)
@@ -231,25 +260,34 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     );
   }
   return (
-    <ReviewSession
-      key={JSON.stringify([selection.mode, [...selection.decks], [...selection.topics]])}
-      session={session}
-      cards={cards.filter((card) => inSelection(card, topicOfCard.get(card.id) ?? null, selection))}
-      mode={selection.mode}
-      notes={content.notes}
-      editableDecks={
-        new Map(
-          content.decks
-            .filter((deck) => isEditableDeck(deck, session.user.id))
-            .map((deck) => [deck.id, deck]),
-        )
-      }
-      deckNames={deckNames}
-      initialEvents={events}
-      onChangeSelection={() => {
-        setSelection(null);
-      }}
-    />
+    <>
+      {settingsPanel}
+      <ReviewSession
+        key={JSON.stringify([selection.mode, [...selection.decks], [...selection.topics]])}
+        session={session}
+        settingsOpen={panel.focus !== null}
+        onOpenSettings={() => {
+          panel.open('pomodoro');
+        }}
+        cards={cards.filter((card) =>
+          inSelection(card, topicOfCard.get(card.id) ?? null, selection),
+        )}
+        mode={selection.mode}
+        notes={content.notes}
+        editableDecks={
+          new Map(
+            content.decks
+              .filter((deck) => isEditableDeck(deck, session.user.id))
+              .map((deck) => [deck.id, deck]),
+          )
+        }
+        deckNames={deckNames}
+        initialEvents={events}
+        onChangeSelection={() => {
+          setSelection(null);
+        }}
+      />
+    </>
   );
 }
 
@@ -303,6 +341,8 @@ function intervalLabel(state: FsrsCardState, now: Date): string {
 
 function ReviewSession({
   session,
+  settingsOpen,
+  onOpenSettings,
   cards,
   mode,
   notes,
@@ -312,6 +352,10 @@ function ReviewSession({
   onChangeSelection,
 }: {
   session: ReadySession;
+  /** Con Ajustes del repaso abiertos los atajos del repaso no responden */
+  settingsOpen: boolean;
+  /** Abre Ajustes del repaso en la parte del Pomodoro, desde el engrane de su píldora */
+  onOpenSettings: () => void;
   cards: CardEntity[];
   mode: ReviewMode;
   notes: Note[];
@@ -588,7 +632,11 @@ function ReviewSession({
   }
   useShortcuts(
     keys,
-    card !== undefined && step !== 'done' && !study.paused && editingLeech === null,
+    card !== undefined &&
+      step !== 'done' &&
+      !study.paused &&
+      editingLeech === null &&
+      !settingsOpen,
   );
 
   const sessionActions = (
@@ -606,7 +654,7 @@ function ReviewSession({
         <Shuffle aria-hidden />
         <span className="hidden sm:inline">{t.reviewSetup.change}</span>
       </Button>
-      <PomodoroPill session={session} />
+      <PomodoroPill session={session} onOpenSettings={onOpenSettings} />
     </>
   );
   const extras = (

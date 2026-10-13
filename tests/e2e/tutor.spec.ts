@@ -5,6 +5,7 @@
 import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { t } from '@/i18n/es-MX';
+import { generateDemo } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 import { openFromMenu } from './support/navigation';
 
@@ -42,11 +43,8 @@ test('con la demo salen hipótesis con evidencia, se responden, el informe trae 
   page,
 }) => {
   test.setTimeout(240_000);
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-  const panel = page.getByRole('region', { name: t.demoData.title });
-  await panel.getByRole('button', { name: t.demoData.generate }).click();
-  await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 150_000 });
+  // La demostración se genera en Datos de demostración del admin (B3 del plan del cambio, 5.4)
+  await generateDemo(page);
 
   await page.goto(SCREENS.tutor.path);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.tutor.title);

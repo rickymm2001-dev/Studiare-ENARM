@@ -1,6 +1,6 @@
-// Campos de Configuración para la carga diaria (D-085). El temporizador de tarjeta y los días fáciles
-// viven aquí para que el formulario de Estudio no crezca más. Reciben su valor y avisan cada cambio,
-// el guardado lo hace el formulario.
+// Campos de Ajustes del repaso para la carga diaria (D-085, B3 del plan del cambio). El temporizador
+// de tarjeta y los días fáciles viven aquí para que el formulario no crezca más. Reciben su valor y
+// avisan cada cambio, el guardado lo hace el formulario.
 import { EASY_DAY_LEVELS, WEEKDAY_KEYS, type WeekdayKey } from '@/engines/easyDays';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';

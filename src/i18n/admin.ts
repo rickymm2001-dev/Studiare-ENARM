@@ -117,8 +117,7 @@ export const adminText = {
     notDemo: {
       title: 'Estás en Mi cuenta',
       description:
-        'Los datos de demostración viven en una base aparte que nunca se mezcla con la tuya. Cambia a la base de demostración para generarlos, borrarlos o ajustarlos.',
-      go: 'Ir a Cuenta y datos',
+        'Los datos de demostración viven en una base aparte que nunca se mezcla con la tuya. Cambia arriba a la base de demostración para generarlos, borrarlos o ajustarlos.',
     },
     stats: {
       label: 'Datos de demostración en cifras',

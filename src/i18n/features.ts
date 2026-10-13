@@ -28,9 +28,6 @@ export const featureText = {
     signedOutBody: 'Elige tu perfil o crea uno nuevo. Todo se guarda solo en este dispositivo.',
     goToWelcome: 'Ir a la bienvenida',
     demoEmptyTitle: 'La demostración está vacía',
-    demoEmptyBody:
-      'Genera los datos de demostración desde Configuración para ver esta pantalla con datos simulados.',
-    goToProfile: 'Ir a Configuración',
     signOut: 'Cerrar sesión',
     simulatedLogin:
       'Inicio de sesión simulado. Sin la nube conectada no hay contraseña ni servidor, y entras con la cuenta de este navegador.',
@@ -278,8 +275,6 @@ export const featureText = {
     saved: 'Ajustes guardados',
   },
   settings: {
-    accountTitle: 'Tu cuenta',
-    accountDescription: (alias: string) => `Sesión abierta como ${alias}.`,
     save: 'Guardar',
     saved: 'Guardado',
     goalsTitle: 'Metas y repaso',
@@ -287,14 +282,6 @@ export const featureText = {
     unsaved: 'Tienes cambios sin guardar.',
     discard: 'Descartar',
     discarded: 'Volvimos a lo que tenías guardado.',
-    sections: {
-      study: 'Estudio',
-      appearance: 'Apariencia',
-      pomodoro: 'Pomodoro',
-      privacy: 'Privacidad',
-      account: 'Cuenta',
-    },
-    sectionsLabel: 'Secciones de Configuración',
     dailyTitle: 'Metas del día',
     advanced: 'Opciones avanzadas del repaso',
     advancedSummary: (retention: number, maxDays: number | null) =>
@@ -436,8 +423,6 @@ export const featureText = {
     accountDeleteAction: 'Eliminar mi cuenta para siempre',
     cancel: 'Cancelar',
     deleted: 'Tus datos se borraron.',
-    subscriptionTitle: 'Suscripción',
-    subscriptionLink: 'Ver planes',
   },
   billing: {
     simulatedNotice:
@@ -1625,11 +1610,8 @@ export const featureText = {
       use: 'Usar foto',
       cancel: 'Cancelar',
     },
-    save: 'Guardar cambios',
-    saved: 'Datos guardados.',
     noAccount:
       'Este perfil se creó antes de las cuentas con correo. Agrega tu correo para guardar tus datos.',
-    addEmail: 'Agregar correo',
   },
   profileCard: {
     levelLine: (level: number, title: string) => `Nivel ${level} · ${title}`,
@@ -1823,11 +1805,6 @@ export const featureText = {
     filtersSummary: (decks: number, topics: number, of: number) =>
       `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
     limits: 'Límites de hoy',
-    limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
-    limitsSummaryUnlimited: (reviews: number) => `Nuevas sin límite · ${reviews} repasos`,
-    limitsHint:
-      'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
-    limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',
     untagged: 'Incluir tarjetas sin subespecialidad',
     untaggedHint: 'Algunas notas no traen su subespecialidad. Entran con su mazo si lo marcaste.',
     start: (n: number) =>

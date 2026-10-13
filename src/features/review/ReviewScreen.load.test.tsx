@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // Carga diaria en Repasar (D-085, filas 5, 6 y 14). Atrasos con deshacer, perfil guía, sugerencia de
-// tarjetas nuevas, sin límite y las banderas de acceso por función.
+// tarjetas nuevas, sin límite y las banderas de acceso por función. El perfil guía, la sugerencia y
+// el límite de nuevas viven en Ajustes del repaso (B3 del plan del cambio).
 import 'fake-indexeddb/auto';
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -25,15 +26,16 @@ afterEach(async () => {
   app = undefined;
 });
 
-/** Abre el bloque de límites de hoy, el que trae el perfil guía y la sugerencia de nuevas */
-async function openLimits(typing: ReturnType<typeof userEvent.setup>) {
+/** Abre Ajustes del repaso, que trae los límites, el perfil guía y la sugerencia de nuevas */
+async function openSettings(typing: ReturnType<typeof userEvent.setup>) {
   await typing.click(
-    await screen.findByText(
-      t.reviewSetup.limits,
-      { selector: 'summary span' },
+    await screen.findByRole(
+      'button',
+      { name: t.settingsPage.reviewSettings.open },
       { timeout: 15_000 },
     ),
   );
+  return screen.findByRole('dialog', { name: t.settingsPage.reviewSettings.title });
 }
 
 const rescheduleEvents = async (api: RenderedApp['api'], userId: string) =>
@@ -98,7 +100,7 @@ describe('atrasos en Repasar', () => {
   });
 });
 
-describe('carga diaria en los límites de hoy', () => {
+describe('carga diaria en Ajustes del repaso', () => {
   it('el perfil guía muestra qué cambia y lo aplica con un botón', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.review.path, {
@@ -106,8 +108,8 @@ describe('carga diaria en los límites de hoy', () => {
         await seedOverdueCards(api, user, { overdue: 2, unseen: 1 });
       },
     });
-    await openLimits(typing);
-    const guide = await screen.findByRole('region', { name: t.dailyLoad.guideTitle });
+    const dialog = await openSettings(typing);
+    const guide = await within(dialog).findByRole('region', { name: t.dailyLoad.guideTitle });
     // La retención de fábrica es 90 y el tope es 21, así que el tope sí cambia
     expect(within(guide).getByText(/Intervalo máximo pasa de 21 días a/)).toBeInTheDocument();
     await typing.click(within(guide).getByRole('button', { name: t.dailyLoad.guideApply }));
@@ -127,8 +129,10 @@ describe('carga diaria en los límites de hoy', () => {
         await seedOverdueCards(api, user, { overdue: 2, unseen: 8, daysLate: 0 });
       },
     });
-    await openLimits(typing);
-    const section = await screen.findByRole('region', { name: t.dailyLoad.suggestionTitle });
+    const dialog = await openSettings(typing);
+    const section = await within(dialog).findByRole('region', {
+      name: t.dailyLoad.suggestionTitle,
+    });
     await typing.click(within(section).getByRole('button', { name: t.dailyLoad.calculate }));
     // Hay 8 nuevas por ver, la sugerencia no pasa de ahí
     const use = await within(section).findByRole('button', { name: t.dailyLoad.use(8) });
@@ -139,9 +143,13 @@ describe('carga diaria en los límites de hoy', () => {
     expect(await within(section).findByText(t.dailyLoad.applied)).toBeInTheDocument();
     const saved = await app.api.repos.users.get(app.user.id);
     expect(saved?.settings.newCardsPerDay).toBe(8);
-    // El campo de arriba ya muestra el número nuevo y no queda un borrador viejo por guardar
-    expect(screen.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toHaveValue(8);
-    expect(screen.getByRole('button', { name: t.settings.saveChanges })).toBeDisabled();
+    // El campo del mismo panel ya muestra el número nuevo y no queda un borrador viejo por guardar
+    await waitFor(() => {
+      expect(
+        within(dialog).getByRole('spinbutton', { name: t.settings.newCardsPerDay }),
+      ).toHaveValue(8);
+    });
+    expect(within(dialog).queryByRole('button', { name: t.settings.saveChanges })).toBeNull();
   });
 
   it('sin minutos de estudio pide ponerlos en Progreso, donde quedó lo que servía de Plan', async () => {
@@ -152,8 +160,10 @@ describe('carga diaria en los límites de hoy', () => {
         await seedOverdueCards(api, user, { overdue: 2, unseen: 3 });
       },
     });
-    await openLimits(typing);
-    const section = await screen.findByRole('region', { name: t.dailyLoad.suggestionTitle });
+    const dialog = await openSettings(typing);
+    const section = await within(dialog).findByRole('region', {
+      name: t.dailyLoad.suggestionTitle,
+    });
     await typing.click(within(section).getByRole('button', { name: t.dailyLoad.calculate }));
     expect(await within(section).findByText(t.dailyLoad.needsMinutes)).toBeInTheDocument();
     expect(within(section).getByRole('link', { name: t.dailyLoad.goToPlan })).toHaveAttribute(
@@ -174,14 +184,24 @@ describe('carga diaria en los límites de hoy', () => {
     expect(
       await screen.findByRole('button', { name: t.reviewSetup.start(2) }, { timeout: 10_000 }),
     ).toBeInTheDocument();
-    await openLimits(typing);
-    const section = await screen.findByRole('region', { name: t.dailyLoad.suggestionTitle });
+    const dialog = await openSettings(typing);
+    // Quitar el límite está una sola vez, junto al campo de nuevas, y se guarda con la barra
     await typing.click(
-      within(section).getByRole('checkbox', { name: t.settings.unlimitedNewCards }),
+      within(dialog).getByRole('checkbox', { name: t.settings.unlimitedNewCards }),
     );
+    expect(
+      within(dialog).getByRole('spinbutton', { name: t.settings.newCardsPerDay }),
+    ).toBeDisabled();
+    await typing.click(within(dialog).getByRole('button', { name: t.settings.saveChanges }));
+    const section = within(dialog).getByRole('region', { name: t.dailyLoad.suggestionTitle });
     expect(await within(section).findByText(t.dailyLoad.unlimitedOn)).toBeInTheDocument();
+    expect(
+      within(section).queryByRole('checkbox', { name: t.settings.unlimitedNewCards }),
+    ).toBeNull();
+    await typing.click(
+      within(dialog).getByRole('button', { name: t.settingsPage.reviewSettings.close }),
+    );
     expect(await screen.findByRole('button', { name: t.reviewSetup.start(6) })).toBeInTheDocument();
-    expect(screen.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toBeDisabled();
     const saved = await app.api.repos.users.get(app.user.id);
     expect(saved?.settings.unlimitedNewCards).toBe(true);
     // El número guardado no se pierde, al apagar el modo vuelve a regir

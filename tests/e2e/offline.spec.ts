@@ -4,6 +4,7 @@
 // funciones de IA dicen que necesitan conexión y lo demás sigue.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { enterAs } from './support/b1';
 import { expect, signUp, test } from './support/fixtures';
 
 // Una pantalla de cada área, pensada para que su archivo no se haya bajado antes de cortar la red
@@ -42,8 +43,10 @@ test('sin conexión abre pantallas que nunca se habían visitado y la IA avisa q
     await expect(page.getByText(t.offlineBanner)).toBeVisible();
   }
 
-  // Configuración, Cuenta, dice que la IA necesita conexión y que lo demás sigue
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  // El modo de la IA, en Datos de demostración del admin, dice que la IA necesita conexión y que lo
+  // demás sigue (B3 del plan del cambio, 5.4). Cambiar de rol también funciona sin red
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.demoData.path);
   await expect(page.getByText(t.ai.detail.offline)).toBeVisible();
   await expect(page.getByText(t.ai.badge.offline)).toBeVisible();
 

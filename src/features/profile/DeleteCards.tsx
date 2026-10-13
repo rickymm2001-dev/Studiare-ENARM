@@ -67,7 +67,9 @@ function Panel({ id, title, description, children }: PanelProps) {
   return (
     <Card aria-labelledby={id}>
       <CardHeader>
-        <CardTitle id={id}>{title}</CardTitle>
+        <CardTitle as="h3" id={id}>
+          {title}
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       {children}
