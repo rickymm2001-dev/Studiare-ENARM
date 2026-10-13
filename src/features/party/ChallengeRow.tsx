@@ -74,7 +74,7 @@ export function ChallengeRow({
       })) {
         await api.recordEvent(createEvent('xp_awarded', award, ctx));
       }
-      celebrate('badge');
+      celebrate('challenge');
     } finally {
       claiming.current = false;
       setBusy(false);

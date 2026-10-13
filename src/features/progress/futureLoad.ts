@@ -1,8 +1,8 @@
 // Carga futura de repasos (7.1, pantalla 10). Proyecta cuántos repasos y tarjetas nuevas tocan en
 // los próximos 30 o 60 días con la configuración actual del alumno. Es la misma proyección y los
-// mismos límites que usa el planificador, así las cifras coinciden. Supone que el alumno responde
-// Bien en cada repaso y que introduce las nuevas al ritmo de su límite diario, y lo dice. Sin React
-// ni Dexie, para probarlo con tarjetas armadas a mano.
+// mismos límites que usa el plan de la semana, así las cifras coinciden. Supone que el alumno
+// responde Bien en cada repaso y que introduce las nuevas al ritmo de su límite diario, y lo dice.
+// Sin React ni Dexie, para probarlo con tarjetas armadas a mano.
 import {
   projectLoad,
   type DayLoad,
@@ -10,7 +10,7 @@ import {
   type ReviewedToday,
   type SchedulerConfig,
 } from '@/engines/fsrs';
-import { applyLimits } from '../planner/planView';
+import { applyLimits } from './planView';
 
 export const LOAD_HORIZONS = [30, 60] as const;
 export type LoadHorizon = (typeof LOAD_HORIZONS)[number];

@@ -6,9 +6,6 @@ import { adminText } from '@/i18n/admin';
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
 import type { Page } from '@playwright/test';
 
-/** La base activa vive en Configuración, en la sección Cuenta y datos */
-const ACCOUNT_SETTINGS = `${SCREENS.settings.path}?seccion=account`;
-
 async function becomeAdmin(page: Page) {
   await page.goto(SCREENS.roleSelector.path);
   await page.getByRole('radio', { name: new RegExp(t.roles.names.admin) }).click();
@@ -27,6 +24,9 @@ test('costos de IA. Sin llamadas dice que no hay y con el proxy simulado lee el 
   await expect(page.getByText(adminText.adminCosts.empty.title)).toBeVisible();
   const today = page.getByRole('region', { name: adminText.adminCosts.today.title });
   await expect(today.getByText(adminText.adminCosts.today.mockNote)).toBeVisible();
+  // El modo de la IA va aquí y siempre se ve, con o sin las herramientas de demostración (B3)
+  const ai = page.getByRole('region', { name: t.ai.cardTitle });
+  await expect(ai.getByText(t.ai.badge.mock)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
 
@@ -105,19 +105,19 @@ test('configuración. El presupuesto diario de IA se cambia en el proxy y queda 
   await expect(restored.getByText(adminText.adminConfig.aiForm.saved)).toBeVisible();
 });
 
-test('datos de demostración. En Mi cuenta pide cambiar de base y en la demo genera pocos alumnos y borra todo', async ({
+test('datos de demostración. En Mi cuenta pide cambiar de base ahí mismo y en la demo genera pocos alumnos y borra todo', async ({
   page,
 }) => {
   test.setTimeout(240_000);
   await becomeAdmin(page);
   await page.goto(SCREENS.demoData.path);
   await expect(page.getByText(adminText.adminDemo.notDemo.title)).toBeVisible();
-
-  await page.goto(ACCOUNT_SETTINGS);
+  // El selector de base pasó aquí desde Configuración (B3 del plan, 5.4). El modo de la IA no es de
+  // la demostración y vive en Costos de IA
+  await expect(page.getByRole('region', { name: t.ai.cardTitle })).toHaveCount(0);
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   await expect(page.getByText(t.database.storedIn('enarm_demo'))).toBeVisible();
 
-  await page.goto(SCREENS.demoData.path);
   await expect(
     page.getByRole('heading', { level: 1, name: adminText.adminDemo.title }),
   ).toBeVisible();

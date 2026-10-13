@@ -1,5 +1,5 @@
 // Controles del Pomodoro (9.2). Registra cada fase como evento con los minutos reales, que usan la
-// racha, el heatmap y el planificador. Al terminar una fase avisa con sonido, confeti pequeño,
+// racha, el heatmap y la semana de Progreso. Al terminar una fase avisa con sonido, confeti pequeño,
 // aviso en la página y, con permiso, notificación, y deja lista la fase siguiente sin arrancarla.
 import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';

@@ -1,11 +1,14 @@
-// Datos de demostración (pantalla 24, 11.2, 11.3). El admin genera, borra y ajusta los alumnos simulados
-// y regenera al alumno de la demostración. Todo ocurre en la base de demostración, que es aparte de
-// Mi cuenta y nunca se mezcla con ella. Borrar y regenerar piden confirmación porque no se deshacen.
+// Datos de demostración (pantalla 24, 11.2, 11.3). El admin cambia entre la base real y la de
+// demostración y, en la demostración, genera, borra y ajusta los alumnos simulados y regenera al
+// alumno de la demostración. Todo ocurre en la base de demostración, que es aparte de Mi cuenta y
+// nunca se mezcla con ella. Borrar y regenerar piden confirmación porque no se deshacen. El selector de
+// base vivía en Configuración y pasó aquí en B3 del plan del cambio (5.4). Todo depende de la bandera
+// demoTools, que en producción está apagada. El modo de la IA no es de la demostración y se ve
+// siempre en Costos de IA.
 import { FlaskConical, RefreshCw, Sparkles, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { screenPath } from '@/app/screens';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import {
@@ -24,6 +27,7 @@ import { SimulatedDataLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { readAdjustments, type DemoFields } from './demoAdjust';
+import { DatabaseCard } from './DemoToolsCards';
 import { formatInt } from './format';
 
 type Phase =
@@ -55,19 +59,25 @@ export function DemoDataScreen() {
   });
   const header = <ScreenHeader title={text.title} description={t.screens.demoData.description} />;
 
-  if (!demo) {
+  if (!isFeatureEnabled('demoTools')) {
     return (
       <>
         {header}
         <EmptyState
-          title={text.notDemo.title}
-          description={text.notDemo.description}
-          action={
-            <Button asChild variant="secondary">
-              <Link to={`${screenPath('settings')}?seccion=account`}>{text.notDemo.go}</Link>
-            </Button>
-          }
+          title={t.settingsPage.demoTools.off.title}
+          description={t.settingsPage.demoTools.off.description}
         />
+      </>
+    );
+  }
+  // La base activa, arriba en la demostración y en Mi cuenta
+  const tools = <DatabaseCard />;
+  if (!demo) {
+    return (
+      <>
+        {header}
+        {tools}
+        <EmptyState title={text.notDemo.title} description={text.notDemo.description} />
       </>
     );
   }
@@ -75,6 +85,7 @@ export function DemoDataScreen() {
     return (
       <>
         {header}
+        {tools}
         <LoadingState />
       </>
     );
@@ -104,6 +115,7 @@ export function DemoDataScreen() {
   return (
     <>
       {header}
+      {tools}
       <StatPanel label={text.stats.label}>
         <StatCell
           icon={<FlaskConical />}

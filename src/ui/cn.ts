@@ -36,6 +36,7 @@ const twMerge = extendTailwindMerge({
         'warning',
         'warning-soft',
         'danger',
+        'danger-hover',
         'danger-soft',
         'danger-fg',
         'demo',

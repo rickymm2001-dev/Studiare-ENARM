@@ -1,5 +1,5 @@
-// Estado de la sincronización entre dispositivos, dentro de la tarjeta de la cuenta en la nube
-// (D-095). Dice cuándo fue la última, por qué falló si falló, y deja sincronizar al momento.
+// Estado de la sincronización entre dispositivos, en Tu sesión de Perfil (D-095). Dice cuándo fue la
+// última, por qué falló si falló, y deja sincronizar al momento. Sin caja gris propia (H06).
 import { RefreshCw } from 'lucide-react';
 import { useSyncStatus } from '@/app/syncState';
 import { t } from '@/i18n/es-MX';
@@ -11,7 +11,7 @@ export function SyncStatus() {
   const text = t.cloud.sync;
   const message = state.running ? text.running : syncMessage(state.outcome, state.lastSyncAt);
   return (
-    <div className="mt-3 flex flex-col gap-2 rounded-md bg-muted p-3 text-sm">
+    <div className="flex flex-col gap-2 border-t border-line pt-3 text-sm">
       <p className="font-semibold">{text.title}</p>
       <p className="text-fg-muted" role="status" aria-live="polite">
         {message}

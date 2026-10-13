@@ -1,18 +1,24 @@
 // Práctica del simulador. Descarte de opciones (D-080) y flujo práctico (D-087). Por defecto la
 // retroalimentación llega al final de la sesión y cada pregunta lleva a la siguiente, con teclado,
-// doble clic y sin la pregunta de confianza. Quien lo prefiere la ve después de cada pregunta.
+// doble clic y sin la pregunta de confianza. Quien lo prefiere la ve después de cada pregunta, y lo
+// elige en Ajustes del repaso, su único lugar (B3 del plan del cambio).
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { setPracticeFeedback } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 /** Abre la configuración de la práctica y empieza una de cinco preguntas */
 async function startPractice(page: Page, feedback?: 'end' | 'each') {
+  if (feedback) await setPracticeFeedback(page, feedback);
   await page.goto(SCREENS.simulatorSetup.path);
   const setup = page.getByRole('region', { name: t.simulator.setupTitle });
   await setup.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  // Simular solo dice cuándo llega la retroalimentación
   if (feedback) {
-    await setup.getByRole('combobox', { name: t.settings.practiceFeedback }).selectOption(feedback);
+    await expect(
+      setup.getByText(t.settingsPage.reviewSettings.practiceFeedback(feedback === 'each')),
+    ).toBeVisible();
   }
   const start = setup.getByRole('button', { name: t.simulator.start });
   // El banco demo se siembra la primera vez que se entra y puede tardar
@@ -26,7 +32,7 @@ test('descartar opciones en la práctica, con la explicación de qué se podía 
 }) => {
   test.setTimeout(180_000);
   await signUp(page);
-  // Quien quiere ver la retroalimentación después de cada pregunta lo elige en Simular
+  // Quien quiere ver la retroalimentación después de cada pregunta lo elige en Ajustes del repaso
   await startPractice(page, 'each');
   await expectNoSeriousA11yViolations(page);
 
@@ -125,7 +131,8 @@ test('la práctica se contesta con el teclado y la retroalimentación llega al f
   if ((await first.locator(':scope > details').getAttribute('open')) === null) {
     await first.locator('summary').click();
   }
-  await expect(first.getByText(t.simulator.explanation)).toBeVisible();
+  // El título exacto, porque algunas preguntas dicen "explicación" dentro de su propio texto
+  await expect(first.getByText(t.simulator.explanation, { exact: true })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
 

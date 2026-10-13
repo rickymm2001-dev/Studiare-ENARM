@@ -1,5 +1,6 @@
 // Acciones del tutor que cambian algo (8.2). Las demás solo llevan a otra pantalla. Cada una es un
-// ajuste pequeño del propio alumno, que él puede deshacer en Configuración.
+// ajuste pequeño del propio alumno, que él puede deshacer en Ajustes del repaso, en Repasar, donde
+// viven el resaltado de negaciones y el Pomodoro desde B3 del plan del cambio.
 import type { DataApi } from '@/data/context';
 import type { User } from '@/data/schemas/people';
 import { updateProfile } from '@/data/usecases/profile';

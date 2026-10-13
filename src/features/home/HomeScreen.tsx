@@ -25,13 +25,13 @@ import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { LandingScreen } from '../landing/LandingScreen';
 import { PartyWidget } from '../party/PartyWidget';
-import { MissionList } from '../rewards/parts';
-import { useRewards } from '../rewards/useRewards';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useAccount } from '../shared/useAccount';
 import { useActivePlan } from '../shared/useActivePlan';
 import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import { useUserEvents } from '../shared/useUserEvents';
+import { MissionList } from './missions/MissionList';
+import { useMissions } from './missions/useMissions';
 import { ReviewLoadCard } from './sections/ReviewLoadCard';
 import { buildSnapshot, type Snapshot } from './snapshot';
 import { BiasPatternWidget, WeakTopicsWidget } from './widgets/AnalysisWidgets';
@@ -287,11 +287,11 @@ function PlanCard({ userId }: { userId: string }) {
 }
 
 function MissionsSection({ session }: { session: ReadySession }) {
-  const rewards = useRewards(session);
+  const missions = useMissions(session);
   return (
     <SideSection title={t.widgets.names.missions}>
-      {rewards ? (
-        <MissionList missions={rewards.missions.daily} label={t.widgets.names.missions} />
+      {missions ? (
+        <MissionList missions={missions} label={t.widgets.names.missions} />
       ) : (
         // Las tres misiones del día, cada una con su línea y su barra (H04)
         <SkeletonRows

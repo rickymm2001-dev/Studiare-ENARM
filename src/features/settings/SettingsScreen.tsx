@@ -1,173 +1,165 @@
-// Configuración (pantalla 27, D-065). Separada de Perfil. En secciones con pestañas (D-078). Estudio
-// con metas y repaso, Apariencia con tema y estilo, Pomodoro, Privacidad con los consentimientos y el
-// puntaje oficial, y Cuenta con la base activa, el modo de IA, exportar y borrar.
-import { FlaskConical, UserRound } from 'lucide-react';
-import { Tabs } from 'radix-ui';
-import { useSearchParams } from 'react-router';
-import { AiModeBadge } from '@/ai/AiModeBadge';
-import { useAiStatus } from '@/ai/useAiStatus';
-import { usePreferences } from '@/app/preferences';
+// Configuración (pantalla 27, D-065). Una sola página con tres secciones, Perfil, Apariencia y
+// Privacidad, cada una con su subtítulo y una línea entre ellas, sin pestañas (B3 del plan del
+// cambio, comentarios 5, 6 y 16). Las anclas #perfil, #apariencia y #privacidad llevan a cada una y
+// los enlaces viejos con ?seccion= siguen funcionando. Estudio y Pomodoro pasaron a Ajustes del
+// repaso, en Repasar. La base de demostración y su panel pasaron a Datos de demostración del admin y el
+// modo de la IA a Costos de IA (5.4). Sin sesión o con la demostración vacía quedan el aviso de las
+// demás pantallas y Apariencia.
+import { LogIn } from 'lucide-react';
+import { useEffect, type ReactNode } from 'react';
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { useRepositories } from '@/data/context';
-import { DATABASE_NAMES } from '@/data/databases';
-import { useLiveData } from '@/data/hooks';
+import { screenPath } from '@/app/screens';
+import { useSession } from '@/app/session';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
+import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SimulatedDataLabel } from '@/ui/components/labels';
-import { RadioCards } from '@/ui/components/radio-cards';
-import { segmentedList, segmentedTabItem } from '@/ui/components/segmented-classes';
-import { useSession } from '@/app/session';
-import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
+import { scrollToElement } from '@/ui/scroll';
+import { LoadingState } from '@/ui/states/states';
+import { AccountDataCard } from '../profile/AccountDataCard';
+import { PlanCard } from '../profile/PlanCard';
+import { SessionCard } from '../profile/SessionCard';
+import { useSubscription } from '../profile/useSubscription';
+import { DemoEmptyCard } from '../shared/DemoEmptyCard';
+import type { ReadySession } from '../shared/RequireSession';
+import { useAccount } from '../shared/useAccount';
 import { AppearanceSettings } from './AppearanceSettings';
 import { PrivacySection } from './PrivacySection';
-import { DemoDataPanel } from './DemoDataPanel';
-
-const DATABASE_OPTIONS = [
-  {
-    value: 'real',
-    label: t.database.real,
-    description: t.database.realDescription,
-    icon: <UserRound />,
-  },
-  {
-    value: 'demo',
-    label: t.database.demo,
-    description: t.database.demoDescription,
-    icon: <FlaskConical />,
-  },
-] as const;
-
-const SECTIONS = ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const;
-type SectionKey = (typeof SECTIONS)[number];
-const isSection = (value: string | null): value is SectionKey =>
-  SECTIONS.includes(value as SectionKey);
+import { legacyRedirect, requestedSection, type SettingsSection } from './sections';
 
 export function SettingsScreen() {
-  const database = usePreferences((state) => state.database);
-  const setDatabase = usePreferences((state) => state.setDatabase);
-  const aiStatus = useAiStatus();
   const session = useSession();
-  // La sección abierta vive en la dirección, para volver a ella o enlazarla (D-078)
-  const [params, setParams] = useSearchParams();
-  const requested = params.get('seccion');
-  const ready = session.status === 'ready' ? session : null;
-  const available = SECTIONS.filter(
-    (key) => ready !== null || key === 'appearance' || key === 'account',
+  const [params] = useSearchParams();
+  const { hash } = useLocation();
+  const seccion = params.get('seccion');
+  const redirect = legacyRedirect(seccion);
+  const header = (
+    <ScreenHeader
+      title={t.screens.settings.title}
+      description={t.screens.settings.description}
+      stats={false}
+    />
   );
-  const section: SectionKey =
-    isSection(requested) && available.includes(requested) ? requested : (available[0] ?? 'account');
-
+  if (redirect) return <Navigate to={redirect} replace />;
+  const target = requestedSection(hash, seccion);
+  if (session.status === 'loading') {
+    return (
+      <>
+        {header}
+        <LoadingState />
+      </>
+    );
+  }
+  if (session.status !== 'ready') {
+    return (
+      <>
+        {header}
+        {session.status === 'demo-empty' ? (
+          <DemoEmptyCard />
+        ) : (
+          // El mismo aviso que el resto de las pantallas con sesión, para entrar desde aquí
+          <Card aria-labelledby="configuracion-sin-sesion">
+            <CardHeader>
+              <CardTitle id="configuracion-sin-sesion">{t.session.signedOutTitle}</CardTitle>
+              <CardDescription>{t.settingsPage.signedOut.body}</CardDescription>
+            </CardHeader>
+            <Button asChild className="self-start">
+              <Link to={screenPath('onboarding')}>
+                <LogIn aria-hidden />
+                {t.session.goToWelcome}
+              </Link>
+            </Button>
+          </Card>
+        )}
+        <SettingsSectionBlock id="apariencia" title={t.settingsPage.sections.appearance} first>
+          <AppearanceSettings />
+        </SettingsSectionBlock>
+        <ScrollToSection target={target === 'apariencia' ? target : null} />
+      </>
+    );
+  }
   return (
     <>
-      <ScreenHeader
-        title={t.screens.settings.title}
-        description={t.screens.settings.description}
-        stats={false}
-      />
-
-      <Tabs.Root
-        value={section}
-        onValueChange={(value) => {
-          setParams({ seccion: value }, { replace: true });
-        }}
-        className="flex flex-col gap-3"
-      >
-        {/* Misma forma que el control segmentado (H01 de B2). Radix marca la pestaña activa con
-            data-state, así que usa segmentedTabItem y no segmentedItem */}
-        <Tabs.List
-          aria-label={t.settings.sectionsLabel}
-          className={cn(segmentedList, 'self-start')}
-        >
-          {available.map((key) => (
-            <Tabs.Trigger
-              key={key}
-              value={key}
-              className={cn(segmentedTabItem, 'whitespace-nowrap')}
-            >
-              {t.settings.sections[key]}
-            </Tabs.Trigger>
-          ))}
-        </Tabs.List>
-
-        {ready ? (
-          <Tabs.Content value="study">
-            <StudySection session={ready} />
-          </Tabs.Content>
-        ) : null}
-
-        <Tabs.Content value="appearance">
-          <AppearanceSettings />
-        </Tabs.Content>
-
-        {ready ? (
-          <Tabs.Content value="pomodoro">
-            <PomodoroSection session={ready} />
-          </Tabs.Content>
-        ) : null}
-
-        {ready ? (
-          <Tabs.Content value="privacy">
-            <PrivacySection session={ready} />
-          </Tabs.Content>
-        ) : null}
-
-        {/* En computadora las tarjetas van en dos columnas (D-057) */}
-        <Tabs.Content value="account" className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
-          <Card>
-            <RadioCards
-              legend={t.database.legend}
-              description={t.database.description}
-              value={database}
-              options={DATABASE_OPTIONS}
-              onValueChange={setDatabase}
-            />
-            <DatabaseStatus />
-          </Card>
-
-          {database === 'demo' ? <DemoDataPanel /> : null}
-
-          <Card aria-labelledby="ia-titulo">
-            <CardHeader className="mb-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-                <AiModeBadge status={aiStatus} />
-              </div>
-              <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-            </CardHeader>
-          </Card>
-
-          {ready ? <DataSection session={ready} /> : null}
-        </Tabs.Content>
-      </Tabs.Root>
+      {header}
+      <ReadySettings session={session} target={target} />
     </>
   );
 }
 
-/** Abre la base activa en el navegador y dice cuántos perfiles tiene. Prueba que IndexedDB funciona */
-function DatabaseStatus() {
-  const repos = useRepositories();
-  const result = useLiveData(
-    () =>
-      repos.users.list().then(
-        (users) => ({ ok: true as const, count: users.length }),
-        () => ({ ok: false as const, count: 0 }),
-      ),
-    [repos],
-  );
-  // La base y el conteo van en dos renglones a propósito. En una fila con salto, el conteo bajaba
-  // solo y el renglón empezaba con el punto medio en el teléfono (H21 de la revisión de B2)
+/**
+ * Las tres secciones con sesión. Se pintan cuando ya cargaron la cuenta y el plan, para que la
+ * página no cambie de alto después de llevar al alumno a la sección que pidió
+ */
+function ReadySettings({
+  session,
+  target,
+}: {
+  session: ReadySession;
+  target: SettingsSection | null;
+}) {
+  const account = useAccount(session.user.id);
+  const subscription = useSubscription(session.user.id);
+  if (account === undefined || subscription === undefined) return <LoadingState />;
+  const text = t.settingsPage.sections;
   return (
-    <div className="mt-3 flex flex-col gap-1 text-sm text-fg-muted" aria-live="polite">
-      <span className="font-mono">{t.database.storedIn(DATABASE_NAMES[repos.kind])}</span>
-      <div className="flex flex-wrap items-center gap-2">
-        {result === undefined ? null : result.ok ? (
-          <span>{t.database.users(result.count)}</span>
-        ) : (
-          <span className="text-danger">{t.database.openError}</span>
-        )}
-        {repos.kind === 'demo' ? <SimulatedDataLabel /> : null}
-      </div>
-    </div>
+    <>
+      {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
+      <SettingsSectionBlock id="perfil" title={text.profile} first>
+        <PlanCard subscription={subscription} />
+        <AccountDataCard session={session} account={account} />
+        <SessionCard session={session} />
+      </SettingsSectionBlock>
+      <SettingsSectionBlock id="apariencia" title={text.appearance}>
+        <AppearanceSettings />
+      </SettingsSectionBlock>
+      <SettingsSectionBlock id="privacidad" title={text.privacy}>
+        <PrivacySection session={session} />
+      </SettingsSectionBlock>
+      <ScrollToSection target={target} />
+    </>
   );
+}
+
+/** Una sección de la página con su subtítulo. Desde la segunda lleva una línea arriba */
+function SettingsSectionBlock({
+  id,
+  title,
+  first = false,
+  children,
+}: {
+  id: SettingsSection;
+  title: string;
+  first?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-subtitulo`}
+      className={cn('flex scroll-mt-24 flex-col gap-3', !first && 'border-t border-line pt-5')}
+    >
+      <h2 id={`${id}-subtitulo`} className="text-lg font-bold text-fg">
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+/**
+ * Lleva a la sección que pide la dirección cuando ya está pintada. Espera una vuelta para ir después
+ * de que el marco mueva el foco al título de la pantalla
+ */
+function ScrollToSection({ target }: { target: SettingsSection | null }) {
+  useEffect(() => {
+    if (!target) return;
+    const timer = setTimeout(() => {
+      scrollToElement(document.getElementById(target));
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [target]);
+  return null;
 }

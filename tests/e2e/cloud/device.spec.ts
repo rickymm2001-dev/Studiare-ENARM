@@ -29,7 +29,7 @@ test.describe('Dispositivo único por cuenta', () => {
     await expect.poll(() => cloud.deviceSessionOf(EMAIL)?.deviceId).toBeTruthy();
     const firstDevice = cloud.deviceSessionOf(EMAIL)?.deviceId;
 
-    await page.goto(SCREENS.profile.path);
+    await page.goto(SCREENS.settings.path);
     await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     await expect(page.getByText(SYNC_OK_PREFIX)).toBeVisible({ timeout: 15_000 });
 
@@ -62,7 +62,7 @@ test.describe('Dispositivo único por cuenta', () => {
     await expect(notice).toHaveCount(0);
 
     // El segundo sigue con la cuenta
-    await second.page.goto(SCREENS.profile.path);
+    await second.page.goto(SCREENS.settings.path);
     await expect(second.page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     await expect(second.page.getByText(SYNC_OK_PREFIX)).toBeVisible({ timeout: 15_000 });
     await second.context.close();
@@ -105,7 +105,7 @@ test.describe('Dispositivo único por cuenta', () => {
     await notice.getByRole('button', { name: t.cloud.deviceLimit.dismiss }).click();
     await expect(notice).toHaveCount(0);
 
-    await second.page.goto(SCREENS.profile.path);
+    await second.page.goto(SCREENS.settings.path);
     await expect(second.page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     await second.context.close();
   });

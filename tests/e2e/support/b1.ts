@@ -1,13 +1,15 @@
 // Ayudantes de las e2e que cierran los huecos de la auditoría inicial (B1, D-119). Cambiar de rol
 // con /rol, suscribirse con el pago simulado, seguir el mazo más chico, salir y volver a entrar,
-// leer y sembrar tablas de IndexedDB y dejar umbrales del admin guardados antes de que cargue la
-// app. Nada de aquí toca src ni fixtures.ts
+// cambiar de base y generar la demostración desde Datos de demostración del admin (B3), elegir cuándo
+// llega la retroalimentación en Ajustes del repaso (B3), leer y sembrar tablas de IndexedDB y dejar
+// umbrales del admin guardados antes de que cargue la app. Nada de aquí toca src ni fixtures.ts
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { OVERRIDES_KEY, type StoredOverrides } from '@/config/overridesStore';
 import { DATABASE_NAMES, type DatabaseKind } from '@/data/databases';
 import type { TableName } from '@/data/db/tables';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 import { expect } from './fixtures';
 
 export type DeviceRole = 'student' | 'physician' | 'admin' | 'owner';
@@ -44,9 +46,9 @@ export async function followSmallestDeck(page: Page): Promise<void> {
   });
 }
 
-/** Cierra la sesión local desde Perfil. Sin sesión la raíz vuelve a ser la portada */
+/** Cierra la sesión local desde Perfil, en Configuración. Sin sesión la raíz vuelve a ser la portada */
 export async function signOut(page: Page): Promise<void> {
-  await page.goto(SCREENS.profile.path);
+  await page.goto(`${SCREENS.settings.path}#perfil`);
   await page.getByRole('button', { name: t.session.signOut }).click();
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.landing.title);
@@ -61,16 +63,54 @@ export async function signIn(page: Page, alias: string): Promise<void> {
   await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 }
 
+/**
+ * Abre Datos de demostración como admin y deja la base que se pide. El selector de base vive ahí
+ * desde B3 (5.4 del plan del cambio). Al terminar vuelve al rol de alumno, salvo que se pida quedarse
+ */
+export async function switchDatabase(
+  page: Page,
+  database: DatabaseKind,
+  options: { stayAsAdmin?: boolean } = {},
+): Promise<void> {
+  await enterAs(page, 'admin');
+  await page.goto(SCREENS.demoData.path);
+  await page.getByRole('radio', { name: new RegExp(t.database[database]) }).click();
+  await expect(page.getByText(t.database.storedIn(DATABASE_NAMES[database]))).toBeVisible();
+  if (!options.stayAsAdmin) await enterAs(page, 'student');
+}
+
 /** Cambia a la base de demostración y genera sus datos en el worker. Tarda hasta un par de minutos */
-export async function generateDemo(page: Page): Promise<void> {
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-  const panel = page.getByRole('region', { name: t.demoData.title });
-  await panel.getByRole('button', { name: t.demoData.generate }).click();
-  await expect(panel.getByRole('status')).toHaveText(
-    new RegExp(escapeRegExp(t.demoData.done(0)).replace('0', '[\\d,]+')),
-    { timeout: 150_000 },
+export async function generateDemo(page: Page, timeout = 150_000): Promise<void> {
+  await switchDatabase(page, 'demo', { stayAsAdmin: true });
+  const generator = page.getByRole('region', { name: adminText.adminDemo.adjust.title });
+  await generator.getByRole('button', { name: adminText.adminDemo.generate }).click();
+  await expect(generator.getByRole('status')).toHaveText(
+    new RegExp(escapeRegExp(adminText.adminDemo.done.generate(0)).replace('0', '[\\d,]+')),
+    { timeout },
   );
+  await enterAs(page, 'student');
+}
+
+/** Ajustes del repaso, el panel de Repasar con todo lo que se guarda del repaso (B3) */
+export const reviewSettingsPanel = (page: Page): Locator =>
+  page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+
+/**
+ * Elige cuándo llega la retroalimentación de la práctica. Se cambia solo en Ajustes del repaso y
+ * Simular la muestra de solo lectura (B3 del plan del cambio). Abre el panel con su dirección y, si
+ * el valor cambió, lo guarda
+ */
+export async function setPracticeFeedback(page: Page, feedback: 'end' | 'each'): Promise<void> {
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const panel = reviewSettingsPanel(page);
+  const field = panel.getByRole('combobox', { name: t.settings.practiceFeedback });
+  await field.selectOption(feedback);
+  await expect(field).toHaveValue(feedback);
+  const save = panel.getByRole('button', { name: t.settings.saveChanges });
+  if (await save.isVisible()) {
+    await save.click();
+    await expect(panel.getByText(t.settings.saved, { exact: true })).toBeVisible();
+  }
 }
 
 /**

@@ -6,8 +6,10 @@ import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
 import { qualityText } from './quality';
+import { settingsPageText } from './settingsPage';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
+import { weekPlanText } from './weekPlan';
 
 interface ScreenText {
   title: string;
@@ -80,21 +82,9 @@ const screens: Record<ScreenKey, ScreenText> = {
     description:
       'Escribe en esquema y vuelve tarjeta cualquier línea con una marca. Enlaza apuntes entre sí.',
   },
-  planner: {
-    title: 'Planificador',
-    description: 'Tu plan del día y de la semana según tu fecha del ENARM y tu carga de repaso.',
-  },
   party: {
     title: 'Party',
     description: 'Grupos con código de invitación, tabla semanal, retos de grupo y duelos.',
-  },
-  rewards: {
-    title: 'Logros',
-    description: 'Tus misiones del día y de la semana, tu liga y tus insignias.',
-  },
-  profile: {
-    title: 'Perfil',
-    description: 'Quién eres en Studiare. Tu nivel, tu racha, tu cuenta y tu plan.',
   },
   adminUsers: {
     title: 'Usuarios',
@@ -102,7 +92,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   settings: {
     title: 'Configuración',
-    description: 'Apariencia, metas, repaso, Pomodoro y tus datos.',
+    description: 'Tu perfil y tu plan, cómo se ve la app y tu privacidad, en una sola página.',
   },
   subscription: {
     title: 'Suscripción',
@@ -171,6 +161,7 @@ export const t = {
   ...qualityText,
   ...tutorText,
   ...vocabularyText,
+  weekPlan: weekPlanText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',
@@ -180,38 +171,37 @@ export const t = {
   },
   nav: {
     label: 'Navegación principal',
+    // Título de la hoja que abre Más en el teléfono (4.28 del plan del cambio)
     more: 'Más secciones',
+    closeMore: 'Cerrar',
     toggle: 'Menú lateral',
     hide: 'Ocultar el menú lateral',
     show: 'Mostrar el menú lateral',
   },
   studyTabs: {
-    label: 'Repasar, mazos, explorar y apuntes',
+    label: 'Repasar, mazos y explorar',
     review: 'Repasar',
     decks: 'Mazos',
     explore: 'Explorar',
-    outlines: 'Apuntes',
   },
   navItems: {
     home: 'Inicio',
     review: 'Repasar',
+    outlines: 'Apuntes',
     simulate: 'Simular',
     progress: 'Progreso',
-    profile: 'Perfil',
     bank: 'Banco',
     agreement: 'Acuerdo',
     drafts: 'Borradores',
     reports: 'Reportes',
     costs: 'Costos',
-    demo: 'Demo',
     settings: 'Configuración',
     users: 'Usuarios',
     platform: 'Plataforma',
     decks: 'Mazos',
-    planner: 'Plan',
     tutor: 'Tutor',
     party: 'Party',
-    rewards: 'Logros',
+    more: 'Más',
     admin: 'Administración',
   },
   screens,
@@ -297,23 +287,6 @@ export const t = {
       count === 1 ? '1 perfil guardado' : `${count.toLocaleString('es-MX')} perfiles guardados`,
     openError: 'No se pudo abrir la base local. Revisa que el navegador permita guardar datos.',
   },
-  demoData: {
-    title: 'Datos de demostración',
-    empty:
-      'La demostración está vacía. Genera al alumno de demostración con 60 días de historial, 300 alumnos simulados y los mazos de Paco. Tarda unos segundos.',
-    ready: (profiles: number) =>
-      `Hay ${profiles.toLocaleString('es-MX')} perfiles simulados, el alumno de demostración con 60 días de historial y los alumnos simulados con sus parámetros verdaderos. Los mazos precargados son de Paco, compartidos con su autorización.`,
-    generate: 'Generar datos de demostración',
-    regenerate: 'Regenerar desde cero',
-    confirm: 'Sí, borrar y regenerar',
-    cancel: 'Cancelar',
-    confirmText:
-      'Se borra toda la base de demostración y se vuelve a generar igual. Tu cuenta real no se toca.',
-    working: 'Generando datos simulados…',
-    done: (events: number) =>
-      `Listo. Se guardaron ${events.toLocaleString('es-MX')} eventos simulados.`,
-    error: 'No se pudieron generar los datos de demostración. Intenta de nuevo.',
-  },
   ai: {
     cardTitle: 'Inteligencia artificial',
     badge: {
@@ -355,6 +328,7 @@ export const t = {
     dismiss: 'Cerrar aviso',
   },
   offlineBanner: 'Sin conexión. Lo que ya está en este dispositivo sigue funcionando.',
+  settingsPage: settingsPageText,
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

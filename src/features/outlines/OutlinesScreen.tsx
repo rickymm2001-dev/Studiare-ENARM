@@ -1,6 +1,7 @@
-// Apuntes (D-092, D-085 fila 2). Cuarta pestaña de Repasar, Mazos y Explorar. Sin parámetros muestra
-// la lista de apuntes y con ?apunte=ID abre ese apunte en el editor. Así hay una sola pantalla en el
-// registro y los enlaces entre apuntes son direcciones normales.
+// Apuntes (D-092, D-085 fila 2). Tiene su propio lugar en el menú y ya no es pestaña de Repasar
+// (comentario 12, B3). Sin parámetros muestra la lista de apuntes y con ?apunte=ID abre ese apunte en
+// el editor. Así hay una sola pantalla en el registro y los enlaces entre apuntes son direcciones
+// normales.
 import { useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -10,7 +11,6 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { Link } from 'react-router';
-import { StudyTabs } from '../review/StudyTabs';
 import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { OutlinePage } from './OutlinePage';
@@ -46,7 +46,6 @@ function Outlines({ session }: { session: ReadySession }) {
   return (
     <>
       <ScreenHeader title={t.screens.outlines.title} description={t.screens.outlines.description} />
-      <StudyTabs />
       {data === undefined ? (
         <LoadingState label={t.outlines.loading} />
       ) : openId && !opened ? (

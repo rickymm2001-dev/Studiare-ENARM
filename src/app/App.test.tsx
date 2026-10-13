@@ -1,35 +1,52 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it } from 'vitest';
+import { createEvent } from '@/data/events/createEvent';
 import { DataProvider } from '@/data/DataProvider';
+import { newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 import { DEFAULT_PREFERENCES, usePreferences } from './preferences';
 import { routes } from './router';
-import { SCREEN_KEYS, SCREENS } from './screens';
+import { LEGACY_REDIRECTS, SCREEN_KEYS, SCREENS } from './screens';
+import { renderApp, resetApp, type RenderedApp } from './testing/renderApp';
 
-function renderAt(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] });
+function renderAt(path: string, previous?: string) {
+  const router = createMemoryRouter(routes, {
+    initialEntries: previous ? [previous, path] : [path],
+    initialIndex: previous ? 1 : 0,
+  });
   render(
     <DataProvider kind="real">
       <RouterProvider router={router} />
     </DataProvider>,
   );
+  return router;
 }
 
-afterEach(() => {
+let app: RenderedApp | undefined;
+afterEach(async () => {
   usePreferences.setState(DEFAULT_PREFERENCES);
+  if (app) {
+    cleanup();
+    await resetApp(app.api);
+    app = undefined;
+  }
 });
 
 describe('rutas', () => {
-  it('registra las 26 pantallas de la sección 10 más Configuración, Usuarios, Explorar, Apuntes, Logros, el aviso de privacidad y los términos con rutas únicas', () => {
-    expect(SCREEN_KEYS).toHaveLength(33);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3)', () => {
+    expect(SCREEN_KEYS).toHaveLength(30);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(33);
-    const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number).sort((a, b) => a - b);
-    expect(numbers).toEqual(Array.from({ length: 33 }, (_, index) => index + 1));
+    expect(new Set(paths).size).toBe(30);
+    const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
+    expect(new Set(numbers).size).toBe(30);
+    // Los números de la especificación no se reusan y las rutas viejas no chocan con ninguna pantalla
+    for (const removed of [13, 15, 31]) expect(numbers).not.toContain(removed);
+    for (const key of ['planner', 'profile', 'rewards']) expect(SCREEN_KEYS).not.toContain(key);
+    for (const path of Object.keys(LEGACY_REDIRECTS)) expect(paths).not.toContain(path);
   });
 
   it('sin sesión la raíz es la portada de venta, sin navegación (D-068)', async () => {
@@ -42,20 +59,29 @@ describe('rutas', () => {
     });
   });
 
-  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party, Logros y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
+  it('el menú del alumno trae sus siete secciones, Más para el teléfono y Configuración al final, sin Plan, Logros ni Perfil (B3)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
-    const items = nav.querySelectorAll('li');
-    expect(items).toHaveLength(10);
-    expect([...items].filter((item) => !item.className.includes('hidden'))).toHaveLength(5);
-    expect(items[9]).toHaveTextContent(t.navItems.settings);
-    expect(nav).toHaveTextContent(t.navItems.rewards);
-    expect(nav).toHaveTextContent(t.navItems.planner);
-    expect(nav).toHaveTextContent(t.navItems.tutor);
-    // Mazos ya no es una sección aparte, es una pestaña de Repasar
+    expect(
+      within(nav)
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual([
+      t.navItems.home,
+      t.navItems.review,
+      t.navItems.outlines,
+      t.navItems.simulate,
+      t.navItems.progress,
+      t.navItems.tutor,
+      t.navItems.party,
+      t.navItems.settings,
+    ]);
+    expect(within(nav).getByRole('button', { name: t.navItems.more })).toBeInTheDocument();
+    for (const gone of ['Plan', 'Logros', 'Perfil']) expect(nav).not.toHaveTextContent(gone);
+    // Mazos no es una sección aparte, es una pestaña de Repasar
     expect(nav).not.toHaveTextContent(t.navItems.decks);
   });
 
@@ -69,6 +95,27 @@ describe('rutas', () => {
       'aria-current',
       'page',
     );
+  });
+
+  it('Apuntes es su propia sección, Repasar ya no queda activa ahí y en el teléfono se marca Más', async () => {
+    renderAt(SCREENS.outlines.path);
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.screens.outlines.title }),
+    ).toBeVisible();
+    const nav = screen.getByRole('navigation', { name: t.nav.label });
+    expect(within(nav).getByRole('link', { name: t.navItems.outlines })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(within(nav).getByRole('link', { name: t.navItems.review })).not.toHaveAttribute(
+      'aria-current',
+    );
+    expect(within(nav).getByRole('button', { name: t.navItems.more })).toHaveAttribute(
+      'aria-current',
+      'true',
+    );
+    // Apuntes dejó de ser pestaña de Repasar (comentario 12)
+    expect(screen.queryByRole('navigation', { name: t.studyTabs.label })).toBeNull();
   });
 
   it('muestra la pantalla de no encontrada en una ruta desconocida', async () => {
@@ -114,4 +161,93 @@ describe('rutas', () => {
       await screen.findByRole('heading', { level: 1, name: t.screens.agreement.title }),
     ).toBeVisible();
   });
+});
+
+describe('rutas de las pantallas que se quitaron (B3)', () => {
+  it.each([
+    ['/perfil', SCREENS.settings.path, t.screens.settings.title],
+    ['/planificador', SCREENS.progress.path, t.screens.progress.title],
+    ['/logros', SCREENS.progress.path, t.screens.progress.title],
+  ])('%s lleva a %s y reemplaza la entrada del historial', async (from, to, title) => {
+    const router = renderAt(from, SCREENS.roleSelector.path);
+    expect(await screen.findByRole('heading', { level: 1, name: title })).toBeVisible();
+    expect(router.state.location.pathname).toBe(to);
+    expect(router.state.historyAction).toBe('REPLACE');
+    // Atrás vuelve a la pantalla anterior y no a la ruta vieja, que volvería a saltar
+    await act(async () => {
+      await router.navigate(-1);
+    });
+    expect(router.state.location.pathname).toBe(SCREENS.roleSelector.path);
+  });
+
+  it('cada ruta vieja apunta a una pantalla que existe', () => {
+    expect(LEGACY_REDIRECTS).toEqual({
+      '/perfil': 'settings',
+      '/planificador': 'progress',
+      '/logros': 'progress',
+    });
+  });
+});
+
+describe('Logros ya no existe (comentario 14)', () => {
+  it('no quedan la pantalla, las insignias, las ligas, su aviso ni sus textos', () => {
+    const removed = import.meta.glob([
+      '/src/features/rewards/**',
+      '/src/app/layout/BadgeToast*',
+      '/src/features/profile/ProfileScreen*',
+      '/src/features/planner/PlannerScreen*',
+    ]);
+    expect(Object.keys(removed)).toEqual([]);
+    expect(Object.keys(t)).not.toContain('rewards');
+    expect(Object.keys(t.widgets.names)).not.toContain('league');
+    expect(Object.keys(t.widgets.names)).not.toContain('badges');
+  });
+
+  it('con más de 100 repasos, que antes ganaban una insignia, Inicio no avisa ni guarda insignias vistas', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        const now = Date.now();
+        for (let index = 0; index < 120; index += 1) {
+          const stamp = new Date(now - (120 - index) * 1000);
+          await api.repos.events.append(
+            createEvent(
+              'card_reviewed',
+              {
+                cardId: newId(),
+                deckId: newId(),
+                source: 'card',
+                rating: 'good',
+                confidence: null,
+                msToReveal: 2000,
+                msToRate: 1500,
+                stateBefore: null,
+                stateAfter: {
+                  due: stamp.toISOString(),
+                  stability: 1,
+                  difficulty: 5,
+                  scheduledDays: 1,
+                  learningSteps: 0,
+                  reps: 1,
+                  lapses: 0,
+                  state: 'review',
+                  lastReview: stamp.toISOString(),
+                },
+              },
+              { userId: user.id, tz: user.timeZone, clock: { now: () => stamp } },
+            ),
+          );
+        }
+      },
+    });
+    // Las misiones de hoy siguen en Inicio y la de tarjetas ya se cumplió
+    const missions = await screen.findByRole(
+      'list',
+      { name: t.widgets.names.missions },
+      { timeout: 15_000 },
+    );
+    expect(await within(missions).findByText(t.missions.done)).toBeVisible();
+    expect(screen.queryByText(/insignia/i)).toBeNull();
+    expect(screen.queryByRole('link', { name: /logros/i })).toBeNull();
+    expect(Object.keys(localStorage).filter((key) => key.includes('badges'))).toEqual([]);
+  }, 30_000);
 });

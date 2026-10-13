@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 arranque hecho, ver su sección. Siguen B1 auditoría inicial, B2 rediseño visual, B3 navegación y Configuración, B4 Repasar y Buscar tarjetas, B5 revisión del examen, B6 apuntes, B7 Party real, B8 plan Gratis, B9 cuentas, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
+- Bloques. B0, B1 y B2 hechos, ver sus secciones. B3 a B7 y B9 avanzan en paralelo en worktrees fuera del repo y se unen a la rama de trabajo al cerrar cada bloque. Siguen B8 plan Gratis, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema completo, con las migraciones 1 a 12 y el archivo manual, tres funciones de pago desplegadas (create-checkout versión 15 con D-118, create-portal-session y payment-webhook-stripe) y los secretos de Stripe de prueba (D-113, D-118). La base todavía tiene las filas de la prueba de pagos de las dos cuentas de Ricardo, que se borran después de cancelar en Stripe
@@ -17,8 +17,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 ### Bloques
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
-- [ ] B2. Sistema de diseño y rediseño visual (en cierre, PR desde la rama ccr-60b5d3a7-f40uky)
-- [ ] B3. Navegación, Configuración y Perfil
+- [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
+- [x] B3. Navegación, Configuración y Perfil (PR en curso)
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
 - [ ] B6. Apuntes y mazos
@@ -88,7 +88,34 @@ Evidencia
 - Evidencia. npm run check con typecheck y lint limpios y 2,798 pruebas que pasan; las 5 que fallaron fueron por tiempo con la máquina a carga 11 en 4 núcleos y pasan solas (102 de 102). Pruebas SQL en verde con el esqueleto de Storage que copia la protección del proyecto real. tutor.spec y theme-dark.spec en verde en teléfono y computadora. JavaScript inicial de 283 KB de 300
 - Capturas de antes en docs/screenshots/v3/antes y de después en docs/screenshots/v3/b2, ya con las correcciones, en calidad 60 para que pesen menos
 
+### B3. Navegación, Configuración y Perfil (D-122)
+- Hecho. Menú por rol con riel en computadora y barra de cinco en el teléfono con Más, que abre Apuntes, Tutor, Party y Configuración (4.28). Rutas viejas de Perfil, Planificador y Logros redirigen sin dejar historial. Apuntes con lugar propio en el menú
+- Configuración en una sola página con Perfil, Apariencia y Privacidad. Perfil con Tu plan, Tus datos de solo lectura, Editar perfil con Guardar y Cancelar y aviso de cambios sin guardar, y Tu sesión
+- Ajustes del repaso en un panel de Repasar con todo lo que se guarda del repaso y el Pomodoro, con un solo lugar por ajuste. Atrás lo cierra y pregunta antes de perder cambios
+- Progreso recibe la semana del planificador y el puntaje oficial. Logros, insignias y ligas se quitan sin tocar eventos, y quedan las tres misiones de hoy en Inicio (4.12)
+- Lo de demostración que estaba en Cuenta pasa a Datos de demostración del admin detrás de demoTools
+- Revisión independiente con 15 hallazgos, todos corregidos. La e2e de la cuenta encontró una carrera real, el puente con la nube reabría una sesión recién cerrada, y ya no pasa. El botón de borrar pasa el contraste al pasar el puntero
+- Evidencia. npm run check con typecheck y lint limpios y 2,875 pruebas que pasan (2 omitidas que solo corren con su variable de entorno). E2e del bloque en teléfono y computadora, 194 pasan en la última corrida completa y la única falla, un selector ambiguo de práctica, quedó corregida y pasó 8 de 8 sola. Nube 22 de 22. perf.spec pasa con la máquina tranquila y su límite es justo con otros agentes corriendo (mediana de 123 a 155 ms, sin regresión contra la versión anterior)
+- JavaScript inicial de 284.8 KB de 300
+- Capturas en docs/screenshots/v3/b3, en teléfono, 1280 y 1920, en claro y en oscuro
+
+### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
+- Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
+- B3 en b3-int. Unido con B2 final, e2e corridas una vez (272 pasan, 17 fallaban por selectores y pantallas movidas) y revisión independiente hecha. Un subagente corrige los hallazgos y las e2e
+- B4 y B5 en b45. Implementados, revisión independiente hecha y sus 12 hallazgos corregidos. Faltan e2e, capturas y PR
+- B6 en b6. Implementado y revisado. Un subagente corrige 4 hallazgos
+- B7 en b7int (unión de b7a, Party en la nube, y b7b, enfoque, resumen, referidos y demo cerrada). Revisado. Un subagente corrige 9 hallazgos. Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
+- B9 en b9. Implementado con la migración renombrada a 20261020000001. Revisión independiente en curso
+- Siguen B8 y B10, que parten de la unión de todo lo anterior
+- Los subagentes se detuvieron tres veces por el límite de uso de la cuenta y se reanudaron con su contexto
+
 ### Preguntas para Ricardo
+- B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
+- B4. La tabla de nombres legibles de los mazos de Paco necesita la revisión de un médico. La lista completa, con las elecciones que piden ojo, está en docs/revisiones/b4-nombres-de-temas.md
+- B5. Los eventos viejos con Otra razón quedan sin motivo, porque no dicen cuál de los siete aplica. Si prefieres que cuenten como Conocimiento es una línea. Las preguntas que quedaron en blanco en el examen no piden motivo por ahora (lo típico ahí sería Tiempo)
+- B7. Decidí que si el referido recibe el reembolso completo de su primer cobro, quien lo invitó pierde el mes desde ese momento, porque un cobro devuelto no es un pago verificado. También se rechazan los referidos en círculo (dos alumnos que se invitan entre sí). Si prefieres esperar a que pase la garantía de 7 días antes de dar el mes, es un cambio chico
+- B7. El resumen semanal cubre la semana en curso desde el lunes, como la tabla de Party, así que el lunes muestra un solo día. La otra opción son los últimos 7 días
+- B2. Quedaron con color las fases del Pomodoro (enfoque en el color de acción y descanso en un tono de rama) y el contador de Nuevas en Repasar. Si los quieres neutros, solo cambian sus clases
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 

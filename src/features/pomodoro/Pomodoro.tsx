@@ -1,11 +1,9 @@
 // Pomodoro en Repasar (9.2, D-062, D-063). Opcional. Empieza como ícono y el alumno lo abre y lo
-// arranca si quiere. Píldora a la altura del título, minimizable para no ver el tiempo, con sus
-// ajustes ahí mismo. Al terminar una fase aparece un aviso con el botón para empezar la siguiente.
+// arranca si quiere. Píldora a la altura del título, minimizable para no ver el tiempo. Su engrane
+// abre Ajustes del repaso en la parte del Pomodoro, el único lugar donde se guardan sus ajustes (B3
+// del plan del cambio). Al terminar una fase aparece un aviso con el botón para empezar la siguiente.
 import { Maximize2, Minimize2, Pause, Play, Settings2, SkipForward, Timer, X } from 'lucide-react';
-import { Popover } from 'radix-ui';
-import { useState } from 'react';
-import { useDataApi } from '@/data/context';
-import { updateProfile } from '@/data/usecases/profile';
+import { useEffect, useState } from 'react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -15,8 +13,14 @@ import type { ReadySession } from '../shared/RequireSession';
 import { formatClock } from './timer';
 import { usePomodoro, usePomodoroUi } from './usePomodoro';
 
-export function PomodoroPill({ session }: { session: ReadySession }) {
-  const api = useDataApi();
+export function PomodoroPill({
+  session,
+  onOpenSettings,
+}: {
+  session: ReadySession;
+  /** Abre Ajustes del repaso en la parte del Pomodoro */
+  onOpenSettings: () => void;
+}) {
   const pomodoro = usePomodoro(session);
   const { state, left, start, pause, resume, stop } = pomodoro;
   const minimized = usePomodoroUi((ui) => ui.minimized);
@@ -97,28 +101,9 @@ export function PomodoroPill({ session }: { session: ReadySession }) {
       >
         <SkipForward aria-hidden />
       </Button>
-      <Popover.Root>
-        <Popover.Trigger asChild>
-          <Button variant="ghost" size="icon" aria-label={t.pomodoro.settings}>
-            <Settings2 aria-hidden />
-          </Button>
-        </Popover.Trigger>
-        <Popover.Portal>
-          <Popover.Content
-            align="end"
-            sideOffset={8}
-            className="animate-rise z-50 w-[min(22rem,calc(100vw-2rem))] rounded-xl border border-line bg-surface p-3 shadow-raised"
-          >
-            <p className="mb-2 font-semibold">{t.pomodoro.settings}</p>
-            <PomodoroSettingsForm
-              value={session.settings.pomodoro}
-              onSave={async (next) => {
-                await updateProfile(api, session.user, { settings: { pomodoro: next } });
-              }}
-            />
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+      <Button variant="ghost" size="icon" aria-label={t.pomodoro.settings} onClick={onOpenSettings}>
+        <Settings2 aria-hidden />
+      </Button>
       <Button
         variant="ghost"
         size="icon"
@@ -180,12 +165,22 @@ export function PomodoroNotice({ session }: { session: ReadySession }) {
 export function PomodoroSettingsForm({
   value,
   onSave,
+  saveBarClassName,
+  onDirtyChange,
 }: {
   value: ReadySession['settings']['pomodoro'];
   onSave: (next: ReadySession['settings']['pomodoro']) => Promise<void>;
+  /** Distancia de la barra de guardar al borde, que dentro de Ajustes del repaso es otra */
+  saveBarClassName?: string;
+  /** Avisa si hay cambios sin guardar, para preguntar antes de cerrar el panel */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const [draft, setDraft] = useState(value);
   const [status, setStatus] = useState('');
+  const dirty = JSON.stringify(draft) !== JSON.stringify(value);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
   const number = (
     key: 'focusMinutes' | 'shortBreakMinutes' | 'longBreakMinutes' | 'cyclesBeforeLong',
     label: string,
@@ -204,8 +199,8 @@ export function PomodoroSettingsForm({
       }}
     />
   );
-  // Sin panel gris propio. Los campos van directo en la tarjeta de Configuración o en el popover del
-  // reloj, sin una caja dentro de otra (H06 de la revisión de B2)
+  // Sin panel gris propio. Los campos van directo en Ajustes del repaso, sin una caja dentro de otra
+  // (H06 de la revisión de B2)
   return (
     <form
       className="flex flex-col gap-3"
@@ -258,8 +253,9 @@ export function PomodoroSettingsForm({
         }}
       />
       <SaveBar
-        dirty={JSON.stringify(draft) !== JSON.stringify(value)}
+        dirty={dirty}
         status={status}
+        className={saveBarClassName}
         onDiscard={() => {
           setDraft(value);
           setStatus('');

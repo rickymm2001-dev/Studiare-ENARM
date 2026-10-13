@@ -1,7 +1,8 @@
 // Pomodoro en Repasar (9.2, D-062, D-063). Con enfoque y descanso corto de un minuto, el bloque se
 // inicia, se pausa, se salta y el descanso termina solo cuando el reloj avanza, con su aviso en la
 // página. Cada paso queda en la bitácora como evento. Con el permiso de notificaciones negado, el
-// ajuste se apaga solo, lo demás se guarda y el aviso dentro de la página sigue funcionando.
+// ajuste se apaga solo, lo demás se guarda y el aviso dentro de la página sigue funcionando. Sus
+// ajustes viven en Ajustes del repaso, en Repasar (B3 del plan del cambio).
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -21,10 +22,16 @@ interface PomodoroEvent {
   payload: { phase?: string; plannedMinutes?: number };
 }
 
+/** La parte del Pomodoro en Ajustes del repaso, que se abre con ?ajustes en Repasar */
+const pomodoroSettings = (page: Page) =>
+  page
+    .getByRole('dialog', { name: t.settingsPage.reviewSettings.title })
+    .getByRole('region', { name: t.settings.pomodoroTitle });
+
 /** Deja enfoque y descanso corto de un minuto, lo mínimo que acepta el ajuste */
 async function setShortPomodoro(page: Page, extra?: (settings: Locator) => Promise<void>) {
-  await page.goto(`${SCREENS.settings.path}?seccion=pomodoro`);
-  const settings = page.getByRole('region', { name: t.settings.pomodoroTitle });
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const settings = pomodoroSettings(page);
   await settings.getByLabel(t.pomodoro.focusMinutes).fill('1');
   await settings.getByLabel(t.pomodoro.shortBreakMinutes).fill('1');
   if (extra) await extra(settings);
@@ -153,9 +160,9 @@ test('con el permiso de notificaciones negado el ajuste se apaga solo, lo demás
   ).not.toBeChecked();
   await expectNoSeriousA11yViolations(page);
 
-  // Lo demás sí quedó guardado y la notificación sigue apagada
+  // Lo demás sí quedó guardado y la notificación sigue apagada. La dirección conserva el panel abierto
   await page.reload();
-  const reloaded = page.getByRole('region', { name: t.settings.pomodoroTitle });
+  const reloaded = pomodoroSettings(page);
   await expect(reloaded.getByLabel(t.pomodoro.focusMinutes)).toHaveValue('1');
   await expect(
     reloaded.getByRole('checkbox', { name: t.pomodoro.notifications }),

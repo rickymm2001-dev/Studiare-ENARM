@@ -28,9 +28,6 @@ export const featureText = {
     signedOutBody: 'Elige tu perfil o crea uno nuevo. Todo se guarda solo en este dispositivo.',
     goToWelcome: 'Ir a la bienvenida',
     demoEmptyTitle: 'La demostración está vacía',
-    demoEmptyBody:
-      'Genera los datos de demostración desde Configuración para ver esta pantalla con datos simulados.',
-    goToProfile: 'Ir a Configuración',
     signOut: 'Cerrar sesión',
     simulatedLogin:
       'Inicio de sesión simulado. Sin la nube conectada no hay contraseña ni servidor, y entras con la cuenta de este navegador.',
@@ -49,7 +46,8 @@ export const featureText = {
     examOn: (date: string) => `ENARM el ${date}`,
     noExamDate: 'Sin fecha de ENARM',
     createTitle: 'Crea tu cuenta',
-    createDescription: 'Todo lo puedes cambiar después en Perfil y en Configuración.',
+    createDescription:
+      'Tu alias y tus datos los cambias después en Configuración, y tu meta diaria en Ajustes del repaso, en Repasar.',
     alias: 'Alias',
     aliasHint: 'Así te verán en Party. No uses tu nombre completo.',
     aliasError: 'Escribe un alias de 1 a 40 caracteres.',
@@ -66,8 +64,6 @@ export const featureText = {
     privacyBody: legalText.onboarding.summary,
     privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
-    consentsTitle: 'Consentimientos por finalidad',
-    consentsDescription: 'Son opcionales y los puedes cambiar en Perfil.',
     consents: {
       party: ['Party', 'Compartir alias, XP, nivel y racha con tus grupos.'],
       ai_analysis: [
@@ -156,8 +152,6 @@ export const featureText = {
       party_challenge: 'Reto de Party',
       latest_hypothesis: 'Última hipótesis del tutor',
       missions: 'Misiones de hoy',
-      league: 'Liga de la semana',
-      badges: 'Insignias recientes',
     },
     heatmap: {
       range: 'Rango',
@@ -280,8 +274,6 @@ export const featureText = {
     saved: 'Ajustes guardados',
   },
   settings: {
-    accountTitle: 'Tu cuenta',
-    accountDescription: (alias: string) => `Sesión abierta como ${alias}.`,
     save: 'Guardar',
     saved: 'Guardado',
     goalsTitle: 'Metas y repaso',
@@ -289,14 +281,6 @@ export const featureText = {
     unsaved: 'Tienes cambios sin guardar.',
     discard: 'Descartar',
     discarded: 'Volvimos a lo que tenías guardado.',
-    sections: {
-      study: 'Estudio',
-      appearance: 'Apariencia',
-      pomodoro: 'Pomodoro',
-      privacy: 'Privacidad',
-      account: 'Cuenta',
-    },
-    sectionsLabel: 'Secciones de Configuración',
     dailyTitle: 'Metas del día',
     advanced: 'Opciones avanzadas del repaso',
     advancedSummary: (retention: number, maxDays: number | null) =>
@@ -438,8 +422,6 @@ export const featureText = {
     accountDeleteAction: 'Eliminar mi cuenta para siempre',
     cancel: 'Cancelar',
     deleted: 'Tus datos se borraron.',
-    subscriptionTitle: 'Suscripción',
-    subscriptionLink: 'Ver planes',
   },
   billing: {
     simulatedNotice:
@@ -1105,32 +1087,9 @@ export const featureText = {
     yourCards: (n: number) => (n === 1 ? '1 tarjeta' : `${n.toLocaleString('es-MX')} tarjetas`),
   },
   planner: {
-    todayTitle: 'Plan de hoy',
-    stats: { minutes: 'Minutos', reviews: 'Repasos', newCards: 'Nuevas' },
-    minutesOf: (planned: number, available: number) => `${planned} de ${available} min`,
-    cardsLine: (reviews: number, fresh: number) => {
-      const due = plural(reviews, 'tarjeta vencida', 'tarjetas vencidas');
-      const fresher = plural(fresh, 'tarjeta nueva', 'tarjetas nuevas');
-      if (reviews > 0 && fresh > 0) return `Repasa ${due} y aprende ${fresher}`;
-      return reviews > 0 ? `Repasa ${due}` : `Aprende ${fresher}`;
-    },
-    simulator: (n: number, topic: string | null) =>
-      topic
-        ? `Practica ${plural(n, 'pregunta', 'preguntas')} de ${topic}`
-        : `Practica ${plural(n, 'pregunta', 'preguntas')} mezcladas`,
-    challenge: (minutes: number) => `Un reto de ${minutes} minutos en Party`,
-    goReview: 'Repasar',
-    goSimulate: 'Practicar',
-    goParty: 'Ir a Party',
-    nothingToday: 'No hay nada pendiente para hoy con tus mazos y tu tiempo.',
-    nothingTodayHint: 'Practica con el simulador o sigue un mazo nuevo.',
-    noDecksTitle: 'Todavía no sigues ningún mazo',
     noDecksBody: 'Sin mazos el plan solo trae práctica de preguntas. Sigue uno para sumar repasos.',
-    goDecks: 'Ir a Mazos',
     limitNote: (limit: number) =>
       `Tu plan Gratis deja ${limit} preguntas al día, así que el bloque de práctica se recortó a lo que te permite.`,
-    topicsCalibrating:
-      'Tus temas a reforzar siguen calibrando. Cuando un tema tenga respuestas suficientes, el bloque de práctica apunta a tu tema más débil.',
     overloadTitle: 'Tu carga no cabe en tu tiempo',
     overloadBody: (needed: number, available: number) =>
       `Los próximos 7 días piden en promedio ${needed} min al día y tienes ${available}. Elige un ajuste.`,
@@ -1549,13 +1508,19 @@ export const featureText = {
     personas: [
       ['Si estudias todo el día', 'Te decimos si tu esfuerzo rinde y cuándo te estás cansando.'],
       ['Si estudias porque toca', 'Misiones cortas y una racha que no vas a querer romper.'],
-      ['Si te va bien sin matarte', 'Duelos, ligas y preguntas que suben de nivel contigo.'],
+      [
+        'Si te va bien sin matarte',
+        'Duelos con tus amigos y preguntas que suben de nivel contigo.',
+      ],
       ['Si estás de guardia', 'Sesiones de 5 minutos que funcionan sin conexión.'],
       [
         'Si vas por segunda vez',
         'Evidencia de por qué fallaste y tu avance contra tu intento anterior.',
       ],
-      ['Si estudias en grupo', 'Retos de grupo y logros para compartir con tu generación.'],
+      [
+        'Si estudias en grupo',
+        'Grupos con tu generación, tabla semanal, retos y duelos para estudiar juntos.',
+      ],
     ],
     pricingTitle: 'Planes',
     bestValue: 'Mejor precio',
@@ -1627,20 +1592,8 @@ export const featureText = {
       use: 'Usar foto',
       cancel: 'Cancelar',
     },
-    save: 'Guardar cambios',
-    saved: 'Datos guardados.',
     noAccount:
       'Este perfil se creó antes de las cuentas con correo. Agrega tu correo para guardar tus datos.',
-    addEmail: 'Agregar correo',
-  },
-  profileCard: {
-    shortcuts: 'Accesos',
-    levelLine: (level: number, title: string) => `Nivel ${level} · ${title}`,
-    seeLevels: 'Ver niveles y títulos',
-    streak: (current: number, best: number) =>
-      `${plural(current, 'día', 'días')} de racha · récord ${best}`,
-    xp: (xp: number) => `${xp.toLocaleString('es-MX')} XP en total`,
-    photoSoon: 'Pronto podrás subir tu foto o elegir un avatar.',
   },
   progress: {
     description:
@@ -1792,13 +1745,14 @@ export const featureText = {
     guideChange: (field: string, from: string, to: string) => `${field} pasa de ${from} a ${to}`,
     guideApply: 'Aplicar perfil guía',
     guideApplied: 'Listo, aplicamos el perfil guía.',
-    suggestionTitle: 'Tarjetas nuevas por día',
+    // Distinto del campo Tarjetas nuevas por día, que desde B3 vive en el mismo panel
+    suggestionTitle: 'Sugerencia de tarjetas nuevas',
     calculate: 'Calcular cuántas nuevas me convienen',
     unlimitedOn:
       'Tus tarjetas nuevas están sin límite. Entran todas las que haya cada día y los repasos de los días siguientes pueden juntarse.',
     needsMinutes:
       'Para calcular cuántas nuevas aguantas necesitamos saber cuántos minutos estudias al día.',
-    goToPlan: 'Poner mis minutos en Plan',
+    goToPlan: 'Poner mis minutos en Progreso',
     noNewCards: 'No tienes tarjetas nuevas por ahora.',
     suggested: (n: number) =>
       `Te sugerimos ${plural(n, 'tarjeta nueva', 'tarjetas nuevas')} por día.`,
@@ -1825,12 +1779,6 @@ export const featureText = {
     filters: 'Mazos y temas',
     filtersSummary: (decks: number, topics: number, of: number) =>
       `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
-    limits: 'Límites de hoy',
-    limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
-    limitsSummaryUnlimited: (reviews: number) => `Nuevas sin límite · ${reviews} repasos`,
-    limitsHint:
-      'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
-    limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',
     untagged: 'Incluir tarjetas sin subespecialidad',
     untaggedHint: 'Algunas notas no traen su subespecialidad. Entran con su mazo si lo marcaste.',
     start: (n: number) =>
@@ -2060,106 +2008,16 @@ export const featureText = {
       syncNow: 'Sincronizar ahora',
     },
   },
-  // Misiones, insignias y ligas (Fase P bloque 6)
-  rewards: {
-    statLeague: 'Liga',
-    statMissions: 'Misiones de hoy',
-    statBadges: 'Insignias',
-    missionsToday: 'Misiones de hoy',
-    missionsWeek: 'Misiones de la semana',
-    leagueTitle: 'Liga de la semana',
-    badgesTitle: 'Insignias',
-    recentTitle: 'Ganadas hace poco',
-    noRecent: 'Todavía no ganas ninguna insignia. La primera llega pronto.',
+  // Misiones de hoy en Inicio (Fase P bloque 6, 4.12 del plan del cambio). Logros, sus insignias, sus
+  // ligas y las misiones de la semana se quitaron en B3 (comentario 14)
+  missions: {
     progress: (current: number, target: number) => `${current} de ${target}`,
     done: 'Cumplida',
-    pending: 'Pendiente',
-    calibrating: (have: number, need: number) =>
-      `Calibrando. Llevas ${have} de ${need} preguntas para medir tus aciertos.`,
-    missions: {
+    titles: {
       dailyCards: (n: number) => `Repasa ${plural(n, 'tarjeta', 'tarjetas')}`,
       dailyQuestions: (n: number) => `Responde ${plural(n, 'pregunta', 'preguntas')}`,
       dailyMinutes: (n: number) => `Estudia ${plural(n, 'minuto', 'minutos')}`,
-      weeklyDays: (n: number) => `Estudia ${plural(n, 'día', 'días')} esta semana`,
-      weeklyXp: (n: number) => `Suma ${n.toLocaleString('es-MX')} XP esta semana`,
-      weeklyAccuracy: (n: number) => `Acierta ${n} % de tus preguntas de la semana`,
     },
-    leagues: {
-      bronze: 'Bronce',
-      silver: 'Plata',
-      gold: 'Oro',
-      sapphire: 'Zafiro',
-      ruby: 'Rubí',
-      diamond: 'Diamante',
-    },
-    leagueNow: (name: string, xp: number) =>
-      `Vas en la liga ${name} con ${xp.toLocaleString('es-MX')} XP esta semana.`,
-    leagueNext: (missing: number, name: string) =>
-      `Te faltan ${missing.toLocaleString('es-MX')} XP para la liga ${name}.`,
-    leagueTop: 'Ya estás en la liga más alta.',
-    leagueMovement: {
-      up: (name: string) => `Subiste de liga. La semana pasada estabas en ${name}.`,
-      down: (name: string) => `Bajaste de liga. La semana pasada estabas en ${name}.`,
-      same: (name: string) => `Sigues en la misma liga que la semana pasada, ${name}.`,
-    },
-    leagueBest: (name: string) => `Tu mejor liga hasta hoy es ${name}.`,
-    leagueNote:
-      'La liga sube con el XP de la semana, de lunes a lunes a las 4 a. m. No da XP extra. Los umbrales son provisionales.',
-    tiers: ['Bronce', 'Plata', 'Oro', 'Platino', 'Diamante'],
-    tierOf: (family: string, tier: string) => `${family}, nivel ${tier}`,
-    toast: {
-      title: (n: number) => (n === 1 ? 'Ganaste una insignia' : `Ganaste ${n} insignias`),
-      see: 'Ver logros',
-      dismiss: 'Cerrar el aviso',
-    },
-    earnedOn: (day: string) => `Ganada el ${day}`,
-    locked: 'Por ganar',
-    nextTier: (current: number, target: number) => `Siguiente nivel. ${current} de ${target}`,
-    allTiers: 'Tienes todos los niveles',
-    families: {
-      reviews: {
-        name: 'Repasos',
-        goal: (n: number) => `Repasa ${n.toLocaleString('es-MX')} tarjetas en total`,
-      },
-      answers: {
-        name: 'Preguntas',
-        goal: (n: number) => `Responde ${n.toLocaleString('es-MX')} preguntas en total`,
-      },
-      focus: {
-        name: 'Enfoque',
-        goal: (n: number) => `Estudia ${n.toLocaleString('es-MX')} minutos en total`,
-      },
-      streak: {
-        name: 'Constancia',
-        goal: (n: number) => `Llega a una racha de ${n} días`,
-      },
-      level: { name: 'Nivel', goal: (n: number) => `Llega al nivel ${n}` },
-      exams: {
-        name: 'Exámenes',
-        goal: (n: number) => `Termina ${plural(n, 'examen completo', 'exámenes completos')}`,
-      },
-      duels: {
-        name: 'Duelos',
-        goal: (n: number) => `Termina ${plural(n, 'duelo', 'duelos')}`,
-      },
-      imports: {
-        name: 'Tus mazos',
-        goal: (n: number) => `Importa ${plural(n, 'mazo', 'mazos')} de otra app`,
-      },
-      verifications: {
-        name: 'Verificación',
-        goal: (n: number) =>
-          `Atiende ${plural(n, 'señal de controversia', 'señales de controversia')}`,
-      },
-      aiCards: {
-        name: 'Tarjetas con IA',
-        goal: (n: number) =>
-          `Aprueba ${plural(n, 'tarjeta propuesta', 'tarjetas propuestas')} por la IA`,
-      },
-    },
-    note: 'Las misiones y las ligas no dan XP extra ni predicen tu puntaje del ENARM. Marcan tu avance y salen de tu bitácora.',
-    widgetGo: 'Ver todos los logros',
-    widgetMore: (n: number) => `${n} más`,
   },
   // Referidos con mes gratis (Fase P bloque 11)
   referrals: {

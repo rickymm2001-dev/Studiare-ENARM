@@ -1,6 +1,7 @@
-// Registro de las 26 pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
-// Explorar (D-085), Apuntes (D-092), Logros (Fase P) y el aviso de privacidad y los términos
-// (Fase G), con su ruta, área y fase.
+// Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
+// Explorar (D-085), Apuntes (D-092) y el aviso de privacidad y los términos (Fase G), con su ruta,
+// área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio (comentarios 6,
+// 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
 
@@ -22,9 +23,7 @@ export const SCREEN_KEYS = [
   'progress',
   'tutor',
   'decks',
-  'planner',
   'party',
-  'profile',
   'subscription',
   'questionBank',
   'questionEditor',
@@ -40,7 +39,6 @@ export const SCREEN_KEYS = [
   'adminUsers',
   'explore',
   'outlines',
-  'rewards',
   'privacyNotice',
   'terms',
 ] as const;
@@ -48,7 +46,7 @@ export const SCREEN_KEYS = [
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
 
 export interface ScreenDef {
-  /** Número de la pantalla en la sección 10 de la especificación */
+  /** Número de la pantalla en la sección 10 de la especificación. No se reusa al quitar una */
   number: number;
   path: string;
   area: ScreenArea;
@@ -69,9 +67,7 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   progress: { number: 10, path: '/progreso', area: 'student', phase: 'C' },
   tutor: { number: 11, path: '/tutor', area: 'student', phase: 'C' },
   decks: { number: 12, path: '/mazos', area: 'student', phase: 'C' },
-  planner: { number: 13, path: '/planificador', area: 'student', phase: 'C' },
   party: { number: 14, path: '/party', area: 'student', phase: 'C' },
-  profile: { number: 15, path: '/perfil', area: 'shared', phase: 'C' },
   subscription: { number: 16, path: '/suscripcion', area: 'student', phase: 'E' },
   questionBank: { number: 17, path: '/medico/banco', area: 'physician', phase: 'E' },
   questionEditor: { number: 18, path: '/medico/editor', area: 'physician', phase: 'E' },
@@ -83,16 +79,14 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   demoData: { number: 24, path: '/admin/demo', area: 'admin', phase: 'D' },
   adminSettings: { number: 25, path: '/admin/configuracion', area: 'admin', phase: 'D' },
   roleSelector: { number: 26, path: '/rol', area: 'shared', phase: 'A' },
-  // Configuración separada de Perfil por decisión de Ricardo (D-065)
+  // Configuración (D-065). Desde B3 también es el Perfil, en una sola página (comentarios 5 y 6)
   settings: { number: 27, path: '/configuracion', area: 'shared', phase: 'C' },
   // Usuarios, roles y asignaciones a médicos (D-070)
   adminUsers: { number: 28, path: '/admin/usuarios', area: 'admin', phase: 'C' },
   // Explorar tarjetas, tercera pestaña de Repasar y Mazos (D-085)
   explore: { number: 29, path: '/mazos/explorar', area: 'student', phase: 'C' },
-  // Apuntes en esquema que se vuelven tarjetas, cuarta pestaña de Repasar (D-092)
+  // Apuntes en esquema que se vuelven tarjetas (D-092). Con su lugar en el menú (comentario 12)
   outlines: { number: 30, path: '/apuntes', area: 'student', phase: 'C' },
-  // Misiones, liga e insignias (Fase P bloque 6)
-  rewards: { number: 31, path: '/logros', area: 'student', phase: 'C' },
   // Aviso de privacidad y términos, públicos y sin sesión (Fase G, G2)
   privacyNotice: { number: 32, path: '/privacidad', area: 'shared', phase: 'F' },
   terms: { number: 33, path: '/terminos', area: 'shared', phase: 'F' },
@@ -101,3 +95,14 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
 export function screenPath(key: ScreenKey): string {
   return SCREENS[key].path;
 }
+
+/**
+ * Rutas de pantallas que ya no existen y la pantalla a la que llevan, para no romper enlaces
+ * guardados ni marcadores (B3 del plan del cambio). Perfil vive en Configuración, y lo que servía
+ * del planificador pasó a Progreso. Logros se quitó y Progreso es lo más cercano
+ */
+export const LEGACY_REDIRECTS: Readonly<Record<string, ScreenKey>> = {
+  '/perfil': 'settings',
+  '/planificador': 'progress',
+  '/logros': 'progress',
+};

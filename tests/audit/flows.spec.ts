@@ -94,7 +94,7 @@ test('dos perfiles en el mismo dispositivo no se ven los datos', async ({ page }
   const anaText = await progressText();
 
   // Sale de la cuenta de Ana y crea la de Beto en el mismo navegador
-  await page.goto(SCREENS.profile.path);
+  await page.goto(SCREENS.settings.path);
   await page.getByRole('button', { name: t.session.signOut }).click();
   await signUp(page, 'Beto');
   const betoText = await progressText();

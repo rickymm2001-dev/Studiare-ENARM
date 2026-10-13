@@ -1,25 +1,21 @@
-// Configuración, sección Privacidad (Fase E bloque E6, D-101). El alumno da o retira cada
-// consentimiento cuando quiera, y guarda de forma voluntaria su puntaje oficial del ENARM, que solo
-// se admite con el permiso de mejora anónima y se borra al retirarlo.
-import { useState, type SyntheticEvent } from 'react';
+// Configuración, sección Privacidad (Fase E bloque E6, D-101, B3 del plan del cambio). El alumno da
+// o retira cada consentimiento por separado cuando quiera, lee el aviso de privacidad, exporta sus
+// datos y borra sus datos o su cuenta. La captura del puntaje oficial pasó a Progreso y su permiso,
+// la mejora anónima, se queda aquí.
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { ConsentPurposeSchema } from '@/data/schemas/common';
-import {
-  OfficialScoreError,
-  changeConsent,
-  removeOfficialScore,
-  submitOfficialScore,
-} from '@/data/usecases/privacy';
+import { changeConsent } from '@/data/usecases/privacy';
 import { currentConsents } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
-import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { CheckboxField, TextField } from '@/ui/components/field';
+import { CheckboxField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
+import { DataSection } from './DataSection';
 import type { z } from 'zod';
 
 type Purpose = z.infer<typeof ConsentPurposeSchema>;
@@ -29,7 +25,7 @@ export function PrivacySection({ session }: { session: ReadySession }) {
   return (
     <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
       <ConsentsCard session={session} />
-      <OfficialScoreCard session={session} />
+      <DataSection session={session} />
     </div>
   );
 }
@@ -51,7 +47,9 @@ function ConsentsCard({ session }: { session: ReadySession }) {
   return (
     <Card aria-labelledby="consentimientos-titulo">
       <CardHeader>
-        <CardTitle id="consentimientos-titulo">{t.settings.privacy.consentsTitle}</CardTitle>
+        <CardTitle as="h3" id="consentimientos-titulo">
+          {t.settings.privacy.consentsTitle}
+        </CardTitle>
         <CardDescription>{t.settings.privacy.consentsDescription}</CardDescription>
       </CardHeader>
       <fieldset className="flex flex-col gap-3">
@@ -90,6 +88,15 @@ function ConsentsCard({ session }: { session: ReadySession }) {
       <p role="status" className="text-sm text-fg-muted">
         {status}
       </p>
+      <p className="text-sm text-fg-muted">
+        {t.settingsPage.privacy.scoreInProgress}{' '}
+        <Link
+          to={screenPath('progress')}
+          className="font-semibold text-primary-ink underline underline-offset-2"
+        >
+          {t.settingsPage.privacy.goToProgress}
+        </Link>
+      </p>
       <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
         <Link to={screenPath('privacyNotice')} className="underline underline-offset-4">
           {legalText.links.privacy}
@@ -97,120 +104,6 @@ function ConsentsCard({ session }: { session: ReadySession }) {
         <Link to={screenPath('terms')} className="underline underline-offset-4">
           {legalText.links.terms}
         </Link>
-      </p>
-    </Card>
-  );
-}
-
-function OfficialScoreCard({ session }: { session: ReadySession }) {
-  const api = useDataApi();
-  const { user } = session;
-  const consents = useLiveData(() => currentConsents(api, user.id), [api.repos, user.id]);
-  // null cuando no hay puntaje guardado. undefined mientras carga
-  const saved = useLiveData(
-    async () => (await api.repos.officialScores.get(user.id)) ?? null,
-    [api.repos, user.id],
-  );
-  const [year, setYear] = useState(String(new Date().getFullYear()));
-  const [score, setScore] = useState('');
-  // Dónde mostrar el error, junto al campo que lo causó
-  const [error, setError] = useState<{ field: 'year' | 'score'; text: string } | null>(null);
-  const [status, setStatus] = useState('');
-  const allowed = consents?.anonymized_improvement === true;
-
-  const submit = (event: SyntheticEvent) => {
-    event.preventDefault();
-    setError(null);
-    setStatus('');
-    // Un campo vacío no es cero. Number('') da 0 y se guardaría un puntaje que nadie escribió
-    const input = {
-      year: year.trim() === '' ? Number.NaN : Number(year),
-      score: score.trim() === '' ? Number.NaN : Number(score),
-    };
-    submitOfficialScore(api, user, input).then(
-      () => {
-        setScore('');
-        setStatus(t.settings.privacy.scoreSaved);
-      },
-      (failure: unknown) => {
-        if (failure instanceof OfficialScoreError) {
-          setError({
-            field: failure.reason === 'invalid_year' ? 'year' : 'score',
-            text: t.settings.privacy.scoreErrors[failure.reason],
-          });
-        } else {
-          setError({ field: 'score', text: t.settings.privacy.consentError });
-        }
-      },
-    );
-  };
-
-  return (
-    <Card aria-labelledby="puntaje-titulo">
-      <CardHeader>
-        <CardTitle id="puntaje-titulo">{t.settings.privacy.scoreTitle}</CardTitle>
-        <CardDescription>{t.settings.privacy.scoreDescription}</CardDescription>
-      </CardHeader>
-      <p className="text-sm">
-        {saved ? t.settings.privacy.current(saved.year, saved.score) : t.settings.privacy.none}
-      </p>
-      {allowed ? (
-        <form className="flex flex-col gap-3" onSubmit={submit} noValidate>
-          <div className="grid grid-cols-2 gap-3">
-            <TextField
-              label={t.settings.privacy.year}
-              type="number"
-              inputMode="numeric"
-              min={2000}
-              max={2100}
-              required
-              value={year}
-              error={error?.field === 'year' ? error.text : null}
-              onChange={(event) => {
-                setYear(event.target.value);
-              }}
-            />
-            <TextField
-              label={t.settings.privacy.score}
-              hint={t.settings.privacy.scoreHint}
-              type="number"
-              inputMode="decimal"
-              min={0}
-              max={100}
-              step="0.01"
-              required
-              value={score}
-              error={error?.field === 'score' ? error.text : null}
-              onChange={(event) => {
-                setScore(event.target.value);
-              }}
-            />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button type="submit">{t.settings.privacy.saveScore}</Button>
-            {saved ? (
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setError(null);
-                  void removeOfficialScore(api, user.id).then(() => {
-                    setStatus(t.settings.privacy.scoreRemoved);
-                  });
-                }}
-              >
-                {t.settings.privacy.removeScore}
-              </Button>
-            ) : null}
-          </div>
-        </form>
-      ) : consents === undefined ? null : (
-        <p className="rounded-md bg-muted p-3 text-sm text-fg-muted">
-          {t.settings.privacy.scoreNeedsConsent}
-        </p>
-      )}
-      <p role="status" className="text-sm text-fg-muted">
-        {status}
       </p>
     </Card>
   );

@@ -15,8 +15,16 @@ export function CardHeader({ className, ...props }: ComponentProps<'div'>) {
   return <div className={cn('mb-2 flex flex-col gap-0.5', className)} {...props} />;
 }
 
-export function CardTitle({ className, ...props }: ComponentProps<'h2'>) {
-  return <h2 className={cn('text-base font-semibold text-fg', className)} {...props} />;
+/**
+ * Título de la tarjeta. Es h2, salvo dentro de una sección de página que ya tiene su h2, como las de
+ * Configuración, donde va como h3 para que los títulos sigan su orden
+ */
+export function CardTitle({
+  className,
+  as: Heading = 'h2',
+  ...props
+}: ComponentProps<'h2'> & { as?: 'h2' | 'h3' }) {
+  return <Heading className={cn('text-base font-semibold text-fg', className)} {...props} />;
 }
 
 export function CardDescription({ className, ...props }: ComponentProps<'p'>) {

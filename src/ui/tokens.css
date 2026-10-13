@@ -59,6 +59,9 @@
   --enarm-warning: #7a5200;
   --enarm-warning-soft: #fbf0d6;
   --enarm-danger: #bf2a24;
+  /* Al pasar el puntero se oscurece y no se aclara con opacidad, que bajaba el texto blanco a 4.46
+     a 1. Con este tono queda en 7.4 a 1 */
+  --enarm-danger-hover: #a3241f;
   --enarm-danger-soft: #fce6e4;
   --enarm-danger-fg: #ffffff;
 
@@ -129,6 +132,7 @@
     --enarm-warning: #f0c060;
     --enarm-warning-soft: #352a12;
     --enarm-danger: #ff8d85;
+    --enarm-danger-hover: #ffa8a1;
     --enarm-danger-soft: #3d1b18;
     --enarm-danger-fg: #2b0d0a;
     --enarm-mi: #7fc1de;
@@ -192,6 +196,7 @@
   --enarm-warning: #f0c060;
   --enarm-warning-soft: #352a12;
   --enarm-danger: #ff8d85;
+  --enarm-danger-hover: #ffa8a1;
   --enarm-danger-soft: #3d1b18;
   --enarm-danger-fg: #2b0d0a;
   --enarm-mi: #7fc1de;
@@ -254,6 +259,7 @@
   --color-warning: var(--enarm-warning);
   --color-warning-soft: var(--enarm-warning-soft);
   --color-danger: var(--enarm-danger);
+  --color-danger-hover: var(--enarm-danger-hover);
   --color-danger-soft: var(--enarm-danger-soft);
   --color-danger-fg: var(--enarm-danger-fg);
   --color-demo: var(--enarm-demo);

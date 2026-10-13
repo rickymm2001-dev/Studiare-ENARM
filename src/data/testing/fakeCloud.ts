@@ -69,6 +69,8 @@ export interface FakeCloud {
   role: 'student' | 'physician' | 'admin' | 'owner';
   /** Cómo falla la lectura del rol. error responde con error de red y throw lanza la excepción */
   failRole: FakeFailure;
+  /** Cuántas veces se leyó el rol de la cuenta, que es parte de cada revisión con sesión */
+  roleReads: number;
   /** Con true, leer la sesión falla por falta de red, como con el token vencido y sin conexión */
   failSession: boolean;
   /** Valor de la clave admin_overrides en platform_settings. null si el admin no ha cambiado nada */
@@ -97,6 +99,15 @@ export interface FakeCloud {
   holdSignOut: boolean;
   /** Termina los signOut detenidos por holdSignOut, quita la sesión y avisa SIGNED_OUT */
   releaseSignOut: () => void;
+  /**
+   * Con true, leer la sesión toma la sesión del momento pero no responde hasta releaseSession, como
+   * una red lenta. Sirve para cerrar la sesión a la mitad de una revisión de la nube
+   */
+  holdSession: boolean;
+  /** Cuántas lecturas de la sesión esperan a releaseSession */
+  heldSessionReads: number;
+  /** Responde las lecturas de la sesión detenidas por holdSession */
+  releaseSession: () => void;
   /** Correos que se pidieron con signInWithOtp, en orden */
   otpRequests: { email: string }[];
   /** Código que acepta verifyOtp. Al aceptarlo abre la sesión de codeSession y avisa SIGNED_IN */
@@ -129,6 +140,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   const listeners = new Set<(event: AuthChangeEvent) => void>();
   // Cierres de sesión detenidos por holdSignOut, en orden
   const heldSignOuts: (() => void)[] = [];
+  // Lecturas de la sesión detenidas por holdSession, en orden
+  const heldSessions: (() => void)[] = [];
   const fake: FakeCloud = {
     cloud: undefined as unknown as SupabaseClient,
     row: options.row ?? null,
@@ -142,6 +155,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     limitRetryAt: '2030-01-02T09:30:00Z',
     role: 'student',
     failRole: 'none',
+    roleReads: 0,
     failSession: false,
     overrides: null,
     flags: null,
@@ -157,6 +171,12 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     holdSignOut: false,
     releaseSignOut: () => {
       for (const finish of heldSignOuts.splice(0)) finish();
+    },
+    holdSession: false,
+    heldSessionReads: 0,
+    releaseSession: () => {
+      fake.heldSessionReads = 0;
+      for (const answer of heldSessions.splice(0)) answer();
     },
     otpRequests: [],
     validCode: '123456',
@@ -203,6 +223,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         return outcome(fake.failCheck, () => ({ data: fake.row, error: null }));
       }
       if (name === 'user_roles') {
+        fake.roleReads += 1;
         return outcome(fake.failRole, () => ({ data: { role: fake.role }, error: null }));
       }
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
@@ -249,8 +270,8 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
 
   const client = {
     auth: {
-      getSession: () =>
-        Promise.resolve({
+      getSession: () => {
+        const result = {
           error: fake.failSession
             ? { name: 'AuthRetryableFetchError', message: 'Failed to fetch', status: 0 }
             : null,
@@ -263,7 +284,15 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
                   }
                 : null,
           },
-        }),
+        };
+        if (!fake.holdSession) return Promise.resolve(result);
+        fake.heldSessionReads += 1;
+        return new Promise<typeof result>((resolve) => {
+          heldSessions.push(() => {
+            resolve(result);
+          });
+        });
+      },
       onAuthStateChange: (listener: (event: AuthChangeEvent) => void) => {
         listeners.add(listener);
         return {
