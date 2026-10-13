@@ -22,7 +22,7 @@ export const b7ExtrasText = {
   // Modo enfoque (respuesta 82). Un interruptor en Configuración, sección Apariencia
   focusMode: {
     label: 'Modo enfoque',
-    hint: 'Oculta en toda la app las tablas, el XP, el nivel, la racha y los retos, para que solo veas lo que estudias.',
+    hint: 'Oculta en toda la app las tablas, el XP, el nivel, la racha, los retos y las misiones de hoy, para que solo veas lo que estudias. Tus duelos se quedan, porque son un compromiso con un compañero.',
     // Fin del repaso sin el XP ganado
     reviewDone: (cards: number) => `Repasaste ${plural(cards, 'tarjeta', 'tarjetas')}.`,
   },

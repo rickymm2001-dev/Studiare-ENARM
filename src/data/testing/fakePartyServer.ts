@@ -20,12 +20,17 @@ export interface FakePartyServer {
    * base, su XP publicado, sus aportes y sus duelos. Devuelve cuántas membresías borró
    */
   forgetMemberships(userId: string): number;
-  /** Lo que pasa al borrar la cuenta. Además de lo anterior se van sus grupos creados */
+  /**
+   * Lo que pasa al borrar la cuenta. Además de lo anterior, cada grupo que administraba pasa al miembro
+   * activo más antiguo, y se borra solo si ya no queda nadie (supabase/manual/party-dueno-al-borrar-cuenta.sql)
+   */
   forgetUser(userId: string): void;
   /** El código del grupo con ese nombre, como si alguien lo compartiera */
   codeOf(groupName: string): string | undefined;
   /** Los ids de los miembros activos del grupo con ese nombre */
   activeMembers(groupName: string): string[];
+  /** Quién administra el grupo con ese nombre. null si nadie, undefined si no existe */
+  ownerOf(groupName: string): string | null | undefined;
   /** El XP de la semana que publicó un alumno en ese grupo, o null si no ha publicado */
   publishedXp(groupName: string, userId: string): number | null;
   /** Los resultados que mandaron los participantes de los duelos de un alumno */
@@ -46,7 +51,8 @@ interface Group {
   id: string;
   name: string;
   inviteCode: string;
-  ownerId: string;
+  /** null si quien lo administraba borró su cuenta y no había a quién pasarlo */
+  ownerId: string | null;
   createdAt: number;
 }
 
@@ -66,6 +72,8 @@ interface Challenge {
   startsAt: number;
   endsAt: number;
   createdBy: string | null;
+  /** Un reto borrado queda marcado y deja de verse */
+  deletedAt: number | null;
 }
 
 interface Duel {
@@ -92,6 +100,8 @@ export const FAKE_PARTY_LIMITS = {
   joinFailuresPerHour: 10,
   openChallengesPerGroup: 10,
   waitingDuelsPerMember: 10,
+  weeklyXp: 50_000,
+  duelMsPerCorrect: 3_000,
 } as const;
 
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -119,6 +129,8 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
   const challenges = new Map<string, Challenge>();
   const duels = new Map<string, Duel>();
   const results = new Map<string, Score>();
+  /** Cuándo empezó cada participante su duelo, por duelo y alumno */
+  const starts = new Map<string, number>();
   const weeklyXp = new Map<string, number>();
   const progress = new Map<string, { groupId: string; amount: number }>();
   const joinFailures: { userId: string; at: number }[] = [];
@@ -132,6 +144,7 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
   const activeIn = (groupId: string) =>
     memberships.filter((item) => item.groupId === groupId && item.leftAt === null);
   const resultKey = (duelId: string, userId: string) => `${duelId}|${userId}`;
+  const liveChallenges = () => [...challenges.values()].filter((item) => item.deletedAt === null);
 
   function newCode(): string {
     let code: string;
@@ -171,7 +184,7 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
           (a, b) => a.joinedAt - b.joinedAt || a.userId.localeCompare(b.userId),
         );
         const active = new Set(members.map((item) => item.userId));
-        const groupChallenges = [...challenges.values()]
+        const groupChallenges = liveChallenges()
           .filter((item) => item.groupId === group.id && item.endsAt > now() - 7 * DAY_MS)
           .sort((a, b) => b.startsAt - a.startsAt)
           .slice(0, 20);
@@ -214,12 +227,15 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
             duels: groupDuels.map((item) => {
               const own = results.get(resultKey(item.id, userId));
               const rivalId = item.challengerId === userId ? item.opponentId : item.challengerId;
+              const startedAt = starts.get(resultKey(item.id, userId));
               return {
                 id: item.id,
                 challengerId: item.challengerId,
                 opponentId: item.opponentId,
                 questionIds: [...item.questionIds],
                 createdAt: iso(item.createdAt),
+                // Como party_overview, solo el inicio propio
+                startedAt: startedAt === undefined ? null : iso(startedAt),
                 mine: scoreJson(own),
                 // Como la política, el del rival solo después del propio
                 rival: own ? scoreJson(results.get(resultKey(item.id, rivalId))) : null,
@@ -309,10 +325,31 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
       return fail('22023', 'La semana no es válida');
     }
     const xp = args.p_xp;
-    if (!isInt(xp) || xp < 0 || xp > 1_000_000) return fail('22023', 'El XP no es válido');
+    if (!isInt(xp) || xp < 0) return fail('22023', 'El XP no es válido');
+    if (xp > FAKE_PARTY_LIMITS.weeklyXp) return fail('PT004', 'El XP de la semana pasa del tope');
     const items = args.p_progress ?? [];
     if (!Array.isArray(items) || items.length > 50) {
       return fail('22023', 'Se esperaba un arreglo de hasta 50 aportes');
+    }
+    // Como en la base, todo o nada. Se revisa todo antes de escribir
+    const accepted: { challenge: Challenge; amount: number }[] = [];
+    for (const item of items as unknown[]) {
+      if (typeof item !== 'object' || item === null) return fail('22023', 'Aporte inválido');
+      const { challengeId, amount } = item as Record<string, unknown>;
+      if (!isUuid(challengeId) || !isInt(amount) || amount < 0 || amount > 1_000_000) {
+        return fail('22023', 'Aporte inválido');
+      }
+      const challenge = challenges.get(challengeId);
+      // Un reto que no existe, que se borró, que ya terminó o de un grupo ajeno se ignora
+      if (
+        challenge?.deletedAt !== null ||
+        challenge.endsAt <= now() - DAY_MS ||
+        !isMember(challenge.groupId, userId)
+      ) {
+        continue;
+      }
+      if (amount > challenge.target) return fail('PT004', 'El aporte pasa de la meta del reto');
+      accepted.push({ challenge, amount });
     }
     let changed = 0;
     for (const own of activeOf(userId)) {
@@ -321,21 +358,8 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
       weeklyXp.set(key, xp);
       changed += 1;
     }
-    for (const item of items as unknown[]) {
-      if (typeof item !== 'object' || item === null) return fail('22023', 'Aporte inválido');
-      const { challengeId, amount } = item as Record<string, unknown>;
-      if (!isUuid(challengeId) || !isInt(amount) || amount < 0 || amount > 1_000_000) {
-        return fail('22023', 'Aporte inválido');
-      }
-      const challenge = challenges.get(challengeId);
-      if (
-        !challenge ||
-        challenge.endsAt <= now() - DAY_MS ||
-        !isMember(challenge.groupId, userId)
-      ) {
-        continue;
-      }
-      const key = `${challengeId}|${userId}`;
+    for (const { challenge, amount } of accepted) {
+      const key = `${challenge.id}|${userId}`;
       if (progress.get(key)?.amount === amount) continue;
       progress.set(key, { groupId: challenge.groupId, amount });
       changed += 1;
@@ -364,7 +388,7 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
     ) {
       return fail('22023', 'El reto no es válido');
     }
-    const open = [...challenges.values()].filter(
+    const open = liveChallenges().filter(
       (item) => item.groupId === groupId && item.endsAt > now(),
     ).length;
     if (open >= FAKE_PARTY_LIMITS.openChallengesPerGroup) return ok({ status: 'limit' });
@@ -377,9 +401,60 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
       startsAt: now(),
       endsAt: now() + 7 * DAY_MS,
       createdBy: userId,
+      deletedAt: null,
     };
     challenges.set(challenge.id, challenge);
     return ok({ status: 'created', challengeId: challenge.id });
+  }
+
+  function deleteChallenge(
+    userId: string,
+    args: Readonly<Record<string, unknown>>,
+  ): FakePartyResult {
+    const challenge = isUuid(args.p_challenge) ? challenges.get(args.p_challenge) : undefined;
+    if (!challenge || !isMember(challenge.groupId, userId)) {
+      return fail('PT002', 'No eres miembro de ese grupo');
+    }
+    if (challenge.createdBy !== userId && groups.get(challenge.groupId)?.ownerId !== userId) {
+      return fail('PT005', 'Solo quien administra el grupo o quien creó el reto puede borrarlo');
+    }
+    if (challenge.deletedAt !== null) return ok(false);
+    challenge.deletedAt = now();
+    return ok(true);
+  }
+
+  // ------------------------------------------------------------------ moderación
+
+  /** null si quien llama administra el grupo y sigue en él, o el error que daría la base */
+  function ownerProblem(groupId: unknown, userId: string): FakePartyResult | null {
+    if (!isUuid(groupId) || !isMember(groupId, userId)) {
+      return fail('PT002', 'No eres miembro de ese grupo');
+    }
+    if (groups.get(groupId)?.ownerId !== userId) {
+      return fail('PT005', 'Solo quien administra el grupo puede hacer esto');
+    }
+    return null;
+  }
+
+  function rotateCode(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
+    const problem = ownerProblem(args.p_group, userId);
+    if (problem) return problem;
+    const group = groups.get(args.p_group as string) as Group;
+    group.inviteCode = newCode();
+    return ok({ status: 'rotated', inviteCode: group.inviteCode });
+  }
+
+  function removeMember(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
+    const problem = ownerProblem(args.p_group, userId);
+    if (problem) return problem;
+    const memberId = args.p_member;
+    if (!isUuid(memberId) || memberId === userId) {
+      return fail('22023', 'Para irte del grupo usa salir del grupo');
+    }
+    const member = membership(args.p_group as string, memberId);
+    if (member?.leftAt !== null) return ok(false);
+    member.leftAt = now();
+    return ok(true);
   }
 
   function createDuel(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
@@ -421,15 +496,31 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
     return ok({ status: 'created', duelId: duel.id });
   }
 
-  function submitResult(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
-    const duel = isUuid(args.p_duel) ? duels.get(args.p_duel) : undefined;
+  /** El duelo si quien llama participa y sigue en el grupo */
+  function ownDuel(userId: string, duelId: unknown): Duel | null {
+    const duel = isUuid(duelId) ? duels.get(duelId) : undefined;
     if (
       !duel ||
       (duel.challengerId !== userId && duel.opponentId !== userId) ||
       !isMember(duel.groupId, userId)
     ) {
-      return fail('PT002', 'No participas en ese duelo');
+      return null;
     }
+    return duel;
+  }
+
+  function startDuel(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
+    const duel = ownDuel(userId, args.p_duel);
+    if (!duel) return fail('PT002', 'No participas en ese duelo');
+    const key = resultKey(duel.id, userId);
+    if (starts.has(key)) return ok('already');
+    starts.set(key, now());
+    return ok('started');
+  }
+
+  function submitResult(userId: string, args: Readonly<Record<string, unknown>>): FakePartyResult {
+    const duel = ownDuel(userId, args.p_duel);
+    if (!duel) return fail('PT002', 'No participas en ese duelo');
     const answered = duel.questionIds.length;
     const { p_correct: correct, p_total_ms: totalMs } = args;
     if (
@@ -443,9 +534,77 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
       return fail('22023', 'El resultado no es válido');
     }
     const key = resultKey(duel.id, userId);
+    if (!starts.has(key)) return fail('PT003', 'Primero empieza el duelo');
+    if (totalMs < correct * FAKE_PARTY_LIMITS.duelMsPerCorrect) {
+      return fail('PT004', 'El tiempo no alcanza para tantos aciertos');
+    }
     if (results.has(key)) return ok('already');
     results.set(key, { correct, answered, totalMs, finishedAt: now() });
     return ok('saved');
+  }
+
+  // ------------------------------------------------------------------ exportar mis datos
+
+  function exportMine(userId: string): FakePartyResult {
+    const mine = memberships
+      .filter((item) => item.userId === userId)
+      .sort((a, b) => a.joinedAt - b.joinedAt);
+    return ok({
+      memberships: mine.map((item) => {
+        const group = groups.get(item.groupId);
+        return {
+          groupId: item.groupId,
+          groupName: item.leftAt === null ? (group?.name ?? null) : null,
+          isOwner: group?.ownerId === userId,
+          joinedAt: iso(item.joinedAt),
+          leftAt: item.leftAt === null ? null : iso(item.leftAt),
+        };
+      }),
+      weeklyXp: [...weeklyXp.entries()]
+        .map(([key, xp]) => ({ parts: key.split('|'), xp }))
+        .filter(({ parts }) => parts[1] === userId)
+        .map(({ parts, xp }) => ({
+          groupId: parts[0],
+          weekStart: parts[2],
+          xp,
+          updatedAt: iso(now()),
+        })),
+      challengeContributions: [...progress.entries()]
+        .filter(([key]) => key.endsWith(`|${userId}`))
+        .map(([key, value]) => ({
+          challengeId: key.slice(0, key.indexOf('|')),
+          groupId: value.groupId,
+          amount: value.amount,
+          updatedAt: iso(now()),
+        })),
+      challengesCreated: [...challenges.values()]
+        .filter((item) => item.createdBy === userId)
+        .map((item) => ({
+          challengeId: item.id,
+          groupId: item.groupId,
+          title: item.title,
+          metric: item.metric,
+          target: item.target,
+          startsAt: iso(item.startsAt),
+          endsAt: iso(item.endsAt),
+          deletedAt: item.deletedAt === null ? null : iso(item.deletedAt),
+        })),
+      duels: [...duels.values()]
+        .filter((item) => item.challengerId === userId || item.opponentId === userId)
+        .map((item) => {
+          const key = resultKey(item.id, userId);
+          const startedAt = starts.get(key);
+          return {
+            duelId: item.id,
+            groupId: item.groupId,
+            role: item.challengerId === userId ? 'challenger' : 'opponent',
+            questionCount: item.questionIds.length,
+            createdAt: iso(item.createdAt),
+            startedAt: startedAt === undefined ? null : iso(startedAt),
+            result: scoreJson(results.get(key)),
+          };
+        }),
+    });
   }
 
   // ------------------------------------------------------------------ borrados en cascada
@@ -461,8 +620,10 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
       if (duel.groupId !== groupId) continue;
       if (duel.challengerId !== userId && duel.opponentId !== userId) continue;
       duels.delete(duel.id);
-      results.delete(resultKey(duel.id, duel.challengerId));
-      results.delete(resultKey(duel.id, duel.opponentId));
+      for (const participant of [duel.challengerId, duel.opponentId]) {
+        results.delete(resultKey(duel.id, participant));
+        starts.delete(resultKey(duel.id, participant));
+      }
     }
   }
 
@@ -501,22 +662,47 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
           return createChallenge(userId, args);
         case 'party_create_duel':
           return createDuel(userId, args);
+        case 'party_start_duel':
+          return startDuel(userId, args);
         case 'party_submit_duel_result':
           return submitResult(userId, args);
+        case 'party_rotate_code':
+          return rotateCode(userId, args);
+        case 'party_remove_member':
+          return removeMember(userId, args);
+        case 'party_delete_challenge':
+          return deleteChallenge(userId, args);
+        case 'party_export_mine':
+          return exportMine(userId);
         default:
           return null;
       }
     },
     forgetMemberships,
     forgetUser(userId) {
-      forgetMemberships(userId);
+      // Antes que nada, cada grupo que administraba pasa al miembro activo más antiguo. Si ya no queda
+      // nadie, el grupo se borra con todo lo suyo
       for (const group of [...groups.values()]) {
         if (group.ownerId !== userId) continue;
+        const heir = activeIn(group.id)
+          .filter((item) => item.userId !== userId)
+          .sort((a, b) => a.joinedAt - b.joinedAt || a.userId.localeCompare(b.userId))[0];
+        if (heir) {
+          group.ownerId = heir.userId;
+          continue;
+        }
         groups.delete(group.id);
         for (const item of memberships.filter((entry) => entry.groupId === group.id)) {
           dropMembershipData(group.id, item.userId);
           memberships.splice(memberships.indexOf(item), 1);
         }
+        for (const challenge of [...challenges.values()]) {
+          if (challenge.groupId === group.id) challenges.delete(challenge.id);
+        }
+      }
+      forgetMemberships(userId);
+      for (const challenge of challenges.values()) {
+        if (challenge.createdBy === userId) challenge.createdBy = null;
       }
       const keep = joinFailures.filter((item) => item.userId !== userId);
       joinFailures.length = 0;
@@ -528,6 +714,9 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
     activeMembers(groupName) {
       const group = byName(groupName);
       return group ? activeIn(group.id).map((item) => item.userId) : [];
+    },
+    ownerOf(groupName) {
+      return byName(groupName)?.ownerId;
     },
     publishedXp(groupName, userId) {
       const group = byName(groupName);

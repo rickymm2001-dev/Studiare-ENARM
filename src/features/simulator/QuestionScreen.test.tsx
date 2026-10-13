@@ -26,7 +26,9 @@ afterEach(async () => {
  * Una práctica con tantas preguntas como se pida, lista para contestar. En cada una, la opción 1
  * es la correcta y las demás no
  */
-async function startPractice(options: { count?: number; settings?: Record<string, unknown> } = {}) {
+async function startPractice(
+  options: { count?: number; settings?: Record<string, unknown>; duelId?: string } = {},
+) {
   const bundles = Array.from({ length: options.count ?? 1 }, () => makeQuestionWithOptions());
   app = await renderApp(SCREENS.question.path, {
     user: { settings: UserSettingsSchema.parse(options.settings ?? {}) },
@@ -42,8 +44,8 @@ async function startPractice(options: { count?: number; settings?: Record<string
         answers: [],
         startedAt: Date.now(),
         ended: false,
-        kind: 'practice',
-        duelId: null,
+        kind: options.duelId ? 'challenge' : 'practice',
+        duelId: options.duelId ?? null,
         targetTags: [],
       });
     },
@@ -228,6 +230,31 @@ describe('pantalla de la pregunta', () => {
       const { summary, result } = await answerAndOpen();
       expect(within(summary).getByText(t.simulator.summaryLabels.xp)).toBeVisible();
       expect(within(result).getByText(/^\+\d+ XP$/)).toBeVisible();
+    });
+
+    it('en modo enfoque el resumen de un duelo sigue llevando a su resultado', async () => {
+      // Los duelos se quedan en modo enfoque. Son un compromiso de uno a uno que el alumno eligió
+      usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+      const typing = userEvent.setup();
+      const { first } = await startPractice({ duelId: newId() });
+      await screen.findByText(first.question.prompt);
+      await typing.click(option(1));
+      await typing.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      expect(screen.getByRole('link', { name: t.party.duel.seeResult })).toHaveAttribute(
+        'href',
+        SCREENS.party.path,
+      );
+      expect(screen.queryByText(t.simulator.summaryLabels.xp)).toBeNull();
+    });
+
+    it('una práctica libre no lleva al resultado de ningún duelo', async () => {
+      const { first } = await startPractice();
+      await screen.findByText(first.question.prompt);
+      await userEvent.click(option(1));
+      await userEvent.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      expect(screen.queryByRole('link', { name: t.party.duel.seeResult })).toBeNull();
     });
 
     it('en modo enfoque ninguno lo dice, aunque el XP quede registrado', async () => {

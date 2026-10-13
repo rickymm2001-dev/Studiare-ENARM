@@ -1,8 +1,9 @@
 // Piezas de Party que comparten la demostración y la nube (9.6, B7 del plan del cambio). Crear un
-// grupo, entrar con un código, crear un reto, la tabla de la semana y la lista de miembros. Quien las
-// usa decide qué pasa al enviar y qué mensaje se muestra.
+// grupo, entrar con un código, crear un reto, la tabla de la semana, la lista de miembros y la
+// confirmación de las acciones de quien administra un grupo. Quien las usa decide qué pasa al enviar y
+// qué mensaje se muestra.
 import { Plus, Users } from 'lucide-react';
-import { useState, type SyntheticEvent } from 'react';
+import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import type { Ranked } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -322,5 +323,90 @@ export function MemberList({ members }: { members: readonly MemberEntry[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * Una acción que no se deshace, como quitar a un miembro o borrar un reto. El primer toque pregunta y
+ * explica qué pasa. onConfirm devuelve null si salió bien o el mensaje del problema
+ */
+export function ConfirmAction({
+  label,
+  icon,
+  confirmText,
+  confirmLabel,
+  onConfirm,
+}: {
+  label: string;
+  icon?: ReactNode;
+  confirmText: string;
+  confirmLabel: string;
+  onConfirm: () => Promise<string | null>;
+}) {
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
+  if (!confirming) {
+    return (
+      <Button
+        size="sm"
+        variant="ghost"
+        className="self-start"
+        onClick={() => {
+          setConfirming(true);
+        }}
+      >
+        {icon}
+        {label}
+      </Button>
+    );
+  }
+  const run = async () => {
+    setBusy(true);
+    setProblem(null);
+    try {
+      const failure = await onConfirm();
+      if (failure === null) setConfirming(false);
+      else setProblem(failure);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div
+      role="group"
+      aria-label={label}
+      className="flex flex-col gap-2 rounded-md border border-line p-3"
+    >
+      <p className="text-sm">{confirmText}</p>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          variant="danger"
+          disabled={busy}
+          onClick={() => {
+            void run();
+          }}
+        >
+          {confirmLabel}
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            setConfirming(false);
+            setProblem(null);
+          }}
+        >
+          {t.partyCloud.admin.cancel}
+        </Button>
+      </div>
+      {problem ? (
+        <p role="alert" className="text-sm text-danger">
+          {problem}
+        </p>
+      ) : null}
+    </div>
   );
 }

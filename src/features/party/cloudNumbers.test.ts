@@ -3,7 +3,12 @@ import type { PartyOverview } from '@/data/cloud/party';
 import type { AppEvent } from '@/data/schemas/events';
 import { newId } from '@/data/testing/fixtures';
 import { answered, event, minute, option, question } from '../tutor/testing/fixtures';
-import { contributionTo, myPartyNumbers, playedDuelsToSubmit } from './cloudNumbers';
+import {
+  contributionTo,
+  myPartyNumbers,
+  playedDuelsToSubmit,
+  submittableResult,
+} from './cloudNumbers';
 import { partyModeOf } from './partyMode';
 
 const day = (cards: number, questions: number, xp: number) => ({
@@ -70,6 +75,7 @@ function overview(
             opponentId: '7a1d3c5e-2b4f-4a6c-8e9d-0f1a2b3c4d5e',
             questionIds: questions.map((item) => item.id),
             createdAt: '2026-10-12T15:00:00.000Z',
+            startedAt: null,
             mine: duelMine,
             rival: null,
           },
@@ -116,6 +122,23 @@ describe('aportes a los retos de la nube', () => {
     expect(numbers.weeklyXp).toBe(260);
     expect([...numbers.contributions]).toEqual([['5b2a1c3d-4e5f-4a6b-9c7d-8e9f0a1b2c3d', 35]]);
   });
+
+  it('recorta a los topes del servidor, así nunca se rechaza la publicación (PT004)', () => {
+    const big = {
+      ...snapshot,
+      weeklyXp: 80_000,
+      activity: { ...snapshot.activity, '2026-10-13': day(500, 6, 100) },
+    };
+    const numbers = myPartyNumbers(
+      overview(null),
+      big,
+      'America/Merida',
+      new Date('2026-10-15T18:00:00.000Z'),
+    );
+    expect(numbers.weeklyXp).toBe(50_000);
+    // Nadie aporta más que la meta de 100 tarjetas de todo el grupo
+    expect(numbers.contributions.get('5b2a1c3d-4e5f-4a6b-9c7d-8e9f0a1b2c3d')).toBe(100);
+  });
 });
 
 describe('duelos jugados en este dispositivo', () => {
@@ -152,8 +175,58 @@ describe('duelos jugados en este dispositivo', () => {
     ]);
   });
 
-  it('no manda nada si no lo ha terminado o si el servidor ya lo tiene', () => {
-    expect(playedDuelsToSubmit(overview(null), played.slice(0, -1))).toEqual([]);
+  it('un intento que se dejó a medias cuenta, con las que faltan como incorrectas', () => {
+    // Sin el fin de la sesión y con solo 5 respuestas
+    const halfway = played.slice(0, 6);
+    expect(playedDuelsToSubmit(overview(null), halfway)).toEqual([
+      { duelId: DUEL, correct: 5, totalMs: 150_000 },
+    ]);
+    // Empezar otra sesión del mismo duelo no cambia nada. Cuenta la primera
+    const replay = newId();
+    const again: AppEvent[] = [
+      ...halfway,
+      event(
+        'session_started',
+        { kind: 'challenge', config: { duelId: DUEL, count: 20 } },
+        minute(40),
+        replay,
+      ),
+      ...questions.map((item, index) =>
+        answered(item, right.id, true, minute(41 + index), { msToAnswer: 30_000 }, replay),
+      ),
+    ];
+    expect(playedDuelsToSubmit(overview(null), again)).toEqual([
+      { duelId: DUEL, correct: 5, totalMs: 150_000 },
+    ]);
+  });
+
+  it('no manda el duelo que tiene abierto en esta pestaña hasta que lo termine o lo deje', () => {
+    expect(playedDuelsToSubmit(overview(null), played.slice(0, 6), sessionId)).toEqual([]);
+    expect(playedDuelsToSubmit(overview(null), played.slice(0, 6), newId())).toHaveLength(1);
+  });
+
+  it('un tiempo menor al mínimo por acierto se manda como el mínimo', () => {
+    expect(submittableResult({ correct: 2, totalMs: 0 })).toEqual({ correct: 2, totalMs: 6_000 });
+    expect(submittableResult({ correct: 0, totalMs: 0 })).toEqual({ correct: 0, totalMs: 0 });
+    expect(submittableResult({ correct: 4, totalMs: 90_000 })).toEqual({
+      correct: 4,
+      totalMs: 90_000,
+    });
+    const fast: AppEvent[] = [
+      played[0] as AppEvent,
+      ...questions
+        .slice(0, 3)
+        .map((item, index) =>
+          answered(item, right.id, true, minute(1 + index), { msToAnswer: 500 }, sessionId),
+        ),
+    ];
+    expect(playedDuelsToSubmit(overview(null), fast)).toEqual([
+      { duelId: DUEL, correct: 3, totalMs: 9_000 },
+    ]);
+  });
+
+  it('no manda nada si no lo ha empezado o si el servidor ya lo tiene', () => {
+    expect(playedDuelsToSubmit(overview(null), [])).toEqual([]);
     expect(
       playedDuelsToSubmit(
         overview({

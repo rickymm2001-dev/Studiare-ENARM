@@ -105,7 +105,7 @@ describe('referidos en Party', () => {
   });
 
   it('cada respuesta del servidor tiene su mensaje', async () => {
-    for (const result of ['own', 'already', 'too_late', 'already_paid'] as const) {
+    for (const result of ['own', 'already', 'circular', 'too_late', 'already_paid'] as const) {
       fakeCloudFor({ redeem: result });
       const typing = userEvent.setup();
       const view = render(<ReferralCard />);

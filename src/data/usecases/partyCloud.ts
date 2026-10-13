@@ -7,6 +7,7 @@ import { isValidInviteCode } from '@/engines/party';
 import { uuidToUlid } from '../cloud/cloudIds';
 import {
   createPartyGroup,
+  fetchMyPartyExport,
   joinPartyGroup,
   leaveAllPartyGroups,
   leavePartyGroup,
@@ -22,6 +23,7 @@ import {
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
 import type { User } from '../schemas/people';
+import type { PartyCloudExport } from './exportData';
 
 type Api = Pick<DataApi, 'recordEvent'>;
 type Rpc = Pick<SupabaseClient, 'rpc'>;
@@ -178,4 +180,15 @@ export async function submitPlayedDuels(
     if (reply.ok && reply.value === 'saved') saved += 1;
   }
   return saved;
+}
+
+/**
+ * Lo de Party del alumno que vive solo en la nube, para Exportar mis datos. Sus membresías, el XP que
+ * publicó, sus aportes, los retos que creó y sus duelos. Nada de los demás
+ */
+export async function exportMyPartyData(cloud: Rpc): Promise<PartyCloudExport> {
+  const reply = await fetchMyPartyExport(cloud);
+  return reply.ok
+    ? { status: 'included', data: reply.value }
+    : { status: 'unavailable', reason: reply.reason };
 }

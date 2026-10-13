@@ -697,8 +697,12 @@ select
 - Toda escritura pasa por funciones. Ya no se puede insertar una membresía directo, que antes dejaba entrar a un grupo sin su código con solo conocer su id
 - Hay topes contra el abuso. 50 miembros por grupo, 10 grupos por alumno, 5 grupos nuevos al día, 10 retos activos por grupo, 10 duelos propios esperando al rival y 10 códigos fallidos por hora
 - En la base de demostración Party sigue en el navegador con sus compañeros simulados, marcados como tales. Sin la nube, Party solo explica que la necesita
-- Antes de compartir nada la app pide el permiso de Party, que empieza apagado. Quitarlo en Configuración, Privacidad, saca al alumno de todos sus grupos
+- Antes de compartir nada la app pide el permiso de Party, que empieza apagado. Quitarlo en Configuración, Privacidad, saca al alumno de todos sus grupos. El permiso dice todo lo que ve un compañero, el alias, la foto de perfil si subió una, el XP de la semana, el aporte a los retos y, en un duelo, aciertos y tiempo. De un perfil ajeno la API solo deja leer el id y el alias
 - Party se cierra en Gratis en el bloque B8. La condición del plan va en una sola función, party_open, que ya usan todas las políticas y funciones de Party
+- Un duelo es un solo intento. Al tocar Jugar el inicio queda en el servidor (party_start_duel), una vez por participante, y sin ese inicio el servidor no acepta el resultado. La app cuenta la primera sesión que empezó, aunque no la termine
+- El servidor rechaza cifras imposibles con el código PT004. Un duelo pide al menos 3 segundos por acierto, el XP de la semana llega hasta 50,000 y el aporte a un reto no pasa de su meta. La app recorta antes de mandar, así que solo un navegador manipulado lo ve
+- Quien administra el grupo cambia el código de invitación, quita a un miembro y borra retos. Un reto lo borra también quien lo creó. Borrar un reto lo marca y no borra la fila, así la migración sigue sin delete
+- Exportar mis datos incluye lo de Party que vive en la nube, con party_export_mine. Solo trae las filas propias
 
 ### Cómo aplicar la migración
 
@@ -723,12 +727,13 @@ select
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 ```
 
-7. Debe salir duelos con el valor party_duels, alumno_entra en true, anon_entra, alumno_inserta_membresias y alumno_publica_directo en false, y politicas_con_barrera en 30. Si cualquiera de los false sale en true, avísame antes de abrir a alumnos
+7. Debe salir duelos con el valor party_duels, alumno_entra en true, anon_entra, alumno_inserta_membresias y alumno_publica_directo en false, y politicas_con_barrera en 31. Si cualquiera de los false sale en true, avísame antes de abrir a alumnos
+8. Después pega completo supabase/manual/party-dueno-al-borrar-cuenta.sql en otra New query y da clic en Run. Cambia una llave foránea, así que el conector no lo puede aplicar. Su consulta del final dice cómo comprobarlo
 
 ### Qué conviene saber
 
 - La tabla se actualiza cuando cada quien abre Party o Inicio, porque ahí su navegador publica su XP. Quien no abre la app esa semana aparece con 0
-- Si quien creó un grupo borra su cuenta, el grupo se borra para todos, porque así lo dejó la primera migración. Cambiarlo pide quitar una llave foránea, y queda para cuando haga falta
+- Si quien administra un grupo borra su cuenta, el grupo pasa al miembro activo más antiguo y solo se borra si ya no queda nadie. Eso vive en supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia la llave foránea de owner_id a on delete set null y agrega el disparador. Mientras no lo pegues, sigue la regla de la primera migración y el grupo se borra para todos
 - Las preguntas de un duelo salen hoy del banco de demostración, igual en todos los navegadores. Con el banco real en la nube (B11) las elegirá el servidor
 
 ## Proyecto real conectado

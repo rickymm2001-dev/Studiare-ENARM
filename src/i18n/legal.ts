@@ -27,7 +27,7 @@ export interface LegalDoc {
 const privacy: LegalDoc = {
   title: 'Aviso de privacidad',
   version: PRIVACY_NOTICE_VERSION,
-  updated: '10 de octubre de 2026',
+  updated: '13 de octubre de 2026',
   intro: [
     'En Studiare cuidamos tus datos. Este aviso explica quién los trata, cuáles son, para qué los usamos, con quién se comparten y cómo ejerces tus derechos. Si algo no queda claro, escríbenos.',
   ],
@@ -74,7 +74,7 @@ const privacy: LegalDoc = {
         'Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, Privacidad. Decir que no a una no te quita el resto del servicio.',
       ],
       bullets: [
-        'Party. Compartir tu alias, XP, nivel y racha con los grupos a los que te unas.',
+        'Party. Compartir con los grupos a los que te unas tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos, y en un duelo tus aciertos y tu tiempo. Tus compañeros nunca ven tu correo ni tus demás datos de cuenta.',
         'Análisis con IA. Usar tus errores para que el tutor te dé hipótesis y un informe con IA.',
         'Mejora anónima. Usar tus datos sin identidad para mejorar el banco de preguntas y medir si lo que se estudia se parece al examen. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
       ],

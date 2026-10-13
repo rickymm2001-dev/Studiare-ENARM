@@ -1,7 +1,8 @@
 // Los grupos del alumno en la nube, al día (B7 del plan del cambio). Al abrir Party o Inicio pide el
-// resumen al servidor, manda los resultados de los duelos que el alumno ya terminó en este dispositivo
-// y publica su XP de la semana y sus aportes a los retos si cambiaron. Cada cifra sale de su bitácora.
-// Mientras recarga después de una acción, la pantalla sigue mostrando lo que ya tenía.
+// resumen al servidor, manda los resultados de los duelos que el alumno ya jugó en este dispositivo,
+// salvo el que tiene a medias en esta pestaña, y publica su XP de la semana y sus aportes a los retos
+// si cambiaron. Cada cifra sale de su bitácora. Mientras recarga después de una acción, la pantalla
+// sigue mostrando lo que ya tenía.
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react';
 import { getCloud } from '@/data/cloud/client';
 import {
@@ -14,7 +15,9 @@ import type { AppEvent } from '@/data/schemas/events';
 import { publishMyNumbers, submitPlayedDuels } from '@/data/usecases/partyCloud';
 import { weekStartOf } from '@/engines/studyDay';
 import type { Snapshot } from '../home/snapshot';
+import { usePractice } from '../simulator/practice';
 import { myPartyNumbers, playedDuelsToSubmit } from './cloudNumbers';
+import { activeDuelSessionOf } from './duelActions';
 
 export type CloudPartyState =
   | { status: 'loading' }
@@ -24,6 +27,8 @@ export type CloudPartyState =
 export function useCloudParty(input: {
   /** false mientras falte el permiso de Party. Entonces no pide nada */
   enabled: boolean;
+  /** El alumno, para saber qué duelo tiene a medias en esta pestaña */
+  userId: string;
   snapshot: Snapshot;
   events: readonly AppEvent[];
   timeZone: string;
@@ -49,7 +54,8 @@ export function useCloudParty(input: {
       let overview = loaded.value;
       setState({ status: 'ready', overview });
 
-      const played = playedDuelsToSubmit(overview, input.events).filter(
+      const playing = activeDuelSessionOf(usePractice.getState(), input.userId);
+      const played = playedDuelsToSubmit(overview, input.events, playing).filter(
         (duel) => !attempted.current.has(duel.duelId),
       );
       for (const duel of played) attempted.current.add(duel.duelId);

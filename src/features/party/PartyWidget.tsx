@@ -17,8 +17,8 @@ import { SimulatedDataLabel } from '@/ui/components/labels';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import type { Snapshot } from '../home/snapshot';
 import type { ReadySession } from '../shared/RequireSession';
-import { contributionTo, localDuelResult } from './cloudNumbers';
-import { duelView } from './duels';
+import { contributionTo } from './cloudNumbers';
+import { duelAttemptSession, duelView } from './duels';
 import { partyModeOf } from './partyMode';
 import { challengeContributions, memberStats } from './stats';
 import { useCloudParty } from './useCloudParty';
@@ -164,7 +164,13 @@ function CloudPartyWidget(props: WidgetProps) {
 
 function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
   const { user } = session;
-  const { state } = useCloudParty({ enabled: true, snapshot, events, timeZone: user.timeZone });
+  const { state } = useCloudParty({
+    enabled: true,
+    userId: user.id,
+    snapshot,
+    events,
+    timeZone: user.timeZone,
+  });
   if (state.status === 'loading') return <SkeletonRows label={t.partyCloud.loading} rows={2} />;
   if (state.status === 'failed') return <WidgetNote note={t.partyCloud.widget.failed} />;
   const group = state.overview.groups[0];
@@ -190,8 +196,10 @@ function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
         challenge.target,
       )
     : null;
+  // Los que todavía no empieza, en ningún dispositivo. Uno empezado es un intento ya usado
   const pendingDuels = group.duels.filter(
-    (duel) => duel.mine === null && localDuelResult(events, duel) === null,
+    (duel) =>
+      duel.mine === null && duel.startedAt === null && duelAttemptSession(events, duel.id) === null,
   ).length;
   return (
     <WidgetBody

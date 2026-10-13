@@ -1,10 +1,16 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { weekStartOf, studyDayOf } from '@/engines/studyDay';
+import { FAKE_PARTY_LIMITS } from '../testing/fakePartyServer';
 import { makeFakeCloud, type FakeCloud } from '../testing/fakeCloud';
 import {
+  PARTY_CAPS,
   createPartyChallenge,
   createPartyDuel,
   createPartyGroup,
+  deletePartyChallenge,
+  fetchMyPartyExport,
   fetchPartyOverview,
   joinPartyGroup,
   leaveAllPartyGroups,
@@ -12,6 +18,9 @@ import {
   normalizeInviteCode,
   partyFailureOf,
   publishPartyNumbers,
+  removePartyMember,
+  rotatePartyCode,
+  startPartyDuel,
   submitPartyDuelResult,
 } from './party';
 
@@ -142,10 +151,16 @@ describe('retos y duelos en la nube', () => {
     if (!created.ok || created.value.status !== 'created') throw new Error('no se creó el duelo');
     const duelId = created.value.duelId;
 
+    // Sin empezar el duelo en el servidor no se acepta el resultado
+    expect(await submitPartyDuelResult(as(ANA), { duelId, correct: 14, totalMs: 600_000 })).toEqual(
+      { ok: false, reason: 'not_started' },
+    );
+    expect(await startPartyDuel(as(ANA), duelId)).toEqual({ ok: true, value: 'started' });
+    expect(await startPartyDuel(as(ANA), duelId)).toEqual({ ok: true, value: 'already' });
     expect(await submitPartyDuelResult(as(ANA), { duelId, correct: 14, totalMs: 600_000 })).toEqual(
       { ok: true, value: 'saved' },
     );
-    expect(await submitPartyDuelResult(as(ANA), { duelId, correct: 20, totalMs: 1 })).toEqual({
+    expect(await submitPartyDuelResult(as(ANA), { duelId, correct: 20, totalMs: 60_000 })).toEqual({
       ok: true,
       value: 'already',
     });
@@ -153,12 +168,19 @@ describe('retos y duelos en la nube', () => {
     expect(before.ok && before.value.groups[0]?.duels[0]).toMatchObject({
       id: duelId,
       questionIds: questions,
+      startedAt: null,
       mine: null,
       rival: null,
     });
+    await startPartyDuel(as(BRUNO), duelId);
+    // Menos de 3 segundos por acierto no se puede contestar
+    expect(
+      await submitPartyDuelResult(as(BRUNO), { duelId, correct: 12, totalMs: 35_999 }),
+    ).toEqual({ ok: false, reason: 'implausible' });
     await submitPartyDuelResult(as(BRUNO), { duelId, correct: 12, totalMs: 500_000 });
     const after = await fetchPartyOverview(as(BRUNO), week());
     expect(after.ok && after.value.groups[0]?.duels[0]).toMatchObject({
+      startedAt: expect.any(String) as string,
       mine: { correct: 12, answered: 20, totalMs: 500_000 },
       rival: { correct: 14, answered: 20, totalMs: 600_000 },
     });
@@ -171,6 +193,131 @@ describe('retos y duelos en la nube', () => {
       ok: false,
       reason: 'not_member',
     });
+  });
+
+  it('el XP de la semana y los aportes tienen tope', async () => {
+    const { fake, as } = threeStudents();
+    const group = await groupOfAna(fake, as);
+    const challenge = await createPartyChallenge(as(ANA), {
+      groupId: group.groupId,
+      title: 'Cien',
+      metric: 'questions',
+      target: 100,
+    });
+    if (!challenge.ok || challenge.value.status !== 'created') throw new Error('sin reto');
+    const challengeId = challenge.value.challengeId;
+    expect(
+      await publishPartyNumbers(as(BRUNO), {
+        weekStart: week(),
+        weeklyXp: PARTY_CAPS.weeklyXp + 1,
+        contributions: [],
+      }),
+    ).toEqual({ ok: false, reason: 'implausible' });
+    expect(
+      await publishPartyNumbers(as(BRUNO), {
+        weekStart: week(),
+        weeklyXp: 10,
+        contributions: [{ challengeId, amount: 101 }],
+      }),
+    ).toEqual({ ok: false, reason: 'implausible' });
+    // Todo o nada. El XP tampoco se guardó
+    expect(fake.party.publishedXp('Guardia', BRUNO)).toBeNull();
+    expect(
+      await publishPartyNumbers(as(BRUNO), {
+        weekStart: week(),
+        weeklyXp: PARTY_CAPS.weeklyXp,
+        contributions: [{ challengeId, amount: 100 }],
+      }),
+    ).toEqual({ ok: true, value: 2 });
+  });
+
+  it('quien administra cambia el código, quita miembros y borra retos', async () => {
+    const { fake, as } = threeStudents();
+    const group = await groupOfAna(fake, as);
+    const challenge = await createPartyChallenge(as(BRUNO), {
+      groupId: group.groupId,
+      title: 'De Bruno',
+      metric: 'cards',
+      target: 50,
+    });
+    if (!challenge.ok || challenge.value.status !== 'created') throw new Error('sin reto');
+
+    // Bruno no administra el grupo, pero borra su propio reto
+    expect(await rotatePartyCode(as(BRUNO), group.groupId)).toEqual({
+      ok: false,
+      reason: 'not_owner',
+    });
+    expect(await removePartyMember(as(BRUNO), { groupId: group.groupId, memberId: ANA })).toEqual({
+      ok: false,
+      reason: 'not_owner',
+    });
+    expect(await deletePartyChallenge(as(BRUNO), challenge.value.challengeId)).toEqual({
+      ok: true,
+      value: true,
+    });
+    expect(await deletePartyChallenge(as(BRUNO), challenge.value.challengeId)).toEqual({
+      ok: true,
+      value: false,
+    });
+    const overview = await fetchPartyOverview(as(ANA), week());
+    expect(overview.ok && overview.value.groups[0]?.challenges).toEqual([]);
+
+    // Ana cambia el código. El de antes ya no abre el grupo
+    const rotated = await rotatePartyCode(as(ANA), group.groupId);
+    if (!rotated.ok) throw new Error('no se cambió el código');
+    expect(rotated.value.inviteCode).not.toBe(group.inviteCode);
+    expect(fake.party.codeOf('Guardia')).toBe(rotated.value.inviteCode);
+    expect(await joinPartyGroup(as(CARLA), group.inviteCode)).toEqual({
+      ok: true,
+      value: { status: 'not_found' },
+    });
+
+    // Ana no se quita a sí misma y quita a Bruno
+    expect(await removePartyMember(as(ANA), { groupId: group.groupId, memberId: ANA })).toEqual({
+      ok: false,
+      reason: 'invalid',
+    });
+    expect(await removePartyMember(as(ANA), { groupId: group.groupId, memberId: BRUNO })).toEqual({
+      ok: true,
+      value: true,
+    });
+    expect(fake.party.activeMembers('Guardia')).toEqual([ANA]);
+    const bruno = await fetchPartyOverview(as(BRUNO), week());
+    expect(bruno.ok && bruno.value.groups).toEqual([]);
+  });
+
+  it('exporta solo las filas propias de Party', async () => {
+    const { fake, as } = threeStudents();
+    const group = await groupOfAna(fake, as);
+    await publishPartyNumbers(as(BRUNO), { weekStart: week(), weeklyXp: 45, contributions: [] });
+    const duel = await createPartyDuel(as(ANA), {
+      groupId: group.groupId,
+      opponentId: BRUNO,
+      questionIds: questions,
+    });
+    if (!duel.ok || duel.value.status !== 'created') throw new Error('sin duelo');
+    await startPartyDuel(as(BRUNO), duel.value.duelId);
+    await submitPartyDuelResult(as(BRUNO), {
+      duelId: duel.value.duelId,
+      correct: 3,
+      totalMs: 90_000,
+    });
+
+    const exported = await fetchMyPartyExport(as(BRUNO));
+    if (!exported.ok) throw new Error('no se exportó');
+    expect(exported.value.memberships).toEqual([
+      expect.objectContaining({ groupId: group.groupId, groupName: 'Guardia', isOwner: false }),
+    ]);
+    expect(exported.value.weeklyXp).toEqual([expect.objectContaining({ xp: 45 })]);
+    expect(exported.value.duels).toEqual([
+      expect.objectContaining({
+        duelId: duel.value.duelId,
+        role: 'opponent',
+        result: expect.objectContaining({ correct: 3, totalMs: 90_000 }) as unknown,
+      }),
+    ]);
+    // Nada de Ana, ni su id
+    expect(JSON.stringify(exported.value)).not.toContain(ANA);
   });
 
   it('retar a quien ya no está en el grupo lo dice', async () => {
@@ -193,6 +340,9 @@ describe('errores', () => {
     expect(partyFailureOf({ code: '42501' })).toBe('other_device');
     expect(partyFailureOf({ code: 'PT001' })).toBe('closed');
     expect(partyFailureOf({ code: 'PT002' })).toBe('not_member');
+    expect(partyFailureOf({ code: 'PT003' })).toBe('not_started');
+    expect(partyFailureOf({ code: 'PT004' })).toBe('implausible');
+    expect(partyFailureOf({ code: 'PT005' })).toBe('not_owner');
     expect(partyFailureOf({ code: '22023' })).toBe('invalid');
     expect(partyFailureOf({ code: 'PGRST202' })).toBe('unavailable');
     expect(partyFailureOf({ message: 'Failed to fetch' })).toBe('network');
@@ -239,5 +389,26 @@ describe('errores', () => {
       p_xp: 80,
       p_progress: [{ challengeId: ANA, amount: 5 }],
     });
+  });
+});
+
+describe('los topes son los de la base', () => {
+  it('PARTY_CAPS y el doble de pruebas usan los mismos números que party_limit', () => {
+    const sql = readFileSync(
+      join(
+        import.meta.dirname,
+        '..',
+        '..',
+        '..',
+        'supabase',
+        'migrations',
+        '20261018000001_party_cloud.sql',
+      ),
+      'utf8',
+    );
+    expect(sql).toContain(`when 'weekly_xp' then ${String(PARTY_CAPS.weeklyXp)}`);
+    expect(sql).toContain(`when 'duel_ms_per_correct' then ${String(PARTY_CAPS.duelMsPerCorrect)}`);
+    expect(FAKE_PARTY_LIMITS.weeklyXp).toBe(PARTY_CAPS.weeklyXp);
+    expect(FAKE_PARTY_LIMITS.duelMsPerCorrect).toBe(PARTY_CAPS.duelMsPerCorrect);
   });
 });

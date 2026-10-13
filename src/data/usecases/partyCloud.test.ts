@@ -7,6 +7,7 @@ import { makeFakeCloud } from '../testing/fakeCloud';
 import { makeUser, testApi } from '../testing/fixtures';
 import {
   createCloudGroup,
+  exportMyPartyData,
   joinCloudGroup,
   leaveCloudGroup,
   pendingNumbers,
@@ -229,6 +230,24 @@ describe('duelos jugados', () => {
       p_duel: 'a',
       p_correct: 3,
       p_total_ms: 1000,
+    });
+  });
+});
+
+describe('exportar mis datos de Party', () => {
+  it('trae las filas propias de la nube y, si la nube falla, dice por qué', async () => {
+    const { api, fake } = setup();
+    const created = await createCloudGroup(api, fake.cloud, makeUser(), 'Guardia');
+    if (!created.ok || created.value.status !== 'created') throw new Error('sin grupo');
+    const exported = await exportMyPartyData(fake.cloud);
+    expect(exported).toMatchObject({
+      status: 'included',
+      data: { memberships: [{ groupName: 'Guardia', isOwner: true, leftAt: null }] },
+    });
+    fake.failParty = 'error';
+    expect(await exportMyPartyData(fake.cloud)).toEqual({
+      status: 'unavailable',
+      reason: 'network',
     });
   });
 });
