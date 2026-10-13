@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import { SCREENS } from '@/app/screens';
@@ -99,6 +99,59 @@ describe('pantalla del examen', () => {
       await screen.findByRole('heading', { level: 1, name: t.screens.examResults.title }),
     ).toBeVisible();
     expect(loadExamState(app.user.id)?.endReason).toBe('completed');
+  });
+
+  it('cerrar la ventana de terminar sin terminar regresa el foco al botón que la abrió', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.exam.path, { seed: seedExam() });
+    await screen.findByText(t.exam.progress(1, 3), { exact: true });
+    const opener = screen.getByRole('button', { name: t.exam.finish });
+    const openDialog = async () => {
+      await typing.click(opener);
+      await screen.findByRole('dialog', { name: t.exam.finishTitle });
+      await waitFor(() => {
+        expect(opener).not.toHaveFocus();
+      });
+    };
+
+    // Con Seguir con el examen
+    await openDialog();
+    await typing.click(screen.getByRole('button', { name: t.exam.finishKeep }));
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+
+    // Con Escape
+    await openDialog();
+    await typing.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+
+    // Con la X
+    await openDialog();
+    await typing.click(screen.getByRole('button', { name: t.exam.close }));
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('ir a la primera en blanco deja el foco en el enunciado y no lo regresa a Terminar', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.exam.path, { seed: seedExam() });
+    await screen.findByText(t.exam.progress(1, 3), { exact: true });
+    await typing.click(screen.getAllByRole('radio')[0] as HTMLElement);
+    await typing.click(screen.getByRole('button', { name: t.exam.finish }));
+    await typing.click(await screen.findByRole('button', { name: t.exam.goFirstBlank }));
+    const prompt = await screen.findByRole('heading', { level: 2, name: /Pregunta 2 de 3/ });
+    await waitFor(() => {
+      expect(prompt).toHaveFocus();
+    });
+    // Radix avisa del cierre un momento después de quitar la ventana. Pasado ese momento el foco
+    // sigue en el enunciado
+    await act(() => new Promise((resolve) => setTimeout(resolve, 20)));
+    expect(prompt).toHaveFocus();
   });
 
   it('con el tiempo agotado cierra solo por tiempo y no deja contestar más', async () => {

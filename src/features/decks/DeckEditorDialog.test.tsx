@@ -26,16 +26,22 @@ afterEach(async () => {
   clearData = null;
 });
 
-/** Crea el mazo con el caso de uso real y abre el editor sobre él, como lo hace Mazos */
-function Harness() {
-  const api = useDataApi();
-  const { repos, deleteAllData } = api;
+/** Crea el mazo con el caso de uso real, como lo hace Mazos */
+function useTestDeck() {
+  const { repos, deleteAllData } = useDataApi();
   const [deck, setDeck] = useState<Deck | null>(null);
   // useDataApi devuelve un objeto nuevo en cada render. Solo los repositorios son estables
   useEffect(() => {
     clearData = deleteAllData;
     void createManualDeck({ repos }, user, { name: 'Cardiología' }).then(setDeck);
   }, [repos, deleteAllData]);
+  return deck;
+}
+
+/** Abre el editor sobre el mazo de prueba */
+function Harness() {
+  const api = useDataApi();
+  const deck = useTestDeck();
   const cards = useLiveData(() => api.repos.cards.list(), [api.repos]);
   if (!deck) return null;
   return (
@@ -52,6 +58,34 @@ function Harness() {
   );
 }
 
+/** Como en Mazos, un botón abre el editor y al cerrarlo el editor se quita de la pantalla */
+function HarnessWithOpener() {
+  const deck = useTestDeck();
+  const [open, setOpen] = useState(false);
+  if (!deck) return null;
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        {t.decks.editCards}
+      </button>
+      {open ? (
+        <DeckEditorDialog
+          session={session}
+          deck={deck}
+          onClose={() => {
+            setOpen(false);
+          }}
+        />
+      ) : null}
+    </>
+  );
+}
+
 function renderEditor() {
   render(
     <DataProvider kind="real">
@@ -61,6 +95,37 @@ function renderEditor() {
 }
 
 describe('editor de tarjetas del mazo', () => {
+  it('al cerrarlo con la X o con Escape el foco regresa al botón que lo abrió', async () => {
+    const typing = userEvent.setup();
+    render(
+      <DataProvider kind="real">
+        <HarnessWithOpener />
+      </DataProvider>,
+    );
+    const opener = await screen.findByRole('button', { name: t.decks.editCards });
+    const openEditor = async () => {
+      await typing.click(opener);
+      await screen.findByRole('dialog', { name: t.decks.editor.title('Cardiología') });
+      await waitFor(() => {
+        expect(opener).not.toHaveFocus();
+      });
+    };
+
+    await openEditor();
+    await typing.click(screen.getByRole('button', { name: t.decks.editor.close }));
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    await openEditor();
+    await typing.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
   it('avisa de una tarjeta larga tras una pausa y de un duplicado, sin bloquear el guardado', async () => {
     const typing = userEvent.setup();
     renderEditor();

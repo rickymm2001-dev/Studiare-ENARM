@@ -29,6 +29,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { TextAreaField } from '@/ui/components/field';
 import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
+import { useReturnFocus } from '@/ui/hooks/use-return-focus';
 import type { ReadySession } from '../shared/RequireSession';
 import { useDebouncedValue } from '../shared/useDebouncedValue';
 import { CardQualityHints } from './CardQualityHints';
@@ -70,6 +71,9 @@ export function DeckEditorDialog({
 }) {
   const api = useDataApi();
   const kindHelpId = useId();
+  // Al cerrar el foco regresa al botón que abrió el editor, si sigue en la pantalla. El enlace a un
+  // apunte lleva a otra pantalla, donde el foco lo toma su título
+  const returnFocus = useReturnFocus();
   const text = t.decks.editor;
   const notes = useLiveData(
     async () => (await api.repos.notes.list()).filter((note) => note.deckId === deck.id),
@@ -197,7 +201,11 @@ export function DeckEditorDialog({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="animate-rise fixed top-1/2 left-1/2 z-50 flex max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-xl border border-line bg-surface p-4 shadow-raised sm:p-5">
+        <Dialog.Content
+          className="animate-rise fixed top-1/2 left-1/2 z-50 flex max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-xl border border-line bg-surface p-4 shadow-raised sm:p-5"
+          onOpenAutoFocus={returnFocus.onOpenAutoFocus}
+          onCloseAutoFocus={returnFocus.onCloseAutoFocus}
+        >
           <div className="flex items-start justify-between gap-3">
             <div>
               <Dialog.Title className="text-xl font-extrabold">
