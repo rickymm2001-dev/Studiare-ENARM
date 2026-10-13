@@ -117,13 +117,13 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
     await expect(demoVersion(page), SCREENS[key].path).toHaveCount(0);
   }
 
-  // La tarjeta de logro de una cuenta de demostración lo dice y no se puede tomar por un logro real
+  // El resumen de la semana de una cuenta de demostración lo dice y no se puede tomar por uno real
   await page.goto(SCREENS.party.path);
   await expect(
     page
-      .getByRole('region', { name: t.party.share.title })
-      .getByRole('figure', { name: t.party.share.previewLabel }),
-  ).toContainText(t.party.share.simulatedBanner, { timeout: 30_000 });
+      .getByRole('region', { name: t.b7.weekShare.title })
+      .getByRole('figure', { name: t.b7.weekShare.previewLabel }),
+  ).toContainText(t.b7.weekShare.simulatedBanner, { timeout: 30_000 });
   await expectNoSeriousA11yViolations(page);
 });
 
@@ -146,8 +146,8 @@ test('los compañeros y los duelos de Party van marcados como simulados', async 
   await group.getByRole('button', { name: t.party.duel.create }).click();
   const duel = group.getByRole('listitem').filter({ hasText: /^Duelo contra/ });
   await expect(duel.getByText(t.labels.simulatedData)).toBeVisible({ timeout: 60_000 });
-  // En una cuenta real la tarjeta de logro no lleva la etiqueta de demostración
-  await expect(page.getByRole('figure', { name: t.party.share.previewLabel })).not.toContainText(
-    t.party.share.simulatedBanner,
+  // En una cuenta real el resumen de la semana no lleva la etiqueta de demostración
+  await expect(page.getByRole('figure', { name: t.b7.weekShare.previewLabel })).not.toContainText(
+    t.b7.weekShare.simulatedBanner,
   );
 });

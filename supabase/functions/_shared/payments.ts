@@ -196,6 +196,9 @@ export function noticeFromStripeEvent(event: unknown): PaymentNotice | null {
   const base = { provider: 'stripe' as const, eventId, payload: root };
 
   if (type === 'checkout.session.completed') {
+    // Una prueba gratis llega con payment_status no_payment_required y no es un pago. Su factura de 0
+    // pesos llega como invoice.paid con monto 0, que la base no cuenta como cobro, así que tampoco
+    // concreta un referido (B7, 20261019000001_referral_first_charge.sql)
     if (object.payment_status !== 'paid') return null;
     const { userId, plan } = ownMetadata({
       user_id: object.client_reference_id,

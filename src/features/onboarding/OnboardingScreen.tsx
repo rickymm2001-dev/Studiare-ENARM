@@ -30,6 +30,7 @@ import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { AccountDetailsFields } from '../profile/AccountDetailsFields';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
+import { ReferralInvite } from './ReferralInvite';
 
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
@@ -79,6 +80,8 @@ export function OnboardingScreen() {
   return (
     <>
       <ScreenHeader title={t.screens.onboarding.title} description={t.onboarding.intro} />
+      {/* Quien llega con el enlace de un compañero guarda su código para canjearlo al entrar (B7) */}
+      <ReferralInvite />
       {/* Mismas pestañas que el resto de la app (H01 de la revisión de B2), a todo lo ancho */}
       <div role="tablist" aria-label={t.onboarding.tabs} className={cn(segmentedList, 'flex')}>
         {(['create', 'login'] as const).map((value) => (
