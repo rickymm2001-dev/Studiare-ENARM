@@ -103,20 +103,23 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
   return (
     <li>
       <details className="group">
-        {/* Toda la fila abre la pregunta. El fondo al pasar el ratón sale un poco del texto */}
-        <summary className="-mx-2 flex min-h-touch cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 rounded-md px-2 py-2 hover:bg-muted [&::-webkit-details-marker]:hidden">
+        {/* Toda la fila abre la pregunta. El fondo al pasar el ratón sale un poco del texto. En el
+            teléfono el texto va en renglones y el tiempo siempre queda a la derecha */}
+        <summary className="-mx-2 flex min-h-touch cursor-pointer list-none items-center gap-3 rounded-md px-2 py-2 hover:bg-muted [&::-webkit-details-marker]:hidden">
           {OUTCOME_ICON[row.outcome]}
-          <span className="font-semibold">{text.questionN(row.index + 1)}</span>
-          <span className="text-sm text-fg-muted">
-            {text.outcome[row.outcome]} · {TOPIC_NAMES.get(question.topic) ?? question.topic}
-          </span>
-          {row.marked ? (
-            <span className="flex items-center gap-1 text-sm text-warning">
-              <Flag aria-hidden className="size-3.5 fill-warning" />
-              {text.markedForReview}
+          <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
+            <span className="font-semibold">{text.questionN(row.index + 1)}</span>
+            <span className="text-sm text-fg-muted">
+              {text.outcome[row.outcome]} · {TOPIC_NAMES.get(question.topic) ?? question.topic}
             </span>
-          ) : null}
-          <span className="ml-auto flex items-center gap-2 text-sm text-fg-muted">
+            {row.marked ? (
+              <span className="flex items-center gap-1 text-sm text-warning">
+                <Flag aria-hidden className="size-3.5 fill-warning" />
+                {text.markedForReview}
+              </span>
+            ) : null}
+          </span>
+          <span className="flex shrink-0 items-center gap-2 text-sm text-fg-muted">
             {text.timeOn(seconds)}
             <ChevronDown
               aria-hidden
