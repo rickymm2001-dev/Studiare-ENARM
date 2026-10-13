@@ -75,7 +75,10 @@ export function SettingsScreen() {
       >
         {/* Misma forma que el control segmentado (H01 de B2). Radix marca la pestaña activa con
             data-state, así que la activa se pinta con esa variante y no con segmentedItem(true) */}
-        <Tabs.List aria-label={t.settings.sectionsLabel} className={cn(segmentedList, 'self-start')}>
+        <Tabs.List
+          aria-label={t.settings.sectionsLabel}
+          className={cn(segmentedList, 'self-start')}
+        >
           {available.map((key) => (
             <Tabs.Trigger
               key={key}

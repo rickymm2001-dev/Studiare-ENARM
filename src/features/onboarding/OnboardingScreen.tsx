@@ -27,6 +27,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented';
 import { AccountDetailsFields } from '../profile/AccountDetailsFields';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
 
@@ -78,11 +79,8 @@ export function OnboardingScreen() {
   return (
     <>
       <ScreenHeader title={t.screens.onboarding.title} description={t.onboarding.intro} />
-      <div
-        role="tablist"
-        aria-label={t.onboarding.tabs}
-        className="flex gap-1 rounded-full bg-muted p-1"
-      >
+      {/* Mismas pestañas que el resto de la app (H01 de la revisión de B2), a todo lo ancho */}
+      <div role="tablist" aria-label={t.onboarding.tabs} className={cn(segmentedList, 'flex')}>
         {(['create', 'login'] as const).map((value) => (
           <button
             key={value}
@@ -92,10 +90,7 @@ export function OnboardingScreen() {
             onClick={() => {
               setTab(value);
             }}
-            className={cn(
-              'min-h-touch flex-1 rounded-full text-sm font-semibold transition-all',
-              tab === value ? 'bg-surface text-fg shadow-card' : 'text-fg-muted',
-            )}
+            className={segmentedItem(tab === value, 'flex-1')}
           >
             {value === 'create' ? t.onboarding.createTab : t.onboarding.loginTab}
           </button>

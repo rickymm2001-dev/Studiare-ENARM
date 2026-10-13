@@ -3,7 +3,7 @@
 // nombre del mazo y la confirmación de que el contenido es del alumno, se guarda como un mazo
 // privado con sus submazos. Las tarjetas empiezan nuevas. Importar el mismo archivo otra vez no
 // duplica nada.
-import { FileUp, TriangleAlert } from 'lucide-react';
+import { FileUp, FolderOpen, TriangleAlert } from 'lucide-react';
 import { useId, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -13,6 +13,7 @@ import type { ParsedImport } from '@/data/import/types';
 import { ImportBlockedError, importParsed, type ImportResult } from '@/data/usecases/importDeck';
 import { htmlToPlain } from '@/engines/cardText';
 import { t } from '@/i18n/es-MX';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -51,6 +52,8 @@ export function ImportDeckCard({
   const inputId = useId();
   const [step, setStep] = useState<Step>({ name: 'idle' });
   const [problem, setProblem] = useState<string | null>(null);
+  // Nombre del último archivo elegido, porque el input se vacía para poder elegir el mismo otra vez
+  const [fileName, setFileName] = useState<string | null>(null);
   const [deckName, setDeckName] = useState('');
   const [rights, setRights] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -60,6 +63,7 @@ export function ImportDeckCard({
   const reset = () => {
     setStep({ name: 'idle' });
     setProblem(null);
+    setFileName(null);
     setDeckName('');
     setRights(false);
     setNameError(null);
@@ -68,6 +72,7 @@ export function ImportDeckCard({
   const choose = async (file: File | undefined) => {
     if (!file) return;
     setProblem(null);
+    setFileName(file.name);
     setStep({ name: 'reading' });
     try {
       const result = await parseFile(file);
@@ -133,23 +138,19 @@ export function ImportDeckCard({
         <div className="flex flex-col gap-3">
           {parsed === null ? (
             <div className="flex flex-col gap-1">
-              <label htmlFor={inputId} className="font-medium">
+              <label id={`${inputId}-etiqueta`} htmlFor={inputId} className="font-medium">
                 {t.importer.fileLabel}
               </label>
-              <input
+              <FileChooser
                 id={inputId}
-                type="file"
+                labelledBy={`${inputId}-etiqueta`}
+                describedBy={`${inputId}-ayuda`}
                 accept=".apkg,.csv,.tsv,.txt,.xlsx,.docx"
                 disabled={reading}
-                aria-describedby={`${inputId}-ayuda`}
-                className="block w-full text-sm file:mr-3 file:min-h-touch file:rounded-full file:border-0 file:bg-primary file:px-4 file:font-semibold file:text-primary-fg"
-                onChange={(event) => {
-                  const input = event.target;
-                  void choose(input.files?.[0]).finally(() => {
-                    // Así se puede elegir el mismo archivo otra vez
-                    input.value = '';
-                  });
-                }}
+                fileName={fileName}
+                chooseText={t.importer.chooseFile}
+                emptyText={t.importer.noFileChosen}
+                onChoose={choose}
               />
               <p id={`${inputId}-ayuda`} className="text-sm text-fg-muted">
                 {t.importer.fileHint}
@@ -190,6 +191,70 @@ export function ImportDeckCard({
         </div>
       )}
     </Card>
+  );
+}
+
+/**
+ * Elegir un archivo con un botón propio en español (H07 de la revisión de B2). El input del
+ * navegador dice Choose File en inglés, así que queda oculto pero sigue en el orden del teclado,
+ * con el nombre de la etiqueta del campo. El botón visible es otra etiqueta del mismo input, la
+ * sigue en el DOM para tomar su foco y su estado desactivado, y abre el selector sin código. Al
+ * lado va el nombre del último archivo elegido. También lo usa la tarjeta de tarjetas con IA
+ */
+export function FileChooser({
+  id,
+  labelledBy,
+  describedBy,
+  accept,
+  disabled,
+  fileName,
+  chooseText,
+  emptyText,
+  onChoose,
+}: {
+  id: string;
+  /** Id de la etiqueta visible del campo, que le da su nombre */
+  labelledBy: string;
+  describedBy: string;
+  accept: string;
+  disabled: boolean;
+  /** Último archivo elegido. null si todavía no hay ninguno */
+  fileName: string | null;
+  chooseText: string;
+  emptyText: string;
+  onChoose: (file: File | undefined) => Promise<void>;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <input
+        id={id}
+        type="file"
+        accept={accept}
+        disabled={disabled}
+        aria-labelledby={labelledBy}
+        aria-describedby={describedBy}
+        className="peer sr-only"
+        onChange={(event) => {
+          const input = event.target;
+          void onChoose(input.files?.[0]).finally(() => {
+            // Así se puede elegir el mismo archivo otra vez
+            input.value = '';
+          });
+        }}
+      />
+      <Button
+        asChild
+        variant="secondary"
+        size="sm"
+        className="cursor-pointer peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus peer-disabled:pointer-events-none peer-disabled:opacity-50"
+      >
+        <label htmlFor={id} aria-hidden>
+          <FolderOpen aria-hidden />
+          {chooseText}
+        </label>
+      </Button>
+      <span className="min-w-0 truncate text-sm text-fg-muted">{fileName ?? emptyText}</span>
+    </div>
   );
 }
 
@@ -245,12 +310,14 @@ function ImportPreview({
           {t.importer.previewSource(t.importer.sources[parsed.source], parsed.fileName)}
         </p>
         <p className="font-semibold">{t.importer.summary(parsed.notes.length, decks.size)}</p>
-        <ul className="flex flex-wrap gap-2 text-sm">
+        <ul className="flex flex-wrap gap-2">
           {(['basic', 'basic_reverse', 'cloze'] as const)
             .filter((kind) => kinds[kind] > 0)
             .map((kind) => (
-              <li key={kind} className="rounded-full bg-muted px-3 py-1">
-                {t.importer.kinds[kind]} · {kinds[kind].toLocaleString('es-MX')}
+              <li key={kind}>
+                <Badge variant="neutral">
+                  {t.importer.kinds[kind]} · {kinds[kind].toLocaleString('es-MX')}
+                </Badge>
               </li>
             ))}
         </ul>

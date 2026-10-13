@@ -16,6 +16,10 @@ export const branchNames: Record<string, string> = {
 export const plural = (n: number, one: string, many: string) =>
   `${n.toLocaleString('es-MX')} ${n === 1 ? one : many}`;
 
+/** Un nombre a media frase. Baja solo la primera letra y respeta siglas como IA (H18 de B2) */
+const midSentence = (name: string) =>
+  /^\p{Lu}{2}/u.test(name) ? name : `${name.charAt(0).toLocaleLowerCase('es-MX')}${name.slice(1)}`;
+
 export const featureText = {
   plural,
   branchNames,
@@ -550,7 +554,7 @@ export const featureText = {
       easyDays: 'Días fáciles',
       cardTimer: 'Temporizador de tarjeta',
     },
-    featureLocked: (name: string) => `Tu plan no incluye ${name.toLowerCase()}.`,
+    featureLocked: (name: string) => `Tu plan no incluye ${midSentence(name)}.`,
     featureSeePlans: 'Ver planes',
     savings: (percent: number) => `Ahorras ${percent}% contra 12 meses al precio regular`,
     choose: (plan: string) => `Elegir ${plan}`,
@@ -802,6 +806,9 @@ export const featureText = {
       'Trae tus tarjetas de otra app o de un archivo. Aceptamos paquetes .apkg de Anki, CSV, Excel (.xlsx) y Word (.docx). Tu mazo queda privado y las tarjetas empiezan como nuevas.',
     fileLabel: 'Archivo para importar',
     fileHint: 'Hasta 600 MB en un paquete y 50 MB en una hoja o un documento.',
+    // El botón propio que reemplaza al del navegador, que sale en inglés (H07 de la revisión de B2)
+    chooseFile: 'Elegir archivo',
+    noFileChosen: 'Ningún archivo elegido',
     reading: 'Leyendo tu archivo…',
     readError: 'No se pudo leer el archivo.',
     errors: {
@@ -913,6 +920,8 @@ export const featureText = {
       'Pega apuntes, un resumen o un fragmento de guía. Los datos personales se ocultan antes de procesarlo.',
     fileLabel: 'O sube un PDF o un archivo de texto',
     fileHint: 'Un PDF debe tener texto que se pueda seleccionar. Los escaneados todavía no.',
+    chooseFile: 'Elegir archivo',
+    noFileChosen: 'Ningún archivo elegido',
     sourceName: 'Nombre de la fuente',
     sourceNameHint: 'Se guarda en cada tarjeta para que sepas de dónde salió.',
     defaultSource: 'Texto pegado',

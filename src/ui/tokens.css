@@ -41,9 +41,10 @@
   --enarm-streak-soft: #eef0f2;
   --enarm-streak-ink: #3f4b55;
 
-  /* Gráficas y heatmap en tonos del color de acción y grises (4.7) */
+  /* Gráficas y heatmap en tonos del color de acción y grises (4.7). Realizados pasa el 3 a 1 que
+     piden las gráficas sobre la superficie, 3.1 en claro y 3.9 en oscuro (H12 de la revisión de B2) */
   --enarm-chart-scheduled: #156082;
-  --enarm-chart-done: #8fb3c6;
+  --enarm-chart-done: #6c98b0;
 
   /* Estados. Solo para correcto e incorrecto, avisos y errores (4.7), siempre con ícono y texto */
   --enarm-success: #1b7a4a;

@@ -93,13 +93,11 @@ export function ResultList({
                 </p>
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Statuses row={row} timeZone={timeZone} now={now} />
+                  {/* En bloque para que una etiqueta larga se corte con puntos suspensivos */}
                   {row.tags.slice(0, TAGS_SHOWN).map((tag) => (
-                    <span
-                      key={tag}
-                      className="max-w-48 truncate rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
-                    >
+                    <Badge key={tag} variant="neutral" className="block max-w-48 truncate">
                       {tag}
-                    </span>
+                    </Badge>
                   ))}
                   {row.tags.length > TAGS_SHOWN ? (
                     <span className="text-xs text-fg-muted">+{row.tags.length - TAGS_SHOWN}</span>

@@ -24,7 +24,7 @@ export function ExamTimer({ startedAtMs, totalMs }: { startedAtMs: number; total
       role="timer"
       aria-label={t.exam.timeLeftValue(text)}
       className={cn(
-        'flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold tabular-nums',
+        'flex items-center gap-1.5 rounded-md border px-3 py-1 text-sm font-bold tabular-nums',
         remaining < 60_000
           ? 'border-danger bg-danger-soft text-danger'
           : remaining < 10 * 60_000

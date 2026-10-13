@@ -221,7 +221,9 @@ function BankList({
                   <span className="line-clamp-1 text-xs text-fg-muted">{question.vignette}</span>
                 ) : null}
                 <span className="flex flex-wrap items-center gap-2 text-xs text-fg-muted">
-                  <Badge>{branchName.get(question.branch) ?? question.branch}</Badge>
+                  <Badge variant="neutral">
+                    {branchName.get(question.branch) ?? question.branch}
+                  </Badge>
                   <span>{topicName.get(question.topic) ?? question.topic}</span>
                   <span>· {t.bank.difficulty(question.physicianDifficulty)}</span>
                   <span>· {t.bank.status[question.editorialStatus]}</span>

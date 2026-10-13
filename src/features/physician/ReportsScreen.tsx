@@ -193,7 +193,7 @@ function GroupCard({
           {latest.prompt}
         </CardTitle>
         <CardDescription className="flex flex-wrap items-center gap-2">
-          <Badge>{branchName.get(latest.branch) ?? latest.branch}</Badge>
+          <Badge variant="neutral">{branchName.get(latest.branch) ?? latest.branch}</Badge>
           <span>{topicName.get(latest.topic) ?? latest.topic}</span>
           <span>· {text.group.total(group.rows.length)}</span>
           {group.openCount > 0 ? (

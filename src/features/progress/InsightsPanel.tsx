@@ -248,7 +248,11 @@ function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   if (rows.length === 0) return null;
   return (
     <li>
-      <Row lead={<ListOrdered className="text-primary-ink" />} title={text.profileTitle} tail={null}>
+      <Row
+        lead={<ListOrdered className="text-primary-ink" />}
+        title={text.profileTitle}
+        tail={null}
+      >
         <p className="text-fg-muted">{text.profileHint}</p>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (
