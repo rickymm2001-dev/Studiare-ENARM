@@ -1,6 +1,6 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
 import { FlaskConical, Info, Menu, WifiOff } from 'lucide-react';
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
@@ -22,11 +22,6 @@ import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 import { TopBarContext } from './TopBarContext';
-
-// El aviso de insignias trae el cálculo de logros, que no hace falta para pintar la primera pantalla
-const BadgeToast = lazy(() =>
-  import('./BadgeToast').then((module) => ({ default: module.BadgeToast })),
-);
 
 export function AppShell() {
   const theme = usePreferences((state) => state.theme);
@@ -179,9 +174,6 @@ export function AppShell() {
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
       <OrganizationSync />
-      <Suspense fallback={null}>
-        <BadgeToast />
-      </Suspense>
 
       <div className={rail}>
         <TopBarContext value={!bare}>
@@ -200,7 +192,7 @@ export function AppShell() {
         </TopBarContext>
       </div>
 
-      {bare ? null : <BottomNav items={NAV_BY_ROLE[role]} collapsed={navCollapsed} />}
+      {bare ? null : <BottomNav nav={NAV_BY_ROLE[role]} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
     </div>
   );

@@ -2,6 +2,7 @@
 // al cerrar B1, con los datos de demostración y los cuatro roles, más los flujos de práctica y examen
 // y las páginas sin sesión. Van a docs/screenshots/v3/antes en teléfono claro y computadora clara y
 // oscura; los anchos de 1920 y el teléfono oscuro se omiten para no cargar el repo de imágenes.
+// Plan, Logros y Perfil se quitaron en B3 y ya no se capturan.
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -46,11 +47,8 @@ test('todas las pantallas antes del rediseño', async ({ page }, info) => {
   await shot(page, project, '05-apuntes', SCREENS.outlines.path);
   await shot(page, project, '06-simular', SCREENS.simulatorSetup.path, t.exam.cardTitle);
   await shot(page, project, '07-progreso', SCREENS.progress.path, t.progress.futureLoad.title);
-  await shot(page, project, '08-planificador', SCREENS.planner.path);
   await shot(page, project, '09-tutor', SCREENS.tutor.path, t.tutor.report.title);
   await shot(page, project, '10-party', SCREENS.party.path);
-  await shot(page, project, '11-logros', SCREENS.rewards.path);
-  await shot(page, project, '12-perfil', SCREENS.profile.path);
   await shot(page, project, '13-suscripcion', SCREENS.subscription.path);
   for (const section of ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const) {
     await shot(

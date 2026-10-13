@@ -39,8 +39,9 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
   await page.reload();
   await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
 
-  // Cerrar sesión lleva a la portada, y con el correo se vuelve a entrar al mismo perfil
-  await page.goto(SCREENS.profile.path);
+  // Cerrar sesión lleva a la portada, y con el correo se vuelve a entrar al mismo perfil. La sesión
+  // se cierra en Configuración, donde vive el Perfil desde B3
+  await page.goto(SCREENS.settings.path);
   await page.getByRole('button', { name: t.session.signOut }).click();
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.landing.title);

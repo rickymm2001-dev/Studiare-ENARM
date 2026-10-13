@@ -4,7 +4,9 @@
 import { usePreferences } from '@/app/preferences';
 import { motionAllowed } from './appearance';
 
-export type CelebrationKind = 'goal' | 'level' | 'badge' | 'session' | 'small';
+// Las insignias se quitaron con Logros (B3 del plan del cambio). El acorde que usaban quedó para
+// los retos de grupo de Party
+export type CelebrationKind = 'goal' | 'level' | 'challenge' | 'session' | 'small';
 
 // Tonos del color de acción y grises, como las gráficas (4.7 del plan del cambio)
 const COLORS = ['#156082', '#4a8aa9', '#8fb3c6', '#b7cdda', '#576570', '#dde2e6'];
@@ -13,7 +15,7 @@ const NOTES: Record<CelebrationKind, number[]> = {
   small: [880],
   session: [523, 659, 784],
   goal: [523, 659, 784, 1047],
-  badge: [659, 880, 1175],
+  challenge: [659, 880, 1175],
   level: [523, 659, 784, 1047, 1319],
 };
 

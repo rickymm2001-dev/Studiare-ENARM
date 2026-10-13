@@ -27,7 +27,7 @@ test('panel de datos de demostración, vacío y generado', async ({ page }, info
       JSON.stringify({ theme: 'system', role: 'student', database: 'demo' }),
     );
   });
-  await page.goto(SCREENS.profile.path);
+  await page.goto(SCREENS.settings.path);
   const panel = page.getByRole('region', { name: t.demoData.title });
   await panel.getByText(t.demoData.empty).waitFor();
   await capture(page, '01-perfil-demo-vacia', info.project.name);

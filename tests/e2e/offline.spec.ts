@@ -7,13 +7,7 @@ import { t } from '@/i18n/es-MX';
 import { expect, signUp, test } from './support/fixtures';
 
 // Una pantalla de cada área, pensada para que su archivo no se haya bajado antes de cortar la red
-const NEVER_VISITED = [
-  SCREENS.progress.path,
-  SCREENS.planner.path,
-  SCREENS.rewards.path,
-  SCREENS.party.path,
-  SCREENS.outlines.path,
-] as const;
+const NEVER_VISITED = [SCREENS.progress.path, SCREENS.party.path, SCREENS.outlines.path] as const;
 
 test('sin conexión abre pantallas que nunca se habían visitado y la IA avisa que necesita red', async ({
   page,

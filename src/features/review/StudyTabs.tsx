@@ -1,7 +1,8 @@
-// Pestañas de Repasar, Mazos, Explorar y Apuntes (D-087, D-085, D-092). Son una sola sección de la navegación y el alumno pasa de
-// elegir qué repasar a administrar sus mazos sin buscar otra sección. Cada pestaña es su propia
-// ruta, así los enlaces de siempre a Mazos siguen funcionando. Toman la forma de las pestañas de
-// toda la app (H01 de la revisión de diseño de B2) y siguen siendo enlaces con aria-current.
+// Pestañas de Repasar, Mazos y Explorar (D-087, D-085). Son una sola sección de la navegación y el
+// alumno pasa de elegir qué repasar a administrar sus mazos sin buscar otra sección. Cada pestaña es
+// su propia ruta, así los enlaces de siempre a Mazos siguen funcionando. Toman la forma de las
+// pestañas de toda la app (H01 de la revisión de diseño de B2) y siguen siendo enlaces con
+// aria-current. Apuntes dejó de ser pestaña y tiene su lugar en el menú (comentario 12, B3).
 import { Link, useLocation } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -12,7 +13,6 @@ const TABS = [
   { key: 'review', path: screenPath('review'), label: t.studyTabs.review },
   { key: 'decks', path: screenPath('decks'), label: t.studyTabs.decks },
   { key: 'explore', path: screenPath('explore'), label: t.studyTabs.explore },
-  { key: 'outlines', path: screenPath('outlines'), label: t.studyTabs.outlines },
 ] as const;
 
 export function StudyTabs() {

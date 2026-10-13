@@ -45,14 +45,15 @@ test('con sesión la raíz es el tablero de Inicio con su navegación', async ({
   await expectNoSeriousA11yViolations(page);
 });
 
-test('navega con la barra inferior entre las 5 secciones', async ({ page }) => {
+// Las secciones de la barra del teléfono, que también están en el riel. Lo demás se abre desde Más y
+// se prueba en navigation.spec.ts (B3 del plan del cambio)
+test('navega con el menú entre las secciones de la barra', async ({ page }) => {
   await signUp(page);
   const nav = page.getByRole('navigation', { name: t.nav.label });
   for (const [label, key] of [
     [t.navItems.review, 'review'],
     [t.navItems.simulate, 'simulatorSetup'],
     [t.navItems.progress, 'progress'],
-    [t.navItems.profile, 'profile'],
     [t.navItems.home, 'home'],
   ] as const) {
     await nav.getByRole('link', { name: label, exact: true }).click();

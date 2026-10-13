@@ -30,7 +30,7 @@ describe('celebrate', () => {
       {} as CanvasRenderingContext2D,
     );
     const celebrate = await freshCelebrate();
-    celebrate('badge');
+    celebrate('challenge');
     await vi.waitFor(() => {
       expect(confetti).toHaveBeenCalled();
     });
@@ -40,7 +40,7 @@ describe('celebrate', () => {
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
     const celebrate = await freshCelebrate();
     expect(() => {
-      celebrate('badge');
+      celebrate('challenge');
     }).not.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(confetti).not.toHaveBeenCalled();

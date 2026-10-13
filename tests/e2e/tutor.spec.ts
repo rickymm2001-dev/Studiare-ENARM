@@ -6,18 +6,14 @@ import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import { openFromMenu } from './support/navigation';
 
 test('sin datos el tutor calibra, no inventa hipótesis y se abre desde el menú', async ({
   page,
 }) => {
   await signUp(page);
-  // En el teléfono el tutor se abre desde Accesos en Perfil y en computadora desde el riel lateral
-  const phone = (page.viewportSize()?.width ?? 0) < 1024;
-  await page.goto(phone ? SCREENS.profile.path : '/');
-  const scope = phone
-    ? page.getByRole('main')
-    : page.getByRole('navigation', { name: t.nav.label });
-  await scope.getByRole('link', { name: t.navItems.tutor, exact: true }).click();
+  // En computadora el tutor está en el riel lateral y en el teléfono se abre desde Más (4.28)
+  await openFromMenu(page, t.navItems.tutor);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.tutor.title);
 
   await expect(page.getByText(t.tutor.calibrating(0))).toBeVisible();

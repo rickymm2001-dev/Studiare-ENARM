@@ -144,7 +144,7 @@ describe('carga diaria en los límites de hoy', () => {
     expect(screen.getByRole('button', { name: t.settings.saveChanges })).toBeDisabled();
   });
 
-  it('sin minutos de estudio pide ponerlos en Plan', async () => {
+  it('sin minutos de estudio pide ponerlos en Progreso, donde quedó lo que servía de Plan', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.review.path, {
       user: { dailyMinutes: null },
@@ -158,7 +158,7 @@ describe('carga diaria en los límites de hoy', () => {
     expect(await within(section).findByText(t.dailyLoad.needsMinutes)).toBeInTheDocument();
     expect(within(section).getByRole('link', { name: t.dailyLoad.goToPlan })).toHaveAttribute(
       'href',
-      SCREENS.planner.path,
+      SCREENS.progress.path,
     );
   });
 

@@ -103,11 +103,9 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
     'review',
     'simulatorSetup',
     'progress',
-    'planner',
     'tutor',
     'decks',
     'party',
-    'profile',
     'settings',
     'subscription',
   ];

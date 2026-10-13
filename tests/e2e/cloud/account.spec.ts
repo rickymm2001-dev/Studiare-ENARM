@@ -35,7 +35,7 @@ test.describe('Cuenta en la nube', () => {
     // Abrir el enlace en este navegador une la cuenta y abre la sesión
     await openEmailLink(page, first.link);
     await expectHome(page);
-    await page.goto(SCREENS.profile.path);
+    await page.goto(SCREENS.settings.path);
     await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     // Este navegador reclamó el dispositivo de la cuenta
     await expect.poll(() => cloud.deviceSessionOf(EMAIL)?.deviceId).toBeTruthy();
@@ -79,7 +79,7 @@ test.describe('Cuenta en la nube', () => {
     await form.getByLabel(t.cloud.code.label).fill(second.code);
     await form.getByRole('button', { name: t.cloud.code.submit }).click();
     await expectHome(page);
-    await page.goto(SCREENS.profile.path);
+    await page.goto(SCREENS.settings.path);
     await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     // Volver a entrar en el mismo navegador es un reclamo refresh con la sesión nueva, y el servidor
     // lo acepta, así que este navegador sigue siendo el activo y la sincronización termina bien
@@ -103,7 +103,7 @@ test.describe('Cuenta en la nube', () => {
     await expectHome(page);
 
     // Sale, pide otro correo y prueba el código viejo. Supabase lo rechaza como vencido
-    await page.goto(SCREENS.profile.path);
+    await page.goto(SCREENS.settings.path);
     await page.getByRole('button', { name: t.session.signOut }).click();
     await expect(page.getByRole('heading', { name: t.session.signedOutTitle })).toBeVisible();
     await page.goto(SCREENS.onboarding.path);

@@ -2,7 +2,8 @@
 // antes.spec.ts, con los datos de demostración y los cuatro roles, los flujos de práctica y examen y
 // las páginas sin sesión, en docs/screenshots/v3/b2. El recorrido completo va en teléfono claro y
 // computadora clara y oscura, y las pantallas clave además en 1920 y en el teléfono oscuro, para
-// cubrir los tres anchos en claro y en oscuro que pide 0.3 del plan sin cargar el repo de imágenes
+// cubrir los tres anchos en claro y en oscuro que pide 0.3 del plan sin cargar el repo de imágenes.
+// Plan, Logros y Perfil se quitaron en B3 y ya no se capturan
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -47,11 +48,8 @@ test('todas las pantallas después del rediseño', async ({ page }, info) => {
   await shot(page, project, '05-apuntes', SCREENS.outlines.path);
   await shot(page, project, '06-simular', SCREENS.simulatorSetup.path, t.exam.cardTitle);
   await shot(page, project, '07-progreso', SCREENS.progress.path, t.progress.futureLoad.title);
-  await shot(page, project, '08-planificador', SCREENS.planner.path);
   await shot(page, project, '09-tutor', SCREENS.tutor.path, t.tutor.report.title);
   await shot(page, project, '10-party', SCREENS.party.path);
-  await shot(page, project, '11-logros', SCREENS.rewards.path);
-  await shot(page, project, '12-perfil', SCREENS.profile.path);
   await shot(page, project, '13-suscripcion', SCREENS.subscription.path);
   for (const section of ['study', 'appearance', 'pomodoro', 'privacy', 'account'] as const) {
     await shot(
@@ -139,7 +137,6 @@ test('pantallas clave en 1920 y en el teléfono oscuro', async ({ page }, info) 
   await shot(page, project, '02-repasar', SCREENS.review.path);
   await shot(page, project, '06-simular', SCREENS.simulatorSetup.path, t.exam.cardTitle);
   await shot(page, project, '07-progreso', SCREENS.progress.path, t.progress.futureLoad.title);
-  await shot(page, project, '12-perfil', SCREENS.profile.path);
   await shot(
     page,
     project,

@@ -1,9 +1,11 @@
-// Secciones de la navegación inferior (10.4). El alumno tiene las 5 de la especificación.
-// Médico tiene las suyas (10.2). Administrador y dueño también estudian, así que ven lo del alumno
-// y abajo, en el riel, su grupo de administración (D-076).
+// Navegación de cada rol (10.4, D-076 y B3 del plan del cambio). En computadora un riel lateral con
+// las secciones arriba y Configuración fija abajo a la izquierda, separada y con el engrane
+// (comentario 3). En el teléfono una barra abajo con las secciones marcadas para la barra y Más,
+// que abre las demás en una hoja (4.28). Administrador y dueño también estudian, así que ven lo del
+// alumno y su grupo de administración (D-076). Aquí solo hay datos y funciones puras. Lo que se pinta
+// vive en layout/BottomNav.tsx.
 import {
   BookOpenCheck,
-  CalendarDays,
   ChartLine,
   ClipboardList,
   Coins,
@@ -11,13 +13,12 @@ import {
   FileText,
   Flag,
   GraduationCap,
-  PartyPopper,
   House,
+  NotebookPen,
+  PartyPopper,
   Scale,
   Settings,
   SlidersHorizontal,
-  Trophy,
-  UserRound,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -31,71 +32,97 @@ export interface NavItem {
   icon: LucideIcon;
   /** Solo marca activa la ruta exacta, para que Inicio no quede activo en todas */
   end?: boolean;
-  /** Solo en el riel de computadora. En el teléfono se llega desde Perfil (D-071) */
-  railOnly?: boolean;
-  /** Abre un grupo nuevo en el riel con una línea divisoria */
-  groupStart?: boolean;
   /** Otras rutas que también dejan activa esta sección, como Mazos dentro de Repasar (D-087) */
   alsoActive?: readonly string[];
 }
 
-const profile: NavItem = {
-  path: screenPath('profile'),
-  label: t.navItems.profile,
-  icon: UserRound,
-};
-const settingsItem: NavItem = {
+/** Sección de arriba del riel. Solo estas pueden ir en la barra del teléfono */
+export interface MainNavItem extends NavItem {
+  /** Va en la barra de abajo del teléfono. Lo demás se abre desde Más (4.28) */
+  bar?: boolean;
+}
+
+/** Grupo extra del riel, con su línea divisoria y su nombre, como Administración (D-076) */
+export interface NavGroup {
+  label: string;
+  items: readonly NavItem[];
+}
+
+export interface RoleNav {
+  /** Secciones de arriba del riel, en orden */
+  main: readonly MainNavItem[];
+  /** Grupos que siguen a las secciones, cada uno separado con una línea */
+  groups: readonly NavGroup[];
+  /** Fijo abajo a la izquierda del riel y al final de Más. Solo Configuración (comentario 3) */
+  pinned: readonly NavItem[];
+}
+
+/** Un bloque de la hoja Más. Los grupos extra llevan su nombre */
+export interface MoreSection {
+  label?: string;
+  items: readonly NavItem[];
+}
+
+const settings: NavItem = {
   path: screenPath('settings'),
   label: t.navItems.settings,
-  icon: SlidersHorizontal,
-  railOnly: true,
+  icon: Settings,
 };
+
 const bank: NavItem = { path: screenPath('questionBank'), label: t.navItems.bank, icon: Database };
 
-const studentNav: readonly NavItem[] = [
-  { path: screenPath('home'), label: t.navItems.home, icon: House, end: true },
-  // Repasar y Mazos son una sola sección con dos pestañas (D-087)
+const studentMain: readonly MainNavItem[] = [
+  { path: screenPath('home'), label: t.navItems.home, icon: House, end: true, bar: true },
+  // Repasar y Mazos son una sola sección con pestañas (D-087). Apuntes ya tiene su lugar en el menú
+  // (comentario 12), así que Repasar no queda activa en /apuntes
   {
     path: screenPath('review'),
     label: t.navItems.review,
     icon: BookOpenCheck,
-    alsoActive: [screenPath('decks'), screenPath('explore'), screenPath('outlines')],
+    bar: true,
+    alsoActive: [screenPath('decks'), screenPath('explore')],
   },
-  { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
-  { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
-  { path: screenPath('planner'), label: t.navItems.planner, icon: CalendarDays, railOnly: true },
-  { path: screenPath('tutor'), label: t.navItems.tutor, icon: GraduationCap, railOnly: true },
-  { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper, railOnly: true },
-  { path: screenPath('rewards'), label: t.navItems.rewards, icon: Trophy, railOnly: true },
-  profile,
-  settingsItem,
+  { path: screenPath('outlines'), label: t.navItems.outlines, icon: NotebookPen },
+  {
+    path: screenPath('simulatorSetup'),
+    label: t.navItems.simulate,
+    icon: ClipboardList,
+    bar: true,
+  },
+  { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine, bar: true },
+  { path: screenPath('tutor'), label: t.navItems.tutor, icon: GraduationCap },
+  { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper },
 ];
 
-const adminGroup: readonly NavItem[] = [
-  { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users, groupStart: true },
-  { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
-  { path: screenPath('adminSettings'), label: t.navItems.platform, icon: Settings },
-  bank,
-].map((item) => ({ ...item, railOnly: true }));
-
-const adminNav: readonly NavItem[] = [...studentNav, ...adminGroup];
-
-export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
-  student: studentNav,
-  physician: [
+const adminGroup: NavGroup = {
+  label: t.navItems.admin,
+  items: [
+    { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users },
+    { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
+    // Sin engrane, que es solo de Configuración (comentario 3)
+    { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
-    { path: screenPath('agreement'), label: t.navItems.agreement, icon: Scale },
-    { path: screenPath('aiDrafts'), label: t.navItems.drafts, icon: FileText },
-    { path: screenPath('contentReports'), label: t.navItems.reports, icon: Flag },
-    profile,
-    settingsItem,
   ],
+};
+
+const studentNav: RoleNav = { main: studentMain, groups: [], pinned: [settings] };
+const adminNav: RoleNav = { main: studentMain, groups: [adminGroup], pinned: [settings] };
+
+export const NAV_BY_ROLE: Record<Role, RoleNav> = {
+  student: studentNav,
+  physician: {
+    main: [
+      { ...bank, bar: true },
+      { path: screenPath('agreement'), label: t.navItems.agreement, icon: Scale, bar: true },
+      { path: screenPath('aiDrafts'), label: t.navItems.drafts, icon: FileText, bar: true },
+      { path: screenPath('contentReports'), label: t.navItems.reports, icon: Flag, bar: true },
+    ],
+    groups: [],
+    pinned: [settings],
+  },
   admin: adminNav,
   owner: adminNav,
 };
-
-/** Accesos de administración para el teléfono, donde no caben en la barra inferior */
-export const ADMIN_LINKS: readonly NavItem[] = adminGroup;
 
 /** Pantalla de entrada de cada rol */
 export const HOME_BY_ROLE: Record<Role, string> = {
@@ -104,3 +131,38 @@ export const HOME_BY_ROLE: Record<Role, string> = {
   admin: screenPath('home'),
   owner: screenPath('home'),
 };
+
+/** Lo que va en la barra del teléfono, en el orden del riel */
+export function phoneBarItems(nav: RoleNav): MainNavItem[] {
+  return nav.main.filter((item) => item.bar === true);
+}
+
+/**
+ * Lo que abre Más en el teléfono. Primero las secciones que no caben en la barra, luego cada grupo
+ * con su nombre y al final lo fijo, igual que en el riel. Sin bloques vacíos
+ */
+export function moreSections(nav: RoleNav): MoreSection[] {
+  const sections: MoreSection[] = [
+    { items: nav.main.filter((item) => item.bar !== true) },
+    ...nav.groups,
+    { items: nav.pinned },
+  ];
+  return sections.filter((section) => section.items.length > 0);
+}
+
+/**
+ * La sección está activa en su ruta, en las que cuelgan de ella y en las que declara, como Mazos
+ * dentro de Repasar. Con end solo cuenta la ruta exacta
+ */
+export function isNavItemActive(item: NavItem, pathname: string): boolean {
+  if (item.end) return pathname === item.path;
+  const within = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
+  return within(item.path) || (item.alsoActive ?? []).some(within);
+}
+
+/** Más queda activa cuando la pantalla abierta es una de las suyas */
+export function isMoreActive(nav: RoleNav, pathname: string): boolean {
+  return moreSections(nav).some((section) =>
+    section.items.some((item) => isNavItemActive(item, pathname)),
+  );
+}

@@ -99,7 +99,7 @@ test('nube caída. Se crea la cuenta en el navegador y todas las pantallas abren
 
   // La cuenta dice con claridad que la nube no respondió y que lo estudiado sigue en el navegador
   current = 'perfil';
-  await page.goto(SCREENS.profile.path);
+  await page.goto(SCREENS.settings.path);
   await expect(page.getByText(t.cloud.error)).toBeVisible({ timeout: 30_000 });
 
   // Y el médico conserva su área mientras la nube no responde

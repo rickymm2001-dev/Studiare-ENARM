@@ -59,7 +59,7 @@ test('estado cargando y error', async ({ page }, info) => {
 
 test('demostración con datos simulados', async ({ page }, info) => {
   await preset(page, { database: 'demo' });
-  await page.goto(SCREENS.profile.path);
+  await page.goto(SCREENS.settings.path);
   await page.getByText(t.database.storedIn('enarm_demo')).waitFor();
   await capture(page, '92-perfil-demostracion', info.project.name);
 });

@@ -83,10 +83,8 @@ test('pantallas del alumno con la demostración', async ({ page }, info) => {
     ['02-repasar', SCREENS.review.path, t.screens.review.title],
     ['03-simular', SCREENS.simulatorSetup.path, t.screens.simulatorSetup.title],
     ['04-progreso', SCREENS.progress.path, t.screens.progress.title],
-    ['05-plan', SCREENS.planner.path, t.screens.planner.title],
     ['06-tutor', SCREENS.tutor.path, t.screens.tutor.title],
     ['07-mazos', SCREENS.decks.path, t.screens.decks.title],
-    ['08-perfil', SCREENS.profile.path, t.screens.profile.title],
     ['09-configuracion', SCREENS.settings.path, t.screens.settings.title],
     ['10-suscripcion', SCREENS.subscription.path, t.screens.subscription.title],
   ];

@@ -200,7 +200,7 @@ function NewPerDay({
               <div className="flex flex-col items-start gap-2">
                 <p className="text-sm">{text.needsMinutes}</p>
                 <Button asChild variant="secondary" size="sm">
-                  <Link to={screenPath('planner')}>{text.goToPlan}</Link>
+                  <Link to={screenPath('progress')}>{text.goToPlan}</Link>
                 </Button>
               </div>
             ) : null}

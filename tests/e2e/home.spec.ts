@@ -32,6 +32,10 @@ test('Inicio muestra cada parte del diseño y el plan lleva a Suscripción', asy
   ]) {
     await expect(page.getByRole('region', { name })).toBeVisible();
   }
+  // Las misiones de hoy siguen en Inicio con su avance aunque Logros se quitó (4.12, B3)
+  await expect(
+    page.getByRole('region', { name: t.widgets.names.missions }).getByRole('progressbar').first(),
+  ).toBeVisible();
   await expect(page.getByRole('button', { name: 'Editar tablero' })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
   await expectNoSeriousA11yViolations(page);

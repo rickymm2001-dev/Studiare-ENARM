@@ -44,9 +44,12 @@ export async function followSmallestDeck(page: Page): Promise<void> {
   });
 }
 
-/** Cierra la sesión local desde Perfil. Sin sesión la raíz vuelve a ser la portada */
+/**
+ * Cierra la sesión local desde Configuración, donde vive el Perfil desde B3. Sin sesión la raíz
+ * vuelve a ser la portada
+ */
 export async function signOut(page: Page): Promise<void> {
-  await page.goto(SCREENS.profile.path);
+  await page.goto(SCREENS.settings.path);
   await page.getByRole('button', { name: t.session.signOut }).click();
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.landing.title);
