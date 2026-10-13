@@ -55,11 +55,11 @@ Recorre cada motor y cada gadget del prototipo. No necesitas ayuda ni terminal s
 - En Apuntes escribes un esquema con marcas, por ejemplo hipertensión >> presión arterial alta, y se vuelve tarjeta
 - En un mazo, la tarjeta con IA genera tarjetas desde un texto o un PDF. Cada una cita la frase literal que la respalda y queda en borrador
 
-## Minuto 8. Planificador, Party y Logros
+## Minuto 8. Progreso y Party
 
-- Planificador. Con la fecha del ENARM y los minutos que tienes al día, arma el Plan de hoy con repasos, tarjetas nuevas y práctica
+- Progreso. La semana con lo planeado contra lo hecho hoy, el aviso de sobrecarga con sus opciones y tus minutos al día, que salen de la fecha del ENARM y de tu tiempo disponible
 - Party. Los grupos con tabla semanal y retos, y los duelos. En la demo, los amigos son simulados y llevan la etiqueta
-- Logros. Las misiones de la semana, la liga semanal por XP y las insignias, con la tarjeta de logro para compartir
+- Misiones de hoy. Viven en Inicio. Logros, las insignias y las ligas se quitaron en el plan del cambio V3
 
 ## Minuto 9. Médico y administración
 

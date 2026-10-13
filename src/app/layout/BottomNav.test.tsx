@@ -52,7 +52,13 @@ const STUDENT_RAIL = [
   t.navItems.tutor,
   t.navItems.party,
 ];
-const ADMIN_GROUP = [t.navItems.users, t.navItems.costs, t.navItems.platform, t.navItems.bank];
+const ADMIN_GROUP = [
+  t.navItems.users,
+  t.navItems.costs,
+  t.navItems.platform,
+  t.navItems.bank,
+  t.screens.demoData.title,
+];
 
 describe('riel de computadora', () => {
   it('alumno. Siete secciones arriba y Configuración sola al final, separada y con el engrane', () => {

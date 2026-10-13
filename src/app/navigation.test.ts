@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { RoleSchema, type Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
 import {
+  navForRole,
   HOME_BY_ROLE,
   NAV_BY_ROLE,
   isMoreActive,
@@ -39,7 +40,13 @@ const STUDENT_MAIN = [
   t.navItems.tutor,
   t.navItems.party,
 ];
-const ADMIN_GROUP = [t.navItems.users, t.navItems.costs, t.navItems.platform, t.navItems.bank];
+const ADMIN_GROUP = [
+  t.navItems.users,
+  t.navItems.costs,
+  t.navItems.platform,
+  t.navItems.bank,
+  t.screens.demoData.title,
+];
 const STUDENT_BAR = [t.navItems.home, t.navItems.review, t.navItems.simulate, t.navItems.progress];
 const PHYSICIAN_BAR = [
   t.navItems.bank,
@@ -207,5 +214,26 @@ describe('sección activa', () => {
     expect(isMoreActive(NAV_BY_ROLE.admin, screenPath('adminUsers'))).toBe(true);
     expect(isMoreActive(NAV_BY_ROLE.physician, screenPath('settings'))).toBe(true);
     expect(isMoreActive(NAV_BY_ROLE.physician, screenPath('questionBank'))).toBe(false);
+  });
+});
+
+describe('banderas en el menú (5.4)', () => {
+  const demoPath = screenPath('demoData');
+  const paths = (role: Role, on: boolean) =>
+    navForRole(role, () => on).groups.flatMap((group) => group.items.map((item) => item.path));
+
+  it('Datos de demostración solo aparece para el admin con demoTools prendida', () => {
+    expect(paths('admin', true)).toContain(demoPath);
+    expect(paths('owner', true)).toContain(demoPath);
+    expect(paths('admin', false)).not.toContain(demoPath);
+    expect(paths('student', true)).not.toContain(demoPath);
+  });
+
+  it('sin banderas el menú no cambia', () => {
+    for (const role of RoleSchema.options) {
+      const nav = navForRole(role, () => true);
+      expect(nav.main).toEqual(NAV_BY_ROLE[role].main);
+      expect(nav.pinned).toEqual(NAV_BY_ROLE[role].pinned);
+    }
   });
 });

@@ -10,7 +10,7 @@ import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
-import { HOME_BY_ROLE, NAV_BY_ROLE } from '../navigation';
+import { HOME_BY_ROLE, navForRole } from '../navigation';
 import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
@@ -192,7 +192,7 @@ export function AppShell() {
         </TopBarContext>
       </div>
 
-      {bare ? null : <BottomNav nav={NAV_BY_ROLE[role]} collapsed={navCollapsed} />}
+      {bare ? null : <BottomNav nav={navForRole(role)} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
     </div>
   );

@@ -5,6 +5,7 @@
 // alumno y su grupo de administración (D-076). Aquí solo hay datos y funciones puras. Lo que se pinta
 // vive en layout/BottomNav.tsx.
 import {
+  FlaskConical,
   BookOpenCheck,
   ChartLine,
   ClipboardList,
@@ -22,6 +23,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react';
+import { isFeatureEnabled, type FeatureFlag } from '@/config/featureFlags';
 import type { Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
 import { screenPath } from './screens';
@@ -34,6 +36,8 @@ export interface NavItem {
   end?: boolean;
   /** Otras rutas que también dejan activa esta sección, como Mazos dentro de Repasar (D-087) */
   alsoActive?: readonly string[];
+  /** Solo aparece con esta bandera prendida, como Datos de demostración (5.4) */
+  flag?: FeatureFlag;
 }
 
 /** Sección de arriba del riel. Solo estas pueden ir en la barra del teléfono */
@@ -102,6 +106,13 @@ const adminGroup: NavGroup = {
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
+    // Único lugar para cambiar de base y generar alumnos simulados. En producción se esconde (5.4)
+    {
+      path: screenPath('demoData'),
+      label: t.screens.demoData.title,
+      icon: FlaskConical,
+      flag: 'demoTools',
+    },
   ],
 };
 
@@ -165,4 +176,24 @@ export function isMoreActive(nav: RoleNav, pathname: string): boolean {
   return moreSections(nav).some((section) =>
     section.items.some((item) => isNavItemActive(item, pathname)),
   );
+}
+
+/**
+ * El menú de un rol sin lo que esconden las banderas apagadas. Lo usa el marco de la app. Las
+ * pruebas pueden pasar cómo leer cada bandera
+ */
+export function navForRole(
+  role: Role,
+  enabled: (flag: FeatureFlag) => boolean = (flag) => isFeatureEnabled(flag),
+): RoleNav {
+  const visible = <T extends NavItem>(items: readonly T[]) =>
+    items.filter((item) => item.flag === undefined || enabled(item.flag));
+  const nav = NAV_BY_ROLE[role];
+  return {
+    main: visible(nav.main),
+    groups: nav.groups
+      .map((group) => ({ ...group, items: visible(group.items) }))
+      .filter((group) => group.items.length > 0),
+    pinned: visible(nav.pinned),
+  };
 }

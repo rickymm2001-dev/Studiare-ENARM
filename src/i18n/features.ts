@@ -1088,32 +1088,9 @@ export const featureText = {
     yourCards: (n: number) => (n === 1 ? '1 tarjeta' : `${n.toLocaleString('es-MX')} tarjetas`),
   },
   planner: {
-    todayTitle: 'Plan de hoy',
-    stats: { minutes: 'Minutos', reviews: 'Repasos', newCards: 'Nuevas' },
-    minutesOf: (planned: number, available: number) => `${planned} de ${available} min`,
-    cardsLine: (reviews: number, fresh: number) => {
-      const due = plural(reviews, 'tarjeta vencida', 'tarjetas vencidas');
-      const fresher = plural(fresh, 'tarjeta nueva', 'tarjetas nuevas');
-      if (reviews > 0 && fresh > 0) return `Repasa ${due} y aprende ${fresher}`;
-      return reviews > 0 ? `Repasa ${due}` : `Aprende ${fresher}`;
-    },
-    simulator: (n: number, topic: string | null) =>
-      topic
-        ? `Practica ${plural(n, 'pregunta', 'preguntas')} de ${topic}`
-        : `Practica ${plural(n, 'pregunta', 'preguntas')} mezcladas`,
-    challenge: (minutes: number) => `Un reto de ${minutes} minutos en Party`,
-    goReview: 'Repasar',
-    goSimulate: 'Practicar',
-    goParty: 'Ir a Party',
-    nothingToday: 'No hay nada pendiente para hoy con tus mazos y tu tiempo.',
-    nothingTodayHint: 'Practica con el simulador o sigue un mazo nuevo.',
-    noDecksTitle: 'Todavía no sigues ningún mazo',
     noDecksBody: 'Sin mazos el plan solo trae práctica de preguntas. Sigue uno para sumar repasos.',
-    goDecks: 'Ir a Mazos',
     limitNote: (limit: number) =>
       `Tu plan Gratis deja ${limit} preguntas al día, así que el bloque de práctica se recortó a lo que te permite.`,
-    topicsCalibrating:
-      'Tus temas a reforzar siguen calibrando. Cuando un tema tenga respuestas suficientes, el bloque de práctica apunta a tu tema más débil.',
     overloadTitle: 'Tu carga no cabe en tu tiempo',
     overloadBody: (needed: number, available: number) =>
       `Los próximos 7 días piden en promedio ${needed} min al día y tienes ${available}. Elige un ajuste.`,
@@ -1612,14 +1589,6 @@ export const featureText = {
     },
     noAccount:
       'Este perfil se creó antes de las cuentas con correo. Agrega tu correo para guardar tus datos.',
-  },
-  profileCard: {
-    levelLine: (level: number, title: string) => `Nivel ${level} · ${title}`,
-    seeLevels: 'Ver niveles y títulos',
-    streak: (current: number, best: number) =>
-      `${plural(current, 'día', 'días')} de racha · récord ${best}`,
-    xp: (xp: number) => `${xp.toLocaleString('es-MX')} XP en total`,
-    photoSoon: 'Pronto podrás subir tu foto o elegir un avatar.',
   },
   progress: {
     description:
