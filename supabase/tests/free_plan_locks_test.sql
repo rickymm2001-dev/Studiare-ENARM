@@ -489,4 +489,14 @@ begin
   end loop;
 end $$;
 
+-- ===================================================================== FL13. La comprobación de docs/SUPABASE.md
+select pg_temp.expect(
+  not has_function_privilege('authenticated', 'public.caller_has_paid_plan()', 'execute')
+  and not has_function_privilege('anon', 'public.caller_has_paid_plan()', 'execute')
+  and has_function_privilege('authenticated', 'public.party_open()', 'execute')
+  and position('caller_has_paid_plan' in pg_get_functiondef('public.party_open()'::regprocedure)) > 0
+  and position('v_outlines_open' in pg_get_functiondef('public.sync_push_records(jsonb)'::regprocedure)) > 0,
+  'FL13. La consulta de comprobación de docs/SUPABASE.md no da lo esperado'
+);
+
 select 'TODAS LAS PRUEBAS DEL PLAN GRATIS EN EL SERVIDOR PASARON' as resultado;

@@ -736,6 +736,46 @@ select
 - Si quien administra un grupo borra su cuenta, el grupo pasa al miembro activo más antiguo y solo se borra si ya no queda nadie. Eso vive en supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia la llave foránea de owner_id a on delete set null y agrega el disparador. Mientras no lo pegues, sigue la regla de la primera migración y el grupo se borra para todos
 - Las preguntas de un duelo salen hoy del banco de demostración, igual en todos los navegadores. Con el banco real en la nube (B11) las elegirá el servidor
 
+## Plan Gratis en el servidor
+
+### Qué hace
+
+- Party se cierra en Gratis (B8 del plan del cambio, respuesta 20 y 4.3). party_open ahora pide un plan de pago vigente, así que en Gratis las políticas ya no dejan ver grupos, compañeros, retos ni duelos, y las funciones de Party contestan PT001. Salir de un grupo, salir de todos y exportar lo propio siguen abiertos
+- Cuenta como plan de pago lo mismo que dice my_plan. Una suscripción vigente, también cancelada o con un cobro fallido mientras dure el periodo pagado, o un mes gratis por referido mientras dure. Cuando B10 agregue la prueba de 7 días, se suma ahí y estas reglas la heredan
+- Los apuntes que viajan a la nube también se cierran. En Gratis la sincronización ignora un apunte nuevo o un cambio a uno que ya estaba, sin frenar los mazos y las tarjetas del mismo envío. Borrar un apunte sí llega a la nube, leer los propios sigue igual y Borrar mis datos los quita todos
+- Los referidos siguen abiertos en Gratis, con su código, su canje y su resumen
+- Subir mazos y seguir mazos nuevos del catálogo se cierran en la app. Un mazo subido se guarda igual que uno hecho a mano y el catálogo viaja dentro de la app hasta el banco en la nube (B11)
+
+### Cómo aplicar la migración
+
+No necesitas terminal. Aplica primero las anteriores, en especial la de Party en la nube y la de referidos con el primer cobro. La migración no tiene sentencias delete ni drop, así que también se puede aplicar con el conector.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261021000001_free_plan_locks.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir. Si alguna vez vuelves a pegar 20261018000001_party_cloud.sql o 20261008000002_sync.sql, pega después esta otra vez, porque esas dos traen las versiones abiertas de party_open y de la sincronización de apuntes
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.caller_has_paid_plan()', 'execute') as alumno_lee_regla,
+  has_function_privilege('anon', 'public.caller_has_paid_plan()', 'execute') as anon_lee_regla,
+  has_function_privilege('authenticated', 'public.party_open()', 'execute') as alumno_party_open,
+  position('caller_has_paid_plan' in pg_get_functiondef('public.party_open()'::regprocedure)) > 0
+    as party_pide_plan,
+  position('v_outlines_open' in pg_get_functiondef('public.sync_push_records(jsonb)'::regprocedure)) > 0
+    as apuntes_con_plan;
+```
+
+7. Debe salir alumno_lee_regla y anon_lee_regla en false, y alumno_party_open, party_pide_plan y apuntes_con_plan en true. Si algo sale distinto, avísame antes de abrir a alumnos
+
+### Qué conviene saber
+
+- Quien pasa a Gratis sigue en sus grupos hasta que sale. Sus compañeros con plan lo siguen viendo con su alias y su última cifra. Él no ve nada del grupo y puede salir quitando el permiso de Party en Configuración, Privacidad
+- La regla del plan no mira el rol. Un médico, un admin o tú mismo necesitan un plan de pago, aunque sea de prueba, para entrar a Party
+- El tope de 20 preguntas al día de Gratis pasa del todo al servidor con el banco en la nube (B11)
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
