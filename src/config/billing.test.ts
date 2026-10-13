@@ -2,11 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   AI_CARDS_PER_DAY_PAID,
   annualSavingsPercent,
+  canUse,
   canUseFeature,
   checkoutPlanFor,
   FOUNDER_SEATS,
   GATED_FEATURES,
+  isGatedFeature,
   PAYMENT_PROVIDERS,
+  PLAN_HIGHLIGHTS,
   PLANS,
   VISIBLE_PLANS,
   visiblePlanOf,
@@ -53,14 +56,29 @@ describe('planes y precios', () => {
     expect(PAYMENT_PROVIDERS).toEqual(['stripe']);
   });
 
-  it('el plan Gratis limita las preguntas y deja fuera el examen completo y el tutor con IA', () => {
-    expect(PLANS.free.access).toMatchObject({
+  it('el plan Gratis da 20 preguntas al día y deja fuera el examen completo, el tutor con IA, Party, subir mazos y el catálogo', () => {
+    // Respuestas 18 y 20 y 4.25 del plan del cambio (B8)
+    expect(PLANS.free.access).toEqual({
       dailyQuestions: 20,
       fullExam: false,
       aiTutor: false,
-      importDecks: true,
-      party: true,
+      importDecks: false,
+      deckCatalog: false,
+      party: false,
     });
+  });
+
+  it('los tres planes de pago abren todo y sin límite de preguntas', () => {
+    for (const key of ['founder', 'monthly', 'annual'] as const) {
+      expect(PLANS[key].access).toEqual({
+        dailyQuestions: null,
+        fullExam: true,
+        aiTutor: true,
+        importDecks: true,
+        deckCatalog: true,
+        party: true,
+      });
+    }
   });
 
   it('cada plan se llama como su clave', () => {
@@ -100,5 +118,38 @@ describe('banderas de acceso por función de carga diaria', () => {
     expect(canUseFeature('free', 'easyDays', plans)).toBe(false);
     expect(canUseFeature('free', 'explore', plans)).toBe(true);
     expect(canUseFeature('monthly', 'easyDays', plans)).toBe(true);
+  });
+});
+
+describe('candados del plan (B8)', () => {
+  it('canUse junta las funciones de la carga diaria y las banderas de acceso', () => {
+    expect(isGatedFeature('outlines')).toBe(true);
+    expect(isGatedFeature('party')).toBe(false);
+    for (const lock of ['outlines', 'aiCards', 'party', 'importDecks', 'deckCatalog'] as const) {
+      expect(canUse('free', lock), lock).toBe(false);
+      expect(canUse('monthly', lock), lock).toBe(true);
+      expect(canUse('founder', lock), lock).toBe(true);
+      expect(canUse('annual', lock), lock).toBe(true);
+    }
+    expect(canUse('free', 'explore')).toBe(true);
+  });
+
+  it('con otra tabla de planes la bandera de acceso cierra solo lo indicado', () => {
+    const plans = {
+      ...PLANS,
+      free: { ...PLANS.free, access: { ...PLANS.free.access, party: true } },
+    };
+    expect(canUse('free', 'party', plans)).toBe(true);
+    expect(canUse('free', 'importDecks', plans)).toBe(false);
+  });
+
+  it('la tabla de planes compara lo que cierra Gratis, sin repetir nada', () => {
+    expect(new Set(PLAN_HIGHLIGHTS).size).toBe(PLAN_HIGHLIGHTS.length);
+    for (const lock of ['outlines', 'party', 'importDecks', 'deckCatalog'] as const) {
+      expect(PLAN_HIGHLIGHTS).toContain(lock);
+    }
+    // Todo lo que se compara está incluido en los de pago y algo de eso falta en Gratis
+    expect(PLAN_HIGHLIGHTS.every((lock) => canUse('monthly', lock))).toBe(true);
+    expect(PLAN_HIGHLIGHTS.filter((lock) => !canUse('free', lock)).length).toBeGreaterThan(0);
   });
 });

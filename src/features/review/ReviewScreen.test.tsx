@@ -9,6 +9,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/testing/fixtures';
 import { seedManualCards } from '@/data/testing/seedCards';
+import { changePlan } from '@/data/usecases/subscription';
 import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { DEFAULT_APPEARANCE } from '@/ui/appearance';
@@ -132,6 +133,21 @@ describe('pantalla de Repasar', () => {
       await screen.findByText(t.review.noDecksTitle, undefined, { timeout: 10_000 }),
     ).toBeVisible();
     expect(screen.getByRole('link', { name: t.review.goToDecks })).toBeVisible();
+    // En Gratis el catálogo es de pago, así que sugiere un mazo propio y no seguir uno (4.25, B8)
+    expect(await screen.findByText(t.freePlan.catalog.reviewEmpty)).toBeVisible();
+    expect(screen.queryByText(t.review.noDecksBody)).toBeNull();
+  });
+
+  it('sin mazos y con un plan de pago sugiere seguir un mazo precargado', async () => {
+    app = await renderApp(SCREENS.review.path, {
+      seed: async (api, user) => {
+        await changePlan(api, user, 'monthly');
+      },
+    });
+    expect(
+      await screen.findByText(t.review.noDecksBody, undefined, { timeout: 10_000 }),
+    ).toBeVisible();
+    expect(screen.queryByText(t.freePlan.catalog.reviewEmpty)).toBeNull();
   });
 
   it('Repasar y Mazos son pestañas de una sola sección y Repasar es la activa aquí', async () => {

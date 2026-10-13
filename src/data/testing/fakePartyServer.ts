@@ -43,7 +43,30 @@ export interface FakePartyOptions {
   /** El alias del perfil de una cuenta. null si no tiene perfil */
   aliasOf: (userId: string) => string | null;
   now?: () => number;
+  /**
+   * Si Party está abierta para la cuenta, como party_open con el plan de pago (B8,
+   * 20261021000001_free_plan_locks.sql). Sin ella siempre está abierta
+   */
+  isOpen?: (userId: string) => boolean;
 }
+
+/**
+ * Las funciones que piden Party abierta, como party_caller() en la base. Con Party cerrada contestan
+ * PT001 antes de tocar nada. Salir de un grupo o de todos y exportar lo propio no la piden
+ */
+const NEED_OPEN = new Set([
+  'party_overview',
+  'party_create_group',
+  'party_join_group',
+  'party_publish',
+  'party_create_challenge',
+  'party_create_duel',
+  'party_start_duel',
+  'party_submit_duel_result',
+  'party_rotate_code',
+  'party_remove_member',
+  'party_delete_challenge',
+]);
 
 type Metric = 'cards' | 'questions' | 'xp';
 
@@ -641,9 +664,14 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
 
   return {
     call(name, userId, args) {
+      // Con Party cerrada, como en el plan Gratis, cada función contesta PT001 antes de tocar nada,
+      // salvo salir y exportar lo propio
+      const open = options.isOpen?.(userId) ?? true;
+      if (name === 'party_open') return ok(open);
+      if (!open && NEED_OPEN.has(name)) {
+        return fail('PT001', 'Party no está abierta para tu cuenta');
+      }
       switch (name) {
-        case 'party_open':
-          return ok(true);
         case 'party_overview': {
           if (!isMonday(args.p_week_start)) return fail('22023', 'La semana no es válida');
           return ok(overview(userId, args.p_week_start));

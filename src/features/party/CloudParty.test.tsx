@@ -7,6 +7,7 @@ import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { writeStoredFlags } from '@/config/featureFlags';
 import {
   createPartyChallenge,
   createPartyDuel,
@@ -89,6 +90,30 @@ const withConsent = async (api: RenderedApp['api'], user: RenderedApp['user']) =
   await setConsent(api, user, 'party', true);
 };
 
+/** Party es de los planes de pago (respuesta 20, B8). El mensual como lo deja la nube con un pago */
+async function subscribe(api: RenderedApp['api'], user: RenderedApp['user']) {
+  await api.repos.subscriptions.put({
+    userId: user.id,
+    plan: 'monthly',
+    status: 'active',
+    isSimulated: false,
+    source: 'payment',
+    periodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+/** Abre una ruta con el plan mensual y lo que la prueba siembre */
+function renderPaid(path: string, options: Parameters<typeof renderApp>[1] = {}) {
+  return renderApp(path, {
+    ...options,
+    seed: async (api, user) => {
+      await subscribe(api, user);
+      await options.seed?.(api, user);
+    },
+  });
+}
+
 /** Ana entra al grupo de Bruno y Bruno la reta. Devuelve el duelo y sus preguntas */
 async function brunoChallengesAna() {
   const { groupId, code } = await brunoGroup();
@@ -157,7 +182,7 @@ function attemptEvents(input: {
 
 describe('Party en la nube', () => {
   it('pide el permiso antes de compartir, crea un grupo y lo muestra con su código', async () => {
-    app = await renderApp('/party');
+    app = await renderPaid('/party');
     const consent = await screen.findByRole('region', { name: text.consent.title });
     expect(within(consent).getByText(text.consent.body)).toBeVisible();
     expect(screen.queryByRole('region', { name: t.party.createTitle })).toBeNull();
@@ -186,7 +211,7 @@ describe('Party en la nube', () => {
 
   it('entra con el enlace de invitación, ve la tabla y publica su XP de la semana', async () => {
     const { code } = await brunoGroup(70);
-    app = await renderApp(`/party?codigo=${code.toLowerCase()}`, {
+    app = await renderPaid(`/party?codigo=${code.toLowerCase()}`, {
       seed: async (api, user) => {
         await withConsent(api, user);
         // 40 XP de hoy, que sale de su bitácora y es lo único que se publica
@@ -225,7 +250,7 @@ describe('Party en la nube', () => {
 
   it('el modo enfoque oculta la tabla, el XP y los retos, y deja los miembros y los duelos', async () => {
     const { code } = await brunoGroup(70);
-    app = await renderApp(`/party?codigo=${code}`, { seed: withConsent });
+    app = await renderPaid(`/party?codigo=${code}`, { seed: withConsent });
     const join = await screen.findByRole('region', { name: t.party.joinTitle });
     await userEvent.click(within(join).getByRole('button', { name: t.party.join }));
     const group = await screen.findByRole('region', { name: 'Guardia' });
@@ -250,7 +275,7 @@ describe('Party en la nube', () => {
 
   it('reta a un compañero real y el duelo queda esperando su turno', async () => {
     const { code } = await brunoGroup();
-    app = await renderApp(`/party?codigo=${code}`, { seed: withConsent });
+    app = await renderPaid(`/party?codigo=${code}`, { seed: withConsent });
     const join = await screen.findByRole('region', { name: t.party.joinTitle });
     await userEvent.click(within(join).getByRole('button', { name: t.party.join }));
     const group = await screen.findByRole('region', { name: 'Guardia' });
@@ -277,7 +302,7 @@ describe('Party en la nube', () => {
     // resultado todavía no llega al servidor
     fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
     await startPartyDuel(fake.cloud, duelId);
-    app = await renderApp('/party', {
+    app = await renderPaid('/party', {
       seed: async (api, user) => {
         await withConsent(api, user);
         const played = attemptEvents({
@@ -310,7 +335,7 @@ describe('Party en la nube', () => {
   it('un duelo dejado a medias cuenta como su intento, sin volver a ofrecer jugar', async () => {
     const { duelId, questions } = await brunoChallengesAna();
     await startPartyDuel(fake.cloud, duelId);
-    app = await renderApp('/party', {
+    app = await renderPaid('/party', {
       seed: async (api, user) => {
         await withConsent(api, user);
         // Contestó 3, acertó 2 y cerró la pestaña sin llegar al resumen
@@ -344,7 +369,7 @@ describe('Party en la nube', () => {
   it('a medias en esta pestaña deja continuar y todavía no manda nada', async () => {
     const { duelId, questions } = await brunoChallengesAna();
     await startPartyDuel(fake.cloud, duelId);
-    app = await renderApp('/party', {
+    app = await renderPaid('/party', {
       seed: async (api, user) => {
         await withConsent(api, user);
         const sessionId = newId();
@@ -390,7 +415,7 @@ describe('Party en la nube', () => {
   it('un duelo empezado en otro dispositivo ya no se juega en este', async () => {
     const { duelId } = await brunoChallengesAna();
     await startPartyDuel(fake.cloud, duelId);
-    app = await renderApp('/party', { seed: withConsent });
+    app = await renderPaid('/party', { seed: withConsent });
     const group = await screen.findByRole('region', { name: 'Guardia' });
     const row = (await within(group).findByText(t.party.duel.title('Bruno'))).closest(
       'li',
@@ -407,7 +432,7 @@ describe('Party en la nube', () => {
     fake.session = { id: BRUNO, email: 'bruno@ejemplo.mx' };
     await joinPartyGroup(fake.cloud, created.value.inviteCode);
     fake.session = { id: ANA, email: 'ana@ejemplo.mx' };
-    app = await renderApp('/party', { seed: withConsent });
+    app = await renderPaid('/party', { seed: withConsent });
     const group = await screen.findByRole('region', { name: 'Guardia' });
     expect(within(group).getByText(text.admin.youAdminister)).toBeVisible();
 
@@ -451,7 +476,7 @@ describe('Party en la nube', () => {
       metric: 'cards',
       target: 50,
     });
-    app = await renderApp('/party', { seed: withConsent });
+    app = await renderPaid('/party', { seed: withConsent });
     const group = await screen.findByRole('region', { name: 'Guardia' });
     await within(group).findByText('De Ana');
     expect(within(group).queryByText(text.admin.youAdminister)).toBeNull();
@@ -473,7 +498,7 @@ describe('Party sin nube', () => {
   it('explica que necesita la cuenta en la nube y sigue mostrando la tarjeta de referidos', async () => {
     holder.cloud = null;
     useCloud.setState({ state: { status: 'off' } });
-    app = await renderApp('/party');
+    app = await renderPaid('/party');
     const card = await screen.findByRole('region', { name: text.needsCloud.title });
     expect(within(card).getByText(text.needsCloud.off)).toBeVisible();
     expect(screen.queryByRole('region', { name: t.party.createTitle })).toBeNull();
@@ -482,7 +507,75 @@ describe('Party sin nube', () => {
 
   it('con la nube configurada y este navegador sin conectar lo dice', async () => {
     useCloud.setState({ state: { status: 'signed-out' } });
-    app = await renderApp('/party');
+    app = await renderPaid('/party');
     expect(await screen.findByText(text.needsCloud.signedOut)).toBeVisible();
+  });
+});
+
+// Party en el plan Gratis (respuesta 20 y 4.3 del plan del cambio, B8). Grupos, tabla, retos y duelos
+// quedan detrás de su candado con una vista previa. Comparte tu semana e Invita y gana un mes siguen
+describe('Party en el plan Gratis', () => {
+  it('muestra la vista previa con su candado y Ver planes, deja abiertos los referidos y no le pide nada de Party al servidor', async () => {
+    const before = fake.rpcCalls.length;
+    app = await renderApp('/party', { seed: withConsent });
+    const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
+    for (const point of t.freePlan.party.points) {
+      expect(within(preview).getByText(point)).toBeVisible();
+    }
+    expect(within(preview).getByText(t.freePlan.party.kept)).toBeVisible();
+    expect(within(preview).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+      'href',
+      SCREENS.subscription.path,
+    );
+    expect(within(preview).queryByText(t.billing.freeTrialCta)).toBeNull();
+    // Lo que sigue abierto en Gratis
+    expect(screen.getByRole('region', { name: t.b7.weekShare.title })).toBeVisible();
+    expect(screen.getByRole('region', { name: t.b7.referral.title })).toBeVisible();
+    // Sin grupos, sin pedir el permiso y sin la frase de lo que se comparte en un grupo
+    expect(screen.queryByRole('region', { name: t.party.createTitle })).toBeNull();
+    expect(screen.queryByRole('region', { name: text.consent.title })).toBeNull();
+    expect(screen.queryByText(text.privacy)).toBeNull();
+    // La tarjeta de referidos sí habla con el servidor, Party no
+    await waitFor(() => {
+      expect(fake.rpcCalls.slice(before)).toContain('my_referral_code');
+    });
+    expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);
+  });
+
+  it('con la prueba gratis prendida el candado ofrece probar 7 días gratis', async () => {
+    writeStoredFlags({ freeTrial: true });
+    try {
+      app = await renderApp('/party');
+      const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
+      expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
+        'href',
+        SCREENS.subscription.path,
+      );
+    } finally {
+      writeStoredFlags(null);
+    }
+  });
+
+  it('sin nube también se ve el candado y no el aviso de la nube', async () => {
+    holder.cloud = null;
+    useCloud.setState({ state: { status: 'off' } });
+    app = await renderApp('/party');
+    expect(await screen.findByRole('region', { name: t.freePlan.party.title })).toBeVisible();
+    expect(screen.queryByRole('region', { name: text.needsCloud.title })).toBeNull();
+    expect(screen.getByRole('region', { name: t.b7.referral.title })).toBeVisible();
+  });
+
+  it('si el servidor ya cerró Party para la cuenta, se ve el candado y no un error', async () => {
+    // Este navegador todavía cree que el plan es de pago, pero el plan acaba de vencer en el servidor
+    const call = fake.party.call.bind(fake.party);
+    vi.spyOn(fake.party, 'call').mockImplementation((name, userId, args) =>
+      name === 'party_overview'
+        ? { error: { code: 'PT001', message: 'Party no está abierta para tu cuenta' } }
+        : call(name, userId, args),
+    );
+    app = await renderPaid('/party', { seed: withConsent });
+    expect(await screen.findByRole('region', { name: t.freePlan.party.title })).toBeVisible();
+    expect(screen.queryByText(text.failures.closed)).toBeNull();
+    expect(screen.queryByRole('button', { name: text.retry })).toBeNull();
   });
 });

@@ -2,6 +2,9 @@
 // troncal con sus subespecialidades (D-066). Cada mazo es una fila de la lista, sin caja propia
 // (H06 de la revisión de B2), con sus temas plegados (D-078). Abajo van los mazos del alumno, que
 // crea y llena a mano. Subir mazos de otras apps llega con la Fase E.
+// Seguir mazos nuevos del catálogo y subir mazos son de los planes de pago (respuesta 20 y 4.25, B8).
+// En Gratis la lista queda como vista previa con su candado y lo que el alumno ya tiene sigue a su
+// alcance.
 import { BookOpenCheck, BookPlus, Check, ChevronDown, Layers, Library } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -21,6 +24,8 @@ import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { usePlanAllows } from '../shared/useActivePlan';
+import { CatalogLockNotice, CatalogRowLock } from './CatalogLock';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
@@ -60,6 +65,10 @@ function Decks({ session }: { session: ReadySession }) {
   // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
   const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
+  // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
+  // ya está en este dispositivo, porque el alumno lo siguió antes y sus repasos son suyos
+  const catalogOpen = usePlanAllows(session.user.id, 'deckCatalog');
+  const onDevice = new Set((stored?.decks ?? []).map((deck) => deck.id));
   // Mazos en el orden de las ramas troncales y las ramas sin mazos juntas en una línea (D-076)
   const branchOrder = topicTaxonomy.branches.map((branch) => branch.key);
   const orderedFiles = [...(catalog ?? [])].sort(
@@ -113,6 +122,7 @@ function Decks({ session }: { session: ReadySession }) {
           <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
           <CardDescription>{t.decks.preloadedDescription}</CardDescription>
         </CardHeader>
+        {catalogOpen === false && !session.isDemo ? <CatalogLockNotice /> : null}
         {catalog === undefined || stored === undefined ? (
           <LoadingState label={t.decks.loading} />
         ) : (
@@ -199,10 +209,12 @@ function Decks({ session }: { session: ReadySession }) {
                         >
                           {t.decks.unfollow}
                         </Button>
+                      ) : catalogOpen === false && !onDevice.has(id) ? (
+                        <CatalogRowLock />
                       ) : (
                         <Button
                           size="sm"
-                          disabled={busy !== null}
+                          disabled={busy !== null || catalogOpen === undefined}
                           onClick={() => {
                             setBusy(file.key);
                             void followDeck(api, session.user, file).finally(() => {

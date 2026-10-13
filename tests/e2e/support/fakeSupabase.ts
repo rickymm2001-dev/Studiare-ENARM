@@ -541,7 +541,11 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const clientErrors: ClientErrorRow[] = [];
   const calls: RecordedCall[] = [];
   // Party en la nube. El alias sale de profiles, como en la base
-  const party = createFakePartyServer({ aliasOf: (userId) => users.get(userId)?.alias ?? null });
+  // Party es de los planes de pago, como party_open en la base (B8, 20261021000001_free_plan_locks.sql)
+  const party = createFakePartyServer({
+    aliasOf: (userId) => users.get(userId)?.alias ?? null,
+    isOpen: (userId) => userPlan(userId) !== 'free',
+  });
   let counter = 0;
   let serverSeq = 0;
   let eventSeq = 0;
@@ -1050,8 +1054,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       const key = `${user.id}|${kind}|${id}`;
       const current = syncRecords.get(key);
       if (current && Date.parse(current.updated_at) >= Date.parse(updatedAt)) continue;
-      serverSeq += 1;
       const deletedAt = asString(raw.deletedAt);
+      // En Gratis un apunte no se crea ni se cambia en la nube y el lote sigue. Solo entra la marca de
+      // borrado de uno que ya estaba, también dentro de data (B8, 20261021000001_free_plan_locks.sql)
+      if (
+        kind === 'outline' &&
+        userPlan(user.id) === 'free' &&
+        (!current || !deletedAt || !asString(raw.data.deletedAt))
+      ) {
+        continue;
+      }
+      serverSeq += 1;
       syncRecords.set(key, {
         user_id: user.id,
         kind,

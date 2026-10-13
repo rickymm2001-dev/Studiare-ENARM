@@ -4,6 +4,7 @@ import { act, cleanup, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
+import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import {
   createPartyChallenge,
@@ -73,10 +74,24 @@ afterEach(async () => {
   useCloud.setState({ state: { status: 'off' } });
 });
 
+/** Party es de los planes de pago (respuesta 20, B8). El mensual como lo deja la nube con un pago */
+async function subscribe(api: RenderedApp['api'], user: RenderedApp['user']) {
+  await api.repos.subscriptions.put({
+    userId: user.id,
+    plan: 'monthly',
+    status: 'active',
+    isSimulated: false,
+    source: 'payment',
+    periodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+}
+
 describe('widget de Party con la nube', () => {
   it('muestra el lugar, el reto y el duelo pendiente, y el modo enfoque quita la sección de Inicio', async () => {
     app = await renderApp('/', {
       seed: async (api, user) => {
+        await subscribe(api, user);
         await setConsent(api, user, 'party', true);
       },
     });
@@ -99,13 +114,34 @@ describe('widget de Party con la nube', () => {
 
   it('sin el permiso de Party no pide nada al servidor y explica qué falta', async () => {
     const before = fake.rpcCalls.length;
-    app = await renderApp('/');
+    app = await renderApp('/', { seed: subscribe });
     const party = await screen.findByRole(
       'region',
       { name: t.widgets.names.party_challenge },
       { timeout: 15_000 },
     );
     expect(await within(party).findByText(t.partyCloud.widget.consent)).toBeVisible();
+    expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);
+  });
+
+  it('en Gratis lleva el aviso corto del candado con Ver planes y no le pide nada al servidor', async () => {
+    const before = fake.rpcCalls.length;
+    app = await renderApp('/', {
+      seed: async (api, user) => {
+        await setConsent(api, user, 'party', true);
+      },
+    });
+    const party = await screen.findByRole(
+      'region',
+      { name: t.widgets.names.party_challenge },
+      { timeout: 15_000 },
+    );
+    expect(await within(party).findByText(t.freePlan.widget)).toBeVisible();
+    expect(within(party).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+      'href',
+      SCREENS.subscription.path,
+    );
+    expect(within(party).queryByText('Guardia')).toBeNull();
     expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);
   });
 });

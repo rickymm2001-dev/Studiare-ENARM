@@ -6,12 +6,14 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useCloud } from '@/app/cloudState';
 import {
   annualSavingsPercent,
+  canUse,
   checkoutPlanFor,
   FOUNDER_PROMO_ACTIVE,
+  PLAN_HIGHLIGHTS,
   PLANS,
   VISIBLE_PLANS,
   visiblePlanOf,
-  type PlanAccess,
+  type PlanHighlight,
   type PlanKey,
 } from '@/config/billing';
 import { cloudConfigured } from '@/data/cloud/client';
@@ -38,14 +40,15 @@ import { useUserEvents } from '../shared/useUserEvents';
  * Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076).
  * Hoy ninguna, porque el examen completo ya existe (hallazgo de B1, D-119)
  */
-const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set();
+const COMING_SOON: ReadonlySet<'dailyQuestions' | PlanHighlight> = new Set();
 
-const ACCESS_KEYS: (keyof PlanAccess)[] = [
+/**
+ * Las preguntas al día y lo que compara cada plan, en el orden de PLAN_HIGHLIGHTS. Incluye lo que
+ * Gratis cierra con su candado, como Apuntes, Party, Importar mazos y el catálogo (B8)
+ */
+const ACCESS_KEYS: readonly ('dailyQuestions' | PlanHighlight)[] = [
   'dailyQuestions',
-  'fullExam',
-  'aiTutor',
-  'importDecks',
-  'party',
+  ...PLAN_HIGHLIGHTS,
 ];
 
 export function SubscriptionScreen() {
@@ -195,12 +198,11 @@ function Billing({ session }: { session: ReadySession }) {
                 </CardHeader>
                 <ul className="mb-4 flex flex-col gap-2 text-sm">
                   {ACCESS_KEYS.map((access) => {
-                    const value = plan.access[access];
                     const label =
                       access === 'dailyQuestions'
                         ? t.billing.access.dailyQuestions(plan.access.dailyQuestions)
                         : t.billing.access[access];
-                    const included = access === 'dailyQuestions' ? true : Boolean(value);
+                    const included = access === 'dailyQuestions' ? true : canUse(key, access);
                     return (
                       <li
                         key={access}

@@ -25,7 +25,7 @@ import {
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
-import { canUseFeature } from '@/config/billing';
+import { canUse, canUseFeature } from '@/config/billing';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
@@ -121,6 +121,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return { decks, cards, notes };
   }, [api.repos]);
   const catalog = useDeckCatalog();
+  // Sin mazos, en Gratis no se sugiere seguir uno del catálogo, que es de pago (4.25, B8)
+  const plan = useActivePlan(session.user.id);
   const [selection, setSelection] = useState<ReviewSelection | null>(null);
   // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
   const panel = useReviewSettingsPanel();
@@ -170,7 +172,11 @@ function ReviewLoader({ session }: { session: ReadySession }) {
               {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
             </CardTitle>
             <CardDescription>
-              {allSuspended ? t.review.allSuspendedBody : t.review.noDecksBody}
+              {allSuspended
+                ? t.review.allSuspendedBody
+                : plan !== undefined && !canUse(plan, 'deckCatalog')
+                  ? t.freePlan.catalog.reviewEmpty
+                  : t.review.noDecksBody}
             </CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
