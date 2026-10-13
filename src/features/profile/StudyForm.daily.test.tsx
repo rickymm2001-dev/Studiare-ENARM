@@ -2,13 +2,23 @@
 // Configuración, sección Estudio (D-085, filas 6, 7 y 8). Temporizador de tarjeta, días fáciles y
 // tarjetas nuevas sin límite. Se guardan con la barra de guardar y quedan como eventos de ajustes.
 import 'fake-indexeddb/auto';
-import { cleanup, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { createMemoryRouter } from 'react-router';
+import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SCREENS } from '@/app/screens';
-import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { usePreferences } from '@/app/preferences';
+import { routes } from '@/app/router';
+import { resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { DataProvider } from '@/data/DataProvider';
+import { useDataApi, type DataApi } from '@/data/context';
+import { makeUser } from '@/data/testing/fixtures';
+import type { User } from '@/data/schemas/people';
 import { UserSettingsSchema } from '@/data/schemas/people';
+import { RequireSession } from '@/features/shared/RequireSession';
 import { t } from '@/i18n/es-MX';
+import { StudySection } from './AccountSettings';
 
 // La pantalla trae muchos campos y userEvent tarda más que los 5 segundos por defecto
 vi.setConfig({ testTimeout: 30_000 });
@@ -20,7 +30,56 @@ afterEach(async () => {
   app = undefined;
 });
 
-const open = () => renderApp(`${SCREENS.settings.path}?seccion=study`);
+function Seeded({ run, children }: { run: (api: DataApi) => Promise<void>; children: ReactNode }) {
+  const api = useDataApi();
+  const [ready, setReady] = useState(false);
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    void run(api).then(() => {
+      setReady(true);
+    });
+  }, [api, run]);
+  return ready ? <>{children}</> : null;
+}
+
+const open = async (userOverrides?: Partial<User>): Promise<RenderedApp> => {
+  const user = makeUser(userOverrides);
+  let captured: DataApi | undefined;
+  const run = async (api: DataApi) => {
+    captured = api;
+    await api.repos.users.put(user);
+  };
+  usePreferences.setState({ sessionUserId: user.id });
+  const testRoutes = [
+    {
+      path: '/test-study',
+      element: (
+        <RequireSession screen="settings">
+          {(session) => <StudySection session={session} />}
+        </RequireSession>
+      ),
+    },
+    ...routes,
+  ];
+  const router = createMemoryRouter(testRoutes, { initialEntries: ['/test-study'] });
+  render(
+    <DataProvider kind="real">
+      <Seeded run={run}>
+        <RouterProvider router={router} />
+      </Seeded>
+    </DataProvider>,
+  );
+  await new Promise<void>((resolve) => {
+    const wait = () => {
+      if (captured) resolve();
+      else setTimeout(wait, 5);
+    };
+    wait();
+  });
+  return { api: captured as DataApi, user };
+};
 
 describe('ajustes de carga diaria en Configuración', () => {
   it('el temporizador viene apagado, no muestra sus opciones y se enciende con sus segundos', async () => {
@@ -121,8 +180,8 @@ describe('ajustes de carga diaria en Configuración', () => {
   });
 
   it('un intervalo máximo del perfil guía que no está en la lista se muestra tal cual', async () => {
-    app = await renderApp(`${SCREENS.settings.path}?seccion=study`, {
-      user: { settings: UserSettingsSchema.parse({ maxIntervalDays: 287 }) },
+    app = await open({
+      settings: UserSettingsSchema.parse({ maxIntervalDays: 287 }),
     });
     const typing = userEvent.setup();
     await typing.click(
