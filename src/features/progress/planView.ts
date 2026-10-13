@@ -1,6 +1,7 @@
-// Entradas del planificador a partir de lo que guarda la app (7.10, 13). Las cuentas las hace el
-// motor planner. Aquí solo se juntan los datos reales del alumno, sin React ni Dexie, para
-// poder probarlo con tarjetas y actividad armadas a mano.
+// Entradas del plan de la semana a partir de lo que guarda la app (7.10). Desde B3 vive en
+// Progreso, porque la pantalla del planificador se quitó (comentario 13 del plan del cambio). Las
+// cuentas las hace el motor planner. Aquí solo se juntan los datos reales del alumno, sin React ni
+// Dexie, para poder probarlo con tarjetas y actividad armadas a mano.
 import { MAX_NEW_CARDS_PER_DAY } from '@/data/schemas/people';
 import { projectLoad, type DayLoad, type QueueCard, type SchedulerConfig } from '@/engines/fsrs';
 import { buildPlan, type PlannerOutput } from '@/engines/planner';
@@ -83,8 +84,11 @@ export function buildPlannerView(input: {
   /** Minutos que declaró el alumno. null si no los ha dicho */
   declaredMinutes: number | null;
   examDate: string | null;
-  /** Claves de subespecialidad en orden de prioridad, de los temas a reforzar */
-  priorityTopics: readonly string[];
+  /**
+   * Claves de subespecialidad en orden de prioridad, de los temas a reforzar. Solo eligen el tema
+   * del bloque de práctica, que la semana de Progreso no muestra. Sin ellas la práctica es mezclada
+   */
+  priorityTopics?: readonly string[];
   /** Preguntas que le deja contestar su plan, hoy y por día. null es sin límite */
   questionLimit?: { today: number | null; perDay: number | null };
   /**
@@ -128,8 +132,10 @@ export function buildPlannerView(input: {
     ...(limits.newCardsPerDay > 0
       ? { loadWithFewerNew: { newPerDay: fewerNew, load: project(fewerNew) } }
       : {}),
-    priorityTopics: input.priorityTopics,
+    priorityTopics: input.priorityTopics ?? [],
     ...(input.questionLimit ? { questionLimit: input.questionLimit } : {}),
+    // Lo que ya estudió hoy sale del tiempo de hoy, como ya salen las tarjetas que repasó
+    minutesUsedToday: input.activity[today]?.focusMinutes ?? 0,
   });
 
   const measuredAverage =

@@ -44,7 +44,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { reservedByStoredExam } from '../exam/examStorage';
-import { buildPlannerView, MEASURED_DAYS_NEEDED, type PlannerView } from './planView';
+import { buildPlannerView, MEASURED_DAYS_NEEDED, type PlannerView } from '../progress/planView';
 
 const topicName = new Map(
   topicTaxonomy.branches.flatMap((branch) =>

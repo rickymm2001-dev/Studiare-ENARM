@@ -8,6 +8,7 @@ import { outlineText } from './outlines';
 import { qualityText } from './quality';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
+import { weekPlanText } from './weekPlan';
 
 interface ScreenText {
   title: string;
@@ -171,6 +172,7 @@ export const t = {
   ...qualityText,
   ...tutorText,
   ...vocabularyText,
+  weekPlan: weekPlanText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',

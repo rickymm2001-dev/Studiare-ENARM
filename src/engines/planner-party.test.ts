@@ -128,6 +128,47 @@ describe('planificador (7.10)', () => {
     expect(increase?.effectMinutesPerDay).toBeCloseTo(3200 / 60 - 30, 9);
   });
 
+  it('hoy reparte solo el tiempo que queda y los demás días y el aviso no cambian', () => {
+    const base = {
+      today: TODAY,
+      examDate: null,
+      declaredMinutes: 60,
+      pomodoroMinutes: [],
+      load: load(80, 20),
+      priorityTopics: [],
+    };
+    const fresh = buildPlan(base);
+    const studied = buildPlan({ ...base, minutesUsedToday: 45 });
+    // Quedan 15 minutos, 900 s. Caben 60 repasos de 15 s y ya no hay lugar para nuevas ni práctica
+    expect(studied.today).toMatchObject({
+      reviews: 60,
+      newCards: 0,
+      simulatorQuestions: 0,
+      challenge: false,
+      minutesPlanned: 15,
+      minutesAvailable: 60,
+      minutesUsed: 45,
+    });
+    expect(fresh.today.minutesUsed).toBe(0);
+    expect(studied.week.slice(1)).toEqual(fresh.week.slice(1));
+
+    // Con el tiempo del día cubierto no queda nada por planear hoy
+    const covered = buildPlan({ ...base, minutesUsedToday: 90 });
+    expect(covered.today).toMatchObject({
+      reviews: 0,
+      newCards: 0,
+      simulatorQuestions: 0,
+      minutesPlanned: 0,
+      minutesUsed: 90,
+    });
+
+    // La sobrecarga mira los 7 días completos, así que lo estudiado hoy no la cambia
+    const overloaded = { ...base, declaredMinutes: 30, load: load(160, 20) };
+    expect(buildPlan({ ...overloaded, minutesUsedToday: 20 }).warnings).toEqual(
+      buildPlan(overloaded).warnings,
+    );
+  });
+
   it('sin carga da un día vacío', () => {
     const plan = buildPlan({
       today: TODAY,

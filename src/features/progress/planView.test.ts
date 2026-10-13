@@ -137,6 +137,19 @@ describe('plan del día y de la semana', () => {
     expect(result.plan.today.simulatorCapped).toBe(true);
   });
 
+  it('hoy reparte solo el tiempo que queda después de lo que ya estudió', () => {
+    const cards = [...[0, 1, 2, 3, 4].map((index) => dueIn(index, -1)), ...newCards(10)];
+    const fresh = view({ cards, declaredMinutes: 60 });
+    const studied = view({ cards, declaredMinutes: 60, activity: { [TODAY]: day(50) } });
+    expect(studied.plan.today.minutesUsed).toBe(50);
+    expect(studied.plan.today.minutesAvailable).toBe(60);
+    // Lo estudiado más lo planeado no pasa del tiempo del día
+    expect(studied.plan.today.minutesPlanned).toBeLessThanOrEqual(10);
+    expect(studied.plan.today.minutesPlanned).toBeLessThan(fresh.plan.today.minutesPlanned);
+    // Los días que vienen no cambian
+    expect(studied.plan.week.slice(1)).toEqual(fresh.plan.week.slice(1));
+  });
+
   it('descuenta lo que ya repasó hoy y respeta los límites diarios', () => {
     const cards = [...Array.from({ length: 30 }, (_, index) => dueIn(index, -1)), ...newCards(40)];
     const small: SchedulerConfig = {

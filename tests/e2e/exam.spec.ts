@@ -291,8 +291,9 @@ test('un examen sin terminar aparta las preguntas del día del plan Gratis', asy
   await expect(practice.getByRole('link', { name: t.simulator.goToOpenExam })).toBeVisible();
   await expect(practice.getByRole('button', { name: t.simulator.start })).toHaveCount(0);
 
-  // El plan del día tampoco propone más práctica de la que permite el plan Gratis
-  await page.goto(SCREENS.planner.path);
-  await expect(page.getByRole('region', { name: t.planner.todayTitle })).toBeVisible();
-  await expect(page.getByText(t.planner.limitNote(20))).toBeVisible();
+  // La semana de Progreso tampoco propone más práctica de la que permite el plan Gratis
+  await page.goto(SCREENS.progress.path);
+  const week = page.getByRole('region', { name: t.planner.weekTitle });
+  await expect(week.getByRole('list', { name: t.weekPlan.daysLabel })).toBeVisible();
+  await expect(week.getByText(t.planner.limitNote(20))).toBeVisible();
 });

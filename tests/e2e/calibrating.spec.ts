@@ -54,8 +54,8 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       ),
   ).toBeVisible();
 
-  // Plan. Los minutos de estudio calibran hasta tener 3 días de estudio
-  await page.goto(SCREENS.planner.path);
+  // La semana de Progreso. Los minutos de estudio calibran hasta tener 3 días de estudio
+  await page.goto(SCREENS.progress.path);
   await expect(
     page
       .getByRole('region', { name: t.planner.minutesTitle })
