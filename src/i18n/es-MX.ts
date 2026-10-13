@@ -6,6 +6,7 @@ import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
 import { qualityText } from './quality';
+import { settingsPageText } from './settingsPage';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
 
@@ -102,7 +103,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   settings: {
     title: 'Configuración',
-    description: 'Apariencia, metas, repaso, Pomodoro y tus datos.',
+    description: 'Tu perfil y tu plan, cómo se ve la app y tu privacidad, en una sola página.',
   },
   subscription: {
     title: 'Suscripción',
@@ -355,6 +356,7 @@ export const t = {
     dismiss: 'Cerrar aviso',
   },
   offlineBanner: 'Sin conexión. Lo que ya está en este dispositivo sigue funcionando.',
+  settingsPage: settingsPageText,
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

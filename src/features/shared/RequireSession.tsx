@@ -52,12 +52,13 @@ export function RequireSession({
         <Card aria-labelledby="demo-vacia">
           <CardHeader>
             <CardTitle id="demo-vacia">{t.session.demoEmptyTitle}</CardTitle>
-            <CardDescription>{t.session.demoEmptyBody}</CardDescription>
+            <CardDescription>{t.settingsPage.demoEmpty.body}</CardDescription>
           </CardHeader>
+          {/* Los datos de demostración se generan en la pantalla del admin (B3 del plan, 5.4) */}
           <Button asChild className="self-start">
-            <Link to={screenPath('settings')}>
+            <Link to={screenPath('demoData')}>
               <Sparkles aria-hidden />
-              {t.session.goToProfile}
+              {t.settingsPage.demoEmpty.link}
             </Link>
           </Button>
         </Card>

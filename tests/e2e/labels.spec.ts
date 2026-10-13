@@ -5,6 +5,7 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { generateDemo } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -91,12 +92,9 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
   page,
 }) => {
   test.setTimeout(360_000);
-  // Con la demostración generada cada pantalla trae sus datos simulados y no el aviso de vacía
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
-  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-  const panel = page.getByRole('region', { name: t.demoData.title });
-  await panel.getByRole('button', { name: t.demoData.generate }).click();
-  await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 200_000 });
+  // Con la demostración generada cada pantalla trae sus datos simulados y no el aviso de vacía. Se
+  // genera en Datos de demostración del admin (B3 del plan del cambio, 5.4)
+  await generateDemo(page, 200_000);
 
   const screens: ScreenKey[] = [
     'home',

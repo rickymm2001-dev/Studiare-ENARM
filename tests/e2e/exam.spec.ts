@@ -273,7 +273,7 @@ test('al borrar mis datos también se va el examen guardado en el navegador', as
   await page.getByRole('radio').first().check();
   expect(await storedExams(page)).toBe(1);
 
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
   await page.getByRole('button', { name: t.settings.delete }).click();
   await page.getByRole('button', { name: t.settings.deleteConfirm }).click();
   await expect.poll(() => storedExams(page)).toBe(0);

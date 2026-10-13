@@ -50,7 +50,7 @@ test('con sesión el aviso se lee con la navegación de la app y desde Configura
   page,
 }) => {
   await signUp(page);
-  await page.goto(`${SCREENS.settings.path}?seccion=privacy`);
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
   await page.getByRole('link', { name: legalText.links.privacy }).click();
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.privacyNotice.title }),

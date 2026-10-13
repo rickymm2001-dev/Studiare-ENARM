@@ -92,7 +92,7 @@ test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', asyn
 });
 
 test('el tema oscuro se aplica y se recuerda al recargar', async ({ page }) => {
-  await page.goto(`${SCREENS.settings.path}?seccion=appearance`);
+  await page.goto(`${SCREENS.settings.path}#apariencia`);
   await page.getByRole('radio', { name: t.theme.dark }).click();
   // El tema se ve al instante como vista previa y se queda solo al guardar (D-078)
   await expect(page.locator('html')).toHaveClass(/\bdark\b/);

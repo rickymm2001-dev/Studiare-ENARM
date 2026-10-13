@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { adminText } from '@/i18n/admin';
 
 const OUT_DIR =
   process.env.AUDIT_OUT ?? join(process.cwd(), 'docs', 'auditoria-2026-10-10', 'recorrido');
@@ -54,6 +55,14 @@ function watch(page: Page, findings: Finding[], context: () => string) {
   });
 }
 
+/** Cambia el rol del dispositivo desde la pantalla 26, sin nube (D-059) */
+async function enterRole(page: Page, role: Role) {
+  await page.goto(SCREENS.roleSelector.path);
+  await page.getByRole('radio', { name: new RegExp(t.roles.names[role]) }).click();
+  await page.getByRole('button', { name: t.roles.enterAs(t.roles.names[role]) }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+}
+
 async function setupRole(page: Page, role: Role, mode: Mode) {
   await page.addInitScript(
     (value) => {
@@ -64,12 +73,14 @@ async function setupRole(page: Page, role: Role, mode: Mode) {
     { theme: 'system', role, database: mode === 'demo' ? 'demo' : 'real' },
   );
   if (mode === 'demo') {
-    // La demostración se genera una vez en este navegador
-    await page.goto(`${SCREENS.settings.path}?seccion=account`);
-    await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
-    const panel = page.getByRole('region', { name: t.demoData.title });
-    await panel.getByRole('button', { name: t.demoData.generate }).click();
-    await expect(panel.getByRole('status')).toHaveText(/Listo\./, { timeout: 240_000 });
+    // La demostración se genera una vez en este navegador, en Datos de demostración del admin (B3 del
+    // plan del cambio, 5.4). La base ya es la de demostración por las preferencias de arriba
+    await enterRole(page, 'admin');
+    await page.goto(SCREENS.demoData.path);
+    const generator = page.getByRole('region', { name: adminText.adminDemo.adjust.title });
+    await generator.getByRole('button', { name: adminText.adminDemo.generate }).click();
+    await expect(generator.getByRole('status')).toHaveText(/Listo\./, { timeout: 240_000 });
+    await enterRole(page, role);
   } else if (role === 'student') {
     // Con una cuenta local, como la de un alumno nuevo
     await page.goto(SCREENS.onboarding.path);

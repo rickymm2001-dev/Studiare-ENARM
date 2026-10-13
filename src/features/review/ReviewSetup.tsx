@@ -1,6 +1,7 @@
 // Qué quieres repasar (D-072, D-078). Arriba el modo y el botón de empezar con cuántas tarjetas
-// tocan. Mazos, ramas y límites quedan plegados con un resumen, porque se cambian poco. La última
-// selección se recuerda en este dispositivo.
+// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco. La última selección
+// se recuerda en este dispositivo. Aquí solo se elige lo de esta sesión. Los límites de cada día se
+// leen aquí y se cambian en Ajustes del repaso, el único lugar de cada ajuste (B3 del plan).
 import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -11,7 +12,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
-import { CheckboxField, TextField } from '@/ui/components/field';
+import { CheckboxField } from '@/ui/components/field';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
@@ -29,8 +30,7 @@ export function ReviewSetup({
   countersFor,
   leechCount,
   limits,
-  limitsExtra,
-  onSaveLimits,
+  onOpenSettings,
   onStart,
 }: {
   /** Atajo para agregar un mazo, junto al título */
@@ -45,11 +45,10 @@ export function ReviewSetup({
   countersFor: (selection: ReviewSelection) => DailyCounters;
   /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Explorar */
   leechCount: number;
-  /** Límites diarios del alumno. Se cambian aquí mismo y aplican al momento */
+  /** Límites diarios del alumno. Aquí solo se leen */
   limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
-  /** Ayudas de carga diaria que van dentro de los límites, como la sugerencia de nuevas */
-  limitsExtra?: ReactNode;
-  onSaveLimits: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
+  /** Abre Ajustes del repaso, donde se cambian los límites */
+  onOpenSettings: () => void;
   onStart: (selection: ReviewSelection) => void;
 }) {
   const deckIds = useMemo(() => [...new Set(cards.map((card) => card.deckId))], [cards]);
@@ -67,6 +66,7 @@ export function ReviewSetup({
   const total = countFor(selection);
   const counters = countersFor(selection);
   const text = t.reviewSetup;
+  const panelText = t.settingsPage.reviewSettings;
 
   return (
     <>
@@ -181,89 +181,20 @@ export function ReviewSetup({
             />
           </Disclosure>
 
-          <Disclosure
-            title={text.limits}
-            summary={
-              limits.unlimitedNewCards
-                ? text.limitsSummaryUnlimited(limits.reviewsPerDay)
-                : text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)
-            }
-          >
-            {/* La clave rehace el borrador cuando los límites cambian desde fuera, por ejemplo al usar la sugerencia */}
-            <DailyLimits
-              key={`${limits.newCardsPerDay}:${limits.reviewsPerDay}`}
-              limits={limits}
-              onSave={onSaveLimits}
-            />
-            {limitsExtra}
-          </Disclosure>
+          <p className="text-sm text-fg-muted">
+            {limits.unlimitedNewCards
+              ? panelText.limitsUnlimited(limits.reviewsPerDay)
+              : panelText.limits(limits.newCardsPerDay, limits.reviewsPerDay)}{' '}
+            <button
+              type="button"
+              onClick={onOpenSettings}
+              className="font-semibold text-primary-ink underline underline-offset-2"
+            >
+              {panelText.changeLimits}
+            </button>
+          </p>
         </div>
       </Card>
     </>
-  );
-}
-
-/** Tarjetas nuevas y repasos por día, con guardado al momento. También están en Configuración */
-function DailyLimits({
-  limits,
-  onSave,
-}: {
-  limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
-  onSave: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
-}) {
-  const [newCards, setNewCards] = useState(String(limits.newCardsPerDay));
-  const [reviews, setReviews] = useState(String(limits.reviewsPerDay));
-  const [saved, setSaved] = useState(false);
-  const clamp = (value: string, max: number) =>
-    Math.min(max, Math.max(0, Math.round(Number(value) || 0)));
-  const next = { newCardsPerDay: clamp(newCards, 500), reviewsPerDay: clamp(reviews, 5000) };
-  const dirty =
-    next.newCardsPerDay !== limits.newCardsPerDay || next.reviewsPerDay !== limits.reviewsPerDay;
-  return (
-    <fieldset>
-      <legend className="sr-only">{t.reviewSetup.limits}</legend>
-      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-        <TextField
-          label={t.settings.newCardsPerDay}
-          type="number"
-          min={0}
-          max={500}
-          inputMode="numeric"
-          value={newCards}
-          disabled={limits.unlimitedNewCards}
-          onChange={(event) => {
-            setNewCards(event.target.value);
-            setSaved(false);
-          }}
-        />
-        <TextField
-          label={t.settings.reviewsPerDay}
-          type="number"
-          min={0}
-          max={5000}
-          inputMode="numeric"
-          value={reviews}
-          onChange={(event) => {
-            setReviews(event.target.value);
-            setSaved(false);
-          }}
-        />
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={!dirty}
-          onClick={() => {
-            void onSave(next).then(() => {
-              setSaved(true);
-            });
-          }}
-        >
-          {t.settings.saveChanges}
-        </Button>
-      </div>
-      <p role="status" className="mt-2 text-sm text-fg-muted">
-        {dirty ? t.settings.unsaved : saved ? t.reviewSetup.limitsSaved : t.reviewSetup.limitsHint}
-      </p>
-    </fieldset>
   );
 }

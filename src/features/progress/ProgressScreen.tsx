@@ -26,6 +26,7 @@ import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
 import { masteryDot } from './masteryChip';
+import { OfficialScoreCard } from './OfficialScoreCard';
 import { useAnalysis } from './useAnalysis';
 
 export function ProgressScreen() {
@@ -153,6 +154,7 @@ function Progress({ session }: { session: ReadySession }) {
         />
         <FutureLoadSection session={session} events={events} content={content} />
       </div>
+      <OfficialScoreCard session={session} />
     </>
   );
 }

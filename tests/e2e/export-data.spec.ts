@@ -1,4 +1,4 @@
-// Exportar mis datos (4.5, D-092). Desde Configuración, Cuenta, la descarga es un JSON con el
+// Exportar mis datos (4.5, D-092). Desde Configuración, Privacidad, la descarga es un JSON con el
 // formato enarm-prototipo-export-v2 y trae el perfil, la cuenta, los consentimientos y la bitácora
 // de quien lo pide. Con dos perfiles en el mismo navegador no se cuela nada del otro.
 import { readFile } from 'node:fs/promises';
@@ -31,7 +31,7 @@ test('descarga un JSON v2 con los datos del alumno que lo pide y nada del otro p
   await signOut(page);
   await signUp(page, 'Beto');
 
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
   const section = page.getByRole('region', { name: t.settings.exportTitle });
   await expect(section.getByText(t.settings.exportDescription)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
