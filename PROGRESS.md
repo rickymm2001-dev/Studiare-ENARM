@@ -17,7 +17,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 ### Bloques
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
-- [ ] B2. Sistema de diseño y rediseño visual (en curso)
+- [ ] B2. Sistema de diseño y rediseño visual (PR 37 abierto, en cierre)
 - [ ] B3. Navegación, Configuración y Perfil
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
