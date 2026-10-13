@@ -24,7 +24,8 @@ export async function capture(page: Page, dir: string, name: string, projectName
   await page.screenshot({
     path: join(dir, `${name}--${projectName}.jpg`),
     type: 'jpeg',
-    quality: 78,
+    // Calidad 60 para que cada toma de bloque pese la mitad en la historia del repo (revisión de B2)
+    quality: 60,
     fullPage: true,
   });
 }
