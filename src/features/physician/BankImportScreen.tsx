@@ -1,7 +1,7 @@
 // Importador del banco (pantalla 22, 10.2). El médico sube el Excel, el CSV o el JSON que llenó con la
 // plantilla. Antes de guardar nada ve cuántas filas entran, cuáles no y por qué, con el número de fila.
 // Lo que entra queda en borrador (4.2) y un ID por fila evita duplicados si vuelve a subir el archivo.
-import { useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import {
   CheckCircle2,
@@ -21,6 +21,7 @@ import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { FileChooser } from '@/ui/components/file-chooser';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import {
@@ -59,9 +60,7 @@ export function BankImportScreen() {
   const [error, setError] = useState('');
   const [shown, setShown] = useState(PAGE);
 
-  const pick = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    event.target.value = '';
+  const pick = async (file: File | undefined) => {
     if (!file) return;
     setError('');
     setShown(PAGE);
@@ -160,37 +159,20 @@ export function BankImportScreen() {
           <CardDescription>{text.file.hint}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-2">
-          <label htmlFor="archivo-banco" className="font-medium">
+          <label id="archivo-banco-etiqueta" htmlFor="archivo-banco" className="font-medium">
             {text.file.label}
           </label>
-          {/* El input nativo queda oculto porque su botón y su texto salen en inglés (H07 de B2). La
-              segunda etiqueta tiene forma de botón y lo abre, y el foco del input se dibuja en ella */}
-          <div className="relative flex flex-wrap items-center gap-3">
-            <input
-              id="archivo-banco"
-              type="file"
-              accept=".xlsx,.csv,.json,.txt"
-              className="peer sr-only"
-              aria-describedby="archivo-banco-elegido"
-              disabled={phase.kind === 'reading' || phase.kind === 'importing'}
-              onChange={(event) => {
-                void pick(event);
-              }}
-            />
-            <Button
-              asChild
-              variant="secondary"
-              className="cursor-pointer peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus peer-disabled:pointer-events-none peer-disabled:opacity-50"
-            >
-              <label htmlFor="archivo-banco">
-                <FileUp aria-hidden />
-                {text.file.choose}
-              </label>
-            </Button>
-            <span id="archivo-banco-elegido" className="min-w-0 text-sm break-all text-fg-muted">
-              {chosenFile ?? text.file.none}
-            </span>
-          </div>
+          <FileChooser
+            id="archivo-banco"
+            labelledBy="archivo-banco-etiqueta"
+            accept=".xlsx,.csv,.json,.txt"
+            disabled={phase.kind === 'reading' || phase.kind === 'importing'}
+            fileName={chosenFile}
+            chooseText={text.file.choose}
+            emptyText={text.file.none}
+            icon={<FileUp aria-hidden />}
+            onChoose={pick}
+          />
           {error ? (
             <p role="alert" className="text-sm text-danger">
               {error}

@@ -185,7 +185,7 @@ function Decks({ session }: { session: ReadySession }) {
                     </div>
                     <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:justify-end">
                       {session.isDemo ? (
-                        <span className="flex items-center gap-1 text-sm font-medium text-success">
+                        <span className="flex items-center gap-1 text-sm font-medium text-fg-muted">
                           <Check aria-hidden className="size-4" />
                           {t.decks.following}
                         </span>

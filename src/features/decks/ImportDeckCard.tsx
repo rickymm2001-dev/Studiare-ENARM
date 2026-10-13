@@ -3,7 +3,7 @@
 // nombre del mazo y la confirmación de que el contenido es del alumno, se guarda como un mazo
 // privado con sus submazos. Las tarjetas empiezan nuevas. Importar el mismo archivo otra vez no
 // duplica nada.
-import { FileUp, FolderOpen, TriangleAlert } from 'lucide-react';
+import { FileUp, TriangleAlert } from 'lucide-react';
 import { useId, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -15,6 +15,7 @@ import { htmlToPlain } from '@/engines/cardText';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
+import { FileChooser } from '@/ui/components/file-chooser';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
@@ -201,63 +202,6 @@ export function ImportDeckCard({
  * sigue en el DOM para tomar su foco y su estado desactivado, y abre el selector sin código. Al
  * lado va el nombre del último archivo elegido. También lo usa la tarjeta de tarjetas con IA
  */
-export function FileChooser({
-  id,
-  labelledBy,
-  describedBy,
-  accept,
-  disabled,
-  fileName,
-  chooseText,
-  emptyText,
-  onChoose,
-}: {
-  id: string;
-  /** Id de la etiqueta visible del campo, que le da su nombre */
-  labelledBy: string;
-  describedBy: string;
-  accept: string;
-  disabled: boolean;
-  /** Último archivo elegido. null si todavía no hay ninguno */
-  fileName: string | null;
-  chooseText: string;
-  emptyText: string;
-  onChoose: (file: File | undefined) => Promise<void>;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-      <input
-        id={id}
-        type="file"
-        accept={accept}
-        disabled={disabled}
-        aria-labelledby={labelledBy}
-        aria-describedby={describedBy}
-        className="peer sr-only"
-        onChange={(event) => {
-          const input = event.target;
-          void onChoose(input.files?.[0]).finally(() => {
-            // Así se puede elegir el mismo archivo otra vez
-            input.value = '';
-          });
-        }}
-      />
-      <Button
-        asChild
-        variant="secondary"
-        size="sm"
-        className="cursor-pointer peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus peer-disabled:pointer-events-none peer-disabled:opacity-50"
-      >
-        <label htmlFor={id} aria-hidden>
-          <FolderOpen aria-hidden />
-          {chooseText}
-        </label>
-      </Button>
-      <span className="min-w-0 truncate text-sm text-fg-muted">{fileName ?? emptyText}</span>
-    </div>
-  );
-}
-
 function ImportPreview({
   parsed,
   deckName,

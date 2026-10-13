@@ -16,7 +16,7 @@ import { cn } from '@/ui/cn';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
-import { segmentedItem, segmentedList } from '@/ui/components/segmented';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { useSession } from '@/app/session';
 import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';

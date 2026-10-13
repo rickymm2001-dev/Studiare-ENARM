@@ -27,7 +27,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
-import { segmentedItem, segmentedList } from '@/ui/components/segmented';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { AccountDetailsFields } from '../profile/AccountDetailsFields';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
 

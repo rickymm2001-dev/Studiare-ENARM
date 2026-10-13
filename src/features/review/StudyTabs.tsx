@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
-import { segmentedItem, segmentedList } from '@/ui/components/segmented';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 
 const TABS = [
   { key: 'review', path: screenPath('review'), label: t.studyTabs.review },

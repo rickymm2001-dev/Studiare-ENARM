@@ -37,7 +37,7 @@ import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { useActivePlan } from '../shared/useActivePlan';
-import { FileChooser } from './ImportDeckCard';
+import { FileChooser } from '@/ui/components/file-chooser';
 
 export function AiCardsCard({ session }: { session: ReadySession }) {
   return (

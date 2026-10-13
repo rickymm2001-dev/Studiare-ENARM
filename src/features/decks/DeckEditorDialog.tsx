@@ -28,7 +28,7 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { TextAreaField } from '@/ui/components/field';
-import { segmentedItem, segmentedList } from '@/ui/components/segmented';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import type { ReadySession } from '../shared/RequireSession';
 import { useDebouncedValue } from '../shared/useDebouncedValue';
 import { CardQualityHints } from './CardQualityHints';
