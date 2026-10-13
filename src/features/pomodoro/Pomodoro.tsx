@@ -208,7 +208,7 @@ export function PomodoroSettingsForm({
   );
   return (
     <form
-      className="flex flex-col gap-3 rounded-md bg-muted p-3"
+      className="flex flex-col gap-3"
       onSubmit={(event) => {
         event.preventDefault();
         void (async () => {

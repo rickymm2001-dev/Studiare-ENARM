@@ -3,7 +3,14 @@
 // Lo que entra queda en borrador (4.2) y un ID por fila evita duplicados si vuelve a subir el archivo.
 import { useState, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
-import { CheckCircle2, Download, FileSpreadsheet, ListChecks, TriangleAlert } from 'lucide-react';
+import {
+  CheckCircle2,
+  Download,
+  FileSpreadsheet,
+  FileUp,
+  ListChecks,
+  TriangleAlert,
+} from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SCREENS } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -30,7 +37,7 @@ const csvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
 type Phase =
   | { kind: 'idle' }
-  | { kind: 'reading' }
+  | { kind: 'reading'; fileName: string }
   | { kind: 'planned'; fileName: string; plan: ImportPlan }
   | { kind: 'importing'; fileName: string; plan: ImportPlan; done: number }
   | { kind: 'done'; fileName: string; outcome: ImportOutcome };
@@ -58,7 +65,7 @@ export function BankImportScreen() {
     if (!file) return;
     setError('');
     setShown(PAGE);
-    setPhase({ kind: 'reading' });
+    setPhase({ kind: 'reading', fileName: file.name });
     try {
       const table = await readBankFile(file);
       const plan = await planImport(api, table, { prefix: prefixOf(file.name), newId });
@@ -72,6 +79,9 @@ export function BankImportScreen() {
       );
     }
   };
+
+  // El input se vacía al leer cada archivo, así que el nombre elegido sale de la fase
+  const chosenFile = phase.kind === 'idle' ? null : phase.fileName;
 
   const run = async (fileName: string, plan: ImportPlan) => {
     setPhase({ kind: 'importing', fileName, plan, done: 0 });
@@ -153,16 +163,34 @@ export function BankImportScreen() {
           <label htmlFor="archivo-banco" className="font-medium">
             {text.file.label}
           </label>
-          <input
-            id="archivo-banco"
-            type="file"
-            accept=".xlsx,.csv,.json,.txt"
-            className="block w-full text-sm file:mr-3 file:min-h-touch file:rounded-full file:border file:border-line file:bg-surface file:px-4 file:font-semibold"
-            disabled={phase.kind === 'reading' || phase.kind === 'importing'}
-            onChange={(event) => {
-              void pick(event);
-            }}
-          />
+          {/* El input nativo queda oculto porque su botón y su texto salen en inglés (H07 de B2). La
+              segunda etiqueta tiene forma de botón y lo abre, y el foco del input se dibuja en ella */}
+          <div className="relative flex flex-wrap items-center gap-3">
+            <input
+              id="archivo-banco"
+              type="file"
+              accept=".xlsx,.csv,.json,.txt"
+              className="peer sr-only"
+              aria-describedby="archivo-banco-elegido"
+              disabled={phase.kind === 'reading' || phase.kind === 'importing'}
+              onChange={(event) => {
+                void pick(event);
+              }}
+            />
+            <Button
+              asChild
+              variant="secondary"
+              className="cursor-pointer peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus peer-disabled:pointer-events-none peer-disabled:opacity-50"
+            >
+              <label htmlFor="archivo-banco">
+                <FileUp aria-hidden />
+                {text.file.choose}
+              </label>
+            </Button>
+            <span id="archivo-banco-elegido" className="min-w-0 text-sm break-all text-fg-muted">
+              {chosenFile ?? text.file.none}
+            </span>
+          </div>
           {error ? (
             <p role="alert" className="text-sm text-danger">
               {error}
