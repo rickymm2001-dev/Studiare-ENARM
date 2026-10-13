@@ -62,4 +62,32 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
     expect(button).not.toMatch(/\bgold\b/);
     expect(button).not.toContain('rounded-full');
   });
+
+  it('sin píldoras fuera de círculos, barras y el reloj del Pomodoro (H01 de la revisión de B2)', () => {
+    // Un círculo lleva size- y no tiene relleno horizontal. Una píldora sí lo tiene. Las barras, las
+    // muestras de las gráficas y el reloj del Pomodoro viven en estos archivos y pueden ser redondos
+    const ROUND_OK = new Set([
+      'ui/components/progress-bar.tsx',
+      'features/review/CardTimerBar.tsx',
+      'features/party/ChallengeRow.tsx',
+      'app/layout/HeaderStats.tsx',
+      'features/home/sections/ReviewLoadCard.tsx',
+      'features/pomodoro/Pomodoro.tsx',
+      'features/profile/AvatarPicker.tsx',
+      'features/profile/AvatarCropper.tsx',
+    ]);
+    const offenders = sourceFiles(SRC).flatMap((file) => {
+      const relative = file.slice(SRC.length);
+      if (ROUND_OK.has(relative)) return [];
+      return readFileSync(file, 'utf8')
+        .split('\n')
+        .flatMap((line, index) => {
+          if (!line.includes('rounded-full')) return [];
+          const pill = /\bp[xlr]-/.test(line);
+          const circle = /\bsize-/.test(line) && !pill;
+          return circle ? [] : [`${relative}:${String(index + 1)}`];
+        });
+    });
+    expect(offenders).toEqual([]);
+  });
 });

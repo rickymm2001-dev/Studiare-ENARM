@@ -441,6 +441,9 @@ export const physicianText = {
       label: 'Archivo del banco',
       hint: 'Excel (.xlsx), CSV o JSON, hasta 50 MB. Un ID en cada fila evita duplicados si lo subes otra vez.',
       reading: 'Leyendo el archivo',
+      // El botón y el texto del input nativo salen en inglés, por eso van propios (H07 de B2)
+      choose: 'Elegir archivo',
+      none: 'Ningún archivo elegido',
     },
     errors: {
       unsupported: 'Ese formato no se puede leer. Usa Excel (.xlsx), CSV o JSON.',

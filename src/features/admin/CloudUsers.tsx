@@ -18,6 +18,7 @@ import type { Role } from '@/data/schemas/common';
 import { assignableRoles } from '@/engines/roles';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
@@ -251,10 +252,10 @@ function UserLine({
           }}
         />
       ) : (
-        <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm font-semibold">
-          <Icon aria-hidden className="size-4" />
+        <Badge variant="neutral">
+          <Icon aria-hidden className="size-3.5" />
           {t.roles.names[user.role]}
-        </span>
+        </Badge>
       )}
     </Card>
   );

@@ -182,7 +182,8 @@ function Setup({ session }: { session: ReadySession }) {
           <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* Una columna en el teléfono para que ninguna opción se corte (H09 de la revisión de B2) */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}

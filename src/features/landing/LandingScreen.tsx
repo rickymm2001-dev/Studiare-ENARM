@@ -39,27 +39,28 @@ export function LandingScreen() {
   return (
     <div className="flex flex-col gap-10 pb-6">
       <title>{t.app.documentTitle(text.documentTitle)}</title>
-      <section className="animate-rise flex flex-col items-start rounded-lg border border-line bg-surface px-5 py-10 sm:px-10 sm:py-14">
-        <Badge variant="neutral" className="mb-3">
-          <Sparkles aria-hidden className="size-3.5" />
-          {text.badge}
-        </Badge>
-        <h1
-          tabIndex={-1}
-          className="max-w-2xl text-3xl leading-tight font-bold outline-none sm:text-4xl"
-        >
-          {text.title}
-        </h1>
-        <p className="mt-4 max-w-xl text-lg text-fg-muted">{text.subtitle}</p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button asChild size="lg">
-            <Link to={screenPath('onboarding')}>{text.cta}</Link>
-          </Button>
-          <Button asChild size="lg" variant="secondary">
-            <Link to={screenPath('onboarding')}>{text.login}</Link>
-          </Button>
+      {/* El título conserva 30 y 36 px, la única excepción a la escala (D-121). Todo el texto del
+          héroe va en el ancho de lectura y con menos alto (H16 de la revisión de B2) */}
+      <section className="animate-rise rounded-lg border border-line bg-surface px-5 py-10 sm:px-10">
+        <div className="flex max-w-reading flex-col items-start">
+          <Badge variant="neutral" className="mb-3">
+            <Sparkles aria-hidden className="size-3.5" />
+            {text.badge}
+          </Badge>
+          <h1 tabIndex={-1} className="text-3xl leading-tight font-bold outline-none sm:text-4xl">
+            {text.title}
+          </h1>
+          <p className="mt-4 max-w-xl text-lg text-fg-muted">{text.subtitle}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <Link to={screenPath('onboarding')}>{text.cta}</Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link to={screenPath('onboarding')}>{text.login}</Link>
+            </Button>
+          </div>
+          <p className="mt-4 text-sm text-fg-muted">{text.trust}</p>
         </div>
-        <p className="mt-4 text-sm text-fg-muted">{text.trust}</p>
       </section>
 
       <section aria-labelledby="diferente" className="flex flex-col gap-4">
@@ -129,21 +130,22 @@ export function LandingScreen() {
                 ) : null}
                 <h3 className="text-lg font-bold">{t.billing.plans[key]}</h3>
                 <PlanPrice plan={key} />
+                {/* Texto de venta, no un estado. Va neutro y el plan destacado ya lleva el borde (H10) */}
                 {key === 'annual' ? (
-                  <p className="text-sm font-semibold text-success">
+                  <p className="text-sm font-semibold text-fg">
                     {t.billing.savings(annualSavingsPercent())}
                   </p>
                 ) : null}
                 <ul className="flex flex-col gap-1 text-sm">
                   <li className="flex items-center gap-2">
-                    <Check aria-hidden className="size-4 text-success" />
+                    <Check aria-hidden className="size-4 text-fg-muted" />
                     {t.billing.access.dailyQuestions(plan.access.dailyQuestions)}
                   </li>
                   {(['fullExam', 'aiTutor', 'importDecks', 'party'] as const)
                     .filter((feature) => plan.access[feature])
                     .map((feature) => (
                       <li key={feature} className="flex items-center gap-2">
-                        <Check aria-hidden className="size-4 text-success" />
+                        <Check aria-hidden className="size-4 text-fg-muted" />
                         {t.billing.access[feature]}
                       </li>
                     ))}

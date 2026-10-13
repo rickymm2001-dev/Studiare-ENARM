@@ -1,9 +1,16 @@
 // Importador del banco (pantalla 22, 10.2). El médico sube el Excel, el CSV o el JSON que llenó con la
 // plantilla. Antes de guardar nada ve cuántas filas entran, cuáles no y por qué, con el número de fila.
 // Lo que entra queda en borrador (4.2) y un ID por fila evita duplicados si vuelve a subir el archivo.
-import { useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
-import { CheckCircle2, Download, FileSpreadsheet, ListChecks, TriangleAlert } from 'lucide-react';
+import {
+  CheckCircle2,
+  Download,
+  FileSpreadsheet,
+  FileUp,
+  ListChecks,
+  TriangleAlert,
+} from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SCREENS } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -14,6 +21,7 @@ import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { FileChooser } from '@/ui/components/file-chooser';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import {
@@ -30,7 +38,7 @@ const csvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
 type Phase =
   | { kind: 'idle' }
-  | { kind: 'reading' }
+  | { kind: 'reading'; fileName: string }
   | { kind: 'planned'; fileName: string; plan: ImportPlan }
   | { kind: 'importing'; fileName: string; plan: ImportPlan; done: number }
   | { kind: 'done'; fileName: string; outcome: ImportOutcome };
@@ -52,13 +60,11 @@ export function BankImportScreen() {
   const [error, setError] = useState('');
   const [shown, setShown] = useState(PAGE);
 
-  const pick = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    event.target.value = '';
+  const pick = async (file: File | undefined) => {
     if (!file) return;
     setError('');
     setShown(PAGE);
-    setPhase({ kind: 'reading' });
+    setPhase({ kind: 'reading', fileName: file.name });
     try {
       const table = await readBankFile(file);
       const plan = await planImport(api, table, { prefix: prefixOf(file.name), newId });
@@ -72,6 +78,9 @@ export function BankImportScreen() {
       );
     }
   };
+
+  // El input se vacía al leer cada archivo, así que el nombre elegido sale de la fase
+  const chosenFile = phase.kind === 'idle' ? null : phase.fileName;
 
   const run = async (fileName: string, plan: ImportPlan) => {
     setPhase({ kind: 'importing', fileName, plan, done: 0 });
@@ -150,18 +159,19 @@ export function BankImportScreen() {
           <CardDescription>{text.file.hint}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-2">
-          <label htmlFor="archivo-banco" className="font-medium">
+          <label id="archivo-banco-etiqueta" htmlFor="archivo-banco" className="font-medium">
             {text.file.label}
           </label>
-          <input
+          <FileChooser
             id="archivo-banco"
-            type="file"
+            labelledBy="archivo-banco-etiqueta"
             accept=".xlsx,.csv,.json,.txt"
-            className="block w-full text-sm file:mr-3 file:min-h-touch file:rounded-full file:border file:border-line file:bg-surface file:px-4 file:font-semibold"
             disabled={phase.kind === 'reading' || phase.kind === 'importing'}
-            onChange={(event) => {
-              void pick(event);
-            }}
+            fileName={chosenFile}
+            chooseText={text.file.choose}
+            emptyText={text.file.none}
+            icon={<FileUp aria-hidden />}
+            onChoose={pick}
           />
           {error ? (
             <p role="alert" className="text-sm text-danger">

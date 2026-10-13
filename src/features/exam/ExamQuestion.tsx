@@ -1,12 +1,13 @@
 // Pregunta del examen. Caso clínico, frase con negaciones resaltadas si el alumno lo pidió y opciones
 // que se pueden descartar. Descartar no cambia la respuesta, solo ayuda a pensar, y queda registrado
 // para medir cómo descarta (D-080). No muestra si acertó, eso llega con los resultados.
+import { Flag } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { structureDictionary } from '@/demo/content';
 import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
-import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { HighlightedPrompt } from '../simulator/HighlightedPrompt';
@@ -68,24 +69,22 @@ export function ExamQuestion({
       )}
     >
       <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
-        <div className="flex flex-wrap items-center gap-2 text-sm text-fg-muted">
-          <span
-            className={`rounded-full px-2.5 py-0.5 font-semibold ${toneClasses(question.branch).chip}`}
-          >
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones */}
+          <Badge variant="neutral" className="whitespace-normal">
             {t.branchNames[question.branch] ?? question.branch} ·{' '}
             {TOPIC_NAMES.get(question.topic) ?? question.topic}
-          </span>
+          </Badge>
           {answer.marked ? (
-            <span className="rounded-full bg-warning-soft px-2.5 py-0.5 font-semibold text-warning">
+            <Badge variant="warning">
+              <Flag aria-hidden className="size-3 fill-current" />
               {t.exam.marked}
-            </span>
+            </Badge>
           ) : null}
         </div>
         {vignette ? (
           <div className="mt-2 rounded-md bg-muted p-3">
-            <p className="mb-1 text-xs font-semibold text-fg-muted">
-              {t.simulator.caseLabel}
-            </p>
+            <p className="mb-1 text-xs font-semibold text-fg-muted">{t.simulator.caseLabel}</p>
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}

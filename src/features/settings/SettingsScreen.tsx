@@ -12,9 +12,11 @@ import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { useSession } from '@/app/session';
 import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
@@ -71,15 +73,20 @@ export function SettingsScreen() {
         }}
         className="flex flex-col gap-3"
       >
+        {/* Misma forma que el control segmentado (H01 de B2). Radix marca la pestaña activa con
+            data-state, así que la activa se pinta con esa variante y no con segmentedItem(true) */}
         <Tabs.List
           aria-label={t.settings.sectionsLabel}
-          className="flex max-w-full gap-1 self-start overflow-x-auto rounded-full border border-line bg-muted p-1"
+          className={cn(segmentedList, 'self-start')}
         >
           {available.map((key) => (
             <Tabs.Trigger
               key={key}
               value={key}
-              className="min-h-9 shrink-0 rounded-full px-2.5 text-[0.8125rem] font-semibold whitespace-nowrap text-fg-muted transition-colors hover:text-fg data-[state=active]:bg-surface data-[state=active]:text-fg data-[state=active]:shadow-card sm:px-3.5 sm:text-sm"
+              className={segmentedItem(
+                false,
+                'whitespace-nowrap data-[state=active]:border-line data-[state=active]:bg-surface data-[state=active]:text-fg',
+              )}
             >
               {t.settings.sections[key]}
             </Tabs.Trigger>
@@ -151,18 +158,19 @@ function DatabaseStatus() {
       ),
     [repos],
   );
+  // La base y el conteo van en dos renglones a propósito. En una fila con salto, el conteo bajaba
+  // solo y el renglón empezaba con el punto medio en el teléfono (H21 de la revisión de B2)
   return (
-    <div
-      className="mt-3 flex flex-wrap items-center gap-2 text-sm text-fg-muted"
-      aria-live="polite"
-    >
+    <div className="mt-3 flex flex-col gap-1 text-sm text-fg-muted" aria-live="polite">
       <span className="font-mono">{t.database.storedIn(DATABASE_NAMES[repos.kind])}</span>
-      {result === undefined ? null : result.ok ? (
-        <span>· {t.database.users(result.count)}</span>
-      ) : (
-        <span className="text-danger">{t.database.openError}</span>
-      )}
-      {repos.kind === 'demo' ? <SimulatedDataLabel /> : null}
+      <div className="flex flex-wrap items-center gap-2">
+        {result === undefined ? null : result.ok ? (
+          <span>{t.database.users(result.count)}</span>
+        ) : (
+          <span className="text-danger">{t.database.openError}</span>
+        )}
+        {repos.kind === 'demo' ? <SimulatedDataLabel /> : null}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,8 @@
 // Arriba a la derecha, siempre a la vista. Racha, nivel con su barra de XP y nombre, y la foto de
 // perfil que lleva a Perfil (D-062). En la barra de computadora el nivel va en una línea, con su
 // título junto al número y la barra más larga, como en el diseño de Ricardo (D-117). Racha, nivel y
-// XP van en neutro, sin dorado ni naranja (4.7 del plan del cambio, D-121).
+// XP van en neutro, sin dorado ni naranja (4.7 del plan del cambio, D-121). El texto chico mide 12 px
+// (H19 de la revisión de B2) y el relleno de la barra es fg-muted, que pasa 3 a 1 sobre muted (H12).
 import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
@@ -55,20 +56,20 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
             <Star aria-hidden className="size-4 text-fg-muted" />
             {t.headerStats.titled(level.level, level.title)}
           </span>
-          <span className="flex items-baseline justify-between gap-1 text-[0.65rem] leading-none font-bold lg:hidden">
+          <span className="flex items-baseline justify-between gap-1 text-xs leading-none font-bold lg:hidden">
             <span className="truncate text-fg-muted">{level.title}</span>
             <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
           </span>
           <span className="flex min-w-0 flex-col gap-1 lg:w-40 xl:w-56">
             <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
               <span
-                className="block h-full rounded-full bg-line-strong"
+                className="block h-full rounded-full bg-fg-muted"
                 style={{ width: `${percent}%` }}
               />
             </span>
             <span
               aria-hidden
-              className="hidden truncate text-[0.65rem] leading-none text-fg-muted sm:block lg:text-xs"
+              className="hidden truncate text-xs leading-none text-fg-muted sm:block"
             >
               {t.headerStats.left(level.xpForNext - level.xpIntoLevel, level.level + 1)}
             </span>

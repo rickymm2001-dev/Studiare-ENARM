@@ -206,9 +206,11 @@ export function PomodoroSettingsForm({
       }}
     />
   );
+  // Sin panel gris propio. Los campos van directo en la tarjeta de Configuración o en el popover del
+  // reloj, sin una caja dentro de otra (H06 de la revisión de B2)
   return (
     <form
-      className="flex flex-col gap-3 rounded-md bg-muted p-3"
+      className="flex flex-col gap-3"
       onSubmit={(event) => {
         event.preventDefault();
         void (async () => {

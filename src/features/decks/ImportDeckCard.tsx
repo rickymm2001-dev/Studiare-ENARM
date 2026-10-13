@@ -13,7 +13,9 @@ import type { ParsedImport } from '@/data/import/types';
 import { ImportBlockedError, importParsed, type ImportResult } from '@/data/usecases/importDeck';
 import { htmlToPlain } from '@/engines/cardText';
 import { t } from '@/i18n/es-MX';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
+import { FileChooser } from '@/ui/components/file-chooser';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
@@ -51,6 +53,8 @@ export function ImportDeckCard({
   const inputId = useId();
   const [step, setStep] = useState<Step>({ name: 'idle' });
   const [problem, setProblem] = useState<string | null>(null);
+  // Nombre del último archivo elegido, porque el input se vacía para poder elegir el mismo otra vez
+  const [fileName, setFileName] = useState<string | null>(null);
   const [deckName, setDeckName] = useState('');
   const [rights, setRights] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -60,6 +64,7 @@ export function ImportDeckCard({
   const reset = () => {
     setStep({ name: 'idle' });
     setProblem(null);
+    setFileName(null);
     setDeckName('');
     setRights(false);
     setNameError(null);
@@ -68,6 +73,7 @@ export function ImportDeckCard({
   const choose = async (file: File | undefined) => {
     if (!file) return;
     setProblem(null);
+    setFileName(file.name);
     setStep({ name: 'reading' });
     try {
       const result = await parseFile(file);
@@ -133,23 +139,19 @@ export function ImportDeckCard({
         <div className="flex flex-col gap-3">
           {parsed === null ? (
             <div className="flex flex-col gap-1">
-              <label htmlFor={inputId} className="font-medium">
+              <label id={`${inputId}-etiqueta`} htmlFor={inputId} className="font-medium">
                 {t.importer.fileLabel}
               </label>
-              <input
+              <FileChooser
                 id={inputId}
-                type="file"
+                labelledBy={`${inputId}-etiqueta`}
+                describedBy={`${inputId}-ayuda`}
                 accept=".apkg,.csv,.tsv,.txt,.xlsx,.docx"
                 disabled={reading}
-                aria-describedby={`${inputId}-ayuda`}
-                className="block w-full text-sm file:mr-3 file:min-h-touch file:rounded-full file:border-0 file:bg-primary file:px-4 file:font-semibold file:text-primary-fg"
-                onChange={(event) => {
-                  const input = event.target;
-                  void choose(input.files?.[0]).finally(() => {
-                    // Así se puede elegir el mismo archivo otra vez
-                    input.value = '';
-                  });
-                }}
+                fileName={fileName}
+                chooseText={t.importer.chooseFile}
+                emptyText={t.importer.noFileChosen}
+                onChoose={choose}
               />
               <p id={`${inputId}-ayuda`} className="text-sm text-fg-muted">
                 {t.importer.fileHint}
@@ -193,6 +195,13 @@ export function ImportDeckCard({
   );
 }
 
+/**
+ * Elegir un archivo con un botón propio en español (H07 de la revisión de B2). El input del
+ * navegador dice Choose File en inglés, así que queda oculto pero sigue en el orden del teclado,
+ * con el nombre de la etiqueta del campo. El botón visible es otra etiqueta del mismo input, la
+ * sigue en el DOM para tomar su foco y su estado desactivado, y abre el selector sin código. Al
+ * lado va el nombre del último archivo elegido. También lo usa la tarjeta de tarjetas con IA
+ */
 function ImportPreview({
   parsed,
   deckName,
@@ -245,12 +254,14 @@ function ImportPreview({
           {t.importer.previewSource(t.importer.sources[parsed.source], parsed.fileName)}
         </p>
         <p className="font-semibold">{t.importer.summary(parsed.notes.length, decks.size)}</p>
-        <ul className="flex flex-wrap gap-2 text-sm">
+        <ul className="flex flex-wrap gap-2">
           {(['basic', 'basic_reverse', 'cloze'] as const)
             .filter((kind) => kinds[kind] > 0)
             .map((kind) => (
-              <li key={kind} className="rounded-full bg-muted px-3 py-1">
-                {t.importer.kinds[kind]} · {kinds[kind].toLocaleString('es-MX')}
+              <li key={kind}>
+                <Badge variant="neutral">
+                  {t.importer.kinds[kind]} · {kinds[kind].toLocaleString('es-MX')}
+                </Badge>
               </li>
             ))}
         </ul>

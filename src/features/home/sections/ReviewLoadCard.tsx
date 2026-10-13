@@ -25,7 +25,7 @@ export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
   return (
     <Card aria-labelledby={titleId} className="flex flex-col p-5">
       {/* h3 como las demás tarjetas de Tus repasos, que ya tiene su h2 */}
-      <h3 id={titleId} className="mb-2 text-lg font-bold text-fg sm:text-xl">
+      <h3 id={titleId} className="mb-2 text-base font-semibold text-fg">
         {text.title}
       </h3>
       <p className="text-sm sm:text-base">

@@ -17,6 +17,7 @@ import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { assignableRoles, type AppRole } from '@/engines/roles';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
@@ -194,9 +195,7 @@ function UserRow({
             }}
           />
         ) : (
-          <span className="rounded-full bg-muted px-3 py-1 text-sm font-semibold">
-            {t.roles.names[user.role]}
-          </span>
+          <Badge variant="neutral">{t.roles.names[user.role]}</Badge>
         )}
       </div>
       {user.role === 'physician' ? (

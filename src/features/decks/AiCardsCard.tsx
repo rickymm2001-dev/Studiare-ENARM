@@ -37,6 +37,7 @@ import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { useActivePlan } from '../shared/useActivePlan';
+import { FileChooser } from '@/ui/components/file-chooser';
 
 export function AiCardsCard({ session }: { session: ReadySession }) {
   return (
@@ -64,6 +65,8 @@ function AiCards({ session }: { session: ReadySession }) {
   const [problem, setProblem] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [reading, setReading] = useState(false);
+  // Nombre del último archivo elegido. El de la fuente se puede editar, así que va aparte
+  const [fileName, setFileName] = useState<string | null>(null);
   const [proposals, setProposals] = useState<FlashcardProposal[]>([]);
   const [chosen, setChosen] = useState<ReadonlySet<string>>(() => new Set());
 
@@ -77,6 +80,7 @@ function AiCards({ session }: { session: ReadySession }) {
     if (!file) return;
     setProblem(null);
     setNotice(null);
+    setFileName(file.name);
     setReading(true);
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
@@ -166,6 +170,7 @@ function AiCards({ session }: { session: ReadySession }) {
     setChosen(new Set());
     setText('');
     setSource('');
+    setFileName(null);
     setProblem(null);
     setNotice(null);
   };
@@ -255,22 +260,20 @@ function AiCards({ session }: { session: ReadySession }) {
             }}
           />
           <div className="flex flex-col gap-1">
-            <label htmlFor={fileId} className="font-medium">
+            <label id={`${fileId}-etiqueta`} htmlFor={fileId} className="font-medium">
               {t.aiCards.fileLabel}
             </label>
-            <input
+            {/* Botón propio en español en lugar del control del navegador (H07 de la revisión de B2) */}
+            <FileChooser
               id={fileId}
-              type="file"
+              labelledBy={`${fileId}-etiqueta`}
+              describedBy={`${fileId}-ayuda`}
               accept=".pdf,.txt,.md,text/plain,application/pdf"
               disabled={reading || busy}
-              aria-describedby={`${fileId}-ayuda`}
-              className="block w-full text-sm file:mr-3 file:min-h-touch file:rounded-full file:border-0 file:bg-primary file:px-4 file:font-semibold file:text-primary-fg"
-              onChange={(event) => {
-                const input = event.target;
-                void loadFile(input.files?.[0]).finally(() => {
-                  input.value = '';
-                });
-              }}
+              fileName={fileName}
+              chooseText={t.aiCards.chooseFile}
+              emptyText={t.aiCards.noFileChosen}
+              onChoose={loadFile}
             />
             <p id={`${fileId}-ayuda`} className="text-sm text-fg-muted">
               {t.aiCards.fileHint}

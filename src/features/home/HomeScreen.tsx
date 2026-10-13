@@ -20,6 +20,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { SkeletonRows } from '@/ui/components/skeleton';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { LandingScreen } from '../landing/LandingScreen';
@@ -140,7 +141,10 @@ function Dashboard({ session }: { session: ReadySession }) {
   );
 }
 
-/** Un grupo del diseño con su título grande, como Tus repasos */
+/**
+ * Un grupo del diseño con su título, como Tus repasos. Va un paso arriba del título de las tarjetas
+ * y abajo del saludo, que es el único título fuerte de la pantalla (H05 de la revisión de B2)
+ */
 function Group({
   title,
   className,
@@ -153,7 +157,7 @@ function Group({
   const id = useId();
   return (
     <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-5', className)}>
-      <h2 id={id} className="screen-title text-fg">
+      <h2 id={id} className="text-lg font-semibold text-fg">
         {title}
       </h2>
       {children}
@@ -161,10 +165,13 @@ function Group({
   );
 }
 
-/** El título de una tarjeta dentro de un grupo. Es h3 porque el grupo ya tiene su h2 */
+/**
+ * El título de una tarjeta dentro de un grupo, del tamaño de CardTitle. Es h3 porque el grupo ya
+ * tiene su h2
+ */
 function CardHeading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <h3 id={id} className="mb-2 text-lg font-bold text-fg sm:text-xl">
+    <h3 id={id} className="mb-2 text-base font-semibold text-fg">
       {children}
     </h3>
   );
@@ -251,18 +258,22 @@ function PlanCard({ userId }: { userId: string }) {
   const plan = useActivePlan(userId);
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3 self-start p-5">
-      <h2 id={id} className="text-lg font-bold text-fg sm:text-xl">
+      <h2 id={id} className="text-lg font-semibold text-fg">
         {text.plan.title}
       </h2>
       {plan === undefined ? (
-        <p role="status" className="text-sm text-fg-muted">
-          {t.states.loading.label}
-        </p>
+        // El nombre del plan y el botón, con su misma altura (H04)
+        <SkeletonRows
+          label={t.states.loading.label}
+          rows={2}
+          rowClassName="h-10"
+          className="gap-3"
+        />
       ) : (
         <>
           <p className="flex items-center gap-3">
             <CreditCard aria-hidden className="size-8 shrink-0 text-primary-ink" />
-            <span className="text-2xl font-extrabold text-primary-ink">{t.billing.plans[plan]}</span>
+            <span className="text-xl font-bold text-fg">{t.billing.plans[plan]}</span>
           </p>
           <Button asChild className="w-full">
             <Link to={screenPath('subscription')}>
@@ -282,9 +293,13 @@ function MissionsSection({ session }: { session: ReadySession }) {
       {rewards ? (
         <MissionList missions={rewards.missions.daily} label={t.widgets.names.missions} />
       ) : (
-        <p role="status" className="text-sm text-fg-muted">
-          {t.states.loading.label}
-        </p>
+        // Las tres misiones del día, cada una con su línea y su barra (H04)
+        <SkeletonRows
+          label={t.states.loading.label}
+          rows={3}
+          rowClassName="h-12"
+          className="gap-3"
+        />
       )}
     </SideSection>
   );
@@ -295,7 +310,7 @@ function SideSection({ title, children }: { title: string; children: ReactNode }
   const id = useId();
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
-      <h2 id={id} className="text-lg font-bold text-fg sm:text-xl">
+      <h2 id={id} className="text-lg font-semibold text-fg">
         {title}
       </h2>
       {children}

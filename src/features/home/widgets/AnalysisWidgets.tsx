@@ -8,15 +8,14 @@ import { screenPath } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
 import { t } from '@/i18n/es-MX';
-import { toneClasses } from '@/ui/branches';
-import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { SkeletonRows } from '@/ui/components/skeleton';
 import { CalibratingNote } from '@/ui/states/states';
 import { topicsCalibration } from '../../progress/analysis';
 import { biasCalibration, biasProfileRows } from '../../progress/focusItems';
-import { masteryChip } from '../../progress/masteryChip';
+import { masteryDot } from '../../progress/masteryChip';
 import { useAnalysis } from '../../progress/useAnalysis';
 import type { ReadySession } from '../../shared/RequireSession';
 import { ALL_BRANCHES, readWeakTopicsSettings } from './analysisSettings';
@@ -28,11 +27,26 @@ interface AnalysisWidgetProps {
   settings: Readonly<Record<string, unknown>>;
 }
 
-function WidgetLoading() {
+/**
+ * Esqueleto con las filas que van a llegar y su misma altura, en lugar del texto de carga (H04 de
+ * la revisión de diseño de B2). El aviso de carga solo lo oye el lector de pantalla
+ */
+function WidgetLoading({
+  rows,
+  rowClassName,
+  className,
+}: {
+  rows: number;
+  rowClassName: string;
+  className?: string;
+}) {
   return (
-    <p role="status" className="text-sm text-fg-muted">
-      {t.states.loading.label}
-    </p>
+    <SkeletonRows
+      label={t.states.loading.label}
+      rows={rows}
+      rowClassName={rowClassName}
+      className={className}
+    />
   );
 }
 
@@ -49,7 +63,8 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
   const text = t.widgets.weakTopics;
   const analysis = useAnalysis(session, events);
   const { count, branch } = readWeakTopicsSettings(settings);
-  if (!analysis) return <WidgetLoading />;
+  // Una línea por tema, de la altura de su fila con el botón de practicar
+  if (!analysis) return <WidgetLoading rows={count} rowClassName="h-10" className="gap-4" />;
 
   // Con una rama elegida solo cuenta lo que se sabe de esa rama
   const calibration = topicsCalibration(
@@ -75,23 +90,17 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
   return (
     <div className="flex flex-col gap-1">
       <p className="text-xs text-fg-muted">{text.hint}</p>
+      {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2), y el
+          porcentaje va en texto neutro con el color solo en un punto (H02) */}
       <ul className="flex flex-col divide-y divide-line">
         {topics.map((topic) => (
           <li key={topic.key} className="flex items-center gap-2 py-1.5">
-            <span
-              aria-hidden
-              className={cn('h-8 w-1 shrink-0 rounded-full', toneClasses(topic.branch).bar)}
-            />
             <span className="flex min-w-0 flex-1 flex-col leading-tight">
               <span className="truncate text-sm font-semibold">{topic.name}</span>
               <span className="truncate text-xs text-fg-muted">{topic.branchName}</span>
             </span>
-            <span
-              className={cn(
-                'shrink-0 rounded-full px-2 py-0.5 text-sm font-bold tabular-nums',
-                masteryChip(topic.mastery),
-              )}
-            >
+            <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold tabular-nums">
+              <span aria-hidden className={masteryDot(topic.mastery)} />
               <span className="sr-only">{t.progress.masteryLabel} </span>
               {Math.round(topic.mastery * 100)}%
             </span>
@@ -114,7 +123,8 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
 export function BiasPatternWidget({ session, events }: AnalysisWidgetProps) {
   const text = t.widgets.biasPattern;
   const analysis = useAnalysis(session, events);
-  if (!analysis) return <WidgetLoading />;
+  // Tres filas de nombre y barra, como las que va a mostrar
+  if (!analysis) return <WidgetLoading rows={3} rowClassName="h-8" />;
 
   const calibration = biasCalibration(analysis.report);
   if (calibration)
@@ -133,7 +143,7 @@ export function BiasPatternWidget({ session, events }: AnalysisWidgetProps) {
           <li key={row.tag} className="flex flex-col gap-1">
             <span className="flex items-center gap-2">
               <span className="min-w-0 flex-1 truncate text-sm font-semibold">{row.name}</span>
-              {row.pattern ? <Badge variant="danger">{text.pattern}</Badge> : null}
+              {row.pattern ? <Badge>{text.pattern}</Badge> : null}
               <span className="shrink-0 text-xs text-fg-muted tabular-nums">
                 {Math.round(row.share * 100)}%
               </span>

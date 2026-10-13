@@ -5,7 +5,6 @@ import { CheckCheck, ChevronDown, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
-import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { ALL_TOPICS } from './topics';
@@ -145,11 +144,8 @@ export function BranchTopicPicker({
           const panelId = `${baseId}-${branch.key}`;
           return (
             <li key={branch.key}>
-              <div className={cn('flex items-center gap-1 pr-1', total === 0 && 'opacity-60')}>
-                <span
-                  aria-hidden
-                  className={cn('ml-2 h-6 w-1 shrink-0 rounded-full', toneClasses(branch.key).bar)}
-                />
+              {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2) */}
+              <div className={cn('flex items-center gap-1 pr-1 pl-2', total === 0 && 'opacity-60')}>
                 <TriCheckbox
                   stacked
                   className="min-h-touch flex-1 py-1 font-semibold hover:bg-transparent"

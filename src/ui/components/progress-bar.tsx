@@ -26,7 +26,7 @@ export function ProgressBar({ value, max, label, className, tone = 'primary' }: 
       <Progress.Indicator
         className={cn(
           'h-full rounded-full transition-[width] duration-700',
-          tone === 'primary' ? 'bg-primary' : 'bg-line-strong',
+          tone === 'primary' ? 'bg-primary' : 'bg-fg-muted',
         )}
         style={{ width: `${percent}%` }}
       />

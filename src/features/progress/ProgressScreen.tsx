@@ -10,8 +10,7 @@ import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
-import { toneClasses } from '@/ui/branches';
-import { cn } from '@/ui/cn';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -26,7 +25,7 @@ import { DifficultyCard } from './DifficultyCard';
 import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
-import { masteryChip } from './masteryChip';
+import { masteryDot } from './masteryChip';
 import { useAnalysis } from './useAnalysis';
 
 export function ProgressScreen() {
@@ -197,11 +196,8 @@ function TopicsCard({
           return (
             <li key={branch.key}>
               <details className="group">
+                {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2) */}
                 <summary className="flex min-h-touch cursor-pointer list-none items-center gap-2 px-3 py-1.5 hover:bg-muted [&::-webkit-details-marker]:hidden">
-                  <span
-                    aria-hidden
-                    className={cn('h-7 w-1 shrink-0 rounded-full', toneClasses(branch.key).bar)}
-                  />
                   <span className="flex min-w-0 flex-1 flex-col leading-tight">
                     <span className="text-sm font-semibold">{branch.name}</span>
                     <span className="text-xs text-fg-muted">
@@ -211,21 +207,18 @@ function TopicsCard({
                       )}
                     </span>
                   </span>
+                  {/* El porcentaje va en texto neutro y el color solo en un punto (H02) */}
                   {state?.kind === 'ready' ? (
-                    <span
-                      className={cn(
-                        'shrink-0 rounded-full px-2 py-0.5 text-sm font-bold tabular-nums',
-                        masteryChip(state.mastery),
-                      )}
-                    >
+                    <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold tabular-nums">
+                      <span aria-hidden className={masteryDot(state.mastery)} />
                       <span className="sr-only">{t.progress.masteryLabel} </span>
                       {Math.round(state.mastery * 100)}%
                     </span>
                   ) : (
-                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-fg-muted [&_svg]:size-3.5">
+                    <Badge className="shrink-0 [&_svg]:size-3.5">
                       <Hourglass aria-hidden />
                       {t.insights.calibratingLabel}
-                    </span>
+                    </Badge>
                   )}
                   <ChevronDown
                     aria-hidden
@@ -293,7 +286,9 @@ function TopicRow({
       <span className="truncate">{name}</span>
       <span className="shrink-0 text-xs tabular-nums">
         {state?.kind === 'ready' ? (
-          <span className={cn('rounded-full px-2 py-0.5 font-bold', masteryChip(state.mastery))}>
+          <span className="flex items-center gap-1.5 font-semibold">
+            <span aria-hidden className={masteryDot(state.mastery)} />
+            <span className="sr-only">{t.progress.masteryLabel} </span>
             {Math.round(state.mastery * 100)}%
           </span>
         ) : (

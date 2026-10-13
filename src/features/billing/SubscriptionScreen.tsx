@@ -188,7 +188,7 @@ function Billing({ session }: { session: ReadySession }) {
                   </div>
                   <PlanPrice plan={key} promo={FOUNDER_PROMO_ACTIVE && current !== 'monthly'} />
                   {key === 'annual' ? (
-                    <p className="text-sm font-semibold text-success">
+                    <p className="text-sm font-semibold text-fg">
                       {t.billing.savings(annualSavingsPercent())}
                     </p>
                   ) : null}
@@ -207,7 +207,7 @@ function Billing({ session }: { session: ReadySession }) {
                         className={cn('flex items-center gap-2', !included && 'text-fg-muted')}
                       >
                         {included ? (
-                          <Check aria-hidden className="size-4 text-success" />
+                          <Check aria-hidden className="size-4 text-fg-muted" />
                         ) : (
                           <Minus aria-hidden className="size-4" />
                         )}

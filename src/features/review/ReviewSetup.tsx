@@ -8,15 +8,17 @@ import type { DailyCounters } from '@/engines/counters';
 import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
-import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
+import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
+
+const MODES: readonly ReviewMode[] = ['today', 'due', 'new'];
 
 export function ReviewSetup({
   addDeck,
@@ -95,29 +97,16 @@ export function ReviewSetup({
           {addDeck}
         </CardHeader>
         <div className="flex flex-col gap-3">
-          <fieldset>
-            <legend className="sr-only">{text.mode}</legend>
-            <div className="flex flex-wrap gap-2">
-              {(['today', 'due', 'new'] as const).map((mode: ReviewMode) => (
-                <button
-                  key={mode}
-                  type="button"
-                  aria-pressed={selection.mode === mode}
-                  onClick={() => {
-                    setSelection({ ...selection, mode });
-                  }}
-                  className={cn(
-                    'min-h-9 rounded-full border-2 px-3 text-sm font-semibold transition-all sm:min-h-touch sm:px-4',
-                    selection.mode === mode
-                      ? 'border-primary bg-primary-soft text-primary-ink'
-                      : 'border-line bg-surface hover:border-line-strong',
-                  )}
-                >
-                  {text.modes[mode]}
-                </button>
-              ))}
-            </div>
-          </fieldset>
+          {/* En el teléfono los modos ocupan dos renglones y cada uno se estira para llenar el suyo */}
+          <SegmentedControl
+            label={text.mode}
+            options={MODES.map((mode) => ({ value: mode, label: text.modes[mode] }))}
+            value={selection.mode}
+            onChange={(mode) => {
+              setSelection({ ...selection, mode });
+            }}
+            itemClassName="grow"
+          />
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Button

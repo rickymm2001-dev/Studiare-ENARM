@@ -18,7 +18,9 @@ export function PlanPrice({
         {founder ? (
           <>
             <span className="sr-only">{t.billing.regularPrice} </span>
-            <s className="mr-2 text-base text-fg-muted">{t.billing.price(PLANS.monthly.priceMxn)}</s>
+            <s className="mr-2 text-base text-fg-muted">
+              {t.billing.price(PLANS.monthly.priceMxn)}
+            </s>
             <span className="sr-only">{t.billing.promoPrice} </span>
           </>
         ) : null}
@@ -27,8 +29,9 @@ export function PlanPrice({
         </span>{' '}
         <span className="text-sm text-fg-muted">{t.billing.periods[plan]}</span>
       </p>
+      {/* La promoción es texto de venta y no un estado, por eso no va en verde (H10 de B2) */}
       {founder ? (
-        <p className="text-sm font-semibold text-success">{t.billing.founderNote(FOUNDER_SEATS)}</p>
+        <p className="text-sm font-semibold text-fg">{t.billing.founderNote(FOUNDER_SEATS)}</p>
       ) : null}
     </>
   );

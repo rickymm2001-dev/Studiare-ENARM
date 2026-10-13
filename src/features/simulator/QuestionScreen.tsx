@@ -12,9 +12,9 @@ import type { AppEvent } from '@/data/schemas/events';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
-import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { ActionDock } from '@/ui/components/action-dock';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
@@ -353,12 +353,11 @@ function QuestionCard({
     >
       <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
         <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
-          <span
-            className={`rounded-full px-2.5 py-0.5 font-semibold ${toneClasses(question.branch).chip}`}
-          >
+          {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones */}
+          <Badge variant="neutral" className="whitespace-normal">
             {t.branchNames[question.branch] ?? question.branch} ·{' '}
             {topicName.get(question.topic) ?? question.topic}
-          </span>
+          </Badge>
           <span className="flex items-center gap-1" aria-live="off">
             <Timer aria-hidden className="size-4" />
             {t.simulator.elapsed(formatDuration(elapsed))}

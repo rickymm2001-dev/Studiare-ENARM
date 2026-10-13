@@ -184,6 +184,7 @@ function ExamRunner({
 
   const currentId = state.questionIds[state.current] ?? '';
   const answer = answerOf(state, currentId);
+  const markLabel = answer.marked ? t.exam.unmark : t.exam.mark;
 
   /** Fija las opciones de la pregunta actual y registra su primera vista */
   const showCurrent = () => {
@@ -405,9 +406,11 @@ function ExamRunner({
         </Card>
       )}
 
-      {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078) */}
+      {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono
+          marcar queda solo con su ícono, para que su texto no se parta en tres renglones, y deja
+          el espacio a Anterior y Siguiente (H14 de la revisión de B2) */}
       <ActionDock className="lg:max-w-reading">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
           <Button
             variant="secondary"
             disabled={state.current === 0}
@@ -421,13 +424,14 @@ function ExamRunner({
           <Button
             variant={answer.marked ? 'primary' : 'secondary'}
             aria-pressed={answer.marked}
-            className="h-auto min-h-touch py-1.5 text-sm whitespace-normal"
+            aria-label={markLabel}
+            className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
             onClick={() => {
               edit((current) => toggleMarked(current, currentId));
             }}
           >
             <Flag aria-hidden />
-            {answer.marked ? t.exam.unmark : t.exam.mark}
+            <span className="max-sm:hidden">{markLabel}</span>
           </Button>
           <Button
             variant="secondary"

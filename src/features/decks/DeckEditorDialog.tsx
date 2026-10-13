@@ -28,6 +28,7 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { TextAreaField } from '@/ui/components/field';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import type { ReadySession } from '../shared/RequireSession';
 import { useDebouncedValue } from '../shared/useDebouncedValue';
 import { CardQualityHints } from './CardQualityHints';
@@ -221,32 +222,34 @@ export function DeckEditorDialog({
               void submit();
             }}
           >
-            <fieldset className="flex flex-wrap gap-2" aria-describedby={kindHelpId}>
+            {/* Elegir un tipo excluye a los otros, así que toma la forma de las pestañas y los
+                filtros excluyentes (H01 de la revisión de B2) y sigue siendo un grupo de radios */}
+            <fieldset aria-describedby={kindHelpId}>
               <legend className="mb-1 font-medium">{text.kind}</legend>
-              {KINDS.map((kind) => (
-                <label
-                  key={kind}
-                  className={cn(
-                    'flex min-h-9 cursor-pointer items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
-                    draft.kind === kind
-                      ? 'border-primary bg-primary-soft text-primary-ink'
-                      : 'border-line bg-surface',
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name="tipo-tarjeta"
-                    className="sr-only"
-                    checked={draft.kind === kind}
-                    // Cambiar de tipo conserva lo escrito, como Cambiar tipo de nota en Anki
-                    onChange={() => {
-                      setDraft(convertDraft(draft, kind));
-                      setError(null);
-                    }}
-                  />
-                  {kindLabels[kind]}
-                </label>
-              ))}
+              <div className={segmentedList}>
+                {KINDS.map((kind) => (
+                  <label
+                    key={kind}
+                    className={segmentedItem(
+                      draft.kind === kind,
+                      'grow cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name="tipo-tarjeta"
+                      className="sr-only"
+                      checked={draft.kind === kind}
+                      // Cambiar de tipo conserva lo escrito, como Cambiar tipo de nota en Anki
+                      onChange={() => {
+                        setDraft(convertDraft(draft, kind));
+                        setError(null);
+                      }}
+                    />
+                    {kindLabels[kind]}
+                  </label>
+                ))}
+              </div>
             </fieldset>
             <p id={kindHelpId} className="-mt-1 text-sm text-fg-muted">
               {text.kindHelp[draft.kind]}

@@ -222,7 +222,8 @@ function Summary({
           {text.time(formatClock(used), formatClock(state.totalMs))}
         </span>
         {perQuestion !== null ? <span>{text.perQuestion(perQuestion)}</span> : null}
-        <span className="font-semibold text-success" aria-live="polite">
+        {/* El XP va en gris como en Retroalimentación. El verde queda para lo correcto */}
+        <span className="font-semibold text-fg-muted" aria-live="polite">
           {text.xp(state.xp)}
         </span>
       </p>

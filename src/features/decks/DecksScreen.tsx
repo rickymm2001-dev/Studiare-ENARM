@@ -1,7 +1,7 @@
 // Mazos (pantalla 12). Precargados que el alumno sigue o deja, con su avance, agrupados por rama
-// troncal con sus subespecialidades (D-066). Cada mazo es una tarjeta compacta con sus temas
-// plegados (D-078). Abajo van los mazos del alumno, que crea y llena a mano. Subir mazos de otras
-// apps llega con la Fase E.
+// troncal con sus subespecialidades (D-066). Cada mazo es una fila de la lista, sin caja propia
+// (H06 de la revisión de B2), con sus temas plegados (D-078). Abajo van los mazos del alumno, que
+// crea y llena a mano. Subir mazos de otras apps llega con la Fase E.
 import { BookOpenCheck, BookPlus, Check, ChevronDown, Layers, Library } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -14,6 +14,7 @@ import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -116,7 +117,7 @@ function Decks({ session }: { session: ReadySession }) {
           <LoadingState label={t.decks.loading} />
         ) : (
           <div className="flex flex-col gap-3">
-            <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            <ul className="flex flex-col divide-y divide-line">
               {orderedFiles.map((file) => {
                 const id = deckIds.deck(file.key);
                 const isFollowed = followed.has(id);
@@ -125,71 +126,66 @@ function Decks({ session }: { session: ReadySession }) {
                   (deckId) => stored.cardsByDeck.get(deckId) ?? [],
                 );
                 const studied = cardIds.filter((cardId) => states.has(cardId)).length;
+                // En el teléfono el ícono va junto al nombre y lo demás a todo lo ancho. En
+                // computadora lo demás queda bajo el nombre y las acciones a la derecha
                 return (
                   <li
                     key={file.key}
-                    className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3 shadow-card"
+                    className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]"
                   >
-                    <div className="flex items-start gap-3">
-                      <span
-                        aria-hidden
-                        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
-                      >
-                        <Layers className="size-5" />
+                    <span
+                      aria-hidden
+                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
+                    >
+                      <Layers className="size-5" />
+                    </span>
+                    <div className="flex min-w-0 flex-col">
+                      <span className="font-semibold">{file.name}</span>
+                      <span className="text-xs text-fg-muted sm:text-sm">
+                        {t.decks.author(file.author)}
                       </span>
-                      <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="font-semibold">{file.name}</span>
-                        <span className="text-xs text-fg-muted sm:text-sm">
-                          {t.decks.author(file.author)}
-                        </span>
-                      </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${toneClasses(deckBranch(file)).chip}`}
-                      >
-                        {branchName(deckBranch(file))}
-                      </span>
-                      <span>{t.decks.stats(file.notes.length, file.media.length)}</span>
-                    </div>
-                    {isFollowed && cardIds.length > 0 ? (
-                      <div className="flex flex-col gap-1">
-                        <ProgressBar
-                          value={studied}
-                          max={cardIds.length}
-                          label={t.decks.progress(studied, cardIds.length)}
-                          className="h-2"
-                        />
-                        <span className="text-xs text-fg-muted sm:text-sm">
-                          {t.decks.progress(studied, cardIds.length)}
-                        </span>
+                    <div className="col-span-2 flex min-w-0 flex-col gap-2 sm:col-span-1 sm:col-start-2">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
+                        <Badge variant="neutral">{branchName(deckBranch(file))}</Badge>
+                        <span>{t.decks.stats(file.notes.length, file.media.length)}</span>
                       </div>
-                    ) : null}
-                    <details className="group">
-                      <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
-                        {t.decks.topicsTitle}
-                        <span className="font-normal text-fg-muted">
-                          · {t.decks.topicsSummary(topTopics(file).length)}
-                        </span>
-                        <ChevronDown
-                          aria-hidden
-                          className="size-4 text-fg-muted transition-transform group-open:rotate-180"
-                        />
-                      </summary>
-                      <div className="mt-1 flex flex-wrap gap-1">
-                        {topTopics(file).map(([topic, count]) => (
-                          <span
-                            key={topic}
-                            className="rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
-                          >
-                            {topicName.get(topic) ?? topic} · {count}
+                      {isFollowed && cardIds.length > 0 ? (
+                        <div className="flex max-w-md flex-col gap-1">
+                          <ProgressBar
+                            value={studied}
+                            max={cardIds.length}
+                            label={t.decks.progress(studied, cardIds.length)}
+                            className="h-2"
+                          />
+                          <span className="text-xs text-fg-muted sm:text-sm">
+                            {t.decks.progress(studied, cardIds.length)}
                           </span>
-                        ))}
-                      </div>
-                    </details>
-                    <div className="flex flex-wrap items-center gap-2">
+                        </div>
+                      ) : null}
+                      <details className="group">
+                        <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
+                          {t.decks.topicsTitle}
+                          <span className="font-normal text-fg-muted">
+                            · {t.decks.topicsSummary(topTopics(file).length)}
+                          </span>
+                          <ChevronDown
+                            aria-hidden
+                            className="size-4 text-fg-muted transition-transform group-open:rotate-180"
+                          />
+                        </summary>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {topTopics(file).map(([topic, count]) => (
+                            <Badge key={topic} variant="neutral" className="whitespace-normal">
+                              {topicName.get(topic) ?? topic} · {count}
+                            </Badge>
+                          ))}
+                        </div>
+                      </details>
+                    </div>
+                    <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:justify-end">
                       {session.isDemo ? (
-                        <span className="flex items-center gap-1 text-sm font-medium text-success">
+                        <span className="flex items-center gap-1 text-sm font-medium text-fg-muted">
                           <Check aria-hidden className="size-4" />
                           {t.decks.following}
                         </span>

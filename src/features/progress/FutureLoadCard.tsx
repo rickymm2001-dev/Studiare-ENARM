@@ -2,6 +2,7 @@
 // próximos 30 o 60 días, con el promedio, el día más cargado y una tabla por semana para quien no
 // ve la gráfica. Lo proyectado sale de futureLoad, la misma proyección y los mismos límites del
 // planificador.
+import { CalendarCheck, Gauge, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -9,6 +10,8 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
+import { SegmentedControl } from '@/ui/components/segmented';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LOAD_HORIZONS, type FutureLoad, type LoadHorizon } from './futureLoad';
 import { formatDay, loadSummary } from './loadFormat';
 
@@ -70,29 +73,12 @@ export function FutureLoadCard({
     <Card aria-labelledby="carga-futura">
       {header}
       <div className="flex flex-col gap-3">
-        <fieldset>
-          <legend className="sr-only">{text.horizonLabel}</legend>
-          <div className="flex gap-2">
-            {LOAD_HORIZONS.map((days) => (
-              <button
-                key={days}
-                type="button"
-                aria-pressed={horizon === days}
-                onClick={() => {
-                  onHorizon(days);
-                }}
-                className={cn(
-                  'min-h-9 rounded-full border-2 px-4 text-sm font-semibold transition-all',
-                  horizon === days
-                    ? 'border-primary bg-primary-soft text-primary-ink'
-                    : 'border-line bg-surface hover:border-line-strong',
-                )}
-              >
-                {text.horizon(days)}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <SegmentedControl
+          label={text.horizonLabel}
+          options={LOAD_HORIZONS.map((days) => ({ value: days, label: text.horizon(days) }))}
+          value={horizon}
+          onChange={onHorizon}
+        />
 
         <LoadBars load={load} className="h-28" />
         <div aria-hidden className="flex justify-between text-xs text-fg-muted">
@@ -110,12 +96,26 @@ export function FutureLoadCard({
           </li>
         </ul>
 
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Figure label={text.average}>{average.toLocaleString('es-MX')}</Figure>
-          <Figure label={text.peak}>{peakText}</Figure>
-          <Figure label={text.total}>{load.totalReviews.toLocaleString('es-MX')}</Figure>
-          <Figure label={text.newCards}>{load.totalNew.toLocaleString('es-MX')}</Figure>
-        </dl>
+        {/* Las cuatro cifras en un solo panel, sin cajas dentro de la tarjeta (H06 de la revisión
+            de B2). Desde lg la tarjeta ocupa media columna, así que vuelven a ir dos por dos */}
+        <StatPanel
+          label={text.horizon(load.horizon)}
+          quad
+          className="lg:grid-flow-row lg:grid-cols-2 lg:[&>*:nth-child(3)]:border-l-0 lg:[&>*:nth-child(n+3)]:border-t"
+        >
+          <StatCell icon={<Gauge />} label={text.average} value={average.toLocaleString('es-MX')} />
+          <StatCell icon={<TrendingUp />} label={text.peak} value={peakText} />
+          <StatCell
+            icon={<CalendarCheck />}
+            label={text.total}
+            value={load.totalReviews.toLocaleString('es-MX')}
+          />
+          <StatCell
+            icon={<Sparkles />}
+            label={text.newCards}
+            value={load.totalNew.toLocaleString('es-MX')}
+          />
+        </StatPanel>
 
         <Disclosure title={text.weeks}>
           <table className="w-full text-sm">
@@ -152,15 +152,5 @@ export function FutureLoadCard({
         </Disclosure>
       </div>
     </Card>
-  );
-}
-
-/** El término va primero para los lectores de pantalla y la cifra se ve arriba */
-function Figure({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col-reverse justify-end rounded-lg bg-muted p-3">
-      <dt className="text-xs text-fg-muted sm:text-sm">{label}</dt>
-      <dd className="text-lg font-extrabold tabular-nums sm:text-xl">{children}</dd>
-    </div>
   );
 }

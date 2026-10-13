@@ -9,7 +9,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Disclosure } from '@/ui/components/disclosure';
 import { SelectField, TextField } from '@/ui/components/field';
-import { cn } from '@/ui/cn';
+import { FilterChip } from '@/ui/components/filter-chip';
 import { TagTree } from './TagTree';
 import { hasActiveFilters, INITIAL_VIEW, type ExploreView } from './view';
 
@@ -49,10 +49,10 @@ export function FilterPanel({
       label: t.explore.deckOption(deckIndent(depth), deck.name, deckCounts.get(deck.id) ?? 0),
     })),
   ];
-  const toggleStatus = (status: ExploreStatus) => {
+  const setStatus = (status: ExploreStatus, on: boolean) => {
     const next = new Set(view.status);
-    if (next.has(status)) next.delete(status);
-    else next.add(status);
+    if (on) next.add(status);
+    else next.delete(status);
     onChange({ status: next });
   };
   return (
@@ -77,30 +77,18 @@ export function FilterPanel({
       <fieldset className="flex flex-col gap-1.5">
         <legend className="mb-1 font-medium">{t.explore.status}</legend>
         <div className="flex flex-wrap gap-1.5">
-          {STATUS_ORDER.map((status) => {
-            const on = view.status.has(status);
-            return (
-              <button
-                key={status}
-                type="button"
-                aria-pressed={on}
-                onClick={() => {
-                  toggleStatus(status);
-                }}
-                className={cn(
-                  'min-h-9 rounded-full border px-3 text-sm font-semibold transition-colors',
-                  on
-                    ? 'border-transparent bg-primary text-primary-fg'
-                    : 'border-line bg-surface text-fg hover:bg-muted',
-                )}
-              >
-                {t.explore.statuses[status]}
-                <span className={cn('ml-1.5 font-normal', on ? 'opacity-90' : 'text-fg-muted')}>
-                  {statusCounts[status].toLocaleString('es-MX')}
-                </span>
-              </button>
-            );
-          })}
+          {STATUS_ORDER.map((status) => (
+            <FilterChip
+              key={status}
+              pressed={view.status.has(status)}
+              onPressedChange={(on) => {
+                setStatus(status, on);
+              }}
+              count={statusCounts[status].toLocaleString('es-MX')}
+            >
+              {t.explore.statuses[status]}
+            </FilterChip>
+          ))}
         </div>
       </fieldset>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

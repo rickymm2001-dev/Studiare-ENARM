@@ -1,17 +1,21 @@
 // Revisión del examen pregunta por pregunta. Ya terminó, así que cada pregunta muestra su
 // retroalimentación completa. Por qué atrae cada opción y qué se podía descartar, qué eligió el
-// alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace.
-import { CheckCircle2, Flag, MinusCircle, XCircle } from 'lucide-react';
+// alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace. Las
+// preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2).
+import { CheckCircle2, ChevronDown, Flag, MinusCircle, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { SegmentedControl } from '@/ui/components/segmented';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { examOutcome, type ExamBundles, type ExamOutcome } from './examResults';
 import { answerOf, type ExamState } from './examState';
 
 type Filter = 'all' | 'missed' | 'blank' | 'marked';
+
+const FILTERS: readonly Filter[] = ['all', 'missed', 'blank', 'marked'];
 
 interface Row {
   id: string;
@@ -62,33 +66,17 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
         <CardTitle id="examen-revision">{text.reviewTitle}</CardTitle>
       </CardHeader>
       <div className="flex flex-col gap-3">
-        <fieldset>
-          <legend className="sr-only">{text.filterLabel}</legend>
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'missed', 'blank', 'marked'] as const).map((value) => (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={filter === value}
-                onClick={() => {
-                  setFilter(value);
-                }}
-                className={cn(
-                  'min-h-9 rounded-full border-2 px-3 text-sm font-semibold transition-all',
-                  filter === value
-                    ? 'border-primary bg-primary-soft text-primary-ink'
-                    : 'border-line bg-surface hover:border-line-strong',
-                )}
-              >
-                {text.filter[value]}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <SegmentedControl
+          label={text.filterLabel}
+          options={FILTERS.map((value) => ({ value, label: text.filter[value] }))}
+          value={filter}
+          onChange={setFilter}
+          itemClassName="grow"
+        />
         {visible.length === 0 ? (
           <p className="text-sm text-fg-muted">{text.noMatches}</p>
         ) : (
-          <ol className="flex flex-col gap-2">
+          <ol className="flex flex-col divide-y divide-line">
             {visible.map((row) => (
               <ReviewItem key={row.id} row={row} state={state} />
             ))}
@@ -114,22 +102,32 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
 
   return (
     <li>
-      <details className="group rounded-lg border border-line">
-        <summary className="flex min-h-touch cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 hover:bg-muted [&::-webkit-details-marker]:hidden">
+      <details className="group">
+        {/* Toda la fila abre la pregunta. El fondo al pasar el ratón sale un poco del texto. En el
+            teléfono el texto va en renglones y el tiempo siempre queda a la derecha */}
+        <summary className="-mx-2 flex min-h-touch cursor-pointer list-none items-center gap-3 rounded-md px-2 py-2 hover:bg-muted [&::-webkit-details-marker]:hidden">
           {OUTCOME_ICON[row.outcome]}
-          <span className="font-semibold">{text.questionN(row.index + 1)}</span>
-          <span className="text-sm text-fg-muted">
-            {text.outcome[row.outcome]} · {TOPIC_NAMES.get(question.topic) ?? question.topic}
-          </span>
-          {row.marked ? (
-            <span className="flex items-center gap-1 text-sm text-warning">
-              <Flag aria-hidden className="size-3.5 fill-warning" />
-              {text.markedForReview}
+          <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
+            <span className="font-semibold">{text.questionN(row.index + 1)}</span>
+            <span className="text-sm text-fg-muted">
+              {text.outcome[row.outcome]} · {TOPIC_NAMES.get(question.topic) ?? question.topic}
             </span>
-          ) : null}
-          <span className="ml-auto text-sm text-fg-muted">{text.timeOn(seconds)}</span>
+            {row.marked ? (
+              <span className="flex items-center gap-1 text-sm text-warning">
+                <Flag aria-hidden className="size-3.5 fill-warning" />
+                {text.markedForReview}
+              </span>
+            ) : null}
+          </span>
+          <span className="flex shrink-0 items-center gap-2 text-sm text-fg-muted">
+            {text.timeOn(seconds)}
+            <ChevronDown
+              aria-hidden
+              className="size-4 shrink-0 transition-transform group-open:rotate-180"
+            />
+          </span>
         </summary>
-        <div className="flex flex-col gap-3 border-t border-line p-3">
+        <div className="flex flex-col gap-3 pt-1 pb-4">
           {vignette ? <p className="whitespace-pre-line text-sm">{vignette}</p> : null}
           <p className="font-medium">{question.prompt}</p>
           <ul className="flex flex-col gap-2">
