@@ -70,9 +70,7 @@ export function PomodoroPill({ session }: { session: ReadySession }) {
         <span className="font-mono text-lg font-bold tabular-nums" aria-hidden>
           {formatClock(left)}
         </span>
-        <span className="text-xs font-semibold tracking-wide text-fg-muted">
-          {phaseName}
-        </span>
+        <span className="text-xs font-semibold tracking-wide text-fg-muted">{phaseName}</span>
       </span>
       <span className="sr-only">{t.pomodoro.remaining(formatClock(left), phaseName)}</span>
       <Button

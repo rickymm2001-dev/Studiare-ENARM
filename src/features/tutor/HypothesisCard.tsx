@@ -72,11 +72,10 @@ export function HypothesisCard({
   const [evidenceOpen, setEvidenceOpen] = useState(false);
 
   const Frame = compact ? 'section' : Card;
+  // Sin franja de color a la izquierda. La etiqueta Confirmada ya lo dice y el color es solo de los
+  // botones con acción (comentario 10)
   return (
-    <Frame
-      aria-labelledby={id}
-      className={compact ? 'flex flex-col' : 'border-l-4 border-l-primary'}
-    >
+    <Frame aria-labelledby={id} className={compact ? 'flex flex-col' : undefined}>
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="info">
           <GraduationCap aria-hidden className="size-3.5" />

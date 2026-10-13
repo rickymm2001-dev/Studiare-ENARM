@@ -289,10 +289,7 @@ function TutorBody({
         </CardHeader>
         <p className="text-sm text-fg-muted">{text.howItWorks}</p>
         {shown.length === 0 && dismissed.length === 0 ? (
-          <p
-            role="status"
-            className="mt-2 rounded-md bg-muted px-3 py-2 text-sm text-fg"
-          >
+          <p role="status" className="mt-2 rounded-md bg-muted px-3 py-2 text-sm text-fg">
             {text.calibrating(view.recentErrors)}
           </p>
         ) : null}

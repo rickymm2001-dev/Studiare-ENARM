@@ -32,7 +32,8 @@ export type FakeFailure = 'none' | 'error' | 'throw';
 export type FakeStorageFailure = FakeFailure | 'server';
 export type FakeStorageOperation = 'upload' | 'download' | 'remove';
 /** Respuesta fija de una función de la base. throw rechaza la llamada como sin red */
-export type FakeRpcReply = { data?: unknown; error: { code?: string; message?: string } | null } | 'throw';
+export type FakeRpcReply =
+  { data?: unknown; error: { code?: string; message?: string } | null } | 'throw';
 /** limit rechaza el reclamo con el error de límite de cambios. hang deja la llamada sin responder */
 export type FakeClaimFailure = FakeFailure | 'limit';
 export type FakeReportFailure = FakeFailure | 'hang';
@@ -186,7 +187,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     ok: () => T,
   ): T | { data: null; error: unknown } => {
     const failure =
-      fake.failStorageOnly === null || fake.failStorageOnly === operation ? fake.failStorage : 'none';
+      fake.failStorageOnly === null || fake.failStorageOnly === operation
+        ? fake.failStorage
+        : 'none';
     if (failure === 'server') return { data: null, error: SERVER_ERROR };
     return outcome(failure, ok);
   };

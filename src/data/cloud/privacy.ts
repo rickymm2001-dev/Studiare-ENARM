@@ -3,6 +3,7 @@
 // Borrar la cuenta quita además el correo, los pagos de la plataforma y los referidos, y antes la
 // foto de perfil de Storage (B2). Ninguna se puede deshacer, así que quien llama pide confirmación.
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { readCloudAvatar } from './account';
 import {
   AvatarStorageError,
   avatarPath,
@@ -58,17 +59,28 @@ async function call(
 /** Borra el estudio del alumno en la nube. La cuenta, el plan y los pagos se quedan */
 export const eraseCloudData = (cloud: Pick<SupabaseClient, 'rpc'>) => call(cloud, 'delete_my_data');
 
+/** La foto que tiene la cuenta, para devolverla si no se pudo eliminar. null si la fila no dice que hay */
+async function currentPhoto(
+  cloud: Pick<SupabaseClient, 'from' | 'storage'>,
+  authId: string,
+): Promise<string | null> {
+  const remote = await readCloudAvatar(cloud, authId);
+  if (remote.status !== 'ok' || remote.avatar?.kind !== 'photo') return null;
+  return downloadAvatar(cloud, avatarPath(authId));
+}
+
 /**
  * Borra la cuenta completa. Después de esto el correo queda libre. Antes quita la foto de perfil con
  * la API de Storage y la sesión del alumno, porque Storage no deja que la base borre sus archivos y la
- * foto quedaría huérfana. Si no se pudo quitar no se borra nada. Si después la base no deja eliminar
- * la cuenta, como con una suscripción activa, la foto vuelve a su lugar
+ * foto quedaría huérfana. Se quita de su ruta fija aunque la fila no diga que hay una. Si no se pudo
+ * quitar no se borra nada. Si después la base no deja eliminar la cuenta, como con una suscripción
+ * activa, la foto vuelve a su lugar
  */
 export async function deleteCloudAccount(
-  cloud: Pick<SupabaseClient, 'rpc' | 'storage'>,
+  cloud: Pick<SupabaseClient, 'rpc' | 'storage' | 'from'>,
   authId: string,
 ): Promise<EraseResult> {
-  const backup = await downloadAvatar(cloud, avatarPath(authId));
+  const backup = await currentPhoto(cloud, authId);
   try {
     await removeAvatar(cloud, authId);
   } catch (error) {

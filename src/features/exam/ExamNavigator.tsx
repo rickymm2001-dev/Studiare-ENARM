@@ -60,7 +60,10 @@ export function ExamNavigator({
       </ol>
       <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-muted">
         <li className="flex items-center gap-1.5">
-          <span aria-hidden className="size-3.5 rounded-sm border border-indicator bg-primary-soft" />
+          <span
+            aria-hidden
+            className="size-3.5 rounded-sm border border-indicator bg-primary-soft"
+          />
           {t.exam.legend.answered}
         </li>
         <li className="flex items-center gap-1.5">

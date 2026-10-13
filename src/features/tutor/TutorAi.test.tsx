@@ -175,3 +175,39 @@ describe('análisis con IA en el tutor', () => {
     expect(call).toMatchObject({ engine: 'forgetting', mode: 'real', outcome: 'fallback' });
   });
 });
+
+describe('responder a una hipótesis', () => {
+  const hypothesisStatus = async (rendered: RenderedApp) =>
+    (await rendered.api.repos.aiArtifacts.list()).find((entry) => entry.kind === 'hypothesis')
+      ?.status;
+
+  it('No me ayuda la descarta en el mismo toque, no vuelve a ofrecer los botones y se deshace', async () => {
+    const typing = userEvent.setup();
+    const rendered = await open('free', false);
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    await typing.click(within(card).getByRole('button', { name: t.tutor.notHelpful }));
+
+    // Sin esperar a que la base lo guarde, la tarjeta ya se fue a las descartadas
+    expect(screen.queryByRole('region', { name: rule.title })).toBeNull();
+    expect(screen.getByText(t.tutor.answered.rejected)).toBeVisible();
+    expect(screen.getByText(t.tutor.dismissedTitle(1))).toBeVisible();
+    // Ya guardada, sigue fuera y sus botones no regresan
+    await waitFor(async () => {
+      expect(await hypothesisStatus(rendered)).toBe('rejected');
+    }, WAIT);
+    expect(screen.queryByRole('region', { name: rule.title })).toBeNull();
+    expect(screen.queryByRole('button', { name: t.tutor.notHelpful })).toBeNull();
+
+    // Volver a mostrarla también cambia en el mismo toque
+    const reopen = screen.getByRole('button', { name: new RegExp(t.tutor.reopen) });
+    await waitFor(() => {
+      expect(reopen).toBeEnabled();
+    }, WAIT);
+    await typing.click(reopen);
+    expect(screen.getByRole('region', { name: rule.title })).toBeVisible();
+    expect(screen.queryByText(t.tutor.dismissedTitle(1))).toBeNull();
+    await waitFor(async () => {
+      expect(await hypothesisStatus(rendered)).toBe('draft');
+    }, WAIT);
+  });
+});

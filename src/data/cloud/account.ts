@@ -151,7 +151,7 @@ export type CloudAvatarRead = ({ status: 'ok' } & RemoteAvatarState) | { status:
  * cuenta que nunca eligió. Un valor que no se reconoce cuenta como sin foto
  */
 export async function readCloudAvatar(
-  cloud: SupabaseClient,
+  cloud: Pick<SupabaseClient, 'from'>,
   authId: string,
 ): Promise<CloudAvatarRead> {
   try {

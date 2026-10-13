@@ -173,7 +173,7 @@ function UserRow({
   return (
     <Card className="flex flex-col gap-3 p-4">
       <div className="flex flex-wrap items-center gap-3">
-        <Avatar name={user.alias} seed={user.id} avatar={account?.avatar} className="size-11" />
+        <Avatar name={user.alias} avatar={account?.avatar} className="size-11" />
         <div className="min-w-0 flex-1">
           <p className="flex items-center gap-1 font-bold">
             {user.alias}

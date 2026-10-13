@@ -11,7 +11,7 @@ import { useLiveData } from '@/data/hooks';
 import { biasTips } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
-import { Button } from '@/ui/components/button';
+import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { useBankReady } from '../shared/useBankReady';
@@ -97,21 +97,16 @@ export function AiDraftsScreen() {
           />
         ))}
       </StatPanel>
-      <div role="group" aria-label={text.sections.label} className="flex flex-wrap gap-2">
-        {SECTIONS.map((key) => (
-          <Button
-            key={key}
-            variant={section === key ? 'primary' : 'secondary'}
-            aria-pressed={section === key}
-            onClick={() => {
-              setSection(key);
-              setNotice('');
-            }}
-          >
-            {text.sections[key]}
-          </Button>
-        ))}
-      </div>
+      {/* Secciones excluyentes con la forma de las pestañas (H01 de la revisión de B2) */}
+      <SegmentedControl
+        label={text.sections.label}
+        options={SECTIONS.map((key) => ({ value: key, label: text.sections[key] }))}
+        value={section}
+        onChange={(key) => {
+          setSection(key);
+          setNotice('');
+        }}
+      />
       {section === 'questions' ? (
         <QuestionDrafts
           physician={{ id: me.id, alias: me.alias }}

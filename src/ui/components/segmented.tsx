@@ -1,7 +1,7 @@
 // Pestañas y filtros excluyentes con una sola forma en toda la app (H01 de la revisión de diseño de
-// B2). Contenedor gris con radio chico y la opción activa en superficie con borde, sin píldoras.
+// B2). Contenedor gris con radio chico y la opción activa como un filtro prendido, sin píldoras.
 // Las pestañas que son enlaces o que usan role tab toman las mismas clases con segmentedList y
-// segmentedItem, para conservar su semántica.
+// segmentedItem (o segmentedTabItem con Radix), para conservar su semántica.
 import type { ReactNode } from 'react';
 import { cn } from '@/ui/cn';
 import { segmentedItem, segmentedList } from './segmented-classes';

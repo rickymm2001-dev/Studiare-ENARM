@@ -12,6 +12,7 @@ import { t } from '@/i18n/es-MX';
 import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -159,21 +160,17 @@ function Summary({ session }: { session: ReadySession }) {
           </p>
         </CardHeader>
         {correct < answers.length ? (
-          <div className="flex flex-wrap gap-2" role="group" aria-label={t.simulator.reviewFilter}>
-            {(['all', 'failed'] as const).map((value) => (
-              <Button
-                key={value}
-                size="sm"
-                variant={filter === value ? 'primary' : 'secondary'}
-                aria-pressed={filter === value}
-                onClick={() => {
-                  setFilter(value);
-                }}
-              >
-                {t.simulator.reviewFilters[value]}
-              </Button>
-            ))}
-          </div>
+          // Filtro excluyente con la forma de las pestañas (H01 de la revisión de B2)
+          <SegmentedControl
+            label={t.simulator.reviewFilter}
+            options={(['all', 'failed'] as const).map((value) => ({
+              value,
+              label: t.simulator.reviewFilters[value],
+            }))}
+            value={filter}
+            onChange={setFilter}
+            className="mb-3"
+          />
         ) : null}
         <ol className="flex flex-col gap-2">
           {answers.map((answer, index) =>

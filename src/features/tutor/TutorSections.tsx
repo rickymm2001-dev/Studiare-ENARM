@@ -95,10 +95,7 @@ export function WeeklyReportCard({
             </div>
           ) : null}
           <section aria-labelledby="informe-prioridades">
-            <h3
-              id="informe-prioridades"
-              className="mb-1.5 text-sm font-bold text-fg-muted"
-            >
+            <h3 id="informe-prioridades" className="mb-1.5 text-sm font-bold text-fg-muted">
               {text.priorities}
             </h3>
             {report.priorities.length === 0 ? (

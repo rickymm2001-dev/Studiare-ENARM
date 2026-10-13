@@ -68,8 +68,20 @@ describe('textos legales', () => {
     for (const word of ['Supabase', 'Stripe', 'Mercado Pago', 'Anthropic']) {
       expect(text).toContain(word);
     }
-    expect(text).toContain('Configuración, Cuenta');
+    // Los lugares de la app después de B3. Perfil para los datos y la foto, Privacidad para lo demás
+    expect(text).toContain('Configuración, sección Perfil');
+    expect(text).toContain('Configuración, sección Privacidad');
+    expect(text).not.toContain('Configuración, Cuenta');
     expect(text).toContain('privacidad@studiare.mx');
+  });
+
+  it('dice dónde vive la foto de perfil, quién la ve y que se borra con la cuenta (B2)', () => {
+    const text = legalToMarkdown(legalText.privacy, EMPTY);
+    expect(text).toContain('Supabase Storage');
+    expect(text).toMatch(/Foto de perfil\. Es opcional/);
+    expect(text).toMatch(/La ves tú y, mientras compartan un grupo activo de Party/);
+    expect(text).toMatch(/se borra al eliminar tu cuenta/);
+    expect(text).toMatch(/Party\. Compartir tu alias, tu foto de perfil/);
   });
 
   it('dice que la IA no manda el nombre ni el correo y que no hay chat libre ni predicción', () => {

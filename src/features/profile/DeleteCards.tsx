@@ -19,7 +19,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 
-type Cloud = Pick<SupabaseClient, 'rpc' | 'storage'>;
+type Cloud = Pick<SupabaseClient, 'rpc' | 'storage' | 'from'>;
 
 /** Por qué falló un borrado. local es que la nube sí se borró y este dispositivo no */
 type DeleteFailure = EraseFailure | 'local';

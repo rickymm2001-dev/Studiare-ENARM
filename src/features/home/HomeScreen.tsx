@@ -157,7 +157,7 @@ function Group({
   const id = useId();
   return (
     <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-5', className)}>
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {title}
       </h2>
       {children}
@@ -258,7 +258,7 @@ function PlanCard({ userId }: { userId: string }) {
   const plan = useActivePlan(userId);
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3 self-start p-5">
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {text.plan.title}
       </h2>
       {plan === undefined ? (
@@ -310,7 +310,7 @@ function SideSection({ title, children }: { title: string; children: ReactNode }
   const id = useId();
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
-      <h2 id={id} className="text-lg font-semibold text-fg">
+      <h2 id={id} className="screen-title text-fg">
         {title}
       </h2>
       {children}
