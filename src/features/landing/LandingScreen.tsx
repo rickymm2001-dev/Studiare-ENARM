@@ -1,5 +1,6 @@
 // Portada de venta (D-060, D-068). Lo primero que ve quien no tiene sesión. Qué es Studiare, qué
-// lo hace distinto, para quién es, precios y registro. Página aparte, sin navegación.
+// lo hace distinto, para quién es, precios y registro. Página aparte, sin navegación. Sobria, con
+// un solo color de acción y sin degradados ni brillos (B2 del plan del cambio, D-121).
 import {
   BookOpenCheck,
   Brain,
@@ -20,16 +21,17 @@ import { PlanPrice } from '@/features/billing/PlanPrice';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { cn } from '@/ui/cn';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 
-const FEATURES: { icon: ReactNode; tone: string; key: keyof typeof t.landing.features }[] = [
-  { icon: <Gauge />, tone: 'bg-mi text-white', key: 'technique' },
-  { icon: <BookOpenCheck />, tone: 'bg-ped text-white', key: 'fsrs' },
-  { icon: <Brain />, tone: 'bg-gyo text-white', key: 'biases' },
-  { icon: <Trophy />, tone: 'bg-gold text-accent-fg', key: 'game' },
-  { icon: <FileUp />, tone: 'bg-cir text-white', key: 'decks' },
-  { icon: <Stethoscope />, tone: 'bg-fam text-white', key: 'physicians' },
+const FEATURES: { icon: ReactNode; key: keyof typeof t.landing.features }[] = [
+  { icon: <Gauge />, key: 'technique' },
+  { icon: <BookOpenCheck />, key: 'fsrs' },
+  { icon: <Brain />, key: 'biases' },
+  { icon: <Trophy />, key: 'game' },
+  { icon: <FileUp />, key: 'decks' },
+  { icon: <Stethoscope />, key: 'physicians' },
 ];
 
 export function LandingScreen() {
@@ -37,40 +39,31 @@ export function LandingScreen() {
   return (
     <div className="flex flex-col gap-10 pb-6">
       <title>{t.app.documentTitle(text.documentTitle)}</title>
-      <section className="bg-hero animate-rise relative overflow-hidden rounded-xl px-5 py-10 text-white shadow-raised sm:px-10 sm:py-14">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-20 -right-20 size-72 rounded-full bg-white/10 blur-2xl"
-        />
-        <p className="mb-3 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
+      <section className="animate-rise flex flex-col items-start rounded-lg border border-line bg-surface px-5 py-10 sm:px-10 sm:py-14">
+        <Badge variant="neutral" className="mb-3">
           <Sparkles aria-hidden className="size-3.5" />
           {text.badge}
-        </p>
+        </Badge>
         <h1
           tabIndex={-1}
-          className="max-w-2xl text-4xl leading-tight font-extrabold outline-none sm:text-5xl"
+          className="max-w-2xl text-3xl leading-tight font-bold outline-none sm:text-4xl"
         >
           {text.title}
         </h1>
-        <p className="mt-4 max-w-xl text-lg text-white/85">{text.subtitle}</p>
+        <p className="mt-4 max-w-xl text-lg text-fg-muted">{text.subtitle}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button asChild variant="gold" size="lg">
+          <Button asChild size="lg">
             <Link to={screenPath('onboarding')}>{text.cta}</Link>
           </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="ghost"
-            className="border border-white/40 text-white hover:bg-white/10"
-          >
+          <Button asChild size="lg" variant="secondary">
             <Link to={screenPath('onboarding')}>{text.login}</Link>
           </Button>
         </div>
-        <p className="mt-4 text-sm text-white/75">{text.trust}</p>
+        <p className="mt-4 text-sm text-fg-muted">{text.trust}</p>
       </section>
 
       <section aria-labelledby="diferente" className="flex flex-col gap-4">
-        <h2 id="diferente" className="text-2xl font-extrabold sm:text-3xl">
+        <h2 id="diferente" className="screen-title">
           {text.featuresTitle}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,10 +71,7 @@ export function LandingScreen() {
             <Card key={feature.key} className="flex flex-col gap-2">
               <span
                 aria-hidden
-                className={cn(
-                  'flex size-11 items-center justify-center rounded-xl [&_svg]:size-5',
-                  feature.tone,
-                )}
+                className="flex size-10 items-center justify-center rounded-md bg-primary-soft text-primary-ink [&_svg]:size-5"
               >
                 {feature.icon}
               </span>
@@ -93,13 +83,13 @@ export function LandingScreen() {
       </section>
 
       <section aria-labelledby="para-ti" className="flex flex-col gap-4">
-        <h2 id="para-ti" className="text-2xl font-extrabold sm:text-3xl">
+        <h2 id="para-ti" className="screen-title">
           {text.personasTitle}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {text.personas.map(([who, what]) => (
-            <div key={who} className="flex gap-3 rounded-xl border border-line bg-surface p-4">
-              <Users aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+            <div key={who} className="flex gap-3 rounded-lg border border-line bg-surface p-4">
+              <Users aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
               <p>
                 <span className="font-bold">{who}.</span>{' '}
                 <span className="text-fg-muted">{what}</span>
@@ -111,7 +101,7 @@ export function LandingScreen() {
 
       <section aria-labelledby="precios" className="flex flex-col gap-4">
         <div>
-          <h2 id="precios" className="text-2xl font-extrabold sm:text-3xl">
+          <h2 id="precios" className="screen-title">
             {text.pricingTitle}
           </h2>
           <p className="text-sm text-fg-muted">
@@ -127,12 +117,15 @@ export function LandingScreen() {
             return (
               <Card
                 key={key}
-                className={cn('flex flex-col gap-3', highlighted && 'ring-2 ring-accent')}
+                className={cn(
+                  'flex flex-col gap-3',
+                  highlighted && 'border-primary ring-1 ring-primary',
+                )}
               >
                 {highlighted ? (
-                  <span className="bg-gold self-start rounded-full px-2.5 py-0.5 text-xs font-bold text-accent-fg">
+                  <Badge variant="info" className="self-start">
                     {FOUNDER_PROMO_ACTIVE ? text.founderBadge : text.bestValue}
-                  </span>
+                  </Badge>
                 ) : null}
                 <h3 className="text-lg font-bold">{t.billing.plans[key]}</h3>
                 <PlanPrice plan={key} />
@@ -155,7 +148,7 @@ export function LandingScreen() {
                       </li>
                     ))}
                 </ul>
-                <Button asChild variant={highlighted ? 'gold' : 'secondary'} className="mt-auto">
+                <Button asChild variant={highlighted ? 'primary' : 'secondary'} className="mt-auto">
                   <Link to={screenPath('onboarding')}>{text.startWith(t.billing.plans[key])}</Link>
                 </Button>
               </Card>
@@ -165,20 +158,20 @@ export function LandingScreen() {
       </section>
 
       <section aria-labelledby="preguntas" className="flex flex-col gap-3">
-        <h2 id="preguntas" className="text-2xl font-extrabold sm:text-3xl">
+        <h2 id="preguntas" className="screen-title">
           {text.faqTitle}
         </h2>
         {text.faq.map(([question, answer]) => (
-          <details key={question} className="rounded-xl border border-line bg-surface p-4">
+          <details key={question} className="rounded-lg border border-line bg-surface p-4">
             <summary className="cursor-pointer font-semibold">{question}</summary>
             <p className="mt-2 text-fg-muted">{answer}</p>
           </details>
         ))}
       </section>
 
-      <section className="flex flex-col items-center gap-3 rounded-xl bg-accent-soft p-8 text-center">
-        <h2 className="text-2xl font-extrabold">{text.finalTitle}</h2>
-        <Button asChild variant="gold" size="lg">
+      <section className="flex flex-col items-start gap-3 rounded-lg border border-line bg-surface p-6 sm:p-8">
+        <h2 className="screen-title">{text.finalTitle}</h2>
+        <Button asChild size="lg">
           <Link to={screenPath('onboarding')}>{text.cta}</Link>
         </Button>
       </section>

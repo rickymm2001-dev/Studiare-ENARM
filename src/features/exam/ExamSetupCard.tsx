@@ -15,7 +15,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import type { ReadySession } from '../shared/RequireSession';
 import { clock } from '../simulator/practice';
 import { startExam } from './examSession';
@@ -58,10 +57,7 @@ export function ExamSetupCard({
 
   const header = (
     <CardHeader className="mb-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <CardTitle id="examen-titulo">{text.cardTitle}</CardTitle>
-        <DemoContentLabel />
-      </div>
+      <CardTitle id="examen-titulo">{text.cardTitle}</CardTitle>
     </CardHeader>
   );
 

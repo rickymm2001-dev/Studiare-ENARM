@@ -16,8 +16,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 
 ### Bloques
 - [x] B0. Arranque
-- [ ] B1. Auditoría inicial de procesos (en cierre)
-- [ ] B2. Sistema de diseño y rediseño visual
+- [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
+- [ ] B2. Sistema de diseño y rediseño visual (PR 37 abierto, en cierre)
 - [ ] B3. Navegación, Configuración y Perfil
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
@@ -77,8 +77,16 @@ Evidencia
 - Revisión independiente de un subagente que no escribió el código, con tsc, eslint y 79 pruebas unitarias corridas por él. Sin hallazgos críticos ni altos. Tres medios y siete bajos, todos atendidos. Lo más útil, el Supabase simulado invertía la regla de los reclamos refresh del dispositivo, el aviso de privacidad seguía diciendo que los permisos se daban al crear el perfil, y faltaban las capturas
 - PR 36 a main con check, e2e y audit del CI
 
+### B2. Sistema de diseño y rediseño visual (D-121)
+- Hecho. Tokens nuevos con un solo color de acción #156082 y neutros, sin degradados, dorado ni brillos. Botones, tarjetas, StatPanel, etiquetas, campos, barra de progreso y navegación con el sistema sobrio. Título de pantalla de 20 y 24 px para el saludo y los títulos. Etiqueta Demostración, no validado por médicos fuera de 17 archivos y un aviso global Versión de demostración con la bandera demoBank. Fondos con degradado, color y foto fuera de Apariencia. Portada, imagen de logro y vista previa lisas. Fotos de perfil con recorte circular, bucket privado en Storage con permisos por fila (migración 20261016000001_avatars aplicada y probada en SQL) y sin avatares generados
+- Capturas de antes en docs/screenshots/v3/antes (114 imágenes, 390 claro y 1280 claro y oscuro, con el examen aparte) y de después en docs/screenshots/v3/b2
+- Pruebas nuevas. src/ui/design.test.ts (sin degradados, color exacto, sin dorado) y tests/e2e/theme-dark.spec.ts (axe en oscuro en todas las pantallas). labels.spec.ts cambia a comprobar el aviso global
+- Revisión de diseño independiente en docs/auditoria-v3/revision-diseno-b2.md, 21 hallazgos. Se corrigen en el bloque salvo H13 (pestañas de Configuración, B3 las quita) y H15 (tabla de usuarios del admin, pasa a B9)
+- Evidencia hasta ahora. npm run check en verde (dos pruebas que fallaban solo con la máquina cargada se hicieron robustas, el editor de pregunta y las banderas de acceso), e2e local completo 341 pruebas en verde en los cuatro proyectos, presupuesto del JavaScript inicial 283.4 KB de 300, pruebas SQL en verde con el bucket de fotos, migración 20261016000001_avatars aplicada en el proyecto. CI del PR 37 en verde completo sobre 2afa906
+- Dónde se quedó. Ricardo pidió subir el progreso y detenerse el 2026-10-13 a las 05:10 UTC. El PR 37 sigue abierto y sin fusionar porque faltan las correcciones del informe de diseño. Para retomar. 1) Corregir H01 a H12, H14 y H16 a H21 con el reparto en tres áreas de archivos sin cruce que está en el script del workflow guardado en la sesión (pestañas y filtros con SegmentedControl y FilterChip nuevos, Progreso e Inicio con Badge neutro y Skeleton, Mazos e importación con input de archivo propio), o a mano siguiendo el informe. 2) Volver a capturar docs/screenshots/v3/b2 con npm run screenshots:v3 -- b2.spec.ts. 3) npm run check, npm run e2e y npm run budget en verde. 4) Fusionar el PR 37 con el CI en verde y marcar B2 en la lista de bloques
+
 ### Preguntas para Ricardo
-- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado con el número de decisión que siga y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
+- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)

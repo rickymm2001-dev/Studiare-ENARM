@@ -1,9 +1,10 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
-import { FlaskConical, Menu, WifiOff } from 'lucide-react';
+import { FlaskConical, Info, Menu, WifiOff } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
@@ -48,6 +49,8 @@ export function AppShell() {
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
   // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
   const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
+  // Mientras el banco es de demostración, un aviso global en lugar de etiquetas por pantalla (4.1)
+  const demoBank = isFeatureEnabled('demoBank');
 
   return (
     <div className="min-h-dvh text-fg">
@@ -85,7 +88,7 @@ export function AppShell() {
               }}
               className="hidden h-full w-rail shrink-0 items-center justify-center bg-primary text-primary-fg transition-colors hover:bg-primary-hover lg:flex [&_svg]:size-7"
             >
-              <Menu aria-hidden strokeWidth={2.4} />
+              <Menu aria-hidden strokeWidth={2} />
             </button>
           )}
           <Link
@@ -127,18 +130,17 @@ export function AppShell() {
         </div>
       </header>
 
-      {/* Aviso de demostración en una sola línea delgada. Es la etiqueta visible de Datos
-          simulados para toda la pantalla, así que las pantallas ya no repiten la suya (D-078) */}
+      {/* Un solo aviso global en una línea delgada. Con la base de demostración es la etiqueta de
+          Datos simulados para toda la pantalla (D-078). Con el banco de demostración, en cualquier
+          base, dice Versión de demostración y se va con el banco real (4.1 del plan, D-121) */}
       {database === 'demo' ? (
         <section
           aria-label={t.labels.simulatedData}
-          className={`flex items-center justify-center gap-x-3 border-b border-sim-line bg-sim px-4 text-xs text-sim-fg sm:text-sm ${rail}`}
+          className={`flex min-h-8 items-center justify-center gap-x-3 border-b border-sim-line bg-sim px-4 text-xs text-sim-fg sm:text-sm ${rail}`}
         >
           <span className="flex min-w-0 items-center gap-1.5">
             <FlaskConical aria-hidden className="size-3.5 shrink-0 sm:size-4" />
-            <span className="font-mono text-[0.6875rem] font-semibold tracking-[0.12em] uppercase">
-              {t.labels.simulatedData}
-            </span>
+            <span className="font-semibold">{t.labels.simulatedData}</span>
             <span className="sr-only sm:not-sr-only sm:truncate">{t.database.banner}</span>
           </span>
           <button
@@ -150,6 +152,15 @@ export function AppShell() {
           >
             {t.database.backToReal}
           </button>
+        </section>
+      ) : demoBank && !bare ? (
+        <section
+          aria-label={t.labels.demoVersion}
+          className={`flex min-h-8 items-center justify-center gap-x-1.5 border-b border-demo-line bg-demo px-4 text-xs text-demo-fg sm:text-sm ${rail}`}
+        >
+          <Info aria-hidden className="size-3.5 shrink-0 sm:size-4" />
+          <span className="font-semibold">{t.labels.demoVersion}</span>
+          <span className="sr-only sm:not-sr-only sm:truncate">{t.labels.demoVersionHint}</span>
         </section>
       ) : null}
 

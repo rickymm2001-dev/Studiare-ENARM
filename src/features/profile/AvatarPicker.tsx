@@ -1,90 +1,108 @@
-// Foto de perfil (D-068). Iniciales, uno de los avatares médicos generados o una foto propia que se
-// reduce a 256 px, se comprime en el navegador y se muestra recortada al centro.
+// Foto de perfil (D-068, B2 del plan del cambio, comentario 15). Iniciales o una foto propia que el
+// alumno encuadra en un círculo antes de guardarla. Los avatares generados se quitaron. Una cuenta
+// vieja con uno se trata como iniciales. El recortador se carga aparte, solo al elegir un archivo.
 import { ImagePlus } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import type { Account } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
-import { AVATAR_GALLERY } from '@/ui/avatarArt';
-import { compressImage } from '@/ui/backgroundImage';
 import { cn } from '@/ui/cn';
 import { Avatar } from '@/ui/components/avatar';
 import { Button } from '@/ui/components/button';
+
+const AvatarCropper = lazy(() =>
+  import('./AvatarCropper').then((module) => ({ default: module.AvatarCropper })),
+);
 
 type AvatarChoice = Account['avatar'];
 
 export function AvatarPicker({
   name,
-  seed,
   value,
   onChange,
 }: {
   name: string;
-  seed: string;
   value: AvatarChoice;
   onChange: (next: AvatarChoice) => void;
 }) {
   const input = useRef<HTMLInputElement>(null);
+  // Archivo elegido y pendiente de encuadrar. El id cambia por archivo, para montar el recortador de nuevo
+  const [pending, setPending] = useState<{ id: number; file: File } | null>(null);
   const [error, setError] = useState('');
-  const isSelected = (choice: AvatarChoice) => JSON.stringify(choice) === JSON.stringify(value);
-  const option = (choice: AvatarChoice, label: string) => (
+  const hasPhoto = value.kind === 'photo';
+
+  const option = (choice: AvatarChoice, label: string, selected: boolean) => (
     <button
-      key={label}
       type="button"
       aria-label={label}
-      aria-pressed={isSelected(choice)}
+      aria-pressed={selected}
       onClick={() => {
         onChange(choice);
       }}
       className={cn(
-        'rounded-full p-0.5 ring-2 transition-all',
-        isSelected(choice) ? 'ring-primary' : 'ring-transparent hover:ring-line-strong',
+        'rounded-full p-0.5 ring-2 transition-colors',
+        selected ? 'ring-primary' : 'ring-transparent hover:ring-line-strong',
       )}
     >
-      <Avatar name={name} seed={seed} avatar={choice} className="size-12" />
+      <Avatar name={name} avatar={choice} className="size-12 text-base" />
     </button>
   );
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-2">
-        {option({ kind: 'initials' }, t.account.avatarInitials)}
-        {AVATAR_GALLERY.map((gallerySeed, index) =>
-          option({ kind: 'generated', seed: gallerySeed }, t.account.avatarGenerated(index + 1)),
-        )}
-        {value.kind === 'photo' ? option(value, t.account.avatarPhoto) : null}
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        {option({ kind: 'initials' }, t.account.avatarInitials, !hasPhoto)}
+        {hasPhoto ? option(value, t.account.avatarPhoto, true) : null}
+        <input
+          ref={input}
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          aria-label={t.account.uploadPhoto}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            event.target.value = '';
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+              setError(t.account.avatarOpenError);
+              return;
+            }
+            setError('');
+            setPending((current) => ({ id: (current?.id ?? 0) + 1, file }));
+          }}
+        />
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={() => {
+            input.current?.click();
+          }}
+        >
+          <ImagePlus aria-hidden />
+          {hasPhoto ? t.account.avatarChangePhoto : t.account.uploadPhoto}
+        </Button>
       </div>
-      <input
-        ref={input}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        aria-label={t.account.uploadPhoto}
-        onChange={(event) => {
-          const file = event.target.files?.[0];
-          event.target.value = '';
-          if (!file) return;
-          void compressImage(file, 256, 0.8)
-            .then((dataUrl) => {
-              setError('');
+      <p className="text-sm text-fg-muted">{t.account.avatarNote}</p>
+      {pending ? (
+        <Suspense fallback={<p className="text-sm text-fg-muted">{t.account.avatarLoading}</p>}>
+          <AvatarCropper
+            key={pending.id}
+            file={pending.file}
+            onConfirm={(dataUrl) => {
               onChange({ kind: 'photo', dataUrl });
-            })
-            .catch(() => {
-              setError(t.appearance.imageError);
-            });
-        }}
-      />
-      <Button
-        type="button"
-        variant="secondary"
-        size="sm"
-        className="self-start"
-        onClick={() => {
-          input.current?.click();
-        }}
-      >
-        <ImagePlus aria-hidden />
-        {t.account.uploadPhoto}
-      </Button>
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+              setPending(null);
+            }}
+            onCancel={() => {
+              setPending(null);
+            }}
+          />
+        </Suspense>
+      ) : null}
+      {error ? (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

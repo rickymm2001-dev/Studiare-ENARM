@@ -214,7 +214,8 @@ describe('banderas de acceso por función', () => {
       await screen.findByText(t.billing.featureLocked(t.billing.featureNames.overdueTools)),
     ).toBeInTheDocument();
     expect(screen.queryByText('Herramientas')).not.toBeInTheDocument();
-    expect(screen.getByText('Explorar abierto')).toBeInTheDocument();
+    // Cada FeatureGate lee el plan por su cuenta, así que la segunda puede tardar un poco más
+    expect(await screen.findByText('Explorar abierto')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
       'href',
       SCREENS.subscription.path,

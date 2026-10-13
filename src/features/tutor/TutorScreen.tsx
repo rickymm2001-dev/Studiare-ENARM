@@ -231,7 +231,7 @@ function TutorBody({
         {shown.length === 0 && dismissed.length === 0 ? (
           <p
             role="status"
-            className="mt-2 rounded-md bg-primary-soft px-3 py-2 text-sm text-primary"
+            className="mt-2 rounded-md bg-primary-soft px-3 py-2 text-sm text-primary-ink"
           >
             {text.calibrating(view.recentErrors)}
           </p>
@@ -284,7 +284,7 @@ function TutorBody({
                   <span className="min-w-0 flex-1">{rule.title}</span>
                   <button
                     type="button"
-                    className="min-h-touch rounded-md px-3 font-semibold text-primary hover:bg-muted"
+                    className="min-h-touch rounded-md px-3 font-semibold text-primary-ink hover:bg-muted"
                     aria-label={`${text.reopen}. ${rule.title}`}
                     onClick={() => {
                       void reopenHypothesis(api, user, hypothesis);

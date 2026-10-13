@@ -2,7 +2,7 @@
   "version": 1,
   "key": "paco-urgencias",
   "name": "Urgencias (Paco)",
-  "description": "Mazo de Paco, compartido con su autorización. Urgencias no es rama de la taxonomía todavía (D-013). Demostración, no validado por médicos.",
+  "description": "Mazo de Paco, compartido con su autorización. Urgencias no es rama de la taxonomía todavía (D-013).",
   "author": "Paco",
   "status": "pending_physician_review",
   "media": [

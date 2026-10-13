@@ -18,7 +18,6 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
@@ -75,7 +74,6 @@ function Practice({ session }: { session: ReadySession }) {
           <span>{t.simulator.progress(practice.index + 1, practice.questionIds.length)}</span>
         ) : undefined
       }
-      badges={<DemoContentLabel />}
     />
   );
   // Con la retroalimentación al final, contestar la última lleva directo al resumen

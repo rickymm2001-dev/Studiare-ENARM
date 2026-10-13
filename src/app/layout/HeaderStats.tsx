@@ -1,6 +1,7 @@
 // Arriba a la derecha, siempre a la vista. Racha, nivel con su barra de XP y nombre, y la foto de
 // perfil que lleva a Perfil (D-062). En la barra de computadora el nivel va en una línea, con su
-// título junto al número y la barra más larga, como en el diseño de Ricardo (D-117).
+// título junto al número y la barra más larga, como en el diseño de Ricardo (D-117). Racha, nivel y
+// XP van en neutro, sin dorado ni naranja (4.7 del plan del cambio, D-121).
 import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
@@ -28,7 +29,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   return (
     <div className="flex items-center gap-2">
       <span
-        className="flex items-center gap-1 rounded-full bg-streak-soft px-2.5 py-1 text-sm font-bold text-streak-ink"
+        className="flex items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-sm font-bold text-fg"
         aria-label={t.headerStats.streak(streak.current)}
         title={t.headerStats.streak(streak.current)}
       >
@@ -51,21 +52,17 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
             aria-hidden
             className="hidden items-center gap-1.5 text-sm font-semibold whitespace-nowrap text-fg lg:flex"
           >
-            <Star aria-hidden className="size-4 text-accent" />
+            <Star aria-hidden className="size-4 text-fg-muted" />
             {t.headerStats.titled(level.level, level.title)}
           </span>
           <span className="flex items-baseline justify-between gap-1 text-[0.65rem] leading-none font-bold lg:hidden">
-            <span className="truncate font-mono tracking-wider text-accent-ink uppercase">
-              {level.title}
-            </span>
-            <span className="font-mono tracking-wider text-fg-muted uppercase">
-              {t.headerStats.short(level.level)}
-            </span>
+            <span className="truncate text-fg-muted">{level.title}</span>
+            <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
           </span>
           <span className="flex min-w-0 flex-col gap-1 lg:w-40 xl:w-56">
             <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
               <span
-                className="block h-full rounded-full bg-gold"
+                className="block h-full rounded-full bg-line-strong"
                 style={{ width: `${percent}%` }}
               />
             </span>

@@ -1,7 +1,8 @@
 // Cliente de Supabase falso para las pruebas del dispositivo único y de CloudBridge. Imita solo lo
 // que usa la app. claim_device guarda el dispositivo como lo haría el servidor, con el session_id
 // del token, y device_sessions devuelve esa fila. Puede rechazar el reclamo por el límite de cambios
-// con el mismo error que lanza la base. Solo lo usan las pruebas.
+// con el mismo error que lanza la base. También imita Storage para la foto de perfil (B2), con los
+// objetos en memoria, y la fila de private_accounts. Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
 
 export interface FakeCloudOptions {
@@ -94,6 +95,16 @@ export interface FakeCloud {
   /** Código que acepta verifyOtp. Al aceptarlo abre la sesión de codeSession y avisa SIGNED_IN */
   validCode: string;
   codeSession: FakeSession;
+  /** Fila de private_accounts que devuelve el servidor al leer la cuenta. null si no hay */
+  remoteAccount: Record<string, unknown> | null;
+  /** Filas que la app mandó a private_accounts con update, en orden */
+  accountUpdates: Record<string, unknown>[];
+  /** Objetos de Storage por bucket/ruta, como avatars/<authId>/avatar.jpg */
+  objects: Map<string, Blob>;
+  /** Cómo falla Storage. error responde con error y throw lanza la excepción */
+  failStorage: FakeFailure;
+  /** Llamadas a Storage en orden, como upload:avatars/ruta, download:avatars/ruta o remove:avatars/ruta */
+  storageCalls: string[];
   /** Dispara un evento de Supabase Auth como si hubiera pasado en el navegador */
   emit: (event: AuthChangeEvent) => void;
 }
@@ -136,6 +147,11 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     otpRequests: [],
     validCode: '123456',
     codeSession: { id: '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10', email: 'rick@example.com' },
+    remoteAccount: null,
+    accountUpdates: [],
+    objects: new Map(),
+    failStorage: 'none',
+    storageCalls: [],
     emit: (event) => {
       listeners.forEach((listener) => {
         listener(event);
@@ -161,6 +177,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         return outcome(fake.failRole, () => ({ data: { role: fake.role }, error: null }));
       }
       if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
+      if (name === 'private_accounts') return { data: fake.remoteAccount, error: null };
       if (name === 'platform_settings') {
         const value = settingKey === 'feature_flags' ? fake.flags : fake.overrides;
         return { data: value === null ? null : { value }, error: null };
@@ -177,7 +194,10 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       gt: () => chain,
       order: () => chain,
       limit: () => chain,
-      update: () => chain,
+      update: (row: Record<string, unknown>) => {
+        if (name === 'private_accounts') fake.accountUpdates.push(row);
+        return chain;
+      },
       insert: (row: { notice_version?: unknown }) => {
         if (name === 'privacy_acceptances' && typeof row.notice_version === 'string') {
           fake.acceptances.push(row.notice_version);
@@ -258,6 +278,41 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       },
     },
     from: table,
+    // Storage guarda los objetos en memoria. Como el real, upload con upsert reemplaza, download
+    // responde con error si el objeto no existe y remove quita lo que haya
+    storage: {
+      from: (bucket: string) => ({
+        upload: (path: string, body: Blob) => {
+          fake.storageCalls.push(`upload:${bucket}/${path}`);
+          return Promise.resolve(
+            outcome(fake.failStorage, () => {
+              fake.objects.set(`${bucket}/${path}`, body);
+              return { data: { id: path, path, fullPath: `${bucket}/${path}` }, error: null };
+            }),
+          );
+        },
+        download: (path: string) => {
+          fake.storageCalls.push(`download:${bucket}/${path}`);
+          return Promise.resolve(
+            outcome(fake.failStorage, () => {
+              const blob = fake.objects.get(`${bucket}/${path}`);
+              return blob
+                ? { data: blob, error: null }
+                : { data: null, error: { message: 'Object not found', status: 404 } };
+            }),
+          );
+        },
+        remove: (paths: string[]) => {
+          for (const path of paths) fake.storageCalls.push(`remove:${bucket}/${path}`);
+          return Promise.resolve(
+            outcome(fake.failStorage, () => {
+              for (const path of paths) fake.objects.delete(`${bucket}/${path}`);
+              return { data: [], error: null };
+            }),
+          );
+        },
+      }),
+    },
     rpc: (name: string, args: { p_device_id: string; p_label: string }) => {
       fake.rpcCalls.push(name);
       if (name.startsWith('sync_') && fake.sync === 'ok') {

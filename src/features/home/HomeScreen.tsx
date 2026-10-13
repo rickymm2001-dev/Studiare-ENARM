@@ -153,7 +153,7 @@ function Group({
   const id = useId();
   return (
     <section aria-labelledby={id} className={cn('flex min-w-0 flex-col gap-5', className)}>
-      <h2 id={id} className="text-xl font-medium text-fg sm:text-2xl">
+      <h2 id={id} className="screen-title text-fg">
         {title}
       </h2>
       {children}
@@ -182,7 +182,7 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
     <Card aria-labelledby={id} className="flex grow flex-col gap-2 p-5">
       <CardHeading id={id}>{t.widgets.names.daily_goal}</CardHeading>
       <div className="flex items-center gap-3">
-        <Target aria-hidden className="size-8 shrink-0 text-primary sm:size-9" />
+        <Target aria-hidden className="size-8 shrink-0 text-primary-ink sm:size-9" />
         <div className="flex min-w-0 flex-col">
           <span className="text-2xl font-extrabold sm:text-3xl">
             {t.widgets.goal.ratio(Math.min(done, goal.value), goal.value)}
@@ -214,7 +214,7 @@ function DueCard({ snapshot }: { snapshot: Snapshot }) {
       <div>
         <p className="sr-only">{text.dueLabel(snapshot.dueCards)}</p>
         <p aria-hidden className="flex items-center gap-3">
-          <Layers className="size-9 shrink-0 text-primary sm:size-10" />
+          <Layers className="size-9 shrink-0 text-primary-ink sm:size-10" />
           <span className="text-4xl font-extrabold sm:text-5xl">
             {snapshot.dueCards.toLocaleString('es-MX')}
           </span>
@@ -261,8 +261,8 @@ function PlanCard({ userId }: { userId: string }) {
       ) : (
         <>
           <p className="flex items-center gap-3">
-            <CreditCard aria-hidden className="size-8 shrink-0 text-primary" />
-            <span className="text-2xl font-extrabold text-primary">{t.billing.plans[plan]}</span>
+            <CreditCard aria-hidden className="size-8 shrink-0 text-primary-ink" />
+            <span className="text-2xl font-extrabold text-primary-ink">{t.billing.plans[plan]}</span>
           </p>
           <Button asChild className="w-full">
             <Link to={screenPath('subscription')}>

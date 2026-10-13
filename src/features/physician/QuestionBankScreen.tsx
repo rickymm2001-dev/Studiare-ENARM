@@ -21,7 +21,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { QuestionPreview } from './QuestionPreview';
 
@@ -52,7 +51,6 @@ export function QuestionBankScreen() {
     <ScreenHeader
       title={t.screens.questionBank.title}
       description={role === 'physician' ? t.bank.physicianHint : t.bank.adminHint}
-      badges={<DemoContentLabel />}
       actions={
         <Button asChild variant="secondary" size="sm">
           <Link to={SCREENS.bankImport.path}>{t.bank.importBank}</Link>

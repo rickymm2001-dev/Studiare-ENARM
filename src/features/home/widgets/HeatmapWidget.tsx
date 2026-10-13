@@ -141,7 +141,7 @@ export function HeatmapWidget({
                 className={cn('flex flex-col gap-1', fluid && MONTH_MIN)}
                 style={grow}
               >
-                <span className="h-3 text-[0.65rem] leading-3 font-semibold tracking-wide text-fg-muted uppercase">
+                <span className="h-3 text-[0.65rem] leading-3 font-semibold tracking-wide text-fg-muted">
                   {month.label}
                 </span>
                 {fluid ? (

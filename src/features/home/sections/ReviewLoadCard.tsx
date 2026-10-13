@@ -36,7 +36,7 @@ export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
         <Link
           to={screenPath('progress')}
           aria-label={text.linkLabel}
-          className="font-semibold text-primary underline underline-offset-4"
+          className="font-semibold text-primary-ink underline underline-offset-4"
         >
           {text.link}
         </Link>

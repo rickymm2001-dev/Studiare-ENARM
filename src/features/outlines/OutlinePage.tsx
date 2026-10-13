@@ -229,7 +229,7 @@ export function OutlinePage({
           ) : (
             // Con el mazo en su lugar el selector queda plegado. Si el mazo ya no existe sale abierto
             <details open={!deck} className="text-sm">
-              <summary className="min-h-touch w-fit cursor-pointer py-2 font-medium text-primary">
+              <summary className="min-h-touch w-fit cursor-pointer py-2 font-medium text-primary-ink">
                 {text.editor.deckChange}
               </summary>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end">

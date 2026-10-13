@@ -16,7 +16,6 @@ import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { LoadingState } from '@/ui/states/states';
@@ -110,10 +109,7 @@ function Decks({ session }: { session: ReadySession }) {
       ) : null}
       <Card aria-labelledby="precargados-titulo">
         <CardHeader>
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
-            <DemoContentLabel />
-          </div>
+          <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
           <CardDescription>{t.decks.preloadedDescription}</CardDescription>
         </CardHeader>
         {catalog === undefined || stored === undefined ? (
@@ -170,7 +166,7 @@ function Decks({ session }: { session: ReadySession }) {
                       </div>
                     ) : null}
                     <details className="group">
-                      <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
+                      <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
                         {t.decks.topicsTitle}
                         <span className="font-normal text-fg-muted">
                           · {t.decks.topicsSummary(topTopics(file).length)}

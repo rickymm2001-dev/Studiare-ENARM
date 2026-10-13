@@ -1,21 +1,18 @@
-// Apariencia (D-060, D-061, D-065, D-078). Tema, fuente de lectura, tamaño del texto, fondo
-// (incluido uno personalizado con color o foto), y animaciones, confeti y sonidos. Los cambios se
-// ven al instante como vista previa y se quedan solo al guardar, con una sola barra de guardar que
-// aparece al haber cambios. Al salir sin guardar vuelve lo guardado.
-import { ImagePlus, Monitor, Moon, PartyPopper, Sun, Trash2 } from 'lucide-react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+// Apariencia (D-060, D-061, D-065, D-078). Tema, fuente de lectura, tamaño del texto, y animaciones,
+// confeti y sonidos. Los cambios se ven al instante como vista previa y se quedan solo al guardar,
+// con una sola barra de guardar que aparece al haber cambios. Al salir sin guardar vuelve lo guardado.
+// Los fondos con degradados, color o foto se quitaron en B2 del plan del cambio (comentario 10).
+import { Monitor, Moon, PartyPopper, Sun } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { usePreferences } from '@/app/preferences';
 import { t } from '@/i18n/es-MX';
 import {
   applyAppearance,
-  BACKGROUND_CHOICES,
   FONT_CHOICES,
   FONT_FAMILIES,
   SIZE_CHOICES,
   type Appearance,
-  type BackgroundChoice,
 } from '@/ui/appearance';
-import { compressImage, loadBackgroundImage, saveBackgroundImage } from '@/ui/backgroundImage';
 import { celebrate } from '@/ui/celebrate';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -25,20 +22,11 @@ import { RadioCards } from '@/ui/components/radio-cards';
 import { SaveBar } from '@/ui/components/save-bar';
 import { applyTheme, resolveTheme, useApplyTheme, type ThemePreference } from '@/ui/theme';
 
-const SWATCH: Record<Exclude<BackgroundChoice, 'custom'>, string> = {
-  plain: 'bg-canvas',
-  glow: 'bg-[radial-gradient(circle_at_80%_0%,var(--color-primary-soft),transparent_70%),radial-gradient(circle_at_0%_30%,var(--color-accent-soft),transparent_70%)] bg-canvas',
-  mesh: 'bg-[radial-gradient(circle_at_0%_0%,var(--color-ped-soft),transparent_65%),radial-gradient(circle_at_100%_0%,var(--color-gyo-soft),transparent_65%),radial-gradient(circle_at_50%_110%,var(--color-cir-soft),transparent_65%)] bg-canvas',
-  dots: 'bg-canvas bg-[radial-gradient(var(--color-line)_1px,transparent_1px)] bg-[length:10px_10px]',
-};
-
 const THEME_OPTIONS = [
   { value: 'system', label: t.theme.system, icon: <Monitor /> },
   { value: 'light', label: t.theme.light, icon: <Sun /> },
   { value: 'dark', label: t.theme.dark, icon: <Moon /> },
 ] as const satisfies readonly { value: ThemePreference; label: string; icon: ReactNode }[];
-
-const PRESET_COLORS = ['#0e5a6b', '#3a2a7a', '#b92b74', '#d94f2b', '#1f8a57', '#c27c0e', '#14202b'];
 
 function ChoiceButton({
   selected,
@@ -60,9 +48,9 @@ function ChoiceButton({
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'flex min-h-touch flex-col items-start gap-1 rounded-lg border-2 p-3 text-left transition-all',
+        'flex min-h-touch flex-col items-start gap-1 rounded-md border p-3 text-left transition-colors',
         selected
-          ? 'border-primary bg-primary-soft shadow-raised'
+          ? 'border-primary bg-primary-soft ring-1 ring-primary'
           : 'border-line bg-surface hover:border-line-strong',
         className,
       )}
@@ -79,14 +67,9 @@ export function AppearanceSettings() {
   const setTheme = usePreferences((state) => state.setTheme);
   const [draft, setDraft] = useState<Appearance>(saved);
   const [theme, setThemeDraft] = useState<ThemePreference>(savedTheme);
-  const [image, setImage] = useState<string | null>(() => loadBackgroundImage());
   const [status, setStatus] = useState('');
-  const fileInput = useRef<HTMLInputElement>(null);
   const text = t.appearance;
-  const dirty =
-    JSON.stringify(draft) !== JSON.stringify(saved) ||
-    image !== loadBackgroundImage() ||
-    theme !== savedTheme;
+  const dirty = JSON.stringify(draft) !== JSON.stringify(saved) || theme !== savedTheme;
 
   // Vista previa del tema. Al salir sin guardar vuelve el tema guardado
   useApplyTheme(theme);
@@ -102,16 +85,12 @@ export function AppearanceSettings() {
 
   // Vista previa en vivo de lo que el alumno va eligiendo
   useEffect(() => {
-    applyAppearance(document.documentElement, draft, image);
-  }, [draft, image]);
+    applyAppearance(document.documentElement, draft);
+  }, [draft]);
   // Al salir de la pantalla vuelve lo guardado
   useEffect(
     () => () => {
-      applyAppearance(
-        document.documentElement,
-        usePreferences.getState().appearance,
-        loadBackgroundImage(),
-      );
+      applyAppearance(document.documentElement, usePreferences.getState().appearance);
     },
     [],
   );
@@ -122,10 +101,6 @@ export function AppearanceSettings() {
   };
 
   const save = () => {
-    if (!saveBackgroundImage(image)) {
-      setStatus(text.imageTooBig);
-      return;
-    }
     setAppearance(draft);
     setTheme(theme);
     setStatus(text.saved);
@@ -133,7 +108,6 @@ export function AppearanceSettings() {
 
   const discard = () => {
     setDraft(saved);
-    setImage(loadBackgroundImage());
     setThemeDraft(savedTheme);
     setStatus(text.discarded);
   };
@@ -153,7 +127,7 @@ export function AppearanceSettings() {
         />
 
         <fieldset>
-          <legend className="eyebrow mb-2 text-fg-muted">{text.font}</legend>
+          <legend className="eyebrow mb-2">{text.font}</legend>
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {FONT_CHOICES.map((font) => (
               <ChoiceButton
@@ -178,8 +152,8 @@ export function AppearanceSettings() {
         </fieldset>
 
         <fieldset>
-          <legend className="eyebrow mb-2 text-fg-muted">{text.size}</legend>
-          <div className="grid grid-cols-4 overflow-hidden rounded-lg border-2 border-line">
+          <legend className="eyebrow mb-2">{text.size}</legend>
+          <div className="grid grid-cols-4 overflow-hidden rounded-md border border-line">
             {SIZE_CHOICES.map((size, index) => (
               <button
                 key={size}
@@ -189,9 +163,9 @@ export function AppearanceSettings() {
                   change({ size });
                 }}
                 className={cn(
-                  'flex min-h-touch flex-col items-center justify-center gap-0.5 border-line px-1 py-1.5 transition-colors not-first:border-l-2',
+                  'flex min-h-touch flex-col items-center justify-center gap-0.5 border-line px-1 py-1.5 transition-colors not-first:border-l',
                   draft.size === size
-                    ? 'bg-primary-soft text-primary'
+                    ? 'bg-primary-soft text-primary-ink'
                     : 'bg-surface hover:bg-muted',
                 )}
               >
@@ -208,120 +182,8 @@ export function AppearanceSettings() {
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend className="eyebrow mb-2 text-fg-muted">{text.background}</legend>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-            {BACKGROUND_CHOICES.map((background) => (
-              <ChoiceButton
-                key={background}
-                label={text.backgrounds[background]}
-                selected={draft.background === background}
-                onClick={() => {
-                  change({ background });
-                }}
-              >
-                <span
-                  aria-hidden
-                  className={cn(
-                    'h-9 w-full rounded-md border border-line bg-cover bg-center sm:h-12',
-                    background === 'custom' ? '' : SWATCH[background],
-                  )}
-                  style={
-                    background === 'custom'
-                      ? image
-                        ? { backgroundImage: `url("${image}")` }
-                        : { backgroundColor: draft.customColor }
-                      : undefined
-                  }
-                />
-                <span className="text-xs sm:text-sm">{text.backgrounds[background]}</span>
-              </ChoiceButton>
-            ))}
-          </div>
-
-          {draft.background === 'custom' ? (
-            <div className="mt-3 flex flex-col gap-3 rounded-lg bg-muted p-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold">{text.customColor}</span>
-                {PRESET_COLORS.map((color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    aria-label={text.pickColor(color)}
-                    aria-pressed={draft.customColor === color}
-                    onClick={() => {
-                      change({ customColor: color });
-                    }}
-                    className={cn(
-                      'size-8 rounded-full border-2',
-                      draft.customColor === color ? 'border-fg' : 'border-transparent',
-                    )}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="color"
-                    value={draft.customColor}
-                    onChange={(event) => {
-                      change({ customColor: event.target.value });
-                    }}
-                    className="size-8 cursor-pointer rounded-full border border-line bg-transparent"
-                  />
-                  {text.otherColor}
-                </label>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <input
-                  ref={fileInput}
-                  type="file"
-                  accept="image/*"
-                  className="sr-only"
-                  aria-label={text.uploadPhoto}
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    event.target.value = '';
-                    if (!file) return;
-                    void compressImage(file)
-                      .then((dataUrl) => {
-                        setImage(dataUrl);
-                        setStatus('');
-                      })
-                      .catch(() => {
-                        setStatus(text.imageError);
-                      });
-                  }}
-                />
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    fileInput.current?.click();
-                  }}
-                >
-                  <ImagePlus aria-hidden />
-                  {image ? text.changePhoto : text.uploadPhoto}
-                </Button>
-                {image ? (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setImage(null);
-                    }}
-                  >
-                    <Trash2 aria-hidden />
-                    {text.removePhoto}
-                  </Button>
-                ) : null}
-              </div>
-              <p className="text-xs text-fg-muted">{text.photoNote}</p>
-            </div>
-          ) : null}
-        </fieldset>
-
         <fieldset className="flex flex-col gap-2">
-          <legend className="eyebrow mb-1 text-fg-muted">{text.motion}</legend>
+          <legend className="eyebrow mb-1">{text.motion}</legend>
           <CheckboxField
             label={text.animations}
             hint={text.animationsHint}
@@ -346,7 +208,7 @@ export function AppearanceSettings() {
             }}
           />
           <Button
-            variant="gold"
+            variant="secondary"
             size="sm"
             className="mt-1 self-start"
             onClick={() => {

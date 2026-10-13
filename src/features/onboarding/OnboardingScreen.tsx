@@ -420,7 +420,7 @@ function LinkSentCard({
     <Card aria-labelledby="enlace-titulo">
       <CardHeader>
         <CardTitle id="enlace-titulo" className="flex items-center gap-2">
-          <MailCheck aria-hidden className="text-primary" />
+          <MailCheck aria-hidden className="text-primary-ink" />
           {ok ? t.cloud.sentTitle : t.cloud.failedTitle}
         </CardTitle>
         <CardDescription role="status">

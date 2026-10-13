@@ -33,6 +33,11 @@ export const FEATURE_FLAGS = {
       'Pantalla Datos de demostración, su panel y el selector de base de demostración (5.4 del plan del cambio). En producción se esconden',
     defaults: { development: true, demo: true, production: false },
   },
+  demoBank: {
+    description:
+      'Aviso global Versión de demostración mientras la app usa el banco de demostración (4.1 del plan del cambio). Se apaga cuando llega el banco real (B11)',
+    defaults: { development: true, demo: true, production: true },
+  },
 } as const satisfies Record<string, FlagDef>;
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS;

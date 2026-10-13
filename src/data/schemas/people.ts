@@ -121,6 +121,11 @@ export const UserSchema = z.strictObject({
 });
 export type User = z.infer<typeof UserSchema>;
 
+/** Cómo empieza la foto de perfil guardada, un JPEG en base64 */
+export const AVATAR_DATA_URL_PREFIX = 'data:image/jpeg;base64,';
+/** Lo más que mide la foto como dataUrl. Unos 300 KB de JPEG, que caben en la fila y en el bucket */
+export const AVATAR_DATA_URL_MAX = 400_000;
+
 /**
  * Datos de cuenta del alumno (D-068). Viven aparte de User para que nunca viajen a la IA ni a
  * Party. Solo el correo es obligatorio. El resto es opcional y sirve para conocer el mercado y
@@ -144,13 +149,17 @@ export const AccountSchema = z.strictObject({
     .string()
     .regex(/^[a-z_]{2,48}$/)
     .nullable(),
-  /** Foto de perfil. initials, un avatar generado por su semilla o una foto propia comprimida */
+  /**
+   * Foto de perfil. initials o una foto propia recortada en círculo y comprimida. generated son los
+   * avatares médicos de D-068, que B2 quitó. Se sigue aceptando para leer cuentas viejas y se ve
+   * como iniciales
+   */
   avatar: z.discriminatedUnion('kind', [
     z.strictObject({ kind: z.literal('initials') }),
     z.strictObject({ kind: z.literal('generated'), seed: z.string().min(1).max(40) }),
     z.strictObject({
       kind: z.literal('photo'),
-      dataUrl: z.string().startsWith('data:image/jpeg;base64,').max(400_000),
+      dataUrl: z.string().startsWith(AVATAR_DATA_URL_PREFIX).max(AVATAR_DATA_URL_MAX),
     }),
   ]),
   updatedAt: UtcDateTimeSchema,

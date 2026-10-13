@@ -1,13 +1,11 @@
+// Tarjeta base. Borde fino sobre superficie lisa, sin sombra (B2 del plan del cambio).
 import type { ComponentProps } from 'react';
 import { cn } from '@/ui/cn';
 
 export function Card({ className, ...props }: ComponentProps<'section'>) {
   return (
     <section
-      className={cn(
-        'animate-rise rounded-xl border border-line/70 bg-surface p-4 shadow-card',
-        className,
-      )}
+      className={cn('animate-rise rounded-lg border border-line bg-surface p-4', className)}
       {...props}
     />
   );
@@ -18,7 +16,7 @@ export function CardHeader({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export function CardTitle({ className, ...props }: ComponentProps<'h2'>) {
-  return <h2 className={cn('text-lg font-semibold text-fg', className)} {...props} />;
+  return <h2 className={cn('text-base font-semibold text-fg', className)} {...props} />;
 }
 
 export function CardDescription({ className, ...props }: ComponentProps<'p'>) {

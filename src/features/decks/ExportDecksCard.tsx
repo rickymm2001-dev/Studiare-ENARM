@@ -63,7 +63,7 @@ export function ExportDecksCard({
     <Card aria-labelledby="exportar-titulo">
       <CardHeader>
         <CardTitle id="exportar-titulo" className="flex items-center gap-2">
-          <FileDown aria-hidden className="size-5 text-primary" />
+          <FileDown aria-hidden className="size-5 text-primary-ink" />
           {t.exporter.title}
         </CardTitle>
         <CardDescription>{t.exporter.intro}</CardDescription>

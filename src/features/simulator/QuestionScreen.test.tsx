@@ -61,7 +61,6 @@ describe('pantalla de la pregunta', () => {
     expect(await screen.findByText(question.prompt)).toBeVisible();
     expect(screen.getAllByRole('radio')).toHaveLength(4);
     expect(screen.getByText(t.choice.optionsHint)).toBeVisible();
-    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
     // Responder pide primero una opción. No pregunta la seguridad (D-087)
     expect(screen.getByRole('button', { name: t.simulator.answerAndFinish })).toBeDisabled();
     expect(screen.queryByRole('button', { name: t.simulator.confidence.sure })).toBeNull();

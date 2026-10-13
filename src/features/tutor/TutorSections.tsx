@@ -81,7 +81,7 @@ export function WeeklyReportCard({
     <Card aria-labelledby="informe-semana">
       <CardHeader className="mb-3">
         <CardTitle id="informe-semana" className="flex items-center gap-2 [&_svg]:size-5">
-          <Target aria-hidden className="text-primary" />
+          <Target aria-hidden className="text-primary-ink" />
           {text.title}
         </CardTitle>
         <CardDescription>{text.hint}</CardDescription>
@@ -97,7 +97,7 @@ export function WeeklyReportCard({
           <section aria-labelledby="informe-prioridades">
             <h3
               id="informe-prioridades"
-              className="mb-1.5 text-sm font-bold text-fg-muted uppercase"
+              className="mb-1.5 text-sm font-bold text-fg-muted"
             >
               {text.priorities}
             </h3>
@@ -109,7 +109,7 @@ export function WeeklyReportCard({
                   <li key={item.key} className="flex items-start gap-3">
                     <span
                       aria-hidden
-                      className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary"
+                      className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary-ink"
                     >
                       {index + 1}
                     </span>
@@ -128,7 +128,7 @@ export function WeeklyReportCard({
           </section>
           {report.habit ? (
             <section aria-labelledby="informe-habito">
-              <h3 id="informe-habito" className="mb-1.5 text-sm font-bold text-fg-muted uppercase">
+              <h3 id="informe-habito" className="mb-1.5 text-sm font-bold text-fg-muted">
                 {text.habit}
               </h3>
               <div className="flex items-start gap-3">
@@ -142,7 +142,7 @@ export function WeeklyReportCard({
           ) : null}
           {report.challenge ? (
             <section aria-labelledby="informe-reto">
-              <h3 id="informe-reto" className="mb-1.5 text-sm font-bold text-fg-muted uppercase">
+              <h3 id="informe-reto" className="mb-1.5 text-sm font-bold text-fg-muted">
                 {text.challenge}
               </h3>
               <div className="flex items-start gap-3">

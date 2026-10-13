@@ -18,7 +18,6 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
@@ -100,7 +99,7 @@ function ExamLoader({ session }: { session: ReadySession }) {
   if (!ready) {
     return (
       <>
-        <SessionHeader title={t.screens.exam.title} badges={<DemoContentLabel />} />
+        <SessionHeader title={t.screens.exam.title} />
         <LoadingState label={t.exam.loading} />
       </>
     );
@@ -111,7 +110,7 @@ function ExamLoader({ session }: { session: ReadySession }) {
 function NoActiveExam() {
   return (
     <>
-      <SessionHeader title={t.screens.exam.title} badges={<DemoContentLabel />} />
+      <SessionHeader title={t.screens.exam.title} />
       <Card>
         <CardHeader>
           <CardTitle>{t.exam.noActive}</CardTitle>
@@ -334,7 +333,6 @@ function ExamRunner({
             <span>{t.exam.answeredCount(answered, total)}</span>
           </>
         }
-        badges={<DemoContentLabel />}
         actions={
           <>
             <ExamTimer startedAtMs={state.startedAtMs} totalMs={state.totalMs} />

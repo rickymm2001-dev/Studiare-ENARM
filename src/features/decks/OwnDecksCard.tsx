@@ -22,7 +22,6 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import type { ReadySession } from '../shared/RequireSession';
 import { DeckEditorDialog } from './DeckEditorDialog';
 import { DeckOrganizer } from './DeckOrganizer';
@@ -111,12 +110,9 @@ export function OwnDecksCard({
           const manual = isEditableDeck(deck, session.user.id);
           return (
             <li key={deck.id} className="flex items-start gap-3">
-              <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+              <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
               <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
-                <span className="flex flex-wrap items-center gap-2 font-semibold">
-                  {deck.name}
-                  {deck.isDemo ? <DemoContentLabel /> : null}
-                </span>
+                <span className="flex flex-wrap items-center gap-2 font-semibold">{deck.name}</span>
                 {deck.parentId ? (
                   <span className="text-xs text-fg-muted">
                     {t.decks.inside(deckPath(decks, deck.parentId).join(' › '))}
@@ -206,7 +202,7 @@ export function OwnDecksCard({
           );
         })}
         <li className="flex items-start gap-3">
-          <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+          <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary-ink" />
           <form
             className="flex min-w-0 flex-1 flex-col gap-2"
             onSubmit={(event) => {

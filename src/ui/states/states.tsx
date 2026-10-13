@@ -39,7 +39,7 @@ function StateFrame({
         className={cn(
           'flex size-12 items-center justify-center rounded-full [&_svg]:size-6',
           tone === 'danger' && 'bg-danger-soft text-danger',
-          tone === 'info' && 'bg-primary-soft text-primary',
+          tone === 'info' && 'bg-primary-soft text-primary-ink',
           tone === 'neutral' && 'bg-muted text-fg-muted',
         )}
       >
@@ -206,7 +206,7 @@ export function CalibratingNote({
         className,
       )}
     >
-      <p className="flex flex-wrap items-center gap-x-2 text-primary">
+      <p className="flex flex-wrap items-center gap-x-2 text-primary-ink">
         <Gauge aria-hidden className="size-4 shrink-0" />
         <span className="font-semibold">{t.states.calibrating.title}</span>
         <span>

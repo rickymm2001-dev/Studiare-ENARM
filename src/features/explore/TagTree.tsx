@@ -61,7 +61,7 @@ export function TagTree({
                 }}
                 className={cn(
                   'flex min-h-8 min-w-0 flex-1 items-center justify-between gap-2 rounded-md px-2 text-left text-sm hover:bg-muted',
-                  isSelected && 'bg-primary-soft font-semibold text-primary',
+                  isSelected && 'bg-primary-soft font-semibold text-primary-ink',
                 )}
               >
                 <span className="truncate">{node.name}</span>

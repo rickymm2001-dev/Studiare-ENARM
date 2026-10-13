@@ -12,7 +12,6 @@ import { biasTips } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { Button } from '@/ui/components/button';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { useBankReady } from '../shared/useBankReady';
@@ -45,13 +44,7 @@ export function AiDraftsScreen() {
     return { artifacts, latest, assignments, decks, notes };
   }, [api.repos, bankReady]);
 
-  const header = (
-    <ScreenHeader
-      title={t.screens.aiDrafts.title}
-      description={text.hint}
-      badges={<DemoContentLabel />}
-    />
-  );
+  const header = <ScreenHeader title={t.screens.aiDrafts.title} description={text.hint} />;
   if (data === undefined || !bankReady || session.status !== 'ready') {
     return (
       <>

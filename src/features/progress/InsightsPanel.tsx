@@ -213,7 +213,7 @@ function InsightRow({ insight }: { insight: Insight }) {
     >
       <p>{body}</p>
       <p className="flex gap-1.5 rounded-md bg-muted p-2 [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0">
-        <Lightbulb aria-hidden className="text-primary" />
+        <Lightbulb aria-hidden className="text-primary-ink" />
         <span>
           <span className="sr-only">{text.whatToDo}. </span>
           {action}
@@ -254,7 +254,7 @@ function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   if (rows.length === 0) return null;
   return (
     <li>
-      <Row lead={<ListOrdered className="text-primary" />} title={text.profileTitle} tail={null}>
+      <Row lead={<ListOrdered className="text-primary-ink" />} title={text.profileTitle} tail={null}>
         <p className="text-fg-muted">{text.profileHint}</p>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (

@@ -48,7 +48,7 @@ export function LevelLadderDialog({
 
           <div className="flex flex-col gap-1">
             <ProgressBar
-              tone="gold"
+              tone="neutral"
               value={level.xpIntoLevel}
               max={level.xpForNext}
               label={text.toNextLevel(fmt(level.xpForNext - level.xpIntoLevel), level.level + 1)}

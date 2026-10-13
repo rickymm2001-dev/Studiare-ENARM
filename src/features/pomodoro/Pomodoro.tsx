@@ -35,7 +35,7 @@ export function PomodoroPill({ session }: { session: ReadySession }) {
         aria-label={t.pomodoro.show(formatClock(left), phaseName)}
         className="relative flex size-touch items-center justify-center rounded-full border border-line bg-surface shadow-card"
       >
-        <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary')} />
+        <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary-ink')} />
         {running ? (
           <span
             aria-hidden
@@ -70,7 +70,7 @@ export function PomodoroPill({ session }: { session: ReadySession }) {
         <span className="font-mono text-lg font-bold tabular-nums" aria-hidden>
           {formatClock(left)}
         </span>
-        <span className="text-[0.65rem] font-semibold tracking-wide text-fg-muted uppercase">
+        <span className="text-[0.65rem] font-semibold tracking-wide text-fg-muted">
           {phaseName}
         </span>
       </span>
@@ -151,7 +151,7 @@ export function PomodoroNotice({ session }: { session: ReadySession }) {
         isBreak ? 'border-cir/40 bg-cir-soft' : 'border-primary/30 bg-primary-soft',
       )}
     >
-      <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary')} />
+      <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary-ink')} />
       <p className="flex-1 font-medium">
         {message}. {isBreak ? t.pomodoro.breakTip : t.pomodoro.focusTip}
       </p>

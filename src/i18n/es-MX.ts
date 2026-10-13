@@ -356,8 +356,10 @@ export const t = {
   },
   offlineBanner: 'Sin conexión. Lo que ya está en este dispositivo sigue funcionando.',
   labels: {
-    demoContent: 'Demostración, no validado por médicos',
     simulatedData: 'Datos simulados',
+    // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)
+    demoVersion: 'Versión de demostración',
+    demoVersionHint: 'Las preguntas y los mazos son de muestra.',
   },
   theme: {
     legend: 'Tema visual',

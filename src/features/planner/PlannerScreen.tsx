@@ -250,8 +250,6 @@ function TodayCard({
               minutes(today.minutesPlanned),
               minutes(today.minutesAvailable),
             )}
-            tone="light"
-            onDark
             className="h-1.5"
           />
         </StatCell>
@@ -279,7 +277,7 @@ function TodayCard({
               key={row.key}
               className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-line p-3"
             >
-              <span aria-hidden className="text-primary [&_svg]:size-5">
+              <span aria-hidden className="text-primary-ink [&_svg]:size-5">
                 {row.icon}
               </span>
               <span className="min-w-0 flex-1 font-medium">{row.text}</span>

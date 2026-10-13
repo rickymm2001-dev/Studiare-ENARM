@@ -7,20 +7,19 @@ import type { AchievementCard } from './achievement';
 const SIZE = 1080;
 const MARGIN = 72;
 const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
-const DISPLAY = `"Bricolage Grotesque Variable", ${SANS}`;
+// Una sola familia, como en la app (B2 del plan del cambio)
+const DISPLAY = SANS;
 
-/** Paleta de marca de src/ui/tokens.css en su tono claro, con el oro y la racha aclarados para fondo oscuro */
+/** Paleta de src/ui/tokens.css, fija para que la imagen se vea igual con cualquier tema. Sin degradados ni dorado (B2, D-121) */
 const COLOR = {
-  top: '#0e5a6b',
-  bottom: '#093a46',
+  background: '#156082',
   ink: '#ffffff',
   soft: 'rgba(255, 255, 255, 0.82)',
   panel: 'rgba(255, 255, 255, 0.12)',
-  gold: '#f6d27a',
-  goldDeep: '#d9a441',
-  flame: '#ffc7a6',
-  sim: '#ece8fb',
-  simInk: '#45358a',
+  medal: '#ffffff',
+  medalInk: '#156082',
+  sim: '#eef0f2',
+  simInk: '#3f4b55',
 } as const;
 
 /** Escribe texto centrado y lo encoge hasta que quepa en el ancho dado */
@@ -84,10 +83,7 @@ function paint(ctx: CanvasRenderingContext2D, card: AchievementCard) {
   const text = t.party.share;
   const middle = SIZE / 2;
 
-  const background = ctx.createLinearGradient(0, 0, SIZE, SIZE);
-  background.addColorStop(0, COLOR.top);
-  background.addColorStop(1, COLOR.bottom);
-  ctx.fillStyle = background;
+  ctx.fillStyle = COLOR.background;
   ctx.fillRect(0, 0, SIZE, SIZE);
 
   ctx.textAlign = 'left';
@@ -96,25 +92,19 @@ function paint(ctx: CanvasRenderingContext2D, card: AchievementCard) {
   ctx.fillStyle = COLOR.soft;
   ctx.fillText(card.brand, MARGIN, 120);
 
-  // Medalla de oro con el nivel
-  const badge = ctx.createLinearGradient(middle - 190, 190, middle + 190, 570);
-  badge.addColorStop(0, COLOR.gold);
-  badge.addColorStop(1, COLOR.goldDeep);
-  ctx.fillStyle = badge;
+  // Medalla lisa con el nivel
+  ctx.fillStyle = COLOR.medal;
   ctx.beginPath();
   ctx.arc(middle, 380, 190, 0, Math.PI * 2);
   ctx.fill();
-  ctx.lineWidth = 10;
-  ctx.strokeStyle = COLOR.ink;
-  ctx.stroke();
-  centered(ctx, String(card.level), middle, 460, 800, 230, DISPLAY, COLOR.bottom, 280);
+  centered(ctx, String(card.level), middle, 460, 800, 230, DISPLAY, COLOR.medalInk, 280);
 
   centered(ctx, card.levelTitle, middle, 668, 800, 76, DISPLAY, COLOR.ink, SIZE - MARGIN * 2);
   centered(ctx, text.level(card.level), middle, 722, 500, 40, SANS, COLOR.soft, SIZE - MARGIN * 2);
 
   const half = (SIZE - MARGIN * 2 - 24) / 2;
-  panel(ctx, MARGIN, text.streakLabel, text.streakValue(card.streak), COLOR.flame);
-  panel(ctx, MARGIN + half + 24, text.xpLabel, card.weeklyXp.toLocaleString('es-MX'), COLOR.gold);
+  panel(ctx, MARGIN, text.streakLabel, text.streakValue(card.streak), COLOR.ink);
+  panel(ctx, MARGIN + half + 24, text.xpLabel, card.weeklyXp.toLocaleString('es-MX'), COLOR.ink);
 
   if (card.alias)
     centered(ctx, card.alias, middle, 976, 600, 40, SANS, COLOR.ink, SIZE - MARGIN * 2);

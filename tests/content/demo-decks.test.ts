@@ -27,7 +27,7 @@ describe('mazos de Paco en la demo (D-053)', () => {
     for (const deck of decks) {
       expect(deck.author).toBe('Paco');
       expect(deck.status).toBe('pending_physician_review');
-      expect(deck.description).toContain('Demostración');
+      expect(deck.description).not.toMatch(/no validado/);
     }
   });
 

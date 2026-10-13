@@ -19,7 +19,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SelectField } from '@/ui/components/field';
 import { Disclosure } from '@/ui/components/disclosure';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
@@ -179,10 +178,7 @@ function Setup({ session }: { session: ReadySession }) {
       </StatPanel>
       <Card aria-labelledby="practica-titulo">
         <CardHeader className="mb-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle id="practica-titulo">{t.simulator.setupTitle}</CardTitle>
-            <DemoContentLabel />
-          </div>
+          <CardTitle id="practica-titulo">{t.simulator.setupTitle}</CardTitle>
           <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-3">

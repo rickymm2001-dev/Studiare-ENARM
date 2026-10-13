@@ -106,8 +106,9 @@ export function CloudBridge() {
             return;
           }
           if (isLeaving()) return;
-          const userId = await linkCloudIdentity(api, identity);
+          const linked = await linkCloudIdentity(api, identity);
           if (stopped() || isLeaving()) return;
+          const { userId } = linked;
           signIn(userId);
           setRole(identity.role);
           setCloud({ status: 'linked', identity });
@@ -135,7 +136,10 @@ export function CloudBridge() {
           // que trae la app ahora. Una versión nueva se registra cuando la acepte (D-104)
           const accepted = await acceptedNoticeVersion(api, userId);
           if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
-          await pushLocalAccount(api, cloud, identity.authId, userId);
+          // En un dispositivo nuevo la foto de perfil de la nube baja antes de subir la cuenta (B2)
+          await pushLocalAccount(api, cloud, identity.authId, userId, {
+            pullPhoto: linked.created,
+          });
           if (stopped() || isLeaving()) return;
           if (syncing?.authId !== identity.authId) {
             syncing?.handle.stop();

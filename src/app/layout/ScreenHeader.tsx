@@ -42,10 +42,7 @@ export function ScreenHeader({
           <div className="flex min-w-0 items-center gap-0.5 sm:gap-1">
             <h1
               tabIndex={-1}
-              className={cn(
-                'text-xl font-extrabold text-fg outline-none sm:text-3xl',
-                inBar && 'lg:truncate lg:text-2xl xl:text-3xl',
-              )}
+              className={cn('screen-title text-fg outline-none', inBar && 'lg:truncate')}
             >
               {title}
             </h1>

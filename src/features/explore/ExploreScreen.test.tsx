@@ -309,19 +309,6 @@ describe('pantalla de Explorar', () => {
     expect(screen.queryByRole('option', { name: /Mazo ajeno/ })).toBeNull();
   });
 
-  it('la etiqueta de demostración sale con tarjetas de demostración y no sin ellas', async () => {
-    const list = await openExplore();
-    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
-    const typing = userEvent.setup();
-    await typing.selectOptions(screen.getByRole('combobox', { name: t.explore.deck }), [
-      screen.getByRole('option', { name: /Nefrología/ }),
-    ]);
-    await waitFor(() => {
-      expect(screen.queryByText(t.labels.demoContent)).toBeNull();
-    });
-    expect(list).toBeDefined();
-  });
-
   it('abre una tarjeta para ver sus dos caras', async () => {
     const typing = userEvent.setup();
     const list = await openExplore();

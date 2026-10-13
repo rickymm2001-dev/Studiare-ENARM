@@ -96,7 +96,6 @@ export function AccountDataCard({
           <legend className="eyebrow mb-1 text-fg-muted">{t.account.avatarTitle}</legend>
           <AvatarPicker
             name={user.alias}
-            seed={user.id}
             value={details.avatar}
             onChange={(avatar) => {
               setDetails({ ...details, avatar });
