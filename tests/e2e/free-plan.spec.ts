@@ -1,0 +1,171 @@
+// Plan Gratis (B8 del plan del cambio, respuestas 18, 19 y 20, 4.3 y 4.25). En Gratis Party, subir
+// mazos, seguir mazos nuevos del catálogo y Apuntes llevan su candado con una vista previa y el botón
+// que lleva a Suscripción, que dice Ver planes hasta que exista la prueba de 7 días (B10). Comparte tu
+// semana y la tarjeta de referidos siguen abiertas. Con un plan de pago todo se abre, y al volver a
+// Gratis lo que el alumno ya tenía sigue a su alcance. Gratis contesta 20 preguntas al día con su
+// explicación después de contestar. Corre en teléfono y en computadora con los dos proyectos de
+// Playwright. Party en la nube con el plan del servidor está en tests/e2e/cloud/free-plan.spec.ts
+import { SCREENS } from '@/app/screens';
+import { t } from '@/i18n/es-MX';
+import { statValue, subscribeMonthly } from './support/b1';
+import {
+  expect,
+  expectNoHorizontalOverflow,
+  expectNoSeriousA11yViolations,
+  signUp,
+  test,
+} from './support/fixtures';
+
+const SMALL = 'Urgencias (Paco)';
+const BIG = 'Medicina interna (Paco)';
+const CLOSED_IN_FREE = ['outlines', 'deckCatalog', 'importDecks', 'party'] as const;
+
+test('en Gratis cada candado muestra su vista previa y su botón lleva a los planes', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+
+  // Party. Grupos, tabla, retos y duelos quedan detrás del candado. Comparte tu semana y los
+  // referidos siguen abiertos (4.3)
+  await page.goto(SCREENS.party.path);
+  const party = page.getByRole('region', { name: t.freePlan.party.title });
+  await expect(party).toBeVisible();
+  for (const point of t.freePlan.party.points) {
+    await expect(party.getByText(point)).toBeVisible();
+  }
+  await expect(party.getByRole('link', { name: t.billing.featureSeePlans })).toBeVisible();
+  await expect(page.getByRole('region', { name: t.b7.weekShare.title })).toBeVisible();
+  await expect(page.getByRole('region', { name: t.b7.referral.title })).toBeVisible();
+  await expect(page.getByRole('region', { name: t.party.createTitle })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: t.partyCloud.needsCloud.title })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+  await expectNoSeriousA11yViolations(page);
+
+  // Inicio. El reto de Party lleva el aviso corto del candado
+  await page.goto(SCREENS.home.path);
+  const widget = page.getByRole('region', { name: t.widgets.names.party_challenge });
+  await expect(widget.getByText(t.freePlan.widget)).toBeVisible();
+  await expect(widget.getByRole('link', { name: t.billing.featureSeePlans })).toBeVisible();
+
+  // Mazos. El catálogo queda como vista previa, sin seguir mazos nuevos, y subir mazos también
+  await page.goto(SCREENS.decks.path);
+  const catalog = page.getByRole('region', { name: t.decks.preloadedTitle });
+  await expect(catalog.getByText(t.freePlan.catalog.notice)).toBeVisible({ timeout: 30_000 });
+  const small = catalog.getByRole('listitem').filter({ hasText: SMALL });
+  await expect(small.getByText(t.freePlan.catalog.rowLocked)).toBeVisible({ timeout: 30_000 });
+  await expect(catalog.getByRole('button', { name: t.decks.follow })).toHaveCount(0);
+  const upload = page.getByRole('region', { name: t.freePlan.importDecks.title });
+  await expect(upload).toBeVisible();
+  for (const point of t.freePlan.importDecks.points) {
+    await expect(upload.getByText(point)).toBeVisible();
+  }
+  await expect(page.getByLabel(t.importer.fileLabel)).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+  await expectNoSeriousA11yViolations(page);
+
+  // Apuntes sigue con su candado (B6)
+  await page.goto(SCREENS.outlines.path);
+  await expect(page.getByRole('region', { name: t.outlines.locked.title })).toBeVisible();
+
+  // La tabla de planes dice lo mismo que los candados
+  await page.goto(SCREENS.subscription.path);
+  const free = page.getByRole('region', { name: t.billing.plans.free, exact: true });
+  const monthly = page.getByRole('region', { name: t.billing.plans.monthly, exact: true });
+  for (const lock of CLOSED_IN_FREE) {
+    const label = t.billing.access[lock];
+    await expect(free.getByRole('listitem').filter({ hasText: label })).toContainText(
+      t.billing.notIncluded,
+    );
+    await expect(monthly.getByRole('listitem').filter({ hasText: label })).not.toContainText(
+      t.billing.notIncluded,
+    );
+  }
+
+  // El botón del candado lleva a Suscripción
+  await page.goto(SCREENS.party.path);
+  await party.getByRole('link', { name: t.billing.featureSeePlans }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.subscription.path}$`));
+});
+
+test('con un plan de pago se abren Party, el catálogo y subir mazos, y al volver a Gratis lo seguido se queda', async ({
+  page,
+}) => {
+  test.setTimeout(240_000);
+  await signUp(page);
+  await subscribeMonthly(page);
+
+  // Party. Sin la nube lo que falta ya no es el plan
+  await page.goto(SCREENS.party.path);
+  await expect(page.getByRole('region', { name: t.partyCloud.needsCloud.title })).toBeVisible();
+  await expect(page.getByRole('region', { name: t.freePlan.party.title })).toHaveCount(0);
+  await page.goto(SCREENS.home.path);
+  await expect(
+    page
+      .getByRole('region', { name: t.widgets.names.party_challenge })
+      .getByText(t.widgets.party.empty),
+  ).toBeVisible();
+
+  // Mazos. Se sube un mazo y se sigue el mazo chico del catálogo
+  await page.goto(SCREENS.decks.path);
+  await expect(page.getByRole('heading', { name: t.importer.title })).toBeVisible();
+  await expect(page.getByText(t.freePlan.catalog.notice)).toHaveCount(0);
+  const small = page.getByRole('listitem').filter({ hasText: SMALL });
+  await small.getByRole('button', { name: t.decks.follow }).click();
+  await expect(small.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
+    timeout: 60_000,
+  });
+
+  // Vuelve a Gratis con la cancelación simulada
+  await page.goto(SCREENS.subscription.path);
+  await page.getByRole('button', { name: t.billing.cancel }).click();
+  await expect(page.getByText(t.billing.canceled)).toBeVisible();
+
+  // Lo que ya tenía se queda. El mazo que sigue se deja y se vuelve a seguir, porque está en el
+  // dispositivo. Los mazos nuevos y subir mazos vuelven a su candado
+  await page.goto(SCREENS.decks.path);
+  await expect(page.getByText(t.freePlan.catalog.notice)).toBeVisible({ timeout: 30_000 });
+  await expect(small.getByRole('button', { name: t.decks.unfollow })).toBeVisible();
+  const big = page.getByRole('listitem').filter({ hasText: BIG });
+  await expect(big.getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
+  await small.getByRole('button', { name: t.decks.unfollow }).click();
+  await small.getByRole('button', { name: t.decks.follow }).click();
+  await expect(small.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
+    timeout: 60_000,
+  });
+  await expect(page.getByRole('region', { name: t.freePlan.importDecks.title })).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+
+  // Sus tarjetas siguen en Repasar y Party vuelve a su candado
+  await page.goto(SCREENS.review.path);
+  await expect(page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ })).toBeVisible({
+    timeout: 30_000,
+  });
+  await page.goto(SCREENS.party.path);
+  await expect(page.getByRole('region', { name: t.freePlan.party.title })).toBeVisible();
+});
+
+test('en Gratis hay 20 preguntas al día y la explicación sale después de contestar', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await signUp(page);
+  await page.goto(SCREENS.simulatorSetup.path);
+  // Respuesta 18. 20 preguntas al día
+  await expect(statValue(page, t.simulator.stats.label, t.simulator.stats.today)).toHaveText('20', {
+    timeout: 60_000,
+  });
+
+  // Respuesta 19. Con la retroalimentación después de cada pregunta, la explicación sale al contestar
+  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
+  await setup.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  await setup.getByRole('combobox', { name: t.settings.practiceFeedback }).selectOption('each');
+  const start = setup.getByRole('button', { name: t.simulator.start });
+  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await start.click();
+  await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible();
+  await page.getByRole('radio').first().check();
+  await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
+  await expect(page.getByRole('region', { name: t.simulator.explanation })).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+});

@@ -2,11 +2,14 @@
 // sigue el mazo más chico para que la prueba sea rápida
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
+  // Seguir mazos del catálogo es de los planes de pago (4.25, B8)
+  await subscribeMonthly(page);
 
   // Sin mazos todavía, Repasar manda a Mazos
   await page.goto(SCREENS.review.path);

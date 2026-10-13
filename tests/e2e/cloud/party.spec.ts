@@ -18,6 +18,15 @@ const text = t.partyCloud;
 const PREFERENCES_KEY = 'enarm.preferences.v1';
 const VERDICTS = new RegExp(Object.values(t.party.duel.verdicts).map(escapeRegExp).join('|'));
 
+/** Party es de los planes de pago (B8). El mensual vigente, como lo deja un aviso de pago ya aplicado */
+const PAID_MONTH = () =>
+  ({
+    plan: 'monthly',
+    status: 'active',
+    provider: 'stripe',
+    currentPeriodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
+  }) as const;
+
 /** Da el permiso de Party, que empieza apagado (4.27), y espera a que aparezcan los grupos */
 async function allowParty(page: Page): Promise<void> {
   const consent = page.getByRole('region', { name: text.consent.title });
@@ -49,11 +58,19 @@ test('dos cuentas forman un grupo, se retan a un duelo y ven la tabla', async ({
   consoleErrors,
 }) => {
   test.setTimeout(360_000);
+  // Los dos ya pagaron el mensual. El plan lo da el servidor y la app lo refleja al conectar
+  for (const [email, alias] of [
+    [ANA, 'Ana'],
+    [BRUNO, 'Bruno'],
+  ] as const) {
+    cloud.createUser({ email, alias });
+    cloud.setSubscription(email, PAID_MONTH());
+  }
 
   // Ana crea el grupo y ve su código
   await enterWithLink(page, cloud, ANA, 'Ana');
   await page.goto(SCREENS.party.path);
-  await expect(page.getByText(text.privacy)).toBeVisible();
+  await expect(page.getByText(text.privacy)).toBeVisible({ timeout: 20_000 });
   await allowParty(page);
   const create = page.getByRole('region', { name: t.party.createTitle });
   await create.getByLabel(t.party.groupName).fill(GROUP);

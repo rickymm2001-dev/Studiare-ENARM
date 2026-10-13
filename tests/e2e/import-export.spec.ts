@@ -13,6 +13,7 @@ import {
   type ApkgFixture,
 } from '@/data/import/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const apkgFixture: ApkgFixture = {
@@ -64,6 +65,8 @@ test('un CSV se previsualiza, exige confirmar derechos, se guarda y no se duplic
   page,
 }) => {
   await signUp(page);
+  // Subir mazos es de los planes de pago (respuesta 20, B8)
+  await subscribeMonthly(page);
   await page.goto(SCREENS.decks.path);
   await expect(page.getByRole('heading', { name: t.importer.title })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
@@ -105,6 +108,8 @@ test('un paquete de Anki del formato viejo y otro del nuevo se leen con el motor
 }) => {
   test.setTimeout(120_000);
   await signUp(page);
+  // Subir mazos es de los planes de pago (respuesta 20, B8)
+  await subscribeMonthly(page);
   await page.goto(SCREENS.decks.path);
 
   await upload(page, 'viejo.apkg', await buildLegacyApkg(apkgFixture));
@@ -135,6 +140,8 @@ test('una hoja de Excel se importa y un archivo que no se puede leer avisa con c
   page,
 }) => {
   await signUp(page);
+  // Subir mazos es de los planes de pago (respuesta 20, B8)
+  await subscribeMonthly(page);
   await page.goto(SCREENS.decks.path);
   await upload(
     page,
@@ -156,6 +163,8 @@ test('una hoja de Excel se importa y un archivo que no se puede leer avisa con c
 
 test('exportar descarga un CSV con encabezados y un identificador por nota', async ({ page }) => {
   await signUp(page);
+  // Subir mazos es de los planes de pago (respuesta 20, B8)
+  await subscribeMonthly(page);
   await page.goto(SCREENS.decks.path);
   // Sin mazos propios no hay nada que exportar
   await expect(page.getByRole('heading', { name: t.exporter.title })).toHaveCount(0);

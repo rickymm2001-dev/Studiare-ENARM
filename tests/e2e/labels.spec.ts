@@ -5,7 +5,7 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { generateDemo, switchDatabase } from './support/b1';
+import { generateDemo, subscribeMonthly, switchDatabase } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -129,8 +129,10 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
 
 test('los compañeros y los duelos de Party van marcados como simulados', async ({ page }) => {
   test.setTimeout(300_000);
-  // Los compañeros simulados solo existen en la base de demostración (B7 del plan del cambio)
+  // Los compañeros simulados solo existen en la base de demostración (B7 del plan del cambio). Party
+  // es de los planes de pago (B8), así que el alumno de demostración contrata el mensual simulado
   await generateDemo(page);
+  await subscribeMonthly(page);
   await page.goto(SCREENS.party.path);
   await page.getByLabel(t.party.groupName).fill('Guardia de los lunes');
   await page.getByRole('button', { name: t.party.create }).click();
