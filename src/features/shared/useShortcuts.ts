@@ -1,7 +1,7 @@
 // Atajos de teclado de una pantalla de estudio (D-087). Con el teclado el alumno no mueve el ratón
 // entre las opciones y el botón de responder. Los atajos no se activan al escribir en un campo, con
-// Ctrl, Alt o Cmd, ni cuando el foco está en un botón y la tecla es Enter o Espacio, que ya lo
-// activan por sí solas.
+// Ctrl, Alt o Cmd, cuando el foco está en un botón y la tecla es Enter o Espacio, que ya lo
+// activan por sí solas, ni dentro de un diálogo abierto encima de la pantalla, como Crear tarjeta.
 import { useEffect, useEffectEvent } from 'react';
 
 /** Nombre de la tecla para los atajos. Letras en minúscula y Mayús con la letra como shift+a */
@@ -18,6 +18,8 @@ const EDITABLE =
 function ignoresKey(target: EventTarget | null, key: string): boolean {
   if (!(target instanceof HTMLElement)) return false;
   if (target.closest(EDITABLE)) return true;
+  // Un diálogo encima de la pantalla tiene sus propias teclas. Enter ahí no pasa a la pregunta
+  if (target.closest('[role="dialog"], [role="alertdialog"]')) return true;
   const pressesButton = key === 'enter' || key === 'space';
   return pressesButton && Boolean(target.closest('button, a[href], summary'));
 }

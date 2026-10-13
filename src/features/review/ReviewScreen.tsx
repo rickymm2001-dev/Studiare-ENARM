@@ -570,7 +570,7 @@ function ReviewSession({
   };
 
   // Todo el repaso con el teclado (D-087). Espacio o Enter muestra la respuesta, 1 a 4 califican y
-  // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 8 eligen la causa y Espacio omite
+  // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 7 eligen el motivo y Espacio omite
   // Datos de la sanguijuela que se está atendiendo. Solo las tarjetas del propio alumno se editan
   const leechCard = leech ? cardById.get(leech.cardId) : undefined;
   const leechNote = leechCard ? noteById.get(leechCard.noteId) : undefined;

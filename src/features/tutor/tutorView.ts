@@ -1,10 +1,12 @@
 // Lo que muestra la pantalla del tutor (11), calculado de la bitácora y el banco. Junta los
-// contextos de error, las hipótesis, el informe semanal y los consejos por sesgo. Todo se deriva
-// cada vez que se abre, así que nunca queda desfasado de lo que el alumno hizo. Sin React ni Dexie.
+// contextos de error, las hipótesis, el informe semanal y los consejos por sesgo, cada uno con el
+// motivo que más marca el alumno en esa trampa (B5). Todo se deriva cada vez que se abre, así que
+// nunca queda desfasado de lo que el alumno hizo. Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
 import type { Option, Question } from '@/data/schemas/bank';
 import type { AppEvent } from '@/data/schemas/events';
 import { topicTaxonomy } from '@/demo/content';
+import { errorMotives, motivesByAttempt, topMotive, type ErrorMotive } from '@/engines/errorCauses';
 import { buildInsights } from '@/engines/insights';
 import { analyzeTopics, type TopicResponse } from '@/engines/topics';
 import { biasByKey, biasCalibration, tipByKey, weakTopicsFrom } from '../progress/focusItems';
@@ -23,6 +25,11 @@ export interface BiasTip {
   reviewed?: boolean;
   /** Las preguntas más recientes donde el alumno cayó en esta trampa, hasta 3 */
   examples: readonly string[];
+  /**
+   * El motivo que más marcó en los errores con esta trampa, con cuántas veces y de cuántos errores
+   * con motivo (B5). null o ausente si no marcó ninguno
+   */
+  motive?: { motive: ErrorMotive; count: number; total: number } | null;
 }
 
 export interface TutorView {
@@ -57,6 +64,38 @@ export interface TutorViewInput {
 }
 
 const BIAS_EXAMPLES = 3;
+
+/**
+ * Por trampa, el motivo que más marcó en los errores donde eligió una opción con esa trampa. Cada
+ * error cuenta una vez con su último motivo, y las causas de antes se leen con la tabla de 4.23
+ */
+export function biasMotives(
+  events: readonly AppEvent[],
+  bank: BankLookup,
+): Map<string, NonNullable<BiasTip['motive']>> {
+  const motiveOf = motivesByAttempt(
+    errorMotives(events, {
+      aliases: (id) => {
+        const stable = bank.questions.get(id)?.questionId;
+        return stable ? [stable] : [];
+      },
+    }),
+  );
+  const byTag = new Map<string, ErrorMotive[]>();
+  for (const event of events) {
+    if (event.type !== 'question_answered' || event.payload.correct) continue;
+    const tag = bank.options.get(event.payload.optionVersionId)?.biasTag;
+    const motive = motiveOf.get(event.id);
+    if (!tag || !motive) continue;
+    byTag.set(tag, [...(byTag.get(tag) ?? []), motive]);
+  }
+  return new Map(
+    [...byTag.entries()].flatMap(([tag, motives]) => {
+      const top = topMotive(motives);
+      return top ? [[tag, top] as const] : [];
+    }),
+  );
+}
 
 /** Por trampa, las preguntas más recientes donde el alumno falló eligiendo una opción con esa trampa */
 function biasExamples(events: readonly AppEvent[], bank: BankLookup): Map<string, string[]> {
@@ -147,6 +186,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
   );
 
   const examplesByTag = biasExamples(events, bank);
+  const motivesByTag = biasMotives(events, bank);
   const biasTips = insightReport.insights.flatMap((insight): BiasTip[] => {
     if (!insight.id.startsWith('bias:') || insight.state.kind !== 'ready') return [];
     if (insight.state.level === 'strength') return [];
@@ -158,6 +198,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
         tip: tipByKey.get(tag) ?? '',
         level: insight.state.level,
         examples: examplesByTag.get(tag) ?? [],
+        motive: motivesByTag.get(tag) ?? null,
       },
     ];
   });

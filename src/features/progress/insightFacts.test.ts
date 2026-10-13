@@ -131,7 +131,8 @@ describe('buildInsightInput', () => {
       changes: [{ fromCorrect: true, toCorrect: false }],
       misread: true,
     });
-    expect(result.causes).toEqual(['misread']);
+    // Leí mal, una causa de antes, se lee como Malinterpretación con la tabla de 4.23
+    expect(result.causes).toEqual(['misinterpretation']);
     expect(result.studyDays).toEqual(['2026-09-01']);
     expect(result.daysSinceStart).toBe(9);
   });
@@ -180,5 +181,57 @@ describe('buildInsightInput', () => {
       thresholds: DEFAULT_THRESHOLDS,
     });
     expect(result.answers.map((item) => item.misread)).toEqual([false, true]);
+  });
+
+  it('cada error cuenta una vez con el último motivo que marcó (B5)', () => {
+    const answer = (id: string, minute: number) => ({
+      ...base,
+      id,
+      at: at(minute),
+      type: 'question_answered',
+      payload: {
+        questionVersionId: 'q1',
+        optionVersionId: 'o2',
+        correct: false,
+        confidence: null,
+        msToAnswer: 90_000,
+        changeCount: 0,
+        highlightEnabled: false,
+      },
+    });
+    const motive = (id: string, minute: number, cause: string) => ({
+      ...base,
+      id,
+      at: at(minute),
+      type: 'cause_reported',
+      payload: { targetKind: 'question', targetId: 'q1', cause },
+    });
+    const events = [
+      answer('e1', 10),
+      // Primero dijo Conocimiento y luego lo cambió a Lectura superficial
+      motive('e2', 11, 'knowledge'),
+      motive('e3', 12, 'superficial_reading'),
+      // Otro error de la misma pregunta con una causa de antes que no dice cuál de los siete fue
+      answer('e4', 30),
+      motive('e5', 31, 'other'),
+    ] as unknown as AppEvent[];
+    const result = buildInsightInput({
+      events,
+      bank: {
+        questions: new Map([['q1', question]]),
+        options: new Map([
+          ['o1', option('o1', true, null)],
+          ['o2', option('o2', false, 'anchoring')],
+        ]),
+        cases: new Map(),
+      },
+      timeZone: 'America/Mexico_City',
+      today: '2026-09-20',
+      desiredRetention: 0.9,
+      thresholds: DEFAULT_THRESHOLDS,
+    });
+    expect(result.causes).toEqual(['superficial_reading']);
+    // Lectura superficial es de lectura, así que en una negativa cuenta como mala lectura
+    expect(result.answers.map((item) => item.misread)).toEqual([true, false]);
   });
 });

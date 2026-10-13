@@ -1,6 +1,6 @@
 // Campos de formulario accesibles con etiqueta visible, ayuda y error asociados (4.8). Con borde
 // fino y radio chico, como el resto de los controles (B2 del plan del cambio).
-import { useId, type ComponentProps, type ReactNode } from 'react';
+import { Fragment, useId, type ComponentProps, type ReactNode } from 'react';
 import { cn } from '@/ui/cn';
 
 const control =
@@ -90,6 +90,27 @@ export function TextAreaField({
   );
 }
 
+interface SelectOption {
+  value: string;
+  label: string;
+  /** Las opciones seguidas con el mismo grupo van juntas bajo su nombre, con optgroup */
+  group?: string;
+}
+
+/** Junta las opciones seguidas que comparten grupo. Las que no tienen grupo quedan sueltas */
+function groupOptions(options: readonly SelectOption[]) {
+  const blocks: { group: string | undefined; options: SelectOption[] }[] = [];
+  for (const option of options) {
+    const last = blocks.at(-1);
+    if (last && option.group !== undefined && last.group === option.group) {
+      last.options.push(option);
+    } else {
+      blocks.push({ group: option.group, options: [option] });
+    }
+  }
+  return blocks;
+}
+
 export function SelectField({
   label,
   hint,
@@ -99,18 +120,27 @@ export function SelectField({
   ...props
 }: FieldShell &
   Omit<ComponentProps<'select'>, 'className'> & {
-    options: readonly { value: string; label: string }[];
+    options: readonly SelectOption[];
   }) {
   const id = useId();
+  const optionOf = (option: SelectOption) => (
+    <option key={option.value} value={option.value}>
+      {option.label}
+    </option>
+  );
   return (
     <Shell id={id} label={label} hint={hint} error={error} className={className}>
       {(describedBy) => (
         <select id={id} className={control} aria-describedby={describedBy} {...props}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {groupOptions(options).map((block, index) =>
+            block.group === undefined ? (
+              <Fragment key={`sueltas-${String(index)}`}>{block.options.map(optionOf)}</Fragment>
+            ) : (
+              <optgroup key={`grupo-${String(index)}`} label={block.group}>
+                {block.options.map(optionOf)}
+              </optgroup>
+            ),
+          )}
         </select>
       )}
     </Shell>

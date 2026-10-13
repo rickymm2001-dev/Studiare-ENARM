@@ -72,8 +72,28 @@ export type ClueStrength = z.infer<typeof ClueStrengthSchema>;
 /** Botones de FSRS en español: Otra vez, Difícil, Bien y Fácil */
 export const FsrsRatingSchema = z.enum(['again', 'hard', 'good', 'easy']);
 
-/** Causas de error autorreportadas (13.3). Otra no lleva texto libre */
-export const ErrorCauseSchema = z.enum([
+/**
+ * Motivos de error que marca el alumno, los siete de Ricardo en su orden (B5, 4.23 del plan del
+ * cambio). Conocimiento, Tiempo, Malinterpretación, Lectura superficial, Ansiedad, Exceso de confianza
+ * y Fatiga. Es lo único que se escribe
+ */
+export const ERROR_MOTIVES = [
+  'knowledge',
+  'time',
+  'misinterpretation',
+  'superficial_reading',
+  'anxiety',
+  'overconfidence',
+  'fatigue',
+] as const;
+export const ErrorMotiveSchema = z.enum(ERROR_MOTIVES);
+export type ErrorMotive = z.infer<typeof ErrorMotiveSchema>;
+
+/**
+ * Las ocho causas que se guardaban antes de B5 (13.3). La bitácora las conserva sin editar y se leen
+ * con la tabla de equivalencias de src/engines/errorCauses.ts. Ya no se escriben
+ */
+export const LEGACY_ERROR_CAUSES = [
   'not_studied',
   'forgot',
   'confused',
@@ -82,7 +102,12 @@ export const ErrorCauseSchema = z.enum([
   'rushed_or_tired',
   'changed_answer',
   'other',
-]);
+] as const;
+export type LegacyErrorCause = (typeof LEGACY_ERROR_CAUSES)[number];
+
+/** Lo que puede traer un evento guardado, los motivos de hoy y las causas de antes */
+export const ErrorCauseSchema = z.enum([...ERROR_MOTIVES, ...LEGACY_ERROR_CAUSES]);
+export type StoredErrorCause = z.infer<typeof ErrorCauseSchema>;
 
 /** Reglas de olvido de 7.9 */
 export const ForgettingRuleSchema = z.enum([

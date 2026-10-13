@@ -49,6 +49,9 @@ export function OwnDecksCard({
   const [problem, setProblem] = useState<string | null>(null);
   // Los apuntes que viven en un mazo no se borran con él, pero sus tarjetas sí. Se avisa antes
   const outlines = useLiveData(() => api.repos.outlines.list(), [api.repos]);
+  // Todos los mazos, para nombrar el padre de uno propio que cuelga de un precargado, como la capa
+  // del alumno donde quedan sus tarjetas en ese mazo (B5, 4.16 del plan del cambio)
+  const allDecks = useLiveData(() => api.repos.decks.list(), [api.repos]);
   const outlinesIn = (deckId: string) => {
     const doomed = descendantIds(decks, deckId);
     return (outlines ?? []).filter(
@@ -115,7 +118,7 @@ export function OwnDecksCard({
                 <span className="flex flex-wrap items-center gap-2 font-semibold">{deck.name}</span>
                 {deck.parentId ? (
                   <span className="text-xs text-fg-muted">
-                    {t.decks.inside(deckPath(decks, deck.parentId).join(' › '))}
+                    {t.decks.inside(deckPath(allDecks ?? decks, deck.parentId).join(' › '))}
                   </span>
                 ) : null}
                 <span className="text-sm text-fg-muted">
