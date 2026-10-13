@@ -156,7 +156,7 @@ function ExamResults({ session }: { session: ReadySession }) {
           <CardDescription>{t.examResults.readBody}</CardDescription>
         </CardHeader>
       </Card>
-      <ExamReview state={state} bundles={bundles} />
+      <ExamReview state={state} bundles={bundles} session={session} />
       <div className="flex flex-wrap gap-2">
         <Button asChild>
           <Link to={screenPath('simulatorSetup')}>{t.examResults.anotherExam}</Link>

@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { cardSearchText } from './cardSearch';
 import { examText } from './exam';
+import { examReviewText } from './examReview';
 import { featureText } from './features';
 import { outlineText } from './outlines';
 import { qualityText } from './quality';
@@ -30,7 +31,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   review: {
     title: 'Repasar',
     description:
-      'Repaso de tarjetas con repetición espaciada. Marcas tu confianza, calificas y anotas la causa si fallas.',
+      'Repaso de tarjetas con repetición espaciada. Marcas tu confianza, calificas y anotas el motivo si fallas.',
   },
   question: {
     title: 'Pregunta',
@@ -39,7 +40,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   feedback: {
     title: 'Retroalimentación',
-    description: 'Explicación, por qué atrae la opción que elegiste y la causa del error.',
+    description:
+      'Explicación, por qué atrae la opción que elegiste, el motivo del error y la tarjeta que puedes crear.',
   },
   sessionSummary: {
     title: 'Resumen de sesión',
@@ -57,7 +59,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   examResults: {
     title: 'Resultados del examen',
-    description: 'Resultados por rama, estructura y trampa. Tus errores pasan al repaso.',
+    description:
+      'Resultados por rama, estructura y trampa. Tus errores pasan al repaso y cada pregunta se puede volver tarjeta.',
   },
   progress: {
     title: 'Progreso',
@@ -164,6 +167,7 @@ export const t = {
   ...vocabularyText,
   ...cardSearchText,
   weekPlan: weekPlanText,
+  examReview: examReviewText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',

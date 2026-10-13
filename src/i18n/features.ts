@@ -1,7 +1,7 @@
 // Textos de las pantallas del alumno de la Fase C, en español de México con trato de tú (4.9).
 // Se integran en t desde es-MX.ts.
 import { deviceLimitText } from './device';
-import { insightText } from './insights';
+import { causeNames, insightText } from './insights';
 import { legalText } from './legal';
 
 export const branchNames: Record<string, string> = {
@@ -1046,16 +1046,8 @@ export const featureText = {
     hours: (n: number) => `${n} h`,
     days: (n: number) => (n === 1 ? '1 día' : `${n} días`),
     causeQuestion: '¿Por qué crees que fallaste?',
-    causes: {
-      not_studied: 'No lo había estudiado',
-      forgot: 'Lo olvidé',
-      confused: 'Lo confundí con otra cosa',
-      misread: 'Leí mal',
-      missed_detail: 'Se me pasó un detalle',
-      rushed_or_tired: 'Fui muy rápido o estaba cansado',
-      changed_answer: 'Cambié mi respuesta',
-      other: 'Otra razón',
-    },
+    // Los siete motivos de Ricardo, en su orden (B5, 4.23 del plan del cambio)
+    causes: causeNames,
     skipCause: 'Omitir',
     // Atajos de teclado. Se ven solo donde hay teclado (D-087)
     keys: {
@@ -1063,7 +1055,7 @@ export const featureText = {
       show: 'muestra la respuesta',
       rate: 'califican',
       good: 'es Bien',
-      cause: 'eligen la causa',
+      cause: 'eligen el motivo',
       skip: 'omite',
       confidence: 'eligen tu seguridad',
     },
