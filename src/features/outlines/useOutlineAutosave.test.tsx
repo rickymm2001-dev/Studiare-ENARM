@@ -120,6 +120,102 @@ describe('useOutlineAutosave', () => {
     Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
   });
 
+  it('flush dice si quedó guardado o por qué no, y lo que falló sigue pendiente', async () => {
+    const failure = new Error('otra ventana');
+    const save = vi
+      .fn()
+      .mockRejectedValueOnce(failure)
+      .mockRejectedValueOnce(failure)
+      .mockResolvedValue(undefined);
+    const { result } = renderHook(() => useOutlineAutosave(save));
+    // Sin nada pendiente cuenta como guardado y no escribe
+    await act(async () => {
+      expect(await result.current.flush()).toEqual({ saved: true });
+    });
+    expect(save).not.toHaveBeenCalled();
+    act(() => {
+      result.current.schedule(payload('uno'));
+    });
+    await act(async () => {
+      expect(await result.current.flush()).toEqual({ saved: false, error: failure });
+    });
+    // El siguiente flush lo vuelve a intentar con lo mismo
+    await act(async () => {
+      expect(await result.current.flush()).toEqual({ saved: false, error: failure });
+    });
+    expect(save).toHaveBeenLastCalledWith(payload('uno'));
+    await act(async () => {
+      expect(await result.current.flush()).toEqual({ saved: true });
+    });
+    expect(save).toHaveBeenCalledTimes(3);
+    expect(result.current.status).toBe('saved');
+  });
+
+  it('flushThen corre después de guardar lo pendiente y ningún guardado se cruza con él', async () => {
+    const order: string[] = [];
+    const save = vi.fn((next: { title: string }) => {
+      order.push(`guardar ${next.title}`);
+      return Promise.resolve();
+    });
+    const { result } = renderHook(() => useOutlineAutosave(save));
+    act(() => {
+      result.current.schedule(payload('uno', 'antes'));
+    });
+    let release: (() => void) | undefined;
+    let outcome: Promise<string> | undefined;
+    act(() => {
+      outcome = result.current.flushThen(async (flushed) => {
+        order.push(`mazo con ${String(flushed.saved)}`);
+        await new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        order.push('mazo listo');
+        return 'hecho';
+      });
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    // Mientras el mazo escribe se vence el plazo de otro cambio, que espera su turno
+    act(() => {
+      result.current.schedule(payload('dos', 'después'));
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(AUTOSAVE_DELAY_MS);
+    });
+    expect(order).toEqual(['guardar antes', 'mazo con true']);
+    await act(async () => {
+      release?.();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    expect(await outcome).toBe('hecho');
+    expect(order).toEqual(['guardar antes', 'mazo con true', 'mazo listo', 'guardar después']);
+  });
+
+  it('flushThen pasa la falla del guardado y si su trabajo falla la fila sigue', async () => {
+    const failure = new Error('otra ventana');
+    const save = vi.fn().mockRejectedValueOnce(failure).mockResolvedValue(undefined);
+    const { result } = renderHook(() => useOutlineAutosave(save));
+    act(() => {
+      result.current.schedule(payload('uno'));
+    });
+    const seen = vi.fn();
+    await act(async () => {
+      await expect(
+        result.current.flushThen((flushed) => {
+          seen(flushed);
+          return Promise.reject(new Error('no se pudo'));
+        }),
+      ).rejects.toThrow('no se pudo');
+    });
+    expect(seen).toHaveBeenCalledWith({ saved: false, error: failure });
+    // Lo pendiente se guarda con el siguiente flush
+    await act(async () => {
+      expect(await result.current.flush()).toEqual({ saved: true });
+    });
+    expect(save).toHaveBeenCalledTimes(2);
+  });
+
   it('guarda por qué falló el último guardado y lo limpia cuando uno sale bien', async () => {
     const failure = new RangeError('pasa de un tope');
     const save = vi.fn().mockRejectedValueOnce(failure).mockResolvedValue(undefined);

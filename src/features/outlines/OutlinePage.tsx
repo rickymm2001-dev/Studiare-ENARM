@@ -40,7 +40,7 @@ import { CheatSheet } from './CheatSheet';
 import { lineBadge } from './lineBadge';
 import { OutlineAiCards } from './OutlineAiCards';
 import { OutlineLinks } from './OutlineLinks';
-import { OutlineSettings } from './OutlineSettings';
+import { OutlineSettings, type SettingsResult } from './OutlineSettings';
 import { OutlineStructure } from './OutlineStructure';
 import { useOutlineAutosave, type SaveStatus } from './useOutlineAutosave';
 
@@ -93,9 +93,9 @@ export function OutlinePage({
   }, []);
 
   // La fecha del apunte que esta ventana tiene abierto. Si otra ventana lo guardó después, guardar
-  // aquí lo pisaría, así que el guardado avisa en lugar de escribir
+  // aquí lo pisaría, así que el guardado avisa en lugar de escribir. Lo mismo el mazo y el tema
   const baseUpdatedAt = useRef(outline.updatedAt);
-  const { status, error, schedule, flush } = useOutlineAutosave(async (payload) => {
+  const { status, error, schedule, flush, flushThen } = useOutlineAutosave(async (payload) => {
     const saved = await saveOutline(api, session.user, {
       outlineId: outline.id,
       title: payload.title,
@@ -104,7 +104,10 @@ export function OutlinePage({
     });
     baseUpdatedAt.current = saved.outline.updatedAt;
   });
-  const conflict = error instanceof OutlineConflictError;
+  // El mazo y el tema no se guardaron porque otra ventana cambió el apunte. Sale el mismo aviso
+  // que cuando choca el guardado del editor
+  const [settingsConflict, setSettingsConflict] = useState(false);
+  const conflict = error instanceof OutlineConflictError || settingsConflict;
 
   const deferredNodes = useDeferredValue(nodes);
   const plan = useMemo(() => planCards(deferredNodes), [deferredNodes]);
@@ -143,23 +146,36 @@ export function OutlinePage({
     if (clean !== '') schedule({ nodes, title: clean });
   };
 
-  const saveSettings = async (choice: OutlineDeckChoice, subject: OutlineSubject | null) => {
+  const saveSettings = async (
+    choice: OutlineDeckChoice,
+    subject: OutlineSubject | null,
+  ): Promise<SettingsResult> => {
     setBusy(true);
     setProblem(null);
     try {
-      // Primero se guarda lo pendiente, así el cambio de mazo y tema ve lo último que escribiste
-      await flush();
-      const updated = await updateOutlineSettings(api, session.user, {
-        outlineId: outline.id,
-        deck: choice,
-        subject,
+      // Primero se guarda lo pendiente, así el cambio de mazo y tema ve lo último que escribiste. Va
+      // en la fila del guardado automático, así ninguno de los dos pisa la fecha que espera el otro
+      await flushThen(async (flushed) => {
+        // Lo pendiente chocó con otra ventana. Seguir pisaría sus líneas en el siguiente guardado.
+        // Otra falla, como la del mazo borrado, sí sigue, porque elegir otro mazo la arregla
+        if (!flushed.saved && flushed.error instanceof OutlineConflictError) throw flushed.error;
+        const updated = await updateOutlineSettings(api, session.user, {
+          outlineId: outline.id,
+          deck: choice,
+          subject,
+          expectedUpdatedAt: baseUpdatedAt.current,
+        });
+        baseUpdatedAt.current = updated.outline.updatedAt;
       });
-      baseUpdatedAt.current = updated.outline.updatedAt;
       // Si algo no se pudo guardar por el mazo, ahora sí se guarda
       void flush();
-      return true;
-    } catch {
-      return false;
+      return 'saved';
+    } catch (failure) {
+      if (failure instanceof OutlineConflictError) {
+        setSettingsConflict(true);
+        return 'conflict';
+      }
+      return 'failed';
     } finally {
       setBusy(false);
     }

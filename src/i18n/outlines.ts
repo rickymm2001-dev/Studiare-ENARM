@@ -47,7 +47,7 @@ export const outlineText = {
       purpose: 'Para qué es',
       purposes: { enarm: 'ENARM', class: 'Modo clase' },
       classHint:
-        'Para tomar apuntes rápido en clase, con una plantilla y una materia libre de la carrera. Las materias libres no cuentan en tus estadísticas del ENARM.',
+        'Para tomar apuntes rápido en clase, con una plantilla y una materia libre de la carrera. Las tarjetas de una materia libre no cuentan en tus estadísticas del ENARM por tema ni en Conócete. Sí cuentan en tu tiempo de estudio, tu racha y tu meta del día.',
       classTitleHint: 'Si lo dejas vacío, se llama como la materia y la fecha.',
       classTitle: (subject: string, date: string) => `${subject}, ${date}`,
       startClass: 'Empezar la clase',
@@ -108,7 +108,8 @@ export const outlineText = {
       freePlaceholder: 'Por ejemplo, Anatomía',
       enarmHint:
         'Sus tarjetas cuentan en tus estadísticas de ese tema y se pueden filtrar por tema en Repasar.',
-      freeHint: 'Una materia libre no cuenta en tus estadísticas del ENARM.',
+      freeHint:
+        'Sus tarjetas no cuentan en tus estadísticas del ENARM por tema ni en Conócete. Sí cuentan en tu tiempo de estudio, tu racha y tu meta del día.',
       enarmRequired: 'Elige la rama y el tema, o cambia a Sin tema.',
       freeRequired: 'Escribe el nombre de la materia.',
       shownNone: 'Sin tema',
@@ -127,7 +128,7 @@ export const outlineText = {
         'Propuestas de tarjetas con IA ancladas a lo que escribiste, como borrador',
         'Búsqueda en todos tus apuntes y esquema para saltar a una sección',
       ],
-      cta: 'Prueba 7 días gratis',
+      // El botón es el de todos los candados de Gratis (src/features/shared/lockedCta.ts)
       kept: 'Si ya tenías apuntes, siguen guardados y sus tarjetas siguen en Repasar.',
     },
 
@@ -203,6 +204,8 @@ export const outlineText = {
       saving: 'Guardando…',
       saved: 'Listo. Las tarjetas del apunte ya van a ese mazo y con ese tema.',
       failed: 'No se pudo guardar el mazo y el tema. Intenta de nuevo.',
+      conflict:
+        'No se guardaron el mazo ni el tema porque el apunte cambió en otra ventana. Abre la versión nueva y vuelve a elegirlos.',
     },
 
     // Esquema del apunte para saltar a una sección (B6)

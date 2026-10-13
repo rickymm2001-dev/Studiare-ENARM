@@ -4,14 +4,16 @@
 // normales. ?linea=ID deja el cursor en esa línea, por ejemplo al abrir un resultado de la búsqueda,
 // y ?modo=clase abre el editor solo, para escribir rápido en clase (B6 del plan del cambio).
 //
-// En el plan Gratis la pantalla conserva su título y muestra su vista previa con candado y la prueba
-// de 7 días (respuesta 20). El candado del servidor llega en B8 (ver src/config/billing.ts).
+// En el plan Gratis la pantalla conserva su título y muestra su vista previa con candado y el botón
+// de los candados de Gratis, que dice Prueba 7 días gratis cuando B10 prende la bandera freeTrial y
+// Ver planes mientras tanto (respuesta 20). El candado del servidor llega en B8 (ver
+// src/config/billing.ts).
 //
 // ANALÍTICA B15. Aquí se medirá el uso de Apuntes cuando llegue la analítica con permiso del bloque
 // B15 (respuesta 78). Solo conteos y claves, nunca el texto del alumno. Apunte creado, con su
 // plantilla y si es modo clase. Línea vuelta tarjeta con el botón, con su tipo. Mazo o tema cambiado.
 // Búsqueda hecha y resultado abierto. Salto desde el esquema. Tarjetas con IA propuestas, aceptadas,
-// editadas y descartadas. Vista previa de Gratis vista y su botón de prueba tocado.
+// editadas y descartadas. Vista previa de Gratis vista y su botón tocado.
 import { Link, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';

@@ -1,7 +1,7 @@
 // Tarjetas con IA desde un apunte, en modo simulado (B6 del plan del cambio, D-085). Cada propuesta
 // se ancla a la frase literal de una línea del apunte, llega como borrador y se acepta o se descarta
-// una por una. Lo aceptado va al mazo del apunte con su tema y la sincronización del apunte no lo
-// retira.
+// una por una. Lo aceptado va al mazo del apunte con su tema, la sincronización del apunte no lo
+// retira y sigue al apunte cuando cambian su mazo o su tema.
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { simulatedGenerator, type CardGenerator } from '../../ai/flashcards';
@@ -9,9 +9,10 @@ import { generateOutlineCards } from '../../ai/outlineCards';
 import type { OutlineNode } from '../../engines/outline';
 import { isAiNote, isLive } from '../schemas/decks';
 import { makeUser, newId, testApi } from '../testing/fixtures';
-import { AI_TAG, recordGeneration } from './aiCards';
+import { AI_TAG, recordGeneration, saveNoteAndSignals, saveProposals } from './aiCards';
+import { createManualDeck, draftOf } from './manualDecks';
 import { acceptOutlineProposal, discardOutlineProposal } from './outlineAi';
-import { createOutline, saveOutline } from './outlines';
+import { createOutline, freeSubjectCardIds, saveOutline, updateOutlineSettings } from './outlines';
 
 const disposers: (() => Promise<void>)[] = [];
 afterEach(async () => {
@@ -185,6 +186,111 @@ describe('aceptar o descartar una por una', () => {
     const events = await api.repos.events.query({ userId: user.id });
     expect(events.filter((event) => event.type === 'ai_artifact_rejected')).toHaveLength(1);
     expect((await api.repos.notes.list()).filter((note) => isAiNote(note))).toEqual([]);
+  });
+
+  it('lo aceptado sigue al apunte cuando cambian su mazo y su tema, sin quedar unido a una línea', async () => {
+    const { api, user } = setup();
+    const { outline, nodes } = await diabetesOutline(api, user);
+    const generation = await generateOutlineCards({ nodes, generator: simulatedGenerator });
+    const recorded = await recordGeneration(
+      api,
+      user,
+      'monthly',
+      generation.result,
+      outline.title,
+      NOW,
+    );
+    const [first] = generation.proposals;
+    if (!first) throw new Error('Falta la propuesta');
+    await acceptOutlineProposal(
+      api,
+      user,
+      { outlineId: outline.id, proposal: first, artifactId: recorded.artifactId, simulated: true },
+      later(1),
+    );
+    const [accepted] = (await api.repos.notes.list()).filter((note) => isAiNote(note));
+    if (!accepted) throw new Error('Falta la tarjeta aceptada');
+    expect(accepted).toMatchObject({ deckId: outline.deckId, sourceOutlineId: outline.id });
+    expect(accepted.outlineId ?? null).toBeNull();
+    expect(accepted.outlineNodeId ?? null).toBeNull();
+    // Una tarjeta con IA de un PDF no es del apunte y no lo sigue
+    const fromPdf = await saveProposals(
+      api,
+      user,
+      { proposals: [first], sourceTitle: 'Guía.pdf', artifactId: newId(), simulated: true },
+      later(2),
+    );
+    const [pdfNote] = (await api.repos.notes.list()).filter(
+      (note) => note.sourceTitle === 'Guía.pdf',
+    );
+
+    // El apunte pasa a un mazo de clases con una materia libre
+    const classes = await createManualDeck(api, user, { name: 'Clases' }, later(3));
+    const farmacology = { kind: 'free', name: 'Farmacología' } as const;
+    const moved = await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: classes.id }, subject: farmacology },
+      later(4),
+    );
+    expect(moved.aiNotes).toBe(1);
+    const after = await api.repos.notes.get(accepted.id);
+    expect(after).toMatchObject({ deckId: classes.id, sourceOutlineId: outline.id });
+    // Sin la etiqueta del tema de antes, con la nueva primero, y las demás se quedan
+    expect(after?.tags).toEqual(['Materia::Farmacología', AI_TAG, 'Tratamiento']);
+    const cards = await api.repos.cards.listAllForNotes([accepted.id]);
+    expect(cards.length).toBeGreaterThan(0);
+    expect(cards.every((card) => card.deckId === classes.id)).toBe(true);
+    // La del PDF sigue donde estaba
+    expect(await api.repos.notes.get(pdfNote?.id ?? '')).toMatchObject({
+      deckId: fromPdf.deckId,
+      tags: pdfNote?.tags,
+    });
+    // Ahora es de una materia libre, así que Conócete la deja fuera
+    const free = await freeSubjectCardIds(api);
+    expect(cards.every((card) => free.has(card.id))).toBe(true);
+
+    // Repetir no escribe nada
+    const before = await api.repos.notes.get(accepted.id);
+    const again = await updateOutlineSettings(
+      api,
+      user,
+      { outlineId: outline.id, deck: { kind: 'deck', deckId: classes.id }, subject: farmacology },
+      later(5),
+    );
+    expect(again.aiNotes).toBe(0);
+    expect(await api.repos.notes.get(accepted.id)).toEqual(before);
+
+    // Editarla a mano en su mazo no la separa del apunte, y el tema vuelve con el apunte
+    const draft = draftOf(accepted);
+    const edited = await saveNoteAndSignals(
+      api,
+      user,
+      {
+        deckId: classes.id,
+        noteId: accepted.id,
+        draft:
+          draft.kind === 'cloze' ? { ...draft, extra: 'Con comida' } : { ...draft, back: 'Sí' },
+      },
+      later(6),
+    );
+    expect(edited.sourceOutlineId).toBe(outline.id);
+    const back = await updateOutlineSettings(
+      api,
+      user,
+      {
+        outlineId: outline.id,
+        deck: { kind: 'deck', deckId: classes.id },
+        subject: { kind: 'enarm', branch: 'internal_medicine', topic: 'endocrinology' },
+      },
+      later(7),
+    );
+    expect(back.aiNotes).toBe(1);
+    expect((await api.repos.notes.get(accepted.id))?.tags).toEqual([
+      'topic:endocrinology',
+      AI_TAG,
+      'Tratamiento',
+    ]);
   });
 
   it('no deja aceptar en el apunte de otro alumno', async () => {

@@ -15,13 +15,18 @@
 //
 // Mazo y tema de cada apunte (B6 del plan del cambio). El alumno elige el mazo de sus tarjetas, uno
 // suyo o el automático que cuelga de Apuntes, y el tema, uno del ENARM o una materia libre. Todas las
-// tarjetas del apunte llevan la etiqueta de su tema (subjectTags). La de una materia libre nunca es
-// topic:, así esas tarjetas no cuentan en las estadísticas del ENARM.
+// tarjetas del apunte llevan la etiqueta de su tema (subjectTags), también las que propuso la IA desde
+// él (sourceOutlineId), que siguen al apunte sin ser de una línea. La de una materia libre nunca es
+// topic:, así esas tarjetas no cuentan en las estadísticas por tema del ENARM, y Conócete las deja
+// fuera con freeSubjectCardIds.
 import {
+  FREE_SUBJECT_TAG_PREFIX,
+  isFreeSubjectNote,
   normalizeTitle,
   planCards,
   sameSubject,
   subjectTags,
+  withSubjectTags,
   type OutlineNode,
   type OutlineSubject,
   type PlanIssue,
@@ -234,12 +239,13 @@ const contentKey = (note: Note) =>
     note.kind === 'cloze' ? [note.kind, note.text, note.extra] : [note.kind, note.front, note.back],
   );
 
+/** Si dos listas de etiquetas son iguales, en el mismo orden */
+const sameTags = (a: readonly string[], b: readonly string[]) =>
+  a.length === b.length && a.every((tag, index) => tag === b[index]);
+
 /** Si la nota ya está como la pide la línea. No cuentan las fechas ni el estado editorial */
 const sameNote = (a: Note, b: Note) =>
-  contentKey(a) === contentKey(b) &&
-  a.deckId === b.deckId &&
-  a.tags.length === b.tags.length &&
-  a.tags.every((tag, index) => tag === b.tags[index]);
+  contentKey(a) === contentKey(b) && a.deckId === b.deckId && sameTags(a.tags, b.tags);
 
 /** Con qué código avisar si el esquema de la tarjeta rechaza lo que el motor dio por bueno */
 const issueOf = (error: DraftError): PlanIssue['code'] =>
@@ -344,6 +350,47 @@ export async function syncOutlineCards(
   return result;
 }
 
+/**
+ * Pasa las tarjetas que la IA propuso desde el apunte (sourceOutlineId) a su mazo y a su tema (B6).
+ * Esas notas no son de una línea, así que syncOutlineCards no las toca. Las cartas van primero, también
+ * las de un borrado para que sigan al revivir, así un corte a la mitad nunca deja una nota en un mazo
+ * y sus cartas en otro, y repetir termina el trabajo. Lo que ya está bien no se escribe. Recorre las
+ * notas vivas porque el campo no tiene índice, así que corre al guardar el mazo y el tema y no en
+ * cada guardado del texto. Devuelve cuántas notas cambiaron
+ */
+async function followOutline(api: Api, outline: Outline, stamp: string): Promise<number> {
+  const changed: Note[] = [];
+  for (const note of await api.repos.notes.list()) {
+    if (note.sourceOutlineId !== outline.id) continue;
+    const tags = withSubjectTags(note.tags, outline.subject);
+    if (note.deckId === outline.deckId && sameTags(note.tags, tags)) continue;
+    changed.push({ ...note, deckId: outline.deckId, tags, updatedAt: stamp });
+  }
+  if (changed.length === 0) return 0;
+  const cards = await api.repos.cards.listAllForNotes(changed.map((note) => note.id));
+  const moving = cards.filter((card) => card.deckId !== outline.deckId);
+  if (moving.length > 0) {
+    await api.repos.cards.putMany(
+      moving.map((card) => ({ ...card, deckId: outline.deckId, updatedAt: stamp })),
+    );
+  }
+  await api.repos.notes.putMany(changed);
+  return changed.length;
+}
+
+/**
+ * Las cartas de las notas de una materia libre (B6), también las borradas, porque sus repasos de
+ * antes siguen en la bitácora. Conócete deja fuera sus repasos, como ya lo hacen las estadísticas por
+ * tema del ENARM. Busca con el índice de etiquetas, sin recorrer todas las notas
+ */
+export async function freeSubjectCardIds(api: Api): Promise<Set<string>> {
+  const notes = (await api.repos.notes.listAllByTagPrefix(FREE_SUBJECT_TAG_PREFIX)).filter((note) =>
+    isFreeSubjectNote(note.tags),
+  );
+  const cards = await api.repos.cards.listAllForNotes(notes.map((note) => note.id));
+  return new Set(cards.map((card) => card.id));
+}
+
 /** Si dos árboles son el mismo, línea por línea. Los dos salieron del esquema, con el mismo orden */
 const sameNodes = (a: readonly OutlineNode[], b: readonly OutlineNode[]) =>
   JSON.stringify(a) === JSON.stringify(b);
@@ -403,9 +450,19 @@ export async function renameOutline(
   return api.repos.outlines.put({ ...outline, title: clean, updatedAt: now.toISOString() });
 }
 
+/** Lo que dejó cambiar el mazo o el tema de un apunte */
+export interface OutlineSettingsResult {
+  outline: Outline;
+  /** Las notas de las líneas */
+  sync: OutlineSyncResult;
+  /** Las tarjetas que propuso la IA desde el apunte y que cambiaron de mazo o de tema */
+  aiNotes: number;
+}
+
 /**
- * Pasa el apunte a otro mazo propio hecho a mano, con todas sus tarjetas. Sirve también cuando el
- * mazo de antes ya no existe, que es cuando guardar falla. Las cartas conservan su ID
+ * Pasa el apunte a otro mazo propio hecho a mano, con todas sus tarjetas, también las que propuso la
+ * IA desde él. Sirve también cuando el mazo de antes ya no existe, que es cuando guardar falla. Las
+ * cartas conservan su ID
  */
 export async function moveOutline(
   api: Api,
@@ -413,7 +470,7 @@ export async function moveOutline(
   outlineId: string,
   deckId: string,
   now: Date = new Date(),
-): Promise<{ outline: Outline; sync: OutlineSyncResult }> {
+): Promise<OutlineSettingsResult> {
   return withOutlineLock(outlineId, async () => {
     const stored = await ownedOutline(api, user, outlineId);
     await ownOutlineDeck(api, user, deckId, CHOSEN_DECK_MISSING);
@@ -421,7 +478,8 @@ export async function moveOutline(
       stored.deckId === deckId
         ? stored
         : await api.repos.outlines.put({ ...stored, deckId, updatedAt: now.toISOString() });
-    return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+    const sync = await syncOutlineCards(api, user, outline, now);
+    return { outline, sync, aiNotes: await followOutline(api, outline, now.toISOString()) };
   });
 }
 
@@ -429,9 +487,11 @@ export async function moveOutline(
 export type OutlineDeckChoice = { kind: 'deck'; deckId: string } | { kind: 'automatic' };
 
 /**
- * Cambia el mazo y el tema del apunte (B6) y pone sus tarjetas como corresponde. El mazo automático
- * reutiliza el que ya cuelga de Apuntes si el apunte está en uno, y si no crea uno con su título. Con
- * expectedUpdatedAt no pisa un apunte que otra ventana guardó después
+ * Cambia el mazo y el tema del apunte (B6) y pone sus tarjetas como corresponde, las de sus líneas y
+ * las que propuso la IA desde él. El mazo automático reutiliza el que ya cuelga de Apuntes si el
+ * apunte está en uno, y si no crea uno con su título. Con expectedUpdatedAt, la fecha de la copia que
+ * el alumno tiene abierta, no pisa un apunte que otra ventana guardó después y avisa con
+ * OutlineConflictError sin escribir nada
  */
 export async function updateOutlineSettings(
   api: Api,
@@ -443,7 +503,7 @@ export async function updateOutlineSettings(
     expectedUpdatedAt?: string;
   },
   now: Date = new Date(),
-): Promise<{ outline: Outline; sync: OutlineSyncResult }> {
+): Promise<OutlineSettingsResult> {
   return withOutlineLock(input.outlineId, async () => {
     const stored = await ownedOutline(api, user, input.outlineId);
     if (input.expectedUpdatedAt !== undefined && stored.updatedAt !== input.expectedUpdatedAt) {
@@ -461,7 +521,9 @@ export async function updateOutlineSettings(
     const outline = changed
       ? await api.repos.outlines.put({ ...stored, deckId, subject, updatedAt: now.toISOString() })
       : stored;
-    return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+    const sync = await syncOutlineCards(api, user, outline, now);
+    // Siempre, aunque el apunte no cambie, así repetir termina lo que un corte dejó a la mitad
+    return { outline, sync, aiNotes: await followOutline(api, outline, now.toISOString()) };
   });
 }
 

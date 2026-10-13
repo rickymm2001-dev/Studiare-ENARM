@@ -1,5 +1,6 @@
 // Hechos para el motor de autoconocimiento (D-074). Lee la bitácora y el banco y arma la entrada de
-// buildInsights. Es una función pura para poder probarla sin Dexie ni React.
+// buildInsights. Es una función pura para poder probarla sin Dexie ni React. Los repasos de las
+// tarjetas de una materia libre (B6) no entran, porque Conócete habla del ENARM.
 import { TZDate } from '@date-fns/tz';
 import type { Thresholds } from '@/config/thresholds';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
@@ -31,8 +32,15 @@ export function buildInsightInput(input: {
   today: string;
   desiredRetention: number;
   thresholds: InsightInput['thresholds'] & Pick<Thresholds, 'behavior'>;
+  /**
+   * Cartas de una materia libre (B6, freeSubjectCardIds). Sus repasos, sus días y las causas que se
+   * reportan en ellas no cuentan en Conócete, como no cuentan en las estadísticas por tema del ENARM.
+   * Sí cuentan en el tiempo de estudio, la racha y la meta del día, que se calculan aparte
+   */
+  freeSubjectCards?: ReadonlySet<string>;
 }): InsightInput {
   const { events, bank, timeZone } = input;
+  const freeSubjectCards = input.freeSubjectCards ?? new Set<string>();
   const sessionStart = new Map<string, number>();
   const shown = new Map<string, Extract<AppEvent, { type: 'question_shown' }>>();
   const changes = new Map<string, Extract<AppEvent, { type: 'answer_changed' }>[]>();
@@ -60,6 +68,9 @@ export function buildInsightInput(input: {
         sessionMinutes.push(event.payload.durationMs / 60_000);
         break;
       case 'cause_reported': {
+        if (event.payload.targetKind === 'card' && freeSubjectCards.has(event.payload.targetId)) {
+          break;
+        }
         causes.push(event.payload.cause);
         if (event.payload.targetKind === 'question' && event.payload.cause === 'misread') {
           const target = event.payload.targetId;
@@ -76,6 +87,7 @@ export function buildInsightInput(input: {
         changes.get(key + event.payload.questionVersionId)?.push(event);
         break;
       case 'card_reviewed': {
+        if (freeSubjectCards.has(event.payload.cardId)) break;
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);
         firstDay ??= day;

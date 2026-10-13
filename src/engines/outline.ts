@@ -29,7 +29,8 @@
  * topes de seguridad de la interfaz y de la base, no de enseñanza (J).
  * De qué es el apunte (B6 del plan del cambio). Un tema del ENARM le pone a cada tarjeta la etiqueta
  * topic: con su clave, la misma que usan Mis errores, Repasar y el tutor. Una materia libre, como las
- * de la carrera, solo le pone Materia::Nombre, así nunca entra a las estadísticas del ENARM.
+ * de la carrera, solo le pone Materia::Nombre, así no entra a las estadísticas por tema del ENARM ni
+ * a Conócete (isFreeSubjectNote). Sí cuenta en el tiempo de estudio, la racha y la meta del día.
  */
 import { clozeHoles, parseCloze } from './cloze';
 import { normalizeTags, sanitizeTag, TAG_MAX_LENGTH, TAG_SEPARATOR } from './tagPath';
@@ -643,7 +644,7 @@ export const FREE_SUBJECT_TAG_ROOT = 'Materia';
 /**
  * Las etiquetas que el tema del apunte le pone a todas sus tarjetas. Un tema del ENARM da topic:clave
  * y cuenta en las estadísticas del ENARM. Una materia libre da Materia::Nombre y nunca da topic:,
- * así no cuenta en esas estadísticas
+ * así no cuenta en las estadísticas por tema ni en Conócete
  */
 export function subjectTags(subject: OutlineSubject | null | undefined): string[] {
   if (!subject) return [];
@@ -651,6 +652,40 @@ export function subjectTags(subject: OutlineSubject | null | undefined): string[
   // Siempre cuelga de Materia, así un nombre como topic:algo nunca empieza con el prefijo del ENARM
   const name = sanitizeTag(subject.name);
   return name === '' ? [] : normalizeTags([`${FREE_SUBJECT_TAG_ROOT}${TAG_SEPARATOR}${name}`]);
+}
+
+/** Comienzo de la etiqueta de una materia libre, Materia:: */
+export const FREE_SUBJECT_TAG_PREFIX = `${FREE_SUBJECT_TAG_ROOT}${TAG_SEPARATOR}`;
+
+/** Si la etiqueta es de una materia libre, Materia::Nombre. Como en Anki, no distingue mayúsculas */
+export function isFreeSubjectTag(tag: string): boolean {
+  return tag.toLowerCase().startsWith(FREE_SUBJECT_TAG_PREFIX.toLowerCase());
+}
+
+/** Si la etiqueta es de un tema, topic:clave del ENARM o Materia::Nombre de una materia libre */
+export function isSubjectTag(tag: string): boolean {
+  return tag.startsWith(ENARM_TOPIC_TAG_PREFIX) || isFreeSubjectTag(tag);
+}
+
+/**
+ * Si las etiquetas son de una nota de materia libre, con Materia:: y sin tema del ENARM. Esas notas
+ * no cuentan en las estadísticas por tema ni en Conócete. Una con topic: sí cuenta en las dos, aunque
+ * también traiga una etiqueta Materia:: escrita en la línea
+ */
+export function isFreeSubjectNote(tags: readonly string[]): boolean {
+  return tags.some(isFreeSubjectTag) && !tags.some((tag) => tag.startsWith(ENARM_TOPIC_TAG_PREFIX));
+}
+
+/**
+ * Las etiquetas de una nota con el tema del apunte, para la que sigue al apunte sin ser de una línea,
+ * como la que propuso la IA. Quita las de cualquier tema y pone primero las del tema que toca, como en
+ * las tarjetas de las líneas. Las demás se quedan en su orden
+ */
+export function withSubjectTags(
+  tags: readonly string[],
+  subject: OutlineSubject | null | undefined,
+): string[] {
+  return normalizeTags([...subjectTags(subject), ...tags.filter((tag) => !isSubjectTag(tag))]);
 }
 
 /** Si dos temas son el mismo. Un nombre libre se compara tal cual, porque cambia la etiqueta */

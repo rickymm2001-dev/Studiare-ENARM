@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { Option, Question } from '@/data/schemas/bank';
 import type { AppEvent } from '@/data/schemas/events';
+import { buildInsights } from '@/engines/insights';
 import { buildInsightInput } from './insightFacts';
 
 const at = (minute: number) => new Date(Date.UTC(2026, 8, 1, 15, minute)).toISOString();
@@ -180,5 +181,75 @@ describe('buildInsightInput', () => {
       thresholds: DEFAULT_THRESHOLDS,
     });
     expect(result.answers.map((item) => item.misread)).toEqual([false, true]);
+  });
+
+  it('los repasos de una materia libre no cuentan en Conócete, ni sus días ni sus causas (B6)', () => {
+    const review = (
+      id: string,
+      cardId: string,
+      day: number,
+      rating: 'again' | 'good',
+      lapses: number,
+    ) => ({
+      ...base,
+      id,
+      at: new Date(Date.UTC(2026, 8, day, 15, 0)).toISOString(),
+      type: 'card_reviewed',
+      payload: {
+        cardId,
+        deckId: 'd1',
+        source: 'card',
+        rating,
+        confidence: null,
+        msToReveal: 1000,
+        msToRate: 1000,
+        stateBefore: { state: 'review' },
+        stateAfter: { lapses },
+      },
+    });
+    const events = [
+      // Una tarjeta de clase que se olvida una y otra vez, sola en su día
+      review('e1', 'clase', 1, 'again', 9),
+      {
+        ...base,
+        id: 'e2',
+        at: new Date(Date.UTC(2026, 8, 1, 15, 1)).toISOString(),
+        type: 'cause_reported',
+        payload: { targetKind: 'card', targetId: 'clase', cause: 'forgot' },
+      },
+      // Y 50 del ENARM que el alumno recuerda, dos días después
+      ...Array.from({ length: 50 }, (_, index) =>
+        review(`r${index}`, `enarm-${index}`, 3, 'good', 0),
+      ),
+    ] as unknown as AppEvent[];
+    const input = {
+      events,
+      bank: { questions: new Map(), options: new Map(), cases: new Map() },
+      timeZone: 'America/Mexico_City',
+      today: '2026-09-10',
+      desiredRetention: 0.9,
+      thresholds: DEFAULT_THRESHOLDS,
+    };
+    const insight = (report: ReturnType<typeof buildInsights>, id: string) =>
+      report.insights.find((entry) => entry.id === id)?.state;
+
+    // Sin la lista, la tarjeta de clase entra a la retención y a las sanguijuelas
+    const all = buildInsightInput(input);
+    expect(all.reviews).toHaveLength(51);
+    expect(all.causes).toEqual(['forgot']);
+    expect(all.studyDays).toEqual(['2026-09-01', '2026-09-03']);
+    expect(insight(buildInsights(all), 'leeches')).toMatchObject({ values: { leeches: 1 } });
+
+    // Con ella, Conócete solo ve las del ENARM
+    const enarm = buildInsightInput({ ...input, freeSubjectCards: new Set(['clase']) });
+    expect(enarm.reviews).toHaveLength(50);
+    expect(enarm.reviews.some((item) => item.cardId === 'clase')).toBe(false);
+    expect(enarm.causes).toEqual([]);
+    expect(enarm.studyDays).toEqual(['2026-09-03']);
+    expect(enarm.daysSinceStart).toBe(7);
+    const report = buildInsights(enarm);
+    expect(report.totals.reviews).toBe(50);
+    expect(insight(report, 'leeches')).toMatchObject({ level: 'strength', values: { leeches: 0 } });
+    expect(insight(report, 'retention')).toMatchObject({ values: { retention: 1, reviews: 50 } });
   });
 });

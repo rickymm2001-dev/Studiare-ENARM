@@ -159,6 +159,25 @@ describe('apuntes y búsquedas por índice (D-092)', () => {
     expect((await repos.notes.list()).map((entry) => entry.id)).not.toContain(deleted.id);
   });
 
+  it('listAllByTagPrefix trae una vez cada nota con una etiqueta que empieza así, sin importar mayúsculas', async () => {
+    const { repos } = setup();
+    const anatomy = note({ tags: ['Materia::Anatomía'] });
+    // Dos etiquetas que coinciden no la repiten
+    const twice = note({ tags: ['Materia::Fisiología', 'materia::Repaso'] });
+    const deleted = note({ tags: ['MATERIA::Bioquímica'], deletedAt: STAMP });
+    const enarm = note({ tags: ['topic:cardiology'] });
+    // Materia sin :: o en medio de la ruta no empieza así
+    const root = note({ tags: ['Materia'] });
+    const nested = note({ tags: ['Rama::Materia::Tema'] });
+    const untagged = note();
+    await repos.notes.putMany([anatomy, twice, deleted, enarm, root, nested, untagged]);
+    const found = await repos.notes.listAllByTagPrefix('Materia::');
+    expect(found.map((entry) => entry.id).sort()).toEqual(
+      [anatomy.id, twice.id, deleted.id].sort(),
+    );
+    expect(await repos.notes.listAllByTagPrefix('Otra::')).toEqual([]);
+  });
+
   it('listAllForNotes trae las cartas de esas notas, también las borradas', async () => {
     const { repos } = setup();
     const [one, two, three] = [newId(), newId(), newId()];

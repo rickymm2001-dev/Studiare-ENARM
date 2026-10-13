@@ -167,6 +167,8 @@ export interface SaveProposalsInput {
   deckId?: string;
   /** Etiquetas que llevan todas, como la del tema del apunte (B6) */
   tags?: readonly string[];
+  /** Apunte del que salen, así siguen su mazo y su tema cuando cambian (B6) */
+  sourceOutlineId?: string;
 }
 
 export interface SavedProposals {
@@ -237,6 +239,7 @@ export async function saveProposals(
       sourceQuote: proposal.quote,
       sourceQuestionVersionId: null,
       sourceTitle: input.sourceTitle,
+      ...(input.sourceOutlineId ? { sourceOutlineId: input.sourceOutlineId } : {}),
       controversy: controversyOf(proposal, input.simulated, stamp),
       isDemo: false,
       createdAt: stamp,

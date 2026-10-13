@@ -1,8 +1,9 @@
 // Apuntes y mazos (B6 del plan del cambio, respuesta 74). Con un plan de pago, se crea un apunte, una
 // línea se vuelve tarjeta con el botón de la línea, sin escribir marcas, se eligen su mazo y su tema
 // del ENARM, y la tarjeta sale en Repasar. El modo clase crea un apunte con plantilla y una materia
-// libre, cuyas tarjetas nunca llevan un tema del ENARM. En Gratis Apuntes se ve con candado y la
-// prueba de 7 días (respuesta 20). Corre en teléfono y en computadora.
+// libre, cuyas tarjetas nunca llevan un tema del ENARM. En Gratis Apuntes se ve con candado y el botón
+// de los candados, que dice Ver planes hasta que B10 prenda la prueba de 7 días (respuesta 20). Corre
+// en teléfono y en computadora.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -140,15 +141,15 @@ test('el modo clase crea un apunte con plantilla y materia libre que no cuenta e
   await expect(page.getByText(t.outlines.subject.shownFree('Anatomía'))).toBeVisible();
 });
 
-test('en Gratis Apuntes se ve con candado y la prueba de 7 días lleva a Suscripción', async ({
-  page,
-}) => {
+test('en Gratis Apuntes se ve con candado y Ver planes lleva a Suscripción', async ({ page }) => {
   await signUp(page);
   await page.goto(SCREENS.outlines.path);
   const preview = page.getByRole('region', { name: t.outlines.locked.title });
   await expect(preview).toBeVisible();
   await expect(page.getByLabel(t.outlines.newTitle)).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
-  await preview.getByRole('link', { name: t.outlines.locked.cta }).click();
+  // La bandera freeTrial sigue apagada hasta B10, así que el botón no promete la prueba gratis
+  await expect(preview.getByText(t.billing.freeTrialCta)).toHaveCount(0);
+  await preview.getByRole('link', { name: t.billing.featureSeePlans }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.subscription.title);
 });

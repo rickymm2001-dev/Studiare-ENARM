@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { writeStoredFlags } from '@/config/featureFlags';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/ids';
 import { isLive, isAiNote } from '@/data/schemas/decks';
@@ -15,6 +16,7 @@ import type { User } from '@/data/schemas/people';
 import { createManualDeck, deleteManualDeck } from '@/data/usecases/manualDecks';
 import { createOutline, saveOutline } from '@/data/usecases/outlines';
 import { t } from '@/i18n/es-MX';
+import { AUTOSAVE_DELAY_MS } from './useOutlineAutosave';
 
 vi.mock('@/ui/celebrate', () => ({ celebrate: () => undefined }));
 
@@ -84,7 +86,7 @@ function openPaid(
 }
 
 describe('pantalla de Apuntes', () => {
-  it('en Gratis se ve con candado, una vista previa y la prueba de 7 días que lleva a Suscripción', async () => {
+  it('en Gratis se ve con candado, una vista previa y Ver planes que lleva a Suscripción', async () => {
     app = await renderApp(SCREENS.outlines.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.outlines.title }, WAIT),
@@ -93,13 +95,29 @@ describe('pantalla de Apuntes', () => {
     for (const point of t.outlines.locked.points) {
       expect(within(preview).getByText(point)).toBeInTheDocument();
     }
-    expect(within(preview).getByRole('link', { name: t.outlines.locked.cta })).toHaveAttribute(
+    // La prueba de 7 días todavía no existe en Suscripción (B10), así que no se promete
+    expect(within(preview).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
       'href',
       SCREENS.subscription.path,
     );
+    expect(within(preview).queryByText(t.billing.freeTrialCta)).toBeNull();
     // No se puede crear un apunte ni ver la lista
     expect(screen.queryByRole('button', { name: t.outlines.create })).toBeNull();
     expect(screen.queryByLabelText(t.outlines.newTitle)).toBeNull();
+  });
+
+  it('con la prueba gratis prendida el candado ofrece probar 7 días gratis', async () => {
+    writeStoredFlags({ freeTrial: true });
+    try {
+      app = await renderApp(SCREENS.outlines.path);
+      const preview = await screen.findByRole('region', { name: t.outlines.locked.title }, WAIT);
+      expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
+        'href',
+        SCREENS.subscription.path,
+      );
+    } finally {
+      writeStoredFlags(null);
+    }
   });
 
   it('sin apuntes dice cómo empezar y deja crear el primero', async () => {
@@ -434,6 +452,43 @@ describe('pantalla de Apuntes', () => {
     // Lo que guardó la otra ventana sigue intacto
     const stored = await app.api.repos.outlines.get(outlineId);
     expect(stored?.title).toBe('Asma');
+    expect(stored?.nodes).toHaveLength(2);
+  });
+
+  it('si otra ventana guardó antes, el mazo y el tema tampoco pisan el apunte', async () => {
+    const typing = userEvent.setup();
+    let outlineId = '';
+    let deckId = '';
+    let otherDeckId = '';
+    app = await openPaid(async (api, user) => {
+      const asma = await createOutline(api, user, { title: 'Asma' });
+      outlineId = asma.id;
+      deckId = asma.deckId;
+      await saveOutline(api, user, { outlineId, nodes: [node('Salbutamol >> Broncodilatador')] });
+      otherDeckId = (await createManualDeck(api, user, { name: 'Neumología' })).id;
+    });
+    await typing.click(await screen.findByRole('link', { name: t.outlines.open('Asma') }, WAIT));
+    const titleField = await screen.findByLabelText(t.outlines.editor.titleLabel);
+    await typing.click(await screen.findByText(t.outlines.settings.title, {}, WAIT));
+    await typing.selectOptions(screen.getByLabelText(t.outlines.editor.deckLabel), otherDeckId);
+    // Otra ventana agrega una línea mientras esta sigue con la copia vieja y un cambio sin guardar
+    const user = (await app.api.repos.outlines.get(outlineId))?.ownerId ?? '';
+    await saveOutline(
+      app.api,
+      { id: user },
+      { outlineId, nodes: [node('Salbutamol >> Broncodilatador'), node('Otra >> Cosa')] },
+      new Date(Date.now() + 60_000),
+    );
+    await typing.type(titleField, ' crónica');
+    await typing.click(screen.getByRole('button', { name: t.outlines.settings.save }));
+    // Sale el mismo aviso del editor, con su botón para abrir la versión nueva
+    expect(await screen.findByText(t.outlines.settings.conflict, {}, WAIT)).toBeInTheDocument();
+    expect(screen.getByText(t.outlines.editor.conflict)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: t.outlines.editor.reload })).toBeInTheDocument();
+    // Ni el mazo ni lo que estaba pendiente pisan a la otra ventana, tampoco pasado el plazo
+    await new Promise((resolve) => setTimeout(resolve, AUTOSAVE_DELAY_MS + 300));
+    const stored = await app.api.repos.outlines.get(outlineId);
+    expect(stored).toMatchObject({ title: 'Asma', deckId });
     expect(stored?.nodes).toHaveLength(2);
   });
 

@@ -5,8 +5,12 @@ import {
   countNodes,
   docToOutline,
   ENARM_TOPIC_TAG_PREFIX,
+  FREE_SUBJECT_TAG_PREFIX,
   firstBlankLine,
   freeSubjects,
+  isFreeSubjectNote,
+  isFreeSubjectTag,
+  isSubjectTag,
   markSpan,
   markTokens,
   nodesFromTemplate,
@@ -22,6 +26,7 @@ import {
   resolveLinks,
   sameSubject,
   subjectTags,
+  withSubjectTags,
   type OutlineNode,
 } from './outline';
 
@@ -491,6 +496,44 @@ describe('tema del apunte (B6)', () => {
         {},
       ]),
     ).toEqual(['anatomía', 'Fisiología']);
+  });
+
+  it('reconoce las etiquetas de un tema y las notas de una materia libre', () => {
+    expect(FREE_SUBJECT_TAG_PREFIX).toBe('Materia::');
+    expect(isFreeSubjectTag('Materia::Anatomía')).toBe(true);
+    expect(isFreeSubjectTag('materia::anatomía')).toBe(true);
+    expect(isFreeSubjectTag('Materia')).toBe(false);
+    expect(isFreeSubjectTag('Rama::Materia::Tema')).toBe(false);
+    expect(isSubjectTag('topic:cardiology')).toBe(true);
+    expect(isSubjectTag('MATERIA::Fisiología')).toBe(true);
+    expect(isSubjectTag('Generada_con_IA')).toBe(false);
+    // Cada etiqueta que da una materia libre cuenta como de materia libre
+    expect(isFreeSubjectNote(subjectTags({ kind: 'free', name: 'Anatomía humana' }))).toBe(true);
+    expect(isFreeSubjectNote(['Materia::Anatomía', 'Hueso'])).toBe(true);
+    // Con un tema del ENARM cuenta en el ENARM aunque la línea traiga Materia::
+    expect(isFreeSubjectNote(['topic:cardiology', 'Materia::Repaso'])).toBe(false);
+    expect(isFreeSubjectNote(['Hueso'])).toBe(false);
+    expect(isFreeSubjectNote([])).toBe(false);
+  });
+
+  it('cambia el tema de una nota que sigue al apunte sin tocar sus demás etiquetas', () => {
+    const tags = ['topic:endocrinology', 'Generada_con_IA', 'Tratamiento'];
+    expect(withSubjectTags(tags, { kind: 'free', name: 'Farmacología' })).toEqual([
+      'Materia::Farmacología',
+      'Generada_con_IA',
+      'Tratamiento',
+    ]);
+    expect(
+      withSubjectTags(['Materia::Vieja', 'materia::Otra', 'Tratamiento'], {
+        kind: 'enarm',
+        branch: 'internal_medicine',
+        topic: 'cardiology',
+      }),
+    ).toEqual(['topic:cardiology', 'Tratamiento']);
+    expect(withSubjectTags(tags, null)).toEqual(['Generada_con_IA', 'Tratamiento']);
+    // Con el mismo tema queda igual
+    const same = { kind: 'enarm', branch: 'internal_medicine', topic: 'endocrinology' } as const;
+    expect(withSubjectTags(tags, same)).toEqual(tags);
   });
 });
 

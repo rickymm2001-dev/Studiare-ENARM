@@ -21,6 +21,7 @@ import {
   OutlineConflictError,
   createOutline,
   deleteOutline,
+  freeSubjectCardIds,
   isAutomaticOutlineDeck,
   isFromOutline,
   moveOutline,
@@ -1303,6 +1304,77 @@ describe('mazo y tema de cada apunte (B6)', () => {
     expect(note?.tags.some((tag) => tag.startsWith(TOPIC_TAG_PREFIX))).toBe(false);
   });
 
+  it('las cartas de una materia libre se encuentran para dejarlas fuera de Conócete, también las borradas', async () => {
+    const { api, user } = setup();
+    const anatomy = { kind: 'free', name: 'Anatomía' } as const;
+    const free = await createOutline(
+      api,
+      user,
+      { title: 'Anatomía, clase 1', subject: anatomy },
+      at(0),
+    );
+    const [humerus, femur] = [newId(), newId()];
+    await saveOutline(
+      api,
+      user,
+      {
+        outlineId: free.id,
+        nodes: [
+          line('Húmero :: Hueso del brazo', [], humerus),
+          line('Fémur >> Hueso del muslo', [], femur),
+        ],
+      },
+      at(1),
+    );
+    // La línea que pierde su marca deja su carta borrada, y sus repasos de antes siguen fuera
+    await saveOutline(
+      api,
+      user,
+      {
+        outlineId: free.id,
+        nodes: [
+          line('Húmero :: Hueso del brazo', [], humerus),
+          line('Fémur, hueso del muslo', [], femur),
+        ],
+      },
+      at(2),
+    );
+    // Una línea del ENARM con una etiqueta Materia:: escrita a mano sigue contando en el ENARM
+    const enarm = await createOutline(
+      api,
+      user,
+      { title: 'Arritmias', subject: cardiology },
+      at(3),
+    );
+    await saveOutline(
+      api,
+      user,
+      { outlineId: enarm.id, nodes: [line('FA >> Fibrilación auricular #Materia::Repaso')] },
+      at(4),
+    );
+    const [enarmNote] = [...(await notesOf(api, enarm.id)).values()];
+    expect(enarmNote?.tags).toEqual(['topic:cardiology', 'Materia::Repaso']);
+    // Y una tarjeta suelta sin tema tampoco es de una materia libre
+    const loose = await createManualDeck(api, user, { name: 'Sueltas' }, at(5));
+    const looseNote = await saveManualNote(
+      api,
+      user,
+      { deckId: loose.id, draft: { kind: 'basic', front: 'A', back: 'B' } },
+      at(5),
+    );
+
+    const freeNotes = await api.repos.notes.listAllByOutline(free.id);
+    const freeCards = await api.repos.cards.listAllForNotes(freeNotes.map((note) => note.id));
+    // Dos del húmero, una por sentido, y la del fémur, ya borrada
+    expect(freeCards).toHaveLength(3);
+    expect(freeCards.filter((card) => !isLive(card))).toHaveLength(1);
+    const ids = await freeSubjectCardIds(api);
+    expect([...ids].sort()).toEqual(idsOf(freeCards).sort());
+    const others = await api.repos.cards.listAllForNotes([enarmNote?.id ?? '', looseNote.id]);
+    expect(others).toHaveLength(2);
+    expect(others.some((card) => ids.has(card.id))).toBe(false);
+  });
+
   it('un tema que no cumple el esquema no crea nada', async () => {
     const { api, user } = setup();
     await expect(
@@ -1361,6 +1433,86 @@ describe('mazo y tema de cada apunte (B6)', () => {
     );
     const [plain] = [...(await notesOf(api, outline.id)).values()];
     expect(plain?.tags).toEqual([]);
+  });
+
+  it('el mazo y el tema no pisan un apunte que otra ventana guardó después', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user, 'Asma');
+    const own = await createManualDeck(api, user, { name: 'Neumología' }, at(1));
+    // Dos ventanas abren la misma copia del apunte
+    const first: Outline = { ...outline };
+    const second: Outline = { ...outline };
+    // La segunda guarda una línea con tarjeta
+    const fromSecond = await saveOutline(
+      api,
+      user,
+      {
+        outlineId: second.id,
+        nodes: [line('Salbutamol >> Broncodilatador')],
+        expectedUpdatedAt: second.updatedAt,
+      },
+      at(2),
+    );
+    const snap = await snapshot(api);
+    // La primera elige mazo y tema con su copia vieja. Avisa con el error propio y no escribe nada
+    await expect(
+      updateOutlineSettings(
+        api,
+        user,
+        {
+          outlineId: first.id,
+          deck: { kind: 'deck', deckId: own.id },
+          subject: cardiology,
+          expectedUpdatedAt: first.updatedAt,
+        },
+        at(3),
+      ),
+    ).rejects.toBeInstanceOf(OutlineConflictError);
+    // Tampoco con el mazo automático, que crearía un mazo nuevo
+    await expect(
+      updateOutlineSettings(
+        api,
+        user,
+        {
+          outlineId: first.id,
+          deck: { kind: 'automatic' },
+          subject: null,
+          expectedUpdatedAt: first.updatedAt,
+        },
+        at(3),
+      ),
+    ).rejects.toBeInstanceOf(OutlineConflictError);
+    // Y sus líneas viejas tampoco pisan las de la segunda
+    await expect(
+      saveOutline(
+        api,
+        user,
+        { outlineId: first.id, nodes: first.nodes, expectedUpdatedAt: first.updatedAt },
+        at(4),
+      ),
+    ).rejects.toBeInstanceOf(OutlineConflictError);
+    expect(await snapshot(api)).toBe(snap);
+
+    // Con la versión nueva sí se guarda y la línea de la segunda sigue, con su tarjeta en el mazo
+    const moved = await updateOutlineSettings(
+      api,
+      user,
+      {
+        outlineId: second.id,
+        deck: { kind: 'deck', deckId: own.id },
+        subject: cardiology,
+        expectedUpdatedAt: fromSecond.outline.updatedAt,
+      },
+      at(5),
+    );
+    expect(moved.outline).toMatchObject({
+      deckId: own.id,
+      subject: cardiology,
+      nodes: fromSecond.outline.nodes,
+      updatedAt: at(5).toISOString(),
+    });
+    const [note] = [...(await notesOf(api, outline.id)).values()];
+    expect(note).toMatchObject({ deckId: own.id, tags: ['topic:cardiology'] });
   });
 
   it('el mazo automático se reutiliza si ya está en uno y si no se crea con el título', async () => {

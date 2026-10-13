@@ -54,6 +54,8 @@ export interface TutorViewInput {
   today: string;
   desiredRetention: number;
   thresholds: Thresholds;
+  /** Cartas de una materia libre, que no cuentan en Conócete ni en el informe semanal (B6) */
+  freeSubjectCards?: ReadonlySet<string>;
 }
 
 const BIAS_EXAMPLES = 3;
@@ -143,6 +145,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
       today: input.today,
       desiredRetention: input.desiredRetention,
       thresholds,
+      freeSubjectCards: input.freeSubjectCards,
     }),
   );
 

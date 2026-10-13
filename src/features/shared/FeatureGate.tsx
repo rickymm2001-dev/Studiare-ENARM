@@ -28,7 +28,7 @@ export function FeatureGate({
   children: ReactNode;
   /**
    * Lo que se ve en lugar de la función cuando el plan no la incluye, como una vista previa con su
-   * candado y la prueba gratis (respuesta 20 del plan del cambio). Sin él sale el aviso corto
+   * candado y el botón de lockedCtaLabel (respuesta 20 del plan del cambio). Sin él sale el aviso corto
    */
   locked?: ReactNode;
   /** Tabla de planes. Solo cambia en las pruebas */
