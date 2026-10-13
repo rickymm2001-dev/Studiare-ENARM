@@ -10,24 +10,13 @@ import { usePreferences } from '@/app/preferences';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import {
+  isActive,
   MOBILE_MORE_BY_ROLE,
   MOBILE_PRIMARY_NAV,
+  NAV_ID,
   settingsItem,
   type NavItem,
 } from '../navigation';
-
-/** Para que el botón del menú superior diga qué controla */
-export const NAV_ID = 'menu-lateral';
-
-/**
- * La sección está activa en su ruta y en las que declara, por ejemplo Mazos dentro de Repasar. Con
- * end solo cuenta la ruta exacta, para que Inicio no quede activo en todas
- */
-export function isActive(item: NavItem, pathname: string): boolean {
-  const within = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
-  if (item.end) return pathname === item.path;
-  return within(item.path) || (item.alsoActive ?? []).some(within);
-}
 
 export function BottomNav({
   items,
@@ -48,7 +37,7 @@ export function BottomNav({
     role === 'physician'
       ? items.filter((item) => !item.bottom).slice(0, 4)
       : MOBILE_PRIMARY_NAV;
-  const moreItems = MOBILE_MORE_BY_ROLE[role] ?? [];
+  const moreItems = MOBILE_MORE_BY_ROLE[role];
   const isMoreActive = moreItems.some((item) => isActive(item, pathname));
 
   return (
@@ -95,29 +84,27 @@ export function BottomNav({
             ))}
           </ul>
 
-          {bottomItem ? (
-            <div className="mt-auto border-t border-line pt-2">
-              <Link
-                to={bottomItem.path}
-                aria-current={isActive(bottomItem, pathname) ? 'page' : undefined}
+          <div className="mt-auto border-t border-line pt-2">
+            <Link
+              to={bottomItem.path}
+              aria-current={isActive(bottomItem, pathname) ? 'page' : undefined}
+              className={cn(
+                'mx-2 flex min-h-14 flex-col items-center justify-center gap-1 rounded-md px-1 text-xs font-medium text-fg-muted transition-colors hover:text-fg',
+                isActive(bottomItem, pathname) && 'font-semibold text-primary-ink',
+              )}
+            >
+              <span
+                aria-hidden
                 className={cn(
-                  'mx-2 flex min-h-14 flex-col items-center justify-center gap-1 rounded-md px-1 text-xs font-medium text-fg-muted transition-colors hover:text-fg',
-                  isActive(bottomItem, pathname) && 'font-semibold text-primary-ink',
+                  'flex h-8 w-14 items-center justify-center rounded-md transition-colors [&_svg]:size-5',
+                  isActive(bottomItem, pathname) && 'bg-primary-soft text-primary-ink',
                 )}
               >
-                <span
-                  aria-hidden
-                  className={cn(
-                    'flex h-8 w-14 items-center justify-center rounded-md transition-colors [&_svg]:size-5',
-                    isActive(bottomItem, pathname) && 'bg-primary-soft text-primary-ink',
-                  )}
-                >
-                  <bottomItem.icon strokeWidth={2} />
-                </span>
-                <span className="truncate">{bottomItem.label}</span>
-              </Link>
-            </div>
-          ) : null}
+                <bottomItem.icon strokeWidth={2} />
+              </span>
+              <span className="truncate">{bottomItem.label}</span>
+            </Link>
+          </div>
         </div>
 
         {/* En el teléfono: exactamente 5 casillas (4 principales + Más) */}
@@ -150,7 +137,9 @@ export function BottomNav({
           <li>
             <button
               type="button"
-              onClick={() => setMoreOpen(true)}
+              onClick={() => {
+                setMoreOpen(true);
+              }}
               aria-current={isMoreActive ? 'page' : undefined}
               aria-expanded={moreOpen}
               className={cn(
@@ -167,7 +156,7 @@ export function BottomNav({
               >
                 <Ellipsis strokeWidth={2} />
               </span>
-              <span className="truncate">{t.navItems.more ?? 'Más'}</span>
+              <span className="truncate">{t.navItems.more}</span>
             </button>
           </li>
         </ul>
@@ -197,7 +186,9 @@ export function BottomNav({
                 <Link
                   key={item.path}
                   to={item.path}
-                  onClick={() => setMoreOpen(false)}
+                  onClick={() => {
+                    setMoreOpen(false);
+                  }}
                   aria-current={isActive(item, pathname) ? 'page' : undefined}
                   className={cn(
                     'flex min-h-12 items-center gap-2.5 rounded-lg border border-line p-3 text-sm font-medium transition-colors hover:bg-muted',

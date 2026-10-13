@@ -39,6 +39,19 @@ export interface NavItem {
   alsoActive?: readonly string[];
 }
 
+/** Para que el botón del menú superior diga qué controla */
+export const NAV_ID = 'menu-lateral';
+
+/**
+ * La sección está activa en su ruta y en las que declara, por ejemplo Mazos dentro de Repasar. Con
+ * end solo cuenta la ruta exacta, para que Inicio no quede activo en todas
+ */
+export function isActive(item: NavItem, pathname: string): boolean {
+  const within = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
+  if (item.end) return pathname === item.path;
+  return within(item.path) || (item.alsoActive ?? []).some(within);
+}
+
 export const settingsItem: NavItem = {
   path: screenPath('settings'),
   label: t.navItems.settings,
