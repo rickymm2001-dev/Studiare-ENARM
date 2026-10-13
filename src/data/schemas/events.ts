@@ -218,6 +218,14 @@ export const EventPayloadSchemas = {
     cardIds: z.array(IdSchema).min(1).max(500),
   }),
   /**
+   * El alumno reinicia tarjetas desde Buscar tarjetas (B4 del plan del cambio). Vuelven a ser nuevas
+   * y empiezan de cero. Sus repasos de antes siguen en la bitácora, que nunca se edita, y este evento
+   * solo dice desde cuándo ya no cuentan para su próximo repaso. Un lote lleva hasta 500 tarjetas
+   */
+  cards_reset: z.strictObject({
+    cardIds: z.array(IdSchema).min(1).max(500),
+  }),
+  /**
    * El alumno atendió la señal de controversia de una tarjeta generada por la IA (D-085). Marcó que ya
    * la verificó o la editó. La señal se quita de la tarjeta y este evento queda como constancia
    */
@@ -313,6 +321,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('official_score_submitted'),
   eventSchemaFor('cards_suspended'),
   eventSchemaFor('cards_unsuspended'),
+  eventSchemaFor('cards_reset'),
   eventSchemaFor('cards_rescheduled'),
   eventSchemaFor('card_controversy_resolved'),
 ]);

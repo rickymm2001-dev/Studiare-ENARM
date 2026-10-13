@@ -7,6 +7,7 @@ import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { followSmallestDeck, presetThresholds, readTable } from './support/b1';
+import { resultRows, searchResults } from './support/cardSearch';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const DAY_MS = 86_400_000;
@@ -122,13 +123,13 @@ test('sanguijuela. Con el umbral del admin en un olvido, fallar una tarjeta ya r
     events.filter((event) => event.type === 'cards_suspended').map((event) => event.payload.reason),
   ).toEqual(['leech']);
 
-  // Explorar la encuentra entre las sanguijuelas, suspendida
+  // Buscar tarjetas la encuentra entre las sanguijuelas, suspendida
   await page.goto(`${SCREENS.explore.path}?estado=sanguijuelas`);
-  const list = page.getByRole('list', { name: t.explore.list });
-  await expect(list).toBeVisible({ timeout: 30_000 });
-  await expect(list.getByRole('listitem')).toHaveCount(1);
-  await expect(list.getByText(t.explore.statusOne.leech, { exact: true })).toBeVisible();
-  await expect(list.getByText(t.explore.statusOne.suspended, { exact: true })).toBeVisible();
+  const results = searchResults(page);
+  await expect(results).toBeVisible({ timeout: 30_000 });
+  await expect(resultRows(page)).toHaveCount(1);
+  await expect(results.getByText(t.cardSearch.leechOne, { exact: true })).toBeVisible();
+  await expect(results.getByText(t.cardSearch.statusOne.suspended, { exact: true })).toBeVisible();
 });
 
 test('atrasos. Adelantar trae un repaso a hoy, posponer mueve lo de hoy y se deshace, y sin vencidas posponer no ofrece nada', async ({

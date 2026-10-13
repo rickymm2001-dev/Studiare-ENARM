@@ -83,7 +83,7 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   settings: { number: 27, path: '/configuracion', area: 'shared', phase: 'C' },
   // Usuarios, roles y asignaciones a médicos (D-070)
   adminUsers: { number: 28, path: '/admin/usuarios', area: 'admin', phase: 'C' },
-  // Explorar tarjetas, tercera pestaña de Repasar y Mazos (D-085)
+  // Buscar tarjetas, antes Explorar, tercera pestaña de Repasar y Mazos (D-085, B4 del plan del cambio)
   explore: { number: 29, path: '/mazos/explorar', area: 'student', phase: 'C' },
   // Apuntes en esquema que se vuelven tarjetas (D-092). Con su lugar en el menú (comentario 12)
   outlines: { number: 30, path: '/apuntes', area: 'student', phase: 'C' },

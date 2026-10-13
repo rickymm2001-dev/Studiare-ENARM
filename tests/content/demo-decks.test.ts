@@ -7,6 +7,7 @@ import { createCardSanitizer } from '@/data/content/cardHtml';
 import { NoteSchema } from '@/data/schemas/decks';
 import { topicTaxonomy } from '@/demo/content';
 import { buildDeckEntities, deckIds, noteSubject } from '@/demo/content/deckEntities';
+import { topicDisplayName } from '@/demo/content/topicDisplayNames';
 import { tagSegments } from '@/engines/tagPath';
 import { loadDemoDecks } from '@/demo/content/decks';
 
@@ -121,13 +122,13 @@ describe('mazos de Paco en la demo (D-053)', () => {
       expect(note?.deckId, entry.key).toBe(entry.card.deckId);
       expect(byId.has(entry.card.deckId), entry.key).toBe(true);
     }
-    // La materia es el segundo nivel de la etiqueta y su mazo tiene ese nombre
+    // La materia es el segundo nivel de la etiqueta y su mazo lleva su nombre legible (B4)
     for (const source of sourceNotes) {
       const note = noteById.get(deckIds.note(source.key));
       const subject = noteSubject(source);
       const holder = byId.get(note?.deckId ?? '');
       if (subject === null) expect(holder?.parentId).toBe(root[0]?.id);
-      else expect(holder?.name, source.key).toBe(subject.replace(/[-_]+/g, ' ').trim());
+      else expect(holder?.name, source.key).toBe(topicDisplayName(subject));
     }
   });
 

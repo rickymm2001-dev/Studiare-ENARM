@@ -2,6 +2,7 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { cardSearchText } from './cardSearch';
 import { examText } from './exam';
 import { featureText } from './features';
 import { outlineText } from './outlines';
@@ -73,9 +74,9 @@ const screens: Record<ScreenKey, ScreenText> = {
     description: 'Mazos precargados que sigues o dejas, los que importas y los que creas a mano.',
   },
   explore: {
-    title: 'Explorar',
+    title: 'Buscar tarjetas',
     description:
-      'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
+      'Encuentra cualquier tarjeta al teclear, fíltrala y ábrela al lado para verla o editarla. Suspende, mueve, etiqueta o reinicia varias a la vez.',
   },
   outlines: {
     title: 'Apuntes',
@@ -161,6 +162,7 @@ export const t = {
   ...qualityText,
   ...tutorText,
   ...vocabularyText,
+  ...cardSearchText,
   weekPlan: weekPlanText,
   app: {
     name: BRAND.name,
@@ -179,10 +181,10 @@ export const t = {
     show: 'Mostrar el menú lateral',
   },
   studyTabs: {
-    label: 'Repasar, mazos y explorar',
+    label: 'Repasar, mazos y buscar tarjetas',
     review: 'Repasar',
     decks: 'Mazos',
-    explore: 'Explorar',
+    explore: 'Buscar tarjetas',
   },
   navItems: {
     home: 'Inicio',

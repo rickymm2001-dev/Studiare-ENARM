@@ -194,4 +194,14 @@ describe('estado más reciente de cada tarjeta', () => {
   it('una tarjeta sin repasos no cambia de estado por un cambio de fecha', () => {
     expect(latestCardStates([moved('2026-10-20T10:00:00.000Z', minute(1))]).size).toBe(0);
   });
+
+  it('reiniciar la deja como nueva y el siguiente repaso vuelve a fijar su estado (B4)', () => {
+    const reset = event('cards_reset', { cardIds: [cardId] }, minute(2));
+    const first = state({ stability: 12, lapses: 9 });
+    expect(latestCardStates([review(first, minute(1)), reset]).has(cardId)).toBe(false);
+    const again = state({ stability: 1, lapses: 0 });
+    expect(
+      latestCardStates([review(first, minute(1)), reset, review(again, minute(3))]).get(cardId),
+    ).toEqual(again);
+  });
 });

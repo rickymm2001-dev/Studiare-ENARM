@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { openCard, resultRows, searchResults } from '../e2e/support/cardSearch';
 import { signUp } from '../e2e/support/fixtures';
 
 const OUT_DIR = join(import.meta.dirname, '..', '..', 'docs', 'screenshots', 'fase-c2-etapa1');
@@ -39,19 +40,19 @@ test('Explorar con filtros, una tarjeta abierta y acciones por lote', async ({ p
     timeout: 60_000,
   });
 
+  // Explorar se rehízo como Buscar tarjetas en B4 del plan del cambio
   await page.goto(SCREENS.explore.path);
-  const list = page.getByRole('list', { name: t.explore.list });
-  await expect(list).toBeVisible({ timeout: 30_000 });
+  const results = searchResults(page);
+  await expect(results).toBeVisible({ timeout: 30_000 });
   await capture(page, 'explorar-lista', info.project.name);
 
   // Una búsqueda, dos tarjetas marcadas y la primera abierta
-  await page.getByRole('searchbox', { name: t.explore.search }).fill('dolor');
-  await expect(list).toBeVisible();
-  const rows = list.getByRole('listitem');
+  await page.getByRole('searchbox', { name: t.cardSearch.searchLabel }).fill('dolor');
+  await expect(results).toBeVisible();
+  const rows = resultRows(page);
   await rows.nth(0).getByRole('checkbox').check();
   await rows.nth(1).getByRole('checkbox').check();
-  await rows.nth(0).getByRole('button', { name: t.explore.seeCard }).click();
-  await page.getByText(t.explore.tagsTitle, { exact: true }).click();
+  await openCard(rows.nth(0));
   await capture(page, 'explorar-filtrada-con-acciones', info.project.name);
 });
 

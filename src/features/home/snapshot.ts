@@ -74,6 +74,10 @@ export function buildSnapshot(input: {
           if (state) latestCard.set(moved.cardId, { ...state, due: moved.to });
         }
         break;
+      case 'cards_reset':
+        // Vuelve a ser nueva, igual que en latestCardStates
+        for (const cardId of event.payload.cardIds) latestCard.delete(cardId);
+        break;
       case 'question_answered':
         entry.questions += 1;
         if (!event.payload.correct && day === today) errorsToday += 1;

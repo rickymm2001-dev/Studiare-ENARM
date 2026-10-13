@@ -1,6 +1,6 @@
 // Tus mazos (pantalla 12). Los mazos del alumno, como Mis errores que arma la app con sus preguntas
-// falladas y los que crea a mano, que se pueden llenar de tarjetas y borrar. Subir mazos de otras
-// apps llega con la Fase E.
+// falladas y los que crea a mano, que se pueden llenar de tarjetas y borrar. Cada mazo de primer
+// nivel dice sus temas, que salen de sus submazos o etiquetas (B4 del plan del cambio).
 import { Layers, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -9,6 +9,7 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { isEditableDeck, type Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
+import type { TopicOutline } from '@/engines/deckTopics';
 import { createManualDeck, deleteManualDeck, DECK_NAME_MAX } from '@/data/usecases/manualDecks';
 import {
   MAX_DECK_DEPTH,
@@ -25,17 +26,21 @@ import { SelectField, TextField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
 import { DeckEditorDialog } from './DeckEditorDialog';
 import { DeckOrganizer } from './DeckOrganizer';
+import { DeckTopics } from './DeckTopics';
 
 export function OwnDecksCard({
   session,
   decks,
   cardsByDeck,
+  topics,
   states,
 }: {
   session: ReadySession;
   /** Los mazos del alumno, de Mis errores y a mano */
   decks: readonly Deck[];
   cardsByDeck: ReadonlyMap<string, readonly string[]>;
+  /** Los temas de cada mazo de primer nivel, por su ID */
+  topics: ReadonlyMap<string, TopicOutline>;
   states: ReadonlyMap<string, FsrsCardState>;
 }) {
   const api = useDataApi();
@@ -123,6 +128,7 @@ export function OwnDecksCard({
                     ? t.decks.editor.empty
                     : t.decks.progress(studied, cardIds.length)}
                 </span>
+                <DeckTopics deckName={deck.name} outline={topics.get(deck.id)} className="w-full" />
                 {confirmingId === deck.id ? (
                   <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium">{t.decks.confirmDelete(deck.name)}</p>
