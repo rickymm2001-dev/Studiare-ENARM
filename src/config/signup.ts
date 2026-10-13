@@ -1,6 +1,6 @@
 // Lo que pide el registro además del correo (B9 del plan del cambio). La edad mínima de la pregunta 45
 // y las opciones cerradas de Cómo nos conociste de la respuesta 22, con el código del influencer si lo
-// trae. La lista es la misma que acepta la tabla signup_sources de la migración 20261019000001.
+// trae. La lista es la misma que acepta la tabla signup_sources de la migración 20261020000001.
 
 /** Edad mínima para crear una cuenta. Ricardo dejó la recomendada (pregunta 45) */
 export const MINIMUM_AGE = 18;

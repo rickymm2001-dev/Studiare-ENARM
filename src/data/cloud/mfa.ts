@@ -1,7 +1,7 @@
 // Segundo factor del equipo (B9 del plan del cambio, respuesta 30). Médicos, admins y el dueño dan de
 // alta un código TOTP de una app de autenticación y lo escriben al entrar. Con el código correcto la
 // sesión de Supabase sube a aal2, que es lo que piden los permisos por fila cuando la bandera requireMfa
-// está prendida (migración 20261019000001). El alumno nunca pasa por aquí. El dueño puede quitar el
+// está prendida (migración 20261020000001). El alumno nunca pasa por aquí. El dueño puede quitar el
 // factor de alguien del equipo que perdió su teléfono, con la función admin-reset-mfa del servidor.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Role } from '../schemas/common.ts';

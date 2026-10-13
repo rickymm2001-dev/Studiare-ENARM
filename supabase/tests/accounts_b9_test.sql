@@ -1,4 +1,4 @@
--- Pruebas de cuentas y acceso (B9, migración 20261019000001). Corre al final sobre la misma base, con
+-- Pruebas de cuentas y acceso (B9, migración 20261020000001). Corre al final sobre la misma base, con
 -- usuarios propios. Cada bloque falla con un error si algo no cumple.
 --   H. El gancho Before User Created y el registro por invitación
 --   I. Las invitaciones, solo para el dueño y los admins

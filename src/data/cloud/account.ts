@@ -31,7 +31,7 @@ export type LinkResult =
 
 /**
  * Marca con la que el gancho Before User Created rechaza un correo sin invitación (migración
- * 20261019000001). El mensaje del gancho llega tal cual en el error de Supabase Auth
+ * 20261020000001). El mensaje del gancho llega tal cual en el error de Supabase Auth
  */
 export const INVITATION_REQUIRED_MARK = 'invitation_required';
 

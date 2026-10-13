@@ -614,7 +614,7 @@ No necesitas terminal. Aplica primero las anteriores.
 
 1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
 2. Da clic en New query
-3. Abre en GitHub el archivo supabase/migrations/20261019000001_accounts_access.sql, copia todo su contenido y pégalo
+3. Abre en GitHub el archivo supabase/migrations/20261020000001_accounts_access.sql, copia todo su contenido y pégalo
 4. Da clic en Run. Debe decir Success
 5. Es segura de repetir
 6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run

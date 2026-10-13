@@ -214,7 +214,7 @@ const authError = (status: number, errorCode: string, message: string): Reply =>
   json({ code: status, error_code: errorCode, msg: message }, status);
 
 const NO_SESSION = pgError('28000', 'Hace falta iniciar sesión');
-/** El mensaje del gancho Before User Created de la migración 20261019000001, con su marca */
+/** El mensaje del gancho Before User Created de la migración 20261020000001, con su marca */
 const INVITATION_REQUIRED =
   'Studiare está abierto solo con invitación y este correo no tiene una (invitation_required)';
 /** El código que da la app de autenticación simulada */
@@ -793,7 +793,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   /**
    * Si el servidor pide segundo factor al equipo, con la bandera requireMfa de feature_flags, como
-   * staff_mfa_required de la migración 20261019000001
+   * staff_mfa_required de la migración 20261020000001
    */
   function mfaRequired(): boolean {
     const flags = settings.get('feature_flags')?.value;
