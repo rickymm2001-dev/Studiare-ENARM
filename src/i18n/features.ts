@@ -85,10 +85,10 @@ export const featureText = {
     // El saludo concuerda con el sexo que el alumno declaró. Sin dato se usa una forma neutra
     welcome: (alias: string, sex: 'female' | 'male' | 'other' | 'undisclosed' | null) =>
       sex === 'female'
-        ? `¡Bienvenida, ${alias}!`
+        ? `Bienvenida, ${alias}`
         : sex === 'male'
-          ? `¡Bienvenido, ${alias}!`
-          : `¡Te damos la bienvenida, ${alias}!`,
+          ? `Bienvenido, ${alias}`
+          : `Te damos la bienvenida, ${alias}`,
     reviewsTitle: 'Tus repasos',
     simulatorsTitle: 'Tus simuladores',
     topicsTitle: 'Temas para reforzar',
@@ -984,8 +984,7 @@ export const featureText = {
   decks: {
     emptyBranches: (names: string) => `Todavía sin mazos en ${names}.`,
     preloadedTitle: 'Mazos precargados',
-    preloadedDescription:
-      'Mazos de demostración que puedes seguir o dejar. No están validados por médicos.',
+    preloadedDescription: 'Mazos de muestra que puedes seguir o dejar.',
     author: (name: string) => `De ${name}, compartido con su autorización`,
     summary: {
       label: 'Tus mazos en cifras',
@@ -1399,24 +1398,6 @@ export const featureText = {
     },
     size: 'Tamaño del texto',
     sizes: { sm: 'Chico', md: 'Normal', lg: 'Grande', xl: 'Muy grande' },
-    background: 'Fondo',
-    backgrounds: {
-      plain: 'Liso',
-      glow: 'Resplandor',
-      mesh: 'Colores de rama',
-      dots: 'Puntos',
-      custom: 'Personalizado',
-    },
-    customColor: 'Color',
-    pickColor: (color: string) => `Usar el color ${color}`,
-    otherColor: 'Otro',
-    uploadPhoto: 'Subir foto',
-    changePhoto: 'Cambiar foto',
-    removePhoto: 'Quitar foto',
-    photoNote:
-      'La foto se reduce y se guarda solo en este dispositivo. Le ponemos un velo encima para que el texto se siga leyendo.',
-    imageError: 'No pudimos abrir esa imagen. Prueba con una foto JPG o PNG.',
-    imageTooBig: 'La foto no cupo en el almacenamiento del navegador. Prueba con otra más ligera.',
     motion: 'Movimiento y sonido',
     animations: 'Animaciones',
     animationsHint: 'Si tu sistema pide reducir movimiento, se respetará siempre.',
@@ -1614,9 +1595,29 @@ export const featureText = {
     targetSpecialty: 'Especialidad que buscas',
     avatarTitle: 'Foto de perfil',
     avatarInitials: 'Usar mis iniciales',
-    avatarGenerated: (n: number) => `Avatar médico ${n}`,
     avatarPhoto: 'Mi foto',
     uploadPhoto: 'Subir foto',
+    avatarChangePhoto: 'Cambiar foto',
+    avatarNote:
+      'La foto se recorta en círculo. La ves tú y, si compartes un grupo de Party, también tus compañeros.',
+    avatarLoading: 'Abriendo la foto…',
+    avatarOpenError: 'No pudimos abrir esa imagen. Prueba con una foto JPG o PNG.',
+    avatarTooBig: 'No pudimos reducir la foto lo suficiente. Prueba con otra más sencilla.',
+    // Recorte circular antes de guardar (B2 del plan del cambio, comentario 15)
+    avatarCrop: {
+      title: 'Encuadra tu foto',
+      hint: 'Arrastra la foto para encuadrarla y usa el control para acercarla.',
+      preview: 'Vista previa de tu foto. Muévela con las flechas del teclado',
+      zoom: 'Acercar',
+      zoomValue: (zoom: number) => `${zoom.toFixed(1)} veces`,
+      move: 'Mover la foto',
+      moveUp: 'Mover hacia arriba',
+      moveDown: 'Mover hacia abajo',
+      moveLeft: 'Mover a la izquierda',
+      moveRight: 'Mover a la derecha',
+      use: 'Usar foto',
+      cancel: 'Cancelar',
+    },
     save: 'Guardar cambios',
     saved: 'Datos guardados.',
     noAccount:

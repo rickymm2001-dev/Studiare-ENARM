@@ -76,7 +76,7 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
                 className={cn(
                   'min-h-9 rounded-full border-2 px-3 text-sm font-semibold transition-all',
                   filter === value
-                    ? 'border-primary bg-primary-soft text-primary'
+                    ? 'border-primary bg-primary-soft text-primary-ink'
                     : 'border-line bg-surface hover:border-line-strong',
                 )}
               >

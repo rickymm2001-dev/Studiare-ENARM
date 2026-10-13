@@ -229,7 +229,7 @@ export function DeckEditorDialog({
                   className={cn(
                     'flex min-h-9 cursor-pointer items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
                     draft.kind === kind
-                      ? 'border-primary bg-primary-soft text-primary'
+                      ? 'border-primary bg-primary-soft text-primary-ink'
                       : 'border-line bg-surface',
                   )}
                 >

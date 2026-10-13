@@ -12,7 +12,6 @@ import { t } from '@/i18n/es-MX';
 import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -81,7 +80,6 @@ function Summary({ session }: { session: ReadySession }) {
     <ScreenHeader
       title={t.screens.sessionSummary.title}
       description={t.screens.sessionSummary.description}
-      badges={<DemoContentLabel />}
     />
   );
   if (!mine) return <NoActivePractice header={header} />;
@@ -124,7 +122,7 @@ function Summary({ session }: { session: ReadySession }) {
           />
         </StatPanel>
         {sentToReview > 0 ? (
-          <p className="mt-3 text-sm font-medium text-primary">
+          <p className="mt-3 text-sm font-medium text-primary-ink">
             {t.simulator.summaryErrors(sentToReview)}
           </p>
         ) : null}

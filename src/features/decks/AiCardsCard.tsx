@@ -191,7 +191,7 @@ function AiCards({ session }: { session: ReadySession }) {
     <Card aria-labelledby="ia-tarjetas-titulo">
       <CardHeader>
         <CardTitle id="ia-tarjetas-titulo" className="flex items-center gap-2">
-          <Sparkles aria-hidden className="size-5 text-primary" />
+          <Sparkles aria-hidden className="size-5 text-primary-ink" />
           {t.aiCards.title}
         </CardTitle>
         <CardDescription>{t.aiCards.intro}</CardDescription>
@@ -412,7 +412,7 @@ function Results({
                   <p className="font-medium">{proposal.front}</p>
                   {proposal.back !== '' ? <p>{proposal.back}</p> : null}
                   <blockquote className="border-l-2 border-line-strong pl-3 text-sm text-fg-muted">
-                    <span className="block text-xs font-semibold uppercase">{t.aiCards.quote}</span>
+                    <span className="block text-xs font-semibold">{t.aiCards.quote}</span>
                     {proposal.quote}
                   </blockquote>
                   {proposal.duplicate ? (

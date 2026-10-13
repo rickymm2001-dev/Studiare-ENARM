@@ -16,7 +16,6 @@ import { t } from '@/i18n/es-MX';
 import { taskNames } from '@/i18n/insights';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingNote, LoadingState } from '@/ui/states/states';
@@ -49,7 +48,7 @@ export function ExamResultsScreen() {
 function NoExam() {
   return (
     <>
-      <ScreenHeader title={t.screens.examResults.title} badges={<DemoContentLabel />} />
+      <ScreenHeader title={t.screens.examResults.title} />
       <Card>
         <CardHeader>
           <CardTitle>{t.examResults.noExam}</CardTitle>
@@ -118,7 +117,7 @@ function ExamResults({ session }: { session: ReadySession }) {
   if (!bundles || !score) {
     return (
       <>
-        <ScreenHeader title={t.screens.examResults.title} badges={<DemoContentLabel />} />
+        <ScreenHeader title={t.screens.examResults.title} />
         <LoadingState label={t.exam.loading} />
       </>
     );
@@ -130,7 +129,6 @@ function ExamResults({ session }: { session: ReadySession }) {
       <ScreenHeader
         title={t.screens.examResults.title}
         description={t.screens.examResults.description}
-        badges={<DemoContentLabel />}
       />
       <Summary
         state={state}
@@ -235,7 +233,7 @@ function Summary({
       ) : null}
       <p className="mt-2 text-sm text-fg-muted">{text.notPrediction}</p>
       {saving && !error ? (
-        <p role="status" className="mt-2 text-sm font-medium text-primary">
+        <p role="status" className="mt-2 text-sm font-medium text-primary-ink">
           {text.saving}
         </p>
       ) : null}
@@ -269,7 +267,7 @@ function ErrorsCard({
     <Card aria-labelledby="examen-errores">
       <CardHeader>
         <CardTitle id="examen-errores" className="flex items-center gap-2">
-          <Layers aria-hidden className="size-5 text-primary" />
+          <Layers aria-hidden className="size-5 text-primary-ink" />
           {text.errorsTitle}
         </CardTitle>
         <CardDescription>
@@ -345,7 +343,7 @@ function RetryCard({
     <Card aria-labelledby="examen-reintentar">
       <CardHeader>
         <CardTitle id="examen-reintentar" className="flex items-center gap-2">
-          <RotateCcw aria-hidden className="size-5 text-primary" />
+          <RotateCcw aria-hidden className="size-5 text-primary-ink" />
           {text.retryTitle}
         </CardTitle>
         <CardDescription>{text.retryBody}</CardDescription>

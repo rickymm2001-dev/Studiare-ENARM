@@ -23,12 +23,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Títulos con la fuente de marca */
+  /* Títulos con la misma familia, solo más peso y un poco más juntos */
   h1,
   h2,
   h3 {
-    font-family: var(--font-display);
-    letter-spacing: -0.015em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  /* Cifras alineadas en todas partes */
+  html {
+    font-variant-numeric: tabular-nums;
   }
 
   /* Tamaño del texto que elige el alumno (D-061). Todo usa rem, así que escala completo */
@@ -42,43 +47,6 @@
     font-size: 125%;
   }
 
-  /* Fondos. Se pintan detrás de todo y no se mueven al hacer scroll */
-  html[data-bg='glow'] body {
-    background:
-      radial-gradient(60rem 30rem at 100% -10%, var(--color-primary-soft), transparent 70%),
-      radial-gradient(40rem 24rem at -10% 10%, var(--color-accent-soft), transparent 70%),
-      var(--color-canvas);
-    background-attachment: fixed;
-  }
-  html[data-bg='mesh'] body {
-    background:
-      radial-gradient(40rem 26rem at 0% 0%, var(--color-ped-soft), transparent 65%),
-      radial-gradient(40rem 26rem at 100% 0%, var(--color-gyo-soft), transparent 65%),
-      radial-gradient(44rem 30rem at 50% 110%, var(--color-cir-soft), transparent 65%),
-      var(--color-canvas);
-    background-attachment: fixed;
-  }
-  /* Personalizado. Color mezclado con el fondo del tema para que el texto se lea, y foto opcional
-     con un velo del mismo color del tema encima (D-065) */
-  html[data-bg='custom'] body {
-    background-color: color-mix(in srgb, var(--enarm-custom-color) 30%, var(--color-canvas));
-    background-image:
-      linear-gradient(
-        color-mix(in srgb, var(--color-canvas) 70%, transparent),
-        color-mix(in srgb, var(--color-canvas) 70%, transparent)
-      ),
-      var(--enarm-custom-image, none);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-  }
-  html[data-bg='dots'] body {
-    background-color: var(--color-canvas);
-    background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-attachment: fixed;
-  }
-
   /* Lo que recibe el foco o se ancla no queda debajo de la barra fija de arriba (D-117) */
   html {
     scroll-padding-top: 3.5rem;
@@ -89,9 +57,10 @@
     }
   }
 
-  /* Foco visible y consistente para teclado (4.8) */
+  /* Foco visible y consistente para teclado (4.8). Es la única excepción con color además del
+     color de acción y los estados (4.7 del plan del cambio) */
   :focus-visible {
-    outline: 3px solid var(--color-focus);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
 
@@ -117,40 +86,20 @@
   }
 }
 
-/* Animaciones de la interfaz */
+/* Movimiento breve. Respeta reducir movimiento por el bloque de arriba */
 @layer utilities {
   .animate-rise {
-    animation: enarm-rise 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: enarm-rise 180ms ease-out both;
   }
   .animate-pop {
-    animation: enarm-pop 520ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
-  }
-  .animate-glow {
-    animation: enarm-glow 2.4s ease-in-out infinite;
-  }
-  .bg-hero {
-    background-image: var(--enarm-hero);
-  }
-  .bg-gold {
-    background-image: var(--enarm-gold);
-  }
-  .bg-flame {
-    background-image: var(--enarm-flame);
-  }
-  .bg-brand {
-    background-image: var(--enarm-primary-grad);
-  }
-  .text-gradient-gold {
-    background-image: var(--enarm-gold);
-    background-clip: text;
-    color: transparent;
+    animation: enarm-pop 320ms cubic-bezier(0.2, 1.2, 0.4, 1) both;
   }
 }
 
 @keyframes enarm-rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -160,37 +109,34 @@
 
 @keyframes enarm-pop {
   0% {
-    transform: scale(0.6);
+    transform: scale(0.85);
     opacity: 0;
-  }
-  60% {
-    transform: scale(1.08);
-    opacity: 1;
   }
   100% {
     transform: scale(1);
-  }
-}
-
-@keyframes enarm-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgb(242 193 78 / 0);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgb(242 193 78 / 0.25);
+    opacity: 1;
   }
 }
 
 /*
-  Etiqueta chica en mayúsculas con letra mono, para encabezar grupos y datos (D-079).
-  Va en texto corto. Los textos largos siguen en la fuente de lectura del alumno.
+  Etiqueta chica para encabezar grupos y datos. Sin mayúsculas sostenidas ni letra mono (B2 del
+  plan del cambio). Va en texto corto. Los textos largos siguen en la fuente de lectura del alumno.
 */
 @utility eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.3;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+/* Título de cada pantalla y de los grupos grandes. 20 px en el teléfono y 24 px desde 640 px, siempre
+   en negritas, un solo tamaño para el saludo de Inicio y los demás títulos (comentario 7, D-121) */
+@utility screen-title {
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  font-weight: 700;
+  @media (width >= 40rem) {
+    font-size: var(--text-title-lg);
+    line-height: var(--text-title-lg--line-height);
+  }
 }

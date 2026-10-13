@@ -25,7 +25,7 @@ export function SessionHeader({ title, meta, badges, actions }: SessionHeaderPro
       <title>{t.app.documentTitle(title)}</title>
       <h1
         tabIndex={-1}
-        className="shrink-0 text-lg font-extrabold text-fg outline-none sm:text-xl lg:text-2xl"
+        className="screen-title shrink-0 text-fg outline-none"
       >
         {title}
       </h1>

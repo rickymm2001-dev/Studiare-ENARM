@@ -7,7 +7,6 @@ import { t } from '@/i18n/es-MX';
 import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
@@ -34,7 +33,6 @@ function Feedback({ session }: { session: ReadySession }) {
           <span>{t.simulator.progress(practice.answers.length, practice.questionIds.length)}</span>
         ) : undefined
       }
-      badges={<DemoContentLabel />}
     />
   );
   if (!answer) return <NoActivePractice header={header} />;

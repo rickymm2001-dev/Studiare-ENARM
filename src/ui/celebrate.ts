@@ -6,7 +6,8 @@ import { motionAllowed } from './appearance';
 
 export type CelebrationKind = 'goal' | 'level' | 'badge' | 'session' | 'small';
 
-const COLORS = ['#f2c14e', '#0e5a6b', '#d94f2b', '#0e8fa3', '#b92b74', '#1f8a57'];
+// Tonos del color de acción y grises, como las gráficas (4.7 del plan del cambio)
+const COLORS = ['#156082', '#4a8aa9', '#8fb3c6', '#b7cdda', '#576570', '#dde2e6'];
 
 const NOTES: Record<CelebrationKind, number[]> = {
   small: [880],

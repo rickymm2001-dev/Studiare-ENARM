@@ -1,13 +1,15 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { parseRole, toCloudAccount } from '../cloud/account';
+import { dataUrlToBlob, photoHash } from '../cloud/avatars';
 import { readCloudConfig } from '../cloud/client';
 import { jwtRole } from '../cloud/keyRole';
 import type { EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
+import { makeFakeCloud } from '../testing/fakeCloud';
 import { freshDb } from '../testing/fixtures';
 import { EMPTY_DETAILS, findAccountByEmail, registerAccount } from './account';
-import { aliasFor, linkCloudIdentity } from './cloudLink';
+import { aliasFor, linkCloudIdentity, pushLocalAccount } from './cloudLink';
 
 const openDbs: EnarmDb[] = [];
 afterEach(async () => {
@@ -102,18 +104,26 @@ describe('rol y datos que viajan a la nube', () => {
     expect(parseRole(undefined)).toBe('student');
   });
 
-  it('la foto propia no se sube y los nombres van como en la tabla', () => {
-    const cloud = toCloudAccount({
-      userId: 'u1',
-      email: 'rick@example.com',
-      ...EMPTY_DETAILS,
-      birthYear: 1998,
-      avatar: { kind: 'photo', dataUrl: 'data:image/jpeg;base64,AAAA' },
-      updatedAt: '2026-10-02T00:00:00.000Z',
-    });
+  it('la foto va a Storage y en la fila solo queda su ruta, con los nombres de la tabla', () => {
+    const cloud = toCloudAccount(
+      {
+        userId: 'u1',
+        email: 'rick@example.com',
+        ...EMPTY_DETAILS,
+        birthYear: 1998,
+        avatar: { kind: 'photo', dataUrl: 'data:image/jpeg;base64,AAAA' },
+        updatedAt: '2026-10-02T00:00:00.000Z',
+      },
+      { kind: 'photo', path: `${identity.authId}/avatar.jpg`, hash: 'deadbeef' },
+    );
     expect(cloud.birth_year).toBe(1998);
-    expect(cloud.avatar).toEqual({ kind: 'initials' });
+    expect(cloud.avatar).toEqual({
+      kind: 'photo',
+      path: `${identity.authId}/avatar.jpg`,
+      hash: 'deadbeef',
+    });
     expect(JSON.stringify(cloud)).not.toContain('rick@example.com');
+    expect(JSON.stringify(cloud)).not.toContain('base64');
   });
 
   it('el alias sale de la nube o del correo', () => {
@@ -133,15 +143,100 @@ describe('unir la cuenta de la nube con el perfil local', () => {
       details: EMPTY_DETAILS,
     });
     if (!created.ok) throw new Error('no se creó');
-    expect(await linkCloudIdentity(api, identity)).toBe(created.user.id);
+    expect(await linkCloudIdentity(api, identity)).toEqual({
+      userId: created.user.id,
+      created: false,
+    });
   });
 
   it('en un dispositivo nuevo crea el perfil con el alias de la nube', async () => {
     const { api } = setup();
-    const userId = await linkCloudIdentity(api, identity);
-    expect((await api.repos.users.get(userId))?.alias).toBe('Rick');
-    expect((await findAccountByEmail(api, 'rick@example.com'))?.userId).toBe(userId);
+    const linked = await linkCloudIdentity(api, identity);
+    expect(linked.created).toBe(true);
+    expect((await api.repos.users.get(linked.userId))?.alias).toBe('Rick');
+    expect((await findAccountByEmail(api, 'rick@example.com'))?.userId).toBe(linked.userId);
     // La segunda vez no duplica
-    expect(await linkCloudIdentity(api, identity)).toBe(userId);
+    expect(await linkCloudIdentity(api, identity)).toEqual({
+      userId: linked.userId,
+      created: false,
+    });
+  });
+});
+
+describe('la foto de perfil al unir la cuenta (B2)', () => {
+  const JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRg==';
+  const PATH = `${identity.authId}/avatar.jpg`;
+  const cloudWithPhoto = () => {
+    const fake = makeFakeCloud();
+    fake.remoteAccount = { avatar: { kind: 'photo', path: PATH, hash: photoHash(JPEG) } };
+    fake.objects.set(`avatars/${PATH}`, dataUrlToBlob(JPEG));
+    return fake;
+  };
+
+  it('en un dispositivo nuevo baja la foto de la nube y no la vuelve a subir', async () => {
+    const { api } = setup();
+    const fake = cloudWithPhoto();
+    const linked = await linkCloudIdentity(api, identity);
+    expect(
+      await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId, {
+        pullPhoto: linked.created,
+      }),
+    ).toBe(true);
+    expect((await api.repos.accounts.get(linked.userId))?.avatar).toEqual({
+      kind: 'photo',
+      dataUrl: JPEG,
+    });
+    expect(fake.storageCalls).toEqual([`download:avatars/${PATH}`]);
+    expect(fake.accountUpdates[0]?.avatar).toEqual({
+      kind: 'photo',
+      path: PATH,
+      hash: photoHash(JPEG),
+    });
+  });
+
+  it('si el alumno eligió iniciales en este dispositivo, no se le regresa la foto y la nube la quita', async () => {
+    const { api } = setup();
+    const fake = cloudWithPhoto();
+    const created = await registerAccount(api, {
+      alias: 'Rick',
+      email: identity.email,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: EMPTY_DETAILS,
+    });
+    if (!created.ok) throw new Error('no se creó');
+    const linked = await linkCloudIdentity(api, identity);
+    expect(linked.created).toBe(false);
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId, {
+      pullPhoto: linked.created,
+    });
+    expect((await api.repos.accounts.get(linked.userId))?.avatar).toEqual({ kind: 'initials' });
+    expect(fake.storageCalls).toEqual([`remove:avatars/${PATH}`]);
+    expect(fake.accountUpdates[0]?.avatar).toEqual({ kind: 'initials' });
+  });
+
+  it('sin foto en la nube el perfil nuevo se queda con iniciales y Storage ni se toca', async () => {
+    const { api } = setup();
+    const fake = makeFakeCloud();
+    const linked = await linkCloudIdentity(api, identity);
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId, { pullPhoto: true });
+    expect((await api.repos.accounts.get(linked.userId))?.avatar).toEqual({ kind: 'initials' });
+    expect(fake.storageCalls).toEqual([]);
+  });
+
+  it('si la bajada falla, la cuenta se sube igual con iniciales', async () => {
+    const { api } = setup();
+    const fake = cloudWithPhoto();
+    fake.failStorage = 'error';
+    const linked = await linkCloudIdentity(api, identity);
+    expect(
+      await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId, { pullPhoto: true }),
+    ).toBe(true);
+    expect((await api.repos.accounts.get(linked.userId))?.avatar).toEqual({ kind: 'initials' });
+    // Sin foto local, la fila conserva la de la nube hasta que Storage vuelva y se pueda decidir
+    expect(fake.accountUpdates[0]?.avatar).toEqual({
+      kind: 'photo',
+      path: PATH,
+      hash: photoHash(JPEG),
+    });
   });
 });

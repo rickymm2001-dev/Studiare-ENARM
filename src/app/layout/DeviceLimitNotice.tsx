@@ -42,7 +42,7 @@ function LimitAlert({ retryAt, className }: { retryAt: number | null; className:
             {text.helpQuestion}{' '}
             <a
               href={supportMailto(support, text.helpMailSubject)}
-              className="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+              className="font-semibold text-primary-ink underline underline-offset-4 hover:text-primary-hover"
             >
               {text.helpLink}
             </a>

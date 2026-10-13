@@ -41,7 +41,7 @@ export function ExamNavigator({
                 className={cn(
                   'relative flex size-9 w-full items-center justify-center rounded-md border text-sm font-semibold',
                   answer.optionId !== null
-                    ? 'border-primary bg-primary-soft text-primary'
+                    ? 'border-primary bg-primary-soft text-primary-ink'
                     : 'border-line bg-surface text-fg-muted hover:bg-muted',
                   isCurrent && 'ring-2 ring-primary ring-offset-1 ring-offset-surface',
                 )}

@@ -7,7 +7,6 @@ import type { Deck } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { CardHtml } from '../shared/CardHtml';
 import { ControversySignal } from '../shared/ControversySignal';
 import type { CardFaces } from '../review/study';
@@ -130,13 +129,12 @@ export function ResultList({
             </div>
             {faces ? (
               <div className="ml-8 flex flex-col gap-2 rounded-lg border border-line bg-muted/40 p-3">
-                {row.isDemo ? <DemoContentLabel className="self-start" /> : null}
                 <div>
-                  <p className="text-xs font-semibold text-fg-muted uppercase">{t.explore.front}</p>
+                  <p className="text-xs font-semibold text-fg-muted">{t.explore.front}</p>
                   <CardHtml html={faces.front} className="text-base" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-fg-muted uppercase">{t.explore.back}</p>
+                  <p className="text-xs font-semibold text-fg-muted">{t.explore.back}</p>
                   <CardHtml html={faces.back} className="text-base" />
                 </div>
                 {row.controversy ? (

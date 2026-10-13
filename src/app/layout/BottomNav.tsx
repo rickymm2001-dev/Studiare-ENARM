@@ -56,17 +56,17 @@ export function BottomNav({
               className={cn(
                 'flex min-h-nav flex-col items-center justify-center gap-1 px-1 text-xs font-medium text-fg-muted',
                 'hover:text-fg lg:min-h-14 lg:rounded-md lg:mx-2',
-                isActive(item, pathname) && 'text-primary font-semibold',
+                isActive(item, pathname) && 'text-primary-ink font-semibold',
               )}
             >
               <span
                 aria-hidden
                 className={cn(
-                  'flex h-8 w-14 items-center justify-center rounded-full transition-all [&_svg]:size-5',
-                  isActive(item, pathname) && 'bg-primary bg-brand text-primary-fg shadow-glow',
+                  'flex h-8 w-14 items-center justify-center rounded-md transition-colors [&_svg]:size-5',
+                  isActive(item, pathname) && 'bg-primary-soft text-primary-ink',
                 )}
               >
-                <item.icon strokeWidth={isActive(item, pathname) ? 2.4 : 2} />
+                <item.icon strokeWidth={2} />
               </span>
               <span className="truncate">{item.label}</span>
             </Link>

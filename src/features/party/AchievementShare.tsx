@@ -93,36 +93,32 @@ function AchievementPreview({ card }: { card: AchievementCard }) {
   return (
     <figure
       aria-label={text.previewLabel}
-      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-2xl bg-[#0e5a6b] text-white shadow-raised"
+      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-lg bg-[#156082] text-white"
     >
       <div className="flex flex-col items-center gap-1 px-5 pt-4 pb-5">
         <p className="self-start text-sm font-bold text-white/85">{card.brand}</p>
         <p
           aria-hidden
-          className="mt-2 flex size-24 items-center justify-center rounded-full border-4 border-white bg-[#f6d27a] font-display text-5xl font-extrabold text-[#093a46]"
+          className="mt-2 flex size-24 items-center justify-center rounded-full bg-white text-5xl font-bold text-[#156082]"
         >
           {card.level}
         </p>
-        <p className="mt-2 font-display text-2xl font-extrabold">{card.levelTitle}</p>
+        <p className="mt-2 text-2xl font-bold">{card.levelTitle}</p>
         <p className="text-sm text-white/85">{text.level(card.level)}</p>
         <div className="mt-3 grid w-full grid-cols-2 gap-2 text-center">
-          <p className="rounded-xl bg-black/25 px-2 py-2">
+          <p className="rounded-md bg-black/25 px-2 py-2">
             <span className="block text-xs text-white/85">{text.streakLabel}</span>
-            <span className="block font-display text-lg font-extrabold text-[#ffc7a6]">
-              {text.streakValue(card.streak)}
-            </span>
+            <span className="block text-lg font-bold">{text.streakValue(card.streak)}</span>
           </p>
-          <p className="rounded-xl bg-black/25 px-2 py-2">
+          <p className="rounded-md bg-black/25 px-2 py-2">
             <span className="block text-xs text-white/85">{text.xpLabel}</span>
-            <span className="block font-display text-lg font-extrabold text-[#f6d27a]">
-              {card.weeklyXp.toLocaleString('es-MX')}
-            </span>
+            <span className="block text-lg font-bold">{card.weeklyXp.toLocaleString('es-MX')}</span>
           </p>
         </div>
         {card.alias ? <p className="mt-2 font-semibold">{card.alias}</p> : null}
       </div>
       {card.simulated ? (
-        <figcaption className="bg-[#ece8fb] px-3 py-2 text-center text-xs font-bold text-[#45358a]">
+        <figcaption className="bg-[#eef0f2] px-3 py-2 text-center text-xs font-bold text-[#3f4b55]">
           {text.simulatedBanner}
         </figcaption>
       ) : null}

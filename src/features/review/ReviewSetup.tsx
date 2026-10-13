@@ -13,7 +13,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
@@ -21,7 +20,6 @@ import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } f
 
 export function ReviewSetup({
   addDeck,
-  hasDemo,
   cards,
   deckNames,
   topicOfCard,
@@ -35,8 +33,6 @@ export function ReviewSetup({
 }: {
   /** Atajo para agregar un mazo, junto al título */
   addDeck?: ReactNode;
-  /** Algún mazo que se sigue es de demostración, así que el repaso lleva su etiqueta (4.6) */
-  hasDemo: boolean;
   cards: CardEntity[];
   deckNames: Map<string, string>;
   /** Subespecialidad de cada tarjeta. null si su nota no la trae */
@@ -93,12 +89,9 @@ export function ReviewSetup({
       ) : null}
       <Card aria-labelledby="que-repasar">
         <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle id="que-repasar" className="text-base sm:text-lg">
-              {text.title}
-            </CardTitle>
-            {hasDemo ? <DemoContentLabel /> : null}
-          </div>
+          <CardTitle id="que-repasar" className="text-base sm:text-lg">
+            {text.title}
+          </CardTitle>
           {addDeck}
         </CardHeader>
         <div className="flex flex-col gap-3">
@@ -116,7 +109,7 @@ export function ReviewSetup({
                   className={cn(
                     'min-h-9 rounded-full border-2 px-3 text-sm font-semibold transition-all sm:min-h-touch sm:px-4',
                     selection.mode === mode
-                      ? 'border-primary bg-primary-soft text-primary'
+                      ? 'border-primary bg-primary-soft text-primary-ink'
                       : 'border-line bg-surface hover:border-line-strong',
                   )}
                 >
@@ -146,7 +139,7 @@ export function ReviewSetup({
               {text.leeches(leechCount)}{' '}
               <Link
                 to={`${screenPath('explore')}?estado=sanguijuelas`}
-                className="font-semibold text-primary underline underline-offset-2"
+                className="font-semibold text-primary-ink underline underline-offset-2"
               >
                 {text.seeLeeches}
               </Link>

@@ -1,6 +1,7 @@
-// Etiquetas visibles (4.6). Las preguntas y los mazos de demostración dicen que no están validados por
-// médicos, la base de demostración marca Datos simulados en toda pantalla del alumno y los amigos, los
-// duelos y la tarjeta de logro de Party también. Las etiquetas llevan texto, nunca solo color
+// Etiquetas visibles (4.6 y 4.1 del plan del cambio). Mientras el banco es de demostración hay un
+// solo aviso global, Versión de demostración, y ninguna pantalla repite su etiqueta. La base de
+// demostración marca Datos simulados en toda pantalla del alumno y los amigos, los duelos y la
+// tarjeta de logro de Party también. Las etiquetas llevan texto, nunca solo color
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -12,9 +13,15 @@ import {
   test,
 } from './support/fixtures';
 
-const demoContent = (page: Page) => page.getByText(t.labels.demoContent).first();
+const demoVersion = (page: Page) =>
+  page.getByRole('region', { name: t.labels.demoVersion, exact: true });
 
-test('preguntas, examen y mazos de demostración dicen que no están validados por médicos', async ({
+/** La frase que Ricardo pidió quitar de cada pantalla (comentario 9) no vuelve a aparecer */
+async function expectNoPerScreenLabel(page: Page) {
+  await expect(page.getByText(/no validad[oa]s? por médicos/)).toHaveCount(0);
+}
+
+test('con el banco de demostración hay un solo aviso global y ninguna etiqueta por pantalla', async ({
   page,
 }) => {
   test.setTimeout(240_000);
@@ -22,12 +29,13 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
 
   // Los mazos precargados
   await page.goto(SCREENS.decks.path);
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toContainText(t.labels.demoVersion);
+  await expectNoPerScreenLabel(page);
 
   // Configurar la práctica, la pregunta, la retroalimentación y el resumen. El banco demo se
   // siembra la primera vez que se entra y puede tardar
   await page.goto(SCREENS.simulatorSetup.path);
-  await expect(demoContent(page)).toBeVisible({ timeout: 60_000 });
+  await expect(demoVersion(page)).toBeVisible();
   // El examen de abajo también pregunta cuántas preguntas, así que se busca dentro de la práctica
   const practice = page.getByRole('region', { name: t.simulator.setupTitle });
   await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
@@ -35,31 +43,48 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toBeVisible();
+  await expectNoPerScreenLabel(page);
   for (let index = 1; index <= 5; index += 1) {
     await answerPracticeQuestion(page, index, 5);
-    if (index === 1) await expect(demoContent(page)).toBeVisible();
   }
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toBeVisible();
+  await expectNoPerScreenLabel(page);
 
-  // Repasar, con las preguntas falladas que pasaron a Mis errores. La etiqueta va al elegir qué
-  // repasar y en cada tarjeta, porque lleva texto médico de un banco que ningún médico validó
+  // Repasar, con las preguntas falladas que pasaron a Mis errores
   await page.goto(SCREENS.review.path);
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toBeVisible();
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
   await expect(page.getByText(t.review.errorCard)).toBeVisible();
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toBeVisible();
+  await expectNoPerScreenLabel(page);
   await expectNoSeriousA11yViolations(page);
 
   // El examen completo, en curso
   await page.goto(SCREENS.simulatorSetup.path);
   const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.labels.demoContent)).toBeVisible({ timeout: 60_000 });
+  await expect(card.getByRole('button', { name: t.exam.start })).toBeEnabled({ timeout: 60_000 });
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page.getByRole('timer')).toBeVisible();
-  await expect(demoContent(page)).toBeVisible();
+  await expect(demoVersion(page)).toBeVisible();
+  await expectNoPerScreenLabel(page);
   await expectNoSeriousA11yViolations(page);
+});
+
+test('la portada, la bienvenida y los textos legales no llevan el aviso del banco', async ({
+  page,
+}) => {
+  for (const path of [
+    SCREENS.home.path,
+    SCREENS.onboarding.path,
+    SCREENS.privacyNotice.path,
+    SCREENS.terms.path,
+  ]) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(demoVersion(page)).toHaveCount(0);
+  }
 });
 
 test('la base de demostración marca Datos simulados en toda pantalla del alumno', async ({
@@ -92,6 +117,8 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
     const banner = page.getByRole('region', { name: t.labels.simulatedData, exact: true });
     await expect(banner, SCREENS[key].path).toContainText(t.labels.simulatedData);
     await expect(banner, SCREENS[key].path).toContainText(t.database.banner);
+    // Un solo aviso. El de Versión de demostración no se apila encima del de datos simulados
+    await expect(demoVersion(page), SCREENS[key].path).toHaveCount(0);
   }
 
   // La tarjeta de logro de una cuenta de demostración lo dice y no se puede tomar por un logro real

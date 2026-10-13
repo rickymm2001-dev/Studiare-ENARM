@@ -14,7 +14,6 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { CheckboxField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { ActionDock } from '@/ui/components/action-dock';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { FeatureGate } from '../shared/FeatureGate';
@@ -138,7 +137,6 @@ function Explore({ session }: { session: ReadySession }) {
   const current = Math.min(page, pages - 1);
   const pageRows = sorted.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE);
   const pageSelected = pageRows.length > 0 && pageRows.every((row) => selected.has(row.cardId));
-  const anyDemo = pageRows.some((row) => row.isDemo);
 
   const toggle = (cardId: string) => {
     setSelected((currentSet) => {
@@ -188,7 +186,6 @@ function Explore({ session }: { session: ReadySession }) {
           <p role="status" className="font-semibold">
             {t.explore.results(sorted.length, data.rows.length)}
           </p>
-          {anyDemo ? <DemoContentLabel /> : null}
           {selectedRows.length > 0 ? (
             <p className="text-sm text-fg-muted">{t.explore.selected(selectedRows.length)}</p>
           ) : null}

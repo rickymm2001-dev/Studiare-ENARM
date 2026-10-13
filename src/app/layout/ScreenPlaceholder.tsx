@@ -37,7 +37,7 @@ export function ScreenPlaceholder({ screenKey }: { screenKey: ScreenKey }) {
         <Card aria-labelledby="pronto-titulo">
           <CardHeader>
             <CardTitle id="pronto-titulo" className="flex items-center gap-2">
-              <Hammer aria-hidden className="text-primary" />
+              <Hammer aria-hidden className="text-primary-ink" />
               {t.phase.comingSoonTitle}
             </CardTitle>
           </CardHeader>
@@ -78,7 +78,7 @@ export function ScreenPlaceholder({ screenKey }: { screenKey: ScreenKey }) {
                     aria-current={option === state ? 'true' : undefined}
                     className={cn(
                       'inline-flex min-h-touch items-center rounded-md border border-line px-3 text-sm font-medium text-fg hover:bg-muted',
-                      option === state && 'border-primary bg-primary-soft text-primary',
+                      option === state && 'border-primary bg-primary-soft text-primary-ink',
                     )}
                   >
                     {t.states.previewOptions[option]}

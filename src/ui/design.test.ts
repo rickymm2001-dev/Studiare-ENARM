@@ -1,0 +1,65 @@
+// Reglas del sistema de diseño (B2 del plan del cambio, D-121). Sin degradados en src, el color de
+// acción es exactamente #156082 en claro y en los dos modos oscuros, los tokens y utilidades de
+// degradado y dorado ya no existen y el botón no tiene variante dorada.
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
+
+const SRC = fileURLToPath(new URL('../', import.meta.url));
+
+/** Todos los archivos de código y estilos de src, sin las pruebas */
+function sourceFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return sourceFiles(path);
+    if (!/\.(ts|tsx|css)$/.test(entry.name) || /\.test\.tsx?$/.test(entry.name)) return [];
+    return [path];
+  });
+}
+
+const read = (relative: string) => readFileSync(join(SRC, relative), 'utf8');
+
+describe('sistema de diseño sobrio (B2, D-121)', () => {
+  it('no hay degradados en CSS, TSX ni canvas', () => {
+    const pattern = /-gradient\(|create(?:Linear|Radial|Conic)Gradient\(/;
+    const offenders = sourceFiles(SRC)
+      .filter((file) => pattern.test(readFileSync(file, 'utf8')))
+      .map((file) => file.slice(SRC.length));
+    expect(offenders).toEqual([]);
+  });
+
+  it('el color de acción es #156082 en claro y en los dos bloques oscuros', () => {
+    const tokens = read('ui/tokens.css');
+    const primaries = [...tokens.matchAll(/--enarm-primary:\s*(#[0-9a-f]{6})/gi)].map((match) =>
+      match[1]?.toLowerCase(),
+    );
+    expect(primaries).toEqual(['#156082', '#156082', '#156082']);
+    // Los botones y la navegación usan el token, nunca otro color de acción escrito a mano
+    expect(read('ui/components/button.tsx')).toContain('bg-primary ');
+  });
+
+  it('los tokens y utilidades de degradado y dorado ya no existen', () => {
+    const css = read('ui/tokens.css') + read('index.css');
+    for (const name of [
+      '--enarm-hero',
+      '--enarm-gold',
+      '--enarm-flame',
+      '--enarm-primary-grad',
+      '--enarm-shadow-glow',
+      '.bg-hero',
+      '.bg-gold',
+      '.bg-flame',
+      '.bg-brand',
+      '.text-gradient-gold',
+    ]) {
+      expect(css, name).not.toContain(name);
+    }
+  });
+
+  it('el botón no tiene variante dorada ni usa píldoras', () => {
+    const button = read('ui/components/button.tsx');
+    expect(button).not.toMatch(/\bgold\b/);
+    expect(button).not.toContain('rounded-full');
+  });
+});

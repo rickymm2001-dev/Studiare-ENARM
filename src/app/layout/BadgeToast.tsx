@@ -75,7 +75,7 @@ function Toast({ session }: { session: ReadySession }) {
       role="status"
       className="fixed inset-x-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 mx-auto flex max-w-reading items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-raised lg:top-24 lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md"
     >
-      <Award aria-hidden className="size-6 shrink-0 text-primary" />
+      <Award aria-hidden className="size-6 shrink-0 text-primary-ink" />
       <div className="min-w-0 flex-1 text-sm">
         <p className="font-semibold text-fg">{t.rewards.toast.title(names.length)}</p>
         <p className="text-fg-muted">{names.join('. ')}</p>

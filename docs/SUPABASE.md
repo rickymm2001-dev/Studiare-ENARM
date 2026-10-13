@@ -697,6 +697,7 @@ Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (ref
 - Tres Edge Functions desplegadas, create-checkout y create-portal-session con verificación de JWT, y payment-webhook-stripe sin ella porque quien llama es Stripe y se identifica con su firma. Se comprobó que arrancan, que el webhook contesta 405 a un GET y 503 a un POST mientras no exista el secreto, y que las otras dos rechazan una llave anónima
 - Falta desplegar payment-webhook-mercadopago, que espera la cuenta de Mercado Pago. Mientras tanto la app no ofrece Mercado Pago (D-114)
 - 2026-10-11, Fase K. La migración 20261015000001_plan_prices deja los precios en 79, 149 y 1,499. create-checkout va en la versión 10. Escribe en sus registros el motivo de cualquier pago que no se pueda abrir, sin llaves ni datos del alumno, y revisa que cada Price ID empiece con price_. Se lee en Edge Functions, create-checkout, Logs, buscando Stripe rechazó, No se pudo crear o no es un Price ID
+- 2026-10-13, B2 del plan del cambio (D-121). La migración 20261016000001_avatars crea el bucket privado avatars para la foto de perfil, solo JPEG y hasta 400 KB, con permisos por fila. La ve y la cambia solo el alumno desde su dispositivo activo, la ven sus compañeros de un grupo activo de Party y los admins, y se borra sola al borrar la cuenta. Se aplicó con el conector y se comprobó que el bucket, las cuatro políticas y el disparador existen. Las pruebas SQL de la carpeta supabase/tests la cubren con un esqueleto de Storage
 
 ### Lo que te toca pegar a mano
 

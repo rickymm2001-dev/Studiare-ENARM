@@ -43,7 +43,7 @@ export function OutlineLinks({
               <li key={target.id}>
                 <Link
                   to={hrefOf(target.id)}
-                  className="font-medium text-primary underline underline-offset-2"
+                  className="font-medium text-primary-ink underline underline-offset-2"
                 >
                   {target.title}
                 </Link>
@@ -79,7 +79,7 @@ export function OutlineLinks({
               <li key={entry.outlineId}>
                 <Link
                   to={hrefOf(entry.outlineId)}
-                  className="font-medium text-primary underline underline-offset-2"
+                  className="font-medium text-primary-ink underline underline-offset-2"
                 >
                   {entry.title}
                 </Link>

@@ -44,6 +44,8 @@ describe('banderas de lanzamiento', () => {
     expect(isFeatureEnabled('demoTools', { appEnv: 'development', stored: null })).toBe(true);
     expect(isFeatureEnabled('demoTools', { appEnv: 'demo', stored: null })).toBe(true);
     expect(isFeatureEnabled('demoTools', { appEnv: 'production', stored: null })).toBe(false);
+    // El aviso de Versión de demostración sigue prendido en producción hasta que llegue el banco real (B11)
+    expect(isFeatureEnabled('demoBank', { appEnv: 'production', stored: null })).toBe(true);
   });
 
   it('lo que dice el servidor manda sobre el valor del entorno', () => {

@@ -52,7 +52,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
 import { resolveControversy } from '@/data/usecases/aiCards';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
@@ -208,7 +207,6 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         ) : null}
         <ReviewSetup
           addDeck={<AddDeckButton />}
-          hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
           cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
           deckNames={unitNames}
           topicOfCard={topicOfCard}
@@ -717,7 +715,6 @@ function ReviewSession({
           </Badge>
           {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
           {leechBefore ? <Badge variant="danger">{t.review.leech.badge}</Badge> : null}
-          {note.isDemo ? <DemoContentLabel /> : null}
           {isAiNote(note) ? <Badge variant="warning">{t.aiCards.draftLabel}</Badge> : null}
           <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
         </div>

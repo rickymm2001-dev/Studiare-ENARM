@@ -54,7 +54,6 @@ describe('pantalla del examen', () => {
     expect(await screen.findByText(t.exam.progress(1, 3), { exact: true })).toBeVisible();
     expect(screen.getByRole('timer')).toBeVisible();
     expect(screen.getAllByRole('radio')).toHaveLength(4);
-    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
     // Nada de retroalimentación hasta los resultados
     expect(screen.queryByText(t.simulator.correct)).toBeNull();
   });

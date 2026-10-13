@@ -1,9 +1,11 @@
 // Cuenta en la nube (D-075). Entrar con un enlace al correo, sin contraseña, leer el rol que
 // asigna el servidor y guardar los datos de cuenta y la aceptación del aviso de privacidad. Al
-// servidor solo viajan el correo, el alias y los datos opcionales que el alumno dio.
+// servidor solo viajan el correo, el alias y los datos opcionales que el alumno dio. La foto de
+// perfil va a Storage y en la fila queda solo su ruta (B2 del plan del cambio).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RoleSchema, type Role } from '@/data/schemas/common';
 import type { Account } from '@/data/schemas/people';
+import { parseRemoteAvatar, syncAvatarToStorage, type RemoteAvatar } from './avatars';
 
 export interface CloudIdentity {
   authId: string;
@@ -32,8 +34,7 @@ export async function requestEmailLink(
 }
 
 export type CodeResult =
-  | { ok: true }
-  | { ok: false; reason: 'invalid' | 'rate_limited' | 'failed' };
+  { ok: true } | { ok: false; reason: 'invalid' | 'rate_limited' | 'failed' };
 
 /** El código del correo trae de 6 a 10 dígitos, según la configuración del proyecto de Supabase */
 export const EMAIL_CODE = /^\d{6,10}$/;
@@ -114,8 +115,11 @@ export async function readCloudIdentity(cloud: SupabaseClient): Promise<CloudIde
   };
 }
 
-/** Datos de cuenta en el formato de la tabla private_accounts. La foto propia no se sube aún */
-export function toCloudAccount(account: Account) {
+/**
+ * Datos de cuenta en el formato de la tabla private_accounts. La foto nunca va en la fila. avatar es
+ * lo que decidió syncAvatarToStorage, iniciales o la ruta de la foto en Storage
+ */
+export function toCloudAccount(account: Account, avatar: RemoteAvatar) {
   return {
     birth_year: account.birthYear,
     sex: account.sex,
@@ -123,19 +127,41 @@ export function toCloudAccount(account: Account) {
     situation: account.situation,
     attempt: account.attempt,
     target_specialty: account.targetSpecialty,
-    avatar: account.avatar.kind === 'photo' ? { kind: 'initials' } : account.avatar,
+    avatar,
     updated_at: new Date().toISOString(),
   };
 }
 
+/** Lo que la nube guarda como foto de perfil. null si no hay fila, no se pudo leer o no se reconoce */
+export async function readCloudAvatar(
+  cloud: SupabaseClient,
+  authId: string,
+): Promise<RemoteAvatar | null> {
+  const { data, error } = await cloud
+    .from('private_accounts')
+    .select('avatar')
+    .eq('user_id', authId)
+    .maybeSingle();
+  if (error) return null;
+  const row = data as { avatar?: unknown } | null;
+  return parseRemoteAvatar(row?.avatar);
+}
+
+/**
+ * Guarda alias y datos de cuenta. Con foto, primero la sube a Storage y en la fila queda su ruta. Si
+ * Storage falla, la cuenta se guarda igual. remoteAvatar es lo que la nube tenía, para no volver a
+ * subir la misma foto y para quitar la anterior al pasar a iniciales. null si no se sabe
+ */
 export async function saveCloudAccount(
   cloud: SupabaseClient,
   authId: string,
   account: Account,
   alias: string,
+  remoteAvatar: RemoteAvatar | null = null,
 ): Promise<boolean> {
+  const avatar = await syncAvatarToStorage(cloud, authId, account.avatar, remoteAvatar);
   const [accountResult, profileResult] = await Promise.all([
-    cloud.from('private_accounts').update(toCloudAccount(account)).eq('user_id', authId),
+    cloud.from('private_accounts').update(toCloudAccount(account, avatar)).eq('user_id', authId),
     cloud.from('profiles').update({ alias }).eq('id', authId),
   ]);
   return !accountResult.error && !profileResult.error;

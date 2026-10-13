@@ -22,7 +22,6 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextAreaField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { SaveBar } from '@/ui/components/save-bar';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import {
@@ -87,7 +86,6 @@ export function QuestionEditorScreen() {
     <ScreenHeader
       title={t.screens.questionEditor.title}
       description={t.screens.questionEditor.description}
-      badges={<DemoContentLabel />}
     />
   );
   const backToBank = (

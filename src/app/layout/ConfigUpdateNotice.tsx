@@ -15,7 +15,7 @@ export function ConfigUpdateNotice({ className = '' }: { className?: string }) {
       role="status"
       className={`flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line bg-muted px-4 py-3 text-sm text-fg ${className}`}
     >
-      <RefreshCw aria-hidden className="size-5 shrink-0 text-primary" />
+      <RefreshCw aria-hidden className="size-5 shrink-0 text-primary-ink" />
       <div className="min-w-0 flex-1 basis-60">
         <p className="font-semibold">{t.configUpdate.title}</p>
         <p>{t.configUpdate.body}</p>

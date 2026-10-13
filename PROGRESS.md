@@ -16,8 +16,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 
 ### Bloques
 - [x] B0. Arranque
-- [ ] B1. Auditoría inicial de procesos (en cierre)
-- [ ] B2. Sistema de diseño y rediseño visual
+- [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
+- [ ] B2. Sistema de diseño y rediseño visual (en curso)
 - [ ] B3. Navegación, Configuración y Perfil
 - [ ] B4. Repasar y Buscar tarjetas
 - [ ] B5. Revisión del examen y motivos de error
@@ -77,8 +77,14 @@ Evidencia
 - Revisión independiente de un subagente que no escribió el código, con tsc, eslint y 79 pruebas unitarias corridas por él. Sin hallazgos críticos ni altos. Tres medios y siete bajos, todos atendidos. Lo más útil, el Supabase simulado invertía la regla de los reclamos refresh del dispositivo, el aviso de privacidad seguía diciendo que los permisos se daban al crear el perfil, y faltaban las capturas
 - PR 36 a main con check, e2e y audit del CI
 
+### B2. Sistema de diseño y rediseño visual (D-121)
+- Hecho. Tokens nuevos con un solo color de acción #156082 y neutros, sin degradados, dorado ni brillos. Botones, tarjetas, StatPanel, etiquetas, campos, barra de progreso y navegación con el sistema sobrio. Título de pantalla de 20 y 24 px para el saludo y los títulos. Etiqueta Demostración, no validado por médicos fuera de 17 archivos y un aviso global Versión de demostración con la bandera demoBank. Fondos con degradado, color y foto fuera de Apariencia. Portada, imagen de logro y vista previa lisas. Fotos de perfil con recorte circular, bucket privado en Storage con permisos por fila (migración 20261016000001_avatars aplicada y probada en SQL) y sin avatares generados
+- Capturas de antes en docs/screenshots/v3/antes (114 imágenes, 390 claro y 1280 claro y oscuro, con el examen aparte) y de después en docs/screenshots/v3/b2
+- Pruebas nuevas. src/ui/design.test.ts (sin degradados, color exacto, sin dorado) y tests/e2e/theme-dark.spec.ts (axe en oscuro en todas las pantallas). labels.spec.ts cambia a comprobar el aviso global
+- Evidencia. Pendiente de cerrar con check, e2e, presupuesto del JavaScript y revisión de diseño
+
 ### Preguntas para Ricardo
-- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. Si no dices otra cosa antes de B2, lo fusiono renumerado con el número de decisión que siga y B2 parte de ahí, porque es tu petición más reciente sobre Inicio
+- El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)

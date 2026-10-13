@@ -22,7 +22,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { SelectField } from '@/ui/components/field';
-import { DemoContentLabel } from '@/ui/components/labels';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { QuestionPreview } from './QuestionPreview';
@@ -75,7 +74,6 @@ export function ReportsScreen() {
     <ScreenHeader
       title={t.screens.contentReports.title}
       description={role === 'physician' ? text.hintPhysician : text.hintAdmin}
-      badges={<DemoContentLabel />}
     />
   );
   if (data === undefined || !bankReady) {

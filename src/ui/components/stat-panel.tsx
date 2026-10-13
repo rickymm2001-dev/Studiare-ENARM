@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { cn } from '../cn';
 
 /**
- * Tarjeta oscura con degradado para las cifras clave de una pantalla (D-079). Las celdas van en
- * una fila, separadas por una línea fina, con el texto en blanco sobre el degradado de la marca
+ * Cifras clave de una pantalla en una superficie lisa con borde fino (B2 del plan del cambio).
+ * Las celdas van en una fila, separadas por una línea, con el texto del color de la página
  */
 export function StatPanel({
   label,
@@ -22,10 +22,10 @@ export function StatPanel({
     <section
       aria-label={label}
       className={cn(
-        'bg-hero animate-rise grid rounded-xl text-white shadow-raised',
+        'animate-rise grid rounded-lg border border-line bg-surface text-fg',
         quad
-          ? 'grid-cols-2 [&>*]:border-white/15 [&>*:nth-child(even)]:border-l [&>*:nth-child(n+3)]:border-t sm:auto-cols-fr sm:grid-flow-col sm:grid-cols-none sm:[&>*:nth-child(n+3)]:border-t-0 sm:[&>*:not(:first-child)]:border-l'
-          : 'auto-cols-fr grid-flow-col divide-x divide-white/15',
+          ? 'grid-cols-2 [&>*]:border-line [&>*:nth-child(even)]:border-l [&>*:nth-child(n+3)]:border-t sm:auto-cols-fr sm:grid-flow-col sm:grid-cols-none sm:[&>*:nth-child(n+3)]:border-t-0 sm:[&>*:not(:first-child)]:border-l'
+          : 'auto-cols-fr grid-flow-col divide-x divide-line',
         className,
       )}
     >
@@ -45,7 +45,7 @@ export function StatCell({
   children,
 }: {
   icon: ReactNode;
-  /** Etiqueta corta, porque va en mayúsculas y letra mono */
+  /** Etiqueta corta */
   label: string;
   /** Texto extra solo para el lector de pantalla, por ejemplo la etiqueta completa */
   srLabel?: string;
@@ -56,11 +56,11 @@ export function StatCell({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex h-full min-w-0 flex-col gap-1 px-3 py-3 sm:px-5 sm:py-4">
-      <span className="flex items-center gap-1.5 font-mono text-[0.625rem] leading-tight font-semibold tracking-[0.1em] text-white/80 uppercase sm:text-[0.6875rem] sm:tracking-[0.14em]">
+    <div className="flex h-full min-w-0 flex-col gap-1 px-3 py-3 sm:px-4 sm:py-3">
+      <span className="flex items-center gap-1.5 text-xs leading-tight font-medium text-fg-muted">
         <span
           aria-hidden
-          className={cn('shrink-0 text-white [&_svg]:size-3.5', !phoneIcon && 'hidden sm:inline')}
+          className={cn('shrink-0 [&_svg]:size-3.5', !phoneIcon && 'hidden sm:inline')}
         >
           {icon}
         </span>
@@ -69,10 +69,8 @@ export function StatCell({
           {srLabel ? <span className="sr-only"> {srLabel}</span> : null}
         </span>
       </span>
-      <span className="font-display text-xl leading-tight font-extrabold tabular-nums sm:text-3xl">
-        {value}
-      </span>
-      {caption ? <span className="text-xs text-white/80">{caption}</span> : null}
+      <span className="text-xl leading-tight font-bold tabular-nums sm:text-2xl">{value}</span>
+      {caption ? <span className="text-xs text-fg-muted">{caption}</span> : null}
       {children ? <div className="mt-auto pt-1">{children}</div> : null}
     </div>
   );

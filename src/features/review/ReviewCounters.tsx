@@ -7,7 +7,7 @@ import { cn } from '@/ui/cn';
 const KINDS: readonly CounterKind[] = ['new', 'learning', 'review'];
 
 const TONE: Record<CounterKind, string> = {
-  new: 'text-primary',
+  new: 'text-primary-ink',
   learning: 'text-danger',
   review: 'text-success',
 };

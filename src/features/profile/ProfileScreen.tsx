@@ -50,7 +50,7 @@ function Profile({ session }: { session: ReadySession }) {
     <>
       {header}
       <Card className="overflow-hidden p-0 sm:p-0">
-        <div className="bg-hero h-20" />
+        <div className="h-20 border-b border-line bg-muted" />
         <div className="-mt-10 flex flex-col gap-3 px-5 pb-5">
           <Avatar
             name={user.alias}
@@ -59,15 +59,15 @@ function Profile({ session }: { session: ReadySession }) {
             className="size-20 text-2xl ring-4 ring-surface"
           />
           <div>
-            <p className="font-display text-2xl font-extrabold">{user.alias}</p>
-            <p className="font-semibold text-warning">
+            <p className="text-xl font-bold">{user.alias}</p>
+            <p className="font-semibold text-fg-muted">
               {t.profileCard.levelLine(level.level, level.title)}
             </p>
           </div>
           <LevelLadderDialog totalXp={totalXp}>
             <button type="button" className="flex flex-col gap-1 rounded-md text-left">
               <ProgressBar
-                tone="gold"
+                tone="neutral"
                 value={level.xpIntoLevel}
                 max={level.xpForNext}
                 label={t.levelLadder.toNextLevel(
@@ -81,11 +81,11 @@ function Profile({ session }: { session: ReadySession }) {
             </button>
           </LevelLadderDialog>
           <div className="flex flex-wrap gap-2">
-            <span className="flex items-center gap-1.5 rounded-full bg-streak-soft px-3 py-1.5 font-bold text-streak-ink">
+            <span className="flex items-center gap-1.5 rounded-md bg-muted px-3 py-1.5 font-bold text-fg">
               <Flame aria-hidden className="size-4" />
               {t.profileCard.streak(streak.current, streak.best)}
             </span>
-            <span className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 font-bold text-warning">
+            <span className="flex items-center gap-1.5 rounded-md bg-muted px-3 py-1.5 font-bold text-fg">
               <Star aria-hidden className="size-4" />
               {t.profileCard.xp(totalXp)}
             </span>

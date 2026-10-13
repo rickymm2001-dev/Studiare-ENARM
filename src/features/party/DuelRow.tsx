@@ -102,7 +102,7 @@ export function DuelRow({
           </table>
           <p role="status" className="mt-2 flex items-center gap-2 font-semibold">
             {view.verdict.kind === 'win' ? (
-              <Trophy aria-hidden className="size-4 text-gold" />
+              <Trophy aria-hidden className="size-4 text-fg-muted" />
             ) : null}
             {text.verdicts[verdictKey(view.verdict)]}
           </p>

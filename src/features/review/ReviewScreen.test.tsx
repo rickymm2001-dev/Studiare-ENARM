@@ -251,7 +251,7 @@ describe('pantalla de Repasar', () => {
     });
   });
 
-  it('el contenido de demostración lleva su etiqueta al elegir y en cada tarjeta, y el propio no', async () => {
+  it('ninguna tarjeta lleva etiqueta de demostración por sí sola, queda el aviso global (4.1 del plan)', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.review.path, { seed: seedDeck(true) });
     const start = await screen.findByRole(
@@ -259,16 +259,10 @@ describe('pantalla de Repasar', () => {
       { name: t.reviewSetup.start(1) },
       { timeout: 10_000 },
     );
-    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/no validad[oa]s? por médicos/)).toBeNull();
     await typing.click(start);
     await screen.findByText('¿Cuál es el tratamiento de primera línea?');
-    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
-  });
-
-  it('un mazo propio no lleva la etiqueta de demostración', async () => {
-    app = await renderApp(SCREENS.review.path, { seed: seedDeck(false) });
-    await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 });
-    expect(screen.queryByText(t.labels.demoContent)).toBeNull();
+    expect(screen.queryByText(/no validad[oa]s? por médicos/)).toBeNull();
   });
 
   it.each([

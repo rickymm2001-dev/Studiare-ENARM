@@ -37,7 +37,7 @@ export function MissionRow({ mission }: { mission: Mission }) {
           value={mission.current}
           max={mission.target}
           label={`${title}. ${text.progress(mission.current, mission.target)}`}
-          tone={mission.done ? 'gold' : 'primary'}
+          tone={mission.done ? 'neutral' : 'primary'}
         />
       )}
     </li>
@@ -67,7 +67,7 @@ export function LeagueSummary({ league }: { league: LeagueStatus }) {
             value={league.weeklyXp - (LEAGUES[index]?.fromXp ?? 0)}
             max={league.next.missingXp + league.weeklyXp - (LEAGUES[index]?.fromXp ?? 0)}
             label={text.leagueNext(league.next.missingXp, text.leagues[league.next.key])}
-            tone="gold"
+            tone="neutral"
           />
           <p className="text-sm text-fg-muted">
             {text.leagueNext(league.next.missingXp, text.leagues[league.next.key])}
@@ -100,7 +100,7 @@ export function BadgeCard({ badge }: { badge: BadgeStatus }) {
       <div className="flex items-center gap-2">
         <Award
           aria-hidden
-          className={cn('size-6 shrink-0', badge.level > 0 ? 'text-gold' : 'text-fg-muted')}
+          className={cn('size-6 shrink-0', badge.level > 0 ? 'text-fg-muted' : 'text-fg-muted')}
         />
         <div className="flex min-w-0 flex-col">
           <span className="font-semibold">{family.name}</span>

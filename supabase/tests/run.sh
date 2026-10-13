@@ -17,6 +17,7 @@ trap cleanup EXIT
 "${run_as[@]}" "$bin/pg_ctl" -D "$work/data" -o "-p $port -k $work -c listen_addresses=''" -l "$work/log" start >/dev/null
 psql_run() { "${run_as[@]}" "$bin/psql" -h "$work" -p "$port" -U postgres -d postgres -v ON_ERROR_STOP=1 -q "$@"; }
 psql_run -f "$here/stub_auth.sql"
+psql_run -f "$here/stub_storage.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
 # Las migraciones que siguen al freno son idempotentes. Se corre la última otra vez para comprobarlo
@@ -37,3 +38,4 @@ psql_run -f "$here/client_errors_test.sql"
 psql_run -f "$here/admin_users_test.sql"
 psql_run -f "$here/function_grants_test.sql"
 psql_run -f "$here/plan_prices_test.sql"
+psql_run -f "$here/avatars_test.sql"

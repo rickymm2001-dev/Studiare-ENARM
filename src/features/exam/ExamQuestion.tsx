@@ -83,7 +83,7 @@ export function ExamQuestion({
         </div>
         {vignette ? (
           <div className="mt-2 rounded-md bg-muted p-3">
-            <p className="mb-1 text-xs font-semibold uppercase text-fg-muted">
+            <p className="mb-1 text-xs font-semibold text-fg-muted">
               {t.simulator.caseLabel}
             </p>
             <p className="whitespace-pre-line">{vignette}</p>
