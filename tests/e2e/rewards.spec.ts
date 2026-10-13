@@ -5,18 +5,10 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
-test('un alumno nuevo ve sus misiones en cero y la liga de partida', async ({ page }) => {
+test('la ruta /logros redirige a Progreso', async ({ page }) => {
   await signUp(page);
   await page.goto(SCREENS.rewards.path);
-  await expect(
-    page.getByRole('heading', { level: 1, name: t.screens.rewards.title }),
-  ).toBeVisible();
-  const today = page.getByRole('region', { name: t.rewards.missionsToday });
-  await expect(today).toBeVisible();
-  await expect(page.getByText(t.rewards.leagueNow(t.rewards.leagues.bronze, 0))).toBeVisible();
-  await expect(page.getByText(t.rewards.calibrating(0, 30))).toBeVisible();
-  await expect(page.getByText(t.rewards.noRecent)).toBeVisible();
-  await expectNoSeriousA11yViolations(page);
+  await expect(page).toHaveURL(new RegExp(SCREENS.progress.path));
 });
 
 test('las misiones de hoy salen en Inicio sin agregarlas', async ({ page }) => {

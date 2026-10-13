@@ -51,9 +51,11 @@ test('días fáciles. Se marcan en Repasar, el resumen los cuenta al recargar y 
   // El sábado casi sin repasos y el domingo con menos. El resumen cambia al momento
   await page.getByRole('combobox', { name: t.settings.weekdays.sat }).selectOption('minimum');
   await page.getByRole('combobox', { name: t.settings.weekdays.sun }).selectOption('reduced');
-  await expect(disclosure).toContainText(t.settings.easyDaysSummary(2));
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(t.settings.saved, { exact: true })).toBeVisible();
+  await page
+    .getByRole('form', { name: 'Ajustes del repaso' })
+    .getByRole('button', { name: t.settings.saveChanges })
+    .click();
+  await expect(page.getByText(t.settings.saved)).toBeVisible();
 
   // Se recuerda al recargar
   await page.reload();

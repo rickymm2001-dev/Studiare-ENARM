@@ -57,7 +57,7 @@ export function ReviewSettingsPanel({
       onSubmit={(event) => {
         event.preventDefault();
         void onSave(patch).then(() => {
-          setStatus(t.settings.saved);
+          setStatus(`${t.pomodoro.saved} · ${t.settings.saved}`);
         });
       }}
     >

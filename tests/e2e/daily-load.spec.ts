@@ -37,7 +37,10 @@ test('contadores, temporizador, atrasos repartidos y deshacer', async ({ page })
   await page.getByRole('checkbox', { name: t.settings.cardTimerEnabled }).check();
   await page.getByRole('combobox', { name: t.settings.cardTimerSeconds }).selectOption('10');
   await page.getByRole('checkbox', { name: t.settings.cardTimerAutoReveal }).check();
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
+  await page
+    .getByRole('form', { name: 'Ajustes del repaso' })
+    .getByRole('button', { name: t.settings.saveChanges })
+    .click();
   await expect(page.getByText(t.settings.saved)).toBeVisible();
 
   // Tres contadores con los números de la selección y el de la tarjeta actual subrayado

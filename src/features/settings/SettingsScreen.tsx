@@ -2,15 +2,18 @@
 // Rediseñada en B3: una sola página sin pestañas, con exactamente tres secciones
 // (Perfil, Apariencia, Privacidad) separadas por una línea horizontal (D-078).
 // Herramientas de demo/admin se muestran al final únicamente para administradores o dueños.
-import { FlaskConical, UserRound } from 'lucide-react';
+import { FlaskConical, LogIn, UserRound } from 'lucide-react';
+import { Link } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { screenPath } from '@/app/screens';
 import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
+import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
@@ -67,7 +70,22 @@ export function SettingsScreen() {
             </h2>
             <p className="text-sm text-fg-muted">{t.screens.profile.description}</p>
           </div>
-          {ready ? <ProfileSection session={ready} /> : null}
+          {ready ? (
+            <ProfileSection session={ready} />
+          ) : session.status === 'signed-out' ? (
+            <Card aria-labelledby="sin-sesion">
+              <CardHeader>
+                <CardTitle id="sin-sesion">{t.session.signedOutTitle}</CardTitle>
+                <CardDescription>{t.session.signedOutBody}</CardDescription>
+              </CardHeader>
+              <Button asChild className="self-start">
+                <Link to={screenPath('onboarding')}>
+                  <LogIn aria-hidden />
+                  {t.session.goToWelcome}
+                </Link>
+              </Button>
+            </Card>
+          ) : null}
         </section>
 
         <hr className="border-line" />

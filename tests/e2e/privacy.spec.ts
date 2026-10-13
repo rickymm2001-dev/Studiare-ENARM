@@ -15,11 +15,20 @@ test('el puntaje oficial se guarda, sobrevive a recargar y se borra al retirar l
   await page.goto(section);
   await expect(page.getByRole('heading', { name: text.consentsTitle })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
-  // La mejora anónima empieza apagada (4.27 del plan del cambio). Sin ella no hay captura del puntaje
+
+  // La mejora anónima empieza apagada (4.27 del plan del cambio). En Progreso no hay captura sin permiso
+  await page.goto(SCREENS.progress.path);
+  await expect(page.getByText(text.scoreNeedsConsent)).toBeVisible();
   await expect(page.getByLabel(text.score, { exact: true })).toHaveCount(0);
+
+  // Se activa el permiso en Configuración
+  await page.goto(section);
   await page
     .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
     .check();
+
+  // En Progreso ya aparece la captura
+  await page.goto(SCREENS.progress.path);
   await expect(page.getByText(text.none)).toBeVisible();
 
   // Un puntaje fuera de rango se frena con el aviso en español y no se guarda
@@ -37,9 +46,11 @@ test('el puntaje oficial se guarda, sobrevive a recargar y se borra al retirar l
   await expect(page.getByText(text.current(year, 72.5))).toBeVisible();
 
   // Retirar la mejora anónima quita el puntaje y la captura
+  await page.goto(section);
   await page
     .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
     .uncheck();
+  await page.goto(SCREENS.progress.path);
   await expect(page.getByText(text.scoreNeedsConsent)).toBeVisible();
   await expect(page.getByText(text.none)).toBeVisible();
   await expect(page.getByLabel(text.score, { exact: true })).toHaveCount(0);
@@ -50,7 +61,7 @@ test('sin la nube conectada solo está Borrar mis datos y no la baja de la cuent
   page,
 }) => {
   await signUp(page);
-  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  await page.goto(SCREENS.settings.path);
   await expect(page.getByRole('heading', { name: t.settings.deleteTitle })).toBeVisible();
   await expect(page.getByRole('heading', { name: t.settings.accountDeleteTitle })).toHaveCount(0);
   await expect(page.getByText(t.settings.deleteCloudNote)).toHaveCount(0);
