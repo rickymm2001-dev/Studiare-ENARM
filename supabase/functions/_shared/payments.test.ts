@@ -1410,3 +1410,143 @@ describe('plan pagado vigente', () => {
     expect(planInForce(row('active', 'no es fecha'), NOW)).toBe('annual');
   });
 });
+
+// Referidos con la prueba gratis (bloque B7 del plan del cambio, respuesta 77 y 4.3). El mes gratis
+// llega con el primer cobro del referido, la primera factura pagada de más de 0 pesos, nunca con la
+// factura de 0 de una prueba, y una sola vez aunque Stripe repita el aviso
+describe('referidos con la prueba gratis y el primer cobro', () => {
+  /**
+   * Lo que hace la base con cada aviso, reducido a lo que importa para el referido. Sigue las reglas de
+   * apply_payment_notice y complete_referral (supabase/migrations/20261019000001_referral_first_charge.sql).
+   * Un aviso repetido se reconoce por su id, un pago de 0 pesos o sin plan se ignora, el mismo cobro no
+   * se cuenta dos veces y el referido se concreta con el primer cobro, una sola vez. La regla de verdad
+   * la prueba supabase/tests/referral_first_charge_test.sql contra Postgres
+   */
+  function ledger() {
+    const events = new Set<string>();
+    const charges = new Set<string>();
+    const state = { referral: 'pending' as 'pending' | 'completed', months: 0 };
+    const applyNotice = (notice: PaymentNotice): Promise<string> => {
+      const key = `${notice.provider}:${notice.eventId}`;
+      if (events.has(key)) return Promise.resolve('duplicate');
+      events.add(key);
+      if (notice.kind !== 'paid') return Promise.resolve('applied');
+      if (
+        notice.userId === null ||
+        notice.plan === null ||
+        notice.providerPaymentId === null ||
+        notice.amountMxn === null ||
+        notice.amountMxn <= 0
+      ) {
+        return Promise.resolve('ignored');
+      }
+      charges.add(notice.providerPaymentId);
+      if (state.referral === 'pending') {
+        state.referral = 'completed';
+        state.months += 1;
+      }
+      return Promise.resolve('applied');
+    };
+    return { applyNotice, state, charges };
+  }
+
+  const send = (event: unknown, deps: PaymentDeps) => {
+    const body = JSON.stringify(event);
+    return handleStripeWebhook(
+      new Request('https://f.supabase.co/functions/v1/payment-webhook-stripe', {
+        method: 'POST',
+        headers: { 'stripe-signature': stripeHeader(body) },
+        body,
+      }),
+      deps,
+    );
+  };
+
+  /** La factura de la suscripción del referido, con los datos que puso create-checkout */
+  const invoice = (id: string, eventId: string, cents: number, reason: string) => ({
+    id: eventId,
+    type: 'invoice.paid',
+    data: {
+      object: {
+        id,
+        amount_paid: cents,
+        currency: 'mxn',
+        billing_reason: reason,
+        customer: 'cus_1',
+        parent: {
+          subscription_details: {
+            subscription: 'sub_prueba',
+            metadata: { user_id: USER, plan: 'monthly' },
+          },
+        },
+        lines: { data: [{ period: { start: 1_760_000_000, end: 1_762_592_000 } }] },
+      },
+    },
+  });
+
+  it('la sesión de pago que abre una prueba sin cobro no es un pago', () => {
+    expect(
+      noticeFromStripeEvent(
+        sessionEvent({ payment_status: 'no_payment_required', amount_total: 0 }),
+      ),
+    ).toBeNull();
+  });
+
+  it('la factura de 0 pesos de la prueba llega con monto 0, que la base no cuenta como cobro', () => {
+    expect(
+      noticeFromStripeEvent(invoice('in_prueba', 'evt_prueba', 0, 'subscription_create')),
+    ).toMatchObject({ kind: 'paid', amountMxn: 0, providerPaymentId: 'in_prueba' });
+    expect(
+      noticeFromStripeEvent(invoice('in_cobro', 'evt_cobro', 14_900, 'subscription_cycle')),
+    ).toMatchObject({ kind: 'paid', amountMxn: 149, providerPaymentId: 'in_cobro' });
+  });
+
+  it('la prueba no da el mes, el primer cobro sí y un aviso repetido no da otro', async () => {
+    const db = ledger();
+    const { deps } = paymentDeps({ applyNotice: db.applyNotice });
+
+    // Empieza la prueba. La sesión no se aplica y la factura de 0 pesos se ignora
+    const start = await send(
+      sessionEvent({ id: 'cs_prueba', payment_status: 'no_payment_required', amount_total: 0 }),
+      deps,
+    );
+    expect(start.status).toBe(200);
+    expect(await start.text()).toBe('Ignorado');
+    const trial = await send(invoice('in_prueba', 'evt_prueba', 0, 'subscription_create'), deps);
+    expect(await trial.text()).toBe('ignored');
+    expect(db.state).toEqual({ referral: 'pending', months: 0 });
+
+    // Termina la prueba y llega el primer cobro
+    const first = await send(
+      invoice('in_cobro1', 'evt_cobro1', 14_900, 'subscription_cycle'),
+      deps,
+    );
+    expect(first.status).toBe(200);
+    expect(await first.text()).toBe('applied');
+    expect(db.state).toEqual({ referral: 'completed', months: 1 });
+
+    // Stripe reenvía el mismo aviso
+    const again = await send(
+      invoice('in_cobro1', 'evt_cobro1', 14_900, 'subscription_cycle'),
+      deps,
+    );
+    expect(again.status).toBe(200);
+    expect(await again.text()).toBe('duplicate');
+    expect(db.state.months).toBe(1);
+
+    // La renovación del mes siguiente tampoco da otro mes
+    await send(invoice('in_cobro2', 'evt_cobro2', 14_900, 'subscription_cycle'), deps);
+    expect(db.state.months).toBe(1);
+    expect([...db.charges]).toEqual(['in_cobro1', 'in_cobro2']);
+  });
+
+  it('sin prueba, el primer pago confirmado da el mes y su factura no se cuenta dos veces', async () => {
+    const db = ledger();
+    const { deps } = paymentDeps({ applyNotice: db.applyNotice });
+    // checkout.session.completed e invoice.paid traen la misma factura
+    await send(sessionEvent(), deps);
+    await send(invoice('in_1', 'evt_factura_1', 15_000, 'subscription_create'), deps);
+    expect(db.state).toEqual({ referral: 'completed', months: 1 });
+    expect([...db.charges]).toEqual(['in_1']);
+  });
+});

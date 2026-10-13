@@ -88,9 +88,11 @@ test('en la demostración crea un grupo simulado, ve la tabla, se une con su có
   await expect(page.getByRole('region', { name: 'Guardia de los jueves' })).toBeVisible();
 });
 
-// Compartir un logro (9.6). La tarjeta lleva solo nivel, racha y XP de la semana y no se comparte nada
-// hasta tocar el botón. Con el menú de compartir del sistema se manda la imagen y sin él se descarga
-test('comparte la tarjeta de logro con el menú del sistema', async ({ page }) => {
+// Comparte tu semana (respuesta 83 del plan del cambio, B7, antes Comparte tu logro de 9.6). La imagen
+// lleva días de estudio, repasos, preguntas y racha de la semana, sin aciertos ni puntajes, y no se
+// comparte nada hasta tocar el botón. Con el menú de compartir del sistema se manda la imagen y sin él
+// se descarga
+test('comparte el resumen de la semana con el menú del sistema', async ({ page }) => {
   // Un menú de compartir de mentira que guarda lo que recibe, porque en la prueba no hay sistema
   await page.addInitScript(() => {
     const shared: {
@@ -118,22 +120,24 @@ test('comparte la tarjeta de logro con el menú del sistema', async ({ page }) =
   });
   await signUp(page);
   await page.goto(SCREENS.party.path);
-  const card = page.getByRole('region', { name: t.party.share.title });
+  const card = page.getByRole('region', { name: t.b7.weekShare.title });
   await expect(card).toBeVisible();
-  const preview = card.getByRole('figure', { name: t.party.share.previewLabel });
-  await expect(preview).toContainText(t.party.share.level(1));
+  const preview = card.getByRole('figure', { name: t.b7.weekShare.previewLabel });
+  await expect(preview).toContainText(t.b7.weekShare.heading);
+  await expect(preview).toContainText(t.b7.weekShare.studyDays);
+  await expect(preview).not.toContainText('XP');
   // Sin alias por defecto y sin etiqueta de demostración en una cuenta real
   await expect(preview).not.toContainText('Ana');
-  await expect(preview).not.toContainText(t.party.share.simulatedBanner);
+  await expect(preview).not.toContainText(t.b7.weekShare.simulatedBanner);
   await expectNoSeriousA11yViolations(page);
   expect(await page.evaluate(() => (window as never as { __shared: unknown[] }).__shared)).toEqual(
     [],
   );
 
-  await card.getByRole('checkbox', { name: t.party.share.includeAlias }).check();
+  await card.getByRole('checkbox', { name: t.b7.weekShare.includeAlias }).check();
   await expect(preview).toContainText('Ana');
-  await card.getByRole('button', { name: t.party.share.button }).click();
-  await expect(card.getByText(t.party.share.outcomes.shared)).toBeVisible();
+  await card.getByRole('button', { name: t.b7.weekShare.button }).click();
+  await expect(card.getByText(t.b7.weekShare.outcomes.shared)).toBeVisible();
 
   const shared = await page.evaluate(
     () =>
@@ -148,27 +152,27 @@ test('comparte la tarjeta de logro con el menú del sistema', async ({ page }) =
       ).__shared,
   );
   expect(shared).toHaveLength(1);
-  expect(shared[0]?.title).toBe(t.party.share.shareTitle);
+  expect(shared[0]?.title).toBe(t.b7.weekShare.shareTitle);
   expect(shared[0]?.text).toContain('Ana');
   expect(shared[0]?.files).toHaveLength(1);
-  expect(shared[0]?.files[0]).toMatchObject({ name: t.party.share.fileName, type: 'image/png' });
+  expect(shared[0]?.files[0]).toMatchObject({ name: t.b7.weekShare.fileName, type: 'image/png' });
   // Una imagen dibujada de verdad pesa varios kilobytes y no es un archivo vacío
   expect(shared[0]?.files[0]?.size ?? 0).toBeGreaterThan(5_000);
 });
 
-test('sin menú de compartir descarga la tarjeta como imagen PNG cuadrada', async ({ page }) => {
+test('sin menú de compartir descarga el resumen como imagen PNG cuadrada', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'share', { value: undefined, configurable: true });
     Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true });
   });
   await signUp(page);
   await page.goto(SCREENS.party.path);
-  const card = page.getByRole('region', { name: t.party.share.title });
+  const card = page.getByRole('region', { name: t.b7.weekShare.title });
   const download = page.waitForEvent('download');
-  await card.getByRole('button', { name: t.party.share.button }).click();
+  await card.getByRole('button', { name: t.b7.weekShare.button }).click();
   const file = await download;
-  expect(file.suggestedFilename()).toBe(t.party.share.fileName);
-  await expect(card.getByText(t.party.share.outcomes.downloaded)).toBeVisible();
+  expect(file.suggestedFilename()).toBe(t.b7.weekShare.fileName);
+  await expect(card.getByText(t.b7.weekShare.outcomes.downloaded)).toBeVisible();
 
   // Es un PNG de 1080 por 1080 píxeles
   const path = await file.path();

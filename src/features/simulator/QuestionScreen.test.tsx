@@ -3,11 +3,13 @@ import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { usePreferences } from '@/app/preferences';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { SCREENS } from '@/app/screens';
 import { UserSettingsSchema } from '@/data/schemas/people';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { usePractice } from './practice';
 
 // El confeti usa un canvas que jsdom no trae
@@ -198,5 +200,47 @@ describe('pantalla de la pregunta', () => {
     app = await renderApp(SCREENS.question.path);
     expect(await screen.findByText(t.simulator.noActive)).toBeVisible();
     expect(screen.getByRole('link', { name: t.simulator.goSetup })).toBeVisible();
+  });
+
+  // Modo enfoque (respuesta 82 del plan del cambio, B7). El XP se sigue ganando, solo no se muestra
+  describe('XP ganado en el resumen y en la retroalimentación', () => {
+    /**
+     * Contesta bien la única pregunta, llega al resumen y abre la respuesta. Devuelve la tarjeta del
+     * resumen y la del resultado de esa respuesta
+     */
+    async function answerAndOpen() {
+      const typing = userEvent.setup();
+      const { first } = await startPractice();
+      await screen.findByText(first.question.prompt);
+      await typing.click(option(1));
+      await typing.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      // La acertada viene cerrada. Se abre para ver su retroalimentación
+      await typing.click(document.querySelector('ol details summary') as HTMLElement);
+      const result = await screen.findByRole('region', {
+        name: new RegExp(`^${t.simulator.correct}`),
+      });
+      const [summary] = screen.getAllByRole('region', { name: t.simulator.summaryTitle });
+      return { summary: summary as HTMLElement, result };
+    }
+
+    it('sin modo enfoque los dos dicen el XP', async () => {
+      const { summary, result } = await answerAndOpen();
+      expect(within(summary).getByText(t.simulator.summaryLabels.xp)).toBeVisible();
+      expect(within(result).getByText(/^\+\d+ XP$/)).toBeVisible();
+    });
+
+    it('en modo enfoque ninguno lo dice, aunque el XP quede registrado', async () => {
+      usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+      const { summary, result } = await answerAndOpen();
+      expect(within(summary).queryByText(t.simulator.summaryLabels.xp)).toBeNull();
+      expect(within(summary).queryByText(/XP/)).toBeNull();
+      expect(within(result).queryByText(/XP/)).toBeNull();
+      const { user, api } = app as RenderedApp;
+      await waitFor(async () => {
+        const events = await api.repos.events.query({ userId: user.id });
+        expect(events.some((event) => event.type === 'xp_awarded')).toBe(true);
+      });
+    });
   });
 });

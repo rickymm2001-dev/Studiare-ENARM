@@ -12,6 +12,7 @@ import type { User } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { changePlan } from '@/data/usecases/subscription';
 import { t } from '@/i18n/es-MX';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
@@ -181,5 +182,36 @@ describe('Inicio con el diseño fijo', () => {
     app = await renderApp(SCREENS.home.path);
     usePreferences.setState({ sessionUserId: null });
     expect(await screen.findByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
+  });
+
+  // Modo enfoque (respuesta 82 del plan del cambio, B7)
+  it('sin modo enfoque la barra muestra la racha y el nivel, y Inicio el reto de Party', async () => {
+    app = await renderApp(SCREENS.home.path);
+    await screen.findByRole('heading', { level: 2, name: t.home.reviewsTitle });
+    expect(await screen.findByLabelText(t.headerStats.streak(0))).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: new RegExp(`^${t.headerStats.openLevels}`) }),
+    ).toBeVisible();
+    expect(screen.getByRole('region', { name: t.widgets.names.party_challenge })).toBeVisible();
+  });
+
+  it('en modo enfoque no hay racha, nivel, XP ni reto de Party, y las misiones se quedan', async () => {
+    const { usePreferences } = await import('@/app/preferences');
+    usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+    app = await renderApp(SCREENS.home.path);
+    await screen.findByRole('heading', { level: 2, name: t.home.reviewsTitle });
+    // La foto sigue llevando a Configuración
+    expect(await screen.findByRole('link', { name: t.headerStats.profile })).toHaveAttribute(
+      'href',
+      SCREENS.settings.path,
+    );
+    expect(screen.queryByLabelText(t.headerStats.streak(0))).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: new RegExp(`^${t.headerStats.openLevels}`) }),
+    ).toBeNull();
+    expect(screen.queryByText(/\bXP\b/)).toBeNull();
+    expect(screen.queryByRole('region', { name: t.widgets.names.party_challenge })).toBeNull();
+    // Las misiones de hoy no son retos y se quedan (4.12)
+    expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
   });
 });

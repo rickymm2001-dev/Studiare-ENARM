@@ -11,6 +11,7 @@ import { settingsPageText } from './settingsPage';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
 import { weekPlanText } from './weekPlan';
+import { b7ExtrasText } from './b7extras';
 
 interface ScreenText {
   title: string;
@@ -347,6 +348,8 @@ export const t = {
     dismiss: 'Cerrar aviso',
   },
   offlineBanner: 'Sin conexión. Lo que ya está en este dispositivo sigue funcionando.',
+  // Modo enfoque, resumen semanal, enlace de referidos y producción sin demo (B7 del plan del cambio)
+  b7: b7ExtrasText,
   settingsPage: settingsPageText,
   labels: {
     simulatedData: 'Datos simulados',

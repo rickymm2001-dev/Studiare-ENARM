@@ -3,7 +3,8 @@
 // cambio, comentarios 5, 6 y 16). Las anclas #perfil, #apariencia y #privacidad llevan a cada una y
 // los enlaces viejos con ?seccion= siguen funcionando. Estudio y Pomodoro pasaron a Ajustes del
 // repaso, en Repasar. La base de demostración, su panel y el modo de la IA pasaron a Datos de
-// demostración del admin (5.4). Sin sesión solo queda Apariencia.
+// demostración del admin (5.4). Sin sesión solo queda Apariencia. En Perfil también va la tarjeta
+// Invita y gana un mes de los referidos, abierta en cualquier plan (4.3 del plan del cambio, B7).
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -13,6 +14,7 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { scrollToElement } from '@/ui/scroll';
 import { LoadingState } from '@/ui/states/states';
+import { ReferralCard } from '../party/ReferralCard';
 import { AccountDataCard } from '../profile/AccountDataCard';
 import { PlanCard } from '../profile/PlanCard';
 import { SessionCard } from '../profile/SessionCard';
@@ -96,6 +98,7 @@ function ReadySettings({
       {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
       <SettingsSectionBlock id="perfil" title={text.profile} first>
         <PlanCard subscription={subscription} />
+        <ReferralCard headingAs="h3" />
         <AccountDataCard session={session} account={account} />
         <SessionCard session={session} />
       </SettingsSectionBlock>

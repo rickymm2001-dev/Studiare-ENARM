@@ -5,6 +5,7 @@
 import { BookOpen, CheckCircle2, Plus, Shuffle } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
+import { useFocusMode } from '@/app/focusMode';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
@@ -368,6 +369,8 @@ function ReviewSession({
 }) {
   const api = useDataApi();
   const { user, settings } = session;
+  // En modo enfoque no se dice el XP ganado, ni al calificar ni al terminar (respuesta 82, B7)
+  const focus = useFocusMode();
   // Mientras carga el plan se supone el más básico, así el temporizador no aparece sin permiso
   const timerAllowed = canUseFeature(useActivePlan(user.id) ?? 'free', 'cardTimer');
   const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
@@ -694,7 +697,11 @@ function ReviewSession({
               {t.review.doneTitle}
             </CardTitle>
             <CardDescription>
-              {reviewed > 0 ? t.review.doneBody(reviewed, xpGained) : t.review.nothingDue}
+              {reviewed > 0
+                ? focus
+                  ? t.b7.focusMode.reviewDone(reviewed)
+                  : t.review.doneBody(reviewed, xpGained)
+                : t.review.nothingDue}
             </CardDescription>
           </CardHeader>
           <div className="flex flex-wrap gap-2">
@@ -733,7 +740,7 @@ function ReviewSession({
           <>
             <ReviewCounters counters={counters} current={counterKindOf(state)} />
             <span aria-live="polite" className="font-semibold text-success">
-              {lastXp > 0 ? t.review.xpGained(lastXp) : ''}
+              {lastXp > 0 && !focus ? t.review.xpGained(lastXp) : ''}
             </span>
           </>
         }
