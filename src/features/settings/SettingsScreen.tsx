@@ -15,6 +15,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
 import { useSession } from '@/app/session';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { AppearanceSettings } from './AppearanceSettings';
 import { PrivacySection } from './PrivacySection';
 import { ProfileSection } from './ProfileSection';
@@ -43,6 +44,7 @@ export function SettingsScreen() {
   const session = useSession();
   const ready = session.status === 'ready' ? session : null;
   const isAdmin = role === 'admin' || role === 'owner';
+  const showDemoTools = isFeatureEnabled('demoTools') || isAdmin;
 
   return (
     <>
@@ -103,19 +105,19 @@ export function SettingsScreen() {
         </section>
 
         {/* Herramientas de desarrollo / demo para administradores */}
-        {isAdmin ? (
+        {showDemoTools ? (
           <>
             <hr className="border-line" />
             <section
-              id="seccion-admin"
-              aria-labelledby="admin-herramientas-titulo"
+              id="seccion-demo"
+              aria-labelledby="demo-herramientas-titulo"
               className="flex flex-col gap-4"
             >
               <div className="flex flex-col gap-1">
-                <h2 id="admin-herramientas-titulo" className="text-xl font-bold">
-                  {t.navItems.admin}
+                <h2 id="demo-herramientas-titulo" className="text-xl font-bold">
+                  {isAdmin ? t.navItems.admin : t.database.demo}
                 </h2>
-                <p className="text-sm text-fg-muted">{t.screens.adminSettings.description}</p>
+                <p className="text-sm text-fg-muted">{t.database.description}</p>
               </div>
               <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
                 <Card>

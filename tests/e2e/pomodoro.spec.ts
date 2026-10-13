@@ -23,12 +23,15 @@ interface PomodoroEvent {
 
 /** Deja enfoque y descanso corto de un minuto, lo mínimo que acepta el ajuste */
 async function setShortPomodoro(page: Page, extra?: (settings: Locator) => Promise<void>) {
-  await page.goto(`${SCREENS.settings.path}?seccion=pomodoro`);
-  const settings = page.getByRole('region', { name: t.settings.pomodoroTitle });
+  await page.goto(SCREENS.review.path);
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
+  await page.locator('summary', { hasText: t.settings.pomodoroTitle }).click();
+  const settings = page.getByRole('form', { name: 'Ajustes del repaso' });
   await settings.getByLabel(t.pomodoro.focusMinutes).fill('1');
   await settings.getByLabel(t.pomodoro.shortBreakMinutes).fill('1');
   if (extra) await extra(settings);
   await settings.getByRole('button', { name: t.settings.saveChanges }).click();
+  await expect(settings.getByText(t.settings.saved)).toBeVisible();
   return settings;
 }
 
