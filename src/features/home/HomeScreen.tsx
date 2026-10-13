@@ -142,8 +142,8 @@ function Dashboard({ session }: { session: ReadySession }) {
 }
 
 /**
- * Un grupo del diseño con su título, como Tus repasos. Va un paso arriba del título de las tarjetas
- * y abajo del saludo, que es el único título fuerte de la pantalla (H05 de la revisión de B2)
+ * Un grupo del diseño con su título, como Tus repasos. Mide lo mismo que el saludo y va en negritas,
+ * como pidió Ricardo en el comentario 7 (manda sobre H05 de la revisión de B2)
  */
 function Group({
   title,
