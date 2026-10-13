@@ -1,6 +1,6 @@
-// Árbol de etiquetas en ruta con su conteo. Tocar una ruta filtra por ella y por todo lo que cuelga
-// de ella. Los niveles de abajo solo se dibujan al abrirlos, así un árbol de cientos de etiquetas no
-// pesa al abrir la pantalla.
+// Árbol de etiquetas en ruta con su conteo, en Más filtros de Buscar tarjetas. Tocar una ruta filtra
+// por ella y por todo lo que cuelga de ella. Los niveles de abajo solo se dibujan al abrirlos, así un
+// árbol de cientos de etiquetas no pesa al abrir la pantalla.
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import type { TagNode } from '@/engines/tagPath';
@@ -38,7 +38,7 @@ export function TagTree({
                   type="button"
                   aria-expanded={isOpen}
                   aria-label={
-                    isOpen ? t.explore.collapseTag(node.name) : t.explore.expandTag(node.name)
+                    isOpen ? t.cardSearch.collapseTag(node.name) : t.cardSearch.expandTag(node.name)
                   }
                   onClick={() => {
                     toggle(node.path);

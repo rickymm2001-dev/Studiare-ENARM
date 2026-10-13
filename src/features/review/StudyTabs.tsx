@@ -1,8 +1,8 @@
-// Pestañas de Repasar, Mazos y Explorar (D-087, D-085). Son una sola sección de la navegación y el
-// alumno pasa de elegir qué repasar a administrar sus mazos sin buscar otra sección. Cada pestaña es
-// su propia ruta, así los enlaces de siempre a Mazos siguen funcionando. Toman la forma de las
-// pestañas de toda la app (H01 de la revisión de diseño de B2) y siguen siendo enlaces con
-// aria-current. Apuntes dejó de ser pestaña y tiene su lugar en el menú (comentario 12, B3).
+// Pestañas de Repasar, Mazos y Buscar tarjetas (D-087, D-085, B4). Son una sola sección de la
+// navegación y el alumno pasa de elegir qué repasar a administrar sus mazos sin buscar otra sección.
+// Cada pestaña es su propia ruta, así los enlaces de siempre a Mazos siguen funcionando. Toman la
+// forma de las pestañas de toda la app (H01 de la revisión de diseño de B2) y siguen siendo enlaces
+// con aria-current. Apuntes dejó de ser pestaña y tiene su lugar en el menú (comentario 12, B3).
 import { Link, useLocation } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';

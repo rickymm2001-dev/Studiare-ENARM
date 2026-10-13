@@ -141,7 +141,7 @@ const isAcademicKey = (key: string): key is AcademicSourceKey =>
   (ACADEMIC_SOURCE_KEYS as readonly string[]).includes(key);
 
 /** La señal de la propuesta con solo fuentes de la lista cerrada. Ya las revisó el validador */
-function controversyOf(
+export function controversyOf(
   proposal: FlashcardProposal,
   simulated: boolean,
   flaggedAt: string,
@@ -253,26 +253,37 @@ export async function saveProposals(
   }
   await api.repos.notes.putMany(notes);
   await api.repos.cards.putMany(cards);
-
-  // El artefacto sale de borrador porque el alumno lo decidió, y queda en la bitácora
-  const artifact = await api.repos.aiArtifacts.get(input.artifactId);
-  if (artifact?.status === 'draft') {
-    await api.repos.aiArtifacts.put({
-      ...artifact,
-      status: 'approved',
-      decidedAt: stamp,
-      decidedBy: user.id,
-      content: { ...artifact.content, saved: notes.length },
-    });
-    await api.recordEvent(
-      createEvent(
-        'ai_artifact_approved',
-        { artifactId: artifact.id, kind: 'flashcard' },
-        { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
-      ),
-    );
-  }
+  await approveGeneration(api, user, input.artifactId, notes.length, now);
   return { deckId: deck.id, notes: notes.length, cards: cards.length, flagged };
+}
+
+/**
+ * El artefacto de una generación sale de borrador porque el alumno guardó lo que eligió, y queda en
+ * la bitácora. Si ya no estaba en borrador no hace nada, así guardar otra vez no repite el evento
+ */
+export async function approveGeneration(
+  api: Api,
+  user: Person,
+  artifactId: string,
+  saved: number,
+  now: Date = new Date(),
+): Promise<void> {
+  const artifact = await api.repos.aiArtifacts.get(artifactId);
+  if (artifact?.status !== 'draft') return;
+  await api.repos.aiArtifacts.put({
+    ...artifact,
+    status: 'approved',
+    decidedAt: now.toISOString(),
+    decidedBy: user.id,
+    content: { ...artifact.content, saved },
+  });
+  await api.recordEvent(
+    createEvent(
+      'ai_artifact_approved',
+      { artifactId: artifact.id, kind: 'flashcard' },
+      { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
+    ),
+  );
 }
 
 /**

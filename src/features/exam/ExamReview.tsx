@@ -1,13 +1,22 @@
 // Revisión del examen pregunta por pregunta. Ya terminó, así que cada pregunta muestra su
 // retroalimentación completa. Por qué atrae cada opción y qué se podía descartar, qué eligió el
 // alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace. Las
-// preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2).
+// preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2). Cada
+// pregunta se puede volver tarjeta y en cada fallada se marca por qué falló, con los siete motivos
+// de Ricardo, opcional y cambiable (B5, comentarios 1 y 2).
 import { CheckCircle2, ChevronDown, Flag, MinusCircle, XCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useDataApi } from '@/data/context';
+import type { AppEvent } from '@/data/schemas/events';
+import { latestMotive } from '@/engines/errorCauses';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
+import { CreateCardButton } from '../questionCards/CreateCardDialog';
+import { MotivePicker } from '../shared/MotivePicker';
+import { reportMotive, useMotiveReports } from '../shared/motives';
+import type { ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { examOutcome, type ExamBundles, type ExamOutcome } from './examResults';
@@ -49,8 +58,18 @@ const OUTCOME_ICON = {
   blank: <MinusCircle aria-hidden className="size-5 shrink-0 text-fg-muted" />,
 } as const;
 
-export function ExamReview({ state, bundles }: { state: ExamState; bundles: ExamBundles }) {
+export function ExamReview({
+  state,
+  bundles,
+  session,
+}: {
+  state: ExamState;
+  bundles: ExamBundles;
+  session: ReadySession;
+}) {
   const [filter, setFilter] = useState<Filter>('all');
+  // Los motivos se leen una vez para toda la lista, no una vez por pregunta
+  const reports = useMotiveReports(session.user.id);
   const rows = rowsOf(state, bundles);
   const visible = rows.filter((row) => {
     if (filter === 'missed') return row.outcome === 'missed';
@@ -78,7 +97,13 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
         ) : (
           <ol className="flex flex-col divide-y divide-line">
             {visible.map((row) => (
-              <ReviewItem key={row.id} row={row} state={state} />
+              <ReviewItem
+                key={row.id}
+                row={row}
+                state={state}
+                session={session}
+                reports={reports}
+              />
             ))}
           </ol>
         )}
@@ -87,7 +112,18 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
   );
 }
 
-function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
+function ReviewItem({
+  row,
+  state,
+  session,
+  reports,
+}: {
+  row: Row;
+  state: ExamState;
+  session: ReadySession;
+  reports: readonly AppEvent[] | undefined;
+}) {
+  const api = useDataApi();
   const { bundle } = row;
   const { question, options, vignette } = bundle;
   const answer = answerOf(state, row.id);
@@ -169,6 +205,34 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
               <p className="text-sm whitespace-pre-line">{question.explanation}</p>
             </div>
           ) : null}
+          <div className="flex flex-col gap-3 border-t border-line pt-3">
+            {row.outcome === 'missed' ? (
+              <MotivePicker
+                // Vale el último motivo que marcó desde que empezó este examen
+                value={latestMotive(
+                  reports ?? [],
+                  { kind: 'question', ids: [question.id, question.questionId] },
+                  new Date(state.startedAtMs).toISOString(),
+                )}
+                // El motivo queda en la sesión del examen, como sus respuestas
+                onChange={(motive) =>
+                  reportMotive(
+                    api,
+                    session.user,
+                    { kind: 'question', id: question.id },
+                    motive,
+                    state.examId,
+                  )
+                }
+              />
+            ) : null}
+            <CreateCardButton
+              session={session}
+              bundle={bundle}
+              from="exam_review"
+              label={t.examReview.createCard.buttonLabel(String(row.index + 1))}
+            />
+          </div>
         </div>
       </details>
     </li>

@@ -115,11 +115,11 @@ describe('hipótesis del tutor por reglas (8.2, 7.9)', () => {
     expect(RULE_ACTIONS.expected_forgetting).toEqual([]);
   });
 
-  it('cuenta las causas reportadas que no coinciden con las señales', () => {
-    // Prisa con causa que dijo olvidé, y mala lectura que sí coincide
+  it('cuenta los motivos marcados que no coinciden con las señales', () => {
+    // Prisa con el motivo Conocimiento, que no coincide, y con Tiempo, que sí
     const contexts = [
-      ...sure(3, { confidence: null, rapidGuess: true, reportedCause: 'forgot' }),
-      ...sure(2, { confidence: null, rapidGuess: true, reportedCause: 'rushed_or_tired' }),
+      ...sure(3, { confidence: null, rapidGuess: true, reportedCause: 'knowledge' }),
+      ...sure(2, { confidence: null, rapidGuess: true, reportedCause: 'time' }),
       ...sure(1, { confidence: null, rapidGuess: true, reportedCause: null }),
     ];
     const [hypothesis] = buildHypotheses({ contexts, now: NOW, thresholds });

@@ -52,6 +52,22 @@ describe('atajos de teclado', () => {
     expect(a).not.toHaveBeenCalled();
   });
 
+  it('no actúa dentro de un diálogo abierto encima de la pantalla', () => {
+    const enter = vi.fn();
+    render(
+      <>
+        <Harness bindings={{ enter }} />
+        <div role="dialog" aria-label="Crear tarjeta">
+          <p>Texto del diálogo</p>
+        </div>
+      </>,
+    );
+    fireEvent.keyDown(screen.getByText('Texto del diálogo'), { key: 'Enter' });
+    expect(enter).not.toHaveBeenCalled();
+    fireEvent.keyDown(window, { key: 'Enter' });
+    expect(enter).toHaveBeenCalledTimes(1);
+  });
+
   it('con el foco en una opción sí actúa', () => {
     const a = vi.fn();
     render(<Harness bindings={{ a }} />);

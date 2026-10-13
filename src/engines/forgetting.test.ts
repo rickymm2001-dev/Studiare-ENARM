@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import { ERROR_MOTIVES, type ErrorMotive } from './errorCauses';
 import {
+  MOTIVE_RULES,
   canCallLlm,
   countListItems,
   evaluateError,
@@ -89,24 +91,35 @@ describe('reglas de olvido (7.9)', () => {
     expect(finding?.severity).toBe('info');
   });
 
-  it('compara la causa reportada con las señales', () => {
-    expect(
-      evaluateError(context({ probableMisread: true, reportedCause: 'misread' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(context({ rapidGuess: true, reportedCause: 'confused' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBe(false);
-    expect(
-      evaluateError(context({ rapidGuess: true, reportedCause: 'other' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBeNull();
-    expect(
-      evaluateError(context({ rapidGuess: true }), thresholds)[0]?.causeMatchesSignals,
-    ).toBeNull();
+  it('compara el motivo marcado con las señales', () => {
+    const matches = (overrides: Partial<ErrorContext>) =>
+      evaluateError(context(overrides), thresholds)[0]?.causeMatchesSignals;
+    expect(matches({ probableMisread: true, reportedCause: 'misinterpretation' })).toBe(true);
+    expect(matches({ rapidGuess: true, reportedCause: 'knowledge' })).toBe(false);
+    // La ansiedad no tiene una señal que la mida, así que no se compara
+    expect(matches({ rapidGuess: true, reportedCause: 'anxiety' })).toBeNull();
+    expect(matches({ rapidGuess: true })).toBeNull();
+  });
+
+  it('cada uno de los siete motivos espera sus propias señales (4.23)', () => {
+    expect(motiveMatches('time', { rapidGuess: true })).toBe(true);
+    expect(motiveMatches('time', { fatigueContext: true })).toBe(false);
+    expect(motiveMatches('fatigue', { fatigueContext: true })).toBe(true);
+    expect(motiveMatches('overconfidence', { confidence: 'sure' })).toBe(true);
+    expect(motiveMatches('overconfidence', { rapidGuess: true })).toBe(false);
+    expect(motiveMatches('superficial_reading', { rapidGuess: true })).toBe(true);
+    expect(motiveMatches('superficial_reading', { probableMisread: true })).toBe(true);
+    expect(motiveMatches('knowledge', { baseTopicWeak: true })).toBe(true);
+    expect(motiveMatches('knowledge', { confusedWithItemId: 'otra' })).toBe(true);
+    expect(motiveMatches('misinterpretation', { rapidGuess: true })).toBe(false);
+    expect(Object.keys(MOTIVE_RULES).sort()).toEqual([...ERROR_MOTIVES].sort());
   });
 });
+
+function motiveMatches(motive: ErrorMotive, overrides: Partial<ErrorContext>) {
+  return evaluateError(context({ ...overrides, reportedCause: motive }), thresholds)[0]
+    ?.causeMatchesSignals;
+}
 
 describe('patrones', () => {
   const now = new Date('2026-10-15T15:00:00.000Z');

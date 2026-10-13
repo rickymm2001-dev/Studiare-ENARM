@@ -1,9 +1,10 @@
 // Mazos (pantalla 12). Precargados que el alumno sigue o deja, con su avance, agrupados por rama
 // troncal con sus subespecialidades (D-066). Cada mazo es una fila de la lista, sin caja propia
-// (H06 de la revisión de B2), con sus temas plegados (D-078). Abajo van los mazos del alumno, que
-// crea y llena a mano. Subir mazos de otras apps llega con la Fase E.
-import { BookOpenCheck, BookPlus, Check, ChevronDown, Layers, Library } from 'lucide-react';
-import { useState } from 'react';
+// (H06 de la revisión de B2), con todos sus temas plegados bajo un resumen con sus ramas (D-078, B4
+// del plan del cambio). Abajo van los mazos del alumno, que crea y llena a mano, también con sus
+// temas.
+import { BookOpenCheck, BookPlus, Check, Layers, Library } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -27,17 +28,13 @@ import { StudyTabs } from '../review/StudyTabs';
 import { descendantIds } from '@/engines/deckTree';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
+import { DeckTopics } from './DeckTopics';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
-import { deckBranch, topTopics } from './deckBranch';
+import { deckBranch } from './deckBranch';
+import { catalogTopicOutline, deckTopicOutlines } from './topicPaths';
 import { useDeckCatalog } from './useDeckCatalog';
-
-const topicName = new Map(
-  topicTaxonomy.branches.flatMap((branch) =>
-    branch.topics.map((topic) => [topic.key, topic.name] as const),
-  ),
-);
 
 export function DecksScreen() {
   return <RequireSession screen="decks">{(session) => <Decks session={session} />}</RequireSession>;
@@ -48,13 +45,31 @@ function Decks({ session }: { session: ReadySession }) {
   const catalog = useDeckCatalog();
   const events = useUserEvents(session.user.id);
   const stored = useLiveData(async () => {
-    const [decks, cards] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
+    const [decks, cards, notes] = await Promise.all([
+      api.repos.decks.list(),
+      api.repos.cards.list(),
+      api.repos.notes.list(),
+    ]);
     const cardsByDeck = new Map<string, string[]>();
     for (const card of cards)
       cardsByDeck.set(card.deckId, [...(cardsByDeck.get(card.deckId) ?? []), card.id]);
-    return { decks, cardsByDeck };
-  }, [api.repos]);
+    // Los temas de los mazos propios salen de sus tarjetas. Los de los precargados, del catálogo
+    const ownIds = new Set(
+      decks.filter((deck) => deck.ownerId === session.user.id).map((deck) => deck.id),
+    );
+    const ownTopics = deckTopicOutlines({
+      decks,
+      notes: new Map(notes.map((note) => [note.id, note])),
+      cards: cards.filter((card) => ownIds.has(card.deckId)),
+    });
+    return { decks, cardsByDeck, ownTopics };
+  }, [api.repos, session.user.id]);
   const [busy, setBusy] = useState<string | null>(null);
+  // Todos los temas de cada mazo precargado, del archivo del mazo aunque no lo sigas (comentario 8)
+  const catalogTopics = useMemo(
+    () => new Map((catalog ?? []).map((file) => [file.key, catalogTopicOutline(file.notes)])),
+    [catalog],
+  );
 
   const followed = followedDeckIds(session, stored?.decks ?? []);
   // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
@@ -163,25 +178,7 @@ function Decks({ session }: { session: ReadySession }) {
                           </span>
                         </div>
                       ) : null}
-                      <details className="group">
-                        <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
-                          {t.decks.topicsTitle}
-                          <span className="font-normal text-fg-muted">
-                            · {t.decks.topicsSummary(topTopics(file).length)}
-                          </span>
-                          <ChevronDown
-                            aria-hidden
-                            className="size-4 text-fg-muted transition-transform group-open:rotate-180"
-                          />
-                        </summary>
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {topTopics(file).map(([topic, count]) => (
-                            <Badge key={topic} variant="neutral" className="whitespace-normal">
-                              {topicName.get(topic) ?? topic} · {count}
-                            </Badge>
-                          ))}
-                        </div>
-                      </details>
+                      <DeckTopics deckName={file.name} outline={catalogTopics.get(file.key)} />
                     </div>
                     <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:justify-end">
                       {session.isDemo ? (
@@ -236,6 +233,7 @@ function Decks({ session }: { session: ReadySession }) {
         session={session}
         decks={ownDecks}
         cardsByDeck={stored?.cardsByDeck ?? new Map()}
+        topics={stored?.ownTopics ?? new Map()}
         states={states}
       />
       <AiCardsCard session={session} />

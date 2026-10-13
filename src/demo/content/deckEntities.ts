@@ -14,6 +14,7 @@ import {
   type Note,
 } from '@/data/schemas/decks';
 import { DEMO_CONTENT_TIME, stableUlid } from '../stableId';
+import { topicDisplayName } from './topicDisplayNames';
 
 export interface DemoDeckCard {
   /** Clave estable de la tarjeta, por ejemplo paco-mi-0001 o paco-mi-0002-c1 */
@@ -55,8 +56,11 @@ export function noteSubject(note: Pick<DemoDeckNote, 'sourceTag'>): string | nul
   return tagSegments(sanitizeTag(note.sourceTag))[1] ?? null;
 }
 
-/** Nombre legible de una materia. Los guiones y guiones bajos de la etiqueta pasan a espacios */
-const subjectName = (subject: string) => subject.replace(/[-_]+/g, ' ').trim();
+/**
+ * Nombre legible de una materia, con la tabla de nombres que se puede revisar (B4 del plan del
+ * cambio, hallazgo H11). AnticonceptivosyMPF se lee Anticonceptivos y métodos de planificación familiar
+ */
+export const subjectName = (subject: string): string => topicDisplayName(subject);
 
 const deckBase = {
   ownerId: null,

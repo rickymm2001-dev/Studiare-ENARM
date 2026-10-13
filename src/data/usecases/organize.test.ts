@@ -4,7 +4,16 @@ import { suspendedCardIds } from '../../engines/suspension';
 import { makeUser, newId, testApi } from '../testing/fixtures';
 import { createManualDeck, saveManualNote } from './manualDecks';
 import { createOutline, saveOutline } from './outlines';
-import { addTags, moveDeck, moveNotes, removeTag, renameDeck, setSuspended } from './organize';
+import {
+  addTags,
+  moveDeck,
+  moveNotes,
+  removeTag,
+  renameDeck,
+  resetCards,
+  setSuspended,
+} from './organize';
+import { latestCardStates } from '../../features/review/study';
 
 const disposers: (() => Promise<void>)[] = [];
 afterEach(async () => {
@@ -190,6 +199,76 @@ describe('suspender tarjetas', () => {
       (event) => event.type === 'cards_suspended',
     );
     expect(events.map((event) => event.payload.cardIds.length)).toEqual([500, 500, 100]);
+  });
+});
+
+describe('reiniciar tarjetas (B4)', () => {
+  it('registra un evento que solo se agrega, también para precargadas, y no toca los repasos', async () => {
+    const { api, user, actor, cloze } = await setup();
+    const ids = (await api.repos.cards.list())
+      .filter((card) => card.noteId === cloze.id)
+      .map((card) => card.id);
+    const first = ids[0] as string;
+    await api.recordEvent({
+      id: newId(),
+      userId: user.id,
+      at: '2026-10-08T10:00:00.000Z',
+      tz: user.timeZone,
+      schemaVersion: 1,
+      sessionId: null,
+      type: 'card_reviewed',
+      payload: {
+        cardId: first,
+        deckId: cloze.deckId,
+        source: 'card',
+        rating: 'again',
+        confidence: null,
+        msToReveal: 1000,
+        msToRate: 1000,
+        stateBefore: null,
+        stateAfter: {
+          due: '2026-10-08T10:10:00.000Z',
+          stability: 1,
+          difficulty: 7,
+          scheduledDays: 0,
+          learningSteps: 0,
+          reps: 1,
+          lapses: 1,
+          state: 'learning',
+          lastReview: '2026-10-08T10:00:00.000Z',
+        },
+      },
+    });
+    expect(latestCardStates(await api.repos.events.query({ userId: user.id })).has(first)).toBe(
+      true,
+    );
+    expect(await resetCards(api, actor, [...ids, ...ids, 'no-existe'])).toBe(ids.length);
+    const events = await api.repos.events.query({ userId: user.id });
+    expect(events.map((event) => event.type)).toEqual(['card_reviewed', 'cards_reset']);
+    expect(latestCardStates(events).has(first)).toBe(false);
+  });
+
+  it('parte en lotes de 500 tarjetas por evento', async () => {
+    const { api, actor, basic } = await setup();
+    const many = Array.from({ length: 600 }, (_, index) => ({
+      id: `01JAAD${String(index).padStart(20, '0')}`,
+      noteId: basic.id,
+      deckId: basic.deckId,
+      ordinal: 0,
+      createdAt: '2026-10-01T15:00:00.000Z',
+    }));
+    await api.repos.cards.putMany(many);
+    expect(
+      await resetCards(
+        api,
+        actor,
+        many.map((card) => card.id),
+      ),
+    ).toBe(600);
+    const events = (await api.repos.events.query({ userId: actor.id })).filter(
+      (event) => event.type === 'cards_reset',
+    );
+    expect(events.map((event) => event.payload.cardIds.length)).toEqual([500, 100]);
   });
 });
 

@@ -97,7 +97,7 @@ test('un CSV se previsualiza, exige confirmar derechos, se guarda y no se duplic
   await importFile(page, 'mis tarjetas');
   await expect(page.getByText(t.importer.doneDuplicates(2))).toBeVisible();
   await page.goto(SCREENS.explore.path);
-  await expect(page.getByText(t.explore.results(2, 2))).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(t.cardSearch.results(2, 2))).toBeVisible({ timeout: 30_000 });
 });
 
 test('un paquete de Anki del formato viejo y otro del nuevo se leen con el motor de SQLite', async ({
@@ -128,7 +128,7 @@ test('un paquete de Anki del formato viejo y otro del nuevo se leen con el motor
   await expect(page.getByText(t.importer.done(3, 4))).toBeVisible();
 
   await page.goto(SCREENS.explore.path);
-  await expect(page.getByText(t.explore.results(8, 8))).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(t.cardSearch.results(8, 8))).toBeVisible({ timeout: 30_000 });
 });
 
 test('una hoja de Excel se importa y un archivo que no se puede leer avisa con claridad', async ({

@@ -2,7 +2,9 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { cardSearchText } from './cardSearch';
 import { examText } from './exam';
+import { examReviewText } from './examReview';
 import { featureText } from './features';
 import { outlineText } from './outlines';
 import { qualityText } from './quality';
@@ -29,7 +31,7 @@ const screens: Record<ScreenKey, ScreenText> = {
   review: {
     title: 'Repasar',
     description:
-      'Repaso de tarjetas con repetición espaciada. Marcas tu confianza, calificas y anotas la causa si fallas.',
+      'Repaso de tarjetas con repetición espaciada. Marcas tu confianza, calificas y anotas el motivo si fallas.',
   },
   question: {
     title: 'Pregunta',
@@ -38,7 +40,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   feedback: {
     title: 'Retroalimentación',
-    description: 'Explicación, por qué atrae la opción que elegiste y la causa del error.',
+    description:
+      'Explicación, por qué atrae la opción que elegiste, el motivo del error y la tarjeta que puedes crear.',
   },
   sessionSummary: {
     title: 'Resumen de sesión',
@@ -56,7 +59,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   examResults: {
     title: 'Resultados del examen',
-    description: 'Resultados por rama, estructura y trampa. Tus errores pasan al repaso.',
+    description:
+      'Resultados por rama, estructura y trampa. Tus errores pasan al repaso y cada pregunta se puede volver tarjeta.',
   },
   progress: {
     title: 'Progreso',
@@ -73,9 +77,9 @@ const screens: Record<ScreenKey, ScreenText> = {
     description: 'Mazos precargados que sigues o dejas, los que importas y los que creas a mano.',
   },
   explore: {
-    title: 'Explorar',
+    title: 'Buscar tarjetas',
     description:
-      'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
+      'Encuentra cualquier tarjeta al teclear, fíltrala y ábrela al lado para verla o editarla. Suspende, mueve, etiqueta o reinicia varias a la vez.',
   },
   outlines: {
     title: 'Apuntes',
@@ -161,7 +165,9 @@ export const t = {
   ...qualityText,
   ...tutorText,
   ...vocabularyText,
+  ...cardSearchText,
   weekPlan: weekPlanText,
+  examReview: examReviewText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',
@@ -179,10 +185,10 @@ export const t = {
     show: 'Mostrar el menú lateral',
   },
   studyTabs: {
-    label: 'Repasar, mazos y explorar',
+    label: 'Repasar, mazos y buscar tarjetas',
     review: 'Repasar',
     decks: 'Mazos',
-    explore: 'Explorar',
+    explore: 'Buscar tarjetas',
   },
   navItems: {
     home: 'Inicio',
