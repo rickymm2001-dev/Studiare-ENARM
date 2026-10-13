@@ -281,7 +281,7 @@ describe('Party sin nube', () => {
     const card = await screen.findByRole('region', { name: text.needsCloud.title });
     expect(within(card).getByText(text.needsCloud.off)).toBeVisible();
     expect(screen.queryByRole('region', { name: t.party.createTitle })).toBeNull();
-    expect(screen.getByRole('region', { name: t.referrals.title })).toBeVisible();
+    expect(screen.getByRole('region', { name: t.b7.referral.title })).toBeVisible();
   });
 
   it('con la nube configurada y este navegador sin conectar lo dice', async () => {

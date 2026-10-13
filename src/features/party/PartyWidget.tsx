@@ -4,7 +4,6 @@
 // enfoque no muestra el lugar ni el reto (respuesta 82). Sin nube dice que Party la necesita.
 import { Link } from 'react-router';
 import { useCloud } from '@/app/cloudState';
-import { useFocusMode } from '@/app/focusMode';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -99,7 +98,6 @@ function WidgetBody({
 
 function DemoPartyWidget({ session, snapshot, events }: WidgetProps) {
   const api = useDataApi();
-  const focus = useFocusMode();
   const { user } = session;
   const data = useLiveData(async () => {
     const memberships = await api.repos.memberships.list();
@@ -144,9 +142,9 @@ function DemoPartyWidget({ session, snapshot, events }: WidgetProps) {
     <WidgetBody
       name={data.group.name}
       simulated={data.group.isSimulated}
-      rank={!focus && me ? { rank: me.rank, of: rows.length } : null}
+      rank={me ? { rank: me.rank, of: rows.length } : null}
       challenge={
-        !focus && challenge && progress
+        challenge && progress
           ? { title: challenge.title, percent: Math.round(progress.fraction * 100) }
           : null
       }
@@ -165,7 +163,6 @@ function CloudPartyWidget(props: WidgetProps) {
 }
 
 function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
-  const focus = useFocusMode();
   const { user } = session;
   const { state } = useCloudParty({ enabled: true, snapshot, events, timeZone: user.timeZone });
   if (state.status === 'loading') return <SkeletonRows label={t.partyCloud.loading} rows={2} />;
@@ -200,9 +197,9 @@ function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
     <WidgetBody
       name={group.name}
       simulated={false}
-      rank={!focus && me ? { rank: me.rank, of: rows.length } : null}
+      rank={me ? { rank: me.rank, of: rows.length } : null}
       challenge={
-        !focus && challenge && progress
+        challenge && progress
           ? { title: challenge.title, percent: Math.round(progress.fraction * 100) }
           : null
       }

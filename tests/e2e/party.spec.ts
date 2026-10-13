@@ -16,7 +16,7 @@ test('sin cuenta en la nube Party explica que la necesita', async ({ page }) => 
   await expect(page.getByRole('region', { name: t.party.createTitle })).toHaveCount(0);
   await expect(page.getByText(t.partyCloud.privacy)).toBeVisible();
   // Los referidos siguen a la vista, porque viven en Party aunque pidan la nube (4.3)
-  await expect(page.getByRole('region', { name: t.referrals.title })).toBeVisible();
+  await expect(page.getByRole('region', { name: t.b7.referral.title })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });
 

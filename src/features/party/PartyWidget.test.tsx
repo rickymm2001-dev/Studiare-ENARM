@@ -74,7 +74,7 @@ afterEach(async () => {
 });
 
 describe('widget de Party con la nube', () => {
-  it('muestra el lugar, el reto y el duelo pendiente, y el modo enfoque deja solo el grupo y el duelo', async () => {
+  it('muestra el lugar, el reto y el duelo pendiente, y el modo enfoque quita la sección de Inicio', async () => {
     app = await renderApp('/', {
       seed: async (api, user) => {
         await setConsent(api, user, 'party', true);
@@ -90,13 +90,11 @@ describe('widget de Party con la nube', () => {
     expect(within(party).getByText('Mil tarjetas · 0%')).toBeVisible();
     expect(within(party).getByText(t.widgets.party.duelsPending(1))).toBeVisible();
 
+    // En modo enfoque Inicio quita toda la sección del reto de Party (tablas, XP y retos, respuesta 82)
     act(() => {
       usePreferences.getState().setAppearance({ focusMode: true });
     });
-    expect(within(party).queryByText(t.widgets.party.rank(2, 2))).toBeNull();
-    expect(within(party).queryByText('Mil tarjetas · 0%')).toBeNull();
-    expect(within(party).getByText('Guardia')).toBeVisible();
-    expect(within(party).getByText(t.widgets.party.duelsPending(1))).toBeVisible();
+    expect(screen.queryByRole('region', { name: t.widgets.names.party_challenge })).toBeNull();
   });
 
   it('sin el permiso de Party no pide nada al servidor y explica qué falta', async () => {
