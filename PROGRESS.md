@@ -88,6 +88,16 @@ Evidencia
 - Evidencia. npm run check con typecheck y lint limpios y 2,798 pruebas que pasan; las 5 que fallaron fueron por tiempo con la máquina a carga 11 en 4 núcleos y pasan solas (102 de 102). Pruebas SQL en verde con el esqueleto de Storage que copia la protección del proyecto real. tutor.spec y theme-dark.spec en verde en teléfono y computadora. JavaScript inicial de 283 KB de 300
 - Capturas de antes en docs/screenshots/v3/antes y de después en docs/screenshots/v3/b2, ya con las correcciones, en calidad 60 para que pesen menos
 
+### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
+- Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
+- B3 en b3-int. Unido con B2 final, e2e corridas una vez (272 pasan, 17 fallaban por selectores y pantallas movidas) y revisión independiente hecha. Un subagente corrige los hallazgos y las e2e
+- B4 y B5 en b45. Implementados, revisión independiente hecha y sus 12 hallazgos corregidos. Faltan e2e, capturas y PR
+- B6 en b6. Implementado y revisado. Un subagente corrige 4 hallazgos
+- B7 en b7int (unión de b7a, Party en la nube, y b7b, enfoque, resumen, referidos y demo cerrada). Revisado. Un subagente corrige 9 hallazgos. Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
+- B9 en b9. Implementado con la migración renombrada a 20261020000001. Revisión independiente en curso
+- Siguen B8 y B10, que parten de la unión de todo lo anterior
+- Los subagentes se detuvieron tres veces por el límite de uso de la cuenta y se reanudaron con su contexto
+
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
 - B4. La tabla de nombres legibles de los mazos de Paco necesita la revisión de un médico. La lista completa, con las elecciones que piden ojo, está en docs/revisiones/b4-nombres-de-temas.md
