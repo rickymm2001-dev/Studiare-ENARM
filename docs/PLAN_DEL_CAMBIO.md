@@ -296,6 +296,8 @@ Si Ricardo no dice otra cosa antes del mensaje de arranque, rige lo que dice cad
 
 **4.7 Comentario 10 y lo que necesita color.** Hay información que se entiende por su color. Quedan estas excepciones, siempre con ícono y texto además del color. Correcto e incorrecto al contestar, avisos y errores de formularios, el anillo de foco, y las gráficas y el heatmap en tonos de #156082 y grises. Lo dorado del nivel y del XP pasa a neutro. Si Ricardo quiere todo sin color, solo cambian los tokens.
 
+Desde el 2026-10-14, por decisión de Ricardo, D-128 reemplaza esta regla en lo de color por rama y acento. Cada rama tiene su color propio y racha, nivel y XP llevan un acento cálido, con los estados todavía solo en verde, ámbar y rojo.
+
 **4.8 Respuestas 62 y 63.** No habrá prueba con 5 aspirantes, pero Ricardo ya los tiene. No hay prueba formal. Los 5 entran primero, con invitación, y se aprende de su uso y de una encuesta corta (B18).
 
 **4.9 Respuesta 64.** La opción C no existía. Se toma A, la recomendada, que es avisar por correo al médico cuando llega un reporte de error.
@@ -535,7 +537,7 @@ El objetivo es que Studiare se vea como un producto hecho por un equipo experto,
 - Sin degradados (comentario 10). Se quitan los tokens --enarm-hero, --enarm-gold, --enarm-flame y --enarm-primary-grad (en claro y en los dos modos oscuros), las utilidades .bg-hero, .bg-gold, .bg-flame, .bg-brand y .text-gradient-gold de src/index.css, los fondos glow, mesh, custom y dots (el fondo por omisión hoy es glow, en src/ui/appearance.ts) y los dos degradados de la imagen para compartir (src/features/party/drawAchievement.ts)
 - StatPanel (src/ui/components/stat-panel.tsx), el recuadro oscuro con degradado de 18 pantallas, pasa a una superficie lisa
 - Botones (src/ui/components/button.tsx). El primario es #156082 liso. Las demás variantes quedan neutras. Se quita la variante dorada. La forma es consistente, sin píldoras en todos lados
-- Lo dorado del nivel y del XP pasa a neutro (4.7)
+- Lo dorado del nivel y del XP pasa a neutro (4.7). Desde el 2026-10-14 D-128 les da un acento cálido
 - Barra blanca de arriba (comentario 7). El saludo y los títulos de cada pantalla bajan al tamaño del título Tus repasos, que es 20 px en el teléfono y 24 px desde 640 px, siempre en negritas. Hoy el saludo usa `text-xl font-extrabold sm:text-3xl` en src/app/layout/ScreenHeader.tsx. Un solo token de tamaño para los dos
 - Etiqueta de demostración (comentario 9). Se quita DemoContentLabel (src/ui/components/labels.tsx) de sus 21 usos en 17 archivos, y la frase de las descripciones de los tres mazos de demostración. Queda el aviso global de 4.1. Las pruebas que buscan la etiqueta se ajustan
 - Fotos de perfil (comentario 15). Se quitan los 12 avatares generados (src/ui/avatarArt.ts y src/ui/components/generated-avatar.tsx). Quedan la foto propia, con recorte circular y vista previa antes de guardar, y las iniciales con un estilo cuidado como opción por omisión. La foto se sincroniza a Supabase Storage con permisos por fila, la ven solo el alumno y su grupo de Party, y entra al aviso de privacidad

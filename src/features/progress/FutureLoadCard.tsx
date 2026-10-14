@@ -1,7 +1,8 @@
 // Carga futura (7.1, pantalla 10). Barras con los repasos y las tarjetas nuevas de cada día de los
 // próximos 30 o 60 días, con el promedio, el día más cargado y una tabla por semana para quien no
 // ve la gráfica. Lo proyectado sale de futureLoad, la misma proyección y los mismos límites del
-// planificador.
+// planificador. Los repasos van en el color de los indicadores y las nuevas en el tono secundario de
+// las gráficas, el mismo de Realizados (D-128). El acento cálido queda para racha, nivel y XP.
 import { CalendarCheck, Gauge, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -29,7 +30,7 @@ export function LoadBars({ load, className }: { load: FutureLoad; className?: st
         const fresh = (day.newCards / max) * 100;
         return (
           <div key={day.day} className="flex h-full min-w-0 flex-1 flex-col justify-end">
-            <div className="w-full rounded-t-sm bg-accent/60" style={{ height: `${fresh}%` }} />
+            <div className="w-full rounded-t-sm bg-chart-done" style={{ height: `${fresh}%` }} />
             <div className="w-full bg-indicator" style={{ height: `${reviews}%` }} />
           </div>
         );
@@ -91,7 +92,7 @@ export function FutureLoadCard({
             {text.reviews}
           </li>
           <li className="flex items-center gap-1.5">
-            <span aria-hidden className="size-3 rounded-sm bg-accent/60" />
+            <span aria-hidden className="size-3 rounded-sm bg-chart-done" />
             {text.fresh}
           </li>
         </ul>

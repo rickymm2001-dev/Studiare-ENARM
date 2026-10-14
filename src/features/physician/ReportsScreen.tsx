@@ -16,6 +16,7 @@ import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { useBankReady } from '../shared/useBankReady';
 import { Badge } from '@/ui/components/badge';
+import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -193,7 +194,9 @@ function GroupCard({
           {latest.prompt}
         </CardTitle>
         <CardDescription className="flex flex-wrap items-center gap-2">
-          <Badge variant="neutral">{branchName.get(latest.branch) ?? latest.branch}</Badge>
+          <BranchBadge branch={latest.branch}>
+            {branchName.get(latest.branch) ?? latest.branch}
+          </BranchBadge>
           <span>{topicName.get(latest.topic) ?? latest.topic}</span>
           <span>· {text.group.total(group.rows.length)}</span>
           {group.openCount > 0 ? (
