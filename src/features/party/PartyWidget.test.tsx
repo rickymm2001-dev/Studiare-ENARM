@@ -137,6 +137,9 @@ describe('widget de Party con la nube', () => {
       { timeout: 15_000 },
     );
     expect(await within(party).findByText(t.freePlan.widget)).toBeVisible();
+    // Es un aviso fijo y no un cambio de estado, así el lector de pantalla no lo anuncia en cada visita
+    expect(within(party).getByRole('note')).toHaveTextContent(t.freePlan.widget);
+    expect(within(party).queryByRole('status')).toBeNull();
     expect(within(party).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
       'href',
       SCREENS.subscription.path,
