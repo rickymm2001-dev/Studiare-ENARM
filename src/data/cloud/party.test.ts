@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { weekStartOf, studyDayOf } from '@/engines/studyDay';
+import { fakeRpc } from '../testing/bankCloud';
 import { FAKE_PARTY_LIMITS } from '../testing/fakePartyServer';
+import { ulidToUuid } from './cloudIds';
 import { makeFakeCloud, type FakeCloud } from '../testing/fakeCloud';
 import {
   PARTY_CAPS,
@@ -22,6 +24,7 @@ import {
   rotatePartyCode,
   startPartyDuel,
   submitPartyDuelResult,
+  PartyDuelSchema,
 } from './party';
 
 const ANA = '2f6c4b1e-8a3d-4c7e-9b10-6d2e5f7a8b01';
@@ -332,6 +335,25 @@ describe('retos y duelos en la nube', () => {
         questionIds: questions,
       }),
     ).toEqual({ ok: true, value: { status: 'rival_gone' } });
+  });
+});
+
+describe('preguntas de un duelo con el banco de la nube (B11, 8.13)', () => {
+  it('viajan como uuid de versión, que es lo que acepta la base, y vuelven en ULID', async () => {
+    const cloud = fakeRpc({ party_create_duel: () => ({ status: 'created', duelId: ANA }) });
+    await createPartyDuel(cloud, { groupId: ANA, opponentId: BRUNO, questionIds: questions });
+    expect(cloud.calls[0]?.args?.p_question_ids).toEqual(questions.map((id) => ulidToUuid(id)));
+    const duel = PartyDuelSchema.parse({
+      id: ANA,
+      challengerId: ANA,
+      opponentId: BRUNO,
+      questionIds: [ulidToUuid(questions[0] ?? ''), 'demo-viejo-1'],
+      createdAt: '2026-10-20T15:00:00.000+00:00',
+      mine: null,
+      rival: null,
+    });
+    // Un duelo creado antes, con ids que no son uuid, se lee igual
+    expect(duel.questionIds).toEqual([questions[0], 'demo-viejo-1']);
   });
 });
 

@@ -4,13 +4,20 @@
 // cada pregunta y el resumen de la sesión, que es donde se ve por defecto (D-087). El motivo es uno
 // de los siete de Ricardo, opcional y cambiable, y vale el último (B5). Junto a Crear tarjeta se
 // avisa si ya creó una con esa pregunta.
+// Con el banco de la nube (B11, 5.4) el reporte de una pregunta de la nube llega también al médico
+// asignado con report_question, con la versión que el alumno tenía a la vista.
 import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useFocusMode } from '@/app/focusMode';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
+import { getCloud } from '@/data/cloud/client';
 import type { ContentReport } from '@/data/schemas/bank';
-import { submitContentReport } from '@/data/usecases/contentReports';
+import {
+  cloudReporter,
+  submitQuestionReport,
+  type RemoteReportOutcome,
+} from '@/data/usecases/contentReports';
 import { biasTaxonomy } from '@/demo/content';
 import { latestMotive } from '@/engines/errorCauses';
 import { t } from '@/i18n/es-MX';
@@ -22,6 +29,7 @@ import { CreateCardButton } from '../questionCards/CreateCardDialog';
 import { useQuestionsWithCards } from '../questionCards/useQuestionsWithCards';
 import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
+import { useQuestionSource } from '../shared/useQuestionSource';
 import type { ReadySession } from '../shared/RequireSession';
 import { DiscardReviewCard } from './DiscardReviewCard';
 import { usePractice, type PracticeAnswer } from './practice';
@@ -58,6 +66,9 @@ export function AnswerReview({
   const withCards = useQuestionsWithCards(session.user.id);
   const [reason, setReason] = useState<ReportReason>('clinical_error');
   const [reported, setReported] = useState(false);
+  // Lo que dijo la nube del reporte, para avisar si no llegó al médico
+  const [remote, setRemote] = useState<RemoteReportOutcome | null>(null);
+  const cloudBank = useQuestionSource().kind === 'cloud';
   const ctx = {
     userId: session.user.id,
     tz: session.user.timeZone,
@@ -70,18 +81,21 @@ export function AnswerReview({
     .filter((option): option is NonNullable<typeof option> => option !== undefined);
 
   const submitReport = async () => {
-    const { report, created } = await submitContentReport(api, {
-      reporterId: session.user.id,
-      targetKind: 'question',
-      targetId: question.id,
-      reason,
-    });
+    // Solo las preguntas que bajaron de la nube se reportan allá. Las de la demostración, aquí
+    const cloud = cloudBank && !question.isDemo ? getCloud() : null;
+    const result = await submitQuestionReport(
+      api,
+      { reporterId: session.user.id, targetId: question.id, reason },
+      cloud ? cloudReporter(cloud) : undefined,
+    );
+    setRemote(result.remote ?? null);
+    if (result.outcome === 'limit') return;
     // Un reporte repetido mientras el primero sigue abierto no suma otro evento
-    if (created) {
+    if (result.outcome === 'created') {
       await api.recordEvent(
         createEvent(
           'report_submitted',
-          { reportId: report.id, targetKind: 'question', targetId: question.id, reason },
+          { reportId: result.report.id, targetKind: 'question', targetId: question.id, reason },
           ctx,
         ),
       );
@@ -223,6 +237,7 @@ export function AnswerReview({
             {reported ? (
               <p role="status" className="text-sm">
                 {t.simulator.reported}
+                {remote === 'offline' ? ` ${t.cloudBank.report.offline}` : null}
               </p>
             ) : (
               <div className="flex flex-wrap items-end gap-2">
@@ -248,6 +263,11 @@ export function AnswerReview({
                   <Flag aria-hidden />
                   {t.simulator.sendReport}
                 </Button>
+                {remote === 'limit' ? (
+                  <p role="status" className="w-full text-sm font-medium">
+                    {t.cloudBank.report.limit}
+                  </p>
+                ) : null}
               </div>
             )}
           </details>

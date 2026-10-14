@@ -1,7 +1,14 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
+import { ulidToUuid } from '../cloud/cloudIds';
+import { fakeRpc, FakeDbError } from '../testing/bankCloud';
 import { newId, testApi } from '../testing/fixtures';
-import { setReportsStatus, submitContentReport } from './contentReports';
+import {
+  cloudReporter,
+  setReportsStatus,
+  submitContentReport,
+  submitQuestionReport,
+} from './contentReports';
 
 const disposers: (() => Promise<unknown>)[] = [];
 afterEach(async () => {
@@ -74,5 +81,70 @@ describe('reportes de contenido', () => {
     });
     // Un ID que no existe se ignora
     expect(await setReportsStatus(api, [newId()], 'resolved')).toBe(0);
+  });
+});
+
+describe('reporte de una pregunta con el banco de la nube (B11, 5.4)', () => {
+  const input = { reporterId: newId(), targetId: newId() };
+
+  it('manda la versión en uuid y solo el motivo, y lo guarda aquí para que vea que ya reportó', async () => {
+    const api = setup();
+    const cloud = fakeRpc({ report_question: () => ({ status: 'created', reportId: 'r1' }) });
+    const result = await submitQuestionReport(
+      api,
+      { ...input, reason: 'wrong_key' },
+      cloudReporter(cloud),
+    );
+    expect(result).toMatchObject({ outcome: 'created', remote: 'sent' });
+    expect(cloud.calls).toEqual([
+      {
+        name: 'report_question',
+        args: { p_version_id: ulidToUuid(input.targetId), p_reason: 'wrong_key' },
+      },
+    ]);
+    expect(await api.repos.contentReports.list()).toHaveLength(1);
+    // El repetido no viaja otra vez
+    expect(
+      await submitQuestionReport(api, { ...input, reason: 'wrong_key' }, cloudReporter(cloud)),
+    ).toMatchObject({ outcome: 'duplicate' });
+    expect(cloud.calls).toHaveLength(1);
+  });
+
+  it('con el tope del día no se guarda y sin conexión se guarda y lo dice', async () => {
+    const api = setup();
+    const full = fakeRpc({ report_question: () => ({ status: 'limit', reportId: null }) });
+    expect(
+      await submitQuestionReport(api, { ...input, reason: 'typo' }, cloudReporter(full)),
+    ).toEqual({ outcome: 'limit', report: null, remote: 'limit' });
+    expect(await api.repos.contentReports.list()).toEqual([]);
+    const offline = fakeRpc({
+      report_question: () => {
+        throw new Error('Failed to fetch');
+      },
+    });
+    expect(
+      await submitQuestionReport(api, { ...input, reason: 'typo' }, cloudReporter(offline)),
+    ).toMatchObject({ outcome: 'created', remote: 'offline' });
+    expect(await api.repos.contentReports.list()).toHaveLength(1);
+  });
+
+  it('sin la nube es el reporte local de siempre y un rechazo de la base no lo pierde', async () => {
+    const api = setup();
+    expect(await submitQuestionReport(api, { ...input, reason: 'other' })).toMatchObject({
+      outcome: 'created',
+    });
+    const rejected = fakeRpc({ report_question: () => new FakeDbError('42501') });
+    expect(
+      await submitQuestionReport(api, { ...input, reason: 'outdated' }, cloudReporter(rejected)),
+    ).toMatchObject({ outcome: 'created', remote: 'failed' });
+    const missing = fakeRpc({ report_question: () => ({ status: 'not_found', reportId: null }) });
+    expect(
+      await submitQuestionReport(
+        api,
+        { ...input, reason: 'clinical_error' },
+        cloudReporter(missing),
+      ),
+    ).toMatchObject({ remote: 'failed' });
+    expect(await cloudReporter(missing)('no-es-ulid', 'typo')).toBe('failed');
   });
 });

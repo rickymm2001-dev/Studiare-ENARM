@@ -39,6 +39,7 @@ import { ErrorState } from '@/ui/states/states';
 import type { Snapshot } from '../home/snapshot';
 import { reservedByStoredExam } from '../exam/examStorage';
 import { dailyQuestions } from '../shared/dailyLimit';
+import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
 import type { ReadySession } from '../shared/RequireSession';
 import { ChallengeRow } from './ChallengeRow';
 import { CloudDuelRow } from './CloudDuelRow';
@@ -138,8 +139,10 @@ function CloudGroups({ session, events, snapshot, focus, inviteCode, onClosed }:
     () => api.repos.subscriptions.get(user.id).then((value) => value ?? null),
     [api.repos, user.id],
   );
+  // Con el banco de la nube el tope de hoy cuenta también lo que dice el servidor (B11, 5.5)
+  const serverQuota = useServerQuota(useQuestionSource());
 
-  if (state.status === 'loading' || subscription === undefined) {
+  if (state.status === 'loading' || subscription === undefined || serverQuota === undefined) {
     return (
       <Card>
         <SkeletonRows label={text.loading} rows={4} />
@@ -162,6 +165,7 @@ function CloudGroups({ session, events, snapshot, focus, inviteCode, onClosed }:
     timeZone: user.timeZone,
     now: new Date(),
     reserved: reservedByStoredExam(user.id),
+    serverQuota,
   });
   const { groups } = state.overview;
 

@@ -4,6 +4,7 @@
 // decide nada. Al servidor solo viajan ids seudónimos y cifras de estudio, y de él solo llegan alias.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { ulidToUuid, uuidToUlid } from './cloudIds';
 
 type Rpc = Pick<SupabaseClient, 'rpc'>;
 
@@ -107,11 +108,23 @@ export const DuelScoreSchema = z.object({
 });
 export type DuelScore = z.infer<typeof DuelScoreSchema>;
 
+/**
+ * Las preguntas de un duelo viajan como uuid de versión, que es lo que acepta la base con el banco de la
+ * nube (B11, 8.13), y la app las usa en ULID. Un id que no es uuid, como los de duelos creados antes,
+ * queda igual
+ */
+const DuelQuestionIdSchema = z
+  .string()
+  .min(1)
+  .max(64)
+  .transform((id) => uuidToUlid(id) ?? id);
+const duelQuestionIdOut = (id: string) => ulidToUuid(id) ?? id;
+
 export const PartyDuelSchema = z.object({
   id: CloudIdSchema,
   challengerId: CloudIdSchema,
   opponentId: CloudIdSchema,
-  questionIds: z.array(z.string().min(1).max(64)).min(1).max(40),
+  questionIds: z.array(DuelQuestionIdSchema).min(1).max(40),
   createdAt: TimestampSchema,
   /** Cuándo lo empezó quien llama, en cualquier dispositivo. null si todavía no lo empieza */
   startedAt: TimestampSchema.nullable().default(null),
@@ -274,7 +287,7 @@ export function createPartyDuel(
     {
       p_group: input.groupId,
       p_opponent: input.opponentId,
-      p_question_ids: [...input.questionIds],
+      p_question_ids: input.questionIds.map(duelQuestionIdOut),
     },
     CreateDuelSchema,
   );

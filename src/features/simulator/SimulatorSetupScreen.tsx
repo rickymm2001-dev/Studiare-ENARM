@@ -1,8 +1,12 @@
 // Configurar simulador (pantalla 7). Práctica por rama, dificultad y estructura, con el límite
 // diario del plan Gratis como bandera de acceso. Los filtros y el botón de empezar van arriba y las
 // ramas quedan plegadas con un resumen (D-078). Debajo va la tarjeta del examen completo.
+// Las preguntas salen de la fuente del alumno (B11, 5.1). Con el banco de la nube se eligen del catálogo
+// y antes de empezar se bajan sus cuerpos. Si llega menos de lo pedido, la práctica arranca con lo
+// concedido y el marco de la app dice por qué. El tope de Gratis es el menor entre lo que cuenta la app
+// y lo que cuenta el servidor, y en un plan de pago el freno del servidor se avisa con su hora.
 import { Gauge, Library, ListChecks, Play } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -10,8 +14,7 @@ import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
-import { ensureDemoBank } from '@/data/usecases/bank';
-import { listStudentPool } from '@/data/usecases/studentBank';
+import { brakeUntil, shortfallReason } from '@/data/bank/quota';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -22,7 +25,11 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import { useBankNotice } from '../shared/bankNotice';
 import { dailyQuestions } from '../shared/dailyLimit';
+import { lockedCtaLabel, lockedCtaPath } from '../shared/lockedCta';
+import { useSourceReadiness } from '../shared/useBankReady';
+import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
 import { difficultyGroupOf } from '../shared/difficulty';
 import { useUserEvents } from '../shared/useUserEvents';
 import { ExamSetupCard } from '../exam/ExamSetupCard';
@@ -49,13 +56,14 @@ function Setup({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const navigate = useNavigate();
   const practice = usePractice();
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    void ensureDemoBank(api).then(() => {
-      setReady(true);
-    });
-  }, [api]);
-  const pool = useLiveData(() => listStudentPool(api), [api.repos, ready]);
+  const source = useQuestionSource();
+  const readiness = useSourceReadiness(source);
+  const pool = useLiveData(() => source.pool(), [source, readiness]);
+  const serverQuota = useServerQuota(source);
+  const showNotice = useBankNotice((state) => state.show);
+  const [starting, setStarting] = useState(false);
+  // La práctica no pudo empezar porque no llegó ninguna pregunta
+  const [blocked, setBlocked] = useState<string | null>(null);
   const questions = pool?.practice;
   const subscription = useLiveData(
     () => api.repos.subscriptions.get(session.user.id).then((value) => value ?? null),
@@ -82,7 +90,13 @@ function Setup({ session }: { session: ReadySession }) {
       description={t.screens.simulatorSetup.description}
     />
   );
-  if (!ready || questions === undefined || events === undefined || subscription === undefined) {
+  if (
+    readiness === undefined ||
+    questions === undefined ||
+    events === undefined ||
+    subscription === undefined ||
+    serverQuota === undefined
+  ) {
     return (
       <>
         {header}
@@ -90,14 +104,31 @@ function Setup({ session }: { session: ReadySession }) {
       </>
     );
   }
+  if (readiness !== 'ready') {
+    const notice = readiness === 'closed' ? t.cloudBank.closed : t.cloudBank.neverDownloaded;
+    return (
+      <>
+        {header}
+        <Card aria-labelledby="banco-aviso">
+          <CardHeader>
+            <CardTitle id="banco-aviso">{notice.title}</CardTitle>
+            <CardDescription>{notice.body}</CardDescription>
+          </CardHeader>
+        </Card>
+      </>
+    );
+  }
 
+  const now = new Date();
   const { plan, left, reserved } = dailyQuestions({
     events,
     subscription,
     timeZone: session.user.timeZone,
-    now: new Date(),
+    now,
     reserved: reservedByStoredExam(session.user.id),
+    serverQuota,
   });
+  const brake = brakeUntil(serverQuota, now);
   // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
   const matchesLevel = (question: (typeof questions)[number]) => {
     if (difficulty !== 'all' && difficultyGroupOf(question.physicianDifficulty) !== difficulty)
@@ -117,7 +148,33 @@ function Setup({ session }: { session: ReadySession }) {
   const start = async () => {
     const sessionId = newId();
     // Los casos seriados se mantienen juntos y en orden
-    const ordered = pickQuestions(filtered, `practice|${sessionId}`, wanted);
+    const picked = pickQuestions(filtered, `practice|${sessionId}`, wanted);
+    // Con la nube se bajan los cuerpos antes de empezar. Lo ya bajado no gasta del tope
+    const result = await source.ensureBodies(
+      picked.map((question) => question.id),
+      'practice',
+    );
+    const ready = new Set(result.ready);
+    const ordered = picked.filter((question) => ready.has(question.id));
+    const reason = shortfallReason({
+      denied: result.denied,
+      offline: result.offline,
+      missing: picked.length - ordered.length,
+    });
+    const retryAt = result.quota?.brake.retryAt ?? null;
+    if (ordered.length === 0) {
+      setBlocked(
+        reason === 'brake' && retryAt
+          ? t.cloudBank.brake(retryAt)
+          : reason
+            ? t.cloudBank.shortfall.reasons[reason]
+            : t.cloudBank.shortfall.none,
+      );
+      return;
+    }
+    if (ordered.length < picked.length && reason) {
+      showNotice({ reason, granted: ordered.length, requested: picked.length, retryAt });
+    }
     // Solo se dirige si la opción está encendida y el perfil ya tiene trampas que dirigir
     const targetTags = targeted && analysis ? targetBiasTags(analysis.report) : [];
     await api.recordEvent(
@@ -129,7 +186,7 @@ function Setup({ session }: { session: ReadySession }) {
             topics: [...topics],
             difficulty,
             structure,
-            count: wanted,
+            count: ordered.length,
             sampling: targetTags.length > 0 ? 'targeted' : 'diverse',
             ...(targetTags.length > 0 ? { targetTags } : {}),
           },
@@ -241,16 +298,25 @@ function Setup({ session }: { session: ReadySession }) {
                 <Link to={screenPath('exam')}>{t.simulator.goToOpenExam}</Link>
               </Button>
             ) : left === 0 ? (
+              // El aviso de los candados de Gratis, con la prueba gratis si está prendida (B8)
               <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-                <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
+                <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
               </Button>
             ) : (
               <Button
                 size="lg"
                 className="w-full sm:w-auto"
-                disabled={wanted === 0}
+                disabled={wanted === 0 || starting}
                 onClick={() => {
-                  void start();
+                  setStarting(true);
+                  setBlocked(null);
+                  void start()
+                    .catch(() => {
+                      setBlocked(t.cloudBank.shortfall.none);
+                    })
+                    .finally(() => {
+                      setStarting(false);
+                    });
                 }}
               >
                 <Play aria-hidden />
@@ -263,6 +329,16 @@ function Setup({ session }: { session: ReadySession }) {
               </p>
             ) : null}
           </div>
+          {brake ? (
+            <p role="status" className="text-sm font-medium text-fg">
+              {t.cloudBank.brake(brake.toISOString())}
+            </p>
+          ) : null}
+          {blocked ? (
+            <p role="alert" className="text-sm font-medium text-danger">
+              {blocked}
+            </p>
+          ) : null}
           {filtered.length === 0 ? (
             <p className="text-sm text-danger">{t.simulator.noQuestions}</p>
           ) : null}
