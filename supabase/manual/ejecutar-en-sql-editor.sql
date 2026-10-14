@@ -16,8 +16,11 @@
 --   aceptarlo. Sin las piezas 4 y 5 no funcionan borrar mis datos ni borrar mi cuenta. Sin la 1 un admin no
 --   puede liberar el dispositivo de un alumno. Sin la 6 no se guardan los errores del navegador.
 --
--- Es una foto de esa fecha. Si una migración de 3 a 9 cambia después, este archivo no se actualiza solo.
--- Las migraciones de supabase/migrations siguen siendo la fuente.
+-- Es una foto de esa fecha, salvo las piezas 2 y 5, que se pusieron al día con B10 (2026-10-14). Si se
+-- vuelve a pegar después de B10 no deshace la restricción de planes ni el freno de borrar la cuenta. Con
+-- B10 la pieza 5 pide billing_blocks_account_deletion, de la migración 20261022000002, así que este
+-- archivo se pega después de las migraciones de B10. Si una migración cambia después, este archivo no se
+-- actualiza solo. Las migraciones de supabase/migrations siguen siendo la fuente.
 
 -- ################ 1. Liberar la cuenta de un alumno (device_barrier)
 -- ===================================================================== Funciones del admin
@@ -47,10 +50,13 @@ $$;
 revoke all on function public.admin_release_device(uuid) from public, anon, service_role;
 grant execute on function public.admin_release_device(uuid) to authenticated;
 
--- ################ 2. Aceptar el plan Fundador (payments_referrals)
+-- ################ 2. Aceptar los planes Fundador y la prueba gratis (billing_plans de B10, versión final)
 alter table public.subscriptions drop constraint if exists subscriptions_plan_check;
-alter table public.subscriptions
-  add constraint subscriptions_plan_check check (plan in ('free', 'founder', 'monthly', 'annual'));
+alter table public.subscriptions add constraint subscriptions_plan_check
+  check (plan in ('free', 'founder', 'founder_annual', 'monthly', 'annual'));
+alter table public.subscriptions drop constraint if exists subscriptions_status_check;
+alter table public.subscriptions add constraint subscriptions_status_check
+  check (status in ('trialing', 'active', 'past_due', 'canceled'));
 
 -- ################ 3. Llaves foráneas para poder borrar médicos y admins (privacy)
 do $$
@@ -135,7 +141,7 @@ $$;
 revoke all on function public.delete_my_data() from public, anon, authenticated, service_role;
 grant execute on function public.delete_my_data() to authenticated;
 
--- ################ 5. Borrar mi cuenta (billing_portal, versión final)
+-- ################ 5. Borrar mi cuenta (billing_plans de B10, versión final)
 create or replace function public.delete_my_account() returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
@@ -150,11 +156,7 @@ begin
   if public.current_app_role() = 'owner' then
     raise exception 'El dueño no puede borrar su propia cuenta' using errcode = '42501';
   end if;
-  if exists (
-    select 1 from public.subscriptions s
-    where s.user_id = v_user and s.provider = 'stripe' and s.status in ('active', 'past_due')
-      and (s.current_period_end is null or s.current_period_end > now())
-  ) then
+  if public.billing_blocks_account_deletion(v_user) then
     raise exception 'Cancela tu suscripción antes de eliminar tu cuenta' using errcode = 'FR002';
   end if;
 
