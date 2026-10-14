@@ -59,6 +59,26 @@ function contentSecurityPolicy(env: Record<string, string>): Plugin {
   };
 }
 
+/**
+ * Imagen para compartir con dirección completa. WhatsApp, Facebook y X no siguen rutas relativas en
+ * og:image. El workflow de Pages pasa SITE_URL con la dirección pública; sin ella, en local y en las
+ * pruebas, la ruta queda relativa
+ */
+function absoluteShareImage(): Plugin {
+  const site = (process.env.SITE_URL ?? '').trim().replace(/\/+$/, '');
+  return {
+    name: 'enarm-absolute-share-image',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (html) =>
+        site === ''
+          ? html
+          : html.replaceAll(`content="${BASE_PATH}og-image.png"`, `content="${site}/og-image.png"`),
+    },
+  };
+}
+
 const apiProxy = {
   '/api': { target: PROXY_TARGET, rewrite: (path: string) => path.replace(/^\/api/, '') },
 };
@@ -69,6 +89,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     tailwindcss(),
     contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_')),
+    absoluteShareImage(),
     // Instalación opcional como PWA y modo sin conexión básico (4.11, 14.4)
     VitePWA({
       registerType: 'prompt',
