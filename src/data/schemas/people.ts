@@ -221,9 +221,25 @@ export const ConsentSchema = z.strictObject({
 });
 export type Consent = z.infer<typeof ConsentSchema>;
 
+/** Un cobro que espera su pago, como una ficha OXXO o una transferencia SPEI (B10, my_plan v2) */
+export const PendingPaymentSchema = z.strictObject({
+  method: z.enum(['oxxo', 'spei', 'mercadopago']),
+  plan: z.enum(['monthly', 'annual']).nullable(),
+  amountMxn: z.number().nonnegative(),
+  /** Vencimiento de la ficha OXXO. null en SPEI y Mercado Pago */
+  expiresAt: UtcDateTimeSchema.nullable(),
+  createdAt: UtcDateTimeSchema,
+});
+export type PendingPayment = z.infer<typeof PendingPaymentSchema>;
+
 export const SubscriptionSchema = z.strictObject({
   userId: IdSchema,
-  plan: z.enum(['free', 'founder', 'monthly', 'annual']),
+  plan: z.enum(['free', 'founder', 'founder_annual', 'monthly', 'annual']),
+  /**
+   * active en todo plan vigente, también en la prueba gratis, un pase o una suscripción cancelada que
+   * vale hasta el fin del periodo. Así planOf y los candados lo leen igual (B8). El estado de la
+   * pasarela va en cloudStatus
+   */
   status: z.enum(['none', 'active', 'canceled']),
   /**
    * true en el pago simulado local (3.2). false cuando el plan viene de la nube, ya verificado por el
@@ -233,10 +249,31 @@ export const SubscriptionSchema = z.strictObject({
   /** Hasta cuándo vale el plan que dio el servidor. Ausente en el simulado local */
   periodEnd: UtcDateTimeSchema.nullable().optional(),
   /**
-   * De dónde viene el plan que dio el servidor, un pago o un mes regalado por referido. Con un pago
-   * vigente no se ofrece otro (D-118). Ausente en el simulado local y en Gratis
+   * De dónde viene el plan que dio el servidor, un pago, un pase de un solo pago o un mes regalado por
+   * referido. Con un pago vigente no se ofrece otro (D-118). Ausente en el simulado local y en Gratis
    */
-  source: z.enum(['payment', 'referral']).optional(),
+  source: z.enum(['payment', 'pass', 'referral']).optional(),
+  // Lo demás de my_plan v2 (B10). Solo con la nube y solo cuando el servidor lo manda
+  /** Estado de la suscripción en la pasarela, aunque ya no esté vigente */
+  cloudStatus: z.enum(['trialing', 'active', 'past_due', 'canceled']).optional(),
+  provider: z.enum(['stripe', 'mercadopago']).optional(),
+  /** Fin de la prueba gratis mientras dura */
+  trialEnd: UtcDateTimeSchema.optional(),
+  /** Canceló y vale hasta el fin del periodo o de la prueba */
+  cancelAtPeriodEnd: z.boolean().optional(),
+  /** Bajada de plan programada en el portal para el fin del periodo */
+  scheduledChange: z.boolean().optional(),
+  /** Fin acumulado de los pases activos */
+  passEnd: UtcDateTimeSchema.optional(),
+  /** Si el servidor le daría la prueba gratis al pagar con tarjeta */
+  trialAvailable: z.boolean().optional(),
+  /** Hasta cuándo puede pedir el reembolso completo */
+  guaranteeUntil: UtcDateTimeSchema.optional(),
+  pendingPayment: PendingPaymentSchema.optional(),
+  /** Aviso de 72 horas sobre un pago que se canceló o una ficha que venció */
+  issue: z
+    .enum(['founder_full', 'trial_duplicate', 'second_subscription', 'voucher_expired'])
+    .optional(),
   updatedAt: UtcDateTimeSchema,
 });
 export type Subscription = z.infer<typeof SubscriptionSchema>;

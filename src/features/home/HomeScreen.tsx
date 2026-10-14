@@ -18,6 +18,7 @@ import { useLiveData } from '@/data/hooks';
 import { monthlyReviewLoad } from '@/engines/monthlyLoad';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -29,6 +30,8 @@ import { LandingScreen } from '../landing/LandingScreen';
 import { PartyWidget } from '../party/PartyWidget';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useAccount } from '../shared/useAccount';
+import { longDate, planStateOf } from '../billing/planState';
+import { useSubscription } from '../profile/useSubscription';
 import { useActivePlan } from '../shared/useActivePlan';
 import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import { useUserEvents } from '../shared/useUserEvents';
@@ -261,10 +264,15 @@ function AnalysisCard({ title, children }: { title: string; children: ReactNode 
   );
 }
 
-/** Plan actual con el botón para cambiarlo, siempre a la vista en Inicio */
+/**
+ * Plan actual con el botón para cambiarlo, siempre a la vista en Inicio. Con la prueba gratis dice
+ * hasta cuándo dura (B10, 3.4)
+ */
 function PlanCard({ userId }: { userId: string }) {
   const id = useId();
   const plan = useActivePlan(userId);
+  const subscription = useSubscription(userId);
+  const trial = planStateOf(subscription);
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3 self-start p-5">
       <h2 id={id} className="screen-title text-fg">
@@ -284,6 +292,11 @@ function PlanCard({ userId }: { userId: string }) {
             <CreditCard aria-hidden className="size-8 shrink-0 text-fg-muted" />
             <span className="text-xl font-bold text-fg">{t.billing.plans[plan]}</span>
           </p>
+          {trial?.kind === 'trialing' ? (
+            <p className="text-sm text-fg-muted">
+              {billingCloudText.trialUntil(longDate(trial.end))}
+            </p>
+          ) : null}
           <Button asChild className="w-full">
             <Link to={screenPath('subscription')}>
               {plan === 'free' ? text.plan.upgrade : text.plan.change}

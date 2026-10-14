@@ -1,24 +1,30 @@
 // @vitest-environment jsdom
+// Suscripción con la cuenta en la nube (Fase P bloque 5, D-096, y B10 del plan del cambio). Lo que
+// ofrece cada tarjeta de planes según lo que el alumno ya tiene, Administrar suscripción con Stripe o
+// con Mercado Pago, la tarjeta de quien no tiene sesión en este navegador y el aviso al volver de la
+// pasarela. La forma de pago se prueba en CheckoutOptions.test.tsx.
 import 'fake-indexeddb/auto';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { writeStoredFlags } from '@/config/featureFlags';
 import { DataProvider } from '@/data/DataProvider';
-import { PLANS } from '@/config/billing';
-import type { PaidPlanKey, PaymentProvider } from '@/data/payments/checkout';
+import type { Subscription } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
+import { billingCloudText } from '@/i18n/billingCloud';
 import {
   BillingPortalCard,
-  CloudCheckoutCard,
+  MercadoPagoManageCard,
   PaymentReturnNotice,
   RETURN_CHECKS,
   RETURN_CHECK_MS,
 } from './CloudBilling';
+import { longDate } from './planState';
 
 vi.setConfig({ testTimeout: 30_000 });
 
@@ -33,10 +39,12 @@ vi.mock('@/data/cloud/client', () => ({
 interface FakeState {
   plan: string;
   /** De dónde viene el plan según my_plan. Sin valor, un pago si el plan no es Gratis */
-  source?: 'payment' | 'referral';
-  invoke: () => Promise<{ data: unknown; error: unknown }>;
+  source?: 'payment' | 'referral' | 'pass';
+  /** Lo demás de my_plan v2, que se suma a plan y source */
+  extra?: Record<string, unknown>;
+  invoke: (name: string) => Promise<{ data: unknown; error: unknown }>;
   rpcCalls: string[];
-  invokeCalls: unknown[];
+  invokeCalls: [string, unknown][];
   otpCalls: unknown[];
   verifyCalls: unknown[];
   /** Error con el que responde signInWithOtp, como el rechazo del registro por invitación (B9) */
@@ -74,22 +82,45 @@ function fakeCloudFor(overrides: Partial<FakeState> = {}) {
         data: {
           plan: state.plan,
           source: state.plan === 'free' ? 'none' : (state.source ?? 'payment'),
-          status: 'active',
+          status: state.plan === 'free' ? 'none' : 'active',
           provider: 'stripe',
           periodEnd: null,
+          ...state.extra,
         },
         error: null,
       });
     },
     functions: {
-      invoke: (_name: string, init: unknown) => {
-        state.invokeCalls.push(init);
-        return state.invoke();
+      invoke: (name: string, init: unknown) => {
+        state.invokeCalls.push([name, init]);
+        return state.invoke(name);
       },
     },
   };
   return state;
 }
+
+const PERIOD_END = '2026-11-14T15:00:00.000Z';
+
+/** La suscripción que reflejó la nube, con lo que la prueba cambie */
+const mirrored =
+  (patch: Partial<Subscription>) =>
+  async (api: RenderedApp['api'], user: { id: string }): Promise<void> => {
+    await api.repos.subscriptions.put({
+      userId: user.id,
+      plan: 'monthly',
+      status: 'active',
+      isSimulated: false,
+      periodEnd: PERIOD_END,
+      source: 'payment',
+      cloudStatus: 'active',
+      provider: 'stripe',
+      updatedAt: new Date().toISOString(),
+      ...patch,
+    });
+  };
+
+const region = (name: string) => screen.getByRole('region', { name });
 
 let app: RenderedApp | undefined;
 beforeEach(() => {
@@ -110,7 +141,7 @@ afterEach(async () => {
 });
 
 describe('pago real desde Suscripción', () => {
-  it('con la nube conectada el aviso es el del servidor y no hay pago simulado', async () => {
+  it('con la nube conectada el aviso es el del servidor y elegir abre la forma de pago, sin pago simulado', async () => {
     fakeCloudFor();
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.subscription.path);
@@ -118,21 +149,74 @@ describe('pago real desde Suscripción', () => {
       await screen.findByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
     );
     expect(
-      await screen.findByRole('heading', { name: t.billing.cloud.checkoutTitle }),
+      await screen.findByRole('heading', {
+        name: billingCloudText.checkoutTitle(t.billing.plans.monthly),
+      }),
     ).toBeVisible();
     expect(screen.queryByText(t.billing.confirm)).toBeNull();
     expect(screen.queryByRole('button', { name: t.billing.cancel })).toBeNull();
-    expect(screen.getByText(t.billing.cloud.testMode)).toBeVisible();
+    expect(screen.getByText(billingCloudText.testMode)).toBeVisible();
   });
 
-  it('sin la nube sigue el checkout simulado de siempre', async () => {
-    useCloud.setState({ state: { status: 'off' } });
-    const typing = userEvent.setup();
+  it('con la prueba disponible el botón de cada plan de pago dice Prueba 7 días gratis', async () => {
+    fakeCloudFor();
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({
+        plan: 'free',
+        status: 'none',
+        source: undefined,
+        cloudStatus: undefined,
+        periodEnd: null,
+        trialAvailable: true,
+      }),
+    });
+    const monthly = await screen.findByRole('region', { name: t.billing.plans.monthly });
+    // El plan reflejado llega de la base local un momento después de la tabla
+    expect(
+      await within(monthly).findByRole('button', { name: t.billing.freeTrialCta }),
+    ).toBeVisible();
+    expect(
+      within(region(t.billing.plans.annual)).getByRole('button', { name: t.billing.freeTrialCta }),
+    ).toBeVisible();
+    // El lugar Fundador se aparta al empezar la prueba
+    expect(within(monthly).getByText(t.billing.founderNote(100))).toBeVisible();
+  });
+
+  it('el anual muestra el precio Fundador de 749 con 1,499 tachado, su ahorro de 20% e IVA incluido', async () => {
+    fakeCloudFor();
     app = await renderApp(SCREENS.subscription.path);
-    await typing.click(
-      await screen.findByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
-    );
-    expect(await screen.findByText(t.billing.confirm)).toBeVisible();
+    const annual = await screen.findByRole('region', { name: t.billing.plans.annual });
+    expect(within(annual).getByText(t.billing.price(749))).toBeVisible();
+    expect(within(annual).getByText(t.billing.price(1499)).tagName).toBe('S');
+    expect(within(annual).getByText(t.billing.founderSavings(20))).toBeVisible();
+    expect(within(annual).getByText(t.billing.taxIncluded)).toBeVisible();
+  });
+
+  it('el botón de los candados abre directo la forma de pago del Mensual (?plan=mensual)', async () => {
+    fakeCloudFor();
+    app = await renderApp(`${SCREENS.subscription.path}?plan=mensual`);
+    expect(
+      await screen.findByRole('heading', {
+        name: billingCloudText.checkoutTitle(t.billing.plans.monthly),
+      }),
+    ).toBeVisible();
+    // El parámetro se quita para que volver no la abra otra vez
+    await waitFor(() => {
+      expect(app?.router.state.location.search).toBe('');
+    });
+  });
+
+  it('con un plan pagado vigente ?plan=mensual solo muestra los planes', async () => {
+    fakeCloudFor({ plan: 'monthly' });
+    app = await renderApp(`${SCREENS.subscription.path}?plan=mensual`, { seed: mirrored({}) });
+    expect(
+      await screen.findByRole('button', { name: billingCloudText.changeTo.annual }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('heading', {
+        name: billingCloudText.checkoutTitle(t.billing.plans.monthly),
+      }),
+    ).toBeNull();
   });
 
   it('con la nube configurada y este navegador sin sesión no ofrece ningún pago y explica qué falta', async () => {
@@ -140,9 +224,9 @@ describe('pago real desde Suscripción', () => {
     useCloud.setState({ state: { status: 'signed-out' } });
     app = await renderApp(SCREENS.subscription.path);
     expect(
-      await screen.findByRole('heading', { name: t.billing.cloud.needLink.title }),
+      await screen.findByRole('heading', { name: billingCloudText.needLink.title }),
     ).toBeVisible();
-    expect(screen.getByText(t.billing.cloud.needLink.body)).toBeVisible();
+    expect(screen.getByText(billingCloudText.needLink.body)).toBeVisible();
     expect(
       screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
     ).toBeNull();
@@ -165,13 +249,13 @@ describe('pago real desde Suscripción', () => {
         });
       },
     });
-    const send = await screen.findByRole('button', { name: t.billing.cloud.needLink.send });
+    const send = await screen.findByRole('button', { name: billingCloudText.needLink.send });
     // El botón espera a que se lea el correo de la cuenta
     await waitFor(() => {
       expect(send).toBeEnabled();
     });
     await typing.click(send);
-    expect(await screen.findByText(t.billing.cloud.needLink.sent('ana@x.mx'))).toBeVisible();
+    expect(await screen.findByText(billingCloudText.needLink.sent('ana@x.mx'))).toBeVisible();
     expect(fake.otpCalls).toEqual([expect.objectContaining({ email: 'ana@x.mx' })]);
   });
 
@@ -195,7 +279,7 @@ describe('pago real desde Suscripción', () => {
         });
       },
     });
-    const send = await screen.findByRole('button', { name: t.billing.cloud.needLink.send });
+    const send = await screen.findByRole('button', { name: billingCloudText.needLink.send });
     await waitFor(() => {
       expect(send).toBeEnabled();
     });
@@ -228,8 +312,8 @@ describe('pago real desde Suscripción', () => {
     fakeCloudFor();
     useCloud.setState({ state: { status: 'signed-out', reason: 'other_device' } });
     app = await renderApp(SCREENS.subscription.path);
-    expect(await screen.findByText(t.billing.cloud.needLink.otherDevice)).toBeVisible();
-    expect(screen.getByRole('button', { name: t.billing.cloud.needLink.send })).toBeVisible();
+    expect(await screen.findByText(billingCloudText.needLink.otherDevice)).toBeVisible();
+    expect(screen.getByRole('button', { name: billingCloudText.needLink.send })).toBeVisible();
   });
 
   it('mientras revisa la conexión no ofrece pago ni enlace', async () => {
@@ -237,179 +321,15 @@ describe('pago real desde Suscripción', () => {
     useCloud.setState({ state: { status: 'checking' } });
     app = await renderApp(SCREENS.subscription.path);
     expect(await screen.findByText(t.cloud.checking)).toBeVisible();
-    expect(screen.queryByRole('button', { name: t.billing.cloud.needLink.send })).toBeNull();
+    expect(screen.queryByRole('button', { name: billingCloudText.needLink.send })).toBeNull();
     expect(
       screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
     ).toBeNull();
   });
 });
 
-describe('tarjeta de pago', () => {
-  const render_ = (
-    open: (url: string) => void,
-    onBack = () => undefined,
-    options: { plan?: PaidPlanKey; providers?: readonly PaymentProvider[] } = {},
-  ) =>
-    render(
-      <DataProvider kind="real">
-        <CloudCheckoutCard
-          plan={options.plan ?? 'annual'}
-          onBack={onBack}
-          open={open}
-          providers={options.providers}
-        />
-      </DataProvider>,
-    );
-
-  it('con una sola pasarela no pide elegir y abre Stripe con la dirección del servidor', async () => {
-    const state = fakeCloudFor();
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open);
-    expect(screen.queryByLabelText(t.billing.cloud.provider)).toBeNull();
-    expect(screen.getByText(t.billing.cloud.singleProvider)).toBeVisible();
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    await waitFor(() => {
-      expect(open).toHaveBeenCalledWith('https://checkout.stripe.com/c/pay/cs_test_1');
-    });
-    expect(state.invokeCalls).toEqual([{ body: { plan: 'annual', provider: 'stripe' } }]);
-  });
-
-  it('con varias pasarelas abre la elegida', async () => {
-    const state = fakeCloudFor();
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open, undefined, { providers: ['stripe', 'mercadopago'] });
-    await typing.selectOptions(screen.getByLabelText(t.billing.cloud.provider), 'stripe');
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    await waitFor(() => {
-      expect(open).toHaveBeenCalledWith('https://checkout.stripe.com/c/pay/cs_test_1');
-    });
-    expect(state.invokeCalls).toEqual([{ body: { plan: 'annual', provider: 'stripe' } }]);
-  });
-
-  it('manda la pasarela de Mercado Pago cuando se elige', async () => {
-    const state = fakeCloudFor({
-      invoke: () =>
-        Promise.resolve({
-          data: { url: 'https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=1' },
-          error: null,
-        }),
-    });
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open, undefined, { providers: ['stripe', 'mercadopago'] });
-    await typing.selectOptions(screen.getByLabelText(t.billing.cloud.provider), 'mercadopago');
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    await waitFor(() => {
-      expect(open).toHaveBeenCalledWith(
-        'https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=1',
-      );
-    });
-    expect(state.invokeCalls).toEqual([{ body: { plan: 'annual', provider: 'mercadopago' } }]);
-  });
-
-  it('muestra el motivo si el servidor no puede y deja volver a intentar', async () => {
-    fakeCloudFor({
-      invoke: () =>
-        Promise.resolve({
-          data: null,
-          error: {
-            context: new Response(JSON.stringify({ error: 'founder_full' }), { status: 409 }),
-          },
-        }),
-    });
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open);
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    expect(await screen.findByText(t.billing.cloud.errors.founder_full)).toBeVisible();
-    expect(open).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: t.billing.cloud.go })).toBeEnabled();
-  });
-
-  it('si ya hay un plan pagado vigente lo explica y no abre la pasarela', async () => {
-    fakeCloudFor({
-      invoke: () =>
-        Promise.resolve({
-          data: null,
-          error: {
-            context: new Response(JSON.stringify({ error: 'already_subscribed' }), {
-              status: 409,
-            }),
-          },
-        }),
-    });
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open);
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    expect(await screen.findByText(t.billing.cloud.errors.already_subscribed)).toBeVisible();
-    expect(open).not.toHaveBeenCalled();
-  });
-
-  it('si el cupo Fundador se llenó deja seguir con el mensual al precio regular', async () => {
-    let calls = 0;
-    const state = fakeCloudFor({
-      invoke: () => {
-        calls += 1;
-        return Promise.resolve(
-          calls === 1
-            ? {
-                data: null,
-                error: {
-                  context: new Response(JSON.stringify({ error: 'founder_full' }), {
-                    status: 409,
-                  }),
-                },
-              }
-            : { data: { url: 'https://checkout.stripe.com/c/pay/cs_test_2' }, error: null },
-        );
-      },
-    });
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open, undefined, { plan: 'founder' });
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    const regular = await screen.findByRole('button', {
-      name: t.billing.cloud.regularInstead(
-        `${t.billing.price(PLANS.monthly.priceMxn)} ${t.billing.periods.monthly}`,
-      ),
-    });
-    await typing.click(regular);
-    await waitFor(() => {
-      expect(open).toHaveBeenCalledWith('https://checkout.stripe.com/c/pay/cs_test_2');
-    });
-    expect(state.invokeCalls).toEqual([
-      { body: { plan: 'founder', provider: 'stripe' } },
-      { body: { plan: 'monthly', provider: 'stripe' } },
-    ]);
-  });
-
-  it('no abre una dirección que no es de la pasarela', async () => {
-    fakeCloudFor({
-      invoke: () => Promise.resolve({ data: { url: 'https://malo.example/pagar' }, error: null }),
-    });
-    const open = vi.fn();
-    const typing = userEvent.setup();
-    render_(open);
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.go }));
-    expect(await screen.findByText(t.billing.cloud.errors.unsafe_url)).toBeVisible();
-    expect(open).not.toHaveBeenCalled();
-  });
-
-  it('Volver regresa a los planes', async () => {
-    fakeCloudFor();
-    const onBack = vi.fn();
-    const typing = userEvent.setup();
-    render_(vi.fn(), onBack);
-    await typing.click(screen.getByRole('button', { name: t.billing.cloud.back }));
-    expect(onBack).toHaveBeenCalledTimes(1);
-  });
-});
-
 describe('administrar la suscripción', () => {
-  const portal = t.billing.cloud.portal;
+  const portal = billingCloudText.portal;
   const PORTAL_URL = 'https://billing.stripe.com/p/session/test_1';
   const withBody = (body: unknown, status: number) => ({
     data: null,
@@ -427,7 +347,7 @@ describe('administrar la suscripción', () => {
     await waitFor(() => {
       expect(open).toHaveBeenCalledWith(PORTAL_URL);
     });
-    expect(state.invokeCalls).toEqual([{ body: {} }]);
+    expect(state.invokeCalls).toEqual([['create-portal-session', { body: {} }]]);
   });
 
   it('quien no pagó con Stripe recibe una explicación y puede volver a intentar', async () => {
@@ -439,6 +359,16 @@ describe('administrar la suscripción', () => {
     expect(await screen.findByText(portal.errors.no_customer)).toBeVisible();
     expect(open).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: portal.go })).toBeEnabled();
+  });
+
+  it('si la suscripción es de Mercado Pago lo explica en lugar de abrir el portal', async () => {
+    fakeCloudFor({ invoke: () => Promise.resolve(withBody({ error: 'mercadopago' }, 409)) });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={open} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    expect(await screen.findByText(portal.errors.mercadopago)).toBeVisible();
+    expect(open).not.toHaveBeenCalled();
   });
 
   it('no abre una dirección que no es del portal', async () => {
@@ -461,27 +391,28 @@ describe('administrar la suscripción', () => {
     expect(await screen.findByText(portal.errors.failed)).toBeVisible();
   });
 
-  it('la pantalla Suscripción lo ofrece solo a quien ya paga y con la nube conectada', async () => {
+  it('la pantalla Suscripción lo ofrece solo a quien paga con Stripe y con la nube conectada', async () => {
     fakeCloudFor({ plan: 'monthly' });
-    app = await renderApp(SCREENS.subscription.path, {
-      seed: async (api, user) => {
-        await api.repos.subscriptions.put({
-          userId: user.id,
-          plan: 'monthly',
-          status: 'active',
-          isSimulated: false,
-          periodEnd: null,
-          updatedAt: new Date().toISOString(),
-        });
-      },
-    });
+    app = await renderApp(SCREENS.subscription.path, { seed: mirrored({}) });
     expect(await screen.findByRole('heading', { name: portal.title })).toBeVisible();
+    expect(screen.getByRole('button', { name: portal.go })).toBeVisible();
+    expect(screen.queryByRole('button', { name: billingCloudText.mercadoPago.cancel })).toBeNull();
   });
 
   it('un alumno del plan Gratis no ve el portal', async () => {
     fakeCloudFor();
     app = await renderApp(SCREENS.subscription.path);
     await screen.findByRole('heading', { name: t.screens.subscription.title });
+    expect(screen.queryByRole('heading', { name: portal.title })).toBeNull();
+  });
+
+  it('con un pase o un mes regalado tampoco, porque no hay nada que se renueve', async () => {
+    fakeCloudFor({ plan: 'monthly', source: 'pass' });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({ source: 'pass', passEnd: PERIOD_END, cloudStatus: undefined }),
+    });
+    await screen.findByRole('heading', { name: t.screens.subscription.title });
+    await screen.findByText(billingCloudText.status.pass(longDate(PERIOD_END)));
     expect(screen.queryByRole('heading', { name: portal.title })).toBeNull();
   });
 
@@ -504,47 +435,158 @@ describe('administrar la suscripción', () => {
   });
 });
 
-describe('un solo plan pagado a la vez', () => {
-  const seedPlan =
-    (plan: 'annual' | 'monthly', source: 'payment' | 'referral') =>
-    async (api: RenderedApp['api'], user: { id: string }) => {
-      await api.repos.subscriptions.put({
-        userId: user.id,
-        plan,
-        status: 'active',
-        isSimulated: false,
-        periodEnd: null,
-        source,
-        updatedAt: new Date().toISOString(),
-      });
-    };
+describe('cancelar la suscripción de Mercado Pago', () => {
+  const mp = billingCloudText.mercadoPago;
+  const subscription: Subscription = {
+    userId: '01J9Z000000000000000000001',
+    plan: 'monthly',
+    status: 'active',
+    isSimulated: false,
+    periodEnd: PERIOD_END,
+    source: 'payment',
+    cloudStatus: 'active',
+    provider: 'mercadopago',
+    updatedAt: '2026-10-14T00:00:00.000Z',
+  };
 
-  it('con un pago vigente no ofrece comprar otro plan y explica cómo cambiarse', async () => {
-    fakeCloudFor({ plan: 'annual' });
-    app = await renderApp(SCREENS.subscription.path, { seed: seedPlan('annual', 'payment') });
-    expect(await screen.findByText(t.billing.cloud.changePlanNote)).toBeVisible();
+  it('pide confirmar, cancela con cancel-subscription y dice hasta cuándo vale', async () => {
+    const state = fakeCloudFor({
+      invoke: () =>
+        Promise.resolve({ data: { status: 'canceled', periodEnd: PERIOD_END }, error: null }),
+    });
+    const onChanged = vi.fn();
+    const typing = userEvent.setup();
+    render(<MercadoPagoManageCard subscription={subscription} onChanged={onChanged} />);
+    await typing.click(screen.getByRole('button', { name: mp.cancel }));
+    expect(screen.getByText(mp.confirm(longDate(PERIOD_END)))).toBeVisible();
+    // Conservarla no llama a nadie
+    await typing.click(screen.getByRole('button', { name: mp.confirmNo }));
+    expect(state.invokeCalls).toEqual([]);
+    await typing.click(screen.getByRole('button', { name: mp.cancel }));
+    await typing.click(screen.getByRole('button', { name: mp.confirmYes }));
+    expect(await screen.findByText(mp.done(longDate(PERIOD_END)))).toBeVisible();
+    expect(state.invokeCalls).toEqual([['cancel-subscription', { body: {} }]]);
+    expect(onChanged).toHaveBeenCalledTimes(1);
+  });
+
+  it('dice por qué no pudo cancelar y no avisa de un cambio', async () => {
+    fakeCloudFor({
+      invoke: () =>
+        Promise.resolve({
+          data: null,
+          error: {
+            context: new Response(JSON.stringify({ error: 'no_subscription' }), { status: 404 }),
+          },
+        }),
+    });
+    const onChanged = vi.fn();
+    const typing = userEvent.setup();
+    render(<MercadoPagoManageCard subscription={subscription} onChanged={onChanged} />);
+    await typing.click(screen.getByRole('button', { name: mp.cancel }));
+    await typing.click(screen.getByRole('button', { name: mp.confirmYes }));
+    expect(await screen.findByText(mp.errors.no_subscription)).toBeVisible();
+    expect(onChanged).not.toHaveBeenCalled();
+  });
+
+  it('ya cancelada no ofrece cancelar otra vez', () => {
+    fakeCloudFor();
+    render(<MercadoPagoManageCard subscription={{ ...subscription, cancelAtPeriodEnd: true }} />);
+    expect(screen.getByText(mp.already)).toBeVisible();
+    expect(screen.queryByRole('button', { name: mp.cancel })).toBeNull();
+  });
+
+  it('Suscripción la muestra en lugar del portal a quien paga con Mercado Pago', async () => {
+    fakeCloudFor({ plan: 'monthly', extra: { provider: 'mercadopago' } });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({ provider: 'mercadopago' }),
+    });
+    expect(await screen.findByRole('button', { name: mp.cancel })).toBeVisible();
+    expect(screen.queryByRole('button', { name: billingCloudText.portal.go })).toBeNull();
+    // Para cambiar de plan con Mercado Pago se cancela y se contrata el otro al terminar
+    expect(
+      within(region(t.billing.plans.annual)).getByText(billingCloudText.mercadoPagoChangeNote),
+    ).toBeVisible();
+  });
+});
+
+describe('un solo plan pagado a la vez', () => {
+  it('con una suscripción de Stripe vigente las otras tarjetas cambian de plan en el portal (3.1.1)', async () => {
+    const state = fakeCloudFor({
+      plan: 'annual',
+      invoke: () =>
+        Promise.resolve({ data: { url: 'https://billing.stripe.com/p/session/x' }, error: null }),
+    });
+    const typing = userEvent.setup();
+    const assign = vi.fn();
+    vi.stubGlobal('location', {
+      assign,
+      href: window.location.href,
+      origin: window.location.origin,
+    });
+    app = await renderApp(SCREENS.subscription.path, { seed: mirrored({ plan: 'annual' }) });
+    const monthly = await screen.findByRole('region', { name: t.billing.plans.monthly });
+    expect(await within(monthly).findByText(billingCloudText.changeNote)).toBeVisible();
     expect(
       screen.queryByRole('button', { name: t.billing.choose(t.billing.plans.monthly) }),
     ).toBeNull();
-    expect(screen.getByRole('heading', { name: t.billing.cloud.portal.title })).toBeVisible();
+    expect(screen.queryByRole('button', { name: t.billing.freeTrialCta })).toBeNull();
+    await typing.click(
+      within(monthly).getByRole('button', { name: billingCloudText.changeTo.monthly }),
+    );
+    await waitFor(() => {
+      expect(state.invokeCalls).toEqual([['create-portal-session', { body: { flow: 'update' } }]]);
+    });
+    await waitFor(() => {
+      expect(assign).toHaveBeenCalledWith('https://billing.stripe.com/p/session/x');
+    });
+    vi.unstubAllGlobals();
+  });
+
+  it('con un pase vigente dice hasta cuándo vale y solo deja sumar otro mes o año', async () => {
+    writeStoredFlags({ cashPasses: true });
+    fakeCloudFor({ plan: 'monthly', source: 'pass' });
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({ source: 'pass', passEnd: PERIOD_END, cloudStatus: undefined }),
+    });
+    expect(await screen.findByText(billingCloudText.passNote(longDate(PERIOD_END)))).toBeVisible();
+    expect(screen.queryByRole('button', { name: t.billing.freeTrialCta })).toBeNull();
+    await typing.click(screen.getByRole('button', { name: billingCloudText.addPeriod.annual }));
+    expect(
+      await screen.findByRole('heading', {
+        name: billingCloudText.checkoutTitle(t.billing.plans.annual),
+      }),
+    ).toBeVisible();
+    // Solo los pases. La tarjeta con renovación espera a que termine el pase (8.10)
+    expect(
+      screen.getByRole('radio', { name: new RegExp(billingCloudText.options.oxxo.label) }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('radio', { name: new RegExp(billingCloudText.options.card.label) }),
+    ).toBeNull();
+    expect(
+      screen.getByText(new RegExp(billingCloudText.summary.passAdds(longDate(PERIOD_END)))),
+    ).toBeVisible();
   });
 
   it('con un mes regalado por referido sí deja pagar', async () => {
     fakeCloudFor({ plan: 'monthly', source: 'referral' });
-    app = await renderApp(SCREENS.subscription.path, { seed: seedPlan('monthly', 'referral') });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({ source: 'referral', cloudStatus: undefined }),
+    });
     expect(
       await screen.findByRole('button', { name: t.billing.choose(t.billing.plans.annual) }),
     ).toBeVisible();
-    expect(screen.queryByText(t.billing.cloud.changePlanNote)).toBeNull();
+    expect(screen.queryByText(billingCloudText.changeNote)).toBeNull();
   });
 });
 
 describe('al volver de la pasarela', () => {
-  const returning = (search: string) =>
+  const returning = (search: string, subscription: Subscription | null = null) =>
     render(
       <DataProvider kind="real">
         <MemoryRouter initialEntries={[`/suscripcion${search}`]}>
-          <PaymentReturnNotice userId="01J9Z000000000000000000001" current="free" />
+          <PaymentReturnNotice userId="01J9Z000000000000000000001" subscription={subscription} />
         </MemoryRouter>
       </DataProvider>,
     );
@@ -552,7 +594,7 @@ describe('al volver de la pasarela', () => {
   it('cancelar dice que no se cobró nada', () => {
     fakeCloudFor();
     returning('?pago=cancelado');
-    expect(screen.getByText(t.billing.cloud.returning.canceled)).toBeVisible();
+    expect(screen.getByText(billingCloudText.returning.canceled)).toBeVisible();
   });
 
   it('sin parámetro no muestra nada', () => {
@@ -564,16 +606,91 @@ describe('al volver de la pasarela', () => {
   it('confirma el pago cuando el servidor ya cambió el plan', async () => {
     const state = fakeCloudFor({ plan: 'free' });
     returning('?pago=ok');
-    expect(await screen.findByText(t.billing.cloud.returning.ok)).toBeVisible();
+    expect(await screen.findByText(billingCloudText.returning.ok)).toBeVisible();
     await waitFor(() => {
       expect(state.rpcCalls.length).toBeGreaterThanOrEqual(1);
     });
     state.plan = 'monthly';
     expect(
-      await screen.findByText(t.billing.cloud.returning.confirmed, undefined, {
+      await screen.findByText(billingCloudText.returning.confirmed, undefined, {
         timeout: RETURN_CHECK_MS * 3,
       }),
     ).toBeVisible();
+  });
+
+  it('con la prueba gratis dice que empezó y que hoy no se cobró nada', async () => {
+    const state = fakeCloudFor({ plan: 'free' });
+    returning('?pago=ok');
+    await waitFor(() => {
+      expect(state.rpcCalls.length).toBeGreaterThanOrEqual(1);
+    });
+    state.plan = 'founder';
+    state.extra = { status: 'trialing', trialEnd: PERIOD_END, periodEnd: PERIOD_END };
+    expect(
+      await screen.findByText(billingCloudText.returning.trialStarted, undefined, {
+        timeout: RETURN_CHECK_MS * 3,
+      }),
+    ).toBeVisible();
+  });
+
+  it('un segundo pase que alarga el mismo plan también confirma el pago', async () => {
+    const state = fakeCloudFor({
+      plan: 'monthly',
+      source: 'pass',
+      extra: { passEnd: PERIOD_END, periodEnd: PERIOD_END },
+    });
+    returning('?pago=ok', {
+      userId: '01J9Z000000000000000000001',
+      plan: 'monthly',
+      status: 'active',
+      isSimulated: false,
+      periodEnd: PERIOD_END,
+      source: 'pass',
+      passEnd: PERIOD_END,
+      updatedAt: '2026-10-14T00:00:00.000Z',
+    });
+    await waitFor(() => {
+      expect(state.rpcCalls.length).toBeGreaterThanOrEqual(1);
+    });
+    state.extra = { passEnd: '2026-12-14T15:00:00.000Z', periodEnd: '2026-12-14T15:00:00.000Z' };
+    expect(
+      await screen.findByText(billingCloudText.returning.confirmed, undefined, {
+        timeout: RETURN_CHECK_MS * 3,
+      }),
+    ).toBeVisible();
+  });
+
+  it('con una ficha o una transferencia pendiente lo dice enseguida, sin esperar el aviso', () => {
+    fakeCloudFor({ plan: 'free' });
+    returning('?pago=pendiente&metodo=oxxo');
+    expect(screen.getByText(billingCloudText.returning.pending.oxxo)).toBeVisible();
+    cleanup();
+    fakeCloudFor({ plan: 'free' });
+    returning('?pago=pendiente&metodo=spei');
+    expect(screen.getByText(billingCloudText.returning.pending.spei)).toBeVisible();
+    cleanup();
+    fakeCloudFor({ plan: 'free' });
+    const view = returning('?pago=pendiente&metodo=otro');
+    expect(view.container).toBeEmptyDOMElement();
+  });
+
+  it('cuando la nube ya tiene el pendiente deja el aviso con su monto a PendingPaymentNotice', () => {
+    fakeCloudFor({ plan: 'free' });
+    const view = returning('?pago=pendiente&metodo=spei', {
+      userId: '01J9Z000000000000000000001',
+      plan: 'free',
+      status: 'none',
+      isSimulated: false,
+      pendingPayment: {
+        method: 'spei',
+        plan: 'monthly',
+        amountMxn: 149,
+        expiresAt: null,
+        createdAt: '2026-10-14T00:00:00.000Z',
+      },
+      updatedAt: '2026-10-14T00:00:00.000Z',
+    });
+    expect(view.container).toBeEmptyDOMElement();
   });
 
   it('si tarda demasiado lo dice, y deja de preguntar', async () => {
@@ -583,7 +700,7 @@ describe('al volver de la pasarela', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(RETURN_CHECK_MS * (RETURN_CHECKS + 2));
     });
-    expect(screen.getByText(t.billing.cloud.returning.slow)).toBeVisible();
+    expect(screen.getByText(billingCloudText.returning.slow)).toBeVisible();
     const calls = state.rpcCalls.length;
     expect(calls).toBe(RETURN_CHECKS);
     await act(async () => {

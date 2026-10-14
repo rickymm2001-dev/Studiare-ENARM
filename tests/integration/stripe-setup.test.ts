@@ -173,8 +173,7 @@ describe('configuración de Stripe en modo prueba', () => {
     const amount = Object.fromEntries(PRICE_SPECS.map((spec) => [spec.key, spec.amountMxn]));
     expect(amount).toEqual({
       founder: PLANS.founder.priceMxn,
-      // El anual Fundador todavía no está en la app de este bloque (paquete B). Es el de 1.2
-      founder_annual: 749,
+      founder_annual: PLANS.founder_annual.priceMxn,
       monthly: PLANS.monthly.priceMxn,
       annual: PLANS.annual.priceMxn,
       pass_monthly: PLANS.monthly.priceMxn,

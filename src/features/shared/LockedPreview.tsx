@@ -2,18 +2,18 @@
 // previa de una función de pago, con su candado, lo que trae y el botón de los candados, que lleva a
 // Suscripción. LockedNote es el aviso corto con el mismo botón, para un lugar chico como el reto de
 // Party en Inicio o una parte de otra tarjeta. Los usan Apuntes, Party, Subir tus mazos, el catálogo
-// de mazos y FeatureGate, así todos los candados se ven y dicen lo mismo. El botón dice Ver planes hasta
-// que B10 prenda la prueba de 7 días (lockedCtaLabel). Son avisos fijos, así que no se anuncian como
-// un cambio en cada visita. LockedLoading ocupa su lugar mientras se sabe el plan.
+// de mazos y FeatureGate, así todos los candados se ven y dicen lo mismo. El botón dice Prueba 7 días
+// gratis y abre la forma de pago del Mensual cuando la prueba existe, y si no Ver planes (lockedCta.ts,
+// B10). Son avisos fijos, así que no se anuncian como un cambio en cada visita. LockedLoading ocupa su
+// lugar mientras se sabe el plan.
 import { Check, Lock } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SkeletonRows } from '@/ui/components/skeleton';
-import { lockedCtaLabel } from './lockedCta';
+import { lockedCtaLabel, lockedCtaPath } from './lockedCta';
 
 export function LockedPreview({
   id,
@@ -52,7 +52,7 @@ export function LockedPreview({
         ))}
       </ul>
       <Button asChild className="self-start">
-        <Link to={screenPath('subscription')}>{lockedCtaLabel()}</Link>
+        <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
       </Button>
       {kept.map((line) => (
         <p key={line} className="text-sm text-fg-muted">
@@ -71,7 +71,7 @@ export function LockedNote({ children }: { children: ReactNode }) {
       <Lock aria-hidden className="size-4 shrink-0 text-fg-muted" />
       <p className="min-w-0 flex-1">{children}</p>
       <Button asChild size="sm" variant="secondary">
-        <Link to={screenPath('subscription')}>{lockedCtaLabel()}</Link>
+        <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
       </Button>
     </div>
   );

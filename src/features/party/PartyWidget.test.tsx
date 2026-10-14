@@ -140,9 +140,10 @@ describe('widget de Party con la nube', () => {
     // Es un aviso fijo y no un cambio de estado, así el lector de pantalla no lo anuncia en cada visita
     expect(within(party).getByRole('note')).toHaveTextContent(t.freePlan.widget);
     expect(within(party).queryByRole('status')).toBeNull();
-    expect(within(party).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+    // Con la nube y la prueba gratis el botón ofrece probarla y abre la forma de pago del Mensual (B10)
+    expect(within(party).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
       'href',
-      SCREENS.subscription.path,
+      `${SCREENS.subscription.path}?plan=mensual`,
     );
     expect(within(party).queryByText('Guardia')).toBeNull();
     expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);

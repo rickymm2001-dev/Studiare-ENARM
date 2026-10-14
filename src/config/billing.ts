@@ -1,7 +1,12 @@
-// Planes de la suscripción simulada (pantalla 16). Precios de ejemplo en pesos mexicanos, sin cobro
-// real (3.2). Se editarán desde admin (pantalla 25) y en producción vendrán de la pasarela de pago.
+// Planes de la suscripción (pantalla 16). Precios en pesos mexicanos con IVA incluido (D-114 y B10 del
+// plan del cambio). Sin la nube el pago es simulado y no cobra nada (3.2). Con la nube cobra la pasarela
+// y el plan lo decide el servidor (supabase/functions/_shared/billingTypes.ts tiene los mismos precios
+// y una prueba los compara).
 
-export type PlanKey = 'free' | 'founder' | 'monthly' | 'annual';
+export type PlanKey = 'free' | 'founder' | 'founder_annual' | 'monthly' | 'annual';
+export type PaidPlanKey = Exclude<PlanKey, 'free'>;
+/** Planes de los pases de un solo pago y de Mercado Pago, que nunca llevan precio Fundador (8.3) */
+export type RegularPlanKey = 'monthly' | 'annual';
 
 /** Lugares del plan Fundador. El cupo se verifica en el servidor al cobrar (D-087) */
 export const FOUNDER_SEATS = 100;
@@ -120,6 +125,14 @@ export const PLANS: Record<PlanKey, PlanDef> = {
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
+  // Promoción del anual, como el Fundador lo es del mensual. Comparte los mismos lugares (B10, 4.5)
+  founder_annual: {
+    key: 'founder_annual',
+    priceMxn: 749,
+    access: PAID_ACCESS,
+    features: ALL_FEATURES_OPEN,
+    aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
+  },
   monthly: {
     key: 'monthly',
     priceMxn: 149,
@@ -136,8 +149,32 @@ export const PLANS: Record<PlanKey, PlanDef> = {
   },
 };
 
-/** Planes que ve el alumno. El Fundador no tiene tarjeta propia, va dentro del mensual (D-114) */
+/**
+ * Planes que ve el alumno. Los Fundador no tienen tarjeta propia, van dentro del mensual y del anual
+ * (D-114 y B10)
+ */
 export const VISIBLE_PLANS: readonly PlanKey[] = ['free', 'monthly', 'annual'];
+
+/** Días de la prueba gratis con tarjeta y de la garantía desde el primer cobro (respuestas 10 y 18) */
+export const TRIAL_DAYS = 7;
+export const GUARANTEE_DAYS = 7;
+
+/** Pases de un solo pago con OXXO, SPEI o Mercado Pago. Cuestan lo mismo que el plan regular (1.7) */
+export const PASS_PRICES_MXN: Record<RegularPlanKey, number> = { monthly: 149, annual: 1499 };
+
+export function isFounderPlan(plan: PlanKey): plan is 'founder' | 'founder_annual' {
+  return plan === 'founder' || plan === 'founder_annual';
+}
+
+/** Si el plan se cobra cada año */
+export function isYearlyPlan(plan: PlanKey): boolean {
+  return plan === 'annual' || plan === 'founder_annual';
+}
+
+/** El plan regular de un plan de pago. Lo usan los pases y Mercado Pago, que no llevan precio Fundador */
+export function regularPlanOf(plan: PaidPlanKey): RegularPlanKey {
+  return isYearlyPlan(plan) ? 'annual' : 'monthly';
+}
 
 /**
  * Si se ofrece la promoción Fundador en el mensual. El cupo real lo cuenta el servidor al cobrar, y si
@@ -146,43 +183,49 @@ export const VISIBLE_PLANS: readonly PlanKey[] = ['free', 'monthly', 'annual'];
  */
 export const FOUNDER_PROMO_ACTIVE = true as boolean;
 
-/** El plan que se cobra al elegir uno visible. El mensual se cobra como Fundador mientras dure la promoción */
+/**
+ * El plan que se cobra al elegir uno visible. Mientras dure la promoción, el mensual se cobra como
+ * Fundador y el anual como anual Fundador (B10)
+ */
 export function checkoutPlanFor(
   key: PlanKey,
   founderPromo: boolean = FOUNDER_PROMO_ACTIVE,
 ): PlanKey {
-  return key === 'monthly' && founderPromo ? 'founder' : key;
+  if (!founderPromo) return key;
+  if (key === 'monthly') return 'founder';
+  if (key === 'annual') return 'founder_annual';
+  return key;
 }
 
-/** El plan visible que corresponde a un plan cobrado. Quien paga el Fundador tiene el mensual */
+/** El plan visible que corresponde a un plan cobrado. Quien paga un Fundador tiene su mensual o anual */
 export function visiblePlanOf(key: PlanKey): PlanKey {
-  return key === 'founder' ? 'monthly' : key;
+  if (key === 'founder') return 'monthly';
+  if (key === 'founder_annual') return 'annual';
+  return key;
 }
 
 /**
- * Cuánto ahorra el anual contra 12 meses del mensual al precio regular, en porcentaje entero. Se
- * redondea hacia abajo para no prometer de más. Con 149 y 1,499 da 16
+ * Cuánto ahorra el anual contra 12 meses del mensual, en porcentaje entero. Se redondea hacia abajo
+ * para no prometer de más. Al precio regular, 149 y 1,499, da 16. Con la promoción, el anual Fundador
+ * de 749 contra 12 meses del Fundador de 79 da 20 (B10)
  */
 export function annualSavingsPercent(
   plans: Record<PlanKey, Pick<PlanDef, 'priceMxn'>> = PLANS,
+  variant: 'regular' | 'founder' = 'regular',
 ): number {
-  const twelveMonths = plans.monthly.priceMxn * 12;
+  const monthly = variant === 'founder' ? plans.founder : plans.monthly;
+  const annual = variant === 'founder' ? plans.founder_annual : plans.annual;
+  const twelveMonths = monthly.priceMxn * 12;
   if (twelveMonths <= 0) return 0;
-  return Math.max(0, Math.floor((1 - plans.annual.priceMxn / twelveMonths) * 100));
+  return Math.max(0, Math.floor((1 - annual.priceMxn / twelveMonths) * 100));
 }
-
-/**
- * Pasarelas que la app ofrece. Mercado Pago queda fuera hasta que su cuenta esté activa y su función de
- * avisos desplegada, porque hoy el servidor respondería que no está configurado (D-114). Para
- * activarla basta con agregarla aquí
- */
-export const PAYMENT_PROVIDERS: readonly ('stripe' | 'mercadopago')[] = ['stripe'];
 
 /**
  * El plan que vale según la suscripción guardada en este navegador, la del pago simulado o la que
  * reflejó la nube con my_plan. Sin suscripción activa es Gratis. Es el único lugar de esta regla en la
- * app, así la prueba gratis de B10 se suma aquí y la heredan los candados, el tope de preguntas,
- * Suscripción y Tu plan
+ * app. La nube refleja como active todo plan vigente, también la prueba gratis, un pase o una
+ * suscripción cancelada que vale hasta el fin del periodo (B10), así los candados, el tope de
+ * preguntas, Suscripción y Tu plan los heredan sin cambiar
  */
 export function planOf(
   subscription: { plan: PlanKey; status: string } | null | undefined,

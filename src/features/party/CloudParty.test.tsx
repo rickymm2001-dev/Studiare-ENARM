@@ -525,6 +525,8 @@ describe('Party sin nube', () => {
 // quedan detrás de su candado con una vista previa. Comparte tu semana e Invita y gana un mes siguen
 describe('Party en el plan Gratis', () => {
   it('muestra la vista previa con su candado y Ver planes, deja abiertos los referidos y solo lee sus membresías', async () => {
+    // Con la prueba gratis apagada desde el servidor, como en producción hasta la corrida real (B10)
+    writeStoredFlags({ freeTrial: false });
     const before = fake.rpcCalls.length;
     app = await renderFree('/party', withConsent);
     const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
@@ -578,9 +580,10 @@ describe('Party en el plan Gratis', () => {
     try {
       app = await renderFree('/party');
       const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
+      // Abre la forma de pago del Mensual, el de la promoción y la prueba (B10)
       expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
         'href',
-        SCREENS.subscription.path,
+        `${SCREENS.subscription.path}?plan=mensual`,
       );
     } finally {
       writeStoredFlags(null);

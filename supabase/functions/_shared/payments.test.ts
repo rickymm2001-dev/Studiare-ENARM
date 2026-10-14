@@ -1,6 +1,6 @@
 import { createHmac } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { PLANS } from '../../../src/config/billing.ts';
+import { PASS_PRICES_MXN as APP_PASS_PRICES_MXN, PLANS } from '../../../src/config/billing.ts';
 import {
   PASS_PRICES_MXN,
   PLAN_PRICES_MXN,
@@ -1822,8 +1822,7 @@ describe('precios', () => {
     expect(PLAN_PRICES_MXN.founder).toBe(PLANS.founder.priceMxn);
     expect(PLAN_PRICES_MXN.monthly).toBe(PLANS.monthly.priceMxn);
     expect(PLAN_PRICES_MXN.annual).toBe(PLANS.annual.priceMxn);
-    // El anual Fundador todavía no está en la app de este bloque (paquete B). Es el de 1.2
-    expect(PLAN_PRICES_MXN.founder_annual).toBe(749);
+    expect(PLAN_PRICES_MXN.founder_annual).toBe(PLANS.founder_annual.priceMxn);
   });
 
   it('los pases cuestan lo mismo que el mensual y el anual', () => {
@@ -1831,5 +1830,7 @@ describe('precios', () => {
       monthly: PLANS.monthly.priceMxn,
       annual: PLANS.annual.priceMxn,
     });
+    // Y los mismos que la app ofrece en la forma de pago (B10, paquete B)
+    expect(PASS_PRICES_MXN).toEqual(APP_PASS_PRICES_MXN);
   });
 });

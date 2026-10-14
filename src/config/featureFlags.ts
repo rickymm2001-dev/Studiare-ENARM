@@ -50,8 +50,23 @@ export const FEATURE_FLAGS = {
   },
   freeTrial: {
     description:
-      'Prueba gratis de 7 días en el botón de los candados de Gratis, como Apuntes, Party e Importar mazos (respuesta 20). Apagada hasta que B10 crea la prueba en Suscripción y la prende',
+      'Prueba 7 días gratis en el botón de los candados de Gratis y en la portada (respuestas 18 y 20, B10). Solo es el texto. La prueba la decide el servidor con trialAvailable de my_plan. En producción se prende desde el servidor después de la corrida real en modo prueba',
+    defaults: { development: true, demo: false, production: false },
+  },
+  cashPasses: {
+    description:
+      'Pases de 1 mes o 1 año con OXXO y SPEI en la forma de pago (B10, 4.4). Se prende cuando Stripe tenga los dos métodos activados y pasen la corrida real',
+    defaults: { development: true, demo: false, production: false },
+  },
+  mercadoPago: {
+    description:
+      'Suscripción y pago único con Mercado Pago en la forma de pago (respuesta 8, B10). Se prende con la cuenta de Mercado Pago y su función de avisos desplegada',
     defaults: { development: false, demo: false, production: false },
+  },
+  paymentsTestMode: {
+    description:
+      'Aviso de modo prueba en la forma de pago, para usar una tarjeta de prueba de la pasarela (B10). Se apaga al pasar los pagos a modo real',
+    defaults: { development: true, demo: true, production: true },
   },
   googleSignIn: {
     description:
