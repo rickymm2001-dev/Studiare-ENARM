@@ -1,13 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type {
-  ChargeNotice,
-  PaymentNotice,
-  SubscriptionNotice,
-  TrialEndingNotice,
-} from './billingTypes.ts';
+import type { ChargeNotice, SubscriptionNotice, TrialEndingNotice } from './billingTypes.ts';
 import {
   applyChargeViaRest,
-  applyNoticeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
   checkoutContextViaRest,
@@ -27,18 +21,7 @@ const env = {
   anonKey: 'anon-de-prueba',
   serviceKey: 'servicio-de-prueba',
 };
-const notice: PaymentNotice = {
-  provider: 'stripe',
-  eventId: 'evt_1',
-  kind: 'paid',
-  userId: '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f',
-  plan: 'monthly',
-  providerPaymentId: 'in_1',
-  providerSubscriptionId: 'sub_1',
-  amountMxn: 150,
-  periodEnd: '2026-11-08T00:00:00.000Z',
-  payload: { id: 'evt_1' },
-};
+const USER = '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f';
 
 function recorder(reply: () => Response) {
   const calls: { url: string; init?: RequestInit }[] = [];
@@ -48,38 +31,6 @@ function recorder(reply: () => Response) {
   }) as typeof fetch;
   return { calls, fetchImpl };
 }
-
-describe('apply_payment_notice por REST', () => {
-  it('manda el aviso con la llave de servicio y devuelve el resultado', async () => {
-    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('applied')));
-    expect(await applyNoticeViaRest(env, notice, fetchImpl)).toBe('applied');
-    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/apply_payment_notice');
-    const headers = new Headers(calls[0]?.init?.headers);
-    expect(headers.get('apikey')).toBe('servicio-de-prueba');
-    expect(headers.get('authorization')).toBe('Bearer servicio-de-prueba');
-    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
-      p_provider: 'stripe',
-      p_event_id: 'evt_1',
-      p_payload: { id: 'evt_1' },
-      p_kind: 'paid',
-      p_user: notice.userId,
-      p_plan: 'monthly',
-      p_provider_payment_id: 'in_1',
-      p_provider_subscription_id: 'sub_1',
-      p_amount_mxn: 150,
-      p_period_end: '2026-11-08T00:00:00.000Z',
-    });
-  });
-
-  it('falla si la base responde con error o con algo que no es un texto', async () => {
-    await expect(
-      applyNoticeViaRest(env, notice, recorder(() => new Response('x', { status: 500 })).fetchImpl),
-    ).rejects.toThrow('500');
-    await expect(
-      applyNoticeViaRest(env, notice, recorder(() => new Response('{"a":1}')).fetchImpl),
-    ).rejects.toThrow('texto');
-  });
-});
 
 describe('quién es el usuario del token', () => {
   it('lo pregunta a Supabase con la llave pública y el token del alumno', async () => {
@@ -120,7 +71,7 @@ describe('quién es el usuario del token', () => {
 describe('clientes de Stripe por REST', () => {
   it('liga al alumno con su cliente usando la llave de servicio', async () => {
     const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('linked')));
-    await linkCustomerViaRest(env, { userId: notice.userId ?? '', customerId: 'cus_1' }, fetchImpl);
+    await linkCustomerViaRest(env, { userId: USER, customerId: 'cus_1' }, fetchImpl);
     expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/record_billing_customer');
     expect(new Headers(calls[0]?.init?.headers).get('authorization')).toBe(
       'Bearer servicio-de-prueba',
@@ -128,7 +79,7 @@ describe('clientes de Stripe por REST', () => {
     expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
       p_provider: 'stripe',
       p_customer_id: 'cus_1',
-      p_user: notice.userId,
+      p_user: USER,
     });
   });
 
@@ -155,7 +106,6 @@ describe('clientes de Stripe por REST', () => {
 
 // Contrato con las funciones de la base de B10 (6.5 del diseño). Cada llamada manda los nombres de
 // parámetros exactos de las migraciones 20261022000001 a 20261022000003
-const USER = '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f';
 
 describe('contexto del pago por REST', () => {
   const context = {
@@ -264,6 +214,9 @@ describe('cobros y estados por REST', () => {
     const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('applied')));
     expect(await applyChargeViaRest(env, charge, fetchImpl)).toBe('applied');
     expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/apply_charge');
+    const headers = new Headers(calls[0]?.init?.headers);
+    expect(headers.get('apikey')).toBe('servicio-de-prueba');
+    expect(headers.get('authorization')).toBe('Bearer servicio-de-prueba');
     expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
       p_provider: 'stripe',
       p_event_id: 'evt_1',

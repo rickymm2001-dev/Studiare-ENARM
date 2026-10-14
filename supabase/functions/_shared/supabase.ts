@@ -9,7 +9,6 @@ import {
   type ChargeNotice,
   type CheckoutContext,
   type CheckoutSubscription,
-  type PaymentNotice,
   type Provider,
   type SubscriptionNotice,
   type TrialEndingNotice,
@@ -20,38 +19,6 @@ export interface SupabaseEnv {
   url: string;
   anonKey: string;
   serviceKey: string;
-}
-
-/** Llama a apply_payment_notice con la llave de servicio. Devuelve applied, duplicate y los demás */
-export async function applyNoticeViaRest(
-  env: SupabaseEnv,
-  notice: PaymentNotice,
-  fetchImpl: typeof fetch = fetch,
-): Promise<string> {
-  const reply = await fetchImpl(`${env.url}/rest/v1/rpc/apply_payment_notice`, {
-    method: 'POST',
-    headers: {
-      apikey: env.serviceKey,
-      authorization: `Bearer ${env.serviceKey}`,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      p_provider: notice.provider,
-      p_event_id: notice.eventId,
-      p_payload: notice.payload,
-      p_kind: notice.kind,
-      p_user: notice.userId,
-      p_plan: notice.plan,
-      p_provider_payment_id: notice.providerPaymentId,
-      p_provider_subscription_id: notice.providerSubscriptionId,
-      p_amount_mxn: notice.amountMxn,
-      p_period_end: notice.periodEnd,
-    }),
-  });
-  if (!reply.ok) throw new Error(`apply_payment_notice respondió ${reply.status}`);
-  const result: unknown = await reply.json();
-  if (typeof result !== 'string') throw new Error('apply_payment_notice no devolvió un texto');
-  return result;
 }
 
 /** Quién es el dueño del token que mandó el navegador. null si Supabase no lo reconoce */

@@ -8,7 +8,6 @@ import type {
 import type { CheckoutDeps, PortalDeps, StripeWebhookDeps } from './payments.ts';
 import {
   applyChargeViaRest,
-  applyNoticeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
   checkoutContextViaRest,
@@ -114,7 +113,6 @@ export function mercadoPagoWebhookDeps(): MercadoPagoWebhookDeps {
     fetch,
     now: () => Date.now(),
     log,
-    applyNotice: (notice) => applyNoticeViaRest(supabase, notice),
     applyCharge: (notice) => applyChargeViaRest(supabase, notice),
     applySubscriptionState: (notice) => applySubscriptionStateViaRest(supabase, notice),
     claimBillingActions: (limit) =>
