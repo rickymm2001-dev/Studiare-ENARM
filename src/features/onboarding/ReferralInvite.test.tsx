@@ -4,6 +4,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { useAccess } from '@/app/accessState';
 import { useCloud } from '@/app/cloudState';
 import { readPendingReferral } from '@/data/referrals/pendingReferral';
 import { t } from '@/i18n/es-MX';
@@ -31,6 +32,7 @@ afterEach(() => {
   holder.configured = true;
   holder.cloud = null;
   useCloud.setState({ state: { status: 'off' } });
+  useAccess.setState({ signup: { status: 'none' } });
   localStorage.clear();
 });
 
@@ -73,5 +75,24 @@ describe('bienvenida con el enlace de un compañero', () => {
     await waitFor(() => {
       expect(readPendingReferral()).toBeNull();
     });
+  });
+
+  it('con la cuenta conectada pero sin completar su registro lo guarda y espera (B9)', async () => {
+    const rpc = vi.fn(() => Promise.resolve({ data: 'ok', error: null }));
+    holder.cloud = { rpc };
+    useCloud.setState({
+      state: {
+        status: 'linked',
+        identity: { authId: 'a', email: 'a@x.mx', role: 'student', alias: null },
+      },
+    });
+    useAccess.setState({ signup: { status: 'required', userId: 'perfil-nuevo' } });
+    show('/bienvenida?ref=ABCD2345');
+    await waitFor(() => {
+      expect(readPendingReferral()).toBe('ABCD2345');
+    });
+    // Lo canjea el puente de la nube cuando termina Completa tu registro
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(rpc).not.toHaveBeenCalled();
   });
 });

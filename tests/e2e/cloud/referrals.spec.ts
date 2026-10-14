@@ -2,10 +2,18 @@
 // B7). El servidor da el código, canjea el de otra persona y otorga el mes gratis con el primer cobro
 // confirmado del referido, nunca con la factura de 0 pesos de una prueba gratis ni dos veces por el
 // mismo aviso. La tarjeta Invita y gana un mes vive en Party y en Configuración, sección Perfil, y cada
-// alumno comparte su enlace /bienvenida?ref=CODIGO, que la bienvenida guarda y se canjea al entrar
+// alumno comparte su enlace /bienvenida?ref=CODIGO, que la bienvenida guarda y se canjea al entrar.
+// Una cuenta nueva que entra desde Ya tengo cuenta lo canjea hasta completar su registro (B9)
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { enterWithLink, expect, openSecondDevice, test } from '../support/cloudFixtures';
+import {
+  enterWithLink,
+  expect,
+  expectHome,
+  openEmailLink,
+  openSecondDevice,
+  test,
+} from '../support/cloudFixtures';
 import { gatewayText } from '../support/fakeGateway';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
@@ -148,5 +156,39 @@ test.describe('Referidos', () => {
     await expect(region.getByText(text.months(1))).toBeVisible();
     await expect(region.getByText(UNTIL_PREFIX)).toBeVisible();
     await second.context.close();
+  });
+
+  test('con el enlace de Ana, una cuenta nueva desde Ya tengo cuenta canjea el código hasta completar su registro (B9)', async ({
+    page,
+    cloud,
+  }) => {
+    const anaCode = cloud.referralCodeOf(ANA);
+    await page.goto(`${SCREENS.onboarding.path}?ref=${anaCode}`);
+    await expect(page.getByText(card.invited(anaCode))).toBeVisible();
+    // Bruno nunca pasó por Crear cuenta. Pide el código desde Ya tengo cuenta
+    await page.getByRole('tab', { name: t.onboarding.loginTab }).click();
+    await page.getByLabel(t.account.email, { exact: true }).fill(BRUNO);
+    await page.getByRole('button', { name: t.cloud.sendLink }).click();
+    await expect(page.getByRole('heading', { name: t.cloud.sentTitle })).toBeVisible();
+    const mail = cloud.lastEmail(BRUNO);
+    if (!mail) throw new Error('El servidor simulado no registró el correo');
+    await openEmailLink(page, mail.link);
+
+    // Sin aceptar el aviso ni confirmar su edad no manda el código, aunque ya reclamó el dispositivo
+    await expect(
+      page.getByRole('heading', { level: 1, name: t.accounts.completeSignup.title }),
+    ).toBeVisible({ timeout: 20_000 });
+    await expect.poll(() => cloud.deviceSessionOf(BRUNO)?.deviceId).toBeTruthy();
+    expect(cloud.referralsOf(ANA)).toEqual({ pending: 0, completed: 0 });
+
+    await page.getByLabel(t.onboarding.alias, { exact: true }).fill('Bruno');
+    await page.getByLabel(t.accounts.signup.adultAccept(18)).check();
+    await page.getByLabel(t.onboarding.privacyAccept).check();
+    await page.getByRole('button', { name: t.accounts.completeSignup.save }).click();
+    await expectHome(page);
+    await expect
+      .poll(() => cloud.referralsOf(ANA), { timeout: 20_000 })
+      .toEqual({ pending: 1, completed: 0 });
+    expect(cloud.acceptancesOf(BRUNO)).toHaveLength(1);
   });
 });
