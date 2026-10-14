@@ -18,6 +18,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
+- [x] Paleta de color con más color por rama y acento cálido (D-128, en integración)
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
 - [x] B4. Repasar y Buscar tarjetas (PR 43 fusionado)
 - [x] B5. Revisión del examen y motivos de error (PR 43 fusionado, junto con B4)

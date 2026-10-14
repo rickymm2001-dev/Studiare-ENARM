@@ -1,6 +1,6 @@
-// Tono de cada rama (D-061). Desde B2 del plan del cambio son tonos del color de acción y no un color
-// por rama. Las clases van completas para que Tailwind las encuentre. Las etiquetas y los íconos usan
-// el fondo suave con el tono ink, que llega a 4.5 de contraste; las barras usan el tono lleno
+// Tono de cada rama (D-061, D-122). Color propio para cada rama, distinguible y seguro para
+// daltonismo. Las clases van completas para que Tailwind las encuentre. Las etiquetas y los íconos usan
+// el fondo suave con el tono ink, que llega a 4.5 de contraste; las barras usan el tono lleno (>= 3 a 1)
 export type BranchTone = 'mi' | 'ped' | 'gyo' | 'cir' | 'fam' | 'urg' | 'neutral';
 
 const TONE_BY_KEY: Record<string, BranchTone> = {
