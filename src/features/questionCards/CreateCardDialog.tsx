@@ -5,6 +5,7 @@
 // Si edita la propuesta, se vuelve a revisar contra su cita con el mismo validador del generador y
 // se avisa cuando ya no se apoya en ella. Si la guarda así, queda en borrador con el aviso a la
 // vista, como en Crear tarjetas con IA. Guardar dos veces no duplica la tarjeta y el diálogo lo dice.
+// En Gratis, si no sigue ningún precargado, no le sugiere seguir uno del catálogo, que es de pago (B8).
 import { BookCheck, BookPlus, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useId, useMemo, useRef, useState } from 'react';
@@ -30,6 +31,7 @@ import { SelectField, TextAreaField, TextField } from '@/ui/components/field';
 import { followedDeckIds } from '../decks/followed';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
+import { usePlanText } from '../shared/useActivePlan';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { AiSuggestions } from './AiSuggestions';
 import { NEW_DECK, questionCardChoices } from './deckChoices';
@@ -163,6 +165,11 @@ export function CreateCardDialog({
   );
   const noPreloaded =
     decks !== undefined && !choices.some((choice) => choice.group === 'preloaded');
+  // Sin precargados que siga, en Gratis no se sugiere seguir uno del catálogo, que es de pago (4.25, B8)
+  const noPreloadedHint = usePlanText(session.user.id, 'deckCatalog', {
+    open: text.noPreloaded,
+    closed: t.freePlan.catalog.createCardNoPreloaded,
+  });
   // La propuesta de la IA se revisa contra su cita con cada cambio. Sin cambios siempre pasa, porque
   // el generador ya la revisó. Lo que se agregue y la frase no diga se avisa, y no se corrige solo
   const aiIssues = useMemo(
@@ -251,7 +258,7 @@ export function CreateCardDialog({
               label={text.deck}
               value={target}
               options={options}
-              hint={chosenPreloaded ? text.layerHint : noPreloaded ? text.noPreloaded : undefined}
+              hint={chosenPreloaded ? text.layerHint : noPreloaded ? noPreloadedHint : undefined}
               onChange={(event) => {
                 setTarget(event.target.value);
                 setResult(null);

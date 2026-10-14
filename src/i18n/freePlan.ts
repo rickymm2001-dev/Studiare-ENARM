@@ -56,6 +56,9 @@ export const freePlanText = {
     // Buscar tarjetas sin tarjetas
     exploreEmpty:
       'Todavía no tienes tarjetas. Crea un mazo propio en Mazos y aparecerán aquí, junto con las de Mis errores cuando falles preguntas en Simular.',
+    // Crear tarjeta con una pregunta, sin mazos precargados que sigas
+    createCardNoPreloaded:
+      'Guárdala en uno de tus mazos o en uno nuevo. Seguir mazos nuevos del catálogo es parte de los planes de pago.',
   },
 
   // El aviso corto de un candado sin vista previa, para las banderas de acceso de sí o no

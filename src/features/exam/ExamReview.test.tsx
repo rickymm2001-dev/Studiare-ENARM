@@ -260,6 +260,11 @@ describe('crear tarjeta desde la revisión del examen (B5, comentario 1)', () =>
       await within(dialog).findByText(t.billing.featureLocked(t.billing.featureNames.aiCards)),
     ).toBeVisible();
     expect(within(dialog).queryByRole('button', { name: t.examReview.ai.button })).toBeNull();
+    // Sin precargados que siga, no le sugiere seguir uno del catálogo, que es de pago (4.25, B8)
+    expect(
+      await within(dialog).findByText(t.freePlan.catalog.createCardNoPreloaded, undefined, WAIT),
+    ).toBeVisible();
+    expect(within(dialog).queryByText(t.examReview.createCard.noPreloaded)).toBeNull();
   });
 
   it('en un plan de pago la IA propone tarjetas ancladas a la explicación y quedan en borrador', async () => {
@@ -277,6 +282,11 @@ describe('crear tarjeta desde la revisión del examen (B5, comentario 1)', () =>
       { name: t.examReview.ai.button },
       WAIT,
     );
+    // Con el catálogo abierto y sin precargados que siga, le sugiere seguir uno en Mazos
+    expect(
+      await within(dialog).findByText(t.examReview.createCard.noPreloaded, undefined, WAIT),
+    ).toBeVisible();
+    expect(within(dialog).queryByText(t.freePlan.catalog.createCardNoPreloaded)).toBeNull();
     await waitFor(() => {
       expect(suggest).toBeEnabled();
     }, WAIT);
