@@ -21,8 +21,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
 - [x] B4. Repasar y Buscar tarjetas (PR 43 fusionado)
 - [x] B5. Revisión del examen y motivos de error (PR 43 fusionado, junto con B4)
-- [x] B6. Apuntes y mazos (PR en curso)
-- [ ] B7. Party real y lo que se queda o se va
+- [x] B6. Apuntes y mazos (PR 44 fusionado)
+- [x] B7. Party real y lo que se queda o se va (PR en curso)
 - [ ] B8. Plan Gratis
 - [ ] B9. Cuentas y acceso
 - [ ] B10. Pagos completos
@@ -118,16 +118,23 @@ Evidencia
 - Evidencia. Typecheck, lint y formato limpios. Vitest completo con 3,062 pruebas que pasan. E2e de outlines-b6, outlines, ai-cards, deck-topics y explore 26 de 26 en teléfono y computadora, más exam-review, calibrating, navigation, offline y theme-dark 28 de 28
 - Capturas en docs/screenshots/v3/b6
 
-### Estado de las ramas en paralelo (2026-10-14, 04:30 UTC)
-- Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
-- B3 fusionado en main (PR 42)
-- B4 y B5 fusionados en main (PR 43). Antes se revirtió la versión paralela que entró directo a main sin PR (9bcf111), por decisión de Ricardo
-- B6 cerrado en la rama de trabajo, con su PR
-- B7 en b7int con los 9 hallazgos de su revisión corregidos (616f948). Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
-- B8 en b8 (Plan Gratis), en implementación sobre b6 y b7int. Su migración será 20261021000001
-- B9 en b9 con los hallazgos de su revisión corregidos (7a1ff2d). Su migración 20261020000001 no se ha aplicado al proyecto
-- El diseño de B10 está listo en /home/user/wt/plans/b10.md y arranca cuando B8 y B9 estén en main
-- Los subagentes se detuvieron cuatro veces por el límite de uso de la cuenta y se reanudaron con su contexto
+### B7. Party real y lo que se queda o se va (D-126)
+- Hecho. Party en la nube con grupos por enlace o código, tabla de la semana, retos de 7 días y duelos reales de un solo intento. Modo enfoque, resumen semanal para compartir, Invita y gana un mes con el primer cobro y su reversión, y producción sin demo con la bandera demoTools
+- Revisión independiente con sus 9 hallazgos corregidos. La unión con B4, B5 y B6 resolvió 10 choques y 6 que git no marcó, entre ellos una carrera de la pantalla de la pregunta que podía trabar un duelo
+- Migraciones 20261018000001_party_cloud y 20261019000001_referral_first_charge aplicadas al proyecto el 2026-10-14 y comprobadas función por función. Falta que Ricardo pegue supabase/manual/party-dueno-al-borrar-cuenta.sql (en su lista de pendientes)
+- El aviso de privacidad pasa a la versión 2026-10-14 porque cambió el texto de Party
+- Evidencia. Typecheck, lint y formato limpios. Vitest con 3,200 pruebas que pasan. Pruebas SQL en 15 archivos con 608 comprobaciones. E2e de Party, etiquetas, Inicio y Configuración en teléfono y computadora, 27 pasan y 1 se salta por ser solo de computadora. Las 6 de la nube, 26 de 26. Suite completa con 142 en teléfono y 142 en computadora, más una de primera visita sin conexión que se pasó del tiempo con la máquina cargada y pasa sola
+- Capturas en docs/screenshots/v3/b7
+
+### Estado de las ramas en paralelo (2026-10-14, 10:15 UTC)
+- Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
+- B3 a B6 fusionados en main (PR 42, 43 y 44)
+- B7 cerrado en la rama de trabajo, con su PR. Sus migraciones ya están en el proyecto
+- B8 en b8 con los 13 hallazgos de su revisión corregidos. Sus migraciones 20261021000001 y 20261021000002 no se han aplicado
+- B9 en b9 con los hallazgos de su revisión corregidos. Su migración 20261020000001 no se ha aplicado
+- B10 en b10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido y en verde. Falta su interfaz, que arranca sobre B8 integrado
+- Los diseños de B10, B11 y B12 están en /home/user/wt/plans
+- Los subagentes se detuvieron cinco veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
