@@ -92,7 +92,7 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       'features/profile/AvatarCropper.tsx',
     ]);
     const offenders = sourceFiles(SRC).flatMap((file) => {
-      const relative = file.slice(SRC.length);
+      const relative = file.slice(SRC.length).replace(/\\/g, '/');
       if (ROUND_OK.has(relative)) return [];
       return readFileSync(file, 'utf8')
         .split('\n')
@@ -104,5 +104,108 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
         });
     });
     expect(offenders).toEqual([]);
+  });
+
+  it('contraste accesible de texto (>= 4.5 a 1) y elementos gráficos (>= 3 a 1) en claro y oscuro (D-122)', () => {
+    function luminance(hex: string): number {
+      const parts = hex.replace('#', '').match(/.{2}/g) ?? [];
+      const [r = 0, g = 0, b = 0] = parts
+        .map((x) => parseInt(x, 16) / 255)
+        .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function contrastRatio(hex1: string, hex2: string): number {
+      const l1 = luminance(hex1);
+      const l2 = luminance(hex2);
+      const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      return Math.floor(ratio * 100) / 100;
+    }
+
+    function parseTokens(cssBlock: string): Map<string, string> {
+      const map = new Map<string, string>();
+      for (const match of cssBlock.matchAll(/--([a-z0-9-]+):\s*(#[0-9a-f]{6})/gi)) {
+        const key = match[1];
+        const val = match[2];
+        if (key && val) {
+          map.set(`--${key.toLowerCase()}`, val.toLowerCase());
+        }
+      }
+      return map;
+    }
+
+    const css = read('ui/tokens.css');
+    const darkMediaIndex = css.indexOf('@media (prefers-color-scheme: dark)');
+    const darkClassIndex = css.indexOf(':root.dark');
+    const themeIndex = css.indexOf('@theme');
+
+    const blocks = [
+      { name: 'claro', tokens: parseTokens(css.slice(0, darkMediaIndex)) },
+      { name: 'oscuro (media)', tokens: parseTokens(css.slice(darkMediaIndex, darkClassIndex)) },
+      { name: 'oscuro (clase)', tokens: parseTokens(css.slice(darkClassIndex, themeIndex)) },
+    ];
+
+    const branches = ['mi', 'ped', 'gyo', 'cir', 'fam', 'urg'];
+
+    const textPairs: [string, string][] = [
+      ['--enarm-fg', '--enarm-surface'],
+      ['--enarm-fg', '--enarm-canvas'],
+      ['--enarm-fg-muted', '--enarm-surface'],
+      ['--enarm-primary-fg', '--enarm-primary'],
+      ['--enarm-primary-ink', '--enarm-primary-soft'],
+      ['--enarm-primary-ink', '--enarm-surface'],
+      ['--enarm-accent-fg', '--enarm-accent'],
+      ['--enarm-accent-ink', '--enarm-accent-soft'],
+      ['--enarm-accent-ink', '--enarm-surface'],
+      ['--enarm-streak-ink', '--enarm-streak-soft'],
+      ['--enarm-streak-ink', '--enarm-surface'],
+      ['--enarm-danger-fg', '--enarm-danger'],
+      ['--enarm-demo-fg', '--enarm-demo'],
+      ['--enarm-sim-fg', '--enarm-sim'],
+      ...branches.flatMap((b): [string, string][] => [
+        [`--enarm-${b}-ink`, `--enarm-${b}-soft`],
+        [`--enarm-${b}-ink`, '--enarm-surface'],
+      ]),
+    ];
+
+    const graphicPairs: [string, string][] = [
+      ['--enarm-line-strong', '--enarm-surface'],
+      ['--enarm-line-strong', '--enarm-muted'],
+      ['--enarm-chart-scheduled', '--enarm-surface'],
+      ['--enarm-chart-done', '--enarm-surface'],
+      ['--enarm-chart-done', '--enarm-canvas'],
+      ['--enarm-indicator', '--enarm-surface'],
+      ['--enarm-accent', '--enarm-surface'],
+      ['--enarm-streak', '--enarm-surface'],
+      ...branches.map((b): [string, string] => [`--enarm-${b}`, '--enarm-surface']),
+    ];
+
+    for (const { name, tokens } of blocks) {
+      for (const [fg, bg] of textPairs) {
+        const fgColor = tokens.get(fg);
+        const bgColor = tokens.get(bg);
+        expect(fgColor, `Token ${fg} faltante en ${name}`).toBeDefined();
+        expect(bgColor, `Token ${bg} faltante en ${name}`).toBeDefined();
+        if (!fgColor || !bgColor) continue;
+        const ratio = contrastRatio(fgColor, bgColor);
+        expect(
+          ratio,
+          `Texto ${fg} (${fgColor}) sobre ${bg} (${bgColor}) en ${name} debe ser >= 4.5 a 1`,
+        ).toBeGreaterThanOrEqual(4.5);
+      }
+
+      for (const [fg, bg] of graphicPairs) {
+        const fgColor = tokens.get(fg);
+        const bgColor = tokens.get(bg);
+        expect(fgColor, `Token ${fg} faltante en ${name}`).toBeDefined();
+        expect(bgColor, `Token ${bg} faltante en ${name}`).toBeDefined();
+        if (!fgColor || !bgColor) continue;
+        const ratio = contrastRatio(fgColor, bgColor);
+        expect(
+          ratio,
+          `Gráfico ${fg} (${fgColor}) sobre ${bg} (${bgColor}) en ${name} debe ser >= 3 a 1`,
+        ).toBeGreaterThanOrEqual(3.0);
+      }
+    }
   });
 });
