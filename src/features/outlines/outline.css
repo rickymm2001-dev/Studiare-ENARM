@@ -1,6 +1,8 @@
 /* Estilos del editor de apuntes (D-092). Solo se cargan con el editor, que es una pieza diferida.
    B6. Sin píldoras ni colores de estado, como el resto de la app (D-121), con el tono de texto del
-   color de acción que se lee en claro y en oscuro, y las palabras largas se parten en el teléfono */
+   color de acción que se lee en claro y en oscuro, y las palabras largas se parten en el teléfono.
+   La insignia de la línea es una etiqueta y va neutra, como Badge desde el cierre de B2, porque una
+   etiqueta no es un botón y nunca lleva el color de acción (comentario 10) */
 .outline-editor {
   min-height: 18rem;
   padding: 0.25rem 0.25rem 2rem;
@@ -70,10 +72,11 @@
 
 .outline-badge {
   margin-left: 0.5rem;
+  border: 1px solid var(--enarm-line);
   border-radius: 0.25rem;
   padding: 0.05rem 0.4rem;
-  background: var(--enarm-primary-soft);
-  color: var(--enarm-primary-ink);
+  background: var(--enarm-muted);
+  color: var(--enarm-fg-muted);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;

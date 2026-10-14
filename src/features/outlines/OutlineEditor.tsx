@@ -375,7 +375,7 @@ export function OutlineEditor({
               // arriba y abajo, nunca sobre el texto de la línea
               'absolute flex items-center justify-center rounded-md border text-primary-ink',
               "before:absolute before:-inset-y-2 before:right-0 before:-left-4 before:content-['']",
-              openMenu ? 'border-primary bg-primary-soft' : 'border-line-strong bg-surface',
+              openMenu ? 'border-indicator bg-primary-soft' : 'border-line-strong bg-surface',
             )}
             // Alineado con el primer renglón de la línea, que mide lo mismo que el botón
             style={{
@@ -416,8 +416,7 @@ export function OutlineEditor({
         {text.marks.map((entry) => (
           <span key={entry.mark} className="whitespace-nowrap">
             {' · '}
-            <code className="font-mono font-semibold text-primary-ink">{entry.mark}</code>{' '}
-            {entry.what}
+            <code className="font-mono font-semibold text-fg">{entry.mark}</code> {entry.what}
           </span>
         ))}
       </p>

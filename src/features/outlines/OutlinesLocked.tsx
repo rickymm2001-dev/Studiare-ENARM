@@ -24,7 +24,7 @@ export function OutlinesLocked() {
       <ul className="flex flex-col gap-1.5 text-sm">
         {text.points.map((point) => (
           <li key={point} className="flex items-start gap-2">
-            <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary-ink" />
+            <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-fg-muted" />
             <span>{point}</span>
           </li>
         ))}

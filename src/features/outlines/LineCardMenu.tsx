@@ -98,7 +98,7 @@ export function LineCardMenu({
             variant="secondary"
             aria-pressed={kind === option}
             disabled={empty}
-            className="h-auto justify-between gap-2 px-3 py-1.5 text-left text-sm whitespace-normal aria-pressed:border-primary aria-pressed:bg-primary-soft aria-pressed:text-primary-ink"
+            className="h-auto justify-between gap-2 px-3 py-1.5 text-left text-sm whitespace-normal aria-pressed:border-indicator aria-pressed:bg-primary-soft aria-pressed:text-primary-ink"
             onMouseDown={keepFocus}
             onClick={() => {
               onChoose(option);

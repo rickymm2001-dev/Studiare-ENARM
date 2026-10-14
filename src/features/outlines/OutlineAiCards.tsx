@@ -45,7 +45,7 @@ export function OutlineAiCards(props: AiProps) {
   return (
     <section aria-labelledby="ia-del-apunte" className="flex flex-col gap-3">
       <h2 id="ia-del-apunte" className="flex items-center gap-2 text-base font-semibold">
-        <Sparkles aria-hidden className="size-4 text-primary-ink" />
+        <Sparkles aria-hidden className="size-4 text-fg-muted" />
         {t.outlines.ai.title}
       </h2>
       <FeatureGate userId={props.session.user.id} feature="aiCards">
