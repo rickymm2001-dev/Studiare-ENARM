@@ -77,6 +77,8 @@ test('B6. Modo clase con plantilla y búsqueda sin acentos', async ({ page }, in
   await capture(page, B6_DIR, '05-nuevo-apunte-de-clase', project);
   await page.getByRole('button', { name: t.outlines.form.startClass }).click();
   await expect(editorOf(page)).toBeVisible({ timeout: 30_000 });
+  // Sin esperar el foco, la primera letra se pierde y la búsqueda de abajo no encuentra la línea
+  await expect(editorOf(page)).toBeFocused();
   await page.keyboard.type('Húmero: hueso del brazo');
   await page.getByRole('button', { name: t.outlines.editor.cardLabel }).click();
   await page.getByRole('button', { name: t.outlines.editor.lineCard.kinds.both }).click();
