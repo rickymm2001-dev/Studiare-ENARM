@@ -73,17 +73,8 @@ export interface Finding {
   at: string;
 }
 
-/** Reglas que esperaríamos ver con cada causa reportada (13.3, D-124) */
+/** Reglas que esperaríamos ver con cada causa reportada (13.3) */
 const CAUSE_RULES: Record<ErrorCause, readonly ForgettingRule[] | null> = {
-  // 7 motivos vigentes (D-124)
-  knowledge: ['foundation_gap', 'persistent_lapse', 'expected_forgetting', 'interference'],
-  time: ['rushing'],
-  misinterpretation: ['misreading'],
-  shallow_reading: ['misreading', 'rushing'],
-  anxiety: null,
-  overconfidence: ['high_confidence_error'],
-  fatigue: ['fatigue'],
-  // 8 motivos heredados (compatibilidad histórica)
   not_studied: ['foundation_gap'],
   forgot: ['persistent_lapse', 'expected_forgetting'],
   confused: ['interference'],

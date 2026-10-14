@@ -34,10 +34,6 @@ export function latestCardStates(events: readonly AppEvent[]): Map<string, FsrsC
         const state = states.get(entry.cardId);
         if (state) states.set(entry.cardId, { ...state, due: entry.to });
       }
-    } else if (event.type === 'cards_reset') {
-      for (const cardId of event.payload.cardIds) {
-        states.delete(cardId);
-      }
     }
   }
   return states;

@@ -92,7 +92,7 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       'features/profile/AvatarCropper.tsx',
     ]);
     const offenders = sourceFiles(SRC).flatMap((file) => {
-      const relative = file.slice(SRC.length).replace(/\\/g, '/');
+      const relative = file.slice(SRC.length);
       if (ROUND_OK.has(relative)) return [];
       return readFileSync(file, 'utf8')
         .split('\n')

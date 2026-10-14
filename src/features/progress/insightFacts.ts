@@ -3,7 +3,6 @@
 import { TZDate } from '@date-fns/tz';
 import type { Thresholds } from '@/config/thresholds';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
-import { normalizeErrorCause, type CurrentErrorCause } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { personalPace, responseSignals } from '@/engines/behavior';
 import type { AnswerFact, InsightInput, ReviewFact } from '@/engines/insights';
@@ -47,7 +46,7 @@ export function buildInsightInput(input: {
   const drafts: Draft[] = [];
   const reviews: ReviewFact[] = [];
   const sessionMinutes: number[] = [];
-  const latestCauses = new Map<string, CurrentErrorCause | null>();
+  const causes: string[] = [];
   const studyDays = new Set<string>();
   let firstDay: string | null = null;
 
@@ -61,20 +60,11 @@ export function buildInsightInput(input: {
         sessionMinutes.push(event.payload.durationMs / 60_000);
         break;
       case 'cause_reported': {
-        const targetKey = `${event.payload.targetKind}|${event.payload.targetId}`;
-        const normalized = normalizeErrorCause(event.payload.cause);
-        latestCauses.set(targetKey, normalized);
-        if (
-          event.payload.targetKind === 'question' &&
-          (normalized === 'misinterpretation' || normalized === 'shallow_reading')
-        ) {
+        causes.push(event.payload.cause);
+        if (event.payload.targetKind === 'question' && event.payload.cause === 'misread') {
           const target = event.payload.targetId;
           const latest = drafts.findLast((draft) => draft.questionIds.includes(target));
           if (latest) latest.reported = true;
-        } else if (event.payload.targetKind === 'question') {
-          const target = event.payload.targetId;
-          const latest = drafts.findLast((draft) => draft.questionIds.includes(target));
-          if (latest) latest.reported = false;
         }
         break;
       }
@@ -169,9 +159,7 @@ export function buildInsightInput(input: {
     answers,
     reviews,
     sessionMinutes,
-    causes: Array.from(latestCauses.values()).filter(
-      (cause): cause is CurrentErrorCause => cause !== null,
-    ),
+    causes,
     studyDays: [...studyDays],
     today: input.today,
     daysSinceStart: firstDay ? Math.max(0, daysBetween(firstDay, input.today)) : 0,

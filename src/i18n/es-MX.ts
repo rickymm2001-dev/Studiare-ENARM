@@ -73,7 +73,7 @@ const screens: Record<ScreenKey, ScreenText> = {
     description: 'Mazos precargados que sigues o dejas, los que importas y los que creas a mano.',
   },
   explore: {
-    title: 'Buscar tarjetas',
+    title: 'Explorar',
     description:
       'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
   },
@@ -179,10 +179,10 @@ export const t = {
     show: 'Mostrar el menú lateral',
   },
   studyTabs: {
-    label: 'Repasar, mazos y buscar tarjetas',
+    label: 'Repasar, mazos y explorar',
     review: 'Repasar',
     decks: 'Mazos',
-    explore: 'Buscar tarjetas',
+    explore: 'Explorar',
   },
   navItems: {
     home: 'Inicio',

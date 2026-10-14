@@ -191,13 +191,13 @@ describe('pantalla de Repasar', () => {
     await typing.click(
       screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.again}`) }),
     );
-    await typing.click(await screen.findByRole('button', { name: t.review.causes.knowledge }));
+    await typing.click(await screen.findByRole('button', { name: t.review.causes.forgot }));
     const { api, user } = app;
     await waitFor(async () => {
       const events = await api.repos.events.query({ userId: user.id });
       expect(events.find((event) => event.type === 'cause_reported')?.payload).toMatchObject({
         targetKind: 'card',
-        cause: 'knowledge',
+        cause: 'forgot',
       });
     });
   });
@@ -235,7 +235,7 @@ describe('pantalla de Repasar', () => {
     (document.activeElement as HTMLElement | null)?.blur();
     await typing.keyboard(' ');
     expect(await screen.findByText('Amoxicilina')).toBeVisible();
-    // 1 es Otra vez. La tarjeta pregunta la causa y 2 elige Tiempo (la segunda de las 7)
+    // 1 es Otra vez. La tarjeta pregunta la causa y 2 elige Lo olvidé
     await typing.keyboard('1');
     expect(await screen.findByText(t.review.causeQuestion)).toBeVisible();
     await typing.keyboard('2');
@@ -246,7 +246,7 @@ describe('pantalla de Repasar', () => {
         rating: 'again',
       });
       expect(events.find((event) => event.type === 'cause_reported')?.payload).toMatchObject({
-        cause: 'time',
+        cause: 'forgot',
       });
     });
   });

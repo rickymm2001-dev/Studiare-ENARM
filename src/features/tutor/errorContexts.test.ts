@@ -47,10 +47,7 @@ describe('causa reportada de cada error', () => {
         },
       }),
     );
-    expect(contexts.map((context) => context.reportedCause)).toEqual([
-      null,
-      'misinterpretation',
-    ]);
+    expect(contexts.map((context) => context.reportedCause)).toEqual([null, 'misread']);
   });
 
   it('la causa de un error que el alumno acaba de reportar sigue contando para ese error', () => {
@@ -76,36 +73,7 @@ describe('causa reportada de cada error', () => {
         },
       }),
     );
-    expect(contexts.map((context) => context.reportedCause)).toEqual(['time', null]);
-  });
-
-  it('al cambiar el motivo de error vale el último reportado (D-124)', () => {
-    const failed = question({ id: newId() });
-    const trap = option(newId(), false, 'Furosemida');
-    const events = [
-      answered(failed, trap.id, false, minute(0)),
-      event(
-        'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'knowledge' },
-        minute(1),
-      ),
-      event(
-        'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'time' },
-        minute(2),
-      ),
-    ];
-    const contexts = buildErrorContexts(
-      input({
-        events,
-        bank: {
-          questions: new Map([[failed.id, failed]]),
-          options: new Map([[trap.id, trap]]),
-          cases: new Map(),
-        },
-      }),
-    );
-    expect(contexts[0]?.reportedCause).toBe('time');
+    expect(contexts.map((context) => context.reportedCause)).toEqual(['rushed_or_tired', null]);
   });
 });
 
@@ -154,7 +122,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
       subtopic: 'cardiology',
       confidence: 'sure',
       confusedWithItemId: other.id,
-      reportedCause: 'knowledge',
+      reportedCause: 'confused',
       lapses: null,
       probableMisread: false,
       baseTopicWeak: false,
@@ -197,7 +165,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
     expect(weak).toMatchObject({
       probableMisread: true,
       baseTopicWeak: true,
-      reportedCause: 'misinterpretation',
+      reportedCause: 'misread',
     });
     // Con el tema base bien o sin dominio calculado no hay brecha de base
     const [fine] = buildErrorContexts(
@@ -271,7 +239,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
       lapses: 3,
       answerListItems: 5,
       confidence: 'sure',
-      reportedCause: 'knowledge',
+      reportedCause: 'forgot',
     });
     expect(context?.daysSinceLastReview).toBeCloseTo(30, 1);
     expect(context?.predictedRetrievability).toBeGreaterThan(0);

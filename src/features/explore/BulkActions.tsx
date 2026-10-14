@@ -1,11 +1,11 @@
 // Acciones por lote sobre las tarjetas marcadas en Explorar. Suspender y reanudar sirven para todas,
 // también las precargadas, porque solo suman un evento. Etiquetar y mover cambian la nota, así que
 // solo aplican a las del alumno y el resultado dice cuántas precargadas se quedaron sin cambio.
-import { Layers, Pause, Play, RotateCcw, Tag, Tags } from 'lucide-react';
+import { Layers, Pause, Play, Tag, Tags } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
 import { isEditableDeck, type Deck } from '@/data/schemas/decks';
-import { addTags, moveNotes, removeTag, resetCards, setSuspended } from '@/data/usecases/organize';
+import { addTags, moveNotes, removeTag, setSuspended } from '@/data/usecases/organize';
 import { deckIndent, flattenDeckTree } from '@/engines/deckTree';
 import { sanitizeTag } from '@/engines/tagPath';
 import type { ExploreRow } from '@/engines/explore';
@@ -94,25 +94,6 @@ export function BulkActions({
         >
           <Play aria-hidden />
           {t.explore.actions.unsuspend}
-        </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          disabled={busy || selected.length === 0}
-          onClick={() => {
-            void run(async () =>
-              t.explore.actions.reset(
-                await resetCards(
-                  api,
-                  actor,
-                  selected.map((row) => row.cardId),
-                ),
-              ),
-            );
-          }}
-        >
-          <RotateCcw aria-hidden />
-          {t.explore.actions.resetAction}
         </Button>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end">

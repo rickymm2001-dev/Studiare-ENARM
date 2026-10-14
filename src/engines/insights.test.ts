@@ -289,21 +289,6 @@ describe('estudio', () => {
     expect(state).toMatchObject({ kind: 'ready', level: 'focus', refs: { cause: 'forgot' } });
   });
 
-  it('las causas más reportadas guían el foco con knowledge (D-124)', () => {
-    const causes = [
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'time',
-      'time',
-      'fatigue',
-    ];
-    const state = find(buildInsights(input({ causes })).insights, 'causes').state;
-    expect(state).toMatchObject({ kind: 'ready', level: 'focus', refs: { cause: 'knowledge' } });
-  });
-
   it('ordena los focos por peso', () => {
     const answers = Array.from({ length: 40 }, (_, i) =>
       answer({ confidence: 'sure', correct: i < 20, msToAnswer: 120_000 }),

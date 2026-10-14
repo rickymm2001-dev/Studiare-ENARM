@@ -11,7 +11,6 @@ import { deckChain } from '@/engines/deckTree';
 import { suspendedCardIds } from '@/engines/suspension';
 import { cardFaces, latestCardStates, type CardFaces } from '../review/study';
 import { followedDeckIds } from '../decks/followed';
-import { extractNoteTopicInfo } from '../decks/deckTopics';
 import type { ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
@@ -54,7 +53,6 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
     const notes = new Map<string, Note>(
       stored.notes.filter((note) => followed.has(note.deckId)).map((note) => [note.id, note]),
     );
-    const deckMap = new Map(stored.decks.map((deck) => [deck.id, deck.name]));
     const cardsById = new Map<string, Card>();
     const sources: ExploreSource[] = [];
     for (const card of stored.cards) {
@@ -63,15 +61,10 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
       if (!note) continue;
       cardsById.set(card.id, card);
       const faces = cardFaces(note, card.ordinal);
-      const cardState = states.get(card.id) ?? null;
-      const topicInfo = extractNoteTopicInfo(note);
       sources.push({
         cardId: card.id,
         noteId: note.id,
         deckId: card.deckId,
-        deckName: deckMap.get(card.deckId) ?? '',
-        topic: topicInfo.topicName,
-        scheduledDays: cardState?.scheduledDays ?? 0,
         kind: note.kind,
         ordinal: card.ordinal,
         tags: note.tags,
@@ -81,7 +74,7 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
         isDemo: note.isDemo,
         createdAt: card.createdAt,
         updatedAt: card.updatedAt ?? card.createdAt,
-        state: cardState,
+        state: states.get(card.id) ?? null,
         controversy: note.controversy ?? null,
         aiDraft: isAiNote(note),
       });

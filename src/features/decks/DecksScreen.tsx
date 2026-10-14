@@ -30,9 +30,14 @@ import { AiCardsCard } from './AiCardsCard';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
-import { deckBranch } from './deckBranch';
-import { deckTopicsGrouped } from './deckTopics';
+import { deckBranch, topTopics } from './deckBranch';
 import { useDeckCatalog } from './useDeckCatalog';
+
+const topicName = new Map(
+  topicTaxonomy.branches.flatMap((branch) =>
+    branch.topics.map((topic) => [topic.key, topic.name] as const),
+  ),
+);
 
 export function DecksScreen() {
   return <RequireSession screen="decks">{(session) => <Decks session={session} />}</RequireSession>;
@@ -158,43 +163,25 @@ function Decks({ session }: { session: ReadySession }) {
                           </span>
                         </div>
                       ) : null}
-                      {(() => {
-                        const topicGroups = deckTopicsGrouped(file);
-                        const totalTopicCount = topicGroups.reduce(
-                          (acc, g) => acc + g.topics.length,
-                          0,
-                        );
-                        return (
-                          <details className="group">
-                            <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
-                              {t.decks.topicsTitle}
-                              <span className="font-normal text-fg-muted">
-                                · {t.decks.topicsSummary(totalTopicCount)}
-                              </span>
-                              <ChevronDown
-                                aria-hidden
-                                className="size-4 text-fg-muted transition-transform group-open:rotate-180"
-                              />
-                            </summary>
-                            <div className="mt-2 flex flex-col gap-3">
-                              {topicGroups.map((group) => (
-                                <div key={group.branchKey} className="flex flex-col gap-1.5">
-                                  <span className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-                                    {group.branchName}
-                                  </span>
-                                  <div className="flex flex-wrap gap-1">
-                                    {group.topics.map((item) => (
-                                      <Badge key={item.key} variant="neutral" className="whitespace-normal">
-                                        {item.name} · {item.count}
-                                      </Badge>
-                                    ))}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </details>
-                        );
-                      })()}
+                      <details className="group">
+                        <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary-ink [&::-webkit-details-marker]:hidden">
+                          {t.decks.topicsTitle}
+                          <span className="font-normal text-fg-muted">
+                            · {t.decks.topicsSummary(topTopics(file).length)}
+                          </span>
+                          <ChevronDown
+                            aria-hidden
+                            className="size-4 text-fg-muted transition-transform group-open:rotate-180"
+                          />
+                        </summary>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {topTopics(file).map(([topic, count]) => (
+                            <Badge key={topic} variant="neutral" className="whitespace-normal">
+                              {topicName.get(topic) ?? topic} · {count}
+                            </Badge>
+                          ))}
+                        </div>
+                      </details>
                     </div>
                     <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:justify-end">
                       {session.isDemo ? (

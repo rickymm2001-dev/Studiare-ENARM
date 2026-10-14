@@ -580,9 +580,7 @@ function studyInsights(input: InsightInput): Insight[] {
     state:
       input.causes.length >= min.causes && topCause
         ? ready(
-            topCause[0] === 'knowledge' || topCause[0] === 'not_studied' || topCause[0] === 'forgot'
-              ? 'focus'
-              : 'watch',
+            topCause[0] === 'not_studied' || topCause[0] === 'forgot' ? 'focus' : 'watch',
             { share: topCause[1] / input.causes.length, total: input.causes.length },
             { cause: topCause[0] },
           )

@@ -154,27 +154,6 @@ export async function setSuspended(
   return ids.length;
 }
 
-/**
- * Reinicia tarjetas con el evento cards_reset, de hasta 500 por evento.
- * Las tarjetas vuelven al estado new (FSRS).
- */
-export async function resetCards(
-  api: Api,
-  user: Actor,
-  cardIds: readonly string[],
-  options: { clock?: Clock } = {},
-): Promise<number> {
-  const existing = new Set((await api.repos.cards.list()).map((card) => card.id));
-  const ids = [...new Set(cardIds)].filter((id) => existing.has(id));
-  const context = { userId: user.id, tz: user.timeZone, clock: options.clock };
-  for (const batch of inBatches(ids, SUSPEND_BATCH)) {
-    await api.recordEvent(
-      createEvent('cards_reset', { cardIds: batch }, context),
-    );
-  }
-  return ids.length;
-}
-
 export type MoveDeckError = 'missing' | 'self' | 'cycle' | 'too_deep';
 
 /** Cuelga un mazo propio de otro mazo propio, o lo deja de primer nivel con parentId null */

@@ -89,8 +89,7 @@ describe('reglas de olvido (7.9)', () => {
     expect(finding?.severity).toBe('info');
   });
 
-  it('compara la causa reportada con las señales (D-124)', () => {
-    // Motivos heredados
+  it('compara la causa reportada con las señales', () => {
     expect(
       evaluateError(context({ probableMisread: true, reportedCause: 'misread' }), thresholds)[0]
         ?.causeMatchesSignals,
@@ -105,42 +104,6 @@ describe('reglas de olvido (7.9)', () => {
     ).toBeNull();
     expect(
       evaluateError(context({ rapidGuess: true }), thresholds)[0]?.causeMatchesSignals,
-    ).toBeNull();
-
-    // 7 motivos vigentes (D-124)
-    expect(
-      evaluateError(context({ baseTopicWeak: true, reportedCause: 'knowledge' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(context({ rapidGuess: true, reportedCause: 'time' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(
-        context({ probableMisread: true, reportedCause: 'misinterpretation' }),
-        thresholds,
-      )[0]?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(
-        context({ probableMisread: true, reportedCause: 'shallow_reading' }),
-        thresholds,
-      )[0]?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(
-        context({ confidence: 'sure', reportedCause: 'overconfidence' }),
-        thresholds,
-      )[0]?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(context({ fatigueContext: true, reportedCause: 'fatigue' }), thresholds)[0]
-        ?.causeMatchesSignals,
-    ).toBe(true);
-    expect(
-      evaluateError(context({ rapidGuess: true, reportedCause: 'anxiety' }), thresholds)[0]
-        ?.causeMatchesSignals,
     ).toBeNull();
   });
 });

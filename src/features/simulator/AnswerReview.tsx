@@ -2,14 +2,13 @@
 // sesgo probable, qué se podía descartar, explicación, referencias por verificar, causa del error y
 // reporte para revisión médica. La usa la retroalimentación tras cada pregunta y el resumen de la
 // sesión, que es donde se ve por defecto (D-087).
-import { Check, CheckCircle2, Flag, Plus, XCircle } from 'lucide-react';
+import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import type { ContentReport } from '@/data/schemas/bank';
 import { submitContentReport } from '@/data/usecases/contentReports';
 import { biasTaxonomy } from '@/demo/content';
-import { CreateQuestionCardDialog } from '@/features/shared/CreateQuestionCardDialog';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -41,8 +40,6 @@ export function AnswerReview({
   const practice = usePractice();
   const { question, options } = bundle;
   const [cause, setCause] = useState<Cause | null>(null);
-  const [createCardOpen, setCreateCardOpen] = useState(false);
-  const [cardCreated, setCardCreated] = useState(false);
   const [reason, setReason] = useState<ReportReason>('clinical_error');
   const [reported, setReported] = useState(false);
   const ctx = {
@@ -98,6 +95,7 @@ export function AnswerReview({
               size="sm"
               variant={cause === value ? 'primary' : 'secondary'}
               aria-pressed={cause === value}
+              disabled={cause !== null}
               onClick={() => {
                 void reportCause(value);
               }}
@@ -201,38 +199,6 @@ export function AnswerReview({
             </div>
           ) : null}
           {!answer.correct && !chosen ? causePicker : null}
-          <div className="mt-3 flex items-center justify-between border-t border-line pt-3">
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => {
-                setCreateCardOpen(true);
-              }}
-            >
-              {cardCreated ? (
-                <>
-                  <Check aria-hidden className="size-4 text-success" />
-                  {t.review.cardCreated}
-                </>
-              ) : (
-                <>
-                  <Plus aria-hidden className="size-4" />
-                  {t.review.createCard}
-                </>
-              )}
-            </Button>
-          </div>
-          <CreateQuestionCardDialog
-            open={createCardOpen}
-            onOpenChange={setCreateCardOpen}
-            question={question}
-            questionVersionId={question.id}
-            vignette={bundle.vignette}
-            options={options}
-            onCardCreated={() => {
-              setCardCreated(true);
-            }}
-          />
           {/* El reporte para revisión médica queda plegado para no ocupar una tarjeta entera */}
           <details className="mt-3 border-t border-line pt-3">
             <summary className="flex min-h-touch cursor-pointer items-center gap-2 text-sm font-medium text-fg-muted">

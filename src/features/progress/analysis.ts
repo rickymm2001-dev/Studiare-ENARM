@@ -3,7 +3,6 @@
 // las subespecialidades débiles, así todos dicen lo mismo. Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
 import type { Question } from '@/data/schemas/bank';
-import { normalizeErrorCause, type CurrentErrorCause } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { topicTaxonomy } from '@/demo/content';
 import { buildInsights, type InsightReport } from '@/engines/insights';
@@ -26,10 +25,6 @@ export interface Analysis {
   report: InsightReport;
   /** Subespecialidades con dominio bajo, de la más débil a la menos */
   weakTopics: WeakTopic[];
-  /** Reparto de motivos de error vigentes totales (D-124). Vale el último motivo de cada reactivo */
-  causesTotal: ReadonlyMap<CurrentErrorCause, number>;
-  /** Reparto de motivos de error vigentes agrupados por rama troncal (D-124) */
-  causesByBranch: ReadonlyMap<string, ReadonlyMap<CurrentErrorCause, number>>;
 }
 
 export function buildAnalysis(input: {
@@ -73,49 +68,7 @@ export function buildAnalysis(input: {
       thresholds,
     }),
   );
-
-  // Reparto de motivos de error (D-124). Vale el último motivo de cada reactivo/intento.
-  const latestCausesByTarget = new Map<
-    string,
-    { cause: CurrentErrorCause; branch: string | null }
-  >();
-  for (const event of [...events].sort((a, b) => a.at.localeCompare(b.at))) {
-    if (event.type === 'cause_reported') {
-      const normalized = normalizeErrorCause(event.payload.cause);
-      const targetKey = `${event.payload.targetKind}|${event.payload.targetId}`;
-      if (normalized === null) {
-        latestCausesByTarget.delete(targetKey);
-      } else {
-        let branch: string | null = null;
-        if (event.payload.targetKind === 'question') {
-          const q = bank.questions.get(event.payload.targetId);
-          branch = q?.branch ?? null;
-        }
-        latestCausesByTarget.set(targetKey, { cause: normalized, branch });
-      }
-    }
-  }
-
-  const causesTotal = new Map<CurrentErrorCause, number>();
-  const causesByBranch = new Map<string, Map<CurrentErrorCause, number>>();
-
-  for (const { cause, branch } of latestCausesByTarget.values()) {
-    causesTotal.set(cause, (causesTotal.get(cause) ?? 0) + 1);
-    if (branch) {
-      const branchMap = causesByBranch.get(branch) ?? new Map<CurrentErrorCause, number>();
-      branchMap.set(cause, (branchMap.get(cause) ?? 0) + 1);
-      causesByBranch.set(branch, branchMap);
-    }
-  }
-
-  return {
-    responses,
-    byTopic,
-    report,
-    weakTopics: weakTopicsFrom(byTopic),
-    causesTotal,
-    causesByBranch,
-  };
+  return { responses, byTopic, report, weakTopics: weakTopicsFrom(byTopic) };
 }
 
 /**

@@ -64,7 +64,6 @@ import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
 import { deckPath, selectionUnitId } from '@/engines/deckTree';
 import { DeckEditorDialog } from '../decks/DeckEditorDialog';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
-import { deckTopicsGrouped, extractNoteTopicInfo, type DeckBranchGroup } from '../decks/deckTopics';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
 import { ReviewCounters } from './ReviewCounters';
@@ -194,34 +193,14 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
   const noteTopic = new Map<string, string | null>();
-  for (const file of catalog) {
-    for (const note of file.notes) {
-      const info = extractNoteTopicInfo(note, file.key);
-      noteTopic.set(deckIds.note(note.key), info.topicKey);
-    }
-  }
+  for (const file of catalog)
+    for (const note of file.notes) noteTopic.set(deckIds.note(note.key), note.topic);
   const topicOfCard = new Map(
-    cards.map((card) => {
-      const note = noteById.get(card.noteId);
-      const fallbackTopic = note ? extractNoteTopicInfo(note).topicKey : null;
-      return [
-        card.id,
-        noteTopic.get(card.noteId) ?? fallbackTopic ?? topicFromTags(note?.tags),
-      ];
-    }),
+    cards.map((card) => [
+      card.id,
+      noteTopic.get(card.noteId) ?? topicFromTags(noteById.get(card.noteId)?.tags),
+    ]),
   );
-  const deckTopicGroups = new Map<string, DeckBranchGroup[]>();
-  for (const file of catalog) {
-    deckTopicGroups.set(deckIds.deck(file.key), deckTopicsGrouped(file));
-  }
-  for (const deck of content.decks) {
-    if (!deckTopicGroups.has(deck.id)) {
-      const deckNotes = content.notes.filter((n) => n.deckId === deck.id);
-      if (deckNotes.length > 0) {
-        deckTopicGroups.set(deck.id, deckTopicsGrouped({ key: deck.id, notes: deckNotes }));
-      }
-    }
-  }
   const config = schedulerConfig(session);
   const cardStates = latestCardStates(events);
   // Las herramientas de atrasos solo sirven si ya hay tarjetas con repasos
@@ -259,7 +238,6 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
           deckNames={unitNames}
           topicOfCard={topicOfCard}
-          deckTopicGroups={deckTopicGroups}
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
             reviewsPerDay: session.settings.reviewsPerDay,
