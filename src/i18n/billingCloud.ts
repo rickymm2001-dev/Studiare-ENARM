@@ -83,6 +83,9 @@ export const billingCloudText = {
     trial_mismatch:
       'Tu prueba gratis cambió mientras elegías. Revisa el aviso y vuelve a intentarlo.',
     not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
+    // Un pase o Mercado Pago que el servidor tiene apagado, aunque este navegador lo mostrara
+    optionUnavailable: (option: string) =>
+      `${option} todavía no está disponible. Elige otra forma de pago o intenta más tarde.`,
     unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
     failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
   },

@@ -254,6 +254,28 @@ describe('ir a pagar', () => {
     }
   });
 
+  it('un pase o Mercado Pago apagado en el servidor lo dice con su nombre y pide elegir otra forma', async () => {
+    const options = [
+      ['oxxo', text.options.oxxo.label],
+      ['spei', text.options.spei.label],
+      ['mercadopago', text.options.mercadopago.label],
+      ['mercadopago_pass', text.options.mercadopago_pass.label],
+    ] as const;
+    for (const [option, label] of options) {
+      fakeCloud([failure({ error: 'not_configured' }, 503)]);
+      const typing = userEvent.setup();
+      const { open } = show();
+      await typing.click(radio(label));
+      const action =
+        option === 'oxxo' || option === 'spei' ? text.actions[option] : text.actions.mercadopago;
+      await typing.click(screen.getByRole('button', { name: action }));
+      expect(await screen.findByText(text.errors.optionUnavailable(label))).toBeVisible();
+      expect(screen.queryByText(text.errors.not_configured)).toBeNull();
+      expect(open).not.toHaveBeenCalled();
+      cleanup();
+    }
+  });
+
   it('cada error de create-checkout tiene su texto y no abre la pasarela', async () => {
     const cases: [unknown, string][] = [
       [{ error: 'already_subscribed' }, text.errors.already_subscribed],

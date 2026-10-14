@@ -143,4 +143,29 @@ test.describe('Pases con OXXO y SPEI', () => {
     ).toBeVisible();
     await expectNoSeriousA11yViolations(page);
   });
+
+  test('si el servidor apaga los pases con la app abierta, OXXO dice que no está disponible y no cobra', async ({
+    page,
+    cloud,
+  }) => {
+    await enterWithLink(page, cloud, EMAIL, 'Carla');
+    await reloadWithServerFlags(page);
+    await page.goto(SCREENS.subscription.path);
+    await page
+      .getByRole('region', { name: t.billing.plans.monthly, exact: true })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
+      .click();
+    await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
+    // Ricardo apaga cashPasses en el servidor. Este navegador todavía tiene la copia con la bandera
+    // prendida, pero create-checkout responde 503 not_configured y no abre la pasarela
+    cloud.setFeatureFlags({ cashPasses: false });
+    await page.getByRole('button', { name: text.actions.oxxo }).click();
+    await expect(
+      page.getByText(text.errors.optionUnavailable(text.options.oxxo.label)),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/suscripcion/);
+    expect(cloud.paymentsOf(EMAIL)).toEqual([]);
+    expect(cloud.passesOf(EMAIL)).toEqual([]);
+    await expectNoSeriousA11yViolations(page);
+  });
 });
