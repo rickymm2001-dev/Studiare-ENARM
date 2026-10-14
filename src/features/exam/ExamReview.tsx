@@ -2,10 +2,16 @@
 // retroalimentación completa. Por qué atrae cada opción y qué se podía descartar, qué eligió el
 // alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace. Las
 // preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2).
-import { CheckCircle2, ChevronDown, Flag, MinusCircle, XCircle } from 'lucide-react';
+import { Check, CheckCircle2, ChevronDown, Flag, MinusCircle, Plus, XCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useSession } from '@/app/session';
+import { useDataApi } from '@/data/context';
+import { createEvent } from '@/data/events/createEvent';
+import { CURRENT_ERROR_CAUSES, type CurrentErrorCause } from '@/data/schemas/common';
+import { CreateQuestionCardDialog } from '@/features/shared/CreateQuestionCardDialog';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
+import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { TOPIC_NAMES } from '../shared/topics';
@@ -92,6 +98,28 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
   const { question, options, vignette } = bundle;
   const answer = answerOf(state, row.id);
   const text = t.examResults;
+
+  const api = useDataApi();
+  const session = useSession();
+  const user = session.status === 'ready' ? session.user : null;
+
+  const [cause, setCause] = useState<CurrentErrorCause | null>(null);
+  const [createCardOpen, setCreateCardOpen] = useState(false);
+  const [cardCreated, setCardCreated] = useState(false);
+
+  const reportCause = async (value: CurrentErrorCause) => {
+    setCause(value);
+    if (user) {
+      await api.recordEvent(
+        createEvent(
+          'cause_reported',
+          { targetKind: 'question', targetId: question.id, cause: value },
+          { userId: user.id, tz: user.timeZone },
+        ),
+      );
+    }
+  };
+
   // Las opciones en el orden que vio. Si no la vio, el set canónico
   const shownIds = state.shownOptions[row.id] ?? question.canonicalOptionIds;
   const shown = shownIds.flatMap((id) => {
@@ -169,6 +197,61 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
               <p className="text-sm whitespace-pre-line">{question.explanation}</p>
             </div>
           ) : null}
+
+          {row.outcome === 'missed' ? (
+            <fieldset className="flex flex-col gap-2 border-t border-line pt-3">
+              <legend className="text-sm font-semibold text-fg">{text.whyFailed}</legend>
+              <div className="flex flex-wrap gap-2">
+                {CURRENT_ERROR_CAUSES.map((value) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={cause === value ? 'primary' : 'secondary'}
+                    aria-pressed={cause === value}
+                    onClick={() => {
+                      void reportCause(value);
+                    }}
+                  >
+                    {t.review.causes[value]}
+                  </Button>
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                setCreateCardOpen(true);
+              }}
+            >
+              {cardCreated ? (
+                <>
+                  <Check aria-hidden className="size-4 text-success" />
+                  {text.cardCreated}
+                </>
+              ) : (
+                <>
+                  <Plus aria-hidden className="size-4" />
+                  {text.createCard}
+                </>
+              )}
+            </Button>
+          </div>
+
+          <CreateQuestionCardDialog
+            open={createCardOpen}
+            onOpenChange={setCreateCardOpen}
+            question={question}
+            questionVersionId={question.id}
+            vignette={vignette}
+            options={options}
+            onCardCreated={() => {
+              setCardCreated(true);
+            }}
+          />
         </div>
       </details>
     </li>
