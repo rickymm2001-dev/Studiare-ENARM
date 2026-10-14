@@ -84,7 +84,6 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
     const ROUND_OK = new Set([
       'ui/components/progress-bar.tsx',
       'features/review/CardTimerBar.tsx',
-      'features/party/ChallengeRow.tsx',
       'app/layout/HeaderStats.tsx',
       'features/home/sections/ReviewLoadCard.tsx',
       'features/pomodoro/Pomodoro.tsx',

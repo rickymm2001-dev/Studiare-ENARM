@@ -1,7 +1,7 @@
 // Etiquetas visibles (4.6 y 4.1 del plan del cambio). Mientras el banco es de demostración hay un
 // solo aviso global, Versión de demostración, y ninguna pantalla repite su etiqueta. La base de
 // demostración marca Datos simulados en toda pantalla del alumno, en esa misma línea, y los amigos,
-// los duelos y la tarjeta de logro de Party también. Las etiquetas llevan texto, nunca solo color
+// los duelos y el resumen de la semana de Party también. Las etiquetas llevan texto, nunca solo color
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
