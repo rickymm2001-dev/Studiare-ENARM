@@ -130,15 +130,18 @@ create index if not exists trial_claims_subscription on public.trial_claims (pro
 
 -- Pruebas usadas, para siempre. Una fila por suscripción que empezó una prueba que cuenta. trial_claims se
 -- borra con la cuenta, así que sin esta tabla el mismo correo volvería a tener prueba al abrir otra cuenta.
--- Sobrevive al borrado (user_id queda en null) y no guarda el correo, solo la huella SHA-256 de su clave
--- normalizada (trial_key_hash). Solo se agrega. Ninguna función la cambia ni la borra, salvo la limpieza
--- manual de las cuentas de prueba
+-- No guarda el correo, solo la huella SHA-256 de su clave normalizada (trial_key_hash). Mientras la cuenta
+-- existe guarda también la pasarela y la suscripción, que hacen única la fila. Al borrarse la cuenta
+-- user_id queda en null y un disparador quita en el mismo paso la pasarela y la suscripción, porque Stripe
+-- liga esa suscripción a un cliente y volverían a identificar a la persona. Queda solo lo que frena otra
+-- prueba, la huella y la fecha. Solo se agrega. Ninguna función la borra, salvo la limpieza manual de las
+-- cuentas de prueba
 create table if not exists public.trial_history (
   id uuid primary key default gen_random_uuid(),
   email_hash text not null,
   user_id uuid references auth.users (id) on delete set null,
-  provider text not null check (provider in ('stripe', 'mercadopago')),
-  provider_subscription_id text not null,
+  provider text check (provider in ('stripe', 'mercadopago')),
+  provider_subscription_id text,
   started_at timestamptz not null default now(),
   unique (provider, provider_subscription_id)
 );
@@ -698,6 +701,23 @@ $$;
 create or replace trigger founder_seats_release_orphan
   before update of user_id on public.founder_seats
   for each row execute function public.founder_seats_release_orphan();
+
+-- Al borrarse una cuenta su prueba usada se queda sin dueño (on delete set null) y, en el mismo paso, sin
+-- la pasarela ni la suscripción. Quedan la huella del correo y la fecha, que bastan para frenar otra prueba
+create or replace function public.trial_history_forget_owner() returns trigger
+language plpgsql security definer set search_path = public, pg_temp as $$
+begin
+  if new.user_id is null and old.user_id is not null then
+    new.provider := null;
+    new.provider_subscription_id := null;
+  end if;
+  return new;
+end;
+$$;
+
+create or replace trigger trial_history_forget_owner
+  before update of user_id on public.trial_history
+  for each row execute function public.trial_history_forget_owner();
 
 -- ===================================================================== Devolver un cobro
 -- Lo que pasa cuando se devuelve un cobro, por el aviso de la pasarela o porque el admin lo marca. El
@@ -1738,6 +1758,7 @@ revoke all on function public.billing_founder_lost(uuid, text, text) from public
 revoke all on function public.trial_email_key(text) from public, anon, authenticated, service_role;
 revoke all on function public.trial_key_hash(text) from public, anon, authenticated, service_role;
 revoke all on function public.founder_seats_release_orphan() from public, anon, authenticated, service_role;
+revoke all on function public.trial_history_forget_owner() from public, anon, authenticated, service_role;
 revoke all on function public.trial_account_key(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_already_used(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_available(uuid) from public, anon, authenticated, service_role;

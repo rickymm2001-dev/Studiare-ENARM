@@ -722,7 +722,7 @@ begin
     'public.billing_register_event(text, text, jsonb)', 'public.billing_event_done(text, text, text)',
     'public.billing_queue_cancel(uuid, text, text, text)', 'public.billing_mark_issue(uuid, text, text)',
     'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)',
-    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()',
+    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()', 'public.trial_history_forget_owner()',
     'public.billing_founder_lost(uuid, text, text)', 'public.billing_flag(text)'] loop
     if has_function_privilege('authenticated', v_fn, 'execute') or has_function_privilege('anon', v_fn, 'execute')
        or has_function_privilege('service_role', v_fn, 'execute') then
@@ -1019,6 +1019,12 @@ select pg_temp.is(
 select pg_temp.trial('evt-r1-c', :'r1c', 'sub_r1_c', 'monthly');
 select pg_temp.state('evt-r1-cx', :'r1c', 'sub_r1_c', 'monthly', 'trialing', p_cancel => true,
   p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+-- Mientras la cuenta existe, la prueba usada guarda de qué suscripción es
+select pg_temp.expect(
+  (select provider = 'stripe' and provider_subscription_id = 'sub_r1_c'
+     from public.trial_history where user_id = :'r1c'),
+  'R1. Con la cuenta viva la prueba usada debía guardar su suscripción'
+);
 begin;
 select pg_temp.as_user(:'r1c');
 select public.delete_my_account();
@@ -1029,9 +1035,18 @@ select pg_temp.is(public.checkout_context(:'r1d') ->> 'trialAvailable', 'false',
 select pg_temp.is(pg_temp.trial('evt-r1-d', :'r1d', 'sub_r1_d', 'monthly'), 'trial_duplicate',
   'R1. La prueba de una cuenta nueva con el correo de una borrada debía rechazarse');
 select pg_temp.expect(
-  not exists (select 1 from public.trial_history where email_hash like '%@%')
-  and exists (select 1 from public.trial_history where provider_subscription_id = 'sub_r1_c' and user_id is null),
-  'R1. La prueba usada debía quedar sin dueño y sin el correo a la vista'
+  not exists (select 1 from public.trial_history where email_hash like '%@%'),
+  'R1. La prueba usada no debía guardar el correo a la vista'
+);
+-- R1b. Al borrar la cuenta la prueba usada queda solo con la huella del correo y la fecha. Sin la
+-- pasarela ni el id de la suscripción, que Stripe liga a un cliente y volverían a identificar a la persona
+select pg_temp.expect(
+  (select count(*) = 1 and bool_and(user_id is null and provider is null and provider_subscription_id is null
+                                    and started_at is not null)
+     from public.trial_history
+     where email_hash = public.trial_key_hash(public.trial_email_key('rosauno@gmail.com')))
+  and not exists (select 1 from public.trial_history where provider_subscription_id = 'sub_r1_c'),
+  'R1b. La prueba usada de una cuenta borrada debía quedar solo con la huella del correo y la fecha'
 );
 
 -- R2. Un aviso de prueba que llega tarde, después del primer cobro, no recorta lo pagado al fin de la prueba
