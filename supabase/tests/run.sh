@@ -20,16 +20,23 @@ psql_run -f "$here/stub_auth.sql"
 psql_run -f "$here/stub_storage.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
-# Las migraciones que siguen al freno son idempotentes. Se corren otra vez las tres últimas, las dos de
-# B7 y la del plan Gratis de B8, para comprobarlo. La de B8 va al final, porque vuelve a cerrar Party y
-# los apuntes de la nube que las de antes dejan abiertos
-for migration in $(ls "$here"/../migrations/*.sql | tail -3); do psql_run -f "$migration"; done
+# Las migraciones que siguen al freno son idempotentes. Se corren otra vez las dos de B7, la del plan
+# Gratis de B8 y las tres de pagos de B10, para comprobarlo. La de B8 va después de las de B7 porque
+# vuelve a cerrar Party y los apuntes de la nube que 20261018000001 deja abiertos. Las de B10 van al
+# final porque 20261019000001 trae otra versión de apply_payment_notice
+for name in 20261018000001_party_cloud 20261019000001_referral_first_charge 20261021000001_free_plan_locks \
+  20261022000001_billing_emails 20261022000002_billing_plans 20261022000003_invoice_requests; do
+  psql_run -f "$here/../migrations/$name.sql"
+done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
-# y repetirse sin daño sobre una base ya migrada
+# y repetirse sin daño sobre una base ya migrada. ejecutar-en-sql-editor.sql ya trae las piezas de B10,
+# así que pegarlo otra vez no deshace los pagos de B10
 psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
 psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
 psql_run -f "$here/../manual/party-dueno-al-borrar-cuenta.sql"
 psql_run -f "$here/../manual/party-dueno-al-borrar-cuenta.sql"
+psql_run -f "$here/../manual/pagos-b10.sql"
+psql_run -f "$here/../manual/pagos-b10.sql"
 psql_run -f "$here/rls_test.sql"
 psql_run -f "$here/device_barrier_test.sql"
 psql_run -f "$here/sync_test.sql"
@@ -46,3 +53,6 @@ psql_run -f "$here/plan_prices_test.sql"
 psql_run -f "$here/avatars_test.sql"
 psql_run -f "$here/party_cloud_test.sql"
 psql_run -f "$here/free_plan_locks_test.sql"
+psql_run -f "$here/billing_emails_test.sql"
+psql_run -f "$here/billing_plans_test.sql"
+psql_run -f "$here/invoice_requests_test.sql"
