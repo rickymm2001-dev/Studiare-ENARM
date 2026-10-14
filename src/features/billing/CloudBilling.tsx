@@ -239,7 +239,9 @@ export function CloudRequiredCard({ userId }: { userId: string }) {
           ? need.sent(email)
           : result.reason === 'rate_limited'
             ? t.cloud.rateLimited
-            : t.cloud.failedBody,
+            : result.reason === 'invitation_required'
+              ? t.accounts.signup.invitationRequired
+              : t.cloud.failedBody,
       );
     } finally {
       setBusy(false);

@@ -12,9 +12,10 @@
 --   - Segundo factor para médicos, admins y dueño (respuesta 30). current_app_role, y con ella is_admin
 --     y todas las políticas y funciones que las usan, dan el rol del equipo solo a una sesión aal2
 --     cuando el servidor lo pide. Lo pide la bandera requireMfa de la clave feature_flags, la misma que
---     lee la app para pedir el alta del factor, así que se prende o se apaga sin otra migración. Sin la
---     bandera queda apagado. El alumno no cambia en nada, porque su rol ya es alumno. assigned_app_role
---     es el rol guardado, sin esa condición, para las reglas que protegen en lugar de dar permisos
+--     lee la app para pedir el alta del factor, así que se prende o se apaga sin otra migración. Solo el
+--     booleano true la prende, igual que en la app. Sin la bandera o con otro valor queda apagado. El
+--     alumno no cambia en nada, porque su rol ya es alumno. assigned_app_role es el rol guardado, sin
+--     esa condición, para las reglas que protegen en lugar de dar permisos
 --   - La política assignments_select cambia para que el médico que lee sus asignaciones también cuente
 --     con el rol con segundo factor. Sigue en la lista abierta a propósito de device_barrier_test.sql
 --   - El disparador user_roles_protect_owner impide que el dueño se borre a sí mismo con borrar mi
@@ -43,18 +44,15 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 -- Si el servidor pide segundo factor al equipo. Es la bandera requireMfa de feature_flags, la misma que
--- lee la app. Sin la clave o sin la bandera, no. Un valor que no es booleano cuenta como sí, para que un
--- error de dedo no apague la protección
+-- lee la app. Solo el booleano true la prende, como en la app, que con un valor que no es booleano
+-- descarta todas las banderas y no pide el código. Así la app y la base nunca piden cosas distintas. Sin
+-- la clave, sin la bandera o con cualquier otro valor, como "true" en texto o 1, queda apagada
 create or replace function public.staff_mfa_required() returns boolean
 language sql stable security definer set search_path = public as $$
-  select case
-    when s.flag is null or jsonb_typeof(s.flag) = 'null' then false
-    when jsonb_typeof(s.flag) = 'boolean' then s.flag = 'true'::jsonb
-    else true
-  end
-  from (
-    select (select value -> 'requireMfa' from public.platform_settings where key = 'feature_flags') as flag
-  ) s
+  select coalesce(
+    (select value -> 'requireMfa' from public.platform_settings where key = 'feature_flags') = 'true'::jsonb,
+    false
+  )
 $$;
 
 -- Rol con el que cuenta cada política y cada función. Médico, admin o dueño solo con sesión aal2 cuando
@@ -206,7 +204,9 @@ begin
   end if;
 end $$;
 
--- Las invitaciones con la marca de si ese correo ya creó su cuenta. Solo el dueño y los admins
+-- Las invitaciones con la marca de si ese correo ya creó su cuenta. Solo el dueño y los admins. Pedir el
+-- código ya crea la fila en auth.users, así que cuenta solo quien confirmó su correo con el enlace, con
+-- el código o con Google
 create or replace function public.admin_list_invitations()
 returns table (email text, invited_at timestamptz, registered boolean)
 language plpgsql stable security definer set search_path = public, pg_temp as $$
@@ -216,7 +216,10 @@ begin
   end if;
   return query
     select i.email, i.created_at,
-           exists (select 1 from auth.users u where lower(u.email) = i.email)
+           exists (
+             select 1 from auth.users u
+             where lower(u.email) = i.email and u.email_confirmed_at is not null
+           )
     from public.signup_invitations i
     order by i.created_at desc, i.email
     limit 500;

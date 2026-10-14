@@ -1,12 +1,14 @@
 // Une la cuenta de la nube con el perfil de este navegador (D-075). Si ya hay un perfil con ese
-// correo se usa. Si no, se crea uno con el alias de la nube, así el alumno entra igual desde un
-// dispositivo nuevo. Si entró con Google desde Crear cuenta, el perfil nace con lo que llenó en el
-// registro (B9). Después pone de acuerdo con la nube la foto (B2) y los datos opcionales (H29), y gana
-// lo más reciente.
+// correo se usa. Si no, se crea uno, así el alumno entra igual desde un dispositivo nuevo. Si entró con
+// Google desde Crear cuenta, el perfil nace con lo que llenó en el registro (B9). Un perfil que nace
+// sin formulario no vio el aviso, así que antes de entrar se revisa con la nube si la cuenta ya completó
+// su registro en otro lado. Después pone de acuerdo con la nube la foto (B2) y los datos opcionales
+// (H29), y gana lo más reciente.
 import type { DataApi } from '@/data/context';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   readCloudAccount,
+  readCloudSignup,
   recordSignupSource,
   saveCloudAccount,
   toCloudAccount,
@@ -30,15 +32,23 @@ import {
 import type { PendingSignup } from '@/data/cloud/pendingSignup';
 import { ACCOUNT_DETAIL_KEYS, type Account } from '@/data/schemas/people';
 import { EMPTY_DETAILS, findAccountByEmail, registerAccount, sameAvatarChoice } from './account';
+import { acceptedNoticeVersion, recordInitialConsents } from './profile';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
-/** Alias para un perfil nuevo. El de la nube o la parte del correo antes de la arroba */
-export function aliasFor(identity: Pick<CloudIdentity, 'alias' | 'email'>): string {
+/**
+ * Alias de un perfil que todavía no lo elige. Es el mismo que pone la base a una cuenta nueva
+ * (handle_new_user). Completa tu registro lo deja vacío para que el alumno escriba el suyo
+ */
+export const PLACEHOLDER_ALIAS = 'Alumno';
+
+/**
+ * Alias para un perfil nuevo. El que el alumno eligió en la nube, o Alumno. Nunca sale del correo,
+ * porque la parte antes de la arroba suele ser el nombre real (B9)
+ */
+export function aliasFor(identity: Pick<CloudIdentity, 'alias'>): string {
   const fromCloud = identity.alias?.trim();
-  if (fromCloud && fromCloud !== 'Alumno') return fromCloud.slice(0, 40);
-  const local = identity.email.split('@')[0]?.trim() ?? '';
-  return (local || 'Alumno').slice(0, 40);
+  return fromCloud ? fromCloud.slice(0, 40) : PLACEHOLDER_ALIAS;
 }
 
 export interface LinkedProfile {
@@ -50,7 +60,9 @@ export interface LinkedProfile {
 
 /**
  * Perfil local que corresponde a la cuenta de la nube. signup es lo que el alumno llenó en Crear cuenta
- * antes de ir a Google. Solo se usa si el perfil se crea ahora
+ * antes de ir a Google. Solo se usa si el perfil se crea ahora. Sin él, el perfil nace sin formulario,
+ * sin decisiones bajo el aviso y sin la confirmación de edad, y no entra hasta completar su registro
+ * o hasta que la nube diga que ya lo completó (B9)
  */
 export async function linkCloudIdentity(
   api: Api,
@@ -78,6 +90,7 @@ export async function linkCloudIdentity(
           email: identity.email,
           dailyGoal: { metric: 'cards', value: 20 },
           details: EMPTY_DETAILS,
+          noticeSeen: false,
         },
   );
   if (result.ok) return { userId: result.user.id, created: true };
@@ -153,29 +166,39 @@ async function reconcileAvatar(
 
 /**
  * Pone de acuerdo los datos opcionales (H29). Lo que manda la nube se copia a este navegador, salvo
- * que el alumno haya guardado otra cosa mientras tanto. Devuelve las columnas que van a la fila, o null
- * para no tocarlas. Un dispositivo sin fecha nunca manda vacíos
+ * que el alumno haya guardado otra cosa mientras tanto. Lo que llenó en el registro entra campo por
+ * campo y pierde su marca al juntarse. Devuelve las columnas que van a la fila, o null para no
+ * tocarlas. Un dispositivo sin fecha nunca manda vacíos
  */
 async function reconcileDetails(
   api: Pick<DataApi, 'repos'>,
   account: Account,
   remote: DetailsSide,
 ): Promise<DetailColumns | null> {
-  const local = { values: detailValuesOf(account), changedAt: account.detailsChangedAt ?? null };
+  const fromSignup = account.detailsFromSignup === true;
+  const local = {
+    values: detailValuesOf(account),
+    changedAt: account.detailsChangedAt ?? null,
+    fromSignup,
+  };
   const plan = planDetailsSync(local, remote);
-  if (plan.pull) {
+  if (plan.pull || fromSignup) {
     const fresh = await api.repos.accounts.get(account.userId);
     if (!fresh) return plan.push;
     const untouched =
       fresh.detailsChangedAt === account.detailsChangedAt &&
       ACCOUNT_DETAIL_KEYS.every((key) => fresh[key] === account[key]);
     if (untouched) {
-      await api.repos.accounts.put({
+      const next: Account = {
         ...fresh,
-        ...plan.pull.values,
-        ...(plan.pull.changedAt ? { detailsChangedAt: plan.pull.changedAt } : {}),
+        ...plan.pull?.values,
+        ...(plan.pull?.changedAt ? { detailsChangedAt: plan.pull.changedAt } : {}),
         updatedAt: new Date().toISOString(),
-      });
+      };
+      // Lo del registro ya se juntó. Si la subida falla, la siguiente vuelve a juntar campo por campo
+      // sin fecha, o compara fechas si tomó la de la nube, y en los dos casos no se pierde nada
+      delete next.detailsFromSignup;
+      await api.repos.accounts.put(next);
     }
   }
   return plan.push;
@@ -251,24 +274,49 @@ export async function pushLocalAccount(
 }
 
 /**
- * Si una cuenta que entró con Google, sin pasar por Crear cuenta, todavía debe confirmar su edad y
- * aceptar el aviso (B9). Las cuentas que entraron con el correo ya lo hicieron en el formulario. Si
- * la nube no se pudo leer no se pide nada, porque no se sabe
+ * Si el perfil de este navegador ya pasó por un registro con el aviso a la vista. Es así con la edad
+ * confirmada (Crear cuenta, Completa tu registro o copiada de la nube) o con alguna decisión bajo una
+ * versión del aviso, como los perfiles de antes de B9. Un perfil que nació sin formulario no tiene
+ * ninguna de las dos (B9)
  */
-export async function signupCompletionNeeded(
+export async function hasLocalSignup(
   api: Pick<DataApi, 'repos'>,
-  cloud: Pick<SupabaseClient, 'from'>,
-  identity: Pick<CloudIdentity, 'authId' | 'provider'>,
   userId: string,
 ): Promise<boolean> {
-  if (!identity.provider || identity.provider === 'email') return false;
   const account = await api.repos.accounts.get(userId);
-  if (!account || account.adultConfirmedAt) return false;
-  const remote = await readCloudAccount(cloud, identity.authId);
-  if (remote.status !== 'ok') return false;
-  if (remote.adultConfirmedAt) {
+  if (account?.adultConfirmedAt) return true;
+  return (await acceptedNoticeVersion(api, userId)) !== null;
+}
+
+/**
+ * Qué falta para un perfil que nació sin formulario. complete, la nube ya tiene su registro y se copia
+ * aquí. required, debe completar su registro. unknown, la nube no se pudo leer y no se deja pasar
+ */
+export type CloudSignupCheck = 'complete' | 'required' | 'unknown';
+
+/**
+ * Revisa con la nube un perfil que nació sin formulario (B9). Si la cuenta ya confirmó su edad o ya
+ * aceptó una versión del aviso, como una cuenta de antes de B9 o una que completó su registro en otro
+ * dispositivo, lo copia aquí. La edad con su fecha y, sin ninguna decisión todavía, cada finalidad
+ * apagada bajo la versión que la cuenta aceptó, para que un aviso más nuevo se pida después como en
+ * cualquier perfil. Decide por datos y no por cómo entró la cuenta
+ */
+export async function resolveCloudSignup(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+  userId: string,
+): Promise<CloudSignupCheck> {
+  const remote = await readCloudSignup(cloud, authId);
+  if (remote.status === 'failed') return 'unknown';
+  if (!remote.adultConfirmedAt && !remote.noticeVersion) return 'required';
+  const account = await api.repos.accounts.get(userId);
+  if (account && remote.adultConfirmedAt && !account.adultConfirmedAt) {
     await api.repos.accounts.put({ ...account, adultConfirmedAt: remote.adultConfirmedAt });
-    return false;
   }
-  return true;
+  const user = await api.repos.users.get(userId);
+  if (user && remote.noticeVersion && (await acceptedNoticeVersion(api, userId)) === null) {
+    await recordInitialConsents(api, user, remote.noticeVersion);
+  }
+  return 'complete';
 }

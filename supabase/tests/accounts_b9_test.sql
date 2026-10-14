@@ -71,12 +71,15 @@ create or replace function pg_temp.require_mfa(p_flag jsonb) returns void langua
 $$;
 
 -- ===================================================================== Usuarios
--- B1 alumna, B2 médica, B3 admin, B5 alumna invitada que ya tenía cuenta. El dueño es el de rls_test
-insert into auth.users (id, email, raw_user_meta_data) values
-  ('b9000000-0000-0000-0000-000000000001', 'b9-alumna@x.mx', '{"alias":"Alumna B9"}'),
-  ('b9000000-0000-0000-0000-000000000002', 'b9-medica@x.mx', '{"alias":"Médica B9"}'),
-  ('b9000000-0000-0000-0000-000000000003', 'b9-admin@x.mx', '{"alias":"Admin B9"}'),
-  ('b9000000-0000-0000-0000-000000000005', 'b9-ya-tenia@x.mx', '{"alias":"Ya tenía B9"}');
+-- B1 alumna, B2 médica, B3 admin, B5 alumna invitada que ya tenía cuenta y confirmó su correo, B8
+-- invitada que pidió el código y nunca lo abrió, así que Supabase ya creó su fila sin confirmarla. El
+-- dueño es el de rls_test
+insert into auth.users (id, email, raw_user_meta_data, email_confirmed_at) values
+  ('b9000000-0000-0000-0000-000000000001', 'b9-alumna@x.mx', '{"alias":"Alumna B9"}', now()),
+  ('b9000000-0000-0000-0000-000000000002', 'b9-medica@x.mx', '{"alias":"Médica B9"}', now()),
+  ('b9000000-0000-0000-0000-000000000003', 'b9-admin@x.mx', '{"alias":"Admin B9"}', now()),
+  ('b9000000-0000-0000-0000-000000000005', 'b9-ya-tenia@x.mx', '{"alias":"Ya tenía B9"}', now()),
+  ('b9000000-0000-0000-0000-000000000008', 'b9-sin-abrir@x.mx', '{}', null);
 update public.user_roles set role = 'physician' where user_id = 'b9000000-0000-0000-0000-000000000002';
 update public.user_roles set role = 'admin' where user_id = 'b9000000-0000-0000-0000-000000000003';
 
@@ -103,7 +106,8 @@ insert into public.review_assignments (question_id, physician_id) values
   ('b9000000-0000-0000-0000-0000000000b1', 'b9000000-0000-0000-0000-000000000002');
 
 -- Invitaciones que mete el dueño desde el editor de SQL. El correo se guarda limpio
-insert into public.signup_invitations (email) values ('  Invitada@B9.MX '), ('b9-ya-tenia@x.mx');
+insert into public.signup_invitations (email) values
+  ('  Invitada@B9.MX '), ('b9-ya-tenia@x.mx'), ('b9-sin-abrir@x.mx');
 
 -- ===================================================================== H1. Registro cerrado
 select pg_temp.expect(
@@ -308,6 +312,18 @@ select pg_temp.expect(
   and not (select registered from public.admin_list_invitations() where email = 'invitada@b9.mx'),
   'I2. La lista no distingue quién ya creó su cuenta'
 );
+-- Pedir el código crea la fila de auth.users, pero sin abrir el correo todavía no creó su cuenta
+select pg_temp.expect(
+  not (select registered from public.admin_list_invitations() where email = 'b9-sin-abrir@x.mx'),
+  'I2. Contó como cuenta creada a quien pidió el código y nunca confirmó su correo'
+);
+reset role;
+update auth.users set email_confirmed_at = now() where id = 'b9000000-0000-0000-0000-000000000008';
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003');
+select pg_temp.expect(
+  (select registered from public.admin_list_invitations() where email = 'b9-sin-abrir@x.mx'),
+  'I2. Al confirmar su correo no contó como cuenta creada'
+);
 rollback;
 
 -- ===================================================================== M1. Sin la bandera nada cambia
@@ -467,18 +483,39 @@ select pg_temp.expect(
 );
 rollback;
 
--- ===================================================================== M5. Un valor raro en la bandera la prende
+-- ===================================================================== M5. Solo el booleano true prende la bandera
+-- Igual que la app, que con un valor que no es booleano descarta las banderas y no pide el código. Así
+-- la app y la base nunca piden cosas distintas
 begin;
-select pg_temp.require_mfa('"sí"'::jsonb);
-select pg_temp.expect(public.staff_mfa_required(), 'M5. Un valor que no es booleano apagó el segundo factor');
-select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal1');
-select pg_temp.expect(not public.is_admin(), 'M5. Con un valor raro el admin sin factor siguió siendo admin');
+do $$
+declare
+  v_flag text;
+begin
+  foreach v_flag in array array['"sí"', '"true"', '1', '{}', '[true]', 'null', 'false'] loop
+    perform pg_temp.require_mfa(v_flag::jsonb);
+    if public.staff_mfa_required() then
+      raise exception 'FALLA M5. La bandera con % prendió el segundo factor', v_flag;
+    end if;
+  end loop;
+  update public.platform_settings set value = '[]'::jsonb where key = 'feature_flags';
+  if public.staff_mfa_required() then
+    raise exception 'FALLA M5. Una clave sin objeto prendió el segundo factor';
+  end if;
+  update public.platform_settings set value = '"requireMfa"'::jsonb where key = 'feature_flags';
+  if public.staff_mfa_required() then
+    raise exception 'FALLA M5. Una clave de texto prendió el segundo factor';
+  end if;
+end $$;
 rollback;
 begin;
-select pg_temp.require_mfa('null'::jsonb);
-select pg_temp.expect(not public.staff_mfa_required(), 'M5. Un null en la bandera la prendió');
-update public.platform_settings set value = '[]'::jsonb where key = 'feature_flags';
-select pg_temp.expect(not public.staff_mfa_required(), 'M5. Una clave sin objeto la prendió');
+select pg_temp.require_mfa('"sí"'::jsonb);
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal1');
+select pg_temp.expect(public.is_admin(),
+  'M5. Con un valor que no es booleano el admin sin factor dejó de ser admin, y la app no le pide el código');
+rollback;
+begin;
+select pg_temp.require_mfa('true'::jsonb);
+select pg_temp.expect(public.staff_mfa_required(), 'M5. El booleano true no prendió el segundo factor');
 rollback;
 
 -- ===================================================================== R1. Solo el dueño restablece el segundo factor

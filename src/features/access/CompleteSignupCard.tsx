@@ -1,12 +1,13 @@
-// Completa tu registro (B9 del plan del cambio). Una cuenta que entró con Google desde Ya tengo cuenta,
-// o que perdió lo que llenó en Crear cuenta, todavía no confirmó su edad ni aceptó el aviso. Antes de
-// seguir lo hace aquí, con su alias, la especialidad que busca, cómo nos conoció y los permisos
-// opcionales, igual que en el registro. Si no quiere, sale.
+// Completa tu registro (B9 del plan del cambio). Un perfil que nació sin formulario, por ejemplo al entrar
+// por primera vez desde Ya tengo cuenta con el correo o con Google, todavía no confirmó su edad ni aceptó
+// el aviso. Antes de seguir lo hace aquí, con su alias, la especialidad que busca, cómo nos conoció y los
+// permisos opcionales, igual que en el registro. Hasta guardar no se sube nada a la nube. Si no quiere,
+// sale.
 import { LogOut, UserCheck } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router';
 import { useAccess } from '@/app/accessState';
-import { pushAccountIfLinked, useCloud } from '@/app/cloudState';
+import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
@@ -16,8 +17,9 @@ import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Account, User } from '@/data/schemas/people';
-import { completeSignup, updateAccount } from '@/data/usecases/account';
-import { setConsent, updateProfile } from '@/data/usecases/profile';
+import { completeSignup } from '@/data/usecases/account';
+import { PLACEHOLDER_ALIAS } from '@/data/usecases/cloudLink';
+import { decideAllConsents, updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { Button } from '@/ui/components/button';
@@ -31,7 +33,6 @@ import {
   TargetSpecialtyField,
 } from '../shared/SignupFields';
 import {
-  CONSENT_PURPOSES,
   EMPTY_HEARD_FROM,
   NO_CONSENTS,
   heardFromOf,
@@ -49,17 +50,19 @@ export function CompleteSignupCard({ userId }: { userId: string }) {
   }, [api.repos, userId]);
   if (data === null) return null;
   if (data === undefined) return <LoadingState />;
-  // El formulario empieza con el alias y la especialidad que ya tiene el perfil
+  // El formulario empieza con la especialidad que ya tiene el perfil y con el alias solo si el alumno
+  // ya eligió uno, por ejemplo en Crear cuenta en otro dispositivo. El de relleno no se muestra
   return <CompleteSignupForm user={data.user} account={data.account} />;
 }
 
 function CompleteSignupForm({ user, account }: { user: User; account: Account }) {
   const api = useDataApi();
   const text = t.accounts.completeSignup;
+  const signIn = usePreferences((state) => state.signIn);
   const signOut = usePreferences((state) => state.signOut);
-  const setSignupFor = useAccess((store) => store.setSignupFor);
+  const finishSignup = useAccess((store) => store.finishSignup);
   const cloudState = useCloud((store) => store.state);
-  const [alias, setAlias] = useState(user.alias);
+  const [alias, setAlias] = useState(user.alias === PLACEHOLDER_ALIAS ? '' : user.alias);
   const [specialty, setSpecialty] = useState(account.targetSpecialty);
   const [heardFrom, setHeardFrom] = useState<HeardFromDraft>(EMPTY_HEARD_FROM);
   const [consents, setConsents] = useState(NO_CONSENTS);
@@ -79,26 +82,33 @@ function CompleteSignupForm({ user, account }: { user: User; account: Account })
     setStatus('saving');
     try {
       if (alias.trim() !== user.alias) await updateProfile(api, user, { alias: alias.trim() });
-      const withSpecialty =
-        specialty !== account.targetSpecialty
-          ? await updateAccount(api, account, { targetSpecialty: specialty })
-          : account;
-      await completeSignup(api, withSpecialty, {
+      // La especialidad entra como la del registro, sin fecha, y no pisa la de la nube (H29)
+      await completeSignup(api, account, {
         adultConfirmedAt: new Date().toISOString(),
         heardFrom: answer,
+        targetSpecialty: specialty,
       });
-      for (const purpose of CONSENT_PURPOSES) {
-        if (consents[purpose]) await setConsent(api, user, purpose, true);
-      }
-      // La aceptación del aviso queda también en la nube, como al registrarse
+      // Aquí acepta el aviso. Cada finalidad queda bajo esta versión, prendida solo si la marcó (4.27)
+      await decideAllConsents(api, user, consents);
+      // La aceptación del aviso queda también en la nube, como al registrarse. Si la red falla, el
+      // puente la registra al subir la cuenta, con la versión que quedó en este perfil
       if (cloudState.status === 'linked') {
-        const cloud = await loadCloud();
-        if (cloud) {
-          await recordPrivacyAcceptance(cloud, cloudState.identity.authId, PRIVACY_NOTICE_VERSION);
+        try {
+          const cloud = await loadCloud();
+          if (cloud) {
+            await recordPrivacyAcceptance(
+              cloud,
+              cloudState.identity.authId,
+              PRIVACY_NOTICE_VERSION,
+            );
+          }
+        } catch {
+          // Sigue. Lo de este navegador ya quedó guardado
         }
       }
-      void pushAccountIfLinked(api, user.id);
-      setSignupFor(null);
+      // Ya con su registro, este navegador abre su perfil y el puente sube la cuenta y sincroniza
+      signIn(user.id);
+      finishSignup();
     } catch {
       setStatus('failed');
     }

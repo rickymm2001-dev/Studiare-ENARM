@@ -175,6 +175,13 @@ export const AccountSchema = z.strictObject({
    * borra en la nube lo que otro dispositivo ya guardó (H29, B9). Falta si nunca los guardó aquí
    */
   detailsChangedAt: UtcDateTimeSchema.optional(),
+  /**
+   * Los datos opcionales vienen del registro (Crear cuenta, Completa tu registro o agregar el correo a
+   * un perfil viejo), sin fecha, y todavía no se juntan con la nube. En la siguiente sincronización
+   * entran campo por campo, sin mandar vacíos ni pisar lo que la nube ya tiene, y la marca se quita.
+   * Guardar en Tus datos también la quita, porque desde ahí los datos llevan su fecha (H29, B9)
+   */
+  detailsFromSignup: z.literal(true).optional(),
   /** Cuándo confirmó que tiene la edad mínima para crear la cuenta (pregunta 45, B9) */
   adultConfirmedAt: UtcDateTimeSchema.optional(),
   /**

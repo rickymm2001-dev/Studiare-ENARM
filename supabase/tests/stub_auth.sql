@@ -8,6 +8,8 @@ create table auth.users (
   id uuid primary key,
   email text,
   raw_user_meta_data jsonb not null default '{}'::jsonb,
+  -- Como en Supabase, vacío hasta que la persona confirma su correo con el enlace o el código (B9)
+  email_confirmed_at timestamptz,
   created_at timestamptz not null default now()
 );
 -- Igual que en Supabase. Los claims del token viajan en request.jwt.claims como JSON. El ajuste

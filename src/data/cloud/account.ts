@@ -5,6 +5,7 @@
 // solo viajan cuando el alumno los guardó, con su fecha (H29, B9).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RoleSchema, type Role } from '@/data/schemas/common';
+import { ConsentSchema } from '@/data/schemas/people';
 import {
   DETAIL_SELECT,
   parseRemoteDetails,
@@ -13,6 +14,7 @@ import {
   type DetailsSide,
 } from './accountDetails';
 import { parseRemoteAvatar, type CloudAvatarColumns, type RemoteAvatarState } from './avatars';
+import { settleWithin } from './timeout';
 
 export interface CloudIdentity {
   authId: string;
@@ -255,9 +257,12 @@ export async function saveCloudAccount(
   return !accountResult.error && !profileResult.error;
 }
 
-/** Registra que aceptó el aviso de privacidad, una sola vez por versión */
+/**
+ * Registra que aceptó el aviso de privacidad, una sola vez por versión. Si no se pudo saber si ya
+ * estaba, no escribe nada y se intenta en la siguiente sincronización, para no duplicar la constancia
+ */
 export async function recordPrivacyAcceptance(
-  cloud: SupabaseClient,
+  cloud: Pick<SupabaseClient, 'from'>,
   authId: string,
   noticeVersion: string,
 ): Promise<void> {
@@ -267,10 +272,73 @@ export async function recordPrivacyAcceptance(
     .eq('user_id', authId)
     .eq('notice_version', noticeVersion)
     .limit(1);
-  if ((existing.data ?? []).length > 0) return;
+  const rows: unknown = existing.data;
+  if (existing.error || (Array.isArray(rows) && rows.length > 0)) return;
   await cloud
     .from('privacy_acceptances')
     .insert({ user_id: authId, notice_version: noticeVersion });
+}
+
+/**
+ * Lo que la nube sabe del registro de la cuenta (B9). Cuándo confirmó su edad y la versión más reciente
+ * del aviso que aceptó. failed si no se pudo leer, y entonces quien llama no deja pasar
+ */
+export type CloudSignupRead =
+  | { status: 'ok'; adultConfirmedAt: string | null; noticeVersion: string | null }
+  | { status: 'failed' };
+
+/** Una versión del aviso como la guarda la app, o null */
+function noticeVersionOf(value: unknown): string | null {
+  const parsed = ConsentSchema.shape.noticeVersion.safeParse(value);
+  return parsed.success ? parsed.data : null;
+}
+
+/** Lo más que se espera a la nube para saber si la cuenta ya completó su registro */
+export const SIGNUP_READ_TIMEOUT_MS = 10_000;
+
+async function askCloudSignup(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+): Promise<CloudSignupRead> {
+  try {
+    const [account, acceptances] = await Promise.all([
+      cloud
+        .from('private_accounts')
+        .select('adult_confirmed_at')
+        .eq('user_id', authId)
+        .maybeSingle(),
+      cloud
+        .from('privacy_acceptances')
+        .select('notice_version')
+        .eq('user_id', authId)
+        .order('notice_version', { ascending: false })
+        .limit(1),
+    ]);
+    if (account.error || acceptances.error) return { status: 'failed' };
+    const row = account.data as { adult_confirmed_at?: unknown } | null;
+    const rows: unknown = acceptances.data;
+    const [latest] = (Array.isArray(rows) ? rows : []) as { notice_version?: unknown }[];
+    return {
+      status: 'ok',
+      adultConfirmedAt: utcOrNull(row?.adult_confirmed_at),
+      noticeVersion: noticeVersionOf(latest?.notice_version),
+    };
+  } catch {
+    return { status: 'failed' };
+  }
+}
+
+/**
+ * Lee si la cuenta ya completó su registro en algún dispositivo. Sin fila responde ok sin nada, como una
+ * cuenta que nunca lo completó. La fila de la cuenta solo la ve el dispositivo activo, así que se llama
+ * después de reclamarlo. failed si falla o tarda más de timeoutMs
+ */
+export function readCloudSignup(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+  timeoutMs: number = SIGNUP_READ_TIMEOUT_MS,
+): Promise<CloudSignupRead> {
+  return settleWithin(askCloudSignup(cloud, authId), timeoutMs, { status: 'failed' });
 }
 
 /**

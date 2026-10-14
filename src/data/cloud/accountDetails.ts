@@ -1,8 +1,9 @@
 // Datos opcionales de la cuenta entre dispositivos (hallazgo H29, B9 del plan del cambio). Año de
 // nacimiento, sexo, estado, situación, intento y especialidad viajan juntos con la fecha en que el
-// alumno los guardó (details_changed_at), igual que la foto con avatar_changed_at (B2). Gana la versión
-// más reciente. Un dispositivo que nunca los guardó no tiene fecha y nunca manda vacíos, así que no
-// puede borrar en la nube lo que el alumno guardó en otro dispositivo. Funciones puras, sin red.
+// alumno los guardó en Tus datos (details_changed_at), igual que la foto con avatar_changed_at (B2).
+// Gana la versión más reciente. Un dispositivo que nunca los guardó no tiene fecha y nunca manda
+// vacíos, así que no puede borrar en la nube lo que el alumno guardó en otro dispositivo. Lo que llenó
+// en el registro tampoco lleva fecha y entra campo por campo. Funciones puras, sin red.
 import {
   ACCOUNT_DETAIL_KEYS,
   AccountSchema,
@@ -29,6 +30,11 @@ export const DETAIL_SELECT = [...Object.values(DETAIL_COLUMNS), 'details_changed
 export interface DetailsSide {
   values: DetailValues;
   changedAt: string | null;
+  /**
+   * Solo del lado de este navegador. Los datos sin fecha vienen del registro y todavía no se juntan con
+   * la nube, así que entran campo por campo aunque la nube tenga fecha
+   */
+  fromSignup?: boolean;
 }
 
 /** Lo que va a la fila. Solo columnas de datos y su fecha */
@@ -102,10 +108,11 @@ const sameValues = (a: DetailValues, b: DetailValues) =>
 /**
  * Qué hacer con los datos. Con fecha en los dos lados gana la más reciente, completa, incluso si el
  * alumno borró algo a propósito. Con la misma fecha y datos distintos manda este navegador, que es el
- * dispositivo activo. Una fecha conocida gana a una desconocida. Sin fecha en ningún lado, como en
- * cuentas de antes de B9, se juntan campo por campo. Lo que falta de un lado se llena con el otro y,
- * si los dos tienen algo distinto, gana la nube para que todos los dispositivos terminen igual. Nunca se
- * manda un vacío sin fecha
+ * dispositivo activo. Una fecha conocida gana a una desconocida, salvo con lo que llenó en el registro.
+ * Sin fecha en ningún lado, como en cuentas de antes de B9, y con lo del registro, se juntan campo por
+ * campo. Lo que falta de un lado se llena con el otro y, si los dos tienen algo distinto, gana la nube
+ * para que todos los dispositivos terminen igual. Al juntar, este navegador toma la fecha de la nube.
+ * Nunca se manda un vacío sin fecha
  */
 export function planDetailsSync(local: DetailsSide, remote: DetailsSide): DetailsPlan {
   const localTime = timeOf(local.changedAt);
@@ -116,28 +123,34 @@ export function planDetailsSync(local: DetailsSide, remote: DetailsSide): Detail
       pull: null,
     };
   }
+  if (localTime === null && (local.fromSignup === true || remoteTime === null)) {
+    return mergeFieldByField(local.values, remote);
+  }
   if (remoteTime !== null && (localTime === null || remoteTime > localTime)) {
     return { push: null, pull: { values: { ...remote.values }, changedAt: remote.changedAt } };
   }
-  if (localTime !== null) {
-    // Misma fecha en los dos lados
-    return sameValues(local.values, remote.values)
-      ? { push: null, pull: null }
-      : {
-          push: { ...detailColumns(local.values), details_changed_at: local.changedAt },
-          pull: null,
-        };
-  }
+  // Misma fecha en los dos lados
+  return sameValues(local.values, remote.values)
+    ? { push: null, pull: null }
+    : {
+        push: { ...detailColumns(local.values), details_changed_at: local.changedAt },
+        pull: null,
+      };
+}
+
+/** Junta los datos campo por campo. Gana la nube en un choque y solo sube lo que la nube no tiene */
+function mergeFieldByField(values: DetailValues, remote: DetailsSide): DetailsPlan {
   const push: Partial<DetailValues> = {};
   const pull: Partial<DetailValues> = {};
   for (const key of ACCOUNT_DETAIL_KEYS) {
-    const mine = local.values[key];
+    const mine = values[key];
     const theirs = remote.values[key];
     if (theirs !== null && theirs !== mine) Object.assign(pull, { [key]: theirs });
     else if (theirs === null && mine !== null) Object.assign(push, { [key]: mine });
   }
+  const pulls = Object.keys(pull).length > 0;
   return {
     push: Object.keys(push).length > 0 ? detailColumns(push) : null,
-    pull: Object.keys(pull).length > 0 ? { values: pull, changedAt: null } : null,
+    pull: pulls || remote.changedAt !== null ? { values: pull, changedAt: remote.changedAt } : null,
   };
 }

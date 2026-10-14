@@ -31,6 +31,15 @@ describe('estado del segundo factor', () => {
     expect(await readMfaStatus(fake.cloud)).toEqual({ kind: 'unknown' });
   });
 
+  it('si Supabase no contesta a tiempo el estado es desconocido y no se queda esperando', async () => {
+    const fake = makeFakeCloud();
+    // listFactors pide la cuenta a /auth/v1/user, y el SDK no le pone tiempo límite
+    fake.cloud.auth.mfa.listFactors = () => new Promise(() => undefined);
+    const started = Date.now();
+    expect(await readMfaStatus(fake.cloud, 30)).toEqual({ kind: 'unknown' });
+    expect(Date.now() - started).toBeLessThan(2000);
+  });
+
   it('un factor que quedó sin verificar no cuenta como dado de alta', async () => {
     const fake = makeFakeCloud();
     fake.mfa.factors = [{ id: 'f0', factor_type: 'totp', status: 'unverified' }];

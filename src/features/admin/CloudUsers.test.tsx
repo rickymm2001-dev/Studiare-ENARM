@@ -8,6 +8,7 @@ import { useCloud } from '@/app/cloudState';
 import { DataProvider } from '@/data/DataProvider';
 import type { Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
+import { DESKTOP_QUERY } from '@/ui/hooks/use-media-query';
 import { CloudUsers } from './CloudUsers';
 
 const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
@@ -94,9 +95,24 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
   holder.cloud = null;
   useCloud.setState({ state: { status: 'off' } });
 });
+
+/** Una ventana de computadora, de 64rem o más. jsdom no trae matchMedia y se ve como teléfono */
+function onDesktop() {
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: query === DESKTOP_QUERY,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  }));
+}
 
 describe('usuarios con la cuenta de la nube', () => {
   it('lista las cuentas reales con su correo, su plan y su rol', async () => {
@@ -254,5 +270,62 @@ describe('dispositivo y segundo factor desde Usuarios (B9)', () => {
     expect(
       within(carla).queryByRole('button', { name: access.mfaReset.label('Carla') }),
     ).toBeNull();
+  });
+});
+
+describe('tabla en computadora y lista en el teléfono (H15 de la revisión de diseño de B2)', () => {
+  const access = t.accounts.admin;
+  const columns = access.users;
+
+  it('en el teléfono es una lista compacta, sin tabla, con el rol debajo del nombre', async () => {
+    setup('owner');
+    expect(await screen.findByRole('list', { name: columns.caption })).toBeVisible();
+    expect(screen.queryByRole('table')).toBeNull();
+    const beto = screen.getByText('Beto').closest('li') as HTMLElement;
+    expect(within(beto).getByLabelText(text.roleOf('Beto'))).toBeVisible();
+  });
+
+  it('desde 64rem es una tabla con encabezados y las acciones de cada cuenta en su fila', async () => {
+    const typing = userEvent.setup();
+    onDesktop();
+    const calls = setup('owner');
+    const table = await screen.findByRole('table', { name: columns.caption });
+    expect(screen.queryByRole('list', { name: columns.caption })).toBeNull();
+    expect(
+      within(table)
+        .getAllByRole('columnheader')
+        .map((header) => header.textContent),
+    ).toEqual([columns.account, columns.role, columns.plan, columns.joined, columns.actions]);
+
+    // Cada cuenta es el encabezado de su fila, con alias y correo
+    const beto = within(table).getByRole('row', { name: /Beto/ });
+    expect(within(beto).getByRole('rowheader')).toHaveTextContent('beto@ejemplo.mx');
+    // El selector del rol se nombra con el alias aunque su etiqueta no se vea
+    expect(within(beto).getByRole('combobox', { name: text.roleOf('Beto') })).toHaveValue(
+      'student',
+    );
+    expect(within(beto).getByRole('cell', { name: 'Mensual' })).toBeVisible();
+    // Liberar dispositivo por fila, y restablecer el segundo factor solo para alguien del equipo
+    expect(within(beto).queryByRole('button', { name: access.mfaReset.label('Beto') })).toBeNull();
+    const carla = within(table).getByRole('row', { name: /Carla/ });
+    expect(
+      within(carla).getByRole('button', { name: access.mfaReset.label('Carla') }),
+    ).toBeVisible();
+    // La propia fila no tiene acciones
+    const own = within(table).getByRole('row', { name: /Yo/ });
+    expect(within(own).queryByRole('button')).toBeNull();
+    expect(within(own).getByText(t.roles.names.owner)).toBeVisible();
+
+    // La confirmación queda en la misma fila
+    await typing.click(
+      within(beto).getByRole('button', { name: access.device.releaseLabel('Beto') }),
+    );
+    const confirm = within(beto).getByRole('group', { name: access.device.releaseLabel('Beto') });
+    await typing.click(within(confirm).getByRole('button', { name: access.confirm }));
+    expect(await screen.findByText(access.device.released('Beto'))).toBeVisible();
+    expect(calls.find((call) => call.name === 'admin_release_device')).toEqual({
+      name: 'admin_release_device',
+      args: { target: '22222222-2222-4222-8222-222222222222' },
+    });
   });
 });

@@ -40,28 +40,42 @@ export const accountsText = {
     googleOpening: 'Abriendo Google…',
     googleFailed: 'No pudimos abrir Google. Intenta de nuevo o usa tu correo.',
     googleCreateHint:
-      'Con Google no escribes tu correo. Usamos el de tu cuenta de Google y nada más de ella.',
+      'Con Google no escribes tu correo, usamos el de tu cuenta de Google. Google también nos manda tu nombre y tu foto de perfil. Se guardan junto con tu acceso, pero Studiare no los usa ni los muestra.',
     invitationOnly:
       'Por ahora Studiare abre solo con invitación. Usa el correo con el que te invitaron.',
     invitationRequired:
       'Ese correo no tiene invitación. Mientras preparamos el lanzamiento solo entran personas invitadas. Si te invitaron, usa el mismo correo de la invitación.',
   },
+  // Lo que Supabase manda de regreso cuando Google o el enlace del correo no dejan entrar
   oauthError: {
     title: 'No pudiste entrar con Google',
+    linkTitle: 'No pudiste entrar con el enlace',
     invitation_required:
       'Tu correo de Google no tiene invitación. Mientras preparamos el lanzamiento solo entran personas invitadas. Si te invitaron con otro correo, entra con ese.',
     cancelled: 'Cancelaste la entrada con Google. No se creó ninguna cuenta.',
     failed: 'Google o el servidor no respondieron. Intenta de nuevo o entra con tu correo.',
+    link_expired:
+      'El enlace venció o ya se usó. Pide otro correo en Ya tengo cuenta y entra con su enlace o con su código.',
+    link_failed:
+      'No pudimos abrir tu sesión con ese enlace. Pide otro correo en Ya tengo cuenta y entra con su enlace o con su código.',
     dismiss: 'Entendido',
   },
   completeSignup: {
     title: 'Completa tu registro',
     description:
-      'Entraste con Google. Antes de empezar confirma tu edad y acepta el aviso de privacidad.',
+      'Te falta un paso para empezar. Elige tu alias, confirma tu edad y acepta el aviso de privacidad.',
     save: 'Guardar y empezar',
     saving: 'Guardando…',
     failed: 'No se pudo guardar. Intenta de nuevo.',
     signOut: 'Salir sin completar',
+  },
+  // Mientras se revisa con la nube lo que falta para entrar
+  access: {
+    checkingSignup: 'Revisando tu registro…',
+    unknownTitle: 'No pudimos revisar tu registro',
+    unknownBody:
+      'Necesitamos la nube para saber si ya completaste tu registro. Revisa tu conexión e intenta de nuevo.',
+    signOut: 'Cerrar sesión',
   },
   mfa: {
     enrollTitle: 'Activa tu segundo factor',
@@ -148,6 +162,16 @@ export const accountsText = {
         network: 'Sin conexión con el servidor. Intenta de nuevo.',
         unknown: 'El servidor no pudo leer los conteos. Intenta más tarde.',
       },
+    },
+    // La tabla de cuentas desde 64rem y la lista del teléfono (H15 de la revisión de diseño de B2)
+    users: {
+      caption: 'Cuentas de la nube',
+      account: 'Cuenta',
+      role: 'Rol',
+      plan: 'Plan',
+      joined: 'Se registró',
+      actions: 'Acciones',
+      noPlan: 'Sin plan',
     },
     device: {
       release: 'Liberar dispositivo',

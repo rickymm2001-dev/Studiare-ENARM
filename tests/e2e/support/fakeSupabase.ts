@@ -16,6 +16,7 @@
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { Role } from '@/data/schemas/common';
 import {
   GATEWAY_CANCEL_PATH,
@@ -44,6 +45,11 @@ export interface FakeUser {
   createdAt: string;
   /** Con qué se creó la cuenta, como app_metadata.provider (B9) */
   provider: 'email' | 'google';
+  /**
+   * Cuándo confirmó su correo, como auth.users.email_confirmed_at. Pedir el código crea la cuenta sin
+   * confirmar. Se confirma al usar el código o al abrir el enlace, y con Google desde el inicio (B9)
+   */
+  emailConfirmedAt: string | null;
 }
 
 interface Session {
@@ -107,18 +113,33 @@ export interface FakeSupabaseServer {
   readonly url: string;
   /** Atiende también las peticiones de otro contexto, como si fuera otro navegador con la misma nube */
   attach(context: BrowserContext): Promise<void>;
+  /**
+   * Crea una cuenta como si ya hubiera completado su registro en otro dispositivo, con su edad confirmada
+   * y el aviso aceptado, igual que las cuentas de antes de B9. Las que crea la app al pedir el código o
+   * al volver de Google nacen sin eso, como en Supabase, y piden Completa tu registro si el perfil nace
+   * sin formulario. registered en false crea una así desde la prueba
+   */
   createUser(input: {
     email: string;
     alias?: string;
     role?: Role;
     provider?: 'email' | 'google';
+    registered?: boolean;
   }): FakeUser;
   userByEmail(email: string): FakeUser | undefined;
   /**
    * Un enlace del correo listo para abrir, como si el alumno hubiera pedido entrar y leído su correo.
-   * Crea la cuenta si no existe. Cada llamada abre una sesión nueva, igual que cada correo de verdad
+   * Crea la cuenta si no existe, ya registrada como con createUser. Cada llamada abre una sesión nueva,
+   * igual que cada correo de verdad
    */
   issueMagicLink(email: string, alias?: string): string;
+  /**
+   * La dirección a la que Supabase Auth regresa al abrir un enlace del correo que venció o que ya se
+   * usó, con el error en el fragmento como lo arma prepErrorRedirectURL de supabase/auth
+   */
+  expiredMagicLink(): string;
+  /** Las versiones del aviso que la cuenta aceptó en privacy_acceptances, en orden */
+  acceptancesOf(email: string): string[];
   /** Todos los correos "enviados", en orden */
   readonly emails: readonly FakeEmail[];
   /** El último correo que se "mandó" a esa dirección */
@@ -652,18 +673,22 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     alias?: string;
     role?: Role;
     provider?: 'email' | 'google';
+    registered?: boolean;
   }): FakeUser {
     const email = normalizeEmail(input.email);
     if (!email) throw new Error(`Correo inválido para el Supabase simulado: ${input.email}`);
     const existing = userByEmail(email);
     if (existing) return existing;
+    const createdAt = new Date(now()).toISOString();
+    const provider = input.provider ?? 'email';
     const user: FakeUser = {
       id: randomUUID(),
       email,
       alias: nonEmpty(input.alias?.trim(), 'Alumno'),
       role: input.role ?? 'student',
-      createdAt: new Date(now()).toISOString(),
-      provider: input.provider ?? 'email',
+      createdAt,
+      provider,
+      emailConfirmedAt: (input.registered ?? true) || provider === 'google' ? createdAt : null,
     };
     users.set(user.id, user);
     // Lo mismo que hace el trigger handle_new_user
@@ -679,9 +704,19 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       avatar: { kind: 'initials' },
       avatar_changed_at: null,
       details_changed_at: null,
-      adult_confirmed_at: null,
+      // Una cuenta que ya completó su registro en otro dispositivo trae su edad y su aviso aceptado
+      adult_confirmed_at: (input.registered ?? true) ? user.createdAt : null,
       updated_at: user.createdAt,
     });
+    if (input.registered ?? true) {
+      privacyAcceptances.push({
+        id: privacyAcceptances.length + 1,
+        user_id: user.id,
+        notice_version: PRIVACY_NOTICE_VERSION,
+        accepted_at: user.createdAt,
+        marketing_opt_out: false,
+      });
+    }
     return user;
   }
 
@@ -729,9 +764,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       aud: 'authenticated',
       role: 'authenticated',
       email: user.email,
-      email_confirmed_at: user.createdAt,
+      email_confirmed_at: user.emailConfirmedAt,
       phone: '',
-      confirmed_at: user.createdAt,
+      confirmed_at: user.emailConfirmedAt,
       last_sign_in_at: new Date(now()).toISOString(),
       app_metadata: { provider: user.provider, providers: [user.provider] },
       user_metadata: { alias: user.alias, email: user.email, email_verified: true, sub: user.id },
@@ -788,18 +823,18 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (!session || session.expiresAt <= now()) return { kind: 'invalid' };
     const user = users.get(session.userId);
     if (!user) return { kind: 'invalid' };
+    // Usar la sesión del enlace es haberlo abierto, que en Supabase confirma el correo
+    user.emailConfirmedAt ??= new Date(now()).toISOString();
     return { kind: 'user', user, session };
   }
 
   /**
    * Si el servidor pide segundo factor al equipo, con la bandera requireMfa de feature_flags, como
-   * staff_mfa_required de la migración 20261020000001
+   * staff_mfa_required de la migración 20261020000001. Solo el booleano true la prende
    */
   function mfaRequired(): boolean {
     const flags = settings.get('feature_flags')?.value;
-    const flag = isRecord(flags) ? flags.requireMfa : undefined;
-    if (flag === undefined || flag === null) return false;
-    return typeof flag === 'boolean' ? flag : true;
+    return isRecord(flags) && flags.requireMfa === true;
   }
 
   /** El rol con el que cuenta cada permiso. Sin aal2 el equipo cuenta como alumno (current_app_role) */
@@ -1395,7 +1430,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
               [...invitations].map((email) => ({
                 email,
                 invited_at: new Date(now()).toISOString(),
-                registered: userByEmail(email) !== undefined,
+                // Como admin_list_invitations, solo cuenta quien confirmó su correo
+                registered: (userByEmail(email)?.emailConfirmedAt ?? null) !== null,
               })),
             )
           : pgError('42501', 'Solo un administrador puede ver las invitaciones');
@@ -1658,7 +1694,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         }
         if (!signupAllowed(email)) return authError(403, 'unexpected_failure', INVITATION_REQUIRED);
         const alias = isRecord(args.data) ? asString(args.data.alias) : null;
-        user = createUser({ email, alias: alias ?? undefined });
+        // Como Supabase, pedir el código crea la cuenta sin registro. Lo completa la app
+        user = createUser({ email, alias: alias ?? undefined, registered: false });
       }
       sendEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`);
       return json({});
@@ -1676,6 +1713,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         return authError(403, 'otp_expired', 'Token has expired or is invalid');
       }
       otps.delete(email);
+      user.emailConfirmedAt ??= new Date(now()).toISOString();
       return json(sessionJson(createSession(user), user));
     }
     if (path === '/user' && request.method() === 'GET') {
@@ -1776,31 +1814,37 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   /**
    * El Google simulado (B9). Supabase lleva al navegador a /authorize, Google regresa a la app con la
-   * sesión en el fragmento, o con el error del gancho del registro en la consulta y el fragmento
+   * sesión en el fragmento, o con el error en la consulta y el fragmento. El error tiene la forma que
+   * arma redirectErrors de supabase/auth (internal/api/external.go). La consulta lleva error,
+   * error_description y, si el error es de Supabase, error_code aunque vaya vacío. El fragmento repite
+   * los que no van vacíos y agrega sb. El código de estado del error se vuelve error con oauthErrorMap,
+   * así que el 403 del gancho llega como access_denied. El gancho no pone código, y cancelar en Google
+   * llega como el access_denied de Google, sin código ni descripción
    */
   function handleAuthorize(url: URL): Reply {
     const back = url.searchParams.get('redirect_to') ?? `${appUrl}/`;
-    const fail = (error: string, code: string, description: string) => {
-      const params = new URLSearchParams({
-        error,
-        error_code: code,
-        error_description: description,
-      }).toString();
-      return redirect(`${back}?${params}#${params}`);
+    const fail = (error: string, description: string, code: string | null) => {
+      const query = new URLSearchParams({ error, error_description: description });
+      if (code !== null) query.set('error_code', code);
+      const hash = new URLSearchParams({ error });
+      if (description !== '') hash.set('error_description', description);
+      if (code) hash.set('error_code', code);
+      hash.set('sb', '');
+      return redirect(`${back}?${query.toString()}#${hash.toString()}`);
     };
     if (url.searchParams.get('provider') !== 'google') {
       return authError(400, 'validation_failed', 'Unsupported provider: provider is not enabled');
     }
-    if (server.googleAccount === null) {
-      return fail('access_denied', 'access_denied', 'The user denied the request');
-    }
+    if (server.googleAccount === null) return fail('access_denied', '', null);
     const email = normalizeEmail(server.googleAccount);
-    if (!email) return fail('server_error', 'unexpected_failure', 'Correo de Google inválido');
+    if (!email) {
+      return fail('server_error', 'Error getting user email from external provider', '');
+    }
     let user = userByEmail(email);
     if (!user) {
-      if (!signupAllowed(email))
-        return fail('server_error', 'unexpected_failure', INVITATION_REQUIRED);
-      user = createUser({ email, provider: 'google' });
+      // El gancho Before User Created rechaza con 403 y sin código de error
+      if (!signupAllowed(email)) return fail('access_denied', INVITATION_REQUIRED, '');
+      user = createUser({ email, provider: 'google', registered: false });
     }
     const session = createSession(user);
     const params = new URLSearchParams({
@@ -2102,6 +2146,21 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     issueMagicLink(email, alias) {
       const user = createUser({ email, ...(alias === undefined ? {} : { alias }) });
       return sendEmail(user, `${appUrl}/`).link;
+    },
+    expiredMagicLink() {
+      const hash = new URLSearchParams({
+        error: 'access_denied',
+        error_code: 'otp_expired',
+        error_description: 'Email link is invalid or has expired',
+        sb: '',
+      });
+      return `${appUrl}/#${hash.toString()}`;
+    },
+    acceptancesOf(email) {
+      const user = emailOf(email);
+      return privacyAcceptances
+        .filter((row) => row.user_id === user?.id)
+        .map((row) => asString(row.notice_version) ?? '');
     },
     emails,
     lastEmail(email) {

@@ -1,8 +1,9 @@
-// Cuentas y acceso (B9 del plan del cambio). Registro solo con invitación, Continuar con Google con un
-// Google simulado y el segundo factor del equipo, contra el Supabase simulado. El gancho Before User
-// Created, Google y la app de autenticación los imita tests/e2e/support/fakeSupabase.ts. El servidor
-// real pide además el segundo factor en los permisos por fila, y eso lo prueba
-// supabase/tests/accounts_b9_test.sql
+// Cuentas y acceso (B9 del plan del cambio). Registro solo con invitación, Completa tu registro para una
+// cuenta que entra por primera vez desde Ya tengo cuenta, Continuar con Google con un Google simulado, el
+// aviso del enlace del correo que venció y el segundo factor del equipo, contra el Supabase simulado. El
+// gancho Before User Created, Google y la app de autenticación los imita
+// tests/e2e/support/fakeSupabase.ts. El servidor real pide además el segundo factor en los permisos por
+// fila, y eso lo prueba supabase/tests/accounts_b9_test.sql
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { FLAGS_KEY } from '@/config/featureFlags';
@@ -79,6 +80,79 @@ test.describe('Registro solo con invitación', () => {
     await expect.poll(() => cloud.accountOf(INVITED)?.adult_confirmed_at).toBeTruthy();
     await expect.poll(() => cloud.accountOf(INVITED)?.target_specialty).toBe('pediatrics');
   });
+
+  test('desde Ya tengo cuenta, un correo invitado que nunca se registró completa su registro antes de entrar', async ({
+    page,
+    cloud,
+  }) => {
+    const INVITED = 'ricardo.mendez@ejemplo.mx';
+    cloud.registrationOpen = false;
+    cloud.invite(INVITED);
+    await page.goto(SCREENS.onboarding.path);
+    await page.getByRole('tab', { name: t.onboarding.loginTab }).click();
+    await page.getByLabel(t.account.email, { exact: true }).fill(INVITED);
+    await page.getByRole('button', { name: t.cloud.sendLink }).click();
+    await expect(page.getByRole('heading', { name: t.cloud.sentTitle })).toBeVisible();
+    // El servidor crea la cuenta al pedir el código, sin su edad ni el aviso
+    expect(cloud.accountOf(INVITED)?.adult_confirmed_at).toBeNull();
+    const mail = cloud.lastEmail(INVITED);
+    if (!mail) throw new Error('El servidor simulado no registró el correo');
+    await openEmailLink(page, mail.link);
+
+    // No entra a Inicio. Completa su registro y el alias no sale del correo
+    const title = page.getByRole('heading', { level: 1, name: t.accounts.completeSignup.title });
+    await expect(title).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toHaveCount(0);
+    const alias = page.getByLabel(t.onboarding.alias, { exact: true });
+    await expect(alias).toHaveValue('');
+    // Hasta guardar no se sube nada ni se acepta el aviso por la persona
+    await expect.poll(() => cloud.deviceSessionOf(INVITED)?.deviceId).toBeTruthy();
+    expect(cloud.acceptancesOf(INVITED)).toEqual([]);
+    expect(cloud.userByEmail(INVITED)?.alias).toBe('Alumno');
+    expect(cloud.rpcCalls('sync_push_records')).toHaveLength(0);
+    await expectNoSeriousA11yViolations(page);
+
+    // Recargar no se salta el registro
+    await page.reload();
+    await expect(title).toBeVisible({ timeout: 20_000 });
+
+    await page.getByRole('button', { name: t.accounts.completeSignup.save }).click();
+    await expect(page.getByText(t.accounts.signup.adultError(18))).toBeVisible();
+    await alias.fill('Rick');
+    await page.getByLabel(t.account.targetSpecialty).selectOption('pediatrics');
+    await page.getByLabel(t.accounts.signup.heardFrom.code).fill('ana_2026');
+    await page.getByLabel(t.accounts.signup.adultAccept(18)).check();
+    await page.getByLabel(t.onboarding.privacyAccept).check();
+    await page.getByRole('button', { name: t.accounts.completeSignup.save }).click();
+    await expectHome(page);
+
+    await expect.poll(() => cloud.accountOf(INVITED)?.adult_confirmed_at).toBeTruthy();
+    await expect.poll(() => cloud.userByEmail(INVITED)?.alias).toBe('Rick');
+    await expect.poll(() => cloud.accountOf(INVITED)?.target_specialty).toBe('pediatrics');
+    expect(cloud.acceptancesOf(INVITED)).toHaveLength(1);
+    // Un código sin canal cuenta como de un influencer
+    await expect
+      .poll(() => cloud.signupSourceOf(INVITED))
+      .toEqual({ channel: 'influencer', influencerCode: 'ANA_2026' });
+  });
+});
+
+test.describe('Enlace del correo', () => {
+  test('un enlace que venció o ya se usó lo avisa como del correo y no como de Google', async ({
+    page,
+    cloud,
+  }) => {
+    await page.goto(cloud.expiredMagicLink());
+    const notice = page.getByRole('alert').filter({ hasText: t.accounts.oauthError.linkTitle });
+    await expect(notice).toContainText(t.accounts.oauthError.link_expired);
+    await expect(page.getByText(t.accounts.oauthError.title)).toHaveCount(0);
+    // La dirección ya no trae el error, así recargar no lo repite
+    expect(page.url()).not.toContain('error');
+    expect(page.url()).not.toContain('sb=');
+    await expectNoSeriousA11yViolations(page);
+    await notice.getByRole('button', { name: t.accounts.oauthError.dismiss }).click();
+    await expect(notice).toBeHidden();
+  });
 });
 
 test.describe('Continuar con Google', () => {
@@ -151,6 +225,9 @@ test.describe('Continuar con Google', () => {
     await expect(
       page.getByRole('heading', { level: 1, name: t.accounts.completeSignup.title }),
     ).toBeVisible({ timeout: 20_000 });
+    // El alias no sale del correo de Google y nada sube antes de guardar
+    await expect(page.getByLabel(t.onboarding.alias, { exact: true })).toHaveValue('');
+    expect(cloud.acceptancesOf(NEW)).toEqual([]);
     await page.getByRole('button', { name: t.accounts.completeSignup.save }).click();
     await expect(page.getByText(t.accounts.signup.adultError(18))).toBeVisible();
     await expectNoSeriousA11yViolations(page);
@@ -161,6 +238,7 @@ test.describe('Continuar con Google', () => {
     await expectHome(page);
     await expect.poll(() => cloud.accountOf(NEW)?.adult_confirmed_at).toBeTruthy();
     await expect.poll(() => cloud.userByEmail(NEW)?.alias).toBe('Nuevo');
+    expect(cloud.acceptancesOf(NEW)).toHaveLength(1);
   });
 });
 
@@ -229,7 +307,8 @@ test.describe('Segundo factor del equipo', () => {
     await expect(challenge).toBeHidden();
 
     await page.goto(SCREENS.adminUsers.path);
-    const row = page.getByRole('listitem').filter({ hasText: PHYSICIAN });
+    // Tabla desde 64rem y lista en el teléfono, con las mismas acciones por cuenta
+    const row = page.getByRole('row').or(page.getByRole('listitem')).filter({ hasText: PHYSICIAN });
     const reset = t.accounts.admin.mfaReset;
     await row.getByRole('button', { name: reset.label('Médica') }).click();
     await expect(row.getByText(reset.confirm('Médica'))).toBeVisible();

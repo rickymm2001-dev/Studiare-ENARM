@@ -11,6 +11,11 @@ interface FieldShell {
   hint?: string;
   error?: string | null;
   className?: string;
+  /**
+   * La etiqueta solo para el lector de pantalla, cuando el encabezado de una columna de tabla ya dice
+   * qué es el campo. Sigue siendo la etiqueta del control
+   */
+  labelHidden?: boolean;
 }
 
 function Shell({
@@ -19,6 +24,7 @@ function Shell({
   hint,
   error,
   className,
+  labelHidden = false,
   children,
 }: FieldShell & { id: string; children: (describedBy: string | undefined) => ReactNode }) {
   const hintId = hint ? `${id}-ayuda` : undefined;
@@ -26,7 +32,7 @@ function Shell({
   const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
   return (
     <div className={cn('flex flex-col gap-1', className)}>
-      <label htmlFor={id} className="font-medium text-fg">
+      <label htmlFor={id} className={labelHidden ? 'sr-only' : 'font-medium text-fg'}>
         {label}
       </label>
       {children(describedBy)}
@@ -95,6 +101,7 @@ export function SelectField({
   hint,
   error,
   className,
+  labelHidden,
   options,
   ...props
 }: FieldShell &
@@ -103,7 +110,14 @@ export function SelectField({
   }) {
   const id = useId();
   return (
-    <Shell id={id} label={label} hint={hint} error={error} className={className}>
+    <Shell
+      id={id}
+      label={label}
+      hint={hint}
+      error={error}
+      className={className}
+      {...(labelHidden === undefined ? {} : { labelHidden })}
+    >
       {(describedBy) => (
         <select id={id} className={control} aria-describedby={describedBy} {...props}>
           {options.map((option) => (

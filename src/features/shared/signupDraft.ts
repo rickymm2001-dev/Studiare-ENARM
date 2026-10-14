@@ -26,13 +26,15 @@ export const EMPTY_HEARD_FROM: HeardFromDraft = { channel: '', code: '' };
 
 /**
  * La respuesta lista para guardar. null si no contestó, invalid si el código no tiene la forma que
- * acepta la base
+ * acepta la base. Un código sin canal cuenta como de un influencer, para no perderlo
  */
 export function heardFromOf(
   draft: HeardFromDraft,
 ): { channel: HeardFromChannel; influencerCode: string | null } | null | 'invalid' {
   const code = normalizeInfluencerCode(draft.code);
   if (code !== null && !INFLUENCER_CODE.test(code)) return 'invalid';
-  if (draft.channel === '') return null;
+  if (draft.channel === '') {
+    return code === null ? null : { channel: 'influencer', influencerCode: code };
+  }
   return { channel: draft.channel, influencerCode: code };
 }

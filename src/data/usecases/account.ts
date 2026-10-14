@@ -25,6 +25,7 @@ export type AccountDetails = Omit<
   | 'updatedAt'
   | 'avatarChangedAt'
   | 'detailsChangedAt'
+  | 'detailsFromSignup'
   | 'adultConfirmedAt'
   | 'heardFrom'
 >;
@@ -68,11 +69,15 @@ const firstAvatarChoice = (avatar: Account['avatar'], now: string) =>
   avatar.kind === 'photo' ? { avatarChangedAt: now } : {};
 
 /**
- * Fecha de los datos opcionales de una cuenta nueva. Solo si el alumno llenó alguno. Una cuenta vacía
- * no tiene fecha, así nunca borra en la nube lo que guardó en otro dispositivo (H29)
+ * Los datos opcionales del registro no llevan fecha. La fecha solo la pone Tus datos (updateAccount).
+ * Si el alumno llenó alguno, la cuenta queda marcada para que en la siguiente sincronización entren
+ * campo por campo, sin mandar vacíos ni pisar lo que la nube ya tiene. Así registrarse en un
+ * dispositivo nuevo con una cuenta que ya existe no borra lo que se guardó en otro (H29)
  */
-const firstDetailsChoice = (details: AccountDetails, now: string) =>
-  ACCOUNT_DETAIL_KEYS.some((key) => details[key] !== null) ? { detailsChangedAt: now } : {};
+const signupDetailsMark = (details: Partial<AccountDetails>) =>
+  ACCOUNT_DETAIL_KEYS.some((key) => details[key] !== undefined && details[key] !== null)
+    ? { detailsFromSignup: true as const }
+    : {};
 
 /** Lo del registro que se guarda con la cuenta, con su fecha */
 function signupFields(extras: SignupExtras | undefined, now: string): Partial<Account> {
@@ -106,20 +111,30 @@ export async function registerAccount(
     dailyGoal: UserSettings['dailyGoal'];
     details: AccountDetails;
     signup?: SignupExtras;
+    /**
+     * false para un perfil que nace sin formulario, como el de una cuenta que entra por primera vez
+     * desde Ya tengo cuenta. No vio el aviso, así que no guarda decisiones bajo ninguna versión hasta
+     * que complete su registro (B9)
+     */
+    noticeSeen?: boolean;
   },
 ): Promise<RegisterResult> {
   if (await findAccountByEmail(api, input.email)) return { ok: false, reason: 'email_taken' };
   // El correo se valida antes de crear el perfil, así no queda un perfil sin cuenta
   const email = normalizeEmail(input.email);
   AccountSchema.shape.email.parse(email);
-  const user = await createProfile(api, { alias: input.alias, dailyGoal: input.dailyGoal });
+  const user = await createProfile(api, {
+    alias: input.alias,
+    dailyGoal: input.dailyGoal,
+    noticeSeen: input.noticeSeen ?? true,
+  });
   const now = new Date().toISOString();
   await api.repos.accounts.put({
     userId: user.id,
     email,
     ...input.details,
     ...firstAvatarChoice(input.details.avatar, now),
-    ...firstDetailsChoice(input.details, now),
+    ...signupDetailsMark(input.details),
     ...signupFields(input.signup, now),
     updatedAt: now,
   });
@@ -130,7 +145,10 @@ export async function registerAccount(
   return { ok: true, user };
 }
 
-/** Agrega el correo, y con él la cuenta, a un perfil viejo que no la tenía (D-068) */
+/**
+ * Agrega el correo, y con él la cuenta, a un perfil viejo que no la tenía (D-068). Los datos entran
+ * como los del registro, sin fecha
+ */
 export async function addAccountToProfile(
   api: Pick<DataApi, 'repos'>,
   input: { userId: string; email: string; details: AccountDetails },
@@ -141,7 +159,7 @@ export async function addAccountToProfile(
     email: input.email,
     ...input.details,
     ...firstAvatarChoice(input.details.avatar, now),
-    ...firstDetailsChoice(input.details, now),
+    ...signupDetailsMark(input.details),
     updatedAt: now,
   });
 }
@@ -163,28 +181,45 @@ export async function updateAccount(
   const detailsChanged = ACCOUNT_DETAIL_KEYS.some(
     (key) => patch[key] !== undefined && patch[key] !== account[key],
   );
-  return api.repos.accounts.put({
+  const next: Account = {
     ...account,
     ...patch,
     ...(avatarChanged ? { avatarChangedAt: now } : {}),
     ...(detailsChanged ? { detailsChangedAt: now } : {}),
     updatedAt: now,
-  });
+  };
+  // Con fecha, los datos ya no entran como los del registro. Gana la versión más reciente completa
+  if (detailsChanged) delete next.detailsFromSignup;
+  return api.repos.accounts.put(next);
 }
 
-/** Confirma la mayoría de edad y, si la dio, la respuesta de cómo nos conoció. Lo usa Completa tu registro */
+/**
+ * Lo que guarda Completa tu registro. Confirma la mayoría de edad y, si la dio, la respuesta de cómo
+ * nos conoció. La especialidad que eligió entra como la del registro, sin fecha, salvo que la cuenta ya
+ * tenga sus datos con fecha (B9)
+ */
 export async function completeSignup(
   api: Pick<DataApi, 'repos'>,
   account: Account,
-  extras: SignupExtras,
+  input: SignupExtras & { targetSpecialty?: string | null },
 ): Promise<Account> {
   const now = new Date().toISOString();
+  const specialty = input.targetSpecialty;
+  const base =
+    specialty !== undefined && specialty !== account.targetSpecialty && account.detailsChangedAt
+      ? await updateAccount(api, account, { targetSpecialty: specialty })
+      : account;
+  const fromSignup =
+    specialty !== undefined && specialty !== base.targetSpecialty
+      ? { targetSpecialty: specialty, ...signupDetailsMark({ targetSpecialty: specialty }) }
+      : {};
   return api.repos.accounts.put({
-    ...account,
-    ...signupFields(extras, now),
+    ...base,
+    ...fromSignup,
+    ...signupFields(input, now),
     // Una confirmación ya guardada se queda con su fecha, igual que en la nube
-    ...(account.adultConfirmedAt ? { adultConfirmedAt: account.adultConfirmedAt } : {}),
-    ...(account.heardFrom ? { heardFrom: account.heardFrom } : {}),
+    ...(base.adultConfirmedAt ? { adultConfirmedAt: base.adultConfirmedAt } : {}),
+    ...(base.heardFrom ? { heardFrom: base.heardFrom } : {}),
     updatedAt: now,
   });
 }

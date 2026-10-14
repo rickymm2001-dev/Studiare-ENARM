@@ -92,6 +92,8 @@ export interface FakeCloud {
   limitRetryAt: string | null;
   /** Rol que tiene la cuenta en user_roles */
   role: 'student' | 'physician' | 'admin' | 'owner';
+  /** Alias de la cuenta en profiles. La base pone Alumno a una cuenta que no eligió uno (B9) */
+  profileAlias: string;
   /** Cómo falla la lectura del rol. error responde con error de red y throw lanza la excepción */
   failRole: FakeFailure;
   /** Con true, leer la sesión falla por falta de red, como con el token vencido y sin conexión */
@@ -100,8 +102,13 @@ export interface FakeCloud {
   overrides: unknown;
   /** Valor de la clave feature_flags en platform_settings. null si el servidor no fija banderas */
   flags: unknown;
-  /** Versiones del aviso de privacidad que la app registró como aceptadas, en orden */
+  /**
+   * Versiones del aviso de privacidad aceptadas en privacy_acceptances, en orden. La app las agrega y
+   * las lee, y la prueba puede poner las de una cuenta que ya aceptó en otro dispositivo (B9)
+   */
   acceptances: string[];
+  /** Cómo falla leer privacy_acceptances. error responde con error de red y throw lanza la excepción */
+  failAcceptanceRead: FakeFailure;
   claims: { p_device_id: string; p_label: string }[];
   /** Reclamos rechazados que el cliente reportó con log_rejected_claim */
   rejections: { p_device_id: string; p_label: string }[];
@@ -178,11 +185,13 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     failReport: 'none',
     limitRetryAt: '2030-01-02T09:30:00Z',
     role: 'student',
+    profileAlias: 'Rick',
     failRole: 'none',
     failSession: false,
     overrides: null,
     flags: null,
     acceptances: [],
+    failAcceptanceRead: 'none',
     claims: [],
     rejections: [],
     checks: 0,
@@ -247,6 +256,28 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   const table = (name: string) => {
     // La clave que pidió la consulta a platform_settings, para servir la fila que toca
     let settingKey: unknown = null;
+    // Lo que pidió la consulta a privacy_acceptances, para responder solo las filas que tocan (B9)
+    let noticeFilter: unknown = null;
+    let descending = false;
+    let limit: number | null = null;
+    // Esperar la cadena sin maybeSingle devuelve la lista. Solo privacy_acceptances tiene filas
+    const list = (): Promise<unknown> => {
+      if (name !== 'privacy_acceptances') return Promise.resolve({ data: [], error: null });
+      if (fake.failAcceptanceRead === 'throw')
+        return Promise.reject(new TypeError('Failed to fetch'));
+      if (fake.failAcceptanceRead === 'error') {
+        return Promise.resolve({ data: null, error: NETWORK_ERROR });
+      }
+      const rows = fake.acceptances
+        .map((version, index) => ({ id: index + 1, notice_version: version }))
+        .filter((row) => noticeFilter === null || row.notice_version === noticeFilter)
+        .sort((a, b) =>
+          descending
+            ? b.notice_version.localeCompare(a.notice_version)
+            : a.notice_version.localeCompare(b.notice_version),
+        );
+      return Promise.resolve({ data: limit === null ? rows : rows.slice(0, limit), error: null });
+    };
     const single = (): unknown => {
       if (name === 'device_sessions') {
         fake.checks += 1;
@@ -255,7 +286,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       if (name === 'user_roles') {
         return outcome(fake.failRole, () => ({ data: { role: fake.role }, error: null }));
       }
-      if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
+      if (name === 'profiles') return { data: { alias: fake.profileAlias }, error: null };
       if (name === 'private_accounts') {
         return outcome(fake.failAccountRead, () => ({ data: fake.remoteAccount, error: null }));
       }
@@ -275,11 +306,18 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       eq: (column: string, value: unknown) => {
         if (name === 'device_sessions') fake.filters.push([column, value]);
         if (name === 'platform_settings' && column === 'key') settingKey = value;
+        if (name === 'privacy_acceptances' && column === 'notice_version') noticeFilter = value;
         return chain;
       },
       gt: () => chain,
-      order: () => chain,
-      limit: () => chain,
+      order: (_column: string, options?: { ascending?: boolean }) => {
+        descending = options?.ascending === false;
+        return chain;
+      },
+      limit: (count: number) => {
+        limit = count;
+        return chain;
+      },
       update: (row: Record<string, unknown>) => {
         if (name === 'private_accounts') {
           fake.accountUpdates.push(row);
@@ -295,9 +333,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         return chain;
       },
       maybeSingle: () => Promise.resolve(single()),
-      // Esperar la cadena sin maybeSingle devuelve una lista vacía, como una consulta sin filas
-      then: (resolve: (value: unknown) => unknown) =>
-        Promise.resolve({ data: [], error: null }).then(resolve),
+      // Esperar la cadena sin maybeSingle devuelve una lista, vacía salvo en privacy_acceptances
+      then: (resolve: (value: unknown) => unknown, reject?: (reason: unknown) => unknown) =>
+        list().then(resolve, reject),
     };
     return chain;
   };

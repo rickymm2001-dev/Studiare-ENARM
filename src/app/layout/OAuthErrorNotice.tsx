@@ -1,7 +1,9 @@
-// Aviso global de que Google no dejó entrar (B9 del plan del cambio). Supabase regresa a la app con el
-// error en la dirección, CloudBridge lo traduce y aquí se explica. El más común mientras el registro
-// esté cerrado es un correo de Google sin invitación. El alumno lo descarta.
+// Aviso global de que Google o el enlace del correo no dejaron entrar (B9 del plan del cambio). Supabase
+// regresa a la app con el error en la dirección, CloudBridge lo traduce y aquí se explica. Con Google, el
+// más común mientras el registro esté cerrado es un correo sin invitación. Con el correo, un enlace que
+// venció o que ya se usó. El alumno lo descarta.
 import { CircleAlert } from 'lucide-react';
+import { isLinkError } from '@/data/cloud/oauth';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { useAccess } from '../accessState';
@@ -25,7 +27,7 @@ export function OAuthErrorNotice({ className = '' }: { className?: string }) {
     >
       <CircleAlert aria-hidden className="size-5 shrink-0 text-warning" />
       <div className="min-w-0 flex-1 basis-60">
-        <p className="font-semibold">{text.title}</p>
+        <p className="font-semibold">{isLinkError(error) ? text.linkTitle : text.title}</p>
         <p>{text[error]}</p>
       </div>
       <Button size="sm" variant="secondary" onClick={dismiss}>

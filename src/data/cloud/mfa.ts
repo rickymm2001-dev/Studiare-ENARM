@@ -5,6 +5,7 @@
 // factor de alguien del equipo que perdió su teléfono, con la función admin-reset-mfa del servidor.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Role } from '../schemas/common.ts';
+import { settleWithin } from './timeout.ts';
 
 /** Los roles que piden segundo factor */
 export const MFA_ROLES: readonly Role[] = ['physician', 'admin', 'owner'];
@@ -22,7 +23,13 @@ export type MfaStatus =
 
 type CloudAuth = Pick<SupabaseClient, 'auth'>;
 
-export async function readMfaStatus(cloud: CloudAuth): Promise<MfaStatus> {
+/**
+ * Lo más que se espera a Supabase para saber el estado del segundo factor. listFactors pide la cuenta a
+ * /auth/v1/user y el SDK no le pone tiempo límite. Pasado esto el estado es unknown y no se bloquea
+ */
+export const MFA_STATUS_TIMEOUT_MS = 10_000;
+
+async function askMfaStatus(cloud: CloudAuth): Promise<MfaStatus> {
   try {
     const [level, factors] = await Promise.all([
       cloud.auth.mfa.getAuthenticatorAssuranceLevel(),
@@ -36,6 +43,14 @@ export async function readMfaStatus(cloud: CloudAuth): Promise<MfaStatus> {
   } catch {
     return { kind: 'unknown' };
   }
+}
+
+/** El estado del segundo factor de la sesión, o unknown si Supabase falla o tarda más de timeoutMs */
+export function readMfaStatus(
+  cloud: CloudAuth,
+  timeoutMs: number = MFA_STATUS_TIMEOUT_MS,
+): Promise<MfaStatus> {
+  return settleWithin(askMfaStatus(cloud), timeoutMs, { kind: 'unknown' });
 }
 
 export interface TotpEnrollment {

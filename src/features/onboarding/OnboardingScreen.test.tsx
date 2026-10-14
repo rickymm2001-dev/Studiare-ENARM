@@ -16,6 +16,7 @@ import { DEFAULT_PREFERENCES, usePreferences } from '@/app/preferences';
 import { routes } from '@/app/router';
 import { SCREENS } from '@/app/screens';
 import { writeStoredFlags } from '@/config/featureFlags';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { PENDING_SIGNUP_KEY } from '@/data/cloud/pendingSignup';
 import { useDataApi, type DataApi } from '@/data/context';
@@ -57,10 +58,14 @@ function mount(fake: FakeCloud) {
   return router;
 }
 
-/** Sin sesión en este navegador. El correo con el código se abrió en otro dispositivo */
-function phoneOnlyCloud() {
+/**
+ * Sin sesión en este navegador. El correo con el código se abrió en otro dispositivo. registered dice
+ * si la cuenta ya completó su registro en otro dispositivo, como una cuenta que ya existía (B9)
+ */
+function phoneOnlyCloud(options: { registered?: boolean } = {}) {
   const fake = makeFakeCloud({ session: null });
   fake.codeSession = { id: '7a2d0f1e-6b4a-4d2a-9d55-6f2f3f6a1b20', email: EMAIL };
+  if (options.registered) fake.acceptances = [PRIVACY_NOTICE_VERSION];
   return fake;
 }
 
@@ -86,7 +91,7 @@ afterEach(async () => {
 
 describe('entrar con el código del correo', () => {
   it('en Ya tengo cuenta, el código abre la sesión, une la cuenta y entra a Inicio', async () => {
-    const fake = phoneOnlyCloud();
+    const fake = phoneOnlyCloud({ registered: true });
     const typing = userEvent.setup();
     const router = mount(fake);
     await typing.click(await screen.findByRole('tab', { name: t.onboarding.loginTab }));
@@ -101,9 +106,56 @@ describe('entrar con el código del correo', () => {
       expect(router.state.location.pathname).toBe(SCREENS.home.path);
     });
     expect(useCloud.getState().state.status).toBe('linked');
-    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
     // Este navegador reclamó la cuenta, como si hubiera abierto el enlace
     expect(fake.claims).toHaveLength(1);
+  });
+
+  it('en Ya tengo cuenta, un correo invitado que nunca se registró completa su registro antes de entrar', async () => {
+    const fake = phoneOnlyCloud();
+    fake.remoteAccount = { adult_confirmed_at: null };
+    // La base le pone Alumno a una cuenta que se creó al pedir el código, sin alias
+    fake.profileAlias = 'Alumno';
+    const typing = userEvent.setup();
+    const router = mount(fake);
+    await typing.click(await screen.findByRole('tab', { name: t.onboarding.loginTab }));
+    await typing.type(screen.getByLabelText(t.account.email), EMAIL);
+    await typing.click(screen.getByRole('button', { name: t.cloud.sendLink }));
+    await typing.type(await screen.findByLabelText(t.cloud.code.label), '123456');
+    await typing.click(screen.getByRole('button', { name: t.cloud.code.submit }));
+
+    // Entra a Inicio, pero lo tapa Completa tu registro, sin abrir el perfil ni subir nada
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.accounts.completeSignup.title }),
+    ).toBeVisible();
+    expect(router.state.location.pathname).toBe(SCREENS.home.path);
+    expect(usePreferences.getState().sessionUserId).toBeNull();
+    expect(fake.accountUpdates).toEqual([]);
+    expect(fake.acceptances).toEqual([]);
+    const alias = screen.getByLabelText(t.onboarding.alias);
+    expect(alias).toHaveValue('');
+
+    await typing.type(alias, 'Ana');
+    await typing.click(screen.getByLabelText(t.accounts.signup.adultAccept(18)));
+    await typing.click(screen.getByLabelText(t.onboarding.privacyAccept));
+    await typing.click(screen.getByRole('button', { name: t.accounts.completeSignup.save }));
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
+    expect(
+      screen.queryByRole('heading', { level: 1, name: t.accounts.completeSignup.title }),
+    ).toBeNull();
+    // Ya con su registro, el aviso queda aceptado una vez y la edad sube a la nube
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
+    await waitFor(() => {
+      expect(fake.accountUpdates.some((row) => typeof row.adult_confirmed_at === 'string')).toBe(
+        true,
+      );
+    });
   });
 
   it('un código equivocado lo dice y no entra', async () => {
@@ -151,7 +203,10 @@ describe('entrar con el código del correo', () => {
     await waitFor(() => {
       expect(useCloud.getState().state.status).toBe('linked');
     });
-    expect(router.state.location.pathname).toBe(SCREENS.home.path);
+    // Inicio se baja aparte, así que llegar puede tardar un poco más que unir la cuenta
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe(SCREENS.home.path);
+    });
     // No se creó un segundo perfil. La nube se unió al que se acaba de crear
     expect(usePreferences.getState().sessionUserId).toBe(local?.[0]?.userId);
     expect(await captured.api?.repos.accounts.list()).toHaveLength(1);
@@ -215,8 +270,9 @@ describe('lo que pide el registro (B9)', () => {
       heardFrom: { channel: 'influencer', influencerCode: 'ANA_2026' },
     });
     expect(account?.adultConfirmedAt).toBeDefined();
-    // Con un dato elegido, los datos tienen fecha y ganan en la nube (H29)
-    expect(account?.detailsChangedAt).toBeDefined();
+    // Lo del registro no lleva fecha y entra campo por campo, sin pisar la nube (H29)
+    expect(account?.detailsChangedAt).toBeUndefined();
+    expect(account?.detailsFromSignup).toBe(true);
     expect(await currentConsents(captured.api as DataApi, account?.userId ?? '')).toEqual({
       party: true,
       ai_analysis: false,

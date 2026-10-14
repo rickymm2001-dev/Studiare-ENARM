@@ -69,7 +69,10 @@ async function sendLink(email: string, alias?: string): Promise<LinkResult | nul
   });
 }
 
-/** Sale a Google. Solo vuelve si no se pudo abrir */
+/**
+ * Sale a Google. Solo vuelve si no se pudo abrir. signInWithGoogle marca la salida en esta pestaña, así
+ * un error al volver se lee como de Google y no como del enlace del correo
+ */
 async function goToGoogle(): Promise<boolean> {
   const cloud = await loadCloud();
   if (!cloud) return false;
@@ -596,7 +599,9 @@ function LinkSentCard({
             ? t.cloud.sentBody(email.trim().toLowerCase())
             : result.reason === 'rate_limited'
               ? t.cloud.rateLimited
-              : t.cloud.failedBody}
+              : result.reason === 'invitation_required'
+                ? t.accounts.signup.invitationRequired
+                : t.cloud.failedBody}
         </CardDescription>
       </CardHeader>
       <div className="flex flex-wrap gap-2">
