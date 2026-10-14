@@ -25,9 +25,16 @@ Son cuatro, y no tres, porque el dueño y el admin son niveles distintos.
 - La protección real está en el servidor. Los permisos por fila de Supabase deciden qué filas puede leer y escribir cada rol, y el proxy de IA alojado revisa el rol de cada llamada con la sesión verificada. Aunque alguien cambie su rol en su navegador, el servidor no le da datos ni acciones de otro rol
 - Sin la nube, como en la demostración, la pantalla Rol deja elegir cualquier rol para probar el prototipo. Con la nube conectada esa pantalla solo dice que el rol lo da el servidor
 
+## Segundo factor del equipo (B9)
+
+- Médicos, admins y tú entran con un segundo factor, el código de 6 dígitos de una app de autenticación en el teléfono. El alumno no lo usa
+- Se prende y se apaga con la bandera requireMfa de la configuración, sin otra migración. Mientras esté apagada nadie lo pide. Los pasos están en docs/SUPABASE.md, en Cuentas y acceso
+- Con la bandera prendida, el servidor solo da el rol del equipo a una sesión que ya verificó su código. Sin él, la base lo trata como alumno, así que no ve ni hace nada del equipo aunque la app falle
+- Si alguien del equipo pierde su teléfono, tú le restableces el segundo factor en Usuarios. El tuyo se restablece desde el panel de Supabase
+
 ## Cómo nombrar a un médico
 
-1. La persona crea su cuenta como cualquier alumno
+1. Mientras el registro siga cerrado, primero la invitas con su correo en Usuarios, Invitaciones. Luego crea su cuenta como cualquier alumno, con su correo o con Google
 2. Tú entras a Usuarios, buscas su alias o su correo y le cambias el rol a Médico
 3. La próxima vez que ella abra la app, ya ve el área médica
 

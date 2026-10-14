@@ -5,7 +5,8 @@
 // objetos en memoria, la fila de private_accounts, que cambia con cada update como en el servidor, y
 // Party en la nube (B7), con las funciones party_* a nombre de la sesión abierta. Cada cuenta tiene su
 // plan, como user_plan. my_plan lo contesta y Party se abre solo con un plan de pago, como party_open
-// (B8). Solo lo usan las pruebas.
+// (B8). Desde B9 imita también el rechazo del registro por invitación, Google, el segundo factor y las
+// Edge Functions. Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
 import { canUse, type PlanKey } from '@/config/billing';
 import { createFakePartyServer, type FakePartyServer } from './fakePartyServer';
@@ -29,7 +30,32 @@ export interface FakeSession {
   email: string;
   /** session_id del token de acceso. Sin él el token no trae el claim */
   sessionId?: string;
+  /** Con qué entró la cuenta por primera vez, como app_metadata.provider. email si falta (B9) */
+  provider?: string;
 }
+
+/** Un factor TOTP del segundo factor (B9) */
+export interface FakeFactor {
+  id: string;
+  factor_type: 'totp';
+  status: 'verified' | 'unverified';
+}
+
+/** Lo que Supabase sabe del segundo factor de la sesión (B9) */
+export interface FakeMfa {
+  level: 'aal1' | 'aal2';
+  factors: FakeFactor[];
+  /** El código que acepta challengeAndVerify */
+  validCode: string;
+  /** Con true, enroll responde con error */
+  failEnroll: boolean;
+  /** Con true, leer el nivel o los factores falla, como sin red */
+  failRead: boolean;
+  enrollCalls: number;
+}
+
+/** Respuesta de una Edge Function. error lleva el cuerpo y el estado que mandaría la función */
+export type FakeFunctionReply = { data: unknown } | { error: { body: unknown; status: number } };
 
 export type FakeFailure = 'none' | 'error' | 'throw';
 /** server responde con un error del servidor, con estado HTTP, en lugar de uno de red */
@@ -71,6 +97,8 @@ export interface FakeCloud {
   limitRetryAt: string | null;
   /** Rol que tiene la cuenta en user_roles */
   role: 'student' | 'physician' | 'admin' | 'owner';
+  /** Alias de la cuenta en profiles. La base pone Alumno a una cuenta que no eligió uno (B9) */
+  profileAlias: string;
   /** Cómo falla la lectura del rol. error responde con error de red y throw lanza la excepción */
   failRole: FakeFailure;
   /** Cuántas veces se leyó el rol de la cuenta, que es parte de cada revisión con sesión */
@@ -81,8 +109,13 @@ export interface FakeCloud {
   overrides: unknown;
   /** Valor de la clave feature_flags en platform_settings. null si el servidor no fija banderas */
   flags: unknown;
-  /** Versiones del aviso de privacidad que la app registró como aceptadas, en orden */
+  /**
+   * Versiones del aviso de privacidad aceptadas en privacy_acceptances, en orden. La app las agrega y
+   * las lee, y la prueba puede poner las de una cuenta que ya aceptó en otro dispositivo (B9)
+   */
   acceptances: string[];
+  /** Cómo falla leer privacy_acceptances. error responde con error de red y throw lanza la excepción */
+  failAcceptanceRead: FakeFailure;
   claims: { p_device_id: string; p_label: string }[];
   /** Reclamos rechazados que el cliente reportó con log_rejected_claim */
   rejections: { p_device_id: string; p_label: string }[];
@@ -140,7 +173,7 @@ export interface FakeCloud {
    * alumno cambiando la sesión
    */
   party: FakePartyServer;
-  /** Alias de cada cuenta en profiles. Sin entrada, la cuenta se llama Rick, como el perfil de la sesión */
+  /** Alias de cada cuenta en Party. Sin entrada, la cuenta se llama como el perfil de la sesión */
   aliases: Map<string, string>;
   /** Cómo fallan las funciones de Party. error responde con error de red y throw lanza la excepción */
   failParty: FakeFailure;
@@ -149,6 +182,18 @@ export interface FakeCloud {
    * cierra Party (party_open) y es lo que contesta my_plan
    */
   plans: Map<string, PlanKey>;
+  /** Error con el que responde signInWithOtp, como el rechazo del registro por invitación (B9) */
+  otpError: { status: number; message: string } | null;
+  /** Entradas con Google que se pidieron con signInWithOAuth, en orden (B9) */
+  oauthRequests: { provider: string; redirectTo: string | undefined }[];
+  /** Segundo factor de la sesión (B9) */
+  mfa: FakeMfa;
+  /** Respuestas de las Edge Functions por nombre. Sin una, la función no existe (B9) */
+  functionReplies: Record<string, FakeFunctionReply>;
+  /** Edge Functions llamadas con su cuerpo, en orden */
+  functionCalls: { name: string; body: unknown }[];
+  /** Valor de la clave registration_open en platform_settings. null si no existe (B9) */
+  registrationOpen: unknown;
 }
 
 const NETWORK_ERROR = { message: 'Failed to fetch', status: 0 };
@@ -172,12 +217,14 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     failReport: 'none',
     limitRetryAt: '2030-01-02T09:30:00Z',
     role: 'student',
+    profileAlias: 'Rick',
     failRole: 'none',
     roleReads: 0,
     failSession: false,
     overrides: null,
     flags: null,
     acceptances: [],
+    failAcceptanceRead: 'none',
     claims: [],
     rejections: [],
     checks: 0,
@@ -213,12 +260,25 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       });
     },
     party: createFakePartyServer({
-      aliasOf: (userId) => fake.aliases.get(userId) ?? 'Rick',
+      aliasOf: (userId) => fake.aliases.get(userId) ?? fake.profileAlias,
       isOpen: (userId) => canUse(fake.plans.get(userId) ?? 'free', 'party'),
     }),
     aliases: new Map(),
     failParty: 'none',
     plans: new Map(),
+    otpError: null,
+    oauthRequests: [],
+    mfa: {
+      level: 'aal1',
+      factors: [],
+      validCode: '654321',
+      failEnroll: false,
+      failRead: false,
+      enrollCalls: 0,
+    },
+    functionReplies: {},
+    functionCalls: [],
+    registrationOpen: null,
   };
 
   const outcome = <T>(failure: FakeFailure, ok: () => T): T | { data: null; error: unknown } => {
@@ -242,6 +302,28 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
   const table = (name: string) => {
     // La clave que pidió la consulta a platform_settings, para servir la fila que toca
     let settingKey: unknown = null;
+    // Lo que pidió la consulta a privacy_acceptances, para responder solo las filas que tocan (B9)
+    let noticeFilter: unknown = null;
+    let descending = false;
+    let limit: number | null = null;
+    // Esperar la cadena sin maybeSingle devuelve la lista. Solo privacy_acceptances tiene filas
+    const list = (): Promise<unknown> => {
+      if (name !== 'privacy_acceptances') return Promise.resolve({ data: [], error: null });
+      if (fake.failAcceptanceRead === 'throw')
+        return Promise.reject(new TypeError('Failed to fetch'));
+      if (fake.failAcceptanceRead === 'error') {
+        return Promise.resolve({ data: null, error: NETWORK_ERROR });
+      }
+      const rows = fake.acceptances
+        .map((version, index) => ({ id: index + 1, notice_version: version }))
+        .filter((row) => noticeFilter === null || row.notice_version === noticeFilter)
+        .sort((a, b) =>
+          descending
+            ? b.notice_version.localeCompare(a.notice_version)
+            : a.notice_version.localeCompare(b.notice_version),
+        );
+      return Promise.resolve({ data: limit === null ? rows : rows.slice(0, limit), error: null });
+    };
     const single = (): unknown => {
       if (name === 'device_sessions') {
         fake.checks += 1;
@@ -251,12 +333,17 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         fake.roleReads += 1;
         return outcome(fake.failRole, () => ({ data: { role: fake.role }, error: null }));
       }
-      if (name === 'profiles') return { data: { alias: 'Rick' }, error: null };
+      if (name === 'profiles') return { data: { alias: fake.profileAlias }, error: null };
       if (name === 'private_accounts') {
         return outcome(fake.failAccountRead, () => ({ data: fake.remoteAccount, error: null }));
       }
       if (name === 'platform_settings') {
-        const value = settingKey === 'feature_flags' ? fake.flags : fake.overrides;
+        const value =
+          settingKey === 'feature_flags'
+            ? fake.flags
+            : settingKey === 'registration_open'
+              ? fake.registrationOpen
+              : fake.overrides;
         return { data: value === null ? null : { value }, error: null };
       }
       return { data: null, error: null };
@@ -266,11 +353,18 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       eq: (column: string, value: unknown) => {
         if (name === 'device_sessions') fake.filters.push([column, value]);
         if (name === 'platform_settings' && column === 'key') settingKey = value;
+        if (name === 'privacy_acceptances' && column === 'notice_version') noticeFilter = value;
         return chain;
       },
       gt: () => chain,
-      order: () => chain,
-      limit: () => chain,
+      order: (_column: string, options?: { ascending?: boolean }) => {
+        descending = options?.ascending === false;
+        return chain;
+      },
+      limit: (count: number) => {
+        limit = count;
+        return chain;
+      },
       update: (row: Record<string, unknown>) => {
         if (name === 'private_accounts') {
           fake.accountUpdates.push(row);
@@ -286,9 +380,9 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         return chain;
       },
       maybeSingle: () => Promise.resolve(single()),
-      // Esperar la cadena sin maybeSingle devuelve una lista vacía, como una consulta sin filas
-      then: (resolve: (value: unknown) => unknown) =>
-        Promise.resolve({ data: [], error: null }).then(resolve),
+      // Esperar la cadena sin maybeSingle devuelve una lista, vacía salvo en privacy_acceptances
+      then: (resolve: (value: unknown) => unknown, reject?: (reason: unknown) => unknown) =>
+        list().then(resolve, reject),
     };
     return chain;
   };
@@ -305,7 +399,11 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
               fake.session && !fake.failSession
                 ? {
                     access_token: fakeAccessToken(fake.session.sessionId),
-                    user: { id: fake.session.id, email: fake.session.email },
+                    user: {
+                      id: fake.session.id,
+                      email: fake.session.email,
+                      app_metadata: { provider: fake.session.provider ?? 'email' },
+                    },
                   }
                 : null,
           },
@@ -332,7 +430,92 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       },
       signInWithOtp: (params: { email: string }) => {
         fake.otpRequests.push({ email: params.email });
-        return Promise.resolve({ data: {}, error: null });
+        return Promise.resolve({ data: {}, error: fake.otpError });
+      },
+      // Entrar con Google. En el navegador real la página se va a Google. Aquí solo se anota
+      signInWithOAuth: (params: { provider: string; options?: { redirectTo?: string } }) => {
+        fake.oauthRequests.push({
+          provider: params.provider,
+          redirectTo: params.options?.redirectTo,
+        });
+        return Promise.resolve({ data: { provider: params.provider, url: '' }, error: null });
+      },
+      // Segundo factor. Como Supabase, verificar el código deja la sesión en aal2 y lo avisa
+      mfa: {
+        getAuthenticatorAssuranceLevel: () => {
+          if (fake.mfa.failRead) {
+            return Promise.resolve({
+              data: null,
+              error: { status: 0, message: 'Failed to fetch' },
+            });
+          }
+          const verified = fake.mfa.factors.some((factor) => factor.status === 'verified');
+          return Promise.resolve({
+            data: {
+              currentLevel: fake.mfa.level,
+              nextLevel: verified ? 'aal2' : fake.mfa.level,
+              currentAuthenticationMethods: [],
+            },
+            error: null,
+          });
+        },
+        listFactors: () => {
+          if (fake.mfa.failRead) {
+            return Promise.resolve({
+              data: null,
+              error: { status: 0, message: 'Failed to fetch' },
+            });
+          }
+          return Promise.resolve({
+            data: {
+              all: fake.mfa.factors,
+              totp: fake.mfa.factors.filter((factor) => factor.status === 'verified'),
+              phone: [],
+              webauthn: [],
+            },
+            error: null,
+          });
+        },
+        enroll: () => {
+          fake.mfa.enrollCalls += 1;
+          if (fake.mfa.failEnroll) {
+            return Promise.resolve({ data: null, error: { status: 500, message: 'boom' } });
+          }
+          const id = `factor-${String(fake.mfa.enrollCalls)}`;
+          fake.mfa.factors.push({ id, factor_type: 'totp', status: 'unverified' });
+          return Promise.resolve({
+            data: {
+              id,
+              type: 'totp',
+              totp: {
+                qr_code:
+                  'data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg"><rect fill="#000" /></svg>',
+                secret: 'JBSWY3DPEHPK3PXP',
+                uri: 'otpauth://totp/Studiare:rick@example.com?secret=JBSWY3DPEHPK3PXP',
+              },
+            },
+            error: null,
+          });
+        },
+        unenroll: (params: { factorId: string }) => {
+          fake.mfa.factors = fake.mfa.factors.filter((factor) => factor.id !== params.factorId);
+          return Promise.resolve({ data: { id: params.factorId }, error: null });
+        },
+        challengeAndVerify: (params: { factorId: string; code: string }) => {
+          const factor = fake.mfa.factors.find((item) => item.id === params.factorId);
+          if (!factor || params.code !== fake.mfa.validCode) {
+            return Promise.resolve({
+              data: null,
+              error: { status: 422, message: 'Invalid TOTP code entered' },
+            });
+          }
+          factor.status = 'verified';
+          fake.mfa.level = 'aal2';
+          setTimeout(() => {
+            fake.emit('MFA_CHALLENGE_VERIFIED');
+          }, 0);
+          return Promise.resolve({ data: { access_token: fakeAccessToken() }, error: null });
+        },
       },
       // Como Supabase, un código correcto deja la sesión guardada y avisa SIGNED_IN
       verifyOtp: (params: { email: string; token: string }) => {
@@ -367,6 +550,36 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
       },
     },
     from: table,
+    // Edge Functions. Una respuesta con error lleva el cuerpo en context, como supabase-js
+    functions: {
+      invoke: (name: string, options?: { body?: unknown }) => {
+        fake.functionCalls.push({ name, body: options?.body });
+        const reply = fake.functionReplies[name];
+        // Sin respuesta, la función no está publicada y contesta la puerta de Supabase
+        if (!reply) {
+          return Promise.resolve({
+            data: null,
+            error: {
+              context: new Response(
+                '{"code":"NOT_FOUND","message":"Requested function was not found"}',
+                { status: 404 },
+              ),
+            },
+          });
+        }
+        if ('error' in reply) {
+          return Promise.resolve({
+            data: null,
+            error: {
+              context: new Response(JSON.stringify(reply.error.body), {
+                status: reply.error.status,
+              }),
+            },
+          });
+        }
+        return Promise.resolve({ data: reply.data, error: null });
+      },
+    },
     // Storage guarda los objetos en memoria. Como el real, upload con upsert reemplaza, download
     // responde con error si el objeto no existe y remove quita lo que haya
     storage: {

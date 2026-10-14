@@ -26,6 +26,7 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
   await page.getByLabel(t.account.email, { exact: true }).fill('ana@ejemplo.mx');
   await page.getByLabel(t.onboarding.goalMetric).selectOption('questions');
   await page.getByLabel(t.onboarding.goalValue).fill('12');
+  await page.getByLabel(t.accounts.signup.adultAccept(18)).check();
   await page.getByLabel(t.onboarding.privacyAccept).check();
   await page.getByRole('button', { name: t.onboarding.create }).click();
 

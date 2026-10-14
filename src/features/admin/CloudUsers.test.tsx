@@ -8,6 +8,7 @@ import { useCloud } from '@/app/cloudState';
 import { DataProvider } from '@/data/DataProvider';
 import type { Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
+import { DESKTOP_QUERY } from '@/ui/hooks/use-media-query';
 import { CloudUsers } from './CloudUsers';
 
 const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
@@ -52,9 +53,25 @@ function setup(
             : { data: options.rows ?? ROWS, error: null },
         );
       }
+      // Las tarjetas de invitaciones y de cómo nos conocieron, vacías (B9)
+      if (name.startsWith('admin_') && name !== 'admin_release_device') {
+        return Promise.resolve({ data: [], error: null });
+      }
+      if (name === 'admin_release_device') return Promise.resolve({ data: true, error: null });
       return Promise.resolve(
         options.setError ? { data: null, error: options.setError } : { data: null, error: null },
       );
+    },
+    from: () => ({
+      select: () => ({
+        eq: () => ({ maybeSingle: () => Promise.resolve({ data: { value: false }, error: null }) }),
+      }),
+    }),
+    functions: {
+      invoke: (name: string, options: { body?: unknown }) => {
+        calls.push({ name, args: options.body });
+        return Promise.resolve({ data: { removed: 1 }, error: null });
+      },
     },
   };
   useCloud.setState({
@@ -78,9 +95,24 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
   holder.cloud = null;
   useCloud.setState({ state: { status: 'off' } });
 });
+
+/** Una ventana de computadora, de 64rem o más. jsdom no trae matchMedia y se ve como teléfono */
+function onDesktop() {
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: query === DESKTOP_QUERY,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  }));
+}
 
 describe('usuarios con la cuenta de la nube', () => {
   it('lista las cuentas reales con su correo, su plan y su rol', async () => {
@@ -182,11 +214,118 @@ describe('usuarios con la cuenta de la nube', () => {
 
   it('si el servidor no deja ver las cuentas explica por qué', async () => {
     setup('admin', { listError: { code: '42501', message: 'Solo un administrador' } });
-    expect(await screen.findByRole('alert')).toHaveTextContent(text.errors.not_admin);
+    expect(await screen.findByText(text.errors.not_admin)).toHaveAttribute('role', 'alert');
   });
 
   it('si falta la migración dice qué puede ser', async () => {
     setup('owner', { listError: { code: '42883', message: 'no existe la función' } });
-    expect(await screen.findByRole('alert')).toHaveTextContent(text.errors.unknown);
+    expect(await screen.findByText(text.errors.unknown)).toHaveAttribute('role', 'alert');
+  });
+});
+
+describe('dispositivo y segundo factor desde Usuarios (B9)', () => {
+  const access = t.accounts.admin;
+
+  it('liberar el dispositivo de una cuenta pide confirmarlo y llama a admin_release_device', async () => {
+    const typing = userEvent.setup();
+    const calls = setup('admin');
+    const beto = (await screen.findByText('Beto')).closest('li') as HTMLElement;
+    await typing.click(
+      within(beto).getByRole('button', { name: access.device.releaseLabel('Beto') }),
+    );
+    expect(calls.some((call) => call.name === 'admin_release_device')).toBe(false);
+    const confirm = within(beto).getByRole('group', { name: access.device.releaseLabel('Beto') });
+    expect(within(confirm).getByText(access.device.confirm('Beto'))).toBeVisible();
+    await typing.click(within(confirm).getByRole('button', { name: access.confirm }));
+    expect(await screen.findByText(access.device.released('Beto'))).toBeVisible();
+    expect(calls.find((call) => call.name === 'admin_release_device')).toEqual({
+      name: 'admin_release_device',
+      args: { target: '22222222-2222-4222-8222-222222222222' },
+    });
+    // Nadie se libera a sí mismo desde aquí
+    const own = screen.getByText('Yo').closest('li') as HTMLElement;
+    expect(
+      within(own).queryByRole('button', { name: access.device.releaseLabel('Yo') }),
+    ).toBeNull();
+  });
+
+  it('solo el dueño restablece el segundo factor, y solo de alguien del equipo', async () => {
+    const typing = userEvent.setup();
+    const calls = setup('owner');
+    const carla = (await screen.findByText('Carla')).closest('li') as HTMLElement;
+    const beto = screen.getByText('Beto').closest('li') as HTMLElement;
+    expect(within(beto).queryByRole('button', { name: access.mfaReset.label('Beto') })).toBeNull();
+    await typing.click(within(carla).getByRole('button', { name: access.mfaReset.label('Carla') }));
+    await typing.click(within(carla).getByRole('button', { name: access.confirm }));
+    expect(await screen.findByText(access.mfaReset.done('Carla'))).toBeVisible();
+    expect(calls.find((call) => call.name === 'admin-reset-mfa')).toEqual({
+      name: 'admin-reset-mfa',
+      args: { userId: '33333333-3333-4333-8333-333333333333' },
+    });
+  });
+
+  it('un admin no ve el botón de restablecer el segundo factor', async () => {
+    setup('admin');
+    const carla = (await screen.findByText('Carla')).closest('li') as HTMLElement;
+    expect(
+      within(carla).queryByRole('button', { name: access.mfaReset.label('Carla') }),
+    ).toBeNull();
+  });
+});
+
+describe('tabla en computadora y lista en el teléfono (H15 de la revisión de diseño de B2)', () => {
+  const access = t.accounts.admin;
+  const columns = access.users;
+
+  it('en el teléfono es una lista compacta, sin tabla, con el rol debajo del nombre', async () => {
+    setup('owner');
+    expect(await screen.findByRole('list', { name: columns.caption })).toBeVisible();
+    expect(screen.queryByRole('table')).toBeNull();
+    const beto = screen.getByText('Beto').closest('li') as HTMLElement;
+    expect(within(beto).getByLabelText(text.roleOf('Beto'))).toBeVisible();
+  });
+
+  it('desde 64rem es una tabla con encabezados y las acciones de cada cuenta en su fila', async () => {
+    const typing = userEvent.setup();
+    onDesktop();
+    const calls = setup('owner');
+    const table = await screen.findByRole('table', { name: columns.caption });
+    expect(screen.queryByRole('list', { name: columns.caption })).toBeNull();
+    expect(
+      within(table)
+        .getAllByRole('columnheader')
+        .map((header) => header.textContent),
+    ).toEqual([columns.account, columns.role, columns.plan, columns.joined, columns.actions]);
+
+    // Cada cuenta es el encabezado de su fila, con alias y correo
+    const beto = within(table).getByRole('row', { name: /Beto/ });
+    expect(within(beto).getByRole('rowheader')).toHaveTextContent('beto@ejemplo.mx');
+    // El selector del rol se nombra con el alias aunque su etiqueta no se vea
+    expect(within(beto).getByRole('combobox', { name: text.roleOf('Beto') })).toHaveValue(
+      'student',
+    );
+    expect(within(beto).getByRole('cell', { name: 'Mensual' })).toBeVisible();
+    // Liberar dispositivo por fila, y restablecer el segundo factor solo para alguien del equipo
+    expect(within(beto).queryByRole('button', { name: access.mfaReset.label('Beto') })).toBeNull();
+    const carla = within(table).getByRole('row', { name: /Carla/ });
+    expect(
+      within(carla).getByRole('button', { name: access.mfaReset.label('Carla') }),
+    ).toBeVisible();
+    // La propia fila no tiene acciones
+    const own = within(table).getByRole('row', { name: /Yo/ });
+    expect(within(own).queryByRole('button')).toBeNull();
+    expect(within(own).getByText(t.roles.names.owner)).toBeVisible();
+
+    // La confirmación queda en la misma fila
+    await typing.click(
+      within(beto).getByRole('button', { name: access.device.releaseLabel('Beto') }),
+    );
+    const confirm = within(beto).getByRole('group', { name: access.device.releaseLabel('Beto') });
+    await typing.click(within(confirm).getByRole('button', { name: access.confirm }));
+    expect(await screen.findByText(access.device.released('Beto'))).toBeVisible();
+    expect(calls.find((call) => call.name === 'admin_release_device')).toEqual({
+      name: 'admin_release_device',
+      args: { target: '22222222-2222-4222-8222-222222222222' },
+    });
   });
 });

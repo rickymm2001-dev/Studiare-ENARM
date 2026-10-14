@@ -1,6 +1,7 @@
 // Tus datos (D-068, B3 del plan del cambio, comentarios 6 y 16). Perfil y cuenta juntos y de solo
-// lectura. La foto va en línea con el alias, sin franja gris (H11). Editar perfil abre todos los
-// campos, alias, foto y los datos opcionales de la cuenta, con Guardar y Cancelar, y avisa si sales
+// lectura. La especialidad que busca va a la vista, primero, porque la usa la comparación por
+// especialidad (B9). La foto va en línea con el alias, sin franja gris (H11). Editar perfil abre todos
+// los campos, alias, foto y los datos opcionales de la cuenta, con Guardar y Cancelar, y avisa si sales
 // con cambios sin guardar. A un perfil viejo sin cuenta le pide su correo para crearla. El alumno de
 // la demostración no tiene cuenta y solo cambia su alias.
 import { Pencil, Save } from 'lucide-react';
@@ -23,9 +24,10 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
+import { TargetSpecialtyField } from '../shared/SignupFields';
 import { UnsavedChangesGuard } from '../shared/UnsavedChangesGuard';
 import { AccountDetailsFields } from './AccountDetailsFields';
-import { accountRows, detailsOf, examDateLabel, sameDetails } from './accountView';
+import { accountRows, detailsOf, examDateLabel, sameDetails, specialtyName } from './accountView';
 import { AvatarPicker } from './AvatarPicker';
 
 interface Draft {
@@ -190,6 +192,13 @@ export function AccountDataCard({
           )}
           {hasAccountFields ? (
             <>
+              {/* La especialidad va primero y a la vista, porque con ella se compara al alumno (B9) */}
+              <TargetSpecialtyField
+                value={draft.details.targetSpecialty}
+                onChange={(targetSpecialty) => {
+                  change({ details: { ...draft.details, targetSpecialty } });
+                }}
+              />
               <fieldset className="flex flex-col gap-2">
                 <legend className="eyebrow mb-1 text-fg-muted">{t.account.avatarTitle}</legend>
                 <AvatarPicker
@@ -202,6 +211,7 @@ export function AccountDataCard({
               </fieldset>
               <AccountDetailsFields
                 value={draft.details}
+                withSpecialty={false}
                 onChange={(details) => {
                   change({ details });
                 }}
@@ -240,9 +250,19 @@ export function AccountDataCard({
               <p className="truncate text-sm text-fg-muted">{account?.email ?? text.noEmail}</p>
             </div>
           </div>
+          {hasAccountFields ? (
+            <div className="flex min-w-0 flex-col rounded-md bg-muted p-3">
+              <p className="text-sm text-fg-muted">{t.account.targetSpecialty}</p>
+              {specialtyName(detailsOf(account)) ? (
+                <p className="text-lg font-bold">{specialtyName(detailsOf(account))}</p>
+              ) : (
+                <p className="text-sm">{t.accounts.profile.specialtyEmpty}</p>
+              )}
+            </div>
+          ) : null}
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {[
-              ...accountRows(detailsOf(account)),
+              ...accountRows(detailsOf(account), { withSpecialty: !hasAccountFields }),
               { label: text.examDate, value: examDateLabel(user) },
             ].map((row) => (
               <div key={row.label} className="flex min-w-0 flex-col">

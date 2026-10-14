@@ -106,3 +106,24 @@ export async function setCloudUserRole(
     return { ok: false, reason: 'network' };
   }
 }
+
+export type ReleaseDeviceResult =
+  { ok: true; hadDevice: boolean } | { ok: false; reason: UsersFailure };
+
+/**
+ * Libera el dispositivo de una cuenta, por ejemplo de quien llegó al límite de cambios y necesita
+ * entrar ya (hallazgo H17, B9). admin_release_device deja constancia de quién lo hizo y reinicia el
+ * conteo de cambios. El siguiente dispositivo que entre se queda con la cuenta
+ */
+export async function releaseUserDevice(
+  cloud: Pick<SupabaseClient, 'rpc'>,
+  target: string,
+): Promise<ReleaseDeviceResult> {
+  try {
+    const reply = await cloud.rpc('admin_release_device', { target });
+    if (reply.error) return { ok: false, reason: failureOf(reply.error) };
+    return { ok: true, hadDevice: reply.data === true };
+  } catch {
+    return { ok: false, reason: 'network' };
+  }
+}

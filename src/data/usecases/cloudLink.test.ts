@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { parseRole, toCloudAccount } from '../cloud/account';
+import { parseRole, readCloudSignup, toCloudAccount } from '../cloud/account';
+import type { PendingSignup } from '../cloud/pendingSignup';
 import { dataUrlToBlob, photoHash } from '../cloud/avatars';
 import { readCloudConfig } from '../cloud/client';
 import { jwtRole } from '../cloud/keyRole';
@@ -10,7 +11,15 @@ import type { Account } from '../schemas/people';
 import { makeFakeCloud, type FakeCloud } from '../testing/fakeCloud';
 import { freshDb } from '../testing/fixtures';
 import { EMPTY_DETAILS, findAccountByEmail, registerAccount, updateAccount } from './account';
-import { aliasFor, linkCloudIdentity, pushLocalAccount } from './cloudLink';
+import {
+  PLACEHOLDER_ALIAS,
+  aliasFor,
+  hasLocalSignup,
+  linkCloudIdentity,
+  pushLocalAccount,
+  resolveCloudSignup,
+} from './cloudLink';
+import { acceptedNoticeVersion, currentConsents } from './profile';
 
 const openDbs: EnarmDb[] = [];
 afterEach(async () => {
@@ -107,20 +116,13 @@ describe('rol y datos que viajan a la nube', () => {
   });
 
   it('la foto va a Storage y en la fila solo queda su ruta, con los nombres de la tabla', () => {
-    const cloud = toCloudAccount(
-      {
-        userId: 'u1',
-        email: 'rick@example.com',
-        ...EMPTY_DETAILS,
-        birthYear: 1998,
-        avatar: { kind: 'photo', dataUrl: 'data:image/jpeg;base64,AAAA' },
-        updatedAt: '2026-10-02T00:00:00.000Z',
-      },
-      {
+    const cloud = toCloudAccount({
+      avatar: {
         avatar: { kind: 'photo', path: `${identity.authId}/avatar.jpg`, hash: 'deadbeef' },
         avatar_changed_at: '2026-10-02T00:00:00.000Z',
       },
-    );
+      details: { birth_year: 1998, details_changed_at: '2026-10-02T00:00:00.000Z' },
+    });
     expect(cloud.birth_year).toBe(1998);
     expect(cloud.avatar).toEqual({
       kind: 'photo',
@@ -131,10 +133,11 @@ describe('rol y datos que viajan a la nube', () => {
     expect(JSON.stringify(cloud)).not.toContain('base64');
   });
 
-  it('el alias sale de la nube o del correo', () => {
-    expect(aliasFor({ alias: 'Rick', email: 'a@b.com' })).toBe('Rick');
-    expect(aliasFor({ alias: 'Alumno', email: 'ricardo.m@b.com' })).toBe('ricardo.m');
-    expect(aliasFor({ alias: null, email: 'x@b.com' })).toBe('x');
+  it('el alias sale de la nube y nunca del correo, que suele llevar el nombre real (B9)', () => {
+    expect(aliasFor({ alias: 'Rick' })).toBe('Rick');
+    expect(aliasFor({ alias: 'Alumno' })).toBe(PLACEHOLDER_ALIAS);
+    expect(aliasFor({ alias: null })).toBe(PLACEHOLDER_ALIAS);
+    expect(aliasFor({ alias: '  ' })).toBe(PLACEHOLDER_ALIAS);
   });
 });
 
@@ -165,6 +168,17 @@ describe('unir la cuenta de la nube con el perfil local', () => {
       userId: linked.userId,
       created: false,
     });
+  });
+
+  it('un perfil que nace sin formulario no acepta el aviso por la persona ni confirma su edad (B9)', async () => {
+    const { api } = setup();
+    const linked = await linkCloudIdentity(api, { ...identity, alias: 'Alumno' });
+    expect((await api.repos.users.get(linked.userId))?.alias).toBe(PLACEHOLDER_ALIAS);
+    // Sin ninguna decisión bajo ninguna versión del aviso, así el puente no registra una aceptación
+    expect(await acceptedNoticeVersion(api, linked.userId)).toBeNull();
+    expect(await api.repos.consents.list()).toEqual([]);
+    expect((await findAccountByEmail(api, identity.email))?.adultConfirmedAt).toBeUndefined();
+    expect(await hasLocalSignup(api, linked.userId)).toBe(false);
   });
 });
 
@@ -295,7 +309,8 @@ describe('la foto de perfil entre dispositivos (B2)', () => {
     const row = lastRow(fake);
     expect('avatar' in row).toBe(false);
     expect('avatar_changed_at' in row).toBe(false);
-    expect(row.birth_year).toBeNull();
+    // Tampoco los datos opcionales, porque no se sabe cuáles son los más recientes (H29)
+    expect('birth_year' in row).toBe(false);
     expect((await localAccount(api)).avatar).toEqual({ kind: 'initials' });
   });
 
@@ -428,5 +443,433 @@ describe('la foto de perfil entre dispositivos (B2)', () => {
     );
     expect(fake.objects.size).toBe(0);
     expect(fake.remoteAccount.avatar).toEqual({ kind: 'initials' });
+  });
+});
+
+describe('los datos opcionales entre dispositivos (H29, B9)', () => {
+  const EARLY = '2026-10-12T09:00:00.000Z';
+  const LATE = '2026-10-13T09:00:00.000Z';
+  type Api = ReturnType<typeof setup>['api'];
+
+  /** La fila de la nube con datos que guardó otro dispositivo */
+  const cloudWithDetails = (changedAt: string | null) => {
+    const fake = makeFakeCloud();
+    fake.remoteAccount = {
+      avatar: { kind: 'initials' },
+      avatar_changed_at: null,
+      birth_year: 1996,
+      sex: 'female',
+      state: 'YUC',
+      situation: 'graduated',
+      attempt: 2,
+      target_specialty: 'pediatrics',
+      details_changed_at: changedAt,
+    };
+    return fake;
+  };
+
+  const localAccount = async (api: Api) => {
+    const account = await findAccountByEmail(api, identity.email);
+    if (!account) throw new Error('falta la cuenta');
+    return account;
+  };
+
+  const sync = async (api: Api, fake: FakeCloud) => {
+    const linked = await linkCloudIdentity(api, identity);
+    expect(await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId)).toBe(true);
+    return linked;
+  };
+
+  it('un dispositivo nuevo no borra en la nube el año de nacimiento ni lo demás, y lo baja', async () => {
+    for (const changedAt of [EARLY, null]) {
+      const { api } = setup();
+      const fake = cloudWithDetails(changedAt);
+      await sync(api, fake);
+      // Nada de los datos viaja de un dispositivo que nunca los guardó
+      for (const row of fake.accountUpdates) {
+        for (const column of [
+          'birth_year',
+          'sex',
+          'state',
+          'situation',
+          'attempt',
+          'target_specialty',
+        ]) {
+          expect(column in row, column).toBe(false);
+        }
+      }
+      expect(fake.remoteAccount?.birth_year).toBe(1996);
+      const account = await localAccount(api);
+      expect(account).toMatchObject({
+        birthYear: 1996,
+        sex: 'female',
+        state: 'YUC',
+        situation: 'graduated',
+        attempt: 2,
+        targetSpecialty: 'pediatrics',
+      });
+      // Con fecha en la nube se copia la fecha. Sin fecha el dispositivo sigue sin ella
+      expect(account.detailsChangedAt).toBe(changedAt ?? undefined);
+    }
+  });
+
+  it('lo que el alumno guardó después en este dispositivo sube completo, incluso un dato que borró', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(LATE));
+    const { api } = setup();
+    const fake = cloudWithDetails(EARLY);
+    const linked = await sync(api, fake);
+    const account = await localAccount(api);
+    vi.setSystemTime(new Date('2026-10-13T10:00:00.000Z'));
+    await updateAccount(api, account, { birthYear: null, targetSpecialty: 'psychiatry' });
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId);
+    expect(fake.remoteAccount).toMatchObject({
+      birth_year: null,
+      target_specialty: 'psychiatry',
+      sex: 'female',
+      details_changed_at: '2026-10-13T10:00:00.000Z',
+    });
+  });
+
+  it('guardar sin cambiar nada no mueve la fecha y no pisa lo más reciente de otro dispositivo', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(EARLY));
+    const { api } = setup();
+    const created = await registerAccount(api, {
+      alias: 'Rick',
+      email: identity.email,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: EMPTY_DETAILS,
+    });
+    if (!created.ok) throw new Error('no se creó');
+    // La fecha solo la pone Tus datos
+    const before = await updateAccount(api, await localAccount(api), { birthYear: 1990 });
+    expect(before.detailsChangedAt).toBe(EARLY);
+    vi.setSystemTime(new Date(LATE));
+    // Solo cambia la foto. Los datos y su fecha se quedan
+    const after = await updateAccount(api, before, {
+      birthYear: 1990,
+      avatar: { kind: 'initials' },
+    });
+    expect(after.detailsChangedAt).toBe(EARLY);
+    // Otro dispositivo guardó después y su versión gana aquí
+    const fake = cloudWithDetails(LATE);
+    await sync(api, fake);
+    expect((await localAccount(api)).birthYear).toBe(1996);
+    expect(fake.accountUpdates.every((row) => !('birth_year' in row))).toBe(true);
+  });
+
+  it('una cuenta de antes sin fechas junta los datos campo por campo y en un choque gana la nube', async () => {
+    const { api } = setup();
+    const created = await registerAccount(api, {
+      alias: 'Rick',
+      email: identity.email,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: EMPTY_DETAILS,
+    });
+    if (!created.ok) throw new Error('no se creó');
+    // Datos guardados antes de B9, sin fecha
+    await api.repos.accounts.put({
+      ...(await localAccount(api)),
+      sex: 'male',
+      attempt: 3,
+    });
+    const fake = makeFakeCloud();
+    fake.remoteAccount = {
+      sex: 'female',
+      attempt: null,
+      birth_year: 1996,
+      details_changed_at: null,
+    };
+    await sync(api, fake);
+    const account = await localAccount(api);
+    expect(account).toMatchObject({ sex: 'female', attempt: 3, birthYear: 1996 });
+    expect(fake.remoteAccount).toMatchObject({ sex: 'female', attempt: 3, birth_year: 1996 });
+    // Solo sube lo que la nube no tenía
+    const last = fake.accountUpdates.at(-1) ?? {};
+    expect(Object.keys(last).sort()).toEqual(['attempt', 'updated_at']);
+    expect(last.attempt).toBe(3);
+  });
+
+  it('registrarse en un dispositivo nuevo con una cuenta que ya existe no borra los datos de la nube', async () => {
+    const DETAIL_COLUMNS = [
+      'birth_year',
+      'sex',
+      'state',
+      'situation',
+      'attempt',
+      'target_specialty',
+    ] as const;
+    /** Crear cuenta en este dispositivo, con solo la especialidad */
+    const signUpWithSpecialty = async (api: Api) => {
+      const created = await registerAccount(api, {
+        alias: 'Rick',
+        email: identity.email,
+        dailyGoal: { metric: 'cards', value: 20 },
+        details: { ...EMPTY_DETAILS, targetSpecialty: 'psychiatry' },
+      });
+      if (!created.ok) throw new Error('no se creó');
+      const account = await localAccount(api);
+      // Lo del registro no lleva fecha. Queda marcado para entrar campo por campo
+      expect(account.detailsChangedAt).toBeUndefined();
+      expect(account.detailsFromSignup).toBe(true);
+    };
+
+    for (const changedAt of [EARLY, null]) {
+      // La nube ya tiene datos de otro dispositivo, sin especialidad. La del registro llena el hueco
+      const { api } = setup();
+      await signUpWithSpecialty(api);
+      const fake = cloudWithDetails(changedAt);
+      fake.remoteAccount = { ...fake.remoteAccount, target_specialty: null };
+      await sync(api, fake);
+      for (const row of fake.accountUpdates) {
+        for (const column of DETAIL_COLUMNS) {
+          if (column !== 'target_specialty') expect(column in row, column).toBe(false);
+        }
+        // Nunca viaja un vacío ni una fecha nueva desde lo del registro
+        expect(Object.values(row)).not.toContain(null);
+        expect('details_changed_at' in row).toBe(false);
+      }
+      expect(fake.remoteAccount).toMatchObject({
+        birth_year: 1996,
+        sex: 'female',
+        state: 'YUC',
+        situation: 'graduated',
+        attempt: 2,
+        target_specialty: 'psychiatry',
+        details_changed_at: changedAt,
+      });
+      const account = await localAccount(api);
+      expect(account).toMatchObject({
+        birthYear: 1996,
+        sex: 'female',
+        state: 'YUC',
+        situation: 'graduated',
+        attempt: 2,
+        targetSpecialty: 'psychiatry',
+      });
+      // Ya se juntó. Toma la fecha de la nube si la había y pierde la marca del registro
+      expect(account.detailsChangedAt).toBe(changedAt ?? undefined);
+      expect(account.detailsFromSignup).toBeUndefined();
+    }
+
+    for (const changedAt of [EARLY, null]) {
+      // Si la nube ya tiene otra especialidad, gana la nube y nada de los datos sube
+      const { api } = setup();
+      await signUpWithSpecialty(api);
+      const fake = cloudWithDetails(changedAt);
+      await sync(api, fake);
+      for (const row of fake.accountUpdates) {
+        for (const column of DETAIL_COLUMNS) expect(column in row, column).toBe(false);
+      }
+      expect(fake.remoteAccount?.target_specialty).toBe('pediatrics');
+      expect(fake.remoteAccount?.birth_year).toBe(1996);
+      expect((await localAccount(api)).targetSpecialty).toBe('pediatrics');
+    }
+  });
+
+  it('lo que guarda Tus datos después del registro lleva fecha y vuelve a ganar completo', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(LATE));
+    const { api } = setup();
+    const created = await registerAccount(api, {
+      alias: 'Rick',
+      email: identity.email,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: { ...EMPTY_DETAILS, targetSpecialty: 'psychiatry' },
+    });
+    if (!created.ok) throw new Error('no se creó');
+    const saved = await updateAccount(api, await localAccount(api), { birthYear: 1999 });
+    expect(saved.detailsChangedAt).toBe(LATE);
+    expect(saved.detailsFromSignup).toBeUndefined();
+    const fake = cloudWithDetails(EARLY);
+    await sync(api, fake);
+    expect(fake.remoteAccount).toMatchObject({
+      birth_year: 1999,
+      target_specialty: 'psychiatry',
+      sex: null,
+      details_changed_at: LATE,
+    });
+  });
+});
+
+describe('el registro con Google y lo que pide el registro (B9)', () => {
+  const pending: PendingSignup = {
+    alias: 'Ricky',
+    dailyGoal: { metric: 'questions', value: 15 },
+    details: { ...EMPTY_DETAILS, targetSpecialty: 'pediatrics' },
+    adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+    heardFrom: { channel: 'influencer', influencerCode: 'ANA_2026' },
+    consents: { party: true },
+    savedAt: '2026-10-13T09:00:00.000Z',
+  };
+  const google = { ...identity, alias: 'Alumno', provider: 'google' };
+
+  it('el perfil nuevo nace con lo que llenó antes de ir a Google', async () => {
+    const { api } = setup();
+    const linked = await linkCloudIdentity(api, google, pending);
+    expect(linked.created).toBe(true);
+    const user = await api.repos.users.get(linked.userId);
+    expect(user?.alias).toBe('Ricky');
+    expect(user?.settings.dailyGoal).toEqual({ metric: 'questions', value: 15 });
+    const account = await findAccountByEmail(api, identity.email);
+    expect(account).toMatchObject({
+      targetSpecialty: 'pediatrics',
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: { channel: 'influencer', influencerCode: 'ANA_2026' },
+    });
+    // Solo el permiso que marcó se prende. Los demás siguen apagados (4.27)
+    expect(await currentConsents(api, linked.userId)).toEqual({
+      party: true,
+      ai_analysis: false,
+      anonymized_improvement: false,
+    });
+    // Si el perfil ya existía, lo pendiente no lo cambia
+    const again = await linkCloudIdentity(api, google, { ...pending, alias: 'Otro' });
+    expect(again).toEqual({ userId: linked.userId, created: false });
+    expect((await api.repos.users.get(linked.userId))?.alias).toBe('Ricky');
+  });
+
+  it('la confirmación de edad sube una vez y cómo nos conoció viaja a su función privada', async () => {
+    const { api } = setup();
+    const linked = await linkCloudIdentity(api, google, pending);
+    const fake = makeFakeCloud();
+    fake.remoteAccount = { adult_confirmed_at: null };
+    fake.rpcReplies.record_signup_source = { data: true, error: null };
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId);
+    expect(fake.accountUpdates.at(-1)?.adult_confirmed_at).toBe('2026-10-13T09:00:00.000Z');
+    expect(fake.rpcCalls.filter((name) => name === 'record_signup_source')).toHaveLength(1);
+    const account = await findAccountByEmail(api, identity.email);
+    expect(account?.heardFrom?.recordedAt).toBeDefined();
+    // La siguiente sincronización ya no la manda ni vuelve a subir la confirmación
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId);
+    expect(fake.rpcCalls.filter((name) => name === 'record_signup_source')).toHaveLength(1);
+    expect('adult_confirmed_at' in (fake.accountUpdates.at(-1) ?? {})).toBe(false);
+  });
+
+  it('si la respuesta no llegó a la nube se vuelve a intentar después', async () => {
+    const { api } = setup();
+    const linked = await linkCloudIdentity(api, google, pending);
+    const fake = makeFakeCloud();
+    fake.rpcReplies.record_signup_source = { error: { code: 'PGRST202', message: 'no existe' } };
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId);
+    expect((await findAccountByEmail(api, identity.email))?.heardFrom?.recordedAt).toBeUndefined();
+    fake.rpcReplies.record_signup_source = { data: false, error: null };
+    await pushLocalAccount(api, fake.cloud, identity.authId, linked.userId);
+    expect((await findAccountByEmail(api, identity.email))?.heardFrom?.recordedAt).toBeDefined();
+  });
+
+  it('el registro del formulario cuenta como registro en este dispositivo', async () => {
+    const { api } = setup();
+    // Crear cuenta con el correo, con el aviso a la vista
+    const created = await registerAccount(api, {
+      alias: 'Rick',
+      email: identity.email,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: EMPTY_DETAILS,
+      signup: { adultConfirmedAt: '2026-10-13T09:00:00.000Z' },
+    });
+    if (!created.ok) throw new Error('no se creó');
+    expect(await hasLocalSignup(api, created.user.id)).toBe(true);
+    // Lo que llenó antes de ir a Google, en otro navegador
+    const other = setup();
+    const google = await linkCloudIdentity(other.api, { ...identity, provider: 'google' }, pending);
+    expect(await hasLocalSignup(other.api, google.userId)).toBe(true);
+  });
+});
+
+describe('Completa tu registro se decide por datos y no por proveedor (B9)', () => {
+  const NOTICE = '2026-10-02';
+  type Api = ReturnType<typeof setup>['api'];
+
+  /** Un perfil que nació sin formulario, al entrar por primera vez con esa cuenta */
+  const bornWithoutForm = async (api: Api, provider: 'email' | 'google') => {
+    const linked = await linkCloudIdentity(api, { ...identity, alias: 'Alumno', provider });
+    expect(linked.created).toBe(true);
+    expect(await hasLocalSignup(api, linked.userId)).toBe(false);
+    return linked.userId;
+  };
+
+  it('con el correo o con Google, una cuenta sin registro en la nube debe completarlo', async () => {
+    for (const provider of ['email', 'google'] as const) {
+      const { api } = setup();
+      const userId = await bornWithoutForm(api, provider);
+      const fake = makeFakeCloud();
+      fake.remoteAccount = { adult_confirmed_at: null };
+      expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('required');
+      // Nada se copia ni se acepta por la persona
+      expect(await acceptedNoticeVersion(api, userId)).toBeNull();
+      expect(await hasLocalSignup(api, userId)).toBe(false);
+      // Sin fila en la nube tampoco
+      fake.remoteAccount = null;
+      expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('required');
+    }
+  });
+
+  it('si la nube no se puede leer no deja pasar', async () => {
+    const { api } = setup();
+    const userId = await bornWithoutForm(api, 'email');
+    const fake = makeFakeCloud();
+    fake.failAccountRead = 'error';
+    expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('unknown');
+    fake.failAccountRead = 'throw';
+    expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('unknown');
+    fake.failAccountRead = 'none';
+    fake.failAcceptanceRead = 'error';
+    expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('unknown');
+    expect(await hasLocalSignup(api, userId)).toBe(false);
+  });
+
+  it('si la nube tarda demasiado tampoco deja pasar', async () => {
+    const { api } = setup();
+    const userId = await bornWithoutForm(api, 'google');
+    const hanging = {
+      from: () => {
+        const chain: Record<string, unknown> = {
+          select: () => chain,
+          eq: () => chain,
+          order: () => chain,
+          limit: () => new Promise(() => undefined),
+          maybeSingle: () => new Promise(() => undefined),
+        };
+        return chain;
+      },
+    } as unknown as FakeCloud['cloud'];
+    const started = Date.now();
+    expect(await readCloudSignup(hanging, identity.authId, 30)).toEqual({ status: 'failed' });
+    expect(Date.now() - started).toBeLessThan(2000);
+    expect(await hasLocalSignup(api, userId)).toBe(false);
+  });
+
+  it('si otro dispositivo ya completó el registro, copia la edad y el aviso aceptado y no lo pide', async () => {
+    const { api } = setup();
+    const userId = await bornWithoutForm(api, 'email');
+    const fake = makeFakeCloud();
+    fake.remoteAccount = { adult_confirmed_at: '2026-10-12T09:00:00.000Z' };
+    fake.acceptances = ['2026-09-01', NOTICE];
+    expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('complete');
+    expect((await findAccountByEmail(api, identity.email))?.adultConfirmedAt).toBe(
+      '2026-10-12T09:00:00.000Z',
+    );
+    // Cada finalidad apagada bajo la versión que la cuenta aceptó, la más reciente
+    expect(await acceptedNoticeVersion(api, userId)).toBe(NOTICE);
+    expect(await currentConsents(api, userId)).toEqual({
+      party: false,
+      ai_analysis: false,
+      anonymized_improvement: false,
+    });
+    expect(await hasLocalSignup(api, userId)).toBe(true);
+  });
+
+  it('una cuenta de antes de B9, con el aviso aceptado y sin la edad, no cambia', async () => {
+    const { api } = setup();
+    const userId = await bornWithoutForm(api, 'email');
+    const fake = makeFakeCloud();
+    fake.remoteAccount = { adult_confirmed_at: null };
+    fake.acceptances = [NOTICE];
+    expect(await resolveCloudSignup(api, fake.cloud, identity.authId, userId)).toBe('complete');
+    expect((await findAccountByEmail(api, identity.email))?.adultConfirmedAt).toBeUndefined();
+    expect(await acceptedNoticeVersion(api, userId)).toBe(NOTICE);
+    expect(await hasLocalSignup(api, userId)).toBe(true);
   });
 });

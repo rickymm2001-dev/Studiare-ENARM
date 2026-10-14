@@ -15,6 +15,15 @@ Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega
 
 - **Pega el archivo de Party en Supabase.** Las migraciones de Party en la nube y de referidos ya están aplicadas en el proyecto. Falta supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia una llave foránea y el conector no lo puede aplicar. Pégalo completo en Supabase, SQL Editor, New query, y da clic en Run. La consulta del final debe dar regla_al_borrar en n, owner_id_opcional en true y disparador_activo en true. Mientras no lo pegues, si quien creó un grupo borra su cuenta, el grupo se borra para todos sus miembros
 
+## Lo que salió de B9, cuentas y acceso
+
+La sesión aplica la migración y publica la función admin-reset-mfa al fusionar el bloque. Lo que sigue es tuyo, con el detalle paso a paso en docs/SUPABASE.md, sección Cuentas y acceso (B9).
+
+- **Activa el gancho del registro.** En Supabase, Authentication, Hooks, Before User Created, tipo Postgres, función public.before_user_created_hook. Sin este paso cualquiera crea su cuenta aunque la app diga que es solo con invitación. Después prueba en incógnito con un correo que no invitaste
+- **Entrar con Google.** En Google Cloud, cliente OAuth web con la dirección de regreso https://bkjbcdwglyllizupokqm.supabase.co/auth/v1/callback, sus datos en Supabase, Authentication, Providers, Google, y al final la bandera googleSignIn. Va con el paso 13
+- **Segundo factor del equipo.** Prende la bandera requireMfa con la consulta de docs/SUPABASE.md y da de alta tu código con una app de autenticación la próxima vez que entres. Desde ahí, sin el código no tienes tu rol de dueño
+- **Invita a tus aspirantes** en Usuarios, Invitaciones. El día del lanzamiento abres el registro con Abrir el registro
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar

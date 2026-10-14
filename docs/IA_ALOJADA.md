@@ -4,7 +4,7 @@ Fase G, bloque G1 (D-103). Con esto la IA real funciona para los alumnos en la d
 
 ## Cómo funciona
 
-- La app manda el token de la sesión de Supabase a la dirección del proxy alojado. El proxy lo verifica con Supabase, lee el plan con la función my_plan y el rol con la tabla user_roles, y decide
+- La app manda el token de la sesión de Supabase a la dirección del proxy alojado. El proxy lo verifica con Supabase, lee el plan con la función my_plan y el rol con la función current_app_role, y decide. Esa función es la misma de los permisos por fila, así que con el segundo factor prendido (B9) solo da el rol del equipo a una sesión que ya verificó su código
 - Un alumno del plan Gratis recibe el aviso de que la IA es de los planes de pago. Un médico, un admin o el dueño la usan siempre
 - Si la cuenta está activa en otro dispositivo, el proxy lo dice y no atiende. La barrera del dispositivo único también llega a la IA
 - El alumno de cada llamada es la cuenta verificada. Lo que diga el cliente en su sobre no cuenta

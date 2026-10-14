@@ -1,13 +1,25 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
+import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEVICE_CLAIM_STORAGE_KEY, forgetDeviceClaim, getDeviceId } from '@/data/cloud/device';
+import { GOOGLE_REDIRECT_KEY } from '@/data/cloud/oauth';
+import { PENDING_SIGNUP_KEY, savePendingSignup } from '@/data/cloud/pendingSignup';
+import { useDataApi, type DataApi } from '@/data/context';
+import {
+  completeSignup,
+  EMPTY_DETAILS,
+  findAccountByEmail,
+  registerAccount,
+} from '@/data/usecases/account';
+import { acceptedNoticeVersion, decideAllConsents } from '@/data/usecases/profile';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { FLAGS_KEY } from '@/config/featureFlags';
 import { OVERRIDES_KEY } from '@/config/overridesStore';
+import { useAccess } from './accessState';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
 import { useConfigUpdate } from './configUpdate';
@@ -22,16 +34,31 @@ vi.mock('@/data/cloud/client', () => ({
 }));
 
 const AUTH_ID = '6f1c0f1e-6b4a-4d2a-9d55-6f2f3f6a1b10';
+const captured: { api?: DataApi } = {};
+
+function Capture() {
+  const value = useDataApi();
+  useEffect(() => {
+    captured.api = value;
+  });
+  return null;
+}
 
 function mount(kind: 'real' | 'demo' = 'real') {
   return render(
     <DataProvider kind={kind}>
+      <Capture />
       <CloudBridge />
     </DataProvider>,
   );
 }
 
-function useFake(fake: FakeCloud) {
+/**
+ * La nube de la prueba. Por omisión la cuenta ya completó su registro en otro dispositivo y aceptó el
+ * aviso, como las cuentas de antes de B9. Con registered en false la cuenta nunca lo completó
+ */
+function useFake(fake: FakeCloud, options: { registered?: boolean } = {}) {
+  if (options.registered ?? true) fake.acceptances = [PRIVACY_NOTICE_VERSION];
   holder.cloud = fake.cloud;
   return fake;
 }
@@ -64,7 +91,10 @@ describe('CloudBridge y el dispositivo único', () => {
       expect(fake.claims).toHaveLength(1);
     });
     expect(linked()).toBe(true);
-    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    // El perfil se abre cuando se sabe que la cuenta ya completó su registro (B9)
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
     expect(fake.claims[0]?.p_device_id).toBe(getDeviceId());
     expect(fake.row?.device_id).toBe(getDeviceId());
     expect(fake.signOuts).toHaveLength(0);
@@ -115,7 +145,10 @@ describe('CloudBridge y el dispositivo único', () => {
     await waitFor(() => {
       expect(fake.claims).toHaveLength(1);
     });
-    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    // El perfil se abre cuando se sabe que la cuenta ya completó su registro (B9)
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
     // Otro dispositivo gana y esta pestaña lo ve al volver a enfocarse, pasados unos minutos
     fake.row = { device_id: 'otro-navegador' };
     vi.useFakeTimers({ toFake: ['Date'] });
@@ -212,7 +245,10 @@ describe('CloudBridge y el dispositivo único', () => {
     });
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(linked()).toBe(true);
-    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    // El perfil se abre cuando se sabe que la cuenta ya completó su registro (B9)
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
     expect(fake.signOuts).toHaveLength(0);
 
     cleanup();
@@ -311,7 +347,10 @@ describe('CloudBridge y el dispositivo único', () => {
     expect(useCloud.getState().state.status).toBe('linked');
     expect(fake.signOuts).toHaveLength(0);
     expect(fake.rejections).toHaveLength(0);
-    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    // El perfil se abre cuando se sabe que la cuenta ya completó su registro (B9)
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
   });
 
   it('al entrar con una sesión nueva en este navegador reclama aunque ya hubiera reclamado antes', async () => {
@@ -387,15 +426,48 @@ describe('CloudBridge y el dispositivo único', () => {
 });
 
 describe('CloudBridge y el aviso de privacidad', () => {
-  it('registra la versión del aviso bajo la que se creó su perfil en este dispositivo, una sola vez', async () => {
-    const fake = useFake(makeFakeCloud());
+  it('registra la versión del aviso bajo la que se creó su perfil en Crear cuenta, una sola vez', async () => {
+    const EMAIL = 'con.formulario@example.com';
+    const fake = useFake(makeFakeCloud({ session: null }), { registered: false });
     mount();
     await waitFor(() => {
-      expect(fake.claims).toHaveLength(1);
+      expect(captured.api).toBeDefined();
+    });
+    const created = await registerAccount(captured.api as DataApi, {
+      alias: 'Formulario',
+      email: EMAIL,
+      dailyGoal: { metric: 'cards', value: 20 },
+      details: EMPTY_DETAILS,
+      signup: { adultConfirmedAt: '2026-10-13T09:00:00.000Z' },
+    });
+    if (!created.ok) throw new Error('no se creó');
+    // Abre el enlace en este mismo navegador
+    fake.session = { id: AUTH_ID, email: EMAIL };
+    act(() => {
+      fake.emit('SIGNED_IN');
     });
     await waitFor(() => {
       expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
     });
+    expect(usePreferences.getState().sessionUserId).toBe(created.user.id);
+    act(() => {
+      fake.emit('SIGNED_IN');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+  });
+
+  it('un perfil que nació sin formulario no acepta el aviso por la persona', async () => {
+    const fake = useFake(
+      makeFakeCloud({ session: { id: AUTH_ID, email: 'sin.formulario@example.com' } }),
+      { registered: false },
+    );
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().signup.status).toBe('required');
+    });
+    expect(fake.claims).toHaveLength(1);
+    expect(fake.acceptances).toEqual([]);
   });
 });
 
@@ -549,5 +621,333 @@ describe('CloudBridge y las banderas de lanzamiento (D-119)', () => {
     await waitFor(() => {
       expect(localStorage.getItem(FLAGS_KEY)).toBeNull();
     });
+  });
+});
+
+describe('CloudBridge y el acceso (B9)', () => {
+  /** Prende el segundo factor del equipo en el servidor y en la copia del navegador */
+  const requireMfa = (fake: FakeCloud) => {
+    fake.flags = { requireMfa: true };
+    localStorage.setItem(FLAGS_KEY, JSON.stringify({ requireMfa: true }));
+  };
+
+  afterEach(() => {
+    useAccess.setState({
+      mfa: { status: 'not-required' },
+      signup: { status: 'none' },
+      oauthError: null,
+    });
+    sessionStorage.clear();
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('con la bandera, un médico sin factor ve el alta y uno con factor ve el código', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.role = 'physician';
+    requireMfa(fake);
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'enroll' });
+    });
+
+    cleanup();
+    useAccess.setState({ mfa: { status: 'not-required' } });
+    fake.mfa.factors = [{ id: 'f1', factor_type: 'totp', status: 'verified' }];
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'challenge', factorId: 'f1' });
+    });
+  });
+
+  it('una sesión que ya dio su código no se vuelve a bloquear', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.role = 'admin';
+    fake.mfa.level = 'aal2';
+    fake.mfa.factors = [{ id: 'f1', factor_type: 'totp', status: 'verified' }];
+    requireMfa(fake);
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().mfa).toEqual({ status: 'verified' });
+    });
+  });
+
+  it('el alumno nunca pasa por el segundo factor, y sin la bandera tampoco el equipo', async () => {
+    const student = useFake(makeFakeCloud());
+    requireMfa(student);
+    mount();
+    await waitFor(() => {
+      expect(student.claims).toHaveLength(1);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useAccess.getState().mfa).toEqual({ status: 'not-required' });
+    expect(student.mfa.enrollCalls).toBe(0);
+
+    cleanup();
+    localStorage.clear();
+    const admin = useFake(makeFakeCloud());
+    admin.role = 'admin';
+    mount();
+    await waitFor(() => {
+      expect(admin.claims).toHaveLength(1);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useAccess.getState().mfa).toEqual({ status: 'not-required' });
+  });
+
+  // Cada prueba con su propio correo, porque los perfiles de este navegador quedan entre pruebas
+  const googleSession = (email: string) =>
+    makeFakeCloud({ session: { id: AUTH_ID, email, provider: 'google' } });
+
+  it('una cuenta de Google nace con lo que el alumno llenó en Crear cuenta antes de ir a Google', async () => {
+    const fake = useFake(googleSession('nueva.google@example.com'), { registered: false });
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: { ...EMPTY_DETAILS, targetSpecialty: 'pediatrics' },
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: { channel: 'friend', influencerCode: null },
+      consents: {},
+    });
+    mount();
+    await waitFor(() => {
+      expect(fake.accountUpdates.length).toBeGreaterThan(0);
+    });
+    const userId = usePreferences.getState().sessionUserId ?? '';
+    expect(useAccess.getState().signup).toEqual({ status: 'none' });
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+    // La confirmación de edad llega a la nube y el aviso queda aceptado
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
+    expect(
+      fake.accountUpdates.some((row) => row.adult_confirmed_at === '2026-10-13T09:00:00.000Z'),
+    ).toBe(true);
+    expect(userId).not.toBe('');
+  });
+
+  it('con dos revisiones a la vez al volver de Google, el perfil nace con el registro pendiente', async () => {
+    const fake = useFake(googleSession('carrera.google@example.com'), { registered: false });
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: { ...EMPTY_DETAILS, targetSpecialty: 'pediatrics' },
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    // Supabase avisa SIGNED_IN mientras la revisión del arranque todavía lee la sesión, así las dos
+    // revisiones unen la cuenta al mismo tiempo
+    fake.holdSession = true;
+    mount();
+    await waitFor(() => {
+      expect(fake.heldSessionReads).toBe(1);
+    });
+    act(() => {
+      fake.emit('SIGNED_IN');
+    });
+    await waitFor(() => {
+      expect(fake.heldSessionReads).toBe(2);
+    });
+    fake.holdSession = false;
+    act(() => {
+      fake.releaseSession();
+    });
+    await waitFor(() => {
+      expect(fake.accountUpdates.length).toBeGreaterThan(0);
+    });
+    expect(useAccess.getState().signup).toEqual({ status: 'none' });
+    const account = await findAccountByEmail(captured.api as DataApi, 'carrera.google@example.com');
+    expect(account?.adultConfirmedAt).toBe('2026-10-13T09:00:00.000Z');
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+  });
+
+  it.each([
+    ['google', 'sin.registro@example.com'],
+    ['email', 'correo.invitado@example.com'],
+  ] as const)(
+    'una cuenta nueva que entra sin formulario con %s completa su registro antes de nada',
+    async (provider, email) => {
+      const fake = useFake(makeFakeCloud({ session: { id: AUTH_ID, email, provider } }), {
+        registered: false,
+      });
+      fake.remoteAccount = { adult_confirmed_at: null };
+      fake.sync = 'ok';
+      mount();
+      await waitFor(() => {
+        expect(useAccess.getState().signup.status).toBe('required');
+      });
+      // Reclama el dispositivo, pero no abre el perfil, no sube la cuenta, no acepta el aviso por la
+      // persona y no sincroniza
+      expect(fake.claims).toHaveLength(1);
+      expect(usePreferences.getState().sessionUserId).toBeNull();
+      expect(fake.accountUpdates).toEqual([]);
+      expect(fake.acceptances).toEqual([]);
+      expect(fake.rpcCalls.filter((name) => name.startsWith('sync_'))).toEqual([]);
+      const account = await findAccountByEmail(captured.api as DataApi, email);
+      expect(useAccess.getState().signup).toEqual({ status: 'required', userId: account?.userId });
+      expect(
+        await acceptedNoticeVersion(captured.api as DataApi, account?.userId ?? ''),
+      ).toBeNull();
+    },
+  );
+
+  it('al guardar Completa tu registro el puente abre el perfil, sube la cuenta, registra el aviso y sincroniza', async () => {
+    const EMAIL = 'completa@example.com';
+    const fake = useFake(makeFakeCloud({ session: { id: AUTH_ID, email: EMAIL } }), {
+      registered: false,
+    });
+    fake.remoteAccount = { adult_confirmed_at: null };
+    fake.sync = 'ok';
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().signup.status).toBe('required');
+    });
+    const api = captured.api as DataApi;
+    const account = await findAccountByEmail(api, EMAIL);
+    const user = account ? await api.repos.users.get(account.userId) : undefined;
+    if (!account || !user) throw new Error('falta el perfil');
+    // Lo que guarda la pantalla
+    await completeSignup(api, account, { adultConfirmedAt: '2026-10-13T11:00:00.000Z' });
+    await decideAllConsents(api, user, { party: true });
+    act(() => {
+      useAccess.getState().finishSignup();
+    });
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).toBe(account.userId);
+    });
+    await waitFor(() => {
+      expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+    });
+    expect(
+      fake.accountUpdates.some((row) => row.adult_confirmed_at === '2026-10-13T11:00:00.000Z'),
+    ).toBe(true);
+    await waitFor(() => {
+      expect(fake.rpcCalls).toContain('sync_clock');
+    });
+    expect(useAccess.getState().signup).toEqual({ status: 'none' });
+  });
+
+  it('si otro dispositivo ya completó el registro, copia la edad y entra sin pedirlo', async () => {
+    const EMAIL = 'otro.dispositivo@example.com';
+    const fake = useFake(makeFakeCloud({ session: { id: AUTH_ID, email: EMAIL } }));
+    fake.remoteAccount = { adult_confirmed_at: '2026-10-12T09:00:00.000Z' };
+    mount();
+    await waitFor(() => {
+      expect(usePreferences.getState().sessionUserId).not.toBeNull();
+    });
+    expect(useAccess.getState().signup).toEqual({ status: 'none' });
+    const account = await findAccountByEmail(captured.api as DataApi, EMAIL);
+    expect(account?.adultConfirmedAt).toBe('2026-10-12T09:00:00.000Z');
+    // No agrega otra aceptación, la que ya había basta
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(fake.acceptances).toEqual([PRIVACY_NOTICE_VERSION]);
+  });
+
+  it('si la nube no se puede leer no deja pasar, y al volver a intentarlo sigue', async () => {
+    const EMAIL = 'sin.red@example.com';
+    const fake = useFake(makeFakeCloud({ session: { id: AUTH_ID, email: EMAIL } }), {
+      registered: false,
+    });
+    fake.failAccountRead = 'error';
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().signup.status).toBe('unknown');
+    });
+    expect(usePreferences.getState().sessionUserId).toBeNull();
+    expect(useCloud.getState().state.status).toBe('linked');
+    expect(fake.accountUpdates).toEqual([]);
+
+    fake.failAccountRead = 'none';
+    fake.remoteAccount = { adult_confirmed_at: '2026-10-12T09:00:00.000Z' };
+    act(() => {
+      useAccess.getState().recheck?.();
+    });
+    await waitFor(() => {
+      expect(useAccess.getState().signup).toEqual({ status: 'none' });
+    });
+    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+  });
+
+  it('mientras revisa el registro no deja abierto el perfil de otra persona en este navegador', async () => {
+    const fake = useFake(
+      makeFakeCloud({ session: { id: AUTH_ID, email: 'nueva.persona@example.com' } }),
+      { registered: false },
+    );
+    usePreferences.setState({ sessionUserId: 'perfil-de-otra-persona' });
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().signup.status).toBe('required');
+    });
+    expect(usePreferences.getState().sessionUserId).toBeNull();
+    expect(fake.signOuts).toEqual([]);
+  });
+
+  it('un registro pendiente no se aplica a una cuenta que entró con el correo', async () => {
+    useFake(makeFakeCloud());
+    savePendingSignup({
+      alias: 'Intruso',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: EMPTY_DETAILS,
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    mount();
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+  });
+
+  it('si Google regresó con un error lo deja para el aviso, olvida el registro pendiente y limpia la dirección', async () => {
+    useFake(makeFakeCloud({ session: null }));
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: EMPTY_DETAILS,
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    // Esta pestaña salió a Google desde la página anterior
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(performance.timeOrigin - 1_000));
+    window.history.replaceState(
+      null,
+      '',
+      '/?error=access_denied&error_code=&error_description=no+tiene+una+(invitation_required)#error=access_denied&error_description=no+tiene+una+(invitation_required)&sb=',
+    );
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().oauthError).toBe('invitation_required');
+    });
+    expect(window.location.search).toBe('');
+    expect(window.location.hash).toBe('');
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+    expect(sessionStorage.getItem(GOOGLE_REDIRECT_KEY)).toBeNull();
+  });
+
+  it('el enlace del correo vencido se avisa como del correo, también con Google apagado', async () => {
+    useFake(makeFakeCloud({ session: null }));
+    window.history.replaceState(
+      null,
+      '',
+      '/#error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired&sb=',
+    );
+    mount();
+    await waitFor(() => {
+      expect(useAccess.getState().oauthError).toBe('link_expired');
+    });
+    expect(window.location.hash).toBe('');
+  });
+
+  it('si Google regresó con éxito la marca de la salida se borra', async () => {
+    useFake(makeFakeCloud({ session: null }));
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(performance.timeOrigin - 1_000));
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state.status).toBe('signed-out');
+    });
+    expect(sessionStorage.getItem(GOOGLE_REDIRECT_KEY)).toBeNull();
+    expect(useAccess.getState().oauthError).toBeNull();
   });
 });

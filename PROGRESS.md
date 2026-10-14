@@ -25,7 +25,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B6. Apuntes y mazos (PR 44 fusionado)
 - [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
 - [x] B8. Plan Gratis (PR 49 fusionado)
-- [ ] B9. Cuentas y acceso
+- [x] B9. Cuentas y acceso (PR en curso)
 - [ ] B10. Pagos completos
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
@@ -134,13 +134,23 @@ Evidencia
 - Desde B8 el ayudante followSmallestDeck de las e2e deja la cuenta en plan de pago. Una prueba que espere algo de Gratis lo fija ella misma
 - Capturas en docs/screenshots/v3/b8
 
+### B9. Cuentas y acceso (D-129)
+- Hecho. Registro solo por invitación con el gancho Before User Created, Continuar con Google tras la bandera googleSignIn, Completa tu registro para quien entra sin pasar por Crear cuenta, segundo factor TOTP para médicos, admins y dueño tras la bandera requireMfa, que el dueño restablece en Usuarios, Cómo nos conociste opcional con código de influencer, casilla de 18 años o más y datos opcionales que ganan por fecha entre dispositivos (H29)
+- Usuarios del admin con Invitaciones, Cómo nos conocieron, Liberar dispositivo y Restablecer segundo factor, en tabla en computadora y en lista en el teléfono (H15)
+- El aviso de privacidad pasa a la versión 2026-10-14b con lo que guarda B9 (entrar con Google, Cómo nos conociste y la fecha de la confirmación de edad). Sigue en borrador para B16
+- Revisión independiente con sus hallazgos corregidos. La unión con B3 a B8 resolvió 9 choques y 3 que git no marcó (el canje del referido espera a que la cuenta complete su registro, el puente revisa la sesión cerrada en las esperas nuevas y el orden de las migraciones)
+- La e2e encontró y corrigió tres fallas reales. Una cuenta que volvía de Google podía nacer sin lo que llenó en Crear cuenta si corrían dos revisiones a la vez, el puente borraba la marca de la salida a Google si el alumno la pulsaba antes de que cargara, y la pantalla del código empezaba con una línea suelta
+- Evidencia. Typecheck, lint y formato limpios. SQL en 18 archivos. E2e completa en teléfono y computadora 291 de 291 (1 saltada que solo es de computadora), nube 50 de 50 y audit:ui 20 de 20 más nube caída 2 de 2
+- Capturas en docs/screenshots/v3/b9 (41)
+- Para B19. El recorrido de audit:ui anota dos detalles de accesibilidad que ya estaban en main. El enlace al aviso en Configuración, Privacidad, es chico en el teléfono, y un campo de Datos de demostración del admin no muestra el foco. También, en el riel del admin a 1280 por 800 el último ícono sale sin etiqueta y las pantallas del segundo factor se ven dentro del marco completo de la app
+
 ### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
 - B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
 - B8 fusionado en main (PR 49), con sus dos migraciones aplicadas al proyecto y verificadas por huella antes de fusionar
 - La paleta con más color (PR 47 de otra herramienta, D-128) fusionada en main (PR 51), con los hallazgos de su revisión corregidos. El PR 50 de otra sesión, que repetía la paleta con D-127, se cerró por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
-- B9 en b9 con los hallazgos de su revisión corregidos. Su migración 20261020000001 no se ha aplicado
+- B9 cerrado en la rama de trabajo, con su PR. Su migración 20261020000001 y la función admin-reset-mfa se aplican al proyecto justo antes de fusionar
 - B10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido sobre B8 en int10, con 20 archivos SQL y las pruebas del servidor en verde. Falta su interfaz, que arranca sobre B9 integrado
 - Los diseños de B10, B11 y B12 están en /home/user/wt/plans
 - Los subagentes se detuvieron cinco veces por el límite de uso de la cuenta y se reanudaron con su contexto
@@ -156,6 +166,7 @@ Evidencia
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
 - B8. ¿Dejamos abierto en Gratis un mazo de muestra del catálogo? ¿Comparte tu semana sigue abierta en Gratis (hoy sí)? ¿Ocultamos de la tabla de Party a quien baja a Gratis (hoy lo siguen viendo hasta que salga)? ¿Médicos y admins sin plan entran a Party (hoy no, el rol no cuenta)? ¿Apuntes en Gratis deja ver y borrar los apuntes viejos (hoy se guardan y sus tarjetas siguen en Repasar)?
 - Paleta. En oscuro hay tres pares de ramas de tono parecido (Ginecología y Medicina familiar, Cirugía y Urgencias, Medicina interna y Pediatría). El nombre siempre va al lado, pero si quieres los separamos más. Se ven en docs/screenshots/v3/paleta
+- B9. La lista de especialidades de Tus datos no se revisó contra una fuente oficial. Una lista pública trae 27, sin Urología y con Medicina de la Actividad Física y Deportiva en lugar de Medicina Deportiva. ¿La revisas tú o tomamos esa?
 - B4 y B5. Revisé la versión que se revirtió. Todo lo que pide el plan ya estaba en la que se quedó y se rescataron tres detalles chicos (el aviso de tarjeta ya creada en la revisión del examen, el atajo X que dice seleccionar y dos pruebas que fallaban en Windows). Quedan a tu gusto, y cada uno es un cambio chico. Un número junto a cada tema de los mazos. Un total global de motivos de error en Progreso, además del reparto por rama. Una marca propia del alumno como la bandera de Anki, porque hoy Marcadas son las tarjetas con señal de la IA. Elegir temas dentro de cada mazo en Repasar (hoy se eligen mazo y subespecialidad). Pasar al documento de revisión médica las 22 diferencias de nombres de temas de la otra versión como alternativas
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)

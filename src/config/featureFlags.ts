@@ -53,6 +53,16 @@ export const FEATURE_FLAGS = {
       'Prueba gratis de 7 días en el botón de los candados de Gratis, como Apuntes, Party e Importar mazos (respuesta 20). Apagada hasta que B10 crea la prueba en Suscripción y la prende',
     defaults: { development: false, demo: false, production: false },
   },
+  googleSignIn: {
+    description:
+      'Botón Continuar con Google en la bienvenida (B9, respuesta 26). Apagado en todos lados hasta que el proveedor de Google esté configurado en Supabase, porque sin él el botón lleva a una página de error',
+    defaults: { development: false, demo: false, production: false },
+  },
+  requireMfa: {
+    description:
+      'Segundo factor obligatorio para médicos, admins y dueño (B9, respuesta 30). El servidor lee la misma bandera en feature_flags.requireMfa y sin sesión aal2 no les da su rol en los permisos por fila. Apagada en todos lados, igual que en el servidor sin la clave',
+    defaults: { development: false, demo: false, production: false },
+  },
 } as const satisfies Record<string, FlagDef>;
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS;

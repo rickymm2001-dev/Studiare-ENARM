@@ -11,6 +11,7 @@ import { requestBody, STUDENT } from '../ai/testing/fakes.ts';
 import { createHostedApp } from './app.ts';
 import {
   bearerToken,
+  canUseEngines,
   createSupabaseAuthenticator,
   type Authenticate,
   type CloudUser,
@@ -36,7 +37,8 @@ function fakeSupabase(
   options: {
     userStatus?: number;
     plan?: string | { status: number; body: unknown };
-    roleRows?: unknown;
+    /** Lo que contesta current_app_role, que ya aplica el segundo factor del equipo */
+    role?: unknown;
     roleStatus?: number;
   } = {},
 ): FakeSupabase {
@@ -59,10 +61,8 @@ function fakeSupabase(
         typeof plan === 'string' ? respond(200, { plan }) : respond(plan.status, plan.body),
       );
     }
-    if (path.startsWith('/rest/v1/user_roles')) {
-      return Promise.resolve(
-        respond(options.roleStatus ?? 200, options.roleRows ?? [{ role: 'student' }]),
-      );
+    if (path === '/rest/v1/rpc/current_app_role') {
+      return Promise.resolve(respond(options.roleStatus ?? 200, options.role ?? 'student'));
     }
     return Promise.resolve(respond(404, {}));
   };
@@ -92,24 +92,42 @@ describe('autenticación con Supabase', () => {
   });
 
   it('un médico se reconoce por su rol', async () => {
-    const result = await authenticator(
-      fakeSupabase({ plan: 'free', roleRows: [{ role: 'physician' }] }),
-    )('token-1');
+    const result = await authenticator(fakeSupabase({ plan: 'free', role: 'physician' }))(
+      'token-1',
+    );
     expect(result).toEqual({ ok: true, user: { id: USER_ID, role: 'physician', plan: 'free' } });
   });
 
-  it('sin fila de rol, o con un rol que no se reconoce, es alumno', async () => {
-    for (const roleRows of [[], [{ role: 'superusuario' }], 'raro']) {
-      const result = await authenticator(fakeSupabase({ roleRows }))('token-1');
+  it('con un rol que no se reconoce, o si current_app_role no contesta, es alumno', async () => {
+    for (const role of [null, 'superusuario', ['physician'], { role: 'admin' }]) {
+      const result = await authenticator(fakeSupabase({ role }))('token-1');
       expect(result).toMatchObject({ ok: true, user: { role: 'student' } });
     }
+    const failed = await authenticator(fakeSupabase({ role: 'admin', roleStatus: 500 }))('t');
+    expect(failed).toMatchObject({ ok: true, user: { role: 'student' } });
+  });
+
+  it('el rol sale de current_app_role, que pide segundo factor al equipo, y no de user_roles', async () => {
+    // Un médico de plan Gratis con la sesión sin segundo factor y la bandera prendida. La base lo
+    // cuenta como alumno, así que la IA también
+    const supabase = fakeSupabase({ plan: 'free', role: 'student' });
+    const result = await authenticator(supabase)('token-aal1');
+    expect(result).toEqual({ ok: true, user: { id: USER_ID, role: 'student', plan: 'free' } });
+    if (result.ok) expect(canUseEngines(result.user)).toBe(false);
+    const paths = supabase.calls.map((call) => call.path.split('?')[0]);
+    expect(paths).toContain('/rest/v1/rpc/current_app_role');
+    expect(paths).not.toContain('/rest/v1/user_roles');
   });
 
   it('pide todo con el token del alumno y la llave pública, nunca otra', async () => {
     const supabase = fakeSupabase();
     await authenticator(supabase)('token-del-alumno');
     expect(supabase.calls.map((call) => call.path.split('?')[0])).toEqual(
-      expect.arrayContaining(['/auth/v1/user', '/rest/v1/rpc/my_plan', '/rest/v1/user_roles']),
+      expect.arrayContaining([
+        '/auth/v1/user',
+        '/rest/v1/rpc/my_plan',
+        '/rest/v1/rpc/current_app_role',
+      ]),
     );
     for (const call of supabase.calls) {
       expect(call.headers.apikey).toBe(ANON);
@@ -175,7 +193,9 @@ describe('autenticación con Supabase', () => {
       fetchImpl: (input: string | URL | Request) => {
         const path = urlOf(input).replace(URL_, '');
         if (path === '/auth/v1/user') return Promise.resolve(Response.json({ id: USER_ID }));
-        if (path.startsWith('/rest/v1/user_roles')) return Promise.resolve(Response.json([]));
+        if (path === '/rest/v1/rpc/current_app_role') {
+          return Promise.resolve(Response.json('student'));
+        }
         return Promise.resolve(
           status === 403
             ? Response.json({ code: '42501' }, { status: 403 })

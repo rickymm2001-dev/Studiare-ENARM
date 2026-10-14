@@ -1,20 +1,36 @@
 // Estado de la cuenta en la nube (D-075). Escucha la sesión de Supabase, une la cuenta con el
 // perfil local, abre la sesión y aplica el rol que da el servidor. También reclama el dispositivo
-// y vigila que siga siendo el único activo de la cuenta. En la demostración no hace nada.
+// y vigila que siga siendo el único activo de la cuenta. Desde B9 revisa además si el equipo debe dar
+// su segundo factor, si un perfil que nació sin formulario debe completar su registro antes de subir
+// nada y si Google o el enlace del correo regresaron con un error. En la demostración no hace nada.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
-import { readCloudIdentity, recordPrivacyAcceptance } from '@/data/cloud/account';
+import { isFeatureEnabled } from '@/config/featureFlags';
+import {
+  readCloudIdentity,
+  recordPrivacyAcceptance,
+  type CloudIdentity,
+} from '@/data/cloud/account';
 import { mirrorRemoteOverrides } from '@/data/cloud/adminSettings';
 import { mirrorRemoteFlags } from '@/data/cloud/featureFlags';
 import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
+import { needsMfaRole, readMfaStatus } from '@/data/cloud/mfa';
+import { readOAuthRedirectError, takeGoogleRedirect, withoutOAuthError } from '@/data/cloud/oauth';
+import { clearPendingSignup, readPendingSignup } from '@/data/cloud/pendingSignup';
 import { useDataApi } from '@/data/context';
 import { runSync } from '@/data/sync/runSync';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { redeemPendingReferral } from '@/data/referrals/pendingReferral';
 import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
-import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
+import {
+  hasLocalSignup,
+  linkCloudIdentity,
+  pushLocalAccount,
+  resolveCloudSignup,
+} from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion } from '@/data/usecases/profile';
+import { NO_SIGNUP_PENDING, useAccess } from './accessState';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
@@ -23,16 +39,33 @@ import { signOutCount, usePreferences } from './preferences';
 import { startSyncScheduler, type SyncScheduler } from './syncScheduler';
 import { useSyncStatus } from './syncState';
 
+/**
+ * Si Supabase regresó con un error de Google o del enlace del correo, lo deja para el aviso del marco
+ * de la app, olvida lo que el alumno había llenado para registrarse y quita el error de la dirección,
+ * para que recargar no lo repita. Solo se lee como de Google si esta pestaña salió a Google (B9)
+ */
+function takeOAuthRedirectError(): void {
+  const fromGoogle = takeGoogleRedirect();
+  const error = readOAuthRedirectError(window.location.href, { fromGoogle });
+  if (!error) return;
+  useAccess.getState().setOAuthError(error);
+  clearPendingSignup();
+  const clean = withoutOAuthError(window.location.href);
+  if (clean) window.history.replaceState(window.history.state, '', clean);
+}
+
 /** Va dentro de DataProvider. No pinta nada */
 export function CloudBridge() {
   const api = useDataApi();
   const signIn = usePreferences((state) => state.signIn);
+  const closeLocalSession = usePreferences((state) => state.closeLocalSession);
   const signOut = usePreferences((state) => state.signOut);
   const setRole = usePreferences((state) => state.setRole);
   const setCloud = useCloud((store) => store.set);
 
   useEffect(() => {
     if (!cloudConfigured() || api.repos.kind !== 'real') return;
+    takeOAuthRedirectError();
     const connect = (cloud: SupabaseClient): (() => void) => {
       const run = { active: true };
       const stopped = () => !run.active;
@@ -65,6 +98,7 @@ export function CloudBridge() {
         stopSync();
         setCloud(state);
         forgetDeviceClaim();
+        useAccess.getState().resetSession();
         signOut();
       };
       const leaveForOtherDevice = () => {
@@ -72,6 +106,31 @@ export function CloudBridge() {
       };
       const leaveForDeviceLimit = (retryAt: number | null) => {
         leaveWith({ status: 'signed-out', reason: 'device_limit', retryAt });
+      };
+
+      /**
+       * Segundo factor del equipo (B9). Con la bandera requireMfa, que lee también el servidor, un
+       * médico, un admin o el dueño sin sesión aal2 ve la pantalla del código. Una sesión que ya lo dio
+       * no se vuelve a revisar. El alumno nunca
+       */
+      const checkMfa = async (identity: CloudIdentity, flags: Promise<unknown>) => {
+        const access = useAccess.getState();
+        await flags;
+        if (stopped() || isLeaving()) return;
+        if (!needsMfaRole(identity.role) || !isFeatureEnabled('requireMfa')) {
+          access.setMfa({ status: 'not-required' });
+          return;
+        }
+        if (useAccess.getState().mfa.status === 'verified') return;
+        if (useAccess.getState().mfa.status === 'not-required')
+          access.setMfa({ status: 'checking' });
+        const status = await readMfaStatus(cloud);
+        if (stopped() || isLeaving()) return;
+        access.setMfa(
+          status.kind === 'challenge'
+            ? { status: 'challenge', factorId: status.factorId }
+            : { status: status.kind },
+        );
       };
 
       // Reintentos de sync cuando falla, con espera creciente de 15 segundos a 5 minutos
@@ -97,7 +156,7 @@ export function CloudBridge() {
         try {
           // Las banderas de lanzamiento del servidor valen también para quien no ha entrado, porque la
           // tabla las deja leer sin sesión. Mandan sobre el entorno y se aplican al recargar (D-119)
-          void mirrorRemoteFlags(cloud).then((result) => {
+          const flags = mirrorRemoteFlags(cloud).then((result) => {
             if (result === 'changed' && !stopped()) useConfigUpdate.getState().set(true);
           });
           const identity = await readCloudIdentity(cloud);
@@ -106,18 +165,46 @@ export function CloudBridge() {
             leaving = false;
             stopGuard();
             forgetDeviceClaim();
+            useAccess.getState().resetSession();
             // Sin sesión nadie tiene un rol. Lo que haya en este dispositivo no vale (D-108)
             setRole('student');
             setCloud(signedOutState(useCloud.getState().state));
             return;
           }
           if (isLeaving() || signedOutMeanwhile()) return;
-          const linked = await linkCloudIdentity(api, identity);
+          // Lo que el alumno llenó en Crear cuenta antes de ir a Google solo sirve para una cuenta que
+          // entró con Google. Se lee sin borrarlo y se borra ya unida la cuenta, porque al volver de
+          // Google corren dos revisiones a la vez, la del arranque y la de SIGNED_IN. Si solo una lo
+          // viera y la otra creara antes el perfil, nacería sin el registro (B9)
+          const pending = readPendingSignup();
+          const linked = await linkCloudIdentity(
+            api,
+            identity,
+            identity.provider && identity.provider !== 'email' ? pending : null,
+          );
+          clearPendingSignup();
           if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           const { userId } = linked;
-          signIn(userId);
+          // Un perfil que nació sin formulario no vio el aviso ni confirmó su edad. No abre la sesión de
+          // este navegador, ni sube ni sincroniza nada, hasta saber si la cuenta ya completó su registro
+          // en otro lado. Así recargar o quedarse sin red no lo deja pasar. Se decide con lo que tiene el
+          // perfil y la nube, no con cómo entró la cuenta (B9)
+          const signedUpHere = await hasLocalSignup(api, userId);
+          if (stopped() || isLeaving() || signedOutMeanwhile()) return;
+          const access = useAccess.getState();
+          if (signedUpHere) {
+            access.setSignup(NO_SIGNUP_PENDING);
+            signIn(userId);
+          } else {
+            // Si este navegador tenía abierto otro perfil, se cierra. La app queda tapada hasta saber
+            closeLocalSession();
+            if (access.signup.status === 'none' || access.signup.userId !== userId) {
+              access.setSignup({ status: 'checking', userId });
+            }
+          }
           setRole(identity.role);
           setCloud({ status: 'linked', identity });
+          void checkMfa(identity, flags);
           // La configuración que el admin fijó en el servidor manda sobre la de este navegador. Los
           // motores la leen al abrir la app, así que si cambió se pide recargar
           void mirrorRemoteOverrides(cloud).then((result) => {
@@ -139,16 +226,33 @@ export function CloudBridge() {
             if (first.status === 'other' || first.status === 'limit' || stopped()) return;
             if (signedOutMeanwhile()) return;
           }
-          // Se registra la versión del aviso que el alumno aceptó de verdad en este dispositivo y no la
-          // que trae la app ahora. Una versión nueva se registra cuando la acepte (D-104)
-          const accepted = await acceptedNoticeVersion(api, userId);
-          if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
-          // Antes de subir la cuenta se pone de acuerdo la foto de perfil. Gana la elección más
-          // reciente, así un dispositivo nuevo o uno que se quedó atrás baja la de la nube (B2)
+          if (!signedUpHere) {
+            // Ya con el dispositivo reclamado, que es el que ve la fila de la cuenta. Si la nube ya tiene
+            // su registro se copia aquí. Si falta, pide Completa tu registro, que guarda y vuelve a pasar
+            // por aquí. Si la nube no contesta no deja pasar y lo vuelve a intentar
+            const check = await resolveCloudSignup(api, cloud, identity.authId, userId);
+            if (stopped() || isLeaving() || signedOutMeanwhile()) return;
+            if (check !== 'complete') {
+              useAccess.getState().setSignup({ status: check, userId });
+              if (check === 'unknown') scheduleRetry();
+              return;
+            }
+            useAccess.getState().setSignup(NO_SIGNUP_PENDING);
+            signIn(userId);
+          }
+          // Antes de subir la cuenta se pone de acuerdo la foto de perfil y los datos opcionales. Gana
+          // lo más reciente, así un dispositivo nuevo o uno que se quedó atrás baja lo de la nube (B2, H29)
           await pushLocalAccount(api, cloud, identity.authId, userId);
           if (stopped() || isLeaving() || signedOutMeanwhile()) return;
+          // Se registra la versión del aviso que el alumno aceptó de verdad, en Crear cuenta o en Completa
+          // tu registro, y no la que trae la app ahora. Una versión nueva se registra cuando la acepte
+          // (D-104). Un perfil que nació sin formulario no tiene ninguna hasta completar su registro
+          const accepted = await acceptedNoticeVersion(api, userId);
+          if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
+          if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           // El código del enlace de invitación que se abrió en este navegador se canjea ya con el
-          // dispositivo reclamado. Sin código guardado no hace nada (respuesta 77, B7)
+          // dispositivo reclamado y el registro completo, así quien todavía no acepta el aviso ni
+          // confirma su edad no manda nada. Sin código guardado no hace nada (respuesta 77, B7)
           void redeemPendingReferral(cloud);
           if (syncing?.authId !== identity.authId) {
             syncing?.handle.stop();
@@ -185,10 +289,15 @@ export function CloudBridge() {
         }
       };
       void sync();
-      const onOnline = () => {
+      const recheck = () => {
         retry.failures = 0;
+        if (retry.timer) clearTimeout(retry.timer);
+        retry.timer = null;
         void sync();
       };
+      // Intentar de nuevo y Completa tu registro vuelven a pasar por aquí (B9)
+      useAccess.getState().setRecheck(recheck);
+      const onOnline = recheck;
       window.addEventListener('online', onOnline);
       const { data } = cloud.auth.onAuthStateChange((event) => {
         // Supabase pide no esperar llamadas dentro del aviso, así que se agenda aparte
@@ -199,6 +308,7 @@ export function CloudBridge() {
       return () => {
         run.active = false;
         if (retry.timer) clearTimeout(retry.timer);
+        if (useAccess.getState().recheck === recheck) useAccess.getState().setRecheck(null);
         window.removeEventListener('online', onOnline);
         stopGuard();
         data.subscription.unsubscribe();
@@ -218,7 +328,7 @@ export function CloudBridge() {
       cancelled = true;
       disconnect?.();
     };
-  }, [api, signIn, signOut, setRole, setCloud]);
+  }, [api, signIn, closeLocalSession, signOut, setRole, setCloud]);
 
   return null;
 }
