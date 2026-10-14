@@ -1,0 +1,79 @@
+// Lo que le falta a una versión del banco para poder aprobarse (B11, 3.4 y 5.7 del plan de B11). Es el
+// espejo de la función SQL bank_version_issues de 20261023000002_bank_core.sql, que es la que manda en
+// la nube. La usa la aprobación local de la demo para pedir lo mismo que la base, y el convertidor del
+// Sheet da los mismos códigos de pendiente. Nunca marca un reactivo por imperfecto (D-080). Solo pide
+// lo que un revisor necesita para aprobar, que es explicación, referencias, la justificación de cada
+// opción y el sesgo de cada distractor. Funciones puras.
+import { OPTION_LETTERS } from './bankColumns.ts';
+
+/** Una versión, con lo mínimo para revisar sus pendientes. Tolera borradores incompletos */
+export interface RuleVersion {
+  prompt: string;
+  explanation: string;
+  /** Títulos de las referencias */
+  refs: readonly string[];
+  options: readonly {
+    /** Letra del Sheet. Sin letra toma la de su posición */
+    letter?: string | null;
+    position: number;
+    text: string;
+    isCorrect: boolean;
+    biasTag: string | null;
+    rationale: string | null;
+  }[];
+  /** Posiciones de las opciones del set canónico */
+  canonicalPositions: readonly number[];
+}
+
+/** Códigos que impiden aprobar y que no se arreglan en el Sheet con una celda vacía */
+export const STRUCTURE_ISSUES = [
+  'prompt_missing',
+  'options_count',
+  'correct_count',
+  'canonical_invalid',
+] as const;
+
+export const MIN_VERSION_OPTIONS = 4;
+export const MAX_VERSION_OPTIONS = 10;
+
+const blank = (text: string | null) => text === null || text.trim() === '';
+
+/**
+ * Los pendientes de una versión, en orden fijo. Primero los de estructura, después explicación y
+ * referencias, y al final los de cada opción por posición. Vacío quiere decir que se puede aprobar
+ */
+export function versionIssues(version: RuleVersion, taggable: ReadonlySet<string>): string[] {
+  const issues: string[] = [];
+  const options = [...version.options].sort((a, b) => a.position - b.position);
+  if (blank(version.prompt)) issues.push('prompt_missing');
+  if (options.length < MIN_VERSION_OPTIONS || options.length > MAX_VERSION_OPTIONS)
+    issues.push('options_count');
+  if (options.filter((option) => option.isCorrect).length !== 1) issues.push('correct_count');
+  const canonical = options.filter((option) =>
+    version.canonicalPositions.includes(option.position),
+  );
+  if (
+    !canonical.some((option) => option.isCorrect) ||
+    !canonical.some((option) => !option.isCorrect)
+  )
+    issues.push('canonical_invalid');
+  if (blank(version.explanation)) issues.push('explanation_missing');
+  if (version.refs.every((ref) => blank(ref))) issues.push('references_missing');
+  for (const option of options) {
+    const letter = (
+      option.letter ??
+      OPTION_LETTERS[option.position] ??
+      String(option.position)
+    ).toUpperCase();
+    if (blank(option.rationale)) issues.push(`rationale_missing:${letter}`);
+    if (option.isCorrect) continue;
+    if (option.biasTag === null || option.biasTag === '') issues.push(`bias_missing:${letter}`);
+    else if (!taggable.has(option.biasTag)) issues.push(`bias_unknown:${letter}`);
+  }
+  return issues;
+}
+
+/** Los pendientes que se completan en el Sheet o en el editor, sin los de estructura */
+export function incompleteOnly(issues: readonly string[]): string[] {
+  return issues.filter((issue) => !(STRUCTURE_ISSUES as readonly string[]).includes(issue));
+}

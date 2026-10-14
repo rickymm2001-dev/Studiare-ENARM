@@ -70,6 +70,58 @@ export const HEADER_ALIASES: Readonly<Record<string, keyof typeof HEADERS>> = {
   tema: 'topic',
 };
 
+/**
+ * Columnas nuevas del Sheet del banco (7.4 del plan del cambio y 3.3 del plan de B11). Todas son
+ * opcionales, así el convertidor del Sheet sirve antes y después del cambio de estructura
+ */
+export const SHEET_HEADERS = {
+  caseKey: 'Caso',
+  caseOrder: 'Orden en el caso',
+  author: 'Autor',
+  reviewer: 'Revisor',
+  language: 'Idioma',
+} as const;
+
+/** Lo que escriben los médicos en Sesgo cuando no hay sesgo. En la correcta cuenta como vacío */
+export const NO_BIAS_LABEL = 'Ninguno';
+
+/** Valores de la columna Estado del Sheet. Aprobado ya no existe, la aprobación vive en la app */
+export const SHEET_STATUS_LABELS = {
+  draft: 'Borrador',
+  ready: 'Lista para revisión',
+  retire: 'Retirar',
+} as const;
+/** Lo que se ignora en Estado con un aviso (PC 7.2) */
+export const SHEET_APPROVED_LABELS = ['Aprobado', 'Aprobada'] as const;
+
+/** Valores de la columna Idioma. Sin valor es español */
+export const LANGUAGE_LABELS = { es: 'Español', en: 'Inglés' } as const;
+
+/** Límites de texto del esquema del banco (src/data/schemas/bank.ts). Pasarlos rechaza el renglón */
+export const TEXT_LIMITS = {
+  vignette: 8_000,
+  prompt: 1_000,
+  explanation: 4_000,
+  optionText: 1_000,
+  rationale: 1_500,
+  reference: 300,
+  references: 10,
+} as const;
+
+/** Órdenes posibles de una pregunta dentro de un caso seriado, como questions.case_order */
+export const MAX_CASE_ORDER = 5;
+
+/** Clave corta de un médico en las columnas Autor y Revisor, como physician_codes.code */
+export const PHYSICIAN_CODE_PATTERN = /^[A-Z][A-Z0-9]{1,7}$/;
+
+/**
+ * Solo la primera línea de un encabezado. El Sheet de hoy trae una segunda línea con instrucciones
+ * (PC 7.2) y el convertidor lee solo el nombre de la columna
+ */
+export function firstHeaderLine(header: string): string {
+  return (header.split(/\r?\n/)[0] ?? '').trim();
+}
+
 export const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'] as const;
 
 /** Encabezados de las tres columnas de una opción */
