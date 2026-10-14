@@ -53,6 +53,16 @@ export const FEATURE_FLAGS = {
       'Prueba gratis de 7 días en el botón de los candados de Gratis, como Apuntes, Party e Importar mazos (respuesta 20). Apagada hasta que B10 crea la prueba en Suscripción y la prende',
     defaults: { development: false, demo: false, production: false },
   },
+  cloudBank: {
+    description:
+      'Los alumnos estudian con el banco de la nube (B11, respuestas 56 y 68). La prende Ricardo en el servidor cuando haya 300 preguntas aprobadas. La base la lee también con bank_open_for_students, así una copia manipulada no abre el banco antes',
+    defaults: { development: false, demo: false, production: false },
+  },
+  deckCatalogCloud: {
+    description:
+      'El catálogo de mazos precargados sale de Supabase Storage, por submazo y para los planes de pago (B11, 4.21 y 4.25 del plan del cambio). En la demo y en desarrollo siguen los mazos empacados',
+    defaults: { development: false, demo: false, production: true },
+  },
 } as const satisfies Record<string, FlagDef>;
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS;

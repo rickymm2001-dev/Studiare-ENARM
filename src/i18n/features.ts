@@ -11,6 +11,8 @@ export const branchNames: Record<string, string> = {
   general_surgery: 'Cirugía general',
   family_medicine: 'Medicina familiar',
   emergency_medicine: 'Urgencias',
+  public_health: 'Salud pública',
+  medical_english: 'Inglés médico',
 };
 
 export const plural = (n: number, one: string, many: string) =>
