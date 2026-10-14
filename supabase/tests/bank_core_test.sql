@@ -13,6 +13,8 @@
 \set p3 'bc000000-0000-0000-0000-0000000000a3'
 \set p4 'bc000000-0000-0000-0000-0000000000a4'
 \set p5 'bc000000-0000-0000-0000-0000000000a5'
+\set p6 'bc000000-0000-0000-0000-0000000000a6'
+\set p7 'bc000000-0000-0000-0000-0000000000a7'
 \set m1 'bc000000-0000-0000-0000-0000000000d1'
 \set ad 'bc000000-0000-0000-0000-0000000000e1'
 
@@ -25,6 +27,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
   (:'p3', 'bc-p3@x.mx', '{"alias":"Pase"}'),
   (:'p4', 'bc-p4@x.mx', '{"alias":"Regalo"}'),
   (:'p5', 'bc-p5@x.mx', '{"alias":"Avisos"}'),
+  (:'p6', 'bc-p6@x.mx', '{"alias":"Fundador anual"}'),
+  (:'p7', 'bc-p7@x.mx', '{"alias":"Ya no paga"}'),
   (:'m1', 'bc-m1@x.mx', '{"alias":"Médica BC"}'),
   (:'ad', 'bc-ad@x.mx', '{"alias":"Admin BC"}');
 update public.user_roles set role = 'physician' where user_id = :'m1';
@@ -38,8 +42,15 @@ insert into public.plan_passes (user_id, plan, provider, provider_payment_id, me
   values (:'p3', 'monthly', 'stripe', 'pi_bc_pass', 'oxxo', now() - interval '1 day', now() + interval '29 days');
 insert into public.subscription_grants (user_id, kind, starts_at, ends_at)
   values (:'p4', 'admin', now() - interval '1 day', now() + interval '29 days');
+-- Fundador anual (B10) y alguien que ya no paga, con la prueba cancelada y un pase vencido
+insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
+  (:'p6', 'founder_annual', 'active', 'stripe', now() + interval '300 days'),
+  (:'p7', 'monthly', 'canceled', 'stripe', now() - interval '1 day');
+insert into public.plan_passes (user_id, plan, provider, provider_payment_id, method, starts_at, ends_at)
+  values (:'p7', 'monthly', 'stripe', 'pi_bc_pass_old', 'oxxo', now() - interval '40 days', now() - interval '10 days');
 select pg_temp.expect(public.user_plan(:'p2') = 'monthly' and public.user_plan(:'p3') = 'monthly'
-  and public.user_plan(:'p4') = 'monthly' and public.user_plan(:'f1') = 'free', 'BC0. Los planes de B10');
+  and public.user_plan(:'p4') = 'monthly' and public.user_plan(:'f1') = 'free'
+  and public.user_plan(:'p6') = 'founder_annual' and public.user_plan(:'p7') = 'free', 'BC0. Los planes de B10');
 
 -- 25 preguntas publicadas, una sola por pregunta estable
 select pg_temp.bank_seed('BC-' || lpad(g::text, 4, '0')) from generate_series(1, 25) g;
@@ -285,6 +296,20 @@ begin;
 select pg_temp.as_user(:'p4');
 select pg_temp.expect(jsonb_array_length(public.fetch_questions(:'q25'::uuid[]) -> 'questions') = 25, 'BC4. El mes regalado tuvo tope');
 rollback;
+begin;
+select pg_temp.as_user(:'p6');
+select pg_temp.expect(jsonb_array_length(public.fetch_questions(:'q25'::uuid[]) -> 'questions') = 25
+  and public.bank_quota() @> '{"plan":"founder_annual","limit":null}', 'BC4. El Fundador anual tuvo tope');
+rollback;
+-- Con la prueba cancelada y el pase vencido vuelve el tope de Gratis
+begin;
+select pg_temp.as_user(:'p7');
+select public.fetch_questions(:'q25'::uuid[]) as r \gset bc4b_
+select pg_temp.expect(public.bank_quota() @> '{"plan":"free","limit":20,"left":0}', 'BC4. Quien ya no paga no tiene la cuota de Gratis');
+rollback;
+select pg_temp.expect(jsonb_array_length((:'bc4b_r')::jsonb -> 'questions') = 20
+  and (select count(*) from jsonb_array_elements((:'bc4b_r')::jsonb -> 'denied') d where d ->> 'reason' = 'daily_limit') = 5,
+  'BC4. Quien ya no paga leyó sin tope');
 -- 300 preguntas más para el freno de 300 por minuto
 select count(pg_temp.bank_seed('BK-' || lpad(g::text, 4, '0'))) from generate_series(1, 300) g;
 select (array_agg(question_id order by source_key))[1:100]::text as k1,
@@ -346,13 +371,37 @@ begin;
 select pg_temp.as_user(:'ad');
 select pg_temp.expect(public.bank_quota() ->> 'plan' = 'admin' and (public.bank_quota() ->> 'limit') is null, 'BC6. Cuota del admin');
 rollback;
--- Con B9, el equipo sin segundo factor cuenta como alumno. Se prueba solo si current_app_role ya lo pide
-do $$
-begin
-  if position('aal' in pg_get_functiondef('public.current_app_role()'::regprocedure)) = 0 then
-    raise notice 'BC5 y BC6 con requireMfa. B9 no está en esta base. current_app_role no pide aal2 y la prueba queda para la integración';
-  end if;
-end $$;
+-- Con requireMfa (B9), el equipo sin segundo factor cuenta como alumno. Con el banco cerrado no lo ve y
+-- abierto tiene el tope de Gratis. Con aal2 vuelve a leer siempre y sin tope
+begin;
+select pg_temp.set_flag('requireMfa', true);
+select pg_temp.set_flag('cloudBank', false);
+select pg_temp.as_user(:'m1', null, 'aal1');
+select pg_temp.expect(public.current_app_role() = 'student'
+  and public.bank_quota() @> '{"plan":"free","open":false,"limit":20}'
+  and public.catalog_changes() @> '{"open":false,"rows":[]}'
+  and public.fetch_questions(:'q25'::uuid[]) -> 'denied' -> 0 ->> 'reason' = 'closed',
+  'BC5. El médico sin segundo factor vio el banco cerrado');
+select pg_temp.as_user(:'ad', null, 'aal1');
+select pg_temp.expect(public.current_app_role() = 'student'
+  and public.bank_quota() @> '{"plan":"free","open":false}' and public.catalog_changes() @> '{"open":false}',
+  'BC6. El admin sin segundo factor vio el banco cerrado');
+select pg_temp.as_user(:'m1', null, 'aal2');
+select pg_temp.expect(public.bank_quota() @> '{"plan":"physician","open":true,"limit":null}'
+  and public.catalog_changes() @> '{"open":true}'
+  and jsonb_array_length(public.fetch_questions(:'q25'::uuid[]) -> 'questions') = 25,
+  'BC5. El médico con segundo factor no leyó el banco cerrado sin tope');
+select pg_temp.as_user(:'ad', null, 'aal2');
+select pg_temp.expect(public.bank_quota() @> '{"plan":"admin","open":true,"limit":null}', 'BC6. El admin con segundo factor');
+rollback;
+begin;
+select pg_temp.set_flag('requireMfa', true);
+select pg_temp.as_user(:'m1', null, 'aal1');
+select public.fetch_questions(:'q25'::uuid[]) as r \gset bc5_
+rollback;
+select pg_temp.expect(jsonb_array_length((:'bc5_r')::jsonb -> 'questions') = 20
+  and (select count(*) from jsonb_array_elements((:'bc5_r')::jsonb -> 'denied') d where d ->> 'reason' = 'daily_limit') = 5,
+  'BC5. El médico sin segundo factor no tuvo el tope de Gratis');
 
 -- ===================================================================== BC7. Versión exacta
 -- La versión 1 ya reemplazada se lee por p_version_ids y gasta como la misma pregunta. Una que nunca se

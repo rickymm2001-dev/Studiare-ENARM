@@ -100,11 +100,38 @@ begin
     coalesce((select session_id from public.device_sessions where user_id = v_owner), 'b9-sesion-dueno'), false);
 end $$;
 
--- Una pregunta en revisión asignada a la médica, para probar sus decisiones
-insert into public.questions (id, question_id, version, branch, topic, body, editorial_status) values
-  ('b9000000-0000-0000-0000-0000000000a1', 'b9000000-0000-0000-0000-0000000000b1', 1, 'pediatrics', 'neonatology', '{}', 'in_review');
-insert into public.review_assignments (question_id, physician_id) values
-  ('b9000000-0000-0000-0000-0000000000b1', 'b9000000-0000-0000-0000-000000000002');
+-- Una pregunta del banco en revisión con la médica de revisora, para probar sus decisiones. Desde B11
+-- nadie lee ni escribe las tablas de preguntas directo, así que se siembra como superusuario con las
+-- funciones del banco y la médica la ve y decide con editor_question y editor_decide, como la app
+do $$
+declare
+  v_question uuid := public.stable_bank_uuid('b9-q', 'B9-0001');
+  v_version uuid;
+begin
+  v_version := public.bank_insert_version(
+    v_question,
+    jsonb_build_object(
+      'branch', 'pediatrics', 'topic', 'neonatology', 'subtopic', 'neonatal_jaundice', 'difficulty', 3,
+      'itemKinds', '[]'::jsonb, 'polarity', 'affirmative', 'task', 'diagnosis', 'format', 'clinical_case',
+      'structureSource', 'physician', 'language', 'es',
+      'vignette', '[Prueba] Caso simulado B9', 'prompt', '[Prueba] ¿Pregunta simulada B9?',
+      'explanation', '[Prueba] Explicación simulada B9',
+      'gpcRefs', jsonb_build_array(jsonb_build_object('title', '[Prueba] Guía simulada', 'status', 'to_verify')),
+      'clues', '[]'::jsonb,
+      'options', (
+        select jsonb_agg(jsonb_build_object(
+          'letter', chr(64 + i), 'text', '[Prueba] Opción ' || chr(64 + i), 'isCorrect', i = 1,
+          'biasTag', (array[null, 'anchoring', 'premature_closure', 'framing_effect'])[i],
+          'rationale', '[Prueba] Justificación ' || chr(64 + i), 'canonical', true) order by i)
+        from generate_series(1, 4) i)),
+    'sheet', null, null, null, null, '{}');
+  insert into public.bank_questions (question_id, origin, source_key, latest_version_id)
+    values (v_question, 'sheet', 'sheet:B9-0001', v_version);
+  update public.questions set editorial_status = 'in_review' where id = v_version;
+  perform public.bank_assign(v_question, 'reviewer', 'b9000000-0000-0000-0000-000000000002', null);
+  perform set_config('b9.question', v_question::text, false);
+  perform set_config('b9.version', v_version::text, false);
+end $$;
 
 -- Invitaciones que mete el dueño desde el editor de SQL. El correo se guarda limpio
 insert into public.signup_invitations (email) values
@@ -330,16 +357,21 @@ rollback;
 -- ===================================================================== M1. Sin la bandera nada cambia
 begin;
 select pg_temp.as_user('b9000000-0000-0000-0000-000000000003');
-select pg_temp.expect(public.current_app_role() = 'admin' and public.is_admin(),
+select pg_temp.expect(public.current_app_role() = 'admin' and public.is_admin()
+  and pg_temp.fails_with($q$select public.admin_bank_overview()$q$) is null,
   'M1. Sin la bandera, el admin con aal1 dejó de ser admin');
 rollback;
 begin;
 select pg_temp.as_user('b9000000-0000-0000-0000-000000000002');
 select pg_temp.expect(public.current_app_role() = 'physician'
-  and (select count(*) from public.questions where id = 'b9000000-0000-0000-0000-0000000000a1') = 1,
+  and public.editor_question(current_setting('b9.question')::uuid) -> 'review' ->> 'role' = 'reviewer'
+  and (select count(*) from jsonb_array_elements(public.editor_list('{"view":"to_review"}') -> 'items') i
+       where i ->> 'questionId' = current_setting('b9.question')) = 1,
   'M1. Sin la bandera, la médica con aal1 dejó de ver lo que tiene asignado');
-insert into public.review_decisions (question_version_id, physician_id, decision)
-  values ('b9000000-0000-0000-0000-0000000000a1', auth.uid(), 'approve');
+select pg_temp.expect(
+  public.editor_decide(current_setting('b9.version')::uuid, 'request_changes', '[Prueba] Comentario simulado', null)
+    ->> 'status' = 'draft',
+  'M1. Sin la bandera, la médica con aal1 no pudo decidir');
 rollback;
 -- Las funciones auxiliares nuevas no se llaman desde la API. current_app_role e is_admin siguen igual
 select pg_temp.expect(
@@ -391,17 +423,33 @@ select pg_temp.expect(
 insert into public.signup_invitations (email) values ('con-factor@b9.mx');
 reset role;
 
+-- Las funciones del banco del admin también piden el factor
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal1');
+select pg_temp.expect(
+  pg_temp.fails_with($q$select public.admin_bank_overview()$q$) = '42501'
+  and pg_temp.fails_with($q$select public.admin_bank_sync_authorize()$q$) = '42501',
+  'M2. El admin sin segundo factor usó las funciones del banco'
+);
+reset role;
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal2');
+select pg_temp.expect(
+  public.admin_bank_sync_authorize() ->> 'actorId' = 'b9000000-0000-0000-0000-000000000003'
+  and pg_temp.fails_with($q$select public.admin_bank_overview()$q$) is null,
+  'M2. El admin con segundo factor no pudo usar las funciones del banco'
+);
+reset role;
+
 -- La médica sin segundo factor no ve lo asignado ni decide
 select pg_temp.as_user('b9000000-0000-0000-0000-000000000002', 'aal1');
 select pg_temp.expect(
   public.current_app_role() = 'student'
-  and (select count(*) from public.questions where id = 'b9000000-0000-0000-0000-0000000000a1') = 0
-  and (select count(*) from public.review_assignments) = 0,
+  and pg_temp.fails_with(format('select public.editor_question(%L)', current_setting('b9.question'))) = '42501'
+  and pg_temp.fails_with($q$select public.editor_list('{}')$q$) = '42501',
   'M2. La médica sin segundo factor vio su pregunta asignada'
 );
 select pg_temp.expect(
-  pg_temp.fails_with($q$insert into public.review_decisions (question_version_id, physician_id, decision)
-    values ('b9000000-0000-0000-0000-0000000000a1', auth.uid(), 'approve')$q$) = '42501',
+  pg_temp.fails_with(format('select public.editor_decide(%L, %L, %L, null)', current_setting('b9.version'),
+    'request_changes', '[Prueba] Comentario simulado')) = '42501',
   'M2. La médica sin segundo factor decidió sobre una pregunta'
 );
 reset role;
@@ -410,11 +458,14 @@ reset role;
 select pg_temp.as_user('b9000000-0000-0000-0000-000000000002', 'aal2');
 select pg_temp.expect(
   public.current_app_role() = 'physician'
-  and (select count(*) from public.questions where id = 'b9000000-0000-0000-0000-0000000000a1') = 1,
+  and public.editor_question(current_setting('b9.question')::uuid) -> 'review' ->> 'role' = 'reviewer',
   'M2. La médica con segundo factor no ve su pregunta asignada'
 );
-insert into public.review_decisions (question_version_id, physician_id, decision)
-  values ('b9000000-0000-0000-0000-0000000000a1', auth.uid(), 'approve');
+select pg_temp.expect(
+  public.editor_decide(current_setting('b9.version')::uuid, 'request_changes', '[Prueba] Comentario simulado', null)
+    ->> 'status' = 'draft',
+  'M2. La médica con segundo factor no pudo decidir'
+);
 reset role;
 
 -- El dueño sin segundo factor no administra

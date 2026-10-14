@@ -29,6 +29,7 @@ Las migraciones son seguras de repetir y no llevan delete ni drop, así el conec
 - Los planes de pago no tienen tope diario. Tienen un freno de 300 lecturas nuevas por minuto y 900 por hora, con avisos al admin a las 600 por día y al leer la mitad del catálogo en 7 días (bank_read_alerts)
 - El equipo (médicos, admins y el dueño) lee sin tope
 - Todo pide sesión y dispositivo activo. Sin sesión responde 28000 y un dispositivo desplazado 42501
+- Con requireMfa prendida (B9), el equipo sin segundo factor cuenta como alumno en todo el banco. No usa el editor ni las funciones del admin, ve el banco cerrado como un alumno y, abierto, tiene el tope de Gratis. Todas las funciones del equipo revisan el rol con current_app_role o is_admin, que piden el factor
 - bank_quota dice el plan, el tope, lo usado y cuándo se renueva, sin gastar nada
 
 ## Flujo editorial
@@ -86,7 +87,6 @@ La numeración de antes se conserva, porque el plan de B11 cita la decisión 9.
 ## Riesgos abiertos
 
 - Copia del banco. Ningún sistema que muestra preguntas impide copiarlas a mano. El tope, el freno, los avisos y los términos son disuasivos
-- Segundo factor. B9 hace que current_app_role pida segundo factor al equipo. Mientras B9 no esté en la misma base, las pruebas que lo revisan avisan y quedan para la integración
 - Listas que dependen de la rama con INDIRECTO en el desplegable de Google Sheets. Solo aparece en guías de terceros. Se prueba primero en el Sheet de prueba (8.34)
 - Costo de transferencia de Storage si los mazos se bajan mucho. Se mide al abrir (8.19)
 - Los borradores del banco de 1500 en content-drafts todavía usan subespecialidades de Medicina familiar que pasaron a Salud pública. Se revisan antes de importarlos

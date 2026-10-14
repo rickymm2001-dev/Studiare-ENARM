@@ -99,12 +99,38 @@ select pg_temp.as_user(:'ad');
 select pg_temp.expect((public.editor_list() ->> 'total')::int >= 4, 'BE2. El admin no ve todo');
 select pg_temp.expect(public.editor_question(:'q4') -> 'review' ->> 'role' = 'admin', 'BE2. Papel del admin');
 rollback;
-do $$
-begin
-  if position('aal' in pg_get_functiondef('public.current_app_role()'::regprocedure)) = 0 then
-    raise notice 'BE2 con requireMfa y aal1. B9 no está en esta base. La prueba queda para la integración';
-  end if;
-end $$;
+-- Con requireMfa (B9), el equipo sin segundo factor cuenta como alumno y no usa el editor ni las
+-- funciones del admin. Con aal2 sí
+begin;
+select pg_temp.set_flag('requireMfa', true);
+select pg_temp.as_user(:'p2', null, 'aal1');
+select pg_temp.expect(pg_temp.fails_with('select public.editor_list()') = '42501'
+  and pg_temp.fails_with(format('select public.editor_question(%L)', :'q1')) = '42501',
+  'BE2. El revisor sin segundo factor usó el editor');
+select pg_temp.as_user(:'ad', null, 'aal1');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_bank_overview()') = '42501'
+  and pg_temp.fails_with('select public.editor_list()') = '42501'
+  and pg_temp.fails_with(format('select public.admin_set_physician_code(%L, %L)', :'p1', 'ZZ')) = '42501',
+  'BE2. El admin sin segundo factor usó las funciones del admin');
+select pg_temp.as_user(:'owner', null, 'aal1');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_bank_overview()') = '42501', 'BE2. El dueño sin segundo factor leyó el resumen');
+select pg_temp.as_user(:'p2', null, 'aal2');
+select pg_temp.expect((public.editor_list('{"view":"all"}') ->> 'total')::int = 3, 'BE2. El revisor con segundo factor no ve sus 3');
+select pg_temp.as_user(:'ad', null, 'aal2');
+select pg_temp.expect((public.admin_bank_overview() ->> 'drafts')::int >= 4 and (public.editor_list() ->> 'total')::int >= 4,
+  'BE2. El admin con segundo factor no ve todo');
+rollback;
+-- Si alguien vuelve a dar permisos de tabla, las políticas de respaldo también piden el segundo factor
+begin;
+select pg_temp.set_flag('requireMfa', true);
+grant select on public.questions, public.review_assignments, public.clinical_cases to authenticated;
+select pg_temp.as_user(:'p2', null, 'aal1');
+select pg_temp.expect((select count(*) from public.questions) = 0 and (select count(*) from public.clinical_cases) = 0,
+  'BE2. Con permisos de tabla, el revisor sin segundo factor leyó preguntas');
+select pg_temp.as_user(:'p2', null, 'aal2');
+select pg_temp.expect((select count(distinct question_id) from public.questions) = 3,
+  'BE2. Con permisos de tabla, el revisor con segundo factor no ve sus 3');
+rollback;
 
 -- ===================================================================== BE3. Versiones
 select pg_temp.latest(:'q1') as q1v1 \gset

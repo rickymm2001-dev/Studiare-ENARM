@@ -7,6 +7,8 @@
 \set f1 'dd000000-0000-0000-0000-0000000000f1'
 \set p1 'dd000000-0000-0000-0000-0000000000a1'
 \set p2 'dd000000-0000-0000-0000-0000000000a2'
+\set p3 'dd000000-0000-0000-0000-0000000000a3'
+\set p4 'dd000000-0000-0000-0000-0000000000a4'
 \set m1 'dd000000-0000-0000-0000-0000000000d1'
 \set ad 'dd000000-0000-0000-0000-0000000000e1'
 
@@ -14,6 +16,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
   (:'f1', 'dd-f1@x.mx', '{"alias":"Gratis DD"}'),
   (:'p1', 'dd-p1@x.mx', '{"alias":"Pago DD"}'),
   (:'p2', 'dd-p2@x.mx', '{"alias":"Pago desplazado DD"}'),
+  (:'p3', 'dd-p3@x.mx', '{"alias":"Prueba DD"}'),
+  (:'p4', 'dd-p4@x.mx', '{"alias":"Pase DD"}'),
   (:'m1', 'dd-m1@x.mx', '{"alias":"Médica DD"}'),
   (:'ad', 'dd-ad@x.mx', '{"alias":"Admin DD"}');
 update public.user_roles set role = 'physician' where user_id = :'m1';
@@ -22,7 +26,13 @@ select user_id::text as owner from public.user_roles where role = 'owner' \gset
 insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
   (:'p1', 'monthly', 'active', 'stripe', now() + interval '20 days'),
   (:'p2', 'annual', 'active', 'stripe', now() + interval '200 days');
-select pg_temp.expect(public.user_plan(:'p1') = 'monthly' and public.user_plan(:'f1') = 'free', 'DC0. Los planes de B10');
+-- La prueba gratis y el pase cuentan como plan de pago (B10)
+insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
+  (:'p3', 'founder', 'trialing', 'stripe', now() + interval '5 days');
+insert into public.plan_passes (user_id, plan, provider, provider_payment_id, method, starts_at, ends_at)
+  values (:'p4', 'annual', 'stripe', 'pi_dd_pass', 'spei', now() - interval '1 day', now() + interval '364 days');
+select pg_temp.expect(public.user_plan(:'p1') = 'monthly' and public.user_plan(:'f1') = 'free'
+  and public.user_plan(:'p3') = 'founder' and public.user_plan(:'p4') = 'annual', 'DC0. Los planes de B10');
 
 -- El manifiesto de un mazo simulado. Un submazo chico sin imágenes y otro de más de 5 MB con imágenes
 create or replace function pg_temp.manifest(
@@ -338,6 +348,10 @@ select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''p
   and pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 4, ''control-prenatal'', 10)') = '22023'
   and pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 2, ''control-prenatal'', -1)') = '22023',
   'DC4. Registró una bajada que no existe');
+select pg_temp.as_user(:'p3');
+select pg_temp.expect(public.deck_catalog_list() ->> 'canDownload' = 'true' and pg_temp.visible() = 1, 'DC4. La prueba gratis no puede bajar');
+select pg_temp.as_user(:'p4');
+select pg_temp.expect(public.deck_catalog_list() ->> 'canDownload' = 'true' and pg_temp.visible() = 1, 'DC4. El pase no puede bajar');
 select pg_temp.as_user(:'m1');
 select pg_temp.expect(public.deck_catalog_list() ->> 'canDownload' = 'true', 'DC4. La médica no puede bajar');
 select pg_temp.as_user(null);

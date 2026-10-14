@@ -129,20 +129,27 @@ revoke all on public.bank_topic_reviewers, public.physician_codes, public.bias_l
   from public, anon, authenticated, service_role;
 
 -- Defensa de más, por si alguien vuelve a dar permisos de tabla. Las preguntas y los casos solo los ve el
--- equipo. Un alumno los lee con fetch_questions
+-- equipo. Un alumno los lee con fetch_questions. El médico cuenta con current_app_role, así que con
+-- requireMfa (B9) también pide su segundo factor
 alter policy questions_select on public.questions using (
   public.is_admin()
-  or exists (
-    select 1 from public.review_assignments ra
-    where ra.question_id = questions.question_id and ra.physician_id = auth.uid() and ra.revoked_at is null
+  or (
+    public.current_app_role() = 'physician'
+    and exists (
+      select 1 from public.review_assignments ra
+      where ra.question_id = questions.question_id and ra.physician_id = auth.uid() and ra.revoked_at is null
+    )
   )
 );
 alter policy cases_select on public.clinical_cases using (
   public.is_admin()
-  or exists (
-    select 1 from public.questions q
-    join public.review_assignments ra on ra.question_id = q.question_id
-    where q.case_id = clinical_cases.id and ra.physician_id = auth.uid() and ra.revoked_at is null
+  or (
+    public.current_app_role() = 'physician'
+    and exists (
+      select 1 from public.questions q
+      join public.review_assignments ra on ra.question_id = q.question_id
+      where q.case_id = clinical_cases.id and ra.physician_id = auth.uid() and ra.revoked_at is null
+    )
   )
 );
 
