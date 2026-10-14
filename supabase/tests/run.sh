@@ -20,9 +20,9 @@ psql_run -f "$here/stub_auth.sql"
 psql_run -f "$here/stub_storage.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
-# Las migraciones que siguen al freno son idempotentes. Se corren otra vez las dos últimas, las de B7,
-# para comprobarlo
-for migration in $(ls "$here"/../migrations/*.sql | tail -2); do psql_run -f "$migration"; done
+# Las migraciones que siguen al freno son idempotentes. Se corren otra vez las tres últimas, la de la
+# foto de perfil de B2 y las dos de B7, para comprobarlo
+for migration in $(ls "$here"/../migrations/*.sql | tail -3); do psql_run -f "$migration"; done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
 # y repetirse sin daño sobre una base ya migrada
 psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
