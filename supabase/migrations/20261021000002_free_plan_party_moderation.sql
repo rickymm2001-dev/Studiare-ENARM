@@ -19,6 +19,12 @@
 --     membresía de cada fila con party_member_of y party_shares_group, que no miran el plan. Antes cada
 --     fila llamaba a user_plan por medio de is_group_member y shares_group, que siguen igual para las
 --     funciones de Party y para la foto de perfil de los compañeros
+--   - is_group_member y shares_group ya no las ejecuta anon ni public. El asesor de seguridad de Supabase
+--     las marcaba como ejecutables sin sesión. 20261014000001 las dejó abiertas a anon porque las
+--     políticas las llamaban con el rol de quien consulta, pero después de esta migración solo las llaman
+--     challenges_insert y avatars_select, las dos para authenticated, y las funciones de Party, que corren
+--     como su dueño. Un anónimo nunca evalúa esas políticas, así que no cambia un resultado vacío por un
+--     error. authenticated las conserva porque las políticas sí se las piden
 --
 -- Lo que se sabe del plan de otra persona
 --   Nadie lo lee. Quien modera en lugar de quien administra sabe que este no tiene Party abierta, y quien
@@ -428,3 +434,9 @@ revoke all on function public.party_create_duel(uuid, uuid, text[]) from public,
 grant execute on function public.party_create_duel(uuid, uuid, text[]) to authenticated;
 revoke all on function public.party_overview(date) from public, anon, service_role;
 grant execute on function public.party_overview(date) to authenticated;
+-- Las dos de siempre se cierran a anon y a public. Las sesiones las conservan porque challenges_insert y
+-- avatars_select las llaman con los permisos de quien consulta
+revoke execute on function public.is_group_member(uuid) from public, anon;
+grant execute on function public.is_group_member(uuid) to authenticated;
+revoke execute on function public.shares_group(uuid) from public, anon;
+grant execute on function public.shares_group(uuid) to authenticated;

@@ -2,8 +2,9 @@
 -- 20 y 4.3). Los duelos que esperan a un rival sin Party abierta no cuentan para el tope, contra un mismo
 -- rival sí hay tope, modera el miembro activo más antiguo con Party abierta mientras quien administra no
 -- la tenga, quien está en Gratis sigue contando en el cupo de 50 y las políticas revisan el plan una vez
--- por consulta y no una vez por fila. Corre al final sobre la misma base, con usuarios propios. Cada
--- bloque falla con un error si algo no cumple.
+-- por consulta y no una vez por fila. is_group_member y shares_group ya no las ejecutan anon ni public.
+-- Corre al final sobre la misma base, con usuarios propios. Cada bloque falla con un error si algo no
+-- cumple.
 \set ON_ERROR_STOP on
 -- Para contar cuántas veces se llama a user_plan en una consulta (PM8)
 set track_functions = 'all';
@@ -364,7 +365,10 @@ select pg_temp.expect(
 
 -- ===================================================================== PM9. La comprobación de docs/SUPABASE.md
 select pg_temp.expect(
-  not has_function_privilege('authenticated', 'public.party_moderator(uuid)', 'execute')
+  not has_function_privilege('anon', 'public.is_group_member(uuid)', 'execute')
+  and not has_function_privilege('anon', 'public.shares_group(uuid)', 'execute')
+  and has_function_privilege('authenticated', 'public.shares_group(uuid)', 'execute')
+  and not has_function_privilege('authenticated', 'public.party_moderator(uuid)', 'execute')
   and not has_function_privilege('authenticated', 'public.party_open_for(uuid)', 'execute')
   and has_function_privilege('authenticated', 'public.party_member_of(uuid)', 'execute')
   and position('party_moderator' in pg_get_functiondef('public.party_assert_owner(uuid, uuid)'::regprocedure)) > 0
@@ -373,5 +377,68 @@ select pg_temp.expect(
     like '%party_open()%',
   'PM9. La consulta de comprobación de docs/SUPABASE.md no da lo esperado'
 );
+
+-- ===================================================================== PM10. Las ayudas de grupo sin anon
+-- El asesor de seguridad de Supabase marcaba is_group_member y shares_group como ejecutables sin sesión.
+-- Se cierran a anon y a public y las conservan las sesiones, porque las políticas se las piden
+do $$
+declare
+  f text;
+begin
+  foreach f in array array['public.is_group_member(uuid)', 'public.shares_group(uuid)'] loop
+    if has_function_privilege('anon', f, 'execute') then
+      raise exception 'FALLA PM10. anon puede ejecutar %', f;
+    end if;
+    if exists (
+      select 1 from pg_proc p
+      where p.oid = f::regprocedure
+        and (p.proacl is null or exists (select 1 from aclexplode(p.proacl) a where a.grantee = 0))
+    ) then
+      raise exception 'FALLA PM10. public puede ejecutar %', f;
+    end if;
+    if not has_function_privilege('authenticated', f, 'execute') then
+      raise exception 'FALLA PM10. Una sesión no puede ejecutar %', f;
+    end if;
+  end loop;
+end $$;
+
+-- Ninguna política que evalúe un anónimo las llama, así quitárselas no cambia un resultado vacío por un
+-- error de permisos. Las que las llaman son solo para sesiones
+do $$
+declare
+  r record;
+begin
+  for r in
+    select schemaname, tablename, policyname, roles from pg_policies
+    where coalesce(qual, '') || ' ' || coalesce(with_check, '') ~ '(^|[^_])(is_group_member|shares_group)\('
+  loop
+    if r.roles <> array['authenticated']::name[] then
+      raise exception 'FALLA PM10. %.% (%) llama a las ayudas de grupo para %', r.schemaname, r.tablename,
+        r.policyname, r.roles;
+    end if;
+  end loop;
+end $$;
+
+-- Un anónimo no las llama por la API y sigue leyendo Storage sin error. Una sesión sí las llama
+begin;
+set local role anon;
+select pg_temp.expect(
+  pg_temp.fails_with($q$select public.is_group_member('b8200000-0000-0000-0000-0000000000a1')$q$) = '42501'
+  and pg_temp.fails_with($q$select public.shares_group('b8200000-0000-0000-0000-000000000001')$q$) = '42501',
+  'PM10. Un anónimo ejecutó is_group_member o shares_group'
+);
+select pg_temp.expect(
+  pg_temp.fails_with($q$select count(*) from storage.objects$q$) is null,
+  'PM10. Un anónimo ya no puede leer storage.objects sin error'
+);
+rollback;
+begin;
+select pg_temp.as_user('b8200000-0000-0000-0000-000000000003');
+select pg_temp.expect(
+  public.is_group_member('b8200000-0000-0000-0000-0000000000a1')
+  and public.shares_group('b8200000-0000-0000-0000-000000000001'),
+  'PM10. Una sesión con plan dejó de ejecutar las ayudas de grupo'
+);
+rollback;
 
 select 'TODAS LAS PRUEBAS DE PARTY CON MIEMBROS EN GRATIS PASARON' as resultado;

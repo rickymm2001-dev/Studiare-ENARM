@@ -745,6 +745,7 @@ select
 - Los apuntes que viajan a la nube también se cierran. En Gratis la sincronización ignora un apunte nuevo o un cambio a uno que ya estaba, sin frenar los mazos y las tarjetas del mismo envío. La app recuerda que dejó apuntes sin subir y los manda todos con el primer plan de pago, así no se pierde nada. Borrar un apunte sí llega a la nube, sobre lo que ya tenía la nube y sin aceptar contenido nuevo. Leer los propios sigue igual y Borrar mis datos los quita todos
 - Quien pasa a Gratis ya no estorba en sus grupos. Los duelos que esperan a un rival en Gratis no cuentan para el tope de 10, y contra un mismo rival se esperan a lo más 10. Si quien administra un grupo pasa a Gratis o sale de él, modera el miembro más antiguo que tenga plan de pago, hasta que vuelva
 - Las políticas de Party revisan el plan una vez por consulta y no una vez por fila, así el resumen de Party no se vuelve lento con grupos grandes
+- is_group_member y shares_group dejan de estar abiertas a anónimos, como pedía el chequeo de seguridad. Las únicas políticas que todavía las llaman son para sesiones iniciadas (challenges_insert y avatars_select), así que un anónimo nunca las evalúa. Las sesiones las conservan
 - Los referidos siguen abiertos en Gratis, con su código, su canje y su resumen
 - Subir mazos y seguir mazos nuevos del catálogo se cierran en la app. Un mazo subido se guarda igual que uno hecho a mano y el catálogo viaja dentro de la app hasta el banco en la nube (B11)
 
@@ -775,10 +776,13 @@ select
   position('party_open_for' in pg_get_functiondef('public.party_create_duel(uuid, uuid, text[])'::regprocedure)) > 0
     as duelos_con_plan,
   (select qual like '%party_open()%' from pg_policies where schemaname = 'public' and policyname = 'groups_select')
-    as plan_una_vez;
+    as plan_una_vez,
+  has_function_privilege('anon', 'public.is_group_member(uuid)', 'execute') as anon_grupo,
+  has_function_privilege('anon', 'public.shares_group(uuid)', 'execute') as anon_comparte,
+  has_function_privilege('authenticated', 'public.shares_group(uuid)', 'execute') as alumno_comparte;
 ```
 
-8. Debe salir alumno_lee_regla, anon_lee_regla y alumno_lee_moderador en false, y alumno_party_open, party_pide_plan, apuntes_con_plan, modera_con_plan, duelos_con_plan y plan_una_vez en true. Si algo sale distinto, avísame antes de abrir a alumnos
+8. Debe salir alumno_lee_regla, anon_lee_regla, alumno_lee_moderador, anon_grupo y anon_comparte en false, y alumno_party_open, party_pide_plan, apuntes_con_plan, modera_con_plan, duelos_con_plan, plan_una_vez y alumno_comparte en true. Si algo sale distinto, avísame antes de abrir a alumnos
 
 ### Qué conviene saber
 
@@ -829,7 +833,7 @@ select
 - La primera migración se aplicó pegándola en el SQL Editor, por eso la lista de migraciones del panel no la muestra. Las demás sí aparecen. No uses supabase db push en este proyecto sin antes registrar la primera con supabase migration repair, porque intentaría aplicarla otra vez
 - Las funciones se subieron con el conector, con los módulos de supabase/functions/_shared incluidos. El repo manda. Si cambias algo ahí, vuelve a desplegar con supabase functions deploy o pídemelo
 - Los secretos de las funciones (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL) los pones tú en Edge Functions, Secrets. FUNCTIONS_URL es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1 y el webhook de Stripe apunta a esa dirección con /payment-webhook-stripe al final
-- El chequeo de seguridad todavía marca avisos que son a propósito. Ocho tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama
+- El chequeo de seguridad todavía marca avisos que son a propósito. Ocho tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama. Con 20261021000002_free_plan_party_moderation (B8) is_group_member y shares_group se cierran a anónimos y quedan current_app_role e is_admin
 - Falta activar la protección contra contraseñas filtradas en Authentication. Es un interruptor del panel y puede requerir el plan de pago de Supabase
 
 ## Antes de abrir a alumnos
