@@ -11,6 +11,7 @@ import { requestBody, STUDENT } from '../ai/testing/fakes.ts';
 import { createHostedApp } from './app.ts';
 import {
   bearerToken,
+  canUseEngines,
   createSupabaseAuthenticator,
   type Authenticate,
   type CloudUser,
@@ -89,6 +90,15 @@ describe('autenticación con Supabase', () => {
   it('un alumno de pago entra con su plan y su rol', async () => {
     const result = await authenticator(fakeSupabase({ plan: 'annual' }))('token-1');
     expect(result).toEqual({ ok: true, user: { id: USER_ID, role: 'student', plan: 'annual' } });
+  });
+
+  it('el anual Fundador es un plan de pago y usa la IA', async () => {
+    const result = await authenticator(fakeSupabase({ plan: 'founder_annual' }))('token-1');
+    expect(result).toEqual({
+      ok: true,
+      user: { id: USER_ID, role: 'student', plan: 'founder_annual' },
+    });
+    expect(result.ok && canUseEngines(result.user)).toBe(true);
   });
 
   it('un médico se reconoce por su rol', async () => {
