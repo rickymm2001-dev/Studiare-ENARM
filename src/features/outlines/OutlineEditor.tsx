@@ -20,7 +20,16 @@ import {
   SquarePlus,
   Undo2,
 } from 'lucide-react';
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react';
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react';
 import { newId } from '@/data/ids';
 import {
   docToOutline,
@@ -410,14 +419,19 @@ export function OutlineEditor({
       <p role="status" className="text-sm font-medium text-warning">
         {limit ? text.limits[limit] : ''}
       </p>
-      {/* Las marcas siempre a la vista, también en el modo clase y en el teléfono */}
+      {/* Las marcas siempre a la vista, también en el modo clase y en el teléfono. Cada marca va
+          junta con lo que hace, y el renglón se parte en el espacio antes de cada punto, que queda
+          fuera de lo que no se parte. Si ese espacio quedara dentro, el renglón no tendría dónde
+          partirse y en el teléfono desbordaría la pantalla a lo ancho */}
       <p className="text-sm text-fg-muted">
         <span className="font-medium">{text.marksLabel}</span>
         {text.marks.map((entry) => (
-          <span key={entry.mark} className="whitespace-nowrap">
-            {' · '}
-            <code className="font-mono font-semibold text-fg">{entry.mark}</code> {entry.what}
-          </span>
+          <Fragment key={entry.mark}>
+            {' ·\u00a0'}
+            <span className="whitespace-nowrap">
+              <code className="font-mono font-semibold text-fg">{entry.mark}</code> {entry.what}
+            </span>
+          </Fragment>
         ))}
       </p>
       {/* En el teléfono no hay teclas Esc ni Tab, ahí sirven los botones de la barra */}
