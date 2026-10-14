@@ -20,7 +20,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
 - [x] B4. Repasar y Buscar tarjetas (fusionado en main)
-- [ ] B5. Revisión del examen y motivos de error
+- [x] B5. Revisión del examen y motivos de error (fusionado en main)
 - [ ] B6. Apuntes y mazos
 - [ ] B7. Party real y lo que se queda o se va
 - [ ] B8. Plan Gratis
@@ -108,6 +108,15 @@ Evidencia
 - Acciones en lote: suspender, reanudar, etiquetar, mover y reiniciar tarjetas (evento `cards_reset`).
 - Rendimiento verificado: filtrado de 10,000 tarjetas en < 100 ms (unit test).
 - Evidencia: 75 pruebas unitarias passing, TypeScript typecheck y ESLint 100% limpios. E2E `tests/e2e/b4-explore-topics.spec.ts` agregada. Fusionado a `main`.
+
+### B5. Revisión del examen y motivos de error (comentarios 1 y 2)
+- Hecho. Tabla de equivalencias y normalización de motivos de error vigentes (7 motivos: conocimiento, tiempo, malinterpretación, lectura superficial, ansiedad, exceso de confianza, fatiga) y compatibilidad con motivos legacy (D-124).
+- Creación de tarjeta desde pregunta (`createCardFromQuestion`) sin IA, con frente y reverso construidos de forma determinista a partir del caso clínico, reactivo, opciones y retroalimentación del banco. Registra el evento `question_card_created`.
+- Creación de tarjetas en la capa del alumno: si el destino es un mazo precargado seguido, la tarjeta se asigna a un submazo privado `Mis tarjetas` (`parentId: preloadedDeck.id`), preservando intacto e inmutable el mazo precargado compartido.
+- Diálogo `CreateQuestionCardDialog` con selección de mazo destino (mazos propios, precargados seguidos o `+ Crear nuevo mazo`) y edición y previsualización de frente y reverso.
+- Botones de 1 toque en la revisión del examen (`ExamReview`) y del simulador (`AnswerReview`), permitiendo seleccionar y cambiar el motivo de error en cualquier momento (gana el último motivo reportado por reactivo).
+- Reflejo del motivo de error vigente en Progreso (tarjeta `Motivos de error` con desglose total y en `Ramas y subespecialidades` por rama) y en el tutor.
+- Evidencia: Pruebas unitarias de esquemas, motores (`forgetting`, `insights`, `errorContexts`, `insightFacts`, `analysis`) y usecases (61 pruebas passing). Suite E2E `tests/e2e/b5-exam-review-cards.spec.ts` en verde para desktop y mobile. Fusionado a `main`.
 
 ### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
