@@ -6,6 +6,7 @@
 --   R. Restablecer el segundo factor, solo el dueño
 --   S. Cómo nos conociste, privado y con conteos para el admin
 --   D. Las fechas nuevas de private_accounts
+--   P. El segundo factor no cambia el plan Gratis ni Party (B7 y B8)
 \set ON_ERROR_STOP on
 
 -- Sesión de un usuario con su nivel de autenticación. session_id es el del token, que usa la barrera del
@@ -666,6 +667,38 @@ select pg_temp.expect(
   and (select details_changed_at from public.private_accounts where user_id = auth.uid()) = '2026-10-13T10:00:00Z'::timestamptz,
   'D1. La confirmación de mayoría de edad se borró o cambió de fecha'
 );
+rollback;
+
+-- ===================================================================== P1. El segundo factor y el plan Gratis
+-- Party y los apuntes de la nube siguen el plan y no el rol (B8, 20261021000001). En el proyecto real
+-- esta migración se aplica después de las del plan Gratis, así que no debe pisar party_open ni
+-- sync_push_records. Con la bandera prendida, un admin con plan de pago y sin segundo factor conserva
+-- Party, pero deja de ver como admin los perfiles de todos. La alumna en Gratis sigue sin Party
+begin;
+select pg_temp.expect(
+  position('caller_has_paid_plan' in pg_get_functiondef('public.party_open()'::regprocedure)) > 0
+  and position('v_outlines_open' in pg_get_functiondef('public.sync_push_records(jsonb)'::regprocedure)) > 0
+  and position('party_moderator' in pg_get_functiondef('public.party_assert_owner(uuid, uuid)'::regprocedure)) > 0,
+  'P1. La migración de cuentas y acceso pisó lo del plan Gratis en party_open, sync_push_records o la moderación'
+);
+select pg_temp.require_mfa('true'::jsonb);
+insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
+  ('b9000000-0000-0000-0000-000000000003', 'monthly', 'active', 'stripe', now() + interval '20 days');
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal1');
+select pg_temp.expect(
+  public.party_open() and not public.is_admin() and (select count(id) from public.profiles) = 1,
+  'P1. Sin segundo factor el admin perdió Party, que es del plan, o siguió viendo todos los perfiles'
+);
+reset role;
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000003', 'aal2');
+select pg_temp.expect(
+  public.party_open() and public.is_admin() and (select count(id) from public.profiles) > 1,
+  'P1. Con segundo factor el admin no recuperó Party o los perfiles de todos'
+);
+reset role;
+select pg_temp.as_user('b9000000-0000-0000-0000-000000000001', 'aal1');
+select pg_temp.expect(not public.party_open(), 'P1. La alumna en Gratis abrió Party con la bandera prendida');
+reset role;
 rollback;
 
 select 'TODAS LAS PRUEBAS DE CUENTAS Y ACCESO PASARON' as resultado;

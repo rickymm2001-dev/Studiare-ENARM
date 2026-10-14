@@ -611,7 +611,7 @@ select
 
 ### Cómo aplicar la migración
 
-No necesitas terminal. Aplica primero las anteriores.
+No necesitas terminal. Aplica primero las anteriores, también las dos del plan Gratis (20261021000001 y 20261021000002) aunque su número sea mayor, porque esta se escribió antes y se aplica después. No toca party_open, sync_push_records ni user_plan, así que no cambia lo que dejaron las del plan Gratis, y las pruebas SQL la corren en los dos órdenes.
 
 1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
 2. Da clic en New query
