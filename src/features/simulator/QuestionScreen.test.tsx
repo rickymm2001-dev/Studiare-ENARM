@@ -125,6 +125,35 @@ describe('pantalla de la pregunta', () => {
     expect(screen.queryByRole('button', { name: t.choice.restoreOption('B') })).toBeNull();
   });
 
+  it('mientras carga la siguiente no deja la pregunta contestada bajo el número de la siguiente', async () => {
+    const typing = userEvent.setup();
+    const { first, second } = await startPractice({ count: 2 });
+    await screen.findByText(first.question.prompt);
+    // La siguiente pregunta tarda en llegar, como con la máquina ocupada
+    const { questions } = (app as RenderedApp).api.repos;
+    const original = questions.get.bind(questions);
+    let release: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    vi.spyOn(questions, 'get').mockImplementation(async (id) => {
+      if (id === second.question.id) await held;
+      return original(id);
+    });
+
+    await typing.click(option(1));
+    await typing.keyboard('{Enter}');
+    expect(await screen.findByText(t.simulator.progress(2, 2))).toBeVisible();
+    expect(screen.queryByText(first.question.prompt)).toBeNull();
+    expect(screen.queryByRole('radio')).toBeNull();
+
+    release();
+    expect(await screen.findByText(second.question.prompt)).toBeVisible();
+    expect(screen.getAllByRole('radio').some((radio) => (radio as HTMLInputElement).checked)).toBe(
+      false,
+    );
+  });
+
   it('con la retroalimentación al final pasa directo a la siguiente y la última lleva al resumen con la revisión', async () => {
     const typing = userEvent.setup();
     const { first, second } = await startPractice({ count: 2 });
@@ -135,6 +164,7 @@ describe('pantalla de la pregunta', () => {
     await typing.click(option(1));
     await typing.keyboard('{Enter}');
     expect(await screen.findByText(t.simulator.progress(2, 2))).toBeVisible();
+    expect(await screen.findByText(second.question.prompt)).toBeVisible();
     expect(screen.queryByText(t.simulator.whyAttracts)).toBeNull();
     // Con el siguiente, el botón dice que es la última
     expect(screen.getByRole('button', { name: t.simulator.answerAndFinish })).toBeDisabled();
