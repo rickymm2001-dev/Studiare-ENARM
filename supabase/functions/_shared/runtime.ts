@@ -5,17 +5,17 @@ import type {
   FunctionEnv,
   MercadoPagoWebhookDeps,
 } from './billingTypes.ts';
-import type { CheckoutDeps, PaymentDeps, PortalDeps } from './payments.ts';
+import type { CheckoutDeps, PortalDeps, StripeWebhookDeps } from './payments.ts';
 import {
   applyChargeViaRest,
   applyNoticeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
   checkoutContextViaRest,
-  customerOfUserViaRest,
-  founderSeatsLeftViaRest,
+  claimBillingActionsViaRest,
+  finishBillingActionViaRest,
   linkCustomerViaRest,
-  subscriptionOfUserViaRest,
+  noteTrialWillEndViaRest,
   userOfCustomerViaRest,
   type SupabaseEnv,
 } from './supabase.ts';
@@ -61,41 +61,48 @@ const log = (line: string) => {
   console.error(line);
 };
 
-export function paymentDeps(): PaymentDeps {
+/** Aviso de Stripe (payment-webhook-stripe) */
+export function stripeWebhookDeps(): StripeWebhookDeps {
   const { env, supabase } = readEnv();
   return {
     env,
     fetch,
     now: () => Date.now(),
-    applyNotice: (notice) => applyNoticeViaRest(supabase, notice),
+    log,
+    applyCharge: (notice) => applyChargeViaRest(supabase, notice),
+    applySubscriptionState: (notice) => applySubscriptionStateViaRest(supabase, notice),
+    noteTrialWillEnd: (notice) => noteTrialWillEndViaRest(supabase, notice),
     linkCustomer: (link) => linkCustomerViaRest(supabase, link),
     userOfCustomer: (customerId) => userOfCustomerViaRest(supabase, customerId),
+    claimBillingActions: (options) => claimBillingActionsViaRest(supabase, options),
+    finishBillingAction: (result) => finishBillingActionViaRest(supabase, result),
   };
 }
 
+/** Crear el pago (create-checkout) */
 export function checkoutDeps(): CheckoutDeps {
   const { env, supabase } = readEnv();
   return {
     env,
     fetch,
     now: () => Date.now(),
-    authenticate: (authorization) => authenticateUser(supabase, authorization),
-    founderSeatsLeft: () => founderSeatsLeftViaRest(supabase),
-    customerOf: (userId) => customerOfUserViaRest(supabase, userId),
-    subscriptionOf: (userId) => subscriptionOfUserViaRest(supabase, userId),
     log,
+    authenticate: (authorization) => authenticateUser(supabase, authorization),
+    checkoutContext: (userId) => checkoutContextViaRest(supabase, userId),
+    linkCustomer: (link) => linkCustomerViaRest(supabase, link),
   };
 }
 
+/** Portal de Stripe (create-portal-session) */
 export function portalDeps(): PortalDeps {
   const { env, supabase } = readEnv();
   return {
     env,
     fetch,
     now: () => Date.now(),
-    authenticate: (authorization) => authenticateUser(supabase, authorization),
-    customerOf: (userId) => customerOfUserViaRest(supabase, userId),
     log,
+    authenticate: (authorization) => authenticateUser(supabase, authorization),
+    checkoutContext: (userId) => checkoutContextViaRest(supabase, userId),
   };
 }
 
@@ -110,6 +117,9 @@ export function mercadoPagoWebhookDeps(): MercadoPagoWebhookDeps {
     applyNotice: (notice) => applyNoticeViaRest(supabase, notice),
     applyCharge: (notice) => applyChargeViaRest(supabase, notice),
     applySubscriptionState: (notice) => applySubscriptionStateViaRest(supabase, notice),
+    claimBillingActions: (limit) =>
+      claimBillingActionsViaRest(supabase, { limit, provider: 'mercadopago' }),
+    finishBillingAction: (result) => finishBillingActionViaRest(supabase, result),
   };
 }
 

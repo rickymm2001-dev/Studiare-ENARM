@@ -192,7 +192,9 @@ export type MercadoPagoCheckoutResult =
 /**
  * Dependencias del aviso de Mercado Pago (payment-webhook-mercadopago). applyNotice es la puerta de
  * antes (apply_payment_notice). applyCharge y applySubscriptionState son las de B10, que usa el
- * paquete C para la suscripción, el pase y el pago de una suscripción
+ * paquete C para la suscripción, el pase y el pago de una suscripción. claimBillingActions y
+ * finishBillingAction ejecutan las acciones de Mercado Pago que deja la base, como cancelar una
+ * suscripción reembolsada o una segunda suscripción (8.6). Sin ellas el aviso no ejecuta acciones
  */
 export interface MercadoPagoWebhookDeps {
   env: FunctionEnv;
@@ -202,6 +204,14 @@ export interface MercadoPagoWebhookDeps {
   applyNotice: (notice: PaymentNotice) => Promise<string>;
   applyCharge: (notice: ChargeNotice) => Promise<string>;
   applySubscriptionState: (notice: SubscriptionNotice) => Promise<string>;
+  /** claim_billing_actions solo de Mercado Pago. Lanza si la base falla */
+  claimBillingActions?: (limit: number) => Promise<BillingAction[]>;
+  /** finish_billing_action. Lanza si la base falla */
+  finishBillingAction?: (result: {
+    id: string;
+    ok: boolean;
+    error: string | null;
+  }) => Promise<void>;
 }
 
 /** Dependencias de cancel-subscription, la cancelación de una suscripción de Mercado Pago (paquete C) */

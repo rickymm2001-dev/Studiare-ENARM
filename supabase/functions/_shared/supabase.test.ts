@@ -12,13 +12,10 @@ import {
   authenticateUser,
   checkoutContextViaRest,
   claimBillingActionsViaRest,
-  customerOfUserViaRest,
   finishBillingActionViaRest,
-  founderSeatsLeftViaRest,
   linkCustomerViaRest,
   noteTrialWillEndViaRest,
   parseCheckoutContext,
-  subscriptionOfUserViaRest,
   userOfCustomerViaRest,
 } from './supabase.ts';
 
@@ -120,36 +117,6 @@ describe('quién es el usuario del token', () => {
   });
 });
 
-describe('lugares de Fundador', () => {
-  const fetchFor = (settings: Response, taken: Response) =>
-    ((url: string) =>
-      Promise.resolve(url.includes('platform_settings') ? settings : taken)) as typeof fetch;
-
-  it('resta los ocupados del total', async () => {
-    const fetchImpl = fetchFor(
-      new Response(JSON.stringify([{ value: { total: 100 } }])),
-      new Response('[]', { headers: { 'content-range': '0-0/37' } }),
-    );
-    expect(await founderSeatsLeftViaRest(env, fetchImpl)).toBe(63);
-  });
-
-  it('si no se puede saber devuelve null', async () => {
-    expect(
-      await founderSeatsLeftViaRest(
-        env,
-        fetchFor(new Response('', { status: 500 }), new Response('[]')),
-      ),
-    ).toBeNull();
-    expect(
-      await founderSeatsLeftViaRest(
-        env,
-        fetchFor(new Response('[]'), new Response('[]', { headers: { 'content-range': '*/*' } })),
-      ),
-    ).toBeNull();
-    expect(await founderSeatsLeftViaRest(env, () => Promise.reject(new Error('red')))).toBeNull();
-  });
-});
-
 describe('clientes de Stripe por REST', () => {
   it('liga al alumno con su cliente usando la llave de servicio', async () => {
     const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('linked')));
@@ -165,90 +132,24 @@ describe('clientes de Stripe por REST', () => {
     });
   });
 
-  it('busca el cliente de un alumno y el alumno de un cliente', async () => {
-    const customer = recorder(() => new Response(JSON.stringify('cus_1')));
-    expect(await customerOfUserViaRest(env, 'u1', customer.fetchImpl)).toBe('cus_1');
-    expect(customer.calls[0]?.url).toContain('/rpc/billing_customer_of_user');
-    expect(JSON.parse(bodyText(customer.calls[0]?.init))).toEqual({
-      p_provider: 'stripe',
-      p_user: 'u1',
-    });
+  it('busca el alumno de un cliente', async () => {
     const user = recorder(() => new Response(JSON.stringify('u1')));
     expect(await userOfCustomerViaRest(env, 'cus_1', user.fetchImpl)).toBe('u1');
     expect(user.calls[0]?.url).toContain('/rpc/billing_user_of_customer');
+    expect(JSON.parse(bodyText(user.calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_customer_id: 'cus_1',
+    });
   });
 
   it('sin resultado devuelve null y si la base falla lanza', async () => {
     const empty = recorder(() => new Response('null'));
-    expect(await customerOfUserViaRest(env, 'u1', empty.fetchImpl)).toBeNull();
     expect(await userOfCustomerViaRest(env, 'cus_x', empty.fetchImpl)).toBeNull();
     const broken = recorder(() => new Response('x', { status: 500 }));
     await expect(userOfCustomerViaRest(env, 'cus_1', broken.fetchImpl)).rejects.toThrow('500');
     await expect(
       linkCustomerViaRest(env, { userId: 'u1', customerId: 'c' }, broken.fetchImpl),
     ).rejects.toThrow('500');
-    await expect(customerOfUserViaRest(env, 'u1', broken.fetchImpl)).rejects.toThrow('500');
-  });
-});
-
-describe('suscripción del alumno por REST', () => {
-  it('lee plan, estado y fin del periodo con la llave de servicio', async () => {
-    const { calls, fetchImpl } = recorder(
-      () =>
-        new Response(
-          JSON.stringify([
-            {
-              plan: 'annual',
-              status: 'active',
-              current_period_end: '2027-10-11T19:03:51.46643+00:00',
-            },
-          ]),
-        ),
-    );
-    expect(await subscriptionOfUserViaRest(env, 'u1', fetchImpl)).toEqual({
-      plan: 'annual',
-      status: 'active',
-      current_period_end: '2027-10-11T19:03:51.46643+00:00',
-    });
-    const url = new URL(calls[0]?.url ?? '');
-    expect(url.pathname).toBe('/rest/v1/subscriptions');
-    expect(url.searchParams.get('user_id')).toBe('eq.u1');
-    expect(url.searchParams.get('select')).toBe('plan,status,current_period_end');
-    expect(new Headers(calls[0]?.init?.headers).get('authorization')).toBe(
-      'Bearer servicio-de-prueba',
-    );
-  });
-
-  it('sin fila devuelve null y sin fecha la deja en null', async () => {
-    expect(
-      await subscriptionOfUserViaRest(env, 'u1', recorder(() => new Response('[]')).fetchImpl),
-    ).toBeNull();
-    expect(
-      await subscriptionOfUserViaRest(
-        env,
-        'u1',
-        recorder(
-          () =>
-            new Response(
-              JSON.stringify([{ plan: 'monthly', status: 'active', current_period_end: null }]),
-            ),
-        ).fetchImpl,
-      ),
-    ).toEqual({ plan: 'monthly', status: 'active', current_period_end: null });
-  });
-
-  it('si la base falla o responde algo raro lanza, para no abrir el pago a ciegas', async () => {
-    const cases = [
-      new Response('x', { status: 500 }),
-      new Response('{}'),
-      new Response('[{"plan":"annual"}]'),
-      new Response('[null]'),
-    ];
-    for (const reply of cases) {
-      await expect(
-        subscriptionOfUserViaRest(env, 'u1', recorder(() => reply).fetchImpl),
-      ).rejects.toThrow();
-    }
   });
 });
 
