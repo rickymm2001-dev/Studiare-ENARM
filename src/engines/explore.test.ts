@@ -278,4 +278,22 @@ describe('rendimiento con 20,000 tarjetas', () => {
     expect(built).toBeLessThan(4000);
     expect(perFilter).toBeLessThan(150);
   });
+
+  it('con 10,000 tarjetas, filtrar tarda menos de 100 ms en la prueba de rendimiento (criterio B4)', () => {
+    const rows = buildExploreRows(sources.slice(0, 10_000), new Set(['c1', 'c2']), 8);
+    expect(rows).toHaveLength(10_000);
+    const t0 = performance.now();
+    const result = filterRows(
+      rows,
+      filters({
+        deckIds: new Set(['d0', 'd8']),
+        status: new Set(['new', 'review']),
+        text: 'sepsis caso',
+      }),
+      NOW,
+    );
+    const duration = performance.now() - t0;
+    expect(duration).toBeLessThan(100);
+    expect(result.length).toBeGreaterThan(0);
+  });
 });

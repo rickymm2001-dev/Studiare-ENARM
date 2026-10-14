@@ -45,9 +45,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas, cambiar su fecha de repaso y atender una controversia', () => {
-    expect(EVENT_TYPES).toHaveLength(36);
-    expect(AppEventSchema.options).toHaveLength(36);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender, reanudar o reiniciar tarjetas, cambiar su fecha de repaso y atender una controversia', () => {
+    expect(EVENT_TYPES).toHaveLength(37);
+    expect(AppEventSchema.options).toHaveLength(37);
   });
 
   it('un cambio de fecha de repaso lleva sus tarjetas con la fecha de antes y la nueva', () => {

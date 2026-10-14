@@ -25,6 +25,12 @@ export interface ExploreSource {
   createdAt: string;
   updatedAt: string;
   state: FsrsCardState | null;
+  /** Nombre del mazo al que pertenece la tarjeta */
+  deckName?: string;
+  /** Subespecialidad o tema médico de la nota */
+  topic?: string;
+  /** Intervalo en días según FSRS */
+  scheduledDays?: number;
   /** Señal de controversia que puso la IA, o null */
   controversy?: ExploreControversy | null;
   /** La propuso la IA a partir de un texto del alumno y sigue en borrador */
@@ -41,6 +47,9 @@ export interface ExploreRow {
   cardId: string;
   noteId: string;
   deckId: string;
+  deckName: string;
+  topic: string;
+  interval: number;
   kind: string;
   ordinal: number;
   tags: readonly string[];
@@ -90,6 +99,9 @@ export function buildExploreRows(
       cardId: source.cardId,
       noteId: source.noteId,
       deckId: source.deckId,
+      deckName: source.deckName ?? '',
+      topic: source.topic ?? '',
+      interval: source.scheduledDays ?? source.state?.scheduledDays ?? 0,
       kind: source.kind,
       ordinal: source.ordinal,
       tags: source.tags,
@@ -189,7 +201,17 @@ export function filterRows(
   });
 }
 
-export type ExploreSortKey = 'front' | 'due' | 'lapses' | 'created' | 'updated';
+export type ExploreSortKey =
+  | 'front'
+  | 'deck'
+  | 'topic'
+  | 'status'
+  | 'due'
+  | 'interval'
+  | 'lapses'
+  | 'created'
+  | 'updated';
+
 export interface ExploreSort {
   key: ExploreSortKey;
   direction: 'asc' | 'desc';
@@ -201,7 +223,15 @@ export function sortRows(rows: readonly ExploreRow[], sort: ExploreSort): Explor
   const compare = (a: ExploreRow, b: ExploreRow): number => {
     switch (sort.key) {
       case 'front':
-        return a.front.localeCompare(b.front, 'es');
+        return a.front.localeCompare(b.front, 'es', { sensitivity: 'base' });
+      case 'deck':
+        return a.deckName.localeCompare(b.deckName, 'es', { sensitivity: 'base' });
+      case 'topic':
+        return a.topic.localeCompare(b.topic, 'es', { sensitivity: 'base' });
+      case 'status':
+        return a.fsrs.localeCompare(b.fsrs, 'es', { sensitivity: 'base' });
+      case 'interval':
+        return a.interval - b.interval;
       case 'lapses':
         return a.lapses - b.lapses;
       case 'created':
