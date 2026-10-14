@@ -1,4 +1,5 @@
-// Pagos en modo prueba con Stripe y Mercado Pago (Fase P bloque 5, D-096).
+// Pagos en modo prueba con Stripe (Fase P bloque 5, D-096). Lo de Mercado Pago vive en mercadopago.ts
+// desde el Paso 0 de B10, y los tipos compartidos en billingTypes.ts.
 //
 // Este módulo es la lógica de las funciones de Supabase (Edge Functions) y no sabe de Deno. Recibe
 // sus dependencias, el entorno con las llaves, fetch, el reloj y la llamada a la base, así se prueba
@@ -20,79 +21,32 @@
 // formas de Stripe (la anterior y la de parent.subscription_details) y falta confirmarla con un pago
 // de prueba real. Queda dicho en la guía.
 
-export type Provider = 'stripe' | 'mercadopago';
-export type PaidPlan = 'founder' | 'monthly' | 'annual';
-export type NoticeKind = 'paid' | 'failed' | 'canceled' | 'refunded';
-
-/** Lo que la base necesita de un aviso, ya traducido y verificado */
-export interface PaymentNotice {
-  provider: Provider;
-  eventId: string;
-  kind: NoticeKind;
-  userId: string | null;
-  plan: PaidPlan | null;
-  providerPaymentId: string | null;
-  providerSubscriptionId: string | null;
-  amountMxn: number | null;
-  periodEnd: string | null;
-  payload: Record<string, unknown>;
-}
-
-/** Precios en pesos y nombre de cada plan. Una prueba confirma que coinciden con src/config/billing.ts */
-export const PLAN_PRICES_MXN: Record<PaidPlan, number> = {
-  founder: 79,
-  monthly: 149,
-  annual: 1499,
-};
-export const PLAN_TITLES: Record<PaidPlan, string> = {
-  founder: 'Studiare. Plan Fundador',
-  monthly: 'Studiare. Plan mensual',
-  annual: 'Studiare. Plan anual',
-};
-const PAID_PLANS = Object.keys(PLAN_PRICES_MXN) as PaidPlan[];
-
-export const isPaidPlan = (value: unknown): value is PaidPlan =>
-  typeof value === 'string' && (PAID_PLANS as string[]).includes(value);
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-export const isUuid = (value: unknown): value is string =>
-  typeof value === 'string' && UUID.test(value);
-
-type Json = Record<string, unknown>;
-const asRecord = (value: unknown): Json =>
-  value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : {};
-const asString = (value: unknown): string | null =>
-  typeof value === 'string' && value !== '' ? value : null;
-const asNumber = (value: unknown): number | null =>
-  typeof value === 'number' && Number.isFinite(value) ? value : null;
+import {
+  isFounderPlan,
+  isPaidPlan,
+  isPassPlan,
+  isUuid,
+  type CheckoutContext,
+  type FunctionEnv,
+  type PaidPlan,
+  type PaymentNotice,
+} from './billingTypes.ts';
+import { createMercadoPagoCheckout } from './mercadopago.ts';
+import {
+  asNumber,
+  asRecord,
+  asString,
+  corsHeaders,
+  hmacSha256Hex,
+  json,
+  safeEqual,
+  subscriptionUrl,
+  text,
+  type Json,
+} from './http.ts';
 
 // ---------------------------------------------------------------------------------------------
 // Firmas
-
-const encoder = new TextEncoder();
-
-async function hmacHex(secret: string, message: string): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
-  return [...new Uint8Array(signature)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-}
-
-/** Compara sin que el tiempo delate dónde difieren */
-export function safeEqual(a: string, b: string): boolean {
-  const left = encoder.encode(a);
-  const right = encoder.encode(b);
-  let diff = left.length ^ right.length;
-  for (let index = 0; index < Math.max(left.length, right.length); index += 1) {
-    diff |= (left[index] ?? 0) ^ (right[index] ?? 0);
-  }
-  return diff === 0;
-}
 
 export const STRIPE_TOLERANCE_SECONDS = 300;
 
@@ -121,42 +75,8 @@ export async function verifyStripeSignature(input: {
   if (!Number.isInteger(seconds) || signatures.length === 0) return false;
   const tolerance = input.toleranceSeconds ?? STRIPE_TOLERANCE_SECONDS;
   if (Math.abs(input.nowMs / 1000 - seconds) > tolerance) return false;
-  const expected = await hmacHex(input.secret, `${timestamp}.${input.rawBody}`);
+  const expected = await hmacSha256Hex(input.secret, `${timestamp}.${input.rawBody}`);
   return signatures.some((signature) => safeEqual(signature, expected));
-}
-
-/**
- * Firma de Mercado Pago. El encabezado x-signature trae ts y v1. El mensaje firmado es
- * "id:<data.id en minúsculas>;request-id:<x-request-id>;ts:<ts>;" y omite lo que no llegó. El HMAC
- * SHA-256 en hexadecimal con el secreto de la integración debe ser igual a v1
- */
-export async function verifyMercadoPagoSignature(input: {
-  header: string | null;
-  requestId: string | null;
-  dataId: string | null;
-  secret: string;
-  nowMs: number;
-  toleranceMs?: number;
-}): Promise<boolean> {
-  if (!input.header || input.secret === '') return false;
-  let ts = '';
-  let v1 = '';
-  for (const piece of input.header.split(',')) {
-    const [name, ...rest] = piece.trim().split('=');
-    if (name === 'ts') ts = rest.join('=');
-    else if (name === 'v1') v1 = rest.join('=');
-  }
-  const stamp = Number(ts);
-  if (!Number.isFinite(stamp) || v1 === '') return false;
-  // ts viene en milisegundos. Una notificación muy vieja se rechaza para que no sirva repetirla
-  if (Math.abs(input.nowMs - stamp) > (input.toleranceMs ?? STRIPE_TOLERANCE_SECONDS * 1000)) {
-    return false;
-  }
-  let manifest = '';
-  if (input.dataId) manifest += `id:${input.dataId.toLowerCase()};`;
-  if (input.requestId) manifest += `request-id:${input.requestId};`;
-  manifest += `ts:${ts};`;
-  return safeEqual(v1, await hmacHex(input.secret, manifest));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -303,69 +223,7 @@ export function stripeRefundFromEvent(
 }
 
 // ---------------------------------------------------------------------------------------------
-// De un pago de Mercado Pago a un aviso
-
-/** La referencia externa que pone create-checkout. user_id|plan */
-export function parseExternalReference(
-  reference: unknown,
-): { userId: string; plan: PaidPlan } | null {
-  if (typeof reference !== 'string') return null;
-  const [userId, plan] = reference.split('|');
-  return isUuid(userId) && isPaidPlan(plan) ? { userId, plan } : null;
-}
-
-export function noticeFromMercadoPagoPayment(payment: unknown): PaymentNotice | null {
-  const root = asRecord(payment);
-  const id = root.id;
-  const paymentId = typeof id === 'number' || typeof id === 'string' ? String(id) : null;
-  const status = asString(root.status);
-  if (!paymentId || !status) return null;
-  const reference = parseExternalReference(root.external_reference);
-  const amount = asNumber(root.transaction_amount);
-  const kind: NoticeKind | null =
-    status === 'approved'
-      ? 'paid'
-      : status === 'refunded' || status === 'charged_back'
-        ? 'refunded'
-        : null;
-  if (!kind) return null;
-  return {
-    provider: 'mercadopago',
-    // Cada cambio de estado de un pago se aplica una vez. Las repeticiones del mismo estado no
-    eventId: `${paymentId}:${status}`,
-    kind,
-    userId: reference?.userId ?? null,
-    plan: reference?.plan ?? null,
-    providerPaymentId: paymentId,
-    providerSubscriptionId: null,
-    amountMxn: String(root.currency_id).toUpperCase() === 'MXN' && amount !== null ? amount : null,
-    periodEnd: null,
-    payload: root,
-  };
-}
-
-// ---------------------------------------------------------------------------------------------
 // Manejadores
-
-export interface FunctionEnv {
-  STRIPE_SECRET_KEY?: string;
-  STRIPE_WEBHOOK_SECRET?: string;
-  STRIPE_PRICE_FOUNDER?: string;
-  STRIPE_PRICE_MONTHLY?: string;
-  STRIPE_PRICE_ANNUAL?: string;
-  /**
-   * Con true, Checkout calcula el impuesto con Stripe Tax y pide dirección y RFC opcional. Se deja
-   * apagado hasta activar Stripe Tax en el panel y poner el domicilio fiscal, porque con Stripe Tax
-   * sin configurar Stripe rechaza abrir el pago
-   */
-  STRIPE_AUTOMATIC_TAX?: string;
-  MERCADOPAGO_ACCESS_TOKEN?: string;
-  MERCADOPAGO_WEBHOOK_SECRET?: string;
-  /** Dirección pública de la app, con la que se arman las URL de regreso y el CORS */
-  APP_URL?: string;
-  /** Dirección pública de las funciones, para la notificación de Mercado Pago */
-  FUNCTIONS_URL?: string;
-}
 
 interface CoreDeps {
   env: FunctionEnv;
@@ -381,18 +239,6 @@ export interface PaymentDeps extends CoreDeps {
   /** De qué alumno es un cliente de Stripe. null si no se ligó a nadie */
   userOfCustomer: (customerId: string) => Promise<string | null>;
 }
-
-/** El cuerpo como objeto, o uno vacío si no llegó o no es JSON */
-async function readJsonRecord(request: Request): Promise<Json> {
-  try {
-    return asRecord(JSON.parse(await request.text()));
-  } catch {
-    return {};
-  }
-}
-
-const text = (body: string, status: number) =>
-  new Response(body, { status, headers: { 'content-type': 'text/plain; charset=utf-8' } });
 
 /** Aviso de Stripe. Verifica la firma sobre el cuerpo tal cual llegó, antes de leerlo como JSON */
 export async function handleStripeWebhook(request: Request, deps: PaymentDeps): Promise<Response> {
@@ -441,50 +287,6 @@ export async function handleStripeWebhook(request: Request, deps: PaymentDeps): 
     // son seguras de repetir
     const link = stripeCustomerLink(event);
     if (link) await deps.linkCustomer(link);
-    return text(await deps.applyNotice(notice), 200);
-  } catch {
-    return text('No se pudo aplicar', 500);
-  }
-}
-
-/**
- * Aviso de Mercado Pago. La notificación solo trae el id del pago, así que después de verificar la
- * firma se consulta el pago a Mercado Pago con el token del servidor y se confía en esa respuesta
- */
-export async function handleMercadoPagoWebhook(
-  request: Request,
-  deps: PaymentDeps,
-): Promise<Response> {
-  if (request.method !== 'POST') return text('Método no permitido', 405);
-  const secret = deps.env.MERCADOPAGO_WEBHOOK_SECRET ?? '';
-  const token = deps.env.MERCADOPAGO_ACCESS_TOKEN ?? '';
-  if (secret === '' || token === '') return text('Mercado Pago no está configurado', 503);
-  const url = new URL(request.url);
-  const body = await readJsonRecord(request);
-  const dataId = url.searchParams.get('data.id') ?? asString(asRecord(body.data).id);
-  const valid = await verifyMercadoPagoSignature({
-    header: request.headers.get('x-signature'),
-    requestId: request.headers.get('x-request-id'),
-    dataId,
-    secret,
-    nowMs: deps.now(),
-  });
-  if (!valid) return text('Firma inválida', 401);
-  const type = url.searchParams.get('type') ?? asString(body.type);
-  if (type !== 'payment' || !dataId || !/^[0-9]+$/.test(dataId)) return text('Ignorado', 200);
-  let payment: unknown;
-  try {
-    const reply = await deps.fetch(`https://api.mercadopago.com/v1/payments/${dataId}`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-    if (!reply.ok) return text('No se pudo consultar el pago', 502);
-    payment = await reply.json();
-  } catch {
-    return text('No se pudo consultar el pago', 502);
-  }
-  const notice = noticeFromMercadoPagoPayment(payment);
-  if (!notice) return text('Ignorado', 200);
-  try {
     return text(await deps.applyNotice(notice), 200);
   } catch {
     return text('No se pudo aplicar', 500);
@@ -548,44 +350,10 @@ async function stripeFailure(reply: Response): Promise<string> {
 
 const STRIPE_PRICE_ENV: Record<PaidPlan, keyof FunctionEnv> = {
   founder: 'STRIPE_PRICE_FOUNDER',
+  founder_annual: 'STRIPE_PRICE_FOUNDER_ANNUAL',
   monthly: 'STRIPE_PRICE_MONTHLY',
   annual: 'STRIPE_PRICE_ANNUAL',
 };
-
-function originOf(value: string | undefined): string {
-  try {
-    return value ? new URL(value).origin : '';
-  } catch {
-    return '';
-  }
-}
-
-/** La pantalla Suscripción de la app, con el resultado del pago si lo hay */
-function subscriptionUrl(appUrl: string, result?: 'ok' | 'cancelado'): string {
-  const target = new URL(appUrl);
-  target.pathname = `${target.pathname.replace(/\/+$/, '')}/suscripcion`;
-  if (result) target.searchParams.set('pago', result);
-  return target.toString();
-}
-
-/** Solo la página de la app puede llamar a la función desde el navegador */
-export function corsHeaders(env: FunctionEnv, origin: string | null): Record<string, string> {
-  const allowed = originOf(env.APP_URL);
-  const headers: Record<string, string> = {
-    'access-control-allow-headers': 'authorization, content-type, apikey, x-client-info',
-    'access-control-allow-methods': 'POST, OPTIONS',
-    vary: 'origin',
-  };
-  if (allowed !== '' && origin === allowed) headers['access-control-allow-origin'] = allowed;
-  return headers;
-}
-
-function json(body: unknown, status: number, headers: Record<string, string>): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...headers, 'content-type': 'application/json; charset=utf-8' },
-  });
-}
 
 /** Crea la sesión de pago con la llave del servidor y devuelve la dirección donde se paga */
 export async function handleCreateCheckout(
@@ -610,6 +378,8 @@ export async function handleCreateCheckout(
   if (!isPaidPlan(plan) || (provider !== 'stripe' && provider !== 'mercadopago')) {
     return json({ error: 'invalid' }, 400, cors);
   }
+  // Mercado Pago no lleva precio Fundador (8.3)
+  if (provider === 'mercadopago' && !isPassPlan(plan)) return json({ error: 'invalid' }, 400, cors);
   const appUrl = deps.env.APP_URL ?? '';
   if (appUrl === '') return json({ error: 'not_configured' }, 503, cors);
 
@@ -627,11 +397,12 @@ export async function handleCreateCheckout(
   }
   if (inForce !== null) return json({ error: 'already_subscribed' }, 409, cors);
 
-  if (plan === 'founder') {
-    const left = await deps.founderSeatsLeft();
-    if (left !== null && left <= 0) return json({ error: 'founder_full' }, 409, cors);
+  let seatsLeft: number | null = null;
+  if (isFounderPlan(plan)) {
+    seatsLeft = await deps.founderSeatsLeft();
+    if (seatsLeft !== null && seatsLeft <= 0) return json({ error: 'founder_full' }, 409, cors);
   }
-  const back = (result: 'ok' | 'cancelado') => subscriptionUrl(appUrl, result);
+  const back = (result: 'ok' | 'cancelado') => subscriptionUrl(appUrl, { pago: result });
 
   try {
     if (provider === 'stripe') {
@@ -704,38 +475,35 @@ export async function handleCreateCheckout(
       return json({ error: 'provider' }, 502, cors);
     }
 
-    const token = deps.env.MERCADOPAGO_ACCESS_TOKEN ?? '';
-    if (token === '') return json({ error: 'not_configured' }, 503, cors);
-    const preference: Json = {
-      items: [
-        {
-          id: plan,
-          title: PLAN_TITLES[plan],
-          quantity: 1,
-          currency_id: 'MXN',
-          unit_price: PLAN_PRICES_MXN[plan],
-        },
-      ],
-      external_reference: `${user.id}|${plan}`,
-      back_urls: { success: back('ok'), failure: back('cancelado'), pending: back('ok') },
-      auto_return: 'approved',
+    if (!isPassPlan(plan)) return json({ error: 'invalid' }, 400, cors);
+    // Lo que se sabe del alumno antes de B10. Al cambiar a checkout_context se pasa completo
+    const context: CheckoutContext = {
+      inForce: null,
+      subscription: null,
+      passEnd: null,
+      trialAvailable: false,
+      trialDays: 0,
+      founderOpen: seatsLeft === null || seatsLeft > 0,
+      founderSeatsLeft: seatsLeft ?? 0,
+      founderLost: false,
+      oxxoExpiresDays: 3,
+      customerId: null,
     };
-    if (deps.env.FUNCTIONS_URL) {
-      preference.notification_url = `${deps.env.FUNCTIONS_URL.replace(/\/+$/, '')}/payment-webhook-mercadopago`;
-    }
-    const reply = await deps.fetch('https://api.mercadopago.com/checkout/preferences', {
-      method: 'POST',
-      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-      body: JSON.stringify(preference),
+    const created = await createMercadoPagoCheckout({
+      user,
+      plan,
+      mode: 'pass',
+      context,
+      env: deps.env,
+      fetch: deps.fetch,
+      log: (line) => deps.log?.(line),
     });
-    if (!reply.ok) {
-      deps.log?.(`Mercado Pago rechazó el pago del plan ${plan}. estado ${String(reply.status)}`);
-      return json({ error: 'provider' }, 502, cors);
-    }
-    const created = asRecord(await reply.json());
-    // En modo prueba Mercado Pago devuelve también una dirección de sandbox
-    const url = asString(created.init_point) ?? asString(created.sandbox_init_point);
-    return url ? json({ url }, 200, cors) : json({ error: 'provider' }, 502, cors);
+    if (created.ok) return json({ url: created.url }, 200, cors);
+    return json(
+      { error: created.error },
+      created.error === 'not_configured' ? 503 : created.error === 'invalid' ? 400 : 502,
+      cors,
+    );
   } catch (error) {
     // Sin red hacia la pasarela, o una respuesta que no se pudo leer. Solo el tipo de error, que no
     // lleva llaves ni datos del alumno

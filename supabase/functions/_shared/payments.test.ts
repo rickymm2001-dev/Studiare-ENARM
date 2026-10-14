@@ -1,34 +1,26 @@
 import { createHmac } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { PLANS } from '../../../src/config/billing.ts';
+import { PLAN_PRICES_MXN, type FunctionEnv, type PaymentNotice } from './billingTypes.ts';
+import { corsHeaders, safeEqual } from './http.ts';
 import {
-  PLAN_PRICES_MXN,
   STRIPE_TOLERANCE_SECONDS,
-  corsHeaders,
   handleCreateCheckout,
   handleCreatePortal,
-  handleMercadoPagoWebhook,
   handleStripeWebhook,
-  noticeFromMercadoPagoPayment,
   noticeFromStripeEvent,
-  parseExternalReference,
   planInForce,
-  safeEqual,
   stripeCustomerLink,
   stripeRefundFromEvent,
-  verifyMercadoPagoSignature,
   verifyStripeSignature,
   type CheckoutDeps,
-  type FunctionEnv,
   type PaymentDeps,
-  type PaymentNotice,
   type PortalDeps,
 } from './payments.ts';
 
 const USER = '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f';
 const NOW = Date.parse('2026-10-08T16:00:00.000Z');
 const STRIPE_SECRET = 'secreto-de-prueba-stripe';
-const MP_SECRET = 'secreto-de-prueba-mp';
 
 const env: FunctionEnv = {
   STRIPE_SECRET_KEY: 'llave-de-prueba-stripe',
@@ -37,7 +29,7 @@ const env: FunctionEnv = {
   STRIPE_PRICE_MONTHLY: 'price_mensual',
   STRIPE_PRICE_ANNUAL: 'price_anual',
   MERCADOPAGO_ACCESS_TOKEN: 'token-de-prueba-mp',
-  MERCADOPAGO_WEBHOOK_SECRET: MP_SECRET,
+  MERCADOPAGO_WEBHOOK_SECRET: 'secreto-de-prueba-mp',
   APP_URL: 'https://app.ejemplo.mx/Studiare-ENARM/',
   FUNCTIONS_URL: 'https://proyecto.supabase.co/functions/v1/',
 };
@@ -56,15 +48,6 @@ const hmac = (secret: string, message: string) =>
 function stripeHeader(body: string, options: { secret?: string; t?: number } = {}) {
   const t = options.t ?? Math.floor(NOW / 1000);
   return `t=${t},v1=${hmac(options.secret ?? STRIPE_SECRET, `${t}.${body}`)}`;
-}
-
-function mpHeader(options: { dataId?: string; requestId?: string; ts?: number; secret?: string }) {
-  const ts = options.ts ?? NOW;
-  let manifest = '';
-  if (options.dataId) manifest += `id:${options.dataId.toLowerCase()};`;
-  if (options.requestId) manifest += `request-id:${options.requestId};`;
-  manifest += `ts:${ts};`;
-  return `ts=${ts},v1=${hmac(options.secret ?? MP_SECRET, manifest)}`;
 }
 
 const sessionEvent = (overrides: Record<string, unknown> = {}) => ({
@@ -134,39 +117,6 @@ describe('firma de Stripe', () => {
     const t = Math.floor(NOW / 1000);
     const good = hmac(STRIPE_SECRET, `${t}.${body}`);
     expect(await check(`t=${t},v1=${'0'.repeat(64)},v1=${good}`)).toBe(true);
-  });
-});
-
-describe('firma de Mercado Pago', () => {
-  const base = { requestId: 'req-1', dataId: 'ABC123', secret: MP_SECRET, nowMs: NOW };
-
-  it('acepta una firma buena, con el id en minúsculas', async () => {
-    const header = mpHeader({ dataId: 'ABC123', requestId: 'req-1' });
-    expect(await verifyMercadoPagoSignature({ ...base, header })).toBe(true);
-  });
-
-  it('omite lo que no llegó del mensaje firmado', async () => {
-    const header = mpHeader({ dataId: '99' });
-    expect(
-      await verifyMercadoPagoSignature({ ...base, dataId: '99', requestId: null, header }),
-    ).toBe(true);
-    const bare = mpHeader({});
-    expect(
-      await verifyMercadoPagoSignature({ ...base, dataId: null, requestId: null, header: bare }),
-    ).toBe(true);
-  });
-
-  it('rechaza otro secreto, otro id, otro request-id, un encabezado roto o una marca vieja', async () => {
-    const header = mpHeader({ dataId: 'ABC123', requestId: 'req-1' });
-    expect(await verifyMercadoPagoSignature({ ...base, header, secret: 'otro' })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header, dataId: 'XYZ' })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header, requestId: 'req-2' })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header: null })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header: 'ts=abc' })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header: 'v1=00' })).toBe(false);
-    const stale = mpHeader({ dataId: 'ABC123', requestId: 'req-1', ts: NOW - 10 * 60_000 });
-    expect(await verifyMercadoPagoSignature({ ...base, header: stale })).toBe(false);
-    expect(await verifyMercadoPagoSignature({ ...base, header, secret: '' })).toBe(false);
   });
 });
 
@@ -370,56 +320,6 @@ describe('cliente y reembolsos de Stripe', () => {
   });
 });
 
-describe('pagos de Mercado Pago', () => {
-  const payment = (overrides: Record<string, unknown> = {}) => ({
-    id: 12345,
-    status: 'approved',
-    external_reference: `${USER}|founder`,
-    transaction_amount: 79,
-    currency_id: 'MXN',
-    ...overrides,
-  });
-
-  it('un pago aprobado trae quién, qué plan y cuánto, y su id de evento incluye el estado', () => {
-    expect(noticeFromMercadoPagoPayment(payment())).toMatchObject({
-      provider: 'mercadopago',
-      eventId: '12345:approved',
-      kind: 'paid',
-      userId: USER,
-      plan: 'founder',
-      providerPaymentId: '12345',
-      amountMxn: 79,
-    });
-  });
-
-  it('un reembolso o contracargo se aplica como reembolso', () => {
-    expect(noticeFromMercadoPagoPayment(payment({ status: 'refunded' }))).toMatchObject({
-      kind: 'refunded',
-      eventId: '12345:refunded',
-    });
-    expect(noticeFromMercadoPagoPayment(payment({ status: 'charged_back' }))?.kind).toBe(
-      'refunded',
-    );
-  });
-
-  it('un pago pendiente, rechazado o sin referencia propia no activa nada', () => {
-    expect(noticeFromMercadoPagoPayment(payment({ status: 'pending' }))).toBeNull();
-    expect(noticeFromMercadoPagoPayment(payment({ status: 'rejected' }))).toBeNull();
-    expect(
-      noticeFromMercadoPagoPayment(payment({ external_reference: 'otra-cosa' })),
-    ).toMatchObject({ userId: null, plan: null });
-    expect(noticeFromMercadoPagoPayment(payment({ currency_id: 'USD' }))?.amountMxn).toBeNull();
-    expect(noticeFromMercadoPagoPayment({})).toBeNull();
-  });
-
-  it('la referencia externa pide un usuario y un plan de pago', () => {
-    expect(parseExternalReference(`${USER}|annual`)).toEqual({ userId: USER, plan: 'annual' });
-    expect(parseExternalReference(`${USER}|free`)).toBeNull();
-    expect(parseExternalReference('x|monthly')).toBeNull();
-    expect(parseExternalReference(42)).toBeNull();
-  });
-});
-
 function paymentDeps(overrides: Partial<PaymentDeps> = {}) {
   const applied: PaymentNotice[] = [];
   const linked: { userId: string; customerId: string }[] = [];
@@ -584,193 +484,6 @@ describe('aviso de Stripe con cliente y reembolso', () => {
   it('si la base falla al buscar al alumno contesta 500', async () => {
     const { deps } = paymentDeps({ userOfCustomer: () => Promise.reject(new Error('caída')) });
     expect((await send(JSON.stringify(refundEvent()), deps)).status).toBe(500);
-  });
-});
-
-describe('aviso de Mercado Pago', () => {
-  const send = (
-    options: {
-      query?: string;
-      body?: unknown;
-      signature?: string | null;
-      requestId?: string | null;
-    },
-    deps: PaymentDeps,
-    method = 'POST',
-  ) =>
-    handleMercadoPagoWebhook(
-      new Request(
-        `https://f.supabase.co/functions/v1/payment-webhook-mercadopago${options.query ?? ''}`,
-        {
-          method,
-          headers: {
-            ...(options.signature ? { 'x-signature': options.signature } : {}),
-            ...(options.requestId ? { 'x-request-id': options.requestId } : {}),
-          },
-          ...(method === 'POST' ? { body: JSON.stringify(options.body ?? {}) } : {}),
-        },
-      ),
-      deps,
-    );
-
-  const approved = {
-    id: 777,
-    status: 'approved',
-    external_reference: `${USER}|monthly`,
-    transaction_amount: 150,
-    currency_id: 'MXN',
-  };
-  const calls: { url: string; auth: string | null }[] = [];
-  const mpFetch = (payment: unknown, ok = true): typeof fetch =>
-    ((url: string, init?: RequestInit) => {
-      calls.push({ url, auth: new Headers(init?.headers).get('authorization') });
-      return Promise.resolve(new Response(JSON.stringify(payment), { status: ok ? 200 : 500 }));
-    }) as typeof fetch;
-
-  it('con firma buena consulta el pago con el token del servidor y lo aplica', async () => {
-    calls.length = 0;
-    const { deps, applied } = paymentDeps({ fetch: mpFetch(approved) });
-    const reply = await send(
-      {
-        query: '?data.id=777&type=payment',
-        signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-        requestId: 'r1',
-      },
-      deps,
-    );
-    expect(reply.status).toBe(200);
-    expect(calls).toEqual([
-      { url: 'https://api.mercadopago.com/v1/payments/777', auth: 'Bearer token-de-prueba-mp' },
-    ]);
-    expect(applied[0]).toMatchObject({
-      eventId: '777:approved',
-      userId: USER,
-      plan: 'monthly',
-      amountMxn: 150,
-    });
-  });
-
-  it('el id también puede venir en el cuerpo', async () => {
-    const { deps, applied } = paymentDeps({ fetch: mpFetch(approved) });
-    const reply = await send(
-      {
-        body: { type: 'payment', data: { id: '777' } },
-        signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-        requestId: 'r1',
-      },
-      deps,
-    );
-    expect(reply.status).toBe(200);
-    expect(applied).toHaveLength(1);
-  });
-
-  it('sin firma o con una mala contesta 401 y no consulta nada', async () => {
-    const { deps, applied } = paymentDeps({
-      fetch: () => Promise.reject(new Error('no debía consultar')),
-    });
-    expect((await send({ query: '?data.id=777&type=payment', requestId: 'r1' }, deps)).status).toBe(
-      401,
-    );
-    expect(
-      (
-        await send(
-          {
-            query: '?data.id=777&type=payment',
-            signature: mpHeader({ dataId: '777', requestId: 'r1', secret: 'otro' }),
-            requestId: 'r1',
-          },
-          deps,
-        )
-      ).status,
-    ).toBe(401);
-    // Firmada para otro id
-    expect(
-      (
-        await send(
-          {
-            query: '?data.id=888&type=payment',
-            signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-            requestId: 'r1',
-          },
-          deps,
-        )
-      ).status,
-    ).toBe(401);
-    expect(applied).toHaveLength(0);
-  });
-
-  it('otros tipos de notificación y ids raros se ignoran con 200', async () => {
-    const { deps, applied } = paymentDeps({
-      fetch: () => Promise.reject(new Error('no debía consultar')),
-    });
-    const sign = (id: string) => mpHeader({ dataId: id, requestId: 'r1' });
-    expect(
-      (
-        await send(
-          { query: '?data.id=777&type=merchant_order', signature: sign('777'), requestId: 'r1' },
-          deps,
-        )
-      ).status,
-    ).toBe(200);
-    expect(
-      (
-        await send(
-          { query: '?data.id=../x&type=payment', signature: sign('../x'), requestId: 'r1' },
-          deps,
-        )
-      ).status,
-    ).toBe(200);
-    expect(applied).toHaveLength(0);
-  });
-
-  it('si no se puede consultar el pago contesta 502 para que lo reintente', async () => {
-    const { deps } = paymentDeps({ fetch: mpFetch({}, false) });
-    const reply = await send(
-      {
-        query: '?data.id=777&type=payment',
-        signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-        requestId: 'r1',
-      },
-      deps,
-    );
-    expect(reply.status).toBe(502);
-    const { deps: broken } = paymentDeps({ fetch: () => Promise.reject(new Error('red')) });
-    expect(
-      (
-        await send(
-          {
-            query: '?data.id=777&type=payment',
-            signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-            requestId: 'r1',
-          },
-          broken,
-        )
-      ).status,
-    ).toBe(502);
-  });
-
-  it('un pago pendiente se ignora y si la base falla contesta 500', async () => {
-    const { deps, applied } = paymentDeps({ fetch: mpFetch({ ...approved, status: 'pending' }) });
-    const args = {
-      query: '?data.id=777&type=payment',
-      signature: mpHeader({ dataId: '777', requestId: 'r1' }),
-      requestId: 'r1',
-    };
-    expect((await send(args, deps)).status).toBe(200);
-    expect(applied).toHaveLength(0);
-    const { deps: failing } = paymentDeps({
-      fetch: mpFetch(approved),
-      applyNotice: () => Promise.reject(new Error('caída')),
-    });
-    expect((await send(args, failing)).status).toBe(500);
-  });
-
-  it('sin configurar contesta 503 y con otro método 405', async () => {
-    expect(
-      (await send({}, paymentDeps({ env: { ...env, MERCADOPAGO_ACCESS_TOKEN: undefined } }).deps))
-        .status,
-    ).toBe(503);
-    expect((await send({}, paymentDeps().deps, 'GET')).status).toBe(405);
   });
 });
 
@@ -966,7 +679,7 @@ describe('crear el pago', () => {
 
   it('crea la preferencia de Mercado Pago con el precio del plan y la referencia del usuario', async () => {
     sent.length = 0;
-    const reply = await ask({ plan: 'founder', provider: 'mercadopago' }, checkoutDeps());
+    const reply = await ask({ plan: 'monthly', provider: 'mercadopago' }, checkoutDeps());
     expect(reply.status).toBe(200);
     expect(await reply.json()).toEqual({
       url: 'https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=1',
@@ -974,11 +687,19 @@ describe('crear el pago', () => {
     expect(sent[0]?.url).toBe('https://api.mercadopago.com/checkout/preferences');
     const preference = JSON.parse(bodyText(sent[0]?.init)) as Record<string, unknown>;
     expect(preference).toMatchObject({
-      external_reference: `${USER}|founder`,
+      external_reference: `${USER}|monthly`,
       auto_return: 'approved',
       notification_url: 'https://proyecto.supabase.co/functions/v1/payment-webhook-mercadopago',
-      items: [{ id: 'founder', quantity: 1, currency_id: 'MXN', unit_price: 79 }],
+      items: [{ id: 'monthly', quantity: 1, currency_id: 'MXN', unit_price: 149 }],
     });
+  });
+
+  it('Mercado Pago no lleva precio Fundador', async () => {
+    sent.length = 0;
+    for (const plan of ['founder', 'founder_annual']) {
+      expect((await ask({ plan, provider: 'mercadopago' }, checkoutDeps())).status).toBe(400);
+    }
+    expect(sent).toHaveLength(0);
   });
 
   it('sin sesión contesta 401 y no llama al procesador', async () => {

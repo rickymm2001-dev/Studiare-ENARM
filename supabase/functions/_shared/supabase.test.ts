@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import type { PaymentNotice } from './payments.ts';
+import type {
+  ChargeNotice,
+  PaymentNotice,
+  SubscriptionNotice,
+  TrialEndingNotice,
+} from './billingTypes.ts';
 import {
+  applyChargeViaRest,
   applyNoticeViaRest,
+  applySubscriptionStateViaRest,
   authenticateUser,
+  checkoutContextViaRest,
+  claimBillingActionsViaRest,
   customerOfUserViaRest,
+  finishBillingActionViaRest,
   founderSeatsLeftViaRest,
   linkCustomerViaRest,
+  noteTrialWillEndViaRest,
+  parseCheckoutContext,
   subscriptionOfUserViaRest,
   userOfCustomerViaRest,
 } from './supabase.ts';
@@ -237,5 +249,253 @@ describe('suscripción del alumno por REST', () => {
         subscriptionOfUserViaRest(env, 'u1', recorder(() => reply).fetchImpl),
       ).rejects.toThrow();
     }
+  });
+});
+
+// Contrato con las funciones de la base de B10 (6.5 del diseño). Cada llamada manda los nombres de
+// parámetros exactos de las migraciones 20261022000001 a 20261022000003
+const USER = '3f9c1c2e-5b7a-4a52-9d1e-0a1b2c3d4e5f';
+
+describe('contexto del pago por REST', () => {
+  const context = {
+    inForce: 'subscription',
+    subscription: {
+      plan: 'founder',
+      status: 'trialing',
+      provider: 'stripe',
+      subscriptionId: 'sub_1',
+      periodEnd: '2026-10-21T16:00:00+00:00',
+      cancelAtPeriodEnd: false,
+    },
+    passEnd: null,
+    trialAvailable: false,
+    trialDays: 7,
+    founderOpen: true,
+    founderSeatsLeft: 63,
+    founderLost: false,
+    oxxoExpiresDays: 3,
+    customerId: 'cus_1',
+  };
+
+  it('pide checkout_context con la llave de servicio y el alumno', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify(context)));
+    expect(await checkoutContextViaRest(env, USER, fetchImpl)).toEqual(context);
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/checkout_context');
+    expect(new Headers(calls[0]?.init?.headers).get('authorization')).toBe(
+      'Bearer servicio-de-prueba',
+    );
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({ p_user: USER });
+  });
+
+  it('sin suscripción ni cliente los deja en null', () => {
+    expect(
+      parseCheckoutContext({ ...context, inForce: null, subscription: null, customerId: null }),
+    ).toMatchObject({ inForce: null, subscription: null, customerId: null });
+  });
+
+  it('si la base falla o la forma no es la esperada lanza, para no abrir un pago a ciegas', async () => {
+    await expect(
+      checkoutContextViaRest(
+        env,
+        USER,
+        recorder(() => new Response('x', { status: 500 })).fetchImpl,
+      ),
+    ).rejects.toThrow('500');
+    for (const broken of [
+      null,
+      [],
+      { ...context, inForce: 'otro' },
+      { ...context, trialAvailable: 'sí' },
+      { ...context, founderSeatsLeft: null },
+      { ...context, passEnd: 'no es fecha' },
+      { ...context, subscription: { status: 'active' } },
+    ]) {
+      expect(() => parseCheckoutContext(broken)).toThrow();
+    }
+  });
+});
+
+describe('cobros y estados por REST', () => {
+  const charge: ChargeNotice = {
+    provider: 'stripe',
+    eventId: 'evt_1',
+    payload: { id: 'evt_1' },
+    kind: 'paid',
+    userId: USER,
+    purpose: 'pass',
+    plan: 'annual',
+    method: 'oxxo',
+    providerPaymentId: 'pi_1',
+    paymentIntentId: 'pi_1',
+    providerSubscriptionId: null,
+    amountMxn: 1349.1,
+    discountMxn: 149.9,
+    promotionCode: 'PRUEBA10',
+    periodEnd: null,
+    expiresAt: '2026-10-12T05:59:59.000Z',
+  };
+  const state: SubscriptionNotice = {
+    provider: 'stripe',
+    eventId: 'evt_2',
+    eventAt: '2026-10-08T16:00:00.000Z',
+    payload: { id: 'evt_2' },
+    userId: USER,
+    subscriptionId: 'sub_1',
+    plan: 'founder',
+    status: 'trialing',
+    periodEnd: '2026-10-15T16:00:00.000Z',
+    trialEnd: '2026-10-15T16:00:00.000Z',
+    cancelAtPeriodEnd: false,
+    scheduledChange: false,
+    priceId: 'price_1',
+    promotionCode: null,
+  };
+  const trial: TrialEndingNotice = {
+    provider: 'stripe',
+    eventId: 'evt_3',
+    payload: { id: 'evt_3' },
+    userId: USER,
+    subscriptionId: 'sub_1',
+    trialEnd: '2026-10-15T16:00:00.000Z',
+  };
+
+  it('apply_charge recibe cada campo con su nombre', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('applied')));
+    expect(await applyChargeViaRest(env, charge, fetchImpl)).toBe('applied');
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/apply_charge');
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_event_id: 'evt_1',
+      p_payload: { id: 'evt_1' },
+      p_kind: 'paid',
+      p_user: USER,
+      p_purpose: 'pass',
+      p_plan: 'annual',
+      p_method: 'oxxo',
+      p_provider_payment_id: 'pi_1',
+      p_payment_intent_id: 'pi_1',
+      p_provider_subscription_id: null,
+      p_amount_mxn: 1349.1,
+      p_discount_mxn: 149.9,
+      p_promotion_code: 'PRUEBA10',
+      p_period_end: null,
+      p_expires_at: '2026-10-12T05:59:59.000Z',
+    });
+  });
+
+  it('apply_subscription_state recibe cada campo con su nombre', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('stale')));
+    expect(await applySubscriptionStateViaRest(env, state, fetchImpl)).toBe('stale');
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/apply_subscription_state');
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_event_id: 'evt_2',
+      p_event_at: '2026-10-08T16:00:00.000Z',
+      p_payload: { id: 'evt_2' },
+      p_user: USER,
+      p_subscription_id: 'sub_1',
+      p_plan: 'founder',
+      p_status: 'trialing',
+      p_period_end: '2026-10-15T16:00:00.000Z',
+      p_trial_end: '2026-10-15T16:00:00.000Z',
+      p_cancel_at_period_end: false,
+      p_scheduled_change: false,
+      p_price_id: 'price_1',
+      p_promotion_code: null,
+    });
+  });
+
+  it('note_trial_will_end recibe cada campo con su nombre', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify('queued')));
+    expect(await noteTrialWillEndViaRest(env, trial, fetchImpl)).toBe('queued');
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/note_trial_will_end');
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
+      p_provider: 'stripe',
+      p_event_id: 'evt_3',
+      p_payload: { id: 'evt_3' },
+      p_user: USER,
+      p_subscription_id: 'sub_1',
+      p_trial_end: '2026-10-15T16:00:00.000Z',
+    });
+  });
+
+  it('las tres lanzan si la base falla o no devuelve un texto', async () => {
+    const broken = recorder(() => new Response('x', { status: 500 })).fetchImpl;
+    const odd = recorder(() => new Response('{"a":1}')).fetchImpl;
+    await expect(applyChargeViaRest(env, charge, broken)).rejects.toThrow('500');
+    await expect(applySubscriptionStateViaRest(env, state, broken)).rejects.toThrow('500');
+    await expect(noteTrialWillEndViaRest(env, trial, broken)).rejects.toThrow('500');
+    await expect(applyChargeViaRest(env, charge, odd)).rejects.toThrow('texto');
+  });
+});
+
+describe('acciones con la pasarela por REST', () => {
+  it('toma las acciones de una pasarela y descarta filas que no entiende', async () => {
+    const { calls, fetchImpl } = recorder(
+      () =>
+        new Response(
+          JSON.stringify([
+            {
+              id: 'a1',
+              provider: 'stripe',
+              kind: 'cancel_subscription',
+              target: 'sub_2',
+              reason: 'trial_duplicate',
+              status: 'pending',
+              attempts: 1,
+            },
+            {
+              id: 'a2',
+              provider: 'paypal',
+              kind: 'cancel_subscription',
+              target: 'x',
+              reason: 'refund',
+            },
+            { id: 'a3', provider: 'stripe', kind: 'otra', target: 'x', reason: 'refund' },
+          ]),
+        ),
+    );
+    expect(
+      await claimBillingActionsViaRest(env, { limit: 5, provider: 'stripe' }, fetchImpl),
+    ).toEqual([
+      {
+        id: 'a1',
+        provider: 'stripe',
+        kind: 'cancel_subscription',
+        target: 'sub_2',
+        reason: 'trial_duplicate',
+        attempts: 1,
+      },
+    ]);
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/claim_billing_actions');
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({ p_limit: 5, p_provider: 'stripe' });
+  });
+
+  it('cierra una acción sin leer la respuesta, también si la base contesta 204', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(null, { status: 204 }));
+    await finishBillingActionViaRest(env, { id: 'a1', ok: false, error: 'Stripe 500' }, fetchImpl);
+    expect(calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/finish_billing_action');
+    expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({
+      p_id: 'a1',
+      p_ok: false,
+      p_error: 'Stripe 500',
+    });
+  });
+
+  it('lanzan si la base falla o la respuesta no es una lista', async () => {
+    const broken = recorder(() => new Response('x', { status: 500 })).fetchImpl;
+    await expect(
+      claimBillingActionsViaRest(env, { limit: 5, provider: null }, broken),
+    ).rejects.toThrow('500');
+    await expect(
+      finishBillingActionViaRest(env, { id: 'a1', ok: true, error: null }, broken),
+    ).rejects.toThrow('500');
+    await expect(
+      claimBillingActionsViaRest(
+        env,
+        { limit: 5, provider: null },
+        recorder(() => new Response('{}')).fetchImpl,
+      ),
+    ).rejects.toThrow('lista');
   });
 });

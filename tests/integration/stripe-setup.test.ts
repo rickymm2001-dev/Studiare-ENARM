@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PLAN_PRICES_MXN } from '../../supabase/functions/_shared/payments.ts';
+import { PLAN_PRICES_MXN } from '../../supabase/functions/_shared/billingTypes.ts';
 import { isTestKey, PLAN_SPECS, setupStripeTest } from '../../scripts/stripe/setup-test.ts';
 
 const KEY = `sk_test_${'a'.repeat(30)}`;
