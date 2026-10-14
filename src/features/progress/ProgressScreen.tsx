@@ -7,6 +7,9 @@ import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import { useDataApi } from '@/data/context';
+import { useLiveData } from '@/data/hooks';
+import { freeSubjectCardIds } from '@/data/usecases/outlines';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
@@ -47,12 +50,15 @@ function Progress({ session }: { session: ReadySession }) {
   const content = useDecksAndCards();
   const analysis = useAnalysis(session, events);
   const motiveBranches = useMotiveBranches(events, catalog);
+  // Las tarjetas de una materia libre no cuentan en el reparto, como no cuentan en Conócete (B6)
+  const api = useDataApi();
+  const freeSubjectCards = useLiveData(() => freeSubjectCardIds(api), [api.repos]);
   const motiveRows = useMemo(
     () =>
-      events === undefined || motiveBranches === undefined
+      events === undefined || motiveBranches === undefined || freeSubjectCards === undefined
         ? undefined
-        : motivesByBranch(events, motiveBranches),
-    [events, motiveBranches],
+        : motivesByBranch(events, motiveBranches, freeSubjectCards),
+    [events, motiveBranches, freeSubjectCards],
   );
 
   const header = (
