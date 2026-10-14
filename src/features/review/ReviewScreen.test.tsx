@@ -17,6 +17,9 @@ import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 // El confeti usa un canvas que jsdom no trae
 vi.mock('@/ui/celebrate', () => ({ celebrate: () => undefined }));
 
+// La primera prueba de la pantalla carga la app completa y con la suite entera tarda más de 5 s
+vi.setConfig({ testTimeout: 30_000 });
+
 let app: RenderedApp | undefined;
 afterEach(async () => {
   cleanup();

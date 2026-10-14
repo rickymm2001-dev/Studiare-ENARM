@@ -29,6 +29,9 @@ vi.mock('@/workers/importClient', () => ({
   },
 }));
 
+// Cada prueba lee archivos y carga la app completa, y con la suite entera tarda más de 5 s
+vi.setConfig({ testTimeout: 30_000 });
+
 let app: RenderedApp | undefined;
 afterEach(async () => {
   cleanup();

@@ -25,7 +25,7 @@ import {
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
-import { canUse, canUseFeature } from '@/config/billing';
+import { canUseFeature } from '@/config/billing';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
@@ -58,7 +58,7 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
-import { useActivePlan } from '../shared/useActivePlan';
+import { useActivePlan, usePlanAllows } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
@@ -109,6 +109,17 @@ export function ReviewScreen() {
   );
 }
 
+/**
+ * El texto de Repasar sin mazos. En Gratis no sugiere seguir un mazo del catálogo, que es de pago
+ * (4.25, B8). Lee el plan solo aquí, así el repaso con tarjetas no carga nada de más. Mientras carga
+ * no dice nada, para no sugerir lo que el plan no abre
+ */
+function NoDecksBody({ userId }: { userId: string }) {
+  const catalogOpen = usePlanAllows(userId, 'deckCatalog');
+  if (catalogOpen === undefined) return null;
+  return <>{catalogOpen ? t.review.noDecksBody : t.freePlan.catalog.reviewEmpty}</>;
+}
+
 function ReviewLoader({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const events = useUserEvents(session.user.id);
@@ -121,8 +132,6 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return { decks, cards, notes };
   }, [api.repos]);
   const catalog = useDeckCatalog();
-  // Sin mazos, en Gratis no se sugiere seguir uno del catálogo, que es de pago (4.25, B8)
-  const plan = useActivePlan(session.user.id);
   const [selection, setSelection] = useState<ReviewSelection | null>(null);
   // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
   const panel = useReviewSettingsPanel();
@@ -172,11 +181,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
               {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
             </CardTitle>
             <CardDescription>
-              {allSuspended
-                ? t.review.allSuspendedBody
-                : plan !== undefined && !canUse(plan, 'deckCatalog')
-                  ? t.freePlan.catalog.reviewEmpty
-                  : t.review.noDecksBody}
+              {allSuspended ? t.review.allSuspendedBody : <NoDecksBody userId={session.user.id} />}
             </CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
