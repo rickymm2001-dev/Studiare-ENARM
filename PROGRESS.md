@@ -32,6 +32,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [ ] B14. Datos y modelo del alumno
 - [ ] B15. Analítica, errores, recordatorios y recorrido
 - [ ] B16. Legal y privacidad
+  - Los borradores están en la rama gemini/legal-b16
 - [ ] B17. Publicación
 - [ ] B18. Primeros alumnos
 - [ ] B19. Auditoría final y lanzamiento
@@ -120,6 +121,7 @@ Evidencia
 - B7 en b7int con los 9 hallazgos de su revisión corregidos (616f948). Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
 - B8 en b8 (Plan Gratis), en implementación sobre b6 y b7int. Su migración será 20261021000001
 - B9 en b9 con los hallazgos de su revisión corregidos (7a1ff2d). Su migración 20261020000001 no se ha aplicado al proyecto
+- B16 en gemini/legal-b16 con los borradores del aviso de privacidad y términos y condiciones listos para el abogado
 - El diseño de B10 está listo en /home/user/wt/plans/b10.md y arranca cuando B8 y B9 estén en main
 - Los subagentes se detuvieron cuatro veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
