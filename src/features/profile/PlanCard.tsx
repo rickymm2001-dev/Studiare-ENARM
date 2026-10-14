@@ -20,8 +20,13 @@ function stateLine(state: PlanState): string {
       return text.trialing(longDate(state.end), t.billing.price(PLANS[state.plan].priceMxn));
     case 'trialCanceled':
       return text.trialCanceled(longDate(state.end));
-    case 'renews':
-      return text.renews(longDate(state.date), t.billing.price(PLANS[state.plan].priceMxn));
+    case 'renews': {
+      // Con un cambio programado se cobra el plan nuevo, así que la línea dice cuál y su precio
+      const price = t.billing.price(PLANS[state.plan].priceMxn);
+      return state.scheduled
+        ? text.renewsAs(longDate(state.date), t.billing.plans[state.plan], price)
+        : text.renews(longDate(state.date), price);
+    }
     case 'canceled':
       return text.canceled(longDate(state.until));
     case 'pastDue':

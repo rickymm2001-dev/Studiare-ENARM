@@ -16,8 +16,12 @@ export function planStateLine(state: PlanState): string {
       return status.trialing(longDate(state.end), t.billing.price(PLANS[state.plan].priceMxn));
     case 'trialCanceled':
       return status.trialCanceled(longDate(state.end));
-    case 'renews':
-      return status.renews(longDate(state.date), t.billing.price(PLANS[state.plan].priceMxn));
+    case 'renews': {
+      const price = t.billing.price(PLANS[state.plan].priceMxn);
+      return state.scheduled
+        ? status.renewsAs(longDate(state.date), t.billing.plans[state.plan], price)
+        : status.renews(longDate(state.date), price);
+    }
     case 'canceled':
       return status.canceled(longDate(state.until));
     case 'pastDue':

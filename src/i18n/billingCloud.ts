@@ -126,6 +126,8 @@ export const billingCloudText = {
     trialCanceled: (date: string) =>
       `Cancelaste tu prueba. Termina el ${date} y no se te cobrará nada.`,
     renews: (date: string, price: string) => `Se renueva el ${date} por ${price}.`,
+    renewsAs: (date: string, plan: string, price: string) =>
+      `Se renueva el ${date} como ${plan} por ${price}.`,
     canceled: (date: string) => `Cancelaste tu suscripción. Tu plan vale hasta el ${date}.`,
     pastDue:
       'No pudimos cobrar tu renovación. Actualiza tu tarjeta en Administrar suscripción para no perder tu plan.',

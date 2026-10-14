@@ -177,6 +177,21 @@ export function regularPlanOf(plan: PaidPlanKey): RegularPlanKey {
 }
 
 /**
+ * El plan que se cobra al renovar con un cambio programado en el portal. Solo se programa bajar de
+ * anual a mensual dentro del mismo precio, regular o Fundador, porque subir se cobra al momento (B10)
+ */
+export function scheduledPlanOf(plan: PaidPlanKey): PaidPlanKey {
+  switch (plan) {
+    case 'annual':
+      return 'monthly';
+    case 'founder_annual':
+      return 'founder';
+    default:
+      return plan;
+  }
+}
+
+/**
  * Si se ofrece la promoción Fundador en el mensual. El cupo real lo cuenta el servidor al cobrar, y si
  * ya se llenó la app ofrece el precio regular. Para terminar la promoción basta con ponerlo en false.
  * Va como boolean y no como true, para que las pantallas sigan cubriendo los dos casos

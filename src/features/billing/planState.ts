@@ -1,7 +1,7 @@
 // En qué estado está el plan del alumno según lo que reflejó la nube con my_plan v2 (B10 del plan del
 // cambio, 3.1.3). Es una función pura que clasifica la suscripción, y Suscripción, Perfil e Inicio
 // eligen cada uno su texto. Así la regla de qué línea toca vive en un solo lugar.
-import { planOf, type PaidPlanKey } from '@/config/billing';
+import { planOf, scheduledPlanOf, type PaidPlanKey } from '@/config/billing';
 import type { Subscription } from '@/data/schemas/people';
 
 /** Fecha larga en español de México, como 21 de octubre de 2026 */
@@ -13,8 +13,11 @@ export type PlanState =
   | { kind: 'trialing'; end: string; plan: PaidPlanKey }
   /** Canceló dentro de la prueba. Termina sin cobro */
   | { kind: 'trialCanceled'; end: string }
-  /** Suscripción activa que se renueva sola */
-  | { kind: 'renews'; date: string; plan: PaidPlanKey }
+  /**
+   * Suscripción activa que se renueva sola. plan es el que se cobra al renovar, que con un cambio
+   * programado (scheduled) es el nuevo y no el de ahora
+   */
+  | { kind: 'renews'; date: string; plan: PaidPlanKey; scheduled: boolean }
   /** Cancelada, vale hasta el fin del periodo pagado */
   | { kind: 'canceled'; until: string }
   /** No se pudo cobrar la renovación */
@@ -54,9 +57,10 @@ export function planStateOf(subscription: Subscription | null | undefined): Plan
       return periodEnd ? { kind: 'canceled', until: periodEnd } : null;
     case 'active':
       if (!periodEnd) return null;
-      return subscription.cancelAtPeriodEnd
-        ? { kind: 'canceled', until: periodEnd }
-        : { kind: 'renews', date: periodEnd, plan };
+      if (subscription.cancelAtPeriodEnd) return { kind: 'canceled', until: periodEnd };
+      return subscription.scheduledChange
+        ? { kind: 'renews', date: periodEnd, plan: scheduledPlanOf(plan), scheduled: true }
+        : { kind: 'renews', date: periodEnd, plan, scheduled: false };
     default:
       return periodEnd ? { kind: 'paidUntil', until: periodEnd } : null;
   }
