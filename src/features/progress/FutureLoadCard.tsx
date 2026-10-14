@@ -31,7 +31,10 @@ export function LoadBars({ load, className }: { load: FutureLoad; className?: st
         return (
           <div key={day.day} className="flex h-full min-w-0 flex-1 flex-col justify-end">
             <div className="w-full rounded-t-sm bg-chart-done" style={{ height: `${fresh}%` }} />
-            <div className="w-full bg-indicator" style={{ height: `${reviews}%` }} />
+            <div
+              className="w-full border-t border-surface bg-indicator"
+              style={{ height: `${reviews}%` }}
+            />
           </div>
         );
       })}

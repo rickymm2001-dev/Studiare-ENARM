@@ -145,18 +145,26 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       { name: 'oscuro (clase)', tokens: parseTokens(css.slice(darkClassIndex, themeIndex)) },
     ];
 
+    // Los dos bloques oscuros, por preferencia del sistema y por clase, son el mismo tema
+    expect(blocks[1]?.tokens).toEqual(blocks[2]?.tokens);
+
     const branches = ['mi', 'ped', 'gyo', 'cir', 'fam', 'urg'];
 
     const textPairs: [string, string][] = [
       ['--enarm-fg', '--enarm-surface'],
       ['--enarm-fg', '--enarm-canvas'],
       ['--enarm-fg-muted', '--enarm-surface'],
+      // Etiqueta de rama neutral, ícono neutral de Mazos y #etiquetas de Apuntes
+      ['--enarm-fg-muted', '--enarm-muted'],
+      ['--enarm-fg', '--enarm-muted'],
       ['--enarm-primary-fg', '--enarm-primary'],
       ['--enarm-primary-ink', '--enarm-primary-soft'],
       ['--enarm-primary-ink', '--enarm-surface'],
       ['--enarm-accent-fg', '--enarm-accent'],
       ['--enarm-accent-ink', '--enarm-accent-soft'],
       ['--enarm-accent-ink', '--enarm-surface'],
+      // XP ganado en el encabezado de Repasar
+      ['--enarm-accent-ink', '--enarm-canvas'],
       ['--enarm-streak-ink', '--enarm-streak-soft'],
       ['--enarm-streak-ink', '--enarm-surface'],
       ['--enarm-danger-fg', '--enarm-danger'],
@@ -176,6 +184,9 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       ['--enarm-chart-done', '--enarm-canvas'],
       ['--enarm-indicator', '--enarm-surface'],
       ['--enarm-accent', '--enarm-surface'],
+      // Barra de XP y de nivel sobre su riel y flama de la racha sobre su fondo suave
+      ['--enarm-accent', '--enarm-muted'],
+      ['--enarm-accent', '--enarm-accent-soft'],
       ['--enarm-streak', '--enarm-surface'],
       ...branches.map((b): [string, string] => [`--enarm-${b}`, '--enarm-surface']),
     ];
