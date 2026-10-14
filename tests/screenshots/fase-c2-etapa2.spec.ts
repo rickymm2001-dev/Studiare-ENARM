@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { followSmallestDeck } from '../e2e/support/b1';
 import { signUp } from '../e2e/support/fixtures';
 
 const OUT_DIR = join(import.meta.dirname, '..', '..', 'docs', 'screenshots', 'fase-c2-etapa2');
@@ -27,15 +28,6 @@ async function capture(page: Page, name: string, projectName: string) {
     type: 'jpeg',
     quality: 78,
     fullPage: true,
-  });
-}
-
-async function followSmallestDeck(page: Page) {
-  await page.goto(SCREENS.decks.path);
-  const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
-  await deck.getByRole('button', { name: t.decks.follow }).click();
-  await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
-    timeout: 60_000,
   });
 }
 

@@ -6,8 +6,7 @@
 //
 // En el plan Gratis la pantalla conserva su título y muestra su vista previa con candado y el botón
 // de los candados de Gratis, que dice Prueba 7 días gratis cuando B10 prende la bandera freeTrial y
-// Ver planes mientras tanto (respuesta 20). El candado del servidor llega en B8 (ver
-// src/config/billing.ts).
+// Ver planes mientras tanto (respuesta 20).
 //
 // ANALÍTICA B15. Aquí se medirá el uso de Apuntes cuando llegue la analítica con permiso del bloque
 // B15 (respuesta 78). Solo conteos y claves, nunca el texto del alumno. Apunte creado, con su

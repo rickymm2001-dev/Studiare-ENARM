@@ -4,9 +4,10 @@
 // crea y llena a mano. Subir mazos de otras apps llega con la Fase E.
 // Seguir mazos nuevos del catálogo y subir mazos son de los planes de pago (respuesta 20 y 4.25, B8).
 // En Gratis la lista queda como vista previa con su candado y lo que el alumno ya tiene sigue a su
-// alcance.
+// alcance. Cuenta como suyo un mazo que está en este dispositivo o del que ya repasó alguna tarjeta,
+// porque los precargados no viajan entre dispositivos pero su bitácora sí.
 import { BookOpenCheck, BookPlus, Check, ChevronDown, Layers, Library } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -14,7 +15,7 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { topicTaxonomy } from '@/demo/content';
-import { deckIds } from '@/demo/content/deckEntities';
+import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { Badge } from '@/ui/components/badge';
@@ -66,9 +67,19 @@ function Decks({ session }: { session: ReadySession }) {
   const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
   // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
-  // ya está en este dispositivo, porque el alumno lo siguió antes y sus repasos son suyos
+  // el alumno ya siguió, porque sus repasos son suyos. Lo dice que esté en este dispositivo o que su
+  // bitácora, que sí viaja entre dispositivos, tenga un repaso de alguna de sus tarjetas
   const catalogOpen = usePlanAllows(session.user.id, 'deckCatalog');
   const onDevice = new Set((stored?.decks ?? []).map((deck) => deck.id));
+  const catalogCards = useMemo(
+    () =>
+      catalogOpen === false
+        ? new Map((catalog ?? []).map((file) => [file.key, catalogCardIds(file)]))
+        : null,
+    [catalog, catalogOpen],
+  );
+  const alreadyStudied = (deckKey: string) =>
+    (catalogCards?.get(deckKey) ?? []).some((cardId) => states.has(cardId));
   // Mazos en el orden de las ramas troncales y las ramas sin mazos juntas en una línea (D-076)
   const branchOrder = topicTaxonomy.branches.map((branch) => branch.key);
   const orderedFiles = [...(catalog ?? [])].sort(
@@ -209,7 +220,9 @@ function Decks({ session }: { session: ReadySession }) {
                         >
                           {t.decks.unfollow}
                         </Button>
-                      ) : catalogOpen === false && !onDevice.has(id) ? (
+                      ) : catalogOpen === false &&
+                        !onDevice.has(id) &&
+                        !alreadyStudied(file.key) ? (
                         <CatalogRowLock />
                       ) : (
                         <Button

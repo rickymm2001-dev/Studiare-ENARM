@@ -1,7 +1,9 @@
 // Datos de prueba para la capa de datos. Solo los usan las pruebas.
 import { monotonicFactory } from 'ulid';
+import type { PlanKey } from '@/config/billing';
 import { createEnarmDb, type EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
+import type { Repositories } from '../repos/types';
 import type { DatabaseKind } from '../databases';
 import { createEvent, type Clock } from '../events/createEvent';
 import type { Question, Option } from '../schemas/bank';
@@ -59,6 +61,33 @@ export function makeUser(overrides: Partial<User> = {}): User {
     createdAt: '2026-10-01T15:00:00.000Z',
     ...overrides,
   };
+}
+
+/**
+ * Deja al alumno con un plan, el único ayudante de las pruebas para eso (B8). simulated es el pago
+ * simulado local (3.2). cloud es como lo deja my_plan al reflejar la nube, con su fuente y su fin de
+ * periodo, que es lo que lee la app con la nube conectada. free queda sin suscripción activa
+ */
+export async function subscribe(
+  api: { repos: Pick<Repositories, 'subscriptions'> },
+  user: Pick<User, 'id'>,
+  plan: PlanKey = 'monthly',
+  from: 'simulated' | 'cloud' = 'simulated',
+): Promise<void> {
+  const paid = plan !== 'free';
+  await api.repos.subscriptions.put({
+    userId: user.id,
+    plan,
+    status: paid ? 'active' : 'none',
+    isSimulated: from === 'simulated',
+    ...(from === 'cloud' && paid
+      ? {
+          source: 'payment' as const,
+          periodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
+        }
+      : {}),
+    updatedAt: new Date().toISOString(),
+  });
 }
 
 export function makeEvent<T extends EventType>(

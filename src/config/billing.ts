@@ -178,13 +178,16 @@ export function annualSavingsPercent(
  */
 export const PAYMENT_PROVIDERS: readonly ('stripe' | 'mercadopago')[] = ['stripe'];
 
-/** Si el plan abre la función. Recibe la tabla de planes para poder probar con otra */
-export function canUseFeature(
-  plan: PlanKey,
-  feature: GatedFeature,
-  plans: Record<PlanKey, Pick<PlanDef, 'features'>> = PLANS,
-): boolean {
-  return plans[plan].features[feature];
+/**
+ * El plan que vale según la suscripción guardada en este navegador, la del pago simulado o la que
+ * reflejó la nube con my_plan. Sin suscripción activa es Gratis. Es el único lugar de esta regla en la
+ * app, así la prueba gratis de B10 se suma aquí y la heredan los candados, el tope de preguntas,
+ * Suscripción y Tu plan
+ */
+export function planOf(
+  subscription: { plan: PlanKey; status: string } | null | undefined,
+): PlanKey {
+  return subscription?.status === 'active' ? subscription.plan : 'free';
 }
 
 /**
@@ -197,7 +200,10 @@ export function isGatedFeature(lock: PlanLock): lock is GatedFeature {
   return (GATED_FEATURES as readonly string[]).includes(lock);
 }
 
-/** Si el plan abre lo que pide el candado. Recibe la tabla de planes para poder probar con otra */
+/**
+ * Si el plan abre lo que pide el candado, una función de la carga diaria o una bandera de acceso. Es
+ * la única pregunta que hace la interfaz. Recibe la tabla de planes para poder probar con otra
+ */
 export function canUse(
   plan: PlanKey,
   lock: PlanLock,

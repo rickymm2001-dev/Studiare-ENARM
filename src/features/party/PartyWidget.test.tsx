@@ -3,6 +3,7 @@ import 'fake-indexeddb/auto';
 import { act, cleanup, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
+import { useSyncStatus } from '@/app/syncState';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
@@ -14,6 +15,7 @@ import {
   publishPartyNumbers,
 } from '@/data/cloud/party';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
+import { subscribe } from '@/data/testing/fixtures';
 import { setConsent } from '@/data/usecases/profile';
 import { studyDayOf, weekStartOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
@@ -38,6 +40,9 @@ beforeEach(async () => {
   fake = makeFakeCloud({ session: { id: BRUNO, email: 'bruno@ejemplo.mx' } });
   fake.aliases.set(ANA, 'Ana');
   fake.aliases.set(BRUNO, 'Bruno');
+  // Party es de los planes de pago, también en el servidor (B8). Los dos pagan el mensual
+  fake.plans.set(ANA, 'monthly');
+  fake.plans.set(BRUNO, 'monthly');
   holder.cloud = fake.cloud;
   // Bruno crea el grupo, un reto y reta a Ana, que entra con el código
   const created = await createPartyGroup(fake.cloud, 'Guardia');
@@ -72,26 +77,18 @@ afterEach(async () => {
   app = undefined;
   holder.cloud = null;
   useCloud.setState({ state: { status: 'off' } });
+  useSyncStatus.getState().reset();
 });
 
-/** Party es de los planes de pago (respuesta 20, B8). El mensual como lo deja la nube con un pago */
-async function subscribe(api: RenderedApp['api'], user: RenderedApp['user']) {
-  await api.repos.subscriptions.put({
-    userId: user.id,
-    plan: 'monthly',
-    status: 'active',
-    isSimulated: false,
-    source: 'payment',
-    periodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-}
+/** El mensual como lo deja la nube con un pago */
+const paid = (api: RenderedApp['api'], user: RenderedApp['user']) =>
+  subscribe(api, user, 'monthly', 'cloud');
 
 describe('widget de Party con la nube', () => {
   it('muestra el lugar, el reto y el duelo pendiente, y el modo enfoque quita la sección de Inicio', async () => {
     app = await renderApp('/', {
       seed: async (api, user) => {
-        await subscribe(api, user);
+        await paid(api, user);
         await setConsent(api, user, 'party', true);
       },
     });
@@ -114,7 +111,7 @@ describe('widget de Party con la nube', () => {
 
   it('sin el permiso de Party no pide nada al servidor y explica qué falta', async () => {
     const before = fake.rpcCalls.length;
-    app = await renderApp('/', { seed: subscribe });
+    app = await renderApp('/', { seed: paid });
     const party = await screen.findByRole(
       'region',
       { name: t.widgets.names.party_challenge },
@@ -126,8 +123,11 @@ describe('widget de Party con la nube', () => {
 
   it('en Gratis lleva el aviso corto del candado con Ver planes y no le pide nada al servidor', async () => {
     const before = fake.rpcCalls.length;
+    fake.plans.set(ANA, 'free');
     app = await renderApp('/', {
       seed: async (api, user) => {
+        // Como lo deja la nube cuando my_plan contesta Gratis
+        await subscribe(api, user, 'free', 'cloud');
         await setConsent(api, user, 'party', true);
       },
     });
@@ -143,5 +143,26 @@ describe('widget de Party con la nube', () => {
     );
     expect(within(party).queryByText('Guardia')).toBeNull();
     expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);
+  });
+
+  it('si el servidor ya cerró Party, lleva el aviso corto y pide el plan otra vez', async () => {
+    // Este navegador todavía cree que el plan es de pago, pero venció en el servidor
+    fake.plans.set(ANA, 'free');
+    const syncNow = vi.fn(() => Promise.resolve());
+    useSyncStatus.setState({ syncNow });
+    app = await renderApp('/', {
+      seed: async (api, user) => {
+        await paid(api, user);
+        await setConsent(api, user, 'party', true);
+      },
+    });
+    const party = await screen.findByRole(
+      'region',
+      { name: t.widgets.names.party_challenge },
+      { timeout: 15_000 },
+    );
+    expect(await within(party).findByText(t.freePlan.widget)).toBeVisible();
+    expect(within(party).queryByText('Guardia')).toBeNull();
+    expect(syncNow).toHaveBeenCalled();
   });
 });

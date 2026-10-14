@@ -4,19 +4,8 @@
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { subscribeMonthly } from './support/b1';
+import { followSmallestDeck } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
-
-/** El catálogo es de los planes de pago (4.25, B8). Contrata el mensual simulado y sigue el mazo */
-async function followSmallestDeck(page: Page) {
-  await subscribeMonthly(page);
-  await page.goto(SCREENS.decks.path);
-  const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
-  await deck.getByRole('button', { name: t.decks.follow }).click();
-  await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
-    timeout: 60_000,
-  });
-}
 
 /** Cuántas tarjetas dice el encabezado de resultados. Con filtros dice "x de y" y toma la x */
 async function resultCount(page: Page): Promise<number> {

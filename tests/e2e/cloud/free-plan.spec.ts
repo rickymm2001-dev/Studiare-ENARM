@@ -1,9 +1,9 @@
 // Plan Gratis con la nube (B8 del plan del cambio, respuesta 20 y 4.3). El plan lo decide el servidor y
-// la app lo refleja. En Gratis Party lleva su candado y la app no le pide nada de Party al servidor,
-// que de todos modos lo rechazaría (PT001, party_open). Los referidos siguen abiertos. Con un plan de
-// pago Party se abre, y cuando el plan vence en el servidor vuelve el candado sin sacar al alumno de
-// su grupo. El mes regalado por un referido cuenta como plan de pago. Corre contra el Supabase
-// simulado
+// la app lo refleja. En Gratis Party lleva su candado y la app solo lee sus membresías con
+// party_export_mine, que no pide Party abierta. Lo demás de Party el servidor lo rechazaría (PT001,
+// party_open). Los referidos siguen abiertos. Con un plan de pago Party se abre, y cuando el plan vence
+// en el servidor vuelve el candado sin sacar al alumno de su grupo, que puede salir de todos desde el
+// candado. El mes regalado por un referido cuenta como plan de pago. Corre contra el Supabase simulado
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { enterWithLink, expect, openSecondDevice, test } from '../support/cloudFixtures';
@@ -16,12 +16,14 @@ const BRUNO = 'bruno.gratis@ejemplo.mx';
 const GROUP = 'Guardia del plan';
 const DAY_MS = 86_400_000;
 
-/** Las llamadas de la app a las funciones de Party en la base */
-const partyCalls = (cloud: FakeSupabaseServer) =>
-  cloud.calls.filter((call) => call.path.includes('/rpc/party_'));
+/** Las llamadas de la app a las funciones de Party en la base que piden Party abierta */
+const openPartyCalls = (cloud: FakeSupabaseServer) =>
+  cloud.calls.filter(
+    (call) => call.path.includes('/rpc/party_') && !call.path.includes('/rpc/party_export_mine'),
+  );
 
 test.describe('Plan Gratis con la nube', () => {
-  test('en Gratis Party lleva su candado, los referidos siguen y la app no llama a Party', async ({
+  test('en Gratis Party lleva su candado, los referidos siguen y la app no usa Party cerrada', async ({
     page,
     cloud,
   }) => {
@@ -44,7 +46,7 @@ test.describe('Plan Gratis con la nube', () => {
         .getByRole('region', { name: t.widgets.names.party_challenge })
         .getByText(t.freePlan.widget),
     ).toBeVisible({ timeout: 20_000 });
-    expect(partyCalls(cloud)).toEqual([]);
+    expect(openPartyCalls(cloud)).toEqual([]);
   });
 
   test('con el plan pagado Party se abre y al vencer en el servidor vuelve el candado', async ({
@@ -82,7 +84,15 @@ test.describe('Plan Gratis con la nube', () => {
       timeout: 30_000,
     });
     await expect(page.getByRole('region', { name: GROUP })).toHaveCount(0);
+    await expect(page.getByText(t.partyCloud.privacy)).toHaveCount(0);
     expect(cloud.party.activeMembers(GROUP)).toHaveLength(1);
+
+    // Sigue en su grupo y sale de todos desde el candado, sin pasar por Privacidad
+    const lock = page.getByRole('region', { name: t.freePlan.party.title });
+    await expect(lock.getByText(t.partyCloud.consent.stillIn(1))).toBeVisible();
+    await lock.getByRole('button', { name: t.partyCloud.consent.leaveAll }).click();
+    await expect(lock.getByText(t.partyCloud.consent.leftAll)).toBeVisible();
+    expect(cloud.party.activeMembers(GROUP)).toHaveLength(0);
   });
 
   test('el mes gratis por un referido abre Party', async ({

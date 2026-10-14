@@ -2,8 +2,11 @@
 // resumen al servidor, manda los resultados de los duelos que el alumno ya jugó en este dispositivo,
 // salvo el que tiene a medias en esta pestaña, y publica su XP de la semana y sus aportes a los retos
 // si cambiaron. Cada cifra sale de su bitácora. Mientras recarga después de una acción, la pantalla
-// sigue mostrando lo que ya tenía.
+// sigue mostrando lo que ya tenía. Si el servidor contesta que Party ya no está abierta (PT001), el plan
+// de este navegador se quedó atrás, así que pide una sincronización, que vuelve a preguntar el plan y
+// pone los candados de Gratis (B8).
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react';
+import { useSyncStatus } from '@/app/syncState';
 import { getCloud } from '@/data/cloud/client';
 import {
   fetchPartyOverview,
@@ -49,6 +52,7 @@ export function useCloudParty(input: {
       }
       if (!loaded.ok) {
         setState({ status: 'failed', reason: loaded.reason });
+        if (loaded.reason === 'closed') void useSyncStatus.getState().syncNow?.();
         return;
       }
       let overview = loaded.value;

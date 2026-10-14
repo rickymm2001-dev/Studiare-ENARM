@@ -4,8 +4,10 @@
 // respuestas 69 y 77). Sin nube solo explica que Party la necesita. La tarjeta para compartir y la de
 // referidos van en todos los casos. El modo enfoque oculta la tabla, el XP y los retos (respuesta 82).
 // En el plan Gratis grupos, tabla, retos y duelos quedan detrás de su candado con una vista previa, y
-// siguen abiertas Comparte tu semana e Invita y gana un mes (respuesta 20 y 4.3, B8).
-import { useState } from 'react';
+// siguen abiertas Comparte tu semana e Invita y gana un mes (respuesta 20 y 4.3, B8). Si el servidor
+// cierra Party antes de que este navegador sepa que el plan cambió, se ve el mismo candado, sin la frase
+// de lo que se comparte en un grupo.
+import { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useCloud } from '@/app/cloudState';
 import { useFocusMode } from '@/app/focusMode';
@@ -47,6 +49,11 @@ function Party({ session, inviteCode }: { session: ReadySession; inviteCode: str
   const cloudStatus = useCloud((store) => store.state.status);
   const focus = useFocusMode();
   const mode = partyModeOf(session.isDemo, cloudStatus);
+  // El servidor contestó que Party ya no está abierta para la cuenta (PT001)
+  const [closedByServer, setClosedByServer] = useState(false);
+  const onClosed = useCallback(() => {
+    setClosedByServer(true);
+  }, []);
 
   const header = (
     <ScreenHeader title={t.screens.party.title} description={t.screens.party.description} />
@@ -63,41 +70,47 @@ function Party({ session, inviteCode }: { session: ReadySession; inviteCode: str
   const share = (
     <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
   );
+  const locked = (
+    <>
+      <PartyLocked />
+      {share}
+    </>
+  );
 
   return (
     <>
       {header}
-      <FeatureGate
-        userId={user.id}
-        feature="party"
-        locked={
-          <>
-            <PartyLocked />
-            {share}
-          </>
-        }
-      >
-        <p className="text-sm text-fg-muted">{mode === 'demo' ? text.privacyDemo : text.privacy}</p>
-        {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
-        {share}
-        {mode === 'demo' ? (
-          <DemoParty
-            session={session}
-            events={events}
-            snapshot={snapshot}
-            focus={focus}
-            inviteCode={inviteCode}
-          />
-        ) : mode === 'cloud' ? (
-          <CloudParty
-            session={session}
-            events={events}
-            snapshot={snapshot}
-            focus={focus}
-            inviteCode={inviteCode}
-          />
+      <FeatureGate userId={user.id} feature="party" locked={locked}>
+        {closedByServer ? (
+          locked
         ) : (
-          <PartyNeedsCloud mode={mode} />
+          <>
+            <p className="text-sm text-fg-muted">
+              {mode === 'demo' ? text.privacyDemo : text.privacy}
+            </p>
+            {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
+            {share}
+            {mode === 'demo' ? (
+              <DemoParty
+                session={session}
+                events={events}
+                snapshot={snapshot}
+                focus={focus}
+                inviteCode={inviteCode}
+              />
+            ) : mode === 'cloud' ? (
+              <CloudParty
+                session={session}
+                events={events}
+                snapshot={snapshot}
+                focus={focus}
+                inviteCode={inviteCode}
+                onClosed={onClosed}
+              />
+            ) : (
+              <PartyNeedsCloud mode={mode} />
+            )}
+          </>
         )}
       </FeatureGate>
       <ReferralCard />

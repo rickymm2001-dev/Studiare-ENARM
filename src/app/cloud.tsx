@@ -18,6 +18,7 @@ import { acceptedNoticeVersion } from '@/data/usecases/profile';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
+import { settlePlanCheck } from './planCheck';
 import { usePreferences } from './preferences';
 import { startSyncScheduler, type SyncScheduler } from './syncScheduler';
 import { useSyncStatus } from './syncState';
@@ -150,13 +151,18 @@ export function CloudBridge() {
             const status = useSyncStatus.getState();
             const handle = startSyncScheduler({
               run: async () => {
-                // El plan lo decide el servidor, así que se refleja aquí en cada ciclo (D-096)
-                await refreshCloudPlan(api, cloud, userId);
+                // El plan lo decide el servidor, así que se refleja aquí en cada ciclo (D-096). Si no
+                // quedó guardado, los candados dejan de esperarlo (B8, planCheck.ts)
+                const cloudPlan = await refreshCloudPlan(api, cloud, userId);
+                await settlePlanCheck(api, userId, identity.authId);
                 return runSync({
                   api,
                   transport: createSupabaseTransport(cloud),
                   userId,
                   authId: identity.authId,
+                  // Si my_plan no contestó se supone Gratis. Así los apuntes que el servidor pudo
+                  // ignorar se vuelven a mandar con el primer plan de pago confirmado (B8)
+                  plan: cloudPlan?.plan ?? 'free',
                 });
               },
               report: status.set,

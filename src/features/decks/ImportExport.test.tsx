@@ -8,9 +8,8 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { parseImportFile } from '@/data/import/parseFile';
 import { loadSqlForTests } from '@/data/import/testing/fixtures';
 import { ImportError } from '@/data/import/types';
-import type { DataApi } from '@/data/context';
-import type { User } from '@/data/schemas/people';
 import { createManualDeck, saveManualNote } from '@/data/usecases/manualDecks';
+import { subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 import type { ImportParseResult } from '@/workers/importApi';
 
@@ -40,17 +39,6 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 10_000 };
-
-/** Subir mazos es de los planes de pago (respuesta 20, B8). Estas pruebas entran con el mensual */
-async function subscribe(api: DataApi, user: User) {
-  await api.repos.subscriptions.put({
-    userId: user.id,
-    plan: 'monthly',
-    status: 'active',
-    isSimulated: true,
-    updatedAt: '2026-10-01T10:00:00.000Z',
-  });
-}
 
 async function openDecks(options: Parameters<typeof renderApp>[1] = {}) {
   app = await renderApp(SCREENS.decks.path, {

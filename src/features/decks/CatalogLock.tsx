@@ -1,8 +1,8 @@
 // El catálogo de mazos precargados en el plan Gratis (4.25 del plan del cambio, B8). Seguir mazos
 // nuevos del catálogo es de los planes de pago, así que la lista queda como vista previa, con el aviso
-// corto del candado arriba y cada mazo nuevo marcado como de pago. Lo que el alumno ya tiene en este
-// dispositivo, porque lo sigue o lo siguió antes, lo sigue repasando y lo puede volver a seguir,
-// porque sus repasos son suyos.
+// corto del candado arriba y cada mazo nuevo marcado como de pago. Un mazo que el alumno ya siguió, porque
+// está en este dispositivo o porque su bitácora tiene repasos de sus tarjetas, lo sigue repasando y lo
+// puede volver a seguir, porque sus repasos son suyos.
 import { Lock } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { LockedNote } from '../shared/LockedPreview';
@@ -15,7 +15,7 @@ export function CatalogLockNotice() {
   );
 }
 
-/** Va en lugar del botón Seguir mazo en un mazo del catálogo que el alumno todavía no tiene */
+/** Va en lugar del botón Seguir mazo en un mazo del catálogo que el alumno nunca ha estudiado */
 export function CatalogRowLock() {
   return (
     <span className="flex items-center gap-1 text-sm font-medium text-fg-muted">

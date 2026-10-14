@@ -1053,23 +1053,30 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       }
       const key = `${user.id}|${kind}|${id}`;
       const current = syncRecords.get(key);
-      if (current && Date.parse(current.updated_at) >= Date.parse(updatedAt)) continue;
       const deletedAt = asString(raw.deletedAt);
       // En Gratis un apunte no se crea ni se cambia en la nube y el lote sigue. Solo entra la marca de
-      // borrado de uno que ya estaba, también dentro de data (B8, 20261021000001_free_plan_locks.sql)
-      if (
-        kind === 'outline' &&
-        userPlan(user.id) === 'free' &&
-        (!current || !deletedAt || !asString(raw.data.deletedAt))
-      ) {
-        continue;
+      // borrado de uno que ya estaba, sobre lo que ya tenía la nube y con sus dos fechas dentro de data.
+      // Una marca posterior al cambio no es una fecha de borrado (B8, 20261021000001_free_plan_locks.sql)
+      const freeOutline = kind === 'outline' && userPlan(user.id) === 'free';
+      if (freeOutline && deletedAt && Date.parse(deletedAt) > Date.parse(updatedAt)) {
+        return pgError('22023', 'La marca de borrado no es una fecha válida');
       }
+      if (current && Date.parse(current.updated_at) >= Date.parse(updatedAt)) continue;
+      if (freeOutline && (!current || !deletedAt)) continue;
+      const data =
+        freeOutline && current
+          ? {
+              ...current.data,
+              deletedAt: new Date(Date.parse(deletedAt ?? updatedAt)).toISOString(),
+              updatedAt: new Date(Date.parse(updatedAt)).toISOString(),
+            }
+          : raw.data;
       serverSeq += 1;
       syncRecords.set(key, {
         user_id: user.id,
         kind,
         record_id: id,
-        data: raw.data,
+        data,
         updated_at: new Date(Date.parse(updatedAt)).toISOString(),
         deleted_at: deletedAt ? new Date(Date.parse(deletedAt)).toISOString() : null,
         server_seq: serverSeq,

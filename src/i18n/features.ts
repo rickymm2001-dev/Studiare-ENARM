@@ -527,7 +527,8 @@ export const featureText = {
       // Apuntes y el catálogo también se comparan en la tabla de planes (B8 del plan del cambio)
       outlines: 'Apuntes que se vuelven tarjetas',
       deckCatalog: 'Mazos precargados del catálogo',
-      importDecks: 'Importar tus mazos',
+      // El mismo nombre que su candado y su tarjeta en Mazos (B8)
+      importDecks: 'Subir tus mazos',
       party: 'Party con tus amigos',
     },
     included: 'Incluido',

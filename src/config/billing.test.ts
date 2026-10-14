@@ -3,7 +3,6 @@ import {
   AI_CARDS_PER_DAY_PAID,
   annualSavingsPercent,
   canUse,
-  canUseFeature,
   checkoutPlanFor,
   FOUNDER_SEATS,
   GATED_FEATURES,
@@ -11,6 +10,7 @@ import {
   PAYMENT_PROVIDERS,
   PLAN_HIGHLIGHTS,
   PLANS,
+  planOf,
   VISIBLE_PLANS,
   visiblePlanOf,
   type FeatureAccess,
@@ -92,7 +92,7 @@ describe('banderas de acceso por función de carga diaria', () => {
     const paidOnly = new Set(['aiCards', 'outlines']);
     for (const key of Object.keys(PLANS) as PlanKey[]) {
       for (const feature of GATED_FEATURES) {
-        expect(canUseFeature(key, feature), `${key} ${feature}`).toBe(
+        expect(canUse(key, feature), `${key} ${feature}`).toBe(
           paidOnly.has(feature) ? key !== 'free' : true,
         );
       }
@@ -115,9 +115,20 @@ describe('banderas de acceso por función de carga diaria', () => {
   it('con otra tabla de planes la bandera cierra solo la función indicada y solo ese plan', () => {
     const closed: FeatureAccess = { ...PLANS.free.features, easyDays: false };
     const plans = { ...PLANS, free: { ...PLANS.free, features: closed } };
-    expect(canUseFeature('free', 'easyDays', plans)).toBe(false);
-    expect(canUseFeature('free', 'explore', plans)).toBe(true);
-    expect(canUseFeature('monthly', 'easyDays', plans)).toBe(true);
+    expect(canUse('free', 'easyDays', plans)).toBe(false);
+    expect(canUse('free', 'explore', plans)).toBe(true);
+    expect(canUse('monthly', 'easyDays', plans)).toBe(true);
+  });
+});
+
+describe('el plan de una suscripción', () => {
+  it('solo una suscripción activa da su plan. Sin ella, cancelada o sin estado es Gratis', () => {
+    expect(planOf(undefined)).toBe('free');
+    expect(planOf(null)).toBe('free');
+    expect(planOf({ plan: 'monthly', status: 'active' })).toBe('monthly');
+    expect(planOf({ plan: 'founder', status: 'active' })).toBe('founder');
+    expect(planOf({ plan: 'annual', status: 'canceled' })).toBe('free');
+    expect(planOf({ plan: 'free', status: 'none' })).toBe('free');
   });
 });
 

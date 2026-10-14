@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
+import type { PlanKey } from '@/config/billing';
 import { PAGE_SIZE } from '@/engines/sync';
 import { createEvent } from '../events/createEvent';
 import type { Card, Deck, Note } from '../schemas/decks';
@@ -17,7 +18,11 @@ interface Device {
   api: ReturnType<typeof testApi>;
   userId: string;
   clock: { seconds: number };
-  sync: (overrides?: { transport?: SyncTransport; authId?: string }) => Promise<SyncResult>;
+  sync: (overrides?: {
+    transport?: SyncTransport;
+    authId?: string;
+    plan?: PlanKey;
+  }) => Promise<SyncResult>;
 }
 
 const disposers: (() => Promise<void>)[] = [];
@@ -41,6 +46,7 @@ function device(server: MemoryServer): Device {
         transport: overrides?.transport ?? memoryTransport(server, now),
         userId,
         authId: overrides?.authId ?? AUTH,
+        ...(overrides?.plan ? { plan: overrides.plan } : {}),
         now,
       }),
   };
@@ -525,4 +531,103 @@ describe('volumen', () => {
     a.clock.seconds = 600;
     expect(ok(await a.sync())).toMatchObject({ eventsPushed: 0 });
   }, 30_000);
+});
+
+// En el plan Gratis el servidor ignora sin error los apuntes nuevos o cambiados (B8,
+// 20261021000001_free_plan_locks.sql). El servidor en memoria aplica la misma regla
+describe('apuntes con el plan Gratis', () => {
+  it('lo que el servidor ignoró en Gratis sube completo con el primer plan de pago', async () => {
+    const server = createMemoryServer();
+    server.plan = 'free';
+    const a = device(server);
+    const made = await fill(a);
+    // Escribió sin conexión y el plan venció antes de sincronizar. Lo demás sube, el apunte no
+    const free = ok(await a.sync({ plan: 'free' }));
+    expect(free.recordsPushed).toBe(4);
+    expect(server.records.has(`outline:${made.outline.id}`)).toBe(false);
+    expect(server.records.has(`deck:${made.deck.id}`)).toBe(true);
+    expect((await a.api.repos.syncState.get(a.userId))?.outlinesPending).toBe(true);
+
+    // La marca de agua ya pasó el apunte. Sin la marca de pendiente no se volvería a mandar
+    a.clock.seconds += 120;
+    ok(await a.sync({ plan: 'free' }));
+    expect(server.records.has(`outline:${made.outline.id}`)).toBe(false);
+
+    // Vuelve a pagar. El apunte sube sin haber cambiado y la marca se quita
+    server.plan = 'monthly';
+    a.clock.seconds += 120;
+    const paid = ok(await a.sync({ plan: 'monthly' }));
+    expect(paid.recordsPushed).toBe(1);
+    expect(server.records.get(`outline:${made.outline.id}`)?.record.data.title).toBe('Apunte');
+    expect((await a.api.repos.syncState.get(a.userId))?.outlinesPending).toBe(false);
+
+    // Otro dispositivo lo recibe, y volver a sincronizar ya no manda nada
+    const b = device(server);
+    b.clock.seconds = a.clock.seconds + 60;
+    ok(await b.sync({ plan: 'monthly' }));
+    expect(await b.api.repos.outlines.get(made.outline.id)).toMatchObject({ title: 'Apunte' });
+    a.clock.seconds += 120;
+    expect(ok(await a.sync({ plan: 'monthly' })).recordsPushed).toBe(0);
+  });
+
+  it('sin el plan del servidor usa el guardado en este navegador', async () => {
+    const server = createMemoryServer();
+    server.plan = 'free';
+    const a = device(server);
+    await fill(a);
+    ok(await a.sync());
+    expect((await a.api.repos.syncState.get(a.userId))?.outlinesPending).toBe(true);
+
+    server.plan = 'monthly';
+    await a.api.repos.subscriptions.put({
+      userId: a.userId,
+      plan: 'monthly',
+      status: 'active',
+      isSimulated: false,
+      source: 'payment',
+      updatedAt: at(a.clock.seconds).toISOString(),
+    });
+    a.clock.seconds += 120;
+    expect(ok(await a.sync()).recordsPushed).toBe(1);
+    expect([...server.records.keys()].filter((key) => key.startsWith('outline:'))).toHaveLength(1);
+  });
+
+  it('en Gratis borrar un apunte llega a la nube, sin el contenido que traiga la marca', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const made = await fill(a);
+    ok(await a.sync({ plan: 'monthly' }));
+    const b = device(server);
+    b.clock.seconds = 200;
+    ok(await b.sync({ plan: 'monthly' }));
+    expect(await b.api.repos.outlines.get(made.outline.id)).toBeDefined();
+
+    // El plan vence. A cambia el apunte, que no sube, y después lo borra, que sí
+    server.plan = 'free';
+    a.clock.seconds = 300;
+    await a.api.repos.outlines.put({
+      ...made.outline,
+      title: 'Cambio en Gratis',
+      updatedAt: at(300).toISOString(),
+    });
+    ok(await a.sync({ plan: 'free' }));
+    expect(server.records.get(`outline:${made.outline.id}`)?.record.data.title).toBe('Apunte');
+    a.clock.seconds = 400;
+    const stamp = at(400).toISOString();
+    await a.api.repos.outlines.put({
+      ...made.outline,
+      title: 'Cambio en Gratis',
+      updatedAt: stamp,
+      deletedAt: stamp,
+    });
+    ok(await a.sync({ plan: 'free' }));
+    const stored = server.records.get(`outline:${made.outline.id}`)?.record;
+    expect(stored).toMatchObject({ deletedAt: stamp, updatedAt: stamp });
+    expect(stored?.data).toMatchObject({ title: 'Apunte', deletedAt: stamp, updatedAt: stamp });
+
+    b.clock.seconds = 500;
+    ok(await b.sync({ plan: 'free' }));
+    expect(await b.api.repos.outlines.get(made.outline.id)).toBeUndefined();
+    expect(await b.api.repos.outlines.getRaw(made.outline.id)).toMatchObject({ deletedAt: stamp });
+  });
 });

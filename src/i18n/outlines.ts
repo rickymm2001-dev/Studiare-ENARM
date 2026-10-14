@@ -130,6 +130,10 @@ export const outlineText = {
       ],
       // El botón es el de todos los candados de Gratis (src/features/shared/lockedCta.ts)
       kept: 'Si ya tenías apuntes, siguen guardados y sus tarjetas siguen en Repasar.',
+      // Con la nube. En Gratis la nube no recibe apuntes nuevos ni cambios, y la sincronización los
+      // manda todos con el primer plan de pago (outlinesPending, B8)
+      keptCloud:
+        'Lo que escribiste y todavía no sube a la nube se queda guardado en este dispositivo y sube cuando vuelvas a tener un plan de pago.',
     },
 
     editor: {

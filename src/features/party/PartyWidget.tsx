@@ -2,7 +2,8 @@
 // reciente y los duelos que esperan tu turno. En la demostración sale de los grupos simulados de este
 // navegador y con la nube de tus grupos reales, que de paso publica tus cifras al día (B7). Con el modo
 // enfoque no muestra el lugar ni el reto (respuesta 82). Sin nube dice que Party la necesita. En el
-// plan Gratis lleva el aviso corto del candado y no le pide nada al servidor (respuesta 20, B8).
+// plan Gratis lleva el aviso corto del candado y no le pide nada al servidor (respuesta 20, B8). Mientras
+// se sabe el plan, muestra que lo está revisando.
 import { Link } from 'react-router';
 import { useCloud } from '@/app/cloudState';
 import { screenPath } from '@/app/screens';
@@ -34,7 +35,12 @@ interface WidgetProps {
 
 export function PartyWidget(props: WidgetProps) {
   return (
-    <FeatureGate userId={props.session.user.id} feature="party" locked={<PartyWidgetLocked />}>
+    <FeatureGate
+      userId={props.session.user.id}
+      feature="party"
+      locked={<PartyWidgetLocked />}
+      loading={<SkeletonRows label={t.freePlan.checking} rows={2} />}
+    >
       <PartyWidgetByMode {...props} />
     </FeatureGate>
   );
@@ -184,7 +190,8 @@ function CloudGroupWidget({ session, snapshot, events }: WidgetProps) {
   });
   if (state.status === 'loading') return <SkeletonRows label={t.partyCloud.loading} rows={2} />;
   if (state.status === 'failed') {
-    // El servidor dice que el plan ya no incluye Party, por ejemplo porque venció hace un momento
+    // El servidor dice que el plan ya no incluye Party, por ejemplo porque venció hace un momento.
+    // useCloudParty ya pidió el plan otra vez
     if (state.reason === 'closed') return <PartyWidgetLocked />;
     return <WidgetNote note={t.partyCloud.widget.failed} />;
   }

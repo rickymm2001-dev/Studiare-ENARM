@@ -11,6 +11,7 @@ import {
   FOUNDER_PROMO_ACTIVE,
   PLAN_HIGHLIGHTS,
   PLANS,
+  planOf,
   VISIBLE_PLANS,
   visiblePlanOf,
   type PlanHighlight,
@@ -70,7 +71,7 @@ function Billing({ session }: { session: ReadySession }) {
   const [checkout, setCheckout] = useState<PlanKey | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const current: PlanKey = subscription?.status === 'active' ? subscription.plan : 'free';
+  const current = planOf(subscription);
   // Con la nube conectada el plan lo decide el servidor y no hay pago simulado (D-096)
   const inCloud = useCloud((store) => store.state.status === 'linked');
   // Con la nube configurada y este navegador sin sesión, el servidor no sabe quién paga. No se ofrece

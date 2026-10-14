@@ -2,14 +2,18 @@
 import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
-import { newId } from '@/data/testing/fixtures';
+import { newId, subscribe } from '@/data/testing/fixtures';
 import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
+
+// Abrir Explorar con un mazo seguido tarda cerca de los 5 segundos por defecto en una máquina cargada,
+// así que usa el tiempo de 30 s de las demás pruebas de pantalla
+vi.setConfig({ testTimeout: 30_000 });
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
@@ -122,10 +126,18 @@ const rowsIn = (list: HTMLElement) => within(list).getAllByRole('listitem');
 
 describe('pantalla de Explorar', () => {
   it('sin tarjetas lo dice y lleva a Mazos', async () => {
-    app = await renderApp(SCREENS.explore.path);
+    app = await renderApp(SCREENS.explore.path, { seed: (api, user) => subscribe(api, user) });
     expect(await screen.findByText(t.explore.empty, undefined, { timeout: 10_000 })).toBeVisible();
     // La pestaña y el botón del estado vacío
     expect(screen.getAllByRole('link', { name: t.studyTabs.decks })).toHaveLength(2);
+  });
+
+  it('en Gratis, sin tarjetas, sugiere crear un mazo propio y no seguir uno del catálogo', async () => {
+    app = await renderApp(SCREENS.explore.path);
+    expect(
+      await screen.findByText(t.freePlan.catalog.exploreEmpty, undefined, { timeout: 10_000 }),
+    ).toBeVisible();
+    expect(screen.queryByText(t.explore.empty)).toBeNull();
   });
 
   it('es la tercera pestaña de la sección y lista todas las tarjetas', async () => {

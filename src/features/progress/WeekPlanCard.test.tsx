@@ -230,7 +230,9 @@ describe('semana de Progreso', () => {
   it('sin mazos lo dice y el plan Gratis recorta la práctica a sus preguntas del día', async () => {
     app = await renderApp(SCREENS.progress.path, { user: { dailyMinutes: 240 } });
     const region = await weekCard();
-    expect(within(region).getByText(t.planner.noDecksBody)).toBeInTheDocument();
+    // En Gratis no sugiere seguir un mazo del catálogo, que es de pago (4.25, B8)
+    expect(await within(region).findByText(t.freePlan.catalog.plannerEmpty)).toBeInTheDocument();
+    expect(within(region).queryByText(t.planner.noDecksBody)).toBeNull();
     expect(within(region).getByText(t.planner.limitNote(20))).toBeInTheDocument();
     expect(
       within(days(region)[0] as HTMLElement).getByText(new RegExp(t.planner.questionsShort(20))),

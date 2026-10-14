@@ -18,6 +18,7 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { usePlanText } from '../shared/useActivePlan';
 import { StudyTabs } from '../review/StudyTabs';
 import { BulkActions, type Notice } from './BulkActions';
 import { FilterPanel } from './FilterPanel';
@@ -60,6 +61,11 @@ function Explore({ session }: { session: ReadySession }) {
   const [selected, setSelected] = useState<ReadonlySet<string>>(() => new Set());
   const [openId, setOpenId] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
+  // Sin tarjetas, en Gratis no se sugiere seguir un mazo del catálogo, que es de pago (4.25, B8)
+  const emptyText = usePlanText(session.user.id, 'deckCatalog', {
+    open: t.explore.empty,
+    closed: t.freePlan.catalog.exploreEmpty,
+  });
 
   // La búsqueda de texto se aplaza para que la caja responda al instante aunque haya miles de filas
   const deferredText = useDeferredValue(view.text);
@@ -108,7 +114,7 @@ function Explore({ session }: { session: ReadySession }) {
       <StudyTabs />
     </>
   );
-  if (!data || !facets || !now) {
+  if (!data || !facets || !now || (data.rows.length === 0 && emptyText === undefined)) {
     return (
       <>
         {header}
@@ -122,7 +128,7 @@ function Explore({ session }: { session: ReadySession }) {
         {header}
         <EmptyState
           title={t.states.empty.title}
-          description={t.explore.empty}
+          description={emptyText}
           action={
             <Button asChild>
               <Link to={screenPath('decks')}>{t.studyTabs.decks}</Link>

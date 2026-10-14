@@ -62,7 +62,7 @@ export function ImportDeckCard(props: ImportDeckProps) {
           title={text.title}
           intro={text.intro}
           points={text.points}
-          kept={text.kept}
+          kept={[text.kept]}
         />
       }
     >

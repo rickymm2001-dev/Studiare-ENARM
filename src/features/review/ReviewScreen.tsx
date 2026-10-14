@@ -25,7 +25,7 @@ import {
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
-import { canUseFeature } from '@/config/billing';
+import { canUse } from '@/config/billing';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
@@ -58,7 +58,7 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
-import { useActivePlan, usePlanAllows } from '../shared/useActivePlan';
+import { useActivePlan, usePlanText } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
@@ -115,9 +115,11 @@ export function ReviewScreen() {
  * no dice nada, para no sugerir lo que el plan no abre
  */
 function NoDecksBody({ userId }: { userId: string }) {
-  const catalogOpen = usePlanAllows(userId, 'deckCatalog');
-  if (catalogOpen === undefined) return null;
-  return <>{catalogOpen ? t.review.noDecksBody : t.freePlan.catalog.reviewEmpty}</>;
+  const body = usePlanText(userId, 'deckCatalog', {
+    open: t.review.noDecksBody,
+    closed: t.freePlan.catalog.reviewEmpty,
+  });
+  return body ?? null;
 }
 
 function ReviewLoader({ session }: { session: ReadySession }) {
@@ -383,7 +385,7 @@ function ReviewSession({
   // En modo enfoque no se dice el XP ganado, ni al calificar ni al terminar (respuesta 82, B7)
   const focus = useFocusMode();
   // Mientras carga el plan se supone el más básico, así el temporizador no aparece sin permiso
-  const timerAllowed = canUseFeature(useActivePlan(user.id) ?? 'free', 'cardTimer');
+  const timerAllowed = canUse(useActivePlan(user.id) ?? 'free', 'cardTimer');
   const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
   const noteById = useMemo(() => new Map(notes.map((note) => [note.id, note])), [notes]);
   // Las tarjetas de la sesión se fijan al entrar. Si se suspende una a media sesión, los datos en

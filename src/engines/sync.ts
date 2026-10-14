@@ -239,16 +239,18 @@ function compareText(a: string, b: string): number {
 
 /**
  * Los registros por subir, en orden de fecha y con la llave como desempate. La marca de agua es la
- * fecha desde la que todo ya está en el servidor. Se sube lo que tiene una fecha posterior. El
- * orden es el mismo en cada llamada, así el envío por lotes avanza sin repetirse
+ * fecha desde la que todo ya está en el servidor. Se sube lo que tiene una fecha posterior, y todo lo
+ * de los tipos de resend sin mirar la marca, como los apuntes que el servidor ignoró en el plan
+ * Gratis (B8). El orden es el mismo en cada llamada, así el envío por lotes avanza sin repetirse
  */
 export function planPush(
   items: readonly SyncItem[],
   watermark: string | null,
   userId: string,
+  resend: ReadonlySet<SyncKind> = new Set(),
 ): WireRecord[] {
   return items
-    .filter((item) => watermark === null || stampOf(item) > watermark)
+    .filter((item) => watermark === null || stampOf(item) > watermark || resend.has(item.kind))
     .sort((a, b) => compareText(stampOf(a), stampOf(b)) || compareText(keyOf(a), keyOf(b)))
     .map((item) => toWire(item, userId));
 }
