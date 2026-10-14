@@ -11,7 +11,7 @@ La documentación web de Mercado Pago no abre desde el entorno de la sesión. Lo
 - **Sin prueba gratis, sin precio Fundador y sin códigos de descuento** en Mercado Pago (8.3 del diseño y respuesta 21). Eso va solo con tarjeta en Stripe
 - **Avisos.** La función `payment-webhook-mercadopago` entiende los temas payment, subscription_preapproval y subscription_authorized_payment. Verifica la firma, consulta el recurso a Mercado Pago con el token del servidor y lo aplica en la base una sola vez
 - **Cancelar desde la app.** Mercado Pago no tiene portal como Stripe. La función nueva `cancel-subscription` cancela la suscripción del alumno y su plan vale hasta el fin de lo pagado
-- **Reembolsos.** Se hacen desde el panel de Mercado Pago. Un reembolso completo o un contracargo quitan el pase o el plan, igual que con Stripe
+- **Reembolsos.** Se hacen desde el panel de Mercado Pago. Un reembolso completo o un contracargo (charged_back) quitan el pase o el plan, igual que en Stripe un reembolso completo o un contracargo perdido
 - **Apagado.** La bandera `mercadoPago` está apagada en todos los entornos y la app no muestra la opción hasta que exista la cuenta y el aviso esté desplegado. El servidor cumple la misma bandera. Sin `mercadoPago` en true en platform_settings, clave feature_flags, `create-checkout` contesta 503 not_configured a todo pago con Mercado Pago. Cancelar desde la app y los avisos de pagos que ya empezaron siguen funcionando
 
 ## Cómo funciona por dentro

@@ -17,12 +17,13 @@ Escrito el 2026-10-10 y puesto al día el 2026-10-14 con B10, pagos completos. Q
 - **Banderas en el servidor.** freeTrial, cashPasses y mercadoPago viven en platform_settings, clave feature_flags, la misma que lee la app, y la base también las cumple. Sin freeTrial en true nadie tiene prueba. Sin cashPasses en true create-checkout contesta 503 not_configured a los pases con OXXO o SPEI. Solo cuenta el booleano true. Una prueba o un pago que ya empezó sigue igual aunque se apague la bandera
 - **Cliente único.** Toda sesión de pago lleva un cliente de Stripe, que SPEI exige. Si el alumno no tiene uno se crea y se liga en el acto. Si el guardado ya no existe en Stripe se crea otro y se reintenta una vez
 - **Reembolsos.** Uno completo desde el panel de Stripe quita lo que pagó ese cobro. Un pase deja de contar y una suscripción se cancela en Stripe con su acción, solo si es la suscripción de ese cobro. Si el alumno ya tiene otra, la nueva sigue. Uno parcial no cambia nada y lo atiendes tú. Desde la versión basil el cargo ya no dice su factura, así que el webhook la busca en los pagos de factura de su PaymentIntent (GET /v1/invoice_payments) y la base encuentra el cobro por ese id exacto. Un pase se encuentra por su PaymentIntent. Un reembolso que no es de ningún cobro guardado queda como ignored y no se adivina por monto
+- **Contracargos.** Abrir uno no cambia nada y queda en el registro de la función. Si se pierde, Stripe ya le regresó el dinero al alumno y la base lo trata como un reembolso completo de ese cobro. La disputa no trae el cliente, así que el webhook lee su PaymentIntent (lectura en PaymentIntents) para saber de quién es y si fue por todo el cobro. Uno ganado o parcial no cambia el acceso
 - **Garantía de 7 días.** Cuenta desde el primer cobro de la suscripción o desde el pago del pase. Los pagos en OXXO no se pueden devolver en la tienda, así que la garantía de un pase con OXXO se devuelve por transferencia y se marca como devuelta en Admin, Pagos
 - **Referidos.** El mes gratis por referido lo da la base con el primer cobro del referido, la primera factura pagada de más de 0 pesos. La sesión de pago y la factura de 0 pesos de una prueba no cuentan, el mismo cobro con otro aviso no se cuenta dos veces y un aviso repetido no da otro mes. Si ese primer cobro se devuelve completo, por ejemplo con la garantía, el referido queda revertido, sin borrar nada, y el mes de quien invitó termina en ese momento (migración 20261019000001, bloque B7)
 - **Facturas.** Stripe genera un recibo por cada cobro y lo deja en el portal. La factura fiscal (CFDI) la pide el alumno en Perfil, Facturas, y el equipo la emite a mano. El correo al equipo queda en la cola hasta B15
 - **Correos.** El aviso de fin de prueba y el de pase por vencer quedan en una cola de la base, apagada, hasta que B15 conecte el envío
 
-## Los diez eventos del webhook
+## Los doce eventos del webhook
 
 El endpoint va a https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe, con la versión 2026-09-30.endive y estos eventos.
 
@@ -38,6 +39,8 @@ El endpoint va a https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-w
 | customer.subscription.deleted | La suscripción terminó |
 | customer.subscription.trial_will_end | Tres días antes del fin de la prueba. Deja el correo de aviso en la cola |
 | charge.refunded | Un reembolso completo, con la factura que pagó su PaymentIntent. Uno parcial se ignora |
+| charge.dispute.created | Se abrió un contracargo. No cambia el acceso. Queda una línea en el registro de la función, sin datos del alumno, para que alguien responda la disputa en el panel |
+| charge.dispute.closed | Solo uno perdido (lost) cuenta, como un reembolso completo del cobro. Ganado o parcial no cambian nada |
 
 ## Los ocho IDs
 
@@ -72,7 +75,7 @@ STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts --app-url=https:
 
 Los pasos de los paneles están en docs/PENDIENTES_DE_RICARDO.md, sección de B10. En resumen
 
-1. Ricardo crea las dos llaves restringidas de prueba, activa OXXO, SPEI, Apple Pay y Google Pay, guarda el portal por omisión, ajusta reintentos y correos, y crea el endpoint nuevo del webhook con los diez eventos
+1. Ricardo crea las dos llaves restringidas de prueba, activa OXXO, SPEI, Apple Pay y Google Pay, guarda el portal por omisión, ajusta reintentos y correos, y crea el endpoint nuevo del webhook con los doce eventos
 2. La sesión corre setup-test.ts y pone los ocho IDs en los secretos de Supabase
 3. La sesión aplica las tres migraciones de B10 y corre la consulta de comprobación de docs/SUPABASE.md, sección Pagos completos
 4. La sesión despliega create-checkout, create-portal-session y payment-webhook-stripe
@@ -81,12 +84,21 @@ Los pasos de los paneles están en docs/PENDIENTES_DE_RICARDO.md, sección de B1
 
 ## Lo que falta confirmar con la corrida real
 
+- Que un contracargo perdido en modo prueba (tarjeta 4000 0000 0000 0259, que abre una disputa por fraude, respondida con la evidencia de prueba losing_evidence) llegue como charge.dispute.closed con status lost y payment_intent, y que quite el plan
 - Que GET /v1/invoice_payments con payment[type]=payment_intent y payment[payment_intent] devuelva la factura de un cobro de suscripción, y que la llave restringida con lectura en Invoices pueda leerlo
 - Si la sesión de pago trae el código de descuento en sus descuentos cuando el alumno lo teclea. Si no, el webhook lo toma de la suscripción o lee el código que aparece en el desglose de la sesión. Esa lectura necesita permiso de lectura en Promotion codes
 - Si el cupón repeating de 1 mes descuenta solo el primer cobro también con prueba, en mensual y en anual (escenario S8)
 - Que en modo prueba Apple Pay y Google Pay aparezcan en un iPhone con Safari y en un Android con Chrome (escenario S11)
 - Que los eventos lleguen con api_version 2026-09-30.endive
 - Si un pase pagado con SPEI se puede devolver desde Stripe a la cuenta de origen. Si no, la garantía se devuelve por transferencia como con OXXO
+
+## Fuentes de los campos nuevos
+
+docs.stripe.com no abre desde el entorno de la sesión. Los campos que se agregaron en la revisión de B10 se leyeron el 2026-10-14 de los tipos del SDK oficial de Stripe para Node (npm stripe 23.0.0, cuya versión fija es 2026-09-30.endive, la misma de Studiare), que se generan de la especificación de la API
+
+- Dispute (docs.stripe.com/api/disputes/object). status con lost, won, warning_closed y prevented, amount, currency, payment_intent y charge. No trae el cliente. Los eventos charge.dispute.created y charge.dispute.closed están en la lista de eventos de los endpoints
+- InvoicePayment (docs.stripe.com/api/invoice-payment). GET /v1/invoice_payments filtra por payment[type]=payment_intent y payment[payment_intent], y cada pago trae su invoice. La factura solo lleva payments si se pide, y desde basil ni la factura trae payment_intent ni el cargo su factura
+- PaymentIntent (docs.stripe.com/api/payment_intents/object). customer, amount_received y currency
 
 ## Impuestos y facturas, para revisar con tu contador
 
@@ -99,7 +111,7 @@ Los pasos de los paneles están en docs/PENDIENTES_DE_RICARDO.md, sección de B1
 
 - **Llave restringida para las funciones.** Una rk_test_ con escritura en Checkout Sessions, Customers, Customer portal y Subscriptions, y lectura en Promotion codes, PaymentIntents e Invoices, para los pagos de factura que busca un reembolso. Sin ella todo funciona con la sk_test_ de hoy
 - **Alertas.** Que alguien mire los webhooks fallidos del panel de Stripe, porque la app no manda alertas
-- **Modo real.** Antes de cobrar de verdad, la lista de lanzamiento de la sección 11 del plan del cambio, con los diez eventos y los ocho IDs nuevos en modo real
+- **Modo real.** Antes de cobrar de verdad, la lista de lanzamiento de la sección 11 del plan del cambio, con los doce eventos y los ocho IDs nuevos en modo real
 
 ## Llaves
 

@@ -733,6 +733,38 @@ export function checkoutSessionSteps(
 }
 
 /**
+ * Un contracargo cerrado (charge.dispute.closed). Solo uno perdido (lost) cuenta, como un reembolso
+ * completo, porque el banco del alumno ya le regresó el dinero. Ganado, warning_closed o prevented no
+ * cambian nada. La disputa trae su PaymentIntent y el monto disputado, pero no el cliente, así que el aviso
+ * lee el PaymentIntent para saber de quién es y si el contracargo fue por todo el cobro
+ */
+export function lostDispute(
+  dispute: unknown,
+  context: Pick<NoticeContext, 'eventId' | 'payload'>,
+): {
+  disputeId: string;
+  notice: ChargeNotice & { paymentIntentId: string; amountMxn: number };
+} | null {
+  const object = asRecord(dispute);
+  if (object.status !== 'lost') return null;
+  const disputeId = asString(object.id);
+  const paymentIntentId = idOf(object.payment_intent);
+  const amountMxn = mxnFromCents(object.amount, object.currency);
+  if (!disputeId || !paymentIntentId || amountMxn === null || amountMxn <= 0) return null;
+  return {
+    disputeId,
+    notice: {
+      ...emptyCharge(context),
+      kind: 'refunded',
+      // La base usa el propósito del cobro que encuentra
+      purpose: 'subscription',
+      paymentIntentId,
+      amountMxn,
+    },
+  };
+}
+
+/**
  * La búsqueda de la factura que pagó un PaymentIntent (GET /v1/invoice_payments). Desde la versión basil
  * la factura ya no trae su payment_intent ni el cargo su factura. La relación vive en los pagos de la
  * factura (InvoicePayment), que se filtran por payment[type] y payment[payment_intent]

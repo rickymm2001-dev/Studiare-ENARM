@@ -56,6 +56,8 @@ import {
   invoiceChargeNotice,
   invoiceOfPayments,
   invoicePaymentParams,
+  lostDispute,
+  mxnFromCents,
   isMissingCustomer,
   passSessionParams,
   portalSessionParams,
@@ -303,6 +305,43 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
       // persona lo vea en payment_webhook_events, en lugar de perderse
       const userId = await deps.userOfCustomer(refund.customerId);
       const notice = await withInvoice(refund.notice, deps);
+      return [{ type: 'charge', notice: { ...notice, userId } }];
+    }
+    case 'charge.dispute.created':
+      // Abrir un contracargo no cambia el acceso. Solo queda en el registro, sin datos del alumno, para
+      // que alguien responda la disputa en Stripe. Si se pierde, llega charge.dispute.closed
+      deps.log(
+        `Contracargo abierto ${asString(object.id) ?? '?'} por ${asString(object.reason) ?? '?'}. No cambia el acceso hasta que Stripe lo cierre`,
+      );
+      return null;
+    case 'charge.dispute.closed': {
+      const lost = lostDispute(object, context);
+      if (!lost) return null;
+      const key = deps.env.STRIPE_SECRET_KEY ?? '';
+      if (key === '') {
+        deps.log('Falta STRIPE_SECRET_KEY para leer el cobro del contracargo');
+        throw new Error('sin llave');
+      }
+      const reply = await stripeCall(
+        { key, fetch: deps.fetch },
+        'GET',
+        `/v1/payment_intents/${encodeURIComponent(lost.notice.paymentIntentId)}`,
+      );
+      if (!reply.ok) {
+        deps.log(`No se pudo leer el cobro del contracargo. ${stripeFailureLine(reply)}`);
+        throw new Error('lectura del cobro');
+      }
+      // Uno parcial no quita el plan, igual que un reembolso parcial
+      const paid = mxnFromCents(reply.body.amount_received, reply.body.currency);
+      if (paid !== null && lost.notice.amountMxn < paid) {
+        deps.log(
+          `Contracargo parcial perdido ${lost.disputeId} de ${String(lost.notice.amountMxn)} de ${String(paid)} pesos. No cambia el acceso. Revísalo en Stripe`,
+        );
+        return null;
+      }
+      const customerId = idOf(reply.body.customer);
+      const userId = customerId === null ? null : await deps.userOfCustomer(customerId);
+      const notice = await withInvoice(lost.notice, deps);
       return [{ type: 'charge', notice: { ...notice, userId } }];
     }
     default:

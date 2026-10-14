@@ -222,6 +222,35 @@ function refundObject(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function disputeObject(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'du_1',
+    object: 'dispute',
+    amount: 14_900,
+    currency: 'mxn',
+    charge: 'ch_1',
+    payment_intent: 'pi_1',
+    reason: 'fraudulent',
+    status: 'lost',
+    created: CREATED,
+    evidence: { customer_email_address: 'alumna@ejemplo.mx', customer_name: 'Alumna Ejemplo' },
+    ...overrides,
+  };
+}
+
+/** El PaymentIntent del cargo disputado, como lo contesta GET /v1/payment_intents/{id} */
+const paymentIntentRead = (overrides: Record<string, unknown> = {}): Route =>
+  reply({
+    id: 'pi_1',
+    object: 'payment_intent',
+    customer: 'cus_1',
+    amount: 14_900,
+    amount_received: 14_900,
+    currency: 'mxn',
+    status: 'succeeded',
+    ...overrides,
+  });
+
 const event = (type: string, object: Record<string, unknown>, id = 'evt_1') => ({
   id,
   object: 'event',
@@ -876,6 +905,81 @@ describe('aviso de Stripe por evento', () => {
     expect(keyless.record.lines).toEqual([
       'Falta STRIPE_SECRET_KEY para buscar la factura del reembolso. Se aplica con su PaymentIntent',
     ]);
+  });
+
+  it('un contracargo perdido quita lo que pagó ese cobro como un reembolso completo', async () => {
+    const { deps, record } = webhookDeps({
+      routes: {
+        'GET /v1/payment_intents/pi_1': paymentIntentRead(),
+        'GET /v1/invoice_payments': invoicePayments('in_1'),
+      },
+    });
+    const answer = await send(event('charge.dispute.closed', disputeObject(), 'evt_disputa'), deps);
+    expect(answer.status).toBe(200);
+    expect(await answer.text()).toBe('applied');
+    expect(record.customers).toEqual(['cus_1']);
+    expect(record.charges).toHaveLength(1);
+    expect(record.charges[0]).toMatchObject({
+      provider: 'stripe',
+      eventId: 'evt_disputa',
+      kind: 'refunded',
+      userId: USER,
+      providerPaymentId: 'in_1',
+      paymentIntentId: 'pi_1',
+      amountMxn: 149,
+    });
+    expect(stripeCalls(record.calls).map((call) => `${call.method} ${call.url.pathname}`)).toEqual([
+      'GET /v1/payment_intents/pi_1',
+      'GET /v1/invoice_payments',
+    ]);
+  });
+
+  it('un contracargo ganado, uno parcial o uno que se abre no cambian el acceso', async () => {
+    for (const status of ['won', 'warning_closed', 'prevented']) {
+      const { deps, record } = webhookDeps();
+      const answer = await send(event('charge.dispute.closed', disputeObject({ status })), deps);
+      expect(await answer.text()).toBe('Ignorado');
+      expect(record.calls).toEqual([]);
+      expect(record.charges).toEqual([]);
+    }
+    const partial = webhookDeps({
+      routes: { 'GET /v1/payment_intents/pi_1': paymentIntentRead() },
+    });
+    const answer = await send(
+      event('charge.dispute.closed', disputeObject({ amount: 5_000 })),
+      partial.deps,
+    );
+    expect(await answer.text()).toBe('Ignorado');
+    expect(partial.record.charges).toEqual([]);
+    expect(partial.record.lines).toEqual([
+      'Contracargo parcial perdido du_1 de 50 de 149 pesos. No cambia el acceso. Revísalo en Stripe',
+    ]);
+    // Al abrirse solo queda en el registro, sin datos del alumno. El acceso cambia si se pierde
+    const opened = webhookDeps();
+    const created = await send(
+      event('charge.dispute.created', disputeObject({ status: 'needs_response' })),
+      opened.deps,
+    );
+    expect(created.status).toBe(200);
+    expect(await created.text()).toBe('Ignorado');
+    expect(opened.record.calls).toEqual([]);
+    expect(opened.record.charges).toEqual([]);
+    expect(opened.record.lines).toEqual([
+      'Contracargo abierto du_1 por fraudulent. No cambia el acceso hasta que Stripe lo cierre',
+    ]);
+  });
+
+  it('si no se puede leer el cobro del contracargo contesta 500 sin aplicar nada', async () => {
+    for (const route of [stripeError(500, { message: 'falla' }), offline]) {
+      const { deps, record } = webhookDeps({ routes: { 'GET /v1/payment_intents/pi_1': route } });
+      expect((await send(event('charge.dispute.closed', disputeObject()), deps)).status).toBe(500);
+      expect(record.charges).toEqual([]);
+    }
+    const keyless = webhookDeps({ env: envWithoutKey });
+    expect((await send(event('charge.dispute.closed', disputeObject()), keyless.deps)).status).toBe(
+      500,
+    );
+    expect(keyless.record.charges).toEqual([]);
   });
 
   it('un reembolso de un cliente que no conocemos se asienta sin alumno, para que alguien lo vea', async () => {
