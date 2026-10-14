@@ -88,4 +88,24 @@ describe('motivos por rama en Progreso (B5)', () => {
     const events = [failed(id, 0), motive('question', id, 'other', 1)];
     expect(motivesByBranch(events, new Map())).toEqual([]);
   });
+
+  it('el motivo de una tarjeta de materia libre no cuenta, como en Conócete (B6)', () => {
+    const question = newId();
+    const card = newId();
+    const events = [
+      failed(question, 0),
+      motive('question', question, 'knowledge', 1),
+      // Una tarjeta de Materia::Anatomía, que no tiene rama del ENARM
+      motive('card', card, 'fatigue', 2),
+    ];
+    const branches = new Map([[motiveTargetKey('question', question), 'internal_medicine']]);
+    // Sin la lista caería con lo que no tiene rama
+    expect(motivesByBranch(events, branches).map((row) => row.group)).toEqual([
+      'internal_medicine',
+      NO_BRANCH,
+    ]);
+    expect(motivesByBranch(events, branches, new Set([card]))).toEqual([
+      { group: 'internal_medicine', total: 1, motives: [{ motive: 'knowledge', count: 1 }] },
+    ]);
+  });
 });

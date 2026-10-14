@@ -3,9 +3,32 @@
 // nota guarda el ID del apunte y de la línea para seguir unida a ella. El apunte lleva fecha de
 // modificación y marca de borrado como mazos, notas y tarjetas, para sincronizar entre dispositivos.
 import { z } from 'zod';
-import { countNodes, OUTLINE_LIMITS, outlineDepth, type OutlineNode } from '../../engines/outline';
-import { IdSchema, UtcDateTimeSchema } from './common';
+import {
+  countNodes,
+  FREE_SUBJECT_MAX_LENGTH,
+  OUTLINE_LIMITS,
+  outlineDepth,
+  type OutlineNode,
+  type OutlineSubject,
+} from '../../engines/outline';
+import { IdSchema, TaxonomyKeySchema, UtcDateTimeSchema } from './common';
 import { SyncShape } from './decks';
+
+/**
+ * De qué es el apunte (B6 del plan del cambio). Un tema del ENARM con su rama y su clave, que cuenta
+ * en las estadísticas del ENARM, o una materia libre de la carrera, que nunca cuenta
+ */
+export const OutlineSubjectSchema: z.ZodType<OutlineSubject> = z.discriminatedUnion('kind', [
+  z.strictObject({ kind: z.literal('enarm'), branch: TaxonomyKeySchema, topic: TaxonomyKeySchema }),
+  z.strictObject({
+    kind: z.literal('free'),
+    name: z
+      .string()
+      .trim()
+      .min(1, 'Escribe el nombre de la materia')
+      .max(FREE_SUBJECT_MAX_LENGTH, `La materia pasa de ${FREE_SUBJECT_MAX_LENGTH} caracteres`),
+  }),
+]);
 
 /** Una línea del apunte con las que cuelgan de ella. El ID de la línea es estable entre ediciones */
 export const OutlineNodeSchema: z.ZodType<OutlineNode> = z.lazy(() =>
@@ -45,8 +68,13 @@ export const OutlineSchema = z.strictObject({
       OUTLINE_LIMITS.maxTitleLength,
       `El título del apunte pasa de ${OUTLINE_LIMITS.maxTitleLength} caracteres`,
     ),
-  /** Mazo propio donde viven las tarjetas del apunte */
+  /** Mazo propio donde viven las tarjetas del apunte. El alumno lo elige (B6) */
   deckId: IdSchema,
+  /**
+   * Tema del ENARM o materia libre del apunte (B6). Ausente o null en un apunte sin tema, como todos
+   * los de antes. Sus tarjetas llevan la etiqueta que le toca (subjectTags)
+   */
+  subject: OutlineSubjectSchema.nullable().optional(),
   /** Las líneas de primer nivel. Un apunte nuevo todavía no tiene ninguna */
   nodes: z
     .array(OutlineNodeSchema)

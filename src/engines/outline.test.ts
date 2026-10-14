@@ -4,7 +4,16 @@ import {
   cardCountOf,
   countNodes,
   docToOutline,
+  ENARM_TOPIC_TAG_PREFIX,
+  FREE_SUBJECT_TAG_PREFIX,
+  firstBlankLine,
+  freeSubjects,
+  isFreeSubjectNote,
+  isFreeSubjectTag,
+  isSubjectTag,
+  markSpan,
   markTokens,
+  nodesFromTemplate,
   normalizeTitle,
   numberClozeHoles,
   OUTLINE_LIMITS,
@@ -15,6 +24,9 @@ import {
   pickIdOwners,
   planCards,
   resolveLinks,
+  sameSubject,
+  subjectTags,
+  withSubjectTags,
   type OutlineNode,
 } from './outline';
 
@@ -426,5 +438,119 @@ describe('cardCountOf', () => {
     expect(
       cardCountOf({ kind: 'cloze', text: '{{c1::a}} y {{c2::b}} y {{c1::c}}', extra: '' }),
     ).toBe(2);
+  });
+});
+
+describe('markSpan, dónde está la marca aunque falte un lado (B6)', () => {
+  it('da la marca y su lugar en el texto tal cual', () => {
+    expect(markSpan('Asma #Neumo >> Salbutamol')).toEqual({
+      type: 'separator',
+      separator: '>>',
+      start: 12,
+      end: 14,
+    });
+    expect(markSpan('Pregunta >> ')).toMatchObject({ type: 'separator', separator: '>>' });
+    expect(markSpan('Causas >>>  ')).toEqual({ type: 'multiline', start: 7, end: 10 });
+    expect(markSpan('El {{sodio}} es')).toEqual({ type: 'cloze' });
+    expect(markSpan('Nota #Cardio::Arritmias y {{c1::x}} >> y')).toMatchObject({
+      type: 'separator',
+      separator: '>>',
+    });
+    expect(markSpan('Sin marca [[A::B]]')).toEqual({ type: 'none' });
+  });
+});
+
+describe('tema del apunte (B6)', () => {
+  it('un tema del ENARM da la etiqueta topic: con su clave', () => {
+    expect(
+      subjectTags({ kind: 'enarm', branch: 'internal_medicine', topic: 'cardiology' }),
+    ).toEqual([`${ENARM_TOPIC_TAG_PREFIX}cardiology`]);
+    expect(ENARM_TOPIC_TAG_PREFIX).toBe('topic:');
+  });
+
+  it('una materia libre cuelga de Materia y nunca empieza con topic:', () => {
+    expect(subjectTags({ kind: 'free', name: 'Anatomía humana' })).toEqual([
+      'Materia::Anatomía_humana',
+    ]);
+    for (const name of ['topic:cardiology', 'Topic:x', '  ']) {
+      const tags = subjectTags({ kind: 'free', name });
+      expect(tags.some((tag) => tag.toLowerCase().startsWith(ENARM_TOPIC_TAG_PREFIX))).toBe(false);
+    }
+    expect(subjectTags(null)).toEqual([]);
+    expect(subjectTags(undefined)).toEqual([]);
+  });
+
+  it('compara temas y sugiere las materias libres ya usadas, sin repetir', () => {
+    const enarm = { kind: 'enarm', branch: 'pediatrics', topic: 'neonatology' } as const;
+    expect(sameSubject(enarm, { ...enarm })).toBe(true);
+    expect(sameSubject(enarm, { ...enarm, topic: 'immunizations' })).toBe(false);
+    expect(sameSubject(null, undefined)).toBe(true);
+    expect(sameSubject({ kind: 'free', name: 'A' }, null)).toBe(false);
+    expect(
+      freeSubjects([
+        { subject: { kind: 'free', name: 'Fisiología' } },
+        { subject: { kind: 'free', name: 'anatomía' } },
+        { subject: { kind: 'free', name: 'Anatomia ' } },
+        { subject: enarm },
+        { subject: null },
+        {},
+      ]),
+    ).toEqual(['anatomía', 'Fisiología']);
+  });
+
+  it('reconoce las etiquetas de un tema y las notas de una materia libre', () => {
+    expect(FREE_SUBJECT_TAG_PREFIX).toBe('Materia::');
+    expect(isFreeSubjectTag('Materia::Anatomía')).toBe(true);
+    expect(isFreeSubjectTag('materia::anatomía')).toBe(true);
+    expect(isFreeSubjectTag('Materia')).toBe(false);
+    expect(isFreeSubjectTag('Rama::Materia::Tema')).toBe(false);
+    expect(isSubjectTag('topic:cardiology')).toBe(true);
+    expect(isSubjectTag('MATERIA::Fisiología')).toBe(true);
+    expect(isSubjectTag('Generada_con_IA')).toBe(false);
+    // Cada etiqueta que da una materia libre cuenta como de materia libre
+    expect(isFreeSubjectNote(subjectTags({ kind: 'free', name: 'Anatomía humana' }))).toBe(true);
+    expect(isFreeSubjectNote(['Materia::Anatomía', 'Hueso'])).toBe(true);
+    // Con un tema del ENARM cuenta en el ENARM aunque la línea traiga Materia::
+    expect(isFreeSubjectNote(['topic:cardiology', 'Materia::Repaso'])).toBe(false);
+    expect(isFreeSubjectNote(['Hueso'])).toBe(false);
+    expect(isFreeSubjectNote([])).toBe(false);
+  });
+
+  it('cambia el tema de una nota que sigue al apunte sin tocar sus demás etiquetas', () => {
+    const tags = ['topic:endocrinology', 'Generada_con_IA', 'Tratamiento'];
+    expect(withSubjectTags(tags, { kind: 'free', name: 'Farmacología' })).toEqual([
+      'Materia::Farmacología',
+      'Generada_con_IA',
+      'Tratamiento',
+    ]);
+    expect(
+      withSubjectTags(['Materia::Vieja', 'materia::Otra', 'Tratamiento'], {
+        kind: 'enarm',
+        branch: 'internal_medicine',
+        topic: 'cardiology',
+      }),
+    ).toEqual(['topic:cardiology', 'Tratamiento']);
+    expect(withSubjectTags(tags, null)).toEqual(['Generada_con_IA', 'Tratamiento']);
+    // Con el mismo tema queda igual
+    const same = { kind: 'enarm', branch: 'internal_medicine', topic: 'endocrinology' } as const;
+    expect(withSubjectTags(tags, same)).toEqual(tags);
+  });
+});
+
+describe('plantillas (B6)', () => {
+  it('arma el árbol con un id por línea y encuentra la primera línea en blanco', () => {
+    let next = 0;
+    const nodes = nodesFromTemplate(
+      [{ text: 'Ideas clave', children: [{ text: '' }] }, { text: 'Dudas' }],
+      () => `id-${(next += 1)}`,
+    );
+    expect(nodes).toEqual([
+      { id: 'id-1', text: 'Ideas clave', children: [{ id: 'id-2', text: '', children: [] }] },
+      { id: 'id-3', text: 'Dudas', children: [] },
+    ]);
+    expect(firstBlankLine(nodes)).toBe('id-2');
+    expect(firstBlankLine([node('a', 'Lleno')])).toBeNull();
+    // Una plantilla no trae marcas, así que no crea tarjetas sola
+    expect(planCards(nodes).plans).toEqual([]);
   });
 });

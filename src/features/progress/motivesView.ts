@@ -1,6 +1,7 @@
 // El reparto de motivos de error por rama para Progreso (B5, comentario 2). Cada error cuenta una vez
 // con el último motivo que marcó el alumno, y las causas de antes se leen con la tabla de 4.23. La
-// rama sale de la pregunta o de la tarjeta del error. Sin React ni Dexie.
+// rama sale de la pregunta o de la tarjeta del error. Las tarjetas de una materia libre (B6) no
+// cuentan, como en Conócete, que lee la misma cuenta para calibrar. Sin React ni Dexie.
 import type { AppEvent } from '@/data/schemas/events';
 import {
   errorMotives,
@@ -27,15 +28,17 @@ export function motiveTargets(events: readonly AppEvent[]): string[] {
 
 /**
  * Motivos por rama, de la rama con más errores a la que menos. branches da la rama de cada elemento
- * por su clave. Las ramas que no se conocen van juntas al final
+ * por su clave. Las ramas que no se conocen van juntas al final. freeSubjectCards son las cartas de
+ * una materia libre (B6, freeSubjectCardIds), que no cuentan en las estadísticas del ENARM
  */
 export function motivesByBranch(
   events: readonly AppEvent[],
   branches: ReadonlyMap<string, string>,
+  freeSubjectCards: ReadonlySet<string> = new Set(),
 ): GroupMotives[] {
   const rows = motivesByGroup(
     reportedMotives(errorMotives(events)).flatMap((entry) =>
-      entry.motive === null
+      entry.motive === null || (entry.kind === 'card' && freeSubjectCards.has(entry.targetId))
         ? []
         : [
             {

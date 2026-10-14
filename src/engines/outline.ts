@@ -27,9 +27,13 @@
  *     respuesta y no generan tarjetas propias, y el plan avisa si traían una marca
  * Umbrales. Hasta 2,000 líneas por apunte, 8 niveles, 3,000 caracteres por campo y 500 tarjetas. Son
  * topes de seguridad de la interfaz y de la base, no de enseñanza (J).
+ * De qué es el apunte (B6 del plan del cambio). Un tema del ENARM le pone a cada tarjeta la etiqueta
+ * topic: con su clave, la misma que usan Mis errores, Repasar y el tutor. Una materia libre, como las
+ * de la carrera, solo le pone Materia::Nombre, así no entra a las estadísticas por tema del ENARM ni
+ * a Conócete (isFreeSubjectNote). Sí cuenta en el tiempo de estudio, la racha y la meta del día.
  */
 import { clozeHoles, parseCloze } from './cloze';
-import { normalizeTags, sanitizeTag, TAG_MAX_LENGTH } from './tagPath';
+import { normalizeTags, sanitizeTag, TAG_MAX_LENGTH, TAG_SEPARATOR } from './tagPath';
 
 export interface OutlineNode {
   id: string;
@@ -117,7 +121,7 @@ function maskedForMarks(text: string): string {
 }
 
 const SEPARATORS = ['<>', '>>', '<<', '::', ';;'] as const;
-type Separator = (typeof SEPARATORS)[number];
+export type Separator = (typeof SEPARATORS)[number];
 
 function findSeparator(masked: string): { index: number; separator: Separator } | null {
   for (let index = 0; index < masked.length; index += 1) {
@@ -212,6 +216,42 @@ export function parseLine(text: string): ParsedLine {
   const numbered = numberClozeHoles(extractInline(line).plain);
   if (numbered !== null) return { ...base, mark: { type: 'cloze', text: numbered } };
   return { ...base, mark: { type: 'none' } };
+}
+
+/**
+ * Dónde está la marca de una línea, con las mismas reglas que parseLine pero aunque a un lado le
+ * falte texto. Así Pregunta >> con la respuesta todavía por escribir ya cuenta como pregunta y
+ * respuesta, y cambiarle el tipo no le agrega una segunda marca. Las posiciones son del texto tal
+ * cual, con sus etiquetas y enlaces
+ */
+export type MarkSpan =
+  | { type: 'none' }
+  | { type: 'separator'; separator: Separator; start: number; end: number }
+  | { type: 'multiline'; start: number; end: number }
+  | { type: 'cloze' };
+
+export function markSpan(text: string): MarkSpan {
+  const line = text.replace(/\r?\n/g, ' ');
+  const masked = maskedForMarks(line);
+  const trimmedEnd = masked.replace(/\s+$/, '');
+  if (trimmedEnd.endsWith('>>>')) {
+    return { type: 'multiline', start: trimmedEnd.length - 3, end: trimmedEnd.length };
+  }
+  const found = findSeparator(masked);
+  if (found) {
+    return {
+      type: 'separator',
+      separator: found.separator,
+      start: found.index,
+      end: found.index + found.separator.length,
+    };
+  }
+  return /\{\{[\s\S]*?\}\}/.test(line) ? { type: 'cloze' } : { type: 'none' };
+}
+
+/** El texto de la línea con huecos, etiquetas y enlaces tapados, con las mismas posiciones */
+export function maskInline(text: string): string {
+  return maskedForMarks(text.replace(/\r?\n/g, ' '));
 }
 
 export type TokenKind = 'separator' | 'cloze' | 'tag' | 'link' | 'multiline';
@@ -579,6 +619,129 @@ export function backlinks(target: OutlineRef, all: readonly OutlineRef[]): Backl
           text: line.text,
         })),
     );
+}
+
+/**
+ * De qué es el apunte (B6). Un tema del ENARM, con su rama y su clave de la taxonomía, o una materia
+ * libre que escribe el alumno, como las de la carrera. Sin tema es null
+ */
+export type OutlineSubject =
+  { kind: 'enarm'; branch: string; topic: string } | { kind: 'free'; name: string };
+
+/** Largo máximo del nombre de una materia libre */
+export const FREE_SUBJECT_MAX_LENGTH = 80;
+
+/**
+ * Prefijo de la etiqueta con la clave del tema del ENARM. Es el mismo TOPIC_TAG_PREFIX de Mis
+ * errores (src/data/usecases/errorCards.ts), que leen Repasar y el tutor. Una prueba los mantiene
+ * iguales
+ */
+export const ENARM_TOPIC_TAG_PREFIX = 'topic:';
+
+/** Raíz de la etiqueta de una materia libre, Materia::Anatomía. No es una clave del ENARM */
+export const FREE_SUBJECT_TAG_ROOT = 'Materia';
+
+/**
+ * Las etiquetas que el tema del apunte le pone a todas sus tarjetas. Un tema del ENARM da topic:clave
+ * y cuenta en las estadísticas del ENARM. Una materia libre da Materia::Nombre y nunca da topic:,
+ * así no cuenta en las estadísticas por tema ni en Conócete
+ */
+export function subjectTags(subject: OutlineSubject | null | undefined): string[] {
+  if (!subject) return [];
+  if (subject.kind === 'enarm') return [`${ENARM_TOPIC_TAG_PREFIX}${subject.topic}`];
+  // Siempre cuelga de Materia, así un nombre como topic:algo nunca empieza con el prefijo del ENARM
+  const name = sanitizeTag(subject.name);
+  return name === '' ? [] : normalizeTags([`${FREE_SUBJECT_TAG_ROOT}${TAG_SEPARATOR}${name}`]);
+}
+
+/** Comienzo de la etiqueta de una materia libre, Materia:: */
+export const FREE_SUBJECT_TAG_PREFIX = `${FREE_SUBJECT_TAG_ROOT}${TAG_SEPARATOR}`;
+
+/** Si la etiqueta es de una materia libre, Materia::Nombre. Como en Anki, no distingue mayúsculas */
+export function isFreeSubjectTag(tag: string): boolean {
+  return tag.toLowerCase().startsWith(FREE_SUBJECT_TAG_PREFIX.toLowerCase());
+}
+
+/** Si la etiqueta es de un tema, topic:clave del ENARM o Materia::Nombre de una materia libre */
+export function isSubjectTag(tag: string): boolean {
+  return tag.startsWith(ENARM_TOPIC_TAG_PREFIX) || isFreeSubjectTag(tag);
+}
+
+/**
+ * Si las etiquetas son de una nota de materia libre, con Materia:: y sin tema del ENARM. Esas notas
+ * no cuentan en las estadísticas por tema ni en Conócete. Una con topic: sí cuenta en las dos, aunque
+ * también traiga una etiqueta Materia:: escrita en la línea
+ */
+export function isFreeSubjectNote(tags: readonly string[]): boolean {
+  return tags.some(isFreeSubjectTag) && !tags.some((tag) => tag.startsWith(ENARM_TOPIC_TAG_PREFIX));
+}
+
+/**
+ * Las etiquetas de una nota con el tema del apunte, para la que sigue al apunte sin ser de una línea,
+ * como la que propuso la IA. Quita las de cualquier tema y pone primero las del tema que toca, como en
+ * las tarjetas de las líneas. Las demás se quedan en su orden
+ */
+export function withSubjectTags(
+  tags: readonly string[],
+  subject: OutlineSubject | null | undefined,
+): string[] {
+  return normalizeTags([...subjectTags(subject), ...tags.filter((tag) => !isSubjectTag(tag))]);
+}
+
+/** Si dos temas son el mismo. Un nombre libre se compara tal cual, porque cambia la etiqueta */
+export function sameSubject(
+  a: OutlineSubject | null | undefined,
+  b: OutlineSubject | null | undefined,
+): boolean {
+  if (!a || !b) return !a && !b;
+  if (a.kind === 'enarm' && b.kind === 'enarm') return a.branch === b.branch && a.topic === b.topic;
+  if (a.kind === 'free' && b.kind === 'free') return a.name === b.name;
+  return false;
+}
+
+/**
+ * Las materias libres que el alumno ya usó, sin repetir y en orden alfabético del español, para
+ * sugerirlas al crear otro apunte
+ */
+export function freeSubjects(
+  outlines: readonly { subject?: OutlineSubject | null | undefined }[],
+): string[] {
+  const kept = new Map<string, string>();
+  for (const outline of outlines) {
+    const subject = outline.subject;
+    if (subject?.kind !== 'free') continue;
+    const key = normalizeTitle(subject.name);
+    if (key !== '' && !kept.has(key)) kept.set(key, subject.name.trim());
+  }
+  return [...kept.values()].sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+/** Una línea de una plantilla, con las que cuelgan de ella */
+export interface TemplateLine {
+  text: string;
+  children?: readonly TemplateLine[];
+}
+
+/** Las líneas de una plantilla como árbol del apunte, cada una con su id propio */
+export function nodesFromTemplate(
+  lines: readonly TemplateLine[],
+  makeId: () => string,
+): OutlineNode[] {
+  return lines.map((line) => ({
+    id: makeId(),
+    text: line.text,
+    children: nodesFromTemplate(line.children ?? [], makeId),
+  }));
+}
+
+/** La primera línea en blanco del árbol, para dejar ahí el cursor al abrir una plantilla */
+export function firstBlankLine(nodes: readonly OutlineNode[]): string | null {
+  for (const node of nodes) {
+    if (node.text.trim() === '') return node.id;
+    const inner = firstBlankLine(node.children);
+    if (inner !== null) return inner;
+  }
+  return null;
 }
 
 /** Las etiquetas de todo el apunte, sin repetir, para listarlas y buscar */

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { OUTLINE_LIMITS, type OutlineNode } from '../../engines/outline';
+import { FREE_SUBJECT_MAX_LENGTH, OUTLINE_LIMITS, type OutlineNode } from '../../engines/outline';
 import { newId } from '../testing/fixtures';
 import { NoteSchema } from './decks';
-import { OutlineNodeSchema, OutlineSchema } from './outlines';
+import { OutlineNodeSchema, OutlineSchema, OutlineSubjectSchema } from './outlines';
 
 const STAMP = '2026-10-08T12:00:00.000Z';
 
@@ -175,5 +175,38 @@ describe('notas con y sin la unión a un apunte', () => {
         sourceQuestionVersionId: newId(),
       }).origin,
     ).toBe('generated');
+  });
+});
+
+describe('tema del apunte (B6)', () => {
+  it('un apunte de antes, sin tema, sigue siendo válido', () => {
+    const parsed = OutlineSchema.parse(outline());
+    expect(parsed.subject).toBeUndefined();
+    expect(OutlineSchema.parse(outline({ subject: null })).subject).toBeNull();
+  });
+
+  it('acepta un tema del ENARM y una materia libre, recortada', () => {
+    expect(
+      OutlineSchema.parse(
+        outline({ subject: { kind: 'enarm', branch: 'internal_medicine', topic: 'cardiology' } }),
+      ).subject,
+    ).toEqual({ kind: 'enarm', branch: 'internal_medicine', topic: 'cardiology' });
+    expect(OutlineSubjectSchema.parse({ kind: 'free', name: '  Anatomía  ' })).toEqual({
+      kind: 'free',
+      name: 'Anatomía',
+    });
+  });
+
+  it('rechaza una materia vacía o larga, claves inválidas y campos de más', () => {
+    for (const subject of [
+      { kind: 'free', name: '   ' },
+      { kind: 'free', name: 'x'.repeat(FREE_SUBJECT_MAX_LENGTH + 1) },
+      { kind: 'enarm', branch: 'medicina interna', topic: 'cardiology' },
+      { kind: 'enarm', branch: 'internal_medicine' },
+      { kind: 'free', name: 'Anatomía', topic: 'cardiology' },
+      { kind: 'otro', name: 'x' },
+    ]) {
+      expect(OutlineSubjectSchema.safeParse(subject).success, JSON.stringify(subject)).toBe(false);
+    }
   });
 });
