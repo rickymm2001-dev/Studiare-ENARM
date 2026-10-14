@@ -1,6 +1,6 @@
 # Aviso de privacidad
 
-Versión 2026-10-13. Última actualización, 13 de octubre de 2026
+Versión 2026-10-14. Última actualización, 14 de octubre de 2026
 
 > Borrador pendiente de revisión de un abogado. Todavía no es el texto legal definitivo.
 

@@ -27,7 +27,7 @@ export interface LegalDoc {
 const privacy: LegalDoc = {
   title: 'Aviso de privacidad',
   version: PRIVACY_NOTICE_VERSION,
-  updated: '13 de octubre de 2026',
+  updated: '14 de octubre de 2026',
   intro: [
     'En Studiare cuidamos tus datos. Este aviso explica quién los trata, cuáles son, para qué los usamos, con quién se comparten y cómo ejerces tus derechos. Si algo no queda claro, escríbenos.',
   ],
