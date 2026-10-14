@@ -1,0 +1,107 @@
+{
+  "status": "partial",
+  "reason": "id_formula",
+  "mode": "dry_run",
+  "counts": {
+    "read": 8,
+    "empty": 4,
+    "example": 0,
+    "unchanged": 0,
+    "created": 6,
+    "versioned": 0,
+    "converged": 0,
+    "meta": 0,
+    "incomplete": 6,
+    "rejected": 2,
+    "conflict": 0,
+    "truncated": 0,
+    "topicMismatches": 2
+  },
+  "rows": [
+    {
+      "rowNumber": 2,
+      "sheetKey": "GO-0001",
+      "outcome": "created",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": [
+        "topic_inferred",
+        "kind_control_check",
+        "bias_none_on_correct",
+        "status_approved_ignored"
+      ],
+      "problems": []
+    },
+    {
+      "rowNumber": 3,
+      "sheetKey": "GO-0002",
+      "outcome": "rejected",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["kind_control_check", "bias_none_on_correct"],
+      "problems": [
+        { "code": "topic_unknown", "column": "Subespecialidad", "value": "Obstetricia" },
+        { "code": "subtopic_is_topic", "column": "Subtema", "value": "Control prenatal" }
+      ]
+    },
+    {
+      "rowNumber": 4,
+      "sheetKey": "GO-0003",
+      "outcome": "rejected",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["kind_control_check"],
+      "problems": [
+        { "code": "topic_unknown", "column": "Subespecialidad", "value": "Ginecología" },
+        {
+          "code": "subtopic_unknown",
+          "column": "Subtema",
+          "value": "Enfermedades hipertensivas del embarazo"
+        }
+      ]
+    },
+    {
+      "rowNumber": 5,
+      "sheetKey": "GO-0004",
+      "outcome": "created",
+      "incomplete": ["explanation_missing"],
+      "notices": ["topic_inferred", "kind_control_check", "structure_auto"],
+      "problems": []
+    },
+    {
+      "rowNumber": 6,
+      "sheetKey": "GO-0005",
+      "outcome": "created",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["topic_inferred"],
+      "problems": []
+    },
+    {
+      "rowNumber": 7,
+      "sheetKey": "GO-0006",
+      "outcome": "created",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["topic_inferred", "kind_control_check"],
+      "problems": []
+    },
+    {
+      "rowNumber": 8,
+      "sheetKey": "GO-0007",
+      "outcome": "created",
+      "incomplete": [
+        "explanation_missing",
+        "references_missing",
+        "rationale_missing:C",
+        "bias_missing:C",
+        "bias_unknown:D"
+      ],
+      "notices": ["topic_inferred", "kind_control_check", "bias_none_on_correct"],
+      "problems": []
+    },
+    {
+      "rowNumber": 9,
+      "sheetKey": "GO-0008",
+      "outcome": "created",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["topic_inferred", "kind_control_check"],
+      "problems": []
+    }
+  ]
+}

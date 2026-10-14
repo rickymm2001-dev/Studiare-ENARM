@@ -11,12 +11,18 @@
 // decide el servidor con el pago, el mes gratis por referido llega con el primer pago, borrar la
 // cuenta se rechaza con una suscripción que se seguiría cobrando (FR002), y Party en la nube (B7) con sus
 // grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
-// (src/data/testing/fakePartyServer.ts). De Storage atiende solo el bucket de la foto de perfil (B2).
+// (src/data/testing/fakePartyServer.ts). De Storage atiende el bucket de la foto de perfil (B2) y, con
+// attachBank, el del catálogo de mazos (B11).
 // Desde B9 también el registro por invitación del gancho Before User Created, entrar con Google con un
 // Google simulado, el segundo factor TOTP con su sesión aal2, que con requireMfa es lo único que da su
 // rol al equipo, y la función admin-reset-mfa. Desde B10 los planes y los pagos viven en fakeBilling.ts
 // (prueba gratis, pases, lugares Fundador, códigos, facturas y Admin, Pagos), con su pasarela, su
 // portal y Mercado Pago simulados.
+//
+// Banco en la nube (B11). attachBank(server, store) engancha el modelo en memoria de fakeBankStore.ts.
+// Desde ahí las rpc del banco, la función bank-sync y el bucket deck-catalog van al banco. En el Paso 0
+// de B11 responden vacío. Los paquetes B y C de B11 cambian bankRpc, bankFunction y bankStorage para
+// que llamen a fakeBank.ts y a fakeEditorial.ts. Sin attachBank todo sigue como antes.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -51,6 +57,18 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './fakeSupabaseConfig';
+import {
+  DECK_CATALOG_BUCKET,
+  bankOpen,
+  fakeStudyDay,
+  fakeStudyDayResetsAt,
+  isBankRpc,
+  isTeam,
+  type BankRpc,
+  type FakeBankCaller,
+  type FakeBankReply,
+  type FakeBankStore,
+} from './fakeBankStore';
 
 export type PaidPlan = Exclude<PlanKey, 'free'>;
 export type Provider = 'stripe' | 'mercadopago';
@@ -262,6 +280,8 @@ export interface FakeSupabaseServer {
   sessionsOf(email: string): number;
   /** Deja a la cuenta con un factor TOTP ya verificado, como si lo hubiera dado de alta antes */
   enrollFactor(email: string): void;
+  /** El banco en la nube enganchado con attachBank (B11). null sin banco */
+  bank: FakeBankStore | null;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -710,6 +730,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     checkoutError: options.checkoutError ?? null,
     portalError: null as PortalFailure | null,
     googleAccount: null as string | null,
+    bank: null as FakeBankStore | null,
   };
   // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
   // el admin lo cambie desde Usuarios
@@ -1425,6 +1446,27 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return json(had);
   }
 
+  // ------------------------------------------------------------------ banco (B11)
+
+  /** Lo que el banco necesita saber de quien llama, como lo ven las funciones de la base */
+  function bankCaller(user: FakeUser, session: Session): FakeBankCaller {
+    const flags = settings.get('feature_flags')?.value;
+    return {
+      userId: user.id,
+      role: user.role,
+      alias: user.alias,
+      activeDevice: isActiveDevice(user, session),
+      plan: userPlan(user.id),
+      flags: isRecord(flags)
+        ? Object.fromEntries(
+            Object.entries(flags).filter((entry): entry is [string, boolean] => {
+              return typeof entry[1] === 'boolean';
+            }),
+          )
+        : {},
+    };
+  }
+
   // ------------------------------------------------------------------ rpc
 
   /** Lo que devolvió una función de pagos, como lo contestaría PostgREST */
@@ -1463,6 +1505,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const { user, session } = auth;
     const requireActiveDevice = (): Reply | null =>
       isActiveDevice(user, session) ? null : NOT_ACTIVE_DEVICE;
+    if (server.bank && isBankRpc(name)) {
+      return fromBankReply(bankRpc(server.bank, name, bankCaller(user, session), args));
+    }
     switch (name) {
       case 'claim_device':
         return claimDevice(user, session, args);
@@ -1949,6 +1994,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
    * que la base lo haga. La quita la app antes con la API
    */
   function handleStorage(path: string, auth: Auth, request: Request): Reply {
+    const deckPrefix = `/object/${DECK_CATALOG_BUCKET}/`;
+    if (server.bank && path.startsWith(deckPrefix)) {
+      const caller = auth.kind === 'user' ? bankCaller(auth.user, auth.session) : null;
+      const objectName = decodeURIComponent(path.slice(deckPrefix.length));
+      return fromBankReply(
+        bankStorage(server.bank, caller, request.method(), objectName, uploadedFile(request)),
+      );
+    }
     const own =
       auth.kind === 'user' && isActiveDevice(auth.user, auth.session)
         ? `${auth.user.id}/avatar.jpg`
@@ -1986,6 +2039,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   function handleFunction(name: string, auth: Auth, request: Request): Reply {
     if (request.method() !== 'POST') return json({ error: 'method' }, 405);
+    if (name === 'bank-sync' && server.bank) {
+      const caller = auth.kind === 'user' ? bankCaller(auth.user, auth.session) : null;
+      return fromBankReply(bankFunction(server.bank, caller, parseJsonBody(request)));
+    }
     if (auth.kind !== 'user') return json({ error: 'unauthorized' }, 401);
     const { user } = auth;
     const body = parseJsonBody(request);
@@ -2481,6 +2538,12 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         },
       ]);
     },
+    get bank() {
+      return server.bank;
+    },
+    set bank(value) {
+      server.bank = value;
+    },
   };
 }
 
@@ -2492,4 +2555,168 @@ export async function installFakeSupabase(
   const server = createFakeSupabase(options);
   await server.attach(context);
   return server;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Banco en la nube (B11)
+
+/** Engancha el banco en memoria al Supabase simulado. Desde aquí las rutas del banco van a él */
+export function attachBank(server: FakeSupabaseServer, store: FakeBankStore): void {
+  server.bank = store;
+}
+
+function fromBankReply(reply: FakeBankReply): Reply {
+  if ('bytes' in reply) {
+    return { status: reply.status, body: reply.bytes, contentType: reply.contentType };
+  }
+  return json(reply.json, reply.status);
+}
+
+const bankError = (code: string, message: string): FakeBankReply => ({
+  status: pgStatus(code),
+  json: { code, message, details: null, hint: null },
+});
+
+/** La cuota vacía de bank_quota, con el plan de quien llama */
+function emptyQuota(store: FakeBankStore, caller: FakeBankCaller) {
+  const team = isTeam(caller);
+  const free = !team && caller.plan === 'free';
+  return {
+    open: team || bankOpen(caller),
+    plan: team ? caller.role : caller.plan,
+    limit: free ? store.settings.freeDaily : null,
+    used: 0,
+    left: free ? store.settings.freeDaily : null,
+    day: fakeStudyDay(store),
+    resetsAt: fakeStudyDayResetsAt(store),
+    brake: { retryAt: null },
+  };
+}
+
+const NOT_ACTIVE: FakeBankReply = bankError(
+  '42501',
+  'Este dispositivo no es el activo de la cuenta',
+);
+const TEAM_ONLY: FakeBankReply = bankError('42501', 'Solo el equipo médico');
+
+/**
+ * Las rpc del banco. Paso 0 de B11. Responden vacío con las formas de src/data/bank/contracts.ts. El
+ * paquete B manda las del alumno a fakeBank.ts y el paquete C las del equipo a fakeEditorial.ts
+ */
+function bankRpc(
+  store: FakeBankStore,
+  name: BankRpc,
+  caller: FakeBankCaller,
+  args: Record<string, unknown>,
+): FakeBankReply {
+  const ok = (value: unknown): FakeBankReply => ({ status: 200, json: value });
+  switch (name) {
+    case 'catalog_changes': {
+      if (!caller.activeDevice) return NOT_ACTIVE;
+      const since = typeof args.p_since === 'number' ? args.p_since : 0;
+      return ok({
+        open: isTeam(caller) || bankOpen(caller),
+        rows: [],
+        nextSince: since,
+        done: true,
+      });
+    }
+    case 'fetch_questions': {
+      if (!caller.activeDevice) return NOT_ACTIVE;
+      const open = isTeam(caller) || bankOpen(caller);
+      const listOf = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
+      const asked = [...listOf(args.p_question_ids), ...listOf(args.p_version_ids)].filter(
+        (id): id is string => typeof id === 'string',
+      );
+      return ok({
+        questions: [],
+        cases: [],
+        denied: asked.map((id) => ({ id, reason: open ? 'not_found' : 'closed' })),
+        quota: emptyQuota(store, caller),
+      });
+    }
+    case 'bank_quota':
+      return caller.activeDevice ? ok(emptyQuota(store, caller)) : NOT_ACTIVE;
+    case 'report_question':
+      return caller.activeDevice ? ok({ status: 'not_found', reportId: null }) : NOT_ACTIVE;
+    case 'bias_agreement_summary':
+      return ok({
+        pairs: 0,
+        kappa: null,
+        vocabulary: 'trap',
+        calibrating: true,
+        minPairs: 30,
+        minKappa: 0.4,
+      });
+    case 'deck_catalog_list':
+      if (!caller.activeDevice) return NOT_ACTIVE;
+      return ok({ canDownload: isTeam(caller) || caller.plan !== 'free', decks: [] });
+    case 'record_deck_download':
+      return caller.activeDevice ? ok(null) : NOT_ACTIVE;
+    default:
+      break;
+  }
+  if (!isTeam(caller)) return TEAM_ONLY;
+  switch (name) {
+    case 'editor_list':
+      return ok({ total: 0, items: [] });
+    case 'editor_reports':
+    case 'editor_distractor_queue':
+    case 'editor_label_pairs':
+    case 'admin_bank_sync_runs':
+    case 'admin_bank_sync_rows':
+    case 'admin_review_report':
+    case 'admin_review_report_detail':
+    case 'admin_bank_read_alerts':
+      return ok([]);
+    case 'admin_bank_overview':
+      return ok({
+        goal: store.settings.bankGoal.approvedToOpen,
+        published: 0,
+        approved: 0,
+        byBranch: [],
+        drafts: 0,
+        incomplete: 0,
+        inReview: 0,
+        conflicts: 0,
+        missing: 0,
+        open: caller.flags.cloudBank === true,
+      });
+    case 'editor_set_report_status':
+    case 'admin_assign_questions':
+    case 'admin_confirm_missing':
+      return ok(0);
+    default:
+      return bankError('PGRST202', `El banco simulado todavía no atiende ${name}`);
+  }
+}
+
+/** La función bank-sync. Paso 0 de B11. Solo el admin, y la corrida sale como apagada */
+function bankFunction(
+  _store: FakeBankStore,
+  caller: FakeBankCaller | null,
+  _body: unknown,
+): FakeBankReply {
+  if (!caller || (caller.role !== 'admin' && caller.role !== 'owner')) {
+    return { status: 401, json: { error: 'unauthorized' } };
+  }
+  return { status: 200, json: { runId: null, status: 'skipped', reason: 'disabled' } };
+}
+
+/** El bucket deck-catalog. Paso 0 de B11. No hay objetos y nadie sube */
+function bankStorage(
+  _store: FakeBankStore,
+  caller: FakeBankCaller | null,
+  method: string,
+  objectName: string,
+  _file: Buffer | null,
+): FakeBankReply {
+  const storageReply = (statusCode: string, error: string, message: string): FakeBankReply => ({
+    status: Number(statusCode),
+    json: { statusCode, error, message },
+  });
+  if (!caller)
+    return storageReply('400', 'Unauthorized', 'new row violates row-level security policy');
+  if (method === 'GET') return storageReply('404', 'not_found', `Object not found: ${objectName}`);
+  return storageReply('403', 'Unauthorized', 'new row violates row-level security policy');
 }

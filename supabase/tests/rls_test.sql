@@ -81,46 +81,60 @@ do $$ begin
   end if;
 end $$;
 
--- 6. El médico solo ve las preguntas asignadas, además de las aprobadas
+-- 6. El médico solo ve y decide lo que tiene asignado, y desde B11 solo con las funciones del editor
+-- (20261023000003_bank_editorial.sql). Las tablas del banco ya no tienen permisos para la API
 insert into public.questions (id, question_id, version, branch, topic, body, editorial_status) values
   ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', 1, 'pediatrics', 'neonatology', '{}', 'in_review'),
   ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', 1, 'pediatrics', 'neonatology', '{}', 'in_review'),
   ('10000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000003', 1, 'pediatrics', 'neonatology', '{}', 'approved');
+insert into public.bank_questions (question_id, origin, latest_version_id) values
+  ('20000000-0000-0000-0000-000000000001', 'app', '10000000-0000-0000-0000-000000000001'),
+  ('20000000-0000-0000-0000-000000000002', 'app', '10000000-0000-0000-0000-000000000002'),
+  ('20000000-0000-0000-0000-000000000003', 'app', '10000000-0000-0000-0000-000000000003');
 insert into public.review_assignments (question_id, physician_id) values
   ('20000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-00000000000c');
 begin;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
 do $$ begin
-  if (select count(*) from public.questions) <> 2 then
+  if (public.editor_list() ->> 'total')::int <> 1 then
     raise exception 'FALLA 6. El médico ve preguntas que no le asignaron';
   end if;
-  insert into public.review_decisions (question_version_id, physician_id, decision)
-    values ('10000000-0000-0000-0000-000000000001', auth.uid(), 'approve');
+  begin
+    perform count(*) from public.questions;
+    raise exception 'FALLA 6. El médico leyó las preguntas directo';
+  exception when insufficient_privilege then null; end;
   begin
     insert into public.review_decisions (question_version_id, physician_id, decision)
-      values ('10000000-0000-0000-0000-000000000002', auth.uid(), 'approve');
-    raise exception 'FALLA 6. El médico decidió sobre una pregunta no asignada';
+      values ('10000000-0000-0000-0000-000000000001', auth.uid(), 'approve');
+    raise exception 'FALLA 6. El médico escribió una decisión directo';
   exception when insufficient_privilege then null; end;
+  -- Sobre lo asignado decide con editor_decide. Pedir cambios no necesita las etiquetas a ciegas
+  if public.editor_decide('10000000-0000-0000-0000-000000000001', 'request_changes', 'Revisar', null) ->> 'status' <> 'draft' then
+    raise exception 'FALLA 6. El médico no decidió sobre lo asignado';
+  end if;
+  begin
+    perform public.editor_decide('10000000-0000-0000-0000-000000000002', 'request_changes', 'Revisar', null);
+    raise exception 'FALLA 6. El médico decidió sobre una pregunta no asignada';
+  exception when sqlstate 'BK007' then null; end;
 end $$;
 rollback;
 
--- 7. El alumno solo ve lo aprobado y no puede escribir preguntas
+-- 7. El alumno no lee ni escribe las preguntas directo. Las lee con fetch_questions, que con el banco
+-- cerrado no le da nada (B11)
 begin;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 do $$ begin
-  -- Desde la migración de pagos, un alumno Gratis solo lee las preguntas aprobadas que ya abrió
-  if (select count(*) from public.questions) <> 0 then
-    raise exception 'FALLA 7. El alumno ve preguntas sin abrirlas';
+  begin
+    perform count(*) from public.questions;
+    raise exception 'FALLA 7. El alumno leyó las preguntas directo';
+  exception when insufficient_privilege then null; end;
+  if public.fetch_questions(array['20000000-0000-0000-0000-000000000003']::uuid[]) -> 'denied' -> 0 ->> 'reason' <> 'closed' then
+    raise exception 'FALLA 7. El alumno leyó una pregunta con el banco cerrado';
   end if;
-  if public.grant_question_access('10000000-0000-0000-0000-000000000001') then
-    raise exception 'FALLA 7. El alumno abrió una pregunta sin aprobar';
-  end if;
-  if not public.grant_question_access('10000000-0000-0000-0000-000000000003') then
-    raise exception 'FALLA 7. El alumno no pudo abrir una pregunta aprobada';
-  end if;
-  if (select count(*) from public.questions) <> 1 then
-    raise exception 'FALLA 7. El alumno ve preguntas sin aprobar';
-  end if;
+  begin
+    perform public.grant_question_access('10000000-0000-0000-0000-000000000003');
+    raise exception 'FALLA 7. El alumno usó el tope viejo';
+  exception when insufficient_privilege then null; end;
   begin
     insert into public.questions (question_id, version, branch, topic, body)
       values (gen_random_uuid(), 1, 'x', 'y', '{}');

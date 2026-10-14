@@ -4,6 +4,12 @@ import {
   applyChargeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
+  bankSyncApplyViaRest,
+  bankSyncAuthorizeViaRest,
+  bankSyncBeginViaRest,
+  bankSyncCronOkViaRest,
+  bankSyncFinishViaRest,
+  bankSyncVersionsContentViaRest,
   checkoutContextViaRest,
   claimBillingActionsViaRest,
   finishBillingActionViaRest,
@@ -351,5 +357,94 @@ describe('acciones con la pasarela por REST', () => {
         recorder(() => new Response('{}')).fetchImpl,
       ),
     ).rejects.toThrow('lista');
+  });
+});
+
+describe('sincronización del banco por REST (B11)', () => {
+  it('Sincronizar ahora pregunta a la base con la sesión del admin y la llave pública', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response(JSON.stringify({ actorId: USER })));
+    expect(await bankSyncAuthorizeViaRest(env, 'Bearer sesion-del-admin', fetchImpl)).toBe(USER);
+    expect(calls[0]?.url).toBe(
+      'https://proyecto.supabase.co/rest/v1/rpc/admin_bank_sync_authorize',
+    );
+    const headers = new Headers(calls[0]?.init?.headers);
+    expect(headers.get('apikey')).toBe('anon-de-prueba');
+    expect(headers.get('authorization')).toBe('Bearer sesion-del-admin');
+    expect(`${headers.get('authorization') ?? ''} ${headers.get('apikey') ?? ''}`).not.toContain(
+      'servicio-de-prueba',
+    );
+  });
+
+  it('sin Bearer, con 401 o con 403 de la base no hay admin', async () => {
+    const denied = recorder(() => new Response('{"code":"42501"}', { status: 403 }));
+    expect(await bankSyncAuthorizeViaRest(env, null, denied.fetchImpl)).toBeNull();
+    expect(await bankSyncAuthorizeViaRest(env, 'Basic x', denied.fetchImpl)).toBeNull();
+    expect(denied.calls).toEqual([]);
+    expect(await bankSyncAuthorizeViaRest(env, 'Bearer alumno', denied.fetchImpl)).toBeNull();
+    expect(
+      await bankSyncAuthorizeViaRest(
+        env,
+        'Bearer x',
+        recorder(() => new Response('{"actorId":5}')).fetchImpl,
+      ),
+    ).toBeNull();
+  });
+
+  it('la ficha de Cron se revisa con la llave de servicio y cualquier falla es false', async () => {
+    const ok = recorder(() => new Response('true'));
+    expect(await bankSyncCronOkViaRest(env, 'ficha', ok.fetchImpl)).toBe(true);
+    expect(ok.calls[0]?.url).toBe('https://proyecto.supabase.co/rest/v1/rpc/bank_sync_cron_ok');
+    expect(JSON.parse(bodyText(ok.calls[0]?.init))).toEqual({ p_token: 'ficha' });
+    expect(new Headers(ok.calls[0]?.init?.headers).get('apikey')).toBe('servicio-de-prueba');
+    expect(
+      await bankSyncCronOkViaRest(env, 'ficha', recorder(() => new Response('false')).fetchImpl),
+    ).toBe(false);
+    expect(
+      await bankSyncCronOkViaRest(
+        env,
+        'ficha',
+        recorder(() => new Response('x', { status: 500 })).fetchImpl,
+      ),
+    ).toBe(false);
+  });
+
+  it('cada función de la corrida recibe sus campos con su nombre', async () => {
+    const { calls, fetchImpl } = recorder(() => new Response('{}'));
+    await bankSyncBeginViaRest(env, { trigger: 'cron', target: 'real', actorId: null }, fetchImpl);
+    await bankSyncVersionsContentViaRest(env, ['v1', 'v2'], fetchImpl);
+    await bankSyncApplyViaRest(
+      env,
+      { runId: 'r1', rows: [{ rowNumber: 2 }], forceDryRun: true },
+      fetchImpl,
+    );
+    await bankSyncFinishViaRest(
+      env,
+      { runId: 'r1', seenKeys: ['GO-0001'], summary: { read: 1 }, status: 'ok', reason: null },
+      fetchImpl,
+    );
+    expect(
+      calls.map((call) => call.url.replace('https://proyecto.supabase.co/rest/v1/rpc/', '')),
+    ).toEqual([
+      'bank_sync_begin',
+      'bank_sync_versions_content',
+      'bank_sync_apply',
+      'bank_sync_finish',
+    ]);
+    expect(calls.map((call) => JSON.parse(bodyText(call.init)) as unknown)).toEqual([
+      { p_trigger: 'cron', p_target: 'real', p_actor: null },
+      { p_version_ids: ['v1', 'v2'] },
+      { p_run: 'r1', p_rows: [{ rowNumber: 2 }], p_force_dry_run: true },
+      {
+        p_run: 'r1',
+        p_seen_keys: ['GO-0001'],
+        p_summary: { read: 1 },
+        p_status: 'ok',
+        p_reason: null,
+      },
+    ]);
+    const broken = recorder(() => new Response('x', { status: 500 })).fetchImpl;
+    await expect(
+      bankSyncBeginViaRest(env, { trigger: 'cron', target: 'real', actorId: null }, broken),
+    ).rejects.toThrow('bank_sync_begin respondió 500');
   });
 });

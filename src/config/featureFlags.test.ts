@@ -90,6 +90,21 @@ describe('banderas de lanzamiento', () => {
     }
   });
 
+  it('el banco de la nube nace apagado y el catálogo de mazos de la nube solo en producción (B11)', () => {
+    for (const appEnv of APP_ENVS) {
+      expect(isFeatureEnabled('cloudBank', { appEnv, stored: null }), appEnv).toBe(false);
+    }
+    // Ricardo abre el banco desde el servidor el día que haya 300 aprobadas (respuesta 68)
+    expect(
+      isFeatureEnabled('cloudBank', { appEnv: 'production', stored: { cloudBank: true } }),
+    ).toBe(true);
+    expect(isFeatureEnabled('deckCatalogCloud', { appEnv: 'production', stored: null })).toBe(true);
+    expect(isFeatureEnabled('deckCatalogCloud', { appEnv: 'demo', stored: null })).toBe(false);
+    expect(isFeatureEnabled('deckCatalogCloud', { appEnv: 'development', stored: null })).toBe(
+      false,
+    );
+  });
+
   it('lo que dice el servidor manda sobre el valor del entorno', () => {
     expect(isFeatureEnabled('demoTools', { appEnv: 'demo', stored: { demoTools: false } })).toBe(
       false,

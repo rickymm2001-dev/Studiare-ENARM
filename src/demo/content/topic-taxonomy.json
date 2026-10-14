@@ -1,11 +1,14 @@
 {
-  "version": 2,
+  "version": 3,
   "status": "pending_physician_review",
+  "weightsProvisional": true,
+  "weightsSource": "Plan del cambio, sección 6, 2026-10-12",
   "branches": [
     {
       "key": "internal_medicine",
       "name": "Medicina interna",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 75,
       "topics": [
         {
           "key": "cardiology",
@@ -308,7 +311,8 @@
     {
       "key": "pediatrics",
       "name": "Pediatría",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 50,
       "topics": [
         {
           "key": "neonatology",
@@ -555,7 +559,8 @@
     {
       "key": "obstetrics_gynecology",
       "name": "Ginecología y obstetricia",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 50,
       "topics": [
         {
           "key": "prenatal_care",
@@ -798,7 +803,8 @@
     {
       "key": "general_surgery",
       "name": "Cirugía general",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 33,
       "topics": [
         {
           "key": "acute_abdomen",
@@ -1101,44 +1107,9 @@
     {
       "key": "family_medicine",
       "name": "Medicina familiar",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 12,
       "topics": [
-        {
-          "key": "preventive_medicine",
-          "name": "Medicina preventiva",
-          "weight": 1,
-          "baseTopic": null,
-          "subtopics": [
-            {
-              "key": "screening",
-              "name": "Tamizaje"
-            },
-            {
-              "key": "adult_immunizations",
-              "name": "Vacunación del adulto"
-            }
-          ]
-        },
-        {
-          "key": "public_health",
-          "name": "Salud pública y epidemiología",
-          "weight": 1,
-          "baseTopic": null,
-          "subtopics": [
-            {
-              "key": "epidemiologic_surveillance",
-              "name": "Vigilancia epidemiológica"
-            },
-            {
-              "key": "study_design",
-              "name": "Diseño de estudios"
-            },
-            {
-              "key": "biostatistics",
-              "name": "Bioestadística"
-            }
-          ]
-        },
         {
           "key": "chronic_disease_primary",
           "name": "Enfermedades crónicas en primer nivel",
@@ -1232,7 +1203,8 @@
     {
       "key": "emergency_medicine",
       "name": "Urgencias",
-      "weight": 1,
+      "section": "clinical",
+      "weight": 17,
       "topics": [
         {
           "key": "resuscitation",
@@ -1379,6 +1351,166 @@
             {
               "key": "spinal_trauma",
               "name": "Trauma raquimedular"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "public_health",
+      "name": "Salud pública",
+      "section": "clinical",
+      "weight": 13,
+      "topics": [
+        {
+          "key": "epidemiology",
+          "name": "Epidemiología y vigilancia",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "epidemiologic_surveillance",
+              "name": "Vigilancia epidemiológica"
+            },
+            {
+              "key": "frequency_association_measures",
+              "name": "Medidas de frecuencia y de asociación"
+            },
+            {
+              "key": "outbreak_investigation",
+              "name": "Estudio de brote"
+            }
+          ]
+        },
+        {
+          "key": "biostatistics",
+          "name": "Bioestadística y diseño de estudios",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "study_design",
+              "name": "Diseño de estudios"
+            },
+            {
+              "key": "diagnostic_tests",
+              "name": "Pruebas diagnósticas"
+            },
+            {
+              "key": "descriptive_inferential_statistics",
+              "name": "Estadística descriptiva e inferencial"
+            }
+          ]
+        },
+        {
+          "key": "preventive_medicine",
+          "name": "Medicina preventiva",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "screening",
+              "name": "Tamizaje"
+            },
+            {
+              "key": "adult_immunizations",
+              "name": "Vacunación del adulto"
+            },
+            {
+              "key": "health_promotion",
+              "name": "Promoción de la salud"
+            }
+          ]
+        },
+        {
+          "key": "health_programs",
+          "name": "Programas de salud y NOM",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "national_health_programs",
+              "name": "Programas nacionales de salud"
+            },
+            {
+              "key": "surveillance_notification_nom",
+              "name": "NOM de vigilancia y notificación"
+            }
+          ]
+        },
+        {
+          "key": "environmental_occupational",
+          "name": "Salud ambiental y ocupacional",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "occupational_risks",
+              "name": "Riesgos laborales"
+            },
+            {
+              "key": "basic_sanitation",
+              "name": "Saneamiento básico"
+            }
+          ]
+        },
+        {
+          "key": "health_system",
+          "name": "Sistema de salud",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "care_levels",
+              "name": "Niveles de atención"
+            },
+            {
+              "key": "health_indicators",
+              "name": "Indicadores de salud"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "medical_english",
+      "name": "Inglés médico",
+      "section": "english",
+      "weight": 30,
+      "topics": [
+        {
+          "key": "reading_comprehension",
+          "name": "Comprensión de lectura",
+          "weight": 1,
+          "baseTopic": null,
+          "subtopics": [
+            {
+              "key": "english_internal_medicine",
+              "name": "Medicina interna"
+            },
+            {
+              "key": "english_pediatrics",
+              "name": "Pediatría"
+            },
+            {
+              "key": "english_obstetrics_gynecology",
+              "name": "Ginecología y obstetricia"
+            },
+            {
+              "key": "english_general_surgery",
+              "name": "Cirugía general"
+            },
+            {
+              "key": "english_family_medicine",
+              "name": "Medicina familiar"
+            },
+            {
+              "key": "english_emergency_medicine",
+              "name": "Urgencias"
+            },
+            {
+              "key": "english_public_health",
+              "name": "Salud pública"
             }
           ]
         }

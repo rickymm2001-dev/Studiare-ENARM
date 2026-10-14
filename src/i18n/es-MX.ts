@@ -16,6 +16,8 @@ import { vocabularyText } from './vocabulary';
 import { weekPlanText } from './weekPlan';
 import { b7ExtrasText } from './b7extras';
 import { freePlanText } from './freePlan';
+import { cloudBankText } from './cloudBank';
+import { bankAdminText } from './bankAdmin';
 
 interface ScreenText {
   title: string;
@@ -351,6 +353,9 @@ export const t = {
   settingsPage: settingsPageText,
   // Candados del plan Gratis con su vista previa (B8 del plan del cambio)
   freePlan: freePlanText,
+  // Banco en la nube y Google Sheets (B11 del plan del cambio). Del alumno y del admin
+  cloudBank: cloudBankText,
+  bankAdmin: bankAdminText,
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

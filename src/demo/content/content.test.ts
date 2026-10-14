@@ -1,5 +1,6 @@
 // Contenido en datos de la Fase B, bloque 7. Valida esquemas, conteos y referencias cruzadas.
 import { describe, expect, it } from 'vitest';
+import { branchSection } from '@/data/schemas/content';
 import {
   biasTaxonomy,
   biasTips,
@@ -12,7 +13,7 @@ describe('taxonomía de temas (13.4)', () => {
   const topics = topicTaxonomy.branches.flatMap((branch) => branch.topics);
   const subtopics = topics.flatMap((topic) => topic.subtopics);
 
-  it('tiene las 6 ramas troncales con pesos iguales y subespecialidades en cada una (D-066)', () => {
+  it('tiene las 7 ramas del examen con los pesos provisionales de la sección 6 e Inglés médico aparte (B11)', () => {
     expect(topicTaxonomy.branches.map((branch) => branch.key)).toEqual([
       'internal_medicine',
       'pediatrics',
@@ -20,10 +21,54 @@ describe('taxonomía de temas (13.4)', () => {
       'general_surgery',
       'family_medicine',
       'emergency_medicine',
+      'public_health',
+      'medical_english',
     ]);
-    expect(new Set(topicTaxonomy.branches.map((branch) => branch.weight)).size).toBe(1);
-    for (const branch of topicTaxonomy.branches)
-      expect(branch.topics.length).toBeGreaterThanOrEqual(7);
+    // Reactivos de cada rama sobre los 250 en español, y los 30 de inglés aparte (respuestas 59 a 61)
+    expect(
+      Object.fromEntries(topicTaxonomy.branches.map((branch) => [branch.key, branch.weight])),
+    ).toEqual({
+      internal_medicine: 75,
+      pediatrics: 50,
+      obstetrics_gynecology: 50,
+      general_surgery: 33,
+      emergency_medicine: 17,
+      public_health: 13,
+      family_medicine: 12,
+      medical_english: 30,
+    });
+    const clinical = topicTaxonomy.branches.filter(
+      (branch) => branchSection(branch) === 'clinical',
+    );
+    expect(clinical.reduce((sum, branch) => sum + branch.weight, 0)).toBe(250);
+    expect(topicTaxonomy.weightsProvisional).toBe(true);
+    expect(topicTaxonomy.weightsSource).toMatch(/sección 6/);
+    for (const branch of clinical) expect(branch.topics.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('Salud pública trae Medicina preventiva desde Medicina familiar y no repite temas (respuesta 59)', () => {
+    const topicsOf = (key: string) =>
+      topicTaxonomy.branches.find((branch) => branch.key === key)?.topics.map((topic) => topic.key);
+    expect(topicsOf('public_health')).toEqual([
+      'epidemiology',
+      'biostatistics',
+      'preventive_medicine',
+      'health_programs',
+      'environmental_occupational',
+      'health_system',
+    ]);
+    expect(topicsOf('family_medicine')).not.toContain('preventive_medicine');
+    expect(topicsOf('family_medicine')).not.toContain('public_health');
+  });
+
+  it('Inglés médico es la sección english con un subtema por rama clínica (B13 la afina)', () => {
+    const english = topicTaxonomy.branches.find((branch) => branch.key === 'medical_english');
+    expect(english && branchSection(english)).toBe('english');
+    const clinicalKeys = topicTaxonomy.branches
+      .filter((branch) => branchSection(branch) === 'clinical')
+      .map((branch) => `english_${branch.key}`);
+    expect(english?.topics.map((topic) => topic.key)).toEqual(['reading_comprehension']);
+    expect(english?.topics[0]?.subtopics.map((subtopic) => subtopic.key)).toEqual(clinicalKeys);
   });
 
   it('las claves de tema y de subtema son únicas en toda la taxonomía', () => {

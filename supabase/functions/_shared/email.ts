@@ -7,18 +7,19 @@
 // finish_email. En B10 solo existe noopSender, que no manda nada. No depende de Deno, así se prueba con
 // Vitest (D-096).
 //
-// Los tipos de correo viven en la tabla email_kinds. La tabla ya trae content_report (B11) y
-// daily_review_reminder (B15), que suman aquí su plantilla en su bloque
+// Los tipos de correo viven en la tabla email_kinds. La tabla ya trae content_report, cuya plantilla
+// suma B11 (4.6 del plan de B11), y daily_review_reminder (B15), que suma la suya en su bloque
 import { PLAN_PRICES_MXN, isPaidPlan, type PaidPlan } from './billingTypes.ts';
 import { subscriptionUrl } from './http.ts';
 import { GUARANTEE_DAYS } from './stripe.ts';
 
-export type EmailKind = 'trial_ending' | 'pass_expiring' | 'invoice_requested';
+export type EmailKind = 'trial_ending' | 'pass_expiring' | 'invoice_requested' | 'content_report';
 
 export const EMAIL_KINDS: readonly EmailKind[] = [
   'trial_ending',
   'pass_expiring',
   'invoice_requested',
+  'content_report',
 ];
 
 export interface EmailMessage {
@@ -89,6 +90,31 @@ function planOf(kind: EmailKind, data: Record<string, unknown>): PaidPlan {
   return data.plan;
 }
 
+/** El motivo de un reporte dentro de la frase, igual que las opciones de Reportar un error */
+const REPORT_REASONS = new Map<unknown, string>([
+  ['clinical_error', 'un error clínico'],
+  ['wrong_key', 'que la respuesta marcada no es la correcta'],
+  ['typo', 'una errata'],
+  ['outdated', 'información desactualizada'],
+  ['other', 'otro problema'],
+]);
+
+/** La clave de la pregunta en el Sheet, como GO-0001. Nunca el texto de la pregunta */
+function questionKeyOf(kind: EmailKind, data: Record<string, unknown>): string {
+  const value = data.questionKey;
+  if (typeof value !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$/.test(value)) {
+    throw new MissingEmailData(kind, 'questionKey');
+  }
+  return value;
+}
+
+/** Una pantalla de la app bajo APP_URL, como /medico/reportes */
+function appPage(appUrl: string, path: string): string {
+  const target = new URL(appUrl);
+  target.pathname = `${target.pathname.replace(/\/+$/, '')}${path}`;
+  return target.toString();
+}
+
 const escapeHtml = (value: string) =>
   value
     .replace(/&/g, '&amp;')
@@ -152,6 +178,22 @@ function template(kind: EmailKind, data: Record<string, unknown>, ctx: EmailCont
           'Revísala en Studiare, Administración, Pagos.',
         ],
         link: { label: 'Abrir Studiare', url: new URL(ctx.appUrl).toString() },
+      };
+    }
+    case 'content_report': {
+      // Para el médico asignado o para el equipo. Sin el alumno ni el texto de la pregunta (4.6)
+      const key = questionKeyOf(kind, data);
+      const reason = REPORT_REASONS.get(data.reason);
+      if (reason === undefined) throw new MissingEmailData(kind, 'reason');
+      const open = typeof data.openReports === 'number' ? Math.floor(data.openReports) : 0;
+      return {
+        subject: 'Nuevo reporte en una pregunta que revisas',
+        paragraphs: [
+          greeting(ctx.alias),
+          `Un alumno reportó ${reason} en la pregunta ${key}. Revísala en Studiare, Médico, Reportes.`,
+          ...(open > 1 ? [`La pregunta tiene ${open} reportes abiertos.`] : []),
+        ],
+        link: { label: 'Ver los reportes', url: appPage(ctx.appUrl, '/medico/reportes') },
       };
     }
   }

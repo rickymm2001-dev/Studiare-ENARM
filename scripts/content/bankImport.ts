@@ -62,6 +62,16 @@ function sheetToTable(sheet: ExcelJS.Worksheet): BankTable {
   return { name: `la hoja ${sheet.name}`, headers: text(sheet.getRow(1)), rows };
 }
 
+/**
+ * La pestaña de un libro como tabla de texto, para el convertidor tolerante del Sheet
+ * (convertSheetTable). Sirve para revisar sin red un .xlsx bajado del Google Sheet o el Sheet de
+ * prueba de npm run bank:sheet-test. null si no existe la pestaña
+ */
+export function workbookTable(book: ExcelJS.Workbook, tab = 'Preguntas'): BankTable | null {
+  const sheet = book.getWorksheet(tab);
+  return sheet ? { ...sheetToTable(sheet), name: sheet.name } : null;
+}
+
 /** Convierte las filas de la hoja Preguntas. Cada fila con problemas se queda fuera de la salida */
 export function convertSheet(
   sheet: ExcelJS.Worksheet,

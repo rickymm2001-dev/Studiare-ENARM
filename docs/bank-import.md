@@ -93,8 +93,27 @@ El JSON es una lista de objetos y cada llave es un encabezado de la plantilla. T
 ## Límites
 
 - 50 MB por archivo y hasta 20,000 filas por importación. Un banco más grande se divide en partes.
-- Las preguntas de casos seriados no se importan por ahora. Cada fila es una pregunta suelta.
+- En la demo, las preguntas de casos seriados no se importan. Cada fila es una pregunta suelta. En la nube sí, con las columnas Caso y Orden en el caso (ver abajo).
 
 ## Lo mismo desde la terminal
 
 Los scripts de scripts/content usan el mismo convertidor que la app. Con node scripts/content/bank-convert.ts archivo.xlsx se convierte el Excel al formato de lotes para revisarlo con check-draft. La app y el script aceptan exactamente lo mismo porque comparten src/data/content/bankConvert.ts.
+
+## En la nube (B11)
+
+Desde B11 el banco vive en Supabase y la fuente principal es el Google Sheet Banco de preguntas, que Studiare lee cada hora. Las reglas del Sheet están en docs/SHEET_DEL_BANCO.md. Esta pantalla sigue sirviendo para subir un archivo suelto, con estas diferencias.
+
+- La usa el admin. El archivo se convierte con el mismo convertidor tolerante del Sheet (src/data/content/bankConvert.ts, convertSheetTable) y se manda a la base con admin_bank_import, que decide qué se crea, qué se versiona y qué no cambió
+- Lee las columnas nuevas del Sheet. Caso y Orden en el caso para casos seriados, Autor y Revisor con la clave corta de cada médico, e Idioma
+- Estado acepta Borrador, Lista para revisión y Retirar. Aprobado se ignora con un aviso, porque la aprobación vive en la app
+- Una pregunta sin explicación, sin referencias, sin justificación o sin sesgo en un distractor ya no se rechaza. Entra como borrador incompleto y no se puede aprobar hasta completarla
+- Si dos filas traen el mismo ID, no entra ninguna de las dos
+- Las preguntas importadas quedan con origen import, separadas de las del Sheet. Una pregunta del Sheet no se pisa con un archivo
+- El reporte dice por fila si se creó, se versionó, no cambió, se rechazó o qué le falta, con los mismos códigos que el reporte de Banco y Sheet
+
+Desde la terminal, sin red y sin base
+
+- `npm run bank:fixture` corre la sincronización completa contra los dos Sheets simulados de tests/fixtures/bank-sheet e imprime su reporte
+- `npm run bank:sheet-test` arma el Sheet de prueba en .xlsx, con contenido simulado, listas y validaciones
+- `npm run bank:sheet-lists` arma solo la pestaña Listas, con un rango con nombre por rama y por subespecialidad
+- workbookTable de scripts/content/bankImport.ts lee una pestaña de un .xlsx bajado del Sheet como tabla para el convertidor tolerante

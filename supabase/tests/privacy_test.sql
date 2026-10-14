@@ -68,6 +68,18 @@ begin
     values ('e0000000-0000-0000-0000-000000000002', 'student', 'student', 'e0000000-0000-0000-0000-000000000004');
 end $$;
 
+-- Lecturas del banco de V1, una de hoy y una de hace tres días (B11). Borrar mis datos conserva solo la
+-- de hoy, que cuenta para el tope de Gratis (8.24, supabase/manual/banco-b11.sql)
+insert into public.questions (id, question_id, version, branch, topic, body, editorial_status)
+  values ('e3000000-0000-0000-0000-000000000001', 'e3000000-0000-0000-0000-0000000000f1', 1, 'pediatrics', 'neonatology', '{}', 'approved');
+insert into public.bank_reads (user_id, question_id, version_id, day, plan, purpose) values
+  ('e0000000-0000-0000-0000-000000000001', 'e3000000-0000-0000-0000-0000000000f1', 'e3000000-0000-0000-0000-000000000001',
+   public.study_day(), 'free', 'practice'),
+  ('e0000000-0000-0000-0000-000000000001', 'e3000000-0000-0000-0000-0000000000f2', 'e3000000-0000-0000-0000-000000000001',
+   public.study_day() - 3, 'free', 'practice'),
+  ('e0000000-0000-0000-0000-000000000002', 'e3000000-0000-0000-0000-0000000000f1', 'e3000000-0000-0000-0000-000000000001',
+   public.study_day() - 3, 'free', 'practice');
+
 -- ===================================================================== P1. La bitácora sigue cerrada
 -- Ni siquiera el dueño de la base la edita o la borra fuera de las funciones de borrado
 select pg_temp.expect(
@@ -136,6 +148,19 @@ select pg_temp.expect((select count(*) from public.events) = 0, 'P4. Le quedaron
 select pg_temp.expect((select count(*) from public.sync_records) = 0, 'P4. Le quedaron registros a V1');
 select pg_temp.expect((select count(*) from public.content_reports) = 0, 'P4. Le quedaron reportes a V1');
 select pg_temp.expect((select count(*) from public.ai_artifacts) = 0, 'P4. Le quedaron borradores de IA a V1');
+commit;
+-- Las lecturas del banco de días anteriores se van y la de hoy se queda, para no reiniciar el tope
+select pg_temp.expect(
+  (select array_agg(day order by day) from public.bank_reads where user_id = 'e0000000-0000-0000-0000-000000000001')
+    = array[public.study_day()],
+  'P4. Borrar mis datos no dejó solo la lectura de hoy de V1'
+);
+select pg_temp.expect(
+  (select count(*) from public.bank_reads where user_id = 'e0000000-0000-0000-0000-000000000002') = 1,
+  'P4. Borrar los datos de V1 tocó las lecturas de V2'
+);
+begin;
+select pg_temp.as_user('e0000000-0000-0000-0000-000000000001');
 -- La cuenta y el perfil siguen, y repetirlo no falla ni borra otra cosa
 select pg_temp.expect((select count(*) from public.profiles) >= 1, 'P4. Se fue el perfil de V1');
 select pg_temp.expect((public.delete_my_data() ->> 'events')::int = 0, 'P4. Repetir debía borrar 0');
