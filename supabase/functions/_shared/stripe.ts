@@ -472,6 +472,50 @@ export function stripeSubscriptionStatus(status: unknown): SubscriptionStatus | 
   }
 }
 
+/**
+ * Campos con datos del pagador que no se guardan en payment_webhook_events, en cualquier nivel del
+ * evento. Correo, nombre, teléfono, domicilio, RFC, tarjeta, recibo y la evidencia de una disputa. La base
+ * solo necesita los ids, los montos, la metadata con el id seudónimo del alumno y la hora del cargo
+ */
+const PAYER_KEYS = new Set([
+  'customer_details',
+  'customer_email',
+  'customer_name',
+  'customer_phone',
+  'customer_address',
+  'customer_shipping',
+  'customer_tax_ids',
+  'billing_details',
+  'shipping',
+  'shipping_details',
+  'shipping_address',
+  'collected_information',
+  'custom_fields',
+  'receipt_email',
+  'receipt_url',
+  'payment_method_details',
+  'evidence',
+  'email',
+  'name',
+  'phone',
+  'address',
+]);
+
+function withoutPayer(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(withoutPayer);
+  if (value === null || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !PAYER_KEYS.has(key))
+      .map(([key, inner]) => [key, withoutPayer(inner)]),
+  );
+}
+
+/** El evento como se guarda en payment_webhook_events, sin los datos del pagador */
+export function storedEvent(event: Json): Json {
+  return asRecord(withoutPayer(event));
+}
+
 export interface NoticeContext {
   eventId: string;
   /** Hora del evento, o de la lectura a Stripe */
@@ -733,8 +777,59 @@ export function checkoutSessionSteps(
 }
 
 /**
+ * Un contracargo cerrado (charge.dispute.closed). Solo uno perdido (lost) cuenta, como un reembolso
+ * completo, porque el banco del alumno ya le regresó el dinero. Ganado, warning_closed o prevented no
+ * cambian nada. La disputa trae su PaymentIntent y el monto disputado, pero no el cliente, así que el aviso
+ * lee el PaymentIntent para saber de quién es y si el contracargo fue por todo el cobro
+ */
+export function lostDispute(
+  dispute: unknown,
+  context: Pick<NoticeContext, 'eventId' | 'payload'>,
+): {
+  disputeId: string;
+  notice: ChargeNotice & { paymentIntentId: string; amountMxn: number };
+} | null {
+  const object = asRecord(dispute);
+  if (object.status !== 'lost') return null;
+  const disputeId = asString(object.id);
+  const paymentIntentId = idOf(object.payment_intent);
+  const amountMxn = mxnFromCents(object.amount, object.currency);
+  if (!disputeId || !paymentIntentId || amountMxn === null || amountMxn <= 0) return null;
+  return {
+    disputeId,
+    notice: {
+      ...emptyCharge(context),
+      kind: 'refunded',
+      // La base usa el propósito del cobro que encuentra
+      purpose: 'subscription',
+      paymentIntentId,
+      amountMxn,
+    },
+  };
+}
+
+/**
+ * La búsqueda de la factura que pagó un PaymentIntent (GET /v1/invoice_payments). Desde la versión basil
+ * la factura ya no trae su payment_intent ni el cargo su factura. La relación vive en los pagos de la
+ * factura (InvoicePayment), que se filtran por payment[type] y payment[payment_intent]
+ */
+export function invoicePaymentParams(paymentIntentId: string): URLSearchParams {
+  return new URLSearchParams({
+    'payment[type]': 'payment_intent',
+    'payment[payment_intent]': paymentIntentId,
+    limit: '1',
+  });
+}
+
+/** La factura del primer pago de la lista de GET /v1/invoice_payments, o null si no pagó ninguna */
+export function invoiceOfPayments(list: unknown): string | null {
+  return idOf(asRecord(asArray(asRecord(list).data)[0]).invoice);
+}
+
+/**
  * Un cargo devuelto por completo (charge.refunded). Stripe no dice a qué alumno ni a qué factura
- * corresponde, solo el cliente, el PaymentIntent y el monto, y de ahí la base encuentra el cobro. Los
+ * corresponde, solo el cliente, el PaymentIntent y el monto. El aviso busca la factura con
+ * invoicePaymentParams y la base encuentra el cobro por la factura o por el PaymentIntent. Los
  * reembolsos parciales se ignoran, porque quitar el plan por una devolución chica sería injusto
  */
 export function refundedCharge(

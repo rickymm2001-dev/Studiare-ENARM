@@ -119,6 +119,16 @@ create or replace function pg_temp.action_for(p_target text) returns text langua
   select reason from public.billing_actions where target = p_target
 $$;
 
+-- Las banderas de feature_flags que el servidor hace cumplir. Prendidas para probar todo, como después
+-- de la corrida real. R5 prueba que apagadas cierran lo suyo
+create or replace function pg_temp.set_flags(p_flags jsonb) returns void language sql as $$
+  insert into public.platform_settings (key, value) values ('feature_flags', p_flags)
+  on conflict (key) do update set value =
+    case when jsonb_typeof(public.platform_settings.value) = 'object' then public.platform_settings.value else '{}'::jsonb end
+    || p_flags
+$$;
+select pg_temp.set_flags('{"freeTrial":true,"cashPasses":true,"mercadoPago":true}');
+
 -- ===================================================================== Usuarios
 \set u01 'ba100000-0000-0000-0000-000000000001'
 \set u02 'ba100000-0000-0000-0000-000000000002'
@@ -711,7 +721,9 @@ begin
     'public.billing_take_seat(uuid, text, text, text, text)', 'public.billing_close_subscription(text, text)',
     'public.billing_register_event(text, text, jsonb)', 'public.billing_event_done(text, text, text)',
     'public.billing_queue_cancel(uuid, text, text, text)', 'public.billing_mark_issue(uuid, text, text)',
-    'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)'] loop
+    'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)',
+    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()', 'public.trial_history_forget_owner()',
+    'public.billing_founder_lost(uuid, text, text)', 'public.billing_flag(text)'] loop
     if has_function_privilege('authenticated', v_fn, 'execute') or has_function_privilege('anon', v_fn, 'execute')
        or has_function_privilege('service_role', v_fn, 'execute') then
       raise exception 'FALLA P6. % es interna y nadie debe ejecutarla por la API', v_fn;
@@ -741,6 +753,7 @@ select pg_temp.expect(
 select pg_temp.expect(
   pg_temp.is_blocked('select * from public.founder_seats')
   and pg_temp.is_blocked('select * from public.trial_claims')
+  and pg_temp.is_blocked('select * from public.trial_history')
   and pg_temp.is_blocked('select * from public.billing_actions')
   and pg_temp.is_blocked('select * from public.email_outbox')
   and pg_temp.is_blocked($q$insert into public.plan_passes (user_id, plan, provider, provider_payment_id, method, starts_at, ends_at) values (auth.uid(), 'annual', 'stripe', 'x', 'oxxo', now(), now() + interval '1 year')$q$),
@@ -914,6 +927,7 @@ select pg_temp.is(public.note_trial_will_end('stripe', 'evt-p9-t', '{}', :'rb', 
 select pg_temp.expect(
   (select count(*) from public.founder_seats where user_id = :'ra') = 1
   and (select count(*) from public.trial_claims where user_id in (:'ra', :'rb')) = 2
+  and (select count(*) from public.trial_history where user_id in (:'ra', :'rb')) = 2
   and pg_temp.action_for('sub_p9_b2') = 'second_subscription'
   and (select count(*) from public.email_outbox where recipient_user = :'rb') = 1,
   'P9. Las cuentas de prueba no quedaron con pagos'
@@ -925,6 +939,8 @@ select pg_temp.expect(
   and not exists (select 1 from public.billing_customers where user_id in (:'ra', :'rb'))
   and not exists (select 1 from public.founder_seats where user_id in (:'ra', :'rb'))
   and not exists (select 1 from public.trial_claims where user_id in (:'ra', :'rb'))
+  and not exists (select 1 from public.trial_history where user_id in (:'ra', :'rb'))
+  and (public.checkout_context(:'rb') ->> 'trialAvailable')::boolean
   and not exists (select 1 from public.email_outbox where recipient_user in (:'ra', :'rb'))
   and pg_temp.action_for('sub_p9_b2') is null
   and exists (select 1 from auth.users where id = :'ra'),
@@ -936,12 +952,12 @@ select pg_temp.expect(
 create temp table p10 as
 select
   (select count(*) from pg_tables where schemaname = 'public'
-     and tablename in ('founder_seats', 'trial_claims', 'plan_passes', 'billing_actions', 'email_kinds', 'email_outbox',
-                       'invoice_requests')) as tablas_nuevas,
+     and tablename in ('founder_seats', 'trial_claims', 'trial_history', 'plan_passes', 'billing_actions', 'email_kinds',
+                       'email_outbox', 'invoice_requests')) as tablas_nuevas,
   (select bool_and(relrowsecurity) from pg_class where oid in (
-     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.plan_passes'::regclass,
-     'public.billing_actions'::regclass, 'public.email_kinds'::regclass, 'public.email_outbox'::regclass,
-     'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
+     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.trial_history'::regclass,
+     'public.plan_passes'::regclass, 'public.billing_actions'::regclass, 'public.email_kinds'::regclass,
+     'public.email_outbox'::regclass, 'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
   has_function_privilege('authenticated', 'public.apply_charge(text, text, jsonb, text, uuid, text, text, text, text, text, text, numeric, numeric, text, timestamptz, timestamptz)', 'execute') as alumno_aplica_cobros,
   has_function_privilege('service_role', 'public.apply_subscription_state(text, text, timestamptz, jsonb, uuid, text, text, text, timestamptz, timestamptz, boolean, boolean, text, text)', 'execute') as servicio_aplica_estados,
   has_function_privilege('authenticated', 'public.checkout_context(uuid)', 'execute') as alumno_lee_contexto,
@@ -956,12 +972,276 @@ select
     where schemaname = 'public'
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 select pg_temp.expect(
-  (select tablas_nuevas = 7 and tablas_con_seguridad_por_fila and not alumno_aplica_cobros and servicio_aplica_estados
+  (select tablas_nuevas = 8 and tablas_con_seguridad_por_fila and not alumno_aplica_cobros and servicio_aplica_estados
       and not alumno_lee_contexto and not alumno_lee_lugares and alumno_pide_factura and plan_fundador_anual
       and estado_prueba and borrar_cuenta_b10 and dias_de_prueba = '7' and correos_encendidos = 'false'
       and politicas_con_barrera = 33
    from p10),
   'P10. La consulta de comprobación de docs/SUPABASE.md no da lo que dice la guía'
+);
+
+-- ===================================================================== P11. Revisión independiente de B10
+-- Cada bloque es un hallazgo de la revisión. Usuarios propios para no depender de lo de arriba
+\set r1a 'ba110000-0000-0000-0000-0000000001a0'
+\set r1c 'ba110000-0000-0000-0000-0000000001c0'
+\set r1d 'ba110000-0000-0000-0000-0000000001d0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r1a', 'r1a@ba.mx', '{"alias":"Borra con lugar"}'),
+  (:'r1c', 'Rosa.Uno+promo@gmail.com', '{"alias":"Borra con prueba"}');
+
+-- R1. Borrar la cuenta no libera una prueba nueva para el mismo correo ni deja un lugar apartado para
+-- siempre. Un lugar apartado de una cuenta borrada se libera, el fin de una suscripción de alguien que ya
+-- no existe cierra su lugar, y la prueba usada queda por la huella del correo
+select pg_temp.trial('evt-r1-a', :'r1a', 'sub_r1_a', 'founder');
+select pg_temp.state('evt-r1-ax', :'r1a', 'sub_r1_a', 'founder', 'trialing', p_cancel => true,
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.is(pg_temp.seat_of(:'r1a'), 'held', 'R1. La prueba Fundador debía apartar el lugar');
+create temp table r1_seats as select public.founder_seats_taken() as taken,
+  (select id from public.founder_seats where user_id = :'r1a') as seat;
+begin;
+select pg_temp.as_user(:'r1a');
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  (select status from public.founder_seats where id = (select seat from r1_seats)) = 'released'
+  and public.founder_seats_taken() = (select taken - 1 from r1_seats),
+  'R1. El lugar apartado de una cuenta borrada debía liberarse'
+);
+-- R1c. El lugar de una cuenta borrada, apartado o confirmado, queda sin el id de su suscripción, que
+-- Stripe liga a un cliente. Ninguna regla lo busca después. El confirmado sigue contando (respuesta 17)
+\set r1e 'ba110000-0000-0000-0000-0000000001e0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r1e', 'r1e@ba.mx', '{"alias":"Borra Fundador pagado"}');
+select pg_temp.state('evt-r1-e', :'r1e', 'sub_r1_e', 'founder', 'active');
+select pg_temp.charge('evt-r1-ec', 'paid', :'r1e', 'subscription', 'founder', 'in_r1_e', 79, 'sub_r1_e',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r1-ex', :'r1e', 'sub_r1_e', 'founder', 'active', p_cancel => true);
+create temp table r1c_seats as select public.founder_seats_taken() as taken,
+  (select id from public.founder_seats where user_id = :'r1e' and status = 'confirmed'
+     and provider_subscription_id = 'sub_r1_e') as seat;
+begin;
+select pg_temp.as_user(:'r1e');
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  (select seat is not null from r1c_seats)
+  and (select user_id is null and status = 'confirmed' and provider_subscription_id is null
+         from public.founder_seats where id = (select seat from r1c_seats))
+  and (select provider_subscription_id is null from public.founder_seats where id = (select seat from r1_seats))
+  and not exists (select 1 from public.founder_seats where provider_subscription_id in ('sub_r1_a', 'sub_r1_e'))
+  and public.founder_seats_taken() = (select taken from r1c_seats),
+  'R1c. El lugar de una cuenta borrada debía quedar sin el id de su suscripción y el confirmado seguir contando'
+);
+-- Un aviso tardío del fin de esa suscripción no cambia el lugar confirmado
+select pg_temp.is(pg_temp.state('evt-r1-ee', :'r1e', 'sub_r1_e', 'founder', 'ended'), 'unknown_user',
+  'R1c. El fin de la suscripción de la cuenta borrada debía decir unknown_user');
+select pg_temp.is((select status from public.founder_seats where id = (select seat from r1c_seats)), 'confirmed',
+  'R1c. El fin de la suscripción no debía liberar un lugar confirmado');
+-- Un lugar apartado sin dueño, de una cuenta que ya no existe, se libera con el fin de su suscripción
+insert into public.founder_seats (user_id, plan, status, provider, provider_subscription_id)
+  values (null, 'founder', 'held', 'stripe', 'sub_r1_huerfana');
+select pg_temp.is(
+  pg_temp.state('evt-r1-b', 'ffffffff-ffff-ffff-ffff-fffffffff1b0', 'sub_r1_huerfana', 'founder', 'ended'),
+  'unknown_user', 'R1. El fin de la suscripción de una cuenta borrada debía decir unknown_user');
+select pg_temp.is(
+  (select status from public.founder_seats where provider_subscription_id = 'sub_r1_huerfana'), 'released',
+  'R1. El fin de la suscripción de una cuenta borrada debía liberar su lugar');
+-- La prueba usada sobrevive al borrado. Otra cuenta con el mismo correo normalizado no tiene otra
+select pg_temp.trial('evt-r1-c', :'r1c', 'sub_r1_c', 'monthly');
+select pg_temp.state('evt-r1-cx', :'r1c', 'sub_r1_c', 'monthly', 'trialing', p_cancel => true,
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+-- Mientras la cuenta existe, la prueba usada guarda de qué suscripción es
+select pg_temp.expect(
+  (select provider = 'stripe' and provider_subscription_id = 'sub_r1_c'
+     from public.trial_history where user_id = :'r1c'),
+  'R1. Con la cuenta viva la prueba usada debía guardar su suscripción'
+);
+begin;
+select pg_temp.as_user(:'r1c');
+select public.delete_my_account();
+commit;
+insert into auth.users (id, email, raw_user_meta_data) values (:'r1d', 'rosauno@gmail.com', '{"alias":"Vuelve"}');
+select pg_temp.is(public.checkout_context(:'r1d') ->> 'trialAvailable', 'false',
+  'R1. Una cuenta nueva con el correo de una cuenta borrada no debía tener prueba');
+select pg_temp.is(pg_temp.trial('evt-r1-d', :'r1d', 'sub_r1_d', 'monthly'), 'trial_duplicate',
+  'R1. La prueba de una cuenta nueva con el correo de una borrada debía rechazarse');
+select pg_temp.expect(
+  not exists (select 1 from public.trial_history where email_hash like '%@%'),
+  'R1. La prueba usada no debía guardar el correo a la vista'
+);
+-- R1b. Al borrar la cuenta la prueba usada queda solo con la huella del correo y la fecha. Sin la
+-- pasarela ni el id de la suscripción, que Stripe liga a un cliente y volverían a identificar a la persona
+select pg_temp.expect(
+  (select count(*) = 1 and bool_and(user_id is null and provider is null and provider_subscription_id is null
+                                    and started_at is not null)
+     from public.trial_history
+     where email_hash = public.trial_key_hash(public.trial_email_key('rosauno@gmail.com')))
+  and not exists (select 1 from public.trial_history where provider_subscription_id = 'sub_r1_c'),
+  'R1b. La prueba usada de una cuenta borrada debía quedar solo con la huella del correo y la fecha'
+);
+
+-- R2. Un aviso de prueba que llega tarde, después del primer cobro, no recorta lo pagado al fin de la prueba
+\set r2a 'ba110000-0000-0000-0000-0000000002a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r2a', 'r2a@ba.mx', '{"alias":"Aviso tarde"}');
+select pg_temp.state('evt-r2-a', :'r2a', 'sub_r2_a', 'monthly', 'trialing', p_at => now() - interval '2 hours',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.is(pg_temp.charge('evt-r2-ac', 'paid', :'r2a', 'subscription', 'monthly', 'in_r2_a', 149, 'sub_r2_a',
+  p_period_end => now() + interval '37 days'), 'applied', 'R2. El primer cobro debía aplicarse');
+-- Stripe lo creó antes del cobro y llegó después
+select pg_temp.is(pg_temp.state('evt-r2-al', :'r2a', 'sub_r2_a', 'monthly', 'trialing', p_at => now() - interval '1 hour',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days'), 'stale',
+  'R2. Un aviso de prueba anterior al primer cobro debía descartarse');
+select pg_temp.expect(
+  (select status = 'active' and current_period_end > now() + interval '30 days' from public.subscriptions where user_id = :'r2a'),
+  'R2. Un aviso de prueba tardío no debía recortar lo pagado'
+);
+-- Uno más nuevo con un fin menor tampoco recorta lo que ya se pagó de esa misma suscripción
+select pg_temp.state('evt-r2-an', :'r2a', 'sub_r2_a', 'monthly', 'trialing',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.expect(
+  (select current_period_end > now() + interval '30 days' from public.subscriptions where user_id = :'r2a')
+  and public.user_plan(:'r2a') = 'monthly',
+  'R2. Un aviso de la misma suscripción no debía acortar el periodo pagado'
+);
+
+-- R3. En Mercado Pago el cobro puede llegar antes que la suscripción y sin su id. La suscripción que
+-- llega después es la misma, adopta su id y no se marca ni se cancela como segunda
+\set r3a 'ba110000-0000-0000-0000-0000000003a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r3a', 'r3a@ba.mx', '{"alias":"Cobro primero"}');
+select pg_temp.is(pg_temp.charge('evt-r3-c', 'paid', :'r3a', 'subscription', 'monthly', '9300001', 149, null, 'mercadopago',
+  p_period_end => now() + interval '30 days', p_provider => 'mercadopago'), 'applied',
+  'R3. El cobro sin suscripción debía aplicarse');
+select pg_temp.is(pg_temp.state('evt-r3-s', :'r3a', 'mp_pre_r3', 'monthly', 'active', p_provider => 'mercadopago',
+  p_period_end => null), 'applied', 'R3. La suscripción que llega después del cobro debía aplicarse');
+select pg_temp.expect(
+  pg_temp.action_for('mp_pre_r3') is null
+  and (select provider_subscription_id = 'mp_pre_r3' and issue is null and status = 'active'
+         and current_period_end > now() + interval '25 days'
+       from public.subscriptions where user_id = :'r3a')
+  and pg_temp.mp(:'r3a') -> 'issue' = 'null'::jsonb,
+  'R3. La suscripción debía adoptar su id sin marcarse como segunda'
+);
+-- El cobro siguiente ya trae su suscripción y alarga la misma
+select pg_temp.is(pg_temp.charge('evt-r3-c2', 'paid', :'r3a', 'subscription', 'monthly', '9300002', 149, 'mp_pre_r3', 'mercadopago',
+  p_period_end => now() + interval '60 days', p_provider => 'mercadopago'), 'applied',
+  'R3. El cobro siguiente debía aplicarse');
+select pg_temp.expect(
+  (select current_period_end > now() + interval '55 days' from public.subscriptions where user_id = :'r3a')
+  and (select count(*) from public.payments where user_id = :'r3a' and status = 'paid') = 2,
+  'R3. El cobro siguiente debía alargar la misma suscripción'
+);
+
+-- R4. El estado Fundador no se salta el cupo ni la regla de quien ya lo perdió
+\set r4a 'ba110000-0000-0000-0000-0000000004a0'
+\set r4b 'ba110000-0000-0000-0000-0000000004b0'
+\set r4c 'ba110000-0000-0000-0000-0000000004c0'
+\set r4d 'ba110000-0000-0000-0000-0000000004d0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r4a', 'r4a@ba.mx', '{"alias":"Fundador vencido"}'),
+  (:'r4b', 'r4b@ba.mx', '{"alias":"Fundador a mano"}'),
+  (:'r4c', 'r4c@ba.mx', '{"alias":"Sube a Fundador"}'),
+  (:'r4d', 'r4d@ba.mx', '{"alias":"Perdió Fundador"}');
+-- Una suscripción Fundador que solo llega terminada, como un pago que venció sin completarse, no ocupa lugar
+select pg_temp.state('evt-r4-a', :'r4a', 'sub_r4_a', 'founder', 'ended');
+select pg_temp.is(pg_temp.seat_of(:'r4a'), null, 'R4. Una suscripción Fundador terminada no debía ocupar lugar');
+-- Con el cupo lleno, una fila Fundador puesta a mano no pasa del cupo
+update public.platform_settings set value = jsonb_build_object('total', public.founder_seats_taken())
+  where key = 'founder_seats';
+insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id, current_period_end)
+  values (:'r4b', 'founder', 'active', 'stripe', 'sub_r4_b', now() + interval '30 days');
+select pg_temp.is(pg_temp.seat_of(:'r4b'), null, 'R4. Una fila Fundador puesta a mano no debía pasar del cupo');
+-- Con el cupo lleno, pasar al precio Fundador en la misma suscripción no da el plan ni el lugar
+select pg_temp.state('evt-r4-c', :'r4c', 'sub_r4_c', 'monthly', 'active', p_price => 'price_mensual');
+select pg_temp.charge('evt-r4-cc', 'paid', :'r4c', 'subscription', 'monthly', 'in_r4_c', 149, 'sub_r4_c',
+  p_period_end => now() + interval '30 days');
+select pg_temp.is(pg_temp.state('evt-r4-cx', :'r4c', 'sub_r4_c', 'founder', 'active', p_price => 'price_fundador'),
+  'founder_full', 'R4. Pasar a Fundador sin lugar en la misma suscripción debía rechazarse');
+select pg_temp.expect(
+  pg_temp.seat_of(:'r4c') is null
+  and (select plan from public.subscriptions where user_id = :'r4c') = 'monthly'
+  and pg_temp.action_for('sub_r4_c') = 'founder_full',
+  'R4. Sin lugar no debía quedar como Fundador'
+);
+update public.platform_settings set value = '{"total":100}' where key = 'founder_seats';
+-- Quien pagó un Fundador y lo dejó no lo recupera con otra suscripción, llegue antes el estado o el cobro
+select pg_temp.state('evt-r4-d1', :'r4d', 'sub_r4_d1', 'founder', 'active');
+select pg_temp.charge('evt-r4-d1c', 'paid', :'r4d', 'subscription', 'founder', 'in_r4_d1', 79, 'sub_r4_d1',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r4-d1e', :'r4d', 'sub_r4_d1', 'founder', 'ended');
+select pg_temp.is(public.checkout_context(:'r4d') ->> 'founderLost', 'true', 'R4. Debía perder el precio Fundador');
+select pg_temp.is(pg_temp.state('evt-r4-d2', :'r4d', 'sub_r4_d2', 'founder', 'active'), 'founder_full',
+  'R4. Una suscripción Fundador nueva de quien lo perdió debía rechazarse');
+select pg_temp.is(pg_temp.charge('evt-r4-d3c', 'paid', :'r4d', 'subscription', 'founder', 'in_r4_d3', 79, 'sub_r4_d3',
+  p_period_end => now() + interval '30 days'), 'founder_full',
+  'R4. El cobro de una suscripción Fundador nueva de quien lo perdió debía rechazarse');
+select pg_temp.expect(
+  (select provider_subscription_id from public.founder_seats where user_id = :'r4d') = 'sub_r4_d1'
+  and public.user_plan(:'r4d') = 'free'
+  and (select status from public.payments where provider_payment_id = 'in_r4_d3') = 'needs_refund'
+  and pg_temp.action_for('sub_r4_d2') = 'founder_full'
+  and pg_temp.action_for('sub_r4_d3') = 'founder_full',
+  'R4. Quien perdió el Fundador no debía recuperarlo ni mover su lugar'
+);
+
+-- R5. Las banderas freeTrial, cashPasses y mercadoPago también las hace cumplir el servidor. Solo el
+-- booleano true las prende, como requireMfa. Sin la clave o con otro valor quedan apagadas
+\set r5a 'ba110000-0000-0000-0000-0000000005a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r5a', 'r5a@ba.mx', '{"alias":"Banderas"}');
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":true,"flags":{"cashPasses":true,"mercadoPago":true}}'::jsonb
+  and (pg_temp.mp(:'r5a') ->> 'trialAvailable')::boolean,
+  'R5. Con las banderas prendidas debía haber prueba, pases y Mercado Pago'
+);
+begin;
+select pg_temp.set_flags('{"freeTrial":false,"cashPasses":"true","mercadoPago":1}');
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":false,"flags":{"cashPasses":false,"mercadoPago":false}}'::jsonb
+  and not (pg_temp.mp(:'r5a') ->> 'trialAvailable')::boolean,
+  'R5. Con las banderas apagadas o con otro valor no debía haber prueba, pases ni Mercado Pago'
+);
+update public.platform_settings set value = '[]'::jsonb where key = 'feature_flags';
+select pg_temp.is(public.checkout_context(:'r5a') ->> 'trialAvailable', 'false',
+  'R5. Una clave que no es objeto debía dejar la prueba apagada');
+delete from public.platform_settings where key = 'feature_flags';
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":false,"flags":{"cashPasses":false,"mercadoPago":false}}'::jsonb,
+  'R5. Sin la clave las banderas debían quedar apagadas'
+);
+rollback;
+
+-- R7. Un reembolso se casa con su cobro por id y nunca cancela una suscripción que no es la del cobro
+\set r7a 'ba110000-0000-0000-0000-0000000007a0'
+\set r7c 'ba110000-0000-0000-0000-0000000007c0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r7a', 'r7a@ba.mx', '{"alias":"Reembolso viejo"}'),
+  (:'r7c', 'r7c@ba.mx', '{"alias":"Reembolso sin cobro"}');
+-- El cobro de una suscripción que ya terminó se devuelve cuando el alumno ya tiene otra. La nueva sigue
+select pg_temp.state('evt-r7-a1', :'r7a', 'sub_r7_a', 'monthly', 'active');
+select pg_temp.charge('evt-r7-a1c', 'paid', :'r7a', 'subscription', 'monthly', 'in_r7_a', 149, 'sub_r7_a',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r7-a1e', :'r7a', 'sub_r7_a', 'monthly', 'ended');
+select pg_temp.is(pg_temp.state('evt-r7-b1', :'r7a', 'sub_r7_b', 'annual', 'active'), 'applied',
+  'R7. La suscripción nueva debía aplicarse');
+select pg_temp.is(pg_temp.charge('evt-r7-ar', 'refunded', :'r7a', 'subscription', null, 'in_r7_a', 149), 'applied',
+  'R7. El reembolso del cobro viejo debía aplicarse');
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_r7_a') = 'refunded'
+  and (select provider_subscription_id = 'sub_r7_b' and status = 'active' from public.subscriptions where user_id = :'r7a')
+  and public.user_plan(:'r7a') = 'annual'
+  and pg_temp.action_for('sub_r7_a') = 'refund'
+  and pg_temp.action_for('sub_r7_b') is null,
+  'R7. Devolver el cobro de otra suscripción no debía cancelar la vigente'
+);
+-- Un reembolso con PaymentIntent que no es de ningún cobro guardado no adivina por monto y hora
+select pg_temp.state('evt-r7-c1', :'r7c', 'sub_r7_c', 'monthly', 'active');
+select pg_temp.charge('evt-r7-c1c', 'paid', :'r7c', 'subscription', 'monthly', 'in_r7_c', 149, 'sub_r7_c',
+  p_period_end => now() + interval '30 days');
+select pg_temp.is(pg_temp.charge('evt-r7-cr', 'refunded', :'r7c', 'subscription', null, null, 149, null, null, 'pi_r7_ajeno'),
+  'ignored', 'R7. Un reembolso que no se casa con ningún cobro debía ignorarse');
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_r7_c') = 'paid'
+  and public.user_plan(:'r7c') = 'monthly'
+  and pg_temp.action_for('sub_r7_c') is null,
+  'R7. Un reembolso sin su cobro no debía quitar el plan por un cobro del mismo monto'
 );
 
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;

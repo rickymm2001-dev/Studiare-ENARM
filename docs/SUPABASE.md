@@ -893,8 +893,8 @@ select
 
 ### Qué hace
 
-- Prueba gratis de 7 días con tarjeta, una sola por persona. Cuenta la cuenta y también el correo, sin puntos ni +algo en Gmail, así que abrir otra cuenta con el mismo correo no da otra prueba. Una prueba repetida queda anulada y su suscripción se cancela sola en Stripe
-- El plan Anual Fundador de 749. Los 100 lugares Fundador los comparten el mensual y el anual. La prueba aparta el lugar, el primer cobro lo confirma y cancelar la prueba lo libera. Si dos personas toman el último lugar a la vez, la base deja pasar a una y a la otra le cancela la suscripción
+- Prueba gratis de 7 días con tarjeta, una sola por persona. Cuenta la cuenta y también el correo, sin puntos ni +algo en Gmail, así que abrir otra cuenta con el mismo correo no da otra prueba, tampoco después de borrar la cuenta. Para eso trial_history guarda cada prueba usada con la huella SHA-256 del correo normalizado, nunca el correo, y sobrevive al borrado. Mientras la cuenta existe también guarda la pasarela y el id de la suscripción. Al borrarse la cuenta se quitan en el mismo paso, porque Stripe liga esa suscripción a un cliente, y quedan solo la huella y la fecha. Una prueba repetida queda anulada y su suscripción se cancela sola en Stripe
+- El plan Anual Fundador de 749. Los 100 lugares Fundador los comparten el mensual y el anual. La prueba aparta el lugar, el primer cobro lo confirma y cancelar la prueba lo libera, también si la cuenta se borró antes de que terminara. El lugar confirmado de una cuenta borrada sigue contando, sin dueño y sin el id de su suscripción, que Stripe liga a un cliente. Si dos personas toman el último lugar a la vez, la base deja pasar a una y a la otra le cancela la suscripción
 - Pases de un solo pago, de 1 mes o de 1 año, con OXXO o SPEI. Un pase nuevo se suma desde el fin del que ya hay. Mientras la ficha o la transferencia no se pagan, el pago queda pendiente y el alumno lo ve
 - Un solo plan pagado a la vez. Con una suscripción vigente no se abre otro pago
 - Cambiar de plan en el portal de Stripe. Subir cobra la diferencia al momento y bajar se agenda al fin del periodo. El plan sale siempre del Price ID que avisa Stripe
@@ -920,12 +920,12 @@ Para confirmar que quedó, abre otra New query, pega esto y da clic en Run. Es l
 ```sql
 select
   (select count(*) from pg_tables where schemaname = 'public'
-     and tablename in ('founder_seats', 'trial_claims', 'plan_passes', 'billing_actions', 'email_kinds', 'email_outbox',
-                       'invoice_requests')) as tablas_nuevas,
+     and tablename in ('founder_seats', 'trial_claims', 'trial_history', 'plan_passes', 'billing_actions', 'email_kinds',
+                       'email_outbox', 'invoice_requests')) as tablas_nuevas,
   (select bool_and(relrowsecurity) from pg_class where oid in (
-     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.plan_passes'::regclass,
-     'public.billing_actions'::regclass, 'public.email_kinds'::regclass, 'public.email_outbox'::regclass,
-     'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
+     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.trial_history'::regclass,
+     'public.plan_passes'::regclass, 'public.billing_actions'::regclass, 'public.email_kinds'::regclass,
+     'public.email_outbox'::regclass, 'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
   has_function_privilege('authenticated', 'public.apply_charge(text, text, jsonb, text, uuid, text, text, text, text, text, text, numeric, numeric, text, timestamptz, timestamptz)', 'execute') as alumno_aplica_cobros,
   has_function_privilege('service_role', 'public.apply_subscription_state(text, text, timestamptz, jsonb, uuid, text, text, text, timestamptz, timestamptz, boolean, boolean, text, text)', 'execute') as servicio_aplica_estados,
   has_function_privilege('authenticated', 'public.checkout_context(uuid)', 'execute') as alumno_lee_contexto,
@@ -942,7 +942,7 @@ select
 ```
 
 Debe salir
-- tablas_nuevas en 7 y tablas_con_seguridad_por_fila en true
+- tablas_nuevas en 8 y tablas_con_seguridad_por_fila en true
 - alumno_aplica_cobros, alumno_lee_contexto y alumno_lee_lugares en false
 - servicio_aplica_estados y alumno_pide_factura en true
 - plan_fundador_anual, estado_prueba y borrar_cuenta_b10 en true. Si alguna sale en false, falta pegar supabase/manual/pagos-b10.sql
@@ -982,8 +982,8 @@ Las dos últimas cuando exista la cuenta de Mercado Pago.
 
 ### Qué conviene saber
 
-- Las reglas viven en platform_settings. billing_rules guarda trialDays (7), guaranteeDays (7), oxxoExpiresDays (3) y passReminderDays (3). Con trialDays en 0 se apaga la prueba sin desplegar nada. founder_seats acepta total (100 si no está) y open en false para cerrar la promoción. billing_emails con enabled en false deja los correos en la cola
-- Cada aviso queda en payment_webhook_events con su resultado en la columna result, por ejemplo applied, duplicate, stale, ignored, unknown_user, trial_duplicate o founder_full. Las acciones con la pasarela, como cancelar una prueba repetida, quedan en billing_actions con su estado y su error si falló
+- Las reglas viven en platform_settings. billing_rules guarda trialDays (7), guaranteeDays (7), oxxoExpiresDays (3) y passReminderDays (3). Con trialDays en 0 se apaga la prueba sin desplegar nada. Las banderas de la app en feature_flags también las cumple la base. Sin freeTrial en true nadie tiene prueba, y sin cashPasses o mercadoPago en true create-checkout no abre pases con OXXO o SPEI ni nada de Mercado Pago. Solo cuenta el booleano true, como requireMfa. founder_seats acepta total (100 si no está) y open en false para cerrar la promoción. billing_emails con enabled en false deja los correos en la cola
+- Cada aviso que la función entiende queda en payment_webhook_events con su resultado en la columna result, por ejemplo applied, duplicate, stale, ignored, unknown_user, trial_duplicate o founder_full. Las acciones con la pasarela, como cancelar una prueba repetida, quedan en billing_actions con su estado y su error si falló
 - Mercado Pago tiene dos caminos. La suscripción (preapproval), que sí se renueva sola cada periodo y se cancela desde la app con cancel-subscription, y el pase de un solo pago. Mercado Pago no lleva precio Fundador ni prueba gratis
 - Las filas de la corrida en modo prueba se borran con supabase/manual/limpiar-pagos-de-prueba.sql, que lista las cuentas al final. Antes se cancelan las suscripciones en Stripe o se borran sus relojes de prueba
 - Los datos fiscales de una factura (RFC, razón social, régimen, uso y código postal) no viajan en los correos. El correo al equipo solo dice el monto
@@ -1030,7 +1030,7 @@ select
 - La primera migración se aplicó pegándola en el SQL Editor, por eso la lista de migraciones del panel no la muestra. Las demás sí aparecen. No uses supabase db push en este proyecto sin antes registrar la primera con supabase migration repair, porque intentaría aplicarla otra vez
 - Las funciones se subieron con el conector, con los módulos de supabase/functions/_shared incluidos. El repo manda. Si cambias algo ahí, vuelve a desplegar con supabase functions deploy o pídemelo
 - Los secretos de las funciones (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL) los pones tú en Edge Functions, Secrets. FUNCTIONS_URL es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1 y el webhook de Stripe apunta a esa dirección con /payment-webhook-stripe al final
-- El chequeo de seguridad todavía marca avisos que son a propósito. Ocho tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama. Con 20261021000002_free_plan_party_moderation (B8) is_group_member y shares_group se cierran a anónimos y quedan current_app_role e is_admin
+- El chequeo de seguridad todavía marca avisos que son a propósito. Nueve tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama. Con 20261021000002_free_plan_party_moderation (B8) is_group_member y shares_group se cierran a anónimos y quedan current_app_role e is_admin
 - Falta activar la protección contra contraseñas filtradas en Authentication. Es un interruptor del panel y puede requerir el plan de pago de Supabase
 
 ## Antes de abrir a alumnos

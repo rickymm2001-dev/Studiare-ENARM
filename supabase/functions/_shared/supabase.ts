@@ -191,6 +191,11 @@ export function parseCheckoutContext(value: unknown): CheckoutContext {
     founderLost: requireBoolean(root.founderLost, 'founderLost'),
     oxxoExpiresDays: requireNumber(root.oxxoExpiresDays, 'oxxoExpiresDays'),
     customerId: asString(root.customerId),
+    // Solo true las prende. Sin el campo o con otro valor quedan apagadas, y la tarjeta sigue igual
+    flags: {
+      cashPasses: asRecord(root.flags).cashPasses === true,
+      mercadoPago: asRecord(root.flags).mercadoPago === true,
+    },
   };
 }
 

@@ -27,6 +27,7 @@ import {
   type ChargeNotice,
   type CheckoutContext,
   type CheckoutError,
+  type CheckoutFlags,
   type CheckoutMode,
   type CheckoutRequest,
   type FunctionEnv,
@@ -53,6 +54,10 @@ import {
   customerParams,
   idOf,
   invoiceChargeNotice,
+  invoiceOfPayments,
+  invoicePaymentParams,
+  lostDispute,
+  mxnFromCents,
   isMissingCustomer,
   passSessionParams,
   portalSessionParams,
@@ -63,6 +68,7 @@ import {
   sessionNeedsRead,
   sessionReadParams,
   stripeCall,
+  storedEvent,
   stripeFailureLine,
   subscriptionNotice,
   subscriptionSessionParams,
@@ -181,6 +187,35 @@ async function withPromotionCode(
 }
 
 /**
+ * Un reembolso con la factura que pagó su PaymentIntent, para que la base encuentre el cobro de la
+ * suscripción por su id exacto (in_) y no por monto y hora. Un pase no tiene factura y se encuentra por su
+ * PaymentIntent. Lanza si Stripe no contesta, y entonces se responde 500 para que Stripe lo reintente
+ */
+async function withInvoice(notice: ChargeNotice, deps: StripeWebhookDeps): Promise<ChargeNotice> {
+  const intent = notice.paymentIntentId;
+  if (intent === null || notice.providerPaymentId !== null) return notice;
+  const key = deps.env.STRIPE_SECRET_KEY ?? '';
+  if (key === '') {
+    deps.log(
+      'Falta STRIPE_SECRET_KEY para buscar la factura del reembolso. Se aplica con su PaymentIntent',
+    );
+    return notice;
+  }
+  const reply = await stripeCall(
+    { key, fetch: deps.fetch },
+    'GET',
+    '/v1/invoice_payments',
+    invoicePaymentParams(intent),
+  );
+  if (!reply.ok) {
+    deps.log(`No se pudo buscar la factura del reembolso. ${stripeFailureLine(reply)}`);
+    throw new Error('lectura de la factura');
+  }
+  const invoiceId = invoiceOfPayments(reply.body);
+  return invoiceId === null ? notice : { ...notice, providerPaymentId: invoiceId };
+}
+
+/**
  * Lo que hay que aplicar por un evento (2.4). null si el evento no se usa. Lanza si la base o la
  * lectura a Stripe fallan, y entonces no se aplicó nada
  */
@@ -192,7 +227,8 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
   const context = {
     eventId,
     eventAt: unixToIso(event.created) ?? new Date(deps.now()).toISOString(),
-    payload: event,
+    // Lo que se guarda va sin los datos del pagador. Conserva los ids, los montos y data.object.created
+    payload: storedEvent(event),
     env: deps.env,
     log: deps.log,
   };
@@ -270,7 +306,45 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
       // El alumno puede no estar ligado todavía. Entonces el aviso se asienta sin alumno, para que una
       // persona lo vea en payment_webhook_events, en lugar de perderse
       const userId = await deps.userOfCustomer(refund.customerId);
-      return [{ type: 'charge', notice: { ...refund.notice, userId } }];
+      const notice = await withInvoice(refund.notice, deps);
+      return [{ type: 'charge', notice: { ...notice, userId } }];
+    }
+    case 'charge.dispute.created':
+      // Abrir un contracargo no cambia el acceso. Solo queda en el registro, sin datos del alumno, para
+      // que alguien responda la disputa en Stripe. Si se pierde, llega charge.dispute.closed
+      deps.log(
+        `Contracargo abierto ${asString(object.id) ?? '?'} por ${asString(object.reason) ?? '?'}. No cambia el acceso hasta que Stripe lo cierre`,
+      );
+      return null;
+    case 'charge.dispute.closed': {
+      const lost = lostDispute(object, context);
+      if (!lost) return null;
+      const key = deps.env.STRIPE_SECRET_KEY ?? '';
+      if (key === '') {
+        deps.log('Falta STRIPE_SECRET_KEY para leer el cobro del contracargo');
+        throw new Error('sin llave');
+      }
+      const reply = await stripeCall(
+        { key, fetch: deps.fetch },
+        'GET',
+        `/v1/payment_intents/${encodeURIComponent(lost.notice.paymentIntentId)}`,
+      );
+      if (!reply.ok) {
+        deps.log(`No se pudo leer el cobro del contracargo. ${stripeFailureLine(reply)}`);
+        throw new Error('lectura del cobro');
+      }
+      // Uno parcial no quita el plan, igual que un reembolso parcial
+      const paid = mxnFromCents(reply.body.amount_received, reply.body.currency);
+      if (paid !== null && lost.notice.amountMxn < paid) {
+        deps.log(
+          `Contracargo parcial perdido ${lost.disputeId} de ${String(lost.notice.amountMxn)} de ${String(paid)} pesos. No cambia el acceso. Revísalo en Stripe`,
+        );
+        return null;
+      }
+      const customerId = idOf(reply.body.customer);
+      const userId = customerId === null ? null : await deps.userOfCustomer(customerId);
+      const notice = await withInvoice(lost.notice, deps);
+      return [{ type: 'charge', notice: { ...notice, userId } }];
     }
     default:
       return null;
@@ -393,6 +467,23 @@ export function parseCheckoutRequest(value: unknown): CheckoutRequest | null {
   };
 }
 
+/**
+ * La bandera de feature_flags que cierra lo que se pidió, o null si está abierto. Los pases con OXXO o
+ * SPEI piden cashPasses y todo Mercado Pago pide mercadoPago. La tarjeta con renovación no depende de
+ * ninguna. Sin banderas cuentan como apagadas. La app ya esconde esas opciones con las mismas banderas, y
+ * esto evita que se abran pidiéndolas directo
+ */
+export function closedFlagFor(
+  ask: CheckoutRequest,
+  flags: CheckoutFlags | undefined,
+): keyof CheckoutFlags | null {
+  if (ask.provider === 'mercadopago') return flags?.mercadoPago === true ? null : 'mercadoPago';
+  if ((ask.mode ?? 'subscription') === 'pass') {
+    return flags?.cashPasses === true ? null : 'cashPasses';
+  }
+  return null;
+}
+
 const ERROR_STATUS: Record<CheckoutError, number> = {
   invalid: 400,
   unauthorized: 401,
@@ -466,6 +557,13 @@ export async function handleCreateCheckout(
   } catch {
     deps.log(`No se pudo leer checkout_context antes de abrir el pago del plan ${ask.plan}`);
     return fail('provider');
+  }
+  const closed = closedFlagFor(ask, context.flags);
+  if (closed) {
+    deps.log(
+      `La bandera ${closed} está apagada en el servidor. No se abre el pago del plan ${ask.plan}`,
+    );
+    return fail('not_configured');
   }
   // Un solo plan pagado a la vez (D-118). Un pase suma a otro pase, pero no a una suscripción (8.10)
   if (context.inForce === 'subscription') return fail('already_subscribed');
@@ -625,12 +723,17 @@ export async function handleCreatePortal(request: Request, deps: PortalDeps): Pr
   const customer = context.customerId;
   if (customer === null) return json({ error: 'no_customer' }, 404, cors);
 
+  // Sin su configuración el portal no se abre. La de Stripe por omisión deja elegir cualquier precio del
+  // catálogo, también el Fundador sin pasar por el cupo
   const configName = isFounderPlan(subscription?.plan)
     ? 'STRIPE_PORTAL_CONFIG_FOUNDER'
     : 'STRIPE_PORTAL_CONFIG_REGULAR';
-  const configuration = (deps.env[configName] ?? '').trim() || null;
-  if (!configuration) {
-    deps.log(`Falta ${configName}. El portal se abre con la configuración por omisión de Stripe`);
+  const configuration = (deps.env[configName] ?? '').trim();
+  if (configuration === '') {
+    deps.log(
+      `Falta ${configName}. El portal no se abre sin su configuración, porque la de Stripe por omisión deja elegir cualquier precio`,
+    );
+    return json({ error: 'not_configured' }, 503, cors);
   }
   const stripeSubscription =
     live && subscription.provider === 'stripe' ? subscription.subscriptionId : null;

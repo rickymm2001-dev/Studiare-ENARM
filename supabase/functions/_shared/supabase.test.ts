@@ -126,6 +126,7 @@ describe('contexto del pago por REST', () => {
     founderLost: false,
     oxxoExpiresDays: 3,
     customerId: 'cus_1',
+    flags: { cashPasses: true, mercadoPago: false },
   };
 
   it('pide checkout_context con la llave de servicio y el alumno', async () => {
@@ -136,6 +137,21 @@ describe('contexto del pago por REST', () => {
       'Bearer servicio-de-prueba',
     );
     expect(JSON.parse(bodyText(calls[0]?.init))).toEqual({ p_user: USER });
+  });
+
+  it('las banderas solo se prenden con true y sin ellas cuentan como apagadas', () => {
+    const { flags: _flags, ...withoutFlags } = context;
+    expect(parseCheckoutContext(withoutFlags).flags).toEqual({
+      cashPasses: false,
+      mercadoPago: false,
+    });
+    expect(
+      parseCheckoutContext({ ...context, flags: { cashPasses: 'true', mercadoPago: 1 } }).flags,
+    ).toEqual({ cashPasses: false, mercadoPago: false });
+    expect(parseCheckoutContext({ ...context, flags: [true] }).flags).toEqual({
+      cashPasses: false,
+      mercadoPago: false,
+    });
   });
 
   it('sin suscripción ni cliente los deja en null', () => {
