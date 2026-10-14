@@ -22,8 +22,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B4. Repasar y Buscar tarjetas (PR 43 fusionado)
 - [x] B5. Revisión del examen y motivos de error (PR 43 fusionado, junto con B4)
 - [x] B6. Apuntes y mazos (PR 44 fusionado)
-- [x] B7. Party real y lo que se queda o se va (PR en curso)
-- [ ] B8. Plan Gratis
+- [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
+- [x] B8. Plan Gratis (PR en curso)
 - [ ] B9. Cuentas y acceso
 - [ ] B10. Pagos completos
 - [ ] B11. Banco en la nube y Google Sheets
@@ -126,11 +126,19 @@ Evidencia
 - Evidencia. Typecheck, lint y formato limpios. Vitest con 3,200 pruebas que pasan. Pruebas SQL en 15 archivos con 608 comprobaciones. E2e de Party, etiquetas, Inicio y Configuración en teléfono y computadora, 27 pasan y 1 se salta por ser solo de computadora. Las 6 de la nube, 26 de 26. Suite completa con 142 en teléfono y 142 en computadora, más una de primera visita sin conexión que se pasó del tiempo con la máquina cargada y pasa sola
 - Capturas en docs/screenshots/v3/b7
 
+### B8. Plan Gratis (D-127)
+- Hecho. En Gratis se cierran con vista previa Party, Subir tus mazos, seguir mazos nuevos del catálogo y Apuntes, y siguen abiertas las 20 preguntas al día con su explicación, los referidos, Comparte tu semana, exportar y borrar los datos propios y repasar lo que ya está en el dispositivo. El servidor aplica los mismos candados con la regla de user_plan
+- Revisión independiente con sus 13 hallazgos corregidos, entre ellos uno alto (los apuntes escritos en Gratis ya no se pierden en la nube). La unión con B4 a B7 resolvió 9 choques y 5 que git no marcó
+- Evidencia. Typecheck, lint y formato limpios. Vitest con 3,234 pruebas que pasan. Pruebas SQL en 17 archivos. E2e del plan Gratis y de lo que contrata plan antes de Party, subir mazos o seguir mazos, 30 de 30 en teléfono y 30 de 30 en computadora tras corregir la del selector de retroalimentación. La nube completa, 16 de 16 en cada proyecto. Más exam-review, pomodoro, review-tools, offline, decks y home
+- Desde B8 el ayudante followSmallestDeck de las e2e deja la cuenta en plan de pago. Una prueba que espere algo de Gratis lo fija ella misma
+- Capturas en docs/screenshots/v3/b8
+
 ### Estado de las ramas en paralelo (2026-10-14, 10:15 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
-- B7 cerrado en la rama de trabajo, con su PR. Sus migraciones ya están en el proyecto
-- B8 en b8 con los 13 hallazgos de su revisión corregidos. Sus migraciones 20261021000001 y 20261021000002 no se han aplicado
+- B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
+- B8 cerrado en la rama de trabajo, con su PR. Sus migraciones se aplican al fusionarlo
+- La paleta con más color (PR 47 de otra herramienta, D-128) se integra por la rama de trabajo después de B8, por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
 - B9 en b9 con los hallazgos de su revisión corregidos. Su migración 20261020000001 no se ha aplicado
 - B10 en b10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido y en verde. Falta su interfaz, que arranca sobre B8 integrado
 - Los diseños de B10, B11 y B12 están en /home/user/wt/plans
@@ -145,6 +153,7 @@ Evidencia
 - B2. Quedaron con color las fases del Pomodoro (enfoque en el color de acción y descanso en un tono de rama) y el contador de Nuevas en Repasar. Si los quieres neutros, solo cambian sus clases
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
+- B8. ¿Dejamos abierto en Gratis un mazo de muestra del catálogo? ¿Comparte tu semana sigue abierta en Gratis (hoy sí)? ¿Ocultamos de la tabla de Party a quien baja a Gratis (hoy lo siguen viendo hasta que salga)? ¿Médicos y admins sin plan entran a Party (hoy no, el rol no cuenta)? ¿Apuntes en Gratis deja ver y borrar los apuntes viejos (hoy se guardan y sus tarjetas siguen en Repasar)?
 - B4 y B5. Revisé la versión que se revirtió. Todo lo que pide el plan ya estaba en la que se quedó y se rescataron tres detalles chicos (el aviso de tarjeta ya creada en la revisión del examen, el atajo X que dice seleccionar y dos pruebas que fallaban en Windows). Quedan a tu gusto, y cada uno es un cambio chico. Un número junto a cada tema de los mazos. Un total global de motivos de error en Progreso, además del reparto por rama. Una marca propia del alumno como la bandera de Anki, porque hoy Marcadas son las tarjetas con señal de la IA. Elegir temas dentro de cada mazo en Repasar (hoy se eligen mazo y subespecialidad). Pasar al documento de revisión médica las 22 diferencias de nombres de temas de la otra versión como alternativas
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)

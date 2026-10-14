@@ -45,6 +45,26 @@ export const deckIds = {
   card: (cardKey: string) => stableUlid(`card|${cardKey}`, DEMO_CONTENT_TIME),
 };
 
+/** Las tarjetas de una nota. La básica tiene una, con ordinal 0, y la cloze una por hueco */
+function ordinalsOf(note: DemoDeckNote): readonly number[] {
+  return note.kind === 'basic' ? [0] : note.ordinals;
+}
+
+/** La clave estable de una tarjeta, por ejemplo paco-mi-0001 o paco-mi-0002-c1 */
+function cardKeyOf(note: DemoDeckNote, ordinal: number): string {
+  return note.kind === 'basic' ? note.key : `${note.key}-c${ordinal}`;
+}
+
+/**
+ * Los ids de las tarjetas de un mazo del catálogo, los mismos que les da seguirlo. Sirven para saber
+ * si el alumno ya repasó ese mazo aunque no esté en este dispositivo, porque su bitácora sí viaja
+ */
+export function catalogCardIds(file: Pick<DemoDeckFile, 'notes'>): string[] {
+  return file.notes.flatMap((note) =>
+    ordinalsOf(note).map((ordinal) => deckIds.card(cardKeyOf(note, ordinal))),
+  );
+}
+
 /** La ruta de etiqueta de una nota. La original ya viene sin espacios y se conserva con sus niveles */
 export function noteTagPath(note: Pick<DemoDeckNote, 'sourceTag' | 'tags'>): string[] {
   const path = sanitizeTag(note.sourceTag);
@@ -138,9 +158,8 @@ export function buildDeckEntities(files: readonly DemoDeckFile[]): DemoDeckEntit
             : { ...common, kind: 'cloze', text: note.text, extra: note.extra },
         ),
       );
-      const ordinals = note.kind === 'basic' ? [0] : note.ordinals;
-      for (const ordinal of ordinals) {
-        const key = note.kind === 'basic' ? note.key : `${note.key}-c${ordinal}`;
+      for (const ordinal of ordinalsOf(note)) {
+        const key = cardKeyOf(note, ordinal);
         cards.push({
           key,
           note,

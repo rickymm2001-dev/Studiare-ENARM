@@ -11,7 +11,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { DataApi } from '@/data/context';
 import type { FsrsCardState } from '@/data/schemas/common';
-import { newId } from '@/data/testing/fixtures';
+import { newId, subscribe } from '@/data/testing/fixtures';
 import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
@@ -205,10 +205,16 @@ const tableFronts = () =>
 
 describe('Buscar tarjetas', () => {
   it('sin tarjetas lo dice y lleva a Mazos', async () => {
-    app = await renderApp(SCREENS.explore.path);
+    app = await renderApp(SCREENS.explore.path, { seed: (api, user) => subscribe(api, user) });
     expect(await screen.findByText(text.empty, undefined, WAIT)).toBeVisible();
     // La pestaña y el botón del estado vacío
     expect(screen.getAllByRole('link', { name: t.studyTabs.decks })).toHaveLength(2);
+  });
+
+  it('en Gratis, sin tarjetas, sugiere crear un mazo propio y no seguir uno del catálogo', async () => {
+    app = await renderApp(SCREENS.explore.path);
+    expect(await screen.findByText(t.freePlan.catalog.exploreEmpty, undefined, WAIT)).toBeVisible();
+    expect(screen.queryByText(text.empty)).toBeNull();
   });
 
   it('es la tercera pestaña de Repasar, se llama Buscar tarjetas y lista todas las tarjetas', async () => {

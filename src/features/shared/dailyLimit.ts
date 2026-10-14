@@ -1,7 +1,7 @@
 // Cuántas preguntas le quedan hoy al alumno según su plan (9.8). La práctica y los duelos de Party
 // consultan lo mismo, así el límite del plan Gratis se aplica igual en los dos. Es una bandera de
 // acceso. En producción el servidor la aplica también. Sin React ni Dexie.
-import { PLANS, type PlanKey } from '@/config/billing';
+import { PLANS, planOf, type PlanKey } from '@/config/billing';
 import type { AppEvent } from '@/data/schemas/events';
 import type { Subscription } from '@/data/schemas/people';
 import { studyDayOf } from '@/engines/studyDay';
@@ -28,8 +28,7 @@ export function dailyQuestions(input: {
    */
   reserved?: number;
 }): DailyQuestions {
-  const { subscription } = input;
-  const plan: PlanKey = subscription?.status === 'active' ? subscription.plan : 'free';
+  const plan = planOf(input.subscription);
   const limit = PLANS[plan].access.dailyQuestions;
   const today = studyDayOf(input.now, input.timeZone);
   // Cada quien cuenta el día con la zona horaria de cuando respondió

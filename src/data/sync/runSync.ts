@@ -2,7 +2,10 @@
 // orden. Se comprueba el reloj, se bajan los registros y la bitácora, y después se suben los cambios
 // propios. Bajar primero hace que lo que se edita encima de lo recién bajado gane por su fecha. Cada
 // página que se baja o se sube deja guardado su avance, así un corte a la mitad continúa donde
-// quedó. Las decisiones de qué gana viven en el motor src/engines/sync.ts.
+// quedó. Las decisiones de qué gana viven en el motor src/engines/sync.ts. En el plan Gratis el servidor
+// ignora sin error los apuntes nuevos o cambiados (B8). Se anota en el avance y, con el primer plan de
+// pago, se mandan todos otra vez, así nada de lo que el alumno escribió se queda sin subir.
+import { canUse, planOf, type PlanKey } from '@/config/billing';
 import {
   PAGE_SIZE,
   SETTLE_MS,
@@ -19,6 +22,7 @@ import {
   stampOf,
   watermarkAfter,
   type SyncItem,
+  type SyncKind,
 } from '@/engines/sync';
 import type { DataApi } from '../context';
 import type { AppEvent } from '../schemas/events';
@@ -35,6 +39,11 @@ export interface SyncDeps {
   userId: string;
   /** La cuenta de la nube. Si cambia, el avance guardado ya no sirve */
   authId: string;
+  /**
+   * El plan que dio el servidor justo antes, con my_plan. Decide si los apuntes que se suben llegan a
+   * la nube (B8). Sin él se usa el plan guardado en este navegador
+   */
+  plan?: PlanKey;
   now?: () => Date;
 }
 
@@ -53,6 +62,15 @@ export type SyncResult =
   | { status: 'failed'; failure: SyncFailure; detail: string };
 
 const KIND_ORDER = ['deck', 'note', 'card', 'outline', 'widget_layout'] as const;
+
+/** Lo que el servidor solo guarda con un plan de pago (B8, 20261021000001_free_plan_locks.sql) */
+const PAID_KINDS: ReadonlySet<SyncKind> = new Set(['outline']);
+
+/** Si el servidor guarda los apuntes que se suben ahora, según el plan que dio o el de este navegador */
+async function outlinesReachCloud(deps: SyncDeps): Promise<boolean> {
+  const plan = deps.plan ?? planOf(await deps.api.repos.subscriptions.get(deps.userId));
+  return canUse(plan, 'outlines');
+}
 
 async function loadState(api: Api, userId: string, authId: string): Promise<SyncState> {
   const saved = await api.repos.syncState.get(userId);
@@ -233,8 +251,17 @@ async function pushRecords(
   });
   // Lo que se acaba de bajar tal cual ya está en el servidor y no se devuelve
   const own = items.filter((item) => fromServer.get(keyOf(item)) !== stampOf(item));
-  const plan = planPush(own, state.recordsWatermark, deps.userId);
+  // Con el plan Gratis el servidor ignora los apuntes nuevos o cambiados, y la marca de agua pasaría de
+  // largo. Se anota antes de subir. Con el primer plan de pago se mandan todos sin mirar la marca, y el
+  // servidor descarta lo que no es más nuevo
+  const outlinesOpen = await outlinesReachCloud(deps);
+  const resend = outlinesOpen && state.outlinesPending === true;
+  const plan = planPush(own, state.recordsWatermark, deps.userId, resend ? PAID_KINDS : undefined);
   let current = state;
+  if (!outlinesOpen && !current.outlinesPending && plan.some((item) => PAID_KINDS.has(item.kind))) {
+    current = { ...current, outlinesPending: true };
+    await repos.syncState.put(current);
+  }
   for (let sent = 0; sent < plan.length; sent += PAGE_SIZE) {
     const chunk = plan.slice(sent, sent + PAGE_SIZE);
     await deps.transport.pushRecords(chunk);
@@ -243,6 +270,10 @@ async function pushRecords(
       ...current,
       recordsWatermark: watermarkAfter(plan, sent + chunk.length, current.recordsWatermark, now()),
     };
+    await repos.syncState.put(current);
+  }
+  if (resend) {
+    current = { ...current, outlinesPending: false };
     await repos.syncState.put(current);
   }
   // Con todo enviado, la marca de agua avanza hasta el registro más nuevo que ya está en el servidor,

@@ -103,8 +103,13 @@ describe('Inicio con el diseño fijo', () => {
     expect(await within(topics).findByText(t.states.calibrating.title)).toBeVisible();
 
     expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
+    // En Gratis el reto de Party lleva el aviso corto del candado (respuesta 20, B8)
     const party = screen.getByRole('region', { name: t.widgets.names.party_challenge });
-    expect(await within(party).findByText(t.widgets.party.empty)).toBeVisible();
+    expect(await within(party).findByText(t.freePlan.widget)).toBeVisible();
+    expect(within(party).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+      'href',
+      SCREENS.subscription.path,
+    );
     const heatmap = screen.getByRole('region', { name: t.widgets.names.heatmap });
     expect(heatmap).toBeVisible();
     // Las iniciales de lunes a domingo van a la izquierda de las filas
@@ -174,6 +179,18 @@ describe('Inicio con el diseño fijo', () => {
     // Las tres tarjetas cuentan hoy y ninguna está vencida
     const due = screen.getByRole('region', { name: t.home.dueTitle });
     expect(within(due).getByText(t.widgets.today.done(3, 0))).toBeVisible();
+  });
+
+  it('con un plan de pago el reto de Party ya no lleva el candado', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await changePlan(api, user, 'monthly');
+      },
+    });
+    const party = await screen.findByRole('region', { name: t.widgets.names.party_challenge });
+    // Sin la nube no hay grupos, pero ya no es por el plan
+    expect(await within(party).findByText(t.widgets.party.empty)).toBeVisible();
+    expect(within(party).queryByText(t.freePlan.widget)).toBeNull();
   });
 
   it('sin sesión la raíz es la portada de venta', async () => {

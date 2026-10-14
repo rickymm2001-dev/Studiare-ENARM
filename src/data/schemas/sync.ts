@@ -15,6 +15,11 @@ export const SyncStateSchema = z.strictObject({
   recordsWatermark: UtcDateTimeSchema.nullable(),
   eventsWatermark: UtcDateTimeSchema.nullable(),
   lastSyncAt: UtcDateTimeSchema.nullable(),
+  /**
+   * Se subieron apuntes con el plan Gratis, y el servidor los ignora sin error (B8). Con el primer plan
+   * de pago se mandan todos otra vez sin mirar la marca de agua. Falta en el avance de antes de B8
+   */
+  outlinesPending: z.boolean().optional(),
 });
 export type SyncState = z.infer<typeof SyncStateSchema>;
 

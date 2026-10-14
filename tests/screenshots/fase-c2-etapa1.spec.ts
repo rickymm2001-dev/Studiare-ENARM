@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { followSmallestDeck } from '../e2e/support/b1';
 import { openCard, resultRows, searchResults } from '../e2e/support/cardSearch';
 import { signUp } from '../e2e/support/fixtures';
 
@@ -33,12 +34,8 @@ async function capture(page: Page, name: string, projectName: string) {
 test('Explorar con filtros, una tarjeta abierta y acciones por lote', async ({ page }, info) => {
   test.setTimeout(180_000);
   await signUp(page);
-  await page.goto(SCREENS.decks.path);
-  const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
-  await deck.getByRole('button', { name: t.decks.follow }).click();
-  await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
-    timeout: 60_000,
-  });
+  // Seguir mazos del catálogo es de pago (B8). followSmallestDeck contrata antes el mensual simulado
+  await followSmallestDeck(page);
 
   // Explorar se rehízo como Buscar tarjetas en B4 del plan del cambio
   await page.goto(SCREENS.explore.path);

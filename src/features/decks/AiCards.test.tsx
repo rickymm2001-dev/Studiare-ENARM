@@ -6,8 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { PLANS } from '@/config/billing';
-import type { DataApi } from '@/data/context';
-import type { User } from '@/data/schemas/people';
+import { subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 
 // Cada prueba arma toda la pantalla de Mazos y genera tarjetas, así que necesita más de 5 segundos
@@ -27,16 +26,6 @@ const MATERIAL =
   'La dosis inicial habitual es de 500 mg cada 12 horas con los alimentos. ' +
   'Nunca debe usarse con una tasa de filtrado glomerular menor de 30 ml/min. ' +
   'La retinopatía diabética se caracteriza por microaneurismas y hemorragias retinianas en el fondo de ojo.';
-
-async function subscribe(api: DataApi, user: User, plan: 'monthly' | 'free' = 'monthly') {
-  await api.repos.subscriptions.put({
-    userId: user.id,
-    plan,
-    status: plan === 'free' ? 'none' : 'active',
-    isSimulated: true,
-    updatedAt: '2026-10-01T10:00:00.000Z',
-  });
-}
 
 async function open(plan: 'monthly' | 'free' = 'monthly') {
   app = await renderApp(SCREENS.decks.path, {

@@ -171,6 +171,12 @@ do $$ begin
   exception when insufficient_privilege then null; end;
 end $$;
 
+-- Party es de los planes de pago desde B8 (20261021000001_free_plan_locks.sql). Los dos alumnos de esta
+-- prueba ya pagaron el mensual
+insert into public.subscriptions (user_id, plan, status, current_period_end) values
+  ('00000000-0000-0000-0000-00000000000d', 'monthly', 'active', now() + interval '30 days'),
+  ('00000000-0000-0000-0000-00000000000e', 'monthly', 'active', now() + interval '30 days');
+
 -- 10. Perfiles de otros solo si comparten grupo
 begin;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');

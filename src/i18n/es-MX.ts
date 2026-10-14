@@ -14,6 +14,7 @@ import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
 import { weekPlanText } from './weekPlan';
 import { b7ExtrasText } from './b7extras';
+import { freePlanText } from './freePlan';
 
 interface ScreenText {
   title: string;
@@ -340,6 +341,8 @@ export const t = {
   // Modo enfoque, resumen semanal, enlace de referidos y producción sin demo (B7 del plan del cambio)
   b7: b7ExtrasText,
   settingsPage: settingsPageText,
+  // Candados del plan Gratis con su vista previa (B8 del plan del cambio)
+  freePlan: freePlanText,
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

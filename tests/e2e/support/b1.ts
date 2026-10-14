@@ -36,8 +36,13 @@ export async function subscribeMonthly(page: Page): Promise<void> {
   await expect(page.getByText(t.billing.receiptTitle)).toBeVisible({ timeout: 15_000 });
 }
 
-/** Sigue el mazo precargado más chico, para que las pruebas de repaso sean rápidas */
+/**
+ * Sigue el mazo precargado más chico, para que las pruebas de repaso sean rápidas. Seguir mazos del
+ * catálogo es de los planes de pago (4.25, B8), así que antes contrata el mensual simulado. Es para
+ * una cuenta recién creada, que empieza en Gratis
+ */
 export async function followSmallestDeck(page: Page): Promise<void> {
+  await subscribeMonthly(page);
   await page.goto(SCREENS.decks.path);
   const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
   await deck.getByRole('button', { name: t.decks.follow }).click();

@@ -34,6 +34,7 @@ import { EmptyState } from '@/ui/states/states';
 import { StudyTabs } from '../review/StudyTabs';
 import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { usePlanText } from '../shared/useActivePlan';
 import { useShortcuts } from '../shared/useShortcuts';
 import { BulkActions, type Notice } from './BulkActions';
 import { CardPanel } from './CardPanel';
@@ -82,6 +83,11 @@ function CardSearch({ session }: { session: ReadySession }) {
   const searchId = useId();
   const panelId = useId();
   const titleId = useId();
+  // Sin tarjetas, en Gratis no se sugiere seguir un mazo del catálogo, que es de pago (4.25, B8)
+  const emptyText = usePlanText(session.user.id, 'deckCatalog', {
+    open: t.cardSearch.empty,
+    closed: t.freePlan.catalog.exploreEmpty,
+  });
 
   // El texto se aplaza un instante para que la caja responda al teclear aunque haya miles de filas
   const deferredText = useDeferredValue(view.text);
@@ -223,7 +229,12 @@ function CardSearch({ session }: { session: ReadySession }) {
       <StudyTabs />
     </>
   );
-  if (!data || !result || nowMs === undefined) {
+  if (
+    !data ||
+    !result ||
+    nowMs === undefined ||
+    (data.rows.length === 0 && emptyText === undefined)
+  ) {
     return (
       <>
         {header}
@@ -239,7 +250,7 @@ function CardSearch({ session }: { session: ReadySession }) {
         {header}
         <EmptyState
           title={t.states.empty.title}
-          description={t.cardSearch.empty}
+          description={emptyText}
           action={
             <Button asChild>
               <Link to={screenPath('decks')}>{t.studyTabs.decks}</Link>

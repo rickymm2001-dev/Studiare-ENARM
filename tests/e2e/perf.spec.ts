@@ -4,6 +4,7 @@
 // calificar son dos pasos por tarjeta y se miden juntos.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, signUp, test } from './support/fixtures';
 
 const CARDS = 200;
@@ -79,6 +80,8 @@ test('una sesión de 200 tarjetas con el procesador 4 veces más lento sigue flu
 }, testInfo) => {
   test.setTimeout(300_000);
   await signUp(page);
+  // Seguir mazos del catálogo es de los planes de pago (4.25, B8)
+  await subscribeMonthly(page);
 
   // Un mazo grande y 250 tarjetas nuevas al día, para tener 200 en una sola sesión
   await page.goto(SCREENS.decks.path);

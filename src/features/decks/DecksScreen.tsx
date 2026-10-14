@@ -3,6 +3,10 @@
 // (H06 de la revisión de B2), con todos sus temas plegados bajo un resumen con sus ramas (D-078, B4
 // del plan del cambio). Abajo van los mazos del alumno, que crea y llena a mano, también con sus
 // temas.
+// Seguir mazos nuevos del catálogo y subir mazos son de los planes de pago (respuesta 20 y 4.25, B8).
+// En Gratis la lista queda como vista previa con su candado y lo que el alumno ya tiene sigue a su
+// alcance. Cuenta como suyo un mazo que está en este dispositivo o del que ya repasó alguna tarjeta,
+// porque los precargados no viajan entre dispositivos pero su bitácora sí.
 import { BookOpenCheck, BookPlus, Check, Layers, Library } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
@@ -12,7 +16,7 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { topicTaxonomy } from '@/demo/content';
-import { deckIds } from '@/demo/content/deckEntities';
+import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { Badge } from '@/ui/components/badge';
@@ -22,6 +26,8 @@ import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { usePlanAllows } from '../shared/useActivePlan';
+import { CatalogLockNotice, CatalogRowLock } from './CatalogLock';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
@@ -75,6 +81,20 @@ function Decks({ session }: { session: ReadySession }) {
   // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
   const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
+  // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
+  // el alumno ya siguió, porque sus repasos son suyos. Lo dice que esté en este dispositivo o que su
+  // bitácora, que sí viaja entre dispositivos, tenga un repaso de alguna de sus tarjetas
+  const catalogOpen = usePlanAllows(session.user.id, 'deckCatalog');
+  const onDevice = new Set((stored?.decks ?? []).map((deck) => deck.id));
+  const catalogCards = useMemo(
+    () =>
+      catalogOpen === false
+        ? new Map((catalog ?? []).map((file) => [file.key, catalogCardIds(file)]))
+        : null,
+    [catalog, catalogOpen],
+  );
+  const alreadyStudied = (deckKey: string) =>
+    (catalogCards?.get(deckKey) ?? []).some((cardId) => states.has(cardId));
   // Mazos en el orden de las ramas troncales y las ramas sin mazos juntas en una línea (D-076)
   const branchOrder = topicTaxonomy.branches.map((branch) => branch.key);
   const orderedFiles = [...(catalog ?? [])].sort(
@@ -128,6 +148,7 @@ function Decks({ session }: { session: ReadySession }) {
           <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
           <CardDescription>{t.decks.preloadedDescription}</CardDescription>
         </CardHeader>
+        {catalogOpen === false && !session.isDemo ? <CatalogLockNotice /> : null}
         {catalog === undefined || stored === undefined ? (
           <LoadingState label={t.decks.loading} />
         ) : (
@@ -196,10 +217,14 @@ function Decks({ session }: { session: ReadySession }) {
                         >
                           {t.decks.unfollow}
                         </Button>
+                      ) : catalogOpen === false &&
+                        !onDevice.has(id) &&
+                        !alreadyStudied(file.key) ? (
+                        <CatalogRowLock />
                       ) : (
                         <Button
                           size="sm"
-                          disabled={busy !== null}
+                          disabled={busy !== null || catalogOpen === undefined}
                           onClick={() => {
                             setBusy(file.key);
                             void followDeck(api, session.user, file).finally(() => {

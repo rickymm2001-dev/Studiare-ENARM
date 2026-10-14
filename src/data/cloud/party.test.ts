@@ -36,6 +36,8 @@ function threeStudents() {
   fake.aliases.set(ANA, 'Ana');
   fake.aliases.set(BRUNO, 'Bruno');
   fake.aliases.set(CARLA, 'Carla');
+  // Party es de los planes de pago (B8). Los tres pagan el mensual
+  for (const id of [ANA, BRUNO, CARLA]) fake.plans.set(id, 'monthly');
   const as = (id: string) => {
     fake.session = { id, email: `${id}@ejemplo.mx` };
     return fake.cloud;

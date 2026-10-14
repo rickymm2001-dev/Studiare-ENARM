@@ -5,11 +5,13 @@
 // reta a un compañero simulado. La Party real entre dos cuentas está en tests/e2e/cloud/party.spec.ts
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { generateDemo } from './support/b1';
+import { generateDemo, subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 test('sin cuenta en la nube Party explica que la necesita', async ({ page }) => {
+  // Party es de los planes de pago (B8). Con el mensual simulado lo que falta es la nube
   await signUp(page);
+  await subscribeMonthly(page);
   await page.goto(SCREENS.party.path);
   const card = page.getByRole('region', { name: t.partyCloud.needsCloud.title });
   await expect(card.getByText(t.partyCloud.needsCloud.off)).toBeVisible();
@@ -25,6 +27,8 @@ test('en la demostración crea un grupo simulado, ve la tabla, se une con su có
 }) => {
   test.setTimeout(300_000);
   await generateDemo(page);
+  // Party es de los planes de pago (B8). El alumno de demostración contrata el mensual simulado
+  await subscribeMonthly(page);
   await page.goto(SCREENS.party.path);
   await expect(page.getByText(t.partyCloud.privacyDemo)).toBeVisible();
   await expect(page.getByText(t.party.createHint)).toBeVisible();

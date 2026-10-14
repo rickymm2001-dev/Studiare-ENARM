@@ -8,7 +8,7 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import type { User } from '@/data/schemas/people';
 import { setConsent } from '@/data/usecases/profile';
-import { makeEvent, makeQuestionWithOptions } from '@/data/testing/fixtures';
+import { makeEvent, makeQuestionWithOptions, subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 
 // Arma toda la pantalla del tutor con cinco errores seguros, así que necesita más de 5 segundos
@@ -50,16 +50,6 @@ async function seedErrors(api: DataApi, user: User) {
       ),
     );
   }
-}
-
-async function subscribe(api: DataApi, user: User, plan: 'monthly' | 'free') {
-  await api.repos.subscriptions.put({
-    userId: user.id,
-    plan,
-    status: plan === 'free' ? 'none' : 'active',
-    isSimulated: true,
-    updatedAt: '2026-10-01T10:00:00.000Z',
-  });
 }
 
 async function open(plan: 'monthly' | 'free', consent: boolean) {

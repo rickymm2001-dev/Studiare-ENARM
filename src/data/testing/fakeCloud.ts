@@ -3,9 +3,11 @@
 // del token, y device_sessions devuelve esa fila. Puede rechazar el reclamo por el límite de cambios
 // con el mismo error que lanza la base. También imita Storage para la foto de perfil (B2), con los
 // objetos en memoria, la fila de private_accounts, que cambia con cada update como en el servidor, y
-// Party en la nube (B7), con las funciones party_* a nombre de la sesión abierta. Solo lo usan las
-// pruebas.
+// Party en la nube (B7), con las funciones party_* a nombre de la sesión abierta. Cada cuenta tiene su
+// plan, como user_plan. my_plan lo contesta y Party se abre solo con un plan de pago, como party_open
+// (B8). Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
+import { canUse, type PlanKey } from '@/config/billing';
 import { createFakePartyServer, type FakePartyServer } from './fakePartyServer';
 
 export interface FakeCloudOptions {
@@ -142,6 +144,11 @@ export interface FakeCloud {
   aliases: Map<string, string>;
   /** Cómo fallan las funciones de Party. error responde con error de red y throw lanza la excepción */
   failParty: FakeFailure;
+  /**
+   * El plan de cada cuenta, como lo da user_plan. Sin entrada es Gratis, como en el servidor. Abre o
+   * cierra Party (party_open) y es lo que contesta my_plan
+   */
+  plans: Map<string, PlanKey>;
 }
 
 const NETWORK_ERROR = { message: 'Failed to fetch', status: 0 };
@@ -205,9 +212,13 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         listener(event);
       });
     },
-    party: createFakePartyServer({ aliasOf: (userId) => fake.aliases.get(userId) ?? 'Rick' }),
+    party: createFakePartyServer({
+      aliasOf: (userId) => fake.aliases.get(userId) ?? 'Rick',
+      isOpen: (userId) => canUse(fake.plans.get(userId) ?? 'free', 'party'),
+    }),
     aliases: new Map(),
     failParty: 'none',
+    plans: new Map(),
   };
 
   const outcome = <T>(failure: FakeFailure, ok: () => T): T | { data: null; error: unknown } => {
@@ -416,6 +427,25 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
               : { data: reply.data, error: null };
           }),
         );
+      }
+      if (name === 'my_plan') {
+        if (!fake.session) {
+          return Promise.resolve({
+            data: null,
+            error: { code: '28000', message: 'Hace falta iniciar sesión' },
+          });
+        }
+        const plan = fake.plans.get(fake.session.id) ?? 'free';
+        return Promise.resolve({
+          data: {
+            plan,
+            source: plan === 'free' ? 'none' : 'payment',
+            status: plan === 'free' ? 'none' : 'active',
+            provider: plan === 'free' ? null : 'stripe',
+            periodEnd: plan === 'free' ? null : '2030-01-01T00:00:00.000Z',
+          },
+          error: null,
+        });
       }
       if (name.startsWith('sync_') && fake.sync === 'ok') {
         return Promise.resolve({

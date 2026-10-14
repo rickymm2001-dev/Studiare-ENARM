@@ -51,9 +51,12 @@ async function stopSendingErrors(page: Page) {
 async function takeExam(page: Page) {
   await page.goto(SCREENS.simulatorSetup.path);
   const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible({
-    timeout: 60_000,
-  });
+  // El tamaño se elige siempre. Con un plan de pago empieza en 280, y seguir un mazo del catálogo ya
+  // contrata el mensual simulado (followSmallestDeck, B8)
+  const size = card.getByRole('combobox', { name: t.exam.size });
+  await expect(size).toBeVisible({ timeout: 60_000 });
+  await size.selectOption(String(QUESTIONS));
+  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible();
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page.getByRole('timer')).toBeVisible();
   for (let index = 1; index <= QUESTIONS; index += 1) {
