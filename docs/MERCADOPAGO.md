@@ -33,6 +33,7 @@ Reglas que conviene saber
 - El mismo cobro llega por dos temas (payment y subscription_authorized_payment). Los dos avisos llevan el mismo id de pago y el mismo fin de periodo, así la base no lo cuenta dos veces
 - Un cobro rechazado de la suscripción no la marca con cobro fallido. Mercado Pago reintenta y un aviso tardío del intento malo podría llegar después del cobro bueno. Si Mercado Pago se rinde, el cambio llega por subscription_preapproval
 - Si un cobro llega sin la referencia, se lee la de su suscripción
+- Si el cobro llega antes que el aviso de su suscripción y sin su id, la base crea la fila con ese cobro y la suscripción que llega después es la misma. Adopta su id y no se marca como segunda suscripción ni se cancela
 - Lo que se guarda del recurso en payment_webhook_events va sin los datos del pagador (correo, nombre, identificación, tarjeta y cuenta de banco)
 - Si la base deja una acción de cancelar una suscripción de Mercado Pago (por ejemplo después de un reembolso completo, 8.6), el aviso la ejecuta después de aplicar. Falta que `runtime.ts` le pase `claimBillingActions` y `finishBillingAction` (ver Pendientes del código)
 

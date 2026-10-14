@@ -1047,4 +1047,31 @@ select pg_temp.expect(
   'R2. Un aviso de la misma suscripción no debía acortar el periodo pagado'
 );
 
+-- R3. En Mercado Pago el cobro puede llegar antes que la suscripción y sin su id. La suscripción que
+-- llega después es la misma, adopta su id y no se marca ni se cancela como segunda
+\set r3a 'ba110000-0000-0000-0000-0000000003a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r3a', 'r3a@ba.mx', '{"alias":"Cobro primero"}');
+select pg_temp.is(pg_temp.charge('evt-r3-c', 'paid', :'r3a', 'subscription', 'monthly', '9300001', 149, null, 'mercadopago',
+  p_period_end => now() + interval '30 days', p_provider => 'mercadopago'), 'applied',
+  'R3. El cobro sin suscripción debía aplicarse');
+select pg_temp.is(pg_temp.state('evt-r3-s', :'r3a', 'mp_pre_r3', 'monthly', 'active', p_provider => 'mercadopago',
+  p_period_end => null), 'applied', 'R3. La suscripción que llega después del cobro debía aplicarse');
+select pg_temp.expect(
+  pg_temp.action_for('mp_pre_r3') is null
+  and (select provider_subscription_id = 'mp_pre_r3' and issue is null and status = 'active'
+         and current_period_end > now() + interval '25 days'
+       from public.subscriptions where user_id = :'r3a')
+  and pg_temp.mp(:'r3a') -> 'issue' = 'null'::jsonb,
+  'R3. La suscripción debía adoptar su id sin marcarse como segunda'
+);
+-- El cobro siguiente ya trae su suscripción y alarga la misma
+select pg_temp.is(pg_temp.charge('evt-r3-c2', 'paid', :'r3a', 'subscription', 'monthly', '9300002', 149, 'mp_pre_r3', 'mercadopago',
+  p_period_end => now() + interval '60 days', p_provider => 'mercadopago'), 'applied',
+  'R3. El cobro siguiente debía aplicarse');
+select pg_temp.expect(
+  (select current_period_end > now() + interval '55 days' from public.subscriptions where user_id = :'r3a')
+  and (select count(*) from public.payments where user_id = :'r3a' and status = 'paid') = 2,
+  'R3. El cobro siguiente debía alargar la misma suscripción'
+);
+
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;

@@ -804,9 +804,13 @@ begin
 
   select * into v_sub from public.subscriptions where user_id = p_user for update;
   v_has_row := found;
-  v_same := coalesce(v_has_row and v_sub.plan <> 'free' and v_sub.provider = p_provider
-    and v_sub.provider_subscription_id = p_subscription_id, false);
   v_live := v_has_row and public.billing_in_force(v_sub.plan, v_sub.status, v_sub.current_period_end);
+  -- La misma suscripción, por su id. También la fila vigente que creó un cobro de la misma pasarela sin
+  -- id de suscripción, como un pago de Mercado Pago que llega antes que su suscripción. Esa fila adopta
+  -- este id y no se toma por una segunda suscripción
+  v_same := coalesce(v_has_row and v_sub.plan <> 'free' and v_sub.provider = p_provider
+    and (v_sub.provider_subscription_id = p_subscription_id
+         or (v_sub.provider_subscription_id is null and v_sub.first_charge_at is not null and v_live)), false);
 
   if v_same and v_sub.state_at is not null and v_at < v_sub.state_at then
     return public.billing_event_done(p_provider, p_event_id, 'stale');
