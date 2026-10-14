@@ -1,9 +1,9 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { uuidToUlid } from '../cloud/cloudIds';
-import { cloudId, fakeRpc, FakeDbError, wireBody, wireQuota, wireRow } from '../testing/bankCloud';
+import { cloudId, fakeBankServer, wireBody, wireRow } from '../testing/bankCloud';
 import { testApi } from '../testing/fixtures';
-import type { CatalogRow, DenyReason, FetchedQuestion } from './contracts';
+import type { CatalogRow } from './contracts';
 import { CATALOG_REFRESH_MS, createCloudSource, fetchBatches } from './cloudSource';
 
 const disposers: (() => Promise<unknown>)[] = [];
@@ -13,102 +13,10 @@ afterEach(async () => {
 
 const ulid = (uuid: string) => uuidToUlid(uuid) ?? '';
 
-/**
- * Un servidor del banco en memoria, con las reglas de 2.2. Gratis abre freeLimit preguntas nuevas por
- * día, un caso seriado se concede completo o nada y lo ya abierto no gasta otra vez
- */
-function bankServer(rows: CatalogRow[], options: { freeLimit?: number; open?: boolean } = {}) {
-  const bodies = new Map<string, FetchedQuestion>(
-    rows.map((row) => [row.versionId, wireBody(row)]),
-  );
-  const read = new Set<string>();
-  const limit = options.freeLimit ?? 20;
-  const state = { open: options.open ?? true, offline: false, deny: new Map<string, DenyReason>() };
-  const quota = () =>
-    wireQuota({ used: read.size, left: Math.max(0, limit - read.size), open: state.open });
-  const throwIfOffline = () => {
-    if (state.offline) throw new Error('Failed to fetch');
-  };
-  const server = fakeRpc({
-    catalog_changes(args) {
-      throwIfOffline();
-      const since = Number(args?.p_since ?? 0);
-      const pageSize = Number(args?.p_limit ?? 1000);
-      if (!state.open) return { open: false, rows: [], nextSince: since, done: true };
-      const after = rows.filter((row) => row.seq > since).sort((a, b) => a.seq - b.seq);
-      const page = after.slice(0, pageSize);
-      return {
-        open: true,
-        rows: page,
-        nextSince: page.at(-1)?.seq ?? since,
-        done: page.length === after.length,
-      };
-    },
-    fetch_questions(args) {
-      throwIfOffline();
-      const ids = (args?.p_version_ids as string[] | undefined) ?? [];
-      if (ids.length > 100) return new FakeDbError('22023');
-      const granted: FetchedQuestion[] = [];
-      const denied: { id: string; reason: DenyReason }[] = [];
-      const handled = new Set<string>();
-      for (const id of ids) {
-        if (handled.has(id)) continue;
-        const body = bodies.get(id);
-        const forced = state.deny.get(id);
-        if (!state.open || !body || forced) {
-          handled.add(id);
-          denied.push({ id, reason: !state.open ? 'closed' : (forced ?? 'not_found') });
-          continue;
-        }
-        const unit = body.caseId
-          ? ids.filter((other) => bodies.get(other)?.caseId === body.caseId)
-          : [id];
-        for (const member of unit) handled.add(member);
-        const fresh = unit.filter((member) => !read.has(member));
-        if (read.size + fresh.length > limit) {
-          denied.push(...unit.map((member) => ({ id: member, reason: 'daily_limit' as const })));
-          continue;
-        }
-        for (const member of unit) {
-          read.add(member);
-          granted.push(bodies.get(member) as FetchedQuestion);
-        }
-      }
-      const caseIds = [...new Set(granted.flatMap((body) => (body.caseId ? [body.caseId] : [])))];
-      return {
-        questions: granted,
-        cases: caseIds.map((id) => ({
-          id,
-          vignette: '[Prueba] Caso simulado',
-          createdAt: '2026-10-20T15:00:00.000Z',
-        })),
-        denied,
-        quota: quota(),
-      };
-    },
-    bank_quota() {
-      throwIfOffline();
-      return quota();
-    },
-    bias_agreement_summary() {
-      throwIfOffline();
-      return {
-        pairs: 31,
-        kappa: 0.52,
-        vocabulary: 'bias',
-        calibrating: false,
-        minPairs: 30,
-        minKappa: 0.4,
-      };
-    },
-  });
-  return { server, state, read, bodies };
-}
-
-function setup(rows: CatalogRow[], options: Parameters<typeof bankServer>[1] = {}) {
+function setup(rows: CatalogRow[], options: Parameters<typeof fakeBankServer>[1] = {}) {
   const api = testApi('real');
   disposers.push(api.dispose);
-  const bank = bankServer(rows, options);
+  const bank = fakeBankServer(rows, options);
   const clock = { now: new Date('2026-10-20T18:00:00.000Z') };
   const discarded = vi.fn();
   const client: { current: typeof bank.server | null } = { current: bank.server };

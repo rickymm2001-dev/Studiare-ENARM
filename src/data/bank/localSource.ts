@@ -1,6 +1,6 @@
 // Fuente local de preguntas (B11, 5.1 del plan de B11). Es el banco de demostración de siempre, guardado
-// en Dexie con ensureDemoBank y elegido con listStudentPool. No hay nada que bajar ni cuota del
-// servidor, así que ensureBodies solo revisa que las versiones estén en este navegador.
+// en Dexie con ensureDemoBank al prepararla y elegido con listStudentPool. No hay nada que bajar ni cuota
+// del servidor, así que ensureBodies solo revisa que las versiones estén en este navegador.
 import type { DataApi } from '../context';
 import type { Question } from '../schemas/bank';
 import { ensureDemoBank } from '../usecases/bank';
@@ -53,8 +53,6 @@ export function createLocalSource(api: Api): QuestionSource {
       };
     },
     async ensureBodies(versionIds) {
-      // Quien recibe un duelo puede no haber abierto nunca el simulador en este navegador
-      await ensureDemoBank(api).catch(() => 0);
       const ids = [...new Set(versionIds)];
       const present = await Promise.all(ids.map((id) => api.repos.questions.get(id)));
       return {

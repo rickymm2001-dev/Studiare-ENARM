@@ -10,6 +10,8 @@ import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
+import { BankNoticeBanner } from '@/features/shared/BankNoticeBanner';
+import { useQuestionSourceKind } from '@/features/shared/useQuestionSource';
 import { HOME_BY_ROLE, navForRole } from '../navigation';
 import { screenPath } from '../screens';
 import { useSession } from '../session';
@@ -46,8 +48,10 @@ export function AppShell() {
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
   // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
   const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
-  // Mientras el banco es de demostración, un aviso global en lugar de etiquetas por pantalla (4.1)
-  const demoBank = isFeatureEnabled('demoBank');
+  // Mientras el banco es de demostración, un aviso global en lugar de etiquetas por pantalla (4.1). Con
+  // el banco de la nube se va solo, sin que haga falta apagar demoBank (B11, 5.1)
+  const sourceKind = useQuestionSourceKind();
+  const demoBank = isFeatureEnabled('demoBank') && sourceKind === 'local';
 
   return (
     <div className="min-h-dvh text-fg">
@@ -186,6 +190,7 @@ export function AppShell() {
         </div>
       )}
 
+      <BankNoticeBanner className={rail} />
       <OtherDeviceNotice className={rail} />
       <DeviceLimitNotice className={rail} />
       <OAuthErrorNotice className={rail} />
