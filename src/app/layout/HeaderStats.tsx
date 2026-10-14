@@ -1,10 +1,11 @@
 // Arriba a la derecha, siempre a la vista. Racha, nivel con su barra de XP y nombre, y la foto de
 // perfil que lleva a Configuración, donde vive el Perfil (D-062, B3 del plan del cambio). En la barra
 // de computadora el nivel va en una línea, con su título junto al número y la barra más larga, como
-// en el diseño de Ricardo (D-117). Racha, nivel y XP van en neutro, sin dorado ni naranja (4.7 del
-// plan del cambio, D-121). El texto chico mide 12 px (H19 de la revisión de B2) y el relleno de la
-// barra es fg-muted, que pasa 3 a 1 sobre muted (H12). En modo enfoque (respuesta 82, B7) solo queda
-// la foto, sin racha, nivel, XP ni la escalera de niveles.
+// en el diseño de Ricardo (D-117). Racha, nivel y XP van en el acento cálido de la paleta, sin
+// dorado ni brillo (D-128, reemplaza a 4.7 del plan del cambio en esto). La racha lleva su número y
+// el ícono además del color, y el nivel su texto. El texto chico mide 12 px (H19 de la revisión de
+// B2) y el relleno de la barra es accent, que pasa 3 a 1 sobre muted. En modo enfoque (respuesta 82,
+// B7) solo queda la foto, sin racha, nivel, XP ni la escalera de niveles.
 import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
@@ -44,11 +45,11 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   return (
     <div className="flex items-center gap-2">
       <span
-        className="flex items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-sm font-bold text-fg"
+        className="flex items-center gap-1 rounded-md bg-streak-soft px-2.5 py-1 text-sm font-bold text-streak-ink"
         aria-label={t.headerStats.streak(streak.current)}
         title={t.headerStats.streak(streak.current)}
       >
-        <Flame aria-hidden className="size-4" />
+        <Flame aria-hidden className="size-4 text-streak" />
         {streak.current}
       </span>
       <LevelLadderDialog totalXp={totalXp}>
@@ -67,7 +68,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
             aria-hidden
             className="hidden items-center gap-1.5 text-sm font-semibold whitespace-nowrap text-fg lg:flex"
           >
-            <Star aria-hidden className="size-4 text-fg-muted" />
+            <Star aria-hidden className="size-4 text-accent" />
             {t.headerStats.titled(level.level, level.title)}
           </span>
           <span className="flex items-baseline justify-between gap-1 text-xs leading-none font-bold lg:hidden">
@@ -77,7 +78,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
           <span className="flex min-w-0 flex-col gap-1 lg:w-40 xl:w-56">
             <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
               <span
-                className="block h-full rounded-full bg-fg-muted"
+                className="block h-full rounded-full bg-accent"
                 style={{ width: `${percent}%` }}
               />
             </span>

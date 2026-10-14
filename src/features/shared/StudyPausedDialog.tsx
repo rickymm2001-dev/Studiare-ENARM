@@ -27,7 +27,8 @@ export function StudyPausedDialog({
         aria-describedby="pausa-texto"
         className="animate-pop flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-line bg-surface p-6 text-center shadow-raised"
       >
-        <span className="flex size-14 items-center justify-center rounded-full bg-accent-soft text-accent">
+        {/* Ícono decorativo en neutro. El acento cálido queda para racha, nivel y XP (D-128) */}
+        <span className="flex size-14 items-center justify-center rounded-full bg-muted text-fg-muted">
           <Coffee aria-hidden className="size-7" />
         </span>
         <h2 id="pausa-titulo" className="text-xl font-extrabold">

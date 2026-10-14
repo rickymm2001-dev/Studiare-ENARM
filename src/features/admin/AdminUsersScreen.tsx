@@ -177,7 +177,7 @@ function UserRow({
         <div className="min-w-0 flex-1">
           <p className="flex items-center gap-1 font-bold">
             {user.alias}
-            {user.role === 'owner' ? <Crown aria-hidden className="size-4 text-accent" /> : null}
+            {user.role === 'owner' ? <Crown aria-hidden className="size-4 text-fg-muted" /> : null}
             {isSelf ? (
               <span className="text-sm font-normal text-fg-muted">({t.party.you})</span>
             ) : null}

@@ -1,10 +1,12 @@
 // Por qué fallas, por rama (B5, comentario 2). Lo que el alumno marcó en cada error, con el último
-// motivo de cada uno, repartido por rama. Las barras van en el color de acción y el resto en grises.
+// motivo de cada uno, repartido por rama. Cada rama lleva la marca de su color junto al nombre
+// (D-128), las barras van en el color de los indicadores y el resto en grises.
 // Son sus propias marcas, así que se ven desde la primera. La lectura de su motivo principal vive en
 // Conócete y calibra hasta tener suficientes, y la tarjeta dice cuánto falta.
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import type { GroupMotives } from '@/engines/errorCauses';
 import { t } from '@/i18n/es-MX';
+import { BranchMark } from '@/ui/components/branch-tag';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote, LoadingState } from '@/ui/states/states';
@@ -31,8 +33,13 @@ export function MotivesCard({ rows }: { rows: readonly GroupMotives[] | undefine
                 row.group === NO_BRANCH ? text.noBranch : (t.branchNames[row.group] ?? row.group);
               return (
                 <li key={row.group} className="flex flex-col gap-2">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-                    <span className="font-semibold">{branch}</span>
+                  <div className="flex flex-wrap items-center justify-between gap-x-2">
+                    <span className="flex items-center gap-2 font-semibold">
+                      {row.group === NO_BRANCH ? null : (
+                        <BranchMark branch={row.group} className="h-5" />
+                      )}
+                      {branch}
+                    </span>
                     <span className="text-sm text-fg-muted">{text.total(row.total)}</span>
                   </div>
                   <ul className="flex flex-col gap-1.5">

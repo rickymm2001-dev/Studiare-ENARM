@@ -77,12 +77,13 @@ function readRaw(): string | null {
 }
 
 /**
- * Toma el registro pendiente y lo borra. null si no hay, si no se entiende o si ya caducó. nowMs es la
- * hora de ahora, para las pruebas
+ * Lee el registro pendiente sin borrarlo. null si no hay, si no se entiende o si ya caducó. El puente
+ * de la nube lo lee así y lo borra ya unida la cuenta, porque Supabase avisa SIGNED_IN mientras corre
+ * la primera revisión y las dos tienen que verlo, gane la que gane al crear el perfil. nowMs es la hora
+ * de ahora, para las pruebas
  */
-export function takePendingSignup(nowMs: number = Date.now()): PendingSignup | null {
+export function readPendingSignup(nowMs: number = Date.now()): PendingSignup | null {
   const raw = readRaw();
-  clearPendingSignup();
   if (!raw) return null;
   try {
     const parsed = PendingSignupSchema.safeParse(JSON.parse(raw));
@@ -92,4 +93,11 @@ export function takePendingSignup(nowMs: number = Date.now()): PendingSignup | n
   } catch {
     return null;
   }
+}
+
+/** Toma el registro pendiente y lo borra. null si no hay, si no se entiende o si ya caducó */
+export function takePendingSignup(nowMs: number = Date.now()): PendingSignup | null {
+  const pending = readPendingSignup(nowMs);
+  clearPendingSignup();
+  return pending;
 }

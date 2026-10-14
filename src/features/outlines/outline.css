@@ -60,8 +60,8 @@
 }
 
 .outline-token--tag {
-  background: var(--enarm-fam-soft);
-  color: var(--enarm-fam-ink);
+  background: var(--enarm-muted);
+  color: var(--enarm-fg);
 }
 
 .outline-token--link {

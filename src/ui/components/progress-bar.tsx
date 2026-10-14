@@ -7,8 +7,11 @@ interface ProgressBarProps {
   /** Texto que lee el lector de pantalla, por ejemplo 12 de 40 errores etiquetados */
   label: string;
   className?: string;
-  /** Color de la barra. neutral para XP, nivel y metas, que ya no llevan color (4.7 del plan del cambio) */
-  tone?: 'primary' | 'neutral';
+  /**
+   * Color de la barra. accent para el XP y el nivel, en el acento cálido de la paleta (D-128), y
+   * neutral para lo que ya terminó, como una misión cumplida
+   */
+  tone?: 'primary' | 'accent' | 'neutral';
 }
 
 export function ProgressBar({ value, max, label, className, tone = 'primary' }: ProgressBarProps) {
@@ -26,7 +29,7 @@ export function ProgressBar({ value, max, label, className, tone = 'primary' }: 
       <Progress.Indicator
         className={cn(
           'h-full rounded-full transition-[width] duration-700',
-          tone === 'primary' ? 'bg-indicator' : 'bg-fg-muted',
+          tone === 'primary' ? 'bg-indicator' : tone === 'accent' ? 'bg-accent' : 'bg-fg-muted',
         )}
         style={{ width: `${percent}%` }}
       />

@@ -163,6 +163,8 @@ export interface FakeSupabaseServer {
     role?: Role;
     provider?: 'email' | 'google';
     registered?: boolean;
+    /** La versión del aviso que aceptó al registrarse. La de la app por omisión */
+    noticeVersion?: string;
   }): FakeUser;
   userByEmail(email: string): FakeUser | undefined;
   /**
@@ -247,6 +249,11 @@ export interface FakeSupabaseServer {
   factorsOf(email: string): { id: string; status: 'verified' | 'unverified' }[];
   /** La respuesta de cómo nos conoció que guardó record_signup_source */
   signupSourceOf(email: string): { channel: string; influencerCode: string | null } | null;
+  /**
+   * Guarda la respuesta de cómo nos conoció de una cuenta, como record_signup_source desde su
+   * navegador. La primera gana. Para llenar los conteos del admin sin un registro por cada cuenta
+   */
+  answerSignupSource(email: string, channel: string, influencerCode?: string): boolean;
   /** La fila de private_accounts de la cuenta */
   accountOf(email: string): Json | null;
   /** Cambia una clave de platform_settings, como feature_flags o registration_open */
@@ -727,6 +734,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     role?: Role;
     provider?: 'email' | 'google';
     registered?: boolean;
+    noticeVersion?: string;
   }): FakeUser {
     const email = normalizeEmail(input.email);
     if (!email) throw new Error(`Correo inválido para el Supabase simulado: ${input.email}`);
@@ -765,7 +773,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       privacyAcceptances.push({
         id: privacyAcceptances.length + 1,
         user_id: user.id,
-        notice_version: PRIVACY_NOTICE_VERSION,
+        notice_version: input.noticeVersion ?? PRIVACY_NOTICE_VERSION,
         accepted_at: user.createdAt,
         marketing_opt_out: false,
       });
@@ -2435,6 +2443,16 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     signupSourceOf(email) {
       const user = emailOf(email);
       return (user && signupSources.get(user.id)) ?? null;
+    },
+    answerSignupSource(email, channel, influencerCode) {
+      const user = emailOf(email) ?? createUser({ email });
+      const reply = recordSignupSource(user, {
+        p_channel: channel,
+        p_influencer_code: influencerCode ?? null,
+      });
+      if (reply.status >= 400)
+        throw new Error(`Respuesta inválida de cómo nos conoció: ${channel}`);
+      return reply.body === 'true';
     },
     accountOf(email) {
       const user = emailOf(email);

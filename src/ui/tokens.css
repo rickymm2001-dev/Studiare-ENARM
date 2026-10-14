@@ -1,8 +1,10 @@
 /*
   Tokens de diseño. Único lugar donde viven colores, tipografía, radios y medidas (10.4, D-016).
-  Sistema sobrio del plan del cambio V3 (B2, D-121). Neutros para superficies, bordes y texto, un
-  solo color de acción, #156082, igual en claro y en oscuro con texto blanco, y colores de estado
-  solo donde el plan lo permite (4.7). Sin degradados ni sombras de color.
+  Sistema sobrio del plan del cambio V3 (B2, D-121) con la paleta de D-128. Neutros para superficies,
+  bordes y texto, un solo color de acción, #156082, igual en claro y en oscuro con texto blanco, un
+  color propio por rama, un acento cálido para racha, nivel y XP, la escala de cinco pasos del
+  heatmap y colores de estado solo para acierto, aviso y peligro. Sin degradados ni sombras de color.
+  D-128 reemplaza a 4.7 del plan del cambio en el color por rama y el acento.
   El modo se elige así
   - Sin clase en <html>, manda la preferencia del sistema (primer pintado, antes de que cargue JS)
   - Con clase light o dark en <html>, manda la elección del alumno (src/ui/theme.ts)
@@ -16,9 +18,9 @@
   --enarm-surface: #ffffff;
   --enarm-muted: #eef0f2;
   --enarm-line: #dde2e6;
-  /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos, 3.6 sobre blanco, 3.3 sobre el
-     lienzo y 3.2 sobre muted */
-  --enarm-line-strong: #7d8892;
+  /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos, 4.3 sobre blanco, 3.8 sobre muted
+     y 3.6 sobre el lienzo (H12 de la revisión de B2) */
+  --enarm-line-strong: #707b85;
 
   /* Texto */
   --enarm-fg: #16212b;
@@ -34,24 +36,30 @@
   --enarm-primary-soft: #e7eff4;
   --enarm-focus: #156082;
   /* Indicadores que no son texto ni botón. El borde o el anillo de lo elegido, las barras y el
-     relleno de las gráficas y el heatmap. En claro es el color de acción. En oscuro va un tono
+     relleno de las gráficas. El heatmap usa su propia escala, abajo. En claro es el color de acción. En oscuro va un tono
      claro, porque #156082 queda abajo del 3 a 1 que piden los gráficos (2.5 sobre la superficie,
      2.7 sobre el lienzo y 2.2 sobre el fondo de las barras) */
   --enarm-indicator: #156082;
 
-  /* Lo que antes era dorado y naranja (nivel, XP y racha) pasa a neutro (4.7) */
-  --enarm-accent: #576570;
-  --enarm-accent-ink: #3f4b55;
-  --enarm-accent-soft: #eef0f2;
+  /* Acento cálido único y sobrio para racha, nivel y XP (D-128). Sin dorado brillante */
+  --enarm-accent: #a64a13;
+  --enarm-accent-soft: #fbf0e8;
+  --enarm-accent-ink: #78320a;
   --enarm-accent-fg: #ffffff;
-  --enarm-streak: #576570;
-  --enarm-streak-soft: #eef0f2;
-  --enarm-streak-ink: #3f4b55;
+  --enarm-streak: #a64a13;
+  --enarm-streak-soft: #fbf0e8;
+  --enarm-streak-ink: #78320a;
 
-  /* Gráficas y heatmap en tonos del color de acción y grises (4.7). Realizados pasa el 3 a 1 que
-     piden las gráficas sobre la superficie, 3.1 en claro y 3.9 en oscuro (H12 de la revisión de B2) */
+  /* Gráficas y heatmap (D-128). Realizados (#5687a1) pasa 3 a 1 sobre blanco (3.9 a 1) y sobre el
+     lienzo (3.6 a 1), resolviendo el hallazgo H12. El heatmap de Inicio va del paso 0, sin
+     actividad, al 4, el día más activo (HeatmapWidget.tsx) */
   --enarm-chart-scheduled: #156082;
-  --enarm-chart-done: #6c98b0;
+  --enarm-chart-done: #5687a1;
+  --enarm-heatmap-0: #eef0f2;
+  --enarm-heatmap-1: #c4dbe6;
+  --enarm-heatmap-2: #84b7cf;
+  --enarm-heatmap-3: #428fae;
+  --enarm-heatmap-4: #156082;
 
   /* Estados. Solo para correcto e incorrecto, avisos y errores (4.7), siempre con ícono y texto */
   --enarm-success: #1b7a4a;
@@ -65,26 +73,26 @@
   --enarm-danger-soft: #fce6e4;
   --enarm-danger-fg: #ffffff;
 
-  /* Ramas. Una escala de tonos del color de acción, sin un color por rama. Todos pasan 3 a 1 sobre
-     blanco, para las barras y los íconos */
-  --enarm-mi: #156082;
-  --enarm-mi-soft: #e7eff4;
-  --enarm-mi-ink: #124f6c;
-  --enarm-ped: #1f6c8e;
-  --enarm-ped-soft: #e7eff4;
-  --enarm-ped-ink: #124f6c;
-  --enarm-gyo: #2a789a;
-  --enarm-gyo-soft: #e7eff4;
-  --enarm-gyo-ink: #124f6c;
-  --enarm-cir: #3885a6;
-  --enarm-cir-soft: #e7eff4;
-  --enarm-cir-ink: #124f6c;
-  --enarm-fam: #478fb0;
-  --enarm-fam-soft: #e7eff4;
-  --enarm-fam-ink: #124f6c;
-  --enarm-urg: #5a98b8;
-  --enarm-urg-soft: #e7eff4;
-  --enarm-urg-ink: #124f6c;
+  /* Ramas con color propio distinguible y seguro para daltonismo (D-128). Todos pasan 3 a 1 sobre
+     blanco y sus tintas pasan 4.5 a 1 sobre fondo suave y sobre la superficie */
+  --enarm-mi: #1d638f;
+  --enarm-mi-soft: #e8f1f7;
+  --enarm-mi-ink: #134666;
+  --enarm-ped: #087d8a;
+  --enarm-ped-soft: #e6f5f7;
+  --enarm-ped-ink: #06545d;
+  --enarm-gyo: #8c3372;
+  --enarm-gyo-soft: #f8eaf4;
+  --enarm-gyo-ink: #60214e;
+  --enarm-cir: #4d4ba3;
+  --enarm-cir-soft: #edecf9;
+  --enarm-cir-ink: #333175;
+  --enarm-fam: #913a5a;
+  --enarm-fam-soft: #faeaf0;
+  --enarm-fam-ink: #64243b;
+  --enarm-urg: #63398c;
+  --enarm-urg-soft: #f2eaf9;
+  --enarm-urg-ink: #432462;
 
   /* Etiquetas obligatorias (4.6), en neutro con borde */
   --enarm-demo: #eef0f2;
@@ -118,15 +126,20 @@
     --enarm-primary-soft: #16303e;
     --enarm-focus: #7fc1de;
     --enarm-indicator: #7fc1de;
-    --enarm-accent: #a3aeb8;
-    --enarm-accent-ink: #c4ccd3;
-    --enarm-accent-soft: #202831;
-    --enarm-accent-fg: #0f1419;
-    --enarm-streak: #a3aeb8;
-    --enarm-streak-soft: #202831;
-    --enarm-streak-ink: #c4ccd3;
+    --enarm-accent: #ea8b48;
+    --enarm-accent-soft: #351d10;
+    --enarm-accent-ink: #f5ab7a;
+    --enarm-accent-fg: #171d24;
+    --enarm-streak: #ea8b48;
+    --enarm-streak-soft: #351d10;
+    --enarm-streak-ink: #f5ab7a;
     --enarm-chart-scheduled: #7fc1de;
     --enarm-chart-done: #4e7f96;
+    --enarm-heatmap-0: #202831;
+    --enarm-heatmap-1: #1b4257;
+    --enarm-heatmap-2: #255973;
+    --enarm-heatmap-3: #448ba8;
+    --enarm-heatmap-4: #7fc1de;
     --enarm-success: #6fd39b;
     --enarm-success-soft: #123224;
     --enarm-warning: #f0c060;
@@ -135,24 +148,24 @@
     --enarm-danger-hover: #ffa8a1;
     --enarm-danger-soft: #3d1b18;
     --enarm-danger-fg: #2b0d0a;
-    --enarm-mi: #7fc1de;
-    --enarm-mi-soft: #16303e;
-    --enarm-mi-ink: #9fd0e6;
-    --enarm-ped: #6fb0cf;
-    --enarm-ped-soft: #16303e;
-    --enarm-ped-ink: #9fd0e6;
-    --enarm-gyo: #5f9fbf;
-    --enarm-gyo-soft: #16303e;
-    --enarm-gyo-ink: #9fd0e6;
-    --enarm-cir: #4f8eaf;
-    --enarm-cir-soft: #16303e;
-    --enarm-cir-ink: #9fd0e6;
-    --enarm-fam: #3f7d9e;
-    --enarm-fam-soft: #16303e;
-    --enarm-fam-ink: #9fd0e6;
-    --enarm-urg: #2f6c8d;
-    --enarm-urg-soft: #16303e;
-    --enarm-urg-ink: #9fd0e6;
+    --enarm-mi: #6faed6;
+    --enarm-mi-soft: #142938;
+    --enarm-mi-ink: #9ecbee;
+    --enarm-ped: #5bc2cf;
+    --enarm-ped-soft: #112d33;
+    --enarm-ped-ink: #8ee0ec;
+    --enarm-gyo: #cf6cb2;
+    --enarm-gyo-soft: #331429;
+    --enarm-gyo-ink: #e89ed2;
+    --enarm-cir: #918fe0;
+    --enarm-cir-soft: #1e1d38;
+    --enarm-cir-ink: #b9b8f2;
+    --enarm-fam: #d67394;
+    --enarm-fam-soft: #351420;
+    --enarm-fam-ink: #eda4be;
+    --enarm-urg: #a67dd4;
+    --enarm-urg-soft: #241336;
+    --enarm-urg-ink: #caa9ee;
     --enarm-demo: #202831;
     --enarm-demo-fg: #c4ccd3;
     --enarm-demo-line: #3a4650;
@@ -182,15 +195,20 @@
   --enarm-primary-soft: #16303e;
   --enarm-focus: #7fc1de;
   --enarm-indicator: #7fc1de;
-  --enarm-accent: #a3aeb8;
-  --enarm-accent-ink: #c4ccd3;
-  --enarm-accent-soft: #202831;
-  --enarm-accent-fg: #0f1419;
-  --enarm-streak: #a3aeb8;
-  --enarm-streak-soft: #202831;
-  --enarm-streak-ink: #c4ccd3;
+  --enarm-accent: #ea8b48;
+  --enarm-accent-soft: #351d10;
+  --enarm-accent-ink: #f5ab7a;
+  --enarm-accent-fg: #171d24;
+  --enarm-streak: #ea8b48;
+  --enarm-streak-soft: #351d10;
+  --enarm-streak-ink: #f5ab7a;
   --enarm-chart-scheduled: #7fc1de;
   --enarm-chart-done: #4e7f96;
+  --enarm-heatmap-0: #202831;
+  --enarm-heatmap-1: #1b4257;
+  --enarm-heatmap-2: #255973;
+  --enarm-heatmap-3: #448ba8;
+  --enarm-heatmap-4: #7fc1de;
   --enarm-success: #6fd39b;
   --enarm-success-soft: #123224;
   --enarm-warning: #f0c060;
@@ -199,24 +217,24 @@
   --enarm-danger-hover: #ffa8a1;
   --enarm-danger-soft: #3d1b18;
   --enarm-danger-fg: #2b0d0a;
-  --enarm-mi: #7fc1de;
-  --enarm-mi-soft: #16303e;
-  --enarm-mi-ink: #9fd0e6;
-  --enarm-ped: #6fb0cf;
-  --enarm-ped-soft: #16303e;
-  --enarm-ped-ink: #9fd0e6;
-  --enarm-gyo: #5f9fbf;
-  --enarm-gyo-soft: #16303e;
-  --enarm-gyo-ink: #9fd0e6;
-  --enarm-cir: #4f8eaf;
-  --enarm-cir-soft: #16303e;
-  --enarm-cir-ink: #9fd0e6;
-  --enarm-fam: #3f7d9e;
-  --enarm-fam-soft: #16303e;
-  --enarm-fam-ink: #9fd0e6;
-  --enarm-urg: #2f6c8d;
-  --enarm-urg-soft: #16303e;
-  --enarm-urg-ink: #9fd0e6;
+  --enarm-mi: #6faed6;
+  --enarm-mi-soft: #142938;
+  --enarm-mi-ink: #9ecbee;
+  --enarm-ped: #5bc2cf;
+  --enarm-ped-soft: #112d33;
+  --enarm-ped-ink: #8ee0ec;
+  --enarm-gyo: #cf6cb2;
+  --enarm-gyo-soft: #331429;
+  --enarm-gyo-ink: #e89ed2;
+  --enarm-cir: #918fe0;
+  --enarm-cir-soft: #1e1d38;
+  --enarm-cir-ink: #b9b8f2;
+  --enarm-fam: #d67394;
+  --enarm-fam-soft: #351420;
+  --enarm-fam-ink: #eda4be;
+  --enarm-urg: #a67dd4;
+  --enarm-urg-soft: #241336;
+  --enarm-urg-ink: #caa9ee;
   --enarm-demo: #202831;
   --enarm-demo-fg: #c4ccd3;
   --enarm-demo-line: #3a4650;
@@ -278,6 +296,11 @@
   --color-streak-ink: var(--enarm-streak-ink);
   --color-chart-scheduled: var(--enarm-chart-scheduled);
   --color-chart-done: var(--enarm-chart-done);
+  --color-heatmap-0: var(--enarm-heatmap-0);
+  --color-heatmap-1: var(--enarm-heatmap-1);
+  --color-heatmap-2: var(--enarm-heatmap-2);
+  --color-heatmap-3: var(--enarm-heatmap-3);
+  --color-heatmap-4: var(--enarm-heatmap-4);
   --color-mi: var(--enarm-mi);
   --color-mi-soft: var(--enarm-mi-soft);
   --color-mi-ink: var(--enarm-mi-ink);

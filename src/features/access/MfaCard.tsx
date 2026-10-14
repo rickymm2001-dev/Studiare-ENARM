@@ -16,6 +16,7 @@ import {
   type VerifyResult,
 } from '@/data/cloud/mfa';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
@@ -79,6 +80,7 @@ export function MfaCard({ gate }: { gate: Gate }) {
         {factorId ? (
           <CodeForm
             factorId={factorId}
+            separated={enrolling}
             onVerified={() => {
               setMfa({ status: 'verified' });
             }}
@@ -136,7 +138,16 @@ function EnrollSteps({ enrollment, onRetry }: { enrollment: Enrollment; onRetry:
   );
 }
 
-function CodeForm({ factorId, onVerified }: { factorId: string; onVerified: () => void }) {
+/** separated pone la línea que lo separa de los pasos del alta. Sin pasos arriba no hace falta */
+function CodeForm({
+  factorId,
+  onVerified,
+  separated,
+}: {
+  factorId: string;
+  onVerified: () => void;
+  separated: boolean;
+}) {
   const text = t.accounts.mfa;
   const [code, setCode] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -170,7 +181,7 @@ function CodeForm({ factorId, onVerified }: { factorId: string; onVerified: () =
 
   return (
     <form
-      className="flex flex-col gap-3 border-t border-line pt-4"
+      className={cn('flex flex-col gap-3', separated && 'border-t border-line pt-4')}
       noValidate
       onSubmit={(event) => void onSubmit(event)}
     >

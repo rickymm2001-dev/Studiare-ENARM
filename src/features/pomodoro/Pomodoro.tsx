@@ -39,13 +39,16 @@ export function PomodoroPill({
         aria-label={t.pomodoro.show(formatClock(left), phaseName)}
         className="relative flex size-touch items-center justify-center rounded-full border border-line bg-surface shadow-card"
       >
-        <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary-ink')} />
+        <Timer
+          aria-hidden
+          className={cn('size-5', isBreak ? 'text-fg-muted' : 'text-primary-ink')}
+        />
         {running ? (
           <span
             aria-hidden
             className={cn(
               'absolute top-1.5 right-1.5 size-2.5 animate-pulse rounded-full',
-              isBreak ? 'bg-cir' : 'bg-indicator',
+              isBreak ? 'bg-line-strong' : 'bg-indicator',
             )}
           />
         ) : null}
@@ -59,14 +62,14 @@ export function PomodoroPill({
       aria-label={t.pomodoro.label}
       className={cn(
         'flex items-center gap-1 rounded-full border bg-surface py-1 pr-1 pl-3 shadow-card',
-        isBreak ? 'border-cir/40' : 'border-indicator/30',
+        isBreak ? 'border-line' : 'border-indicator/30',
       )}
     >
       <span
         aria-hidden
         className={cn(
           'size-2.5 rounded-full',
-          isBreak ? 'bg-cir' : 'bg-indicator',
+          isBreak ? 'bg-line-strong' : 'bg-indicator',
           running && 'animate-pulse',
         )}
       />
@@ -131,10 +134,10 @@ export function PomodoroNotice({ session }: { session: ReadySession }) {
       role="status"
       className={cn(
         'animate-rise flex flex-wrap items-center gap-3 rounded-xl border p-3 shadow-card',
-        isBreak ? 'border-cir/40 bg-cir-soft' : 'border-indicator/30 bg-primary-soft',
+        isBreak ? 'border-line bg-muted' : 'border-indicator/30 bg-primary-soft',
       )}
     >
-      <Timer aria-hidden className={cn('size-5', isBreak ? 'text-cir' : 'text-primary-ink')} />
+      <Timer aria-hidden className={cn('size-5', isBreak ? 'text-fg-muted' : 'text-primary-ink')} />
       <p className="flex-1 font-medium">
         {message}. {isBreak ? t.pomodoro.breakTip : t.pomodoro.focusTip}
       </p>

@@ -103,10 +103,15 @@ describe('el error del enlace del correo', () => {
   });
 });
 
+/** La marca que dejó la página anterior, antes de ir a Google */
+const markedBeforeThisPage = () => String(performance.timeOrigin - 1_000);
+/** La hora de inicio de la página que carga al volver de Google */
+const nextPage = () => Date.now() + 1;
+
 describe('la marca de la salida a Google', () => {
   it('cuenta para un solo regreso y caduca', () => {
     expect(takeGoogleRedirect()).toBe(false);
-    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(Date.now()));
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, markedBeforeThisPage());
     expect(takeGoogleRedirect()).toBe(true);
     expect(takeGoogleRedirect()).toBe(false);
     const old = Date.now() - GOOGLE_REDIRECT_TTL_MS - 1;
@@ -114,6 +119,17 @@ describe('la marca de la salida a Google', () => {
     expect(takeGoogleRedirect()).toBe(false);
     sessionStorage.setItem(GOOGLE_REDIRECT_KEY, 'basura');
     expect(takeGoogleRedirect()).toBe(false);
+    expect(sessionStorage.getItem(GOOGLE_REDIRECT_KEY)).toBeNull();
+  });
+
+  it('una marca que puso esta misma página se queda para el regreso de Google', () => {
+    // El alumno pulsó Continuar con Google antes de que el puente de la nube terminara de cargar
+    const marked = String(Date.now());
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, marked);
+    expect(takeGoogleRedirect()).toBe(false);
+    expect(sessionStorage.getItem(GOOGLE_REDIRECT_KEY)).toBe(marked);
+    // La página que carga al volver de Google sí la toma
+    expect(takeGoogleRedirect(Date.now(), nextPage())).toBe(true);
     expect(sessionStorage.getItem(GOOGLE_REDIRECT_KEY)).toBeNull();
   });
 });
@@ -131,7 +147,7 @@ describe('signInWithGoogle', () => {
     } as unknown as SupabaseClient;
     expect(await signInWithGoogle(cloud, APP)).toEqual({ ok: true });
     expect(calls).toEqual([{ provider: 'google', options: { redirectTo: APP } }]);
-    expect(takeGoogleRedirect()).toBe(true);
+    expect(takeGoogleRedirect(Date.now(), nextPage())).toBe(true);
   });
 
   it('si Supabase no puede armar la dirección o la red falla, lo dice y quita la marca', async () => {
