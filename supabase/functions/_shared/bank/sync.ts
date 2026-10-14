@@ -31,6 +31,7 @@ import {
   type KnownQuestion,
 } from './plan.ts';
 import { readBankSheet } from './sheetTable.ts';
+import { corsHeaders } from '../http.ts';
 
 export type SyncTrigger = 'cron' | 'manual';
 export type SyncTarget = 'real' | 'test';
@@ -173,24 +174,6 @@ export function parseApplyResults(value: unknown): SyncApplyResult[] {
   });
 }
 
-function originOf(url: string | undefined): string {
-  try {
-    return url ? new URL(url).origin : '';
-  } catch {
-    return '';
-  }
-}
-
-function corsHeaders(appUrl: string | undefined, origin: string | null): Record<string, string> {
-  const allowed = originOf(appUrl);
-  return {
-    'access-control-allow-headers': 'authorization, content-type, apikey, x-client-info',
-    'access-control-allow-methods': 'POST, OPTIONS',
-    vary: 'origin',
-    ...(allowed !== '' && origin === allowed ? { 'access-control-allow-origin': allowed } : {}),
-  };
-}
-
 function reply(body: unknown, status: number, headers: Record<string, string>): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -200,7 +183,8 @@ function reply(body: unknown, status: number, headers: Record<string, string>): 
 
 /** La petición a bank-sync. 401 sin ficha ni sesión de admin, sin tocar Google */
 export async function handleBankSync(request: Request, deps: BankSyncDeps): Promise<Response> {
-  const headers = corsHeaders(deps.env.appUrl, request.headers.get('origin'));
+  // El mismo CORS que las demás funciones (http.ts). Solo la dirección de la app
+  const headers = corsHeaders({ APP_URL: deps.env.appUrl }, request.headers.get('origin'));
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
   if (request.method !== 'POST') return reply({ error: 'method' }, 405, headers);
 
