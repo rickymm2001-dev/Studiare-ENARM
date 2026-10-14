@@ -24,9 +24,9 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
+import { TargetSpecialtyField } from '../shared/SignupFields';
 import { UnsavedChangesGuard } from '../shared/UnsavedChangesGuard';
 import { AccountDetailsFields } from './AccountDetailsFields';
-import { TargetSpecialtyField } from '../shared/SignupFields';
 import { accountRows, detailsOf, examDateLabel, sameDetails, specialtyName } from './accountView';
 import { AvatarPicker } from './AvatarPicker';
 
