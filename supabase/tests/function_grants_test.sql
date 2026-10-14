@@ -74,4 +74,37 @@ select pg_temp.expect(
 select pg_temp.expect(public.ai_day() = (now() at time zone 'America/Mexico_City')::date,
   'G4. ai_day cambió de resultado al fijar search_path');
 
+-- ===================================================================== G5. Banco en la nube (B11)
+-- Toda función del banco nace sin execute para public y para anon. Cada archivo de prueba del banco
+-- revisa además quién sí la ejecuta (bank_core_test, bank_editorial_test, bank_sync_test y
+-- deck_catalog_test)
+do $$
+declare
+  r record;
+  n integer := 0;
+begin
+  for r in
+    select p.oid::regprocedure::text as f, p.proacl
+    from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public' and (
+      p.proname ~ '^(bank_|editor_|deck_catalog_|admin_bank_|admin_deck_catalog_|admin_review_report)'
+      or p.proname in ('ulid_uuid', 'stable_bank_uuid', 'catalog_changes', 'fetch_questions', 'report_question',
+        'bias_agreement_summary', 'record_deck_download', 'upsert_distractor_stats', 'party_duels_check_questions',
+        'content_reports_guard', 'content_reports_notify', 'forbid_bank_changes', 'admin_assign_questions',
+        'admin_set_topic_reviewer', 'admin_set_physician_code', 'admin_retire_question', 'admin_restore_question',
+        'admin_confirm_missing', 'owner_confirm_deck_authorization'))
+  loop
+    n := n + 1;
+    if r.proacl is null or exists (select 1 from aclexplode(r.proacl) a where a.grantee = 0) then
+      raise exception 'FALLA G5. public puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('anon', r.f, 'execute') then
+      raise exception 'FALLA G5. anon puede ejecutar %', r.f;
+    end if;
+  end loop;
+  if n < 60 then
+    raise exception 'FALLA G5. Se esperaban más de 60 funciones del banco y hay %', n;
+  end if;
+end $$;
+
 select 'TODAS LAS PRUEBAS DE PERMISOS DE FUNCIONES PASARON' as resultado;

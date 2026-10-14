@@ -21,10 +21,12 @@ psql_run -f "$here/stub_storage.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
 # Las migraciones que siguen al freno son idempotentes. Se corren otra vez, por su nombre, la de la foto
-# de perfil de B2, las dos de B7, las dos del plan Gratis de B8 y las tres de pagos de B10, para
-# comprobarlo. Las de B8 van después de las de B7 porque vuelven a cerrar Party y los apuntes de la nube
-# que la de Party de B7 deja abiertos. Las de B10 van al final porque 20261019000001 trae otra versión de
-# apply_payment_notice. Se nombran para que una migración nueva de otro bloque no saque a ninguna de la lista
+# de perfil de B2, las dos de B7, las dos del plan Gratis de B8, las tres de pagos de B10 y las del banco
+# en la nube de B11, para comprobarlo. Las de B8 van después de las de B7 porque vuelven a cerrar Party y
+# los apuntes de la nube que la de Party de B7 deja abiertos. Las de B10 van después porque
+# 20261019000001 trae otra versión de apply_payment_notice. Las de B11 van al final porque cierran las
+# tablas del banco y el tope viejo de preguntas que dejaron las anteriores. Se nombran para que una
+# migración nueva de otro bloque no saque a ninguna de la lista
 for name in \
   20261017000001_avatar_changed_at \
   20261018000001_party_cloud \
@@ -33,7 +35,10 @@ for name in \
   20261021000002_free_plan_party_moderation \
   20261022000001_billing_emails \
   20261022000002_billing_plans \
-  20261022000003_invoice_requests; do
+  20261022000003_invoice_requests \
+  20261023000001_bank_taxonomy \
+  20261023000002_bank_core \
+  20261023000003_bank_editorial; do
   psql_run -f "$here/../migrations/$name.sql"
 done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
@@ -45,6 +50,9 @@ psql_run -f "$here/../manual/party-dueno-al-borrar-cuenta.sql"
 psql_run -f "$here/../manual/party-dueno-al-borrar-cuenta.sql"
 psql_run -f "$here/../manual/pagos-b10.sql"
 psql_run -f "$here/../manual/pagos-b10.sql"
+# La de B11 trae otra versión de delete_my_data, así que va después de ejecutar-en-sql-editor.sql
+psql_run -f "$here/../manual/banco-b11.sql"
+psql_run -f "$here/../manual/banco-b11.sql"
 psql_run -f "$here/rls_test.sql"
 psql_run -f "$here/device_barrier_test.sql"
 psql_run -f "$here/sync_test.sql"
@@ -65,3 +73,6 @@ psql_run -f "$here/free_plan_party_moderation_test.sql"
 psql_run -f "$here/billing_emails_test.sql"
 psql_run -f "$here/billing_plans_test.sql"
 psql_run -f "$here/invoice_requests_test.sql"
+psql_run -f "$here/bank_core_test.sql"
+psql_run -f "$here/bank_editorial_test.sql"
+psql_run -f "$here/physician_pay_test.sql"

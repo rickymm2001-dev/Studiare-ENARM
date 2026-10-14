@@ -198,15 +198,24 @@ select pg_temp.expect(pg_temp.is_blocked($q$select public.apply_payment_notice('
 commit;
 
 -- ===================================================================== Q4. Tope del plan Gratis
--- 25 preguntas aprobadas y una en borrador
+-- Desde B11 el tope de 20 preguntas nuevas por día de estudio lo cuenta fetch_questions en bank_reads
+-- (20261023000002_bank_core.sql, H07). grant_question_access queda sin uso y sin execute para la API.
+-- 25 preguntas publicadas y una en borrador, con el banco abierto para los alumnos
 insert into public.questions (id, question_id, version, branch, topic, body, editorial_status)
-  select ('e0000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid, gen_random_uuid(), 1, 'pediatrics', 'neonatology', '{}', 'approved'
+  select ('e0000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid,
+         ('e1000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid, 1, 'pediatrics', 'neonatology',
+         '{"prompt":"[Prueba] Pregunta simulada"}', 'approved'
   from generate_series(1, 25) g;
 insert into public.questions (id, question_id, version, branch, topic, body, editorial_status)
-  values ('e0000000-0000-0000-0000-0000000000ff', gen_random_uuid(), 1, 'pediatrics', 'neonatology', '{}', 'draft');
-insert into public.question_options (question_version_id, text, is_correct, rationale)
-  select ('e0000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid, 'Opción', true, 'Porque sí'
+  values ('e0000000-0000-0000-0000-0000000000ff', 'e1000000-0000-0000-0000-0000000000ff', 1, 'pediatrics', 'neonatology', '{}', 'draft');
+insert into public.question_options (question_version_id, text, is_correct, rationale, position)
+  select ('e0000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid, 'Opción', true, 'Porque sí', 0
   from generate_series(1, 25) g;
+insert into public.bank_questions (question_id, origin, latest_version_id)
+  select question_id, 'app', id from public.questions where id::text like 'e0000000-%';
+select public.bank_publish(question_id) from public.bank_questions where question_id::text like 'e1000000-%';
+insert into public.platform_settings (key, value) values ('feature_flags', '{"cloudBank":true}')
+  on conflict (key) do update set value = public.platform_settings.value || '{"cloudBank":true}';
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('d0000000-0000-0000-0000-000000000011', 'g1@x.mx', '{"alias":"Gratis"}'),
@@ -215,67 +224,66 @@ insert into auth.users (id, email, raw_user_meta_data) values
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000011', 'ses-g1');
 select pg_temp.expect(public.free_daily_questions() = 20, 'Q4. El tope diario debía ser 20');
--- Sin abrir nada no ve ninguna pregunta, aunque estén aprobadas
-select pg_temp.expect((select count(*) from public.questions) = 0, 'Q4. Un alumno Gratis veía preguntas sin abrirlas');
-select pg_temp.expect((select count(*) from public.question_options) = 0, 'Q4. Un alumno Gratis veía opciones sin abrir la pregunta');
-select pg_temp.expect(public.grant_question_access('e0000000-0000-0000-0000-000000000001'), 'Q4. Abrir la primera debía permitirse');
-select pg_temp.expect((select count(*) from public.questions) = 1, 'Q4. Debía ver solo la que abrió');
-select pg_temp.expect((select count(*) from public.question_options) = 1, 'Q4. Debía ver solo las opciones de la que abrió');
-select pg_temp.expect((select count(*) from public.questions where id = 'e0000000-0000-0000-0000-000000000002') = 0, 'Q4. Una pregunta sin abrir se podía leer por su id');
--- Volver a abrir la misma no gasta cupo
-select pg_temp.expect(public.grant_question_access('e0000000-0000-0000-0000-000000000001'), 'Q4. Volver a abrir la misma debía permitirse');
-commit;
-select pg_temp.expect((select count(*) from public.question_grants where user_id = 'd0000000-0000-0000-0000-000000000011') = 1, 'Q4. Volver a abrir la misma gastó cupo');
-begin;
-select pg_temp.as_user('d0000000-0000-0000-0000-000000000011', 'ses-g1');
-do $$ begin
-  for i in 2..20 loop
-    perform public.grant_question_access(('e0000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid);
-  end loop;
-end $$;
-select pg_temp.expect((select count(*) from public.questions) = 20, 'Q4. Debía ver las 20 que abrió');
--- La 21 se rechaza con FR001 y no se puede leer
+-- Las preguntas no se leen directo, aunque estén aprobadas
+select pg_temp.expect(pg_temp.is_blocked('select count(*) from public.questions'), 'Q4. Un alumno Gratis leyó las preguntas directo');
+select pg_temp.expect(pg_temp.is_blocked('select count(*) from public.question_options'), 'Q4. Un alumno Gratis leyó las opciones directo');
+select pg_temp.expect(pg_temp.is_blocked($q$select public.grant_question_access('e0000000-0000-0000-0000-000000000001')$q$),
+  'Q4. Un alumno usó el tope viejo');
 select pg_temp.expect(
-  pg_temp.fails_with($q$select public.grant_question_access('e0000000-0000-0000-0000-000000000021')$q$) = 'FR001',
-  'Q4. La pregunta 21 debía rechazarse con FR001'
-);
+  jsonb_array_length(public.fetch_questions(array['e1000000-0000-0000-0000-000000000001']::uuid[]) -> 'questions') = 1,
+  'Q4. Abrir la primera debía permitirse');
+-- Volver a abrir la misma no gasta cupo
+select pg_temp.expect(
+  (public.fetch_questions(array['e1000000-0000-0000-0000-000000000001']::uuid[]) -> 'quota' ->> 'used')::int = 1,
+  'Q4. Volver a abrir la misma gastó cupo');
 commit;
+select pg_temp.expect((select count(*) from public.bank_reads where user_id = 'd0000000-0000-0000-0000-000000000011') = 1, 'Q4. bank_reads no tiene 1');
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000011', 'ses-g1');
-select pg_temp.expect((select count(*) from public.questions) = 20, 'Q4. La pregunta rechazada se podía leer');
-select pg_temp.expect((select count(*) from public.questions where id = 'e0000000-0000-0000-0000-000000000021') = 0, 'Q4. La pregunta 21 se leyó por su id');
--- Una en borrador nunca se abre
-select pg_temp.expect(not public.grant_question_access('e0000000-0000-0000-0000-0000000000ff'), 'Q4. Una pregunta en borrador no debía abrirse');
--- Otra persona Gratis no ve lo que abrió esta
+select pg_temp.expect(
+  jsonb_array_length(public.fetch_questions(array(
+    select ('e1000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid from generate_series(2, 20) i)) -> 'questions') = 19,
+  'Q4. No abrió las 20');
+-- La 21 sale negada con daily_limit, sin error, y una en borrador nunca se abre
+select pg_temp.expect(
+  public.fetch_questions(array['e1000000-0000-0000-0000-000000000021', 'e1000000-0000-0000-0000-0000000000ff']::uuid[]) -> 'denied'
+    = '[{"id":"e1000000-0000-0000-0000-000000000021","reason":"daily_limit"},{"id":"e1000000-0000-0000-0000-0000000000ff","reason":"not_found"}]'::jsonb,
+  'Q4. La pregunta 21 debía negarse con daily_limit');
+select pg_temp.expect((public.bank_quota() ->> 'left')::int = 0, 'Q4. Le quedaba cupo');
 commit;
+-- Otra persona Gratis tiene su propio tope
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000012');
-select pg_temp.expect((select count(*) from public.questions) = 0, 'Q4. Otra persona veía lo que abrió esta');
+select pg_temp.expect((public.bank_quota() ->> 'used')::int = 0, 'Q4. Otra persona gastó del cupo de esta');
 commit;
--- Al día siguiente el cupo se renueva
-update public.question_grants set day = day - 1;
+-- Al día siguiente el cupo se renueva. El superusuario mueve el día con el freno de bank_reads apagado
+alter table public.bank_reads disable trigger bank_reads_append_only;
+update public.bank_reads set day = day - 1 where user_id = 'd0000000-0000-0000-0000-000000000011';
+alter table public.bank_reads enable trigger bank_reads_append_only;
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000011', 'ses-g1');
-select pg_temp.expect((select count(*) from public.questions) = 0, 'Q4. Al día siguiente lo abierto ayer no debía verse');
-select pg_temp.expect(public.grant_question_access('e0000000-0000-0000-0000-000000000021'), 'Q4. Al día siguiente el cupo debía renovarse');
+select pg_temp.expect(
+  jsonb_array_length(public.fetch_questions(array['e1000000-0000-0000-0000-000000000021']::uuid[]) -> 'questions') = 1,
+  'Q4. Al día siguiente el cupo debía renovarse');
 commit;
 
 -- Un plan de pago no tiene tope
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000007');
-do $$ begin
-  for i in 1..25 loop
-    perform public.grant_question_access(('e0000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid);
-  end loop;
-end $$;
-select pg_temp.expect((select count(*) from public.questions where id::text like 'e0000000-%') = 25, 'Q4. Un plan de pago debía ver las 25 aprobadas');
+select pg_temp.expect(
+  jsonb_array_length(public.fetch_questions(array(
+    select ('e1000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid from generate_series(1, 25) i)) -> 'questions') = 25,
+  'Q4. Un plan de pago debía leer las 25 aprobadas');
+select pg_temp.expect((public.bank_quota() ->> 'limit') is null, 'Q4. Un plan de pago tenía tope');
 commit;
-select pg_temp.expect((select count(*) from public.question_grants where user_id = 'd0000000-0000-0000-0000-000000000007') = 0, 'Q4. Un plan de pago no debía gastar cupo');
 
--- Un administrador ve todo, también el borrador
+-- Un administrador lee todo lo publicado. Los borradores los ve con las funciones del editor
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-0000000000ad');
-select pg_temp.expect((select count(*) from public.questions where id::text like 'e0000000-%') = 26, 'Q4. Un administrador debía ver las 26');
+select pg_temp.expect(
+  jsonb_array_length(public.fetch_questions(array(
+    select ('e1000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid from generate_series(1, 25) i)) -> 'questions') = 25,
+  'Q4. Un administrador debía leer las 25');
 commit;
 
 -- Un dispositivo desplazado no abre preguntas aunque conserve su token
@@ -289,10 +297,12 @@ select public.claim_device('dev-b', 'Safari');
 commit;
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000012', 'ses-a');
-select pg_temp.expect(pg_temp.fails_with($q$select public.grant_question_access('e0000000-0000-0000-0000-000000000003')$q$) = '42501', 'Q4. El dispositivo desplazado abrió una pregunta');
+select pg_temp.expect(pg_temp.fails_with($q$select public.fetch_questions(array['e1000000-0000-0000-0000-000000000003']::uuid[])$q$) = '42501', 'Q4. El dispositivo desplazado abrió una pregunta');
 select pg_temp.expect(pg_temp.fails_with($q$select public.my_plan()$q$) = '42501', 'Q4. El dispositivo desplazado leyó su plan');
 select pg_temp.expect(pg_temp.fails_with($q$select public.my_referral_code()$q$) = '42501', 'Q4. El dispositivo desplazado pidió su código');
 commit;
+-- El banco vuelve a quedar cerrado para las pruebas que siguen
+update public.platform_settings set value = value || '{"cloudBank":false}' where key = 'feature_flags';
 
 -- ===================================================================== Q5. Referidos
 begin;
@@ -397,15 +407,16 @@ select pg_temp.expect((select count(*) from public.subscription_grants where use
 update public.platform_settings set value = '{"rewardDays":30,"maxRewards":12,"redeemWindowDays":14}' where key = 'referral_rules';
 commit;
 
--- Los meses regalados abren el plan mensual, también el tope de preguntas
+-- Los meses regalados abren el plan mensual, también sin tope de preguntas (fetch_questions de B11)
+update public.platform_settings set value = value || '{"cloudBank":true}' where key = 'feature_flags';
 begin;
 select pg_temp.as_user('d0000000-0000-0000-0000-000000000001');
-do $$ begin
-  for i in 1..25 loop
-    perform public.grant_question_access(('e0000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid);
-  end loop;
-end $$;
-select pg_temp.expect((select count(*) from public.questions where id::text like 'e0000000-%') = 25, 'Q5. Un mes regalado debía abrir el banco sin tope');
+select pg_temp.expect(
+  jsonb_array_length(public.fetch_questions(array(
+    select ('e1000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid from generate_series(1, 25) i)) -> 'questions') = 25
+  and public.bank_quota() ->> 'plan' = 'monthly' and (public.bank_quota() ->> 'limit') is null,
+  'Q5. Un mes regalado debía abrir el banco sin tope');
 commit;
+update public.platform_settings set value = value || '{"cloudBank":false}' where key = 'feature_flags';
 
 \echo 'TODAS LAS PRUEBAS DE PAGOS, PLAN GRATIS Y REFERIDOS PASARON'
