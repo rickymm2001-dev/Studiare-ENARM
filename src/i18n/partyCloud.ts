@@ -35,7 +35,7 @@ export const partyCloudText = {
   consent: {
     title: 'Activa Party',
     body: 'Party comparte con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos, y en un duelo tus aciertos y tu tiempo. Nunca tu correo.',
-    hint: 'Lo puedes quitar cuando quieras en Configuración, Privacidad. Al quitarlo sales de tus grupos.',
+    hint: 'Lo puedes quitar cuando quieras en Configuración, sección Privacidad. Al quitarlo sales de tus grupos.',
     allow: 'Activar Party',
     failed: 'No se pudo guardar tu permiso. Intenta de nuevo.',
     stillIn: (n: number) =>
