@@ -4,10 +4,10 @@
 // alumno y nunca su exactitud, sus sesgos, su conducta ni un puntaje estimado. El alias va solo si el
 // alumno lo pide y en modo enfoque la racha no va. Sin React ni DOM, para poder probarlo.
 import { BRAND } from '@/config/brand';
-import { isStudyDay } from '@/engines/rewards';
+import { STUDY_DAY_MIN } from '@/config/rewards';
 import { addDays, weekStartOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
-import type { Snapshot } from '../home/snapshot';
+import type { DaySummary, Snapshot } from '../home/snapshot';
 
 /** Lo que el resumen lee de la instantánea del alumno */
 export type WeekShareSource = Pick<Snapshot, 'today' | 'activity' | 'streak'>;
@@ -18,7 +18,7 @@ export interface WeekShareCard {
   alias: string | null;
   /** Lunes de la semana en curso, AAAA-MM-DD */
   weekStart: string;
-  /** Días de la semana con estudio, de 0 a 7, con la misma regla que la misión de la semana */
+  /** Días de la semana con estudio, de 0 a 7, con la regla de STUDY_DAY_MIN */
   studyDays: number;
   /** Tarjetas repasadas en la semana */
   reviews: number;
@@ -28,6 +28,18 @@ export interface WeekShareCard {
   streak: number | null;
   /** Con datos de demostración la imagen lo dice, para que nadie la tome por real (4.6) */
   simulated: boolean;
+}
+
+/**
+ * Un día cuenta como de estudio con al menos una tarjeta, una pregunta o 5 minutos de enfoque. Las
+ * misiones de la semana, que tenían esta regla, se quitaron en B3 y el resumen la conserva
+ */
+function isStudyDay(day: DaySummary): boolean {
+  return (
+    day.cards >= STUDY_DAY_MIN.cards ||
+    day.questions >= STUDY_DAY_MIN.questions ||
+    day.focusMinutes >= STUDY_DAY_MIN.minutes
+  );
 }
 
 export function buildWeekShare(input: {
@@ -47,7 +59,7 @@ export function buildWeekShare(input: {
     if (!entry) continue;
     reviews += entry.cards;
     questions += entry.questions;
-    if (isStudyDay({ ...entry, minutes: entry.focusMinutes, correct: 0 })) studyDays += 1;
+    if (isStudyDay(entry)) studyDays += 1;
   }
   return {
     brand: BRAND.name,
