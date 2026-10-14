@@ -188,7 +188,7 @@ export function BiasTipsCard({
     <Card aria-labelledby="consejos-sesgo">
       <CardHeader className="mb-3">
         <CardTitle id="consejos-sesgo" className="flex items-center gap-2 [&_svg]:size-5">
-          <Lightbulb aria-hidden className="text-accent" />
+          <Lightbulb aria-hidden className="text-fg-muted" />
           {t.vocabulary[vocabulary].biasTipsTitle}
         </CardTitle>
         <CardDescription>{text.hint}</CardDescription>

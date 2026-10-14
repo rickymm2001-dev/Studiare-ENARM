@@ -9,6 +9,7 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
+import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { SkeletonRows } from '@/ui/components/skeleton';
@@ -90,11 +91,12 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
   return (
     <div className="flex flex-col gap-1">
       <p className="text-xs text-fg-muted">{text.hint}</p>
-      {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2), y el
-          porcentaje va en texto neutro con el color solo en un punto (H02) */}
+      {/* La rama se lee por su nombre, con la marca de su color al lado (D-128), y el porcentaje
+          va en texto neutro con el color de estado solo en un punto (H02) */}
       <ul className="flex flex-col divide-y divide-line">
         {topics.map((topic) => (
           <li key={topic.key} className="flex items-center gap-2 py-1.5">
+            <BranchMark branch={topic.branch} className="h-8" />
             <span className="flex min-w-0 flex-1 flex-col leading-tight">
               <span className="truncate text-sm font-semibold">{topic.name}</span>
               <span className="truncate text-xs text-fg-muted">{topic.branchName}</span>

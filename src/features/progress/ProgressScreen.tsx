@@ -15,6 +15,7 @@ import { deckIds } from '@/demo/content/deckEntities';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
+import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -219,8 +220,10 @@ function TopicsCard({
           return (
             <li key={branch.key}>
               <details className="group">
-                {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2) */}
+                {/* La rama se lee por su nombre y lleva junto la marca de su color, que con la
+                    paleta ya distingue cada rama (D-128, resuelve H20 de la revisión de B2) */}
                 <summary className="flex min-h-touch cursor-pointer list-none items-center gap-2 px-3 py-1.5 hover:bg-muted [&::-webkit-details-marker]:hidden">
+                  <BranchMark branch={branch.key} className="h-7" />
                   <span className="flex min-w-0 flex-1 flex-col leading-tight">
                     <span className="text-sm font-semibold">{branch.name}</span>
                     <span className="text-xs text-fg-muted">

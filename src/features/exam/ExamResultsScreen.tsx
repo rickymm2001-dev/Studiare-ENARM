@@ -15,6 +15,7 @@ import { biasTaxonomy } from '@/demo/content';
 import type { ExamScore } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
 import { taskNames } from '@/i18n/insights';
+import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
@@ -224,9 +225,10 @@ function Summary({
           {text.time(formatClock(used), formatClock(state.totalMs))}
         </span>
         {perQuestion !== null ? <span>{text.perQuestion(perQuestion)}</span> : null}
-        {/* El XP va en gris como en Retroalimentación. El verde queda para lo correcto */}
+        {/* El XP va en el acento cálido (D-128) como en Retroalimentación. El verde queda para lo
+            correcto */}
         {focus ? null : (
-          <span className="font-semibold text-fg-muted" aria-live="polite">
+          <span className="font-semibold text-accent-ink" aria-live="polite">
             {text.xp(state.xp)}
           </span>
         )}
@@ -371,11 +373,14 @@ function RetryCard({
 
 function TallyRow({
   name,
+  branch,
   correct,
   answered,
   total,
 }: {
   name: string;
+  /** Rama de la fila, para la marca de su color junto al nombre (D-128) */
+  branch?: string;
   correct: number;
   answered: number;
   total: number;
@@ -383,8 +388,11 @@ function TallyRow({
   const label = `${name}. ${t.examResults.tally(correct, answered, total)}`;
   return (
     <li className="flex flex-col gap-1">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-        <span className="font-medium">{name}</span>
+      <div className="flex flex-wrap items-center justify-between gap-x-2">
+        <span className="flex items-center gap-2 font-medium">
+          {branch ? <BranchMark branch={branch} className="h-5" /> : null}
+          {name}
+        </span>
         <span className="text-sm text-fg-muted">
           {t.examResults.tally(correct, answered, total)}
         </span>
@@ -405,6 +413,7 @@ function BranchCard({ score }: { score: ExamScore }) {
           <TallyRow
             key={row.key}
             name={t.branchNames[row.key] ?? row.key}
+            branch={row.key}
             correct={row.correct}
             answered={row.answered}
             total={row.total}

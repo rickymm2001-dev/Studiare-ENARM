@@ -123,7 +123,7 @@ export function AnswerReview({
             )}
             {answer.correct ? t.simulator.correct : t.simulator.incorrect}
             {answer.xp > 0 && !focus ? (
-              <span className="text-sm font-normal text-fg-muted">
+              <span className="text-sm font-normal text-accent-ink">
                 {t.review.xpGained(answer.xp)}
               </span>
             ) : null}

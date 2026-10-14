@@ -296,6 +296,8 @@ Si Ricardo no dice otra cosa antes del mensaje de arranque, rige lo que dice cad
 
 **4.7 Comentario 10 y lo que necesita color.** Hay información que se entiende por su color. Quedan estas excepciones, siempre con ícono y texto además del color. Correcto e incorrecto al contestar, avisos y errores de formularios, el anillo de foco, y las gráficas y el heatmap en tonos de #156082 y grises. Lo dorado del nivel y del XP pasa a neutro. Si Ricardo quiere todo sin color, solo cambian los tokens.
 
+Desde el 2026-10-14, por decisión de Ricardo, D-128 reemplaza esta regla en lo de color por rama y acento. Cada rama tiene su color propio y racha, nivel y XP llevan un acento cálido, con los estados todavía solo en verde, ámbar y rojo.
+
 **4.8 Respuestas 62 y 63.** No habrá prueba con 5 aspirantes, pero Ricardo ya los tiene. No hay prueba formal. Los 5 entran primero, con invitación, y se aprende de su uso y de una encuesta corta (B18).
 
 **4.9 Respuesta 64.** La opción C no existía. Se toma A, la recomendada, que es avisar por correo al médico cuando llega un reporte de error.

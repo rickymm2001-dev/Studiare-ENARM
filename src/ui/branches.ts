@@ -1,6 +1,9 @@
-// Tono de cada rama (D-061, D-122). Color propio para cada rama, distinguible y seguro para
-// daltonismo. Las clases van completas para que Tailwind las encuentre. Las etiquetas y los íconos usan
-// el fondo suave con el tono ink, que llega a 4.5 de contraste; las barras usan el tono lleno (>= 3 a 1)
+// Tono de cada rama (D-061, D-128). Color propio para cada rama, distinguible y seguro para
+// daltonismo, que se hereda en toda la app por los tokens. Las clases van completas para que Tailwind
+// las encuentre. Las etiquetas y los íconos usan el fondo suave con el tono ink, que llega a 4.5 de
+// contraste, y las marcas y barras el tono lleno (3 a 1 o más). El color nunca va solo, siempre junto
+// al nombre de la rama. Lo que no tiene rama conocida va en neutro, porque una etiqueta o un ícono
+// decorativo no lleva el color de acción (comentario 10, D-121)
 export type BranchTone = 'mi' | 'ped' | 'gyo' | 'cir' | 'fam' | 'urg' | 'neutral';
 
 const TONE_BY_KEY: Record<string, BranchTone> = {
@@ -24,9 +27,9 @@ export const TONE_CLASSES: Record<BranchTone, { chip: string; bar: string; icon:
   fam: { chip: 'bg-fam-soft text-fam-ink', bar: 'bg-fam', icon: 'bg-fam-soft text-fam-ink' },
   urg: { chip: 'bg-urg-soft text-urg-ink', bar: 'bg-urg', icon: 'bg-urg-soft text-urg-ink' },
   neutral: {
-    chip: 'bg-primary-soft text-primary-ink',
-    bar: 'bg-primary',
-    icon: 'bg-primary text-primary-fg',
+    chip: 'bg-muted text-fg-muted',
+    bar: 'bg-line-strong',
+    icon: 'bg-muted text-fg-muted',
   },
 };
 

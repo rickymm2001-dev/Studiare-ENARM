@@ -106,7 +106,7 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('contraste accesible de texto (>= 4.5 a 1) y elementos gráficos (>= 3 a 1) en claro y oscuro (D-122)', () => {
+  it('contraste accesible de texto (>= 4.5 a 1) y elementos gráficos (>= 3 a 1) en claro y oscuro (D-128)', () => {
     function luminance(hex: string): number {
       const parts = hex.replace('#', '').match(/.{2}/g) ?? [];
       const [r = 0, g = 0, b = 0] = parts

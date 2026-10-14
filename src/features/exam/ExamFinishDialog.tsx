@@ -32,7 +32,7 @@ export function ExamFinishDialog({
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-1">
               <Dialog.Title className="flex items-center gap-2 text-xl font-extrabold">
-                <Flag aria-hidden className="size-5 text-accent" />
+                <Flag aria-hidden className="size-5 text-fg-muted" />
                 {t.exam.finishTitle}
               </Dialog.Title>
               <Dialog.Description className="text-fg-muted">

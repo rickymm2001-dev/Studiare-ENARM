@@ -1,8 +1,10 @@
 /*
   Tokens de diseño. Único lugar donde viven colores, tipografía, radios y medidas (10.4, D-016).
-  Sistema sobrio del plan del cambio V3 (B2, D-121). Neutros para superficies, bordes y texto, un
-  solo color de acción, #156082, igual en claro y en oscuro con texto blanco, y colores de estado
-  solo donde el plan lo permite (4.7). Sin degradados ni sombras de color.
+  Sistema sobrio del plan del cambio V3 (B2, D-121) con la paleta de D-128. Neutros para superficies,
+  bordes y texto, un solo color de acción, #156082, igual en claro y en oscuro con texto blanco, un
+  color propio por rama, un acento cálido para racha, nivel y XP, la escala de cinco pasos del
+  heatmap y colores de estado solo para acierto, aviso y peligro. Sin degradados ni sombras de color.
+  D-128 reemplaza a 4.7 del plan del cambio en el color por rama y el acento.
   El modo se elige así
   - Sin clase en <html>, manda la preferencia del sistema (primer pintado, antes de que cargue JS)
   - Con clase light o dark en <html>, manda la elección del alumno (src/ui/theme.ts)
@@ -34,12 +36,12 @@
   --enarm-primary-soft: #e7eff4;
   --enarm-focus: #156082;
   /* Indicadores que no son texto ni botón. El borde o el anillo de lo elegido, las barras y el
-     relleno de las gráficas y el heatmap. En claro es el color de acción. En oscuro va un tono
+     relleno de las gráficas. El heatmap usa su propia escala, abajo. En claro es el color de acción. En oscuro va un tono
      claro, porque #156082 queda abajo del 3 a 1 que piden los gráficos (2.5 sobre la superficie,
      2.7 sobre el lienzo y 2.2 sobre el fondo de las barras) */
   --enarm-indicator: #156082;
 
-  /* Acento cálido único y sobrio para racha, nivel y XP (D-122). Sin dorado brillante */
+  /* Acento cálido único y sobrio para racha, nivel y XP (D-128). Sin dorado brillante */
   --enarm-accent: #a64a13;
   --enarm-accent-soft: #fbf0e8;
   --enarm-accent-ink: #78320a;
@@ -48,8 +50,9 @@
   --enarm-streak-soft: #fbf0e8;
   --enarm-streak-ink: #78320a;
 
-  /* Gráficas y heatmap (D-122). Realizados (#5687a1) pasa 3 a 1 sobre blanco (3.9 a 1) y sobre el
-     lienzo (3.6 a 1), resolviendo el hallazgo H12 */
+  /* Gráficas y heatmap (D-128). Realizados (#5687a1) pasa 3 a 1 sobre blanco (3.9 a 1) y sobre el
+     lienzo (3.6 a 1), resolviendo el hallazgo H12. El heatmap de Inicio va del paso 0, sin
+     actividad, al 4, el día más activo (HeatmapWidget.tsx) */
   --enarm-chart-scheduled: #156082;
   --enarm-chart-done: #5687a1;
   --enarm-heatmap-0: #eef0f2;
@@ -70,7 +73,7 @@
   --enarm-danger-soft: #fce6e4;
   --enarm-danger-fg: #ffffff;
 
-  /* Ramas con color propio distinguible y seguro para daltonismo (D-122). Todos pasan 3 a 1 sobre
+  /* Ramas con color propio distinguible y seguro para daltonismo (D-128). Todos pasan 3 a 1 sobre
      blanco y sus tintas pasan 4.5 a 1 sobre fondo suave y sobre la superficie */
   --enarm-mi: #1d638f;
   --enarm-mi-soft: #e8f1f7;

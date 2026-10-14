@@ -744,7 +744,8 @@ function ReviewSession({
         meta={
           <>
             <ReviewCounters counters={counters} current={counterKindOf(state)} />
-            <span aria-live="polite" className="font-semibold text-success">
+            {/* El XP va en el acento cálido (D-128). El verde queda para lo correcto */}
+            <span aria-live="polite" className="font-semibold text-accent-ink">
               {lastXp > 0 && !focus ? t.review.xpGained(lastXp) : ''}
             </span>
           </>

@@ -2,7 +2,7 @@
 // lectores de pantalla. Dividido por meses con el nombre del mes arriba (D-065). Rango de 90, 180
 // o 365 días y métrica configurables (9.1). En Inicio las celdas se estiran para ocupar todo el ancho
 // (D-117), y en el teléfono, donde el año no cabe, se desplaza de lado. A la izquierda va la inicial
-// de cada día, de lunes a domingo.
+// de cada día, de lunes a domingo. Las celdas usan la escala de cinco pasos de la paleta (D-128).
 import { useEffect, useRef, type CSSProperties } from 'react';
 import { addDays, daysBetween } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
@@ -13,13 +13,17 @@ import type { HeatmapSettings } from './heatmapSettings';
 
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-const LEVELS = [
-  'bg-muted',
-  'bg-indicator/25',
-  'bg-indicator/50',
-  'bg-indicator/75',
-  'bg-indicator',
-];
+/**
+ * Escala de cinco pasos de los tokens heatmap-0 a heatmap-4 (D-128), del día sin actividad al más
+ * activo. Cada modo tiene sus propios tonos, así el oscuro no depende de transparencias
+ */
+const HEATMAP_LEVELS = [
+  'bg-heatmap-0',
+  'bg-heatmap-1',
+  'bg-heatmap-2',
+  'bg-heatmap-3',
+  'bg-heatmap-4',
+] as const;
 /** Separación entre celdas, en px */
 const CELL_GAP = 3;
 /**
@@ -97,7 +101,7 @@ export function HeatmapWidget({
         className={cn(
           cell,
           fluid ? 'rounded-[4px]' : 'rounded-[3px]',
-          LEVELS[levelOf(snapshot.activity[day]?.[settings.metric] ?? 0)],
+          HEATMAP_LEVELS[levelOf(snapshot.activity[day]?.[settings.metric] ?? 0)],
           day === snapshot.today && 'ring-1 ring-fg',
         )}
       />
@@ -182,7 +186,7 @@ export function HeatmapWidget({
         {summaryAtEnd ? summary : <span />}
         <div className="flex items-center gap-1 text-xs text-fg-muted" aria-hidden>
           <span>{t.widgets.heatmap.less}</span>
-          {LEVELS.map((level) => (
+          {HEATMAP_LEVELS.map((level) => (
             <span key={level} className={cn('size-3 rounded-[3px]', level)} />
           ))}
           <span>{t.widgets.heatmap.more}</span>
