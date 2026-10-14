@@ -8,11 +8,11 @@ import {
   hypothesisInput,
   restructureInput,
   weeklyReportInput,
-} from '../../../src/ai/testing/aiSamples.ts';
-import { AI_ENGINES } from '../../../src/engines/aiContracts.ts';
-import { mockHypothesis } from '../../../src/engines/aiMock.ts';
-import { createApp } from '../app.ts';
-import { createAiDeps } from './index.ts';
+} from '../../../../src/ai/testing/aiSamples.ts';
+import { AI_ENGINES } from '../../../../src/engines/aiContracts.ts';
+import { mockHypothesis } from '../../../../src/engines/aiMock.ts';
+import { createApp } from '../../../../server/src/app.ts';
+import { createAiDeps } from '../../../../server/src/ai/index.ts';
 import { createAnthropicProvider } from './provider.ts';
 import { fakeApi, fakeMessage, requestBody, STUDENT } from './testing/fakes.ts';
 

@@ -2,7 +2,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { AI_ENGINES } from '../../../src/engines/aiContracts.ts';
+import { AI_ENGINES } from '../../../../src/engines/aiContracts.ts';
 import {
   AiConfigPatchSchema,
   DEFAULT_CONFIG,

@@ -12,7 +12,7 @@ import {
   inputChars,
   type AiEngine,
   type AiErrorCode,
-} from '../../../src/engines/aiContracts.ts';
+} from '../../../../src/engines/aiContracts.ts';
 import { AiConfigPatchSchema, mergeConfig, saveAiConfig, type AiConfig } from './config.ts';
 import type { LedgerPort } from './ledger.ts';
 import { findPersonalData, hasPersonalData } from './pii.ts';

@@ -8,7 +8,11 @@ import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
 import { MAX_BODY_BYTES, PROXY_VERSION } from '../config.ts';
 import type { AiMode } from '../env.ts';
-import { createAiRoutes, type AiRoutesDeps, type AiVariables } from '../ai/route.ts';
+import {
+  createAiRoutes,
+  type AiRoutesDeps,
+  type AiVariables,
+} from '../../../supabase/functions/_shared/ai/routes.ts';
 import {
   bearerToken,
   canAdminister,

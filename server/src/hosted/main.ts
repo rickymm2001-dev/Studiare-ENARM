@@ -5,11 +5,15 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { serve } from '@hono/node-server';
 import { ACADEMIC_SOURCE_KEYS } from '../../../src/config/academicSources.ts';
-import { DEFAULT_CONFIG } from '../ai/config.ts';
-import { PgLedger, createRestRpc } from '../ai/pgLedger.ts';
-import { loadPrompts } from '../ai/prompts.ts';
-import { createAnthropicProvider, createMockProvider, type AiProvider } from '../ai/provider.ts';
-import type { AiRoutesDeps } from '../ai/route.ts';
+import { DEFAULT_CONFIG } from '../../../supabase/functions/_shared/ai/config.ts';
+import { PgLedger, createRestRpc } from '../../../supabase/functions/_shared/ai/pgLedger.ts';
+import { loadPrompts } from '../../../supabase/functions/_shared/ai/prompts.ts';
+import {
+  createAnthropicProvider,
+  createMockProvider,
+  type AiProvider,
+} from '../../../supabase/functions/_shared/ai/provider.ts';
+import type { AiRoutesDeps } from '../../../supabase/functions/_shared/ai/routes.ts';
 import { KEY_VARIABLE } from '../config.ts';
 import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
 import { createHostedApp } from './app.ts';

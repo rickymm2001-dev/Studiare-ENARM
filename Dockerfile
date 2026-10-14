@@ -14,6 +14,7 @@ COPY src/engines ./src/engines
 COPY src/config ./src/config
 COPY src/data/schemas/common.ts ./src/data/schemas/common.ts
 COPY src/data/cloud/keyRole.ts ./src/data/cloud/keyRole.ts
+COPY supabase/functions/_shared/ai ./supabase/functions/_shared/ai
 
 USER node
 EXPOSE 8787

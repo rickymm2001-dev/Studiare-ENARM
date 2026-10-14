@@ -14,8 +14,8 @@ import {
 import { AI_ENGINES } from '@/engines/aiContracts';
 import { mockHypothesis } from '@/engines/aiMock';
 import { createAiDeps } from '../../server/src/ai/index.ts';
-import { createAnthropicProvider } from '../../server/src/ai/provider.ts';
-import { fakeApi, fakeMessage } from '../../server/src/ai/testing/fakes.ts';
+import { createAnthropicProvider } from '../../supabase/functions/_shared/ai/provider.ts';
+import { fakeApi, fakeMessage } from '../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { createApp } from '../../server/src/app.ts';
 
 const STUDENT = '01HZX0000000000000000000AA';

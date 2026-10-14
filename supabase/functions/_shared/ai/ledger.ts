@@ -5,7 +5,7 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { z } from 'zod';
-import { AI_ENGINES, type AiEngine } from '../../../src/engines/aiContracts.ts';
+import { AI_ENGINES, type AiEngine } from '../../../../src/engines/aiContracts.ts';
 
 const TIME_ZONE = 'America/Mexico_City';
 

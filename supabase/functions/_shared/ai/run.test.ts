@@ -7,11 +7,11 @@ import {
   hypothesisInput,
   restructureInput,
   weeklyReportInput,
-} from '../../../src/ai/testing/aiSamples.ts';
-import { AI_ENGINES, ENGINE_CONTRACTS } from '../../../src/engines/aiContracts.ts';
-import { mockHypothesis } from '../../../src/engines/aiMock.ts';
+} from '../../../../src/ai/testing/aiSamples.ts';
+import { AI_ENGINES, ENGINE_CONTRACTS } from '../../../../src/engines/aiContracts.ts';
+import { mockHypothesis } from '../../../../src/engines/aiMock.ts';
 import { DEFAULT_CONFIG } from './config.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from './index.ts';
+import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../../../../server/src/ai/index.ts';
 import { loadPrompts } from './prompts.ts';
 import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
 import { runEngine, type RunDeps } from './run.ts';

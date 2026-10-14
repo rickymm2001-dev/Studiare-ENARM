@@ -3,7 +3,7 @@
 // cambia en cada llamada va en el mensaje del usuario.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { AI_ENGINES, type AiEngine } from '../../../src/engines/aiContracts.ts';
+import { AI_ENGINES, type AiEngine } from '../../../../src/engines/aiContracts.ts';
 
 export interface PromptSet {
   /** Por ejemplo forgetting.base.v1 */

@@ -8,13 +8,13 @@ import {
   type AiEngine,
   type AiErrorCode,
   type EngineInputs,
-} from '../../../src/engines/aiContracts.ts';
+} from '../../../../src/engines/aiContracts.ts';
 import {
   GUARD_MESSAGES,
   guardFlashcards,
   guardOutput,
   type GuardResult,
-} from '../../../src/engines/aiGuards.ts';
+} from '../../../../src/engines/aiGuards.ts';
 import type { AiConfig } from './config.ts';
 import { addUsage, EMPTY_USAGE, estimateCostUsd, type Usage } from './cost.ts';
 import { buildUserMessage, type PromptSets } from './prompts.ts';

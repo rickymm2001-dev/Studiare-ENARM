@@ -2,7 +2,7 @@
 // persona antes de enviar nada. Aquí se revisa otra vez, porque el proxy no confía en el cliente, y
 // si queda un correo, un teléfono, un CURP, un RFC o un nombre del perfil, se bloquea la petición
 // completa. Al modelo nunca llega algo que pase por aquí con datos personales.
-import { scrubPersonalData } from '../../../src/engines/piiFilter.ts';
+import { scrubPersonalData } from '../../../../src/engines/piiFilter.ts';
 
 /** Todos los textos de una entrada, sin importar qué tan anidados estén */
 export function collectStrings(value: unknown, out: string[] = []): string[] {

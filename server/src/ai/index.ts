@@ -5,11 +5,15 @@ import Anthropic from '@anthropic-ai/sdk';
 import { fileURLToPath } from 'node:url';
 import { ACADEMIC_SOURCE_KEYS } from '../../../src/config/academicSources.ts';
 import type { AiCredentials } from '../env.ts';
-import { loadAiConfig, type AiConfig } from './config.ts';
-import { Ledger } from './ledger.ts';
-import { loadPrompts } from './prompts.ts';
-import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
-import type { AiRoutesDeps } from './route.ts';
+import { loadAiConfig, type AiConfig } from '../../../supabase/functions/_shared/ai/config.ts';
+import { Ledger } from '../../../supabase/functions/_shared/ai/ledger.ts';
+import { loadPrompts } from '../../../supabase/functions/_shared/ai/prompts.ts';
+import {
+  createAnthropicProvider,
+  createMockProvider,
+  type AiProvider,
+} from '../../../supabase/functions/_shared/ai/provider.ts';
+import type { AiRoutesDeps } from '../../../supabase/functions/_shared/ai/routes.ts';
 
 export const SERVER_PROMPTS_DIR = fileURLToPath(new URL('../../prompts', import.meta.url));
 export const ROOT_PROMPTS_DIR = fileURLToPath(new URL('../../../prompts', import.meta.url));

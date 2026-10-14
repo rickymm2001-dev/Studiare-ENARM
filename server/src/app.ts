@@ -4,7 +4,7 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
 import { ALLOWED_HOSTNAMES, ALLOWED_ORIGINS, MAX_BODY_BYTES, PROXY_VERSION } from './config.ts';
-import { createAiRoutes, type AiRoutesDeps } from './ai/route.ts';
+import { createAiRoutes, type AiRoutesDeps } from '../../supabase/functions/_shared/ai/routes.ts';
 import type { AiMode } from './env.ts';
 
 export interface HealthResponse {

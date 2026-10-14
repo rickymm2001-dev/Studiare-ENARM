@@ -2,8 +2,8 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { AI_ENGINES, PROMPT_VERSION_PATTERN } from '../../../src/engines/aiContracts.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from './index.ts';
+import { AI_ENGINES, PROMPT_VERSION_PATTERN } from '../../../../src/engines/aiContracts.ts';
+import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../../../../server/src/ai/index.ts';
 import { buildUserMessage, flashcardsPrompt, loadPrompts, MASTER_MARKER } from './prompts.ts';
 
 const dirs: string[] = [];
