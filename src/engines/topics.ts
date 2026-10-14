@@ -13,7 +13,8 @@
  * Método
  *   - Prior Beta con la media de la rama y fuerza de 10 respuestas (motor stats/betaBinomial)
  *   - Prioridad = (1 − dominio) × peso del tema en el ENARM × factor de olvido. El peso del tema es
- *     el peso de su rama por su peso relativo dentro de la rama. El factor de olvido es 2 − R̄, con
+ *     el peso de su rama por su peso relativo dentro de la rama. Solo cuentan las ramas de la sección
+ *     clínica, los 250 reactivos. Inglés médico va aparte y pesa cero aquí (B11). El factor de olvido es 2 − R̄, con
  *     R̄ la retrievability promedio de sus tarjetas, entre 1 y 2. Sin tarjetas el factor es 1 (J)
  *   - Acción. Repasar sus tarjetas si R̄ < 0.85, simulador del tema si el dominio es menor a 0.6, y
  *     si no, un reto del tema (J)
@@ -21,7 +22,7 @@
  * 10, 5 temas, y 20 respuestas por categoría de estructura (J, configurables).
  */
 import type { Thresholds } from '@/config/thresholds';
-import type { TopicTaxonomy } from '@/data/schemas/content';
+import { branchSection, type TopicTaxonomy } from '@/data/schemas/content';
 import { pooledMean, shrinkTally, type ShrunkEstimate, type Tally } from './stats/betaBinomial';
 
 export interface TopicResponse {
@@ -81,16 +82,42 @@ function stateOf(tally: Tally, estimate: ShrunkEstimate, minTrials = 0): Mastery
     : { kind: 'calibrating', responses: tally.trials, responsesNeeded: estimate.responsesNeeded };
 }
 
-/** Peso de cada tema en el ENARM. Peso de su rama por su peso relativo dentro de la rama */
+/**
+ * Peso de cada rama en los 250 reactivos clínicos del ENARM. Las ramas de la sección english, como
+ * Inglés médico, quedan fuera porque se cuentan aparte (B11, sección 6 del plan del cambio)
+ */
+export function examBranchWeights(taxonomy: TopicTaxonomy): Record<string, number> {
+  return Object.fromEntries(
+    taxonomy.branches
+      .filter((branch) => branchSection(branch) === 'clinical')
+      .map((branch) => [branch.key, branch.weight] as const),
+  );
+}
+
+/** Las ramas que no son de la sección clínica, que el examen completo deja fuera hasta B13 */
+export function nonClinicalBranches(taxonomy: TopicTaxonomy): string[] {
+  return taxonomy.branches
+    .filter((branch) => branchSection(branch) !== 'clinical')
+    .map((branch) => branch.key);
+}
+
+/**
+ * Peso de cada tema en el ENARM. Peso de su rama por su peso relativo dentro de la rama, sobre las
+ * ramas clínicas. Los temas de Inglés médico pesan cero
+ */
 export function topicExamWeights(taxonomy: TopicTaxonomy): Map<string, number> {
-  const totalBranchWeight = taxonomy.branches.reduce((sum, branch) => sum + branch.weight, 0);
+  const branchWeights = examBranchWeights(taxonomy);
+  const totalBranchWeight = Object.values(branchWeights).reduce((sum, weight) => sum + weight, 0);
   const weights = new Map<string, number>();
   for (const branch of taxonomy.branches) {
+    const branchWeight = branchWeights[branch.key] ?? 0;
     const totalTopicWeight = branch.topics.reduce((sum, topic) => sum + topic.weight, 0);
     for (const topic of branch.topics) {
       weights.set(
         `${branch.key}/${topic.key}`,
-        (branch.weight / totalBranchWeight) * (topic.weight / totalTopicWeight),
+        totalBranchWeight > 0
+          ? (branchWeight / totalBranchWeight) * (topic.weight / totalTopicWeight)
+          : 0,
       );
     }
   }

@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { TopicTaxonomy } from '@/data/schemas/content';
 import { createRng } from './random';
-import { analyzeCategories, analyzeTopics, topicExamWeights, type TopicResponse } from './topics';
+import {
+  analyzeCategories,
+  analyzeTopics,
+  examBranchWeights,
+  nonClinicalBranches,
+  topicExamWeights,
+  type TopicResponse,
+} from './topics';
 
 const taxonomy: TopicTaxonomy = {
   version: 1,
@@ -64,6 +71,53 @@ describe('análisis por tema (7.3)', () => {
     expect(weights.get('mi/endo')).toBeCloseTo(0.125, 12);
     expect(weights.get('ped/neo')).toBeCloseTo(0.5, 12);
     expect([...weights.values()].reduce((sum, value) => sum + value, 0)).toBeCloseTo(1, 12);
+  });
+
+  it('Inglés médico va aparte y no entra en los pesos de los 250 reactivos clínicos (B11)', () => {
+    const withEnglish: TopicTaxonomy = {
+      ...taxonomy,
+      branches: [
+        ...taxonomy.branches.map((branch) => ({ ...branch, section: 'clinical' as const })),
+        {
+          key: 'english',
+          name: 'Inglés médico',
+          section: 'english',
+          weight: 30,
+          topics: [
+            {
+              key: 'reading',
+              name: 'Comprensión de lectura',
+              weight: 1,
+              baseTopic: null,
+              subtopics: [{ key: 'mi_text', name: 'Texto de medicina interna' }],
+            },
+          ],
+        },
+      ],
+    };
+    const weights = topicExamWeights(withEnglish);
+    expect(weights.get('english/reading')).toBe(0);
+    expect(weights.get('mi/cardio')).toBeCloseTo(0.25, 12);
+    expect([...weights.values()].reduce((sum, value) => sum + value, 0)).toBeCloseTo(1, 12);
+    expect(examBranchWeights(withEnglish)).toEqual({ mi: 1, ped: 1 });
+    expect(nonClinicalBranches(withEnglish)).toEqual(['english']);
+    expect(nonClinicalBranches(taxonomy)).toEqual([]);
+    // Un tema de inglés nunca sale entre los temas a reforzar, porque su prioridad es cero
+    const analysis = analyzeTopics({
+      responses: [...responses('english', 'reading', 0, 40), ...responses('mi', 'cardio', 10, 40)],
+      taxonomy: withEnglish,
+      averageRetrievability: {},
+      thresholds: { ...DEFAULT_THRESHOLDS.topics, topN: 1 },
+    });
+    expect(analysis.priorities.map((priority) => priority.topic)).toEqual(['cardio']);
+  });
+
+  it('una taxonomía sin ramas clínicas no divide entre cero', () => {
+    const onlyEnglish: TopicTaxonomy = {
+      ...taxonomy,
+      branches: taxonomy.branches.map((branch) => ({ ...branch, section: 'english' as const })),
+    };
+    expect([...topicExamWeights(onlyEnglish).values()].every((weight) => weight === 0)).toBe(true);
   });
 
   it('calibra con pocos datos y dice cuántas respuestas faltan', () => {
