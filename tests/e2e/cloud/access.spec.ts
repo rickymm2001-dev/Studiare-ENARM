@@ -24,6 +24,9 @@ async function withFlags(
   cloud.setSetting('feature_flags', flags);
   await page.addInitScript(
     ([key, value]) => {
+      // El script corre en cada documento, también en el about:blank con el que openEmailLink
+      // recarga la página, que no tiene almacenamiento y lanza al leer localStorage
+      if (!location.protocol.startsWith('http')) return;
       localStorage.setItem(key, value);
     },
     [FLAGS_KEY, JSON.stringify(flags)] as const,
