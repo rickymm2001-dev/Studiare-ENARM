@@ -246,6 +246,7 @@ export function CloudBridge() {
           // (D-104). Un perfil que nació sin formulario no tiene ninguna hasta completar su registro
           const accepted = await acceptedNoticeVersion(api, userId);
           if (accepted) await recordPrivacyAcceptance(cloud, identity.authId, accepted);
+          if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           // El código del enlace de invitación que se abrió en este navegador se canjea ya con el
           // dispositivo reclamado y el registro completo, así quien todavía no acepta el aviso ni
           // confirma su edad no manda nada. Sin código guardado no hace nada (respuesta 77, B7)
