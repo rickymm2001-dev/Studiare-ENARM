@@ -1,6 +1,7 @@
-// Aviso de privacidad y términos y condiciones, como páginas públicas de la app (Fase G, G2). No
-// piden sesión, porque el alumno los lee antes de crear su cuenta. Muestran, arriba y siempre, que
-// son un borrador pendiente de revisión legal mientras no los apruebe un abogado.
+// Aviso de privacidad y términos y condiciones, como páginas públicas de la app (Fase G, G2, y B16).
+// No piden sesión, porque el alumno los lee antes de crear su cuenta. Muestran, arriba y siempre, que
+// son un borrador para revisión del abogado mientras Ricardo no diga que los aprobó. Donde falta un
+// dato del responsable el alumno lee un texto neutro y nunca una marca de pendiente (fillLegal).
 import { FileText } from 'lucide-react';
 import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -10,24 +11,32 @@ import { t } from '@/i18n/es-MX';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { Card } from '@/ui/components/card';
-import { fillLegal } from './fillLegal';
+import { legalLines } from './fillLegal';
 
-/** El texto ya lleno, con el correo como enlace para escribir si está configurado */
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** El texto ya lleno, con los correos configurados como enlaces para escribir */
 function Text({ value, identity }: { value: string; identity: LegalIdentity }): ReactNode {
-  const filled = fillLegal(value, identity);
-  const email = identity.email;
-  if (!email || !filled.includes(email)) return filled;
-  return filled.split(email).map((part, index, parts) => (
-    <Fragment key={index}>
-      {part}
-      {index < parts.length - 1 ? (
-        <a href={`mailto:${email}`} className="font-semibold underline underline-offset-4">
-          {email}
-        </a>
-      ) : null}
-    </Fragment>
-  ));
+  const present = [...new Set([identity.privacyEmail, identity.email])].filter(
+    (email): email is string => email !== null && value.includes(email),
+  );
+  if (present.length === 0) return value;
+  // El grupo de captura deja los correos en las partes impares del split
+  const parts = value.split(new RegExp(`(${present.map(escapeRegExp).join('|')})`));
+  return parts.map((part, index) =>
+    index % 2 === 1 ? (
+      <a key={index} href={`mailto:${part}`} className="font-semibold underline underline-offset-4">
+        {part}
+      </a>
+    ) : (
+      <Fragment key={index}>{part}</Fragment>
+    ),
+  );
 }
+
+/** Las líneas que lee el alumno, ya llenas. Las que dependen de un dato que falta no van */
+const studentLines = (lines: readonly string[] | undefined, identity: LegalIdentity) =>
+  legalLines(lines, identity, 'student');
 
 function LegalPage({ docKey }: { docKey: LegalKey }) {
   const doc: LegalDoc = legalText[docKey];
@@ -51,7 +60,7 @@ function LegalPage({ docKey }: { docKey: LegalKey }) {
         </p>
 
         <p className="text-sm text-fg-muted">{legalText.version(doc.version)}</p>
-        {doc.intro.map((paragraph) => (
+        {studentLines(doc.intro, identity).map((paragraph) => (
           <p key={paragraph}>
             <Text value={paragraph} identity={identity} />
           </p>
@@ -74,14 +83,14 @@ function LegalPage({ docKey }: { docKey: LegalKey }) {
             <h2 id={`legal-${section.id}`} className="text-lg font-semibold">
               {section.title}
             </h2>
-            {section.paragraphs?.map((paragraph) => (
+            {studentLines(section.paragraphs, identity).map((paragraph) => (
               <p key={paragraph}>
                 <Text value={paragraph} identity={identity} />
               </p>
             ))}
             {section.bullets ? (
               <ul className="list-disc space-y-1.5 pl-5">
-                {section.bullets.map((bullet) => (
+                {studentLines(section.bullets, identity).map((bullet) => (
                   <li key={bullet}>
                     <Text value={bullet} identity={identity} />
                   </li>
