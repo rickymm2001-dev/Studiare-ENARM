@@ -179,13 +179,12 @@ do $$ begin
     raise exception 'FALLA 10. Un alumno ve perfiles fuera de sus grupos';
   end if;
 end $$;
-insert into public.groups (id, name, invite_code, owner_id)
-  values ('30000000-0000-0000-0000-000000000001', 'R0 Mérida', 'ABC234', auth.uid());
-insert into public.memberships (group_id, user_id) values ('30000000-0000-0000-0000-000000000001', auth.uid());
+-- Los grupos se crean y se abren con su código solo con las funciones de Party (20261018000001)
+select set_config('rls.party_code', public.party_create_group('R0 Mérida') ->> 'inviteCode', false);
 commit;
 begin;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000e');
-insert into public.memberships (group_id, user_id) values ('30000000-0000-0000-0000-000000000001', auth.uid());
+select public.party_join_group(current_setting('rls.party_code'));
 do $$ begin
   if (select count(*) from public.profiles) <> 2 then
     raise exception 'FALLA 10. Compañeros de grupo no se ven';

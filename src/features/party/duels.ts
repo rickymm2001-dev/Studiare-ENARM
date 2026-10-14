@@ -1,7 +1,9 @@
 // Duelos de Party (9.6). Las mismas preguntas para los dos jugadores, gana más exactitud y desempata
-// el menor tiempo. El resultado del alumno sale de su bitácora, sin guardar nada aparte. El del rival
-// simulado sale de una semilla por compañero y duelo, y la interfaz lo marca como simulado (D-028).
-// Sin React ni Dexie.
+// el menor tiempo. El resultado del alumno sale de su bitácora, sin guardar nada aparte. Es un solo
+// intento. Cuenta la primera sesión que empezó ese duelo, aunque no la termine, y las preguntas que
+// no contestó cuentan como incorrectas. Así nadie juega, ve las respuestas en la retroalimentación y
+// vuelve a empezar. El del rival simulado sale de una semilla por compañero y duelo, y la interfaz
+// lo marca como simulado (D-028). Sin React ni Dexie.
 import type { Challenge, Membership } from '@/data/schemas/activity';
 import type { AppEvent } from '@/data/schemas/events';
 import { decideDuel, DUEL_QUESTIONS, type DuelResult } from '@/engines/party';
@@ -19,39 +21,45 @@ export const duelSize = (challenge: Pick<Challenge, 'questionIds'>) =>
   challenge.questionIds?.length ?? DUEL_QUESTIONS;
 
 /**
- * Resultado del alumno en un duelo, o null si todavía no lo juega. Cuenta la sesión de tipo reto de
- * ese duelo que ya terminó. Las que no contestó cuentan como incorrectas. El tiempo es la suma de lo
- * que tardó en contestar, sin lo que dedicó a leer la retroalimentación
+ * La sesión con que el alumno empezó el duelo, la primera de tipo reto con ese duelo. null si todavía
+ * no lo empieza. Es su único intento, la termine o no
+ */
+export function duelAttemptSession(events: readonly AppEvent[], duelId: string): string | null {
+  let first: { sessionId: string; at: string; id: string } | null = null;
+  for (const event of events) {
+    if (
+      event.type !== 'session_started' ||
+      event.payload.kind !== 'challenge' ||
+      event.payload.config.duelId !== duelId ||
+      !event.sessionId
+    )
+      continue;
+    // La bitácora puede llegar en cualquier orden. Manda la hora y, con la misma hora, el id
+    if (!first || event.at < first.at || (event.at === first.at && event.id < first.id)) {
+      first = { sessionId: event.sessionId, at: event.at, id: event.id };
+    }
+  }
+  return first?.sessionId ?? null;
+}
+
+/**
+ * Resultado del alumno en un duelo, o null si todavía no lo empieza. Cuenta la primera sesión de tipo
+ * reto de ese duelo, la termine o no. Las que no contestó cuentan como incorrectas. El tiempo es la
+ * suma de lo que tardó en contestar, sin lo que dedicó a leer la retroalimentación
  */
 export function playerDuelResult(
   events: readonly AppEvent[],
   challenge: Pick<Challenge, 'id' | 'questionIds'>,
   memberId: string,
 ): DuelResult | null {
-  const sessions = new Set<string>();
-  for (const event of events) {
-    if (
-      event.type === 'session_started' &&
-      event.payload.kind === 'challenge' &&
-      event.payload.config.duelId === challenge.id &&
-      event.sessionId
-    )
-      sessions.add(event.sessionId);
-  }
-  const ended = events.find(
-    (event) =>
-      event.type === 'session_ended' &&
-      event.payload.kind === 'challenge' &&
-      event.sessionId !== null &&
-      sessions.has(event.sessionId),
-  );
-  if (!ended?.sessionId) return null;
+  const sessionId = duelAttemptSession(events, challenge.id);
+  if (!sessionId) return null;
   const questions = new Set(challenge.questionIds ?? []);
   let correct = 0;
   let totalMs = 0;
   const seen = new Set<string>();
   for (const event of events) {
-    if (event.type !== 'question_answered' || event.sessionId !== ended.sessionId) continue;
+    if (event.type !== 'question_answered' || event.sessionId !== sessionId) continue;
     // Una pregunta del duelo cuenta una sola vez, la primera vez que se contestó
     if (seen.has(event.payload.questionVersionId)) continue;
     if (questions.size > 0 && !questions.has(event.payload.questionVersionId)) continue;
@@ -87,6 +95,8 @@ export type DuelVerdict = { kind: 'draw' } | { kind: 'win' | 'lose'; by: 'accura
 export type DuelView =
   /** El alumno todavía no juega. No se le muestra el resultado del rival */
   | { status: 'pending' }
+  /** Lo está jugando ahora, en esta pestaña. Tampoco se le muestra el del rival */
+  | { status: 'in_progress' }
   | { status: 'decided'; self: DuelResult; rival: DuelResult; verdict: DuelVerdict };
 
 /** Quién gana según 9.6, desde el punto de vista del alumno */
@@ -97,13 +107,20 @@ export function verdictFor(self: DuelResult, rival: DuelResult): DuelVerdict {
     : { kind: outcome.memberId === self.memberId ? 'win' : 'lose', by: outcome.by };
 }
 
-/** Lo que muestra un duelo desde el punto de vista del alumno */
+/**
+ * Lo que muestra un duelo desde el punto de vista del alumno. activeSessionId es la práctica que tiene
+ * abierta en esta pestaña. Si es la de este duelo, todavía lo está jugando
+ */
 export function duelView(input: {
   events: readonly AppEvent[];
   challenge: Pick<Challenge, 'id' | 'questionIds'>;
   selfId: string;
   opponent: Pick<Membership, 'id'>;
+  activeSessionId?: string | null;
 }): DuelView {
+  const attempt = duelAttemptSession(input.events, input.challenge.id);
+  if (!attempt) return { status: 'pending' };
+  if (attempt === input.activeSessionId) return { status: 'in_progress' };
   const self = playerDuelResult(input.events, input.challenge, input.selfId);
   if (!self) return { status: 'pending' };
   const rival = simulatedDuelResult(input.opponent, input.challenge);

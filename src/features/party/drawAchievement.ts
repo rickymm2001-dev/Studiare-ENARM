@@ -1,49 +1,58 @@
-// Dibuja la tarjeta de logro como una imagen PNG cuadrada con el canvas del navegador (9.6). Los
-// colores son fijos y salen de la paleta de marca, así la imagen se ve igual sin importar el tema de
-// quien la comparte. Solo corre en el navegador, por eso quien la usa la recibe por parámetro.
+// Dibuja el resumen de la semana como una imagen PNG cuadrada con el canvas del navegador (respuesta
+// 83 del plan del cambio, B7). Diseño sobrio de B2 (D-121). Superficie blanca, una franja lisa del
+// color de acción #156082 con la marca y la semana, y las cifras en cuadros neutros con borde fino.
+// Sin degradados ni dorado. Los colores son fijos y salen de la paleta del modo claro, así la imagen se
+// ve igual sin importar el tema de quien la comparte. Solo corre en el navegador, por eso quien la usa
+// la recibe por parámetro.
 import { t } from '@/i18n/es-MX';
-import type { AchievementCard } from './achievement';
+import { weekShareFigures, weekShareLabel, type WeekShareCard } from './achievement';
 
 const SIZE = 1080;
 const MARGIN = 72;
+const GAP = 24;
+const BAND = 300;
 const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
-// Una sola familia, como en la app (B2 del plan del cambio)
-const DISPLAY = SANS;
 
-/** Paleta de src/ui/tokens.css, fija para que la imagen se vea igual con cualquier tema. Sin degradados ni dorado (B2, D-121) */
+/** Paleta de src/ui/tokens.css en modo claro. Un solo color de acción y neutros (B2, D-121) */
 const COLOR = {
-  background: '#156082',
-  ink: '#ffffff',
-  soft: 'rgba(255, 255, 255, 0.82)',
-  panel: 'rgba(255, 255, 255, 0.12)',
-  medal: '#ffffff',
-  medalInk: '#156082',
+  surface: '#ffffff',
+  action: '#156082',
+  onAction: '#ffffff',
+  onActionSoft: 'rgba(255, 255, 255, 0.85)',
+  tile: '#f5f6f7',
+  line: '#dde2e6',
+  ink: '#16212b',
+  muted: '#576570',
   sim: '#eef0f2',
   simInk: '#3f4b55',
 } as const;
 
-/** Escribe texto centrado y lo encoge hasta que quepa en el ancho dado */
-function centered(
+type Align = 'left' | 'center';
+
+/** Escribe una línea y la encoge hasta que quepa en el ancho dado */
+function fitText(
   ctx: CanvasRenderingContext2D,
   text: string,
-  x: number,
-  y: number,
-  weight: number,
-  startSize: number,
-  family: string,
-  color: string,
-  maxWidth: number,
+  options: {
+    x: number;
+    y: number;
+    weight: number;
+    size: number;
+    color: string;
+    maxWidth: number;
+    align?: Align;
+  },
 ) {
-  let size = startSize;
-  ctx.font = `${weight} ${size}px ${family}`;
-  while (size > 20 && ctx.measureText(text).width > maxWidth) {
+  let size = options.size;
+  ctx.font = `${options.weight} ${size}px ${SANS}`;
+  while (size > 20 && ctx.measureText(text).width > options.maxWidth) {
     size -= 2;
-    ctx.font = `${weight} ${size}px ${family}`;
+    ctx.font = `${options.weight} ${size}px ${SANS}`;
   }
-  ctx.fillStyle = color;
-  ctx.textAlign = 'center';
+  ctx.fillStyle = options.color;
+  ctx.textAlign = options.align ?? 'left';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText(text, x, y);
+  ctx.fillText(text, options.x, options.y);
 }
 
 /** Rectángulo de esquinas redondas. roundRect no existe en los iPhone con iOS 15 o anterior */
@@ -64,66 +73,146 @@ function roundedRect(
   ctx.closePath();
 }
 
-function panel(
+/** Un cuadro con la cifra grande y su etiqueta abajo */
+function tile(
   ctx: CanvasRenderingContext2D,
-  x: number,
-  label: string,
-  value: string,
-  valueColor: string,
+  box: { x: number; y: number; width: number; height: number },
+  figure: { label: string; value: string },
 ) {
-  const width = (SIZE - MARGIN * 2 - 24) / 2;
-  ctx.fillStyle = COLOR.panel;
-  roundedRect(ctx, x, 760, width, 150, 28);
+  roundedRect(ctx, box.x, box.y, box.width, box.height, 24);
+  ctx.fillStyle = COLOR.tile;
   ctx.fill();
-  centered(ctx, label, x + width / 2, 815, 500, 32, SANS, COLOR.soft, width - 40);
-  centered(ctx, value, x + width / 2, 883, 800, 62, DISPLAY, valueColor, width - 40);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = COLOR.line;
+  ctx.stroke();
+  const inner = box.width - 72;
+  fitText(ctx, figure.value, {
+    x: box.x + 36,
+    y: box.y + box.height / 2 + 20,
+    weight: 800,
+    size: 96,
+    color: COLOR.ink,
+    maxWidth: inner,
+  });
+  fitText(ctx, figure.label, {
+    x: box.x + 36,
+    y: box.y + box.height - 40,
+    weight: 600,
+    size: 36,
+    color: COLOR.muted,
+    maxWidth: inner,
+  });
 }
 
-function paint(ctx: CanvasRenderingContext2D, card: AchievementCard) {
-  const text = t.party.share;
-  const middle = SIZE / 2;
+/**
+ * Dónde va cada cuadro. Dos columnas. Con un número impar de cifras, como en modo enfoque sin la
+ * racha, la primera ocupa todo el ancho
+ */
+export function tileBoxes(
+  count: number,
+  area: { top: number; bottom: number },
+): { x: number; y: number; width: number; height: number }[] {
+  const full = SIZE - MARGIN * 2;
+  const half = (full - GAP) / 2;
+  const rows = Math.ceil(count / 2);
+  const height = (area.bottom - area.top - GAP * (rows - 1)) / rows;
+  const boxes: { x: number; y: number; width: number; height: number }[] = [];
+  let index = 0;
+  for (let row = 0; row < rows; row += 1) {
+    const y = area.top + row * (height + GAP);
+    const left = count - index;
+    if (row === 0 && count % 2 === 1) {
+      boxes.push({ x: MARGIN, y, width: full, height });
+      index += 1;
+      continue;
+    }
+    boxes.push({ x: MARGIN, y, width: left === 1 ? full : half, height });
+    index += 1;
+    if (left > 1) {
+      boxes.push({ x: MARGIN + half + GAP, y, width: half, height });
+      index += 1;
+    }
+  }
+  return boxes;
+}
 
-  ctx.fillStyle = COLOR.background;
+function paint(ctx: CanvasRenderingContext2D, card: WeekShareCard) {
+  const text = t.b7.weekShare;
+  const width = SIZE - MARGIN * 2;
+
+  ctx.fillStyle = COLOR.surface;
   ctx.fillRect(0, 0, SIZE, SIZE);
 
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
-  ctx.font = `700 44px ${DISPLAY}`;
-  ctx.fillStyle = COLOR.soft;
-  ctx.fillText(card.brand, MARGIN, 120);
+  // Franja lisa del color de acción con la marca, el título y la semana
+  ctx.fillStyle = COLOR.action;
+  ctx.fillRect(0, 0, SIZE, BAND);
+  fitText(ctx, card.brand, {
+    x: MARGIN,
+    y: 104,
+    weight: 700,
+    size: 44,
+    color: COLOR.onActionSoft,
+    maxWidth: width,
+  });
+  fitText(ctx, text.heading, {
+    x: MARGIN,
+    y: 196,
+    weight: 800,
+    size: 72,
+    color: COLOR.onAction,
+    maxWidth: width,
+  });
+  fitText(ctx, weekShareLabel(card), {
+    x: MARGIN,
+    y: 254,
+    weight: 500,
+    size: 40,
+    color: COLOR.onActionSoft,
+    maxWidth: width,
+  });
 
-  // Medalla lisa con el nivel
-  ctx.fillStyle = COLOR.medal;
-  ctx.beginPath();
-  ctx.arc(middle, 380, 190, 0, Math.PI * 2);
-  ctx.fill();
-  centered(ctx, String(card.level), middle, 460, 800, 230, DISPLAY, COLOR.medalInk, 280);
+  // Abajo queda lugar para el alias y para la franja de datos de demostración
+  const bottom = SIZE - (card.simulated ? 80 : 0) - (card.alias ? 96 : 0) - MARGIN;
+  const figures = weekShareFigures(card);
+  tileBoxes(figures.length, { top: BAND + MARGIN - 24, bottom }).forEach((box, index) => {
+    const figure = figures[index];
+    if (figure) tile(ctx, box, figure);
+  });
 
-  centered(ctx, card.levelTitle, middle, 668, 800, 76, DISPLAY, COLOR.ink, SIZE - MARGIN * 2);
-  centered(ctx, text.level(card.level), middle, 722, 500, 40, SANS, COLOR.soft, SIZE - MARGIN * 2);
-
-  const half = (SIZE - MARGIN * 2 - 24) / 2;
-  panel(ctx, MARGIN, text.streakLabel, text.streakValue(card.streak), COLOR.ink);
-  panel(ctx, MARGIN + half + 24, text.xpLabel, card.weeklyXp.toLocaleString('es-MX'), COLOR.ink);
-
-  if (card.alias)
-    centered(ctx, card.alias, middle, 976, 600, 40, SANS, COLOR.ink, SIZE - MARGIN * 2);
+  if (card.alias) {
+    fitText(ctx, card.alias, {
+      x: MARGIN,
+      y: bottom + 72,
+      weight: 600,
+      size: 40,
+      color: COLOR.ink,
+      maxWidth: width,
+    });
+  }
 
   if (card.simulated) {
     ctx.fillStyle = COLOR.sim;
     ctx.fillRect(0, SIZE - 80, SIZE, 80);
-    centered(ctx, text.simulatedBanner, middle, SIZE - 30, 700, 30, SANS, COLOR.simInk, SIZE - 80);
+    fitText(ctx, text.simulatedBanner, {
+      x: SIZE / 2,
+      y: SIZE - 30,
+      weight: 700,
+      size: 30,
+      color: COLOR.simInk,
+      maxWidth: SIZE - 80,
+      align: 'center',
+    });
   }
 }
 
-export async function drawAchievement(card: AchievementCard): Promise<Blob> {
+export async function drawWeekShare(card: WeekShareCard): Promise<Blob> {
   // Con las fuentes de la app ya cargadas el texto sale con su tipografía
   await document.fonts.ready;
   const canvas = document.createElement('canvas');
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('El navegador no puede dibujar la tarjeta');
+  if (!ctx) throw new Error('El navegador no puede dibujar la imagen');
   paint(ctx, card);
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

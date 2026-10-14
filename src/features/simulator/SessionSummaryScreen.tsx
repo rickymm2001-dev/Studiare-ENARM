@@ -1,8 +1,11 @@
 // Resumen de sesión (pantalla 6). Exactitud, XP, tiempo, exactitud por confianza y la revisión de
-// cada respuesta con su retroalimentación (D-087). Registra el fin de la sesión una sola vez.
+// cada respuesta con su retroalimentación (D-087). Registra el fin de la sesión una sola vez. En modo
+// enfoque (respuesta 82, B7) no muestra el XP. El enlace al resultado del duelo se queda, porque los
+// duelos siguen a la vista en modo enfoque, como un compromiso de uno a uno que el alumno eligió.
 import { CheckCircle2, Sparkles, Swords, Target, Timer, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useFocusMode } from '@/app/focusMode';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -38,6 +41,7 @@ export function SessionSummaryScreen() {
 function Summary({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const practice = usePractice();
+  const focus = useFocusMode();
   const mine = practice.userId === session.user.id && practice.answers.length > 0;
   const { answers } = practice;
   const [filter, setFilter] = useState<'all' | 'failed'>('all');
@@ -109,12 +113,14 @@ function Summary({ session }: { session: ReadySession }) {
             value={`${Math.round((correct / answers.length) * 100)}%`}
             caption={t.simulator.summaryAccuracy(correct, answers.length)}
           />
-          <StatCell
-            icon={<Sparkles />}
-            label={t.simulator.summaryLabels.xp}
-            value={`+${xp.toLocaleString('es-MX')}`}
-            caption={t.simulator.summaryLabels.xpCaption}
-          />
+          {focus ? null : (
+            <StatCell
+              icon={<Sparkles />}
+              label={t.simulator.summaryLabels.xp}
+              value={`+${xp.toLocaleString('es-MX')}`}
+              caption={t.simulator.summaryLabels.xpCaption}
+            />
+          )}
           <StatCell
             icon={<Timer />}
             label={t.simulator.summaryLabels.time}

@@ -4,7 +4,8 @@
 // los enlaces viejos con ?seccion= siguen funcionando. Estudio y Pomodoro pasaron a Ajustes del
 // repaso, en Repasar. La base de demostración y su panel pasaron a Datos de demostración del admin y el
 // modo de la IA a Costos de IA (5.4). Sin sesión o con la demostración vacía quedan el aviso de las
-// demás pantallas y Apariencia.
+// demás pantallas y Apariencia. En Perfil también va la tarjeta Invita y gana un mes de los referidos,
+// abierta en cualquier plan (4.3 del plan del cambio, B7).
 import { LogIn } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
@@ -17,6 +18,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { scrollToElement } from '@/ui/scroll';
 import { LoadingState } from '@/ui/states/states';
+import { ReferralCard } from '../party/ReferralCard';
 import { AccountDataCard } from '../profile/AccountDataCard';
 import { PlanCard } from '../profile/PlanCard';
 import { SessionCard } from '../profile/SessionCard';
@@ -107,6 +109,7 @@ function ReadySettings({
       {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
       <SettingsSectionBlock id="perfil" title={text.profile} first>
         <PlanCard subscription={subscription} />
+        <ReferralCard headingAs="h3" />
         <AccountDataCard session={session} account={account} />
         <SessionCard session={session} />
       </SettingsSectionBlock>

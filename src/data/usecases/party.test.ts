@@ -1,13 +1,19 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { newId, testApi } from '../testing/fixtures';
-import { createChallenge, createDuel, createGroup, joinGroupByCode } from './party';
+import {
+  createChallenge,
+  createDuel,
+  createGroup,
+  joinGroupByCode,
+  SimulatedFriendsOutsideDemoError,
+} from './party';
 import { MAX_GROUP_MEMBERS } from '@/engines/party';
 import { makeUser } from '../testing/fixtures';
 
 const apis: ReturnType<typeof testApi>[] = [];
-function setup() {
-  const api = testApi();
+function setup(kind: 'real' | 'demo' = 'real') {
+  const api = testApi(kind);
   apis.push(api);
   return api;
 }
@@ -17,7 +23,7 @@ afterEach(async () => {
 
 describe('duelos de Party', () => {
   it('guarda el duelo con su rival y las preguntas fijadas', async () => {
-    const api = setup();
+    const api = setup('demo');
     const user = makeUser();
     const group = await createGroup(api, user, { name: 'Guardia', withSimulatedFriends: true });
     const rival = (await api.repos.memberships.list()).find((member) => member.isSimulated);
@@ -44,7 +50,7 @@ describe('duelos de Party', () => {
   });
 
   it('un duelo sin preguntas no se crea', async () => {
-    const api = setup();
+    const api = setup('demo');
     const user = makeUser();
     const group = await createGroup(api, user, { name: 'Guardia', withSimulatedFriends: true });
     const rival = (await api.repos.memberships.list()).find((member) => member.isSimulated);
@@ -80,6 +86,26 @@ describe('duelos de Party', () => {
     });
     expect(collective.kind).toBe('collective');
     expect(collective).not.toHaveProperty('opponentId');
+  });
+});
+
+describe('compañeros simulados', () => {
+  it('solo se agregan en la base de demostración', async () => {
+    const real = setup('real');
+    await expect(
+      createGroup(real, makeUser(), { name: 'Guardia', withSimulatedFriends: true }),
+    ).rejects.toBeInstanceOf(SimulatedFriendsOutsideDemoError);
+    expect(await real.repos.groups.list()).toEqual([]);
+    expect(await real.repos.memberships.list()).toEqual([]);
+
+    const demo = setup('demo');
+    const group = await createGroup(demo, makeUser(), {
+      name: 'Guardia',
+      withSimulatedFriends: true,
+    });
+    const members = await demo.repos.memberships.list();
+    expect(group.isSimulated).toBe(true);
+    expect(members.filter((member) => member.isSimulated)).toHaveLength(6);
   });
 });
 

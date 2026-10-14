@@ -49,7 +49,8 @@ function Practice({ session }: { session: ReadySession }) {
     practice.sessionId !== null &&
     practice.userId === session.user.id &&
     practice.index < practice.questionIds.length;
-  const bundle = useQuestion(active ? practice.questionIds[practice.index] : undefined);
+  const currentId = active ? practice.questionIds[practice.index] : undefined;
+  const bundle = useQuestion(currentId);
   const events = useUserEvents(session.user.id);
   useVisibilityLog({
     userId: session.user.id,
@@ -87,7 +88,10 @@ function Practice({ session }: { session: ReadySession }) {
     return <Navigate to={screenPath('sessionSummary')} replace />;
   }
   if (!active) return <NoActivePractice header={header} />;
-  if (bundle === undefined || events === undefined) {
+  // Mientras carga la siguiente, useLiveData conserva la pregunta que ya se contestó. Sin esto se
+  // quedaba un momento bajo el número de la siguiente, con su botón apagado
+  const stale = bundle != null && bundle.question.id !== currentId;
+  if (bundle === undefined || events === undefined || stale) {
     return (
       <>
         {header}

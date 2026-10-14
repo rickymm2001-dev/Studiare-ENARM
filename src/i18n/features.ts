@@ -65,7 +65,10 @@ export const featureText = {
     privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
     consents: {
-      party: ['Party', 'Compartir alias, XP, nivel y racha con tus grupos.'],
+      party: [
+        'Party',
+        'Compartir con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana, tu aporte a los retos y tus duelos.',
+      ],
       ai_analysis: [
         'Análisis con IA',
         'Usar tus errores para hipótesis del tutor, con IDs seudónimos.',
@@ -377,7 +380,7 @@ export const featureText = {
     },
     exportTitle: 'Exportar mis datos',
     exportDescription:
-      'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON.',
+      'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON. Con tu cuenta en la nube incluye también lo tuyo de Party, tus grupos, tu XP publicado, tus aportes a los retos y tus duelos.',
     export: 'Descargar mis datos',
     deleteTitle: 'Borrar mis datos',
     deleteDescription:
@@ -1796,30 +1799,6 @@ export const featureText = {
       },
       seeResult: 'Ver el resultado del duelo',
     },
-    share: {
-      title: 'Comparte tu logro',
-      hint: 'Una imagen con tu nivel, tu racha y tus XP de la semana. No se comparte nada hasta que tú lo decidas.',
-      previewLabel: 'Vista previa de tu tarjeta de logro',
-      level: (n: number) => `Nivel ${n}`,
-      streakLabel: 'Racha',
-      streakValue: (n: number) => plural(n, 'día', 'días'),
-      xpLabel: 'XP esta semana',
-      includeAlias: 'Incluir mi alias en la tarjeta',
-      button: 'Compartir mi logro',
-      working: 'Preparando la imagen…',
-      shareTitle: 'Mi logro',
-      shareText: (level: number, title: string, streak: number, weeklyXp: number) =>
-        `Voy en el nivel ${level} (${title}), con ${plural(streak, 'día', 'días')} de racha y ${weeklyXp.toLocaleString('es-MX')} XP esta semana.`,
-      simulatedBanner: 'Datos de demostración. No son logros reales.',
-      fileName: 'mi-logro.png',
-      outcomes: {
-        shared: 'Listo. Elegiste dónde compartirla.',
-        downloaded:
-          'Tu navegador no puede compartir imágenes directamente, así que se descargó la tarjeta. Súbela donde quieras.',
-        cancelled: 'No se compartió nada.',
-        failed: 'No se pudo crear la imagen. Intenta de nuevo.',
-      },
-    },
   },
   cloud: {
     loginNote:
@@ -1909,9 +1888,6 @@ export const featureText = {
   },
   // Referidos con mes gratis (Fase P bloque 11)
   referrals: {
-    title: 'Invita a un compañero',
-    description:
-      'Comparte tu código. Cuando tu referido haga su primer pago confirmado, tú ganas un mes gratis.',
     needsCloud:
       'Los referidos necesitan tu cuenta en la nube, porque el mes gratis lo da el servidor. Entra con tu correo para usarlos.',
     yourCode: 'Tu código',
@@ -1921,7 +1897,6 @@ export const featureText = {
     completed: (n: number) => plural(n, 'referido concretado', 'referidos concretados'),
     months: (n: number) => plural(n, 'mes gratis ganado', 'meses gratis ganados'),
     until: (date: string) => `Tu mes gratis vale hasta el ${date}.`,
-    rule: 'Un referido cuenta cuando hace su primer pago confirmado, no al registrarse.',
     redeemTitle: 'Tengo un código',
     redeemLabel: 'Código de quien te invitó',
     redeem: 'Canjear código',
@@ -1931,6 +1906,8 @@ export const featureText = {
       invalid: 'Ese código no existe. Revísalo.',
       own: 'No puedes canjear tu propio código.',
       already: 'Ya canjeaste un código antes.',
+      circular:
+        'Esa persona entró con tu código, así que no puedes entrar con el suyo. Dos compañeros no se invitan entre sí.',
       too_late: 'Ya pasó el tiempo para canjear un código con esta cuenta.',
       already_paid: 'Ya hiciste un pago, así que no puedes entrar como referido.',
       failed: 'No pudimos canjear el código. Intenta de nuevo en unos minutos.',

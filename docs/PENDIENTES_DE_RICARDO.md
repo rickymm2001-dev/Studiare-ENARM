@@ -11,6 +11,10 @@ Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega
 3. **Cambia la llave de Stripe del entorno.** La que está hoy en los secretos del entorno de la sesión es la publicable (empieza con pk_test_) y con ella no se puede cancelar, reembolsar ni crear precios. Pon en su lugar una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en productos, precios, cupones, códigos promocionales, clientes, suscripciones, sesiones de pago, configuraciones del portal, dominios de medios de pago y reembolsos, y de lectura en eventos. Se crea en Stripe, Developers, API keys, Create restricted key. Sin ella los pasos de Stripe de B10 quedan en esta lista en lugar de hacerse solos
 4. **Revisa SUPABASE_ACCESS_TOKEN si lo pusiste.** El entorno inyecta algo en api.supabase.com, pero Supabase lo rechaza con JWT could not be decoded. Es opcional. Si quieres que la sesión configure correos, plantillas y secretos sin preguntarte, genera uno nuevo en supabase.com, Account, Access Tokens, y reemplázalo. Con el conector de Supabase que ya está, la base y las funciones sí se alcanzan
 
+## Lo que salió de B7
+
+- **Pega el archivo de Party en Supabase.** Las migraciones de Party en la nube y de referidos ya están aplicadas en el proyecto. Falta supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia una llave foránea y el conector no lo puede aplicar. Pégalo completo en Supabase, SQL Editor, New query, y da clic en Run. La consulta del final debe dar regla_al_borrar en n, owner_id_opcional en true y disparador_activo en true. Mientras no lo pegues, si quien creó un grupo borra su cuenta, el grupo se borra para todos sus miembros
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar

@@ -1,14 +1,16 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
+import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import type { User } from '@/data/schemas/people';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { startExam } from './examSession';
 import { loadExamState, saveExamState } from './examStorage';
 
@@ -123,5 +125,27 @@ describe('pantalla del examen', () => {
     expect(Object.values(state?.answers ?? {}).every((answer) => answer.optionId === null)).toBe(
       true,
     );
+  });
+
+  // Modo enfoque (respuesta 82 del plan del cambio, B7)
+  it('los resultados dicen el XP, salvo en modo enfoque', async () => {
+    const finishExam = async () => {
+      const typing = userEvent.setup();
+      app = await renderApp(SCREENS.exam.path, { seed: seedExam() });
+      await screen.findByText(t.exam.progress(1, 3), { exact: true });
+      await typing.click(screen.getAllByRole('radio')[0] as HTMLElement);
+      await typing.click(screen.getByRole('button', { name: t.exam.finish }));
+      await typing.click(await screen.findByRole('button', { name: t.exam.finishConfirm }));
+      return screen.findByRole('region', { name: t.examResults.summaryTitle });
+    };
+    const summary = await finishExam();
+    expect(await within(summary).findByText(/^\+\d+ XP$/)).toBeVisible();
+
+    cleanup();
+    await resetApp(app?.api);
+    usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+    const focused = await finishExam();
+    expect(within(focused).getByText(t.examResults.notPrediction)).toBeVisible();
+    expect(within(focused).queryByText(/XP/)).toBeNull();
   });
 });

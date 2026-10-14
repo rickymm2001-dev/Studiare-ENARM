@@ -1,38 +1,37 @@
-// Retar a un compañero del grupo a un duelo (9.6). En el prototipo solo se puede retar a los
-// compañeros simulados, porque sin servidor no hay otras personas que jueguen su parte.
+// Retar a un compañero del grupo a un duelo (9.6). En la demostración el rival es un compañero simulado
+// y en la nube (B7) otro miembro del grupo, que juega las mismas preguntas cuando pueda. Quien llama
+// decide cómo se crea el duelo y qué decir si no se pudo.
 import { Swords } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
-import { useDataApi } from '@/data/context';
-import type { Group, Membership } from '@/data/schemas/activity';
+import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { SelectField } from '@/ui/components/field';
-import { challengeToDuel } from './duelActions';
 
 export function NewDuelForm({
-  group,
-  members,
-  selfId,
+  rivals,
+  onCreate,
+  emptyText,
 }: {
-  group: Group;
-  members: readonly Membership[];
-  selfId: string;
+  rivals: readonly { id: string; alias: string }[];
+  /** Crea el duelo. Devuelve null si se creó o el mensaje que hay que mostrar */
+  onCreate: (rivalId: string) => Promise<string | null>;
+  /** Lo que se dice cuando no hay a quién retar */
+  emptyText: string;
 }) {
   const text = t.party.duel;
-  const api = useDataApi();
-  const rivals = members.filter((member) => member.isSimulated && member.id !== selfId);
   const [open, setOpen] = useState(false);
   const [rivalId, setRivalId] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  if (rivals.length === 0) return <p className="mt-3 text-sm text-fg-muted">{text.noRivals}</p>;
+  if (rivals.length === 0) return <p className="mt-3 text-sm text-fg-muted">{emptyText}</p>;
   if (!open) {
     return (
       <Button
         variant="secondary"
         size="sm"
-        className="mt-3 ml-2"
+        className="mt-3 self-start"
         onClick={() => {
           setOpen(true);
         }}
@@ -50,12 +49,9 @@ export function NewDuelForm({
     setBusy(true);
     setMessage(null);
     try {
-      const duel = await challengeToDuel(api, group, chosen);
-      if (duel) {
-        setOpen(false);
-      } else {
-        setMessage(text.noQuestions);
-      }
+      const failure = await onCreate(chosen.id);
+      if (failure === null) setOpen(false);
+      else setMessage(failure);
     } catch {
       setMessage(text.createFailed);
     } finally {
@@ -78,7 +74,7 @@ export function NewDuelForm({
           setRivalId(event.target.value);
         }}
       />
-      <p className="text-sm text-fg-muted">{text.rules(20)}</p>
+      <p className="text-sm text-fg-muted">{text.rules(DUEL_QUESTIONS)}</p>
       <div className="flex gap-2">
         <Button type="submit" size="sm" disabled={busy}>
           {text.create}
