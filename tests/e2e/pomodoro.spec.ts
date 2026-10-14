@@ -160,7 +160,7 @@ test('con el permiso de notificaciones negado el ajuste se apaga solo, lo demás
   await page.reload();
   await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
   await page.locator('summary', { hasText: t.settings.pomodoroTitle }).click();
-  const reloaded = page.getByRole('region', { name: t.settings.pomodoroTitle });
+  const reloaded = page.getByRole('form', { name: 'Ajustes del repaso' });
   await expect(reloaded.getByLabel(t.pomodoro.focusMinutes)).toHaveValue('1');
   await expect(
     reloaded.getByRole('checkbox', { name: t.pomodoro.notifications }),
