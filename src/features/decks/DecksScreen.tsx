@@ -19,7 +19,7 @@ import { topicTaxonomy } from '@/demo/content';
 import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
-import { Badge } from '@/ui/components/badge';
+import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
@@ -171,7 +171,7 @@ function Decks({ session }: { session: ReadySession }) {
                   >
                     <span
                       aria-hidden
-                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
+                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${toneClasses(deckBranch(file)).icon}`}
                     >
                       <Layers className="size-5" />
                     </span>
@@ -183,7 +183,9 @@ function Decks({ session }: { session: ReadySession }) {
                     </div>
                     <div className="col-span-2 flex min-w-0 flex-col gap-2 sm:col-span-1 sm:col-start-2">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
-                        <Badge variant="neutral">{branchName(deckBranch(file))}</Badge>
+                        <BranchBadge branch={deckBranch(file)}>
+                          {branchName(deckBranch(file))}
+                        </BranchBadge>
                         <span>{t.decks.stats(file.notes.length, file.media.length)}</span>
                       </div>
                       {isFollowed && cardIds.length > 0 ? (

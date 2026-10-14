@@ -1,5 +1,5 @@
 // Tabla de niveles y títulos (D-063). Se abre al tocar el nivel del encabezado. Marca dónde va el
-// alumno, cuál es el siguiente título y cuánto XP le falta.
+// alumno, cuál es el siguiente título y cuánto XP le falta, en el acento cálido del nivel (D-128).
 import { Award, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import type { ReactNode } from 'react';
@@ -48,7 +48,7 @@ export function LevelLadderDialog({
 
           <div className="flex flex-col gap-1">
             <ProgressBar
-              tone="neutral"
+              tone="accent"
               value={level.xpIntoLevel}
               max={level.xpForNext}
               label={text.toNextLevel(fmt(level.xpForNext - level.xpIntoLevel), level.level + 1)}

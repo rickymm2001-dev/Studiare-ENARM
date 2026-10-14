@@ -115,7 +115,7 @@ function Summary({ session }: { session: ReadySession }) {
           />
           {focus ? null : (
             <StatCell
-              icon={<Sparkles />}
+              icon={<Sparkles className="text-accent" />}
               label={t.simulator.summaryLabels.xp}
               value={`+${xp.toLocaleString('es-MX')}`}
               caption={t.simulator.summaryLabels.xpCaption}

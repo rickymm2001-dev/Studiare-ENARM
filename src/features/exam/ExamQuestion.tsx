@@ -8,6 +8,7 @@ import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
+import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { HighlightedPrompt } from '../simulator/HighlightedPrompt';
@@ -70,11 +71,12 @@ export function ExamQuestion({
     >
       <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
         <div className="flex flex-wrap items-center gap-2">
-          {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones */}
-          <Badge variant="neutral" className="whitespace-normal">
+          {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones. Va en el
+              color de la rama (D-128) */}
+          <BranchBadge branch={question.branch} className="whitespace-normal">
             {t.branchNames[question.branch] ?? question.branch} ·{' '}
             {TOPIC_NAMES.get(question.topic) ?? question.topic}
-          </Badge>
+          </BranchBadge>
           {answer.marked ? (
             <Badge variant="warning">
               <Flag aria-hidden className="size-3 fill-current" />
