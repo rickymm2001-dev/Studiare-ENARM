@@ -12,9 +12,21 @@ export interface PlanAccess {
   dailyQuestions: number | null;
   fullExam: boolean;
   aiTutor: boolean;
+  /** Subir mazos propios de Anki, CSV, Excel o Word (respuesta 20) */
   importDecks: boolean;
+  /**
+   * Seguir mazos nuevos del catálogo de precargados (4.25 del plan del cambio). Los que el alumno ya
+   * tiene en su dispositivo los sigue repasando en cualquier plan
+   */
+  deckCatalog: boolean;
+  /** Grupos, tabla de la semana, retos y duelos. Los referidos siguen abiertos (respuesta 20, 4.3) */
   party: boolean;
 }
+
+/** Las banderas de PlanAccess que solo abren o cierran algo, sin cifra */
+export type AccessFlag = {
+  [Key in keyof PlanAccess]: PlanAccess[Key] extends boolean ? Key : never;
+}[keyof PlanAccess];
 
 /**
  * Funciones de la carga diaria que cada plan puede abrir o cerrar (D-085, fila 14). Gratis cierra las
@@ -69,37 +81,56 @@ export interface PlanDef {
 /** Generaciones de tarjetas con IA por día en los planes de pago. Juicio de diseño, ajustable */
 export const AI_CARDS_PER_DAY_PAID = 20;
 
+/** Lo que abre un plan de pago. Los tres planes de pago dan lo mismo y solo cambia el precio */
+const PAID_ACCESS: PlanAccess = {
+  dailyQuestions: null,
+  fullExam: true,
+  aiTutor: true,
+  importDecks: true,
+  deckCatalog: true,
+  party: true,
+};
+
 export const PLANS: Record<PlanKey, PlanDef> = {
   free: {
     key: 'free',
     priceMxn: 0,
-    access: { dailyQuestions: 20, fullExam: false, aiTutor: false, importDecks: true, party: true },
+    // 20 preguntas al día con su explicación después de contestar (respuestas 18 y 19). Party,
+    // Importar mazos y seguir mazos nuevos del catálogo son de pago (respuesta 20 y 4.25, B8 del plan
+    // del cambio). El servidor también cierra Party y los apuntes de la nube según el plan
+    // (supabase/migrations/20261021000001_free_plan_locks.sql). El tope de preguntas pasa al
+    // servidor con el banco en la nube (B11)
+    access: {
+      dailyQuestions: 20,
+      fullExam: false,
+      aiTutor: false,
+      importDecks: false,
+      deckCatalog: false,
+      party: false,
+    },
     // La IA con textos y PDF es de pago (D-085, fila 14). Apuntes también, con su candado y su vista
-    // previa (respuesta 20, B6 del plan del cambio).
-    // B8. Hoy este candado de Apuntes solo lo pone el navegador. En el bloque B8 se cierra también en
-    // el servidor, con permisos por fila según el plan para los apuntes que viajan a la nube (los
-    // registros outline de sync_records), como pide la sección B8 del plan del cambio
+    // previa (respuesta 20, B6 del plan del cambio)
     features: { ...ALL_FEATURES_OPEN, aiCards: false, outlines: false },
     aiCardsPerDay: 0,
   },
   founder: {
     key: 'founder',
     priceMxn: 79,
-    access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    access: PAID_ACCESS,
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
   monthly: {
     key: 'monthly',
     priceMxn: 149,
-    access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    access: PAID_ACCESS,
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
   annual: {
     key: 'annual',
     priceMxn: 1499,
-    access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    access: PAID_ACCESS,
     features: ALL_FEATURES_OPEN,
     aiCardsPerDay: AI_CARDS_PER_DAY_PAID,
   },
@@ -147,11 +178,51 @@ export function annualSavingsPercent(
  */
 export const PAYMENT_PROVIDERS: readonly ('stripe' | 'mercadopago')[] = ['stripe'];
 
-/** Si el plan abre la función. Recibe la tabla de planes para poder probar con otra */
-export function canUseFeature(
-  plan: PlanKey,
-  feature: GatedFeature,
-  plans: Record<PlanKey, Pick<PlanDef, 'features'>> = PLANS,
-): boolean {
-  return plans[plan].features[feature];
+/**
+ * El plan que vale según la suscripción guardada en este navegador, la del pago simulado o la que
+ * reflejó la nube con my_plan. Sin suscripción activa es Gratis. Es el único lugar de esta regla en la
+ * app, así la prueba gratis de B10 se suma aquí y la heredan los candados, el tope de preguntas,
+ * Suscripción y Tu plan
+ */
+export function planOf(
+  subscription: { plan: PlanKey; status: string } | null | undefined,
+): PlanKey {
+  return subscription?.status === 'active' ? subscription.plan : 'free';
 }
+
+/**
+ * Todo lo que un plan puede cerrar con un candado. Las funciones de la carga diaria y las banderas de
+ * acceso de sí o no, como Party o Importar mazos (B8 del plan del cambio)
+ */
+export type PlanLock = GatedFeature | AccessFlag;
+
+export function isGatedFeature(lock: PlanLock): lock is GatedFeature {
+  return (GATED_FEATURES as readonly string[]).includes(lock);
+}
+
+/**
+ * Si el plan abre lo que pide el candado, una función de la carga diaria o una bandera de acceso. Es
+ * la única pregunta que hace la interfaz. Recibe la tabla de planes para poder probar con otra
+ */
+export function canUse(
+  plan: PlanKey,
+  lock: PlanLock,
+  plans: Record<PlanKey, Pick<PlanDef, 'features' | 'access'>> = PLANS,
+): boolean {
+  return isGatedFeature(lock) ? plans[plan].features[lock] : plans[plan].access[lock];
+}
+
+/**
+ * Lo que compara cada plan en Suscripción y en la portada, en este orden, después de las preguntas al
+ * día. Están las tres funciones que cierra Gratis por la respuesta 20 (Apuntes, Party e Importar
+ * mazos) y el catálogo de mazos (4.25), para que la tabla diga lo mismo que los candados
+ */
+export const PLAN_HIGHLIGHTS = [
+  'fullExam',
+  'aiTutor',
+  'outlines',
+  'deckCatalog',
+  'importDecks',
+  'party',
+] as const satisfies readonly PlanLock[];
+export type PlanHighlight = (typeof PLAN_HIGHLIGHTS)[number];

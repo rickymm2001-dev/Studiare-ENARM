@@ -736,6 +736,57 @@ select
 - Si quien administra un grupo borra su cuenta, el grupo pasa al miembro activo más antiguo y solo se borra si ya no queda nadie. Eso vive en supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia la llave foránea de owner_id a on delete set null y agrega el disparador. Mientras no lo pegues, sigue la regla de la primera migración y el grupo se borra para todos
 - Las preguntas de un duelo salen hoy del banco de demostración, igual en todos los navegadores. Con el banco real en la nube (B11) las elegirá el servidor
 
+## Plan Gratis en el servidor
+
+### Qué hace
+
+- Party se cierra en Gratis (B8 del plan del cambio, respuesta 20 y 4.3). party_open ahora pide un plan de pago vigente, así que en Gratis las políticas ya no dejan ver grupos, compañeros, retos ni duelos, y las funciones de Party contestan PT001. Salir de un grupo, salir de todos y exportar lo propio siguen abiertos
+- Cuenta como plan de pago lo mismo que dice my_plan. Una suscripción vigente, también cancelada o con un cobro fallido mientras dure el periodo pagado, o un mes gratis por referido mientras dure. Cuando B10 agregue la prueba de 7 días, se suma ahí y estas reglas la heredan
+- Los apuntes que viajan a la nube también se cierran. En Gratis la sincronización ignora un apunte nuevo o un cambio a uno que ya estaba, sin frenar los mazos y las tarjetas del mismo envío. La app recuerda que dejó apuntes sin subir y los manda todos con el primer plan de pago, así no se pierde nada. Borrar un apunte sí llega a la nube, sobre lo que ya tenía la nube y sin aceptar contenido nuevo. Leer los propios sigue igual y Borrar mis datos los quita todos
+- Quien pasa a Gratis ya no estorba en sus grupos. Los duelos que esperan a un rival en Gratis no cuentan para el tope de 10, y contra un mismo rival se esperan a lo más 10. Si quien administra un grupo pasa a Gratis o sale de él, modera el miembro más antiguo que tenga plan de pago, hasta que vuelva
+- Las políticas de Party revisan el plan una vez por consulta y no una vez por fila, así el resumen de Party no se vuelve lento con grupos grandes
+- Los referidos siguen abiertos en Gratis, con su código, su canje y su resumen
+- Subir mazos y seguir mazos nuevos del catálogo se cierran en la app. Un mazo subido se guarda igual que uno hecho a mano y el catálogo viaja dentro de la app hasta el banco en la nube (B11)
+
+### Cómo aplicar la migración
+
+No necesitas terminal. Aplica primero las anteriores, en especial la de Party en la nube y la de referidos con el primer cobro. Son dos migraciones y van en orden. Ninguna tiene sentencias delete ni drop, así que también se pueden aplicar con el conector.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261021000001_free_plan_locks.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Repite los pasos 2 a 4 con supabase/migrations/20261021000002_free_plan_party_moderation.sql
+6. Las dos son seguras de repetir. Si alguna vez vuelves a pegar 20261018000001_party_cloud.sql, 20261008000002_sync.sql o 20261008000001_device_barrier.sql, pega después estas dos otra vez y en orden, porque esas traen las versiones anteriores de party_open, de la sincronización de apuntes y de las políticas de Party
+7. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.caller_has_paid_plan()', 'execute') as alumno_lee_regla,
+  has_function_privilege('anon', 'public.caller_has_paid_plan()', 'execute') as anon_lee_regla,
+  has_function_privilege('authenticated', 'public.party_open()', 'execute') as alumno_party_open,
+  position('caller_has_paid_plan' in pg_get_functiondef('public.party_open()'::regprocedure)) > 0
+    as party_pide_plan,
+  position('v_outlines_open' in pg_get_functiondef('public.sync_push_records(jsonb)'::regprocedure)) > 0
+    as apuntes_con_plan,
+  has_function_privilege('authenticated', 'public.party_moderator(uuid)', 'execute') as alumno_lee_moderador,
+  position('party_moderator' in pg_get_functiondef('public.party_assert_owner(uuid, uuid)'::regprocedure)) > 0
+    as modera_con_plan,
+  position('party_open_for' in pg_get_functiondef('public.party_create_duel(uuid, uuid, text[])'::regprocedure)) > 0
+    as duelos_con_plan,
+  (select qual like '%party_open()%' from pg_policies where schemaname = 'public' and policyname = 'groups_select')
+    as plan_una_vez;
+```
+
+8. Debe salir alumno_lee_regla, anon_lee_regla y alumno_lee_moderador en false, y alumno_party_open, party_pide_plan, apuntes_con_plan, modera_con_plan, duelos_con_plan y plan_una_vez en true. Si algo sale distinto, avísame antes de abrir a alumnos
+
+### Qué conviene saber
+
+- Quien pasa a Gratis sigue en sus grupos hasta que sale o lo quitan, y cuenta en el cupo de 50. Sus compañeros con plan lo siguen viendo con su alias, su foto y su última cifra. Él no ve nada del grupo y puede salir con Salir de todos mis grupos en el candado de Party o quitando el permiso de Party en Configuración, Privacidad
+- Quien modera en lugar de quien administra se da cuenta de que esa persona no tiene plan de pago, y quien reta puede notar que un duelo contra alguien en Gratis no contó para su tope. Nadie más ve el plan de otra persona
+- La regla del plan no mira el rol. Un médico, un admin o tú mismo necesitan un plan de pago, aunque sea de prueba, para entrar a Party
+- El tope de 20 preguntas al día de Gratis pasa del todo al servidor con el banco en la nube (B11)
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.

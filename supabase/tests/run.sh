@@ -20,9 +20,18 @@ psql_run -f "$here/stub_auth.sql"
 psql_run -f "$here/stub_storage.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
-# Las migraciones que siguen al freno son idempotentes. Se corren otra vez las tres últimas, la de la
-# foto de perfil de B2 y las dos de B7, para comprobarlo
-for migration in $(ls "$here"/../migrations/*.sql | tail -3); do psql_run -f "$migration"; done
+# Las migraciones que siguen al freno son idempotentes. Se corren otra vez, por su nombre, la de la foto
+# de perfil de B2, las dos de B7 y las dos del plan Gratis de B8, para comprobarlo. Van en este orden
+# porque las de B8 vuelven a cerrar Party y los apuntes de la nube que la de Party de B7 deja abiertos.
+# Se nombran para que una migración nueva de otro bloque no saque a ninguna de la lista
+for name in \
+  20261017000001_avatar_changed_at \
+  20261018000001_party_cloud \
+  20261019000001_referral_first_charge \
+  20261021000001_free_plan_locks \
+  20261021000002_free_plan_party_moderation; do
+  psql_run -f "$here/../migrations/$name.sql"
+done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
 # y repetirse sin daño sobre una base ya migrada
 psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
@@ -44,3 +53,5 @@ psql_run -f "$here/function_grants_test.sql"
 psql_run -f "$here/plan_prices_test.sql"
 psql_run -f "$here/avatars_test.sql"
 psql_run -f "$here/party_cloud_test.sql"
+psql_run -f "$here/free_plan_locks_test.sql"
+psql_run -f "$here/free_plan_party_moderation_test.sql"

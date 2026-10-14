@@ -6,6 +6,7 @@ import 'fake-indexeddb/auto';
 import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { writeStoredFlags } from '@/config/featureFlags';
@@ -15,6 +16,7 @@ import { isLive, isAiNote } from '@/data/schemas/decks';
 import type { User } from '@/data/schemas/people';
 import { createManualDeck, deleteManualDeck } from '@/data/usecases/manualDecks';
 import { createOutline, saveOutline } from '@/data/usecases/outlines';
+import { subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 import { AUTOSAVE_DELAY_MS } from './useOutlineAutosave';
 
@@ -61,17 +63,6 @@ interface Line {
 }
 const node = (text: string, ...children: Line[]): Line => ({ id: newId(), text, children });
 
-/** Apuntes es de pago desde B6 (respuesta 20). Las pruebas de la función entran con el mensual */
-async function subscribe(api: DataApi, user: User) {
-  await api.repos.subscriptions.put({
-    userId: user.id,
-    plan: 'monthly',
-    status: 'active',
-    isSimulated: true,
-    updatedAt: '2026-10-01T10:00:00.000Z',
-  });
-}
-
 /** Abre Apuntes con un plan de pago y lo que la prueba siembre */
 function openPaid(
   seed?: (api: DataApi, user: User) => Promise<void>,
@@ -104,6 +95,21 @@ describe('pantalla de Apuntes', () => {
     // No se puede crear un apunte ni ver la lista
     expect(screen.queryByRole('button', { name: t.outlines.create })).toBeNull();
     expect(screen.queryByLabelText(t.outlines.newTitle)).toBeNull();
+    // Lo que tenía se queda. Sin nube no hay nada que subir, así que no habla de la nube
+    expect(within(preview).getByText(t.outlines.locked.kept)).toBeInTheDocument();
+    expect(within(preview).queryByText(t.outlines.locked.keptCloud)).toBeNull();
+  });
+
+  it('con la nube el candado dice que lo que no subió se queda aquí y sube al volver a pagar', async () => {
+    useCloud.setState({ state: { status: 'signed-out' } });
+    try {
+      app = await renderApp(SCREENS.outlines.path);
+      const preview = await screen.findByRole('region', { name: t.outlines.locked.title }, WAIT);
+      expect(within(preview).getByText(t.outlines.locked.kept)).toBeInTheDocument();
+      expect(within(preview).getByText(t.outlines.locked.keptCloud)).toBeInTheDocument();
+    } finally {
+      useCloud.setState({ state: { status: 'off' } });
+    }
   });
 
   it('con la prueba gratis prendida el candado ofrece probar 7 días gratis', async () => {

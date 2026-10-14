@@ -3,7 +3,11 @@
 // la tabla de la semana con alias y XP, retos y duelos entre alumnos (B7 del plan del cambio,
 // respuestas 69 y 77). Sin nube solo explica que Party la necesita. La tarjeta para compartir y la de
 // referidos van en todos los casos. El modo enfoque oculta la tabla, el XP y los retos (respuesta 82).
-import { useState } from 'react';
+// En el plan Gratis grupos, tabla, retos y duelos quedan detrás de su candado con una vista previa, y
+// siguen abiertas Comparte tu semana e Invita y gana un mes (respuesta 20 y 4.3, B8). Si el servidor
+// cierra Party antes de que este navegador sepa que el plan cambió, se ve el mismo candado, sin la frase
+// de lo que se comparte en un grupo.
+import { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useCloud } from '@/app/cloudState';
 import { useFocusMode } from '@/app/focusMode';
@@ -13,12 +17,14 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot } from '../home/snapshot';
+import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { AchievementShare } from './AchievementShare';
 import { CloudParty } from './CloudParty';
 import { DemoParty } from './DemoParty';
 import { inviteStore, readInviteCode } from './inviteLink';
+import { PartyLocked } from './PartyLocked';
 import { partyModeOf, type PartyMode } from './partyMode';
 import { ReferralCard } from './ReferralCard';
 
@@ -43,6 +49,11 @@ function Party({ session, inviteCode }: { session: ReadySession; inviteCode: str
   const cloudStatus = useCloud((store) => store.state.status);
   const focus = useFocusMode();
   const mode = partyModeOf(session.isDemo, cloudStatus);
+  // El servidor contestó que Party ya no está abierta para la cuenta (PT001)
+  const [closedByServer, setClosedByServer] = useState(false);
+  const onClosed = useCallback(() => {
+    setClosedByServer(true);
+  }, []);
 
   const header = (
     <ScreenHeader title={t.screens.party.title} description={t.screens.party.description} />
@@ -56,32 +67,52 @@ function Party({ session, inviteCode }: { session: ReadySession; inviteCode: str
     );
   }
   const snapshot = buildSnapshot({ events, user, settings, now: new Date() });
+  const share = (
+    <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
+  );
+  const locked = (
+    <>
+      <PartyLocked />
+      {share}
+    </>
+  );
 
   return (
     <>
       {header}
-      <p className="text-sm text-fg-muted">{mode === 'demo' ? text.privacyDemo : text.privacy}</p>
-      {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
-      <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
-      {mode === 'demo' ? (
-        <DemoParty
-          session={session}
-          events={events}
-          snapshot={snapshot}
-          focus={focus}
-          inviteCode={inviteCode}
-        />
-      ) : mode === 'cloud' ? (
-        <CloudParty
-          session={session}
-          events={events}
-          snapshot={snapshot}
-          focus={focus}
-          inviteCode={inviteCode}
-        />
-      ) : (
-        <PartyNeedsCloud mode={mode} />
-      )}
+      <FeatureGate userId={user.id} feature="party" locked={locked}>
+        {closedByServer ? (
+          locked
+        ) : (
+          <>
+            <p className="text-sm text-fg-muted">
+              {mode === 'demo' ? text.privacyDemo : text.privacy}
+            </p>
+            {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
+            {share}
+            {mode === 'demo' ? (
+              <DemoParty
+                session={session}
+                events={events}
+                snapshot={snapshot}
+                focus={focus}
+                inviteCode={inviteCode}
+              />
+            ) : mode === 'cloud' ? (
+              <CloudParty
+                session={session}
+                events={events}
+                snapshot={snapshot}
+                focus={focus}
+                inviteCode={inviteCode}
+                onClosed={onClosed}
+              />
+            ) : (
+              <PartyNeedsCloud mode={mode} />
+            )}
+          </>
+        )}
+      </FeatureGate>
       <ReferralCard />
     </>
   );

@@ -91,6 +91,10 @@ end $$;
 
 -- Datos que crea el servidor o que sirven de contenido compartido
 insert into public.subscriptions (user_id, plan, status) values ('b0000000-0000-0000-0000-000000000001', 'monthly', 'active');
+-- Party es de los planes de pago desde B8 (20261021000001_free_plan_locks.sql). El compañero de grupo
+-- tiene un mes regalado, que no deja fila en subscriptions, así B2b sigue viendo cero suscripciones
+insert into public.subscription_grants (user_id, kind, starts_at, ends_at)
+  values ('b0000000-0000-0000-0000-000000000002', 'admin', now() - interval '1 day', now() + interval '30 days');
 insert into public.payments (user_id, provider, provider_payment_id, amount_mxn, status)
   values ('b0000000-0000-0000-0000-000000000001', 'stripe', 'barrera-pay-1', 249, 'paid');
 insert into public.ai_artifacts (id, user_id, kind, content)

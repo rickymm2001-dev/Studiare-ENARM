@@ -1,7 +1,10 @@
 // Servidor de sincronización en memoria, para las pruebas. Aplica las mismas reglas que
 // supabase/migrations/20261008000002_sync.sql: una fecha estrictamente más nueva reemplaza a la
-// que ya hay, un evento con el mismo ID se ignora y cada cambio recibe un contador que crece. Se
-// puede apagar, hacer fallar o adelantar su reloj. Solo lo usan las pruebas.
+// que ya hay, un evento con el mismo ID se ignora y cada cambio recibe un contador que crece. Con el
+// plan Gratis aplica la regla de los apuntes de 20261021000001_free_plan_locks.sql: ignora uno nuevo
+// o cambiado sin error y solo guarda la marca de borrado de uno que ya tenía, sobre lo que ya tenía.
+// Se puede apagar, hacer fallar o adelantar su reloj. Solo lo usan las pruebas.
+import { canUse, type PlanKey } from '@/config/billing';
 import type { WireEvent, WireRecord } from '@/engines/sync';
 import { SyncTransportError, type SyncFailure, type SyncTransport } from '../transport';
 
@@ -20,6 +23,11 @@ export interface MemoryServer {
   /** Registros que llegaron en cada subida, para revisar lo que viaja */
   pushedRecords: WireRecord[][];
   pushedEvents: WireEvent[][];
+  /**
+   * El plan de la cuenta, como user_plan. Por omisión uno de pago, así las pruebas que no son del plan
+   * suben todo. Con free los apuntes siguen la regla del plan Gratis
+   */
+  plan: PlanKey;
 }
 
 export function createMemoryServer(): MemoryServer {
@@ -33,6 +41,38 @@ export function createMemoryServer(): MemoryServer {
     calls: { serverTime: 0, pushRecords: 0, pullRecords: 0, pushEvents: 0, pullEvents: 0 },
     pushedRecords: [],
     pushedEvents: [],
+    plan: 'monthly',
+  };
+}
+
+/**
+ * Lo que guarda el servidor de un registro que llegó, o null si lo ignora. Una fecha más nueva
+ * reemplaza a la que ya hay. En Gratis un apunte solo entra como marca de borrado de uno que ya estaba,
+ * con lo que ya tenía y sus dos fechas nuevas, y una marca posterior al cambio se rechaza
+ */
+function accepted(
+  server: MemoryServer,
+  record: WireRecord,
+  existing: WireRecord | undefined,
+): WireRecord | null {
+  const newer = !existing || record.updatedAt > existing.updatedAt;
+  if (record.kind !== 'outline' || canUse(server.plan, 'outlines')) {
+    return newer ? structuredClone(record) : null;
+  }
+  if (record.deletedAt === null) return null;
+  if (record.deletedAt > record.updatedAt) {
+    throw new SyncTransportError('server', 'La marca de borrado no es una fecha válida');
+  }
+  if (!existing || !newer) return null;
+  return {
+    ...structuredClone(existing),
+    updatedAt: record.updatedAt,
+    deletedAt: record.deletedAt,
+    data: {
+      ...structuredClone(existing.data),
+      deletedAt: record.deletedAt,
+      updatedAt: record.updatedAt,
+    },
   };
 }
 
@@ -57,13 +97,16 @@ export function memoryTransport(
     pushRecords(records) {
       enter('pushRecords');
       server.pushedRecords.push([...records]);
+      // Como en la base, la subida entra completa o no entra. Si un registro se rechaza no cambia nada
+      const staged = new Map<string, WireRecord>();
       for (const record of records) {
         const key = `${record.kind}:${record.id}`;
-        const existing = server.records.get(key);
-        if (!existing || record.updatedAt > existing.record.updatedAt) {
-          server.seq += 1;
-          server.records.set(key, { record: structuredClone(record), seq: server.seq });
-        }
+        const stored = accepted(server, record, staged.get(key) ?? server.records.get(key)?.record);
+        if (stored) staged.set(key, stored);
+      }
+      for (const [key, stored] of staged) {
+        server.seq += 1;
+        server.records.set(key, { record: stored, seq: server.seq });
       }
       return Promise.resolve();
     },

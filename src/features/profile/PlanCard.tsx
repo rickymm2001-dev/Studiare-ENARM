@@ -4,7 +4,7 @@
 import { CreditCard } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import { PLANS, type PlanKey } from '@/config/billing';
+import { PLANS, planOf } from '@/config/billing';
 import type { Subscription } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -15,8 +15,9 @@ const dateOf = (iso: string) =>
 
 export function PlanCard({ subscription }: { subscription: Subscription | null }) {
   const text = t.settingsPage.plan;
-  const active = subscription?.status === 'active' ? subscription : null;
-  const plan: PlanKey = active ? active.plan : 'free';
+  const plan = planOf(subscription);
+  // Hasta cuándo vale y de dónde viene solo se dicen de un plan de pago
+  const active = plan === 'free' ? null : subscription;
   const until = active?.periodEnd ? dateOf(active.periodEnd) : null;
   return (
     <Card aria-labelledby="plan-titulo">

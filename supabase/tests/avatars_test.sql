@@ -74,6 +74,10 @@ insert into public.groups (id, name, invite_code, owner_id) values
 insert into public.memberships (group_id, user_id) values
   ('fa000000-0000-0000-0000-00000000000a', 'fa000000-0000-0000-0000-000000000001'),
   ('fa000000-0000-0000-0000-00000000000a', 'fa000000-0000-0000-0000-000000000003');
+-- Party es de los planes de pago desde B8 (20261021000001_free_plan_locks.sql). Los dos pagan el mensual
+insert into public.subscriptions (user_id, plan, status, current_period_end) values
+  ('fa000000-0000-0000-0000-000000000001', 'monthly', 'active', now() + interval '30 days'),
+  ('fa000000-0000-0000-0000-000000000003', 'monthly', 'active', now() + interval '30 days');
 
 -- ===================================================================== A1. El bucket es privado y solo acepta JPEG chicos
 select pg_temp.expect(

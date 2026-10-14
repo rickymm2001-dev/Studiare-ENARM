@@ -20,6 +20,7 @@ import { TextField } from '@/ui/components/field';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { CalibratingNote } from '@/ui/states/states';
 import type { ReadySession } from '../shared/RequireSession';
+import { usePlanText } from '../shared/useActivePlan';
 import { MEASURED_DAYS_NEEDED, type PlannerView } from './planView';
 import { useWeekPlan } from './useWeekPlan';
 import type { DayDone, WeekDay, WeekPlan } from './weekPlan';
@@ -61,6 +62,11 @@ export function WeekPlanCard({
 function WeekBody({ session, week }: { session: ReadySession; week: WeekPlan }) {
   const [applied, setApplied] = useState(false);
   const { view, questionLimit } = week;
+  // En Gratis no se sugiere seguir un mazo del catálogo, que es de pago (4.25, B8)
+  const noDecks = usePlanText(session.user.id, 'deckCatalog', {
+    open: t.planner.noDecksBody,
+    closed: t.freePlan.catalog.plannerEmpty,
+  });
   const limitNote =
     questionLimit !== null && week.days.some((day) => day.plan.simulatorCapped)
       ? t.planner.limitNote(questionLimit)
@@ -84,8 +90,8 @@ function WeekBody({ session, week }: { session: ReadySession; week: WeekPlan }) 
         </p>
         <DayList days={week.days} today={week.today} />
         {limitNote ? <p className="text-sm text-fg-muted">{limitNote}</p> : null}
-        {view.cardCount === 0 ? (
-          <p className="text-sm text-fg-muted">{t.planner.noDecksBody}</p>
+        {view.cardCount === 0 && noDecks ? (
+          <p className="text-sm text-fg-muted">{noDecks}</p>
         ) : null}
       </div>
       <MinutesSection session={session} view={view} />

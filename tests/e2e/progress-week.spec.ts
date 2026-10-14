@@ -4,6 +4,7 @@
 // ajuste cambia el plan. Corre en teléfono y en computadora con los dos proyectos de Playwright.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 test('la semana calibra los minutos, avisa la sobrecarga y cada ajuste cambia lo planeado', async ({
@@ -11,6 +12,8 @@ test('la semana calibra los minutos, avisa la sobrecarga y cada ajuste cambia lo
 }) => {
   test.setTimeout(120_000);
   await signUp(page);
+  // Seguir mazos del catálogo es de los planes de pago (4.25, B8)
+  await subscribeMonthly(page);
 
   // Progreso se abre desde la navegación, el riel en computadora y la barra de abajo en el teléfono
   await page

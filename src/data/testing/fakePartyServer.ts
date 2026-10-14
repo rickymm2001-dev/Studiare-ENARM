@@ -2,8 +2,11 @@
 // de supabase/migrations/20261018000001_party_cloud.sql con sus mismas respuestas, sus topes y sus
 // códigos de error, y deja ver lo mismo que sus políticas. Lo usan el doble de la nube de las pruebas
 // unitarias (fakeCloud.ts) y el Supabase simulado de las e2e (tests/e2e/support/fakeSupabase.ts), así
-// las dos imitan exactamente lo mismo. Las cuentas, el dispositivo activo y la sesión los revisa quien
-// lo usa. Solo lo usan las pruebas.
+// las dos imitan exactamente lo mismo. Con isOpen imita también el plan Gratis de
+// 20261021000001_free_plan_locks.sql y 20261021000002_free_plan_party_moderation.sql: Party cerrada,
+// duelos contra un rival sin Party abierta que no cuentan para el tope y moderación del miembro más
+// antiguo con Party abierta. Las cuentas, el dispositivo activo y la sesión los revisa quien lo usa.
+// Solo lo usan las pruebas.
 import { addDays, studyDayOf, weekStartOf } from '@/engines/studyDay';
 
 export type FakePartyResult = { data: unknown } | { error: { code: string; message: string } };
@@ -43,7 +46,30 @@ export interface FakePartyOptions {
   /** El alias del perfil de una cuenta. null si no tiene perfil */
   aliasOf: (userId: string) => string | null;
   now?: () => number;
+  /**
+   * Si Party está abierta para la cuenta, como party_open con el plan de pago (B8,
+   * 20261021000001_free_plan_locks.sql). Sin ella siempre está abierta
+   */
+  isOpen?: (userId: string) => boolean;
 }
+
+/**
+ * Las funciones que piden Party abierta, como party_caller() en la base. Con Party cerrada contestan
+ * PT001 antes de tocar nada. Salir de un grupo o de todos y exportar lo propio no la piden
+ */
+const NEED_OPEN = new Set([
+  'party_overview',
+  'party_create_group',
+  'party_join_group',
+  'party_publish',
+  'party_create_challenge',
+  'party_create_duel',
+  'party_start_duel',
+  'party_submit_duel_result',
+  'party_rotate_code',
+  'party_remove_member',
+  'party_delete_challenge',
+]);
 
 type Metric = 'cards' | 'questions' | 'xp';
 
@@ -145,6 +171,22 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
     memberships.filter((item) => item.groupId === groupId && item.leftAt === null);
   const resultKey = (duelId: string, userId: string) => `${duelId}|${userId}`;
   const liveChallenges = () => [...challenges.values()].filter((item) => item.deletedAt === null);
+  const openFor = (userId: string) => options.isOpen?.(userId) ?? true;
+
+  /**
+   * Quien modera el grupo, como party_moderator. Quien lo administra mientras siga en él con Party
+   * abierta y, si no, el miembro activo más antiguo que sí la tenga. null si nadie
+   */
+  function moderatorOf(groupId: string): string | null {
+    const ownerId = groups.get(groupId)?.ownerId ?? null;
+    if (ownerId === null) return null;
+    if (isMember(groupId, ownerId) && openFor(ownerId)) return ownerId;
+    const heir = activeIn(groupId)
+      .filter((item) => item.userId !== ownerId)
+      .sort((a, b) => a.joinedAt - b.joinedAt || a.userId.localeCompare(b.userId))
+      .find((item) => openFor(item.userId));
+    return heir?.userId ?? null;
+  }
 
   function newCode(): string {
     let code: string;
@@ -201,7 +243,7 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
             id: group.id,
             name: group.name,
             inviteCode: group.inviteCode,
-            isOwner: group.ownerId === userId,
+            isOwner: moderatorOf(group.id) === userId,
             joinedAt: iso(own.joinedAt),
             members: members.map((item) => ({
               userId: item.userId,
@@ -415,7 +457,7 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
     if (!challenge || !isMember(challenge.groupId, userId)) {
       return fail('PT002', 'No eres miembro de ese grupo');
     }
-    if (challenge.createdBy !== userId && groups.get(challenge.groupId)?.ownerId !== userId) {
+    if (challenge.createdBy !== userId && moderatorOf(challenge.groupId) !== userId) {
       return fail('PT005', 'Solo quien administra el grupo o quien creó el reto puede borrarlo');
     }
     if (challenge.deletedAt !== null) return ok(false);
@@ -425,12 +467,12 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
 
   // ------------------------------------------------------------------ moderación
 
-  /** null si quien llama administra el grupo y sigue en él, o el error que daría la base */
+  /** null si quien llama modera el grupo y sigue en él, o el error que daría la base */
   function ownerProblem(groupId: unknown, userId: string): FakePartyResult | null {
     if (!isUuid(groupId) || !isMember(groupId, userId)) {
       return fail('PT002', 'No eres miembro de ese grupo');
     }
-    if (groups.get(groupId)?.ownerId !== userId) {
+    if (moderatorOf(groupId) !== userId) {
       return fail('PT005', 'Solo quien administra el grupo puede hacer esto');
     }
     return null;
@@ -482,8 +524,16 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
         item.challengerId === userId &&
         !results.has(resultKey(item.id, item.opponentId)) &&
         isMember(item.groupId, item.opponentId),
-    ).length;
-    if (waiting >= FAKE_PARTY_LIMITS.waitingDuelsPerMember) return ok({ status: 'limit' });
+    );
+    // El tope cuenta solo a los rivales que pueden jugar. Contra un mismo rival también hay tope
+    const canPlay = waiting.filter((item) => openFor(item.opponentId)).length;
+    const sameRival = waiting.filter((item) => item.opponentId === opponentId).length;
+    if (
+      canPlay >= FAKE_PARTY_LIMITS.waitingDuelsPerMember ||
+      sameRival >= FAKE_PARTY_LIMITS.waitingDuelsPerMember
+    ) {
+      return ok({ status: 'limit' });
+    }
     const duel: Duel = {
       id: crypto.randomUUID(),
       groupId,
@@ -641,9 +691,14 @@ export function createFakePartyServer(options: FakePartyOptions): FakePartyServe
 
   return {
     call(name, userId, args) {
+      // Con Party cerrada, como en el plan Gratis, cada función contesta PT001 antes de tocar nada,
+      // salvo salir y exportar lo propio
+      const open = openFor(userId);
+      if (name === 'party_open') return ok(open);
+      if (!open && NEED_OPEN.has(name)) {
+        return fail('PT001', 'Party no está abierta para tu cuenta');
+      }
       switch (name) {
-        case 'party_open':
-          return ok(true);
         case 'party_overview': {
           if (!isMonday(args.p_week_start)) return fail('22023', 'La semana no es válida');
           return ok(overview(userId, args.p_week_start));

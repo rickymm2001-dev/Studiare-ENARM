@@ -2,7 +2,8 @@
 // muestra qué contiene con sus avisos y las filas que no se pueden importar, y solo entonces, con el
 // nombre del mazo y la confirmación de que el contenido es del alumno, se guarda como un mazo
 // privado con sus submazos. Las tarjetas empiezan nuevas. Importar el mismo archivo otra vez no
-// duplica nada.
+// duplica nada. Es de los planes de pago (respuesta 20). En Gratis se ve su vista previa con el
+// candado y los mazos que ya se subieron siguen en Mazos y en Repasar (B8).
 import { FileUp, TriangleAlert } from 'lucide-react';
 import { useId, useMemo, useState } from 'react';
 import { Link } from 'react-router';
@@ -21,6 +22,8 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
 import { parseFileInWorker } from '@/workers/importClient';
 import type { ImportParseResult } from '@/workers/importApi';
+import { FeatureGate } from '../shared/FeatureGate';
+import { LockedPreview } from '../shared/LockedPreview';
 import type { ReadySession } from '../shared/RequireSession';
 
 type Step =
@@ -41,14 +44,34 @@ const baseName = (file: string) =>
     .trim()
     .slice(0, 120);
 
-export function ImportDeckCard({
-  session,
-  parseFile = parseFileInWorker,
-}: {
+interface ImportDeckProps {
   session: ReadySession;
   /** Lee el archivo. Por defecto en un Worker. Las pruebas pasan una versión sin Worker */
   parseFile?: (file: File) => Promise<ImportParseResult>;
-}) {
+}
+
+export function ImportDeckCard(props: ImportDeckProps) {
+  const text = t.freePlan.importDecks;
+  return (
+    <FeatureGate
+      userId={props.session.user.id}
+      feature="importDecks"
+      locked={
+        <LockedPreview
+          id="importar-cerrado"
+          title={text.title}
+          intro={text.intro}
+          points={text.points}
+          kept={[text.kept]}
+        />
+      }
+    >
+      <ImportDeck {...props} />
+    </FeatureGate>
+  );
+}
+
+function ImportDeck({ session, parseFile = parseFileInWorker }: ImportDeckProps) {
   const api = useDataApi();
   const inputId = useId();
   const [step, setStep] = useState<Step>({ name: 'idle' });

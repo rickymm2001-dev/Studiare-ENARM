@@ -50,6 +50,16 @@ create or replace function pg_temp.questions(n integer default 20) returns text[
   select array(select '01J' || lpad(i::text, 23, '0') from generate_series(1, n) i)
 $$;
 
+-- Party es de los planes de pago desde B8 (20261021000001_free_plan_locks.sql). Los alumnos de estas
+-- pruebas tienen el mensual vigente, como si ya lo hubieran pagado. Los candados de Gratis se prueban
+-- en free_plan_locks_test.sql
+create or replace function pg_temp.paid(p_prefix text) returns void language sql as $$
+  insert into public.subscriptions (user_id, plan, status, current_period_end)
+    select id, 'monthly', 'active', now() + interval '30 days'
+    from auth.users where id::text like p_prefix || '%'
+  on conflict (user_id) do nothing
+$$;
+
 -- La semana se calcula antes de entrar como anon, que no puede llamar a study_day
 select set_config('party.week', pg_temp.week()::text, false);
 
@@ -62,6 +72,7 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('c7000000-0000-0000-0000-0000000000c1', 'carla.party@x.mx', '{"alias":"Carla"}'),
   ('c7000000-0000-0000-0000-0000000000d1', 'diego.party@x.mx', '{"alias":"Diego"}'),
   ('c7000000-0000-0000-0000-0000000000e1', 'elena.party@x.mx', '{"alias":"Elena"}');
+select pg_temp.paid('c7000000-');
 
 -- ===================================================================== PC1. Crear un grupo
 begin;
@@ -477,6 +488,7 @@ select pg_temp.expect(
 insert into auth.users (id, email, raw_user_meta_data)
   select ('c7100000-0000-0000-0000-' || lpad(to_hex(n), 12, '0'))::uuid, 'lleno' || n || '@x.mx', '{"alias":"Lleno"}'
   from generate_series(1, 50) n;
+select pg_temp.paid('c7100000-');
 insert into public.groups (id, name, invite_code, owner_id)
   values ('c7100000-0000-0000-0000-0000000000ff', 'Grupo lleno', 'LLENO2', 'c7100000-0000-0000-0000-000000000001');
 insert into public.memberships (group_id, user_id)
@@ -739,6 +751,7 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('c7300000-0000-0000-0000-0000000000a2', 'gabi.party@x.mx', '{"alias":"Gabi"}'),
   ('c7300000-0000-0000-0000-0000000000b2', 'hugo.party@x.mx', '{"alias":"Hugo"}'),
   ('c7300000-0000-0000-0000-0000000000c2', 'iris.party@x.mx', '{"alias":"Iris"}');
+select pg_temp.paid('c7300000-');
 
 begin;
 select pg_temp.as_user('c7300000-0000-0000-0000-0000000000f1');
@@ -1080,6 +1093,7 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('c7400000-0000-0000-0000-0000000000a3', 'leo.party@x.mx', '{"alias":"Leo"}'),
   ('c7400000-0000-0000-0000-0000000000a4', 'mia.party@x.mx', '{"alias":"Mia"}'),
   ('c7400000-0000-0000-0000-0000000000a5', 'nico.party@x.mx', '{"alias":"Nico"}');
+select pg_temp.paid('c7400000-');
 insert into public.groups (id, name, invite_code, owner_id) values
   ('c7400000-0000-0000-0000-0000000000b1', 'Herencia', 'HERNC2', 'c7400000-0000-0000-0000-0000000000a1'),
   ('c7400000-0000-0000-0000-0000000000b2', 'Sola', 'SLAAA2', 'c7400000-0000-0000-0000-0000000000a4'),

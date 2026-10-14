@@ -29,6 +29,9 @@ function setup() {
   const fake = makeFakeCloud({ session: { id: ANA, email: 'ana@ejemplo.mx' } });
   fake.aliases.set(ANA, 'Ana');
   fake.aliases.set(BRUNO, 'Bruno');
+  // Party es de los planes de pago (B8). Los dos pagan el mensual
+  fake.plans.set(ANA, 'monthly');
+  fake.plans.set(BRUNO, 'monthly');
   return { api, fake };
 }
 afterEach(async () => {

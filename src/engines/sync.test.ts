@@ -355,6 +355,23 @@ describe('qué se sube', () => {
     expect(plan.map((record) => record.updatedAt)).toEqual([stampAt(3), stampAt(4)]);
   });
 
+  it('los tipos que se vuelven a mandar suben completos, sin mirar la marca de agua (B8)', () => {
+    const decks = make(5);
+    const old = item('outline', outline(nextId(), { updatedAt: stampAt(1) }));
+    const plan = planPush([...decks, old], stampAt(2), USER, new Set(['outline']));
+    expect(plan.map((record) => [record.kind, record.updatedAt])).toEqual([
+      ['outline', stampAt(1)],
+      ['deck', stampAt(3)],
+      ['deck', stampAt(4)],
+    ]);
+    // Sin pedirlo, el apunte viejo no se vuelve a mandar y la marca de agua no retrocede
+    expect(planPush([...decks, old], stampAt(2), USER).map((record) => record.kind)).toEqual([
+      'deck',
+      'deck',
+    ]);
+    expect(watermarkAfter(plan, 1, stampAt(2), later)).toBe(stampAt(2));
+  });
+
   it('el orden es el mismo en cada llamada, con la llave como desempate', () => {
     const same = Array.from({ length: 6 }, () => item('deck', deck({ updatedAt: T1 })));
     const one = planPush(same, null, USER).map((record) => record.id);

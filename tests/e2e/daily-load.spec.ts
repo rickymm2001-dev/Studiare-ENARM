@@ -5,16 +5,8 @@
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { followSmallestDeck } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
-
-async function followSmallestDeck(page: Page) {
-  await page.goto(SCREENS.decks.path);
-  const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
-  await deck.getByRole('button', { name: t.decks.follow }).click();
-  await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
-    timeout: 60_000,
-  });
-}
 
 const rating = (page: Page, value: keyof typeof t.review.ratings) =>
   page.getByRole('button', { name: new RegExp(`^${t.review.ratings[value]}`) });

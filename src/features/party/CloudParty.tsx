@@ -4,7 +4,10 @@
 // nada pide el permiso de Party (4.27). Con el modo enfoque se ocultan la tabla, el XP y los retos y
 // se quedan los grupos, las invitaciones y los duelos, que son un compromiso de uno a uno que el alumno
 // eligió (respuesta 82). Quien administra el grupo cambia el código, quita miembros y borra retos, y
-// quien creó un reto también lo borra, siempre con confirmación.
+// quien creó un reto también lo borra, siempre con confirmación. Mientras quien administra no tenga
+// Party abierta, modera el miembro activo más antiguo que sí la tenga, y el servidor lo marca con
+// isOwner (20261021000002). Si el servidor contesta que el plan ya no incluye Party, como cuando acaba
+// de vencer, avisa a Party con onClosed para que muestre el mismo candado de Gratis (B8).
 import { Copy, KeyRound, Link2, LogOut, UserMinus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getCloud } from '@/data/cloud/client';
@@ -13,7 +16,6 @@ import {
   createPartyChallenge,
   createPartyDuel,
   deletePartyChallenge,
-  fetchPartyOverview,
   removePartyMember,
   rotatePartyCode,
   type PartyChallenge,
@@ -23,16 +25,11 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { newId } from '@/data/ids';
 import type { AppEvent } from '@/data/schemas/events';
-import {
-  createCloudGroup,
-  joinCloudGroup,
-  leaveCloudGroup,
-  stopSharingParty,
-} from '@/data/usecases/partyCloud';
+import { createCloudGroup, joinCloudGroup, leaveCloudGroup } from '@/data/usecases/partyCloud';
 import { changeConsent } from '@/data/usecases/privacy';
 import { currentConsents } from '@/data/usecases/profile';
 import { weeklyLeaderboard } from '@/engines/party';
-import { studyDayOf, weekStartOf } from '@/engines/studyDay';
+import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -56,6 +53,7 @@ import {
   NewChallengeForm,
 } from './GroupParts';
 import { forgetInviteCode, inviteLink, inviteStore } from './inviteLink';
+import { LeaveAllGroups } from './LeaveAllGroups';
 import { NewDuelForm } from './NewDuelForm';
 import { useCloudParty } from './useCloudParty';
 
@@ -69,6 +67,8 @@ interface CloudPartyProps {
   focus: boolean;
   /** El código del enlace de invitación con que se abrió la pantalla */
   inviteCode: string | null;
+  /** El servidor contestó que Party ya no está abierta para la cuenta (PT001) */
+  onClosed: () => void;
 }
 
 export function CloudParty(props: CloudPartyProps) {
@@ -76,33 +76,18 @@ export function CloudParty(props: CloudPartyProps) {
   const { user } = props.session;
   const consents = useLiveData(() => currentConsents(api, user.id), [api.repos, user.id]);
   if (consents === undefined) return <SkeletonRows label={text.loading} />;
-  if (!consents.party)
-    return <PartyConsentCard session={props.session} snapshot={props.snapshot} />;
+  if (!consents.party) return <PartyConsentCard session={props.session} />;
   return <CloudGroups {...props} />;
 }
 
 /**
  * Sin el permiso de Party no se comparte nada. Si la cuenta sigue en grupos, por ejemplo porque dio el
- * permiso en otro dispositivo, lo dice y deja salir de todos con un toque
+ * permiso en otro dispositivo, lo dice y deja salir de todos con un toque (LeaveAllGroups)
  */
-function PartyConsentCard({ session, snapshot }: { session: ReadySession; snapshot: Snapshot }) {
+function PartyConsentCard({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [stillIn, setStillIn] = useState(0);
-  const weekStart = weekStartOf(snapshot.today);
-
-  useEffect(() => {
-    const cloud = getCloud();
-    if (!cloud) return;
-    let stopped = false;
-    void fetchPartyOverview(cloud, weekStart).then((reply) => {
-      if (!stopped && reply.ok) setStillIn(reply.value.groups.length);
-    });
-    return () => {
-      stopped = true;
-    };
-  }, [weekStart]);
 
   const allow = async () => {
     setBusy(true);
@@ -115,58 +100,31 @@ function PartyConsentCard({ session, snapshot }: { session: ReadySession; snapsh
       setBusy(false);
     }
   };
-  const leaveAll = async () => {
-    const cloud = getCloud();
-    if (!cloud) return;
-    setBusy(true);
-    const reply = await stopSharingParty(cloud);
-    setBusy(false);
-    if (reply.ok) {
-      setStillIn(0);
-      setMessage(text.consent.leftAll);
-    } else {
-      setMessage(text.failures[reply.reason]);
-    }
-  };
-
   return (
-    <Card aria-labelledby="permiso-party">
+    <Card aria-labelledby="permiso-party" className="flex flex-col gap-3">
       <CardHeader>
         <CardTitle id="permiso-party">{text.consent.title}</CardTitle>
         <CardDescription>{text.consent.body}</CardDescription>
       </CardHeader>
-      <p className="mb-3 text-sm text-fg-muted">{text.consent.hint}</p>
-      <div className="flex flex-wrap gap-2">
-        <Button
-          disabled={busy}
-          onClick={() => {
-            void allow();
-          }}
-        >
-          {text.consent.allow}
-        </Button>
-        {stillIn > 0 ? (
-          <Button
-            variant="secondary"
-            disabled={busy}
-            onClick={() => {
-              void leaveAll();
-            }}
-          >
-            <LogOut aria-hidden />
-            {text.consent.leaveAll}
-          </Button>
-        ) : null}
-      </div>
-      {stillIn > 0 ? <p className="mt-2 text-sm">{text.consent.stillIn(stillIn)}</p> : null}
-      <p role="status" className="mt-2 min-h-5 text-sm">
+      <p className="text-sm text-fg-muted">{text.consent.hint}</p>
+      <Button
+        className="self-start"
+        disabled={busy}
+        onClick={() => {
+          void allow();
+        }}
+      >
+        {text.consent.allow}
+      </Button>
+      <p role="status" className={message ? 'text-sm' : 'sr-only'}>
         {message}
       </p>
+      <LeaveAllGroups />
     </Card>
   );
 }
 
-function CloudGroups({ session, events, snapshot, focus, inviteCode }: CloudPartyProps) {
+function CloudGroups({ session, events, snapshot, focus, inviteCode, onClosed }: CloudPartyProps) {
   const api = useDataApi();
   const { user } = session;
   const { state, reload } = useCloudParty({
@@ -189,6 +147,9 @@ function CloudGroups({ session, events, snapshot, focus, inviteCode }: CloudPart
     );
   }
   if (state.status === 'failed') {
+    // El plan de este navegador todavía dice que es de pago, pero el servidor ya cerró Party. Party
+    // muestra el candado de Gratis y useCloudParty ya pidió el plan otra vez
+    if (state.reason === 'closed') return <ReportClosed onClosed={onClosed} />;
     return (
       <Card>
         <ErrorState description={text.failures[state.reason]} onRetry={reload} />
@@ -561,4 +522,12 @@ function CloudChallengeRow({
       onDelete={onDelete}
     />
   );
+}
+
+/** Avisa una vez que el servidor cerró Party. Party pone el candado en su lugar */
+function ReportClosed({ onClosed }: { onClosed: () => void }) {
+  useEffect(() => {
+    onClosed();
+  }, [onClosed]);
+  return null;
 }

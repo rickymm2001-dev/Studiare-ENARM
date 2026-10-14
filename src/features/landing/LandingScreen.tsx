@@ -15,7 +15,14 @@ import {
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import { annualSavingsPercent, FOUNDER_PROMO_ACTIVE, PLANS, VISIBLE_PLANS } from '@/config/billing';
+import {
+  annualSavingsPercent,
+  canUse,
+  FOUNDER_PROMO_ACTIVE,
+  PLAN_HIGHLIGHTS,
+  PLANS,
+  VISIBLE_PLANS,
+} from '@/config/billing';
 import { cloudConfigured } from '@/data/cloud/client';
 import { PlanPrice } from '@/features/billing/PlanPrice';
 import { t } from '@/i18n/es-MX';
@@ -141,14 +148,13 @@ export function LandingScreen() {
                     <Check aria-hidden className="size-4 text-fg-muted" />
                     {t.billing.access.dailyQuestions(plan.access.dailyQuestions)}
                   </li>
-                  {(['fullExam', 'aiTutor', 'importDecks', 'party'] as const)
-                    .filter((feature) => plan.access[feature])
-                    .map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <Check aria-hidden className="size-4 text-fg-muted" />
-                        {t.billing.access[feature]}
-                      </li>
-                    ))}
+                  {/* Lo que incluye cada plan, con lo que Gratis deja fuera (respuesta 20, 4.25, B8) */}
+                  {PLAN_HIGHLIGHTS.filter((feature) => canUse(key, feature)).map((feature) => (
+                    <li key={feature} className="flex items-center gap-2">
+                      <Check aria-hidden className="size-4 text-fg-muted" />
+                      {t.billing.access[feature]}
+                    </li>
+                  ))}
                 </ul>
                 <Button asChild variant={highlighted ? 'primary' : 'secondary'} className="mt-auto">
                   <Link to={screenPath('onboarding')}>{text.startWith(t.billing.plans[key])}</Link>

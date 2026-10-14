@@ -9,6 +9,7 @@ import { parseImportFile } from '@/data/import/parseFile';
 import { loadSqlForTests } from '@/data/import/testing/fixtures';
 import { ImportError } from '@/data/import/types';
 import { createManualDeck, saveManualNote } from '@/data/usecases/manualDecks';
+import { subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 import type { ImportParseResult } from '@/workers/importApi';
 
@@ -27,6 +28,9 @@ vi.mock('@/workers/importClient', () => ({
   },
 }));
 
+// Cada prueba lee archivos y carga la app completa, y con la suite entera tarda más de 5 s
+vi.setConfig({ testTimeout: 30_000 });
+
 let app: RenderedApp | undefined;
 afterEach(async () => {
   cleanup();
@@ -36,8 +40,14 @@ afterEach(async () => {
 
 const WAIT = { timeout: 10_000 };
 
-async function openDecks(seed?: Parameters<typeof renderApp>[1]) {
-  app = await renderApp(SCREENS.decks.path, seed);
+async function openDecks(options: Parameters<typeof renderApp>[1] = {}) {
+  app = await renderApp(SCREENS.decks.path, {
+    ...options,
+    seed: async (api, user) => {
+      await subscribe(api, user);
+      await options.seed?.(api, user);
+    },
+  });
   return screen.findByLabelText(t.importer.fileLabel, undefined, WAIT);
 }
 
@@ -152,5 +162,39 @@ describe('exportar desde Mazos', () => {
     expect(await within(card).findByText(/1 nota exportada en Studiare-/)).toBeVisible();
     clicked.mockRestore();
     vi.unstubAllGlobals();
+  });
+});
+
+// Subir mazos en el plan Gratis (respuesta 20, B8). Se ve su vista previa con el candado y exportar
+// los mazos propios sigue abierto, porque son datos del alumno
+describe('subir mazos en el plan Gratis', () => {
+  it('muestra la vista previa con su candado y Ver planes, sin elegir archivo', async () => {
+    app = await renderApp(SCREENS.decks.path);
+    const preview = await screen.findByRole('region', { name: t.freePlan.importDecks.title }, WAIT);
+    for (const point of t.freePlan.importDecks.points) {
+      expect(within(preview).getByText(point)).toBeVisible();
+    }
+    expect(within(preview).getByText(t.freePlan.importDecks.kept)).toBeVisible();
+    expect(within(preview).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+      'href',
+      SCREENS.subscription.path,
+    );
+    expect(screen.queryByLabelText(t.importer.fileLabel)).toBeNull();
+    expect(screen.queryByRole('heading', { name: t.importer.title })).toBeNull();
+  });
+
+  it('exportar los mazos propios sigue abierto', async () => {
+    app = await renderApp(SCREENS.decks.path, {
+      seed: async (api, user) => {
+        const deck = await createManualDeck(api, user, { name: 'Cardiología' });
+        await saveManualNote(api, user, {
+          deckId: deck.id,
+          draft: { kind: 'basic', front: 'Frente', back: 'Reverso' },
+        });
+      },
+    });
+    const card = await screen.findByRole('region', { name: t.exporter.title }, WAIT);
+    expect(within(card).getByRole('button', { name: t.exporter.button })).toBeEnabled();
+    expect(screen.getByRole('region', { name: t.freePlan.importDecks.title })).toBeVisible();
   });
 });

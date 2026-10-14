@@ -523,7 +523,11 @@ export const featureText = {
         n === null ? 'Preguntas sin límite' : `${n} preguntas al día`,
       fullExam: 'Examen completo',
       aiTutor: 'Tutor con IA',
-      importDecks: 'Importar tus mazos',
+      // Apuntes y el catálogo también se comparan en la tabla de planes (B8 del plan del cambio)
+      outlines: 'Apuntes que se vuelven tarjetas',
+      deckCatalog: 'Mazos precargados del catálogo',
+      // El mismo nombre que su candado y su tarjeta en Mazos (B8)
+      importDecks: 'Subir tus mazos',
       party: 'Party con tus amigos',
     },
     included: 'Incluido',

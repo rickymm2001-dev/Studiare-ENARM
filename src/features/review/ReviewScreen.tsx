@@ -25,7 +25,7 @@ import {
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
-import { canUseFeature } from '@/config/billing';
+import { canUse } from '@/config/billing';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
@@ -58,7 +58,7 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
-import { useActivePlan } from '../shared/useActivePlan';
+import { useActivePlan, usePlanText } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
@@ -106,6 +106,19 @@ export function ReviewScreen() {
       {(session) => <ReviewLoader session={session} />}
     </RequireSession>
   );
+}
+
+/**
+ * El texto de Repasar sin mazos. En Gratis no sugiere seguir un mazo del catálogo, que es de pago
+ * (4.25, B8). Lee el plan solo aquí, así el repaso con tarjetas no carga nada de más. Mientras carga
+ * no dice nada, para no sugerir lo que el plan no abre
+ */
+function NoDecksBody({ userId }: { userId: string }) {
+  const body = usePlanText(userId, 'deckCatalog', {
+    open: t.review.noDecksBody,
+    closed: t.freePlan.catalog.reviewEmpty,
+  });
+  return body ?? null;
 }
 
 function ReviewLoader({ session }: { session: ReadySession }) {
@@ -169,7 +182,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
               {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
             </CardTitle>
             <CardDescription>
-              {allSuspended ? t.review.allSuspendedBody : t.review.noDecksBody}
+              {allSuspended ? t.review.allSuspendedBody : <NoDecksBody userId={session.user.id} />}
             </CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
@@ -377,7 +390,7 @@ function ReviewSession({
   // En modo enfoque no se dice el XP ganado, ni al calificar ni al terminar (respuesta 82, B7)
   const focus = useFocusMode();
   // Mientras carga el plan se supone el más básico, así el temporizador no aparece sin permiso
-  const timerAllowed = canUseFeature(useActivePlan(user.id) ?? 'free', 'cardTimer');
+  const timerAllowed = canUse(useActivePlan(user.id) ?? 'free', 'cardTimer');
   const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
   const noteById = useMemo(() => new Map(notes.map((note) => [note.id, note])), [notes]);
   // Las tarjetas de la sesión se fijan al entrar. Si se suspende una a media sesión, los datos en

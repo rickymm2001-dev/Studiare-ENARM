@@ -2,11 +2,14 @@
 // futura dice que no hay mazos y, con un mazo seguido, proyecta 30 o 60 días con su tabla por semana.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 test('la dificultad calibra y la carga futura proyecta los mazos que sigues', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
+  // Seguir mazos del catálogo es de los planes de pago (4.25, B8)
+  await subscribeMonthly(page);
   await page.goto(SCREENS.progress.path);
 
   // Sin respuestas cada grupo de dificultad calibra con cuánto falta
