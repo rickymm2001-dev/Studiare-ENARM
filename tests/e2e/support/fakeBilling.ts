@@ -28,7 +28,10 @@ import {
   type SubscriptionNotice,
 } from '../../../supabase/functions/_shared/billingTypes.ts';
 import { addMonths } from '../../../supabase/functions/_shared/mercadopago.ts';
-import { parseCheckoutRequest } from '../../../supabase/functions/_shared/payments.ts';
+import {
+  closedFlagFor,
+  parseCheckoutRequest,
+} from '../../../supabase/functions/_shared/payments.ts';
 import { oxxoExpiresAt } from '../../../supabase/functions/_shared/stripe.ts';
 
 type Json = Record<string, unknown>;
@@ -220,6 +223,11 @@ export interface FakeBilling {
   /** Adelanta el reloj de pagos. Encola el aviso de fin de prueba 3 días antes, como trial_will_end */
   advanceTime(ms: number): void;
   readonly rules: BillingRules;
+  /**
+   * Si están las configuraciones del portal, STRIPE_PORTAL_CONFIG_FOUNDER y STRIPE_PORTAL_CONFIG_REGULAR.
+   * Sin la que toca, create-portal-session responde 503 not_configured
+   */
+  portalConfigs: { founder: boolean; regular: boolean };
   /** Lugares Fundador, como founder_seats en platform_settings */
   founderSeats: { total: number; open: boolean };
   /** Códigos de descuento válidos en la pasarela simulada, con su porcentaje */
@@ -305,6 +313,11 @@ export interface FakeBillingOptions {
   onPaidCharge: (userId: string) => void;
   aliasOf: (userId: string) => string | null;
   emailOf: (userId: string) => string | null;
+  /**
+   * Una bandera de lanzamiento de feature_flags en platform_settings, como billing_flag de la base. Solo
+   * el booleano true la prende
+   */
+  flag: (name: 'freeTrial' | 'cashPasses' | 'mercadoPago') => boolean;
 }
 
 const DAY_MS = 86_400_000;
@@ -375,6 +388,7 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
     passReminderDays: 3,
   };
   const founderSeats = { total: options.founderSeats ?? 100, open: true };
+  const portalConfigs = { founder: true, regular: true };
   const promotionCodes = new Map<string, number>([['PRUEBA10', 10]]);
 
   const subscriptions = new Map<string, BillingSubscription>();
@@ -452,7 +466,9 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
     return hasPaidCharge(userId);
   }
 
-  const trialAvailable = (userId: string) => rules.trialDays > 0 && !trialAlreadyUsed(userId);
+  // trialDays en 0 o la bandera freeTrial apagada la quitan para todos, como trial_available
+  const trialAvailable = (userId: string) =>
+    rules.trialDays > 0 && options.flag('freeTrial') && !trialAlreadyUsed(userId);
 
   const seatsTaken = () =>
     seats.filter((seat) => seat.status === 'held' || seat.status === 'confirmed').length;
@@ -571,6 +587,7 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
       founderLost: confirmed && !(live && isFounderPlan(row.plan)),
       oxxoExpiresDays: Math.min(Math.max(rules.oxxoExpiresDays, 1), 7),
       customerId: customers.get(userId) ?? null,
+      flags: { cashPasses: options.flag('cashPasses'), mercadoPago: options.flag('mercadoPago') },
     };
   }
 
@@ -988,6 +1005,8 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
     if (!ask) return checkoutFail('invalid');
     const mode: CheckoutMode = ask.mode ?? 'subscription';
     const context = checkoutContext(user.id);
+    // Los pases y Mercado Pago con su bandera apagada no se abren, aunque se pidan directo
+    if (closedFlagFor(ask, context.flags)) return checkoutFail('not_configured');
     if (context.inForce === 'subscription') return checkoutFail('already_subscribed');
     if (mode === 'subscription' && context.inForce === 'pass') {
       return checkoutFail('pass_in_force', { passEnd: context.passEnd });
@@ -1209,11 +1228,16 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
     if (live && row.provider === 'mercadopago')
       return { status: 409, body: { error: 'mercadopago' } };
     if (!customers.has(user.id)) return { status: 404, body: { error: 'no_customer' } };
+    // Sin su configuración no se abre, porque la de Stripe por omisión deja elegir cualquier precio
+    const founder = row !== null && isFounderPlan(row.plan);
+    if (!(founder ? portalConfigs.founder : portalConfigs.regular)) {
+      return { status: 503, body: { error: 'not_configured' } };
+    }
     const portal: FakePortal = {
       id: nextId('bps_fake'),
       userId: user.id,
       flow: live ? flow : null,
-      configuration: row && isFounderPlan(row.plan) ? 'founder' : 'regular',
+      configuration: founder ? 'founder' : 'regular',
       returnUrl: subscriptionUrl(),
     };
     portals.set(portal.id, portal);
@@ -1710,6 +1734,7 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
     now,
     advanceTime,
     rules,
+    portalConfigs,
     founderSeats,
     promotionCodes,
     myPlan,

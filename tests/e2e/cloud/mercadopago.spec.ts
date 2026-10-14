@@ -21,6 +21,8 @@ const EMAIL = 'diego.mp@ejemplo.mx';
 const text = billingCloudText;
 
 test.describe('Mercado Pago', () => {
+  // Con freeTrial apagada, como en producción hasta la corrida real, los planes dicen Elegir. Mercado
+  // Pago nunca tiene prueba
   test.beforeEach(({ cloud }) => {
     cloud.setFeatureFlags({ mercadoPago: true });
   });
@@ -35,7 +37,7 @@ test.describe('Mercado Pago', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.monthly, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
       .click();
 
     // Mercado Pago cobra el precio regular y no tiene prueba ni códigos de descuento
@@ -99,7 +101,7 @@ test.describe('Mercado Pago', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.annual, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.annual) })
       .click();
     await page
       .getByRole('radio', { name: new RegExp(text.options.mercadopago_pass.label) })

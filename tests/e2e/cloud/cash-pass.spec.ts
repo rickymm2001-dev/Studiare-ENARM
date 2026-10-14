@@ -21,6 +21,8 @@ const EMAIL = 'carla.pase@ejemplo.mx';
 const text = billingCloudText;
 
 test.describe('Pases con OXXO y SPEI', () => {
+  // Con freeTrial apagada, como en producción hasta la corrida real, el Mensual dice Elegir y no la
+  // prueba. Los pases no dependen de ella
   test.beforeEach(({ cloud }) => {
     cloud.setFeatureFlags({ cashPasses: true });
   });
@@ -35,7 +37,7 @@ test.describe('Pases con OXXO y SPEI', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.monthly, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
       .click();
 
     // OXXO es un pase de un solo pago, con la garantía por transferencia
@@ -120,7 +122,7 @@ test.describe('Pases con OXXO y SPEI', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.annual, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.annual) })
       .click();
     await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
     await page.getByRole('button', { name: text.actions.oxxo }).click();
