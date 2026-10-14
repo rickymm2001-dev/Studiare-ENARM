@@ -607,6 +607,11 @@ describe('Buscar tarjetas', () => {
         name: text.selectRow('Primera línea en insuficiencia cardiaca'),
       }),
     ).toBeChecked();
+    // La ayuda dice lo que hace X, seleccionar, y no marcar, para no confundirlo con Marcadas por
+    // la IA
+    const hint = screen.getByText(`${text.shortcuts.label}.`).parentElement;
+    expect(hint).toHaveTextContent('X seleccionar');
+    expect(hint).not.toHaveTextContent('marcar');
     await typing.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByRole('region', { name: text.panel.label })).toBeNull();

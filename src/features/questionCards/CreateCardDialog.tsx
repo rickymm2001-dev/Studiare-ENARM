@@ -5,9 +5,9 @@
 // Si edita la propuesta, se vuelve a revisar contra su cita con el mismo validador del generador y
 // se avisa cuando ya no se apoya en ella. Si la guarda así, queda en borrador con el aviso a la
 // vista, como en Crear tarjetas con IA. Guardar dos veces no duplica la tarjeta y el diálogo lo dice.
-import { BookPlus, X } from 'lucide-react';
+import { BookCheck, BookPlus, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
-import { useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -49,34 +49,51 @@ function proposalOf(draft: NoteDraft, quote: string): ProposedCard {
     : { kind: 'basic', front: draft.front, back: draft.back, quote };
 }
 
-/** El botón que abre el diálogo. El diálogo solo existe mientras está abierto */
+/**
+ * El botón que abre el diálogo. El diálogo solo existe mientras está abierto. Si el alumno ya creó
+ * una tarjeta con la pregunta, lo dice al lado y el botón lo lleva como descripción, así el lector
+ * de pantalla lo anuncia con él. El botón sigue activo, porque puede querer otra en otro mazo
+ */
 export function CreateCardButton({
   session,
   bundle,
   from,
   label,
+  created = false,
 }: {
   session: ReadySession;
   bundle: QuestionBundle;
   from: From;
   /** Nombre para el lector de pantalla cuando hay varios botones iguales en la página */
   label?: string;
+  /** Ya creó una tarjeta con esta pregunta, según sus eventos question_card_created */
+  created?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const createdId = useId();
   return (
     <>
-      <Button
-        size="sm"
-        variant="secondary"
-        className="self-start"
-        aria-label={label}
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        <BookPlus aria-hidden />
-        {t.examReview.createCard.button}
-      </Button>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <Button
+          size="sm"
+          variant="secondary"
+          aria-label={label}
+          aria-describedby={created ? createdId : undefined}
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <BookPlus aria-hidden />
+          {t.examReview.createCard.button}
+        </Button>
+        {created ? (
+          // En el teléfono el aviso puede partirse en dos renglones y el ícono va con el primero
+          <p id={createdId} className="flex items-start gap-1.5 text-sm text-fg-muted">
+            <BookCheck aria-hidden className="mt-0.5 size-4 shrink-0 text-success" />
+            {t.examReview.createCard.alreadyCreated}
+          </p>
+        ) : null}
+      </div>
       {open ? (
         <CreateCardDialog
           session={session}

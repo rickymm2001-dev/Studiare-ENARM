@@ -112,7 +112,9 @@ export const cardSearchText = {
       move: 'moverte',
       open: 'abrir',
       close: 'cerrar',
-      select: 'marcar',
+      // X pone o quita la casilla de la fila. Se dice seleccionar y no marcar, para no confundirlo
+      // con Marcadas por la IA
+      select: 'seleccionar',
     },
     panel: {
       label: 'Tarjeta abierta',

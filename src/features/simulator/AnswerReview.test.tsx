@@ -91,4 +91,47 @@ describe('revisión de la práctica (B5)', () => {
     expect(create).toBeVisible();
     expect(create).toHaveTextContent(t.examReview.createCard.button);
   });
+
+  it('avisa junto a Crear tarjeta cuando ya creaste una con la pregunta, sin bloquear el botón, y el aviso sigue al recargar', async () => {
+    const typing = userEvent.setup();
+    const text = t.examReview.createCard;
+    await failedPractice();
+    const button = await screen.findByRole(
+      'button',
+      { name: text.buttonLabel('1') },
+      { timeout: 20_000 },
+    );
+    // Sin tarjeta no hay aviso y el botón no lleva descripción
+    expect(screen.queryByText(text.alreadyCreated)).toBeNull();
+    expect(button).not.toHaveAccessibleDescription();
+
+    // Con tarjeta, en un mazo nuevo. El aviso sale al momento junto al botón, que lo lleva como
+    // descripción para el lector de pantalla y sigue activo para hacer otra en otro mazo
+    await typing.click(button);
+    const dialog = await screen.findByRole('dialog', { name: text.title });
+    const select = within(dialog).getByRole('combobox', { name: text.deck });
+    await typing.selectOptions(
+      select,
+      within(select).getByRole('option', { name: text.newDeckOption }),
+    );
+    await typing.type(within(dialog).getByLabelText(text.newDeckName), 'Repaso de la práctica');
+    await typing.click(within(dialog).getByRole('button', { name: text.save }));
+    await within(dialog).findByText(text.saved('Repaso de la práctica'));
+    await typing.click(within(dialog).getByRole('button', { name: text.close }));
+    expect(await screen.findByText(text.alreadyCreated)).toBeVisible();
+    expect(button).toHaveAccessibleDescription(text.alreadyCreated);
+    expect(button).toBeEnabled();
+
+    // Al recargar el aviso se lee otra vez de la bitácora
+    const { user } = app as RenderedApp;
+    cleanup();
+    app = await renderApp(SCREENS.sessionSummary.path, { user });
+    const reloaded = await screen.findByRole(
+      'button',
+      { name: text.buttonLabel('1') },
+      { timeout: 20_000 },
+    );
+    expect(await screen.findByText(text.alreadyCreated)).toBeVisible();
+    expect(reloaded).toHaveAccessibleDescription(text.alreadyCreated);
+  });
 });

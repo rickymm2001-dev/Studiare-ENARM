@@ -10,6 +10,7 @@ import { isAiNote } from '@/data/schemas/decks';
 import type { User } from '@/data/schemas/people';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
 import { createManualDeck } from '@/data/usecases/manualDecks';
+import { createQuestionCard } from '@/data/usecases/questionCards';
 import { t } from '@/i18n/es-MX';
 import { startExam } from './examSession';
 import { choose, finishExamState } from './examState';
@@ -63,6 +64,64 @@ function seedFailedExam(options: { plan?: 'free' | 'monthly'; deckName?: string 
     }
     if (options.deckName) await createManualDeck(api, user, { name: options.deckName });
   };
+}
+
+/**
+ * Un examen de dos preguntas, las dos falladas y ya terminado. Con la primera de la revisión el
+ * alumno ya creó antes una tarjeta en Cardiología y con la segunda todavía no
+ */
+async function seedCardForFirst(api: DataApi, user: User) {
+  const pairs = [makeQuestionWithOptions(), makeQuestionWithOptions()];
+  for (const { question, options } of pairs) {
+    await api.repos.questions.addVersion({ ...question, explanation: EXPLANATION }, options);
+  }
+  const started = await startExam({
+    api,
+    user,
+    questions: pairs.map(({ question }) => question),
+    requested: 2,
+    options: { highlight: false, askConfidence: false, alerts: false },
+  });
+  if (!started) throw new Error('No se armó el examen');
+  const now = Date.now();
+  let state = started;
+  for (const { question, options } of pairs) {
+    const wrong = options.find((option) => !option.isCorrect);
+    if (!wrong) throw new Error('Sin distractor');
+    state = choose(state, question.id, wrong.id, now).state;
+  }
+  saveExamState(finishExamState(state, now + 1000, 'completed'));
+  // La primera de la revisión es la primera en el orden del examen
+  const firstId = started.questionIds[0];
+  const first = pairs.find(({ question }) => question.id === firstId)?.question;
+  if (!first) throw new Error('Sin primera pregunta');
+  const deck = await createManualDeck(api, user, { name: 'Cardiología' });
+  await createQuestionCard(api, user, {
+    question: first,
+    target: { kind: 'deck', deckId: deck.id },
+    draft: { kind: 'basic', front: 'Frente de prueba', back: 'Reverso de prueba' },
+    source: { kind: 'bank' },
+    from: 'exam_review',
+    layer: {
+      name: t.examReview.createCard.layerDeckName,
+      description: t.examReview.createCard.layerDeckDescription,
+    },
+  });
+}
+
+/** Abre las preguntas de la revisión con esos números y devuelve sus filas en ese orden */
+async function openRows(typing: ReturnType<typeof userEvent.setup>, numbers: readonly number[]) {
+  const review = await screen.findByRole('region', { name: t.examResults.reviewTitle }, WAIT);
+  await waitFor(() => {
+    expect(screen.queryByText(t.examResults.saving)).toBeNull();
+  }, WAIT);
+  const rows: HTMLElement[] = [];
+  for (const n of numbers) {
+    const title = within(review).getByText(t.examResults.questionN(n));
+    await typing.click(title);
+    rows.push(title.closest('li') as HTMLElement);
+  }
+  return rows;
 }
 
 /** Abre la primera pregunta de la revisión, que es la fallada */
@@ -308,5 +367,52 @@ describe('crear tarjeta desde la revisión del examen (B5, comentario 1)', () =>
     expect(note && isAiNote(note)).toBe(true);
     expect(JSON.stringify(note)).toContain('Repetir 80 mg en una hora.');
     expect(EXPLANATION).toContain(note?.sourceQuote ?? '¿sin cita?');
+  });
+});
+
+describe('aviso de tarjeta ya creada junto a Crear tarjeta (B5, comentario 1)', () => {
+  it('dice con qué preguntas ya creaste tarjeta, sin bloquear el botón, al momento y después de recargar', async () => {
+    const typing = userEvent.setup();
+    const text = t.examReview.createCard;
+    app = await renderApp(SCREENS.examResults.path, { seed: seedCardForFirst });
+    const [withCard, withoutCard] = (await openRows(typing, [1, 2])) as [HTMLElement, HTMLElement];
+
+    // Con tarjeta. El aviso va junto al botón, que lo lleva como descripción para el lector de
+    // pantalla y sigue activo, porque puede querer otra tarjeta en otro mazo
+    expect(await within(withCard).findByText(text.alreadyCreated, undefined, WAIT)).toBeVisible();
+    const first = within(withCard).getByRole('button', { name: text.buttonLabel('1') });
+    expect(first).toBeEnabled();
+    expect(first).toHaveAccessibleDescription(text.alreadyCreated);
+
+    // Sin tarjeta. Las dos filas salen de la misma lectura de la bitácora, que ya llegó
+    const second = within(withoutCard).getByRole('button', { name: text.buttonLabel('2') });
+    expect(within(withoutCard).queryByText(text.alreadyCreated)).toBeNull();
+    expect(second).not.toHaveAccessibleDescription();
+
+    // Al crear la tarjeta de la segunda el aviso aparece al momento
+    await typing.click(second);
+    const dialog = await screen.findByRole('dialog', { name: text.title });
+    const select = within(dialog).getByRole('combobox', { name: text.deck });
+    await waitFor(() => {
+      expect(within(select).getByRole('option', { name: 'Cardiología' })).toBeInTheDocument();
+    });
+    await typing.selectOptions(select, within(select).getByRole('option', { name: 'Cardiología' }));
+    await typing.click(within(dialog).getByRole('button', { name: text.save }));
+    await within(dialog).findByText(text.saved('Cardiología'));
+    await typing.click(within(dialog).getByRole('button', { name: text.close }));
+    expect(await within(withoutCard).findByText(text.alreadyCreated)).toBeVisible();
+    expect(second).toHaveAccessibleDescription(text.alreadyCreated);
+
+    // Al recargar se lee otra vez de la bitácora y los dos avisos siguen
+    const { user } = app;
+    cleanup();
+    app = await renderApp(SCREENS.examResults.path, { user });
+    const reloaded = await openRows(typing, [1, 2]);
+    for (const [index, row] of reloaded.entries()) {
+      expect(await within(row).findByText(text.alreadyCreated, undefined, WAIT)).toBeVisible();
+      expect(
+        within(row).getByRole('button', { name: text.buttonLabel(String(index + 1)) }),
+      ).toHaveAccessibleDescription(text.alreadyCreated);
+    }
   });
 });
