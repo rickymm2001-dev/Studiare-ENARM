@@ -580,11 +580,33 @@ describe('Party en el plan Gratis', () => {
     try {
       app = await renderFree('/party');
       const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
-      // Abre la forma de pago del Mensual, el de la promoción y la prueba (B10)
-      expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
-        'href',
-        `${SCREENS.subscription.path}?plan=mensual`,
-      );
+      // my_plan dice que todavía le toca la prueba. Abre la forma de pago del Mensual, el de la
+      // promoción y la prueba (B10)
+      await refreshCloudPlan(app.api, fake.cloud, app.user.id);
+      expect(
+        await within(preview).findByRole('link', { name: t.billing.freeTrialCta }),
+      ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
+    } finally {
+      writeStoredFlags(null);
+    }
+  });
+
+  it('a quien ya no le toca la prueba el candado le dice Ver planes, con la bandera prendida', async () => {
+    writeStoredFlags({ freeTrial: true });
+    fake.trialUsed.add(ANA);
+    try {
+      app = await renderFree('/party');
+      const preview = await screen.findByRole('region', { name: t.freePlan.party.title });
+      // Cuando my_plan ya contestó que no le toca, el candado no promete una prueba que Suscripción
+      // no ofrece
+      await refreshCloudPlan(app.api, fake.cloud, app.user.id);
+      expect(await app.api.repos.subscriptions.get(app.user.id)).toMatchObject({
+        trialAvailable: false,
+      });
+      expect(
+        within(preview).getByRole('link', { name: t.billing.featureSeePlans }),
+      ).toHaveAttribute('href', SCREENS.subscription.path);
+      expect(within(preview).queryByText(t.billing.freeTrialCta)).toBeNull();
     } finally {
       writeStoredFlags(null);
     }

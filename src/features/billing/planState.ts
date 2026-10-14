@@ -66,6 +66,18 @@ export function planStateOf(subscription: Subscription | null | undefined): Plan
   }
 }
 
+/**
+ * Si al alumno todavía le toca la prueba gratis. Solo con la cuenta conectada y cuando my_plan lo dice,
+ * porque el servidor es quien la da (4.18). Lo usan Suscripción y el botón de los candados, así los dos
+ * dicen lo mismo
+ */
+export function trialOffered(
+  subscription: Subscription | null | undefined,
+  linked: boolean,
+): boolean {
+  return linked && subscription?.trialAvailable === true;
+}
+
 /** Si la suscripción de pago vigente es de Stripe o de Mercado Pago. null con pase, mes o Gratis */
 export function liveProviderOf(
   subscription: Subscription | null | undefined,

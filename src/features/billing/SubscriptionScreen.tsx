@@ -47,7 +47,7 @@ import {
   PaymentReturnNotice,
 } from './CloudBilling';
 import { PendingPaymentNotice } from './PendingPaymentNotice';
-import { longDate, liveProviderOf } from './planState';
+import { longDate, liveProviderOf, trialOffered } from './planState';
 import { PlanPrice } from './PlanPrice';
 import { PlanStatus } from './PlanStatus';
 import { usePortal } from './usePortal';
@@ -111,7 +111,7 @@ function Billing({ session }: { session: ReadySession }) {
   // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-118)
   const liveProvider = inCloud ? liveProviderOf(subscription) : null;
   const passLive = inCloud && current !== 'free' && subscription?.source === 'pass';
-  const trialAvailable = inCloud && subscription?.trialAvailable === true;
+  const trialAvailable = trialOffered(subscription, inCloud);
   const flags = readPaymentFlags();
   const canAddPass = paymentOptionsFor(flags, true).length > 0;
   // Quien paga el precio regular no ve el de Fundador, que ya no es el suyo

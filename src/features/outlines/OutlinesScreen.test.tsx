@@ -119,20 +119,38 @@ describe('pantalla de Apuntes', () => {
     }
   });
 
-  it('con la prueba gratis prendida y la nube configurada el candado ofrece probar 7 días gratis', async () => {
+  it('con la prueba gratis prendida, la nube y la prueba disponible el candado ofrece probar 7 días gratis', async () => {
     writeStoredFlags({ freeTrial: true });
     cloudMock.configured = true;
+    useCloud.setState({
+      state: {
+        status: 'linked',
+        identity: { authId: 'a', email: 'a@x.mx', role: 'student', alias: null },
+      },
+    });
     try {
-      app = await renderApp(SCREENS.outlines.path);
+      // Gratis como lo refleja my_plan, que dice que todavía le toca la prueba
+      app = await renderApp(SCREENS.outlines.path, {
+        seed: async (api, user) => {
+          await api.repos.subscriptions.put({
+            userId: user.id,
+            plan: 'free',
+            status: 'none',
+            isSimulated: false,
+            trialAvailable: true,
+            updatedAt: new Date().toISOString(),
+          });
+        },
+      });
       const preview = await screen.findByRole('region', { name: t.outlines.locked.title }, WAIT);
       // Abre la forma de pago del Mensual, el de la promoción y la prueba (B10)
-      expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
-        'href',
-        `${SCREENS.subscription.path}?plan=mensual`,
-      );
+      expect(
+        await within(preview).findByRole('link', { name: t.billing.freeTrialCta }),
+      ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
     } finally {
       writeStoredFlags(null);
       cloudMock.configured = false;
+      useCloud.setState({ state: { status: 'off' } });
     }
   });
 

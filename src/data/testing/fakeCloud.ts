@@ -182,6 +182,11 @@ export interface FakeCloud {
    * cierra Party (party_open) y es lo que contesta my_plan
    */
   plans: Map<string, PlanKey>;
+  /**
+   * Cuentas a las que ya no les toca la prueba gratis, como en trial_available del servidor (B10). Sin
+   * entrada, my_plan dice que Gratis todavía puede probar y un plan de pago no
+   */
+  trialUsed: Set<string>;
   /** Error con el que responde signInWithOtp, como el rechazo del registro por invitación (B9) */
   otpError: { status: number; message: string } | null;
   /** Entradas con Google que se pidieron con signInWithOAuth, en orden (B9) */
@@ -266,6 +271,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     aliases: new Map(),
     failParty: 'none',
     plans: new Map(),
+    trialUsed: new Set(),
     otpError: null,
     oauthRequests: [],
     mfa: {
@@ -656,6 +662,7 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
             status: plan === 'free' ? 'none' : 'active',
             provider: plan === 'free' ? null : 'stripe',
             periodEnd: plan === 'free' ? null : '2030-01-01T00:00:00.000Z',
+            trialAvailable: plan === 'free' && !fake.trialUsed.has(fake.session.id),
           },
           error: null,
         });
