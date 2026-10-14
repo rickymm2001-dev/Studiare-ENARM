@@ -187,8 +187,9 @@ export const billingCloudText = {
         'No encontramos una suscripción con Stripe en tu cuenta. Si tienes un pase, no se renueva solo y termina en la fecha indicada. Si es un mes gratis por referido, termina solo.',
       mercadopago:
         'Tu suscripción es con Mercado Pago. Puedes cancelarla aquí mismo, en Administrar suscripción.',
+      // El servidor no abre el portal sin su configuración (503 not_configured). Se dice qué hacer
       not_configured:
-        'La administración de suscripciones todavía no está activada. Escribe al equipo de Studiare.',
+        'Por ahora no podemos abrir Administrar suscripción. Escribe al equipo de Studiare para cambiar de plan o cancelar, y lo hacemos por ti.',
       unsafe_url: 'Stripe mandó una dirección que no reconocemos. No la abrimos.',
       failed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
     },

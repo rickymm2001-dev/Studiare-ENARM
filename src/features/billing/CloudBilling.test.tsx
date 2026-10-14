@@ -361,6 +361,21 @@ describe('administrar la suscripción', () => {
     expect(screen.getByRole('button', { name: portal.go })).toBeEnabled();
   });
 
+  it('si el servidor no tiene la configuración del portal dice cómo cambiar o cancelar', async () => {
+    fakeCloudFor({ invoke: () => Promise.resolve(withBody({ error: 'not_configured' }, 503)) });
+    const open = vi.fn();
+    const typing = userEvent.setup();
+    render(<BillingPortalCard open={open} />);
+    await typing.click(screen.getByRole('button', { name: portal.go }));
+    const message = await screen.findByText(portal.errors.not_configured);
+    expect(message).toBeVisible();
+    // No basta con decir que no está activado. Dice a quién escribir para cambiar de plan o cancelar
+    expect(message).toHaveTextContent(/equipo de Studiare/);
+    expect(message).toHaveTextContent(/cancelar/);
+    expect(open).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: portal.go })).toBeEnabled();
+  });
+
   it('si la suscripción es de Mercado Pago lo explica en lugar de abrir el portal', async () => {
     fakeCloudFor({ invoke: () => Promise.resolve(withBody({ error: 'mercadopago' }, 409)) });
     const open = vi.fn();
