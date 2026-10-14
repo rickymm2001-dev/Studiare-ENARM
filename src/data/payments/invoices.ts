@@ -149,6 +149,21 @@ export async function listMyPayments(
   }
 }
 
+export type PassMethod = 'oxxo' | 'spei' | 'mercadopago';
+const PASS_METHODS: readonly string[] = ['oxxo', 'spei', 'mercadopago'];
+
+/**
+ * El método del pase que venció más reciente, para decir el aviso voucher_expired de my_plan con sus
+ * palabras (B10). null si no hay uno o su método no se conoce
+ */
+export function expiredPassMethodOf(payments: readonly MyPayment[]): PassMethod | null {
+  const expired = payments
+    .filter((payment) => payment.purpose === 'pass' && payment.status === 'expired')
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))[0];
+  const method = expired?.method ?? null;
+  return method !== null && PASS_METHODS.includes(method) ? (method as PassMethod) : null;
+}
+
 /** Los pagos de los que se puede pedir factura. Pagados y mayores a 0, como pide request_invoice */
 export const invoiceablePayments = (payments: readonly MyPayment[]) =>
   payments.filter((payment) => payment.status === 'paid' && payment.amountMxn > 0);

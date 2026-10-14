@@ -135,7 +135,7 @@ test.describe('Pases con OXXO y SPEI', () => {
     expect(cloud.paymentsOf(EMAIL)).toMatchObject([{ status: 'expired' }]);
     expect(cloud.passesOf(EMAIL)).toEqual([]);
     await page.goto(SCREENS.subscription.path);
-    await expect(page.getByText(text.pending.voucherExpired)).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(text.pending.voucherExpired.oxxo)).toBeVisible({ timeout: 20_000 });
     await expect(
       page.getByRole('region', { name: t.billing.current(t.billing.plans.free) }),
     ).toBeVisible();

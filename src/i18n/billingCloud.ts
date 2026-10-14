@@ -162,7 +162,14 @@ export const billingCloudText = {
       `Esperamos tu transferencia SPEI de ${price}. Tu plan se activa en cuanto llegue.`,
     mercadopago:
       'Tu pago con Mercado Pago está pendiente. Tu plan se activa cuando Mercado Pago lo confirme.',
-    voucherExpired: 'Tu ficha OXXO venció sin pago. No se cobró nada. Puedes generar otra.',
+    // El pago de un pase que venció, con las palabras de su método. unknown si no se pudo saber cuál
+    voucherExpired: {
+      oxxo: 'Tu ficha OXXO venció sin pago. No se cobró nada. Puedes generar otra.',
+      spei: 'Tu pago por transferencia SPEI venció sin que llegara la transferencia. No se cobró nada. Puedes empezar otro.',
+      mercadopago:
+        'Tu pago de Mercado Pago venció sin completarse. No se cobró nada. Puedes intentarlo otra vez.',
+      unknown: 'Tu pago pendiente venció sin pago. No se cobró nada. Puedes empezar otro.',
+    },
   },
 
   // Administrar suscripción con Stripe

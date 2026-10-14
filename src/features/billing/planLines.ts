@@ -1,6 +1,7 @@
 // Los textos del estado del plan y del pago pendiente en Suscripción (B10, 3.1.3). Qué estado tiene el
 // plan lo decide planStateOf. Aquí solo se elige su línea.
 import { PLANS } from '@/config/billing';
+import type { PassMethod } from '@/data/payments/invoices';
 import type { Subscription } from '@/data/schemas/people';
 import { billingCloudText } from '@/i18n/billingCloud';
 import { t } from '@/i18n/es-MX';
@@ -35,8 +36,14 @@ export function planStateLine(state: PlanState): string {
   }
 }
 
-/** El texto del pago pendiente o de la ficha vencida. null si no hay ninguno */
-export function pendingPaymentText(subscription: Subscription | null | undefined): string | null {
+/**
+ * El texto del pago pendiente o del pase que venció sin pago. null si no hay ninguno. expiredMethod es
+ * el método del que venció, que my_plan no trae (useExpiredPassMethod). Sin él se dice sin método
+ */
+export function pendingPaymentText(
+  subscription: Subscription | null | undefined,
+  expiredMethod: PassMethod | null = null,
+): string | null {
   const pending = subscription?.pendingPayment;
   if (pending) {
     const price = t.billing.price(pending.amountMxn);
@@ -51,5 +58,7 @@ export function pendingPaymentText(subscription: Subscription | null | undefined
         return pendingText.mercadopago;
     }
   }
-  return subscription?.issue === 'voucher_expired' ? pendingText.voucherExpired : null;
+  return subscription?.issue === 'voucher_expired'
+    ? pendingText.voucherExpired[expiredMethod ?? 'unknown']
+    : null;
 }

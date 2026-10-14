@@ -193,7 +193,22 @@ describe('pago pendiente', () => {
     expect(pendingPaymentText(pending('oxxo'))).toBe(pendingText.oxxo(t.billing.price(149)));
     expect(pendingPaymentText(pending('spei'))).toBe(pendingText.spei(t.billing.price(149)));
     expect(pendingPaymentText(pending('mercadopago'))).toBe(pendingText.mercadopago);
-    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }))).toBe(pendingText.voucherExpired);
+    // El pase que venció lo dice con las palabras de su método, y sin saberlo no nombra ninguno
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'oxxo')).toBe(
+      pendingText.voucherExpired.oxxo,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'spei')).toBe(
+      pendingText.voucherExpired.spei,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'mercadopago')).toBe(
+      pendingText.voucherExpired.mercadopago,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }))).toBe(
+      pendingText.voucherExpired.unknown,
+    );
+    expect(pendingText.voucherExpired.spei).not.toMatch(/OXXO|ficha/);
+    expect(pendingText.voucherExpired.mercadopago).not.toMatch(/OXXO|ficha/);
+    expect(pendingText.voucherExpired.unknown).not.toMatch(/OXXO|ficha/);
     expect(pendingPaymentText(sub())).toBeNull();
   });
 
