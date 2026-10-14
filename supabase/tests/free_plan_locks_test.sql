@@ -123,22 +123,30 @@ select pg_temp.expect(pg_temp.fails_with('select public.party_open()') = '42501'
 rollback;
 
 -- ===================================================================== FL2. La regla del plan es interna
-select pg_temp.expect(
-  not has_function_privilege('anon', 'public.caller_has_paid_plan()', 'execute')
-  and not has_function_privilege('authenticated', 'public.caller_has_paid_plan()', 'execute')
-  and not has_function_privilege('service_role', 'public.caller_has_paid_plan()', 'execute')
-  and not exists (
-    select 1 from pg_proc p
-    where p.oid = 'public.caller_has_paid_plan()'::regprocedure
-      and (p.proacl is null or exists (select 1 from aclexplode(p.proacl) a where a.grantee = 0))
-  ),
-  'FL2. caller_has_paid_plan debe ser una ayuda interna'
-);
+-- Nadie la ejecuta por la API, ni la de quien llama ni la de otro alumno
+do $$
+declare
+  f text;
+begin
+  foreach f in array array['public.caller_has_paid_plan()', 'public.has_paid_plan(uuid)'] loop
+    if has_function_privilege('anon', f, 'execute')
+       or has_function_privilege('authenticated', f, 'execute')
+       or has_function_privilege('service_role', f, 'execute')
+       or exists (
+         select 1 from pg_proc p
+         where p.oid = f::regprocedure
+           and (p.proacl is null or exists (select 1 from aclexplode(p.proacl) a where a.grantee = 0))
+       ) then
+      raise exception 'FALLA FL2. % debe ser una ayuda interna', f;
+    end if;
+  end loop;
+end $$;
 begin;
 select pg_temp.as_user('b8000000-0000-0000-0000-000000000002');
 select pg_temp.expect(
-  pg_temp.fails_with('select public.caller_has_paid_plan()') = '42501',
-  'FL2. Una sesión llamó a la ayuda interna caller_has_paid_plan'
+  pg_temp.fails_with('select public.caller_has_paid_plan()') = '42501'
+  and pg_temp.fails_with($q$select public.has_paid_plan('b8000000-0000-0000-0000-000000000001')$q$) = '42501',
+  'FL2. Una sesión llamó a una ayuda interna del plan'
 );
 rollback;
 
@@ -384,16 +392,10 @@ select pg_temp.expect(
     pg_temp.deck('fl-mazo-g', now() - interval '1 hour'))) = 1,
   'FL10. En Gratis el lote con un apunte nuevo no guardó solo el mazo'
 );
--- Cambiar el que ya estaba no entra, ni con una marca de borrado que no va dentro de data
+-- Cambiar el que ya estaba no entra
 select pg_temp.expect(
   public.sync_push_records(jsonb_build_array(pg_temp.outline('fl-apunte-g', 'Cardio editado', now() - interval '1 hour'))) = 0,
   'FL10. En Gratis se cambió un apunte'
-);
-select pg_temp.expect(
-  public.sync_push_records(jsonb_build_array(
-    jsonb_set(pg_temp.outline('fl-apunte-g', 'Cardio a escondidas', now() - interval '50 minutes'), '{deletedAt}',
-      to_jsonb(now() - interval '50 minutes')))) = 0,
-  'FL10. En Gratis una marca de borrado sin borrado en data cambió el apunte'
 );
 -- Una marca de borrado de un apunte que no está en la nube no crea nada
 select pg_temp.expect(
@@ -412,13 +414,58 @@ select pg_temp.expect(
   'FL10. En Gratis la nube no quedó con el apunte de antes sin cambios y el mazo nuevo'
 );
 
--- Borrar sí, con la marca de borrado dentro de data. Una marca más vieja no cambia nada
+-- Una marca de borrado que no es una fecha no entra. Ni infinita, ni posterior al cambio, ni texto
 begin;
 select pg_temp.as_user('b8000000-0000-0000-0000-000000000001');
 select pg_temp.expect(
+  pg_temp.fails_with(format('select public.sync_push_records(%L)', jsonb_build_array(
+    jsonb_set(pg_temp.outline('fl-apunte-g', 'Cardio', now() - interval '30 minutes', now() - interval '30 minutes'),
+      '{deletedAt}', '"infinity"')))) = '22023',
+  'FL10. En Gratis entró una marca de borrado infinita'
+);
+select pg_temp.expect(
+  pg_temp.fails_with(format('select public.sync_push_records(%L)', jsonb_build_array(
+    jsonb_set(pg_temp.outline('fl-apunte-g', 'Cardio', now() - interval '30 minutes', now() - interval '30 minutes'),
+      '{deletedAt}', to_jsonb(now() - interval '5 minutes'))))) = '22023',
+  'FL10. En Gratis entró una marca de borrado posterior al cambio'
+);
+select pg_temp.expect(
+  pg_temp.fails_with(format('select public.sync_push_records(%L)', jsonb_build_array(
+    jsonb_set(pg_temp.outline('fl-apunte-g', 'Cardio', now() - interval '30 minutes', now() - interval '30 minutes'),
+      '{deletedAt}', '"mañana"')))) is not null,
+  'FL10. En Gratis entró una marca de borrado que no es una fecha'
+);
+rollback;
+select pg_temp.expect(
+  (select deleted_at is null and data ->> 'title' = 'Cardio' from public.sync_records where record_id = 'fl-apunte-g'),
+  'FL10. Una marca de borrado inválida cambió el apunte'
+);
+
+-- Borrar sí. La marca queda sobre lo que ya tenía la nube, con solo sus dos fechas dentro de data, así
+-- marcar un apunte como borrado no sirve para subir contenido nuevo. Una marca más vieja no cambia nada
+begin;
+select pg_temp.as_user('b8000000-0000-0000-0000-000000000001');
+select set_config('fl.deleted', to_char((now() - interval '10 minutes') at time zone 'UTC',
+  'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'), false);
+select pg_temp.expect(
   public.sync_push_records(jsonb_build_array(
-    pg_temp.outline('fl-apunte-g', 'Cardio', now() - interval '10 minutes', now() - interval '10 minutes'))) = 1,
+    jsonb_set(
+      pg_temp.outline('fl-apunte-g', 'Contenido a escondidas', current_setting('fl.deleted')::timestamptz,
+        current_setting('fl.deleted')::timestamptz),
+      '{data,nodes}',
+      jsonb_build_array(jsonb_build_object('id', 'n1', 'text', repeat('Texto nuevo ', 2000), 'children', '[]'::jsonb))
+    ))) = 1,
   'FL10. En Gratis no se pudo borrar un apunte'
+);
+select pg_temp.expect(
+  (select data ->> 'title' = 'Cardio' and data -> 'nodes' = '[]'::jsonb
+     and data ->> 'deletedAt' = current_setting('fl.deleted')
+     and data ->> 'updatedAt' = current_setting('fl.deleted')
+     and data ->> 'deletedAt' ~ '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$'
+     and deleted_at = current_setting('fl.deleted')::timestamptz
+     and updated_at = current_setting('fl.deleted')::timestamptz
+   from public.sync_records where record_id = 'fl-apunte-g'),
+  'FL10. La marca de borrado en Gratis guardó lo que mandó el navegador o no dejó sus fechas'
 );
 select pg_temp.expect(
   public.sync_push_records(jsonb_build_array(
@@ -470,6 +517,103 @@ select pg_temp.expect(
   (select count(*) from public.sync_records where user_id = 'b8000000-0000-0000-0000-000000000001') = 0,
   'FL11. Borrar mis datos en Gratis dejó registros en la nube'
 );
+
+-- ===================================================================== FL14. El rol no abre Party
+-- Un admin y un médico sin plan de pago tampoco entran a Party, aunque sigan en un grupo de cuando
+-- pagaban. El admin sigue viendo los perfiles por ser admin, pero no el grupo
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('b8100000-0000-0000-0000-000000000001', 'admin.b8@x.mx', '{"alias":"Admin sin plan"}'),
+  ('b8100000-0000-0000-0000-000000000002', 'medico.b8@x.mx', '{"alias":"Médico sin plan"}'),
+  ('b8100000-0000-0000-0000-000000000003', 'dueno.b8@x.mx', '{"alias":"Dueño con plan"}');
+insert into public.user_roles (user_id, role) values
+  ('b8100000-0000-0000-0000-000000000001', 'admin'),
+  ('b8100000-0000-0000-0000-000000000002', 'physician')
+  on conflict (user_id) do update set role = excluded.role;
+insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
+  ('b8100000-0000-0000-0000-000000000003', 'monthly', 'active', 'stripe', now() + interval '20 days');
+insert into public.groups (id, name, invite_code, owner_id) values
+  ('b8100000-0000-0000-0000-0000000000a1', 'Roles B8', 'RLSB82', 'b8100000-0000-0000-0000-000000000003');
+insert into public.memberships (group_id, user_id) values
+  ('b8100000-0000-0000-0000-0000000000a1', 'b8100000-0000-0000-0000-000000000003'),
+  ('b8100000-0000-0000-0000-0000000000a1', 'b8100000-0000-0000-0000-000000000001'),
+  ('b8100000-0000-0000-0000-0000000000a1', 'b8100000-0000-0000-0000-000000000002');
+insert into public.challenges (id, group_id, title, metric, target, starts_at, ends_at, created_by) values
+  ('b8100000-0000-0000-0000-0000000000c1', 'b8100000-0000-0000-0000-0000000000a1', 'Reto de roles', 'cards', 10,
+   now(), now() + interval '7 days', 'b8100000-0000-0000-0000-000000000003');
+do $$
+declare
+  who text;
+  stmt text;
+begin
+  foreach who in array array['b8100000-0000-0000-0000-000000000001', 'b8100000-0000-0000-0000-000000000002'] loop
+    perform pg_temp.as_user(who);
+    if public.party_open() then
+      raise exception 'FALLA FL14. Party está abierta para % sin plan', who;
+    end if;
+    foreach stmt in array array[
+      'select public.party_create_group(''Grupo por rol'')',
+      format('select public.party_overview(%L)', pg_temp.week()),
+      format('select public.party_create_challenge(%L, %L, %L, 10)', 'b8100000-0000-0000-0000-0000000000a1', 'x', 'cards'),
+      format('select public.party_rotate_code(%L)', 'b8100000-0000-0000-0000-0000000000a1')
+    ] loop
+      if pg_temp.fails_with(stmt) is distinct from 'PT001' then
+        raise exception 'FALLA FL14. % sin plan no contestó PT001: %', who, stmt;
+      end if;
+    end loop;
+    if (select count(*) from public.groups) + (select count(*) from public.challenges) > 0
+       or (select count(*) from public.memberships) <> 1 then
+      raise exception 'FALLA FL14. % sin plan ve el grupo o a sus miembros', who;
+    end if;
+    reset role;
+  end loop;
+end $$;
+-- Con un plan de pago el admin entra como cualquiera
+insert into public.subscriptions (user_id, plan, status, provider, current_period_end) values
+  ('b8100000-0000-0000-0000-000000000001', 'annual', 'active', 'stripe', now() + interval '200 days');
+begin;
+select pg_temp.as_user('b8100000-0000-0000-0000-000000000001');
+select pg_temp.expect(
+  public.party_open() and (select count(*) from public.groups) = 1 and (select count(*) from public.challenges) = 1,
+  'FL14. El admin con plan de pago no ve su grupo'
+);
+rollback;
+
+-- ===================================================================== FL15. La foto de un compañero en Gratis
+-- El médico sigue en Gratis y en el grupo. No ve la foto del dueño, que paga, y el dueño sí ve la
+-- suya mientras siga en el grupo, como su alias. Al salir deja de verse
+insert into storage.objects (bucket_id, name, owner, owner_id, metadata) values
+  ('avatars', 'b8100000-0000-0000-0000-000000000002/avatar.jpg', 'b8100000-0000-0000-0000-000000000002',
+   'b8100000-0000-0000-0000-000000000002', '{"mimetype":"image/jpeg","size":1}'),
+  ('avatars', 'b8100000-0000-0000-0000-000000000003/avatar.jpg', 'b8100000-0000-0000-0000-000000000003',
+   'b8100000-0000-0000-0000-000000000003', '{"mimetype":"image/jpeg","size":1}');
+begin;
+select pg_temp.as_user('b8100000-0000-0000-0000-000000000002');
+select pg_temp.expect(
+  (select array_agg(name order by name) from storage.objects where bucket_id = 'avatars')
+    = array['b8100000-0000-0000-0000-000000000002/avatar.jpg'],
+  'FL15. En Gratis se ve la foto de un compañero o no la propia'
+);
+rollback;
+begin;
+select pg_temp.as_user('b8100000-0000-0000-0000-000000000003');
+select pg_temp.expect(
+  (select count(*) from storage.objects where bucket_id = 'avatars'
+     and name like 'b8100000-0000-0000-0000-00000000000_/avatar.jpg') = 2,
+  'FL15. Quien paga no ve la foto del compañero que pasó a Gratis'
+);
+rollback;
+begin;
+select pg_temp.as_user('b8100000-0000-0000-0000-000000000002');
+select pg_temp.expect(public.party_leave_all() = 1, 'FL15. El médico en Gratis no pudo salir del grupo');
+commit;
+begin;
+select pg_temp.as_user('b8100000-0000-0000-0000-000000000003');
+select pg_temp.expect(
+  (select count(*) from storage.objects where bucket_id = 'avatars'
+     and name = 'b8100000-0000-0000-0000-000000000002/avatar.jpg') = 0,
+  'FL15. Se sigue viendo la foto de quien salió del grupo'
+);
+rollback;
 
 -- ===================================================================== FL12. Permisos de las funciones
 do $$

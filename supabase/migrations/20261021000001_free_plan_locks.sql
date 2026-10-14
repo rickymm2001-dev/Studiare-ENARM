@@ -5,14 +5,18 @@
 --     (respuesta 20, 4.3). party_open(), el lugar que dejó B7 para el plan (20261018000001), ahora
 --     pide un plan de pago vigente. Con eso se cierran de una vez las lecturas de las políticas, porque
 --     is_group_member y shares_group pasan por ella, incluidos los perfiles y las fotos de los
---     compañeros, y todas las funciones party_* que piden Party abierta con party_caller()
+--     compañeros, y todas las funciones party_* que piden Party abierta con party_caller().
+--     20261021000002_free_plan_party_moderation.sql pone party_open directo en las políticas, para que
+--     el plan se revise una vez por consulta y no una vez por fila
 --   - Los apuntes que viajan a la nube, los registros outline de sync_records. La API no tiene permiso
 --     de escribir en sync_records y la única puerta es sync_push_records, así que el candado va ahí,
 --     registro por registro según su tipo. En Gratis un apunte nuevo o un cambio a uno que ya estaba
---     se ignoran sin tumbar la subida, que también trae los mazos y las tarjetas del alumno. La marca
---     de borrado de un apunte que ya está en la nube sí se guarda. Leer los propios sigue igual
---     (sync_records_select) y Borrar mis datos los quita todos. Son datos del alumno y sus derechos
---     ARCO no dependen del plan
+--     se ignoran sin tumbar la subida, que también trae los mazos y las tarjetas del alumno. La app
+--     anota que dejó apuntes sin subir y los manda todos otra vez con el primer plan de pago
+--     (outlinesPending en src/data/sync/runSync.ts), así no se pierde nada de lo que escribió. La
+--     marca de borrado de un apunte que ya está en la nube sí se guarda, sobre lo que ya tenía la nube
+--     y con solo sus dos fechas. Leer los propios sigue igual (sync_records_select) y Borrar mis datos
+--     los quita todos. Son datos del alumno y sus derechos ARCO no dependen del plan
 --
 -- Qué sigue abierto en Gratis
 --   - Los referidos (4.3). my_referral_code, redeem_referral_code y my_referrals no revisan el plan, y
@@ -45,15 +49,23 @@
 -- Se corre después de 20261019000001_referral_first_charge.sql y no depende de 20261020000001 (B9).
 -- No edita las migraciones anteriores. Si alguien vuelve a correr 20261018000001 o 20261008000002,
 -- hay que correr esta otra vez después, porque esas dos traen las versiones abiertas de party_open y de
--- sync_push_records
+-- sync_push_records. 20261021000002_free_plan_party_moderation.sql va después de esta y usa
+-- has_paid_plan
 
--- ===================================================================== Plan de pago de quien llama
--- true si quien llama tiene un plan de pago vigente o un mes regalado por referido, con la misma regla
--- que my_plan. Ayuda interna. Solo la llaman party_open y sync_push_records, que corren con los
--- permisos de su dueño, así que ninguna sesión la ejecuta por la API
+-- ===================================================================== Plan de pago
+-- true si el alumno tiene un plan de pago vigente o un mes regalado por referido, con la misma regla
+-- que my_plan. Es el único lugar de esa regla. Ayuda interna. La llaman caller_has_paid_plan y las
+-- revisiones de Party sobre otro miembro (20261021000002), que corren con los permisos de su dueño,
+-- así que ninguna sesión la ejecuta por la API
+create or replace function public.has_paid_plan(p_user uuid) returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select p_user is not null and public.user_plan(p_user) <> 'free'
+$$;
+
+-- Lo mismo para quien llama. Ayuda interna. Solo la llaman party_open y sync_push_records
 create or replace function public.caller_has_paid_plan() returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
-  select auth.uid() is not null and public.user_plan(auth.uid()) <> 'free'
+  select public.has_paid_plan(auth.uid())
 $$;
 
 -- ===================================================================== Party
@@ -120,14 +132,24 @@ begin
 
     if (v_rec ->> 'kind') = 'outline' and not v_outlines_open then
       -- En Gratis un apunte no se crea ni se cambia en la nube. Se ignora sin tumbar la subida, así
-      -- los mazos y las tarjetas del mismo lote siguen llegando. Borrar sí se puede. Se guarda la marca
-      -- de borrado de un apunte que ya estaba, que también va dentro de data, porque es lo que leen los
-      -- otros dispositivos. Una marca sin apunte en la nube no crea nada
-      if v_deleted is null or nullif(v_rec -> 'data' ->> 'deletedAt', '') is null then
+      -- los mazos y las tarjetas del mismo lote siguen llegando, y la app lo vuelve a mandar con el
+      -- primer plan de pago. Borrar sí se puede. Al apunte que ya estaba se le pone la marca de borrado
+      -- sobre lo que ya tenía la nube, con la fecha de borrado y la de cambio también dentro de data,
+      -- porque es lo que leen los otros dispositivos. El resto de data que mande el navegador no se
+      -- guarda. Una marca sin apunte en la nube no crea nada
+      if v_deleted is null then
         continue;
       end if;
+      -- La app borra con la misma fecha en las dos. Una marca infinita o posterior al cambio no es
+      -- una fecha de borrado
+      if not isfinite(v_deleted) or v_deleted > v_updated then
+        raise exception 'La marca de borrado no es una fecha válida' using errcode = '22023';
+      end if;
       update public.sync_records r
-        set data = v_rec -> 'data',
+        set data = r.data || jsonb_build_object(
+              'deletedAt', to_char(v_deleted at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),
+              'updatedAt', to_char(v_updated at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')
+            ),
             updated_at = v_updated,
             deleted_at = v_deleted,
             server_seq = nextval('public.sync_records_seq')
@@ -157,9 +179,10 @@ end;
 $$;
 
 -- ===================================================================== Permisos de las funciones
--- caller_has_paid_plan es una ayuda interna y no la ejecuta nadie por la API. party_open la siguen
--- ejecutando las sesiones, porque la llaman las políticas con los permisos de quien consulta.
--- sync_push_records igual que antes, solo una sesión iniciada
+-- has_paid_plan y caller_has_paid_plan son ayudas internas y no las ejecuta nadie por la API.
+-- party_open la siguen ejecutando las sesiones, porque la llaman las políticas con los permisos de
+-- quien consulta. sync_push_records igual que antes, solo una sesión iniciada
+revoke all on function public.has_paid_plan(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.caller_has_paid_plan() from public, anon, authenticated, service_role;
 revoke all on function public.party_open() from public, anon, service_role;
 grant execute on function public.party_open() to authenticated;
