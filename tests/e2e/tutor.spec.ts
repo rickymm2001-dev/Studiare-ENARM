@@ -15,7 +15,9 @@ test('sin datos el tutor calibra, no inventa hipótesis y se abre desde el menú
   const phone = (page.viewportSize()?.width ?? 0) < 1024;
   await page.goto('/');
   if (phone) {
-    await page.getByRole('button', { name: t.nav.more }).click();
+    await page
+      .getByRole('button', { name: new RegExp(`^(${t.navItems.more}|${t.nav.more})$`) })
+      .click();
     await page.getByRole('link', { name: t.navItems.tutor, exact: true }).click();
   } else {
     await page

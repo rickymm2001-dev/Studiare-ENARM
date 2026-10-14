@@ -137,6 +137,7 @@ export function BottomNav({
           <li>
             <button
               type="button"
+              aria-label={t.navItems.more}
               onClick={() => {
                 setMoreOpen(true);
               }}
