@@ -91,8 +91,9 @@ export function useTutorData(
 
 /**
  * La vista del tutor con los datos cargados. Se recalcula solo cuando algo cambia. La parte pesada
- * depende de la bitácora, el banco y las tarjetas, no de los artefactos, así responder una
- * hipótesis o revisar un consejo no la vuelve a calcular completa
+ * depende de la bitácora, el banco y las tarjetas, también de cuáles son de una materia libre (B6),
+ * no de los artefactos, así responder una hipótesis o revisar un consejo no la vuelve a calcular
+ * completa
  */
 export function useTutorView(
   session: ReadySession,
@@ -100,7 +101,7 @@ export function useTutorView(
   data: TutorData,
 ): TutorView {
   const { user, settings } = session;
-  const { catalog, bank, content, tipReviews } = data;
+  const { catalog, bank, content, tipReviews, freeSubjectCards } = data;
   const base = useMemo(() => {
     const noteById = new Map(content.notes.map((note) => [note.id, note]));
     const catalogTopic = new Map(
@@ -138,9 +139,9 @@ export function useTutorView(
       today: studyDayOf(now, user.timeZone),
       desiredRetention: settings.desiredRetention,
       thresholds: DEFAULT_THRESHOLDS,
-      freeSubjectCards: data.freeSubjectCards,
+      freeSubjectCards,
     });
-  }, [events, catalog, bank, content, user.timeZone, settings.desiredRetention]);
+  }, [events, catalog, bank, content, freeSubjectCards, user.timeZone, settings.desiredRetention]);
   // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
   return useMemo(
     () => ({ ...base, biasTips: applyTipReviews(base.biasTips, tipReviews) }),
