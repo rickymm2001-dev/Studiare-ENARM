@@ -1,62 +1,73 @@
-// Compartir un logro (9.6). Una tarjeta con el nivel, la racha y los XP de la semana del propio
-// alumno, que se comparte como imagen con el menú del sistema o se descarga. Nada sale de aquí hasta
-// que el alumno toca el botón, y el alias solo va si él lo pide.
+// Comparte tu semana (respuesta 83 del plan del cambio, B7). Antes era Comparte tu logro (9.6) y ahora
+// es el resumen de la semana del propio alumno, con días de estudio, repasos, preguntas y racha. Se
+// comparte como imagen con el menú de compartir del teléfono o se descarga. Nada sale de aquí hasta que
+// el alumno toca el botón, el alias solo va si él lo pide y en modo enfoque la racha no va. El nombre
+// y las propiedades del componente no cambiaron, para que Party lo siga usando igual.
 import { Share2 } from 'lucide-react';
 import { useState } from 'react';
+import { useFocusMode } from '@/app/focusMode';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField } from '@/ui/components/field';
-import type { Snapshot } from '../home/snapshot';
-import { buildAchievement, type AchievementCard } from './achievement';
-import { drawAchievement } from './drawAchievement';
 import {
-  browserShareDeps,
-  shareAchievement,
-  type ShareDeps,
-  type ShareOutcome,
-} from './shareAchievement';
+  buildWeekShare,
+  weekShareFigures,
+  weekShareLabel,
+  type WeekShareCard,
+  type WeekShareSource,
+} from './achievement';
+import { drawWeekShare } from './drawAchievement';
+import { browserShareDeps, shareWeek, type ShareDeps, type ShareOutcome } from './shareAchievement';
 
 export function AchievementShare({
   snapshot,
   alias,
   simulated,
-  render = drawAchievement,
+  render = drawWeekShare,
   deps,
 }: {
-  snapshot: Pick<Snapshot, 'level' | 'streak' | 'weeklyXp'>;
+  /** La instantánea del alumno. Del resumen solo se leen hoy, la actividad por día y la racha */
+  snapshot: WeekShareSource;
   alias: string;
-  /** La cuenta es de demostración y la tarjeta lo dice */
+  /** La cuenta es de demostración y la imagen lo dice */
   simulated: boolean;
   /** Dibuja la imagen. Las pruebas ponen uno propio porque jsdom no tiene canvas */
-  render?: (card: AchievementCard) => Promise<Blob>;
+  render?: (card: WeekShareCard) => Promise<Blob>;
   /** El navegador de verdad si no se indica */
   deps?: ShareDeps;
 }) {
-  const text = t.party.share;
+  const text = t.b7.weekShare;
+  const focus = useFocusMode();
   const [includeAlias, setIncludeAlias] = useState(false);
   const [busy, setBusy] = useState(false);
   const [outcome, setOutcome] = useState<ShareOutcome | null>(null);
-  const card = buildAchievement({ snapshot, alias: includeAlias ? alias : null, simulated });
+  const card = buildWeekShare({
+    snapshot,
+    alias: includeAlias ? alias : null,
+    simulated,
+    includeStreak: !focus,
+  });
 
   const share = async () => {
     setBusy(true);
     setOutcome(null);
     try {
-      setOutcome(await shareAchievement(card, render, deps ?? browserShareDeps()));
+      setOutcome(await shareWeek(card, render, deps ?? browserShareDeps()));
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <Card aria-labelledby="compartir-logro">
+    <Card aria-labelledby="compartir-semana">
       <CardHeader className="mb-3">
-        <CardTitle id="compartir-logro">{text.title}</CardTitle>
-        <CardDescription>{text.hint}</CardDescription>
+        <CardTitle id="compartir-semana">{text.title}</CardTitle>
+        <CardDescription>{focus ? text.hintFocus : text.hint}</CardDescription>
       </CardHeader>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-        <AchievementPreview card={card} />
+        <WeekSharePreview card={card} />
         <div className="flex flex-1 flex-col gap-3">
           <CheckboxField
             label={text.includeAlias}
@@ -87,36 +98,39 @@ export function AchievementShare({
   );
 }
 
-/** La misma tarjeta que se comparte, en HTML. Los colores son fijos, como en la imagen */
-function AchievementPreview({ card }: { card: AchievementCard }) {
-  const text = t.party.share;
+/**
+ * La misma imagen que se comparte, en HTML. Los colores son fijos, como en la imagen, así se ve igual
+ * en claro y en oscuro. Cada cifra va con su etiqueta en una lista de definiciones para el lector de
+ * pantalla, con el número arriba a la vista
+ */
+function WeekSharePreview({ card }: { card: WeekShareCard }) {
+  const text = t.b7.weekShare;
+  const figures = weekShareFigures(card);
   return (
     <figure
       aria-label={text.previewLabel}
-      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-lg bg-[#156082] text-white"
+      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-lg border border-[#dde2e6] bg-white text-[#16212b]"
     >
-      <div className="flex flex-col items-center gap-1 px-5 pt-4 pb-5">
-        <p className="self-start text-sm font-bold text-white/85">{card.brand}</p>
-        <p
-          aria-hidden
-          className="mt-2 flex size-24 items-center justify-center rounded-full bg-white text-5xl font-bold text-[#156082]"
-        >
-          {card.level}
-        </p>
-        <p className="mt-2 text-2xl font-bold">{card.levelTitle}</p>
-        <p className="text-sm text-white/85">{text.level(card.level)}</p>
-        <div className="mt-3 grid w-full grid-cols-2 gap-2 text-center">
-          <p className="rounded-md bg-black/25 px-2 py-2">
-            <span className="block text-xs text-white/85">{text.streakLabel}</span>
-            <span className="block text-lg font-bold">{text.streakValue(card.streak)}</span>
-          </p>
-          <p className="rounded-md bg-black/25 px-2 py-2">
-            <span className="block text-xs text-white/85">{text.xpLabel}</span>
-            <span className="block text-lg font-bold">{card.weeklyXp.toLocaleString('es-MX')}</span>
-          </p>
-        </div>
-        {card.alias ? <p className="mt-2 font-semibold">{card.alias}</p> : null}
+      <div className="flex flex-col gap-0.5 bg-[#156082] px-4 pt-3 pb-4 text-white">
+        <p className="text-xs font-bold text-white/85">{card.brand}</p>
+        <p className="text-lg font-bold">{text.heading}</p>
+        <p className="text-xs text-white/85">{weekShareLabel(card)}</p>
       </div>
+      <dl className="grid grid-cols-2 gap-2 p-3">
+        {figures.map((figure, index) => (
+          <div
+            key={figure.label}
+            className={cn(
+              'flex flex-col-reverse gap-0.5 rounded-md border border-[#dde2e6] bg-[#f5f6f7] px-3 py-2',
+              figures.length % 2 === 1 && index === 0 && 'col-span-2',
+            )}
+          >
+            <dt className="text-xs font-semibold text-[#576570]">{figure.label}</dt>
+            <dd className="text-xl font-bold">{figure.value}</dd>
+          </div>
+        ))}
+      </dl>
+      {card.alias ? <p className="px-4 pb-3 font-semibold">{card.alias}</p> : null}
       {card.simulated ? (
         <figcaption className="bg-[#eef0f2] px-3 py-2 text-center text-xs font-bold text-[#3f4b55]">
           {text.simulatedBanner}

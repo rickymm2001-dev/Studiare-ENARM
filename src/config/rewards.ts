@@ -8,3 +8,9 @@ export const MISSION_TARGETS = {
   dailyQuestions: 10,
   dailyMinutes: 25,
 } as const;
+
+/**
+ * Un día cuenta como de estudio si hubo al menos esto de actividad. Era la regla de la misión de la
+ * semana y hoy la usa el resumen de la semana para compartir (respuesta 83, B7)
+ */
+export const STUDY_DAY_MIN = { cards: 1, questions: 1, minutes: 5 } as const;

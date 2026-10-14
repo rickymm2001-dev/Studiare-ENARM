@@ -3,11 +3,13 @@ import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { usePreferences } from '@/app/preferences';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { SCREENS } from '@/app/screens';
 import { UserSettingsSchema } from '@/data/schemas/people';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { usePractice } from './practice';
 
 // El confeti usa un canvas que jsdom no trae
@@ -24,7 +26,9 @@ afterEach(async () => {
  * Una práctica con tantas preguntas como se pida, lista para contestar. En cada una, la opción 1
  * es la correcta y las demás no
  */
-async function startPractice(options: { count?: number; settings?: Record<string, unknown> } = {}) {
+async function startPractice(
+  options: { count?: number; settings?: Record<string, unknown>; duelId?: string } = {},
+) {
   const bundles = Array.from({ length: options.count ?? 1 }, () => makeQuestionWithOptions());
   app = await renderApp(SCREENS.question.path, {
     user: { settings: UserSettingsSchema.parse(options.settings ?? {}) },
@@ -40,8 +44,8 @@ async function startPractice(options: { count?: number; settings?: Record<string
         answers: [],
         startedAt: Date.now(),
         ended: false,
-        kind: 'practice',
-        duelId: null,
+        kind: options.duelId ? 'challenge' : 'practice',
+        duelId: options.duelId ?? null,
         targetTags: [],
       });
     },
@@ -121,6 +125,35 @@ describe('pantalla de la pregunta', () => {
     expect(screen.queryByRole('button', { name: t.choice.restoreOption('B') })).toBeNull();
   });
 
+  it('mientras carga la siguiente no deja la pregunta contestada bajo el número de la siguiente', async () => {
+    const typing = userEvent.setup();
+    const { first, second } = await startPractice({ count: 2 });
+    await screen.findByText(first.question.prompt);
+    // La siguiente pregunta tarda en llegar, como con la máquina ocupada
+    const { questions } = (app as RenderedApp).api.repos;
+    const original = questions.get.bind(questions);
+    let release: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    vi.spyOn(questions, 'get').mockImplementation(async (id) => {
+      if (id === second.question.id) await held;
+      return original(id);
+    });
+
+    await typing.click(option(1));
+    await typing.keyboard('{Enter}');
+    expect(await screen.findByText(t.simulator.progress(2, 2))).toBeVisible();
+    expect(screen.queryByText(first.question.prompt)).toBeNull();
+    expect(screen.queryByRole('radio')).toBeNull();
+
+    release();
+    expect(await screen.findByText(second.question.prompt)).toBeVisible();
+    expect(screen.getAllByRole('radio').some((radio) => (radio as HTMLInputElement).checked)).toBe(
+      false,
+    );
+  });
+
   it('con la retroalimentación al final pasa directo a la siguiente y la última lleva al resumen con la revisión', async () => {
     const typing = userEvent.setup();
     const { first, second } = await startPractice({ count: 2 });
@@ -131,6 +164,7 @@ describe('pantalla de la pregunta', () => {
     await typing.click(option(1));
     await typing.keyboard('{Enter}');
     expect(await screen.findByText(t.simulator.progress(2, 2))).toBeVisible();
+    expect(await screen.findByText(second.question.prompt)).toBeVisible();
     expect(screen.queryByText(t.simulator.whyAttracts)).toBeNull();
     // Con el siguiente, el botón dice que es la última
     expect(screen.getByRole('button', { name: t.simulator.answerAndFinish })).toBeDisabled();
@@ -198,5 +232,72 @@ describe('pantalla de la pregunta', () => {
     app = await renderApp(SCREENS.question.path);
     expect(await screen.findByText(t.simulator.noActive)).toBeVisible();
     expect(screen.getByRole('link', { name: t.simulator.goSetup })).toBeVisible();
+  });
+
+  // Modo enfoque (respuesta 82 del plan del cambio, B7). El XP se sigue ganando, solo no se muestra
+  describe('XP ganado en el resumen y en la retroalimentación', () => {
+    /**
+     * Contesta bien la única pregunta, llega al resumen y abre la respuesta. Devuelve la tarjeta del
+     * resumen y la del resultado de esa respuesta
+     */
+    async function answerAndOpen() {
+      const typing = userEvent.setup();
+      const { first } = await startPractice();
+      await screen.findByText(first.question.prompt);
+      await typing.click(option(1));
+      await typing.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      // La acertada viene cerrada. Se abre para ver su retroalimentación
+      await typing.click(document.querySelector('ol details summary') as HTMLElement);
+      const result = await screen.findByRole('region', {
+        name: new RegExp(`^${t.simulator.correct}`),
+      });
+      const [summary] = screen.getAllByRole('region', { name: t.simulator.summaryTitle });
+      return { summary: summary as HTMLElement, result };
+    }
+
+    it('sin modo enfoque los dos dicen el XP', async () => {
+      const { summary, result } = await answerAndOpen();
+      expect(within(summary).getByText(t.simulator.summaryLabels.xp)).toBeVisible();
+      expect(within(result).getByText(/^\+\d+ XP$/)).toBeVisible();
+    });
+
+    it('en modo enfoque el resumen de un duelo sigue llevando a su resultado', async () => {
+      // Los duelos se quedan en modo enfoque. Son un compromiso de uno a uno que el alumno eligió
+      usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+      const typing = userEvent.setup();
+      const { first } = await startPractice({ duelId: newId() });
+      await screen.findByText(first.question.prompt);
+      await typing.click(option(1));
+      await typing.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      expect(screen.getByRole('link', { name: t.party.duel.seeResult })).toHaveAttribute(
+        'href',
+        SCREENS.party.path,
+      );
+      expect(screen.queryByText(t.simulator.summaryLabels.xp)).toBeNull();
+    });
+
+    it('una práctica libre no lleva al resultado de ningún duelo', async () => {
+      const { first } = await startPractice();
+      await screen.findByText(first.question.prompt);
+      await userEvent.click(option(1));
+      await userEvent.click(screen.getByRole('button', { name: t.simulator.answerAndFinish }));
+      expect(await screen.findByText(t.simulator.summaryTitle)).toBeVisible();
+      expect(screen.queryByRole('link', { name: t.party.duel.seeResult })).toBeNull();
+    });
+
+    it('en modo enfoque ninguno lo dice, aunque el XP quede registrado', async () => {
+      usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+      const { summary, result } = await answerAndOpen();
+      expect(within(summary).queryByText(t.simulator.summaryLabels.xp)).toBeNull();
+      expect(within(summary).queryByText(/XP/)).toBeNull();
+      expect(within(result).queryByText(/XP/)).toBeNull();
+      const { user, api } = app as RenderedApp;
+      await waitFor(async () => {
+        const events = await api.repos.events.query({ userId: user.id });
+        expect(events.some((event) => event.type === 'xp_awarded')).toBe(true);
+      });
+    });
   });
 });

@@ -2,10 +2,11 @@
 // estructura de pregunta, trampa, tipo de reactivo y descarte, y la revisión de cada pregunta. Al
 // entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Son
 // cifras de este examen. No predicen el puntaje del ENARM y los patrones acumulados siguen
-// calibrando en Progreso.
+// calibrando en Progreso. En modo enfoque (respuesta 82, B7) no muestra el XP.
 import { CheckCheck, CircleDashed, Clock, Flag, Layers, RotateCcw, Target } from 'lucide-react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
+import { useFocusMode } from '@/app/focusMode';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -184,6 +185,7 @@ function Summary({
   onRetry: () => void;
 }) {
   const text = t.examResults;
+  const focus = useFocusMode();
   const used = elapsedMs(state, state.finishedAtMs ?? state.startedAtMs);
   const perQuestion =
     score.averageMsPerAnswered === null ? null : Math.round(score.averageMsPerAnswered / 1000);
@@ -223,9 +225,11 @@ function Summary({
         </span>
         {perQuestion !== null ? <span>{text.perQuestion(perQuestion)}</span> : null}
         {/* El XP va en gris como en Retroalimentación. El verde queda para lo correcto */}
-        <span className="font-semibold text-fg-muted" aria-live="polite">
-          {text.xp(state.xp)}
-        </span>
+        {focus ? null : (
+          <span className="font-semibold text-fg-muted" aria-live="polite">
+            {text.xp(state.xp)}
+          </span>
+        )}
       </p>
       {state.shortfall > 0 ? (
         <p className="mt-2 text-sm text-fg-muted">

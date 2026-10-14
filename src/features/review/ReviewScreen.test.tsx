@@ -3,6 +3,7 @@ import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
@@ -10,6 +11,7 @@ import { newId } from '@/data/testing/fixtures';
 import { seedManualCards } from '@/data/testing/seedCards';
 import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 
 // El confeti usa un canvas que jsdom no trae
 vi.mock('@/ui/celebrate', () => ({ celebrate: () => undefined }));
@@ -345,4 +347,22 @@ describe('pantalla de Repasar', () => {
       expect(screen.getByText(marked, { selector: 'mark' })).toBeVisible();
     },
   );
+
+  // Modo enfoque (respuesta 82 del plan del cambio, B7)
+  it('en modo enfoque el fin del repaso no dice el XP', async () => {
+    usePreferences.setState({ appearance: { ...DEFAULT_APPEARANCE, focusMode: true } });
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.review.path, { seed: seedDeck(false) });
+    await typing.click(
+      await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
+    );
+    await typing.click(await screen.findByRole('button', { name: t.review.show }));
+    await typing.click(
+      screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }),
+    );
+    expect(await screen.findByText(t.review.doneTitle)).toBeVisible();
+    expect(screen.getByText(t.b7.focusMode.reviewDone(1))).toBeVisible();
+    expect(screen.queryByText(t.review.doneBody(1, 0))).toBeNull();
+    expect(screen.queryByText(/XP/)).toBeNull();
+  });
 });

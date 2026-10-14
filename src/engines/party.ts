@@ -49,7 +49,12 @@ export interface LeaderboardRow extends SharedMemberStats {
   rank: number;
 }
 
-export function weeklyLeaderboard(members: readonly SharedMemberStats[]): LeaderboardRow[] {
+/** Lo mínimo para ordenar la tabla. En la nube solo se comparten alias y XP de la semana (B7) */
+export type Ranked<T> = T & { rank: number };
+
+export function weeklyLeaderboard<T extends Pick<SharedMemberStats, 'alias' | 'weeklyXp'>>(
+  members: readonly T[],
+): Ranked<T>[] {
   const sorted = [...members].sort(
     (a, b) => b.weeklyXp - a.weeklyXp || a.alias.localeCompare(b.alias, 'es'),
   );

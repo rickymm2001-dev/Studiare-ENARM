@@ -114,10 +114,10 @@ insert into public.events (id, user_id, type, at, tz, payload)
   values ('barrera-evt-1', auth.uid(), 'card_reviewed', now(), 'America/Merida', '{}');
 insert into public.content_reports (reporter_id, target_kind, target_id, reason)
   values (auth.uid(), 'question', gen_random_uuid(), 'typo');
-insert into public.groups (id, name, invite_code, owner_id) values ('b5000000-0000-0000-0000-0000000000a1', 'Grupo de la barrera', 'BAR234', auth.uid());
-insert into public.memberships (group_id, user_id) values ('b5000000-0000-0000-0000-0000000000a1', auth.uid());
-insert into public.challenges (group_id, title, metric, target, starts_at, ends_at)
-  values ('b5000000-0000-0000-0000-0000000000a1', 'Reto', 'cards', 10, now(), now() + interval '7 days');
+-- Grupos, membresías y retos se escriben solo con las funciones de Party (20261018000001)
+select set_config('barrera.party_code', public.party_create_group('Grupo de la barrera') ->> 'inviteCode', false);
+select public.party_create_challenge(
+  (select id from public.groups where invite_code = current_setting('barrera.party_code')), 'Reto', 'cards', 10);
 select pg_temp.expect(pg_temp.rows_changed($q$update public.profiles set alias = 'Uno B' where id = auth.uid()$q$) = 1, 'B1. El ganador no actualizó su perfil');
 select pg_temp.expect(pg_temp.rows_changed($q$update public.private_accounts set state = 'YUC' where user_id = auth.uid()$q$) = 1, 'B1. El ganador no actualizó su cuenta');
 select pg_temp.expect(pg_temp.rows_changed($q$update public.ai_artifacts set status = 'approved' where user_id = auth.uid()$q$) = 1, 'B1. El ganador no decidió su borrador');
@@ -131,7 +131,7 @@ commit;
 -- El compañero de grupo todavía no reclamó nada, así que pasa
 begin;
 select pg_temp.as_user('b0000000-0000-0000-0000-000000000002', 'ses-s2');
-insert into public.memberships (group_id, user_id) values ('b5000000-0000-0000-0000-0000000000a1', auth.uid());
+select public.party_join_group(current_setting('barrera.party_code'));
 commit;
 begin;
 select pg_temp.as_user('b0000000-0000-0000-0000-000000000001', 'ses-1');
@@ -177,11 +177,19 @@ do $$ begin
     raise exception 'FALLA B2. Insertó una membresía'; end if;
   if not pg_temp.is_blocked($q$insert into public.challenges (group_id, title, metric, target, starts_at, ends_at) values ('b5000000-0000-0000-0000-0000000000a1', 'x', 'cards', 1, now(), now())$q$) then
     raise exception 'FALLA B2. Insertó un reto'; end if;
+  -- Las funciones de Party también piden el dispositivo activo, incluso para salir del grupo
+  if not pg_temp.is_blocked($q$select public.party_create_group('x')$q$) then
+    raise exception 'FALLA B2. Creó un grupo con la función'; end if;
+  if not pg_temp.is_blocked($q$select public.party_join_group(current_setting('barrera.party_code'))$q$) then
+    raise exception 'FALLA B2. Entró a un grupo con la función'; end if;
+  if not pg_temp.is_blocked($q$select public.party_leave_all()$q$) then
+    raise exception 'FALLA B2. Salió de sus grupos con la función'; end if;
+  if not pg_temp.is_blocked($q$update public.memberships set left_at = now() where user_id = auth.uid()$q$) then
+    raise exception 'FALLA B2. Editó una membresía'; end if;
   if pg_temp.rows_changed($q$update public.profiles set alias = 'Hackeado' where id = auth.uid()$q$) <> 0
      or pg_temp.rows_changed($q$update public.private_accounts set state = 'CDMX' where user_id = auth.uid()$q$) <> 0
      or pg_temp.rows_changed($q$update public.ai_artifacts set status = 'rejected' where user_id = auth.uid()$q$) <> 0
      or pg_temp.rows_changed($q$update public.decks set name = 'Hackeado' where owner_id = auth.uid()$q$) <> 0
-     or pg_temp.rows_changed($q$update public.memberships set left_at = now() where user_id = auth.uid()$q$) <> 0
      or pg_temp.rows_changed($q$delete from public.decks where owner_id = auth.uid()$q$) <> 0
      or pg_temp.rows_changed($q$delete from public.notes$q$) <> 0
      or pg_temp.rows_changed($q$delete from public.cards$q$) <> 0 then
@@ -800,7 +808,8 @@ begin
   select string_agg(policyname, ', ' order by policyname) into missing
   from pg_policies
   where schemaname = 'public'
-    and coalesce(qual, '') || ' ' || coalesce(with_check, '') ~ '(auth\.uid\(\)|is_group_member|shares_group)'
+    and coalesce(qual, '') || ' ' || coalesce(with_check, '')
+      ~ '(auth\.uid\(\)|is_group_member|shares_group|party_has_duel_result)'
     and coalesce(qual, '') || ' ' || coalesce(with_check, '') not like '%is_active_device%'
     and policyname <> all (open_on_purpose);
   if missing is not null then
@@ -809,10 +818,11 @@ begin
   select count(*) into protected from pg_policies
     where schemaname = 'public'
       and coalesce(qual, '') || ' ' || coalesce(with_check, '') like '%is_active_device%';
-  -- 22 de la barrera, 1 de la sincronización (sync_records_select, migración 20261008000002) y 3 de
-  -- referidos y meses regalados (migración 20261008000003)
-  if protected <> 26 then
-    raise exception 'FALLA B11. Debían ser 26 políticas con la barrera y hay %', protected;
+  -- 22 de la barrera, 1 de la sincronización (sync_records_select, migración 20261008000002), 3 de
+  -- referidos y meses regalados (migración 20261008000003) y 5 de Party en la nube (XP de la semana,
+  -- aportes a los retos, duelos, sus inicios y sus resultados, migración 20261018000001)
+  if protected <> 31 then
+    raise exception 'FALLA B11. Debían ser 31 políticas con la barrera y hay %', protected;
   end if;
 end $$;
 
