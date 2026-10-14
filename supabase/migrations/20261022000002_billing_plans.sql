@@ -891,6 +891,11 @@ begin
     when v_same then coalesce(v_sub.current_period_end, p_period_end, now())
     else coalesce(p_period_end, now())
   end;
+  -- Un aviso de la misma suscripción que no la termina nunca acorta lo que ya se pagó. Por ejemplo un aviso
+  -- de prueba que llega después del primer cobro no regresa el acceso al fin de la prueba
+  if v_same and p_status <> 'ended' then
+    v_end := greatest(v_end, coalesce(v_sub.current_period_end, v_end));
+  end if;
   v_price_changed := v_same and p_price_id is not null and v_sub.price_id is distinct from p_price_id;
 
   insert into public.subscriptions as s (
@@ -1101,11 +1106,17 @@ begin
       now() + case when v_plan in ('annual', 'founder_annual') then interval '1 year' else interval '1 month' end
     );
     if v_same then
+      -- El primer cobro cambia el estado (de prueba o de cobro fallido a activa) y desde aquí cuenta como el
+      -- último estado aplicado. Un aviso de estado creado antes, como uno de prueba que llega tarde, queda
+      -- viejo (stale). Solo el primero, porque en un cambio de plan Stripe crea el aviso del Price ID nuevo
+      -- casi a la vez que el cobro de la diferencia, y ese aviso no se debe perder
       update public.subscriptions
         set status = case when status in ('trialing', 'past_due') then 'active' else status end,
             provider_subscription_id = coalesce(provider_subscription_id, p_provider_subscription_id),
             current_period_end = greatest(v_end, coalesce(current_period_end, v_end)),
             first_charge_at = coalesce(first_charge_at, now()),
+            state_at = case when first_charge_at is null then greatest(coalesce(state_at, now()), now())
+                            else state_at end,
             updated_at = now()
         where user_id = p_user;
     else

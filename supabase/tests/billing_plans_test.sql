@@ -1023,4 +1023,28 @@ select pg_temp.expect(
   'R1. La prueba usada debía quedar sin dueño y sin el correo a la vista'
 );
 
+-- R2. Un aviso de prueba que llega tarde, después del primer cobro, no recorta lo pagado al fin de la prueba
+\set r2a 'ba110000-0000-0000-0000-0000000002a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r2a', 'r2a@ba.mx', '{"alias":"Aviso tarde"}');
+select pg_temp.state('evt-r2-a', :'r2a', 'sub_r2_a', 'monthly', 'trialing', p_at => now() - interval '2 hours',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.is(pg_temp.charge('evt-r2-ac', 'paid', :'r2a', 'subscription', 'monthly', 'in_r2_a', 149, 'sub_r2_a',
+  p_period_end => now() + interval '37 days'), 'applied', 'R2. El primer cobro debía aplicarse');
+-- Stripe lo creó antes del cobro y llegó después
+select pg_temp.is(pg_temp.state('evt-r2-al', :'r2a', 'sub_r2_a', 'monthly', 'trialing', p_at => now() - interval '1 hour',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days'), 'stale',
+  'R2. Un aviso de prueba anterior al primer cobro debía descartarse');
+select pg_temp.expect(
+  (select status = 'active' and current_period_end > now() + interval '30 days' from public.subscriptions where user_id = :'r2a'),
+  'R2. Un aviso de prueba tardío no debía recortar lo pagado'
+);
+-- Uno más nuevo con un fin menor tampoco recorta lo que ya se pagó de esa misma suscripción
+select pg_temp.state('evt-r2-an', :'r2a', 'sub_r2_a', 'monthly', 'trialing',
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.expect(
+  (select current_period_end > now() + interval '30 days' from public.subscriptions where user_id = :'r2a')
+  and public.user_plan(:'r2a') = 'monthly',
+  'R2. Un aviso de la misma suscripción no debía acortar el periodo pagado'
+);
+
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;
