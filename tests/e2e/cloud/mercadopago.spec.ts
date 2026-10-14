@@ -106,7 +106,8 @@ test.describe('Mercado Pago', () => {
       .click();
     await page.getByRole('button', { name: text.actions.mercadopago }).click();
     await expect(page).toHaveURL(new RegExp(`^${FAKE_MERCADOPAGO_ORIGIN}/checkout/v1/redirect`));
-    await page.getByRole('button', { name: mercadoPagoText.pay }).click();
+    // Pagar a secas, porque Pagar en efectivo también empieza con Pagar
+    await page.getByRole('button', { name: mercadoPagoText.pay, exact: true }).click();
 
     // Aprobado da un pase anual que no se renueva
     await expect(page).toHaveURL(/\/suscripcion\?pago=ok$/);
