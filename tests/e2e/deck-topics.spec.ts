@@ -10,6 +10,7 @@ import { topicDisplayName } from '@/demo/content/topicDisplayNames';
 import { buildTopicOutline, type TopicNode } from '@/engines/deckTopics';
 import { sanitizeTag, tagSegments } from '@/engines/tagPath';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 interface DeckFile {
@@ -105,7 +106,10 @@ test('Mazos y Repasar dicen todos los temas de los mazos de Paco, agrupados por 
   await expect(gyo.getByText('AnticonceptivosyMPF')).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
-  // Se siguen los tres y Repasar dice lo mismo debajo de cada mazo
+  // Se siguen los tres y Repasar dice lo mismo debajo de cada mazo. Los temas se ven también en
+  // Gratis, pero seguir mazos del catálogo es de los planes de pago (4.25, B8)
+  await subscribeMonthly(page);
+  await page.goto(SCREENS.decks.path);
   for (const file of files) {
     const row = deckRow(page, file.name);
     await row.getByRole('button', { name: t.decks.follow }).click();
