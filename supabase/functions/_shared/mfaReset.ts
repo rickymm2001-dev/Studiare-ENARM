@@ -4,7 +4,7 @@
 // Si pasa, la función borra los factores con la API de administración de Supabase Auth y la llave de
 // servicio, que nunca sale de aquí. Borrar un factor verificado cierra las sesiones de esa persona, que
 // lo vuelve a dar de alta al entrar. Sin Deno, para probarla con Vitest.
-import { corsHeaders } from './payments.ts';
+import { corsHeaders } from './http.ts';
 import type { SupabaseEnv } from './supabase.ts';
 
 export type AuthorizeOutcome = 'ok' | 'not_owner' | 'self' | 'not_found' | 'no_session';
