@@ -83,12 +83,17 @@ export interface SyncableRepo<T, K extends string = Id> extends Omit<EntityRepo<
 }
 
 /**
- * Notas con la búsqueda por apunte (D-092). Una nota de un apunte guarda el ID del apunte, y la
- * búsqueda usa su índice en lugar de recorrer todas las notas
+ * Notas con la búsqueda por apunte (D-092) y por etiqueta. Una nota de un apunte guarda el ID del
+ * apunte, y las búsquedas usan su índice en lugar de recorrer todas las notas
  */
 export interface NoteRepo extends SyncableRepo<Note> {
   /** Las notas del apunte, también las marcadas como borradas, que reviven si vuelve su marca */
   listAllByOutline(outlineId: Id): Promise<Note[]>;
+  /**
+   * Las notas con alguna etiqueta que empieza con prefix, sin distinguir mayúsculas, cada una una
+   * vez y también las marcadas como borradas. Sirve para las de una materia libre, Materia:: (B6)
+   */
+  listAllByTagPrefix(prefix: string): Promise<Note[]>;
 }
 
 /** Cartas con la búsqueda por nota, para leer solo las de las notas que importan */

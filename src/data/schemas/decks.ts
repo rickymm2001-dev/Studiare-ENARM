@@ -91,6 +91,12 @@ const NoteBaseShape = {
    */
   outlineId: IdSchema.nullable().optional(),
   outlineNodeId: IdSchema.nullable().optional(),
+  /**
+   * Apunte del que salió una tarjeta que propuso la IA (B6). Va sin línea, así la sincronización del
+   * apunte no la retira, y la tarjeta sigue el mazo y el tema del apunte cuando cambian. Ausente o
+   * null en las demás notas, también en las de antes de este campo, que siguen igual
+   */
+  sourceOutlineId: IdSchema.nullable().optional(),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,
 };

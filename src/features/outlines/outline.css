@@ -1,4 +1,6 @@
-/* Estilos del editor de apuntes (D-092). Solo se cargan con el editor, que es una pieza diferida */
+/* Estilos del editor de apuntes (D-092). Solo se cargan con el editor, que es una pieza diferida.
+   B6. Sin píldoras ni colores de estado, como el resto de la app (D-121), con el tono de texto del
+   color de acción que se lee en claro y en oscuro, y las palabras largas se parten en el teléfono */
 .outline-editor {
   min-height: 18rem;
   padding: 0.25rem 0.25rem 2rem;
@@ -6,6 +8,7 @@
   line-height: 1.65;
   color: var(--enarm-fg);
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 .outline-editor ul {
@@ -43,13 +46,15 @@
 .outline-token--separator,
 .outline-token--multiline {
   background: var(--enarm-primary-soft);
-  color: var(--enarm-primary);
+  color: var(--enarm-primary-ink);
   font-weight: 700;
 }
 
+/* El hueco se distingue con un subrayado punteado y no con un color de aviso */
 .outline-token--cloze {
-  background: var(--enarm-accent-soft);
-  color: var(--enarm-warning);
+  background: var(--enarm-muted);
+  color: var(--enarm-fg);
+  border-bottom: 1px dashed var(--enarm-line-strong);
 }
 
 .outline-token--tag {
@@ -58,17 +63,17 @@
 }
 
 .outline-token--link {
-  color: var(--enarm-primary);
+  color: var(--enarm-primary-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .outline-badge {
   margin-left: 0.5rem;
-  border-radius: 999px;
-  padding: 0.05rem 0.55rem;
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.4rem;
   background: var(--enarm-primary-soft);
-  color: var(--enarm-primary);
+  color: var(--enarm-primary-ink);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;

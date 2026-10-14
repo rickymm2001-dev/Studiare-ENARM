@@ -1,6 +1,6 @@
-// Deja ver una función solo si el plan del alumno la incluye (D-085, fila 14). Hoy todas están
-// abiertas en todos los planes, pero cada punto de entrada ya pregunta, así que decidir cuáles son
-// de pago es cambiar la tabla de planes y no la interfaz.
+// Deja ver una función solo si el plan del alumno la incluye (D-085, fila 14). Cada punto de entrada
+// pregunta, así que decidir cuáles son de pago es cambiar la tabla de planes y no la interfaz. Una
+// función cerrada puede mostrar su propia vista previa con candado en lugar del aviso corto (B6).
 import { Lock } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -20,17 +20,24 @@ export function FeatureGate({
   userId,
   feature,
   children,
+  locked,
   plans = PLANS,
 }: {
   userId: string;
   feature: GatedFeature;
   children: ReactNode;
+  /**
+   * Lo que se ve en lugar de la función cuando el plan no la incluye, como una vista previa con su
+   * candado y el botón de lockedCtaLabel (respuesta 20 del plan del cambio). Sin él sale el aviso corto
+   */
+  locked?: ReactNode;
   /** Tabla de planes. Solo cambia en las pruebas */
   plans?: Record<PlanKey, Pick<PlanDef, 'features'>>;
 }) {
   const plan = useActivePlan(userId);
   if (plan === undefined) return null;
   if (canUseFeature(plan, feature, plans)) return <>{children}</>;
+  if (locked !== undefined) return <>{locked}</>;
   return (
     <div
       role="status"

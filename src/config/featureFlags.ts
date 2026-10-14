@@ -38,6 +38,11 @@ export const FEATURE_FLAGS = {
       'Aviso global Versión de demostración mientras la app usa el banco de demostración (4.1 del plan del cambio). Se apaga cuando llega el banco real (B11)',
     defaults: { development: true, demo: true, production: true },
   },
+  freeTrial: {
+    description:
+      'Prueba gratis de 7 días en el botón de los candados de Gratis, como Apuntes, Party e Importar mazos (respuesta 20). Apagada hasta que B10 crea la prueba en Suscripción y la prende',
+    defaults: { development: false, demo: false, production: false },
+  },
 } as const satisfies Record<string, FlagDef>;
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS;

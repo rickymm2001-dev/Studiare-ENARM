@@ -218,6 +218,8 @@ export function manualNoteOf(args: {
     sourceQuestionVersionId: existing?.sourceQuestionVersionId ?? null,
     ...(existing?.sourceGuid ? { sourceGuid: existing.sourceGuid } : {}),
     ...(existing?.sourceTitle ? { sourceTitle: existing.sourceTitle } : {}),
+    // La tarjeta que la IA propuso desde un apunte sigue unida a él al editarla (B6)
+    ...(existing?.sourceOutlineId ? { sourceOutlineId: existing.sourceOutlineId } : {}),
     ...(existing?.controversy && !args.edited ? { controversy: existing.controversy } : {}),
     isDemo: existing?.isDemo ?? false,
     // Una tarjeta suelta no lleva estos campos, para no cambiar lo que ya se guardaba

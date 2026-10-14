@@ -48,6 +48,15 @@ describe('banderas de lanzamiento', () => {
     expect(isFeatureEnabled('demoBank', { appEnv: 'production', stored: null })).toBe(true);
   });
 
+  it('la prueba gratis está apagada en los tres entornos hasta que B10 la crea, y el servidor la prende', () => {
+    for (const appEnv of APP_ENVS) {
+      expect(isFeatureEnabled('freeTrial', { appEnv, stored: null }), appEnv).toBe(false);
+    }
+    expect(
+      isFeatureEnabled('freeTrial', { appEnv: 'production', stored: { freeTrial: true } }),
+    ).toBe(true);
+  });
+
   it('lo que dice el servidor manda sobre el valor del entorno', () => {
     expect(
       isFeatureEnabled('demoTools', { appEnv: 'production', stored: { demoTools: true } }),

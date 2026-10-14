@@ -69,10 +69,14 @@ describe('planes y precios', () => {
 });
 
 describe('banderas de acceso por función de carga diaria', () => {
-  it('todas las funciones están abiertas en todos los planes, menos las tarjetas con IA, que son de pago', () => {
+  it('todas las funciones están abiertas en todos los planes, menos las tarjetas con IA y Apuntes, que son de pago', () => {
+    // Apuntes se cierra en Gratis por la respuesta 20 del plan del cambio (B6)
+    const paidOnly = new Set(['aiCards', 'outlines']);
     for (const key of Object.keys(PLANS) as PlanKey[]) {
       for (const feature of GATED_FEATURES) {
-        expect(canUseFeature(key, feature)).toBe(feature === 'aiCards' ? key !== 'free' : true);
+        expect(canUseFeature(key, feature), `${key} ${feature}`).toBe(
+          paidOnly.has(feature) ? key !== 'free' : true,
+        );
       }
     }
   });
