@@ -18,8 +18,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
-- [x] B3. Navegación, Configuración y Perfil (PR en curso)
-- [ ] B4. Repasar y Buscar tarjetas
+- [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
+- [x] B4. Repasar y Buscar tarjetas (fusionado en main)
 - [ ] B5. Revisión del examen y motivos de error
 - [ ] B6. Apuntes y mazos
 - [ ] B7. Party real y lo que se queda o se va
@@ -98,6 +98,16 @@ Evidencia
 - Evidencia. npm run check con typecheck y lint limpios y 2,875 pruebas que pasan (2 omitidas que solo corren con su variable de entorno). E2e del bloque en teléfono y computadora, 194 pasan en la última corrida completa y la única falla, un selector ambiguo de práctica, quedó corregida y pasó 8 de 8 sola. Nube 22 de 22. perf.spec pasa con la máquina tranquila y su límite es justo con otros agentes corriendo (mediana de 123 a 155 ms, sin regresión contra la versión anterior)
 - JavaScript inicial de 284.8 KB de 300
 - Capturas en docs/screenshots/v3/b3, en teléfono, 1280 y 1920, en claro y en oscuro
+
+### B4. Repasar y Buscar tarjetas (comentarios 8 y 11)
+- Hecho. Cada mazo en Repasar y Mazos muestra su rama y debajo todos sus temas en orden alfabético del español (Intl.Collator con es-MX, sin distinguir acentos), sin repetidos y sin recortes. Los mazos con varias ramas se agrupan por rama.
+- Diccionario médico de visualización para abreviaturas y nombres pegados de Paco (AR -> Artritis reumatoide, LES -> Lupus eritematoso sistémico, etc.).
+- Buscar tarjetas (`/repasar/explorar` o `/explorar`): Búsqueda reactiva, chips de filtros con conteos reactivos (`mazo`, `tema`, `estado`, `vencidas`, `sanguijuelas`, `marcadas`), botón Más filtros plegable.
+- En computadora: tabla ordenable por columna (`frente`, `mazo`, `tema`, `estado`, `próxima fecha`, `intervalo`, `fallos`) con panel lateral para ver y editar la tarjeta inline sin perder la lista, con metadatos FSRS y botón de suspender/reanudar.
+- Atajos de teclado (`ArrowDown`, `ArrowUp`, `Space` para marcar/desmarcar, `Escape` para cerrar panel) y desplazamiento continuo progresivo en lugar de paginación.
+- Acciones en lote: suspender, reanudar, etiquetar, mover y reiniciar tarjetas (evento `cards_reset`).
+- Rendimiento verificado: filtrado de 10,000 tarjetas en < 100 ms (unit test).
+- Evidencia: 75 pruebas unitarias passing, TypeScript typecheck y ESLint 100% limpios. E2E `tests/e2e/b4-explore-topics.spec.ts` agregada. Fusionado a `main`.
 
 ### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
