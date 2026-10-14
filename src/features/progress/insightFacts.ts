@@ -1,5 +1,6 @@
 // Hechos para el motor de autoconocimiento (D-074). Lee la bitácora y el banco y arma la entrada de
-// buildInsights. Es una función pura para poder probarla sin Dexie ni React.
+// buildInsights. Es una función pura para poder probarla sin Dexie ni React. Los repasos de las
+// tarjetas de una materia libre (B6) no entran, porque Conócete habla del ENARM.
 import { TZDate } from '@date-fns/tz';
 import type { Thresholds } from '@/config/thresholds';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
@@ -37,21 +38,29 @@ export function buildInsightInput(input: {
   today: string;
   desiredRetention: number;
   thresholds: InsightInput['thresholds'] & Pick<Thresholds, 'behavior'>;
+  /**
+   * Cartas de una materia libre (B6, freeSubjectCardIds). Sus repasos, sus días y las causas que se
+   * reportan en ellas no cuentan en Conócete, como no cuentan en las estadísticas por tema del ENARM.
+   * Sí cuentan en el tiempo de estudio, la racha y la meta del día, que se calculan aparte
+   */
+  freeSubjectCards?: ReadonlySet<string>;
 }): InsightInput {
   const { events, bank, timeZone } = input;
+  const freeSubjectCards = input.freeSubjectCards ?? new Set<string>();
   const sessionStart = new Map<string, number>();
   const shown = new Map<string, Extract<AppEvent, { type: 'question_shown' }>>();
   const changes = new Map<string, Extract<AppEvent, { type: 'answer_changed' }>[]>();
 
   // El motivo que marca el alumno se ata a su respuesta más reciente de esa pregunta, no a todas las
   // veces que la contestó, y si lo cambia vale el último. El ID del reporte puede ser el de la versión
-  // o el de la pregunta. Las causas de antes se leen con la tabla de equivalencias (4.23)
+  // o el de la pregunta. Las causas de antes se leen con la tabla de equivalencias (4.23). Los
+  // motivos que marca en una tarjeta de una materia libre no cuentan (B6)
   const motives = errorMotives(events, {
     aliases: (id) => {
       const stable = bank.questions.get(id)?.questionId;
       return stable ? [stable] : [];
     },
-  });
+  }).filter((entry) => !(entry.kind === 'card' && freeSubjectCards.has(entry.targetId)));
   const motiveOfAnswer = motivesByAttempt(motives);
   type Draft = Omit<AnswerFact, 'misread'>;
   const drafts: Draft[] = [];
@@ -79,6 +88,7 @@ export function buildInsightInput(input: {
         changes.get(key + event.payload.questionVersionId)?.push(event);
         break;
       case 'card_reviewed': {
+        if (freeSubjectCards.has(event.payload.cardId)) break;
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);
         firstDay ??= day;

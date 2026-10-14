@@ -9,6 +9,9 @@ export const examReviewText = {
   createCard: {
     button: 'Crear tarjeta',
     buttonLabel: (question: string) => `Crear tarjeta de la pregunta ${question}`,
+    // Va junto al botón y el lector de pantalla lo lee con él. El botón sigue activo, porque el
+    // alumno puede querer otra tarjeta en otro mazo
+    alreadyCreated: 'Ya creaste una tarjeta con esta pregunta',
     title: 'Crear tarjeta',
     description:
       'Se arma con el texto del banco. Revísala y cámbiala a tu gusto antes de guardarla.',

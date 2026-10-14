@@ -1,10 +1,19 @@
 // Apuntes (D-092). Se escribe un apunte con marcas y salen tarjetas que Repasar ya trae. Al editar el
 // texto las tarjetas se actualizan sin perder las que siguen, quitar una marca las quita y volver a
 // ponerla las revive. Un enlace a otro apunte se resuelve y se puede crear desde el apunte que lo cita.
+// Desde B6 Apuntes es de los planes de pago (respuesta 20), así que cada prueba contrata el mensual
+// con el pago simulado. Lo nuevo de B6 vive en outlines-b6.spec.ts.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+
+/** Una cuenta nueva con el plan mensual simulado, que incluye Apuntes */
+async function signUpPaid(page: Page) {
+  await signUp(page);
+  await subscribeMonthly(page);
+}
 
 const editorOf = (page: Page) => page.getByRole('textbox', { name: t.outlines.editor.label });
 
@@ -24,7 +33,7 @@ async function saved(page: Page) {
 
 test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', async ({ page }) => {
   test.setTimeout(180_000);
-  await signUp(page);
+  await signUpPaid(page);
   await createOutline(page, 'Asma');
 
   // Dos líneas con marca y una más dentro de la primera
@@ -113,7 +122,7 @@ test('partir una línea con Enter al inicio y volverla a unir conserva su nota y
   page,
 }) => {
   test.setTimeout(120_000);
-  await signUp(page);
+  await signUpPaid(page);
   await createOutline(page, 'Historial');
   await page.keyboard.type('Pregunta >> Respuesta');
   await saved(page);
@@ -146,7 +155,7 @@ test('partir una línea con Enter al inicio y volverla a unir conserva su nota y
 
 test('pegar varias líneas hace varias líneas con su tarjeta cada una', async ({ page }) => {
   test.setTimeout(120_000);
-  await signUp(page);
+  await signUpPaid(page);
   await createOutline(page, 'Pegado');
   await page.evaluate(() => {
     const target = document.querySelector('[role="textbox"]');
@@ -164,7 +173,7 @@ test('los enlaces entre apuntes se resuelven y se crean desde el que los cita', 
   page,
 }) => {
   test.setTimeout(120_000);
-  await signUp(page);
+  await signUpPaid(page);
   await createOutline(page, 'Neumología');
   await page.keyboard.type('Ver [[Asma]] para el tratamiento');
   await saved(page);
@@ -187,7 +196,7 @@ test('Esc saca el foco del editor y los botones de la barra sirven sin teclado',
   page,
 }) => {
   test.setTimeout(120_000);
-  await signUp(page);
+  await signUpPaid(page);
   await createOutline(page, 'Teclado');
   await page.keyboard.type('Uno');
   await page.keyboard.press('Enter');
@@ -199,5 +208,6 @@ test('Esc saca el foco del editor y los botones de la barra sirven sin teclado',
   await expect(editorOf(page).locator('ul ul li')).toHaveCount(0);
   await editorOf(page).click();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: t.outlines.editor.indent })).toBeFocused();
+  // Esc lleva a la barra, a su primer botón, el de volver tarjeta la línea (B6)
+  await expect(page.getByRole('button', { name: t.outlines.editor.cardLabel })).toBeFocused();
 });

@@ -2,7 +2,8 @@
 // sesgo probable, qué se podía descartar, explicación, referencias por verificar, por qué falló,
 // crear una tarjeta con la pregunta y reporte para revisión médica. La usa la retroalimentación tras
 // cada pregunta y el resumen de la sesión, que es donde se ve por defecto (D-087). El motivo es uno
-// de los siete de Ricardo, opcional y cambiable, y vale el último (B5).
+// de los siete de Ricardo, opcional y cambiable, y vale el último (B5). Junto a Crear tarjeta se
+// avisa si ya creó una con esa pregunta.
 import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
@@ -17,6 +18,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
 import { CreateCardButton } from '../questionCards/CreateCardDialog';
+import { useQuestionsWithCards } from '../questionCards/useQuestionsWithCards';
 import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
 import type { ReadySession } from '../shared/RequireSession';
@@ -50,6 +52,7 @@ export function AnswerReview({
   const practice = usePractice();
   const { question, options } = bundle;
   const reports = useMotiveReports(session.user.id);
+  const withCards = useQuestionsWithCards(session.user.id);
   const [reason, setReason] = useState<ReportReason>('clinical_error');
   const [reported, setReported] = useState(false);
   const ctx = {
@@ -205,6 +208,7 @@ export function AnswerReview({
                   ? undefined
                   : t.examReview.createCard.buttonLabel(String(questionNumber))
               }
+              created={withCards?.has(question.questionId) ?? false}
             />
           </div>
           {/* El reporte para revisión médica queda plegado para no ocupar una tarjeta entera */}

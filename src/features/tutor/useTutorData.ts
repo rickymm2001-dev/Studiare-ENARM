@@ -9,6 +9,7 @@ import type { AiArtifact } from '@/data/schemas/activity';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
 import type { Card, Note } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
+import { freeSubjectCardIds } from '@/data/usecases/outlines';
 import { deckIds } from '@/demo/content/deckEntities';
 import { studyDayOf } from '@/engines/studyDay';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
@@ -28,6 +29,8 @@ export interface TutorData {
   artifacts: AiArtifact[];
   /** Los consejos que un médico ya revisó, por clave de sesgo */
   tipReviews: ReadonlyMap<string, TipReview>;
+  /** Cartas de una materia libre, que no cuentan en Conócete ni en el informe semanal (B6) */
+  freeSubjectCards: ReadonlySet<string>;
 }
 
 export function useTutorData(
@@ -79,14 +82,18 @@ export function useTutorData(
     async () => tipReviewsFrom(await api.repos.aiArtifacts.list()),
     [api.repos],
   );
-  if (!catalog || !bank || !content || !artifacts || !tipReviews) return undefined;
-  return { catalog, bank, content, artifacts, tipReviews };
+  const freeSubjectCards = useLiveData(() => freeSubjectCardIds(api), [api.repos]);
+  if (!catalog || !bank || !content || !artifacts || !tipReviews || !freeSubjectCards) {
+    return undefined;
+  }
+  return { catalog, bank, content, artifacts, tipReviews, freeSubjectCards };
 }
 
 /**
  * La vista del tutor con los datos cargados. Se recalcula solo cuando algo cambia. La parte pesada
- * depende de la bitácora, el banco y las tarjetas, no de los artefactos, así responder una
- * hipótesis o revisar un consejo no la vuelve a calcular completa
+ * depende de la bitácora, el banco y las tarjetas, también de cuáles son de una materia libre (B6),
+ * no de los artefactos, así responder una hipótesis o revisar un consejo no la vuelve a calcular
+ * completa
  */
 export function useTutorView(
   session: ReadySession,
@@ -94,7 +101,7 @@ export function useTutorView(
   data: TutorData,
 ): TutorView {
   const { user, settings } = session;
-  const { catalog, bank, content, tipReviews } = data;
+  const { catalog, bank, content, tipReviews, freeSubjectCards } = data;
   const base = useMemo(() => {
     const noteById = new Map(content.notes.map((note) => [note.id, note]));
     const catalogTopic = new Map(
@@ -132,8 +139,9 @@ export function useTutorView(
       today: studyDayOf(now, user.timeZone),
       desiredRetention: settings.desiredRetention,
       thresholds: DEFAULT_THRESHOLDS,
+      freeSubjectCards,
     });
-  }, [events, catalog, bank, content, user.timeZone, settings.desiredRetention]);
+  }, [events, catalog, bank, content, freeSubjectCards, user.timeZone, settings.desiredRetention]);
   // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
   return useMemo(
     () => ({ ...base, biasTips: applyTipReviews(base.biasTips, tipReviews) }),

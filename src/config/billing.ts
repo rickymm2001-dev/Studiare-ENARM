@@ -17,9 +17,9 @@ export interface PlanAccess {
 }
 
 /**
- * Funciones de la carga diaria que cada plan puede abrir o cerrar (D-085, fila 14). Hoy todas están
- * abiertas en todos los planes, porque Ricardo todavía no decide cuáles serán de pago. Cuando lo
- * decida solo cambia esta tabla y la interfaz ya consulta la bandera en cada punto de entrada
+ * Funciones de la carga diaria que cada plan puede abrir o cerrar (D-085, fila 14). Gratis cierra las
+ * tarjetas con IA y Apuntes (respuesta 20 del plan del cambio). Para cambiar cuáles son de pago solo
+ * cambia esta tabla, y la interfaz ya consulta la bandera en cada punto de entrada
  */
 export const GATED_FEATURES = [
   'explore',
@@ -74,8 +74,12 @@ export const PLANS: Record<PlanKey, PlanDef> = {
     key: 'free',
     priceMxn: 0,
     access: { dailyQuestions: 20, fullExam: false, aiTutor: false, importDecks: true, party: true },
-    // La IA con textos y PDF es de pago (D-085, fila 14)
-    features: { ...ALL_FEATURES_OPEN, aiCards: false },
+    // La IA con textos y PDF es de pago (D-085, fila 14). Apuntes también, con su candado y su vista
+    // previa (respuesta 20, B6 del plan del cambio).
+    // B8. Hoy este candado de Apuntes solo lo pone el navegador. En el bloque B8 se cierra también en
+    // el servidor, con permisos por fila según el plan para los apuntes que viajan a la nube (los
+    // registros outline de sync_records), como pide la sección B8 del plan del cambio
+    features: { ...ALL_FEATURES_OPEN, aiCards: false, outlines: false },
     aiCardsPerDay: 0,
   },
   founder: {

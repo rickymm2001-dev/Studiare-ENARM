@@ -19,9 +19,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
-- [x] B4. Repasar y Buscar tarjetas (PR en curso)
-- [x] B5. Revisión del examen y motivos de error (PR en curso, junto con B4)
-- [ ] B6. Apuntes y mazos
+- [x] B4. Repasar y Buscar tarjetas (PR 43 fusionado)
+- [x] B5. Revisión del examen y motivos de error (PR 43 fusionado, junto con B4)
+- [x] B6. Apuntes y mazos (PR en curso)
 - [ ] B7. Party real y lo que se queda o se va
 - [ ] B8. Plan Gratis
 - [ ] B9. Cuentas y acceso
@@ -112,11 +112,17 @@ Evidencia
 - Evidencia de B4 y B5. Typecheck, lint y formato limpios y 2,977 pruebas unitarias que pasan; la única que falló con la máquina cargada fue la de rendimiento de ordenar en Buscar tarjetas, que pasa sola. E2e de ai-cards, deck-topics, exam-review, explore, import-export, review-tools y review en teléfono y computadora, 30 de 30
 - Capturas en docs/screenshots/v3/b5
 
+### B6. Apuntes y mazos (D-125)
+- Hecho. Una línea se vuelve tarjeta con un botón, con menú de tipos y sin escribir marcas. Cada apunte elige su mazo y su tema del ENARM o una materia libre que no cuenta en las estadísticas. Modo clase con plantillas, búsqueda sin acentos y esquema de tres niveles. IA en los planes de pago con propuestas ancladas a su línea, en borrador y con descarte una por una. Candado en Gratis con vista previa
+- Revisión independiente con sus 4 hallazgos corregidos. La unión con B4 y B5 resolvió 6 choques y 4 que git no marcó (tutor sin recalcular, motivos de materia libre en Progreso, colores del cierre de B2 y un renglón que se desbordaba en el teléfono)
+- Evidencia. Typecheck, lint y formato limpios. Vitest completo con 3,062 pruebas que pasan. E2e de outlines-b6, outlines, ai-cards, deck-topics y explore 26 de 26 en teléfono y computadora, más exam-review, calibrating, navigation, offline y theme-dark 28 de 28
+- Capturas en docs/screenshots/v3/b6
+
 ### Estado de las ramas en paralelo (2026-10-14, 04:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
 - B3 fusionado en main (PR 42)
-- B4 y B5 cerrados en la rama de trabajo. Antes se revirtió la versión paralela que entró directo a main sin PR (9bcf111), por decisión de Ricardo
-- B6 en int6, unido sobre B4 y B5. Un subagente busca choques que git no marcó y corre sus e2e
+- B4 y B5 fusionados en main (PR 43). Antes se revirtió la versión paralela que entró directo a main sin PR (9bcf111), por decisión de Ricardo
+- B6 cerrado en la rama de trabajo, con su PR
 - B7 en b7int con los 9 hallazgos de su revisión corregidos (616f948). Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
 - B8 en b8 (Plan Gratis), en implementación sobre b6 y b7int. Su migración será 20261021000001
 - B9 en b9 con los hallazgos de su revisión corregidos (7a1ff2d). Su migración 20261020000001 no se ha aplicado al proyecto
@@ -132,6 +138,7 @@ Evidencia
 - B2. Quedaron con color las fases del Pomodoro (enfoque en el color de acción y descanso en un tono de rama) y el contador de Nuevas en Repasar. Si los quieres neutros, solo cambian sus clases
 - El PR 34 (rama claude/serene-lovelace-ckuetk, de otra sesión tuya del mismo 2026-10-12, antes de que se escribiera el plan) cambia Inicio. Carga de repaso de los próximos 7 días en lugar de la gráfica por mes, título Tu calendario y 0.8 cm de separación en lugar de los 1.25rem de D-117. No está en el plan y usa el número D-118, que el plan ya le dio al plan pagado único. Su CI está en verde. B2 arrancó sin él, porque el rediseño toca los mismos archivos de Inicio y fusionarlo sin tu respuesta habría mezclado dos criterios de separación. Sigue abierto. Si lo quieres, dilo y lo adapto a los tokens nuevos con el número de decisión que siga; si no, lo cierro
 - El repo ya está conectado a Cloudflare Pages (proyecto enarm-prototipo) y publica una vista previa por PR. B17 lo aprovecha. Falta saber el dominio
+- B4 y B5. Revisé la versión que se revirtió. Todo lo que pide el plan ya estaba en la que se quedó y se rescataron tres detalles chicos (el aviso de tarjeta ya creada en la revisión del examen, el atajo X que dice seleccionar y dos pruebas que fallaban en Windows). Quedan a tu gusto, y cada uno es un cambio chico. Un número junto a cada tema de los mazos. Un total global de motivos de error en Progreso, además del reparto por rama. Una marca propia del alumno como la bandera de Anki, porque hoy Marcadas son las tarjetas con señal de la IA. Elegir temas dentro de cada mazo en Repasar (hoy se eligen mazo y subespecialidad). Pasar al documento de revisión médica las 22 diferencias de nombres de temas de la otra versión como alternativas
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 

@@ -73,8 +73,13 @@ test('las dos bases existen por separado en IndexedDB', async ({ page }) => {
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   await expect(page.getByText(t.database.storedIn('enarm_demo'))).toBeVisible();
   await expect(page.getByText(t.database.users(0))).toBeVisible();
-  const names = await page.evaluate(async () =>
-    (await indexedDB.databases()).map((database) => database.name).sort(),
-  );
-  expect(names).toEqual(['enarm_demo', 'enarm_real']);
+  // Dexie crea la base de demostración al abrirla por primera vez, un momento después del cambio, y
+  // el conteo de usuarios ya decía 0 con la base real, así que se espera a que exista
+  await expect
+    .poll(() =>
+      page.evaluate(async () =>
+        (await indexedDB.databases()).map((database) => database.name).sort(),
+      ),
+    )
+    .toEqual(['enarm_demo', 'enarm_real']);
 });

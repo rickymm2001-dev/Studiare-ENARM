@@ -92,7 +92,8 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       'features/profile/AvatarCropper.tsx',
     ]);
     const offenders = sourceFiles(SRC).flatMap((file) => {
-      const relative = file.slice(SRC.length);
+      // En Windows la ruta llega con diagonales invertidas y ROUND_OK usa las normales
+      const relative = file.slice(SRC.length).replace(/\\/g, '/');
       if (ROUND_OK.has(relative)) return [];
       return readFileSync(file, 'utf8')
         .split('\n')

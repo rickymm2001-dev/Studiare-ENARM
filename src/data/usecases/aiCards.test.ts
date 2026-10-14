@@ -7,6 +7,8 @@ import { makeUser, testApi } from '../testing/fixtures';
 import {
   GenerationLimitError,
   AI_DECK_NAME,
+  approveGeneration,
+  discardProposal,
   generationsLeft,
   generationsToday,
   recordGeneration,
@@ -284,6 +286,29 @@ describe('guardar las tarjetas elegidas', () => {
       (event) => event.type === 'ai_artifact_approved',
     );
     expect(approved).toHaveLength(1);
+  });
+
+  it('aprobar de una en una suma las guardadas sin repetir el evento y no toca un rechazado', async () => {
+    const { api, user } = setup();
+    // Como Crear tarjeta (B5) o un apunte (B6), que guardan una propuesta a la vez del mismo artefacto
+    const { artifactId } = await recordGeneration(api, user, 'monthly', result(), 'a', NOW);
+    await approveGeneration(api, user, artifactId, 1, NOW);
+    await approveGeneration(api, user, artifactId, 1, NOW);
+    const artifact = await api.repos.aiArtifacts.get(artifactId);
+    expect(artifact).toMatchObject({ status: 'approved', decidedBy: user.id });
+    expect(artifact?.content).toMatchObject({ saved: 2 });
+    const approved = (await api.repos.events.query({ userId: user.id })).filter(
+      (event) => event.type === 'ai_artifact_approved',
+    );
+    expect(approved).toHaveLength(1);
+
+    // Una generación que el alumno descartó completa queda rechazada aunque después se apruebe
+    const other = await recordGeneration(api, user, 'monthly', result(), 'b', NOW);
+    await discardProposal(api, user, { artifactId: other.artifactId, pending: 0 }, NOW);
+    await approveGeneration(api, user, other.artifactId, 1, NOW);
+    const rejected = await api.repos.aiArtifacts.get(other.artifactId);
+    expect(rejected).toMatchObject({ status: 'rejected' });
+    expect(rejected?.content).not.toHaveProperty('saved');
   });
 
   it('un cloze con dos huecos da dos cartas', async () => {

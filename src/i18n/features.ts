@@ -538,6 +538,8 @@ export const featureText = {
     },
     featureLocked: (name: string) => `Tu plan no incluye ${midSentence(name)}.`,
     featureSeePlans: 'Ver planes',
+    // El botón de los candados de Gratis cuando ya existe la prueba gratis (B10, bandera freeTrial)
+    freeTrialCta: 'Prueba 7 días gratis',
     savings: (percent: number) => `Ahorras ${percent}% contra 12 meses al precio regular`,
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',

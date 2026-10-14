@@ -3,7 +3,8 @@
 // alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace. Las
 // preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2). Cada
 // pregunta se puede volver tarjeta y en cada fallada se marca por qué falló, con los siete motivos
-// de Ricardo, opcional y cambiable (B5, comentarios 1 y 2).
+// de Ricardo, opcional y cambiable (B5, comentarios 1 y 2). Junto a Crear tarjeta se avisa si ya
+// creó una con esa pregunta.
 import { CheckCircle2, ChevronDown, Flag, MinusCircle, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
@@ -14,6 +15,7 @@ import { cn } from '@/ui/cn';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { CreateCardButton } from '../questionCards/CreateCardDialog';
+import { useQuestionsWithCards } from '../questionCards/useQuestionsWithCards';
 import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
 import type { ReadySession } from '../shared/RequireSession';
@@ -68,8 +70,10 @@ export function ExamReview({
   session: ReadySession;
 }) {
   const [filter, setFilter] = useState<Filter>('all');
-  // Los motivos se leen una vez para toda la lista, no una vez por pregunta
+  // Los motivos y las preguntas que ya tienen tarjeta se leen una vez para toda la lista, no una
+  // vez por pregunta
   const reports = useMotiveReports(session.user.id);
+  const withCards = useQuestionsWithCards(session.user.id);
   const rows = rowsOf(state, bundles);
   const visible = rows.filter((row) => {
     if (filter === 'missed') return row.outcome === 'missed';
@@ -103,6 +107,7 @@ export function ExamReview({
                 state={state}
                 session={session}
                 reports={reports}
+                created={withCards?.has(row.bundle.question.questionId) ?? false}
               />
             ))}
           </ol>
@@ -117,11 +122,14 @@ function ReviewItem({
   state,
   session,
   reports,
+  created,
 }: {
   row: Row;
   state: ExamState;
   session: ReadySession;
   reports: readonly AppEvent[] | undefined;
+  /** Ya creó una tarjeta con esta pregunta */
+  created: boolean;
 }) {
   const api = useDataApi();
   const { bundle } = row;
@@ -231,6 +239,7 @@ function ReviewItem({
               bundle={bundle}
               from="exam_review"
               label={t.examReview.createCard.buttonLabel(String(row.index + 1))}
+              created={created}
             />
           </div>
         </div>

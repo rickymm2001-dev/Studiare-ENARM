@@ -1,6 +1,7 @@
 // El análisis de las respuestas del alumno que comparten Progreso y los widgets de Inicio. Junta cada
 // respuesta con su rama, tema y dificultad, el dominio por subespecialidad, el informe de Conócete y
-// las subespecialidades débiles, así todos dicen lo mismo. Sin React ni Dexie.
+// las subespecialidades débiles, así todos dicen lo mismo. Conócete deja fuera las tarjetas de una
+// materia libre (B6). Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
 import type { Question } from '@/data/schemas/bank';
 import type { AppEvent } from '@/data/schemas/events';
@@ -34,6 +35,8 @@ export function buildAnalysis(input: {
   today: string;
   desiredRetention: number;
   thresholds: Thresholds;
+  /** Cartas de una materia libre, que no cuentan en Conócete (B6) */
+  freeSubjectCards?: ReadonlySet<string>;
 }): Analysis {
   const { events, bank, thresholds } = input;
   const responses = events.flatMap((event): AnsweredQuestion[] => {
@@ -66,6 +69,7 @@ export function buildAnalysis(input: {
       today: input.today,
       desiredRetention: input.desiredRetention,
       thresholds,
+      freeSubjectCards: input.freeSubjectCards,
     }),
   );
   return { responses, byTopic, report, weakTopics: weakTopicsFrom(byTopic) };
