@@ -122,8 +122,8 @@ export interface SecondDevice {
 }
 
 /**
- * Otro navegador con la misma nube, con las mismas opciones del proyecto (tamaño, idioma y zona
- * horaria). Sus errores de consola también tumban la prueba. Quien lo abre lo cierra al terminar
+ * Otro navegador con la misma nube, con las mismas opciones del proyecto (tamaño, idioma, zona
+ * horaria y tema). Sus errores de consola también tumban la prueba. Quien lo abre lo cierra al terminar
  */
 export async function openSecondDevice(
   browser: Browser,
@@ -141,6 +141,7 @@ export async function openSecondDevice(
     locale: use.locale,
     timezoneId: use.timezoneId,
     reducedMotion: use.reducedMotion,
+    colorScheme: use.colorScheme,
     serviceWorkers: use.serviceWorkers,
   });
   await cloud.attach(context);

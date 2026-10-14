@@ -13,6 +13,7 @@ import { invoicesText } from '@/i18n/invoices';
 import {
   enterWithLink,
   expect,
+  openSecondDevice,
   reloadWithServerFlags,
   test as cloudTest,
 } from '../../e2e/support/cloudFixtures';
@@ -49,7 +50,7 @@ cloudTest.describe('Pagos completos', () => {
 
   cloudTest(
     'B10. Prueba gratis, forma de pago, pases, facturas y Admin, Pagos',
-    async ({ page, cloud }, info) => {
+    async ({ page, browser, cloud, consoleErrors }, info) => {
       cloudTest.setTimeout(600_000);
       const project = info.project.name;
       const full = FULL_WALK(project);
@@ -93,21 +94,28 @@ cloudTest.describe('Pagos completos', () => {
         await capture(page, B10_DIR, '05-perfil-con-prueba', project);
       }
 
-      // Carla paga un pase de un mes con OXXO. Primero pendiente y luego activo
-      await enterWithLink(page, cloud, 'carla.b10@ejemplo.mx', 'Carla');
+      // Carla paga un pase de un mes con OXXO en su propio navegador. Primero pendiente y luego activo
+      const carla = await openSecondDevice(browser, cloud, consoleErrors);
+      const carlaPage = carla.page;
+      await enterWithLink(carlaPage, cloud, 'carla.b10@ejemplo.mx', 'Carla');
+      await reloadWithServerFlags(carlaPage);
+      const carlaMonthly = carlaPage.getByRole('region', {
+        name: t.billing.plans.monthly,
+        exact: true,
+      });
       await open(
-        page,
+        carlaPage,
         SCREENS.subscription.path,
-        monthly.getByRole('button', { name: t.billing.freeTrialCta }),
+        carlaMonthly.getByRole('button', { name: t.billing.freeTrialCta }),
       );
-      await monthly.getByRole('button', { name: t.billing.freeTrialCta }).click();
-      await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
-      await page.getByRole('button', { name: text.actions.oxxo }).click();
-      await page.getByRole('button', { name: gatewayText.voucher }).click();
-      await expect(page).toHaveURL(/pago=pendiente&metodo=oxxo/);
+      await carlaMonthly.getByRole('button', { name: t.billing.freeTrialCta }).click();
+      await carlaPage.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
+      await carlaPage.getByRole('button', { name: text.actions.oxxo }).click();
+      await carlaPage.getByRole('button', { name: gatewayText.voucher }).click();
+      await expect(carlaPage).toHaveURL(/pago=pendiente&metodo=oxxo/);
       const pending = cloud.paymentsOf('carla.b10@ejemplo.mx')[0];
       await expect(
-        page.getByText(
+        carlaPage.getByText(
           text.pending.oxxoUntil(
             t.billing.price(149),
             new Date(pending?.expiresAt ?? 0).toLocaleDateString('es-MX', {
@@ -119,24 +127,24 @@ cloudTest.describe('Pagos completos', () => {
           ),
         ),
       ).toBeVisible({ timeout: 30_000 });
-      await capture(page, B10_DIR, '06-pase-pendiente', project);
+      await capture(carlaPage, B10_DIR, '06-pase-pendiente', project);
       cloud.settleVoucher('carla.b10@ejemplo.mx', 'paid');
       await open(
-        page,
+        carlaPage,
         SCREENS.subscription.path,
-        page.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
+        carlaPage.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
       );
-      await capture(page, B10_DIR, '07-pase-activo', project);
+      await capture(carlaPage, B10_DIR, '07-pase-activo', project);
 
       // Carla pide la factura de su pase en Perfil
       await open(
-        page,
+        carlaPage,
         `${SCREENS.settings.path}#perfil`,
-        page
+        carlaPage
           .getByRole('region', { name: invoices.student.title })
           .getByRole('button', { name: invoices.student.request }),
       );
-      const invoiceCard = page.getByRole('region', { name: invoices.student.title });
+      const invoiceCard = carlaPage.getByRole('region', { name: invoices.student.title });
       await invoiceCard.getByRole('button', { name: invoices.student.request }).click();
       await invoiceCard.getByLabel(invoices.student.form.rfc).fill('XAXX010101000');
       await invoiceCard.getByLabel(invoices.student.form.legalName).fill('Carla Gómez');
@@ -147,20 +155,26 @@ cloudTest.describe('Pagos completos', () => {
       await expect(
         invoiceCard.getByText(invoices.student.sent('carla.b10@ejemplo.mx')),
       ).toBeVisible();
-      await capture(page, B10_DIR, '09-perfil-con-facturas', project);
+      await capture(carlaPage, B10_DIR, '09-perfil-con-facturas', project);
+      await carla.context.close();
 
-      // El admin ve el resumen, la solicitud, los códigos y los pagos
+      // El admin, en otro navegador, ve el resumen, la solicitud, los códigos y los pagos
       cloud.createUser({ email: 'admin.b10@ejemplo.mx', alias: 'Admin', role: 'admin' });
-      await enterWithLink(page, cloud, 'admin.b10@ejemplo.mx');
+      const admin = await openSecondDevice(browser, cloud, consoleErrors);
+      await enterWithLink(admin.page, cloud, 'admin.b10@ejemplo.mx');
+      await reloadWithServerFlags(admin.page);
       await open(
-        page,
+        admin.page,
         SCREENS.adminBilling.path,
-        page.getByRole('region', { name: invoices.admin.invoices.title }).getByText('CARLA GÓMEZ'),
-        page.getByRole('region', { name: invoices.admin.payments.title }).getByText('Carla', {
+        admin.page
+          .getByRole('region', { name: invoices.admin.invoices.title })
+          .getByText('CARLA GÓMEZ'),
+        admin.page.getByRole('region', { name: invoices.admin.payments.title }).getByText('Carla', {
           exact: false,
         }),
       );
-      await capture(page, B10_DIR, '10-admin-pagos', project);
+      await capture(admin.page, B10_DIR, '10-admin-pagos', project);
+      await admin.context.close();
     },
   );
 });
