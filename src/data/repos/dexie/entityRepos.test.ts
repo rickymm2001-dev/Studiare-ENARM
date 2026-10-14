@@ -198,3 +198,103 @@ describe('apuntes y búsquedas por índice (D-092)', () => {
     ).toEqual([cards[0]?.id, cards[1]?.id, cards[2]?.id].sort());
   });
 });
+
+describe('banco de la nube en el navegador (B11)', () => {
+  const entry = (overrides: Record<string, unknown> = {}) => ({
+    questionId: newId(),
+    versionId: newId(),
+    version: 1,
+    branch: 'internal_medicine',
+    topic: 'cardiology',
+    subtopic: 'hypertension',
+    difficulty: 3,
+    itemKinds: [],
+    polarity: 'affirmative' as const,
+    task: 'diagnosis' as const,
+    format: 'direct' as const,
+    caseId: null,
+    caseOrder: null,
+    caseSize: null,
+    variantOf: null,
+    examEligible: true,
+    distractorBiases: ['anchoring'],
+    optionCount: 4,
+    language: 'es' as const,
+    status: 'published' as const,
+    seq: 1,
+    ...overrides,
+  });
+
+  it('el catálogo guarda con validación y lista las publicadas y por versión', async () => {
+    const { repos } = setup();
+    const published = entry();
+    const retired = entry({ status: 'retired', seq: 2 });
+    expect(await repos.catalog.putMany([published, retired])).toBe(2);
+    expect(await repos.catalog.count()).toBe(2);
+    expect((await repos.catalog.listPublished()).map((row) => row.questionId)).toEqual([
+      published.questionId,
+    ]);
+    expect(await repos.catalog.getByVersion(retired.versionId)).toEqual(retired);
+    expect(await repos.catalog.get(published.questionId)).toEqual(published);
+    // Un id que no es ULID o un caso a medias no entran
+    await expect(repos.catalog.putMany([entry({ questionId: 'no-ulid' })])).rejects.toThrow();
+    await expect(repos.catalog.putMany([entry({ caseId: newId() })])).rejects.toThrow();
+    expect(await repos.catalog.count()).toBe(2);
+  });
+
+  it('el estado del banco guarda una fila por clave y devuelve la de la clave pedida', async () => {
+    const { repos } = setup();
+    expect(await repos.bankState.get('catalog')).toBeUndefined();
+    await repos.bankState.put({
+      key: 'catalog',
+      since: 12,
+      complete: true,
+      open: true,
+      syncedAt: '2026-10-20T15:00:00.000Z',
+    });
+    await repos.bankState.put({
+      key: 'catalog',
+      since: 15,
+      complete: true,
+      open: true,
+      syncedAt: '2026-10-20T16:00:00.000Z',
+    });
+    expect(await repos.bankState.get('catalog')).toMatchObject({ since: 15 });
+    expect(await repos.bankState.get('quota')).toBeUndefined();
+    await expect(
+      repos.bankState.put({
+        key: 'quota',
+        at: '2026-10-20T16:00:00.000Z',
+        quota: {
+          open: true,
+          plan: 'free',
+          limit: 20,
+          used: -1,
+          left: 21,
+          day: '2026-10-20',
+          resetsAt: '2026-10-21T10:00:00.000Z',
+          brake: { retryAt: null },
+        },
+      }),
+    ).rejects.toThrow();
+  });
+
+  it('las imágenes de los mazos se guardan como Blob y se cuentan por submazo', async () => {
+    const { repos } = setup();
+    const media = (file: string, subjectKey = 'cardiologia') => ({
+      path: `/deck-media/paco-mi/${subjectKey}/${file}`,
+      deckKey: 'paco-mi',
+      subjectKey,
+      deckVersion: 1,
+      type: 'image/png' as const,
+      blob: new Blob([new Uint8Array([1, 2, 3])], { type: 'image/png' }),
+    });
+    expect(
+      await repos.deckMedia.putMany([media('a.png'), media('b.png'), media('c.png', 'renal')]),
+    ).toBe(3);
+    expect(await repos.deckMedia.countForSubject('paco-mi', 'cardiologia')).toBe(2);
+    const stored = await repos.deckMedia.get('/deck-media/paco-mi/cardiologia/a.png');
+    expect(stored?.blob.size).toBe(3);
+    await expect(repos.deckMedia.putMany([media('../fuera.png')])).rejects.toThrow();
+  });
+});

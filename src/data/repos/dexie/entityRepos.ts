@@ -3,11 +3,22 @@ import type { Table } from 'dexie';
 import type { z } from 'zod';
 import type { EnarmDb } from '../../db/database';
 import { OptionSchema, QuestionSchema, type Option, type Question } from '../../schemas/bank';
+import {
+  BankStateSchema,
+  CatalogEntrySchema,
+  DeckMediaSchema,
+  type BankState,
+  type BankStateKey,
+  type BankStateOf,
+} from '../../schemas/bankCloud';
 import { CardSchema, NoteSchema } from '../../schemas/decks';
 import type {
   AppendOnlyRepo,
+  BankStateRepo,
   CacheReader,
   CardRepo,
+  CatalogRepo,
+  DeckMediaRepo,
   EntityRepo,
   NoteRepo,
   OptionRepo,
@@ -169,5 +180,47 @@ export function createDexieOptionRepo(db: EnarmDb): OptionRepo {
     get: (id) => db.options.get(id),
     listForQuestionVersion: (questionVersionId) =>
       db.options.where('questionVersionId').equals(questionVersionId).toArray(),
+  };
+}
+
+export function createDexieCatalogRepo(db: EnarmDb): CatalogRepo {
+  return {
+    get: (questionId) => db.catalog.get(questionId),
+    list: () => db.catalog.toArray(),
+    listPublished: () => db.catalog.where('status').equals('published').toArray(),
+    getByVersion: (versionId) => db.catalog.where('versionId').equals(versionId).first(),
+    async putMany(entries) {
+      const parsed = entries.map((entry) => CatalogEntrySchema.parse(entry));
+      await db.catalog.bulkPut(parsed);
+      return parsed.length;
+    },
+    count: () => db.catalog.count(),
+  };
+}
+
+export function createDexieBankStateRepo(db: EnarmDb): BankStateRepo {
+  return {
+    async get<K extends BankStateKey>(key: K) {
+      const state = await db.bankState.get(key);
+      return state?.key === key ? (state as BankStateOf<K>) : undefined;
+    },
+    async put<S extends BankState>(state: S) {
+      const parsed = BankStateSchema.parse(state) as S;
+      await db.bankState.put(parsed);
+      return parsed;
+    },
+  };
+}
+
+export function createDexieDeckMediaRepo(db: EnarmDb): DeckMediaRepo {
+  return {
+    get: (path) => db.deckMedia.get(path),
+    async putMany(media) {
+      const parsed = media.map((item) => DeckMediaSchema.parse(item));
+      await db.deckMedia.bulkPut(parsed);
+      return parsed.length;
+    },
+    countForSubject: (deckKey, subjectKey) =>
+      db.deckMedia.where('[deckKey+subjectKey]').equals([deckKey, subjectKey]).count(),
   };
 }

@@ -23,6 +23,7 @@ import {
   QuestionSchema,
   ReviewAssignmentSchema,
 } from '../schemas/bank';
+import { BankStateSchema, CatalogEntrySchema, DeckMediaSchema } from '../schemas/bankCloud';
 import {
   CardStateCacheSchema,
   ItemStatsCacheSchema,
@@ -86,6 +87,15 @@ export const TABLES = {
     indexes: 'id, questionId, physicianId, &[questionId+physicianId]',
     kind: 'entity',
   },
+  // Banco en la nube (B11, 5.2). El catálogo sin texto, el estado de su bajada y las imágenes de los
+  // submazos del catálogo de mazos. Los cuerpos de las preguntas van a questions, options y cases
+  catalog: {
+    schema: CatalogEntrySchema,
+    indexes: 'questionId, versionId, branch, topic, status, seq',
+    kind: 'entity',
+  },
+  bankState: { schema: BankStateSchema, indexes: 'key', kind: 'entity' },
+  deckMedia: { schema: DeckMediaSchema, indexes: 'path, [deckKey+subjectKey]', kind: 'entity' },
 
   events: {
     schema: AppEventSchema,
