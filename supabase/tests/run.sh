@@ -38,7 +38,8 @@ for name in \
   20261022000003_invoice_requests \
   20261023000001_bank_taxonomy \
   20261023000002_bank_core \
-  20261023000003_bank_editorial; do
+  20261023000003_bank_editorial \
+  20261023000004_bank_sync; do
   psql_run -f "$here/../migrations/$name.sql"
 done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
@@ -76,3 +77,4 @@ psql_run -f "$here/invoice_requests_test.sql"
 psql_run -f "$here/bank_core_test.sql"
 psql_run -f "$here/bank_editorial_test.sql"
 psql_run -f "$here/physician_pay_test.sql"
+psql_run -f "$here/bank_sync_test.sql"

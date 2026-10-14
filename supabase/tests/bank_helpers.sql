@@ -178,3 +178,32 @@ begin
   end loop;
   return v_result;
 end $$;
+
+-- Un renglón ya planeado, como lo manda bank-sync a bank_sync_apply (SyncRowPayload)
+create or replace function pg_temp.sync_row(
+  p_row integer, p_key text, p_decision text, p_hash text default 'hash-1',
+  p_status text default null, p_author text default null, p_reviewer text default null,
+  p_expect uuid default null, p_case_key text default null, p_case_order integer default null,
+  p_case_vignette text default null, p_incomplete jsonb default '[]', p_notices jsonb default '[]',
+  p_explanation text default '[Prueba] Explicación simulada', p_prompt text default '[Prueba] ¿Pregunta simulada?'
+) returns jsonb language sql as $$
+  select jsonb_build_object(
+    'rowNumber', p_row, 'key', p_key, 'rowHash', p_hash, 'metaHash', md5(coalesce(p_author, '') || coalesce(p_reviewer, '') || coalesce(p_status, '')),
+    'decision', p_decision, 'expectLatestVersionId', p_expect, 'problems', '[]'::jsonb,
+    'incomplete', p_incomplete, 'notices', p_notices,
+    'question', jsonb_build_object(
+      'branch', 'obstetrics_gynecology', 'topic', 'prenatal_care', 'subtopic', 'gestational_diabetes',
+      'difficulty', 3, 'itemKinds', '[]'::jsonb, 'task', 'diagnosis', 'polarity', 'affirmative',
+      'structureDeclared', true, 'language', 'es',
+      'vignette', case when p_case_order = 1 then '' else '[Prueba] Caso simulado' end, 'prompt', p_prompt,
+      'explanation', p_explanation, 'refs', jsonb_build_array('[Prueba] Guía simulada'),
+      'options', jsonb_build_array(
+        jsonb_build_object('letter', 'A', 'text', '[Prueba] Opción A', 'correct', true, 'bias', null, 'rationale', '[Prueba] A'),
+        jsonb_build_object('letter', 'B', 'text', '[Prueba] Opción B', 'correct', false, 'bias', 'anchoring', 'rationale', '[Prueba] B'),
+        jsonb_build_object('letter', 'C', 'text', '[Prueba] Opción C', 'correct', false, 'bias', 'premature_closure', 'rationale', '[Prueba] C'),
+        jsonb_build_object('letter', 'D', 'text', '[Prueba] Opción D', 'correct', false, 'bias', 'framing_effect', 'rationale', '[Prueba] D')),
+      'canonical', jsonb_build_array('A', 'B', 'C', 'D'),
+      'caseKey', p_case_key, 'caseOrder', p_case_order, 'caseVignette', p_case_vignette),
+    'meta', jsonb_build_object('authorCode', p_author, 'reviewerCode', p_reviewer, 'sheetStatus', p_status)
+  )
+$$;

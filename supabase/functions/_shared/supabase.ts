@@ -339,3 +339,102 @@ export async function finishBillingActionViaRest(
     fetchImpl,
   );
 }
+
+// ---------------------------------------------------------------------------------------------
+// Banco en la nube (B11). Las funciones de la base de 20261023000004_bank_sync.sql. Devuelven el JSON
+// tal cual y bank/sync.ts lo revisa
+
+/**
+ * El admin que pidió Sincronizar ahora, con su propia sesión y la llave pública. La base revisa que sea
+ * admin (con segundo factor desde B9). null si no lo es o si el token no sirve
+ */
+export async function bankSyncAuthorizeViaRest(
+  env: SupabaseEnv,
+  authorization: string | null,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string | null> {
+  if (!authorization?.toLowerCase().startsWith('bearer ')) return null;
+  const reply = await fetchImpl(`${env.url}/rest/v1/rpc/admin_bank_sync_authorize`, {
+    method: 'POST',
+    headers: { apikey: env.anonKey, authorization, 'content-type': 'application/json' },
+    body: '{}',
+  });
+  if (!reply.ok) return null;
+  return asString(asRecord(await reply.json()).actorId);
+}
+
+/** Si la ficha de Cron es la que vive en Vault. false ante cualquier falla */
+export async function bankSyncCronOkViaRest(
+  env: SupabaseEnv,
+  token: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  try {
+    return (await callRpc(env, 'bank_sync_cron_ok', { p_token: token }, fetchImpl)) === true;
+  } catch {
+    return false;
+  }
+}
+
+/** Empieza una corrida, o la deja en skipped con su motivo */
+export function bankSyncBeginViaRest(
+  env: SupabaseEnv,
+  args: { trigger: string; target: string; actorId: string | null },
+  fetchImpl: typeof fetch = fetch,
+): Promise<unknown> {
+  return callRpc(
+    env,
+    'bank_sync_begin',
+    { p_trigger: args.trigger, p_target: args.target, p_actor: args.actorId },
+    fetchImpl,
+  );
+}
+
+/** El contenido de versiones de la app, para compararlas con su renglón */
+export function bankSyncVersionsContentViaRest(
+  env: SupabaseEnv,
+  versionIds: readonly string[],
+  fetchImpl: typeof fetch = fetch,
+): Promise<unknown> {
+  return callRpc(env, 'bank_sync_versions_content', { p_version_ids: versionIds }, fetchImpl);
+}
+
+/** Aplica una tanda de renglones ya planeados */
+export function bankSyncApplyViaRest(
+  env: SupabaseEnv,
+  args: { runId: string; rows: readonly unknown[]; forceDryRun: boolean },
+  fetchImpl: typeof fetch = fetch,
+): Promise<unknown> {
+  return callRpc(
+    env,
+    'bank_sync_apply',
+    { p_run: args.runId, p_rows: args.rows, p_force_dry_run: args.forceDryRun },
+    fetchImpl,
+  );
+}
+
+/** Termina una corrida con sus conteos */
+export function bankSyncFinishViaRest(
+  env: SupabaseEnv,
+  args: {
+    runId: string;
+    seenKeys: readonly string[] | null;
+    summary: Record<string, unknown>;
+    status: string;
+    reason: string | null;
+  },
+  fetchImpl: typeof fetch = fetch,
+): Promise<unknown> {
+  return callRpc(
+    env,
+    'bank_sync_finish',
+    {
+      p_run: args.runId,
+      p_seen_keys: args.seenKeys,
+      p_summary: args.summary,
+      p_status: args.status,
+      p_reason: args.reason,
+    },
+    fetchImpl,
+  );
+}

@@ -1,0 +1,1523 @@
+// Generado por scripts/content/sync-bank-shared.ts desde src/demo/content/topic-taxonomy.json. No lo edites a mano. Cambia el
+// original y corre npm run bank:shared.
+
+export const topicTaxonomy = {
+  version: 3,
+  status: 'pending_physician_review',
+  weightsProvisional: true,
+  weightsSource: 'Plan del cambio, sección 6, 2026-10-12',
+  branches: [
+    {
+      key: 'internal_medicine',
+      name: 'Medicina interna',
+      section: 'clinical',
+      weight: 75,
+      topics: [
+        {
+          key: 'cardiology',
+          name: 'Cardiología',
+          weight: 1.2,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'hypertension',
+              name: 'Hipertensión arterial sistémica',
+            },
+            {
+              key: 'heart_failure',
+              name: 'Insuficiencia cardiaca',
+            },
+            {
+              key: 'acute_coronary_syndrome',
+              name: 'Síndrome coronario agudo',
+            },
+            {
+              key: 'atrial_fibrillation',
+              name: 'Fibrilación auricular',
+            },
+          ],
+        },
+        {
+          key: 'endocrinology',
+          name: 'Endocrinología',
+          weight: 1.2,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'diabetes_type_2',
+              name: 'Diabetes mellitus tipo 2',
+            },
+            {
+              key: 'diabetic_emergencies',
+              name: 'Cetoacidosis y estado hiperosmolar',
+            },
+            {
+              key: 'thyroid_disease',
+              name: 'Hipotiroidismo e hipertiroidismo',
+            },
+            {
+              key: 'dyslipidemia',
+              name: 'Dislipidemias',
+            },
+          ],
+        },
+        {
+          key: 'pulmonology',
+          name: 'Neumología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'asthma_adult',
+              name: 'Asma en el adulto',
+            },
+            {
+              key: 'copd',
+              name: 'Enfermedad pulmonar obstructiva crónica',
+            },
+            {
+              key: 'community_pneumonia',
+              name: 'Neumonía adquirida en la comunidad',
+            },
+            {
+              key: 'pulmonary_embolism',
+              name: 'Tromboembolia pulmonar',
+            },
+          ],
+        },
+        {
+          key: 'nephrology',
+          name: 'Nefrología',
+          weight: 0.9,
+          baseTopic: 'endocrinology',
+          subtopics: [
+            {
+              key: 'acute_kidney_injury',
+              name: 'Lesión renal aguda',
+            },
+            {
+              key: 'chronic_kidney_disease',
+              name: 'Enfermedad renal crónica',
+            },
+            {
+              key: 'electrolyte_disorders',
+              name: 'Trastornos de sodio y potasio',
+            },
+          ],
+        },
+        {
+          key: 'gastroenterology',
+          name: 'Gastroenterología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'upper_gi_bleeding',
+              name: 'Hemorragia digestiva alta',
+            },
+            {
+              key: 'cirrhosis',
+              name: 'Cirrosis hepática y sus complicaciones',
+            },
+            {
+              key: 'viral_hepatitis',
+              name: 'Hepatitis virales',
+            },
+            {
+              key: 'peptic_ulcer',
+              name: 'Enfermedad ácido péptica',
+            },
+          ],
+        },
+        {
+          key: 'infectious_diseases',
+          name: 'Infectología',
+          weight: 1.1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'hiv',
+              name: 'Infección por VIH',
+            },
+            {
+              key: 'tuberculosis',
+              name: 'Tuberculosis',
+            },
+            {
+              key: 'dengue',
+              name: 'Dengue',
+            },
+            {
+              key: 'sepsis',
+              name: 'Sepsis y choque séptico',
+            },
+          ],
+        },
+        {
+          key: 'hematology',
+          name: 'Hematología',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'anemia_adult',
+              name: 'Anemias en el adulto',
+            },
+            {
+              key: 'anticoagulation',
+              name: 'Anticoagulación',
+            },
+            {
+              key: 'acute_leukemia_adult',
+              name: 'Leucemias agudas del adulto',
+            },
+          ],
+        },
+        {
+          key: 'neurology',
+          name: 'Neurología',
+          weight: 0.9,
+          baseTopic: 'cardiology',
+          subtopics: [
+            {
+              key: 'stroke',
+              name: 'Enfermedad vascular cerebral',
+            },
+            {
+              key: 'epilepsy',
+              name: 'Epilepsia y estado epiléptico',
+            },
+            {
+              key: 'headache',
+              name: 'Cefaleas primarias',
+            },
+          ],
+        },
+        {
+          key: 'rheumatology',
+          name: 'Reumatología',
+          weight: 0.7,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'rheumatoid_arthritis',
+              name: 'Artritis reumatoide',
+            },
+            {
+              key: 'lupus',
+              name: 'Lupus eritematoso sistémico',
+            },
+            {
+              key: 'gout',
+              name: 'Gota',
+            },
+          ],
+        },
+        {
+          key: 'psychiatry',
+          name: 'Psiquiatría',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'depression',
+              name: 'Depresión',
+            },
+            {
+              key: 'anxiety_disorders',
+              name: 'Trastornos de ansiedad',
+            },
+            {
+              key: 'substance_use',
+              name: 'Consumo de sustancias',
+            },
+          ],
+        },
+        {
+          key: 'oncology',
+          name: 'Oncología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'lung_cancer',
+              name: 'Cáncer de pulmón',
+            },
+            {
+              key: 'colorectal_cancer_internal',
+              name: 'Cáncer colorrectal',
+            },
+            {
+              key: 'lymphomas',
+              name: 'Linfomas',
+            },
+          ],
+        },
+        {
+          key: 'dermatology',
+          name: 'Dermatología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'dermatitis',
+              name: 'Dermatitis',
+            },
+            {
+              key: 'skin_cancer',
+              name: 'Cáncer de piel',
+            },
+            {
+              key: 'psoriasis',
+              name: 'Psoriasis',
+            },
+          ],
+        },
+        {
+          key: 'geriatrics',
+          name: 'Geriatría',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'geriatric_syndromes',
+              name: 'Síndromes geriátricos',
+            },
+            {
+              key: 'delirium',
+              name: 'Delirium',
+            },
+            {
+              key: 'falls',
+              name: 'Caídas',
+            },
+          ],
+        },
+        {
+          key: 'allergy_immunology',
+          name: 'Alergia e inmunología clínica',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'anaphylaxis',
+              name: 'Anafilaxia',
+            },
+            {
+              key: 'primary_immunodeficiency',
+              name: 'Inmunodeficiencias',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'pediatrics',
+      name: 'Pediatría',
+      section: 'clinical',
+      weight: 50,
+      topics: [
+        {
+          key: 'neonatology',
+          name: 'Neonatología',
+          weight: 1.2,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'neonatal_jaundice',
+              name: 'Ictericia neonatal',
+            },
+            {
+              key: 'neonatal_resuscitation',
+              name: 'Reanimación neonatal',
+            },
+            {
+              key: 'neonatal_respiratory_distress',
+              name: 'Dificultad respiratoria del recién nacido',
+            },
+            {
+              key: 'neonatal_sepsis',
+              name: 'Sepsis neonatal',
+            },
+          ],
+        },
+        {
+          key: 'growth_development',
+          name: 'Crecimiento y desarrollo',
+          weight: 0.9,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'developmental_milestones',
+              name: 'Hitos del desarrollo',
+            },
+            {
+              key: 'child_malnutrition',
+              name: 'Desnutrición infantil',
+            },
+            {
+              key: 'breastfeeding',
+              name: 'Lactancia materna',
+            },
+          ],
+        },
+        {
+          key: 'immunizations',
+          name: 'Vacunación',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'vaccination_schedule',
+              name: 'Esquema nacional de vacunación',
+            },
+            {
+              key: 'vaccine_contraindications',
+              name: 'Contraindicaciones de vacunas',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_infectious',
+          name: 'Infecciones pediátricas',
+          weight: 1.2,
+          baseTopic: 'immunizations',
+          subtopics: [
+            {
+              key: 'acute_diarrhea_dehydration',
+              name: 'Diarrea aguda y deshidratación',
+            },
+            {
+              key: 'exanthematous_diseases',
+              name: 'Enfermedades exantemáticas',
+            },
+            {
+              key: 'acute_otitis_media',
+              name: 'Otitis media aguda',
+            },
+            {
+              key: 'streptococcal_pharyngitis',
+              name: 'Faringoamigdalitis estreptocócica',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_respiratory',
+          name: 'Neumología pediátrica',
+          weight: 1.1,
+          baseTopic: 'pulmonology',
+          subtopics: [
+            {
+              key: 'bronchiolitis',
+              name: 'Bronquiolitis',
+            },
+            {
+              key: 'croup',
+              name: 'Laringotraqueítis',
+            },
+            {
+              key: 'pediatric_asthma',
+              name: 'Asma en el niño',
+            },
+            {
+              key: 'pediatric_pneumonia',
+              name: 'Neumonía en el niño',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_cardiology',
+          name: 'Cardiología pediátrica',
+          weight: 0.7,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'congenital_heart_disease',
+              name: 'Cardiopatías congénitas',
+            },
+            {
+              key: 'kawasaki_disease',
+              name: 'Enfermedad de Kawasaki',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_neurology',
+          name: 'Neurología pediátrica',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'febrile_seizures',
+              name: 'Crisis febriles',
+            },
+            {
+              key: 'bacterial_meningitis_child',
+              name: 'Meningitis bacteriana en el niño',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_nephrology',
+          name: 'Nefrología pediátrica',
+          weight: 0.7,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'pediatric_uti',
+              name: 'Infección urinaria en el niño',
+            },
+            {
+              key: 'nephrotic_syndrome_child',
+              name: 'Síndrome nefrótico',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_hematology_oncology',
+          name: 'Hematología y oncología pediátricas',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'iron_deficiency_child',
+              name: 'Anemia por deficiencia de hierro',
+            },
+            {
+              key: 'acute_lymphoblastic_leukemia',
+              name: 'Leucemia linfoblástica aguda',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_surgery',
+          name: 'Cirugía pediátrica',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'intussusception',
+              name: 'Invaginación intestinal',
+            },
+            {
+              key: 'pyloric_stenosis',
+              name: 'Estenosis hipertrófica de píloro',
+            },
+            {
+              key: 'cryptorchidism',
+              name: 'Criptorquidia',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_gastroenterology',
+          name: 'Gastroenterología pediátrica',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'pediatric_diarrhea',
+              name: 'Enfermedad diarreica aguda',
+            },
+            {
+              key: 'pediatric_gerd',
+              name: 'Reflujo gastroesofágico',
+            },
+          ],
+        },
+        {
+          key: 'pediatric_endocrinology',
+          name: 'Endocrinología pediátrica',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'congenital_hypothyroidism',
+              name: 'Hipotiroidismo congénito',
+            },
+            {
+              key: 'pediatric_diabetes',
+              name: 'Diabetes tipo 1',
+            },
+          ],
+        },
+        {
+          key: 'genetics',
+          name: 'Genética',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'chromosomal_syndromes',
+              name: 'Síndromes cromosómicos',
+            },
+            {
+              key: 'inborn_errors',
+              name: 'Errores innatos del metabolismo',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'obstetrics_gynecology',
+      name: 'Ginecología y obstetricia',
+      section: 'clinical',
+      weight: 50,
+      topics: [
+        {
+          key: 'prenatal_care',
+          name: 'Control prenatal',
+          weight: 1.1,
+          baseTopic: 'endocrinology',
+          subtopics: [
+            {
+              key: 'prenatal_control',
+              name: 'Control prenatal y tamizajes',
+            },
+            {
+              key: 'gestational_diabetes',
+              name: 'Diabetes gestacional',
+            },
+          ],
+        },
+        {
+          key: 'hypertensive_pregnancy',
+          name: 'Enfermedad hipertensiva del embarazo',
+          weight: 1.3,
+          baseTopic: 'cardiology',
+          subtopics: [
+            {
+              key: 'preeclampsia',
+              name: 'Preeclampsia',
+            },
+            {
+              key: 'eclampsia_hellp',
+              name: 'Eclampsia y síndrome HELLP',
+            },
+          ],
+        },
+        {
+          key: 'obstetric_hemorrhage',
+          name: 'Hemorragia obstétrica',
+          weight: 1.3,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'placenta_previa',
+              name: 'Placenta previa',
+            },
+            {
+              key: 'placental_abruption',
+              name: 'Desprendimiento prematuro de placenta',
+            },
+            {
+              key: 'postpartum_hemorrhage',
+              name: 'Hemorragia posparto',
+            },
+          ],
+        },
+        {
+          key: 'labor_delivery',
+          name: 'Trabajo de parto',
+          weight: 1,
+          baseTopic: 'prenatal_care',
+          subtopics: [
+            {
+              key: 'normal_labor',
+              name: 'Trabajo de parto normal',
+            },
+            {
+              key: 'preterm_labor',
+              name: 'Amenaza de parto pretérmino',
+            },
+            {
+              key: 'premature_rupture_membranes',
+              name: 'Ruptura prematura de membranas',
+            },
+          ],
+        },
+        {
+          key: 'early_pregnancy',
+          name: 'Primer trimestre',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'ectopic_pregnancy',
+              name: 'Embarazo ectópico',
+            },
+            {
+              key: 'miscarriage',
+              name: 'Aborto',
+            },
+            {
+              key: 'gestational_trophoblastic',
+              name: 'Enfermedad trofoblástica gestacional',
+            },
+          ],
+        },
+        {
+          key: 'puerperium',
+          name: 'Puerperio',
+          weight: 0.7,
+          baseTopic: 'labor_delivery',
+          subtopics: [
+            {
+              key: 'puerperal_infection',
+              name: 'Infección puerperal',
+            },
+            {
+              key: 'mastitis',
+              name: 'Mastitis',
+            },
+          ],
+        },
+        {
+          key: 'gynecologic_infections',
+          name: 'Infecciones ginecológicas',
+          weight: 0.9,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'vaginitis',
+              name: 'Vaginitis y vaginosis',
+            },
+            {
+              key: 'pelvic_inflammatory_disease',
+              name: 'Enfermedad pélvica inflamatoria',
+            },
+            {
+              key: 'hpv_infection',
+              name: 'Infección por virus del papiloma humano',
+            },
+          ],
+        },
+        {
+          key: 'gynecologic_oncology',
+          name: 'Oncología ginecológica y mamaria',
+          weight: 1,
+          baseTopic: 'gynecologic_infections',
+          subtopics: [
+            {
+              key: 'cervical_cancer',
+              name: 'Cáncer cervicouterino',
+            },
+            {
+              key: 'breast_cancer',
+              name: 'Cáncer de mama',
+            },
+            {
+              key: 'endometrial_cancer',
+              name: 'Cáncer de endometrio',
+            },
+          ],
+        },
+        {
+          key: 'reproductive_endocrinology',
+          name: 'Endocrinología ginecológica',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'amenorrhea',
+              name: 'Amenorrea',
+            },
+            {
+              key: 'polycystic_ovary',
+              name: 'Síndrome de ovario poliquístico',
+            },
+            {
+              key: 'menopause',
+              name: 'Climaterio y menopausia',
+            },
+          ],
+        },
+        {
+          key: 'contraception',
+          name: 'Anticoncepción',
+          weight: 0.9,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'hormonal_contraception',
+              name: 'Anticoncepción hormonal',
+            },
+            {
+              key: 'intrauterine_device',
+              name: 'Dispositivo intrauterino',
+            },
+            {
+              key: 'emergency_contraception',
+              name: 'Anticoncepción de emergencia',
+            },
+          ],
+        },
+        {
+          key: 'climacteric',
+          name: 'Climaterio y menopausia',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'menopause_obstetrics',
+              name: 'Menopausia',
+            },
+            {
+              key: 'osteoporosis_postmenopausal',
+              name: 'Osteoporosis posmenopáusica',
+            },
+          ],
+        },
+        {
+          key: 'breast',
+          name: 'Mama',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'breast_cancer_obstetrics',
+              name: 'Cáncer de mama',
+            },
+            {
+              key: 'benign_breast',
+              name: 'Patología mamaria benigna',
+            },
+          ],
+        },
+        {
+          key: 'maternal_fetal',
+          name: 'Medicina materno fetal',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'fetal_growth_restriction',
+              name: 'Restricción del crecimiento fetal',
+            },
+            {
+              key: 'preterm_labor_obstetrics',
+              name: 'Parto pretérmino',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'general_surgery',
+      name: 'Cirugía general',
+      section: 'clinical',
+      weight: 33,
+      topics: [
+        {
+          key: 'acute_abdomen',
+          name: 'Abdomen agudo',
+          weight: 1.3,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'appendicitis',
+              name: 'Apendicitis aguda',
+            },
+            {
+              key: 'bowel_obstruction',
+              name: 'Oclusión intestinal',
+            },
+            {
+              key: 'hollow_viscus_perforation',
+              name: 'Perforación de víscera hueca',
+            },
+          ],
+        },
+        {
+          key: 'hepatobiliary',
+          name: 'Vías biliares',
+          weight: 1.2,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'cholecystitis',
+              name: 'Colecistitis y colelitiasis',
+            },
+            {
+              key: 'choledocholithiasis',
+              name: 'Coledocolitiasis y colangitis',
+            },
+          ],
+        },
+        {
+          key: 'pancreas',
+          name: 'Páncreas',
+          weight: 0.9,
+          baseTopic: 'hepatobiliary',
+          subtopics: [
+            {
+              key: 'acute_pancreatitis',
+              name: 'Pancreatitis aguda',
+            },
+            {
+              key: 'pancreatic_cancer',
+              name: 'Cáncer de páncreas',
+            },
+          ],
+        },
+        {
+          key: 'hernias',
+          name: 'Hernias de pared abdominal',
+          weight: 0.8,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'inguinal_hernia',
+              name: 'Hernia inguinal',
+            },
+            {
+              key: 'ventral_hernia',
+              name: 'Hernias umbilical e incisional',
+            },
+          ],
+        },
+        {
+          key: 'trauma',
+          name: 'Trauma',
+          weight: 1.2,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'primary_survey',
+              name: 'Revisión primaria del politraumatizado',
+            },
+            {
+              key: 'abdominal_trauma',
+              name: 'Trauma abdominal',
+            },
+            {
+              key: 'thoracic_trauma',
+              name: 'Trauma de tórax',
+            },
+            {
+              key: 'head_trauma',
+              name: 'Traumatismo craneoencefálico',
+            },
+          ],
+        },
+        {
+          key: 'burns',
+          name: 'Quemaduras',
+          weight: 0.8,
+          baseTopic: 'trauma',
+          subtopics: [
+            {
+              key: 'burn_classification',
+              name: 'Clasificación de quemaduras',
+            },
+            {
+              key: 'burn_resuscitation',
+              name: 'Reanimación del paciente quemado',
+            },
+          ],
+        },
+        {
+          key: 'colorectal_anorectal',
+          name: 'Colon, recto y ano',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'hemorrhoids',
+              name: 'Enfermedad hemorroidal',
+            },
+            {
+              key: 'anal_fissure_fistula',
+              name: 'Fisura y fístula anal',
+            },
+            {
+              key: 'colorectal_cancer',
+              name: 'Cáncer colorrectal',
+            },
+            {
+              key: 'diverticular_disease',
+              name: 'Enfermedad diverticular',
+            },
+          ],
+        },
+        {
+          key: 'vascular_surgery',
+          name: 'Cirugía vascular',
+          weight: 0.7,
+          baseTopic: 'cardiology',
+          subtopics: [
+            {
+              key: 'peripheral_arterial_disease',
+              name: 'Enfermedad arterial periférica',
+            },
+            {
+              key: 'aortic_aneurysm',
+              name: 'Aneurisma de aorta abdominal',
+            },
+          ],
+        },
+        {
+          key: 'perioperative',
+          name: 'Paciente quirúrgico',
+          weight: 0.8,
+          baseTopic: 'nephrology',
+          subtopics: [
+            {
+              key: 'preoperative_assessment',
+              name: 'Valoración preoperatoria',
+            },
+            {
+              key: 'surgical_site_infection',
+              name: 'Infección del sitio quirúrgico',
+            },
+            {
+              key: 'postoperative_fluids',
+              name: 'Líquidos y electrolitos en el posoperatorio',
+            },
+          ],
+        },
+        {
+          key: 'urology',
+          name: 'Urología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'urolithiasis',
+              name: 'Litiasis urinaria',
+            },
+            {
+              key: 'benign_prostatic_hyperplasia',
+              name: 'Hiperplasia prostática benigna',
+            },
+            {
+              key: 'prostate_cancer',
+              name: 'Cáncer de próstata',
+            },
+            {
+              key: 'testicular_torsion',
+              name: 'Torsión testicular',
+            },
+          ],
+        },
+        {
+          key: 'orthopedics',
+          name: 'Ortopedia y traumatología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'fractures',
+              name: 'Fracturas',
+            },
+            {
+              key: 'pediatric_orthopedics',
+              name: 'Ortopedia pediátrica',
+            },
+          ],
+        },
+        {
+          key: 'otolaryngology',
+          name: 'Otorrinolaringología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'otitis',
+              name: 'Otitis',
+            },
+            {
+              key: 'sinusitis',
+              name: 'Sinusitis',
+            },
+            {
+              key: 'epistaxis',
+              name: 'Epistaxis',
+            },
+          ],
+        },
+        {
+          key: 'ophthalmology',
+          name: 'Oftalmología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'red_eye',
+              name: 'Ojo rojo',
+            },
+            {
+              key: 'glaucoma',
+              name: 'Glaucoma',
+            },
+            {
+              key: 'cataract',
+              name: 'Catarata',
+            },
+          ],
+        },
+        {
+          key: 'neurosurgery',
+          name: 'Neurocirugía',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'head_trauma_general',
+              name: 'Traumatismo craneoencefálico',
+            },
+            {
+              key: 'intracranial_hemorrhage',
+              name: 'Hemorragia intracraneal',
+            },
+          ],
+        },
+        {
+          key: 'thoracic_surgery',
+          name: 'Cirugía de tórax',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'pneumothorax',
+              name: 'Neumotórax',
+            },
+            {
+              key: 'pleural_effusion',
+              name: 'Derrame pleural',
+            },
+          ],
+        },
+        {
+          key: 'anesthesiology',
+          name: 'Anestesiología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'preoperative_assessment_general',
+              name: 'Valoración preanestésica',
+            },
+            {
+              key: 'local_anesthetics',
+              name: 'Anestésicos locales',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'family_medicine',
+      name: 'Medicina familiar',
+      section: 'clinical',
+      weight: 12,
+      topics: [
+        {
+          key: 'chronic_disease_primary',
+          name: 'Enfermedades crónicas en primer nivel',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'diabetes_primary_care',
+              name: 'Control de diabetes',
+            },
+            {
+              key: 'hypertension_primary_care',
+              name: 'Control de hipertensión',
+            },
+            {
+              key: 'dyslipidemia_family',
+              name: 'Dislipidemias',
+            },
+          ],
+        },
+        {
+          key: 'adolescent_health',
+          name: 'Salud del adolescente',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'adolescent_development',
+              name: 'Desarrollo del adolescente',
+            },
+            {
+              key: 'adolescent_risk',
+              name: 'Conductas de riesgo',
+            },
+          ],
+        },
+        {
+          key: 'primary_mental_health',
+          name: 'Salud mental en primer nivel',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'depression_primary',
+              name: 'Depresión',
+            },
+            {
+              key: 'anxiety_primary',
+              name: 'Ansiedad',
+            },
+            {
+              key: 'substance_use_family',
+              name: 'Consumo de sustancias',
+            },
+          ],
+        },
+        {
+          key: 'family_health',
+          name: 'Estudio de salud familiar',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'family_life_cycle',
+              name: 'Ciclo vital familiar',
+            },
+            {
+              key: 'family_functionality',
+              name: 'Funcionalidad familiar',
+            },
+          ],
+        },
+        {
+          key: 'medical_ethics_law',
+          name: 'Ética, legislación y NOM',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'informed_consent',
+              name: 'Consentimiento informado',
+            },
+            {
+              key: 'clinical_record_nom',
+              name: 'NOM del expediente clínico',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'emergency_medicine',
+      name: 'Urgencias',
+      section: 'clinical',
+      weight: 17,
+      topics: [
+        {
+          key: 'resuscitation',
+          name: 'Reanimación',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'cardiac_arrest',
+              name: 'Paro cardiorrespiratorio',
+            },
+            {
+              key: 'airway_management',
+              name: 'Manejo de la vía aérea',
+            },
+          ],
+        },
+        {
+          key: 'shock',
+          name: 'Choque',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'septic_shock',
+              name: 'Choque séptico',
+            },
+            {
+              key: 'hypovolemic_shock',
+              name: 'Choque hipovolémico',
+            },
+          ],
+        },
+        {
+          key: 'toxicology',
+          name: 'Toxicología',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'poisonings',
+              name: 'Intoxicaciones',
+            },
+            {
+              key: 'envenomations',
+              name: 'Mordeduras y picaduras',
+            },
+          ],
+        },
+        {
+          key: 'cardiovascular_emergencies',
+          name: 'Urgencias cardiovasculares',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'chest_pain',
+              name: 'Dolor torácico',
+            },
+            {
+              key: 'arrhythmia',
+              name: 'Arritmias en urgencias',
+            },
+          ],
+        },
+        {
+          key: 'respiratory_emergencies',
+          name: 'Urgencias respiratorias',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'asthma_exacerbation',
+              name: 'Crisis asmática',
+            },
+            {
+              key: 'pulmonary_embolism_emergency',
+              name: 'Tromboembolia pulmonar',
+            },
+          ],
+        },
+        {
+          key: 'neurologic_emergencies',
+          name: 'Urgencias neurológicas',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'stroke_emergency',
+              name: 'Evento vascular cerebral',
+            },
+            {
+              key: 'status_epilepticus',
+              name: 'Estado epiléptico',
+            },
+          ],
+        },
+        {
+          key: 'metabolic_emergencies',
+          name: 'Urgencias metabólicas',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'diabetic_ketoacidosis',
+              name: 'Cetoacidosis diabética',
+            },
+            {
+              key: 'electrolyte_disorders_emergency',
+              name: 'Trastornos electrolíticos',
+            },
+          ],
+        },
+        {
+          key: 'environmental_emergencies',
+          name: 'Urgencias ambientales',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'heat_stroke',
+              name: 'Golpe de calor',
+            },
+            {
+              key: 'drowning',
+              name: 'Ahogamiento',
+            },
+            {
+              key: 'hypothermia',
+              name: 'Hipotermia',
+            },
+          ],
+        },
+        {
+          key: 'polytrauma',
+          name: 'Politrauma',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'atls',
+              name: 'Atención inicial del trauma',
+            },
+            {
+              key: 'spinal_trauma',
+              name: 'Trauma raquimedular',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'public_health',
+      name: 'Salud pública',
+      section: 'clinical',
+      weight: 13,
+      topics: [
+        {
+          key: 'epidemiology',
+          name: 'Epidemiología y vigilancia',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'epidemiologic_surveillance',
+              name: 'Vigilancia epidemiológica',
+            },
+            {
+              key: 'frequency_association_measures',
+              name: 'Medidas de frecuencia y de asociación',
+            },
+            {
+              key: 'outbreak_investigation',
+              name: 'Estudio de brote',
+            },
+          ],
+        },
+        {
+          key: 'biostatistics',
+          name: 'Bioestadística y diseño de estudios',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'study_design',
+              name: 'Diseño de estudios',
+            },
+            {
+              key: 'diagnostic_tests',
+              name: 'Pruebas diagnósticas',
+            },
+            {
+              key: 'descriptive_inferential_statistics',
+              name: 'Estadística descriptiva e inferencial',
+            },
+          ],
+        },
+        {
+          key: 'preventive_medicine',
+          name: 'Medicina preventiva',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'screening',
+              name: 'Tamizaje',
+            },
+            {
+              key: 'adult_immunizations',
+              name: 'Vacunación del adulto',
+            },
+            {
+              key: 'health_promotion',
+              name: 'Promoción de la salud',
+            },
+          ],
+        },
+        {
+          key: 'health_programs',
+          name: 'Programas de salud y NOM',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'national_health_programs',
+              name: 'Programas nacionales de salud',
+            },
+            {
+              key: 'surveillance_notification_nom',
+              name: 'NOM de vigilancia y notificación',
+            },
+          ],
+        },
+        {
+          key: 'environmental_occupational',
+          name: 'Salud ambiental y ocupacional',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'occupational_risks',
+              name: 'Riesgos laborales',
+            },
+            {
+              key: 'basic_sanitation',
+              name: 'Saneamiento básico',
+            },
+          ],
+        },
+        {
+          key: 'health_system',
+          name: 'Sistema de salud',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'care_levels',
+              name: 'Niveles de atención',
+            },
+            {
+              key: 'health_indicators',
+              name: 'Indicadores de salud',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'medical_english',
+      name: 'Inglés médico',
+      section: 'english',
+      weight: 30,
+      topics: [
+        {
+          key: 'reading_comprehension',
+          name: 'Comprensión de lectura',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'english_internal_medicine',
+              name: 'Medicina interna',
+            },
+            {
+              key: 'english_pediatrics',
+              name: 'Pediatría',
+            },
+            {
+              key: 'english_obstetrics_gynecology',
+              name: 'Ginecología y obstetricia',
+            },
+            {
+              key: 'english_general_surgery',
+              name: 'Cirugía general',
+            },
+            {
+              key: 'english_family_medicine',
+              name: 'Medicina familiar',
+            },
+            {
+              key: 'english_emergency_medicine',
+              name: 'Urgencias',
+            },
+            {
+              key: 'english_public_health',
+              name: 'Salud pública',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
