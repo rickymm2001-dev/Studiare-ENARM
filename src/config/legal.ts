@@ -4,8 +4,13 @@
 // ellos la app no inventa nada y los textos dicen que falta completarlos.
 import { readSupportEmail } from './support.ts';
 
-/** Versión del aviso de privacidad que acepta el alumno. Cambia cuando cambia el texto */
-export const PRIVACY_NOTICE_VERSION = '2026-10-14';
+/**
+ * Versión del aviso de privacidad que acepta el alumno. Cambia cuando cambia el texto. Las versiones se
+ * comparan como texto (src/data/usecases/profile.ts), así que una segunda versión del mismo día lleva
+ * una letra al final, como 2026-10-14b, que queda después de 2026-10-14 y antes de cualquier fecha
+ * posterior
+ */
+export const PRIVACY_NOTICE_VERSION = '2026-10-14b';
 
 export interface LegalIdentity {
   name: string | null;

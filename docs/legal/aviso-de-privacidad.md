@@ -1,6 +1,6 @@
 # Aviso de privacidad
 
-Versión 2026-10-14. Última actualización, 14 de octubre de 2026
+Versión 2026-10-14b. Última actualización, 14 de octubre de 2026
 
 > Borrador pendiente de revisión de un abogado. Todavía no es el texto legal definitivo.
 
@@ -17,6 +17,9 @@ Para cualquier duda sobre este aviso o sobre tus datos, escribe a [pendiente de 
 Tratamos los datos de la lista. No tratamos datos sensibles de salud tuyos, porque los textos médicos de la plataforma son material de estudio y no información sobre ti.
 
 - Cuenta. Tu alias, tu correo, y de forma opcional tu año de nacimiento, sexo, estado, situación, intento del examen y especialidad que buscas.
+- Edad mínima. Al crear tu cuenta confirmas que tienes 18 años o más. Guardamos solo la fecha y la hora en que lo confirmaste, no tu fecha de nacimiento. Esa fecha ya no cambia y se borra al eliminar tu cuenta.
+- Entrar con Google. Es opcional. Si lo eliges, Google nos comparte el correo, el nombre y la foto de tu cuenta de Google. Usamos solo tu correo, para tu cuenta. Tu nombre y tu foto de Google quedan guardados en el registro de acceso de Supabase, pero Studiare no los usa ni los muestra. Tu alias y tu foto en Studiare son los que tú eliges. Nunca recibimos tu contraseña de Google.
+- Cómo nos conociste. Es opcional. Si contestas, guardamos el canal que elegiste, como Instagram, un amigo o tu universidad, el código de influencer si escribiste uno y la fecha. Solo lo usamos para medir, en conteos totales, por dónde llega la gente a Studiare. En la app el equipo solo ve esos conteos, nunca tu respuesta junto a tu cuenta. No la usamos para mandarte publicidad, no va a herramientas de analítica y se borra al eliminar tu cuenta.
 - Foto de perfil. Es opcional. Si subes una, la guardamos en Supabase Storage, en un espacio privado de tu cuenta. La ves tú y, mientras compartan un grupo activo de Party, los miembros de ese grupo. Si eliges tus iniciales la quitamos de la nube, y se borra al eliminar tu cuenta.
 - Estudio. Tus respuestas a preguntas y tarjetas, los tiempos, la confianza que marcas, las causas de tus errores, tus mazos y apuntes, tus metas y tus ajustes.
 - Puntaje oficial. Solo si tú decides capturarlo en Progreso, con tu permiso de mejora anónima, que das o retiras en Configuración, sección Privacidad.
@@ -27,7 +30,7 @@ Tratamos los datos de la lista. No tratamos datos sensibles de salud tuyos, porq
 
 Para lo que necesitamos hacer para darte el servicio.
 
-- Crear y mantener tu cuenta, y que solo tú entres a ella.
+- Crear y mantener tu cuenta, confirmar que tienes la edad mínima y que solo tú entres a ella.
 - Darte tu plan de estudio, tus estadísticas, tu repaso y tus simuladores.
 - Sincronizar tu estudio entre tus dispositivos, uno activo a la vez.
 - Cobrar tu plan y atender tus pagos y aclaraciones.
@@ -55,6 +58,7 @@ La IA la presta Anthropic, que actúa como proveedor de la plataforma. Si agrega
 No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a operar la plataforma, y solo lo necesario para su tarea.
 
 - Supabase, que aloja la base de datos, el inicio de sesión y los archivos, como tu foto de perfil en Supabase Storage.
+- Google, solo si eliges entrar con Google. Confirma quién eres y nos manda los datos de tu cuenta de Google que se explican arriba. No le mandamos tus datos de estudio.
 - Stripe y Mercado Pago, que procesan los pagos. Reciben lo que necesitan para cobrar y no lo usamos para otra cosa.
 - Anthropic, solo si encendiste el análisis con IA, con lo que se explicó arriba.
 - El servicio que aloja el proxy de IA, solo si encendiste el análisis con IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.
@@ -82,7 +86,7 @@ Studiare guarda en tu navegador tus datos de estudio y tus preferencias, para fu
 
 ## Personas menores de edad
 
-Studiare es para personas mayores de 18 años que se preparan para el examen. Si crees que una persona menor de edad creó una cuenta, escríbenos y la eliminamos.
+Studiare es para personas de 18 años o más que se preparan para el examen, y al crear tu cuenta lo confirmas. Si crees que una persona menor de edad creó una cuenta, escríbenos y la eliminamos.
 
 ## Cambios a este aviso
 

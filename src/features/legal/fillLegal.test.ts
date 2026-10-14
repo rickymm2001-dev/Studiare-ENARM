@@ -60,7 +60,35 @@ describe('textos legales', () => {
 
   it('la versión del aviso es la que se guarda al aceptarlo', () => {
     expect(legalText.privacy.version).toBe(PRIVACY_NOTICE_VERSION);
-    expect(PRIVACY_NOTICE_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    // Una fecha, con una letra al final si es la segunda versión del mismo día
+    expect(PRIVACY_NOTICE_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}[a-z]?$/);
+  });
+
+  it('las versiones se comparan como texto, así que 2026-10-14b va después de 2026-10-14 (B9)', () => {
+    // Como noticeNeedsAcceptance (<) y acceptedNoticeVersion (sort) en src/data/usecases/profile.ts
+    const version: string = PRIVACY_NOTICE_VERSION;
+    expect(version > '2026-10-14').toBe(true);
+    expect(version < '2026-10-15').toBe(true);
+    expect(['2026-10-15', version, '2026-10-14'].sort()).toEqual([
+      '2026-10-14',
+      version,
+      '2026-10-15',
+    ]);
+  });
+
+  it('dice qué se guarda al entrar con Google, de cómo nos conociste y de la edad (B9)', () => {
+    const text = legalToMarkdown(legalText.privacy, EMPTY);
+    expect(text).toMatch(/Entrar con Google\. Es opcional/);
+    expect(text).toMatch(/Usamos solo tu correo/);
+    expect(text).toMatch(/Nunca recibimos tu contraseña de Google/);
+    expect(text).toMatch(/Google, solo si eliges entrar con Google/);
+    expect(text).toMatch(/Cómo nos conociste\. Es opcional/);
+    expect(text).toMatch(/en conteos totales/);
+    expect(text).toMatch(/no va a herramientas de analítica/);
+    expect(text).toMatch(
+      /Guardamos solo la fecha y la hora en que lo confirmaste, no tu fecha de nacimiento/,
+    );
+    expect(text).toMatch(/18 años o más/);
   });
 
   it('el aviso nombra a quienes reciben datos y dice cómo ejercer los derechos', () => {

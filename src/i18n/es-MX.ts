@@ -320,7 +320,7 @@ export const t = {
   noticeUpdate: {
     title: 'Actualizamos el aviso de privacidad',
     body: (version: string) =>
-      `Cambió el texto con el que decidiste qué usamos de tus datos. Léelo y acéptalo para dejar constancia. La versión nueva es la del ${version}. Tus permisos siguen como estaban.`,
+      `Cambió el texto con el que decidiste qué usamos de tus datos. Léelo y acéptalo para dejar constancia. La versión nueva es la ${version}. Tus permisos siguen como estaban.`,
     read: 'Leer el aviso',
     accept: 'Aceptar la versión nueva',
     saving: 'Guardando…',
