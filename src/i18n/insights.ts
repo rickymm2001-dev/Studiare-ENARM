@@ -1,6 +1,7 @@
 // Textos del motor de autoconocimiento en Progreso (D-074). Cada hallazgo tiene un título, una
 // frase con tus números y una acción concreta según su nivel. Las acciones siguen
 // docs/ANALISIS_DOCENTE_ENARM.md. Todo es borrador pendiente de revisión médica y docente.
+import type { ErrorMotive } from '@/engines/errorCauses';
 
 type Values = Record<string, number>;
 type Refs = Record<string, string>;
@@ -54,52 +55,38 @@ const hourNames: Record<string, string> = {
   noche: 'noche',
 };
 
-export const causeNames: Record<string, string> = {
+/**
+ * Los siete motivos de error de Ricardo (B5, 4.23 del plan del cambio). Reemplazan a las ocho causas
+ * de antes. t.review.causes usa estos mismos nombres
+ */
+export const causeNames = {
   knowledge: 'Conocimiento',
   time: 'Tiempo',
   misinterpretation: 'Malinterpretación',
-  shallow_reading: 'Lectura superficial',
+  superficial_reading: 'Lectura superficial',
   anxiety: 'Ansiedad',
   overconfidence: 'Exceso de confianza',
   fatigue: 'Fatiga',
-  not_studied: 'No lo había estudiado',
-  forgot: 'Lo olvidé',
-  confused: 'Lo confundí con otra cosa',
-  misread: 'Leí mal',
-  missed_detail: 'Se me pasó un detalle',
-  rushed_or_tired: 'Fui muy rápido o estaba cansado',
-  changed_answer: 'Cambié mi respuesta',
-  other: 'Otra razón',
+} as const satisfies Record<ErrorMotive, string>;
+
+const causeAdvice: Record<ErrorMotive, string> = {
+  knowledge:
+    'Son huecos de contenido. Crea una tarjeta de esas preguntas desde la revisión y agrega sus temas a tu plan.',
+  time: 'Practica bloques con reloj a 77 segundos por pregunta. Si una se atora, marca tu mejor opción y sigue.',
+  misinterpretation:
+    'Lee primero la pregunta final, marca las negaciones y di con tus palabras qué te piden antes de ver las opciones.',
+  superficial_reading:
+    'Lee el caso completo antes de las opciones y busca a propósito edad, signos vitales, tiempo de evolución y el último dato.',
+  anxiety:
+    'Respira antes de cada bloque y cambia tu respuesta solo si encuentras un dato concreto que leíste mal, no por duda.',
+  overconfidence:
+    'Antes de contestar, busca el dato del caso que no encaja con tu primera idea. Lo que parece obvio merece una segunda lectura.',
+  fatigue:
+    'Haz bloques más cortos con pausas y estudia en tu mejor horario. Si notas cansancio, descansa antes de seguir.',
 };
 
-const causeAdvice: Record<string, string> = {
-  knowledge:
-    'Son huecos de contenido o conceptos olvidados. Agrega esos temas a tu plan y crea tarjetas para que entren a tu repaso espaciado.',
-  time: 'Revisa tu ritmo y tus pausas. Bloques más cortos con descansos te ayudan a distribuir mejor el tiempo.',
-  misinterpretation:
-    'Lee primero la pregunta final, marca las negaciones y no respondas antes de terminar de entender el caso.',
-  shallow_reading:
-    'Al leer, busca a propósito edad, signos vitales, tiempo de evolución y el último dato clave del caso.',
-  anxiety:
-    'Confía en tu preparación. Cambia tu respuesta solo si encuentras un dato concreto que contradiga tu primera elección.',
-  overconfidence:
-    'Cuidado con responder en automático. Revisa todas las opciones antes de confirmar tu respuesta.',
-  fatigue:
-    'Estudiar con cansancio reduce la retención. Haz pausas regulares o concluye la sesión cuando sientas fatiga.',
-  not_studied:
-    'Son huecos de contenido. Agrega esos temas a tu plan y empieza con su resumen y sus tarjetas.',
-  forgot:
-    'Lo estudiaste pero no se quedó. Crea tarjetas de esas preguntas para que entren al repaso espaciado.',
-  confused:
-    'Haz tablas comparativas de lo que confundes, por ejemplo dos diagnósticos parecidos, con el dato que los separa.',
-  misread:
-    'Lee primero la pregunta final, marca las negaciones y no respondas antes de terminar el caso.',
-  missed_detail:
-    'Al leer, busca a propósito edad, signos vitales, tiempo de evolución y el último dato del caso.',
-  rushed_or_tired: 'Revisa tu ritmo y tus pausas. Bloques más cortos con descansos te ayudan.',
-  changed_answer: 'Cambia solo si encuentras un dato concreto que leíste mal, no por duda.',
-  other: 'Revisa la explicación de cada error y anota en una frase qué harías distinto.',
-};
+const isMotive = (value: string | undefined): value is ErrorMotive =>
+  value !== undefined && Object.hasOwn(causeNames, value);
 
 const unitNames = {
   answers: 'respuestas',
@@ -108,7 +95,7 @@ const unitNames = {
   reviews: 'repasos de tarjetas',
   days: 'días desde que empezaste',
   changes: 'cambios de respuesta',
-  causes: 'errores con causa reportada',
+  causes: 'errores con motivo',
 } as const;
 
 interface InsightCopy {
@@ -277,8 +264,11 @@ const copy: Record<string, InsightCopy> = {
   causes: {
     title: 'Por qué fallas, según tú',
     text: (v, r) =>
-      `La causa que más reportas es "${causeNames[r.cause ?? ''] ?? r.cause}", en ${pct(v.share)} de ${num(v.total)} errores.`,
-    action: (_v, r) => causeAdvice[r.cause ?? ''] ?? causeAdvice.other ?? '',
+      `El motivo que más marcas es ${isMotive(r.cause) ? causeNames[r.cause] : (r.cause ?? '')}, en ${pct(v.share)} de ${num(v.total)} errores.`,
+    action: (_v, r) =>
+      isMotive(r.cause)
+        ? causeAdvice[r.cause]
+        : 'Revisa la explicación de cada error y anota en una frase qué harías distinto.',
   },
 };
 

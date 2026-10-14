@@ -1,7 +1,8 @@
 // Organizar tarjetas ya hechas (D-085, filas 3 a 5). Mover notas entre mazos propios, poner y quitar
-// etiquetas, mover y renombrar mazos, y suspender o reanudar tarjetas. Lo precargado no se edita, solo
-// se suspende, porque suspender es un evento que se suma a la bitácora y no toca el contenido. Todo
-// cambio de una nota o de un mazo pone su fecha de modificación, para sincronizar entre dispositivos.
+// etiquetas, mover y renombrar mazos, suspender o reanudar tarjetas y reiniciarlas (B4). Lo
+// precargado no se edita, solo se suspende o se reinicia, porque son eventos que se suman a la
+// bitácora y no tocan el contenido. Todo cambio de una nota o de un mazo pone su fecha de
+// modificación, para sincronizar entre dispositivos.
 import { canMoveDeck } from '../../engines/deckTree';
 import { SUSPEND_BATCH, inBatches } from '../../engines/suspension';
 import { TAGS_PER_NOTE_MAX, normalizeTags, sanitizeTag } from '../../engines/tagPath';
@@ -155,8 +156,9 @@ export async function setSuspended(
 }
 
 /**
- * Reinicia tarjetas con el evento cards_reset, de hasta 500 por evento.
- * Las tarjetas vuelven al estado new (FSRS).
+ * Reinicia tarjetas para que vuelvan a ser nuevas (B4 del plan del cambio), con eventos de hasta 500
+ * tarjetas. Sirve para cualquier tarjeta, también las precargadas, porque no cambia su contenido ni
+ * borra sus repasos, que siguen en la bitácora. Solo toca tarjetas que existen
  */
 export async function resetCards(
   api: Api,
@@ -168,9 +170,7 @@ export async function resetCards(
   const ids = [...new Set(cardIds)].filter((id) => existing.has(id));
   const context = { userId: user.id, tz: user.timeZone, clock: options.clock };
   for (const batch of inBatches(ids, SUSPEND_BATCH)) {
-    await api.recordEvent(
-      createEvent('cards_reset', { cardIds: batch }, context),
-    );
+    await api.recordEvent(createEvent('cards_reset', { cardIds: batch }, context));
   }
   return ids.length;
 }

@@ -191,7 +191,11 @@ describe('pantalla de Repasar', () => {
     await typing.click(
       screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.again}`) }),
     );
-    await typing.click(await screen.findByRole('button', { name: t.review.causes.knowledge }));
+    // Los siete motivos de Ricardo (4.23 del plan del cambio)
+    for (const name of Object.values(t.review.causes)) {
+      expect(await screen.findByRole('button', { name })).toBeVisible();
+    }
+    await typing.click(screen.getByRole('button', { name: t.review.causes.knowledge }));
     const { api, user } = app;
     await waitFor(async () => {
       const events = await api.repos.events.query({ userId: user.id });
@@ -235,7 +239,7 @@ describe('pantalla de Repasar', () => {
     (document.activeElement as HTMLElement | null)?.blur();
     await typing.keyboard(' ');
     expect(await screen.findByText('Amoxicilina')).toBeVisible();
-    // 1 es Otra vez. La tarjeta pregunta la causa y 2 elige Tiempo (la segunda de las 7)
+    // 1 es Otra vez. La tarjeta pregunta el motivo y 2 elige Tiempo
     await typing.keyboard('1');
     expect(await screen.findByText(t.review.causeQuestion)).toBeVisible();
     await typing.keyboard('2');

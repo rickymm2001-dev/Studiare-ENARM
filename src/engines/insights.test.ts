@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import type { ErrorMotive } from './errorCauses';
 import {
   buildInsights,
   chanceBaseline,
@@ -274,34 +275,36 @@ describe('estudio', () => {
     expect(state.kind === 'ready' && state.values.leeches).toBe(1);
   });
 
-  it('las causas más reportadas guían el foco', () => {
-    const causes = [
-      'forgot',
-      'forgot',
-      'forgot',
-      'forgot',
-      'forgot',
-      'misread',
-      'misread',
-      'guessed',
+  it('los motivos más marcados guían el foco', () => {
+    const causes: ErrorMotive[] = [
+      'knowledge',
+      'knowledge',
+      'knowledge',
+      'knowledge',
+      'knowledge',
+      'misinterpretation',
+      'misinterpretation',
+      'time',
     ];
     const state = find(buildInsights(input({ causes })).insights, 'causes').state;
-    expect(state).toMatchObject({ kind: 'ready', level: 'focus', refs: { cause: 'forgot' } });
+    expect(state).toMatchObject({
+      kind: 'ready',
+      level: 'focus',
+      values: { share: 5 / 8, total: 8 },
+      refs: { cause: 'knowledge' },
+    });
   });
 
-  it('las causas más reportadas guían el foco con knowledge (D-124)', () => {
-    const causes = [
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'knowledge',
-      'time',
-      'time',
-      'fatigue',
-    ];
-    const state = find(buildInsights(input({ causes })).insights, 'causes').state;
-    expect(state).toMatchObject({ kind: 'ready', level: 'focus', refs: { cause: 'knowledge' } });
+  it('un motivo de técnica es a vigilar y con pocos errores calibra', () => {
+    const causes: ErrorMotive[] = [...Array<ErrorMotive>(6).fill('time'), 'anxiety', 'fatigue'];
+    expect(find(buildInsights(input({ causes })).insights, 'causes').state).toMatchObject({
+      kind: 'ready',
+      level: 'watch',
+      refs: { cause: 'time' },
+    });
+    expect(
+      find(buildInsights(input({ causes: causes.slice(0, 7) })).insights, 'causes').state,
+    ).toMatchObject({ kind: 'calibrating', have: 7, need: 8, unit: 'causes' });
   });
 
   it('ordena los focos por peso', () => {

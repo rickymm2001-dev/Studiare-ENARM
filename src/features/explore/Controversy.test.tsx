@@ -75,10 +75,10 @@ async function seed(api: DataApi, user: User) {
     artifactId,
     simulated: true,
   });
-  // El alumno sigue su propio mazo, así que aparece en Explorar y en Repasar
+  // El alumno sigue su propio mazo, así que aparece en Buscar tarjetas y en Repasar
 }
 
-describe('señal de controversia en Explorar', () => {
+describe('señal de controversia en Buscar tarjetas', () => {
   it('marca la tarjeta con la etiqueta de la IA y de borrador, y al verificarla la señal se va', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.explore.path, {
@@ -93,7 +93,7 @@ describe('señal de controversia en Explorar', () => {
         await seed(api, user);
       },
     });
-    const list = await screen.findByRole('list', { name: t.explore.list }, WAIT);
+    const list = await screen.findByRole('list', { name: t.cardSearch.resultsLabel }, WAIT);
     const rows = within(list).getAllByRole('listitem');
     expect(rows).toHaveLength(2);
     const flagged = rows.find((row) => within(row).queryByText(t.controversy.badge)) as HTMLElement;
@@ -102,16 +102,34 @@ describe('señal de controversia en Explorar', () => {
     expect(within(clean).queryByText(t.controversy.badge)).toBeNull();
     expect(within(clean).getByText(t.aiCards.draftLabel)).toBeVisible();
 
+    // El chip de marcadas por la IA la cuenta y la encuentra sola
+    await typing.click(screen.getByRole('button', { name: t.cardSearch.openFilters(0) }));
+    const sheet = await screen.findByRole('dialog', { name: t.cardSearch.filtersLabel });
+    await typing.click(
+      within(sheet).getByRole('button', { name: new RegExp(`^${t.cardSearch.flagged}\\s*1$`) }),
+    );
+    await typing.click(within(sheet).getByRole('button', { name: t.cardSearch.showResults(1) }));
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('list', { name: t.cardSearch.resultsLabel })).getAllByRole(
+          'listitem',
+        ),
+      ).toHaveLength(1);
+    });
+
     // Al abrirla se ve la explicación con su fuente de la lista y que la IA no cambió la tarjeta
-    await typing.click(within(flagged).getByRole('button', { name: /^Ver tarjeta/ }));
-    const signal = await within(flagged).findByLabelText(t.controversy.title);
+    await typing.click(
+      within(screen.getByRole('list', { name: t.cardSearch.resultsLabel })).getByRole('button'),
+    );
+    const panel = await screen.findByRole('dialog', { name: t.cardSearch.panel.label }, WAIT);
+    const signal = await within(panel).findByLabelText(t.controversy.title);
     expect(within(signal).getByText(/afirmación absoluta/)).toBeVisible();
     expect(within(signal).getByText(/Capítulo de diabetes/)).toBeVisible();
     expect(within(signal).getByText(t.controversy.notChanged)).toBeVisible();
 
     await typing.click(within(signal).getByRole('button', { name: t.controversy.verify }));
     await waitFor(() => {
-      expect(screen.queryByText(t.controversy.badge)).toBeNull();
+      expect(within(panel).queryByLabelText(t.controversy.title)).toBeNull();
     }, WAIT);
     const events = (await app.api.repos.events.query({ userId: app.user.id })).filter(
       (event) => event.type === 'card_controversy_resolved',

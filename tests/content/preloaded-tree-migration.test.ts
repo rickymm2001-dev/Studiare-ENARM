@@ -164,6 +164,33 @@ describe('migración al árbol con los 3 mazos de Paco', () => {
     expect(notes.some((note) => note.deckId === deckIds.deck('paco-urgencias'))).toBe(false);
   });
 
+  it('las materias con el nombre pegado de antes reciben su nombre legible una sola vez (B4)', async () => {
+    counter += 1;
+    const db = createEnarmDb('real', { name: `migracion-nombres-${counter}-${Date.now()}` });
+    opened.push(db);
+    await db.open();
+    const repos = createDexieRepositories(db);
+    const chosen = files.filter((file) => file.key === 'paco-urgencias');
+    const entities = buildDeckEntities(chosen);
+    // Ya en el árbol, pero con la materia guardada como venía en la etiqueta
+    const thermal = deckIds.subject('paco-urgencias', 'Térmicos');
+    await db.decks.bulkPut(
+      entities.decks.map((deck) => (deck.id === thermal ? { ...deck, name: 'Térmicos' } : deck)),
+    );
+    await db.notes.bulkPut(entities.notes);
+    await db.cards.bulkPut(entities.cards.map((entry) => entry.card));
+
+    expect(
+      await ensurePreloadedTree({ repos }, ['paco-urgencias'], () => Promise.resolve(files)),
+    ).toBe(true);
+    expect((await db.decks.get(thermal))?.name).toBe('Alteraciones por temperatura');
+    expect(await db.notes.count()).toBe(123);
+    // La segunda vez ya no hay nada que renombrar
+    expect(
+      await ensurePreloadedTree({ repos }, ['paco-urgencias'], () => Promise.resolve(files)),
+    ).toBe(false);
+  });
+
   it('sin mazos seguidos no hace nada', async () => {
     const { repos } = await legacyDatabase([]);
     expect(await ensurePreloadedTree({ repos }, [], () => Promise.resolve(files))).toBe(false);

@@ -34,7 +34,8 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
   examResults: () =>
     import('@/features/exam/ExamResultsScreen').then((module) => module.ExamResultsScreen),
   decks: () => import('@/features/decks/DecksScreen').then((module) => module.DecksScreen),
-  explore: () => import('@/features/explore/ExploreScreen').then((module) => module.ExploreScreen),
+  explore: () =>
+    import('@/features/explore/CardSearchScreen').then((module) => module.CardSearchScreen),
   outlines: () =>
     import('@/features/outlines/OutlinesScreen').then((module) => module.OutlinesScreen),
   tutor: () => import('@/features/tutor/TutorScreen').then((module) => module.TutorScreen),

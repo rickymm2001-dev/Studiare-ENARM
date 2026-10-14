@@ -1,12 +1,12 @@
 // Progreso (pantalla 10). Cifras en una fila, tus focos de la semana con atajo a practicar, Conócete
-// con las lecturas del motor de autoconocimiento (D-074) y el dominio por rama troncal y por
-// subespecialidad con el modelo beta-binomial del motor topics (D-066). Todo en una sola página con
-// filas que se abren al tocarlas (D-078). Cada dato muestra calibrando hasta tener datos suficientes.
+// con las lecturas del motor de autoconocimiento (D-074), el dominio por rama troncal y por
+// subespecialidad con el modelo beta-binomial del motor topics (D-066) y por qué fallas en cada rama
+// con los siete motivos (B5). Todo en una sola página con filas que se abren al tocarlas (D-078).
+// Cada dato muestra calibrando hasta tener datos suficientes.
 import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { CURRENT_ERROR_CAUSES, type CurrentErrorCause } from '@/data/schemas/common';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
@@ -28,8 +28,11 @@ import { FutureLoadSection } from './FutureLoadSection';
 import { WeekPlanCard } from './WeekPlanCard';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
 import { masteryDot } from './masteryChip';
+import { MotivesCard } from './MotivesCard';
+import { motivesByBranch } from './motivesView';
 import { OfficialScoreCard } from './OfficialScoreCard';
 import { useAnalysis } from './useAnalysis';
+import { useMotiveBranches } from './useMotiveBranches';
 
 export function ProgressScreen() {
   return (
@@ -43,6 +46,14 @@ function Progress({ session }: { session: ReadySession }) {
   const catalog = useDeckCatalog();
   const content = useDecksAndCards();
   const analysis = useAnalysis(session, events);
+  const motiveBranches = useMotiveBranches(events, catalog);
+  const motiveRows = useMemo(
+    () =>
+      events === undefined || motiveBranches === undefined
+        ? undefined
+        : motivesByBranch(events, motiveBranches),
+    [events, motiveBranches],
+  );
 
   const header = (
     <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
@@ -61,7 +72,7 @@ function Progress({ session }: { session: ReadySession }) {
     );
   }
 
-  const { responses, byTopic, report, weakTopics, causesTotal, causesByBranch } = analysis;
+  const { responses, byTopic, report, weakTopics } = analysis;
   const cardNote = new Map(content.cards.map((card) => [card.id, card.noteId]));
   // Tarjetas repasadas por rama y subespecialidad, con lo que dicen las notas de cada mazo
   const noteInfo = new Map<string, { branch: string; topic: string | null }>();
@@ -140,14 +151,11 @@ function Progress({ session }: { session: ReadySession }) {
 
       <InsightsPanel report={report} />
 
-      <CausesBreakdownCard causesTotal={causesTotal} />
-
       <TopicsCard
         byBranch={byBranch}
         byTopic={byTopic}
         cardsByBranch={cardsByBranch}
         cardsByTopic={cardsByTopic}
-        causesByBranch={causesByBranch}
       />
 
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
@@ -157,6 +165,7 @@ function Progress({ session }: { session: ReadySession }) {
             minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
           })}
         />
+        <MotivesCard rows={motiveRows} />
         <FutureLoadSection session={session} events={events} content={content} />
         <WeekPlanCard session={session} events={events} content={content} />
       </div>
@@ -177,13 +186,11 @@ function TopicsCard({
   byTopic,
   cardsByBranch,
   cardsByTopic,
-  causesByBranch,
 }: {
   byBranch: ReadonlyMap<string, BranchEntry>;
   byTopic: ReadonlyMap<string, TopicEntry>;
   cardsByBranch: ReadonlyMap<string, number>;
   cardsByTopic: ReadonlyMap<string, number>;
-  causesByBranch?: ReadonlyMap<string, ReadonlyMap<CurrentErrorCause, number>>;
 }) {
   const [showEmpty, setShowEmpty] = useState(false);
   const hasData = (key: string) =>
@@ -258,20 +265,6 @@ function TopicsCard({
                   {hidden > 0 ? (
                     <p className="text-xs text-fg-muted">{t.progress.emptyHidden(hidden)}</p>
                   ) : null}
-                  {(() => {
-                    const branchCauses = causesByBranch?.get(branch.key);
-                    if (!branchCauses || branchCauses.size === 0) return null;
-                    return (
-                      <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">
-                        <span className="font-semibold text-fg">Motivos de error:</span>
-                        {Array.from(branchCauses.entries()).map(([cause, count]) => (
-                          <span key={cause} className="rounded bg-muted px-1.5 py-0.5">
-                            {t.review.causes[cause]}: {count}
-                          </span>
-                        ))}
-                      </div>
-                    );
-                  })()}
                 </div>
               </details>
             </li>
@@ -322,37 +315,5 @@ function TopicRow({
         )}
       </span>
     </li>
-  );
-}
-
-function CausesBreakdownCard({
-  causesTotal,
-}: {
-  causesTotal: ReadonlyMap<CurrentErrorCause, number>;
-}) {
-  if (causesTotal.size === 0) return null;
-  return (
-    <Card aria-labelledby="motivos-error-titulo">
-      <CardHeader className="mb-2">
-        <CardTitle id="motivos-error-titulo" className="text-base font-bold">
-          Motivos de error
-        </CardTitle>
-        <CardDescription>
-          Distribución de las causas que reportaste al fallar reactivos.
-        </CardDescription>
-      </CardHeader>
-      <div className="flex flex-wrap gap-2">
-        {CURRENT_ERROR_CAUSES.map((cause) => {
-          const count = causesTotal.get(cause) ?? 0;
-          if (count === 0) return null;
-          return (
-            <Badge key={cause} className="text-sm py-1 px-2.5">
-              <span className="font-semibold">{t.review.causes[cause]}:</span>{' '}
-              <span className="tabular-nums">{count}</span>
-            </Badge>
-          );
-        })}
-      </div>
-    </Card>
   );
 }

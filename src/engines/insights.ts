@@ -16,7 +16,7 @@
  *   - Sesgos con analyzeBias en error_share (D-051) contra una línea base de azar, la parte de
  *     errores que irían a cada etiqueta si eligiera al azar entre los distractores visibles. Es
  *     honesta sin población real y se calcula con sus propios datos
- *   - Retención, sanguijuelas, constancia y causas reportadas
+ *   - Retención, sanguijuelas, constancia y motivos de error (los siete de errorCauses.ts)
  * Umbrales. Todos (J) y en INSIGHT_MINIMUMS.
  */
 import type { Thresholds } from '@/config/thresholds';
@@ -33,6 +33,7 @@ import {
   type ResponseRecord,
 } from './behavior';
 import { analyzeBias, type BiasExposure } from './bias';
+import { topMotive, type ErrorMotive } from './errorCauses';
 
 /** Segundos por reactivo en el ENARM, 6 horas para 280 */
 export const ENARM_SECONDS_PER_ITEM = 77;
@@ -75,7 +76,8 @@ export interface InsightInput {
   reviews: readonly ReviewFact[];
   /** Minutos activos de cada sesión terminada */
   sessionMinutes: readonly number[];
-  causes: readonly string[];
+  /** El motivo de cada error que lo tiene, uno por error y el último que marcó (B5) */
+  causes: readonly ErrorMotive[];
   /** Días de estudio AAAA-MM-DD con actividad */
   studyDays: readonly string[];
   today: string;
@@ -569,22 +571,18 @@ function studyInsights(input: InsightInput): Insight[] {
         : calibrating(sessions.length, 5, 'sessions'),
   });
 
-  // Causas que reporta al fallar
-  const causeCounts = new Map<string, number>();
-  for (const cause of input.causes) causeCounts.set(cause, (causeCounts.get(cause) ?? 0) + 1);
-  const topCause = [...causeCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+  // Motivos que marca al fallar. Un hueco de conocimiento es foco y los demás son de técnica
+  const top = topMotive(input.causes);
   out.push({
     id: 'causes',
     area: 'study',
     weight: 2,
     state:
-      input.causes.length >= min.causes && topCause
+      input.causes.length >= min.causes && top
         ? ready(
-            topCause[0] === 'knowledge' || topCause[0] === 'not_studied' || topCause[0] === 'forgot'
-              ? 'focus'
-              : 'watch',
-            { share: topCause[1] / input.causes.length, total: input.causes.length },
-            { cause: topCause[0] },
+            top.motive === 'knowledge' ? 'focus' : 'watch',
+            { share: top.count / top.total, total: top.total },
+            { cause: top.motive },
           )
         : calibrating(input.causes.length, min.causes, 'causes'),
   });

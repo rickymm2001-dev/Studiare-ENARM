@@ -1,19 +1,22 @@
 // Revisión del examen pregunta por pregunta. Ya terminó, así que cada pregunta muestra su
 // retroalimentación completa. Por qué atrae cada opción y qué se podía descartar, qué eligió el
 // alumno y qué descartó, y la explicación. Cada pregunta va plegada y se filtra por desenlace. Las
-// preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2).
-import { Check, CheckCircle2, ChevronDown, Flag, MinusCircle, Plus, XCircle } from 'lucide-react';
+// preguntas son filas de una lista y no cajas dentro de la tarjeta (H06 de la revisión de B2). Cada
+// pregunta se puede volver tarjeta y en cada fallada se marca por qué falló, con los siete motivos
+// de Ricardo, opcional y cambiable (B5, comentarios 1 y 2).
+import { CheckCircle2, ChevronDown, Flag, MinusCircle, XCircle } from 'lucide-react';
 import { useState } from 'react';
-import { useSession } from '@/app/session';
 import { useDataApi } from '@/data/context';
-import { createEvent } from '@/data/events/createEvent';
-import { CURRENT_ERROR_CAUSES, type CurrentErrorCause } from '@/data/schemas/common';
-import { CreateQuestionCardDialog } from '@/features/shared/CreateQuestionCardDialog';
+import type { AppEvent } from '@/data/schemas/events';
+import { latestMotive } from '@/engines/errorCauses';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
-import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
+import { CreateCardButton } from '../questionCards/CreateCardDialog';
+import { MotivePicker } from '../shared/MotivePicker';
+import { reportMotive, useMotiveReports } from '../shared/motives';
+import type { ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { examOutcome, type ExamBundles, type ExamOutcome } from './examResults';
@@ -55,8 +58,18 @@ const OUTCOME_ICON = {
   blank: <MinusCircle aria-hidden className="size-5 shrink-0 text-fg-muted" />,
 } as const;
 
-export function ExamReview({ state, bundles }: { state: ExamState; bundles: ExamBundles }) {
+export function ExamReview({
+  state,
+  bundles,
+  session,
+}: {
+  state: ExamState;
+  bundles: ExamBundles;
+  session: ReadySession;
+}) {
   const [filter, setFilter] = useState<Filter>('all');
+  // Los motivos se leen una vez para toda la lista, no una vez por pregunta
+  const reports = useMotiveReports(session.user.id);
   const rows = rowsOf(state, bundles);
   const visible = rows.filter((row) => {
     if (filter === 'missed') return row.outcome === 'missed';
@@ -84,7 +97,13 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
         ) : (
           <ol className="flex flex-col divide-y divide-line">
             {visible.map((row) => (
-              <ReviewItem key={row.id} row={row} state={state} />
+              <ReviewItem
+                key={row.id}
+                row={row}
+                state={state}
+                session={session}
+                reports={reports}
+              />
             ))}
           </ol>
         )}
@@ -93,33 +112,22 @@ export function ExamReview({ state, bundles }: { state: ExamState; bundles: Exam
   );
 }
 
-function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
+function ReviewItem({
+  row,
+  state,
+  session,
+  reports,
+}: {
+  row: Row;
+  state: ExamState;
+  session: ReadySession;
+  reports: readonly AppEvent[] | undefined;
+}) {
+  const api = useDataApi();
   const { bundle } = row;
   const { question, options, vignette } = bundle;
   const answer = answerOf(state, row.id);
   const text = t.examResults;
-
-  const api = useDataApi();
-  const session = useSession();
-  const user = session.status === 'ready' ? session.user : null;
-
-  const [cause, setCause] = useState<CurrentErrorCause | null>(null);
-  const [createCardOpen, setCreateCardOpen] = useState(false);
-  const [cardCreated, setCardCreated] = useState(false);
-
-  const reportCause = async (value: CurrentErrorCause) => {
-    setCause(value);
-    if (user) {
-      await api.recordEvent(
-        createEvent(
-          'cause_reported',
-          { targetKind: 'question', targetId: question.id, cause: value },
-          { userId: user.id, tz: user.timeZone },
-        ),
-      );
-    }
-  };
-
   // Las opciones en el orden que vio. Si no la vio, el set canónico
   const shownIds = state.shownOptions[row.id] ?? question.canonicalOptionIds;
   const shown = shownIds.flatMap((id) => {
@@ -197,61 +205,34 @@ function ReviewItem({ row, state }: { row: Row; state: ExamState }) {
               <p className="text-sm whitespace-pre-line">{question.explanation}</p>
             </div>
           ) : null}
-
-          {row.outcome === 'missed' ? (
-            <fieldset className="flex flex-col gap-2 border-t border-line pt-3">
-              <legend className="text-sm font-semibold text-fg">{text.whyFailed}</legend>
-              <div className="flex flex-wrap gap-2">
-                {CURRENT_ERROR_CAUSES.map((value) => (
-                  <Button
-                    key={value}
-                    size="sm"
-                    variant={cause === value ? 'primary' : 'secondary'}
-                    aria-pressed={cause === value}
-                    onClick={() => {
-                      void reportCause(value);
-                    }}
-                  >
-                    {t.review.causes[value]}
-                  </Button>
-                ))}
-              </div>
-            </fieldset>
-          ) : null}
-
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => {
-                setCreateCardOpen(true);
-              }}
-            >
-              {cardCreated ? (
-                <>
-                  <Check aria-hidden className="size-4 text-success" />
-                  {text.cardCreated}
-                </>
-              ) : (
-                <>
-                  <Plus aria-hidden className="size-4" />
-                  {text.createCard}
-                </>
-              )}
-            </Button>
+          <div className="flex flex-col gap-3 border-t border-line pt-3">
+            {row.outcome === 'missed' ? (
+              <MotivePicker
+                // Vale el último motivo que marcó desde que empezó este examen
+                value={latestMotive(
+                  reports ?? [],
+                  { kind: 'question', ids: [question.id, question.questionId] },
+                  new Date(state.startedAtMs).toISOString(),
+                )}
+                // El motivo queda en la sesión del examen, como sus respuestas
+                onChange={(motive) =>
+                  reportMotive(
+                    api,
+                    session.user,
+                    { kind: 'question', id: question.id },
+                    motive,
+                    state.examId,
+                  )
+                }
+              />
+            ) : null}
+            <CreateCardButton
+              session={session}
+              bundle={bundle}
+              from="exam_review"
+              label={t.examReview.createCard.buttonLabel(String(row.index + 1))}
+            />
           </div>
-
-          <CreateQuestionCardDialog
-            open={createCardOpen}
-            onOpenChange={setCreateCardOpen}
-            question={question}
-            questionVersionId={question.id}
-            vignette={vignette}
-            options={options}
-            onCardCreated={() => {
-              setCardCreated(true);
-            }}
-          />
         </div>
       </details>
     </li>

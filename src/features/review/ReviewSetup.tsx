@@ -1,13 +1,16 @@
 // Qué quieres repasar (D-072, D-078). Arriba el modo y el botón de empezar con cuántas tarjetas
-// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco. La última selección
-// se recuerda en este dispositivo. Aquí solo se elige lo de esta sesión. Los límites de cada día se
-// leen aquí y se cambian en Ajustes del repaso, el único lugar de cada ajuste (B3 del plan).
+// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco, y al abrirlos cada
+// mazo dice sus ramas y todos sus temas ya abiertos, sin un segundo pliegue (B4 del plan del cambio,
+// comentario 8). La última selección se recuerda en este dispositivo. Aquí solo se elige lo de esta
+// sesión. Los límites de cada día se leen aquí y se cambian en Ajustes del repaso, el único lugar de
+// cada ajuste (B3 del plan).
 import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { DailyCounters } from '@/engines/counters';
 import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
+import type { TopicOutline } from '@/engines/deckTopics';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -15,9 +18,9 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField } from '@/ui/components/field';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
+import { DeckTopics } from '../decks/DeckTopics';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
-import type { DeckBranchGroup } from '../decks/deckTopics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
 const MODES: readonly ReviewMode[] = ['today', 'due', 'new'];
@@ -26,8 +29,8 @@ export function ReviewSetup({
   addDeck,
   cards,
   deckNames,
+  deckTopics,
   topicOfCard,
-  deckTopicGroups,
   countFor,
   countersFor,
   leechCount,
@@ -39,15 +42,15 @@ export function ReviewSetup({
   addDeck?: ReactNode;
   cards: CardEntity[];
   deckNames: Map<string, string>;
+  /** Ramas y temas de cada mazo, por el mismo ID que deckNames */
+  deckTopics: ReadonlyMap<string, TopicOutline>;
   /** Subespecialidad de cada tarjeta. null si su nota no la trae */
   topicOfCard: Map<string, string | null>;
-  /** Grupos de ramas y temas de cada mazo (B4, comentario 8) */
-  deckTopicGroups?: ReadonlyMap<string, DeckBranchGroup[]>;
   /** Cuántas tarjetas tocarían hoy con esta selección */
   countFor: (selection: ReviewSelection) => number;
   /** Cuántas de esas son nuevas, de aprendizaje o programadas */
   countersFor: (selection: ReviewSelection) => DailyCounters;
-  /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Explorar */
+  /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Buscar tarjetas */
   leechCount: number;
   /** Límites diarios del alumno. Aquí solo se leen */
   limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
@@ -56,23 +59,8 @@ export function ReviewSetup({
   onStart: (selection: ReviewSelection) => void;
 }) {
   const deckIds = useMemo(() => [...new Set(cards.map((card) => card.deckId))], [cards]);
-  const allKnownTopics = useMemo(() => {
-    if (deckTopicGroups && deckTopicGroups.size > 0) {
-      const set = new Set<string>();
-      for (const groups of deckTopicGroups.values()) {
-        for (const group of groups) {
-          for (const topic of group.topics) {
-            set.add(topic.key);
-          }
-        }
-      }
-      return [...set];
-    }
-    return ALL_TOPICS;
-  }, [deckTopicGroups]);
-
   const [selection, setSelection] = useState<ReviewSelection>(() =>
-    loadSelection(deckIds, allKnownTopics),
+    loadSelection(deckIds, ALL_TOPICS),
   );
   const counts = useMemo(() => {
     const map = new Map<string, number>();
@@ -159,129 +147,52 @@ export function ReviewSetup({
             summary={text.filtersSummary(
               selection.decks.size,
               selection.topics.size,
-              allKnownTopics.length,
+              ALL_TOPICS.length,
             )}
             defaultOpen={total === 0}
           >
-            {deckTopicGroups && deckTopicGroups.size > 0 ? (
-              <div className="flex flex-col gap-4">
-                {deckIds.map((deckId) => {
-                  const groups = deckTopicGroups.get(deckId) ?? [];
-                  const isDeckChecked = selection.decks.has(deckId);
-                  const deckName = deckNames.get(deckId) ?? deckId;
-
-                  return (
-                    <div
-                      key={deckId}
-                      className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <CheckboxField
-                          label={deckName}
-                          checked={isDeckChecked}
-                          onChange={(event) => {
-                            const decks = new Set(selection.decks);
-                            const topics = new Set(selection.topics);
-                            if (event.target.checked) {
-                              decks.add(deckId);
-                              for (const g of groups) {
-                                for (const t of g.topics) topics.add(t.key);
-                              }
-                            } else {
-                              decks.delete(deckId);
-                              for (const g of groups) {
-                                for (const t of g.topics) topics.delete(t.key);
-                              }
-                            }
-                            setSelection({ ...selection, decks, topics });
-                          }}
-                        />
-                        {groups.length > 0 ? (
-                          <span className="text-xs text-fg-muted">
-                            {groups.map((g) => g.branchName).join(', ')}
-                          </span>
-                        ) : null}
-                      </div>
-
-                      {isDeckChecked && groups.length > 0 ? (
-                        <div className="ml-6 flex flex-col gap-3 border-t border-line/60 pt-2">
-                          {groups.map((group) => (
-                            <div key={group.branchKey} className="flex flex-col gap-1.5">
-                              {groups.length > 1 ? (
-                                <span className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-                                  {group.branchName}
-                                </span>
-                              ) : null}
-                              <div className="grid gap-x-3 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
-                                {group.topics.map((item) => (
-                                  <CheckboxField
-                                    key={item.key}
-                                    label={`${item.name} (${item.count})`}
-                                    checked={selection.topics.has(item.key)}
-                                    onChange={(event) => {
-                                      const nextTopics = new Set(selection.topics);
-                                      if (event.target.checked) nextTopics.add(item.key);
-                                      else nextTopics.delete(item.key);
-                                      setSelection({ ...selection, topics: nextTopics });
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-                <CheckboxField
-                  label={text.untagged}
-                  hint={text.untaggedHint}
-                  checked={selection.includeUntagged}
-                  onChange={(event) => {
-                    setSelection({ ...selection, includeUntagged: event.target.checked });
-                  }}
-                />
-              </div>
-            ) : (
-              <>
-                <fieldset>
-                  <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
-                  <div className="grid gap-x-3 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
-                    {deckIds.map((deckId) => (
-                      <CheckboxField
-                        key={deckId}
-                        label={deckNames.get(deckId) ?? deckId}
-                        checked={selection.decks.has(deckId)}
-                        onChange={(event) => {
-                          const decks = new Set(selection.decks);
-                          if (event.target.checked) decks.add(deckId);
-                          else decks.delete(deckId);
-                          setSelection({ ...selection, decks });
-                        }}
-                      />
-                    ))}
-                  </div>
-                </fieldset>
-                <BranchTopicPicker
-                  selected={selection.topics}
-                  counts={counts}
-                  countLabel={text.cards}
-                  showCount={false}
-                  onChange={(topics) => {
-                    setSelection({ ...selection, topics });
-                  }}
-                />
-                <CheckboxField
-                  label={text.untagged}
-                  hint={text.untaggedHint}
-                  checked={selection.includeUntagged}
-                  onChange={(event) => {
-                    setSelection({ ...selection, includeUntagged: event.target.checked });
-                  }}
-                />
-              </>
-            )}
+            <fieldset>
+              <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
+              <ul className="flex flex-col divide-y divide-line">
+                {deckIds.map((deckId) => (
+                  <li key={deckId} className="flex flex-col gap-1 py-2 first:pt-0 last:pb-0">
+                    <CheckboxField
+                      label={deckNames.get(deckId) ?? deckId}
+                      checked={selection.decks.has(deckId)}
+                      onChange={(event) => {
+                        const decks = new Set(selection.decks);
+                        if (event.target.checked) decks.add(deckId);
+                        else decks.delete(deckId);
+                        setSelection({ ...selection, decks });
+                      }}
+                    />
+                    <DeckTopics
+                      deckName={deckNames.get(deckId) ?? deckId}
+                      outline={deckTopics.get(deckId)}
+                      collapsible={false}
+                      className="pl-8"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+            <BranchTopicPicker
+              selected={selection.topics}
+              counts={counts}
+              countLabel={text.cards}
+              showCount={false}
+              onChange={(topics) => {
+                setSelection({ ...selection, topics });
+              }}
+            />
+            <CheckboxField
+              label={text.untagged}
+              hint={text.untaggedHint}
+              checked={selection.includeUntagged}
+              onChange={(event) => {
+                setSelection({ ...selection, includeUntagged: event.target.checked });
+              }}
+            />
           </Disclosure>
 
           <p className="text-sm text-fg-muted">

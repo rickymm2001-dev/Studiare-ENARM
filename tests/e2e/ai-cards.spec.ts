@@ -5,6 +5,7 @@ import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { buildPdf } from '@/data/import/testing/pdf';
 import { t } from '@/i18n/es-MX';
+import { cardPanel, openCard, resultRows, searchResults } from './support/cardSearch';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const MATERIAL =
@@ -52,16 +53,15 @@ test('el plan Gratis no la incluye y uno de pago genera tarjetas en borrador con
   await card.getByRole('button', { name: /^Guardar \d+ tarjetas? en borrador$/ }).click();
   await expect(card.getByText(t.aiCards.savedTitle, { exact: true })).toBeVisible();
 
-  // En Explorar la tarjeta con señal la lleva marcada, y al verificarla la señal se quita
+  // En Buscar tarjetas la tarjeta con señal la lleva marcada, y al verificarla la señal se quita
   await page.goto(SCREENS.explore.path);
-  const list = page.getByRole('list', { name: t.explore.list });
-  await expect(list).toBeVisible({ timeout: 30_000 });
-  const badge = list.getByText(t.controversy.badge).first();
+  const results = searchResults(page);
+  await expect(results).toBeVisible({ timeout: 30_000 });
+  const badge = results.getByText(t.controversy.badge).first();
   await expect(badge).toBeVisible();
-  const row = list.getByRole('listitem').filter({ hasText: t.controversy.badge });
-  await row.getByRole('button', { name: /^Ver tarjeta/ }).click();
-  await row.getByRole('button', { name: t.controversy.verify }).click();
-  await expect(list.getByText(t.controversy.badge)).toHaveCount(0);
+  await openCard(resultRows(page).filter({ hasText: t.controversy.badge }).first());
+  await cardPanel(page).getByRole('button', { name: t.controversy.verify }).click();
+  await expect(results.getByText(t.controversy.badge)).toHaveCount(0);
 });
 
 test('un PDF con texto llena el campo y uno sin texto avisa que no se puede leer', async ({

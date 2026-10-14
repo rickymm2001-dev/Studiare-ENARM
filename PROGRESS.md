@@ -19,8 +19,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
-- [x] B4. Repasar y Buscar tarjetas (fusionado en main)
-- [x] B5. Revisión del examen y motivos de error (fusionado en main)
+- [x] B4. Repasar y Buscar tarjetas (PR en curso)
+- [x] B5. Revisión del examen y motivos de error (PR en curso, junto con B4)
 - [ ] B6. Apuntes y mazos
 - [ ] B7. Party real y lo que se queda o se va
 - [ ] B8. Plan Gratis
@@ -99,34 +99,29 @@ Evidencia
 - JavaScript inicial de 284.8 KB de 300
 - Capturas en docs/screenshots/v3/b3, en teléfono, 1280 y 1920, en claro y en oscuro
 
-### B4. Repasar y Buscar tarjetas (comentarios 8 y 11)
-- Hecho. Cada mazo en Repasar y Mazos muestra su rama y debajo todos sus temas en orden alfabético del español (Intl.Collator con es-MX, sin distinguir acentos), sin repetidos y sin recortes. Los mazos con varias ramas se agrupan por rama.
-- Diccionario médico de visualización para abreviaturas y nombres pegados de Paco (AR -> Artritis reumatoide, LES -> Lupus eritematoso sistémico, etc.).
-- Buscar tarjetas (`/repasar/explorar` o `/explorar`): Búsqueda reactiva, chips de filtros con conteos reactivos (`mazo`, `tema`, `estado`, `vencidas`, `sanguijuelas`, `marcadas`), botón Más filtros plegable.
-- En computadora: tabla ordenable por columna (`frente`, `mazo`, `tema`, `estado`, `próxima fecha`, `intervalo`, `fallos`) con panel lateral para ver y editar la tarjeta inline sin perder la lista, con metadatos FSRS y botón de suspender/reanudar.
-- Atajos de teclado (`ArrowDown`, `ArrowUp`, `Space` para marcar/desmarcar, `Escape` para cerrar panel) y desplazamiento continuo progresivo en lugar de paginación.
-- Acciones en lote: suspender, reanudar, etiquetar, mover y reiniciar tarjetas (evento `cards_reset`).
-- Rendimiento verificado: filtrado de 10,000 tarjetas en < 100 ms (unit test).
-- Evidencia: 75 pruebas unitarias passing, TypeScript typecheck y ESLint 100% limpios. E2E `tests/e2e/b4-explore-topics.spec.ts` agregada. Fusionado a `main`.
+### B4. Repasar y Buscar tarjetas (D-123)
+- Hecho. Temas de cada mazo hasta tres niveles (rama, materia y tema), desde la ruta de las etiquetas de los mazos de Paco, con nombres legibles y plegados con su resumen. En Repasar se ven abiertos dentro de Mazos y temas
+- Buscar tarjetas reemplaza a Explorar con su misma ruta. Búsqueda al teclear con la sintaxis de antes, chips con su conteo, tabla con panel desde 64rem y lista con hojas en el teléfono, de 60 en 60, y atajos de teclado. Reiniciar es un evento nuevo que solo se agrega
+- Revisión independiente con sus hallazgos corregidos. La tabla de nombres de temas espera la revisión de un médico en docs/revisiones/b4-nombres-de-temas.md
+- Capturas en docs/screenshots/v3/b4
 
-### B5. Revisión del examen y motivos de error (comentarios 1 y 2)
-- Hecho. Tabla de equivalencias y normalización de motivos de error vigentes (7 motivos: conocimiento, tiempo, malinterpretación, lectura superficial, ansiedad, exceso de confianza, fatiga) y compatibilidad con motivos legacy (D-124).
-- Creación de tarjeta desde pregunta (`createCardFromQuestion`) sin IA, con frente y reverso construidos de forma determinista a partir del caso clínico, reactivo, opciones y retroalimentación del banco. Registra el evento `question_card_created`.
-- Creación de tarjetas en la capa del alumno: si el destino es un mazo precargado seguido, la tarjeta se asigna a un submazo privado `Mis tarjetas` (`parentId: preloadedDeck.id`), preservando intacto e inmutable el mazo precargado compartido.
-- Diálogo `CreateQuestionCardDialog` con selección de mazo destino (mazos propios, precargados seguidos o `+ Crear nuevo mazo`) y edición y previsualización de frente y reverso.
-- Botones de 1 toque en la revisión del examen (`ExamReview`) y del simulador (`AnswerReview`), permitiendo seleccionar y cambiar el motivo de error en cualquier momento (gana el último motivo reportado por reactivo).
-- Reflejo del motivo de error vigente en Progreso (tarjeta `Motivos de error` con desglose total y en `Ramas y subespecialidades` por rama) y en el tutor.
-- Evidencia: Pruebas unitarias de esquemas, motores (`forgetting`, `insights`, `errorContexts`, `insightFacts`, `analysis`) y usecases (61 pruebas passing). Suite E2E `tests/e2e/b5-exam-review-cards.spec.ts` en verde para desktop y mobile. Fusionado a `main`.
+### B5. Revisión del examen y motivos de error (D-124)
+- Hecho. Crear tarjeta en cada pregunta de la revisión del examen y de la retroalimentación de la práctica, con el texto del banco y sin IA por omisión. En un precargado la tarjeta va a la capa Mis tarjetas del alumno (4.16) y no se duplica
+- Siete motivos de error de un toque en las falladas, con tabla de equivalencias para los eventos viejos, que no se editan (4.23). Alimentan Progreso con el reparto por rama, Conócete, el tutor y los consejos por trampa
+- Revisión independiente con sus hallazgos corregidos
+- Evidencia de B4 y B5. Typecheck, lint y formato limpios y 2,977 pruebas unitarias que pasan; la única que falló con la máquina cargada fue la de rendimiento de ordenar en Buscar tarjetas, que pasa sola. E2e de ai-cards, deck-topics, exam-review, explore, import-export, review-tools y review en teléfono y computadora, 30 de 30
+- Capturas en docs/screenshots/v3/b5
 
-### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
+### Estado de las ramas en paralelo (2026-10-14, 04:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
-- B3 en b3-int. Unido con B2 final, e2e corridas una vez (272 pasan, 17 fallaban por selectores y pantallas movidas) y revisión independiente hecha. Un subagente corrige los hallazgos y las e2e
-- B4 y B5 en b45. Implementados, revisión independiente hecha y sus 12 hallazgos corregidos. Faltan e2e, capturas y PR
-- B6 en b6. Implementado y revisado. Un subagente corrige 4 hallazgos
-- B7 en b7int (unión de b7a, Party en la nube, y b7b, enfoque, resumen, referidos y demo cerrada). Revisado. Un subagente corrige 9 hallazgos. Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
-- B9 en b9. Implementado con la migración renombrada a 20261020000001. Revisión independiente en curso
-- Siguen B8 y B10, que parten de la unión de todo lo anterior
-- Los subagentes se detuvieron tres veces por el límite de uso de la cuenta y se reanudaron con su contexto
+- B3 fusionado en main (PR 42)
+- B4 y B5 cerrados en la rama de trabajo. Antes se revirtió la versión paralela que entró directo a main sin PR (9bcf111), por decisión de Ricardo
+- B6 en int6, unido sobre B4 y B5. Un subagente busca choques que git no marcó y corre sus e2e
+- B7 en b7int con los 9 hallazgos de su revisión corregidos (616f948). Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
+- B8 en b8 (Plan Gratis), en implementación sobre b6 y b7int. Su migración será 20261021000001
+- B9 en b9 con los hallazgos de su revisión corregidos (7a1ff2d). Su migración 20261020000001 no se ha aplicado al proyecto
+- El diseño de B10 está listo en /home/user/wt/plans/b10.md y arranca cuando B8 y B9 estén en main
+- Los subagentes se detuvieron cuatro veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico

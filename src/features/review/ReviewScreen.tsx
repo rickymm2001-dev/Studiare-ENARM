@@ -60,11 +60,11 @@ import { FeatureGate } from '../shared/FeatureGate';
 import { useActivePlan } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
+import { deckIds } from '@/demo/content/deckEntities';
 import { deckPath, selectionUnitId } from '@/engines/deckTree';
 import { DeckEditorDialog } from '../decks/DeckEditorDialog';
+import { CONTAINER_DECKS, deckTopicOutlines } from '../decks/topicPaths';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
-import { deckTopicsGrouped, extractNoteTopicInfo, type DeckBranchGroup } from '../decks/deckTopics';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
 import { ReviewCounters } from './ReviewCounters';
@@ -93,8 +93,6 @@ type Confidence = 'dont_know' | 'unsure' | 'sure';
 const CARD_TIME_CAP_MS = DEFAULT_THRESHOLDS.daily.cardTimeCapSeconds * 1000;
 type Cause = keyof typeof t.review.causes;
 const RATINGS: FsrsRating[] = ['again', 'hard', 'good', 'easy'];
-/** ENARM 2027 solo agrupa a las ramas, así que no se elige como unidad de repaso */
-const CONTAINER_DECKS: ReadonlySet<string> = new Set([deckIds.deck(ROOT_DECK_KEY)]);
 
 /** Reloj de la sesión. Solo se llama desde manejadores de eventos */
 function clock(): number {
@@ -128,7 +126,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
   const noteById = new Map(content.notes.map((note) => [note.id, note]));
-  // Las suspendidas no entran al repaso, pero siguen en el mazo y en Explorar (D-085)
+  // Las suspendidas no entran al repaso, pero siguen en el mazo y en Buscar tarjetas (D-085)
   const suspended = suspendedCardIds(events);
   const cards = errorsFirst(
     content.cards.filter((card) => followed.has(card.deckId) && !suspended.has(card.id)),
@@ -151,7 +149,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   );
   // Con una sesión en curso no se cambia de pantalla aunque suspendas la última tarjeta activa
   if (cards.length === 0 && selection === null) {
-    // Si sigues mazos pero todo está suspendido, el aviso lleva a Explorar y no a Mazos
+    // Si sigues mazos pero todo está suspendido, el aviso lleva a Buscar tarjetas y no a Mazos
     const allSuspended = content.cards.some(
       (card) => followed.has(card.deckId) && suspended.has(card.id),
     );
@@ -194,34 +192,14 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
   const noteTopic = new Map<string, string | null>();
-  for (const file of catalog) {
-    for (const note of file.notes) {
-      const info = extractNoteTopicInfo(note, file.key);
-      noteTopic.set(deckIds.note(note.key), info.topicKey);
-    }
-  }
+  for (const file of catalog)
+    for (const note of file.notes) noteTopic.set(deckIds.note(note.key), note.topic);
   const topicOfCard = new Map(
-    cards.map((card) => {
-      const note = noteById.get(card.noteId);
-      const fallbackTopic = note ? extractNoteTopicInfo(note).topicKey : null;
-      return [
-        card.id,
-        noteTopic.get(card.noteId) ?? fallbackTopic ?? topicFromTags(note?.tags),
-      ];
-    }),
+    cards.map((card) => [
+      card.id,
+      noteTopic.get(card.noteId) ?? topicFromTags(noteById.get(card.noteId)?.tags),
+    ]),
   );
-  const deckTopicGroups = new Map<string, DeckBranchGroup[]>();
-  for (const file of catalog) {
-    deckTopicGroups.set(deckIds.deck(file.key), deckTopicsGrouped(file));
-  }
-  for (const deck of content.decks) {
-    if (!deckTopicGroups.has(deck.id)) {
-      const deckNotes = content.notes.filter((n) => n.deckId === deck.id);
-      if (deckNotes.length > 0) {
-        deckTopicGroups.set(deck.id, deckTopicsGrouped({ key: deck.id, notes: deckNotes }));
-      }
-    }
-  }
   const config = schedulerConfig(session);
   const cardStates = latestCardStates(events);
   // Las herramientas de atrasos solo sirven si ya hay tarjetas con repasos
@@ -258,8 +236,13 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           addDeck={<AddDeckButton />}
           cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
           deckNames={unitNames}
+          // Todos los temas de cada mazo, también los de sus tarjetas suspendidas (comentario 8)
+          deckTopics={deckTopicOutlines({
+            decks: content.decks,
+            notes: noteById,
+            cards: content.cards.filter((card) => followed.has(card.deckId)),
+          })}
           topicOfCard={topicOfCard}
-          deckTopicGroups={deckTopicGroups}
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
             reviewsPerDay: session.settings.reviewsPerDay,
@@ -592,7 +575,7 @@ function ReviewSession({
   };
 
   // Todo el repaso con el teclado (D-087). Espacio o Enter muestra la respuesta, 1 a 4 califican y
-  // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 8 eligen la causa y Espacio omite
+  // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 7 eligen el motivo y Espacio omite
   // Datos de la sanguijuela que se está atendiendo. Solo las tarjetas del propio alumno se editan
   const leechCard = leech ? cardById.get(leech.cardId) : undefined;
   const leechNote = leechCard ? noteById.get(leechCard.noteId) : undefined;

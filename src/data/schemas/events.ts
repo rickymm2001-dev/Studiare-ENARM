@@ -7,6 +7,7 @@ import {
   CardConfidenceSchema,
   ConsentPurposeSchema,
   ErrorCauseSchema,
+  ErrorMotiveSchema,
   ForgettingRuleSchema,
   FsrsCardStateSchema,
   FsrsRatingSchema,
@@ -77,10 +78,14 @@ export const EventPayloadSchemas = {
     /** La marcó para revisar en el examen */
     markedForReview: z.boolean().optional(),
   }),
+  /**
+   * Por qué falló, con uno de los siete motivos (B5). Es opcional y se puede cambiar. Cada cambio es
+   * otro evento y vale el último. Al leer se aceptan también las causas de antes (StoredPayloadSchemas)
+   */
   cause_reported: z.strictObject({
     targetKind: z.enum(['question', 'card']),
     targetId: IdSchema,
-    cause: ErrorCauseSchema,
+    cause: ErrorMotiveSchema,
   }),
   session_started: z.strictObject({
     kind: SessionKindSchema,
@@ -218,7 +223,9 @@ export const EventPayloadSchemas = {
     cardIds: z.array(IdSchema).min(1).max(500),
   }),
   /**
-   * El alumno reinicia el avance FSRS de tarjetas, devolviéndolas al estado new (B4 del plan).
+   * El alumno reinicia tarjetas desde Buscar tarjetas (B4 del plan del cambio). Vuelven a ser nuevas
+   * y empiezan de cero. Sus repasos de antes siguen en la bitácora, que nunca se edita, y este evento
+   * solo dice desde cuándo ya no cuentan para su próximo repaso. Un lote lleva hasta 500 tarjetas
    */
   cards_reset: z.strictObject({
     cardIds: z.array(IdSchema).min(1).max(500),
@@ -230,6 +237,27 @@ export const EventPayloadSchemas = {
   card_controversy_resolved: z.strictObject({
     noteId: IdSchema,
     resolution: z.enum(['verified', 'edited']),
+  }),
+  /**
+   * El alumno convirtió una pregunta del banco en tarjeta desde la revisión (B5, comentario 1). Lleva
+   * la pregunta y su versión, el mazo que eligió y la nota que quedó. En un mazo precargado la nota
+   * vive en la capa del alumno, un mazo privado suyo que cuelga del precargado (4.16)
+   */
+  question_card_created: z.strictObject({
+    questionId: IdSchema,
+    questionVersionId: IdSchema,
+    version: z.int().min(1),
+    /** El mazo que eligió */
+    deckId: IdSchema,
+    /** El mazo donde quedó la nota. Es la capa del alumno si eligió uno precargado */
+    noteDeckId: IdSchema,
+    noteId: IdSchema,
+    /** bank si el texto salió del banco sin IA, ai si lo propuso el motor de tarjetas (8.4) */
+    source: z.enum(['bank', 'ai']),
+    /** La generación de IA de la que salió. null si salió del banco */
+    artifactId: IdSchema.nullable(),
+    /** Dónde la creó, la revisión del examen o la de la práctica */
+    from: z.enum(['exam_review', 'practice_review']),
   }),
   /**
    * Cambio de fecha de repaso de tarjetas (D-085, fila 5). Repartir atrasos, posponer, adelantar o
@@ -258,20 +286,20 @@ export const EventPayloadSchemas = {
         (payload.kind === 'spread' || payload.kind === 'postpone') === (payload.days !== null),
       { message: 'Solo repartir y posponer llevan días', path: ['days'] },
     ),
-  /**
-   * El alumno creó una tarjeta desde una pregunta (B5 del plan del cambio, D-124).
-   * Solo se agrega y registra la pregunta, su versión, la tarjeta y el mazo destino.
-   */
-  question_card_created: z.strictObject({
-    questionId: IdSchema,
-    questionVersionId: IdSchema,
-    cardId: IdSchema,
-    deckId: IdSchema,
-  }),
 } as const;
 
 export type EventType = keyof typeof EventPayloadSchemas;
 export const EVENT_TYPES = Object.keys(EventPayloadSchemas) as EventType[];
+
+/**
+ * Cómo se leen los payloads guardados. Igual que al escribir, salvo cause_reported, que acepta también
+ * las ocho causas de antes. Esos eventos no se editan, se leen con la tabla de equivalencias de
+ * src/engines/errorCauses.ts (4.23 del plan del cambio)
+ */
+const StoredPayloadSchemas = {
+  ...EventPayloadSchemas,
+  cause_reported: EventPayloadSchemas.cause_reported.extend({ cause: ErrorCauseSchema }),
+} as const;
 
 /** Campos comunes de todo evento (6.1) */
 const EventEnvelopeShape = {
@@ -290,7 +318,7 @@ function eventSchemaFor<T extends EventType>(type: T) {
   return z.strictObject({
     ...EventEnvelopeShape,
     type: z.literal(type),
-    payload: EventPayloadSchemas[type],
+    payload: StoredPayloadSchemas[type],
   });
 }
 
@@ -337,4 +365,13 @@ export const AppEventSchema = z.discriminatedUnion('type', [
 
 export type AppEvent = z.infer<typeof AppEventSchema>;
 export type EventOf<T extends EventType> = Extract<AppEvent, { type: T }>;
+/** Lo que se escribe hoy en cada tipo. Lo guardado puede traer además valores viejos (AppEvent) */
 export type EventPayload<T extends EventType> = z.infer<(typeof EventPayloadSchemas)[T]>;
+
+/** Valida lo que se va a escribir. Rechaza lo que ya solo se lee, como una causa de error vieja */
+export function parseWritablePayload<T extends EventType>(
+  type: T,
+  payload: EventPayload<T>,
+): EventPayload<T> {
+  return EventPayloadSchemas[type].parse(payload) as EventPayload<T>;
+}

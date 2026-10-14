@@ -31,7 +31,7 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   await page.getByRole('button', { name: t.review.show }).click();
   await rating('good').click();
 
-  // Tarjeta 2 solo con el teclado. Espacio muestra, 1 es Otra vez y pide la causa, 2 es Lo olvidé
+  // Tarjeta 2 solo con el teclado. Espacio muestra, 1 es Otra vez y pide el motivo, 2 es Tiempo
   await expect(page.getByRole('button', { name: t.review.show })).toBeVisible();
   await page.keyboard.press('Space');
   await page.keyboard.press('1');

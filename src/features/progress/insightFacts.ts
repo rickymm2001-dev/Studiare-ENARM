@@ -3,9 +3,14 @@
 import { TZDate } from '@date-fns/tz';
 import type { Thresholds } from '@/config/thresholds';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
-import { normalizeErrorCause, type CurrentErrorCause } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { personalPace, responseSignals } from '@/engines/behavior';
+import {
+  READING_MOTIVES,
+  errorMotives,
+  motivesByAttempt,
+  reportedMotives,
+} from '@/engines/errorCauses';
 import type { AnswerFact, InsightInput, ReviewFact } from '@/engines/insights';
 import { isProbableMisread } from '@/engines/structure';
 import { daysBetween, studyDayOf } from '@/engines/studyDay';
@@ -38,16 +43,22 @@ export function buildInsightInput(input: {
   const shown = new Map<string, Extract<AppEvent, { type: 'question_shown' }>>();
   const changes = new Map<string, Extract<AppEvent, { type: 'answer_changed' }>[]>();
 
-  // La causa que reporta el alumno se ata a su respuesta más reciente de esa pregunta, no a todas las
-  // veces que la contestó. El ID de la causa puede ser el de la versión o el de la pregunta
-  type Draft = Omit<AnswerFact, 'misread'> & {
-    reported: boolean;
-    questionIds: readonly string[];
-  };
+  // El motivo que marca el alumno se ata a su respuesta más reciente de esa pregunta, no a todas las
+  // veces que la contestó, y si lo cambia vale el último. El ID del reporte puede ser el de la versión
+  // o el de la pregunta. Las causas de antes se leen con la tabla de equivalencias (4.23)
+  const motives = errorMotives(events, {
+    aliases: (id) => {
+      const stable = bank.questions.get(id)?.questionId;
+      return stable ? [stable] : [];
+    },
+  });
+  const motiveOfAnswer = motivesByAttempt(motives);
+  type Draft = Omit<AnswerFact, 'misread'>;
   const drafts: Draft[] = [];
   const reviews: ReviewFact[] = [];
+  /** Dónde están en reviews los repasos de cada tarjeta, para reiniciarla */
+  const reviewsOfCard = new Map<string, number[]>();
   const sessionMinutes: number[] = [];
-  const latestCauses = new Map<string, CurrentErrorCause | null>();
   const studyDays = new Set<string>();
   let firstDay: string | null = null;
 
@@ -60,24 +71,6 @@ export function buildInsightInput(input: {
       case 'session_ended':
         sessionMinutes.push(event.payload.durationMs / 60_000);
         break;
-      case 'cause_reported': {
-        const targetKey = `${event.payload.targetKind}|${event.payload.targetId}`;
-        const normalized = normalizeErrorCause(event.payload.cause);
-        latestCauses.set(targetKey, normalized);
-        if (
-          event.payload.targetKind === 'question' &&
-          (normalized === 'misinterpretation' || normalized === 'shallow_reading')
-        ) {
-          const target = event.payload.targetId;
-          const latest = drafts.findLast((draft) => draft.questionIds.includes(target));
-          if (latest) latest.reported = true;
-        } else if (event.payload.targetKind === 'question') {
-          const target = event.payload.targetId;
-          const latest = drafts.findLast((draft) => draft.questionIds.includes(target));
-          if (latest) latest.reported = false;
-        }
-        break;
-      }
       case 'question_shown':
         shown.set(key + event.payload.questionVersionId, event);
         changes.set(key + event.payload.questionVersionId, []);
@@ -89,6 +82,9 @@ export function buildInsightInput(input: {
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);
         firstDay ??= day;
+        const indexes = reviewsOfCard.get(event.payload.cardId) ?? [];
+        indexes.push(reviews.length);
+        reviewsOfCard.set(event.payload.cardId, indexes);
         reviews.push({
           rating: event.payload.rating,
           stateBefore: event.payload.stateBefore?.state ?? null,
@@ -97,6 +93,18 @@ export function buildInsightInput(input: {
         });
         break;
       }
+      case 'cards_reset':
+        // Reiniciar vuelve nueva a la tarjeta y sin olvidos (B4). Sus repasos de antes siguen
+        // contando para la retención, pero ya no la hacen sanguijuela hasta que se vuelva a olvidar.
+        // Solo cambian los hechos que se arman aquí. La bitácora no se toca
+        for (const cardId of event.payload.cardIds) {
+          for (const index of reviewsOfCard.get(cardId) ?? []) {
+            const review = reviews[index];
+            if (review) reviews[index] = { ...review, lapsesAfter: 0 };
+          }
+          reviewsOfCard.delete(cardId);
+        }
+        break;
       case 'question_answered': {
         const day = studyDayOf(new Date(event.at), timeZone);
         studyDays.add(day);
@@ -143,8 +151,6 @@ export function buildInsightInput(input: {
           topic: question.topic,
           visibleTags: shownOptions.flatMap((option) => (option.biasTag ? [option.biasTag] : [])),
           chosenTag: chosen?.biasTag ?? null,
-          reported: false,
-          questionIds: [question.id, question.questionId],
         });
         break;
       }
@@ -155,23 +161,26 @@ export function buildInsightInput(input: {
 
   // La mala lectura usa el ritmo personal, así que va en una segunda pasada
   const pace = personalPace(drafts, input.thresholds.behavior);
-  const answers: AnswerFact[] = drafts.map(({ reported, questionIds: _questionIds, ...draft }) => ({
-    ...draft,
-    misread: isProbableMisread({
-      polarity: draft.polarity,
-      correct: draft.correct,
-      answeredFast: responseSignals(draft, pace, input.thresholds.behavior).rapidGuess,
-      reportedMisread: reported,
-    }),
-  }));
+  const answers: AnswerFact[] = drafts.map((draft) => {
+    const motive = motiveOfAnswer.get(draft.id) ?? null;
+    return {
+      ...draft,
+      misread: isProbableMisread({
+        polarity: draft.polarity,
+        correct: draft.correct,
+        answeredFast: responseSignals(draft, pace, input.thresholds.behavior).rapidGuess,
+        // Malinterpretación y Lectura superficial son las dos de lectura
+        reportedMisread: motive !== null && READING_MOTIVES.has(motive),
+      }),
+    };
+  });
 
   return {
     answers,
     reviews,
     sessionMinutes,
-    causes: Array.from(latestCauses.values()).filter(
-      (cause): cause is CurrentErrorCause => cause !== null,
-    ),
+    // Un motivo por error, el último que marcó
+    causes: reportedMotives(motives).flatMap((entry) => (entry.motive ? [entry.motive] : [])),
     studyDays: [...studyDays],
     today: input.today,
     daysSinceStart: firstDay ? Math.max(0, daysBetween(firstDay, input.today)) : 0,

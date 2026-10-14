@@ -4,10 +4,10 @@
 // tarjeta. Las reglas en sí viven en el motor forgetting. Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
 import type { Option, Question } from '@/data/schemas/bank';
-import { normalizeErrorCause, type CurrentErrorCause } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { personalPace, responseSignals, sessionThirds } from '@/engines/behavior';
-import { countListItems, type ErrorCause, type ErrorContext } from '@/engines/forgetting';
+import { errorMotives, motivesByAttempt } from '@/engines/errorCauses';
+import { countListItems, type ErrorContext } from '@/engines/forgetting';
 import { retrievabilityOf } from '@/engines/fsrs';
 import type { AnswerFact } from '@/engines/insights';
 import { DAY_MS } from '@/engines/studyDay';
@@ -97,48 +97,6 @@ function lastThirdOfTiringSessions(
   return ids;
 }
 
-type CauseKind = 'question' | 'card';
-
-/**
- * La causa que reportó el alumno justo después de un error, de esa pregunta o tarjeta. Solo vale
- * hasta el siguiente intento del mismo elemento, porque una causa reportada días después de otro
- * intento explica ese intento y no el error anterior
- */
-function causeLookup(events: readonly AppEvent[]) {
-  const byTarget = new Map<string, { at: string; cause: ErrorCause }[]>();
-  const attempts = new Map<string, string[]>();
-  const push = <T>(map: Map<string, T[]>, key: string, value: T) => {
-    const list = map.get(key) ?? [];
-    list.push(value);
-    map.set(key, list);
-  };
-  for (const event of events) {
-    if (event.type === 'cause_reported') {
-      push(byTarget, `${event.payload.targetKind}|${event.payload.targetId}`, {
-        at: event.at,
-        cause: event.payload.cause,
-      });
-    } else if (event.type === 'question_answered') {
-      push(attempts, `question|${event.payload.questionVersionId}`, event.at);
-    } else if (event.type === 'card_reviewed') {
-      push(attempts, `card|${event.payload.cardId}`, event.at);
-    }
-  }
-  for (const list of byTarget.values()) list.sort((a, b) => a.at.localeCompare(b.at));
-  for (const list of attempts.values()) list.sort((a, b) => a.localeCompare(b));
-  return (kind: CauseKind, ids: readonly string[], at: string): CurrentErrorCause | null => {
-    // El siguiente intento del mismo elemento, que es el primero con el ID de la versión
-    const next = attempts.get(`${kind}|${ids[0] ?? ''}`)?.find((time) => time > at);
-    for (const id of ids) {
-      const found = byTarget
-        .get(`${kind}|${id}`)
-        ?.findLast((entry) => entry.at >= at && (next === undefined || entry.at < next));
-      if (found) return normalizeErrorCause(found.cause);
-    }
-    return null;
-  };
-}
-
 export function buildErrorContexts(input: ErrorContextInput): ErrorContext[] {
   const { events, bank, thresholds } = input;
   const facts = buildInsightInput({
@@ -152,7 +110,16 @@ export function buildErrorContexts(input: ErrorContextInput): ErrorContext[] {
   const answers = facts.answers;
   const pace = personalPace(answers, thresholds.behavior);
   const tired = lastThirdOfTiringSessions(answers, thresholds.behavior);
-  const causeAfter = causeLookup(events);
+  // El motivo de cada error es el último que marcó el alumno para ese intento, hasta el siguiente
+  // intento del mismo elemento. Las causas de antes se leen con la tabla de equivalencias (4.23)
+  const motiveOf = motivesByAttempt(
+    errorMotives(events, {
+      aliases: (id) => {
+        const stable = bank.questions.get(id)?.questionId;
+        return stable ? [stable] : [];
+      },
+    }),
+  );
   const answeredEvents = new Map(
     events.flatMap((event) => (event.type === 'question_answered' ? [[event.id, event]] : [])),
   );
@@ -188,7 +155,7 @@ export function buildErrorContexts(input: ErrorContextInput): ErrorContext[] {
       baseTopicWeak: baseIsWeak(question.topic),
       predictedRetrievability: null,
       daysSinceLastReview: null,
-      reportedCause: causeAfter('question', [question.id, question.questionId], event.at),
+      reportedCause: motiveOf.get(event.id) ?? null,
     });
   }
 
@@ -218,7 +185,7 @@ export function buildErrorContexts(input: ErrorContextInput): ErrorContext[] {
         seen && before.lastReview
           ? (Date.parse(event.at) - Date.parse(before.lastReview)) / DAY_MS
           : null,
-      reportedCause: causeAfter('card', [event.payload.cardId], event.at),
+      reportedCause: motiveOf.get(event.id) ?? null,
     });
   }
   return contexts.sort((a, b) => a.at.localeCompare(b.at) || a.eventId.localeCompare(b.eventId));

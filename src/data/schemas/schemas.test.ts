@@ -5,6 +5,7 @@ import { makeQuestionWithOptions, makeUser, newId } from '../testing/fixtures';
 import { AiArtifactSchema } from './activity';
 import { OptionSchema, QuestionSchema } from './bank';
 import { UtcDateTimeSchema } from './common';
+import { createEvent } from '../events/createEvent';
 import { CardSchema, NoteSchema } from './decks';
 import { AppEventSchema, EVENT_TYPES } from './events';
 import { UserSchema, UserSettingsSchema } from './people';
@@ -45,9 +46,65 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto, suspender, reanudar o reiniciar tarjetas, cambiar su fecha de repaso, atender una controversia y crear tarjeta desde pregunta', () => {
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas, cambiar su fecha de repaso, atender una controversia y crear una tarjeta con una pregunta y reiniciar tarjetas', () => {
     expect(EVENT_TYPES).toHaveLength(38);
     expect(AppEventSchema.options).toHaveLength(38);
+  });
+
+  it('un motivo de error se escribe con los siete de hoy y se lee también con las causas de antes (4.23)', () => {
+    const userId = newId();
+    const targetId = newId();
+    const write = (cause: string) =>
+      createEvent(
+        'cause_reported',
+        // Una causa vieja ya no pasa el tipo, por eso se fuerza aquí para probar que tampoco pasa al correr
+        { targetKind: 'question', targetId, cause: cause as 'knowledge' },
+        { userId, tz: 'America/Merida' },
+      );
+    expect(write('overconfidence').payload.cause).toBe('overconfidence');
+    expect(() => write('forgot')).toThrow();
+    expect(() => write('other')).toThrow();
+    // Un evento guardado antes de B5 se sigue leyendo tal cual, sin editarlo
+    const stored = {
+      id: newId(),
+      userId,
+      at: '2026-10-08T12:00:00.000Z',
+      tz: 'America/Merida',
+      schemaVersion: 1,
+      sessionId: null,
+      type: 'cause_reported',
+      payload: { targetKind: 'card', targetId, cause: 'rushed_or_tired' },
+    };
+    expect(AppEventSchema.parse(stored)).toEqual(stored);
+    expect(() =>
+      AppEventSchema.parse({ ...stored, payload: { ...stored.payload, cause: 'boredom' } }),
+    ).toThrow();
+  });
+
+  it('crear una tarjeta con una pregunta deja la pregunta, su versión, el mazo y la nota', () => {
+    const payload = {
+      questionId: newId(),
+      questionVersionId: newId(),
+      version: 2,
+      deckId: newId(),
+      noteDeckId: newId(),
+      noteId: newId(),
+      source: 'bank' as const,
+      artifactId: null,
+      from: 'exam_review' as const,
+    };
+    const event = createEvent('question_card_created', payload, {
+      userId: newId(),
+      tz: 'America/Merida',
+    });
+    expect(event.payload).toEqual(payload);
+    expect(() =>
+      createEvent(
+        'question_card_created',
+        { ...payload, version: 0 },
+        { userId: newId(), tz: 'America/Merida' },
+      ),
+    ).toThrow();
   });
 
   it('un cambio de fecha de repaso lleva sus tarjetas con la fecha de antes y la nueva', () => {

@@ -177,6 +177,29 @@ describe('carga de repaso por mes', () => {
     expect(byMonth(load([...events, suspend]))['2026-11']?.scheduled).toBe(1);
   });
 
+  it('una tarjeta reiniciada se queda sin cita, y la de antes cuenta solo si ya había llegado (B4)', () => {
+    counter += 1;
+    const reset = (day: string) =>
+      ({
+        id: `01J00000000000000000000${String(counter).padStart(3, '0')}`,
+        userId: USER,
+        at: noon(day),
+        tz: TZ,
+        schemaVersion: 1,
+        sessionId: null,
+        type: 'cards_reset',
+        payload: { cardIds: ['a'] },
+      }) as AppEvent;
+    // Se reinició antes de su cita de noviembre, que ya no cuenta
+    const early = [reviewed('a', '2026-10-01', '2026-11-05'), reset('2026-10-10')];
+    expect(byMonth(load(early))['2026-11']?.scheduled).toBe(0);
+    // Se reinició después de su cita del 3 de octubre, que sí estaba programada
+    const late = [reviewed('a', '2026-09-20', '2026-10-03'), reset('2026-10-10')];
+    expect(byMonth(load(late))['2026-10']?.scheduled).toBe(1);
+    // Reiniciar una tarjeta que nunca se repasó no cuenta nada
+    expect(load([reset('2026-10-10')]).points.every((point) => point.scheduled === 0)).toBe(true);
+  });
+
   it('lo que cae fuera de los cinco meses no se cuenta', () => {
     const result = load([reviewed('a', '2026-03-01', '2027-06-01')]);
     expect(result.points.every((point) => point.scheduled === 0)).toBe(true);

@@ -1,9 +1,33 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import type { AppEvent } from '@/data/schemas/events';
+import { AppEventSchema, type AppEvent } from '@/data/schemas/events';
 import { newId } from '@/data/testing/fixtures';
+import type { LegacyErrorCause } from '@/engines/errorCauses';
 import { buildErrorContexts, type CardFact, type ErrorContextInput } from './errorContexts';
-import { answered, event, minute, option, question, state } from './testing/fixtures';
+import {
+  SESSION,
+  USER,
+  answered,
+  event,
+  minute,
+  option,
+  question,
+  state,
+} from './testing/fixtures';
+
+/** Un reporte guardado antes de B5, con una de las ocho causas de antes. Ya no se puede escribir */
+function legacyCause(targetId: string, cause: LegacyErrorCause, at: number): AppEvent {
+  return AppEventSchema.parse({
+    id: newId(),
+    userId: USER,
+    at: new Date(at).toISOString(),
+    tz: 'America/Merida',
+    schemaVersion: 1,
+    sessionId: SESSION,
+    type: 'cause_reported',
+    payload: { targetKind: 'question', targetId, cause },
+  });
+}
 
 function input(overrides: Partial<ErrorContextInput>): ErrorContextInput {
   return {
@@ -33,7 +57,7 @@ describe('causa reportada de cada error', () => {
       answered(failed, trap.id, false, minute(0) + 4 * day),
       event(
         'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'misread' },
+        { targetKind: 'question', targetId: failed.id, cause: 'misinterpretation' },
         minute(1) + 4 * day,
       ),
     ];
@@ -47,10 +71,7 @@ describe('causa reportada de cada error', () => {
         },
       }),
     );
-    expect(contexts.map((context) => context.reportedCause)).toEqual([
-      null,
-      'misinterpretation',
-    ]);
+    expect(contexts.map((context) => context.reportedCause)).toEqual([null, 'misinterpretation']);
   });
 
   it('la causa de un error que el alumno acaba de reportar sigue contando para ese error', () => {
@@ -60,7 +81,7 @@ describe('causa reportada de cada error', () => {
       answered(failed, trap.id, false, minute(0)),
       event(
         'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'rushed_or_tired' },
+        { targetKind: 'question', targetId: failed.id, cause: 'time' },
         minute(1),
       ),
       // Un intento posterior sin causa no la cambia
@@ -78,10 +99,18 @@ describe('causa reportada de cada error', () => {
     );
     expect(contexts.map((context) => context.reportedCause)).toEqual(['time', null]);
   });
+});
 
-  it('al cambiar el motivo de error vale el último reportado (D-124)', () => {
-    const failed = question({ id: newId() });
-    const trap = option(newId(), false, 'Furosemida');
+describe('motivo de cada error, el último que marcó (B5)', () => {
+  const failed = question({ id: newId() });
+  const trap = option(newId(), false, 'Furosemida');
+  const bank = {
+    questions: new Map([[failed.id, failed]]),
+    options: new Map([[trap.id, trap]]),
+    cases: new Map(),
+  };
+
+  it('si cambia de motivo vale el último y el anterior no se pierde de la bitácora', () => {
     const events = [
       answered(failed, trap.id, false, minute(0)),
       event(
@@ -91,21 +120,49 @@ describe('causa reportada de cada error', () => {
       ),
       event(
         'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'time' },
+        { targetKind: 'question', targetId: failed.id, cause: 'overconfidence' },
         minute(2),
       ),
     ];
-    const contexts = buildErrorContexts(
+    const [context] = buildErrorContexts(input({ events, bank }));
+    expect(context?.reportedCause).toBe('overconfidence');
+    expect(events.filter((item) => item.type === 'cause_reported')).toHaveLength(2);
+  });
+
+  it('lee las causas de antes con la tabla de equivalencias y Otra razón queda sin motivo', () => {
+    const read = (cause: LegacyErrorCause) =>
+      buildErrorContexts(
+        input({
+          events: [
+            answered(failed, trap.id, false, minute(0)),
+            legacyCause(failed.id, cause, minute(1)),
+          ],
+          bank,
+        }),
+      )[0]?.reportedCause;
+    expect(read('rushed_or_tired')).toBe('time');
+    expect(read('missed_detail')).toBe('superficial_reading');
+    expect(read('changed_answer')).toBe('anxiety');
+    expect(read('forgot')).toBe('knowledge');
+    expect(read('other')).toBeNull();
+  });
+
+  it('un motivo nuevo después de una causa vieja la reemplaza', () => {
+    const [context] = buildErrorContexts(
       input({
-        events,
-        bank: {
-          questions: new Map([[failed.id, failed]]),
-          options: new Map([[trap.id, trap]]),
-          cases: new Map(),
-        },
+        events: [
+          answered(failed, trap.id, false, minute(0)),
+          legacyCause(failed.id, 'misread', minute(1)),
+          event(
+            'cause_reported',
+            { targetKind: 'question', targetId: failed.id, cause: 'fatigue' },
+            minute(2),
+          ),
+        ],
+        bank,
       }),
     );
-    expect(contexts[0]?.reportedCause).toBe('time');
+    expect(context?.reportedCause).toBe('fatigue');
   });
 });
 
@@ -120,7 +177,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
       answered(failed, trap.id, false, minute(5), { confidence: 'sure' }),
       event(
         'cause_reported',
-        { targetKind: 'question', targetId: failed.id, cause: 'confused' },
+        { targetKind: 'question', targetId: failed.id, cause: 'knowledge' },
         minute(6),
       ),
       // Un acierto no genera contexto
@@ -174,7 +231,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
       answered(negative, wrong.id, false, minute(2), { msToAnswer: 500 }),
       event(
         'cause_reported',
-        { targetKind: 'question', targetId: negative.id, cause: 'misread' },
+        { targetKind: 'question', targetId: negative.id, cause: 'misinterpretation' },
         minute(3),
       ),
     ];
@@ -236,7 +293,7 @@ describe('contexto de cada error para las reglas de olvido', () => {
       review,
       event(
         'cause_reported',
-        { targetKind: 'card', targetId: cardId, cause: 'forgot' },
+        { targetKind: 'card', targetId: cardId, cause: 'knowledge' },
         minute(11),
       ),
       // Una tarjeta que se califica bien no es un error

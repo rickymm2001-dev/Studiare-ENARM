@@ -6,10 +6,10 @@
  * mismo tipo y área en patrones, y dice cuándo un patrón se confirma y puede llamar al LLM (8.2).
  * Entradas. El contexto de un error, ya calculado por los otros motores (lapsos y retrievability
  * de FSRS, mala lectura de structure, adivinanza rápida y fatiga de behavior, dominio del tema base
- * de topics) y la causa que reportó el alumno.
+ * de topics) y el motivo que marcó el alumno, uno de los siete de errorCauses.ts.
  * Salidas. Hallazgos con regla, área, evidencia, acción, gravedad y si la causa reportada
  * coincide con las señales. Patrones con su estado.
- * Método. Las reglas de la tabla de 7.9. La causa reportada se compara con las reglas que se
+ * Método. Las reglas de la tabla de 7.9. El motivo marcado se compara con las reglas que se
  * cumplieron. Si no coinciden, el hallazgo lo dice.
  * Umbrales. 3 lapsos para olvido persistente, 4 elementos para tarjeta de lista, patrón con 5
  * hallazgos en 14 días y como máximo una llamada al LLM por patrón cada 7 días (J). Olvido esperado
@@ -17,10 +17,10 @@
  */
 import type { Thresholds } from '@/config/thresholds';
 import type { z } from 'zod';
-import type { ErrorCauseSchema, ForgettingRuleSchema } from '@/data/schemas/common';
+import type { ForgettingRuleSchema } from '@/data/schemas/common';
+import type { ErrorMotive } from './errorCauses';
 
 export type ForgettingRule = z.infer<typeof ForgettingRuleSchema>;
-export type ErrorCause = z.infer<typeof ErrorCauseSchema>;
 
 export type ForgettingAction =
   | 'review_explanation'
@@ -59,7 +59,8 @@ export interface ErrorContext {
   /** Retrievability que FSRS predijo antes del lapso y días desde el último repaso */
   predictedRetrievability: number | null;
   daysSinceLastReview: number | null;
-  reportedCause: ErrorCause | null;
+  /** El motivo que marcó el alumno, el último. Las causas viejas ya llegan leídas con la tabla de 4.23 */
+  reportedCause: ErrorMotive | null;
 }
 
 export interface Finding {
@@ -73,25 +74,25 @@ export interface Finding {
   at: string;
 }
 
-/** Reglas que esperaríamos ver con cada causa reportada (13.3, D-124) */
-const CAUSE_RULES: Record<ErrorCause, readonly ForgettingRule[] | null> = {
-  // 7 motivos vigentes (D-124)
-  knowledge: ['foundation_gap', 'persistent_lapse', 'expected_forgetting', 'interference'],
+/**
+ * Reglas que esperaríamos ver con cada motivo (13.3 y 4.23). Conocimiento junta lo que antes eran no
+ * lo había estudiado, lo olvidé y lo confundí. La ansiedad no tiene una señal que la mida, así que no
+ * se compara
+ */
+export const MOTIVE_RULES: Readonly<Record<ErrorMotive, readonly ForgettingRule[] | null>> = {
+  knowledge: [
+    'foundation_gap',
+    'persistent_lapse',
+    'expected_forgetting',
+    'interference',
+    'list_card',
+  ],
   time: ['rushing'],
   misinterpretation: ['misreading'],
-  shallow_reading: ['misreading', 'rushing'],
+  superficial_reading: ['misreading', 'rushing'],
   anxiety: null,
   overconfidence: ['high_confidence_error'],
   fatigue: ['fatigue'],
-  // 8 motivos heredados (compatibilidad histórica)
-  not_studied: ['foundation_gap'],
-  forgot: ['persistent_lapse', 'expected_forgetting'],
-  confused: ['interference'],
-  misread: ['misreading'],
-  missed_detail: ['misreading', 'rushing'],
-  rushed_or_tired: ['rushing', 'fatigue'],
-  changed_answer: null,
-  other: null,
 };
 
 export function evaluateError(
@@ -141,7 +142,7 @@ export function evaluateError(
     triggered.push({ rule: 'expected_forgetting', action: 'none', area });
   }
 
-  const expected = context.reportedCause === null ? null : CAUSE_RULES[context.reportedCause];
+  const expected = context.reportedCause === null ? null : MOTIVE_RULES[context.reportedCause];
   const rules = new Set(triggered.map((entry) => entry.rule));
   const causeMatchesSignals = expected === null ? null : expected.some((rule) => rules.has(rule));
   return triggered.map((entry) => ({

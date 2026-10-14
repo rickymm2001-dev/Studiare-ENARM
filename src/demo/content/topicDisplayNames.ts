@@ -1,48 +1,82 @@
-// Nombres legibles en español de los temas de Paco para revisión médica (B4, comentario 8).
-// Convierte nombres pegados o abreviaturas técnicas de las notas y etiquetas en nombres legibles.
-// Ninguno cambia el contenido de las tarjetas, solo cómo se ve el tema en Repasar, Mazos y Buscar tarjetas.
+// Nombres legibles de las ramas, materias y temas de los mazos de Paco (B4 del plan del cambio,
+// comentario 8 y hallazgo H11). Las etiquetas de Paco traen nombres pegados, como AnticonceptivosyMPF
+// o Hemorragias1T, siglas, como AR o LES, y palabras unidas con guion en lugar de espacio, como
+// Hipertensión-Portal. Esta tabla dice cómo se leen. Es solo datos, para que Ricardo o un médico la
+// revisen y la corrijan sin tocar código. La clave es el nivel de la etiqueta tal como viene en el
+// mazo y el valor es el nombre que ve el alumno. Se aplica solo a las notas precargadas.
+// Cubre todos los niveles de los tres primeros, rama, materia y tema, que son los que se muestran
+// (TOPIC_OUTLINE_DEPTH), y de los niveles cuarto y quinto los nombres pegados, para que cualquier
+// lugar que los muestre se lea bien. Los nombres de abajo que ya se leen bien, como Dengue o
+// Guillain-Barré, se quedan como vienen. topicDisplayNames.test.ts revisa las dos cosas.
 
-export const PACO_TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
-  // Ajustes de primeros tres niveles según docs/revisiones/b4-nombres-de-temas.md
-  Hongos: 'Micosis',
-  Térmicos: 'Alteraciones por temperatura',
-  GW: 'Granulomatosis con poliangitis (Wegener)',
-  UNM: 'Enfermedades neuromusculares',
+export const TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
+  // Ramas, el primer nivel de la etiqueta
+  'Medicina-Interna': 'Medicina interna',
+  Ginecología: 'Ginecología',
+  Obstetricia: 'Obstetricia',
+  Urgencias: 'Urgencias',
+
+  // Medicina interna
+  Infectología: 'Infectología',
+  Sepsis: 'Sepsis',
+  Antibióticos: 'Antibióticos',
+  Tuberculosis: 'Tuberculosis',
+  VIH: 'Infección por VIH',
+  Vector: 'Enfermedades transmitidas por vector',
   Clostridum: 'Clostridium',
-
-  // Reumatología
+  Rabia: 'Rabia',
+  Zoonosis: 'Zoonosis',
+  Hongos: 'Micosis',
+  Hematología: 'Hematología',
+  BH: 'Biometría hemática',
+  Anemias: 'Anemias',
+  Leucemias: 'Leucemias',
+  'Mieloma-Múltiple': 'Mieloma múltiple',
+  Linfoma: 'Linfomas',
+  Coagulopatías: 'Coagulopatías',
+  Gastroenterología: 'Gastroenterología',
+  Diarrea: 'Diarrea',
+  Hepatología: 'Hepatología',
+  Oncología: 'Oncología',
+  Neumología: 'Neumología',
+  EPOC: 'Enfermedad pulmonar obstructiva crónica',
+  CaPulmonar: 'Cáncer de pulmón',
+  Ocupacionales: 'Enfermedades pulmonares ocupacionales',
+  Neurología: 'Neurología',
+  EVC: 'Enfermedad vascular cerebral',
+  Movimiento: 'Trastornos del movimiento',
+  Desmielinizantes: 'Enfermedades desmielinizantes',
+  UNM: 'Enfermedades neuromusculares',
+  Cefaleas: 'Cefaleas',
+  Demencias: 'Demencias',
+  Reumatología: 'Reumatología',
   AR: 'Artritis reumatoide',
-  LES: 'Lupus eritematoso sistémico',
   OA: 'Osteoartritis',
+  Fibromialgia: 'Fibromialgia',
+  LES: 'Lupus eritematoso sistémico',
   EA: 'Espondilitis anquilosante',
   AP: 'Artritis psoriásica',
   AReactiva: 'Artritis reactiva',
-  PAN: 'Poliarteritis nodosa',
+  GW: 'Granulomatosis con poliangitis (Wegener)',
+  Sjögren: 'Síndrome de Sjögren',
+  PAN: 'Poliarteritis nudosa',
+  Takayasu: 'Arteritis de Takayasu',
   AIJ: 'Artritis idiopática juvenil',
   ACG: 'Arteritis de células gigantes',
-  'Churg-Strauss': 'Granulomatosis eosinofílica con poliangeítis',
+  'Churg-Strauss': 'Granulomatosis eosinofílica con poliangitis (Churg-Strauss)',
   Behçet: 'Enfermedad de Behçet',
-  Sjögren: 'Síndrome de Sjögren',
-  Takayasu: 'Arteritis de Takayasu',
-  Fibromialgia: 'Fibromialgia',
+  Nefrología: 'Nefrología',
+  LRA: 'Lesión renal aguda',
+  'Peritonitis-Diálisis': 'Peritonitis asociada a diálisis',
+  Hiperkalemia: 'Hiperkalemia',
+  ERC: 'Enfermedad renal crónica',
+  'Sx-Nefrótico': 'Síndrome nefrótico',
+  'Sx-Nefrítico': 'Síndrome nefrítico',
+  GNRP: 'Glomerulonefritis rápidamente progresiva',
+  ATR: 'Acidosis tubular renal',
+  PKD: 'Enfermedad renal poliquística',
 
-  // Hematología
-  BH: 'Biometría hemática',
-  Anemias: 'Anemias',
-  'Mieloma-Múltiple': 'Mieloma múltiple',
-  LLA: 'Leucemia linfoblástica aguda',
-  LMA: 'Leucemia mieloide aguda',
-  LMC: 'Leucemia mieloide crónica',
-  LH: 'Linfoma de Hodgkin',
-  LNH: 'Linfoma no Hodgkin',
-  EvW: 'Enfermedad de von Willebrand',
-  Hemofilia: 'Hemofilia',
-  SMD: 'Síndromes mielodisplásicos',
-  'Policitemia-Vera': 'Policitemia vera',
-  Trombocitosis: 'Trombocitosis esencial',
-  Mielofibrosis: 'Mielofibrosis',
-
-  // Gastroenterología y Hepatología
+  // Medicina interna, niveles cuarto y quinto. Solo los nombres pegados
   VCholerae: 'Vibrio cholerae',
   EColi: 'Escherichia coli',
   HepatitisA: 'Hepatitis A',
@@ -61,29 +95,17 @@ export const PACO_TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   'Ca-Gástrico': 'Cáncer gástrico',
   'Ca-Páncreas': 'Cáncer de páncreas',
   'Ca-Colorrectal': 'Cáncer colorrectal',
-  Cirrosis: 'Cirrosis hepática',
-  Várices: 'Várices esofágicas',
-  Ascitis: 'Ascitis',
-  Wilson: 'Enfermedad de Wilson',
-  Trasplante: 'Trasplante hepático',
-  Lynch: 'Síndrome de Lynch',
-  Hepatocarcinoma: 'Hepatocarcinoma',
-  Salmonella: 'Salmonelosis',
-  Shigella: 'Shigelosis',
-
-  // Neumología
-  EPOC: 'Enfermedad pulmonar obstructiva crónica',
-  CaPulmonar: 'Cáncer pulmonar',
+  LLA: 'Leucemia linfoblástica aguda',
+  LMA: 'Leucemia mieloide aguda',
+  LMC: 'Leucemia mieloide crónica',
+  LH: 'Linfoma de Hodgkin',
+  LNH: 'Linfoma no Hodgkin',
+  EvW: 'Enfermedad de von Willebrand',
+  SMD: 'Síndromes mielodisplásicos',
+  'Policitemia-Vera': 'Policitemia vera',
   'Minero-Carbón': 'Neumoconiosis de los mineros del carbón',
   'Proteinosis-Alveolar': 'Proteinosis alveolar pulmonar',
-  Bisinosis: 'Bisinosis',
-  Silicosis: 'Silicosis',
-  Asbestosis: 'Asbestosis',
-  Sarcoidosis: 'Sarcoidosis',
-  Intersticial: 'Enfermedad pulmonar intersticial',
-  Neumoconiosis: 'Neumoconiosis',
-
-  // Neurología
+  'Fiebre-Manchada': 'Fiebre manchada de las Montañas Rocosas',
   Isag: 'Enfermedad vascular cerebral isquémica aguda',
   HSA: 'Hemorragia subaracnoidea',
   HIC: 'Hemorragia intracerebral',
@@ -94,82 +116,74 @@ export const PACO_TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   'Neuralgia-Trigémino': 'Neuralgia del trigémino',
   'Deterioro-Cognitivo': 'Deterioro cognitivo',
   DFT: 'Demencia frontotemporal',
-  EVC: 'Enfermedad vascular cerebral',
-  Parkinson: 'Enfermedad de Parkinson',
-  Huntington: 'Enfermedad de Huntington',
-  'Guillain-Barré': 'Síndrome de Guillain-Barré',
-  Miastenia: 'Miastenia gravis',
-  'Eaton-Lambert': 'Síndrome de Eaton-Lambert',
-  Alzheimer: 'Enfermedad de Alzheimer',
-  Vascular: 'Demencia vascular',
-  Lewy: 'Demencia con cuerpos de Lewy',
 
-  // Nefrología
-  LRA: 'Lesión renal aguda',
-  ERC: 'Enfermedad renal crónica',
-  'Peritonitis-Diálisis': 'Peritonitis en diálisis',
-  Hiperkalemia: 'Hiperkalemia',
-  'Sx-Nefrótico': 'Síndrome nefrótico',
-  'Sx-Nefrítico': 'Síndrome nefrítico',
-  GNRP: 'Glomerulonefritis rápidamente progresiva',
-  ATR: 'Acidosis tubular renal',
-  PKD: 'Enfermedad renal poliquística',
-
-  // Infectología
-  'Fiebre-Manchada': 'Fiebre manchada de las Montañas Rocosas',
-  Sepsis: 'Sepsis y choque séptico',
-  Antibióticos: 'Antibióticos',
-  Tuberculosis: 'Tuberculosis',
-  VIH: 'VIH/SIDA',
-  Dengue: 'Dengue',
-  Zika: 'Zika',
-  Chikungunya: 'Chikungunya',
-  Paludismo: 'Paludismo',
-  Chagas: 'Enfermedad de Chagas',
-  Leishmaniasis: 'Leishmaniasis',
-  Tetani: 'Tétanos',
-  Botulinum: 'Botulismo',
-  Rabia: 'Rabia',
-  Brucelosis: 'Brucelosis',
-  Lyme: 'Enfermedad de Lyme',
-  Carbunco: 'Carbunco (Ántrax)',
-  Tularemia: 'Tularemia',
-  Aspergilosis: 'Aspergilosis',
-  Criptococosis: 'Criptococosis',
-  Histoplasmosis: 'Histoplasmosis',
-  Coccidioidomicosis: 'Coccidioidomicosis',
-  Blastomicosis: 'Blastomicosis',
-  Mucormicosis: 'Mucormicosis',
-  Micetoma: 'Micetoma',
-  EPI: 'Enfermedad pélvica inflamatoria',
-  'Fitz-Hugh-Curtis': 'Síndrome de Fitz-Hugh-Curtis',
-  Bartolinitis: 'Bartolinitis',
+  // Ginecología
+  Menopausia: 'Menopausia',
+  'Menopausia-Climaterio': 'Menopausia y climaterio',
+  Osteoporosis: 'Osteoporosis',
+  Uroginecología: 'Uroginecología',
+  Amenorreas: 'Amenorreas',
+  Primarias: 'Amenorreas primarias',
+  Secundarias: 'Amenorreas secundarias',
+  Fisiológicas: 'Amenorreas fisiológicas',
+  Infertilidad: 'Infertilidad',
+  AnticonceptivosyMPF: 'Anticonceptivos y métodos de planificación familiar',
+  Emergencia: 'Anticoncepción de emergencia',
+  DIU: 'Dispositivo intrauterino',
+  Fisiología: 'Fisiología',
+  Implante: 'Implante subdérmico',
+  Progestinas: 'Progestinas',
+  AOCs: 'Anticonceptivos orales combinados',
+  Barrera: 'Métodos de barrera',
+  Definitivos: 'Métodos definitivos',
   Cervicovaginitis: 'Cervicovaginitis',
-  Candida: 'Candidiasis cervicovaginal',
-  Chlamydia: 'Chlamydia trachomatis',
-  Gardnerella: 'Vaginosis bacteriana (Gardnerella)',
-  Trichomonas: 'Tricomoniasis',
+  EPI: 'Enfermedad pélvica inflamatoria',
+  Bartolinitis: 'Bartolinitis',
+  SUA: 'Sangrado uterino anormal',
+  Dismenorrea: 'Dismenorrea',
+  Endometriosis: 'Endometriosis',
+  SOP: 'Síndrome de ovario poliquístico',
+  Polipos: 'Pólipos',
+  Adenomiosis: 'Adenomiosis',
+  Miomatosis: 'Miomatosis uterina',
+  Ovario: 'Cáncer de ovario',
+  Mama: 'Cáncer de mama',
+  HiperplasiaEndometrial: 'Hiperplasia endometrial',
+  Endometrio: 'Cáncer de endometrio',
+  'Vagina-Vulva': 'Cáncer de vagina y vulva',
+  CCU: 'Cáncer cervicouterino',
+  Torsion_Ovarica: 'Torsión ovárica',
+  Patología_Mamaria: 'Patología mamaria',
 
-  // Ginecología y Obstetricia
+  // Ginecología, cuarto nivel. Los nombres pegados y Cobre, para que se lea igual que su vecino LNG
   Cobre: 'DIU de cobre',
   LNG: 'DIU de levonorgestrel',
   OTB: 'Oclusión tubaria bilateral',
   HSC: 'Hiperplasia suprarrenal congénita',
   Himen_Imperforado: 'Himen imperforado',
-  Hemorragias1T: 'Hemorragias del primer trimestre',
-  Hemorragias3T: 'Hemorragias del tercer trimestre',
-  AnticonceptivosyMPF: 'Anticonceptivos y planificación familiar',
+
+  // Obstetricia
   Control_Prenatal: 'Control prenatal',
+  CambiosFisiologicos: 'Cambios fisiológicos del embarazo',
+  Consultas_Intervenciones: 'Consultas e intervenciones',
+  BienestarFetal: 'Bienestar fetal',
+  IVU: 'Infección de vías urinarias',
+  Incompatibilidad_Rh: 'Incompatibilidad Rh',
+  Depresion: 'Depresión',
+  Salud_Bucal: 'Salud bucal',
+  Tiroides: 'Tiroides',
   Parto_Normal: 'Parto normal',
   Puerperio: 'Puerperio',
   Cesárea: 'Cesárea',
+  Hemorragias1T: 'Hemorragias del primer trimestre',
   Aborto: 'Aborto',
   ETG: 'Enfermedad trofoblástica gestacional',
   EmbarazoEctopico: 'Embarazo ectópico',
+  Hemorragias3T: 'Hemorragias del tercer trimestre',
   PlacentaPrevia: 'Placenta previa',
   DPPNI: 'Desprendimiento prematuro de placenta normoinserta',
   VasaPrevia: 'Vasa previa',
-  MaduracionPulmonar: 'Maduración pulmonar',
+  MaduracionPulmonar: 'Maduración pulmonar fetal',
   Acretismo: 'Acretismo placentario',
   Ruptura_Uterina: 'Ruptura uterina',
   APP: 'Amenaza de parto pretérmino',
@@ -178,57 +192,44 @@ export const PACO_TOPIC_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   Embarazo_Multiple: 'Embarazo múltiple',
   DG: 'Diabetes gestacional',
   Enfermedades_Hipertensivas: 'Enfermedades hipertensivas del embarazo',
-  SUA: 'Sangrado uterino anormal',
-  Dismenorrea: 'Dismenorrea',
-  Endometriosis: 'Endometriosis',
-  SOP: 'Síndrome de ovario poliquístico',
-  Polipos: 'Pólipos endometriales',
-  Adenomiosis: 'Adenomiosis',
-  Miomatosis: 'Miomatosis uterina',
-  Torsion_Ovarica: 'Torsión ovárica',
-  Patología_Mamaria: 'Patología mamaria',
   HigadoGraso: 'Hígado graso agudo del embarazo',
   'Oligo/Polihidramnios': 'Oligohidramnios y polihidramnios',
-  'Induccion/Conduccion': 'Inducción y conducción del parto',
+  'Induccion/Conduccion': 'Inducción y conducción del trabajo de parto',
   Distocias: 'Distocias',
   Patologia_Puerperal: 'Patología puerperal',
-  CCU: 'Cáncer cervicouterino',
-  AOCs: 'Anticonceptivos orales combinados',
-  'Menopausia-Climaterio': 'Menopausia y climaterio',
-  Osteoporosis: 'Osteoporosis',
-  Infertilidad: 'Infertilidad',
-  CambiosFisiologicos: 'Cambios fisiológicos del embarazo',
-  Consultas_Intervenciones: 'Consultas e intervenciones prenatales',
-  BienestarFetal: 'Pruebas de bienestar fetal',
-  IVU: 'Infección de vías urinarias en el embarazo',
-  Incompatibilidad_Rh: 'Incompatibilidad Rh',
-  Salud_Bucal: 'Salud bucal en el embarazo',
+  Misceláneos: 'Misceláneos',
 
   // Urgencias
-  Anticolinérgico: 'Toxíndrome anticolinérgico',
-  Simpáticomimético: 'Toxíndrome simpaticomimético',
-  Serotoninérgico: 'Toxíndrome serotoninérgico',
-  Colinérgico: 'Toxíndrome colinérgico',
-  'Hipnótico-Sedante': 'Toxíndrome hipnótico-sedante',
-  Opiáceo: 'Toxíndrome opiáceo',
+  Toxíndromes: 'Toxíndromes',
+  Anticolinérgico: 'Síndrome anticolinérgico',
+  Simpáticomimético: 'Síndrome simpaticomimético',
+  Serotoninérgico: 'Síndrome serotoninérgico',
+  Colinérgico: 'Síndrome colinérgico',
+  'Hipnótico-Sedante': 'Síndrome hipnótico-sedante',
+  Opiáceo: 'Intoxicación por opiáceos',
   Etanol: 'Intoxicación por etanol',
   Quemaduras: 'Quemaduras',
-  Hipotermia: 'Hipotermia accidental',
-  Calor: 'Golpe de calor y lesiones térmicas',
+  Térmicos: 'Alteraciones por temperatura',
+  Hipotermia: 'Hipotermia',
+  Calor: 'Golpe de calor',
 };
 
-/** Traduce una clave o etiqueta técnica a un nombre legible en español */
-export function displayTopicName(raw: string): string {
-  const direct = PACO_TOPIC_DISPLAY_NAMES[raw];
-  if (direct) return direct;
+/**
+ * Un nivel de etiqueta sin la tabla, como en los mazos importados y propios. Los guiones bajos
+ * vuelven a ser espacios, que es como sanitizeTag guardó los espacios, y lo demás queda como el
+ * alumno lo escribió
+ */
+export function plainTopicName(segment: string): string {
+  return segment.replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();
+}
 
-  // Si tiene prefijo o subniveles con :: revisar el último segmento
-  const last = raw.split('::').pop() ?? raw;
-  if (PACO_TOPIC_DISPLAY_NAMES[last]) return PACO_TOPIC_DISPLAY_NAMES[last];
+/** La tabla en un Map, así un nivel como constructor no lee lo que hereda un objeto */
+const DISPLAY_NAMES = new Map(Object.entries(TOPIC_DISPLAY_NAMES));
 
-  return raw
-    .replace(/::/g, ' - ')
-    .replace(/[-_]+/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .trim();
+/**
+ * Nombre legible de un nivel de etiqueta de un mazo precargado. Primero la tabla y, si no está, el
+ * nivel con espacios en lugar de guiones bajos
+ */
+export function topicDisplayName(segment: string): string {
+  return DISPLAY_NAMES.get(segment) ?? plainTopicName(segment);
 }

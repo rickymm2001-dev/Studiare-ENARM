@@ -209,9 +209,6 @@ export const examText = {
       'Un examen difícil no es un veredicto. En el ENARM de verdad habrá preguntas que no sabes. Lo que se entrena aquí es qué haces con ellas, descartar lo falso, elegir lo más probable y seguir avanzando. Lo que fallaste ya es la lista de lo que más te conviene repasar.',
 
     reviewTitle: 'Revisión pregunta por pregunta',
-    createCard: 'Crear tarjeta',
-    cardCreated: 'Tarjeta creada',
-    whyFailed: '¿Por qué fallaste?',
     filter: { all: 'Todas', missed: 'Falladas', blank: 'En blanco', marked: 'Marcadas' },
     filterLabel: 'Mostrar',
     questionN: (n: number) => `Pregunta ${n}`,

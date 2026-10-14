@@ -1,9 +1,11 @@
 // Seguir y dejar mazos precargados (3.1). Seguir guarda el mazo, sus submazos, notas y tarjetas en la
 // base activa con IDs estables, así un mazo seguido dos veces no se duplica. Dejarlo conserva el
 // historial de repasos, solo lo quita de los que sigue. Quien ya seguía mazos antes del árbol (D-085)
-// los recibe reacomodados con ensurePreloadedTree, sin perder ninguna tarjeta ni su historial.
+// los recibe reacomodados con ensurePreloadedTree, sin perder ninguna tarjeta ni su historial, y
+// quien los seguía con los nombres pegados de las materias los recibe con su nombre legible (B4).
 import type { DemoDeckFile } from '@/data/schemas/content';
 import { buildDeckEntities, deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
+import { TOPIC_DISPLAY_NAMES } from '@/demo/content/topicDisplayNames';
 import type { DataApi } from '../context';
 import type { User } from '../schemas/people';
 import { updateProfile } from './profile';
@@ -51,10 +53,31 @@ export async function unfollowDeck(
 }
 
 /**
- * Pasa al árbol los mazos precargados que el alumno ya seguía. Si falta la raíz ENARM 2027 o un
- * mazo seguido todavía no cuelga de ella, vuelve a guardar sus archivos, que trae las materias como
- * submazos y las etiquetas en ruta. Los IDs son los mismos, así que las tarjetas conservan su
- * historial de repaso. true si hubo que reacomodar algo
+ * Si alguna materia de los mazos seguidos conserva un nombre de antes de la tabla de nombres
+ * legibles, como AnticonceptivosyMPF. Se sabe sin cargar el catálogo, porque el ID de cada materia
+ * sale del mazo y de su nivel de etiqueta, que son las claves de la tabla
+ */
+async function hasStaleSubjectNames(
+  api: Pick<DataApi, 'repos'>,
+  followed: readonly string[],
+): Promise<boolean> {
+  const expected = new Map<string, string>();
+  for (const key of followed) {
+    for (const [segment, name] of Object.entries(TOPIC_DISPLAY_NAMES))
+      expected.set(deckIds.subject(key, segment), name);
+  }
+  return (await api.repos.decks.list()).some((deck) => {
+    const name = expected.get(deck.id);
+    return name !== undefined && deck.name !== name;
+  });
+}
+
+/**
+ * Pasa al árbol los mazos precargados que el alumno ya seguía. Si falta la raíz ENARM 2027, un
+ * mazo seguido todavía no cuelga de ella o una materia tiene su nombre pegado de antes, vuelve a
+ * guardar sus archivos, que trae las materias como submazos con su nombre legible y las etiquetas
+ * en ruta. Los IDs son los mismos, así que las tarjetas conservan su historial de repaso. true si
+ * hubo que reacomodar algo
  */
 export async function ensurePreloadedTree(
   api: Pick<DataApi, 'repos'>,
@@ -66,7 +89,8 @@ export async function ensurePreloadedTree(
   const parents = await Promise.all(
     followed.map(async (key) => (await api.repos.decks.get(deckIds.deck(key)))?.parentId),
   );
-  if (parents.every((parent) => parent === rootId)) return false;
+  const inTree = parents.every((parent) => parent === rootId);
+  if (inTree && !(await hasStaleSubjectNames(api, followed))) return false;
   const files = (await loadFiles()).filter((file) => followed.includes(file.key));
   if (files.length === 0) return false;
   await saveDeckFiles(api, files);

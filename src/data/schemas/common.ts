@@ -73,35 +73,27 @@ export type ClueStrength = z.infer<typeof ClueStrengthSchema>;
 export const FsrsRatingSchema = z.enum(['again', 'hard', 'good', 'easy']);
 
 /**
- * Los 7 motivos de error autorreportados vigentes (D-124, comentarios 1 y 2).
- * Un toque en la revisión: Conocimiento, Tiempo, Malinterpretación, Lectura superficial,
- * Ansiedad, Exceso de confianza y Fatiga.
+ * Motivos de error que marca el alumno, los siete de Ricardo en su orden (B5, 4.23 del plan del
+ * cambio). Conocimiento, Tiempo, Malinterpretación, Lectura superficial, Ansiedad, Exceso de confianza
+ * y Fatiga. Es lo único que se escribe
  */
-export const CurrentErrorCauseSchema = z.enum([
+export const ERROR_MOTIVES = [
   'knowledge',
   'time',
   'misinterpretation',
-  'shallow_reading',
-  'anxiety',
-  'overconfidence',
-  'fatigue',
-]);
-export type CurrentErrorCause = z.infer<typeof CurrentErrorCauseSchema>;
-
-export const CURRENT_ERROR_CAUSES = [
-  'knowledge',
-  'time',
-  'misinterpretation',
-  'shallow_reading',
+  'superficial_reading',
   'anxiety',
   'overconfidence',
   'fatigue',
 ] as const;
+export const ErrorMotiveSchema = z.enum(ERROR_MOTIVES);
+export type ErrorMotive = z.infer<typeof ErrorMotiveSchema>;
 
 /**
- * Los 8 motivos heredados antes de D-124. Se conservan para leer eventos históricos de IndexedDB.
+ * Las ocho causas que se guardaban antes de B5 (13.3). La bitácora las conserva sin editar y se leen
+ * con la tabla de equivalencias de src/engines/errorCauses.ts. Ya no se escriben
  */
-export const LegacyErrorCauseSchema = z.enum([
+export const LEGACY_ERROR_CAUSES = [
   'not_studied',
   'forgot',
   'confused',
@@ -110,56 +102,12 @@ export const LegacyErrorCauseSchema = z.enum([
   'rushed_or_tired',
   'changed_answer',
   'other',
-]);
-export type LegacyErrorCause = z.infer<typeof LegacyErrorCauseSchema>;
+] as const;
+export type LegacyErrorCause = (typeof LEGACY_ERROR_CAUSES)[number];
 
-/**
- * Causas de error autorreportadas. Acepta los 7 motivos vigentes y los 8 heredados (D-124).
- * En la interfaz solo se eligen los 7 vigentes; los 15 se leen para compatibilidad.
- */
-export const ErrorCauseSchema = z.union([CurrentErrorCauseSchema, LegacyErrorCauseSchema]);
-export type ErrorCause = z.infer<typeof ErrorCauseSchema>;
-
-/**
- * Tabla de equivalencias D-124 de motivos heredados a motivos vigentes.
- * Convierte un motivo (heredado o vigente) a uno de los 7 motivos actuales, o null si era 'other' / sin motivo.
- * - not_studied, forgot, confused -> knowledge
- * - misread -> misinterpretation
- * - missed_detail -> shallow_reading
- * - rushed_or_tired -> time
- * - changed_answer -> anxiety
- * - other -> null
- */
-export function normalizeErrorCause(
-  cause: ErrorCause | string | null | undefined,
-): CurrentErrorCause | null {
-  if (!cause) return null;
-  switch (cause) {
-    case 'knowledge':
-    case 'time':
-    case 'misinterpretation':
-    case 'shallow_reading':
-    case 'anxiety':
-    case 'overconfidence':
-    case 'fatigue':
-      return cause;
-    case 'not_studied':
-    case 'forgot':
-    case 'confused':
-      return 'knowledge';
-    case 'misread':
-      return 'misinterpretation';
-    case 'missed_detail':
-      return 'shallow_reading';
-    case 'rushed_or_tired':
-      return 'time';
-    case 'changed_answer':
-      return 'anxiety';
-    case 'other':
-    default:
-      return null;
-  }
-}
+/** Lo que puede traer un evento guardado, los motivos de hoy y las causas de antes */
+export const ErrorCauseSchema = z.enum([...ERROR_MOTIVES, ...LEGACY_ERROR_CAUSES]);
+export type StoredErrorCause = z.infer<typeof ErrorCauseSchema>;
 
 /** Reglas de olvido de 7.9 */
 export const ForgettingRuleSchema = z.enum([
