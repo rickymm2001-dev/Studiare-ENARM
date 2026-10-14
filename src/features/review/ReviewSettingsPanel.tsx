@@ -49,6 +49,29 @@ export function ReviewSettingsPanel({
   const patch = patchOf(draft);
   const dirty = differs(patch, settings);
 
+  const handleSubmit = async () => {
+    let nextPatch = patch;
+    let deniedNotice = false;
+    if (
+      draft.pomodoro.notifications &&
+      typeof Notification !== 'undefined' &&
+      Notification.permission !== 'granted'
+    ) {
+      const permission = await Notification.requestPermission().catch(() => 'denied' as const);
+      if (permission !== 'granted') {
+        setDraft((curr) => ({ ...curr, pomodoro: { ...curr.pomodoro, notifications: false } }));
+        nextPatch = { ...patch, pomodoro: { ...draft.pomodoro, notifications: false } };
+        deniedNotice = true;
+      }
+    }
+    await onSave(nextPatch);
+    setStatus(
+      deniedNotice
+        ? `${t.pomodoro.notificationsDenied} · ${t.settings.saved}`
+        : `${t.pomodoro.saved} · ${t.settings.saved}`,
+    );
+  };
+
   return (
     <form
       id="ajustes-del-repaso"
@@ -56,9 +79,7 @@ export function ReviewSettingsPanel({
       className="flex flex-col gap-4 border-t border-line pt-3"
       onSubmit={(event) => {
         event.preventDefault();
-        void onSave(patch).then(() => {
-          setStatus(`${t.pomodoro.saved} · ${t.settings.saved}`);
-        });
+        void handleSubmit();
       }}
     >
       <fieldset>
