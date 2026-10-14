@@ -1305,3 +1305,4 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - El aviso de privacidad pasa a la versión 2026-10-14b. Las versiones se comparan como texto, así que queda después de 2026-10-14 y antes de cualquier fecha posterior
 - La migración 20261020000001 lleva un número menor que las de B8, pero en el proyecto se aplica después de ellas. run.sh prueba ese orden y no pisa party_open, sync_push_records ni user_plan
 - Revisión independiente con sus hallazgos corregidos. La e2e encontró tres fallas reales más, corregidas con su prueba
+- Migración 20261020000001_accounts_access aplicada al proyecto el 2026-10-14, después de las de B8 y justo antes de fusionar el PR 52, con sus 12 funciones iguales al repo por huella. La consulta de comprobación de docs/SUPABASE.md dio registro cerrado, el gancho solo para Auth, las respuestas privadas y el segundo factor apagado. La función admin-reset-mfa se publica con B10

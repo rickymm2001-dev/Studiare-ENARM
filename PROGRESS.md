@@ -25,7 +25,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B6. Apuntes y mazos (PR 44 fusionado)
 - [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
 - [x] B8. Plan Gratis (PR 49 fusionado)
-- [x] B9. Cuentas y acceso (PR en curso)
+- [x] B9. Cuentas y acceso (PR 52 fusionado)
 - [ ] B10. Pagos completos
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
@@ -150,7 +150,7 @@ Evidencia
 - B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
 - B8 fusionado en main (PR 49), con sus dos migraciones aplicadas al proyecto y verificadas por huella antes de fusionar
 - La paleta con más color (PR 47 de otra herramienta, D-128) fusionada en main (PR 51), con los hallazgos de su revisión corregidos. El PR 50 de otra sesión, que repetía la paleta con D-127, se cerró por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
-- B9 cerrado en la rama de trabajo, con su PR. Su migración 20261020000001 y la función admin-reset-mfa se aplican al proyecto justo antes de fusionar
+- B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
 - B10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido sobre B8 en int10, con 20 archivos SQL y las pruebas del servidor en verde. Falta su interfaz, que arranca sobre B9 integrado
 - Los diseños de B10, B11 y B12 están en /home/user/wt/plans
 - Los subagentes se detuvieron cinco veces por el límite de uso de la cuenta y se reanudaron con su contexto
