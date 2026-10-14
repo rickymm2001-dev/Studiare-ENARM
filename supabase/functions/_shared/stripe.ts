@@ -733,8 +733,27 @@ export function checkoutSessionSteps(
 }
 
 /**
+ * La búsqueda de la factura que pagó un PaymentIntent (GET /v1/invoice_payments). Desde la versión basil
+ * la factura ya no trae su payment_intent ni el cargo su factura. La relación vive en los pagos de la
+ * factura (InvoicePayment), que se filtran por payment[type] y payment[payment_intent]
+ */
+export function invoicePaymentParams(paymentIntentId: string): URLSearchParams {
+  return new URLSearchParams({
+    'payment[type]': 'payment_intent',
+    'payment[payment_intent]': paymentIntentId,
+    limit: '1',
+  });
+}
+
+/** La factura del primer pago de la lista de GET /v1/invoice_payments, o null si no pagó ninguna */
+export function invoiceOfPayments(list: unknown): string | null {
+  return idOf(asRecord(asArray(asRecord(list).data)[0]).invoice);
+}
+
+/**
  * Un cargo devuelto por completo (charge.refunded). Stripe no dice a qué alumno ni a qué factura
- * corresponde, solo el cliente, el PaymentIntent y el monto, y de ahí la base encuentra el cobro. Los
+ * corresponde, solo el cliente, el PaymentIntent y el monto. El aviso busca la factura con
+ * invoicePaymentParams y la base encuentra el cobro por la factura o por el PaymentIntent. Los
  * reembolsos parciales se ignoran, porque quitar el plan por una devolución chica sería injusto
  */
 export function refundedCharge(

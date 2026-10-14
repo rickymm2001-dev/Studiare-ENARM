@@ -1163,4 +1163,40 @@ select pg_temp.expect(
 );
 rollback;
 
+-- R7. Un reembolso se casa con su cobro por id y nunca cancela una suscripción que no es la del cobro
+\set r7a 'ba110000-0000-0000-0000-0000000007a0'
+\set r7c 'ba110000-0000-0000-0000-0000000007c0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r7a', 'r7a@ba.mx', '{"alias":"Reembolso viejo"}'),
+  (:'r7c', 'r7c@ba.mx', '{"alias":"Reembolso sin cobro"}');
+-- El cobro de una suscripción que ya terminó se devuelve cuando el alumno ya tiene otra. La nueva sigue
+select pg_temp.state('evt-r7-a1', :'r7a', 'sub_r7_a', 'monthly', 'active');
+select pg_temp.charge('evt-r7-a1c', 'paid', :'r7a', 'subscription', 'monthly', 'in_r7_a', 149, 'sub_r7_a',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r7-a1e', :'r7a', 'sub_r7_a', 'monthly', 'ended');
+select pg_temp.is(pg_temp.state('evt-r7-b1', :'r7a', 'sub_r7_b', 'annual', 'active'), 'applied',
+  'R7. La suscripción nueva debía aplicarse');
+select pg_temp.is(pg_temp.charge('evt-r7-ar', 'refunded', :'r7a', 'subscription', null, 'in_r7_a', 149), 'applied',
+  'R7. El reembolso del cobro viejo debía aplicarse');
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_r7_a') = 'refunded'
+  and (select provider_subscription_id = 'sub_r7_b' and status = 'active' from public.subscriptions where user_id = :'r7a')
+  and public.user_plan(:'r7a') = 'annual'
+  and pg_temp.action_for('sub_r7_a') = 'refund'
+  and pg_temp.action_for('sub_r7_b') is null,
+  'R7. Devolver el cobro de otra suscripción no debía cancelar la vigente'
+);
+-- Un reembolso con PaymentIntent que no es de ningún cobro guardado no adivina por monto y hora
+select pg_temp.state('evt-r7-c1', :'r7c', 'sub_r7_c', 'monthly', 'active');
+select pg_temp.charge('evt-r7-c1c', 'paid', :'r7c', 'subscription', 'monthly', 'in_r7_c', 149, 'sub_r7_c',
+  p_period_end => now() + interval '30 days');
+select pg_temp.is(pg_temp.charge('evt-r7-cr', 'refunded', :'r7c', 'subscription', null, null, 149, null, null, 'pi_r7_ajeno'),
+  'ignored', 'R7. Un reembolso que no se casa con ningún cobro debía ignorarse');
+select pg_temp.expect(
+  (select status from public.payments where provider_payment_id = 'in_r7_c') = 'paid'
+  and public.user_plan(:'r7c') = 'monthly'
+  and pg_temp.action_for('sub_r7_c') is null,
+  'R7. Un reembolso sin su cobro no debía quitar el plan por un cobro del mismo monto'
+);
+
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;

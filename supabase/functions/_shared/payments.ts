@@ -54,6 +54,8 @@ import {
   customerParams,
   idOf,
   invoiceChargeNotice,
+  invoiceOfPayments,
+  invoicePaymentParams,
   isMissingCustomer,
   passSessionParams,
   portalSessionParams,
@@ -182,6 +184,35 @@ async function withPromotionCode(
 }
 
 /**
+ * Un reembolso con la factura que pagó su PaymentIntent, para que la base encuentre el cobro de la
+ * suscripción por su id exacto (in_) y no por monto y hora. Un pase no tiene factura y se encuentra por su
+ * PaymentIntent. Lanza si Stripe no contesta, y entonces se responde 500 para que Stripe lo reintente
+ */
+async function withInvoice(notice: ChargeNotice, deps: StripeWebhookDeps): Promise<ChargeNotice> {
+  const intent = notice.paymentIntentId;
+  if (intent === null || notice.providerPaymentId !== null) return notice;
+  const key = deps.env.STRIPE_SECRET_KEY ?? '';
+  if (key === '') {
+    deps.log(
+      'Falta STRIPE_SECRET_KEY para buscar la factura del reembolso. Se aplica con su PaymentIntent',
+    );
+    return notice;
+  }
+  const reply = await stripeCall(
+    { key, fetch: deps.fetch },
+    'GET',
+    '/v1/invoice_payments',
+    invoicePaymentParams(intent),
+  );
+  if (!reply.ok) {
+    deps.log(`No se pudo buscar la factura del reembolso. ${stripeFailureLine(reply)}`);
+    throw new Error('lectura de la factura');
+  }
+  const invoiceId = invoiceOfPayments(reply.body);
+  return invoiceId === null ? notice : { ...notice, providerPaymentId: invoiceId };
+}
+
+/**
  * Lo que hay que aplicar por un evento (2.4). null si el evento no se usa. Lanza si la base o la
  * lectura a Stripe fallan, y entonces no se aplicó nada
  */
@@ -271,7 +302,8 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
       // El alumno puede no estar ligado todavía. Entonces el aviso se asienta sin alumno, para que una
       // persona lo vea en payment_webhook_events, en lugar de perderse
       const userId = await deps.userOfCustomer(refund.customerId);
-      return [{ type: 'charge', notice: { ...refund.notice, userId } }];
+      const notice = await withInvoice(refund.notice, deps);
+      return [{ type: 'charge', notice: { ...notice, userId } }];
     }
     default:
       return null;

@@ -743,7 +743,11 @@ begin
   select * into v_sub from public.subscriptions where user_id = v_pay.user_id for update;
   v_has_sub := found;
   v_plan := v_pay.plan;
-  if v_has_sub and v_sub.provider = v_pay.provider then
+  -- Solo se quita el acceso de la suscripción de ese cobro. Si el alumno ya tiene otra, por ejemplo una
+  -- prueba nueva después de que la del cobro terminó, la nueva sigue y solo se cancela la del cobro
+  if v_has_sub and v_sub.provider = v_pay.provider
+     and (v_pay.provider_subscription_id is null or v_sub.provider_subscription_id is null
+          or v_sub.provider_subscription_id = v_pay.provider_subscription_id) then
     update public.subscriptions
       set status = 'canceled', current_period_end = least(coalesce(current_period_end, now()), now()),
           updated_at = now()
@@ -751,6 +755,8 @@ begin
     v_target := coalesce(v_pay.provider_subscription_id, v_sub.provider_subscription_id);
     perform public.billing_queue_cancel(v_pay.user_id, v_pay.provider, v_target, 'refund');
     v_plan := coalesce(v_plan, v_sub.plan);
+  else
+    perform public.billing_queue_cancel(v_pay.user_id, v_pay.provider, v_pay.provider_subscription_id, 'refund');
   end if;
 
   -- El único cobro de un Fundador. Esa persona nunca se quedó como Fundador
@@ -1265,8 +1271,10 @@ begin
   end if;
 
   -- ------------------------------------------------------------------- Reembolso completo
-  -- Primero el cobro que dice el aviso, después por su PaymentIntent y si no el cobro del alumno con ese
-  -- monto que siga sin devolverse y esté más cerca de la hora del cargo (data.object.created), como hoy
+  -- Primero el cobro que dice el aviso (la factura in_ que Stripe dice que pagó el PaymentIntent, o el id
+  -- del pago de Mercado Pago) y después por su PaymentIntent. Solo un aviso sin ninguno de los dos, como
+  -- uno de antes de B10, busca el cobro del alumno con ese monto que siga sin devolverse y esté más cerca
+  -- de la hora del cargo (data.object.created). Con un id que no es de ningún cobro guardado no se adivina
   if p_provider_payment_id is not null then
     select * into v_pay from public.payments
       where provider = p_provider and provider_payment_id = p_provider_payment_id and user_id = p_user;
@@ -1275,6 +1283,9 @@ begin
     select * into v_pay from public.payments
       where provider = p_provider and payment_intent_id = p_payment_intent_id and user_id = p_user
       order by created_at desc limit 1;
+  end if;
+  if v_pay.id is null and (p_provider_payment_id is not null or p_payment_intent_id is not null) then
+    return public.billing_event_done(p_provider, p_event_id, 'ignored');
   end if;
   if v_pay.id is null then
     v_charged_at := case
@@ -1291,7 +1302,7 @@ begin
   if v_pay.id is not null then
     perform public.billing_refund_payment(v_pay.id, p_amount_mxn is null or p_amount_mxn >= v_pay.amount_mxn, null);
   else
-    -- Un reembolso que no encuentra su cobro igual quita el plan de esa pasarela, como hoy
+    -- Un reembolso sin ids que no encuentra su cobro igual quita el plan de esa pasarela, como antes de B10
     update public.subscriptions
       set status = 'canceled', current_period_end = least(coalesce(current_period_end, now()), now()), updated_at = now()
       where user_id = p_user and provider = p_provider and plan <> 'free';

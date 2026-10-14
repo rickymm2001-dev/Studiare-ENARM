@@ -246,8 +246,32 @@ interface WebhookOptions {
   env?: FunctionEnv;
 }
 
+/** La lista de pagos de factura de un PaymentIntent, como la contesta GET /v1/invoice_payments */
+const invoicePayments = (invoice: string | null): Route =>
+  reply({
+    object: 'list',
+    data:
+      invoice === null
+        ? []
+        : [
+            {
+              id: 'inpay_1',
+              object: 'invoice_payment',
+              invoice,
+              is_default: true,
+              status: 'paid',
+              payment: { type: 'payment_intent', payment_intent: 'pi_1' },
+            },
+          ],
+    has_more: false,
+  });
+
 function webhookDeps(options: WebhookOptions = {}) {
-  const { calls, fetchImpl } = fakeFetch(options.routes ?? {});
+  // Por omisión un PaymentIntent no pagó ninguna factura, como el de un pase
+  const { calls, fetchImpl } = fakeFetch({
+    'GET /v1/invoice_payments': invoicePayments(null),
+    ...options.routes,
+  });
   const pending = [...(options.actions ?? [])];
   const record = {
     calls,
@@ -805,8 +829,12 @@ describe('aviso de Stripe por evento', () => {
     ]);
   });
 
-  it('un reembolso completo va al alumno de su cliente con su PaymentIntent y sin id de pago', async () => {
-    const { deps, record } = webhookDeps();
+  it('un reembolso completo va al alumno de su cliente con su PaymentIntent y la factura que pagó', async () => {
+    // Desde basil el cargo no dice su factura. Se busca en los pagos de factura de su PaymentIntent, así
+    // la base encuentra el cobro de la suscripción por su id exacto y no por monto y hora
+    const { deps, record } = webhookDeps({
+      routes: { 'GET /v1/invoice_payments': invoicePayments('in_1') },
+    });
     expect(await (await send(event('charge.refunded', refundObject()), deps)).text()).toBe(
       'applied',
     );
@@ -814,10 +842,40 @@ describe('aviso de Stripe por evento', () => {
     expect(record.charges[0]).toMatchObject({
       kind: 'refunded',
       userId: USER,
-      providerPaymentId: null,
+      providerPaymentId: 'in_1',
       paymentIntentId: 'pi_1',
       amountMxn: 149,
     });
+    const lookup = stripeCalls(record.calls)[0];
+    expect(lookup?.method).toBe('GET');
+    expect(lookup?.url.pathname).toBe('/v1/invoice_payments');
+    expect(Object.fromEntries(lookup?.url.searchParams ?? [])).toEqual({
+      'payment[type]': 'payment_intent',
+      'payment[payment_intent]': 'pi_1',
+      limit: '1',
+    });
+    expect(new Headers(lookup?.init?.headers).get('stripe-version')).toBe(STRIPE_API_VERSION);
+  });
+
+  it('el reembolso de un pase no tiene factura y va solo con su PaymentIntent', async () => {
+    const { deps, record } = webhookDeps();
+    await send(event('charge.refunded', refundObject()), deps);
+    expect(record.charges[0]).toMatchObject({ providerPaymentId: null, paymentIntentId: 'pi_1' });
+  });
+
+  it('si no se puede buscar la factura del reembolso contesta 500 sin aplicar nada', async () => {
+    for (const route of [stripeError(500, { message: 'falla' }), offline]) {
+      const { deps, record } = webhookDeps({ routes: { 'GET /v1/invoice_payments': route } });
+      expect((await send(event('charge.refunded', refundObject()), deps)).status).toBe(500);
+      expect(record.charges).toEqual([]);
+    }
+    // Sin la llave se aplica con el PaymentIntent y queda en el registro
+    const keyless = webhookDeps({ env: envWithoutKey });
+    expect((await send(event('charge.refunded', refundObject()), keyless.deps)).status).toBe(200);
+    expect(keyless.record.charges[0]).toMatchObject({ providerPaymentId: null });
+    expect(keyless.record.lines).toEqual([
+      'Falta STRIPE_SECRET_KEY para buscar la factura del reembolso. Se aplica con su PaymentIntent',
+    ]);
   });
 
   it('un reembolso de un cliente que no conocemos se asienta sin alumno, para que alguien lo vea', async () => {
@@ -955,8 +1013,8 @@ describe('referidos con la prueba gratis y el primer cobro', () => {
    * apply_charge, complete_referral y revert_referral (migraciones 20261019000001 y 20261022000002). Un
    * aviso repetido se reconoce por su id, un pago de 0 pesos o sin plan se ignora, el mismo cobro no se
    * cuenta dos veces y el referido se concreta con el primer cobro, una sola vez. Un reembolso completo
-   * de ese cobro, que de Stripe llega sin id de pago y se reconoce por su PaymentIntent o por el monto,
-   * lo revierte y quita el mes. La regla de verdad la prueban referral_first_charge_test.sql y
+   * de ese cobro, que de Stripe llega con la factura que pagó su PaymentIntent o, si no la tiene, se
+   * reconoce por el monto, lo revierte y quita el mes. La regla de verdad la prueban referral_first_charge_test.sql y
    * billing_plans_test.sql contra Postgres
    */
   function ledger() {
