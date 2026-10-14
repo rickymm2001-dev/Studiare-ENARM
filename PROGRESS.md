@@ -112,15 +112,16 @@ Evidencia
 - Evidencia de B4 y B5. Typecheck, lint y formato limpios y 2,977 pruebas unitarias que pasan; la única que falló con la máquina cargada fue la de rendimiento de ordenar en Buscar tarjetas, que pasa sola. E2e de ai-cards, deck-topics, exam-review, explore, import-export, review-tools y review en teléfono y computadora, 30 de 30
 - Capturas en docs/screenshots/v3/b5
 
-### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
+### Estado de las ramas en paralelo (2026-10-14, 04:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques
-- B3 en b3-int. Unido con B2 final, e2e corridas una vez (272 pasan, 17 fallaban por selectores y pantallas movidas) y revisión independiente hecha. Un subagente corrige los hallazgos y las e2e
-- B4 y B5 en b45. Implementados, revisión independiente hecha y sus 12 hallazgos corregidos. Faltan e2e, capturas y PR
-- B6 en b6. Implementado y revisado. Un subagente corrige 4 hallazgos
-- B7 en b7int (unión de b7a, Party en la nube, y b7b, enfoque, resumen, referidos y demo cerrada). Revisado. Un subagente corrige 9 hallazgos. Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
-- B9 en b9. Implementado con la migración renombrada a 20261020000001. Revisión independiente en curso
-- Siguen B8 y B10, que parten de la unión de todo lo anterior
-- Los subagentes se detuvieron tres veces por el límite de uso de la cuenta y se reanudaron con su contexto
+- B3 fusionado en main (PR 42)
+- B4 y B5 cerrados en la rama de trabajo. Antes se revirtió la versión paralela que entró directo a main sin PR (9bcf111), por decisión de Ricardo
+- B6 en int6, unido sobre B4 y B5. Un subagente busca choques que git no marcó y corre sus e2e
+- B7 en b7int con los 9 hallazgos de su revisión corregidos (616f948). Sus migraciones 20261018000001 y 20261019000001 no se han aplicado al proyecto
+- B8 en b8 (Plan Gratis), en implementación sobre b6 y b7int. Su migración será 20261021000001
+- B9 en b9 con los hallazgos de su revisión corregidos (7a1ff2d). Su migración 20261020000001 no se ha aplicado al proyecto
+- El diseño de B10 está listo en /home/user/wt/plans/b10.md y arranca cuando B8 y B9 estén en main
+- Los subagentes se detuvieron cuatro veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
