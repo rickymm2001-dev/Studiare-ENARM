@@ -27,6 +27,7 @@ import {
   type ChargeNotice,
   type CheckoutContext,
   type CheckoutError,
+  type CheckoutFlags,
   type CheckoutMode,
   type CheckoutRequest,
   type FunctionEnv,
@@ -393,6 +394,23 @@ export function parseCheckoutRequest(value: unknown): CheckoutRequest | null {
   };
 }
 
+/**
+ * La bandera de feature_flags que cierra lo que se pidió, o null si está abierto. Los pases con OXXO o
+ * SPEI piden cashPasses y todo Mercado Pago pide mercadoPago. La tarjeta con renovación no depende de
+ * ninguna. Sin banderas cuentan como apagadas. La app ya esconde esas opciones con las mismas banderas, y
+ * esto evita que se abran pidiéndolas directo
+ */
+export function closedFlagFor(
+  ask: CheckoutRequest,
+  flags: CheckoutFlags | undefined,
+): keyof CheckoutFlags | null {
+  if (ask.provider === 'mercadopago') return flags?.mercadoPago === true ? null : 'mercadoPago';
+  if ((ask.mode ?? 'subscription') === 'pass') {
+    return flags?.cashPasses === true ? null : 'cashPasses';
+  }
+  return null;
+}
+
 const ERROR_STATUS: Record<CheckoutError, number> = {
   invalid: 400,
   unauthorized: 401,
@@ -466,6 +484,13 @@ export async function handleCreateCheckout(
   } catch {
     deps.log(`No se pudo leer checkout_context antes de abrir el pago del plan ${ask.plan}`);
     return fail('provider');
+  }
+  const closed = closedFlagFor(ask, context.flags);
+  if (closed) {
+    deps.log(
+      `La bandera ${closed} está apagada en el servidor. No se abre el pago del plan ${ask.plan}`,
+    );
+    return fail('not_configured');
   }
   // Un solo plan pagado a la vez (D-118). Un pase suma a otro pase, pero no a una suscripción (8.10)
   if (context.inForce === 'subscription') return fail('already_subscribed');

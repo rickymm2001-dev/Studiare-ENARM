@@ -1118,6 +1118,8 @@ const baseContext: CheckoutContext = {
   founderLost: false,
   oxxoExpiresDays: 3,
   customerId: 'cus_1',
+  // Las banderas de feature_flags que hace cumplir el servidor, prendidas para probar todo
+  flags: { cashPasses: true, mercadoPago: true },
 };
 
 const liveSubscription = (
@@ -1584,6 +1586,57 @@ describe('crear el pago', () => {
     expect(await withTrial.json()).toEqual({ error: 'trial_mismatch', trialAvailable: false });
     expect((await askCheckout({ plan: 'founder', provider: 'mercadopago' }, deps)).status).toBe(
       400,
+    );
+  });
+
+  it('con la bandera de pases o de Mercado Pago apagada en el servidor contesta 503 sin abrir nada', async () => {
+    const closed = { cashPasses: false, mercadoPago: false };
+    for (const [body, flag] of [
+      [{ plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' }, 'cashPasses'],
+      [{ plan: 'annual', provider: 'stripe', mode: 'pass', method: 'spei' }, 'cashPasses'],
+      [{ plan: 'monthly', provider: 'mercadopago', mode: 'pass' }, 'mercadoPago'],
+      [{ plan: 'annual', provider: 'mercadopago', mode: 'subscription' }, 'mercadoPago'],
+    ] as const) {
+      const { deps, calls, lines } = checkoutDeps({ context: { flags: closed } });
+      const answer = await askCheckout(body, deps);
+      expect(answer.status).toBe(503);
+      expect(await answer.json()).toEqual({ error: 'not_configured' });
+      expect(calls).toEqual([]);
+      expect(lines).toEqual([
+        `La bandera ${flag} está apagada en el servidor. No se abre el pago del plan ${body.plan}`,
+      ]);
+    }
+    // Una sola bandera prendida abre solo lo suyo
+    const onlyPasses = checkoutDeps({
+      context: { flags: { cashPasses: true, mercadoPago: false } },
+    });
+    expect(
+      (
+        await askCheckout(
+          { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' },
+          onlyPasses.deps,
+        )
+      ).status,
+    ).toBe(200);
+    expect(
+      (await askCheckout({ plan: 'monthly', provider: 'mercadopago' }, onlyPasses.deps)).status,
+    ).toBe(503);
+    // Sin banderas en el contexto cuentan como apagadas. La tarjeta con renovación no depende de ellas
+    const { flags: _flags, ...withoutFlags } = baseContext;
+    const old = checkoutDeps({
+      overrides: { checkoutContext: () => Promise.resolve(withoutFlags) },
+    });
+    expect(
+      (
+        await askCheckout(
+          { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' },
+          old.deps,
+        )
+      ).status,
+    ).toBe(503);
+    const card = checkoutDeps({ context: { flags: closed } });
+    expect((await askCheckout({ plan: 'monthly', provider: 'stripe' }, card.deps)).status).toBe(
+      200,
     );
   });
 

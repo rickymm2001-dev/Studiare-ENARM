@@ -14,6 +14,7 @@ Escrito el 2026-10-10 y puesto al día el 2026-10-14 con B10, pagos completos. Q
 - **Portal del cliente con dos configuraciones.** Una para Fundadores, que deja cambiar entre 79 y 749, y otra regular, que deja cambiar entre 149 y 1,499. Subir cobra la diferencia al momento. Bajar o pasar de anual a mensual se agenda al fin del periodo. Cambiar de plan en la prueba no la termina. Cancelar deja el plan hasta el fin del periodo pagado. La app abre el portal directo en cambiar de plan o en cancelar
 - **Acciones que decide la base.** Si una prueba resulta repetida, si llega una segunda suscripción, si ya no hay lugar Fundador o si se reembolsa un cobro de suscripción, la base deja una acción de cancelar y el webhook la ejecuta en Stripe al momento, sin prorrateo ni factura final. Una que falla se reintenta con el siguiente aviso
 - **Avisos de Stripe.** El webhook verifica la firma con tolerancia de 5 minutos y cada evento se aplica una sola vez aunque Stripe lo reenvíe. Si la base o la lectura a Stripe fallan contesta 500 y Stripe lo reintenta. Lo que no entiende lo contesta con 200 y queda guardado en payment_webhook_events con el motivo en su columna result
+- **Banderas en el servidor.** freeTrial, cashPasses y mercadoPago viven en platform_settings, clave feature_flags, la misma que lee la app, y la base también las cumple. Sin freeTrial en true nadie tiene prueba. Sin cashPasses en true create-checkout contesta 503 not_configured a los pases con OXXO o SPEI. Solo cuenta el booleano true. Una prueba o un pago que ya empezó sigue igual aunque se apague la bandera
 - **Cliente único.** Toda sesión de pago lleva un cliente de Stripe, que SPEI exige. Si el alumno no tiene uno se crea y se liga en el acto. Si el guardado ya no existe en Stripe se crea otro y se reintenta una vez
 - **Reembolsos.** Uno completo desde el panel de Stripe quita lo que pagó ese cobro. Un pase deja de contar y una suscripción se cancela en Stripe con su acción. Uno parcial no cambia nada y lo atiendes tú
 - **Garantía de 7 días.** Cuenta desde el primer cobro de la suscripción o desde el pago del pase. Los pagos en OXXO no se pueden devolver en la tienda, así que la garantía de un pase con OXXO se devuelve por transferencia y se marca como devuelta en Admin, Pagos
@@ -75,8 +76,8 @@ Los pasos de los paneles están en docs/PENDIENTES_DE_RICARDO.md, sección de B1
 2. La sesión corre setup-test.ts y pone los ocho IDs en los secretos de Supabase
 3. La sesión aplica las tres migraciones de B10 y corre la consulta de comprobación de docs/SUPABASE.md, sección Pagos completos
 4. La sesión despliega create-checkout, create-portal-session y payment-webhook-stripe
-5. Juntos corren los escenarios de la sección 7.3 del diseño de B10 con relojes de prueba de Stripe, revisando cada paso en la base y en Stripe
-6. Con todo en verde se prenden las banderas freeTrial y cashPasses
+5. La sesión prende freeTrial y cashPasses en feature_flags, porque sin ellas el servidor no da prueba ni abre pases, y juntos corren los escenarios de la sección 7.3 del diseño de B10 con relojes de prueba de Stripe, revisando cada paso en la base y en Stripe. Si la app publicada ya usa este proyecto, mientras tanto también ve la prueba y los pases
+6. Con todo en verde se dejan prendidas. Si algo falla se apagan otra vez
 
 ## Lo que falta confirmar con la corrida real
 

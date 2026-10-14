@@ -439,10 +439,24 @@ language sql stable security definer set search_path = public, pg_temp as $$
     )
 $$;
 
--- Si a la cuenta le toca la prueba gratis. trialDays en 0 la apaga para todos
+-- Una bandera de lanzamiento de feature_flags, la misma clave que lee la app (freeTrial, cashPasses y
+-- mercadoPago). Solo el booleano true la prende, como requireMfa (staff_mfa_required). Sin la clave, sin
+-- la bandera o con cualquier otro valor queda apagada, que es lo que la app trae en producción. Así lo que
+-- la app esconde con una bandera tampoco lo abre el servidor
+create or replace function public.billing_flag(p_name text) returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select coalesce(
+    (select value -> p_name from public.platform_settings where key = 'feature_flags') = 'true'::jsonb,
+    false
+  )
+$$;
+
+-- Si a la cuenta le toca la prueba gratis. La apagan para todos trialDays en 0 o la bandera freeTrial
+-- apagada. Una prueba que ya empezó en la pasarela sigue igual aunque después se apague
 create or replace function public.trial_available(p_user uuid) returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
-  select public.billing_rule('trialDays', 7) > 0 and not public.trial_already_used(p_user)
+  select public.billing_rule('trialDays', 7) > 0 and public.billing_flag('freeTrial')
+    and not public.trial_already_used(p_user)
 $$;
 
 -- ===================================================================== Plan efectivo
@@ -619,6 +633,11 @@ begin
         select 1 from public.founder_seats where user_id = p_user and status = 'confirmed'
       ) and not (v_live and v_sub.plan in ('founder', 'founder_annual')),
     'oxxoExpiresDays', least(greatest(public.billing_rule('oxxoExpiresDays', 3), 1), 7),
+    -- Lo que create-checkout no abre con su bandera apagada. Pases con OXXO o SPEI y Mercado Pago
+    'flags', jsonb_build_object(
+      'cashPasses', public.billing_flag('cashPasses'),
+      'mercadoPago', public.billing_flag('mercadoPago')
+    ),
     'customerId', (
       select customer_id from public.billing_customers where user_id = p_user and provider = 'stripe'
     )
@@ -1711,6 +1730,7 @@ revoke all on function public.founder_seats_release_orphan() from public, anon, 
 revoke all on function public.trial_account_key(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_already_used(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_available(uuid) from public, anon, authenticated, service_role;
+revoke all on function public.billing_flag(text) from public, anon, authenticated, service_role;
 revoke all on function public.user_plan(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.billing_blocks_account_deletion(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.subscriptions_sync_founder_seat() from public, anon, authenticated, service_role;

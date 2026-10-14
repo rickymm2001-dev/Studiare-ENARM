@@ -119,6 +119,16 @@ create or replace function pg_temp.action_for(p_target text) returns text langua
   select reason from public.billing_actions where target = p_target
 $$;
 
+-- Las banderas de feature_flags que el servidor hace cumplir. Prendidas para probar todo, como después
+-- de la corrida real. R5 prueba que apagadas cierran lo suyo
+create or replace function pg_temp.set_flags(p_flags jsonb) returns void language sql as $$
+  insert into public.platform_settings (key, value) values ('feature_flags', p_flags)
+  on conflict (key) do update set value =
+    case when jsonb_typeof(public.platform_settings.value) = 'object' then public.platform_settings.value else '{}'::jsonb end
+    || p_flags
+$$;
+select pg_temp.set_flags('{"freeTrial":true,"cashPasses":true,"mercadoPago":true}');
+
 -- ===================================================================== Usuarios
 \set u01 'ba100000-0000-0000-0000-000000000001'
 \set u02 'ba100000-0000-0000-0000-000000000002'
@@ -713,7 +723,7 @@ begin
     'public.billing_queue_cancel(uuid, text, text, text)', 'public.billing_mark_issue(uuid, text, text)',
     'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)',
     'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()',
-    'public.billing_founder_lost(uuid, text, text)'] loop
+    'public.billing_founder_lost(uuid, text, text)', 'public.billing_flag(text)'] loop
     if has_function_privilege('authenticated', v_fn, 'execute') or has_function_privilege('anon', v_fn, 'execute')
        or has_function_privilege('service_role', v_fn, 'execute') then
       raise exception 'FALLA P6. % es interna y nadie debe ejecutarla por la API', v_fn;
@@ -1126,5 +1136,31 @@ select pg_temp.expect(
   and pg_temp.action_for('sub_r4_d3') = 'founder_full',
   'R4. Quien perdió el Fundador no debía recuperarlo ni mover su lugar'
 );
+
+-- R5. Las banderas freeTrial, cashPasses y mercadoPago también las hace cumplir el servidor. Solo el
+-- booleano true las prende, como requireMfa. Sin la clave o con otro valor quedan apagadas
+\set r5a 'ba110000-0000-0000-0000-0000000005a0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r5a', 'r5a@ba.mx', '{"alias":"Banderas"}');
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":true,"flags":{"cashPasses":true,"mercadoPago":true}}'::jsonb
+  and (pg_temp.mp(:'r5a') ->> 'trialAvailable')::boolean,
+  'R5. Con las banderas prendidas debía haber prueba, pases y Mercado Pago'
+);
+begin;
+select pg_temp.set_flags('{"freeTrial":false,"cashPasses":"true","mercadoPago":1}');
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":false,"flags":{"cashPasses":false,"mercadoPago":false}}'::jsonb
+  and not (pg_temp.mp(:'r5a') ->> 'trialAvailable')::boolean,
+  'R5. Con las banderas apagadas o con otro valor no debía haber prueba, pases ni Mercado Pago'
+);
+update public.platform_settings set value = '[]'::jsonb where key = 'feature_flags';
+select pg_temp.is(public.checkout_context(:'r5a') ->> 'trialAvailable', 'false',
+  'R5. Una clave que no es objeto debía dejar la prueba apagada');
+delete from public.platform_settings where key = 'feature_flags';
+select pg_temp.expect(
+  public.checkout_context(:'r5a') @> '{"trialAvailable":false,"flags":{"cashPasses":false,"mercadoPago":false}}'::jsonb,
+  'R5. Sin la clave las banderas debían quedar apagadas'
+);
+rollback;
 
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;
