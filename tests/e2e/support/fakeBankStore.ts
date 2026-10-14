@@ -61,6 +61,7 @@ export const BANK_EDITORIAL_RPCS = [
   'admin_deck_catalog_register',
   'admin_deck_catalog_publish',
   'admin_deck_catalog_retire',
+  'admin_deck_catalog_overview',
   'owner_confirm_deck_authorization',
 ] as const;
 
@@ -257,6 +258,8 @@ export interface FakeDeckVersion {
   version: number;
   status: 'uploading' | 'published' | 'retired';
   subjects: FakeDeckSubject[];
+  /** La vista previa de esta versión. Pasa al mazo al publicar, como en la base */
+  preview?: FakeDeck['preview'];
   createdAt: string;
   publishedAt: string | null;
 }

@@ -372,4 +372,30 @@ select pg_temp.expect((select array_agg(column_name::text order by column_name::
   where table_schema = 'public' and table_name = 'bank_sync_row_results')
   = '{id,incomplete,notices,outcome,problems,question_id,row_number,run_id,sheet_key}', 'BS13. bank_sync_row_results tiene otra columna');
 
+-- ===================================================================== BS14. Cron
+-- En el Postgres de las pruebas no hay pg_cron, pg_net ni Vault, así que 20261023000006 no hizo nada
+select pg_temp.expect(to_regnamespace('cron') is null and to_regnamespace('net') is null and to_regnamespace('vault') is null
+  and not exists (select 1 from pg_extension where extname in ('pg_cron', 'pg_net')), 'BS14. La migración de Cron hizo algo sin sus piezas');
+-- Con un Vault de prueba crea la ficha una sola vez, de 256 bits, y bank_sync_cron_ok la acepta. Sin
+-- pg_cron no programa nada
+begin;
+create schema vault;
+create table vault.secrets (id uuid primary key default gen_random_uuid(), name text unique, secret text, description text);
+create view vault.decrypted_secrets as select id, name, secret as decrypted_secret, description from vault.secrets;
+create function vault.create_secret(new_secret text, new_name text default null, new_description text default '',
+  new_key_id uuid default null) returns uuid language sql as $$
+  insert into vault.secrets (name, secret, description) values (new_name, new_secret, new_description) returning id
+$$;
+\ir ../migrations/20261023000006_bank_sync_cron.sql
+\ir ../migrations/20261023000006_bank_sync_cron.sql
+select pg_temp.expect((select count(*) = 1 and bool_and(decrypted_secret ~ '^[0-9a-f]{64}$') from vault.decrypted_secrets
+  where name = 'bank_sync_cron_token'), 'BS14. La ficha no quedó una sola vez con 64 caracteres hexadecimales');
+select decrypted_secret as cron_token from vault.decrypted_secrets where name = 'bank_sync_cron_token' \gset
+select pg_temp.as_service();
+select pg_temp.expect(public.bank_sync_cron_ok(:'cron_token'), 'BS14. bank_sync_cron_ok no aceptó la ficha nueva');
+reset role;
+select pg_temp.expect(to_regnamespace('cron') is null and not exists (select 1 from pg_extension where extname in ('pg_cron', 'pg_net')),
+  'BS14. Sin pg_cron programó algo');
+rollback;
+
 \echo 'TODAS LAS PRUEBAS DE LA SINCRONIZACION DEL BANCO PASARON'

@@ -182,6 +182,51 @@ export interface DeckCatalogList {
   decks: DeckCatalogEntry[];
 }
 
+/** Un archivo que el admin sube a la versión en subida, con la ruta dentro del bucket deck-catalog */
+export interface DeckUploadFile {
+  subjectKey: string;
+  /** <mazo>/v<n>/<submazo>.json, .part-<k>.json si pasa de 5 MB, o .media-<k>.zip */
+  path: string;
+  contentType: 'application/json' | 'application/zip';
+}
+
+/** Respuesta de admin_deck_catalog_register */
+export interface DeckRegisterResult {
+  deckKey: string;
+  version: number;
+  status: 'uploading';
+  files: DeckUploadFile[];
+}
+
+/** Respuestas de admin_deck_catalog_publish y admin_deck_catalog_retire */
+export type DeckPublishResult = 'published' | 'already_published';
+export type DeckRetireResult = 'retired' | 'already_retired';
+
+/** Una versión de un mazo en admin_deck_catalog_overview, con cuántos archivos ya subió */
+export interface DeckAdminVersion {
+  version: number;
+  status: 'uploading' | 'published' | 'retired';
+  createdAt: string;
+  publishedAt: string | null;
+  files: number;
+  uploaded: number;
+}
+
+/** Un mazo del catálogo para el admin, también borradores y retirados (admin_deck_catalog_overview) */
+export interface DeckAdminEntry {
+  deckKey: string;
+  name: string;
+  author: string;
+  description: string;
+  license: 'own' | 'third_party';
+  authorizationNote: string | null;
+  authorizationConfirmedAt: string | null;
+  status: 'draft' | 'published' | 'retired';
+  publishedVersion: number | null;
+  versions: DeckAdminVersion[];
+  downloads: number;
+}
+
 // ===================================================================== Flujo editorial
 
 /** Estado de la revisión a ciegas de una versión para quien la consulta (4.4) */

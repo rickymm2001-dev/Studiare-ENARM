@@ -6,7 +6,8 @@
 -- Borrar mis datos y la bitácora de lecturas (8.24). bank_reads es un dato del alumno y también el
 -- contador de su tope de Gratis. Borrar mis datos quita todas sus lecturas menos las del día de estudio
 -- en curso, así nadie reinicia su tope de 20 preguntas borrando sus datos. Borrar la cuenta las quita
--- todas en cascada. Lo demás es igual a la versión de 20261010000001_ai_hosted.sql
+-- todas en cascada. También quita la bitácora de mazos bajados del catálogo (deck_catalog_downloads), que
+-- no cuenta para ningún tope. Lo demás es igual a la versión de 20261010000001_ai_hosted.sql
 --
 -- La migración 20261023000003 ya trae content_report en email_kinds desde B10
 -- (20261022000001_billing_emails.sql), así que este archivo no cambia esa restricción.
@@ -23,6 +24,7 @@ declare
   v_decks bigint;
   v_ai bigint;
   v_reads bigint;
+  v_downloads bigint;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -56,6 +58,9 @@ begin
   -- Las lecturas del banco, menos las del día de estudio en curso, que cuentan para el tope de Gratis
   delete from public.bank_reads where user_id = v_user and day < public.study_day();
   get diagnostics v_reads = row_count;
+  -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
+  delete from public.deck_catalog_downloads where user_id = v_user;
+  get diagnostics v_downloads = row_count;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
@@ -66,7 +71,8 @@ begin
     'memberships', v_groups,
     'decks', v_decks,
     'ai_usage', v_ai,
-    'bank_reads', v_reads
+    'bank_reads', v_reads,
+    'deck_downloads', v_downloads
   );
 end;
 $$;
