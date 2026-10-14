@@ -160,7 +160,13 @@ export async function ownManualDeck(
 export async function createManualDeck(
   api: Repos,
   user: Pick<User, 'id'>,
-  input: { name: string; description?: string; parentId?: string | null },
+  input: {
+    name: string;
+    description?: string;
+    parentId?: string | null;
+    /** ID fijo, para que un segundo toque no cree otro mazo. Si falta se crea uno nuevo */
+    id?: string;
+  },
   now: Date = new Date(),
 ): Promise<Deck> {
   if (input.parentId) {
@@ -170,7 +176,7 @@ export async function createManualDeck(
       throw new RangeError('Ya son demasiados niveles de mazos');
   }
   return api.repos.decks.put({
-    id: newId(),
+    id: input.id ?? newId(),
     name: input.name.trim(),
     description: input.description?.trim() ?? '',
     ownerId: user.id,

@@ -5,6 +5,7 @@ import type { Id } from '../schemas/common';
 import {
   AppEventSchema,
   EVENT_SCHEMA_VERSION,
+  parseWritablePayload,
   type EventOf,
   type EventPayload,
   type EventType,
@@ -45,7 +46,8 @@ export function createEvent<T extends EventType>(
     tz: context.tz,
     schemaVersion: EVENT_SCHEMA_VERSION,
     sessionId: context.sessionId ?? null,
-    payload,
+    // Lo que ya solo se lee, como una causa de error de antes de B5, no se vuelve a escribir (4.23)
+    payload: parseWritablePayload(type, payload),
   };
   // El esquema confirma que el payload corresponde al tipo, así que el resultado es EventOf<T>
   return AppEventSchema.parse(candidate) as EventOf<T>;

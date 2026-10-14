@@ -1,7 +1,8 @@
 // Revisión de una respuesta de práctica. Correcto o incorrecto, por qué atrae la opción elegida y su
-// sesgo probable, qué se podía descartar, explicación, referencias por verificar, causa del error y
-// reporte para revisión médica. La usa la retroalimentación tras cada pregunta y el resumen de la
-// sesión, que es donde se ve por defecto (D-087).
+// sesgo probable, qué se podía descartar, explicación, referencias por verificar, por qué falló,
+// crear una tarjeta con la pregunta y reporte para revisión médica. La usa la retroalimentación tras
+// cada pregunta y el resumen de la sesión, que es donde se ve por defecto (D-087). El motivo es uno
+// de los siete de Ricardo, opcional y cambiable, y vale el último (B5).
 import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
@@ -9,17 +10,20 @@ import { createEvent } from '@/data/events/createEvent';
 import type { ContentReport } from '@/data/schemas/bank';
 import { submitContentReport } from '@/data/usecases/contentReports';
 import { biasTaxonomy } from '@/demo/content';
+import { latestMotive } from '@/engines/errorCauses';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
+import { CreateCardButton } from '../questionCards/CreateCardDialog';
+import { MotivePicker } from '../shared/MotivePicker';
+import { reportMotive, useMotiveReports } from '../shared/motives';
 import type { ReadySession } from '../shared/RequireSession';
 import { DiscardReviewCard } from './DiscardReviewCard';
 import { usePractice, type PracticeAnswer } from './practice';
 import type { QuestionBundle } from './useQuestion';
 
-type Cause = keyof typeof t.review.causes;
 type ReportReason = ContentReport['reason'];
 
 const biasName = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias.name]));
@@ -30,16 +34,22 @@ export function AnswerReview({
   answer,
   session,
   idPrefix = 'resp',
+  questionNumber,
 }: {
   bundle: QuestionBundle;
   answer: PracticeAnswer;
   session: ReadySession;
   idPrefix?: string;
+  /**
+   * El número de la pregunta en la sesión, cuando hay varias revisiones en la página, como en el
+   * resumen. Nombra su botón Crear tarjeta para que el lector de pantalla no oiga varios iguales
+   */
+  questionNumber?: number;
 }) {
   const api = useDataApi();
   const practice = usePractice();
   const { question, options } = bundle;
-  const [cause, setCause] = useState<Cause | null>(null);
+  const reports = useMotiveReports(session.user.id);
   const [reason, setReason] = useState<ReportReason>('clinical_error');
   const [reported, setReported] = useState(false);
   const ctx = {
@@ -52,17 +62,6 @@ export function AnswerReview({
   const shown = answer.shownOptionIds
     .map((id) => options.find((option) => option.id === id))
     .filter((option): option is NonNullable<typeof option> => option !== undefined);
-
-  const reportCause = async (value: Cause) => {
-    setCause(value);
-    await api.recordEvent(
-      createEvent(
-        'cause_reported',
-        { targetKind: 'question', targetId: question.id, cause: value },
-        ctx,
-      ),
-    );
-  };
 
   const submitReport = async () => {
     const { report, created } = await submitContentReport(api, {
@@ -84,28 +83,25 @@ export function AnswerReview({
     setReported(true);
   };
 
+  // Vale el último motivo que marcó desde que empezó esta práctica
   const causePicker = (
-    <div className="mt-3 border-t border-line pt-3">
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(t.review.causes) as Cause[]).map((value) => (
-            <Button
-              key={value}
-              size="sm"
-              variant={cause === value ? 'primary' : 'secondary'}
-              aria-pressed={cause === value}
-              disabled={cause !== null}
-              onClick={() => {
-                void reportCause(value);
-              }}
-            >
-              {t.review.causes[value]}
-            </Button>
-          ))}
-        </div>
-      </fieldset>
-    </div>
+    <MotivePicker
+      className="mt-3 border-t border-line pt-3"
+      value={latestMotive(
+        reports ?? [],
+        { kind: 'question', ids: [question.id, question.questionId] },
+        new Date(practice.startedAt).toISOString(),
+      )}
+      onChange={(motive) =>
+        reportMotive(
+          api,
+          session.user,
+          { kind: 'question', id: question.id },
+          motive,
+          practice.sessionId,
+        )
+      }
+    />
   );
 
   // En computadora el resultado va a la izquierda y la explicación a la derecha (D-078)
@@ -199,6 +195,18 @@ export function AnswerReview({
             </div>
           ) : null}
           {!answer.correct && !chosen ? causePicker : null}
+          <div className="mt-3 border-t border-line pt-3">
+            <CreateCardButton
+              session={session}
+              bundle={bundle}
+              from="practice_review"
+              label={
+                questionNumber === undefined
+                  ? undefined
+                  : t.examReview.createCard.buttonLabel(String(questionNumber))
+              }
+            />
+          </div>
           {/* El reporte para revisión médica queda plegado para no ocupar una tarjeta entera */}
           <details className="mt-3 border-t border-line pt-3">
             <summary className="flex min-h-touch cursor-pointer items-center gap-2 text-sm font-medium text-fg-muted">

@@ -1,13 +1,16 @@
 // Qué quieres repasar (D-072, D-078). Arriba el modo y el botón de empezar con cuántas tarjetas
-// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco. La última selección
-// se recuerda en este dispositivo. Aquí solo se elige lo de esta sesión. Los límites de cada día se
-// leen aquí y se cambian en Ajustes del repaso, el único lugar de cada ajuste (B3 del plan).
+// tocan. Mazos y ramas quedan plegados con un resumen, porque se cambian poco, y al abrirlos cada
+// mazo dice sus ramas y todos sus temas ya abiertos, sin un segundo pliegue (B4 del plan del cambio,
+// comentario 8). La última selección se recuerda en este dispositivo. Aquí solo se elige lo de esta
+// sesión. Los límites de cada día se leen aquí y se cambian en Ajustes del repaso, el único lugar de
+// cada ajuste (B3 del plan).
 import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { DailyCounters } from '@/engines/counters';
 import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
+import type { TopicOutline } from '@/engines/deckTopics';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -15,6 +18,7 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField } from '@/ui/components/field';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
+import { DeckTopics } from '../decks/DeckTopics';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
@@ -25,6 +29,7 @@ export function ReviewSetup({
   addDeck,
   cards,
   deckNames,
+  deckTopics,
   topicOfCard,
   countFor,
   countersFor,
@@ -37,13 +42,15 @@ export function ReviewSetup({
   addDeck?: ReactNode;
   cards: CardEntity[];
   deckNames: Map<string, string>;
+  /** Ramas y temas de cada mazo, por el mismo ID que deckNames */
+  deckTopics: ReadonlyMap<string, TopicOutline>;
   /** Subespecialidad de cada tarjeta. null si su nota no la trae */
   topicOfCard: Map<string, string | null>;
   /** Cuántas tarjetas tocarían hoy con esta selección */
   countFor: (selection: ReviewSelection) => number;
   /** Cuántas de esas son nuevas, de aprendizaje o programadas */
   countersFor: (selection: ReviewSelection) => DailyCounters;
-  /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Explorar */
+  /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Buscar tarjetas */
   leechCount: number;
   /** Límites diarios del alumno. Aquí solo se leen */
   limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
@@ -146,21 +153,28 @@ export function ReviewSetup({
           >
             <fieldset>
               <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
-              <div className="grid gap-x-3 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="flex flex-col divide-y divide-line">
                 {deckIds.map((deckId) => (
-                  <CheckboxField
-                    key={deckId}
-                    label={deckNames.get(deckId) ?? deckId}
-                    checked={selection.decks.has(deckId)}
-                    onChange={(event) => {
-                      const decks = new Set(selection.decks);
-                      if (event.target.checked) decks.add(deckId);
-                      else decks.delete(deckId);
-                      setSelection({ ...selection, decks });
-                    }}
-                  />
+                  <li key={deckId} className="flex flex-col gap-1 py-2 first:pt-0 last:pb-0">
+                    <CheckboxField
+                      label={deckNames.get(deckId) ?? deckId}
+                      checked={selection.decks.has(deckId)}
+                      onChange={(event) => {
+                        const decks = new Set(selection.decks);
+                        if (event.target.checked) decks.add(deckId);
+                        else decks.delete(deckId);
+                        setSelection({ ...selection, decks });
+                      }}
+                    />
+                    <DeckTopics
+                      deckName={deckNames.get(deckId) ?? deckId}
+                      outline={deckTopics.get(deckId)}
+                      collapsible={false}
+                      className="pl-8"
+                    />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </fieldset>
             <BranchTopicPicker
               selected={selection.topics}

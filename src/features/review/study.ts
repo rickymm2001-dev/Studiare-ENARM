@@ -22,7 +22,7 @@ export function reviewEndReason(
 /**
  * Último estado de cada tarjeta repasada. Un cambio de fecha (repartir, posponer, adelantar o
  * deshacer) solo mueve el vencimiento y deja lo demás del estado como estaba, y un repaso posterior
- * vuelve a fijar todo el estado
+ * vuelve a fijar todo el estado. Reiniciar la deja como nueva hasta su siguiente repaso (B4)
  */
 export function latestCardStates(events: readonly AppEvent[]): Map<string, FsrsCardState> {
   const states = new Map<string, FsrsCardState>();
@@ -34,6 +34,8 @@ export function latestCardStates(events: readonly AppEvent[]): Map<string, FsrsC
         const state = states.get(entry.cardId);
         if (state) states.set(entry.cardId, { ...state, due: entry.to });
       }
+    } else if (event.type === 'cards_reset') {
+      for (const cardId of event.payload.cardIds) states.delete(cardId);
     }
   }
   return states;

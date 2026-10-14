@@ -18,9 +18,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
-- [x] B3. Navegación, Configuración y Perfil (PR en curso)
-- [ ] B4. Repasar y Buscar tarjetas
-- [ ] B5. Revisión del examen y motivos de error
+- [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
+- [x] B4. Repasar y Buscar tarjetas (PR en curso)
+- [x] B5. Revisión del examen y motivos de error (PR en curso, junto con B4)
 - [ ] B6. Apuntes y mazos
 - [ ] B7. Party real y lo que se queda o se va
 - [ ] B8. Plan Gratis
@@ -98,6 +98,19 @@ Evidencia
 - Evidencia. npm run check con typecheck y lint limpios y 2,875 pruebas que pasan (2 omitidas que solo corren con su variable de entorno). E2e del bloque en teléfono y computadora, 194 pasan en la última corrida completa y la única falla, un selector ambiguo de práctica, quedó corregida y pasó 8 de 8 sola. Nube 22 de 22. perf.spec pasa con la máquina tranquila y su límite es justo con otros agentes corriendo (mediana de 123 a 155 ms, sin regresión contra la versión anterior)
 - JavaScript inicial de 284.8 KB de 300
 - Capturas en docs/screenshots/v3/b3, en teléfono, 1280 y 1920, en claro y en oscuro
+
+### B4. Repasar y Buscar tarjetas (D-123)
+- Hecho. Temas de cada mazo hasta tres niveles (rama, materia y tema), desde la ruta de las etiquetas de los mazos de Paco, con nombres legibles y plegados con su resumen. En Repasar se ven abiertos dentro de Mazos y temas
+- Buscar tarjetas reemplaza a Explorar con su misma ruta. Búsqueda al teclear con la sintaxis de antes, chips con su conteo, tabla con panel desde 64rem y lista con hojas en el teléfono, de 60 en 60, y atajos de teclado. Reiniciar es un evento nuevo que solo se agrega
+- Revisión independiente con sus hallazgos corregidos. La tabla de nombres de temas espera la revisión de un médico en docs/revisiones/b4-nombres-de-temas.md
+- Capturas en docs/screenshots/v3/b4
+
+### B5. Revisión del examen y motivos de error (D-124)
+- Hecho. Crear tarjeta en cada pregunta de la revisión del examen y de la retroalimentación de la práctica, con el texto del banco y sin IA por omisión. En un precargado la tarjeta va a la capa Mis tarjetas del alumno (4.16) y no se duplica
+- Siete motivos de error de un toque en las falladas, con tabla de equivalencias para los eventos viejos, que no se editan (4.23). Alimentan Progreso con el reparto por rama, Conócete, el tutor y los consejos por trampa
+- Revisión independiente con sus hallazgos corregidos
+- Evidencia de B4 y B5. Typecheck, lint y formato limpios y 2,977 pruebas unitarias que pasan; la única que falló con la máquina cargada fue la de rendimiento de ordenar en Buscar tarjetas, que pasa sola. E2e de ai-cards, deck-topics, exam-review, explore, import-export, review-tools y review en teléfono y computadora, 30 de 30
+- Capturas en docs/screenshots/v3/b5
 
 ### Estado de las ramas en paralelo (2026-10-13, 22:30 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque o par de bloques

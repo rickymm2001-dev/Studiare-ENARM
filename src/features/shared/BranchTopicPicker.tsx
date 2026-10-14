@@ -144,8 +144,12 @@ export function BranchTopicPicker({
           const panelId = `${baseId}-${branch.key}`;
           return (
             <li key={branch.key}>
-              {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2) */}
-              <div className={cn('flex items-center gap-1 pr-1 pl-2', total === 0 && 'opacity-60')}>
+              {/* La rama se lee por su nombre, sin barra de color (H20 de la revisión de B2). Una rama
+                  sin tarjetas va en el gris de texto secundario y no transparente, que no daba el
+                  contraste mínimo (B4 del plan del cambio) */}
+              <div
+                className={cn('flex items-center gap-1 pr-1 pl-2', total === 0 && 'text-fg-muted')}
+              >
                 <TriCheckbox
                   stacked
                   className="min-h-touch flex-1 py-1 font-semibold hover:bg-transparent"

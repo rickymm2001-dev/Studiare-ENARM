@@ -105,7 +105,7 @@ export const tutorText = {
     evidenceConfused: (other: string) => `La confundiste con ${other}`,
     evidenceMissing: 'Ya no está en tu banco',
     causeMismatch: (mismatches: number, total: number) =>
-      `En ${mismatches} de ${plural(total, 'caso', 'casos')} en que dijiste la causa, no coincidía con lo que apuntan las señales.`,
+      `En ${mismatches} de ${plural(total, 'caso', 'casos')} en que marcaste el motivo, no coincidía con lo que apuntan las señales.`,
     helpful: 'Me sirve',
     notHelpful: 'No me ayuda',
     answered: {

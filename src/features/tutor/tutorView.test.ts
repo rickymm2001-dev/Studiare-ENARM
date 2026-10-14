@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
 import { newId } from '@/data/testing/fixtures';
-import { buildTutorView, type TutorViewInput } from './tutorView';
+import { biasMotives, buildTutorView, type TutorViewInput } from './tutorView';
 import { answered, event, minute, option, question } from './testing/fixtures';
 
 const NOW = new Date(minute(60 * 24));
@@ -119,5 +119,53 @@ describe('vista del tutor', () => {
       have: 0,
       need: DEFAULT_THRESHOLDS.bias.minTaggedErrors,
     });
+  });
+});
+
+describe('motivos en los consejos por trampa (B5)', () => {
+  it('cada trampa dice el motivo que más marcó en sus errores, con el último de cada error', () => {
+    const questions = Array.from({ length: 3 }, () => question({ id: newId() }));
+    const trap = (q: (typeof questions)[number]) => ({
+      ...option(newId(), false, 'Mala'),
+      questionVersionId: q.id,
+    });
+    const traps = questions.map(trap);
+    const [first, second, third] = questions as [
+      (typeof questions)[number],
+      (typeof questions)[number],
+      (typeof questions)[number],
+    ];
+    const motive = (
+      q: (typeof questions)[number],
+      cause: 'knowledge' | 'overconfidence',
+      at: number,
+    ) => event('cause_reported', { targetKind: 'question', targetId: q.id, cause }, at);
+    const events: AppEvent[] = [
+      answered(first, traps[0]?.id ?? '', false, minute(0)),
+      // Cambió de Conocimiento a Exceso de confianza, así que cuenta el último
+      motive(first, 'knowledge', minute(1)),
+      motive(first, 'overconfidence', minute(2)),
+      answered(second, traps[1]?.id ?? '', false, minute(3)),
+      motive(second, 'overconfidence', minute(4)),
+      answered(third, traps[2]?.id ?? '', false, minute(5)),
+      motive(third, 'knowledge', minute(6)),
+    ];
+    const bank = {
+      questions: new Map(questions.map((q) => [q.id, q])),
+      options: new Map(traps.map((o) => [o.id, o])),
+      cases: new Map(),
+    };
+    expect(biasMotives(events, bank).get('anchoring')).toEqual({
+      motive: 'overconfidence',
+      count: 2,
+      total: 3,
+    });
+    // Sin motivos marcados no dice nada
+    expect(
+      biasMotives(
+        events.filter((item) => item.type !== 'cause_reported'),
+        bank,
+      ).size,
+    ).toBe(0);
   });
 });

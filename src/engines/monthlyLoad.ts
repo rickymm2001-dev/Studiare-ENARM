@@ -9,8 +9,9 @@
 // Método. Cada repaso (card_reviewed) y cada cambio de fecha (cards_rescheduled) deja una cita para
 // esa tarjeta en su nueva fecha de vencimiento. La cita cuenta como programada en el mes de esa fecha
 // si llegó su día antes de que la tarjeta se volviera a programar. Si el alumno la repasó antes de
-// tiempo o la cambió de fecha, la cita vieja ya no cuenta y cuenta la nueva. La última cita de cada
-// tarjeta cuenta aunque todavía no llegue, siempre que la tarjeta siga activa y no esté suspendida.
+// tiempo o la cambió de fecha, la cita vieja ya no cuenta y cuenta la nueva. Reiniciar una tarjeta
+// (cards_reset) la deja sin cita. La última cita de cada tarjeta cuenta aunque todavía no llegue,
+// siempre que la tarjeta siga activa y no esté suspendida.
 // Realizados son los card_reviewed de cada mes. Los meses usan el día de estudio, que corta a las
 // 4 a. m. en la zona del alumno, igual que el resto de la app.
 import type { AppEvent } from '@/data/schemas/events';
@@ -83,6 +84,16 @@ export function monthlyReviewLoad(input: {
       for (const moved of event.payload.cards) {
         // Solo se mueve lo que ya tenía fecha, igual que en el resto de la app
         if (appointments.has(moved.cardId)) reschedule(moved.cardId, moved.to, event.at);
+      }
+    } else if (event.type === 'cards_reset') {
+      // Una tarjeta reiniciada vuelve a ser nueva y se queda sin cita. La cita de antes cuenta si ya
+      // había llegado su día, como cuando se cambia de fecha
+      for (const cardId of event.payload.cardIds) {
+        const previous = appointments.get(cardId);
+        if (previous !== undefined && Date.parse(previous) <= Date.parse(event.at)) {
+          count(scheduled, monthOf(previous));
+        }
+        appointments.delete(cardId);
       }
     }
   }
