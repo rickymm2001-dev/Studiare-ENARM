@@ -1,4 +1,5 @@
-// Datos opcionales de la cuenta (D-068). Se usan al registrarse y en Perfil.
+// Datos opcionales de la cuenta (D-068). Se usan al registrarse y en Perfil. La especialidad que busca
+// va aparte y a la vista en los dos lugares (B9), así que aquí se puede omitir con withSpecialty.
 import type { AccountDetails } from '@/data/usecases/account';
 import { MEXICAN_STATES } from '@/config/mexico';
 import { SPECIALTIES } from '@/config/specialties';
@@ -11,9 +12,12 @@ const NONE = '';
 export function AccountDetailsFields({
   value,
   onChange,
+  withSpecialty = true,
 }: {
   value: AccountDetails;
   onChange: (next: AccountDetails) => void;
+  /** false cuando la especialidad ya está a la vista en otro campo */
+  withSpecialty?: boolean;
 }) {
   const text = t.account;
   const set = (patch: Partial<AccountDetails>) => {
@@ -76,14 +80,16 @@ export function AccountDetailsFields({
           set({ attempt: event.target.value ? Number(event.target.value) : null });
         }}
       />
-      <SelectField
-        label={text.targetSpecialty}
-        value={value.targetSpecialty ?? NONE}
-        options={optional(SPECIALTIES.map(([key, name]) => ({ value: key, label: name })))}
-        onChange={(event) => {
-          set({ targetSpecialty: event.target.value || null });
-        }}
-      />
+      {withSpecialty ? (
+        <SelectField
+          label={text.targetSpecialty}
+          value={value.targetSpecialty ?? NONE}
+          options={optional(SPECIALTIES.map(([key, name]) => ({ value: key, label: name })))}
+          onChange={(event) => {
+            set({ targetSpecialty: event.target.value || null });
+          }}
+        />
+      ) : null}
     </div>
   );
 }

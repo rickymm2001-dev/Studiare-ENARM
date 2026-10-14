@@ -12,9 +12,13 @@
 // cuenta se rechaza con una suscripción de Stripe activa (FR002), y Party en la nube (B7) con sus
 // grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
 // (src/data/testing/fakePartyServer.ts). De Storage atiende solo el bucket de la foto de perfil (B2).
+// Desde B9 también el registro por invitación del gancho Before User Created, entrar con Google con un
+// Google simulado, el segundo factor TOTP con su sesión aal2, que con requireMfa es lo único que da su
+// rol al equipo, y la función admin-reset-mfa.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { Role } from '@/data/schemas/common';
 import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
 import {
@@ -42,6 +46,13 @@ export interface FakeUser {
   alias: string;
   role: Role;
   createdAt: string;
+  /** Con qué se creó la cuenta, como app_metadata.provider (B9) */
+  provider: 'email' | 'google';
+  /**
+   * Cuándo confirmó su correo, como auth.users.email_confirmed_at. Pedir el código crea la cuenta sin
+   * confirmar. Se confirma al usar el código o al abrir el enlace, y con Google desde el inicio (B9)
+   */
+  emailConfirmedAt: string | null;
 }
 
 interface Session {
@@ -51,6 +62,8 @@ interface Session {
   accessToken: string;
   refreshToken: string;
   expiresAt: number;
+  /** aal2 después de dar el código del segundo factor (B9) */
+  aal: 'aal1' | 'aal2';
 }
 
 /** Lo que "llegó" a un correo. El enlace abre sesión en el navegador que lo abre y el código en cualquiera */
@@ -109,19 +122,43 @@ export interface FakeSupabaseOptions {
   checkoutError?: CheckoutFailure | null;
   /** Dirección pública de la app, con la que se arman las URL de regreso del pago */
   appUrl?: string;
+  /** Si cualquiera puede crear su cuenta. true por omisión (B9) */
+  registrationOpen?: boolean;
 }
 
 export interface FakeSupabaseServer {
   readonly url: string;
   /** Atiende también las peticiones de otro contexto, como si fuera otro navegador con la misma nube */
   attach(context: BrowserContext): Promise<void>;
-  createUser(input: { email: string; alias?: string; role?: Role }): FakeUser;
+  /**
+   * Crea una cuenta como si ya hubiera completado su registro en otro dispositivo, con su edad confirmada
+   * y el aviso aceptado, igual que las cuentas de antes de B9. Las que crea la app al pedir el código o
+   * al volver de Google nacen sin eso, como en Supabase, y piden Completa tu registro si el perfil nace
+   * sin formulario. registered en false crea una así desde la prueba
+   */
+  createUser(input: {
+    email: string;
+    alias?: string;
+    role?: Role;
+    provider?: 'email' | 'google';
+    registered?: boolean;
+    /** La versión del aviso que aceptó al registrarse. La de la app por omisión */
+    noticeVersion?: string;
+  }): FakeUser;
   userByEmail(email: string): FakeUser | undefined;
   /**
    * Un enlace del correo listo para abrir, como si el alumno hubiera pedido entrar y leído su correo.
-   * Crea la cuenta si no existe. Cada llamada abre una sesión nueva, igual que cada correo de verdad
+   * Crea la cuenta si no existe, ya registrada como con createUser. Cada llamada abre una sesión nueva,
+   * igual que cada correo de verdad
    */
   issueMagicLink(email: string, alias?: string): string;
+  /**
+   * La dirección a la que Supabase Auth regresa al abrir un enlace del correo que venció o que ya se
+   * usó, con el error en el fragmento como lo arma prepErrorRedirectURL de supabase/auth
+   */
+  expiredMagicLink(): string;
+  /** Las versiones del aviso que la cuenta aceptó en privacy_acceptances, en orden */
+  acceptancesOf(email: string): string[];
   /** Todos los correos "enviados", en orden */
   readonly emails: readonly FakeEmail[];
   /** El último correo que se "mandó" a esa dirección */
@@ -150,6 +187,38 @@ export interface FakeSupabaseServer {
   founderSeats: number;
   checkoutError: CheckoutFailure | null;
   portalError: PortalFailure | null;
+  /**
+   * Si cualquiera puede crear su cuenta. Con false, el gancho Before User Created solo deja pasar los
+   * correos invitados, con el código del correo y con Google (B9). true por omisión, para que las
+   * pruebas de antes de B9 sigan creando cuentas
+   */
+  registrationOpen: boolean;
+  /** Invita un correo, como el admin desde Usuarios */
+  invite(email: string): void;
+  readonly invitations: readonly string[];
+  /**
+   * La cuenta de Google con la que el Google simulado regresa a la app. null simula que el alumno
+   * canceló en Google
+   */
+  googleAccount: string | null;
+  /** El código que acepta el segundo factor simulado, como si saliera de la app de autenticación */
+  readonly totpCode: string;
+  factorsOf(email: string): { id: string; status: 'verified' | 'unverified' }[];
+  /** La respuesta de cómo nos conoció que guardó record_signup_source */
+  signupSourceOf(email: string): { channel: string; influencerCode: string | null } | null;
+  /**
+   * Guarda la respuesta de cómo nos conoció de una cuenta, como record_signup_source desde su
+   * navegador. La primera gana. Para llenar los conteos del admin sin un registro por cada cuenta
+   */
+  answerSignupSource(email: string, channel: string, influencerCode?: string): boolean;
+  /** La fila de private_accounts de la cuenta */
+  accountOf(email: string): Json | null;
+  /** Cambia una clave de platform_settings, como feature_flags o registration_open */
+  setSetting(key: string, value: unknown): void;
+  /** Cuántas sesiones abiertas tiene la cuenta */
+  sessionsOf(email: string): number;
+  /** Deja a la cuenta con un factor TOTP ya verificado, como si lo hubiera dado de alta antes */
+  enrollFactor(email: string): void;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -198,6 +267,22 @@ const authError = (status: number, errorCode: string, message: string): Reply =>
   json({ code: status, error_code: errorCode, msg: message }, status);
 
 const NO_SESSION = pgError('28000', 'Hace falta iniciar sesión');
+/** El mensaje del gancho Before User Created de la migración 20261020000001, con su marca */
+const INVITATION_REQUIRED =
+  'Studiare está abierto solo con invitación y este correo no tiene una (invitation_required)';
+/** El código que da la app de autenticación simulada */
+const TOTP_CODE = '246810';
+const HEARD_FROM = [
+  'instagram',
+  'tiktok',
+  'facebook',
+  'youtube',
+  'influencer',
+  'friend',
+  'google',
+  'university',
+  'other',
+];
 const NOT_ACTIVE_DEVICE = pgError('42501', 'Este dispositivo no es el activo de la cuenta');
 
 const SESSION_SECONDS = 3600;
@@ -243,7 +328,12 @@ function base64Url(value: string): string {
 }
 
 /** Token de acceso con la forma de Supabase. La firma es fija porque nadie la verifica */
-function accessTokenFor(user: FakeUser, sessionId: string, expiresAt: number): string {
+function accessTokenFor(
+  user: FakeUser,
+  sessionId: string,
+  expiresAt: number,
+  aal: Session['aal'] = 'aal1',
+): string {
   const issuedAt = Math.floor(expiresAt / 1000) - SESSION_SECONDS;
   return [
     base64Url(JSON.stringify({ alg: 'HS256', typ: 'JWT' })),
@@ -256,8 +346,11 @@ function accessTokenFor(user: FakeUser, sessionId: string, expiresAt: number): s
         iat: issuedAt,
         email: user.email,
         role: 'authenticated',
-        aal: 'aal1',
-        amr: [{ method: 'otp', timestamp: issuedAt }],
+        aal,
+        amr: [
+          { method: user.provider === 'google' ? 'oauth' : 'otp', timestamp: issuedAt },
+          ...(aal === 'aal2' ? [{ method: 'totp', timestamp: issuedAt }] : []),
+        ],
         session_id: sessionId,
         is_anonymous: false,
       }),
@@ -517,6 +610,15 @@ interface ClientErrorRow extends Json {
   last_seen: string;
 }
 
+interface FactorRow {
+  id: string;
+  factor_type: 'totp';
+  status: 'verified' | 'unverified';
+  friendly_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 type Auth =
   { kind: 'anon' } | { kind: 'invalid' } | { kind: 'user'; user: FakeUser; session: Session };
 
@@ -573,6 +675,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const clientErrors: ClientErrorRow[] = [];
   /** Fotos de perfil del bucket avatars, por ruta <id>/avatar.jpg */
   const avatarObjects = new Map<string, Buffer>();
+  /** B9. Correos invitados, factores TOTP por cuenta y respuestas de cómo nos conoció */
+  const invitations = new Set<string>();
+  const factors = new Map<string, FactorRow[]>();
+  const signupSources = new Map<string, { channel: string; influencerCode: string | null }>();
   const calls: RecordedCall[] = [];
   // Party en la nube. El alias sale de profiles, como en la base
   // Party es de los planes de pago, como party_open en la base (B8, 20261021000001_free_plan_locks.sql)
@@ -589,7 +695,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     founderSeats: options.founderSeats ?? 100,
     checkoutError: options.checkoutError ?? null,
     portalError: null as PortalFailure | null,
+    googleAccount: null as string | null,
   };
+  // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
+  // el admin lo cambie desde Usuarios
+  settings.set('registration_open', {
+    value: options.registrationOpen ?? true,
+    updatedAt: new Date().toISOString(),
+  });
 
   const nextId = (prefix: string) => {
     counter += 1;
@@ -601,17 +714,28 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const userByEmail = (email: string): FakeUser | undefined =>
     [...users.values()].find((user) => user.email === email.trim().toLowerCase());
 
-  function createUser(input: { email: string; alias?: string; role?: Role }): FakeUser {
+  function createUser(input: {
+    email: string;
+    alias?: string;
+    role?: Role;
+    provider?: 'email' | 'google';
+    registered?: boolean;
+    noticeVersion?: string;
+  }): FakeUser {
     const email = normalizeEmail(input.email);
     if (!email) throw new Error(`Correo inválido para el Supabase simulado: ${input.email}`);
     const existing = userByEmail(email);
     if (existing) return existing;
+    const createdAt = new Date(now()).toISOString();
+    const provider = input.provider ?? 'email';
     const user: FakeUser = {
       id: randomUUID(),
       email,
       alias: nonEmpty(input.alias?.trim(), 'Alumno'),
       role: input.role ?? 'student',
-      createdAt: new Date(now()).toISOString(),
+      createdAt,
+      provider,
+      emailConfirmedAt: (input.registered ?? true) || provider === 'google' ? createdAt : null,
     };
     users.set(user.id, user);
     // Lo mismo que hace el trigger handle_new_user
@@ -626,10 +750,29 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       target_specialty: null,
       avatar: { kind: 'initials' },
       avatar_changed_at: null,
+      details_changed_at: null,
+      // Una cuenta que ya completó su registro en otro dispositivo trae su edad y su aviso aceptado
+      adult_confirmed_at: (input.registered ?? true) ? user.createdAt : null,
       updated_at: user.createdAt,
     });
+    if (input.registered ?? true) {
+      privacyAcceptances.push({
+        id: privacyAcceptances.length + 1,
+        user_id: user.id,
+        notice_version: input.noticeVersion ?? PRIVACY_NOTICE_VERSION,
+        accepted_at: user.createdAt,
+        marketing_opt_out: false,
+      });
+    }
     return user;
   }
+
+  /**
+   * Lo que haría el gancho Before User Created antes de crear una cuenta (B9). Con el registro abierto
+   * o con invitación deja pasar
+   */
+  const signupAllowed = (email: string) =>
+    settings.get('registration_open')?.value === true || invitations.has(email);
 
   function createSession(user: FakeUser): Session {
     const id = randomUUID();
@@ -640,21 +783,23 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       accessToken: accessTokenFor(user, id, expiresAt),
       refreshToken: `rt_${randomUUID()}`,
       expiresAt,
+      aal: 'aal1',
     };
     sessions.set(session.accessToken, session);
     return session;
   }
 
-  function rotateSession(session: Session): Session {
+  function rotateSession(session: Session, aal: Session['aal'] = session.aal): Session {
     const user = users.get(session.userId);
     if (!user) throw new Error('Sesión sin usuario');
     sessions.delete(session.accessToken);
     const expiresAt = now() + SESSION_SECONDS * 1000;
     const next: Session = {
       ...session,
-      accessToken: accessTokenFor(user, session.id, expiresAt),
+      accessToken: accessTokenFor(user, session.id, expiresAt, aal),
       refreshToken: `rt_${randomUUID()}`,
       expiresAt,
+      aal,
     };
     sessions.set(next.accessToken, next);
     return next;
@@ -666,13 +811,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       aud: 'authenticated',
       role: 'authenticated',
       email: user.email,
-      email_confirmed_at: user.createdAt,
+      email_confirmed_at: user.emailConfirmedAt,
       phone: '',
-      confirmed_at: user.createdAt,
+      confirmed_at: user.emailConfirmedAt,
       last_sign_in_at: new Date(now()).toISOString(),
-      app_metadata: { provider: 'email', providers: ['email'] },
+      app_metadata: { provider: user.provider, providers: [user.provider] },
       user_metadata: { alias: user.alias, email: user.email, email_verified: true, sub: user.id },
       identities: [],
+      factors: factors.get(user.id) ?? [],
       created_at: user.createdAt,
       updated_at: user.createdAt,
       is_anonymous: false,
@@ -724,15 +870,35 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (!session || session.expiresAt <= now()) return { kind: 'invalid' };
     const user = users.get(session.userId);
     if (!user) return { kind: 'invalid' };
+    // Usar la sesión del enlace es haberlo abierto, que en Supabase confirma el correo
+    user.emailConfirmedAt ??= new Date(now()).toISOString();
     return { kind: 'user', user, session };
   }
 
-  const isAdmin = (user: FakeUser) => user.role === 'admin' || user.role === 'owner';
+  /**
+   * Si el servidor pide segundo factor al equipo, con la bandera requireMfa de feature_flags, como
+   * staff_mfa_required de la migración 20261020000001. Solo el booleano true la prende
+   */
+  function mfaRequired(): boolean {
+    const flags = settings.get('feature_flags')?.value;
+    return isRecord(flags) && flags.requireMfa === true;
+  }
+
+  /** El rol con el que cuenta cada permiso. Sin aal2 el equipo cuenta como alumno (current_app_role) */
+  const roleOf = (user: FakeUser, session: Session | null): Role =>
+    user.role === 'student' || !mfaRequired() || session?.aal === 'aal2' ? user.role : 'student';
+
+  const isAdmin = (user: FakeUser, session: Session | null) => {
+    const role = roleOf(user, session);
+    return role === 'admin' || role === 'owner';
+  };
 
   function deleteUser(userId: string): void {
     party.forgetUser(userId);
     users.delete(userId);
     accounts.delete(userId);
+    factors.delete(userId);
+    signupSources.delete(userId);
     for (const [token, session] of sessions) if (session.userId === userId) sessions.delete(token);
     deviceSessions.delete(userId);
     subscriptions.delete(userId);
@@ -765,7 +931,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   // ------------------------------------------------------------------ dispositivo único
 
   function isActiveDevice(user: FakeUser, session: Session): boolean {
-    if (isAdmin(user)) return true;
+    if (isAdmin(user, session)) return true;
     const row = deviceSessions.get(user.id);
     const held = row?.sessionId;
     if (held === undefined || held === null) return true;
@@ -1199,8 +1365,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return empty(204);
   }
 
-  function adminListUsers(user: FakeUser, args: Json): Reply {
-    if (!isAdmin(user)) return pgError('42501', 'Solo un administrador puede ver los usuarios');
+  function adminListUsers(user: FakeUser, session: Session, args: Json): Reply {
+    if (!isAdmin(user, session)) {
+      return pgError('42501', 'Solo un administrador puede ver los usuarios');
+    }
     const query = asString(args.p_query)?.trim().toLowerCase() ?? '';
     const role = isRole(args.p_role) ? args.p_role : null;
     const limit = Math.min(Math.max(typeof args.p_limit === 'number' ? args.p_limit : 50, 1), 100);
@@ -1233,16 +1401,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     );
   }
 
-  function setUserRole(user: FakeUser, args: Json): Reply {
+  function setUserRole(user: FakeUser, session: Session, args: Json): Reply {
     const target = asString(args.target);
     const next = args.new_role;
-    if (!isAdmin(user)) return pgError('42501', 'Solo un administrador puede cambiar roles');
+    if (!isAdmin(user, session))
+      return pgError('42501', 'Solo un administrador puede cambiar roles');
     if (target === user.id) return pgError('42501', 'Nadie cambia su propio rol');
     if (!isRole(next)) return pgError('22P02', 'invalid input value for enum app_role');
     if (next === 'owner') return pgError('42501', 'El rol de dueño no se asigna desde la app');
     const other = target === null ? undefined : users.get(target);
     if (other?.role === 'owner') return pgError('42501', 'Nadie puede quitar al dueño');
-    if ((other?.role === 'admin' || next === 'admin') && user.role !== 'owner') {
+    if ((other?.role === 'admin' || next === 'admin') && roleOf(user, session) !== 'owner') {
       return pgError('42501', 'Solo el dueño nombra o quita administradores');
     }
     if (other) other.role = next;
@@ -1290,6 +1459,47 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return 'error' in reply ? pgError(reply.error.code, reply.error.message) : json(reply.data);
   }
 
+  // ------------------------------------------------------------------ cuentas y acceso (B9)
+
+  /** record_signup_source. La primera respuesta gana y el canal sale de la lista cerrada */
+  function recordSignupSource(user: FakeUser, args: Json): Reply {
+    const channel = asString(args.p_channel) ?? '';
+    const code = (asString(args.p_influencer_code) ?? '').trim().toUpperCase();
+    if (!HEARD_FROM.includes(channel)) {
+      return pgError('23514', 'violates check constraint "signup_sources_channel_check"');
+    }
+    if (code !== '' && !/^[A-Z0-9_-]{2,32}$/.test(code)) {
+      return pgError('23514', 'violates check constraint "signup_sources_influencer_code_check"');
+    }
+    if (signupSources.has(user.id)) return json(false);
+    signupSources.set(user.id, { channel, influencerCode: code === '' ? null : code });
+    return json(true);
+  }
+
+  /** Conteos de cómo nos conocieron, por canal o por código. Nunca filas sueltas */
+  function sourceCounts(by: 'channel' | 'code'): Json[] {
+    const totals = new Map<string, number>();
+    for (const answer of signupSources.values()) {
+      const key = by === 'channel' ? answer.channel : answer.influencerCode;
+      if (key !== null) totals.set(key, (totals.get(key) ?? 0) + 1);
+    }
+    return [...totals.entries()].map(([key, total]) => ({ [by]: key, total }));
+  }
+
+  /** admin_release_device. Quita el dispositivo y deja constancia de que se liberó */
+  function releaseDevice(target: string): Reply {
+    const had = deviceSessions.delete(target);
+    deviceClaims.push({
+      userId: target,
+      deviceId: '',
+      label: '',
+      at: now(),
+      kind: 'release',
+      rejected: false,
+    });
+    return json(had);
+  }
+
   // ------------------------------------------------------------------ rpc
 
   function handleRpc(name: string, auth: Auth, body: unknown): Reply {
@@ -1328,9 +1538,31 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       case 'delete_my_account':
         return requireActiveDevice() ?? deleteMyAccount(user);
       case 'admin_list_users':
-        return adminListUsers(user, args);
+        return adminListUsers(user, session, args);
       case 'set_user_role':
-        return setUserRole(user, args);
+        return setUserRole(user, session, args);
+      case 'record_signup_source':
+        return requireActiveDevice() ?? recordSignupSource(user, args);
+      case 'admin_list_invitations':
+        return isAdmin(user, session)
+          ? json(
+              [...invitations].map((email) => ({
+                email,
+                invited_at: new Date(now()).toISOString(),
+                // Como admin_list_invitations, solo cuenta quien confirmó su correo
+                registered: (userByEmail(email)?.emailConfirmedAt ?? null) !== null,
+              })),
+            )
+          : pgError('42501', 'Solo un administrador puede ver las invitaciones');
+      case 'admin_signup_source_counts':
+      case 'admin_influencer_code_counts':
+        return isAdmin(user, session)
+          ? json(sourceCounts(name === 'admin_signup_source_counts' ? 'channel' : 'code'))
+          : pgError('42501', 'Solo un administrador puede ver de dónde llegan los alumnos');
+      case 'admin_release_device':
+        return isAdmin(user, session)
+          ? releaseDevice(asString(args.target) ?? '')
+          : pgError('42501', 'Solo un administrador puede liberar una cuenta');
       case 'party_open':
       case 'party_overview':
       case 'party_create_group':
@@ -1362,7 +1594,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   /** Las filas que las políticas por fila dejan ver a quien llama */
   function visibleRows(table: string, auth: Auth): Json[] | null {
     const user = auth.kind === 'user' ? auth.user : null;
+    const session = auth.kind === 'user' ? auth.session : null;
     const active = auth.kind === 'user' && isActiveDevice(auth.user, auth.session);
+    const admin = user !== null && isAdmin(user, session);
     const own = <T extends { userId: string }>(list: T[]) =>
       user ? list.filter((item) => item.userId === user.id) : [];
     switch (table) {
@@ -1373,7 +1607,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
           updated_at: item.updatedAt,
         }));
       case 'user_roles':
-        return (user ? (isAdmin(user) ? [...users.values()] : [user]) : []).map((item) => ({
+        return (user ? (admin ? [...users.values()] : [user]) : []).map((item) => ({
           user_id: item.id,
           role: item.role,
           updated_at: item.createdAt,
@@ -1381,7 +1615,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         }));
       case 'profiles':
         // Por columnas la API solo lee id y alias de cualquier perfil (20261018000001)
-        return (user ? (isAdmin(user) ? [...users.values()] : [user]) : []).map((item) => ({
+        return (user ? (admin ? [...users.values()] : [user]) : []).map((item) => ({
           id: item.id,
           alias: item.alias,
         }));
@@ -1462,7 +1696,15 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
             }))
           : [];
       case 'client_errors':
-        return user && isAdmin(user) ? clientErrors : [];
+        return admin ? clientErrors : [];
+      case 'signup_invitations':
+        return admin
+          ? [...invitations].map((email) => ({
+              email,
+              invited_by: null,
+              created_at: new Date(now()).toISOString(),
+            }))
+          : [];
       default:
         return null;
     }
@@ -1484,7 +1726,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       return rowsReply(rows, request, url);
     }
     const user = auth.kind === 'user' ? auth.user : null;
+    const session = auth.kind === 'user' ? auth.session : null;
     const active = auth.kind === 'user' && isActiveDevice(auth.user, auth.session);
+    const admin = user !== null && isAdmin(user, session);
     const stamp = new Date(now()).toISOString();
     if (table === 'privacy_acceptances' && method === 'POST' && user) {
       const incoming = Array.isArray(body) ? (body as unknown[]) : [body];
@@ -1509,7 +1753,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       const current = accounts.get(user.id);
       const filtered = applyQuery(current ? [current] : [], url);
       if (current && filtered.length > 0 && active) {
-        accounts.set(user.id, { ...current, ...body, user_id: user.id, email: current.email });
+        accounts.set(user.id, {
+          ...current,
+          ...body,
+          user_id: user.id,
+          email: current.email,
+          // La confirmación de mayoría de edad se queda con la primera fecha, como el disparador
+          adult_confirmed_at: current.adult_confirmed_at ?? body.adult_confirmed_at ?? null,
+        });
       }
       return empty(204);
     }
@@ -1519,7 +1770,28 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       if (filtered.length > 0 && alias) user.alias = alias.slice(0, 40);
       return empty(204);
     }
-    if (table === 'platform_settings' && user && isAdmin(user)) {
+    if (table === 'signup_invitations' && user) {
+      if (!admin) return pgError('42501', 'new row violates row-level security policy');
+      if (method === 'POST' && isRecord(body)) {
+        const email = normalizeEmail(body.email);
+        if (!email)
+          return pgError('23514', 'violates check constraint "signup_invitations_email_check"');
+        if (invitations.has(email)) {
+          return pgError(
+            '23505',
+            'duplicate key value violates unique constraint "signup_invitations_pkey"',
+          );
+        }
+        invitations.add(email);
+        return empty(201);
+      }
+      if (method === 'DELETE') {
+        const email = url.searchParams.get('email')?.replace(/^eq\./, '');
+        if (email !== undefined) invitations.delete(email);
+        return empty(204);
+      }
+    }
+    if (table === 'platform_settings' && admin) {
       if (method === 'POST' && isRecord(body) && typeof body.key === 'string') {
         settings.set(body.key, { value: body.value, updatedAt: stamp });
         return empty(201);
@@ -1553,8 +1825,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         if (args.create_user === false) {
           return authError(422, 'otp_disabled', 'Signups not allowed for otp');
         }
+        if (!signupAllowed(email)) return authError(403, 'unexpected_failure', INVITATION_REQUIRED);
         const alias = isRecord(args.data) ? asString(args.data.alias) : null;
-        user = createUser({ email, alias: alias ?? undefined });
+        // Como Supabase, pedir el código crea la cuenta sin registro. Lo completa la app
+        user = createUser({ email, alias: alias ?? undefined, registered: false });
       }
       sendEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`);
       return json({});
@@ -1572,6 +1846,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         return authError(403, 'otp_expired', 'Token has expired or is invalid');
       }
       otps.delete(email);
+      user.emailConfirmedAt ??= new Date(now()).toISOString();
       return json(sessionJson(createSession(user), user));
     }
     if (path === '/user' && request.method() === 'GET') {
@@ -1608,7 +1883,112 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       const next = rotateSession(session);
       return json(sessionJson(next, user));
     }
+    if (path === '/factors' || path.startsWith('/factors/')) return handleFactors(path, auth, args);
     return authError(404, 'not_found', `Ruta de auth sin simular: ${path}`);
+  }
+
+  /**
+   * Segundo factor TOTP (B9). Alta, reto y verificación como Supabase Auth. Verificar el código deja la
+   * misma sesión en aal2 con un token nuevo, así el dispositivo activo no cambia
+   */
+  function handleFactors(path: string, auth: Auth, args: Json): Reply {
+    if (auth.kind !== 'user')
+      return authError(401, 'no_authorization', 'This endpoint requires a valid JWT');
+    const { user, session } = auth;
+    const mine = factors.get(user.id) ?? [];
+    if (path === '/factors') {
+      const stamp = new Date(now()).toISOString();
+      const factor: FactorRow = {
+        id: randomUUID(),
+        factor_type: 'totp',
+        status: 'unverified',
+        friendly_name: asString(args.friendly_name) ?? 'Studiare',
+        created_at: stamp,
+        updated_at: stamp,
+      };
+      factors.set(user.id, [...mine, factor]);
+      return json({
+        id: factor.id,
+        type: 'totp',
+        friendly_name: factor.friendly_name,
+        totp: {
+          qr_code:
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#fff"/><rect x="2" y="2" width="6" height="6" fill="#000"/></svg>',
+          secret: 'JBSWY3DPEHPK3PXP',
+          uri: `otpauth://totp/Studiare:${user.email}?secret=JBSWY3DPEHPK3PXP&issuer=Studiare`,
+        },
+      });
+    }
+    const match = /^\/factors\/([^/]+)(\/challenge|\/verify)?$/.exec(path);
+    const factor = mine.find((item) => item.id === match?.[1]);
+    if (!match || !factor) return authError(404, 'mfa_factor_not_found', 'Factor not found');
+    if (match[2] === undefined) {
+      factors.set(
+        user.id,
+        mine.filter((item) => item.id !== factor.id),
+      );
+      return json({ id: factor.id });
+    }
+    if (match[2] === '/challenge') {
+      return json({
+        id: randomUUID(),
+        type: 'totp',
+        expires_at: Math.floor(now() / 1000) + 300,
+      });
+    }
+    if (asString(args.code) !== TOTP_CODE) {
+      return authError(422, 'mfa_verification_failed', 'Invalid TOTP code entered');
+    }
+    factor.status = 'verified';
+    factor.updated_at = new Date(now()).toISOString();
+    const upgraded = rotateSession(session, 'aal2');
+    return json(sessionJson(upgraded, user));
+  }
+
+  /**
+   * El Google simulado (B9). Supabase lleva al navegador a /authorize, Google regresa a la app con la
+   * sesión en el fragmento, o con el error en la consulta y el fragmento. El error tiene la forma que
+   * arma redirectErrors de supabase/auth (internal/api/external.go). La consulta lleva error,
+   * error_description y, si el error es de Supabase, error_code aunque vaya vacío. El fragmento repite
+   * los que no van vacíos y agrega sb. El código de estado del error se vuelve error con oauthErrorMap,
+   * así que el 403 del gancho llega como access_denied. El gancho no pone código, y cancelar en Google
+   * llega como el access_denied de Google, sin código ni descripción
+   */
+  function handleAuthorize(url: URL): Reply {
+    const back = url.searchParams.get('redirect_to') ?? `${appUrl}/`;
+    const fail = (error: string, description: string, code: string | null) => {
+      const query = new URLSearchParams({ error, error_description: description });
+      if (code !== null) query.set('error_code', code);
+      const hash = new URLSearchParams({ error });
+      if (description !== '') hash.set('error_description', description);
+      if (code) hash.set('error_code', code);
+      hash.set('sb', '');
+      return redirect(`${back}?${query.toString()}#${hash.toString()}`);
+    };
+    if (url.searchParams.get('provider') !== 'google') {
+      return authError(400, 'validation_failed', 'Unsupported provider: provider is not enabled');
+    }
+    if (server.googleAccount === null) return fail('access_denied', '', null);
+    const email = normalizeEmail(server.googleAccount);
+    if (!email) {
+      return fail('server_error', 'Error getting user email from external provider', '');
+    }
+    let user = userByEmail(email);
+    if (!user) {
+      // El gancho Before User Created rechaza con 403 y sin código de error
+      if (!signupAllowed(email)) return fail('access_denied', INVITATION_REQUIRED, '');
+      user = createUser({ email, provider: 'google', registered: false });
+    }
+    const session = createSession(user);
+    const params = new URLSearchParams({
+      access_token: session.accessToken,
+      expires_at: String(Math.floor(session.expiresAt / 1000)),
+      expires_in: String(SESSION_SECONDS),
+      provider_token: 'token-de-google-simulado',
+      refresh_token: session.refreshToken,
+      token_type: 'bearer',
+    });
+    return redirect(`${back}#${params.toString()}`);
   }
 
   // ------------------------------------------------------------------ edge functions
@@ -1694,6 +2074,18 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       };
       checkouts.set(checkout.id, checkout);
       return json({ url: `${FAKE_GATEWAY_ORIGIN}/c/pay/${checkout.id}` });
+    }
+    if (name === 'admin-reset-mfa') {
+      const target = isRecord(body) ? asString(body.userId) : null;
+      if (!target) return json({ error: 'invalid' }, 400);
+      if (roleOf(user, auth.session) !== 'owner') return json({ error: 'not_owner' }, 403);
+      if (target === user.id) return json({ error: 'self' }, 403);
+      if (!users.has(target)) return json({ error: 'not_found' }, 404);
+      const removed = factors.get(target)?.length ?? 0;
+      factors.delete(target);
+      // Borrar un factor verificado cierra las sesiones de esa persona
+      for (const [token, item] of sessions) if (item.userId === target) sessions.delete(token);
+      return json({ removed });
     }
     if (name === 'create-portal-session') {
       if (server.portalError) {
@@ -1800,6 +2192,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   function handleSupabase(request: Request): Reply {
     const url = new URL(request.url());
     if (request.method() === 'OPTIONS') return preflight(request);
+    // Entrar con Google es una navegación del navegador y no lleva la llave pública
+    if (url.pathname === '/auth/v1/authorize' && request.method() === 'GET') {
+      return handleAuthorize(url);
+    }
     const apiKey = request.headers().apikey ?? url.searchParams.get('apikey');
     if (apiKey !== FAKE_SUPABASE_ANON_KEY) {
       return json(
@@ -1883,6 +2279,21 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     issueMagicLink(email, alias) {
       const user = createUser({ email, ...(alias === undefined ? {} : { alias }) });
       return sendEmail(user, `${appUrl}/`).link;
+    },
+    expiredMagicLink() {
+      const hash = new URLSearchParams({
+        error: 'access_denied',
+        error_code: 'otp_expired',
+        error_description: 'Email link is invalid or has expired',
+        sb: '',
+      });
+      return `${appUrl}/#${hash.toString()}`;
+    },
+    acceptancesOf(email) {
+      const user = emailOf(email);
+      return privacyAcceptances
+        .filter((row) => row.user_id === user?.id)
+        .map((row) => asString(row.notice_version) ?? '');
     },
     emails,
     lastEmail(email) {
@@ -1977,6 +2388,75 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     set portalError(value) {
       server.portalError = value;
+    },
+    get registrationOpen() {
+      return settings.get('registration_open')?.value === true;
+    },
+    set registrationOpen(value) {
+      settings.set('registration_open', { value, updatedAt: new Date(now()).toISOString() });
+    },
+    invite(email) {
+      const clean = normalizeEmail(email);
+      if (!clean) throw new Error(`Correo inválido para invitar: ${email}`);
+      invitations.add(clean);
+    },
+    get invitations() {
+      return [...invitations];
+    },
+    get googleAccount() {
+      return server.googleAccount;
+    },
+    set googleAccount(value) {
+      server.googleAccount = value;
+    },
+    totpCode: TOTP_CODE,
+    factorsOf(email) {
+      const user = emailOf(email);
+      return (user ? (factors.get(user.id) ?? []) : []).map((factor) => ({
+        id: factor.id,
+        status: factor.status,
+      }));
+    },
+    signupSourceOf(email) {
+      const user = emailOf(email);
+      return (user && signupSources.get(user.id)) ?? null;
+    },
+    answerSignupSource(email, channel, influencerCode) {
+      const user = emailOf(email) ?? createUser({ email });
+      const reply = recordSignupSource(user, {
+        p_channel: channel,
+        p_influencer_code: influencerCode ?? null,
+      });
+      if (reply.status >= 400)
+        throw new Error(`Respuesta inválida de cómo nos conoció: ${channel}`);
+      return reply.body === 'true';
+    },
+    accountOf(email) {
+      const user = emailOf(email);
+      return (user && accounts.get(user.id)) ?? null;
+    },
+    setSetting(key, value) {
+      settings.set(key, { value, updatedAt: new Date(now()).toISOString() });
+    },
+    sessionsOf(email) {
+      const user = emailOf(email);
+      return [...sessions.values()].filter((session) => session.userId === user?.id).length;
+    },
+    enrollFactor(email) {
+      const user = emailOf(email);
+      if (!user) throw new Error(`No existe la cuenta ${email}`);
+      const stamp = new Date(now()).toISOString();
+      factors.set(user.id, [
+        ...(factors.get(user.id) ?? []),
+        {
+          id: randomUUID(),
+          factor_type: 'totp',
+          status: 'verified',
+          friendly_name: 'Studiare',
+          created_at: stamp,
+          updated_at: stamp,
+        },
+      ]);
     },
   };
 }

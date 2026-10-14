@@ -30,6 +30,7 @@ test('nube caída. Se crea la cuenta en el navegador y todas las pantallas abren
   await page.goto(SCREENS.onboarding.path);
   await page.getByLabel(t.onboarding.alias, { exact: true }).fill('Sin nube');
   await page.getByLabel(t.account.email, { exact: true }).fill('sinnube@ejemplo.mx');
+  await page.getByLabel(t.accounts.signup.adultAccept(18)).check();
   await page.getByLabel(t.onboarding.privacyAccept).check();
   await page.getByRole('button', { name: t.onboarding.create }).click();
   await expect(page.getByText(t.cloud.failedTitle)).toBeVisible({ timeout: 60_000 });

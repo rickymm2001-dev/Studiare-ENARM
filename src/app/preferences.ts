@@ -126,6 +126,11 @@ interface PreferencesState extends DevicePreferences {
   setAppearance: (patch: Partial<DevicePreferences['appearance']>) => void;
   setNavCollapsed: (navCollapsed: boolean) => void;
   signIn: (userId: string) => void;
+  /**
+   * Deja este navegador sin perfil abierto, sin cerrar la sesión de la nube. La usa el puente mientras
+   * un perfil que nació sin formulario completa su registro (B9)
+   */
+  closeLocalSession: () => void;
   signOut: () => void;
 }
 
@@ -155,6 +160,9 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
     },
     signIn: (userId) => {
       update({ sessionUserId: userId });
+    },
+    closeLocalSession: () => {
+      if (get().sessionUserId !== null) update({ sessionUserId: null });
     },
     signOut: () => {
       signOuts += 1;

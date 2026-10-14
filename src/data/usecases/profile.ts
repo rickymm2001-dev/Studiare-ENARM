@@ -26,6 +26,12 @@ export { PRIVACY_NOTICE_VERSION };
 export interface NewProfile {
   alias: string;
   dailyGoal: UserSettings['dailyGoal'];
+  /**
+   * Si la persona vio el aviso al crear el perfil, como en Crear cuenta. Con false, el perfil nace sin
+   * ninguna decisión y sin aceptación del aviso, porque no lo vio, y las registra Completa tu registro
+   * (B9). true si falta
+   */
+  noticeSeen?: boolean;
 }
 
 const PURPOSES: ConsentPurpose[] = ['party', 'ai_analysis', 'anonymized_improvement'];
@@ -35,6 +41,39 @@ const PURPOSES: ConsentPurpose[] = ['party', 'ai_analysis', 'anonymized_improvem
  * un permiso aparte que empieza en no (4.27). Antes se daban todas al crear el perfil
  */
 const INITIAL_CONSENT_STATUS = 'revoked' as const;
+
+/**
+ * Registra cada finalidad apagada bajo la versión del aviso que la persona aceptó, con su evento. Es lo
+ * que pasa al crear el perfil con el aviso a la vista, y lo que hace un dispositivo nuevo cuando la nube
+ * dice que la cuenta ya aceptó una versión en otro (B9)
+ */
+export async function recordInitialConsents(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+  noticeVersion: string,
+): Promise<void> {
+  const now = new Date().toISOString();
+  for (const purpose of PURPOSES) {
+    const status = INITIAL_CONSENT_STATUS;
+    await api.repos.consents.put(
+      ConsentSchema.parse({
+        id: newId(),
+        userId: user.id,
+        purpose,
+        noticeVersion,
+        status,
+        decidedAt: now,
+      }),
+    );
+    await api.recordEvent(
+      createEvent(
+        'consent_changed',
+        { purpose, status, noticeVersion },
+        { userId: user.id, tz: user.timeZone },
+      ),
+    );
+  }
+}
 
 export async function createProfile(
   api: Pick<DataApi, 'repos' | 'recordEvent'>,
@@ -52,26 +91,7 @@ export async function createProfile(
     createdAt: now,
   });
   await api.repos.users.put(user);
-  for (const purpose of PURPOSES) {
-    const status = INITIAL_CONSENT_STATUS;
-    await api.repos.consents.put(
-      ConsentSchema.parse({
-        id: newId(),
-        userId: user.id,
-        purpose,
-        noticeVersion: PRIVACY_NOTICE_VERSION,
-        status,
-        decidedAt: now,
-      }),
-    );
-    await api.recordEvent(
-      createEvent(
-        'consent_changed',
-        { purpose, status, noticeVersion: PRIVACY_NOTICE_VERSION },
-        { userId: user.id, tz: user.timeZone },
-      ),
-    );
-  }
+  if (input.noticeSeen ?? true) await recordInitialConsents(api, user, PRIVACY_NOTICE_VERSION);
   return user;
 }
 
@@ -163,6 +183,19 @@ export async function currentConsents(
   };
   for (const consent of list) result[consent.purpose] = consent.status === 'granted';
   return result;
+}
+
+/**
+ * Registra la decisión de cada finalidad bajo la versión actual del aviso, prendida solo si el alumno
+ * la marcó. La usa Completa tu registro, que es donde un perfil que nació sin formulario acepta el
+ * aviso (B9)
+ */
+export async function decideAllConsents(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+  granted: Partial<Record<ConsentPurpose, boolean>>,
+): Promise<void> {
+  for (const purpose of PURPOSES) await setConsent(api, user, purpose, granted[purpose] === true);
 }
 
 /** Da o retira el consentimiento de una finalidad, con su evento (4.5) */

@@ -2,6 +2,7 @@
 import 'fake-indexeddb/auto';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
@@ -27,7 +28,9 @@ function mount(kind: 'real' | 'demo' = 'real') {
   );
 }
 
+/** La nube de la prueba, con una cuenta que ya completó su registro y aceptó el aviso (B9) */
 function useFake(fake: FakeCloud) {
+  fake.acceptances = [PRIVACY_NOTICE_VERSION];
   holder.cloud = fake.cloud;
   return fake;
 }

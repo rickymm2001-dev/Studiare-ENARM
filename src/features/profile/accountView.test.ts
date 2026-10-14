@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { ENARM_EXAM } from '@/config/exam';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
-import { accountRows, examDateLabel, sameDetails } from './accountView';
+import { accountRows, examDateLabel, sameDetails, specialtyName } from './accountView';
 
 describe('datos de Perfil de solo lectura', () => {
   it('cada dato sale con su texto y lo que falta queda sin dato', () => {
@@ -22,6 +22,14 @@ describe('datos de Perfil de solo lectura', () => {
       [t.account.attempt, t.account.attempts(5)],
       [t.account.targetSpecialty, 'Anestesiología'],
     ]);
+    // En Perfil la especialidad va aparte, a la vista, y no se repite entre las filas (B9)
+    expect(
+      accountRows({ ...EMPTY_DETAILS, targetSpecialty: 'anesthesiology' }, { withSpecialty: false })
+        .map((row) => row.label)
+        .includes(t.account.targetSpecialty),
+    ).toBe(false);
+    expect(specialtyName({ targetSpecialty: 'anesthesiology' })).toBe('Anestesiología');
+    expect(specialtyName({ targetSpecialty: null })).toBeNull();
   });
 
   it('la fecha del ENARM es la de la plataforma y dice que es provisional mientras lo sea', () => {

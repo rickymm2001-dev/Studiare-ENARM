@@ -14,10 +14,12 @@ import { HOME_BY_ROLE, navForRole } from '../navigation';
 import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
+import { AccessGate } from './AccessGate';
 import { BottomNav, NAV_ID } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
+import { OAuthErrorNotice } from './OAuthErrorNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
@@ -186,6 +188,7 @@ export function AppShell() {
 
       <OtherDeviceNotice className={rail} />
       <DeviceLimitNotice className={rail} />
+      <OAuthErrorNotice className={rail} />
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
       <OrganizationSync />
@@ -202,7 +205,10 @@ export function AppShell() {
                   'flex w-full flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
             }
           >
-            <Outlet />
+            {/* Segundo factor del equipo y registro de Google por completar (B9) */}
+            <AccessGate>
+              <Outlet />
+            </AccessGate>
           </main>
         </TopBarContext>
       </div>

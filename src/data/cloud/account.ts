@@ -1,22 +1,50 @@
 // Cuenta en la nube (D-075). Entrar con un enlace al correo, sin contraseña, leer el rol que
 // asigna el servidor y guardar los datos de cuenta y la aceptación del aviso de privacidad. Al
 // servidor solo viajan el correo, el alias y los datos opcionales que el alumno dio. La foto de
-// perfil va a Storage y en la fila queda solo su ruta (B2 del plan del cambio).
+// perfil va a Storage y en la fila queda solo su ruta (B2 del plan del cambio). Los datos opcionales
+// solo viajan cuando el alumno los guardó, con su fecha (H29, B9).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RoleSchema, type Role } from '@/data/schemas/common';
-import type { Account } from '@/data/schemas/people';
+import { ConsentSchema } from '@/data/schemas/people';
+import {
+  DETAIL_SELECT,
+  parseRemoteDetails,
+  utcOrNull,
+  type DetailColumns,
+  type DetailsSide,
+} from './accountDetails';
 import { parseRemoteAvatar, type CloudAvatarColumns, type RemoteAvatarState } from './avatars';
+import { settleWithin } from './timeout';
 
 export interface CloudIdentity {
   authId: string;
   email: string;
   role: Role;
   alias: string | null;
+  /**
+   * Con qué entró por primera vez la cuenta, email o google. Lo dice Supabase en app_metadata.provider.
+   * Falta si no se pudo leer
+   */
+  provider?: string | null;
 }
 
-export type LinkResult = { ok: true } | { ok: false; reason: 'rate_limited' | 'failed' };
+export type LinkResult =
+  { ok: true } | { ok: false; reason: 'rate_limited' | 'invitation_required' | 'failed' };
 
-/** Envía el enlace de acceso. Crea la cuenta en la nube si no existe */
+/**
+ * Marca con la que el gancho Before User Created rechaza un correo sin invitación (migración
+ * 20261020000001). El mensaje del gancho llega tal cual en el error de Supabase Auth
+ */
+export const INVITATION_REQUIRED_MARK = 'invitation_required';
+
+/** Si un error de Auth es el rechazo del registro por invitación */
+export function isInvitationRejection(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('message' in error)) return false;
+  const { message } = error;
+  return typeof message === 'string' && message.includes(INVITATION_REQUIRED_MARK);
+}
+
+/** Envía el enlace de acceso. Crea la cuenta en la nube si no existe y el registro lo permite */
 export async function requestEmailLink(
   cloud: SupabaseClient,
   input: { email: string; alias?: string; redirectTo: string },
@@ -30,6 +58,7 @@ export async function requestEmailLink(
     },
   });
   if (!error) return { ok: true };
+  if (isInvitationRejection(error)) return { ok: false, reason: 'invitation_required' };
   return { ok: false, reason: error.status === 429 ? 'rate_limited' : 'failed' };
 }
 
@@ -107,37 +136,32 @@ export async function readCloudIdentity(cloud: SupabaseClient): Promise<CloudIde
   if (roleRow.error) throw new Error('No se pudo leer el rol de la cuenta');
   const roleData = roleRow.data as { role?: unknown } | null;
   const profileData = profileRow.data as { alias?: unknown } | null;
+  const provider = (user as { app_metadata?: { provider?: unknown } }).app_metadata?.provider;
   return {
     authId: user.id,
     email: user.email.toLowerCase(),
     role: parseRole(roleData?.role),
     alias: typeof profileData?.alias === 'string' ? profileData.alias : null,
+    provider: typeof provider === 'string' ? provider : null,
   };
 }
 
 /**
- * Datos de cuenta en el formato de la tabla private_accounts. La foto nunca va en la fila. avatar son
- * las columnas de la foto que decidió pushAvatar, iniciales o la ruta de la foto en Storage con la
- * fecha de la elección, o null para no tocarlas
+ * Lo que va a la fila de private_accounts. La foto nunca va en la fila. avatar son las columnas que
+ * decidió pushAvatar y details las que decidió planDetailsSync, o null para no tocarlas.
+ * adultConfirmedAt solo se manda cuando la nube todavía no la tiene
  */
-export function toCloudAccount(account: Account, avatar: CloudAvatarColumns | null) {
+export function toCloudAccount(input: {
+  avatar: CloudAvatarColumns | null;
+  details: DetailColumns | null;
+  adultConfirmedAt?: string | null;
+}) {
   return {
-    birth_year: account.birthYear,
-    sex: account.sex,
-    state: account.state,
-    situation: account.situation,
-    attempt: account.attempt,
-    target_specialty: account.targetSpecialty,
-    ...avatar,
+    ...input.details,
+    ...(input.adultConfirmedAt ? { adult_confirmed_at: input.adultConfirmedAt } : {}),
+    ...input.avatar,
     updated_at: new Date().toISOString(),
   };
-}
-
-/** La fecha de la fila con el formato de la cuenta local, o null si no hay o no se entiende */
-function utcOrNull(value: unknown): string | null {
-  if (typeof value !== 'string') return null;
-  const time = Date.parse(value);
-  return Number.isNaN(time) ? null : new Date(time).toISOString();
 }
 
 /**
@@ -173,27 +197,72 @@ export async function readCloudAvatar(
 }
 
 /**
- * Guarda alias y datos de cuenta. avatar son las columnas de la foto, o null para dejar la que ya
- * tiene la nube, como cuando no se pudo leer, cuando manda la elección de la nube o cuando Storage
- * falló y se reintenta después
+ * Lo que la nube sabe de la cuenta. La foto con su fecha, los datos opcionales con la suya y la
+ * confirmación de mayoría de edad. failed si no se pudo leer, y entonces quien llama no toca nada,
+ * porque no sabe qué es lo más reciente
+ */
+export type CloudAccountRead =
+  | {
+      status: 'ok';
+      avatar: RemoteAvatarState;
+      details: DetailsSide;
+      adultConfirmedAt: string | null;
+    }
+  | { status: 'failed' };
+
+/**
+ * Lee la fila de la cuenta. Sin fila responde ok sin datos ni fechas, como una cuenta que nunca eligió
+ * nada. Un valor que no se reconoce cuenta como sin dato
+ */
+export async function readCloudAccount(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+): Promise<CloudAccountRead> {
+  try {
+    const { data, error } = await cloud
+      .from('private_accounts')
+      .select(`avatar, avatar_changed_at, ${DETAIL_SELECT}, adult_confirmed_at`)
+      .eq('user_id', authId)
+      .maybeSingle();
+    if (error) return { status: 'failed' };
+    const row = data as Record<string, unknown> | null;
+    return {
+      status: 'ok',
+      avatar: {
+        avatar: parseRemoteAvatar(row?.avatar),
+        changedAt: utcOrNull(row?.avatar_changed_at),
+      },
+      details: parseRemoteDetails(row),
+      adultConfirmedAt: utcOrNull(row?.adult_confirmed_at),
+    };
+  } catch {
+    return { status: 'failed' };
+  }
+}
+
+/**
+ * Guarda el alias y lo que decidió la sincronización de la cuenta. columns son las columnas de
+ * private_accounts que cambian, sin datos ni foto cuando no hay nada que llevar
  */
 export async function saveCloudAccount(
   cloud: SupabaseClient,
   authId: string,
-  account: Account,
   alias: string,
-  avatar: CloudAvatarColumns | null = null,
+  columns: ReturnType<typeof toCloudAccount>,
 ): Promise<boolean> {
   const [accountResult, profileResult] = await Promise.all([
-    cloud.from('private_accounts').update(toCloudAccount(account, avatar)).eq('user_id', authId),
+    cloud.from('private_accounts').update(columns).eq('user_id', authId),
     cloud.from('profiles').update({ alias }).eq('id', authId),
   ]);
   return !accountResult.error && !profileResult.error;
 }
 
-/** Registra que aceptó el aviso de privacidad, una sola vez por versión */
+/**
+ * Registra que aceptó el aviso de privacidad, una sola vez por versión. Si no se pudo saber si ya
+ * estaba, no escribe nada y se intenta en la siguiente sincronización, para no duplicar la constancia
+ */
 export async function recordPrivacyAcceptance(
-  cloud: SupabaseClient,
+  cloud: Pick<SupabaseClient, 'from'>,
   authId: string,
   noticeVersion: string,
 ): Promise<void> {
@@ -203,10 +272,92 @@ export async function recordPrivacyAcceptance(
     .eq('user_id', authId)
     .eq('notice_version', noticeVersion)
     .limit(1);
-  if ((existing.data ?? []).length > 0) return;
+  const rows: unknown = existing.data;
+  if (existing.error || (Array.isArray(rows) && rows.length > 0)) return;
   await cloud
     .from('privacy_acceptances')
     .insert({ user_id: authId, notice_version: noticeVersion });
+}
+
+/**
+ * Lo que la nube sabe del registro de la cuenta (B9). Cuándo confirmó su edad y la versión más reciente
+ * del aviso que aceptó. failed si no se pudo leer, y entonces quien llama no deja pasar
+ */
+export type CloudSignupRead =
+  | { status: 'ok'; adultConfirmedAt: string | null; noticeVersion: string | null }
+  | { status: 'failed' };
+
+/** Una versión del aviso como la guarda la app, o null */
+function noticeVersionOf(value: unknown): string | null {
+  const parsed = ConsentSchema.shape.noticeVersion.safeParse(value);
+  return parsed.success ? parsed.data : null;
+}
+
+/** Lo más que se espera a la nube para saber si la cuenta ya completó su registro */
+export const SIGNUP_READ_TIMEOUT_MS = 10_000;
+
+async function askCloudSignup(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+): Promise<CloudSignupRead> {
+  try {
+    const [account, acceptances] = await Promise.all([
+      cloud
+        .from('private_accounts')
+        .select('adult_confirmed_at')
+        .eq('user_id', authId)
+        .maybeSingle(),
+      cloud
+        .from('privacy_acceptances')
+        .select('notice_version')
+        .eq('user_id', authId)
+        .order('notice_version', { ascending: false })
+        .limit(1),
+    ]);
+    if (account.error || acceptances.error) return { status: 'failed' };
+    const row = account.data as { adult_confirmed_at?: unknown } | null;
+    const rows: unknown = acceptances.data;
+    const [latest] = (Array.isArray(rows) ? rows : []) as { notice_version?: unknown }[];
+    return {
+      status: 'ok',
+      adultConfirmedAt: utcOrNull(row?.adult_confirmed_at),
+      noticeVersion: noticeVersionOf(latest?.notice_version),
+    };
+  } catch {
+    return { status: 'failed' };
+  }
+}
+
+/**
+ * Lee si la cuenta ya completó su registro en algún dispositivo. Sin fila responde ok sin nada, como una
+ * cuenta que nunca lo completó. La fila de la cuenta solo la ve el dispositivo activo, así que se llama
+ * después de reclamarlo. failed si falla o tarda más de timeoutMs
+ */
+export function readCloudSignup(
+  cloud: Pick<SupabaseClient, 'from'>,
+  authId: string,
+  timeoutMs: number = SIGNUP_READ_TIMEOUT_MS,
+): Promise<CloudSignupRead> {
+  return settleWithin(askCloudSignup(cloud, authId), timeoutMs, { status: 'failed' });
+}
+
+/**
+ * Manda la respuesta de cómo nos conoció a la tabla privada signup_sources (B9). La primera gana, así
+ * que repetirla no cambia nada. true si la nube ya la tiene, false si falló y hay que reintentar
+ */
+export async function recordSignupSource(
+  cloud: Pick<SupabaseClient, 'rpc'>,
+  heardFrom: { channel: string; influencerCode: string | null },
+): Promise<boolean> {
+  try {
+    const { error } = await cloud.rpc('record_signup_source', {
+      p_channel: heardFrom.channel,
+      p_influencer_code: heardFrom.influencerCode,
+    });
+    return !error;
+  } catch {
+    return false;
+  }
 }
 
 /**
