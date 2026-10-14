@@ -3,7 +3,8 @@
 // de computadora el nivel va en una línea, con su título junto al número y la barra más larga, como
 // en el diseño de Ricardo (D-117). Racha, nivel y XP van en neutro, sin dorado ni naranja (4.7 del
 // plan del cambio, D-121). El texto chico mide 12 px (H19 de la revisión de B2) y el relleno de la
-// barra es fg-muted, que pasa 3 a 1 sobre muted (H12).
+// barra es fg-muted, que pasa 3 a 1 sobre muted (H12). En modo enfoque (respuesta 82, B7) solo queda
+// la foto, sin racha, nivel, XP ni la escalera de niveles.
 import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
@@ -12,19 +13,31 @@ import { useAccount } from '@/features/shared/useAccount';
 import { useUserEvents } from '@/features/shared/useUserEvents';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
+import { useFocusMode } from '../focusMode';
 import { screenPath } from '../screens';
 import { LevelLadderDialog } from './LevelLadderDialog';
 import { useSession } from '../session';
 
 export function HeaderStats() {
   const session = useSession();
+  const focus = useFocusMode();
   if (session.status !== 'ready') return null;
+  if (focus) return <ProfileLink user={session.user} />;
   return <Stats user={session.user} settings={session.settings} />;
+}
+
+/** La foto de perfil, que lleva a Configuración. Es lo único que queda en modo enfoque */
+function ProfileLink({ user }: { user: User }) {
+  const account = useAccount(user.id);
+  return (
+    <Link to={screenPath('settings')} aria-label={t.headerStats.profile} className="rounded-full">
+      <Avatar name={user.alias} avatar={account?.avatar} />
+    </Link>
+  );
 }
 
 function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   const events = useUserEvents(user.id);
-  const account = useAccount(user.id);
   if (events === undefined) return null;
   const { streak, level, totalXp } = buildSnapshot({ events, user, settings, now: new Date() });
   const percent = level.xpForNext > 0 ? Math.round((level.xpIntoLevel / level.xpForNext) * 100) : 0;
@@ -77,9 +90,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
           </span>
         </button>
       </LevelLadderDialog>
-      <Link to={screenPath('settings')} aria-label={t.headerStats.profile} className="rounded-full">
-        <Avatar name={user.alias} avatar={account?.avatar} />
-      </Link>
+      <ProfileLink user={user} />
     </div>
   );
 }

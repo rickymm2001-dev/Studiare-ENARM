@@ -4,10 +4,12 @@
 // el plan actual y el botón para cambiarlo, las misiones de hoy y el reto de Party, y el heatmap del
 // año abajo. Cada cifra sale de la bitácora con los mismos motores que el resto de la app.
 // Medio centímetro (gap-5) entre todo, columnas que terminan a la misma altura y el heatmap a todo
-// el ancho (D-117).
+// el ancho (D-117). En modo enfoque (respuesta 82, B7) no van las misiones de hoy ni el reto de Party,
+// como pide 4.12, y la columna lateral se queda solo con el plan.
 import { CreditCard, Layers, Target } from 'lucide-react';
 import { useId, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router';
+import { useFocusMode } from '@/app/focusMode';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { useSession } from '@/app/session';
@@ -52,6 +54,7 @@ function Dashboard({ session }: { session: ReadySession }) {
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const account = useAccount(user.id);
+  const focus = useFocusMode();
   // Las tarjetas que Repasar sí ofrece, para que las vencidas cuenten lo mismo
   const cards = useLiveData(async () => {
     const [decks, all] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
@@ -119,12 +122,18 @@ function Dashboard({ session }: { session: ReadySession }) {
           </AnalysisCard>
         </Group>
 
+        {/* En modo enfoque solo queda el plan. Conserva el ancho de una columna, igual que con las
+            misiones y el reto a su lado, para que la tarjeta no se estire de orilla a orilla */}
         <aside className="grid grid-cols-1 gap-5 [grid-area:lateral] md:grid-cols-3 xl:grid-cols-1 xl:content-start xl:border-l xl:border-line xl:pl-5">
           <PlanCard userId={user.id} />
-          <MissionsSection session={session} />
-          <SideSection title={t.widgets.names.party_challenge}>
-            <PartyWidget session={session} snapshot={snapshot} events={events} />
-          </SideSection>
+          {focus ? null : (
+            <>
+              <MissionsSection session={session} />
+              <SideSection title={t.widgets.names.party_challenge}>
+                <PartyWidget session={session} snapshot={snapshot} events={events} />
+              </SideSection>
+            </>
+          )}
         </aside>
 
         <Card aria-label={t.widgets.names.heatmap} className="p-5 [grid-area:heatmap]">

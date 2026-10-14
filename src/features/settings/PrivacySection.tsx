@@ -14,6 +14,7 @@ import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField } from '@/ui/components/field';
+import { afterPartyConsentChange } from '../party/cloudConsent';
 import type { ReadySession } from '../shared/RequireSession';
 import { DataSection } from './DataSection';
 import type { z } from 'zod';
@@ -72,7 +73,9 @@ function ConsentsCard({ session }: { session: ReadySession }) {
                 setStatus('');
                 setAsked({ purpose, granted, base: consents });
                 changeConsent(api, user, purpose, granted).then(
-                  () => {
+                  async () => {
+                    // Retirar el permiso de Party saca de los grupos de la nube (B7)
+                    if (purpose === 'party') await afterPartyConsentChange(granted);
                     setStatus(t.settings.privacy.consentSaved);
                   },
                   () => {

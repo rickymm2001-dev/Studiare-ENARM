@@ -1,7 +1,8 @@
 // Apariencia (D-060, D-061, D-065, D-078). Tema, fuente de lectura, tamaño del texto, y animaciones,
 // confeti y sonidos. Los cambios se ven al instante como vista previa y se quedan solo al guardar,
 // con una sola barra de guardar que aparece al haber cambios. Al salir sin guardar vuelve lo guardado.
-// Los fondos con degradados, color o foto se quitaron en B2 del plan del cambio (comentario 10).
+// Los fondos con degradados, color o foto se quitaron en B2 del plan del cambio (comentario 10). El
+// modo enfoque (respuesta 82, B7) también vive aquí y se aplica al guardar.
 import { Monitor, Moon, PartyPopper, Sun } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { usePreferences } from '@/app/preferences';
@@ -220,6 +221,18 @@ export function AppearanceSettings() {
             {text.tryIt}
           </Button>
         </fieldset>
+
+        {/* Modo enfoque (respuesta 82 del plan del cambio). Un interruptor que oculta tablas, XP,
+            nivel, racha y retos en toda la app. Se guarda con la barra, como lo demás */}
+        <CheckboxField
+          role="switch"
+          label={t.b7.focusMode.label}
+          hint={t.b7.focusMode.hint}
+          checked={draft.focusMode}
+          onChange={(event) => {
+            change({ focusMode: event.target.checked });
+          }}
+        />
 
         <SaveBar dirty={dirty} status={status} onSave={save} onDiscard={discard} />
       </div>

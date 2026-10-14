@@ -1,9 +1,10 @@
-// Compartir la tarjeta de logro con la Web Share API y un respaldo (9.6). Donde el navegador puede
-// compartir archivos abre el menú de compartir del sistema. Donde no, descarga la imagen para que el
-// alumno la suba donde quiera. Cancelar no es un error. Las dependencias del navegador entran por
-// parámetro, así se prueba sin navegador.
+// Compartir el resumen de la semana con la Web Share API y un respaldo (respuesta 83 del plan del
+// cambio, B7, antes la tarjeta de logro de 9.6). Donde el navegador puede compartir archivos, como el
+// teléfono, abre el menú de compartir del sistema con la imagen y su texto. Donde no, descarga la
+// imagen para que el alumno la suba donde quiera. Cancelar no es un error. Las dependencias del
+// navegador entran por parámetro, así se prueba sin navegador.
 import { t } from '@/i18n/es-MX';
-import { achievementText, type AchievementCard } from './achievement';
+import { weekShareText, type WeekShareCard } from './achievement';
 
 export type ShareOutcome = 'shared' | 'downloaded' | 'cancelled' | 'failed';
 
@@ -18,22 +19,19 @@ export interface ShareDeps {
 
 const isCancel = (error: unknown) => error instanceof DOMException && error.name === 'AbortError';
 
-export async function shareAchievement(
-  card: AchievementCard,
-  render: (card: AchievementCard) => Promise<Blob>,
+export async function shareWeek(
+  card: WeekShareCard,
+  render: (card: WeekShareCard) => Promise<Blob>,
   deps: ShareDeps,
 ): Promise<ShareOutcome> {
+  const text = t.b7.weekShare;
   let file: File;
   try {
-    file = new File([await render(card)], t.party.share.fileName, { type: 'image/png' });
+    file = new File([await render(card)], text.fileName, { type: 'image/png' });
   } catch {
     return 'failed';
   }
-  const data: ShareData = {
-    files: [file],
-    title: t.party.share.shareTitle,
-    text: achievementText(card),
-  };
+  const data: ShareData = { files: [file], title: text.shareTitle, text: weekShareText(card) };
   if (deps.share && deps.canShare?.(data) === true) {
     try {
       await deps.share(data);

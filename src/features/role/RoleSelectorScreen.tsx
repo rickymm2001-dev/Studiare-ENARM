@@ -1,10 +1,13 @@
 // Pantalla 26. Selector de rol sin login, solo para probar el prototipo. No tiene enlaces (D-059).
+// Con la nube el rol lo da el servidor (D-075) y sin la bandera demoTools, como en producción, el
+// selector queda cerrado aunque falte la nube (pregunta 73, 5.4 del plan del cambio, B7).
 import { Crown, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { HOME_BY_ROLE } from '@/app/navigation';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { cloudConfigured } from '@/data/cloud/client';
 import type { Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
@@ -32,8 +35,10 @@ export function RoleSelectorScreen() {
   const [selected, setSelected] = useState<Role>(currentRole);
   const navigate = useNavigate();
 
-  // Con cuenta en la nube el rol lo asigna el servidor y nadie se lo pone a sí mismo (D-075)
-  if (cloudConfigured()) {
+  // Con cuenta en la nube el rol lo asigna el servidor y nadie se lo pone a sí mismo (D-075). En
+  // producción tampoco se elige aquí, aunque la nube falte (5.4)
+  const cloud = cloudConfigured();
+  if (cloud || !isFeatureEnabled('demoTools')) {
     return (
       <>
         <ScreenHeader
@@ -41,7 +46,7 @@ export function RoleSelectorScreen() {
           description={t.screens.roleSelector.description}
         />
         <Card>
-          <p>{t.cloud.roleFromCloud}</p>
+          <p>{cloud ? t.cloud.roleFromCloud : t.b7.demoLock.roleLocked}</p>
         </Card>
       </>
     );

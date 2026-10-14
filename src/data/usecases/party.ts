@@ -1,5 +1,7 @@
-// Party simulada en el navegador (9.6, 3.2). Sin servidor, los grupos viven en esta base. Crear un
-// grupo puede sumar compañeros simulados, marcados como tales, para ver la tabla y los retos.
+// Party de la demostración (9.6, 3.2). Los grupos viven en la base del navegador y crear un grupo puede
+// sumar compañeros simulados, marcados como tales, para ver la tabla, los retos y los duelos. Desde B7
+// del plan del cambio los compañeros simulados solo existen en enarm_demo. Con una cuenta real Party
+// vive en la nube (partyCloud.ts).
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { generateInviteCode, isValidInviteCode, MAX_GROUP_MEMBERS } from '@/engines/party';
@@ -29,11 +31,22 @@ async function joinAs(api: Api, user: User, group: Group): Promise<Membership> {
   return membership;
 }
 
+/** Los compañeros simulados solo existen en la base de demostración (B7 del plan del cambio) */
+export class SimulatedFriendsOutsideDemoError extends Error {
+  constructor() {
+    super('Los compañeros simulados solo existen en la base de demostración');
+    this.name = 'SimulatedFriendsOutsideDemoError';
+  }
+}
+
 export async function createGroup(
   api: Api,
   user: User,
   input: { name: string; withSimulatedFriends: boolean },
 ): Promise<Group> {
+  if (input.withSimulatedFriends && api.repos.kind !== 'demo') {
+    throw new SimulatedFriendsOutsideDemoError();
+  }
   const id = newId();
   const now = new Date().toISOString();
   const group = await api.repos.groups.put({

@@ -1,10 +1,12 @@
 // Exportar mis datos, borrar mis datos y eliminar mi cuenta, en Privacidad de Configuración (4.5,
 // D-101, B3 del plan del cambio). Venía de la pestaña Cuenta.
 import { Download } from 'lucide-react';
+import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
-import { exportUserData } from '@/data/usecases/exportData';
+import { exportUserData, type PartyCloudExport } from '@/data/usecases/exportData';
+import { exportMyPartyData } from '@/data/usecases/partyCloud';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -17,6 +19,13 @@ export function DataSection({ session }: { session: ReadySession }) {
   const { deleteAllData } = api;
   const { user } = session;
   const signOut = usePreferences((state) => state.signOut);
+  const cloudStatus = useCloud((store) => store.state.status);
+  // Lo de Party vive solo en la nube (B7). Se pide con la cuenta real conectada, nunca en la demostración
+  const partyCloud = async (): Promise<PartyCloudExport | null> => {
+    if (session.isDemo || cloudStatus !== 'linked') return null;
+    const cloud = await loadCloud();
+    return cloud ? exportMyPartyData(cloud) : { status: 'unavailable', reason: 'network' };
+  };
   // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay que leer
   // los perfiles antes, porque con la base borrada ya no se sabe de quién eran
   const wipeLocal = async () => {
@@ -38,7 +47,7 @@ export function DataSection({ session }: { session: ReadySession }) {
           variant="secondary"
           className="self-start"
           onClick={() => {
-            void exportUserData(api.repos, user.id).then((data) => {
+            void exportUserData(api.repos, user.id, { partyCloud }).then((data) => {
               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
               const url = URL.createObjectURL(blob);
               const link = document.createElement('a');

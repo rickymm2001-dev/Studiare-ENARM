@@ -6,6 +6,7 @@
 // avisa si ya creó una con esa pregunta.
 import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useFocusMode } from '@/app/focusMode';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import type { ContentReport } from '@/data/schemas/bank';
@@ -48,6 +49,8 @@ export function AnswerReview({
    */
   questionNumber?: number;
 }) {
+  // En modo enfoque no dice el XP ganado (respuesta 82 del plan del cambio, B7)
+  const focus = useFocusMode();
   const api = useDataApi();
   const practice = usePractice();
   const { question, options } = bundle;
@@ -119,7 +122,7 @@ export function AnswerReview({
               <XCircle aria-hidden className="size-6 text-danger" />
             )}
             {answer.correct ? t.simulator.correct : t.simulator.incorrect}
-            {answer.xp > 0 ? (
+            {answer.xp > 0 && !focus ? (
               <span className="text-sm font-normal text-fg-muted">
                 {t.review.xpGained(answer.xp)}
               </span>

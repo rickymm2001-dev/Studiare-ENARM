@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 export const ReferralSummarySchema = z.object({
   pending: z.number().int().nonnegative(),
+  /** Sin los revertidos por un reembolso completo del cobro que los concretó */
   completed: z.number().int().nonnegative(),
   monthsEarned: z.number().int().nonnegative(),
   grantedUntil: z.string().nullable(),
@@ -38,10 +39,22 @@ export async function fetchReferralState(cloud: SupabaseClient): Promise<Referra
   }
 }
 
+/**
+ * Lo que contesta el servidor al canjear. circular es que quien canjea ya invitó a la dueña del código,
+ * porque dos alumnos no se refieren entre sí
+ */
 export type RedeemResult =
-  'ok' | 'invalid' | 'own' | 'already' | 'too_late' | 'already_paid' | 'failed';
+  'ok' | 'invalid' | 'own' | 'already' | 'circular' | 'too_late' | 'already_paid' | 'failed';
 
-const RedeemSchema = z.enum(['ok', 'invalid', 'own', 'already', 'too_late', 'already_paid']);
+const RedeemSchema = z.enum([
+  'ok',
+  'invalid',
+  'own',
+  'already',
+  'circular',
+  'too_late',
+  'already_paid',
+]);
 
 /** Lo que se escribió, sin espacios y en mayúsculas. Una cadena vacía no se manda */
 export function normalizeReferralCode(value: string): string {
