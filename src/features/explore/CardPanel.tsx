@@ -215,7 +215,7 @@ export function CardPanel({
                   key={kind}
                   className={segmentedItem(
                     draft.kind === kind,
-                    'grow cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
+                    'grow cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus',
                   )}
                 >
                   <input

@@ -329,7 +329,7 @@ export const outlineText = {
       failed: 'No se pudo borrar el apunte. Intenta de nuevo.',
     },
 
-    // Tarjetas que salen de un apunte, vistas desde el editor de mazos y desde Explorar
+    // Tarjetas que salen de un apunte, vistas desde el editor de mazos y desde Buscar tarjetas
     fromOutline: {
       note: 'Esta tarjeta sale de un apunte. Cámbiala en el apunte y se actualiza sola.',
       open: 'Abrir el apunte',
