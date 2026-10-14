@@ -18,7 +18,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B0. Arranque
 - [x] B1. Auditoría inicial de procesos (PR 36 fusionado)
 - [x] B2. Sistema de diseño y rediseño visual (PR 40 fusionado, que incluye el PR 37)
-- [x] Paleta de color con más color por rama y acento cálido (D-128, PR en curso)
+- [x] Paleta de color con más color por rama y acento cálido (D-128, PR 51 fusionado)
 - [x] B3. Navegación, Configuración y Perfil (PR 42 fusionado)
 - [x] B4. Repasar y Buscar tarjetas (PR 43 fusionado)
 - [x] B5. Revisión del examen y motivos de error (PR 43 fusionado, junto con B4)
@@ -139,7 +139,7 @@ Evidencia
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
 - B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
 - B8 fusionado en main (PR 49), con sus dos migraciones aplicadas al proyecto y verificadas por huella antes de fusionar
-- La paleta con más color (PR 47 de otra herramienta, D-128) cerrada sobre B8 en la rama de trabajo, con su PR. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
+- La paleta con más color (PR 47 de otra herramienta, D-128) fusionada en main (PR 51), con los hallazgos de su revisión corregidos. El PR 50 de otra sesión, que repetía la paleta con D-127, se cerró por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
 - B9 en b9 con los hallazgos de su revisión corregidos. Su migración 20261020000001 no se ha aplicado
 - B10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido sobre B8 en int10, con 20 archivos SQL y las pruebas del servidor en verde. Falta su interfaz, que arranca sobre B9 integrado
 - Los diseños de B10, B11 y B12 están en /home/user/wt/plans
