@@ -17,7 +17,7 @@ import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { needsMfaRole, readMfaStatus } from '@/data/cloud/mfa';
 import { readOAuthRedirectError, takeGoogleRedirect, withoutOAuthError } from '@/data/cloud/oauth';
-import { clearPendingSignup, takePendingSignup } from '@/data/cloud/pendingSignup';
+import { clearPendingSignup, readPendingSignup } from '@/data/cloud/pendingSignup';
 import { useDataApi } from '@/data/context';
 import { runSync } from '@/data/sync/runSync';
 import { refreshCloudPlan } from '@/data/payments/cloudPlan';
@@ -173,13 +173,16 @@ export function CloudBridge() {
           }
           if (isLeaving() || signedOutMeanwhile()) return;
           // Lo que el alumno llenó en Crear cuenta antes de ir a Google solo sirve para una cuenta que
-          // entró con Google. Se toma una sola vez y se borra (B9)
-          const pending = takePendingSignup();
+          // entró con Google. Se lee sin borrarlo y se borra ya unida la cuenta, porque al volver de
+          // Google corren dos revisiones a la vez, la del arranque y la de SIGNED_IN. Si solo una lo
+          // viera y la otra creara antes el perfil, nacería sin el registro (B9)
+          const pending = readPendingSignup();
           const linked = await linkCloudIdentity(
             api,
             identity,
             identity.provider && identity.provider !== 'email' ? pending : null,
           );
+          clearPendingSignup();
           if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           const { userId } = linked;
           // Un perfil que nació sin formulario no vio el aviso ni confirmó su edad. No abre la sesión de

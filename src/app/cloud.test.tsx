@@ -725,6 +725,42 @@ describe('CloudBridge y el acceso (B9)', () => {
     expect(userId).not.toBe('');
   });
 
+  it('con dos revisiones a la vez al volver de Google, el perfil nace con el registro pendiente', async () => {
+    const fake = useFake(googleSession('carrera.google@example.com'), { registered: false });
+    savePendingSignup({
+      alias: 'Ricky',
+      dailyGoal: { metric: 'cards', value: 30 },
+      details: { ...EMPTY_DETAILS, targetSpecialty: 'pediatrics' },
+      adultConfirmedAt: '2026-10-13T09:00:00.000Z',
+      heardFrom: null,
+      consents: {},
+    });
+    // Supabase avisa SIGNED_IN mientras la revisión del arranque todavía lee la sesión, así las dos
+    // revisiones unen la cuenta al mismo tiempo
+    fake.holdSession = true;
+    mount();
+    await waitFor(() => {
+      expect(fake.heldSessionReads).toBe(1);
+    });
+    act(() => {
+      fake.emit('SIGNED_IN');
+    });
+    await waitFor(() => {
+      expect(fake.heldSessionReads).toBe(2);
+    });
+    fake.holdSession = false;
+    act(() => {
+      fake.releaseSession();
+    });
+    await waitFor(() => {
+      expect(fake.accountUpdates.length).toBeGreaterThan(0);
+    });
+    expect(useAccess.getState().signup).toEqual({ status: 'none' });
+    const account = await findAccountByEmail(captured.api as DataApi, 'carrera.google@example.com');
+    expect(account?.adultConfirmedAt).toBe('2026-10-13T09:00:00.000Z');
+    expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+  });
+
   it.each([
     ['google', 'sin.registro@example.com'],
     ['email', 'correo.invitado@example.com'],
