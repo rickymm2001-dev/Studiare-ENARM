@@ -1267,3 +1267,4 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Subir mazos y el catálogo se cierran solo en la app hasta que el banco y los mazos vivan en la nube (B11). La demo sigue el plan del alumno de demostración
 - Endurecimiento. is_group_member y shares_group dejan de poder ejecutarse sin sesión
 - Revisión independiente con sus 13 hallazgos corregidos, y la unión con B4 a B7 en main con 5 choques que git no marcó, corregidos
+- Migraciones aplicadas al proyecto el 2026-10-14, justo antes de fusionar el PR 49. 20261021000001_free_plan_locks y 20261021000002_free_plan_party_moderation, con sus 15 funciones iguales al repo por huella y ninguna ejecutable sin sesión
