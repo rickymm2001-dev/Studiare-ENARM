@@ -472,6 +472,50 @@ export function stripeSubscriptionStatus(status: unknown): SubscriptionStatus | 
   }
 }
 
+/**
+ * Campos con datos del pagador que no se guardan en payment_webhook_events, en cualquier nivel del
+ * evento. Correo, nombre, teléfono, domicilio, RFC, tarjeta, recibo y la evidencia de una disputa. La base
+ * solo necesita los ids, los montos, la metadata con el id seudónimo del alumno y la hora del cargo
+ */
+const PAYER_KEYS = new Set([
+  'customer_details',
+  'customer_email',
+  'customer_name',
+  'customer_phone',
+  'customer_address',
+  'customer_shipping',
+  'customer_tax_ids',
+  'billing_details',
+  'shipping',
+  'shipping_details',
+  'shipping_address',
+  'collected_information',
+  'custom_fields',
+  'receipt_email',
+  'receipt_url',
+  'payment_method_details',
+  'evidence',
+  'email',
+  'name',
+  'phone',
+  'address',
+]);
+
+function withoutPayer(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(withoutPayer);
+  if (value === null || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !PAYER_KEYS.has(key))
+      .map(([key, inner]) => [key, withoutPayer(inner)]),
+  );
+}
+
+/** El evento como se guarda en payment_webhook_events, sin los datos del pagador */
+export function storedEvent(event: Json): Json {
+  return asRecord(withoutPayer(event));
+}
+
 export interface NoticeContext {
   eventId: string;
   /** Hora del evento, o de la lectura a Stripe */

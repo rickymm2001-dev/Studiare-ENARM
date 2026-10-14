@@ -1000,6 +1000,89 @@ describe('aviso de Stripe por evento', () => {
     expect(record.charges).toEqual([]);
   });
 
+  it('lo que se guarda del evento va sin los datos del pagador y conserva la hora del cargo', async () => {
+    const payer = {
+      email: 'alumna@ejemplo.mx',
+      name: 'Alumna Ejemplo',
+      phone: '+525512345678',
+      address: { line1: 'Calle 1', postal_code: '01000', country: 'MX' },
+    };
+    const session = subscriptionSession({
+      customer_details: { ...payer, tax_exempt: 'none' },
+      customer_email: 'alumna@ejemplo.mx',
+      collected_information: {
+        shipping_details: { name: 'Alumna Ejemplo', address: payer.address },
+      },
+    });
+    const sessionDeps = webhookDeps({
+      routes: sessionRead(session, subscriptionObject({ status: 'trialing' })),
+    });
+    await send(event('checkout.session.completed', session), sessionDeps.deps);
+    const invoiceDeps = webhookDeps();
+    await send(
+      event(
+        'invoice.paid',
+        invoiceObject({
+          customer_email: 'alumna@ejemplo.mx',
+          customer_name: 'Alumna Ejemplo',
+          customer_phone: '+525512345678',
+          customer_address: payer.address,
+          customer_shipping: { name: 'Alumna Ejemplo', address: payer.address },
+          customer_tax_ids: [{ type: 'mx_rfc', value: 'XAXX010101000' }],
+        }),
+      ),
+      invoiceDeps.deps,
+    );
+    const refundDeps = webhookDeps();
+    await send(
+      event(
+        'charge.refunded',
+        refundObject({
+          billing_details: payer,
+          receipt_email: 'alumna@ejemplo.mx',
+          receipt_url: 'https://pay.stripe.com/receipts/x',
+          shipping: { name: 'Alumna Ejemplo', address: payer.address },
+          payment_method_details: { type: 'card', card: { last4: '4242', fingerprint: 'fp_1' } },
+        }),
+      ),
+      refundDeps.deps,
+    );
+    const disputeDeps = webhookDeps({
+      routes: { 'GET /v1/payment_intents/pi_1': paymentIntentRead() },
+    });
+    await send(event('charge.dispute.closed', disputeObject()), disputeDeps.deps);
+
+    const stored = [
+      sessionDeps.record.states[0]?.payload,
+      invoiceDeps.record.charges[0]?.payload,
+      refundDeps.record.charges[0]?.payload,
+      disputeDeps.record.charges[0]?.payload,
+    ];
+    for (const payload of stored) {
+      expect(payload).toMatchObject({ id: 'evt_1', created: CREATED });
+      expect(typeof payload?.type).toBe('string');
+      const text = JSON.stringify(payload);
+      for (const secret of [
+        'alumna@ejemplo.mx',
+        'Alumna Ejemplo',
+        '+525512345678',
+        'Calle 1',
+        'XAXX',
+        '4242',
+        'receipts',
+      ]) {
+        expect(text).not.toContain(secret);
+      }
+    }
+    // La base busca un reembolso sin ids por la hora del cargo (data.object.created)
+    expect(refundDeps.record.charges[0]?.payload).toMatchObject({
+      data: { object: { id: 'ch_1', created: CREATED, payment_intent: 'pi_1', amount: 14_900 } },
+    });
+    expect(invoiceDeps.record.charges[0]?.payload).toMatchObject({
+      data: { object: { id: 'in_1', customer: 'cus_1', amount_paid: 14_900 } },
+    });
+  });
+
   it('si la base falla al buscar al alumno o al ligar al cliente contesta 500 y no aplica', async () => {
     const lost = webhookDeps({
       overrides: { userOfCustomer: () => Promise.reject(new Error('sin base')) },

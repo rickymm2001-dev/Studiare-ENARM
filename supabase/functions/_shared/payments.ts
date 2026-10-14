@@ -68,6 +68,7 @@ import {
   sessionNeedsRead,
   sessionReadParams,
   stripeCall,
+  storedEvent,
   stripeFailureLine,
   subscriptionNotice,
   subscriptionSessionParams,
@@ -226,7 +227,8 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
   const context = {
     eventId,
     eventAt: unixToIso(event.created) ?? new Date(deps.now()).toISOString(),
-    payload: event,
+    // Lo que se guarda va sin los datos del pagador. Conserva los ids, los montos y data.object.created
+    payload: storedEvent(event),
     env: deps.env,
     log: deps.log,
   };
