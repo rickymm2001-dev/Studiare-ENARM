@@ -52,6 +52,8 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
   demoData: () => import('@/features/admin/DemoDataScreen').then((module) => module.DemoDataScreen),
   adminSettings: () =>
     import('@/features/admin/AdminSettingsScreen').then((module) => module.AdminSettingsScreen),
+  adminBilling: () =>
+    import('@/features/admin/BillingAdminScreen').then((module) => module.BillingAdminScreen),
   questionBank: () =>
     import('@/features/physician/QuestionBankScreen').then((module) => module.QuestionBankScreen),
   agreement: () =>

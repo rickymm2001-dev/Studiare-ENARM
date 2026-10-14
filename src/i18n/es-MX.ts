@@ -142,6 +142,11 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Datos de demostración',
     description: 'Genera, borra y ajusta alumnos simulados, y regenera al alumno de la demo.',
   },
+  adminBilling: {
+    title: 'Pagos',
+    description:
+      'Lugares Fundador, pruebas y pases, solicitudes de factura, códigos de influencer y pagos recientes.',
+  },
   adminSettings: {
     title: 'Configuración',
     description: 'Umbrales, pesos del ENARM, precios y modelos por motor.',
@@ -208,6 +213,7 @@ export const t = {
     costs: 'Costos',
     settings: 'Configuración',
     users: 'Usuarios',
+    billing: 'Pagos',
     platform: 'Plataforma',
     decks: 'Mazos',
     tutor: 'Tutor',

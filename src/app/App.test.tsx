@@ -37,12 +37,18 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3)', () => {
-    expect(SCREEN_KEYS).toHaveLength(30);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3) y con Admin, Pagos (B10)', () => {
+    expect(SCREEN_KEYS).toHaveLength(31);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(30);
+    expect(new Set(paths).size).toBe(31);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(30);
+    expect(new Set(numbers).size).toBe(31);
+    expect(SCREENS.adminBilling).toEqual({
+      number: 34,
+      path: '/admin/pagos',
+      area: 'admin',
+      phase: 'E',
+    });
     // Los números de la especificación no se reusan y las rutas viejas no chocan con ninguna pantalla
     for (const removed of [13, 15, 31]) expect(numbers).not.toContain(removed);
     for (const key of ['planner', 'profile', 'rewards']) expect(SCREEN_KEYS).not.toContain(key);

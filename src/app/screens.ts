@@ -1,7 +1,7 @@
 // Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
-// Explorar (D-085), Apuntes (D-092) y el aviso de privacidad y los términos (Fase G), con su ruta,
-// área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio (comentarios 6,
-// 13 y 14) y sus rutas llevan a donde quedó lo suyo.
+// Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G) y Admin, Pagos
+// (B10), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
+// (comentarios 6, 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
 
@@ -41,6 +41,7 @@ export const SCREEN_KEYS = [
   'outlines',
   'privacyNotice',
   'terms',
+  'adminBilling',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -90,6 +91,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   // Aviso de privacidad y términos, públicos y sin sesión (Fase G, G2)
   privacyNotice: { number: 32, path: '/privacidad', area: 'shared', phase: 'F' },
   terms: { number: 33, path: '/terminos', area: 'shared', phase: 'F' },
+  // Admin, Pagos (B10 del plan del cambio, 3.3)
+  adminBilling: { number: 34, path: '/admin/pagos', area: 'admin', phase: 'E' },
 };
 
 export function screenPath(key: ScreenKey): string {
