@@ -8,9 +8,8 @@ import type {
   Settlement,
 } from '../../../supabase/functions/_shared/ai/ledger.ts';
 import { PgLedger, createRestRpc } from '../../../supabase/functions/_shared/ai/pgLedger.ts';
-import { loadPrompts } from '../../../supabase/functions/_shared/ai/prompts.ts';
 import { createMockProvider } from '../../../supabase/functions/_shared/ai/provider.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
+import { loadPrompts, ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
 import { requestBody, STUDENT } from '../../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { createHostedApp } from './app.ts';
 import {
@@ -279,7 +278,6 @@ function hostedApp(
       setConfig: (next) => {
         config = next;
       },
-      configFile: null,
       saveConfig: (next) => {
         extra.saved?.push(next);
         return Promise.resolve();

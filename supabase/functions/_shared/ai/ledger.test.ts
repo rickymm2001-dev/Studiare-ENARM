@@ -1,18 +1,5 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
-import { dayKey, Ledger } from './ledger.ts';
-
-const dirs: string[] = [];
-const tempFile = () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ai-ledger-'));
-  dirs.push(dir);
-  return join(dir, 'ledger.json');
-};
-afterEach(() => {
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
-});
+import { describe, expect, it } from 'vitest';
+import { dayKey, Ledger, type LedgerPersistence, type LedgerState } from './ledger.ts';
 
 const LIMITS = { perStudentPerDay: 2, dailyBudgetUsd: 1 };
 const admit = (ledger: Ledger, studentRef = 'alumno-uno-0001') =>
@@ -106,24 +93,54 @@ describe('presupuesto del día', () => {
   });
 });
 
-describe('archivo', () => {
+describe('dónde se guarda', () => {
+  /** Guarda en memoria, como lo haría un archivo o una tabla */
+  const memory = () => {
+    let stored: unknown = null;
+    const persistence: LedgerPersistence = {
+      load: () => stored,
+      save: (state: LedgerState) => {
+        stored = structuredClone(state);
+      },
+    };
+    return {
+      persistence,
+      set: (value: unknown) => {
+        stored = value;
+      },
+    };
+  };
+
   it('sobrevive a reiniciar el proxy el mismo día', () => {
-    const file = tempFile();
+    const store = memory();
     const now = () => new Date('2026-10-08T15:00:00Z');
-    const first = new Ledger({ file, now });
+    const first = new Ledger({ persistence: store.persistence, now });
     admit(first);
     first.settle({ engine: 'forgetting', costUsd: 0.4, real: true });
-    const second = new Ledger({ file, now });
+    const second = new Ledger({ persistence: store.persistence, now });
     expect(second.summary()).toMatchObject({ calls: 1, spentUsd: 0.4 });
   });
 
-  it('un archivo de otro día o dañado empieza en cero', () => {
-    const file = tempFile();
-    const first = new Ledger({ file, now: () => new Date('2026-10-07T15:00:00Z') });
+  it('lo guardado de otro día, dañado o que no se puede leer empieza en cero', () => {
+    const store = memory();
+    const first = new Ledger({
+      persistence: store.persistence,
+      now: () => new Date('2026-10-07T15:00:00Z'),
+    });
     admit(first);
-    const nextDay = new Ledger({ file, now: () => new Date('2026-10-08T15:00:00Z') });
+    const nextDay = new Ledger({
+      persistence: store.persistence,
+      now: () => new Date('2026-10-08T15:00:00Z'),
+    });
     expect(nextDay.summary().calls).toBe(0);
-    writeFileSync(file, 'esto no es json');
-    expect(new Ledger({ file }).summary().calls).toBe(0);
+    store.set({ day: 'no es un libro' });
+    expect(new Ledger({ persistence: store.persistence }).summary().calls).toBe(0);
+    const failing: LedgerPersistence = {
+      load: () => {
+        throw new Error('no se pudo leer');
+      },
+      save: () => undefined,
+    };
+    expect(new Ledger({ persistence: failing }).summary().calls).toBe(0);
   });
 });

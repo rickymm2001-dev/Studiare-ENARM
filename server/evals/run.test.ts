@@ -50,8 +50,7 @@ describe('casos dorados', () => {
   });
 
   it('ninguna entrada trae datos personales', async () => {
-    const { findPersonalData, hasPersonalData } =
-      await import('../../supabase/functions/_shared/ai/pii.ts');
+    const { findPersonalData, hasPersonalData } = await import('../../supabase/functions/_shared/ai/pii.ts');
     for (const golden of cases) {
       expect(hasPersonalData(findPersonalData(golden.input)), golden.id).toBe(false);
     }

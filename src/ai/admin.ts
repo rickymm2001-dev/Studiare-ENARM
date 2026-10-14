@@ -3,7 +3,7 @@
 // publicada, no hay nada que leer y las pantallas lo dicen. Los esquemas repiten los del proxy,
 // porque el cliente no puede cargar los archivos del servidor.
 import { z } from 'zod';
-import { AI_ENGINES } from '@/engines/aiContracts';
+import { AI_ENGINES, AiThinkingSchema } from '@/engines/aiContracts';
 import type { AiStatus } from './client';
 import { AI_BASE_URL, aiAuthHeaders } from './endpoint';
 
@@ -17,6 +17,8 @@ export const AdminConfigSchema = z.strictObject({
     z.strictObject({
       id: z.string(),
       effort: z.enum(['low', 'medium', 'high']).nullable(),
+      // B12. Opcional mientras la pantalla 25 no lo muestra. El proxy lo conserva si no se manda
+      thinking: AiThinkingSchema.nullable().optional(),
       maxTokens: z.int(),
     }),
   ),
@@ -32,6 +34,12 @@ export const AdminConfigSchema = z.strictObject({
   limits: z.strictObject({
     perStudentPerDay: EngineRecord(z.int()),
     dailyBudgetUsd: z.number(),
+    // Límites de B12 (2.4 del plan). Opcionales mientras la pantalla 25 no los muestra
+    perUserDailyUsd: z.number().optional(),
+    engineShare: EngineRecord(z.number()).optional(),
+    cardGenerationsPerDay: z.int().optional(),
+    sectionsPerGeneration: z.int().optional(),
+    maxPendingJobs: z.int().optional(),
     timeoutMs: z.int(),
     maxRetries: z.int(),
   }),

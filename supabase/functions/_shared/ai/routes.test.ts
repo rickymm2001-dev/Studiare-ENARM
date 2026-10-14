@@ -1,7 +1,5 @@
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { Hono } from 'hono';
+import { describe, expect, it } from 'vitest';
 import {
   biasTipInput,
   flashcardsInput,
@@ -9,46 +7,56 @@ import {
   restructureInput,
   weeklyReportInput,
 } from '../../../../src/ai/testing/aiSamples.ts';
-import { AI_ENGINES } from '../../../../src/engines/aiContracts.ts';
-import { mockHypothesis } from '../../../../src/engines/aiMock.ts';
-import { createApp } from '../../../../server/src/app.ts';
-import { createAiDeps } from '../../../../server/src/ai/index.ts';
-import { createAnthropicProvider } from './provider.ts';
+import { DEFAULT_CONFIG, type AiConfig } from './config.ts';
+import { ACADEMIC_SOURCE_KEYS } from './engines/academicSources.ts';
+import { AI_ENGINES } from './engines/aiContracts.ts';
+import { mockHypothesis } from './engines/aiMock.ts';
+import { Ledger } from './ledger.ts';
+import { bundledPromptSets } from './prompts.ts';
+import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
+import { createAiRoutes, type AiRoutesDeps } from './routes.ts';
 import { fakeApi, fakeMessage, requestBody, STUDENT } from './testing/fakes.ts';
 
-const HEADERS = {
-  host: '127.0.0.1:8787',
-  origin: 'http://127.0.0.1:5173',
-  'content-type': 'application/json',
-};
-const dirs: string[] = [];
-afterEach(() => {
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
-});
+const HEADERS = { 'content-type': 'application/json' };
+
+/** Las rutas con el núcleo solo. Prompts generados, libro en memoria y configuración de fábrica */
+function coreDeps(
+  provider: (config: () => AiConfig) => AiProvider = () => createMockProvider(),
+  saveConfig?: AiRoutesDeps['saveConfig'],
+): AiRoutesDeps {
+  let config = DEFAULT_CONFIG;
+  const getConfig = () => config;
+  return {
+    provider: provider(getConfig),
+    prompts: bundledPromptSets(),
+    config: getConfig,
+    setConfig: (next) => {
+      config = next;
+    },
+    ...(saveConfig ? { saveConfig } : {}),
+    ledger: new Ledger(),
+    sourceKeys: new Set<string>(ACADEMIC_SOURCE_KEYS),
+  };
+}
+
+const appOf = (ai: AiRoutesDeps) => new Hono().route('/ai', createAiRoutes(ai));
 
 function mockApp() {
-  const ai = createAiDeps({
-    credentials: { mode: 'mock', apiKey: null },
-    files: { config: null, ledger: null },
-  });
-  return { app: createApp({ mode: 'mock', ai }), ai };
+  const ai = coreDeps();
+  return { app: appOf(ai), ai };
 }
 
 function realApp(replies: Parameters<typeof fakeApi>[0]) {
   const api = fakeApi(replies);
-  const ai = createAiDeps({
-    credentials: { mode: 'real', apiKey: 'no-se-usa' },
-    files: { config: null, ledger: null },
-    provider: (config) => createAnthropicProvider(api, () => config().limits),
-  });
-  return { app: createApp({ mode: 'real', ai }), ai, api };
+  const ai = coreDeps((config) => createAnthropicProvider(api, () => config().limits));
+  return { app: appOf(ai), ai, api };
 }
 
 const post = (
-  app: ReturnType<typeof createApp>,
+  app: ReturnType<typeof appOf>,
   engine: string,
   body: unknown,
-  headers = HEADERS,
+  headers: Record<string, string> = HEADERS,
 ) => app.request(`/ai/${engine}`, { method: 'POST', headers, body: JSON.stringify(body) });
 
 describe('POST /ai/:engine en modo simulado', () => {
@@ -106,29 +114,6 @@ describe('POST /ai/:engine en modo simulado', () => {
       error: string;
     };
     expect(error.error).toBe('invalid_request');
-  });
-
-  it('exige JSON y respeta el filtro de Host y de Origin del proxy', async () => {
-    const { app } = mockApp();
-    const body = JSON.stringify(requestBody(hypothesisInput()));
-    const text = await app.request('/ai/forgetting', {
-      method: 'POST',
-      headers: { ...HEADERS, 'content-type': 'text/plain' },
-      body,
-    });
-    expect(text.status).toBe(415);
-    const origin = await app.request('/ai/forgetting', {
-      method: 'POST',
-      headers: { ...HEADERS, origin: 'https://evil.example' },
-      body,
-    });
-    expect(origin.status).toBe(403);
-    const host = await app.request('/ai/forgetting', {
-      method: 'POST',
-      headers: { ...HEADERS, host: 'evil.example' },
-      body,
-    });
-    expect(host.status).toBe(403);
   });
 });
 
@@ -290,15 +275,12 @@ describe('configuración y uso', () => {
     expect(body.limits.perStudentPerDay.forgetting).toBeGreaterThan(0);
   });
 
-  it('PUT /ai/config cambia los límites al instante y los guarda en el archivo', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'ai-route-'));
-    dirs.push(dir);
-    const file = join(dir, 'ai-config.local.json');
-    const ai = createAiDeps({
-      credentials: { mode: 'mock', apiKey: null },
-      files: { config: file, ledger: null },
+  it('PUT /ai/config cambia los límites al instante y los guarda donde diga quien arma', async () => {
+    const saved: AiConfig[] = [];
+    const ai = coreDeps(undefined, (next) => {
+      saved.push(next);
     });
-    const app = createApp({ mode: 'mock', ai });
+    const app = appOf(ai);
     const put = await app.request('/ai/config', {
       method: 'PUT',
       headers: HEADERS,
@@ -307,13 +289,26 @@ describe('configuración y uso', () => {
     expect(put.status).toBe(200);
     expect(ai.config().limits.perStudentPerDay.forgetting).toBe(1);
     expect(ai.config().limits.perStudentPerDay.flashcards).toBe(240);
-    const saved = JSON.parse(readFileSync(file, 'utf8')) as {
-      limits: { perStudentPerDay: Record<string, number> };
-    };
-    expect(saved.limits.perStudentPerDay.forgetting).toBe(1);
+    expect(saved).toHaveLength(1);
+    expect(saved[0]?.limits.perStudentPerDay.forgetting).toBe(1);
     const send = () => post(app, 'forgetting', requestBody(hypothesisInput()));
     expect((await send()).status).toBe(200);
     expect((await send()).status).toBe(429);
+  });
+
+  it('PUT /ai/config sin dónde guardar cambia solo en memoria y si guardar falla no cambia nada', async () => {
+    const { app, ai } = mockApp();
+    const put = (target: ReturnType<typeof appOf>) =>
+      target.request('/ai/config', {
+        method: 'PUT',
+        headers: HEADERS,
+        body: JSON.stringify({ limits: { dailyBudgetUsd: 2 } }),
+      });
+    expect((await put(app)).status).toBe(200);
+    expect(ai.config().limits.dailyBudgetUsd).toBe(2);
+    const failing = coreDeps(undefined, () => Promise.reject(new Error('sin base')));
+    expect((await put(appOf(failing))).status).toBe(400);
+    expect(failing.config().limits.dailyBudgetUsd).toBe(DEFAULT_CONFIG.limits.dailyBudgetUsd);
   });
 
   it('PUT /ai/config rechaza lo inválido y un modelo sin precio', async () => {

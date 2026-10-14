@@ -1,25 +1,6 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
-import { AI_ENGINES } from '../../../../src/engines/aiContracts.ts';
-import {
-  AiConfigPatchSchema,
-  DEFAULT_CONFIG,
-  loadAiConfig,
-  mergeConfig,
-  saveAiConfig,
-} from './config.ts';
-
-const dirs: string[] = [];
-const tempDir = () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ai-config-'));
-  dirs.push(dir);
-  return dir;
-};
-afterEach(() => {
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
-});
+import { describe, expect, it } from 'vitest';
+import { AiConfigPatchSchema, DEFAULT_CONFIG, mergeConfig } from './config.ts';
+import { AI_ENGINES } from './engines/aiContracts.ts';
 
 describe('configuración de fábrica', () => {
   it('cada motor tiene modelo, sin sufijo de fecha, y el modelo tiene precio', () => {
@@ -44,8 +25,28 @@ describe('configuración de fábrica', () => {
     expect(DEFAULT_CONFIG.prices['claude-opus-5-5']?.input).toBe(4);
   });
 
-  it('Haiku 4.5 no recibe esfuerzo, que ese modelo no acepta', () => {
+  it('Haiku 4.5 no recibe esfuerzo ni razonamiento, que ese modelo no configura', () => {
     expect(DEFAULT_CONFIG.models.forgetting.effort).toBeNull();
+    expect(DEFAULT_CONFIG.models.forgetting.thinking).toBeNull();
+    expect(DEFAULT_CONFIG.models.flashcards.thinking).toBe('adaptive');
+  });
+
+  it('trae los límites de B12 con los valores de 2.4 del plan', () => {
+    const limits = DEFAULT_CONFIG.limits;
+    expect(limits.perUserDailyUsd).toBe(0.3);
+    expect(limits.cardGenerationsPerDay).toBe(20);
+    expect(limits.sectionsPerGeneration).toBe(12);
+    expect(limits.maxPendingJobs).toBe(12);
+    expect(limits.engineShare).toEqual({
+      forgetting: 0.1,
+      weekly_report: 0.1,
+      flashcards: 0.55,
+      bias_tips: 0.1,
+      restructure: 0.15,
+    });
+    // Son techos y no apartados. Hoy suman justo el presupuesto completo
+    const total = AI_ENGINES.reduce((sum, engine) => sum + limits.engineShare[engine], 0);
+    expect(total).toBeCloseTo(1, 10);
   });
 });
 
@@ -89,30 +90,54 @@ describe('cambios', () => {
     expect(bad({ limits: { dailyBudgetUsd: -1 } })).toBe(false);
     expect(bad({ models: { otro: { id: 'claude-x', effort: null, maxTokens: 500 } } })).toBe(false);
     expect(bad({ limits: { perStudentPerDay: { forgetting: 10 } } })).toBe(true);
+    expect(bad({ limits: { engineShare: { flashcards: 1.5 } } })).toBe(false);
+    expect(bad({ limits: { perUserDailyUsd: -0.1 } })).toBe(false);
+    expect(bad({ limits: { sectionsPerGeneration: 0 } })).toBe(false);
+    expect(
+      bad({
+        models: {
+          forgetting: { id: 'claude-x', effort: 'max', thinking: 'siempre', maxTokens: 500 },
+        },
+      }),
+    ).toBe(false);
+    expect(
+      bad({
+        models: {
+          forgetting: { id: 'claude-x', effort: 'xhigh', thinking: 'off', maxTokens: 500 },
+        },
+      }),
+    ).toBe(true);
   });
-});
 
-describe('archivo local', () => {
-  it('guarda y vuelve a leer la configuración completa', () => {
-    const file = join(tempDir(), 'ai-config.local.json');
-    const next = mergeConfig(DEFAULT_CONFIG, { limits: { perStudentPerDay: { forgetting: 7 } } });
-    saveAiConfig(file, next);
-    expect(JSON.parse(readFileSync(file, 'utf8'))).toMatchObject({
-      limits: { perStudentPerDay: { forgetting: 7 } },
+  it('mezcla las cuotas por motor sin perder las demás', () => {
+    const next = mergeConfig(DEFAULT_CONFIG, {
+      limits: { engineShare: { flashcards: 0.4 }, perUserDailyUsd: 0.5 },
     });
-    // Leer un archivo completo como cambios mezcla igual
-    expect(loadAiConfig(file).limits.perStudentPerDay.forgetting).toBe(7);
+    expect(next.limits.engineShare.flashcards).toBe(0.4);
+    expect(next.limits.engineShare.restructure).toBe(0.15);
+    expect(next.limits.perUserDailyUsd).toBe(0.5);
+    expect(next.limits.cardGenerationsPerDay).toBe(DEFAULT_CONFIG.limits.cardGenerationsPerDay);
   });
 
-  it('sin archivo, con archivo dañado o con valores inválidos usa los de fábrica', () => {
-    expect(loadAiConfig(null)).toBe(DEFAULT_CONFIG);
-    const dir = tempDir();
-    expect(loadAiConfig(join(dir, 'no-existe.json'))).toBe(DEFAULT_CONFIG);
-    const broken = join(dir, 'roto.json');
-    writeFileSync(broken, '{ no es json');
-    expect(loadAiConfig(broken)).toBe(DEFAULT_CONFIG);
-    const invalid = join(dir, 'invalido.json');
-    writeFileSync(invalid, JSON.stringify({ limits: { perStudentPerDay: { forgetting: -4 } } }));
-    expect(loadAiConfig(invalid)).toBe(DEFAULT_CONFIG);
+  it('un cambio sin razonamiento lo conserva si el modelo es el mismo y lo deja en null si cambia', () => {
+    const same = mergeConfig(DEFAULT_CONFIG, {
+      models: { flashcards: { id: 'claude-sonnet-5-5', effort: 'medium', maxTokens: 7000 } },
+    });
+    expect(same.models.flashcards).toEqual({
+      id: 'claude-sonnet-5-5',
+      effort: 'medium',
+      thinking: 'adaptive',
+      maxTokens: 7000,
+    });
+    const other = mergeConfig(DEFAULT_CONFIG, {
+      models: { flashcards: { id: 'claude-haiku-4-5', effort: null, maxTokens: 7000 } },
+    });
+    expect(other.models.flashcards.thinking).toBeNull();
+    const explicit = mergeConfig(DEFAULT_CONFIG, {
+      models: {
+        flashcards: { id: 'claude-haiku-5-5', effort: 'low', thinking: 'off', maxTokens: 4000 },
+      },
+    });
+    expect(explicit.models.flashcards.thinking).toBe('off');
   });
 });

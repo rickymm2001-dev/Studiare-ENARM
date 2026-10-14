@@ -2,6 +2,8 @@
 // alimentan la pantalla de admin y PUT /ai/config cambia modelos, precios y límites sin reiniciar.
 // Una petición pasa por el esquema, el tamaño, el filtro de datos personales y los límites antes
 // de llegar al proveedor, y su salida pasa por el esquema y las guardas antes de salir de aquí.
+// Es parte del núcleo que comparten la Edge Function y el proxy de desarrollo (B12, 1.1). No lee
+// archivos ni el entorno. Dónde se guarda la configuración lo decide quien arma las dependencias.
 import { Hono } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import {
@@ -12,8 +14,8 @@ import {
   inputChars,
   type AiEngine,
   type AiErrorCode,
-} from '../../../../src/engines/aiContracts.ts';
-import { AiConfigPatchSchema, mergeConfig, saveAiConfig, type AiConfig } from './config.ts';
+} from './engines/aiContracts.ts';
+import { AiConfigPatchSchema, mergeConfig, type AiConfig } from './config.ts';
 import type { LedgerPort } from './ledger.ts';
 import { findPersonalData, hasPersonalData } from './pii.ts';
 import type { PromptSets } from './prompts.ts';
@@ -25,10 +27,11 @@ export interface AiRoutesDeps {
   prompts: PromptSets;
   config: () => AiConfig;
   setConfig: (next: AiConfig) => void;
-  /** Archivo donde se guardan los cambios de configuración. null no guarda */
-  configFile: string | null;
-  /** Otra forma de guardar los cambios, como la base de datos del proxy alojado. Manda sobre configFile */
-  saveConfig?: (next: AiConfig) => Promise<void>;
+  /**
+   * Dónde se guardan los cambios de configuración, como la tabla ai_config en la nube o el archivo
+   * local del proxy de desarrollo. Sin él los cambios solo viven en memoria
+   */
+  saveConfig?: (next: AiConfig) => void | Promise<void>;
   ledger: LedgerPort;
   sourceKeys: ReadonlySet<string>;
   clock?: () => number;
@@ -45,6 +48,13 @@ const STATUS: Record<AiErrorCode, ContentfulStatusCode> = {
   provider_error: 502,
   unauthorized: 401,
   plan_required: 403,
+  // Códigos de B12 (8.5, contrato C1). Las rutas que los devuelven las escribe el paquete A
+  gate_closed: 403,
+  staff_only: 403,
+  refused: 502,
+  generation_limit: 429,
+  not_configured: 503,
+  paused: 503,
 };
 
 const MESSAGES: Record<
@@ -110,7 +120,6 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
     try {
       const next = mergeConfig(deps.config(), patch.data);
       if (deps.saveConfig) await deps.saveConfig(next);
-      else if (deps.configFile) saveAiConfig(deps.configFile, next);
       deps.setConfig(next);
       return c.json({ mode: deps.provider.mode, config: next });
     } catch {

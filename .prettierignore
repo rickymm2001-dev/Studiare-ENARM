@@ -13,3 +13,6 @@ docs/screenshots
 .review
 content-drafts
 dist-cloud
+# Copias generadas por npm run ai:sync (B12). Sus originales sí pasan por Prettier
+supabase/functions/_shared/ai/engines
+supabase/functions/_shared/ai/prompts.generated.ts

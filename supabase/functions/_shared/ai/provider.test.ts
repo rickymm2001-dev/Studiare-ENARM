@@ -1,8 +1,8 @@
 import { APIError } from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
-import { ENGINE_CONTRACTS } from '../../../../src/engines/aiContracts.ts';
 import { flashcardsInput, hypothesisInput } from '../../../../src/ai/testing/aiSamples.ts';
 import { DEFAULT_CONFIG } from './config.ts';
+import { ENGINE_CONTRACTS } from './engines/aiContracts.ts';
 import { createAnthropicProvider, createMockProvider, ProviderError } from './provider.ts';
 import { fakeApi, fakeMessage } from './testing/fakes.ts';
 

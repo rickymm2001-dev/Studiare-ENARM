@@ -4,7 +4,7 @@ import type {
   Message,
   MessageCreateParamsNonStreaming,
 } from '@anthropic-ai/sdk/resources/messages';
-import type { AiEngine, EngineInputs } from '../../../../../src/engines/aiContracts.ts';
+import type { AiEngine, EngineInputs } from '../engines/aiContracts.ts';
 import { DEFAULT_CONFIG, type AiConfig } from '../config.ts';
 import type { MessagesApi } from '../provider.ts';
 

@@ -1,26 +1,24 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
-import { AI_ENGINES, PROMPT_VERSION_PATTERN } from '../../../../src/engines/aiContracts.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../../../../server/src/ai/index.ts';
-import { buildUserMessage, flashcardsPrompt, loadPrompts, MASTER_MARKER } from './prompts.ts';
+import { describe, expect, it } from 'vitest';
+import { AI_ENGINES, PROMPT_VERSION_PATTERN } from './engines/aiContracts.ts';
+import {
+  buildPromptSets,
+  buildUserMessage,
+  bundledPromptSets,
+  composeFlashcardsPrompt,
+  MASTER_MARKER,
+  promptHash,
+} from './prompts.ts';
+import type { PromptSource } from './promptSources.ts';
 
-const dirs: string[] = [];
-const tempDir = () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ai-prompts-'));
-  dirs.push(dir);
-  return dir;
-};
-afterEach(() => {
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+const source = (file: string, version: string, text: string): PromptSource => ({
+  file,
+  version,
+  sha256: '0'.repeat(64),
+  text,
 });
 
 describe('prompts del repositorio', () => {
-  const prompts = loadPrompts({
-    serverPromptsDir: SERVER_PROMPTS_DIR,
-    rootPromptsDir: ROOT_PROMPTS_DIR,
-  });
+  const prompts = bundledPromptSets();
 
   it('hay un prompt por motor y su versión tiene el formato esperado', () => {
     for (const engine of AI_ENGINES) {
@@ -48,54 +46,82 @@ describe('prompts del repositorio', () => {
   });
 });
 
+describe('huella del prompt', () => {
+  it('es el SHA-256 en hexadecimal del texto en UTF-8', async () => {
+    // SHA-256 de "abc", el vector de prueba de FIPS 180-2
+    expect(await promptHash({ version: 'forgetting.base.v1', text: 'abc' })).toBe(
+      'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+    );
+    const accented = await promptHash({ version: 'forgetting.base.v1', text: 'olvídalo' });
+    expect(accented).toMatch(/^[0-9a-f]{64}$/);
+    expect(accented).not.toBe(
+      await promptHash({ version: 'forgetting.base.v1', text: 'olvidalo' }),
+    );
+  });
+});
+
 describe('prompt de flashcards', () => {
   const provisional =
     '# Provisional\n\n## Reglas que no se pueden saltar\n\n1. Cita tal cual.\n\n## Lo que hace la app después\n\nTexto.';
 
-  const withMaster = (master: string | null) => {
-    const dir = tempDir();
-    writeFileSync(join(dir, 'flashcards_provisional.md'), provisional);
-    if (master !== null) writeFileSync(join(dir, 'flashcards_maestro.md'), master);
-    return dir;
-  };
-
   it('con la marca vacía o sin la marca usa el provisional', () => {
-    expect(flashcardsPrompt(withMaster(`Intro\n${MASTER_MARKER}\n   \n`)).version).toBe(
+    expect(composeFlashcardsPrompt(provisional, `Intro\n${MASTER_MARKER}\n   \n`).version).toBe(
       'flashcards.provisional.v1',
     );
-    expect(flashcardsPrompt(withMaster('Sin marca')).version).toBe('flashcards.provisional.v1');
-    expect(flashcardsPrompt(withMaster(null)).version).toBe('flashcards.provisional.v1');
+    expect(composeFlashcardsPrompt(provisional, 'Sin marca').version).toBe(
+      'flashcards.provisional.v1',
+    );
+    const plain = composeFlashcardsPrompt(provisional, null);
+    expect(plain.version).toBe('flashcards.provisional.v1');
+    expect(plain.text.startsWith('# Provisional')).toBe(true);
+    expect(plain.text).toContain('<datos>');
   });
 
   it('con prompt maestro lo usa y le agrega las reglas fijas de la app', () => {
-    const prompt = flashcardsPrompt(withMaster(`Intro\n${MASTER_MARKER}\nMi prompt de Ricardo`));
+    const prompt = composeFlashcardsPrompt(
+      provisional,
+      `Intro\n${MASTER_MARKER}\nMi prompt de Ricardo`,
+    );
     expect(prompt.version).toBe('flashcards.maestro.v1');
     expect(prompt.text.startsWith('Mi prompt de Ricardo')).toBe(true);
     expect(prompt.text).toContain('Cita tal cual');
     expect(prompt.text).not.toContain('Texto.');
+    expect(prompt.text).toContain('<datos>');
   });
 });
 
 describe('versiones de los demás motores', () => {
+  const provisional = source('prompts/flashcards_provisional.md', 'flashcards.provisional.v1', 'x');
+
   it('usa la versión más alta de cada uno', () => {
-    const server = tempDir();
+    const sources = [provisional];
     for (const engine of ['forgetting', 'weekly_report', 'bias_tips', 'restructure']) {
-      writeFileSync(join(server, `${engine}.base.v1.md`), 'viejo');
-      writeFileSync(join(server, `${engine}.base.v10.md`), 'nuevo');
-      writeFileSync(join(server, `${engine}.base.v2.md`), 'medio');
+      sources.push(
+        source(`server/prompts/${engine}.base.v1.md`, `${engine}.base.v1`, 'viejo'),
+        source(`server/prompts/${engine}.base.v10.md`, `${engine}.base.v10`, 'nuevo\n'),
+        source(`server/prompts/${engine}.base.v2.md`, `${engine}.base.v2`, 'medio'),
+      );
     }
-    const root = tempDir();
-    mkdirSync(root, { recursive: true });
-    writeFileSync(join(root, 'flashcards_provisional.md'), 'x');
-    const prompts = loadPrompts({ serverPromptsDir: server, rootPromptsDir: root });
+    const prompts = buildPromptSets(sources);
     expect(prompts.forgetting).toEqual({ version: 'forgetting.base.v10', text: 'nuevo' });
   });
 
-  it('falla de entrada si falta el prompt de un motor', () => {
-    const root = tempDir();
-    writeFileSync(join(root, 'flashcards_provisional.md'), 'x');
-    expect(() => loadPrompts({ serverPromptsDir: tempDir(), rootPromptsDir: root })).toThrow(
-      'Falta el prompt',
+  it('solo cuenta los prompts de motor de server/prompts', () => {
+    const sources = [
+      provisional,
+      source('prompts/forgetting.base.v9.md', 'forgetting.base.v9', 'fuera de lugar'),
+    ];
+    expect(() => buildPromptSets(sources)).toThrow('Falta el prompt del motor forgetting');
+  });
+
+  it('falla de entrada si falta el prompt de un motor o el provisional de flashcards', () => {
+    expect(() => buildPromptSets([provisional])).toThrow('Falta el prompt');
+    const engines = ['forgetting', 'weekly_report', 'bias_tips', 'restructure'].map((engine) =>
+      source(`server/prompts/${engine}.base.v1.md`, `${engine}.base.v1`, 'texto'),
+    );
+    expect(() => buildPromptSets(engines)).toThrow('Falta el prompt del motor flashcards');
+    expect(buildPromptSets([...engines, provisional]).weekly_report.version).toBe(
+      'weekly_report.base.v1',
     );
   });
 });

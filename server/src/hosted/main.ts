@@ -7,7 +7,6 @@ import { serve } from '@hono/node-server';
 import { ACADEMIC_SOURCE_KEYS } from '../../../src/config/academicSources.ts';
 import { DEFAULT_CONFIG } from '../../../supabase/functions/_shared/ai/config.ts';
 import { PgLedger, createRestRpc } from '../../../supabase/functions/_shared/ai/pgLedger.ts';
-import { loadPrompts } from '../../../supabase/functions/_shared/ai/prompts.ts';
 import {
   createAnthropicProvider,
   createMockProvider,
@@ -15,7 +14,7 @@ import {
 } from '../../../supabase/functions/_shared/ai/provider.ts';
 import type { AiRoutesDeps } from '../../../supabase/functions/_shared/ai/routes.ts';
 import { KEY_VARIABLE } from '../config.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
+import { loadPrompts, ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
 import { createHostedApp } from './app.ts';
 import { createSupabaseAuthenticator } from './auth.ts';
 import { createRestConfigStore } from './configStore.ts';
@@ -64,7 +63,6 @@ const ai: AiRoutesDeps = {
   setConfig: (next) => {
     config = next;
   },
-  configFile: null,
   saveConfig: (next) => store.save(next),
   ledger: new PgLedger(createRestRpc({ url: env.supabaseUrl, serviceKey: env.serviceKey })),
   sourceKeys: new Set<string>(ACADEMIC_SOURCE_KEYS),

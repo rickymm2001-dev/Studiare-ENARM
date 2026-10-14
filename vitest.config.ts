@@ -31,8 +31,18 @@ export default defineConfig({
     restoreMocks: true,
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,tsx}', 'server/src/**/*.ts'],
-      exclude: ['**/*.test.{ts,tsx}', 'src/main.tsx', 'src/**/testing/**', 'src/**/*.d.ts'],
+      include: ['src/**/*.{ts,tsx}', 'server/src/**/*.ts', 'supabase/functions/_shared/**/*.ts'],
+      exclude: [
+        '**/*.test.{ts,tsx}',
+        'src/main.tsx',
+        'src/**/testing/**',
+        'src/**/*.d.ts',
+        // Dobles de prueba y copias generadas. Sus originales en src ya cuentan (B12, 1.3 del plan)
+        'supabase/functions/**/testing/**',
+        'supabase/functions/_shared/ai/engines/**',
+        'supabase/functions/_shared/ai/prompts.generated.ts',
+        'supabase/functions/_shared/bank/generated/**',
+      ],
       reportsDirectory: './coverage',
       // Cobertura de 90% o más en los motores (14.1, criterio de la Fase B)
       thresholds: {
