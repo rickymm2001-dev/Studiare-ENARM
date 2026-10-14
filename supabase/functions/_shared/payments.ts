@@ -48,6 +48,7 @@ import { createMercadoPagoCheckout } from './mercadopago.ts';
 import {
   PASS_PRICE_SECRETS,
   PLAN_PRICE_SECRETS,
+  breakdownPromotionCodeIds,
   checkoutSessionSteps,
   customerParams,
   idOf,
@@ -56,6 +57,7 @@ import {
   passSessionParams,
   portalSessionParams,
   priceFromEnv,
+  promotionCodeOf,
   refundedCharge,
   runStripeAction,
   sessionNeedsRead,
@@ -148,6 +150,37 @@ async function withUser<T extends { userId: string | null }>(
 }
 
 /**
+ * La sesión leída con el texto de su código de descuento. Si ni la sesión ni su suscripción lo traen,
+ * se lee del código que aparece en el desglose. Si esa lectura falla, el aviso se aplica sin código,
+ * porque el código solo sirve para contar y no cambia el plan
+ */
+async function withPromotionCode(
+  session: Json,
+  client: StripeClient,
+  deps: StripeWebhookDeps,
+): Promise<Json> {
+  if (promotionCodeOf(session.discounts, asRecord(session.subscription).discounts) !== null) {
+    return session;
+  }
+  const promotionId = breakdownPromotionCodeIds(session)[0];
+  if (!promotionId) return session;
+  try {
+    const reply = await stripeCall(
+      client,
+      'GET',
+      `/v1/promotion_codes/${encodeURIComponent(promotionId)}`,
+    );
+    if (reply.ok && asString(reply.body.code)) {
+      return { ...session, discounts: [{ promotion_code: reply.body }] };
+    }
+    deps.log(`No se pudo leer el código de descuento. ${stripeFailureLine(reply)}`);
+  } catch {
+    deps.log('Sin red hacia Stripe al leer el código de descuento');
+  }
+  return session;
+}
+
+/**
  * Lo que hay que aplicar por un evento (2.4). null si el evento no se usa. Lanza si la base o la
  * lectura a Stripe fallan, y entonces no se aplicó nada
  */
@@ -190,7 +223,7 @@ async function webhookSteps(event: Json, deps: StripeWebhookDeps): Promise<Webho
             deps.log(`No se pudo leer la sesión de pago. ${stripeFailureLine(reply)}`);
             throw new Error('lectura de la sesión');
           }
-          session = reply.body;
+          session = await withPromotionCode(reply.body, { key, fetch: deps.fetch }, deps);
           readAt = new Date(deps.now()).toISOString();
         }
       }

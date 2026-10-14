@@ -472,7 +472,9 @@ describe('aviso de Stripe por evento', () => {
     expect(read?.url.pathname).toBe('/v1/checkout/sessions/cs_1');
     expect(read?.url.searchParams.getAll('expand[]')).toEqual([
       'subscription',
+      'subscription.discounts.promotion_code',
       'discounts.promotion_code',
+      'total_details.breakdown',
     ]);
     const headers = new Headers(read?.init?.headers);
     expect(headers.get('authorization')).toBe(`Bearer ${KEY}`);
@@ -614,6 +616,60 @@ describe('aviso de Stripe por evento', () => {
       discountMxn: 14.9,
       promotionCode: 'PRUEBA10',
     });
+  });
+
+  it('si la sesión no trae el código lo toma de su suscripción o lo lee del desglose', async () => {
+    // Prueba con código. Lo trae la suscripción expandida y no hace falta otra lectura
+    const trialSession = subscriptionSession({ total_details: { amount_discount: 0 } });
+    const fromSubscription = webhookDeps({
+      routes: sessionRead(
+        trialSession,
+        subscriptionObject({
+          status: 'trialing',
+          discounts: [{ id: 'di_1', promotion_code: { id: 'promo_1', code: 'prueba10' } }],
+        }),
+      ),
+    });
+    await send(event('checkout.session.completed', trialSession), fromSubscription.deps);
+    expect(stripeCalls(fromSubscription.record.calls)).toHaveLength(1);
+    expect(fromSubscription.record.states[0]?.promotionCode).toBe('PRUEBA10');
+
+    // Pase con descuento. Solo el desglose trae el id del código, y se lee su texto
+    const session = passSession('oxxo', { total_details: { amount_discount: 1_490 } });
+    const breakdown = {
+      amount_discount: 1_490,
+      breakdown: {
+        discounts: [{ amount: 1_490, discount: { id: 'di_2', promotion_code: 'promo_2' } }],
+        taxes: [],
+      },
+    };
+    const fromBreakdown = webhookDeps({
+      routes: {
+        'GET /v1/checkout/sessions/cs_pase': reply({ ...session, total_details: breakdown }),
+        'GET /v1/promotion_codes/promo_2': reply({ id: 'promo_2', code: 'luna-15' }),
+      },
+    });
+    expect(
+      await (await send(event('checkout.session.completed', session), fromBreakdown.deps)).text(),
+    ).toBe('applied');
+    expect(stripeCalls(fromBreakdown.record.calls).map((call) => call.url.pathname)).toEqual([
+      '/v1/checkout/sessions/cs_pase',
+      '/v1/promotion_codes/promo_2',
+    ]);
+    expect(fromBreakdown.record.charges[0]?.promotionCode).toBe('LUNA-15');
+
+    // Si esa lectura falla el pase se aplica igual, sin código, y queda en el registro
+    const unread = webhookDeps({
+      routes: {
+        'GET /v1/checkout/sessions/cs_pase': reply({ ...session, total_details: breakdown }),
+        'GET /v1/promotion_codes/promo_2': stripeError(403, { code: 'secret_key_required' }),
+      },
+    });
+    expect(
+      await (await send(event('checkout.session.completed', session), unread.deps)).text(),
+    ).toBe('applied');
+    expect(unread.record.charges[0]).toMatchObject({ discountMxn: 14.9, promotionCode: null });
+    expect(unread.record.lines[0]).toMatch(/^No se pudo leer el código de descuento\. estado 403/);
   });
 
   it('una factura pagada es un cobro y la de 0 pesos de la prueba ni llega a la base', async () => {

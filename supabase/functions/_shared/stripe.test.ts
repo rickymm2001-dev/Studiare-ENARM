@@ -3,6 +3,7 @@ import { STRIPE_API_VERSION, type FunctionEnv } from './billingTypes.ts';
 import {
   PASS_PRICE_SECRETS,
   PLAN_PRICE_SECRETS,
+  breakdownPromotionCodeIds,
   cancelStripeSubscription,
   checkoutSessionSteps,
   customerParams,
@@ -17,6 +18,7 @@ import {
   priceFromEnv,
   refundedCharge,
   sessionNeedsRead,
+  sessionReadParams,
   stripeCall,
   stripeFailureLine,
   stripeSubscriptionStatus,
@@ -857,6 +859,35 @@ describe('sesión de pago terminada', () => {
     );
     expect(foreign?.link).toBeNull();
     expect(foreign?.charge?.userId).toBeNull();
+  });
+
+  it('la lectura expande los códigos y el desglose, y del desglose salen los id de los códigos', () => {
+    expect(sessionReadParams().getAll('expand[]')).toEqual([
+      'subscription',
+      'subscription.discounts.promotion_code',
+      'discounts.promotion_code',
+      'total_details.breakdown',
+    ]);
+    const discount = (promotionCode: unknown) => ({
+      amount: 100,
+      discount: { id: 'di_1', promotion_code: promotionCode },
+    });
+    expect(
+      breakdownPromotionCodeIds({
+        total_details: {
+          breakdown: {
+            discounts: [
+              discount('promo_1'),
+              discount({ id: 'promo_2', code: 'X' }),
+              discount('promo_1'),
+              discount(null),
+              discount('otro_3'),
+            ],
+          },
+        },
+      }),
+    ).toEqual(['promo_1', 'promo_2']);
+    expect(breakdownPromotionCodeIds({})).toEqual([]);
   });
 
   it('solo se lee de Stripe la suscripción o una sesión con descuento', () => {

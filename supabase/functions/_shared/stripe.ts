@@ -313,12 +313,31 @@ export function customerParams(user: { id: string; email: string | null }): URLS
   return params;
 }
 
-/** La lectura de una sesión con su suscripción y sus códigos de descuento (2.4) */
+/**
+ * La lectura de una sesión con su suscripción y sus códigos de descuento (2.4). El código puede venir en
+ * los descuentos de la sesión o de su suscripción. No está confirmado que la sesión los llene cuando el
+ * alumno teclea el código (docs-digest, sección 5), por eso también se pide el desglose, que sí lo
+ * refleja pero solo con el id del código. Stripe no expande más de cuatro niveles
+ */
 export function sessionReadParams(): URLSearchParams {
   const params = new URLSearchParams();
   params.append('expand[]', 'subscription');
+  params.append('expand[]', 'subscription.discounts.promotion_code');
   params.append('expand[]', 'discounts.promotion_code');
+  params.append('expand[]', 'total_details.breakdown');
   return params;
+}
+
+/**
+ * Los id de los códigos de descuento del desglose de una sesión, para leer su texto cuando la sesión no
+ * lo trae en sus descuentos
+ */
+export function breakdownPromotionCodeIds(session: unknown): string[] {
+  const breakdown = asRecord(asRecord(asRecord(session).total_details).breakdown);
+  const ids = asArray(breakdown.discounts)
+    .map((entry) => idOf(asRecord(asRecord(entry).discount).promotion_code))
+    .filter((id): id is string => id?.startsWith('promo_') === true);
+  return [...new Set(ids)];
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -672,7 +691,7 @@ export function checkoutSessionSteps(
         providerSubscriptionId: idOf(object.subscription),
         amountMxn,
         discountMxn: discountCents > 0 ? discountCents / 100 : null,
-        promotionCode,
+        promotionCode: promotionCode ?? state?.promotionCode ?? null,
         periodEnd: state?.periodEnd ?? null,
       };
     }
