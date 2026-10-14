@@ -625,12 +625,17 @@ export async function handleCreatePortal(request: Request, deps: PortalDeps): Pr
   const customer = context.customerId;
   if (customer === null) return json({ error: 'no_customer' }, 404, cors);
 
+  // Sin su configuración el portal no se abre. La de Stripe por omisión deja elegir cualquier precio del
+  // catálogo, también el Fundador sin pasar por el cupo
   const configName = isFounderPlan(subscription?.plan)
     ? 'STRIPE_PORTAL_CONFIG_FOUNDER'
     : 'STRIPE_PORTAL_CONFIG_REGULAR';
-  const configuration = (deps.env[configName] ?? '').trim() || null;
-  if (!configuration) {
-    deps.log(`Falta ${configName}. El portal se abre con la configuración por omisión de Stripe`);
+  const configuration = (deps.env[configName] ?? '').trim();
+  if (configuration === '') {
+    deps.log(
+      `Falta ${configName}. El portal no se abre sin su configuración, porque la de Stripe por omisión deja elegir cualquier precio`,
+    );
+    return json({ error: 'not_configured' }, 503, cors);
   }
   const stripeSubscription =
     live && subscription.provider === 'stripe' ? subscription.subscriptionId : null;

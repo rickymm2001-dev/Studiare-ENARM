@@ -712,7 +712,8 @@ begin
     'public.billing_register_event(text, text, jsonb)', 'public.billing_event_done(text, text, text)',
     'public.billing_queue_cancel(uuid, text, text, text)', 'public.billing_mark_issue(uuid, text, text)',
     'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)',
-    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()'] loop
+    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()',
+    'public.billing_founder_lost(uuid, text, text)'] loop
     if has_function_privilege('authenticated', v_fn, 'execute') or has_function_privilege('anon', v_fn, 'execute')
        or has_function_privilege('service_role', v_fn, 'execute') then
       raise exception 'FALLA P6. % es interna y nadie debe ejecutarla por la API', v_fn;
@@ -1072,6 +1073,58 @@ select pg_temp.expect(
   (select current_period_end > now() + interval '55 days' from public.subscriptions where user_id = :'r3a')
   and (select count(*) from public.payments where user_id = :'r3a' and status = 'paid') = 2,
   'R3. El cobro siguiente debía alargar la misma suscripción'
+);
+
+-- R4. El estado Fundador no se salta el cupo ni la regla de quien ya lo perdió
+\set r4a 'ba110000-0000-0000-0000-0000000004a0'
+\set r4b 'ba110000-0000-0000-0000-0000000004b0'
+\set r4c 'ba110000-0000-0000-0000-0000000004c0'
+\set r4d 'ba110000-0000-0000-0000-0000000004d0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r4a', 'r4a@ba.mx', '{"alias":"Fundador vencido"}'),
+  (:'r4b', 'r4b@ba.mx', '{"alias":"Fundador a mano"}'),
+  (:'r4c', 'r4c@ba.mx', '{"alias":"Sube a Fundador"}'),
+  (:'r4d', 'r4d@ba.mx', '{"alias":"Perdió Fundador"}');
+-- Una suscripción Fundador que solo llega terminada, como un pago que venció sin completarse, no ocupa lugar
+select pg_temp.state('evt-r4-a', :'r4a', 'sub_r4_a', 'founder', 'ended');
+select pg_temp.is(pg_temp.seat_of(:'r4a'), null, 'R4. Una suscripción Fundador terminada no debía ocupar lugar');
+-- Con el cupo lleno, una fila Fundador puesta a mano no pasa del cupo
+update public.platform_settings set value = jsonb_build_object('total', public.founder_seats_taken())
+  where key = 'founder_seats';
+insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id, current_period_end)
+  values (:'r4b', 'founder', 'active', 'stripe', 'sub_r4_b', now() + interval '30 days');
+select pg_temp.is(pg_temp.seat_of(:'r4b'), null, 'R4. Una fila Fundador puesta a mano no debía pasar del cupo');
+-- Con el cupo lleno, pasar al precio Fundador en la misma suscripción no da el plan ni el lugar
+select pg_temp.state('evt-r4-c', :'r4c', 'sub_r4_c', 'monthly', 'active', p_price => 'price_mensual');
+select pg_temp.charge('evt-r4-cc', 'paid', :'r4c', 'subscription', 'monthly', 'in_r4_c', 149, 'sub_r4_c',
+  p_period_end => now() + interval '30 days');
+select pg_temp.is(pg_temp.state('evt-r4-cx', :'r4c', 'sub_r4_c', 'founder', 'active', p_price => 'price_fundador'),
+  'founder_full', 'R4. Pasar a Fundador sin lugar en la misma suscripción debía rechazarse');
+select pg_temp.expect(
+  pg_temp.seat_of(:'r4c') is null
+  and (select plan from public.subscriptions where user_id = :'r4c') = 'monthly'
+  and pg_temp.action_for('sub_r4_c') = 'founder_full',
+  'R4. Sin lugar no debía quedar como Fundador'
+);
+update public.platform_settings set value = '{"total":100}' where key = 'founder_seats';
+-- Quien pagó un Fundador y lo dejó no lo recupera con otra suscripción, llegue antes el estado o el cobro
+select pg_temp.state('evt-r4-d1', :'r4d', 'sub_r4_d1', 'founder', 'active');
+select pg_temp.charge('evt-r4-d1c', 'paid', :'r4d', 'subscription', 'founder', 'in_r4_d1', 79, 'sub_r4_d1',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r4-d1e', :'r4d', 'sub_r4_d1', 'founder', 'ended');
+select pg_temp.is(public.checkout_context(:'r4d') ->> 'founderLost', 'true', 'R4. Debía perder el precio Fundador');
+select pg_temp.is(pg_temp.state('evt-r4-d2', :'r4d', 'sub_r4_d2', 'founder', 'active'), 'founder_full',
+  'R4. Una suscripción Fundador nueva de quien lo perdió debía rechazarse');
+select pg_temp.is(pg_temp.charge('evt-r4-d3c', 'paid', :'r4d', 'subscription', 'founder', 'in_r4_d3', 79, 'sub_r4_d3',
+  p_period_end => now() + interval '30 days'), 'founder_full',
+  'R4. El cobro de una suscripción Fundador nueva de quien lo perdió debía rechazarse');
+select pg_temp.expect(
+  (select provider_subscription_id from public.founder_seats where user_id = :'r4d') = 'sub_r4_d1'
+  and public.user_plan(:'r4d') = 'free'
+  and (select status from public.payments where provider_payment_id = 'in_r4_d3') = 'needs_refund'
+  and pg_temp.action_for('sub_r4_d2') = 'founder_full'
+  and pg_temp.action_for('sub_r4_d3') = 'founder_full',
+  'R4. Quien perdió el Fundador no debía recuperarlo ni mover su lugar'
 );
 
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;

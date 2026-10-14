@@ -1750,15 +1750,24 @@ describe('portal de facturación', () => {
     expect(calls).toEqual([]);
   });
 
-  it('sin la configuración del portal se abre la de Stripe y queda en el registro', async () => {
-    const { deps, calls, lines } = portalDeps({
-      env: { ...env, STRIPE_PORTAL_CONFIG_REGULAR: ' ' },
-    });
-    expect((await askPortal(deps)).status).toBe(200);
-    expect(form(calls[0]).configuration).toBeUndefined();
-    expect(lines).toEqual([
-      'Falta STRIPE_PORTAL_CONFIG_REGULAR. El portal se abre con la configuración por omisión de Stripe',
+  it('sin la configuración del portal contesta 503 sin llamar a Stripe y lo deja en el registro', async () => {
+    // La configuración por omisión de Stripe deja elegir cualquier precio, también el Fundador sin lugar
+    const regular = portalDeps({ env: { ...env, STRIPE_PORTAL_CONFIG_REGULAR: ' ' } });
+    const answer = await askPortal(regular.deps);
+    expect(answer.status).toBe(503);
+    expect(await answer.json()).toEqual({ error: 'not_configured' });
+    expect(regular.calls).toEqual([]);
+    expect(regular.lines).toEqual([
+      'Falta STRIPE_PORTAL_CONFIG_REGULAR. El portal no se abre sin su configuración, porque la de Stripe por omisión deja elegir cualquier precio',
     ]);
+
+    const { STRIPE_PORTAL_CONFIG_FOUNDER: _withoutFounder, ...envWithoutFounder } = env;
+    const founder = portalDeps({
+      env: envWithoutFounder,
+      context: { subscription: liveSubscription({ plan: 'founder' }) },
+    });
+    expect((await askPortal(founder.deps)).status).toBe(503);
+    expect(founder.calls).toEqual([]);
   });
 
   it('sin sesión contesta 401 y sin llave o sin dirección de la app 503', async () => {

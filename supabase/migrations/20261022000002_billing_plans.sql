@@ -360,6 +360,18 @@ begin
 end;
 $$;
 
+-- Quien pagó un Fundador y lo dejó pierde el precio (respuesta 17). Tiene un lugar confirmado de otra
+-- suscripción. Una suscripción Fundador nueva o un cambio al precio Fundador no se lo devuelven
+create or replace function public.billing_founder_lost(p_user uuid, p_provider text, p_subscription_id text)
+returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select exists (
+    select 1 from public.founder_seats f
+    where f.user_id = p_user and f.status = 'confirmed'
+      and (f.provider is distinct from p_provider or f.provider_subscription_id is distinct from p_subscription_id)
+  )
+$$;
+
 -- La clave de una prueba por correo. Minúsculas, sin el sufijo +algo y, en gmail.com y googlemail.com,
 -- sin puntos y con dominio gmail.com. null si no parece un correo
 create or replace function public.trial_email_key(p_email text) returns text
@@ -627,18 +639,19 @@ language sql stable security definer set search_path = public, pg_temp as $$
 $$;
 
 -- ===================================================================== Disparador del lugar Fundador
--- Una suscripción Fundador sin lugar lo recibe, apartado en la prueba y confirmado en lo demás. Así el
--- camino de antes (apply_payment_notice) y una fila puesta a mano cuentan igual. Nunca cambia un lugar
--- que ya existe, porque eso lo deciden apply_subscription_state y apply_charge
+-- Una suscripción Fundador vigente sin lugar lo recibe, apartado en la prueba y confirmado en lo demás,
+-- con el candado y el tope del cupo (billing_take_seat). Así el camino de antes (apply_payment_notice) y
+-- una fila puesta a mano cuentan igual y ninguno pasa del cupo. Una fila cancelada o terminada no ocupa
+-- lugar, como un pago Fundador que venció sin completarse. Nunca cambia un lugar que ya existe, porque eso
+-- lo deciden apply_subscription_state y apply_charge
 create or replace function public.subscriptions_sync_founder_seat() returns trigger
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  if new.plan in ('founder', 'founder_annual') then
-    insert into public.founder_seats (user_id, plan, status, provider, provider_subscription_id, held_at, confirmed_at, updated_at)
-      values (new.user_id, new.plan, case when new.status = 'trialing' then 'held' else 'confirmed' end,
-              coalesce(new.provider, 'stripe'), new.provider_subscription_id, now(),
-              case when new.status = 'trialing' then null else now() end, now())
-      on conflict (user_id) do nothing;
+  if new.plan in ('founder', 'founder_annual') and new.status in ('trialing', 'active', 'past_due')
+     and not exists (select 1 from public.founder_seats where user_id = new.user_id) then
+    perform public.billing_take_seat(new.user_id, new.plan,
+      case when new.status = 'trialing' then 'held' else 'confirmed' end,
+      coalesce(new.provider, 'stripe'), new.provider_subscription_id);
   end if;
   return null;
 end;
@@ -769,6 +782,7 @@ declare
   v_result text;
   v_end timestamptz;
   v_price_changed boolean;
+  v_seat_ok boolean;
 begin
   if p_status is null or p_status not in ('trialing', 'active', 'past_due', 'canceled', 'ended') then
     raise exception 'Estado de suscripción desconocido' using errcode = '22023';
@@ -846,9 +860,17 @@ begin
       end if;
     end if;
     -- Una suscripción Fundador nueva necesita lugar (1.5). Se aparta con el candado del cupo, también sin
-    -- prueba, y el primer cobro lo confirma. Así ningún camino pasa del cupo
-    if v_plan in ('founder', 'founder_annual') and p_status in ('trialing', 'active', 'past_due')
-       and not public.billing_take_seat(p_user, v_plan, 'held', p_provider, p_subscription_id) then
+    -- prueba, y el primer cobro lo confirma. Así ningún camino pasa del cupo. Quien ya perdió el precio
+    -- Fundador no lo recupera y cuenta como sin lugar
+    v_seat_ok := true;
+    if v_plan in ('founder', 'founder_annual') and p_status in ('trialing', 'active', 'past_due') then
+      if public.billing_founder_lost(p_user, p_provider, p_subscription_id) then
+        v_seat_ok := false;
+      else
+        v_seat_ok := public.billing_take_seat(p_user, v_plan, 'held', p_provider, p_subscription_id);
+      end if;
+    end if;
+    if not v_seat_ok then
       -- Sin lugar. Una prueba queda anulada y no cuenta, la suscripción se cancela y su cobro, si lo hubo,
       -- queda para devolverse. El alumno decide si sigue con el precio regular (8.16)
       if p_status = 'trialing' then
@@ -878,6 +900,25 @@ begin
       insert into public.trial_history (email_hash, user_id, provider, provider_subscription_id)
         values (public.trial_key_hash(public.trial_account_key(p_user)), p_user, p_provider, p_subscription_id)
         on conflict (provider, provider_subscription_id) do nothing;
+    end if;
+  end if;
+
+  -- Pasar al precio Fundador en la misma suscripción, que el portal regular no permite pero un cambio en el
+  -- panel de Stripe sí, pide lugar como una suscripción nueva. Sin lugar, o si ya perdió el precio, no
+  -- cambia el plan y la suscripción se cancela como cualquier Fundador sin lugar
+  if v_same and v_plan in ('founder', 'founder_annual') and v_sub.plan not in ('founder', 'founder_annual')
+     and p_status in ('trialing', 'active', 'past_due') then
+    if public.billing_founder_lost(p_user, p_provider, p_subscription_id) then
+      v_seat_ok := false;
+    else
+      v_seat_ok := public.billing_take_seat(p_user, v_plan,
+        case when p_status = 'trialing' or v_sub.first_charge_at is null then 'held' else 'confirmed' end,
+        p_provider, p_subscription_id);
+    end if;
+    if not v_seat_ok then
+      perform public.billing_queue_cancel(p_user, p_provider, p_subscription_id, 'founder_full');
+      perform public.billing_mark_issue(p_user, 'founder_full', p_provider);
+      return public.billing_event_done(p_provider, p_event_id, 'founder_full');
     end if;
   end if;
 
@@ -974,6 +1015,7 @@ declare
   v_start timestamptz;
   v_pay public.payments%rowtype;
   v_charged_at timestamptz;
+  v_seat_ok boolean;
 begin
   if p_kind is null or p_kind not in ('paid', 'pending', 'failed', 'expired', 'refunded') then
     raise exception 'Tipo de cobro desconocido' using errcode = '22023';
@@ -1080,9 +1122,18 @@ begin
     if v_plan is null then
       return public.billing_event_done(p_provider, p_event_id, 'ignored');
     end if;
-    if v_plan in ('founder', 'founder_annual')
-       and not public.billing_take_seat(p_user, v_plan, 'confirmed', p_provider,
-                                        coalesce(p_provider_subscription_id, v_sub.provider_subscription_id)) then
+    -- El lugar Fundador. Un cobro de otra suscripción Fundador de quien ya perdió el precio cuenta como sin
+    -- lugar, para que llegar antes que el aviso de estado no se salte la regla
+    v_seat_ok := true;
+    if v_plan in ('founder', 'founder_annual') then
+      if not v_same and public.billing_founder_lost(p_user, p_provider, p_provider_subscription_id) then
+        v_seat_ok := false;
+      else
+        v_seat_ok := public.billing_take_seat(p_user, v_plan, 'confirmed', p_provider,
+                                              coalesce(p_provider_subscription_id, v_sub.provider_subscription_id));
+      end if;
+    end if;
+    if not v_seat_ok then
       -- Se cobró y no hay lugar. Queda para devolverse y la suscripción se cancela para que no vuelva a cobrar
       insert into public.payments (user_id, provider, provider_payment_id, amount_mxn, status, purpose, plan, method,
                                    payment_intent_id, provider_subscription_id, discount_mxn, promotion_code, paid_at)
@@ -1653,6 +1704,7 @@ revoke all on function public.founder_seats_taken() from public, anon, authentic
 revoke all on function public.founder_promo_open() from public, anon, authenticated, service_role;
 revoke all on function public.billing_take_seat(uuid, text, text, text, text) from public, anon, authenticated, service_role;
 revoke all on function public.billing_close_subscription(text, text) from public, anon, authenticated, service_role;
+revoke all on function public.billing_founder_lost(uuid, text, text) from public, anon, authenticated, service_role;
 revoke all on function public.trial_email_key(text) from public, anon, authenticated, service_role;
 revoke all on function public.trial_key_hash(text) from public, anon, authenticated, service_role;
 revoke all on function public.founder_seats_release_orphan() from public, anon, authenticated, service_role;
