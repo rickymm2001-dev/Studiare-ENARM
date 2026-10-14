@@ -218,6 +218,12 @@ export const EventPayloadSchemas = {
     cardIds: z.array(IdSchema).min(1).max(500),
   }),
   /**
+   * El alumno reinicia el avance FSRS de tarjetas, devolviéndolas al estado new (B4 del plan).
+   */
+  cards_reset: z.strictObject({
+    cardIds: z.array(IdSchema).min(1).max(500),
+  }),
+  /**
    * El alumno atendió la señal de controversia de una tarjeta generada por la IA (D-085). Marcó que ya
    * la verificó o la editó. La señal se quita de la tarjeta y este evento queda como constancia
    */
@@ -313,6 +319,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('official_score_submitted'),
   eventSchemaFor('cards_suspended'),
   eventSchemaFor('cards_unsuspended'),
+  eventSchemaFor('cards_reset'),
   eventSchemaFor('cards_rescheduled'),
   eventSchemaFor('card_controversy_resolved'),
 ]);
