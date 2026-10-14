@@ -5,7 +5,7 @@ import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import { LevelLadderDialog } from '@/app/layout/LevelLadderDialog';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { ADMIN_LINKS, NAV_BY_ROLE, type NavItem } from '@/app/navigation';
+import { ADMIN_LINKS, MOBILE_MORE_BY_ROLE, type NavItem } from '@/app/navigation';
 import { usePreferences } from '@/app/preferences';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
@@ -107,10 +107,11 @@ function Profile({ session }: { session: ReadySession }) {
 /** En el teléfono no caben Mazos, Party, Configuración ni Administración en la barra (D-076) */
 function PhoneShortcuts() {
   const role = usePreferences((state) => state.role);
-  const railOnly = NAV_BY_ROLE[role].filter((item) => item.railOnly && !item.groupStart);
+  const moreItems = MOBILE_MORE_BY_ROLE[role];
   const admin = role === 'admin' || role === 'owner' ? ADMIN_LINKS : [];
+  const shortcuts = moreItems.filter((item) => !admin.includes(item));
   const groups: [string, readonly NavItem[]][] = [
-    [t.profileCard.shortcuts, railOnly.filter((item) => !admin.includes(item))],
+    [t.profileCard.shortcuts, shortcuts],
     [t.navItems.admin, admin],
   ];
   return (

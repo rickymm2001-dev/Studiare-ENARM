@@ -5,8 +5,8 @@ import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { DailyCounters } from '@/engines/counters';
-import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
+import { useMemo, useState, type ReactNode } from 'react';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -196,9 +196,7 @@ export function ReviewSetup({
                 : text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)
             }
           >
-            {/* La clave rehace el borrador cuando los límites cambian desde fuera, por ejemplo al usar la sugerencia */}
             <DailyLimits
-              key={`${limits.newCardsPerDay}:${limits.reviewsPerDay}`}
               limits={limits}
               onSave={onSaveLimits}
             />
@@ -227,7 +225,18 @@ function DailyLimits({
 }) {
   const [newCards, setNewCards] = useState(String(limits.newCardsPerDay));
   const [reviews, setReviews] = useState(String(limits.reviewsPerDay));
+  const [prevLimits, setPrevLimits] = useState(limits);
   const [saved, setSaved] = useState(false);
+
+  if (
+    prevLimits.newCardsPerDay !== limits.newCardsPerDay ||
+    prevLimits.reviewsPerDay !== limits.reviewsPerDay
+  ) {
+    setPrevLimits(limits);
+    setNewCards(String(limits.newCardsPerDay));
+    setReviews(String(limits.reviewsPerDay));
+  }
+
   const clamp = (value: string, max: number) =>
     Math.min(max, Math.max(0, Math.round(Number(value) || 0)));
   const next = { newCardsPerDay: clamp(newCards, 500), reviewsPerDay: clamp(reviews, 5000) };
@@ -276,7 +285,11 @@ function DailyLimits({
         </Button>
       </div>
       <p role="status" className="mt-2 text-sm text-fg-muted">
-        {dirty ? t.settings.unsaved : saved ? t.reviewSetup.limitsSaved : t.reviewSetup.limitsHint}
+        {dirty
+          ? t.settings.unsaved
+          : saved
+            ? `${t.settings.saved}. ${t.reviewSetup.limitsSaved}`
+            : t.reviewSetup.limitsHint}
       </p>
     </fieldset>
   );

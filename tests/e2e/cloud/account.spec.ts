@@ -104,6 +104,7 @@ test.describe('Cuenta en la nube', () => {
 
     // Sale, pide otro correo y prueba el código viejo. Supabase lo rechaza como vencido
     await page.goto(SCREENS.profile.path);
+    await expect(page.getByText(t.cloud.linked(EMAIL))).toBeVisible();
     await page.getByRole('button', { name: t.session.signOut }).click();
     await expect(page.getByRole('heading', { name: t.session.signedOutTitle })).toBeVisible();
     await page.goto(SCREENS.onboarding.path);

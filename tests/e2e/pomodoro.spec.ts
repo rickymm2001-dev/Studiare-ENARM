@@ -158,6 +158,8 @@ test('con el permiso de notificaciones negado el ajuste se apaga solo, lo demás
 
   // Lo demás sí quedó guardado y la notificación sigue apagada
   await page.reload();
+  await page.locator('summary', { hasText: t.reviewSetup.limits }).click();
+  await page.locator('summary', { hasText: t.settings.pomodoroTitle }).click();
   const reloaded = page.getByRole('region', { name: t.settings.pomodoroTitle });
   await expect(reloaded.getByLabel(t.pomodoro.focusMinutes)).toHaveValue('1');
   await expect(

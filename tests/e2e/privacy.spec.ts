@@ -50,6 +50,7 @@ test('el puntaje oficial se guarda, sobrevive a recargar y se borra al retirar l
   await page
     .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
     .uncheck();
+  await expect(page.getByText(t.settings.privacy.consentSaved)).toBeVisible();
   await page.goto(SCREENS.progress.path);
   await expect(page.getByText(text.scoreNeedsConsent)).toBeVisible();
   await expect(page.getByText(text.none)).toBeVisible();
