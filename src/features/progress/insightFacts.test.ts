@@ -131,7 +131,7 @@ describe('buildInsightInput', () => {
       changes: [{ fromCorrect: true, toCorrect: false }],
       misread: true,
     });
-    expect(result.causes).toEqual(['misread']);
+    expect(result.causes).toEqual(['misinterpretation']);
     expect(result.studyDays).toEqual(['2026-09-01']);
     expect(result.daysSinceStart).toBe(9);
   });
@@ -180,5 +180,34 @@ describe('buildInsightInput', () => {
       thresholds: DEFAULT_THRESHOLDS,
     });
     expect(result.answers.map((item) => item.misread)).toEqual([false, true]);
+  });
+
+  it('al cambiar un motivo de error vale el último reportado (D-124)', () => {
+    const events = [
+      {
+        ...base,
+        id: 'e1',
+        at: at(10),
+        type: 'cause_reported',
+        payload: { targetKind: 'question', targetId: 'q1', cause: 'knowledge' },
+      },
+      {
+        ...base,
+        id: 'e2',
+        at: at(12),
+        type: 'cause_reported',
+        payload: { targetKind: 'question', targetId: 'q1', cause: 'time' },
+      },
+    ] as unknown as AppEvent[];
+    const result = buildInsightInput({
+      events,
+      bank: { questions: new Map(), options: new Map(), cases: new Map() },
+      timeZone: 'America/Mexico_City',
+      today: '2026-09-20',
+      desiredRetention: 0.9,
+      thresholds: DEFAULT_THRESHOLDS,
+    });
+    // Solo refleja 'time', no 'knowledge' ni duplicados
+    expect(result.causes).toEqual(['time']);
   });
 });

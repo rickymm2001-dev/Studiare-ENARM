@@ -55,6 +55,13 @@ const hourNames: Record<string, string> = {
 };
 
 export const causeNames: Record<string, string> = {
+  knowledge: 'Conocimiento',
+  time: 'Tiempo',
+  misinterpretation: 'Malinterpretación',
+  shallow_reading: 'Lectura superficial',
+  anxiety: 'Ansiedad',
+  overconfidence: 'Exceso de confianza',
+  fatigue: 'Fatiga',
   not_studied: 'No lo había estudiado',
   forgot: 'Lo olvidé',
   confused: 'Lo confundí con otra cosa',
@@ -66,6 +73,19 @@ export const causeNames: Record<string, string> = {
 };
 
 const causeAdvice: Record<string, string> = {
+  knowledge:
+    'Son huecos de contenido o conceptos olvidados. Agrega esos temas a tu plan y crea tarjetas para que entren a tu repaso espaciado.',
+  time: 'Revisa tu ritmo y tus pausas. Bloques más cortos con descansos te ayudan a distribuir mejor el tiempo.',
+  misinterpretation:
+    'Lee primero la pregunta final, marca las negaciones y no respondas antes de terminar de entender el caso.',
+  shallow_reading:
+    'Al leer, busca a propósito edad, signos vitales, tiempo de evolución y el último dato clave del caso.',
+  anxiety:
+    'Confía en tu preparación. Cambia tu respuesta solo si encuentras un dato concreto que contradiga tu primera elección.',
+  overconfidence:
+    'Cuidado con responder en automático. Revisa todas las opciones antes de confirmar tu respuesta.',
+  fatigue:
+    'Estudiar con cansancio reduce la retención. Haz pausas regulares o concluye la sesión cuando sientas fatiga.',
   not_studied:
     'Son huecos de contenido. Agrega esos temas a tu plan y empieza con su resumen y sus tarjetas.',
   forgot:

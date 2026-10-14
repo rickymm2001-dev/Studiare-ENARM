@@ -36,7 +36,7 @@ const copied = [...dockerfile.matchAll(/^COPY\s+(\S+)\s+\S+\s*$/gm)]
 describe('imagen del proxy alojado', () => {
   it('copia todo lo que el proxy importa', () => {
     const missing = closure(ENTRY)
-      .map((file) => relative(ROOT, file))
+      .map((file) => relative(ROOT, file).replace(/\\/g, '/'))
       .filter((file) => !copied.some((source) => file === source || file.startsWith(`${source}/`)));
     expect(missing).toEqual([]);
   });

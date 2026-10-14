@@ -72,8 +72,36 @@ export type ClueStrength = z.infer<typeof ClueStrengthSchema>;
 /** Botones de FSRS en español: Otra vez, Difícil, Bien y Fácil */
 export const FsrsRatingSchema = z.enum(['again', 'hard', 'good', 'easy']);
 
-/** Causas de error autorreportadas (13.3). Otra no lleva texto libre */
-export const ErrorCauseSchema = z.enum([
+/**
+ * Los 7 motivos de error autorreportados vigentes (D-124, comentarios 1 y 2).
+ * Un toque en la revisión: Conocimiento, Tiempo, Malinterpretación, Lectura superficial,
+ * Ansiedad, Exceso de confianza y Fatiga.
+ */
+export const CurrentErrorCauseSchema = z.enum([
+  'knowledge',
+  'time',
+  'misinterpretation',
+  'shallow_reading',
+  'anxiety',
+  'overconfidence',
+  'fatigue',
+]);
+export type CurrentErrorCause = z.infer<typeof CurrentErrorCauseSchema>;
+
+export const CURRENT_ERROR_CAUSES = [
+  'knowledge',
+  'time',
+  'misinterpretation',
+  'shallow_reading',
+  'anxiety',
+  'overconfidence',
+  'fatigue',
+] as const;
+
+/**
+ * Los 8 motivos heredados antes de D-124. Se conservan para leer eventos históricos de IndexedDB.
+ */
+export const LegacyErrorCauseSchema = z.enum([
   'not_studied',
   'forgot',
   'confused',
@@ -83,6 +111,55 @@ export const ErrorCauseSchema = z.enum([
   'changed_answer',
   'other',
 ]);
+export type LegacyErrorCause = z.infer<typeof LegacyErrorCauseSchema>;
+
+/**
+ * Causas de error autorreportadas. Acepta los 7 motivos vigentes y los 8 heredados (D-124).
+ * En la interfaz solo se eligen los 7 vigentes; los 15 se leen para compatibilidad.
+ */
+export const ErrorCauseSchema = z.union([CurrentErrorCauseSchema, LegacyErrorCauseSchema]);
+export type ErrorCause = z.infer<typeof ErrorCauseSchema>;
+
+/**
+ * Tabla de equivalencias D-124 de motivos heredados a motivos vigentes.
+ * Convierte un motivo (heredado o vigente) a uno de los 7 motivos actuales, o null si era 'other' / sin motivo.
+ * - not_studied, forgot, confused -> knowledge
+ * - misread -> misinterpretation
+ * - missed_detail -> shallow_reading
+ * - rushed_or_tired -> time
+ * - changed_answer -> anxiety
+ * - other -> null
+ */
+export function normalizeErrorCause(
+  cause: ErrorCause | string | null | undefined,
+): CurrentErrorCause | null {
+  if (!cause) return null;
+  switch (cause) {
+    case 'knowledge':
+    case 'time':
+    case 'misinterpretation':
+    case 'shallow_reading':
+    case 'anxiety':
+    case 'overconfidence':
+    case 'fatigue':
+      return cause;
+    case 'not_studied':
+    case 'forgot':
+    case 'confused':
+      return 'knowledge';
+    case 'misread':
+      return 'misinterpretation';
+    case 'missed_detail':
+      return 'shallow_reading';
+    case 'rushed_or_tired':
+      return 'time';
+    case 'changed_answer':
+      return 'anxiety';
+    case 'other':
+    default:
+      return null;
+  }
+}
 
 /** Reglas de olvido de 7.9 */
 export const ForgettingRuleSchema = z.enum([

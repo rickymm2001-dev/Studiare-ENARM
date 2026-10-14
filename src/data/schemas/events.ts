@@ -258,6 +258,16 @@ export const EventPayloadSchemas = {
         (payload.kind === 'spread' || payload.kind === 'postpone') === (payload.days !== null),
       { message: 'Solo repartir y posponer llevan días', path: ['days'] },
     ),
+  /**
+   * El alumno creó una tarjeta desde una pregunta (B5 del plan del cambio, D-124).
+   * Solo se agrega y registra la pregunta, su versión, la tarjeta y el mazo destino.
+   */
+  question_card_created: z.strictObject({
+    questionId: IdSchema,
+    questionVersionId: IdSchema,
+    cardId: IdSchema,
+    deckId: IdSchema,
+  }),
 } as const;
 
 export type EventType = keyof typeof EventPayloadSchemas;
@@ -322,6 +332,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('cards_reset'),
   eventSchemaFor('cards_rescheduled'),
   eventSchemaFor('card_controversy_resolved'),
+  eventSchemaFor('question_card_created'),
 ]);
 
 export type AppEvent = z.infer<typeof AppEventSchema>;

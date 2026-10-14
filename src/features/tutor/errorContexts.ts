@@ -4,6 +4,7 @@
 // tarjeta. Las reglas en sí viven en el motor forgetting. Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
 import type { Option, Question } from '@/data/schemas/bank';
+import { normalizeErrorCause, type CurrentErrorCause } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { personalPace, responseSignals, sessionThirds } from '@/engines/behavior';
 import { countListItems, type ErrorCause, type ErrorContext } from '@/engines/forgetting';
@@ -125,14 +126,14 @@ function causeLookup(events: readonly AppEvent[]) {
   }
   for (const list of byTarget.values()) list.sort((a, b) => a.at.localeCompare(b.at));
   for (const list of attempts.values()) list.sort((a, b) => a.localeCompare(b));
-  return (kind: CauseKind, ids: readonly string[], at: string): ErrorCause | null => {
+  return (kind: CauseKind, ids: readonly string[], at: string): CurrentErrorCause | null => {
     // El siguiente intento del mismo elemento, que es el primero con el ID de la versión
     const next = attempts.get(`${kind}|${ids[0] ?? ''}`)?.find((time) => time > at);
     for (const id of ids) {
       const found = byTarget
         .get(`${kind}|${id}`)
-        ?.find((entry) => entry.at >= at && (next === undefined || entry.at < next));
-      if (found) return found.cause;
+        ?.findLast((entry) => entry.at >= at && (next === undefined || entry.at < next));
+      if (found) return normalizeErrorCause(found.cause);
     }
     return null;
   };
