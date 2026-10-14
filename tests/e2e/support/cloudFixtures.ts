@@ -4,10 +4,20 @@
 import type { Browser, BrowserContext, ConsoleMessage, Page } from '@playwright/test';
 import { t } from '@/i18n/es-MX';
 import { installFakeSupabase, type FakeSupabaseServer } from './fakeSupabase';
-import { FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN, FAKE_SUPABASE_URL } from './fakeSupabaseConfig';
+import {
+  FAKE_GATEWAY_ORIGIN,
+  FAKE_MERCADOPAGO_ORIGIN,
+  FAKE_PORTAL_ORIGIN,
+  FAKE_SUPABASE_URL,
+} from './fakeSupabaseConfig';
 import { expect, test as base } from './fixtures';
 
-const FAKE_ORIGINS = [FAKE_SUPABASE_URL, FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN];
+const FAKE_ORIGINS = [
+  FAKE_SUPABASE_URL,
+  FAKE_GATEWAY_ORIGIN,
+  FAKE_PORTAL_ORIGIN,
+  FAKE_MERCADOPAGO_ORIGIN,
+];
 
 /**
  * Chromium escribe en la consola una línea "Failed to load resource" por cada respuesta 4xx, y el
@@ -80,6 +90,30 @@ export async function enterWithLink(
 ): Promise<void> {
   await openEmailLink(page, cloud.issueMagicLink(email, alias));
   await expectHome(page);
+}
+
+/**
+ * Aplica las banderas que se prendieron en platform_settings.feature_flags del Supabase simulado, como
+ * lo hará Ricardo (B10, 5.4). La app copia las banderas del servidor al abrir, avisa que hay una
+ * configuración nueva y con Recargar ahora las aplica
+ */
+export async function reloadWithServerFlags(page: Page): Promise<void> {
+  const reload = page.getByRole('button', { name: t.configUpdate.reload });
+  await expect(reload).toBeVisible({ timeout: 20_000 });
+  await reload.click();
+  await page.waitForLoadState('load');
+  await expect(page.getByRole('button', { name: t.configUpdate.reload })).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 20_000 });
+}
+
+/** Una fecha larga como la escribe la app, en la zona horaria del navegador de la prueba */
+export function longDateIn(iso: string | number, timeZone: string): string {
+  return new Date(iso).toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone,
+  });
 }
 
 export interface SecondDevice {

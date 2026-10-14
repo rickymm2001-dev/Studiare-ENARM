@@ -19,6 +19,13 @@ export const CLOUD_PREVIEW_URL = `http://127.0.0.1:${CLOUD_PREVIEW_PORT}`;
 export const FAKE_GATEWAY_ORIGIN = 'https://checkout.stripe.com';
 export const FAKE_PORTAL_ORIGIN = 'https://billing.stripe.com';
 
+/**
+ * Origen de Mercado Pago simulado (B10). La app acepta pagos en mercadopago.com y mercadopago.com.mx
+ * (src/data/payments/checkout.ts), así que el servidor falso atiende este dentro del navegador de la
+ * prueba. Ninguna petición sale a Mercado Pago de verdad
+ */
+export const FAKE_MERCADOPAGO_ORIGIN = 'https://www.mercadopago.com.mx';
+
 function base64Url(value: string): string {
   return Buffer.from(value, 'utf8').toString('base64url');
 }
