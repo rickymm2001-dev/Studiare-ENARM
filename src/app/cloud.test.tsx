@@ -909,8 +909,8 @@ describe('CloudBridge y el acceso (B9)', () => {
       heardFrom: null,
       consents: {},
     });
-    // Esta pestaña salió a Google
-    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(Date.now()));
+    // Esta pestaña salió a Google desde la página anterior
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(performance.timeOrigin - 1_000));
     window.history.replaceState(
       null,
       '',
@@ -942,7 +942,7 @@ describe('CloudBridge y el acceso (B9)', () => {
 
   it('si Google regresó con éxito la marca de la salida se borra', async () => {
     useFake(makeFakeCloud({ session: null }));
-    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(Date.now()));
+    sessionStorage.setItem(GOOGLE_REDIRECT_KEY, String(performance.timeOrigin - 1_000));
     mount();
     await waitFor(() => {
       expect(useCloud.getState().state.status).toBe('signed-out');

@@ -29,20 +29,35 @@ function forgetGoogleRedirect(): void {
   }
 }
 
+/** Cuándo empezó a cargar esta página. 0 si el navegador no lo dice */
+function pageStartedAt(): number {
+  return typeof performance !== 'undefined' && Number.isFinite(performance.timeOrigin)
+    ? performance.timeOrigin
+    : 0;
+}
+
 /**
  * Si esta pestaña salió a Google hace poco. La marca se borra al leerla, así cuenta para un solo
- * regreso. nowMs es la hora de ahora, para las pruebas
+ * regreso. Una marca que puso esta misma página no se toca, porque es de la salida que está por pasar.
+ * Ocurre cuando el alumno pulsa Continuar con Google antes de que termine de cargar el puente de la
+ * nube, que se baja aparte. nowMs y pageStartMs son la hora de ahora y la del inicio de la página, para
+ * las pruebas
  */
-export function takeGoogleRedirect(nowMs: number = Date.now()): boolean {
+export function takeGoogleRedirect(
+  nowMs: number = Date.now(),
+  pageStartMs: number = pageStartedAt(),
+): boolean {
   let raw: string | null;
   try {
     raw = storage()?.getItem(GOOGLE_REDIRECT_KEY) ?? null;
   } catch {
     raw = null;
   }
-  forgetGoogleRedirect();
   if (raw === null) return false;
-  const age = nowMs - Number(raw);
+  const markedAt = Number(raw);
+  if (Number.isFinite(markedAt) && markedAt >= pageStartMs && pageStartMs > 0) return false;
+  forgetGoogleRedirect();
+  const age = nowMs - markedAt;
   return Number.isFinite(age) && age >= 0 && age <= GOOGLE_REDIRECT_TTL_MS;
 }
 
