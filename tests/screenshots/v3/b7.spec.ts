@@ -10,7 +10,7 @@ import { test, type Locator, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { studyDayOf, weekStartOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
-import { generateDemo } from '../../e2e/support/b1';
+import { generateDemo, subscribeMonthly } from '../../e2e/support/b1';
 import { enterWithLink, expect, test as cloudTest } from '../../e2e/support/cloudFixtures';
 import type { FakeSupabaseServer } from '../../e2e/support/fakeSupabase';
 import { CLOUD_PREVIEW_URL } from '../../e2e/support/fakeSupabaseConfig';
@@ -26,6 +26,15 @@ const CHALLENGE = 'Repasos de la semana';
 /** La misma clave que usa src/config/featureFlags.ts para la copia de las banderas */
 const FLAGS_KEY = 'enarm.feature-flags.v1';
 const party = t.partyCloud;
+
+/** Party es de los planes de pago (B8). El mensual vigente, como lo deja un aviso de pago ya aplicado */
+const PAID_MONTH = () =>
+  ({
+    plan: 'monthly',
+    status: 'active',
+    provider: 'stripe',
+    currentPeriodEnd: new Date(Date.now() + 20 * 86_400_000).toISOString(),
+  }) as const;
 
 /** Captura lo que se ve, sin página completa, para menús y hojas abiertas */
 async function viewport(page: Page, name: string, project: string) {
@@ -96,7 +105,10 @@ cloudTest.describe('Party en la nube', () => {
       const project = info.project.name;
       const full = FULL_WALK(project);
 
-      // Ana entra con su correo y abre Party. El permiso empieza apagado (4.27)
+      // Ana ya pagó el mensual, porque Party es de los planes de pago (B8). Entra con su correo y abre
+      // Party. El permiso empieza apagado (4.27)
+      cloud.createUser({ email: 'ana.b7@ejemplo.mx', alias: 'Ana' });
+      cloud.setSubscription('ana.b7@ejemplo.mx', PAID_MONTH());
       await enterWithLink(page, cloud, 'ana.b7@ejemplo.mx', 'Ana');
       await page.goto(SCREENS.party.path);
       const consent = page.getByRole('region', { name: party.consent.title });
@@ -112,15 +124,17 @@ cloudTest.describe('Party en la nube', () => {
       await expect(group).toBeVisible({ timeout: 30_000 });
       const code = cloud.party.codeOf(GROUP) ?? '';
 
-      // Tres compañeros entran con el código. Sus llamadas van directo al Supabase simulado
+      // Tres compañeros con el mensual entran con el código. Sus llamadas van directo al Supabase
+      // simulado
       const mates = [
         { alias: 'Bruno', email: 'bruno.b7@ejemplo.mx', xp: 420, cards: 60 },
         { alias: 'Carla', email: 'carla.b7@ejemplo.mx', xp: 310, cards: 45 },
         { alias: 'Diego', email: 'diego.b7@ejemplo.mx', xp: 120, cards: 15 },
-      ].map((mate) => ({
-        ...mate,
-        id: cloud.createUser({ email: mate.email, alias: mate.alias }).id,
-      }));
+      ].map((mate) => {
+        const id = cloud.createUser({ email: mate.email, alias: mate.alias }).id;
+        cloud.setSubscription(mate.email, PAID_MONTH());
+        return { ...mate, id };
+      });
       for (const mate of mates) asMember(cloud, mate.id, 'party_join_group', { p_code: code });
 
       // Ana propone un reto de la semana
@@ -198,7 +212,7 @@ cloudTest.describe('Party en la nube', () => {
         project,
       );
 
-      // Invita y gana un mes también en Configuración, sección Perfil, con el plan Gratis
+      // Invita y gana un mes también en Configuración, sección Perfil
       await page.goto(`${SCREENS.settings.path}#perfil`);
       const referral = page.getByRole('region', { name: t.b7.referral.title });
       await expect(referral.getByTestId('referral-link')).toBeVisible({ timeout: 30_000 });
@@ -243,9 +257,12 @@ test('B7. Party sin nube y el menú del alumno sin la demostración', async ({ p
     localStorage.setItem(key, JSON.stringify({ demoTools: false }));
   }, FLAGS_KEY);
   await signUp(page);
+  // Con un plan de pago, para que Party no muestre el candado de Gratis (B8) sino lo que falta
+  await subscribeMonthly(page);
 
   // Sin la cuenta en la nube Party explica que la necesita, y el resumen y los referidos siguen
   await shot(page, project, '10-party-sin-nube', SCREENS.party.path);
+  await expect(page.getByRole('region', { name: party.needsCloud.title })).toBeVisible();
 
   // El menú del alumno no lleva nada de la demostración. En el teléfono se ve al abrir Más
   await page.goto(SCREENS.home.path);
