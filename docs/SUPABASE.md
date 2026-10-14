@@ -443,7 +443,7 @@ Esto sí pide un poco de terminal, para publicar las cuatro funciones del servid
 1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio recurrente en pesos. Fundador 79 cada mes, Mensual 149 cada mes y Anual 1,499 cada año (D-114). Copia el Price ID de cada uno (empieza con price_)
 2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos. checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, customer.subscription.deleted y charge.refunded. Copia el secreto de firma (empieza con whsec_)
 3. En Mercado Pago, en tu aplicación, activa las credenciales de prueba. Copia el Access Token de prueba. En Webhooks agrega la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-mercadopago, marca el tema Pagos y copia la clave secreta que te da
-4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). Opcional, STRIPE_AUTOMATIC_TAX con el valor true cuando actives Stripe Tax, ver docs/STRIPE.md. SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú
+4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). Opcional, STRIPE_AUTOMATIC_TAX con el valor true cuando actives Stripe Tax, ver docs/STRIPE.md. SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú. Desde B10 la lista completa está en la sección Pagos completos (B10)
 5. Con la CLI de Supabase conectada a tu proyecto, desde la carpeta del repo, corre estas cuatro líneas. Los avisos de las pasarelas no llevan sesión de Supabase y se identifican con su firma, por eso llevan la bandera.
 
 ```bash
@@ -458,7 +458,7 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 
 ### Qué conviene saber
 
-- Mercado Pago cobra un pago único del periodo y no renueva solo. La renovación automática con Mercado Pago queda para después
+- Antes de B10 Mercado Pago cobraba un pago único del periodo. Desde B10 tiene la suscripción (preapproval), que sí se renueva sola, y el pase de un solo pago. Ver la sección Pagos completos (B10)
 - Los campos de Stripe y de Mercado Pago que lee el servidor salen de sus guías de webhooks. En este entorno no se pudo abrir su documentación, así que la lectura acepta las dos formas de la factura de Stripe (la anterior y la de parent.subscription_details) y falta confirmarla con un pago de prueba real. Si algún evento no activa el plan, el cuerpo del aviso queda guardado tal cual en payment_webhook_events para revisarlo
 - Un reembolso completo hecho desde el panel de Stripe o de Mercado Pago quita el plan en el acto y marca el pago como devuelto. Uno parcial no cambia nada y lo atiende una persona. Ver la sección siguiente
 - Cancelar la suscripción lo hace el alumno desde Suscripción, Administrar suscripción. Ver la sección siguiente
@@ -476,7 +476,7 @@ supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 - Un aviso de pago tardío o repetido de un pago que ya se devolvió se ignora y no reactiva el plan
 - Un alumno que vuelve a pagar usa su mismo cliente de Stripe, para que sus facturas, su portal y un reembolso no queden repartidos. Si el cliente guardado ya no existe en Stripe, por ejemplo porque se borró o porque se cambió de llaves de prueba a reales, el pago se reintenta una vez como alumno nuevo
 - Un reembolso parcial se ignora a propósito, para no quitar el plan por una devolución chica
-- Quien pagó con Mercado Pago no tiene portal. Su pago es único y no se renueva, así que al abrir Administrar suscripción la app le explica que su plan termina en la fecha indicada
+- Quien paga con Mercado Pago no tiene portal. Desde B10 cancela su suscripción desde la app, con cancel-subscription, y un pase de un solo pago termina solo en su fecha
 - Eliminar la cuenta no cancela la suscripción en Stripe. Por eso la base se niega a eliminarla mientras haya una suscripción de Stripe activa, y la pantalla le dice al alumno que la cancele antes. Una ya cancelada, con el periodo pagado, sí se puede eliminar
 
 ### Cómo aplicar la séptima migración
@@ -888,6 +888,105 @@ select
 - Quien modera en lugar de quien administra se da cuenta de que esa persona no tiene plan de pago, y quien reta puede notar que un duelo contra alguien en Gratis no contó para su tope. Nadie más ve el plan de otra persona
 - La regla del plan no mira el rol. Un médico, un admin o tú mismo necesitan un plan de pago, aunque sea de prueba, para entrar a Party
 - El tope de 20 preguntas al día de Gratis pasa del todo al servidor con el banco en la nube (B11)
+
+## Pagos completos (B10)
+
+### Qué hace
+
+- Prueba gratis de 7 días con tarjeta, una sola por persona. Cuenta la cuenta y también el correo, sin puntos ni +algo en Gmail, así que abrir otra cuenta con el mismo correo no da otra prueba. Una prueba repetida queda anulada y su suscripción se cancela sola en Stripe
+- El plan Anual Fundador de 749. Los 100 lugares Fundador los comparten el mensual y el anual. La prueba aparta el lugar, el primer cobro lo confirma y cancelar la prueba lo libera. Si dos personas toman el último lugar a la vez, la base deja pasar a una y a la otra le cancela la suscripción
+- Pases de un solo pago, de 1 mes o de 1 año, con OXXO o SPEI. Un pase nuevo se suma desde el fin del que ya hay. Mientras la ficha o la transferencia no se pagan, el pago queda pendiente y el alumno lo ve
+- Un solo plan pagado a la vez. Con una suscripción vigente no se abre otro pago
+- Cambiar de plan en el portal de Stripe. Subir cobra la diferencia al momento y bajar se agenda al fin del periodo. El plan sale siempre del Price ID que avisa Stripe
+- Códigos de descuento. El código queda en el pago y en la prueba, y Admin, Pagos cuenta cuántas pruebas y cobros trajo cada uno
+- Solicitudes de factura. El alumno la pide en Perfil sobre un cobro pagado y el admin la marca emitida o rechazada en Admin, Pagos. Los datos fiscales solo los ven el alumno y los admins
+- Admin, Pagos con el resumen, los pagos recientes, marcar un pago como devuelto (para la garantía de un pase con OXXO, que se devuelve por transferencia), los códigos y las facturas
+- Una cola de correos apagada para el aviso de fin de prueba, el de pase por vencer y el de factura nueva. B15 conecta el envío. Los tipos de correo viven en la tabla email_kinds, que ya trae content_report (B11) y daily_review_reminder (B15)
+- Borrar la cuenta pide cancelar antes una suscripción de Stripe o de Mercado Pago en prueba, activa o con cobro fallido. Una cancelada al final del periodo sí deja borrarla
+- Los avisos de pago de antes (apply_payment_notice) siguen funcionando igual, con las reglas nuevas del cupo Fundador
+
+### Cómo aplicar las tres migraciones
+
+Aplica primero todas las anteriores, en especial la de referidos con el primer cobro (20261019000001) y la del plan Gratis (20261021000001). Son tres archivos y van en orden. Las tres son seguras de repetir.
+
+1. supabase/migrations/20261022000001_billing_emails.sql, las reglas de pago y la cola de correos
+2. supabase/migrations/20261022000002_billing_plans.sql, la prueba, los lugares Fundador, los pases, las acciones con la pasarela y las funciones nuevas de los avisos
+3. supabase/migrations/20261022000003_invoice_requests.sql, las solicitudes de factura
+
+Se pueden aplicar con el conector o pegando cada una en SQL Editor, New query, Run. La segunda trae dos piezas marcadas como Sección con drop y Sección con delete, que el conector no puede correr sin una confirmación humana. Si el conector las salta, pega supabase/manual/pagos-b10.sql completo en el SQL Editor y ejecútalo una vez. Sin esas piezas la base rechaza el plan Anual Fundador y el estado de prueba, y un aviso de una prueba fallaría.
+
+Para confirmar que quedó, abre otra New query, pega esto y da clic en Run. Es la misma consulta que prueba supabase/tests/billing_plans_test.sql.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public'
+     and tablename in ('founder_seats', 'trial_claims', 'plan_passes', 'billing_actions', 'email_kinds', 'email_outbox',
+                       'invoice_requests')) as tablas_nuevas,
+  (select bool_and(relrowsecurity) from pg_class where oid in (
+     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.plan_passes'::regclass,
+     'public.billing_actions'::regclass, 'public.email_kinds'::regclass, 'public.email_outbox'::regclass,
+     'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
+  has_function_privilege('authenticated', 'public.apply_charge(text, text, jsonb, text, uuid, text, text, text, text, text, text, numeric, numeric, text, timestamptz, timestamptz)', 'execute') as alumno_aplica_cobros,
+  has_function_privilege('service_role', 'public.apply_subscription_state(text, text, timestamptz, jsonb, uuid, text, text, text, timestamptz, timestamptz, boolean, boolean, text, text)', 'execute') as servicio_aplica_estados,
+  has_function_privilege('authenticated', 'public.checkout_context(uuid)', 'execute') as alumno_lee_contexto,
+  has_table_privilege('authenticated', 'public.founder_seats', 'select') as alumno_lee_lugares,
+  has_function_privilege('authenticated', 'public.request_invoice(uuid, text, text, text, text, text, text)', 'execute') as alumno_pide_factura,
+  (select pg_get_constraintdef(oid) like '%founder_annual%' from pg_constraint where conname = 'subscriptions_plan_check') as plan_fundador_anual,
+  (select pg_get_constraintdef(oid) like '%trialing%' from pg_constraint where conname = 'subscriptions_status_check') as estado_prueba,
+  position('billing_blocks_account_deletion' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0 as borrar_cuenta_b10,
+  (select value ->> 'trialDays' from public.platform_settings where key = 'billing_rules') as dias_de_prueba,
+  (select value ->> 'enabled' from public.platform_settings where key = 'billing_emails') as correos_encendidos,
+  (select count(*) from pg_policies
+    where schemaname = 'public'
+      and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
+```
+
+Debe salir
+- tablas_nuevas en 7 y tablas_con_seguridad_por_fila en true
+- alumno_aplica_cobros, alumno_lee_contexto y alumno_lee_lugares en false
+- servicio_aplica_estados y alumno_pide_factura en true
+- plan_fundador_anual, estado_prueba y borrar_cuenta_b10 en true. Si alguna sale en false, falta pegar supabase/manual/pagos-b10.sql
+- dias_de_prueba en 7 y correos_encendidos en false
+- politicas_con_barrera en 33 con las migraciones hasta B10. Si después aplicaste otras con barrera, sale más
+
+Si cualquiera de los permisos sale distinto, avísame antes de abrir a alumnos.
+
+### Las funciones y sus secretos
+
+En Supabase, Edge Functions, Secrets. Los nombres son exactos y ninguno va en el repo.
+
+| Nombre | Qué es |
+|---|---|
+| STRIPE_SECRET_KEY | La llave de Stripe de las funciones. Recomendado una rk_test_ restringida |
+| STRIPE_WEBHOOK_SECRET | El secreto de firma del endpoint nuevo, con la versión 2026-09-30.endive |
+| STRIPE_PRICE_FOUNDER, STRIPE_PRICE_FOUNDER_ANNUAL, STRIPE_PRICE_MONTHLY y STRIPE_PRICE_ANNUAL | Los cuatro precios con renovación del producto Studiare |
+| STRIPE_PRICE_PASS_MONTHLY y STRIPE_PRICE_PASS_ANNUAL | Los dos precios del producto Studiare pase |
+| STRIPE_PORTAL_CONFIG_FOUNDER y STRIPE_PORTAL_CONFIG_REGULAR | Las dos configuraciones del portal |
+| STRIPE_AUTOMATIC_TAX | Sigue apagado. Ver docs/STRIPE.md |
+| MERCADOPAGO_ACCESS_TOKEN y MERCADOPAGO_WEBHOOK_SECRET | La credencial de Mercado Pago y la clave secreta de sus avisos. Ver docs/MERCADOPAGO.md |
+| APP_URL y FUNCTIONS_URL | Sin cambio |
+
+Los ocho IDs de Stripe los crea y los imprime scripts/stripe/setup-test.ts (docs/STRIPE.md). En el entorno de la sesión van STRIPE_SECRET_KEY con una rk_test_ y MP_ACCESS_TOKEN, que no son los mismos valores que los de Supabase.
+
+Después de las migraciones se despliegan las funciones. Los avisos de las pasarelas se identifican con su firma y no llevan sesión de Supabase, por eso llevan la bandera.
+
+```bash
+supabase functions deploy create-checkout
+supabase functions deploy create-portal-session
+supabase functions deploy payment-webhook-stripe --no-verify-jwt
+supabase functions deploy cancel-subscription
+supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
+```
+
+Las dos últimas cuando exista la cuenta de Mercado Pago.
+
+### Qué conviene saber
+
+- Las reglas viven en platform_settings. billing_rules guarda trialDays (7), guaranteeDays (7), oxxoExpiresDays (3) y passReminderDays (3). Con trialDays en 0 se apaga la prueba sin desplegar nada. founder_seats acepta total (100 si no está) y open en false para cerrar la promoción. billing_emails con enabled en false deja los correos en la cola
+- Cada aviso queda en payment_webhook_events con su resultado en la columna result, por ejemplo applied, duplicate, stale, ignored, unknown_user, trial_duplicate o founder_full. Las acciones con la pasarela, como cancelar una prueba repetida, quedan en billing_actions con su estado y su error si falló
+- Mercado Pago tiene dos caminos. La suscripción (preapproval), que sí se renueva sola cada periodo y se cancela desde la app con cancel-subscription, y el pase de un solo pago. Mercado Pago no lleva precio Fundador ni prueba gratis
+- Las filas de la corrida en modo prueba se borran con supabase/manual/limpiar-pagos-de-prueba.sql, que lista las cuentas al final. Antes se cancelan las suscripciones en Stripe o se borran sus relojes de prueba
+- Los datos fiscales de una factura (RFC, razón social, régimen, uso y código postal) no viajan en los correos. El correo al equipo solo dice el monto
 
 ## Proyecto real conectado
 

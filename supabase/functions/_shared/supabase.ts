@@ -1,6 +1,19 @@
 // Llamadas de las funciones a Supabase con fetch, sin librerías (Fase P bloque 5, D-096). La llave
 // de servicio solo existe en el entorno de la función y jamás sale de ella ni llega al navegador.
-import type { PaymentNotice, SubscriptionRow } from './payments.ts';
+// Desde B10 los nombres de los parámetros de cada llamada son el contrato con las funciones de la base
+// (migraciones 20261022000001 a 20261022000003, 6.5 del diseño).
+import {
+  isProvider,
+  type AuthenticatedUser,
+  type BillingAction,
+  type ChargeNotice,
+  type CheckoutContext,
+  type CheckoutSubscription,
+  type Provider,
+  type SubscriptionNotice,
+  type TrialEndingNotice,
+} from './billingTypes.ts';
+import { asArray, asRecord, asString } from './http.ts';
 
 export interface SupabaseEnv {
   url: string;
@@ -8,44 +21,12 @@ export interface SupabaseEnv {
   serviceKey: string;
 }
 
-/** Llama a apply_payment_notice con la llave de servicio. Devuelve applied, duplicate y los demás */
-export async function applyNoticeViaRest(
-  env: SupabaseEnv,
-  notice: PaymentNotice,
-  fetchImpl: typeof fetch = fetch,
-): Promise<string> {
-  const reply = await fetchImpl(`${env.url}/rest/v1/rpc/apply_payment_notice`, {
-    method: 'POST',
-    headers: {
-      apikey: env.serviceKey,
-      authorization: `Bearer ${env.serviceKey}`,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      p_provider: notice.provider,
-      p_event_id: notice.eventId,
-      p_payload: notice.payload,
-      p_kind: notice.kind,
-      p_user: notice.userId,
-      p_plan: notice.plan,
-      p_provider_payment_id: notice.providerPaymentId,
-      p_provider_subscription_id: notice.providerSubscriptionId,
-      p_amount_mxn: notice.amountMxn,
-      p_period_end: notice.periodEnd,
-    }),
-  });
-  if (!reply.ok) throw new Error(`apply_payment_notice respondió ${reply.status}`);
-  const result: unknown = await reply.json();
-  if (typeof result !== 'string') throw new Error('apply_payment_notice no devolvió un texto');
-  return result;
-}
-
 /** Quién es el dueño del token que mandó el navegador. null si Supabase no lo reconoce */
 export async function authenticateUser(
   env: SupabaseEnv,
   authorization: string | null,
   fetchImpl: typeof fetch = fetch,
-): Promise<{ id: string; email: string | null } | null> {
+): Promise<AuthenticatedUser | null> {
   if (!authorization?.toLowerCase().startsWith('bearer ')) return null;
   const reply = await fetchImpl(`${env.url}/auth/v1/user`, {
     headers: { apikey: env.anonKey, authorization },
@@ -57,36 +38,6 @@ export async function authenticateUser(
   return typeof id === 'string' && id !== ''
     ? { id, email: typeof email === 'string' ? email : null }
     : null;
-}
-
-/** Lugares de Fundador que quedan. null si no se pudo saber, y entonces decide el servidor al cobrar */
-export async function founderSeatsLeftViaRest(
-  env: SupabaseEnv,
-  fetchImpl: typeof fetch = fetch,
-): Promise<number | null> {
-  const headers = { apikey: env.serviceKey, authorization: `Bearer ${env.serviceKey}` };
-  try {
-    const settings = await fetchImpl(
-      `${env.url}/rest/v1/platform_settings?key=eq.founder_seats&select=value`,
-      { headers },
-    );
-    const taken = await fetchImpl(
-      `${env.url}/rest/v1/subscriptions?plan=eq.founder&select=user_id`,
-      {
-        headers: { ...headers, prefer: 'count=exact', range: '0-0' },
-      },
-    );
-    if (!settings.ok || !taken.ok) return null;
-    const rows: unknown = await settings.json();
-    const total = Array.isArray(rows)
-      ? Number((rows[0] as { value?: { total?: unknown } } | undefined)?.value?.total)
-      : Number.NaN;
-    const range = taken.headers.get('content-range') ?? '';
-    const count = Number(range.split('/')[1]);
-    return Number.isFinite(total) && Number.isFinite(count) ? total - count : null;
-  } catch {
-    return null;
-  }
 }
 
 const serviceHeaders = (env: SupabaseEnv) => ({
@@ -125,21 +76,6 @@ export async function linkCustomerViaRest(
   );
 }
 
-/** El cliente de Stripe de un alumno. null si no se ligó. Lanza si la base falla */
-export async function customerOfUserViaRest(
-  env: SupabaseEnv,
-  userId: string,
-  fetchImpl: typeof fetch = fetch,
-): Promise<string | null> {
-  const result = await callRpc(
-    env,
-    'billing_customer_of_user',
-    { p_provider: 'stripe', p_user: userId },
-    fetchImpl,
-  );
-  return typeof result === 'string' && result !== '' ? result : null;
-}
-
 /** El alumno de un cliente de Stripe. null si no se ligó. Lanza si la base falla */
 export async function userOfCustomerViaRest(
   env: SupabaseEnv,
@@ -155,34 +91,251 @@ export async function userOfCustomerViaRest(
   return typeof result === 'string' && result !== '' ? result : null;
 }
 
+/** Llama a una función de la base que no devuelve nada. Lanza si la base no contesta bien */
+async function callRpcVoid(
+  env: SupabaseEnv,
+  name: string,
+  args: Record<string, unknown>,
+  fetchImpl: typeof fetch,
+): Promise<void> {
+  const reply = await fetchImpl(`${env.url}/rest/v1/rpc/${name}`, {
+    method: 'POST',
+    headers: serviceHeaders(env),
+    body: JSON.stringify(args),
+  });
+  if (!reply.ok) throw new Error(`${name} respondió ${reply.status}`);
+}
+
+/** Una función de la base que devuelve un texto, como applied o duplicate */
+async function callRpcText(
+  env: SupabaseEnv,
+  name: string,
+  args: Record<string, unknown>,
+  fetchImpl: typeof fetch,
+): Promise<string> {
+  const result = await callRpc(env, name, args, fetchImpl);
+  if (typeof result !== 'string') throw new Error(`${name} no devolvió un texto`);
+  return result;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Pagos de B10
+
 /**
- * La suscripción del alumno como está en la base, para que create-checkout no abra un segundo cobro.
- * null si no tiene. Lanza si la base falla, y entonces no se abre el pago
+ * Lo que la base sabe del alumno antes de abrir un pago o el portal (checkout_context). Lanza si la
+ * base falla o devuelve algo que no tiene la forma esperada, y entonces no se abre nada (D-118)
  */
-export async function subscriptionOfUserViaRest(
+export async function checkoutContextViaRest(
   env: SupabaseEnv,
   userId: string,
   fetchImpl: typeof fetch = fetch,
-): Promise<SubscriptionRow | null> {
-  const query = new URLSearchParams({
-    user_id: `eq.${userId}`,
-    select: 'plan,status,current_period_end',
-  });
-  const reply = await fetchImpl(`${env.url}/rest/v1/subscriptions?${query}`, {
-    headers: { apikey: env.serviceKey, authorization: `Bearer ${env.serviceKey}` },
-  });
-  if (!reply.ok) throw new Error(`subscriptions respondió ${reply.status}`);
-  const rows: unknown = await reply.json();
-  if (!Array.isArray(rows)) throw new Error('subscriptions no devolvió una lista');
-  const row: unknown = rows[0];
-  if (row === undefined) return null;
-  const { plan, status, current_period_end } = (row ?? {}) as Record<string, unknown>;
-  if (typeof plan !== 'string' || typeof status !== 'string') {
-    throw new Error('subscriptions devolvió una fila incompleta');
+): Promise<CheckoutContext> {
+  return parseCheckoutContext(
+    await callRpc(env, 'checkout_context', { p_user: userId }, fetchImpl),
+  );
+}
+
+const isoOrNull = (value: unknown): string | null => {
+  if (value === null || value === undefined) return null;
+  if (typeof value !== 'string' || Number.isNaN(Date.parse(value))) {
+    throw new Error('checkout_context devolvió una fecha que no se lee');
+  }
+  return value;
+};
+
+function requireBoolean(value: unknown, name: string): boolean {
+  if (typeof value !== 'boolean') throw new Error(`checkout_context no trae ${name}`);
+  return value;
+}
+
+function requireNumber(value: unknown, name: string): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    throw new Error(`checkout_context no trae ${name}`);
+  }
+  return value;
+}
+
+/** Revisa la forma de checkout_context. Exportada para probarla sin red */
+export function parseCheckoutContext(value: unknown): CheckoutContext {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('checkout_context no devolvió un objeto');
+  }
+  const root = value as Record<string, unknown>;
+  const inForce = root.inForce ?? null;
+  if (inForce !== null && inForce !== 'subscription' && inForce !== 'pass') {
+    throw new Error('checkout_context trae un inForce desconocido');
+  }
+  let subscription: CheckoutSubscription | null = null;
+  if (root.subscription !== null && root.subscription !== undefined) {
+    const row = asRecord(root.subscription);
+    const plan = asString(row.plan);
+    const status = asString(row.status);
+    if (!plan || !status) throw new Error('checkout_context trae una suscripción incompleta');
+    subscription = {
+      plan,
+      status,
+      provider: isProvider(row.provider) ? row.provider : null,
+      subscriptionId: asString(row.subscriptionId),
+      periodEnd: isoOrNull(row.periodEnd),
+      cancelAtPeriodEnd: row.cancelAtPeriodEnd === true,
+    };
   }
   return {
-    plan,
-    status,
-    current_period_end: typeof current_period_end === 'string' ? current_period_end : null,
+    inForce,
+    subscription,
+    passEnd: isoOrNull(root.passEnd),
+    trialAvailable: requireBoolean(root.trialAvailable, 'trialAvailable'),
+    trialDays: requireNumber(root.trialDays, 'trialDays'),
+    founderOpen: requireBoolean(root.founderOpen, 'founderOpen'),
+    founderSeatsLeft: requireNumber(root.founderSeatsLeft, 'founderSeatsLeft'),
+    founderLost: requireBoolean(root.founderLost, 'founderLost'),
+    oxxoExpiresDays: requireNumber(root.oxxoExpiresDays, 'oxxoExpiresDays'),
+    customerId: asString(root.customerId),
   };
+}
+
+/** Aplica un cobro con apply_charge. Devuelve applied, duplicate, ignored, unknown_user o founder_full */
+export async function applyChargeViaRest(
+  env: SupabaseEnv,
+  notice: ChargeNotice,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string> {
+  return callRpcText(
+    env,
+    'apply_charge',
+    {
+      p_provider: notice.provider,
+      p_event_id: notice.eventId,
+      p_payload: notice.payload,
+      p_kind: notice.kind,
+      p_user: notice.userId,
+      p_purpose: notice.purpose,
+      p_plan: notice.plan,
+      p_method: notice.method,
+      p_provider_payment_id: notice.providerPaymentId,
+      p_payment_intent_id: notice.paymentIntentId,
+      p_provider_subscription_id: notice.providerSubscriptionId,
+      p_amount_mxn: notice.amountMxn,
+      p_discount_mxn: notice.discountMxn,
+      p_promotion_code: notice.promotionCode,
+      p_period_end: notice.periodEnd,
+      p_expires_at: notice.expiresAt,
+    },
+    fetchImpl,
+  );
+}
+
+/** Aplica el estado de una suscripción con apply_subscription_state */
+export async function applySubscriptionStateViaRest(
+  env: SupabaseEnv,
+  notice: SubscriptionNotice,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string> {
+  return callRpcText(
+    env,
+    'apply_subscription_state',
+    {
+      p_provider: notice.provider,
+      p_event_id: notice.eventId,
+      p_event_at: notice.eventAt,
+      p_payload: notice.payload,
+      p_user: notice.userId,
+      p_subscription_id: notice.subscriptionId,
+      p_plan: notice.plan,
+      p_status: notice.status,
+      p_period_end: notice.periodEnd,
+      p_trial_end: notice.trialEnd,
+      p_cancel_at_period_end: notice.cancelAtPeriodEnd,
+      p_scheduled_change: notice.scheduledChange,
+      p_price_id: notice.priceId,
+      p_promotion_code: notice.promotionCode,
+    },
+    fetchImpl,
+  );
+}
+
+/** Encola el correo de fin de la prueba con note_trial_will_end */
+export async function noteTrialWillEndViaRest(
+  env: SupabaseEnv,
+  notice: TrialEndingNotice,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string> {
+  return callRpcText(
+    env,
+    'note_trial_will_end',
+    {
+      p_provider: notice.provider,
+      p_event_id: notice.eventId,
+      p_payload: notice.payload,
+      p_user: notice.userId,
+      p_subscription_id: notice.subscriptionId,
+      p_trial_end: notice.trialEnd,
+    },
+    fetchImpl,
+  );
+}
+
+const ACTION_REASONS = new Set([
+  'trial_duplicate',
+  'second_subscription',
+  'founder_full',
+  'refund',
+]);
+
+/**
+ * Toma hasta limit acciones pendientes con la pasarela (claim_billing_actions). Con provider solo las
+ * de esa pasarela. Lanza si la base falla
+ */
+export async function claimBillingActionsViaRest(
+  env: SupabaseEnv,
+  options: { limit: number; provider: Provider | null },
+  fetchImpl: typeof fetch = fetch,
+): Promise<BillingAction[]> {
+  const rows = await callRpc(
+    env,
+    'claim_billing_actions',
+    { p_limit: options.limit, p_provider: options.provider },
+    fetchImpl,
+  );
+  if (!Array.isArray(rows)) throw new Error('claim_billing_actions no devolvió una lista');
+  const actions: BillingAction[] = [];
+  for (const value of asArray(rows)) {
+    const row = asRecord(value);
+    const id = asString(row.id);
+    const target = asString(row.target);
+    const reason = asString(row.reason);
+    if (
+      !id ||
+      !target ||
+      !isProvider(row.provider) ||
+      row.kind !== 'cancel_subscription' ||
+      !reason ||
+      !ACTION_REASONS.has(reason)
+    ) {
+      continue;
+    }
+    actions.push({
+      id,
+      provider: row.provider,
+      kind: 'cancel_subscription',
+      target,
+      reason: reason as BillingAction['reason'],
+      attempts: typeof row.attempts === 'number' ? row.attempts : 0,
+    });
+  }
+  return actions;
+}
+
+/** Cierra una acción con la pasarela. ok en false la deja fallida con su motivo, sin llaves */
+export async function finishBillingActionViaRest(
+  env: SupabaseEnv,
+  result: { id: string; ok: boolean; error: string | null },
+  fetchImpl: typeof fetch = fetch,
+): Promise<void> {
+  await callRpcVoid(
+    env,
+    'finish_billing_action',
+    { p_id: result.id, p_ok: result.ok, p_error: result.error },
+    fetchImpl,
+  );
 }

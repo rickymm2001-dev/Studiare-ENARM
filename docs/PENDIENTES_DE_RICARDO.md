@@ -1,6 +1,6 @@
 # Lo que falta de Ricardo
 
-Es la sección 9 del plan del cambio V3 (docs/PLAN_DEL_CAMBIO.md), puesta al día por la sesión que lo ejecuta. La última vez fue el 2026-10-13, durante el cierre del bloque B2. Va en el orden en que conviene hacerla. Cada bloque del plan que espera algo de aquí se deja listo y apagado mientras tanto.
+Es la sección 9 del plan del cambio V3 (docs/PLAN_DEL_CAMBIO.md), puesta al día por la sesión que lo ejecuta. La última vez fue el 2026-10-14, con el servidor de pagos de B10. Va en el orden en que conviene hacerla. Cada bloque del plan que espera algo de aquí se deja listo y apagado mientras tanto.
 
 Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega directo en el servicio o en los secretos del entorno. A la sesión le sirven la dirección del proyecto y la llave pública (anon o publishable), nada más.
 
@@ -8,12 +8,29 @@ Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega
 
 1. **Limpia la prueba de pagos en Stripe.** No se pudo desde la sesión (ver abajo por qué). En Stripe, en modo prueba, abre Customers y busca los dos clientes de tus cuentas de prueba, cus_VQIKjhh9C1h6BU (pagó el Anual y el Fundador el 11 de octubre) y cus_VQPXetXjcQNKay (pagó el Fundador el 11 en la noche). En cada suscripción elige Cancel subscription, Immediately, y marca que se reembolse el último pago. Si el reembolso no sale ahí, hazlo desde Payments, el cobro, Refund. Con eso los avisos de Stripe dejan la base en Gratis solos
 2. **Borra las filas de prueba de la base.** Después del paso 1, pega supabase/manual/limpiar-pagos-de-prueba.sql en Supabase, SQL Editor, y ejecútalo una vez. Quita las filas de subscriptions, payments y billing_customers de tus dos cuentas, porque el cupo Fundador cuenta toda fila founder y un cliente de prueba de Stripe rompe el pago en modo real. En la consulta del final, pagos, suscripciones y clientes deben dar cero
-3. **Cambia la llave de Stripe del entorno.** La que está hoy en los secretos del entorno de la sesión es la publicable (empieza con pk_test_) y con ella no se puede cancelar, reembolsar ni crear precios. Pon en su lugar una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en productos, precios, cupones, códigos promocionales, clientes, suscripciones, sesiones de pago, configuraciones del portal, dominios de medios de pago y reembolsos, y de lectura en eventos. Se crea en Stripe, Developers, API keys, Create restricted key. Sin ella los pasos de Stripe de B10 quedan en esta lista en lugar de hacerse solos
+3. **Cambia la llave de Stripe del entorno.** La que está hoy en los secretos del entorno de la sesión es la publicable (empieza con pk_test_) y con ella no se puede cancelar, reembolsar ni crear precios. Pon en su lugar una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en Products, Prices, Coupons, Promotion codes, Customers, Subscriptions, Checkout Sessions, Customer portal, Payment method domains, Refunds y Test clocks, y de lectura en Events, PaymentIntents, Invoices y Webhook endpoints. Si Stripe pide otro permiso para una herramienta de prueba, por ejemplo fondear el saldo de SPEI, la sesión te dirá cuál. Se crea en Stripe, Developers, API keys, Create restricted key. Sin ella los pasos de Stripe de B10 quedan en esta lista en lugar de hacerse solos
 4. **Revisa SUPABASE_ACCESS_TOKEN si lo pusiste.** El entorno inyecta algo en api.supabase.com, pero Supabase lo rechaza con JWT could not be decoded. Es opcional. Si quieres que la sesión configure correos, plantillas y secretos sin preguntarte, genera uno nuevo en supabase.com, Account, Access Tokens, y reemplázalo. Con el conector de Supabase que ya está, la base y las funciones sí se alcanzan
 
 ## Lo que salió de B7
 
 - **Pega el archivo de Party en Supabase.** Las migraciones de Party en la nube y de referidos ya están aplicadas en el proyecto. Falta supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia una llave foránea y el conector no lo puede aplicar. Pégalo completo en Supabase, SQL Editor, New query, y da clic en Run. La consulta del final debe dar regla_al_borrar en n, owner_id_opcional en true y disparador_activo en true. Mientras no lo pegues, si quien creó un grupo borra su cuenta, el grupo se borra para todos sus miembros
+
+## Lo que salió del bloque B10, pagos completos en modo prueba
+
+El código del servidor de pagos ya está y se probó con un Stripe simulado. La corrida real espera estos pasos. Ninguno lleva llaves al chat. El detalle de qué hace Stripe con cada uno está en docs/STRIPE.md.
+
+- **Paso B10.1. Llave restringida para la sesión.** Es el paso 3 de arriba. Va al entorno de la sesión como STRIPE_SECRET_KEY
+- **Paso B10.2. Llave restringida para las funciones, recomendada.** En Stripe, Developers, API keys, Create restricted key, en modo prueba, otra rk_test_ con escritura en Checkout Sessions, Customers, Customer portal y Subscriptions, y lectura en Promotion codes y PaymentIntents. Pégala en Supabase, Edge Functions, Secrets, como STRIPE_SECRET_KEY en lugar de la sk_test_ de hoy. Sin ella todo funciona con la de hoy
+- **Paso B10.3. Medios de pago.** En Stripe, Settings, Payment methods, activa OXXO, transferencias bancarias de México (SPEI), Apple Pay y Google Pay. Es el paso 16
+- **Paso B10.4. Portal por omisión.** En Settings, Billing, Customer portal, guarda la configuración por omisión aunque Studiare use las dos suyas. La sesión crea esas dos
+- **Paso B10.5. Reintentos y correos de Stripe.** En Settings, Billing, Subscriptions and emails, reintentos inteligentes, por ejemplo 4 intentos en 2 semanas, y al final cancelar la suscripción. Enciende los correos de cobro fallido y de tarjeta por vencer, y los recibos de pago
+- **Paso B10.6. Webhook nuevo.** En Developers, Webhooks, crea un endpoint con la dirección https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe, la versión de la API 2026-09-30.endive y estos diez eventos. checkout.session.completed, checkout.session.async_payment_succeeded, checkout.session.async_payment_failed, invoice.paid, invoice.payment_failed, customer.subscription.created, customer.subscription.updated, customer.subscription.deleted, customer.subscription.trial_will_end y charge.refunded. Copia su secreto de firma (empieza con whsec_) a Supabase, Edge Functions, Secrets, como STRIPE_WEBHOOK_SECRET, y desactiva el endpoint viejo
+- **Paso B10.7. SQL Editor si la sesión lo pide.** Si el conector no puede con las piezas con drop o delete de la migración de B10, pega supabase/manual/pagos-b10.sql en Supabase, SQL Editor, y ejecútalo una vez. Si sigue pendiente lo del paso 2, pega también supabase/manual/limpiar-pagos-de-prueba.sql
+- **Paso B10.8. Pruebas con tu navegador y tu teléfono.** Cuando la sesión te avise, con tus cuentas de prueba. Empezar una prueba gratis, cancelarla, cambiar de plan en el portal, pagar un pase con OXXO y con SPEI, usar el código PRUEBA10 y pedir una factura. En tu iPhone con Safari y en un Android con Chrome confirma que aparecen Apple Pay y Google Pay
+- **Paso B10.9. Influencers.** El nombre de cada uno, su código y el descuento. El código lleva letras mayúsculas, números y guion, sin guion bajo. La sesión crea en modo prueba el cupón PRUEBA10 de ejemplo. Los reales se crean al lanzar. Es el paso 25
+- **Paso B10.10. Mercado Pago.** Cuando exista la cuenta de la empresa. Es el paso 15
+
+Lo que hace la sesión después, sin pedirte nada más. Corre scripts/stripe/setup-test.ts, pone los ocho IDs en los secretos de Supabase, aplica las tres migraciones, corre la consulta de comprobación de docs/SUPABASE.md, despliega las funciones, corre contigo los escenarios y, con todo en verde, prende las banderas de la prueba gratis y de los pases.
 
 ## Esta semana
 
@@ -49,8 +66,8 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
     - Pega tú la llave en Supabase, Edge Functions, Secrets, como GOOGLE_SA_KEY, y el ID de tu Sheet como GOOGLE_BANK_SHEET_ID. Después borra el archivo bajado
     - Comparte tu Sheet Banco de preguntas con el correo de la cuenta de servicio como Lector, sin notificar. Deja apagado que los editores puedan compartir y el acceso general en Restringido
 14. **Resend** (B15 y B17). Crea la cuenta, agrega tu dominio y pon en tu DNS los registros SPF, DKIM y DMARC que te da. En Supabase, Authentication, SMTP Settings, pon sus datos. Crea una clave de API y pégala en Supabase, Edge Functions, Secrets, como RESEND_API_KEY
-15. **Mercado Pago** (B10). Cuenta de negocio de tu empresa. Sus credenciales de prueba van al entorno de la sesión (MP_ACCESS_TOKEN) y a los secretos de Supabase con los nombres que lee el código, MERCADOPAGO_ACCESS_TOKEN y MERCADOPAGO_WEBHOOK_SECRET
-16. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO, transferencias bancarias de México, Apple Pay y Google Pay (comentario 19). La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con la llave restringida del paso 3. Cuando te avise, prueba el pago en tu iPhone con Safari y en un Android con Chrome
+15. **Mercado Pago** (B10). Cuenta de negocio de tu empresa. Con ella, sus credenciales de prueba, un usuario de prueba vendedor y uno comprador de México, y en Webhooks la dirección https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-mercadopago con los temas payment, subscription_preapproval y subscription_authorized_payment, y su clave secreta. En Supabase, Edge Functions, Secrets, van MERCADOPAGO_ACCESS_TOKEN y MERCADOPAGO_WEBHOOK_SECRET. En el entorno de la sesión va MP_ACCESS_TOKEN. La guía completa está en docs/MERCADOPAGO.md
+16. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO, transferencias bancarias de México, Apple Pay y Google Pay (comentario 19). La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con la llave restringida del paso 3. El resto de los pasos de Stripe están en la sección de B10 de arriba
 17. **PostHog** (B15). Crea la cuenta y un proyecto. Su clave pública va como variable VITE_POSTHOG_KEY, junto con su dirección, en GitHub y después en Cloudflare
 18. **Sentry** (B15). Crea la cuenta y un proyecto. Su DSN va como variable VITE_SENTRY_DSN. Pon tu correo en sus alertas. Crea un token para subir los mapas de código y guárdalo como secreto de GitHub SENTRY_AUTH_TOKEN
 19. **Secreto de GitHub para la calibración** (B14). En Supabase crea una llave secreta dedicada a ese proceso y guárdala en GitHub, Settings, Secrets and variables, Actions, como SUPABASE_CALIBRATION_KEY
@@ -76,8 +93,7 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
 ## De la lista anterior, que sigue vivo
 
 - **Tu cuenta de dueño.** Si todavía no lo hiciste, márcala con el SQL del paso 3 de docs/SUPABASE.md. La app no puede asignar ese rol, a propósito
-- **Portal del cliente de Stripe.** Que esté guardado y activo en Settings, Billing, Customer portal, con Cancel subscriptions encendido. B10 lo reconfigura con dos configuraciones, una para Fundadores y otra para precios regulares
-- **Webhook de Stripe.** Hoy tiene seis eventos. B10 pide agregar customer.subscription.trial_will_end, checkout.session.async_payment_succeeded y checkout.session.async_payment_failed. La sesión te dirá cuándo
+- **Portal del cliente y webhook de Stripe.** Pasaron a los pasos B10.4 y B10.6 de arriba
 
 ## Por qué la limpieza de pagos no la hizo la sesión
 
