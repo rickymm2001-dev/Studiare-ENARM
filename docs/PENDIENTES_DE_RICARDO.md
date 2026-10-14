@@ -32,6 +32,31 @@ El código del servidor de pagos ya está y se probó con un Stripe simulado. La
 
 Lo que hace la sesión después, sin pedirte nada más. Corre scripts/stripe/setup-test.ts, pone los ocho IDs en los secretos de Supabase, aplica las tres migraciones, corre la consulta de comprobación de docs/SUPABASE.md, despliega las funciones, corre contigo los escenarios y, con todo en verde, prende las banderas de la prueba gratis y de los pases.
 
+## Lo que salió de B11, el banco en la nube
+
+El servidor del banco ya está con sus pruebas. Todo queda apagado hasta tus pasos. El guion completo está en la sección 8 del plan de B11 y el detalle técnico en docs/BANCO_EN_LA_NUBE.md y docs/SUPABASE.md. Ninguno lleva llaves al chat.
+
+- **Paso B11.1. Cuenta de servicio de Google.** En console.cloud.google.com, en el proyecto Studiare, activa Google Sheets API, crea la cuenta de servicio studiare-banco sin roles y una llave JSON. Si sale que crear llaves está desactivado, el proyecto está en una organización con la política iam.managed.disableServiceAccountKeyCreation, y conviene crear el proyecto con tu cuenta personal o cambiar esa política solo para este proyecto. Es el paso 13
+- **Paso B11.2. Secretos de la función.** En Supabase, Edge Functions, Secrets, crea GOOGLE_SA_KEY con el contenido completo del archivo JSON y GOOGLE_BANK_SHEET_ID con el ID de tu Sheet, lo que va entre /d/ y /edit. Después borra el archivo bajado
+- **Paso B11.3. Compartir el Sheet.** En Banco de preguntas, Compartir, pega el correo de la cuenta de servicio (termina en iam.gserviceaccount.com) como Lector, sin notificar. Deja apagado que los editores cambien permisos y el acceso general en Restringido
+- **Paso B11.4. Sheet de prueba.** La sesión te deja Studiare-banco-prueba.xlsx en tu Drive (`npm run bank:sheet-test`). Ábrelo con Hojas de cálculo de Google, Archivo, Guardar como Hojas de cálculo de Google, compártelo igual con la cuenta de servicio y crea el secreto GOOGLE_BANK_TEST_SHEET_ID con su ID. Ahí revisa si las listas de Subespecialidad y Subtema cambian con la rama
+- **Paso B11.5. SQL Editor si la sesión lo pide.** Si el conector no aplica la pieza con delete, pega supabase/manual/banco-b11.sql en SQL Editor y ejecútalo una vez, después de ejecutar-en-sql-editor.sql. Sin ella, Borrar mis datos no quita las lecturas del banco ni las bajadas de mazos
+- **Paso B11.6. Cambios de estructura de tu Sheet** (los hacen tú o Paco, no cambian el texto de ninguna pregunta)
+  - Haz una copia de seguridad del Sheet
+  - Fija los ID antes de la primera sincronización que aplique. Hoy son una fórmula que cambia al ordenar renglones, y mientras lo sean la sincronización solo reporta
+  - Agrega las columnas Caso, Orden en el caso, Autor y Revisor. Paco llena Caso y Orden de las 13 preguntas que dependen de otra y del caso partido entre los renglones 77 y 79, y Autor en las 108
+  - Deja en cada encabezado solo su primera línea y la ayuda como nota de la celda
+  - Copia la pestaña Listas que te deja la sesión (`npm run bank:sheet-lists`) y crea las validaciones de Subespecialidad y Subtema como en el Sheet de prueba
+  - Cambia la lista de Estado a Borrador, Lista para revisión y Retirar
+  - Reemplaza el texto de la pestaña Instrucciones con el de docs/SHEET_DEL_BANCO.md
+- **Paso B11.7. Claves y revisores.** Una clave corta para cada médico (por ejemplo PM para Paco), quién revisa cada subespecialidad y, si la quieres en el reporte de pagos, la tarifa por revisión. Se ponen en Studiare, Administración, Usuarios y Banco y Sheet
+- **Paso B11.8. Mazos.** Sube en Catálogo de mazos los de Paco (incluidos Pediatría y Cirugía, que van solo a Storage) y confirma su autorización como dueño. El de Fer espera su autorización escrita
+- **Paso B11.9. Abrir el banco.** Cuando haya 300 aprobadas, prende cloudBank. Mientras tanto los alumnos siguen con la demo
+
+Lo que hace la sesión después, sin pedirte nada más. Aplica las seis migraciones, guarda project_url en Vault, despliega bank-sync sin verificación de JWT, revisa que conteste 401 sin ficha ni sesión y skipped con disabled a la de Cron, y con tu aviso prende la sincronización en solo reporte contra el Sheet de prueba y contra el real. Pasa a aplicar solo cuando los ID sean fijos y tú lo apruebes.
+
+Decisiones de B11 que esperan tu visto bueno, con la opción recomendada ya tomada. Subespecialidad deducida del subtema (8.2), De control con casilla para el revisor (8.4), qué cuenta como revisión pagable (8.7) y la tarifa (8.8), el freno de los planes de pago (8.10), el día de abrir el banco (8.14), los temas de Salud pública (8.15), los pesos del examen completo (8.17), Pediatría y Cirugía solo en Storage (8.18), un médico con decisiones que quiere borrar su cuenta (8.33), las listas dependientes (8.34) y cómo se cuenta la meta de 300 (8.35).
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar
