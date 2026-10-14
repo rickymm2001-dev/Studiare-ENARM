@@ -188,7 +188,7 @@ select
   (select value from public.platform_settings where key = 'device_limits') as limite;
 ```
 
-8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización, 26 con la de pagos y 30 con la de Party en la nube), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
+8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización, 26 con la de pagos y 31 con la de Party en la nube), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
 9. Para que el aviso del límite lleve un enlace de ayuda, crea en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, la variable VITE_SUPPORT_EMAIL con el correo donde quieres recibir las dudas. Es público, lo verán los alumnos. Después corre de nuevo la publicación en Actions, con el flujo pages y Run workflow. Sin esa variable el aviso no muestra enlace y pide al alumno que consulte al equipo por el medio donde le dieron acceso
 
 ### Cómo probarlo con dos navegadores
@@ -433,7 +433,7 @@ select
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 ```
 
-7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 149 y annual 1499 (150 y 1200 si todavía no aplicas la migración 20261015000001), y politicas_con_barrera en 26 (30 si ya aplicaste la de Party en la nube). Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
+7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 149 y annual 1499 (150 y 1200 si todavía no aplicas la migración 20261015000001), y politicas_con_barrera en 26 (31 si ya aplicaste la de Party en la nube). Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
 8. Si cambiaste los precios en platform_settings antes, esta migración no los pisa. Solo cambia el valor viejo de ejemplo
 
 ### Cómo preparar los pagos en modo prueba
