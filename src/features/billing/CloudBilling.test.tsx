@@ -39,6 +39,8 @@ interface FakeState {
   invokeCalls: unknown[];
   otpCalls: unknown[];
   verifyCalls: unknown[];
+  /** Error con el que responde signInWithOtp, como el rechazo del registro por invitación (B9) */
+  otpError?: { status: number; message: string } | null;
 }
 
 function fakeCloudFor(overrides: Partial<FakeState> = {}) {
@@ -59,7 +61,7 @@ function fakeCloudFor(overrides: Partial<FakeState> = {}) {
     auth: {
       signInWithOtp: (args: unknown) => {
         state.otpCalls.push(args);
-        return Promise.resolve({ error: null });
+        return Promise.resolve({ error: state.otpError ?? null });
       },
       verifyOtp: (args: unknown) => {
         state.verifyCalls.push(args);
@@ -171,6 +173,35 @@ describe('pago real desde Suscripción', () => {
     await typing.click(send);
     expect(await screen.findByText(t.billing.cloud.needLink.sent('ana@x.mx'))).toBeVisible();
     expect(fake.otpCalls).toEqual([expect.objectContaining({ email: 'ana@x.mx' })]);
+  });
+
+  it('si el servidor rechaza el correo porque no tiene invitación, lo dice con ese motivo', async () => {
+    fakeCloudFor({
+      otpError: {
+        status: 403,
+        message:
+          'Studiare está abierto solo con invitación y este correo no tiene una (invitation_required)',
+      },
+    });
+    useCloud.setState({ state: { status: 'signed-out' } });
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: async (api, user) => {
+        await api.repos.accounts.put({
+          userId: user.id,
+          email: 'ana@x.mx',
+          ...EMPTY_DETAILS,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    const send = await screen.findByRole('button', { name: t.billing.cloud.needLink.send });
+    await waitFor(() => {
+      expect(send).toBeEnabled();
+    });
+    await typing.click(send);
+    expect(await screen.findByText(t.accounts.signup.invitationRequired)).toBeVisible();
+    expect(screen.queryByText(t.cloud.failedBody)).toBeNull();
   });
 
   it('deja entrar con el código del correo abierto en otro dispositivo', async () => {

@@ -592,6 +592,104 @@ select
 
 7. Debe salir sesion_puede_llamarla en true y anon_puede_llamarla en false. La función revisa por dentro que quien llama sea admin o dueño
 
+## Cuentas y acceso (B9)
+
+### Qué hace
+
+- Registro solo con invitación hasta el lanzamiento (respuesta 52). La tabla signup_invitations guarda los correos invitados y solo el dueño y los admins la leen y la escriben. Los invitas en Usuarios, en la tarjeta Invitaciones, donde también ves si ya crearon su cuenta y quitas una invitación. Cuenta como creada cuando la persona confirmó su correo con el enlace, el código o Google, no solo con pedir el código
+- Quien decide es el servidor, con el gancho Before User Created de Supabase Auth. Corre antes de crear cualquier cuenta, con el enlace o el código del correo y con Google, y rechaza un correo sin invitación mientras el registro esté cerrado. Las cuentas que ya existen no pasan por el gancho, así que entran igual. Crear una cuenta desde el panel de Supabase, en Authentication, Users, Add user, tampoco pasa por él
+- El interruptor es la clave registration_open de platform_settings. Nace en false. El día del lanzamiento la cambias a true desde Usuarios, con el botón Abrir el registro, o con SQL
+- Entrar con Google (respuesta 26). Botón Continuar con Google en Crear cuenta y en Ya tengo cuenta. Lo que el alumno llenó en Crear cuenta espera en su pestaña mientras va a Google y su perfil nace con eso. Funciona igual con el dispositivo único, porque al volver de Google la app reclama el dispositivo como con el correo. La bandera googleSignIn lo esconde hasta que configures Google
+- Completa tu registro. Una cuenta que entra por primera vez sin pasar por Crear cuenta, con el correo o con Google desde Ya tengo cuenta, elige su alias, confirma su edad y acepta el aviso en esa pantalla antes de seguir. Se decide con los datos y no con el proveedor. No la ve quien ya lo completó en otro dispositivo ni una cuenta de antes de B9, porque la nube ya tiene su edad confirmada o su aviso aceptado. Mientras no lo complete, la app no abre su perfil, no sube nada a la nube y no registra la aceptación del aviso, y si la nube no contesta no deja pasar y lo vuelve a intentar
+- Segundo factor para médicos, admins y dueño (respuesta 30). Con la bandera requireMfa prendida, quien tiene uno de esos roles da de alta un código de una app de autenticación la primera vez y lo escribe al entrar. Sin ese código el servidor lo trata como alumno en todos los permisos por fila, porque la condición vive en current_app_role, la función que usan todas las reglas de rol. El alumno no cambia en nada
+- La misma bandera manda en la app y en el servidor. Es requireMfa de la clave feature_flags, la de las banderas de lanzamiento. Así se prende sin otra migración y la app y la base nunca piden cosas distintas. Sin la clave, o con false, nadie da segundo factor
+- El dueño restablece el segundo factor de un médico o de un admin que perdió su teléfono, en Usuarios, con Restablecer segundo factor. Lo hace la función admin-reset-mfa, que revisa con la base que quien pide sea el dueño con su propio segundo factor, borra los factores con la API de administración de Auth y cierra las sesiones de esa persona. Queda constancia en la tabla mfa_resets
+- Cómo nos conociste (respuesta 22). Pregunta opcional del registro con opciones cerradas y el código de influencer si lo trae. Cada respuesta va a la tabla privada signup_sources, que nadie lee una por una desde la app. Tú y los admins ven solo conteos por canal y por código, en Usuarios, en Cómo nos conocieron. Nunca va a la analítica
+- Edad mínima de 18 años (pregunta 45). Casilla obligatoria en el registro. La fecha queda en private_accounts.adult_confirmed_at y, una vez puesta, la base no deja borrarla ni cambiarla
+- Datos opcionales entre dispositivos (hallazgo H29). private_accounts.details_changed_at guarda cuándo guardó el alumno su año de nacimiento, sexo, estado, situación, intento y especialidad. Gana la versión más reciente, y un dispositivo nuevo que nunca los guardó ya no borra en la nube lo que el alumno guardó en otro
+- Liberar el dispositivo de un alumno (hallazgo H17). En Usuarios, con Liberar dispositivo, que usa admin_release_device
+
+### Cómo aplicar la migración
+
+No necesitas terminal. Aplica primero las anteriores.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261020000001_accounts_access.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  (select value from public.platform_settings where key = 'registration_open') as registro_abierto,
+  has_function_privilege('supabase_auth_admin', 'public.before_user_created_hook(jsonb)', 'execute') as auth_ejecuta_gancho,
+  has_function_privilege('authenticated', 'public.before_user_created_hook(jsonb)', 'execute') as alumno_ejecuta_gancho,
+  has_table_privilege('authenticated', 'public.signup_sources', 'select') as alumno_lee_respuestas,
+  has_function_privilege('authenticated', 'public.record_signup_source(text, text)', 'execute') as alumno_responde,
+  public.staff_mfa_required() as segundo_factor_prendido;
+```
+
+7. Debe salir registro_abierto en false, auth_ejecuta_gancho en true, alumno_ejecuta_gancho y alumno_lee_respuestas en false, alumno_responde en true y segundo_factor_prendido en false. Si alumno_ejecuta_gancho o alumno_lee_respuestas salen en true, avísame antes de abrir a alumnos
+
+### Cómo activar el gancho del registro
+
+Sin este paso la migración no frena a nadie y cualquiera crea su cuenta.
+
+1. En Supabase abre Authentication, Hooks
+2. Busca Before User Created y da clic en Add hook o en Configure
+3. Elige Postgres como tipo
+4. En Schema elige public y en Function elige before_user_created_hook
+5. Activa el gancho y guarda
+6. Prueba en una ventana de incógnito con un correo que no invitaste. La app debe decir que ese correo no tiene invitación. Después invítalo en Usuarios y vuelve a intentar
+
+### Cómo activar Entrar con Google
+
+1. En Google Cloud, en tu proyecto Studiare, abre APIs y servicios, Pantalla de consentimiento de OAuth, y configúrala con la marca Studiare, tu dominio y tu correo de soporte
+2. En Credenciales crea un ID de cliente de OAuth de tipo Aplicación web
+3. En URI de redireccionamiento autorizados pon https://bkjbcdwglyllizupokqm.supabase.co/auth/v1/callback
+4. Copia el Client ID y el secreto del cliente
+5. En Supabase abre Authentication, Sign In / Providers, Google, actívalo y pega ahí el Client ID y el secreto. No los pegues en ningún otro lado
+6. En Authentication, URL Configuration revisa que la dirección pública de la app esté en Redirect URLs, como en el paso 6
+7. Prende la bandera googleSignIn con esto en el SQL Editor
+
+```sql
+insert into public.platform_settings (key, value) values ('feature_flags', '{"googleSignIn": true}')
+on conflict (key) do update set value = public.platform_settings.value || '{"googleSignIn": true}', updated_at = now();
+```
+
+8. Recarga la app. En Crear cuenta y en Ya tengo cuenta debe aparecer Continuar con Google. Si Google no está activado en Supabase, el botón lleva a una página de error, por eso la bandera va al final
+
+### Cómo prender el segundo factor del equipo
+
+1. En Supabase abre Authentication, Multi-Factor y revisa que TOTP (App Authenticator) esté activado. Viene activado en todos los proyectos
+2. Publica la función que restablece el segundo factor, desde la carpeta del repo con la CLI conectada a tu proyecto. No necesita secretos nuevos, usa APP_URL, que ya existe
+
+```bash
+supabase functions deploy admin-reset-mfa
+```
+
+3. Prende la bandera con esto en el SQL Editor
+
+```sql
+insert into public.platform_settings (key, value) values ('feature_flags', '{"requireMfa": true}')
+on conflict (key) do update set value = public.platform_settings.value || '{"requireMfa": true}', updated_at = now();
+```
+
+4. Recarga la app con tu cuenta. Te pide dar de alta tu código. Escanea el QR con tu app de autenticación y escribe el código de 6 dígitos. Desde ese momento, sin el código no tienes tu rol de dueño, ni en la app ni en la base
+5. Para apagarlo cambia true por false en la misma consulta. Como la escritura de platform_settings también pide el rol de admin, con el segundo factor prendido solo un admin o el dueño con su código lo pueden apagar desde la app. Desde el SQL Editor siempre se puede
+
+### Si pierdes tu propio segundo factor
+
+La app no deja que el dueño restablezca el suyo. Hazlo en Supabase, en Authentication, Users, abre tu cuenta, busca la sección de factores de MFA y borra el factor. La siguiente vez que entres la app te pide darlo de alta otra vez.
+
+### Qué conviene saber
+
+- El gancho compara el correo exacto, sin mayúsculas ni espacios. Un correo de Gmail con puntos o con un más cuenta como otro correo. Invita el correo con el que la persona va a entrar
+- Un valor que no sea true en registration_open deja el registro cerrado. En requireMfa solo el booleano true prende el segundo factor, igual que en la app, que con un valor que no es booleano descarta las banderas. Así la app y la base nunca piden cosas distintas. Escribe true sin comillas
+- Antes de publicar esta versión de la app aplica la migración. La app nueva lee las columnas details_changed_at y adult_confirmed_at de private_accounts, y sin ellas no puede guardar los datos de la cuenta, aunque todo lo demás sigue funcionando
+- El proxy de IA alojado lee el rol con current_app_role, la misma regla de los permisos por fila. Con el segundo factor prendido, alguien del equipo que no ha escrito su código usa la IA como alumno, con su plan
+
 ## Privacidad, borrar mis datos y mi cuenta
 
 ### Qué hace

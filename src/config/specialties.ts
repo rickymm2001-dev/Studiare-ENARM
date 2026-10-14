@@ -1,6 +1,10 @@
 // Especialidades de entrada directa del ENARM para elegir la especialidad objetivo (D-068).
 // Lista tomada de fuentes públicas sobre el 50º ENARM 2026. Está por verificar contra la
 // convocatoria oficial de la CIFRHS, que no se pudo abrir desde el entorno de desarrollo
+// Por confirmar (B9). Desde B9 la especialidad va a la vista en el registro y en Tus datos, y la usa la
+// comparación por especialidad (B14). Falta revisar con la convocatoria vigente si Urología sigue siendo
+// de entrada directa y si el nombre oficial es Medicina de la Actividad Física y Deportiva. Las claves no
+// cambian aunque cambie el nombre, porque ya se guardan en las cuentas
 export const SPECIALTIES = [
   ['anatomic_pathology', 'Anatomía Patológica'],
   ['anesthesiology', 'Anestesiología'],
