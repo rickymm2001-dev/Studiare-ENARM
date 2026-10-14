@@ -20,8 +20,10 @@ export const billingCloudText = {
       label: 'Tarjeta, Apple Pay o Google Pay',
       trial: (price: string, period: string) =>
         `${TRIAL_DAYS} días gratis. Después ${price} ${period} con renovación automática hasta que canceles.`,
+      // Sin decir por qué no hay prueba. my_plan solo dice que no la hay, y puede ser porque ya la
+      // usó, porque pagó antes o porque está apagada para todos
       noTrial: (price: string, period: string) =>
-        `${price} ${period} con renovación automática hasta que canceles. Ya usaste tu prueba gratis.`,
+        `${price} ${period} con renovación automática hasta que canceles. Sin prueba gratis, el primer cobro es hoy.`,
     },
     oxxo: {
       label: 'Efectivo en OXXO',

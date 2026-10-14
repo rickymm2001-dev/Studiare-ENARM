@@ -143,11 +143,17 @@ describe('aviso antes de pagar (4.18)', () => {
     expect(screen.getByRole('button', { name: text.actions.trial })).toBeVisible();
   });
 
-  it('sin prueba dice que hoy se cobra y que ya usó su prueba', () => {
+  it('sin prueba dice que hoy se cobra, sin decir por qué no hay prueba', () => {
     show({ trialAvailable: false, plan: 'annual', chargedPlan: 'founder_annual' });
     expect(radio(text.options.card.label)).toHaveTextContent(
       text.options.card.noTrial(t.billing.price(749), t.billing.periods.annual),
     );
+    // my_plan solo dice que no hay prueba. Puede ser que ya la usó, que pagó antes un pase o que la
+    // prueba está apagada para todos, así que no afirma que la usó
+    expect(radio(text.options.card.label)).toHaveTextContent(
+      'Sin prueba gratis, el primer cobro es hoy.',
+    );
+    expect(screen.queryByText(/usaste|ya usó|tu prueba/i)).toBeNull();
     expect(screen.getByText(text.summary.charge(t.billing.price(749), 'año'))).toBeVisible();
     expect(screen.getByRole('button', { name: text.go })).toBeVisible();
   });
