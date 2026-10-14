@@ -711,7 +711,8 @@ begin
     'public.billing_take_seat(uuid, text, text, text, text)', 'public.billing_close_subscription(text, text)',
     'public.billing_register_event(text, text, jsonb)', 'public.billing_event_done(text, text, text)',
     'public.billing_queue_cancel(uuid, text, text, text)', 'public.billing_mark_issue(uuid, text, text)',
-    'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)'] loop
+    'public.billing_in_force(text, text, timestamptz)', 'public.billing_promo_code(text)',
+    'public.trial_key_hash(text)', 'public.founder_seats_release_orphan()'] loop
     if has_function_privilege('authenticated', v_fn, 'execute') or has_function_privilege('anon', v_fn, 'execute')
        or has_function_privilege('service_role', v_fn, 'execute') then
       raise exception 'FALLA P6. % es interna y nadie debe ejecutarla por la API', v_fn;
@@ -741,6 +742,7 @@ select pg_temp.expect(
 select pg_temp.expect(
   pg_temp.is_blocked('select * from public.founder_seats')
   and pg_temp.is_blocked('select * from public.trial_claims')
+  and pg_temp.is_blocked('select * from public.trial_history')
   and pg_temp.is_blocked('select * from public.billing_actions')
   and pg_temp.is_blocked('select * from public.email_outbox')
   and pg_temp.is_blocked($q$insert into public.plan_passes (user_id, plan, provider, provider_payment_id, method, starts_at, ends_at) values (auth.uid(), 'annual', 'stripe', 'x', 'oxxo', now(), now() + interval '1 year')$q$),
@@ -914,6 +916,7 @@ select pg_temp.is(public.note_trial_will_end('stripe', 'evt-p9-t', '{}', :'rb', 
 select pg_temp.expect(
   (select count(*) from public.founder_seats where user_id = :'ra') = 1
   and (select count(*) from public.trial_claims where user_id in (:'ra', :'rb')) = 2
+  and (select count(*) from public.trial_history where user_id in (:'ra', :'rb')) = 2
   and pg_temp.action_for('sub_p9_b2') = 'second_subscription'
   and (select count(*) from public.email_outbox where recipient_user = :'rb') = 1,
   'P9. Las cuentas de prueba no quedaron con pagos'
@@ -925,6 +928,8 @@ select pg_temp.expect(
   and not exists (select 1 from public.billing_customers where user_id in (:'ra', :'rb'))
   and not exists (select 1 from public.founder_seats where user_id in (:'ra', :'rb'))
   and not exists (select 1 from public.trial_claims where user_id in (:'ra', :'rb'))
+  and not exists (select 1 from public.trial_history where user_id in (:'ra', :'rb'))
+  and (public.checkout_context(:'rb') ->> 'trialAvailable')::boolean
   and not exists (select 1 from public.email_outbox where recipient_user in (:'ra', :'rb'))
   and pg_temp.action_for('sub_p9_b2') is null
   and exists (select 1 from auth.users where id = :'ra'),
@@ -936,12 +941,12 @@ select pg_temp.expect(
 create temp table p10 as
 select
   (select count(*) from pg_tables where schemaname = 'public'
-     and tablename in ('founder_seats', 'trial_claims', 'plan_passes', 'billing_actions', 'email_kinds', 'email_outbox',
-                       'invoice_requests')) as tablas_nuevas,
+     and tablename in ('founder_seats', 'trial_claims', 'trial_history', 'plan_passes', 'billing_actions', 'email_kinds',
+                       'email_outbox', 'invoice_requests')) as tablas_nuevas,
   (select bool_and(relrowsecurity) from pg_class where oid in (
-     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.plan_passes'::regclass,
-     'public.billing_actions'::regclass, 'public.email_kinds'::regclass, 'public.email_outbox'::regclass,
-     'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
+     'public.founder_seats'::regclass, 'public.trial_claims'::regclass, 'public.trial_history'::regclass,
+     'public.plan_passes'::regclass, 'public.billing_actions'::regclass, 'public.email_kinds'::regclass,
+     'public.email_outbox'::regclass, 'public.invoice_requests'::regclass)) as tablas_con_seguridad_por_fila,
   has_function_privilege('authenticated', 'public.apply_charge(text, text, jsonb, text, uuid, text, text, text, text, text, text, numeric, numeric, text, timestamptz, timestamptz)', 'execute') as alumno_aplica_cobros,
   has_function_privilege('service_role', 'public.apply_subscription_state(text, text, timestamptz, jsonb, uuid, text, text, text, timestamptz, timestamptz, boolean, boolean, text, text)', 'execute') as servicio_aplica_estados,
   has_function_privilege('authenticated', 'public.checkout_context(uuid)', 'execute') as alumno_lee_contexto,
@@ -956,12 +961,66 @@ select
     where schemaname = 'public'
       and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
 select pg_temp.expect(
-  (select tablas_nuevas = 7 and tablas_con_seguridad_por_fila and not alumno_aplica_cobros and servicio_aplica_estados
+  (select tablas_nuevas = 8 and tablas_con_seguridad_por_fila and not alumno_aplica_cobros and servicio_aplica_estados
       and not alumno_lee_contexto and not alumno_lee_lugares and alumno_pide_factura and plan_fundador_anual
       and estado_prueba and borrar_cuenta_b10 and dias_de_prueba = '7' and correos_encendidos = 'false'
       and politicas_con_barrera = 33
    from p10),
   'P10. La consulta de comprobación de docs/SUPABASE.md no da lo que dice la guía'
+);
+
+-- ===================================================================== P11. Revisión independiente de B10
+-- Cada bloque es un hallazgo de la revisión. Usuarios propios para no depender de lo de arriba
+\set r1a 'ba110000-0000-0000-0000-0000000001a0'
+\set r1c 'ba110000-0000-0000-0000-0000000001c0'
+\set r1d 'ba110000-0000-0000-0000-0000000001d0'
+insert into auth.users (id, email, raw_user_meta_data) values
+  (:'r1a', 'r1a@ba.mx', '{"alias":"Borra con lugar"}'),
+  (:'r1c', 'Rosa.Uno+promo@gmail.com', '{"alias":"Borra con prueba"}');
+
+-- R1. Borrar la cuenta no libera una prueba nueva para el mismo correo ni deja un lugar apartado para
+-- siempre. Un lugar apartado de una cuenta borrada se libera, el fin de una suscripción de alguien que ya
+-- no existe cierra su lugar, y la prueba usada queda por la huella del correo
+select pg_temp.trial('evt-r1-a', :'r1a', 'sub_r1_a', 'founder');
+select pg_temp.state('evt-r1-ax', :'r1a', 'sub_r1_a', 'founder', 'trialing', p_cancel => true,
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+select pg_temp.is(pg_temp.seat_of(:'r1a'), 'held', 'R1. La prueba Fundador debía apartar el lugar');
+create temp table r1_seats as select public.founder_seats_taken() as taken;
+begin;
+select pg_temp.as_user(:'r1a');
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  (select status from public.founder_seats where provider_subscription_id = 'sub_r1_a') = 'released'
+  and public.founder_seats_taken() = (select taken - 1 from r1_seats),
+  'R1. El lugar apartado de una cuenta borrada debía liberarse'
+);
+-- Un lugar apartado sin dueño, de una cuenta que ya no existe, se libera con el fin de su suscripción
+insert into public.founder_seats (user_id, plan, status, provider, provider_subscription_id)
+  values (null, 'founder', 'held', 'stripe', 'sub_r1_huerfana');
+select pg_temp.is(
+  pg_temp.state('evt-r1-b', 'ffffffff-ffff-ffff-ffff-fffffffff1b0', 'sub_r1_huerfana', 'founder', 'ended'),
+  'unknown_user', 'R1. El fin de la suscripción de una cuenta borrada debía decir unknown_user');
+select pg_temp.is(
+  (select status from public.founder_seats where provider_subscription_id = 'sub_r1_huerfana'), 'released',
+  'R1. El fin de la suscripción de una cuenta borrada debía liberar su lugar');
+-- La prueba usada sobrevive al borrado. Otra cuenta con el mismo correo normalizado no tiene otra
+select pg_temp.trial('evt-r1-c', :'r1c', 'sub_r1_c', 'monthly');
+select pg_temp.state('evt-r1-cx', :'r1c', 'sub_r1_c', 'monthly', 'trialing', p_cancel => true,
+  p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
+begin;
+select pg_temp.as_user(:'r1c');
+select public.delete_my_account();
+commit;
+insert into auth.users (id, email, raw_user_meta_data) values (:'r1d', 'rosauno@gmail.com', '{"alias":"Vuelve"}');
+select pg_temp.is(public.checkout_context(:'r1d') ->> 'trialAvailable', 'false',
+  'R1. Una cuenta nueva con el correo de una cuenta borrada no debía tener prueba');
+select pg_temp.is(pg_temp.trial('evt-r1-d', :'r1d', 'sub_r1_d', 'monthly'), 'trial_duplicate',
+  'R1. La prueba de una cuenta nueva con el correo de una borrada debía rechazarse');
+select pg_temp.expect(
+  not exists (select 1 from public.trial_history where email_hash like '%@%')
+  and exists (select 1 from public.trial_history where provider_subscription_id = 'sub_r1_c' and user_id is null),
+  'R1. La prueba usada debía quedar sin dueño y sin el correo a la vista'
 );
 
 select 'TODAS LAS PRUEBAS DE PAGOS COMPLETOS PASARON' as resultado;

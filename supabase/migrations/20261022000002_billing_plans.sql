@@ -1,7 +1,8 @@
 -- Pagos completos (B10 del plan del cambio, respuestas 1, 2 y 7 a 21, secciones 1 y 2 del diseño).
 --
 -- Qué agrega
---   - Prueba gratis de 7 días con tarjeta (estado trialing), una por persona. Cuenta como plan vigente
+--   - Prueba gratis de 7 días con tarjeta (estado trialing), una por persona. Cuenta como plan vigente.
+--     La prueba usada queda en trial_history con la huella del correo y sobrevive al borrado de la cuenta
 --   - Fundador anual (founder_annual, 749 al año) que comparte los 100 lugares con el Fundador mensual.
 --     Los lugares viven en founder_seats. Se aparta al empezar la prueba y se confirma con el primer
 --     cobro. Se libera si la suscripción termina sin cobro o si se devuelve completo su único cobro
@@ -127,6 +128,22 @@ create unique index if not exists trial_claims_email_key on public.trial_claims 
   where status <> 'voided';
 create index if not exists trial_claims_subscription on public.trial_claims (provider, provider_subscription_id);
 
+-- Pruebas usadas, para siempre. Una fila por suscripción que empezó una prueba que cuenta. trial_claims se
+-- borra con la cuenta, así que sin esta tabla el mismo correo volvería a tener prueba al abrir otra cuenta.
+-- Sobrevive al borrado (user_id queda en null) y no guarda el correo, solo la huella SHA-256 de su clave
+-- normalizada (trial_key_hash). Solo se agrega. Ninguna función la cambia ni la borra, salvo la limpieza
+-- manual de las cuentas de prueba
+create table if not exists public.trial_history (
+  id uuid primary key default gen_random_uuid(),
+  email_hash text not null,
+  user_id uuid references auth.users (id) on delete set null,
+  provider text not null check (provider in ('stripe', 'mercadopago')),
+  provider_subscription_id text not null,
+  started_at timestamptz not null default now(),
+  unique (provider, provider_subscription_id)
+);
+create index if not exists trial_history_email on public.trial_history (email_hash);
+
 -- Pases de un solo pago
 create table if not exists public.plan_passes (
   id uuid primary key default gen_random_uuid(),
@@ -169,7 +186,9 @@ alter table public.plan_passes enable row level security;
 alter table public.founder_seats enable row level security;
 alter table public.trial_claims enable row level security;
 alter table public.billing_actions enable row level security;
-revoke all on public.plan_passes, public.founder_seats, public.trial_claims, public.billing_actions
+alter table public.trial_history enable row level security;
+revoke all on public.plan_passes, public.founder_seats, public.trial_claims, public.billing_actions,
+  public.trial_history
   from public, anon, authenticated, service_role;
 grant select on public.plan_passes to authenticated;
 do $$
@@ -370,8 +389,23 @@ language sql stable security definer set search_path = public, pg_temp as $$
   select coalesce(public.trial_email_key((select email from auth.users where id = p_user)), 'id:' || p_user::text)
 $$;
 
--- Si la cuenta ya usó su prueba, si otra cuenta con el mismo correo normalizado ya la usó o si la cuenta
--- ya tuvo un cobro mayor a 0. Una prueba anulada por cupo lleno (voided) no cuenta
+-- La huella de la clave de una cuenta, que es lo único que guarda trial_history. sha256 viene con Postgres
+-- desde la versión 11, sin extensiones
+create or replace function public.trial_key_hash(p_key text) returns text
+language sql immutable set search_path = public, pg_temp as $$
+  select encode(sha256(convert_to(p_key, 'UTF8')), 'hex')
+$$;
+
+-- Las pruebas que ya contaban antes de trial_history quedan también ahí. No pisa lo que ya exista
+insert into public.trial_history (email_hash, user_id, provider, provider_subscription_id, started_at)
+  select public.trial_key_hash(t.email_key), t.user_id, t.provider, t.provider_subscription_id, t.started_at
+  from public.trial_claims t
+  where t.status in ('started', 'converted', 'canceled')
+  on conflict (provider, provider_subscription_id) do nothing;
+
+-- Si la cuenta ya usó su prueba, si otra cuenta con el mismo correo normalizado ya la usó, también una
+-- cuenta ya borrada (trial_history), o si la cuenta ya tuvo un cobro mayor a 0. Una prueba anulada por
+-- cupo lleno (voided) no cuenta
 create or replace function public.trial_already_used(p_user uuid) returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
   select exists (
@@ -382,6 +416,10 @@ language sql stable security definer set search_path = public, pg_temp as $$
       select 1 from public.trial_claims t
       where t.email_key = public.trial_account_key(p_user) and t.user_id <> p_user
         and t.status in ('started', 'converted', 'canceled')
+    )
+    or exists (
+      select 1 from public.trial_history h
+      where h.email_hash = public.trial_key_hash(public.trial_account_key(p_user))
     )
     or exists (
       select 1 from public.payments p
@@ -610,6 +648,25 @@ create or replace trigger subscriptions_sync_founder_seat
   after insert or update of plan, status on public.subscriptions
   for each row execute function public.subscriptions_sync_founder_seat();
 
+-- Al borrarse una cuenta su lugar queda sin dueño (on delete set null). Uno confirmado sigue contando
+-- (respuesta 17), pero uno apartado por una prueba que nunca cobró se libera en el acto. Si no, la prueba
+-- cancelada de quien borró su cuenta dejaría el lugar ocupado para siempre
+create or replace function public.founder_seats_release_orphan() returns trigger
+language plpgsql security definer set search_path = public, pg_temp as $$
+begin
+  if new.user_id is null and old.user_id is not null and new.status = 'held' then
+    new.status := 'released';
+    new.released_at := now();
+    new.updated_at := now();
+  end if;
+  return new;
+end;
+$$;
+
+create or replace trigger founder_seats_release_orphan
+  before update of user_id on public.founder_seats
+  for each row execute function public.founder_seats_release_orphan();
+
 -- ===================================================================== Devolver un cobro
 -- Lo que pasa cuando se devuelve un cobro, por el aviso de la pasarela o porque el admin lo marca. El
 -- cobro queda refunded. Un pase deja de contar. Un cobro de suscripción quita el acceso como hoy (D-106) y
@@ -723,6 +780,11 @@ begin
     return 'duplicate';
   end if;
   if p_user is null or not exists (select 1 from auth.users where id = p_user) then
+    -- La cuenta ya no existe, por ejemplo porque se borró con la prueba cancelada. El fin de su
+    -- suscripción igual cierra su prueba y libera su lugar apartado, que siguen por su id de suscripción
+    if p_status = 'ended' then
+      perform public.billing_close_subscription(p_provider, p_subscription_id);
+    end if;
     return public.billing_event_done(p_provider, p_event_id, 'unknown_user');
   end if;
   perform pg_advisory_xact_lock(hashtextextended('pay:' || p_user::text, 0));
@@ -808,6 +870,10 @@ begin
               status = 'started', promotion_code = excluded.promotion_code, started_at = now(),
               ends_at = excluded.ends_at, converted_at = null, canceled_at = null, updated_at = now()
           where t.status = 'voided';
+      -- La prueba queda usada para siempre, también si después se borra la cuenta
+      insert into public.trial_history (email_hash, user_id, provider, provider_subscription_id)
+        values (public.trial_key_hash(public.trial_account_key(p_user)), p_user, p_provider, p_subscription_id)
+        on conflict (provider, provider_subscription_id) do nothing;
     end if;
   end if;
 
@@ -1573,6 +1639,8 @@ revoke all on function public.founder_promo_open() from public, anon, authentica
 revoke all on function public.billing_take_seat(uuid, text, text, text, text) from public, anon, authenticated, service_role;
 revoke all on function public.billing_close_subscription(text, text) from public, anon, authenticated, service_role;
 revoke all on function public.trial_email_key(text) from public, anon, authenticated, service_role;
+revoke all on function public.trial_key_hash(text) from public, anon, authenticated, service_role;
+revoke all on function public.founder_seats_release_orphan() from public, anon, authenticated, service_role;
 revoke all on function public.trial_account_key(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_already_used(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_available(uuid) from public, anon, authenticated, service_role;
