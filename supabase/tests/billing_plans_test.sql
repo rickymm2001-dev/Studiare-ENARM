@@ -996,16 +996,46 @@ select pg_temp.trial('evt-r1-a', :'r1a', 'sub_r1_a', 'founder');
 select pg_temp.state('evt-r1-ax', :'r1a', 'sub_r1_a', 'founder', 'trialing', p_cancel => true,
   p_period_end => now() + interval '7 days', p_trial_end => now() + interval '7 days');
 select pg_temp.is(pg_temp.seat_of(:'r1a'), 'held', 'R1. La prueba Fundador debía apartar el lugar');
-create temp table r1_seats as select public.founder_seats_taken() as taken;
+create temp table r1_seats as select public.founder_seats_taken() as taken,
+  (select id from public.founder_seats where user_id = :'r1a') as seat;
 begin;
 select pg_temp.as_user(:'r1a');
 select public.delete_my_account();
 commit;
 select pg_temp.expect(
-  (select status from public.founder_seats where provider_subscription_id = 'sub_r1_a') = 'released'
+  (select status from public.founder_seats where id = (select seat from r1_seats)) = 'released'
   and public.founder_seats_taken() = (select taken - 1 from r1_seats),
   'R1. El lugar apartado de una cuenta borrada debía liberarse'
 );
+-- R1c. El lugar de una cuenta borrada, apartado o confirmado, queda sin el id de su suscripción, que
+-- Stripe liga a un cliente. Ninguna regla lo busca después. El confirmado sigue contando (respuesta 17)
+\set r1e 'ba110000-0000-0000-0000-0000000001e0'
+insert into auth.users (id, email, raw_user_meta_data) values (:'r1e', 'r1e@ba.mx', '{"alias":"Borra Fundador pagado"}');
+select pg_temp.state('evt-r1-e', :'r1e', 'sub_r1_e', 'founder', 'active');
+select pg_temp.charge('evt-r1-ec', 'paid', :'r1e', 'subscription', 'founder', 'in_r1_e', 79, 'sub_r1_e',
+  p_period_end => now() + interval '30 days');
+select pg_temp.state('evt-r1-ex', :'r1e', 'sub_r1_e', 'founder', 'active', p_cancel => true);
+create temp table r1c_seats as select public.founder_seats_taken() as taken,
+  (select id from public.founder_seats where user_id = :'r1e' and status = 'confirmed'
+     and provider_subscription_id = 'sub_r1_e') as seat;
+begin;
+select pg_temp.as_user(:'r1e');
+select public.delete_my_account();
+commit;
+select pg_temp.expect(
+  (select seat is not null from r1c_seats)
+  and (select user_id is null and status = 'confirmed' and provider_subscription_id is null
+         from public.founder_seats where id = (select seat from r1c_seats))
+  and (select provider_subscription_id is null from public.founder_seats where id = (select seat from r1_seats))
+  and not exists (select 1 from public.founder_seats where provider_subscription_id in ('sub_r1_a', 'sub_r1_e'))
+  and public.founder_seats_taken() = (select taken from r1c_seats),
+  'R1c. El lugar de una cuenta borrada debía quedar sin el id de su suscripción y el confirmado seguir contando'
+);
+-- Un aviso tardío del fin de esa suscripción no cambia el lugar confirmado
+select pg_temp.is(pg_temp.state('evt-r1-ee', :'r1e', 'sub_r1_e', 'founder', 'ended'), 'unknown_user',
+  'R1c. El fin de la suscripción de la cuenta borrada debía decir unknown_user');
+select pg_temp.is((select status from public.founder_seats where id = (select seat from r1c_seats)), 'confirmed',
+  'R1c. El fin de la suscripción no debía liberar un lugar confirmado');
 -- Un lugar apartado sin dueño, de una cuenta que ya no existe, se libera con el fin de su suscripción
 insert into public.founder_seats (user_id, plan, status, provider, provider_subscription_id)
   values (null, 'founder', 'held', 'stripe', 'sub_r1_huerfana');

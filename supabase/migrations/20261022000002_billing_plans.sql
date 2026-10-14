@@ -685,14 +685,20 @@ create or replace trigger subscriptions_sync_founder_seat
 
 -- Al borrarse una cuenta su lugar queda sin dueño (on delete set null). Uno confirmado sigue contando
 -- (respuesta 17), pero uno apartado por una prueba que nunca cobró se libera en el acto. Si no, la prueba
--- cancelada de quien borró su cuenta dejaría el lugar ocupado para siempre
+-- cancelada de quien borró su cuenta dejaría el lugar ocupado para siempre. En el mismo paso el lugar pierde
+-- el id de su suscripción, que Stripe liga a un cliente. Ninguna regla lo busca después. Solo
+-- billing_close_subscription busca por ese id, y solo libera lugares apartados, que aquí ya se liberaron.
+-- La pasarela se queda, porque sola no identifica a nadie
 create or replace function public.founder_seats_release_orphan() returns trigger
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  if new.user_id is null and old.user_id is not null and new.status = 'held' then
-    new.status := 'released';
-    new.released_at := now();
+  if new.user_id is null and old.user_id is not null then
+    new.provider_subscription_id := null;
     new.updated_at := now();
+    if new.status = 'held' then
+      new.status := 'released';
+      new.released_at := now();
+    end if;
   end if;
   return new;
 end;
