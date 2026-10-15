@@ -1,4 +1,5 @@
-// Convierte los mazos de Paco (.apkg) en mazos precargados de la demo (D-053).
+// Convierte los mazos de Paco (.apkg) en mazos precargados de la demo (D-053). La rama y el tema de cada
+// submazo salen de src/data/content/deckTopicMap.ts, que usa también el Catálogo de mazos (B11).
 // Uso: node scripts/content/import-paco-decks.ts <MI.apkg> <GyO.apkg> <Urgencias.apkg>
 // Escribe src/demo/content/decks/<mazo>.json con las notas saneadas y public/demo-media/<mazo>/ con
 // las imágenes que usan las notas. No trae el historial de repasos (D-010). Después corre
@@ -11,94 +12,11 @@ import { DatabaseSync } from 'node:sqlite';
 import { unzipSync } from 'fflate';
 import { JSDOM } from 'jsdom';
 import { createCardSanitizer } from '../../src/data/content/cardHtml.ts';
+import { PACO_DECKS } from '../../src/data/content/deckTopicMap.ts';
 
 const root = resolve(import.meta.dirname, '..', '..');
 
-interface DeckConfig {
-  key: string;
-  name: string;
-  description: string;
-  /** Raíces de etiqueta que pertenecen a este mazo */
-  roots: string[];
-  branchOf: (segments: string[]) => { branch: string | null; topic: string | null };
-}
-
-const MI_TOPICS: Record<string, string> = {
-  Gastroenterología: 'gastroenterology',
-  Hematología: 'hematology',
-  Infectología: 'infectious_diseases',
-  Nefrología: 'nephrology',
-  Neumología: 'pulmonology',
-  Neurología: 'neurology',
-  Reumatología: 'rheumatology',
-};
-
-// Subtemas del mazo de Ginecología y obstetricia en la taxonomía. Juicio de Claude, por revisar
-const GYO_TOPICS: Record<string, string | null> = {
-  Amenorreas: 'reproductive_endocrinology',
-  AnticonceptivosyMPF: 'contraception',
-  Infectología: 'gynecologic_infections',
-  Infertilidad: 'reproductive_endocrinology',
-  Menopausia: 'reproductive_endocrinology',
-  Oncología: 'gynecologic_oncology',
-  Patología_Mamaria: 'gynecologic_oncology',
-  SUA: 'reproductive_endocrinology',
-  Torsion_Ovarica: null,
-  APP: 'labor_delivery',
-  Cesárea: 'labor_delivery',
-  Control_Prenatal: 'prenatal_care',
-  Corioamnionitis: 'labor_delivery',
-  DG: 'prenatal_care',
-  Distocias: 'labor_delivery',
-  Embarazo_Multiple: 'prenatal_care',
-  Enfermedades_Hipertensivas: 'hypertensive_pregnancy',
-  Hemorragias1T: 'early_pregnancy',
-  Hemorragias3T: 'obstetric_hemorrhage',
-  HigadoGraso: null,
-  'Induccion/Conduccion': 'labor_delivery',
-  Misceláneos: null,
-  'Oligo/Polihidramnios': 'prenatal_care',
-  Parto_Normal: 'labor_delivery',
-  Patologia_Puerperal: 'puerperium',
-  Puerperio: 'puerperium',
-  RPM: 'labor_delivery',
-};
-
-const DECKS: DeckConfig[] = [
-  {
-    key: 'paco-mi',
-    name: 'Medicina interna (Paco)',
-    description:
-      'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
-    roots: ['Medicina-Interna'],
-    branchOf: (segments) => ({
-      branch: 'internal_medicine',
-      topic: MI_TOPICS[segments[1] ?? ''] ?? null,
-    }),
-  },
-  {
-    key: 'paco-gyo',
-    name: 'Ginecología y obstetricia (Paco)',
-    description:
-      'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
-    roots: ['Ginecología', 'Obstetricia'],
-    branchOf: (segments) => ({
-      branch: 'obstetrics_gynecology',
-      topic: GYO_TOPICS[segments[1] ?? ''] ?? null,
-    }),
-  },
-  {
-    key: 'paco-urgencias',
-    name: 'Urgencias (Paco)',
-    description:
-      'Mazo de Paco, compartido con su autorización. Urgencias no es rama de la taxonomía todavía (D-013). Demostración, no validado por médicos.',
-    roots: ['Urgencias'],
-    branchOf: (segments) =>
-      segments[1] === 'Quemaduras'
-        ? { branch: 'general_surgery', topic: 'burns' }
-        : { branch: null, topic: null },
-  },
-];
+const DECKS = PACO_DECKS;
 
 const sanitizer = createCardSanitizer(new JSDOM('').window);
 const files = process.argv.slice(2);
