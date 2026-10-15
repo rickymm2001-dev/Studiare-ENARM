@@ -114,11 +114,35 @@ const result = (issues: Iterable<GuardIssue>): GuardResult => {
  * Términos de salud mental. El tutor habla de cómo estudia el alumno y nunca opina sobre cómo está
  * (8.2). Se revisan sobre el texto normalizado, sin acentos
  */
-const MENTAL_HEALTH =
-  /\b(depresion|deprimid[oa]|ansiedad|ansios[oa]|trastorno|burnout|agotamiento emocional|estres cronico|salud mental|psicolog\w*|psiquiatr\w*|terapia|suicid\w*|panico|angustia|autoestima)\b/;
+const MENTAL_HEALTH_TERMS = String.raw`depresion|deprimid[oa]|ansiedad|ansios[oa]|trastorno|burnout|agotamiento emocional|estres cronico|salud mental|psicolog\w*|psiquiatr\w*|terapia|suicid\w*|panico|angustia|autoestima`;
+const MENTAL_HEALTH = new RegExp(String.raw`\b(${MENTAL_HEALTH_TERMS})\b`, 'g');
+/**
+ * Una frase que le atribuye al alumno un estado de ánimo, como tienes ansiedad, estás deprimido o tu
+ * autoestima (B12). Aunque el término venga en el texto del banco, eso ya es opinar sobre el alumno
+ */
+const ABOUT_STUDENT = [
+  new RegExp(
+    String.raw`\b(tienes|tengas|sientes|sufres|padeces|vives con|muestras) (de |un |una |mucha |mucho |cierta |cierto |algo de )?(${MENTAL_HEALTH_TERMS})\b`,
+  ),
+  /\b(estas|estes|te sientes|te notas|te ves|pareces|eres|andas) (muy |algo |un poco |bastante )?(deprimid[oa]|ansios[oa]|estresad[oa]|agotad[oa]|angustiad[oa]|triste)\b/,
+  new RegExp(String.raw`\btu (${MENTAL_HEALTH_TERMS}|estres|animo)\b`),
+];
 
-export function mentionsMentalHealth(text: string): boolean {
-  return MENTAL_HEALTH.test(normalizeForMatch(text));
+/**
+ * Si el texto opina sobre la salud mental del alumno. Un término de salud mental cuenta si no viene
+ * en el apoyo, que es el texto del banco o los datos que recibió el motor, o si la frase se lo
+ * atribuye al alumno. Así un tema de psiquiatría del banco o una terapia intensiva se pueden repetir
+ * y "parece que tienes ansiedad" nunca pasa (B12, para no rechazar el banco imperfecto, D-080)
+ */
+export function mentionsMentalHealth(text: string, support = ''): boolean {
+  const supported = new Set(normalizeForMatch(support).match(MENTAL_HEALTH) ?? []);
+  return sentencesOf(text).some((raw) => {
+    const sentence = normalizeForMatch(raw);
+    const terms = sentence.match(MENTAL_HEALTH) ?? [];
+    if (terms.length === 0) return false;
+    if (ABOUT_STUDENT.some((pattern) => pattern.test(sentence))) return true;
+    return terms.some((term) => !supported.has(term));
+  });
 }
 
 /** Frases de un texto. Un punto dentro de una cifra como 3.5 no corta la frase */
@@ -227,11 +251,10 @@ export function guardHypothesis(output: HypothesisOutput, input: HypothesisInput
     const sentences = sentenceCount(output.studentMessage);
     if (sentences < 2 || sentences > 3) issues.push('message_sentences');
   }
-  if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
-  if (predictsScore(text)) issues.push('score_prediction');
-
   // Los datos médicos salen de los ítems implicados y de nada más
   const support = joinTexts(input.area, ...input.evidence.map((item) => item.text));
+  if (mentionsMentalHealth(text, support)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
   if (hasNewFact(text, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -261,9 +284,6 @@ export function guardWeeklyReport(
     output.habit,
     output.challenge,
   );
-  if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
-  if (predictsScore(text)) issues.push('score_prediction');
-
   const support = joinTexts(
     String(input.answers),
     ...input.priorities.flatMap((line) => [line.title, line.detail]),
@@ -272,6 +292,8 @@ export function guardWeeklyReport(
     input.challenge?.title,
     input.challenge?.detail,
   );
+  if (mentionsMentalHealth(text, support)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
   if (hasNewFact(text, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -285,13 +307,12 @@ export function guardBiasTip(output: BiasTipOutput, input: BiasTipInput): GuardR
 
   if (output.exampleRefs.some((ref) => !refs.has(ref))) issues.push('ref_not_in_input');
   if (new Set(output.exampleRefs).size !== output.exampleRefs.length) issues.push('examples_count');
-  if (mentionsMentalHealth(output.tip)) issues.push('mental_health_opinion');
+  const support = joinTexts(input.baseTip, input.biasLabel, ...input.examples.map((e) => e.text));
+  if (mentionsMentalHealth(output.tip, support)) issues.push('mental_health_opinion');
   if (predictsScore(output.tip)) issues.push('score_prediction');
   // Sin el vocabulario en la entrada cuenta como trampa, que es lo que dice la app sin acuerdo medido
   const vocabulary = input.vocabulary ?? DEFAULT_BIAS_VOCABULARY;
   if (vocabulary === 'trampa' && usesBiasWord(output.tip)) issues.push('vocabulary');
-
-  const support = joinTexts(input.baseTip, input.biasLabel, ...input.examples.map((e) => e.text));
   if (hasNewFact(output.tip, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -386,7 +407,8 @@ export function guardRestructure(output: RestructureOutput, input: RestructureIn
   if (key && groundedRatio(key.text, original) < ANSWER_GROUNDED_RATIO) {
     issues.push('answer_not_grounded');
   }
-  if (mentionsMentalHealth(proposed)) issues.push('mental_health_opinion');
+  // Un tema de psiquiatría puede repetir sus términos. Lo nuevo no
+  if (mentionsMentalHealth(proposed, original)) issues.push('mental_health_opinion');
   return result(issues);
 }
 

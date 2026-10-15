@@ -39,6 +39,27 @@ describe('texto', () => {
     expect(mentionsMentalHealth('Tu autoestima está baja')).toBe(true);
     expect(mentionsMentalHealth('Revisa la explicación de esos casos')).toBe(false);
   });
+
+  it('deja repetir un tema de psiquiatría del banco, pero no atribuírselo al alumno (B12)', () => {
+    const bank =
+      'Mujer de 30 años con trastorno depresivo mayor y ansiedad. Se inicia terapia con un antidepresivo.';
+    expect(
+      mentionsMentalHealth('Confundes el trastorno depresivo mayor con la ansiedad.', bank),
+    ).toBe(false);
+    expect(mentionsMentalHealth('Ingresa a terapia intensiva.', 'Pasa a terapia intensiva.')).toBe(
+      false,
+    );
+    for (const opinion of [
+      'Parece que tienes ansiedad antes del examen.',
+      'Estás muy deprimido con este tema.',
+      'Tu ansiedad te hace fallar el trastorno depresivo.',
+      'Sufres de trastorno de ansiedad.',
+    ]) {
+      expect(mentionsMentalHealth(opinion, bank), opinion).toBe(true);
+    }
+    // Un término que el banco no trae sigue contando, aunque el resto sí venga
+    expect(mentionsMentalHealth('Hay depresión y burnout en estos casos.', bank)).toBe(true);
+  });
 });
 
 describe('predicción del puntaje (B12)', () => {
@@ -142,6 +163,27 @@ describe('hipótesis', () => {
       studentMessage: 'Parece que tienes mucha ansiedad. Descansa un poco por favor.',
     };
     expect(guardHypothesis(opinion, input).issues).toEqual(['mental_health_opinion']);
+  });
+
+  it('acepta un patrón de psiquiatría que repite los términos del banco (B12)', () => {
+    const psychiatry = hypothesisInput({
+      area: 'Trastorno depresivo mayor',
+      evidence: [
+        { ref: 'q-31', kind: 'question', text: 'Mujer con trastorno depresivo mayor y ansiedad.' },
+        { ref: 'q-32', kind: 'question', text: 'Hombre con depresión y riesgo suicida.' },
+      ],
+    });
+    const output: HypothesisOutput = {
+      ...good,
+      hypothesis: 'En trastorno depresivo mayor confundes la depresión con la ansiedad.',
+      evidence: ['q-31', 'q-32'],
+    };
+    expect(guardHypothesis(output, psychiatry)).toEqual({ passed: true, issues: [] });
+    const opinion = {
+      ...output,
+      studentMessage: 'Parece que tienes ansiedad con este tema. Repasa los criterios con calma.',
+    };
+    expect(guardHypothesis(opinion, psychiatry).issues).toEqual(['mental_health_opinion']);
   });
 
   it('rechaza predecir el puntaje del ENARM (B12)', () => {
@@ -383,6 +425,17 @@ describe('pregunta reestructurada', () => {
     expect(guardRestructure(same, input).issues).toEqual(
       expect.arrayContaining(['unchanged', 'transform_not_applied']),
     );
+  });
+
+  it('acepta reestructurar una pregunta de psiquiatría o con terapia intensiva (B12)', () => {
+    const sample = restructureInput({
+      transform: 'change_anchor',
+      stem: 'Mujer de 30 años con trastorno depresivo mayor y ansiedad que ingresa a terapia intensiva. ¿Qué sigue?',
+    });
+    expect(guardRestructure(mockOutput('restructure', sample), sample)).toEqual({
+      passed: true,
+      issues: [],
+    });
   });
 
   it('rechaza cifras y fármacos nuevos, cita inventada, clave sin apoyo y salud mental', () => {
