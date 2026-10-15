@@ -18,6 +18,8 @@ server/.env.local
 .env.*
 !.env.example
 !server/.env.example
+# IDs y secretos locales para la herramienta de despliegue (docs/DESPLIEGUE.md)
+private/
 
 # Sistema y editores
 .DS_Store

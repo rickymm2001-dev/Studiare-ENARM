@@ -27,6 +27,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B8. Plan Gratis (PR 49 fusionado)
 - [x] B9. Cuentas y acceso (PR 52 fusionado)
 - [x] B10. Pagos completos (PR 53 fusionado)
+- [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR 54 fusionado)
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
 - [ ] B13. Inglés médico
@@ -152,6 +153,12 @@ Evidencia
 - Capturas en docs/screenshots/v3/b10 (51)
 - Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
 - En el proyecto. Las tres migraciones y sus 44 funciones verificadas por huella antes de fusionar, y desplegadas create-checkout, create-portal-session, payment-webhook-stripe, payment-webhook-mercadopago y admin-reset-mfa. Faltan cancel-subscription, las dos piezas de supabase/manual/pagos-b10.sql y los secretos de los precios nuevos. Quedan listos para subirse con el script de despliegue en cuanto llegue el token de Supabase
+
+### Herramientas (D-131)
+- npm run deploy:supabase aplica el SQL, también las piezas con drop o delete, publica las funciones y pone los secretos desde el repo con el token de Supabase. Con el token, lo que falta de B10 son dos comandos (docs/DESPLIEGUE.md) y ya no pegas archivos en el SQL Editor
+- PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
+- Revisión independiente con 13 hallazgos, ninguno alto, todos corregidos con su prueba
+- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
 
 ### B16. Legal y privacidad (D-132)
 - Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 18 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
