@@ -5,7 +5,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 - Los dos textos pasan a la versión 2026-10-15, con fecha a la vista del 15 de octubre de 2026
 - Siguen marcados como borrador para revisión del abogado, en la app y en docs/legal. La marca se quita solo cuando Ricardo diga que el abogado los aprobó (0.1 del plan del cambio)
 - Quien aceptó una versión anterior del aviso, como la 2026-10-14 de B7 o la 2026-10-14b de B9, ve al entrar el aviso de que cambió y lo acepta de nuevo. Eso ya existía, y una prueba revisa que la versión nueva quede después de las dos al ordenarlas como texto
-- El texto vive en src/i18n/legal.ts y los archivos de esta carpeta salen de ahí con npm run legal:export
+- El texto vive en src/i18n/legalDocs.ts y los archivos de esta carpeta salen de ahí con npm run legal:export
 
 ## Cómo se leyó cada cosa
 

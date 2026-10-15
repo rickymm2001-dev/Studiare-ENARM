@@ -8,7 +8,7 @@ Borradores del aviso de privacidad y de los términos y condiciones de Studiare,
 - terminos-y-condiciones.md son los términos y condiciones, que se leen en la página de Términos
 - CAMBIOS-B16.md es la lista de lo que cambió en B16, con el porqué y las preguntas para el abogado y para Ricardo
 
-Son el mismo texto que muestra la app. Se generan con npm run legal:export a partir de src/i18n/legal.ts, y una prueba falla si estos archivos se quedan atrás del texto de la app.
+Son el mismo texto que muestra la app. Se generan con npm run legal:export a partir de src/i18n/legalDocs.ts, y una prueba falla si estos archivos se quedan atrás del texto de la app.
 
 La única diferencia es lo que falta. Aquí cada dato que falta va entre corchetes, con quién lo pone, por ejemplo [Pendiente de Ricardo. Domicilio del responsable] o [Pendiente del abogado. Tribunales competentes]. El alumno nunca ve esas marcas. En la app lee un texto neutro, como la empresa que opera Studiare o al equipo de Studiare por el medio donde te dieron acceso, y una línea que sin su dato no dice nada, como la del domicilio o la de los tribunales, no se le muestra. Una prueba lo revisa.
 
@@ -36,4 +36,4 @@ Para mandarle al abogado los textos con los datos ya puestos, corre el comando c
 
 ## Cuando el texto cambie
 
-Cambia el texto en src/i18n/legal.ts y sube PRIVACY_NOTICE_VERSION en src/config/legal.ts. Esa versión es la que se guarda cuando el alumno acepta el aviso, y se compara como texto, así que la nueva tiene que quedar después de la anterior al ordenarlas. Quien aceptó una versión anterior ve el aviso de que cambió. Corre npm run legal:export y manda la nueva versión al abogado.
+Cambia el texto en src/i18n/legalDocs.ts y sube PRIVACY_NOTICE_VERSION en src/config/legal.ts. Esa versión es la que se guarda cuando el alumno acepta el aviso, y se compara como texto, así que la nueva tiene que quedar después de la anterior al ordenarlas. Quien aceptó una versión anterior ve el aviso de que cambió. Corre npm run legal:export y manda la nueva versión al abogado.

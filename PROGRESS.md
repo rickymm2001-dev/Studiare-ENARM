@@ -6,7 +6,7 @@
 - Bloques. B0, B1 y B2 hechos, ver sus secciones. B3 a B7 y B9 avanzan en paralelo en worktrees fuera del repo y se unen a la rama de trabajo al cerrar cada bloque. Siguen B8 plan Gratis, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
-- Nube. El proyecto real de Supabase tiene el esquema completo, con las migraciones 1 a 12 y el archivo manual, tres funciones de pago desplegadas (create-checkout versión 15 con D-118, create-portal-session y payment-webhook-stripe) y los secretos de Stripe de prueba (D-113, D-118). La base todavía tiene las filas de la prueba de pagos de las dos cuentas de Ricardo, que se borran después de cancelar en Stripe
+- Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago y de restablecer el segundo factor desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). Lo que falta de B10 sube con el token de Supabase. La base todavía tiene las filas de la prueba de pagos de las dos cuentas de Ricardo, que se borran después de cancelar en Stripe
 - Inicio con el diseño fijo de Ricardo (D-116) y la barra superior con el menú lateral que se oculta (D-117)
 - Historia. Las fases 0 a L de abajo quedaron cerradas con la respuesta 98. Sus secciones se conservan como registro de lo hecho y de su evidencia, aunque digan que esperan aprobación
 
@@ -26,13 +26,13 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
 - [x] B8. Plan Gratis (PR 49 fusionado)
 - [x] B9. Cuentas y acceso (PR 52 fusionado)
-- [x] B10. Pagos completos (PR en curso)
+- [x] B10. Pagos completos (PR 53 fusionado)
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
 - [ ] B13. Inglés médico
 - [ ] B14. Datos y modelo del alumno
 - [ ] B15. Analítica, errores, recordatorios y recorrido
-- [ ] B16. Legal y privacidad
+- [ ] B16. Legal y privacidad (listo con su revisión, se fusiona después de B11, D-131)
 - [ ] B17. Publicación
   - Las imágenes de marca están en la rama gemini/imagenes-marca
 - [ ] B18. Primeros alumnos
@@ -151,17 +151,27 @@ Evidencia
 - Evidencia. Typecheck, lint y formato limpios. Vitest con 3,564 pruebas. SQL en 21 archivos. E2e de nube 68 de 68 en teléfono y computadora, e2e normal en verde (rendimiento y sin conexión pasan solas con la máquina cargada) y audit:ui 20 de 20. JS inicial de 297.0 KB de 300
 - Capturas en docs/screenshots/v3/b10 (51)
 - Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
+- En el proyecto. Las tres migraciones y sus 44 funciones verificadas por huella antes de fusionar, y desplegadas create-checkout, create-portal-session, payment-webhook-stripe, payment-webhook-mercadopago y admin-reset-mfa. Faltan cancel-subscription, las dos piezas de supabase/manual/pagos-b10.sql y los secretos de los precios nuevos. Quedan listos para subirse con el script de despliegue en cuanto llegue el token de Supabase
 
-### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
+### B16. Legal y privacidad (D-131)
+- Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 16 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
+- El alumno nunca ve una marca de pendiente. Donde falta un dato lee un texto neutro. El abogado sí ve qué falta en docs/legal
+- Los textos completos cargan solo con la página legal, para seguir debajo de 300 KB de JavaScript inicial
+- Entra con lo de Gemini para B17, la imagen para compartir con dirección completa y tres capturas de instalación. Las capturas muestran la app antes de la paleta y se rehacen en B17
+- Se fusiona después de B11, porque el aviso da por hechas las lecturas del banco en el servidor
+
+### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
 - B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
 - B8 fusionado en main (PR 49), con sus dos migraciones aplicadas al proyecto y verificadas por huella antes de fusionar
 - La paleta con más color (PR 47 de otra herramienta, D-128) fusionada en main (PR 51), con los hallazgos de su revisión corregidos. El PR 50 de otra sesión, que repetía la paleta con D-127, se cerró por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
 - B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
-- B10 cerrado en la rama de trabajo, con su PR. Sus migraciones y funciones se aplican al proyecto antes de fusionar, salvo las dos piezas con drop o delete de pagos-b10.sql, que pega Ricardo
-- Los diseños de B10, B11 y B12 están en /home/user/wt/plans
-- Los subagentes se detuvieron cinco veces por el límite de uso de la cuenta y se reanudaron con su contexto
+- B10 fusionado en main (PR 53). Sus tres migraciones y cinco funciones se aplicaron al proyecto antes de fusionar y se verificaron por huella. Lo que falta subir espera el token de Supabase
+- B16 listo con lo de Gemini para B17 (rama b16int). Se fusiona después de B11
+- En curso. B11 paquetes B y C, B12 paquete A, el diseño de B14, puertos de Playwright configurables para correr e2e en paralelo y un script que despliega migraciones, funciones y secretos con la API de Supabase, para que lo que espera tus llaves sea un solo comando
+- Los diseños de B10 a B13 y B15 están en /home/user/wt/plans
+- Los subagentes se detuvieron varias veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
 ### Preguntas para Ricardo
 - B4. Los temas de los mazos de Paco salen de la ruta de sus etiquetas (rama, materia y tema), porque las claves branch y topic de las notas solo llegan a la subespecialidad y no dan tu ejemplo de Reumatología con Artritis reumatoide. Se muestran tres niveles y no el cuarto ni el quinto (por ejemplo Diarrea, Agentes, Salmonella). Si quieres más niveles es un cambio chico
