@@ -13,7 +13,11 @@
 // Solo acepta llaves de prueba (sk_test_ o rk_test_). La llave se lee de STRIPE_SECRET_KEY, no se guarda
 // ni se imprime. Todas las llamadas usan la versión fija de la API. Uso
 //   STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts [--app-url=https://...] [--archive-old]
-import { resolve } from 'node:path';
+//     [--write-ids=private/stripe-test-ids.json]
+// Con --write-ids guarda además los ocho IDs en ese JSON, que npm run deploy:supabase pone en los
+// secretos de Supabase con --secrets-from (docs/DESPLIEGUE.md). private/ no va al repo.
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { STRIPE_API_VERSION } from '../../supabase/functions/_shared/billingTypes.ts';
 import { subscriptionUrl } from '../../supabase/functions/_shared/http.ts';
 
@@ -482,6 +486,20 @@ export function summaryLines(result: SetupResult): string[] {
   return lines;
 }
 
+/** Los ocho IDs como NOMBRE y valor, en el orden de 2.6. Es lo que lee deploy:supabase --secrets-from */
+export function idsRecord(result: SetupResult): Record<SecretName, string> {
+  return Object.fromEntries(result.ids.map((entry) => [entry.env, entry.id])) as Record<
+    SecretName,
+    string
+  >;
+}
+
+/** Guarda los IDs en un JSON local. Solo los IDs, nunca la llave */
+export function writeIdsFile(path: string, result: SetupResult): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(idsRecord(result), null, 2)}\n`, { mode: 0o600 });
+}
+
 // Uso desde la línea de comandos
 if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename)) {
   const key = process.env.STRIPE_SECRET_KEY ?? '';
@@ -499,6 +517,13 @@ if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename
   }).then(
     (result) => {
       for (const line of summaryLines(result)) console.log(line);
+      const idsPath = arg('write-ids');
+      if (idsPath) {
+        writeIdsFile(resolve(idsPath), result);
+        console.log(
+          `Guardé los ocho IDs en ${idsPath}. Ponlos con npm run deploy:supabase -- --plan b10 --secrets-from ${idsPath}`,
+        );
+      }
     },
     (error: unknown) => {
       console.error(error instanceof Error ? error.message : 'Falló la configuración');

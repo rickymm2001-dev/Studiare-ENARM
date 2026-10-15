@@ -37,6 +37,7 @@
     "legal:export": "node scripts/legal-export.ts",
     "audit:high": "npm audit --audit-level=high",
     "test:sql": "bash supabase/tests/run.sh",
+    "deploy:supabase": "node --use-env-proxy --disable-warning=UNDICI-EHPA scripts/deploy/supabase.ts",
     "audit:ui": "node scripts/playwright.ts test --config playwright.audit.config.ts"
   },
   "dependencies": {

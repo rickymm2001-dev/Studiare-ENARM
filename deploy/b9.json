@@ -1,0 +1,18 @@
+{
+  "description": "Cuentas y acceso (B9). La migración ya está aplicada y registrada como accounts_access, así que se salta y solo se comprueba por huella. admin-reset-mfa ya está publicada desde el 2026-10-15 (versión 1). Correr el plan la vuelve a publicar desde el repo y sube su versión.",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261020000001_accounts_access.sql"
+    }
+  ],
+  "functions": [
+    {
+      "slug": "admin-reset-mfa",
+      "verifyJwt": true,
+      "note": "Restablece el segundo factor de alguien del equipo. Solo el dueño"
+    }
+  ],
+  "anonExecutable": {
+    "current_app_role": "D-113. Las políticas la llaman con el rol de quien consulta y sin sesión devuelve alumno"
+  }
+}
