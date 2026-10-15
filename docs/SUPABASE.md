@@ -934,6 +934,7 @@ select
   (select pg_get_constraintdef(oid) like '%founder_annual%' from pg_constraint where conname = 'subscriptions_plan_check') as plan_fundador_anual,
   (select pg_get_constraintdef(oid) like '%trialing%' from pg_constraint where conname = 'subscriptions_status_check') as estado_prueba,
   position('billing_blocks_account_deletion' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0 as borrar_cuenta_b10,
+  position('signup_invitations' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0 as borra_la_invitacion,
   (select value ->> 'trialDays' from public.platform_settings where key = 'billing_rules') as dias_de_prueba,
   (select value ->> 'enabled' from public.platform_settings where key = 'billing_emails') as correos_encendidos,
   (select count(*) from pg_policies
@@ -945,7 +946,7 @@ Debe salir
 - tablas_nuevas en 8 y tablas_con_seguridad_por_fila en true
 - alumno_aplica_cobros, alumno_lee_contexto y alumno_lee_lugares en false
 - servicio_aplica_estados y alumno_pide_factura en true
-- plan_fundador_anual, estado_prueba y borrar_cuenta_b10 en true. Si alguna sale en false, falta pegar supabase/manual/pagos-b10.sql
+- plan_fundador_anual, estado_prueba, borrar_cuenta_b10 y borra_la_invitacion en true. Si alguna sale en false, falta pegar supabase/manual/pagos-b10.sql
 - dias_de_prueba en 7 y correos_encendidos en false
 - politicas_con_barrera en 33 con las migraciones hasta B10. Si después aplicaste otras con barrera, sale más
 

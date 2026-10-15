@@ -1,5 +1,6 @@
-// Aviso de privacidad y términos y condiciones (Fase G, G2). Se leen sin sesión desde la portada y
-// desde la bienvenida, dicen que son un borrador pendiente de revisión legal y pasan axe.
+// Aviso de privacidad y términos y condiciones (Fase G, G2, y B16). Se leen sin sesión desde la portada
+// y desde la bienvenida, dicen que son un borrador para revisión del abogado, nunca le muestran al
+// alumno una marca de pendiente y pasan axe.
 import { SCREENS } from '@/app/screens';
 import { legalText } from '@/i18n/legal';
 import { t } from '@/i18n/es-MX';
@@ -18,6 +19,8 @@ test('desde la portada se lee el aviso y los términos sin sesión, y dicen que 
   await expect(
     page.getByRole('heading', { level: 2, name: 'Tus derechos y cómo ejercerlos' }),
   ).toBeVisible();
+  // Lo que falta del responsable no se ve como marca (B16)
+  await expect(page.getByRole('main')).not.toContainText(/[[\]{}]|\bpendiente/i);
   // Sin sesión no hay navegación de la app
   await expect(page.getByRole('navigation', { name: t.nav.label })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
@@ -25,6 +28,7 @@ test('desde la portada se lee el aviso y los términos sin sesión, y dicen que 
   await page.getByRole('link', { name: legalText.links.terms }).click();
   await expect(page.getByRole('heading', { level: 1, name: t.screens.terms.title })).toBeVisible();
   await expect(page.getByText('No hay chat libre')).toBeVisible();
+  await expect(page.getByRole('main')).not.toContainText(/[[\]{}]|\bpendiente/i);
   await expectNoSeriousA11yViolations(page);
 });
 

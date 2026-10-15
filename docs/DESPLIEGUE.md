@@ -144,7 +144,12 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
     { "file": "supabase/migrations/20261022000001_billing_emails.sql" },
     {
       "file": "supabase/manual/pagos-b10.sql",
-      "check": { "plan_fundador_anual": true, "estado_prueba": true, "borrar_cuenta_b10": true },
+      "check": {
+        "plan_fundador_anual": true,
+        "estado_prueba": true,
+        "borrar_cuenta_b10": true,
+        "borra_la_invitacion": true
+      },
       "note": "Por qué va este paso"
     },
     {
