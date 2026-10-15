@@ -28,11 +28,26 @@ const FULL_WALK = (project: string) => !project.startsWith('1920') && project !=
 const text = billingCloudText;
 const invoices = invoicesText;
 
-/** Abre una ruta y espera su título y lo que se pide antes de capturar */
+/**
+ * Abre una ruta del build con la nube y espera su título y lo que se pide antes de capturar. Va con la
+ * dirección completa, porque los navegadores de Carla y del admin toman la baseURL del proyecto, que es
+ * la del build sin la nube
+ */
 async function open(page: Page, path: string, ...ready: Locator[]) {
-  await page.goto(path);
+  await page.goto(`${CLOUD_PREVIEW_URL}${path}`);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 60_000 });
   for (const locator of ready) await expect(locator).toBeVisible({ timeout: 60_000 });
+}
+
+/**
+ * Captura la página completa desde arriba. Después de un clic la página queda desplazada y la barra de
+ * arriba, que es fija, saldría a media imagen
+ */
+async function shot(page: Page, name: string, project: string) {
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+  });
+  await capture(page, B10_DIR, name, project);
 }
 
 /** Captura solo una tarjeta, como el formulario de factura */
@@ -65,18 +80,18 @@ cloudTest.describe('Pagos completos', () => {
         SCREENS.subscription.path,
         monthly.getByRole('button', { name: t.billing.freeTrialCta }),
       );
-      await capture(page, B10_DIR, '01-planes-con-prueba', project);
+      await shot(page, '01-planes-con-prueba', project);
 
       // La forma de pago con el aviso de la prueba, y con OXXO
       await monthly.getByRole('button', { name: t.billing.freeTrialCta }).click();
       await expect(
         page.getByRole('heading', { name: text.checkoutTitle(t.billing.plans.monthly) }),
       ).toBeVisible();
-      await capture(page, B10_DIR, '02-forma-de-pago-con-prueba', project);
+      await shot(page, '02-forma-de-pago-con-prueba', project);
       if (full) {
         await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
         await expect(page.getByText(text.summary.oxxoRefund, { exact: false })).toBeVisible();
-        await capture(page, B10_DIR, '03-forma-de-pago-oxxo', project);
+        await shot(page, '03-forma-de-pago-oxxo', project);
         await page.getByRole('radio', { name: new RegExp(text.options.card.label) }).click();
       }
 
@@ -84,14 +99,14 @@ cloudTest.describe('Pagos completos', () => {
       await page.getByRole('button', { name: text.actions.trial }).click();
       await page.getByRole('button', { name: gatewayText.startTrial }).click();
       await expect(page.getByText(text.returning.trialStarted)).toBeVisible({ timeout: 30_000 });
-      await capture(page, B10_DIR, '04-prueba-activa', project);
+      await shot(page, '04-prueba-activa', project);
       if (full) {
         await open(
           page,
           `${SCREENS.settings.path}#perfil`,
           page.getByRole('region', { name: invoices.student.title }),
         );
-        await capture(page, B10_DIR, '05-perfil-con-prueba', project);
+        await shot(page, '05-perfil-con-prueba', project);
       }
 
       // Carla paga un pase de un mes con OXXO en su propio navegador. Primero pendiente y luego activo
@@ -127,14 +142,14 @@ cloudTest.describe('Pagos completos', () => {
           ),
         ),
       ).toBeVisible({ timeout: 30_000 });
-      await capture(carlaPage, B10_DIR, '06-pase-pendiente', project);
+      await shot(carlaPage, '06-pase-pendiente', project);
       cloud.settleVoucher('carla.b10@ejemplo.mx', 'paid');
       await open(
         carlaPage,
         SCREENS.subscription.path,
         carlaPage.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
       );
-      await capture(carlaPage, B10_DIR, '07-pase-activo', project);
+      await shot(carlaPage, '07-pase-activo', project);
 
       // Carla pide la factura de su pase en Perfil
       await open(
@@ -155,7 +170,7 @@ cloudTest.describe('Pagos completos', () => {
       await expect(
         invoiceCard.getByText(invoices.student.sent('carla.b10@ejemplo.mx')),
       ).toBeVisible();
-      await capture(carlaPage, B10_DIR, '09-perfil-con-facturas', project);
+      await shot(carlaPage, '09-perfil-con-facturas', project);
       await carla.context.close();
 
       // El admin, en otro navegador, ve el resumen, la solicitud, los códigos y los pagos
@@ -173,7 +188,7 @@ cloudTest.describe('Pagos completos', () => {
           exact: false,
         }),
       );
-      await capture(admin.page, B10_DIR, '10-admin-pagos', project);
+      await shot(admin.page, '10-admin-pagos', project);
       await admin.context.close();
     },
   );
