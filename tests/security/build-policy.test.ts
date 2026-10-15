@@ -170,7 +170,7 @@ describe('build de producción sin los mazos de la demo (B11, 5.9)', () => {
   it('producción no emite los .json de los mazos ni copia demo-media, que son de pago', () => {
     expect(existsSync(join(production, 'demo-media'))).toBe(false);
     expect(allScripts(production).some((code) => code.includes(PACO_NOTE))).toBe(false);
-    expect(readdirSync(join(production, 'assets')).some((file) => /^paco-/.test(file))).toBe(
+    expect(readdirSync(join(production, 'assets')).some((file) => file.startsWith('paco-'))).toBe(
       false,
     );
     // Y lo demás del build sigue ahí
