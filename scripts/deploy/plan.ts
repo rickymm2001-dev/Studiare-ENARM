@@ -5,6 +5,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { z } from 'zod';
 import { FUNCTIONS_DIR } from './closure.ts';
+import { checkColumns, checkQuery } from './sql.ts';
 
 export const PLANS_DIR = 'deploy';
 export const MIGRATIONS_DIR = 'supabase/migrations';
@@ -40,8 +41,8 @@ const FunctionStepSchema = z.strictObject({
 });
 
 const SecretRuleSchema = z.strictObject({
-  /** El valor debe empezar así, por ejemplo price_ para un precio de Stripe */
-  prefix: z.string().optional(),
+  /** La forma completa del valor, con ^ y $, por ejemplo ^price_[A-Za-z0-9]+$ */
+  pattern: z.string().min(2),
   note: z.string().optional(),
 });
 
@@ -52,6 +53,8 @@ const PlanSchema = z.strictObject({
   secrets: z.record(z.string().regex(SECRET_NAME), SecretRuleSchema).optional(),
   /** Funciones que pueden quedar ejecutables por anon aunque el archivo no se lo conceda, con su porqué */
   anonExecutable: z.record(z.string(), z.string().min(1)).optional(),
+  /** Funciones que pueden tener más de una versión en la base, con su porqué */
+  overloads: z.record(z.string(), z.string().min(1)).optional(),
 });
 
 export type CheckExpectation = Record<string, z.infer<typeof CheckValue>>;
@@ -82,8 +85,9 @@ export interface Plan {
   description: string;
   migrations: SqlStep[];
   functions: FunctionStep[];
-  secrets: Record<string, { prefix: string | null }> | null;
+  secrets: Record<string, { pattern: RegExp }> | null;
   anonExecutable: Record<string, string>;
+  overloads: Record<string, string>;
 }
 
 export class PlanError extends Error {
@@ -151,9 +155,8 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
   const files = migrations.map((step) => step.file);
   const repeatedFile = files.find((value, index) => files.indexOf(value) !== index);
   if (repeatedFile) throw new PlanError(`${repeatedFile} aparece dos veces en el plan`);
-  const names = migrations.map((step) => step.name);
-  const repeatedName = names.find((value, index) => names.indexOf(value) !== index);
-  if (repeatedName) throw new PlanError(`Dos pasos del plan se registrarían como ${repeatedName}`);
+  checkHistoryNames(root, migrations);
+  for (const step of migrations) checkExpectedColumns(step);
 
   const functions = data.functions.map((step): FunctionStep => {
     if (!existsSync(join(root, FUNCTIONS_DIR, step.slug, 'index.ts'))) {
@@ -175,12 +178,109 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
       ? Object.fromEntries(
           Object.entries(data.secrets).map(([name, rule]) => [
             name,
-            { prefix: rule.prefix ?? null },
+            { pattern: secretPattern(name, rule.pattern) },
           ]),
         )
       : null,
     anonExecutable: data.anonExecutable ?? {},
+    overloads: data.overloads ?? {},
   };
+}
+
+/**
+ * Un plan con check debe nombrar justo las columnas que da la consulta de Comprobación del archivo,
+ * cuántas sean. Así una columna nueva en el archivo obliga a decir en el plan qué debe dar
+ */
+function checkExpectedColumns(step: SqlStep): void {
+  if (!step.check) return;
+  const query = checkQuery(step.sql);
+  if (query === null) {
+    throw new PlanError(`${step.file} no trae la consulta de Comprobación que pide el plan`);
+  }
+  const columns = checkColumns(query);
+  if (columns === null) return;
+  const expected = Object.keys(step.check);
+  const missing = columns.filter((column) => !expected.includes(column));
+  const extra = expected.filter((column) => !columns.includes(column));
+  if (missing.length > 0 || extra.length > 0) {
+    const parts = [
+      missing.length > 0 ? `falta decir qué debe dar ${missing.join(', ')}` : '',
+      extra.length > 0 ? `${extra.join(', ')} no sale en la consulta` : '',
+    ].filter((part) => part !== '');
+    throw new PlanError(
+      `La comprobación de ${step.file} en el plan no cuadra con el archivo. ${parts.join('. ')}`,
+    );
+  }
+}
+
+/** La forma de un secreto. Debe abarcar el valor completo, así que va con ^ y $ */
+function secretPattern(name: string, pattern: string): RegExp {
+  if (!pattern.startsWith('^') || !pattern.endsWith('$')) {
+    throw new PlanError(`La forma de ${name} debe empezar con ^ y terminar con $`);
+  }
+  try {
+    return new RegExp(pattern);
+  } catch {
+    throw new PlanError(`La forma de ${name} no es una expresión regular válida`);
+  }
+}
+
+/** Un nombre como los que deja el conector al aplicar por trozos, por ejemplo billing_plans_1 */
+function isChunkOf(candidate: string, base: string): boolean {
+  return (
+    candidate.startsWith(`${base}_`) &&
+    /^(?:\d+|[a-z])(?:_|$)/.test(candidate.slice(base.length + 1))
+  );
+}
+
+/**
+ * Los nombres con los que se reconoce lo aplicado deben ser inequívocos. Cada migración del repo con un
+ * nombre propio que no sea trozo de otro, y los nombres y recordedAs del plan sin repetirse ni
+ * coincidir con el nombre de otro archivo del repo
+ */
+function checkHistoryNames(root: string, steps: readonly SqlStep[]): void {
+  const owners = new Map<string, string>();
+  const repoFiles = [
+    ...(existsSync(join(root, MIGRATIONS_DIR))
+      ? readdirSync(join(root, MIGRATIONS_DIR)).map((name) => `${MIGRATIONS_DIR}/${name}`)
+      : []),
+    ...(existsSync(join(root, MANUAL_DIR))
+      ? readdirSync(join(root, MANUAL_DIR)).map((name) => `${MANUAL_DIR}/${name}`)
+      : []),
+  ].filter((file) => MIGRATION_FILE.test(file) || MANUAL_FILE.test(file));
+  for (const file of repoFiles) {
+    const name = defaultStepName(file);
+    const other = owners.get(name);
+    if (other)
+      throw new PlanError(`${other} y ${file} se registrarían con el mismo nombre ${name}`);
+    owners.set(name, file);
+  }
+  for (const [name, file] of owners) {
+    for (const [base, baseFile] of owners) {
+      if (name !== base && isChunkOf(name, base)) {
+        throw new PlanError(
+          `${file} se llama como un trozo de ${baseFile} (${name}). Cambia su nombre para que no se confundan en la historia`,
+        );
+      }
+    }
+  }
+  const claimed = new Map<string, string>();
+  for (const step of steps) {
+    for (const name of [step.name, ...step.recordedAs]) {
+      const owner = owners.get(name);
+      if (owner && owner !== step.file) {
+        throw new PlanError(`${step.file} usa el nombre ${name}, que es de ${owner}`);
+      }
+      const previous = claimed.get(name);
+      if (previous && previous !== step.file) {
+        throw new PlanError(`${previous} y ${step.file} usan el mismo nombre ${name} en el plan`);
+      }
+      if (previous === step.file) {
+        throw new PlanError(`${step.file} repite el nombre ${name}`);
+      }
+      claimed.set(name, step.file);
+    }
+  }
 }
 
 /** Todas las migraciones del repo en orden de versión, con su texto */

@@ -1,13 +1,14 @@
 // Despliega a Supabase desde los archivos del repo, sin pasar el SQL ni las funciones por el conector
 // (docs/DESPLIEGUE.md). Uso
 //   npm run deploy:supabase -- --plan b10 [--dry-run] [--only migrations|functions] [--yes]
-//   npm run deploy:supabase -- --secrets-from private/stripe-test-ids.json [--plan b10] [--dry-run] [--yes]
+//   npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.json [--dry-run] [--yes]
 // El token sale de SUPABASE_ACCESS_TOKEN. En la sesión en la nube, sin esa variable, lo pone el proxy
 // del entorno. Nunca se imprime, ni el token ni el valor de un secreto.
 import { createInterface } from 'node:readline/promises';
 import { resolve } from 'node:path';
 import { runDeploy, type DeployOptions, type Io } from './deploy.ts';
 import { createManagementClient } from './managementApi.ts';
+import { errorText } from './output.ts';
 
 /** El proyecto Studiare (D-113). Se puede cambiar con --project-ref */
 export const STUDIARE_PROJECT_REF = 'bkjbcdwglyllizupokqm';
@@ -15,14 +16,14 @@ export const STUDIARE_PROJECT_REF = 'bkjbcdwglyllizupokqm';
 export const USAGE = [
   'Uso',
   '  npm run deploy:supabase -- --plan b10 [--dry-run] [--only migrations|functions] [--yes]',
-  '  npm run deploy:supabase -- --secrets-from private/stripe-test-ids.json [--plan b10] [--dry-run] [--yes]',
+  '  npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.json [--dry-run] [--yes]',
   'Opciones',
   '  --plan b10          deploy/b10.json, o la ruta a otro plan',
   '  --dry-run           dice qué haría, con lecturas del proyecto y sin escribir nada',
   '  --only migrations   solo el SQL del plan',
   '  --only functions    solo las Edge Functions del plan',
   '  --yes               no pregunta antes de escribir',
-  '  --secrets-from x    pone los secretos de ese JSON y nada más. Con --plan revisa sus nombres',
+  '  --secrets-from x    pone los secretos de ese JSON y nada más. El plan dice qué nombres espera y la forma de cada valor',
   `  --project-ref x     otro proyecto en lugar de ${STUDIARE_PROJECT_REF}`,
   'Token',
   '  SUPABASE_ACCESS_TOKEN en el entorno. En la sesión en la nube lo pone el proxy',
@@ -99,21 +100,39 @@ export function parseArgs(argv: readonly string[]): CliArgs {
         args.help = true;
         break;
       default:
-        throw new UsageError(`No conozco ${flag}`);
+        // No se repite lo que llegó, por si alguien pegó ahí el token
+        throw new UsageError(
+          `No conozco la opción número ${index + 1}. Usa --help para ver las que hay`,
+        );
     }
   }
   if (args.only !== null && args.secretsFrom !== null) {
     throw new UsageError('--only no va con --secrets-from');
   }
+  if (args.secretsFrom !== null && args.plan === null) {
+    throw new UsageError('--secrets-from necesita --plan, que dice qué secretos espera');
+  }
   return args;
 }
+
+/** Solo caracteres visibles de ASCII, sin espacios */
+const TOKEN_SHAPE = /^[\x21-\x7E]+$/;
 
 /** De dónde sale el token, sin leerlo en voz alta */
 export function resolveToken(
   env: Record<string, string | undefined>,
 ): { token: string | null; note: string } | { error: string } {
-  const token = env.SUPABASE_ACCESS_TOKEN?.trim() ?? '';
-  if (token !== '') return { token, note: 'con el token de SUPABASE_ACCESS_TOKEN' };
+  const token = env.SUPABASE_ACCESS_TOKEN ?? '';
+  if (token !== '') {
+    // Un salto de línea o un espacio harían que fetch lance con el encabezado completo en su mensaje
+    if (!TOKEN_SHAPE.test(token)) {
+      return {
+        error:
+          'SUPABASE_ACCESS_TOKEN trae espacios, saltos de línea u otros caracteres que no van en un token. Revísalo. Aquí no se muestra',
+      };
+    }
+    return { token, note: 'con el token de SUPABASE_ACCESS_TOKEN' };
+  }
   if ((env.HTTPS_PROXY ?? env.https_proxy ?? '') !== '') {
     return {
       token: null,
@@ -155,7 +174,7 @@ export async function main(argv: readonly string[], env: Record<string, string |
   try {
     args = parseArgs(argv);
   } catch (error) {
-    console.error(error instanceof Error ? error.message : 'Opciones inválidas');
+    console.error(error instanceof UsageError ? error.message : 'Opciones inválidas');
     console.error(USAGE);
     return 2;
   }
@@ -172,7 +191,7 @@ export async function main(argv: readonly string[], env: Record<string, string |
   try {
     client = createManagementClient({ ref: args.projectRef, token: auth.token, fetch });
   } catch (error) {
-    console.error(error instanceof Error ? error.message : 'No pude preparar el cliente');
+    console.error(errorText(error));
     return 2;
   }
   // Un plan por nombre vive en deploy/. Una ruta, como el JSON de secretos, es desde donde se corre
@@ -197,9 +216,7 @@ if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename
       process.exitCode = code;
     },
     (error: unknown) => {
-      console.error(
-        error instanceof Error ? `${error.name}. ${error.message}` : 'Falló el despliegue',
-      );
+      console.error(`Falló el despliegue. ${errorText(error)}`);
       process.exitCode = 1;
     },
   );

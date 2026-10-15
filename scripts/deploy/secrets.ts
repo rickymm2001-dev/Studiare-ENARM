@@ -23,9 +23,13 @@ export function readSecretsFile(path: string): Record<string, string> {
     throw new PlanError(`${path} debe ser un objeto con NOMBRE y valor`);
   }
   const entries = Object.entries(raw as Record<string, unknown>);
-  for (const [name, value] of entries) {
-    // El mensaje lleva el nombre, nunca el valor
-    if (!SECRET_NAME.test(name)) throw new PlanError(`${name} no es un nombre de secreto válido`);
+  for (const [index, [name, value]] of entries.entries()) {
+    // Un nombre inválido no se repite, porque puede ser un valor pegado donde no iba
+    if (!SECRET_NAME.test(name)) {
+      throw new PlanError(
+        `El nombre número ${index + 1} del archivo no es un nombre de secreto válido. No se muestra`,
+      );
+    }
     if (typeof value !== 'string' || value === '') {
       throw new PlanError(`${name} debe tener un valor de texto no vacío`);
     }
@@ -38,15 +42,26 @@ export function readSecretsFile(path: string): Record<string, string> {
 
 export async function runSecrets(options: DeployOptions): Promise<number> {
   const { client } = options;
+  if (!options.plan) {
+    options.io.err(
+      'Para poner secretos hace falta --plan, que dice qué nombres espera y la forma de cada valor. Por ejemplo --plan b10',
+    );
+    return 2;
+  }
   let secrets: Record<string, string>;
-  let plan: Plan | null = null;
+  let plan: Plan;
   try {
     secrets = readSecretsFile(resolve(options.root, options.secretsFrom ?? ''));
-    if (options.plan) plan = loadPlan(options.root, options.plan);
+    plan = loadPlan(options.root, options.plan);
   } catch (error) {
     reportError(options.io, 'No se pusieron secretos', error);
     return 1;
   }
+  if (!plan.secrets) {
+    options.io.err(`El plan ${plan.id} no dice qué secretos espera. No se escribió nada.`);
+    return 1;
+  }
+  const rules = plan.secrets;
   const hide = redactor(Object.values(secrets));
   const io: Io = {
     out: (line) => {
@@ -64,17 +79,22 @@ export async function runSecrets(options: DeployOptions): Promise<number> {
   );
 
   const problems: string[] = [];
-  if (plan?.secrets) {
-    const rules = plan.secrets;
-    for (const name of Object.keys(rules)) {
-      if (!(name in secrets)) problems.push(`Falta ${name}, que pide el plan ${plan.id}`);
-    }
-    for (const name of names) {
-      const rule = rules[name];
-      if (!rule) problems.push(`${name} no está en el plan ${plan.id}`);
-      else if (rule.prefix !== null && !(secrets[name] ?? '').startsWith(rule.prefix)) {
-        problems.push(`${name} debe empezar con ${rule.prefix}`);
-      }
+  for (const name of Object.keys(rules)) {
+    if (!(name in secrets)) problems.push(`Falta ${name}, que pide el plan ${plan.id}`);
+  }
+  const unexpected = names.filter((name) => !(name in rules));
+  if (unexpected.length > 0) {
+    // Sin repetirlos, por si alguno es un valor puesto como nombre
+    problems.push(
+      `El archivo trae ${plural(unexpected.length, 'nombre', 'nombres')} que el plan ${plan.id} no espera. No se muestran`,
+    );
+  }
+  for (const name of names) {
+    const rule = rules[name];
+    if (rule && !rule.pattern.test(secrets[name] ?? '')) {
+      problems.push(
+        `${name} no tiene la forma que pide el plan (${rule.pattern.source}). No se muestra el valor`,
+      );
     }
   }
   if (problems.length > 0) {
@@ -117,5 +137,3 @@ export async function runSecrets(options: DeployOptions): Promise<number> {
   );
   return 0;
 }
-
-/** Corre lo que piden las opciones y devuelve el código de salida */

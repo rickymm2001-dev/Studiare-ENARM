@@ -6,6 +6,8 @@
 // Nunca imprime ni devuelve el token. Un error dice el método, la ruta y el mensaje de Supabase, sin
 // encabezados ni cuerpo de la petición, así que tampoco lleva valores de secretos.
 
+import { createHash } from 'node:crypto';
+
 export const MANAGEMENT_API_URL = 'https://api.supabase.com';
 
 /** Una fila de la historia de migraciones del proyecto (supabase_migrations.schema_migrations) */
@@ -60,8 +62,11 @@ export interface ManagementClient {
   readonly ref: string;
   /** Corre SQL con permiso de escritura. Devuelve las filas del resultado */
   runQuery(query: string): Promise<Row[]>;
-  /** Corre una consulta de solo lectura. Nunca escribe */
-  readQuery(query: string): Promise<Row[]>;
+  /**
+   * Corre una consulta en la ruta de solo lectura. Con fallback, si esa ruta falla por algo que no es el
+   * token, la repite en la general con read_only. La simulación no lo pide
+   */
+  readQuery(query: string, options?: { fallback?: boolean }): Promise<Row[]>;
   listMigrations(): Promise<MigrationRecord[]>;
   /** Aplica la migración y la registra en la historia con ese nombre, como el conector */
   applyMigration(input: { name: string; query: string }): Promise<void>;
@@ -114,11 +119,27 @@ function toRows(value: unknown, what: string): Row[] {
 
 const REF_SHAPE = /^[a-z]{20}$/;
 
+/** La clave de idempotencia de una migración, con su nombre y la huella de su SQL */
+export function migrationKey(name: string, query: string): string {
+  return `studiare-${name}-${createHash('sha256').update(query, 'utf8').digest('hex').slice(0, 32)}`;
+}
+
+/** El código de una falla de red, como ENOTFOUND, o solo el tipo de error. Nunca su mensaje */
+function networkCause(error: unknown): string {
+  const code = (error as { cause?: { code?: unknown } } | null)?.cause?.code;
+  if (typeof code === 'string' && /^[A-Z0-9_]+$/.test(code)) return code;
+  return error instanceof Error ? error.name : 'Error desconocido';
+}
+
 export function createManagementClient(options: ManagementClientOptions): ManagementClient {
   if (!REF_SHAPE.test(options.ref)) {
     throw new ManagementApiError(0, 'La referencia del proyecto debe tener 20 letras minúsculas');
   }
   const base = `${options.baseUrl ?? MANAGEMENT_API_URL}/v1/projects/${options.ref}`;
+  const token = options.token;
+  /** Por si Supabase repitiera el token en un mensaje */
+  const hideToken = (text: string) =>
+    token !== null && token.length >= 8 ? text.split(token).join('[oculto]') : text;
 
   /** Una llamada. Lanza con el estado y el mensaje de Supabase si no sale bien */
   async function call(
@@ -126,8 +147,9 @@ export function createManagementClient(options: ManagementClientOptions): Manage
     path: string,
     body?: { json: unknown } | { form: FormData },
     accept404 = false,
+    extraHeaders: Record<string, string> = {},
   ): Promise<{ status: number; data: unknown }> {
-    const headers: Record<string, string> = { accept: 'application/json' };
+    const headers: Record<string, string> = { accept: 'application/json', ...extraHeaders };
     if (options.token !== null) headers.authorization = `Bearer ${options.token}`;
     let payload: string | FormData | undefined;
     if (body && 'json' in body) {
@@ -137,12 +159,24 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       // fetch pone el content-type de multipart con su frontera
       payload = body.form;
     }
-    const reply = await options.fetch(`${base}${path}`, {
-      method,
-      headers,
-      ...(payload === undefined ? {} : { body: payload }),
-    });
-    const text = await reply.text();
+    const route = `${method} ${path.split('?')[0] ?? path}`;
+    let reply: Response;
+    let text: string;
+    try {
+      reply = await options.fetch(`${base}${path}`, {
+        method,
+        headers,
+        ...(payload === undefined ? {} : { body: payload }),
+      });
+      text = await reply.text();
+    } catch (error) {
+      // El mensaje de fetch puede traer el encabezado con el token, por ejemplo si trae un salto de
+      // línea. Solo se dice el código de red, como ENOTFOUND, o el tipo de error
+      throw new ManagementApiError(
+        0,
+        `No hubo respuesta de Supabase en ${route}. ${networkCause(error)}`,
+      );
+    }
     let data: unknown;
     try {
       data = text === '' ? null : JSON.parse(text);
@@ -157,7 +191,9 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       const extra = [detail, proxy ? `proxy ${proxy}` : ''].filter((part) => part !== '');
       throw new ManagementApiError(
         reply.status,
-        `Supabase respondió ${reply.status} en ${method} ${path.split('?')[0] ?? path}. ${extra.join('. ').slice(0, 400)}`.trim(),
+        hideToken(
+          `Supabase respondió ${reply.status} en ${route}. ${extra.join('. ').slice(0, 400)}`.trim(),
+        ),
       );
     }
     return { status: reply.status, data };
@@ -169,14 +205,18 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       const { data } = await call('POST', '/database/query', { json: { query } });
       return toRows(data, 'database/query');
     },
-    async readQuery(query) {
+    async readQuery(query, readOptions = {}) {
       try {
         const { data } = await call('POST', '/database/query/read-only', { json: { query } });
         return toRows(data, 'database/query/read-only');
       } catch (error) {
         // El endpoint de solo lectura está en beta. Si falla por algo que no es el token, se repite en
         // el general con read_only, que es como lo llama el servidor MCP de Supabase
-        if (!(error instanceof ManagementApiError) || [401, 429].includes(error.status)) {
+        if (
+          readOptions.fallback !== true ||
+          !(error instanceof ManagementApiError) ||
+          [401, 429].includes(error.status)
+        ) {
           throw error;
         }
         const { data } = await call('POST', '/database/query', {
@@ -193,9 +233,15 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       }));
     },
     async applyMigration(input) {
-      await call('POST', '/database/migrations', {
-        json: { query: input.query, name: input.name },
-      });
+      // La especificación acepta Idempotency-Key en esta ruta para registrar la misma migración una
+      // sola vez. Sale del nombre y del SQL, así un reintento del mismo archivo no se registra doble
+      await call(
+        'POST',
+        '/database/migrations',
+        { json: { query: input.query, name: input.name } },
+        false,
+        { 'idempotency-key': migrationKey(input.name, input.query) },
+      );
     },
     async listFunctions() {
       const { data } = await call('GET', '/functions');

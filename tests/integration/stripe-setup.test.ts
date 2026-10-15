@@ -1,4 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
 import { PLANS } from '../../src/config/billing.ts';
 import {
   PASS_PRICES_MXN,
@@ -14,9 +17,11 @@ import {
   PROMO_SPEC,
   isTestKey,
   portalParams,
+  runSetupCli,
   setupStripeTest,
   summaryLines,
   type PriceKey,
+  type SetupResult,
 } from '../../scripts/stripe/setup-test.ts';
 
 const KEY = `rk_test_${'a'.repeat(30)}`;
@@ -435,5 +440,71 @@ describe('configuración de Stripe en modo prueba', () => {
     expect(lines.slice(0, 8).every((line) => /^[A-Z_]+=(price|bpc)_\d+$/.test(line))).toBe(true);
     expect(lines).toContain(`Cupón ${PROMO_SPEC.coupon} creado y código ${PROMO_SPEC.code} creado`);
     expect(lines.join('\n')).not.toContain(KEY);
+  });
+});
+
+describe('setup-test.ts desde la línea de comandos', () => {
+  const dirs: string[] = [];
+  afterEach(() => {
+    for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+  });
+  const output = () => {
+    const lines: string[] = [];
+    return {
+      lines,
+      deps: (fetchImpl: typeof fetch, writeIds?: (path: string, result: SetupResult) => void) => ({
+        fetch: fetchImpl,
+        log: (line: string) => lines.push(line),
+        error: (line: string) => lines.push(line),
+        ...(writeIds ? { writeIds } : {}),
+      }),
+    };
+  };
+
+  it('acepta --write-ids con espacio y guarda los ocho IDs', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'studiare-ids-'));
+    dirs.push(dir);
+    const path = join(dir, 'private/stripe-test-ids.json');
+    const stripe = fakeStripe();
+    const out = output();
+    const code = await runSetupCli(
+      ['--write-ids', path, '--app-url', APP],
+      { STRIPE_SECRET_KEY: KEY },
+      out.deps(stripe.fetch),
+    );
+    expect(code).toBe(0);
+    const saved = JSON.parse(readFileSync(path, 'utf8')) as Record<string, string>;
+    expect(Object.keys(saved)).toHaveLength(8);
+    expect(out.lines.join('\n')).toContain(`Guardé los ocho IDs en ${path}`);
+    expect(out.lines.join('\n')).not.toContain(KEY);
+  });
+
+  it('--write-ids sin valor o una opción que no existe no llaman a Stripe', async () => {
+    for (const argv of [['--write-ids'], ['--write-ids', '--archive-old'], ['--write-id=x.json']]) {
+      const stripe = fakeStripe();
+      const out = output();
+      expect(await runSetupCli(argv, { STRIPE_SECRET_KEY: KEY }, out.deps(stripe.fetch))).toBe(2);
+      expect(stripe.calls).toEqual([]);
+    }
+  });
+
+  it('si no puede guardar los IDs dice qué quedó en Stripe y cómo seguir', async () => {
+    const stripe = fakeStripe();
+    const out = output();
+    const code = await runSetupCli(
+      ['--write-ids=/sin-permiso/ids.json'],
+      { STRIPE_SECRET_KEY: KEY },
+      out.deps(stripe.fetch, () => {
+        throw Object.assign(new Error(`EACCES: permission denied ${KEY}`), { code: 'EACCES' });
+      }),
+    );
+    expect(code).toBe(1);
+    const text = out.lines.join('\n');
+    expect(text).toContain('No pude guardar los IDs en /sin-permiso/ids.json (EACCES)');
+    expect(text).toContain(
+      'En Stripe ya quedó lo de arriba, 6 precios y 2 configuraciones del portal creados',
+    );
+    expect(text).toContain('STRIPE_PRICE_FOUNDER=price_');
+    expect(text).not.toContain(KEY);
   });
 });

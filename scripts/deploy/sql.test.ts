@@ -4,10 +4,16 @@ import { describe, expect, it } from 'vitest';
 import {
   SqlParseError,
   anonGrants,
+  applyFunctionSql,
+  checkColumns,
   checkQuery,
   extractFunctions,
   fingerprint,
   fingerprintQuery,
+  onlyFunctionStatements,
+  sameAsDb,
+  sameDef,
+  type FunctionDef,
 } from './sql.ts';
 
 const ROOT = join(import.meta.dirname, '../..');
@@ -68,8 +74,86 @@ do $$ begin execute 'create function public.dinamica() returns int as $q$ select
     );
     expect(query).toContain("any (array['alfa', 'beta_2']::text[])");
     expect(query).toContain("has_function_privilege('anon', p.oid, 'execute')");
+    expect(query).toContain('p.prosecdef as security_definer');
+    expect(query).toContain("coalesce(array_to_string(p.proconfig, chr(10)), '') as config");
     expect(query).toContain('pg_catalog.pg_proc');
     expect(() => fingerprintQuery(["x'; drop table y; --"])).toThrow(SqlParseError);
+  });
+});
+
+describe('security definer y set del encabezado', () => {
+  it('lee security definer, set con = o to, varios set y los cambios de alter function', () => {
+    const [alfa, beta, gamma] = extractFunctions(`
+create function public.alfa() returns int language sql security definer
+  set search_path = public, pg_temp as $$ select 1 $$;
+create function public.beta() returns int language sql set search_path to Public
+  set statement_timeout = '5s' as $$ select 2 $$;
+create function public.gamma() returns int language sql set search_path from current as $$ select 3 $$;
+`);
+    expect(alfa).toMatchObject({ securityDefiner: true, config: ['search_path=public, pg_temp'] });
+    expect(beta).toMatchObject({
+      securityDefiner: false,
+      config: ['search_path=public', 'statement_timeout=5s'],
+    });
+    // from current no se puede reproducir desde el repo. Queda null y no se compara
+    expect(gamma?.config).toBeNull();
+  });
+
+  it('alter function cambia la versión esperada de una función que ya existe', () => {
+    const state = new Map<string, FunctionDef>();
+    applyFunctionSql(
+      'create function public.ai_day() returns int language sql as $$ select 1 $$;',
+      state,
+    );
+    const touched = applyFunctionSql(
+      `alter function public.ai_day() set search_path = public, pg_temp;
+alter function public.no_existe() security definer;`,
+      state,
+    );
+    expect(touched).toEqual(['ai_day']);
+    expect(state.get('ai_day')).toMatchObject({
+      securityDefiner: false,
+      config: ['search_path=public, pg_temp'],
+    });
+    applyFunctionSql('alter function public.ai_day() security definer reset search_path;', state);
+    expect(state.get('ai_day')).toMatchObject({ securityDefiner: true, config: [] });
+  });
+
+  it('sameAsDb y sameDef comparan cuerpo, security y set', () => {
+    const def: FunctionDef = {
+      body: 'select 1',
+      securityDefiner: true,
+      config: ['search_path=public'],
+    };
+    const row = {
+      fingerprint: fingerprint('select 1'),
+      securityDefiner: true,
+      config: 'search_path=public',
+    };
+    expect(sameAsDb(def, row)).toBe(true);
+    expect(sameAsDb(def, { ...row, securityDefiner: false })).toBe(false);
+    expect(sameAsDb(def, { ...row, config: '' })).toBe(false);
+    expect(sameAsDb({ ...def, config: null }, { ...row, config: '' })).toBe(true);
+    expect(sameDef(def, { ...def, body: ' select\n 1 ' })).toBe(true);
+    expect(sameDef(def, { ...def, securityDefiner: false })).toBe(false);
+  });
+
+  it('solo un archivo de funciones, grant, revoke y comment se reconoce por sus funciones', () => {
+    expect(
+      onlyFunctionStatements(`create or replace function public.a() returns int language sql as $$ select 1 $$;
+revoke all on function public.a() from public;
+grant execute on function public.a() to authenticated;
+comment on function public.a() is 'uno';`),
+    ).toBe(true);
+    expect(onlyFunctionStatements('create table public.t (id int);')).toBe(false);
+    expect(onlyFunctionStatements('alter function public.a() set search_path = public;')).toBe(
+      false,
+    );
+    expect(
+      onlyFunctionStatements(
+        'begin; create function public.a() returns int as $$ select 1 $$; commit;',
+      ),
+    ).toBe(false);
   });
 });
 
@@ -97,6 +181,22 @@ describe('consulta de comprobación de un archivo manual', () => {
     expect(checkQuery(sql)).toBe('select\n  true as listo');
     expect(checkQuery('select 1;')).toBeNull();
     expect(() => checkQuery('-- Comprobación\nselect 1; select 2;')).toThrow(SqlParseError);
+    // Solo select. Un with podría traer un insert o un delete
+    expect(() =>
+      checkQuery('-- Comprobación\nwith x as (delete from t returning 1) select * from x;'),
+    ).toThrow(SqlParseError);
+  });
+
+  it('lee los nombres de las columnas del select, sin los de las subconsultas', () => {
+    expect(
+      checkColumns(`select
+  (select count(*) as n from t) as tablas,
+  exists (select 1 from u where a = 'x') as hay,
+  1 + 2 as suma
+`),
+    ).toEqual(['tablas', 'hay', 'suma']);
+    // Si una columna no tiene as, no se puede saber su nombre
+    expect(checkColumns('select 1 as uno, 2')).toBeNull();
   });
 
   it('las de los archivos manuales del repo son un solo select', () => {

@@ -13,7 +13,7 @@ import { expectedFunctions, runDeploy, type Io } from './deploy.ts';
 import { readSecretsFile } from './secrets.ts';
 import { createManagementClient } from './managementApi.ts';
 import { loadPlan, repoMigrations } from './plan.ts';
-import { extractFunctions } from './sql.ts';
+import { applyFunctionSql, type FunctionDef } from './sql.ts';
 import { STUDIARE_PROJECT_REF, main, parseArgs, resolveToken } from './supabase.ts';
 import { fakeSupabase, type FakeOptions } from './testing/fakeSupabase.ts';
 
@@ -42,16 +42,17 @@ const REAL_HISTORY = [
  * delete_my_account, que sigue en su versión de antes de B10 porque la Sección con delete no se aplicó,
  * y sin la función de Party de supabase/manual
  */
-function realFunctions(): Record<string, string> {
-  const bodies: Record<string, string> = {};
-  for (const migration of repoMigrations(ROOT)) {
-    for (const fn of extractFunctions(migration.sql)) bodies[fn.name] = fn.body ?? '';
-  }
-  const privacy = extractFunctions(
+function realFunctions(): Record<string, FunctionDef> {
+  const defs = new Map<string, FunctionDef>();
+  for (const migration of repoMigrations(ROOT)) applyFunctionSql(migration.sql, defs);
+  const privacy = new Map<string, FunctionDef>();
+  applyFunctionSql(
     readFileSync(join(ROOT, 'supabase/migrations/20261009000001_privacy.sql'), 'utf8'),
-  ).find((fn) => fn.name === 'delete_my_account');
-  bodies.delete_my_account = privacy?.body ?? 'antes de B10';
-  return bodies;
+    privacy,
+  );
+  const old = privacy.get('delete_my_account');
+  if (old) defs.set('delete_my_account', old);
+  return Object.fromEntries(defs);
 }
 
 const REAL_STATE: FakeOptions = {
@@ -130,8 +131,12 @@ describe('los planes del repo', () => {
     const plan = loadPlan(ROOT, 'b10');
     const names = [...PRICE_SPECS.map((spec) => spec.env), ...PORTAL_SPECS.map((spec) => spec.env)];
     expect(Object.keys(plan.secrets ?? {}).sort()).toEqual([...names].sort());
-    for (const spec of PRICE_SPECS) expect(plan.secrets?.[spec.env]?.prefix).toBe('price_');
-    for (const spec of PORTAL_SPECS) expect(plan.secrets?.[spec.env]?.prefix).toBe('bpc_');
+    for (const spec of PRICE_SPECS) {
+      expect(plan.secrets?.[spec.env]?.pattern.source).toBe('^price_[A-Za-z0-9]+$');
+    }
+    for (const spec of PORTAL_SPECS) {
+      expect(plan.secrets?.[spec.env]?.pattern.source).toBe('^bpc_[A-Za-z0-9]+$');
+    }
   });
 
   it('verify_jwt de cada plan coincide con lo que dice el index.ts de la función', () => {
@@ -226,14 +231,21 @@ describe('línea de comandos', () => {
       projectRef: STUDIARE_PROJECT_REF,
     });
     expect(() => parseArgs(['--only', 'todo'])).toThrow(/migrations o functions/);
+    expect(() => parseArgs(['--secrets-from', 'private/ids.json'])).toThrow(/--plan/);
     expect(() => parseArgs(['--plan'])).toThrow(/necesita un valor/);
-    expect(() => parseArgs(['--borrar'])).toThrow(/No conozco/);
+    expect(() => parseArgs(['--plan', 'b10', TOKEN])).toThrow(/No conozco la opción número 3/);
+    expect(() => parseArgs([TOKEN])).not.toThrow(new RegExp(TOKEN));
   });
 
   it('el token sale del entorno o del proxy y nunca se repite', () => {
     const fromEnv = resolveToken({ SUPABASE_ACCESS_TOKEN: TOKEN });
     expect(fromEnv).toEqual({ token: TOKEN, note: 'con el token de SUPABASE_ACCESS_TOKEN' });
     expect(resolveToken({ HTTPS_PROXY: 'http://127.0.0.1:1' })).toMatchObject({ token: null });
+    for (const bad of [`${TOKEN}\n`, `${TOKEN}\r`, `Bearer ${TOKEN}`, `${TOKEN}\t`]) {
+      const result = resolveToken({ SUPABASE_ACCESS_TOKEN: bad });
+      expect(result).toMatchObject({ error: expect.stringContaining('caracteres') as string });
+      expect(JSON.stringify(result)).not.toContain(TOKEN);
+    }
     expect(resolveToken({})).toMatchObject({
       error: expect.stringContaining('Falta SUPABASE_ACCESS_TOKEN') as string,
     });
@@ -252,6 +264,12 @@ describe('línea de comandos', () => {
       return true;
     });
     const env = { SUPABASE_ACCESS_TOKEN: TOKEN };
+
+    // Un token con un retorno de carro al final no llega a fetch ni sale en pantalla
+    vi.stubGlobal('fetch', fakeSupabase({ ref: STUDIARE_PROJECT_REF }).fetch);
+    expect(
+      await main(['--plan', 'b10', '--dry-run'], { SUPABASE_ACCESS_TOKEN: `${TOKEN}\r` }),
+    ).toBe(2);
 
     // Un plan con el token rechazado
     vi.stubGlobal(

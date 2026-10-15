@@ -27,10 +27,18 @@ create table if not exists public.marca (id int);
 -- Comprobación
 select true as listo;
 `;
+const OTRO = `create table if not exists public.otra (id int);\n`;
+const TABLA = `create table if not exists public.t (id int);
+create or replace function public.delta() returns int language sql as $$ select 4 $$;
+revoke all on function public.delta() from public, anon, authenticated, service_role;
+`;
 const VIEJO = `create or replace function public.beta() returns int language sql as $$ select 20 $$;\n`;
 
 const STEPS = {
-  base: { file: 'supabase/migrations/20260101000001_base.sql' },
+  base: {
+    file: 'supabase/migrations/20260101000001_base.sql',
+    recordedAs: ['base_1', 'base_2'],
+  },
   more: { file: 'supabase/migrations/20260101000002_more.sql' },
   arreglo: { file: 'supabase/manual/arreglo.sql', check: { listo: true } },
 };
@@ -40,13 +48,42 @@ const PLANS: Record<string, unknown> = {
     description: 'Plan de prueba',
     migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
     functions: [{ slug: 'hola', verifyJwt: false }],
-    secrets: { STRIPE_PRICE_FOUNDER: { prefix: 'price_' }, STRIPE_PORTAL_CONFIG_REGULAR: {} },
+    secrets: {
+      STRIPE_PRICE_FOUNDER: { pattern: '^price_[A-Za-z0-9_]+$' },
+      STRIPE_PORTAL_CONFIG_REGULAR: { pattern: '^bpc_[A-Za-z0-9_]+$' },
+    },
   },
   'sin-arreglo': { description: 'Sin la pieza manual', migrations: [STEPS.base, STEPS.more] },
+  mas: { description: 'Solo more', migrations: [STEPS.more] },
+  'base-sin-registro': {
+    description: 'base sin registro, con more registrada',
+    migrations: [{ file: STEPS.base.file }, STEPS.more],
+  },
+  tabla: {
+    description: 'Una migración con una tabla además de su función',
+    migrations: [{ file: 'supabase/migrations/20260101000003_tabla.sql' }],
+  },
   'solo-base': { description: 'Solo base', migrations: [STEPS.base] },
   conflicto: {
     description: 'Con un archivo manual viejo',
     migrations: [STEPS.base, STEPS.more, { file: 'supabase/manual/viejo.sql' }],
+  },
+  'dos-manuales': {
+    description: 'Dos archivos manuales seguidos',
+    migrations: [STEPS.base, STEPS.more, STEPS.arreglo, { file: 'supabase/manual/otro.sql' }],
+    functions: [{ slug: 'hola', verifyJwt: false }],
+  },
+  'dos-funciones': {
+    description: 'Solo dos funciones',
+    functions: [
+      { slug: 'hola', verifyJwt: false },
+      { slug: 'adios', verifyJwt: false },
+    ],
+  },
+  'beta-sobrecargada': {
+    description: 'beta con una sobrecarga anotada',
+    migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
+    overloads: { beta: 'Prueba de una sobrecarga a propósito' },
   },
   'beta-abierta': {
     description: 'beta abierta a anon a propósito',
@@ -64,8 +101,11 @@ beforeEach(() => {
   const files: Record<string, string> = {
     'supabase/migrations/20260101000001_base.sql': BASE,
     'supabase/migrations/20260101000002_more.sql': MORE,
+    'supabase/migrations/20260101000003_tabla.sql': TABLA,
     'supabase/manual/arreglo.sql': ARREGLO,
     'supabase/manual/viejo.sql': VIEJO,
+    'supabase/manual/otro.sql': OTRO,
+    'supabase/functions/adios/index.ts': `import { hola } from '../_shared/util.ts';\nDeno.serve(hola);\n`,
     'supabase/functions/hola/index.ts': `import { hola } from '../_shared/util.ts';\nDeno.serve(hola);\n`,
     'supabase/functions/_shared/util.ts': `export const hola = () => new Response('hola');\n`,
     ...Object.fromEntries(
@@ -111,7 +151,7 @@ function collectIo(answer = true) {
 async function run(
   fakeOptions: FakeOptions,
   options: Partial<{
-    plan: string;
+    plan: string | null;
     dryRun: boolean;
     yes: boolean;
     only: 'migrations' | 'functions';
@@ -123,7 +163,7 @@ async function run(
   const output = collectIo(options.answer ?? true);
   const code = await runDeploy({
     root,
-    plan: options.plan ?? 'prueba',
+    plan: options.plan === undefined ? 'prueba' : options.plan,
     dryRun: options.dryRun ?? false,
     only: options.only ?? null,
     yes: options.yes ?? true,
@@ -154,7 +194,7 @@ describe('qué ya está aplicado', () => {
     bytes: 0,
   });
 
-  it('reconoce la versión, el nombre y los trozos del conector, sin confundir nombres parecidos', () => {
+  it('reconoce la versión, el nombre y lo que el plan declara en recordedAs, sin deducir trozos', () => {
     const history = [
       { version: '20261015010327', name: 'billing_plans_1' },
       { version: '20261015010417', name: 'billing_plans_2' },
@@ -162,13 +202,17 @@ describe('qué ya está aplicado', () => {
       { version: '20261014143028', name: 'free_plan_locks' },
       { version: '20261022000003', name: 'otra' },
     ];
-    expect(recordedMatches(step('billing_plans'), history).map((r) => r.name)).toEqual([
-      'billing_plans_1',
-      'billing_plans_2',
-    ]);
-    expect(recordedMatches(step('privacy'), history)).toHaveLength(1);
-    expect(recordedMatches(step('billing'), history)).toEqual([]);
+    // Un trozo del conector solo cuenta si el plan lo declara
+    expect(recordedMatches(step('billing_plans'), history)).toEqual([]);
+    expect(recordedMatches(step('privacy'), history)).toEqual([]);
+    expect(
+      recordedMatches(
+        { ...step('billing_plans'), recordedAs: ['billing_plans_1', 'billing_plans_2'] },
+        history,
+      ).map((record) => record.name),
+    ).toEqual(['billing_plans_1', 'billing_plans_2']);
     expect(recordedMatches(step('free_plan'), history)).toEqual([]);
+    expect(recordedMatches(step('free_plan_locks'), history)).toHaveLength(1);
     expect(recordedMatches(step('invoice_requests', '20261022000003'), history)).toHaveLength(1);
   });
 });
@@ -193,15 +237,59 @@ describe('aplicar un plan', () => {
     expect(result.out.at(-1)).toBe('Todo en verde.');
   });
 
-  it('sin registro pero con las huellas del repo tampoco repite el SQL', async () => {
-    const result = await run({
-      ...REAL_LIKE,
-      history: [],
-      functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
-    });
+  it('un archivo de solo funciones sin registro, con sus funciones en la base, no se repite', async () => {
+    const result = await run(
+      { functions: { alfa: 'select 10', gamma: 'select 3' } },
+      { plan: 'mas' },
+    );
     expect(result.code).toBe(0);
-    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(appliedNames(result.fake)).toEqual([]);
     expect(result.all()).toContain('ya estaba aplicada sin registro (2 funciones iguales al repo)');
+  });
+
+  it('un archivo con más que funciones no se da por aplicado solo por sus funciones', async () => {
+    const result = await run({ functions: { delta: 'select 4' } }, { plan: 'tabla' });
+    expect(result.code).toBe(0);
+    expect(appliedNames(result.fake)).toEqual(['tabla']);
+    expect(result.all()).toContain(
+      'se aplica, trae más que funciones, sin registro ni comprobación',
+    );
+  });
+
+  it('compara con la versión del propio archivo, no con la última del repo', async () => {
+    // alfa está como la deja more, no como la deja base, así que base no cuenta como aplicada. Aplicarla
+    // regresaría alfa, porque more está registrada y no se vuelve a aplicar, y se detiene sin escribir
+    const result = await run(
+      {
+        history: [{ version: '20261014000003', name: 'more' }],
+        functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
+      },
+      { plan: 'base-sin-registro' },
+    );
+    expect(result.code).toBe(1);
+    expect(result.fake.writes()).toEqual([]);
+    expect(result.all()).toContain('1. base  se aplica, 1 función distinta o faltante');
+    expect(result.all()).toContain(
+      'Aplicarla dejaría alfa más vieja que supabase/migrations/20260101000002_more.sql',
+    );
+  });
+
+  it('una función con el mismo cuerpo pero otro security o set cuenta como distinta', async () => {
+    const definer = await run({
+      ...REAL_LIKE,
+      tamperDef: (name, def) => (name === 'beta' ? { ...def, securityDefiner: true } : def),
+    });
+    expect(definer.code).toBe(1);
+    expect(definer.all()).toContain(
+      'beta quedó distinta de supabase/migrations/20260101000001_base.sql',
+    );
+    const config = await run({
+      ...REAL_LIKE,
+      tamperDef: (name, def) =>
+        name === 'beta' ? { ...def, config: ['search_path=public'] } : def,
+    });
+    expect(config.code).toBe(1);
+    expect(config.all()).toContain('beta quedó distinta');
   });
 
   it('un archivo manual con la comprobación en verde y huellas iguales se salta', async () => {
@@ -254,6 +342,31 @@ describe('aplicar un plan', () => {
     expect(allowed.all()).toContain('beta sigue abierta a anon a propósito. Prueba');
   });
 
+  it('una sobrecarga en la base es problema salvo que el plan la anote', async () => {
+    const extra = { name: 'beta', body: 'select 99', anon: false };
+    const result = await run({ ...REAL_LIKE, extraRows: [extra] });
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('beta tiene 2 versiones en la base');
+    const noted = await run({ ...REAL_LIKE, extraRows: [extra] }, { plan: 'beta-sobrecargada' });
+    expect(noted.code).toBe(0);
+    expect(noted.all()).toContain('beta tiene 2 versiones en la base. Prueba de una sobrecarga');
+  });
+
+  it('revisa anon en todas las versiones de una función, no solo en la del repo', async () => {
+    const result = await run(
+      { ...REAL_LIKE, extraRows: [{ name: 'beta', body: 'select 99', anon: true }] },
+      { plan: 'beta-sobrecargada' },
+    );
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('anon puede ejecutar una versión de beta');
+  });
+
+  it('la simulación no usa el respaldo de escritura para leer', async () => {
+    const result = await run({ ...REAL_LIKE, readOnlyStatus: 500 }, { dryRun: true });
+    expect(result.code).toBe(1);
+    expect(result.fake.requests.some((request) => request.path === '/database/query')).toBe(false);
+  });
+
   it('no escribe nada si algo registrado quedó distinto y ningún paso lo corrige', async () => {
     const result = await run(REAL_LIKE, { plan: 'sin-arreglo' });
     expect(result.code).toBe(1);
@@ -277,6 +390,78 @@ describe('aplicar un plan', () => {
     expect(result.code).toBe(1);
     expect(result.fake.requests).toEqual([]);
     expect(result.all()).toContain('supabase/manual/viejo.sql trae beta distinta de');
+  });
+
+  it('si la comprobación de la base sale en rojo no publica ninguna función', async () => {
+    const result = await run({ ...REAL_LIKE, tamper: (_name, body) => `${body} + 0` });
+    expect(result.code).toBe(1);
+    expect(result.fake.edge.has('hola')).toBe(false);
+    expect(result.all()).toContain('No se publicó ninguna función');
+  });
+
+  it('se detiene justo después de un archivo manual que queda con la comprobación en rojo', async () => {
+    const result = await run(
+      { ...REAL_LIKE, checkRow: () => ({ listo: false }) },
+      { plan: 'dos-manuales' },
+    );
+    expect(result.code).toBe(1);
+    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(result.all()).toContain('supabase/manual/arreglo.sql quedó con la comprobación en rojo');
+    expect(result.fake.edge.has('hola')).toBe(false);
+  });
+
+  it('se detiene en la función que queda con otro verify_jwt y no publica las que siguen', async () => {
+    const result = await run({ forceVerifyJwt: true }, { plan: 'dos-funciones' });
+    expect(result.code).toBe(1);
+    expect(result.fake.edge.get('hola')?.verifyJwt).toBe(true);
+    expect(result.fake.edge.has('adios')).toBe(false);
+    expect(result.all()).toContain('hola quedó con verify_jwt true y el plan dice false');
+  });
+
+  it('un 5xx o una falla de red en la comprobación previa terminan sin escribir', async () => {
+    for (const failure of [500, 502, 'network'] as const) {
+      const result = await run({ ...REAL_LIKE, checkFailure: () => failure });
+      expect(result.code, String(failure)).toBe(1);
+      expect(result.fake.writes(), String(failure)).toEqual([]);
+      expect(result.all()).toContain('No pude leer el estado del proyecto');
+    }
+  });
+
+  it('un 400 de SQL en la comprobación previa cuenta como rojo, porque falta algo, y se aplica', async () => {
+    const result = await run({
+      ...REAL_LIKE,
+      checkFailure: (applied) => (applied.has('manual_arreglo') ? null : 400),
+    });
+    expect(result.code).toBe(0);
+    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(result.all()).toContain('comprobación en rojo (la consulta falló');
+  });
+
+  it('un archivo manual registrado con la comprobación en rojo bloquea, también en la simulación', async () => {
+    const state: FakeOptions = {
+      ...REAL_LIKE,
+      history: [
+        ...(REAL_LIKE.history ?? []),
+        { version: '20261014000004', name: 'manual_arreglo' },
+      ],
+      functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
+      checkRow: () => ({ listo: false }),
+    };
+    for (const dryRun of [true, false]) {
+      const result = await run(state, { dryRun });
+      expect(result.code, `dryRun ${String(dryRun)}`).toBe(1);
+      expect(result.fake.writes()).toEqual([]);
+      expect(result.all()).toContain(
+        'está registrada, pero su comprobación sale en rojo (listo dio false',
+      );
+    }
+  });
+
+  it('falla si lo aplicado no aparece en la historia de migraciones', async () => {
+    const result = await run({ ...REAL_LIKE, dropRecord: true });
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('manual_arreglo no aparece en la historia de migraciones');
+    expect(result.fake.edge.has('hola')).toBe(false);
   });
 
   it('se detiene en el primer SQL que falla y no publica', async () => {
@@ -350,21 +535,44 @@ describe('secretos', () => {
     expect(result.fake.writes()).toEqual([]);
   });
 
-  it('con el plan revisa nombres y prefijos sin mostrar valores', async () => {
-    const result = await run(
-      {},
-      { secretsFrom: writeSecrets({ ...VALUES, STRIPE_PRICE_FOUNDER: 'prod_equivocado_1' }) },
-    );
-    expect(result.code).toBe(1);
-    expect(result.fake.requests).toEqual([]);
-    expect(result.all()).toContain('STRIPE_PRICE_FOUNDER debe empezar con price_');
-    expect(result.all()).not.toContain('prod_equivocado_1');
+  it('revisa cada valor con la forma completa del plan, sin mostrarlo', async () => {
+    for (const bad of ['prod_equivocado_1', 'price_con espacio', 'price_', 'xprice_abc']) {
+      const result = await run(
+        {},
+        { secretsFrom: writeSecrets({ ...VALUES, STRIPE_PRICE_FOUNDER: bad }) },
+      );
+      expect(result.code, bad).toBe(1);
+      expect(result.fake.requests).toEqual([]);
+      // Con el valor price_ la forma también sale tapada, porque nada que se parezca al valor se muestra
+      expect(result.all()).toContain('STRIPE_PRICE_FOUNDER no tiene la forma que pide el plan');
+      expect(result.all()).not.toContain(bad);
+    }
+  });
+
+  it('un nombre que no es del plan o que no es válido no se repite en pantalla', async () => {
     const extra = await run(
       {},
       { secretsFrom: writeSecrets({ ...VALUES, OTRO_SECRETO: 'valor_de_otro' }) },
     );
     expect(extra.code).toBe(1);
-    expect(extra.all()).toContain('OTRO_SECRETO no está en el plan prueba');
+    expect(extra.all()).toContain('El archivo trae 1 nombre que el plan prueba no espera');
+    expect(extra.all()).not.toContain('OTRO_SECRETO');
+    const invalid = await run(
+      {},
+      { secretsFrom: writeSecrets({ ...VALUES, 'sk_test_esto-es-una-llave': 'x1234' }) },
+    );
+    expect(invalid.code).toBe(1);
+    expect(invalid.all()).toContain(
+      'El nombre número 3 del archivo no es un nombre de secreto válido',
+    );
+    expect(invalid.all()).not.toContain('sk_test_esto-es-una-llave');
+  });
+
+  it('sin --plan no pone secretos', async () => {
+    const result = await run({}, { secretsFrom: writeSecrets(VALUES), plan: null });
+    expect(result.code).toBe(2);
+    expect(result.fake.requests).toEqual([]);
+    expect(result.all()).toContain('Para poner secretos hace falta --plan');
   });
 
   it('oculta los valores aunque la API los repita en su error', async () => {

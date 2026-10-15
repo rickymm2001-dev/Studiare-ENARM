@@ -3,14 +3,15 @@
 // el resultado. Con --secrets-from pasa al paso de secretos de secrets.ts.
 //
 // Cómo decide si un SQL ya está aplicado, para nunca repetirlo a ciegas
-//   - Registrado. La historia de migraciones tiene su versión, su nombre o un trozo de su nombre como
-//     lo deja el conector (billing_plans_1 a billing_plans_5). Se salta
-//   - Sin registro, pero cada función que crea ya está en la base con la huella del repo y, si es un
-//     archivo manual con comprobación, la comprobación sale en verde. Se salta
+//   - Registrado. La historia de migraciones tiene su versión, su nombre o uno de los nombres que el plan
+//     declara en recordedAs, como los trozos del conector (billing_plans_1 a billing_plans_5). Se salta
+//   - Sin registro, pero cada función que crea ya está en la base igual que en el archivo, y el archivo
+//     solo trae funciones, grant, revoke o comment, o su comprobación sale en verde. Se salta
 //   - Lo demás se aplica. Todo SQL del repo es idempotente, pero si aplicarlo dejaría una función en una
 //     versión más vieja que la del repo, o si uno registrado quedó distinto y nadie lo corrige, no se
 //     escribe nada y se explica por qué
-// La versión esperada de cada función es la de la última migración del repo que la define. Si solo vive
+// Una función es igual si coinciden la huella de su cuerpo, security definer y su set. La versión
+// esperada de cada función es la de la última migración del repo que la crea o la cambia. Si solo vive
 // en supabase/manual, la del último archivo manual del plan.
 import { functionClosure, type FunctionClosure } from './closure.ts';
 import {
@@ -30,7 +31,6 @@ import {
   type Io,
 } from './output.ts';
 import {
-  PlanError,
   loadPlan,
   repoMigrations,
   type CheckExpectation,
@@ -38,7 +38,16 @@ import {
   type SqlStep,
 } from './plan.ts';
 import { runSecrets } from './secrets.ts';
-import { anonGrants, checkQuery, extractFunctions, fingerprint, fingerprintQuery } from './sql.ts';
+import {
+  anonGrants,
+  applyFunctionSql,
+  checkQuery,
+  fingerprintQuery,
+  onlyFunctionStatements,
+  sameAsDb,
+  sameDef,
+  type FunctionDef,
+} from './sql.ts';
 
 export type { DeployOptions, Io } from './output.ts';
 
@@ -46,23 +55,21 @@ export type { DeployOptions, Io } from './output.ts';
 // Huellas esperadas
 
 export interface Expected {
-  fingerprint: string;
+  def: FunctionDef;
+  /** El último archivo que la crea o la cambia */
   file: string;
 }
 
 interface StepFunction {
   name: string;
-  own: string;
+  own: FunctionDef;
 }
 
-/** Las funciones de public que crea un SQL. Si se crea dos veces, cuenta la última */
+/** Las funciones de public que crea un SQL, como quedan al final del archivo */
 function stepFunctions(sql: string): StepFunction[] {
-  const byName = new Map<string, string>();
-  for (const definition of extractFunctions(sql)) {
-    if (definition.schema !== 'public' || definition.body === null) continue;
-    byName.set(definition.name, fingerprint(definition.body));
-  }
-  return [...byName].map(([name, own]) => ({ name, own }));
+  const own = new Map<string, FunctionDef>();
+  applyFunctionSql(sql, own);
+  return [...own].filter(([, def]) => def.body !== null).map(([name, def]) => ({ name, own: def }));
 }
 
 /**
@@ -73,11 +80,15 @@ export function expectedFunctions(
   plan: Plan,
   migrations: readonly { file: string; sql: string }[],
 ): { expected: Map<string, Expected>; conflicts: string[] } {
-  const latest = new Map<string, Expected>();
+  // Las migraciones en orden de versión, con lo que cada una crea o cambia, como alter function ... set
+  const defs = new Map<string, FunctionDef>();
+  const files = new Map<string, string>();
   for (const migration of migrations) {
-    for (const fn of stepFunctions(migration.sql)) {
-      latest.set(fn.name, { fingerprint: fn.own, file: migration.file });
-    }
+    for (const name of applyFunctionSql(migration.sql, defs)) files.set(name, migration.file);
+  }
+  const latest = new Map<string, Expected>();
+  for (const [name, def] of defs) {
+    if (def.body !== null) latest.set(name, { def, file: files.get(name) ?? '' });
   }
   const manual = new Map<string, Expected>();
   const conflicts: string[] = [];
@@ -85,12 +96,12 @@ export function expectedFunctions(
     if (step.kind !== 'manual') continue;
     for (const fn of stepFunctions(step.sql)) {
       const fromMigration = latest.get(fn.name);
-      if (fromMigration && fromMigration.fingerprint !== fn.own) {
+      if (fromMigration && !sameDef(fromMigration.def, fn.own)) {
         conflicts.push(
           `${step.file} trae ${fn.name} distinta de ${fromMigration.file}, la última migración que la define. Aplicarlo la regresaría`,
         );
       }
-      manual.set(fn.name, { fingerprint: fn.own, file: step.file });
+      manual.set(fn.name, { def: fn.own, file: step.file });
     }
   }
   const expected = new Map<string, Expected>();
@@ -108,6 +119,9 @@ export function expectedFunctions(
 
 export interface DbFunction {
   fingerprint: string;
+  securityDefiner: boolean;
+  /** proconfig con sus entradas separadas por salto de línea */
+  config: string;
   anon: boolean;
 }
 
@@ -118,19 +132,21 @@ export function parseFunctionRows(rows: readonly Row[]): Map<string, DbFunction[
   for (const row of rows) {
     if (typeof row.name !== 'string' || typeof row.fingerprint !== 'string') continue;
     const list = result.get(row.name) ?? [];
-    list.push({ fingerprint: row.fingerprint, anon: truthy(row.anon) });
+    list.push({
+      fingerprint: row.fingerprint,
+      securityDefiner: truthy(row.security_definer),
+      config: typeof row.config === 'string' ? row.config : '',
+      anon: truthy(row.anon),
+    });
     result.set(row.name, list);
   }
   return result;
 }
 
-/** Un trozo como lo nombra el conector, por ejemplo billing_plans_1 o privacy_a_freno_bitacora */
-function isChunkOf(recorded: string, base: string): boolean {
-  if (!recorded.startsWith(`${base}_`)) return false;
-  return /^(?:\d+|[a-z])(?:_|$)/.test(recorded.slice(base.length + 1));
-}
-
-/** Las filas de la historia que corresponden a un paso, por versión, por nombre o por trozo */
+/**
+ * Las filas de la historia que corresponden a un paso, por versión, por nombre o por los nombres que el
+ * plan declara en recordedAs. Los trozos del conector no se deducen, se declaran
+ */
 export function recordedMatches(
   step: SqlStep,
   history: readonly MigrationRecord[],
@@ -139,25 +155,29 @@ export function recordedMatches(
     (record) =>
       (step.version !== null && record.version === step.version) ||
       record.name === step.name ||
-      step.recordedAs.includes(record.name) ||
-      isChunkOf(record.name, step.name),
+      step.recordedAs.includes(record.name),
   );
 }
 
 function sameValue(actual: unknown, expected: CheckExpectation[string]): boolean {
-  if (typeof expected === 'boolean') return truthy(actual) === expected && actual !== null;
+  if (typeof expected === 'boolean') {
+    return expected ? truthy(actual) : actual === false || actual === 'f' || actual === 'false';
+  }
   if (expected === null) return actual === null;
   return String(actual) === String(expected);
 }
 
-/** Las columnas de la comprobación que no dieron lo esperado. Vacío es que salió en verde */
+/**
+ * Las columnas de la comprobación que no dieron lo esperado. Vacío es que salió en verde. Una fila que
+ * no llega o una columna que no viene nunca cuentan como verde
+ */
 export function checkDifferences(row: Row | undefined, expected: CheckExpectation): string[] {
-  return Object.entries(expected)
-    .filter(([column, value]) => !sameValue(row?.[column], value))
-    .map(
-      ([column, value]) =>
-        `${column} dio ${JSON.stringify(row?.[column] ?? null)} y debía dar ${JSON.stringify(value)}`,
-    );
+  return Object.entries(expected).flatMap(([column, value]) => {
+    if (!row) return [`${column} no llegó, la consulta no devolvió filas`];
+    if (!(column in row)) return [`${column} no viene en el resultado`];
+    if (sameValue(row[column], value)) return [];
+    return [`${column} dio ${JSON.stringify(row[column])} y debía dar ${JSON.stringify(value)}`];
+  });
 }
 
 export interface StepDecision {
@@ -186,30 +206,40 @@ export function decideSteps(
   expected: Map<string, Expected>,
   state: ProjectState,
 ): StepDecision[] {
-  const inDb = (name: string) => {
+  const rowsOf = (name: string) => state.functions.get(name) ?? [];
+  /** La base ya tiene la función como la deja este archivo */
+  const asInFile = (fn: StepFunction) => rowsOf(fn.name).some((row) => sameAsDb(fn.own, row));
+  /** La base tiene la versión esperada, la de la última migración que la define */
+  const asExpected = (name: string) => {
     const want = expected.get(name);
-    return (
-      want !== undefined &&
-      (state.functions.get(name) ?? []).some((row) => row.fingerprint === want.fingerprint)
-    );
+    return want !== undefined && rowsOf(name).some((row) => sameAsDb(want.def, row));
   };
   const decisions: StepDecision[] = plan.migrations.map((step, index) => {
     const functions = stepFunctions(step.sql);
     const recorded = recordedMatches(step, state.history);
     const checkProblems = step.check ? (state.checks.get(step.file) ?? []) : [];
-    const differing = functions.filter((fn) => !inDb(fn.name)).map((fn) => fn.name);
+    const differing = functions.filter((fn) => !asInFile(fn)).map((fn) => fn.name);
     if (recorded.length > 0) {
-      // Las funciones que quedaron distintas se revisan abajo, cuando ya se sabe qué pasos se aplican
+      // Las funciones que quedaron distintas se revisan abajo, cuando ya se sabe qué pasos se aplican.
+      // Una comprobación en rojo no la corrige nadie, porque lo registrado no se vuelve a aplicar
       return {
         step,
         index,
         action: 'skip',
         reason: `ya aplicada, registrada como ${describeRecords(recorded)}`,
         notes: [],
-        problems: [],
+        problems:
+          checkProblems.length > 0
+            ? [
+                `${step.file} está registrada, pero su comprobación sale en rojo (${checkProblems.join(', ')}). Revisa la base antes de seguir`,
+              ]
+            : [],
       };
     }
-    const byFingerprint = functions.length > 0 && differing.length === 0;
+    // Las funciones solo dicen algo del archivo si es todo funciones. Con otras sentencias hace falta su
+    // comprobación en verde o que esté registrado
+    const functionsOnly = onlyFunctionStatements(step.sql);
+    const byFingerprint = functionsOnly && functions.length > 0 && differing.length === 0;
     const byCheck = step.check !== null && checkProblems.length === 0;
     if ((byFingerprint || byCheck) && differing.length === 0 && checkProblems.length === 0) {
       const how = [
@@ -232,6 +262,9 @@ export function decideSteps(
         ? plural(differing.length, 'función distinta o faltante', 'funciones distintas o faltantes')
         : '',
       checkProblems.length > 0 ? `comprobación en rojo (${checkProblems.join(', ')})` : '',
+      differing.length === 0 && checkProblems.length === 0 && !functionsOnly && step.check === null
+        ? 'trae más que funciones, sin registro ni comprobación'
+        : '',
     ].filter((part) => part !== '');
     return {
       step,
@@ -252,7 +285,7 @@ export function decideSteps(
         decision.action === 'apply' &&
         want !== undefined &&
         stepFunctions(decision.step.sql).some(
-          (fn) => fn.name === name && fn.own === want.fingerprint,
+          (fn) => fn.name === name && sameDef(fn.own, want.def),
         ),
     );
   };
@@ -260,7 +293,7 @@ export function decideSteps(
     for (const fn of stepFunctions(decision.step.sql)) {
       const want = expected.get(fn.name);
       if (!want) continue;
-      if (decision.action === 'skip' && !inDb(fn.name)) {
+      if (decision.action === 'skip' && !asExpected(fn.name)) {
         const later = fixer(decision.index, fn.name);
         if (later) {
           decision.notes.push(
@@ -274,7 +307,7 @@ export function decideSteps(
       }
       if (
         decision.action === 'apply' &&
-        fn.own !== want.fingerprint &&
+        !sameDef(fn.own, want.def) &&
         !fixer(decision.index, fn.name)
       ) {
         decision.problems.push(
@@ -304,9 +337,14 @@ export function verifyFunctions(
   let same = 0;
   for (const [name, want] of [...expected].sort(([a], [b]) => a.localeCompare(b))) {
     const rows = functions.get(name) ?? [];
-    const match = rows.find((row) => row.fingerprint === want.fingerprint);
-    if (rows.length > 1)
-      notes.push(`${name} tiene ${rows.length} versiones en la base (sobrecarga)`);
+    const match = rows.find((row) => sameAsDb(want.def, row));
+    if (rows.length > 1) {
+      // Una sobrecarga vieja puede seguir abierta o tomar las llamadas. Solo pasa si el plan la anota
+      const reason = plan.overloads[name];
+      const text = `${name} tiene ${rows.length} versiones en la base`;
+      if (reason) notes.push(`${text}. ${reason}`);
+      else problems.push(`${text}. Si es a propósito, anótala en overloads del plan`);
+    }
     if (!match) {
       problems.push(
         rows.length === 0
@@ -316,11 +354,16 @@ export function verifyFunctions(
       continue;
     }
     same += 1;
-    if (!match.anon) continue;
+    // anon se revisa en todas las versiones con ese nombre, no solo en la del repo
+    if (!rows.some((row) => row.anon)) continue;
     const reason = plan.anonExecutable[name];
     if (reason) notes.push(`${name} sigue abierta a anon a propósito. ${reason}`);
     else if (!granted.has(name) && !grantsAll) {
-      problems.push(`anon puede ejecutar ${name} y ningún archivo del plan se lo concede`);
+      problems.push(
+        match.anon
+          ? `anon puede ejecutar ${name} y ningún archivo del plan se lo concede`
+          : `anon puede ejecutar una versión de ${name} que no es la del repo`,
+      );
     }
   }
   return { problems, notes, same };
@@ -338,11 +381,6 @@ interface LocalPlan {
 
 function loadLocal(root: string, name: string): LocalPlan {
   const plan = loadPlan(root, name);
-  for (const step of plan.migrations) {
-    if (step.check && checkQuery(step.sql) === null) {
-      throw new PlanError(`${step.file} no trae la consulta de Comprobación que pide el plan`);
-    }
-  }
   const closures = new Map(
     plan.functions.map((step) => [step.slug, functionClosure(root, step.slug)] as const),
   );
@@ -388,28 +426,40 @@ async function readState(
   client: ManagementClient,
   local: LocalPlan,
   withHistory: boolean,
+  fallback: boolean,
 ): Promise<ProjectState> {
   // Primero la historia, que es un GET. Con un token malo se detiene ahí, antes de cualquier consulta
   const history = withHistory ? await client.listMigrations() : [];
   const names = [...local.expected.keys()].sort();
   const functions =
     names.length > 0
-      ? parseFunctionRows(await client.readQuery(fingerprintQuery(names)))
+      ? parseFunctionRows(await client.readQuery(fingerprintQuery(names), { fallback }))
       : new Map<string, DbFunction[]>();
   const checks = new Map<string, string[]>();
   for (const step of local.plan.migrations) {
-    const query = step.check ? checkQuery(step.sql) : null;
-    if (!step.check || query === null) continue;
+    if (!step.check) continue;
     try {
-      checks.set(step.file, checkDifferences((await client.readQuery(query))[0], step.check));
+      checks.set(step.file, await runCheck(client, step, fallback));
     } catch (error) {
-      // Antes de aplicar es normal que falle si falta un objeto. Cuenta como comprobación en rojo
-      if (error instanceof ManagementApiError && [401, 403, 429].includes(error.status))
-        throw error;
+      // Antes de aplicar es normal que la consulta falle porque falta un objeto, y Supabase contesta
+      // 400 con el error de SQL. Eso cuenta como comprobación en rojo. Una falla de red, un 5xx o
+      // cualquier otra cosa no dice nada de la base, así que se detiene sin escribir
+      if (!(error instanceof ManagementApiError && error.status === 400)) throw error;
       checks.set(step.file, [`la consulta falló, ${errorText(error)}`]);
     }
   }
   return { history, functions, checks };
+}
+
+/** Corre la consulta de comprobación de un archivo. Vacío es que salió en verde */
+async function runCheck(
+  client: ManagementClient,
+  step: SqlStep,
+  fallback: boolean,
+): Promise<string[]> {
+  const query = checkQuery(step.sql);
+  if (!step.check || query === null) return [];
+  return checkDifferences((await client.readQuery(query, { fallback }))[0], step.check);
 }
 
 async function runPlan(options: DeployOptions): Promise<number> {
@@ -440,7 +490,8 @@ async function runPlan(options: DeployOptions): Promise<number> {
   const before = new Map<string, FunctionInfo | null>();
   try {
     if (doSql) {
-      const state = await readState(client, local, true);
+      // La simulación no usa el respaldo, que va por la ruta general de SQL
+      const state = await readState(client, local, true, !options.dryRun);
       decisions = decideSteps(plan, local.expected, state);
       for (const decision of decisions) {
         io.out(`  ${decision.index + 1}. ${decision.step.name}  ${decision.reason}`);
@@ -493,19 +544,43 @@ async function runPlan(options: DeployOptions): Promise<number> {
   ];
   if (writes.length > 0 && !(await confirmWrites(options, writes))) return 1;
 
-  const problems: string[] = [];
   const summary: string[] = [];
+  /** Imprime los problemas y lo que ya no se hizo. Siempre termina en 1 */
+  const stop = (problems: readonly string[], rest: string) => {
+    for (const problem of problems) io.err(`  ${problem}`);
+    io.err(rest);
+    return 1;
+  };
 
-  // SQL en orden. Se detiene en el primero que falle
+  // SQL en orden. Se detiene en el primero que falle o que deje su comprobación en rojo
   if (doSql) {
     io.out('');
     for (const decision of toApply) {
-      io.out(`Aplicando ${decision.index + 1}. ${decision.step.file}`);
+      const { step } = decision;
+      io.out(`Aplicando ${decision.index + 1}. ${step.file}`);
       try {
-        await client.applyMigration({ name: decision.step.name, query: decision.step.sql });
+        await client.applyMigration({ name: step.name, query: step.sql });
+        // Lo aplicado debe quedar registrado, o la siguiente corrida no lo reconocería
+        const history = await client.listMigrations();
+        if (!history.some((record) => record.name === step.name)) {
+          return stop(
+            [`${step.name} no aparece en la historia de migraciones después de aplicarlo`],
+            'Se detiene aquí. Lo que sigue en el plan no se aplicó y no se publicó ninguna función.',
+          );
+        }
+        if (step.check) {
+          const differences = await runCheck(client, step, true);
+          if (differences.length > 0) {
+            return stop(
+              [`${step.file} quedó con la comprobación en rojo, ${differences.join(', ')}`],
+              'Se detiene aquí. Lo que sigue en el plan no se aplicó y no se publicó ninguna función.',
+            );
+          }
+          io.out('  comprobación en verde');
+        }
       } catch (error) {
-        reportError(io, `Falló ${decision.step.file}`, error);
-        io.err('Lo que sigue en el plan no se aplicó.');
+        reportError(io, `Falló ${step.file}`, error);
+        io.err('Lo que sigue en el plan no se aplicó y no se publicó ninguna función.');
         return 1;
       }
     }
@@ -514,8 +589,9 @@ async function runPlan(options: DeployOptions): Promise<number> {
     // Comprobación con huellas, permisos de anon y las consultas de los archivos manuales
     io.out('');
     io.out('Comprobación de la base');
+    const problems: string[] = [];
     try {
-      const after = await readState(client, local, false);
+      const after = await readState(client, local, false, true);
       const verified = verifyFunctions(plan, local.expected, after.functions);
       for (const note of verified.notes) io.out(`  ${note}`);
       problems.push(...verified.problems);
@@ -529,11 +605,18 @@ async function runPlan(options: DeployOptions): Promise<number> {
       summary.push(`Huellas ${verified.same} de ${local.expected.size} iguales al repo`);
     } catch (error) {
       reportError(io, 'No pude comprobar la base', error);
+      io.err('No se publicó ninguna función.');
       return 1;
+    }
+    if (problems.length > 0) {
+      return stop(
+        problems,
+        'La base quedó distinta de lo que dice el repo. No se publicó ninguna función. Revisa lo de arriba antes de seguir.',
+      );
     }
   }
 
-  // Edge Functions
+  // Edge Functions. Se detiene en la primera que no quede como dice el plan
   if (doFunctions) {
     io.out('');
     const deployed: string[] = [];
@@ -541,6 +624,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
       const closure = local.closures.get(step.slug);
       if (!closure) continue;
       io.out(`Publicando ${step.slug}`);
+      let after: FunctionInfo | null;
       try {
         await client.deployFunction({
           slug: step.slug,
@@ -548,29 +632,21 @@ async function runPlan(options: DeployOptions): Promise<number> {
           verifyJwt: step.verifyJwt,
           files: closure.files.map((file) => ({ path: file.path, content: file.content })),
         });
-        const after = await client.getFunction(step.slug);
-        const previous = before.get(step.slug)?.version ?? 0;
-        if (!after) {
-          problems.push(`${step.slug} no aparece después de publicarla`);
-        } else {
-          if (after.version <= previous) {
-            problems.push(`${step.slug} sigue en la versión ${after.version}, no subió`);
-          }
-          if (after.verifyJwt !== step.verifyJwt) {
-            problems.push(
-              `${step.slug} quedó con verify_jwt ${String(after.verifyJwt)} y el plan dice ${String(step.verifyJwt)}`,
-            );
-          }
-          if (after.status !== 'ACTIVE') {
-            problems.push(`${step.slug} quedó en estado ${after.status}`);
-          }
-          io.out(`  versión ${previous} a ${after.version}, verify_jwt ${String(after.verifyJwt)}`);
-          deployed.push(`${step.slug} v${after.version}`);
-        }
+        after = await client.getFunction(step.slug);
       } catch (error) {
         reportError(io, `Falló la publicación de ${step.slug}`, error);
+        io.err('Las funciones que siguen no se publicaron.');
         return 1;
       }
+      const previous = before.get(step.slug)?.version ?? 0;
+      const problems = publishedProblems(step, previous, after);
+      if (after) {
+        io.out(`  versión ${previous} a ${after.version}, verify_jwt ${String(after.verifyJwt)}`);
+      }
+      if (problems.length > 0) {
+        return stop(problems, 'Se detiene aquí. Las funciones que siguen no se publicaron.');
+      }
+      deployed.push(`${step.slug} v${after?.version ?? 0}`);
     }
     summary.push(`Funciones publicadas ${deployed.length > 0 ? deployed.join(', ') : 'ninguna'}`);
   }
@@ -578,13 +654,28 @@ async function runPlan(options: DeployOptions): Promise<number> {
   io.out('');
   io.out('Resumen');
   for (const line of summary) io.out(`  ${line}`);
-  if (problems.length > 0) {
-    for (const problem of problems) io.err(`  ${problem}`);
-    io.err('Quedó algo distinto de lo que dice el repo. Revisa lo de arriba antes de seguir.');
-    return 1;
-  }
   io.out('Todo en verde.');
   return 0;
+}
+
+/** Lo que no quedó como dice el plan después de publicar una función */
+function publishedProblems(
+  step: Plan['functions'][number],
+  previous: number,
+  after: FunctionInfo | null,
+): string[] {
+  if (!after) return [`${step.slug} no aparece después de publicarla`];
+  const problems: string[] = [];
+  if (after.version <= previous) {
+    problems.push(`${step.slug} sigue en la versión ${after.version}, no subió`);
+  }
+  if (after.verifyJwt !== step.verifyJwt) {
+    problems.push(
+      `${step.slug} quedó con verify_jwt ${String(after.verifyJwt)} y el plan dice ${String(step.verifyJwt)}`,
+    );
+  }
+  if (after.status !== 'ACTIVE') problems.push(`${step.slug} quedó en estado ${after.status}`);
+  return problems;
 }
 
 /** Corre lo que piden las opciones y devuelve el código de salida */

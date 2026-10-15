@@ -42,8 +42,8 @@ npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.jso
 
 Qué pasa en el paso 2 con el proyecto como está hoy
 
-- Las tres migraciones de B10 se saltan. El conector ya las registró como billing_emails, billing_plans_1 a billing_plans_5 e invoice_requests
-- supabase/manual/pagos-b10.sql se aplica. Son las dos piezas con drop y delete de 20261022000002 que el conector no pudo correr. Su comprobación debe salir en verde
+- Las tres migraciones de B10 se saltan. El conector ya las registró como billing_emails, billing_plans_1 a billing_plans_5 e invoice_requests. Los cinco trozos van declarados en recordedAs de b10.json
+- supabase/manual/pagos-b10.sql se aplica. Son las dos piezas con drop y delete de 20261022000002 que el conector no pudo correr. Su comprobación corre justo después y debe salir en verde, o no sigue
 - supabase/manual/party-dueno-al-borrar-cuenta.sql se aplica. Es la pieza de Party de B7 que también estaba pendiente
 - cancel-subscription se publica con verify_jwt en true
 - Al final se revisan por huella las 46 funciones que tocan esos archivos y que ninguna quede abierta a anon sin que un archivo lo diga
@@ -57,40 +57,66 @@ Qué pasa en el paso 2 con el proyecto como está hoy
 | --only migrations | Solo el SQL del plan |
 | --only functions | Solo las Edge Functions del plan |
 | --yes | No pregunta antes de escribir. Sin esta opción pregunta en la terminal, y si no hay terminal no escribe |
-| --secrets-from archivo | Solo pone los secretos de ese JSON. Con --plan revisa que estén los nombres del plan, sin otros, y que cada valor empiece como debe |
+| --secrets-from archivo | Solo pone los secretos de ese JSON. Necesita --plan, que dice qué nombres espera y la forma completa de cada valor. Un nombre que el plan no espera o que no es válido no se repite en pantalla |
 | --project-ref ref | Otro proyecto en lugar de bkjbcdwglyllizupokqm |
 
-Termina con código 0 si todo quedó en verde y con 1 si algo falló o quedó distinto del repo.
+Termina con código 0 si todo quedó en verde, con 1 si algo falló o quedó distinto del repo y con 2 si las opciones o el token no sirven.
 
 ## El token
 
 - En tu computadora la herramienta lee SUPABASE_ACCESS_TOKEN. Se crea en supabase.com, Account, Access Tokens. Ponlo solo en tu terminal, nunca en el repo ni en el chat
 - En la sesión en la nube no hace falta la variable. El proxy del entorno pone el token en cada llamada a api.supabase.com. El 2026-10-15 ese token respondía 401 JWT could not be decoded, y se cambia en los secretos del entorno
-- La herramienta nunca imprime el token ni el valor de un secreto, solo sus nombres. Si la API repitiera un valor en un mensaje de error, se muestra como [oculto]
+- La herramienta nunca imprime el token ni el valor de un secreto, solo sus nombres. Si la API repitiera un valor o el token en un mensaje de error, se muestra como [oculto]
+- Un SUPABASE_ACCESS_TOKEN con espacios, saltos de línea u otros caracteres fuera de ASCII visible se rechaza antes de llamar a nada, sin mostrarlo. Con un salto de línea, fetch lanzaría un error con el encabezado completo en su mensaje. Por lo mismo, de un error que no es de la herramienta solo se dice su tipo, y una opción desconocida no se repite
 - El comando de npm arranca Node con --use-env-proxy, porque el fetch de Node no usa el proxy del entorno por sí solo. En tu computadora, sin proxy, esa opción no cambia nada
 
 ## Cómo decide qué ya está aplicado
 
 Nunca repite un SQL a ciegas. Para cada archivo del plan
 
-- **Registrado.** Si la historia de migraciones del proyecto tiene su versión, su nombre o un trozo de su nombre como los que deja el conector (billing_plans_1, privacy_a_freno_bitacora), se salta. El nombre es el del archivo sin la versión, y el de un archivo de supabase/manual es manual_ más su nombre, por ejemplo manual_pagos_b10
-- **Aplicado sin registro.** Si cada función que crea ya está en la base con la huella del repo y, en un archivo manual, su comprobación sale en verde, se salta. Pasa con la primera migración, que se pegó en el SQL Editor
-- **Lo demás se aplica** y queda registrado con su nombre, igual que lo hace el conector. Así la siguiente corrida lo reconoce
+- **Registrado.** Si la historia de migraciones del proyecto tiene su versión, su nombre o uno de los nombres que el plan declara en recordedAs, se salta. El nombre es el del archivo sin la versión, y el de un archivo de supabase/manual es manual_ más su nombre, por ejemplo manual_pagos_b10. Los trozos del conector, como billing_plans_1 a billing_plans_5, no se deducen. Se declaran en recordedAs
+- **Aplicado sin registro.** Se salta si cada función que crea ya está en la base igual que en el propio archivo y, además, el archivo es todo create function, grant, revoke o comment, o su comprobación sale en verde. Un archivo con una tabla, una llave o un update no se da por aplicado solo porque sus funciones estén. Ahí hace falta su comprobación o su registro
+- **Lo demás se aplica** y queda registrado con su nombre, igual que lo hace el conector. Se manda Idempotency-Key, que la especificación acepta en esa ruta, con el nombre y la huella del SQL
 
 Y se detiene sin escribir nada cuando
 
 - Un archivo registrado tiene una función distinta del repo y ningún paso posterior del plan la corrige. Si un paso posterior sí la corrige, lo dice y sigue. Es el caso de delete_my_account con pagos-b10.sql
+- Un archivo registrado tiene su comprobación en rojo, porque lo registrado no se vuelve a aplicar. También en --dry-run
 - Aplicar un archivo dejaría una función en una versión más vieja que la de una migración posterior del repo
 - Un archivo de supabase/manual trae una función distinta de la última migración que la define
+- La lectura del estado falla por la red, por un 5xx o por una respuesta inesperada. Solo un 400 de SQL, que es lo que pasa cuando falta el objeto que busca la comprobación, cuenta como comprobación en rojo
 
-La huella de una función es md5 de su cuerpo sin comentarios de línea ni espacios, la misma que calcula la base con md5(regexp_replace(regexp_replace(prosrc, '--[^\n]*', '', 'g'), '\s+', '', 'g')). Se comprobó el 2026-10-15 contra un Postgres 16 local con todas las migraciones en el orden de supabase/tests/run.sh, y las 129 funciones dieron la misma huella en el repo y en la base. La versión que se espera de cada función es la de la última migración del repo que la define y, si solo vive en supabase/manual, la del último archivo manual del plan.
+Una función es igual si coinciden tres cosas
 
-Después de aplicar se revisa
+- La huella del cuerpo, md5 sin comentarios de línea ni espacios, la misma que calcula la base con md5(regexp_replace(regexp_replace(prosrc, '--[^\n]*', '', 'g'), '\s+', '', 'g'))
+- security definer, que la base guarda en prosecdef
+- Su set, como set search_path = public, pg_temp, que la base guarda en proconfig. Cuenta también lo que cambia un alter function ... set, reset o security posterior, como el search_path que 20261014000001 le pone a ai_day
 
-- Que cada función que tocan los archivos del plan tenga la huella esperada
-- Que anon no pueda ejecutar ninguna, salvo que un archivo del plan se lo conceda con grant execute o que el plan la anote en anonExecutable con su porqué. En b9 está current_app_role, abierta a propósito desde D-113
-- Que la comprobación del final de cada archivo manual dé lo que pide el plan
-- Que la versión de cada función publicada suba, que quede ACTIVE y con el verify_jwt del plan
+Se comprobó el 2026-10-15 contra un Postgres 16 local con todas las migraciones en el orden de supabase/tests/run.sh, y las 129 funciones dieron lo mismo en el repo y en la base en las tres cosas. La versión que se espera de cada función es la de la última migración del repo que la crea o la cambia y, si solo vive en supabase/manual, la del último archivo manual del plan.
+
+Al cargar el plan se revisa que los nombres no se presten a confusión. Cada migración del repo tiene un nombre propio que no es trozo de otra (por ejemplo pagos y pagos_2), y name y recordedAs no se repiten ni toman el nombre de otro archivo.
+
+Mientras aplica
+
+- Después de cada archivo relee la historia. Si no aparece con su nombre, se detiene
+- Si el archivo tiene comprobación, la corre en ese momento. Si sale en rojo, se detiene y no aplica lo que sigue
+
+Después de aplicar se revisa, y si algo no cuadra no se publica ninguna función
+
+- Que cada función que tocan los archivos del plan sea igual a la esperada
+- Que no haya más de una versión de una función con el mismo nombre, salvo que el plan la anote en overloads con su porqué
+- Que anon no pueda ejecutar ninguna de sus versiones, salvo que un archivo del plan se lo conceda con grant execute o que el plan la anote en anonExecutable con su porqué. En b9 está current_app_role, abierta a propósito desde D-113
+- Que la comprobación del final de cada archivo manual dé lo que pide el plan, con la fila y cada columna presentes
+
+Y al publicar, cada función debe subir de versión, quedar ACTIVE y con el verify_jwt del plan. La primera que no quede así detiene las que siguen.
+
+La simulación con --dry-run solo usa rutas de lectura. Fuera de ella, si la ruta de solo lectura de SQL falla por algo que no es el token, la lectura se repite en la ruta general con read_only, como lo hace el servidor MCP.
+
+### Límites
+
+- No se comparan los argumentos de cada función (pg_get_function_identity_arguments). Desde el repo no se pueden reproducir con seguridad, porque la base escribe los tipos con sus nombres largos y con o sin esquema según el search_path de quien consulta. Lo cubre en parte la regla de las sobrecargas
+- Un set ... from current no se puede reproducir desde el repo, así que en esa función no se compara el set
+- Un alter function ... rename no se sigue
 
 ## Cómo reemplaza los pegados a mano
 
@@ -99,7 +125,7 @@ Después de aplicar se revisa
 | supabase/manual/pagos-b10.sql | Lo pegabas tú en el SQL Editor | Va en el plan b10 y lo aplica la sesión |
 | supabase/manual/party-dueno-al-borrar-cuenta.sql | Lo pegabas tú en el SQL Editor | Va en el plan b10 y lo aplica la sesión |
 | supabase/manual/limpiar-pagos-de-prueba.sql | Lo pegas tú | Sigue igual. Borra filas de pagos y va solo después de cancelar en Stripe, así que no entra en ningún plan |
-| supabase/manual/ejecutar-en-sql-editor.sql | Lo pegabas tú (D-113) | No está en un plan. Si hace falta saber si se pegó, un plan con ese archivo y --dry-run lo dice por huella |
+| supabase/manual/ejecutar-en-sql-editor.sql | Lo pegabas tú (D-113) | No está en un plan. Trae más que funciones y no tiene consulta de Comprobación, así que la herramienta no puede saber si ya se pegó. Para meterlo en un plan habría que agregarle una |
 
 ## Los planes
 
@@ -114,19 +140,25 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
       "file": "supabase/manual/pagos-b10.sql",
       "check": { "plan_fundador_anual": true, "estado_prueba": true, "borrar_cuenta_b10": true },
       "note": "Por qué va este paso"
+    },
+    {
+      "file": "supabase/migrations/20261022000002_billing_plans.sql",
+      "recordedAs": ["billing_plans_1", "billing_plans_2"]
     }
   ],
   "functions": [{ "slug": "cancel-subscription", "verifyJwt": true }],
-  "secrets": { "STRIPE_PRICE_FOUNDER": { "prefix": "price_" } },
-  "anonExecutable": { "current_app_role": "Por qué queda abierta a anon" }
+  "secrets": { "STRIPE_PRICE_FOUNDER": { "pattern": "^price_[A-Za-z0-9]+$" } },
+  "anonExecutable": { "current_app_role": "Por qué queda abierta a anon" },
+  "overloads": { "una_funcion": "Por qué tiene dos versiones en la base" }
 }
 ```
 
 - migrations va en orden y acepta migraciones completas de supabase/migrations, con sus secciones con drop y delete, y archivos de supabase/manual
-- check compara, columna por columna, el select que va después de la última línea de comentario que dice Comprobación en el archivo
-- name cambia el nombre con el que queda registrado y recordedAs agrega otros nombres con los que ya pudo quedar
+- check compara, columna por columna, el select que va después de la última línea de comentario que dice Comprobación en el archivo. Solo se acepta un select, y el plan debe nombrar justo las columnas que da, cuántas sean. Si el archivo gana una columna, por ejemplo borra_la_invitacion en la versión de pagos-b10.sql de B16, el plan no carga hasta que diga qué debe dar
+- name cambia el nombre con el que queda registrado y recordedAs declara otros nombres con los que ya quedó, como los trozos del conector
 - verifyJwt va en true para las funciones que llama la app con la sesión del alumno y en false para los avisos de Stripe y de Mercado Pago, que se identifican con su firma. Una prueba revisa que coincida con lo que dice el index.ts de cada función
-- secrets son los nombres que espera --secrets-from, con el inicio que debe tener cada valor
+- secrets son los nombres que espera --secrets-from, cada uno con pattern, la forma completa de su valor con ^ y $
+- anonExecutable y overloads anotan, con su porqué, lo que la comprobación de la base aceptaría como excepción
 - Hoy hay dos. b10, lo que falta de B10. b9, que solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
 
 Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa.
@@ -153,6 +185,9 @@ Revisadas el 2026-10-15. Los sitios de documentación de Supabase no abren desde
 - La respuesta de error, con un GET el 2026-10-15. 401 con el mensaje JWT could not be decoded en JSON y el encabezado X-Proxy-Error del proxy del entorno
 
 ## Lo que falta confirmar con la primera corrida real
+
+- Que un error de SQL en database/query y en database/query/read-only responda 400. La herramienta solo cuenta un 400 como comprobación en rojo antes de aplicar, y cualquier otro estado la detiene sin escribir
+- Que POST database/migrations con la misma Idempotency-Key no registre dos veces, como dice la especificación, y que GET database/migrations muestre el registro justo después de aplicar
 
 - Que POST database/migrations corra bien los archivos con begin y commit propios, como party-dueno-al-borrar-cuenta.sql. Postgres solo avisa si llega un begin dentro de otra transacción, así que se espera que pase
 - Que database/query/read-only pueda leer pg_proc y auth.users. Si falla por permisos, la herramienta repite la lectura en database/query con read_only, como el servidor MCP

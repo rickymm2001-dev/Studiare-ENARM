@@ -1,7 +1,9 @@
 // Lo que comparten los pasos de la herramienta de despliegue (docs/DESPLIEGUE.md). Las opciones, la
 // salida en pantalla, los mensajes de error sin token ni valores y la confirmación antes de escribir.
+import { ClosureError } from './closure.ts';
 import { ManagementApiError, type ManagementClient } from './managementApi.ts';
 import { PlanError } from './plan.ts';
+import { SqlParseError } from './sql.ts';
 
 export interface Io {
   out(line: string): void;
@@ -40,9 +42,22 @@ function authHint(error: unknown): string {
   return '';
 }
 
+/**
+ * El texto de un error para la pantalla. Los errores de la herramienta ya se escribieron sin token ni
+ * valores. De uno ajeno solo se dice su tipo, porque su mensaje podría traer el token, como el
+ * TypeError de fetch con un encabezado inválido
+ */
 export function errorText(error: unknown): string {
-  if (error instanceof ManagementApiError || error instanceof PlanError) return error.message;
-  if (error instanceof Error) return `${error.name}. ${error.message}`;
+  if (
+    error instanceof ManagementApiError ||
+    error instanceof PlanError ||
+    error instanceof SqlParseError ||
+    error instanceof ClosureError
+  ) {
+    return error.message;
+  }
+  if (error instanceof Error)
+    return `${error.name}, sin el detalle para no mostrar datos sensibles`;
   return 'Error desconocido';
 }
 

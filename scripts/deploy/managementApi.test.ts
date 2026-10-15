@@ -28,7 +28,10 @@ describe('forma de cada llamada a la API de administración', () => {
 
   it('si la ruta de solo lectura falla, repite en la general con read_only', async () => {
     const { fake, client } = setup({ readOnlyStatus: 500, checkRow: () => ({ ok: 1 }) });
-    expect(await client.readQuery('select 1 as ok')).toEqual([{ ok: 1 }]);
+    // Sin pedirlo no hay respaldo
+    await expect(client.readQuery('select 1 as ok')).rejects.toThrow(/500/);
+    fake.requests.splice(0);
+    expect(await client.readQuery('select 1 as ok', { fallback: true })).toEqual([{ ok: 1 }]);
     expect(fake.requests.map((request) => request.path)).toEqual([
       '/database/query/read-only',
       '/database/query',
@@ -64,6 +67,11 @@ describe('forma de cada llamada a la API de administración', () => {
       path: '/database/migrations',
       json: { query: 'select 1;', name: 'manual_pagos_b10' },
     });
+    // Idempotency-Key, que la especificación acepta en esta ruta, sale del nombre y del SQL
+    const key = fake.requests[1]?.headers.get('idempotency-key') ?? '';
+    expect(key).toMatch(/^studiare-manual_pagos_b10-[0-9a-f]{32}$/);
+    await client.applyMigration({ name: 'manual_pagos_b10', query: 'select 2;' });
+    expect(fake.requests[2]?.headers.get('idempotency-key')).not.toBe(key);
   });
 
   it('funciones, una por slug y 404 como null', async () => {
@@ -138,6 +146,30 @@ describe('forma de cada llamada a la API de administración', () => {
       'STRIPE_PRICE_FOUNDER',
     ]);
     expect(fake.requests[1]).toMatchObject({ method: 'GET', path: '/secrets' });
+  });
+
+  it('si fetch lanza, el error no repite su mensaje, que puede traer el token', async () => {
+    const client = createManagementClient({
+      ref: 'abcdefghijklmnopqrst',
+      token: `${TOKEN}\r`,
+      fetch: () =>
+        Promise.reject(
+          new TypeError(`Headers.append: Bearer ${TOKEN}\r is an invalid header value.`),
+        ),
+    });
+    const error = await client.listMigrations().catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(ManagementApiError);
+    expect((error as Error).message).not.toContain(TOKEN);
+    expect((error as Error).message).toContain(
+      'No hubo respuesta de Supabase en GET /database/migrations',
+    );
+  });
+
+  it('si Supabase repitiera el token en su mensaje, sale tapado', async () => {
+    const { client } = setup({ failWith: { status: 400, message: `token ${TOKEN} inválido` } });
+    const error = await client.listMigrations().catch((caught: unknown) => caught);
+    expect((error as Error).message).not.toContain(TOKEN);
+    expect((error as Error).message).toContain('[oculto]');
   });
 
   it('sin token no manda authorization, para que lo ponga el proxy', async () => {
