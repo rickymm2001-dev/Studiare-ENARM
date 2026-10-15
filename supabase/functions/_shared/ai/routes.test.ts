@@ -1,3 +1,4 @@
+import { APIUserAbortError } from '@anthropic-ai/sdk';
 import { Hono } from 'hono';
 import { describe, expect, it } from 'vitest';
 import {
@@ -329,6 +330,52 @@ describe('reserva del peor costo (revisión del hallazgo 1)', () => {
     expect(queued.status).toBe(202);
     expect(seen.admit).toEqual([undefined]);
     expect(ai.ledger.snapshot().users[STUDENT]?.reserved).toBeUndefined();
+  });
+});
+
+describe('plazo total de la petición (revisión del hallazgo 11)', () => {
+  /** Un cliente del SDK que nunca contesta: solo termina si se cancela la señal */
+  const hungApi = () => ({
+    calls: 0,
+    create(_params: unknown, options: { signal?: AbortSignal }) {
+      this.calls += 1;
+      return new Promise<never>((_resolve, reject) => {
+        options.signal?.addEventListener('abort', () => {
+          reject(new APIUserAbortError());
+        });
+      });
+    },
+  });
+
+  it('una llamada que no contesta se cancela al vencer el plazo y todavía alcanza a asentar', async () => {
+    const api = hungApi();
+    const ai = coreDeps((config) => createAnthropicProvider(api, () => config().limits));
+    ai.requestDeadlineMs = 50;
+    const logs: string[] = [];
+    ai.log = (code) => logs.push(code);
+    const app = appOf(ai);
+    const started = Date.now();
+    const response = await post(app, 'forgetting', requestBody(hypothesisInput()));
+    expect(Date.now() - started).toBeLessThan(2_000);
+    expect(response.status).toBe(502);
+    expect(((await response.json()) as { error: string }).error).toBe('provider_error');
+    // Se intentó una sola vez: vencido el plazo no hay reintento por validación
+    expect(api.calls).toBe(1);
+    // Asentó, con su renglón de bitácora, y la reserva volvió a cero
+    expect(ai.ledger.log).toMatchObject([
+      { engine: 'forgetting', ok: false, outcome: 'provider_error', userId: STUDENT },
+    ]);
+    expect(ai.ledger.snapshot().users[STUDENT]).toMatchObject({ reserved: {} });
+    expect(logs).toContain('ai.call.deadline_exceeded');
+  });
+
+  it('con tiempo de sobra no cambia nada: contesta, y la señal solo se corta al vencer', async () => {
+    const good = JSON.stringify(mockHypothesis(hypothesisInput()));
+    const { app, api } = realApp([fakeMessage(good)]);
+    expect((await post(app, 'forgetting', requestBody(hypothesisInput()))).status).toBe(200);
+    const signal = api.calls[0]?.options.signal;
+    expect(signal).toBeInstanceOf(AbortSignal);
+    expect(signal?.aborted).toBe(false);
   });
 });
 

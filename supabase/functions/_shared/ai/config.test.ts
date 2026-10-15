@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { AiConfigPatchSchema, DEFAULT_CONFIG, mergeConfig } from './config.ts';
 import { AI_ENGINES } from './engines/aiContracts.ts';
+import { VALIDATION_RETRIES } from './run.ts';
+import { REQUEST_DEADLINE_MS } from './routes.ts';
 
 describe('configuración de fábrica', () => {
   it('cada motor tiene modelo, sin sufijo de fecha, y el modelo tiene precio', () => {
@@ -47,6 +49,24 @@ describe('configuración de fábrica', () => {
     // Son techos y no apartados. Hoy suman justo el presupuesto completo
     const total = AI_ENGINES.reduce((sum, engine) => sum + limits.engineShare[engine], 0);
     expect(total).toBeCloseTo(1, 10);
+  });
+});
+
+describe('tiempos de fábrica (revisión del hallazgo 11)', () => {
+  it('un reintento del SDK, como pide 2.8 del plan', () => {
+    expect(DEFAULT_CONFIG.limits.maxRetries).toBe(1);
+    expect(DEFAULT_CONFIG.limits.timeoutMs).toBe(30_000);
+  });
+
+  it('el peor caso del SDK y del reintento por validación cabe en el plazo de la petición, que cabe antes del corte del plan Free', () => {
+    const { timeoutMs, maxRetries } = DEFAULT_CONFIG.limits;
+    // Cada llamada al modelo hace hasta 1 + maxRetries intentos, y runEngine hasta 1 + VALIDATION_RETRIES llamadas
+    const worstCase = (1 + maxRetries) * timeoutMs * (1 + VALIDATION_RETRIES);
+    expect(worstCase).toBeLessThanOrEqual(REQUEST_DEADLINE_MS);
+    // La plataforma corta a los 150 s en el plan Free. Quedan 30 s para asentar o liberar en la base,
+    // que espera 10 s por llamada
+    expect(REQUEST_DEADLINE_MS).toBe(120_000);
+    expect(150_000 - REQUEST_DEADLINE_MS).toBeGreaterThanOrEqual(30_000);
   });
 });
 

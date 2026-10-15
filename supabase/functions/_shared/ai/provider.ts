@@ -18,6 +18,12 @@ import { effortParam, thinkingParam } from './models.ts';
 export interface ProviderCall {
   engine: AiEngine;
   model: ModelChoice;
+  /**
+   * Cancela la llamada, y sus reintentos y esperas, cuando vence el plazo total de la petición (REQUEST
+   * _DEADLINE_MS de routes.ts). Así la función siempre alcanza a asentar o liberar antes del corte de la
+   * plataforma
+   */
+  signal?: AbortSignal;
   /** El bloque fijo del motor, que va en caché */
   system: string;
   user: string;
@@ -160,7 +166,7 @@ export interface MessagesApi {
   /** timeout en milisegundos y reintentos del SDK con espera exponencial ante fallas de red o 5xx */
   create(
     params: MessageCreateParamsNonStreaming,
-    options: { timeout: number; maxRetries: number },
+    options: { timeout: number; maxRetries: number; signal?: AbortSignal },
   ): Promise<Message>;
 }
 
@@ -221,7 +227,11 @@ export function createAnthropicProvider(
       const { timeoutMs, maxRetries } = limits();
       let message: Message;
       try {
-        message = await api.create(buildMessageParams(call), { timeout: timeoutMs, maxRetries });
+        message = await api.create(buildMessageParams(call), {
+          timeout: timeoutMs,
+          maxRetries,
+          ...(call.signal ? { signal: call.signal } : {}),
+        });
       } catch (error) {
         throw toProviderError(error);
       }

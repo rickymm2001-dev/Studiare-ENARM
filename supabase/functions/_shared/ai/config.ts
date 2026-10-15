@@ -70,9 +70,13 @@ export interface AiLimits {
   sectionsPerGeneration: number;
   /** Trabajos por lote pendientes por alumno (B12, 3.4) */
   maxPendingJobs: number;
-  /** Tiempo máximo de una llamada al modelo */
+  /** Tiempo máximo de cada intento de una llamada al modelo */
   timeoutMs: number;
-  /** Reintentos del SDK ante fallas de red o 5xx, con espera exponencial */
+  /**
+   * Reintentos del SDK ante fallas de red o 5xx, con espera exponencial. Uno de fábrica, como pide 2.8 del
+   * plan de B12. Con dos, una llamada podía hacer tres intentos de 30 s y el reintento por validación otros
+   * tres, más que los 150 s que da el plan Free antes de cortar la función
+   */
   maxRetries: number;
 }
 
@@ -121,7 +125,7 @@ export const DEFAULT_CONFIG: AiConfig = {
     sectionsPerGeneration: 12,
     maxPendingJobs: 12,
     timeoutMs: 30_000,
-    maxRetries: 2,
+    maxRetries: 1,
   },
 };
 

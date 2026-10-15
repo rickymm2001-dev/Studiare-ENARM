@@ -1,4 +1,4 @@
-import { APIError } from '@anthropic-ai/sdk';
+import { APIError, APIUserAbortError } from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { describe, expect, it } from 'vitest';
 import {
@@ -297,5 +297,84 @@ describe('peor costo de una llamada, para reservarlo al admitirla', () => {
     ).toBeGreaterThan(base * 1.9);
     const noPrice = { ...DEFAULT_CONFIG, prices: {} };
     expect(worstCaseCostUsd({ config: noPrice, prompts }, 'flashcards', inputs.flashcards)).toBe(0);
+  });
+});
+
+describe('plazo total de la petición (revisión del hallazgo 11)', () => {
+  const invalid = JSON.stringify({ ...mockHypothesis(input), evidence: ['q-99'] });
+
+  it('cada intento recibe la señal del plazo', async () => {
+    const api = fakeApi([fakeMessage(invalid), fakeMessage(good)]);
+    const controller = new AbortController();
+    const result = await runEngine(
+      { ...deps(real(api)), signal: controller.signal },
+      'forgetting',
+      input,
+    );
+    expect(result.ok).toBe(true);
+    expect(api.calls.map((call) => call.options.signal)).toEqual([
+      controller.signal,
+      controller.signal,
+    ]);
+  });
+
+  it('vencido el plazo no empieza el reintento por validación y lo dice como falla del proveedor', async () => {
+    const controller = new AbortController();
+    const calls: number[] = [];
+    const provider: AiProvider = {
+      mode: 'real',
+      call() {
+        calls.push(calls.length);
+        // El primer intento termina con una salida inválida justo cuando vence el plazo
+        controller.abort();
+        return Promise.resolve({
+          raw: JSON.parse(invalid) as unknown,
+          model: 'claude-haiku-4-5',
+          usage: { inputTokens: 1000, outputTokens: 200, cacheWriteTokens: 0, cacheReadTokens: 0 },
+        });
+      },
+    };
+    const result = await runEngine(
+      { ...deps(provider), signal: controller.signal },
+      'forgetting',
+      input,
+    );
+    expect(calls).toHaveLength(1);
+    expect(result).toMatchObject({ ok: false, error: 'provider_error', outcome: 'provider_error' });
+    // El primer intento cuesta y queda en lo que se asienta
+    expect(result.ok ? 0 : result.cost.inputTokens).toBe(1000);
+  });
+
+  it('con el plazo ya vencido no llama al proveedor', async () => {
+    const api = fakeApi([fakeMessage(good)]);
+    const result = await runEngine(
+      { ...deps(real(api)), signal: AbortSignal.abort() },
+      'forgetting',
+      input,
+    );
+    expect(api.calls).toHaveLength(0);
+    expect(result).toMatchObject({ ok: false, error: 'provider_error' });
+  });
+
+  it('una llamada cancelada a la mitad por el plazo es provider_error', async () => {
+    const controller = new AbortController();
+    const hung = {
+      create: (_params: unknown, options: { signal?: AbortSignal }) =>
+        new Promise<never>((_resolve, reject) => {
+          options.signal?.addEventListener('abort', () => {
+            reject(new APIUserAbortError());
+          });
+        }),
+    };
+    const pending = runEngine(
+      {
+        ...deps(createAnthropicProvider(hung as never, () => DEFAULT_CONFIG.limits)),
+        signal: controller.signal,
+      },
+      'forgetting',
+      input,
+    );
+    controller.abort();
+    expect(await pending).toMatchObject({ ok: false, error: 'provider_error' });
   });
 });

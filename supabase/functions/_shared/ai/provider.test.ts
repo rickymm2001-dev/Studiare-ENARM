@@ -1,4 +1,4 @@
-import { APIError } from '@anthropic-ai/sdk';
+import { APIError, APIUserAbortError } from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
 import { flashcardsInput, hypothesisInput } from '../../../../src/ai/testing/aiSamples.ts';
 import { DEFAULT_CONFIG, type ModelChoice } from './config.ts';
@@ -67,6 +67,36 @@ describe('proveedor de Anthropic', () => {
     expect(request?.params.messages).toEqual([{ role: 'user', content: 'Datos' }]);
     expect(request?.params.output_config?.format).toMatchObject({ type: 'json_schema' });
     expect(request?.options).toEqual({ timeout: 12_345, maxRetries: 3 });
+  });
+
+  it('pasa al SDK la señal del plazo total de la petición, solo si la hay (revisión del hallazgo 11)', async () => {
+    const api = fakeApi([fakeMessage(okJson), fakeMessage(okJson)]);
+    const provider = createAnthropicProvider(api, LIMITS);
+    const deadline = new AbortController();
+    await provider.call({ ...call(), signal: deadline.signal });
+    await provider.call(call());
+    expect(api.calls[0]?.options.signal).toBe(deadline.signal);
+    expect(api.calls[1]?.options).toEqual({ timeout: 12_345, maxRetries: 3 });
+    expect(api.calls[1]?.options).not.toHaveProperty('signal');
+  });
+
+  it('una señal ya cancelada o que se cancela a media llamada llega como provider_error, sin copiar el mensaje', async () => {
+    const hung = {
+      create: (_params: unknown, options: { signal?: AbortSignal }) =>
+        new Promise<never>((_resolve, reject) => {
+          options.signal?.addEventListener('abort', () => {
+            reject(new APIUserAbortError());
+          });
+        }),
+    };
+    const provider = createAnthropicProvider(hung, LIMITS);
+    const deadline = new AbortController();
+    const pending = provider.call({ ...call(), signal: deadline.signal });
+    deadline.abort();
+    const failure = await pending.catch((caught: unknown) => caught);
+    expect(failure).toBeInstanceOf(ProviderError);
+    expect(failure).toMatchObject({ kind: 'provider_error' });
+    expect(toProviderError(new APIUserAbortError()).message).not.toContain('aborted');
   });
 
   it('no manda esfuerzo a Haiku 4.5 y sí a Sonnet 5.5, y nunca fuerza herramientas ni razonamiento', async () => {

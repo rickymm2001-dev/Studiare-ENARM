@@ -40,7 +40,7 @@ export function fakeMessage(
 export interface FakeApi extends MessagesApi {
   calls: {
     params: MessageCreateParamsNonStreaming;
-    options: { timeout: number; maxRetries: number };
+    options: { timeout: number; maxRetries: number; signal?: AbortSignal };
   }[];
 }
 

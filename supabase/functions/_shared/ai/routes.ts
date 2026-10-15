@@ -49,6 +49,15 @@ import { runEngine, worstCaseCostUsd } from './run.ts';
 /** La versión de /health. La 2 suma unavailable y engines (B12, contrato C1) */
 export const HEALTH_VERSION = 2;
 
+/**
+ * El plazo total de una petición de IA, desde que entra a la función. La plataforma corta a los 150 s en el
+ * plan Free, y un corte se salta el asiento del libro: el cupo y la reserva quedarían gastados y el costo
+ * sin registrar. Con 120 s la función alcanza a asentar o liberar (cada llamada a la base espera 10 s como
+ * máximo). Al vencer se cancela la llamada al modelo, con sus reintentos del SDK y el de validación
+ * (revisión del hallazgo 11)
+ */
+export const REQUEST_DEADLINE_MS = 120_000;
+
 export interface AiRoutesDeps {
   /** null sin clave y sin permiso de respuestas simuladas. Los motores contestan not_configured (2.9) */
   provider: AiProvider | null;
@@ -70,10 +79,14 @@ export interface AiRoutesDeps {
   sourceKeys: ReadonlySet<string>;
   clock?: Clock;
   log?: Log;
+  /** Plazo total de una petición. Por omisión REQUEST_DEADLINE_MS. Las pruebas lo acortan */
+  requestDeadlineMs?: number;
 }
 
 export interface AiVariables {
   caller: AiCaller;
+  /** Se cancela al vencer el plazo total de la petición */
+  deadline: AbortSignal;
 }
 
 type AiContext = Context<{ Variables: AiVariables }>;
@@ -140,6 +153,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
 
   routes.use(async (c, next) => {
     c.header('Cache-Control', 'no-store');
+    c.set('deadline', AbortSignal.timeout(deps.requestDeadlineMs ?? REQUEST_DEADLINE_MS));
     try {
       await deps.refreshConfig?.();
     } catch {
@@ -375,6 +389,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
           prompts: deps.prompts,
           config,
           sourceKeys: deps.sourceKeys,
+          signal: c.get('deadline'),
           ...(deps.clock ? { clock: deps.clock } : {}),
         },
         engine,
@@ -407,6 +422,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
       reservedUsd: reserveUsd,
     });
     if (result.ok) return c.json({ output: result.output, meta: result.meta });
+    if (c.get('deadline').aborted) log('ai.call.deadline_exceeded');
     log('ai.call.failed', { status: STATUS[result.error] });
     return c.json(
       { error: result.error, message: result.message, cost: result.cost },

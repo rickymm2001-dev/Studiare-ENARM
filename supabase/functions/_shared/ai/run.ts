@@ -54,6 +54,11 @@ export interface RunDeps {
   sourceKeys: ReadonlySet<string>;
   /** Reloj en milisegundos, para medir la latencia */
   clock?: () => number;
+  /**
+   * El plazo total de la petición. Cada intento lo recibe, y si ya venció no se empieza otro: el reintento
+   * por validación no puede pasar de lo que da la plataforma (150 s en el plan Free)
+   */
+  signal?: AbortSignal;
 }
 
 export interface CostReport {
@@ -176,6 +181,8 @@ export async function runEngine<E extends AiEngine>(
   let issues: string[] = [];
   const trace: AttemptTrace[] = [];
   for (let attempt = 0; attempt <= VALIDATION_RETRIES; attempt += 1) {
+    // Vencido el plazo no se empieza otro intento: la ruta tiene que asentar antes del corte
+    if (deps.signal?.aborted) return failure('provider_error', 'provider_error', trace);
     let raw: unknown;
     try {
       const result = await deps.provider.call({
@@ -185,6 +192,7 @@ export async function runEngine<E extends AiEngine>(
         user: buildUserMessage(input, issues),
         input,
         schema,
+        ...(deps.signal ? { signal: deps.signal } : {}),
       });
       usage = addUsage(usage, result.usage);
       if (result.refusal) {
