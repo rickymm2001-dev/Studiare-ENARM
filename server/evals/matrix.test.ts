@@ -292,6 +292,15 @@ describe('compuertas automáticas', () => {
     expect(gateRun(run('haiku55-low', [warm])).passed).toBe(true);
   });
 
+  it('un 429 o una falla de red se dicen aparte de la calidad', () => {
+    const cases = good();
+    cases[0] = result({ passed: false, accepted: false, error: 'rate_limited' });
+    expect(gateRun(run('haiku55-low', [cases])).failures).toEqual([
+      'anclaje bajo 100%',
+      'errores del proveedor o del límite de la API, conviene repetir con menos --concurrency',
+    ]);
+  });
+
   it('un candidato que no terminó por el tope no pasa', () => {
     expect(gateRun({ ...run('haiku55-low', [good()]), complete: false }).failures).toEqual([
       'no terminó sus repeticiones por el tope de costo',

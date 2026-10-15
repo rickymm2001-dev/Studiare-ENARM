@@ -63,6 +63,17 @@ export function gateRun(run: CandidateRun): GateReport {
     if (summary.rejectedRight < summary.rejectionCases) failures.add('rechazos bajo 100%');
     if (summary.adversarialRight < summary.adversarialCases) failures.add('adversarios bajo 100%');
     if (summary.refusals > 0) failures.add('el modelo se negó en algún caso');
+    // Una falla de red o un 429 no dice nada de la calidad, pero tampoco deja elegir al candidato
+    if (
+      results.some(
+        (result) =>
+          !result.refused && (result.error === 'provider_error' || result.error === 'rate_limited'),
+      )
+    ) {
+      failures.add(
+        'errores del proveedor o del límite de la API, conviene repetir con menos --concurrency',
+      );
+    }
     if (summary.cutoffs > 0) failures.add('alguna respuesta se cortó por max_tokens');
     if (limit !== null && summary.p95LatencyMs > limit) {
       failures.add(`latencia p95 arriba de ${limit / 1000} s`);
