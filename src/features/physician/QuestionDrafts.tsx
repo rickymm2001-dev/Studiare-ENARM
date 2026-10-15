@@ -2,7 +2,10 @@
 // revisar la que llega con la original al lado, aprobarla como variante o rechazarla.
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
+import { AiAccessNotice } from '@/ai/AiAccessNotice';
+import { engineAccess } from '@/ai/gate';
 import { useAiStatus } from '@/ai/useAiStatus';
+import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -22,6 +25,7 @@ import { draftFromVersion, type DraftIssue, type QuestionDraft } from './editorD
 import { OptionsEditor } from './EditorSections';
 import { useEditorialRepo } from './useEditorialRepo';
 import { draftFromProposal, TRANSFORMS, type Transform } from './restructure';
+import { marksOf, type RestructureMarks } from './restructureEligibility';
 import {
   decideRestructure,
   DecisionError,
@@ -38,13 +42,19 @@ type Person = Pick<User, 'id' | 'alias'>;
 export function QuestionDrafts({
   physician,
   questions,
+  marks,
+  marksFailed,
   artifacts,
   notice,
   onNotice,
 }: {
   physician: Person;
-  /** Las preguntas que este médico puede reestructurar */
+  /** Las preguntas que este médico puede reestructurar si están marcadas */
   questions: readonly Question[];
+  /** Cuáles están marcadas y por qué. null mientras se leen los reportes y los distractores */
+  marks: RestructureMarks | null;
+  /** No se pudieron leer los reportes y los distractores */
+  marksFailed: boolean;
   artifacts: readonly AiArtifact[];
   notice: string;
   onNotice: (message: string) => void;
@@ -57,7 +67,13 @@ export function QuestionDrafts({
     .sort((a, b) => (b.decidedAt ?? '').localeCompare(a.decidedAt ?? ''));
   return (
     <>
-      <RequestCard physician={physician} questions={questions} onNotice={onNotice} />
+      <RequestCard
+        physician={physician}
+        questions={questions}
+        marks={marks}
+        marksFailed={marksFailed}
+        onNotice={onNotice}
+      />
       <p role="status" className="text-sm font-medium text-success">
         {notice}
       </p>
@@ -119,26 +135,37 @@ export function QuestionDrafts({
 function RequestCard({
   physician,
   questions,
+  marks,
+  marksFailed,
   onNotice,
 }: {
   physician: Person;
   questions: readonly Question[];
+  marks: RestructureMarks | null;
+  marksFailed: boolean;
   onNotice: (message: string) => void;
 }) {
   const text = physicianText.draftsScreen.questions;
   const api = useDataApi();
   const status = useAiStatus();
+  const role = usePreferences((state) => state.role);
+  const access = engineAccess(status, 'restructure', role);
+  // Solo las marcadas se ofrecen (B12, 5.3). Sin leer las marcas no se ofrece ninguna
+  const marked = marks
+    ? questions.filter((question) => marksOf(marks, question.questionId).length > 0)
+    : [];
   const [query, setQuery] = useState('');
   const [chosen, setChosen] = useState<Question | null>(null);
   const [transform, setTransform] = useState<Transform>('to_except');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const needle = normalize(query.trim());
-  const results = needle
-    ? questions
-        .filter((question) => normalize(`${question.prompt} ${question.vignette}`).includes(needle))
-        .slice(0, MAX_RESULTS)
-    : [];
+  // Sin escribir nada se ven las primeras marcadas. Escribir filtra entre las marcadas
+  const results = marked
+    .filter((question) =>
+      needle === '' ? true : normalize(`${question.prompt} ${question.vignette}`).includes(needle),
+    )
+    .slice(0, MAX_RESULTS);
 
   const ask = async () => {
     if (!chosen || busy) return;
@@ -152,9 +179,16 @@ function RequestCard({
         options,
         transform,
         status,
+        ...(marks ? { marks } : {}),
       });
       if (result.ok) onNotice(result.reused ? text.reused : text.created);
-      else setError(text.failed[result.reason] ?? text.failed.other ?? '');
+      else {
+        setError(
+          text.failed[result.reason] ??
+            (result.message !== result.reason ? result.message : text.failed.other) ??
+            '',
+        );
+      }
     } catch {
       setError(text.failed.other ?? '');
     } finally {
@@ -177,6 +211,19 @@ function RequestCard({
             setQuery(event.target.value);
           }}
         />
+        <p className="text-sm text-fg-muted">{text.markedHint}</p>
+        {marksFailed ? (
+          <p role="alert" className="text-sm text-danger">
+            {text.markedFailed}
+          </p>
+        ) : marks && marked.length === 0 ? (
+          <p role="status" className="text-sm text-fg-muted">
+            {text.markedEmpty}
+          </p>
+        ) : null}
+        {marked.length > 0 ? (
+          <p className="text-sm font-medium">{text.markedCount(marked.length)}</p>
+        ) : null}
         {needle && results.length === 0 ? (
           <p className="text-sm text-fg-muted">{text.noResults}</p>
         ) : null}
@@ -184,7 +231,16 @@ function RequestCard({
           <ul className="flex flex-col divide-y divide-line">
             {results.map((question) => (
               <li key={question.id} className="flex items-center gap-2 py-2">
-                <span className="min-w-0 flex-1 text-sm">{question.prompt}</span>
+                <span className="min-w-0 flex-1 text-sm">
+                  {question.prompt}
+                  <span className="mt-0.5 flex flex-wrap gap-1.5">
+                    {marksOf(marks ?? new Map(), question.questionId).map((reason) => (
+                      <Badge key={reason} variant="warning">
+                        {text.markReasons[reason] ?? reason}
+                      </Badge>
+                    ))}
+                  </span>
+                </span>
                 <Button
                   size="sm"
                   variant={chosen?.id === question.id ? 'primary' : 'secondary'}
@@ -216,13 +272,14 @@ function RequestCard({
         />
         <div className="flex flex-wrap items-center gap-3">
           <Button
-            disabled={!chosen || busy}
+            disabled={!chosen || busy || access !== 'open'}
             onClick={() => {
               void ask();
             }}
           >
             {busy ? text.asking : text.ask}
           </Button>
+          <AiAccessNotice access={access} />
           {error ? (
             <p role="alert" className="text-sm text-danger">
               {error}

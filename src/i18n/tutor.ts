@@ -195,6 +195,9 @@ export const tutorText = {
         template: 'Redactado con respuestas fijas de demostración',
       },
       draft: 'Borrador, no validado por médico',
+      pending:
+        'Tu tutor está preparando esta explicación con IA. Suele llegar en menos de una hora y puede tardar hasta un día.',
+      jobFailed: 'La IA no pudo preparar esta explicación. Ves la versión sin IA.',
       noEvidence:
         'La IA no encontró evidencia suficiente para añadir una lectura, así que se queda la explicación base.',
     },

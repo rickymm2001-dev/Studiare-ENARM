@@ -1,7 +1,12 @@
 // Arma lo que se le manda a cada motor de IA del tutor a partir de lo que la app ya calculó (8.2,
 // 8.3, 8.5). Solo viaja texto del banco y de las tarjetas del alumno, ya sin su nombre, y cifras que
 // la app calculó. Nada de texto libre del alumno. Si no hay con qué armar la entrada, no se llama.
-import type { BiasTipInput, HypothesisInput, WeeklyReportInput } from '@/engines/aiContracts';
+import type {
+  BiasTipInput,
+  BiasVocabulary,
+  HypothesisInput,
+  WeeklyReportInput,
+} from '@/engines/aiContracts';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { Hypothesis } from './tutorModel';
 import type { BiasTip } from './tutorView';
@@ -73,7 +78,18 @@ export function weeklyReportInputFrom(
   };
 }
 
-export function biasTipInputFrom(tip: BiasTip, texts: ItemTexts): BiasTipInput | null {
+/**
+ * De cómo llama la interfaz a los sesgos a lo que se le manda a la IA (B12, 10.14). Mientras el
+ * acuerdo entre médicos no alcanza la app dice trampas, y la IA tampoco puede decir sesgo
+ */
+export const biasVocabularyOf = (vocabulary: 'bias' | 'trap'): BiasVocabulary =>
+  vocabulary === 'bias' ? 'sesgo' : 'trampa';
+
+export function biasTipInputFrom(
+  tip: BiasTip,
+  texts: ItemTexts,
+  vocabulary: BiasVocabulary = 'trampa',
+): BiasTipInput | null {
   if (tip.tip.trim() === '') return null;
   const examples = tip.examples.flatMap((questionId) => {
     const text = texts.textOf('question', questionId);
@@ -85,5 +101,6 @@ export function biasTipInputFrom(tip: BiasTip, texts: ItemTexts): BiasTipInput |
     biasLabel: clip(tip.name, 80),
     baseTip: clip(tip.tip, 500),
     examples: examples.slice(0, 3),
+    vocabulary,
   };
 }
