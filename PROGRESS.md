@@ -34,6 +34,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [ ] B15. Analítica, errores, recordatorios y recorrido
 - [ ] B16. Legal y privacidad
 - [ ] B17. Publicación
+  - Las imágenes de marca están en la rama gemini/imagenes-marca
 - [ ] B18. Primeros alumnos
 - [ ] B19. Auditoría final y lanzamiento
 

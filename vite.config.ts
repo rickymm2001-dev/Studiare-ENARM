@@ -93,6 +93,29 @@ export default defineConfig(({ mode }) => ({
             purpose: 'maskable',
           },
         ],
+        screenshots: [
+          {
+            src: 'screenshots/inicio-telefono.webp',
+            sizes: '390x844',
+            type: 'image/webp',
+            form_factor: 'narrow',
+            label: 'Pantalla de inicio en el teléfono móvil',
+          },
+          {
+            src: 'screenshots/repasar-telefono.webp',
+            sizes: '390x844',
+            type: 'image/webp',
+            form_factor: 'narrow',
+            label: 'Sesión de repaso en el teléfono móvil',
+          },
+          {
+            src: 'screenshots/inicio-computadora.webp',
+            sizes: '1280x800',
+            type: 'image/webp',
+            form_factor: 'wide',
+            label: 'Pantalla de inicio en la computadora',
+          },
+        ],
       },
       workbox: {
         // La app completa queda en caché para abrir sin conexión después de la primera carga. Las
