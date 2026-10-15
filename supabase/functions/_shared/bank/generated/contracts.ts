@@ -242,6 +242,9 @@ export type EditorialStatus = 'draft' | 'in_review' | 'approved' | 'rejected';
 export type IncompleteCode =
   | 'explanation_missing'
   | 'references_missing'
+  // Solo en inglés (B13). La fuente del texto falta, está incompleta o su licencia no está en la lista
+  | 'passage_source_missing'
+  | 'license_not_allowed'
   | `rationale_missing:${string}`
   | `bias_missing:${string}`
   | `bias_unknown:${string}`;
@@ -473,7 +476,9 @@ export type SyncProblemCode =
   | 'option_orphan'
   | 'canonical_invalid'
   | 'template_placeholder'
-  | 'case_inconsistent';
+  | 'case_inconsistent'
+  // Inglés en otra rama o Español en Inglés médico (B13)
+  | 'language_branch_mismatch';
 
 /** Avisos de un renglón que entra. Los de ReviewFlag los confirma el revisor (3.4) */
 export type SyncNoticeCode =
@@ -487,6 +492,9 @@ export type SyncNoticeCode =
   | 'author_is_reviewer'
   | 'case_rows_apart'
   | 'language_unknown'
+  // Idioma vacío en Inglés médico, que queda en inglés. Un caso de inglés sin 2 o 3 preguntas (B13)
+  | 'language_inferred'
+  | 'english_case_size'
   | 'not_ready';
 
 /** Un problema de un renglón. value es solo de listas cerradas, recortado a 60 caracteres */

@@ -45,6 +45,13 @@ export const QuestionStructureSchema = z.strictObject({
   source: z.enum(['auto', 'physician']),
 });
 
+/**
+ * Idioma del texto de una pregunta. Sin el campo es español, como todo lo de antes de B13. Inglés médico
+ * va en inglés y el resto del banco en español (language_branch_mismatch en el servidor)
+ */
+export const QuestionLanguageSchema = z.enum(['es', 'en']);
+export type QuestionLanguage = z.infer<typeof QuestionLanguageSchema>;
+
 export const GpcReferenceSchema = z.strictObject({
   /** Solo el título general de la GPC, sin inventar claves, años ni páginas (11.1) */
   title: z.string().min(1).max(300),
@@ -84,6 +91,8 @@ export const QuestionSchema = z
     clues: z.array(ClueSchema).max(20).optional(),
     /** Dificultad que estima el médico, de 1 a 5 (7.7) */
     physicianDifficulty: z.int().min(1).max(5),
+    /** Idioma del texto, la pregunta y las opciones. Ausente es español (B13). Sin índice en Dexie */
+    language: QuestionLanguageSchema.optional(),
     /**
      * ID estable de la pregunta de la que sale esta variante reestructurada (8.6). Ausente en las
      * preguntas originales. Una variante no entra al puntaje del examen hasta su umbral

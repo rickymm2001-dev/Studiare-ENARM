@@ -25,5 +25,13 @@ export interface StructureDictionary {
     kind: 'negation' | 'exception' | 'false_statement' | 'least_likely' | 'contraindication';
   }[];
   falsePositives: string[];
+  english?: {
+    negations: {
+      id: string;
+      pattern: string;
+      kind: 'negation' | 'exception' | 'false_statement' | 'least_likely' | 'contraindication';
+    }[];
+    falsePositives: string[];
+  };
   tasks: { task: QuestionTask; patterns: string[] }[];
 }

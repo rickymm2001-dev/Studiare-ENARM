@@ -1,0 +1,213 @@
+{
+  "_aviso": "[Prueba] Fuentes simuladas de textos, no son contenido médico. Las leen passageSource.test.ts y la prueba EN9 de supabase/tests/english_section_test.sql, para que passageSource.ts y bank_passage_source_issue den lo mismo sobre los mismos casos. issue es null si la fuente está bien",
+  "cases": [
+    {
+      "name": "texto propio del equipo, sin título ni enlace",
+      "refs": ["Fuente del texto. Texto propio del equipo Studiare."],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con título",
+      "refs": ["Fuente del texto. [Prueba] Caso de ejemplo. Texto propio del equipo Studiare."],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con un enlace que no hacía falta",
+      "refs": [
+        "Fuente del texto. [Prueba] Caso. Texto propio del equipo Studiare. https://example.org/caso"
+      ],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con un enlace http, que se ignora",
+      "refs": [
+        "Fuente del texto. [Prueba] Caso. Texto propio del equipo Studiare. http://example.org/caso"
+      ],
+      "issue": null
+    },
+    {
+      "name": "dominio público con enlace",
+      "refs": [
+        "Fuente del texto. Heart Attack, MedlinePlus.gov (NLM). Dominio público. https://medlineplus.gov/heartattack.html"
+      ],
+      "issue": null
+    },
+    {
+      "name": "CC0 con enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo simulado. CC0. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "CC BY con enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo simulado. CC BY. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "CC BY-SA con enlace",
+      "refs": [
+        "Fuente del texto. [Prueba] Artículo simulado. CC BY-SA. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "el título trae puntos y siglas",
+      "refs": [
+        "Fuente del texto. Smith J. et al. Cardiac outcomes, vol. 3. CC BY. https://example.org/a/b?x=1#y"
+      ],
+      "issue": null
+    },
+    {
+      "name": "enlace con puerto y camino",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org:8443/a/b"],
+      "issue": null
+    },
+    {
+      "name": "la fuente va después de otra referencia",
+      "refs": [
+        "[Prueba] Guía de práctica clínica simulada",
+        "Fuente del texto. [Prueba] Artículo simulado. CC BY. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "mayúsculas y espacios de más en el prefijo, y licencia en mayúsculas y sin acento",
+      "refs": [
+        "  FUENTE   DEL TEXTO.   [Prueba] Texto simulado.   DOMINIO PUBLICO.   https://example.org/texto  "
+      ],
+      "issue": null
+    },
+    {
+      "name": "licencia en minúsculas",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. cc by-sa. https://example.org/texto"],
+      "issue": null
+    },
+    {
+      "name": "sin punto antes del enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. CC BY https://example.org/texto"],
+      "issue": null
+    },
+    {
+      "name": "sin referencias",
+      "refs": [],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo una guía de práctica clínica",
+      "refs": ["Guía de Práctica Clínica de diabetes gestacional"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "una referencia que menciona la fuente pero no empieza con ella",
+      "refs": ["Ver la Fuente del texto. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "el prefijo con dos puntos en lugar de punto",
+      "refs": ["Fuente del texto: [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "el prefijo con una letra de más",
+      "refs": ["Fuente del textos. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el prefijo",
+      "refs": ["Fuente del texto."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el título, sin licencia",
+      "refs": ["Fuente del texto. Heart Attack, MedlinePlus.gov (NLM)"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "título y enlace, sin licencia",
+      "refs": ["Fuente del texto. [Prueba] Texto. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el enlace",
+      "refs": ["Fuente del texto. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "CC BY sin enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con enlace http",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. http://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con un enlace sin punto en el host",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. https://localhost/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con un enlace cortado",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. https://"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "licencia sin título",
+      "refs": ["Fuente del texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "CC BY-NC",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-NC. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "CC BY-ND",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-ND. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "CC BY-NC-SA",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-NC-SA. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "todos los derechos reservados",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto. Todos los derechos reservados. https://example.org/texto"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia con versión, que en la referencia no es el nombre exacto",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY 4.0. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "texto propio escrito de otra forma",
+      "refs": ["Fuente del texto. [Prueba] Texto. Texto propio. "],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia fuera de la lista sin enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto. Licencia desconocida."],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "con dos fuentes manda la primera, mala",
+      "refs": [
+        "Fuente del texto. [Prueba] Uno. CC BY-NC. https://example.org/uno",
+        "Fuente del texto. [Prueba] Dos. CC BY. https://example.org/dos"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "con dos fuentes manda la primera, buena",
+      "refs": [
+        "Fuente del texto. [Prueba] Uno. CC BY. https://example.org/uno",
+        "Fuente del texto. [Prueba] Dos. CC BY-NC. https://example.org/dos"
+      ],
+      "issue": null
+    }
+  ]
+}

@@ -165,3 +165,56 @@ describe('utilidades', () => {
     expect(isProbableMisread({ ...base, polarity: 'affirmative' })).toBe(false);
   });
 });
+
+describe('inglés (B13), paso 0', () => {
+  it('sin el bloque english en el diccionario el inglés no resalta nada y el español no cambia', () => {
+    expect(dictionary.english).toBeUndefined();
+    const withoutEnglish = { ...dictionary };
+    delete withoutEnglish.english;
+    expect(findNegations('Which of the following is NOT a cause?', withoutEnglish, 'en')).toEqual(
+      [],
+    );
+    expect(
+      findNegations('¿Cuál de las siguientes NO es una causa?', withoutEnglish, 'es'),
+    ).toHaveLength(1);
+    expect(findNegations('¿Cuál de las siguientes NO es una causa?', withoutEnglish)).toHaveLength(
+      1,
+    );
+  });
+
+  it('con un bloque english resalta con él y deja el diccionario en español para el español', () => {
+    const custom = {
+      ...dictionary,
+      english: {
+        negations: [{ id: 'not', pattern: 'not', kind: 'negation' as const }],
+        falsePositives: ['not only'],
+      },
+    };
+    expect(findNegations('Which is NOT a cause?', custom, 'en').map((range) => range.text)).toEqual(
+      ['NOT'],
+    );
+    expect(findNegations('Not only a cause, also a sign', custom, 'en')).toEqual([]);
+    // El mismo texto leído como español no usa el bloque en inglés
+    expect(findNegations('Which is NOT a cause?', custom, 'es')).toEqual([]);
+  });
+
+  it('una pregunta en inglés toma data_interpretation si nadie elige la tarea y ninguna otra cosa cambia', () => {
+    const question = {
+      vignette: '',
+      prompt: 'What is the most likely diagnosis?',
+      serialCase: false,
+      language: 'en' as const,
+    };
+    expect(analyzeStructure(question, dictionary)).toMatchObject({
+      polarity: 'affirmative',
+      task: 'data_interpretation',
+      format: 'direct',
+    });
+    // En español la tarea se detecta por la frase, con language o sin él
+    const spanish = { ...question, prompt: '¿Cuál es el diagnóstico más probable?' };
+    expect(analyzeStructure({ ...spanish, language: 'es' }, dictionary).task).toBe('diagnosis');
+    expect(analyzeStructure({ ...spanish, language: undefined }, dictionary).task).toBe(
+      'diagnosis',
+    );
+  });
+});
