@@ -45,7 +45,7 @@ export function SourceLine({
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="break-all underline"
+            className="break-words underline"
           >
             {source.url}
             <span className="sr-only">{text.newTab}</span>

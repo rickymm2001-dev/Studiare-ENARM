@@ -59,7 +59,8 @@ function catalogWith(canDownload: boolean, branch: string | null = 'medical_engl
             {
               kind: 'basic',
               front: '<span lang="en">[Prueba] Term sample</span>',
-              back: '[Prueba] Término de muestra<br><i>Fuente MedlinePlus.gov (NLM)</i>',
+              // Como el reverso del mazo real: el nombre en español, los otros nombres y la fuente
+              back: '<b>[Prueba] Término de muestra</b><br><i>En español también</i> [Prueba] Otro nombre<br><i>Fuente MedlinePlus.gov (NLM)</i>',
             },
           ],
         },
@@ -115,6 +116,15 @@ describe('vocabulario médico en el catálogo de la nube', () => {
     // La vista previa deja leer unas notas, con el término en inglés marcado como inglés
     await user.click(within(catalog).getByText(text.preview));
     expect(within(catalog).getByText('[Prueba] Term sample')).toHaveAttribute('lang', 'en');
+    // El reverso trae el nombre en español, los otros nombres y la fuente separados por saltos de línea.
+    // Cada parte va en su renglón y las palabras no se pegan
+    const back = within(catalog).getByText(
+      '[Prueba] Término de muestra En español también [Prueba] Otro nombre Fuente MedlinePlus.gov (NLM)',
+    );
+    expect(back.textContent).toBe(
+      '[Prueba] Término de muestra\nEn español también [Prueba] Otro nombre\nFuente MedlinePlus.gov (NLM)',
+    );
+    expect(back).toHaveClass('whitespace-pre-line');
     expect(within(catalog).queryByRole('button', { name: /Bajar/ })).toBeNull();
   });
 

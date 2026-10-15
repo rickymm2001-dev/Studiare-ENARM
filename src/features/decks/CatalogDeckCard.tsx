@@ -322,16 +322,20 @@ function CatalogDeckCard({
                 <li key={index} className="rounded-md border border-line p-3 text-sm">
                   {note.kind === 'basic' ? (
                     <>
-                      <p className="font-medium" lang={lang}>
+                      <p className="font-medium whitespace-pre-line" lang={lang}>
                         {plainText(note.front)}
                       </p>
-                      <p className="mt-1 text-fg-muted">{plainText(note.back)}</p>
+                      <p className="mt-1 whitespace-pre-line text-fg-muted">
+                        {plainText(note.back)}
+                      </p>
                     </>
                   ) : (
                     <>
-                      <p className="font-medium">{plainText(note.text)}</p>
+                      <p className="font-medium whitespace-pre-line">{plainText(note.text)}</p>
                       {note.extra ? (
-                        <p className="mt-1 text-fg-muted">{plainText(note.extra)}</p>
+                        <p className="mt-1 whitespace-pre-line text-fg-muted">
+                          {plainText(note.extra)}
+                        </p>
                       ) : null}
                     </>
                   )}
@@ -387,11 +391,19 @@ function CatalogDeckCard({
   );
 }
 
-/** El texto de una nota de muestra, sin etiquetas HTML ni huecos de cloze */
+/**
+ * El texto de una nota de muestra, sin etiquetas HTML ni huecos de cloze. Un salto de línea o un párrafo
+ * queda como un renglón, para que el reverso del vocabulario no pegue el nombre en español, los otros
+ * nombres y la fuente (B13, 4.2). Se muestra con whitespace-pre-line
+ */
 function plainText(html: string): string {
   const doc = new DOMParser().parseFromString(html, 'text/html');
+  for (const lineBreak of doc.body.querySelectorAll('br')) lineBreak.replaceWith('\n');
+  for (const block of doc.body.querySelectorAll('p, div, li')) block.append('\n');
   return doc.body.textContent
     .replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, '$1')
-    .replace(/\s+/g, ' ')
+    .replace(/[^\S\n]+/g, ' ')
+    .replace(/ ?\n ?/g, '\n')
+    .replace(/\n{2,}/g, '\n')
     .trim();
 }
