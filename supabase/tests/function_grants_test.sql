@@ -123,7 +123,7 @@ declare
     'ai_batches_due', 'ai_jobs_pending', 'ai_job_requeue', 'ai_batch_mark', 'ai_job_finish', 'ai_jobs_scrub',
     'ai_tick_lease_take', 'ai_tick_secret_ok'];
   v_internal constant text[] := array['ai_job_row_json', 'ai_job_stored_json', 'ai_gate_write', 'ai_gate_now',
-    'ai_gate_assert_reviewer', 'ai_gate_verdict', 'ai_gate_guard'];
+    'ai_gate_assert_reviewer', 'ai_gate_verdict', 'ai_gate_guard', 'ai_gate_min_items'];
 begin
   for r in
     select p.oid::regprocedure::text as f, p.proname::text as name, p.proacl

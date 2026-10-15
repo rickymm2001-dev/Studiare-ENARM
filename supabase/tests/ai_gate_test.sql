@@ -4,6 +4,7 @@
 --   G2. Solo el médico asignado ve sus textos, en su orden y sin ver al otro
 --   G3. Calificar con la rúbrica, cambiar mientras está abierta
 --   G4. Avance y cierre con el veredicto de 5.4 (pasa, grave, seguridad, anclaje, utilidad, acuerdo, incompleto)
+--   G4b. Una muestra de pocos textos no abre un motor, aunque los dos médicos la aprueben (mínimo por motor)
 --   G5. Abrir pide veredicto y cerrar no. La pausa
 --   G6. La clave ai_gate no se escribe directo, ni siquiera un admin
 --   G7. Las reseñas sobreviven a que el médico borre su cuenta
@@ -30,6 +31,23 @@ begin
   return null;
 exception when others then
   return sqlstate;
+end $$;
+
+-- Cambia los mínimos de textos por motor de la clave ai_gate (minItems). La bandera solo cambia con la marca
+-- de la transacción, igual que en admin_ai_gate_set. Las pruebas con muestras chicas lo bajan a propósito
+create or replace function pg_temp.set_min_items(p_min jsonb) returns void language plpgsql as $$
+begin
+  perform set_config('app.ai_gate_writer', 'on', true);
+  update public.platform_settings set value = jsonb_set(value, '{minItems}', p_min, true) where key = 'ai_gate';
+  perform set_config('app.ai_gate_writer', '', true);
+end $$;
+
+create or replace function pg_temp.fails_message(stmt text) returns text language plpgsql as $$
+begin
+  execute stmt;
+  return null;
+exception when others then
+  return sqlerrm;
 end $$;
 
 -- Un texto de la muestra con la forma de AiGateItemSchema
@@ -269,6 +287,72 @@ select pg_temp.as_user(:'admin');
 select pg_temp.expect(public.admin_ai_gate_close('c14-muestra') = :'verdict'::jsonb, 'G4. Cerrar otra vez cambió el veredicto');
 rollback;
 
+-- ===================================================================== G4b. Un mínimo de textos para abrir un motor
+-- El veredicto se calcula sobre los textos que traiga la muestra. Sin un mínimo, una muestra de prueba de
+-- 6 textos que los dos médicos aprueban abría el motor para todos los alumnos de pago
+select pg_temp.expect(
+  public.ai_gate_min_items('forgetting') = 60 and public.ai_gate_min_items('weekly_report') = 30
+  and public.ai_gate_min_items('flashcards') = 60 and public.ai_gate_min_items('bias_tips') = 40
+  and public.ai_gate_min_items('restructure') = 30,
+  'G4b. Los mínimos de fábrica no son los de la muestra completa de 5.1 y la auditoría corta de 5.5');
+begin;
+select pg_temp.as_user(:'admin');
+select public.admin_ai_gate_sample_create(jsonb_build_object('version', 1, 'id', 'c14-seis', 'createdAt', 'x',
+  'items', jsonb_build_array(pg_temp.item(31, 'bias_tips'), pg_temp.item(32, 'bias_tips'), pg_temp.item(33, 'bias_tips'),
+    pg_temp.item(34, 'bias_tips'), pg_temp.item(35, 'bias_tips'), pg_temp.item(36, 'bias_tips'))),
+  array[:'pa', :'pb']::uuid[]);
+reset role;
+do $$
+declare
+  v_uid text;
+  v_n integer;
+begin
+  foreach v_uid in array array['c1400000-0000-0000-0000-0000000000a1', 'c1400000-0000-0000-0000-0000000000a2'] loop
+    perform pg_temp.as_user(v_uid);
+    for v_n in 31..36 loop
+      perform pg_temp.review(v_n);
+    end loop;
+    reset role;
+  end loop;
+end $$;
+select pg_temp.as_user(:'admin');
+select pg_temp.expect((public.admin_ai_gate_close('c14-seis') -> 'engines' -> 'bias_tips' ->> 'passed')::boolean,
+  'G4b. Los 6 consejos aprobados por los dos médicos no pasaron el veredicto');
+commit;
+begin;
+select pg_temp.as_user(:'admin');
+select pg_temp.expect(pg_temp.fails_with($q$select public.admin_ai_gate_set('bias_tips', true, 'c14-seis')$q$) = '55000',
+  'G4b. Una muestra de 6 textos abrió el motor');
+select pg_temp.expect(pg_temp.fails_message($q$select public.admin_ai_gate_set('bias_tips', true, 'c14-seis')$q$)
+  = 'La muestra trae 6 textos de este motor y hacen falta al menos 40', 'G4b. El mensaje no dice cuántos textos hacen falta');
+rollback;
+select pg_temp.expect(not coalesce((select (value -> 'engines' -> 'bias_tips' ->> 'open')::boolean
+  from public.platform_settings where key = 'ai_gate'), false), 'G4b. El motor quedó abierto con 6 textos');
+-- La clave ai_gate cambia el mínimo por motor. Con 6 abre, con 7 no, y lo demás no se mueve
+begin;
+select pg_temp.set_min_items('{"bias_tips": 6}');
+select pg_temp.expect(public.ai_gate_min_items('bias_tips') = 6 and public.ai_gate_min_items('forgetting') = 60,
+  'G4b. El mínimo de la clave ai_gate no se leyó por motor');
+select pg_temp.as_user(:'admin');
+select pg_temp.expect(public.admin_ai_gate_set('bias_tips', true, 'c14-seis') -> 'engines' -> 'bias_tips' ->> 'open' = 'true',
+  'G4b. Con el mínimo en 6 no abrió');
+rollback;
+begin;
+select pg_temp.set_min_items('{"bias_tips": 7}');
+select pg_temp.as_user(:'admin');
+select pg_temp.expect(pg_temp.fails_with($q$select public.admin_ai_gate_set('bias_tips', true, 'c14-seis')$q$) = '55000',
+  'G4b. Con el mínimo en 7 abrió con 6 textos');
+rollback;
+-- Un valor que no es un entero positivo se ignora y vale el de fábrica, nunca abre de más
+begin;
+select pg_temp.set_min_items('{"bias_tips": "seis", "forgetting": 0, "flashcards": -5, "restructure": 2.5, "weekly_report": null}');
+select pg_temp.expect(public.ai_gate_min_items('bias_tips') = 40 and public.ai_gate_min_items('forgetting') = 60
+  and public.ai_gate_min_items('flashcards') = 60 and public.ai_gate_min_items('restructure') = 30
+  and public.ai_gate_min_items('weekly_report') = 30, 'G4b. Un mínimo que no es un entero positivo se tomó en cuenta');
+rollback;
+-- Las pruebas que siguen abren motores con muestras de unos cuantos textos. Aquí se baja el mínimo a propósito
+select pg_temp.set_min_items('{"forgetting": 1, "weekly_report": 1, "flashcards": 1, "bias_tips": 1, "restructure": 1}');
+
 -- ===================================================================== G5. Abrir, cerrar y pausar
 begin;
 select pg_temp.as_user(:'pa');
@@ -347,7 +431,8 @@ rollback;
 -- ===================================================================== G7. Las reseñas sobreviven a la cuenta
 begin;
 delete from auth.users where id = :'pb';
-select pg_temp.expect((select count(*) from public.ai_gate_reviews where reviewer_id is null) = 12,
+-- Sus 12 reseñas de la muestra grande y las 6 de la muestra de 6 consejos (G4b)
+select pg_temp.expect((select count(*) from public.ai_gate_reviews where reviewer_id is null) = 18,
   'G7. Las reseñas de la médica se fueron con su cuenta');
 rollback;
 

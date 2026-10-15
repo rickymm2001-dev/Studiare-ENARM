@@ -20,10 +20,20 @@
 --   Un error grave lo revisan los dos médicos o Ricardo mientras la muestra está abierta. Si se
 --   confirma, se queda y el motor no pasa en esta ronda
 --
--- Abrir un motor pide que haya pasado en esa muestra y guarda el modelo, el esfuerzo, el
--- razonamiento y la huella del prompt de sus textos. La función lo cuenta como cerrado para alumnos
--- en cuanto cualquiera de esos cambia (10.12). Cerrar siempre se puede. La pausa frena a todos
--- salvo admin y dueño
+-- Abrir un motor pide que haya pasado en esa muestra, que la muestra traiga un mínimo de textos de ese
+-- motor, y guarda el modelo, el esfuerzo, el razonamiento y la huella del prompt de sus textos. La
+-- función lo cuenta como cerrado para alumnos en cuanto cualquiera de esos cambia (10.12). Cerrar
+-- siempre se puede. La pausa frena a todos salvo admin y dueño
+--
+-- El mínimo de textos (revisión independiente, hallazgo 8). El veredicto se calcula sobre los textos
+-- que traiga la muestra, así que sin un mínimo una muestra de prueba de 6 textos abría un motor para
+-- todos los alumnos de pago. Por omisión es el menor entre la muestra completa de 5.1 (120 tarjetas, 70
+-- hipótesis, 50 consejos, 30 informes y 30 reestructuradas) y la auditoría corta de 5.5 (60 textos, 40
+-- en informes y consejos), para que las dos puedan abrir un motor: 60 hipótesis, 60 tarjetas, 40
+-- consejos, 30 informes y 30 reestructuradas. La clave ai_gate lo cambia por motor con minItems, por
+-- ejemplo {"minItems": {"flashcards": 120}}, con la marca app.ai_gate_writer como cualquier cambio de la
+-- bandera. Lo decide la sesión con Ricardo y los médicos antes de la auditoría, nunca después de ver
+-- resultados (10.10)
 --
 -- Las reseñas son el registro de la validación. Sobreviven a que un médico borre sus datos y, si
 -- borra la cuenta, se quedan sin su id. Ninguna tabla tiene políticas. Todo pasa por las funciones
@@ -494,8 +504,32 @@ begin
 end;
 $$;
 
+-- ===================================================================== Mínimo de textos por motor
+-- Cuántos textos de un motor pide una muestra para poder abrirlo. El de fábrica está en el encabezado.
+-- La clave minItems de ai_gate lo cambia por motor. Un valor que no sea un entero de 1 a 9999 se ignora
+create or replace function public.ai_gate_min_items(p_engine text) returns integer
+language plpgsql stable security definer set search_path = public, pg_temp as $$
+declare
+  v_override text;
+begin
+  select value -> 'minItems' ->> p_engine into v_override
+    from public.platform_settings where key = 'ai_gate';
+  if v_override ~ '^[1-9][0-9]{0,3}$' then
+    return v_override::integer;
+  end if;
+  return case p_engine
+    when 'forgetting' then 60
+    when 'weekly_report' then 30
+    when 'flashcards' then 60
+    when 'bias_tips' then 40
+    when 'restructure' then 30
+  end;
+end;
+$$;
+
 -- ===================================================================== Abrir y cerrar motores
--- Abrir pide que el motor haya pasado en esa muestra cerrada. Guarda con qué se auditó
+-- Abrir pide que el motor haya pasado en esa muestra cerrada y que la muestra traiga el mínimo de
+-- textos de ese motor. Guarda con qué se auditó
 create or replace function public.admin_ai_gate_set(p_engine text, p_open boolean, p_sample text)
 returns jsonb
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -503,6 +537,8 @@ declare
   v_state jsonb;
   v_sample public.ai_gate_samples%rowtype;
   v_versions integer;
+  v_texts integer;
+  v_min integer;
   v_item record;
 begin
   if not public.is_admin() then
@@ -528,6 +564,13 @@ begin
   if not found or v_sample.status <> 'closed'
      or coalesce((v_sample.verdict -> 'engines' -> p_engine ->> 'passed')::boolean, false) is not true then
     raise exception 'El motor no pasó en esa muestra cerrada' using errcode = '55000';
+  end if;
+  -- Un veredicto sobre pocos textos no prueba nada: la muestra tiene que traer el mínimo del motor
+  select count(*) into v_texts from public.ai_gate_items where sample_id = p_sample and engine = p_engine;
+  v_min := public.ai_gate_min_items(p_engine);
+  if v_texts < v_min then
+    raise exception 'La muestra trae % textos de este motor y hacen falta al menos %', v_texts, v_min
+      using errcode = '55000';
   end if;
   select count(distinct (model, effort, thinking, prompt_version, prompt_hash)) into v_versions
     from public.ai_gate_items where sample_id = p_sample and engine = p_engine;
@@ -583,7 +626,8 @@ begin
     'public.ai_gate_write(jsonb)',
     'public.ai_gate_now()',
     'public.ai_gate_assert_reviewer(text)',
-    'public.ai_gate_verdict(text)'
+    'public.ai_gate_verdict(text)',
+    'public.ai_gate_min_items(text)'
   ] loop
     execute format('revoke all on function %s from public, anon, authenticated, service_role', v_sig);
   end loop;
