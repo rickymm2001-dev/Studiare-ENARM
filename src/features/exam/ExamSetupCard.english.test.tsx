@@ -206,6 +206,29 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(screen.getByText(t.exam.fullLocked)).toBeVisible();
   });
 
+  it('en Gratis con menos preguntas libres que el examen dice que el plan lo limita, con o sin inglés', async () => {
+    const typing = userEvent.setup();
+    card({ plan: 'free', left: 1 });
+    expect(screen.getByText(t.exam.limitedTo(1))).toBeVisible();
+    // Con 5 libres cabe un examen de 5 en español, porque 5 preguntas no alcanzan para un texto de inglés
+    cleanup();
+    card({ plan: 'free', left: 5 });
+    expect(screen.getByText(t.exam.limitedTo(5))).toBeVisible();
+    expect(screen.queryByText(new RegExp(' en español y '))).toBeNull();
+    // Quitar la parte en inglés no cambia que el límite del día sea lo que lo limita
+    await typing.click(screen.getByRole('checkbox', { name: copy.include }));
+    expect(screen.getByText(t.exam.limitedTo(5))).toBeVisible();
+  });
+
+  it('si las preguntas libres alcanzan para todo el examen no dice que el plan lo limita', () => {
+    card({ plan: 'free', left: 20 });
+    expect(screen.queryByText(t.exam.limitedTo(20))).toBeNull();
+    cleanup();
+    // Un banco más chico que lo que le queda hoy tampoco lo limita el plan
+    card({ plan: 'free', left: 20, questions: spanish(6), englishQuestions: english([3]) });
+    expect(screen.queryByText(t.exam.limitedTo(20))).toBeNull();
+  });
+
   it('empieza el examen con sus dos secciones y deja en la bitácora lo del inglés', async () => {
     const typing = userEvent.setup();
     card({ plan: 'free', left: 20 });

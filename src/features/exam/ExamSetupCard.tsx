@@ -123,7 +123,10 @@ export function ExamSetupCard({
     [questions, englishQuestions, requested, withEnglish],
   );
   const count = preview.questionIds.length;
-  const limitedByPlan = left !== null && left < Math.min(size, count + preview.shortfall);
+  // El tope de Gratis es lo que limita el examen cuando le quedan menos preguntas que el tamaño pedido y que
+  // las que hay en el banco, contando las de inglés si entran
+  const inBank = questions.length + (withEnglish ? englishQuestions.length : 0);
+  const limitedByPlan = left !== null && left < Math.min(size, inBank);
 
   const header = (
     <CardHeader className="mb-3">
