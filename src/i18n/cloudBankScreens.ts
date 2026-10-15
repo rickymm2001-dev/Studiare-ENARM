@@ -52,6 +52,7 @@ export const cloudBankScreensText = {
   // Reportar un error con la nube (5.4)
   report: {
     limit: 'Ya mandaste los reportes que se permiten hoy. Mañana puedes mandar más.',
-    offline: 'Tu reporte quedó guardado aquí, pero no llegó al médico porque no hay conexión.',
+    offline: 'Tu reporte quedó guardado aquí y le llega al médico en cuanto vuelva la conexión.',
+    failed: 'No se pudo mandar al médico. Quedó guardado solo en este dispositivo.',
   },
 } as const;

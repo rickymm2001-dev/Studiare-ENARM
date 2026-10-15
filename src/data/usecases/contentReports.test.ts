@@ -5,6 +5,7 @@ import { fakeRpc, FakeDbError } from '../testing/bankCloud';
 import { newId, testApi } from '../testing/fixtures';
 import {
   cloudReporter,
+  retryPendingReports,
   setReportsStatus,
   submitContentReport,
   submitQuestionReport,
@@ -126,6 +127,53 @@ describe('reporte de una pregunta con el banco de la nube (B11, 5.4)', () => {
       await submitQuestionReport(api, { ...input, reason: 'typo' }, cloudReporter(offline)),
     ).toMatchObject({ outcome: 'created', remote: 'offline' });
     expect(await api.repos.contentReports.list()).toHaveLength(1);
+  });
+
+  it('sin conexión queda pendiente y se manda al volver la red, sin perder ni repetir nada', async () => {
+    const api = setup();
+    const offline = fakeRpc({
+      report_question: () => {
+        throw new Error('Failed to fetch');
+      },
+    });
+    const first = await submitQuestionReport(
+      api,
+      { ...input, reason: 'typo' },
+      cloudReporter(offline),
+    );
+    const second = await submitQuestionReport(
+      api,
+      { ...input, reason: 'wrong_key' },
+      cloudReporter(offline),
+    );
+    expect((await api.repos.bankState.get('reports'))?.pending).toEqual([
+      expect.objectContaining({ reportId: first.report?.id, reason: 'typo' }),
+      expect.objectContaining({ reportId: second.report?.id, reason: 'wrong_key' }),
+    ]);
+    // Sigue sin red, así que nada sale de la lista
+    expect(await retryPendingReports(api, cloudReporter(offline))).toBe(0);
+    expect((await api.repos.bankState.get('reports'))?.pending).toHaveLength(2);
+    // Con red, el primero llega y el segundo topa el máximo del día y espera a otro día
+    const back = fakeRpc({
+      report_question: (args) =>
+        args?.p_reason === 'typo'
+          ? { status: 'created', reportId: 'r1' }
+          : { status: 'limit', reportId: null },
+    });
+    expect(await retryPendingReports(api, cloudReporter(back))).toBe(1);
+    expect(back.calls.map((call) => call.args)).toEqual([
+      { p_version_id: ulidToUuid(input.targetId), p_reason: 'typo' },
+      { p_version_id: ulidToUuid(input.targetId), p_reason: 'wrong_key' },
+    ]);
+    expect((await api.repos.bankState.get('reports'))?.pending).toEqual([
+      expect.objectContaining({ reportId: second.report?.id }),
+    ]);
+    // Un rechazo de la nube tampoco se vuelve a intentar
+    const rejected = fakeRpc({ report_question: () => new FakeDbError('42501') });
+    expect(await retryPendingReports(api, cloudReporter(rejected))).toBe(0);
+    expect((await api.repos.bankState.get('reports'))?.pending).toEqual([]);
+    // Los dos siguen guardados aquí
+    expect(await api.repos.contentReports.list()).toHaveLength(2);
   });
 
   it('sin la nube es el reporte local de siempre y un rechazo de la base no lo pierde', async () => {

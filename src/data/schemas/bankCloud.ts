@@ -4,7 +4,7 @@
 // no viven aquí. Van a las tablas de siempre (questions, options y cases) con su esquema, así el
 // simulador, el examen, el Tutor y Progreso los leen igual que el banco de demostración.
 import { z } from 'zod';
-import { QuestionTaskSchema } from './bank';
+import { ContentReportSchema, QuestionTaskSchema } from './bank';
 import {
   CalendarDateSchema,
   IdSchema,
@@ -105,6 +105,21 @@ export type DeckDownload = z.infer<typeof DeckDownloadSchema>;
  *   agreement. El último acuerdo entre médicos, para hablar de sesgos o de trampas (4.4)
  *   decks. Los submazos del catálogo de mazos que ya se bajaron (4.8)
  */
+/**
+ * Un reporte de error que se guardó sin conexión y todavía no llega al médico (B3 de la revisión de
+ * B11). Se manda solo al conectar la cuenta y cada vez que vuelve la red. Solo el motivo, nunca texto
+ */
+export const PendingReportSchema = z.strictObject({
+  reportId: IdSchema,
+  questionVersionId: IdSchema,
+  reason: ContentReportSchema.shape.reason,
+  at: UtcDateTimeSchema,
+});
+export type PendingReport = z.infer<typeof PendingReportSchema>;
+
+/** Cuántos reportes esperan a la red como máximo. Si hubiera más, los más viejos ya no viajan */
+export const MAX_PENDING_REPORTS = 200;
+
 export const BankStateSchema = z.discriminatedUnion('key', [
   z.strictObject({
     key: z.literal('catalog'),
@@ -121,6 +136,10 @@ export const BankStateSchema = z.discriminatedUnion('key', [
     at: UtcDateTimeSchema,
   }),
   z.strictObject({ key: z.literal('decks'), downloads: z.array(DeckDownloadSchema) }),
+  z.strictObject({
+    key: z.literal('reports'),
+    pending: z.array(PendingReportSchema).max(MAX_PENDING_REPORTS),
+  }),
 ]);
 export type BankState = z.infer<typeof BankStateSchema>;
 export type BankStateKey = BankState['key'];

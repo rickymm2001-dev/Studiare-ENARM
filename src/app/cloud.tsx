@@ -85,15 +85,16 @@ export function CloudBridge() {
         bankTimer = null;
       };
       const startBank = () => {
-        if (bankTimer || !isFeatureEnabled('cloudBank')) return;
-        // La fuente de la nube se carga aparte, para no pesar en el JavaScript inicial
-        const refresh = () =>
-          import('@/features/shared/useQuestionSource').then(({ questionSourceFor }) =>
-            questionSourceFor(api, 'cloud').refresh(),
+        if (!isFeatureEnabled('cloudBank')) return;
+        // La fuente de la nube se carga aparte, para no pesar en el JavaScript inicial. Se pone al día
+        // al conectar y cada vez que vuelve la red, que pasa otra vez por aquí, y cada 6 horas
+        const catchUp = () =>
+          import('@/features/shared/useQuestionSource').then(({ catchUpCloudBank }) =>
+            catchUpCloudBank(api),
           );
-        void refresh();
-        bankTimer = setInterval(() => {
-          void refresh();
+        void catchUp();
+        bankTimer ??= setInterval(() => {
+          void catchUp();
         }, CATALOG_REFRESH_MS);
       };
       const stopSync = () => {
