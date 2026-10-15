@@ -13,7 +13,7 @@ import { SCREENS } from '@/app/screens';
 import { deckCatalogText as text } from '@/i18n/cloudDecks';
 import { t } from '@/i18n/es-MX';
 import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
-import { seedCatalogDeck } from '../support/fakeBank';
+import { goOffline, seedCatalogDeck } from '../support/fakeBank';
 import { createFakeBankStore } from '../support/fakeBankStore';
 import { attachBank, type FakeSupabaseServer } from '../support/fakeSupabase';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
@@ -72,7 +72,7 @@ test.describe('Catálogo de mazos de la nube para el alumno', () => {
     await catalog.getByText(text.subjects(1)).click();
     await catalog.getByRole('button', { name: text.downloadLabel(SUBJECT) }).click();
     await expect(catalog.getByText(text.done(1))).toBeVisible({ timeout: 30_000 });
-    await expect(catalog.getByText(text.downloaded)).toBeVisible();
+    await expect(catalog.getByText(text.downloaded, { exact: true })).toBeVisible();
     // El servidor anotó la bajada de esa materia y esa versión
     expect(store.deckDownloads).toEqual([
       expect.objectContaining({
@@ -88,7 +88,7 @@ test.describe('Catálogo de mazos de la nube para el alumno', () => {
     const start = page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ });
     await expect(start).toBeVisible({ timeout: 30_000 });
     const reads = storageReads(cloud);
-    await context.setOffline(true);
+    await goOffline(context);
     await start.click();
     await expect(page.getByText(fronts[0] ?? '')).toBeVisible({ timeout: 30_000 });
     // La imagen sale de lo guardado en el dispositivo y no de la red

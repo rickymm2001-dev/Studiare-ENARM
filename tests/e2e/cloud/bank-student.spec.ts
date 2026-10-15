@@ -9,7 +9,7 @@ import { SCREENS } from '@/app/screens';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
-import { openBank, seedBank, setQuota } from '../support/fakeBank';
+import { goOffline, openBank, seedBank, setQuota } from '../support/fakeBank';
 import { createFakeBankStore } from '../support/fakeBankStore';
 import { attachBank, type FakeSupabaseServer } from '../support/fakeSupabase';
 import { answerPracticeQuestion, expectNoSeriousA11yViolations } from '../support/fixtures';
@@ -66,10 +66,12 @@ test.describe('Banco en la nube para el alumno', () => {
     expect(rpcCalls(cloud, 'catalog_changes')).toBe(0);
     expect(rpcCalls(cloud, 'fetch_questions')).toBe(0);
 
+    // La app lee las banderas del servidor al abrir, así que hay que recargar para que vea el cambio
     openBank(cloud);
+    await page.reload();
     await reloadWithServerFlags(page);
     await page.goto(SCREENS.simulatorSetup.path);
-    await expect(setup(page).getByText(t.simulator.bankNote(25))).toBeVisible({ timeout: 30_000 });
+    await expect(setup(page).getByText(bankText.bankNote(25))).toBeVisible({ timeout: 30_000 });
     await expect(demoNotice(page)).toHaveCount(0);
     expect(rpcCalls(cloud, 'catalog_changes')).toBeGreaterThan(0);
     // Abrir la pantalla no gasta del tope
@@ -159,7 +161,7 @@ test.describe('Banco en la nube para el alumno', () => {
     const fetches = rpcCalls(cloud, 'fetch_questions');
 
     // Sin red vuelve a Simular desde el menú y empieza otra práctica con lo bajado
-    await context.setOffline(true);
+    await goOffline(context);
     await openFromMenu(page, t.navItems.simulate);
     const offline = setup(page);
     await expect(offline).toBeVisible({ timeout: 30_000 });

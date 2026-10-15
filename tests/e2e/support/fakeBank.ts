@@ -8,6 +8,9 @@
 // Todo el texto que siembra lleva [Prueba] y es simulado, nunca contenido médico (CLAUDE.md). Las
 // lecturas solo se agregan, como bank_reads.
 import { createHash, randomUUID } from 'node:crypto';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { BrowserContext } from '@playwright/test';
 import { zipSync } from 'fflate';
 import type {
   BankStudentRpc,
@@ -26,6 +29,7 @@ import {
   isTeam,
   seedQuestions,
 } from './fakeBankStore';
+import { CLOUD_PREVIEW_URL } from './fakeSupabaseConfig';
 
 export { advanceStudyDay } from './fakeBankStore';
 
@@ -540,6 +544,23 @@ export function fakeBankDownload(
 /** Abre el banco a los alumnos como lo hará Ricardo, con cloudBank en platform_settings.feature_flags */
 export function openBank(server: { setFeatureFlags(flags: Record<string, boolean>): void }): void {
   server.setFeatureFlags({ cloudBank: true });
+}
+
+/** La carpeta del build de nube que sirve el proyecto de Playwright */
+const CLOUD_DIST = fileURLToPath(new URL('../../../dist-cloud/', import.meta.url));
+
+/**
+ * Corta la red como un teléfono sin señal, con la página ya cargada. En los proyectos de nube el
+ * service worker está bloqueado, así que sin red nadie serviría los íconos de la raíz, como el de la
+ * pestaña y el logo del marco, que en producción salen del precache. El navegador los vuelve a pedir
+ * al cambiar de pantalla y escribiría "Failed to load resource" en la consola. Aquí salen del build,
+ * como lo haría el precache. Lo de Supabase sigue pasando por el servidor simulado
+ */
+export async function goOffline(context: BrowserContext): Promise<void> {
+  await context.route(`${CLOUD_PREVIEW_URL}/*.png`, (route) =>
+    route.fulfill({ path: join(CLOUD_DIST, new URL(route.request().url()).pathname) }),
+  );
+  await context.setOffline(true);
 }
 
 /** Siembra n preguntas simuladas aprobadas y publicadas en el catálogo */
