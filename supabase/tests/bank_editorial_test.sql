@@ -280,6 +280,9 @@ begin;
 select pg_temp.as_user(:'p2');
 select pg_temp.expect(public.editor_label_option(:'q1v3', :'optb', 'anchoring') = '{"done":1,"total":3,"revealed":false}'::jsonb,
   'BE5. Primera etiqueta');
+-- La que ya etiquetó deja de estar pendiente aunque no se cierre hasta terminar, así el editor dice 1 de 3
+select pg_temp.expect(public.editor_question(:'q1') -> 'review' -> 'pendingOptionIds' = jsonb_build_array(:'optc', :'optd'),
+  'BE5. La opción etiquetada sigue pendiente');
 -- Antes de terminar puede cambiarla
 select pg_temp.expect(public.editor_label_option(:'q1v3', :'optb', 'framing_effect') = '{"done":1,"total":3,"revealed":false}'::jsonb,
   'BE5. Cambiar antes de terminar');

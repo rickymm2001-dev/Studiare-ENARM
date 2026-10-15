@@ -157,6 +157,8 @@ describe('Revisiones de médicos', () => {
     const typing = userEvent.setup();
     showScreen();
     const table = await screen.findByRole('table');
+    // La tabla con su propio scroll se enfoca para recorrerla con el teclado (axe en el teléfono)
+    expect(screen.getByRole('region', { name: text.tableLabel })).toHaveAttribute('tabindex', '0');
     expect(within(table).getByRole('rowheader', { name: 'Ana' })).toBeVisible();
     expect(await screen.findByText(text.rate(50))).toBeVisible();
     const total = within(table).getByRole('rowheader', { name: text.total }).closest('tr');

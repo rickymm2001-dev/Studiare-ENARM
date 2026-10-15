@@ -267,6 +267,11 @@ describe('Banco y Sheet', () => {
     expect(within(rows).getByText('Renglón 46. Faltan las referencias.')).toBeVisible();
     expect(within(rows).getByText(`Renglón 46. ${text.sync.notices.topic_inferred}`)).toBeVisible();
     expect(within(rows).getByRole('button', { name: text.sync.rows.csv })).toBeVisible();
+    // La tabla con su propio scroll se enfoca para recorrerla con el teclado (axe en el teléfono)
+    expect(within(rows).getByRole('region', { name: text.sync.rows.title })).toHaveAttribute(
+      'tabindex',
+      '0',
+    );
   });
 
   it('Asignaciones dice quién es el revisor por omisión y avisa si ya no es médico', async () => {

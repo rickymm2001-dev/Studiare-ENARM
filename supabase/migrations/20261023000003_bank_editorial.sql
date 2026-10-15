@@ -862,12 +862,14 @@ begin
         join public.bias_labels l on l.option_id = coalesce(o.option_id, o.id) and l.labeler_id = v_uid
         where o.question_version_id = v_latest.id
       ), '[]'::jsonb),
+      -- Los distractores que el revisor todavía no etiqueta. Las etiquetas se cierran juntas al terminar,
+      -- así que una guardada ya no está pendiente aunque siga abierta (como el repositorio local)
       'pendingOptionIds', case when v_my_role = 'reviewer' and v_state = 'blind_pending' then coalesce((
         select jsonb_agg(coalesce(o.option_id, o.id) order by o.position)
         from public.question_options o
         where o.question_version_id = v_latest.id and not o.is_correct
           and not exists (select 1 from public.bias_labels l
-            where l.option_id = coalesce(o.option_id, o.id) and l.labeler_id = v_uid and l.locked_at is not null)
+            where l.option_id = coalesce(o.option_id, o.id) and l.labeler_id = v_uid)
       ), '[]'::jsonb) else '[]'::jsonb end
     ),
     'reports', jsonb_build_object(

@@ -164,7 +164,8 @@ function ReportTable({ rows }: { rows: readonly ReviewReportRow[] }) {
   const columns = text.columns;
   const totals = reviewTotals(rows);
   return (
-    <div className="overflow-x-auto">
+    // La tabla tiene su propio scroll en el teléfono, así que se enfoca para recorrerla con el teclado
+    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={text.tableLabel}>
       <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-fg-muted">

@@ -453,7 +453,8 @@ function RunRows({ runId, finishedAt }: { runId: string; finishedAt: string | nu
                 {copy.csv}
               </Button>
             </div>
-            <div className="overflow-x-auto">
+            {/* La tabla tiene su propio scroll en el teléfono, así que se enfoca para recorrerla con el teclado */}
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={copy.title}>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-fg-muted">

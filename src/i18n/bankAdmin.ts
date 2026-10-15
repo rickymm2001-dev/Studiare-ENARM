@@ -320,6 +320,7 @@ export const bankAdminText = {
       amount: 'Monto',
     },
     total: 'Total',
+    tableLabel: 'Revisiones por médico y mes',
     summaryCsv: 'Descargar CSV del resumen',
     detailCsv: 'Descargar CSV del detalle',
     summaryFile: (from: string, to: string) => `revisiones-resumen-${from}-a-${to}.csv`,

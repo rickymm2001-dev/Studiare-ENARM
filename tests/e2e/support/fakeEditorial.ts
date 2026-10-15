@@ -878,9 +878,10 @@ const editorQuestion: Handler = (store, caller, args) => {
           ? [{ optionId: option.optionId, tag: label.tag, locked: label.lockedAt !== null }]
           : [];
       }),
+      // Los distractores sin etiqueta del revisor, cerrada o no, como editor_question
       pendingOptionIds: hide
         ? ordered
-            .filter((option) => !option.isCorrect && !(mine.get(option.optionId)?.lockedAt ?? null))
+            .filter((option) => !option.isCorrect && !mine.has(option.optionId))
             .map((option) => option.optionId)
         : [],
     },
