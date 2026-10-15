@@ -8,9 +8,13 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './tests/e2e/support/fakeSupabaseConfig';
+import { loopbackUrl, serverStartTimeout, testPorts } from './server/src/testPorts.ts';
 
-const PREVIEW_URL = 'http://127.0.0.1:4173';
-const PROXY_URL = 'http://127.0.0.1:8787';
+// Puertos de los servidores de prueba. Con PW_PORT_OFFSET se corren juntos para que varias copias del
+// repositorio corran Playwright a la vez (tests/e2e/README.md)
+const PORTS = testPorts(process.env);
+const PREVIEW_URL = loopbackUrl(PORTS.preview);
+const PROXY_URL = loopbackUrl(PORTS.proxy);
 
 const phone = {
   browserName: 'chromium' as const,
@@ -50,14 +54,14 @@ export default defineConfig({
       command: 'node server/src/main.ts --mock --ephemeral',
       url: `${PROXY_URL}/health`,
       reuseExistingServer: false,
-      timeout: 30_000,
+      timeout: serverStartTimeout(30_000, PORTS),
     },
     {
       command: 'npm run build && npm run preview',
       url: PREVIEW_URL,
       // Nunca reusar una vista previa abierta, que podría ser de una compilación anterior
       reuseExistingServer: false,
-      timeout: 180_000,
+      timeout: serverStartTimeout(180_000, PORTS),
     },
     {
       // El mismo build con la nube hacia el Supabase simulado de las e2e de nube, como en
@@ -70,7 +74,7 @@ export default defineConfig({
       },
       url: CLOUD_PREVIEW_URL,
       reuseExistingServer: false,
-      timeout: 240_000,
+      timeout: serverStartTimeout(240_000, PORTS),
     },
   ],
 });

@@ -5,9 +5,18 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './tests/e2e/support/fakeSupabaseConfig';
+import {
+  loopbackUrl,
+  mayReuseServer,
+  serverStartTimeout,
+  testPorts,
+} from './server/src/testPorts.ts';
 
-const PREVIEW_URL = 'http://127.0.0.1:4173';
-const PROXY_URL = 'http://127.0.0.1:8787';
+// Puertos de los servidores de prueba. Con PW_PORT_OFFSET se corren juntos para que varias copias del
+// repositorio corran Playwright a la vez (tests/e2e/README.md)
+const PORTS = testPorts(process.env);
+const PREVIEW_URL = loopbackUrl(PORTS.preview);
+const PROXY_URL = loopbackUrl(PORTS.proxy);
 
 /** Las pruebas de nube viven aparte y solo corren contra el build con la nube configurada */
 const CLOUD_TESTS = /tests[\\/]e2e[\\/]cloud[\\/].*\.spec\.ts$/;
@@ -76,18 +85,22 @@ export default defineConfig({
   // Las pruebas corren contra el build de producción, porque el service worker solo existe ahí
   webServer: [
     {
-      // El proxy corre forzado en modo simulado para que las pruebas no dependan de una clave
+      // El proxy corre forzado en modo simulado para que las pruebas no dependan de una clave. Toma el
+      // puerto de PW_PORT_OFFSET, que hereda de este proceso
       command: 'node server/src/main.ts --mock --ephemeral',
       url: `${PROXY_URL}/health`,
       // Nunca reusar un proxy abierto, que podría estar en modo real con clave (D-040)
       reuseExistingServer: false,
-      timeout: 30_000,
+      timeout: serverStartTimeout(30_000, PORTS),
     },
     {
+      // El puerto de la vista previa lo pone vite.config.ts con el mismo PW_PORT_OFFSET
       command: 'npm run build && npm run preview',
       url: PREVIEW_URL,
-      reuseExistingServer: !process.env.CI,
-      timeout: 180_000,
+      // Fuera del CI se reusa una vista previa abierta solo con los puertos de siempre. Con otro juego
+      // nunca, porque podría ser el build de otra copia del repositorio
+      reuseExistingServer: mayReuseServer(PORTS, process.env),
+      timeout: serverStartTimeout(180_000, PORTS),
     },
     {
       // El mismo build con la nube configurada hacia el proyecto falso, en su propia carpeta y puerto.
@@ -99,8 +112,8 @@ export default defineConfig({
         VITE_SUPABASE_ANON_KEY: FAKE_SUPABASE_ANON_KEY,
       },
       url: CLOUD_PREVIEW_URL,
-      reuseExistingServer: !process.env.CI,
-      timeout: 240_000,
+      reuseExistingServer: mayReuseServer(PORTS, process.env),
+      timeout: serverStartTimeout(240_000, PORTS),
     },
   ],
 });

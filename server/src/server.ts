@@ -16,8 +16,13 @@ export function startProxy(options: {
   port: number;
   mode: AiMode;
   ai?: AiRoutesDeps;
+  allowedOrigins?: ReadonlySet<string>;
 }): Promise<RunningProxy> {
-  const app = createApp({ mode: options.mode, ...(options.ai ? { ai: options.ai } : {}) });
+  const app = createApp({
+    mode: options.mode,
+    ...(options.ai ? { ai: options.ai } : {}),
+    ...(options.allowedOrigins ? { allowedOrigins: options.allowedOrigins } : {}),
+  });
   return new Promise((resolve, reject) => {
     const server = serve({ fetch: app.fetch, port: options.port, hostname: PROXY_HOST }, (info) => {
       resolve({
