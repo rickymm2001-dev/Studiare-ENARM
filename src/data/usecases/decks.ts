@@ -10,9 +10,25 @@ import type { DataApi } from '../context';
 import type { User } from '../schemas/people';
 import { updateProfile } from './profile';
 
-/** Guarda mazos, notas y tarjetas de los archivos con sus IDs estables. Repetirlo no duplica nada */
-async function saveDeckFiles(api: Pick<DataApi, 'repos'>, files: readonly DemoDeckFile[]) {
-  const entities = buildDeckEntities(files);
+/**
+ * Guarda mazos, notas y tarjetas de los archivos con sus IDs estables. Repetirlo no duplica nada. Los
+ * submazos que se bajan del catálogo de la nube (B11, catalogDecks.ts) pasan por aquí con isDemo en
+ * false. Llevan las mismas claves de nota que en la demo, así quien ya los seguía conserva su historial
+ */
+export async function saveDeckFiles(
+  api: Pick<DataApi, 'repos'>,
+  files: readonly DemoDeckFile[],
+  options: { isDemo?: boolean } = {},
+) {
+  const built = buildDeckEntities(files);
+  const isDemo = options.isDemo ?? true;
+  const entities = isDemo
+    ? built
+    : {
+        decks: built.decks.map((deck) => ({ ...deck, isDemo })),
+        notes: built.notes.map((note) => ({ ...note, isDemo })),
+        cards: built.cards,
+      };
   // La decisión de un médico sobre una tarjeta (aprobada o rechazada) sobrevive a volver a seguir el
   // mazo, que si no la regresaría a borrador
   const decided = new Map(
