@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { FOUNDER_SEATS, PLANS } from '../../config/billing';
+import {
+  FOUNDER_SEATS,
+  GUARANTEE_DAYS,
+  PASS_PRICES_MXN,
+  PLANS,
+  TRIAL_DAYS,
+} from '../../config/billing';
 import { PRIVACY_NOTICE_VERSION, type LegalIdentity } from '../../config/legal';
 import { ConsentPurposeSchema } from '../../data/schemas/common';
 import { t } from '../../i18n/es-MX';
@@ -312,14 +318,15 @@ describe('términos de B16', () => {
     expect(terms).toContain(
       `hasta ${PLANS.free.access.dailyQuestions ?? 0} preguntas distintas al día`,
     );
-    // El Fundador anual, los pases, la prueba y la garantía vienen de B10. Al unir B10 se comparan con
-    // PLANS.founder_annual, PASS_PRICES_MXN, TRIAL_DAYS y GUARANTEE_DAYS de src/config/billing.ts
-    expect(terms).toContain('749 pesos al año');
+    // El Fundador anual, los pases, la prueba y la garantía salen de la configuración de B10
+    expect(terms).toContain(`${mxn(PLANS.founder_annual.priceMxn)} pesos al año`);
     expect(terms).toContain(
-      `Pases de un solo pago, ${mxn(PLANS.monthly.priceMxn)} pesos por 1 mes y ${mxn(PLANS.annual.priceMxn)} pesos por 1 año`,
+      `Pases de un solo pago, ${mxn(PASS_PRICES_MXN.monthly)} pesos por 1 mes y ${mxn(PASS_PRICES_MXN.annual)} pesos por 1 año`,
     );
-    expect(terms).toContain('empiezan con 7 días gratis');
-    expect(terms).toContain('Garantía de 7 días. Tienes 7 días naturales');
+    expect(terms).toContain(`empiezan con ${TRIAL_DAYS} días gratis`);
+    expect(terms).toContain(
+      `Garantía de ${GUARANTEE_DAYS} días. Tienes ${GUARANTEE_DAYS} días naturales`,
+    );
   });
 
   it('la prueba gratis dice el cobro automático antes de pedir la tarjeta (4.18)', () => {
