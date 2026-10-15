@@ -208,10 +208,10 @@ describe('repositorio editorial local', () => {
     await asPhysician.label(question.id, first?.optionId ?? '', tagA);
     await asPhysician.label(question.id, second?.optionId ?? '', tagB);
     const pairs = await asPhysician.labelPairs();
-    expect(pairs.map((pair) => [pair.authorTag, pair.reviewerTag])).toEqual([
-      [tagA, tagA],
-      [tagA, tagB],
-    ]);
+    // Las dos etiquetas pueden llevar la misma hora, así que el orden entre ellas no importa
+    expect(pairs.map((pair) => `${pair.authorTag}|${pair.reviewerTag}`).toSorted()).toEqual(
+      [`${tagA}|${tagA}`, `${tagA}|${tagB}`].toSorted(),
+    );
   });
 
   it('los reportes del médico son solo de lo asignado', async () => {
