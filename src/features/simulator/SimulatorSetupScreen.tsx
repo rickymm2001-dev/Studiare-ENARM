@@ -5,7 +5,7 @@
 // y antes de empezar se bajan sus cuerpos. Si llega menos de lo pedido, la práctica arranca con lo
 // concedido y el marco de la app dice por qué. El tope de Gratis es el menor entre lo que cuenta la app
 // y lo que cuenta el servidor, y en un plan de pago el freno del servidor se avisa con su hora.
-import { Gauge, Library, ListChecks, Play } from 'lucide-react';
+import { Gauge, Library, ListChecks, Play, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -59,7 +59,7 @@ function Setup({ session }: { session: ReadySession }) {
   const navigate = useNavigate();
   const practice = usePractice();
   const source = useQuestionSource();
-  const readiness = useSourceReadiness(source);
+  const { readiness, retry } = useSourceReadiness(source);
   const pool = useLiveData(() => source.pool(), [source, readiness]);
   const serverQuota = useServerQuota(source);
   const showNotice = useBankNotice((state) => state.show);
@@ -118,6 +118,13 @@ function Setup({ session }: { session: ReadySession }) {
             <CardTitle id="banco-aviso">{notice.title}</CardTitle>
             <CardDescription>{notice.body}</CardDescription>
           </CardHeader>
+          {/* Con la red de vuelta se prepara solo, y el botón sirve si la red ya estaba */}
+          {readiness === 'never_downloaded' ? (
+            <Button variant="secondary" className="mt-2" onClick={retry}>
+              <RefreshCw aria-hidden />
+              {bankText.retry}
+            </Button>
+          ) : null}
         </Card>
       </>
     );

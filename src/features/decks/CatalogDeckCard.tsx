@@ -75,6 +75,13 @@ function useCloudDeckCatalog(): { state: CatalogState; reload: () => void } {
     setState({ status: 'loading' });
     setAttempt((value) => value + 1);
   }, []);
+  // Al volver la red se pide otra vez, sin esperar a que el alumno lo pida (B4 de la revisión)
+  useEffect(() => {
+    window.addEventListener('online', reload);
+    return () => {
+      window.removeEventListener('online', reload);
+    };
+  }, [reload]);
   return { state, reload };
 }
 
@@ -95,9 +102,15 @@ export function CloudDeckCatalog({ session }: { session: ReadySession }) {
       {state.status === 'loading' || downloads === undefined ? (
         <LoadingState label={text.loading} />
       ) : state.status === 'offline' ? (
-        <p role="status" className="text-sm text-fg-muted">
-          {text.offline}
-        </p>
+        <div className="flex flex-col items-start gap-2">
+          <p role="status" className="text-sm text-fg-muted">
+            {text.offline}
+          </p>
+          <Button size="sm" variant="secondary" onClick={reload}>
+            <RefreshCw aria-hidden />
+            {text.retry}
+          </Button>
+        </div>
       ) : state.status === 'failed' ? (
         <ErrorState description={text.failed} onRetry={reload} />
       ) : state.list.decks.length === 0 ? (

@@ -261,4 +261,33 @@ describe('catálogo de mazos de la nube', () => {
     const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
     expect(await within(catalog).findByText(text.offline, undefined, WAIT)).toBeVisible();
   });
+
+  it('sin conexión, Intentar de nuevo lo vuelve a pedir (B4 de la revisión)', async () => {
+    const user = userEvent.setup();
+    await catalogCloud(true);
+    const cloud = holder.cloud;
+    holder.cloud = null;
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(await within(catalog).findByText(text.offline, undefined, WAIT)).toBeVisible();
+    holder.cloud = cloud;
+    await user.click(within(catalog).getByRole('button', { name: text.retry }));
+    expect(
+      await within(catalog).findByText('Ginecología y obstetricia (Paco)', undefined, WAIT),
+    ).toBeVisible();
+  });
+
+  it('sin conexión lo vuelve a pedir solo cuando vuelve la red', async () => {
+    await catalogCloud(true);
+    const cloud = holder.cloud;
+    holder.cloud = null;
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(await within(catalog).findByText(text.offline, undefined, WAIT)).toBeVisible();
+    holder.cloud = cloud;
+    window.dispatchEvent(new Event('online'));
+    expect(
+      await within(catalog).findByText('Ginecología y obstetricia (Paco)', undefined, WAIT),
+    ).toBeVisible();
+  });
 });

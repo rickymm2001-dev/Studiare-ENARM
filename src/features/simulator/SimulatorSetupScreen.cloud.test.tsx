@@ -237,6 +237,28 @@ describe('Simular con el banco de la nube', () => {
     expect(await app.api.repos.questions.listLatest()).toEqual([]);
   });
 
+  it('cuando vuelve la red baja el catálogo solo y deja elegir', async () => {
+    const server = bank(rows(5));
+    server.state.offline = true;
+    app = await renderApp(SCREENS.simulatorSetup.path);
+    expect(await screen.findByText(bankText.neverDownloaded.title)).toBeVisible();
+    // La red vuelve y el navegador lo avisa (B4 de la revisión de B11)
+    server.state.offline = false;
+    window.dispatchEvent(new Event('online'));
+    expect(await setup()).toBeVisible();
+  });
+
+  it('con la red de vuelta sin aviso del navegador, Intentar de nuevo baja el catálogo', async () => {
+    const user = userEvent.setup();
+    const server = bank(rows(5));
+    server.state.offline = true;
+    app = await renderApp(SCREENS.simulatorSetup.path);
+    expect(await screen.findByText(bankText.neverDownloaded.title)).toBeVisible();
+    server.state.offline = false;
+    await user.click(screen.getByRole('button', { name: bankText.retry }));
+    expect(await setup()).toBeVisible();
+  });
+
   it('con la bandera apagada es el banco de demostración de siempre, con su aviso', async () => {
     writeStoredFlags({ cloudBank: false });
     const server = bank(rows(5));

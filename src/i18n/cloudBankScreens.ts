@@ -21,6 +21,7 @@ export const cloudBankScreensText = {
     title: 'Conéctate una vez para bajar el banco',
     body: 'El banco de preguntas se baja la primera vez que abres Simular con conexión. Después puedes practicar sin conexión con lo que ya bajaste.',
   },
+  retry: 'Intentar de nuevo',
   closed: {
     title: 'El banco de preguntas todavía no abre',
     body: 'Los médicos siguen revisando las preguntas. Mientras tanto puedes repasar tus tarjetas y tus apuntes.',
