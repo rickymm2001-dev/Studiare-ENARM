@@ -103,7 +103,10 @@ export function AgreementScreen() {
         <StatCell
           icon={<Gauge />}
           label={text.stats.kappa}
-          value={report.global ? fixed(report.global.kappa) : text.stats.noKappa}
+          // Mientras calibra no se muestra un kappa de pocos pares, que es ruido
+          value={
+            report.global && !report.calibrating ? fixed(report.global.kappa) : text.stats.noKappa
+          }
           caption={text.stats.kappaCaption}
         />
       </StatPanel>

@@ -143,6 +143,8 @@ describe('acuerdo del etiquetado (pantalla 19)', () => {
     expect(title.closest('[role="status"]')).not.toBeNull();
     const stats = screen.getByRole('region', { name: text.stats.label });
     expect(within(stats).getByText(String(minPairs - 1))).toBeVisible();
+    // Un kappa de pocos pares es ruido. Mientras calibra no se muestra
+    expect(within(stats).getByText(text.stats.noKappa)).toBeVisible();
   });
 
   it('con 30 pares que coinciden el alumno ve sesgos y el tablero lista el acuerdo por etiqueta', async () => {
