@@ -22,6 +22,7 @@ import { ProgressBar } from '@/ui/components/progress-bar';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingState, EmptyState, LoadingState } from '@/ui/states/states';
 import { AiModeCard } from './AiModeCard';
+import { CloudCostsCard } from './CloudCostsCard';
 import { formatDateTime, formatInt, formatUsd, shortId } from './format';
 import { useAiAdmin } from './useAiAdmin';
 
@@ -139,6 +140,8 @@ export function AiCostsScreen() {
           <p className="text-sm text-fg-muted">{text.today.noProxy}</p>
         )}
       </Card>
+
+      <CloudCostsCard />
 
       {summary.total.calls === 0 ? (
         <EmptyState title={text.empty.title} description={text.empty.description} />

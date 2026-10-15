@@ -112,6 +112,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   questionEditor: { title: 'Editor de pregunta', description: '' },
   agreement: { title: 'Acuerdo del etiquetado', description: '' },
   aiDrafts: { title: 'Borradores de IA', description: '' },
+  // Su descripción vive en aiAudit.ts, que carga la pantalla, para no pesar en lo que la app descarga al abrir
+  aiAudit: { title: 'Auditoría de la IA', description: '' },
   contentReports: { title: 'Reportes de contenido', description: '' },
   bankImport: { title: 'Importar banco', description: '' },
   aiCosts: {
@@ -188,6 +190,7 @@ export const t = {
     bank: 'Banco',
     agreement: 'Acuerdo',
     drafts: 'Borradores',
+    audit: 'Auditoría de IA',
     reports: 'Reportes',
     costs: 'Costos',
     settings: 'Configuración',
