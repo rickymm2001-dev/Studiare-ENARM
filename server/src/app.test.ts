@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createApp, type HealthResponse } from './app.ts';
 import { MAX_BODY_BYTES } from './config.ts';
+import { proxyAllowedOrigins, testPorts } from './testPorts.ts';
 
 const LOCAL = { host: '127.0.0.1:8787' };
 
@@ -47,6 +48,29 @@ describe('app del proxy', () => {
       expect(response.status, origin).toBe(200);
     }
     for (const origin of ['https://evil.example', 'null', 'http://127.0.0.1:9999']) {
+      const response = await app.request('/health', { headers: { ...LOCAL, origin } });
+      expect(response.status, origin).toBe(403);
+    }
+  });
+
+  it('con los orígenes del proxy simulado de otra copia acepta su vista previa y nada más', async () => {
+    const app = createApp({
+      mode: 'mock',
+      allowedOrigins: proxyAllowedOrigins(testPorts({ PW_PORT_OFFSET: '10' })),
+    });
+    for (const origin of [
+      'http://127.0.0.1:4183',
+      'http://localhost:4183',
+      'http://127.0.0.1:4173',
+    ]) {
+      const response = await app.request('/health', { headers: { ...LOCAL, origin } });
+      expect(response.status, origin).toBe(200);
+    }
+    for (const origin of [
+      'http://127.0.0.1:4184',
+      'http://127.0.0.1:4193',
+      'https://evil.example',
+    ]) {
       const response = await app.request('/health', { headers: { ...LOCAL, origin } });
       expect(response.status, origin).toBe(403);
     }

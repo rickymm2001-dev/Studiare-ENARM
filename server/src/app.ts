@@ -20,8 +20,14 @@ function hostnameOf(hostHeader: string | undefined): string | null {
   return match?.[1] ?? null;
 }
 
-export function createApp(options: { mode: AiMode; ai?: AiRoutesDeps }) {
+export function createApp(options: {
+  mode: AiMode;
+  ai?: AiRoutesDeps;
+  /** Por omisión ALLOWED_ORIGINS. El proxy simulado de las pruebas suma su vista previa (testPorts.ts) */
+  allowedOrigins?: ReadonlySet<string>;
+}) {
   const app = new Hono();
+  const allowedOrigins = options.allowedOrigins ?? ALLOWED_ORIGINS;
 
   app.use(secureHeaders());
 
@@ -40,7 +46,7 @@ export function createApp(options: { mode: AiMode; ai?: AiRoutesDeps }) {
   // preguntar antes (preflight) y que la app sí manda (5.3, 8.1)
   app.use(async (c, next) => {
     const origin = c.req.header('origin');
-    if (origin !== undefined && !ALLOWED_ORIGINS.has(origin)) {
+    if (origin !== undefined && !allowedOrigins.has(origin)) {
       return c.json({ error: 'origin_not_allowed' }, 403);
     }
     if (!['GET', 'HEAD'].includes(c.req.method)) {
