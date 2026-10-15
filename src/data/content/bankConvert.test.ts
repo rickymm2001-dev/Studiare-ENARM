@@ -182,6 +182,43 @@ describe('lo que entra incompleto y lo que solo se avisa', () => {
     expect(result.question).toMatchObject({ task: 'diagnosis', structureDeclared: false });
   });
 
+  it('sin Tarea y sin tarea que detectar entra con el pendiente task_undetected, sin rechazo', () => {
+    const result = only({
+      [HEADERS.task]: '',
+      [HEADERS.prompt]: '[Prueba] ¿Qué opinas del caso simulado?',
+      [HEADERS.refs]: '',
+    });
+    expect(result.problems).toEqual([]);
+    expect(result.notices).toEqual(['structure_auto']);
+    expect(result.incomplete).toEqual(['task_undetected', 'references_missing']);
+    expect(result.question).toMatchObject({ task: '', structureDeclared: false });
+    // El mismo orden que pide la aprobación
+    const question = result.question;
+    if (!question) throw new Error('Debió entrar');
+    expect(
+      versionIssues(
+        {
+          prompt: question.prompt,
+          task: question.task,
+          explanation: question.explanation,
+          refs: question.refs,
+          options: question.options.map((option, position) => ({
+            letter: option.letter,
+            position,
+            text: option.text,
+            isCorrect: option.correct,
+            biasTag: option.bias,
+            rationale: option.rationale,
+          })),
+          canonicalPositions: question.options
+            .map((option, position) => (question.canonical.includes(option.letter) ? position : -1))
+            .filter((position) => position >= 0),
+        },
+        taggableBiasKeys,
+      ),
+    ).toEqual(result.incomplete);
+  });
+
   it('un renglón con todos los tipos de reactivo raros entra sin pendientes (D-080)', () => {
     const result = only({
       [HEADERS.kind]:

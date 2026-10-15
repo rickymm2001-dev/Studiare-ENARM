@@ -1,6 +1,7 @@
 // Pasos de la revisión de una pregunta en el editor (4.1 y 4.4 del plan de B11), como función pura
 import { describe, expect, it } from 'vitest';
 import type { EditorQuestion, EditorVersion } from '@/data/bank/contracts';
+import { draftFromEditorVersion } from './editorDraft';
 import {
   approvalBlockers,
   needsComment,
@@ -201,5 +202,17 @@ describe('pasos de la revisión', () => {
     });
     expect(sourceKeyLabel('import:MI-0001')).toBe('MI-0001');
     expect(sourceKeyLabel(null)).toBeNull();
+  });
+});
+
+describe('versión del Sheet sin tarea', () => {
+  it('el borrador deja la tarea vacía para que el médico la elija y una desconocida sigue como diagnóstico', () => {
+    const structure = version().structure;
+    expect(
+      draftFromEditorVersion(version({ structure: { ...structure, task: '' } })).structure.task,
+    ).toBe('');
+    expect(
+      draftFromEditorVersion(version({ structure: { ...structure, task: 'otra' } })).structure.task,
+    ).toBe('diagnosis');
   });
 });

@@ -5,6 +5,7 @@ import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
 import {
   buildNextVersion,
   changedParts,
+  checkedStructure,
   draftFromVersion,
   taxonomyViewFrom,
   validateDraft,
@@ -119,6 +120,14 @@ describe('borrador del editor', () => {
     expect(codes({ ...draft, options: only((index) => index === 0) })).toEqual(
       expect.arrayContaining(['canonical_count', 'canonical_without_distractor']),
     );
+  });
+
+  it('sin tarea no se guarda, y nadie la elige por el médico (task_undetected)', () => {
+    const { draft } = sample();
+    const empty: QuestionDraft = { ...draft, structure: { ...draft.structure, task: '' } };
+    expect(codes(empty)).toEqual(['task_missing']);
+    expect(() => checkedStructure(empty)).toThrow();
+    expect(checkedStructure(draft).task).toBe(draft.structure.task);
   });
 
   it('la subespecialidad y el subtema tienen que ser de la rama y del tema', () => {

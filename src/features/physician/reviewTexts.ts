@@ -14,6 +14,7 @@ export function incompleteText(code: string): string {
       return text.bias_missing(letter ?? '');
     case 'bias_unknown':
       return text.bias_unknown(letter ?? '');
+    case 'task_undetected':
     case 'explanation_missing':
     case 'references_missing':
     case 'prompt_missing':

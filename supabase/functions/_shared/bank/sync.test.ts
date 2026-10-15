@@ -280,7 +280,8 @@ describe('modo forzado', () => {
     const t = await setup();
     await t.call({ headers: { [CRON_TOKEN_HEADER]: CRON_TOKEN } });
     const rows = t.store.applied.flatMap((call) => call.rows);
-    expect(rows.filter((row) => row.question !== undefined)).toHaveLength(13);
+    // 14 con GO-0020, que entra sin tarea detectada con su pendiente task_undetected
+    expect(rows.filter((row) => row.question !== undefined)).toHaveLength(14);
     expect(t.store.finished[0]?.input.reason).toBeNull();
   });
 

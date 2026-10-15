@@ -68,6 +68,16 @@ describe('pendientes de una versión', () => {
     expect(incompleteOnly(issues)).toEqual(issues);
   });
 
+  it('una tarea vacía queda pendiente antes de la explicación y sin la propiedad no se revisa', () => {
+    expect(versionIssues({ ...complete, task: '', explanation: '' }, taggable)).toEqual([
+      'task_undetected',
+      'explanation_missing',
+    ]);
+    expect(incompleteOnly(['task_undetected'])).toEqual(['task_undetected']);
+    expect(versionIssues({ ...complete, task: 'diagnosis' }, taggable)).toEqual([]);
+    expect(versionIssues(complete, taggable)).toEqual([]);
+  });
+
   it('usa la letra del Sheet si la opción la trae', () => {
     const options = complete.options.map((option) =>
       option.position === 1 ? { ...option, letter: 'B', biasTag: null } : option,

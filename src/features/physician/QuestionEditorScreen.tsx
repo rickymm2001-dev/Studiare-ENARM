@@ -860,7 +860,11 @@ function EditorForm({
               <SelectField
                 label={text.meta.task}
                 value={draft.structure.task}
-                options={options(text.meta.tasks)}
+                options={
+                  draft.structure.task === ''
+                    ? [{ value: '', label: text.meta.taskPick }, ...options(text.meta.tasks)]
+                    : options(text.meta.tasks)
+                }
                 onChange={(event) => {
                   patch({
                     structure: {

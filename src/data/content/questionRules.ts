@@ -3,12 +3,17 @@
 // la nube. La usa la aprobación local de la demo para pedir lo mismo que la base, y el convertidor del
 // Sheet da los mismos códigos de pendiente. Nunca marca un reactivo por imperfecto (D-080). Solo pide
 // lo que un revisor necesita para aprobar, que es explicación, referencias, la justificación de cada
-// opción y el sesgo de cada distractor. Funciones puras.
+// opción y el sesgo de cada distractor, y la tarea cuando el convertidor no la detectó. Funciones puras.
 import { OPTION_LETTERS } from './bankColumns.ts';
 
 /** Una versión, con lo mínimo para revisar sus pendientes. Tolera borradores incompletos */
 export interface RuleVersion {
   prompt: string;
+  /**
+   * La tarea. Vacía o null cuando el convertidor del Sheet no la detectó, y queda pendiente
+   * task_undetected. Sin la propiedad no se revisa, como en la demo, donde siempre hay tarea
+   */
+  task?: string | null;
   explanation: string;
   /** Títulos de las referencias */
   refs: readonly string[];
@@ -39,8 +44,9 @@ export const MAX_VERSION_OPTIONS = 10;
 const blank = (text: string | null) => text === null || text.trim() === '';
 
 /**
- * Los pendientes de una versión, en orden fijo. Primero los de estructura, después explicación y
- * referencias, y al final los de cada opción por posición. Vacío quiere decir que se puede aprobar
+ * Los pendientes de una versión, en orden fijo. Primero los de estructura, después la tarea, la
+ * explicación y las referencias, y al final los de cada opción por posición. Vacío quiere decir que se
+ * puede aprobar
  */
 export function versionIssues(version: RuleVersion, taggable: ReadonlySet<string>): string[] {
   const issues: string[] = [];
@@ -57,6 +63,7 @@ export function versionIssues(version: RuleVersion, taggable: ReadonlySet<string
     !canonical.some((option) => !option.isCorrect)
   )
     issues.push('canonical_invalid');
+  if (version.task !== undefined && blank(version.task)) issues.push('task_undetected');
   if (blank(version.explanation)) issues.push('explanation_missing');
   if (version.refs.every((ref) => blank(ref))) issues.push('references_missing');
   for (const option of options) {

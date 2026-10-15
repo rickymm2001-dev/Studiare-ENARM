@@ -223,8 +223,8 @@ grant select, insert on public.content_reports to authenticated;
 
 -- ===================================================================== Pendientes de una versión
 -- Lo que le falta a una versión para aprobarse. Espejo de src/data/content/questionRules.ts, con los
--- mismos códigos y el mismo orden. Primero la estructura, después explicación y referencias, y al final
--- cada opción por posición. Nunca marca un reactivo por imperfecto (D-080)
+-- mismos códigos y el mismo orden. Primero la estructura, después la tarea, la explicación y las
+-- referencias, y al final cada opción por posición. Nunca marca un reactivo por imperfecto (D-080)
 create or replace function public.bank_version_issues(p_version_id uuid) returns text[]
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 declare
@@ -258,6 +258,10 @@ begin
     where question_version_id = p_version_id and id = any (v_version.canonical_option_ids) and not is_correct
   ) then
     v_issues := array_append(v_issues, 'canonical_invalid');
+  end if;
+  -- Una versión del Sheet sin tarea detectada (decisión de Ricardo en la revisión de B11)
+  if btrim(coalesce(v_version.task, '')) = '' then
+    v_issues := array_append(v_issues, 'task_undetected');
   end if;
   if btrim(coalesce(v_version.body ->> 'explanation', '')) = '' then
     v_issues := array_append(v_issues, 'explanation_missing');

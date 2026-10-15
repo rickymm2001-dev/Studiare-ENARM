@@ -180,6 +180,7 @@ export const physicianText = {
       auto: (summary: string) => `Sugerencia automática ${summary}`,
       useAuto: 'Usar la sugerencia',
       autoNone: 'El motor no detectó la tarea de esta pregunta.',
+      taskPick: 'Elige la tarea',
       polarities: { affirmative: 'Afirmativa', negative: 'Negativa' } as Record<string, string>,
       formats: {
         clinical_case: 'Caso clínico',
@@ -275,6 +276,7 @@ export const physicianText = {
       canonical_without_distractor: 'El set canónico incluye al menos un distractor.',
       gpc_empty: 'Una referencia de GPC no tiene título.',
       clue_empty: 'Un dato del caso no tiene texto.',
+      task_missing: 'Elige la tarea de la pregunta. No se pudo detectar sola.',
     } as Record<string, string>,
     issueAt: (n: number, message: string) => `Opción ${n}. ${message}`,
   },
@@ -666,6 +668,8 @@ export const physicianText = {
 
   /** Lo que le falta a una versión para aprobarse (3.4), con la letra de la opción cuando aplica */
   incomplete: {
+    task_undetected:
+      'Falta la tarea. No se pudo detectar, así que escríbela en la columna Tarea del Sheet o elígela en el editor.',
     explanation_missing: 'Falta la explicación.',
     references_missing: 'Faltan las referencias.',
     rationale_missing: (letter: string) => `Falta la justificación de la opción ${letter}.`,

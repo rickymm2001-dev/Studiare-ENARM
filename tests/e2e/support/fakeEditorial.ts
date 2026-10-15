@@ -295,6 +295,7 @@ function issuesOf(version: FakeBankVersion): string[] {
   return versionIssues(
     {
       prompt: version.prompt,
+      task: version.task,
       explanation: version.explanation,
       refs: version.gpcRefs.map((ref) => ref.title),
       options: version.options.map((option) => ({
@@ -515,7 +516,12 @@ function insertVersion(store: FakeBankStore, input: VersionInput): FakeBankVersi
     typeof content.subtopic !== 'string' ||
     ![1, 2, 3, 4, 5].includes(difficulty) ||
     !['affirmative', 'negative'].includes(String(content.polarity)) ||
-    !TASKS.has(String(content.task)) ||
+    // Sin tarea entra como pendiente task_undetected, como bank_check_content
+    !(
+      content.task === '' ||
+      content.task === null ||
+      (typeof content.task === 'string' && TASKS.has(content.task))
+    ) ||
     !['clinical_case', 'direct', 'serial_case'].includes(String(content.format)) ||
     options.length < 2 ||
     options.length > 10 ||
@@ -558,7 +564,7 @@ function insertVersion(store: FakeBankStore, input: VersionInput): FakeBankVersi
     difficulty,
     itemKinds: strings(content.itemKinds),
     polarity: content.polarity === 'negative' ? 'negative' : 'affirmative',
-    task: String(content.task),
+    task: typeof content.task === 'string' ? content.task : '',
     format:
       content.format === 'serial_case'
         ? 'serial_case'

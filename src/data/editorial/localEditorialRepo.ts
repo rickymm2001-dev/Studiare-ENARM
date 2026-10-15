@@ -32,7 +32,11 @@ import {
   saveQuestionVersion,
   StaleVersionError,
 } from '@/features/physician/editorActions';
-import { buildNextVersion, validateDraft } from '@/features/physician/editorDraft';
+import {
+  buildNextVersion,
+  checkedStructure,
+  validateDraft,
+} from '@/features/physician/editorDraft';
 import {
   EditorialError,
   type EditorialRepo,
@@ -423,7 +427,7 @@ export function createLocalEditorialRepo(
           branch: draft.branch,
           topic: draft.topic,
           subtopic: draft.subtopic,
-          structure: { ...draft.structure, source: 'physician' },
+          structure: { ...checkedStructure(draft), source: 'physician' },
           explanation: draft.explanation,
           gpcRefs: draft.gpcRefs,
           physicianDifficulty: draft.physicianDifficulty,

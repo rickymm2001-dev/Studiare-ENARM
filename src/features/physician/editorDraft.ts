@@ -10,7 +10,13 @@ export const MIN_OPTIONS = 4;
 export const MAX_OPTIONS = 10;
 export const MAX_SECONDARY_TAGS = 5;
 
-type Structure = Pick<Question['structure'], 'polarity' | 'task' | 'format'>;
+/**
+ * La estructura del borrador. task vacía es una versión del Sheet sin tarea detectada
+ * (task_undetected). El médico la elige antes de guardar
+ */
+type Structure = Pick<Question['structure'], 'polarity' | 'format'> & {
+  task: Question['structure']['task'] | '';
+};
 
 export interface DraftOption {
   /** ID estable de la opción. Las etiquetas de los médicos se guardan con este ID */
@@ -134,7 +140,9 @@ export function draftFromEditorVersion(version: EditorVersion): QuestionDraft {
       subtopic: version.subtopic,
       structure: {
         polarity: version.structure.polarity,
-        task: task.success ? task.data : 'diagnosis',
+        // Sin tarea queda vacía para que el médico la elija. Una que la app no conoce se muestra como
+        // diagnóstico, como antes
+        task: task.success ? task.data : version.structure.task === '' ? '' : 'diagnosis',
         format: version.structure.format,
       },
       explanation: version.explanation,
@@ -184,7 +192,8 @@ export type IssueCode =
   | 'canonical_without_correct'
   | 'canonical_without_distractor'
   | 'gpc_empty'
-  | 'clue_empty';
+  | 'clue_empty'
+  | 'task_missing';
 
 export interface DraftIssue {
   code: IssueCode;
@@ -258,6 +267,7 @@ export function validateDraft(draft: QuestionDraft, taxonomy: TaxonomyView): Dra
 
   if (draft.gpcRefs.some((ref) => ref.title.trim().length === 0)) push('gpc_empty');
   if (draft.clues.some((clue) => clue.text.trim().length === 0)) push('clue_empty');
+  if (draft.structure.task === '') push('task_missing');
   return issues;
 }
 
@@ -279,6 +289,18 @@ export function blockingIssues(
   return kind === 'local'
     ? [...issues]
     : issues.filter((issue) => !CLOUD_PENDING_ISSUES.has(issue.code));
+}
+
+/**
+ * La estructura de un borrador que ya pasó validateDraft, que no deja guardar con la tarea vacía
+ * (task_missing). Nunca elige una tarea por el médico
+ */
+export function checkedStructure(
+  draft: QuestionDraft,
+): Pick<Question['structure'], 'polarity' | 'task' | 'format'> {
+  const { task } = draft.structure;
+  if (task === '') throw new Error('Una versión no se guarda sin tarea. validateDraft lo avisa');
+  return { ...draft.structure, task };
 }
 
 export interface NextVersionInput {
@@ -331,7 +353,7 @@ export function buildNextVersion(input: NextVersionInput): {
     topic: draft.topic,
     subtopic: draft.subtopic,
     structure: {
-      ...draft.structure,
+      ...checkedStructure(draft),
       source:
         current.structure.source === 'physician' ||
         !sameStructure(current.structure, draft.structure)

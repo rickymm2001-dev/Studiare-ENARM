@@ -7,12 +7,12 @@
     "empty": 0,
     "example": 0,
     "unchanged": 0,
-    "created": 13,
+    "created": 14,
     "versioned": 0,
     "converged": 0,
     "meta": 0,
-    "incomplete": 1,
-    "rejected": 11,
+    "incomplete": 2,
+    "rejected": 10,
     "conflict": 0,
     "truncated": 0,
     "topicMismatches": 0
@@ -202,10 +202,10 @@
     {
       "rowNumber": 24,
       "sheetKey": "GO-0020",
-      "outcome": "rejected",
-      "incomplete": [],
+      "outcome": "created",
+      "incomplete": ["task_undetected"],
       "notices": ["structure_auto"],
-      "problems": [{ "code": "task_undetected", "column": "Tarea" }]
+      "problems": []
     },
     {
       "rowNumber": 25,

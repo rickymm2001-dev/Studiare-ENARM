@@ -70,10 +70,16 @@ describe('reporte de oro de los Sheets simulados', () => {
       'template_placeholder',
       'option_gap',
       'difficulty_invalid',
-      'task_undetected',
     ]) {
       expect(problems, code).toContain(code);
     }
+    // Sin tarea que detectar el renglón entra con su pendiente y no se rechaza (revisión de B11)
+    expect(problems).not.toContain('task_undetected');
+    expect(report.rows.find((row) => row.sheetKey === 'GO-0020')).toMatchObject({
+      outcome: 'created',
+      incomplete: ['task_undetected'],
+      problems: [],
+    });
     const notices = new Set(report.rows.flatMap((row) => row.notices));
     for (const code of ['case_rows_apart', 'author_is_reviewer', 'language_unknown']) {
       expect(notices, code).toContain(code);

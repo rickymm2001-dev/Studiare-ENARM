@@ -353,6 +353,25 @@ select pg_temp.expect((select problems from public.bank_sync_row_results where r
 select pg_temp.expect((select count(*) from public.bank_sync_row_results where run_id = :'r11' and outcome = 'rejected') = 2
   and not exists (select 1 from public.bank_questions where source_key = 'sheet:GO-0300'), 'BS11. Un rechazado dejó una pregunta');
 
+-- Un renglón sin tarea detectada entra con su pendiente y no se aprueba hasta elegirla (revisión de B11)
+begin;
+select public.bank_sync_begin('manual', 'real', :'ad') ->> 'runId' as r11b \gset
+select public.bank_sync_apply(:'r11b', jsonb_build_array(jsonb_set(
+  pg_temp.sync_row(32, 'GO-0302', 'create', 'hash-302', p_incomplete => '["task_undetected"]'),
+  '{question,task}', '""')));
+select public.bank_sync_finish(:'r11b', null, '{}', 'ok', null);
+select latest_version_id as v302 from public.bank_questions where source_key = 'sheet:GO-0302' \gset
+select pg_temp.expect((select outcome from public.bank_sync_row_results where run_id = :'r11b' and row_number = 32) = 'created',
+  'BS11. Un renglón sin tarea se rechazó');
+select pg_temp.expect((select task is null and incomplete = '{task_undetected}' from public.questions where id = :'v302'),
+  'BS11. La versión sin tarea no quedó con su pendiente');
+select pg_temp.expect(public.bank_version_issues(:'v302') = '{task_undetected}', 'BS11. bank_version_issues no pidió la tarea');
+-- El editor la recibe vacía y la huella compara con la tarea vacía del renglón
+select pg_temp.expect(public.bank_version_json(:'v302', false) -> 'structure' ->> 'task' = ''
+  and public.bank_sync_versions_content(array[:'v302']::uuid[]) -> 0 -> 'content' ->> 'task' = '',
+  'BS11. La tarea vacía salió como otra');
+rollback;
+
 -- ===================================================================== BS12. Importación del admin
 select pg_temp.set_setting('bank_sync', 'enabled', 'false');
 begin;

@@ -229,7 +229,7 @@ language sql stable security definer set search_path = public, pg_temp as $$
     'content', jsonb_build_object(
       'branch', q.branch, 'topic', q.topic, 'subtopic', coalesce(q.subtopic, ''),
       'difficulty', coalesce(q.difficulty, 3), 'itemKinds', to_jsonb(q.item_kinds),
-      'task', coalesce(q.task, 'diagnosis'), 'polarity', coalesce(q.polarity, 'affirmative'),
+      'task', coalesce(q.task, ''), 'polarity', coalesce(q.polarity, 'affirmative'),
       'language', q.language,
       'vignette', coalesce(q.body ->> 'vignette', ''), 'prompt', coalesce(q.body ->> 'prompt', ''),
       'explanation', coalesce(q.body ->> 'explanation', ''),

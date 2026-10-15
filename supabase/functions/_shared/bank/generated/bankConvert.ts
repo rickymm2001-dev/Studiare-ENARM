@@ -705,7 +705,10 @@ export function convertSheetTable(
     if (taskText !== '') {
       task = findLabeled(TASK_LABELS, taskText) ?? null;
       if (task === null) problem('task_unknown', HEADERS.task, taskText);
-    } else if (task === null && prompt !== '') problem('task_undetected', HEADERS.task);
+    }
+    // Sin tarea que detectar, el renglón entra con el pendiente task_undetected y el médico la elige en
+    // el Sheet o en el editor (decisión de Ricardo en la revisión de B11). Una tarea escrita que no está
+    // en la lista sí rechaza el renglón
     const polarityText = cell('polarity');
     let polarity: 'affirmative' | 'negative' =
       auto.polarity === 'negative' ? 'negative' : 'affirmative';
@@ -804,6 +807,7 @@ export function convertSheetTable(
       .map((reference) => reference.trim())
       .filter(Boolean);
     if (refs.length === 0) incomplete.splice(explanation === '' ? 1 : 0, 0, 'references_missing');
+    if (task === null && taskText === '' && prompt !== '') incomplete.unshift('task_undetected');
     if (
       refs.length > TEXT_LIMITS.references ||
       refs.some((reference) => reference.length > TEXT_LIMITS.reference)
@@ -823,8 +827,7 @@ export function convertSheetTable(
 
     const caseOrderText = cell('caseOrder');
     const caseOrder = /^\d+$/.test(caseOrderText) ? Number(caseOrderText) : null;
-    const accepted =
-      problems.length === 0 && branch && topic && subtopic && task !== null ? true : false;
+    const accepted = problems.length === 0 && branch && topic && subtopic ? true : false;
     pending.push({
       rowNumber: row.rowNumber,
       key: idText === '' ? null : idText,
@@ -832,14 +835,15 @@ export function convertSheetTable(
       incomplete,
       notices,
       question:
-        accepted && branch && topic && subtopic && task !== null
+        accepted && branch && topic && subtopic
           ? {
               branch: branch.key,
               topic: topic.key,
               subtopic: subtopic.key,
               difficulty,
               itemKinds,
-              task,
+              // Vacía si no se detectó. Queda pendiente task_undetected
+              task: task ?? '',
               polarity,
               structureDeclared: taskText !== '' && polarityText !== '',
               language,

@@ -303,7 +303,8 @@ language sql stable security definer set search_path = public, pg_temp as $$
     'branch', q.branch, 'topic', q.topic, 'subtopic', coalesce(q.subtopic, ''),
     'difficulty', coalesce(q.difficulty, 3), 'itemKinds', to_jsonb(q.item_kinds),
     'structure', jsonb_build_object(
-      'polarity', coalesce(q.polarity, 'affirmative'), 'task', coalesce(q.task, 'diagnosis'),
+      -- Vacía si no se detectó, para que el editor pida elegirla (task_undetected)
+      'polarity', coalesce(q.polarity, 'affirmative'), 'task', coalesce(q.task, ''),
       'format', coalesce(q.format, 'direct'), 'source', coalesce(q.structure_source, 'auto')),
     'vignette', coalesce(q.body ->> 'vignette', ''), 'prompt', coalesce(q.body ->> 'prompt', ''),
     'explanation', coalesce(q.body ->> 'explanation', ''),
@@ -355,7 +356,8 @@ begin
     raise exception 'La dificultad va del 1 al 5' using errcode = '22023';
   end if;
   if coalesce(p_content ->> 'polarity', '') not in ('affirmative', 'negative')
-     or coalesce(p_content ->> 'task', '') not in ('diagnosis', 'next_step', 'initial_study', 'confirmatory_study',
+     -- Sin tarea entra como pendiente task_undetected (decisión de Ricardo en la revisión de B11)
+     or coalesce(p_content ->> 'task', '') not in ('', 'diagnosis', 'next_step', 'initial_study', 'confirmatory_study',
        'initial_treatment', 'treatment_of_choice', 'mechanism', 'risk_factor', 'complication_prognosis',
        'prevention_screening', 'data_interpretation')
      or coalesce(p_content ->> 'format', '') not in ('clinical_case', 'direct', 'serial_case') then
@@ -431,7 +433,7 @@ begin
       'gpcRefs', case when jsonb_typeof(p_content -> 'gpcRefs') = 'array' then p_content -> 'gpcRefs' else '[]'::jsonb end,
       'clues', case when jsonb_typeof(p_content -> 'clues') = 'array' then p_content -> 'clues' else '[]'::jsonb end
     ),
-    'draft', false, p_content ->> 'subtopic', p_content ->> 'polarity', p_content ->> 'task',
+    'draft', false, p_content ->> 'subtopic', p_content ->> 'polarity', nullif(p_content ->> 'task', ''),
     p_content ->> 'format', coalesce(p_content ->> 'structureSource', 'auto'), (p_content ->> 'difficulty')::smallint,
     coalesce(array(select jsonb_array_elements_text(
       case when jsonb_typeof(p_content -> 'itemKinds') = 'array' then p_content -> 'itemKinds' else '[]'::jsonb end)), '{}'),
