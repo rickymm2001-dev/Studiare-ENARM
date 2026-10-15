@@ -1,17 +1,19 @@
-// App de Hono del proxy de IA. /health dice el modo y /ai atiende los cinco motores con validación
-// zod, filtro de datos personales, límites y bitácora de costo (8.1).
+// App de Hono del proxy de IA de desarrollo (8.1 y B12, 1.1). /health dice el modo y qué motores ven
+// los alumnos, y /ai atiende los motores y los trabajos por lote con las mismas rutas del núcleo que
+// la Edge Function ai-proxy. Aquí solo se agregan las guardas de localhost y de origen de la app.
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
-import { ALLOWED_HOSTNAMES, ALLOWED_ORIGINS, MAX_BODY_BYTES, PROXY_VERSION } from './config.ts';
-import { createAiRoutes, type AiRoutesDeps } from '../../supabase/functions/_shared/ai/routes.ts';
+import type { AiHealth } from '../../supabase/functions/_shared/ai/engines/aiContracts.ts';
+import {
+  createAiRoutes,
+  HEALTH_VERSION,
+  type AiRoutesDeps,
+} from '../../supabase/functions/_shared/ai/routes.ts';
+import { ALLOWED_HOSTNAMES, ALLOWED_ORIGINS, MAX_BODY_BYTES } from './config.ts';
 import type { AiMode } from './env.ts';
 
-export interface HealthResponse {
-  status: 'ok';
-  mode: AiMode;
-  version: number;
-}
+export type HealthResponse = AiHealth;
 
 function hostnameOf(hostHeader: string | undefined): string | null {
   if (!hostHeader) return null;
@@ -65,9 +67,14 @@ export function createApp(options: {
     }),
   );
 
+  // Sin engines, que solo manda la Edge Function (contrato C1). En desarrollo todo está abierto
   app.get('/health', (c) => {
     c.header('Cache-Control', 'no-store');
-    const body: HealthResponse = { status: 'ok', mode: options.mode, version: PROXY_VERSION };
+    const body: HealthResponse = {
+      status: 'ok',
+      mode: options.ai?.provider?.mode ?? options.mode,
+      version: HEALTH_VERSION,
+    };
     return c.json(body);
   });
 

@@ -1,9 +1,23 @@
 import { APIError } from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
 import { flashcardsInput, hypothesisInput } from '../../../../src/ai/testing/aiSamples.ts';
-import { DEFAULT_CONFIG } from './config.ts';
+import { DEFAULT_CONFIG, type ModelChoice } from './config.ts';
 import { ENGINE_CONTRACTS } from './engines/aiContracts.ts';
-import { createAnthropicProvider, createMockProvider, ProviderError } from './provider.ts';
+import {
+  buildMessageParams,
+  createAnthropicProvider,
+  createMockProvider,
+  ProviderError,
+  readMessage,
+  toProviderError,
+} from './provider.ts';
+import {
+  rateLimitError,
+  refusalMessage,
+  spendLimitError,
+  thinkingFirstMessage,
+  workspaceLimitError,
+} from './testing/fakeAnthropic.ts';
 import { fakeApi, fakeMessage } from './testing/fakes.ts';
 
 const LIMITS = () => ({ timeoutMs: 12_345, maxRetries: 3 });
@@ -117,11 +131,38 @@ describe('proveedor de Anthropic', () => {
     }
   });
 
-  it('una negativa del modelo es una falla del proveedor', async () => {
-    const api = fakeApi([fakeMessage(null, { stop: 'refusal' })]);
-    await expect(createAnthropicProvider(api, LIMITS).call(call())).rejects.toMatchObject({
-      kind: 'provider_error',
-    });
+  it('una negativa del modelo trae su categoría y sus tokens, sin salida que revisar', async () => {
+    const api = fakeApi([refusalMessage('bio')]);
+    const result = await createAnthropicProvider(api, LIMITS).call(call());
+    expect(result.refusal).toEqual({ category: 'bio' });
+    expect(result.raw).toBeUndefined();
+    expect(result.problem).toBeUndefined();
+    expect(result.usage.inputTokens).toBe(1000);
+    const uncategorized = await createAnthropicProvider(
+      fakeApi([fakeMessage(null, { stop: 'refusal' })]),
+      LIMITS,
+    ).call(call());
+    expect(uncategorized.refusal).toEqual({ category: null });
+  });
+
+  it('lee el texto aunque antes venga un bloque de razonamiento', async () => {
+    const result = await createAnthropicProvider(
+      fakeApi([thinkingFirstMessage(okJson)]),
+      LIMITS,
+    ).call(call());
+    expect(result.raw).toMatchObject({ confidence: 'low' });
+    expect(readMessage(thinkingFirstMessage(okJson)).problem).toBeUndefined();
+  });
+
+  it('el límite de gasto de la organización y del espacio de trabajo son org_limit', async () => {
+    for (const error of [spendLimitError(), workspaceLimitError()]) {
+      const failure = await createAnthropicProvider(fakeApi([error]), LIMITS)
+        .call(call())
+        .catch((caught: unknown) => caught);
+      expect(failure).toBeInstanceOf(ProviderError);
+      expect((failure as ProviderError).kind).toBe('org_limit');
+    }
+    expect(toProviderError(rateLimitError()).kind).toBe('rate_limited');
   });
 
   it('traduce los errores de la API sin copiar lo que contestó', async () => {
@@ -156,5 +197,61 @@ describe('proveedor de Anthropic', () => {
       .catch((caught: unknown) => caught);
     expect((failure as ProviderError).kind).toBe('provider_error');
     expect((failure as ProviderError).message).toContain('conectar');
+  });
+});
+
+describe('petición según las reglas del modelo (2.8)', () => {
+  const params = (model: ModelChoice) =>
+    buildMessageParams({
+      model,
+      system: 'S',
+      user: 'U',
+      schema: ENGINE_CONTRACTS.forgetting.output,
+    });
+
+  it('Haiku 4.5 va sin esfuerzo y sin razonamiento', () => {
+    const request = params({
+      id: 'claude-haiku-4-5',
+      effort: null,
+      thinking: null,
+      maxTokens: 1500,
+    });
+    expect(request.output_config).not.toHaveProperty('effort');
+    expect(request).not.toHaveProperty('thinking');
+  });
+
+  it('Haiku 5.5 apaga el razonamiento con disabled y Sonnet 5.5 con between_tools', () => {
+    expect(
+      params({ id: 'claude-haiku-5-5', effort: 'low', thinking: 'off', maxTokens: 4000 }),
+    ).toMatchObject({ thinking: { type: 'disabled' }, output_config: { effort: 'low' } });
+    expect(
+      params({ id: 'claude-sonnet-5-5', effort: 'high', thinking: 'off', maxTokens: 8000 }),
+    ).toMatchObject({ thinking: { type: 'between_tools' }, output_config: { effort: 'high' } });
+  });
+
+  it('con razonamiento adaptativo no se manda thinking, que ya es lo que hacen por omisión', () => {
+    for (const id of ['claude-haiku-5-5', 'claude-sonnet-5-5', 'claude-opus-5-5']) {
+      const request = params({ id, effort: 'medium', thinking: 'adaptive', maxTokens: 4000 });
+      expect(request, id).not.toHaveProperty('thinking');
+      expect(request.output_config?.effort).toBe('medium');
+    }
+  });
+
+  it('Opus 5.5 nunca recibe off, aunque la configuración lo traiga', () => {
+    expect(
+      params({ id: 'claude-opus-5-5', effort: 'low', thinking: 'off', maxTokens: 4000 }),
+    ).not.toHaveProperty('thinking');
+  });
+
+  it('nunca lleva metadata, herramientas, temperatura ni datos aparte del mensaje', () => {
+    const request = params({
+      id: 'claude-sonnet-5-5',
+      effort: 'low',
+      thinking: 'adaptive',
+      maxTokens: 6000,
+    });
+    expect(Object.keys(request).sort()).toEqual(
+      ['max_tokens', 'messages', 'model', 'output_config', 'system'].sort(),
+    );
   });
 });

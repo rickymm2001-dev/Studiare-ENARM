@@ -13,7 +13,8 @@ import { AI_ENGINES, ENGINE_CONTRACTS } from './engines/aiContracts.ts';
 import { mockHypothesis } from './engines/aiMock.ts';
 import { bundledPromptSets } from './prompts.ts';
 import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
-import { runEngine, type RunDeps } from './run.ts';
+import { runEngine, validateOutput, type RunDeps } from './run.ts';
+import { refusalMessage, spendLimitError } from './testing/fakeAnthropic.ts';
 import { fakeApi, fakeMessage } from './testing/fakes.ts';
 
 const prompts = bundledPromptSets();
@@ -151,7 +152,54 @@ describe('modo real con cliente falso', () => {
       'forgetting',
       input,
     );
-    expect(broken).toMatchObject({ ok: false, error: 'provider_error' });
+    expect(broken).toMatchObject({ ok: false, error: 'provider_error', outcome: 'provider_error' });
+  });
+
+  it('una negativa no se reintenta, cuesta lo que usó y guarda su categoría', async () => {
+    const api = fakeApi([refusalMessage('general_harms'), fakeMessage(good)]);
+    const result = await runEngine(deps(real(api)), 'forgetting', input);
+    expect(result).toMatchObject({
+      ok: false,
+      error: 'refused',
+      outcome: 'refused',
+      refusalCategory: 'general_harms',
+      message: 'La IA no atendió esta petición. Se usa la versión sin IA.',
+      cost: { inputTokens: 1000 },
+    });
+    expect(api.calls).toHaveLength(1);
+  });
+
+  it('el límite de gasto de Anthropic sale como pausa y queda como org_limit', async () => {
+    const result = await runEngine(deps(real(fakeApi([spendLimitError()]))), 'forgetting', input);
+    expect(result).toMatchObject({ ok: false, error: 'paused', outcome: 'org_limit' });
+  });
+
+  it('un error del cliente sale como invalid_output con su resultado para la bitácora', async () => {
+    const invented = JSON.stringify({ ...mockHypothesis(input), evidence: ['q-99'] });
+    const result = await runEngine(
+      deps(real(fakeApi([fakeMessage(invented), fakeMessage(invented)]))),
+      'forgetting',
+      input,
+    );
+    expect(result).toMatchObject({ outcome: 'invalid_output', refusalCategory: null });
+  });
+});
+
+describe('validateOutput, que comparten el camino al momento y los lotes', () => {
+  it('pasa lo bueno, dice por qué falla el esquema y por qué falla una guarda', () => {
+    expect(validateOutput('forgetting', mockHypothesis(input), input, SOURCE_KEYS)).toMatchObject({
+      ok: true,
+    });
+    expect(validateOutput('forgetting', { hypothesis: 1 }, input, SOURCE_KEYS)).toMatchObject({
+      ok: false,
+      schemaValid: false,
+    });
+    const invented = { ...mockHypothesis(input), evidence: ['q-99'] };
+    expect(validateOutput('forgetting', invented, input, SOURCE_KEYS)).toMatchObject({
+      ok: false,
+      schemaValid: true,
+      issues: [expect.stringContaining('Citaste evidencia') as unknown],
+    });
   });
 });
 

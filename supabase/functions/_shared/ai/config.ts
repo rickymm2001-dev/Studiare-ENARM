@@ -3,6 +3,7 @@
 // los guarda en la tabla ai_config en la nube o en server/ai-config.local.json en desarrollo
 // (server/src/ai/configFile.ts). Nunca hay una clave en este archivo. Sin Node ni Deno (B12, 1.1).
 import { z } from 'zod';
+import { modelChoiceProblem } from './models.ts';
 import {
   AI_ENGINES,
   AiEffortSchema,
@@ -198,4 +199,16 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
     }
   }
   return merged;
+}
+
+/**
+ * Por qué una configuración no se puede usar, o null. Cada modelo tiene que cumplir sus reglas de
+ * esfuerzo y razonamiento (models.ts), y se rechaza al guardarla y no a media llamada (B12, 2.8)
+ */
+export function configProblem(config: AiConfig): string | null {
+  for (const engine of AI_ENGINES) {
+    const problem = modelChoiceProblem(config.models[engine]);
+    if (problem) return `El motor ${engine} no se puede guardar así. ${problem}`;
+  }
+  return null;
 }

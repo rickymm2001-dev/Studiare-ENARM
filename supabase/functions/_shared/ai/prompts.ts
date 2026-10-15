@@ -97,8 +97,13 @@ export function buildPromptSets(sources: readonly PromptSource[]): PromptSets {
  * UTF-8. Es la promptHash de la compuerta 1 (B12, 5.5) y de la muestra de auditoría. Usa Web Crypto,
  * que existe en Node y en Deno
  */
-export async function promptHash(prompt: PromptSet): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(prompt.text));
+export function promptHash(prompt: PromptSet): Promise<string> {
+  return sha256Hex(prompt.text);
+}
+
+/** SHA-256 en hexadecimal de un texto en UTF-8, con Web Crypto */
+export async function sha256Hex(text: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
@@ -127,4 +132,20 @@ export function buildUserMessage(input: unknown, issues: readonly string[] = [])
     );
   }
   return parts.join('\n');
+}
+
+/**
+ * La entrada que lleva un mensaje de buildUserMessage, para el lote simulado, que calcula su respuesta
+ * fija con ella. undefined si el mensaje no tiene el bloque de datos
+ */
+export function inputFromUserMessage(message: string): unknown {
+  const lines = message.split('\n');
+  const at = lines.indexOf('<datos>');
+  const data = at === -1 ? undefined : lines[at + 1];
+  if (data === undefined || lines[at + 2] !== '</datos>') return undefined;
+  try {
+    return JSON.parse(data) as unknown;
+  } catch {
+    return undefined;
+  }
 }

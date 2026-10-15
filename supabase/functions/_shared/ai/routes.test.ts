@@ -11,30 +11,47 @@ import { DEFAULT_CONFIG, type AiConfig } from './config.ts';
 import { ACADEMIC_SOURCE_KEYS } from './engines/academicSources.ts';
 import { AI_ENGINES } from './engines/aiContracts.ts';
 import { mockHypothesis } from './engines/aiMock.ts';
-import { Ledger } from './ledger.ts';
+import { alwaysOpenGate } from './gate.ts';
+import { DayLedger } from './ledger.ts';
 import { bundledPromptSets } from './prompts.ts';
 import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
-import { createAiRoutes, type AiRoutesDeps } from './routes.ts';
+import { createAiRoutes, healthOf, type AiRoutesDeps } from './routes.ts';
 import { fakeApi, fakeMessage, requestBody, STUDENT } from './testing/fakes.ts';
+import { MemoryJobStore } from './testing/memory.ts';
 
+const OTHER_STUDENT = '01HZX0000000000000000000BB';
+/** Sin token es el dueño, como en el proxy de desarrollo. Con token, el alumno de pago de ese id */
 const HEADERS = { 'content-type': 'application/json' };
+const studentHeaders = (id = STUDENT) => ({ ...HEADERS, authorization: `Bearer ${id}` });
 
-/** Las rutas con el núcleo solo. Prompts generados, libro en memoria y configuración de fábrica */
+/** Las rutas con el núcleo solo. Prompts generados, libro y cola en memoria y todo abierto */
 function coreDeps(
   provider: (config: () => AiConfig) => AiProvider = () => createMockProvider(),
   saveConfig?: AiRoutesDeps['saveConfig'],
-): AiRoutesDeps {
+): AiRoutesDeps & { ledger: DayLedger } {
   let config = DEFAULT_CONFIG;
   const getConfig = () => config;
+  const prompts = bundledPromptSets();
   return {
     provider: provider(getConfig),
-    prompts: bundledPromptSets(),
+    prompts,
     config: getConfig,
     setConfig: (next) => {
       config = next;
     },
     ...(saveConfig ? { saveConfig } : {}),
-    ledger: new Ledger(),
+    ledger: new DayLedger(),
+    jobs: new MemoryJobStore(),
+    gate: alwaysOpenGate(getConfig, prompts),
+    identify: (authorization) => {
+      const id = /^Bearer (.+)$/.exec(authorization ?? '')?.[1];
+      return Promise.resolve({
+        ok: true,
+        caller: id
+          ? { userId: id, role: 'student', paid: true }
+          : { userId: 'dueno-local-0001', role: 'owner', paid: true },
+      });
+    },
     sourceKeys: new Set<string>(ACADEMIC_SOURCE_KEYS),
   };
 }
@@ -56,7 +73,7 @@ const post = (
   app: ReturnType<typeof appOf>,
   engine: string,
   body: unknown,
-  headers: Record<string, string> = HEADERS,
+  headers: Record<string, string> = studentHeaders(),
 ) => app.request(`/ai/${engine}`, { method: 'POST', headers, body: JSON.stringify(body) });
 
 describe('POST /ai/:engine en modo simulado', () => {
@@ -70,7 +87,8 @@ describe('POST /ai/:engine en modo simulado', () => {
 
   it.each(AI_ENGINES)('atiende el motor %s', async (engine) => {
     const { app } = mockApp();
-    const response = await post(app, engine, requestBody(samples[engine] as never));
+    // Como el dueño, que usa los cinco motores, también restructure
+    const response = await post(app, engine, requestBody(samples[engine] as never), HEADERS);
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
     const body = (await response.json()) as { output: unknown; meta: Record<string, unknown> };
@@ -87,7 +105,7 @@ describe('POST /ai/:engine en modo simulado', () => {
     const { app } = mockApp();
     const raw = await app.request('/ai/forgetting', {
       method: 'POST',
-      headers: HEADERS,
+      headers: studentHeaders(),
       body: '{ no es json',
     });
     expect(raw.status).toBe(400);
@@ -195,7 +213,8 @@ describe('límites', () => {
     const other = await post(
       app,
       'forgetting',
-      requestBody(hypothesisInput(), { studentRef: '01HZX0000000000000000000BB' }),
+      requestBody(hypothesisInput()),
+      studentHeaders(OTHER_STUDENT),
     );
     expect(other.status).toBe(200);
   });
@@ -214,7 +233,8 @@ describe('límites', () => {
     const second = await post(
       app,
       'forgetting',
-      requestBody(hypothesisInput(), { studentRef: '01HZX0000000000000000000BB' }),
+      requestBody(hypothesisInput()),
+      studentHeaders(OTHER_STUDENT),
     );
     expect(second.status).toBe(429);
     expect(((await second.json()) as { error: string }).error).toBe('budget_exceeded');
@@ -259,6 +279,7 @@ describe('configuración y uso', () => {
       prompts: Record<string, string>;
     };
     expect(body.mode).toBe('mock');
+    expect(Object.keys(body).sort()).toEqual(['config', 'mode', 'prompts']);
     expect(body.config.models.flashcards?.id).toBe('claude-sonnet-5-5');
     expect(body.prompts.forgetting).toMatch(/^forgetting\.base\.v\d+$/);
     expect(JSON.stringify(body)).not.toMatch(/apiKey|sk-ant/);
@@ -272,6 +293,14 @@ describe('configuración y uso', () => {
       limits: { perStudentPerDay: Record<string, number> };
     };
     expect(body.usage).toMatchObject({ calls: 1, students: 1 });
+    // La forma que lee la pantalla 23, sin campos nuevos que su esquema estricto rechace
+    expect(Object.keys(body.usage).sort()).toEqual([
+      'byEngine',
+      'calls',
+      'day',
+      'spentUsd',
+      'students',
+    ]);
     expect(body.limits.perStudentPerDay.forgetting).toBeGreaterThan(0);
   });
 
@@ -307,7 +336,9 @@ describe('configuración y uso', () => {
     expect((await put(app)).status).toBe(200);
     expect(ai.config().limits.dailyBudgetUsd).toBe(2);
     const failing = coreDeps(undefined, () => Promise.reject(new Error('sin base')));
-    expect((await put(appOf(failing))).status).toBe(400);
+    const response = await put(appOf(failing));
+    expect(response.status).toBe(503);
+    expect(await response.text()).not.toContain('sin base');
     expect(failing.config().limits.dailyBudgetUsd).toBe(DEFAULT_CONFIG.limits.dailyBudgetUsd);
   });
 
@@ -324,8 +355,50 @@ describe('configuración y uso', () => {
         })
       ).status,
     ).toBe(400);
+    // Haiku 4.5 no acepta esfuerzo. Se rechaza al guardar y no a media llamada
+    const effort = await put({
+      models: { forgetting: { id: 'claude-haiku-4-5', effort: 'low', maxTokens: 1500 } },
+    });
+    expect(effort.status).toBe(400);
+    expect(await effort.json()).toMatchObject({
+      message: expect.stringContaining('claude-haiku-4-5 no acepta esfuerzo') as unknown,
+    });
     const broken = await app.request('/ai/config', { method: 'PUT', headers: HEADERS, body: '{' });
     expect(broken.status).toBe(400);
     expect(ai.config().models.forgetting.id).toBe('claude-haiku-4-5');
+  });
+});
+
+describe('salud y permisos del núcleo', () => {
+  it('healthOf dice el modo y, sin proveedor, unavailable', async () => {
+    const ai = coreDeps();
+    expect(await healthOf(ai)).toMatchObject({ status: 'ok', mode: 'mock', version: 2 });
+    expect(await healthOf({ ...ai, provider: null })).toMatchObject({ mode: 'unavailable' });
+  });
+
+  it('una sesión que no se reconoce no llega a ningún motor', async () => {
+    const ai = coreDeps();
+    const app = appOf({
+      ...ai,
+      identify: () => Promise.resolve({ ok: false, failure: 'unavailable' }),
+    });
+    const response = await post(app, 'forgetting', requestBody(hypothesisInput()));
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({ error: 'unauthorized' });
+    expect((await ai.ledger.summary()).calls).toBe(0);
+  });
+
+  it('si la configuración guardada no se puede leer, no atiende a ciegas', async () => {
+    const ai = coreDeps();
+    const app = appOf({ ...ai, refreshConfig: () => Promise.reject(new Error('sin base')) });
+    const response = await post(app, 'forgetting', requestBody(hypothesisInput()));
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({ error: 'not_configured' });
+  });
+
+  it('el sobre puede traer otro alumno, pero cuenta la cuenta de la sesión', async () => {
+    const { app, ai } = mockApp();
+    await post(app, 'forgetting', requestBody(hypothesisInput(), { studentRef: OTHER_STUDENT }));
+    expect(Object.keys(ai.ledger.snapshot().users)).toEqual([STUDENT]);
   });
 });

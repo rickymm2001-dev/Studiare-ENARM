@@ -1,7 +1,8 @@
 // Ejecuta un motor de IA de principio a fin (8.1). Arma el mensaje, llama al proveedor, valida la
 // salida con el esquema del motor y con sus guardas de anclaje. Si algo falla, reintenta una vez
 // diciéndole al modelo qué falló. Si vuelve a fallar, no devuelve nada y la app cae a su plantilla
-// sin IA. Suma los tokens de todos los intentos, porque los dos cuestan.
+// sin IA. Suma los tokens de todos los intentos, porque los dos cuestan. Una negativa del modelo no
+// se reintenta (B12, 2.8). validateOutput la usa también la recolección de lotes (3.4).
 import {
   ENGINE_CONTRACTS,
   type AiCallMeta,
@@ -15,10 +16,13 @@ import {
   guardOutput,
   type GuardResult,
 } from './engines/aiGuards.ts';
+import { MOCK_MODEL } from './engines/aiMock.ts';
 import type { AiConfig } from './config.ts';
 import { addUsage, EMPTY_USAGE, estimateCostUsd, type Usage } from './cost.ts';
+import { ERROR_MESSAGES } from './messages.ts';
+import type { CallOutcome } from './ports.ts';
 import { buildUserMessage, type PromptSets } from './prompts.ts';
-import { ProviderError, type AiProvider } from './provider.ts';
+import { ProviderError, type AiProvider, type ProviderFailure } from './provider.ts';
 
 /** Intentos con reintento por validación. Uno extra, como pide la especificación */
 export const VALIDATION_RETRIES = 1;
@@ -54,13 +58,25 @@ export interface AttemptTrace {
 
 export type RunResult =
   | { ok: true; output: unknown; meta: AiCallMeta; trace: AttemptTrace[] }
-  | { ok: false; error: AiErrorCode; message: string; cost: CostReport; trace: AttemptTrace[] };
+  | {
+      ok: false;
+      error: AiErrorCode;
+      message: string;
+      cost: CostReport;
+      trace: AttemptTrace[];
+      /** Cómo termina en ai_call_log.outcome (2.5) */
+      outcome: CallOutcome;
+      /** La categoría de la negativa del modelo, si se negó */
+      refusalCategory: string | null;
+    };
 
-const FAIL_MESSAGES = {
-  invalid_output: 'La IA no dio una respuesta que se pueda usar. Se usa la versión sin IA.',
-  provider_error: 'No se pudo usar la IA en este momento. Se usa la versión sin IA.',
-  rate_limited: 'El servicio de IA está saturado. Intenta de nuevo en unos minutos.',
-} as const;
+/** El código para la app y el resultado de la bitácora de cada falla del proveedor */
+const PROVIDER_FAILURES: Record<ProviderFailure, { error: AiErrorCode; outcome: CallOutcome }> = {
+  rate_limited: { error: 'rate_limited', outcome: 'rate_limited' },
+  provider_error: { error: 'provider_error', outcome: 'provider_error' },
+  // El límite de gasto de Anthropic. La app lo dice como pausa (2.8)
+  org_limit: { error: 'paused', outcome: 'org_limit' },
+};
 
 const describeSchemaIssues = (issues: readonly { path: PropertyKey[]; message: string }[]) =>
   issues
@@ -68,6 +84,40 @@ const describeSchemaIssues = (issues: readonly { path: PropertyKey[]; message: s
     .map((issue) => `${issue.path.map(String).join('.') || 'raíz'}: ${issue.message}`);
 
 const describeGuard = (result: GuardResult) => result.issues.map((code) => GUARD_MESSAGES[code]);
+
+export type Validation =
+  | { ok: true; output: unknown; guardIssues: string[] }
+  | { ok: false; schemaValid: boolean; issues: string[] };
+
+/**
+ * Revisa una salida contra el esquema y las guardas de anclaje de su motor. La comparten la llamada
+ * al momento y la recolección de lotes, que valida cada resultado contra la entrada guardada (3.4).
+ * En tarjetas devuelve solo las ancladas
+ */
+export function validateOutput<E extends AiEngine>(
+  engine: E,
+  raw: unknown,
+  input: EngineInputs[E],
+  sourceKeys: ReadonlySet<string>,
+): Validation {
+  const parsed = ENGINE_CONTRACTS[engine].output.safeParse(raw);
+  if (!parsed.success) {
+    return { ok: false, schemaValid: false, issues: describeSchemaIssues(parsed.error.issues) };
+  }
+  let output: unknown = parsed.data;
+  let guard: GuardResult;
+  if (engine === 'flashcards') {
+    const guarded = guardFlashcards(parsed.data as never, input as EngineInputs['flashcards'], {
+      sourceKeys,
+    });
+    output = { cards: guarded.cards };
+    guard = guarded.result;
+  } else {
+    guard = guardOutput(engine, parsed.data as never, input as never, { sourceKeys });
+  }
+  if (!guard.passed) return { ok: false, schemaValid: true, issues: describeGuard(guard) };
+  return { ok: true, output, guardIssues: describeGuard(guard) };
+}
 
 export async function runEngine<E extends AiEngine>(
   deps: RunDeps,
@@ -84,10 +134,24 @@ export async function runEngine<E extends AiEngine>(
 
   let usage: Usage = EMPTY_USAGE;
   const report = (): CostReport => ({
-    model: real ? model.id : 'respuestas-fijas-v1',
+    model: real ? model.id : MOCK_MODEL,
     ...usage,
     estimatedCostUsd: price ? estimateCostUsd(price, usage) : 0,
     latencyMs: Math.max(0, Math.round(clock() - started)),
+  });
+  const failure = (
+    error: AiErrorCode,
+    outcome: CallOutcome,
+    trace: AttemptTrace[],
+    refusalCategory: string | null = null,
+  ): RunResult => ({
+    ok: false,
+    error,
+    message: ERROR_MESSAGES[error],
+    cost: report(),
+    trace,
+    outcome,
+    refusalCategory,
   });
 
   let issues: string[] = [];
@@ -104,6 +168,11 @@ export async function runEngine<E extends AiEngine>(
         schema,
       });
       usage = addUsage(usage, result.usage);
+      if (result.refusal) {
+        // Una negativa no se reintenta. Se registra con su categoría y la app usa su plantilla
+        trace.push({ schemaValid: false, guardPassed: null, issues: ['El modelo se negó'] });
+        return failure('refused', 'refused', trace, result.refusal.category);
+      }
       if (result.problem !== undefined) {
         issues = [result.problem];
         trace.push({ schemaValid: false, guardPassed: null, issues });
@@ -112,39 +181,25 @@ export async function runEngine<E extends AiEngine>(
       raw = result.raw;
     } catch (error) {
       const kind = error instanceof ProviderError ? error.kind : 'provider_error';
-      return { ok: false, error: kind, message: FAIL_MESSAGES[kind], cost: report(), trace };
+      const mapped = PROVIDER_FAILURES[kind];
+      return failure(mapped.error, mapped.outcome, trace);
     }
 
-    const parsed = schema.safeParse(raw);
-    if (!parsed.success) {
-      issues = describeSchemaIssues(parsed.error.issues);
-      trace.push({ schemaValid: false, guardPassed: null, issues });
+    const checked = validateOutput(engine, raw, input, deps.sourceKeys);
+    if (!checked.ok) {
+      issues = checked.issues;
+      trace.push({
+        schemaValid: checked.schemaValid,
+        guardPassed: checked.schemaValid ? false : null,
+        issues,
+      });
       continue;
     }
-
-    let output: unknown = parsed.data;
-    let guard: GuardResult;
-    if (engine === 'flashcards') {
-      const guarded = guardFlashcards(parsed.data as never, input as EngineInputs['flashcards'], {
-        sourceKeys: deps.sourceKeys,
-      });
-      output = { cards: guarded.cards };
-      guard = guarded.result;
-    } else {
-      guard = guardOutput(engine, parsed.data as never, input as never, {
-        sourceKeys: deps.sourceKeys,
-      });
-    }
-    if (!guard.passed) {
-      issues = describeGuard(guard);
-      trace.push({ schemaValid: true, guardPassed: false, issues });
-      continue;
-    }
-    trace.push({ schemaValid: true, guardPassed: true, issues: describeGuard(guard) });
+    trace.push({ schemaValid: true, guardPassed: true, issues: checked.guardIssues });
     const cost = report();
     return {
       ok: true,
-      output,
+      output: checked.output,
       meta: {
         engine,
         mode: deps.provider.mode,
@@ -157,16 +212,10 @@ export async function runEngine<E extends AiEngine>(
         estimatedCostUsd: cost.estimatedCostUsd,
         latencyMs: cost.latencyMs,
         outcome: attempt === 0 ? 'ok' : 'retried_ok',
-        validator: { passed: true, issues: guard.issues.map((code) => GUARD_MESSAGES[code]) },
+        validator: { passed: true, issues: checked.guardIssues },
       },
       trace,
     };
   }
-  return {
-    ok: false,
-    error: 'invalid_output',
-    message: FAIL_MESSAGES.invalid_output,
-    cost: report(),
-    trace,
-  };
+  return failure('invalid_output', 'invalid_output', trace);
 }
