@@ -7,6 +7,7 @@ import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { readLegalIdentity, type LegalIdentity } from '@/config/legal';
 import { legalText, type LegalDoc, type LegalKey } from '@/i18n/legal';
+import { legalDocs } from '@/i18n/legalDocs';
 import { t } from '@/i18n/es-MX';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
@@ -39,7 +40,7 @@ const studentLines = (lines: readonly string[] | undefined, identity: LegalIdent
   legalLines(lines, identity, 'student');
 
 function LegalPage({ docKey }: { docKey: LegalKey }) {
-  const doc: LegalDoc = legalText[docKey];
+  const doc: LegalDoc = legalDocs[docKey];
   const identity = readLegalIdentity();
   const other: LegalKey = docKey === 'privacy' ? 'terms' : 'privacy';
   const screenKey = docKey === 'privacy' ? 'privacyNotice' : 'terms';

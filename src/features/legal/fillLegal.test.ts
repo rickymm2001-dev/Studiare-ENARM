@@ -12,6 +12,7 @@ import { PRIVACY_NOTICE_VERSION, type LegalIdentity } from '../../config/legal';
 import { ConsentPurposeSchema } from '../../data/schemas/common';
 import { t } from '../../i18n/es-MX';
 import { legalText, type LegalDoc } from '../../i18n/legal';
+import { legalDocs } from '../../i18n/legalDocs';
 import { LEGAL_MARKS, fillLegal, legalLines, legalToMarkdown } from './fillLegal';
 
 const EMPTY: LegalIdentity = { name: null, address: null, email: null, privacyEmail: null };
@@ -72,7 +73,7 @@ describe('fillLegal', () => {
 });
 
 describe('textos legales', () => {
-  const docs = [legalText.privacy, legalText.terms];
+  const docs = [legalDocs.privacy, legalDocs.terms];
 
   it('toda marca de los textos es una que fillLegal sabe llenar', () => {
     for (const doc of docs) {
@@ -106,8 +107,8 @@ describe('textos legales', () => {
 
   it('el alumno nunca lee una marca de pendiente ni un corchete, aunque falte todo (B16)', () => {
     const shown = [
-      studentText(legalText.privacy),
-      studentText(legalText.terms),
+      studentText(legalDocs.privacy),
+      studentText(legalDocs.terms),
       legalText.draftNotice,
       ...Object.values(legalText.onboarding),
       ...Object.values(legalText.links),
@@ -122,11 +123,11 @@ describe('textos legales', () => {
   });
 
   it('el abogado sí ve qué falta en docs/legal (B16)', () => {
-    const privacy = legalToMarkdown(legalText.privacy, EMPTY);
+    const privacy = legalToMarkdown(legalDocs.privacy, EMPTY);
     expect(privacy).toContain('[Pendiente de Ricardo. Razón social del responsable]');
     expect(privacy).toContain('[Pendiente de Ricardo. Domicilio del responsable]');
     expect(privacy).toContain('a [Pendiente de Ricardo. Correo de privacidad]');
-    const terms = legalToMarkdown(legalText.terms, EMPTY);
+    const terms = legalToMarkdown(legalDocs.terms, EMPTY);
     expect(terms).toContain('a [Pendiente de Ricardo. Correo de soporte]');
     expect(terms).toContain('[Pendiente del abogado. Tribunales competentes]');
     expect(terms).toContain('[Pendiente del abogado. Qué reembolsos hay después de los 7 días]');
@@ -136,18 +137,18 @@ describe('textos legales', () => {
     expect(JSON.stringify(legalText)).not.toMatch(/Plexus/i);
     const identity: LegalIdentity = { ...EMPTY, name: PLEXUS };
     expect(
-      legalLines(section(legalText.privacy, 'responsable').paragraphs, identity, 'student'),
+      legalLines(section(legalDocs.privacy, 'responsable').paragraphs, identity, 'student'),
     ).toEqual([
       `El responsable de tus datos personales es ${PLEXUS}.`,
       'Para cualquier duda sobre este aviso o sobre tus datos, escribe al equipo de Studiare por el medio donde te dieron acceso.',
     ]);
-    expect(studentText(legalText.terms, identity)).toContain(
+    expect(studentText(legalDocs.terms, identity)).toContain(
       `Estos términos son el acuerdo entre tú y ${PLEXUS} sobre el uso de Studiare.`,
     );
   });
 
   it('la versión del aviso es la que se guarda al aceptarlo', () => {
-    expect(legalText.privacy.version).toBe(PRIVACY_NOTICE_VERSION);
+    expect(legalDocs.privacy.version).toBe(PRIVACY_NOTICE_VERSION);
     // Una fecha, con una letra al final si es la segunda versión del mismo día
     expect(PRIVACY_NOTICE_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}[a-z]?$/);
   });
@@ -172,7 +173,7 @@ describe('textos legales', () => {
   });
 
   it('dice qué se guarda al entrar con Google, de cómo nos conociste y de la edad (B9)', () => {
-    const text = legalToMarkdown(legalText.privacy, EMPTY);
+    const text = legalToMarkdown(legalDocs.privacy, EMPTY);
     expect(text).toMatch(/Entrar con Google\. Es opcional/);
     expect(text).toMatch(/Usamos solo tu correo/);
     expect(text).toMatch(/Nunca recibimos tu contraseña de Google/);
@@ -187,7 +188,7 @@ describe('textos legales', () => {
   });
 
   it('el aviso nombra a quienes reciben datos y dice cómo ejercer los derechos', () => {
-    const text = studentText(legalText.privacy, FULL);
+    const text = studentText(legalDocs.privacy, FULL);
     for (const word of ['Supabase', 'Stripe', 'Mercado Pago', 'Anthropic']) {
       expect(text).toContain(word);
     }
@@ -199,7 +200,7 @@ describe('textos legales', () => {
   });
 
   it('cada encargado de B16 está en el aviso con lo que recibe, y los que no están activos lo dicen', () => {
-    const bullets = section(legalText.privacy, 'terceros').bullets ?? [];
+    const bullets = section(legalDocs.privacy, 'terceros').bullets ?? [];
     const of = (name: string) => {
       const found = bullets.find((bullet) => bullet.startsWith(name));
       if (!found) throw new Error(`Falta ${name} en Con quién compartimos tus datos`);
@@ -223,7 +224,7 @@ describe('textos legales', () => {
   });
 
   it('PostHog solo con un permiso aparte de analítica, que empieza apagado (respuesta 78 y 4.27)', () => {
-    const text = studentText(legalText.privacy);
+    const text = studentText(legalDocs.privacy);
     expect(text).toMatch(
       /PostHog, cuando se active.*Solo recibirá datos si das el permiso de analítica, que se pedirá aparte y empezará apagado/,
     );
@@ -233,7 +234,7 @@ describe('textos legales', () => {
   });
 
   it('OpenAI solo recibe texto del banco en evaluaciones internas, nunca datos del alumno (respuesta 38)', () => {
-    const ia = (section(legalText.privacy, 'ia').paragraphs ?? []).join(' ');
+    const ia = (section(legalDocs.privacy, 'ia').paragraphs ?? []).join(' ');
     expect(ia).toMatch(/OpenAI no recibe datos tuyos/);
     expect(ia).toMatch(
       /evaluaciones internas para comparar la calidad de la IA, con texto del banco/,
@@ -243,14 +244,14 @@ describe('textos legales', () => {
   });
 
   it('las finalidades opcionales son justo los permisos que guarda la app, cada uno aparte y apagado (4.27)', () => {
-    const optional = section(legalText.privacy, 'opcionales');
+    const optional = section(legalDocs.privacy, 'opcionales');
     const labels = ConsentPurposeSchema.options.map((purpose) => t.onboarding.consents[purpose][0]);
     expect(optional.bullets?.map((bullet) => bullet.split('.')[0])).toEqual(labels);
     expect(optional.paragraphs?.[0]).toMatch(/Cada una se pide por separado y empieza apagada/);
   });
 
   it('dice la huella del correo de una prueba gratis, que se conserva al eliminar la cuenta (B10, trial_history)', () => {
-    const text = studentText(legalText.privacy);
+    const text = studentText(legalDocs.privacy);
     expect(text).toMatch(
       /Prueba gratis usada\. Si empiezas una prueba gratis, guardamos una huella de tu correo, que es un hash SHA-256/,
     );
@@ -258,13 +259,13 @@ describe('textos legales', () => {
     expect(text).toMatch(/Al eliminar tu cuenta se conserva, ya sin ligarla a tu cuenta/);
     expect(text).toMatch(/Si usaste una prueba gratis, se queda solo la huella de tu correo/);
     expect(text).toMatch(/sin fecha de borrado, solo para evitar pruebas repetidas/);
-    expect(studentText(legalText.terms)).toMatch(
+    expect(studentText(legalDocs.terms)).toMatch(
       /una sola vez por persona\. No se repite si eliminas tu cuenta y vuelves con el mismo correo/,
     );
   });
 
   it('dice la comparación con otros alumnos, solo con permiso, en percentiles y con grupos de 30 (B14)', () => {
-    const text = studentText(legalText.privacy);
+    const text = studentText(legalDocs.privacy);
     expect(text).toMatch(/en percentiles de lo que ya pasó/);
     expect(text).toMatch(/solo con los datos de quienes dieron el permiso de mejora anónima/);
     expect(text).toMatch(/grupos de al menos 30 alumnos/);
@@ -273,7 +274,7 @@ describe('textos legales', () => {
   });
 
   it('dice la factura, las lecturas del banco y los referidos, y qué deja Borrar mis datos (B7, B10 y B11)', () => {
-    const text = studentText(legalText.privacy);
+    const text = studentText(legalDocs.privacy);
     expect(text).toMatch(
       /Factura\. Solo si pides una factura \(CFDI\), tu RFC, tu nombre o razón social, tu régimen fiscal, el código postal de tu domicilio fiscal, el uso del CFDI/,
     );
@@ -289,7 +290,7 @@ describe('textos legales', () => {
   });
 
   it('dice dónde vive la foto de perfil, quién la ve y que se borra con la cuenta (B2)', () => {
-    const text = legalToMarkdown(legalText.privacy, EMPTY);
+    const text = legalToMarkdown(legalDocs.privacy, EMPTY);
     expect(text).toContain('Supabase Storage');
     expect(text).toMatch(/Foto de perfil\. Es opcional/);
     expect(text).toMatch(/La ves tú y, mientras compartan un grupo activo de Party/);
@@ -298,16 +299,16 @@ describe('textos legales', () => {
   });
 
   it('dice que la IA no manda el nombre ni el correo y que no hay chat libre ni predicción', () => {
-    const privacy = legalToMarkdown(legalText.privacy, EMPTY);
+    const privacy = legalToMarkdown(legalDocs.privacy, EMPTY);
     expect(privacy).toMatch(/nunca viaja tu nombre ni tu correo/i);
-    const terms = legalToMarkdown(legalText.terms, EMPTY);
+    const terms = legalToMarkdown(legalDocs.terms, EMPTY);
     expect(terms).toMatch(/No hay chat libre/);
     expect(terms).toMatch(/no predice tu puntaje/i);
   });
 });
 
 describe('términos de B16', () => {
-  const terms = studentText(legalText.terms);
+  const terms = studentText(legalDocs.terms);
 
   it('los precios son los de la configuración de pagos, con el IVA incluido', () => {
     expect(terms).toMatch(/con IVA incluido/);
@@ -351,7 +352,7 @@ describe('términos de B16', () => {
   });
 
   it('dice las condiciones del Fundador (4.5, 4.6 y respuesta 17)', () => {
-    const fundador = (section(legalText.terms, 'fundador').bullets ?? []).join(' ');
+    const fundador = (section(legalDocs.terms, 'fundador').bullets ?? []).join(' ');
     expect(fundador).toMatch(/100 lugares en total que comparten los dos/);
     expect(fundador).toMatch(/Solo se paga con tarjeta en Stripe y con renovación automática/);
     expect(fundador).toMatch(/Tu lugar se aparta al empezar la prueba gratis/);
@@ -364,11 +365,11 @@ describe('términos de B16', () => {
 
 describe('Markdown para el abogado', () => {
   it('lleva el borrador, la versión y todas las secciones', () => {
-    const markdown = legalToMarkdown(legalText.terms, EMPTY);
+    const markdown = legalToMarkdown(legalDocs.terms, EMPTY);
     expect(markdown.startsWith('# Términos y condiciones\n')).toBe(true);
     expect(markdown).toContain(legalText.draftNotice);
-    expect(markdown).toContain(legalText.version(legalText.terms.version));
-    for (const item of legalText.terms.sections) expect(markdown).toContain(`## ${item.title}`);
+    expect(markdown).toContain(legalText.version(legalDocs.terms.version));
+    for (const item of legalDocs.terms.sections) expect(markdown).toContain(`## ${item.title}`);
     expect(markdown.endsWith('\n')).toBe(true);
   });
 
@@ -380,10 +381,10 @@ describe('Markdown para el abogado', () => {
     // Si falla, corre npm run legal:export y revisa el cambio antes de mandarlo al abogado
     const dir = join(import.meta.dirname, '..', '..', '..', 'docs', 'legal');
     expect(readFileSync(join(dir, 'aviso-de-privacidad.md'), 'utf8')).toBe(
-      legalToMarkdown(legalText.privacy, EMPTY),
+      legalToMarkdown(legalDocs.privacy, EMPTY),
     );
     expect(readFileSync(join(dir, 'terminos-y-condiciones.md'), 'utf8')).toBe(
-      legalToMarkdown(legalText.terms, EMPTY),
+      legalToMarkdown(legalDocs.terms, EMPTY),
     );
   });
 });

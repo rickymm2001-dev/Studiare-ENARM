@@ -7,6 +7,7 @@ import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { legalText } from '@/i18n/legal';
+import { legalDocs } from '@/i18n/legalDocs';
 import { t } from '@/i18n/es-MX';
 import { PrivacyNoticeScreen, TermsScreen } from './LegalScreen';
 
@@ -34,12 +35,12 @@ describe('páginas legales', () => {
       screen.getByRole('heading', { level: 1, name: t.screens.privacyNotice.title }),
     ).toBeInTheDocument();
     expect(screen.getByRole('note')).toHaveTextContent(legalText.draftNotice);
-    for (const section of legalText.privacy.sections) {
+    for (const section of legalDocs.privacy.sections) {
       expect(screen.getByRole('heading', { level: 2, name: section.title })).toBeInTheDocument();
     }
     // El índice lleva a cada sección
     const index = screen.getByRole('navigation', { name: legalText.links.contents });
-    expect(within(index).getAllByRole('link')).toHaveLength(legalText.privacy.sections.length);
+    expect(within(index).getAllByRole('link')).toHaveLength(legalDocs.privacy.sections.length);
   });
 
   it('sin datos del responsable no muestra marcas de pendiente ni inventa nada (B16)', () => {
