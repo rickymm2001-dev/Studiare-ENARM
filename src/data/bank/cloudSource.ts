@@ -35,8 +35,11 @@ export type CloudSourceRepos = Pick<Repositories, 'catalog' | 'bankState' | 'que
 
 export interface CloudSourceDeps {
   repos: CloudSourceRepos;
-  /** El cliente de Supabase si ya está. null sin él, que se trata como sin conexión */
-  cloud: () => Rpc | null;
+  /**
+   * El cliente de Supabase. Puede esperar a que el SDK termine de bajar, como pasa justo después de
+   * abrir la app. null sin nube, que se trata como sin conexión
+   */
+  cloud: () => Rpc | null | Promise<Rpc | null>;
   now?: () => Date;
   /** Avisa cuántas filas o cuerpos se descartaron, sin nada de su contenido */
   onDiscarded?: (what: 'catalog' | 'bodies' | 'cases', count: number) => void;
@@ -146,7 +149,7 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
   }
 
   async function refreshAll(): Promise<void> {
-    const cloud = deps.cloud();
+    const cloud = await deps.cloud();
     if (!cloud) return;
     const failure = await refreshCatalog(cloud);
     if (failure === 'network') return;
@@ -193,7 +196,7 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
       if (known !== null && !stale) {
         // La cuota cambia con cada sesión. Se pide sin esperar, para que el tope que se ve esté al día
         void (async () => {
-          const cloud = deps.cloud();
+          const cloud = await deps.cloud();
           const quota = cloud ? await fetchBankQuota(cloud) : null;
           if (quota?.ok) await saveQuota(quota.value);
         })().catch(() => undefined);
@@ -234,7 +237,7 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
         offline,
       });
       if (missing.length === 0) return result([], await cachedQuota(), false);
-      const cloud = deps.cloud();
+      const cloud = await deps.cloud();
       if (!cloud) return result([], await cachedQuota(), true);
 
       const cases = new Map<string, string | null>();
@@ -291,7 +294,7 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
     },
 
     async quota() {
-      const cloud = deps.cloud();
+      const cloud = await deps.cloud();
       const reply = cloud ? await fetchBankQuota(cloud) : null;
       if (reply?.ok) {
         await saveQuota(reply.value);

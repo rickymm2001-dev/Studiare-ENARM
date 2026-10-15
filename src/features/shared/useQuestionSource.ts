@@ -9,7 +9,7 @@ import { createCloudSource } from '@/data/bank/cloudSource';
 import type { QuotaInfo } from '@/data/bank/contracts';
 import { createLocalSource } from '@/data/bank/localSource';
 import type { QuestionSource } from '@/data/bank/questionSource';
-import { getCloud } from '@/data/cloud/client';
+import { loadCloud } from '@/data/cloud/client';
 import { useDataApi, type DataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { currentSourceKind, sourceKindFor } from './questionSourceKind';
@@ -26,7 +26,9 @@ export function questionSourceFor(api: Api, kind: Kind): QuestionSource {
   if (existing) return existing;
   const created =
     kind === 'cloud'
-      ? createCloudSource({ repos: api.repos, cloud: getCloud })
+      ? // Justo al abrir la app el SDK todavía puede estar bajando. La fuente lo espera y no lo toma
+        // como sin conexión
+        createCloudSource({ repos: api.repos, cloud: loadCloud })
       : createLocalSource({ repos: api.repos });
   sources.set(api.repos, { ...known, [kind]: created });
   return created;

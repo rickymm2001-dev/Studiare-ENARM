@@ -8,6 +8,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { writeStoredFlags } from '@/config/featureFlags';
 import type { CatalogRow } from '@/data/bank/contracts';
+import { createCloudSource } from '@/data/bank/cloudSource';
 import { uuidToUlid } from '@/data/cloud/cloudIds';
 import { fakeBankServer, wireRow } from '@/data/testing/bankCloud';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
@@ -18,11 +19,18 @@ import { usePractice } from './practice';
 vi.setConfig({ testTimeout: 30_000 });
 
 // Simular con el banco de la nube (B11, 5.1 a 5.5). getCloud devuelve el banco falso de cada prueba
-const holder = vi.hoisted((): { cloud: unknown } => ({ cloud: null }));
+// Con sdkLoading, getCloud todavía no lo tiene y loadCloud lo entrega cuando termina de bajar
+const holder = vi.hoisted((): { cloud: unknown; sdkLoading: Promise<unknown> | null } => ({
+  cloud: null,
+  sdkLoading: null,
+}));
 vi.mock('@/data/cloud/client', () => ({
-  getCloud: () => holder.cloud,
+  getCloud: () => (holder.sdkLoading ? null : holder.cloud),
   cloudConfigured: () => true,
-  loadCloud: () => Promise.resolve(holder.cloud),
+  loadCloud: async () => {
+    await holder.sdkLoading;
+    return holder.cloud;
+  },
 }));
 
 let app: RenderedApp | undefined;
@@ -52,6 +60,7 @@ afterEach(async () => {
   await resetApp(app?.api);
   app = undefined;
   holder.cloud = null;
+  holder.sdkLoading = null;
   localStorage.clear();
   useCloud.setState({ state: { status: 'off' } });
   useBankNotice.getState().clear();
@@ -120,6 +129,34 @@ describe('Simular con el banco de la nube', () => {
     expect(screen.getByText(bankText.shortfall.reasons.unavailable)).toBeVisible();
     await user.click(screen.getByRole('button', { name: bankText.shortfall.dismiss }));
     expect(screen.queryByText(bankText.shortfall.started(3, 5))).toBeNull();
+  });
+
+  it('al abrir la app espera al SDK de la nube y no toma su carga como sin conexión', async () => {
+    const user = userEvent.setup();
+    const server = bank(rows(5), { plan: 'monthly' });
+    // Así queda justo después de recargar. El catálogo ya está en el navegador, el SDK sigue bajando
+    // y la cuenta se está revisando
+    let release = () => undefined as unknown;
+    holder.sdkLoading = new Promise((resolve) => {
+      release = () => {
+        resolve(undefined);
+      };
+    });
+    useCloud.setState({ state: { status: 'checking' } });
+    app = await renderApp(SCREENS.simulatorSetup.path, {
+      seed: async (api) => {
+        await createCloudSource({ repos: api.repos, cloud: () => server.server }).prepare();
+      },
+    });
+    const practice = await setup();
+    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '5');
+    await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
+    release();
+    holder.sdkLoading = null;
+    await waitFor(() => {
+      expect(usePractice.getState().questionIds).toHaveLength(5);
+    });
+    expect(screen.queryByText(bankText.shortfall.reasons.offline)).toBeNull();
   });
 
   it('sin conexión y sin catálogo bajado pide conectarse una vez y no usa el banco de demostración', async () => {
