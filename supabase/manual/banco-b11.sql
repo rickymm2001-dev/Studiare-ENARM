@@ -2,6 +2,8 @@
 -- confirmación humana (D-113). Pégalo completo en SQL Editor, New query, Run, después de aplicar las
 -- migraciones 20261023000001 a 20261023000006 y después de ejecutar-en-sql-editor.sql, que trae otra
 -- versión de delete_my_data. Es repetible, así que pegarlo dos veces no hace daño.
+-- Es igual a la Sección con delete de 20261023000005_deck_catalog.sql. Con un token válido de Supabase no
+-- lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b11 (docs/DESPLIEGUE.md).
 --
 -- Borrar mis datos y la bitácora de lecturas (8.24). bank_reads es un dato del alumno y también el
 -- contador de su tope de Gratis. Borrar mis datos quita todas sus lecturas menos las del día de estudio
@@ -78,3 +80,8 @@ end;
 $$;
 revoke all on function public.delete_my_data() from public, anon, authenticated, service_role;
 grant execute on function public.delete_my_data() to authenticated;
+
+-- Comprobación. La columna debe salir en true
+select
+  position('bank_reads' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0
+    as borrar_mis_datos_b11;

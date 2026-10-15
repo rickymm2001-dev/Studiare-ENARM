@@ -127,6 +127,25 @@ describe('los planes del repo', () => {
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
   });
 
+  it('b11 lleva las seis migraciones del banco, Borrar mis datos y bank-sync sin verificar JWT', () => {
+    const plan = loadPlan(ROOT, 'b11');
+    expect(plan.migrations.map((step) => step.name)).toEqual([
+      'bank_taxonomy',
+      'bank_core',
+      'bank_editorial',
+      'bank_sync',
+      'deck_catalog',
+      'bank_sync_cron',
+      'manual_banco_b11',
+    ]);
+    expect(plan.functions).toEqual([
+      { slug: 'bank-sync', verifyJwt: false, note: expect.any(String) as string },
+    ]);
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // La cuenta de servicio de Google es una credencial y la pone Ricardo, no este plan
+    expect(Object.keys(plan.secrets ?? {})).toEqual(['GOOGLE_BANK_SHEET_ID']);
+  });
+
   it('los secretos de b10 son los ocho IDs que crea setup-test.ts, con su prefijo', () => {
     const plan = loadPlan(ROOT, 'b10');
     const names = [...PRICE_SPECS.map((spec) => spec.env), ...PORTAL_SPECS.map((spec) => spec.env)];

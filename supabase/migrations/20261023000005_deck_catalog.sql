@@ -569,3 +569,75 @@ revoke all on function public.admin_deck_catalog_overview() from public, anon, a
 grant execute on function public.admin_deck_catalog_overview() to authenticated;
 revoke all on function public.owner_confirm_deck_authorization(text, text) from public, anon, authenticated, service_role;
 grant execute on function public.owner_confirm_deck_authorization(text, text) to authenticated;
+
+-- ===================================================================== Borrar mis datos. Sección con delete
+-- Borrar mis datos conserva las lecturas del banco del día de estudio en curso, para que nadie reinicie
+-- su tope de Gratis, y quita las descargas del catálogo (8.24). Es la fuente de la versión de B11 y va
+-- igual en supabase/manual/banco-b11.sql, para pegarla a mano si el despliegue no puede con un delete
+create or replace function public.delete_my_data() returns jsonb
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_user uuid := auth.uid();
+  v_events bigint;
+  v_records bigint;
+  v_artifacts bigint;
+  v_reports bigint;
+  v_groups bigint;
+  v_decks bigint;
+  v_ai bigint;
+  v_reads bigint;
+  v_downloads bigint;
+begin
+  if v_user is null then
+    raise exception 'Hace falta iniciar sesión' using errcode = '28000';
+  end if;
+  if not public.is_active_device() then
+    raise exception 'Este dispositivo no es el activo de la cuenta' using errcode = '42501';
+  end if;
+
+  -- Una subida a medias no debe revivir lo que se está borrando
+  perform pg_advisory_xact_lock(hashtextextended('sync:' || v_user::text, 0));
+  perform set_config('app.erasing_user', v_user::text, true);
+
+  delete from public.events where user_id = v_user;
+  get diagnostics v_events = row_count;
+  delete from public.sync_records where user_id = v_user;
+  get diagnostics v_records = row_count;
+  delete from public.ai_artifacts where user_id = v_user;
+  get diagnostics v_artifacts = row_count;
+  delete from public.content_reports where reporter_id = v_user;
+  get diagnostics v_reports = row_count;
+  delete from public.memberships where user_id = v_user;
+  get diagnostics v_groups = row_count;
+  -- Los mazos guardados en la tabla vieja arrastran sus notas y tarjetas
+  delete from public.decks where owner_id = v_user;
+  get diagnostics v_decks = row_count;
+  -- El uso y la bitácora de la IA. Sin el uso de hoy, borrar datos no sirve para saltarse el límite
+  -- diario, así que el uso de hoy se conserva y solo se quita lo anterior
+  delete from public.ai_usage_day where user_id = v_user and day < public.ai_day();
+  get diagnostics v_ai = row_count;
+  delete from public.ai_call_log where user_id = v_user;
+  -- Las lecturas del banco, menos las del día de estudio en curso, que cuentan para el tope de Gratis
+  delete from public.bank_reads where user_id = v_user and day < public.study_day();
+  get diagnostics v_reads = row_count;
+  -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
+  delete from public.deck_catalog_downloads where user_id = v_user;
+  get diagnostics v_downloads = row_count;
+
+  perform set_config('app.erasing_user', '', true);
+  return jsonb_build_object(
+    'events', v_events,
+    'records', v_records,
+    'artifacts', v_artifacts,
+    'reports', v_reports,
+    'memberships', v_groups,
+    'decks', v_decks,
+    'ai_usage', v_ai,
+    'bank_reads', v_reads,
+    'deck_downloads', v_downloads
+  );
+end;
+$$;
+revoke all on function public.delete_my_data() from public, anon, authenticated, service_role;
+grant execute on function public.delete_my_data() to authenticated;
+-- ===================================================================== Fin de la sección con delete
