@@ -27,8 +27,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B8. Plan Gratis (PR 49 fusionado)
 - [x] B9. Cuentas y acceso (PR 52 fusionado)
 - [x] B10. Pagos completos (PR 53 fusionado)
-- [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR en curso)
-- [ ] B11. Banco en la nube y Google Sheets
+- [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR 54 fusionado)
+- [x] B11. Banco en la nube y Google Sheets (D-133, PR en curso)
 - [ ] B12. IA real
 - [ ] B13. Inglés médico
 - [ ] B14. Datos y modelo del alumno
@@ -157,6 +157,13 @@ Evidencia
 - PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
 - Revisión independiente con 13 hallazgos, ninguno alto, todos corregidos con su prueba
 - Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
+
+### B11. Banco en la nube y Google Sheets (D-133)
+- Hecho. Banco en la nube con versiones y catálogo, tope de Gratis y freno de descargas en el servidor, sincronización con tu Sheet en una Edge Function, flujo editorial con revisión a ciegas, acuerdo y reporte de pagos por pregunta revisada, catálogo de mazos en Storage con la autorización del dueño, y la app del alumno con la fuente de la nube y estudio sin conexión con lo ya bajado
+- Revisión independiente con 15 hallazgos, todos corregidos. El alto era que un admin podía publicar un mazo de terceros sin tu confirmación cambiando la licencia
+- Decisiones tomadas con el plan. Una Tarea que no se detecta entra como pendiente para aprobar y no se rechaza (D-080), y el pago es por pregunta revisada (respuesta 58)
+- Todo queda apagado hasta tus pasos de B11 en docs/PENDIENTES_DE_RICARDO.md. Con el token de Supabase, subirlo es npm run deploy:supabase -- --plan b11
+- Capturas en docs/screenshots/v3/b11 (48)
 
 ### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
