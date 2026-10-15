@@ -28,7 +28,7 @@ import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { useBankNotice } from '../shared/bankNotice';
 import { dailyQuestions } from '../shared/dailyLimit';
-import { lockedCtaLabel, lockedCtaPath } from '../shared/lockedCta';
+import { useLockedCta } from '../shared/useLockedCta';
 import { useSourceReadiness } from '../shared/useBankReady';
 import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
 import { difficultyGroupOf } from '../shared/difficulty';
@@ -62,6 +62,8 @@ function Setup({ session }: { session: ReadySession }) {
   const pool = useLiveData(() => source.pool(), [source, readiness]);
   const serverQuota = useServerQuota(source);
   const showNotice = useBankNotice((state) => state.show);
+  // El botón del candado de Gratis, con la prueba solo si a este alumno todavía le toca (B10)
+  const lockedCta = useLockedCta();
   const [starting, setStarting] = useState(false);
   // La práctica no pudo empezar porque no llegó ninguna pregunta
   const [blocked, setBlocked] = useState<string | null>(null);
@@ -305,7 +307,7 @@ function Setup({ session }: { session: ReadySession }) {
             ) : left === 0 ? (
               // El aviso de los candados de Gratis, con la prueba gratis si está prendida (B8)
               <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-                <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
+                <Link to={lockedCta.path}>{lockedCta.label}</Link>
               </Button>
             ) : (
               <Button

@@ -93,10 +93,24 @@ describe('Simular con el banco de la nube', () => {
   it('al topar en Gratis muestra el aviso de B8 con la prueba gratis', async () => {
     const server = bank(rows(25));
     for (const row of rows(20)) server.read.add(row.versionId);
-    app = await renderApp(SCREENS.simulatorSetup.path);
+    // Gratis como lo refleja my_plan, que dice que todavía le toca la prueba (B10)
+    app = await renderApp(SCREENS.simulatorSetup.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'free',
+          status: 'none',
+          isSimulated: false,
+          trialAvailable: true,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
     const practice = await setup();
     expect(await within(practice).findByText(t.simulator.limitReached)).toBeVisible();
-    expect(within(practice).getByRole('link', { name: t.billing.freeTrialCta })).toBeVisible();
+    expect(
+      await within(practice).findByRole('link', { name: t.billing.freeTrialCta }),
+    ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
     expect(within(practice).queryByRole('button', { name: t.simulator.start })).toBeNull();
   });
 
