@@ -614,6 +614,7 @@ function SubmitPanel({ view, onSubmit }: { view: ReviewView; onSubmit: () => Pro
         <CardTitle id="editor-mandar">{text.title}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
+      {view.decided ? <p className="text-sm font-medium">{text.decided}</p> : null}
       {view.incomplete.length > 0 ? (
         <>
           <p className="text-sm font-medium">{text.incomplete}</p>
@@ -626,7 +627,7 @@ function SubmitPanel({ view, onSubmit }: { view: ReviewView; onSubmit: () => Pro
       ) : null}
       <div>
         <Button
-          disabled={busy || view.incomplete.length > 0}
+          disabled={busy || view.decided || view.incomplete.length > 0}
           onClick={() => {
             setBusy(true);
             void onSubmit().finally(() => {

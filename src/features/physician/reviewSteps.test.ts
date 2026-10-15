@@ -118,6 +118,27 @@ describe('pasos de la revisión', () => {
     ).toBe('closed');
   });
 
+  it('un borrador que regresó con cambios pedidos ya está decidido y pide una versión nueva', () => {
+    const returned = version({
+      status: 'draft',
+      decisions: [
+        {
+          physician: { id: 'p2', alias: 'Beto' },
+          decision: 'request_changes',
+          comment: 'Revisa la clave',
+          decidedAt: '2026-10-14T15:00:00.000Z',
+        },
+      ],
+    });
+    const view = reviewViewOf(question({ role: 'author', state: 'none' }, [returned]));
+    expect(view?.step).toBe('draft');
+    expect(view?.decided).toBe(true);
+    expect(
+      reviewViewOf(question({ role: 'author', state: 'none' }, [version({ status: 'draft' })]))
+        ?.decided,
+    ).toBe(false);
+  });
+
   it('el admin y quien no está asignado solo leen', () => {
     for (const role of ['admin', 'none'] as const) {
       const view = reviewViewOf(question({ role, state: 'none' }));

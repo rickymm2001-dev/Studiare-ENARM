@@ -27,6 +27,11 @@ export interface ReviewView {
   previous: EditorVersion | null;
   /** Puede guardar versiones nuevas. Nunca durante el paso a ciegas ni siendo admin */
   editable: boolean;
+  /**
+   * La versión más reciente ya tiene una decisión, como un borrador que regresó con cambios pedidos.
+   * No se manda otra vez a revisión (22023). Los cambios van en una versión nueva
+   */
+  decided: boolean;
   /** Distractores del paso a ciegas, con cuántos ya etiquetó */
   blind: { total: number; done: number; pending: string[] } | null;
   /** Qué cambió contra la versión anterior. null en la primera */
@@ -66,6 +71,7 @@ export function reviewViewOf(question: EditorQuestion): ReviewView | null {
     latest,
     previous: previous ?? null,
     editable: writer && step !== 'blind',
+    decided: latest.decisions.length > 0,
     blind:
       step === 'blind'
         ? { total: distractors.length, done: distractors.length - pending.length, pending }

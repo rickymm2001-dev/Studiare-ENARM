@@ -601,6 +601,8 @@ export const physicianText = {
       action: 'Mandar a revisión',
       sent: 'Mandaste la versión a revisión.',
       incomplete: 'Completa los pendientes antes de mandarla.',
+      decided:
+        'Esta versión ya tiene una decisión. Guarda tus cambios como versión nueva para mandarla otra vez.',
     },
     waiting: 'Esta versión espera la decisión del revisor.',
     closed: (status: string) => `La versión más reciente quedó ${status.toLowerCase()}.`,
