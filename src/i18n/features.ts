@@ -411,6 +411,8 @@ export const featureText = {
       owner: 'La cuenta del dueño de la plataforma no se puede borrar desde aquí.',
       active_subscription:
         'Tienes una suscripción con tarjeta activa. Cancélala primero en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros. No se borró nada.',
+      physician_reviews:
+        'Tu cuenta tiene revisiones registradas para pagos. Pide a Ricardo que la cierre. No se borró nada.',
       no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
       network: 'No hay conexión con el servidor. No se borró nada. Inténtalo de nuevo.',
       unknown: 'El servidor no pudo borrar tus datos. No se borró nada. Inténtalo más tarde.',

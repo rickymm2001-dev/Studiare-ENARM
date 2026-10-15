@@ -13,7 +13,13 @@ import {
 } from './avatars';
 
 export type EraseFailure =
-  'not_active_device' | 'owner' | 'active_subscription' | 'no_session' | 'network' | 'unknown';
+  | 'not_active_device'
+  | 'owner'
+  | 'active_subscription'
+  | 'physician_reviews'
+  | 'no_session'
+  | 'network'
+  | 'unknown';
 
 export type EraseResult = { ok: true } | { ok: false; reason: EraseFailure };
 
@@ -38,6 +44,9 @@ export function failureOf(error: RpcError): EraseFailure {
   }
   // La base se niega a eliminar la cuenta mientras haya una suscripción con tarjeta activa (D-106)
   if (error.code === 'FR002') return 'active_subscription';
+  // Un médico con decisiones de revisión no se elimina solo. Respaldan pagos que se conservan para los
+  // impuestos y la llave de review_decisions no tiene on delete (B11, 8.33 del plan de B11)
+  if (error.code === '23503') return 'physician_reviews';
   if (error.code === '28000') return 'no_session';
   // Sin código es que la petición ni llegó al servidor
   if (!error.code) return 'network';

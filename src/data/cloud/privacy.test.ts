@@ -164,6 +164,20 @@ describe('la foto de perfil al eliminar la cuenta (B2)', () => {
     expect(fake.objects.get(OBJECT)?.size).toBe(10);
   });
 
+  it('un médico con revisiones registradas para pagos no se elimina solo y la foto vuelve (B11, 8.33)', async () => {
+    expect(failureOf({ code: '23503', message: 'violates foreign key constraint' })).toBe(
+      'physician_reviews',
+    );
+    const fake = withPhoto(
+      accountCloud({ error: { code: '23503', message: 'review_decisions_physician_id_fkey' } }),
+    );
+    expect(await deleteCloudAccount(fake.cloud, AUTH_ID)).toEqual({
+      ok: false,
+      reason: 'physician_reviews',
+    });
+    expect(fake.objects.get(OBJECT)?.size).toBe(10);
+  });
+
   it('si la foto no se pudo devolver, el motivo queda en consola y la pantalla dice el de la base', async () => {
     const fake = withPhoto(
       accountCloud({ error: { code: 'FR002', message: 'Cancela tu suscripción' } }),
