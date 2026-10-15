@@ -1074,6 +1074,70 @@ Mientras falten los secretos de Google, cada corrida termina como skipped con no
 - Las corridas de la sincronización quedan en bank_sync_runs y su reporte de renglones en bank_sync_row_results, sin texto de ninguna pregunta. Los registros de la función solo dicen el id de la corrida, conteos y códigos
 - Un médico con decisiones registradas no puede borrar su cuenta solo. La base responde 23503, porque esas decisiones respaldan pagos
 
+## IA real en Edge Functions (B12)
+
+### Qué hace
+
+- 20261026000001_ai_proxy_v2. ai_whoami, con la que la función ai-proxy pregunta quién llama, su rol y si su plan es de pago. El libro de IA v2, que suma el gasto por alumno y las generaciones de tarjetas del día (ai_generations), y la bitácora con modo, resultado, tokens de caché, versión del prompt y categoría de negativa. admin_ai_cost_report da el costo por motor, por modo y por alumno al mes
+- 20261026000002_ai_jobs. La cola de lotes (ai_jobs, ai_batches y ai_tick_lease) y las funciones que usa ai-batch. ai_tick_secret_ok compara el secreto del ciclo sin sacarlo de Vault
+- 20261026000003_ai_gate. La compuerta 1. Muestras, textos asignados y reseñas de los médicos (ai_gate_samples, ai_gate_items y ai_gate_reviews), con el veredicto por motor. El estado vive en platform_settings con la llave ai_gate, nace con todos los motores cerrados y sin pausa, y solo cambia con admin_ai_gate_set y admin_ai_pause. Un disparador rechaza cualquier otra escritura, aunque venga de un admin
+- No lleva textos de alumnos ni secretos. El detalle de las funciones de IA está en docs/IA_ALOJADA.md
+
+### Cómo aplicar las tres migraciones
+
+Aplica primero todas las anteriores, incluidas las de B11. Van en orden y las tres son seguras de repetir. Ninguna lleva delete ni drop, así el conector las aplica sin pedir confirmación.
+
+1. supabase/migrations/20261026000001_ai_proxy_v2.sql
+2. supabase/migrations/20261026000002_ai_jobs.sql
+3. supabase/migrations/20261026000003_ai_gate.sql
+
+Después la sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea en Vault ai_tick_secret y programa el trabajo ia-lotes cada 10 minutos. Necesita project_url en Vault, que guardó B11, y si falta se detiene y lo dice. Es repetible.
+
+Al final pega tú en SQL Editor la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql, después de banco-b11.sql. Es la versión de delete_my_data de B12, que conserva lo de B11 y además quita los trabajos de IA del alumno y sus generaciones de días anteriores. Es repetible. delete_my_account no cambia, porque ai_jobs y ai_generations se van en cascada con la cuenta.
+
+Para confirmar que quedó, abre otra New query, pega esto y da clic en Run.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename in ('ai_generations', 'ai_jobs', 'ai_batches',
+     'ai_tick_lease', 'ai_gate_samples', 'ai_gate_items', 'ai_gate_reviews')) as tablas_nuevas,
+  has_function_privilege('authenticated', 'public.ai_whoami()', 'execute') as alumno_pregunta_quien_es,
+  has_function_privilege('anon', 'public.ai_whoami()', 'execute') as anonimo_pregunta_quien_es,
+  has_function_privilege('authenticated', 'public.ai_tick_secret_ok(text)', 'execute') as alumno_prueba_secreto,
+  has_function_privilege('authenticated', 'public.ai_jobs_claim(integer)', 'execute') as alumno_toma_trabajos,
+  has_table_privilege('authenticated', 'public.ai_jobs', 'select') as alumno_lee_trabajos,
+  has_table_privilege('authenticated', 'public.ai_gate_reviews', 'select') as alumno_lee_resenas,
+  (select value from public.platform_settings where key = 'ai_gate') as compuerta,
+  position('ai_jobs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b12,
+  exists (select 1 from vault.decrypted_secrets where name = 'ai_tick_secret') as secreto_del_ciclo,
+  exists (select 1 from cron.job where jobname = 'ia-lotes') as ciclo_de_lotes;
+```
+
+Debe salir
+- tablas_nuevas en 7
+- alumno_pregunta_quien_es en true
+- anonimo_pregunta_quien_es, alumno_prueba_secreto, alumno_toma_trabajos, alumno_lee_trabajos y alumno_lee_resenas en false
+- compuerta con paused en false y engines vacío, hasta que el admin abra un motor
+- borrar_datos_b12 en true. Si sale false, falta pegar la pieza 4
+- secreto_del_ciclo y ciclo_de_lotes en true. Si salen false, falta la pieza del ciclo de lotes
+
+### Las funciones ai-proxy y ai-batch
+
+Las despliega la sesión con el conector, sin verificación de JWT, con index.ts, deno.json y los archivos de supabase/functions/_shared/ai que importan. Son las primeras funciones del proyecto con paquetes de npm, que vienen del mapa de deno.json con las mismas versiones de package.json. Los secretos y los pasos están en docs/IA_ALOJADA.md.
+
+```bash
+supabase functions deploy ai-proxy --no-verify-jwt
+supabase functions deploy ai-batch --no-verify-jwt
+```
+
+### Qué conviene saber
+
+- El chequeo de seguridad de Supabase marcará, a propósito, siete tablas nuevas con permisos por fila y sin políticas (ai_generations, ai_jobs, ai_batches, ai_tick_lease, ai_gate_samples, ai_gate_items y ai_gate_reviews). Ni anon ni authenticated tienen permisos sobre ellas, y solo las tocan las funciones de la base
+- También marcará las funciones que la app llama con sesión, ai_whoami, las de la compuerta y las admin_ai_*. Revisan por dentro la sesión, el dispositivo activo, la asignación del médico o is_admin, que con B9 pide segundo factor
+- Las del libro, la cola, el ciclo y el secreto solo las ejecuta service_role. supabase/tests/function_grants_test.sql revisa la lista completa
+- Las reseñas de los médicos se quedan aunque un médico borre su cuenta, sin su nombre, para que el veredicto de una muestra cerrada no cambie
+- El ID de cada lote de Anthropic se guarda en ai_batches. La entrada de cada trabajo se borra al terminar y la salida 14 días después de entregarla, sin borrar la fila, que queda para el costo. El lote se borra en Anthropic en cuanto se procesa
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
