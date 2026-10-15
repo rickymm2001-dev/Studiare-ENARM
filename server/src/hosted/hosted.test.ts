@@ -1,13 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { hypothesisInput } from '../../../src/ai/testing/aiSamples.ts';
 import { ACADEMIC_SOURCE_KEYS } from '../../../src/config/academicSources.ts';
-import { DEFAULT_CONFIG, type AiConfig } from '../ai/config.ts';
-import type { Admission, LedgerPort, Settlement } from '../ai/ledger.ts';
-import { PgLedger, createRestRpc } from '../ai/pgLedger.ts';
-import { loadPrompts } from '../ai/prompts.ts';
-import { createMockProvider } from '../ai/provider.ts';
-import { ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
-import { requestBody, STUDENT } from '../ai/testing/fakes.ts';
+import { DEFAULT_CONFIG, type AiConfig } from '../../../supabase/functions/_shared/ai/config.ts';
+import type {
+  Admission,
+  LedgerPort,
+  Settlement,
+} from '../../../supabase/functions/_shared/ai/ledger.ts';
+import { PgLedger, createRestRpc } from '../../../supabase/functions/_shared/ai/pgLedger.ts';
+import { createMockProvider } from '../../../supabase/functions/_shared/ai/provider.ts';
+import { loadPrompts, ROOT_PROMPTS_DIR, SERVER_PROMPTS_DIR } from '../ai/index.ts';
+import { requestBody, STUDENT } from '../../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { createHostedApp } from './app.ts';
 import {
   bearerToken,
@@ -275,7 +278,6 @@ function hostedApp(
       setConfig: (next) => {
         config = next;
       },
-      configFile: null,
       saveConfig: (next) => {
         extra.saved?.push(next);
         return Promise.resolve();

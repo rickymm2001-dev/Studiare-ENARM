@@ -2,7 +2,7 @@
 // esquema en el primer intento, anclaje de lo que sí se contesta, rechazos correctos de lo que no se
 // puede contestar, costo y latencia. Sirve igual con las respuestas fijas que con el modelo real.
 import { AI_ENGINES, type AiEngine } from '../../src/engines/aiContracts.ts';
-import { runEngine, type RunDeps } from '../src/ai/run.ts';
+import { runEngine, type RunDeps } from '../../supabase/functions/_shared/ai/run.ts';
 import { buildCases, type GoldenCase } from './cases.ts';
 
 export interface CaseResult {

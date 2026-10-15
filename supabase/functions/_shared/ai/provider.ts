@@ -9,8 +9,8 @@ import type {
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { APIConnectionError, APIError, RateLimitError } from '@anthropic-ai/sdk';
 import type { z } from 'zod';
-import type { AiEngine, EngineInputs } from '../../../src/engines/aiContracts.ts';
-import { mockOutput, MOCK_MODEL } from '../../../src/engines/aiMock.ts';
+import type { AiEngine, EngineInputs } from './engines/aiContracts.ts';
+import { mockOutput, MOCK_MODEL } from './engines/aiMock.ts';
 import type { AiLimits, ModelChoice } from './config.ts';
 import { approximateTokens, type Usage } from './cost.ts';
 

@@ -1,7 +1,12 @@
 // Guarda la configuración de los motores de IA en la tabla ai_config de Supabase (D-103). En un
 // alojamiento sin disco duradero, un archivo local se perdería al reiniciar. La tabla solo la lee y
 // la escribe el servidor del proxy, con la llave de servicio.
-import { AiConfigPatchSchema, DEFAULT_CONFIG, mergeConfig, type AiConfig } from '../ai/config.ts';
+import {
+  AiConfigPatchSchema,
+  DEFAULT_CONFIG,
+  mergeConfig,
+  type AiConfig,
+} from '../../../supabase/functions/_shared/ai/config.ts';
 
 export interface ConfigStore {
   load(): Promise<AiConfig>;

@@ -1,19 +1,35 @@
 // Configuración de los motores de IA del proxy (8.1). Modelos por motor, precios y límites. Los
-// valores de aquí son los de fábrica. Para cambiarlos se escribe server/ai-config.local.json, que
-// queda fuera de git, o se edita desde la pantalla de configuración del admin. Nunca hay una clave
-// en este archivo.
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+// valores de aquí son los de fábrica. Se cambian desde la pantalla de configuración del admin, que
+// los guarda en la tabla ai_config en la nube o en server/ai-config.local.json en desarrollo
+// (server/src/ai/configFile.ts). Nunca hay una clave en este archivo. Sin Node ni Deno (B12, 1.1).
 import { z } from 'zod';
-import { AI_ENGINES, type AiEngine } from '../../../src/engines/aiContracts.ts';
+import {
+  AI_ENGINES,
+  AiEffortSchema,
+  AiThinkingSchema,
+  MAX_GENERATION_SECTIONS,
+  type AiEffort,
+  type AiEngine,
+  type AiThinking,
+} from './engines/aiContracts.ts';
 
-export type Effort = 'low' | 'medium' | 'high';
+/** Esfuerzo que acepta la API (output_config.effort). Qué modelo acepta cuál lo decide el servidor (2.8) */
+export type Effort = AiEffort;
+
+/**
+ * Razonamiento del modelo (B12, 2.8). adaptive deja que el modelo razone cuando lo necesita. off lo
+ * apaga donde el modelo lo permite, como disabled en Haiku 5.5 o between_tools en Sonnet 5.5. Un
+ * modelo sin razonamiento configurable, como Haiku 4.5, lleva null y la petición no manda thinking
+ */
+export type Thinking = AiThinking;
 
 export interface ModelChoice {
   /** ID del modelo tal cual, sin sufijo de fecha */
   id: string;
   /** Esfuerzo de razonamiento. null en modelos que no lo aceptan, como Haiku 4.5 */
   effort: Effort | null;
+  /** Razonamiento. null en modelos sin razonamiento configurable, como Haiku 4.5 */
+  thinking: Thinking | null;
   /** Tope de tokens de salida, que en modelos con razonamiento incluye el razonamiento */
   maxTokens: number;
 }
@@ -34,6 +50,25 @@ export interface AiLimits {
   perStudentPerDay: Record<AiEngine, number>;
   /** Presupuesto diario total en dólares. Solo cuenta el gasto real */
   dailyBudgetUsd: number;
+  /**
+   * Tope en dólares por alumno al día (B12, 2.4 y 10.6). Médicos, admins y dueño no lo tienen, pero
+   * sus llamadas sí cuentan en la cuota del motor y en el total
+   */
+  perUserDailyUsd: number;
+  /**
+   * Cuota de cada motor como fracción del presupuesto del día (B12, 2.4 y 10.7). Son techos y no
+   * apartados, así que pueden sumar más de 1
+   */
+  engineShare: Record<AiEngine, number>;
+  /** Generaciones de tarjetas por alumno al día. Igual a AI_CARDS_PER_DAY_PAID de src/config/billing.ts */
+  cardGenerationsPerDay: number;
+  /**
+   * Secciones por generación de tarjetas. Igual a SECTIONS_PER_GENERATION de src/ai/flashcards.ts y
+   * nunca más que MAX_GENERATION_SECTIONS, que es lo que acepta el sobre
+   */
+  sectionsPerGeneration: number;
+  /** Trabajos por lote pendientes por alumno (B12, 3.4) */
+  maxPendingJobs: number;
   /** Tiempo máximo de una llamada al modelo */
   timeoutMs: number;
   /** Reintentos del SDK ante fallas de red o 5xx, con espera exponencial */
@@ -48,14 +83,15 @@ export interface AiConfig {
 
 // Los precios son los de la sección 8.1 a octubre de 2026. Haiku 5.5 queda listo para cambiar a él
 // cuando las evaluaciones con clave lo respalden, a $0.10 y $0.50 por millón con prompts de hasta
-// 100,000 tokens. Su caché se estima con los mismos factores que los demás
+// 100,000 tokens. Su caché se estima con los mismos factores que los demás. Los modelos que elija
+// npm run eval-ai los aplica la sesión principal aquí (B12, contrato C4)
 export const DEFAULT_CONFIG: AiConfig = {
   models: {
-    forgetting: { id: 'claude-haiku-4-5', effort: null, maxTokens: 1500 },
-    weekly_report: { id: 'claude-haiku-4-5', effort: null, maxTokens: 1500 },
-    flashcards: { id: 'claude-sonnet-5-5', effort: 'low', maxTokens: 6000 },
-    bias_tips: { id: 'claude-haiku-4-5', effort: null, maxTokens: 1000 },
-    restructure: { id: 'claude-sonnet-5-5', effort: 'low', maxTokens: 4000 },
+    forgetting: { id: 'claude-haiku-4-5', effort: null, thinking: null, maxTokens: 1500 },
+    weekly_report: { id: 'claude-haiku-4-5', effort: null, thinking: null, maxTokens: 1500 },
+    flashcards: { id: 'claude-sonnet-5-5', effort: 'low', thinking: 'adaptive', maxTokens: 6000 },
+    bias_tips: { id: 'claude-haiku-4-5', effort: null, thinking: null, maxTokens: 1000 },
+    restructure: { id: 'claude-sonnet-5-5', effort: 'low', thinking: 'adaptive', maxTokens: 4000 },
   },
   prices: {
     'claude-haiku-4-5': { input: 1, output: 5, cacheWrite: 1.25, cacheRead: 0.1 },
@@ -72,6 +108,17 @@ export const DEFAULT_CONFIG: AiConfig = {
       restructure: 20,
     },
     dailyBudgetUsd: 5,
+    perUserDailyUsd: 0.3,
+    engineShare: {
+      forgetting: 0.1,
+      weekly_report: 0.1,
+      flashcards: 0.55,
+      bias_tips: 0.1,
+      restructure: 0.15,
+    },
+    cardGenerationsPerDay: 20,
+    sectionsPerGeneration: 12,
+    maxPendingJobs: 12,
     timeoutMs: 30_000,
     maxRetries: 2,
   },
@@ -84,7 +131,12 @@ const ModelIdSchema = z
   .refine((id) => !/-\d{8}$/.test(id), 'El ID del modelo va sin sufijo de fecha');
 const ModelChoiceSchema = z.strictObject({
   id: ModelIdSchema,
-  effort: z.enum(['low', 'medium', 'high']).nullable(),
+  effort: AiEffortSchema.nullable(),
+  /**
+   * Opcional en un cambio. Sin él se queda el del motor si el modelo no cambia, y si cambia queda
+   * null. Así un cambio de antes de B12 o una configuración guardada sin él se siguen leyendo
+   */
+  thinking: AiThinkingSchema.nullable().optional(),
   maxTokens: z.int().min(200).max(32_000),
 });
 const PriceSchema = z.strictObject({
@@ -96,6 +148,11 @@ const PriceSchema = z.strictObject({
 const LimitsSchema = z.strictObject({
   perStudentPerDay: z.partialRecord(z.enum(AI_ENGINES), z.int().min(1).max(10_000)),
   dailyBudgetUsd: z.number().min(0).max(100_000),
+  perUserDailyUsd: z.number().min(0).max(1000),
+  engineShare: z.partialRecord(z.enum(AI_ENGINES), z.number().min(0).max(1)),
+  cardGenerationsPerDay: z.int().min(1).max(1000),
+  sectionsPerGeneration: z.int().min(1).max(MAX_GENERATION_SECTIONS),
+  maxPendingJobs: z.int().min(1).max(1000),
   timeoutMs: z.int().min(1000).max(120_000),
   maxRetries: z.int().min(0).max(5),
 });
@@ -112,7 +169,11 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
   const models = { ...base.models };
   for (const engine of AI_ENGINES) {
     const next = patch.models?.[engine];
-    if (next) models[engine] = next;
+    if (!next) continue;
+    const before = base.models[engine];
+    const thinking =
+      next.thinking !== undefined ? next.thinking : next.id === before.id ? before.thinking : null;
+    models[engine] = { id: next.id, effort: next.effort, thinking, maxTokens: next.maxTokens };
   }
   const merged: AiConfig = {
     models,
@@ -124,6 +185,10 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
         ...base.limits.perStudentPerDay,
         ...patch.limits?.perStudentPerDay,
       },
+      engineShare: {
+        ...base.limits.engineShare,
+        ...patch.limits?.engineShare,
+      },
     },
   };
   // Un modelo sin precio no se puede presupuestar, así que no se acepta
@@ -133,23 +198,4 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
     }
   }
   return merged;
-}
-
-/** Carga los cambios guardados en el archivo local. Si no hay archivo o está dañado, usa los de fábrica */
-export function loadAiConfig(file: string | null): AiConfig {
-  if (file === null || !existsSync(file)) return DEFAULT_CONFIG;
-  try {
-    const patch = AiConfigPatchSchema.parse(JSON.parse(readFileSync(file, 'utf8')));
-    return mergeConfig(DEFAULT_CONFIG, patch);
-  } catch {
-    return DEFAULT_CONFIG;
-  }
-}
-
-/** Guarda la configuración completa en el archivo local, sin dejar un archivo a medias */
-export function saveAiConfig(file: string, config: AiConfig): void {
-  mkdirSync(dirname(file), { recursive: true });
-  const temp = `${file}.tmp`;
-  writeFileSync(temp, `${JSON.stringify(config, null, 2)}\n`);
-  renameSync(temp, file);
 }

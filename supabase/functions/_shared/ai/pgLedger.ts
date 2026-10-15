@@ -3,7 +3,7 @@
 // Así los límites por alumno y el presupuesto sobreviven a reiniciar el servidor y se comparten
 // entre copias. Solo el servidor lo usa, con la llave de servicio. No guarda texto de alumnos.
 import { z } from 'zod';
-import { AI_ENGINES, type AiEngine } from '../../../src/engines/aiContracts.ts';
+import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
 import type { Admission, LedgerPort, Settlement, UsageSummary } from './ledger.ts';
 
 /** Llama a una función de Postgres y devuelve su resultado. Falla si el servidor contesta con error */

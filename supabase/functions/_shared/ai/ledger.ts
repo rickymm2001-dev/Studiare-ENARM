@@ -1,11 +1,10 @@
 // Libro del día del proxy de IA (8.1). Cuenta las llamadas de cada alumno y el gasto del día para
-// frenar de golpe cuando se pasa un límite. Vive en memoria y, si se le da un archivo, sobrevive a
-// reiniciar el proxy, que si no dejaría el presupuesto en cero cada vez. Solo guarda el día
-// actual. El histórico de costos queda en la bitácora de la app (aiCallLog).
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+// frenar de golpe cuando se pasa un límite. Vive en memoria y, si se le da dónde guardarse, sobrevive
+// a reiniciar el proxy, que si no dejaría el presupuesto en cero cada vez. En desarrollo se guarda en
+// un archivo (server/src/ai/ledgerFile.ts). Solo guarda el día actual. El histórico de costos queda
+// en la bitácora de la app (aiCallLog). Sin Node ni Deno (B12, 1.1).
 import { z } from 'zod';
-import { AI_ENGINES, type AiEngine } from '../../../src/engines/aiContracts.ts';
+import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -29,7 +28,15 @@ const StateSchema = z.strictObject({
   spentUsd: z.number().nonnegative(),
   byEngine: z.partialRecord(z.enum(AI_ENGINES), EngineTotals),
 });
-type State = z.infer<typeof StateSchema>;
+export type LedgerState = z.infer<typeof StateSchema>;
+type State = LedgerState;
+
+/** Dónde se guarda el libro entre reinicios. Una falla al leer empieza el día de nuevo */
+export interface LedgerPersistence {
+  /** El último estado guardado, sin validar. null si no hay ninguno */
+  load(): unknown;
+  save(state: LedgerState): void;
+}
 
 export interface UsageSummary {
   day: string;
@@ -71,11 +78,17 @@ export interface LedgerPort {
   summary(): UsageSummary | Promise<UsageSummary>;
 }
 
+export interface LedgerOptions {
+  /** Sin él, el libro vive solo en memoria */
+  persistence?: LedgerPersistence | null;
+  now?: () => Date;
+}
+
 export class Ledger implements LedgerPort {
   private state: State;
-  private readonly options: { file?: string | null; now?: () => Date };
+  private readonly options: LedgerOptions;
 
-  constructor(options: { file?: string | null; now?: () => Date } = {}) {
+  constructor(options: LedgerOptions = {}) {
     this.options = options;
     this.state = this.load();
   }
@@ -90,25 +103,23 @@ export class Ledger implements LedgerPort {
 
   private load(): State {
     const day = dayKey(this.now());
-    const file = this.options.file;
-    if (file && existsSync(file)) {
+    const persistence = this.options.persistence;
+    if (persistence) {
       try {
-        const parsed = StateSchema.parse(JSON.parse(readFileSync(file, 'utf8')));
-        if (parsed.day === day) return parsed;
+        const stored = persistence.load();
+        if (stored !== null) {
+          const parsed = StateSchema.parse(stored);
+          if (parsed.day === day) return parsed;
+        }
       } catch {
-        // Un archivo dañado no frena el proxy. Se empieza el día de nuevo
+        // Un libro guardado dañado no frena el proxy. Se empieza el día de nuevo
       }
     }
     return this.empty(day);
   }
 
   private save(): void {
-    const file = this.options.file;
-    if (!file) return;
-    mkdirSync(dirname(file), { recursive: true });
-    const temp = `${file}.tmp`;
-    writeFileSync(temp, JSON.stringify(this.state));
-    renameSync(temp, file);
+    this.options.persistence?.save(this.state);
   }
 
   /** Pasa al día nuevo cuando cambia la fecha */
