@@ -204,12 +204,26 @@ describe('catálogo de mazos de la nube', () => {
   it('Gratis ve las materias y las notas de muestra con el candado y la prueba gratis', async () => {
     const user = userEvent.setup();
     await catalogCloud(false);
-    app = await renderApp(SCREENS.decks.path);
+    // Gratis como lo refleja my_plan, que dice que todavía le toca la prueba (B10)
+    app = await renderApp(SCREENS.decks.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'free',
+          status: 'none',
+          isSimulated: false,
+          trialAvailable: true,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
     const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
     expect(
       await within(catalog).findByText(t.freePlan.catalog.notice, undefined, WAIT),
     ).toBeVisible();
-    expect(within(catalog).getByRole('link', { name: t.billing.freeTrialCta })).toBeVisible();
+    expect(
+      await within(catalog).findByRole('link', { name: t.billing.freeTrialCta }, WAIT),
+    ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
     await user.click(await within(catalog).findByText(text.subjects(1), undefined, WAIT));
     expect(within(catalog).getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
     expect(
