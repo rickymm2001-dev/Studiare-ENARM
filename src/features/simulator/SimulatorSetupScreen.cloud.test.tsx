@@ -76,7 +76,9 @@ describe('Simular con el banco de la nube', () => {
     for (const row of rows(18)) server.read.add(row.versionId);
     app = await renderApp(SCREENS.simulatorSetup.path);
     const practice = await setup();
-    expect(within(practice).getByText(t.simulator.bankNote(25))).toBeVisible();
+    // El banco de la nube no es de demostración y no lo dice
+    expect(within(practice).getByText(bankText.bankNote(25))).toBeVisible();
+    expect(within(practice).queryByText(t.simulator.bankNote(25))).toBeNull();
     const stats = screen.getByRole('region', { name: t.simulator.stats.label });
     await waitFor(() => {
       expect(stats).toHaveTextContent(
@@ -172,8 +174,9 @@ describe('Simular con el banco de la nube', () => {
     writeStoredFlags({ cloudBank: false });
     const server = bank(rows(5));
     app = await renderApp(SCREENS.simulatorSetup.path);
-    await setup();
+    const practice = await setup();
     expect(screen.getByRole('region', { name: t.labels.demoVersion })).toBeVisible();
+    expect(within(practice).getByText(/^Banco de demostración con/)).toBeVisible();
     expect(server.server.calls).toEqual([]);
   });
 });

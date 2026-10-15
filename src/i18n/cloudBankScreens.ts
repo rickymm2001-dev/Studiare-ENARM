@@ -14,6 +14,8 @@ export function shortTime(iso: string): string {
 }
 
 export const cloudBankScreensText = {
+  // Bajo el título de Simular con el banco de la nube, que no es de demostración
+  bankNote: (n: number) => `Banco de Studiare con ${plural(n, 'pregunta', 'preguntas')}.`,
   // Simular cuando la fuente es la nube y todavía no hay con qué elegir (5.3)
   neverDownloaded: {
     title: 'Conéctate una vez para bajar el banco',

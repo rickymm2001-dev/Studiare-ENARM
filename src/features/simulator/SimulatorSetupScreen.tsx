@@ -237,7 +237,11 @@ function Setup({ session }: { session: ReadySession }) {
       <Card aria-labelledby="practica-titulo">
         <CardHeader className="mb-3">
           <CardTitle id="practica-titulo">{t.simulator.setupTitle}</CardTitle>
-          <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
+          <CardDescription>
+            {source.kind === 'cloud'
+              ? bankText.bankNote(questions.length)
+              : t.simulator.bankNote(questions.length)}
+          </CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-3">
           {/* Una columna en el teléfono para que ninguna opción se corte (H09 de la revisión de B2) */}
