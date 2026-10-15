@@ -5,7 +5,12 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { defaultNeedles, findSecrets, findServiceKeys } from '../../scripts/secrets.ts';
+import {
+  defaultNeedles,
+  findSecrets,
+  findServiceKeys,
+  OPENAI_KEY_VARIABLE,
+} from '../../scripts/secrets.ts';
 import { buildApp, ROOT } from './buildApp.ts';
 
 let buildDir = '';
@@ -63,6 +68,36 @@ describe('secretos en el build', () => {
       writeFileSync(join(planted, 'app.js'), `const k = "${jwt('service_role')}";`);
       expect(findSecrets(planted, defaultNeedles()).map((finding) => finding.needle)).toEqual([
         'llave JWT con rol service_role',
+      ]);
+    } finally {
+      rmSync(planted, { recursive: true, force: true });
+    }
+  });
+
+  it('el escáner detecta la clave de OpenAI de las evaluaciones, por nombre y por forma', () => {
+    // Las llaves se arman por partes para que este archivo no tenga una con la forma completa
+    const projectKey = ['sk', 'proj', 'A1b2C3d4_E5f6G7h8-I9j0K1l2M3n4'].join('-');
+    const serviceKey = ['sk', 'svcacct', 'Z'.repeat(40)].join('-');
+    const legacyKey = ['sk', 'a1B2'.repeat(12)].join('-');
+    expect(findServiceKeys(`const k="${projectKey}";`)).toEqual(['llave de OpenAI (sk-)']);
+    expect(findServiceKeys(`const k="${serviceKey}";`)).toEqual(['llave de OpenAI (sk-)']);
+    expect(findServiceKeys(`const k="${legacyKey}";`)).toEqual(['llave de OpenAI (sk-)']);
+    // El prefijo solo, una clave de Anthropic y un texto con sk- dentro de otra palabra no cuentan
+    expect(findServiceKeys("if (key.startsWith('sk-proj-')) return null;")).toEqual([]);
+    expect(findServiceKeys(`const k="sk-ant-api03-${'a'.repeat(40)}";`)).toEqual([]);
+    expect(findServiceKeys(`const css="task-${'a'.repeat(40)}";`)).toEqual([]);
+
+    const planted = mkdtempSync(join(tmpdir(), 'enarm-openai-'));
+    try {
+      writeFileSync(join(planted, 'app.js'), `const n = "${OPENAI_KEY_VARIABLE}";`);
+      writeFileSync(join(planted, 'otro.js'), `const k = "${projectKey}";`);
+      expect(
+        findSecrets(planted, defaultNeedles())
+          .map((finding) => `${finding.file}: ${finding.needle}`)
+          .sort(),
+      ).toEqual([
+        'app.js: nombre de la clave de OpenAI de evaluaciones',
+        'otro.js: llave de OpenAI (sk-)',
       ]);
     } finally {
       rmSync(planted, { recursive: true, force: true });
