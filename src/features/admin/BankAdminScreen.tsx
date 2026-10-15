@@ -34,6 +34,7 @@ import { BranchBadge } from '@/ui/components/branch-tag';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { ProgressBar } from '@/ui/components/progress-bar';
 import { SelectField } from '@/ui/components/field';
 import { ErrorState, LoadingState } from '@/ui/states/states';
 import { downloadText } from '../physician/bankTemplates';
@@ -138,21 +139,12 @@ function OverviewCard() {
           <p className="text-sm font-medium">
             {overview.goal(state.value.published, state.value.goal)}
           </p>
-          <div
-            role="progressbar"
-            aria-label={overview.title}
-            aria-valuemin={0}
-            aria-valuemax={state.value.goal}
-            aria-valuenow={Math.min(state.value.published, state.value.goal)}
-            className="h-2 overflow-hidden rounded-full bg-muted"
-          >
-            <div
-              className="h-full bg-accent"
-              style={{
-                width: `${Math.min(100, (state.value.published / Math.max(1, state.value.goal)) * 100)}%`,
-              }}
-            />
-          </div>
+          <ProgressBar
+            value={state.value.published}
+            max={state.value.goal}
+            label={overview.title}
+            tone="accent"
+          />
           <p className="text-sm text-fg-muted">{overview.english(state.value.englishPublished)}</p>
           <div>
             <p className="text-sm font-medium">{overview.byBranch}</p>
