@@ -128,3 +128,19 @@ export function buildUserMessage(input: unknown, issues: readonly string[] = [])
   }
   return parts.join('\n');
 }
+
+/**
+ * La entrada que lleva un mensaje de buildUserMessage, para el lote simulado, que calcula su respuesta
+ * fija con ella. undefined si el mensaje no tiene el bloque de datos
+ */
+export function inputFromUserMessage(message: string): unknown {
+  const lines = message.split('\n');
+  const at = lines.indexOf('<datos>');
+  const data = at === -1 ? undefined : lines[at + 1];
+  if (data === undefined || lines[at + 2] !== '</datos>') return undefined;
+  try {
+    return JSON.parse(data) as unknown;
+  } catch {
+    return undefined;
+  }
+}

@@ -129,6 +129,11 @@ export interface SettlementV2 {
 export interface UsageSummaryV2 extends UsageSummary {
   /** Trabajos por lote que esperan respuesta */
   pendingJobs: number;
+  /**
+   * Peor costo estimado de los trabajos ya mandados en un lote y sin resultado, por motor (paquete A).
+   * El ciclo de lotes lo cuenta como gastado antes de mandar otro lote (3.4)
+   */
+  inFlightUsd: Partial<Record<BatchEngine, number>>;
 }
 
 export interface LedgerPortV2 {
@@ -185,6 +190,17 @@ export interface ClaimedJobs {
   jobs: StoredJob[];
 }
 
+/**
+ * Un reclamo que se quedó en submitting, porque el ciclo se cortó entre crear el lote en Anthropic y
+ * registrarlo (paquete A). El reconciliador lo busca entre los lotes recientes por custom_id
+ */
+export interface StaleClaim {
+  claimId: string;
+  /** Cuándo se reclamó, en ISO 8601 */
+  claimedAt: string;
+  jobIds: string[];
+}
+
 export type BatchRowStatus = 'in_progress' | 'canceling' | 'ended' | 'processed';
 
 export interface BatchRow {
@@ -195,6 +211,17 @@ export interface BatchRow {
   lastPolledAt: string | null;
 }
 
+/** Tokens y modelo de un intento que no dio salida, para su renglón de bitácora (paquete A) */
+export interface JobUsage {
+  model: string;
+  /** false con el lote simulado, que no gasta */
+  real: boolean;
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;
+  cacheWriteTokens: number;
+}
+
 export type JobFinish =
   | { status: 'ready'; output: unknown; meta: AiCallMeta; costUsd: number }
   | {
@@ -202,6 +229,8 @@ export type JobFinish =
       error: AiErrorCode;
       costUsd: number;
       refusalCategory?: string | null;
+      /** Sin él el renglón de bitácora va sin tokens */
+      usage?: JobUsage;
     };
 
 /** Por qué vuelve a la cola, para la tabla de reintentos de 3.4 */
@@ -213,7 +242,11 @@ export interface JobStore {
   status(userId: string, jobKeys: readonly string[]): Promise<AiJobStatus[]>;
   /** Pasa hasta limit trabajos de queued a submitting, con su entrada */
   claim(limit: number): Promise<ClaimedJobs>;
-  /** El lote ya existe en Anthropic. estimates es el peor costo de cada trabajo, por id */
+  /**
+   * El lote ya existe en Anthropic. estimates es el peor costo de cada trabajo, por id. Los trabajos
+   * del reclamo que no vienen en estimates no cupieron en el presupuesto y vuelven a la cola sin
+   * contar intento
+   */
   submitted(
     claimId: string,
     batchId: string,
@@ -223,6 +256,10 @@ export interface JobStore {
   unclaim(claimId: string): Promise<void>;
   /** Los lotes en curso que no se revisan hace minMinutes o más */
   due(minMinutes: number): Promise<BatchRow[]>;
+  /**
+   * Cambia el estado de un lote. Con processed, los trabajos de ese lote que siguen sin resultado
+   * vuelven a la cola como expired, con su tope de intentos
+   */
   mark(batchId: string, status: BatchRowStatus): Promise<void>;
   /** De esos ids, los que siguen esperando resultado en ese lote, con su entrada guardada */
   pending(batchId: string, jobIds: readonly string[]): Promise<StoredJob[]>;
@@ -236,8 +273,10 @@ export interface JobStore {
   ): Promise<'requeued' | 'failed'>;
   /** Pone en null entradas terminadas y salidas viejas. Devuelve cuántas filas limpió */
   scrub(): Promise<number>;
-  /** Un solo ciclo a la vez. true si este holder tomó el candado por seconds segundos */
+  /** Un solo ciclo a la vez. true si este holder tomó el candado por seconds segundos. Con 0 lo suelta */
   lease(holder: string, seconds: number): Promise<boolean>;
+  /** Los reclamos que siguen en submitting hace minMinutes o más (paquete A) */
+  stale(minMinutes: number): Promise<StaleClaim[]>;
 }
 
 // ---------------------------------------------------------------------------------------------
