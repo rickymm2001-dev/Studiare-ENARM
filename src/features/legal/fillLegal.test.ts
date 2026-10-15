@@ -317,7 +317,7 @@ describe('términos de B16', () => {
     expect(terms).toContain(`Fundador, ${mxn(PLANS.founder.priceMxn)} pesos al mes`);
     expect(terms).toContain(`con ${FOUNDER_SEATS} lugares en total`);
     expect(terms).toContain(
-      `hasta ${PLANS.free.access.dailyQuestions ?? 0} preguntas distintas al día`,
+      `hasta ${PLANS.free.access.dailyQuestions ?? 0} preguntas al día`,
     );
     // El Fundador anual, los pases, la prueba y la garantía salen de la configuración de B10
     expect(terms).toContain(`${mxn(PLANS.founder_annual.priceMxn)} pesos al año`);

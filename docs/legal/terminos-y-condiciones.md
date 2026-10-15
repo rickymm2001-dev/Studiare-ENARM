@@ -24,7 +24,7 @@ Studiare no predice tu puntaje en el examen y no garantiza que lo apruebes ni qu
 
 ## Planes y precios
 
-El plan Gratis incluye hasta 20 preguntas distintas al día con su explicación. El examen completo, el tutor con IA, Party, Apuntes, Importar mazos y seguir mazos nuevos del catálogo son de los planes de pago.
+El plan Gratis incluye hasta 20 preguntas al día con su explicación. El examen completo, el tutor con IA, Party, Apuntes, Importar mazos y seguir mazos nuevos del catálogo son de los planes de pago.
 
 Los planes de pago no tienen tope diario de preguntas, aunque tampoco permiten la descarga masiva del banco, y suman funciones como el análisis con IA y la generación de tarjetas.
 
@@ -63,9 +63,9 @@ Pagas con tarjeta, Apple Pay o Google Pay con renovación automática, o con un 
 
 ## Invita y gana un mes
 
-Cuando una persona que invitaste con tu enlace o tu código hace su primer cobro confirmado de más de 0 pesos, ganas un mes gratis. La prueba gratis no cuenta como cobro. Si ese primer cobro se reembolsa completo, por ejemplo con la garantía, tu mes termina en ese momento.
+Cuando una persona que invitaste con tu enlace o tu código hace su primer cobro confirmado de más de 0 pesos, ganas un mes gratis, hasta 12 meses en total. La prueba gratis no cuenta como cobro. Si ese primer cobro se reembolsa completo, por ejemplo con la garantía, tu mes termina en ese momento.
 
-El código de quien te invitó se canjea en los primeros días después de crear tu cuenta y antes de tu primer pago. Dos compañeros no pueden invitarse entre sí.
+El código de quien te invitó se canjea en los primeros 14 días después de crear tu cuenta y antes de tu primer pago. Dos compañeros no pueden invitarse entre sí.
 
 ## Cómo puedes usar la plataforma
 

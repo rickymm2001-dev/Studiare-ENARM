@@ -15,7 +15,7 @@
 -- Qué pasa si no se corre
 --   Sin la pieza 1 la base rechaza el plan Fundador anual y la prueba gratis (estado trialing), así que
 --   un aviso de Stripe de una prueba fallaría y Stripe lo reintentaría. Sin la pieza 2 borrar la cuenta
---   sigue con el freno de antes, que no mira la prueba ni Mercado Pago.
+--   sigue con el freno de antes, que no mira la prueba ni Mercado Pago, y deja el correo de la invitación.
 
 -- ################ 1. Planes y estados que acepta subscriptions
 alter table public.subscriptions drop constraint if exists subscriptions_plan_check;
@@ -28,11 +28,13 @@ alter table public.subscriptions add constraint subscriptions_status_check
 -- ################ 2. Borrar mi cuenta con el freno de B10
 -- Pide cancelar antes una suscripción de Stripe o de Mercado Pago en prueba, activa o con cobro fallido
 -- (8.20). Una cancelada al final del periodo sí se puede. El freno lo decide
--- billing_blocks_account_deletion, de la migración 20261022000002
+-- billing_blocks_account_deletion, de la migración 20261022000002. También borra el correo de la
+-- invitación de esa persona, como dice el aviso de privacidad (B16)
 create or replace function public.delete_my_account() returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_user uuid := auth.uid();
+  v_email text;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -48,7 +50,10 @@ begin
   end if;
 
   perform pg_advisory_xact_lock(hashtextextended('sync:' || v_user::text, 0));
+  select lower(btrim(email)) into v_email from auth.users where id = v_user;
   perform set_config('app.erasing_user', v_user::text, true);
+  -- El correo de la invitación tampoco se queda, como dice el aviso de privacidad (B16)
+  delete from public.signup_invitations where email = v_email;
   delete from auth.users where id = v_user;
   perform set_config('app.erasing_user', '', true);
 end;
@@ -57,11 +62,13 @@ $$;
 revoke all on function public.delete_my_account() from public, anon, authenticated, service_role;
 grant execute on function public.delete_my_account() to authenticated;
 
--- Comprobación. Las tres columnas deben salir en true
+-- Comprobación. Las cuatro columnas deben salir en true
 select
   (select pg_get_constraintdef(oid) like '%founder_annual%'
      from pg_constraint where conname = 'subscriptions_plan_check') as plan_fundador_anual,
   (select pg_get_constraintdef(oid) like '%trialing%'
      from pg_constraint where conname = 'subscriptions_status_check') as estado_prueba,
   position('billing_blocks_account_deletion' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0
-    as borrar_cuenta_b10;
+    as borrar_cuenta_b10,
+  position('signup_invitations' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0
+    as borra_la_invitacion;

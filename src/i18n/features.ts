@@ -75,7 +75,7 @@ export const featureText = {
       ],
       anonymized_improvement: [
         'Mejora anónima',
-        'Usar tus datos anonimizados para mejorar el banco.',
+        'Usar tus datos con un ID seudónimo, sin tu nombre ni tu correo, para mejorar el banco y revisar fallas de la app.',
       ],
     },
     create: 'Crear cuenta y empezar',

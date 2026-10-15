@@ -9,7 +9,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 
 ## Cómo se leyó cada cosa
 
-- Cada frase se revisó contra el código de main, contra el plan del cambio y contra el código de los bloques que todavía no llegan a main (B10 en la rama b10ui y su plan, B11 en la rama b11int y su plan). Lo que depende de un bloque que no está en main se dice abajo, en Lo que el texto da por hecho
+- Cada frase se revisó contra el código de main, contra el plan del cambio y contra el código de los bloques que todavía no llegan a main (B11 en la rama b11int y su plan). B10 ya está en main. Lo que depende de un bloque que no está en main se dice abajo, en Lo que el texto da por hecho
 - Se usaron como material de partida el borrador de Gemini (rama gemini/legal-b16, con su propia lista de cambios) y la rama claude/keen-hopper-4oj3c2. De ahí se tomaron la factura, OpenAI, los proveedores nuevos y la estructura de los términos. Se dejó fuera lo que no coincide con el código o con el plan, que está al final de esta lista
 
 ## Aviso de privacidad
@@ -28,7 +28,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 - Nuevo, Lecturas del banco (B11). Qué preguntas abre cada día, con su plan y para qué, para contar en el servidor el tope de Gratis y frenar descargas masivas. Dice que el equipo ve un aviso con el alias y la cifra del día cuando el volumen es muy alto, porque así lo muestra la lista de avisos del admin en B11
 - Nuevo, Uso de la IA. El conteo diario por función y el costo, sin texto. Ya existía desde la IA alojada (ai_usage_day y ai_call_log) y no se decía
 - Pagos. Se agregan el estado de la prueba gratis, el plan o pase, la pasarela, el código de descuento y que la prueba se liga al correo para dar una por persona (trial_claims de B10). Se agrega la cuenta bancaria cuando se pide la garantía de un pago en OXXO, que B10 devuelve por transferencia
-- Nuevo, Prueba gratis usada (B10, tabla trial_history de la rama b10fix). Quien empieza una prueba deja una huella de su correo, un hash SHA-256 sin sal de su correo normalizado, con la pasarela, el identificador de la suscripción en la pasarela y la fecha. No guarda el correo. Sobrevive al borrado de la cuenta, ya sin ligarse a ella, solo para que nadie repita la prueba con el mismo correo. El aviso dice qué se guarda, por qué, que solo sirve para comparar el mismo correo y que no tiene fecha de borrado
+- Nuevo, Prueba gratis usada (B10, tabla trial_history). Quien empieza una prueba deja una huella de su correo, un hash SHA-256 sin sal de su correo normalizado, con la pasarela, el identificador de la suscripción en la pasarela y la fecha. No guarda el correo. Sobrevive al borrado de la cuenta, ya sin ligarse a ella, solo para que nadie repita la prueba con el mismo correo. El aviso dice qué se guarda, por qué, que solo sirve para comparar el mismo correo y que no tiene fecha de borrado
 - Nuevo, Factura (B10). RFC, nombre o razón social, régimen fiscal, código postal fiscal, uso del CFDI y correo, solo si el alumno pide factura. Son los campos de invoice_requests
 - Nuevo, Referidos (B7). Quién invitó a quién y si ya hubo primer cobro. Quien invitó solo ve conteos, como devuelve my_referrals
 - Técnicos. Se agrega el registro de acceso de Supabase con la dirección IP
@@ -83,7 +83,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 - El acuerdo es con la razón social de VITE_LEGAL_NAME. La propiedad de la plataforma también se le atribuye a ella y no a la marca Studiare
 - Qué es Studiare. Se agrega que la comparación con otros alumnos es de percentiles y no un puntaje estimado
 - Tu cuenta. Edad mínima de 18 años con la confirmación (pregunta 45). Registro con invitación hasta que se abra (respuesta 52, D-129). Cuidar también la cuenta de Google si se entra con ella
-- Planes y precios, sección nueva. Gratis con 20 preguntas distintas al día y lo que es de pago (B8). Los planes de pago sin tope diario pero sin descarga masiva (4.10). Precios en pesos con IVA incluido (respuesta 13), Mensual 149, Anual 1,499, Fundador 79 o 749 y pases de 149 por 1 mes y 1,499 por 1 año, iguales a B10. Una prueba compara los que ya existen en main con src/config/billing.ts
+- Planes y precios, sección nueva. Gratis con hasta 20 preguntas al día y lo que es de pago (B8). Los planes de pago sin tope diario pero sin descarga masiva (4.10). Precios en pesos con IVA incluido (respuesta 13), Mensual 149, Anual 1,499, Fundador 79 o 749 y pases de 149 por 1 mes y 1,499 por 1 año, iguales a B10. Una prueba compara los que ya existen en main con src/config/billing.ts
 - Formas de pago y prueba gratis, sección nueva. Tarjeta, Apple Pay o Google Pay con renovación, pases en OXXO o SPEI sin renovación (4.4), Mercado Pago cuando se active, sin prueba ni Fundador. Un solo plan pagado a la vez (D-118). Prueba de 7 días con tarjeta, una por persona, que no se repite al eliminar la cuenta y volver con el mismo correo ni en una cuenta que ya pagó (trial_history y trial_already_used de b10fix), con la fecha y el monto del primer cobro dichos antes de pedir la tarjeta (4.18). Cancelar en la prueba no cobra. Los pases se suman. Los códigos de descuento solo descuentan el primer cobro (respuesta 21)
 - Cambio de plan, cancelación y garantía, sección nueva. Subir de mensual a anual cobra la diferencia con prorrateo y bajar se aplica al fin del periodo (respuesta 9). Con Mercado Pago se cancela y se contrata el otro. Cobro fallido. Garantía de 7 días naturales desde el primer cobro o desde cada pase, con reembolso completo y devolución por transferencia en OXXO (respuesta 10, 4.18). Antes la política de reembolsos estaba toda pendiente. Ahora solo queda pendiente qué pasa después de los 7 días
 - Precio Fundador, sección nueva (4.5, 4.6 y respuesta 17). 100 lugares compartidos, solo con tarjeta y renovación, el lugar se aparta con la prueba y se libera si se cancela antes del primer cobro, se conserva al cambiar entre Fundador mensual y anual, se pierde para siempre al cancelar después de pagar, qué pasa si se llenan mientras se paga y que la promoción puede terminar antes
@@ -105,7 +105,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 
 El aviso y los términos describen el producto como queda al lanzar. Antes de quitar la marca de borrador tienen que estar en main y en producción estos bloques, o hay que ajustar el texto.
 
-- B10, con los arreglos del servidor de la rama b10fix. Precios con el Fundador anual, prueba gratis con trial_history, pases de OXXO y SPEI, garantía, cambio de plan en el portal, códigos de descuento, Mercado Pago y factura a pedido. Al unir B10 con B16 conviene que la prueba de precios compare también PLANS.founder_annual, PASS_PRICES_MXN, TRIAL_DAYS y GUARANTEE_DAYS en lugar de los números escritos
+- B10 ya está en main. Falta prender en producción las banderas freeTrial y cashPasses, que nacen apagadas, porque los términos describen la prueba gratis y los pases como vigentes. Si se lanza sin ellas, hay que ajustar el texto
 - B11. Lecturas del banco en el servidor y Borrar mis datos que conserva el día en curso
 - B14. Comparación con otros alumnos y calibración nocturna en GitHub Actions. Sus textos dicen cuando esté disponible y cuando se active
 - B15. PostHog, Sentry, Resend y recordatorios, con las condiciones de Huecos de consentimiento
@@ -118,8 +118,20 @@ El aviso y los términos describen el producto como queda al lanzar. Antes de qu
 - Los recordatorios de repaso por correo de B15 tienen que empezar apagados. El plan de B15 no lo dice y el aviso ya lo promete
 - Sentry en el navegador tiene que seguir detrás del permiso de mejora anónima, como hoy hace errorReporter.ts con los reportes que van a Supabase. Si B15 decide otra cosa, cambia el aviso
 - La comparación con otros alumnos no pide un permiso aparte, usa el de mejora anónima (respuesta 87). No se inventó uno nuevo
-- La pista del permiso Mejora anónima en el registro y en Configuración dice solo Usar tus datos anonimizados para mejorar el banco. No menciona la calibración, la comparación ni los reportes de fallas. Se recomienda ampliarla cuando llegue B14, porque el permiso cubre más de lo que la pista dice
+- La pista del permiso Mejora anónima en el registro y en Configuración decía Usar tus datos anonimizados para mejorar el banco. Ahora dice que usa un ID seudónimo, sin nombre ni correo, para mejorar el banco y revisar fallas de la app, como el aviso. Cuando llegue B14 se amplía con la calibración y la comparación, y Ricardo y el abogado deciden su nombre y si se pide de nuevo
 - Las tarjetas con IA desde el texto del alumno no dependen del permiso de análisis con IA, porque son una acción que el alumno pide cada vez. El aviso lo dice así. Queda como pregunta para el abogado
+
+## Correcciones de la revisión independiente
+
+- Acceder ya no promete que el archivo trae todos los datos. Dice qué trae y que lo demás se pide por escrito
+- Invitación entra en Qué datos tratamos. Al eliminar la cuenta ahora también se borra el correo de la invitación (delete_my_account, con su prueba SQL)
+- Conservación dice qué queda de los avisos de cobro de la pasarela
+- El tutor manda también el texto de las tarjetas en las que fallaste, incluidas las de tus mazos
+- Invita y gana un mes dice el tope de 12 meses y la ventana de 14 días para canjear el código, como la configuración del servidor
+- El plan Gratis dice hasta 20 preguntas al día, porque se cuenta cada respuesta
+- Rectificar dice que el correo y los datos de una factura se cambian por escrito
+- Lecturas del banco suma los tres avisos al equipo y las descargas de mazos del catálogo de B11, y Cancelar dice que los avisos que ya vio el equipo se quedan hasta eliminar la cuenta
+- El proxy de IA corre en las Edge Functions de Supabase desde B12, así que su encargado es Supabase y no hace falta nombrar otro
 
 ## Preguntas para el abogado
 
@@ -136,9 +148,11 @@ El aviso y los términos describen el producto como queda al lanzar. Antes de qu
 11. Prueba gratis con cobro automático. ¿Hace falta un aviso por correo antes del cobro? El sistema ya lo deja listo para 3 días antes, y se manda cuando exista Resend (B15)
 12. Límite de responsabilidad a lo pagado en 12 meses y el aviso de que no es un servicio médico. ¿Son suficientes para una plataforma de estudio de medicina?
 13. Mazos de terceros en el catálogo con autorización escrita. ¿Qué debe decir esa autorización y qué responsabilidad queda con el alumno que importa material ajeno?
-14. Huella del correo de la prueba gratis. Se guarda un hash SHA-256 sin sal del correo normalizado, sin fecha de borrado y aunque se elimine la cuenta. Quien conozca un correo puede calcular su hash y ver si coincide, y junto a la huella queda el identificador de la suscripción en la pasarela, que la pasarela sí liga a un cliente. ¿Es un dato personal seudónimo que pide algo más, como un plazo de conservación, un hash con sal secreta o borrar el identificador de la suscripción al eliminar la cuenta? ¿Basta lo que dice el aviso para el derecho de cancelación?
-15. Conservación de pagos. Studiare borra los pagos con la cuenta y deja el registro a Stripe y al sistema de facturación. ¿La empresa debe conservar algo más por obligación fiscal?
+14. Huella del correo de la prueba gratis. Se guarda un hash SHA-256 sin sal del correo normalizado, sin fecha de borrado y aunque se elimine la cuenta. Quien conozca un correo puede calcular su hash y ver si coincide. Al eliminar la cuenta ya se quitan la pasarela y el identificador de la suscripción. ¿Es un dato personal seudónimo que pide algo más, como un plazo de conservación o un hash con sal secreta? ¿Basta lo que dice el aviso para el derecho de cancelación?
+15. Conservación de pagos. Studiare borra los pagos con la cuenta y deja el registro a Stripe y al sistema de facturación. Los avisos de cobro de la pasarela se quedan sin nombre ni correo, con el identificador de la cuenta y los de la pasarela, sin fecha de borrado. ¿Hace falta un plazo para esos avisos? ¿La empresa debe conservar algo más por obligación fiscal?
 16. Datos opcionales del perfil, como año de nacimiento, sexo y estado. ¿Piden algo más que el aviso actual?
+17. Registro de acceso. Supabase guarda un registro de acceso con la dirección IP. ¿Hay que decir cuánto tiempo se conserva después de eliminar la cuenta?
+18. Reportes de fallas. Hoy se guardan 14 días en Supabase. Cuando entre Sentry (B15) su conservación puede ser otra y el aviso tendrá que decirla
 
 ## Preguntas para Ricardo
 

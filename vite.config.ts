@@ -149,6 +149,8 @@ export default defineConfig(({ mode }) => ({
           'assets/simulate.worker-*.js',
           'assets/import.worker-*.js',
           'assets/pdf-*.js',
+          // La imagen para compartir solo la leen WhatsApp, Facebook y X, no hace falta sin conexión
+          'og-image.png',
         ],
         runtimeCaching: [
           {

@@ -154,7 +154,7 @@ Evidencia
 - En el proyecto. Las tres migraciones y sus 44 funciones verificadas por huella antes de fusionar, y desplegadas create-checkout, create-portal-session, payment-webhook-stripe, payment-webhook-mercadopago y admin-reset-mfa. Faltan cancel-subscription, las dos piezas de supabase/manual/pagos-b10.sql y los secretos de los precios nuevos. Quedan listos para subirse con el script de despliegue en cuanto llegue el token de Supabase
 
 ### B16. Legal y privacidad (D-131)
-- Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 16 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
+- Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 18 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
 - El alumno nunca ve una marca de pendiente. Donde falta un dato lee un texto neutro. El abogado sí ve qué falta en docs/legal
 - Los textos completos cargan solo con la página legal, para seguir debajo de 300 KB de JavaScript inicial
 - Entra con lo de Gemini para B17, la imagen para compartir con dirección completa y tres capturas de instalación. Las capturas muestran la app antes de la paleta y se rehacen en B17
