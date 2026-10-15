@@ -40,3 +40,7 @@ Thumbs.db
 server/ai-config.local.json
 server/.ai-ledger.json
 server/*.tmp
+
+# Datos privados de las evaluaciones de IA (B12, 10.27). Banco real exportado, muestras de la
+# compuerta y detalle del juez. Nunca entran al repositorio
+private/
