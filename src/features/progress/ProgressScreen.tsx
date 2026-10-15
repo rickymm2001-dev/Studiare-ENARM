@@ -2,16 +2,19 @@
 // con las lecturas del motor de autoconocimiento (D-074), el dominio por rama troncal y por
 // subespecialidad con el modelo beta-binomial del motor topics (D-066) y por qué fallas en cada rama
 // con los siete motivos (B5). Todo en una sola página con filas que se abren al tocarlas (D-078).
-// Cada dato muestra calibrando hasta tener datos suficientes.
+// Cada dato muestra calibrando hasta tener datos suficientes. Inglés médico tiene su tarjeta aparte de las
+// ramas, con sus propias cifras (B13, 2.7).
 import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { freeSubjectCardIds } from '@/data/usecases/outlines';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
+import { summarizeEnglish } from '@/engines/englishSection';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
@@ -27,6 +30,7 @@ import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { DifficultyCard } from './DifficultyCard';
+import { EnglishProgressCard } from './EnglishProgressCard';
 import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
 import { WeekPlanCard } from './WeekPlanCard';
@@ -164,6 +168,13 @@ function Progress({ session }: { session: ReadySession }) {
         cardsByBranch={cardsByBranch}
         cardsByTopic={cardsByTopic}
       />
+
+      {isFeatureEnabled('medicalEnglish') ? (
+        <EnglishProgressCard
+          summary={summarizeEnglish(analysis.english.answers, DEFAULT_THRESHOLDS.english)}
+          texts={analysis.english.texts}
+        />
+      ) : null}
 
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <DifficultyCard
