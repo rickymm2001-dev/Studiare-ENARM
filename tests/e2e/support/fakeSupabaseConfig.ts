@@ -2,13 +2,14 @@
 // que construye la app apuntando a este proyecto que no existe, y el servidor falso que atiende sus
 // peticiones desde Playwright. Nada de aquí es un secreto. La llave tiene la forma de la llave pública
 // anterior de Supabase (un JWT con rol anon) porque el cliente y el escáner del build solo aceptan ese rol.
+import { loopbackUrl, testPorts } from '../../../server/src/testPorts.ts';
 
 /** Origen del proyecto falso. Cumple la forma que exige readCloudConfig y la CSP del build */
 export const FAKE_SUPABASE_URL = 'https://fakeproj.supabase.co';
 
-/** Dónde sirve Playwright el build con la nube configurada */
-export const CLOUD_PREVIEW_PORT = 4174;
-export const CLOUD_PREVIEW_URL = `http://127.0.0.1:${CLOUD_PREVIEW_PORT}`;
+/** Dónde sirve Playwright el build con la nube configurada. 4174, o corrido con PW_PORT_OFFSET */
+export const CLOUD_PREVIEW_PORT = testPorts(process.env).cloudPreview;
+export const CLOUD_PREVIEW_URL = loopbackUrl(CLOUD_PREVIEW_PORT);
 
 /**
  * Orígenes de la pasarela y del portal de pagos simulados. La app solo abre direcciones de pago en

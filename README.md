@@ -70,7 +70,7 @@ La clave se llama ENARM_ANTHROPIC_KEY y vive solo en server/.env.local, que no s
 ## Comandos
 
 - npm run check corre typecheck, lint y pruebas unitarias con cobertura. Es lo mismo que corre el CI
-- npm run e2e corre Playwright. La primera vez instala Chromium con npm run e2e:install
+- npm run e2e corre Playwright. La primera vez instala Chromium con npm run e2e:install. Para correrlo en dos copias del repositorio a la vez, cada una con sus puertos, ver tests/e2e/README.md (PW_PORT_OFFSET)
 - npm run budget mide el JavaScript inicial del build en dist contra el presupuesto de 300 KB comprimidos. El CI lo vigila en tests/security/build-policy.test.ts
 - npm run audit:high busca vulnerabilidades altas o críticas en las dependencias
 - npm run test:sql prueba el esquema de Supabase contra un Postgres local temporal. Necesita los binarios de PostgreSQL 15 o más reciente

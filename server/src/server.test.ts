@@ -19,7 +19,7 @@ describe('el proxy escucha solo en localhost (5.3, 14.3)', () => {
   });
 
   it('ningún archivo del proxy escucha en todas las interfaces', () => {
-    for (const file of ['server.ts', 'main.ts', 'config.ts', 'app.ts']) {
+    for (const file of ['server.ts', 'main.ts', 'config.ts', 'app.ts', 'testPorts.ts']) {
       const source = readFileSync(join(import.meta.dirname, file), 'utf8');
       // Solo valores entre comillas, para no confundir el código con los comentarios
       expect(source, file).not.toMatch(/['"]0\.0\.0\.0['"]|['"]::['"]/);
