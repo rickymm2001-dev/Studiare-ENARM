@@ -194,6 +194,103 @@ describe('predicción del puntaje (B12)', () => {
   });
 });
 
+describe('predicción del puntaje, promesas sin resultado del examen (B12, revisión del hallazgo 13)', () => {
+  // Las seis frases del informe. Antes pasaban, porque la guarda pedía un resultado del examen junto con
+  // un futuro o una estimación
+  const promises = [
+    'Aprobarás con este ritmo.',
+    'Es muy probable que apruebes.',
+    'Tu nota final en el ENARM será alta.',
+    'Vas camino a una calificación muy buena en el ENARM.',
+    'Seguro entras a la especialidad que quieres.',
+    'Estás en buen camino para conseguir una residencia en pediatría.',
+  ];
+
+  it('rechaza los verbos de promesa sin objeto, entrar a una especialidad y la nota con será', () => {
+    for (const text of promises) expect(predictsScore(text), text).toBe(true);
+    for (const text of [
+      'Vas a aprobar si sigues así.',
+      'Seguro que apruebas.',
+      'Es probable que apruebes en tu primer intento.',
+      'Probablemente apruebes con este ritmo.',
+      'Conseguirás tu plaza si sigues así.',
+      'Si lo repasas, ingresarás a la especialidad que quieres.',
+      'Probablemente quedarás entre los mejores del país.',
+      'Terminarás entre los 10 primeros.',
+      'Tu ranking en el ENARM mejorará si sigues así.',
+      'La calificación que obtengas en el ENARM será alta.',
+      'La nota final del ENARM será favorable.',
+      'Vas por buen camino para obtener una plaza.',
+      'Vas por buen camino para entrar a la especialidad que quieres.',
+      'Vas en buen camino hacia un puntaje alto en el ENARM.',
+    ]) {
+      expect(predictsScore(text), text).toBe(true);
+    }
+  });
+
+  it('en un texto largo la frase que promete basta para rechazarlo', () => {
+    expect(
+      predictsScore(
+        'Esta semana respondiste 120 preguntas. Repasa los antibióticos. Aprobarás con este ritmo. Descansa.',
+      ),
+    ).toBe(true);
+  });
+
+  it('no bloquea lo que habla del avance, de pasar de tarjeta o de pasar por alto un dato', () => {
+    for (const text of [
+      'Vas por buen camino con tus repasos.',
+      'Estás en el camino correcto para dominar la tabla de antibióticos.',
+      'Tu puntaje de práctica subió 5 puntos, vas por buen camino.',
+      'Es posible que pases por alto la dosis del segundo fármaco.',
+      'Pasarás a la siguiente tarjeta cuando contestes.',
+      'Quedarás con diez tarjetas nuevas para repasar.',
+      'Nota: en el ENARM este dato será frecuente.',
+      'Tu calificación del simulador será visible al terminar.',
+      'Tu resultado del examen de ayer fue 72%.',
+      'Aprobar el simulacro requiere constancia.',
+      'La nota de evolución será firmada por el médico tratante.',
+      'El paciente quedará con secuelas leves si no se reperfunde.',
+      'La residencia geriátrica cuenta con enfermería de planta.',
+      'Tu nota de práctica del tema sube cada semana.',
+      'Entras al quirófano con el consentimiento firmado.',
+    ]) {
+      expect(predictsScore(text), text).toBe(false);
+    }
+  });
+
+  it('las guardas de hipótesis, informe y consejo las rechazan con score_prediction', () => {
+    const hypothesis = hypothesisInput();
+    const base: HypothesisOutput = {
+      hypothesis: 'Confundes los antibióticos de la neumonía típica con los de la atípica.',
+      evidence: ['q-01', 'q-02'],
+      confidence: 'low',
+      actions: ['create_contrast_card'],
+      studentMessage: 'Compara ambos tratamientos lado a lado. Fíjate en el dato que distingue.',
+    };
+    const report = weeklyReportInput();
+    const goodReport = mockOutput('weekly_report', report);
+    const tipInput = biasTipInput();
+    const goodTip = mockOutput('bias_tips', tipInput);
+    for (const text of promises) {
+      const message = `Compara ambos tratamientos lado a lado. ${text}`;
+      expect(
+        guardHypothesis({ ...base, studentMessage: message }, hypothesis).issues,
+        text,
+      ).toEqual(['score_prediction']);
+      expect(
+        guardWeeklyReport(
+          { ...goodReport, summary: `Respondiste varias preguntas. ${text}` },
+          report,
+        ).issues,
+        text,
+      ).toEqual(['score_prediction']);
+      expect(guardBiasTip({ ...goodTip, tip: text }, tipInput).issues, text).toEqual([
+        'score_prediction',
+      ]);
+    }
+  });
+});
+
 describe('vocabulario de sesgo o trampa (B12)', () => {
   it('reconoce la palabra sesgo con o sin acento ni plural', () => {
     expect(usesBiasWord('Este sesgo te hace fallar')).toBe(true);

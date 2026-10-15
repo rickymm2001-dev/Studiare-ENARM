@@ -193,20 +193,65 @@ const DIRECT_PREDICTION = [
   /\b(aprobaras|pasaras|vas a aprobar|vas a pasar) (el )?(enarm|examen)\b/,
   /\bseras seleccionad[oa]\b/,
   /\btu percentil\b/,
-  /\btu (puntaje|calificacion|lugar|resultado) (en|del) (el )?enarm\b/,
+  /\btu (nota|puntaje|calificacion|lugar|resultado|ranking|posicion)( final)? (en|del|de) (el )?enarm\b/,
 ];
+/**
+ * Promesas que no nombran el resultado del examen (B12, revisión del hallazgo 13). En esta app lo que se
+ * aprueba es el ENARM, así que aprobarás, vas a aprobar o es muy probable que apruebes ya predicen, aunque
+ * no digan qué. Pasarás o quedarás solos no, porque son pasar a la siguiente tarjeta o quedar con diez
+ * tarjetas, y "es posible que pases por alto la dosis" tampoco
+ */
+const PASS_PROMISE = [
+  /\b(aprobaras|vas a aprobar)\b/,
+  /\b(es|sera|seria) (muy |bastante |altamente |casi )?(probable|posible|seguro) que apruebes\b/,
+  /\b(probablemente|seguramente|seguro( que)?) (apruebes|apruebas)\b/,
+];
+/** Entrar, ingresar o ganar una especialidad, una residencia o una plaza */
+const ENTRY_PROMISE =
+  /\b(entras|entraras|ingresas|ingresaras|conseguiras|ganaras|obtendras)( a| en)? (la|tu|una|esa) (especialidad|residencia|plaza)\b/;
+/** Quedar entre los mejores, que es un lugar en el ranking del examen */
+const RANK_PROMISE =
+  /\b(quedaras|estaras|terminaras) (entre|dentro de) (los|las) (mejores|primeros|primeras|\d+|top)\b/;
+/**
+ * Ir por buen camino, que promete algo solo si lo que sigue es un lugar del examen: una plaza, una
+ * residencia, el ranking, entrar a una especialidad, o una calificación o un puntaje del ENARM. "Vas por
+ * buen camino con tus repasos" o "tu puntaje de práctica subió, vas por buen camino" no prometen nada
+ */
+const ON_THE_WAY = /\b(vas|estas|andas) (por |en )?(muy |buen |el |un )*(camino|rumbo|ruta)\b/;
+const EXAM_SEAT = /\b(plazas?|residencias?|ranking)\b/;
+const GOAL_SEAT =
+  /\b(entrar|ingresar|conseguir|ganar|obtener|alcanzar) (a |en )?(la|tu|una|esa) (especialidad|residencia|plaza)\b/;
+const SCORE_WORD = /\b(calificacion(es)?|puntajes?|notas?)\b/;
+const ENARM = /\benarm\b/;
+/** Tu nota o tu calificación, o la del ENARM, que con un verbo en futuro y el ENARM es una predicción */
+const OWN_GRADE =
+  /\b(tu|tus|su|sus) (nota|notas|calificacion|calificaciones)\b|\b(nota|calificacion)( final)? (del|en el|de) enarm\b|\bcalificacion que (obtengas|saques|logres|alcances)\b/;
+const WILL_BE = /\b(sera|seran|estara|estaran|quedara|quedaran)\b/;
 
 /**
  * Si el texto predice el puntaje del ENARM, una plaza o un percentil del alumno. La app nunca predice
  * el puntaje (CLAUDE.md), así que la IA tampoco. Una frase cuenta si junta un resultado del examen con
- * un futuro o una estimación, si habla de la probabilidad de aprobar o de quedar en el examen, o si lo
- * dice sin rodeos. Frases como "en el ENARM tendrás casos así", "la probabilidad de quedar con
- * secuelas" o "la escala de Alvarado da una puntuación de 7" no cuentan
+ * un futuro o una estimación, si habla de la probabilidad de aprobar o de quedar en el examen, si lo
+ * dice sin rodeos, o si promete aprobar, entrar a una especialidad o quedar entre los mejores aunque no
+ * nombre el resultado. Frases como "en el ENARM tendrás casos así", "la probabilidad de quedar con
+ * secuelas", "es posible que pases por alto la dosis" o "la escala de Alvarado da una puntuación de 7"
+ * no cuentan
  */
 export function predictsScore(text: string): boolean {
   return sentencesOf(text).some((raw) => {
     const sentence = normalizeForMatch(raw);
     if (DIRECT_PREDICTION.some((pattern) => pattern.test(sentence))) return true;
+    if (PASS_PROMISE.some((pattern) => pattern.test(sentence))) return true;
+    if (ENTRY_PROMISE.test(sentence) || RANK_PROMISE.test(sentence)) return true;
+    if (
+      ON_THE_WAY.test(sentence) &&
+      (EXAM_SEAT.test(sentence) ||
+        GOAL_SEAT.test(sentence) ||
+        (SCORE_WORD.test(sentence) && ENARM.test(sentence)))
+    ) {
+      return true;
+    }
+    if (OWN_GRADE.test(sentence) && WILL_BE.test(sentence) && ENARM.test(sentence)) return true;
     if (CHANCE_TO_PASS.test(sentence)) return true;
     const outcome = EXAM_OUTCOME.test(sentence);
     if (CHANCE_TO_GET.test(sentence) && (outcome || EXAM.test(sentence))) return true;
