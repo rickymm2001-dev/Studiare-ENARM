@@ -127,7 +127,11 @@ describe('Simular con el banco de la nube', () => {
     expect([...usePractice.getState().questionIds].sort()).toEqual([...granted].sort());
     const fetch = server.server.calls.find((call) => call.name === 'fetch_questions');
     expect(fetch?.args?.p_purpose).toBe('practice');
-    expect(await screen.findByText(bankText.shortfall.started(3, 5))).toBeVisible();
+    const started = await screen.findByText(bankText.shortfall.started(3, 5));
+    expect(started).toBeVisible();
+    // Se anuncia con una región viva del marco, que no suma un estado vacío a las demás pantallas
+    expect(started.closest('[aria-live="polite"]')).not.toBeNull();
+    expect(started.closest('[role="status"]')).toBeNull();
     expect(screen.getByText(bankText.shortfall.reasons.unavailable)).toBeVisible();
     await user.click(screen.getByRole('button', { name: bankText.shortfall.dismiss }));
     expect(screen.queryByText(bankText.shortfall.started(3, 5))).toBeNull();

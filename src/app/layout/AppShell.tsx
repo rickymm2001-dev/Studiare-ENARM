@@ -198,7 +198,9 @@ export function AppShell() {
         </div>
       )}
 
-      <div role="status" className={rail}>
+      {/* Una región viva siempre presente para que el aviso se anuncie al llegar. Con aria-live y no
+          con role status, para no sumar un estado vacío a cada pantalla */}
+      <div aria-live="polite" aria-atomic="true" className={rail}>
         {bankNotice ? (
           <Suspense fallback={null}>
             <BankNoticeBanner />
