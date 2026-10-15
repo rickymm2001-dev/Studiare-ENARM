@@ -300,6 +300,29 @@ export interface JobStore {
 
 export type BatchRequest = BatchCreateParams.Request;
 
+/**
+ * El lote ya no existe en Anthropic (404 al consultarlo o al pedir sus resultados). Se borró a mano, es de
+ * otro espacio de trabajo o ya se borró al procesarlo y falló el último paso. El ciclo lo da por perdido
+ */
+export class BatchNotFoundError extends Error {
+  constructor() {
+    super('El lote no existe en Anthropic');
+    this.name = 'BatchNotFoundError';
+  }
+}
+
+/**
+ * Crear el lote se cortó sin respuesta, por la conexión o por el plazo, y pudo haberse creado. Los
+ * trabajos no se regresan a la cola, porque se mandarían dos veces: se quedan en submitting y el
+ * reconciliador busca el lote por custom_id entre los recientes de Anthropic
+ */
+export class BatchCreateUncertainError extends Error {
+  constructor() {
+    super('No se supo si el lote se creó en Anthropic');
+    this.name = 'BatchCreateUncertainError';
+  }
+}
+
 export interface BatchApi {
   create(requests: readonly BatchRequest[]): Promise<MessageBatch>;
   retrieve(batchId: string): Promise<MessageBatch>;

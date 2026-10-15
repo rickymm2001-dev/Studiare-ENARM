@@ -160,6 +160,7 @@ export function buildAiBatch(
           requeued: 0,
           processedBatches: 0,
           scrubbed: 0,
+          errors: 0,
         };
       }
       await rest.config.refresh();

@@ -18,14 +18,43 @@ import { fakeApi, fakeMessage, type FakeApi } from './fakes.ts';
 
 export { fakeApi, fakeMessage, type FakeApi };
 
-/** Lotes simulados que la prueba controla. Además puede hacer fallar el siguiente create */
+/**
+ * Lotes simulados que la prueba controla. Además puede hacer fallar el siguiente create, perder la
+ * respuesta de un create que sí creó el lote, hacer fallar la consulta o los resultados de un lote y
+ * perder un lote por completo, como uno borrado a mano o de otro espacio de trabajo (404)
+ */
 export class FakeBatchApi extends SimulatedBatchApi {
   readonly created: { id: string; requests: BatchRequest[] }[] = [];
   private failures: Error[] = [];
+  private lostResponses: Error[] = [];
+  private retrieveFailures = new Map<string, Error>();
+  private resultsFailures = new Map<string, Error>();
 
   /** El siguiente create falla con este error, como un 429 o un 500 de la API */
   failNextCreate(error: Error): void {
     this.failures.push(error);
+  }
+
+  /** El siguiente create sí crea el lote, pero su respuesta se pierde y lanza este error */
+  loseNextCreateResponse(error: Error): void {
+    this.lostResponses.push(error);
+  }
+
+  /** La consulta de este lote falla con este error hasta que se pase null */
+  failRetrieve(batchId: string, error: Error | null): void {
+    if (error) this.retrieveFailures.set(batchId, error);
+    else this.retrieveFailures.delete(batchId);
+  }
+
+  /** Los resultados de este lote fallan con este error hasta que se pase null */
+  failResults(batchId: string, error: Error | null): void {
+    if (error) this.resultsFailures.set(batchId, error);
+    else this.resultsFailures.delete(batchId);
+  }
+
+  /** El lote desaparece de Anthropic. Consultarlo o pedir sus resultados da 404 */
+  lose(batchId: string): void {
+    this.batches.delete(batchId);
   }
 
   override async create(requests: readonly BatchRequest[]): Promise<MessageBatch> {
@@ -33,7 +62,19 @@ export class FakeBatchApi extends SimulatedBatchApi {
     if (failure) throw failure;
     const batch = await super.create(requests);
     this.created.push({ id: batch.id, requests: [...requests] });
+    const lost = this.lostResponses.shift();
+    if (lost) throw lost;
     return batch;
+  }
+
+  override retrieve(batchId: string): Promise<MessageBatch> {
+    const failure = this.retrieveFailures.get(batchId);
+    return failure ? Promise.reject(failure) : super.retrieve(batchId);
+  }
+
+  override results(batchId: string): ReturnType<SimulatedBatchApi['results']> {
+    const failure = this.resultsFailures.get(batchId);
+    return failure ? Promise.reject(failure) : super.results(batchId);
   }
 }
 

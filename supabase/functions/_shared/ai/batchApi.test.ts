@@ -1,4 +1,4 @@
-import { APIError } from '@anthropic-ai/sdk';
+import { APIConnectionError, APIConnectionTimeoutError, APIError } from '@anthropic-ai/sdk';
 import type { MessageBatch } from '@anthropic-ai/sdk/resources/messages';
 import { describe, expect, it } from 'vitest';
 import {
@@ -16,7 +16,7 @@ import {
 } from './batchApi.ts';
 import { AI_ENGINES, ENGINE_CONTRACTS, type AiEngine } from './engines/aiContracts.ts';
 import { MOCK_MODEL, mockOutput } from './engines/aiMock.ts';
-import type { BatchRequest } from './ports.ts';
+import { BatchCreateUncertainError, BatchNotFoundError, type BatchRequest } from './ports.ts';
 import { buildUserMessage, bundledPromptSets, inputFromUserMessage } from './prompts.ts';
 
 const prompts = bundledPromptSets();
@@ -102,7 +102,9 @@ describe('lote simulado', () => {
     expect((await api.recent(5)).map((item) => item.id)).toEqual([batch.id]);
     await api.delete(batch.id);
     expect(api.deleted).toEqual([batch.id]);
-    await expect(api.retrieve(batch.id)).rejects.toThrow();
+    // Un lote borrado da 404, igual que la API
+    await expect(api.retrieve(batch.id)).rejects.toBeInstanceOf(BatchNotFoundError);
+    await expect(api.results(batch.id)).rejects.toBeInstanceOf(BatchNotFoundError);
   });
 
   it('por omisión termina en la primera consulta', async () => {
@@ -175,6 +177,51 @@ describe('adaptador del SDK', () => {
       'msgbatch_3',
       'msgbatch_2',
     ]);
+  });
+
+  const sdkError = (status: number) =>
+    APIError.generate(
+      status,
+      { type: 'error', error: { type: 'not_found_error', message: 'texto de la API' } },
+      undefined,
+      new Headers(),
+    );
+
+  it('un 404 al consultar o al pedir los resultados es un lote perdido, y otro error sigue su camino', async () => {
+    const gone = client({
+      retrieve: () => Promise.reject(sdkError(404)),
+      results: () => Promise.reject(sdkError(404)),
+    });
+    const api = createSdkBatchApi(gone.fake);
+    await expect(api.retrieve('msgbatch_1')).rejects.toBeInstanceOf(BatchNotFoundError);
+    await expect(api.results('msgbatch_1')).rejects.toBeInstanceOf(BatchNotFoundError);
+    const down = client({
+      retrieve: () => Promise.reject(sdkError(500)),
+      results: () => Promise.reject(new Error('sin resultados')),
+    });
+    const broken = createSdkBatchApi(down.fake);
+    await expect(broken.retrieve('msgbatch_1')).rejects.not.toBeInstanceOf(BatchNotFoundError);
+    await expect(broken.retrieve('msgbatch_1')).rejects.toMatchObject({ status: 500 });
+    await expect(broken.results('msgbatch_1')).rejects.toThrow('sin resultados');
+  });
+
+  it('crear sin respuesta de la API es incierto, y un error con respuesta no', async () => {
+    const dropped = client({
+      create: () => Promise.reject(new APIConnectionError({ message: 'se cortó' })),
+    });
+    await expect(createSdkBatchApi(dropped.fake).create([])).rejects.toBeInstanceOf(
+      BatchCreateUncertainError,
+    );
+    const slow = client({ create: () => Promise.reject(new APIConnectionTimeoutError()) });
+    await expect(createSdkBatchApi(slow.fake).create([])).rejects.toBeInstanceOf(
+      BatchCreateUncertainError,
+    );
+    const limited = client({ create: () => Promise.reject(sdkError(429)) });
+    const error: unknown = await createSdkBatchApi(limited.fake)
+      .create([])
+      .catch((caught: unknown) => caught);
+    expect(error).not.toBeInstanceOf(BatchCreateUncertainError);
+    expect(error).toMatchObject({ status: 429 });
   });
 
   it('borrar uno que ya no existe no es error, y otro error sí', async () => {

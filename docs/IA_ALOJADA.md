@@ -58,6 +58,8 @@ Sin clave y sin AI_ALLOW_MOCK, /health dice unavailable, los motores contestan q
 - El alumno ve que llegó a su límite de hoy. Usó su parte del día, sus generaciones de tarjetas o tiene 12 trabajos pendientes
 - El alumno ve que su sesión venció. Tiene que entrar otra vez con su correo
 - El alumno ve que su cuenta está activa en otro dispositivo. Tiene que entrar ahí otra vez para tomarla
+- Un lote falla o desaparece. El ciclo de ai-batch registra el código de la falla en el log y sigue con los demás lotes, con el envío y con la limpieza, así un lote malo ya no congela todo. Si Anthropic ya no encuentra un lote (404), se da por procesado y sus trabajos vuelven a la cola con su tope de intentos
+- Un envío se corta. Si algo falla entre reclamar los trabajos y crear el lote, vuelven a la cola enseguida. Si crear el lote se queda sin respuesta, el lote pudo haberse creado y los trabajos esperan en el estado de envío hasta que el reconciliador los reconoce por custom_id o, a los 15 minutos sin ningún lote reciente que pudiera ser suyo, los regresa a la cola
 - Una hipótesis se queda pendiente más de media hora. Revisa en Integrations, Cron, que el trabajo ia-lotes corra, y en Edge Functions, ai-batch, Logs, el motivo
 - La función contesta 503 en todo. Mira su registro. Dice cuáles variables faltan
 

@@ -4,6 +4,11 @@
 // precio. Lo corre la función ai-batch cuando pg_cron la llama (cada 10 minutos, solo si hay algo
 // pendiente) y el proxy de desarrollo con su propio reloj. Un solo ciclo a la vez, con un candado.
 // Al procesar un lote se borra en Anthropic, para no dejar ahí textos de alumnos (10.17).
+// Cada paso del ciclo falla por su lado (revisión, hallazgos 2 y 3): un lote que lanza se registra con un
+// código y el ciclo sigue con el siguiente lote, con el envío y con la limpieza. Un lote que Anthropic ya
+// no encuentra se da por perdido y sus trabajos vuelven a la cola. Si algo falla entre reclamar los
+// trabajos y crear el lote, el reclamo se suelta enseguida, y uno que se queda sin lote se suelta a los
+// 15 minutos si ningún lote reciente es suyo.
 import type { Message, MessageBatchIndividualResponse } from '@anthropic-ai/sdk/resources/messages';
 import {
   ENGINE_CONTRACTS,
@@ -14,16 +19,19 @@ import {
 import { MOCK_MODEL } from './engines/aiMock.ts';
 import type { AiConfig, ModelPrice } from './config.ts';
 import { estimateBatchCostUsd, worstBatchCostUsd } from './cost.ts';
-import type {
-  BatchApi,
-  BatchRequest,
-  BatchRow,
-  Clock,
-  GateReader,
-  JobStore,
-  LedgerPortV2,
-  Log,
-  StoredJob,
+import {
+  BatchCreateUncertainError,
+  BatchNotFoundError,
+  type BatchApi,
+  type BatchRequest,
+  type BatchRow,
+  type Clock,
+  type GateReader,
+  type JobStore,
+  type LedgerPortV2,
+  type Log,
+  type StaleClaim,
+  type StoredJob,
 } from './ports.ts';
 import { buildUserMessage, type PromptSets } from './prompts.ts';
 import { buildMessageParams, readMessage } from './provider.ts';
@@ -64,11 +72,23 @@ export interface TickReport {
   requeued: number;
   processedBatches: number;
   scrubbed: number;
+  /** Pasos del ciclo que fallaron y se registraron sin detener a los demás */
+  errors: number;
 }
 
 const DEFAULTS = { pollMinutes: 10, maxResults: 150, maxClaim: 500, staleMinutes: 15 };
 /** Un lote expira a las 24 horas. Un reclamo más viejo que esto ya no tiene lote que reconocer */
 const ABANDON_CLAIM_MS = 25 * 3_600_000;
+/** Cuántos lotes recientes se piden a Anthropic para reconocer uno que se creó y no se registró */
+const RECENT_BATCHES = 20;
+/** Margen entre el reloj de la base y el de Anthropic al comparar cuándo nació un lote y cuándo se reclamó */
+const CLOCK_SKEW_MS = 5 * 60_000;
+
+/** El estado HTTP de un error de la API, si lo trae. Es lo único del error que se registra (2.5) */
+function statusOf(error: unknown): Record<string, number> {
+  const status = (error as { status?: unknown } | null)?.status;
+  return typeof status === 'number' ? { status } : {};
+}
 
 /** El precio de lo que contestó la API. El modelo puede venir con sufijo de fecha */
 function priceFor(config: AiConfig, model: string, engine: BatchEngine): ModelPrice | undefined {
@@ -111,6 +131,7 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
     requeued: 0,
     processedBatches: 0,
     scrubbed: 0,
+    errors: 0,
   };
   const holder = deps.holder ?? crypto.randomUUID();
   const deadline = deps.clock() + deps.deadlineMs;
@@ -119,6 +140,12 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
   report.took = true;
   const config = deps.config();
   const real = deps.mode === 'real';
+
+  /** Una falla se registra con su código y el estado HTTP, nunca con su texto, y el ciclo sigue */
+  const fail = (code: string, error: unknown) => {
+    report.errors += 1;
+    deps.log(code, statusOf(error));
+  };
 
   // ------------------------------------------------------------------------------------------
   // Un resultado
@@ -265,34 +292,73 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
     await collect(row.id);
   }
 
+  /**
+   * Revisa un lote. Si Anthropic ya no lo encuentra (se borró a mano, es de otro espacio de trabajo, o se
+   * borró al procesarlo y el último paso falló), se da por procesado. Marcarlo así devuelve a la cola, con
+   * su tope de intentos, los trabajos que se quedaron sin resultado. Lo que ya terminó se queda como está
+   */
+  async function pollOrLose(row: BatchRow) {
+    try {
+      await poll(row);
+    } catch (error) {
+      if (!(error instanceof BatchNotFoundError)) throw error;
+      deps.log('ai.batch.lost');
+      await deps.jobs.mark(row.id, 'processed');
+      report.processedBatches += 1;
+    }
+  }
+
   // ------------------------------------------------------------------------------------------
-  // Reconocer un lote que se creó y no se registró, por los custom_id de sus resultados
+  // Reconocer un lote que se creó y no se registró, por los custom_id de sus resultados. Un reclamo que
+  // lleva staleMinutes en submitting y no tiene lote se suelta: antes esperaba 25 horas, un día entero
+  // para todo lo que reclamó, aunque el ciclo solo hubiera fallado un segundo
+
+  async function reconcileClaim(
+    claim: StaleClaim,
+    recent: Awaited<ReturnType<BatchApi['recent']>>,
+  ) {
+    const claimedAt = Date.parse(claim.claimedAt);
+    const since = claimedAt - CLOCK_SKEW_MS;
+    const ids = new Set(claim.jobIds);
+    // Los lotes que nacieron desde el reclamo, de cualquier estado, son los únicos que pudieron ser suyos
+    const born = recent.filter((batch) => Date.parse(batch.created_at) >= since);
+    for (const batch of born) {
+      if (batch.processing_status !== 'ended') continue;
+      const custom: string[] = [];
+      try {
+        for await (const line of await deps.batches.results(batch.id)) custom.push(line.custom_id);
+      } catch (error) {
+        if (error instanceof BatchNotFoundError) continue;
+        throw error;
+      }
+      if (custom.length === 0 || !custom.every((id) => ids.has(id))) continue;
+      await deps.jobs.submitted(
+        claim.claimId,
+        batch.id,
+        Object.fromEntries(custom.map((id) => [id, 0])),
+      );
+      deps.log('ai.batch.reconciled', { jobs: custom.length });
+      return;
+    }
+    // Ninguno es suyo. La lista llega del más nuevo al más viejo, así que si ninguno de los recientes nació
+    // desde el reclamo, no hay ninguno que pudiera serlo. Uno en curso, que todavía no se puede leer, sí
+    // cuenta. Entonces el lote nunca se creó y los trabajos pueden volver a la cola
+    const age = deps.clock() - claimedAt;
+    if (born.length === 0 || age > ABANDON_CLAIM_MS) {
+      await deps.jobs.unclaim(claim.claimId);
+      deps.log('ai.batch.claim_released', { minutes: Math.round(age / 60_000) });
+    }
+  }
 
   async function reconcile() {
     const stale = await deps.jobs.stale(options.staleMinutes);
     if (stale.length === 0) return;
-    const recent = await deps.batches.recent(20);
+    const recent = await deps.batches.recent(RECENT_BATCHES);
     for (const claim of stale) {
-      const claimedAt = Date.parse(claim.claimedAt);
-      const ids = new Set(claim.jobIds);
-      let found = false;
-      for (const batch of recent) {
-        if (batch.processing_status !== 'ended') continue;
-        if (Date.parse(batch.created_at) < claimedAt - 5 * 60_000) continue;
-        const custom: string[] = [];
-        for await (const line of await deps.batches.results(batch.id)) custom.push(line.custom_id);
-        if (custom.length === 0 || !custom.every((id) => ids.has(id))) continue;
-        await deps.jobs.submitted(
-          claim.claimId,
-          batch.id,
-          Object.fromEntries(custom.map((id) => [id, 0])),
-        );
-        deps.log('ai.batch.reconciled', { jobs: custom.length });
-        found = true;
-        break;
-      }
-      if (!found && deps.clock() - claimedAt > ABANDON_CLAIM_MS) {
-        await deps.jobs.unclaim(claim.claimId);
+      try {
+        await reconcileClaim(claim, recent);
+      } catch (error) {
+        fail('ai.batch.reconcile_failed', error);
       }
     }
   }
@@ -300,43 +366,60 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
   // ------------------------------------------------------------------------------------------
   // Mandar lo que cabe en el presupuesto del día y de la cuota de cada motor
 
+  /** Regresa un reclamo a la cola. Si no se puede, el reconciliador lo suelta a los 15 minutos */
+  async function release(claimId: string) {
+    try {
+      await deps.jobs.unclaim(claimId);
+    } catch (error) {
+      fail('ai.batch.unclaim_failed', error);
+    }
+  }
+
   async function send() {
     const state = await deps.gate.read();
     // Con la pausa no salen lotes nuevos. Los que ya están en curso se siguen recogiendo
     if (state.paused) return;
     const claim = await deps.jobs.claim(options.maxClaim);
     if (claim.jobs.length === 0) return;
-    const summary = await deps.ledger.summary();
-    const { limits } = config;
-    const inFlight = Object.values(summary.inFlightUsd).reduce((sum, value) => sum + value, 0);
-    let total = limits.dailyBudgetUsd - summary.spentUsd - inFlight;
-    const perEngine = new Map<BatchEngine, number>();
+    // Desde aquí los trabajos están en submitting. Si algo falla antes de crear el lote se regresan a la
+    // cola, no solo si falla crearlo, y no se quedan esperando a que alguien los suelte
     const requests: BatchRequest[] = [];
     const estimates: Record<string, number> = {};
-    for (const job of claim.jobs) {
-      const request = batchRequestFor(job, config, deps.prompts);
-      const model = config.models[job.engine];
-      const price = config.prices[model.id];
-      const text = `${deps.prompts[job.engine].text}${buildUserMessage(job.input, job.issues)}`;
-      const worst = real && price ? worstBatchCostUsd(price, text, model.maxTokens) : 0;
-      const engineLeft =
-        perEngine.get(job.engine) ??
-        limits.dailyBudgetUsd * limits.engineShare[job.engine] -
-          (summary.byEngine[job.engine]?.costUsd ?? 0) -
-          (summary.inFlightUsd[job.engine] ?? 0);
-      if (
-        worst > total ||
-        worst > engineLeft ||
-        (real && engineLeft <= 0) ||
-        (real && total <= 0)
-      ) {
-        perEngine.set(job.engine, engineLeft);
-        continue;
+    try {
+      const summary = await deps.ledger.summary();
+      const { limits } = config;
+      const inFlight = Object.values(summary.inFlightUsd).reduce((sum, value) => sum + value, 0);
+      let total = limits.dailyBudgetUsd - summary.spentUsd - inFlight;
+      const perEngine = new Map<BatchEngine, number>();
+      for (const job of claim.jobs) {
+        const request = batchRequestFor(job, config, deps.prompts);
+        const model = config.models[job.engine];
+        const price = config.prices[model.id];
+        const text = `${deps.prompts[job.engine].text}${buildUserMessage(job.input, job.issues)}`;
+        const worst = real && price ? worstBatchCostUsd(price, text, model.maxTokens) : 0;
+        const engineLeft =
+          perEngine.get(job.engine) ??
+          limits.dailyBudgetUsd * limits.engineShare[job.engine] -
+            (summary.byEngine[job.engine]?.costUsd ?? 0) -
+            (summary.inFlightUsd[job.engine] ?? 0);
+        if (
+          worst > total ||
+          worst > engineLeft ||
+          (real && engineLeft <= 0) ||
+          (real && total <= 0)
+        ) {
+          perEngine.set(job.engine, engineLeft);
+          continue;
+        }
+        total -= worst;
+        perEngine.set(job.engine, engineLeft - worst);
+        requests.push(request);
+        estimates[job.id] = worst;
       }
-      total -= worst;
-      perEngine.set(job.engine, engineLeft - worst);
-      requests.push(request);
-      estimates[job.id] = worst;
+    } catch (error) {
+      fail('ai.batch.send_failed', error);
+      await release(claim.claimId);
+      return;
     }
     if (requests.length === 0) {
       // Nada cabe hoy. Espera al día siguiente sin contar intento
@@ -346,26 +429,58 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
     let batchId: string;
     try {
       batchId = (await deps.batches.create(requests)).id;
-    } catch {
+    } catch (error) {
+      if (error instanceof BatchCreateUncertainError) {
+        // El lote pudo haberse creado. Regresar los trabajos los mandaría dos veces, así que se quedan en
+        // submitting y el reconciliador busca su lote entre los recientes por custom_id
+        fail('ai.batch.create_uncertain', error);
+        return;
+      }
       // Un 429 o un 5xx al crear. Se regresa todo sin contar intento y se prueba en el siguiente ciclo
-      deps.log('ai.batch.create_failed');
-      await deps.jobs.unclaim(claim.claimId);
+      fail('ai.batch.create_failed', error);
+      await release(claim.claimId);
       return;
     }
-    await deps.jobs.submitted(claim.claimId, batchId, estimates);
+    try {
+      await deps.jobs.submitted(claim.claimId, batchId, estimates);
+    } catch (error) {
+      // El lote ya existe en Anthropic: los trabajos no se regresan, y el reconciliador lo reconoce
+      fail('ai.batch.register_failed', error);
+      return;
+    }
     report.sent += requests.length;
   }
 
-  try {
-    await reconcile();
-    for (const row of await deps.jobs.due(options.pollMinutes)) {
-      if (!timeLeft() || budget <= 0) break;
-      await poll(row);
+  /** Un paso del ciclo. Si falla se registra y el ciclo sigue con el siguiente */
+  async function step(code: string, work: () => Promise<void>) {
+    try {
+      await work();
+    } catch (error) {
+      fail(code, error);
     }
-    if (timeLeft()) await send();
-    report.scrubbed = await deps.jobs.scrub();
+  }
+
+  try {
+    await step('ai.batch.reconcile_failed', reconcile);
+    let due: BatchRow[] = [];
+    await step('ai.batch.due_failed', async () => {
+      due = await deps.jobs.due(options.pollMinutes);
+    });
+    for (const row of due) {
+      if (!timeLeft() || budget <= 0) break;
+      // Un lote que falla no frena a los demás, ni al envío ni a la limpieza
+      await step('ai.batch.poll_failed', () => pollOrLose(row));
+    }
+    if (timeLeft()) await step('ai.batch.send_failed', send);
+    await step('ai.batch.scrub_failed', async () => {
+      report.scrubbed = await deps.jobs.scrub();
+    });
   } finally {
-    await deps.jobs.lease(holder, 0);
+    try {
+      await deps.jobs.lease(holder, 0);
+    } catch (error) {
+      fail('ai.batch.lease_release_failed', error);
+    }
   }
   deps.log('ai.batch.tick', {
     sent: report.sent,
@@ -373,6 +488,7 @@ export async function runBatchTick(deps: BatchTickDeps): Promise<TickReport> {
     failed: report.failed,
     requeued: report.requeued,
     batches: report.processedBatches,
+    errors: report.errors,
   });
   return report;
 }

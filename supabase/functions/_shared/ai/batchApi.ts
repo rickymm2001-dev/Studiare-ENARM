@@ -8,11 +8,16 @@ import type {
   MessageBatchIndividualResponse,
   MessageBatchResult,
 } from '@anthropic-ai/sdk/resources/messages';
-import { NotFoundError } from '@anthropic-ai/sdk';
+import { APIConnectionError, NotFoundError } from '@anthropic-ai/sdk';
 import { AI_ENGINES, type AiEngine, type EngineInputs } from './engines/aiContracts.ts';
 import { MOCK_MODEL, mockOutput } from './engines/aiMock.ts';
 import { approximateTokens } from './cost.ts';
-import type { BatchApi, BatchRequest } from './ports.ts';
+import {
+  BatchCreateUncertainError,
+  BatchNotFoundError,
+  type BatchApi,
+  type BatchRequest,
+} from './ports.ts';
 import { inputFromUserMessage, type PromptSets } from './prompts.ts';
 
 // ---------------------------------------------------------------------------------------------
@@ -31,12 +36,40 @@ export interface BatchesClient {
   list(params: { limit: number }): AsyncIterable<MessageBatch>;
 }
 
+/** Un 404 del SDK es un lote que ya no existe. Cualquier otro error sigue su camino */
+function asLost(error: unknown): never {
+  if (error instanceof NotFoundError) throw new BatchNotFoundError();
+  throw error;
+}
+
 export function createSdkBatchApi(batches: BatchesClient): BatchApi {
   return {
-    create: (requests) =>
-      batches.create({ requests: [...requests] }, { timeout: 60_000, maxRetries: 1 }),
-    retrieve: (batchId) => batches.retrieve(batchId),
-    results: (batchId) => batches.results(batchId),
+    async create(requests) {
+      try {
+        return await batches.create(
+          { requests: [...requests] },
+          { timeout: 60_000, maxRetries: 1 },
+        );
+      } catch (error) {
+        // Sin respuesta de la API el lote pudo haberse creado, y los trabajos no se regresan a la cola
+        if (error instanceof APIConnectionError) throw new BatchCreateUncertainError();
+        throw error;
+      }
+    },
+    async retrieve(batchId) {
+      try {
+        return await batches.retrieve(batchId);
+      } catch (error) {
+        return asLost(error);
+      }
+    },
+    async results(batchId) {
+      try {
+        return await batches.results(batchId);
+      } catch (error) {
+        return asLost(error);
+      }
+    },
     cancel: (batchId) => batches.cancel(batchId),
     async delete(batchId) {
       try {
@@ -246,7 +279,7 @@ export class SimulatedBatchApi implements BatchApi {
     const found = this.batches.get(batchId);
     if (!found) {
       if (this.options.unknownAsEnded) return Promise.resolve(this.unknown(batchId));
-      return Promise.reject(new Error(`Lote simulado desconocido ${batchId}`));
+      return Promise.reject(new BatchNotFoundError());
     }
     if (!found.results && found.retrieves >= (this.options.retrievesBeforeEnd ?? 0)) {
       this.end(batchId);
@@ -259,6 +292,7 @@ export class SimulatedBatchApi implements BatchApi {
     const found = this.batches.get(batchId);
     if (!found?.results) {
       if (!found && this.options.unknownAsEnded) return Promise.resolve(iterate([]));
+      if (!found) return Promise.reject(new BatchNotFoundError());
       return Promise.reject(new Error(`El lote simulado ${batchId} no tiene resultados`));
     }
     const lines = [...found.results].map(([custom_id, result]) => ({ custom_id, result }));
