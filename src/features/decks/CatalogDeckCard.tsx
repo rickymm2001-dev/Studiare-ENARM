@@ -7,6 +7,7 @@
 import { Download, Layers, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useCloud } from '@/app/cloudState';
 import { screenPath } from '@/app/screens';
 import type {
   DeckCatalogEntry,
@@ -44,14 +45,20 @@ type CatalogState =
   | { status: 'failed' }
   | { status: 'ready'; list: DeckCatalogList };
 
-/** La lista del catálogo, con su estado. reload la vuelve a pedir */
+/**
+ * La lista del catálogo, con su estado. reload la vuelve a pedir. Al abrir la app el SDK de la nube
+ * se baja y la cuenta se revisa después de pintar Mazos, así que la lista se pide cuando la cuenta
+ * queda conectada y no antes. Mientras se revisa se ve cargando
+ */
 function useCloudDeckCatalog(): { state: CatalogState; reload: () => void } {
+  const cloudStatus = useCloud((store) => store.state.status);
   const [state, setState] = useState<CatalogState>({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let alive = true;
     const load = async (): Promise<CatalogState> => {
-      const cloud = getCloud();
+      if (cloudStatus === 'checking') return { status: 'loading' };
+      const cloud = cloudStatus === 'linked' ? getCloud() : null;
       if (!cloud) return { status: 'offline' };
       const reply = await fetchDeckCatalog(cloud);
       if (reply.ok) return { status: 'ready', list: reply.value };
@@ -63,7 +70,7 @@ function useCloudDeckCatalog(): { state: CatalogState; reload: () => void } {
     return () => {
       alive = false;
     };
-  }, [attempt]);
+  }, [attempt, cloudStatus]);
   const reload = useCallback(() => {
     setState({ status: 'loading' });
     setAttempt((value) => value + 1);

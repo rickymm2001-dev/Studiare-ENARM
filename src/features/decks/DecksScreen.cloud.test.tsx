@@ -219,6 +219,28 @@ describe('catálogo de mazos de la nube', () => {
     expect(within(catalog).getByText('[Prueba] Nota de muestra')).toBeVisible();
   });
 
+  it('al abrir la app espera a que la cuenta se conecte y entonces pide el catálogo', async () => {
+    const pending = await catalogCloud(true);
+    const cloud = holder.cloud;
+    // Así abre Mazos al recargar. El SDK todavía no baja y la cuenta se está revisando
+    holder.cloud = null;
+    useCloud.setState({ state: { status: 'checking' } });
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(within(catalog).getByText(text.loading)).toBeVisible();
+    holder.cloud = cloud;
+    useCloud.setState({
+      state: {
+        status: 'linked',
+        identity: { authId: 'cuenta', email: 'ana@ejemplo.mx', role: 'student', alias: 'Ana' },
+      },
+    });
+    expect(
+      await within(catalog).findByText('Ginecología y obstetricia (Paco)', undefined, WAIT),
+    ).toBeVisible();
+    expect(pending.records).toEqual([]);
+  });
+
   it('sin conexión lo dice y no se queda cargando', async () => {
     holder.cloud = null;
     app = await renderApp(SCREENS.decks.path);
