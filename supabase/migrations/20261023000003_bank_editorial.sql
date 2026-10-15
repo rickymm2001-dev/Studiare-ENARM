@@ -1458,6 +1458,62 @@ begin
 end;
 $$;
 
+-- Los topes del banco y la tarifa por revisión, para la sección Banco de Plataforma (B5 de la revisión).
+-- Los topes van completos, los públicos de platform_settings y los privados de bank_private_settings
+create or replace function public.admin_bank_settings() returns jsonb
+language plpgsql stable security definer set search_path = public, pg_temp as $$
+begin
+  perform public.bank_require_admin();
+  return jsonb_build_object('limits', public.bank_limits(), 'pay',
+    jsonb_build_object('perReviewMxn', public.bank_pay_rate()));
+end;
+$$;
+
+-- Guarda los topes y la tarifa. Cada campo va a su tabla, con los mismos rangos que la app
+-- (BankLimitsSchema y PhysicianPaySchema de src/data/cloud/bankAdmin.ts)
+create or replace function public.admin_save_bank_settings(p_limits jsonb, p_pay jsonb) returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  v_uid uuid := auth.uid();
+  v_field record;
+  v_value numeric;
+  v_rate jsonb := coalesce(p_pay -> 'perReviewMxn', 'null'::jsonb);
+begin
+  perform public.bank_require_admin();
+  if jsonb_typeof(p_limits) is distinct from 'object' then
+    raise exception 'Faltan los topes' using errcode = '22023';
+  end if;
+  for v_field in
+    select * from (values ('perMinute', 1, 10000, true), ('perHour', 1, 100000, true),
+      ('alertDaily', 1, 100000, true), ('alertWeekShare', 0.01, 1, false), ('reportsPerDay', 1, 1000, true),
+      ('maxFetch', 1, 500, true)) as f(name, low, high, whole)
+  loop
+    if jsonb_typeof(p_limits -> v_field.name) is distinct from 'number' then
+      raise exception 'Falta % o no es número', v_field.name using errcode = '22023';
+    end if;
+    v_value := (p_limits ->> v_field.name)::numeric;
+    if v_value < v_field.low or v_value > v_field.high or (v_field.whole and v_value <> trunc(v_value)) then
+      raise exception '% fuera de rango', v_field.name using errcode = '22023';
+    end if;
+  end loop;
+  if jsonb_typeof(v_rate) not in ('null', 'number')
+     or (jsonb_typeof(v_rate) = 'number' and ((v_rate #>> '{}')::numeric < 0 or (v_rate #>> '{}')::numeric > 100000)) then
+    raise exception 'Tarifa fuera de rango' using errcode = '22023';
+  end if;
+
+  insert into public.platform_settings (key, value, updated_at)
+    values ('bank_limits', jsonb_build_object('perMinute', p_limits -> 'perMinute',
+      'reportsPerDay', p_limits -> 'reportsPerDay', 'maxFetch', p_limits -> 'maxFetch'), now())
+    on conflict (key) do update set value = excluded.value, updated_at = excluded.updated_at;
+  insert into public.bank_private_settings (key, value, updated_at, updated_by)
+    values ('bank_limits', jsonb_build_object('perHour', p_limits -> 'perHour',
+      'alertDaily', p_limits -> 'alertDaily', 'alertWeekShare', p_limits -> 'alertWeekShare'), now(), v_uid),
+      ('physician_pay', jsonb_build_object('perReviewMxn', v_rate), now(), v_uid)
+    on conflict (key) do update
+      set value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by;
+end;
+$$;
+
 -- Retira una pregunta entera. Los alumnos la dejan de recibir y conservan lo que ya bajaron
 create or replace function public.admin_retire_question(p_question_id uuid, p_reason text) returns text
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -1545,13 +1601,14 @@ end;
 $$;
 
 -- ===================================================================== Pago a médicos (respuesta 58)
--- Tarifa por revisión de physician_pay. null si Ricardo no la puso
+-- Tarifa por revisión de physician_pay, en bank_private_settings (B5 de la revisión). null si Ricardo no
+-- la puso
 create or replace function public.bank_pay_rate() returns numeric
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 declare
   v_rate numeric;
 begin
-  select (value ->> 'perReviewMxn')::numeric into v_rate from public.platform_settings where key = 'physician_pay';
+  select (value ->> 'perReviewMxn')::numeric into v_rate from public.bank_private_settings where key = 'physician_pay';
   return case when v_rate >= 0 then v_rate end;
 exception when others then
   return null;
@@ -1736,6 +1793,10 @@ revoke all on function public.admin_set_physician_code(uuid, text) from public, 
 grant execute on function public.admin_set_physician_code(uuid, text) to authenticated;
 revoke all on function public.admin_bank_team() from public, anon, authenticated, service_role;
 grant execute on function public.admin_bank_team() to authenticated;
+revoke all on function public.admin_bank_settings() from public, anon, authenticated, service_role;
+grant execute on function public.admin_bank_settings() to authenticated;
+revoke all on function public.admin_save_bank_settings(jsonb, jsonb) from public, anon, authenticated, service_role;
+grant execute on function public.admin_save_bank_settings(jsonb, jsonb) to authenticated;
 revoke all on function public.admin_retire_question(uuid, text) from public, anon, authenticated, service_role;
 grant execute on function public.admin_retire_question(uuid, text) to authenticated;
 revoke all on function public.admin_restore_question(uuid) from public, anon, authenticated, service_role;

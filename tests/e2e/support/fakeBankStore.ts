@@ -50,6 +50,8 @@ export const BANK_EDITORIAL_RPCS = [
   'admin_set_topic_reviewer',
   'admin_set_physician_code',
   'admin_bank_team',
+  'admin_bank_settings',
+  'admin_save_bank_settings',
   'admin_retire_question',
   'admin_restore_question',
   'admin_confirm_missing',
@@ -299,7 +301,10 @@ export interface FakeStorageObject {
   createdAt: string;
 }
 
-/** Los valores de platform_settings del banco (1.16 del plan de B11) */
+/**
+ * Los ajustes del banco (1.16 del plan de B11). perHour, alertDaily, alertWeekShare y la tarifa viven en
+ * bank_private_settings y solo salen por admin_bank_settings (B5 de la revisión)
+ */
 export interface FakeBankSettings {
   bankLimits: {
     perMinute: number;

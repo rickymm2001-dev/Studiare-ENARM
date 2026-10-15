@@ -44,7 +44,6 @@ test('el admin ve las revisiones del mes con su monto y baja los CSV que cuadran
   if (!ana || !beto) throw new Error('Faltan las cuentas del equipo');
   bank.physicianCodes.set(beto.id, 'BR');
   bank.settings.physicianPay.perReviewMxn = RATE;
-  cloud.setSetting('physician_pay', { perReviewMxn: RATE });
 
   // Beto revisa tres preguntas de Ana. Aprueba dos y pide cambios en una
   const questions = seedQuestions(bank, 3, { status: 'draft', origin: 'app', authorId: ana.id });

@@ -268,7 +268,10 @@ function OpenBankControl({
 
 function SyncCard() {
   const copy = text.sync;
-  const settings = useBankAdminQuery((cloud) => readBankSettings(cloud), 'settings');
+  const settings = useBankAdminQuery(
+    (cloud, onForbidden) => readBankSettings(cloud, onForbidden),
+    'settings',
+  );
   const runs = useBankAdminQuery((cloud, onForbidden) => readSyncRuns(cloud, onForbidden), 'runs');
   const [target, setTarget] = useState<SyncTarget>('test');
   const [selected, setSelected] = useState<string | null>(null);

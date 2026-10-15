@@ -21,21 +21,38 @@ vi.mock('@/data/cloud/client', () => ({
 
 const text = bankAdminText.platform;
 
-function fakeCloud(): { upserts: { key: string; value: unknown }[] } {
-  const state = { upserts: [] as { key: string; value: unknown }[] };
+interface FakeState {
+  upserts: { key: string; value: unknown }[];
+  /** Las claves que se leyeron de platform_settings, que se lee sin sesión */
+  read: string[];
+  rpc: [string, unknown][];
+}
+
+function fakeCloud(): FakeState {
+  const state: FakeState = { upserts: [], read: [], rpc: [] };
   const settings: Record<string, unknown> = {
-    bank_limits: { perMinute: 120 },
     bank_sync: { enabled: false },
-    physician_pay: { perReviewMxn: null },
     bank_goal: { approvedToOpen: 300 },
   };
   holder.cloud = {
+    // El freno por hora, los avisos y la tarifa solo salen de admin_bank_settings (B5 de la revisión)
+    rpc: (name: string, args: unknown) => {
+      state.rpc.push([name, args]);
+      return Promise.resolve({
+        data:
+          name === 'admin_bank_settings'
+            ? { limits: { perMinute: 120 }, pay: { perReviewMxn: null } }
+            : null,
+        error: null,
+      });
+    },
     from: () => {
       let key = '';
       const query = {
         select: () => query,
         eq: (_column: string, value: string) => {
           key = value;
+          state.read.push(value);
           return query;
         },
         maybeSingle: () => Promise.resolve({ data: { value: settings[key] }, error: null }),
@@ -82,10 +99,14 @@ describe('Ajustes del banco', () => {
     await typing.type(screen.getByLabelText(text.fields.perReviewMxn), '45');
     await typing.click(screen.getByRole('button', { name: text.save }));
     expect(await screen.findByText(text.saved)).toBeVisible();
-    expect(state.upserts).toEqual([
-      { key: 'bank_limits', value: { ...DEFAULT_BANK_LIMITS, perMinute: 120 } },
-      { key: 'physician_pay', value: { perReviewMxn: 45 } },
+    expect(state.rpc).toContainEqual([
+      'admin_save_bank_settings',
+      { p_limits: { ...DEFAULT_BANK_LIMITS, perMinute: 120 }, p_pay: { perReviewMxn: 45 } },
     ]);
+    // Nada pasa por platform_settings, que se lee sin sesión
+    expect(state.upserts).toEqual([]);
+    expect(state.read).not.toContain('bank_limits');
+    expect(state.read).not.toContain('physician_pay');
   });
 
   it('no guarda una parte del banco fuera de rango', async () => {
@@ -100,5 +121,6 @@ describe('Ajustes del banco', () => {
     await waitFor(() => {
       expect(state.upserts).toEqual([]);
     });
+    expect(state.rpc.map(([name]) => name)).not.toContain('admin_save_bank_settings');
   });
 });

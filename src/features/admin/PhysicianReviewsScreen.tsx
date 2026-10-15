@@ -50,7 +50,10 @@ function ReviewsReport() {
   const [draft, setDraft] = useState(initial);
   const [range, setRange] = useState(initial);
   const [error, setError] = useState('');
-  const settings = useBankAdminQuery((cloud) => readBankSettings(cloud), 'settings');
+  const settings = useBankAdminQuery(
+    (cloud, onForbidden) => readBankSettings(cloud, onForbidden),
+    'settings',
+  );
   const { state, reload } = useBankAdminQuery(
     (cloud, onForbidden) => readReviewReport(cloud, range, onForbidden),
     `${range.from}|${range.to}`,

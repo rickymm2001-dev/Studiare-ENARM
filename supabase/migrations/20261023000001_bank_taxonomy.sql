@@ -12,8 +12,11 @@
 --   - bank_taxonomy y bank_bias_tags, la taxonomía de src/demo/content para que el servidor valide sin
 --     leer la app. tests/content/taxonomySeed.test.ts compara esta siembra con topic-taxonomy.json y
 --     bias-taxonomy.json. Cambiar la taxonomía pide una migración nueva
---   - Claves nuevas de platform_settings (bank_limits, bank_sync, bank_goal y physician_pay), sin
---     secretos ni el ID del Sheet, porque platform_settings se lee sin sesión
+--   - Claves nuevas de platform_settings (bank_limits, bank_sync y bank_goal), sin secretos ni el ID del
+--     Sheet, porque platform_settings se lee sin sesión. bank_limits ahí solo lleva perMinute,
+--     reportsPerDay y maxFetch. El freno por hora, los umbrales de los avisos y la tarifa por revisión
+--     viven en bank_private_settings, que nadie lee por la API, para que nadie ajuste su lectura justo
+--     debajo de los avisos ni vea cuánto se paga (B5 de la revisión)
 --   - bank_open_for_students(), la bandera cloudBank leída en el servidor, así una app manipulada no
 --     abre el banco antes, y bank_limit, los topes con sus valores de respaldo
 --
@@ -297,9 +300,24 @@ $$;
 -- Topes del alumno (2.2 y 2.3), sincronización con el Sheet (3.10), meta para abrir el banco
 -- (respuesta 56) y tarifa por revisión (8.8). No pisa un valor que el admin ya haya cambiado
 insert into public.platform_settings (key, value) values
-  ('bank_limits', '{"perMinute":300,"perHour":900,"alertDaily":600,"alertWeekShare":0.5,"reportsPerDay":10,"maxFetch":100}'),
+  ('bank_limits', '{"perMinute":300,"reportsPerDay":10,"maxFetch":100}'),
   ('bank_sync', '{"enabled":false,"mode":"dry_run","tab":"Preguntas","maxRows":5000,"minIntervalSeconds":60,"idPattern":"^[A-Z]{2,4}-[0-9]{4,5}$"}'),
-  ('bank_goal', '{"approvedToOpen":300}'),
+  ('bank_goal', '{"approvedToOpen":300}')
+  on conflict (key) do nothing;
+
+-- Los ajustes que no se leen sin sesión (B5 de la revisión). bank_limits lleva perHour, alertDaily y
+-- alertWeekShare, y physician_pay la tarifa. Sin permisos de tabla. Solo los leen las funciones del
+-- servidor y el admin con admin_bank_settings
+create table if not exists public.bank_private_settings (
+  key text primary key check (key in ('bank_limits', 'physician_pay')),
+  value jsonb not null check (jsonb_typeof(value) = 'object'),
+  updated_at timestamptz not null default now(),
+  updated_by uuid references auth.users (id) on delete set null
+);
+alter table public.bank_private_settings enable row level security;
+revoke all on public.bank_private_settings from public, anon, authenticated, service_role;
+insert into public.bank_private_settings (key, value) values
+  ('bank_limits', '{"perHour":900,"alertDaily":600,"alertWeekShare":0.5}'),
   ('physician_pay', '{"perReviewMxn":null}')
   on conflict (key) do nothing;
 
@@ -313,14 +331,22 @@ language sql stable security definer set search_path = public, pg_temp as $$
   )
 $$;
 
--- Los topes con sus valores de respaldo, por si el admin borra una clave o escribe algo que no se lee
+-- Los topes con sus valores de respaldo, por si el admin borra una clave o escribe algo que no se lee.
+-- Cada campo sale solo de su tabla, así un perHour escrito en platform_settings no cuenta
 create or replace function public.bank_limits() returns jsonb
 language sql stable security definer set search_path = public, pg_temp as $$
   select '{"perMinute":300,"perHour":900,"alertDaily":600,"alertWeekShare":0.5,"reportsPerDay":10,"maxFetch":100}'::jsonb
-    || coalesce(
-      (select value from public.platform_settings where key = 'bank_limits' and jsonb_typeof(value) = 'object'),
-      '{}'::jsonb
-    )
+    || coalesce((
+      select jsonb_object_agg(e.key, e.value)
+      from public.platform_settings s, jsonb_each(s.value) e
+      where s.key = 'bank_limits' and jsonb_typeof(s.value) = 'object'
+        and e.key in ('perMinute', 'reportsPerDay', 'maxFetch')
+    ), '{}'::jsonb)
+    || coalesce((
+      select jsonb_object_agg(e.key, e.value)
+      from public.bank_private_settings s, jsonb_each(s.value) e
+      where s.key = 'bank_limits' and e.key in ('perHour', 'alertDaily', 'alertWeekShare')
+    ), '{}'::jsonb)
 $$;
 
 -- Un número de bank_limits. Con un valor que no es número o es negativo, el de respaldo
@@ -329,7 +355,7 @@ language plpgsql stable security definer set search_path = public, pg_temp as $$
 declare
   v_value numeric;
 begin
-  select (value ->> p_field)::numeric into v_value from public.platform_settings where key = 'bank_limits';
+  v_value := (public.bank_limits() ->> p_field)::numeric;
   if v_value is null or v_value < 0 then
     return p_default;
   end if;

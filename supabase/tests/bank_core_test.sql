@@ -78,6 +78,12 @@ select pg_temp.expect((select count(*) from public.platform_settings where key i
   'BC1. anon dejó de leer bank_limits y bank_goal');
 select pg_temp.expect(not exists (select 1 from public.platform_settings where value::text ~* 'sheet_id|private_key'),
   'BC1. platform_settings trae un secreto');
+-- El freno por hora, los umbrales de los avisos y la tarifa no se leen sin sesión (B5 de la revisión)
+select pg_temp.expect(not exists (select 1 from public.platform_settings
+    where value ?| array['perHour', 'alertDaily', 'alertWeekShare', 'perReviewMxn']),
+  'BC1. anon leyó el freno por hora, los avisos o la tarifa');
+select pg_temp.expect(pg_temp.is_blocked('select count(*) from public.bank_private_settings'),
+  'BC1. anon leyó bank_private_settings');
 rollback;
 -- Un token sin usuario no llega a ninguna lectura
 begin;
@@ -333,8 +339,8 @@ select pg_temp.expect(exists (select 1 from public.bank_read_alerts where user_i
 select pg_temp.expect((select count(*) from public.bank_read_alerts where user_id = :'p1' and kind = 'week_share') = 1,
   'BC4. Leer casi todo el catálogo en la semana no avisó');
 -- Con alertDaily en 30 nace un aviso daily_volume sin bloquear, una sola vez por día
-select pg_temp.set_setting('bank_limits', 'alertDaily', '30');
-select pg_temp.set_setting('bank_limits', 'alertWeekShare', '0.9');
+select pg_temp.set_private_setting('bank_limits', 'alertDaily', '30');
+select pg_temp.set_private_setting('bank_limits', 'alertWeekShare', '0.9');
 begin;
 select pg_temp.as_user(:'p5');
 select pg_temp.expect(jsonb_array_length(public.fetch_questions(:'q25'::uuid[]) -> 'questions') = 25, 'BC4. Avisos, 25');
@@ -348,14 +354,14 @@ commit;
 select pg_temp.expect((select count(*) from public.bank_read_alerts where user_id = :'p5' and kind = 'daily_volume') = 1
   and not exists (select 1 from public.bank_read_alerts where user_id = :'p5' and kind = 'week_share'),
   'BC4. daily_volume no salió una sola vez');
-select pg_temp.set_setting('bank_limits', 'alertWeekShare', '0.1');
+select pg_temp.set_private_setting('bank_limits', 'alertWeekShare', '0.1');
 begin;
 select pg_temp.as_user(:'p5');
 select public.fetch_questions((:'k1'::uuid[])[21:21]);
 commit;
 select pg_temp.expect(exists (select 1 from public.bank_read_alerts where user_id = :'p5' and kind = 'week_share'), 'BC4. Sin week_share');
-select pg_temp.set_setting('bank_limits', 'alertDaily', '600');
-select pg_temp.set_setting('bank_limits', 'alertWeekShare', '0.5');
+select pg_temp.set_private_setting('bank_limits', 'alertDaily', '600');
+select pg_temp.set_private_setting('bank_limits', 'alertWeekShare', '0.5');
 
 -- ===================================================================== BC5 y BC6. Equipo
 begin;

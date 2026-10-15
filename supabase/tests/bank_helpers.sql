@@ -74,6 +74,11 @@ create or replace function pg_temp.set_setting(p_key text, p_field text, p_value
   update public.platform_settings set value = value || jsonb_build_object(p_field, p_value) where key = p_key
 $$;
 
+-- Lo mismo en bank_private_settings, para el freno por hora, los avisos y la tarifa (B5 de la revisión)
+create or replace function pg_temp.set_private_setting(p_key text, p_field text, p_value jsonb) returns void language sql as $$
+  update public.bank_private_settings set value = value || jsonb_build_object(p_field, p_value) where key = p_key
+$$;
+
 -- El contenido simulado de una pregunta, en la forma interna de bank_insert_version
 create or replace function pg_temp.bank_content(
   p_n integer, p_options integer default 4, p_branch text default 'pediatrics',

@@ -126,14 +126,14 @@ select pg_temp.as_user(:'ad');
 select pg_temp.expect((select bool_and(amount_mxn is null) from public.admin_review_report('2026-08-01', '2026-10-31')),
   'PP3. Sin tarifa el monto no es null');
 commit;
-select pg_temp.set_setting('physician_pay', 'perReviewMxn', '50');
+select pg_temp.set_private_setting('physician_pay', 'perReviewMxn', '50');
 begin;
 select pg_temp.as_user(:'ad');
 select pg_temp.expect((select bool_and(amount_mxn = reviewed * 50) from public.admin_review_report('2026-08-01', '2026-10-31'))
   and (select sum(amount_mxn) from public.admin_review_report('2026-08-01', '2026-10-31') where physician_id in (:'m1', :'m2', :'m3')) = 500,
   'PP3. Con tarifa de 50 el monto no es revisiones por 50');
 commit;
-select pg_temp.set_setting('physician_pay', 'perReviewMxn', 'null');
+select pg_temp.set_private_setting('physician_pay', 'perReviewMxn', 'null');
 
 -- ===================================================================== PP4. Cuenta con revisiones
 -- Un médico con decisiones no borra su cuenta solo, porque su historial respalda pagos (8.33). La base

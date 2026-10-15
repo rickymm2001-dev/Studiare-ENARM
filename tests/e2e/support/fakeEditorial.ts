@@ -57,6 +57,7 @@ import {
   type FakeBankOption,
   type FakeBankQuestion,
   type FakeBankReply,
+  type FakeBankSettings,
   type FakeBankStore,
   type FakeBankVersion,
   type FakeDeck,
@@ -1344,6 +1345,31 @@ const adminBankTeam: Handler = (store, caller) => {
   return { codes, topicReviewers };
 };
 
+/** admin_bank_settings. Los topes completos y la tarifa, que no se leen sin sesión (B5) */
+const adminBankSettings: Handler = (store, caller) => {
+  requireAdmin(caller);
+  return {
+    limits: { ...store.settings.bankLimits },
+    pay: { perReviewMxn: store.settings.physicianPay.perReviewMxn },
+  };
+};
+
+/** admin_save_bank_settings. La app ya valida los rangos, aquí solo se guardan */
+const adminSaveBankSettings: Handler = (store, caller, args) => {
+  requireAdmin(caller);
+  const limits = isRecord(args.p_limits) ? args.p_limits : {};
+  for (const field of Object.keys(
+    store.settings.bankLimits,
+  ) as (keyof FakeBankSettings['bankLimits'])[]) {
+    const value = limits[field];
+    if (typeof value !== 'number') return raise('22023', `Falta ${field} o no es número`);
+    store.settings.bankLimits[field] = value;
+  }
+  const pay = isRecord(args.p_pay) ? args.p_pay.perReviewMxn : null;
+  store.settings.physicianPay.perReviewMxn = typeof pay === 'number' ? pay : null;
+  return null;
+};
+
 const adminRetireQuestion: Handler = (store, caller, args) => {
   requireAdmin(caller);
   const question = store.questions.get(str(args.p_question_id) ?? '');
@@ -2312,6 +2338,8 @@ const HANDLERS: Readonly<Record<BankEditorialRpc, Handler>> = {
   admin_set_topic_reviewer: adminSetTopicReviewer,
   admin_set_physician_code: adminSetPhysicianCode,
   admin_bank_team: adminBankTeam,
+  admin_bank_settings: adminBankSettings,
+  admin_save_bank_settings: adminSaveBankSettings,
   admin_retire_question: adminRetireQuestion,
   admin_restore_question: adminRestoreQuestion,
   admin_confirm_missing: adminConfirmMissing,

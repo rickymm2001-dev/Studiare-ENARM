@@ -118,6 +118,7 @@ function fakeCloud(options: { open?: boolean; running?: boolean } = {}): FakeSta
           },
         ],
         admin_list_users: [],
+        admin_bank_settings: { limits: {}, pay: { perReviewMxn: null } },
         admin_bank_team: {
           codes: [],
           topicReviewers: [

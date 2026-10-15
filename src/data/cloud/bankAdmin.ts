@@ -109,18 +109,6 @@ async function readSetting(cloud: Tables, key: string): Promise<unknown> {
   }
 }
 
-/** Guarda un valor de platform_settings. Solo el admin puede, por el permiso por fila */
-async function saveSetting(cloud: Tables, key: string, value: unknown): Promise<boolean> {
-  try {
-    const { error } = await cloud
-      .from('platform_settings')
-      .upsert({ key, value, updated_at: new Date().toISOString() });
-    return !error;
-  } catch {
-    return false;
-  }
-}
-
 export interface BankSettings {
   limits: BankLimits;
   sync: BankSyncSettings;
@@ -128,19 +116,27 @@ export interface BankSettings {
   goal: number;
 }
 
+/**
+ * Los topes completos y la tarifa, de admin_bank_settings. El freno por hora, los avisos y la tarifa
+ * viven en bank_private_settings, que no se lee sin sesión (B5 de la revisión)
+ */
+const PrivateSettingsSchema = z.object({ limits: z.unknown(), pay: z.unknown() });
+
 /** Los ajustes del banco, con los de fábrica donde falte algo. null si no se pudieron leer */
-export async function readBankSettings(cloud: Tables): Promise<BankSettings | null> {
-  const [limits, sync, pay, goal] = await Promise.all([
-    readSetting(cloud, 'bank_limits'),
+export async function readBankSettings(
+  cloud: Cloud & Tables,
+  onForbidden?: ForbiddenHandler,
+): Promise<BankSettings | null> {
+  const [privateSettings, sync, goal] = await Promise.all([
+    callBankRpc(cloud, 'admin_bank_settings', {}, PrivateSettingsSchema, onForbidden).catch(
+      () => undefined,
+    ),
     readSetting(cloud, 'bank_sync'),
-    readSetting(cloud, 'physician_pay'),
     readSetting(cloud, 'bank_goal'),
   ]);
-  if (limits === undefined || sync === undefined || pay === undefined || goal === undefined) {
-    return null;
-  }
-  const parsedLimits = BankLimitsSchema.partial().safeParse(limits ?? {});
-  const parsedPay = PhysicianPaySchema.safeParse(pay ?? {});
+  if (privateSettings === undefined || sync === undefined || goal === undefined) return null;
+  const parsedLimits = BankLimitsSchema.partial().safeParse(privateSettings.limits ?? {});
+  const parsedPay = PhysicianPaySchema.safeParse(privateSettings.pay ?? {});
   const parsedGoal = z.object({ approvedToOpen: count }).safeParse(goal ?? {});
   return {
     limits: { ...DEFAULT_BANK_LIMITS, ...(parsedLimits.success ? parsedLimits.data : {}) },
@@ -150,11 +146,23 @@ export async function readBankSettings(cloud: Tables): Promise<BankSettings | nu
   };
 }
 
-export const saveBankLimits = (cloud: Tables, limits: BankLimits) =>
-  saveSetting(cloud, 'bank_limits', BankLimitsSchema.parse(limits));
-
-export const savePhysicianPay = (cloud: Tables, pay: PhysicianPay) =>
-  saveSetting(cloud, 'physician_pay', PhysicianPaySchema.parse(pay));
+/** Guarda los topes y la tarifa con admin_save_bank_settings, que pone cada campo en su tabla */
+export async function saveBankSettings(
+  cloud: Cloud,
+  settings: { limits: BankLimits; pay: PhysicianPay },
+  onForbidden?: ForbiddenHandler,
+): Promise<void> {
+  await callBankRpc(
+    cloud,
+    'admin_save_bank_settings',
+    {
+      p_limits: BankLimitsSchema.parse(settings.limits),
+      p_pay: PhysicianPaySchema.parse(settings.pay),
+    },
+    z.unknown(),
+    onForbidden,
+  );
+}
 
 // ===================================================================== Sincronización
 

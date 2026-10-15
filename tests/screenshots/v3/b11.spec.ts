@@ -53,7 +53,6 @@ cloudTest.describe('Médico y admin del banco en la nube', () => {
       bank.settings.bankSync.enabled = true;
       bank.settings.physicianPay.perReviewMxn = 50;
       cloud.setSetting('bank_sync', { ...bank.settings.bankSync });
-      cloud.setSetting('physician_pay', { perReviewMxn: 50 });
 
       // Un banco pequeño. Seis preguntas de Ana que revisa Beto, dos ya en revisión, una aprobada,
       // una con cambios pedidos y pares de autor y revisor de sobra para medir kappa

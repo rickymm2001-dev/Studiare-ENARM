@@ -79,7 +79,12 @@ function fakeCloud() {
     rpc: (name: string, args: unknown) => {
       calls.push([name, args]);
       return Promise.resolve({
-        data: name === 'admin_review_report' ? SUMMARY : DETAIL,
+        data:
+          name === 'admin_bank_settings'
+            ? { limits: {}, pay: { perReviewMxn: 50 } }
+            : name === 'admin_review_report'
+              ? SUMMARY
+              : DETAIL,
         error: null,
       });
     },
@@ -93,7 +98,7 @@ function fakeCloud() {
         },
         maybeSingle: () =>
           Promise.resolve({
-            data: key === 'physician_pay' ? { value: { perReviewMxn: 50 } } : null,
+            data: key === 'bank_sync' ? { value: { enabled: false } } : null,
             error: null,
           }),
       };
@@ -152,7 +157,7 @@ describe('Revisiones de médicos', () => {
     expect(await screen.findByText(text.rate(50))).toBeVisible();
     const total = within(table).getByRole('rowheader', { name: text.total }).closest('tr');
     expect(total).toHaveTextContent('4');
-    expect(calls[0]?.[0]).toBe('admin_review_report');
+    expect(calls.find(([name]) => name !== 'admin_bank_settings')?.[0]).toBe('admin_review_report');
 
     await typing.click(screen.getByRole('button', { name: text.summaryCsv }));
     await typing.click(screen.getByRole('button', { name: text.detailCsv }));

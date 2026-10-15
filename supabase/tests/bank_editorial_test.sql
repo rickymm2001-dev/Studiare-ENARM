@@ -55,6 +55,32 @@ commit;
 begin;
 select pg_temp.as_user(:'p1');
 select pg_temp.expect(pg_temp.fails_with('select public.admin_bank_team()') = '42501', 'BE1. Un médico leyó las claves del equipo');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_bank_settings()') = '42501', 'BE1. Un médico leyó los topes privados');
+select pg_temp.expect(pg_temp.fails_with($q$select public.admin_save_bank_settings('{}', '{}')$q$) = '42501',
+  'BE1. Un médico guardó los topes');
+rollback;
+-- Topes y tarifa del admin. Cada campo va a su tabla y solo los públicos quedan en platform_settings (B5)
+begin;
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_bank_settings() = jsonb_build_object('limits', jsonb_build_object('perMinute', 300,
+    'perHour', 900, 'alertDaily', 600, 'alertWeekShare', 0.5, 'reportsPerDay', 10, 'maxFetch', 100),
+    'pay', jsonb_build_object('perReviewMxn', null)), 'BE1. admin_bank_settings no dio los de fábrica');
+select public.admin_save_bank_settings('{"perMinute":120,"perHour":800,"alertDaily":500,"alertWeekShare":0.4,"reportsPerDay":8,"maxFetch":90}',
+  '{"perReviewMxn":45}');
+select pg_temp.expect(public.admin_bank_settings() = jsonb_build_object('limits', jsonb_build_object('perMinute', 120,
+    'perHour', 800, 'alertDaily', 500, 'alertWeekShare', 0.4, 'reportsPerDay', 8, 'maxFetch', 90),
+    'pay', jsonb_build_object('perReviewMxn', 45)), 'BE1. admin_save_bank_settings no guardó');
+select pg_temp.expect((select value from public.platform_settings where key = 'bank_limits')
+    = '{"perMinute":120,"reportsPerDay":8,"maxFetch":90}'::jsonb, 'BE1. Un tope privado quedó en platform_settings');
+select pg_temp.expect(pg_temp.fails_with($q$select public.admin_save_bank_settings('{"perMinute":120,"perHour":800,"alertDaily":500,"alertWeekShare":2,"reportsPerDay":8,"maxFetch":90}', '{}')$q$) = '22023'
+  and pg_temp.fails_with($q$select public.admin_save_bank_settings('{"perMinute":1.5,"perHour":800,"alertDaily":500,"alertWeekShare":0.4,"reportsPerDay":8,"maxFetch":90}', '{}')$q$) = '22023'
+  and pg_temp.fails_with($q$select public.admin_save_bank_settings('{"perMinute":120,"perHour":800,"alertDaily":500,"alertWeekShare":0.4,"reportsPerDay":8}', '{}')$q$) = '22023'
+  and pg_temp.fails_with($q$select public.admin_save_bank_settings('{"perMinute":120,"perHour":800,"alertDaily":500,"alertWeekShare":0.4,"reportsPerDay":8,"maxFetch":90}', '{"perReviewMxn":-1}')$q$) = '22023',
+  'BE1. admin_save_bank_settings aceptó un valor fuera de rango');
+reset role;
+-- Un perHour escrito a mano en platform_settings no cuenta
+update public.platform_settings set value = value || '{"perHour":5}' where key = 'bank_limits';
+select pg_temp.expect(public.bank_limit('perHour', 900) = 800, 'BE1. Contó un perHour de platform_settings');
 rollback;
 -- Un revisor por omisión que dejó de ser médico no se usa al mandar a revisión (B1 de la revisión)
 begin;
@@ -697,7 +723,7 @@ declare
     'public.admin_set_physician_code(uuid, text)', 'public.admin_retire_question(uuid, text)',
     'public.admin_restore_question(uuid)', 'public.admin_confirm_missing(uuid[], text)', 'public.admin_bank_read_alerts(integer)',
     'public.admin_review_report(date, date)', 'public.admin_review_report_detail(date, date, uuid)',
-    'public.admin_bank_team()'];
+    'public.admin_bank_team()', 'public.admin_bank_settings()', 'public.admin_save_bank_settings(jsonb, jsonb)'];
   f text;
   r text;
 begin

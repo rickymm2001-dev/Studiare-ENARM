@@ -1,15 +1,14 @@
 // Sección Banco de Plataforma (pantalla 25, 4.3 del plan de B11). El freno de lectura de los planes de
 // pago, los avisos al admin, el tope de reportes de error por alumno, las preguntas por petición y la
-// tarifa por revisión del reporte de pagos. Viven en platform_settings y los lee la base, así que solo
-// se cambian con la cuenta de la nube conectada como admin.
+// tarifa por revisión del reporte de pagos. Los lee la base, así que solo se cambian con la cuenta de la
+// nube conectada como admin. El freno por hora, los avisos y la tarifa no se leen sin sesión (B5).
 import { useState } from 'react';
 import { useCloud } from '@/app/cloudState';
 import {
   BankLimitsSchema,
   PhysicianPaySchema,
   readBankSettings,
-  saveBankLimits,
-  savePhysicianPay,
+  saveBankSettings,
   type BankLimits,
   type BankSettings,
 } from '@/data/cloud/bankAdmin';
@@ -18,6 +17,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 import { ErrorState, LoadingState } from '@/ui/states/states';
+import { askSecondFactor } from '../physician/secondFactor';
 import { bankCodeText } from './bankErrors';
 import { requireCloud, useBankAdminQuery } from './useBankAdminQuery';
 
@@ -45,8 +45,8 @@ export function BankSettingsForm() {
 }
 
 function BankSettingsFields() {
-  const { state, reload } = useBankAdminQuery(async (cloud) => {
-    const settings = await readBankSettings(cloud);
+  const { state, reload } = useBankAdminQuery(async (cloud, onForbidden) => {
+    const settings = await readBankSettings(cloud, onForbidden);
     if (!settings) throw new Error('settings');
     return settings;
   }, 'bank-settings');
@@ -78,12 +78,12 @@ function SettingsForm({ initial }: { initial: BankSettings }) {
     }
     setBusy(true);
     try {
-      const cloud = await requireCloud();
-      const [savedLimits, savedPay] = await Promise.all([
-        saveBankLimits(cloud, limits.data),
-        savePhysicianPay(cloud, pay.data),
-      ]);
-      setMessage(savedLimits && savedPay ? 'saved' : 'failed');
+      await saveBankSettings(
+        await requireCloud(),
+        { limits: limits.data, pay: pay.data },
+        askSecondFactor,
+      );
+      setMessage('saved');
     } catch {
       setMessage('failed');
     } finally {
