@@ -50,3 +50,9 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Recordatorios por WhatsApp.** Cuesta por mensaje y Ricardo eligió solo el correo (respuesta 81). Si los alumnos lo piden, pide una cuenta de WhatsApp Business y plantillas aprobadas. Surgió en el plan del cambio V3 (D-119)
 - **Prueba de penetración externa al crecer.** Ricardo la pospuso (respuesta 31). Conviene una ligera antes de abrir a muchos alumnos de pago y una completa al crecer. Surgió en el plan del cambio V3 (D-119)
 - **FSRS ajustado a cada alumno desde 1,000 repasos.** Ricardo eligió los parámetros de fábrica para todos (respuesta 90). El punto de extensión ya existe en src/engines/fsrs.ts y sería un bloque chico si cambia de opinión. Surgió en el plan del cambio V3 (D-119)
+
+- **Contexto de la opción elegida en las tarjetas de una pregunta fallada.** Mandar al motor de tarjetas la opción que el alumno eligió como contexto que no se puede citar, para que la tarjeta ataque su confusión. Surgió en el plan de B12
+- **Resultados de lotes en tiempo real.** Hoy el alumno recoge la hipótesis cuando abre el Tutor o cada 60 segundos. Un aviso del servidor al terminar el lote lo haría inmediato. Surgió en el plan de B12
+- **Límites de IA distintos por plan.** Hoy el tope por alumno y las cuotas por motor son iguales para todos los planes de pago. Surgió en el plan de B12
+- **Que la pregunta reestructurada pueda señalar una controversia del original.** Sin corregirla por su cuenta, solo avisar al médico con texto de la lista cerrada de textos académicos. Surgió en el plan de B12
+- **Reserva de lotes que descuente las llamadas síncronas en vuelo.** UsageSummaryV2 no expone lo reservado, así que el envío de lotes no las resta. No afecta el tope por alumno. Surgió en la revisión de B12

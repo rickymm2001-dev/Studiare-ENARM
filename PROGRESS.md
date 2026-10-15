@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0, B1 y B2 hechos, ver sus secciones. B3 a B7 y B9 avanzan en paralelo en worktrees fuera del repo y se unen a la rama de trabajo al cerrar cada bloque. Siguen B8 plan Gratis, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
+- Bloques. B0 a B11 y B16 hechos y fusionados en main, ver sus secciones. B12 IA real en su PR y B13 inglés médico en integración. Siguen B14 modelo del alumno, B15 analítica y recorrido, B17 publicación, B18 primeros alumnos y B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -29,7 +29,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B10. Pagos completos (PR 53 fusionado)
 - [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR 54 fusionado)
 - [x] B11. Banco en la nube y Google Sheets (D-133, PR 55 fusionado)
-- [ ] B12. IA real
+- [x] B12. IA real (D-134, PR en curso)
 - [ ] B13. Inglés médico
 - [ ] B14. Datos y modelo del alumno
 - [ ] B15. Analítica, errores, recordatorios y recorrido
@@ -178,6 +178,13 @@ Evidencia
 - Capturas en docs/screenshots/v3/b16 (16). Del aviso y de los términos va solo lo que se ve al abrir, porque el texto completo está en docs/legal
 - Se fusiona después de B11, que ya está en main (PR 55), porque el aviso da por hechas las lecturas del banco en el servidor
 
+### B12. IA real (D-134)
+- Hecho. El proxy de IA pasó a las Edge Functions ai-proxy y ai-batch, con el mismo núcleo que el servidor de desarrollo. Los cinco motores están prendidos en el servidor y cerrados a los alumnos por la compuerta 1. Hipótesis por lotes a mitad de costo, tope en dólares por alumno con reserva del peor costo, bitácora sin texto, reporte de costos de la nube, pantalla Auditoría de la IA para los dos médicos y npm run eval-ai con matriz de modelos, juez y comparación con OpenAI
+- Revisión independiente con 14 hallazgos (1 alto, 3 medios y 10 bajos), todos corregidos con su prueba. El alto era que las llamadas en paralelo se saltaban el tope en dólares por alumno. Ninguno tocaba secretos, permisos ni privacidad
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios. Vitest con 4,513 pruebas. SQL en 29 suites, con dos pruebas de varias conexiones. eval-ai simulado con 135 casos y sus cuatro metas cumplidas. E2e de IA, tutor, tarjetas, médico, menú y admin en teléfono, computadora y nube con {{E2E}}. JS inicial de 289.9 KB de 300
+- Capturas en docs/screenshots/v3/b12 (36)
+- No se corrió ninguna evaluación real ni se llamó a Anthropic. La corrida real y la elección de modelos esperan la clave de evaluaciones y tu aprobación del gasto. Nada de B12 se ha desplegado todavía. Los pasos tuyos están en docs/PENDIENTES_DE_RICARDO.md
+
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
@@ -187,7 +194,7 @@ Evidencia
 - B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
 - B10 fusionado en main (PR 53). Sus tres migraciones y cinco funciones se aplicaron al proyecto antes de fusionar y se verificaron por huella. Lo que falta subir espera el token de Supabase
 - B16 unido con lo de Gemini para B17 y con B11 ya en main. Su PR sigue al de B11
-- En curso. B11 paquetes B y C, B12 paquete A, el diseño de B14, puertos de Playwright configurables para correr e2e en paralelo y un script que despliega migraciones, funciones y secretos con la API de Supabase, para que lo que espera tus llaves sea un solo comando
+- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) está en su PR y B13 (inglés médico) cerrando su integración. Siguen B14, B15 y B17 a B19. Los despliegues de B11, B12 y B13 a Supabase esperan la autorización escrita de Ricardo
 - Los diseños de B10 a B13 y B15 están en /home/user/wt/plans
 - Los subagentes se detuvieron varias veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
@@ -204,6 +211,7 @@ Evidencia
 - Paleta. En oscuro hay tres pares de ramas de tono parecido (Ginecología y Medicina familiar, Cirugía y Urgencias, Medicina interna y Pediatría). El nombre siempre va al lado, pero si quieres los separamos más. Se ven en docs/screenshots/v3/paleta
 - B9. La lista de especialidades de Tus datos no se revisó contra una fuente oficial. Una lista pública trae 27, sin Urología y con Medicina de la Actividad Física y Deportiva en lugar de Medicina Deportiva. ¿La revisas tú o tomamos esa?
 - B4 y B5. Revisé la versión que se revirtió. Todo lo que pide el plan ya estaba en la que se quedó y se rescataron tres detalles chicos (el aviso de tarjeta ya creada en la revisión del examen, el atajo X que dice seleccionar y dos pruebas que fallaban en Windows). Quedan a tu gusto, y cada uno es un cambio chico. Un número junto a cada tema de los mazos. Un total global de motivos de error en Progreso, además del reparto por rama. Una marca propia del alumno como la bandera de Anki, porque hoy Marcadas son las tarjetas con señal de la IA. Elegir temas dentro de cada mazo en Repasar (hoy se eligen mazo y subespecialidad). Pasar al documento de revisión médica las 22 diferencias de nombres de temas de la otra versión como alternativas
+- B12. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Tope de 0.30 dólares por alumno al día (10.6), mínimos de textos para abrir un motor en la compuerta, 60 en hipótesis y tarjetas, 40 en consejos y 30 en informes y reestructuradas (cámbialos antes de ver resultados), compuerta atada al modelo y al prompt con una auditoría corta de 60 textos por cambio (10.12), dos espacios de trabajo en Anthropic, producción y evaluaciones (10.21), qué hacer si ningún modelo pasa en tarjetas (10.23), el pago de la auditoría a los médicos (10.24) y permitir api.openai.com en la red de la sesión (10.25)
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 
