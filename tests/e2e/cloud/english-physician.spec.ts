@@ -3,11 +3,8 @@
 // le falta. Sin la fuente del texto no se puede mandar a revisión. Ella llena la fuente con una licencia CC
 // BY, guarda y manda. El revisor etiqueta a ciegas con el texto en inglés y su fuente a la vista, aprueba, y
 // el caso queda publicado en el catálogo con su idioma, de donde lo toma la práctica de inglés del alumno.
-// Todo contra el Supabase simulado (fakeEditorial.ts) con el texto simulado de fakeBankStore.ts.
-//
-// seedEnglishCases la agrega el paquete B en fakeBankStore.ts (6.3 del plan de B13). Aquí se lee del módulo
-// con la forma que le da el plan, para que la rama del paquete C compile sola. Al unir los paquetes se puede
-// cambiar por el import directo. Esta spec se escribió sin poder correrla.
+// Todo contra el Supabase simulado (fakeEditorial.ts) con los casos de lectura simulados de seedEnglishCases
+// (fakeBankStore.ts, 6.3 del plan de B13).
 import type { Locator } from '@playwright/test';
 import { PASSAGE_SOURCE_PREFIX } from '@/data/content/passageSource';
 import { SCREENS } from '@/app/screens';
@@ -22,9 +19,9 @@ import {
   test,
 } from '../support/cloudFixtures';
 import { openBank, seedBank } from '../support/fakeBank';
-import * as fakeBankStoreModule from '../support/fakeBankStore';
 import {
   createFakeBankStore,
+  seedEnglishCases,
   seedQuestions,
   type FakeBankQuestion,
   type FakeBankStore,
@@ -42,21 +39,6 @@ const MISSING = physicianText.incomplete.passage_source_missing;
 const AUTHOR = { email: 'autora.ingles@ejemplo.mx', alias: 'Ana', role: 'physician' } as const;
 const REVIEWER = { email: 'revisor.ingles@ejemplo.mx', alias: 'Beto', role: 'physician' } as const;
 const STUDENT = 'alumna.ingles@ejemplo.mx';
-
-/** La forma que 6.3 del plan le da a seedEnglishCases, que agrega el paquete B */
-type SeedEnglishCases = (
-  store: FakeBankStore,
-  cases: number,
-  options: { itemsPerCase: number },
-) => unknown;
-
-function seedEnglish(store: FakeBankStore, cases: number, itemsPerCase: number): void {
-  const seed = (fakeBankStoreModule as unknown as { seedEnglishCases?: SeedEnglishCases })
-    .seedEnglishCases;
-  if (!seed)
-    throw new Error('Falta seedEnglishCases en tests/e2e/support/fakeBankStore.ts (paquete B)');
-  seed(store, cases, { itemsPerCase });
-}
 
 /** La versión más reciente de una pregunta del banco simulado */
 function latestOf(bank: FakeBankStore, questionId: string): FakeBankVersion {
@@ -112,7 +94,7 @@ test.describe('Inglés médico, médico y revisor', () => {
     if (!ana || !beto) throw new Error('Faltan las cuentas del equipo');
     // Dos preguntas en español del banco y un caso de lectura en inglés de una pregunta, sin su fuente
     const spanish = seedQuestions(bank, 2, { status: 'draft', origin: 'app', authorId: ana.id });
-    seedEnglish(bank, 1, 1);
+    seedEnglishCases(bank, 1, { itemsPerCase: 1 });
     const [english] = asDraftWithoutSource(bank, ana.id);
     if (!english) throw new Error('Sin pregunta en inglés');
     for (const question of [...spanish, english]) {
@@ -248,7 +230,7 @@ test.describe('Inglés médico, médico y revisor', () => {
       users: [ana, beto],
     } = teamBank(cloud, [AUTHOR, REVIEWER]);
     if (!ana || !beto) throw new Error('Faltan las cuentas del equipo');
-    seedEnglish(bank, 1, 1);
+    seedEnglishCases(bank, 1, { itemsPerCase: 1 });
     const [english] = asDraftWithoutSource(bank, ana.id);
     if (!english) throw new Error('Sin pregunta en inglés');
     assignQuestion(bank, english.questionId, ana.id, 'author');
@@ -303,7 +285,7 @@ test.describe('Inglés médico, médico y revisor', () => {
     const bank = createFakeBankStore();
     attachBank(cloud, bank);
     seedBank(bank, 5);
-    seedEnglish(bank, 1, 2);
+    seedEnglishCases(bank, 1, { itemsPerCase: 2 });
     const published = [...bank.catalog.values()].filter((row) => row.language === 'en');
     expect(published).toHaveLength(2);
     expect(published.every((row) => row.branch === 'medical_english')).toBe(true);
