@@ -121,7 +121,11 @@ function GateCard({
   onChanged: (message: string) => void;
   onRetry: () => void;
 }) {
-  const status = useAiStatus();
+  // Lo que ven los alumnos se vuelve a preguntar cada vez que cambia la compuerta, para que el aviso de
+  // un motor abierto sin auditoría vigente sea el de ahora y no el de cuando se abrió la pantalla
+  const status = useAiStatus({
+    refreshKey: gate.status === 'ready' ? JSON.stringify(gate.value) : '',
+  });
   const [acting, setActing] = useState<Acting>(null);
   const [problem, setProblem] = useState('');
 

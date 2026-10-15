@@ -68,6 +68,24 @@ describe('useAiStatus', () => {
     expect(holder.fetchAiStatus).toHaveBeenCalledTimes(1);
   });
 
+  it('con otra clave de refresco pregunta de nuevo y mientras llega no usa la respuesta vieja', async () => {
+    const closed: AiStatus = { kind: 'real', engines: { bias_tips: 'gated' } };
+    holder.fetchAiStatus.mockResolvedValueOnce(closed).mockResolvedValueOnce(REAL);
+    const { result, rerender } = renderHook(({ refreshKey }) => useAiStatus({ refreshKey }), {
+      initialProps: { refreshKey: 'cerrado' },
+    });
+    await waitFor(() => {
+      expect(result.current).toEqual(closed);
+    });
+    rerender({ refreshKey: 'abierto' });
+    // La respuesta de antes ya no vale para la clave nueva
+    expect(result.current).toEqual({ kind: 'checking' });
+    await waitFor(() => {
+      expect(result.current).toEqual(REAL);
+    });
+    expect(holder.fetchAiStatus).toHaveBeenCalledTimes(2);
+  });
+
   it('sin conexión no consulta y dice offline, y al volver la red pregunta de nuevo', async () => {
     setOnline(false);
     const { result } = renderHook(() => useAiStatus());
