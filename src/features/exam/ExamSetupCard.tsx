@@ -25,6 +25,7 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField } from '@/ui/components/field';
 import { useBankNotice } from '../shared/bankNotice';
 import { chooseWithBodies } from '../shared/chooseWithBodies';
+import { useLockedCta } from '../shared/useLockedCta';
 import type { ReadySession } from '../shared/RequireSession';
 import { useQuestionSource } from '../shared/useQuestionSource';
 import { clock } from '../simulator/practice';
@@ -66,6 +67,8 @@ export function ExamSetupCard({
   const [alerts, setAlerts] = useState(true);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
+  // El botón del candado de Gratis, el mismo de Simular y los demás candados (B10)
+  const lockedCta = useLockedCta();
   const text = t.exam;
 
   const header = (
@@ -210,7 +213,7 @@ export function ExamSetupCard({
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           {left === 0 ? (
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
+              <Link to={lockedCta.path}>{lockedCta.label}</Link>
             </Button>
           ) : (
             <Button

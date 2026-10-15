@@ -2,9 +2,11 @@
 import 'fake-indexeddb/auto';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useEffect } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
+import { DEFAULT_PREFERENCES, usePreferences } from '@/app/preferences';
 import { writeStoredFlags } from '@/config/featureFlags';
 import { catalogEntryOf } from '@/data/bank/catalogMerge';
 import { createCloudSource, poolQuestionOfEntry } from '@/data/bank/cloudSource';
@@ -46,6 +48,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
   cleanup();
+  usePreferences.setState(DEFAULT_PREFERENCES);
   clearExamState(user.id);
   holder.cloud = null;
   localStorage.clear();
@@ -111,6 +114,45 @@ describe('examen completo con el banco de la nube', () => {
     await typing.click(screen.getByRole('button', { name: t.exam.start }));
     expect(await screen.findByRole('alert')).toHaveTextContent(bankText.shortfall.reasons.offline);
     expect(loadExamState(user.id)).toBeNull();
+  });
+
+  it('sin preguntas en Gratis el candado es el mismo de los demás, con la prueba si le toca', async () => {
+    const captured: { api?: DataApi } = {};
+    function Capture() {
+      const api = useDataApi();
+      useEffect(() => {
+        captured.api = api;
+      }, [api]);
+      return null;
+    }
+    render(
+      <DataProvider kind="real">
+        <MemoryRouter>
+          <Capture />
+          <ExamSetupCard session={session} questions={[]} plan="free" left={0} />
+        </MemoryRouter>
+      </DataProvider>,
+    );
+    await waitFor(() => {
+      expect(captured.api).toBeDefined();
+    });
+    // La sesión abierta del alumno, Gratis como lo refleja my_plan, que dice que todavía le toca la
+    // prueba (B10)
+    await (captured.api as DataApi).repos.users.put(user);
+    usePreferences.setState({ sessionUserId: user.id });
+    await (captured.api as DataApi).repos.subscriptions.put({
+      userId: user.id,
+      plan: 'free',
+      status: 'none',
+      isSimulated: false,
+      trialAvailable: true,
+      updatedAt: new Date().toISOString(),
+    });
+    expect(await screen.findByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
+      'href',
+      '/suscripcion?plan=mensual',
+    );
+    expect(screen.queryByRole('button', { name: t.exam.start })).toBeNull();
   });
 
   it('sin conexión arma el examen solo con lo ya bajado aunque el banco sea más grande', async () => {
