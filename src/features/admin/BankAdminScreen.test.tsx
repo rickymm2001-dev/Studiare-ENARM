@@ -27,14 +27,17 @@ const RUN = '01234567-89ab-4cde-8f01-23456789abcd';
 const AT = '2026-10-14T15:00:00.000Z';
 
 interface FakeState {
+  /** La corrida ya terminó. Mientras corre no tiene renglones */
+  finished: boolean;
   flags: Record<string, boolean>;
   upserts: { key: string; value: unknown }[];
   invoked: unknown[];
   rpc: string[];
 }
 
-function fakeCloud(options: { open?: boolean } = {}): FakeState {
+function fakeCloud(options: { open?: boolean; running?: boolean } = {}): FakeState {
   const state: FakeState = {
+    finished: options.running !== true,
     flags: { cloudBank: options.open ?? false, requireMfa: false },
     upserts: [],
     invoked: [],
@@ -67,33 +70,37 @@ function fakeCloud(options: { open?: boolean } = {}): FakeState {
             trigger: 'manual',
             target: 'test',
             mode: 'dry_run',
-            status: 'partial',
-            reason: 'id_formula',
-            counts: { read: 3, created: 1, rejected: 2 },
+            status: state.finished ? 'partial' : 'running',
+            reason: state.finished ? 'id_formula' : null,
+            counts: state.finished ? { read: 3, created: 1, rejected: 2 } : {},
             startedAt: AT,
-            finishedAt: AT,
+            finishedAt: state.finished ? AT : null,
           },
         ],
-        admin_bank_sync_rows: [
-          {
-            rowNumber: 45,
-            sheetKey: 'GO-0045',
-            outcome: 'rejected',
-            incomplete: [],
-            notices: [],
-            problems: [{ code: 'subtopic_is_topic', column: 'Subtema', value: 'Control prenatal' }],
-            questionId: null,
-          },
-          {
-            rowNumber: 46,
-            sheetKey: 'GO-0046',
-            outcome: 'created',
-            incomplete: ['references_missing'],
-            notices: ['topic_inferred'],
-            problems: [],
-            questionId: null,
-          },
-        ],
+        admin_bank_sync_rows: !state.finished
+          ? []
+          : [
+              {
+                rowNumber: 45,
+                sheetKey: 'GO-0045',
+                outcome: 'rejected',
+                incomplete: [],
+                notices: [],
+                problems: [
+                  { code: 'subtopic_is_topic', column: 'Subtema', value: 'Control prenatal' },
+                ],
+                questionId: null,
+              },
+              {
+                rowNumber: 46,
+                sheetKey: 'GO-0046',
+                outcome: 'created',
+                incomplete: ['references_missing'],
+                notices: ['topic_inferred'],
+                problems: [],
+                questionId: null,
+              },
+            ],
         editor_list: { total: 0, items: [] },
         admin_bank_read_alerts: [
           {
@@ -237,5 +244,23 @@ describe('Banco y Sheet', () => {
     expect(within(rows).getByText('Renglón 46. Faltan las referencias.')).toBeVisible();
     expect(within(rows).getByText(`Renglón 46. ${text.sync.notices.topic_inferred}`)).toBeVisible();
     expect(within(rows).getByRole('button', { name: text.sync.rows.csv })).toBeVisible();
+  });
+
+  it('los renglones de una corrida que seguía corriendo aparecen al actualizar cuando termina', async () => {
+    const state = fakeCloud({ running: true });
+    const typing = userEvent.setup();
+    showScreen();
+    const card = await screen.findByRole('region', { name: text.sync.title });
+    await typing.click(await within(card).findByRole('button', { name: text.sync.run.show }));
+    const rows = await screen.findByRole('region', { name: text.sync.run.selected });
+    expect(await within(rows).findByText(text.sync.rows.none)).toBeVisible();
+
+    state.finished = true;
+    await typing.click(within(card).getByRole('button', { name: text.sync.refresh }));
+    expect(
+      await within(rows).findByText(
+        'Renglón 45. El subtema Control prenatal es una subespecialidad. Elige el subtema en la lista.',
+      ),
+    ).toBeVisible();
   });
 });

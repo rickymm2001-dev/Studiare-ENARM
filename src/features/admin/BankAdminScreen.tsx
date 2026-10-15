@@ -353,7 +353,16 @@ function SyncCard() {
           </ul>
         )
       ) : null}
-      {selected ? <RunRows runId={selected} /> : null}
+      {selected ? (
+        <RunRows
+          runId={selected}
+          finishedAt={
+            runs.state.status === 'ready'
+              ? (runs.state.value.find((run) => run.id === selected)?.finishedAt ?? null)
+              : null
+          }
+        />
+      ) : null}
     </Card>
   );
 }
@@ -405,12 +414,15 @@ function RunLine({
   );
 }
 
-/** Los renglones de una corrida con lo que hay que hacer en cada uno, y su CSV */
-function RunRows({ runId }: { runId: string }) {
+/**
+ * Los renglones de una corrida con lo que hay que hacer en cada uno, y su CSV. Se vuelven a leer cuando
+ * la corrida termina, porque mientras corre todavía no tiene todos
+ */
+function RunRows({ runId, finishedAt }: { runId: string; finishedAt: string | null }) {
   const copy = text.sync.rows;
   const { state, reload } = useBankAdminQuery(
     (cloud, onForbidden) => readSyncRows(cloud, runId, onForbidden),
-    `rows|${runId}`,
+    `rows|${runId}|${finishedAt ?? 'running'}`,
   );
   return (
     <section
