@@ -15,7 +15,7 @@ import { newId } from '@/data/ids';
 import { shortfallReason } from '@/data/bank/quota';
 import type { PoolQuestion } from '@/data/bank/questionSource';
 import { topicTaxonomy } from '@/demo/content';
-import { buildExam, examTotalMs } from '@/engines/exam';
+import { buildExam, examTotalMs, sectionOf } from '@/engines/exam';
 import { examBranchWeights, nonClinicalBranches } from '@/engines/topics';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
@@ -146,7 +146,13 @@ export function ExamSetupCard({
         purpose: 'exam',
         choose: (from) =>
           buildExam({
-            questions: from,
+            questions: from.map((question) => ({
+              id: question.id,
+              caseId: question.caseId,
+              caseOrder: question.caseOrder,
+              branch: question.branch,
+              section: sectionOf(question),
+            })),
             requested,
             seed,
             branchWeights: examBranchWeights(topicTaxonomy),

@@ -12,7 +12,7 @@ import type { AppEvent, EventPayload } from '@/data/schemas/events';
 import type { User, UserSettings } from '@/data/schemas/people';
 import { recordEventOnce } from '@/data/usecases/recordEvent';
 import { rankedUlid, ULID_RANKS } from '@/demo/stableId';
-import { buildExam } from '@/engines/exam';
+import { buildExam, sectionOf } from '@/engines/exam';
 import { sampleOptions } from '@/engines/sampler';
 import { sendErrorsToReview, type FailedQuestion } from '../review/sendErrors';
 import { recordAnswerWithXp } from '../simulator/answerXp';
@@ -90,7 +90,7 @@ export async function loadExamBundles(
 export async function startExam(input: {
   api: Pick<DataApi, 'recordEvent'>;
   user: Pick<User, 'id' | 'timeZone'>;
-  questions: readonly Pick<Question, 'id' | 'caseId' | 'caseOrder' | 'branch'>[];
+  questions: readonly Pick<Question, 'id' | 'caseId' | 'caseOrder' | 'branch' | 'language'>[];
   requested: number;
   options: ExamOptions;
   nowMs?: number;
@@ -98,11 +98,12 @@ export async function startExam(input: {
   const nowMs = input.nowMs ?? Date.now();
   const examId = newId();
   const plan = buildExam({
-    questions: input.questions.map(({ id, caseId, caseOrder, branch }) => ({
+    questions: input.questions.map(({ id, caseId, caseOrder, branch, language }) => ({
       id,
       caseId,
       caseOrder,
       branch,
+      section: sectionOf({ language }),
     })),
     requested: input.requested,
     seed: examId,
