@@ -140,6 +140,30 @@ describe('forma de cada llamada a la API de administración', () => {
     expect(fake.requests[1]).toMatchObject({ method: 'GET', path: '/secrets' });
   });
 
+  it('si fetch lanza, el error no repite su mensaje, que puede traer el token', async () => {
+    const client = createManagementClient({
+      ref: 'abcdefghijklmnopqrst',
+      token: `${TOKEN}\r`,
+      fetch: () =>
+        Promise.reject(
+          new TypeError(`Headers.append: Bearer ${TOKEN}\r is an invalid header value.`),
+        ),
+    });
+    const error = await client.listMigrations().catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(ManagementApiError);
+    expect((error as Error).message).not.toContain(TOKEN);
+    expect((error as Error).message).toContain(
+      'No hubo respuesta de Supabase en GET /database/migrations',
+    );
+  });
+
+  it('si Supabase repitiera el token en su mensaje, sale tapado', async () => {
+    const { client } = setup({ failWith: { status: 400, message: `token ${TOKEN} inválido` } });
+    const error = await client.listMigrations().catch((caught: unknown) => caught);
+    expect((error as Error).message).not.toContain(TOKEN);
+    expect((error as Error).message).toContain('[oculto]');
+  });
+
   it('sin token no manda authorization, para que lo ponga el proxy', async () => {
     const { fake, client } = setup({}, null);
     await client.listMigrations();

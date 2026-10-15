@@ -114,11 +114,22 @@ function toRows(value: unknown, what: string): Row[] {
 
 const REF_SHAPE = /^[a-z]{20}$/;
 
+/** El código de una falla de red, como ENOTFOUND, o solo el tipo de error. Nunca su mensaje */
+function networkCause(error: unknown): string {
+  const code = (error as { cause?: { code?: unknown } } | null)?.cause?.code;
+  if (typeof code === 'string' && /^[A-Z0-9_]+$/.test(code)) return code;
+  return error instanceof Error ? error.name : 'Error desconocido';
+}
+
 export function createManagementClient(options: ManagementClientOptions): ManagementClient {
   if (!REF_SHAPE.test(options.ref)) {
     throw new ManagementApiError(0, 'La referencia del proyecto debe tener 20 letras minúsculas');
   }
   const base = `${options.baseUrl ?? MANAGEMENT_API_URL}/v1/projects/${options.ref}`;
+  const token = options.token;
+  /** Por si Supabase repitiera el token en un mensaje */
+  const hideToken = (text: string) =>
+    token !== null && token.length >= 8 ? text.split(token).join('[oculto]') : text;
 
   /** Una llamada. Lanza con el estado y el mensaje de Supabase si no sale bien */
   async function call(
@@ -137,12 +148,24 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       // fetch pone el content-type de multipart con su frontera
       payload = body.form;
     }
-    const reply = await options.fetch(`${base}${path}`, {
-      method,
-      headers,
-      ...(payload === undefined ? {} : { body: payload }),
-    });
-    const text = await reply.text();
+    const route = `${method} ${path.split('?')[0] ?? path}`;
+    let reply: Response;
+    let text: string;
+    try {
+      reply = await options.fetch(`${base}${path}`, {
+        method,
+        headers,
+        ...(payload === undefined ? {} : { body: payload }),
+      });
+      text = await reply.text();
+    } catch (error) {
+      // El mensaje de fetch puede traer el encabezado con el token, por ejemplo si trae un salto de
+      // línea. Solo se dice el código de red, como ENOTFOUND, o el tipo de error
+      throw new ManagementApiError(
+        0,
+        `No hubo respuesta de Supabase en ${route}. ${networkCause(error)}`,
+      );
+    }
     let data: unknown;
     try {
       data = text === '' ? null : JSON.parse(text);
@@ -157,7 +180,9 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       const extra = [detail, proxy ? `proxy ${proxy}` : ''].filter((part) => part !== '');
       throw new ManagementApiError(
         reply.status,
-        `Supabase respondió ${reply.status} en ${method} ${path.split('?')[0] ?? path}. ${extra.join('. ').slice(0, 400)}`.trim(),
+        hideToken(
+          `Supabase respondió ${reply.status} en ${route}. ${extra.join('. ').slice(0, 400)}`.trim(),
+        ),
       );
     }
     return { status: reply.status, data };

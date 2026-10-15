@@ -227,13 +227,19 @@ describe('línea de comandos', () => {
     });
     expect(() => parseArgs(['--only', 'todo'])).toThrow(/migrations o functions/);
     expect(() => parseArgs(['--plan'])).toThrow(/necesita un valor/);
-    expect(() => parseArgs(['--borrar'])).toThrow(/No conozco/);
+    expect(() => parseArgs(['--plan', 'b10', TOKEN])).toThrow(/No conozco la opción número 3/);
+    expect(() => parseArgs([TOKEN])).not.toThrow(new RegExp(TOKEN));
   });
 
   it('el token sale del entorno o del proxy y nunca se repite', () => {
     const fromEnv = resolveToken({ SUPABASE_ACCESS_TOKEN: TOKEN });
     expect(fromEnv).toEqual({ token: TOKEN, note: 'con el token de SUPABASE_ACCESS_TOKEN' });
     expect(resolveToken({ HTTPS_PROXY: 'http://127.0.0.1:1' })).toMatchObject({ token: null });
+    for (const bad of [`${TOKEN}\n`, `${TOKEN}\r`, `Bearer ${TOKEN}`, `${TOKEN}\t`]) {
+      const result = resolveToken({ SUPABASE_ACCESS_TOKEN: bad });
+      expect(result).toMatchObject({ error: expect.stringContaining('caracteres') as string });
+      expect(JSON.stringify(result)).not.toContain(TOKEN);
+    }
     expect(resolveToken({})).toMatchObject({
       error: expect.stringContaining('Falta SUPABASE_ACCESS_TOKEN') as string,
     });
@@ -252,6 +258,12 @@ describe('línea de comandos', () => {
       return true;
     });
     const env = { SUPABASE_ACCESS_TOKEN: TOKEN };
+
+    // Un token con un retorno de carro al final no llega a fetch ni sale en pantalla
+    vi.stubGlobal('fetch', fakeSupabase({ ref: STUDIARE_PROJECT_REF }).fetch);
+    expect(
+      await main(['--plan', 'b10', '--dry-run'], { SUPABASE_ACCESS_TOKEN: `${TOKEN}\r` }),
+    ).toBe(2);
 
     // Un plan con el token rechazado
     vi.stubGlobal(
