@@ -27,6 +27,18 @@ export const settingsPageText = {
     simulated: 'Lo contrataste con el pago simulado, que no cobra nada.',
     paidUntil: (date: string) => `Tu periodo pagado va hasta el ${date}.`,
     referralUntil: (date: string) => `Tu mes gratis por referido termina el ${date}.`,
+    // La línea de 3.1.3 que corresponde, con la nube (B10)
+    trialing: (date: string, price: string) =>
+      `Prueba gratis hasta el ${date}. Ese día se cobran ${price} salvo que canceles.`,
+    trialCanceled: (date: string) =>
+      `Cancelaste tu prueba. Termina el ${date} y no se te cobrará nada.`,
+    renews: (date: string, price: string) => `Se renueva el ${date} por ${price}.`,
+    renewsAs: (date: string, plan: string, price: string) =>
+      `Se renueva el ${date} como ${plan} por ${price}.`,
+    canceled: (date: string) => `Cancelaste tu suscripción. Tu plan vale hasta el ${date}.`,
+    pastDue:
+      'No pudimos cobrar tu renovación. Revisa tu forma de pago en Suscripción para no perder tu plan.',
+    pass: (date: string) => `Pase pagado hasta el ${date}. No se renueva.`,
     change: 'Cambiar tu plan',
   },
   profile: {

@@ -17,6 +17,7 @@ import {
   House,
   NotebookPen,
   PartyPopper,
+  Receipt,
   Scale,
   Settings,
   SlidersHorizontal,
@@ -102,6 +103,8 @@ const adminGroup: NavGroup = {
   label: t.navItems.admin,
   items: [
     { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users },
+    // Pagos, facturas y códigos de influencer (B10)
+    { path: screenPath('adminBilling'), label: t.navItems.billing, icon: Receipt },
     { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },

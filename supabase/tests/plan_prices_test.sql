@@ -1,4 +1,5 @@
--- Pruebas de los precios de D-114 (migración 20261015000001). Corre al final sobre la misma base.
+-- Pruebas de los precios de D-114 (migración 20261015000001) y del Fundador anual de B10
+-- (20261022000002). Corre al final sobre la misma base.
 -- Cada bloque falla con un error si algo no cumple.
 \set ON_ERROR_STOP on
 
@@ -8,10 +9,11 @@ begin
 end $$;
 
 -- ===================================================================== P1. Precios nuevos
+-- Con B10 (20261022000002) se suma el Fundador anual de 749
 select pg_temp.expect(
   (select value from public.platform_settings where key = 'plans') =
-    '{"free":{"priceMxn":0,"dailyQuestions":20},"founder":{"priceMxn":79},"monthly":{"priceMxn":149},"annual":{"priceMxn":1499}}'::jsonb,
-  'P1. Los precios deben ser 79 Fundador, 149 mensual y 1499 anual'
+    '{"free":{"priceMxn":0,"dailyQuestions":20},"founder":{"priceMxn":79},"founder_annual":{"priceMxn":749},"monthly":{"priceMxn":149},"annual":{"priceMxn":1499}}'::jsonb,
+  'P1. Los precios deben ser 79 Fundador, 749 Fundador anual, 149 mensual y 1499 anual'
 );
 
 -- ===================================================================== P2. No pisa lo que cambió el admin

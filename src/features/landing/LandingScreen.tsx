@@ -16,7 +16,6 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import {
-  annualSavingsPercent,
   canUse,
   FOUNDER_PROMO_ACTIVE,
   PLAN_HIGHLIGHTS,
@@ -25,7 +24,9 @@ import {
 } from '@/config/billing';
 import { cloudConfigured } from '@/data/cloud/client';
 import { PlanPrice } from '@/features/billing/PlanPrice';
+import { trialAdvertised } from '@/features/shared/lockedCta';
 import { t } from '@/i18n/es-MX';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { legalText } from '@/i18n/legal';
 import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
@@ -43,6 +44,7 @@ const FEATURES: { icon: ReactNode; key: keyof typeof t.landing.features }[] = [
 
 export function LandingScreen() {
   const text = t.landing;
+  const offersTrial = trialAdvertised();
   return (
     <div className="flex flex-col gap-10 pb-6">
       <title>{t.app.documentTitle(text.documentTitle)}</title>
@@ -113,7 +115,7 @@ export function LandingScreen() {
             {text.pricingTitle}
           </h2>
           <p className="text-sm text-fg-muted">
-            {cloudConfigured() ? t.billing.cloud.notice : t.billing.simulatedNotice}
+            {cloudConfigured() ? billingCloudText.notice : t.billing.simulatedNotice}
           </p>
         </div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -136,12 +138,11 @@ export function LandingScreen() {
                   </Badge>
                 ) : null}
                 <h3 className="text-lg font-bold">{t.billing.plans[key]}</h3>
-                <PlanPrice plan={key} />
-                {/* Texto de venta, no un estado. Va neutro y el plan destacado ya lleva el borde (H10) */}
-                {key === 'annual' ? (
-                  <p className="text-sm font-semibold text-fg">
-                    {t.billing.savings(annualSavingsPercent())}
-                  </p>
+                {/* El ahorro del anual es texto de venta, no un estado. Va neutro y el plan destacado ya
+                    lleva el borde (H10). La prueba se dice con la bandera freeTrial y la nube (B10) */}
+                <PlanPrice plan={key} trial={offersTrial} />
+                {offersTrial && key !== 'free' ? (
+                  <p className="text-sm font-semibold text-fg">{t.billing.trialLine}</p>
                 ) : null}
                 <ul className="flex flex-col gap-1 text-sm">
                   <li className="flex items-center gap-2">

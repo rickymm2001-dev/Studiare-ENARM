@@ -91,6 +91,15 @@ describe('autenticación con Supabase', () => {
     expect(result).toEqual({ ok: true, user: { id: USER_ID, role: 'student', plan: 'annual' } });
   });
 
+  it('el anual Fundador es un plan de pago y usa la IA', async () => {
+    const result = await authenticator(fakeSupabase({ plan: 'founder_annual' }))('token-1');
+    expect(result).toEqual({
+      ok: true,
+      user: { id: USER_ID, role: 'student', plan: 'founder_annual' },
+    });
+    expect(result.ok && canUseEngines(result.user)).toBe(true);
+  });
+
   it('un médico se reconoce por su rol', async () => {
     const result = await authenticator(fakeSupabase({ plan: 'free', role: 'physician' }))(
       'token-1',

@@ -9,12 +9,14 @@
 // Lo que NO simula queda dicho en tests/e2e/cloud/README.md. Reglas que sí hace cumplir, iguales a
 // las de la base: un solo dispositivo activo por cuenta con su límite de cambios (DV001), el plan lo
 // decide el servidor con el pago, el mes gratis por referido llega con el primer pago, borrar la
-// cuenta se rechaza con una suscripción de Stripe activa (FR002), y Party en la nube (B7) con sus
+// cuenta se rechaza con una suscripción que se seguiría cobrando (FR002), y Party en la nube (B7) con sus
 // grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
 // (src/data/testing/fakePartyServer.ts). De Storage atiende solo el bucket de la foto de perfil (B2).
 // Desde B9 también el registro por invitación del gancho Before User Created, entrar con Google con un
 // Google simulado, el segundo factor TOTP con su sesión aal2, que con requireMfa es lo único que da su
-// rol al equipo, y la función admin-reset-mfa.
+// rol al equipo, y la función admin-reset-mfa. Desde B10 los planes y los pagos viven en fakeBilling.ts
+// (prueba gratis, pases, lugares Fundador, códigos, facturas y Admin, Pagos), con su pasarela, su
+// portal y Mercado Pago simulados.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -22,15 +24,29 @@ import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { Role } from '@/data/schemas/common';
 import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
 import {
+  createFakeBilling,
+  type BillingSubscription,
+  type FakeBilling,
+  type InvoiceRequest,
+  type BillingPass,
+  type BillingPayment,
+  type OutboxEmail,
+  type RpcResult,
+  type TrialClaim,
+} from './fakeBilling';
+import {
   GATEWAY_CANCEL_PATH,
   GATEWAY_PAY_PATH,
   PORTAL_CANCEL_SUBSCRIPTION_PATH,
+  PORTAL_CHANGE_PLAN_PATH,
   gatewayPage,
   portalPage,
 } from './fakeGateway';
+import { handleMercadoPagoRequest } from './fakeMercadoPago';
 import {
   CLOUD_PREVIEW_URL,
   FAKE_GATEWAY_ORIGIN,
+  FAKE_MERCADOPAGO_ORIGIN,
   FAKE_PORTAL_ORIGIN,
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
@@ -76,10 +92,15 @@ export interface FakeEmail {
 
 export interface FakeSubscription {
   plan: PlanKey;
-  status: 'active' | 'past_due' | 'canceled' | 'none';
+  status: 'trialing' | 'active' | 'past_due' | 'canceled' | 'none';
   provider: Provider | null;
   /** ISO 8601 o null si la suscripción no tiene fin de periodo */
   currentPeriodEnd: string | null;
+  /** Fin de la prueba gratis (B10) */
+  trialEndsAt?: string | null;
+  cancelAtPeriodEnd?: boolean;
+  scheduledChange?: boolean;
+  promotionCode?: string | null;
 }
 
 export interface DeviceLimits {
@@ -179,6 +200,33 @@ export interface FakeSupabaseServer {
   lastPaymentNotice(email: string): FakePaymentNotice | null;
   readonly calls: readonly RecordedCall[];
   rpcCalls(name: string): RecordedCall[];
+  /** Planes y pagos (B10). Lo usan Mercado Pago simulado y las pruebas que necesitan más detalle */
+  readonly billing: FakeBilling;
+  /** La prueba termina. charge cobra el primer periodo y cancel la termina sin cobro */
+  endTrial(email: string, outcome: 'charge' | 'cancel'): void;
+  /** Termina el periodo. Renueva con el cambio programado o termina si estaba cancelada */
+  endPeriod(email: string): void;
+  /** OXXO (o Mercado Pago en efectivo) confirma la ficha pendiente, o vence sin pago */
+  settleVoucher(email: string, outcome: 'paid' | 'expired'): void;
+  /** Llega la transferencia SPEI pendiente */
+  fundTransfer(email: string): void;
+  /** Adelanta el reloj de los pagos, que no mueve las sesiones */
+  advanceTime(ms: number): void;
+  /** Cambia platform_settings.feature_flags, sumando a lo que ya tenía */
+  setFeatureFlags(flags: Record<string, boolean>): void;
+  /**
+   * Quita o pone las configuraciones del portal de Stripe. Sin la que toca, create-portal-session
+   * responde 503 not_configured
+   */
+  setPortalConfig(config: { founder?: boolean; regular?: boolean }): void;
+  /** Cambia billing_rules, como trialDays en 0, que apaga la prueba desde el servidor */
+  setBillingRules(rules: { trialDays?: number; guaranteeDays?: number }): void;
+  founderSeatsTaken(): number;
+  trialClaimOf(email: string): TrialClaim | null;
+  passesOf(email: string): BillingPass[];
+  paymentsOf(email: string): BillingPayment[];
+  invoiceRequestsOf(email: string): InvoiceRequest[];
+  outbox(): readonly OutboxEmail[];
   /** Party en la nube, para revisar desde la prueba los grupos, los miembros y los duelos */
   readonly party: FakePartyServer;
   /** El id de la cuenta con ese correo, como lo ve el servidor */
@@ -290,8 +338,6 @@ const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const DAY_MS = 86_400_000;
 const SYNC_KINDS = ['deck', 'note', 'card', 'outline', 'widget_layout'];
 const ROLES: readonly Role[] = ['student', 'physician', 'admin', 'owner'];
-const PAID_PLANS: readonly PaidPlan[] = ['founder', 'monthly', 'annual'];
-const PLAN_PRICES_MXN: Record<PaidPlan, number> = { founder: 79, monthly: 149, annual: 1499 };
 
 const isRecord = (value: unknown): value is Json =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -314,8 +360,6 @@ function text(value: unknown): string {
       return value === null ? '' : JSON.stringify(value);
   }
 }
-const isPaidPlan = (value: unknown): value is PaidPlan =>
-  typeof value === 'string' && (PAID_PLANS as readonly string[]).includes(value);
 const isRole = (value: unknown): value is Role =>
   typeof value === 'string' && (ROLES as readonly string[]).includes(value);
 const normalizeEmail = (value: unknown): string | null => {
@@ -529,33 +573,6 @@ interface Otp {
   expiresAt: number;
 }
 
-interface CheckoutSession {
-  id: string;
-  userId: string;
-  plan: PaidPlan;
-  provider: Provider;
-  successUrl: string;
-  cancelUrl: string;
-  status: 'open' | 'paid' | 'canceled';
-}
-
-interface PortalSession {
-  id: string;
-  userId: string;
-  returnUrl: string;
-}
-
-interface Payment {
-  id: string;
-  userId: string;
-  plan: PaidPlan;
-  provider: Provider;
-  /** El id del cobro en la pasarela. El mismo cobro no se cuenta dos veces */
-  providerPaymentId: string;
-  amountMxn: number;
-  paidAt: string;
-}
-
 interface Referral {
   id: string;
   referrerId: string;
@@ -655,20 +672,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       { value: { maxChanges: 3, windowHours: 24 }, updatedAt: new Date().toISOString() },
     ],
   ]);
-  const subscriptions = new Map<string, FakeSubscription>();
-  const payments: Payment[] = [];
-  const stripeCustomers = new Map<string, string>();
-  const checkouts = new Map<string, CheckoutSession>();
-  const portals = new Map<string, PortalSession>();
   const referralCodes = new Map<string, string>();
   const referrals: Referral[] = [];
   const grants: Grant[] = [];
-  // Avisos de pago ya aplicados, por procesador e id de evento, y el último de cada cuenta
-  const noticeEvents = new Set<string>();
-  const lastNotices = new Map<
-    string,
-    Omit<FakePaymentNotice, 'email'> & { userId: string; provider: Provider }
-  >();
   const syncRecords = new Map<string, SyncRecordRow>();
   const events: EventRow[] = [];
   const privacyAcceptances: Json[] = [];
@@ -686,13 +692,30 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     aliasOf: (userId) => users.get(userId)?.alias ?? null,
     isOpen: (userId) => userPlan(userId) !== 'free',
   });
+  // Planes y pagos (B10). El mes por referido vive aquí y el primer cobro lo concreta
+  const billing = createFakeBilling({
+    appUrl,
+    gatewayOrigin: FAKE_GATEWAY_ORIGIN,
+    portalOrigin: FAKE_PORTAL_ORIGIN,
+    mercadoPagoOrigin: FAKE_MERCADOPAGO_ORIGIN,
+    founderSeats: options.founderSeats ?? 100,
+    grantEndOf: (userId) => activeGrantEnd(userId),
+    onPaidCharge: (userId) => {
+      completeReferral(userId);
+    },
+    aliasOf: (userId) => users.get(userId)?.alias ?? null,
+    emailOf: (userId) => users.get(userId)?.email ?? null,
+    flag: (name) => {
+      const flags = settings.get('feature_flags')?.value;
+      return isRecord(flags) && flags[name] === true;
+    },
+  });
   let counter = 0;
   let serverSeq = 0;
   let eventSeq = 0;
 
   const server = {
     deviceLimits: options.deviceLimits ?? { maxChanges: 3, windowHours: 24 },
-    founderSeats: options.founderSeats ?? 100,
     checkoutError: options.checkoutError ?? null,
     portalError: null as PortalFailure | null,
     googleAccount: null as string | null,
@@ -901,8 +924,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     signupSources.delete(userId);
     for (const [token, session] of sessions) if (session.userId === userId) sessions.delete(token);
     deviceSessions.delete(userId);
-    subscriptions.delete(userId);
-    stripeCustomers.delete(userId);
+    billing.forgetUser(userId);
     referralCodes.delete(userId);
     for (const key of [...syncRecords.keys()]) {
       if (key.startsWith(`${userId}|`)) syncRecords.delete(key);
@@ -912,7 +934,6 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       list.length = 0;
       list.push(...left);
     };
-    keep(payments);
     keep(grants);
     keep(deviceClaims);
     const stillReferrals = referrals.filter(
@@ -1047,14 +1068,6 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   // ------------------------------------------------------------------ planes, pagos y referidos
 
-  function subscriptionInForce(userId: string): FakeSubscription | null {
-    const row = subscriptions.get(userId);
-    if (!row || row.plan === 'free') return null;
-    if (!['active', 'past_due', 'canceled'].includes(row.status)) return null;
-    if (row.currentPeriodEnd === null) return row.status === 'active' ? row : null;
-    return Date.parse(row.currentPeriodEnd) > now() ? row : null;
-  }
-
   const activeGrantEnd = (userId: string): string | null =>
     grants
       .filter(
@@ -1067,29 +1080,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       .sort()
       .at(-1) ?? null;
 
-  function userPlan(userId: string): PlanKey {
-    const inForce = subscriptionInForce(userId);
-    if (inForce) return inForce.plan;
-    return activeGrantEnd(userId) === null ? 'free' : 'monthly';
-  }
-
-  function myPlan(user: FakeUser): Reply {
-    const plan = userPlan(user.id);
-    const row = subscriptions.get(user.id);
-    const inForce = subscriptionInForce(user.id);
-    return json({
-      plan,
-      source: plan === 'free' ? 'none' : inForce?.plan === plan ? 'payment' : 'referral',
-      status: row?.status ?? 'none',
-      provider: row?.provider ?? null,
-      periodEnd:
-        plan === 'free'
-          ? null
-          : row?.plan === plan
-            ? row.currentPeriodEnd
-            : activeGrantEnd(user.id),
-    });
-  }
+  /** user_plan. La suscripción vigente, el pase, el mes regalado o Gratis (fakeBilling.ts) */
+  const userPlan = (userId: string): PlanKey => billing.userPlan(userId);
 
   function completeReferral(referredId: string): void {
     const referral = referrals.find(
@@ -1115,61 +1107,6 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       startsAt: new Date(latest).toISOString(),
       endsAt: new Date(latest + REFERRAL_RULES.rewardDays * DAY_MS).toISOString(),
     });
-  }
-
-  /**
-   * Lo que haría apply_payment_notice con un aviso de pago verificado (20261019000001). Un aviso
-   * repetido se reconoce por su id, la factura de 0 pesos de una prueba gratis no es un cobro, el mismo
-   * cobro no se cuenta dos veces y el referido se concreta con el primer cobro, una sola vez
-   */
-  function applyNotice(
-    notice: Omit<FakePaymentNotice, 'email'> & { userId: string; provider: Provider },
-  ): FakeNoticeResult {
-    const key = `${notice.provider}:${notice.eventId}`;
-    if (noticeEvents.has(key)) return 'duplicate';
-    noticeEvents.add(key);
-    lastNotices.set(notice.userId, notice);
-    if (notice.amountMxn <= 0) return 'ignored';
-    const periodDays = notice.plan === 'annual' ? 365 : 30;
-    subscriptions.set(notice.userId, {
-      plan: notice.plan,
-      status: 'active',
-      provider: notice.provider,
-      currentPeriodEnd: new Date(now() + periodDays * DAY_MS).toISOString(),
-    });
-    const counted = payments.some(
-      (payment) =>
-        payment.provider === notice.provider && payment.providerPaymentId === notice.paymentId,
-    );
-    if (!counted) {
-      payments.push({
-        id: nextId('pay'),
-        userId: notice.userId,
-        plan: notice.plan,
-        provider: notice.provider,
-        providerPaymentId: notice.paymentId,
-        amountMxn: notice.amountMxn,
-        paidAt: new Date(now()).toISOString(),
-      });
-    }
-    if (notice.provider === 'stripe' && !stripeCustomers.has(notice.userId)) {
-      stripeCustomers.set(notice.userId, nextId('cus_fake'));
-    }
-    completeReferral(notice.userId);
-    return 'applied';
-  }
-
-  /** El botón Pagar de la pasarela simulada. Cobra el precio del plan con un aviso propio */
-  function applyPayment(checkout: CheckoutSession): void {
-    applyNotice({
-      eventId: `evt_${checkout.id}`,
-      userId: checkout.userId,
-      plan: checkout.plan,
-      provider: checkout.provider,
-      paymentId: `in_${checkout.id}`,
-      amountMxn: PLAN_PRICES_MXN[checkout.plan],
-    });
-    checkout.status = 'paid';
   }
 
   function referralCodeOf(userId: string): string {
@@ -1201,7 +1138,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       return json('circular');
     }
     // Quien ya tuvo un cobro no entra como referido. Una prueba sin cobro no cuenta (20261019000001)
-    if (payments.some((payment) => payment.userId === user.id && payment.amountMxn > 0)) {
+    if (billing.hasPaidCharge(user.id)) {
       return json('already_paid');
     }
     if (Date.parse(user.createdAt) < now() - REFERRAL_RULES.redeemWindowDays * DAY_MS) {
@@ -1353,12 +1290,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (user.role === 'owner') {
       return pgError('42501', 'El dueño no puede borrar su propia cuenta');
     }
-    const row = subscriptions.get(user.id);
-    const stripeActive =
-      row?.provider === 'stripe' &&
-      (row.status === 'active' || row.status === 'past_due') &&
-      (row.currentPeriodEnd === null || Date.parse(row.currentPeriodEnd) > now());
-    if (stripeActive) {
+    // billing_blocks_account_deletion. Una suscripción de Stripe o de Mercado Pago que se seguiría
+    // cobrando, también en prueba, salvo que ya esté cancelada al final del periodo (8.20)
+    if (billing.blocksAccountDeletion(user.id)) {
       return pgError('FR002', 'Cancela tu suscripción antes de eliminar tu cuenta');
     }
     deleteUser(user.id);
@@ -1502,6 +1436,28 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   // ------------------------------------------------------------------ rpc
 
+  /** Lo que devolvió una función de pagos, como lo contestaría PostgREST */
+  function rpcReply(result: RpcResult): Reply {
+    return result.ok ? json(result.data) : pgError(result.code, result.message, result.detail);
+  }
+
+  function adminBilling(name: string, user: FakeUser, args: Json): RpcResult {
+    switch (name) {
+      case 'admin_invoice_requests':
+        return billing.adminInvoiceRequests(args);
+      case 'admin_set_invoice_status':
+        return billing.adminSetInvoiceStatus(user.id, args);
+      case 'admin_billing_summary':
+        return billing.adminBillingSummary();
+      case 'admin_recent_payments':
+        return billing.adminRecentPayments(args);
+      case 'admin_mark_payment_refunded':
+        return billing.adminMarkPaymentRefunded(args);
+      default:
+        return billing.adminPromotionCodeStats();
+    }
+  }
+
   function handleRpc(name: string, auth: Auth, body: unknown): Reply {
     const args: Json = isRecord(body) ? body : {};
     if (auth.kind === 'invalid') return pgError('PGRST301', 'JWT expired');
@@ -1522,7 +1478,19 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       case 'log_rejected_claim':
         return logRejectedClaim(user, args);
       case 'my_plan':
-        return requireActiveDevice() ?? myPlan(user);
+        return requireActiveDevice() ?? json(billing.myPlan(user.id));
+      // Facturas y Admin, Pagos (B10, 20261022000002 y 20261022000003)
+      case 'request_invoice':
+        return requireActiveDevice() ?? rpcReply(billing.requestInvoice(user.id, args));
+      case 'admin_invoice_requests':
+      case 'admin_set_invoice_status':
+      case 'admin_billing_summary':
+      case 'admin_recent_payments':
+      case 'admin_mark_payment_refunded':
+      case 'admin_promotion_code_stats':
+        return isAdmin(user, session)
+          ? rpcReply(adminBilling(name, user, args))
+          : pgError('42501', 'Solo un administrador puede ver los pagos');
       case 'sync_push_records':
         return requireActiveDevice() ?? pushRecords(user, args);
       case 'sync_push_events':
@@ -1644,28 +1612,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       case 'events':
         return user && active ? events.filter((row) => row.user_id === user.id) : [];
       case 'subscriptions': {
-        const row = user ? subscriptions.get(user.id) : undefined;
-        return user && active && row
-          ? [
-              {
-                user_id: user.id,
-                plan: row.plan,
-                status: row.status,
-                provider: row.provider,
-                current_period_end: row.currentPeriodEnd,
-              },
-            ]
-          : [];
+        const row = user ? billing.subscriptionRow(user.id) : null;
+        return user && active && row ? [row] : [];
       }
+      // Cada quien ve sus pagos y el admin todos, sin la barrera del dispositivo (payments_select)
       case 'payments':
-        return own(payments).map((payment) => ({
-          id: payment.id,
-          user_id: payment.userId,
-          plan: payment.plan,
-          provider: payment.provider,
-          amount_mxn: payment.amountMxn,
-          paid_at: payment.paidAt,
-        }));
+        return user ? billing.paymentRows(admin ? null : user.id) : [];
+      // Pases y facturas propios con la barrera, o todos para el admin (B10)
+      case 'plan_passes':
+        return user ? billing.passRows(admin ? null : active ? user.id : '') : [];
+      case 'invoice_requests':
+        return user ? billing.invoiceRows(admin ? null : active ? user.id : '') : [];
       case 'referral_codes':
         return user && active && referralCodes.has(user.id)
           ? [{ user_id: user.id, code: referralCodes.get(user.id) }]
@@ -2042,12 +1999,6 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const { user } = auth;
     const body = parseJsonBody(request);
     if (name === 'create-checkout') {
-      const args: Json = isRecord(body) ? body : {};
-      const plan = args.plan;
-      const provider = args.provider;
-      if (!isPaidPlan(plan) || (provider !== 'stripe' && provider !== 'mercadopago')) {
-        return json({ error: 'invalid' }, 400);
-      }
       if (server.checkoutError) {
         const status =
           server.checkoutError === 'not_configured'
@@ -2057,23 +2008,13 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
               : 409;
         return json({ error: server.checkoutError }, status);
       }
-      if (subscriptionInForce(user.id)) return json({ error: 'already_subscribed' }, 409);
-      if (plan === 'founder') {
-        const taken = [...subscriptions.values()].filter((row) => row.plan === 'founder').length;
-        if (server.founderSeats - taken <= 0) return json({ error: 'founder_full' }, 409);
-      }
-      const back = (result: 'ok' | 'cancelado') => `${appUrl}/suscripcion?pago=${result}`;
-      const checkout: CheckoutSession = {
-        id: nextId('cs_test_fake'),
-        userId: user.id,
-        plan,
-        provider,
-        successUrl: back('ok'),
-        cancelUrl: back('cancelado'),
-        status: 'open',
-      };
-      checkouts.set(checkout.id, checkout);
-      return json({ url: `${FAKE_GATEWAY_ORIGIN}/c/pay/${checkout.id}` });
+      const reply = billing.createCheckout({ id: user.id, email: user.email }, body);
+      return json(reply.body, reply.status);
+    }
+    // Cancelar la suscripción de Mercado Pago, que no tiene portal (B10)
+    if (name === 'cancel-subscription') {
+      const reply = billing.cancelSubscription({ id: user.id, email: user.email });
+      return json(reply.body, reply.status);
     }
     if (name === 'admin-reset-mfa') {
       const target = isRecord(body) ? asString(body.userId) : null;
@@ -2097,14 +2038,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
               : 502;
         return json({ error: server.portalError }, status);
       }
-      if (!stripeCustomers.has(user.id)) return json({ error: 'no_customer' }, 404);
-      const portal: PortalSession = {
-        id: nextId('bps_fake'),
-        userId: user.id,
-        returnUrl: `${appUrl}/suscripcion`,
-      };
-      portals.set(portal.id, portal);
-      return json({ url: `${FAKE_PORTAL_ORIGIN}/p/session/${portal.id}` });
+      const reply = billing.createPortal({ id: user.id, email: user.email }, body);
+      return json(reply.body, reply.status);
     }
     return json({ error: 'not_found' }, 404);
   }
@@ -2115,52 +2050,64 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return new URLSearchParams(request.postData() ?? '').get(name);
   }
 
+  const unknownPage = (what: string): Reply => ({
+    status: 404,
+    body: what,
+    contentType: 'text/plain',
+  });
+
   function handleGateway(request: Request, url: URL): Reply {
     const payMatch = /^\/c\/pay\/([^/]+)$/.exec(url.pathname);
     if (payMatch && request.method() === 'GET') {
-      const checkout = checkouts.get(payMatch[1] ?? '');
-      if (!checkout)
-        return { status: 404, body: 'Sesión de pago desconocida', contentType: 'text/plain' };
-      return html(gatewayPage({ sessionId: checkout.id, plan: checkout.plan }));
+      const checkout = billing.checkoutOf(payMatch[1] ?? '');
+      if (checkout?.provider !== 'stripe') return unknownPage('Sesión de pago desconocida');
+      return html(gatewayPage({ sessionId: checkout.id, ...checkout }));
     }
     if (request.method() === 'POST') {
-      const checkout = checkouts.get(formField(request, 'session') ?? '');
-      if (!checkout)
-        return { status: 404, body: 'Sesión de pago desconocida', contentType: 'text/plain' };
+      const checkout = billing.checkoutOf(formField(request, 'session') ?? '');
+      if (checkout?.provider !== 'stripe') return unknownPage('Sesión de pago desconocida');
       if (url.pathname === GATEWAY_PAY_PATH) {
-        if (checkout.status === 'open') applyPayment(checkout);
-        return redirect(checkout.successUrl);
+        // Stripe revisa el código en la misma página antes de cobrar
+        const code = (formField(request, 'code') ?? '').trim().toUpperCase();
+        if (code !== '' && !billing.promotionCodes.has(code)) {
+          return html(gatewayPage({ sessionId: checkout.id, ...checkout, invalidCode: true }));
+        }
+        return redirect(billing.completeCheckout(checkout.id, code === '' ? null : code));
       }
       if (url.pathname === GATEWAY_CANCEL_PATH) {
-        checkout.status = 'canceled';
-        return redirect(checkout.cancelUrl);
+        return redirect(billing.cancelCheckout(checkout.id));
       }
     }
-    return { status: 404, body: 'Página sin simular', contentType: 'text/plain' };
+    return unknownPage('Página sin simular');
   }
 
   function handlePortal(request: Request, url: URL): Reply {
     const match = /^\/p\/session\/([^/]+)$/.exec(url.pathname);
     if (match && request.method() === 'GET') {
-      const portal = portals.get(match[1] ?? '');
-      const row = portal ? subscriptions.get(portal.userId) : undefined;
-      if (!portal || !row || row.plan === 'free') {
-        return { status: 404, body: 'Sesión del portal desconocida', contentType: 'text/plain' };
-      }
+      const portal = billing.portalOf(match[1] ?? '');
+      const row = portal ? billing.subscriptionOf(portal.userId) : null;
+      if (!portal || !row) return unknownPage('Sesión del portal desconocida');
       return html(
-        portalPage({ sessionId: portal.id, plan: row.plan, returnUrl: portal.returnUrl }),
+        portalPage({
+          sessionId: portal.id,
+          plan: row.plan,
+          canceled: row.cancelAtPeriodEnd || row.status === 'canceled',
+          changeTo: billing.portalTarget(portal.id),
+          returnUrl: portal.returnUrl,
+        }),
       );
     }
-    if (request.method() === 'POST' && url.pathname === PORTAL_CANCEL_SUBSCRIPTION_PATH) {
-      const portal = portals.get(formField(request, 'session') ?? '');
-      if (!portal)
-        return { status: 404, body: 'Sesión del portal desconocida', contentType: 'text/plain' };
-      const row = subscriptions.get(portal.userId);
+    if (request.method() === 'POST') {
+      const portal = billing.portalOf(formField(request, 'session') ?? '');
+      if (!portal) return unknownPage('Sesión del portal desconocida');
       // Cancelar desde el portal conserva el plan hasta el fin del periodo ya pagado, como Stripe
-      if (row) subscriptions.set(portal.userId, { ...row, status: 'canceled' });
+      if (url.pathname === PORTAL_CANCEL_SUBSCRIPTION_PATH) billing.portalCancel(portal.id);
+      // Subir cobra hoy la diferencia y bajar se programa para el fin del periodo (2.3)
+      else if (url.pathname === PORTAL_CHANGE_PLAN_PATH) billing.portalChangePlan(portal.id);
+      else return unknownPage('Página sin simular');
       return redirect(portal.returnUrl);
     }
-    return { status: 404, body: 'Página sin simular', contentType: 'text/plain' };
+    return unknownPage('Página sin simular');
   }
 
   // ------------------------------------------------------------------ enrutado
@@ -2260,6 +2207,45 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   }
 
   const emailOf = (email: string): FakeUser | undefined => userByEmail(email);
+  const requireUser = (email: string): FakeUser => {
+    const user = emailOf(email);
+    if (!user) throw new Error(`No hay una cuenta con el correo ${email}`);
+    return user;
+  };
+
+  /** La suscripción de fakeBilling con la forma de antes, para las pruebas */
+  const fakeSubscriptionOf = (row: BillingSubscription): FakeSubscription => ({
+    plan: row.plan,
+    status: row.status,
+    provider: row.provider,
+    currentPeriodEnd: row.periodEnd,
+    trialEndsAt: row.trialEndsAt,
+    cancelAtPeriodEnd: row.cancelAtPeriodEnd,
+    scheduledChange: row.scheduledChange,
+    promotionCode: row.promotionCode,
+  });
+
+  /** Una suscripción que deja la prueba como si un aviso ya la hubiera aplicado. Gratis la quita */
+  const billingRowOf = (userId: string, row: FakeSubscription): BillingSubscription | null =>
+    row.plan === 'free' || row.status === 'none'
+      ? null
+      : {
+          userId,
+          plan: row.plan,
+          status: row.status,
+          provider: row.provider ?? 'stripe',
+          subscriptionId: nextId(row.provider === 'mercadopago' ? 'mp_pre' : 'sub_fake'),
+          periodEnd: row.currentPeriodEnd,
+          trialEndsAt: row.trialEndsAt ?? null,
+          cancelAtPeriodEnd: row.cancelAtPeriodEnd ?? false,
+          scheduledChange: row.scheduledChange ?? false,
+          scheduledPlan: null,
+          promotionCode: row.promotionCode ?? null,
+          firstChargeAt: row.status === 'trialing' ? null : new Date(now()).toISOString(),
+          stateAt: new Date(now()).toISOString(),
+          issue: null,
+          issueAt: null,
+        };
 
   return {
     url: FAKE_SUPABASE_URL,
@@ -2272,6 +2258,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       );
       await context.route(`${FAKE_PORTAL_ORIGIN}/**`, (route) =>
         fulfill(route, handlePortal, false),
+      );
+      // Mercado Pago simulado, con el mismo FakeBilling (fakeMercadoPago.ts, paquete C de B10)
+      await context.route(`${FAKE_MERCADOPAGO_ORIGIN}/**`, (route) =>
+        fulfill(route, (request, url) => handleMercadoPagoRequest(request, url, billing), false),
       );
     },
     createUser,
@@ -2311,14 +2301,12 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     subscriptionOf(email) {
       const user = emailOf(email);
-      return (user && subscriptions.get(user.id)) ?? null;
+      const row = user ? billing.subscriptionOf(user.id) : null;
+      return row ? fakeSubscriptionOf(row) : null;
     },
     setSubscription(email, subscription) {
       const user = emailOf(email) ?? createUser({ email });
-      subscriptions.set(user.id, subscription);
-      if (subscription.provider === 'stripe' && !stripeCustomers.has(user.id)) {
-        stripeCustomers.set(user.id, nextId('cus_fake'));
-      }
+      billing.setSubscription(user.id, billingRowOf(user.id, subscription));
     },
     referralCodeOf(email) {
       const user = emailOf(email) ?? createUser({ email });
@@ -2335,7 +2323,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     paymentNotice(notice) {
       const user = emailOf(notice.email);
       if (!user) throw new Error(`No hay una cuenta con el correo ${notice.email}`);
-      return applyNotice({
+      return billing.legacyNotice({
         eventId: notice.eventId,
         userId: user.id,
         plan: notice.plan,
@@ -2346,7 +2334,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     lastPaymentNotice(email) {
       const user = emailOf(email);
-      const notice = user ? lastNotices.get(user.id) : undefined;
+      const notice = user ? billing.lastNoticeOf(user.id) : null;
       return user && notice
         ? {
             eventId: notice.eventId,
@@ -2361,6 +2349,53 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     rpcCalls(name) {
       return calls.filter((call) => call.path.startsWith(`/rest/v1/rpc/${name}`));
     },
+    billing,
+    endTrial(email, outcome) {
+      billing.endTrial(requireUser(email).id, outcome);
+    },
+    endPeriod(email) {
+      billing.endPeriod(requireUser(email).id);
+    },
+    settleVoucher(email, outcome) {
+      billing.settleVoucher(requireUser(email).id, outcome);
+    },
+    fundTransfer(email) {
+      billing.fundTransfer(requireUser(email).id);
+    },
+    advanceTime(ms) {
+      billing.advanceTime(ms);
+    },
+    setFeatureFlags(flags) {
+      const current = settings.get('feature_flags')?.value;
+      settings.set('feature_flags', {
+        value: { ...(isRecord(current) ? current : {}), ...flags },
+        updatedAt: new Date(now()).toISOString(),
+      });
+    },
+    setBillingRules(rules) {
+      Object.assign(billing.rules, rules);
+    },
+    setPortalConfig(config) {
+      Object.assign(billing.portalConfigs, config);
+    },
+    founderSeatsTaken: () => billing.founderSeatsTaken(),
+    trialClaimOf(email) {
+      const user = emailOf(email);
+      return user ? billing.trialClaimOf(user.id) : null;
+    },
+    passesOf(email) {
+      const user = emailOf(email);
+      return user ? billing.passesOf(user.id) : [];
+    },
+    paymentsOf(email) {
+      const user = emailOf(email);
+      return user ? billing.paymentsOf(user.id) : [];
+    },
+    invoiceRequestsOf(email) {
+      const user = emailOf(email);
+      return user ? billing.invoiceRequestsOf(user.id) : [];
+    },
+    outbox: () => billing.outbox,
     party,
     userIdOf(email) {
       return emailOf(email)?.id;
@@ -2372,10 +2407,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       server.deviceLimits = value;
     },
     get founderSeats() {
-      return server.founderSeats;
+      return billing.founderSeats.total;
     },
     set founderSeats(value) {
-      server.founderSeats = value;
+      billing.founderSeats.total = value;
     },
     get checkoutError() {
       return server.checkoutError;

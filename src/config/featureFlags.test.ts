@@ -50,13 +50,32 @@ describe('banderas de lanzamiento', () => {
     expect(isFeatureEnabled('demoBank', { appEnv: 'production', stored: null })).toBe(true);
   });
 
-  it('la prueba gratis está apagada en los tres entornos hasta que B10 la crea, y el servidor la prende', () => {
+  it('la prueba gratis y los pases en efectivo solo vienen prendidos en desarrollo, y el servidor los prende (B10)', () => {
+    for (const flag of ['freeTrial', 'cashPasses'] as const) {
+      expect(isFeatureEnabled(flag, { appEnv: 'development', stored: null }), flag).toBe(true);
+      expect(isFeatureEnabled(flag, { appEnv: 'demo', stored: null }), flag).toBe(false);
+      expect(isFeatureEnabled(flag, { appEnv: 'production', stored: null }), flag).toBe(false);
+      expect(isFeatureEnabled(flag, { appEnv: 'production', stored: { [flag]: true } }), flag).toBe(
+        true,
+      );
+    }
+  });
+
+  it('Mercado Pago nace apagado en todos lados y el aviso de modo prueba prendido en todos lados (B10)', () => {
     for (const appEnv of APP_ENVS) {
-      expect(isFeatureEnabled('freeTrial', { appEnv, stored: null }), appEnv).toBe(false);
+      expect(isFeatureEnabled('mercadoPago', { appEnv, stored: null }), appEnv).toBe(false);
+      expect(isFeatureEnabled('paymentsTestMode', { appEnv, stored: null }), appEnv).toBe(true);
     }
     expect(
-      isFeatureEnabled('freeTrial', { appEnv: 'production', stored: { freeTrial: true } }),
+      isFeatureEnabled('mercadoPago', { appEnv: 'production', stored: { mercadoPago: true } }),
     ).toBe(true);
+    // Al pasar a modo real el servidor lo apaga para todos
+    expect(
+      isFeatureEnabled('paymentsTestMode', {
+        appEnv: 'production',
+        stored: { paymentsTestMode: false },
+      }),
+    ).toBe(false);
   });
 
   it('Google y el segundo factor nacen apagados en todos lados y los prende el servidor (B9)', () => {

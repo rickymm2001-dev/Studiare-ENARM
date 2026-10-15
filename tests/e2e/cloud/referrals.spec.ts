@@ -3,7 +3,8 @@
 // confirmado del referido, nunca con la factura de 0 pesos de una prueba gratis ni dos veces por el
 // mismo aviso. La tarjeta Invita y gana un mes vive en Party y en Configuración, sección Perfil, y cada
 // alumno comparte su enlace /bienvenida?ref=CODIGO, que la bienvenida guarda y se canjea al entrar.
-// Una cuenta nueva que entra desde Ya tengo cuenta lo canjea hasta completar su registro (B9)
+// Una cuenta nueva que entra desde Ya tengo cuenta lo canjea hasta completar su registro (B9). Con la
+// prueba gratis de B10 el mes llega con el primer cobro después de la prueba y no con la prueba
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import {
@@ -14,6 +15,7 @@ import {
   openSecondDevice,
   test,
 } from '../support/cloudFixtures';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { gatewayText } from '../support/fakeGateway';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
@@ -69,13 +71,16 @@ test.describe('Referidos', () => {
     await expect(region.getByText(text.pending(1))).toBeVisible();
     await expect(region.getByText(text.months(0))).toBeVisible();
 
+    // Sin prueba gratis en el servidor, el pago es al momento
+    cloud.setBillingRules({ trialDays: 0 });
     await second.page.goto(SCREENS.subscription.path);
     await second.page
+      .getByRole('region', { name: t.billing.plans.monthly, exact: true })
       .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
       .click();
-    await second.page.getByRole('button', { name: t.billing.cloud.go }).click();
+    await second.page.getByRole('button', { name: billingCloudText.go }).click();
     await second.page.getByRole('button', { name: gatewayText.pay }).click();
-    await expect(second.page.getByText(t.billing.cloud.returning.confirmed)).toBeVisible({
+    await expect(second.page.getByText(billingCloudText.returning.confirmed)).toBeVisible({
       timeout: 20_000,
     });
     expect(cloud.referralsOf(ANA)).toEqual({ pending: 0, completed: 1 });
@@ -93,6 +98,8 @@ test.describe('Referidos', () => {
     cloud,
     consoleErrors,
   }) => {
+    // El servidor da la prueba gratis solo con freeTrial prendida (trial_available)
+    cloud.setFeatureFlags({ freeTrial: true });
     // Ana ve su enlace en Configuración, sección Perfil, también en el plan Gratis (4.3)
     await enterWithLink(page, cloud, ANA, 'Ana');
     await page.goto(`${SCREENS.settings.path}#perfil`);
@@ -118,31 +125,25 @@ test.describe('Referidos', () => {
       second.page.getByRole('region', { name: card.title }).getByText(text.alreadyReferred),
     ).toBeVisible();
 
-    // La prueba gratis abre con una factura de 0 pesos. No es un cobro y no da el mes
-    expect(
-      cloud.paymentNotice({
-        eventId: 'evt_prueba_bruno',
-        email: BRUNO,
-        plan: 'monthly',
-        paymentId: 'in_prueba_bruno',
-        amountMxn: 0,
-      }),
-    ).toBe('ignored');
+    // Bruno empieza su prueba gratis. Abre con una factura de 0 pesos, que no es un cobro y no da el mes
+    await second.page.goto(SCREENS.subscription.path);
+    await second.page
+      .getByRole('region', { name: t.billing.plans.monthly, exact: true })
+      .getByRole('button', { name: t.billing.freeTrialCta })
+      .click();
+    await second.page.getByRole('button', { name: billingCloudText.actions.trial }).click();
+    await second.page.getByRole('button', { name: gatewayText.startTrial }).click();
+    await expect(second.page.getByText(billingCloudText.returning.trialStarted)).toBeVisible({
+      timeout: 20_000,
+    });
+    expect(cloud.lastPaymentNotice(BRUNO)?.amountMxn).toBe(0);
     expect(cloud.referralsOf(ANA)).toEqual({ pending: 1, completed: 0 });
     await page.reload();
     await expect(region.getByText(text.pending(1))).toBeVisible();
     await expect(region.getByText(text.months(0))).toBeVisible();
 
-    // El primer cobro, con la pasarela simulada, da el mes a Ana
-    await second.page.goto(SCREENS.subscription.path);
-    await second.page
-      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
-      .click();
-    await second.page.getByRole('button', { name: t.billing.cloud.go }).click();
-    await second.page.getByRole('button', { name: gatewayText.pay }).click();
-    await expect(second.page.getByText(t.billing.cloud.returning.confirmed)).toBeVisible({
-      timeout: 20_000,
-    });
+    // El primer cobro, al terminar la prueba, da el mes a Ana
+    cloud.endTrial(BRUNO, 'charge');
     expect(cloud.referralsOf(ANA)).toEqual({ pending: 0, completed: 1 });
 
     // La pasarela repite el aviso de ese cobro y no da otro mes

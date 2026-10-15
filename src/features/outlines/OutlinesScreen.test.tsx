@@ -21,6 +21,13 @@ import { t } from '@/i18n/es-MX';
 import { AUTOSAVE_DELAY_MS } from './useOutlineAutosave';
 
 vi.mock('@/ui/celebrate', () => ({ celebrate: () => undefined }));
+// Solo cambia si la nube está configurada. Sin URL de Supabase el cliente real tampoco existe
+const cloudMock = vi.hoisted(() => ({ configured: false }));
+vi.mock('@/data/cloud/client', () => ({
+  getCloud: () => null,
+  cloudConfigured: () => cloudMock.configured,
+  loadCloud: () => Promise.resolve(null),
+}));
 
 // Abrir un apunte carga el editor y sus pruebas tardan más que los 5 segundos por defecto
 vi.setConfig({ testTimeout: 30_000 });
@@ -86,7 +93,7 @@ describe('pantalla de Apuntes', () => {
     for (const point of t.outlines.locked.points) {
       expect(within(preview).getByText(point)).toBeInTheDocument();
     }
-    // La prueba de 7 días todavía no existe en Suscripción (B10), así que no se promete
+    // Sin la nube no hay prueba gratis, así que no se promete aunque la bandera esté prendida (B10)
     expect(within(preview).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
       'href',
       SCREENS.subscription.path,
@@ -112,17 +119,38 @@ describe('pantalla de Apuntes', () => {
     }
   });
 
-  it('con la prueba gratis prendida el candado ofrece probar 7 días gratis', async () => {
+  it('con la prueba gratis prendida, la nube y la prueba disponible el candado ofrece probar 7 días gratis', async () => {
     writeStoredFlags({ freeTrial: true });
+    cloudMock.configured = true;
+    useCloud.setState({
+      state: {
+        status: 'linked',
+        identity: { authId: 'a', email: 'a@x.mx', role: 'student', alias: null },
+      },
+    });
     try {
-      app = await renderApp(SCREENS.outlines.path);
+      // Gratis como lo refleja my_plan, que dice que todavía le toca la prueba
+      app = await renderApp(SCREENS.outlines.path, {
+        seed: async (api, user) => {
+          await api.repos.subscriptions.put({
+            userId: user.id,
+            plan: 'free',
+            status: 'none',
+            isSimulated: false,
+            trialAvailable: true,
+            updatedAt: new Date().toISOString(),
+          });
+        },
+      });
       const preview = await screen.findByRole('region', { name: t.outlines.locked.title }, WAIT);
-      expect(within(preview).getByRole('link', { name: t.billing.freeTrialCta })).toHaveAttribute(
-        'href',
-        SCREENS.subscription.path,
-      );
+      // Abre la forma de pago del Mensual, el de la promoción y la prueba (B10)
+      expect(
+        await within(preview).findByRole('link', { name: t.billing.freeTrialCta }),
+      ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
     } finally {
       writeStoredFlags(null);
+      cloudMock.configured = false;
+      useCloud.setState({ state: { status: 'off' } });
     }
   });
 

@@ -8,15 +8,25 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { writeStoredFlags } from '@/config/featureFlags';
 import { t } from '@/i18n/es-MX';
 
 vi.setConfig({ testTimeout: 30_000 });
+
+// La nube configurada solo cambia cloudConfigured. Las pruebas de aquí no llaman al servidor
+const cloudMock = vi.hoisted(() => ({ configured: false }));
+vi.mock('@/data/cloud/client', () => ({
+  getCloud: () => null,
+  cloudConfigured: () => cloudMock.configured,
+  loadCloud: () => Promise.resolve(null),
+}));
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
   cleanup();
   await resetApp(app?.api);
   app = undefined;
+  cloudMock.configured = false;
 });
 
 const WAIT = { timeout: 15_000 };
@@ -64,5 +74,32 @@ describe('tabla de planes con el plan Gratis', () => {
       expect(within(free).queryByText(t.billing.access[lock]), lock).toBeNull();
       expect(within(monthly).getByText(t.billing.access[lock]), lock).toBeVisible();
     }
+  });
+});
+
+describe('la portada con la prueba gratis (B10, 3.4)', () => {
+  it('dice Prueba 7 días gratis con tarjeta solo con la bandera y la nube, y muestra el anual Fundador', async () => {
+    const pricingOf = async () => {
+      await screen.findByRole('heading', { level: 1, name: t.landing.title }, WAIT);
+      return screen.getByRole('region', { name: t.landing.pricingTitle });
+    };
+    writeStoredFlags({ freeTrial: true });
+    // Sin la nube configurada no hay prueba, aunque la bandera esté prendida
+    app = await renderApp(SCREENS.home.path);
+    usePreferences.setState({ sessionUserId: null });
+    let pricing = await pricingOf();
+    expect(within(pricing).queryByText(t.billing.trialLine)).toBeNull();
+    // El anual muestra el precio Fundador de 749
+    expect(within(pricing).getByText(t.billing.price(749))).toBeVisible();
+    expect(within(pricing).getByText(t.billing.founderSavings(20))).toBeVisible();
+    cleanup();
+    await resetApp(app.api);
+
+    cloudMock.configured = true;
+    writeStoredFlags({ freeTrial: true });
+    app = await renderApp(SCREENS.home.path);
+    usePreferences.setState({ sessionUserId: null });
+    pricing = await pricingOf();
+    expect(within(pricing).getAllByText(t.billing.trialLine)).toHaveLength(2);
   });
 });

@@ -429,75 +429,8 @@ export const featureText = {
   billing: {
     simulatedNotice:
       'Pagos simulados. En esta demostración no se cobra nada ni se piden datos de tarjeta.',
-    // Con la cuenta en la nube conectada el plan lo decide el servidor (Fase P bloque 5, D-096)
-    cloud: {
-      notice:
-        'Tu plan lo confirma el servidor cuando la pasarela avisa del pago. Los pagos están en modo prueba y no se cobra dinero real hasta que Studiare los active.',
-      source: {
-        payment: 'Tu plan viene de un pago confirmado.',
-        referral: 'Tu plan viene de un mes gratis por referido.',
-        none: 'Todavía no tienes un plan de pago.',
-      },
-      validUntil: (date: string) => `Vale hasta el ${date}.`,
-      checkoutTitle: 'Pagar con la pasarela',
-      provider: 'Pasarela de pago',
-      providers: { stripe: 'Tarjeta con Stripe', mercadopago: 'Mercado Pago' },
-      testMode: 'Modo prueba. Usa una tarjeta de prueba de la pasarela, no una tuya.',
-      singleProvider: 'Pagas con tarjeta en la página segura de Stripe.',
-      regularInstead: (price: string) => `Continuar con el precio regular de ${price}`,
-      go: 'Ir a pagar',
-      opening: 'Abriendo la pasarela…',
-      back: 'Volver a los planes',
-      errors: {
-        founder_full:
-          'Los lugares del precio Fundador ya se llenaron. Puedes continuar con el precio regular.',
-        already_subscribed:
-          'Ya tienes un plan pagado vigente. Para cambiar de plan, cancela el tuyo en Administrar suscripción y contrata el nuevo cuando termine tu periodo.',
-        not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
-        unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
-        failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
-      },
-      returning: {
-        ok: 'Estamos confirmando tu pago. Esto tarda unos segundos.',
-        confirmed: 'Tu plan ya está activo. Gracias.',
-        slow: 'Tu pago sigue sin confirmarse. Puede tardar unos minutos. Si pasa más tiempo, escribe al equipo.',
-        canceled: 'Cancelaste el pago. No se cobró nada.',
-      },
-      cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
-      // Con un plan pagado vigente no se ofrece otro pago, que sería un segundo cobro (D-118)
-      changePlanNote:
-        'Para cambiarte a este plan, cancela el tuyo en Administrar suscripción y contrátalo cuando termine tu periodo.',
-      portal: {
-        title: 'Administrar suscripción',
-        description:
-          'Se abre el portal seguro de Stripe, donde puedes cancelar tu suscripción, cambiar tu tarjeta y ver tus facturas. Si cancelas, tu plan cambia cuando Stripe nos avise.',
-        go: 'Abrir el portal',
-        opening: 'Abriendo el portal…',
-        errors: {
-          no_customer:
-            'No encontramos una suscripción con Stripe en tu cuenta. Si pagaste con Mercado Pago, tu plan no se renueva solo y termina en la fecha indicada. Si es un mes gratis por referido, termina solo.',
-          not_configured:
-            'La administración de suscripciones todavía no está activada. Escribe al equipo de Studiare.',
-          unsafe_url: 'Stripe mandó una dirección que no reconocemos. No la abrimos.',
-          failed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
-        },
-      },
-      refresh: 'Revisar mi plan',
-      // Con la nube configurada pero este navegador sin sesión. El servidor no sabe quién paga, así que
-      // no se ofrece pago alguno, ni el real ni el simulado
-      needLink: {
-        title: 'Conecta tu cuenta para pagar',
-        body: 'Para pagar, este navegador tiene que estar conectado a tu cuenta en la nube. Pide un correo nuevo y abre el enlace aquí, o escribe abajo el código que trae si lo abres en tu teléfono.',
-        otherDevice:
-          'Tu cuenta se abrió en otro dispositivo. Para pagar aquí, pide un correo nuevo y entra con el enlace o el código. Eso cerrará la sesión del otro dispositivo.',
-        send: 'Enviarme un correo nuevo',
-        sending: 'Enviando el correo…',
-        sent: (email: string) =>
-          `Te enviamos un correo a ${email}. Abre el enlace en este navegador o escribe abajo el código que trae. Si no lo ves, revisa la carpeta de spam.`,
-        noAccount:
-          'No encontramos el correo de tu cuenta en este navegador. Sal y vuelve a entrar desde la pantalla de acceso.',
-      },
-    },
+    // Los textos con la cuenta en la nube viven en billingCloud.ts y solo los bajan las pantallas que
+    // los usan, que se cargan en diferido, así no pesan en el JavaScript inicial (B10, 5.6)
     current: (plan: string) => `Tu plan actual es ${plan}.`,
     stats: {
       plan: 'Plan',
@@ -505,19 +438,37 @@ export const featureText = {
       dailyCaption: 'por día',
       unlimited: 'sin límite',
     },
-    plans: { free: 'Gratis', founder: 'Mensual Fundador', monthly: 'Mensual', annual: 'Anual' },
+    plans: {
+      free: 'Gratis',
+      founder: 'Mensual Fundador',
+      founder_annual: 'Anual Fundador',
+      monthly: 'Mensual',
+      annual: 'Anual',
+    },
     // Lo lee un lector de pantalla, que no anuncia el tachado
     regularPrice: 'Precio regular',
     promoPrice: 'Precio Fundador',
     periods: {
       free: 'para siempre',
       founder: 'al mes, de por vida',
+      founder_annual: 'al año, de por vida',
       monthly: 'al mes',
       annual: 'al año',
     },
+    // Con la prueba gratis el lugar se aparta al empezarla (4.6). Sin ella, al primer cobro
     founderNote: (seats: number) =>
-      `Precio Fundador para los primeros ${seats} usuarios. No sube mientras conserves tu suscripción. El cupo se confirma al cobrar.`,
-    price: (mxn: number) => (mxn === 0 ? '$0' : `$${mxn.toLocaleString('es-MX')} MXN`),
+      `Precio Fundador para los primeros ${seats}. No sube mientras conserves tu suscripción. Tu lugar se aparta al empezar tu prueba.`,
+    founderNoteNoTrial: (seats: number) =>
+      `Precio Fundador para los primeros ${seats}. No sube mientras conserves tu suscripción. Tu lugar se confirma al pagar.`,
+    taxIncluded: 'IVA incluido.',
+    // Con centavos solo cuando los hay, como un cobro con código de descuento
+    price: (mxn: number) =>
+      mxn === 0
+        ? '$0'
+        : `$${mxn.toLocaleString('es-MX', {
+            minimumFractionDigits: Number.isInteger(mxn) ? 0 : 2,
+            maximumFractionDigits: 2,
+          })} MXN`,
     access: {
       dailyQuestions: (n: number | null) =>
         n === null ? 'Preguntas sin límite' : `${n} preguntas al día`,
@@ -548,6 +499,9 @@ export const featureText = {
     // El botón de los candados de Gratis cuando ya existe la prueba gratis (B10, bandera freeTrial)
     freeTrialCta: 'Prueba 7 días gratis',
     savings: (percent: number) => `Ahorras ${percent}% contra 12 meses al precio regular`,
+    founderSavings: (percent: number) => `Ahorras ${percent}% contra 12 meses del Fundador mensual`,
+    // La línea de la prueba en la portada, con la bandera freeTrial (B10, 3.4)
+    trialLine: 'Prueba 7 días gratis con tarjeta',
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',
     checkoutTitle: 'Checkout simulado',

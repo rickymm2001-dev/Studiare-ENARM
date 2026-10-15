@@ -1,169 +1,50 @@
 // Pago real en modo prueba desde Suscripción, cuando la cuenta de la nube está conectada (Fase P
-// bloque 5, D-096). El alumno elige la pasarela, la función del servidor crea el pago y el navegador
-// lo abre. Al volver, la app revisa el plan con la nube hasta que el aviso del pago lo confirme.
+// bloque 5, D-096, y B10 del plan del cambio). La forma de pago vive en CheckoutOptions.tsx. Aquí quedan
+// Administrar suscripción, con el portal de Stripe o la cancelación de Mercado Pago, que no tiene
+// portal, la tarjeta de quien no tiene sesión en este navegador y el aviso al volver de la pasarela, que
+// revisa el plan con la nube hasta que el aviso del pago lo confirme.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useCloud } from '@/app/cloudState';
+import { planOf } from '@/config/billing';
 import { requestEmailLink } from '@/data/cloud/account';
 import { loadCloud } from '@/data/cloud/client';
-import { PAYMENT_PROVIDERS, PLANS, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import { refreshCloudPlan } from '@/data/payments/cloudPlan';
-import {
-  startCheckout,
-  type CheckoutResult,
-  type PaidPlanKey,
-  type PaymentProvider,
-} from '@/data/payments/checkout';
-import { openBillingPortal } from '@/data/payments/portal';
+import { cancelMercadoPagoSubscription } from '@/data/payments/cancel';
+import { refreshCloudPlan, type CloudPlan } from '@/data/payments/cloudPlan';
+import type { Subscription } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SelectField } from '@/ui/components/field';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
+import { longDate } from './planState';
+import { usePortal } from './usePortal';
 
-const text = t.billing.cloud;
-type CheckoutError = Extract<CheckoutResult, { ok: false }>['reason'];
+const text = billingCloudText;
 
 /** Cuántas veces y cada cuánto se revisa el plan al volver de la pasarela */
 export const RETURN_CHECKS = 10;
 export const RETURN_CHECK_MS = 3000;
 
-export function CloudCheckoutCard({
-  plan: requested,
-  onBack,
-  open = (url: string) => {
-    window.location.assign(url);
-  },
-  providers = PAYMENT_PROVIDERS,
-}: {
-  plan: PaidPlanKey;
-  onBack: () => void;
-  /** Cómo se abre la pasarela. Se puede cambiar en las pruebas */
-  open?: (url: string) => void;
-  /** Pasarelas que se ofrecen. Con una sola no se pide elegir */
-  providers?: readonly PaymentProvider[];
-}) {
-  // Si el cupo Fundador se llenó, el alumno puede seguir con el mensual al precio regular
-  const [plan, setPlan] = useState<PaidPlanKey>(requested);
-  const [provider, setProvider] = useState<PaymentProvider>(providers[0] ?? 'stripe');
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<CheckoutError | null>(null);
-
-  const go = async (target: PaidPlanKey = plan) => {
-    const cloud = await loadCloud();
-    if (!cloud) {
-      setError('failed');
-      return;
-    }
-    setBusy(true);
-    setError(null);
-    const result = await startCheckout(cloud, { plan: target, provider });
-    if (result.ok) {
-      open(result.url);
-      return;
-    }
-    setBusy(false);
-    setError(result.reason);
-  };
-
-  return (
-    <Card aria-labelledby="checkout-nube-titulo">
-      <CardHeader>
-        <CardTitle id="checkout-nube-titulo">{text.checkoutTitle}</CardTitle>
-        <CardDescription>
-          {t.billing.checkoutSummary(
-            t.billing.plans[plan],
-            t.billing.price(PLANS[plan].priceMxn),
-            t.billing.periods[plan],
-          )}
-        </CardDescription>
-      </CardHeader>
-      <p className="mb-3 rounded-md bg-sim px-3 py-2 text-sm text-sim-fg">{text.testMode}</p>
-      {providers.length > 1 ? (
-        <SelectField
-          label={text.provider}
-          value={provider}
-          onChange={(event) => {
-            setProvider(event.target.value as PaymentProvider);
-          }}
-          options={providers.map((value) => ({ value, label: text.providers[value] }))}
-        />
-      ) : (
-        <p className="text-sm text-fg-muted">{text.singleProvider}</p>
-      )}
-      <p role="status" className="mt-2 min-h-5 text-sm text-fg-muted">
-        {busy ? text.opening : error ? text.errors[error] : null}
-      </p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {error === 'founder_full' && plan === 'founder' ? (
-          <Button
-            disabled={busy}
-            // El texto es largo y en el teléfono se parte en dos renglones en lugar de salirse (H27)
-            className="h-auto min-h-11 whitespace-normal"
-            onClick={() => {
-              setPlan('monthly');
-              void go('monthly');
-            }}
-          >
-            {text.regularInstead(
-              `${t.billing.price(PLANS.monthly.priceMxn)} ${t.billing.periods.monthly}`,
-            )}
-          </Button>
-        ) : (
-          <Button
-            disabled={busy}
-            onClick={() => {
-              void go();
-            }}
-          >
-            {text.go}
-          </Button>
-        )}
-        <Button variant="secondary" disabled={busy} onClick={onBack}>
-          {text.back}
-        </Button>
-      </div>
-    </Card>
-  );
-}
+const assign = (url: string) => {
+  window.location.assign(url);
+};
 
 /**
- * Para quien ya paga. Abre el portal de Stripe, donde cancela, cambia su tarjeta o ve sus facturas.
- * La cancelación llega al servidor como un aviso de Stripe, y el plan cambia con él (D-106)
+ * Para quien paga con Stripe. Abre el portal, donde cambia de plan, cancela, cambia su tarjeta o ve sus
+ * facturas. Lo que haga llega al servidor como un aviso de Stripe, y el plan cambia con él (D-106)
  */
 export function BillingPortalCard({
-  open = (url: string) => {
-    window.location.assign(url);
-  },
+  open = assign,
 }: {
   /** Cómo se abre el portal. Se puede cambiar en las pruebas */
   open?: (url: string) => void;
 }) {
   const portal = text.portal;
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const go = async () => {
-    setError(null);
-    setBusy(true);
-    const cloud = await loadCloud();
-    if (!cloud) {
-      setBusy(false);
-      setError(portal.errors.failed);
-      return;
-    }
-    const result = await openBillingPortal(cloud);
-    if (result.ok) {
-      open(result.url);
-      return;
-    }
-    setBusy(false);
-    setError(portal.errors[result.reason]);
-  };
-
+  const { busy, error, go } = usePortal(open);
   return (
     <Card aria-labelledby="portal-titulo">
       <CardHeader>
@@ -184,6 +65,91 @@ export function BillingPortalCard({
           {portal.go}
         </Button>
       </div>
+    </Card>
+  );
+}
+
+/**
+ * Para quien paga con Mercado Pago, que no tiene portal (B10, 2.5). Cancela con cancel-subscription,
+ * después de confirmar. El plan vale hasta el fin de lo pagado y la app vuelve a leerlo
+ */
+export function MercadoPagoManageCard({
+  subscription,
+  onChanged,
+}: {
+  subscription: Subscription;
+  /** Se canceló. Quien llama vuelve a leer el plan */
+  onChanged?: () => void;
+}) {
+  const mp = text.mercadoPago;
+  const [stage, setStage] = useState<'idle' | 'confirm' | 'busy'>('idle');
+  const [message, setMessage] = useState<string | null>(null);
+  const until = subscription.periodEnd ? longDate(subscription.periodEnd) : null;
+  const canceled =
+    subscription.cancelAtPeriodEnd === true || subscription.cloudStatus === 'canceled';
+
+  const cancel = async () => {
+    setStage('busy');
+    setMessage(null);
+    const cloud = await loadCloud();
+    const result = cloud
+      ? await cancelMercadoPagoSubscription(cloud)
+      : ({ ok: false, reason: 'failed' } as const);
+    setStage('idle');
+    if (!result.ok) {
+      setMessage(mp.errors[result.reason]);
+      return;
+    }
+    const end = result.periodEnd ?? subscription.periodEnd ?? null;
+    setMessage(end ? mp.done(longDate(end)) : mp.doneNoDate);
+    onChanged?.();
+  };
+
+  return (
+    <Card aria-labelledby="mercadopago-titulo">
+      <CardHeader>
+        <CardTitle id="mercadopago-titulo">{mp.title}</CardTitle>
+        <CardDescription>{mp.description}</CardDescription>
+      </CardHeader>
+      <p role="status" className="mb-2 min-h-5 text-sm text-fg-muted">
+        {stage === 'busy' ? mp.canceling : (message ?? (canceled ? mp.already : null))}
+      </p>
+      {canceled ? null : stage === 'confirm' ? (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">{until ? mp.confirm(until) : mp.confirmNoDate}</p>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="danger"
+              onClick={() => {
+                void cancel();
+              }}
+            >
+              {mp.confirmYes}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setStage('idle');
+              }}
+            >
+              {mp.confirmNo}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <Button
+            variant="secondary"
+            disabled={stage === 'busy'}
+            onClick={() => {
+              setStage('confirm');
+              setMessage(null);
+            }}
+          >
+            {mp.cancel}
+          </Button>
+        </div>
+      )}
     </Card>
   );
 }
@@ -275,33 +241,68 @@ export function CloudRequiredCard({ userId }: { userId: string }) {
   );
 }
 
+/** Lo que cambia cuando un pago se confirma, para saber si el aviso ya llegó */
+function signatureOf(
+  plan: string,
+  periodEnd: string | null | undefined,
+  passEnd: string | null | undefined,
+  status: string | null | undefined,
+): string {
+  return [plan, periodEnd ?? '', passEnd ?? '', status ?? ''].join('|');
+}
+
+const signatureOfCloud = (cloudPlan: CloudPlan) =>
+  signatureOf(cloudPlan.plan, cloudPlan.periodEnd, cloudPlan.passEnd, cloudPlan.status);
+
+const signatureOfLocal = (subscription: Subscription | null) =>
+  signatureOf(
+    planOf(subscription),
+    subscription?.periodEnd,
+    subscription?.passEnd,
+    subscription?.cloudStatus,
+  );
+
+const PENDING_METHODS = ['oxxo', 'spei', 'mercadopago'] as const;
+type PendingMethod = (typeof PENDING_METHODS)[number];
+
 /**
- * Lo que se ve al volver de la pasarela con ?pago=ok o ?pago=cancelado. En el primer caso revisa el
- * plan en la nube cada pocos segundos hasta que cambie, porque el aviso del pago llega aparte
+ * Lo que se ve al volver de la pasarela con ?pago=ok, ?pago=cancelado o ?pago=pendiente&metodo=. Con ok
+ * revisa el plan en la nube cada pocos segundos hasta que cambie, porque el aviso del pago llega aparte.
+ * Con pendiente dice enseguida que el pago está en camino y revisa hasta que la nube tenga el pendiente,
+ * que desde ahí lo muestra PendingPaymentNotice con su monto y su fecha
  */
 export function PaymentReturnNotice({
   userId,
-  current,
+  subscription,
 }: {
   userId: string;
-  current: PlanKey | undefined;
+  /** La suscripción reflejada en este navegador. undefined mientras carga */
+  subscription: Subscription | null | undefined;
 }) {
   const [params] = useSearchParams();
   const result = params.get('pago');
+  const rawMethod = params.get('metodo');
+  const method: PendingMethod | null = (PENDING_METHODS as readonly string[]).includes(
+    rawMethod ?? '',
+  )
+    ? (rawMethod as PendingMethod)
+    : null;
   const api = useDataApi();
   const apiRef = useRef(api);
   useEffect(() => {
     apiRef.current = api;
   });
-  const [state, setState] = useState<'checking' | 'confirmed' | 'slow'>('checking');
-  // El plan con el que se volvió. Si cambia a uno de pago, el pago quedó confirmado
-  const initial = useRef<PlanKey | undefined>(undefined);
+  const [state, setState] = useState<'checking' | 'confirmed' | 'trial' | 'slow'>('checking');
+  // Cómo estaba el plan al volver. Si cambia a uno de pago, el pago quedó confirmado
+  const initial = useRef<string | undefined>(undefined);
   useEffect(() => {
-    if (initial.current === undefined && current !== undefined) initial.current = current;
-  }, [current]);
+    if (initial.current === undefined && subscription !== undefined) {
+      initial.current = signatureOfLocal(subscription);
+    }
+  }, [subscription]);
 
   useEffect(() => {
-    if (result !== 'ok') return;
+    if (result !== 'ok' && !(result === 'pendiente' && method !== null)) return;
     let stopped = false;
     let tries = 0;
     let timer: ReturnType<typeof setTimeout> | null = null;
@@ -309,7 +310,18 @@ export function PaymentReturnNotice({
       tries += 1;
       const cloudPlan = await refreshCloudPlan(apiRef.current, cloud, userId);
       if (stopped) return;
-      if (cloudPlan && cloudPlan.plan !== 'free' && cloudPlan.plan !== initial.current) {
+      if (result === 'ok' && cloudPlan && cloudPlan.plan !== 'free') {
+        if (initial.current !== undefined && signatureOfCloud(cloudPlan) !== initial.current) {
+          setState(cloudPlan.status === 'trialing' ? 'trial' : 'confirmed');
+          return;
+        }
+      }
+      // El pendiente ya está en la nube, o el pago ya se confirmó
+      if (
+        result === 'pendiente' &&
+        cloudPlan &&
+        (cloudPlan.pendingPayment || cloudPlan.plan !== 'free')
+      ) {
         setState('confirmed');
         return;
       }
@@ -329,7 +341,7 @@ export function PaymentReturnNotice({
       stopped = true;
       if (timer) clearTimeout(timer);
     };
-  }, [result, userId]);
+  }, [result, method, userId]);
 
   if (result === 'cancelado') {
     return (
@@ -338,14 +350,25 @@ export function PaymentReturnNotice({
       </p>
     );
   }
+  if (result === 'pendiente' && method !== null) {
+    // Cuando la nube ya tiene el pendiente, PendingPaymentNotice lo dice con su monto y su fecha
+    if (state === 'confirmed' || subscription?.pendingPayment?.method === method) return null;
+    return (
+      <p role="status" className="rounded-md bg-muted px-3 py-2 text-sm">
+        {text.returning.pending[method]}
+      </p>
+    );
+  }
   if (result !== 'ok') return null;
   return (
     <p role="status" className="rounded-md bg-muted px-3 py-2 text-sm">
       {state === 'confirmed'
         ? text.returning.confirmed
-        : state === 'slow'
-          ? text.returning.slow
-          : text.returning.ok}
+        : state === 'trial'
+          ? text.returning.trialStarted
+          : state === 'slow'
+            ? text.returning.slow
+            : text.returning.ok}
     </p>
   );
 }
