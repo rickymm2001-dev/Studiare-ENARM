@@ -1,10 +1,22 @@
 // Estado calibrando (4.3). Con un alumno nuevo, cada análisis y cada widget que depende de datos dice
 // que calibra y cuánto falta en lugar de mostrar cifras inventadas. Nada predice el puntaje del ENARM
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+
+/** Las ramas de la taxonomía. Son ocho desde B11, con Salud pública e Inglés médico */
+const BRANCHES = (
+  JSON.parse(
+    readFileSync(
+      fileURLToPath(new URL('../../src/demo/content/topic-taxonomy.json', import.meta.url)),
+      'utf8',
+    ),
+  ) as { branches: unknown[] }
+).branches.length;
 
 test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget', async ({
   page,
@@ -27,7 +39,10 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
     .click();
   await expect(insights.getByText(/Llevas 0 de \d+ /).first()).toBeVisible();
   const branches = page.getByRole('region', { name: t.topicPicker.title });
-  await expect(branches.getByText(t.insights.calibratingLabel, { exact: true })).toHaveCount(6);
+  // Cada rama calibra
+  await expect(branches.getByText(t.insights.calibratingLabel, { exact: true })).toHaveCount(
+    BRANCHES,
+  );
   const difficulty = page.getByRole('region', { name: t.progress.difficultyTitle });
   await expect(difficulty.getByText(t.progress.difficultyCalibrating(20))).toHaveCount(3);
   await expect(
