@@ -159,6 +159,8 @@ Evidencia
 - Los textos completos cargan solo con la página legal, para seguir debajo de 300 KB de JavaScript inicial
 - Entra con lo de Gemini para B17, la imagen para compartir con dirección completa y tres capturas de instalación. Las capturas muestran la app antes de la paleta y se rehacen en B17
 - Revisión independiente con 13 hallazgos, 12 corregidos. Los dos altos eran que el archivo de Acceder no trae todos los datos, como decía el aviso, y que el correo de la invitación se quedaba al eliminar la cuenta. Ahora se borra
+- Evidencia. Typecheck, lint y formato limpios. Pruebas legales y de presupuesto en verde, con el JavaScript inicial en 293 KB de 300. SQL completo en verde, con la prueba nueva de la invitación. E2e completa en teléfono, computadora y nube con 358 de 362. Las 3 que fallaron (sin conexión en la primera visita y rendimiento) fallan igual en la rama sin B16 con la máquina cargada por otros agentes, y esa rama pasó en el CI de GitHub
+- Capturas en docs/screenshots/v3/b16 (16). Del aviso y de los términos va solo lo que se ve al abrir, porque el texto completo está en docs/legal
 - Se fusiona después de B11, porque el aviso da por hechas las lecturas del banco en el servidor
 
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
