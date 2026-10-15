@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [Prueba] Artículo simulado sin licencia en sus metadatos -->
+<pmc-articleset>
+  <article xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+    <front>
+      <article-meta>
+        <article-id pub-id-type="pmcid">PMC9900004</article-id>
+        <title-group><article-title>[Prueba] Article without a license</article-title></title-group>
+        <abstract><p>[Prueba] Simulated abstract.</p></abstract>
+      </article-meta>
+    </front>
+  </article>
+</pmc-articleset>

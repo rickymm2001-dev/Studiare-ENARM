@@ -92,6 +92,7 @@ function addValidations(sheet: ExcelJS.Worksheet, headers: readonly string[], la
   for (const letter of OPTION_LETTERS) list(optionHeaders(letter).bias, 'LISTA_SESGOS');
   list(HEADERS.status, 'LISTA_ESTADOS');
   list(SHEET_HEADERS.language, 'LISTA_IDIOMAS');
+  list(SHEET_HEADERS.passageLicense, 'LISTA_LICENCIAS');
   list(SHEET_HEADERS.caseOrder, '"1,2,3,4,5"');
 }
 

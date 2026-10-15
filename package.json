@@ -36,6 +36,8 @@
     "bank:fixture": "node scripts/content/bank-sheet-fixture.ts",
     "bank:sheet-test": "node scripts/content/bank-sheet-test.ts",
     "bank:sheet-lists": "node scripts/content/bank-sheet-lists.ts",
+    "english:vocabulary": "node scripts/content/english-vocabulary.ts",
+    "english:passages": "node scripts/content/english-passages.ts",
     "recovery-report": "RECOVERY_REPORT=1 vitest run tests/recovery && prettier --write docs/recovery-report.md",
     "budget": "node scripts/bundle-budget.ts dist",
     "legal:export": "node scripts/legal-export.ts",

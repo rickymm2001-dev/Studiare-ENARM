@@ -23,8 +23,13 @@
  *   - El tiempo es el ritmo de 77 segundos por reactivo de D-074
  *   - Los cortes por estructura y por trampa son descriptivos de este examen. El patrón por
  *     sesgo y el análisis por estructura siguen calibrando en sus motores
+ *   - Secciones (B13). El examen real trae 250 reactivos en español (clinical) y 30 de comprensión de
+ *     textos en inglés (english). El plan trae cuántos se pidieron, cuántos salieron y cuántos faltaron en
+ *     cada sección, con su tiempo por reactivo. Mientras el paquete B de B13 no arme la parte en inglés,
+ *     todo se cuenta como clinical y buildExam se comporta como antes
  * Umbrales. 77 segundos por reactivo (J).
  */
+import { ENARM_FORMAT } from '@/config/exam';
 import { createRng } from './random';
 
 /** Segundos por reactivo. Es el ritmo de referencia de Conócete (D-074) */
@@ -34,12 +39,36 @@ export const EXAM_SECONDS_PER_QUESTION = 77;
 export const EXAM_SIZES = [20, 50, 100, 280] as const;
 export type ExamSize = (typeof EXAM_SIZES)[number];
 
+/**
+ * Las dos secciones del examen completo (sección 6 del plan del cambio). clinical son los 250 reactivos
+ * en español y english los 30 de comprensión de textos en inglés, que se arman y se califican aparte
+ */
+export type ExamSection = 'clinical' | 'english';
+
 export interface ExamQuestion {
   /** ID de la versión de la pregunta */
   id: string;
   caseId: string | null;
   caseOrder: number | null;
   branch: string;
+  /**
+   * Sección de la pregunta (B13). Sin el campo es clinical, como todo lo de antes. Es opcional en el
+   * paso 0 de B13 para no tocar a quienes arman ExamQuestion todavía. El paquete B la llena desde el
+   * banco y puede volverla obligatoria
+   */
+  section?: ExamSection;
+}
+
+/** Lo que pasó con una sección al armar el examen (B13) */
+export interface ExamSectionPlan {
+  /** Reactivos que se pidieron de esta sección */
+  requested: number;
+  /** Reactivos que salieron en el examen */
+  picked: number;
+  /** Cuántos faltaron por no haber suficientes, sin rellenar con la otra sección */
+  shortfall: number;
+  /** Ritmo de esta sección, que suma el tiempo total */
+  secondsPerQuestion: number;
 }
 
 export interface ExamPlan {
@@ -50,6 +79,25 @@ export interface ExamPlan {
   /** Cuántas se pidieron de más, por falta de preguntas */
   shortfall: number;
   totalMs: number;
+  /**
+   * El detalle por sección. Con el comportamiento de antes, todo es clinical y la parte en inglés queda
+   * en cero
+   */
+  sections: Record<ExamSection, ExamSectionPlan>;
+}
+
+/**
+ * Cuántos reactivos de inglés le tocan a un examen de ese tamaño, con la misma proporción del examen
+ * completo (30 de 280). Redondea al entero más cercano. El examen real quita o agrega casos completos
+ * después, porque un caso trae dos o tres preguntas (3.1 del plan de B13)
+ */
+export function englishTargetFor(
+  size: number,
+  format: { clinical: number; english: number } = ENARM_FORMAT,
+): number {
+  const total = format.clinical + format.english;
+  if (total <= 0 || size <= 0) return 0;
+  return Math.max(0, Math.round((size * format.english) / total));
 }
 
 export function examTotalMs(
@@ -68,6 +116,11 @@ export function buildExam(input: {
   branchWeights?: Readonly<Record<string, number>>;
   /** Ramas que no entran al examen, como Inglés médico hasta B13 */
   excludeBranches?: readonly string[];
+  /**
+   * La parte en inglés del examen (B13). Todavía no tiene efecto, la arma el paquete B de B13. Con
+   * include en false el examen es solo en español
+   */
+  english?: { include: boolean; secondsPerQuestion: number; placement: 'mixed' | 'end' };
 }): ExamPlan {
   const requested = Math.max(0, Math.floor(input.requested));
   const excluded = new Set(input.excludeBranches ?? []);
@@ -129,12 +182,28 @@ export function buildExam(input: {
   }
 
   const ordered = createRng(`${input.seed}|order`).shuffle(picked).flat();
+  const secondsPerQuestion = input.secondsPerQuestion ?? EXAM_SECONDS_PER_QUESTION;
   return {
     questionIds: ordered.map((question) => question.id),
     requested,
     available: eligible.length,
     shortfall: Math.max(0, requested - ordered.length),
     totalMs: examTotalMs(ordered.length, input.secondsPerQuestion),
+    // Sin la parte en inglés todo es de la sección clinical
+    sections: {
+      clinical: {
+        requested,
+        picked: ordered.length,
+        shortfall: Math.max(0, requested - ordered.length),
+        secondsPerQuestion,
+      },
+      english: {
+        requested: 0,
+        picked: 0,
+        shortfall: 0,
+        secondsPerQuestion: input.english?.secondsPerQuestion ?? secondsPerQuestion,
+      },
+    },
   };
 }
 

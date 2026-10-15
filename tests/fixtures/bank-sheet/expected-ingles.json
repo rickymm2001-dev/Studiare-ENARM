@@ -1,0 +1,157 @@
+{
+  "status": "partial",
+  "reason": null,
+  "mode": "apply",
+  "counts": {
+    "read": 17,
+    "empty": 0,
+    "example": 0,
+    "unchanged": 0,
+    "created": 13,
+    "versioned": 0,
+    "converged": 0,
+    "meta": 0,
+    "incomplete": 4,
+    "rejected": 4,
+    "conflict": 0,
+    "truncated": 0
+  },
+  "rows": [
+    {
+      "rowNumber": 2,
+      "sheetKey": "EN-0001",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 3,
+      "sheetKey": "EN-0002",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["structure_auto", "language_inferred"],
+      "problems": []
+    },
+    {
+      "rowNumber": 4,
+      "sheetKey": "EN-0003",
+      "outcome": "created",
+      "incomplete": ["passage_source_missing"],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 5,
+      "sheetKey": "EN-0004",
+      "outcome": "created",
+      "incomplete": ["license_not_allowed"],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 6,
+      "sheetKey": "EN-0005",
+      "outcome": "created",
+      "incomplete": ["passage_source_missing"],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 7,
+      "sheetKey": "EN-0006",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "language_branch_mismatch", "column": "Idioma", "value": "Inglés" }]
+    },
+    {
+      "rowNumber": 8,
+      "sheetKey": "EN-0007",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "language_branch_mismatch", "column": "Idioma", "value": "Español" }]
+    },
+    {
+      "rowNumber": 9,
+      "sheetKey": "EN-0008",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 10,
+      "sheetKey": "EN-0009",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 11,
+      "sheetKey": "EN-0010",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 12,
+      "sheetKey": "EN-0011",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "case_inconsistent", "column": "Fuente del texto" }]
+    },
+    {
+      "rowNumber": 13,
+      "sheetKey": "EN-0012",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "case_inconsistent", "column": "Fuente del texto" }]
+    },
+    {
+      "rowNumber": 14,
+      "sheetKey": "EN-0013",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["english_case_size"],
+      "problems": []
+    },
+    {
+      "rowNumber": 15,
+      "sheetKey": "EN-0014",
+      "outcome": "created",
+      "incomplete": ["explanation_missing"],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 16,
+      "sheetKey": "EN-0015",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 17,
+      "sheetKey": "EN-0016",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 18,
+      "sheetKey": "EN-0017",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    }
+  ]
+}

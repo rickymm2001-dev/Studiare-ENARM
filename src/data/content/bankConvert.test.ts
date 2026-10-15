@@ -5,6 +5,8 @@ import { biasTaxonomy, structureDictionary, taggableBiasKeys, topicTaxonomy } fr
 import { analyzeStructure } from '@/engines/structure';
 import { HEADERS, SHEET_HEADERS, optionHeaders } from './bankColumns';
 import { convertSheetTable, sheetQuestionFormat, type SheetConvertContext } from './bankConvert';
+import { canonicalFromSheet, contentHash } from './contentHash';
+import { parsePassageSource } from './passageSource';
 import { incompleteOnly, versionIssues } from './questionRules';
 
 const context: SheetConvertContext = {
@@ -243,10 +245,16 @@ describe('lo que entra incompleto y lo que solo se avisa', () => {
   });
 
   it('el idioma por omisión es español y uno desconocido avisa', () => {
-    expect(only({ [SHEET_HEADERS.language]: 'Inglés' }).question?.language).toBe('en');
+    expect(only({ [SHEET_HEADERS.language]: 'Español' }).question?.language).toBe('es');
+    expect(only({ [SHEET_HEADERS.language]: 'spanish' }).question?.language).toBe('es');
     expect(only({ [SHEET_HEADERS.language]: 'Francés' })).toMatchObject({
       notices: ['language_unknown'],
       question: { language: 'es' },
+    });
+    // Inglés en una rama de español ya no entra. Lo cuida language_branch_mismatch (B13)
+    expect(only({ [SHEET_HEADERS.language]: 'Inglés' })).toMatchObject({
+      problems: [{ code: 'language_branch_mismatch', column: 'Idioma', value: 'Inglés' }],
+      question: null,
     });
   });
 
@@ -485,5 +493,485 @@ describe('casos clínicos (3.6)', () => {
     expect(result.question && sheetQuestionFormat(result.question)).toBe('clinical_case');
     const direct = only({ [HEADERS.vignette]: '' });
     expect(direct.question && sheetQuestionFormat(direct.question)).toBe('direct');
+  });
+});
+
+describe('Inglés médico (B13, 1.5 y 1.6 del plan de B13)', () => {
+  const SOURCE = '[Prueba] Texto simulado';
+  const URL = 'https://example.org/texto';
+  const REFERENCE = `Fuente del texto. ${SOURCE}. CC BY. ${URL}`;
+  // Un renglón en inglés. Texto, pregunta y opciones en inglés, justificación y explicación en español
+  const ENGLISH: Cells = {
+    ...BASE,
+    [HEADERS.branch]: 'Inglés médico',
+    [HEADERS.topic]: 'Comprensión de lectura',
+    [HEADERS.subtopic]: 'Pediatría',
+    [HEADERS.task]: '',
+    [HEADERS.polarity]: '',
+    [HEADERS.vignette]: '[Prueba] Simulated passage, not medical content.',
+    [HEADERS.prompt]: '[Prueba] Which statement does the passage support?',
+    [SHEET_HEADERS.language]: 'Inglés',
+    [SHEET_HEADERS.passageSource]: SOURCE,
+    [SHEET_HEADERS.passageLicense]: 'CC BY',
+    [SHEET_HEADERS.passageUrl]: URL,
+  };
+  const english = (overrides: Cells = {}) => row(overrides, ENGLISH);
+  const onlyEnglish = (overrides: Cells = {}) => {
+    const first = convert(english(overrides)).rows[0];
+    if (!first) throw new Error('Sin renglón');
+    return first;
+  };
+
+  it('un renglón en inglés completo entra con la fuente como primera referencia y data_interpretation', () => {
+    const result = onlyEnglish();
+    expect(result.problems).toEqual([]);
+    expect(result.incomplete).toEqual([]);
+    expect(result.notices).toEqual(['structure_auto']);
+    expect(result.question).toMatchObject({
+      branch: 'medical_english',
+      topic: 'reading_comprehension',
+      subtopic: 'english_pediatrics',
+      language: 'en',
+      task: 'data_interpretation',
+      polarity: 'affirmative',
+      structureDeclared: false,
+      refs: [REFERENCE, '[Prueba] Guía simulada uno', '[Prueba] Guía simulada dos'],
+    });
+    expect(parsePassageSource((result.question?.refs ?? []).map((title) => ({ title })))).toEqual({
+      ok: true,
+      source: { title: SOURCE, license: 'cc_by', url: URL },
+    });
+  });
+
+  it('con la Tarea y la Polaridad escritas no avisa que las detectó solas', () => {
+    const result = onlyEnglish({
+      [HEADERS.task]: 'Diagnóstico',
+      [HEADERS.polarity]: 'Afirmativa',
+    });
+    expect(result.notices).toEqual([]);
+    expect(result.question).toMatchObject({ task: 'diagnosis', structureDeclared: true });
+  });
+
+  it('la polaridad se detecta con las negaciones en inglés y la del médico gana', () => {
+    expect(onlyEnglish().question?.polarity).toBe('affirmative');
+    const negative = onlyEnglish({
+      [HEADERS.prompt]: '[Prueba] Which of these is NOT in the text?',
+    });
+    expect(negative.question?.polarity).toBe('negative');
+    expect(negative.notices).toEqual(['structure_auto']);
+    expect(
+      onlyEnglish({
+        [HEADERS.prompt]: '[Prueba] Which of these is NOT in the text?',
+        [HEADERS.polarity]: 'Afirmativa',
+      }).question?.polarity,
+    ).toBe('affirmative');
+    // Una pregunta en español no se lee con el diccionario en inglés
+    expect(only({ [HEADERS.prompt]: '[Prueba] ¿Cuál de estos es NOT?' }).question?.polarity).toBe(
+      'affirmative',
+    );
+  });
+
+  describe('idioma y rama', () => {
+    it('Idioma vacío en Inglés médico se toma como inglés y avisa', () => {
+      const result = onlyEnglish({ [SHEET_HEADERS.language]: '' });
+      expect(result.problems).toEqual([]);
+      expect(result.question?.language).toBe('en');
+      expect(result.notices).toEqual(['structure_auto', 'language_inferred']);
+    });
+
+    it('Inglés en otra rama y Español en Inglés médico rechazan el renglón', () => {
+      expect(
+        onlyEnglish({
+          [HEADERS.branch]: 'Pediatría',
+          [HEADERS.topic]: 'Neonatología',
+          [HEADERS.subtopic]: 'Ictericia neonatal',
+        }),
+      ).toMatchObject({
+        problems: [{ code: 'language_branch_mismatch', column: 'Idioma', value: 'Inglés' }],
+        question: null,
+      });
+      expect(onlyEnglish({ [SHEET_HEADERS.language]: 'Español' })).toMatchObject({
+        problems: [{ code: 'language_branch_mismatch', column: 'Idioma', value: 'Español' }],
+        question: null,
+      });
+      // Un Idioma desconocido cuenta como español y en Inglés médico tampoco entra
+      expect(onlyEnglish({ [SHEET_HEADERS.language]: 'Francés' })).toMatchObject({
+        problems: [{ code: 'language_branch_mismatch' }],
+        notices: expect.arrayContaining(['language_unknown']) as string[],
+        question: null,
+      });
+    });
+
+    it('con la rama desconocida solo se rechaza por la rama', () => {
+      expect(
+        onlyEnglish({ [HEADERS.branch]: 'Rama inventada' }).problems.map((item) => item.code),
+      ).toEqual(['branch_unknown']);
+    });
+  });
+
+  describe('fuente del texto y licencia', () => {
+    it('sin fuente queda el pendiente passage_source_missing, después de la explicación y las referencias', () => {
+      const result = onlyEnglish({
+        [SHEET_HEADERS.passageSource]: '',
+        [SHEET_HEADERS.passageLicense]: '',
+        [SHEET_HEADERS.passageUrl]: '',
+      });
+      expect(result.problems).toEqual([]);
+      expect(result.incomplete).toEqual(['passage_source_missing']);
+      expect(result.question?.refs).toEqual([
+        '[Prueba] Guía simulada uno',
+        '[Prueba] Guía simulada dos',
+      ]);
+      const more = onlyEnglish({
+        [SHEET_HEADERS.passageSource]: '',
+        [SHEET_HEADERS.passageLicense]: '',
+        [SHEET_HEADERS.passageUrl]: '',
+        [HEADERS.explanation]: '',
+        [HEADERS.refs]: '',
+        [optionHeaders('C').rationale]: '',
+      });
+      expect(more.incomplete).toEqual([
+        'explanation_missing',
+        'references_missing',
+        'passage_source_missing',
+        'rationale_missing:C',
+      ]);
+    });
+
+    it('una licencia fuera de la lista deja license_not_allowed y conserva lo que escribió el médico', () => {
+      for (const license of ['CC BY-NC', 'CC BY-ND', 'Todos los derechos reservados']) {
+        const result = onlyEnglish({ [SHEET_HEADERS.passageLicense]: license });
+        expect(result.problems, license).toEqual([]);
+        expect(result.incomplete, license).toEqual(['license_not_allowed']);
+        expect(result.question?.refs[0], license).toBe(
+          `Fuente del texto. ${SOURCE}. ${license}. ${URL}`,
+        );
+      }
+    });
+
+    it('licencia vacía, sin enlace o con un enlace que no es https deja passage_source_missing', () => {
+      const variants: Cells[] = [
+        { [SHEET_HEADERS.passageLicense]: '' },
+        { [SHEET_HEADERS.passageUrl]: '' },
+        { [SHEET_HEADERS.passageUrl]: 'http://example.org/texto' },
+        { [SHEET_HEADERS.passageUrl]: 'example.org/texto' },
+        { [SHEET_HEADERS.passageSource]: '' },
+      ];
+      for (const overrides of variants) {
+        const result = onlyEnglish(overrides);
+        expect(result.problems, JSON.stringify(overrides)).toEqual([]);
+        expect(result.incomplete, JSON.stringify(overrides)).toEqual(['passage_source_missing']);
+      }
+    });
+
+    it('el texto propio del equipo no pide título ni enlace', () => {
+      const result = onlyEnglish({
+        [SHEET_HEADERS.passageSource]: '',
+        [SHEET_HEADERS.passageLicense]: 'Texto propio del equipo Studiare',
+        [SHEET_HEADERS.passageUrl]: '',
+      });
+      expect(result.incomplete).toEqual([]);
+      expect(result.question?.refs[0]).toBe('Fuente del texto. Texto propio del equipo Studiare.');
+    });
+
+    it('acepta la licencia como la escribe el médico y la guarda con su nombre exacto', () => {
+      const expected: [string, string][] = [
+        ['cc by', 'CC BY'],
+        ['CC BY 4.0', 'CC BY'],
+        ['cc-by-sa', 'CC BY-SA'],
+        ['cc0', 'CC0'],
+        ['dominio publico', 'Dominio público'],
+        ['public domain', 'Dominio público'],
+      ];
+      for (const [written, label] of expected) {
+        const result = onlyEnglish({ [SHEET_HEADERS.passageLicense]: written });
+        expect(result.incomplete, written).toEqual([]);
+        expect(result.question?.refs[0], written).toBe(
+          `Fuente del texto. ${SOURCE}. ${label}. ${URL}`,
+        );
+      }
+    });
+
+    it('la fuente cuenta como referencia, así que sin Referencias no falta references_missing', () => {
+      const result = onlyEnglish({ [HEADERS.refs]: '' });
+      expect(result.incomplete).toEqual([]);
+      expect(result.question?.refs).toEqual([REFERENCE]);
+    });
+
+    it('una referencia a mano con la forma de la fuente cuenta si las tres columnas vienen vacías', () => {
+      const result = onlyEnglish({
+        [SHEET_HEADERS.passageSource]: '',
+        [SHEET_HEADERS.passageLicense]: '',
+        [SHEET_HEADERS.passageUrl]: '',
+        [HEADERS.refs]: `${REFERENCE};;[Prueba] Guía simulada uno`,
+      });
+      expect(result.incomplete).toEqual([]);
+      expect(result.question?.refs).toEqual([REFERENCE, '[Prueba] Guía simulada uno']);
+    });
+
+    it('recorta el título largo para que la referencia quepa y no deja pendiente', () => {
+      const result = onlyEnglish({ [SHEET_HEADERS.passageSource]: 'Título largo '.repeat(40) });
+      expect(result.problems).toEqual([]);
+      expect(result.incomplete).toEqual([]);
+      const reference = result.question?.refs[0] ?? '';
+      expect(reference.length).toBeLessThanOrEqual(300);
+      expect(reference.endsWith(`. CC BY. ${URL}`)).toBe(true);
+    });
+
+    it('si el enlace no cabe o sobran referencias, rechaza el renglón por el largo', () => {
+      expect(
+        onlyEnglish({ [SHEET_HEADERS.passageUrl]: `https://example.org/${'a'.repeat(290)}` }),
+      ).toMatchObject({
+        problems: [{ code: 'text_too_long', column: 'Fuente del texto' }],
+        question: null,
+      });
+      const ten = Array.from({ length: 10 }, (_, index) => `[Prueba] Guía ${index}`).join(';;');
+      expect(onlyEnglish({ [HEADERS.refs]: ten })).toMatchObject({
+        problems: [{ code: 'text_too_long', column: 'Fuente del texto' }],
+        question: null,
+      });
+    });
+
+    it('los pendientes son los mismos que pide la aprobación (questionRules)', () => {
+      const issuesOf = (overrides: Cells) => {
+        const result = onlyEnglish(overrides);
+        const question = result.question;
+        if (!question) throw new Error('Debió entrar');
+        const issues = versionIssues(
+          {
+            prompt: question.prompt,
+            task: question.task,
+            explanation: question.explanation,
+            refs: question.refs,
+            language: question.language,
+            englishBranch: true,
+            options: question.options.map((option, position) => ({
+              letter: option.letter,
+              position,
+              text: option.text,
+              isCorrect: option.correct,
+              biasTag: option.bias,
+              rationale: option.rationale,
+            })),
+            canonicalPositions: question.options
+              .map((option, position) =>
+                question.canonical.includes(option.letter) ? position : -1,
+              )
+              .filter((position) => position >= 0),
+          },
+          taggableBiasKeys,
+        );
+        expect(issues, JSON.stringify(overrides)).toEqual(result.incomplete);
+      };
+      const variants: Cells[] = [
+        {},
+        {
+          [SHEET_HEADERS.passageSource]: '',
+          [SHEET_HEADERS.passageLicense]: '',
+          [SHEET_HEADERS.passageUrl]: '',
+        },
+        { [SHEET_HEADERS.passageLicense]: 'CC BY-NC' },
+        { [SHEET_HEADERS.passageUrl]: '' },
+        {
+          [HEADERS.refs]: '',
+          [SHEET_HEADERS.passageSource]: '',
+          [SHEET_HEADERS.passageLicense]: '',
+          [SHEET_HEADERS.passageUrl]: '',
+        },
+        {
+          [HEADERS.explanation]: '',
+          [optionHeaders('B').bias]: '',
+          [SHEET_HEADERS.passageLicense]: 'GPL',
+        },
+      ];
+      for (const overrides of variants) issuesOf(overrides);
+    });
+  });
+
+  describe('en español las columnas nuevas se ignoran', () => {
+    it('un renglón en español con fuente, licencia y enlace queda igual que sin ellos', () => {
+      const filled = row({
+        [SHEET_HEADERS.passageSource]: SOURCE,
+        [SHEET_HEADERS.passageLicense]: 'CC BY-NC',
+        [SHEET_HEADERS.passageUrl]: 'no es un enlace',
+      });
+      expect(convert(filled)).toEqual(convert(BASE));
+    });
+
+    it('la huella de un renglón en español no cambia por las columnas nuevas', async () => {
+      const plain = only().question;
+      const filled = only({ [SHEET_HEADERS.passageSource]: SOURCE }).question;
+      if (!plain || !filled) throw new Error('Debieron entrar');
+      expect(await contentHash(canonicalFromSheet(filled))).toBe(
+        await contentHash(canonicalFromSheet(plain)),
+      );
+    });
+
+    it('la huella de un renglón en inglés cambia con su fuente', async () => {
+      const first = onlyEnglish().question;
+      const second = onlyEnglish({ [SHEET_HEADERS.passageLicense]: 'CC0' }).question;
+      if (!first || !second) throw new Error('Debieron entrar');
+      expect(await contentHash(canonicalFromSheet(first))).not.toBe(
+        await contentHash(canonicalFromSheet(second)),
+      );
+    });
+  });
+
+  describe('casos de lectura', () => {
+    const caseRow = (id: string, order: string, overrides: Cells = {}) =>
+      english({
+        [HEADERS.id]: id,
+        [SHEET_HEADERS.caseKey]: 'go-c010',
+        [SHEET_HEADERS.caseOrder]: order,
+        // El texto va completo en el Orden 1. En los demás renglones el caso clínico trae lo que se agrega
+        [HEADERS.vignette]: order === '1' ? (ENGLISH[HEADERS.vignette] ?? '') : '',
+        // Los demás renglones heredan la fuente del Orden 1
+        ...(order === '1'
+          ? {}
+          : {
+              [SHEET_HEADERS.passageSource]: '',
+              [SHEET_HEADERS.passageLicense]: '',
+              [SHEET_HEADERS.passageUrl]: '',
+            }),
+        ...overrides,
+      });
+
+    it('los renglones del caso heredan la fuente del Orden 1 y todos la llevan como primera referencia', () => {
+      const result = convert(
+        caseRow('GO-0001', '1'),
+        caseRow('GO-0002', '2'),
+        caseRow('GO-0003', '3'),
+      );
+      expect(result.rows.map((item) => item.problems)).toEqual([[], [], []]);
+      expect(result.rows.map((item) => item.incomplete)).toEqual([[], [], []]);
+      for (const item of result.rows) {
+        expect(item.question?.refs[0]).toBe(REFERENCE);
+        expect(item.question?.language).toBe('en');
+        expect(item.question?.caseVignette).toBe(ENGLISH[HEADERS.vignette]);
+        expect(item.notices).toEqual(['structure_auto']);
+      }
+    });
+
+    it('la fuente puede venir en otro renglón del caso y los demás la heredan', () => {
+      const result = convert(
+        caseRow('GO-0001', '1', {
+          [SHEET_HEADERS.passageSource]: '',
+          [SHEET_HEADERS.passageLicense]: '',
+          [SHEET_HEADERS.passageUrl]: '',
+        }),
+        caseRow('GO-0002', '2', {
+          [SHEET_HEADERS.passageSource]: SOURCE,
+          [SHEET_HEADERS.passageLicense]: 'CC BY',
+          [SHEET_HEADERS.passageUrl]: URL,
+        }),
+      );
+      expect(result.rows.map((item) => item.question?.refs[0])).toEqual([REFERENCE, REFERENCE]);
+      expect(result.rows.map((item) => item.incomplete)).toEqual([[], []]);
+    });
+
+    it('repetir la misma fuente en todos los renglones no estorba, aunque cambie la forma', () => {
+      const result = convert(
+        caseRow('GO-0001', '1'),
+        caseRow('GO-0002', '2', {
+          [SHEET_HEADERS.passageSource]: ' [PRUEBA] texto simulado ',
+          [SHEET_HEADERS.passageLicense]: 'cc by 4.0',
+          [SHEET_HEADERS.passageUrl]: URL,
+        }),
+      );
+      expect(result.rows.every((item) => item.problems.length === 0)).toBe(true);
+      expect(result.rows.map((item) => item.question?.refs[0])).toEqual([REFERENCE, REFERENCE]);
+    });
+
+    it('dos fuentes distintas en un caso lo rechazan entero con case_inconsistent en la fuente', () => {
+      const result = convert(
+        caseRow('GO-0001', '1'),
+        caseRow('GO-0002', '2', {
+          [SHEET_HEADERS.passageSource]: '[Prueba] Otro texto simulado',
+          [SHEET_HEADERS.passageLicense]: 'CC0',
+          [SHEET_HEADERS.passageUrl]: 'https://example.org/otro',
+        }),
+      );
+      expect(result.rows.map((item) => item.problems)).toEqual([
+        [{ code: 'case_inconsistent', column: 'Fuente del texto' }],
+        [{ code: 'case_inconsistent', column: 'Fuente del texto' }],
+      ]);
+      expect(result.rows.every((item) => item.question === null)).toBe(true);
+    });
+
+    it('un caso con idiomas distintos se rechaza entero y lo dice en la columna Idioma', () => {
+      const result = convert(
+        caseRow('GO-0001', '1'),
+        caseRow('GO-0002', '2', {
+          [HEADERS.branch]: 'Ginecología y obstetricia',
+          [HEADERS.topic]: 'Control prenatal',
+          [HEADERS.subtopic]: 'Diabetes gestacional',
+          [SHEET_HEADERS.language]: 'Español',
+        }),
+      );
+      expect(result.rows.map((item) => item.problems.map((problem) => problem.code))).toEqual([
+        ['case_inconsistent'],
+        ['case_inconsistent'],
+      ]);
+      expect(result.rows[0]?.problems[0]?.column).toBe('Idioma');
+    });
+
+    it('si un renglón del caso se rechaza por el largo de la fuente, el caso no entra partido', () => {
+      const result = convert(
+        caseRow('GO-0001', '1', {
+          [SHEET_HEADERS.passageUrl]: `https://example.org/${'a'.repeat(290)}`,
+        }),
+        caseRow('GO-0002', '2'),
+      );
+      expect(result.rows.every((item) => item.question === null)).toBe(true);
+      expect(result.rows.map((item) => item.problems.map((problem) => problem.code))).toEqual([
+        ['text_too_long'],
+        ['text_too_long'],
+      ]);
+    });
+
+    it('un caso de lectura con una pregunta o con más de tres entra y solo avisa del tamaño', () => {
+      const sizes = (count: number) =>
+        convert(
+          ...Array.from({ length: count }, (_, index) =>
+            caseRow(`GO-000${index + 1}`, String(index + 1)),
+          ),
+        );
+      for (const count of [1, 4, 5]) {
+        const result = sizes(count);
+        expect(
+          result.rows.every((item) => item.problems.length === 0),
+          String(count),
+        ).toBe(true);
+        expect(
+          result.rows.every((item) => item.notices.includes('english_case_size')),
+          String(count),
+        ).toBe(true);
+      }
+      for (const count of [2, 3]) {
+        const result = sizes(count);
+        expect(
+          result.rows.some((item) => item.notices.includes('english_case_size')),
+          String(count),
+        ).toBe(false);
+      }
+    });
+
+    it('una pregunta suelta en inglés es válida y no avisa del tamaño', () => {
+      const result = onlyEnglish();
+      expect(result.notices).not.toContain('english_case_size');
+      expect(result.question?.caseKey).toBeNull();
+      expect(result.question && sheetQuestionFormat(result.question)).toBe('clinical_case');
+    });
+
+    it('un caso en español no avisa del tamaño aunque tenga una sola pregunta', () => {
+      const result = convert(
+        row({
+          [HEADERS.id]: 'GO-0001',
+          [SHEET_HEADERS.caseKey]: 'go-c020',
+          [SHEET_HEADERS.caseOrder]: '1',
+        }),
+      );
+      expect(result.rows[0]?.notices).toEqual([]);
+    });
   });
 });

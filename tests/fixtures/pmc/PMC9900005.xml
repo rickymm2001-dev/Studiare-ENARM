@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [Prueba] Artículo simulado CC0 sin resumen -->
+<pmc-articleset>
+  <article xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+    <front>
+      <article-meta>
+        <article-id pub-id-type="pmcid">PMC9900005</article-id>
+        <title-group><article-title>[Prueba] Article without an abstract</article-title></title-group>
+        <permissions>
+          <license xlink:href="https://creativecommons.org/publicdomain/zero/1.0/"><license-p>[Prueba] CC0.</license-p></license>
+        </permissions>
+      </article-meta>
+    </front>
+  </article>
+</pmc-articleset>

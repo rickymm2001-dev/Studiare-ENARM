@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   branchQuotas,
   buildExam,
+  englishTargetFor,
   examTotalMs,
   scoreExam,
   EXAM_SECONDS_PER_QUESTION,
@@ -347,5 +348,41 @@ describe('calificación del examen', () => {
     const empty = scoreExam({ questions: [], answers: [] });
     expect(empty.accuracy).toBeNull();
     expect(empty.averageMsPerAnswered).toBeNull();
+  });
+});
+
+describe('contratos de B13, paso 0', () => {
+  it('la parte en inglés de un examen corto sigue la proporción de 30 en 280', () => {
+    expect([280, 100, 50, 20].map((size) => englishTargetFor(size))).toEqual([30, 11, 5, 2]);
+    expect(englishTargetFor(0)).toBe(0);
+    expect(englishTargetFor(-10)).toBe(0);
+    expect(englishTargetFor(100, { clinical: 90, english: 10 })).toBe(10);
+    expect(englishTargetFor(100, { clinical: 0, english: 0 })).toBe(0);
+  });
+
+  it('el plan trae su detalle por sección y, sin parte en inglés, todo es clinical', () => {
+    const questions = bank(30);
+    const plan = buildExam({ questions, requested: 40, seed: 'secciones' });
+    expect(plan.sections).toEqual({
+      clinical: { requested: 40, picked: 40, shortfall: 0, secondsPerQuestion: 77 },
+      english: { requested: 0, picked: 0, shortfall: 0, secondsPerQuestion: 77 },
+    });
+    // Lo demás del plan es igual con o sin el detalle y la sección de cada pregunta es opcional
+    const tagged = questions.map((question) => ({ ...question, section: 'clinical' as const }));
+    const again = buildExam({ questions: tagged, requested: 40, seed: 'secciones' });
+    expect(again).toEqual(plan);
+    const short = buildExam({
+      questions: bank(4),
+      requested: 40,
+      seed: 'x',
+      secondsPerQuestion: 60,
+    });
+    expect(short.sections.clinical).toMatchObject({
+      requested: 40,
+      picked: short.questionIds.length,
+      shortfall: short.shortfall,
+      secondsPerQuestion: 60,
+    });
+    expect(short.totalMs).toBe(short.questionIds.length * 60 * 1000);
   });
 });

@@ -1,25 +1,33 @@
 // La siembra de la taxonomía en la base es igual a la de la app (B11, 1.3 del plan de B11). El servidor
 // valida rama, subespecialidad, subtema y etiquetas de sesgo con bank_taxonomy y bank_bias_tags, que
-// siembra 20261023000001_bank_taxonomy.sql. Si alguien cambia topic-taxonomy.json o bias-taxonomy.json
-// sin una migración nueva, esta prueba falla.
+// siembra 20261023000001_bank_taxonomy.sql, y desde B13 20261027000001_english_section.sql agrega el
+// tema de vocabulario. Si alguien cambia topic-taxonomy.json o bias-taxonomy.json sin una migración
+// nueva, esta prueba falla.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { branchSection } from '@/data/schemas/content';
 import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
 
-const migration = readFileSync(
-  resolve(import.meta.dirname, '../../supabase/migrations/20261023000001_bank_taxonomy.sql'),
-  'utf8',
+const migrations = ['20261023000001_bank_taxonomy.sql', '20261027000001_english_section.sql'].map(
+  (name) => readFileSync(resolve(import.meta.dirname, '../../supabase/migrations', name), 'utf8'),
 );
 
+/** Las filas que siembran todas las migraciones con insert en esa tabla, en el orden de las migraciones */
 function insertedRows(table: string): string[][] {
-  const start = migration.indexOf(`insert into public.${table}`);
-  const end = migration.indexOf('on conflict', start);
-  expect(start).toBeGreaterThan(-1);
-  return [...migration.slice(start, end).matchAll(/\(([^()]*)\)/g)]
-    .map((match) => [...(match[1] ?? '').matchAll(/'([^']*)'/g)].map((value) => value[1] ?? ''))
-    .filter((values) => values.length > 0);
+  const rows: string[][] = [];
+  for (const migration of migrations) {
+    const start = migration.indexOf(`insert into public.${table}`);
+    if (start === -1) continue;
+    const end = migration.indexOf('on conflict', start);
+    rows.push(
+      ...[...migration.slice(start, end).matchAll(/\(([^()]*)\)/g)]
+        .map((match) => [...(match[1] ?? '').matchAll(/'([^']*)'/g)].map((value) => value[1] ?? ''))
+        .filter((values) => values.length > 0),
+    );
+  }
+  expect(rows.length, table).toBeGreaterThan(0);
+  return rows;
 }
 
 describe('siembra de la taxonomía en la base', () => {
@@ -40,6 +48,15 @@ describe('siembra de la taxonomía en la base', () => {
     const seeded = insertedRows('bank_bias_tags').map((values) => values[0]);
     const taggable = biasTaxonomy.biases.filter((bias) => bias.taggable).map((bias) => bias.key);
     expect(seeded.sort()).toEqual(taggable.sort());
+  });
+
+  it('el vocabulario médico de B13 lo siembra su propia migración, en la sección english', () => {
+    const own = migrations[1] ?? '';
+    expect(own).toContain("('medical_english', 'medical_vocabulary', 'english_terms', 'english')");
+    const seeded = insertedRows('bank_taxonomy');
+    expect(
+      seeded.filter((values) => values[1] === 'medical_vocabulary').map((v) => v.join('|')),
+    ).toEqual(['medical_english|medical_vocabulary|english_terms|english']);
   });
 
   it('Salud pública e Inglés médico ya están en la base con su sección', () => {

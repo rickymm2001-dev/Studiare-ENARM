@@ -28,7 +28,8 @@ psql_run -f "$here/grants.sql"
 # para probar ese orden y que no pise party_open, sync_push_records ni user_plan. Las de B10 van después
 # porque 20261019000001 trae otra versión de apply_payment_notice. Las de B11 van al final porque cierran
 # las tablas del banco y el tope viejo de preguntas que dejaron las anteriores. Se nombran para que una
-# migración nueva de otro bloque no saque a ninguna de la lista
+# migración nueva de otro bloque no saque a ninguna de la lista. La de Inglés médico de B13 va hasta el final,
+# después de las de B11 y de las de B12, porque redefine bank_version_issues y bank_incomplete_of de B11
 for name in \
   20261017000001_avatar_changed_at \
   20261018000001_party_cloud \
@@ -44,7 +45,8 @@ for name in \
   20261023000003_bank_editorial \
   20261023000004_bank_sync \
   20261023000005_deck_catalog \
-  20261023000006_bank_sync_cron; do
+  20261023000006_bank_sync_cron \
+  20261027000001_english_section; do
   psql_run -f "$here/../migrations/$name.sql"
 done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
@@ -85,3 +87,7 @@ psql_run -f "$here/bank_editorial_test.sql"
 psql_run -f "$here/physician_pay_test.sql"
 psql_run -f "$here/bank_sync_test.sql"
 psql_run -f "$here/deck_catalog_test.sql"
+# La prueba de Inglés médico compara la función SQL de la fuente del texto con passageSource.ts sobre la misma
+# lista de casos, y psql la lee de esta ruta
+export PASSAGE_SOURCES_FILE="$here/../../tests/fixtures/passage-sources.json"
+psql_run -f "$here/english_section_test.sql"

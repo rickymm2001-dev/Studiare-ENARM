@@ -34,6 +34,7 @@ export const SYNC_PROBLEM_CODES = [
   'canonical_invalid',
   'template_placeholder',
   'case_inconsistent',
+  'language_branch_mismatch',
 ] as const satisfies readonly SyncProblemCode[];
 
 /** Todos los avisos del contrato y los que solo pone la base */
@@ -49,6 +50,8 @@ export const SYNC_NOTICE_CODES = [
   'author_is_reviewer',
   'case_rows_apart',
   'language_unknown',
+  'language_inferred',
+  'english_case_size',
   'not_ready',
   ...SERVER_NOTICE_CODES,
 ] as const satisfies readonly (SyncNoticeCode | ServerNoticeCode)[];

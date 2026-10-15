@@ -82,6 +82,11 @@ export const SHEET_HEADERS = {
   author: 'Autor',
   reviewer: 'Revisor',
   language: 'Idioma',
+  // Solo se leen en las preguntas en inglés, con la fuente y la licencia del texto (B13, 1.5 del plan de
+  // B13). En español se ignoran, así ningún renglón de antes cambia
+  passageSource: 'Fuente del texto',
+  passageLicense: 'Licencia del texto',
+  passageUrl: 'Enlace del texto',
 } as const;
 
 /** Lo que escriben los médicos en Sesgo cuando no hay sesgo. En la correcta cuenta como vacío */
@@ -96,8 +101,17 @@ export const SHEET_STATUS_LABELS = {
 /** Lo que se ignora en Estado con un aviso (PC 7.2) */
 export const SHEET_APPROVED_LABELS = ['Aprobado', 'Aprobada'] as const;
 
-/** Valores de la columna Idioma. Sin valor es español */
+/** Valores de la columna Idioma. Sin valor es español, y en Inglés médico es inglés */
 export const LANGUAGE_LABELS = { es: 'Español', en: 'Inglés' } as const;
+
+/**
+ * Un caso de lectura en inglés trae dos o tres preguntas, como en el ENARM. Otro número no rechaza nada
+ * (D-080), solo avisa con english_case_size
+ */
+export const ENGLISH_CASE_SIZES = { min: 2, max: 3 } as const;
+
+/** La tarea de una pregunta en inglés cuando nadie la elige. Es la misma de ENGLISH_DEFAULT_TASK en structure.ts */
+export const ENGLISH_DEFAULT_TASK_KEY = 'data_interpretation';
 
 /** Límites de texto del esquema del banco (src/data/schemas/bank.ts). Pasarlos rechaza el renglón */
 export const TEXT_LIMITS = {
@@ -148,6 +162,8 @@ export interface TaxonomyTopic {
 export interface TaxonomyBranch {
   key: string;
   name: string;
+  /** clinical son los 250 en español e english los 30 de inglés. Sin el campo es clinical (B11). Es texto porque la copia generada para bank-sync lee el JSON como módulo */
+  section?: string | undefined;
   topics: TaxonomyTopic[];
 }
 export interface BiasInfo {

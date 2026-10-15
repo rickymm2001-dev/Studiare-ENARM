@@ -7,6 +7,14 @@ import { QuestionTaskSchema } from './bank';
 /** Estado de revisión de un archivo de contenido escrito por Claude */
 export const ReviewStatusSchema = z.enum(['pending_physician_review', 'physician_reviewed']);
 
+/** Una negación del diccionario, con su patrón y qué tipo de marca es */
+const NegationEntrySchema = z.strictObject({
+  id: z.string().min(1),
+  pattern: z.string().min(1),
+  /** Qué tipo de marca es, para explicarlo al alumno */
+  kind: z.enum(['negation', 'exception', 'false_statement', 'least_likely', 'contraindication']),
+});
+
 /** Diccionario del etiquetador de estructura (7.5, 13.2) */
 export const StructureDictionarySchema = z.strictObject({
   version: z.int().min(1),
@@ -15,24 +23,20 @@ export const StructureDictionarySchema = z.strictObject({
    * Negaciones y excepciones. Cada patrón es una expresión regular sin acentos y en minúsculas,
    * porque el texto se normaliza antes de buscar. Se envuelve con límites de palabra
    */
-  negations: z
-    .array(
-      z.strictObject({
-        id: z.string().min(1),
-        pattern: z.string().min(1),
-        /** Qué tipo de marca es, para explicarlo al alumno */
-        kind: z.enum([
-          'negation',
-          'exception',
-          'false_statement',
-          'least_likely',
-          'contraindication',
-        ]),
-      }),
-    )
-    .min(1),
+  negations: z.array(NegationEntrySchema).min(1),
   /** Frases que contienen una negación pero no vuelven negativa la pregunta, como al menos o si no */
   falsePositives: z.array(z.string().min(1)),
+  /**
+   * Lo mismo para las preguntas en inglés de Inglés médico (B13, 2.3 del plan de B13), con las mismas
+   * reglas de los patrones. Sin el bloque, el inglés no resalta nada. Las tareas no tienen versión en
+   * inglés, porque la tarea por omisión de una pregunta en inglés es data_interpretation
+   */
+  english: z
+    .strictObject({
+      negations: z.array(NegationEntrySchema).min(1),
+      falsePositives: z.array(z.string().min(1)),
+    })
+    .optional(),
   /** Tareas por orden de prioridad. Gana la primera que aparezca en la frase de la pregunta */
   tasks: z
     .array(

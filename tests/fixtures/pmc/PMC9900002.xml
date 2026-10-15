@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [Prueba] Artículo simulado con licencia que no permite uso comercial -->
+<pmc-articleset>
+  <article xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+    <front>
+      <journal-meta><journal-title-group><journal-title>[Prueba] Journal of Simulated Things</journal-title></journal-title-group></journal-meta>
+      <article-meta>
+        <article-id pub-id-type="pmcid">PMC9900002</article-id>
+        <title-group><article-title>[Prueba] Article with a non commercial license</article-title></title-group>
+        <permissions>
+          <license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by-nc/4.0/">
+            <license-p>[Prueba] Non commercial.</license-p>
+          </license>
+        </permissions>
+        <abstract><p>[Prueba] Simulated abstract.</p></abstract>
+      </article-meta>
+    </front>
+  </article>
+</pmc-articleset>

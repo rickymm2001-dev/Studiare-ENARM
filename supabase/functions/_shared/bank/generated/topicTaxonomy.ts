@@ -2,7 +2,7 @@
 // original y corre npm run bank:shared.
 
 export const topicTaxonomy = {
-  version: 3,
+  version: 4,
   status: 'pending_physician_review',
   weightsProvisional: true,
   weightsSource: 'Plan del cambio, sección 6, 2026-10-12',
@@ -1514,6 +1514,18 @@ export const topicTaxonomy = {
             {
               key: 'english_public_health',
               name: 'Salud pública',
+            },
+          ],
+        },
+        {
+          key: 'medical_vocabulary',
+          name: 'Vocabulario médico',
+          weight: 1,
+          baseTopic: null,
+          subtopics: [
+            {
+              key: 'english_terms',
+              name: 'Términos médicos',
             },
           ],
         },
