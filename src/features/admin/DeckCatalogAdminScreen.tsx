@@ -70,7 +70,10 @@ export function DeckCatalogAdminScreen() {
       />
       {linked ? (
         <>
-          <UploadCard onUploaded={catalog.reload} />
+          <UploadCard
+            entries={catalog.state.status === 'ready' ? catalog.state.value : []}
+            onUploaded={catalog.reload}
+          />
           <Card aria-labelledby="mazos-lista" className="flex flex-col gap-3">
             <CardHeader>
               <CardTitle id="mazos-lista">{text.list}</CardTitle>
@@ -268,7 +271,14 @@ function proposedKey(notes: readonly PackNote[], fileName: string): string {
   return paco?.key ?? subjectKeyOf(fileName.replace(/\.[^.]+$/, '')).slice(0, 48);
 }
 
-function UploadCard({ onUploaded }: { onUploaded: () => void }) {
+function UploadCard({
+  entries,
+  onUploaded,
+}: {
+  /** Los mazos que ya están en el catálogo, para precargar su licencia, su nota y su crédito */
+  entries: readonly DeckAdminEntry[];
+  onUploaded: () => void;
+}) {
   const upload = text.upload;
   const [phase, setPhase] = useState<UploadPhase>({ kind: 'idle' });
   const [error, setError] = useState('');
@@ -279,6 +289,20 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
   const [author, setAuthor] = useState('');
   const [license, setLicense] = useState<'own' | 'third_party'>('third_party');
   const [note, setNote] = useState('');
+
+  /**
+   * Un mazo que ya está en el catálogo conserva su licencia, su nota y su crédito. Otra nota pediría
+   * que el dueño confirme otra vez, y un mazo de terceros solo lo pasa a propio el dueño (A1 y M1)
+   */
+  const fillFromCatalog = (key: string) => {
+    const entry = entries.find((item) => item.deckKey === key);
+    if (!entry) return;
+    setName(entry.name);
+    setDescription(entry.description);
+    setAuthor(entry.author);
+    setLicense(entry.license);
+    setNote(entry.authorizationNote ?? '');
+  };
 
   const pick = async (file: File | undefined) => {
     if (!file) return;
@@ -309,6 +333,7 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
       setName(paco?.name ?? file.name.replace(/\.[^.]+$/, '').slice(0, 120));
       setDescription(paco?.description ?? '');
       setAuthor(paco ? 'Paco' : '');
+      fillFromCatalog(key);
       setPhase({
         kind: 'ready',
         fileName: file.name,
@@ -390,7 +415,13 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
       onUploaded();
     } catch (caught) {
       setPhase(ready);
-      setError(caught instanceof EditorialError ? bankErrorText(caught) : upload.failed);
+      setError(
+        caught instanceof EditorialError
+          ? caught.detail === 'license_owner_only'
+            ? upload.licenseOwnerOnly
+            : bankErrorText(caught)
+          : upload.failed,
+      );
     }
   };
 
@@ -440,7 +471,9 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
               hint={upload.keyHint}
               value={deckKey}
               onChange={(event) => {
-                setDeckKey(event.target.value.trim().toLowerCase());
+                const key = event.target.value.trim().toLowerCase();
+                setDeckKey(key);
+                fillFromCatalog(key);
               }}
             />
             <TextField

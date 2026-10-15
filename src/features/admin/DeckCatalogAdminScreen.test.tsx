@@ -23,11 +23,37 @@ vi.mock('@/data/cloud/client', () => ({
   loadCloud: () => Promise.resolve(holder.cloud),
 }));
 
+// El .apkg se abre en el worker. Aquí llega ya leído, con dos notas simuladas de un submazo
+vi.mock('@/workers/importClient', () => ({
+  parseFileInWorker: () =>
+    Promise.resolve({
+      ok: true,
+      parsed: {
+        source: 'apkg',
+        notes: [1, 2].map((n) => ({
+          guid: `guid-${String(n)}`,
+          kind: 'basic',
+          front: `[Prueba] Frente ${String(n)}`,
+          back: `[Prueba] Reverso ${String(n)}`,
+          html: true,
+          tags: ['Prueba::Uno'],
+          deckPath: ['Prueba', 'Uno'],
+          position: n,
+        })),
+      },
+    }),
+}));
+vi.mock('@/data/import/zip', () => ({ readZip: () => ({}) }));
+
 const text = bankAdminText.decks;
 const AT = '2026-10-14T15:00:00.000Z';
 
-function fakeCloud(): { calls: [string, unknown][] } {
-  const state = { calls: [] as [string, unknown][], confirmed: false };
+function fakeCloud(options: { note?: string } = {}): { calls: [string, unknown][] } {
+  const state = {
+    calls: [] as [string, unknown][],
+    confirmed: false,
+    note: options.note ?? null,
+  };
   holder.cloud = {
     rpc: (name: string, args: unknown) => {
       state.calls.push([name, args]);
@@ -40,7 +66,7 @@ function fakeCloud(): { calls: [string, unknown][] } {
               author: 'Paco',
               description: '',
               license: 'third_party',
-              authorizationNote: null,
+              authorizationNote: state.note,
               authorizationConfirmedAt: state.confirmed ? AT : null,
               status: 'draft',
               publishedVersion: null,
@@ -65,6 +91,14 @@ function fakeCloud(): { calls: [string, unknown][] } {
           data: null,
           error: { code: state.confirmed ? 'BK011' : 'BK010', details: null },
         });
+      }
+      if (name === 'admin_deck_catalog_register') {
+        const manifest = (args as { p_manifest: { license: string } }).p_manifest;
+        return Promise.resolve(
+          manifest.license === 'own'
+            ? { data: null, error: { code: '42501', details: 'license_owner_only' } }
+            : { data: null, error: { code: '22023', details: null } },
+        );
       }
       if (name === 'owner_confirm_deck_authorization') {
         state.confirmed = true;
@@ -166,5 +200,31 @@ describe('Catálogo de mazos', () => {
     expect(await within(refreshed).findByRole('alert')).toHaveTextContent(
       bankAdminText.errors.BK011 ?? '',
     );
+  });
+
+  it('al volver a subir un mazo precarga su licencia y su nota, y pasarlo a propio es solo del dueño', async () => {
+    // El mazo ya está en el catálogo con la nota de su autorización
+    const state = fakeCloud({ note: '[Prueba] Nota del dueño' });
+    const typing = userEvent.setup();
+    showScreen();
+    await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    await typing.upload(
+      screen.getByLabelText(text.upload.file),
+      new File([new Uint8Array([1, 2, 3])], 'paco-pediatria.apkg'),
+    );
+    const key = await screen.findByLabelText(text.upload.key);
+    await typing.clear(key);
+    await typing.type(key, 'paco-pediatria');
+    expect(screen.getByLabelText(text.upload.name, { exact: true })).toHaveValue(
+      'Pediatría de Paco',
+    );
+    expect(screen.getByLabelText(text.upload.license)).toHaveValue('third_party');
+    expect(screen.getByLabelText(text.upload.note)).toHaveValue('[Prueba] Nota del dueño');
+
+    await typing.selectOptions(screen.getByLabelText(text.upload.license), 'own');
+    await typing.click(screen.getByRole('button', { name: text.upload.register }));
+    const card = screen.getByRole('region', { name: text.upload.title });
+    expect(await within(card).findByRole('alert')).toHaveTextContent(text.upload.licenseOwnerOnly);
+    expect(state.calls.map(([name]) => name)).toContain('admin_deck_catalog_register');
   });
 });

@@ -18,8 +18,12 @@
 -- Licencias. Un mazo propio (own) se publica cuando están sus archivos. Uno de terceros (third_party)
 -- necesita la nota de su autorización escrita y que el dueño la confirme. Sin eso, publicar responde
 -- BK010. Si el admin cambia la licencia o la nota, la confirmación se pierde y el dueño vuelve a revisar.
+-- Solo el dueño pasa un mazo de terceros a propio (42501), así nadie se salta su confirmación. Bajar un
+-- mazo de terceros, o verlo en la lista del alumno, pide además la autorización confirmada.
 --
--- Es idempotente y no lleva delete ni drop (D-113). Se corre después de 20261023000004_bank_sync.sql.
+-- Es idempotente y no lleva drop. Al final trae una Sección con delete, la versión de B11 de
+-- delete_my_data, que va igual en supabase/manual/banco-b11.sql para pegarla a mano (D-113). Se corre
+-- después de 20261023000004_bank_sync.sql.
 
 -- ===================================================================== Bucket
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
@@ -145,7 +149,7 @@ language sql stable security definer set search_path = public, pg_temp as $$
 $$;
 
 -- La usa la política deck_catalog_select. Plan de pago o equipo, dispositivo activo y un archivo de la
--- versión publicada de un mazo publicado
+-- versión publicada de un mazo publicado, propio o de terceros con la autorización confirmada
 create or replace function public.deck_catalog_can_read(p_object_name text) returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
   select coalesce((
@@ -157,6 +161,7 @@ language sql stable security definer set search_path = public, pg_temp as $$
         select 1 from public.deck_catalog d
         join public.deck_catalog_versions v on v.deck_key = d.deck_key and v.version = d.published_version
         where d.deck_key = p.deck_key and d.status = 'published' and v.version = p.version and v.status = 'published'
+          and (d.license = 'own' or d.authorization_confirmed_at is not null)
       )
     from public.deck_catalog_path(p_object_name) p
   ), false)
@@ -297,7 +302,8 @@ begin
 end;
 $$;
 
--- Los mazos publicados con sus submazos y tamaños. Gratis los ve con canDownload false y la vista previa
+-- Los mazos publicados con sus submazos y tamaños. Gratis los ve con canDownload false y la vista previa.
+-- Uno de terceros solo sale con la autorización confirmada por el dueño
 create or replace function public.deck_catalog_list() returns jsonb
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 begin
@@ -328,7 +334,8 @@ begin
             where s.deck_key = d.deck_key and s.version = d.published_version), '[]'::jsonb),
           'preview', d.preview) order by d.name, d.deck_key)
       from public.deck_catalog d
-      where d.status = 'published' and d.published_version is not null), '[]'::jsonb)
+      where d.status = 'published' and d.published_version is not null
+        and (d.license = 'own' or d.authorization_confirmed_at is not null)), '[]'::jsonb)
   );
 end;
 $$;
@@ -360,7 +367,9 @@ $$;
 
 -- ===================================================================== Del admin
 -- Revisa el manifiesto como DeckManifestSchema, crea la versión en subida y devuelve dónde subir cada
--- archivo. Una versión anterior que se quedó en subida pasa a retirada, así solo hay una abierta
+-- archivo. Una versión anterior que se quedó en subida pasa a retirada, así solo hay una abierta. Pasar
+-- un mazo de terceros a propio es solo del dueño (42501 con detail license_owner_only), porque un mazo
+-- propio se publica sin su confirmación
 create or replace function public.admin_deck_catalog_register(p_manifest jsonb) returns jsonb
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
@@ -375,6 +384,12 @@ begin
   end if;
 
   perform pg_advisory_xact_lock(hashtextextended('deck-catalog:' || v_key, 0));
+  if v_license = 'own' and public.current_app_role() <> 'owner' and exists (
+    select 1 from public.deck_catalog where deck_key = v_key and license = 'third_party'
+  ) then
+    raise exception 'Solo el dueño pasa un mazo de terceros a propio'
+      using errcode = '42501', detail = 'license_owner_only';
+  end if;
   insert into public.deck_catalog as d (deck_key, name, description, author, license, authorization_note)
     values (v_key, p_manifest ->> 'name', coalesce(p_manifest ->> 'description', ''), p_manifest ->> 'author',
       v_license, v_note)

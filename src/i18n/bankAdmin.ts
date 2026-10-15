@@ -424,6 +424,8 @@ export const bankAdminText = {
       uploading: (done: number, total: number) => `Subiendo ${num(done)} de ${num(total)} archivos`,
       uploaded: 'La versión quedó subida. Revísala y publícala abajo.',
       failed: 'No se pudo subir. Intenta de nuevo, los archivos ya subidos no se repiten.',
+      licenseOwnerOnly:
+        'Este mazo es de terceros. Solo el dueño puede pasarlo a propio, porque uno propio se publica sin su confirmación.',
       invalid: 'Revisa la clave, el nombre, el autor y, si es de terceros, la autorización.',
       size: (bytes: number) =>
         bytes >= 1_000_000

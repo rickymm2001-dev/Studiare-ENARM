@@ -62,6 +62,18 @@ exception when insufficient_privilege then
   return false;
 end $$;
 
+-- El detail del error con el que falla una sentencia, o null si no falla
+create or replace function pg_temp.fails_detail(stmt text) returns text language plpgsql as $$
+declare
+  v_detail text;
+begin
+  execute stmt;
+  return null;
+exception when others then
+  get stacked diagnostics v_detail = pg_exception_detail;
+  return v_detail;
+end $$;
+
 create or replace function pg_temp.visible() returns bigint language sql as $$
   select count(*) from storage.objects where bucket_id = 'deck-catalog'
 $$;
@@ -322,13 +334,40 @@ select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_retir
 select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","publishedVersion":2,"versions":[{"version":4,"status":"uploading","files":1,"uploaded":0},{"version":2,"status":"published","files":1,"uploaded":1}]}]',
   'DC1. El resumen del admin');
 select pg_temp.as_user(:'p1');
-select pg_temp.expect(pg_temp.visible() = 1, 'DC1. Leyó un mazo retirado');
+-- paco-gyo es de terceros y su nota nueva espera al dueño, así que tampoco se lee (M1 de la revisión)
+select pg_temp.expect(not exists (select 1 from storage.objects where bucket_id = 'deck-catalog' and name like 'studiare-urg/%'),
+  'DC1. Leyó un mazo retirado');
+select pg_temp.expect(pg_temp.visible() = 0, 'DC1. Leyó un mazo de terceros que espera la confirmación del dueño');
+select pg_temp.expect(not (public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo"}]'),
+  'DC1. La lista mostró un mazo de terceros que espera la confirmación del dueño');
 select pg_temp.as_user(:'m1');
 select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_overview()') = '42501'
   and pg_temp.fails_with('select public.admin_deck_catalog_retire(''paco-gyo'')') = '42501', 'DC1. Una médica usó funciones del admin');
 commit;
 
+-- Solo el dueño pasa un mazo de terceros a propio, porque uno propio se publica sin su confirmación
+-- (A1 de la revisión)
+begin;
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_register(pg_temp.manifest(''paco-gyo'', ''own'', null))') = '42501',
+  'DC2. El admin pasó un mazo de terceros a propio');
+select pg_temp.expect(pg_temp.fails_detail('select public.admin_deck_catalog_register(pg_temp.manifest(''paco-gyo'', ''own'', null))')
+  = 'license_owner_only', 'DC2. El 42501 no dice license_owner_only para la pantalla');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","license":"third_party"}]',
+  'DC2. El mazo dejó de ser de terceros');
+select pg_temp.as_user(:'owner');
+select pg_temp.expect((public.admin_deck_catalog_register(pg_temp.manifest('paco-gyo', 'own', null)) ->> 'status') = 'uploading',
+  'DC2. El dueño no pudo registrarlo como propio');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","license":"own"}]',
+  'DC2. El dueño no pudo pasarlo a propio');
+rollback;
+
 -- ===================================================================== DC4. Lista y bajadas
+-- El dueño confirma la nota nueva y paco-gyo vuelve a la lista
+begin;
+select pg_temp.as_user(:'owner');
+select public.owner_confirm_deck_authorization('paco-gyo', '[Prueba] Otra nota');
+commit;
 begin;
 select pg_temp.as_user(:'f1');
 select public.deck_catalog_list() as free_list \gset

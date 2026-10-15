@@ -2035,6 +2035,14 @@ const adminDeckCatalogRegister: Handler = (store, caller, args) => {
   const trimmed = manifest.authorizationNote?.trim() ?? '';
   const note = trimmed === '' ? null : trimmed;
   const existing = store.decks.get(manifest.deckKey);
+  // Solo el dueño pasa un mazo de terceros a propio, como admin_deck_catalog_register
+  if (
+    existing?.license === 'third_party' &&
+    manifest.license === 'own' &&
+    caller.role !== 'owner'
+  ) {
+    raise('42501', 'Solo el dueño pasa un mazo de terceros a propio', 'license_owner_only');
+  }
   const sameAuthorization =
     existing?.license === manifest.license && existing.authorizationNote === note;
   const deck: FakeDeck = existing ?? {
