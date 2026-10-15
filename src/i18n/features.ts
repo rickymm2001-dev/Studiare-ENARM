@@ -11,6 +11,8 @@ export const branchNames: Record<string, string> = {
   general_surgery: 'Cirugía general',
   family_medicine: 'Medicina familiar',
   emergency_medicine: 'Urgencias',
+  public_health: 'Salud pública',
+  medical_english: 'Inglés médico',
 };
 
 export const plural = (n: number, one: string, many: string) =>
@@ -409,6 +411,8 @@ export const featureText = {
       owner: 'La cuenta del dueño de la plataforma no se puede borrar desde aquí.',
       active_subscription:
         'Tienes una suscripción con tarjeta activa. Cancélala primero en Suscripción, Administrar suscripción, porque eliminar la cuenta no detiene los cobros. No se borró nada.',
+      physician_reviews:
+        'Tu cuenta tiene revisiones registradas para pagos. Pide a Ricardo que la cierre. No se borró nada.',
       no_session: 'Tu sesión en la nube venció. Entra otra vez con tu correo.',
       network: 'No hay conexión con el servidor. No se borró nada. Inténtalo de nuevo.',
       unknown: 'El servidor no pudo borrar tus datos. No se borró nada. Inténtalo más tarde.',
@@ -1226,34 +1230,6 @@ export const featureText = {
     unsaved: 'Tienes cambios sin guardar.',
     saved: 'Apariencia guardada.',
     discarded: 'Volvimos a lo que tenías guardado.',
-  },
-  bank: {
-    listTitle: 'Preguntas',
-    search: 'Buscar en la pregunta o el caso',
-    all: 'Todas',
-    statusLabel: 'Estado',
-    pages: 'Páginas del banco',
-    previous: 'Anterior',
-    next: 'Siguiente',
-    pageOf: (page: number, total: number) => `Página ${page} de ${total}`,
-    physicianHint: 'Las preguntas que te asignaron para revisar.',
-    adminHint: 'Todo el banco, con a quién está asignada cada pregunta.',
-    emptyTitle: 'Todavía no tienes preguntas asignadas',
-    emptyBody: 'Un admin te asignará subespecialidades para revisar.',
-    count: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
-    branchHint: 'Próximamente podrás editar, etiquetar y aprobar cada pregunta desde aquí.',
-    difficulty: (n: number) => `Dificultad ${n}`,
-    status: {
-      draft: 'Borrador',
-      in_review: 'En revisión',
-      approved: 'Aprobada',
-      rejected: 'Rechazada',
-    },
-    statsLabel: 'Preguntas por estado',
-    assignedTo: (names: string) => `Asignada a ${names}`,
-    unassigned: 'Sin asignar',
-    importBank: 'Importar banco',
-    more: (n: number) => `Y ${n} más`,
   },
   admin: {
     stats: {

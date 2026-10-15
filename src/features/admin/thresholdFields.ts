@@ -1,6 +1,8 @@
 // Los umbrales que el admin puede cambiar desde la pantalla 25. Son los de la sección 12 de la
 // especificación, más la retención deseada. El resto de los números de configuración de los motores
-// no se editan desde la interfaz.
+// no se editan desde la interfaz. Desde B11 el doble etiquetado del 20 % ya no existe, porque cada
+// revisión etiqueta a ciegas todos sus distractores (8.9 del plan de B11), así que doubleLabelShare
+// sigue en el esquema por compatibilidad y ya no se muestra.
 import type { Thresholds } from '@/config/thresholds';
 
 export interface ThresholdField {
@@ -18,7 +20,6 @@ export const THRESHOLD_FIELDS: readonly ThresholdField[] = [
   { group: 'sampling', key: 'nonFunctionalExposures', kind: 'int', step: 1 },
   { group: 'bias', key: 'minTaggedErrors', kind: 'int', step: 1 },
   { group: 'bias', key: 'minKappaForBiasLanguage', kind: 'float', step: 0.05 },
-  { group: 'bias', key: 'doubleLabelShare', kind: 'float', step: 0.05 },
   { group: 'bias', key: 'minLabeledPairs', kind: 'int', step: 1 },
   { group: 'topics', key: 'maxIntervalWidth', kind: 'float', step: 0.01 },
   { group: 'structure', key: 'minResponsesPerCategory', kind: 'int', step: 1 },

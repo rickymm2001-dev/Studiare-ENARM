@@ -16,6 +16,8 @@ import { vocabularyText } from './vocabulary';
 import { weekPlanText } from './weekPlan';
 import { b7ExtrasText } from './b7extras';
 import { freePlanText } from './freePlan';
+import { cloudBankText } from './cloudBank';
+import { bankAdminNavText } from './bankAdminNav';
 
 interface ScreenText {
   title: string;
@@ -94,10 +96,8 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Party',
     description: 'Grupos con código de invitación, tabla semanal, retos de grupo y duelos.',
   },
-  adminUsers: {
-    title: 'Usuarios',
-    description: 'Roles y asignaciones de preguntas a médicos.',
-  },
+  // Su descripción vive en admin.ts, que carga la pantalla (B11)
+  adminUsers: { title: 'Usuarios', description: '' },
   settings: {
     title: 'Configuración',
     description: 'Tu perfil y tu plan, cómo se ve la app y tu privacidad, en una sola página.',
@@ -106,34 +106,14 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Suscripción',
     description: 'Planes y pago simulados. Nada aquí cobra dinero real.',
   },
-  questionBank: {
-    title: 'Banco de preguntas',
-    description:
-      'Preguntas con filtros, estado de calibración y alertas de distractores que no funcionan.',
-  },
-  questionEditor: {
-    title: 'Editor de pregunta',
-    description:
-      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias y versiones.',
-  },
-  agreement: {
-    title: 'Acuerdo del etiquetado',
-    description: 'Cola de doble etiquetado y tablero de acuerdo entre médicos con kappa.',
-  },
-  aiDrafts: {
-    title: 'Borradores de IA',
-    description:
-      'Preguntas reestructuradas, tarjetas para mazos públicos y consejos que esperan tu revisión.',
-  },
-  contentReports: {
-    title: 'Reportes de contenido',
-    description: 'Errores de contenido que reportan los alumnos.',
-  },
-  bankImport: {
-    title: 'Importar banco',
-    description:
-      'Importa el banco desde CSV o JSON con una plantilla y un reporte de errores por fila.',
-  },
+  // Las pantallas del médico dicen su descripción desde physician.ts, que cargan perezosas, para no
+  // pasar del presupuesto del JavaScript inicial (B11)
+  questionBank: { title: 'Banco de preguntas', description: '' },
+  questionEditor: { title: 'Editor de pregunta', description: '' },
+  agreement: { title: 'Acuerdo del etiquetado', description: '' },
+  aiDrafts: { title: 'Borradores de IA', description: '' },
+  contentReports: { title: 'Reportes de contenido', description: '' },
+  bankImport: { title: 'Importar banco', description: '' },
   aiCosts: {
     title: 'Costos de IA',
     description: 'Costo acumulado, costo por motor, proyección por alumno y bitácora de llamadas.',
@@ -142,15 +122,14 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Datos de demostración',
     description: 'Genera, borra y ajusta alumnos simulados, y regenera al alumno de la demo.',
   },
+  // Banco en la nube (B11, 4.3 del plan de B11)
+  ...bankAdminNavText.screens,
   adminBilling: {
     title: 'Pagos',
     description:
       'Lugares Fundador, pruebas y pases, solicitudes de factura, códigos de influencer y pagos recientes.',
   },
-  adminSettings: {
-    title: 'Configuración',
-    description: 'Umbrales, pesos del ENARM, precios y modelos por motor.',
-  },
+  adminSettings: { title: 'Configuración', description: '' },
   privacyNotice: {
     title: 'Aviso de privacidad',
     description:
@@ -351,6 +330,8 @@ export const t = {
   settingsPage: settingsPageText,
   // Candados del plan Gratis con su vista previa (B8 del plan del cambio)
   freePlan: freePlanText,
+  // Banco en la nube y Google Sheets (B11 del plan del cambio). Del alumno y del admin
+  cloudBank: cloudBankText,
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

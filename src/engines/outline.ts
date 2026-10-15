@@ -33,22 +33,19 @@
  * a Conócete (isFreeSubjectNote). Sí cuenta en el tiempo de estudio, la racha y la meta del día.
  */
 import { clozeHoles, parseCloze } from './cloze';
+import {
+  countNodes,
+  FREE_SUBJECT_MAX_LENGTH,
+  OUTLINE_LIMITS,
+  outlineDepth,
+  type OutlineNode,
+} from './outlineLimits';
 import { normalizeTags, sanitizeTag, TAG_MAX_LENGTH, TAG_SEPARATOR } from './tagPath';
 
-export interface OutlineNode {
-  id: string;
-  text: string;
-  children: OutlineNode[];
-}
-
-export const OUTLINE_LIMITS = {
-  maxNodes: 2000,
-  maxDepth: 8,
-  /** Igual que el tope de campo de las tarjetas hechas a mano */
-  maxFieldLength: 3000,
-  maxCards: 500,
-  maxTitleLength: 120,
-} as const;
+// Los topes y el tipo del árbol viven en outlineLimits.ts, que el esquema de apuntes usa sin cargar
+// este motor en el JavaScript inicial. Se reexportan para que nada más cambie
+export { countNodes, FREE_SUBJECT_MAX_LENGTH, OUTLINE_LIMITS, outlineDepth };
+export type { OutlineNode };
 
 export type LineMark =
   | { type: 'none' }
@@ -353,16 +350,6 @@ function hasMarkDeep(nodes: readonly OutlineNode[]): boolean {
   );
 }
 
-/** Cuántas líneas tiene el árbol, para el tope de seguridad */
-export function countNodes(nodes: readonly OutlineNode[]): number {
-  return nodes.reduce((total, node) => total + 1 + countNodes(node.children), 0);
-}
-
-/** Qué tan hondo llega el árbol. Un árbol de una línea tiene profundidad 1 */
-export function outlineDepth(nodes: readonly OutlineNode[]): number {
-  return nodes.reduce((deepest, node) => Math.max(deepest, 1 + outlineDepth(node.children)), 0);
-}
-
 function clozeUsable(text: string): boolean {
   const { openings } = parseCloze(text);
   // Un hueco sin cerrar o sin respuesta dejaría la respuesta a la vista en la pregunta
@@ -627,9 +614,6 @@ export function backlinks(target: OutlineRef, all: readonly OutlineRef[]): Backl
  */
 export type OutlineSubject =
   { kind: 'enarm'; branch: string; topic: string } | { kind: 'free'; name: string };
-
-/** Largo máximo del nombre de una materia libre */
-export const FREE_SUBJECT_MAX_LENGTH = 80;
 
 /**
  * Prefijo de la etiqueta con la clave del tema del ENARM. Es el mismo TOPIC_TAG_PREFIX de Mis

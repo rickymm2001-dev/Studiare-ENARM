@@ -1,12 +1,16 @@
-// Etiquetado con cola asignada y acuerdo con datos (pantallas 19 y 28, 7.11, D-070). Un admin nombra
-// médica a una alumna y le asigna todas las subespecialidades. Ella entra, ve su cola del doble
-// etiquetado, etiqueta a ciegas los distractores de una pregunta y el tablero cuenta sus etiquetas.
-// Con las etiquetas de un segundo médico sobre las mismas opciones, sembradas porque ninguna
-// pantalla las deja poner en una prueba, kappa deja de calibrar y la app habla de sesgos.
-// physician.spec ya cubre la cola vacía y al admin que no etiqueta.
+// Revisión a ciegas de la demo (pantallas 17, 18 y 19, 4.4 del plan de B11). Un admin nombra médica a
+// una alumna y le asigna todas las subespecialidades. Ella abre una pregunta completa del banco, la
+// manda a revisión y, ya en revisión, etiqueta a ciegas cada distractor sin ver lo del autor. Al
+// terminar ve la pregunta completa y la aprueba. El tablero de acuerdo cuenta los pares de la etiqueta
+// del autor y la suya. Con más pares, sembrados porque etiquetar treinta a mano no cabe en una prueba,
+// kappa deja de calibrar y la app habla de sesgos. Ya no hay muestra del 20 % (8.9 del plan de B11).
+// physician.spec ya cubre la cola vacía y al admin que solo lee.
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { ulid } from 'ulid';
 import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import { versionIssues } from '@/data/content/questionRules';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import {
@@ -23,15 +27,26 @@ import {
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const text = physicianText.agreementScreen;
+const review = physicianText.review;
 
 interface StoredQuestion {
+  id: string;
   questionId: string;
   version: number;
+  caseId: string | null;
+  prompt: string;
+  explanation: string;
+  gpcRefs: { title: string }[];
+  canonicalOptionIds: string[];
 }
 interface StoredOption {
+  id: string;
   optionId: string;
+  questionVersionId: string;
+  text: string;
   isCorrect: boolean;
   biasTag: string | null;
+  rationale: string;
 }
 interface StoredLabel {
   id: string;
@@ -41,11 +56,54 @@ interface StoredLabel {
   labeledAt: string;
 }
 
+const TAGGABLE = new Set(
+  (
+    JSON.parse(
+      readFileSync(
+        fileURLToPath(new URL('../../src/demo/content/bias-taxonomy.json', import.meta.url)),
+        'utf8',
+      ),
+    ) as { biases: { key: string; taggable: boolean }[] }
+  ).biases
+    .filter((bias) => bias.taggable)
+    .map((bias) => bias.key),
+);
+
 /** Cuántas preguntas distintas tiene el banco, sin contar versiones */
 const bankSize = (questions: readonly StoredQuestion[]) =>
   new Set(questions.map((question) => question.questionId)).size;
 
-test('el admin asigna temas a una médica, ella etiqueta su cola y con pares de dos médicos kappa deja de calibrar', async ({
+/** Una pregunta directa sin pendientes, que se puede mandar a revisión y aprobar */
+function completeQuestion(questions: readonly StoredQuestion[], options: readonly StoredOption[]) {
+  return questions.find((question) => {
+    if (question.caseId !== null || question.version !== 1) return false;
+    const own = options.filter((option) => option.questionVersionId === question.id);
+    const position = new Map(own.map((option, index) => [option.id, index]));
+    return (
+      versionIssues(
+        {
+          prompt: question.prompt,
+          explanation: question.explanation,
+          refs: question.gpcRefs.map((ref) => ref.title),
+          options: own.map((option, index) => ({
+            position: index,
+            text: option.text,
+            isCorrect: option.isCorrect,
+            biasTag: option.biasTag,
+            rationale: option.rationale,
+          })),
+          canonicalPositions: question.canonicalOptionIds.flatMap((id) => {
+            const at = position.get(id);
+            return at === undefined ? [] : [at];
+          }),
+        },
+        TAGGABLE,
+      ).length === 0
+    );
+  });
+}
+
+test('la médica manda una pregunta a revisión, la etiqueta a ciegas, la aprueba y con pares suficientes kappa deja de calibrar', async ({
   page,
 }) => {
   test.setTimeout(300_000);
@@ -68,97 +126,124 @@ test('el admin asigna temas a una médica, ella etiqueta su cola y con pares de 
   await expect(ana.getByText(t.admin.assignTitle('Ana'))).toBeVisible();
   await ana.getByRole('button', { name: t.topicPicker.all }).click();
   await ana.getByRole('button', { name: t.admin.saveAssignment }).click();
-  const questions = bankSize(await readTable<StoredQuestion>(page, 'questions'));
-  await expect(page.getByRole('status')).toHaveText(t.admin.assigned('Ana', questions, 0));
-  await expect(ana.getByText(t.admin.assignedCount(questions))).toBeVisible();
-  await expectNoSeriousA11yViolations(page);
+  const questions = await readTable<StoredQuestion>(page, 'questions');
+  const size = bankSize(questions);
+  await expect(page.getByRole('status')).toHaveText(t.admin.assigned('Ana', size, 0));
+  await expect(ana.getByText(t.admin.assignedCount(size))).toBeVisible();
 
-  // Ana entra como médica. Su cola es la muestra del doble etiquetado, el 20 % del banco
+  // Ana entra como médica. Nada está en revisión todavía, así que no tiene nada por etiquetar
   await signOut(page);
   await signIn(page, 'Ana');
   await enterAs(page, 'physician');
   await page.goto(SCREENS.agreement.path);
   const queue = page.getByRole('region', { name: text.queue.title });
-  await expect(queue.getByText(text.queue.hint)).toBeVisible({ timeout: 45_000 });
-  const sample = Math.ceil(questions * DEFAULT_THRESHOLDS.bias.doubleLabelShare);
-  await expect(queue.getByText(text.queue.remaining(sample))).toBeVisible();
-  await expect(statValue(page, text.stats.label, text.stats.sample)).toHaveText(String(sample));
+  await expect(queue.getByText(text.queue.empty)).toBeVisible({ timeout: 45_000 });
+  await expect(statValue(page, text.stats.label, text.stats.pending)).toHaveText('0');
   await expect(statValue(page, text.stats.label, text.stats.kappa)).toHaveText(text.stats.noKappa);
   await expect(page.getByRole('status').filter({ hasText: text.vocabulary.title })).toContainText(
     text.vocabulary.calibrating,
   );
   await expectNoSeriousA11yViolations(page);
 
-  // Etiqueta a ciegas cada distractor de la primera pregunta. Cada etiqueta se guarda al elegirla
-  // La pregunta se ancla por su enunciado, porque al completarla sale de la cola y la primera pasa a
-  // ser otra
-  const first = queue.locator('details').first();
-  // Los selects de una pregunta plegada no están en el árbol de accesibilidad. Se abre antes de contar
-  await first.locator('summary').click();
-  await expect(first.getByRole('combobox').first()).toBeVisible();
-  const distractors = await first.getByRole('combobox').count();
-  const progress = (done: number) => text.queue.progress(done, distractors);
-  await expect(first.locator('summary')).toContainText(progress(0));
-  const prompt = (await first.locator('summary').innerText()).replace(progress(0), '').trim();
-  const question = queue.locator('details').filter({ hasText: prompt });
-  await expect(question).toHaveCount(1);
-  for (let index = 0; index < distractors; index += 1) {
-    await question
+  // Abre desde el banco una pregunta completa y la manda a revisión. Ella es su revisora en la demo
+  const options = await readTable<StoredOption>(page, 'options');
+  const target = completeQuestion(questions, options);
+  if (!target) throw new Error('El banco demo no tiene una pregunta directa completa');
+  const distractors = options.filter(
+    (option) => option.questionVersionId === target.id && !option.isCorrect,
+  );
+  await page.goto(SCREENS.questionBank.path);
+  const list = page.getByRole('region', { name: physicianText.bank.listTitle });
+  await list.getByLabel(physicianText.bank.search).fill(target.prompt.slice(0, 80));
+  await list
+    .getByRole('link', { name: physicianText.bankScreen.openQuestion(target.prompt.slice(0, 140)) })
+    .first()
+    .click();
+  await expect(
+    page.getByRole('heading', { level: 1, name: t.screens.questionEditor.title }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: review.submit.action }).click({ timeout: 60_000 });
+  await expect(page.getByText(review.submit.sent)).toBeVisible();
+
+  // Paso 1. A ciegas no ve la justificación del autor ni el formulario
+  const blind = page.getByRole('region', { name: review.blind.title });
+  await expect(blind).toBeVisible({ timeout: 30_000 });
+  await expect(
+    page.getByLabel(physicianText.questionEditor.meta.explanation, { exact: true }),
+  ).toHaveCount(0);
+  for (const option of distractors) await expect(page.getByText(option.rationale)).toHaveCount(0);
+  await expect(blind.getByRole('combobox')).toHaveCount(distractors.length);
+  await expectNoSeriousA11yViolations(page);
+  for (let index = 0; index < distractors.length; index += 1) {
+    await blind
       .getByRole('combobox')
       .nth(index)
       .selectOption({ index: 1 + (index % 2) });
-    await expect(queue.getByRole('status')).toHaveText(text.queue.saved);
-    // El avance cambia cuando la etiqueta ya está en la base. Con la última, la pregunta sale de la cola
-    if (index < distractors - 1) {
-      await expect(question.locator('summary')).toContainText(progress(index + 1));
+    // El aviso dice qué etiqueta quedó y en qué opción (H25). Con la última dice que ya ve todo
+    const notice = page
+      .getByRole('status')
+      .filter({ hasText: /^Guardaste .+ en la opción [A-J]\./ });
+    if (index < distractors.length - 1) {
+      await expect(notice).toBeVisible();
+      await expect(
+        blind.getByText(review.blind.progress(index + 1, distractors.length)),
+      ).toBeVisible();
     } else {
-      await expect(question).toHaveCount(0);
+      await expect(notice).toContainText(review.blind.revealed);
     }
   }
-  // Completa, el tablero cuenta sus etiquetas
-  await expect(queue.getByText(text.queue.remaining(sample - 1))).toBeVisible();
-  await expect(statValue(page, text.stats.label, text.stats.mine)).toHaveText(
-    new RegExp(`^${distractors}/\\d+$`),
-  );
+
+  // Paso 2. Con el etiquetado completo ve lo del autor y aprueba
+  await expect(blind).toHaveCount(0);
+  const decide = page.getByRole('region', { name: review.decide.title });
+  await expect(decide).toBeVisible();
+  await decide.getByRole('button', { name: review.decide.approve }).click();
+  await expect(page.getByText(review.decide.approvedPublished)).toBeVisible();
   const mine = await readTable<StoredLabel>(page, 'biasLabels');
   const anaId = mine[0]?.physicianId ?? '';
-  expect(mine).toHaveLength(distractors);
+  expect(mine).toHaveLength(distractors.length);
   expect(mine.every((label) => label.physicianId === anaId)).toBe(true);
 
-  // Un segundo médico que etiquetó las mismas opciones que Ana en otras preguntas. Coinciden en
-  // cuatro de cada cinco. Sus etiquetas se siembran directo, porque etiquetar treinta pares a mano
-  // no cabe en una prueba, con las llaves y los campos que exige el esquema
-  const pairs = DEFAULT_THRESHOLDS.bias.minLabeledPairs + 10;
+  // El tablero cuenta un par de autor y revisora por distractor y sigue calibrando
+  await page.goto(SCREENS.agreement.path);
+  await expect(queue.getByText(text.queue.empty)).toBeVisible({ timeout: 45_000 });
+  expect(await statNumber(page, text.stats.label, text.stats.pairs)).toBe(distractors.length);
+  await expect(statValue(page, text.stats.label, text.stats.kappa)).toHaveText(text.stats.noKappa);
+
+  // Más pares de Ana sobre otros distractores que ya traen la etiqueta del autor. Coincide en cuatro
+  // de cada cinco. Se siembran directo, con las llaves y los campos que exige el esquema
+  const seededPairs = DEFAULT_THRESHOLDS.bias.minLabeledPairs + 10;
   const labeled = new Set(mine.map((label) => label.optionId));
-  const options = (await readTable<StoredOption>(page, 'options')).filter(
+  const others = options.filter(
     (option) => !option.isCorrect && option.biasTag !== null && !labeled.has(option.optionId),
   );
-  const distinct = [...new Map(options.map((option) => [option.optionId, option])).values()];
+  const distinct = [...new Map(others.map((option) => [option.optionId, option])).values()];
   const tags = [...new Set(distinct.map((option) => option.biasTag as string))];
-  expect(distinct.length).toBeGreaterThanOrEqual(pairs);
+  expect(distinct.length).toBeGreaterThanOrEqual(seededPairs);
   expect(tags.length).toBeGreaterThan(1);
-  const otherPhysician = ulid();
   const now = new Date().toISOString();
-  const seeded: StoredLabel[] = distinct.slice(0, pairs).flatMap((option, index) => {
-    const tag = option.biasTag as string;
-    const disagree = tags.find((candidate) => candidate !== tag) ?? tag;
-    return [
-      { id: ulid(), optionId: option.optionId, physicianId: anaId, biasTag: tag, labeledAt: now },
-      {
+  await putRows(
+    page,
+    'biasLabels',
+    distinct.slice(0, seededPairs).map((option, index): StoredLabel => {
+      const tag = option.biasTag as string;
+      const disagree = tags.find((candidate) => candidate !== tag) ?? tag;
+      return {
         id: ulid(),
         optionId: option.optionId,
-        physicianId: otherPhysician,
+        physicianId: anaId,
         biasTag: index % 5 === 4 ? disagree : tag,
         labeledAt: now,
-      },
-    ];
-  });
-  await putRows(page, 'biasLabels', seeded);
+      };
+    }),
+  );
 
   // Con pares suficientes kappa se mide, la app habla de sesgos y el acuerdo por etiqueta se lista
   await page.reload();
-  await expect(queue.getByText(text.queue.hint)).toBeVisible({ timeout: 45_000 });
-  expect(await statNumber(page, text.stats.label, text.stats.pairs)).toBe(pairs);
+  await expect(queue.getByText(text.queue.empty)).toBeVisible({ timeout: 45_000 });
+  expect(await statNumber(page, text.stats.label, text.stats.pairs)).toBe(
+    distractors.length + seededPairs,
+  );
   await expect(statValue(page, text.stats.label, text.stats.kappa)).toHaveText(/^-?\d+(\.\d+)?$/);
   await expect(page.getByRole('status').filter({ hasText: text.vocabulary.title })).toHaveCount(0);
   const vocabulary = page.getByRole('region', { name: text.vocabulary.title });

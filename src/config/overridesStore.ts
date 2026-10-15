@@ -17,6 +17,11 @@ export const StoredOverridesSchema = z.strictObject({
       branches: z.record(z.string(), z.number().positive()),
       /** Peso de cada tema por rama/tema */
       topics: z.record(z.string(), z.number().positive()),
+      /**
+       * Los pesos siguen siendo provisionales (B11, respuesta 61). Sin el campo vale lo que diga la
+       * taxonomía. El admin lo apaga cuando salga la convocatoria con los pesos oficiales
+       */
+      provisional: z.boolean().optional(),
     })
     .optional(),
   /** Estimación de costo de IA por alumno al mes del plan maestro, en dólares */

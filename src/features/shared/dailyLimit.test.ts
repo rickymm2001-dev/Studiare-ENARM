@@ -26,7 +26,45 @@ describe('preguntas que le quedan hoy', () => {
       answeredToday: 7,
       reserved: 0,
       left: limit - 7,
+      limitedByServer: false,
     });
+  });
+
+  it('con el banco de la nube le queda el menor entre la app y el servidor (B11, 5.5)', () => {
+    const quota = {
+      open: true,
+      plan: 'free',
+      limit: 20,
+      used: 18,
+      left: 2,
+      day: '2026-10-01',
+      resetsAt: new Date(now.getTime() + 3_600_000).toISOString(),
+      brake: { retryAt: null },
+    };
+    const input = { events: answers(5), subscription: null, timeZone: 'America/Merida', now };
+    expect(dailyQuestions({ ...input, serverQuota: quota })).toMatchObject({
+      left: 2,
+      limitedByServer: true,
+    });
+    // Si la app ya cuenta menos, manda la app
+    expect(
+      dailyQuestions({ ...input, events: answers(19), serverQuota: { ...quota, left: 10 } }),
+    ).toMatchObject({ left: 1, limitedByServer: false });
+    // Una cuota de un día que ya pasó no cuenta
+    expect(
+      dailyQuestions({
+        ...input,
+        serverQuota: { ...quota, resetsAt: new Date(now.getTime() - 1000).toISOString() },
+      }),
+    ).toMatchObject({ left: 15, limitedByServer: false });
+    // Un plan de pago no tiene tope ni en la app ni en el servidor
+    expect(
+      dailyQuestions({
+        ...input,
+        subscription: { plan: 'monthly', status: 'active' },
+        serverQuota: { ...quota, plan: 'monthly', limit: null, left: null },
+      }),
+    ).toMatchObject({ left: null, limitedByServer: false });
   });
 
   it('nunca baja de cero aunque haya contestado más', () => {

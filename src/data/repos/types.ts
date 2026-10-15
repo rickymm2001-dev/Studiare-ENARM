@@ -21,6 +21,13 @@ import type {
   ReviewAssignment,
 } from '../schemas/bank';
 import type {
+  BankState,
+  BankStateKey,
+  BankStateOf,
+  CatalogEntry,
+  DeckMedia,
+} from '../schemas/bankCloud';
+import type {
   CardStateCache,
   ItemStatsCache,
   StreakCache,
@@ -120,6 +127,8 @@ export interface QuestionRepo {
   listVersions(questionId: Id): Promise<Question[]>;
   latest(questionId: Id): Promise<Question | undefined>;
   listLatest(): Promise<Question[]>;
+  /** Cuáles de estas versiones ya están guardadas, sin leer su contenido (B11) */
+  storedIds(questionVersionIds: readonly Id[]): Promise<Set<Id>>;
   /** Agrega una versión nueva con sus opciones en una sola transacción */
   addVersion(question: Question, options: readonly Option[]): Promise<Question>;
   /** Cambia solo el estado editorial de una versión, sin tocar su contenido */
@@ -132,6 +141,38 @@ export interface QuestionRepo {
 export interface OptionRepo {
   get(optionVersionId: Id): Promise<Option | undefined>;
   listForQuestionVersion(questionVersionId: Id): Promise<Option[]>;
+}
+
+/**
+ * Catálogo del banco de la nube guardado en este navegador (B11, 5.2). Solo lo escribe la bajada del
+ * catálogo (src/data/bank/catalogMerge.ts), que decide qué fila gana con el seq
+ */
+export interface CatalogRepo {
+  get(questionId: Id): Promise<CatalogEntry | undefined>;
+  list(): Promise<CatalogEntry[]>;
+  /** Las publicadas, que son las que se eligen para estudiar. Las retiradas se conservan */
+  listPublished(): Promise<CatalogEntry[]>;
+  /** La fila de una versión, para saber de qué pregunta estable es */
+  getByVersion(versionId: Id): Promise<CatalogEntry | undefined>;
+  /** Valida con zod y guarda en una sola operación. Devuelve cuántas guardó */
+  putMany(entries: readonly CatalogEntry[]): Promise<number>;
+  count(): Promise<number>;
+}
+
+/** Estado del banco de la nube, una fila por clave (catalog, quota, agreement y decks) */
+export interface BankStateRepo {
+  get<K extends BankStateKey>(key: K): Promise<BankStateOf<K> | undefined>;
+  /** Valida con zod y guarda, creando o reemplazando la fila de su clave */
+  put<S extends BankState>(state: S): Promise<S>;
+}
+
+/** Imágenes de los submazos bajados del catálogo de mazos (B11, 4.8) */
+export interface DeckMediaRepo {
+  get(path: string): Promise<DeckMedia | undefined>;
+  /** Valida con zod y guarda en una sola operación. Devuelve cuántas guardó */
+  putMany(media: readonly DeckMedia[]): Promise<number>;
+  /** Quita todas las imágenes de un mazo de este navegador (8.32). Devuelve cuántas quitó */
+  removeForDeck(deckKey: string): Promise<number>;
 }
 
 /** Las cachés se leen desde la interfaz y solo las escriben las derivaciones */
@@ -159,6 +200,9 @@ export interface Repositories {
   biasLabels: EntityRepo<BiasLabel>;
   contentReports: EntityRepo<ContentReport>;
   reviewAssignments: EntityRepo<ReviewAssignment>;
+  catalog: CatalogRepo;
+  bankState: BankStateRepo;
+  deckMedia: DeckMediaRepo;
   sessions: EntityRepo<Session>;
   findings: EntityRepo<Finding>;
   patterns: EntityRepo<Pattern>;

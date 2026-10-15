@@ -6,16 +6,45 @@ import { taskNames } from './insights';
 const num = (value: number) => value.toLocaleString('es-MX');
 
 export const physicianText = {
+  /** Las descripciones de las pantallas del médico. Sus títulos siguen en t.screens */
+  descriptions: {
+    questionEditor:
+      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, versiones y la revisión a ciegas.',
+    agreement:
+      'Acuerdo entre la etiqueta del autor y la que pone a ciegas el revisor, con kappa, y lo que te falta etiquetar.',
+  },
+  /** Banco de preguntas (pantalla 17). Salió de t para no pesar en lo que la app carga al abrir */
+  bank: {
+    listTitle: 'Preguntas',
+    search: 'Buscar en la pregunta o el caso',
+    all: 'Todas',
+    statusLabel: 'Estado',
+    pages: 'Páginas del banco',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    pageOf: (page: number, total: number) => `Página ${page} de ${total}`,
+    physicianHint: 'Las preguntas que te asignaron para revisar.',
+    adminHint: 'Todo el banco, con a quién está asignada cada pregunta.',
+    emptyTitle: 'Todavía no tienes preguntas asignadas',
+    emptyBody: 'Un admin te asignará subespecialidades para revisar.',
+    count: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
+    status: {
+      draft: 'Borrador',
+      in_review: 'En revisión',
+      approved: 'Aprobada',
+      rejected: 'Rechazada',
+    },
+    statsLabel: 'Preguntas por estado',
+    unassigned: 'Sin asignar',
+    importBank: 'Importar banco',
+  },
   agreementScreen: {
     stats: {
-      label: 'Doble etiquetado en cifras',
-      sample: 'Muestra',
-      sampleCaption: (questions: number, options: number) =>
-        `${plural(questions, 'pregunta', 'preguntas')} y ${plural(options, 'distractor', 'distractores')}`,
-      mine: 'Mis etiquetas',
-      mineCaption: (done: number, total: number) => `${num(done)} de ${num(total)} distractores`,
+      label: 'Etiquetado a ciegas en cifras',
+      pending: 'Por etiquetar',
+      pendingCaption: 'preguntas en revisión que te esperan',
       pairs: 'Pares',
-      pairsCaption: 'etiquetados por dos médicos',
+      pairsCaption: 'del autor y del revisor',
       kappa: 'Kappa',
       kappaCaption: 'acuerdo más allá del azar',
       noKappa: 'Sin medir',
@@ -26,8 +55,8 @@ export const physicianText = {
       bias: 'La interfaz del alumno habla de sesgos, porque los médicos coinciden lo suficiente al etiquetar.',
       rule: (threshold: number) =>
         `Habla de sesgos con kappa de ${threshold.toLocaleString('es-MX')} o más.`,
-      calibrating: 'Faltan opciones etiquetadas por dos médicos para fiarse de kappa.',
-      unit: 'opciones con dos etiquetas',
+      calibrating: 'Faltan distractores etiquetados a ciegas por un revisor para fiarse de kappa.',
+      unit: 'pares de autor y revisor',
       current: (kappa: string, lower: string, upper: string) =>
         `Kappa global ${kappa}, con intervalo de 95 % de ${lower} a ${upper}.`,
     },
@@ -42,24 +71,19 @@ export const physicianText = {
       none: 'Todavía no hay pares con los que medir el acuerdo por etiqueta.',
     },
     queue: {
-      title: 'Mi cola de doble etiquetado',
-      hint: 'Etiqueta a ciegas el sesgo que explota cada distractor, sin ver lo que puso el autor ni otro médico. Cada etiqueta se guarda al elegirla.',
+      title: 'Por etiquetar a ciegas',
+      hint: 'Las preguntas que revisas y que esperan tu etiquetado a ciegas. Ábrelas en el editor y etiqueta el sesgo que explota cada distractor, sin ver lo que puso el autor.',
       empty:
-        'No tienes preguntas de la muestra por etiquetar. O ya terminaste, o todavía no te asignan subespecialidades.',
+        'No tienes preguntas en revisión por etiquetar. O ya terminaste, o todavía no te mandan preguntas a revisar.',
       adminNote:
-        'Las etiquetas las ponen los médicos. Aquí ves cómo va el acuerdo. Para etiquetar entra como médico.',
+        'Las etiquetas las ponen los médicos al revisar cada pregunta. Aquí ves cómo va el acuerdo. Para etiquetar entra como médico.',
       progress: (done: number, total: number) => `${done} de ${total} etiquetados`,
-      option: (text: string) => `Etiqueta del distractor ${text}`,
-      none: 'Sin etiquetar',
-      saved: 'Etiqueta guardada.',
-      failed: 'No se pudo guardar la etiqueta. Intenta de nuevo.',
-      showMore: (n: number) => `Mostrar ${num(n)} más`,
+      open: 'Etiquetar a ciegas',
+      failed: 'No se pudo leer tu cola. Intenta de nuevo.',
       remaining: (n: number) => plural(n, 'pregunta por etiquetar', 'preguntas por etiquetar'),
     },
-    empty: {
-      title: 'Todavía no hay preguntas',
-      description: 'Cuando haya preguntas en el banco, el 20 % entra al doble etiquetado.',
-    },
+    failed: 'No se pudo leer el acuerdo. Intenta de nuevo.',
+    retry: 'Intentar de nuevo',
   },
 
   questionEditor: {
@@ -156,6 +180,7 @@ export const physicianText = {
       auto: (summary: string) => `Sugerencia automática ${summary}`,
       useAuto: 'Usar la sugerencia',
       autoNone: 'El motor no detectó la tarea de esta pregunta.',
+      taskPick: 'Elige la tarea',
       polarities: { affirmative: 'Afirmativa', negative: 'Negativa' } as Record<string, string>,
       formats: {
         clinical_case: 'Caso clínico',
@@ -251,6 +276,7 @@ export const physicianText = {
       canonical_without_distractor: 'El set canónico incluye al menos un distractor.',
       gpc_empty: 'Una referencia de GPC no tiene título.',
       clue_empty: 'Un dato del caso no tiene texto.',
+      task_missing: 'Elige la tarea de la pregunta. No se pudo detectar sola.',
     } as Record<string, string>,
     issueAt: (n: number, message: string) => `Opción ${n}. ${message}`,
   },
@@ -497,4 +523,225 @@ export const physicianText = {
       goBank: 'Ver el banco',
     },
   },
+
+  // Banco en la nube (B11, 4.2 del plan de B11). Banco del médico, revisión a ciegas en el editor,
+  // pendientes, avisos con casilla, conflictos con el Sheet, distractores y errores de las funciones
+  bankScreen: {
+    views: {
+      label: 'Qué preguntas ver',
+      to_review: 'Por revisar',
+      my_drafts: 'Mis borradores',
+      incomplete: 'Incompletas',
+      reported: 'Con reporte',
+      conflict: 'Con conflicto',
+      published: 'Publicadas',
+      all: 'Todas',
+    } as Record<string, string>,
+    open: 'Abrir',
+    openQuestion: (key: string) => `Abrir la pregunta ${key}`,
+    sheetId: (key: string) => `ID del Sheet ${key}`,
+    fromSheet: 'Viene del Sheet',
+    version: (n: number) => `Versión ${n}`,
+    published: (n: number) => `Publicada la versión ${n}`,
+    author: (alias: string) => `Autor ${alias}`,
+    reviewer: (alias: string) => `Revisor ${alias}`,
+    pending: (n: number) => plural(n, 'pendiente', 'pendientes'),
+    flags: (n: number) => plural(n, 'aviso por confirmar', 'avisos por confirmar'),
+    reports: (n: number) => plural(n, 'reporte abierto', 'reportes abiertos'),
+    distractors: (n: number) =>
+      plural(n, 'distractor que casi nadie elige', 'distractores que casi nadie eligen'),
+    blindPending: 'Te falta etiquetar a ciegas',
+    conflict: 'Conflicto con el Sheet',
+    missing: 'Ya no está en el Sheet',
+    retireRequested: 'El Sheet pide retirarla',
+    retired: 'Retirada',
+    noPreview: 'Sin texto que mostrar',
+    emptyView: 'No hay preguntas en esta vista. Cambia el filtro para ver las demás.',
+    failed: 'No se pudo leer el banco. Intenta de nuevo.',
+    retry: 'Intentar de nuevo',
+    importHint: 'Las preguntas se escriben en el Sheet del banco. La sincronización las trae aquí.',
+    myReviews: {
+      title: 'Mis revisiones del mes',
+      hint: 'Se paga por pregunta revisada. Varias rondas sobre la misma pregunta en el mes cuentan una vez. Los distractores atendidos van aparte.',
+      approved: 'Aprobadas',
+      changesRequested: 'Cambios pedidos',
+      rejected: 'Rechazadas',
+      reviewed: 'Preguntas revisadas',
+      distractors: 'Distractores atendidos',
+    },
+    demoNote:
+      'En la demostración trabajas sobre el banco de este navegador. Tú eres el revisor de lo que tienes asignado y la etiqueta del autor es la del banco.',
+  },
+
+  review: {
+    readOnly:
+      'Solo lectura. Los médicos escriben, etiquetan y deciden. Desde aquí ves la pregunta completa y su historia.',
+    notWriter: 'Esta pregunta no es tuya. Pide al admin que te la asigne para editarla.',
+    sheet: {
+      title: 'Esta pregunta viene del Sheet',
+      body: (key: string) =>
+        `Esta pregunta viene del Sheet (${key}). Corrígela en el Sheet para no crear un conflicto.`,
+      editAnyway: 'Editar aquí de todos modos',
+    },
+    conflict: {
+      title: 'Conflicto con el Sheet',
+      body: 'El Sheet cambió esta pregunta y también se editó aquí. Nada se pisa hasta que elijas.',
+      keepApp: 'Conservar la de la app',
+      takeSheet: 'Usar la del Sheet',
+      keptApp:
+        'Se conserva la versión de la app. Copia tu corrección al Sheet para que vuelvan a coincidir.',
+      tookSheet: 'La siguiente sincronización traerá el renglón del Sheet como versión nueva.',
+      failed: 'No se pudo resolver el conflicto. Intenta de nuevo.',
+    },
+    blind: {
+      title: 'Paso 1. Etiqueta a ciegas',
+      hint: 'Elige el sesgo o la trampa que explota cada distractor. No ves lo que puso el autor ni sus justificaciones hasta terminar. Cada etiqueta se guarda al elegirla.',
+      progress: (done: number, total: number) => `${done} de ${total} distractores etiquetados`,
+      correct: 'Correcta. No se etiqueta.',
+      option: (letter: string) => `Sesgo del distractor ${letter}`,
+      choose: 'Elige una etiqueta',
+      saved: (bias: string, letter: string) => `Guardaste ${bias} en la opción ${letter}.`,
+      revealed: 'Terminaste el etiquetado. Ya ves la pregunta completa.',
+      failed: 'No se pudo guardar la etiqueta. Intenta de nuevo.',
+      locked: 'Tus etiquetas de esta versión ya están cerradas.',
+    },
+    decide: {
+      title: 'Paso 2. Decide',
+      hint: 'Ya ves lo del autor. Revisa qué cambió, los pendientes y los avisos antes de decidir.',
+      changes: 'Qué cambió contra la versión anterior',
+      firstVersion: 'Es la primera versión.',
+      noChanges: 'Sin cambios de contenido.',
+      incompleteTitle: 'Lo que le falta para aprobarse',
+      incompleteNone: 'No le falta nada.',
+      flagsTitle: 'Confirma antes de aprobar',
+      comment: 'Comentario para el autor',
+      commentHint: 'Obligatorio para pedir cambios o rechazar.',
+      approve: 'Aprobar',
+      requestChanges: 'Pedir cambios',
+      reject: 'Rechazar',
+      approvedPublished: 'Aprobaste la versión. Ya está publicada para los alumnos.',
+      approvedWaiting:
+        'Aprobaste la versión. Se publica cuando las demás preguntas de su caso estén aprobadas.',
+      changesRequested: 'Pediste cambios. La versión regresó a borrador con tu comentario.',
+      rejected: 'Rechazaste la versión. Lo publicado antes sigue publicado.',
+      blockers: {
+        incomplete: 'Faltan pendientes por completar.',
+        flags: 'Faltan casillas por confirmar.',
+      } as Record<string, string>,
+    },
+    submit: {
+      title: 'Mandar a revisión',
+      hint: 'La versión va al revisor asignado, que es otro médico. Antes tiene que estar completa.',
+      action: 'Mandar a revisión',
+      sent: 'Mandaste la versión a revisión.',
+      incomplete: 'Completa los pendientes antes de mandarla.',
+      decided:
+        'Esta versión ya tiene una decisión. Guarda tus cambios como versión nueva para mandarla otra vez.',
+    },
+    waiting: 'Esta versión espera la decisión del revisor.',
+    blindWaiting:
+      'Eres el revisor. No ves lo del autor ni editas hasta etiquetar a ciegas, cuando la manden a revisión.',
+    closed: (status: string) => `La versión más reciente quedó ${status.toLowerCase()}.`,
+    saveNotes: {
+      savedIncomplete: (n: number) =>
+        `Guardaste la versión nueva en borrador. Le ${n === 1 ? 'falta' : 'faltan'} ${plural(n, 'pendiente', 'pendientes')} para aprobarse.`,
+    },
+    decisions: {
+      title: 'Decisiones',
+      names: {
+        approve: 'Aprobó',
+        request_changes: 'Pidió cambios',
+        reject: 'Rechazó',
+      } as Record<string, string>,
+      by: (decision: string, alias: string, date: string) => `${decision} ${alias} el ${date}`,
+    },
+    source: {
+      sheet: 'Del Sheet',
+      import: 'Importada',
+      app: 'Escrita en la app',
+      ai_variant: 'Variante de IA',
+    } as Record<string, string>,
+    hiddenRationale: 'Escondida hasta que termines el etiquetado.',
+    distractorFlags: (n: number) =>
+      plural(n, 'distractor que casi nadie elige', 'distractores que casi nadie eligen'),
+  },
+
+  /** Lo que le falta a una versión para aprobarse (3.4), con la letra de la opción cuando aplica */
+  incomplete: {
+    task_undetected:
+      'Falta la tarea. No se pudo detectar, así que escríbela en la columna Tarea del Sheet o elígela en el editor.',
+    explanation_missing: 'Falta la explicación.',
+    references_missing: 'Faltan las referencias.',
+    rationale_missing: (letter: string) => `Falta la justificación de la opción ${letter}.`,
+    bias_missing: (letter: string) => `Falta el sesgo del distractor ${letter}.`,
+    bias_unknown: (letter: string) => `El sesgo del distractor ${letter} no está en la lista.`,
+    prompt_missing: 'Falta la frase de la pregunta.',
+    options_count: 'La pregunta lleva de 4 a 10 opciones.',
+    correct_count: 'Marca exactamente una opción como correcta.',
+    canonical_invalid: 'El set canónico lleva la correcta y al menos un distractor.',
+    other: (code: string) => `Pendiente ${code}.`,
+  },
+
+  /** Avisos con casilla que el revisor confirma al aprobar (3.4) */
+  flags: {
+    topic_inferred: 'Confirmo la subespecialidad, que se dedujo del subtema.',
+    kind_control_check: 'Confirmo que es un reactivo De control.',
+    other: (code: string) => `Confirmo el aviso ${code}.`,
+  },
+
+  distractors: {
+    title: 'Distractores que casi nadie elige',
+    hint: 'Los marca la calibración cuando un distractor tiene muchas exposiciones y casi ninguna elección. Edita la pregunta, déjala así o descarta la marca.',
+    calibrating:
+      'Calibrando. La cola se llena cuando la calibración con los alumnos que dieron permiso empiece a mandar cifras.',
+    question: (key: string) => `Pregunta ${key}`,
+    figures: (exposures: number, choices: number, attraction: string) =>
+      `${num(exposures)} exposiciones, ${num(choices)} elecciones, atracción de ${attraction}`,
+    edit: 'Editar la pregunta',
+    keep: 'Dejarla así',
+    dismiss: 'Descartar',
+    note: 'Nota opcional',
+    resolved: {
+      edited: 'Marcaste el distractor como editado.',
+      kept: 'Dejaste el distractor así.',
+      dismissed: 'Descartaste la marca.',
+    } as Record<string, string>,
+    failed: 'No se pudo guardar. Intenta de nuevo.',
+  },
+
+  importCloud: {
+    physician:
+      'Las preguntas se escriben en el Sheet del banco. La sincronización las trae al banco.',
+    adminHint:
+      'Con la nube, el archivo sube al banco de la nube en borrador, con el mismo convertidor y el mismo reporte de renglones que la sincronización del Sheet.',
+    run: (n: number) => `Subir ${plural(n, 'renglón', 'renglones')} a la nube`,
+    uploading: 'Subiendo a la nube',
+    done: (created: number, versioned: number, rejected: number) =>
+      `Listo. ${plural(created, 'pregunta nueva', 'preguntas nuevas')}, ${plural(versioned, 'versión nueva', 'versiones nuevas')} y ${plural(rejected, 'renglón rechazado', 'renglones rechazados')}.`,
+    failed: 'No se pudo subir el archivo. Intenta de nuevo.',
+    busy: 'Hay una sincronización en curso. Espera a que termine e intenta de nuevo.',
+  },
+
+  /** Errores de las funciones del banco, con lo que el médico puede hacer */
+  errors: {
+    stale: 'Alguien más guardó o sincronizó una versión nueva. Recargamos la pregunta.',
+    same_author_reviewer:
+      'Autor y revisor tienen que ser distintos. Pide al admin que asigne otro médico.',
+    blind_labels: 'Primero termina el etiquetado a ciegas.',
+    incomplete: 'La versión tiene pendientes. Complétalos antes de seguir.',
+    not_assigned: 'No tienes asignada esta pregunta.',
+    flags_unconfirmed: 'Confirma las casillas antes de aprobar.',
+    sync_busy: 'Hay una sincronización en curso. Intenta en un minuto.',
+    report_limit: 'Se llegó al tope de reportes del día.',
+    deck_unauthorized:
+      'Un mazo de terceros necesita la autorización confirmada por el dueño antes de publicarse.',
+    deck_files_missing: 'Faltan archivos de esta versión del mazo. Vuelve a subirlos.',
+    forbidden: 'No tienes permiso para hacer esto.',
+    no_session: 'Tu sesión se cerró. Vuelve a entrar.',
+    invalid: 'La base no aceptó el cambio. Revisa los datos e intenta de nuevo.',
+    not_found: 'No encontramos esa pregunta.',
+    network:
+      'Necesitas conexión. El banco del equipo vive en el servidor. Revisa tu internet y tu sesión e intenta de nuevo.',
+    unknown: 'Algo salió mal. Intenta de nuevo.',
+  } as Record<string, string>,
 };

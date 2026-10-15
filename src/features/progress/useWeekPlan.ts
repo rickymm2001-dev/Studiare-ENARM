@@ -8,6 +8,7 @@ import type { Card, Deck } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
 import { reservedByStoredExam } from '../exam/examStorage';
 import type { ReadySession } from '../shared/RequireSession';
+import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
 import { buildWeekPlan, type WeekPlan } from './weekPlan';
 
 export function useWeekPlan(
@@ -21,8 +22,10 @@ export function useWeekPlan(
     () => api.repos.subscriptions.get(userId).then((value) => value ?? null),
     [api.repos, userId],
   );
+  // Con el banco de la nube el tope de hoy cuenta también lo que dice el servidor (B11, 5.5)
+  const serverQuota = useServerQuota(useQuestionSource());
   return useMemo(() => {
-    if (subscription === undefined) return undefined;
+    if (subscription === undefined || serverQuota === undefined) return undefined;
     return buildWeekPlan({
       now: new Date(),
       session,
@@ -31,7 +34,8 @@ export function useWeekPlan(
       cards: content.cards,
       subscription,
       reservedQuestions: reservedByStoredExam(userId),
+      serverQuota,
     });
     // session cambia con el perfil, así que sus ajustes y sus minutos ya están cubiertos
-  }, [subscription, session, events, content, userId]);
+  }, [subscription, serverQuota, session, events, content, userId]);
 }

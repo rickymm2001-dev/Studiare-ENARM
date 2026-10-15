@@ -1,20 +1,23 @@
 // @vitest-environment jsdom
+// Acuerdo del etiquetado (pantalla 19, 4.4 del plan de B11) con el repositorio local de la demo. El
+// tablero compara la etiqueta del autor, que en la demo es la del banco, con la que puso a ciegas el
+// revisor. Debajo, las preguntas en revisión que al médico le faltan por etiquetar.
 import 'fake-indexeddb/auto';
-import { cleanup, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { cleanup, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { DataApi } from '@/data/context';
 import type { BiasLabel } from '@/data/schemas/bank';
 import type { User } from '@/data/schemas/people';
 import { newId } from '@/data/testing/fixtures';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
+import { ensureDemoBank } from '@/data/usecases/bank';
 import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
-import { sampleQuestionIds } from './agreementView';
 
 vi.setConfig({ testTimeout: 60_000 });
 
@@ -27,15 +30,11 @@ afterEach(async () => {
 
 const WAIT = { timeout: 30_000 };
 const demo = buildDemoBank();
-const questions = demo.questions.map((entry) => entry.question);
-const sample = sampleQuestionIds(questions);
 const text = physicianText.agreementScreen;
-const [tagA, tagB, tagC, tagD] = TAGGABLE_BIASES.map((bias) => bias.key) as [
-  string,
-  string,
-  string,
-  string,
-];
+const tags = TAGGABLE_BIASES.map((bias) => bias.key);
+const distractors = demo.questions
+  .flatMap((entry) => entry.options)
+  .filter((option) => !option.isCorrect && option.biasTag !== null);
 
 const putLabel = (api: DataApi, optionId: string, physicianId: string, biasTag: string) =>
   api.repos.biasLabels.put({
@@ -46,17 +45,13 @@ const putLabel = (api: DataApi, optionId: string, physicianId: string, biasTag: 
     labeledAt: '2026-10-08T10:00:00.000Z',
   } satisfies BiasLabel);
 
-/** Dos médicos que etiquetan 100 opciones con las cuatro etiquetas. Coinciden en `agreements` */
-async function seedPairs(api: DataApi, agreements: number) {
-  const a = newId();
-  const b = newId();
-  const tags = [tagA, tagB, tagC, tagD];
-  for (let index = 0; index < 100; index += 1) {
-    const optionId = newId();
-    const first = tags[index % 4] as string;
-    const second = index < agreements ? first : (tags[(index + 1) % 4] as string);
-    await putLabel(api, optionId, a, first);
-    await putLabel(api, optionId, b, second);
+/** Etiquetas a ciegas de un revisor sobre distractores del banco. agree dice si coincide con el autor */
+async function seedPairs(api: DataApi, count: number, agree: (index: number) => boolean) {
+  const reviewer = newId();
+  for (const [index, option] of distractors.slice(0, count).entries()) {
+    const author = option.biasTag ?? '';
+    const other = tags.find((tag) => tag !== author) ?? author;
+    await putLabel(api, option.optionId, reviewer, agree(index) ? author : other);
   }
 }
 
@@ -70,10 +65,11 @@ async function open(options: {
   return app;
 }
 
-/** Asigna al médico la primera pregunta de la muestra */
-const assignFirst = async (api: DataApi, user: User) => {
-  const first = questions.find((question) => question.questionId === sample[0]);
-  if (!first) throw new Error('Sin muestra');
+/** Asigna al médico la primera pregunta del banco y la deja en revisión */
+const assignInReview = async (api: DataApi, user: User) => {
+  await ensureDemoBank(api);
+  const first = demo.questions[0]?.question;
+  if (!first) throw new Error('Sin banco');
   await api.repos.reviewAssignments.put({
     id: newId(),
     questionId: first.questionId,
@@ -81,60 +77,52 @@ const assignFirst = async (api: DataApi, user: User) => {
     assignedBy: null,
     assignedAt: '2026-10-08T10:00:00.000Z',
   });
+  await api.repos.questions.setEditorialStatus(first.id, 'in_review');
   return first;
 };
 
 describe('acuerdo del etiquetado (pantalla 19)', () => {
-  it('el médico etiqueta a ciegas, se guarda al elegir y avanza su cola', async () => {
-    const typing = userEvent.setup();
-    const rendered = await open({
+  it('el médico ve las preguntas en revisión que le faltan por etiquetar a ciegas, con su enlace', async () => {
+    await open({
       role: 'physician',
       seed: async (api, user) => {
-        await assignFirst(api, user);
+        await assignInReview(api, user);
       },
     });
     const queue = await screen.findByRole('region', { name: text.queue.title }, WAIT);
     expect(await within(queue).findByText(text.queue.remaining(1), undefined, WAIT)).toBeVisible();
+    const link = within(queue).getByRole('link', { name: text.queue.open });
+    expect(link).toHaveAttribute(
+      'href',
+      `${SCREENS.questionEditor.path}?pregunta=${demo.questions[0]?.question.questionId ?? ''}`,
+    );
+    const stats = screen.getByRole('region', { name: text.stats.label });
+    expect(within(stats).getByText('1')).toBeVisible();
+  });
 
-    // Abre la pregunta. No muestra la etiqueta del autor y todas empiezan sin etiquetar
-    const first = questions.find((question) => question.questionId === sample[0]);
-    await typing.click(within(queue).getByText(first?.prompt ?? ''));
-    const selects = within(queue).getAllByLabelText(/^Etiqueta del distractor/);
-    expect(selects.length).toBeGreaterThan(2);
-    for (const select of selects) expect(select).toHaveValue('');
-
-    await typing.selectOptions(selects[0] as HTMLElement, tagB);
-    await waitFor(async () => {
-      expect(await rendered.api.repos.biasLabels.list()).toHaveLength(1);
-    }, WAIT);
-    const [saved] = await rendered.api.repos.biasLabels.list();
-    expect(saved).toMatchObject({ biasTag: tagB, physicianId: rendered.user.id });
-    // La definición de la etiqueta elegida queda a la vista
-    const definition =
-      TAGGABLE_BIASES.find((bias) => bias.key === tagB)?.distractorDefinition ?? '';
-    expect(await within(queue).findByText(definition)).toBeVisible();
-    expect(await within(queue).findByText(text.queue.saved, undefined, WAIT)).toBeVisible();
-
-    // Quitar la etiqueta la borra
-    await typing.selectOptions(selects[0] as HTMLElement, '');
-    await waitFor(async () => {
-      expect(await rendered.api.repos.biasLabels.list()).toHaveLength(0);
-    }, WAIT);
+  it('una pregunta asignada que no está en revisión no entra a la cola', async () => {
+    await open({
+      role: 'physician',
+      seed: async (api, user) => {
+        const first = await assignInReview(api, user);
+        await api.repos.questions.setEditorialStatus(first.id, 'draft');
+      },
+    });
+    const queue = await screen.findByRole('region', { name: text.queue.title }, WAIT);
+    expect(await within(queue).findByText(text.queue.empty, undefined, WAIT)).toBeVisible();
   });
 
   it('un médico sin preguntas asignadas no tiene cola', async () => {
     await open({ role: 'physician' });
     const queue = await screen.findByRole('region', { name: text.queue.title }, WAIT);
-    expect(await within(queue).findByText(text.queue.empty)).toBeVisible();
+    expect(await within(queue).findByText(text.queue.empty, undefined, WAIT)).toBeVisible();
   });
 
   it('el admin ve el tablero y no etiqueta', async () => {
     await open({ role: 'admin' });
     const queue = await screen.findByRole('region', { name: text.queue.title }, WAIT);
     expect(within(queue).getByText(text.queue.adminNote)).toBeVisible();
-    expect(within(queue).queryAllByRole('combobox')).toHaveLength(0);
-    const stats = screen.getByRole('region', { name: text.stats.label });
-    expect(await within(stats).findByText(String(sample.length), undefined, WAIT)).toBeVisible();
+    expect(within(queue).queryAllByRole('link')).toHaveLength(0);
   });
 
   it('sin pares calibra y dice que el alumno ve trampas', async () => {
@@ -148,19 +136,27 @@ describe('acuerdo del etiquetado (pantalla 19)', () => {
     expect(screen.getByText(text.byTag.none)).toBeVisible();
   });
 
-  it('con kappa de 0.40 el alumno ve sesgos y con 0.39 ve trampas, y el tablero lo dice', async () => {
-    // 55 coincidencias en 100 pares dan kappa de 0.40 exacto
-    await open({ role: 'admin', seed: (api) => seedPairs(api, 55) });
-    const card = await screen.findByRole('region', { name: text.vocabulary.title }, WAIT);
-    expect(within(card).getByText(text.vocabulary.bias)).toBeVisible();
-    expect(screen.getByRole('region', { name: text.byTag.title })).toBeVisible();
-    // Por etiqueta, con las de menos acuerdo primero
-    const table = within(screen.getByRole('region', { name: text.byTag.title })).getByRole('table');
-    expect(within(table).getAllByRole('row').length).toBe(5);
+  it('con 29 pares sigue calibrando aunque coincidan todos', async () => {
+    const minPairs = DEFAULT_THRESHOLDS.bias.minLabeledPairs;
+    await open({ role: 'admin', seed: (api) => seedPairs(api, minPairs - 1, () => true) });
+    const title = await screen.findByText(text.vocabulary.title, undefined, WAIT);
+    expect(title.closest('[role="status"]')).not.toBeNull();
+    const stats = screen.getByRole('region', { name: text.stats.label });
+    expect(within(stats).getByText(String(minPairs - 1))).toBeVisible();
+    // Un kappa de pocos pares es ruido. Mientras calibra no se muestra
+    expect(within(stats).getByText(text.stats.noKappa)).toBeVisible();
   });
 
-  it('con kappa menor a 0.4 dice trampas', async () => {
-    await open({ role: 'admin', seed: (api) => seedPairs(api, 40) });
+  it('con 30 pares que coinciden el alumno ve sesgos y el tablero lista el acuerdo por etiqueta', async () => {
+    await open({ role: 'admin', seed: (api) => seedPairs(api, 40, () => true) });
+    const card = await screen.findByRole('region', { name: text.vocabulary.title }, WAIT);
+    expect(within(card).getByText(text.vocabulary.bias)).toBeVisible();
+    const table = within(screen.getByRole('region', { name: text.byTag.title })).getByRole('table');
+    expect(within(table).getAllByRole('row').length).toBeGreaterThan(1);
+  });
+
+  it('con poco acuerdo dice trampas', async () => {
+    await open({ role: 'admin', seed: (api) => seedPairs(api, 40, (index) => index % 4 === 0) });
     const card = await screen.findByRole('region', { name: text.vocabulary.title }, WAIT);
     expect(within(card).getByText(text.vocabulary.trap)).toBeVisible();
   });

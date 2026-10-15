@@ -1,6 +1,8 @@
 // Panel del médico de la Fase E. Pantalla 19, acuerdo del etiquetado. Sin etiquetas mide nada y dice
-// que el alumno ve trampas. El médico sin preguntas asignadas no tiene cola y el admin no etiqueta.
-// Pantalla 18, editor de pregunta con versiones. Pantalla 21, reportes de contenido. Pantalla 20, borradores de IA. Pantalla 22, importador del banco.
+// que el alumno ve trampas. El médico sin preguntas en revisión no tiene nada por etiquetar y el admin
+// no etiqueta. Pantalla 18, editor de pregunta, que el admin solo lee desde B11 (la médica que edita,
+// etiqueta a ciegas y decide está en physician-labeling.spec). Pantalla 21, reportes de contenido.
+// Pantalla 20, borradores de IA. Pantalla 22, importador del banco.
 import { SCREENS } from '@/app/screens';
 import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
@@ -55,43 +57,35 @@ test('acuerdo del etiquetado. El admin ve el tablero y no etiqueta', async ({ pa
   await expectNoSeriousA11yViolations(page);
 });
 
-test('editor de pregunta. Se abre desde el banco, guarda una versión nueva y la lista en el historial', async ({
-  page,
-}) => {
+test('editor de pregunta. El admin la abre desde el banco y solo la lee', async ({ page }) => {
   test.setTimeout(180_000);
   await signUp(page);
   await enterAs(page, 'admin');
   await page.goto(SCREENS.questionBank.path);
-  const list = page.getByRole('region', { name: t.bank.listTitle });
-  const first = list.getByRole('listitem').first();
-  await expect(first).toBeVisible({ timeout: 90_000 });
-  await first.locator('summary').click();
-  await first.getByRole('link', { name: physicianText.questionEditor.edit }).click();
+  const list = page.getByRole('region', { name: physicianText.bank.listTitle });
+  const open = list
+    .getByRole('link', {
+      name: new RegExp(`^${physicianText.bankScreen.openQuestion('')}`),
+    })
+    .first();
+  await expect(open).toBeVisible({ timeout: 90_000 });
+  await open.click();
 
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.questionEditor.title }),
   ).toBeVisible();
-  const explanation = page.getByLabel(physicianText.questionEditor.meta.explanation, {
-    exact: true,
-  });
-  await expect(explanation).toBeVisible({ timeout: 60_000 });
-  await expectNoSeriousA11yViolations(page);
-
-  await explanation.fill('Explicación revisada en la prueba de punta a punta.');
-  await page.getByRole('button', { name: t.settings.saveChanges }).click();
-  await expect(page.getByText(physicianText.questionEditor.save.saved)).toBeVisible();
-  const history = page.getByRole('region', { name: physicianText.questionEditor.sections.history });
-  await expect(history.getByText(physicianText.questionEditor.status.version(2))).toBeVisible();
+  // Los médicos escriben, etiquetan y deciden. El admin ve la pregunta completa y su historia (1.7)
+  await expect(page.getByText(physicianText.review.readOnly)).toBeVisible({ timeout: 60_000 });
   await expect(
-    history.getByText(
-      physicianText.questionEditor.history.changed([
-        physicianText.questionEditor.history.parts.explanation ?? '',
-      ]),
-    ),
+    page.getByRole('region', { name: physicianText.questionEditor.sections.history }),
   ).toBeVisible();
   await expect(
     page.getByLabel(physicianText.questionEditor.meta.explanation, { exact: true }),
-  ).toHaveValue('Explicación revisada en la prueba de punta a punta.');
+  ).toHaveCount(0);
+  await expect(page.getByRole('button', { name: physicianText.review.submit.action })).toHaveCount(
+    0,
+  );
+  await expectNoSeriousA11yViolations(page);
 });
 
 test('reportes. El alumno reporta un error y desde la bandeja se resuelve', async ({ page }) => {
@@ -231,7 +225,7 @@ test('importador. Revisa el archivo, reporta la fila con problema e importa solo
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.questionBank.title }),
   ).toBeVisible();
-  await page.getByLabel(t.bank.search).fill('prueba de importación');
+  await page.getByLabel(physicianText.bank.search).fill('prueba de importación');
   await expect(page.getByText('¿Cuál es el diagnóstico de la prueba de importación?')).toBeVisible({
     timeout: 60_000,
   });

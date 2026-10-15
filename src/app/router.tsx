@@ -54,6 +54,12 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
     import('@/features/admin/AdminSettingsScreen').then((module) => module.AdminSettingsScreen),
   adminBilling: () =>
     import('@/features/admin/BillingAdminScreen').then((module) => module.BillingAdminScreen),
+  bankAdmin: () =>
+    import('@/features/admin/bankAdminScreens').then((module) => module.BankAdminScreen),
+  physicianReviews: () =>
+    import('@/features/admin/bankAdminScreens').then((module) => module.PhysicianReviewsScreen),
+  deckCatalogAdmin: () =>
+    import('@/features/admin/bankAdminScreens').then((module) => module.DeckCatalogAdminScreen),
   questionBank: () =>
     import('@/features/physician/QuestionBankScreen').then((module) => module.QuestionBankScreen),
   agreement: () =>

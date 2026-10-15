@@ -47,6 +47,10 @@ const ADMIN_GROUP = [
   t.navItems.costs,
   t.navItems.platform,
   t.navItems.bank,
+  // Banco en la nube (B11). Banco y Sheet, Revisiones y Catálogo de mazos
+  t.screens.bankAdmin.title,
+  t.screens.physicianReviews.title,
+  t.screens.deckCatalogAdmin.title,
   t.screens.demoData.title,
 ];
 const STUDENT_BAR = [t.navItems.home, t.navItems.review, t.navItems.simulate, t.navItems.progress];

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
 import type { Note } from '@/data/schemas/decks';
-import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
@@ -30,7 +29,7 @@ export function CardDrafts({ pending }: { pending: readonly PendingNote[] }) {
     setError('');
     try {
       await decideNote(api, id, status);
-      setMessage(text.decided(t.bank.status[status]));
+      setMessage(text.decided(physicianText.bank.status[status]));
     } catch {
       setMessage('');
       setError(text.failed);

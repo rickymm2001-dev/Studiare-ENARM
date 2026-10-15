@@ -4,7 +4,8 @@
 // el admin no vea botones que el servidor va a rechazar. Desde B9 también las invitaciones del registro,
 // cómo nos conocieron en conteos, liberar el dispositivo de una cuenta (H17) y, solo para el dueño,
 // restablecer el segundo factor de alguien del equipo. Desde 64rem las cuentas van en una tabla con sus
-// acciones por fila y en el teléfono en una lista compacta (H15 de la revisión de diseño de B2).
+// acciones por fila y en el teléfono en una lista compacta (H15 de la revisión de diseño de B2). Desde
+// B11 cada médico lleva su clave corta para las columnas Autor y Revisor del Google Sheet.
 import {
   Crown,
   GraduationCap,
@@ -25,9 +26,11 @@ import {
   type CloudUser,
   type UsersFailure,
 } from '@/data/cloud/adminUsers';
+import { readBankTeam } from '@/data/cloud/bankAdmin';
 import { needsMfaRole, resetUserMfa } from '@/data/cloud/mfa';
 import type { Role } from '@/data/schemas/common';
 import { assignableRoles } from '@/engines/roles';
+import { adminText } from '@/i18n/admin';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
 import { Button } from '@/ui/components/button';
@@ -35,6 +38,8 @@ import { SelectField, TextField } from '@/ui/components/field';
 import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
 import { LoadingState } from '@/ui/states/states';
 import { InvitationsCard } from './InvitationsCard';
+import { PhysicianCodeForm } from './PhysicianCodeForm';
+import { useBankAdminQuery } from './useBankAdminQuery';
 import { SignupSourcesCard } from './SignupSourcesCard';
 
 type State =
@@ -59,6 +64,12 @@ export function CloudUsers() {
   const [page, setPage] = useState(0);
   const [state, setState] = useState<State>({ status: 'loading' });
   const [message, setMessage] = useState('');
+  // Las claves del Sheet de los médicos (B1 de la revisión). Si no se pueden leer, el formulario sigue
+  const team = useBankAdminQuery((cloud, onForbidden) => readBankTeam(cloud, onForbidden), 'team');
+  const codes =
+    team.state.status === 'ready'
+      ? new Map(team.state.value.codes.map((entry) => [entry.userId, entry.code] as const))
+      : null;
 
   useEffect(() => {
     let stopped = false;
@@ -84,7 +95,7 @@ export function CloudUsers() {
   const header = (
     <ScreenHeader
       title={t.screens.adminUsers.title}
-      description={t.screens.adminUsers.description}
+      description={adminText.descriptions.adminUsers}
     />
   );
 
@@ -211,6 +222,7 @@ export function CloudUsers() {
               onRole={changeRole}
               onReleaseDevice={releaseDevice}
               onResetMfa={resetMfa}
+              codes={codes}
             />
           )}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -246,8 +258,14 @@ export function CloudUsers() {
   );
 }
 
+/** La clave de un médico, null si no tiene y undefined mientras no se leen */
+const codeOf = (codes: ReadonlyMap<string, string> | null, userId: string) =>
+  codes === null ? undefined : (codes.get(userId) ?? null);
+
 interface RowHandlers {
   callerRole: Role;
+  /** La clave del Sheet de cada médico, por id de cuenta. null mientras no se lee */
+  codes: ReadonlyMap<string, string> | null;
   onRole: (user: CloudUser, next: Role) => Promise<void>;
   onReleaseDevice: (user: CloudUser) => Promise<void>;
   onResetMfa: (user: CloudUser) => Promise<void>;
@@ -474,7 +492,17 @@ function UserRow(props: RowProps) {
       <td className="py-3 pr-3">{planNameOf(user) ?? t.accounts.admin.users.noPlan}</td>
       <td className="py-3 pr-3 tabular-nums">{joinedOn(user)}</td>
       <td className="py-3">
-        <AccountActions {...props} />
+        <div className="flex flex-col gap-2">
+          <AccountActions {...props} />
+          {user.role === 'physician' ? (
+            <PhysicianCodeForm
+              key={codeOf(props.codes, user.id) ?? ''}
+              userId={user.id}
+              alias={user.alias}
+              current={codeOf(props.codes, user.id)}
+            />
+          ) : null}
+        </div>
       </td>
     </tr>
   );
@@ -500,6 +528,14 @@ function UserItem(props: RowProps) {
       </div>
       <RoleControl {...props} labelHidden={false} />
       <AccountActions {...props} />
+      {user.role === 'physician' ? (
+        <PhysicianCodeForm
+          key={codeOf(props.codes, user.id) ?? ''}
+          userId={user.id}
+          alias={user.alias}
+          current={codeOf(props.codes, user.id)}
+        />
+      ) : null}
     </div>
   );
 }

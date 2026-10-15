@@ -11,6 +11,7 @@ import { readStoredOverrides } from '@/config/overridesStore';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
+import { bankAdminText } from '@/i18n/bankAdmin';
 
 vi.setConfig({ testTimeout: 30_000 });
 
@@ -179,6 +180,25 @@ describe('pesos del ENARM', () => {
       await within(card).findByText(adminText.adminConfig.weightsForm.resetDone),
     ).toBeVisible();
     expect(readStoredOverrides()).toBeNull();
+  });
+
+  it('apagar la marca de provisionales guarda que ya son los oficiales sin tocar los pesos', async () => {
+    const typing = userEvent.setup();
+    await open();
+    const card = screen.getByRole('region', { name: adminText.adminConfig.weightsForm.title });
+    expect(within(card).getByText(bankAdminText.weights.provisionalMark)).toBeVisible();
+    expect(within(card).getByText(bankAdminText.weights.english)).toBeVisible();
+    const save = within(card).getByRole('button', { name: adminText.adminConfig.weightsForm.save });
+    expect(save).toBeDisabled();
+    await typing.click(within(card).getByLabelText(bankAdminText.weights.provisional));
+    expect(within(card).getByText(bankAdminText.weights.officialMark)).toBeVisible();
+    await typing.click(save);
+    expect(await within(card).findByText(adminText.adminConfig.weightsForm.saved)).toBeVisible();
+    expect(readStoredOverrides()?.weights).toEqual({
+      branches: {},
+      topics: {},
+      provisional: false,
+    });
   });
 
   it('un peso que no es positivo no deja guardar', async () => {

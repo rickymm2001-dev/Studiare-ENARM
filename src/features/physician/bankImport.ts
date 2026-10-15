@@ -14,6 +14,7 @@ import { bankTaxonomy } from './bankTaxonomy';
 import {
   buildNextVersion,
   changedParts,
+  checkedStructure,
   draftFromVersion,
   validateDraft,
   type QuestionDraft,
@@ -165,7 +166,7 @@ export async function planImport(
         branch: draft.branch,
         topic: draft.topic,
         subtopic: draft.subtopic,
-        structure: { ...draft.structure, source: declared ? 'physician' : 'auto' },
+        structure: { ...checkedStructure(draft), source: declared ? 'physician' : 'auto' },
         explanation: '',
         gpcRefs: [],
         physicianDifficulty: draft.physicianDifficulty,

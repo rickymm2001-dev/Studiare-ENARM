@@ -1,0 +1,219 @@
+{
+  "status": "partial",
+  "reason": null,
+  "mode": "apply",
+  "counts": {
+    "read": 24,
+    "empty": 0,
+    "example": 0,
+    "unchanged": 0,
+    "created": 14,
+    "versioned": 0,
+    "converged": 0,
+    "meta": 0,
+    "incomplete": 2,
+    "rejected": 10,
+    "conflict": 0,
+    "truncated": 0,
+    "topicMismatches": 0
+  },
+  "rows": [
+    {
+      "rowNumber": 2,
+      "sheetKey": "GO-0001",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 3,
+      "sheetKey": "GO-0002",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["kind_control_check"],
+      "problems": []
+    },
+    {
+      "rowNumber": 4,
+      "sheetKey": "GO-0003",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 5,
+      "sheetKey": "GO-0004",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 6,
+      "sheetKey": "GO-0005",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 7,
+      "sheetKey": "GO-0006",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["case_rows_apart"],
+      "problems": []
+    },
+    {
+      "rowNumber": 8,
+      "sheetKey": "GO-0007",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 9,
+      "sheetKey": "GO-0008",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["case_rows_apart"],
+      "problems": []
+    },
+    {
+      "rowNumber": 10,
+      "sheetKey": "GO-0009",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "case_inconsistent", "column": "Caso" }]
+    },
+    {
+      "rowNumber": 11,
+      "sheetKey": "GO-0010",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "case_inconsistent", "column": "Caso" }]
+    },
+    {
+      "rowNumber": 12,
+      "sheetKey": "GO-0011",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [
+        { "code": "subtopic_is_topic", "column": "Subtema", "value": "Control prenatal" }
+      ]
+    },
+    {
+      "rowNumber": 13,
+      "sheetKey": "GO-0012",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 14,
+      "sheetKey": "GO-0013",
+      "outcome": "created",
+      "incomplete": ["explanation_missing", "references_missing"],
+      "notices": ["bias_none_on_correct"],
+      "problems": []
+    },
+    {
+      "rowNumber": 15,
+      "sheetKey": "GO-0014",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["author_is_reviewer"],
+      "problems": []
+    },
+    {
+      "rowNumber": 16,
+      "sheetKey": "GO-0015",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": [],
+      "problems": []
+    },
+    {
+      "rowNumber": 17,
+      "sheetKey": "GO-15",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "id_format", "column": "ID" }]
+    },
+    {
+      "rowNumber": 18,
+      "sheetKey": null,
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "id_missing", "column": "ID" }]
+    },
+    {
+      "rowNumber": 19,
+      "sheetKey": "GO-0016",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "id_duplicate", "column": "ID" }]
+    },
+    {
+      "rowNumber": 20,
+      "sheetKey": "GO-0016",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "id_duplicate", "column": "ID" }]
+    },
+    {
+      "rowNumber": 21,
+      "sheetKey": "GO-0017",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "template_placeholder", "column": "ID" }]
+    },
+    {
+      "rowNumber": 22,
+      "sheetKey": "GO-0018",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [
+        { "code": "option_gap", "column": "Opción C" },
+        { "code": "options_few", "column": "Opción A" }
+      ]
+    },
+    {
+      "rowNumber": 23,
+      "sheetKey": "GO-0019",
+      "outcome": "rejected",
+      "incomplete": [],
+      "notices": [],
+      "problems": [{ "code": "difficulty_invalid", "column": "Dificultad", "value": "7" }]
+    },
+    {
+      "rowNumber": 24,
+      "sheetKey": "GO-0020",
+      "outcome": "created",
+      "incomplete": ["task_undetected"],
+      "notices": ["structure_auto"],
+      "problems": []
+    },
+    {
+      "rowNumber": 25,
+      "sheetKey": "GO-0021",
+      "outcome": "created",
+      "incomplete": [],
+      "notices": ["status_approved_ignored", "language_unknown"],
+      "problems": []
+    }
+  ]
+}

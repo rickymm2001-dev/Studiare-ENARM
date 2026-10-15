@@ -76,16 +76,35 @@ export const BiasTaxonomySchema = z.strictObject({
 });
 export type BiasTaxonomy = z.infer<typeof BiasTaxonomySchema>;
 
+/**
+ * Sección del examen de una rama (B11). clinical son los 250 reactivos en español y english los 30 de
+ * comprensión de textos en inglés, que se cuentan aparte. Sin el campo, la rama es clinical
+ */
+export const TaxonomySectionSchema = z.enum(['clinical', 'english']);
+export type TaxonomySection = z.infer<typeof TaxonomySectionSchema>;
+
 /** Taxonomía de ramas, temas y subtemas con pesos del ENARM (13.4) */
 export const TopicTaxonomySchema = z.strictObject({
   version: z.int().min(1),
   status: ReviewStatusSchema,
+  /**
+   * Los pesos de fábrica son provisionales mientras la convocatoria no publique los oficiales (sección
+   * 6 del plan del cambio). El admin los cambia y apaga la marca en Plataforma
+   */
+  weightsProvisional: z.boolean().optional(),
+  /** De dónde salen los pesos de fábrica, para mostrarlo junto a la marca */
+  weightsSource: z.string().min(1).max(200).optional(),
   branches: z
     .array(
       z.strictObject({
         key: TaxonomyKeySchema,
         name: z.string().min(1),
-        /** Peso provisional del ENARM, iguales hasta que Ricardo dé los oficiales (D-013) */
+        /** Sección del examen. Sin el campo es clinical (ver branchSection) */
+        section: TaxonomySectionSchema.optional(),
+        /**
+         * Peso provisional del ENARM. Desde B11 son los reactivos de cada rama sobre 250 de la
+         * sección 6 del plan del cambio, e Inglés médico con sus 30 aparte
+         */
         weight: z.number().positive(),
         topics: z
           .array(
@@ -107,6 +126,11 @@ export const TopicTaxonomySchema = z.strictObject({
     .min(1),
 });
 export type TopicTaxonomy = z.infer<typeof TopicTaxonomySchema>;
+
+/** La sección de una rama. Las que no la dicen son clinical, como todas las de antes de B11 */
+export function branchSection(branch: { section?: TaxonomySection | undefined }): TaxonomySection {
+  return branch.section ?? 'clinical';
+}
 
 /** Textos base de consejos por sesgo (8.5). Borradores de Claude pendientes de revisión médica */
 export const BiasTipsSchema = z.strictObject({

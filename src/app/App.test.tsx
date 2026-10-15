@@ -8,6 +8,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { DataProvider } from '@/data/DataProvider';
 import { newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { DEFAULT_PREFERENCES, usePreferences } from './preferences';
 import { routes } from './router';
 import { LEGACY_REDIRECTS, SCREEN_KEYS, SCREENS } from './screens';
@@ -37,15 +38,33 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3) y con Admin, Pagos (B10)', () => {
-    expect(SCREEN_KEYS).toHaveLength(31);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) y las tres del banco en la nube (B11)', () => {
+    expect(SCREEN_KEYS).toHaveLength(34);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(31);
+    expect(new Set(paths).size).toBe(34);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(31);
+    expect(new Set(numbers).size).toBe(34);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.bankAdmin).toEqual({
+      number: 35,
+      path: '/admin/banco',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.physicianReviews).toEqual({
+      number: 36,
+      path: '/admin/revisiones',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.deckCatalogAdmin).toEqual({
+      number: 37,
+      path: '/admin/mazos',
       area: 'admin',
       phase: 'E',
     });
@@ -140,7 +159,9 @@ describe('rutas', () => {
     expect(nav).not.toHaveTextContent(t.navItems.review);
     // Espera a que el banco demo termine de guardarse. Si la prueba acaba antes, la carga diferida
     // corre con el entorno ya cerrado y Vitest reporta un error de cierre intermitente (D-091)
-    expect(await screen.findByText(t.bank.emptyTitle, {}, { timeout: 20_000 })).toBeVisible();
+    expect(
+      await screen.findByText(physicianText.bank.emptyTitle, {}, { timeout: 20_000 }),
+    ).toBeVisible();
   }, 30_000);
 
   it('un alumno no entra al área de admin ni puede cambiarse de rol él mismo', async () => {

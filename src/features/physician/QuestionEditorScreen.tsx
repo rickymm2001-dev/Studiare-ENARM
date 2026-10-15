@@ -1,91 +1,82 @@
-// Editor de pregunta (pantalla 18, 10.2). Caso, enunciado, de 4 a 10 opciones con su etiqueta y su
-// definición a la vista, set canónico, explicación, referencias de GPC, tema, estructura, dificultad
-// e historial de versiones. Cada guardado crea una versión nueva en borrador y las anteriores no
-// cambian (6.1). El médico edita solo lo que le asignaron y, si la pregunta está en el doble
-// etiquetado, primero etiqueta a ciegas (7.11).
+// Editor de pregunta (pantalla 18, 10.2 y 4.2 del plan de B11). Caso, enunciado, de 4 a 10 opciones con
+// su etiqueta y su definición a la vista, set canónico, explicación, referencias de GPC, tema,
+// estructura, dificultad e historial de versiones con sus decisiones. Cada guardado crea una versión
+// nueva en borrador y las anteriores no cambian (6.1). Con la versión en revisión el revisor pasa por
+// dos pasos. Primero etiqueta a ciegas los distractores, sin ver lo del autor. Después ve la pregunta
+// completa, lo que cambió, sus pendientes y las casillas por confirmar, y decide. El autor manda a
+// revisión. El admin y el dueño solo leen. Lo que viene del Sheet se corrige en el Sheet, y un
+// conflicto con el Sheet se resuelve aquí sin pisar nada.
 import { useMemo, useState, type SyntheticEvent } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SCREENS } from '@/app/screens';
-import { useSession } from '@/app/session';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
-import type { Question } from '@/data/schemas/bank';
+import type { EditorQuestion, EditorVersion } from '@/data/bank/contracts';
+import {
+  errorCodeOf,
+  type EditorialRepo,
+  type ReviewDecision,
+} from '@/data/editorial/editorialRepo';
+import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { analyzeStructure } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
-import { useBankReady } from '../shared/useBankReady';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextAreaField } from '@/ui/components/field';
 import { SaveBar } from '@/ui/components/save-bar';
-import { EmptyState, LoadingState } from '@/ui/states/states';
+import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
+import { bankTaxonomy } from './bankTaxonomy';
+import { InvalidDraftError } from './editorActions';
 import {
-  canMoveTo,
-  draftFromVersion,
-  isBlindLocked,
-  STATUS_FLOW,
+  blockingIssues,
+  draftFromEditorVersion,
+  validateDraft,
   type DraftIssue,
   type QuestionDraft,
 } from './editorDraft';
-import {
-  InvalidDraftError,
-  moveQuestionStatus,
-  saveQuestionVersion,
-  StaleVersionError,
-} from './editorActions';
-import { sampleQuestionIds } from './agreementView';
-import { bankTaxonomy } from './bankTaxonomy';
 import { CluesEditor, GpcEditor, HistoryCard, OptionsEditor } from './EditorSections';
+import { VersionPreview } from './QuestionPreview';
+import { approvalBlockers, reviewViewOf, type ReviewView } from './reviewSteps';
+import { flagText, incompleteText } from './reviewTexts';
+import { useEditorialRepo } from './useEditorialRepo';
+import { useRepoQuery } from './useRepoQuery';
 
 const options = (entries: Record<string, string>) =>
   Object.entries(entries).map(([value, label]) => ({ value, label }));
 
 const sameDraft = (a: QuestionDraft, b: QuestionDraft) => JSON.stringify(a) === JSON.stringify(b);
 
+const biasName = new Map(TAGGABLE_BIASES.map((bias) => [bias.key, bias.name]));
+const biasDefinition = new Map(
+  TAGGABLE_BIASES.map((bias) => [bias.key, bias.distractorDefinition]),
+);
+
+/** El aviso de un error de las funciones del banco */
+const errorText = (error: unknown) =>
+  physicianText.errors[errorCodeOf(error)] ?? physicianText.errors.unknown ?? '';
+
 export function QuestionEditorScreen() {
   const text = physicianText.questionEditor;
-  const api = useDataApi();
-  const role = usePreferences((state) => state.role);
-  const session = useSession();
-  const me = session.status === 'ready' ? session.user.id : null;
   const [params] = useSearchParams();
   const questionId = params.get('pregunta');
-  const bankReady = useBankReady();
-  // El aviso vive aquí y no en el formulario, porque al guardar sale una versión y el formulario
-  // se vuelve a armar con ella
+  const { repo, ready, key } = useEditorialRepo();
+  // Los avisos viven aquí y no en los paneles, porque al guardar o decidir la pregunta se vuelve a
+  // leer y los paneles se arman otra vez
   const [notice, setNotice] = useState('');
-
-  const data = useLiveData(async () => {
-    if (!questionId) return null;
-    const versions = await api.repos.questions.listVersions(questionId);
-    const latest = versions.at(-1);
-    if (!latest) return null;
-    const optionsByVersion = new Map(
-      await Promise.all(
-        versions.map(
-          async (version) =>
-            [version.id, await api.repos.options.listForQuestionVersion(version.id)] as const,
-        ),
-      ),
-    );
-    const [assignments, labels, all, linkedCase] = await Promise.all([
-      api.repos.reviewAssignments.list(),
-      api.repos.biasLabels.list(),
-      api.repos.questions.listLatest(),
-      latest.caseId ? api.repos.cases.get(latest.caseId) : Promise.resolve(undefined),
-    ]);
-    return { versions, optionsByVersion, assignments, labels, all, linkedCase };
-  }, [api.repos, questionId, bankReady]);
+  const [error, setError] = useState('');
+  const { state, reload } = useRepoQuery(
+    () => (questionId ? repo.question(questionId) : Promise.resolve(null)),
+    `${key}|${questionId ?? ''}`,
+    ready,
+  );
 
   const header = (
     <ScreenHeader
       title={t.screens.questionEditor.title}
-      description={t.screens.questionEditor.description}
+      description={physicianText.descriptions.questionEditor}
     />
   );
   const backToBank = (
@@ -96,15 +87,15 @@ export function QuestionEditorScreen() {
       </Link>
     </Button>
   );
-  const state = (title: string, description: string, action?: React.ReactNode) => (
+  const empty = (title: string, description: string) => (
     <>
       {header}
-      <EmptyState title={title} description={description} action={action ?? backToBank} />
+      <EmptyState title={title} description={description} action={backToBank} />
     </>
   );
 
-  if (!questionId) return state(text.noQuestion.title, text.noQuestion.description);
-  if (data === undefined || !bankReady) {
+  if (!questionId) return empty(text.noQuestion.title, text.noQuestion.description);
+  if (state.status === 'loading') {
     return (
       <>
         {header}
@@ -112,93 +103,577 @@ export function QuestionEditorScreen() {
       </>
     );
   }
-  const latest = data?.versions.at(-1);
-  if (!data || !latest) return state(text.notFound.title, text.notFound.description);
-
-  const isPhysician = role === 'physician';
-  if (
-    isPhysician &&
-    !data.assignments.some(
-      (assignment) => assignment.questionId === questionId && assignment.physicianId === me,
-    )
-  ) {
-    return state(text.notAssigned.title, text.notAssigned.description);
-  }
-
-  const latestOptions = data.optionsByVersion.get(latest.id) ?? [];
-  const blind = isBlindLocked({
-    role: isPhysician ? 'physician' : 'admin',
-    inSample: sampleQuestionIds(data.all).includes(questionId),
-    distractorOptionIds: latestOptions
-      .filter((option) => !option.isCorrect)
-      .map((option) => option.optionId),
-    labeledByMe: new Set(
-      data.labels.filter((label) => label.physicianId === me).map((label) => label.optionId),
-    ),
-  });
-  if (blind) {
-    return state(
-      text.blind.title,
-      text.blind.description,
-      <Button asChild>
-        <Link to={SCREENS.agreement.path}>{text.blind.cta}</Link>
-      </Button>,
+  if (state.status === 'failed') {
+    if (state.code === 'not_assigned') {
+      return empty(text.notAssigned.title, text.notAssigned.description);
+    }
+    if (state.code === 'not_found' || state.code === 'invalid') {
+      return empty(text.notFound.title, text.notFound.description);
+    }
+    return (
+      <>
+        {header}
+        <ErrorState description={physicianText.errors[state.code] ?? ''} onRetry={reload} />
+      </>
     );
   }
+  const question = state.value;
+  const view = question ? reviewViewOf(question) : null;
+  if (!question || !view) return empty(text.notFound.title, text.notFound.description);
 
-  const drafts = new Map(
-    data.versions.map((version) => [
-      version.id,
-      draftFromVersion(version, data.optionsByVersion.get(version.id) ?? []),
-    ]),
-  );
+  const act = async (work: () => Promise<string>) => {
+    setError('');
+    setNotice('');
+    try {
+      setNotice(await work());
+    } catch (caught) {
+      setError(errorText(caught));
+    }
+    reload();
+  };
+
   return (
     <>
       {header}
-      <EditorForm
-        key={latest.id}
-        latest={latest}
-        initial={drafts.get(latest.id) ?? draftFromVersion(latest, latestOptions)}
-        linkedVignette={data.linkedCase?.vignette ?? null}
-        versions={data.versions}
-        drafts={drafts}
-        back={backToBank}
-        notice={notice}
-        onNotice={setNotice}
-      />
+      <StatusCard question={question} view={view} back={backToBank} notice={notice} error={error} />
+      {view.conflict && view.step !== 'read_only' ? (
+        <ConflictCard
+          onChoose={(choice) =>
+            act(async () => {
+              await repo.resolveSyncConflict(question.question.questionId, choice);
+              return choice === 'keep_app'
+                ? physicianText.review.conflict.keptApp
+                : physicianText.review.conflict.tookSheet;
+            })
+          }
+        />
+      ) : null}
+      {view.step === 'blind' ? (
+        <BlindStep
+          key={view.latest.versionId}
+          repo={repo}
+          question={question}
+          view={view}
+          onSaved={(message) => {
+            setError('');
+            setNotice(message);
+            reload();
+          }}
+          onFailed={(message) => {
+            setError(message);
+            reload();
+          }}
+        />
+      ) : (
+        <ReviewBody
+          repo={repo}
+          question={question}
+          view={view}
+          act={act}
+          onSaved={(message) => {
+            setError('');
+            setNotice(message);
+            reload();
+          }}
+          onFailed={(message) => {
+            setNotice('');
+            setError(message);
+          }}
+          onStale={() => {
+            setNotice('');
+            setError(physicianText.errors.stale ?? '');
+            reload();
+          }}
+        />
+      )}
     </>
   );
 }
 
-function EditorForm({
-  latest,
-  initial,
-  linkedVignette,
-  versions,
-  drafts,
+function StatusCard({
+  question,
+  view,
   back,
   notice,
-  onNotice: setNotice,
+  error,
 }: {
-  latest: Question;
-  initial: QuestionDraft;
-  linkedVignette: string | null;
-  versions: readonly Question[];
-  drafts: ReadonlyMap<string, QuestionDraft>;
+  question: EditorQuestion;
+  view: ReviewView;
   back: React.ReactNode;
   notice: string;
-  onNotice: (notice: string) => void;
+  error: string;
 }) {
   const text = physicianText.questionEditor;
-  const api = useDataApi();
+  const review = physicianText.review;
+  const { latest } = view;
+  return (
+    <Card aria-labelledby="editor-estado">
+      <CardHeader>
+        <CardTitle id="editor-estado" className="flex flex-wrap items-center gap-2">
+          {text.status.title}
+          {view.sheetKey ? <Badge>{physicianText.bankScreen.sheetId(view.sheetKey)}</Badge> : null}
+          <Badge variant="info">{text.status.version(latest.version)}</Badge>
+          <Badge variant={latest.status === 'approved' ? 'success' : 'neutral'}>
+            {physicianText.bank.status[latest.status]}
+          </Badge>
+          {question.question.publishedVersion !== null ? (
+            <Badge variant="success">
+              {physicianText.bankScreen.published(question.question.publishedVersion)}
+            </Badge>
+          ) : null}
+        </CardTitle>
+        <CardDescription>{text.status.hint}</CardDescription>
+      </CardHeader>
+      {view.step === 'read_only' ? (
+        <p className="text-sm text-fg-muted">{review.readOnly}</p>
+      ) : null}
+      {view.step === 'waiting' ? (
+        <p className="text-sm text-fg-muted">
+          {view.authorHidden ? review.blindWaiting : review.waiting}
+        </p>
+      ) : null}
+      {view.step === 'closed' ? (
+        <p className="text-sm text-fg-muted">
+          {review.closed(physicianText.bank.status[latest.status])}
+        </p>
+      ) : null}
+      {question.reports.open > 0 ? (
+        <p className="text-sm text-fg-muted">
+          {physicianText.bankScreen.reports(question.reports.open)}
+        </p>
+      ) : null}
+      {question.distractorFlags.some((flag) => flag.status === 'open') ? (
+        <p className="text-sm text-fg-muted">
+          {review.distractorFlags(
+            question.distractorFlags.filter((flag) => flag.status === 'open').length,
+          )}
+        </p>
+      ) : null}
+      <div className="mt-2 flex flex-wrap items-center gap-2">{back}</div>
+      <p role="status" className="mt-2 text-sm font-medium text-success">
+        {notice}
+      </p>
+      {error ? (
+        <p role="alert" className="mt-2 text-sm text-danger">
+          {error}
+        </p>
+      ) : null}
+    </Card>
+  );
+}
+
+function ConflictCard({
+  onChoose,
+}: {
+  onChoose: (choice: 'keep_app' | 'take_sheet') => Promise<void>;
+}) {
+  const text = physicianText.review.conflict;
+  const [busy, setBusy] = useState(false);
+  const choose = (choice: 'keep_app' | 'take_sheet') => {
+    setBusy(true);
+    void onChoose(choice).finally(() => {
+      setBusy(false);
+    });
+  };
+  return (
+    <Card aria-labelledby="editor-conflicto">
+      <CardHeader>
+        <CardTitle id="editor-conflicto">{text.title}</CardTitle>
+        <CardDescription>{text.body}</CardDescription>
+      </CardHeader>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            choose('keep_app');
+          }}
+        >
+          {text.keepApp}
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            choose('take_sheet');
+          }}
+        >
+          {text.takeSheet}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+/** Paso 1. El revisor etiqueta a ciegas cada distractor, sin ver lo del autor (4.4) */
+function BlindStep({
+  repo,
+  question,
+  view,
+  onSaved,
+  onFailed,
+}: {
+  repo: EditorialRepo;
+  question: EditorQuestion;
+  view: ReviewView;
+  onSaved: (message: string) => void;
+  onFailed: (message: string) => void;
+}) {
+  const text = physicianText.review.blind;
+  const { latest } = view;
+  const mine = new Map(question.review.myLabels.map((label) => [label.optionId, label.tag]));
+  const [busy, setBusy] = useState<string | null>(null);
+  const ordered = [...latest.options].sort((a, b) => a.position - b.position);
+
+  const choose = async (optionId: string, letter: string, tag: string) => {
+    if (tag === '') return;
+    setBusy(optionId);
+    try {
+      const result = await repo.label(latest.versionId, optionId, tag);
+      const saved = text.saved(biasName.get(tag) ?? tag, letter);
+      onSaved(result.revealed ? `${saved} ${text.revealed}` : saved);
+    } catch (caught) {
+      onFailed(errorCodeOf(caught) === 'blind_labels' ? text.locked : errorText(caught));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <Card aria-labelledby="editor-ciegas">
+      <CardHeader>
+        <CardTitle id="editor-ciegas">{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      {view.blind ? (
+        <p className="mb-2 text-sm font-medium">
+          {text.progress(view.blind.done, view.blind.total)}
+        </p>
+      ) : null}
+      <div className="flex flex-col gap-3">
+        {question.case ? (
+          <p className="rounded-md bg-muted p-3 text-sm">{question.case.vignette}</p>
+        ) : null}
+        {latest.vignette ? <p className="text-sm">{latest.vignette}</p> : null}
+        <p className="font-medium">{latest.prompt}</p>
+        <ol className="flex flex-col gap-3">
+          {ordered.map((option) => {
+            const letter = option.letter ?? String(option.position + 1);
+            const current = mine.get(option.optionId) ?? '';
+            return (
+              <li key={option.id} className="flex flex-col gap-1">
+                <p className="text-sm font-medium">
+                  {letter}. {option.text}
+                </p>
+                {option.isCorrect ? (
+                  <p className="text-sm text-fg-muted">{text.correct}</p>
+                ) : (
+                  <>
+                    <SelectField
+                      label={text.option(letter)}
+                      value={current}
+                      disabled={busy !== null}
+                      options={[
+                        { value: '', label: text.choose },
+                        ...TAGGABLE_BIASES.map((bias) => ({ value: bias.key, label: bias.name })),
+                      ]}
+                      onChange={(event) => {
+                        void choose(option.optionId, letter, event.target.value);
+                      }}
+                    />
+                    {current ? (
+                      <p className="text-sm text-fg-muted">{biasDefinition.get(current)}</p>
+                    ) : null}
+                  </>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </Card>
+  );
+}
+
+/** Todo lo que no es el paso a ciegas. Decidir, mandar a revisión, editar y la historia */
+function ReviewBody({
+  repo,
+  question,
+  view,
+  act,
+  onSaved,
+  onFailed,
+  onStale,
+}: {
+  repo: EditorialRepo;
+  question: EditorQuestion;
+  view: ReviewView;
+  act: (work: () => Promise<string>) => Promise<void>;
+  onSaved: (message: string) => void;
+  onFailed: (message: string) => void;
+  onStale: () => void;
+}) {
+  const review = physicianText.review;
+  const [editAnyway, setEditAnyway] = useState(false);
+  const { latest } = view;
+  const canEdit = view.editable && (!view.fromSheet || editAnyway);
+  const initial = useMemo(() => draftFromEditorVersion(latest), [latest]);
+  return (
+    <>
+      {view.step === 'decide' ? (
+        <DecidePanel
+          view={view}
+          onDecide={(decision, comment, checks) =>
+            act(async () => {
+              const result = await repo.decide(latest.versionId, decision, comment, checks);
+              if (decision === 'approve') {
+                return result.waitingCase
+                  ? review.decide.approvedWaiting
+                  : review.decide.approvedPublished;
+              }
+              return decision === 'reject'
+                ? review.decide.rejected
+                : review.decide.changesRequested;
+            })
+          }
+        />
+      ) : null}
+      {view.step === 'draft' ? (
+        <SubmitPanel
+          view={view}
+          onSubmit={() =>
+            act(async () => {
+              await repo.submit(latest.versionId);
+              return review.submit.sent;
+            })
+          }
+        />
+      ) : null}
+      {view.editable && view.fromSheet && !editAnyway ? (
+        <Card aria-labelledby="editor-sheet">
+          <CardHeader>
+            <CardTitle id="editor-sheet">{review.sheet.title}</CardTitle>
+            <CardDescription>{review.sheet.body(view.sheetKey ?? '')}</CardDescription>
+          </CardHeader>
+          <div>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setEditAnyway(true);
+              }}
+            >
+              {review.sheet.editAnyway}
+            </Button>
+          </div>
+        </Card>
+      ) : null}
+      {canEdit ? (
+        <EditorForm
+          key={latest.versionId}
+          repo={repo}
+          questionId={question.question.questionId}
+          latest={latest}
+          initial={initial}
+          caseVignette={question.case?.vignette ?? null}
+          onSaved={onSaved}
+          onFailed={onFailed}
+          onStale={onStale}
+        />
+      ) : (
+        <Card aria-labelledby="editor-lectura">
+          <CardHeader>
+            <CardTitle id="editor-lectura">{physicianText.questionEditor.sections.case}</CardTitle>
+          </CardHeader>
+          <VersionPreview version={latest} caseVignette={question.case?.vignette ?? null} />
+        </Card>
+      )}
+      <HistoryCard versions={question.versions} />
+    </>
+  );
+}
+
+/** Paso 2. La pregunta completa con lo que cambió, sus pendientes y sus casillas, y la decisión */
+function DecidePanel({
+  view,
+  onDecide,
+}: {
+  view: ReviewView;
+  onDecide: (decision: ReviewDecision, comment: string, checks: string[]) => Promise<void>;
+}) {
+  const text = physicianText.review.decide;
+  const history = physicianText.questionEditor.history;
+  const [checked, setChecked] = useState<ReadonlySet<string>>(new Set());
+  const [comment, setComment] = useState('');
+  const [busy, setBusy] = useState(false);
+  const blockers = approvalBlockers(view, checked);
+  const decide = (decision: ReviewDecision) => {
+    setBusy(true);
+    void onDecide(decision, comment, [...checked]).finally(() => {
+      setBusy(false);
+    });
+  };
+  const noComment = comment.trim() === '';
+  return (
+    <Card aria-labelledby="editor-decidir">
+      <CardHeader>
+        <CardTitle id="editor-decidir">{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      <div className="flex flex-col gap-3">
+        <div>
+          <p className="font-medium">{text.changes}</p>
+          <p className="text-sm">
+            {view.changes === null
+              ? text.firstVersion
+              : view.changes.length === 0
+                ? text.noChanges
+                : history.changed(view.changes.map((part) => history.parts[part] ?? part))}
+          </p>
+        </div>
+        <div>
+          <p className="font-medium">{text.incompleteTitle}</p>
+          {view.incomplete.length === 0 ? (
+            <p className="text-sm text-fg-muted">{text.incompleteNone}</p>
+          ) : (
+            <ul className="list-disc pl-5 text-sm">
+              {view.incomplete.map((code) => (
+                <li key={code}>{incompleteText(code)}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {view.flags.length > 0 ? (
+          <fieldset className="flex flex-col gap-2">
+            <legend className="font-medium">{text.flagsTitle}</legend>
+            {view.flags.map((flag) => (
+              <CheckboxField
+                key={flag}
+                label={flagText(flag)}
+                checked={checked.has(flag)}
+                onChange={(event) => {
+                  const next = new Set(checked);
+                  if (event.target.checked) next.add(flag);
+                  else next.delete(flag);
+                  setChecked(next);
+                }}
+              />
+            ))}
+          </fieldset>
+        ) : null}
+        <TextAreaField
+          label={text.comment}
+          hint={text.commentHint}
+          rows={3}
+          maxLength={2000}
+          value={comment}
+          onChange={(event) => {
+            setComment(event.target.value);
+          }}
+        />
+        {blockers.length > 0 ? (
+          <ul className="text-sm text-fg-muted">
+            {blockers.map((blocker) => (
+              <li key={blocker}>{text.blockers[blocker]}</li>
+            ))}
+          </ul>
+        ) : null}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            disabled={busy || blockers.length > 0}
+            onClick={() => {
+              decide('approve');
+            }}
+          >
+            {text.approve}
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={busy || noComment}
+            onClick={() => {
+              decide('request_changes');
+            }}
+          >
+            {text.requestChanges}
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={busy || noComment}
+            onClick={() => {
+              decide('reject');
+            }}
+          >
+            {text.reject}
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+/** El borrador más reciente va a revisión cuando ya no le falta nada */
+function SubmitPanel({ view, onSubmit }: { view: ReviewView; onSubmit: () => Promise<void> }) {
+  const text = physicianText.review.submit;
+  const [busy, setBusy] = useState(false);
+  return (
+    <Card aria-labelledby="editor-mandar">
+      <CardHeader>
+        <CardTitle id="editor-mandar">{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      {view.decided ? <p className="text-sm font-medium">{text.decided}</p> : null}
+      {view.incomplete.length > 0 ? (
+        <>
+          <p className="text-sm font-medium">{text.incomplete}</p>
+          <ul className="mb-2 list-disc pl-5 text-sm">
+            {view.incomplete.map((code) => (
+              <li key={code}>{incompleteText(code)}</li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      <div>
+        <Button
+          disabled={busy || view.decided || view.incomplete.length > 0}
+          onClick={() => {
+            setBusy(true);
+            void onSubmit().finally(() => {
+              setBusy(false);
+            });
+          }}
+        >
+          {text.action}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+function EditorForm({
+  repo,
+  questionId,
+  latest,
+  initial,
+  caseVignette,
+  onSaved,
+  onFailed,
+  onStale,
+}: {
+  repo: EditorialRepo;
+  questionId: string;
+  latest: EditorVersion;
+  initial: QuestionDraft;
+  caseVignette: string | null;
+  onSaved: (message: string) => void;
+  onFailed: (message: string) => void;
+  onStale: () => void;
+}) {
+  const text = physicianText.questionEditor;
   const [draft, setDraft] = useState(initial);
   const [issues, setIssues] = useState<DraftIssue[]>([]);
-  const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const dirty = !sameDraft(draft, initial);
   const patch = (change: Partial<QuestionDraft>) => {
     setDraft((current) => ({ ...current, ...change }));
-    setNotice('');
   };
 
   const auto = useMemo(
@@ -216,28 +691,24 @@ function EditorForm({
   const save = async (event?: SyntheticEvent) => {
     event?.preventDefault();
     if (!dirty || busy) return;
+    const blocking = blockingIssues(validateDraft(draft, bankTaxonomy), repo.kind);
+    if (blocking.length > 0) {
+      setIssues(blocking);
+      return;
+    }
     setBusy(true);
-    setError('');
     try {
-      await saveQuestionVersion(api, { current: latest, draft, taxonomy: bankTaxonomy });
+      const saved = await repo.saveVersion(questionId, latest.versionId, draft);
       setIssues([]);
-      setNotice(text.save.saved);
+      onSaved(
+        saved.incomplete.length > 0
+          ? physicianText.review.saveNotes.savedIncomplete(saved.incomplete.length)
+          : text.save.saved,
+      );
     } catch (caught) {
       if (caught instanceof InvalidDraftError) setIssues([...caught.issues]);
-      else setError(caught instanceof StaleVersionError ? text.status.stale : text.save.failed);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const move = async (to: Question['editorialStatus']) => {
-    setBusy(true);
-    setError('');
-    try {
-      await moveQuestionStatus(api, latest, to);
-      setNotice(text.status.moved(t.bank.status[to]));
-    } catch (caught) {
-      setError(caught instanceof StaleVersionError ? text.status.stale : text.status.failed);
+      else if (errorCodeOf(caught) === 'stale') onStale();
+      else onFailed(errorText(caught));
     } finally {
       setBusy(false);
     }
@@ -259,50 +730,10 @@ function EditorForm({
       }}
       noValidate
     >
-      <Card aria-labelledby="editor-estado">
-        <CardHeader>
-          <CardTitle id="editor-estado" className="flex flex-wrap items-center gap-2">
-            {text.status.title}
-            <Badge variant="info">{text.status.version(latest.version)}</Badge>
-            <Badge variant={latest.editorialStatus === 'approved' ? 'success' : 'neutral'}>
-              {t.bank.status[latest.editorialStatus]}
-            </Badge>
-          </CardTitle>
-          <CardDescription>{text.status.hint}</CardDescription>
-        </CardHeader>
-        <div className="flex flex-wrap items-center gap-2">
-          {STATUS_FLOW[latest.editorialStatus].map((to) => (
-            <Button
-              key={to}
-              type="button"
-              variant={
-                to === 'rejected' ? 'secondary' : to === 'approved' ? 'primary' : 'secondary'
-              }
-              disabled={busy || dirty || !canMoveTo(latest.editorialStatus, to)}
-              onClick={() => {
-                void move(to);
-              }}
-            >
-              {latest.editorialStatus === 'approved' && to === 'in_review'
-                ? text.status.reopen
-                : (text.status.move[to] ?? to)}
-            </Button>
-          ))}
-          {back}
-        </div>
-        {dirty ? <p className="mt-2 text-sm text-fg-muted">{text.status.unsaved}</p> : null}
-        {unverified > 0 ? (
-          <p className="mt-2 text-sm text-fg-muted">{text.status.unverifiedGpc(unverified)}</p>
-        ) : null}
-        <p role="status" className="mt-2 text-sm font-medium text-success">
-          {notice}
-        </p>
-        {error ? (
-          <p role="alert" className="mt-2 text-sm text-danger">
-            {error}
-          </p>
-        ) : null}
-      </Card>
+      {dirty ? <p className="text-sm text-fg-muted">{text.status.unsaved}</p> : null}
+      {unverified > 0 ? (
+        <p className="text-sm text-fg-muted">{text.status.unverifiedGpc(unverified)}</p>
+      ) : null}
 
       <Card aria-labelledby="editor-caso">
         <CardHeader>
@@ -312,7 +743,7 @@ function EditorForm({
           {latest.caseId !== null ? (
             <>
               <p className="font-medium">{text.case.vignette}</p>
-              <p className="rounded-md bg-muted p-3 text-sm">{linkedVignette ?? ''}</p>
+              <p className="rounded-md bg-muted p-3 text-sm">{caseVignette ?? ''}</p>
               <p className="text-sm text-fg-muted">{text.case.vignetteSerial}</p>
             </>
           ) : (
@@ -429,7 +860,11 @@ function EditorForm({
               <SelectField
                 label={text.meta.task}
                 value={draft.structure.task}
-                options={options(text.meta.tasks)}
+                options={
+                  draft.structure.task === ''
+                    ? [{ value: '', label: text.meta.taskPick }, ...options(text.meta.tasks)]
+                    : options(text.meta.tasks)
+                }
                 onChange={(event) => {
                   patch({
                     structure: {
@@ -535,14 +970,11 @@ function EditorForm({
       <SaveBar
         dirty={dirty}
         status=""
-
         onDiscard={() => {
           setDraft(initial);
           setIssues([]);
         }}
       />
-
-      <HistoryCard versions={versions} drafts={drafts} />
     </form>
   );
 }

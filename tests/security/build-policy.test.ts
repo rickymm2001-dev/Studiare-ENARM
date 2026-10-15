@@ -15,18 +15,20 @@ import { buildApp } from './buildApp.ts';
 let withoutCloud = '';
 let withCloud = '';
 let withAi = '';
+let production = '';
 
 beforeAll(() => {
   withoutCloud = buildApp({ VITE_SUPABASE_URL: '' });
+  production = buildApp({ VITE_SUPABASE_URL: '', VITE_APP_ENV: 'production' });
   withCloud = buildApp({ VITE_SUPABASE_URL: 'https://abcd1234.supabase.co' });
   withAi = buildApp({
     VITE_SUPABASE_URL: 'https://abcd1234.supabase.co',
     VITE_AI_URL: 'https://ia.studiare.mx',
   });
-}, 240_000);
+}, 320_000);
 
 afterAll(() => {
-  for (const dir of [withoutCloud, withCloud, withAi]) {
+  for (const dir of [withoutCloud, withCloud, withAi, production]) {
     if (dir) rmSync(dir, { recursive: true, force: true });
   }
 });
@@ -148,5 +150,31 @@ describe('presupuesto del JavaScript inicial', () => {
     } finally {
       rmSync(fake, { recursive: true, force: true });
     }
+  });
+});
+
+describe('build de producción sin los mazos de la demo (B11, 5.9)', () => {
+  /** Todo el JavaScript del build, para buscar contenido de los mazos de Paco */
+  const allScripts = (dir: string) =>
+    readdirSync(join(dir, 'assets'))
+      .filter((file) => file.endsWith('.js'))
+      .map((file) => read(dir, join('assets', file)));
+  // La clave de una nota de paco-mi.json, que solo existe en los .json de los mazos
+  const PACO_NOTE = 'paco-mi-e7199b280d57';
+
+  it('la demo publicada trae sus mazos y sus imágenes', () => {
+    expect(existsSync(join(withoutCloud, 'demo-media', 'paco-mi'))).toBe(true);
+    expect(allScripts(withoutCloud).some((code) => code.includes(PACO_NOTE))).toBe(true);
+  });
+
+  it('producción no emite los .json de los mazos ni copia demo-media, que son de pago', () => {
+    expect(existsSync(join(production, 'demo-media'))).toBe(false);
+    expect(allScripts(production).some((code) => code.includes(PACO_NOTE))).toBe(false);
+    expect(readdirSync(join(production, 'assets')).some((file) => file.startsWith('paco-'))).toBe(
+      false,
+    );
+    // Y lo demás del build sigue ahí
+    expect(existsSync(join(production, 'index.html'))).toBe(true);
+    expect(measureInitialBundle(production).withinBudget).toBe(true);
   });
 });

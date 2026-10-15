@@ -988,6 +988,92 @@ Las dos últimas cuando exista la cuenta de Mercado Pago.
 - Las filas de la corrida en modo prueba se borran con supabase/manual/limpiar-pagos-de-prueba.sql, que lista las cuentas al final. Antes se cancelan las suscripciones en Stripe o se borran sus relojes de prueba
 - Los datos fiscales de una factura (RFC, razón social, régimen, uso y código postal) no viajan en los correos. El correo al equipo solo dice el monto
 
+## Banco en la nube (B11)
+
+### Qué hace
+
+- El banco de preguntas pasa a la base. Los alumnos leen un catálogo sin texto y piden los cuerpos con una función que aplica el tope de Gratis (20 preguntas nuevas por día de estudio) y el freno de los planes de pago (300 por minuto y 900 por hora). Nadie lee las tablas de preguntas directo
+- Flujo editorial completo en la base. Autor y revisor, revisión a ciegas de los sesgos, decisiones que solo se agregan, publicación, reportes de alumnos con correo al médico y el reporte de pagos a médicos
+- La función bank-sync lee el Google Sheet del banco cada hora con una cuenta de servicio de solo lectura y crea borradores y versiones sin pisar lo que se corrigió en la app
+- El catálogo compartido de mazos en el bucket privado deck-catalog
+- Todo nace apagado. cloudBank en feature_flags y bank_sync.enabled quedan en false. El detalle está en docs/BANCO_EN_LA_NUBE.md
+
+### Cómo aplicar las seis migraciones
+
+Aplica primero todas las anteriores, incluidas las tres de B10, porque content_report ya vive en email_kinds desde B10. Van en orden y las seis son seguras de repetir. Ninguna lleva delete ni drop, así el conector las aplica sin pedir confirmación.
+
+1. supabase/migrations/20261023000001_bank_taxonomy.sql
+2. supabase/migrations/20261023000002_bank_core.sql
+3. supabase/migrations/20261023000003_bank_editorial.sql
+4. supabase/migrations/20261023000004_bank_sync.sql
+5. supabase/migrations/20261023000005_deck_catalog.sql
+6. supabase/migrations/20261023000006_bank_sync_cron.sql
+
+Después pega supabase/manual/banco-b11.sql en SQL Editor, New query, Run. Va después de ejecutar-en-sql-editor.sql, porque trae otra versión de delete_my_data que conserva las lecturas del día en curso y quita la bitácora de bajadas de mazos. Es repetible.
+
+La sexta migración crea en Vault la ficha de Cron (bank_sync_cron_token) y el trabajo bank-sync-hourly. Falta guardar la dirección del proyecto en Vault, una sola vez. Lo hace la sesión con el conector o tú en el SQL Editor.
+
+```sql
+select vault.create_secret('https://bkjbcdwglyllizupokqm.supabase.co', 'project_url', 'Dirección del proyecto para Cron');
+```
+
+Para confirmar que quedó, abre otra New query, pega esto y da clic en Run.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename in ('bank_taxonomy', 'bank_bias_tags', 'bank_questions',
+     'question_catalog', 'bank_reads', 'bank_read_alerts', 'bias_labels', 'physician_codes', 'bank_topic_reviewers', 'distractor_flags',
+     'bank_sync_runs', 'bank_sync_row_results', 'deck_catalog', 'deck_catalog_versions', 'deck_catalog_subjects',
+     'deck_catalog_downloads')) as tablas_nuevas,
+  has_table_privilege('authenticated', 'public.questions', 'select') as alumno_lee_preguntas,
+  has_function_privilege('authenticated', 'public.fetch_questions(uuid[], uuid[], text)', 'execute') as alumno_pide_cuerpos,
+  has_function_privilege('anon', 'public.fetch_questions(uuid[], uuid[], text)', 'execute') as anonimo_pide_cuerpos,
+  has_function_privilege('authenticated', 'public.bank_sync_apply(uuid, jsonb, boolean)', 'execute') as alumno_sincroniza,
+  public.bank_open_for_students() as banco_abierto,
+  (select value ->> 'enabled' from public.platform_settings where key = 'bank_sync') as sincronizacion_encendida,
+  (select count(*) from public.bank_taxonomy) as subtemas,
+  (select public from storage.buckets where id = 'deck-catalog') as mazos_publicos,
+  position('deck_catalog_downloads' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b11,
+  exists (select 1 from vault.decrypted_secrets where name = 'bank_sync_cron_token') as ficha_de_cron,
+  exists (select 1 from vault.decrypted_secrets where name = 'project_url') as direccion_del_proyecto,
+  exists (select 1 from cron.job where jobname = 'bank-sync-hourly') as trabajo_por_hora;
+```
+
+Debe salir
+- tablas_nuevas en 16 y subtemas en 208
+- alumno_pide_cuerpos en true
+- alumno_lee_preguntas, anonimo_pide_cuerpos, alumno_sincroniza, banco_abierto y mazos_publicos en false
+- sincronizacion_encendida en false
+- borrar_datos_b11 en true. Si sale false, falta pegar supabase/manual/banco-b11.sql
+- ficha_de_cron, direccion_del_proyecto y trabajo_por_hora en true. Si direccion_del_proyecto sale false, falta el paso de Vault de arriba
+
+### La función bank-sync y sus secretos
+
+En Supabase, Edge Functions, Secrets. Los nombres son exactos y ninguno va en el repo ni en el chat.
+
+| Nombre | Qué es |
+|---|---|
+| GOOGLE_SA_KEY | El contenido completo del archivo JSON de la llave de la cuenta de servicio de Google. Solo lee el Sheet porque está compartido con ella |
+| GOOGLE_BANK_SHEET_ID | El ID del Sheet Banco de preguntas, lo que va entre /d/ y /edit en su dirección |
+| GOOGLE_BANK_TEST_SHEET_ID | El ID del Sheet de prueba, con contenido simulado. Siempre se lee en solo reporte |
+| APP_URL | Sin cambio. Sirve para que Sincronizar ahora funcione desde la app |
+
+La función se despliega sin verificación de JWT, porque Cron la llama con su ficha y no con una sesión. Ella misma revisa la ficha de Cron o la sesión del admin y contesta 401 a todo lo demás sin tocar Google.
+
+```bash
+supabase functions deploy bank-sync --no-verify-jwt
+```
+
+Mientras falten los secretos de Google, cada corrida termina como skipped con not_configured y no hace nada más.
+
+### Qué conviene saber
+
+- Los ajustes viven en platform_settings. bank_limits guarda perMinute (300), perHour (900), alertDaily (600), alertWeekShare (0.5), reportsPerDay (10) y maxFetch (100). bank_sync guarda enabled, mode (dry_run o apply), tab (Preguntas), maxRows (5000), minIntervalSeconds (60) e idPattern. bank_goal guarda approvedToOpen (300) y physician_pay guarda perReviewMxn, vacío hasta que Ricardo ponga la tarifa
+- Ninguno de esos ajustes lleva secretos ni el ID del Sheet, porque platform_settings se lee sin sesión
+- Para abrir el banco a los alumnos se prende cloudBank en feature_flags. La app y la base leen la misma bandera
+- Las corridas de la sincronización quedan en bank_sync_runs y su reporte de renglones en bank_sync_row_results, sin texto de ninguna pregunta. Los registros de la función solo dicen el id de la corrida, conteos y códigos
+- Un médico con decisiones registradas no puede borrar su cuenta solo. La base responde 23503, porque esas decisiones respaldan pagos
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.

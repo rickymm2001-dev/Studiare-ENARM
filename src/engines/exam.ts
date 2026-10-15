@@ -1,8 +1,8 @@
 /**
  * Examen completo, armado y calificación (10.1 pantallas 8 y 9, D-012, D-080).
  *
- * Qué hace. Arma un examen sin preguntas repetidas, parejo entre ramas y con los casos seriados
- * juntos y en orden, con un tiempo total por reactivo. Califica las respuestas por rama, por
+ * Qué hace. Arma un examen sin preguntas repetidas, repartido entre ramas por sus pesos del ENARM y
+ * con los casos seriados juntos y en orden, con un tiempo total por reactivo. Califica las respuestas por rama, por
  * estructura, por trampa y por tipo de reactivo, y mide cómo descartó opciones.
  * Entradas. Las preguntas elegibles con su rama y su caso, cuántas se piden y una semilla. Al
  * calificar, la información de cada pregunta y lo que contestó el alumno.
@@ -10,8 +10,14 @@
  * cortes.
  * Método
  *   - Una unidad es una pregunta suelta o un caso seriado completo. Cada rama tiene sus unidades
- *     barajadas con la semilla y siempre se toma de la rama con menos preguntas hasta ahora, entre
- *     las que tienen una unidad que quepa en lo que falta. Al final se baraja el orden de las unidades
+ *     barajadas con la semilla
+ *   - Con pesos por rama (sección 6 del plan del cambio, B11), cada rama recibe una cuota proporcional
+ *     a su peso entre las ramas que hay en el banco, con el método del residuo mayor, y se llena con
+ *     unidades que quepan en su cuota. Las ramas que no entran al examen, como Inglés médico hasta
+ *     B13, se quitan antes
+ *   - Lo que falte, porque no hay pesos o porque una rama no alcanzó su cuota, se reparte parejo.
+ *     Siempre se toma de la rama con menos preguntas hasta ahora, entre las que tienen una unidad
+ *     que quepa en lo que falta. Al final se baraja el orden de las unidades
  *   - Si hay menos preguntas que las pedidas, el examen toma todas y avisa cuántas faltaron
  *     (D-012). Nunca repite una pregunta
  *   - El tiempo es el ritmo de 77 segundos por reactivo de D-074
@@ -58,57 +64,105 @@ export function buildExam(input: {
   requested: number;
   seed: string;
   secondsPerQuestion?: number;
+  /** Peso de cada rama. Sin pesos, el reparto es parejo entre las ramas */
+  branchWeights?: Readonly<Record<string, number>>;
+  /** Ramas que no entran al examen, como Inglés médico hasta B13 */
+  excludeBranches?: readonly string[];
 }): ExamPlan {
   const requested = Math.max(0, Math.floor(input.requested));
+  const excluded = new Set(input.excludeBranches ?? []);
+  const eligible = input.questions.filter((question) => !excluded.has(question.branch));
   const units = new Map<string, ExamQuestion[]>();
-  for (const question of input.questions) {
+  for (const question of eligible) {
     const key = question.caseId ?? question.id;
     units.set(key, [...(units.get(key) ?? []), question]);
   }
   for (const unit of units.values()) unit.sort((a, b) => (a.caseOrder ?? 0) - (b.caseOrder ?? 0));
 
   // Cola de unidades por rama, barajada con la semilla. Una unidad es de la rama de su primera pregunta
-  const queues = new Map<string, ExamQuestion[][]>();
+  const lanes = new Map<string, { queue: ExamQuestion[][]; count: number }>();
   for (const unit of units.values()) {
-    const branch = unit[0]?.branch ?? '';
-    queues.set(branch, [...(queues.get(branch) ?? []), unit]);
+    const branch = (unit[0] as ExamQuestion).branch;
+    const lane = lanes.get(branch);
+    if (lane) lane.queue.push(unit);
+    else lanes.set(branch, { queue: [unit], count: 0 });
   }
-  const branches = [...queues.keys()].sort();
-  for (const branch of branches) {
-    const rng = createRng(`${input.seed}|branch|${branch}`);
-    queues.set(branch, rng.shuffle(queues.get(branch) ?? []));
+  const branches = [...lanes.keys()].sort();
+  for (const [branch, lane] of lanes)
+    lane.queue = createRng(`${input.seed}|branch|${branch}`).shuffle(lane.queue);
+  const laneOf = (branch: string) =>
+    lanes.get(branch) as { queue: ExamQuestion[][]; count: number };
+
+  const picked: ExamQuestion[][] = [];
+  let remaining = Math.min(requested, eligible.length);
+  const take = (branch: string, fits: (unit: ExamQuestion[]) => boolean): boolean => {
+    const lane = laneOf(branch);
+    const index = lane.queue.findIndex(fits);
+    if (index < 0) return false;
+    const [unit] = lane.queue.splice(index, 1) as [ExamQuestion[]];
+    picked.push(unit);
+    lane.count += unit.length;
+    remaining -= unit.length;
+    return true;
+  };
+  const fitsRemaining = (unit: ExamQuestion[]) => unit.length <= remaining;
+
+  // Primero la cuota de cada rama por su peso. Un caso que no cabe en la cuota espera al reparto parejo
+  if (input.branchWeights) {
+    const quotas = branchQuotas(remaining, input.branchWeights, branches);
+    for (const [branch, quota] of quotas) {
+      const fitsQuota = (unit: ExamQuestion[]) =>
+        fitsRemaining(unit) && laneOf(branch).count + unit.length <= quota;
+      let added = true;
+      while (added) added = take(branch, fitsQuota);
+    }
   }
 
-  // Se elige siempre la rama con menos preguntas hasta ahora, entre las que tienen una unidad que
-  // quepa. Así el reparto queda parejo aunque algunas unidades sean casos de 3 preguntas
-  const picked: ExamQuestion[][] = [];
-  const counts = new Map<string, number>(branches.map((branch) => [branch, 0]));
-  let remaining = Math.min(requested, input.questions.length);
+  // Lo que falta se reparte parejo. Se elige siempre la rama con menos preguntas hasta ahora, entre las
+  // que tienen una unidad que quepa. Así el reparto queda parejo aunque algunas unidades sean casos de 3
   while (remaining > 0) {
-    const fitting = branches
-      .filter((branch) => (queues.get(branch) ?? []).some((unit) => unit.length <= remaining))
-      .sort((a, b) => (counts.get(a) ?? 0) - (counts.get(b) ?? 0) || a.localeCompare(b));
-    const branch = fitting[0];
+    const [branch] = branches
+      .filter((candidate) => laneOf(candidate).queue.some(fitsRemaining))
+      .sort((a, b) => laneOf(a).count - laneOf(b).count || a.localeCompare(b));
     if (branch === undefined) break;
-    const queue = queues.get(branch) ?? [];
-    const [unit] = queue.splice(
-      queue.findIndex((candidate) => candidate.length <= remaining),
-      1,
-    );
-    if (!unit) break;
-    picked.push(unit);
-    counts.set(branch, (counts.get(branch) ?? 0) + unit.length);
-    remaining -= unit.length;
+    take(branch, fitsRemaining);
   }
 
   const ordered = createRng(`${input.seed}|order`).shuffle(picked).flat();
   return {
     questionIds: ordered.map((question) => question.id),
     requested,
-    available: input.questions.length,
+    available: eligible.length,
     shortfall: Math.max(0, requested - ordered.length),
     totalMs: examTotalMs(ordered.length, input.secondsPerQuestion),
   };
+}
+
+/**
+ * Cuántas preguntas le tocan a cada rama del banco por su peso, sumando total. Residuo mayor, con el
+ * empate por clave. Una rama sin peso o con peso cero no tiene cuota y solo entra en el reparto parejo
+ */
+export function branchQuotas(
+  total: number,
+  weights: Readonly<Record<string, number>>,
+  branches: readonly string[],
+): Map<string, number> {
+  const exact = branches
+    .map((branch) => ({ branch, weight: weights[branch] ?? 0 }))
+    .filter((entry) => entry.weight > 0);
+  const sum = exact.reduce((acc, entry) => acc + entry.weight, 0);
+  if (sum <= 0 || total <= 0) return new Map();
+  const shares = exact.map(({ branch, weight }) => {
+    const value = (total * weight) / sum;
+    return { branch, quota: Math.floor(value), remainder: value - Math.floor(value) };
+  });
+  // Lo que sobra al redondear hacia abajo va a las de residuo mayor, una a cada una
+  const left = total - shares.reduce((acc, share) => acc + share.quota, 0);
+  const byRemainder = [...shares].sort(
+    (a, b) => b.remainder - a.remainder || a.branch.localeCompare(b.branch),
+  );
+  for (const share of byRemainder.slice(0, left)) share.quota += 1;
+  return new Map(shares.map((share) => [share.branch, share.quota]));
 }
 
 /** Tipos de reactivo de D-080. Un reactivo puede tener varios */

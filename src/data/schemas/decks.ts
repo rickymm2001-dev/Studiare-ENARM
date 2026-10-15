@@ -3,7 +3,7 @@
 // (D-085, fila 12). Borrar es poner la marca y no quitar el registro, así otro dispositivo se entera.
 import { z } from 'zod';
 import { ACADEMIC_SOURCE_KEYS } from '../../config/academicSources';
-import { CONTROVERSY_REASON_MAX, CONTROVERSY_REASON_MIN } from '../../engines/cardGen';
+import { CONTROVERSY_REASON_MAX, CONTROVERSY_REASON_MIN } from '../../engines/controversyLimits';
 import { TAG_MAX_LENGTH } from '../../engines/tagPath';
 import { ContentOriginSchema, EditorialStatusSchema, IdSchema, UtcDateTimeSchema } from './common';
 

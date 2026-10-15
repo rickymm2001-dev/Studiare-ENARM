@@ -6,14 +6,14 @@ Regla que no cambia. Nunca pegues una llave secreta en el chat. Cada una se pega
 
 ## Lo que salió del bloque B0
 
-1. **Limpia la prueba de pagos en Stripe.** No se pudo desde la sesión (ver abajo por qué). En Stripe, en modo prueba, abre Customers y busca los dos clientes de tus cuentas de prueba, cus_VQIKjhh9C1h6BU (pagó el Anual y el Fundador el 11 de octubre) y cus_VQPXetXjcQNKay (pagó el Fundador el 11 en la noche). En cada suscripción elige Cancel subscription, Immediately, y marca que se reembolse el último pago. Si el reembolso no sale ahí, hazlo desde Payments, el cobro, Refund. Con eso los avisos de Stripe dejan la base en Gratis solos
-2. **Borra las filas de prueba de la base.** Después del paso 1, pega supabase/manual/limpiar-pagos-de-prueba.sql en Supabase, SQL Editor, y ejecútalo una vez. Quita las filas de subscriptions, payments y billing_customers de tus dos cuentas, porque el cupo Fundador cuenta toda fila founder y un cliente de prueba de Stripe rompe el pago en modo real. En la consulta del final, pagos, suscripciones y clientes deben dar cero
-3. **Cambia la llave de Stripe del entorno.** La que está hoy en los secretos del entorno de la sesión es la publicable (empieza con pk_test_) y con ella no se puede cancelar, reembolsar ni crear precios. Pon en su lugar una llave restringida de modo prueba (empieza con rk_test_) con permiso de escritura en Products, Prices, Coupons, Promotion codes, Customers, Subscriptions, Checkout Sessions, Customer portal, Payment method domains, Refunds y Test clocks, y de lectura en Events, PaymentIntents, Invoices y Webhook endpoints. Si Stripe pide otro permiso para una herramienta de prueba, por ejemplo fondear el saldo de SPEI, la sesión te dirá cuál. Se crea en Stripe, Developers, API keys, Create restricted key. Sin ella los pasos de Stripe de B10 quedan en esta lista en lugar de hacerse solos
-4. **Cambia SUPABASE_ACCESS_TOKEN en el entorno de la sesión.** El entorno inyecta algo en api.supabase.com, pero Supabase lo rechaza con JWT could not be decoded (revisado el 2026-10-15). Genera uno nuevo en supabase.com, Account, Access Tokens, y reemplázalo en los secretos del entorno. Con él la sesión aplica el SQL, incluidas las piezas con drop o delete, publica las funciones y pone los secretos directo desde el repo con npm run deploy:supabase (docs/DESPLIEGUE.md). Ya no tendrías que pegar archivos en el SQL Editor
+1. **Hecho el 2026-10-15. Limpia la prueba de pagos en Stripe.** La sesión canceló en modo prueba las tres suscripciones de cus_VQIKjhh9C1h6BU y cus_VQPXetXjcQNKay y reembolsó sus tres cobros (79, 1,499 y 79). Los avisos de Stripe llegaron a Supabase y se procesaron
+2. **Borra las filas de prueba de la base.** El paso 1 ya está. Falta tu autorización directa en el chat para que la sesión lo corra, porque el control de permisos de la sesión frena borrar o leer datos de cobro de la base real. Si prefieres hacerlo tú, pega supabase/manual/limpiar-pagos-de-prueba.sql en Supabase, SQL Editor, y ejecútalo una vez. Quita las filas de subscriptions, payments y billing_customers de tus dos cuentas, porque el cupo Fundador cuenta toda fila founder y un cliente de prueba de Stripe rompe el pago en modo real. En la consulta del final, pagos, suscripciones y clientes deben dar cero
+3. **Hecho el 2026-10-15. Llave de Stripe del entorno.** Ya es una sk_test_ y responde en modo prueba (livemode false). Con ella la sesión creó precios, cupón, portales y el webhook nuevo
+4. **Hecho el 2026-10-15. Token de Supabase del entorno.** Ya responde y con él la sesión aplicó el plan b10 con npm run deploy:supabase (docs/DESPLIEGUE.md)
 
 ## Lo que salió de B7
 
-- **El archivo de Party en Supabase.** Las migraciones de Party en la nube y de referidos ya están aplicadas en el proyecto. Falta supabase/manual/party-dueno-al-borrar-cuenta.sql, que cambia una llave foránea y el conector no lo puede aplicar. Con el token del paso 4 ya no lo pegas tú. Va en el plan b10 y la sesión lo aplica con npm run deploy:supabase -- --plan b10, con su comprobación. Solo si el token no llega, pégalo completo en Supabase, SQL Editor, New query, y da clic en Run. La consulta del final debe dar regla_al_borrar en n, owner_id_opcional en true y disparador_activo en true. Mientras no se aplique, si quien creó un grupo borra su cuenta, el grupo se borra para todos sus miembros
+- **Hecho el 2026-10-15. El archivo de Party en Supabase.** La sesión aplicó supabase/manual/party-dueno-al-borrar-cuenta.sql con el plan b10 y su comprobación salió en verde. Si quien creó un grupo borra su cuenta, el grupo pasa al miembro más antiguo
 
 ## Lo que salió de B9, cuentas y acceso
 
@@ -28,18 +28,43 @@ La sesión aplica la migración y publica la función admin-reset-mfa al fusiona
 
 El código del servidor de pagos ya está y se probó con un Stripe simulado. La corrida real espera estos pasos. Ninguno lleva llaves al chat. El detalle de qué hace Stripe con cada uno está en docs/STRIPE.md.
 
-- **Paso B10.1. Llave restringida para la sesión.** Es el paso 3 de arriba. Va al entorno de la sesión como STRIPE_SECRET_KEY
+- **Hecho. Paso B10.1. Llave para la sesión.** Es el paso 3 de arriba
 - **Paso B10.2. Llave restringida para las funciones, recomendada.** En Stripe, Developers, API keys, Create restricted key, en modo prueba, otra rk_test_ con escritura en Checkout Sessions, Customers, Customer portal y Subscriptions, y lectura en Promotion codes y PaymentIntents. Pégala en Supabase, Edge Functions, Secrets, como STRIPE_SECRET_KEY en lugar de la sk_test_ de hoy. Sin ella todo funciona con la de hoy
 - **Paso B10.3. Medios de pago.** En Stripe, Settings, Payment methods, activa OXXO, transferencias bancarias de México (SPEI), Apple Pay y Google Pay. Es el paso 16
 - **Paso B10.4. Portal por omisión.** En Settings, Billing, Customer portal, guarda la configuración por omisión aunque Studiare use las dos suyas. La sesión crea esas dos
 - **Paso B10.5. Reintentos y correos de Stripe.** En Settings, Billing, Subscriptions and emails, reintentos inteligentes, por ejemplo 4 intentos en 2 semanas, y al final cancelar la suscripción. Enciende los correos de cobro fallido y de tarjeta por vencer, y los recibos de pago
-- **Paso B10.6. Webhook nuevo.** En Developers, Webhooks, crea un endpoint con la dirección https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-stripe, la versión de la API 2026-09-30.endive y estos doce eventos. checkout.session.completed, checkout.session.async_payment_succeeded, checkout.session.async_payment_failed, invoice.paid, invoice.payment_failed, customer.subscription.created, customer.subscription.updated, customer.subscription.deleted, customer.subscription.trial_will_end, charge.refunded, charge.dispute.created y charge.dispute.closed. Copia su secreto de firma (empieza con whsec_) a Supabase, Edge Functions, Secrets, como STRIPE_WEBHOOK_SECRET, y desactiva el endpoint viejo
-- **Paso B10.7. Ya no pegas pagos-b10.sql.** Con el token del paso 4 la sesión aplica supabase/manual/pagos-b10.sql, las dos piezas con drop o delete de la migración de B10 que el conector no pudo correr, con npm run deploy:supabase -- --plan b10, y revisa su comprobación. Solo si el token no llega, pégalo tú en Supabase, SQL Editor, y ejecútalo una vez. supabase/manual/limpiar-pagos-de-prueba.sql sigue siendo tuyo si sigue pendiente lo del paso 2, porque borra filas de pagos y va después de cancelar en Stripe
+- **Hecho el 2026-10-15. Paso B10.6. Webhook nuevo.** La sesión creó en modo prueba el endpoint con la dirección de payment-webhook-stripe, la versión 2026-09-30.endive y los doce eventos, puso su secreto en STRIPE_WEBHOOK_SECRET sin verlo en pantalla y desactivó el viejo. Las tres cancelaciones y los tres reembolsos de la limpieza llegaron firmados y se procesaron
+- **Hecho el 2026-10-15. Paso B10.7. pagos-b10.sql.** La sesión lo aplicó con el plan b10, con su comprobación en verde y las 46 funciones iguales al repo. También publicó cancel-subscription
 - **Paso B10.8. Pruebas con tu navegador y tu teléfono.** Cuando la sesión te avise, con tus cuentas de prueba. Empezar una prueba gratis, cancelarla, cambiar de plan en el portal, pagar un pase con OXXO y con SPEI, usar el código PRUEBA10 y pedir una factura. En tu iPhone con Safari y en un Android con Chrome confirma que aparecen Apple Pay y Google Pay
 - **Paso B10.9. Influencers.** El nombre de cada uno, su código y el descuento. El código lleva letras mayúsculas, números y guion, sin guion bajo. La sesión crea en modo prueba el cupón PRUEBA10 de ejemplo. Los reales se crean al lanzar. Es el paso 25
 - **Paso B10.10. Mercado Pago.** Cuando exista la cuenta de la empresa. Es el paso 15
 
-Lo que hace la sesión después, sin pedirte nada más, con los comandos de docs/DESPLIEGUE.md. Corre el plan b10, que aplica pagos-b10.sql y el archivo de Party, publica cancel-subscription y comprueba todo por huella (las tres migraciones de B10 ya están aplicadas). Corre scripts/stripe/setup-test.ts con --write-ids y pone los ocho IDs en los secretos de Supabase con --secrets-from. Después corre contigo los escenarios y, con todo en verde, prende las banderas de la prueba gratis y de los pases.
+Hecho el 2026-10-15 por la sesión. El plan b10 (pagos-b10.sql, el archivo de Party y cancel-subscription), scripts/stripe/setup-test.ts con los seis precios, el cupón y el código PRUEBA10 y los dos portales, y los ocho IDs en los secretos de Supabase. Falta correr contigo los escenarios del paso B10.8 y, con todo en verde, prender las banderas de la prueba gratis y de los pases.
+
+## Lo que salió de B11, el banco en la nube
+
+El servidor del banco ya está con sus pruebas. Todo queda apagado hasta tus pasos. El guion completo está en la sección 8 del plan de B11 y el detalle técnico en docs/BANCO_EN_LA_NUBE.md y docs/SUPABASE.md. Ninguno lleva llaves al chat.
+
+- **Paso B11.1. Cuenta de servicio de Google.** En console.cloud.google.com, en el proyecto Studiare, activa Google Sheets API, crea la cuenta de servicio studiare-banco sin roles y una llave JSON. Si sale que crear llaves está desactivado, el proyecto está en una organización con la política iam.managed.disableServiceAccountKeyCreation, y conviene crear el proyecto con tu cuenta personal o cambiar esa política solo para este proyecto. Es el paso 13
+- **Paso B11.2. Secretos de la función.** En Supabase, Edge Functions, Secrets, crea GOOGLE_SA_KEY con el contenido completo del archivo JSON y GOOGLE_BANK_SHEET_ID con el ID de tu Sheet, lo que va entre /d/ y /edit. Después borra el archivo bajado
+- **Paso B11.3. Compartir el Sheet.** En Banco de preguntas, Compartir, pega el correo de la cuenta de servicio (termina en iam.gserviceaccount.com) como Lector, sin notificar. Deja apagado que los editores cambien permisos y el acceso general en Restringido
+- **Paso B11.4. Sheet de prueba.** La sesión te deja Studiare-banco-prueba.xlsx en tu Drive (`npm run bank:sheet-test`). Ábrelo con Hojas de cálculo de Google, Archivo, Guardar como Hojas de cálculo de Google, compártelo igual con la cuenta de servicio y crea el secreto GOOGLE_BANK_TEST_SHEET_ID con su ID. Ahí revisa si las listas de Subespecialidad y Subtema cambian con la rama
+- **Paso B11.5. Ya no pegas banco-b11.sql.** Con el token de Supabase (paso 4 de arriba) la sesión aplica las seis migraciones y la pieza de Borrar mis datos con npm run deploy:supabase -- --plan b11 y revisa su comprobación. Solo si el token no llega, pega supabase/manual/banco-b11.sql en SQL Editor después de ejecutar-en-sql-editor.sql
+- **Paso B11.6. Cambios de estructura de tu Sheet** (los hacen tú o Paco, no cambian el texto de ninguna pregunta)
+  - Haz una copia de seguridad del Sheet
+  - Fija los ID antes de la primera sincronización que aplique. Hoy son una fórmula que cambia al ordenar renglones, y mientras lo sean la sincronización solo reporta
+  - Agrega las columnas Caso, Orden en el caso, Autor y Revisor. Paco llena Caso y Orden de las 13 preguntas que dependen de otra y del caso partido entre los renglones 77 y 79, y Autor en las 108
+  - Deja en cada encabezado solo su primera línea y la ayuda como nota de la celda
+  - Copia la pestaña Listas que te deja la sesión (`npm run bank:sheet-lists`) y crea las validaciones de Subespecialidad y Subtema como en el Sheet de prueba
+  - Cambia la lista de Estado a Borrador, Lista para revisión y Retirar
+  - Reemplaza el texto de la pestaña Instrucciones con el de docs/SHEET_DEL_BANCO.md
+- **Paso B11.7. Claves y revisores.** Una clave corta para cada médico (por ejemplo PM para Paco), quién revisa cada subespecialidad y, si la quieres en el reporte de pagos, la tarifa por revisión. Se ponen en Studiare, Administración, Usuarios y Banco y Sheet
+- **Paso B11.8. Mazos.** Sube en Catálogo de mazos los de Paco (incluidos Pediatría y Cirugía, que van solo a Storage) y confirma su autorización como dueño. El de Fer espera su autorización escrita
+- **Paso B11.9. Abrir el banco.** Cuando haya 300 aprobadas, prende cloudBank. Mientras tanto los alumnos siguen con la demo
+
+Lo que hace la sesión después, sin pedirte nada más. Aplica las seis migraciones, guarda project_url en Vault, despliega bank-sync sin verificación de JWT, revisa que conteste 401 sin ficha ni sesión y skipped con disabled a la de Cron, y con tu aviso prende la sincronización en solo reporte contra el Sheet de prueba y contra el real. Pasa a aplicar solo cuando los ID sean fijos y tú lo apruebes.
+
+Decisiones de B11 que esperan tu visto bueno, con la opción recomendada ya tomada. Subespecialidad deducida del subtema (8.2), De control con casilla para el revisor (8.4), la tarifa (8.8), el freno de los planes de pago (8.10), el día de abrir el banco (8.14), los temas de Salud pública (8.15), los pesos del examen completo (8.17), Pediatría y Cirugía solo en Storage (8.18), un médico con decisiones que quiere borrar su cuenta (8.33), las listas dependientes (8.34) y cómo se cuenta la meta de 300 (8.35). Ya aplicadas con el plan. El pago a médicos cuenta cada pregunta revisada una vez al mes (respuesta 58) y una Tarea que no se detecta entra como pendiente para aprobar (D-080). Queda tuya cómo cierras la cuenta de un médico con decisiones sin perder lo que respalda sus pagos.
 
 ## Esta semana
 
@@ -56,8 +81,6 @@ Lo que hace la sesión después, sin pedirte nada más, con los comandos de docs
 ## Entorno de la sesión (sección 10 del plan)
 
 12. **Red, secretos, conectores y modo Auto.** Ya están GitHub, Supabase y Google Drive como conectores, y en la red api.stripe.com, api.supabase.com y api.cloudflare.com. Faltan o hay que corregir
-    - STRIPE_SECRET_KEY con la llave restringida de prueba (paso 3)
-    - SUPABASE_ACCESS_TOKEN con un token válido de supabase.com (paso 4). Con él la sesión despliega a Supabase sin el conector
     - MP_ACCESS_TOKEN con la credencial de prueba de Mercado Pago, cuando exista la cuenta (paso 15)
     - ENARM_OPENAI_KEY para comparar calidad en las evaluaciones (B12)
     - CLOUDFLARE_API_TOKEN junto al CLOUDFLARE_ACCOUNT_ID que ya está (paso 20)

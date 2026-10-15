@@ -1,4 +1,7 @@
 // @vitest-environment jsdom
+// Editor de pregunta (pantalla 18, 4.2 y 4.4 del plan de B11) con el repositorio local de la demo. El
+// médico asignado edita y manda a revisión. Con la versión en revisión primero etiqueta a ciegas, sin
+// ver lo del autor, y después decide. El admin solo lee.
 import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -9,11 +12,11 @@ import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import type { User } from '@/data/schemas/people';
 import { newId } from '@/data/testing/fixtures';
+import { ensureDemoBank } from '@/data/usecases/bank';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { buildDemoBank } from '@/demo/content/bank';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
-import { sampleQuestionIds } from './agreementView';
 
 // Cada prueba encadena varias esperas de hasta 30 segundos, y en el CI el banco demo tarda en cargar
 vi.setConfig({ testTimeout: 120_000 });
@@ -25,19 +28,21 @@ afterEach(async () => {
   app = undefined;
 });
 
-const WAIT = { timeout: 30_000 };
+// El banco demo se guarda la primera vez que se abre y, con las demás pruebas corriendo, tarda
+const WAIT = { timeout: 60_000 };
 const text = physicianText.questionEditor;
+const review = physicianText.review;
 const demo = buildDemoBank();
-const entries = demo.questions;
-const sample = new Set(sampleQuestionIds(entries.map((entry) => entry.question)));
-const inSample = entries.find((entry) => sample.has(entry.question.questionId));
-const outOfSample = entries.find((entry) => !sample.has(entry.question.questionId));
-if (!inSample || !outOfSample) throw new Error('El banco demo no alcanza para la prueba');
+// Una pregunta directa y completa del banco demo, que se puede mandar a revisión
+const entry = demo.questions.find((item) => item.question.caseId === null);
+if (!entry) throw new Error('El banco demo no alcanza para la prueba');
+const { question, options } = entry;
+const biasName = new Map(TAGGABLE_BIASES.map((bias) => [bias.key, bias.name]));
 
-const assign = (api: DataApi, user: User, questionId: string) =>
+const assign = (api: DataApi, user: User) =>
   api.repos.reviewAssignments.put({
     id: newId(),
-    questionId,
+    questionId: question.questionId,
     physicianId: user.id,
     assignedBy: null,
     assignedAt: '2026-10-08T10:00:00.000Z',
@@ -52,6 +57,15 @@ async function open(
   app = await renderApp(`${SCREENS.questionEditor.path}?pregunta=${questionId}`, { seed });
   return app;
 }
+
+/** Médico con la pregunta asignada, opcionalmente ya en revisión */
+const assigned =
+  (inReview = false) =>
+  async (api: DataApi, user: User) => {
+    await ensureDemoBank(api);
+    await assign(api, user);
+    if (inReview) await api.repos.questions.setEditorialStatus(question.id, 'in_review');
+  };
 
 describe('editor de pregunta (pantalla 18)', () => {
   it('sin pregunta en la dirección pide elegir una desde el banco', async () => {
@@ -69,10 +83,27 @@ describe('editor de pregunta (pantalla 18)', () => {
     expect(await screen.findByText(text.notFound.title, undefined, WAIT)).toBeVisible();
   });
 
-  it('el admin edita, guarda una versión nueva en borrador y el historial dice qué cambió', async () => {
+  it('el admin solo lee la pregunta, sin editarla ni decidir', async () => {
+    // El banco demo se guarda aquí, porque la marca de banco listo de una prueba anterior sigue viva
+    await open('admin', question.questionId, async (api) => {
+      await ensureDemoBank(api);
+    });
+    expect(await screen.findByText(review.readOnly, undefined, WAIT)).toBeVisible();
+    expect(screen.getByText(question.prompt)).toBeVisible();
+    expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
+    expect(screen.queryByRole('button', { name: review.submit.action })).toBeNull();
+    expect(screen.getByRole('region', { name: text.sections.history })).toBeVisible();
+  });
+
+  it('un médico sin la pregunta asignada no la ve', async () => {
+    await open('physician', question.questionId);
+    expect(await screen.findByText(text.notAssigned.title, undefined, WAIT)).toBeVisible();
+    expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
+  });
+
+  it('el médico asignado edita, guarda una versión nueva en borrador y el historial dice qué cambió', async () => {
     const typing = userEvent.setup();
-    const { question } = outOfSample;
-    const rendered = await open('admin', question.questionId);
+    const rendered = await open('physician', question.questionId, assigned());
     const explanation = await screen.findByLabelText(text.meta.explanation, undefined, WAIT);
     expect(explanation).toHaveValue(question.explanation);
     const history = screen.getByRole('region', { name: text.sections.history });
@@ -92,8 +123,6 @@ describe('editor de pregunta (pantalla 18)', () => {
       explanation: 'Explicación corregida por el médico.',
       editorialStatus: 'draft',
     });
-    // El historial lista las dos versiones y lo que cambió. El formulario se arma de nuevo con la
-    // versión 2, así que se busca otra vez en cada intento
     await waitFor(() => {
       const after = screen.getByRole('region', { name: text.sections.history });
       expect(within(after).getByText(text.status.version(2))).toBeVisible();
@@ -104,42 +133,9 @@ describe('editor de pregunta (pantalla 18)', () => {
     expect(screen.getByText(text.save.saved)).toBeVisible();
   });
 
-  it('lleva la versión por borrador, revisión y aprobación', async () => {
-    // Sin las pausas de user-event entre acciones, que bajo carga solo suman espera
-    const typing = userEvent.setup({ delay: null });
-    const { question } = outOfSample;
-    const rendered = await open('admin', question.questionId);
-    // El editor tiene unas 1,800 etiquetas. Buscar un botón por su rol en toda la página una y otra
-    // vez mientras se espera ocupa el hilo y retrasa la consulta que vuelve a pintar el estado, y
-    // bajo carga pasaba de 30 segundos. Se espera al editor con una búsqueda barata y los botones se
-    // buscan solo dentro de la tarjeta del estado, que sigue montada al cambiar de estado
-    await screen.findByLabelText(text.meta.explanation, undefined, WAIT);
-    const card = screen.getByRole('region', {
-      name: (name) => name.startsWith(text.status.title),
-    });
-    const statusButton = (name: string) => within(card).findByRole('button', { name }, WAIT);
-
-    await typing.click(await statusButton(text.status.move.in_review ?? ''));
-    await waitFor(async () => {
-      expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
-        'in_review',
-      );
-    }, WAIT);
-    await typing.click(await statusButton(text.status.move.approved ?? ''));
-    await waitFor(async () => {
-      expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
-        'approved',
-      );
-    }, WAIT);
-    expect(await statusButton(text.status.reopen)).toBeVisible();
-    // Aprobada no pasa directo a otra cosa que no sea reabrir la revisión
-    expect(screen.queryByRole('button', { name: text.status.move.rejected })).toBeNull();
-  });
-
   it('no guarda con problemas y los dice, y la versión no cambia', async () => {
     const typing = userEvent.setup();
-    const { question } = outOfSample;
-    const rendered = await open('admin', question.questionId);
+    const rendered = await open('physician', question.questionId, assigned());
     const prompt = await screen.findByLabelText(text.case.prompt, undefined, WAIT);
     await typing.clear(prompt);
     await typing.click(await screen.findByRole('button', { name: t.settings.saveChanges }, WAIT));
@@ -150,8 +146,7 @@ describe('editor de pregunta (pantalla 18)', () => {
 
   it('cada distractor muestra la definición de su etiqueta y la correcta no lleva etiqueta', async () => {
     const typing = userEvent.setup();
-    const { question, options } = outOfSample;
-    await open('admin', question.questionId);
+    await open('physician', question.questionId, assigned());
     await screen.findByLabelText(text.meta.explanation, undefined, WAIT);
     const distractor = options.findIndex((option) => !option.isCorrect);
     const group = screen.getByRole('group', { name: text.options.title(distractor + 1) });
@@ -165,56 +160,86 @@ describe('editor de pregunta (pantalla 18)', () => {
     expect(within(key).queryByLabelText(text.options.tag)).toBeNull();
   });
 
-  it('un médico sin la pregunta asignada no la edita', async () => {
-    await open('physician', outOfSample.question.questionId);
-    expect(await screen.findByText(text.notAssigned.title, undefined, WAIT)).toBeVisible();
-    expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
+  it('el autor manda el borrador completo a revisión', async () => {
+    const typing = userEvent.setup({ delay: null });
+    const rendered = await open('physician', question.questionId, assigned());
+    const send = await screen.findByRole('button', { name: review.submit.action }, WAIT);
+    await typing.click(send);
+    await waitFor(async () => {
+      expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
+        'in_review',
+      );
+    }, WAIT);
+    expect(await screen.findByText(review.submit.sent, undefined, WAIT)).toBeVisible();
   });
 
-  it('un médico con la pregunta asignada y fuera del doble etiquetado la edita', async () => {
-    await open('physician', outOfSample.question.questionId, async (api, user) => {
-      await assign(api, user, outOfSample.question.questionId);
-    });
-    expect(await screen.findByLabelText(text.meta.explanation, undefined, WAIT)).toBeVisible();
-  });
-
-  it('en el doble etiquetado primero etiqueta a ciegas y después se abre el editor', async () => {
-    const { question, options } = inSample;
+  it('en revisión primero etiqueta a ciegas, ve el aviso de cada etiqueta, y al terminar decide y aprueba', async () => {
+    const typing = userEvent.setup({ delay: null });
+    const rendered = await open('physician', question.questionId, assigned(true));
+    const step = await screen.findByRole('region', { name: review.blind.title }, WAIT);
+    // A ciegas no se ve lo del autor. Ni su justificación ni el editor
     const distractors = options.filter((option) => !option.isCorrect);
-    const labelAll = async (api: DataApi, user: User, count: number) => {
-      for (const option of distractors.slice(0, count))
+    for (const option of distractors) expect(screen.queryByText(option.rationale)).toBeNull();
+    expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
+    expect(screen.queryByRole('region', { name: text.sections.history })).toBeNull();
+
+    const tag = TAGGABLE_BIASES[0]?.key ?? '';
+    for (let index = 0; index < distractors.length; index += 1) {
+      const current = await screen.findByRole('region', { name: review.blind.title }, WAIT);
+      const select = within(current).getAllByRole('combobox')[index] as HTMLSelectElement;
+      const letter = /distractor ([A-J])$/.exec(select.labels[0]?.textContent ?? '')?.[1] ?? '';
+      await typing.selectOptions(select, tag);
+      // El aviso dice qué etiqueta quedó y en qué opción (H25)
+      expect(
+        await screen.findByText(
+          new RegExp(review.blind.saved(biasName.get(tag) ?? tag, letter).replace('.', '\\.')),
+          undefined,
+          WAIT,
+        ),
+      ).toBeVisible();
+    }
+    await waitFor(() => {
+      expect(step).not.toBeInTheDocument();
+    }, WAIT);
+    const labels = await rendered.api.repos.biasLabels.list();
+    expect(labels).toHaveLength(distractors.length);
+
+    // Paso 2. La pregunta completa y la decisión
+    const decide = await screen.findByRole('region', { name: review.decide.title }, WAIT);
+    // Ya ve lo del autor, como la justificación del distractor en el formulario
+    expect(screen.getAllByDisplayValue(distractors[0]?.rationale ?? '').length).toBeGreaterThan(0);
+    await typing.click(within(decide).getByRole('button', { name: review.decide.approve }));
+    await waitFor(async () => {
+      expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe(
+        'approved',
+      );
+    }, WAIT);
+    expect(await screen.findByText(review.decide.approvedPublished, undefined, WAIT)).toBeVisible();
+  });
+
+  it('pedir cambios pide comentario y regresa la versión a borrador', async () => {
+    const typing = userEvent.setup({ delay: null });
+    const rendered = await open('physician', question.questionId, async (api, user) => {
+      await assigned(true)(api, user);
+      for (const option of options.filter((item) => !item.isCorrect)) {
         await api.repos.biasLabels.put({
           id: newId(),
           optionId: option.optionId,
           physicianId: user.id,
-          biasTag: TAGGABLE_BIASES[0]?.key ?? '',
+          biasTag: TAGGABLE_BIASES[1]?.key ?? '',
           labeledAt: '2026-10-08T10:00:00.000Z',
         });
-    };
-    // Con un distractor sin etiquetar sigue cerrado
-    await open('physician', question.questionId, async (api, user) => {
-      await assign(api, user, question.questionId);
-      await labelAll(api, user, distractors.length - 1);
+      }
     });
-    expect(await screen.findByText(text.blind.title, undefined, WAIT)).toBeVisible();
-    expect(screen.getByRole('link', { name: text.blind.cta })).toHaveAttribute(
-      'href',
-      SCREENS.agreement.path,
-    );
-    expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
-    cleanup();
-    await resetApp(app?.api);
-
-    // Con todos etiquetados ya se abre
-    await open('physician', question.questionId, async (api, user) => {
-      await assign(api, user, question.questionId);
-      await labelAll(api, user, distractors.length);
-    });
-    expect(await screen.findByLabelText(text.meta.explanation, undefined, WAIT)).toBeVisible();
-  });
-
-  it('el admin edita una pregunta del doble etiquetado sin esperar nada', async () => {
-    await open('admin', inSample.question.questionId);
-    expect(await screen.findByLabelText(text.meta.explanation, undefined, WAIT)).toBeVisible();
+    const decide = await screen.findByRole('region', { name: review.decide.title }, WAIT);
+    const changes = within(decide).getByRole('button', { name: review.decide.requestChanges });
+    expect(changes).toBeDisabled();
+    await typing.type(within(decide).getByLabelText(review.decide.comment), 'Revisa la clave.');
+    expect(changes).toBeEnabled();
+    await typing.click(changes);
+    await waitFor(async () => {
+      expect((await rendered.api.repos.questions.get(question.id))?.editorialStatus).toBe('draft');
+    }, WAIT);
+    expect(await screen.findByText(review.decide.changesRequested, undefined, WAIT)).toBeVisible();
   });
 });

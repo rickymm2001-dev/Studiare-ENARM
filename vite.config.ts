@@ -1,3 +1,5 @@
+import { rmSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -60,6 +62,27 @@ function contentSecurityPolicy(env: Record<string, string>): Plugin {
 }
 
 /**
+ * Build de producción sin los mazos de la demo (B11, 5.9 del plan de B11). Vite copia public completo y
+ * no tiene filtro, así que al terminar se quita la carpeta demo-media, con las imágenes de los mazos de
+ * Paco. Los .json ya no se emiten porque src/demo/content/decks/index.ts deja el glob en una rama que
+ * Rollup quita. En producción los mazos salen del catálogo de la nube, que es de los planes de pago
+ */
+function withoutDemoDecks(env: Record<string, string>): Plugin {
+  let outDir = '';
+  return {
+    name: 'enarm-without-demo-decks',
+    apply: 'build',
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      if (env.VITE_APP_ENV !== 'production' || outDir === '') return;
+      rmSync(resolve(outDir, 'demo-media'), { recursive: true, force: true });
+    },
+  };
+}
+
+/**
  * Imagen para compartir con dirección completa. WhatsApp, Facebook y X no siguen rutas relativas en
  * og:image. El workflow de Pages pasa SITE_URL con la dirección pública; sin ella, en local y en las
  * pruebas, la ruta queda relativa
@@ -89,6 +112,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     tailwindcss(),
     contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_')),
+    withoutDemoDecks(loadEnv(mode, process.cwd(), 'VITE_')),
     absoluteShareImage(),
     // Instalación opcional como PWA y modo sin conexión básico (4.11, 14.4)
     VitePWA({

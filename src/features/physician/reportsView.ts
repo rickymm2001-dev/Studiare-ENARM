@@ -1,11 +1,18 @@
 // Lo que muestra la bandeja de reportes de contenido (pantalla 21). Agrupa los reportes por pregunta,
-// marca los que son de una versión anterior y ordena lo más grave primero. Sin React ni Dexie.
-import type { ContentReport, Question } from '@/data/schemas/bank';
+// marca los que son de una versión anterior y ordena lo más grave primero. Trabaja con lo que da el
+// repositorio editorial, local o de la nube, sin datos del alumno (8.30). Sin React ni Dexie.
+import type {
+  EditorReportQuestion,
+  EditorReportRow,
+  EditorReports,
+  ReportReason,
+  ReportStatus,
+} from '@/data/editorial/editorialRepo';
 
-export type StatusFilter = ContentReport['status'] | 'all';
+export type StatusFilter = ReportStatus | 'all';
 
 /** Menor es más grave. Una clave equivocada o un error clínico llegan al alumno como verdad */
-const SEVERITY: Record<ContentReport['reason'], number> = {
+const SEVERITY: Record<ReportReason, number> = {
   wrong_key: 0,
   clinical_error: 1,
   outdated: 2,
@@ -14,21 +21,19 @@ const SEVERITY: Record<ContentReport['reason'], number> = {
 };
 
 export interface ReportRow {
-  report: ContentReport;
-  /** La versión que el alumno reportó. Puede faltar si ya no está en esta base */
-  version: Question | undefined;
-  /** El reporte es de una versión anterior a la actual de la pregunta */
+  report: EditorReportRow;
+  /** El reporte es de una versión anterior a la más reciente de la pregunta */
   outdated: boolean;
 }
 
 export interface ReportGroup {
   /** ID estable de la pregunta */
   questionId: string;
-  latest: Question;
+  question: EditorReportQuestion;
   /** Los más nuevos primero */
   rows: ReportRow[];
   openCount: number;
-  reasons: Partial<Record<ContentReport['reason'], number>>;
+  reasons: Partial<Record<ReportReason, number>>;
   newestAt: string;
   /** La gravedad más alta entre sus reportes abiertos, o entre todos si ninguno está abierto */
   severity: number;
@@ -36,46 +41,34 @@ export interface ReportGroup {
 
 export interface ReportsView {
   groups: ReportGroup[];
-  counts: Record<ContentReport['status'], number>;
+  counts: Record<ReportStatus, number>;
   /** Reportes de apuntes de alumnos, que son privados y no se revisan aquí */
   notes: number;
 }
 
-export interface ReportsInput {
-  reports: readonly ContentReport[];
-  /** Todas las versiones de las preguntas reportadas, por su ID de versión */
-  versionsById: ReadonlyMap<string, Question>;
-  /** La versión más reciente de cada pregunta, por su ID estable */
-  latestByStableId: ReadonlyMap<string, Question>;
-  /** Preguntas (por ID estable) que este médico puede ver. null si ve todas */
-  allowed: ReadonlySet<string> | null;
-  status: StatusFilter;
-}
-
-export function buildReportsView(input: ReportsInput): ReportsView {
+export function buildReportsView(reports: EditorReports, status: StatusFilter): ReportsView {
   const counts: ReportsView['counts'] = { open: 0, resolved: 0, dismissed: 0 };
-  let notes = 0;
+  const questions = new Map(reports.questions.map((question) => [question.questionId, question]));
   const byQuestion = new Map<string, ReportRow[]>();
-  for (const report of input.reports) {
-    if (report.targetKind === 'note') {
-      notes += 1;
-      continue;
-    }
-    const version = input.versionsById.get(report.targetId);
-    if (!version) continue;
-    if (input.allowed && !input.allowed.has(version.questionId)) continue;
-    const latest = input.latestByStableId.get(version.questionId);
-    if (!latest) continue;
+  for (const report of reports.rows) {
+    const question = questions.get(report.questionId);
+    if (!question) continue;
     counts[report.status] += 1;
-    if (input.status !== 'all' && report.status !== input.status) continue;
-    const row: ReportRow = { report, version, outdated: version.id !== latest.id };
-    byQuestion.set(version.questionId, [...(byQuestion.get(version.questionId) ?? []), row]);
+    if (status !== 'all' && report.status !== status) continue;
+    const row: ReportRow = {
+      report,
+      outdated:
+        report.version !== null &&
+        question.latestVersion !== null &&
+        report.version < question.latestVersion,
+    };
+    byQuestion.set(report.questionId, [...(byQuestion.get(report.questionId) ?? []), row]);
   }
 
   const groups: ReportGroup[] = [];
   for (const [questionId, rows] of byQuestion) {
-    const latest = input.latestByStableId.get(questionId);
-    if (!latest) continue;
+    const question = questions.get(questionId);
+    if (!question) continue;
     rows.sort((a, b) => b.report.createdAt.localeCompare(a.report.createdAt));
     const open = rows.filter((row) => row.report.status === 'open');
     const reasons: ReportGroup['reasons'] = {};
@@ -85,7 +78,7 @@ export function buildReportsView(input: ReportsInput): ReportsView {
     const pool = open.length > 0 ? open : rows;
     groups.push({
       questionId,
-      latest,
+      question,
       rows,
       openCount: open.length,
       reasons,
@@ -100,14 +93,14 @@ export function buildReportsView(input: ReportsInput): ReportsView {
       b.openCount - a.openCount ||
       b.newestAt.localeCompare(a.newestAt),
   );
-  return { groups, counts, notes };
+  return { groups, counts, notes: reports.notes };
 }
 
 /** Los motivos de un grupo, del más grave al menos */
 export function reasonsBySeverity(
   reasons: ReportGroup['reasons'],
-): { reason: ContentReport['reason']; count: number }[] {
-  return (Object.entries(reasons) as [ContentReport['reason'], number][])
+): { reason: ReportReason; count: number }[] {
+  return (Object.entries(reasons) as [ReportReason, number][])
     .map(([reason, count]) => ({ reason, count }))
     .sort((a, b) => SEVERITY[a.reason] - SEVERITY[b.reason]);
 }

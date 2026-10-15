@@ -2,7 +2,8 @@
 // perfil local, abre la sesión y aplica el rol que da el servidor. También reclama el dispositivo
 // y vigila que siga siendo el único activo de la cuenta. Desde B9 revisa además si el equipo debe dar
 // su segundo factor, si un perfil que nació sin formulario debe completar su registro antes de subir
-// nada y si Google o el enlace del correo regresaron con un error. En la demostración no hace nada.
+// nada y si Google o el enlace del correo regresaron con un error. Desde B11, con la bandera cloudBank,
+// baja el catálogo del banco de la nube al conectar y cada 6 horas. En la demostración no hace nada.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
 import { isFeatureEnabled } from '@/config/featureFlags';
@@ -30,6 +31,7 @@ import {
   resolveCloudSignup,
 } from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion } from '@/data/usecases/profile';
+import { CATALOG_REFRESH_MS } from '@/data/bank/questionSource';
 import { NO_SIGNUP_PENDING, useAccess } from './accessState';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
@@ -76,7 +78,27 @@ export function CloudBridge() {
       // La sincronización vive mientras viva el vigilante. Si otro dispositivo gana la cuenta o se
       // cierra la sesión, deja de subir y de bajar en el acto (D-095)
       let syncing: { authId: string; handle: SyncScheduler } | null = null;
+      // El catálogo del banco de la nube se baja mientras viva la sincronización (B11, 5.3)
+      let bankTimer: ReturnType<typeof setInterval> | null = null;
+      const stopBank = () => {
+        if (bankTimer) clearInterval(bankTimer);
+        bankTimer = null;
+      };
+      const startBank = () => {
+        if (!isFeatureEnabled('cloudBank')) return;
+        // La fuente de la nube se carga aparte, para no pesar en el JavaScript inicial. Se pone al día
+        // al conectar y cada vez que vuelve la red, que pasa otra vez por aquí, y cada 6 horas
+        const catchUp = () =>
+          import('@/features/shared/useQuestionSource').then(({ catchUpCloudBank }) =>
+            catchUpCloudBank(api),
+          );
+        void catchUp();
+        bankTimer ??= setInterval(() => {
+          void catchUp();
+        }, CATALOG_REFRESH_MS);
+      };
       const stopSync = () => {
+        stopBank();
         syncing?.handle.stop();
         syncing = null;
         useSyncStatus.getState().reset();
@@ -279,6 +301,11 @@ export function CloudBridge() {
             syncing = { authId: identity.authId, handle };
             status.setSyncNow(() => handle.syncNow());
           }
+          // Con la bandera cloudBank, que llega del servidor, el catálogo se baja al conectar. El
+          // dispositivo ya está reclamado, que es lo que piden las funciones del banco
+          void flags.then(() => {
+            if (!stopped() && !isLeaving()) startBank();
+          });
           retry.failures = 0;
         } catch {
           if (stopped()) return;

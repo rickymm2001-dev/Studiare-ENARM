@@ -11,12 +11,19 @@
 // decide el servidor con el pago, el mes gratis por referido llega con el primer pago, borrar la
 // cuenta se rechaza con una suscripción que se seguiría cobrando (FR002), y Party en la nube (B7) con sus
 // grupos, códigos, topes y duelos, que atiende el mismo doble de las pruebas unitarias
-// (src/data/testing/fakePartyServer.ts). De Storage atiende solo el bucket de la foto de perfil (B2).
+// (src/data/testing/fakePartyServer.ts). De Storage atiende el bucket de la foto de perfil (B2) y, con
+// attachBank, el del catálogo de mazos (B11).
 // Desde B9 también el registro por invitación del gancho Before User Created, entrar con Google con un
 // Google simulado, el segundo factor TOTP con su sesión aal2, que con requireMfa es lo único que da su
 // rol al equipo, y la función admin-reset-mfa. Desde B10 los planes y los pagos viven en fakeBilling.ts
 // (prueba gratis, pases, lugares Fundador, códigos, facturas y Admin, Pagos), con su pasarela, su
 // portal y Mercado Pago simulados.
+//
+// Banco en la nube (B11). attachBank(server, store) engancha el modelo en memoria de fakeBankStore.ts.
+// Desde ahí las rpc del banco, la función bank-sync y el bucket deck-catalog van al banco. Las del
+// alumno y la bajada de deck-catalog las atiende fakeBank.ts (paquete B). Las del médico y el admin,
+// bank-sync y la subida a deck-catalog responden vacío hasta que fakeEditorial.ts (paquete C) las
+// atienda. Sin attachBank todo sigue como antes.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -51,6 +58,19 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './fakeSupabaseConfig';
+import { editorialFunction, editorialRpc, editorialStorage } from './fakeEditorial';
+import { fakeBankDownload, fakeBankRpc } from './fakeBank';
+import {
+  BANK_STUDENT_RPCS,
+  DECK_CATALOG_BUCKET,
+  isBankRpc,
+  isTeam,
+  type BankRpc,
+  type BankStudentRpc,
+  type FakeBankCaller,
+  type FakeBankReply,
+  type FakeBankStore,
+} from './fakeBankStore';
 
 export type PaidPlan = Exclude<PlanKey, 'free'>;
 export type Provider = 'stripe' | 'mercadopago';
@@ -267,6 +287,8 @@ export interface FakeSupabaseServer {
   sessionsOf(email: string): number;
   /** Deja a la cuenta con un factor TOTP ya verificado, como si lo hubiera dado de alta antes */
   enrollFactor(email: string): void;
+  /** El banco en la nube enganchado con attachBank (B11). null sin banco */
+  bank: FakeBankStore | null;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -719,6 +741,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     checkoutError: options.checkoutError ?? null,
     portalError: null as PortalFailure | null,
     googleAccount: null as string | null,
+    bank: null as FakeBankStore | null,
   };
   // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
   // el admin lo cambie desde Usuarios
@@ -1434,6 +1457,28 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return json(had);
   }
 
+  // ------------------------------------------------------------------ banco (B11)
+
+  /** Lo que el banco necesita saber de quien llama, como lo ven las funciones de la base */
+  function bankCaller(user: FakeUser, session: Session): FakeBankCaller {
+    const flags = settings.get('feature_flags')?.value;
+    return {
+      userId: user.id,
+      // Sin aal2, con requireMfa, el equipo cuenta como alumno, como current_app_role (B9)
+      role: roleOf(user, session),
+      alias: user.alias,
+      activeDevice: isActiveDevice(user, session),
+      plan: userPlan(user.id),
+      flags: isRecord(flags)
+        ? Object.fromEntries(
+            Object.entries(flags).filter((entry): entry is [string, boolean] => {
+              return typeof entry[1] === 'boolean';
+            }),
+          )
+        : {},
+    };
+  }
+
   // ------------------------------------------------------------------ rpc
 
   /** Lo que devolvió una función de pagos, como lo contestaría PostgREST */
@@ -1472,6 +1517,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const { user, session } = auth;
     const requireActiveDevice = (): Reply | null =>
       isActiveDevice(user, session) ? null : NOT_ACTIVE_DEVICE;
+    if (server.bank && isBankRpc(name)) {
+      return fromBankReply(bankRpc(server.bank, name, bankCaller(user, session), args));
+    }
     switch (name) {
       case 'claim_device':
         return claimDevice(user, session, args);
@@ -1958,6 +2006,14 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
    * que la base lo haga. La quita la app antes con la API
    */
   function handleStorage(path: string, auth: Auth, request: Request): Reply {
+    const deckPrefix = `/object/${DECK_CATALOG_BUCKET}/`;
+    if (server.bank && path.startsWith(deckPrefix)) {
+      const caller = auth.kind === 'user' ? bankCaller(auth.user, auth.session) : null;
+      const objectName = decodeURIComponent(path.slice(deckPrefix.length));
+      return fromBankReply(
+        bankStorage(server.bank, caller, request.method(), objectName, uploadedFile(request)),
+      );
+    }
     const own =
       auth.kind === 'user' && isActiveDevice(auth.user, auth.session)
         ? `${auth.user.id}/avatar.jpg`
@@ -1995,6 +2051,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   function handleFunction(name: string, auth: Auth, request: Request): Reply {
     if (request.method() !== 'POST') return json({ error: 'method' }, 405);
+    if (name === 'bank-sync' && server.bank) {
+      const caller = auth.kind === 'user' ? bankCaller(auth.user, auth.session) : null;
+      return fromBankReply(bankFunction(server.bank, caller, parseJsonBody(request)));
+    }
     if (auth.kind !== 'user') return json({ error: 'unauthorized' }, 401);
     const { user } = auth;
     const body = parseJsonBody(request);
@@ -2493,6 +2553,12 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         },
       ]);
     },
+    get bank() {
+      return server.bank;
+    },
+    set bank(value) {
+      server.bank = value;
+    },
   };
 }
 
@@ -2504,4 +2570,78 @@ export async function installFakeSupabase(
   const server = createFakeSupabase(options);
   await server.attach(context);
   return server;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Banco en la nube (B11)
+
+/** Engancha el banco en memoria al Supabase simulado. Desde aquí las rutas del banco van a él */
+export function attachBank(server: FakeSupabaseServer, store: FakeBankStore): void {
+  server.bank = store;
+}
+
+function fromBankReply(reply: FakeBankReply): Reply {
+  if ('bytes' in reply) {
+    return { status: reply.status, body: reply.bytes, contentType: reply.contentType };
+  }
+  return json(reply.json, reply.status);
+}
+
+const bankError = (code: string, message: string): FakeBankReply => ({
+  status: pgStatus(code),
+  json: { code, message, details: null, hint: null },
+});
+
+const TEAM_ONLY: FakeBankReply = bankError('42501', 'Solo el equipo médico');
+
+const isStudentRpc = (name: BankRpc): name is BankStudentRpc =>
+  (BANK_STUDENT_RPCS as readonly string[]).includes(name);
+
+/**
+ * Las rpc del banco. Las del alumno van a fakeBank.ts (paquete B de B11). Las del equipo responden vacío
+ * con las formas de src/data/bank/contracts.ts hasta que fakeEditorial.ts (paquete C) las atienda
+ */
+function bankRpc(
+  store: FakeBankStore,
+  name: BankRpc,
+  caller: FakeBankCaller,
+  args: Record<string, unknown>,
+): FakeBankReply {
+  if (isStudentRpc(name)) return fakeBankRpc(store, name, caller, args);
+  if (!isTeam(caller)) return TEAM_ONLY;
+  // Las del equipo las atiende fakeEditorial.ts (paquete C de B11)
+  return editorialRpc(store, name, caller, args);
+}
+
+/** La función bank-sync. La atiende fakeEditorial.ts con runSync de verdad (paquete C de B11) */
+function bankFunction(
+  store: FakeBankStore,
+  caller: FakeBankCaller | null,
+  body: unknown,
+): FakeBankReply {
+  return editorialFunction(store, caller, body);
+}
+
+/**
+ * El bucket deck-catalog. Bajar lo atiende fakeBank.ts con la política deck_catalog_select. Lo que sube
+ * el admin lo atiende fakeEditorial.ts (paquete C de B11)
+ */
+function bankStorage(
+  store: FakeBankStore,
+  caller: FakeBankCaller | null,
+  method: string,
+  objectName: string,
+  file: Buffer | null,
+): FakeBankReply {
+  if (method === 'GET') return fakeBankDownload(store, caller, objectName);
+  if (!caller)
+    return {
+      status: 400,
+      json: {
+        statusCode: '400',
+        error: 'Unauthorized',
+        message: 'new row violates row-level security policy',
+      },
+    };
+  return editorialStorage(store, caller, method, objectName, file);
 }

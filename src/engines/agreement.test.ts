@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { computeAgreement, selectDoubleLabelSample, type LabelRecord } from './agreement';
+import {
+  computeAgreement,
+  computePairAgreement,
+  selectDoubleLabelSample,
+  type LabelRecord,
+} from './agreement';
 import { createRng } from './random';
 
 const thresholds = DEFAULT_THRESHOLDS.bias;
@@ -98,5 +103,32 @@ describe('acuerdo del etiquetado (7.11)', () => {
     );
     expect(report.pairs).toBe(2);
     expect(report.global?.kappa).toBeCloseTo(1, 12);
+  });
+
+  it('los pares de autor y revisor dan el mismo kappa que dos médicos con las mismas etiquetas (B11)', () => {
+    const records = labels(120, 0.7, 'pares');
+    const pairs = [];
+    for (let index = 0; index < records.length; index += 2) {
+      pairs.push({
+        authorTag: records[index]?.tag ?? '',
+        reviewerTag: records[index + 1]?.tag ?? '',
+      });
+    }
+    const report = computePairAgreement(pairs, thresholds);
+    expect(report).toEqual(computeAgreement(records, thresholds));
+    expect(report.pairs).toBe(120);
+  });
+
+  it('con 29 pares calibra aunque coincidan todos', () => {
+    const pairs = Array.from({ length: thresholds.minLabeledPairs - 1 }, (_, index) => ({
+      authorTag: index % 2 === 0 ? 'anchoring' : 'availability',
+      reviewerTag: index % 2 === 0 ? 'anchoring' : 'availability',
+    }));
+    const report = computePairAgreement(pairs, thresholds);
+    expect(report.calibrating).toBe(true);
+    expect(report.vocabulary).toBe('trap');
+    expect(
+      computePairAgreement([...pairs, pairs[0] as (typeof pairs)[number]], thresholds).vocabulary,
+    ).toBe('bias');
   });
 });

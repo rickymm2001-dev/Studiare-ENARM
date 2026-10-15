@@ -1,21 +1,37 @@
 import { describe, expect, it } from 'vitest';
-import type { ContentReport, Question } from '@/data/schemas/bank';
-import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
-import { buildReportsView, reasonsBySeverity, type ReportsInput } from './reportsView';
+import type {
+  EditorReportQuestion,
+  EditorReportRow,
+  EditorReports,
+} from '@/data/editorial/editorialRepo';
+import { buildReportsView, reasonsBySeverity } from './reportsView';
 
-const question = (overrides: Partial<Question> = {}): Question => ({
-  ...makeQuestionWithOptions().question,
+let counter = 0;
+const nextId = () => {
+  counter += 1;
+  return `id-${String(counter).padStart(4, '0')}`;
+};
+
+const question = (overrides: Partial<EditorReportQuestion> = {}): EditorReportQuestion => ({
+  questionId: nextId(),
+  questionKey: 'GO-0001',
+  promptPreview: '¿Cuál es la respuesta simulada?',
+  branch: 'internal_medicine',
+  topic: 'cardiology',
+  latestVersion: 1,
   ...overrides,
 });
+
 const report = (
-  target: Question,
-  reason: ContentReport['reason'],
-  overrides: Partial<ContentReport> = {},
-): ContentReport => ({
-  id: newId(),
-  reporterId: newId(),
-  targetKind: 'question',
-  targetId: target.id,
+  target: EditorReportQuestion,
+  reason: EditorReportRow['reason'],
+  overrides: Partial<EditorReportRow> = {},
+): EditorReportRow => ({
+  id: nextId(),
+  questionId: target.questionId,
+  questionKey: target.questionKey,
+  versionId: nextId(),
+  version: target.latestVersion,
   reason,
   status: 'open',
   createdAt: '2026-10-09T10:00:00.000Z',
@@ -23,36 +39,26 @@ const report = (
   ...overrides,
 });
 
-function input(questions: Question[], reports: ContentReport[], extra: Partial<ReportsInput> = {}) {
-  const latest = new Map<string, Question>();
-  for (const q of questions) {
-    const current = latest.get(q.questionId);
-    if (!current || q.version > current.version) latest.set(q.questionId, q);
-  }
-  return {
-    reports,
-    versionsById: new Map(questions.map((q) => [q.id, q])),
-    latestByStableId: latest,
-    allowed: null,
-    status: 'open',
-    ...extra,
-  } satisfies ReportsInput;
-}
+const reports = (
+  questions: EditorReportQuestion[],
+  rows: EditorReportRow[],
+  notes = 0,
+): EditorReports => ({ questions, rows, notes });
 
 describe('bandeja de reportes', () => {
   it('agrupa por pregunta y cuenta por estado', () => {
     const a = question();
     const b = question();
     const view = buildReportsView(
-      input(
+      reports(
         [a, b],
         [
           report(a, 'typo'),
           report(a, 'wrong_key'),
           report(b, 'typo', { status: 'resolved', resolvedAt: '2026-10-09T11:00:00.000Z' }),
         ],
-        { status: 'all' },
       ),
+      'all',
     );
     expect(view.counts).toEqual({ open: 2, resolved: 1, dismissed: 0 });
     expect(view.groups).toHaveLength(2);
@@ -62,9 +68,8 @@ describe('bandeja de reportes', () => {
   it('el filtro de estado deja los conteos completos', () => {
     const a = question();
     const view = buildReportsView(
-      input([a], [report(a, 'typo'), report(a, 'typo', { status: 'dismissed' })], {
-        status: 'dismissed',
-      }),
+      reports([a], [report(a, 'typo'), report(a, 'typo', { status: 'dismissed' })]),
+      'dismissed',
     );
     expect(view.counts).toEqual({ open: 1, resolved: 0, dismissed: 1 });
     expect(view.groups[0]?.rows).toHaveLength(1);
@@ -76,7 +81,7 @@ describe('bandeja de reportes', () => {
     const clinical = question();
     const closed = question();
     const view = buildReportsView(
-      input(
+      reports(
         [typo, wrongKey, clinical, closed],
         [
           report(typo, 'typo'),
@@ -84,8 +89,8 @@ describe('bandeja de reportes', () => {
           report(wrongKey, 'wrong_key'),
           report(closed, 'wrong_key', { status: 'resolved' }),
         ],
-        { status: 'all' },
       ),
+      'all',
     );
     expect(view.groups.map((group) => group.questionId)).toEqual([
       wrongKey.questionId,
@@ -95,41 +100,29 @@ describe('bandeja de reportes', () => {
     ]);
   });
 
-  it('marca como de versión anterior el reporte que no es de la versión actual', () => {
-    const v1 = question();
-    const v2 = question({ questionId: v1.questionId, version: 2 });
-    const view = buildReportsView(input([v1, v2], [report(v1, 'typo'), report(v2, 'typo')]));
+  it('marca como de versión anterior el reporte que no es de la versión más reciente', () => {
+    const a = question({ latestVersion: 2 });
+    const view = buildReportsView(
+      reports([a], [report(a, 'typo', { version: 1 }), report(a, 'typo', { version: 2 })]),
+      'open',
+    );
     const rows = view.groups[0]?.rows ?? [];
     expect(rows).toHaveLength(2);
     expect(rows.filter((row) => row.outdated)).toHaveLength(1);
-    expect(view.groups[0]?.latest.id).toBe(v2.id);
+    expect(view.groups[0]?.question.latestVersion).toBe(2);
   });
 
-  it('un médico solo ve las preguntas que le asignaron', () => {
-    const mine = question();
-    const other = question();
-    const view = buildReportsView(
-      input([mine, other], [report(mine, 'typo'), report(other, 'typo')], {
-        allowed: new Set([mine.questionId]),
-      }),
-    );
-    expect(view.groups.map((group) => group.questionId)).toEqual([mine.questionId]);
-    expect(view.counts.open).toBe(1);
+  it('sin saber la versión no marca nada como anterior', () => {
+    const a = question({ latestVersion: null });
+    const view = buildReportsView(reports([a], [report(a, 'typo', { version: 1 })]), 'open');
+    expect(view.groups[0]?.rows[0]?.outdated).toBe(false);
   });
 
-  it('los reportes de apuntes no entran y se cuentan aparte, y los de una versión que no está se ignoran', () => {
+  it('los reportes de una pregunta que no está en la lista se ignoran y los apuntes se cuentan aparte', () => {
     const a = question();
-    const view = buildReportsView(
-      input(
-        [a],
-        [
-          report(a, 'typo', { targetKind: 'note', targetId: newId() }),
-          report(a, 'typo', { targetId: newId() }),
-        ],
-        { status: 'all' },
-      ),
-    );
-    expect(view.notes).toBe(1);
+    const ghost = question();
+    const view = buildReportsView(reports([a], [report(ghost, 'typo')], 3), 'all');
+    expect(view.notes).toBe(3);
     expect(view.groups).toHaveLength(0);
     expect(view.counts.open).toBe(0);
   });

@@ -214,10 +214,12 @@ do $$ begin
     raise exception 'FALLA B2. No lee quién tiene la cuenta'; end if;
   if (select count(*) from public.platform_settings) < 1 then
     raise exception 'FALLA B2. No lee la configuración'; end if;
-  if (select count(*) from public.questions where id = 'b4000000-0000-0000-0000-0000000000e1') <> 1 then
-    raise exception 'FALLA B2. No lee las preguntas aprobadas'; end if;
-  if (select count(*) from public.clinical_cases where id = 'b3000000-0000-0000-0000-0000000000c1') <> 1 then
-    raise exception 'FALLA B2. No lee los casos clínicos'; end if;
+  -- Desde B11 las preguntas y los casos no se leen directo, ni desde el dispositivo activo. Salen solo con
+  -- fetch_questions (20261023000002_bank_core.sql)
+  if not pg_temp.is_blocked($q$select count(*) from public.questions where id = 'b4000000-0000-0000-0000-0000000000e1'$q$) then
+    raise exception 'FALLA B2. Lee las preguntas directo'; end if;
+  if not pg_temp.is_blocked($q$select count(*) from public.clinical_cases where id = 'b3000000-0000-0000-0000-0000000000c1'$q$) then
+    raise exception 'FALLA B2. Lee los casos clínicos directo'; end if;
   if (select count(*) from public.payments) <> 1 then
     raise exception 'FALLA B2. No lee su historial de pagos'; end if;
   -- El aviso de privacidad se registra al entrar, antes de que se sepa quién tiene la cuenta
@@ -797,6 +799,39 @@ do $$ begin
 end $$;
 rollback;
 
+-- Las funciones del banco en la nube (B11) tampoco las ejecuta anon. Las del alumno exigen el
+-- dispositivo activo por dentro y las del equipo revisan el rol
+do $$
+declare
+  f text;
+begin
+  foreach f in array array[
+    'public.catalog_changes(bigint, integer)', 'public.fetch_questions(uuid[], uuid[], text)', 'public.bank_quota()',
+    'public.report_question(uuid, text)', 'public.bias_agreement_summary()', 'public.editor_list(jsonb, integer, integer)',
+    'public.editor_question(uuid)', 'public.admin_bank_overview()'] loop
+    if has_function_privilege('anon', f, 'execute') then raise exception 'FALLA B10. anon puede ejecutar %', f; end if;
+  end loop;
+end $$;
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('b0000000-0000-0000-0000-0000000000b1', 'barrera-banco@x.mx', '{"alias":"Banco"}');
+begin;
+select pg_temp.as_user('b0000000-0000-0000-0000-0000000000b1', 'ses-banco-1');
+select public.claim_device('dev-banco-1', 'Chrome');
+commit;
+begin;
+select pg_temp.as_user('b0000000-0000-0000-0000-0000000000b1', 'ses-banco-2');
+select public.claim_device('dev-banco-2', 'Safari');
+commit;
+begin;
+select pg_temp.as_user('b0000000-0000-0000-0000-0000000000b1', 'ses-banco-1');
+do $$ begin
+  if not pg_temp.is_blocked($q$select public.fetch_questions(array['b4000000-0000-0000-0000-0000000000e2']::uuid[])$q$) then
+    raise exception 'FALLA B10. El dispositivo desplazado pidió preguntas del banco'; end if;
+  if not pg_temp.is_blocked($q$select public.catalog_changes()$q$) then
+    raise exception 'FALLA B10. El dispositivo desplazado leyó el catálogo del banco'; end if;
+end $$;
+rollback;
+
 -- ===================================================================== B11. Cobertura de las políticas
 -- Toda política que dé acceso por auth.uid() o por grupo debe exigir is_active_device(), salvo estas, que
 -- se dejan abiertas a propósito (ver el encabezado de la migración). Si alguien agrega una política nueva
@@ -805,7 +840,10 @@ do $$
 declare
   open_on_purpose text[] := array[
     'roles_select', 'privacy_own', 'payments_select', 'device_sessions_select',
-    'assignments_select', 'decisions_insert', 'decisions_select', 'questions_select'];
+    'assignments_select', 'decisions_insert', 'decisions_select', 'questions_select',
+    -- Desde B11 los casos los ve solo el equipo asignado, como las preguntas, y la API no tiene permisos
+    -- de tabla sobre ninguna de las dos. El alumno las lee con fetch_questions, que exige el dispositivo
+    'cases_select'];
   missing text;
   protected int;
 begin

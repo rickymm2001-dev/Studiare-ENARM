@@ -10,6 +10,12 @@ import {
   applyChargeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
+  bankSyncApplyViaRest,
+  bankSyncAuthorizeViaRest,
+  bankSyncBeginViaRest,
+  bankSyncCronOkViaRest,
+  bankSyncFinishViaRest,
+  bankSyncVersionsContentViaRest,
   checkoutContextViaRest,
   claimBillingActionsViaRest,
   finishBillingActionViaRest,
@@ -18,6 +24,14 @@ import {
   userOfCustomerViaRest,
   type SupabaseEnv,
 } from './supabase.ts';
+import { createGoogleClient } from './bank/google.ts';
+import {
+  parseApplyResults,
+  parseBegin,
+  parseVersionsContent,
+  type BankSyncDeps,
+  type BankSyncStore,
+} from './bank/sync.ts';
 
 /** Los nombres de 2.6 del diseño. Lo que no esté aquí no llega a las funciones */
 const NAMES = [
@@ -132,5 +146,51 @@ export function cancelSubscriptionDeps(): CancelSubscriptionDeps {
     authenticate: (authorization) => authenticateUser(supabase, authorization),
     checkoutContext: (userId) => checkoutContextViaRest(supabase, userId),
     applySubscriptionState: (notice) => applySubscriptionStateViaRest(supabase, notice),
+  };
+}
+
+/** Las funciones de la base de la sincronización del banco, con la llave de servicio (B11) */
+function restBankSyncStore(supabase: SupabaseEnv): BankSyncStore {
+  return {
+    begin: async (trigger, target, actorId) =>
+      parseBegin(await bankSyncBeginViaRest(supabase, { trigger, target, actorId })),
+    versionsContent: async (versionIds) =>
+      parseVersionsContent(await bankSyncVersionsContentViaRest(supabase, versionIds)),
+    apply: async (runId, rows, forceDryRun) =>
+      parseApplyResults(await bankSyncApplyViaRest(supabase, { runId, rows, forceDryRun })),
+    finish: async (runId, input) => {
+      await bankSyncFinishViaRest(supabase, { runId, ...input });
+    },
+  };
+}
+
+/**
+ * Sincronización del banco con el Google Sheet (bank-sync, B11). Lee del entorno solo la llave de la
+ * cuenta de servicio y los ID de los Sheets, que pone Ricardo como secretos de las Edge Functions. Nunca
+ * se registran
+ */
+export function bankSyncDeps(onRun?: (runId: string | null) => void): BankSyncDeps {
+  const { supabase } = readEnv();
+  return {
+    env: {
+      appUrl: Deno.env.get('APP_URL'),
+      serviceAccountKey: Deno.env.get('GOOGLE_SA_KEY'),
+      sheetId: Deno.env.get('GOOGLE_BANK_SHEET_ID'),
+      testSheetId: Deno.env.get('GOOGLE_BANK_TEST_SHEET_ID'),
+    },
+    log,
+    authorizeAdmin: (authorization) => bankSyncAuthorizeViaRest(supabase, authorization),
+    cronOk: (token) => bankSyncCronOkViaRest(supabase, token),
+    store: restBankSyncStore(supabase),
+    google: (key) =>
+      createGoogleClient(key, {
+        fetch,
+        now: () => Date.now(),
+        sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+      }),
+    waitUntil: (work) => {
+      EdgeRuntime.waitUntil(work);
+    },
+    ...(onRun ? { onRun } : {}),
   };
 }

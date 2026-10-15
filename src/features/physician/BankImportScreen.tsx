@@ -1,6 +1,8 @@
 // Importador del banco (pantalla 22, 10.2). El médico sube el Excel, el CSV o el JSON que llenó con la
 // plantilla. Antes de guardar nada ve cuántas filas entran, cuáles no y por qué, con el número de fila.
 // Lo que entra queda en borrador (4.2) y un ID por fila evita duplicados si vuelve a subir el archivo.
+// Con la nube (B11, 4.2 del plan de B11) el importador es del admin y sube al banco de la nube con el
+// convertidor del Sheet. El médico escribe en el Sheet. En la demo sigue local.
 import { useState } from 'react';
 import { Link } from 'react-router';
 import {
@@ -12,6 +14,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { BankFileError, readBankFile } from '@/data/content/bankFiles';
@@ -32,6 +35,8 @@ import {
   type RowProblem,
 } from './bankImport';
 import { BOM, csvTemplate, downloadText, EXCEL_TEMPLATE_FILE, jsonTemplate } from './bankTemplates';
+import { CloudBankImport } from './CloudBankImport';
+import { useEditorialKind } from './useEditorialRepo';
 
 const PAGE = 50;
 const csvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
@@ -54,6 +59,45 @@ const prefixOf = (fileName: string) =>
     .replace(/^-|-$/g, '') || 'banco';
 
 export function BankImportScreen() {
+  const kind = useEditorialKind();
+  const role = usePreferences((state) => state.role);
+  // Con la nube del equipo nunca se importa a la base local (M6 de la revisión)
+  if (kind === 'checking' || kind === 'unavailable') {
+    return (
+      <>
+        <ScreenHeader
+          title={t.screens.bankImport.title}
+          description={physicianText.importScreen.hint}
+        />
+        {kind === 'checking' ? (
+          <LoadingState />
+        ) : (
+          <Card>
+            <p className="text-sm">{physicianText.errors.network}</p>
+          </Card>
+        )}
+      </>
+    );
+  }
+  if (kind === 'cloud') {
+    return role === 'physician' ? (
+      <>
+        <ScreenHeader
+          title={t.screens.bankImport.title}
+          description={physicianText.importScreen.hint}
+        />
+        <Card>
+          <p className="text-sm">{physicianText.importCloud.physician}</p>
+        </Card>
+      </>
+    ) : (
+      <CloudBankImport />
+    );
+  }
+  return <LocalBankImport />;
+}
+
+function LocalBankImport() {
   const text = physicianText.importScreen;
   const api = useDataApi();
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });

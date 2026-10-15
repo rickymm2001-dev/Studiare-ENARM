@@ -110,7 +110,17 @@ export class DecisionError extends Error {
 }
 
 export type Decision =
-  { kind: 'reject' } | { kind: 'approve'; draft: QuestionDraft; taxonomy: TaxonomyView };
+  | { kind: 'reject' }
+  | {
+      kind: 'approve';
+      draft: QuestionDraft;
+      taxonomy: TaxonomyView;
+      /**
+       * Con la nube la variante nace en el banco de la nube con editor_create_question y variant_of
+       * (B11, 4.2 del plan de B11). Devuelve el id estable de la variante. Sin esto se guarda local
+       */
+      saveVariant?: (draft: QuestionDraft, original: Question) => Promise<string>;
+    };
 
 export async function decideRestructure(
   api: Api,
@@ -137,12 +147,18 @@ export async function decideRestructure(
   if (issues.length > 0) throw new InvalidDraftError(issues);
   const original = await api.repos.questions.get(content.questionVersionId);
   if (!original) throw new DecisionError('La pregunta original ya no está en el banco');
-  const variant = buildVariant({ original, draft: decision.draft, now });
-  await api.repos.questions.addVersion(variant.question, variant.options);
+  let variantQuestionId: string;
+  if (decision.saveVariant) {
+    variantQuestionId = await decision.saveVariant(decision.draft, original);
+  } else {
+    const variant = buildVariant({ original, draft: decision.draft, now });
+    await api.repos.questions.addVersion(variant.question, variant.options);
+    variantQuestionId = variant.question.questionId;
+  }
   const approved: AiArtifact = {
     ...artifact,
     status: editedFromProposal(decision.draft, content.proposal) ? 'edited' : 'approved',
-    content: { ...artifact.content, variantQuestionId: variant.question.questionId },
+    content: { ...artifact.content, variantQuestionId },
     ...decided,
   };
   await api.repos.aiArtifacts.put(approved);

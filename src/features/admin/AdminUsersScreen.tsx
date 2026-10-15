@@ -15,6 +15,7 @@ import { ensureDemoBank } from '@/data/usecases/bank';
 import { setLocalUserRole, setPhysicianTopics } from '@/data/usecases/admin';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { assignableRoles, type AppRole } from '@/engines/roles';
+import { adminText } from '@/i18n/admin';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
 import { Badge } from '@/ui/components/badge';
@@ -57,7 +58,7 @@ function LocalUsers() {
   const header = (
     <ScreenHeader
       title={t.screens.adminUsers.title}
-      description={t.screens.adminUsers.description}
+      description={adminText.descriptions.adminUsers}
     />
   );
   // Espera a que el banco termine de guardarse, así las asignaciones lo ven completo
