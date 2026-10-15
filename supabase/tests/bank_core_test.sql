@@ -524,4 +524,25 @@ begin
   end if;
 end $$;
 
+-- ===================================================================== BC12. Candado del seq del catálogo
+-- bank_publish y bank_catalog_retire toman el mismo candado antes de pedir un seq, así el orden en que se
+-- confirman es el del seq (M3 de la revisión). Se ve en pg_locks dentro de la transacción
+create or replace function pg_temp.holds_catalog_seq_lock() returns boolean language sql as $$
+  select exists (
+    select 1 from pg_locks
+    where locktype = 'advisory' and pid = pg_backend_pid() and objsubid = 1
+      and classid::bigint = ((hashtextextended('bank-catalog-seq', 0) >> 32) & 4294967295)
+      and objid::bigint = (hashtextextended('bank-catalog-seq', 0) & 4294967295)
+  )
+$$;
+begin;
+select pg_temp.expect(not pg_temp.holds_catalog_seq_lock(), 'BC12. El candado ya estaba tomado');
+select pg_temp.bank_seed('BC-L001') as lock_q \gset
+select pg_temp.expect(pg_temp.holds_catalog_seq_lock(), 'BC12. bank_publish no tomó el candado del seq');
+rollback;
+begin;
+select public.bank_catalog_retire(:'first_q');
+select pg_temp.expect(pg_temp.holds_catalog_seq_lock(), 'BC12. bank_catalog_retire no tomó el candado del seq');
+rollback;
+
 \echo 'TODAS LAS PRUEBAS DEL BANCO, LECTURA DEL ALUMNO, PASARON'

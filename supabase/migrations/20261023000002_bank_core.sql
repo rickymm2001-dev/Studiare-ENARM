@@ -311,7 +311,9 @@ $$;
 -- ===================================================================== Publicar
 -- Publica la versión aprobada más reciente de una pregunta. Un caso seriado se publica completo. Si
 -- alguna de sus preguntas no tiene versión aprobada con ese mismo caso, nada cambia y responde
--- waiting_case. Devuelve published, waiting_case, retired o not_approved
+-- waiting_case. Devuelve published, waiting_case, retired o not_approved. Toma el candado del seq del
+-- catálogo antes de pedir números, así el orden en que se confirman es el orden del seq y catalog_changes
+-- no se salta una fila que otra transacción confirma con un seq menor después (M3 de la revisión)
 create or replace function public.bank_publish(p_question_id uuid) returns text
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
@@ -359,6 +361,7 @@ begin
   end if;
 
   v_size := case when v_version.case_id is null then null else cardinality(v_targets) end;
+  perform pg_advisory_xact_lock(hashtextextended('bank-catalog-seq', 0));
   insert into public.question_catalog as c (
     question_id, version_id, version, branch, topic, subtopic, difficulty, item_kinds, polarity, task,
     format, case_id, case_order, case_size, variant_of, exam_eligible, distractor_biases, option_count,
@@ -393,10 +396,12 @@ begin
 end;
 $$;
 
--- Saca una pregunta del catálogo para los alumnos. La app deja de elegirla y conserva lo que ya bajó
+-- Saca una pregunta del catálogo para los alumnos. La app deja de elegirla y conserva lo que ya bajó.
+-- Toma el mismo candado del seq que bank_publish
 create or replace function public.bank_catalog_retire(p_question_id uuid) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin
+  perform pg_advisory_xact_lock(hashtextextended('bank-catalog-seq', 0));
   update public.question_catalog
     set status = 'retired', seq = nextval('public.bank_catalog_seq'), updated_at = now()
     where question_id = p_question_id and status <> 'retired';
