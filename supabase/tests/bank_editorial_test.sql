@@ -76,6 +76,19 @@ select pg_temp.as_user(:'p1');
 select pg_temp.expect(public.editor_submit(:'q99v1') ->> 'reviewerId' = :'p2',
   'BE1. No usó al revisor por omisión de la subespecialidad');
 rollback;
+-- Un admin que asignó puede borrar su cuenta. La asignación queda y pierde quién la hizo (B2 de la revisión)
+begin;
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('be000000-0000-0000-0000-0000000000e2', 'be-ad2@x.mx', '{"alias":"Admin que se va"}');
+update public.user_roles set role = 'admin' where user_id = 'be000000-0000-0000-0000-0000000000e2';
+select pg_temp.as_user('be000000-0000-0000-0000-0000000000e2');
+select public.admin_assign_questions(array[:'q4']::uuid[], :'p3', null);
+reset role;
+select pg_temp.expect(pg_temp.fails_with('delete from auth.users where id = ''be000000-0000-0000-0000-0000000000e2''') is null,
+  'BE1. Borrar la cuenta de un admin que asignó falló');
+select pg_temp.expect(exists (select 1 from public.review_assignments where question_id = :'q4'
+    and physician_id = :'p3' and assigned_by is null), 'BE1. La asignación no quedó sin quién la hizo');
+rollback;
 -- Reasignar al revisor como autor no deja a nadie con los dos papeles
 begin;
 select pg_temp.as_user(:'ad');
