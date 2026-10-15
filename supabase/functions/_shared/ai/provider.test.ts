@@ -165,6 +165,49 @@ describe('proveedor de Anthropic', () => {
     expect(toProviderError(rateLimitError()).kind).toBe('rate_limited');
   });
 
+  it('reconoce el límite de gasto donde venga en el cuerpo, no solo en error.details.error_code (revisión del hallazgo 7)', () => {
+    // Nadie confirmó en qué campo llega el código. Se busca en el cuerpo serializado completo
+    for (const where of ['details', 'root', 'message'] as const) {
+      const failure = toProviderError(spendLimitError(where));
+      expect(failure.kind, where).toBe('org_limit');
+      expect(failure.status, where).toBe(429);
+    }
+    for (const where of ['message', 'root'] as const) {
+      const failure = toProviderError(workspaceLimitError(where));
+      expect(failure.kind, where).toBe('org_limit');
+      expect(failure.status, where).toBe(400);
+    }
+    // El mensaje del servidor propio nunca se copia
+    expect(toProviderError(spendLimitError('message')).message).not.toContain('enforced');
+  });
+
+  it('un 429 por minuto, o un 400 cualquiera, no se confunde con el tope de gasto', () => {
+    const rateLimited = APIError.generate(
+      429,
+      {
+        type: 'error',
+        error: {
+          type: 'rate_limit_error',
+          message: 'Number of request tokens has exceeded your per-minute rate limit',
+        },
+      },
+      undefined,
+      new Headers({ 'retry-after': '20' }),
+    );
+    expect(toProviderError(rateLimited).kind).toBe('rate_limited');
+    const badRequest = APIError.generate(
+      400,
+      { type: 'error', error: { type: 'invalid_request_error', message: 'max_tokens: too large' } },
+      undefined,
+      new Headers(),
+    );
+    expect(toProviderError(badRequest)).toMatchObject({ kind: 'provider_error', status: 400 });
+    // Sin cuerpo, solo cuenta el mensaje
+    expect(toProviderError(APIError.generate(500, undefined, 'caído', new Headers())).kind).toBe(
+      'provider_error',
+    );
+  });
+
   it('traduce los errores de la API sin copiar lo que contestó', async () => {
     const make = (status: number) =>
       APIError.generate(

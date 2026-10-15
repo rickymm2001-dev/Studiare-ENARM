@@ -156,27 +156,58 @@ export function apiError(
   return APIError.generate(status, body, undefined, new Headers(headers));
 }
 
-/** El tope mensual de la organización (429 sin retry-after y con enforced_spend_limit_reached) */
-export const spendLimitError = (): Error =>
-  apiError(429, {
-    type: 'error',
-    error: {
-      type: 'rate_limit_error',
-      message: 'You have reached your API usage limits.',
-      details: { error_code: 'enforced_spend_limit_reached' },
-    },
-  });
+/**
+ * El tope mensual de la organización (429 sin retry-after y con enforced_spend_limit_reached). Nadie ha
+ * confirmado en qué campo del cuerpo viene el código (el SDK solo declara message y type), así que el
+ * doble lo pone donde se pida: en error.details.error_code, que es lo que dice la documentación, en un
+ * campo suelto en la raíz o en cualquier otro lugar y solo dentro del mensaje
+ */
+export const spendLimitError = (where: 'details' | 'root' | 'message' = 'details'): Error =>
+  apiError(
+    429,
+    where === 'details'
+      ? {
+          type: 'error',
+          error: {
+            type: 'rate_limit_error',
+            message: 'You have reached your API usage limits.',
+            details: { error_code: 'enforced_spend_limit_reached' },
+          },
+        }
+      : where === 'root'
+        ? {
+            type: 'error',
+            error_code: 'enforced_spend_limit_reached',
+            error: { type: 'rate_limit_error', message: 'You have reached your API usage limits.' },
+          }
+        : {
+            type: 'error',
+            error: {
+              type: 'rate_limit_error',
+              message: 'Request rejected: enforced_spend_limit_reached for this organization.',
+            },
+          },
+  );
 
 /** El límite de gasto que pone la cuenta a un espacio de trabajo (400) */
-export const workspaceLimitError = (): Error =>
-  apiError(400, {
-    type: 'error',
-    error: {
-      type: 'invalid_request_error',
-      message:
-        'You have reached your specified workspace API usage limits. You will regain access on 2026-11-01.',
-    },
-  });
+export const workspaceLimitError = (where: 'message' | 'root' = 'message'): Error =>
+  apiError(
+    400,
+    where === 'message'
+      ? {
+          type: 'error',
+          error: {
+            type: 'invalid_request_error',
+            message:
+              'You have reached your specified workspace API usage limits. You will regain access on 2026-11-01.',
+          },
+        }
+      : {
+          type: 'error',
+          error: { type: 'invalid_request_error' },
+          message: 'You have reached your specified API usage limits.',
+        },
+  );
 
 /** Un 429 de límite por minuto, con retry-after */
 export const rateLimitError = (): Error =>

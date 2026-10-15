@@ -62,6 +62,10 @@ describe('respuestas especiales del Anthropic simulado', () => {
       error: { details: { error_code: 'enforced_spend_limit_reached' } },
     });
     expect(workspaceLimitError()).toBeInstanceOf(BadRequestError);
+    // Los mismos errores con el código en otro lugar del cuerpo
+    expect(spendLimitError('root')).toBeInstanceOf(RateLimitError);
+    expect(spendLimitError('message')).toBeInstanceOf(RateLimitError);
+    expect(workspaceLimitError('root')).toBeInstanceOf(BadRequestError);
   });
 
   it('la negativa trae su categoría y el razonamiento va antes del texto', () => {

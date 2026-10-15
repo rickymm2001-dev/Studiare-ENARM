@@ -164,31 +164,24 @@ export interface MessagesApi {
   ): Promise<Message>;
 }
 
-/** El cuerpo de un error de la API, sin confiar en su forma */
-interface ErrorBody {
-  error?: { message?: unknown; details?: { error_code?: unknown } };
-}
-const bodyOf = (error: { error: unknown }): ErrorBody =>
-  error.error !== null && typeof error.error === 'object' ? error.error : {};
-
-/** El código del cuerpo del error, como enforced_spend_limit_reached. Nunca se copia el mensaje */
-function errorCodeOf(error: { error: unknown }): string | null {
-  const code = bodyOf(error).error?.details?.error_code;
-  return typeof code === 'string' ? code : null;
-}
-
 /**
- * El límite de gasto que la cuenta puso a la organización o a un espacio de trabajo. La API lo
- * contesta con 400 y un mensaje que empieza así (documentación de rate limits, 2026-10-15)
+ * Lo que dice un error de la API sobre el límite de gasto de la cuenta. El tope mensual de la organización
+ * llega como 429 con enforced_spend_limit_reached y el de un espacio de trabajo como 400 con un mensaje
+ * que empieza con "You have reached your specified" (documentación de rate limits, 2026-10-15). No se
+ * confía en en qué campo viene: el SDK 0.132.1 declara solo message y type en el error, así que se busca
+ * en el cuerpo serializado completo y en el mensaje. Nunca se copia nada de lo que contestó la API
  */
-function isOwnSpendLimit(error: { error: unknown }): boolean {
-  const message = bodyOf(error).error?.message;
-  return typeof message === 'string' && message.startsWith('You have reached your specified');
+const SPEND_LIMIT_MARKERS = ['enforced_spend_limit_reached', 'you have reached your specified'];
+
+function isSpendLimit(error: { error: unknown; message: string }): boolean {
+  // El cuerpo viene de JSON.parse, así que serializarlo no falla. Sin cuerpo solo cuenta el mensaje
+  const text = `${JSON.stringify(error.error)} ${error.message}`.toLowerCase();
+  return SPEND_LIMIT_MARKERS.some((marker) => text.includes(marker));
 }
 
 export function toProviderError(error: unknown): ProviderError {
   if (error instanceof RateLimitError) {
-    if (errorCodeOf(error) === 'enforced_spend_limit_reached') {
+    if (isSpendLimit(error)) {
       return new ProviderError('org_limit', 'Se alcanzó el límite de gasto de la IA', 429);
     }
     return new ProviderError('rate_limited', 'El servicio de IA está saturado', 429);
@@ -197,8 +190,12 @@ export function toProviderError(error: unknown): ProviderError {
     return new ProviderError('provider_error', 'No se pudo conectar con el servicio de IA');
   }
   if (error instanceof APIError) {
-    if (error.status === 400 && isOwnSpendLimit(error)) {
-      return new ProviderError('org_limit', 'Se alcanzó el límite de gasto de la IA', 400);
+    if (isSpendLimit(error)) {
+      return new ProviderError(
+        'org_limit',
+        'Se alcanzó el límite de gasto de la IA',
+        error.status as number | undefined,
+      );
     }
     const text =
       error.status === 401 || error.status === 403
