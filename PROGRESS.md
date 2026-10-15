@@ -26,7 +26,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
 - [x] B8. Plan Gratis (PR 49 fusionado)
 - [x] B9. Cuentas y acceso (PR 52 fusionado)
-- [x] B10. Pagos completos (PR en curso)
+- [x] B10. Pagos completos (PR 53 fusionado)
+- [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR en curso)
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
 - [ ] B13. Inglés médico
@@ -150,6 +151,11 @@ Evidencia
 - Evidencia. Typecheck, lint y formato limpios. Vitest con 3,564 pruebas. SQL en 21 archivos. E2e de nube 68 de 68 en teléfono y computadora, e2e normal en verde (rendimiento y sin conexión pasan solas con la máquina cargada) y audit:ui 20 de 20. JS inicial de 297.0 KB de 300
 - Capturas en docs/screenshots/v3/b10 (51)
 - Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
+
+### Herramientas (D-131)
+- npm run deploy:supabase aplica el SQL, también las piezas con drop o delete, publica las funciones y pone los secretos desde el repo con el token de Supabase. Con el token, lo que falta de B10 son dos comandos (docs/DESPLIEGUE.md) y ya no pegas archivos en el SQL Editor
+- PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
+- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts y del servidor en verde. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
 
 ### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
