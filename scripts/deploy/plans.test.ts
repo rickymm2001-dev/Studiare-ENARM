@@ -13,7 +13,7 @@ import { expectedFunctions, runDeploy, type Io } from './deploy.ts';
 import { readSecretsFile } from './secrets.ts';
 import { createManagementClient } from './managementApi.ts';
 import { loadPlan, repoMigrations } from './plan.ts';
-import { applyFunctionSql, type FunctionDef } from './sql.ts';
+import { applyFunctionSql, sameDef, type FunctionDef } from './sql.ts';
 import { STUDIARE_PROJECT_REF, main, parseArgs, resolveToken } from './supabase.ts';
 import { fakeSupabase, type FakeOptions } from './testing/fakeSupabase.ts';
 
@@ -52,6 +52,15 @@ function realFunctions(): Record<string, FunctionDef> {
   );
   const old = privacy.get('delete_my_account');
   if (old) defs.set('delete_my_account', old);
+  return Object.fromEntries(defs);
+}
+
+/** La base con B11 aplicado y B12 sin aplicar. Todas las funciones de las migraciones hasta 20261023000006 */
+function beforeB12Functions(): Record<string, FunctionDef> {
+  const defs = new Map<string, FunctionDef>();
+  for (const migration of repoMigrations(ROOT)) {
+    if (migration.version <= '20261023000006') applyFunctionSql(migration.sql, defs);
+  }
   return Object.fromEntries(defs);
 }
 
@@ -146,6 +155,60 @@ describe('los planes del repo', () => {
     expect(Object.keys(plan.secrets ?? {})).toEqual(['GOOGLE_BANK_SHEET_ID']);
   });
 
+  it('b12 lleva las cuatro migraciones de IA, la pieza de Borrar mis datos y las dos funciones sin verificar JWT', () => {
+    const plan = loadPlan(ROOT, 'b12');
+    expect(plan.migrations.map((step) => step.name)).toEqual([
+      'ai_proxy_v2',
+      'ai_jobs',
+      'ai_gate',
+      'ai_delete_my_data',
+      'manual_ia_b12',
+    ]);
+    expect(plan.migrations.at(-1)?.check).toEqual({ borrar_mis_datos_b12: true });
+    expect(plan.functions).toEqual([
+      { slug: 'ai-proxy', verifyJwt: false, note: expect.any(String) as string },
+      { slug: 'ai-batch', verifyJwt: false, note: expect.any(String) as string },
+    ]);
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+  });
+
+  it('los secretos de b12 son los dos que pone la sesión, y la clave de Anthropic no pasa por el plan', () => {
+    const plan = loadPlan(ROOT, 'b12');
+    expect(Object.keys(plan.secrets ?? {})).toEqual(['APP_ORIGINS', 'AI_ALLOW_MOCK']);
+    const origins = plan.secrets?.APP_ORIGINS?.pattern;
+    expect(origins?.test('https://rickymm2001-dev.github.io')).toBe(true);
+    expect(origins?.test('https://app.studiare.mx,https://localhost:5173')).toBe(true);
+    for (const bad of [
+      'http://studiare.mx',
+      'https://studiare.mx/',
+      'https://*.studiare.mx',
+      '*',
+      '',
+    ]) {
+      expect(origins?.test(bad), bad).toBe(false);
+    }
+    const mock = plan.secrets?.AI_ALLOW_MOCK?.pattern;
+    for (const good of ['0', '1']) expect(mock?.test(good), good).toBe(true);
+    for (const bad of ['2', 'true', '']) expect(mock?.test(bad), bad).toBe(false);
+  });
+
+  it('Borrar mis datos v3 es la misma en la última migración y en las tres piezas manuales', () => {
+    const latest = new Map<string, FunctionDef>();
+    for (const migration of repoMigrations(ROOT)) applyFunctionSql(migration.sql, latest);
+    const want = latest.get('delete_my_data');
+    expect(want?.body).toContain('ai_jobs');
+    for (const file of [
+      'supabase/manual/ia-b12.sql',
+      'supabase/manual/banco-b11.sql',
+      'supabase/manual/ejecutar-en-sql-editor.sql',
+    ]) {
+      const defs = new Map<string, FunctionDef>();
+      applyFunctionSql(readFileSync(join(ROOT, file), 'utf8'), defs);
+      const own = defs.get('delete_my_data');
+      expect(own && want && sameDef(own, want), file).toBe(true);
+    }
+  });
+
   it('los secretos de b10 son los ocho IDs que crea setup-test.ts, con su prefijo', () => {
     const plan = loadPlan(ROOT, 'b10');
     const names = [...PRICE_SPECS.map((spec) => spec.env), ...PORTAL_SPECS.map((spec) => spec.env)];
@@ -199,6 +262,43 @@ describe('los planes del repo', () => {
     expect(second.text).toContain(
       'manual_pagos_b10  ya aplicada, registrada como manual_pagos_b10',
     );
+  });
+
+  it('b12 contra un proyecto con B11 aplica las cuatro migraciones y la pieza, y publica las dos funciones', async () => {
+    const fake = fakeSupabase({
+      ref: STUDIARE_PROJECT_REF,
+      functions: beforeB12Functions(),
+      checkRow: (applied) => ({ borrar_mis_datos_b12: applied.has('manual_ia_b12') }),
+    });
+    const first = await runReal(fake, 'b12');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    const applied = fake
+      .writes()
+      .filter((request) => request.path === '/database/migrations')
+      .map((request) => (request.json as { name: string }).name);
+    expect(applied).toEqual([
+      'ai_proxy_v2',
+      'ai_jobs',
+      'ai_gate',
+      'ai_delete_my_data',
+      'manual_ia_b12',
+    ]);
+    // Borrar mis datos v3 quedó en la base con los trabajos de IA
+    expect(fake.functions.get('delete_my_data')?.body).toContain('ai_jobs');
+    expect(fake.edge.get('ai-proxy')).toMatchObject({ version: 1, verifyJwt: false });
+    expect(fake.edge.get('ai-batch')).toMatchObject({ version: 1, verifyJwt: false });
+
+    // Otra corrida no repite SQL, porque todo quedó registrado con su nombre
+    const before = fake.writes().length;
+    const second = await runReal(fake, 'b12');
+    expect(second.code).toBe(0);
+    expect(
+      fake
+        .writes()
+        .slice(before)
+        .filter((request) => request.path === '/database/migrations'),
+    ).toEqual([]);
   });
 
   it('b9 se salta la migración ya registrada y acepta current_app_role abierta a propósito', async () => {

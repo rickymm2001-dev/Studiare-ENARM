@@ -165,7 +165,12 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
 - verifyJwt va en true para las funciones que llama la app con la sesión del alumno y en false para los avisos de Stripe y de Mercado Pago, que se identifican con su firma. Una prueba revisa que coincida con lo que dice el index.ts de cada función
 - secrets son los nombres que espera --secrets-from, cada uno con pattern, la forma completa de su valor con ^ y $
 - anonExecutable y overloads anotan, con su porqué, lo que la comprobación de la base aceptaría como excepción
-- Hoy hay dos. b10, lo que falta de B10. b9, que solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
+- Hoy hay cuatro
+  - b9 solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
+  - b10 es lo que falta de B10
+  - b11 es el banco en la nube y bank-sync
+  - b12 es la IA real. Cuatro migraciones, supabase/manual/ia-b12.sql con su comprobación y las funciones ai-proxy y ai-batch, que llevan verifyJwt en false. Sus secretos son APP_ORIGINS y AI_ALLOW_MOCK. La clave ENARM_ANTHROPIC_KEY la pone Ricardo directo en Supabase. La pieza del ciclo de lotes (supabase/manual/ia-lotes-cron.sql) no entra, porque se corre después de comprobar /health en modo simulado
+- Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql, y por eso b11 y b12 se despliegan seguidos
 
 Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa.
 
