@@ -7,12 +7,14 @@
 // Las listas dependientes con INDIRECTO en un desplegable no están en la documentación de Google, solo
 // en guías de terceros (8.34). Por eso se prueban primero en el Sheet de prueba (npm run bank:sheet-test)
 // y, si fallan, queda la lista completa con el formato condicional. Todo sale de las taxonomías de
-// src/demo/content, sin escribir nada de medicina.
+// src/demo/content, sin escribir nada de medicina. La lista Licencia del texto (LISTA_LICENCIAS) es la de
+// las columnas de la fuente de los casos de lectura en inglés de B13 (docs/INGLES_MEDICO.md).
 // Uso: npm run bank:sheet-lists             escribe content-drafts/bank-sheet/Studiare-banco-listas.xlsx
 //      npm run bank:sheet-lists -- otra.xlsx
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import ExcelJS from 'exceljs';
+import { LICENSE_LABELS, PASSAGE_LICENSES } from '../../src/data/content/passageSource.ts';
 import {
   KIND_LABELS,
   LANGUAGE_LABELS,
@@ -102,6 +104,12 @@ export function buildListsLayout(data: ContentTaxonomies): ListsLayout {
     },
     { header: 'Estado', values: Object.values(SHEET_STATUS_LABELS), name: 'LISTA_ESTADOS' },
     { header: 'Idioma', values: Object.values(LANGUAGE_LABELS), name: 'LISTA_IDIOMAS' },
+    // Las licencias que acepta Studiare para el texto de un caso de lectura en inglés (B13, 1.4)
+    {
+      header: 'Licencia del texto',
+      values: PASSAGE_LICENSES.map((license) => LICENSE_LABELS[license]),
+      name: 'LISTA_LICENCIAS',
+    },
   ];
   return {
     columns,

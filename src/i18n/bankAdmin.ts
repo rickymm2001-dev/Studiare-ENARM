@@ -51,8 +51,13 @@ const problems: Record<SyncProblemCode, (column: string, value?: string) => stri
     `El set canónico${quoted(value)} no tiene la correcta y un distractor. Corrige las letras.`,
   template_placeholder: (column) =>
     `${column} todavía tiene el texto de ejemplo de la plantilla. Reemplázalo con el tuyo.`,
-  case_inconsistent: (_column, value) =>
-    `El caso${quoted(value)} tiene órdenes repetidos, con huecos o sin el 1. Corrige Caso y Orden en el caso de todos sus renglones.`,
+  // Los dos primeros son de los casos de lectura en inglés (B13). La columna dice cuál fue la causa
+  case_inconsistent: (column, value) =>
+    column === 'Fuente del texto'
+      ? `El caso${quoted(value)} trae fuentes del texto distintas. Deja la fuente solo en el Orden 1 o escribe la misma en todos sus renglones.`
+      : column === 'Idioma'
+        ? `El caso${quoted(value)} mezcla preguntas en español y en inglés. Un caso de lectura va todo en inglés, corrige el Idioma de sus renglones.`
+        : `El caso${quoted(value)} tiene órdenes repetidos, con huecos o sin el 1. Corrige Caso y Orden en el caso de todos sus renglones.`,
   language_branch_mismatch: (_column, value) =>
     `El Idioma${quoted(value)} no va con la rama. Inglés médico va en Inglés y las demás ramas en Español. Corrige el Idioma o la Rama troncal.`,
 };

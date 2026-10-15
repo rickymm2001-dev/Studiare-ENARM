@@ -17,7 +17,7 @@
           "title": "Preguntas",
           "gridProperties": {
             "rowCount": 25,
-            "columnCount": 38
+            "columnCount": 41
           }
         }
       },
@@ -45,7 +45,7 @@
     "spreadsheetId": "fixture-despues",
     "valueRanges": [
       {
-        "range": "Preguntas!A1:AL25",
+        "range": "Preguntas!A1:AO25",
         "majorDimension": "ROWS",
         "values": [
           [
@@ -86,7 +86,10 @@
             "Estado",
             "Autor",
             "Revisor",
-            "Idioma"
+            "Idioma",
+            "Fuente del texto",
+            "Licencia del texto",
+            "Enlace del texto"
           ],
           [
             "GO-0001",
@@ -672,7 +675,10 @@
             "Borrador",
             "PM",
             "AL",
-            "Inglés"
+            "Inglés",
+            "",
+            "Texto propio del equipo Studiare",
+            ""
           ],
           [
             "GO-15",

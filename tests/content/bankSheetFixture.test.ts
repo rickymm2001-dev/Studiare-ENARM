@@ -97,6 +97,57 @@ describe('reporte de oro de los Sheets simulados', () => {
   });
 });
 
+describe('Sheet simulado de casos de lectura en inglés (B13)', () => {
+  it('toca cada regla nueva sin cambiar los reportes de oro de B11', async () => {
+    const report = await fixtureReport('ingles');
+    expect(report).toMatchObject({ status: 'partial', reason: null, mode: 'apply' });
+    const byKey = (key: string) => report.rows.find((row) => row.sheetKey === key);
+    // Un renglón en inglés completo entra sin pendientes ni avisos
+    expect(byKey('EN-0001')).toMatchObject({ outcome: 'created', incomplete: [], notices: [] });
+    // Idioma y Tarea vacíos en Inglés médico se toman solos y se avisa
+    expect(byKey('EN-0002')).toMatchObject({
+      outcome: 'created',
+      notices: ['structure_auto', 'language_inferred'],
+    });
+    // La fuente que falta, la licencia fuera de la lista y el enlace que falta son pendientes
+    expect(byKey('EN-0003')?.incomplete).toEqual(['passage_source_missing']);
+    expect(byKey('EN-0004')?.incomplete).toEqual(['license_not_allowed']);
+    expect(byKey('EN-0005')?.incomplete).toEqual(['passage_source_missing']);
+    // El idioma tiene que ir con la rama, en los dos sentidos
+    for (const key of ['EN-0006', 'EN-0007']) {
+      expect(byKey(key)).toMatchObject({
+        outcome: 'rejected',
+        problems: [{ code: 'language_branch_mismatch', column: 'Idioma' }],
+      });
+    }
+    // Un caso hereda la fuente del Orden 1, y dos fuentes distintas lo rechazan entero
+    for (const key of ['EN-0008', 'EN-0009', 'EN-0010'])
+      expect(byKey(key)).toMatchObject({ outcome: 'created', incomplete: [] });
+    for (const key of ['EN-0011', 'EN-0012'])
+      expect(byKey(key)).toMatchObject({
+        outcome: 'rejected',
+        problems: [{ code: 'case_inconsistent', column: 'Fuente del texto' }],
+      });
+    // Un caso de una pregunta entra y solo avisa
+    expect(byKey('EN-0013')).toMatchObject({ outcome: 'created', notices: ['english_case_size'] });
+    // La fuente cuenta como referencia, así que sin Referencias solo falta lo demás
+    expect(byKey('EN-0014')?.incomplete).toEqual(['explanation_missing']);
+    // En español las tres columnas se ignoran
+    expect(byKey('EN-0015')).toMatchObject({ outcome: 'created', incomplete: [], notices: [] });
+    // Texto propio del equipo sin título ni enlace, y la licencia con versión y en minúsculas
+    expect(byKey('EN-0016')).toMatchObject({ outcome: 'created', incomplete: [] });
+    expect(byKey('EN-0017')).toMatchObject({ outcome: 'created', incomplete: [] });
+    expect(report.counts).toMatchObject({ read: 17, created: 13, incomplete: 4, rejected: 4 });
+  });
+
+  it('el reporte nunca copia texto de una pregunta ni la fuente, solo valores de listas', async () => {
+    const reported = JSON.stringify((await fixtureReport('ingles')).rows);
+    expect(reported).not.toContain('[Prueba]');
+    expect(reported).not.toContain('example.org');
+    expect(reported).not.toContain('Texto simulado');
+  });
+});
+
 describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
   const root = resolve(import.meta.dirname, '..', '..');
   const data = loadTaxonomies(root);
@@ -125,6 +176,19 @@ describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
     expect(layout.topicLookup).toBe(`Listas!$C$2:$D$${topics + 1}`);
   });
 
+  it('la pestaña Listas trae la lista de licencias del texto con su nombre exacto (B13)', () => {
+    const layout = buildListsLayout(data);
+    const licenses = layout.columns.find((column) => column.name === 'LISTA_LICENCIAS');
+    expect(licenses?.header).toBe('Licencia del texto');
+    expect(licenses?.values).toEqual([
+      'Texto propio del equipo Studiare',
+      'Dominio público',
+      'CC0',
+      'CC BY',
+      'CC BY-SA',
+    ]);
+  });
+
   it('el .xlsx del Sheet de prueba se lee igual que el Sheet simulado despues', async () => {
     const book = buildTestSheetWorkbook(readFixture('despues'), data);
     const reread = new ExcelJS.Workbook();
@@ -149,6 +213,7 @@ describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
 
     const defined = reread.definedNames.model.map((item) => item.name);
     expect(defined).toContain('RAMAS');
+    expect(defined).toContain('LISTA_LICENCIAS');
     expect(defined).toContain('SUB_OBSTETRICS_GYNECOLOGY');
     expect(defined).toContain('LISTA_SESGOS');
     const preguntas = reread.getWorksheet('Preguntas') as unknown as {
@@ -157,6 +222,7 @@ describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
     const formulas = Object.values(preguntas.dataValidations.model).flatMap((item) =>
       (item.formulae ?? []).map(String),
     );
+    expect(formulas).toContain('LISTA_LICENCIAS');
     expect(formulas).toContain('INDIRECT("SUB_"&VLOOKUP($B2,Listas!$A$2:$B$9,2,FALSE))');
     expect(formulas.some((formula) => formula.startsWith('INDIRECT("TEMA_"'))).toBe(true);
   });

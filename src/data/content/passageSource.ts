@@ -142,7 +142,9 @@ function tidy(text: string): string {
 /**
  * Arma la referencia con lo que haya, aunque la licencia no sea de la lista o falte, para que el
  * Sheet conserve lo que escribió el médico y el pendiente salga de leer la referencia con
- * parsePassageSource. null si no hay nada. Si pasa de 300 caracteres recorta el título y nunca el enlace
+ * parsePassageSource. Un enlace que no empieza con http o https, o que trae espacios, no es un enlace y
+ * se deja fuera, así la fuente queda sin enlace y el pendiente es passage_source_missing. null si no
+ * hay nada. Si pasa de 300 caracteres recorta el título y nunca el enlace
  */
 export function composePassageSource(parts: {
   title: string;
@@ -150,7 +152,8 @@ export function composePassageSource(parts: {
   url: string;
 }): string | null {
   const license = tidy(parts.license);
-  const url = parts.url.replace(/\s+/g, ' ').trim();
+  const written = parts.url.trim();
+  const url = /^https?:\/\/\S+$/i.test(written) ? written : '';
   let title = tidy(parts.title);
   if (title === '' && license === '' && url === '') return null;
   const build = (shownTitle: string) => {

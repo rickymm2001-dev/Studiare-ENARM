@@ -129,6 +129,14 @@ describe('armar la referencia', () => {
     expect(composePassageSource({ title: '', license: '', url: 'https://a.org/x' })).toBe(
       'Fuente del texto. https://a.org/x',
     );
+    // Lo que no empieza con http o https, o trae espacios, no es un enlace y se deja fuera
+    expect(
+      composePassageSource({ title: 'Texto', license: 'CC BY', url: 'example.org/texto' }),
+    ).toBe('Fuente del texto. Texto. CC BY.');
+    expect(
+      composePassageSource({ title: 'Texto', license: 'CC BY', url: 'https://a.org/x y' }),
+    ).toBe('Fuente del texto. Texto. CC BY.');
+    expect(composePassageSource({ title: '', license: '', url: 'example.org' })).toBeNull();
   });
 });
 
