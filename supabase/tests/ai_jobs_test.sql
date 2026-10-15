@@ -2,7 +2,11 @@
 -- (supabase/manual/ia-lotes-cron.sql). Corre al final sobre la misma base, con usuarios propios. Las
 -- funciones se llaman como postgres, que es lo que hace la función con la llave de servicio. Cada
 -- bloque falla con un error si algo no cumple.
---   J1 a J10. Encolar, reclamar, mandar, sondear, terminar, reencolar, estado, reusar, limpiar y varados
+--   J1 a J10. Encolar, reclamar, mandar, sondear, terminar, reencolar, estado, reusar, limpiar y varados.
+--      J2 es una prueba estructural: reclama dos veces seguidas en una sola sesión y busca "for update skip
+--      locked" en el texto de ai_jobs_claim. No prueba la concurrencia, y si alguien quita el skip locked
+--      con una subconsulta que lo pierda seguiría pasando. El reclamo con dos conexiones de verdad, una con
+--      su transacción abierta, está en supabase/tests/concurrency.sh (C2), que run.sh corre al final
 --   C. Candado del ciclo y secreto de Vault
 --   K. La pieza de cron, dos veces, sobre imitaciones de Vault, pg_cron y pg_net
 --   P. Permisos. Nadie con llave pública
@@ -81,6 +85,7 @@ select pg_temp.expect(pg_temp.enqueue(null, 'rst_sistema-0001', p_engine => 'res
   'J1. Una reestructurada de sistema no se encoló sin alumno');
 
 -- ===================================================================== J2. Reclamar sin dobles
+-- Estructural, en una sola sesión. La concurrencia se prueba con dos conexiones en concurrency.sh (C2)
 select public.ai_jobs_claim(2) as claim_a \gset
 select public.ai_jobs_claim(100) as claim_b \gset
 select pg_temp.expect(jsonb_array_length(:'claim_a'::jsonb -> 'jobs') = 2

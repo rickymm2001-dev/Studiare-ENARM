@@ -99,7 +99,8 @@ psql_run -f "$here/deck_catalog_test.sql"
 psql_run -f "$here/ai_proxy_v2_test.sql"
 psql_run -f "$here/ai_jobs_test.sql"
 psql_run -f "$here/ai_gate_test.sql"
-# Lo que protege el candado por día del libro de IA solo se ve con varias conexiones a la vez
+# Lo que protegen el candado por día del libro de IA y el reclamo de la cola de lotes solo se ve con varias
+# conexiones a la vez. Va al final porque deja la cola de lotes sin trabajos pendientes
 # shellcheck source=supabase/tests/concurrency.sh
 source "$here/concurrency.sh"
 run_concurrency_tests
