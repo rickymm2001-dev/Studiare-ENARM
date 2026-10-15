@@ -9,7 +9,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { bankAdminText } from '@/i18n/bankAdmin';
-import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { callerOf, enterTeam, teamBank } from '../../e2e/support/bankTeam';
 import { expect, openSecondDevice, test as cloudTest } from '../../e2e/support/cloudFixtures';
@@ -93,7 +92,7 @@ cloudTest.describe('Médico y admin del banco en la nube', () => {
       await open(
         page,
         SCREENS.questionBank.path,
-        page.getByRole('region', { name: t.bank.listTitle }),
+        page.getByRole('region', { name: physicianText.bank.listTitle }),
       );
       await capture(page, B11_DIR, '01-banco-medico', project);
       await open(

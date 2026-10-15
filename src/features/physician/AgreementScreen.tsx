@@ -50,7 +50,10 @@ export function AgreementScreen() {
   );
 
   const header = (
-    <ScreenHeader title={t.screens.agreement.title} description={t.screens.agreement.description} />
+    <ScreenHeader
+      title={t.screens.agreement.title}
+      description={physicianText.descriptions.agreement}
+    />
   );
   if (state.status === 'loading') {
     return (

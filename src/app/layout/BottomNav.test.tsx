@@ -61,9 +61,9 @@ const ADMIN_GROUP = [
   t.navItems.platform,
   t.navItems.bank,
   // Banco en la nube (B11). Banco y Sheet, Revisiones y Catálogo de mazos
-  t.bankAdmin.nav.bank,
-  t.bankAdmin.nav.reviews,
-  t.bankAdmin.nav.decks,
+  t.screens.bankAdmin.title,
+  t.screens.physicianReviews.title,
+  t.screens.deckCatalogAdmin.title,
   t.screens.demoData.title,
 ];
 

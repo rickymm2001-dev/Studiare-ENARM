@@ -165,7 +165,7 @@ export function CloudBankImport() {
           </p>
           <div>
             <Button asChild variant="secondary">
-              <Link to={SCREENS.bankAdmin.path}>{bankAdminText.screens.bankAdmin.title}</Link>
+              <Link to={SCREENS.bankAdmin.path}>{t.screens.bankAdmin.title}</Link>
             </Button>
           </div>
         </Card>

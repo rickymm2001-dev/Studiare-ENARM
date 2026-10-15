@@ -49,7 +49,7 @@ test.describe('Banco en la nube, médicos', () => {
     // La autora abre su borrador desde el banco, corrige la explicación y la manda
     await enterTeam(page, cloud, AUTHOR.email);
     await page.goto(SCREENS.questionBank.path);
-    const list = page.getByRole('region', { name: t.bank.listTitle });
+    const list = page.getByRole('region', { name: physicianText.bank.listTitle });
     await list
       .getByRole('link', { name: physicianText.bankScreen.openQuestion(first.prompt) })
       .click({ timeout: 30_000 });

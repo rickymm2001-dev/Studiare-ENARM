@@ -4,7 +4,6 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import type { EditorVersion } from '@/data/bank/contracts';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
-import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
@@ -389,7 +388,7 @@ export function HistoryCard({
               <p className="flex flex-wrap items-center gap-2 font-semibold">
                 {physicianText.questionEditor.status.version(version.version)}
                 <Badge variant={version.status === 'approved' ? 'success' : 'neutral'}>
-                  {t.bank.status[version.status]}
+                  {physicianText.bank.status[version.status]}
                 </Badge>
                 {index === 0 ? <Badge variant="info">{text.current}</Badge> : null}
                 {version.source ? (

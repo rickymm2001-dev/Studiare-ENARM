@@ -66,11 +66,11 @@ export function QuestionBankScreen() {
   const header = (
     <ScreenHeader
       title={t.screens.questionBank.title}
-      description={isPhysician ? t.bank.physicianHint : t.bank.adminHint}
+      description={isPhysician ? physicianText.bank.physicianHint : physicianText.bank.adminHint}
       actions={
         showImport ? (
           <Button asChild variant="secondary" size="sm">
-            <Link to={SCREENS.bankImport.path}>{t.bank.importBank}</Link>
+            <Link to={SCREENS.bankImport.path}>{physicianText.bank.importBank}</Link>
           </Button>
         ) : undefined
       }
@@ -94,7 +94,10 @@ export function QuestionBankScreen() {
         {isPhysician && repo.kind === 'cloud' ? (
           <p className="text-sm text-fg-muted">{text.importHint}</p>
         ) : null}
-        <EmptyState title={t.bank.emptyTitle} description={t.bank.emptyBody} />
+        <EmptyState
+          title={physicianText.bank.emptyTitle}
+          description={physicianText.bank.emptyBody}
+        />
       </>
     );
   }
@@ -108,29 +111,29 @@ export function QuestionBankScreen() {
       {repo.kind === 'local' ? <p className="text-sm text-fg-muted">{text.demoNote}</p> : null}
       {isPhysician && repo.kind === 'cloud' ? <MyReviewsCard /> : null}
       {state.status === 'ready' ? (
-        <StatPanel label={t.bank.statsLabel}>
+        <StatPanel label={physicianText.bank.statsLabel}>
           <StatCell
             icon={<FilePen />}
-            label={t.bank.status.draft}
+            label={physicianText.bank.status.draft}
             value={countOf('draft').toLocaleString('es-MX')}
           />
           <StatCell
             icon={<Hourglass />}
-            label={t.bank.status.in_review}
+            label={physicianText.bank.status.in_review}
             value={countOf('in_review').toLocaleString('es-MX')}
           />
           <StatCell
             icon={<BadgeCheck />}
-            label={t.bank.status.approved}
+            label={physicianText.bank.status.approved}
             value={countOf('approved').toLocaleString('es-MX')}
           />
         </StatPanel>
       ) : null}
       <Card aria-labelledby="banco-lista">
         <CardHeader>
-          <CardTitle id="banco-lista">{t.bank.listTitle}</CardTitle>
+          <CardTitle id="banco-lista">{physicianText.bank.listTitle}</CardTitle>
           {state.status === 'ready' ? (
-            <CardDescription>{t.bank.count(items.length)}</CardDescription>
+            <CardDescription>{physicianText.bank.count(items.length)}</CardDescription>
           ) : null}
         </CardHeader>
         {filters}
@@ -215,7 +218,7 @@ function Filters({
         label={t.topicPicker.trunks}
         value={filter.branch ?? ''}
         options={[
-          { value: '', label: t.bank.all },
+          { value: '', label: physicianText.bank.all },
           ...topicTaxonomy.branches.map((item) => ({ value: item.key, label: item.name })),
         ]}
         onChange={(event) => {
@@ -228,7 +231,7 @@ function Filters({
         value={filter.topic ?? ''}
         disabled={!filter.branch}
         options={[
-          { value: '', label: t.bank.all },
+          { value: '', label: physicianText.bank.all },
           ...topics.map((item) => ({ value: item.key, label: item.name })),
         ]}
         onChange={(event) => {
@@ -237,13 +240,15 @@ function Filters({
         }}
       />
       <SelectField
-        label={t.bank.statusLabel}
+        label={physicianText.bank.statusLabel}
         value={filter.status ?? ''}
         options={[
-          { value: '', label: t.bank.all },
-          ...(Object.keys(t.bank.status) as (keyof typeof t.bank.status)[]).map((key) => ({
+          { value: '', label: physicianText.bank.all },
+          ...(
+            Object.keys(physicianText.bank.status) as (keyof typeof physicianText.bank.status)[]
+          ).map((key) => ({
             value: key,
-            label: t.bank.status[key],
+            label: physicianText.bank.status[key],
           })),
         ]}
         onChange={(event) => {
@@ -281,7 +286,7 @@ function BankList({
     <>
       <div className="mb-3">
         <TextField
-          label={t.bank.search}
+          label={physicianText.bank.search}
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
@@ -301,7 +306,7 @@ function BankList({
         </ul>
       )}
       {pages > 1 ? (
-        <nav aria-label={t.bank.pages} className="mt-3 flex items-center gap-2">
+        <nav aria-label={physicianText.bank.pages} className="mt-3 flex items-center gap-2">
           <Button
             variant="secondary"
             size="sm"
@@ -310,9 +315,11 @@ function BankList({
               setPage(current - 1);
             }}
           >
-            {t.bank.previous}
+            {physicianText.bank.previous}
           </Button>
-          <span className="text-sm text-fg-muted">{t.bank.pageOf(current + 1, pages)}</span>
+          <span className="text-sm text-fg-muted">
+            {physicianText.bank.pageOf(current + 1, pages)}
+          </span>
           <Button
             variant="secondary"
             size="sm"
@@ -321,7 +328,7 @@ function BankList({
               setPage(current + 1);
             }}
           >
-            {t.bank.next}
+            {physicianText.bank.next}
           </Button>
         </nav>
       ) : null}
@@ -347,13 +354,15 @@ function BankRow({ item, showPeople }: { item: EditorListItem; showPeople: boole
           </BranchBadge>
           <span>{topicName.get(item.topic) ?? item.topic}</span>
           <span>· {text.version(item.version)}</span>
-          <span>· {t.bank.status[item.status]}</span>
+          <span>· {physicianText.bank.status[item.status]}</span>
           {item.publishedVersion !== null && item.publishedVersion !== item.version ? (
             <span>· {text.published(item.publishedVersion)}</span>
           ) : null}
           {showPeople && item.author ? <span>· {text.author(item.author.alias)}</span> : null}
           {showPeople && item.reviewer ? <span>· {text.reviewer(item.reviewer.alias)}</span> : null}
-          {showPeople && !item.author && !item.reviewer ? <span>· {t.bank.unassigned}</span> : null}
+          {showPeople && !item.author && !item.reviewer ? (
+            <span>· {physicianText.bank.unassigned}</span>
+          ) : null}
         </span>
         <span className="flex flex-wrap gap-1.5">
           {fromSheet ? <Badge>{text.fromSheet}</Badge> : null}

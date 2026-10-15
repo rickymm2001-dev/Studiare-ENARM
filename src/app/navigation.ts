@@ -5,22 +5,21 @@
 // alumno y su grupo de administración (D-076). Aquí solo hay datos y funciones puras. Lo que se pinta
 // vive en layout/BottomNav.tsx.
 import {
+  Award,
   FlaskConical,
   BookOpenCheck,
   ChartLine,
-  ClipboardCheck,
   ClipboardList,
   Coins,
   Database,
   FileText,
   Flag,
   GraduationCap,
-  FileSpreadsheet,
   House,
-  Library,
   NotebookPen,
   PartyPopper,
   Receipt,
+  RefreshCw,
   Scale,
   Settings,
   SlidersHorizontal,
@@ -29,7 +28,6 @@ import {
 } from 'lucide-react';
 import { isFeatureEnabled, type FeatureFlag } from '@/config/featureFlags';
 import type { Role } from '@/data/schemas/common';
-import { bankAdminText } from '@/i18n/bankAdmin';
 import { t } from '@/i18n/es-MX';
 import { screenPath } from './screens';
 
@@ -113,14 +111,19 @@ const adminGroup: NavGroup = {
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
-    // Banco en la nube (B11). Database ya es del Banco del médico
-    { path: screenPath('bankAdmin'), label: bankAdminText.nav.bank, icon: FileSpreadsheet },
+    // Banco en la nube (B11). Con íconos que ya carga la app, por el presupuesto del JavaScript inicial.
+    // Database ya es del Banco del médico y los mazos comparten el de Repasar y Mazos
+    { path: screenPath('bankAdmin'), label: t.screens.bankAdmin.title, icon: RefreshCw },
     {
       path: screenPath('physicianReviews'),
-      label: bankAdminText.nav.reviews,
-      icon: ClipboardCheck,
+      label: t.screens.physicianReviews.title,
+      icon: Award,
     },
-    { path: screenPath('deckCatalogAdmin'), label: bankAdminText.nav.decks, icon: Library },
+    {
+      path: screenPath('deckCatalogAdmin'),
+      label: t.screens.deckCatalogAdmin.title,
+      icon: BookOpenCheck,
+    },
     // Único lugar para cambiar de base y generar alumnos simulados. En producción se esconde (5.4)
     {
       path: screenPath('demoData'),

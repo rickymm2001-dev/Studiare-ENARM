@@ -76,7 +76,7 @@ export function QuestionEditorScreen() {
   const header = (
     <ScreenHeader
       title={t.screens.questionEditor.title}
-      description={t.screens.questionEditor.description}
+      description={physicianText.descriptions.questionEditor}
     />
   );
   const backToBank = (
@@ -214,7 +214,7 @@ function StatusCard({
           {view.sheetKey ? <Badge>{physicianText.bankScreen.sheetId(view.sheetKey)}</Badge> : null}
           <Badge variant="info">{text.status.version(latest.version)}</Badge>
           <Badge variant={latest.status === 'approved' ? 'success' : 'neutral'}>
-            {t.bank.status[latest.status]}
+            {physicianText.bank.status[latest.status]}
           </Badge>
           {question.question.publishedVersion !== null ? (
             <Badge variant="success">
@@ -229,7 +229,9 @@ function StatusCard({
       ) : null}
       {view.step === 'waiting' ? <p className="text-sm text-fg-muted">{review.waiting}</p> : null}
       {view.step === 'closed' ? (
-        <p className="text-sm text-fg-muted">{review.closed(t.bank.status[latest.status])}</p>
+        <p className="text-sm text-fg-muted">
+          {review.closed(physicianText.bank.status[latest.status])}
+        </p>
       ) : null}
       {question.reports.open > 0 ? (
         <p className="text-sm text-fg-muted">

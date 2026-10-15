@@ -5,6 +5,7 @@
 // confirma. Publicar revisa que estén todos los archivos (BK011) y la autorización (BK010). Retirar lo
 // saca del catálogo y quien ya lo bajó lo conserva.
 import { useState } from 'react';
+import { zipSync } from 'fflate';
 import { FileUp } from 'lucide-react';
 import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -46,6 +47,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SelectField, TextAreaField, TextField } from '@/ui/components/field';
 import { FileChooser } from '@/ui/components/file-chooser';
 import { ErrorState, LoadingState } from '@/ui/states/states';
+import { parseFileInWorker } from '@/workers/importClient';
 import { askSecondFactor } from '../physician/secondFactor';
 import { bankCodeText, bankErrorText } from './bankErrors';
 import { requireCloud, useBankAdminQuery } from './useBankAdminQuery';
@@ -64,7 +66,7 @@ export function DeckCatalogAdminScreen() {
     <>
       <ScreenHeader
         title={t.screens.deckCatalogAdmin.title}
-        description={t.screens.deckCatalogAdmin.description}
+        description={bankAdminText.descriptions.deckCatalogAdmin}
       />
       {linked ? (
         <>
@@ -284,11 +286,10 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
     setNotice('');
     setPhase({ kind: 'reading', fileName: file.name });
     try {
-      const [{ parseFileInWorker }, bytes] = await Promise.all([
-        import('@/workers/importClient'),
+      const [parsed, bytes] = await Promise.all([
+        parseFileInWorker(file),
         file.arrayBuffer().then((buffer) => new Uint8Array(buffer)),
       ]);
-      const parsed = await parseFileInWorker(file);
       if (!parsed.ok || parsed.parsed.source !== 'apkg') throw new Error('read');
       const notes: PackNote[] = parsed.parsed.notes.map((parsedNote) => ({
         guid: parsedNote.guid,
@@ -335,7 +336,6 @@ function UploadCard({ onUploaded }: { onUploaded: () => void }) {
     try {
       const cloud = await requireCloud();
       const version = nextDeckVersion(await readDeckCatalog(cloud, askSecondFactor), deckKey);
-      const { zipSync } = await import('fflate');
       const sanitizer = createCardSanitizer(window);
       const packed = await packDeck(
         ready.notes,

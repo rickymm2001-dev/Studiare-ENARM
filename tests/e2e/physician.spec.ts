@@ -62,7 +62,7 @@ test('editor de pregunta. El admin la abre desde el banco y solo la lee', async 
   await signUp(page);
   await enterAs(page, 'admin');
   await page.goto(SCREENS.questionBank.path);
-  const list = page.getByRole('region', { name: t.bank.listTitle });
+  const list = page.getByRole('region', { name: physicianText.bank.listTitle });
   const open = list
     .getByRole('link', {
       name: new RegExp(`^${physicianText.bankScreen.openQuestion('')}`),
@@ -225,7 +225,7 @@ test('importador. Revisa el archivo, reporta la fila con problema e importa solo
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.questionBank.title }),
   ).toBeVisible();
-  await page.getByLabel(t.bank.search).fill('prueba de importación');
+  await page.getByLabel(physicianText.bank.search).fill('prueba de importación');
   await expect(page.getByText('¿Cuál es el diagnóstico de la prueba de importación?')).toBeVisible({
     timeout: 60_000,
   });

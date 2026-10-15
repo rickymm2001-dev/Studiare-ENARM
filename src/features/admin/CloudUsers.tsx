@@ -29,6 +29,7 @@ import {
 import { needsMfaRole, resetUserMfa } from '@/data/cloud/mfa';
 import type { Role } from '@/data/schemas/common';
 import { assignableRoles } from '@/engines/roles';
+import { adminText } from '@/i18n/admin';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
 import { Button } from '@/ui/components/button';
@@ -86,7 +87,7 @@ export function CloudUsers() {
   const header = (
     <ScreenHeader
       title={t.screens.adminUsers.title}
-      description={t.screens.adminUsers.description}
+      description={adminText.descriptions.adminUsers}
     />
   );
 

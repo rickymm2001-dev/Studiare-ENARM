@@ -153,8 +153,8 @@ test('la médica manda una pregunta a revisión, la etiqueta a ciegas, la aprueb
     (option) => option.questionVersionId === target.id && !option.isCorrect,
   );
   await page.goto(SCREENS.questionBank.path);
-  const list = page.getByRole('region', { name: t.bank.listTitle });
-  await list.getByLabel(t.bank.search).fill(target.prompt.slice(0, 80));
+  const list = page.getByRole('region', { name: physicianText.bank.listTitle });
+  await list.getByLabel(physicianText.bank.search).fill(target.prompt.slice(0, 80));
   await list
     .getByRole('link', { name: physicianText.bankScreen.openQuestion(target.prompt.slice(0, 140)) })
     .first()

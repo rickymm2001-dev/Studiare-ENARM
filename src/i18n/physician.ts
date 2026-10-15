@@ -6,6 +6,38 @@ import { taskNames } from './insights';
 const num = (value: number) => value.toLocaleString('es-MX');
 
 export const physicianText = {
+  /** Las descripciones de las pantallas del médico. Sus títulos siguen en t.screens */
+  descriptions: {
+    questionEditor:
+      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, versiones y la revisión a ciegas.',
+    agreement:
+      'Acuerdo entre la etiqueta del autor y la que pone a ciegas el revisor, con kappa, y lo que te falta etiquetar.',
+  },
+  /** Banco de preguntas (pantalla 17). Salió de t para no pesar en lo que la app carga al abrir */
+  bank: {
+    listTitle: 'Preguntas',
+    search: 'Buscar en la pregunta o el caso',
+    all: 'Todas',
+    statusLabel: 'Estado',
+    pages: 'Páginas del banco',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    pageOf: (page: number, total: number) => `Página ${page} de ${total}`,
+    physicianHint: 'Las preguntas que te asignaron para revisar.',
+    adminHint: 'Todo el banco, con a quién está asignada cada pregunta.',
+    emptyTitle: 'Todavía no tienes preguntas asignadas',
+    emptyBody: 'Un admin te asignará subespecialidades para revisar.',
+    count: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
+    status: {
+      draft: 'Borrador',
+      in_review: 'En revisión',
+      approved: 'Aprobada',
+      rejected: 'Rechazada',
+    },
+    statsLabel: 'Preguntas por estado',
+    unassigned: 'Sin asignar',
+    importBank: 'Importar banco',
+  },
   agreementScreen: {
     stats: {
       label: 'Etiquetado a ciegas en cifras',

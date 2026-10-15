@@ -14,6 +14,11 @@ const engines: Record<AiEngine, string> = {
 const usd = (value: number) => value.toLocaleString('es-MX');
 
 export const adminText = {
+  /** Las descripciones de Usuarios y Plataforma. Sus títulos siguen en t.screens (B11) */
+  descriptions: {
+    adminUsers: 'Roles, claves del Sheet de los médicos y asignaciones de preguntas.',
+    adminSettings: 'Umbrales, pesos del ENARM, ajustes del banco, precios y modelos por motor.',
+  },
   adminCosts: {
     title: 'Costos de IA',
     engines,

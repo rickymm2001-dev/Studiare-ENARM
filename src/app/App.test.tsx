@@ -8,6 +8,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { DataProvider } from '@/data/DataProvider';
 import { newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { physicianText } from '@/i18n/physician';
 import { DEFAULT_PREFERENCES, usePreferences } from './preferences';
 import { routes } from './router';
 import { LEGACY_REDIRECTS, SCREEN_KEYS, SCREENS } from './screens';
@@ -158,7 +159,9 @@ describe('rutas', () => {
     expect(nav).not.toHaveTextContent(t.navItems.review);
     // Espera a que el banco demo termine de guardarse. Si la prueba acaba antes, la carga diferida
     // corre con el entorno ya cerrado y Vitest reporta un error de cierre intermitente (D-091)
-    expect(await screen.findByText(t.bank.emptyTitle, {}, { timeout: 20_000 })).toBeVisible();
+    expect(
+      await screen.findByText(physicianText.bank.emptyTitle, {}, { timeout: 20_000 }),
+    ).toBeVisible();
   }, 30_000);
 
   it('un alumno no entra al área de admin ni puede cambiarse de rol él mismo', async () => {

@@ -2,8 +2,9 @@
 // Sheet, Revisiones de médicos y Catálogo de mazos, la sección Banco de Plataforma, la clave del Sheet
 // en Usuarios, y una frase con su acción para cada código de renglón de la sincronización
 // (SyncProblemCode y SyncNoticeCode de src/data/bank/contracts.ts) y para cada error BK de las funciones
-// del banco. Español de México con trato de tú y sin signos de exclamación. Se integran en t.bankAdmin
-// desde es-MX.ts.
+// del banco. Español de México con trato de tú y sin signos de exclamación. No entran a t ni a lo que
+// la app carga al abrir. Solo los importan las pantallas del admin, perezosas. El menú y los títulos de
+// las pantallas viven en bankAdminNav.ts.
 import type { SyncNoticeCode, SyncProblemCode } from '@/data/bank/contracts';
 import { plural } from './features';
 
@@ -76,27 +77,14 @@ const notices: Record<SyncNoticeCode, string> = {
 };
 
 export const bankAdminText = {
-  nav: {
-    bank: 'Banco y Sheet',
-    reviews: 'Revisiones',
-    decks: 'Catálogo de mazos',
-  },
-  screens: {
-    bankAdmin: {
-      title: 'Banco y Sheet',
-      description:
-        'Avance del banco hacia la meta, sincronización con el Google Sheet, conflictos, faltantes, asignaciones y avisos de lectura.',
-    },
-    physicianReviews: {
-      title: 'Revisiones de médicos',
-      description:
-        'Revisiones por médico y por mes, con el monto si hay tarifa, y el CSV que cuadra.',
-    },
-    deckCatalogAdmin: {
-      title: 'Catálogo de mazos',
-      description:
-        'Sube un mazo de Anki por submazo, revisa su licencia y su autorización y publícalo para los planes de pago.',
-    },
+  /** La descripción de cada pantalla. Su título está en t.screens, desde bankAdminNav.ts */
+  descriptions: {
+    bankAdmin:
+      'Avance del banco hacia la meta, sincronización con el Google Sheet, conflictos, faltantes, asignaciones y avisos de lectura.',
+    physicianReviews:
+      'Revisiones por médico y por mes, con el monto si hay tarifa, y el CSV que cuadra.',
+    deckCatalogAdmin:
+      'Sube un mazo de Anki por submazo, revisa su licencia y su autorización y publícalo para los planes de pago.',
   },
   needsCloud: 'Esta pantalla necesita la cuenta de la nube conectada como admin.',
   retry: 'Intentar de nuevo',

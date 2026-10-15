@@ -100,7 +100,7 @@ export function BankAdminScreen() {
     <>
       <ScreenHeader
         title={t.screens.bankAdmin.title}
-        description={t.screens.bankAdmin.description}
+        description={bankAdminText.descriptions.bankAdmin}
       />
       {linked ? (
         <>

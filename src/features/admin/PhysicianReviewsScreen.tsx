@@ -32,7 +32,7 @@ export function PhysicianReviewsScreen() {
     <>
       <ScreenHeader
         title={t.screens.physicianReviews.title}
-        description={t.screens.physicianReviews.description}
+        description={bankAdminText.descriptions.physicianReviews}
       />
       {linked ? (
         <ReviewsReport />
