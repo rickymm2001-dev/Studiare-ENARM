@@ -50,6 +50,7 @@ const privacy: LegalDoc = {
         'Cómo nos conociste. Es opcional. Si contestas, guardamos el canal que elegiste, como Instagram, un amigo o tu universidad, el código de influencer si escribiste uno y la fecha. Solo lo usamos para medir, en conteos totales, por dónde llega la gente a Studiare. En la app el equipo solo ve esos conteos, nunca tu respuesta junto a tu cuenta. No la usamos para mandarte publicidad, no va a herramientas de analítica y se borra al eliminar tu cuenta.',
         'Foto de perfil. Es opcional. Si subes una, la guardamos en Supabase Storage, en un espacio privado de tu cuenta. La ves tú y, mientras compartan un grupo activo de Party, los miembros de ese grupo. Si eliges tus iniciales la quitamos de la nube, y se borra al eliminar tu cuenta.',
         'Estudio. Tus respuestas a preguntas y tarjetas, los tiempos, la confianza que marcas, las causas de tus errores, tus mazos y apuntes, tus metas y tus ajustes.',
+        'Facturación. Si solicitas factura fiscal (CFDI), tu nombre o razón social, RFC, régimen fiscal, código postal de tu domicilio fiscal y uso de CFDI, únicamente para emitir el comprobante y cumplir la ley.',
         'Puntaje oficial. Solo si tú decides capturarlo en Progreso, con tu permiso de mejora anónima, que das o retiras en Configuración, sección Privacidad.',
         'Pagos. El identificador y el estado de tus pagos y de tu plan. Nunca vemos ni guardamos los datos de tu tarjeta, que viven en la pasarela de pagos.',
         'Técnicos. Qué dispositivo tiene activa tu cuenta, la zona horaria y los avisos de seguridad de tu sesión.',
@@ -66,16 +67,16 @@ const privacy: LegalDoc = {
         'Crear y mantener tu cuenta, confirmar que tienes la edad mínima y que solo tú entres a ella.',
         'Darte tu plan de estudio, tus estadísticas, tu repaso y tus simuladores.',
         'Sincronizar tu estudio entre tus dispositivos, uno activo a la vez.',
-        'Cobrar tu plan y atender tus pagos y aclaraciones.',
+        'Cobrar tu plan o pase, emitir tus facturas si las pides y atender aclaraciones.',
         'Cuidar la seguridad de la plataforma y prevenir abusos.',
-        'Responder a tus solicitudes y cumplir obligaciones legales.',
+        'Responder a tus solicitudes y cumplir obligaciones legales y fiscales.',
       ],
     },
     {
       id: 'opcionales',
       title: 'Lo que solo hacemos si lo permites',
       paragraphs: [
-        'Estas finalidades son opcionales y empiezan apagadas. Las prendes o las apagas cuando quieras en Configuración, sección Privacidad. Decir que no a una no te quita el resto del servicio.',
+        'Estas finalidades son opcionales y empiezan apagadas por omisión. Cada consentimiento se solicita por separado y tú decides cuáles activar al registrarte o en cualquier momento desde Configuración, sección Privacidad. Decir que no a cualquiera de ellas no afecta el funcionamiento del resto del servicio.',
       ],
       bullets: [
         'Party. Compartir tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos con los miembros de los grupos a los que te unas, y en un duelo tus aciertos y tu tiempo. Tus compañeros nunca ven tu correo ni tus demás datos de cuenta.',
@@ -87,26 +88,28 @@ const privacy: LegalDoc = {
       id: 'ia',
       title: 'Qué pasa con la inteligencia artificial',
       paragraphs: [
-        'Cuando el análisis con IA está encendido, a la IA solo viajan identificadores seudónimos y texto del banco de preguntas. Nunca viaja tu nombre ni tu correo, y un filtro quita correos, teléfonos y nombres antes de enviar.',
+        'Cuando el análisis con IA está encendido, a la IA solo viajan identificadores seudónimos y texto del banco de preguntas o de tus apuntes. Nunca viaja tu nombre ni tu correo, y un filtro quita correos, teléfonos y nombres antes de enviar.',
         'Lo que escribe la IA queda como borrador, marcado como no validado por un médico. La IA no corrige por su cuenta lo que considera mal, solo lo señala, y no predice tu puntaje del examen.',
-        'La IA la presta Anthropic, que actúa como proveedor de la plataforma. Si agregamos otro proveedor de IA, actualizamos este aviso antes.',
+        'La IA de la plataforma la presta Anthropic como encargado. OpenAI se utiliza únicamente en evaluaciones internas de calidad y consistencia del banco de preguntas; solo recibe texto del banco con identificadores seudónimos y nunca datos, nombres ni actividad de alumnos.',
       ],
     },
     {
       id: 'terceros',
       title: 'Con quién compartimos tus datos',
       paragraphs: [
-        'No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a operar la plataforma, y solo lo necesario para su tarea.',
+        'No vendemos tus datos. Solo los compartimos con encargados y proveedores que nos ayudan a operar la plataforma, y solo lo necesario para su tarea.',
       ],
       bullets: [
         'Supabase, que aloja la base de datos, el inicio de sesión y los archivos, como tu foto de perfil en Supabase Storage.',
         'Google, solo si eliges entrar con Google. Confirma quién eres y nos manda los datos de tu cuenta de Google que se explican arriba. No le mandamos tus datos de estudio.',
-        'Stripe y Mercado Pago, que procesan los pagos. Reciben lo que necesitan para cobrar y no lo usamos para otra cosa.',
-        'Anthropic, solo si encendiste el análisis con IA, con lo que se explicó arriba.',
+        'Stripe y Mercado Pago, que procesan los pagos y suscripciones con tarjeta, OXXO y SPEI. Reciben lo que necesitan para cobrar y facturar.',
+        'Resend, que envía los correos transaccionales para entrar a tu cuenta y los avisos de la plataforma.',
+        'PostHog, para analítica del producto y métricas de uso, solo si diste tu consentimiento para ello.',
+        'Sentry, para registrar errores y fallas técnicas de la aplicación, sin datos personales sensibles.',
+        'Anthropic, solo si encendiste el análisis con IA, con identificadores seudónimos y texto de estudio, como se explicó arriba.',
         'El servicio que aloja el proxy de IA, solo si encendiste el análisis con IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.',
-        'El proveedor que envía los correos de acceso a tu cuenta.',
-        'El servicio que aloja la página, como GitHub Pages o Cloudflare, que ve datos técnicos de tu conexión, como la dirección IP.',
-        'Autoridades, cuando una ley o una orden de autoridad competente lo exija.',
+        'El servicio que aloja la página y la red de distribución (como Cloudflare o GitHub Pages), que ve datos técnicos de tu conexión, como la dirección IP.',
+        'Autoridades competentes, cuando una ley o una orden fundada y motivada lo exija.',
       ],
     },
     {
@@ -120,14 +123,14 @@ const privacy: LegalDoc = {
         'Rectificar. Cambias tu alias, tu foto y tus datos de cuenta en Configuración, sección Perfil, y tus ajustes de estudio en Repasar.',
         'Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio, y también puedes eliminar tu cuenta completa con tu foto de perfil. Se borran del dispositivo y de la nube.',
         'Oponerte o retirar un permiso. En Configuración, sección Privacidad.',
-        'Por correo. Si prefieres, escribe a {correo} con tu nombre y lo que pides, y respondemos en un plazo razonable.',
+        'Por correo. Si prefieres, escribe a nuestro correo de privacidad {correo} con tu nombre y lo que pides, y respondemos en un plazo razonable.',
       ],
     },
     {
       id: 'conservacion',
       title: 'Cuánto tiempo los conservamos',
       paragraphs: [
-        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. Los cobros que ya procesó la pasarela de pagos se conservan allá el tiempo que la ley fiscal exige, y a nosotros nos queda solo el registro de que existieron.',
+        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. Los cobros y datos de facturación se conservan en las pasarelas y registros fiscales durante los plazos que exige la legislación fiscal mexicana, y a nosotros nos queda solo el registro de que existieron.',
       ],
     },
     {
@@ -141,7 +144,7 @@ const privacy: LegalDoc = {
       id: 'menores',
       title: 'Personas menores de edad',
       paragraphs: [
-        'Studiare es para personas de 18 años o más que se preparan para el examen, y al crear tu cuenta lo confirmas. Si crees que una persona menor de edad creó una cuenta, escríbenos y la eliminamos.',
+        'Studiare es para personas de 18 años o más que se preparan para el examen, y al crear tu cuenta lo confirmas. No admitimos el registro de menores de edad. Si crees que una persona menor de edad creó una cuenta, escríbenos y la eliminamos.',
       ],
     },
     {
@@ -156,8 +159,8 @@ const privacy: LegalDoc = {
 
 const terms: LegalDoc = {
   title: 'Términos y condiciones',
-  version: '2026-10-10',
-  updated: '10 de octubre de 2026',
+  version: '2026-10-13',
+  updated: '13 de octubre de 2026',
   intro: [
     'Estos términos son el acuerdo entre tú y {nombre} para usar Studiare. Al crear tu cuenta aceptas lo que dicen. Léelos con calma.',
   ],
@@ -175,7 +178,8 @@ const terms: LegalDoc = {
       id: 'cuenta',
       title: 'Tu cuenta',
       bullets: [
-        'Debes ser mayor de 18 años y darnos datos verdaderos.',
+        'Edad mínima. Debes tener al menos 18 años cumplidos para registrarte y usar la plataforma. Nos das datos verdaderos.',
+        'Registro por invitación. Mientras dure la fase de lanzamiento, el registro requiere una invitación o código válido. No es posible crear una cuenta sin invitación durante este periodo.',
         'La cuenta es personal. No la compartas ni la vendas.',
         'Solo un dispositivo tiene activa tu cuenta a la vez, y el cambio de dispositivo está limitado. Es una medida de seguridad y de uso personal.',
         'Cuida el acceso a tu correo, porque con él entras a tu cuenta. Avísanos si crees que alguien más entró.',
@@ -185,13 +189,18 @@ const terms: LegalDoc = {
       id: 'planes',
       title: 'Planes, pagos y cancelación',
       paragraphs: [
-        'El plan Gratis tiene un límite de preguntas distintas por día. Los planes de pago quitan ese límite y suman funciones, como el análisis con IA y la generación de tarjetas. Los precios en pesos mexicanos se muestran en Suscripción antes de pagar.',
-        'Los pagos los procesan Stripe y Mercado Pago, y tu plan se activa cuando la pasarela nos avisa que el pago se confirmó. El plan Fundador tiene un cupo limitado y se conserva mientras no lo canceles.',
+        'El plan Gratis tiene un límite diario de preguntas y funciones básicas. Los planes de pago quitan ese límite y suman funciones, como el análisis con IA y la generación de tarjetas. Los precios en pesos mexicanos se muestran en Suscripción antes de pagar.',
+        'Procesamiento de pagos. Los pagos los procesan Stripe y Mercado Pago. El alumno elige su pasarela en Suscripción. Tu plan o pase se activa cuando la pasarela confirma el cobro.',
+        'Prueba gratis de 7 días. Las suscripciones con tarjeta incluyen 7 días de prueba sin cobro. La pantalla de pago informa con claridad el cobro automático antes de pedir tu tarjeta. Al concluir los 7 días de prueba se realiza el cobro de tu primera mensualidad o anualidad, a menos que canceles antes de que termine dicho periodo.',
+        'Garantía de 7 días. Cuentas con 7 días naturales de garantía a partir de tu primer cobro. Si solicitas la devolución en ese plazo escribiendo a {correo}, te reembolsamos el 100% de ese primer cobro.',
+        'Cambio de plan. Puedes cambiar de plan (por ejemplo, entre mensual y anual) desde el portal de suscripción con prorrateo automático de los días no utilizados.',
+        'Pases de OXXO y SPEI. Los pagos en OXXO y SPEI son pases de acceso de un solo pago (1 mes o 1 año) sin renovación automática. Al vencer el plazo, la cuenta vuelve al plan Gratis sin cobros sorpresa.',
+        'Precio Fundador. Es una promoción con cupo estrictamente limitado a 100 lugares en total (compartidos entre mensual y anual) y requiere suscripción con renovación automática. El lugar se aparta al iniciar la prueba gratis; si cancelas antes del primer cobro, el lugar se libera para otro alumno. Si ya pagaste y cancelas tu suscripción, pierdes el precio Fundador y tu lugar de forma definitiva, y ese cupo no se vuelve a abrir. Cambiar entre Fundador mensual y anual en el portal conserva tu lugar.',
       ],
       bullets: [
         'Cancelas cuando quieras. Conservas tu plan hasta que termine el periodo que ya pagaste.',
-        'Reembolsos. {reembolsos}',
-        'Si un cobro sale mal o no lo reconoces, escríbenos a {correo} y lo revisamos.',
+        'Reembolsos. Además de la garantía de 7 días del primer cobro, {reembolsos}.',
+        'Aclaraciones. Si un cobro sale mal o no lo reconoces, escríbenos a {correo} y lo revisamos.',
       ],
     },
     {
@@ -258,11 +267,11 @@ export const legalText = {
   draftNotice:
     'Borrador pendiente de revisión de un abogado. Todavía no es el texto legal definitivo.',
   /** Lo que se escribe donde falta un dato del responsable */
-  pending: '[pendiente de completar]',
+  pending: '[PENDIENTE DE RICARDO]',
   /** Lo que reemplaza a las marcas que no dependen de variables de entorno, mientras no se decidan */
   pendingPolicy: {
-    reembolsos: '[pendiente de definir la política de reembolsos]',
-    jurisdiccion: '[pendiente de definir los tribunales competentes]',
+    reembolsos: '[pendiente de definir la política de reembolsos por el abogado]',
+    jurisdiccion: '[pendiente de definir los tribunales competentes por el abogado]',
   },
   updated: (date: string) => `Última actualización, ${date}`,
   version: (version: string) => `Versión ${version}`,

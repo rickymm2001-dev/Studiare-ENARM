@@ -10,7 +10,7 @@ import { readSupportEmail } from './support.ts';
  * una letra al final, como 2026-10-14b, que queda después de 2026-10-14 y antes de cualquier fecha
  * posterior
  */
-export const PRIVACY_NOTICE_VERSION = '2026-10-14b';
+export const PRIVACY_NOTICE_VERSION = '2026-10-15';
 
 export interface LegalIdentity {
   name: string | null;
