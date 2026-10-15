@@ -192,10 +192,19 @@ begin
       'tab', coalesce(v_settings ->> 'tab', 'Preguntas'),
       'maxRows', least(greatest(coalesce((v_settings ->> 'maxRows')::integer, 5000), 1), 40000),
       'idPattern', coalesce(v_settings ->> 'idPattern', '^[A-Z]{2,4}-[0-9]{4,5}$')),
+    -- La huella para saltar una corrida de Cron sin cambios. Solo de una corrida que aplicó (no de solo
+    -- reporte ni de una bajada a solo reporte por fórmulas en el ID), y ninguna si alguna pregunta pide la
+    -- siguiente corrida o si cambiaron las claves de los médicos o los revisores por subespecialidad
+    -- después de esa corrida, porque el mismo Sheet ya no da lo mismo (M4 de la revisión)
     'lastSheetHash', (
-      select sheet_hash from public.bank_sync_runs
-      where target = p_target and status in ('ok', 'partial') and sheet_hash is not null
-      order by started_at desc limit 1),
+      select r.sheet_hash from public.bank_sync_runs r
+      where r.target = p_target and r.status in ('ok', 'partial') and r.mode = 'apply'
+        and r.reason is distinct from 'id_formula' and r.sheet_hash is not null
+        and not exists (
+          select 1 from public.bank_questions q where q.source_key like v_origin || ':%' and q.sheet_force_next)
+        and not exists (select 1 from public.physician_codes c where c.set_at >= r.started_at)
+        and not exists (select 1 from public.bank_topic_reviewers t where t.set_at >= r.started_at)
+      order by r.started_at desc limit 1),
     'known', coalesce((
       select jsonb_agg(jsonb_build_object(
         'key', substring(r.source_key from char_length(v_origin) + 2),

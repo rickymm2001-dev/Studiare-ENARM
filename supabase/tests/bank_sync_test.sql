@@ -183,6 +183,30 @@ select pg_temp.expect((:'b5')::jsonb -> 'known' @> jsonb_build_array(jsonb_build
 select pg_temp.expect((:'b5')::jsonb ->> 'lastSheetHash' = 'sheet-1', 'BS5. No trae la huella del Sheet anterior');
 select pg_temp.expect(position('[Prueba]' in (:'b5')) = 0, 'BS5. bank_sync_begin trae texto');
 select public.bank_sync_finish(((:'b5')::jsonb ->> 'runId')::uuid, null, '{}', 'skipped', 'no_changes');
+-- La huella solo sale de una corrida que aplicó, y ninguna si algo cambió fuera del Sheet (M4 de la revisión)
+begin;
+select pg_temp.set_setting('bank_sync', 'mode', '"dry_run"');
+select public.bank_sync_begin('manual', 'real', :'ad') ->> 'runId' as r5dry \gset
+select public.bank_sync_finish(:'r5dry', null, '{"sheetHash":"sheet-dry"}', 'ok', null);
+select pg_temp.expect(public.bank_sync_begin('manual', 'real', :'ad') ->> 'lastSheetHash' = 'sheet-1',
+  'BS5. La huella salió de una corrida en solo reporte');
+rollback;
+begin;
+update public.bank_questions set sheet_force_next = true where question_id = :'q1';
+select pg_temp.expect(public.bank_sync_begin('manual', 'real', :'ad') ->> 'lastSheetHash' is null,
+  'BS5. Con una pregunta que pide la siguiente corrida trajo la huella');
+rollback;
+begin;
+update public.physician_codes set set_at = now() where user_id = :'d2';
+select pg_temp.expect(public.bank_sync_begin('manual', 'real', :'ad') ->> 'lastSheetHash' is null,
+  'BS5. Con una clave de médico nueva trajo la huella');
+rollback;
+begin;
+insert into public.bank_topic_reviewers (branch, topic, physician_id, set_at)
+  values ('obstetrics_gynecology', 'prenatal_care', :'d2', now());
+select pg_temp.expect(public.bank_sync_begin('manual', 'real', :'ad') ->> 'lastSheetHash' is null,
+  'BS5. Con un revisor por subespecialidad nuevo trajo la huella');
+rollback;
 
 -- ===================================================================== BS6. Versión nueva
 -- GO-0002 se aprueba y se publica. Una versión nueva del Sheet no la saca del catálogo

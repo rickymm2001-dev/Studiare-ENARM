@@ -304,7 +304,13 @@ export async function runSync(
       read.table.headers,
       read.table.rows.map((row) => row.cells),
     );
-    if (trigger === 'cron' && hash === begin.lastSheetHash) {
+    // Saltar por la huella solo si ninguna pregunta pide la siguiente corrida (M4 de la revisión). La
+    // base ya no da huella en ese caso. Esto lo cuida también si llega de una base vieja
+    if (
+      trigger === 'cron' &&
+      hash === begin.lastSheetHash &&
+      !begin.known.some((question) => question.forceNext)
+    ) {
       return await finish(
         { status: 'skipped', reason: 'no_changes', counts: { read: converted.counts.read } },
         null,

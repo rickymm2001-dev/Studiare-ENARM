@@ -162,6 +162,51 @@ describe('corrida', () => {
     expect(t.runs).toEqual([body.runId, null]);
   });
 
+  it('Cron salta un Sheet sin cambios salvo que una pregunta pida la siguiente corrida', async () => {
+    const cron = (t: Awaited<ReturnType<typeof setup>>) =>
+      handleBankSync(
+        new Request('https://p.supabase.co/functions/v1/bank-sync', {
+          method: 'POST',
+          headers: { [CRON_TOKEN_HEADER]: CRON_TOKEN },
+        }),
+        t.deps,
+      ).then(() => Promise.all(t.pending));
+    const first = await setup();
+    await cron(first);
+    const hash = first.store.finished[0]?.input.summary.sheetHash;
+    expect(typeof hash).toBe('string');
+
+    const same = await setup({ store: { begin: { lastSheetHash: String(hash) } } });
+    await cron(same);
+    expect(same.store.finished[0]?.input).toMatchObject({
+      status: 'skipped',
+      reason: 'no_changes',
+    });
+
+    const forced = await setup({
+      store: {
+        begin: { lastSheetHash: String(hash) },
+        known: [
+          {
+            key: 'GO-0001',
+            questionId: '00000000-0000-4000-8000-000000000001',
+            rowHash: null,
+            metaHash: null,
+            latestVersionId: '00000000-0000-4000-8000-000000000002',
+            latestSource: 'app',
+            appliedVersionId: null,
+            forceNext: true,
+            conflictRowHash: null,
+            status: 'active',
+          },
+        ],
+      },
+    });
+    await cron(forced);
+    expect(forced.store.finished[0]?.input.status).not.toBe('skipped');
+    expect(forced.store.applied.length).toBeGreaterThan(0);
+  });
+
   it('el admin con su sesión corre contra el Sheet real o el de prueba', async () => {
     const t = await setup({ env: { sheetId: 'no-existe' } });
     const real = await t.call({ headers: { authorization: 'Bearer sesion-de-admin' } });
