@@ -18,7 +18,6 @@ import { b7ExtrasText } from './b7extras';
 import { freePlanText } from './freePlan';
 import { cloudBankText } from './cloudBank';
 import { bankAdminNavText } from './bankAdminNav';
-import { englishText } from './english';
 
 interface ScreenText {
   title: string;
@@ -333,8 +332,8 @@ export const t = {
   freePlan: freePlanText,
   // Banco en la nube y Google Sheets (B11 del plan del cambio). Del alumno y del admin
   cloudBank: cloudBankText,
-  // Inglés médico (B13 del plan del cambio)
-  english: englishText,
+  // Los textos de Inglés médico (B13) viven en english.ts y se importan donde se usan, como los de
+  // cloudBankScreens.ts, para no pesar en el JavaScript inicial, que está al límite de los 300 KB
   labels: {
     simulatedData: 'Datos simulados',
     // Aviso global y discreto mientras la app usa el banco de demostración (4.1 del plan del cambio)

@@ -1,8 +1,9 @@
 // Textos del módulo de Inglés médico (B13 del plan del cambio, respuesta 61). Aquí viven la tarjeta de
 // práctica en Simular, la lectura con el texto en inglés y su fuente, el tiempo sugerido, la parte en
 // inglés del examen completo, el corte por sección de los resultados y las cifras de Progreso. Español de
-// México con trato de tú y sin signos de dos puntos ni de exclamación. Se integra en t.english desde
-// es-MX.ts.
+// México con trato de tú y sin signos de dos puntos ni de exclamación. No cuelga de t en es-MX.ts: lo
+// importan las pantallas que lo usan, que cargan por ruta, y así no pesa en el JavaScript inicial, que
+// está al límite de los 300 KB (14.4), igual que cloudBankScreens.ts.
 import { ENARM_FORMAT } from '@/config/exam';
 
 const plural = (n: number, one: string, many: string) =>
