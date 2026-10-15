@@ -1,7 +1,7 @@
 // Despliega a Supabase desde los archivos del repo, sin pasar el SQL ni las funciones por el conector
 // (docs/DESPLIEGUE.md). Uso
 //   npm run deploy:supabase -- --plan b10 [--dry-run] [--only migrations|functions] [--yes]
-//   npm run deploy:supabase -- --secrets-from private/stripe-test-ids.json [--plan b10] [--dry-run] [--yes]
+//   npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.json [--dry-run] [--yes]
 // El token sale de SUPABASE_ACCESS_TOKEN. En la sesión en la nube, sin esa variable, lo pone el proxy
 // del entorno. Nunca se imprime, ni el token ni el valor de un secreto.
 import { createInterface } from 'node:readline/promises';
@@ -16,14 +16,14 @@ export const STUDIARE_PROJECT_REF = 'bkjbcdwglyllizupokqm';
 export const USAGE = [
   'Uso',
   '  npm run deploy:supabase -- --plan b10 [--dry-run] [--only migrations|functions] [--yes]',
-  '  npm run deploy:supabase -- --secrets-from private/stripe-test-ids.json [--plan b10] [--dry-run] [--yes]',
+  '  npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.json [--dry-run] [--yes]',
   'Opciones',
   '  --plan b10          deploy/b10.json, o la ruta a otro plan',
   '  --dry-run           dice qué haría, con lecturas del proyecto y sin escribir nada',
   '  --only migrations   solo el SQL del plan',
   '  --only functions    solo las Edge Functions del plan',
   '  --yes               no pregunta antes de escribir',
-  '  --secrets-from x    pone los secretos de ese JSON y nada más. Con --plan revisa sus nombres',
+  '  --secrets-from x    pone los secretos de ese JSON y nada más. El plan dice qué nombres espera y la forma de cada valor',
   `  --project-ref x     otro proyecto en lugar de ${STUDIARE_PROJECT_REF}`,
   'Token',
   '  SUPABASE_ACCESS_TOKEN en el entorno. En la sesión en la nube lo pone el proxy',
@@ -108,6 +108,9 @@ export function parseArgs(argv: readonly string[]): CliArgs {
   }
   if (args.only !== null && args.secretsFrom !== null) {
     throw new UsageError('--only no va con --secrets-from');
+  }
+  if (args.secretsFrom !== null && args.plan === null) {
+    throw new UsageError('--secrets-from necesita --plan, que dice qué secretos espera');
   }
   return args;
 }

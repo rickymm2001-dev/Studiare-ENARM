@@ -46,28 +46,28 @@
   ],
   "secrets": {
     "STRIPE_PRICE_FOUNDER": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PRICE_FOUNDER_ANNUAL": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PRICE_MONTHLY": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PRICE_ANNUAL": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PRICE_PASS_MONTHLY": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PRICE_PASS_ANNUAL": {
-      "prefix": "price_"
+      "pattern": "^price_[A-Za-z0-9]+$"
     },
     "STRIPE_PORTAL_CONFIG_FOUNDER": {
-      "prefix": "bpc_"
+      "pattern": "^bpc_[A-Za-z0-9]+$"
     },
     "STRIPE_PORTAL_CONFIG_REGULAR": {
-      "prefix": "bpc_"
+      "pattern": "^bpc_[A-Za-z0-9]+$"
     }
   }
 }

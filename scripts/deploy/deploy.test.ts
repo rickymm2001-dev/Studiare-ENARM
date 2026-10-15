@@ -48,7 +48,10 @@ const PLANS: Record<string, unknown> = {
     description: 'Plan de prueba',
     migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
     functions: [{ slug: 'hola', verifyJwt: false }],
-    secrets: { STRIPE_PRICE_FOUNDER: { prefix: 'price_' }, STRIPE_PORTAL_CONFIG_REGULAR: {} },
+    secrets: {
+      STRIPE_PRICE_FOUNDER: { pattern: '^price_[A-Za-z0-9_]+$' },
+      STRIPE_PORTAL_CONFIG_REGULAR: { pattern: '^bpc_[A-Za-z0-9_]+$' },
+    },
   },
   'sin-arreglo': { description: 'Sin la pieza manual', migrations: [STEPS.base, STEPS.more] },
   mas: { description: 'Solo more', migrations: [STEPS.more] },
@@ -148,7 +151,7 @@ function collectIo(answer = true) {
 async function run(
   fakeOptions: FakeOptions,
   options: Partial<{
-    plan: string;
+    plan: string | null;
     dryRun: boolean;
     yes: boolean;
     only: 'migrations' | 'functions';
@@ -160,7 +163,7 @@ async function run(
   const output = collectIo(options.answer ?? true);
   const code = await runDeploy({
     root,
-    plan: options.plan ?? 'prueba',
+    plan: options.plan === undefined ? 'prueba' : options.plan,
     dryRun: options.dryRun ?? false,
     only: options.only ?? null,
     yes: options.yes ?? true,
@@ -532,21 +535,44 @@ describe('secretos', () => {
     expect(result.fake.writes()).toEqual([]);
   });
 
-  it('con el plan revisa nombres y prefijos sin mostrar valores', async () => {
-    const result = await run(
-      {},
-      { secretsFrom: writeSecrets({ ...VALUES, STRIPE_PRICE_FOUNDER: 'prod_equivocado_1' }) },
-    );
-    expect(result.code).toBe(1);
-    expect(result.fake.requests).toEqual([]);
-    expect(result.all()).toContain('STRIPE_PRICE_FOUNDER debe empezar con price_');
-    expect(result.all()).not.toContain('prod_equivocado_1');
+  it('revisa cada valor con la forma completa del plan, sin mostrarlo', async () => {
+    for (const bad of ['prod_equivocado_1', 'price_con espacio', 'price_', 'xprice_abc']) {
+      const result = await run(
+        {},
+        { secretsFrom: writeSecrets({ ...VALUES, STRIPE_PRICE_FOUNDER: bad }) },
+      );
+      expect(result.code, bad).toBe(1);
+      expect(result.fake.requests).toEqual([]);
+      // Con el valor price_ la forma también sale tapada, porque nada que se parezca al valor se muestra
+      expect(result.all()).toContain('STRIPE_PRICE_FOUNDER no tiene la forma que pide el plan');
+      expect(result.all()).not.toContain(bad);
+    }
+  });
+
+  it('un nombre que no es del plan o que no es válido no se repite en pantalla', async () => {
     const extra = await run(
       {},
       { secretsFrom: writeSecrets({ ...VALUES, OTRO_SECRETO: 'valor_de_otro' }) },
     );
     expect(extra.code).toBe(1);
-    expect(extra.all()).toContain('OTRO_SECRETO no está en el plan prueba');
+    expect(extra.all()).toContain('El archivo trae 1 nombre que el plan prueba no espera');
+    expect(extra.all()).not.toContain('OTRO_SECRETO');
+    const invalid = await run(
+      {},
+      { secretsFrom: writeSecrets({ ...VALUES, 'sk_test_esto-es-una-llave': 'x1234' }) },
+    );
+    expect(invalid.code).toBe(1);
+    expect(invalid.all()).toContain(
+      'El nombre número 3 del archivo no es un nombre de secreto válido',
+    );
+    expect(invalid.all()).not.toContain('sk_test_esto-es-una-llave');
+  });
+
+  it('sin --plan no pone secretos', async () => {
+    const result = await run({}, { secretsFrom: writeSecrets(VALUES), plan: null });
+    expect(result.code).toBe(2);
+    expect(result.fake.requests).toEqual([]);
+    expect(result.all()).toContain('Para poner secretos hace falta --plan');
   });
 
   it('oculta los valores aunque la API los repita en su error', async () => {

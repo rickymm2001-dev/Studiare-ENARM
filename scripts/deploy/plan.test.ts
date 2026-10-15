@@ -60,6 +60,16 @@ select (select count(*) from public.t) = 0 as vacia, true as lista;
   });
 });
 
+describe('secretos del plan', () => {
+  it('cada uno lleva una expresión completa, con inicio y fin', () => {
+    const withPattern = (pattern: string) =>
+      repoWith({}, { description: 'Prueba', secrets: { STRIPE_PRICE_FOUNDER: { pattern } } });
+    expect(loadPlan(withPattern('^price_[A-Za-z0-9]+$'), 'prueba').secrets).toBeTruthy();
+    expect(() => loadPlan(withPattern('price_'), 'prueba')).toThrow(/con \^ y terminar con \$/);
+    expect(() => loadPlan(withPattern('^price_[$'), 'prueba')).toThrow(PlanError);
+  });
+});
+
 describe('nombres con los que se reconoce lo aplicado', () => {
   it('dos migraciones del repo no pueden llamarse igual', () => {
     const root = repoWith(

@@ -131,8 +131,12 @@ describe('los planes del repo', () => {
     const plan = loadPlan(ROOT, 'b10');
     const names = [...PRICE_SPECS.map((spec) => spec.env), ...PORTAL_SPECS.map((spec) => spec.env)];
     expect(Object.keys(plan.secrets ?? {}).sort()).toEqual([...names].sort());
-    for (const spec of PRICE_SPECS) expect(plan.secrets?.[spec.env]?.prefix).toBe('price_');
-    for (const spec of PORTAL_SPECS) expect(plan.secrets?.[spec.env]?.prefix).toBe('bpc_');
+    for (const spec of PRICE_SPECS) {
+      expect(plan.secrets?.[spec.env]?.pattern.source).toBe('^price_[A-Za-z0-9]+$');
+    }
+    for (const spec of PORTAL_SPECS) {
+      expect(plan.secrets?.[spec.env]?.pattern.source).toBe('^bpc_[A-Za-z0-9]+$');
+    }
   });
 
   it('verify_jwt de cada plan coincide con lo que dice el index.ts de la función', () => {
@@ -227,6 +231,7 @@ describe('línea de comandos', () => {
       projectRef: STUDIARE_PROJECT_REF,
     });
     expect(() => parseArgs(['--only', 'todo'])).toThrow(/migrations o functions/);
+    expect(() => parseArgs(['--secrets-from', 'private/ids.json'])).toThrow(/--plan/);
     expect(() => parseArgs(['--plan'])).toThrow(/necesita un valor/);
     expect(() => parseArgs(['--plan', 'b10', TOKEN])).toThrow(/No conozco la opción número 3/);
     expect(() => parseArgs([TOKEN])).not.toThrow(new RegExp(TOKEN));

@@ -41,8 +41,8 @@ const FunctionStepSchema = z.strictObject({
 });
 
 const SecretRuleSchema = z.strictObject({
-  /** El valor debe empezar así, por ejemplo price_ para un precio de Stripe */
-  prefix: z.string().optional(),
+  /** La forma completa del valor, con ^ y $, por ejemplo ^price_[A-Za-z0-9]+$ */
+  pattern: z.string().min(2),
   note: z.string().optional(),
 });
 
@@ -85,7 +85,7 @@ export interface Plan {
   description: string;
   migrations: SqlStep[];
   functions: FunctionStep[];
-  secrets: Record<string, { prefix: string | null }> | null;
+  secrets: Record<string, { pattern: RegExp }> | null;
   anonExecutable: Record<string, string>;
   overloads: Record<string, string>;
 }
@@ -178,7 +178,7 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
       ? Object.fromEntries(
           Object.entries(data.secrets).map(([name, rule]) => [
             name,
-            { prefix: rule.prefix ?? null },
+            { pattern: secretPattern(name, rule.pattern) },
           ]),
         )
       : null,
@@ -210,6 +210,18 @@ function checkExpectedColumns(step: SqlStep): void {
     throw new PlanError(
       `La comprobación de ${step.file} en el plan no cuadra con el archivo. ${parts.join('. ')}`,
     );
+  }
+}
+
+/** La forma de un secreto. Debe abarcar el valor completo, así que va con ^ y $ */
+function secretPattern(name: string, pattern: string): RegExp {
+  if (!pattern.startsWith('^') || !pattern.endsWith('$')) {
+    throw new PlanError(`La forma de ${name} debe empezar con ^ y terminar con $`);
+  }
+  try {
+    return new RegExp(pattern);
+  } catch {
+    throw new PlanError(`La forma de ${name} no es una expresión regular válida`);
   }
 }
 
