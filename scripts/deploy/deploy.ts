@@ -199,14 +199,20 @@ export function decideSteps(
     const checkProblems = step.check ? (state.checks.get(step.file) ?? []) : [];
     const differing = functions.filter((fn) => !inDb(fn.name)).map((fn) => fn.name);
     if (recorded.length > 0) {
-      // Las funciones que quedaron distintas se revisan abajo, cuando ya se sabe qué pasos se aplican
+      // Las funciones que quedaron distintas se revisan abajo, cuando ya se sabe qué pasos se aplican.
+      // Una comprobación en rojo no la corrige nadie, porque lo registrado no se vuelve a aplicar
       return {
         step,
         index,
         action: 'skip',
         reason: `ya aplicada, registrada como ${describeRecords(recorded)}`,
         notes: [],
-        problems: [],
+        problems:
+          checkProblems.length > 0
+            ? [
+                `${step.file} está registrada, pero su comprobación sale en rojo (${checkProblems.join(', ')}). Revisa la base antes de seguir`,
+              ]
+            : [],
       };
     }
     const byFingerprint = functions.length > 0 && differing.length === 0;
@@ -516,6 +522,14 @@ async function runPlan(options: DeployOptions): Promise<number> {
       io.out(`Aplicando ${decision.index + 1}. ${step.file}`);
       try {
         await client.applyMigration({ name: step.name, query: step.sql });
+        // Lo aplicado debe quedar registrado, o la siguiente corrida no lo reconocería
+        const history = await client.listMigrations();
+        if (!history.some((record) => record.name === step.name)) {
+          return stop(
+            [`${step.name} no aparece en la historia de migraciones después de aplicarlo`],
+            'Se detiene aquí. Lo que sigue en el plan no se aplicó y no se publicó ninguna función.',
+          );
+        }
         if (step.check) {
           const differences = await runCheck(client, step);
           if (differences.length > 0) {

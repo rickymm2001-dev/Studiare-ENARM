@@ -6,6 +6,8 @@
 // Nunca imprime ni devuelve el token. Un error dice el método, la ruta y el mensaje de Supabase, sin
 // encabezados ni cuerpo de la petición, así que tampoco lleva valores de secretos.
 
+import { createHash } from 'node:crypto';
+
 export const MANAGEMENT_API_URL = 'https://api.supabase.com';
 
 /** Una fila de la historia de migraciones del proyecto (supabase_migrations.schema_migrations) */
@@ -114,6 +116,11 @@ function toRows(value: unknown, what: string): Row[] {
 
 const REF_SHAPE = /^[a-z]{20}$/;
 
+/** La clave de idempotencia de una migración, con su nombre y la huella de su SQL */
+export function migrationKey(name: string, query: string): string {
+  return `studiare-${name}-${createHash('sha256').update(query, 'utf8').digest('hex').slice(0, 32)}`;
+}
+
 /** El código de una falla de red, como ENOTFOUND, o solo el tipo de error. Nunca su mensaje */
 function networkCause(error: unknown): string {
   const code = (error as { cause?: { code?: unknown } } | null)?.cause?.code;
@@ -137,8 +144,9 @@ export function createManagementClient(options: ManagementClientOptions): Manage
     path: string,
     body?: { json: unknown } | { form: FormData },
     accept404 = false,
+    extraHeaders: Record<string, string> = {},
   ): Promise<{ status: number; data: unknown }> {
-    const headers: Record<string, string> = { accept: 'application/json' };
+    const headers: Record<string, string> = { accept: 'application/json', ...extraHeaders };
     if (options.token !== null) headers.authorization = `Bearer ${options.token}`;
     let payload: string | FormData | undefined;
     if (body && 'json' in body) {
@@ -218,9 +226,15 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       }));
     },
     async applyMigration(input) {
-      await call('POST', '/database/migrations', {
-        json: { query: input.query, name: input.name },
-      });
+      // La especificación acepta Idempotency-Key en esta ruta para registrar la misma migración una
+      // sola vez. Sale del nombre y del SQL, así un reintento del mismo archivo no se registra doble
+      await call(
+        'POST',
+        '/database/migrations',
+        { json: { query: input.query, name: input.name } },
+        false,
+        { 'idempotency-key': migrationKey(input.name, input.query) },
+      );
     },
     async listFunctions() {
       const { data } = await call('GET', '/functions');

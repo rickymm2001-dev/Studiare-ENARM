@@ -40,6 +40,8 @@ export interface FakeOptions {
   failWith?: { status: number; message: string };
   /** Falla al aplicar este nombre */
   failApply?: string;
+  /** Aplica el SQL pero no lo deja en la historia */
+  dropRecord?: boolean;
   /** Falla la ruta de solo lectura, para probar el respaldo */
   readOnlyStatus?: number;
   /** Al publicar no sube la versión */
@@ -131,7 +133,7 @@ export function fakeSupabase(options: FakeOptions = {}) {
       }
       applied.add(name);
       clock += 1;
-      history.push({ version: String(clock), name });
+      if (!options.dropRecord) history.push({ version: String(clock), name });
       return json(null);
     }
     const isCheck =

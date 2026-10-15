@@ -64,6 +64,11 @@ describe('forma de cada llamada a la API de administración', () => {
       path: '/database/migrations',
       json: { query: 'select 1;', name: 'manual_pagos_b10' },
     });
+    // Idempotency-Key, que la especificación acepta en esta ruta, sale del nombre y del SQL
+    const key = fake.requests[1]?.headers.get('idempotency-key') ?? '';
+    expect(key).toMatch(/^studiare-manual_pagos_b10-[0-9a-f]{32}$/);
+    await client.applyMigration({ name: 'manual_pagos_b10', query: 'select 2;' });
+    expect(fake.requests[2]?.headers.get('idempotency-key')).not.toBe(key);
   });
 
   it('funciones, una por slug y 404 como null', async () => {

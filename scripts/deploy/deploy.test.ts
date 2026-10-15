@@ -339,6 +339,33 @@ describe('aplicar un plan', () => {
     expect(result.all()).toContain('comprobación en rojo (la consulta falló');
   });
 
+  it('un archivo manual registrado con la comprobación en rojo bloquea, también en la simulación', async () => {
+    const state: FakeOptions = {
+      ...REAL_LIKE,
+      history: [
+        ...(REAL_LIKE.history ?? []),
+        { version: '20261014000004', name: 'manual_arreglo' },
+      ],
+      functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
+      checkRow: () => ({ listo: false }),
+    };
+    for (const dryRun of [true, false]) {
+      const result = await run(state, { dryRun });
+      expect(result.code, `dryRun ${String(dryRun)}`).toBe(1);
+      expect(result.fake.writes()).toEqual([]);
+      expect(result.all()).toContain(
+        'está registrada, pero su comprobación sale en rojo (listo dio false',
+      );
+    }
+  });
+
+  it('falla si lo aplicado no aparece en la historia de migraciones', async () => {
+    const result = await run({ ...REAL_LIKE, dropRecord: true });
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('manual_arreglo no aparece en la historia de migraciones');
+    expect(result.fake.edge.has('hola')).toBe(false);
+  });
+
   it('se detiene en el primer SQL que falla y no publica', async () => {
     const result = await run({ ...REAL_LIKE, failApply: 'manual_arreglo' });
     expect(result.code).toBe(1);
