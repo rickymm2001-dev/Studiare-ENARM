@@ -194,6 +194,30 @@
       "issue": "license_not_allowed"
     },
     {
+      "name": "licencia en mayúsculas y con el acento de público",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto simulado. DOMINIO PÚBLICO. https://example.org/texto"
+      ],
+      "issue": null
+    },
+    {
+      "name": "licencia con un acento en otra letra",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto simulado. Dominio públíco. https://example.org/texto"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "texto propio con un acento de más, que sin otro pedazo se lee como un título sin licencia",
+      "refs": ["Fuente del texto. Téxto propio del equipo Studiare."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "texto propio con un acento de más y un título antes",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. Téxto propio del equipo Studiare."],
+      "issue": "license_not_allowed"
+    },
+    {
       "name": "con dos fuentes manda la primera, mala",
       "refs": [
         "Fuente del texto. [Prueba] Uno. CC BY-NC. https://example.org/uno",

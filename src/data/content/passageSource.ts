@@ -11,7 +11,7 @@
 //   Fuente del texto. Texto propio del equipo Studiare.
 //
 // La lectura es de derecha a izquierda. El último pedazo que empieza con http es el enlace, antes va la
-// licencia, que se reconoce solo por su nombre exacto (sin importar mayúsculas ni acentos en las vocales),
+// licencia, que se reconoce solo por su nombre exacto (sin importar mayúsculas y con o sin el acento de público),
 // y todo lo anterior es el título, que puede traer puntos. El prefijo se reconoce sin importar mayúsculas
 // ni espacios de más. Lo comparte la función bank-sync con una copia generada
 // (scripts/content/sync-bank-shared.ts). Funciones puras, sin Node ni React.
@@ -52,25 +52,13 @@ export function licenseNeedsUrl(license: PassageLicense): boolean {
 }
 
 const PREFIX_WORD = 'Fuente del texto.';
-const ACCENTS: Readonly<Record<string, string>> = {
-  á: 'a',
-  é: 'e',
-  í: 'i',
-  ó: 'o',
-  ú: 'u',
-  ü: 'u',
-};
-
 /**
- * Minúsculas, vocales sin acento y espacios simples, para reconocer el nombre de la licencia. Es lo que
- * hace también la función SQL, con translate y lower, así que las dos reconocen lo mismo
+ * Minúsculas, la ú de público sin acento y espacios simples, para reconocer el nombre de la licencia.
+ * Es lo que reconoce también la función SQL con sus expresiones, así que las dos aceptan lo mismo. Un
+ * acento en cualquier otra letra no se perdona
  */
 function fold(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[áéíóúü]/g, (letter) => ACCENTS[letter] ?? letter)
-    .replace(/\s+/g, ' ')
-    .trim();
+  return text.toLowerCase().replace(/ú/g, 'u').replace(/\s+/g, ' ').trim();
 }
 
 /** Una dirección https con host con punto, sin espacios. Pedir más sería pedir de más */
