@@ -2,6 +2,7 @@
 // tutor, así dicen lo mismo. Cada foco sale del informe de Conócete, ya ordenado por peso, o de la
 // subespecialidad más débil, y lleva al lugar donde se practica.
 import { screenPath } from '@/app/screens';
+import { branchSection } from '@/data/schemas/content';
 import { biasTaxonomy, biasTips, topicTaxonomy } from '@/demo/content';
 import type { Insight, InsightReport } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
@@ -161,12 +162,14 @@ export const WEAK_TOPIC_BELOW = 0.6;
 
 /**
  * Subespecialidades con dominio bajo, de la más débil a la menos. Solo entran las que ya tienen
- * respuestas suficientes, las que calibran no cuentan
+ * respuestas suficientes, las que calibran no cuentan. Inglés médico no entra: su práctica es aparte
+ * y su tarjeta de Progreso tiene sus propias cifras (B13, 2.8)
  */
 export function weakTopicsFrom(
   byTopic: ReadonlyMap<string, { state: { kind: string; mastery?: number } }>,
 ): WeakTopic[] {
   return topicTaxonomy.branches
+    .filter((branch) => branchSection(branch) === 'clinical')
     .flatMap((branch) =>
       branch.topics.flatMap((topic) => {
         const state = byTopic.get(topic.key)?.state;

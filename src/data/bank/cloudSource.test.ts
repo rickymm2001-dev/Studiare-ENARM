@@ -5,6 +5,7 @@ import { cloudId, fakeBankServer, wireBody, wireRow } from '../testing/bankCloud
 import { testApi } from '../testing/fixtures';
 import type { CatalogRow } from './contracts';
 import { CATALOG_REFRESH_MS, createCloudSource, fetchBatches } from './cloudSource';
+import { EMPTY_POOL } from './questionSource';
 
 const disposers: (() => Promise<unknown>)[] = [];
 afterEach(async () => {
@@ -33,7 +34,7 @@ const rowsOf = (count: number, start = 1) =>
   Array.from({ length: count }, (_, index) => wireRow({ seq: start + index }));
 
 describe('fuente de la nube (5.1 a 5.5)', () => {
-  it('baja el catálogo por páginas hasta done y arma el pool sin texto y sin inglés', async () => {
+  it('baja el catálogo por páginas hasta done y arma el pool sin texto, con el inglés aparte', async () => {
     const rows = [
       ...rowsOf(3),
       wireRow({ seq: 4, examEligible: false, variantOf: cloudId() }),
@@ -54,16 +55,67 @@ describe('fuente de la nube (5.1 a 5.5)', () => {
       open: true,
     });
     const pool = await source.pool();
+    // La práctica y el examen en español no traen el caso de inglés, que va en su propio pool
     expect(pool.practice).toHaveLength(4);
     expect(pool.exam.map((question) => question.id)).toEqual(
       rows.slice(0, 3).map((row) => ulid(row.versionId)),
     );
     expect(pool.practice[0]).toMatchObject({ isDemo: false, language: 'es', examEligible: true });
+    expect(pool.english.practice.map((question) => question.id)).toEqual([
+      ulid((rows[4] as CatalogRow).versionId),
+    ]);
+    expect(pool.english.exam).toHaveLength(1);
+    expect(pool.english.practice[0]).toMatchObject({
+      language: 'en',
+      branch: 'medical_english',
+      isDemo: false,
+    });
     // Una sola página y nada de cuerpos todavía
     expect(bank.server.calls.filter((call) => call.name === 'fetch_questions')).toHaveLength(0);
     expect(await api.repos.bankState.get('agreement')).toMatchObject({
       summary: { vocabulary: 'bias', pairs: 31 },
     });
+  });
+
+  it('los casos de lectura en inglés llegan completos al pool de inglés y sus cuerpos guardan el idioma', async () => {
+    const caseId = cloudId();
+    const rows = [
+      ...rowsOf(3),
+      ...[1, 2, 3].map((order) =>
+        wireRow({
+          seq: 3 + order,
+          language: 'en',
+          branch: 'medical_english',
+          topic: 'reading_comprehension',
+          subtopic: 'english_pediatrics',
+          format: 'serial_case',
+          task: 'data_interpretation',
+          caseId,
+          caseOrder: order,
+          caseSize: 3,
+        }),
+      ),
+      // Un caso de inglés que todavía no es examinable, como una variante
+      wireRow({ seq: 7, language: 'en', branch: 'medical_english', examEligible: false }),
+    ];
+    const { source, api } = setup(rows);
+    await source.prepare();
+    const pool = await source.pool();
+    expect(pool.practice).toHaveLength(3);
+    expect(pool.english.practice).toHaveLength(4);
+    expect(pool.english.exam).toHaveLength(3);
+    expect(pool.english.practice.slice(0, 3).map((question) => question.caseOrder)).toEqual([
+      1, 2, 3,
+    ]);
+    expect(new Set(pool.english.practice.slice(0, 3).map((question) => question.caseId)).size).toBe(
+      1,
+    );
+    // Al bajar el cuerpo queda guardado con su idioma, y el español no lleva el campo
+    const ids = [rows[0], rows[3]].map((row) => ulid((row as CatalogRow).versionId));
+    const result = await source.ensureBodies(ids, 'practice');
+    expect(result.ready).toEqual(ids);
+    expect((await api.repos.questions.get(ids[1] as string))?.language).toBe('en');
+    expect((await api.repos.questions.get(ids[0] as string))?.language).toBeUndefined();
   });
 
   it('pide desde el último seq y solo cambia lo nuevo', async () => {
@@ -92,13 +144,13 @@ describe('fuente de la nube (5.1 a 5.5)', () => {
     expect(await source.prepare()).toBe('never_downloaded');
     client.current = null;
     expect(await source.prepare()).toBe('never_downloaded');
-    expect(await source.pool()).toEqual({ practice: [], exam: [] });
+    expect(await source.pool()).toEqual(EMPTY_POOL);
   });
 
   it('con el banco cerrado no hay nada que elegir', async () => {
     const { source } = setup(rowsOf(3), { open: false });
     expect(await source.prepare()).toBe('closed');
-    expect(await source.pool()).toEqual({ practice: [], exam: [] });
+    expect(await source.pool()).toEqual(EMPTY_POOL);
   });
 
   it('Gratis baja hasta su tope, lo ya bajado no se vuelve a pedir y la cuota queda guardada', async () => {

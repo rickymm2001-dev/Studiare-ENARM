@@ -96,6 +96,8 @@ export function bodyEntitiesOf(raw: unknown): BodyEntities | null {
     ...(nonEmpty(raw.itemKinds) ? { itemKinds: raw.itemKinds } : {}),
     ...(nonEmpty(raw.clues) ? { clues: raw.clues } : {}),
     physicianDifficulty: raw.physicianDifficulty,
+    // Sin el campo, o con uno que no se conoce, es español como todo lo de antes de B13 (en queda guardado)
+    ...(raw.language === 'en' ? { language: 'en' } : {}),
     ...(variantOf === null ? {} : { variantOf }),
     canonicalOptionIds: canonical,
     editorialStatus: 'approved',

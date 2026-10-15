@@ -1,6 +1,8 @@
 // Elige las preguntas de una sesión (7.2). Con la misma semilla sale siempre la misma lista, que es lo
 // que necesita un duelo, y los casos seriados quedan juntos y en su orden aunque el azar los separe.
+// La práctica de Inglés médico no elige preguntas sino textos completos (B13, 2.2), con pickEnglishCases.
 import type { Question } from '@/data/schemas/bank';
+import { pickCaseUnits, type PickedCases } from '@/engines/caseUnits';
 import { createRng } from '@/engines/random';
 
 export function pickQuestions<T extends Pick<Question, 'id' | 'caseId' | 'caseOrder'>>(
@@ -26,4 +28,18 @@ export function pickQuestions<T extends Pick<Question, 'id' | 'caseId' | 'caseOr
     }
   }
   return ordered;
+}
+
+/**
+ * Elige hasta cases textos de lectura completos, con todas sus preguntas y en orden. A diferencia de
+ * pickQuestions, que elige preguntas y luego junta las de un mismo caso, aquí nunca queda un texto a medias.
+ * maxItems es lo que le queda hoy a Gratis, o null sin tope, y un texto que no cabe se salta
+ */
+export function pickEnglishCases<T extends Pick<Question, 'id' | 'caseId' | 'caseOrder'>>(
+  questions: readonly T[],
+  seed: string,
+  cases: number,
+  maxItems: number | null,
+): PickedCases<T> {
+  return pickCaseUnits(questions, seed, cases, maxItems === null ? {} : { maxItems });
 }

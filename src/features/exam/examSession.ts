@@ -12,7 +12,7 @@ import type { AppEvent, EventPayload } from '@/data/schemas/events';
 import type { User, UserSettings } from '@/data/schemas/people';
 import { recordEventOnce } from '@/data/usecases/recordEvent';
 import { rankedUlid, ULID_RANKS } from '@/demo/stableId';
-import { buildExam } from '@/engines/exam';
+import { buildExam, sectionOf, type ExamPlan } from '@/engines/exam';
 import { sampleOptions } from '@/engines/sampler';
 import { sendErrorsToReview, type FailedQuestion } from '../review/sendErrors';
 import { recordAnswerWithXp } from '../simulator/answerXp';
@@ -83,39 +83,70 @@ export async function loadExamBundles(
   );
 }
 
+/** La parte en inglés del examen, como la pide buildExam (B13) */
+export interface ExamEnglishOptions {
+  include: boolean;
+  secondsPerQuestion: number;
+  placement: 'mixed' | 'end';
+}
+
 /**
  * Arma el examen, registra su inicio y lo guarda en el navegador. null si no hay preguntas
- * elegibles
+ * elegibles. Con plan, que es el que ya se armó con todo el banco para saber qué cuerpos bajar, no se
+ * arma otra vez: se conserva su orden y solo se quita lo que el servidor no concedió. Así las secciones
+ * y el orden son los mismos que vio el alumno al configurarlo. Sin plan se arma con questions, que es lo
+ * que hacen las pruebas. Deja en la bitácora cuántos reactivos de inglés se pidieron, cuántos entraron y
+ * cuántos faltaron
  */
 export async function startExam(input: {
   api: Pick<DataApi, 'recordEvent'>;
   user: Pick<User, 'id' | 'timeZone'>;
-  questions: readonly Pick<Question, 'id' | 'caseId' | 'caseOrder' | 'branch'>[];
+  questions: readonly Pick<Question, 'id' | 'caseId' | 'caseOrder' | 'branch' | 'language'>[];
   requested: number;
   options: ExamOptions;
+  english?: ExamEnglishOptions;
+  plan?: ExamPlan;
   nowMs?: number;
 }): Promise<ExamState | null> {
   const nowMs = input.nowMs ?? Date.now();
   const examId = newId();
-  const plan = buildExam({
-    questions: input.questions.map(({ id, caseId, caseOrder, branch }) => ({
-      id,
-      caseId,
-      caseOrder,
-      branch,
-    })),
-    requested: input.requested,
-    seed: examId,
-  });
-  if (plan.questionIds.length === 0) return null;
+  const built =
+    input.plan ??
+    buildExam({
+      questions: input.questions.map(({ id, caseId, caseOrder, branch, language }) => ({
+        id,
+        caseId,
+        caseOrder,
+        branch,
+        section: sectionOf({ language }),
+      })),
+      requested: input.requested,
+      seed: examId,
+      ...(input.english ? { english: input.english } : {}),
+    });
+  const granted = new Set(input.questions.map((question) => question.id));
+  const questionIds = built.questionIds.filter((id) => granted.has(id));
+  if (questionIds.length === 0) return null;
+  const sectionOfId = new Map(
+    input.questions.map((question) => [question.id, sectionOf(question)]),
+  );
+  const englishPicked = questionIds.filter((id) => sectionOfId.get(id) === 'english').length;
+  const clinicalPicked = questionIds.length - englishPicked;
+  const totalMs = Math.round(
+    (clinicalPicked * built.sections.clinical.secondsPerQuestion +
+      englishPicked * built.sections.english.secondsPerQuestion) *
+      1000,
+  );
+  const requested = built.requested;
+  const shortfall = Math.max(0, requested - questionIds.length);
   const state = createExamState({
     examId,
     userId: input.user.id,
     seed: examId,
-    questionIds: plan.questionIds,
-    requested: plan.requested,
-    shortfall: plan.shortfall,
-    totalMs: plan.totalMs,
+    questionIds,
+    requested,
+    shortfall,
+    totalMs,
     nowMs,
     ...input.options,
   });
@@ -126,11 +157,14 @@ export async function startExam(input: {
         kind: 'exam',
         config: {
           examId,
-          requested: plan.requested,
-          count: plan.questionIds.length,
-          shortfall: plan.shortfall,
-          totalMs: plan.totalMs,
+          requested,
+          count: questionIds.length,
+          shortfall,
+          totalMs,
           ...input.options,
+          englishRequested: built.sections.english.requested,
+          englishPicked,
+          englishShortfall: Math.max(0, built.sections.english.requested - englishPicked),
         },
       },
       { userId: input.user.id, tz: input.user.timeZone, sessionId: examId, clock: clockAt(nowMs) },

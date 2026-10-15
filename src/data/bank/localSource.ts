@@ -30,7 +30,7 @@ export function poolQuestionOf(question: Question, examEligible: boolean): PoolQ
       format: question.structure.format,
     },
     examEligible,
-    language: 'es',
+    language: question.language ?? 'es',
     // El banco de demostración no lleva el resumen de sesgos. El muestreo dirigido usa las opciones
     distractorBiases: [],
     cached: true,
@@ -46,11 +46,16 @@ export function createLocalSource(api: Api): QuestionSource {
       return 'ready';
     },
     async pool() {
-      const { practice, exam } = await listStudentPool(api);
-      const forExam = new Set(exam.map((question) => question.id));
+      const { practice, exam, english } = await listStudentPool(api);
+      const forExam = new Set([...exam, ...english.exam].map((question) => question.id));
+      const toPool = (question: Question) => poolQuestionOf(question, forExam.has(question.id));
       return {
-        practice: practice.map((question) => poolQuestionOf(question, forExam.has(question.id))),
+        practice: practice.map(toPool),
         exam: exam.map((question) => poolQuestionOf(question, true)),
+        english: {
+          practice: english.practice.map(toPool),
+          exam: english.exam.map((question) => poolQuestionOf(question, true)),
+        },
       };
     },
     async ensureBodies(versionIds) {

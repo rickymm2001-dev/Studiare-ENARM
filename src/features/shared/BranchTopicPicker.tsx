@@ -1,14 +1,17 @@
 // Selector de ramas troncales y subespecialidades (D-066, D-078). Cada troncal es una fila con su
 // casilla y su total. Sus subespecialidades se ven solo al abrir la fila, para que las 72 no llenen
-// la pantalla. Marcar una troncal marca o desmarca todas sus subespecialidades.
+// la pantalla. Marcar una troncal marca o desmarca todas sus subespecialidades. La práctica en español
+// pide solo las ramas clínicas (scope clinical) y deja fuera Inglés médico, que tiene su propia práctica
+// (B13, 2.8 del plan de B13). Repasar muestra todas, porque ahí vive el mazo de vocabulario.
 import { CheckCheck, ChevronDown, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
+import { branchSection } from '@/data/schemas/content';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
-import { ALL_TOPICS } from './topics';
+import { ALL_TOPICS, CLINICAL_TOPICS } from './topics';
 
 function TriCheckbox({
   checked,
@@ -73,6 +76,7 @@ export function BranchTopicPicker({
   counts,
   countLabel = t.topicPicker.questions,
   showCount = true,
+  scope = 'all',
 }: {
   selected: ReadonlySet<string>;
   onChange: (next: Set<string>) => void;
@@ -82,8 +86,14 @@ export function BranchTopicPicker({
   countLabel?: (n: number) => string;
   /** Muestra cuántas subespecialidades van marcadas. Se apaga si ya lo dice el resumen de afuera */
   showCount?: boolean;
+  /** Qué ramas se ofrecen. clinical deja fuera Inglés médico. Todas por omisión */
+  scope?: 'all' | 'clinical';
 }) {
   const baseId = useId();
+  const topics = scope === 'clinical' ? CLINICAL_TOPICS : ALL_TOPICS;
+  const branches = topicTaxonomy.branches.filter(
+    (branch) => scope === 'all' || branchSection(branch) === 'clinical',
+  );
   const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set());
   const setMany = (keys: readonly string[], on: boolean) => {
     const next = new Set(selected);
@@ -108,7 +118,7 @@ export function BranchTopicPicker({
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {showCount ? (
           <span className="text-sm text-fg-muted" aria-live="polite">
-            {t.topicPicker.selected(selected.size, ALL_TOPICS.length)}
+            {t.topicPicker.selected(selected.size, topics.length)}
           </span>
         ) : null}
         <div className="ml-auto flex gap-1">
@@ -117,7 +127,7 @@ export function BranchTopicPicker({
             variant="ghost"
             size="sm"
             onClick={() => {
-              onChange(new Set(ALL_TOPICS));
+              onChange(new Set(topics));
             }}
           >
             <CheckCheck aria-hidden />
@@ -137,7 +147,7 @@ export function BranchTopicPicker({
         </div>
       </div>
       <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
-        {topicTaxonomy.branches.map((branch) => {
+        {branches.map((branch) => {
           const keys = branch.topics.map((topic) => topic.key);
           const on = keys.filter((key) => selected.has(key)).length;
           const total = countOf(keys);

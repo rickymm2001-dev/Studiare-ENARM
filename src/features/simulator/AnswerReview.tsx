@@ -6,6 +6,8 @@
 // avisa si ya creó una con esa pregunta.
 // Con el banco de la nube (B11, 5.4) el reporte de una pregunta de la nube llega también al médico
 // asignado con report_question, con la versión que el alumno tenía a la vista.
+// Una pregunta de Inglés médico (B13, 2.5) muestra el texto plegado con la línea de su fuente. La pregunta
+// y las opciones van en inglés (lang="en") y la explicación y las justificaciones en español.
 import { CheckCircle2, Flag, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useFocusMode } from '@/app/focusMode';
@@ -32,8 +34,10 @@ import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
 import { useQuestionSourceKind } from '../shared/questionSourceKind';
 import type { ReadySession } from '../shared/RequireSession';
+import { isPassageSourceRef, parsePassageSource } from '@/data/content/passageSource';
 import { DiscardReviewCard } from './DiscardReviewCard';
 import { usePractice, type PracticeAnswer } from './practice';
+import { ReadingPassage } from './ReadingPassage';
 import type { QuestionBundle } from './useQuestion';
 
 type ReportReason = ContentReport['reason'];
@@ -63,6 +67,14 @@ export function AnswerReview({
   const api = useDataApi();
   const practice = usePractice();
   const { question, options } = bundle;
+  // Lo que está en inglés lo dice el lector de pantalla en inglés. La interfaz sigue en español
+  const english = question.language === 'en';
+  const lang = english ? 'en' : undefined;
+  const inEnglish = (text: string) => (english ? <span lang="en">{text}</span> : text);
+  // La fuente del texto ya se ve bajo el texto. Entre las referencias por verificar queda lo demás
+  const references = parsePassageSource(question.gpcRefs).ok
+    ? question.gpcRefs.filter((ref) => !isPassageSourceRef(ref.title))
+    : question.gpcRefs;
   const reports = useMotiveReports(session.user.id);
   const withCards = useQuestionsWithCards(session.user.id);
   const [reason, setReason] = useState<ReportReason>('clinical_error');
@@ -143,11 +155,19 @@ export function AnswerReview({
               </span>
             ) : null}
           </CardTitle>
-          <CardDescription>{question.prompt}</CardDescription>
+          <CardDescription lang={lang}>{question.prompt}</CardDescription>
           {answer.sentToReview ? (
             <p className="mt-1 text-sm font-medium text-fg">{t.simulator.sentToReview}</p>
           ) : null}
         </CardHeader>
+        {english && bundle.vignette ? (
+          <ReadingPassage
+            text={bundle.vignette}
+            refs={question.gpcRefs}
+            fold="always"
+            className="mb-3"
+          />
+        ) : null}
         <ul className="flex flex-col gap-2">
           {shown.map((option, position) => {
             const isChosen = option.id === answer.optionVersionId;
@@ -163,7 +183,7 @@ export function AnswerReview({
               >
                 <p>
                   <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                  {option.text}
+                  {inEnglish(option.text)}
                   {isChosen ? (
                     <span className="ml-2 text-sm font-medium">({t.simulator.yourAnswer})</span>
                   ) : null}
@@ -198,6 +218,7 @@ export function AnswerReview({
           shown={shown}
           eliminated={answer.eliminatedOptionIds}
           chosenId={answer.optionVersionId}
+          lang={lang}
         />
 
         <Card aria-labelledby={`${idPrefix}-explicacion`}>
@@ -205,11 +226,11 @@ export function AnswerReview({
             <CardTitle id={`${idPrefix}-explicacion`}>{t.simulator.explanation}</CardTitle>
           </CardHeader>
           <p className="whitespace-pre-line">{question.explanation || correctOption?.rationale}</p>
-          {question.gpcRefs.length > 0 ? (
+          {references.length > 0 ? (
             <div className="mt-3">
               <p className="text-sm font-medium">{t.simulator.references}</p>
               <ul className="list-disc pl-5 text-sm text-fg-muted">
-                {question.gpcRefs.map((ref) => (
+                {references.map((ref) => (
                   <li key={ref.title}>{ref.title}</li>
                 ))}
               </ul>

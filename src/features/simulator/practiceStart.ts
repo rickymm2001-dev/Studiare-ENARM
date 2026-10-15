@@ -5,7 +5,7 @@ import type { DataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import type { User } from '@/data/schemas/people';
-import { clock, usePractice } from './practice';
+import { clock, SPANISH_PRACTICE_DEFAULTS, usePractice } from './practice';
 
 export async function startPracticeWithQuestions(
   api: Pick<DataApi, 'recordEvent'>,
@@ -33,6 +33,8 @@ export async function startPracticeWithQuestions(
     kind: 'practice',
     duelId: null,
     targetTags: [],
+    // Las falladas de un examen pueden traer casos de inglés. Cada pregunta se pinta según su idioma
+    ...SPANISH_PRACTICE_DEFAULTS,
   });
   return true;
 }

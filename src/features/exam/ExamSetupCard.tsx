@@ -2,27 +2,37 @@
 // y empezar, o seguir con un examen en curso y ver el último. El plan Gratis se limita a las
 // preguntas que le quedan hoy y el examen de 280 es de los planes de pago. Son banderas de acceso,
 // la interfaz no pregunta por el plan.
-// Desde B11 el examen se reparte por los pesos de rama del ENARM, sin Inglés médico hasta B13 (5.4). Con
-// el banco de la nube se bajan todos sus cuerpos antes de empezar, en tandas, así el examen corre sin
-// conexión. Si llega menos de lo armado, empieza con lo concedido y el marco de la app dice por qué.
+// Desde B11 el examen se reparte por los pesos de rama del ENARM (5.4). Con el banco de la nube se bajan
+// todos sus cuerpos antes de empezar, en tandas, así el examen corre sin conexión. Si llega menos de lo
+// armado, empieza con lo concedido y el marco de la app dice por qué.
+// Desde B13 trae su parte en inglés, como el ENARM (3.1 y 3.7 del plan de B13). El de 280 son 250 en
+// español y 30 en inglés, con la misma proporción en los cortos y el tiempo de cada sección. La casilla
+// Incluir la parte en inglés aparece con la bandera medicalEnglish. Con menos reactivos de inglés de los
+// que pide el umbral lleva la marca Calibrando y dice cuántos hay, y si no hay ninguno el examen es solo
+// en español y lo avisa. El español no rellena lo que falte de inglés.
 import { Play } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { PLANS, type PlanKey } from '@/config/billing';
+import { ENGLISH_PLACEMENT } from '@/config/exam';
+import { isFeatureEnabled } from '@/config/featureFlags';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { newId } from '@/data/ids';
 import { shortfallReason } from '@/data/bank/quota';
 import type { PoolQuestion } from '@/data/bank/questionSource';
 import { topicTaxonomy } from '@/demo/content';
-import { buildExam, examTotalMs } from '@/engines/exam';
-import { examBranchWeights, nonClinicalBranches } from '@/engines/topics';
+import { buildExam, sectionOf, type ExamPlan, type ExamQuestion } from '@/engines/exam';
+import { examBranchWeights } from '@/engines/topics';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
+import { englishText } from '@/i18n/english';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField } from '@/ui/components/field';
+import { CalibratingNote } from '@/ui/states/states';
 import { useBankNotice } from '../shared/bankNotice';
 import { chooseWithBodies } from '../shared/chooseWithBodies';
 import { useLockedCta } from '../shared/useLockedCta';
@@ -41,14 +51,27 @@ import {
 } from './examState';
 import { loadExamState, saveExamState } from './examStorage';
 
+/** La pregunta del pool como la arma buildExam, con la sección que dice su idioma */
+const toExamQuestion = (question: PoolQuestion): ExamQuestion => ({
+  id: question.id,
+  caseId: question.caseId,
+  caseOrder: question.caseOrder,
+  branch: question.branch,
+  section: sectionOf(question),
+});
+
 export function ExamSetupCard({
   session,
   questions,
+  englishQuestions = [],
   plan,
   left,
 }: {
   session: ReadySession;
+  /** Las preguntas en español que entran al examen */
   questions: readonly PoolQuestion[];
+  /** Los reactivos de inglés que entran al examen (B13). Vacío si no hay textos */
+  englishQuestions?: readonly PoolQuestion[];
   plan: PlanKey;
   /** Preguntas que le quedan hoy en su plan. null es sin límite */
   left: number | null;
@@ -65,11 +88,45 @@ export function ExamSetupCard({
   const [highlight, setHighlight] = useState(settings.negationHighlightExam);
   const [askConfidence, setAskConfidence] = useState(false);
   const [alerts, setAlerts] = useState(true);
+  // La parte en inglés va incluida, como en el ENARM, y el alumno la puede quitar (3.1)
+  const [includeEnglish, setIncludeEnglish] = useState(true);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
   // El botón del candado de Gratis, el mismo de Simular y los demás candados (B10)
   const lockedCta = useLockedCta();
   const text = t.exam;
+
+  const requested = Math.min(size, left ?? Number.POSITIVE_INFINITY);
+  const thresholds = DEFAULT_THRESHOLDS.english;
+  // La casilla solo está con la bandera. Sin ningún reactivo de inglés el examen es solo en español del
+  // tamaño pedido, y lo avisa. Con algunos entra a su parte aunque no alcance, y el español no la rellena
+  const englishFlag = isFeatureEnabled('medicalEnglish');
+  const hasEnglish = englishQuestions.length > 0;
+  const withEnglish = englishFlag && includeEnglish && hasEnglish;
+  const englishOptions = {
+    include: withEnglish,
+    secondsPerQuestion: thresholds.secondsPerItem,
+    placement: ENGLISH_PLACEMENT,
+  };
+  const weights = examBranchWeights(topicTaxonomy);
+  // Lo que traería el examen con estas opciones. Los conteos de cada sección no dependen de la semilla
+  const preview = useMemo(
+    () =>
+      buildExam({
+        questions: [...questions, ...(withEnglish ? englishQuestions : [])].map(toExamQuestion),
+        requested,
+        seed: 'vista',
+        branchWeights: weights,
+        english: englishOptions,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- weights y englishOptions salen de las demás
+    [questions, englishQuestions, requested, withEnglish],
+  );
+  const count = preview.questionIds.length;
+  // El tope de Gratis es lo que limita el examen cuando le quedan menos preguntas que el tamaño pedido y que
+  // las que hay en el banco, contando las de inglés si entran
+  const inBank = questions.length + (withEnglish ? englishQuestions.length : 0);
+  const limitedByPlan = left !== null && left < Math.min(size, inBank);
 
   const header = (
     <CardHeader className="mb-3">
@@ -128,9 +185,6 @@ export function ExamSetupCard({
   }
 
   const sizes = allowedExamSizes(access.fullExam);
-  const requested = Math.min(size, left ?? Number.POSITIVE_INFINITY);
-  const count = Math.min(requested, questions.length);
-  const limitedByPlan = left !== null && left < Math.min(size, questions.length);
 
   const start = async () => {
     setBusy(true);
@@ -140,21 +194,26 @@ export function ExamSetupCard({
       // con lo concedido, que cabe completo, y conserva cuántas faltaron de lo pedido. Sin conexión se
       // arma solo con lo ya bajado (M2)
       const seed = newId();
+      const candidates = [...questions, ...(withEnglish ? englishQuestions : [])];
+      // El último plan que armó choose. Sin conexión vuelve a elegir de lo ya bajado y arma otro
+      const armed: { plan: ExamPlan | null } = { plan: null };
       const { ids, result, fromStored } = await chooseWithBodies({
         source,
-        candidates: questions,
+        candidates,
         purpose: 'exam',
-        choose: (from) =>
-          buildExam({
-            questions: from,
+        choose: (from) => {
+          armed.plan = buildExam({
+            questions: from.map(toExamQuestion),
             requested,
             seed,
-            branchWeights: examBranchWeights(topicTaxonomy),
-            excludeBranches: nonClinicalBranches(topicTaxonomy),
-          }).questionIds,
+            branchWeights: weights,
+            english: englishOptions,
+          });
+          return armed.plan.questionIds;
+        },
       });
       const ready = new Set(result.ready);
-      const chosen = questions.filter((question) => ready.has(question.id));
+      const chosen = candidates.filter((question) => ready.has(question.id));
       const reason = fromStored
         ? 'offline'
         : shortfallReason({
@@ -182,6 +241,8 @@ export function ExamSetupCard({
         questions: chosen,
         requested,
         options: { highlight, askConfidence, alerts },
+        english: englishOptions,
+        ...(armed.plan ? { plan: armed.plan } : {}),
       });
       if (state) void navigate(screenPath('exam'));
       else setFailed(text.startError);
@@ -210,6 +271,16 @@ export function ExamSetupCard({
             }}
           />
         </div>
+        {englishFlag ? (
+          <CheckboxField
+            label={englishText.exam.include}
+            hint={englishText.exam.includeHint}
+            checked={includeEnglish}
+            onChange={(event) => {
+              setIncludeEnglish(event.target.checked);
+            }}
+          />
+        ) : null}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           {left === 0 ? (
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
@@ -229,7 +300,16 @@ export function ExamSetupCard({
             </Button>
           )}
           <p className="text-sm text-fg-muted">
-            {count > 0 ? text.timeTotal(examTotalMs(count)) : t.simulator.noQuestions}
+            {count > 0 ? text.timeTotal(preview.totalMs) : t.simulator.noQuestions}
+            {count > 0 && preview.sections.english.picked > 0 ? (
+              <>
+                {' · '}
+                {englishText.exam.composition(
+                  preview.sections.clinical.picked,
+                  preview.sections.english.picked,
+                )}
+              </>
+            ) : null}
           </p>
         </div>
         {failed ? (
@@ -237,8 +317,15 @@ export function ExamSetupCard({
             {failed}
           </p>
         ) : null}
-        {size > questions.length && questions.length > 0 ? (
-          <p className="text-sm text-fg-muted">{text.shortfall(size, questions.length)}</p>
+        {preview.sections.clinical.shortfall > 0 && count > 0 ? (
+          <p className="text-sm text-fg-muted">{text.shortfall(size, count)}</p>
+        ) : null}
+        {englishFlag && includeEnglish ? (
+          <EnglishExamNotes
+            have={englishQuestions.length}
+            preview={preview}
+            min={thresholds.examMinItems}
+          />
         ) : null}
         {limitedByPlan ? <p className="text-sm text-fg-muted">{text.limitedTo(left)}</p> : null}
         {access.fullExam ? null : <p className="text-sm text-fg-muted">{text.fullLocked}</p>}
@@ -284,5 +371,38 @@ export function ExamSetupCard({
         ) : null}
       </div>
     </Card>
+  );
+}
+
+/**
+ * Lo que dice la tarjeta de la parte en inglés cuando hay pocos reactivos (3.7). Con menos de los que pide el
+ * umbral lleva la marca Calibrando y dice cuántos hay. Si no hay ninguno el examen es solo en español, y si
+ * hay algunos pero no alcanzan para los 30 dice cuántos traerá el examen, porque el español no los rellena
+ */
+function EnglishExamNotes({
+  have,
+  preview,
+  min,
+}: {
+  have: number;
+  preview: ExamPlan;
+  min: number;
+}) {
+  const copy = englishText.exam;
+  return (
+    <div className="flex flex-col gap-1.5">
+      {have < min ? (
+        <CalibratingNote current={have} target={min} unit={englishText.itemsUnit} />
+      ) : null}
+      {have === 0 ? (
+        <p role="status" className="text-sm font-medium text-fg">
+          {copy.onlySpanish}
+        </p>
+      ) : preview.sections.english.shortfall > 0 ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {copy.missing(preview.sections.english.picked, preview.sections.english.requested)}
+        </p>
+      ) : null}
+    </div>
   );
 }
