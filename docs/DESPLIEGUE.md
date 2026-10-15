@@ -192,6 +192,8 @@ Revisadas el 2026-10-15. Los sitios de documentación de Supabase no abren desde
 
 ## Lo que falta confirmar con la primera corrida real
 
+La primera corrida real fue el 2026-10-15 con el plan b10, todo en verde. Confirmó que database/query/read-only lee pg_proc, que POST database/migrations corre un archivo con begin y commit propios (party-dueno-al-borrar-cuenta.sql) y lo registra, que la respuesta es la lista de filas, que una función que no existe se detecta y se crea, y que cancel-subscription quedó ACTIVE con verify_jwt en true. Sigue sin probarse lo de abajo que no pasó en esa corrida, como un 400 de SQL y la Idempotency-Key repetida
+
 - Que un error de SQL en database/query y en database/query/read-only responda 400. La herramienta solo cuenta un 400 como comprobación en rojo antes de aplicar, y cualquier otro estado la detiene sin escribir
 - Que POST database/migrations con la misma Idempotency-Key no registre dos veces, como dice la especificación, y que GET database/migrations muestre el registro justo después de aplicar
 

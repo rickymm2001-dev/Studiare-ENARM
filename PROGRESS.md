@@ -6,7 +6,7 @@
 - Bloques. B0, B1 y B2 hechos, ver sus secciones. B3 a B7 y B9 avanzan en paralelo en worktrees fuera del repo y se unen a la rama de trabajo al cerrar cada bloque. Siguen B8 plan Gratis, B10 pagos, B11 banco en la nube y Google Sheets, B12 IA real, B13 inglés médico, B14 modelo del alumno, B15 analítica y recorrido, B16 legal, B17 publicación, B18 primeros alumnos y B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
-- Nube. El proyecto real de Supabase tiene el esquema completo, con las migraciones 1 a 12 y el archivo manual, tres funciones de pago desplegadas (create-checkout versión 15 con D-118, create-portal-session y payment-webhook-stripe) y los secretos de Stripe de prueba (D-113, D-118). La base todavía tiene las filas de la prueba de pagos de las dos cuentas de Ricardo, que se borran después de cancelar en Stripe
+- Nube. El proyecto real de Supabase tiene el esquema completo, con las migraciones 1 a 12 y el archivo manual, tres funciones de pago desplegadas (create-checkout versión 15 con D-118, create-portal-session y payment-webhook-stripe) y los secretos de Stripe de prueba (D-113, D-118). El 2026-10-15 se aplicó el plan b10 y se publicó cancel-subscription. Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
 - Inicio con el diseño fijo de Ricardo (D-116) y la barra superior con el menú lateral que se oculta (D-117)
 - Historia. Las fases 0 a L de abajo quedaron cerradas con la respuesta 98. Sus secciones se conservan como registro de lo hecho y de su evidencia, aunque digan que esperan aprobación
 
@@ -150,13 +150,14 @@ Evidencia
 - Revisión independiente con 12 hallazgos corregidos, entre ellos uno alto (lugares Fundador y prueba repetida al borrar la cuenta). Al borrar la cuenta ya no queda nada de la prueba ni del lugar Fundador que se ligue a la persona por Stripe
 - Evidencia. Typecheck, lint y formato limpios. Vitest con 3,564 pruebas. SQL en 21 archivos. E2e de nube 68 de 68 en teléfono y computadora, e2e normal en verde (rendimiento y sin conexión pasan solas con la máquina cargada) y audit:ui 20 de 20. JS inicial de 297.0 KB de 300
 - Capturas en docs/screenshots/v3/b10 (51)
-- Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
+- Desplegado en el proyecto real el 2026-10-15 con las llaves nuevas del entorno. Plan b10 en verde (pagos-b10.sql y el archivo de Party aplicados, 46 de 46 funciones iguales al repo, cancel-subscription v1). En Stripe de prueba los seis precios, el cupón y el código PRUEBA10, los dos portales, los ocho IDs en los secretos y el webhook nuevo de doce eventos con su secreto. Las tres suscripciones de prueba de Ricardo quedaron canceladas y reembolsadas, y sus avisos llegaron firmados
+- Pendiente. Borrar las filas de prueba de la base (falta la autorización directa de Ricardo), los escenarios con su navegador y su teléfono, las banderas freeTrial y cashPasses, los medios de pago y la cuenta de Mercado Pago
 
 ### Herramientas (D-131)
 - npm run deploy:supabase aplica el SQL, también las piezas con drop o delete, publica las funciones y pone los secretos desde el repo con el token de Supabase. Con el token, lo que falta de B10 son dos comandos (docs/DESPLIEGUE.md) y ya no pegas archivos en el SQL Editor
 - PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
 - Revisión independiente con 13 hallazgos, ninguno alto, todos corregidos con su prueba
-- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
+- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y, el 2026-10-15, contra el proyecto real con el plan b10, todo en verde. setup-test de Stripe corre ahora con la llave que pone el proxy del entorno y se detiene si Stripe no responde en modo prueba
 
 ### B11. Banco en la nube y Google Sheets (D-133)
 - Hecho. Banco en la nube con versiones y catálogo, tope de Gratis y freno de descargas en el servidor, sincronización con tu Sheet en una Edge Function, flujo editorial con revisión a ciegas, acuerdo y reporte de pagos por pregunta revisada, catálogo de mazos en Storage con la autorización del dueño, y la app del alumno con la fuente de la nube y estudio sin conexión con lo ya bajado
