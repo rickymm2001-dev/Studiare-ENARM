@@ -53,6 +53,13 @@ describe('reporte de renglones', () => {
     );
   });
 
+  it('avisa cuando el Sheet trae otro Revisor que el que reasignó el admin', () => {
+    expect(noticeMessage('reviewer_differs')).toBe(bankAdminText.sync.notices.reviewer_differs);
+    expect(noticeMessage('reviewer_differs')).not.toBe(
+      bankAdminText.sync.noticeOther('reviewer_differs'),
+    );
+  });
+
   it('un código que no conoce no rompe el reporte', () => {
     expect(problemMessage({ code: 'nuevo' as never, column: 'ID' })).toContain('nuevo');
     expect(noticeMessage('otro')).toContain('otro');

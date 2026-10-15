@@ -395,7 +395,16 @@ begin
         if not 'author_is_reviewer' = any (v_notices) then v_notices := array_append(v_notices, 'author_is_reviewer'); end if;
       end;
     end if;
-    if v_reviewer is not null then
+    -- Un revisor que el admin reasignó en la app no lo pisa el Sheet. La app gana y el reporte avisa
+    -- con reviewer_differs (B7 de la revisión). Uno que vino del Sheet o del revisor por omisión sí cambia
+    if v_reviewer is not null and exists (
+      select 1 from public.review_assignments a
+        join public.user_roles r on r.user_id = a.assigned_by and r.role in ('admin', 'owner')
+        where a.question_id = v_question_id and a.role = 'reviewer' and a.revoked_at is null
+          and a.physician_id <> v_reviewer
+    ) then
+      if not 'reviewer_differs' = any (v_notices) then v_notices := array_append(v_notices, 'reviewer_differs'); end if;
+    elsif v_reviewer is not null then
       begin
         perform public.bank_assign(v_question_id, 'reviewer', v_reviewer, null);
       exception when sqlstate 'BK003' then

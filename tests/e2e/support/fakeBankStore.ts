@@ -178,6 +178,8 @@ export interface FakeAssignment {
   role: 'author' | 'reviewer';
   assignedAt: string;
   revokedAt: string | null;
+  /** Quién asignó. null o sin valor si vino del Sheet o de una siembra */
+  assignedBy?: string | null;
 }
 
 export interface FakeDecision {

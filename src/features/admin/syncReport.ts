@@ -5,6 +5,7 @@
 // pregunta. Sin React ni Dexie.
 import type { SyncNoticeCode, SyncProblemCode, SyncRowResult } from '@/data/bank/contracts';
 import { bankAdminText } from '@/i18n/bankAdmin';
+import { SERVER_NOTICE_CODES, type ServerNoticeCode } from '@/data/cloud/bankAdmin';
 import { BOM } from '../physician/bankTemplates';
 import { csvCell } from './csvCell';
 
@@ -35,7 +36,7 @@ export const SYNC_PROBLEM_CODES = [
   'case_inconsistent',
 ] as const satisfies readonly SyncProblemCode[];
 
-/** Todos los avisos del contrato */
+/** Todos los avisos del contrato y los que solo pone la base */
 export const SYNC_NOTICE_CODES = [
   'topic_inferred',
   'kind_control_check',
@@ -49,7 +50,8 @@ export const SYNC_NOTICE_CODES = [
   'case_rows_apart',
   'language_unknown',
   'not_ready',
-] as const satisfies readonly SyncNoticeCode[];
+  ...SERVER_NOTICE_CODES,
+] as const satisfies readonly (SyncNoticeCode | ServerNoticeCode)[];
 
 // Si el contrato suma un código y esta lista no, esto deja de compilar
 type OnlyNever<T extends never> = T;
@@ -60,7 +62,7 @@ export type SyncCodesListed = [
 
 const isProblemCode = (code: string): code is SyncProblemCode =>
   (SYNC_PROBLEM_CODES as readonly string[]).includes(code);
-const isNoticeCode = (code: string): code is SyncNoticeCode =>
+const isNoticeCode = (code: string): code is SyncNoticeCode | ServerNoticeCode =>
   (SYNC_NOTICE_CODES as readonly string[]).includes(code);
 
 /** La frase de un motivo de rechazo */

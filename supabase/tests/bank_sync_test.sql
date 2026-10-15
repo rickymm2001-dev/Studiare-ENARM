@@ -223,6 +223,28 @@ select pg_temp.expect((select version from public.questions where id = pg_temp.l
   and (select sheet_row_hash = 'hash-2b' and sheet_applied_version_id = latest_version_id from public.bank_questions where question_id = :'q2'),
   'BS6. La versión nueva no quedó como borrador o sacó a la publicada');
 
+-- El Revisor del Sheet no pisa al revisor que el admin reasignó en la app. La app gana y el reporte
+-- avisa con reviewer_differs. Un revisor que vino del Sheet sí cambia con el Sheet (B7 de la revisión)
+begin;
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('cc000000-0000-0000-0000-0000000000d3', 'cc-d3@x.mx', '{"alias":"Tercera simulada"}');
+update public.user_roles set role = 'physician' where user_id = 'cc000000-0000-0000-0000-0000000000d3';
+insert into public.physician_codes (code, user_id) values ('TRS', 'cc000000-0000-0000-0000-0000000000d3');
+select pg_temp.latest(:'q2') as q2v2 \gset
+select public.bank_sync_begin('manual', 'real', :'ad') ->> 'runId' as r6b \gset
+select public.bank_sync_apply(:'r6b', jsonb_build_array(pg_temp.sync_row(3, 'GO-0002', 'meta_only', 'hash-2b', 'draft', 'PMS', 'TRS', :'q2v2')));
+select pg_temp.expect(public.bank_assignee(:'q2', 'reviewer') = 'cc000000-0000-0000-0000-0000000000d3'
+  and not (select 'reviewer_differs' = any (notices) from public.bank_sync_row_results where run_id = :'r6b' and row_number = 3),
+  'BS6. El Revisor del Sheet no cambió al revisor que vino del Sheet');
+select pg_temp.as_user(:'ad');
+select public.admin_assign_questions(array[:'q2']::uuid[], null, :'d2');
+reset role;
+select public.bank_sync_apply(:'r6b', jsonb_build_array(pg_temp.sync_row(3, 'GO-0002', 'meta_only', 'hash-2b', 'draft', 'PMS', 'TRS', :'q2v2')));
+select pg_temp.expect(public.bank_assignee(:'q2', 'reviewer') = :'d2', 'BS6. El Revisor del Sheet pisó la reasignación del admin');
+select pg_temp.expect((select notices from public.bank_sync_row_results where run_id = :'r6b' and row_number = 3
+    order by id desc limit 1) @> '{reviewer_differs}', 'BS6. El reporte no avisó que el Sheet dice otro revisor');
+rollback;
+
 -- ===================================================================== BS7. Conflicto
 -- Alguien guardó entre el plan y la escritura. El candado lo ve y no pisa nada
 select public.bank_sync_begin('manual', 'real', :'ad') ->> 'runId' as r7 \gset

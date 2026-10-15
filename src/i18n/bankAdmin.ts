@@ -6,6 +6,7 @@
 // la app carga al abrir. Solo los importan las pantallas del admin, perezosas. El menú y los títulos de
 // las pantallas viven en bankAdminNav.ts.
 import type { SyncNoticeCode, SyncProblemCode } from '@/data/bank/contracts';
+import type { ServerNoticeCode } from '@/data/cloud/bankAdmin';
 import { plural } from './features';
 
 const num = (value: number) => value.toLocaleString('es-MX');
@@ -54,8 +55,8 @@ const problems: Record<SyncProblemCode, (column: string, value?: string) => stri
     `El caso${quoted(value)} tiene órdenes repetidos, con huecos o sin el 1. Corrige Caso y Orden en el caso de todos sus renglones.`,
 };
 
-/** Cada aviso de un renglón que sí entra (3.4) */
-const notices: Record<SyncNoticeCode, string> = {
+/** Cada aviso de un renglón que sí entra (3.4), con los que solo pone la base */
+const notices: Record<SyncNoticeCode | ServerNoticeCode, string> = {
   topic_inferred: 'La subespecialidad se dedujo del subtema. El revisor la confirma al aprobar.',
   kind_control_check: 'Dice De control. El revisor confirma o corrige el tipo al aprobar.',
   structure_auto: 'La tarea o la polaridad se detectaron solas. Revísalas si no coinciden.',
@@ -74,6 +75,8 @@ const notices: Record<SyncNoticeCode, string> = {
   language_unknown: 'El Idioma no está en la lista. Quedó en español.',
   not_ready:
     'Pide Lista para revisión pero le faltan pendientes o un revisor distinto del autor. Quedó en borrador.',
+  reviewer_differs:
+    'El Revisor del Sheet no es el que asignó el admin en la app. Se quedó el de la app. Corrige el Revisor del Sheet o reasigna en Asignaciones.',
 };
 
 export const bankAdminText = {

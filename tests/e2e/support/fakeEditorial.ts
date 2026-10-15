@@ -30,6 +30,7 @@ import type {
   SyncRowPayload,
   SyncRowResult,
 } from '@/data/bank/contracts';
+import type { ServerNoticeCode } from '@/data/cloud/bankAdmin';
 import { versionIssues } from '@/data/content/questionRules';
 import type { Role } from '@/data/schemas/common';
 import { DeckManifestSchema, DECK_PART_MAX_BYTES } from '@/data/schemas/deckCatalog';
@@ -248,6 +249,7 @@ function assign(
   questionId: string,
   role: 'author' | 'reviewer',
   physicianId: string | null,
+  by: string | null = null,
 ): FakeBankReply | null {
   if (physicianId === null) return null;
   const at = iso(store);
@@ -267,10 +269,35 @@ function assign(
     current.role = role;
     current.assignedAt = at;
     current.revokedAt = null;
+    current.assignedBy = by;
   } else {
-    store.assignments.push({ questionId, physicianId, role, assignedAt: at, revokedAt: null });
+    store.assignments.push({
+      questionId,
+      physicianId,
+      role,
+      assignedAt: at,
+      revokedAt: null,
+      assignedBy: by,
+    });
   }
   return null;
+}
+
+/** El revisor vigente lo asignó un admin o el dueño y no es el del Sheet, como en bank_apply_row */
+function adminKeepsReviewer(
+  store: FakeBankStore,
+  questionId: string,
+  physicianId: string,
+): boolean {
+  return store.assignments.some(
+    (item) =>
+      item.questionId === questionId &&
+      item.role === 'reviewer' &&
+      item.revokedAt === null &&
+      item.physicianId !== physicianId &&
+      item.assignedBy != null &&
+      ['admin', 'owner'].includes(sideOf(store).directory?.(item.assignedBy)?.role ?? ''),
+  );
 }
 
 function assignOrRaise(
@@ -278,8 +305,9 @@ function assignOrRaise(
   questionId: string,
   role: 'author' | 'reviewer',
   physicianId: string | null,
+  by: string | null = null,
 ): void {
-  const reply = assign(store, questionId, role, physicianId);
+  const reply = assign(store, questionId, role, physicianId, by);
   if (reply) throw new Raise(reply);
 }
 
@@ -1298,8 +1326,8 @@ const adminAssignQuestions: Handler = (store, caller, args) => {
         item.revokedAt = at;
       }
     }
-    assignOrRaise(store, questionId, 'author', author);
-    assignOrRaise(store, questionId, 'reviewer', reviewer);
+    assignOrRaise(store, questionId, 'author', author, caller.userId);
+    assignOrRaise(store, questionId, 'reviewer', reviewer, caller.userId);
     question.updatedAt = at;
     changed += 1;
   }
@@ -1739,8 +1767,8 @@ function applyRow(
   const key = row.key.trim();
   let decision = key === '' ? 'rejected' : row.decision;
   const questionId = decision === 'rejected' ? null : stableUuid(`${origin}-q`, key);
-  const notices: SyncNoticeCode[] = [...row.notices];
-  const notice = (code: SyncNoticeCode) => {
+  const notices: (SyncNoticeCode | ServerNoticeCode)[] = [...row.notices];
+  const notice = (code: SyncNoticeCode | ServerNoticeCode) => {
     if (!notices.includes(code)) notices.push(code);
   };
   let author: string | null = null;
@@ -1847,6 +1875,15 @@ function applyRow(
       ['author', author],
       ['reviewer', reviewer],
     ] as const) {
+      // El revisor que reasignó el admin en la app no lo pisa el Sheet (B7 de la revisión)
+      if (
+        role === 'reviewer' &&
+        physician !== null &&
+        adminKeepsReviewer(store, questionId, physician)
+      ) {
+        notice('reviewer_differs');
+        continue;
+      }
       if (assign(store, questionId, role, physician)) notice('author_is_reviewer');
     }
     const question = store.questions.get(questionId);
@@ -1879,7 +1916,8 @@ function applyRow(
     sheetKey: key === '' ? null : key.slice(0, 60),
     outcome,
     incomplete: [...row.incomplete],
-    notices,
+    // La base guarda text[] y la app lo lee igual, con los avisos que solo pone la base
+    notices: notices as SyncNoticeCode[],
     problems: row.problems.map((problem): SyncProblem => ({ ...problem })),
     questionId,
   });

@@ -178,6 +178,14 @@ const SyncRunSchema = z.object({
   finishedAt: z.string().nullable(),
 }) satisfies z.ZodType<SyncRunSummary>;
 
+/**
+ * Avisos que solo pone la base al aplicar un renglón y que todavía no están en SyncNoticeCode de
+ * src/data/bank/contracts.ts. reviewer_differs dice que el Sheet trae otro Revisor que el que el admin
+ * reasignó en la app, y que se quedó el de la app (B7 de la revisión)
+ */
+export const SERVER_NOTICE_CODES = ['reviewer_differs'] as const;
+export type ServerNoticeCode = (typeof SERVER_NOTICE_CODES)[number];
+
 const SyncRowSchema = z.object({
   rowNumber: count.nullable(),
   sheetKey: z.string().nullable(),
