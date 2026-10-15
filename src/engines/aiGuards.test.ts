@@ -62,6 +62,102 @@ describe('texto', () => {
   });
 });
 
+describe('salud mental, atribuciones al alumno (B12, revisión del hallazgo 4)', () => {
+  // Las seis frases del informe. Antes pasaban todas, porque la guarda solo probaba las frases al
+  // alumno si la frase ya traía un término de la lista general
+  const attributed = [
+    'Te sientes triste por los errores.',
+    'Estás muy estresado con esto.',
+    'Se nota que estás agotado.',
+    'Tu ánimo no ayuda.',
+    'Tu estrés sube en las sesiones largas.',
+    'Pareces angustiado al contestar.',
+  ];
+
+  it('rechaza atribuirle un estado al alumno aunque la frase no traiga un término de la lista', () => {
+    for (const text of attributed) expect(mentionsMentalHealth(text), text).toBe(true);
+    for (const text of [
+      'Tienes mucho estrés con el examen.',
+      'Sufres de estrés cuando el reloj corre.',
+      'Sientes tristeza al fallar.',
+      'Eres muy ansioso con las preguntas largas.',
+      'Cuando estés estresada, respira.',
+      'Andas un poco agotada esta semana.',
+      'Te ves deprimido después de los simulacros.',
+      'Tu tristeza afecta tu ritmo.',
+    ]) {
+      expect(mentionsMentalHealth(text), text).toBe(true);
+    }
+  });
+
+  it('también las rechaza dentro de un texto más largo y aunque el banco hable de psiquiatría', () => {
+    const bank = 'Mujer con trastorno depresivo mayor, ansiedad y estrés postraumático.';
+    expect(
+      mentionsMentalHealth(
+        'Repasa la dosis de sertralina. Se nota que estás agotado. Sigue con las tarjetas.',
+        bank,
+      ),
+    ).toBe(true);
+    expect(mentionsMentalHealth('Tu ánimo no ayuda.', bank)).toBe(true);
+  });
+
+  it('no bloquea el estrés ni el ánimo cuando no son del alumno, ni el texto del banco', () => {
+    const bank =
+      'Mujer de 30 años con trastorno depresivo mayor, ansiedad y estrés postraumático. Recibe terapia cognitiva.';
+    for (const text of [
+      'El estrés oxidativo daña las membranas celulares.',
+      'Con estrés de tiempo, descarta primero las opciones imposibles.',
+      'Entrena el manejo del estrés ante el reloj del simulador.',
+      'El ánimo bajo es un criterio del trastorno depresivo mayor.',
+      'Una paciente triste y con anhedonia no descarta la ansiedad.',
+      'Confundes el trastorno depresivo mayor con la ansiedad.',
+      'La paciente estresada por el trabajo presenta insomnio.',
+      'Estas tarjetas están agotadas por hoy.',
+      'Estás cerca de terminar el repaso.',
+      'Eres capaz de resolver este tipo de pregunta.',
+      'Tienes que revisar la tabla de dosis.',
+      'Tu estrategia de descarte funciona.',
+      'Tu ritmo de estudio bajó esta semana.',
+      'Haz una pausa de cinco minutos cada hora.',
+    ]) {
+      expect(mentionsMentalHealth(text, bank), text).toBe(false);
+    }
+  });
+
+  it('las guardas de cada motor las rechazan con mental_health_opinion', () => {
+    const hypothesis = hypothesisInput();
+    const base: HypothesisOutput = {
+      hypothesis: 'Confundes los antibióticos de la neumonía típica con los de la atípica.',
+      evidence: ['q-01', 'q-02'],
+      confidence: 'low',
+      actions: ['create_contrast_card'],
+      studentMessage: 'Compara ambos tratamientos lado a lado. Fíjate en el dato que distingue.',
+    };
+    expect(guardHypothesis(base, hypothesis).passed).toBe(true);
+    const report = weeklyReportInput();
+    const goodReport = mockOutput('weekly_report', report);
+    const tipInput = biasTipInput();
+    const goodTip = mockOutput('bias_tips', tipInput);
+    for (const text of attributed) {
+      const message = `Compara ambos tratamientos lado a lado. ${text}`;
+      expect(
+        guardHypothesis({ ...base, studentMessage: message }, hypothesis).issues,
+        text,
+      ).toContain('mental_health_opinion');
+      expect(
+        guardWeeklyReport(
+          { ...goodReport, summary: `Respondiste varias preguntas. ${text}` },
+          report,
+        ).issues,
+        text,
+      ).toContain('mental_health_opinion');
+      expect(guardBiasTip({ ...goodTip, tip: text }, tipInput).issues, text).toContain(
+        'mental_health_opinion',
+      );
+    }
+  });
+});
+
 describe('predicción del puntaje (B12)', () => {
   it('detecta un puntaje estimado, una plaza o un percentil futuro', () => {
     for (const text of [

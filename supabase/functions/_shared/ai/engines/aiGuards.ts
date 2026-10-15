@@ -117,31 +117,42 @@ const result = (issues: Iterable<GuardIssue>): GuardResult => {
 const MENTAL_HEALTH_TERMS = String.raw`depresion|deprimid[oa]|ansiedad|ansios[oa]|trastorno|burnout|agotamiento emocional|estres cronico|salud mental|psicolog\w*|psiquiatr\w*|terapia|suicid\w*|panico|angustia|autoestima`;
 const MENTAL_HEALTH = new RegExp(String.raw`\b(${MENTAL_HEALTH_TERMS})\b`, 'g');
 /**
- * Una frase que le atribuye al alumno un estado de ánimo, como tienes ansiedad, estás deprimido o tu
- * autoestima (B12). Aunque el término venga en el texto del banco, eso ya es opinar sobre el alumno
+ * Lo que se le atribuye al alumno. Son los términos de arriba y además los que solo valen cuando la frase
+ * habla de él, como estresado, agotado, angustiado, triste, estrés o ánimo. Solos no cuentan, porque un
+ * estrés oxidativo o el estrés de tiempo del simulador son tema de estudio (B12, revisión del hallazgo 4)
+ */
+const STUDENT_STATE_TERMS = String.raw`${MENTAL_HEALTH_TERMS}|estres|tristeza`;
+const STUDENT_STATES = String.raw`deprimid[oa]|ansios[oa]|estresad[oa]|agotad[oa]|angustiad[oa]|triste`;
+/**
+ * Una frase que le atribuye al alumno un estado de ánimo, como tienes ansiedad, estás deprimido, te
+ * sientes triste o tu estrés (B12). Aunque el término venga en el texto del banco, eso ya es opinar sobre
+ * el alumno
  */
 const ABOUT_STUDENT = [
   new RegExp(
-    String.raw`\b(tienes|tengas|sientes|sufres|padeces|vives con|muestras) (de |un |una |mucha |mucho |cierta |cierto |algo de )?(${MENTAL_HEALTH_TERMS})\b`,
+    String.raw`\b(tienes|tengas|sientes|sufres|padeces|vives con|muestras) (de |un |una |mucha |mucho |cierta |cierto |algo de )?(${STUDENT_STATE_TERMS})\b`,
   ),
-  /\b(estas|estes|te sientes|te notas|te ves|pareces|eres|andas) (muy |algo |un poco |bastante )?(deprimid[oa]|ansios[oa]|estresad[oa]|agotad[oa]|angustiad[oa]|triste)\b/,
-  new RegExp(String.raw`\btu (${MENTAL_HEALTH_TERMS}|estres|animo)\b`),
+  new RegExp(
+    String.raw`\b(estas|estes|te sientes|te notas|te ves|pareces|eres|andas) (muy |algo |un poco |bastante )?(${STUDENT_STATES})\b`,
+  ),
+  new RegExp(String.raw`\btu (${STUDENT_STATE_TERMS}|animo)\b`),
 ];
 
 /**
  * Si el texto opina sobre la salud mental del alumno. Un término de salud mental cuenta si no viene
  * en el apoyo, que es el texto del banco o los datos que recibió el motor, o si la frase se lo
- * atribuye al alumno. Así un tema de psiquiatría del banco o una terapia intensiva se pueden repetir
- * y "parece que tienes ansiedad" nunca pasa (B12, para no rechazar el banco imperfecto, D-080)
+ * atribuye al alumno, tenga o no un término de la lista. Así un tema de psiquiatría del banco o una
+ * terapia intensiva se pueden repetir y "parece que tienes ansiedad" o "estás muy estresado" nunca
+ * pasan (B12, para no rechazar el banco imperfecto, D-080)
  */
 export function mentionsMentalHealth(text: string, support = ''): boolean {
   const supported = new Set(normalizeForMatch(support).match(MENTAL_HEALTH) ?? []);
   return sentencesOf(text).some((raw) => {
     const sentence = normalizeForMatch(raw);
-    const terms = sentence.match(MENTAL_HEALTH) ?? [];
-    if (terms.length === 0) return false;
+    // Antes esto se probaba solo si la frase traía un término de la lista, y "estás muy estresado" o
+    // "tu ánimo" nunca llegaban hasta aquí
     if (ABOUT_STUDENT.some((pattern) => pattern.test(sentence))) return true;
-    return terms.some((term) => !supported.has(term));
+    return (sentence.match(MENTAL_HEALTH) ?? []).some((term) => !supported.has(term));
   });
 }
 
