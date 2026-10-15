@@ -364,13 +364,16 @@ function biasTipCases(
   return Array.from({ length: options.perEngine }, (_, index): GoldenCase<'bias_tips'> => {
     const entry = withExamples[index % Math.max(1, withExamples.length)];
     if (!entry) throw new Error('El banco no tiene trampas con al menos dos ejemplos');
-    const picked = entry.examples
-      .filter(
-        (example, position, all) =>
-          all.findIndex((other) => other.question.key === example.question.key) === position,
-      )
-      .slice(0, 2 + (index % 2));
-    const vocabulary = VOCABULARIES[index % VOCABULARIES.length];
+    const unique = entry.examples.filter(
+      (example, position, all) =>
+        all.findIndex((other) => other.question.key === example.question.key) === position,
+    );
+    // Cada vuelta por la lista de trampas usa otros ejemplos y otro vocabulario, para no repetir
+    const round = Math.floor(index / Math.max(1, withExamples.length));
+    const count = 2 + ((index + round) % 2);
+    const start = (round * count) % unique.length;
+    const picked = [...unique.slice(start), ...unique.slice(0, start)].slice(0, count);
+    const vocabulary = VOCABULARIES[(index + round) % VOCABULARIES.length];
     const input: BiasTipInput = {
       biasKey: clip(entry.bias.key, 60),
       biasLabel: clip(entry.bias.label, 80),
