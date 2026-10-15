@@ -87,7 +87,6 @@ export const englishText = {
     missing: (have: number, wanted: number) =>
       `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que trae el examen real. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
     navigatorTag: 'Inglés',
-    itemTag: 'Inglés médico',
   },
 
   // Resultados del examen por sección (3.6)
