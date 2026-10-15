@@ -41,6 +41,32 @@ describe('rama y tema de un submazo', () => {
     });
   });
 
+  it('los submazos del mazo de vocabulario en inglés son del tema de vocabulario médico (B13)', () => {
+    for (const root of ['Inglés_médico', 'Inglés médico', 'Ingles-medico']) {
+      expect(propose([root, 'Corazón_y_circulación']), root).toEqual({
+        branch: 'medical_english',
+        topic: 'medical_vocabulary',
+      });
+    }
+    // Un submazo con el nombre del otro tema de la rama sigue yendo a ese tema
+    expect(propose(['Inglés médico', 'Comprensión de lectura'])).toEqual({
+      branch: 'medical_english',
+      topic: 'reading_comprehension',
+    });
+    // Sin ese tema en la rama, o en una rama de español, no se propone
+    expect(
+      proposeDeckTopic(['Inglés médico', 'Infecciones'], {
+        branches: [
+          { key: 'medical_english', name: 'Inglés médico', section: 'english', topics: [] },
+        ],
+      }),
+    ).toEqual({ branch: 'medical_english', topic: null });
+    expect(propose(['Pediatría', 'Corazón_y_circulación'])).toEqual({
+      branch: 'pediatrics',
+      topic: null,
+    });
+  });
+
   it('lo que no se encuentra queda sin tema para que el admin lo elija', () => {
     expect(propose(['Mazo', 'Cosas varias'])).toEqual({ branch: null, topic: null });
     expect(propose(['Urgencias', 'Toxicología'])).toEqual({ branch: null, topic: null });

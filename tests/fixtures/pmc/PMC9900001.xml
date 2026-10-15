@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [Prueba] Artículo simulado con la forma de JATS de PubMed Central. Nada de esto es contenido médico -->
+<pmc-articleset>
+  <article xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+    <front>
+      <journal-meta>
+        <journal-title-group><journal-title>[Prueba] Journal of Simulated Things</journal-title></journal-title-group>
+      </journal-meta>
+      <article-meta>
+        <article-id pub-id-type="pmcid">PMC9900001</article-id>
+        <article-id pub-id-type="doi">10.0000/prueba.1</article-id>
+        <title-group><article-title>[Prueba] A simulated &amp; short title</article-title></title-group>
+        <contrib-group>
+          <contrib contrib-type="author"><name><surname>Prueba</surname><given-names>Ana</given-names></name></contrib>
+          <contrib contrib-type="author"><name><surname>Simulado</surname><given-names>Beto</given-names></name></contrib>
+        </contrib-group>
+        <permissions>
+          <copyright-statement>© [Prueba]</copyright-statement>
+          <license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
+            <ali:license_ref>https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+            <license-p>[Prueba] Open access under a Creative Commons license.</license-p>
+          </license>
+        </permissions>
+        <abstract>
+          <sec><title>Background</title><p>[Prueba] Simulated background with <italic>italic</italic> text.</p></sec>
+          <sec><title>Methods</title><p>[Prueba] Simulated methods &amp; a second sentence.</p><p>[Prueba] Another paragraph.</p></sec>
+        </abstract>
+      </article-meta>
+    </front>
+    <body><sec><title>Introduction</title><p>[Prueba] Body text that must not be copied.</p></sec></body>
+  </article>
+</pmc-articleset>

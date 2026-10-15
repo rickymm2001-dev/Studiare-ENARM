@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  [Prueba] Muestra simulada con la forma del archivo de temas de salud de MedlinePlus (health-topics).
+  Todos los nombres son inventados para las pruebas y no son contenido médico. Los temas reales salen
+  del XML que se baja a mano de https://medlineplus.gov/xml.html
+-->
+<health-topics total="12" date-generated="10/01/2026 00:00:00">
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Alpha Topic" url="https://medlineplus.gov/prueba-alpha.html" id="9001" language="English" date-created="01/01/2020">
+    <also-called>[Prueba] Alias A1</also-called>
+    <also-called>[Prueba] Alias &amp; A2</also-called>
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <group id="901" url="https://medlineplus.gov/pruebagroupone.html">[Prueba] Group One</group>
+    <group id="902" url="https://medlineplus.gov/pruebagrouptwo.html">[Prueba] Group Two</group>
+    <language-mapped-topic id="9101" language="Spanish" title="[Prueba] Tema Alfa" url="https://medlineplus.gov/spanish/prueba-alpha.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Beta &amp; Gamma" url="https://medlineplus.gov/prueba-beta.html" id="9002" language="English" date-created="01/01/2020">
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <group id="901" url="https://medlineplus.gov/pruebagroupone.html">[Prueba] Group One</group>
+    <language-mapped-topic id="9102" language="Spanish" title="[Prueba] Beta y Gamma" url="https://medlineplus.gov/spanish/prueba-beta.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Delta Sin Par" url="https://medlineplus.gov/prueba-delta.html" id="9003" language="English" date-created="01/01/2020">
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <group id="901" url="https://medlineplus.gov/pruebagroupone.html">[Prueba] Group One</group>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Epsilon Sin Grupo" url="https://medlineplus.gov/prueba-epsilon.html" id="9004" language="English" date-created="01/01/2020">
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <language-mapped-topic id="9104" language="Spanish" title="[Prueba] Tema Épsilon" url="https://medlineplus.gov/spanish/prueba-epsilon.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="  [Prueba] Zeta   Topic  " url="https://medlineplus.gov/prueba-zeta.html" id="9005" language="English" date-created="01/01/2020">
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <group id="903" url="https://medlineplus.gov/pruebagroupthree.html">[Prueba] Group Three</group>
+    <language-mapped-topic id="9105" language="Spanish" title="[Prueba] Tema Zeta" url="https://medlineplus.gov/spanish/prueba-zeta.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Alpha Repetido" url="https://medlineplus.gov/prueba-repetido.html" id="9001" language="English" date-created="01/01/2020">
+    <group id="901" url="https://medlineplus.gov/pruebagroupone.html">[Prueba] Group One</group>
+    <language-mapped-topic id="9101" language="Spanish" title="[Prueba] Tema Repetido" url="https://medlineplus.gov/spanish/prueba-repetido.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="" url="https://medlineplus.gov/prueba-vacio.html" id="9007" language="English" date-created="01/01/2020">
+    <group id="901" url="https://medlineplus.gov/pruebagroupone.html">[Prueba] Group One</group>
+    <language-mapped-topic id="9107" language="Spanish" title="[Prueba] Tema Vacío" url="https://medlineplus.gov/spanish/prueba-vacio.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Eta Con Etiquetas" url="https://medlineplus.gov/prueba-eta.html" id="9008" language="English" date-created="01/01/2020">
+    <also-called>[Prueba] &lt;i&gt;Alias&lt;/i&gt; E &amp;amp; F</also-called>
+    <also-called>[Prueba] Alias A1</also-called>
+    <also-called>   </also-called>
+    <group id="902" url="https://medlineplus.gov/pruebagrouptwo.html">[Prueba] Group Two</group>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Theta" url="https://medlineplus.gov/prueba-theta.html" id="9009" language="English" date-created="01/01/2020">
+    <group id="902" url="https://medlineplus.gov/pruebagrouptwo.html">[Prueba] Group Two</group>
+    <language-mapped-topic id="9109" language="Spanish" title="[Prueba] Theta" url="https://medlineplus.gov/spanish/prueba-theta.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Tema Alfa" url="https://medlineplus.gov/spanish/prueba-alpha.html" id="9101" language="Spanish" date-created="01/01/2020">
+    <also-called>[Prueba] Alias A en español</also-called>
+    <also-called>[Prueba] Otro nombre A</also-called>
+    <full-summary>&lt;p&gt;[Prueba] Resumen simulado.&lt;/p&gt;</full-summary>
+    <group id="901" url="https://medlineplus.gov/spanish/pruebagroupone.html">[Prueba] Grupo Uno</group>
+    <group id="902" url="https://medlineplus.gov/spanish/pruebagrouptwo.html">[Prueba] Grupo Dos</group>
+    <language-mapped-topic id="9001" language="English" title="[Prueba] Alpha Topic" url="https://medlineplus.gov/prueba-alpha.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Beta y Gamma" url="https://medlineplus.gov/spanish/prueba-beta.html" id="9102" language="Spanish" date-created="01/01/2020">
+    <group id="901" url="https://medlineplus.gov/spanish/pruebagroupone.html">[Prueba] Grupo Uno</group>
+    <language-mapped-topic id="9002" language="English" title="[Prueba] Beta &amp; Gamma" url="https://medlineplus.gov/prueba-beta.html"/>
+  </health-topic>
+  <health-topic meta-desc="[Prueba] resumen" title="[Prueba] Tema Eta" url="https://medlineplus.gov/spanish/prueba-eta.html" id="9108" language="Spanish" date-created="01/01/2020">
+    <also-called>[Prueba] Nombre eta</also-called>
+    <group id="902" url="https://medlineplus.gov/spanish/pruebagrouptwo.html">[Prueba] Grupo Dos</group>
+    <language-mapped-topic id="9008" language="English" title="[Prueba] Eta Con Etiquetas" url="https://medlineplus.gov/prueba-eta.html"/>
+  </health-topic>
+</health-topics>

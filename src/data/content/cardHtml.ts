@@ -1,5 +1,6 @@
 // Saneado del HTML de tarjetas (14.3). Lista corta de etiquetas, sin estilos, sin enlaces y sin
-// atributos salvo src y alt de las imágenes. Las imágenes solo se conservan si su archivo existe
+// atributos salvo src y alt de las imágenes y lang con es o en, para que el lector de pantalla diga bien
+// un término en inglés (mazo de vocabulario de B13). Las imágenes solo se conservan si su archivo existe
 // en el mapa de medios, y su ruta se reescribe. Lo usan el script que convierte los mazos de Paco
 // (D-053) y, en la Fase E, el importador de .apkg. Recibe la ventana del DOM para poder correr en el
 // navegador y en Node con jsdom.
@@ -46,6 +47,11 @@ export function createCardSanitizer(window: WindowLike): CardSanitizer {
   let resolver: (file: string) => string | null = () => null;
   // La ruta se reescribe antes de que DOMPurify valide el URI, así solo pasan rutas del mapa
   purify.addHook('uponSanitizeAttribute', (node, data) => {
+    // El idioma de un término. Solo los dos del producto, con o sin región, y nada más en lang
+    if (data.attrName === 'lang') {
+      if (!/^(?:en|es)(?:-[A-Za-z]{2})?$/.test(data.attrValue)) data.keepAttr = false;
+      return;
+    }
     if (node.nodeName !== 'IMG' || data.attrName !== 'src') return;
     let file = data.attrValue;
     try {
@@ -74,7 +80,7 @@ export function createCardSanitizer(window: WindowLike): CardSanitizer {
         return purify
           .sanitize(html, {
             ALLOWED_TAGS: [...CARD_ALLOWED_TAGS],
-            ALLOWED_ATTR: ['src', 'alt'],
+            ALLOWED_ATTR: ['src', 'alt', 'lang'],
             ALLOW_DATA_ATTR: false,
             ALLOWED_URI_REGEXP: /^[\w./-]+$/,
           })
