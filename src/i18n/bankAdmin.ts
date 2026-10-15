@@ -75,6 +75,8 @@ const notices: Record<SyncNoticeCode | ServerNoticeCode, string> = {
   language_unknown: 'El Idioma no está en la lista. Quedó en español.',
   not_ready:
     'Pide Lista para revisión pero le faltan pendientes o un revisor distinto del autor. Quedó en borrador.',
+  author_differs:
+    'El Autor del Sheet no es el que asignó el admin en la app. Se quedó el de la app. Corrige el Autor del Sheet o reasigna en Asignaciones.',
   reviewer_differs:
     'El Revisor del Sheet no es el que asignó el admin en la app. Se quedó el de la app. Corrige el Revisor del Sheet o reasigna en Asignaciones.',
 };

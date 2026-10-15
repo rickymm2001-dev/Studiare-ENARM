@@ -283,16 +283,17 @@ function assign(
   return null;
 }
 
-/** El revisor vigente lo asignó un admin o el dueño y no es el del Sheet, como en bank_apply_row */
-function adminKeepsReviewer(
+/** El papel vigente lo asignó un admin o el dueño y no es el del Sheet, como bank_admin_assigned_other */
+function adminAssignedOther(
   store: FakeBankStore,
   questionId: string,
+  role: 'author' | 'reviewer',
   physicianId: string,
 ): boolean {
   return store.assignments.some(
     (item) =>
       item.questionId === questionId &&
-      item.role === 'reviewer' &&
+      item.role === role &&
       item.revokedAt === null &&
       item.physicianId !== physicianId &&
       item.assignedBy != null &&
@@ -1876,13 +1877,9 @@ function applyRow(
       ['author', author],
       ['reviewer', reviewer],
     ] as const) {
-      // El revisor que reasignó el admin en la app no lo pisa el Sheet (B7 de la revisión)
-      if (
-        role === 'reviewer' &&
-        physician !== null &&
-        adminKeepsReviewer(store, questionId, physician)
-      ) {
-        notice('reviewer_differs');
+      // El autor o el revisor que reasignó el admin en la app no lo pisa el Sheet (B7 de la revisión)
+      if (physician !== null && adminAssignedOther(store, questionId, role, physician)) {
+        notice(role === 'author' ? 'author_differs' : 'reviewer_differs');
         continue;
       }
       if (assign(store, questionId, role, physician)) notice('author_is_reviewer');

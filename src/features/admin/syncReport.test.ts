@@ -53,11 +53,11 @@ describe('reporte de renglones', () => {
     );
   });
 
-  it('avisa cuando el Sheet trae otro Revisor que el que reasignó el admin', () => {
-    expect(noticeMessage('reviewer_differs')).toBe(bankAdminText.sync.notices.reviewer_differs);
-    expect(noticeMessage('reviewer_differs')).not.toBe(
-      bankAdminText.sync.noticeOther('reviewer_differs'),
-    );
+  it('avisa cuando el Sheet trae otro Autor u otro Revisor que el que reasignó el admin', () => {
+    for (const code of ['author_differs', 'reviewer_differs'] as const) {
+      expect(noticeMessage(code)).toBe(bankAdminText.sync.notices[code]);
+      expect(noticeMessage(code)).not.toBe(bankAdminText.sync.noticeOther(code));
+    }
   });
 
   it('un código que no conoce no rompe el reporte', () => {

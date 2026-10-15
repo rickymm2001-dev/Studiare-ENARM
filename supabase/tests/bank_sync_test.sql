@@ -47,6 +47,7 @@ begin
   end loop;
   foreach f in array array['public.bank_sync_settings()', 'public.bank_sync_problems(jsonb)', 'public.bank_text_array(jsonb)',
       'public.bank_sheet_content(text, text, jsonb)', 'public.bank_apply_row(uuid, text, jsonb, boolean)',
+      'public.bank_admin_assigned_other(uuid, text, uuid)',
       'public.bank_sync_run_json(public.bank_sync_runs)'] loop
     foreach r in array array['anon', 'authenticated', 'service_role'] loop
       if has_function_privilege(r, f, 'execute') then raise exception 'FALLA BS1. % ejecuta la ayuda interna %', r, f; end if;
@@ -223,8 +224,8 @@ select pg_temp.expect((select version from public.questions where id = pg_temp.l
   and (select sheet_row_hash = 'hash-2b' and sheet_applied_version_id = latest_version_id from public.bank_questions where question_id = :'q2'),
   'BS6. La versión nueva no quedó como borrador o sacó a la publicada');
 
--- El Revisor del Sheet no pisa al revisor que el admin reasignó en la app. La app gana y el reporte
--- avisa con reviewer_differs. Un revisor que vino del Sheet sí cambia con el Sheet (B7 de la revisión)
+-- El Revisor y el Autor del Sheet no pisan a quien el admin reasignó en la app. La app gana y el reporte
+-- avisa con reviewer_differs o author_differs. Quien vino del Sheet sí cambia con el Sheet (B7 de la revisión)
 begin;
 insert into auth.users (id, email, raw_user_meta_data)
   values ('cc000000-0000-0000-0000-0000000000d3', 'cc-d3@x.mx', '{"alias":"Tercera simulada"}');
@@ -243,6 +244,23 @@ select public.bank_sync_apply(:'r6b', jsonb_build_array(pg_temp.sync_row(3, 'GO-
 select pg_temp.expect(public.bank_assignee(:'q2', 'reviewer') = :'d2', 'BS6. El Revisor del Sheet pisó la reasignación del admin');
 select pg_temp.expect((select notices from public.bank_sync_row_results where run_id = :'r6b' and row_number = 3
     order by id desc limit 1) @> '{reviewer_differs}', 'BS6. El reporte no avisó que el Sheet dice otro revisor');
+-- Lo mismo con el Autor (caso hermano de B7). Una autora que vino del Sheet sí cambia con el Sheet
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('cc000000-0000-0000-0000-0000000000d4', 'cc-d4@x.mx', '{"alias":"Cuarta simulada"}');
+update public.user_roles set role = 'physician' where user_id = 'cc000000-0000-0000-0000-0000000000d4';
+insert into public.physician_codes (code, user_id) values ('CUS', 'cc000000-0000-0000-0000-0000000000d4');
+select public.bank_sync_apply(:'r6b', jsonb_build_array(pg_temp.sync_row(3, 'GO-0002', 'meta_only', 'hash-2b', 'draft', 'CUS', 'TRS', :'q2v2')));
+select pg_temp.expect(public.bank_assignee(:'q2', 'author') = 'cc000000-0000-0000-0000-0000000000d4'
+  and not (select 'author_differs' = any (notices) from public.bank_sync_row_results where run_id = :'r6b' and row_number = 3
+    order by id desc limit 1),
+  'BS6. El Autor del Sheet no cambió a la autora que vino del Sheet');
+select pg_temp.as_user(:'ad');
+select public.admin_assign_questions(array[:'q2']::uuid[], :'d1', null);
+reset role;
+select public.bank_sync_apply(:'r6b', jsonb_build_array(pg_temp.sync_row(3, 'GO-0002', 'meta_only', 'hash-2b', 'draft', 'CUS', 'TRS', :'q2v2')));
+select pg_temp.expect(public.bank_assignee(:'q2', 'author') = :'d1', 'BS6. El Autor del Sheet pisó la reasignación del admin');
+select pg_temp.expect((select notices from public.bank_sync_row_results where run_id = :'r6b' and row_number = 3
+    order by id desc limit 1) @> '{author_differs}', 'BS6. El reporte no avisó que el Sheet dice otro autor');
 rollback;
 
 -- ===================================================================== BS7. Conflicto

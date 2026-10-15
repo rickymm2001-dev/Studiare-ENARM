@@ -277,6 +277,19 @@ language sql immutable set search_path = public, pg_temp as $$
   )
 $$;
 
+-- Si el papel vigente de la pregunta lo asignó un admin o el dueño en la app y es otro médico que el del
+-- Sheet. Entonces el Sheet no lo pisa (B7 de la revisión)
+create or replace function public.bank_admin_assigned_other(p_question_id uuid, p_role text, p_physician uuid)
+returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select exists (
+    select 1 from public.review_assignments a
+      join public.user_roles r on r.user_id = a.assigned_by and r.role in ('admin', 'owner')
+      where a.question_id = p_question_id and a.role = p_role and a.revoked_at is null
+        and a.physician_id <> p_physician
+  )
+$$;
+
 -- Aplica un renglón ya planeado, o solo lo reporta. p_origin es sheet o import. Devuelve
 -- {rowNumber, outcome, questionId}
 create or replace function public.bank_apply_row(p_run uuid, p_origin text, p_row jsonb, p_apply boolean)
@@ -388,21 +401,19 @@ begin
 
   -- Autor, Revisor y Estado, salvo en un conflicto, que espera a que alguien lo resuelva
   if p_apply and v_decision in ('create', 'version', 'converged', 'meta_only') then
-    if v_author is not null then
+    -- Un autor o un revisor que el admin reasignó en la app no lo pisa el Sheet. La app gana y el reporte
+    -- avisa con author_differs o reviewer_differs (B7 de la revisión). Quien vino del Sheet o del revisor
+    -- por omisión sí cambia con el Sheet
+    if v_author is not null and public.bank_admin_assigned_other(v_question_id, 'author', v_author) then
+      if not 'author_differs' = any (v_notices) then v_notices := array_append(v_notices, 'author_differs'); end if;
+    elsif v_author is not null then
       begin
         perform public.bank_assign(v_question_id, 'author', v_author, null);
       exception when sqlstate 'BK003' then
         if not 'author_is_reviewer' = any (v_notices) then v_notices := array_append(v_notices, 'author_is_reviewer'); end if;
       end;
     end if;
-    -- Un revisor que el admin reasignó en la app no lo pisa el Sheet. La app gana y el reporte avisa
-    -- con reviewer_differs (B7 de la revisión). Uno que vino del Sheet o del revisor por omisión sí cambia
-    if v_reviewer is not null and exists (
-      select 1 from public.review_assignments a
-        join public.user_roles r on r.user_id = a.assigned_by and r.role in ('admin', 'owner')
-        where a.question_id = v_question_id and a.role = 'reviewer' and a.revoked_at is null
-          and a.physician_id <> v_reviewer
-    ) then
+    if v_reviewer is not null and public.bank_admin_assigned_other(v_question_id, 'reviewer', v_reviewer) then
       if not 'reviewer_differs' = any (v_notices) then v_notices := array_append(v_notices, 'reviewer_differs'); end if;
     elsif v_reviewer is not null then
       begin
@@ -633,6 +644,7 @@ revoke all on function public.bank_sync_settings() from public, anon, authentica
 revoke all on function public.bank_sync_problems(jsonb) from public, anon, authenticated, service_role;
 revoke all on function public.bank_text_array(jsonb) from public, anon, authenticated, service_role;
 revoke all on function public.bank_sheet_content(text, text, jsonb) from public, anon, authenticated, service_role;
+revoke all on function public.bank_admin_assigned_other(uuid, text, uuid) from public, anon, authenticated, service_role;
 revoke all on function public.bank_apply_row(uuid, text, jsonb, boolean) from public, anon, authenticated, service_role;
 revoke all on function public.bank_sync_run_json(public.bank_sync_runs) from public, anon, authenticated, service_role;
 -- Del servidor, solo con la llave de servicio
