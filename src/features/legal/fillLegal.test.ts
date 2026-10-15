@@ -66,14 +66,16 @@ describe('textos legales', () => {
 
   it('las versiones se comparan como texto, así que 2026-10-14b va después de 2026-10-14 (B9)', () => {
     // Como noticeNeedsAcceptance (<) y acceptedNoticeVersion (sort) en src/data/usecases/profile.ts
-    const version: string = PRIVACY_NOTICE_VERSION;
-    expect(version > '2026-10-14').toBe(true);
-    expect(version < '2026-10-15').toBe(true);
-    expect(['2026-10-15', version, '2026-10-14'].sort()).toEqual([
+    expect('2026-10-14b' > '2026-10-14').toBe(true);
+    expect('2026-10-14b' < '2026-10-15').toBe(true);
+    expect(['2026-10-15', '2026-10-14b', '2026-10-14'].sort()).toEqual([
       '2026-10-14',
-      version,
+      '2026-10-14b',
       '2026-10-15',
     ]);
+    // La versión vigente nunca queda antes de la de B9, para que quien aceptó una anterior lo vuelva a ver
+    const version: string = PRIVACY_NOTICE_VERSION;
+    expect(version >= '2026-10-14b').toBe(true);
   });
 
   it('dice qué se guarda al entrar con Google, de cómo nos conociste y de la edad (B9)', () => {
