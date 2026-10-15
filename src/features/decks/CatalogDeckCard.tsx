@@ -38,6 +38,7 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { ErrorState, LoadingState } from '@/ui/states/states';
 import type { ReadySession } from '../shared/RequireSession';
 import { CatalogLockNotice, CatalogRowLock } from './CatalogLock';
+import { deckSourceOf, isEnglishDeck } from './deckSource';
 
 type CatalogState =
   | { status: 'loading' }
@@ -153,6 +154,16 @@ function CatalogDeckCard({
   const hasUpdate = deck.subjects.some((subject) => states.get(subject.subjectKey) === 'update');
   const pendingBytes = pending.reduce((sum, subject) => sum + subject.bytes, 0);
   const branch = deck.subjects.find((subject) => subject.branch)?.branch ?? deck.deckKey;
+  // Un mazo de una fuente pública, como el vocabulario de MedlinePlus, dice su fuente y su licencia en
+  // lugar del crédito de un autor, y sus notas de muestra se leen en inglés (B13, 4.4 y 8.16)
+  const source = deckSourceOf({
+    key: deck.deckKey,
+    branches: deck.subjects.map((subject) => subject.branch),
+    topics: deck.subjects.map((subject) => subject.topic),
+  });
+  const lang = isEnglishDeck({ branches: deck.subjects.map((subject) => subject.branch) })
+    ? 'en'
+    : undefined;
 
   const download = async (subjects: readonly DeckCatalogSubjectInfo[], label: string) => {
     const cloud = getCloud();
@@ -211,7 +222,9 @@ function CatalogDeckCard({
       <div className="flex min-w-0 flex-col gap-2">
         <div className="flex min-w-0 flex-col">
           <h3 className="font-semibold">{deck.name}</h3>
-          <span className="text-xs text-fg-muted sm:text-sm">{t.decks.author(deck.author)}</span>
+          <span className="text-xs text-fg-muted sm:text-sm">
+            {source ? text.source.line(source.name, source.license) : t.decks.author(deck.author)}
+          </span>
           <span className="text-sm text-fg-muted">
             {text.totals(deck.notes, fileSize(deck.bytes))}
           </span>
@@ -296,6 +309,11 @@ function CatalogDeckCard({
               );
             })}
           </ul>
+          {source ? (
+            <p className="text-xs text-fg-muted">
+              {text.source.topicsFooter(source.name, source.license)}
+            </p>
+          ) : null}
         </Disclosure>
         {!canDownload && deck.preview.length > 0 ? (
           <Disclosure title={text.preview} summary={text.previewHint}>
@@ -304,7 +322,9 @@ function CatalogDeckCard({
                 <li key={index} className="rounded-md border border-line p-3 text-sm">
                   {note.kind === 'basic' ? (
                     <>
-                      <p className="font-medium">{plainText(note.front)}</p>
+                      <p className="font-medium" lang={lang}>
+                        {plainText(note.front)}
+                      </p>
                       <p className="mt-1 text-fg-muted">{plainText(note.back)}</p>
                     </>
                   ) : (

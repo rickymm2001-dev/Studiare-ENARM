@@ -83,4 +83,21 @@ describe('temas de un mazo', () => {
     ).toEqual(['Artritis reumatoide', LONG, 'Lupus eritematoso sistémico']);
     expect(screen.getByText(t.deckTopics.untagged(1))).toBeVisible();
   });
+
+  it('un mazo de una fuente pública dice su fuente al pie de la lista, plegado o abierto (B13)', async () => {
+    const typing = userEvent.setup();
+    const footer = 'Fuente MedlinePlus.gov (NLM). Dominio público.';
+    const folded = render(<DeckTopics deckName="Vocabulario" outline={outline} source={footer} />);
+    await typing.click(screen.getByText(t.deckTopics.title));
+    expect(screen.getByText(footer)).toBeVisible();
+    folded.unmount();
+    render(
+      <DeckTopics deckName="Vocabulario" outline={outline} collapsible={false} source={footer} />,
+    );
+    expect(screen.getByText(footer)).toBeVisible();
+    cleanup();
+    // Sin fuente, como los mazos de Paco, no pinta nada de más
+    render(<DeckTopics deckName="Vocabulario" outline={outline} collapsible={false} />);
+    expect(screen.queryByText(footer)).toBeNull();
+  });
 });
