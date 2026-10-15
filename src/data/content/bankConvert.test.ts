@@ -552,6 +552,25 @@ describe('Inglés médico (B13, 1.5 y 1.6 del plan de B13)', () => {
     expect(result.question).toMatchObject({ task: 'diagnosis', structureDeclared: true });
   });
 
+  it('la polaridad se detecta con las negaciones en inglés y la del médico gana', () => {
+    expect(onlyEnglish().question?.polarity).toBe('affirmative');
+    const negative = onlyEnglish({
+      [HEADERS.prompt]: '[Prueba] Which of these is NOT in the text?',
+    });
+    expect(negative.question?.polarity).toBe('negative');
+    expect(negative.notices).toEqual(['structure_auto']);
+    expect(
+      onlyEnglish({
+        [HEADERS.prompt]: '[Prueba] Which of these is NOT in the text?',
+        [HEADERS.polarity]: 'Afirmativa',
+      }).question?.polarity,
+    ).toBe('affirmative');
+    // Una pregunta en español no se lee con el diccionario en inglés
+    expect(only({ [HEADERS.prompt]: '[Prueba] ¿Cuál de estos es NOT?' }).question?.polarity).toBe(
+      'affirmative',
+    );
+  });
+
   describe('idioma y rama', () => {
     it('Idioma vacío en Inglés médico se toma como inglés y avisa', () => {
       const result = onlyEnglish({ [SHEET_HEADERS.language]: '' });
