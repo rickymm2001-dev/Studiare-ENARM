@@ -68,13 +68,31 @@ export async function expectHome(page: Page): Promise<void> {
   });
 }
 
+/** Si ir de una dirección a otra solo cambiaría el hash, sin cargar otro documento */
+function sameDocument(from: string, to: string): boolean {
+  try {
+    const current = new URL(from);
+    const next = new URL(to);
+    return (
+      current.origin === next.origin &&
+      current.pathname === next.pathname &&
+      current.search === next.search
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Abre el enlace del correo como lo haría el navegador al venir del correo, cargando la página de nuevo.
  * Si la página ya está en la app con la misma ruta, ir directo al enlace solo cambiaría el hash sin
- * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva
+ * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva. Solo entonces
+ * pasa antes por about:blank. En los demás casos va directo, porque desde about:blank Chromium a veces
+ * pide el ícono de la página anterior con origen null y lo bloquea por ser de loopback, un error de
+ * consola que no es de la app
  */
 export async function openEmailLink(page: Page, link: string): Promise<void> {
-  if (page.url() !== 'about:blank') await page.goto('about:blank');
+  if (sameDocument(page.url(), link)) await page.goto('about:blank');
   await page.goto(link);
 }
 
