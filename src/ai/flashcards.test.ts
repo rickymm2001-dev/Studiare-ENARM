@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { ProposedCard, SourceSection } from '@/engines/cardGen';
 import {
+  CardGenerationError,
   createProxyGenerator,
   generateFlashcards,
   generatorFor,
@@ -250,7 +251,7 @@ describe('generadores', () => {
       ...options,
       fetchImpl: wrong,
     });
-    await expect(generator.generate(section)).rejects.toThrow('bad_response');
+    await expect(generator.generate(section)).rejects.toMatchObject({ reason: 'bad_response' });
     expect(generator.drainMetas?.()).toHaveLength(1);
 
     const limited = vi.fn(() =>
@@ -268,7 +269,10 @@ describe('generadores', () => {
       createProxyGenerator({ status: { kind: 'mock' }, ...options, fetchImpl: limited }).generate(
         section,
       ),
-    ).rejects.toThrow('student_limit');
+    ).rejects.toMatchObject({
+      reason: 'student_limit',
+      message: 'Llegaste al límite de usos de IA de hoy. Vuelve mañana.',
+    });
   });
 
   it('el resultado de generar junta lo que costaron las llamadas y cae al simulado si el proxy falla', async () => {
@@ -292,5 +296,134 @@ describe('generadores', () => {
     expect(fallen.mode).toBe('template');
     // La llamada que falló queda con su motivo aunque no costó
     expect(fallen.metas).toHaveLength(1);
+  });
+});
+
+describe('generación y tope de B12', () => {
+  const STUDENT = '01HZX0000000000000000000AA';
+  const goodCard = {
+    kind: 'basic' as const,
+    front: '¿Cómo se llama la oración?',
+    back: 'Oración clínica número',
+    quote: 'Oración clínica número Oración clínica número',
+  };
+  const meta = {
+    engine: 'flashcards',
+    mode: 'real',
+    model: 'claude-sonnet-5-5',
+    promptVersion: 'flashcards.provisional.v1',
+    inputTokens: 800,
+    outputTokens: 300,
+    cacheWriteTokens: 0,
+    cacheReadTokens: 0,
+    estimatedCostUsd: 0.0046,
+    latencyMs: 900,
+    outcome: 'ok',
+    validator: { passed: true, issues: [] },
+  };
+  const paragraph = (n: number) => `${'Oración clínica número '.repeat(52)}${n}.`;
+  const THREE = [0, 1, 2].map(paragraph).join('\n\n');
+  const limited = (error: string, message: string) =>
+    Response.json({ error, message }, { status: 429 });
+
+  it('todas las secciones de una generación llevan la misma ref y su número de sección', async () => {
+    const generations: { ref: string; section: number }[] = [];
+    const fetchImpl = vi.fn((_url: string, init?: RequestInit) => {
+      const body = JSON.parse(init?.body as string) as { generation: (typeof generations)[number] };
+      generations.push(body.generation);
+      return Promise.resolve(Response.json({ output: { cards: [goodCard] }, meta }));
+    }) as unknown as typeof fetch;
+    await generateFlashcards({
+      text: THREE,
+      generator: createProxyGenerator({
+        status: { kind: 'real' },
+        studentRef: STUDENT,
+        fetchImpl,
+      }),
+    });
+    expect(generations.map((generation) => generation.section)).toEqual([0, 1, 2]);
+    expect(new Set(generations.map((generation) => generation.ref)).size).toBe(1);
+    expect(generations[0]?.ref).toMatch(/^[A-Za-z0-9_-]{8,64}$/);
+    // Otra generación, otra ref
+    const second: string[] = [];
+    await createProxyGenerator({
+      status: { kind: 'real' },
+      studentRef: STUDENT,
+      fetchImpl: vi.fn((_url: string, init?: RequestInit) => {
+        second.push(
+          (JSON.parse(init?.body as string) as { generation: { ref: string } }).generation.ref,
+        );
+        return Promise.resolve(Response.json({ output: { cards: [goodCard] }, meta }));
+      }) as unknown as typeof fetch,
+    }).generate({ index: 0, title: null, text: paragraph(0) });
+    expect(second[0]).not.toBe(generations[0]?.ref);
+  });
+
+  it('el tope de generaciones de hoy en la primera sección se avisa y no se tapa con el simulado', async () => {
+    const fetchImpl = vi.fn(() =>
+      Promise.resolve(limited('generation_limit', 'Llegaste al límite de generaciones.')),
+    ) as unknown as typeof fetch;
+    const failure = await generateFlashcards({
+      text: THREE,
+      generator: createProxyGenerator({ status: { kind: 'real' }, studentRef: STUDENT, fetchImpl }),
+    }).catch((error: unknown) => error);
+    expect(failure).toBeInstanceOf(CardGenerationError);
+    expect(failure).toMatchObject({
+      reason: 'generation_limit',
+      message: 'Llegaste al límite de generaciones.',
+    });
+    expect((failure as CardGenerationError).metas).toHaveLength(1);
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it('un tope en una sección posterior entrega lo que alcanzó a salir y lo dice', async () => {
+    let calls = 0;
+    const fetchImpl = vi.fn(() => {
+      calls += 1;
+      return Promise.resolve(
+        calls === 1
+          ? Response.json({ output: { cards: [goodCard] }, meta })
+          : limited('budget_exceeded', 'La IA está en pausa por hoy. Vuelve mañana.'),
+      );
+    }) as unknown as typeof fetch;
+    const result = await generateFlashcards({
+      text: [0, 1, 2].map(paragraph).join('\n\n'),
+      generator: createProxyGenerator({ status: { kind: 'real' }, studentRef: STUDENT, fetchImpl }),
+    });
+    expect(result.proposals).toHaveLength(1);
+    expect(result.stopped).toEqual({
+      reason: 'budget_exceeded',
+      message: 'La IA está en pausa por hoy. Vuelve mañana.',
+    });
+    expect(result.fellBack).toBe(false);
+    expect(calls).toBe(2);
+  });
+
+  it('en producción no hay respuestas fijas. Si el proxy falla, falla', async () => {
+    const down = vi.fn(() => Promise.reject(new TypeError('sin red'))) as unknown as typeof fetch;
+    await expect(
+      generateFlashcards({
+        text: TEXT,
+        generator: createProxyGenerator({
+          status: { kind: 'real' },
+          studentRef: STUDENT,
+          fetchImpl: down,
+        }),
+        fallback: null,
+      }),
+    ).rejects.toMatchObject({ reason: 'network' });
+  });
+
+  it('el generador de producción sin IA avisa que no está disponible', async () => {
+    vi.stubEnv('VITE_APP_ENV', 'production');
+    try {
+      const generator = generatorFor({ kind: 'no-proxy' }, { studentRef: STUDENT });
+      expect(generator).not.toBe(simulatedGenerator);
+      await expect(generateFlashcards({ text: TEXT, generator })).rejects.toMatchObject({
+        reason: 'not_configured',
+      });
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });

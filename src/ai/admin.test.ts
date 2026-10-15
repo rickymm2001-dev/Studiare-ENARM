@@ -53,6 +53,37 @@ describe('proxy de IA para el admin', () => {
     }
   });
 
+  it('una función que responde sin clave se consulta, para ver su configuración. Una que no responde, no', () => {
+    expect(proxyAvailable({ kind: 'unavailable', reachable: true })).toBe(true);
+    expect(proxyAvailable({ kind: 'unavailable', reachable: false })).toBe(false);
+  });
+
+  it('lee el esfuerzo máximo, el razonamiento y el modo sin clave de la función', async () => {
+    const rich = {
+      ...config,
+      models: {
+        ...config.models,
+        flashcards: { id: 'claude-haiku-5-5', effort: 'max', thinking: 'off', maxTokens: 8000 },
+      },
+      limits: {
+        ...config.limits,
+        perUserDailyUsd: 0.3,
+        cardGenerationsPerDay: 20,
+        sectionsPerGeneration: 12,
+        maxPendingJobs: 12,
+        engineShare: {
+          forgetting: 0.1,
+          weekly_report: 0.1,
+          flashcards: 0.55,
+          bias_tips: 0.1,
+          restructure: 0.15,
+        },
+      },
+    };
+    const response = { mode: 'unavailable', config: rich, prompts: {} };
+    expect(await fetchAdminConfig(reply(response))).toEqual(response);
+  });
+
   it('lee la configuración y el uso de hoy', async () => {
     const response = { mode: 'mock', config, prompts: { forgetting: 'forgetting.base.v1' } };
     expect(await fetchAdminConfig(reply(response))).toEqual(response);
@@ -94,6 +125,19 @@ describe('proxy de IA para el admin', () => {
       ok: false,
       message: expect.stringContaining('no aceptó') as string,
     });
+    // Si el servidor dice por qué, se muestra tal cual
+    expect(
+      await saveAdminConfig(
+        {},
+        reply(
+          {
+            error: 'invalid_request',
+            message: 'claude-opus-5-5 no deja apagar el razonamiento',
+          },
+          400,
+        ),
+      ),
+    ).toEqual({ ok: false, message: 'claude-opus-5-5 no deja apagar el razonamiento' });
     const down = vi.fn(() => Promise.reject(new TypeError('sin red'))) as unknown as typeof fetch;
     expect(await saveAdminConfig({}, down)).toMatchObject({ ok: false });
     // Se guardó pero no se pudo volver a leer

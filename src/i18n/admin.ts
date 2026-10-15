@@ -299,7 +299,7 @@ export const adminText = {
       effort: 'Esfuerzo',
       effortHint: 'Haiku 4.5 no lo acepta',
       effortNone: 'Sin esfuerzo',
-      efforts: { low: 'Bajo', medium: 'Medio', high: 'Alto' },
+      efforts: { low: 'Bajo', medium: 'Medio', high: 'Alto', xhigh: 'Muy alto', max: 'Máximo' },
       maxTokens: 'Tope de tokens de salida',
       perStudent: 'Llamadas por alumno al día',
       budgetTitle: 'Presupuesto diario',

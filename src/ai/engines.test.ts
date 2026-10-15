@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { AI_ENGINES, type AiEngine } from '@/engines/aiContracts';
 import { mockHypothesis } from '@/engines/aiMock';
 import { urlOf } from './testing/fetch';
-import { callEngine, scrubInput, type CallOptions } from './engines';
+import { callEngine, ENGINE_TIMEOUT_MS, scrubInput, type CallOptions } from './engines';
 import {
   biasTipInput,
   flashcardsInput,
@@ -306,5 +306,98 @@ describe('cada motor tiene su URL', () => {
       });
     }
     expect(urls).toEqual(AI_ENGINES.map((engine) => `/api/ai/${engine}`));
+  });
+});
+
+describe('sin IA y en producción', () => {
+  it('con la IA no disponible no inventa respuestas ni llama a nadie', async () => {
+    let called = false;
+    for (const status of [
+      { kind: 'unavailable', reachable: true },
+      { kind: 'unavailable', reachable: false },
+    ] as const) {
+      const result = await callEngine('forgetting', hypothesisInput(), {
+        ...options(status),
+        fetchImpl: () => {
+          called = true;
+          return Promise.resolve(json({}));
+        },
+      });
+      expect(result).toMatchObject({ ok: false, reason: 'not_configured', meta: null });
+      expect(!result.ok && result.message).toBe(
+        'La IA no está disponible ahora. Ves la versión sin IA.',
+      );
+    }
+    expect(called).toBe(false);
+  });
+
+  it('las respuestas fijas del cliente son solo de desarrollo y de la demo', async () => {
+    for (const status of [{ kind: 'no-proxy' }, { kind: 'checking' }] as const) {
+      const production = await callEngine('forgetting', hypothesisInput(), {
+        ...options(status),
+        appEnv: 'production',
+      });
+      expect(production).toMatchObject({ ok: false, reason: 'not_configured', meta: null });
+      for (const appEnv of ['development', 'demo'] as const) {
+        const result = await callEngine('forgetting', hypothesisInput(), {
+          ...options(status),
+          appEnv,
+        });
+        expect(result.ok && result.meta.mode).toBe('template');
+      }
+    }
+  });
+
+  it('con el proxy en producción sigue llamando al proxy', async () => {
+    const result = await callEngine('forgetting', hypothesisInput(), {
+      ...options({ kind: 'real' }),
+      appEnv: 'production',
+      fetchImpl: () =>
+        Promise.resolve(json({ output: mockHypothesis(hypothesisInput()), meta: goodMeta })),
+    });
+    expect(result.ok).toBe(true);
+  });
+});
+
+describe('códigos de B12 y tiempos', () => {
+  it.each([
+    ['gate_closed', 403],
+    ['staff_only', 403],
+    ['refused', 502],
+    ['generation_limit', 429],
+    ['not_configured', 503],
+    ['paused', 503],
+  ] as const)('el motivo %s del proxy llega tal cual con su mensaje', async (error, status) => {
+    const result = await callEngine('forgetting', hypothesisInput(), {
+      ...options({ kind: 'real' }),
+      fetchImpl: () => Promise.resolve(json({ error, message: `Mensaje de ${error}.` }, status)),
+    });
+    expect(result).toMatchObject({ ok: false, reason: error, message: `Mensaje de ${error}.` });
+  });
+
+  it('las tarjetas esperan más que el resto de los motores', () => {
+    expect(ENGINE_TIMEOUT_MS.flashcards).toBe(75_000);
+    for (const engine of AI_ENGINES) {
+      if (engine !== 'flashcards') expect(ENGINE_TIMEOUT_MS[engine]).toBe(45_000);
+    }
+  });
+
+  it('en tarjetas manda la generación y la sección, y en los demás motores no', async () => {
+    const bodies: Record<string, unknown>[] = [];
+    const reply = (engine: AiEngine) => (_url: RequestInfo | URL, init?: RequestInit) => {
+      bodies.push(JSON.parse(init?.body as string) as Record<string, unknown>);
+      return Promise.resolve(json({ output: {}, meta: { ...goodMeta, engine } }));
+    };
+    await callEngine('flashcards', flashcardsInput(), {
+      ...options({ kind: 'real' }),
+      generation: { ref: 'gen_abcdefgh', section: 2 },
+      fetchImpl: reply('flashcards'),
+    });
+    await callEngine('forgetting', hypothesisInput(), {
+      ...options({ kind: 'real' }),
+      fetchImpl: reply('forgetting'),
+    });
+    expect(bodies[0]?.generation).toEqual({ ref: 'gen_abcdefgh', section: 2 });
+    expect(bodies[1]).not.toHaveProperty('generation');
   });
 });
