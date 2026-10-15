@@ -46,9 +46,14 @@ export function createSdkBatchApi(batches: BatchesClient): BatchApi {
   return {
     async create(requests) {
       try {
+        // Sin reintentos del SDK (revisión del hallazgo 10). Crear un lote no es idempotente y Anthropic no
+        // ofrece una llave de idempotencia para los lotes: si el primer POST tarda más del plazo pero el lote
+        // se creó, un reintento crearía otro con los mismos custom_id y solo se registraría el segundo. El
+        // primero se cobraría sin que nadie lo recoja y dejaría texto de alumnos en Anthropic hasta 29
+        // días. Quien reintenta es el ciclo, que sí reconoce un lote que se creó y no se registró
         return await batches.create(
           { requests: [...requests] },
-          { timeout: 60_000, maxRetries: 1 },
+          { timeout: 60_000, maxRetries: 0 },
         );
       } catch (error) {
         // Sin respuesta de la API el lote pudo haberse creado, y los trabajos no se regresan a la cola

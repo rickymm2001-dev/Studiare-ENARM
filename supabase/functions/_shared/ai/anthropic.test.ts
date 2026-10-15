@@ -3,6 +3,8 @@
 // petición sale del proceso.
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ANTHROPIC_BASE_URL, createAnthropicClients } from './anthropic.ts';
+import { createSdkBatchApi } from './batchApi.ts';
+import { BatchCreateUncertainError } from './ports.ts';
 import { fakeMessage } from './testing/fakes.ts';
 
 interface Captured {
@@ -45,6 +47,18 @@ describe('createAnthropicClients', () => {
     expect(request?.url).toBe(`${ANTHROPIC_BASE_URL}/v1/messages`);
     expect(request?.headers.get('x-api-key')).toBe('clave-de-prueba');
     expect(request?.headers.get('authorization')).toBeNull();
+  });
+
+  it('crear un lote con el SDK real llega una sola vez a la red aunque falle la conexión (revisión del hallazgo 10)', async () => {
+    let attempts = 0;
+    vi.stubGlobal('fetch', () => {
+      attempts += 1;
+      return Promise.reject(new TypeError('fetch failed'));
+    });
+    const api = createSdkBatchApi(createAnthropicClients('clave-de-prueba').batches);
+    // El SDK reintenta por omisión una vez. Crear un lote no es idempotente, así que no debe
+    await expect(api.create([])).rejects.toBeInstanceOf(BatchCreateUncertainError);
+    expect(attempts).toBe(1);
   });
 
   it('los lotes van a la misma dirección con la misma clave', async () => {

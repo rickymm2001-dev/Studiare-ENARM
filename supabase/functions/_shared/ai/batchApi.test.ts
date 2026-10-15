@@ -160,15 +160,30 @@ describe('adaptador del SDK', () => {
     return { fake, calls };
   }
 
-  it('crea el lote con sus peticiones, un tiempo de espera y un reintento', async () => {
+  it('crea el lote con sus peticiones y un tiempo de espera, sin que el SDK reintente (revisión del hallazgo 10)', async () => {
     const { fake, calls } = client();
     await createSdkBatchApi(fake).create([requestFor('forgetting', 'job-1')]);
+    // Crear un lote no es idempotente. Un reintento tras un tiempo vencido pudo duplicarlo
     expect(calls).toEqual([
       {
         params: { requests: [requestFor('forgetting', 'job-1')] },
-        options: { timeout: 60_000, maxRetries: 1 },
+        options: { timeout: 60_000, maxRetries: 0 },
       },
     ]);
+  });
+
+  it('un fallo al crear se intenta una sola vez por llamada y lo reintenta el ciclo', async () => {
+    let attempts = 0;
+    const { fake } = client({
+      create: () => {
+        attempts += 1;
+        return Promise.reject(new APIConnectionTimeoutError());
+      },
+    });
+    await expect(createSdkBatchApi(fake).create([])).rejects.toBeInstanceOf(
+      BatchCreateUncertainError,
+    );
+    expect(attempts).toBe(1);
   });
 
   it('los recientes se cortan en el límite', async () => {
