@@ -15,7 +15,8 @@ export const CANDIDATE_NAMES = [
 export type CandidateName = (typeof CANDIDATE_NAMES)[number];
 
 export interface Candidate {
-  name: CandidateName;
+  /** Uno de CANDIDATE_NAMES, o openai:<modelo> en la comparación con OpenAI (4.5) */
+  name: string;
   id: string;
   effort: ModelChoice['effort'];
   thinking: ModelChoice['thinking'];

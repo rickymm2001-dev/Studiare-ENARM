@@ -4,7 +4,7 @@
 // pasaron. Por motor se elige el más barato que pase todo, con la latencia p95 para desempatar. El
 // juez es un filtro previo y la palabra final es de los dos médicos en la compuerta 1.
 import type { AiEngine } from '../../src/engines/aiContracts.ts';
-import type { Candidate, CandidateName } from './candidates.ts';
+import type { Candidate } from './candidates.ts';
 import { summarizeGroup, type CaseResult, type EngineSummary } from './run.ts';
 
 /** Esquema válido al primer intento en 98% o más de cada repetición */
@@ -44,7 +44,7 @@ export interface GateReport {
   failures: string[];
 }
 
-export const runKey = (engine: AiEngine, candidate: CandidateName) => `${engine}:${candidate}`;
+export const runKey = (engine: AiEngine, candidate: string) => `${engine}:${candidate}`;
 
 /** Las compuertas automáticas de un candidato en un motor, revisadas en cada repetición */
 export function gateRun(run: CandidateRun): GateReport {
