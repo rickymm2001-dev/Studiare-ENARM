@@ -10,10 +10,13 @@ import { parsePublicEmail, readSupportEmail } from './support.ts';
  * Versión del aviso de privacidad que acepta el alumno. Cambia cuando cambia el texto. Las versiones se
  * comparan como texto (src/data/usecases/profile.ts), así que cada versión nueva tiene que quedar
  * después de la anterior al ordenarlas. Una segunda versión del mismo día lleva una letra al final,
- * como 2026-10-14b, que queda después de 2026-10-14 y antes de 2026-10-15. Quien aceptó una versión
- * anterior ve el aviso de que cambió (NoticeUpdateNotice)
+ * como 2026-10-15b, que queda después de 2026-10-15 y antes de 2026-10-16. Quien aceptó una versión
+ * anterior ve el aviso de que cambió (NoticeUpdateNotice). El orden de las que hubo es 2026-10-14,
+ * 2026-10-14b (B9), 2026-10-15 (el primer borrador de B16, ya publicado en main) y 2026-10-15b, el
+ * texto de B16 que lo reemplaza. Se dejó con letra, y no con 2026-10-16, para que quien aceptó el
+ * primer borrador lo vuelva a aceptar sin saltar de día
  */
-export const PRIVACY_NOTICE_VERSION = '2026-10-15';
+export const PRIVACY_NOTICE_VERSION = '2026-10-15b';
 
 export interface LegalIdentity {
   /** Razón social del responsable */

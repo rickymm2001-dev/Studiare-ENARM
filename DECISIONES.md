@@ -1337,7 +1337,7 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 
 ### D-132. Aviso de privacidad y términos al día para el abogado (B16 del plan del cambio)
 - Fecha 2026-10-15. Origen R, bloque B16 de D-119, respuestas 42 a 49, 4.26 y 4.27
-- Los dos textos pasan a la versión 2026-10-15 y siguen marcados como Borrador para revisión del abogado. La marca se quita solo cuando Ricardo diga que el abogado los aprobó. La versión queda después de 2026-10-14 y 2026-10-14b al ordenarlas como texto, así quien aceptó una anterior acepta de nuevo
+- El aviso pasa a la versión 2026-10-15b y los términos a la 2026-10-15, y siguen marcados como Borrador para revisión del abogado. La marca se quita solo cuando Ricardo diga que el abogado los aprobó. La versión del aviso queda después de 2026-10-14, 2026-10-14b y 2026-10-15 al ordenarlas como texto. La 2026-10-15 es la del primer borrador que otra sesión (Gemini) fusionó a main, y este texto lo reemplaza, así quien aceptó cualquiera de las anteriores acepta de nuevo
 - Los datos del responsable no van escritos en el texto. Salen de VITE_LEGAL_NAME (Plexus Medica S. de R.L. de C.V.), VITE_LEGAL_ADDRESS, VITE_PRIVACY_EMAIL (nuevo, cae a VITE_SUPPORT_EMAIL) y VITE_SUPPORT_EMAIL. Un cambio del contador no toca el código
 - fillLegal tiene dos lectores. El alumno nunca ve una marca entre corchetes ni la palabra pendiente, lee un texto neutro o no ve la línea. El abogado ve en docs/legal cada dato que falta y quién lo pone
 - El aviso nombra a cada encargado con lo que recibe. Los que no están activos (Mercado Pago, Resend, PostHog, Sentry y GitHub) dicen cuando se active. OpenAI solo recibe texto del banco en las evaluaciones internas

@@ -153,23 +153,34 @@ describe('textos legales', () => {
     expect(PRIVACY_NOTICE_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}[a-z]?$/);
   });
 
-  it('aviso y términos van en la versión de B16, 2026-10-15, con esa fecha a la vista', () => {
-    for (const doc of docs) {
-      expect(doc.version).toBe('2026-10-15');
-      expect(doc.updated).toBe('15 de octubre de 2026');
-    }
+  it('aviso y términos llevan su versión y la fecha de B16 a la vista', () => {
+    // El aviso lleva la versión que acepta el alumno, 2026-10-15b, del mismo día que el primer borrador
+    expect(legalDocs.privacy.version).toBe('2026-10-15b');
+    expect(legalDocs.terms.version).toBe('2026-10-15');
+    for (const doc of docs) expect(doc.updated).toBe('15 de octubre de 2026');
   });
 
-  it('las versiones se comparan como texto, así que la de B16 va después de las de B7 y B9', () => {
+  it('las versiones se comparan como texto, así que la de B16 va después de todas las anteriores', () => {
     // Como noticeNeedsAcceptance (<) y acceptedNoticeVersion (sort) en src/data/usecases/profile.ts
-    const version: string = PRIVACY_NOTICE_VERSION;
-    expect(version > '2026-10-14b').toBe(true);
-    expect(version > '2026-10-14').toBe(true);
-    expect(['2026-10-14b', version, '2026-10-14'].sort()).toEqual([
+    const isAfter = (later: string, earlier: string) => later > earlier;
+    expect(isAfter('2026-10-14b', '2026-10-14')).toBe(true);
+    expect(isAfter('2026-10-15', '2026-10-14b')).toBe(true);
+    expect(isAfter('2026-10-15b', '2026-10-15')).toBe(true);
+    expect(isAfter('2026-10-16', '2026-10-15b')).toBe(true);
+    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16 y B16
+    expect(['2026-10-15b', '2026-10-14', '2026-10-15', '2026-10-14b'].sort()).toEqual([
       '2026-10-14',
       '2026-10-14b',
-      version,
+      '2026-10-15',
+      '2026-10-15b',
     ]);
+    // La versión vigente es la mayor de todas las conocidas, para que quien aceptó una anterior,
+    // incluido el primer borrador de B16, vuelva a aceptar
+    const earlier = ['2026-10-14', '2026-10-14b', '2026-10-15'];
+    for (const version of earlier) {
+      expect(isAfter(PRIVACY_NOTICE_VERSION, version), version).toBe(true);
+    }
+    expect([...earlier, PRIVACY_NOTICE_VERSION].sort().at(-1)).toBe(PRIVACY_NOTICE_VERSION);
   });
 
   it('dice qué se guarda al entrar con Google, de cómo nos conociste y de la edad (B9)', () => {
@@ -316,9 +327,7 @@ describe('términos de B16', () => {
     expect(terms).toContain(`Anual, ${mxn(PLANS.annual.priceMxn)} pesos al año`);
     expect(terms).toContain(`Fundador, ${mxn(PLANS.founder.priceMxn)} pesos al mes`);
     expect(terms).toContain(`con ${FOUNDER_SEATS} lugares en total`);
-    expect(terms).toContain(
-      `hasta ${PLANS.free.access.dailyQuestions ?? 0} preguntas al día`,
-    );
+    expect(terms).toContain(`hasta ${PLANS.free.access.dailyQuestions ?? 0} preguntas al día`);
     // El Fundador anual, los pases, la prueba y la garantía salen de la configuración de B10
     expect(terms).toContain(`${mxn(PLANS.founder_annual.priceMxn)} pesos al año`);
     expect(terms).toContain(

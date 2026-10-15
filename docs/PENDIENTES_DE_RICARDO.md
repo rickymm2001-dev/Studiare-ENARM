@@ -43,7 +43,7 @@ Lo que hace la sesión después, sin pedirte nada más, con los comandos de docs
 
 ## Lo que salió de B16, legal y privacidad
 
-El aviso de privacidad y los términos quedaron al día en la versión 2026-10-15, todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.
+El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.
 
 - **Los datos del responsable** (pregunta 43). Mientras falten, el alumno lee un texto neutro y el abogado ve la marca de lo que falta. Ponlos en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, y después en Cloudflare (B17). Son públicos por diseño
   - VITE_LEGAL_NAME con Plexus Medica S. de R.L. de C.V.

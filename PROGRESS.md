@@ -35,7 +35,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [ ] B15. Analítica, errores, recordatorios y recorrido
 - [ ] B16. Legal y privacidad (listo con su revisión, se fusiona después de B11, D-132)
 - [ ] B17. Publicación
-  - Las imágenes de marca están en la rama gemini/imagenes-marca
+  - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
 - [ ] B18. Primeros alumnos
 - [ ] B19. Auditoría final y lanzamiento
 
@@ -161,10 +161,11 @@ Evidencia
 - Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
 
 ### B16. Legal y privacidad (D-132)
-- Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 18 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
+- Hecho. Aviso de privacidad en la versión 2026-10-15b y términos en la 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 18 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
 - El alumno nunca ve una marca de pendiente. Donde falta un dato lee un texto neutro. El abogado sí ve qué falta en docs/legal
 - Los textos completos cargan solo con la página legal, para seguir debajo de 300 KB de JavaScript inicial
 - Entra con lo de Gemini para B17, la imagen para compartir con dirección completa y tres capturas de instalación. Las capturas muestran la app antes de la paleta y se rehacen en B17
+- Unión con main (afc5fc7), que trajo el primer borrador legal de Gemini con la versión 2026-10-15 del aviso. En legal.ts, legalDocs.ts, docs/legal, fillLegal y sus pruebas ganó este texto. De Gemini quedan las imágenes de marca, la imagen para compartir con SITE_URL y el workflow de Pages. El aviso pasa a la versión 2026-10-15b, para que quien aceptó el borrador de Gemini acepte este. Los términos siguen en 2026-10-15
 - Revisión independiente con 13 hallazgos, 12 corregidos. Los dos altos eran que el archivo de Acceder no trae todos los datos, como decía el aviso, y que el correo de la invitación se quedaba al eliminar la cuenta. Ahora se borra
 - Evidencia. Typecheck, lint y formato limpios. Pruebas legales y de presupuesto en verde, con el JavaScript inicial en 293 KB de 300. SQL completo en verde, con la prueba nueva de la invitación. E2e completa en teléfono, computadora y nube con 358 de 362. Las 3 que fallaron (sin conexión en la primera visita y rendimiento) fallan igual en la rama sin B16 con la máquina cargada por otros agentes, y esa rama pasó en el CI de GitHub
 - Capturas en docs/screenshots/v3/b16 (16). Del aviso y de los términos va solo lo que se ve al abrir, porque el texto completo está en docs/legal

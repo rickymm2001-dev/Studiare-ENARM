@@ -1,10 +1,10 @@
-// Capturas de cierre de B16 del plan del cambio (legal y privacidad, respuestas 42 a 49). El aviso de
-// privacidad y los términos en la versión 2026-10-15, con la marca de borrador para el abogado y sin
-// ninguna marca de pendiente a la vista, y la bienvenida con el resumen del aviso y los permisos
-// apagados. Quedan en docs/screenshots/v3/b16. El aviso y los términos van en los seis proyectos y la
-// bienvenida en teléfono y computadora, en claro y en oscuro. Del aviso y de los términos va solo lo que se
-// ve al abrir, con el título, la marca de borrador y el índice, porque la página completa pesa casi 1 MB
-// por imagen y el abogado lee el texto en docs/legal.
+// Capturas de cierre de B16 del plan del cambio (legal y privacidad, respuestas 42 a 49). El aviso
+// de privacidad (versión 2026-10-15b) y los términos (versión 2026-10-15), con la marca de borrador
+// para el abogado y sin ninguna marca de pendiente a la vista, y la bienvenida con el resumen del
+// aviso y los permisos apagados. Quedan en docs/screenshots/v3/b16. El aviso y los términos van en
+// los seis proyectos y la bienvenida en teléfono y computadora, en claro y en oscuro. Del aviso y
+// de los términos va solo lo que se ve al abrir, con el título, la marca de borrador y el índice,
+// porque la página completa pesa casi 1 MB por imagen y el abogado lee el texto en docs/legal.
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';

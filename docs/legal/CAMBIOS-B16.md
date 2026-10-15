@@ -2,9 +2,9 @@
 
 Lista de lo que cambió en el aviso de privacidad y en los términos y condiciones con el bloque B16 del plan del cambio (respuestas 42 a 49, 4.26 y 4.27), contra lo que había en main después de B9. Es para el abogado de Ricardo (respuesta 44) y para Ricardo.
 
-- Los dos textos pasan a la versión 2026-10-15, con fecha a la vista del 15 de octubre de 2026
+- El aviso de privacidad pasa a la versión 2026-10-15b y los términos a la 2026-10-15, los dos con fecha a la vista del 15 de octubre de 2026. El aviso lleva la letra porque main ya traía un primer borrador del aviso en la versión 2026-10-15, y quien lo aceptó tiene que aceptar este texto, que lo reemplaza
 - Siguen marcados como borrador para revisión del abogado, en la app y en docs/legal. La marca se quita solo cuando Ricardo diga que el abogado los aprobó (0.1 del plan del cambio)
-- Quien aceptó una versión anterior del aviso, como la 2026-10-14 de B7 o la 2026-10-14b de B9, ve al entrar el aviso de que cambió y lo acepta de nuevo. Eso ya existía, y una prueba revisa que la versión nueva quede después de las dos al ordenarlas como texto
+- Quien aceptó una versión anterior del aviso, como la 2026-10-14 de B7, la 2026-10-14b de B9 o la 2026-10-15 del primer borrador de B16, ve al entrar el aviso de que cambió y lo acepta de nuevo. Eso ya existía, y una prueba revisa que la versión nueva quede después de las tres al ordenarlas como texto
 - El texto vive en src/i18n/legalDocs.ts y los archivos de esta carpeta salen de ahí con npm run legal:export
 
 ## Cómo se leyó cada cosa
@@ -96,7 +96,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 
 - src/features/legal/fillLegal.ts tiene dos lectores, el alumno y el abogado. Para el alumno, una línea que depende de un dato que falta sin texto neutro no se muestra. Para el abogado, cada falta va entre corchetes. Las marcas son {nombre}, {domicilio}, {contactoPrivacidad}, {contactoSoporte}, {reembolsos} y {jurisdiccion}. Las de contacto llevan su preposición para que el texto neutro se lea bien
 - La página legal muestra como enlace el correo de privacidad y el de soporte
-- src/config/legal.ts lee VITE_PRIVACY_EMAIL y sube PRIVACY_NOTICE_VERSION a 2026-10-15. .github/workflows/pages.yml pasa la variable nueva al build
+- src/config/legal.ts lee VITE_PRIVACY_EMAIL y sube PRIVACY_NOTICE_VERSION a 2026-10-15b. .github/workflows/pages.yml pasa la variable nueva al build
 - El aviso de borrador dice ahora Borrador para revisión del abogado, sin la palabra pendiente, para que ninguna marca de pendiente llegue al alumno
 - El resumen del aviso en el registro dice que los permisos empiezan apagados y que a la IA también viaja el texto que el alumno elige
 - Pruebas nuevas. Orden de las versiones con B7 y B9, la versión y fecha de B16, cada proveedor con lo que recibe, PostHog con permiso apagado, OpenAI solo con texto del banco, la comparación, la factura, la huella del correo de la prueba gratis, las lecturas del banco, los referidos y Borrar mis datos, los permisos iguales a los de la app, la razón social desde VITE_LEGAL_NAME, los precios contra la configuración de pagos, las condiciones de la prueba, la garantía, los pases y el Fundador, y que ninguna marca, corchete o la palabra pendiente llegue al alumno ni en la página ni en el texto

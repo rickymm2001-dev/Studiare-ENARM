@@ -56,9 +56,9 @@ describe('aceptar el aviso nuevo', () => {
     expect(await noticeNeedsAcceptance(api, user)).toBe(true);
   });
 
-  it('quien aceptó el aviso de B7 (2026-10-14) o el de B9 (2026-10-14b) ve el aviso nuevo de B16', async () => {
+  it('quien aceptó el aviso de B7 (2026-10-14), el de B9 (2026-10-14b) o el primer borrador de B16 (2026-10-15) ve el aviso nuevo', async () => {
     api = testApi();
-    for (const version of ['2026-10-14', '2026-10-14b']) {
+    for (const version of ['2026-10-14', '2026-10-14b', '2026-10-15']) {
       const user = newId();
       await api.repos.consents.put(consent(user, version, 'party'));
       expect(await noticeNeedsAcceptance(api, user), version).toBe(true);
