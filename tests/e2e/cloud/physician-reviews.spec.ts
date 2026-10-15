@@ -1,7 +1,8 @@
 // Revisiones de médicos para pagar (pantalla 36, 4.5 del plan de B11, respuesta 58). El revisor decide
 // sobre tres versiones con las mismas funciones de la base. El admin ve una fila por médico y mes de
-// Mérida con su clave del Sheet, aprobadas, cambios pedidos, el total de revisiones y el monto con la
-// tarifa que puso Ricardo, y baja los dos CSV, que cuadran entre sí y con las decisiones. Sin correos.
+// Mérida con su clave del Sheet, aprobadas, cambios pedidos, las preguntas revisadas y el monto con la
+// tarifa por pregunta revisada que puso Ricardo, y baja los dos CSV, que cuadran entre sí y con las
+// decisiones. Sin correos.
 import { readFile } from 'node:fs/promises';
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
@@ -97,7 +98,7 @@ test('el admin ve las revisiones del mes con su monto y baja los CSV que cuadran
   await expect(page.getByText(REVIEWER.email)).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
-  // El resumen y el detalle cuadran: tres revisiones de Beto en el detalle
+  // El resumen y el detalle cuadran: tres preguntas revisadas de Beto, cada una paga en el detalle
   const summary = await downloadedLines(page, text.summaryCsv);
   expect(summary).toHaveLength(2);
   expect(summary[1]).toContain('"Beto"');
@@ -107,6 +108,7 @@ test('el admin ve las revisiones del mes con su monto y baja los CSV que cuadran
   expect(detail.slice(1).every((line) => line.includes('"Beto"') && line.includes('"BR"'))).toBe(
     true,
   );
+  expect(detail.slice(1).every((line) => line.endsWith(`,"${text.pays}"`))).toBe(true);
   expect(detail.filter((line) => line.includes(`"${text.decisions.approve ?? ''}"`))).toHaveLength(
     2,
   );

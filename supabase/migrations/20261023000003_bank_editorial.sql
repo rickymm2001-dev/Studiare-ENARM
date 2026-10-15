@@ -1254,17 +1254,19 @@ begin
   end if;
   select jsonb_build_object(
     'from', to_char(p_from, 'YYYY-MM-DD'), 'to', to_char(p_to, 'YYYY-MM-DD'),
-    'approved', count(*) filter (where decision = 'approve'),
-    'changesRequested', count(*) filter (where decision = 'request_changes'),
-    'rejected', count(*) filter (where decision = 'reject'),
-    'reviewed', count(*),
+    'approved', count(*) filter (where d.decision = 'approve'),
+    'changesRequested', count(*) filter (where d.decision = 'request_changes'),
+    'rejected', count(*) filter (where d.decision = 'reject'),
+    -- Preguntas por mes, como reviewed de admin_review_report (pago por pregunta revisada)
+    'reviewed', count(distinct (date_trunc('month', d.decided_at at time zone 'America/Merida'), q.question_id)),
     'distractorsResolved', (
       select count(*) from public.distractor_flags
       where resolved_by = v_uid and status <> 'open'
         and (resolved_at at time zone 'America/Merida')::date between p_from and p_to)
   ) into v_result
-  from public.review_decisions
-  where physician_id = v_uid and (decided_at at time zone 'America/Merida')::date between p_from and p_to;
+  from public.review_decisions d
+  join public.questions q on q.id = d.question_version_id
+  where d.physician_id = v_uid and (d.decided_at at time zone 'America/Merida')::date between p_from and p_to;
   return v_result;
 end;
 $$;
@@ -1615,9 +1617,10 @@ exception when others then
 end;
 $$;
 
--- Una fila por médico y mes, en hora de Mérida. reviewed es cada decisión del revisor sobre una versión
--- (aprobar, pedir cambios o rechazar). Los distractores atendidos van aparte (8.7). El monto es reviewed
--- por la tarifa, o null sin tarifa (8.8)
+-- Una fila por médico y mes, en hora de Mérida. approved, changes_requested y rejected cuentan cada
+-- decisión del revisor sobre una versión. reviewed cuenta preguntas, así varias rondas sobre la misma
+-- pregunta en el mes cuentan una vez (pago por pregunta revisada, respuesta 58). Los distractores
+-- atendidos van aparte (8.7). El monto es reviewed por la tarifa, o null sin tarifa (8.8)
 create or replace function public.admin_review_report(p_from date, p_to date)
 returns table (month date, physician_id uuid, alias text, code text, approved bigint, changes_requested bigint,
                rejected bigint, reviewed bigint, distractors_resolved bigint, amount_mxn numeric)
@@ -1635,8 +1638,9 @@ begin
              count(*) filter (where d.decision = 'approve') as a,
              count(*) filter (where d.decision = 'request_changes') as c,
              count(*) filter (where d.decision = 'reject') as r,
-             count(*) as t
+             count(distinct q.question_id) as t
       from public.review_decisions d
+      join public.questions q on q.id = d.question_version_id
       where (d.decided_at at time zone 'America/Merida')::date between p_from and p_to
       group by 1, 2
     ), flags as (
@@ -1660,10 +1664,11 @@ begin
 end;
 $$;
 
--- Una fila por decisión, para el CSV de detalle. Cuadra con el resumen
+-- Una fila por decisión, para el CSV de detalle. counts marca la primera decisión del médico sobre cada
+-- pregunta en el mes, la que paga. Las filas con counts cuadran con reviewed del resumen
 create or replace function public.admin_review_report_detail(p_from date, p_to date, p_physician uuid default null)
 returns table (decided_at timestamptz, month date, physician_id uuid, alias text, code text,
-               question_key text, version integer, decision text)
+               question_key text, version integer, decision text, counts boolean)
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 begin
   perform public.bank_require_admin();
@@ -1673,7 +1678,10 @@ begin
   return query
     select d.decided_at, date_trunc('month', d.decided_at at time zone 'America/Merida')::date,
            d.physician_id, coalesce(pr.alias, ''), pc.code,
-           public.bank_question_key(q.question_id), q.version, d.decision
+           public.bank_question_key(q.question_id), q.version, d.decision,
+           row_number() over (
+             partition by d.physician_id, q.question_id, date_trunc('month', d.decided_at at time zone 'America/Merida')
+             order by d.decided_at, d.id) = 1
     from public.review_decisions d
     join public.questions q on q.id = d.question_version_id
     left join public.profiles pr on pr.id = d.physician_id

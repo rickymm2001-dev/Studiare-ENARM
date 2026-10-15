@@ -1,7 +1,8 @@
 // Revisiones de médicos (pantalla 36, 4.5 del plan de B11, respuesta 58). Una tabla por médico y por mes
-// de Mérida con aprobadas, cambios pedidos, rechazadas, el total de revisiones, los distractores
-// atendidos y el monto si Ricardo puso tarifa. Se baja como CSV del resumen y del detalle, que cuadran
-// con las decisiones de la base. Sin correos, solo alias y clave del Sheet.
+// de Mérida con aprobadas, cambios pedidos, rechazadas, las preguntas revisadas, los distractores
+// atendidos y el monto si Ricardo puso tarifa. Se paga por pregunta revisada, así varias rondas sobre la
+// misma pregunta en el mes cuentan una vez. Se baja como CSV del resumen y del detalle, que cuadran con
+// las decisiones de la base. Sin correos, solo alias y clave del Sheet.
 import { useState } from 'react';
 import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';

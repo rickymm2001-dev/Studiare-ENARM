@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // Revisiones de médicos (pantalla 36, 4.5 del plan de B11). La tabla por médico y mes y sus dos CSV,
-// que cuadran: la suma de Revisiones del resumen es el número de filas del detalle
+// que cuadran: la suma de Preguntas revisadas del resumen es el número de filas del detalle que pagan.
+// Ana revisa una pregunta en dos rondas, que cuenta una vez
 import 'fake-indexeddb/auto';
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -40,9 +41,9 @@ const SUMMARY = [
     approved: 2,
     changes_requested: 1,
     rejected: 0,
-    reviewed: 3,
+    reviewed: 2,
     distractors_resolved: 1,
-    amount_mxn: '150',
+    amount_mxn: '100',
   },
   {
     month: '2026-10-01',
@@ -57,20 +58,23 @@ const SUMMARY = [
     amount_mxn: '50',
   },
 ];
-const DETAIL = [
-  ['p1', 'approve'],
-  ['p1', 'approve'],
-  ['p1', 'request_changes'],
-  ['p2', 'approve'],
-].map(([physician, decision], index) => ({
+const DETAIL = (
+  [
+    ['p1', 'request_changes', 'GO-0001', 1, true],
+    ['p1', 'approve', 'GO-0001', 2, false],
+    ['p1', 'approve', 'GO-0002', 1, true],
+    ['p2', 'approve', 'GO-0003', 1, true],
+  ] as const
+).map(([physician, decision, key, version, counts], index) => ({
   decided_at: `2026-10-1${index}T16:00:00.000Z`,
   month: '2026-10-01',
   physician_id: physician,
   alias: physician === 'p1' ? 'Ana' : 'Beto',
   code: physician === 'p1' ? 'AN' : null,
-  question_key: `GO-000${index}`,
-  version: 1,
+  question_key: key,
+  version,
   decision,
+  counts,
 }));
 
 function fakeCloud() {
@@ -156,7 +160,7 @@ describe('Revisiones de médicos', () => {
     expect(within(table).getByRole('rowheader', { name: 'Ana' })).toBeVisible();
     expect(await screen.findByText(text.rate(50))).toBeVisible();
     const total = within(table).getByRole('rowheader', { name: text.total }).closest('tr');
-    expect(total).toHaveTextContent('4');
+    expect(total).toHaveTextContent('3');
     expect(calls.find(([name]) => name !== 'admin_bank_settings')?.[0]).toBe('admin_review_report');
 
     await typing.click(screen.getByRole('button', { name: text.summaryCsv }));
@@ -170,8 +174,10 @@ describe('Revisiones de médicos', () => {
       (sum, line) => sum + Number(line.split(',')[6]?.replace(/"/g, '')),
       0,
     );
-    expect(reviewed).toBe(4);
-    expect(lines(detail?.[1] ?? '').slice(1)).toHaveLength(reviewed);
+    expect(reviewed).toBe(3);
+    const detailRows = lines(detail?.[1] ?? '').slice(1);
+    expect(detailRows).toHaveLength(4);
+    expect(detailRows.filter((line) => line.endsWith(`,"${text.pays}"`))).toHaveLength(reviewed);
     expect(summary?.[1]).not.toContain('@');
   });
 });

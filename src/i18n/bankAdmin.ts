@@ -300,9 +300,9 @@ export const bankAdminText = {
     show: 'Ver',
     rate: (rate: number | null) =>
       rate === null
-        ? 'Sin tarifa por revisión. El reporte da solo conteos.'
-        : `Tarifa de ${rate.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })} por revisión.`,
-    rule: 'Cuenta cada decisión del revisor asignado sobre una versión. Aprobar, pedir cambios y rechazar se ven por separado. Los distractores atendidos van aparte. Mes en hora de Mérida.',
+        ? 'Sin tarifa por pregunta revisada. El reporte da solo conteos.'
+        : `Tarifa de ${rate.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })} por pregunta revisada.`,
+    rule: 'Se paga por pregunta revisada. Varias rondas del mismo revisor sobre una pregunta en el mes cuentan una vez. Aprobar, pedir cambios y rechazar cuentan cada decisión y se ven por separado. Los distractores atendidos van aparte. Mes en hora de Mérida.',
     none: 'No hay revisiones en ese rango.',
     columns: {
       month: 'Mes',
@@ -311,7 +311,7 @@ export const bankAdminText = {
       approved: 'Aprobadas',
       changesRequested: 'Cambios pedidos',
       rejected: 'Rechazadas',
-      reviewed: 'Revisiones',
+      reviewed: 'Preguntas revisadas',
       distractors: 'Distractores atendidos',
       rate: 'Tarifa',
       amount: 'Monto',
@@ -321,7 +321,18 @@ export const bankAdminText = {
     detailCsv: 'Descargar CSV del detalle',
     summaryFile: (from: string, to: string) => `revisiones-resumen-${from}-a-${to}.csv`,
     detailFile: (from: string, to: string) => `revisiones-detalle-${from}-a-${to}.csv`,
-    detailColumns: ['Fecha', 'Mes', 'Médico', 'Clave', 'Pregunta', 'Versión', 'Decisión'] as const,
+    detailColumns: [
+      'Fecha',
+      'Mes',
+      'Médico',
+      'Clave',
+      'Pregunta',
+      'Versión',
+      'Decisión',
+      'Paga',
+    ] as const,
+    pays: 'Sí',
+    doesNotPay: 'No, otra ronda de la misma pregunta en el mes',
     decisions: {
       approve: 'Aprobó',
       request_changes: 'Pidió cambios',
@@ -332,7 +343,7 @@ export const bankAdminText = {
 
   platform: {
     title: 'Banco',
-    hint: 'Freno de lectura de los planes de pago, avisos al admin, tope de reportes por alumno y la tarifa por revisión. Se guardan en el servidor.',
+    hint: 'Freno de lectura de los planes de pago, avisos al admin, tope de reportes por alumno y la tarifa por pregunta revisada. Se guardan en el servidor.',
     fields: {
       perMinute: 'Preguntas nuevas por minuto antes del freno',
       perHour: 'Preguntas nuevas por hora antes del freno',
@@ -340,7 +351,7 @@ export const bankAdminText = {
       alertWeekShare: 'Aviso al leer en 7 días esta parte del banco, de 0.01 a 1',
       reportsPerDay: 'Reportes de error por alumno al día',
       maxFetch: 'Preguntas por petición',
-      perReviewMxn: 'Tarifa por revisión en pesos, vacía si no hay',
+      perReviewMxn: 'Tarifa por pregunta revisada en pesos, vacía si no hay',
     },
     save: 'Guardar ajustes del banco',
     saved: 'Guardaste los ajustes del banco.',

@@ -1,5 +1,6 @@
 -- Pruebas del reporte de revisiones y pagos a médicos (B11, respuesta 58, 4.5 y 6.1 del plan de B11).
--- El resumen por médico y mes cuadra con el detalle y con review_decisions, en hora de Mérida. Usuarios
+-- El resumen por médico y mes cuadra con el detalle y con review_decisions, en hora de Mérida. Paga
+-- preguntas revisadas, así varias rondas sobre la misma pregunta en el mes cuentan una vez. Usuarios
 -- propios que empiezan con pa. Todo el texto es simulado.
 \set ON_ERROR_STOP on
 \ir bank_helpers.sql
@@ -24,10 +25,13 @@ insert into public.physician_codes (code, user_id) values ('PAU', :'m1'), ('PAD'
 -- Seis versiones para decidir. Una decisión por versión y revisor
 select count(pg_temp.bank_seed('PA-' || g, 'in_review')) from generate_series(1, 6) g;
 select array_agg(latest_version_id order by source_key)::text as v from public.bank_questions where source_key like 'sheet:PA-%' \gset
+-- Una segunda versión de PA-4, para una segunda ronda de la médica uno en octubre
+select pg_temp.latest(pg_temp.bank_seed('PA-4', 'in_review')) as v4b \gset
 
 -- Decisiones de tres médicos en agosto, septiembre y octubre de 2026. Las horas van en UTC. Mérida es
 -- UTC-6, así que el 31 de agosto a las 23:30 de Mérida es el 1 de septiembre a las 05:30 UTC y cuenta en
--- agosto. El 31 de julio a las 23:00 de Mérida queda fuera del rango
+-- agosto. El 31 de julio a las 23:00 de Mérida queda fuera del rango. PA-4 tiene dos rondas de la médica
+-- uno en octubre, que pagan una pregunta revisada
 insert into public.review_decisions (question_version_id, physician_id, decision, comment, decided_at) values
   ((:'v'::uuid[])[1], :'m1', 'approve', null, '2026-08-10 15:00:00Z'),
   ((:'v'::uuid[])[2], :'m1', 'approve', null, '2026-09-01 05:30:00Z'),
@@ -38,7 +42,8 @@ insert into public.review_decisions (question_version_id, physician_id, decision
   ((:'v'::uuid[])[1], :'m3', 'approve', null, '2026-09-12 12:00:00Z'),
   ((:'v'::uuid[])[2], :'m3', 'approve', null, '2026-10-02 12:00:00Z'),
   ((:'v'::uuid[])[3], :'m3', 'request_changes', '[Prueba] Cambios', '2026-10-20 12:00:00Z'),
-  ((:'v'::uuid[])[4], :'m1', 'approve', null, '2026-10-05 12:00:00Z'),
+  ((:'v'::uuid[])[4], :'m1', 'request_changes', '[Prueba] Primera ronda', '2026-10-03 12:00:00Z'),
+  (:'v4b', :'m1', 'approve', null, '2026-10-05 12:00:00Z'),
   ((:'v'::uuid[])[5], :'m1', 'approve', null, '2026-08-01 05:00:00Z');
 -- Un distractor atendido por el médico dos en septiembre
 insert into public.distractor_flags (question_id, option_id, question_version_id, exposures, choices, attraction, source, status, resolved_at, resolved_by)
@@ -54,15 +59,22 @@ create temp table pp_summary on commit drop as
   select * from public.admin_review_report('2026-08-01', '2026-10-31') where physician_id in (:'m1', :'m2', :'m3');
 create temp table pp_detail on commit drop as
   select * from public.admin_review_report_detail('2026-08-01', '2026-10-31') where physician_id in (:'m1', :'m2', :'m3');
--- Todo el reporte, de todos los médicos, cuadra con su detalle
+-- Todo el reporte, de todos los médicos, cuadra con las filas del detalle que pagan
 select pg_temp.expect((select sum(reviewed) from public.admin_review_report('2026-08-01', '2026-10-31'))
-  = (select count(*) from public.admin_review_report_detail('2026-08-01', '2026-10-31')), 'PP1. El reporte completo no cuadra');
-select pg_temp.expect((select sum(reviewed) from pp_summary) = 10, 'PP1. El resumen no suma 10 revisiones');
-select pg_temp.expect((select count(*) from pp_detail) = 10, 'PP1. El detalle no trae 10 filas');
-select pg_temp.expect((select sum(approved + changes_requested + rejected) from pp_summary) = 10, 'PP1. Las tres decisiones no suman');
+  = (select count(*) from public.admin_review_report_detail('2026-08-01', '2026-10-31') where counts), 'PP1. El reporte completo no cuadra');
+select pg_temp.expect((select sum(reviewed) from pp_summary) = 10, 'PP1. El resumen no suma 10 preguntas revisadas');
+select pg_temp.expect((select count(*) from pp_detail) = 11 and (select count(*) from pp_detail where counts) = 10,
+  'PP1. El detalle no trae 11 decisiones con 10 que pagan');
+select pg_temp.expect((select sum(approved + changes_requested + rejected) from pp_summary) = 11, 'PP1. Las tres decisiones no suman');
+-- Dos rondas sobre la misma pregunta en el mes pagan una vez, y paga la primera
+select pg_temp.expect((select reviewed from pp_summary where physician_id = :'m1' and month = '2026-10-01') = 1
+  and (select approved + changes_requested from pp_summary where physician_id = :'m1' and month = '2026-10-01') = 2,
+  'PP1. Dos rondas de la misma pregunta contaron dos veces');
+select pg_temp.expect((select decision from pp_detail where physician_id = :'m1' and question_key = 'PA-4' and counts) = 'request_changes',
+  'PP1. No paga la primera ronda');
 -- Por mes, el resumen cuadra con el detalle
 select pg_temp.expect(not exists (
-  select 1 from (select month, physician_id, count(*) as n from pp_detail group by 1, 2) d
+  select 1 from (select month, physician_id, count(*) filter (where counts) as n from pp_detail group by 1, 2) d
   full join pp_summary s on s.month = d.month and s.physician_id = d.physician_id
   where coalesce(d.n, 0) <> coalesce(s.reviewed, 0)), 'PP1. El resumen no cuadra con el detalle por mes');
 -- La de las 23:30 del 31 de agosto de Mérida cuenta en agosto
@@ -85,7 +97,7 @@ select pg_temp.expect((select sum(reviewed) from public.admin_review_report('202
 commit;
 select pg_temp.expect((select count(*) from public.review_decisions
   where (decided_at at time zone 'America/Merida')::date between '2026-08-01' and '2026-10-31'
-    and physician_id in (:'m1', :'m2', :'m3')) = 10, 'PP1. review_decisions no tiene 10 en el rango');
+    and physician_id in (:'m1', :'m2', :'m3')) = 11, 'PP1. review_decisions no tiene 11 en el rango');
 
 -- ===================================================================== PP2. Permisos
 begin;
@@ -95,7 +107,7 @@ select pg_temp.expect(pg_temp.fails_with('select * from public.admin_review_repo
 select pg_temp.expect(pg_temp.fails_with('select * from public.admin_review_report_detail(''2026-08-01'', ''2026-10-31'')') = '42501',
   'PP2. Un médico leyó el detalle');
 -- El médico ve solo lo suyo
-select pg_temp.expect(public.editor_my_reviews('2026-08-01', '2026-10-31') = '{"from":"2026-08-01","to":"2026-10-31","approved":3,"changesRequested":0,"rejected":1,"reviewed":4,"distractorsResolved":0}'::jsonb,
+select pg_temp.expect(public.editor_my_reviews('2026-08-01', '2026-10-31') = '{"from":"2026-08-01","to":"2026-10-31","approved":3,"changesRequested":1,"rejected":1,"reviewed":4,"distractorsResolved":0}'::jsonb,
   'PP2. Mis revisiones de la médica uno');
 select pg_temp.expect(pg_temp.fails_with('select public.editor_my_reviews(''2026-10-31'', ''2026-08-01'')') = '22023', 'PP2. Rango al revés');
 rollback;

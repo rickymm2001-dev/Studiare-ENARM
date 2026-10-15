@@ -495,6 +495,12 @@ const ReportRowSchema = z
     amountMxn: row.amount_mxn,
   }));
 
+/**
+ * Una fila del detalle con counts, que marca la primera decisión del médico sobre cada pregunta en el
+ * mes. Esas son las que paga el resumen, una por pregunta revisada (respuesta 58)
+ */
+export type ReviewDetailRow = ReviewReportDetailRow & { counts: boolean };
+
 const DetailRowSchema = z
   .object({
     decided_at: z.string(),
@@ -505,8 +511,9 @@ const DetailRowSchema = z
     question_key: z.string(),
     version: count,
     decision: z.enum(['approve', 'request_changes', 'reject']),
+    counts: z.boolean(),
   })
-  .transform((row): ReviewReportDetailRow => ({
+  .transform((row): ReviewDetailRow => ({
     decidedAt: row.decided_at,
     month: row.month.slice(0, 7),
     physicianId: row.physician_id,
@@ -515,6 +522,7 @@ const DetailRowSchema = z
     questionKey: row.question_key,
     version: row.version,
     decision: row.decision,
+    counts: row.counts,
   }));
 
 export function readReviewReport(

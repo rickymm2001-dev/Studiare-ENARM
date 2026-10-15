@@ -1192,7 +1192,10 @@ const editorMyReviews: Handler = (store, caller, args) => {
     approved: mine.filter((decision) => decision.decision === 'approve').length,
     changesRequested: mine.filter((decision) => decision.decision === 'request_changes').length,
     rejected: mine.filter((decision) => decision.decision === 'reject').length,
-    reviewed: mine.length,
+    // Preguntas por mes, como admin_review_report (pago por pregunta revisada)
+    reviewed: new Set(
+      mine.map((decision) => `${meridaMonth(decision.decidedAt)}|${decision.questionId}`),
+    ).size,
     distractorsResolved: store.distractorFlags.filter(
       (flag) =>
         flag.resolvedBy === caller.userId &&
@@ -1453,11 +1456,27 @@ function decisionsIn(store: FakeBankStore, args: Json) {
   );
 }
 
+/**
+ * Las decisiones que pagan. La primera de cada médico sobre cada pregunta en el mes de Mérida, así varias
+ * rondas sobre la misma pregunta cuentan una vez (pago por pregunta revisada)
+ */
+function paidDecisions<T extends { physicianId: string; questionId: string; decidedAt: string }>(
+  decisions: readonly T[],
+): Set<T> {
+  const first = new Map<string, T>();
+  for (const decision of [...decisions].sort((a, b) => a.decidedAt.localeCompare(b.decidedAt))) {
+    const key = `${decision.physicianId}|${decision.questionId}|${meridaMonth(decision.decidedAt)}`;
+    if (!first.has(key)) first.set(key, decision);
+  }
+  return new Set(first.values());
+}
+
 /** admin_review_report, una fila por médico y mes con nombres de columna de SQL */
 const adminReviewReport: Handler = (store, caller, args) => {
   requireAdmin(caller);
   const rate = store.settings.physicianPay.perReviewMxn;
   const rows = new Map<string, Json & { reviewed: number }>();
+  const paid = paidDecisions(decisionsIn(store, args));
   for (const decision of decisionsIn(store, args)) {
     const month = meridaMonth(decision.decidedAt);
     const key = `${month}|${decision.physicianId}`;
@@ -1480,7 +1499,7 @@ const adminReviewReport: Handler = (store, caller, args) => {
           ? 'changes_requested'
           : 'rejected';
     row[field] = Number(row[field]) + 1;
-    row.reviewed += 1;
+    if (paid.has(decision)) row.reviewed += 1;
     row.amount_mxn = rate === null ? null : row.reviewed * rate;
     rows.set(key, row);
   }
@@ -1494,6 +1513,7 @@ const adminReviewReport: Handler = (store, caller, args) => {
 const adminReviewReportDetail: Handler = (store, caller, args) => {
   requireAdmin(caller);
   const physician = str(args.p_physician);
+  const paid = paidDecisions(decisionsIn(store, args));
   return decisionsIn(store, args)
     .filter((decision) => physician === null || decision.physicianId === physician)
     .sort((a, b) => a.decidedAt.localeCompare(b.decidedAt))
@@ -1506,6 +1526,7 @@ const adminReviewReportDetail: Handler = (store, caller, args) => {
       question_key: questionKey(store, decision.questionId),
       version: decision.version,
       decision: decision.decision,
+      counts: paid.has(decision),
     }));
 };
 

@@ -1,8 +1,10 @@
 // El CSV del reporte de revisiones para pagar a los médicos (B11, 4.5 del plan de B11). En UTF-8 con
 // BOM para Excel, con alias y clave del médico y sin correos. El resumen tiene una fila por médico y
-// mes y el detalle una por decisión. Cuadran: la suma de Revisiones del resumen es el número de filas
-// del detalle. Sin React ni Dexie.
-import type { ReviewReportDetailRow, ReviewReportRow } from '@/data/bank/contracts';
+// mes y el detalle una por decisión. Se paga por pregunta revisada, así varias rondas sobre la misma
+// pregunta en el mes cuentan una vez. Cuadran: la suma de Preguntas revisadas del resumen es el número
+// de filas del detalle que dicen Sí en Paga. Sin React ni Dexie.
+import type { ReviewReportRow } from '@/data/bank/contracts';
+import type { ReviewDetailRow } from '@/data/cloud/bankAdmin';
 import { bankAdminText } from '@/i18n/bankAdmin';
 import { BOM } from '../physician/bankTemplates';
 import { meridaDay } from '../physician/meridaMonth';
@@ -45,7 +47,7 @@ export function reviewSummaryCsv(rows: readonly ReviewReportRow[], rate: number 
   ]);
 }
 
-export function reviewDetailCsv(rows: readonly ReviewReportDetailRow[]): string {
+export function reviewDetailCsv(rows: readonly ReviewDetailRow[]): string {
   return csv([
     text.detailColumns,
     ...rows.map((row) => [
@@ -56,6 +58,7 @@ export function reviewDetailCsv(rows: readonly ReviewReportDetailRow[]): string 
       row.questionKey,
       row.version,
       text.decisions[row.decision] ?? row.decision,
+      row.counts ? text.pays : text.doesNotPay,
     ]),
   ]);
 }
@@ -86,15 +89,21 @@ export function reviewTotals(rows: readonly ReviewReportRow[]): ReviewTotals {
   };
 }
 
-/** El resumen y el detalle cuadran. Cada decisión del detalle cuenta una revisión en el resumen */
+/**
+ * El resumen y el detalle cuadran. Cada fila del detalle que paga cuenta una pregunta revisada en el
+ * resumen, y las decisiones del detalle suman las tres columnas de decisiones
+ */
 export function reviewsSquare(
   summary: readonly ReviewReportRow[],
-  detail: readonly ReviewReportDetailRow[],
+  detail: readonly ReviewDetailRow[],
 ): boolean {
-  if (reviewTotals(summary).reviewed !== detail.length) return false;
+  const totals = reviewTotals(summary);
+  const paid = detail.filter((row) => row.counts);
+  if (totals.reviewed !== paid.length) return false;
+  if (totals.approved + totals.changesRequested + totals.rejected !== detail.length) return false;
   const key = (month: string, physician: string) => `${month}|${physician}`;
   const counted = new Map<string, number>();
-  for (const row of detail) {
+  for (const row of paid) {
     const at = key(row.month, row.physicianId);
     counted.set(at, (counted.get(at) ?? 0) + 1);
   }

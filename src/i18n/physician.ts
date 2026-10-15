@@ -560,11 +560,11 @@ export const physicianText = {
     importHint: 'Las preguntas se escriben en el Sheet del banco. La sincronización las trae aquí.',
     myReviews: {
       title: 'Mis revisiones del mes',
-      hint: 'Cada decisión que tomas como revisor cuenta una vez. Los distractores atendidos van aparte.',
+      hint: 'Se paga por pregunta revisada. Varias rondas sobre la misma pregunta en el mes cuentan una vez. Los distractores atendidos van aparte.',
       approved: 'Aprobadas',
       changesRequested: 'Cambios pedidos',
       rejected: 'Rechazadas',
-      reviewed: 'Revisiones',
+      reviewed: 'Preguntas revisadas',
       distractors: 'Distractores atendidos',
     },
     demoNote:
