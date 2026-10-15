@@ -188,6 +188,11 @@ describe('Admin, Pagos', () => {
     fakeCloud();
     showScreen();
     expect(await screen.findByText(text.summary.founderSeats(37, 100, 3))).toBeVisible();
+    // Con un solo lugar apartado la frase va en singular
+    expect(text.summary.founderSeats(1, 100, 1)).toBe(
+      'Lugares Fundador ocupados 1 de 100, 1 apartado por una prueba.',
+    );
+    expect(text.summary.founderSeats(37, 100, 3)).toContain('3 apartados por pruebas.');
     const summary = screen.getByRole('region', { name: text.summary.title });
     expect(within(summary).getByText(text.summary.failedActions).nextSibling).toHaveTextContent(
       '2',

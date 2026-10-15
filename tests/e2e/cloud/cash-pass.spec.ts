@@ -21,6 +21,8 @@ const EMAIL = 'carla.pase@ejemplo.mx';
 const text = billingCloudText;
 
 test.describe('Pases con OXXO y SPEI', () => {
+  // Con freeTrial apagada, como en producción hasta la corrida real, el Mensual dice Elegir y no la
+  // prueba. Los pases no dependen de ella
   test.beforeEach(({ cloud }) => {
     cloud.setFeatureFlags({ cashPasses: true });
   });
@@ -35,7 +37,7 @@ test.describe('Pases con OXXO y SPEI', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.monthly, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
       .click();
 
     // OXXO es un pase de un solo pago, con la garantía por transferencia
@@ -120,7 +122,7 @@ test.describe('Pases con OXXO y SPEI', () => {
     await page.goto(SCREENS.subscription.path);
     await page
       .getByRole('region', { name: t.billing.plans.annual, exact: true })
-      .getByRole('button', { name: t.billing.freeTrialCta })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.annual) })
       .click();
     await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
     await page.getByRole('button', { name: text.actions.oxxo }).click();
@@ -135,10 +137,35 @@ test.describe('Pases con OXXO y SPEI', () => {
     expect(cloud.paymentsOf(EMAIL)).toMatchObject([{ status: 'expired' }]);
     expect(cloud.passesOf(EMAIL)).toEqual([]);
     await page.goto(SCREENS.subscription.path);
-    await expect(page.getByText(text.pending.voucherExpired)).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(text.pending.voucherExpired.oxxo)).toBeVisible({ timeout: 20_000 });
     await expect(
       page.getByRole('region', { name: t.billing.current(t.billing.plans.free) }),
     ).toBeVisible();
+    await expectNoSeriousA11yViolations(page);
+  });
+
+  test('si el servidor apaga los pases con la app abierta, OXXO dice que no está disponible y no cobra', async ({
+    page,
+    cloud,
+  }) => {
+    await enterWithLink(page, cloud, EMAIL, 'Carla');
+    await reloadWithServerFlags(page);
+    await page.goto(SCREENS.subscription.path);
+    await page
+      .getByRole('region', { name: t.billing.plans.monthly, exact: true })
+      .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
+      .click();
+    await page.getByRole('radio', { name: new RegExp(text.options.oxxo.label) }).click();
+    // Ricardo apaga cashPasses en el servidor. Este navegador todavía tiene la copia con la bandera
+    // prendida, pero create-checkout responde 503 not_configured y no abre la pasarela
+    cloud.setFeatureFlags({ cashPasses: false });
+    await page.getByRole('button', { name: text.actions.oxxo }).click();
+    await expect(
+      page.getByText(text.errors.optionUnavailable(text.options.oxxo.label)),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/suscripcion/);
+    expect(cloud.paymentsOf(EMAIL)).toEqual([]);
+    expect(cloud.passesOf(EMAIL)).toEqual([]);
     await expectNoSeriousA11yViolations(page);
   });
 });

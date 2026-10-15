@@ -19,7 +19,8 @@ export const ALLOWED_HOSTNAMES = new Set(['127.0.0.1', 'localhost', '[::1]']);
 
 /**
  * Páginas que pueden llamar al proxy. La app en desarrollo (5173) y en vista previa (4173).
- * Una petición desde cualquier otro sitio se rechaza aunque llegue por localhost
+ * Una petición desde cualquier otro sitio se rechaza aunque llegue por localhost. El proxy simulado de
+ * las pruebas suma la vista previa corrida con PW_PORT_OFFSET (testPorts.ts)
  */
 export const ALLOWED_ORIGINS = new Set([
   'http://127.0.0.1:5173',

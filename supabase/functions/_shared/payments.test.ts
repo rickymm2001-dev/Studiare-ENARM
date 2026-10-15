@@ -222,6 +222,35 @@ function refundObject(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function disputeObject(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'du_1',
+    object: 'dispute',
+    amount: 14_900,
+    currency: 'mxn',
+    charge: 'ch_1',
+    payment_intent: 'pi_1',
+    reason: 'fraudulent',
+    status: 'lost',
+    created: CREATED,
+    evidence: { customer_email_address: 'alumna@ejemplo.mx', customer_name: 'Alumna Ejemplo' },
+    ...overrides,
+  };
+}
+
+/** El PaymentIntent del cargo disputado, como lo contesta GET /v1/payment_intents/{id} */
+const paymentIntentRead = (overrides: Record<string, unknown> = {}): Route =>
+  reply({
+    id: 'pi_1',
+    object: 'payment_intent',
+    customer: 'cus_1',
+    amount: 14_900,
+    amount_received: 14_900,
+    currency: 'mxn',
+    status: 'succeeded',
+    ...overrides,
+  });
+
 const event = (type: string, object: Record<string, unknown>, id = 'evt_1') => ({
   id,
   object: 'event',
@@ -246,8 +275,32 @@ interface WebhookOptions {
   env?: FunctionEnv;
 }
 
+/** La lista de pagos de factura de un PaymentIntent, como la contesta GET /v1/invoice_payments */
+const invoicePayments = (invoice: string | null): Route =>
+  reply({
+    object: 'list',
+    data:
+      invoice === null
+        ? []
+        : [
+            {
+              id: 'inpay_1',
+              object: 'invoice_payment',
+              invoice,
+              is_default: true,
+              status: 'paid',
+              payment: { type: 'payment_intent', payment_intent: 'pi_1' },
+            },
+          ],
+    has_more: false,
+  });
+
 function webhookDeps(options: WebhookOptions = {}) {
-  const { calls, fetchImpl } = fakeFetch(options.routes ?? {});
+  // Por omisión un PaymentIntent no pagó ninguna factura, como el de un pase
+  const { calls, fetchImpl } = fakeFetch({
+    'GET /v1/invoice_payments': invoicePayments(null),
+    ...options.routes,
+  });
   const pending = [...(options.actions ?? [])];
   const record = {
     calls,
@@ -805,8 +858,12 @@ describe('aviso de Stripe por evento', () => {
     ]);
   });
 
-  it('un reembolso completo va al alumno de su cliente con su PaymentIntent y sin id de pago', async () => {
-    const { deps, record } = webhookDeps();
+  it('un reembolso completo va al alumno de su cliente con su PaymentIntent y la factura que pagó', async () => {
+    // Desde basil el cargo no dice su factura. Se busca en los pagos de factura de su PaymentIntent, así
+    // la base encuentra el cobro de la suscripción por su id exacto y no por monto y hora
+    const { deps, record } = webhookDeps({
+      routes: { 'GET /v1/invoice_payments': invoicePayments('in_1') },
+    });
     expect(await (await send(event('charge.refunded', refundObject()), deps)).text()).toBe(
       'applied',
     );
@@ -814,10 +871,115 @@ describe('aviso de Stripe por evento', () => {
     expect(record.charges[0]).toMatchObject({
       kind: 'refunded',
       userId: USER,
-      providerPaymentId: null,
+      providerPaymentId: 'in_1',
       paymentIntentId: 'pi_1',
       amountMxn: 149,
     });
+    const lookup = stripeCalls(record.calls)[0];
+    expect(lookup?.method).toBe('GET');
+    expect(lookup?.url.pathname).toBe('/v1/invoice_payments');
+    expect(Object.fromEntries(lookup?.url.searchParams ?? [])).toEqual({
+      'payment[type]': 'payment_intent',
+      'payment[payment_intent]': 'pi_1',
+      limit: '1',
+    });
+    expect(new Headers(lookup?.init?.headers).get('stripe-version')).toBe(STRIPE_API_VERSION);
+  });
+
+  it('el reembolso de un pase no tiene factura y va solo con su PaymentIntent', async () => {
+    const { deps, record } = webhookDeps();
+    await send(event('charge.refunded', refundObject()), deps);
+    expect(record.charges[0]).toMatchObject({ providerPaymentId: null, paymentIntentId: 'pi_1' });
+  });
+
+  it('si no se puede buscar la factura del reembolso contesta 500 sin aplicar nada', async () => {
+    for (const route of [stripeError(500, { message: 'falla' }), offline]) {
+      const { deps, record } = webhookDeps({ routes: { 'GET /v1/invoice_payments': route } });
+      expect((await send(event('charge.refunded', refundObject()), deps)).status).toBe(500);
+      expect(record.charges).toEqual([]);
+    }
+    // Sin la llave se aplica con el PaymentIntent y queda en el registro
+    const keyless = webhookDeps({ env: envWithoutKey });
+    expect((await send(event('charge.refunded', refundObject()), keyless.deps)).status).toBe(200);
+    expect(keyless.record.charges[0]).toMatchObject({ providerPaymentId: null });
+    expect(keyless.record.lines).toEqual([
+      'Falta STRIPE_SECRET_KEY para buscar la factura del reembolso. Se aplica con su PaymentIntent',
+    ]);
+  });
+
+  it('un contracargo perdido quita lo que pagó ese cobro como un reembolso completo', async () => {
+    const { deps, record } = webhookDeps({
+      routes: {
+        'GET /v1/payment_intents/pi_1': paymentIntentRead(),
+        'GET /v1/invoice_payments': invoicePayments('in_1'),
+      },
+    });
+    const answer = await send(event('charge.dispute.closed', disputeObject(), 'evt_disputa'), deps);
+    expect(answer.status).toBe(200);
+    expect(await answer.text()).toBe('applied');
+    expect(record.customers).toEqual(['cus_1']);
+    expect(record.charges).toHaveLength(1);
+    expect(record.charges[0]).toMatchObject({
+      provider: 'stripe',
+      eventId: 'evt_disputa',
+      kind: 'refunded',
+      userId: USER,
+      providerPaymentId: 'in_1',
+      paymentIntentId: 'pi_1',
+      amountMxn: 149,
+    });
+    expect(stripeCalls(record.calls).map((call) => `${call.method} ${call.url.pathname}`)).toEqual([
+      'GET /v1/payment_intents/pi_1',
+      'GET /v1/invoice_payments',
+    ]);
+  });
+
+  it('un contracargo ganado, uno parcial o uno que se abre no cambian el acceso', async () => {
+    for (const status of ['won', 'warning_closed', 'prevented']) {
+      const { deps, record } = webhookDeps();
+      const answer = await send(event('charge.dispute.closed', disputeObject({ status })), deps);
+      expect(await answer.text()).toBe('Ignorado');
+      expect(record.calls).toEqual([]);
+      expect(record.charges).toEqual([]);
+    }
+    const partial = webhookDeps({
+      routes: { 'GET /v1/payment_intents/pi_1': paymentIntentRead() },
+    });
+    const answer = await send(
+      event('charge.dispute.closed', disputeObject({ amount: 5_000 })),
+      partial.deps,
+    );
+    expect(await answer.text()).toBe('Ignorado');
+    expect(partial.record.charges).toEqual([]);
+    expect(partial.record.lines).toEqual([
+      'Contracargo parcial perdido du_1 de 50 de 149 pesos. No cambia el acceso. Revísalo en Stripe',
+    ]);
+    // Al abrirse solo queda en el registro, sin datos del alumno. El acceso cambia si se pierde
+    const opened = webhookDeps();
+    const created = await send(
+      event('charge.dispute.created', disputeObject({ status: 'needs_response' })),
+      opened.deps,
+    );
+    expect(created.status).toBe(200);
+    expect(await created.text()).toBe('Ignorado');
+    expect(opened.record.calls).toEqual([]);
+    expect(opened.record.charges).toEqual([]);
+    expect(opened.record.lines).toEqual([
+      'Contracargo abierto du_1 por fraudulent. No cambia el acceso hasta que Stripe lo cierre',
+    ]);
+  });
+
+  it('si no se puede leer el cobro del contracargo contesta 500 sin aplicar nada', async () => {
+    for (const route of [stripeError(500, { message: 'falla' }), offline]) {
+      const { deps, record } = webhookDeps({ routes: { 'GET /v1/payment_intents/pi_1': route } });
+      expect((await send(event('charge.dispute.closed', disputeObject()), deps)).status).toBe(500);
+      expect(record.charges).toEqual([]);
+    }
+    const keyless = webhookDeps({ env: envWithoutKey });
+    expect((await send(event('charge.dispute.closed', disputeObject()), keyless.deps)).status).toBe(
+      500,
+    );
+    expect(keyless.record.charges).toEqual([]);
   });
 
   it('un reembolso de un cliente que no conocemos se asienta sin alumno, para que alguien lo vea', async () => {
@@ -836,6 +998,89 @@ describe('aviso de Stripe por evento', () => {
     expect(await answer.text()).toBe('Ignorado');
     expect(record.customers).toEqual([]);
     expect(record.charges).toEqual([]);
+  });
+
+  it('lo que se guarda del evento va sin los datos del pagador y conserva la hora del cargo', async () => {
+    const payer = {
+      email: 'alumna@ejemplo.mx',
+      name: 'Alumna Ejemplo',
+      phone: '+525512345678',
+      address: { line1: 'Calle 1', postal_code: '01000', country: 'MX' },
+    };
+    const session = subscriptionSession({
+      customer_details: { ...payer, tax_exempt: 'none' },
+      customer_email: 'alumna@ejemplo.mx',
+      collected_information: {
+        shipping_details: { name: 'Alumna Ejemplo', address: payer.address },
+      },
+    });
+    const sessionDeps = webhookDeps({
+      routes: sessionRead(session, subscriptionObject({ status: 'trialing' })),
+    });
+    await send(event('checkout.session.completed', session), sessionDeps.deps);
+    const invoiceDeps = webhookDeps();
+    await send(
+      event(
+        'invoice.paid',
+        invoiceObject({
+          customer_email: 'alumna@ejemplo.mx',
+          customer_name: 'Alumna Ejemplo',
+          customer_phone: '+525512345678',
+          customer_address: payer.address,
+          customer_shipping: { name: 'Alumna Ejemplo', address: payer.address },
+          customer_tax_ids: [{ type: 'mx_rfc', value: 'XAXX010101000' }],
+        }),
+      ),
+      invoiceDeps.deps,
+    );
+    const refundDeps = webhookDeps();
+    await send(
+      event(
+        'charge.refunded',
+        refundObject({
+          billing_details: payer,
+          receipt_email: 'alumna@ejemplo.mx',
+          receipt_url: 'https://pay.stripe.com/receipts/x',
+          shipping: { name: 'Alumna Ejemplo', address: payer.address },
+          payment_method_details: { type: 'card', card: { last4: '4242', fingerprint: 'fp_1' } },
+        }),
+      ),
+      refundDeps.deps,
+    );
+    const disputeDeps = webhookDeps({
+      routes: { 'GET /v1/payment_intents/pi_1': paymentIntentRead() },
+    });
+    await send(event('charge.dispute.closed', disputeObject()), disputeDeps.deps);
+
+    const stored = [
+      sessionDeps.record.states[0]?.payload,
+      invoiceDeps.record.charges[0]?.payload,
+      refundDeps.record.charges[0]?.payload,
+      disputeDeps.record.charges[0]?.payload,
+    ];
+    for (const payload of stored) {
+      expect(payload).toMatchObject({ id: 'evt_1', created: CREATED });
+      expect(typeof payload?.type).toBe('string');
+      const text = JSON.stringify(payload);
+      for (const secret of [
+        'alumna@ejemplo.mx',
+        'Alumna Ejemplo',
+        '+525512345678',
+        'Calle 1',
+        'XAXX',
+        '4242',
+        'receipts',
+      ]) {
+        expect(text).not.toContain(secret);
+      }
+    }
+    // La base busca un reembolso sin ids por la hora del cargo (data.object.created)
+    expect(refundDeps.record.charges[0]?.payload).toMatchObject({
+      data: { object: { id: 'ch_1', created: CREATED, payment_intent: 'pi_1', amount: 14_900 } },
+    });
+    expect(invoiceDeps.record.charges[0]?.payload).toMatchObject({
+      data: { object: { id: 'in_1', customer: 'cus_1', amount_paid: 14_900 } },
+    });
   });
 
   it('si la base falla al buscar al alumno o al ligar al cliente contesta 500 y no aplica', async () => {
@@ -955,8 +1200,8 @@ describe('referidos con la prueba gratis y el primer cobro', () => {
    * apply_charge, complete_referral y revert_referral (migraciones 20261019000001 y 20261022000002). Un
    * aviso repetido se reconoce por su id, un pago de 0 pesos o sin plan se ignora, el mismo cobro no se
    * cuenta dos veces y el referido se concreta con el primer cobro, una sola vez. Un reembolso completo
-   * de ese cobro, que de Stripe llega sin id de pago y se reconoce por su PaymentIntent o por el monto,
-   * lo revierte y quita el mes. La regla de verdad la prueban referral_first_charge_test.sql y
+   * de ese cobro, que de Stripe llega con la factura que pagó su PaymentIntent o, si no la tiene, se
+   * reconoce por el monto, lo revierte y quita el mes. La regla de verdad la prueban referral_first_charge_test.sql y
    * billing_plans_test.sql contra Postgres
    */
   function ledger() {
@@ -1118,6 +1363,8 @@ const baseContext: CheckoutContext = {
   founderLost: false,
   oxxoExpiresDays: 3,
   customerId: 'cus_1',
+  // Las banderas de feature_flags que hace cumplir el servidor, prendidas para probar todo
+  flags: { cashPasses: true, mercadoPago: true },
 };
 
 const liveSubscription = (
@@ -1587,6 +1834,57 @@ describe('crear el pago', () => {
     );
   });
 
+  it('con la bandera de pases o de Mercado Pago apagada en el servidor contesta 503 sin abrir nada', async () => {
+    const closed = { cashPasses: false, mercadoPago: false };
+    for (const [body, flag] of [
+      [{ plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' }, 'cashPasses'],
+      [{ plan: 'annual', provider: 'stripe', mode: 'pass', method: 'spei' }, 'cashPasses'],
+      [{ plan: 'monthly', provider: 'mercadopago', mode: 'pass' }, 'mercadoPago'],
+      [{ plan: 'annual', provider: 'mercadopago', mode: 'subscription' }, 'mercadoPago'],
+    ] as const) {
+      const { deps, calls, lines } = checkoutDeps({ context: { flags: closed } });
+      const answer = await askCheckout(body, deps);
+      expect(answer.status).toBe(503);
+      expect(await answer.json()).toEqual({ error: 'not_configured' });
+      expect(calls).toEqual([]);
+      expect(lines).toEqual([
+        `La bandera ${flag} está apagada en el servidor. No se abre el pago del plan ${body.plan}`,
+      ]);
+    }
+    // Una sola bandera prendida abre solo lo suyo
+    const onlyPasses = checkoutDeps({
+      context: { flags: { cashPasses: true, mercadoPago: false } },
+    });
+    expect(
+      (
+        await askCheckout(
+          { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' },
+          onlyPasses.deps,
+        )
+      ).status,
+    ).toBe(200);
+    expect(
+      (await askCheckout({ plan: 'monthly', provider: 'mercadopago' }, onlyPasses.deps)).status,
+    ).toBe(503);
+    // Sin banderas en el contexto cuentan como apagadas. La tarjeta con renovación no depende de ellas
+    const { flags: _flags, ...withoutFlags } = baseContext;
+    const old = checkoutDeps({
+      overrides: { checkoutContext: () => Promise.resolve(withoutFlags) },
+    });
+    expect(
+      (
+        await askCheckout(
+          { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo' },
+          old.deps,
+        )
+      ).status,
+    ).toBe(503);
+    const card = checkoutDeps({ context: { flags: closed } });
+    expect((await askCheckout({ plan: 'monthly', provider: 'stripe' }, card.deps)).status).toBe(
+      200,
+    );
+  });
+
   it('solo la página de la app puede llamar desde el navegador', async () => {
     const { deps } = checkoutDeps();
     const ok = await askCheckout({ plan: 'monthly', provider: 'stripe' }, deps);
@@ -1750,15 +2048,24 @@ describe('portal de facturación', () => {
     expect(calls).toEqual([]);
   });
 
-  it('sin la configuración del portal se abre la de Stripe y queda en el registro', async () => {
-    const { deps, calls, lines } = portalDeps({
-      env: { ...env, STRIPE_PORTAL_CONFIG_REGULAR: ' ' },
-    });
-    expect((await askPortal(deps)).status).toBe(200);
-    expect(form(calls[0]).configuration).toBeUndefined();
-    expect(lines).toEqual([
-      'Falta STRIPE_PORTAL_CONFIG_REGULAR. El portal se abre con la configuración por omisión de Stripe',
+  it('sin la configuración del portal contesta 503 sin llamar a Stripe y lo deja en el registro', async () => {
+    // La configuración por omisión de Stripe deja elegir cualquier precio, también el Fundador sin lugar
+    const regular = portalDeps({ env: { ...env, STRIPE_PORTAL_CONFIG_REGULAR: ' ' } });
+    const answer = await askPortal(regular.deps);
+    expect(answer.status).toBe(503);
+    expect(await answer.json()).toEqual({ error: 'not_configured' });
+    expect(regular.calls).toEqual([]);
+    expect(regular.lines).toEqual([
+      'Falta STRIPE_PORTAL_CONFIG_REGULAR. El portal no se abre sin su configuración, porque la de Stripe por omisión deja elegir cualquier precio',
     ]);
+
+    const { STRIPE_PORTAL_CONFIG_FOUNDER: _withoutFounder, ...envWithoutFounder } = env;
+    const founder = portalDeps({
+      env: envWithoutFounder,
+      context: { subscription: liveSubscription({ plan: 'founder' }) },
+    });
+    expect((await askPortal(founder.deps)).status).toBe(503);
+    expect(founder.calls).toEqual([]);
   });
 
   it('sin sesión contesta 401 y sin llave o sin dirección de la app 503', async () => {

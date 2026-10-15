@@ -24,7 +24,7 @@ import {
 } from '@/config/billing';
 import { cloudConfigured } from '@/data/cloud/client';
 import { PlanPrice } from '@/features/billing/PlanPrice';
-import { lockedCtaOffersTrial } from '@/features/shared/lockedCta';
+import { trialAdvertised } from '@/features/shared/lockedCta';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
 import { legalText } from '@/i18n/legal';
@@ -44,7 +44,7 @@ const FEATURES: { icon: ReactNode; key: keyof typeof t.landing.features }[] = [
 
 export function LandingScreen() {
   const text = t.landing;
-  const offersTrial = lockedCtaOffersTrial();
+  const offersTrial = trialAdvertised();
   return (
     <div className="flex flex-col gap-10 pb-6">
       <title>{t.app.documentTitle(text.documentTitle)}</title>

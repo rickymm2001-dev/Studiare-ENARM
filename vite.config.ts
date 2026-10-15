@@ -7,9 +7,13 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { BRAND } from './src/config/brand.ts';
 import { aiOriginOf, buildHeadersFile, buildMetaCsp, supabaseOriginOf } from './src/config/csp.ts';
+import { loopbackUrl, testPorts } from './server/src/testPorts.ts';
 
-// Puerto local del proxy de IA. Debe coincidir con server/src/config.ts
-const PROXY_TARGET = 'http://127.0.0.1:8787';
+// Puertos de la vista previa (4173) y del proxy de IA local (8787, el de server/src/config.ts). Solo
+// cambian con PW_PORT_OFFSET, que usan las pruebas de Playwright para no chocar entre copias del
+// repositorio. Con esa variable el proxy solo arranca en modo simulado (server/src/main.ts)
+const PORTS = testPorts(process.env);
+const PROXY_TARGET = loopbackUrl(PORTS.proxy);
 
 // Ruta donde vive la app publicada. En local y con dominio propio es /.
 // En GitHub Pages sin dominio propio es /Studiare-ENARM/. La pone el workflow de Pages (D-055)
@@ -198,7 +202,7 @@ export default defineConfig(({ mode }) => ({
   },
   preview: {
     host: '127.0.0.1',
-    port: 4173,
+    port: PORTS.preview,
     strictPort: true,
     proxy: apiProxy,
   },

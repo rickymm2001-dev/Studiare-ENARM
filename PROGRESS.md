@@ -25,8 +25,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B6. Apuntes y mazos (PR 44 fusionado)
 - [x] B7. Party real y lo que se queda o se va (PR 48 fusionado)
 - [x] B8. Plan Gratis (PR 49 fusionado)
-- [x] B9. Cuentas y acceso (PR en curso)
-- [ ] B10. Pagos completos
+- [x] B9. Cuentas y acceso (PR 52 fusionado)
+- [x] B10. Pagos completos (PR 53 fusionado)
+- [x] Herramientas. Despliegue desde el repo y Playwright en paralelo (D-131, PR en curso)
 - [ ] B11. Banco en la nube y Google Sheets
 - [ ] B12. IA real
 - [ ] B13. Inglés médico
@@ -144,14 +145,27 @@ Evidencia
 - Capturas en docs/screenshots/v3/b9 (41)
 - Para B19. El recorrido de audit:ui anota dos detalles de accesibilidad que ya estaban en main. El enlace al aviso en Configuración, Privacidad, es chico en el teléfono, y un campo de Datos de demostración del admin no muestra el foco. También, en el riel del admin a 1280 por 800 el último ícono sale sin etiqueta y las pantallas del segundo factor se ven dentro del marco completo de la app
 
+### B10. Pagos completos (D-130)
+- Hecho. Prueba gratis de 7 días, pases con OXXO y SPEI, Fundador anual, cambio de plan en el portal, Mercado Pago tras su bandera, códigos de descuento, facturas a pedido y la pantalla Admin, Pagos. Correos de pagos en la cola para B15
+- Revisión independiente con 12 hallazgos corregidos, entre ellos uno alto (lugares Fundador y prueba repetida al borrar la cuenta). Al borrar la cuenta ya no queda nada de la prueba ni del lugar Fundador que se ligue a la persona por Stripe
+- Evidencia. Typecheck, lint y formato limpios. Vitest con 3,564 pruebas. SQL en 21 archivos. E2e de nube 68 de 68 en teléfono y computadora, e2e normal en verde (rendimiento y sin conexión pasan solas con la máquina cargada) y audit:ui 20 de 20. JS inicial de 297.0 KB de 300
+- Capturas en docs/screenshots/v3/b10 (51)
+- Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
+
+### Herramientas (D-131)
+- npm run deploy:supabase aplica el SQL, también las piezas con drop o delete, publica las funciones y pone los secretos desde el repo con el token de Supabase. Con el token, lo que falta de B10 son dos comandos (docs/DESPLIEGUE.md) y ya no pegas archivos en el SQL Editor
+- PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
+- Revisión independiente con 13 hallazgos, ninguno alto, todos corregidos con su prueba
+- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
+
 ### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
 - B7 fusionado en main (PR 48), con sus migraciones aplicadas al proyecto
 - B8 fusionado en main (PR 49), con sus dos migraciones aplicadas al proyecto y verificadas por huella antes de fusionar
 - La paleta con más color (PR 47 de otra herramienta, D-128) fusionada en main (PR 51), con los hallazgos de su revisión corregidos. El PR 50 de otra sesión, que repetía la paleta con D-127, se cerró por decisión de Ricardo. Los PR 45 y 46 se cerraron y su contenido entra en B16 y B17
-- B9 cerrado en la rama de trabajo, con su PR. Su migración 20261020000001 y la función admin-reset-mfa se aplican al proyecto justo antes de fusionar
-- B10 con el servidor de pagos (Stripe, Mercado Pago, correos y SQL) unido sobre B8 en int10, con 20 archivos SQL y las pruebas del servidor en verde. Falta su interfaz, que arranca sobre B9 integrado
+- B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
+- B10 cerrado en la rama de trabajo, con su PR. Sus migraciones y funciones se aplican al proyecto antes de fusionar, salvo las dos piezas con drop o delete de pagos-b10.sql, que pega Ricardo
 - Los diseños de B10, B11 y B12 están en /home/user/wt/plans
 - Los subagentes se detuvieron cinco veces por el límite de uso de la cuenta y se reanudaron con su contexto
 

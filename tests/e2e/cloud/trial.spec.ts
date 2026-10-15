@@ -137,9 +137,12 @@ test.describe('Prueba gratis', () => {
     cloud,
   }) => {
     const zone = test.info().project.use.timezoneId ?? 'America/Merida';
+    // El servidor da la prueba solo con freeTrial prendida en feature_flags (trial_available)
+    cloud.setFeatureFlags({ freeTrial: true });
     await enterWithLink(page, cloud, EMAIL, 'Ana');
     await page.goto(SCREENS.subscription.path);
-    // La prueba no depende de la bandera. La decide el servidor y Suscripción la ofrece
+    // La decide el servidor con trialAvailable de my_plan y Suscripción la ofrece, sin recargar con la
+    // copia nueva de las banderas
     await page
       .getByRole('region', { name: t.billing.plans.annual, exact: true })
       .getByRole('button', { name: t.billing.freeTrialCta })

@@ -3,8 +3,8 @@
 -- Qué hace
 --   Borra las filas de pago de prueba de las cuentas que se listan al final. Son las dos cuentas de
 --   prueba de Ricardo y, desde B10, las cuentas de la corrida real en modo prueba. Limpia subscriptions,
---   payments, billing_customers y, desde B10, founder_seats, trial_claims, plan_passes, invoice_requests,
---   email_outbox y billing_actions. Hace falta porque el cupo Fundador cuenta los lugares apartados y
+--   payments, billing_customers y, desde B10, founder_seats, trial_claims, trial_history, plan_passes,
+--   invoice_requests, email_outbox y billing_actions. Hace falta porque el cupo Fundador cuenta los lugares apartados y
 --   confirmados, porque una prueba gratis usada frena otra con el mismo correo y porque un cliente de
 --   prueba de Stripe no existe en modo real y rompería el pago cuando se cambie a las llaves reales. Las
 --   cuentas en sí no se tocan.
@@ -38,6 +38,10 @@ begin
   delete from public.invoice_requests where user_id = any (p_users);
   delete from public.email_outbox where recipient_user = any (p_users);
   delete from public.plan_passes where user_id = any (p_users);
+  -- La prueba usada para siempre, por la cuenta y por la huella de su correo
+  delete from public.trial_history
+    where user_id = any (p_users)
+       or email_hash in (select public.trial_key_hash(public.trial_account_key(u)) from unnest(p_users) as u);
   delete from public.trial_claims where user_id = any (p_users);
   delete from public.founder_seats where user_id = any (p_users);
   delete from public.payments where user_id = any (p_users);
@@ -49,6 +53,7 @@ begin
     'clientes', (select count(*) from public.billing_customers where user_id = any (p_users)),
     'lugares', (select count(*) from public.founder_seats where user_id = any (p_users)),
     'pruebas', (select count(*) from public.trial_claims where user_id = any (p_users)),
+    'pruebas_usadas', (select count(*) from public.trial_history where user_id = any (p_users)),
     'pases', (select count(*) from public.plan_passes where user_id = any (p_users)),
     'facturas', (select count(*) from public.invoice_requests where user_id = any (p_users)),
     'correos', (select count(*) from public.email_outbox where recipient_user = any (p_users)),

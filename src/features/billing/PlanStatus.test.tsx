@@ -44,7 +44,25 @@ describe('qué estado tiene el plan', () => {
     expect(
       planStateOf(sub({ cloudStatus: 'trialing', trialEnd: TRIAL_END, cancelAtPeriodEnd: true })),
     ).toEqual({ kind: 'trialCanceled', end: TRIAL_END });
-    expect(planStateOf(sub())).toEqual({ kind: 'renews', date: END, plan: 'founder' });
+    expect(planStateOf(sub())).toEqual({
+      kind: 'renews',
+      date: END,
+      plan: 'founder',
+      scheduled: false,
+    });
+    // Con la bajada programada se renueva con el mensual del mismo precio, regular o Fundador
+    expect(planStateOf(sub({ plan: 'founder_annual', scheduledChange: true }))).toEqual({
+      kind: 'renews',
+      date: END,
+      plan: 'founder',
+      scheduled: true,
+    });
+    expect(planStateOf(sub({ plan: 'annual', scheduledChange: true }))).toEqual({
+      kind: 'renews',
+      date: END,
+      plan: 'monthly',
+      scheduled: true,
+    });
     expect(planStateOf(sub({ cancelAtPeriodEnd: true }))).toEqual({ kind: 'canceled', until: END });
     expect(planStateOf(sub({ cloudStatus: 'canceled' }))).toEqual({ kind: 'canceled', until: END });
     expect(planStateOf(sub({ cloudStatus: 'past_due', provider: 'mercadopago' }))).toEqual({
@@ -97,7 +115,13 @@ describe('PlanStatus en Suscripción', () => {
         guaranteeUntil: '2026-10-21T00:00:00.000Z',
       }),
     );
-    expect(screen.getByText(status.renews(longDate(END), t.billing.price(749)))).toBeVisible();
+    // Con la bajada programada al renovar se cobra el Mensual Fundador, no el anual de ahora
+    expect(
+      screen.getByText(
+        status.renewsAs(longDate(END), t.billing.plans.founder, t.billing.price(79)),
+      ),
+    ).toBeVisible();
+    expect(screen.queryByText(status.renews(longDate(END), t.billing.price(749)))).toBeNull();
     expect(screen.getByText(status.scheduled(longDate(END)))).toBeVisible();
     expect(
       screen.getByText(status.guarantee(longDate('2026-10-21T00:00:00.000Z'), 'ayuda@studiare.mx')),
@@ -169,7 +193,22 @@ describe('pago pendiente', () => {
     expect(pendingPaymentText(pending('oxxo'))).toBe(pendingText.oxxo(t.billing.price(149)));
     expect(pendingPaymentText(pending('spei'))).toBe(pendingText.spei(t.billing.price(149)));
     expect(pendingPaymentText(pending('mercadopago'))).toBe(pendingText.mercadopago);
-    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }))).toBe(pendingText.voucherExpired);
+    // El pase que venció lo dice con las palabras de su método, y sin saberlo no nombra ninguno
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'oxxo')).toBe(
+      pendingText.voucherExpired.oxxo,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'spei')).toBe(
+      pendingText.voucherExpired.spei,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }), 'mercadopago')).toBe(
+      pendingText.voucherExpired.mercadopago,
+    );
+    expect(pendingPaymentText(sub({ issue: 'voucher_expired' }))).toBe(
+      pendingText.voucherExpired.unknown,
+    );
+    expect(pendingText.voucherExpired.spei).not.toMatch(/OXXO|ficha/);
+    expect(pendingText.voucherExpired.mercadopago).not.toMatch(/OXXO|ficha/);
+    expect(pendingText.voucherExpired.unknown).not.toMatch(/OXXO|ficha/);
     expect(pendingPaymentText(sub())).toBeNull();
   });
 
@@ -213,6 +252,18 @@ describe('Tu plan en Perfil', () => {
     card(sub({ plan: 'founder_annual' }));
     expect(screen.getByText(t.billing.plans.founder_annual)).toBeVisible();
     expect(screen.getByText(profile.renews(longDate(END), t.billing.price(749)))).toBeVisible();
+  });
+
+  it('con la bajada programada dice el plan y el precio que se cobran al renovar', () => {
+    card(sub({ plan: 'annual', scheduledChange: true }));
+    // Arriba sigue el plan de ahora, y la línea dice lo que se cobra al renovar
+    expect(screen.getByText(t.billing.plans.annual)).toBeVisible();
+    expect(
+      screen.getByText(
+        profile.renewsAs(longDate(END), t.billing.plans.monthly, t.billing.price(149)),
+      ),
+    ).toBeVisible();
+    expect(screen.queryByText(profile.renews(longDate(END), t.billing.price(1499)))).toBeNull();
   });
 
   it('el pago simulado lo dice y Gratis no tiene línea de estado', () => {

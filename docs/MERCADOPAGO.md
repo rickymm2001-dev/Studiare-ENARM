@@ -11,8 +11,8 @@ La documentación web de Mercado Pago no abre desde el entorno de la sesión. Lo
 - **Sin prueba gratis, sin precio Fundador y sin códigos de descuento** en Mercado Pago (8.3 del diseño y respuesta 21). Eso va solo con tarjeta en Stripe
 - **Avisos.** La función `payment-webhook-mercadopago` entiende los temas payment, subscription_preapproval y subscription_authorized_payment. Verifica la firma, consulta el recurso a Mercado Pago con el token del servidor y lo aplica en la base una sola vez
 - **Cancelar desde la app.** Mercado Pago no tiene portal como Stripe. La función nueva `cancel-subscription` cancela la suscripción del alumno y su plan vale hasta el fin de lo pagado
-- **Reembolsos.** Se hacen desde el panel de Mercado Pago. Un reembolso completo o un contracargo quitan el pase o el plan, igual que con Stripe
-- **Apagado.** La bandera `mercadoPago` está apagada en todos los entornos y la app no muestra la opción hasta que exista la cuenta y el aviso esté desplegado
+- **Reembolsos.** Se hacen desde el panel de Mercado Pago. Un reembolso completo o un contracargo (charged_back) quitan el pase o el plan, igual que en Stripe un reembolso completo o un contracargo perdido
+- **Apagado.** La bandera `mercadoPago` está apagada en todos los entornos y la app no muestra la opción hasta que exista la cuenta y el aviso esté desplegado. El servidor cumple la misma bandera. Sin `mercadoPago` en true en platform_settings, clave feature_flags, `create-checkout` contesta 503 not_configured a todo pago con Mercado Pago. Cancelar desde la app y los avisos de pagos que ya empezaron siguen funcionando
 
 ## Cómo funciona por dentro
 
@@ -33,6 +33,7 @@ Reglas que conviene saber
 - El mismo cobro llega por dos temas (payment y subscription_authorized_payment). Los dos avisos llevan el mismo id de pago y el mismo fin de periodo, así la base no lo cuenta dos veces
 - Un cobro rechazado de la suscripción no la marca con cobro fallido. Mercado Pago reintenta y un aviso tardío del intento malo podría llegar después del cobro bueno. Si Mercado Pago se rinde, el cambio llega por subscription_preapproval
 - Si un cobro llega sin la referencia, se lee la de su suscripción
+- Si el cobro llega antes que el aviso de su suscripción y sin su id, la base crea la fila con ese cobro y la suscripción que llega después es la misma. Adopta su id y no se marca como segunda suscripción ni se cancela
 - Lo que se guarda del recurso en payment_webhook_events va sin los datos del pagador (correo, nombre, identificación, tarjeta y cuenta de banco)
 - Si la base deja una acción de cancelar una suscripción de Mercado Pago (por ejemplo después de un reembolso completo, 8.6), el aviso la ejecuta después de aplicar. Falta que `runtime.ts` le pase `claimBillingActions` y `finishBillingAction` (ver Pendientes del código)
 

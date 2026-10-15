@@ -70,7 +70,7 @@ export const invoicesText = {
     summary: {
       title: 'Resumen',
       founderSeats: (taken: number, total: number, held: number) =>
-        `Lugares Fundador ocupados ${taken.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')}, ${held.toLocaleString('es-MX')} apartados por pruebas.`,
+        `Lugares Fundador ocupados ${taken.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')}, ${held.toLocaleString('es-MX')} ${held === 1 ? 'apartado por una prueba' : 'apartados por pruebas'}.`,
       founderClosed: 'La promoción Fundador está cerrada.',
       activeTrials: 'Pruebas activas',
       activePasses: 'Pases activos',

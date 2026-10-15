@@ -20,8 +20,10 @@ export const billingCloudText = {
       label: 'Tarjeta, Apple Pay o Google Pay',
       trial: (price: string, period: string) =>
         `${TRIAL_DAYS} días gratis. Después ${price} ${period} con renovación automática hasta que canceles.`,
+      // Sin decir por qué no hay prueba. my_plan solo dice que no la hay, y puede ser porque ya la
+      // usó, porque pagó antes o porque está apagada para todos
       noTrial: (price: string, period: string) =>
-        `${price} ${period} con renovación automática hasta que canceles. Ya usaste tu prueba gratis.`,
+        `${price} ${period} con renovación automática hasta que canceles. Sin prueba gratis, el primer cobro es hoy.`,
     },
     oxxo: {
       label: 'Efectivo en OXXO',
@@ -81,6 +83,9 @@ export const billingCloudText = {
     trial_mismatch:
       'Tu prueba gratis cambió mientras elegías. Revisa el aviso y vuelve a intentarlo.',
     not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
+    // Un pase o Mercado Pago que el servidor tiene apagado, aunque este navegador lo mostrara
+    optionUnavailable: (option: string) =>
+      `${option} todavía no está disponible. Elige otra forma de pago o intenta más tarde.`,
     unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
     failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
   },
@@ -119,6 +124,11 @@ export const billingCloudText = {
   portalOpening: 'Abriendo el portal…',
   portalFailed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
 
+  // Recibos en Suscripción con la nube. Los pagos reales se ven en Facturas, en Perfil
+  receiptsInCloud:
+    'Tus pagos están en Configuración, en Facturas, donde también pides la factura de cada uno.',
+  receiptsInCloudLink: 'Ver mis pagos',
+
   // Estado del plan (3.1.3)
   status: {
     trialing: (date: string, price: string) =>
@@ -126,6 +136,8 @@ export const billingCloudText = {
     trialCanceled: (date: string) =>
       `Cancelaste tu prueba. Termina el ${date} y no se te cobrará nada.`,
     renews: (date: string, price: string) => `Se renueva el ${date} por ${price}.`,
+    renewsAs: (date: string, plan: string, price: string) =>
+      `Se renueva el ${date} como ${plan} por ${price}.`,
     canceled: (date: string) => `Cancelaste tu suscripción. Tu plan vale hasta el ${date}.`,
     pastDue:
       'No pudimos cobrar tu renovación. Actualiza tu tarjeta en Administrar suscripción para no perder tu plan.',
@@ -158,7 +170,14 @@ export const billingCloudText = {
       `Esperamos tu transferencia SPEI de ${price}. Tu plan se activa en cuanto llegue.`,
     mercadopago:
       'Tu pago con Mercado Pago está pendiente. Tu plan se activa cuando Mercado Pago lo confirme.',
-    voucherExpired: 'Tu ficha OXXO venció sin pago. No se cobró nada. Puedes generar otra.',
+    // El pago de un pase que venció, con las palabras de su método. unknown si no se pudo saber cuál
+    voucherExpired: {
+      oxxo: 'Tu ficha OXXO venció sin pago. No se cobró nada. Puedes generar otra.',
+      spei: 'Tu pago por transferencia SPEI venció sin que llegara la transferencia. No se cobró nada. Puedes empezar otro.',
+      mercadopago:
+        'Tu pago de Mercado Pago venció sin completarse. No se cobró nada. Puedes intentarlo otra vez.',
+      unknown: 'Tu pago pendiente venció sin pago. No se cobró nada. Puedes empezar otro.',
+    },
   },
 
   // Administrar suscripción con Stripe
@@ -173,8 +192,9 @@ export const billingCloudText = {
         'No encontramos una suscripción con Stripe en tu cuenta. Si tienes un pase, no se renueva solo y termina en la fecha indicada. Si es un mes gratis por referido, termina solo.',
       mercadopago:
         'Tu suscripción es con Mercado Pago. Puedes cancelarla aquí mismo, en Administrar suscripción.',
+      // El servidor no abre el portal sin su configuración (503 not_configured). Se dice qué hacer
       not_configured:
-        'La administración de suscripciones todavía no está activada. Escribe al equipo de Studiare.',
+        'Por ahora no podemos abrir Administrar suscripción. Escribe al equipo de Studiare para cambiar de plan o cancelar, y lo hacemos por ti.',
       unsafe_url: 'Stripe mandó una dirección que no reconocemos. No la abrimos.',
       failed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
     },

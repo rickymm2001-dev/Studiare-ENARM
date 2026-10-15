@@ -100,6 +100,13 @@ test.describe('Pago en la nube', () => {
     await expect(
       page.getByRole('region', { name: t.billing.current(t.billing.plans.founder) }),
     ).toBeVisible();
+
+    // Sin la configuración del portal Fundador el servidor no lo abre (503 not_configured) y la app
+    // dice a quién escribir para cambiar de plan o cancelar
+    cloud.setPortalConfig({ founder: false });
+    await page.getByRole('button', { name: text.portal.go }).click();
+    await expect(page.getByText(text.portal.errors.not_configured)).toBeVisible();
+    await expect(page).toHaveURL(/\/suscripcion$/);
   });
 
   test('cancelar en la pasarela regresa sin cobrar nada', async ({ page, cloud }) => {

@@ -98,6 +98,8 @@ test.describe('Referidos', () => {
     cloud,
     consoleErrors,
   }) => {
+    // El servidor da la prueba gratis solo con freeTrial prendida (trial_available)
+    cloud.setFeatureFlags({ freeTrial: true });
     // Ana ve su enlace en Configuración, sección Perfil, también en el plan Gratis (4.3)
     await enterWithLink(page, cloud, ANA, 'Ana');
     await page.goto(`${SCREENS.settings.path}#perfil`);

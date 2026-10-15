@@ -6,9 +6,10 @@
 // suma otro pase (8.10).
 import { Check, Crown, Gauge, Minus, Receipt } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useCloud } from '@/app/cloudState';
+import { screenPath } from '@/app/screens';
 import {
   canUse,
   checkoutPlanFor,
@@ -47,7 +48,7 @@ import {
   PaymentReturnNotice,
 } from './CloudBilling';
 import { PendingPaymentNotice } from './PendingPaymentNotice';
-import { longDate, liveProviderOf } from './planState';
+import { longDate, liveProviderOf, trialOffered } from './planState';
 import { PlanPrice } from './PlanPrice';
 import { PlanStatus } from './PlanStatus';
 import { usePortal } from './usePortal';
@@ -111,7 +112,7 @@ function Billing({ session }: { session: ReadySession }) {
   // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-118)
   const liveProvider = inCloud ? liveProviderOf(subscription) : null;
   const passLive = inCloud && current !== 'free' && subscription?.source === 'pass';
-  const trialAvailable = inCloud && subscription?.trialAvailable === true;
+  const trialAvailable = trialOffered(subscription, inCloud);
   const flags = readPaymentFlags();
   const canAddPass = paymentOptionsFor(flags, true).length > 0;
   // Quien paga el precio regular no ve el de Fundador, que ya no es el suyo
@@ -346,7 +347,18 @@ function Billing({ session }: { session: ReadySession }) {
         <CardHeader>
           <CardTitle id="recibos-titulo">{t.billing.receiptsTitle}</CardTitle>
         </CardHeader>
-        {receipts.length === 0 ? (
+        {receipts.length === 0 && inCloud ? (
+          // Con la nube los pagos reales no son recibos simulados. Viven en Facturas, en Perfil
+          <p className="text-sm text-fg-muted">
+            {billingCloudText.receiptsInCloud}{' '}
+            <Link
+              to={`${screenPath('settings')}#perfil`}
+              className="font-semibold text-primary-ink underline underline-offset-2"
+            >
+              {billingCloudText.receiptsInCloudLink}
+            </Link>
+          </p>
+        ) : receipts.length === 0 ? (
           <p className="text-sm text-fg-muted">{t.billing.noReceipts}</p>
         ) : (
           <ul className="flex flex-col gap-2">

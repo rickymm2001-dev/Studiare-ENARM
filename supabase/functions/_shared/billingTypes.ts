@@ -98,6 +98,18 @@ export interface CheckoutSubscription {
   cancelAtPeriodEnd: boolean;
 }
 
+/**
+ * Las banderas de lanzamiento que el servidor hace cumplir al abrir un pago. Son las de feature_flags en
+ * platform_settings, la misma clave que lee la app, y solo el booleano true las prende. freeTrial no viene
+ * aquí porque ya decide trialAvailable
+ */
+export interface CheckoutFlags {
+  /** Pases de un solo pago con OXXO o SPEI en Stripe */
+  cashPasses: boolean;
+  /** Suscripción y pase con Mercado Pago */
+  mercadoPago: boolean;
+}
+
 /** Respuesta de checkout_context, igual a 1.8 del diseño */
 export interface CheckoutContext {
   inForce: 'subscription' | 'pass' | null;
@@ -111,6 +123,8 @@ export interface CheckoutContext {
   oxxoExpiresDays: number;
   /** El cliente de Stripe ligado a la cuenta */
   customerId: string | null;
+  /** Sin el campo, como en una base sin la migración, las banderas cuentan como apagadas */
+  flags?: CheckoutFlags;
 }
 
 /** Una acción con la pasarela que decidió la base, como la devuelve claim_billing_actions */

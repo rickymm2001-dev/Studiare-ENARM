@@ -1,7 +1,8 @@
 -- Pagos completos (B10 del plan del cambio, respuestas 1, 2 y 7 a 21, secciones 1 y 2 del diseño).
 --
 -- Qué agrega
---   - Prueba gratis de 7 días con tarjeta (estado trialing), una por persona. Cuenta como plan vigente
+--   - Prueba gratis de 7 días con tarjeta (estado trialing), una por persona. Cuenta como plan vigente.
+--     La prueba usada queda en trial_history con la huella del correo y sobrevive al borrado de la cuenta
 --   - Fundador anual (founder_annual, 749 al año) que comparte los 100 lugares con el Fundador mensual.
 --     Los lugares viven en founder_seats. Se aparta al empezar la prueba y se confirma con el primer
 --     cobro. Se libera si la suscripción termina sin cobro o si se devuelve completo su único cobro
@@ -127,6 +128,25 @@ create unique index if not exists trial_claims_email_key on public.trial_claims 
   where status <> 'voided';
 create index if not exists trial_claims_subscription on public.trial_claims (provider, provider_subscription_id);
 
+-- Pruebas usadas, para siempre. Una fila por suscripción que empezó una prueba que cuenta. trial_claims se
+-- borra con la cuenta, así que sin esta tabla el mismo correo volvería a tener prueba al abrir otra cuenta.
+-- No guarda el correo, solo la huella SHA-256 de su clave normalizada (trial_key_hash). Mientras la cuenta
+-- existe guarda también la pasarela y la suscripción, que hacen única la fila. Al borrarse la cuenta
+-- user_id queda en null y un disparador quita en el mismo paso la pasarela y la suscripción, porque Stripe
+-- liga esa suscripción a un cliente y volverían a identificar a la persona. Queda solo lo que frena otra
+-- prueba, la huella y la fecha. Solo se agrega. Ninguna función la borra, salvo la limpieza manual de las
+-- cuentas de prueba
+create table if not exists public.trial_history (
+  id uuid primary key default gen_random_uuid(),
+  email_hash text not null,
+  user_id uuid references auth.users (id) on delete set null,
+  provider text check (provider in ('stripe', 'mercadopago')),
+  provider_subscription_id text,
+  started_at timestamptz not null default now(),
+  unique (provider, provider_subscription_id)
+);
+create index if not exists trial_history_email on public.trial_history (email_hash);
+
 -- Pases de un solo pago
 create table if not exists public.plan_passes (
   id uuid primary key default gen_random_uuid(),
@@ -169,7 +189,9 @@ alter table public.plan_passes enable row level security;
 alter table public.founder_seats enable row level security;
 alter table public.trial_claims enable row level security;
 alter table public.billing_actions enable row level security;
-revoke all on public.plan_passes, public.founder_seats, public.trial_claims, public.billing_actions
+alter table public.trial_history enable row level security;
+revoke all on public.plan_passes, public.founder_seats, public.trial_claims, public.billing_actions,
+  public.trial_history
   from public, anon, authenticated, service_role;
 grant select on public.plan_passes to authenticated;
 do $$
@@ -341,6 +363,18 @@ begin
 end;
 $$;
 
+-- Quien pagó un Fundador y lo dejó pierde el precio (respuesta 17). Tiene un lugar confirmado de otra
+-- suscripción. Una suscripción Fundador nueva o un cambio al precio Fundador no se lo devuelven
+create or replace function public.billing_founder_lost(p_user uuid, p_provider text, p_subscription_id text)
+returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select exists (
+    select 1 from public.founder_seats f
+    where f.user_id = p_user and f.status = 'confirmed'
+      and (f.provider is distinct from p_provider or f.provider_subscription_id is distinct from p_subscription_id)
+  )
+$$;
+
 -- La clave de una prueba por correo. Minúsculas, sin el sufijo +algo y, en gmail.com y googlemail.com,
 -- sin puntos y con dominio gmail.com. null si no parece un correo
 create or replace function public.trial_email_key(p_email text) returns text
@@ -370,8 +404,23 @@ language sql stable security definer set search_path = public, pg_temp as $$
   select coalesce(public.trial_email_key((select email from auth.users where id = p_user)), 'id:' || p_user::text)
 $$;
 
--- Si la cuenta ya usó su prueba, si otra cuenta con el mismo correo normalizado ya la usó o si la cuenta
--- ya tuvo un cobro mayor a 0. Una prueba anulada por cupo lleno (voided) no cuenta
+-- La huella de la clave de una cuenta, que es lo único que guarda trial_history. sha256 viene con Postgres
+-- desde la versión 11, sin extensiones
+create or replace function public.trial_key_hash(p_key text) returns text
+language sql immutable set search_path = public, pg_temp as $$
+  select encode(sha256(convert_to(p_key, 'UTF8')), 'hex')
+$$;
+
+-- Las pruebas que ya contaban antes de trial_history quedan también ahí. No pisa lo que ya exista
+insert into public.trial_history (email_hash, user_id, provider, provider_subscription_id, started_at)
+  select public.trial_key_hash(t.email_key), t.user_id, t.provider, t.provider_subscription_id, t.started_at
+  from public.trial_claims t
+  where t.status in ('started', 'converted', 'canceled')
+  on conflict (provider, provider_subscription_id) do nothing;
+
+-- Si la cuenta ya usó su prueba, si otra cuenta con el mismo correo normalizado ya la usó, también una
+-- cuenta ya borrada (trial_history), o si la cuenta ya tuvo un cobro mayor a 0. Una prueba anulada por
+-- cupo lleno (voided) no cuenta
 create or replace function public.trial_already_used(p_user uuid) returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
   select exists (
@@ -384,15 +433,33 @@ language sql stable security definer set search_path = public, pg_temp as $$
         and t.status in ('started', 'converted', 'canceled')
     )
     or exists (
+      select 1 from public.trial_history h
+      where h.email_hash = public.trial_key_hash(public.trial_account_key(p_user))
+    )
+    or exists (
       select 1 from public.payments p
       where p.user_id = p_user and p.status in ('paid', 'refunded', 'needs_refund') and p.amount_mxn > 0
     )
 $$;
 
--- Si a la cuenta le toca la prueba gratis. trialDays en 0 la apaga para todos
+-- Una bandera de lanzamiento de feature_flags, la misma clave que lee la app (freeTrial, cashPasses y
+-- mercadoPago). Solo el booleano true la prende, como requireMfa (staff_mfa_required). Sin la clave, sin
+-- la bandera o con cualquier otro valor queda apagada, que es lo que la app trae en producción. Así lo que
+-- la app esconde con una bandera tampoco lo abre el servidor
+create or replace function public.billing_flag(p_name text) returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select coalesce(
+    (select value -> p_name from public.platform_settings where key = 'feature_flags') = 'true'::jsonb,
+    false
+  )
+$$;
+
+-- Si a la cuenta le toca la prueba gratis. La apagan para todos trialDays en 0 o la bandera freeTrial
+-- apagada. Una prueba que ya empezó en la pasarela sigue igual aunque después se apague
 create or replace function public.trial_available(p_user uuid) returns boolean
 language sql stable security definer set search_path = public, pg_temp as $$
-  select public.billing_rule('trialDays', 7) > 0 and not public.trial_already_used(p_user)
+  select public.billing_rule('trialDays', 7) > 0 and public.billing_flag('freeTrial')
+    and not public.trial_already_used(p_user)
 $$;
 
 -- ===================================================================== Plan efectivo
@@ -569,6 +636,11 @@ begin
         select 1 from public.founder_seats where user_id = p_user and status = 'confirmed'
       ) and not (v_live and v_sub.plan in ('founder', 'founder_annual')),
     'oxxoExpiresDays', least(greatest(public.billing_rule('oxxoExpiresDays', 3), 1), 7),
+    -- Lo que create-checkout no abre con su bandera apagada. Pases con OXXO o SPEI y Mercado Pago
+    'flags', jsonb_build_object(
+      'cashPasses', public.billing_flag('cashPasses'),
+      'mercadoPago', public.billing_flag('mercadoPago')
+    ),
     'customerId', (
       select customer_id from public.billing_customers where user_id = p_user and provider = 'stripe'
     )
@@ -589,18 +661,19 @@ language sql stable security definer set search_path = public, pg_temp as $$
 $$;
 
 -- ===================================================================== Disparador del lugar Fundador
--- Una suscripción Fundador sin lugar lo recibe, apartado en la prueba y confirmado en lo demás. Así el
--- camino de antes (apply_payment_notice) y una fila puesta a mano cuentan igual. Nunca cambia un lugar
--- que ya existe, porque eso lo deciden apply_subscription_state y apply_charge
+-- Una suscripción Fundador vigente sin lugar lo recibe, apartado en la prueba y confirmado en lo demás,
+-- con el candado y el tope del cupo (billing_take_seat). Así el camino de antes (apply_payment_notice) y
+-- una fila puesta a mano cuentan igual y ninguno pasa del cupo. Una fila cancelada o terminada no ocupa
+-- lugar, como un pago Fundador que venció sin completarse. Nunca cambia un lugar que ya existe, porque eso
+-- lo deciden apply_subscription_state y apply_charge
 create or replace function public.subscriptions_sync_founder_seat() returns trigger
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  if new.plan in ('founder', 'founder_annual') then
-    insert into public.founder_seats (user_id, plan, status, provider, provider_subscription_id, held_at, confirmed_at, updated_at)
-      values (new.user_id, new.plan, case when new.status = 'trialing' then 'held' else 'confirmed' end,
-              coalesce(new.provider, 'stripe'), new.provider_subscription_id, now(),
-              case when new.status = 'trialing' then null else now() end, now())
-      on conflict (user_id) do nothing;
+  if new.plan in ('founder', 'founder_annual') and new.status in ('trialing', 'active', 'past_due')
+     and not exists (select 1 from public.founder_seats where user_id = new.user_id) then
+    perform public.billing_take_seat(new.user_id, new.plan,
+      case when new.status = 'trialing' then 'held' else 'confirmed' end,
+      coalesce(new.provider, 'stripe'), new.provider_subscription_id);
   end if;
   return null;
 end;
@@ -609,6 +682,48 @@ $$;
 create or replace trigger subscriptions_sync_founder_seat
   after insert or update of plan, status on public.subscriptions
   for each row execute function public.subscriptions_sync_founder_seat();
+
+-- Al borrarse una cuenta su lugar queda sin dueño (on delete set null). Uno confirmado sigue contando
+-- (respuesta 17), pero uno apartado por una prueba que nunca cobró se libera en el acto. Si no, la prueba
+-- cancelada de quien borró su cuenta dejaría el lugar ocupado para siempre. En el mismo paso el lugar pierde
+-- el id de su suscripción, que Stripe liga a un cliente. Ninguna regla lo busca después. Solo
+-- billing_close_subscription busca por ese id, y solo libera lugares apartados, que aquí ya se liberaron.
+-- La pasarela se queda, porque sola no identifica a nadie
+create or replace function public.founder_seats_release_orphan() returns trigger
+language plpgsql security definer set search_path = public, pg_temp as $$
+begin
+  if new.user_id is null and old.user_id is not null then
+    new.provider_subscription_id := null;
+    new.updated_at := now();
+    if new.status = 'held' then
+      new.status := 'released';
+      new.released_at := now();
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+create or replace trigger founder_seats_release_orphan
+  before update of user_id on public.founder_seats
+  for each row execute function public.founder_seats_release_orphan();
+
+-- Al borrarse una cuenta su prueba usada se queda sin dueño (on delete set null) y, en el mismo paso, sin
+-- la pasarela ni la suscripción. Quedan la huella del correo y la fecha, que bastan para frenar otra prueba
+create or replace function public.trial_history_forget_owner() returns trigger
+language plpgsql security definer set search_path = public, pg_temp as $$
+begin
+  if new.user_id is null and old.user_id is not null then
+    new.provider := null;
+    new.provider_subscription_id := null;
+  end if;
+  return new;
+end;
+$$;
+
+create or replace trigger trial_history_forget_owner
+  before update of user_id on public.trial_history
+  for each row execute function public.trial_history_forget_owner();
 
 -- ===================================================================== Devolver un cobro
 -- Lo que pasa cuando se devuelve un cobro, por el aviso de la pasarela o porque el admin lo marca. El
@@ -654,7 +769,11 @@ begin
   select * into v_sub from public.subscriptions where user_id = v_pay.user_id for update;
   v_has_sub := found;
   v_plan := v_pay.plan;
-  if v_has_sub and v_sub.provider = v_pay.provider then
+  -- Solo se quita el acceso de la suscripción de ese cobro. Si el alumno ya tiene otra, por ejemplo una
+  -- prueba nueva después de que la del cobro terminó, la nueva sigue y solo se cancela la del cobro
+  if v_has_sub and v_sub.provider = v_pay.provider
+     and (v_pay.provider_subscription_id is null or v_sub.provider_subscription_id is null
+          or v_sub.provider_subscription_id = v_pay.provider_subscription_id) then
     update public.subscriptions
       set status = 'canceled', current_period_end = least(coalesce(current_period_end, now()), now()),
           updated_at = now()
@@ -662,6 +781,8 @@ begin
     v_target := coalesce(v_pay.provider_subscription_id, v_sub.provider_subscription_id);
     perform public.billing_queue_cancel(v_pay.user_id, v_pay.provider, v_target, 'refund');
     v_plan := coalesce(v_plan, v_sub.plan);
+  else
+    perform public.billing_queue_cancel(v_pay.user_id, v_pay.provider, v_pay.provider_subscription_id, 'refund');
   end if;
 
   -- El único cobro de un Fundador. Esa persona nunca se quedó como Fundador
@@ -712,6 +833,7 @@ declare
   v_result text;
   v_end timestamptz;
   v_price_changed boolean;
+  v_seat_ok boolean;
 begin
   if p_status is null or p_status not in ('trialing', 'active', 'past_due', 'canceled', 'ended') then
     raise exception 'Estado de suscripción desconocido' using errcode = '22023';
@@ -723,6 +845,11 @@ begin
     return 'duplicate';
   end if;
   if p_user is null or not exists (select 1 from auth.users where id = p_user) then
+    -- La cuenta ya no existe, por ejemplo porque se borró con la prueba cancelada. El fin de su
+    -- suscripción igual cierra su prueba y libera su lugar apartado, que siguen por su id de suscripción
+    if p_status = 'ended' then
+      perform public.billing_close_subscription(p_provider, p_subscription_id);
+    end if;
     return public.billing_event_done(p_provider, p_event_id, 'unknown_user');
   end if;
   perform pg_advisory_xact_lock(hashtextextended('pay:' || p_user::text, 0));
@@ -742,9 +869,13 @@ begin
 
   select * into v_sub from public.subscriptions where user_id = p_user for update;
   v_has_row := found;
-  v_same := coalesce(v_has_row and v_sub.plan <> 'free' and v_sub.provider = p_provider
-    and v_sub.provider_subscription_id = p_subscription_id, false);
   v_live := v_has_row and public.billing_in_force(v_sub.plan, v_sub.status, v_sub.current_period_end);
+  -- La misma suscripción, por su id. También la fila vigente que creó un cobro de la misma pasarela sin
+  -- id de suscripción, como un pago de Mercado Pago que llega antes que su suscripción. Esa fila adopta
+  -- este id y no se toma por una segunda suscripción
+  v_same := coalesce(v_has_row and v_sub.plan <> 'free' and v_sub.provider = p_provider
+    and (v_sub.provider_subscription_id = p_subscription_id
+         or (v_sub.provider_subscription_id is null and v_sub.first_charge_at is not null and v_live)), false);
 
   if v_same and v_sub.state_at is not null and v_at < v_sub.state_at then
     return public.billing_event_done(p_provider, p_event_id, 'stale');
@@ -780,9 +911,17 @@ begin
       end if;
     end if;
     -- Una suscripción Fundador nueva necesita lugar (1.5). Se aparta con el candado del cupo, también sin
-    -- prueba, y el primer cobro lo confirma. Así ningún camino pasa del cupo
-    if v_plan in ('founder', 'founder_annual') and p_status in ('trialing', 'active', 'past_due')
-       and not public.billing_take_seat(p_user, v_plan, 'held', p_provider, p_subscription_id) then
+    -- prueba, y el primer cobro lo confirma. Así ningún camino pasa del cupo. Quien ya perdió el precio
+    -- Fundador no lo recupera y cuenta como sin lugar
+    v_seat_ok := true;
+    if v_plan in ('founder', 'founder_annual') and p_status in ('trialing', 'active', 'past_due') then
+      if public.billing_founder_lost(p_user, p_provider, p_subscription_id) then
+        v_seat_ok := false;
+      else
+        v_seat_ok := public.billing_take_seat(p_user, v_plan, 'held', p_provider, p_subscription_id);
+      end if;
+    end if;
+    if not v_seat_ok then
       -- Sin lugar. Una prueba queda anulada y no cuenta, la suscripción se cancela y su cobro, si lo hubo,
       -- queda para devolverse. El alumno decide si sigue con el precio regular (8.16)
       if p_status = 'trialing' then
@@ -808,6 +947,29 @@ begin
               status = 'started', promotion_code = excluded.promotion_code, started_at = now(),
               ends_at = excluded.ends_at, converted_at = null, canceled_at = null, updated_at = now()
           where t.status = 'voided';
+      -- La prueba queda usada para siempre, también si después se borra la cuenta
+      insert into public.trial_history (email_hash, user_id, provider, provider_subscription_id)
+        values (public.trial_key_hash(public.trial_account_key(p_user)), p_user, p_provider, p_subscription_id)
+        on conflict (provider, provider_subscription_id) do nothing;
+    end if;
+  end if;
+
+  -- Pasar al precio Fundador en la misma suscripción, que el portal regular no permite pero un cambio en el
+  -- panel de Stripe sí, pide lugar como una suscripción nueva. Sin lugar, o si ya perdió el precio, no
+  -- cambia el plan y la suscripción se cancela como cualquier Fundador sin lugar
+  if v_same and v_plan in ('founder', 'founder_annual') and v_sub.plan not in ('founder', 'founder_annual')
+     and p_status in ('trialing', 'active', 'past_due') then
+    if public.billing_founder_lost(p_user, p_provider, p_subscription_id) then
+      v_seat_ok := false;
+    else
+      v_seat_ok := public.billing_take_seat(p_user, v_plan,
+        case when p_status = 'trialing' or v_sub.first_charge_at is null then 'held' else 'confirmed' end,
+        p_provider, p_subscription_id);
+    end if;
+    if not v_seat_ok then
+      perform public.billing_queue_cancel(p_user, p_provider, p_subscription_id, 'founder_full');
+      perform public.billing_mark_issue(p_user, 'founder_full', p_provider);
+      return public.billing_event_done(p_provider, p_event_id, 'founder_full');
     end if;
   end if;
 
@@ -825,6 +987,11 @@ begin
     when v_same then coalesce(v_sub.current_period_end, p_period_end, now())
     else coalesce(p_period_end, now())
   end;
+  -- Un aviso de la misma suscripción que no la termina nunca acorta lo que ya se pagó. Por ejemplo un aviso
+  -- de prueba que llega después del primer cobro no regresa el acceso al fin de la prueba
+  if v_same and p_status <> 'ended' then
+    v_end := greatest(v_end, coalesce(v_sub.current_period_end, v_end));
+  end if;
   v_price_changed := v_same and p_price_id is not null and v_sub.price_id is distinct from p_price_id;
 
   insert into public.subscriptions as s (
@@ -899,6 +1066,7 @@ declare
   v_start timestamptz;
   v_pay public.payments%rowtype;
   v_charged_at timestamptz;
+  v_seat_ok boolean;
 begin
   if p_kind is null or p_kind not in ('paid', 'pending', 'failed', 'expired', 'refunded') then
     raise exception 'Tipo de cobro desconocido' using errcode = '22023';
@@ -1005,9 +1173,18 @@ begin
     if v_plan is null then
       return public.billing_event_done(p_provider, p_event_id, 'ignored');
     end if;
-    if v_plan in ('founder', 'founder_annual')
-       and not public.billing_take_seat(p_user, v_plan, 'confirmed', p_provider,
-                                        coalesce(p_provider_subscription_id, v_sub.provider_subscription_id)) then
+    -- El lugar Fundador. Un cobro de otra suscripción Fundador de quien ya perdió el precio cuenta como sin
+    -- lugar, para que llegar antes que el aviso de estado no se salte la regla
+    v_seat_ok := true;
+    if v_plan in ('founder', 'founder_annual') then
+      if not v_same and public.billing_founder_lost(p_user, p_provider, p_provider_subscription_id) then
+        v_seat_ok := false;
+      else
+        v_seat_ok := public.billing_take_seat(p_user, v_plan, 'confirmed', p_provider,
+                                              coalesce(p_provider_subscription_id, v_sub.provider_subscription_id));
+      end if;
+    end if;
+    if not v_seat_ok then
       -- Se cobró y no hay lugar. Queda para devolverse y la suscripción se cancela para que no vuelva a cobrar
       insert into public.payments (user_id, provider, provider_payment_id, amount_mxn, status, purpose, plan, method,
                                    payment_intent_id, provider_subscription_id, discount_mxn, promotion_code, paid_at)
@@ -1035,11 +1212,17 @@ begin
       now() + case when v_plan in ('annual', 'founder_annual') then interval '1 year' else interval '1 month' end
     );
     if v_same then
+      -- El primer cobro cambia el estado (de prueba o de cobro fallido a activa) y desde aquí cuenta como el
+      -- último estado aplicado. Un aviso de estado creado antes, como uno de prueba que llega tarde, queda
+      -- viejo (stale). Solo el primero, porque en un cambio de plan Stripe crea el aviso del Price ID nuevo
+      -- casi a la vez que el cobro de la diferencia, y ese aviso no se debe perder
       update public.subscriptions
         set status = case when status in ('trialing', 'past_due') then 'active' else status end,
             provider_subscription_id = coalesce(provider_subscription_id, p_provider_subscription_id),
             current_period_end = greatest(v_end, coalesce(current_period_end, v_end)),
             first_charge_at = coalesce(first_charge_at, now()),
+            state_at = case when first_charge_at is null then greatest(coalesce(state_at, now()), now())
+                            else state_at end,
             updated_at = now()
         where user_id = p_user;
     else
@@ -1114,8 +1297,10 @@ begin
   end if;
 
   -- ------------------------------------------------------------------- Reembolso completo
-  -- Primero el cobro que dice el aviso, después por su PaymentIntent y si no el cobro del alumno con ese
-  -- monto que siga sin devolverse y esté más cerca de la hora del cargo (data.object.created), como hoy
+  -- Primero el cobro que dice el aviso (la factura in_ que Stripe dice que pagó el PaymentIntent, o el id
+  -- del pago de Mercado Pago) y después por su PaymentIntent. Solo un aviso sin ninguno de los dos, como
+  -- uno de antes de B10, busca el cobro del alumno con ese monto que siga sin devolverse y esté más cerca
+  -- de la hora del cargo (data.object.created). Con un id que no es de ningún cobro guardado no se adivina
   if p_provider_payment_id is not null then
     select * into v_pay from public.payments
       where provider = p_provider and provider_payment_id = p_provider_payment_id and user_id = p_user;
@@ -1124,6 +1309,9 @@ begin
     select * into v_pay from public.payments
       where provider = p_provider and payment_intent_id = p_payment_intent_id and user_id = p_user
       order by created_at desc limit 1;
+  end if;
+  if v_pay.id is null and (p_provider_payment_id is not null or p_payment_intent_id is not null) then
+    return public.billing_event_done(p_provider, p_event_id, 'ignored');
   end if;
   if v_pay.id is null then
     v_charged_at := case
@@ -1140,7 +1328,7 @@ begin
   if v_pay.id is not null then
     perform public.billing_refund_payment(v_pay.id, p_amount_mxn is null or p_amount_mxn >= v_pay.amount_mxn, null);
   else
-    -- Un reembolso que no encuentra su cobro igual quita el plan de esa pasarela, como hoy
+    -- Un reembolso sin ids que no encuentra su cobro igual quita el plan de esa pasarela, como antes de B10
     update public.subscriptions
       set status = 'canceled', current_period_end = least(coalesce(current_period_end, now()), now()), updated_at = now()
       where user_id = p_user and provider = p_provider and plan <> 'free';
@@ -1572,10 +1760,15 @@ revoke all on function public.founder_seats_taken() from public, anon, authentic
 revoke all on function public.founder_promo_open() from public, anon, authenticated, service_role;
 revoke all on function public.billing_take_seat(uuid, text, text, text, text) from public, anon, authenticated, service_role;
 revoke all on function public.billing_close_subscription(text, text) from public, anon, authenticated, service_role;
+revoke all on function public.billing_founder_lost(uuid, text, text) from public, anon, authenticated, service_role;
 revoke all on function public.trial_email_key(text) from public, anon, authenticated, service_role;
+revoke all on function public.trial_key_hash(text) from public, anon, authenticated, service_role;
+revoke all on function public.founder_seats_release_orphan() from public, anon, authenticated, service_role;
+revoke all on function public.trial_history_forget_owner() from public, anon, authenticated, service_role;
 revoke all on function public.trial_account_key(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_already_used(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.trial_available(uuid) from public, anon, authenticated, service_role;
+revoke all on function public.billing_flag(text) from public, anon, authenticated, service_role;
 revoke all on function public.user_plan(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.billing_blocks_account_deletion(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.subscriptions_sync_founder_seat() from public, anon, authenticated, service_role;

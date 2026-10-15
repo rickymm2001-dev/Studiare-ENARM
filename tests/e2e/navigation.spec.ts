@@ -28,6 +28,7 @@ const STUDENT_MORE = [t.navItems.outlines, t.navItems.tutor, t.navItems.party];
 // Datos de demostración aparece porque el build de las pruebas es la demo, con demoTools prendida (5.4)
 const ADMIN_GROUP = [
   t.navItems.users,
+  // Admin, Pagos de B10, después de Usuarios
   t.navItems.billing,
   t.navItems.costs,
   t.navItems.platform,

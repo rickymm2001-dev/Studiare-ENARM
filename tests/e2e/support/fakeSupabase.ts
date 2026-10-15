@@ -234,6 +234,11 @@ export interface FakeSupabaseServer {
   advanceTime(ms: number): void;
   /** Cambia platform_settings.feature_flags, sumando a lo que ya tenía */
   setFeatureFlags(flags: Record<string, boolean>): void;
+  /**
+   * Quita o pone las configuraciones del portal de Stripe. Sin la que toca, create-portal-session
+   * responde 503 not_configured
+   */
+  setPortalConfig(config: { founder?: boolean; regular?: boolean }): void;
   /** Cambia billing_rules, como trialDays en 0, que apaga la prueba desde el servidor */
   setBillingRules(rules: { trialDays?: number; guaranteeDays?: number }): void;
   founderSeatsTaken(): number;
@@ -722,6 +727,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     aliasOf: (userId) => users.get(userId)?.alias ?? null,
     emailOf: (userId) => users.get(userId)?.email ?? null,
+    flag: (name) => {
+      const flags = settings.get('feature_flags')?.value;
+      return isRecord(flags) && flags[name] === true;
+    },
   });
   let counter = 0;
   let serverSeq = 0;
@@ -2425,6 +2434,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     setBillingRules(rules) {
       Object.assign(billing.rules, rules);
+    },
+    setPortalConfig(config) {
+      Object.assign(billing.portalConfigs, config);
     },
     founderSeatsTaken: () => billing.founderSeatsTaken(),
     trialClaimOf(email) {

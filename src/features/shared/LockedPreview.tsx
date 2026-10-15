@@ -3,8 +3,8 @@
 // Suscripción. LockedNote es el aviso corto con el mismo botón, para un lugar chico como el reto de
 // Party en Inicio o una parte de otra tarjeta. Los usan Apuntes, Party, Subir tus mazos, el catálogo
 // de mazos y FeatureGate, así todos los candados se ven y dicen lo mismo. El botón dice Prueba 7 días
-// gratis y abre la forma de pago del Mensual cuando la prueba existe, y si no Ver planes (lockedCta.ts,
-// B10). Son avisos fijos, así que no se anuncian como un cambio en cada visita. LockedLoading ocupa su
+// gratis y abre la forma de pago del Mensual cuando al alumno todavía le toca la prueba, y si no Ver
+// planes (lockedCta.ts, B10). Son avisos fijos, así que no se anuncian como un cambio en cada visita. LockedLoading ocupa su
 // lugar mientras se sabe el plan.
 import { Check, Lock } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -13,7 +13,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SkeletonRows } from '@/ui/components/skeleton';
-import { lockedCtaLabel, lockedCtaPath } from './lockedCta';
+import { useLockedCta } from './useLockedCta';
 
 export function LockedPreview({
   id,
@@ -34,6 +34,7 @@ export function LockedPreview({
   /** Lo que el alumno todavía puede hacer con lo suyo, como salir de sus grupos */
   children?: ReactNode;
 }) {
+  const cta = useLockedCta();
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3">
       <CardHeader>
@@ -52,7 +53,7 @@ export function LockedPreview({
         ))}
       </ul>
       <Button asChild className="self-start">
-        <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
+        <Link to={cta.path}>{cta.label}</Link>
       </Button>
       {kept.map((line) => (
         <p key={line} className="text-sm text-fg-muted">
@@ -66,12 +67,13 @@ export function LockedPreview({
 
 /** El aviso corto de un candado, con una frase y el mismo botón */
 export function LockedNote({ children }: { children: ReactNode }) {
+  const cta = useLockedCta();
   return (
     <div role="note" className="flex flex-wrap items-center gap-3 rounded-lg bg-muted p-3 text-sm">
       <Lock aria-hidden className="size-4 shrink-0 text-fg-muted" />
       <p className="min-w-0 flex-1">{children}</p>
       <Button asChild size="sm" variant="secondary">
-        <Link to={lockedCtaPath()}>{lockedCtaLabel()}</Link>
+        <Link to={cta.path}>{cta.label}</Link>
       </Button>
     </div>
   );

@@ -40,13 +40,21 @@ type Failure = Extract<CheckoutResult, { ok: false }>;
 const isPass = (option: PaymentOption) =>
   option === 'oxxo' || option === 'spei' || option === 'mercadopago_pass';
 
-/** El texto del error de create-checkout */
-function failureText(failure: Failure): string {
+/**
+ * El texto del error de create-checkout. Con not_configured en un pase o en Mercado Pago es que el
+ * servidor tiene apagada esa forma de pago aunque la copia de las banderas de este navegador diga que
+ * no, así que se nombra la forma de pago y se pide elegir otra
+ */
+function failureText(failure: Failure, option: PaymentOption): string {
   switch (failure.reason) {
     case 'pass_in_force':
       return failure.passEnd
         ? text.errors.pass_in_force(longDate(failure.passEnd))
         : text.errors.passInForceNoDate;
+    case 'not_configured':
+      return option === 'card'
+        ? text.errors.not_configured
+        : text.errors.optionUnavailable(text.options[option].label);
     default:
       return text.errors[failure.reason];
   }
@@ -209,7 +217,7 @@ export function CheckoutOptions({
         <p className="rounded-md bg-sim px-3 py-2 text-sm text-sim-fg">{text.testMode}</p>
       ) : null}
       <p role="status" className="min-h-5 text-sm text-fg-muted">
-        {busy ? text.opening : failure ? failureText(failure) : null}
+        {busy ? text.opening : failure ? failureText(failure, option) : null}
       </p>
       <div className="flex flex-wrap gap-2">
         {lostFounder ? (
