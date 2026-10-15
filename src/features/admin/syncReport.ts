@@ -6,6 +6,7 @@
 import type { SyncNoticeCode, SyncProblemCode, SyncRowResult } from '@/data/bank/contracts';
 import { bankAdminText } from '@/i18n/bankAdmin';
 import { BOM } from '../physician/bankTemplates';
+import { csvCell } from './csvCell';
 
 const text = bankAdminText.sync;
 
@@ -89,8 +90,6 @@ export function rowMessages(
 
 /** Renglón 45, o Ya no está para los que desaparecieron */
 export const rowLabel = (row: Pick<SyncRowResult, 'rowNumber'>) => text.rows.row(row.rowNumber);
-
-const csvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
 /**
  * El CSV del reporte de renglones, en UTF-8 con BOM para Excel. Un renglón del CSV por cada frase,

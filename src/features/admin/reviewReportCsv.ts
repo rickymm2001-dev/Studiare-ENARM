@@ -6,15 +6,12 @@ import type { ReviewReportDetailRow, ReviewReportRow } from '@/data/bank/contrac
 import { bankAdminText } from '@/i18n/bankAdmin';
 import { BOM } from '../physician/bankTemplates';
 import { meridaDay } from '../physician/meridaMonth';
+import { csvCell } from './csvCell';
 
 const text = bankAdminText.reviews;
 
-const cell = (value: string | number | null) => {
-  const raw = value === null ? '' : String(value);
-  return `"${raw.replace(/"/g, '""')}"`;
-};
 const csv = (lines: readonly (readonly (string | number | null)[])[]) =>
-  `${BOM}${lines.map((line) => line.map(cell).join(',')).join('\r\n')}\r\n`;
+  `${BOM}${lines.map((line) => line.map(csvCell).join(',')).join('\r\n')}\r\n`;
 
 /** Las columnas del resumen, en el orden de 4.5 */
 export const SUMMARY_COLUMNS = [

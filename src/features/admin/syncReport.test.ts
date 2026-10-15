@@ -93,4 +93,10 @@ describe('reporte de renglones', () => {
     expect(lines[1]).toContain('Brujería');
     expect(lines[2]).toBe('"Renglón 46","GO-0046","Versión nueva",""');
   });
+
+  it('una clave del Sheet que parece fórmula no se corre al abrir el CSV', () => {
+    const csv = syncRowsCsv([row({ sheetKey: '=HYPERLINK("http://x")' })], incompleteText);
+    const lines = csv.slice(1).trimEnd().split('\r\n');
+    expect(lines[1]).toBe('"Renglón 45","\'=HYPERLINK(""http://x"")","Rechazado",""');
+  });
 });

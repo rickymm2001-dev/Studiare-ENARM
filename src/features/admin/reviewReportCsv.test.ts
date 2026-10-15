@@ -59,6 +59,13 @@ describe('CSV de revisiones', () => {
     expect(csv).not.toContain('@');
   });
 
+  it('un alias que parece fórmula lleva apóstrofo y los números no', () => {
+    const [, summary] = lines(reviewSummaryCsv([row({ alias: '@SUM(A1)', code: '-AN' })], 50));
+    expect(summary).toBe('"2026-10","\'@SUM(A1)","\'-AN","2","1","0","3","1","50","150"');
+    const [, detailLine] = lines(reviewDetailCsv([detail({ alias: '+Ana', questionKey: '=1+1' })]));
+    expect(detailLine).toBe('"2026-10-14","2026-10","\'+Ana","AN","\'=1+1","2","Aprobó"');
+  });
+
   it('el detalle tiene una fila por decisión con el día de Mérida', () => {
     const csv = reviewDetailCsv([
       detail(),
