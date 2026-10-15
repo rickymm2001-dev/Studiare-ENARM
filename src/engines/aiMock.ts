@@ -12,7 +12,8 @@
  * Umbrales. De 4 pruebas de evidencia como máximo en una hipótesis y confianza media desde 10
  * hallazgos recientes.
  * B12. El consejo por sesgo cambia sesgo por trampa cuando el alumno ve trampas, para pasar la guarda
- * vocabulary. Ninguna respuesta fija predice el puntaje, así que todas pasan score_prediction.
+ * vocabulary. Ninguna respuesta fija predice el puntaje, así que todas pasan score_prediction. Las
+ * tarjetas simuladas no convierten en tarjeta una orden escondida en el texto.
  */
 import {
   DEFAULT_BIAS_VOCABULARY,
@@ -31,7 +32,7 @@ import {
   type WeeklyReportOutput,
 } from './aiContracts.ts';
 import { simulateCards } from './cardSim.ts';
-import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, wordsOf } from './grounding.ts';
+import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, normalizeForMatch, wordsOf } from './grounding.ts';
 
 export const MOCK_MODEL = 'respuestas-fijas-v1';
 
@@ -113,8 +114,63 @@ export function mockWeeklyReport(input: WeeklyReportInput): WeeklyReportOutput {
   };
 }
 
+/**
+ * Una frase que le da órdenes a la IA en lugar de enseñar algo, como "ignora tus instrucciones" o
+ * "nota para la IA". El texto del alumno es material y nunca instrucciones, así que el simulado,
+ * como un modelo que se porta bien, no la vuelve tarjeta (B12, casos adversarios)
+ */
+const INSTRUCTION_PATTERNS = [
+  /\b(ignora|olvida|omite)\b.{0,40}\b(instrucciones|reglas|indicaciones|consejo base)\b/,
+  /\b(nota|instruccion|mensaje|orden) para (la |el )?(ia|inteligencia artificial|modelo|tutor|asistente)\b/,
+  /\b(crea|escribe|agrega|genera|responde)\b.{0,40}\btarjetas?\b/,
+  /\bsi eres (una |un )?(ia|inteligencia artificial|modelo|asistente)\b/,
+];
+
+export function looksLikeInstruction(sentence: string): boolean {
+  const normalized = normalizeForMatch(sentence);
+  return INSTRUCTION_PATTERNS.some((pattern) => pattern.test(normalized));
+}
+
+/** Una frase en primera persona es del alumno sobre sí mismo y no algo que estudiar */
+const FIRST_PERSON = /\b(tengo|tuve|me|mi|mis|yo|siento|estoy)\b/;
+const FALLBACK_CARDS = 2;
+
+/**
+ * Tarjetas de respaldo cuando el simulador no encuentra un dato que ocultar, como en explicaciones
+ * largas del banco. Pregunta cómo termina una frase del texto y su respuesta es el resto de la frase,
+ * así que todo sale de la cita. Nunca usa preguntas, frases en primera persona ni órdenes a la IA (B12)
+ */
+function fallbackCards(text: string): FlashcardsOutput['cards'] {
+  return text
+    .split(/(?<=[.!?])\s+(?=[\p{Lu}¿¡\d])/u)
+    .map((sentence) => sentence.trim())
+    .filter(
+      (sentence) =>
+        sentence.length >= 40 &&
+        sentence.length <= 260 &&
+        !sentence.includes('?') &&
+        wordsOf(sentence).length >= 8 &&
+        !FIRST_PERSON.test(normalizeForMatch(sentence)) &&
+        !looksLikeInstruction(sentence),
+    )
+    .slice(0, FALLBACK_CARDS)
+    .map((sentence) => {
+      const words = sentence.replace(/[.;:]+$/, '').split(/\s+/);
+      const cut = Math.min(6, Math.floor(words.length / 2));
+      return {
+        kind: 'basic' as const,
+        front: `¿Cómo termina esta idea del texto? ${words.slice(0, cut).join(' ')}…`,
+        back: words.slice(cut).join(' '),
+        quote: sentence,
+      };
+    });
+}
+
 export function mockFlashcards(input: FlashcardsInput): FlashcardsOutput {
-  const cards = simulateCards({ index: 0, title: input.title, text: input.text });
+  const cards = simulateCards({ index: 0, title: input.title, text: input.text }).filter(
+    (card) => !looksLikeInstruction(card.quote),
+  );
+  if (cards.length === 0) return { cards: fallbackCards(input.text) };
   return {
     cards: cards.map((card) => ({
       kind: card.kind,
