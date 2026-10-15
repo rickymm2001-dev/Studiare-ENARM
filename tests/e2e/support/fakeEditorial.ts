@@ -31,6 +31,7 @@ import type {
   SyncRowResult,
 } from '@/data/bank/contracts';
 import type { ServerNoticeCode } from '@/data/cloud/bankAdmin';
+import { parsePassageSource } from '@/data/content/passageSource';
 import { versionIssues } from '@/data/content/questionRules';
 import type { Role } from '@/data/schemas/common';
 import { DeckManifestSchema, DECK_PART_MAX_BYTES } from '@/data/schemas/deckCatalog';
@@ -318,8 +319,21 @@ const TAGGABLE: ReadonlySet<string> = new Set(
   biasTaxonomy.biases.filter((bias) => bias.taggable).map((bias) => bias.key),
 );
 
-/** bank_version_issues, con la misma regla que la app (questionRules.ts) */
+/**
+ * bank_version_issues, con la misma regla que la app (questionRules.ts). Una pregunta en inglés pide además
+ * su fuente del texto con una licencia aceptada (B13, 1.6 y EN4 a EN6 de la prueba SQL), igual que la
+ * función de la migración 20261027000001
+ */
 function issuesOf(version: FakeBankVersion): string[] {
+  const issues = baseIssuesOf(version);
+  if (version.language === 'en') {
+    const source = parsePassageSource(version.gpcRefs);
+    if (!source.ok && !issues.includes(source.issue)) issues.push(source.issue);
+  }
+  return issues;
+}
+
+function baseIssuesOf(version: FakeBankVersion): string[] {
   const position = new Map(version.options.map((option) => [option.id, option.position]));
   return versionIssues(
     {
