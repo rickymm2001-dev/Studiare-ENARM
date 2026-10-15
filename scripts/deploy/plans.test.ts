@@ -84,6 +84,7 @@ const REAL_STATE: FakeOptions = {
           plan_fundador_anual: applied.has('manual_pagos_b10'),
           estado_prueba: applied.has('manual_pagos_b10'),
           borrar_cuenta_b10: applied.has('manual_pagos_b10'),
+          borra_la_invitacion: applied.has('manual_pagos_b10'),
         },
 };
 

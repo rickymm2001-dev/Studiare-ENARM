@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readLegalIdentity } from '../src/config/legal.ts';
 import { legalToMarkdown } from '../src/features/legal/fillLegal.ts';
-import { legalText } from '../src/i18n/legal.ts';
+import { legalDocs } from '../src/i18n/legalDocs.ts';
 
 export const LEGAL_FILES = {
   privacy: 'aviso-de-privacidad.md',
@@ -18,7 +18,7 @@ if (process.argv[1]?.endsWith('legal-export.ts')) {
   mkdirSync(dir, { recursive: true });
   const identity = readLegalIdentity(process.env);
   for (const key of ['privacy', 'terms'] as const) {
-    writeFileSync(join(dir, LEGAL_FILES[key]), legalToMarkdown(legalText[key], identity));
+    writeFileSync(join(dir, LEGAL_FILES[key]), legalToMarkdown(legalDocs[key], identity));
   }
   console.log(`Textos legales escritos en ${dir}`);
 }

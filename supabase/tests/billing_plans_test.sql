@@ -875,6 +875,11 @@ rollback;
 -- Cancelada al final del periodo sí se puede
 select pg_temp.state('evt-p7-18', :'u18', 'sub_p7_18', 'monthly', 'active');
 select pg_temp.state('evt-p7-18x', :'u18', 'sub_p7_18', 'monthly', 'active', p_cancel => true);
+-- Con invitación. Al borrar la cuenta se va su correo de la lista y se queda el de otra persona (B16)
+insert into public.signup_invitations (email)
+  select email from auth.users where id = :'u18'
+  union all select 'p7-otra-persona@example.com'
+on conflict do nothing;
 begin;
 select pg_temp.as_user(:'u18');
 select public.delete_my_account();
@@ -883,6 +888,11 @@ select pg_temp.expect(
   not exists (select 1 from auth.users where id = :'u18')
   and not exists (select 1 from public.subscriptions where user_id = :'u18'),
   'P7. No borró la cuenta con la suscripción cancelada al final del periodo'
+);
+select pg_temp.expect(
+  (select count(*) from public.signup_invitations where email = 'p7-otra-persona@example.com') = 1
+  and not exists (select 1 from public.signup_invitations where email = 'q8@ba.mx'),
+  'P7. El correo de la invitación debía irse con la cuenta y el de otra persona quedarse'
 );
 -- El lugar de un Fundador que borra su cuenta sigue contando sin dueño (respuesta 17)
 create temp table p7_seats as select public.founder_seats_taken() as taken,
@@ -966,6 +976,7 @@ select
   (select pg_get_constraintdef(oid) like '%founder_annual%' from pg_constraint where conname = 'subscriptions_plan_check') as plan_fundador_anual,
   (select pg_get_constraintdef(oid) like '%trialing%' from pg_constraint where conname = 'subscriptions_status_check') as estado_prueba,
   position('billing_blocks_account_deletion' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0 as borrar_cuenta_b10,
+  position('signup_invitations' in pg_get_functiondef('public.delete_my_account()'::regprocedure)) > 0 as borra_la_invitacion,
   (select value ->> 'trialDays' from public.platform_settings where key = 'billing_rules') as dias_de_prueba,
   (select value ->> 'enabled' from public.platform_settings where key = 'billing_emails') as correos_encendidos,
   (select count(*) from pg_policies
@@ -974,7 +985,7 @@ select
 select pg_temp.expect(
   (select tablas_nuevas = 8 and tablas_con_seguridad_por_fila and not alumno_aplica_cobros and servicio_aplica_estados
       and not alumno_lee_contexto and not alumno_lee_lugares and alumno_pide_factura and plan_fundador_anual
-      and estado_prueba and borrar_cuenta_b10 and dias_de_prueba = '7' and correos_encendidos = 'false'
+      and estado_prueba and borrar_cuenta_b10 and borra_la_invitacion and dias_de_prueba = '7' and correos_encendidos = 'false'
       and politicas_con_barrera = 33
    from p10),
   'P10. La consulta de comprobación de docs/SUPABASE.md no da lo que dice la guía'

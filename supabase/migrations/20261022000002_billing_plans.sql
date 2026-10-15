@@ -1725,6 +1725,7 @@ create or replace function public.delete_my_account() returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_user uuid := auth.uid();
+  v_email text;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -1740,7 +1741,10 @@ begin
   end if;
 
   perform pg_advisory_xact_lock(hashtextextended('sync:' || v_user::text, 0));
+  select lower(btrim(email)) into v_email from auth.users where id = v_user;
   perform set_config('app.erasing_user', v_user::text, true);
+  -- El correo de la invitación tampoco se queda, como dice el aviso de privacidad (B16)
+  delete from public.signup_invitations where email = v_email;
   delete from auth.users where id = v_user;
   perform set_config('app.erasing_user', '', true);
 end;
