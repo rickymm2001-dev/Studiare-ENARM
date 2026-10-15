@@ -227,7 +227,11 @@ function StatusCard({
       {view.step === 'read_only' ? (
         <p className="text-sm text-fg-muted">{review.readOnly}</p>
       ) : null}
-      {view.step === 'waiting' ? <p className="text-sm text-fg-muted">{review.waiting}</p> : null}
+      {view.step === 'waiting' ? (
+        <p className="text-sm text-fg-muted">
+          {view.authorHidden ? review.blindWaiting : review.waiting}
+        </p>
+      ) : null}
       {view.step === 'closed' ? (
         <p className="text-sm text-fg-muted">
           {review.closed(physicianText.bank.status[latest.status])}

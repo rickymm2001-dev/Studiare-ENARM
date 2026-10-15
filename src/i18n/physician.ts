@@ -637,6 +637,8 @@ export const physicianText = {
         'Esta versión ya tiene una decisión. Guarda tus cambios como versión nueva para mandarla otra vez.',
     },
     waiting: 'Esta versión espera la decisión del revisor.',
+    blindWaiting:
+      'Eres el revisor. No ves lo del autor ni editas hasta etiquetar a ciegas, cuando la manden a revisión.',
     closed: (status: string) => `La versión más reciente quedó ${status.toLowerCase()}.`,
     saveNotes: {
       savedIncomplete: (n: number) =>

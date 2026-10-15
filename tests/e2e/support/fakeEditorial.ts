@@ -349,6 +349,17 @@ function reviewState(store: FakeBankStore, version: FakeBankVersion, userId: str
     : 'blind_pending';
 }
 
+/** bank_reviewer_blind. El revisor activo sin sus etiquetas cerradas en cada distractor de la versión */
+function reviewerBlind(store: FakeBankStore, version: FakeBankVersion, userId: string): boolean {
+  if (assignee(store, version.questionId, 'reviewer') !== userId) return false;
+  const locked = new Set(
+    store.labels
+      .filter((label) => label.labelerId === userId && label.lockedAt !== null)
+      .map((label) => label.optionId),
+  );
+  return distractors(version).some((option) => !locked.has(option.optionId));
+}
+
 /** bank_question_key */
 const questionKey = (store: FakeBankStore, questionId: string) =>
   store.questions.get(questionId)?.sourceKey?.replace(/^[a-z_]+:/, '') ?? questionId.slice(0, 8);
@@ -781,7 +792,7 @@ const editorQuestion: Handler = (store, caller, args) => {
         ? 'author'
         : 'none';
   const state = reviewState(store, latest, caller.userId);
-  const hide = myRole === 'reviewer' && state === 'blind_pending';
+  const hide = myRole === 'reviewer' && reviewerBlind(store, latest, caller.userId);
   const mine = new Map(
     store.labels
       .filter((label) => label.labelerId === caller.userId)
@@ -904,6 +915,9 @@ const editorSaveVersion: Handler = (store, caller, args) => {
   if (question.latestVersionId !== str(args.p_base_version_id)) {
     raise('BK002', 'Alguien más guardó o sincronizó una versión nueva');
   }
+  if (reviewerBlind(store, latestOf(store, question), caller.userId)) {
+    raise('BK004', 'Etiqueta a ciegas antes de editar');
+  }
   const base = latestOf(store, question);
   const version = insertVersion(store, {
     questionId,
@@ -943,6 +957,8 @@ const editorLabelOption: Handler = (store, caller, args) => {
   if (assignee(store, current.questionId, 'reviewer') !== caller.userId) {
     raise('BK007', 'No eres el revisor de esta pregunta');
   }
+  if (current.authorId === caller.userId)
+    raise('BK003', 'Autor y revisor tienen que ser distintos');
   const optionId = str(args.p_option_id) ?? '';
   const option = distractors(current).find((item) => item.optionId === optionId);
   if (!option) raise('22023', 'La opción no es un distractor de esta versión');
@@ -1138,7 +1154,12 @@ const editorResolveDistractor: Handler = (store, caller, args) => {
 const editorLabelPairs: Handler = (store, caller) => {
   requireTeam(caller);
   return store.labels
-    .filter((label) => label.authorTag !== null && label.lockedAt !== null)
+    .filter(
+      (label) =>
+        label.authorTag !== null &&
+        label.lockedAt !== null &&
+        store.versions.get(label.versionId)?.authorId !== label.labelerId,
+    )
     .sort((a, b) => a.labeledAt.localeCompare(b.labeledAt) || a.optionId.localeCompare(b.optionId))
     .map((label) => ({
       option_id: label.optionId,

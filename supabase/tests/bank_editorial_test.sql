@@ -229,6 +229,14 @@ select pg_temp.expect((select author_tag from public.bias_labels where option_id
   and (select tag from public.bias_labels where option_id = :'optb' and labeler_id = :'p2') = 'framing_effect'
   and (select count(*) from public.bias_labels where labeler_id = :'p2' and locked_at is not null) = 3,
   'BE5. Las etiquetas no guardaron la del autor o no se cerraron');
+-- Si la reasignan como revisora no etiqueta su propia versión (M5)
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_assign_questions(array[:'q1']::uuid[], :'p2', :'p1');
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(pg_temp.fails_with(format('select public.editor_label_option(%L, %L, %L)', :'q1v3', :'optb', 'anchoring')) = 'BK003',
+  'BE5. La autora reasignada etiquetó su propia versión');
+rollback;
 -- La autora ve sus etiquetas siempre
 begin;
 select pg_temp.as_user(:'p1');
@@ -397,10 +405,23 @@ commit;
 select pg_temp.expect((select version_id from public.question_catalog where question_id = :'q2') = :'q2v2', 'BE9. Rechazar quitó la publicada');
 
 -- ===================================================================== BE10. El revisor edita
+-- Primero etiqueta a ciegas. En borrador tampoco ve lo del autor ni lo edita (M5 de la revisión)
 select pg_temp.latest(:'q3') as q3v1 \gset
 select pg_temp.draft_of(:'q3v1', '{"vignette":"[Prueba] Caso editado por el revisor"}')::text as draft_q3 \gset
 begin;
 select pg_temp.as_user(:'p2');
+select pg_temp.expect((select bool_and((o ->> 'hidden')::boolean and o ->> 'biasTag' is null and o ->> 'rationale' is null)
+  from jsonb_array_elements(public.editor_question(:'q3') -> 'versions' -> 0 -> 'options') o where not (o ->> 'isCorrect')::boolean),
+  'BE10. El revisor vio lo del autor en un borrador');
+select pg_temp.expect(pg_temp.fails_with(format('select public.editor_save_version(%L, %L, %L)', :'q3', :'q3v1', :'draft_q3')) = 'BK004',
+  'BE10. El revisor editó un borrador sin etiquetar a ciegas');
+rollback;
+-- La autora la manda, el revisor la etiqueta y ya la puede editar. Su versión va a la autora
+begin;
+select pg_temp.as_user(:'p1');
+select public.editor_submit(:'q3v1');
+select pg_temp.as_user(:'p2');
+select pg_temp.label_all(:'q3', 'anchoring');
 select (public.editor_save_version(:'q3', :'q3v1', :'draft_q3')) ->> 'versionId' as q3v2 \gset
 select pg_temp.expect(public.editor_submit(:'q3v2') ->> 'reviewerId' = :'p1', 'BE10. La versión del revisor no fue a la autora');
 commit;
@@ -415,6 +436,8 @@ select pg_temp.latest(:'q4') as q4v1 \gset
 select pg_temp.draft_of(:'q4v1')::text as draft_q4 \gset
 begin;
 select pg_temp.as_user(:'p3');
+select public.editor_submit(:'q4v1');
+select pg_temp.label_all(:'q4', 'anchoring');
 select (public.editor_save_version(:'q4', :'q4v1', :'draft_q4')) ->> 'versionId' as q4v2 \gset
 select pg_temp.expect(pg_temp.fails_with(format('select public.editor_submit(%L)', :'q4v2')) = 'BK003', 'BE10. Sin otro médico no dio BK003');
 rollback;
@@ -556,6 +579,13 @@ select pg_temp.as_user(:'p2');
 select pg_temp.expect(public.bias_agreement_summary() = '{"pairs":30,"kappa":0.247492,"vocabulary":"trap","calibrating":false,"minPairs":30,"minKappa":0.4}'::jsonb,
   'BE13. 30 pares con poco acuerdo no dieron trampas');
 select pg_temp.expect((select count(*) from public.editor_label_pairs()) = 30, 'BE13. editor_label_pairs no trae los 30 pares');
+-- Quien escribió la versión no cuenta como revisor de sí mismo, aunque lo hayan reasignado (M5)
+reset role;
+insert into public.bias_labels (option_id, labeler_id, question_version_id, tag, author_tag, locked_at)
+  values (gen_random_uuid(), :'p1', :'q1v3', 'anchoring', 'anchoring', now());
+select pg_temp.as_user(:'p2');
+select pg_temp.expect((select count(*) from public.editor_label_pairs()) = 30
+  and (public.bias_agreement_summary() ->> 'pairs')::int = 30, 'BE13. Contó el par de la autora consigo misma');
 rollback;
 -- Los umbrales del admin mandan
 begin;
@@ -606,7 +636,8 @@ declare
   internal text[] := array[
     'public.bank_team_role()', 'public.bank_assignee(uuid, text)', 'public.bank_assigned_physician(uuid)',
     'public.bank_can_see(uuid)', 'public.bank_person(uuid)', 'public.bank_question_key(uuid)',
-    'public.bank_review_state(uuid, uuid)', 'public.bank_list_item(uuid, uuid)', 'public.bank_version_json(uuid, boolean)',
+    'public.bank_review_state(uuid, uuid)', 'public.bank_reviewer_blind(uuid, uuid)', 'public.bank_list_item(uuid, uuid)',
+    'public.bank_version_json(uuid, boolean)',
     'public.bank_check_content(jsonb)', 'public.bank_insert_version(uuid, jsonb, text, uuid, uuid, integer, uuid, text[], text[])',
     'public.bank_draft_content(jsonb, uuid)', 'public.bank_save_result(uuid)', 'public.bank_threshold(text, text, numeric)',
     'public.bank_assign(uuid, text, uuid, uuid)', 'public.bank_send_to_review(uuid, uuid)', 'public.bank_require_admin()',

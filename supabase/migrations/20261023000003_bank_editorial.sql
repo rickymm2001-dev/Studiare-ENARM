@@ -238,6 +238,25 @@ begin
 end;
 $$;
 
+-- Si el revisor activo todavía no ve lo del autor en una versión. Lo ve hasta tener cerradas sus
+-- etiquetas a ciegas de cada distractor de esa versión, en cualquier estado, también en borrador (M5 de
+-- la revisión). Para cualquier otra persona da false
+create or replace function public.bank_reviewer_blind(p_version_id uuid, p_user uuid) returns boolean
+language sql stable security definer set search_path = public, pg_temp as $$
+  select coalesce((
+    select public.bank_assignee(q.question_id, 'reviewer') = p_user
+      and exists (
+        select 1 from public.question_options o
+        where o.question_version_id = q.id and not o.is_correct
+          and not exists (
+            select 1 from public.bias_labels l
+            where l.option_id = coalesce(o.option_id, o.id) and l.labeler_id = p_user and l.locked_at is not null
+          )
+      )
+    from public.questions q where q.id = p_version_id
+  ), false)
+$$;
+
 -- Un renglón de editor_list (EditorListItem de src/data/bank/contracts.ts)
 create or replace function public.bank_list_item(p_question_id uuid, p_user uuid) returns jsonb
 language sql stable security definer set search_path = public, pg_temp as $$
@@ -638,14 +657,22 @@ begin
   if auth.uid() is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
   end if;
-  select count(*), avg(case when author_tag = tag then 1 else 0 end) into v_pairs, v_observed
-    from public.bias_labels where author_tag is not null and locked_at is not null;
+  -- Los mismos pares que editor_label_pairs. Sin los de quien etiquetó una versión que él escribió
+  with pairs as (
+    select l.author_tag, l.tag from public.bias_labels l
+    join public.questions q on q.id = l.question_version_id
+    where l.author_tag is not null and l.locked_at is not null and q.author_id is distinct from l.labeler_id
+  )
+  select count(*), avg(case when author_tag = tag then 1 else 0 end) into v_pairs, v_observed from pairs;
   if v_pairs > 0 then
+    with pairs as (
+      select l.author_tag, l.tag from public.bias_labels l
+      join public.questions q on q.id = l.question_version_id
+      where l.author_tag is not null and l.locked_at is not null and q.author_id is distinct from l.labeler_id
+    )
     select sum((a.n::numeric / v_pairs) * (coalesce(b.n, 0)::numeric / v_pairs)) into v_expected
-      from (select author_tag as category, count(*) as n from public.bias_labels
-            where author_tag is not null and locked_at is not null group by author_tag) a
-      left join (select tag as category, count(*) as n from public.bias_labels
-            where author_tag is not null and locked_at is not null group by tag) b on b.category = a.category;
+      from (select author_tag as category, count(*) as n from pairs group by author_tag) a
+      left join (select tag as category, count(*) as n from pairs group by tag) b on b.category = a.category;
     if 1 - v_expected >= 1e-12 then
       v_kappa := (v_observed - v_expected) / (1 - v_expected);
     end if;
@@ -804,7 +831,7 @@ begin
     when public.bank_assignee(p_question_id, 'author') = v_uid then 'author'
     else 'none' end;
   v_state := public.bank_review_state(v_latest.id, v_uid);
-  v_hide := v_my_role = 'reviewer' and v_state = 'blind_pending';
+  v_hide := v_my_role = 'reviewer' and public.bank_reviewer_blind(v_latest.id, v_uid);
   return jsonb_build_object(
     'question', public.bank_list_item(p_question_id, v_uid),
     'versions', coalesce((
@@ -918,6 +945,10 @@ begin
   if v_registry.latest_version_id is distinct from p_base_version_id then
     raise exception 'Alguien más guardó o sincronizó una versión nueva' using errcode = 'BK002';
   end if;
+  -- El revisor no edita lo que todavía no ve. Primero etiqueta a ciegas (M5 de la revisión)
+  if public.bank_reviewer_blind(p_base_version_id, v_uid) then
+    raise exception 'Etiqueta a ciegas antes de editar' using errcode = 'BK004';
+  end if;
   select * into v_base from public.questions where id = p_base_version_id;
   v_version := public.bank_insert_version(
     p_question_id, public.bank_draft_content(p_draft, p_question_id), 'app', v_uid,
@@ -982,6 +1013,10 @@ begin
   end if;
   if public.bank_assignee(v_version.question_id, 'reviewer') is distinct from v_uid then
     raise exception 'No eres el revisor de esta pregunta' using errcode = 'BK007';
+  end if;
+  -- Quien escribió la versión no se etiqueta a sí mismo, aunque lo reasignen como revisor
+  if v_version.author_id = v_uid then
+    raise exception 'Autor y revisor tienen que ser distintos' using errcode = 'BK003';
   end if;
   select * into v_option from public.question_options
     where question_version_id = p_version_id and coalesce(option_id, id) = p_option_id and not is_correct;
@@ -1198,7 +1233,8 @@ begin
   return query
     select l.option_id, l.author_tag, l.tag, l.labeled_at
     from public.bias_labels l
-    where l.author_tag is not null and l.locked_at is not null
+    join public.questions q on q.id = l.question_version_id
+    where l.author_tag is not null and l.locked_at is not null and q.author_id is distinct from l.labeler_id
     order by l.labeled_at, l.option_id;
 end;
 $$;
@@ -1614,6 +1650,7 @@ revoke all on function public.bank_can_see(uuid) from public, anon, authenticate
 revoke all on function public.bank_person(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.bank_question_key(uuid) from public, anon, authenticated, service_role;
 revoke all on function public.bank_review_state(uuid, uuid) from public, anon, authenticated, service_role;
+revoke all on function public.bank_reviewer_blind(uuid, uuid) from public, anon, authenticated, service_role;
 revoke all on function public.bank_list_item(uuid, uuid) from public, anon, authenticated, service_role;
 revoke all on function public.bank_version_json(uuid, boolean) from public, anon, authenticated, service_role;
 revoke all on function public.bank_check_content(jsonb) from public, anon, authenticated, service_role;

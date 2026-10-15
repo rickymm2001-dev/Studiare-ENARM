@@ -139,6 +139,24 @@ describe('pasos de la revisión', () => {
     ).toBe(false);
   });
 
+  it('el revisor no ve ni edita un borrador hasta etiquetarlo a ciegas', () => {
+    const hidden = version({ status: 'draft' });
+    hidden.options = hidden.options.map((option) =>
+      option.isCorrect ? option : { ...option, biasTag: null, rationale: null, hidden: true },
+    );
+    const view = reviewViewOf(question({ role: 'reviewer', state: 'none' }, [hidden]));
+    expect(view?.step).toBe('waiting');
+    expect(view?.editable).toBe(false);
+    expect(view?.authorHidden).toBe(true);
+    // Con sus etiquetas cerradas ya lo ve y lo edita
+    const seen = reviewViewOf(
+      question({ role: 'reviewer', state: 'none' }, [version({ status: 'draft' })]),
+    );
+    expect(seen?.step).toBe('draft');
+    expect(seen?.editable).toBe(true);
+    expect(seen?.authorHidden).toBe(false);
+  });
+
   it('el admin y quien no está asignado solo leen', () => {
     for (const role of ['admin', 'none'] as const) {
       const view = reviewViewOf(question({ role, state: 'none' }));

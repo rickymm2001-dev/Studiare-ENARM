@@ -28,6 +28,11 @@ export interface ReviewView {
   /** Puede guardar versiones nuevas. Nunca durante el paso a ciegas ni siendo admin */
   editable: boolean;
   /**
+   * El revisor todavía no ve lo del autor en la versión más reciente, en cualquier estado, hasta cerrar
+   * sus etiquetas a ciegas. Mientras tanto no la edita (M5 de la revisión)
+   */
+  authorHidden: boolean;
+  /**
    * La versión más reciente ya tiene una decisión, como un borrador que regresó con cambios pedidos.
    * No se manda otra vez a revisión (22023). Los cambios van en una versión nueva
    */
@@ -57,9 +62,11 @@ export function reviewViewOf(question: EditorQuestion): ReviewView | null {
   const { role, state } = question.review;
   const writer = role === 'author' || role === 'reviewer';
   const distractors = latest.options.filter((option) => !option.isCorrect);
+  const authorHidden = role === 'reviewer' && latest.options.some((option) => option.hidden);
   let step: ReviewStepKind;
   if (!writer) step = 'read_only';
   else if (role === 'reviewer' && state === 'blind_pending') step = 'blind';
+  else if (authorHidden) step = 'waiting';
   else if (role === 'reviewer' && state === 'ready' && latest.status === 'in_review') {
     step = 'decide';
   } else if (latest.status === 'draft') step = 'draft';
@@ -70,7 +77,8 @@ export function reviewViewOf(question: EditorQuestion): ReviewView | null {
     step,
     latest,
     previous: previous ?? null,
-    editable: writer && step !== 'blind',
+    editable: writer && step !== 'blind' && !authorHidden,
+    authorHidden,
     decided: latest.decisions.length > 0,
     blind:
       step === 'blind'
