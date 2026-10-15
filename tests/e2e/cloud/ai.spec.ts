@@ -96,6 +96,16 @@ const envelope = (engine: string, input: unknown) => ({
   input,
 });
 
+/** axe en claro y en oscuro, que el tema del sistema decide */
+async function expectAccessibleInBothThemes(page: Page) {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expectNoSeriousA11yViolations(page);
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expectNoSeriousA11yViolations(page);
+  await page.emulateMedia({ colorScheme: 'light' });
+}
+
 const cardsRegion = (page: Page) => page.getByRole('region', { name: t.aiCards.title });
 const analysisRegion = (page: Page) => page.getByRole('region', { name: t.tutor.ai.title });
 
@@ -138,12 +148,13 @@ test.describe('IA alojada', () => {
     await expect(cards).toBeVisible();
     await expect(cards.getByText(t.ai.access.gatedCards)).toBeVisible({ timeout: 30_000 });
     await expect(cards.getByRole('button', { name: t.aiCards.generate })).toHaveCount(0);
+    await expectAccessibleInBothThemes(page);
 
     await page.goto(SCREENS.tutor.path);
     const analysis = analysisRegion(page);
     await expect(analysis.getByText(t.ai.access.gated)).toBeVisible({ timeout: 30_000 });
     await expect(analysis.getByRole('button', { name: t.tutor.ai.turnOn })).toHaveCount(0);
-    await expectNoSeriousA11yViolations(page);
+    await expectAccessibleInBothThemes(page);
 
     // La app solo preguntó cómo está la IA. Ningún motor recibió nada y nada se gastó
     expect(ai.calls.some((call) => call.path === '/health' && call.status === 200)).toBe(true);
@@ -214,7 +225,7 @@ test.describe('IA alojada', () => {
       'bias_tips',
       'weekly_report',
     ]);
-    await expectNoSeriousA11yViolations(page);
+    await expectAccessibleInBothThemes(page);
 
     // La prueba hace de pg_cron: manda el lote, Anthropic lo termina y se recogen los resultados
     const [sent, collected] = await ai.runBatchCycle();
@@ -232,7 +243,7 @@ test.describe('IA alojada', () => {
     const batch = ai.memory.ledger.log.find((entry) => entry.mode === 'batch');
     expect(batch).toMatchObject({ engine: 'forgetting', outcome: 'ok', real: true });
     expect(batch?.costUsd ?? 0).toBeGreaterThan(0);
-    await expectNoSeriousA11yViolations(page);
+    await expectAccessibleInBothThemes(page);
   });
 
   test('si el servidor no tiene clave y responde con respuestas simuladas, el Tutor lo dice', async ({
