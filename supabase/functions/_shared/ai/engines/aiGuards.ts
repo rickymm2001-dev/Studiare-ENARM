@@ -15,21 +15,26 @@
  * vez con los problemas, y el cliente, que no confía en nadie. Sin importaciones de la app.
  * Umbrales. Mensaje al alumno de 2 a 3 frases, una frase de hipótesis, de 2 a 3 ejemplos en un
  * consejo y cita de 20 caracteres y 4 palabras como mínimo.
+ * B12. Dos guardas nuevas. score_prediction rechaza en lo que lee el alumno (hipótesis, informe y
+ * consejo) un puntaje estimado, una probabilidad de plaza o un percentil futuro, porque la regla de
+ * CLAUDE.md prohíbe predecir el puntaje del ENARM. vocabulary rechaza la palabra sesgo en un consejo
+ * cuando la app todavía dice trampas (D-099, 10.14 del plan de B12).
  */
-import type {
-  BiasTipInput,
-  BiasTipOutput,
-  EngineInputs,
-  EngineOutputs,
-  FlashcardsInput,
-  FlashcardsOutput,
-  HypothesisInput,
-  HypothesisOutput,
-  RestructureInput,
-  RestructureOutput,
-  WeeklyReportInput,
-  WeeklyReportOutput,
-  AiEngine,
+import {
+  DEFAULT_BIAS_VOCABULARY,
+  type BiasTipInput,
+  type BiasTipOutput,
+  type EngineInputs,
+  type EngineOutputs,
+  type FlashcardsInput,
+  type FlashcardsOutput,
+  type HypothesisInput,
+  type HypothesisOutput,
+  type RestructureInput,
+  type RestructureOutput,
+  type WeeklyReportInput,
+  type WeeklyReportOutput,
+  type AiEngine,
 } from './aiContracts.ts';
 import { clozeHoles } from './cloze.ts';
 import {
@@ -62,7 +67,9 @@ export type GuardIssue =
   | 'number_not_in_quote'
   | 'drug_not_in_quote'
   | 'answer_not_grounded'
-  | 'controversy_invalid';
+  | 'controversy_invalid'
+  | 'score_prediction'
+  | 'vocabulary';
 
 export interface GuardResult {
   passed: boolean;
@@ -93,6 +100,9 @@ export const GUARD_MESSAGES: Readonly<Record<GuardIssue, string>> = {
   drug_not_in_quote: 'Hay un fármaco que la cita no trae',
   answer_not_grounded: 'La respuesta no se apoya en las palabras de la cita',
   controversy_invalid: 'La controversia no cita una fuente de la lista cerrada',
+  score_prediction:
+    'Predijiste un puntaje, una plaza o un percentil del ENARM, y eso nunca se hace',
+  vocabulary: 'Usaste la palabra sesgo y con este alumno se dice trampa',
 };
 
 const result = (issues: Iterable<GuardIssue>): GuardResult => {
@@ -112,11 +122,73 @@ export function mentionsMentalHealth(text: string): boolean {
 }
 
 /** Frases de un texto. Un punto dentro de una cifra como 3.5 no corta la frase */
-export function sentenceCount(text: string): number {
+function sentencesOf(text: string): string[] {
   return text
     .trim()
     .split(/(?<=[.!?…])\s+(?=[¿¡"“(\p{Lu}\d])/u)
-    .filter((part) => part.replace(/[^\p{L}\d]/gu, '').length > 0).length;
+    .filter((part) => part.replace(/[^\p{L}\d]/gu, '').length > 0);
+}
+
+export function sentenceCount(text: string): number {
+  return sentencesOf(text).length;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Predicción del puntaje (CLAUDE.md, B12)
+
+/**
+ * Lo que una predicción promete. El puntaje, la calificación, los aciertos o el percentil del
+ * examen, una plaza o la selección. Se revisa frase por frase sobre el texto normalizado, sin acentos
+ */
+const EXAM_OUTCOME =
+  /\b(puntajes?|calificacion(es)?|aciertos|percentil(es)?|plazas?|seleccion|seleccionad[oa]s?|residencias?)\b/;
+/** Verbos en futuro sobre el resultado del alumno, como obtendrás o vas a aprobar */
+const OUTCOME_FUTURE =
+  /\b(obtendras|sacaras|alcanzaras|lograras|aprobaras|pasaras|quedaras|vas a (sacar|obtener|alcanzar|lograr|aprobar|pasar|quedar))\b/;
+/** Palabras de estimación, como puntaje estimado o percentil proyectado */
+const ESTIMATE =
+  /\b(estimad[oa]s?|estimacion(es)?|proyectad[oa]s?|proyeccion(es)?|pronostic\w*|predic\w*)\b/;
+/** Probabilidad de aprobar o de ser seleccionado, que siempre es del examen */
+const CHANCE_TO_PASS =
+  /\b(probabilidad(es)?|posibilidad(es)?|chances?|oportunidad(es)?) de (aprobar|ser seleccionad[oa])\b/;
+/** Probabilidad de quedar, de entrar o de conseguir algo, que es del examen si nombra su resultado */
+const CHANCE_TO_GET =
+  /\b(probabilidad(es)?|posibilidad(es)?|chances?|oportunidad(es)?) de (pasar|quedar|entrar|obtener|conseguir|ganar|alcanzar)\b/;
+const EXAM = /\b(enarm|examen)\b/;
+/** Una predicción sin rodeos sobre el examen, como aprobarás el ENARM o tu percentil */
+const DIRECT_PREDICTION = [
+  /\b(aprobaras|pasaras|vas a aprobar|vas a pasar) (el )?(enarm|examen)\b/,
+  /\bseras seleccionad[oa]\b/,
+  /\btu percentil\b/,
+  /\btu (puntaje|calificacion|lugar|resultado) (en|del) (el )?enarm\b/,
+];
+
+/**
+ * Si el texto predice el puntaje del ENARM, una plaza o un percentil del alumno. La app nunca predice
+ * el puntaje (CLAUDE.md), así que la IA tampoco. Una frase cuenta si junta un resultado del examen con
+ * un futuro o una estimación, si habla de la probabilidad de aprobar o de quedar en el examen, o si lo
+ * dice sin rodeos. Frases como "en el ENARM tendrás casos así", "la probabilidad de quedar con
+ * secuelas" o "la escala de Alvarado da una puntuación de 7" no cuentan
+ */
+export function predictsScore(text: string): boolean {
+  return sentencesOf(text).some((raw) => {
+    const sentence = normalizeForMatch(raw);
+    if (DIRECT_PREDICTION.some((pattern) => pattern.test(sentence))) return true;
+    if (CHANCE_TO_PASS.test(sentence)) return true;
+    const outcome = EXAM_OUTCOME.test(sentence);
+    if (CHANCE_TO_GET.test(sentence) && (outcome || EXAM.test(sentence))) return true;
+    return outcome && (OUTCOME_FUTURE.test(sentence) || ESTIMATE.test(sentence));
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Vocabulario de sesgo o trampa (D-099, B12)
+
+const BIAS_WORD = /\bsesg\w*/;
+
+/** Si el texto usa la palabra sesgo, o sesgado, que no se dice mientras el alumno ve trampas */
+export function usesBiasWord(text: string): boolean {
+  return BIAS_WORD.test(normalizeForMatch(text));
 }
 
 const joinTexts = (...parts: readonly (string | null | undefined)[]) =>
@@ -156,6 +228,7 @@ export function guardHypothesis(output: HypothesisOutput, input: HypothesisInput
     if (sentences < 2 || sentences > 3) issues.push('message_sentences');
   }
   if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
 
   // Los datos médicos salen de los ítems implicados y de nada más
   const support = joinTexts(input.area, ...input.evidence.map((item) => item.text));
@@ -189,6 +262,7 @@ export function guardWeeklyReport(
     output.challenge,
   );
   if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
 
   const support = joinTexts(
     String(input.answers),
@@ -212,6 +286,10 @@ export function guardBiasTip(output: BiasTipOutput, input: BiasTipInput): GuardR
   if (output.exampleRefs.some((ref) => !refs.has(ref))) issues.push('ref_not_in_input');
   if (new Set(output.exampleRefs).size !== output.exampleRefs.length) issues.push('examples_count');
   if (mentionsMentalHealth(output.tip)) issues.push('mental_health_opinion');
+  if (predictsScore(output.tip)) issues.push('score_prediction');
+  // Sin el vocabulario en la entrada cuenta como trampa, que es lo que dice la app sin acuerdo medido
+  const vocabulary = input.vocabulary ?? DEFAULT_BIAS_VOCABULARY;
+  if (vocabulary === 'trampa' && usesBiasWord(output.tip)) issues.push('vocabulary');
 
   const support = joinTexts(input.baseTip, input.biasLabel, ...input.examples.map((e) => e.text));
   if (hasNewFact(output.tip, support)) issues.push('new_medical_fact');

@@ -11,21 +11,24 @@
  * de que un médico debe revisarlas. Sin importaciones de la app.
  * Umbrales. De 4 pruebas de evidencia como máximo en una hipótesis y confianza media desde 10
  * hallazgos recientes.
+ * B12. El consejo por sesgo cambia sesgo por trampa cuando el alumno ve trampas, para pasar la guarda
+ * vocabulary. Ninguna respuesta fija predice el puntaje, así que todas pasan score_prediction.
  */
-import type {
-  AiEngine,
-  BiasTipInput,
-  BiasTipOutput,
-  EngineInputs,
-  EngineOutputs,
-  FlashcardsInput,
-  FlashcardsOutput,
-  HypothesisInput,
-  HypothesisOutput,
-  RestructureInput,
-  RestructureOutput,
-  WeeklyReportInput,
-  WeeklyReportOutput,
+import {
+  DEFAULT_BIAS_VOCABULARY,
+  type AiEngine,
+  type BiasTipInput,
+  type BiasTipOutput,
+  type EngineInputs,
+  type EngineOutputs,
+  type FlashcardsInput,
+  type FlashcardsOutput,
+  type HypothesisInput,
+  type HypothesisOutput,
+  type RestructureInput,
+  type RestructureOutput,
+  type WeeklyReportInput,
+  type WeeklyReportOutput,
 } from './aiContracts.ts';
 import { simulateCards } from './cardSim.ts';
 import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, wordsOf } from './grounding.ts';
@@ -133,9 +136,51 @@ export function mockFlashcards(input: FlashcardsInput): FlashcardsOutput {
   };
 }
 
+/** La palabra sesgo con su artículo, y cómo queda en femenino al cambiarla por trampa */
+const BIAS_WORDS: readonly [RegExp, string][] = [
+  [/\b(el|un|este|ese|del|al) sesgo\b/giu, '$1 trampa'],
+  [/\b(los|unos|estos|esos) sesgos\b/giu, '$1 trampas'],
+  [/\bsesgos\b/giu, 'trampas'],
+  [/\bsesgo\b/giu, 'trampa'],
+  [/\bsesgad[oa]s?\b/giu, 'con trampa'],
+];
+const FEMININE: Readonly<Record<string, string>> = {
+  el: 'la',
+  un: 'una',
+  este: 'esta',
+  ese: 'esa',
+  del: 'de la',
+  al: 'a la',
+  los: 'las',
+  unos: 'unas',
+  estos: 'estas',
+  esos: 'esas',
+};
+
+/** Cambia sesgo por trampa con su artículo en femenino, respetando la mayúscula inicial */
+export function toTrapVocabulary(text: string): string {
+  let result = text;
+  for (const [pattern, replacement] of BIAS_WORDS) {
+    result = result.replace(pattern, (match: string, article?: string) => {
+      const swapped =
+        typeof article === 'string'
+          ? replacement.replace('$1', FEMININE[article.toLowerCase()] ?? article)
+          : replacement;
+      const initial = match.charAt(0);
+      return initial === initial.toUpperCase()
+        ? `${swapped.charAt(0).toUpperCase()}${swapped.slice(1)}`
+        : swapped;
+    });
+  }
+  return result;
+}
+
 export function mockBiasTip(input: BiasTipInput): BiasTipOutput {
+  const tip = `${input.baseTip} Practícalo con las preguntas donde te pasó.`;
+  // Mientras la app dice trampas el consejo tampoco dice sesgo (D-099, B12)
+  const vocabulary = input.vocabulary ?? DEFAULT_BIAS_VOCABULARY;
   return {
-    tip: `${input.baseTip} Practícalo con las preguntas donde te pasó.`,
+    tip: vocabulary === 'trampa' ? toTrapVocabulary(tip) : tip,
     exampleRefs: input.examples.map((example) => example.ref),
   };
 }

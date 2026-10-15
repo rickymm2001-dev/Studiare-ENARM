@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { HYPOTHESIS_RULES } from './aiContracts';
-import { guardHypothesis } from './aiGuards';
+import { guardBiasTip, guardHypothesis } from './aiGuards';
 import {
+  mockBiasTip,
   mockFlashcards,
   mockHypothesis,
   mockOutput,
   mockRestructure,
   mockWeeklyReport,
+  toTrapVocabulary,
 } from './aiMock';
 import {
+  biasTipInput,
   flashcardsInput,
   hypothesisInput,
   restructureInput,
@@ -89,5 +92,31 @@ describe('informe, tarjetas y preguntas simulados', () => {
 
   it('rechaza un motor que no existe', () => {
     expect(() => mockOutput('otro' as never, {} as never)).toThrow('Motor');
+  });
+});
+
+describe('consejo simulado y vocabulario (B12)', () => {
+  const withBias = 'Este sesgo te engaña. Los sesgos se vencen al nombrar el dato del sesgo.';
+
+  it('cambia sesgo por trampa con su artículo cuando el alumno ve trampas', () => {
+    expect(toTrapVocabulary(withBias)).toBe(
+      'Esta trampa te engaña. Las trampas se vencen al nombrar el dato de la trampa.',
+    );
+    expect(toTrapVocabulary('Sesgo de anclaje y una lectura sesgada')).toBe(
+      'Trampa de anclaje y una lectura con trampa',
+    );
+    expect(toTrapVocabulary('Un sesgo y al sesgo')).toBe('Una trampa y a la trampa');
+  });
+
+  it('el consejo pasa la guarda de vocabulario con trampa, por omisión y con sesgo', () => {
+    for (const vocabulary of ['trampa', undefined, 'sesgo'] as const) {
+      const input = biasTipInput({
+        baseTip: withBias,
+        ...(vocabulary ? { vocabulary } : {}),
+      });
+      const output = mockBiasTip(input);
+      expect(guardBiasTip(output, input), String(vocabulary)).toEqual({ passed: true, issues: [] });
+      expect(output.tip.includes('sesgo'), String(vocabulary)).toBe(vocabulary === 'sesgo');
+    }
   });
 });
