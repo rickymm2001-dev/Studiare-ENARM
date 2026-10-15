@@ -66,6 +66,30 @@ Lo que hace la sesión después, sin pedirte nada más. Aplica las seis migracio
 
 Decisiones de B11 que esperan tu visto bueno, con la opción recomendada ya tomada. Subespecialidad deducida del subtema (8.2), De control con casilla para el revisor (8.4), la tarifa (8.8), el freno de los planes de pago (8.10), el día de abrir el banco (8.14), los temas de Salud pública (8.15), los pesos del examen completo (8.17), Pediatría y Cirugía solo en Storage (8.18), un médico con decisiones que quiere borrar su cuenta (8.33), las listas dependientes (8.34) y cómo se cuenta la meta de 300 (8.35). Ya aplicadas con el plan. El pago a médicos cuenta cada pregunta revisada una vez al mes (respuesta 58) y una Tarea que no se detecta entra como pendiente para aprobar (D-080). Queda tuya cómo cierras la cuenta de un médico con decisiones sin perder lo que respalda sus pagos.
 
+## Lo que salió de B13, inglés médico
+
+El servidor, el convertidor del Sheet y los scripts de contenido ya están con sus pruebas. Todo queda apagado hasta tus pasos, porque el inglés se abre con la misma bandera cloudBank que el resto del banco. El detalle técnico y la guía para los médicos están en docs/INGLES_MEDICO.md y docs/SHEET_DEL_BANCO.md. Ninguno de estos pasos lleva llaves al chat.
+
+- **Paso B13.1. Red de la sesión (unos 5 minutos).** En el menú del entorno, Edit, Network access, agrega a Allowed domains medlineplus.gov, www.ncbi.nlm.nih.gov, pmc.ncbi.nlm.nih.gov y eutils.ncbi.nlm.nih.gov. Sirven para el vocabulario y para preparar textos con licencia. Sin ellos, los scripts quedan listos y la sesión te pide que bajes a mano el archivo XML de temas de salud de MedlinePlus, de https://medlineplus.gov/xml.html. Los dominios nuevos solo se leen al abrir una sesión
+- **Paso B13.2. Tu Sheet.**
+  1. Agrega tres columnas al final, Fuente del texto, Licencia del texto y Enlace del texto. El orden no importa
+  2. Copia la lista Licencia del texto desde la pestaña Listas que deja la sesión (`npm run bank:sheet-lists`), como en B11, y úsala como validación de la columna Licencia del texto
+  3. Reemplaza el texto de la pestaña Instrucciones con el de docs/SHEET_DEL_BANCO.md, que ya trae lo del inglés
+  4. Los médicos escriben los casos de inglés en la misma pestaña Preguntas, con Rama troncal Inglés médico, Subespecialidad Comprensión de lectura, el Subtema de la rama clínica de la que trata el texto, Idioma Inglés, Caso y Orden. El texto va en Caso clínico del Orden 1
+  5. Para textos con licencia, la sesión les deja Studiare-ingles-textos.xlsx con los textos, la fuente y la licencia ya llenos (`npm run english:passages`), y ellos escriben las preguntas. Primero los médicos eligen los textos y los anotan en content-drafts/ingles/textos.json, con la forma que está en docs/INGLES_MEDICO.md
+  6. La meta es 30 reactivos aprobados, unos 12 casos, para la parte del examen, y más para que la práctica no repita
+- **Paso B13.3. Mazo de vocabulario.** La sesión dejó listo `npm run english:vocabulary`, pero todavía no generó el mazo, porque necesita el XML de temas de salud de MedlinePlus y esta sesión no abre medlineplus.gov. Con el paso B13.1 hecho, la sesión baja el archivo y lo genera. Si prefieres hacerlo tú, bájalo de https://medlineplus.gov/xml.html, déjalo en una carpeta y pásale la ruta a la sesión. Cuando la sesión te avise, súbelo en Studiare, Administración, Catálogo de mazos, Subir mazo, y confirma la autorización con la nota "Dominio público, MedlinePlus.gov"
+- **Paso B13.4. Lo que te toca confirmar.**
+  - Si en el ENARM la pregunta y las opciones de la parte en inglés van en inglés o en español (8.2). Hoy van en inglés, igual que el texto
+  - Si el inglés va mezclado por casos o en bloque al final del examen (8.4). Hoy va mezclado y cambiarlo es una constante
+  - Las licencias aceptadas, con tu abogado (8.8). Hoy son Texto propio, Dominio público, CC0, CC BY y CC BY-SA, y nada con NC ni ND
+
+Lo que hace la sesión después, sin pedirte nada más. Aplica la migración 20261027000001_english_section.sql al fusionar el bloque, con la misma herramienta de despliegue, y revisa su comprobación. Con el banco cerrado, los alumnos siguen con la demo, que no trae textos en inglés. Los casos de inglés aprobados esperan en el catálogo hasta que abras el banco (paso B11.9).
+
+Decisiones de B13 que esperan tu visto bueno, con la opción recomendada ya tomada. Contenido de demostración en inglés, sin textos ni preguntas hechos por IA (8.1), tiempo de 90 segundos por reactivo de inglés (8.3), vocabulario de MedlinePlus en el catálogo de pago con vista previa en Gratis (8.16), la meta de 30 de inglés aparte de la de 300 (8.17), prioridad a los resúmenes CC BY de PubMed Central (8.19) y el falso cognado como sesgo nuevo, que se propone sin sembrar (8.9). Lo demás de la sección 8 del plan de B13 es editable y se queda como está hasta que digas otra cosa.
+
+Lo que no está todavía. El mazo de vocabulario (src/demo/content/decks/vocabulario-ingles.json) y cualquier texto con licencia, porque los scripts necesitan los archivos reales. Los scripts se probaron con archivos de muestra con la marca [Prueba], así que la primera corrida real se revisa a mano.
+
 ## Lo que salió de B16, legal y privacidad
 
 El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.
@@ -97,6 +121,7 @@ El aviso de privacidad y los términos quedaron al día (el aviso en la versión
     - MP_ACCESS_TOKEN con la credencial de prueba de Mercado Pago, cuando exista la cuenta (paso 15)
     - ENARM_OPENAI_KEY para comparar calidad en las evaluaciones (B12)
     - CLOUDFLARE_API_TOKEN junto al CLOUDFLARE_ACCOUNT_ID que ya está (paso 20)
+    - En Allowed domains, para B13, medlineplus.gov, www.ncbi.nlm.nih.gov, pmc.ncbi.nlm.nih.gov y eutils.ncbi.nlm.nih.gov (paso B13.1)
     - En Allowed domains, api.mercadopago.com, drive.google.com y drive.usercontent.google.com, y la documentación que la sesión debe leer antes de usar cada servicio. docs.stripe.com, www.mercadopago.com.mx, supabase.com, developers.google.com, resend.com, posthog.com, docs.sentry.io y developers.cloudflare.com
     - Los secretos y conectores nuevos solo se leen al abrir una sesión. Ponlos antes del siguiente mensaje de arranque
     - Revisión del 2026-10-13. La llave que el entorno inyecta en api.stripe.com sigue siendo la publicable (pk_test_), así que la limpieza de pagos y lo de Stripe de B10 siguen en esta lista. El token que el entorno inyecta en api.cloudflare.com responde Invalid API Token. Los sitios de documentación (docs.stripe.com, supabase.com, mercadopago, developers.google.com, resend.com, posthog.com, docs.sentry.io y developers.cloudflare.com) están bloqueados por la red del entorno, y la sesión tuvo que consultar la documentación oficial por GitHub y npm. Agrégalos en Allowed domains
