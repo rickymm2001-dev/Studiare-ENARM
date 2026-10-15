@@ -271,7 +271,7 @@ export const adminText = {
       title: 'Pesos del ENARM',
       hint: 'El peso de cada rama y de cada tema decide cuánto cuenta en el dominio, el examen y el plan.',
       provisional:
-        'Los de fábrica son provisionales, iguales por rama, hasta que haya los oficiales. Se guardan en este navegador y se aplican al recargar la app.',
+        'Los de fábrica son los reactivos de cada rama sobre 250, provisionales hasta que la convocatoria publique los oficiales. Se aplican al recargar la app.',
       branchSummary: (weight: number, topics: number) =>
         `Peso ${weight} · ${plural(topics, 'tema', 'temas')}`,
       branchWeight: (name: string) => `Peso de la rama ${name}`,

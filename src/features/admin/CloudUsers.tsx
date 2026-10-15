@@ -4,7 +4,8 @@
 // el admin no vea botones que el servidor va a rechazar. Desde B9 también las invitaciones del registro,
 // cómo nos conocieron en conteos, liberar el dispositivo de una cuenta (H17) y, solo para el dueño,
 // restablecer el segundo factor de alguien del equipo. Desde 64rem las cuentas van en una tabla con sus
-// acciones por fila y en el teléfono en una lista compacta (H15 de la revisión de diseño de B2).
+// acciones por fila y en el teléfono en una lista compacta (H15 de la revisión de diseño de B2). Desde
+// B11 cada médico lleva su clave corta para las columnas Autor y Revisor del Google Sheet.
 import {
   Crown,
   GraduationCap,
@@ -35,6 +36,7 @@ import { SelectField, TextField } from '@/ui/components/field';
 import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
 import { LoadingState } from '@/ui/states/states';
 import { InvitationsCard } from './InvitationsCard';
+import { PhysicianCodeForm } from './PhysicianCodeForm';
 import { SignupSourcesCard } from './SignupSourcesCard';
 
 type State =
@@ -474,7 +476,12 @@ function UserRow(props: RowProps) {
       <td className="py-3 pr-3">{planNameOf(user) ?? t.accounts.admin.users.noPlan}</td>
       <td className="py-3 pr-3 tabular-nums">{joinedOn(user)}</td>
       <td className="py-3">
-        <AccountActions {...props} />
+        <div className="flex flex-col gap-2">
+          <AccountActions {...props} />
+          {user.role === 'physician' ? (
+            <PhysicianCodeForm userId={user.id} alias={user.alias} />
+          ) : null}
+        </div>
       </td>
     </tr>
   );
@@ -500,6 +507,7 @@ function UserItem(props: RowProps) {
       </div>
       <RoleControl {...props} labelHidden={false} />
       <AccountActions {...props} />
+      {user.role === 'physician' ? <PhysicianCodeForm userId={user.id} alias={user.alias} /> : null}
     </div>
   );
 }

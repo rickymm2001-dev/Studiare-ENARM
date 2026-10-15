@@ -8,13 +8,16 @@ import {
   FlaskConical,
   BookOpenCheck,
   ChartLine,
+  ClipboardCheck,
   ClipboardList,
   Coins,
   Database,
   FileText,
   Flag,
   GraduationCap,
+  FileSpreadsheet,
   House,
+  Library,
   NotebookPen,
   PartyPopper,
   Receipt,
@@ -26,6 +29,7 @@ import {
 } from 'lucide-react';
 import { isFeatureEnabled, type FeatureFlag } from '@/config/featureFlags';
 import type { Role } from '@/data/schemas/common';
+import { bankAdminText } from '@/i18n/bankAdmin';
 import { t } from '@/i18n/es-MX';
 import { screenPath } from './screens';
 
@@ -109,6 +113,14 @@ const adminGroup: NavGroup = {
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
+    // Banco en la nube (B11). Database ya es del Banco del médico
+    { path: screenPath('bankAdmin'), label: bankAdminText.nav.bank, icon: FileSpreadsheet },
+    {
+      path: screenPath('physicianReviews'),
+      label: bankAdminText.nav.reviews,
+      icon: ClipboardCheck,
+    },
+    { path: screenPath('deckCatalogAdmin'), label: bankAdminText.nav.decks, icon: Library },
     // Único lugar para cambiar de base y generar alumnos simulados. En producción se esconde (5.4)
     {
       path: screenPath('demoData'),

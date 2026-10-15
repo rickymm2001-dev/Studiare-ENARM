@@ -7,7 +7,15 @@ import { draftOf, patchOf, validateAiDraft } from './aiConfigDraft';
 import { readAdjustments } from './demoAdjust';
 import { initialDraft, patchFromDraft, validateDraft } from './thresholdDraft';
 import { THRESHOLD_FIELDS, fieldId, readThreshold } from './thresholdFields';
-import { currentDraft, factoryDraft, positive, weightsPatch } from './weightsDraft';
+import {
+  branchesBySection,
+  currentDraft,
+  factoryDraft,
+  positive,
+  weightsPatch,
+  weightsProvisional,
+  weightsToStore,
+} from './weightsDraft';
 
 describe('umbrales', () => {
   it('cada campo editable existe en los umbrales y arranca con su valor', () => {
@@ -63,6 +71,27 @@ describe('pesos del ENARM', () => {
     draft.branches[branch] = '2';
     draft.topics[topic] = '0';
     expect(weightsPatch(draft)).toEqual({ branches: { [branch]: 2 }, topics: {} });
+  });
+
+  it('los pesos de fábrica son los de la sección 6 del plan del cambio, con Inglés médico aparte (B11)', () => {
+    const { clinical, english } = branchesBySection();
+    expect(clinical.reduce((total, branch) => total + branch.weight, 0)).toBe(250);
+    expect(clinical.map((branch) => branch.key)).toContain('public_health');
+    expect(english.map((branch) => [branch.key, branch.weight])).toEqual([['medical_english', 30]]);
+  });
+
+  it('los pesos siguen provisionales hasta que el admin apaga la marca, y solo se guarda lo que cambia', () => {
+    expect(weightsProvisional(undefined)).toBe(true);
+    expect(weightsProvisional({ provisional: false })).toBe(false);
+    expect(weightsToStore(currentDraft(), true)).toBeNull();
+    expect(weightsToStore(currentDraft(), false)).toEqual({
+      branches: {},
+      topics: {},
+      provisional: false,
+    });
+    const draft = currentDraft();
+    draft.branches.public_health = '20';
+    expect(weightsToStore(draft, true)).toEqual({ branches: { public_health: 20 }, topics: {} });
   });
 
   it('un peso es positivo y de hasta 100', () => {
