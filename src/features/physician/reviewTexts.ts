@@ -3,7 +3,10 @@
 import { physicianText } from '@/i18n/physician';
 import { splitIncomplete } from './reviewSteps';
 
-/** El texto de un pendiente, con la letra de la opción cuando aplica */
+/**
+ * El texto de un pendiente, con la letra de la opción cuando aplica. passage_source_missing,
+ * license_not_allowed y language_branch_mismatch son de Inglés médico (B13)
+ */
 export function incompleteText(code: string): string {
   const text = physicianText.incomplete;
   const { code: base, letter } = splitIncomplete(code);
@@ -21,6 +24,9 @@ export function incompleteText(code: string): string {
     case 'options_count':
     case 'correct_count':
     case 'canonical_invalid':
+    case 'passage_source_missing':
+    case 'license_not_allowed':
+    case 'language_branch_mismatch':
       return text[base];
     default:
       return text.other(code);

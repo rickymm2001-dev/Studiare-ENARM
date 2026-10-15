@@ -155,6 +155,53 @@ describe('umbrales', () => {
   });
 });
 
+describe('umbrales de Inglés médico', () => {
+  const english = adminText.adminConfig.thresholds;
+
+  it('van aparte bajo su título, con su valor de fábrica y su explicación', async () => {
+    await open();
+    const card = screen.getByRole('region', { name: adminText.adminConfig.thresholdsForm.title });
+    const group = within(card).getByRole('group', {
+      name: adminText.adminConfig.thresholdsForm.englishTitle,
+    });
+    expect(within(group).getByLabelText(english['english.secondsPerItem'].label)).toHaveValue(90);
+    expect(within(group).getByLabelText(english['english.examMinItems'].label)).toHaveValue(30);
+    expect(within(group).getByLabelText(english['english.practiceMinCases'].label)).toHaveValue(1);
+    expect(within(group).getByLabelText(english['english.minAnswersForStats'].label)).toHaveValue(
+      20,
+    );
+    expect(within(group).getAllByRole('spinbutton')).toHaveLength(4);
+    // Los demás umbrales quedan fuera de ese grupo
+    expect(
+      within(group).queryByLabelText(
+        adminText.adminConfig.thresholds['bias.minTaggedErrors'].label,
+      ),
+    ).toBeNull();
+  });
+
+  it('un tiempo fuera de rango muestra el motivo y no deja guardar, y uno bueno se guarda solo', async () => {
+    const typing = userEvent.setup();
+    await open();
+    const card = screen.getByRole('region', { name: adminText.adminConfig.thresholdsForm.title });
+    const seconds = within(card).getByLabelText(english['english.secondsPerItem'].label);
+    const save = within(card).getByRole('button', {
+      name: adminText.adminConfig.thresholdsForm.save,
+    });
+    fireEvent.change(seconds, { target: { value: '20' } });
+    await waitFor(() => {
+      expect(save).toBeDisabled();
+    });
+    expect(seconds).toHaveAttribute('aria-invalid', 'true');
+    fireEvent.change(seconds, { target: { value: '120' } });
+    await waitFor(() => {
+      expect(save).toBeEnabled();
+    });
+    await typing.click(save);
+    expect(await within(card).findByText(adminText.adminConfig.thresholdsForm.saved)).toBeVisible();
+    expect(readStoredOverrides()?.thresholds).toEqual({ english: { secondsPerItem: 120 } });
+  });
+});
+
 describe('pesos del ENARM', () => {
   it('dice que son provisionales y guarda solo los pesos que cambian', async () => {
     const typing = userEvent.setup();

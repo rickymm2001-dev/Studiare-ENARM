@@ -1,10 +1,35 @@
 // Borrador del editor de pregunta (pantalla 18). Convierte una versión del banco en algo que se puede
 // editar, valida el borrador, arma la versión siguiente y compara versiones para el historial. Sin
 // React ni Dexie. Editar nunca cambia una versión. Siempre sale una versión nueva en borrador (6.1).
+//
+// Inglés médico (B13, 1.4 y 5.4 del plan de B13). El idioma de la pregunta sale de su rama. En inglés el
+// borrador lleva aparte la fuente del texto (título, licencia y enlace), y al guardar se vuelve la
+// primera referencia con la forma fija de passageSource.ts (draftForSave). Así llega igual a la nube, a
+// la huella y al alumno, sin redefinir nada del contenido de B11. Que falte la fuente o que su licencia
+// no esté en la lista no impide guardar, deja el pendiente que impide aprobar (passageIssue).
 import type { EditorVersion } from '@/data/bank/contracts';
+import {
+  composePassageSource,
+  isHttpsUrl,
+  isPassageSourceRef,
+  LICENSE_LABELS,
+  licenseNeedsUrl,
+  parsePassageSource,
+  PASSAGE_LICENSES,
+  PASSAGE_SOURCE_MAX_LENGTH,
+  splitPassageSource,
+  type PassageSourceIssue,
+} from '@/data/content/passageSource';
 import { newId } from '@/data/ids';
 import { ItemKindSchema, type ClueStrength, type ItemKind } from '@/data/schemas/common';
-import { QuestionTaskSchema, type Clue, type Option, type Question } from '@/data/schemas/bank';
+import {
+  QuestionTaskSchema,
+  type Clue,
+  type Option,
+  type Question,
+  type QuestionLanguage,
+} from '@/data/schemas/bank';
+import { languageOfBranch } from './branchLanguage';
 
 export const MIN_OPTIONS = 4;
 export const MAX_OPTIONS = 10;
@@ -49,6 +74,19 @@ export interface DraftClue {
   strength: ClueStrength;
 }
 
+/**
+ * La fuente del texto de una pregunta en inglés, como la escribe el médico en tres campos. license es el
+ * nombre de la licencia como se lee en la lista (LICENSE_LABELS), o lo que trajo el Sheet si no es de la
+ * lista, y queda vacío mientras no se elige. url es una dirección https y va vacía con el texto propio
+ */
+export interface DraftPassage {
+  title: string;
+  license: string;
+  url: string;
+}
+
+export const EMPTY_PASSAGE: DraftPassage = { title: '', license: '', url: '' };
+
 export interface QuestionDraft {
   vignette: string;
   prompt: string;
@@ -62,6 +100,16 @@ export interface QuestionDraft {
   itemKinds: ItemKind[];
   clues: DraftClue[];
   options: DraftOption[];
+  /**
+   * Idioma de la pregunta (B13). Solo viaja en inglés, y sale de la rama: Inglés médico es en y las demás
+   * ramas son es. Sin el campo es español, como todo lo de antes
+   */
+  language?: QuestionLanguage | undefined;
+  /**
+   * La fuente del texto, solo en inglés. draftForSave la vuelve la primera referencia, así que los
+   * borradores que ya pasaron por ahí no la traen y sus gpcRefs ya llevan la fuente
+   */
+  passage?: DraftPassage | undefined;
 }
 
 /** Lo que necesita una versión para volverse borrador. Lo cumplen Question y EditorVersion */
@@ -78,12 +126,31 @@ export interface DraftSourceQuestion {
   itemKinds?: readonly ItemKind[] | undefined;
   clues?: readonly Clue[] | undefined;
   canonicalOptionIds: readonly string[];
+  /** Sin el campo se toma del idioma de la rama. La nube no lo devuelve en editor_question (B13) */
+  language?: QuestionLanguage | undefined;
 }
 
 export type DraftSourceOption = Pick<
   Option,
   'id' | 'optionId' | 'text' | 'isCorrect' | 'biasTag' | 'rationale'
 > & { secondaryBiasTags: readonly string[] };
+
+/**
+ * Separa la fuente del texto de las demás referencias. Toma la primera que empieza con Fuente del texto,
+ * como parsePassageSource, y deja las otras donde estaban. Sin fuente, el pasaje queda vacío
+ */
+function splitPassage<T extends { title: string }>(
+  refs: readonly T[],
+): { passage: DraftPassage; rest: T[] } {
+  const at = refs.findIndex((ref) => isPassageSourceRef(ref.title));
+  const found = at === -1 ? undefined : refs[at];
+  const parts = found ? splitPassageSource(found.title) : null;
+  if (!parts) return { passage: { ...EMPTY_PASSAGE }, rest: [...refs] };
+  return {
+    passage: { title: parts.title, license: parts.licenseText, url: parts.url },
+    rest: refs.filter((_, index) => index !== at),
+  };
+}
 
 /** El borrador de una versión. Primero van las opciones del set canónico, en su orden */
 export function draftFromVersion(
@@ -96,6 +163,10 @@ export function draftFromVersion(
     return place === -1 ? Number.MAX_SAFE_INTEGER : place;
   };
   const ordered = [...options].sort((a, b) => rank(a) - rank(b));
+  // En inglés la fuente del texto sale de las referencias y se edita aparte (B13, 5.4)
+  const english = (question.language ?? languageOfBranch(question.branch)) === 'en';
+  const split = english ? splitPassage(question.gpcRefs) : null;
+  const refs = split ? split.rest : question.gpcRefs;
   return {
     vignette: question.vignette,
     prompt: question.prompt,
@@ -108,7 +179,7 @@ export function draftFromVersion(
       format: question.structure.format,
     },
     explanation: question.explanation,
-    gpcRefs: question.gpcRefs.map((ref) => ({ ...ref })),
+    gpcRefs: refs.map((ref) => ({ ...ref })),
     physicianDifficulty: question.physicianDifficulty,
     itemKinds: [...(question.itemKinds ?? [])],
     clues: (question.clues ?? []).map((clue) => ({ ...clue })),
@@ -121,6 +192,7 @@ export function draftFromVersion(
       rationale: option.rationale,
       canonical: canonical.has(option.id),
     })),
+    ...(split ? { language: 'en' as const, passage: split.passage } : {}),
   };
 }
 
@@ -193,7 +265,10 @@ export type IssueCode =
   | 'canonical_without_distractor'
   | 'gpc_empty'
   | 'clue_empty'
-  | 'task_missing';
+  | 'task_missing'
+  // Inglés médico (B13). La fuente no cabe en 300 caracteres, o el idioma no va con la rama
+  | 'passage_long'
+  | 'language_branch_mismatch';
 
 export interface DraftIssue {
   code: IssueCode;
@@ -208,6 +283,8 @@ export interface TaxonomyView {
   subtopicsOfTopic: (branch: string, topic: string) => readonly string[];
   /** Las etiquetas que se pueden poner a un distractor */
   taggable: ReadonlySet<string>;
+  /** El idioma que lleva una pregunta de esa rama: Inglés médico en inglés y las demás en español */
+  languageOf: (branch: string) => QuestionLanguage;
 }
 
 const normalize = (text: string) =>
@@ -268,7 +345,84 @@ export function validateDraft(draft: QuestionDraft, taxonomy: TaxonomyView): Dra
   if (draft.gpcRefs.some((ref) => ref.title.trim().length === 0)) push('gpc_empty');
   if (draft.clues.some((clue) => clue.text.trim().length === 0)) push('clue_empty');
   if (draft.structure.task === '') push('task_missing');
+  // Inglés médico (B13). El idioma va con la rama, y la fuente tiene que caber en una referencia
+  if ((draft.language ?? 'es') !== taxonomy.languageOf(draft.branch)) {
+    push('language_branch_mismatch');
+  }
+  if (draft.language === 'en' && draft.passage) {
+    const reference = composePassageSource(draft.passage);
+    if (reference !== null && reference.length > PASSAGE_SOURCE_MAX_LENGTH) push('passage_long');
+  }
   return issues;
+}
+
+/**
+ * Qué le falta a la fuente del texto de un borrador en inglés para aprobarse, que es lo mismo que dirá la
+ * base al leer la referencia que arma draftForSave (1.6 del plan de B13). null si está completa o si la
+ * pregunta no es en inglés. No impide guardar, solo aprobar, así que no es parte de validateDraft
+ */
+export function passageIssue(
+  draft: Pick<QuestionDraft, 'language' | 'passage'>,
+): PassageSourceIssue | null {
+  if (draft.language !== 'en') return null;
+  const reference = draft.passage ? composePassageSource(draft.passage) : null;
+  if (reference === null) return 'passage_source_missing';
+  const read = parsePassageSource([{ title: reference }]);
+  return read.ok ? null : read.issue;
+}
+
+/** Lo que está mal en cada campo de la fuente, para decirlo junto al campo */
+export interface PassageProblems {
+  title?: 'missing';
+  license?: 'missing' | 'not_allowed';
+  url?: 'missing' | 'invalid';
+}
+
+/** La licencia de la lista que el texto nombra, sin importar mayúsculas ni acentos, o undefined */
+export function licenseOfPassage(license: string) {
+  const wanted = normalize(license);
+  return PASSAGE_LICENSES.find((key) => normalize(LICENSE_LABELS[key]) === wanted);
+}
+
+/**
+ * Los problemas de cada campo de la fuente. Sin licencia elegida solo falta la licencia. Con una
+ * licencia que pide enlace faltan el título y el enlace https. El texto propio del equipo no pide más
+ */
+export function passageProblems(passage: DraftPassage): PassageProblems {
+  const problems: PassageProblems = {};
+  if (passage.license.trim() === '') {
+    problems.license = 'missing';
+    return problems;
+  }
+  const key = licenseOfPassage(passage.license);
+  if (key === undefined) {
+    problems.license = 'not_allowed';
+    return problems;
+  }
+  if (!licenseNeedsUrl(key)) return problems;
+  if (passage.title.trim() === '') problems.title = 'missing';
+  const url = passage.url.trim();
+  if (url === '') problems.url = 'missing';
+  else if (!isHttpsUrl(url)) problems.url = 'invalid';
+  return problems;
+}
+
+/**
+ * El borrador como lo guarda el repositorio. En inglés la fuente del texto pasa a ser la primera
+ * referencia, con la forma fija de passageSource.ts, y el idioma viaja con el borrador. En español no
+ * cambia nada. Es idempotente, un borrador que ya pasó por aquí no lleva el pasaje aparte
+ */
+export function draftForSave(draft: QuestionDraft): QuestionDraft {
+  const { passage, ...rest } = draft;
+  if (draft.language !== 'en') return rest;
+  const reference = passage ? composePassageSource(passage) : null;
+  return {
+    ...rest,
+    gpcRefs:
+      reference === null
+        ? rest.gpcRefs
+        : [{ title: reference, status: 'verified' }, ...rest.gpcRefs],
+  };
 }
 
 /**
@@ -322,7 +476,9 @@ export function buildNextVersion(input: NextVersionInput): {
   question: Question;
   options: Option[];
 } {
-  const { current, draft, newId, now } = input;
+  const { current, newId, now } = input;
+  // En inglés la fuente del texto pasa a ser la primera referencia. Si ya pasó, no cambia nada
+  const draft = draftForSave(input.draft);
   const options: Option[] = draft.options.map((option) => ({
     id: newId(),
     optionId: option.optionId,
@@ -363,6 +519,8 @@ export function buildNextVersion(input: NextVersionInput): {
     explanation: draft.explanation.trim(),
     gpcRefs: draft.gpcRefs.map((ref) => ({ title: ref.title.trim(), status: ref.status })),
     physicianDifficulty: draft.physicianDifficulty,
+    // Solo la pregunta en inglés lleva el idioma. Sin el campo es español, como todo lo de antes
+    ...(draft.language === 'en' ? { language: 'en' as const } : {}),
     ...(draft.itemKinds.length > 0 ? { itemKinds: [...draft.itemKinds] } : {}),
     ...(draft.clues.length > 0
       ? {
@@ -383,6 +541,7 @@ export function buildNextVersion(input: NextVersionInput): {
 /** Las partes de la pregunta que pueden cambiar entre dos versiones, para el historial */
 export type ChangedPart =
   | 'vignette'
+  | 'source'
   | 'prompt'
   | 'taxonomy'
   | 'structure'
@@ -397,6 +556,7 @@ export type ChangedPart =
 
 const CHANGED_ORDER: readonly ChangedPart[] = [
   'vignette',
+  'source',
   'prompt',
   'options',
   'tags',
@@ -439,6 +599,8 @@ export function changedParts(before: QuestionDraft, after: QuestionDraft): Chang
   );
   const changed = new Set<ChangedPart>();
   if (before.vignette !== after.vignette) changed.add('vignette');
+  // La fuente del texto de una pregunta en inglés. En español los dos son undefined
+  if (!same(before.passage, after.passage)) changed.add('source');
   if (before.prompt !== after.prompt) changed.add('prompt');
   if (optionsChanged) changed.add('options');
   if (tagsChanged) changed.add('tags');
@@ -463,6 +625,8 @@ export function changedParts(before: QuestionDraft, after: QuestionDraft): Chang
 export function taxonomyViewFrom(source: {
   branches: readonly {
     key: string;
+    /** clinical o english. Sin el campo es clinical, como en branchSection */
+    section?: 'clinical' | 'english' | undefined;
     topics: readonly { key: string; subtopics: readonly { key: string }[] }[];
   }[];
   taggable: Iterable<string>;
@@ -477,5 +641,7 @@ export function taxonomyViewFrom(source: {
         (subtopic) => subtopic.key,
       ),
     taggable,
+    languageOf: (branch) =>
+      source.branches.find((item) => item.key === branch)?.section === 'english' ? 'en' : 'es',
   };
 }

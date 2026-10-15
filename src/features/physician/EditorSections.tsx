@@ -3,6 +3,12 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import type { EditorVersion } from '@/data/bank/contracts';
+import {
+  composePassageSource,
+  LICENSE_LABELS,
+  PASSAGE_LICENSES,
+} from '@/data/content/passageSource';
+import type { QuestionLanguage } from '@/data/schemas/bank';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
@@ -14,14 +20,20 @@ import {
   changedParts,
   draftFromEditorVersion,
   emptyOption,
+  licenseOfPassage,
   MAX_OPTIONS,
   MAX_SECONDARY_TAGS,
   MIN_OPTIONS,
+  passageIssue,
+  passageProblems,
   type DraftClue,
   type DraftIssue,
   type DraftOption,
+  type DraftPassage,
   type QuestionDraft,
 } from './editorDraft';
+import { SourceLine } from './SourceLine';
+import { incompleteText } from './reviewTexts';
 
 const biasByKey = new Map(TAGGABLE_BIASES.map((bias) => [bias.key, bias]));
 const excerpt = (text: string) => (text.length > 70 ? `${text.slice(0, 70)}…` : text);
@@ -30,10 +42,13 @@ export function OptionsEditor({
   options,
   issues,
   onChange,
+  language,
 }: {
   options: DraftOption[];
   issues: readonly DraftIssue[];
   onChange: (options: DraftOption[]) => void;
+  /** En inglés el texto de cada opción se lee en inglés. Las justificaciones siguen en español (B13) */
+  language?: QuestionLanguage | undefined;
 }) {
   const text = physicianText.questionEditor.options;
   const uid = useId();
@@ -86,6 +101,7 @@ export function OptionsEditor({
                     label={text.text}
                     value={option.text}
                     rows={2}
+                    lang={language === 'en' ? 'en' : undefined}
                     onChange={(event) => {
                       patch(index, { text: event.target.value });
                     }}
@@ -210,6 +226,101 @@ export function OptionsEditor({
         {options.length >= MAX_OPTIONS ? (
           <p className="text-sm text-fg-muted">{text.full}</p>
         ) : null}
+      </div>
+    </Card>
+  );
+}
+
+/**
+ * La fuente del texto de una pregunta en inglés (B13, 5.4 del plan de B13). Título, licencia de la lista y
+ * enlace. Dice en vivo lo que le falta para aprobarse y cómo se verá bajo el texto. Faltar algo no
+ * impide guardar, deja el pendiente que impide aprobar
+ */
+export function PassageSourceEditor({
+  passage,
+  onChange,
+}: {
+  passage: DraftPassage;
+  onChange: (passage: DraftPassage) => void;
+}) {
+  const text = physicianText.questionEditor.passage;
+  const uid = useId();
+  const problems = passageProblems(passage);
+  const issue = passageIssue({ language: 'en', passage });
+  const reference = composePassageSource(passage);
+  // El select muestra el nombre exacto de la licencia aunque el Sheet haya traído otra mayúscula. Una
+  // que trajo el Sheet y no es de la lista se muestra aparte para poder corregirla
+  const known = licenseOfPassage(passage.license);
+  const selected = known === undefined ? passage.license : LICENSE_LABELS[known];
+  const outside = passage.license.trim() !== '' && known === undefined;
+  const licenseChoices = [
+    { value: '', label: text.licensePick },
+    ...PASSAGE_LICENSES.map((key) => ({
+      value: LICENSE_LABELS[key],
+      label: LICENSE_LABELS[key],
+    })),
+    ...(outside ? [{ value: passage.license, label: text.licenseOutside(passage.license) }] : []),
+  ];
+  const patch = (change: Partial<DraftPassage>) => {
+    onChange({ ...passage, ...change });
+  };
+  return (
+    <Card aria-labelledby={`${uid}-fuente`}>
+      <CardHeader>
+        <CardTitle id={`${uid}-fuente`}>{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      <div className="flex flex-col gap-3">
+        <p className="text-sm text-fg-muted">{text.accepted}</p>
+        <div className="grid gap-3 sm:grid-cols-[1fr_16rem]">
+          <TextField
+            label={text.sourceTitle}
+            hint={text.sourceTitleHint}
+            lang="en"
+            value={passage.title}
+            error={problems.title ? text.titleMissing : null}
+            onChange={(event) => {
+              patch({ title: event.target.value });
+            }}
+          />
+          <SelectField
+            label={text.license}
+            value={selected}
+            options={licenseChoices}
+            error={problems.license === 'not_allowed' ? text.licenseNotAllowed : null}
+            onChange={(event) => {
+              patch({ license: event.target.value });
+            }}
+          />
+        </div>
+        <TextField
+          label={text.url}
+          hint={text.urlHint}
+          type="url"
+          inputMode="url"
+          value={passage.url}
+          error={
+            problems.url === 'invalid'
+              ? text.urlInvalid
+              : problems.url === 'missing'
+                ? text.urlMissing
+                : null
+          }
+          onChange={(event) => {
+            patch({ url: event.target.value });
+          }}
+        />
+        <div className="flex flex-col gap-1" role="status">
+          <p className="text-sm font-medium">
+            {issue === null ? text.complete : incompleteText(issue)}
+          </p>
+          {issue === null && reference !== null ? (
+            <div>
+              <p className="text-xs text-fg-muted">{text.preview}</p>
+              <SourceLine refs={[{ title: reference }]} />
+            </div>
+          ) : null}
+        </div>
       </div>
     </Card>
   );

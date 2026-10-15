@@ -109,8 +109,11 @@ export const bankAdminText = {
     title: 'Avance del banco',
     goal: (published: number, goal: number) =>
       `${num(published)} de ${num(goal)} preguntas aprobadas y publicadas para abrir el banco.`,
-    english: (n: number) =>
-      `Inglés médico aparte, ${plural(n, 'pregunta publicada', 'preguntas publicadas')}.`,
+    // Inglés médico aparte de la meta de las siete ramas, con su propia meta (B13, 8.17)
+    english: (published: number, goal: number) =>
+      `Inglés, ${num(published)} de ${num(goal)} para la parte del examen.`,
+    englishHint: (goal: number, englishGoal: number) =>
+      `Aparte de las ${num(goal)} de las siete ramas. Con menos de ${num(englishGoal)} reactivos de inglés publicados, la parte en inglés del examen dice calibrando.`,
     byBranch: 'Publicadas por rama',
     noBranch: 'Todavía no hay preguntas publicadas.',
     counts: {

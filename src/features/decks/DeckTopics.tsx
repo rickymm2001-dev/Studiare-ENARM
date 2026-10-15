@@ -14,11 +14,14 @@ export function TopicOutlineList({
   label,
   outline,
   className,
+  source,
 }: {
   /** Nombre de la lista para el lector de pantalla, como Temas de Urgencias (Paco) */
   label: string;
   outline: TopicOutline;
   className?: string;
+  /** La fuente del mazo, al pie de la lista, cuando sale de una fuente pública (B13, 4.4) */
+  source?: string | undefined;
 }) {
   return (
     <div className={cn('flex flex-col gap-3', className)}>
@@ -42,6 +45,7 @@ export function TopicOutlineList({
       {outline.untagged > 0 ? (
         <p className="text-xs text-fg-muted">{t.deckTopics.untagged(outline.untagged)}</p>
       ) : null}
+      {source ? <p className="text-xs text-fg-muted">{source}</p> : null}
     </div>
   );
 }
@@ -73,12 +77,15 @@ export function DeckTopics({
   outline,
   className,
   collapsible = true,
+  source,
 }: {
   deckName: string;
   outline: TopicOutline | undefined;
   className?: string;
   /** false muestra la lista abierta, sin un segundo pliegue */
   collapsible?: boolean;
+  /** La fuente del mazo, al pie de su lista de temas (B13, 4.4) */
+  source?: string | undefined;
 }) {
   if (!outline || outline.branches.length === 0) return null;
   if (!collapsible) {
@@ -87,6 +94,7 @@ export function DeckTopics({
         label={t.deckTopics.listLabel(deckName)}
         outline={outline}
         className={cn('min-w-0', className)}
+        source={source}
       />
     );
   }
@@ -112,6 +120,7 @@ export function DeckTopics({
         label={t.deckTopics.listLabel(deckName)}
         outline={outline}
         className="mt-2"
+        source={source}
       />
     </details>
   );

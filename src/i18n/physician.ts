@@ -9,7 +9,7 @@ export const physicianText = {
   /** Las descripciones de las pantallas del médico. Sus títulos siguen en t.screens */
   descriptions: {
     questionEditor:
-      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, versiones y la revisión a ciegas.',
+      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, la fuente del texto en inglés, versiones y la revisión a ciegas.',
     agreement:
       'Acuerdo entre la etiqueta del autor y la que pone a ciegas el revisor, con kappa, y lo que te falta etiquetar.',
   },
@@ -37,6 +37,9 @@ export const physicianText = {
     statsLabel: 'Preguntas por estado',
     unassigned: 'Sin asignar',
     importBank: 'Importar banco',
+    // Sección del examen (B13). Español son las ramas clínicas e Inglés es Inglés médico
+    sectionLabel: 'Sección',
+    sections: { clinical: 'Español', english: 'Inglés' } as Record<string, string>,
   },
   agreementScreen: {
     stats: {
@@ -141,6 +144,39 @@ export const physicianText = {
         'Esta viñeta es del caso seriado. Editarla crea un caso nuevo y queda fuera de este editor.',
       prompt: 'Frase de la pregunta',
       promptHint: 'Ahí se buscan las negaciones. No pongas el caso en esta frase.',
+      // Inglés médico (B13). El texto de lectura es la viñeta del caso
+      vignetteEnglish: 'Texto en inglés',
+      vignetteEnglishHint:
+        'El texto de lectura, en inglés y tal como sale de su fuente, hasta 8,000 caracteres. Déjalo vacío solo si la pregunta no lleva texto.',
+      promptEnglish: 'Pregunta en inglés',
+      promptEnglishHint: 'Ahí se buscan las negaciones en inglés, como NOT, EXCEPT o LEAST.',
+    },
+    // Inglés médico (B13). El idioma sale de la rama y no se elige
+    language: {
+      badge: 'Inglés',
+      note: 'Esta pregunta es en inglés porque su rama es Inglés médico. El texto, la pregunta y las opciones van en inglés, y la explicación y las justificaciones en español.',
+    },
+    // La fuente del texto de una pregunta en inglés (B13, 1.4 y 5.4 del plan de B13)
+    passage: {
+      title: 'Fuente del texto',
+      hint: 'Cada texto en inglés lleva su fuente y su licencia a la vista junto al texto. Sin una fuente con una licencia aceptada, la pregunta no se puede aprobar.',
+      sourceTitle: 'Título de la fuente',
+      sourceTitleHint:
+        'Como aparece en la página, con quien la publica. Con el texto propio del equipo se deja vacío.',
+      license: 'Licencia del texto',
+      licensePick: 'Elige la licencia',
+      licenseOutside: (name: string) => `${name} (no está en la lista)`,
+      url: 'Enlace del texto',
+      urlHint:
+        'La dirección completa de donde sale el texto, con https. El texto propio del equipo no la pide.',
+      accepted:
+        'Se aceptan texto propio del equipo, dominio público, CC0, CC BY y CC BY-SA, con el texto sin cambios. No se acepta nada con NC ni ND.',
+      preview: 'Así se verá bajo el texto',
+      complete: 'La fuente está completa.',
+      titleMissing: 'Escribe el título de la fuente.',
+      licenseNotAllowed: 'Esta licencia no está en la lista. Elige una de las que se aceptan.',
+      urlMissing: 'Escribe el enlace de donde sale el texto.',
+      urlInvalid: 'Escribe el enlace completo, con https://.',
     },
     options: {
       count: (n: number) => `${n} de 10 opciones`,
@@ -232,6 +268,7 @@ export const physicianText = {
       changed: (parts: string[]) => `Cambió ${parts.join(', ')}`,
       parts: {
         vignette: 'la viñeta',
+        source: 'la fuente del texto',
         prompt: 'la frase de la pregunta',
         options: 'las opciones',
         tags: 'las etiquetas',
@@ -277,6 +314,9 @@ export const physicianText = {
       gpc_empty: 'Una referencia de GPC no tiene título.',
       clue_empty: 'Un dato del caso no tiene texto.',
       task_missing: 'Elige la tarea de la pregunta. No se pudo detectar sola.',
+      passage_long: 'La fuente del texto pasa de 300 caracteres. Acorta el título o el enlace.',
+      language_branch_mismatch:
+        'El idioma no va con la rama. Inglés médico va en inglés y las demás ramas en español.',
     } as Record<string, string>,
     issueAt: (n: number, message: string) => `Opción ${n}. ${message}`,
   },
@@ -679,7 +719,22 @@ export const physicianText = {
     options_count: 'La pregunta lleva de 4 a 10 opciones.',
     correct_count: 'Marca exactamente una opción como correcta.',
     canonical_invalid: 'El set canónico lleva la correcta y al menos un distractor.',
+    // Inglés médico (B13). Los dos primeros son pendientes y el tercero impide mandar a revisión
+    passage_source_missing:
+      'Falta la fuente del texto en inglés. Llena la fuente, la licencia y el enlace del texto.',
+    license_not_allowed:
+      'La licencia del texto en inglés no está en la lista. Elige Texto propio del equipo Studiare, Dominio público, CC0, CC BY o CC BY-SA.',
+    language_branch_mismatch:
+      'El idioma no va con la rama. Inglés médico va en inglés y las demás ramas en español.',
     other: (code: string) => `Pendiente ${code}.`,
+  },
+
+  /** La línea de la fuente del texto bajo un texto en inglés (B13, 2.3 y 5.4 del plan de B13) */
+  sourceLine: {
+    label: 'Fuente del texto.',
+    incomplete: 'La fuente del texto está incompleta.',
+    missing: 'Este texto en inglés no tiene fuente.',
+    newTab: ' (se abre en otra pestaña)',
   },
 
   /** Avisos con casilla que el revisor confirma al aprobar (3.4) */
