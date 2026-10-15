@@ -2,14 +2,15 @@
 // Las tarjetas con IA ante la compuerta 1 y ante los topes del servidor (B12, 3.5). Con la compuerta
 // cerrada el botón no aparece para los alumnos y se ve el aviso. Un tope de generaciones se avisa y no
 // se tapa con las respuestas fijas del cliente. En producción, sin IA, tampoco hay respuestas fijas.
+// Esta es la puerta de texto o PDF. Las de la revisión del examen y la del apunte tienen su prueba al lado.
 import 'fake-indexeddb/auto';
 import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fakeProxy } from '@/ai/testing/proxyFetch';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { subscribe } from '@/data/testing/fixtures';
-import type { AiEngine } from '@/engines/aiContracts';
 import { t } from '@/i18n/es-MX';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -29,46 +30,6 @@ const MATERIAL =
   'La dosis inicial habitual es de 500 mg cada 12 horas con los alimentos. ' +
   'La retinopatía diabética se caracteriza por microaneurismas y hemorragias retinianas en el fondo de ojo.';
 
-const ENGINES: Record<AiEngine, 'open' | 'gated'> = {
-  forgetting: 'gated',
-  weekly_report: 'gated',
-  flashcards: 'gated',
-  bias_tips: 'gated',
-  restructure: 'gated',
-};
-
-function stub(handlers: {
-  engines?: Partial<Record<AiEngine, 'open' | 'gated'>>;
-  flashcards?: () => Response;
-}) {
-  const calls: Call[] = [];
-  const fetchStub = vi.fn((url: string, init?: RequestInit) => {
-    calls.push({ url, body: init?.body ? (JSON.parse(init.body as string) as never) : undefined });
-    if (url.endsWith('/api/health')) {
-      return Promise.resolve(
-        Response.json({
-          status: 'ok',
-          mode: 'mock',
-          version: 2,
-          ...(handlers.engines ? { engines: { ...ENGINES, ...handlers.engines } } : {}),
-        }),
-      );
-    }
-    if (url.endsWith('/api/ai/flashcards') && handlers.flashcards) {
-      return Promise.resolve(handlers.flashcards());
-    }
-    return Promise.resolve(Response.json({ error: 'nope' }, { status: 404 }));
-  });
-  vi.stubGlobal('fetch', fetchStub);
-  return calls;
-}
-
-interface Call {
-  url: string;
-  body: Record<string, unknown> | undefined;
-}
-const engineCalls = (calls: Call[]) => calls.filter((call) => call.url.includes('/api/ai/'));
-
 async function open() {
   app = await renderApp(SCREENS.decks.path, {
     seed: async (api, user) => {
@@ -80,24 +41,28 @@ async function open() {
 
 describe('tarjetas con IA ante la compuerta', () => {
   it('con la compuerta cerrada no hay botón ni formulario y se ve el aviso', async () => {
-    const calls = stub({ engines: {} });
+    const proxy = fakeProxy({ engines: {} });
+    vi.stubGlobal('fetch', proxy.fetch);
     const card = await open();
     expect(await within(card).findByText(t.ai.access.gatedCards, undefined, WAIT)).toBeVisible();
     expect(within(card).queryByRole('button', { name: t.aiCards.generate })).toBeNull();
     expect(within(card).queryByLabelText(t.aiCards.textLabel)).toBeNull();
-    expect(engineCalls(calls)).toEqual([]);
+    expect(proxy.engineCalls()).toEqual([]);
   });
 
   it('con el motor de tarjetas abierto ofrece el botón y manda la generación y su sección', async () => {
     const typing = userEvent.setup();
-    const calls = stub({
+    const proxy = fakeProxy({
       engines: { flashcards: 'open' },
-      flashcards: () =>
-        Response.json(
-          { error: 'generation_limit', message: 'Llegaste al límite.' },
-          { status: 429 },
-        ),
+      routes: {
+        '/api/ai/flashcards': () =>
+          Response.json(
+            { error: 'generation_limit', message: 'Llegaste al límite.' },
+            { status: 429 },
+          ),
+      },
     });
+    vi.stubGlobal('fetch', proxy.fetch);
     const card = await open();
     const button = await within(card).findByRole('button', { name: t.aiCards.generate }, WAIT);
     await waitFor(() => {
@@ -108,26 +73,30 @@ describe('tarjetas con IA ante la compuerta', () => {
     });
     await typing.click(button);
     await waitFor(() => {
-      expect(engineCalls(calls)).toHaveLength(1);
+      expect(proxy.engineCalls()).toHaveLength(1);
     }, WAIT);
-    const body = engineCalls(calls)[0]?.body;
+    const body = proxy.engineCalls()[0]?.body;
     expect(body?.generation).toMatchObject({ section: 0 });
     expect((body?.generation as { ref: string }).ref).toMatch(/^[A-Za-z0-9_-]{8,64}$/);
   });
 
   it('el tope de generaciones de hoy se avisa tal cual y no se cae a las respuestas fijas', async () => {
     const typing = userEvent.setup();
-    stub({
+    const proxy = fakeProxy({
       engines: { flashcards: 'open' },
-      flashcards: () =>
-        Response.json(
-          {
-            error: 'generation_limit',
-            message: 'Llegaste al límite de generaciones de tarjetas con IA de hoy. Vuelve mañana.',
-          },
-          { status: 429 },
-        ),
+      routes: {
+        '/api/ai/flashcards': () =>
+          Response.json(
+            {
+              error: 'generation_limit',
+              message:
+                'Llegaste al límite de generaciones de tarjetas con IA de hoy. Vuelve mañana.',
+            },
+            { status: 429 },
+          ),
+      },
     });
+    vi.stubGlobal('fetch', proxy.fetch);
     const card = await open();
     const button = await within(card).findByRole('button', { name: t.aiCards.generate }, WAIT);
     await waitFor(() => {
@@ -151,14 +120,13 @@ describe('tarjetas con IA ante la compuerta', () => {
 
   it('en producción, sin IA, no hay respuestas fijas y se dice que no está disponible', async () => {
     vi.stubEnv('VITE_APP_ENV', 'production');
-    const calls = stub({});
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() => Promise.reject(new TypeError('sin red'))),
-    );
+    const proxy = fakeProxy({ unreachable: true });
+    vi.stubGlobal('fetch', proxy.fetch);
     const card = await open();
     expect(await within(card).findByText(t.ai.access.unavailable, undefined, WAIT)).toBeVisible();
     expect(within(card).queryByRole('button', { name: t.aiCards.generate })).toBeNull();
-    expect(engineCalls(calls)).toEqual([]);
+    // Preguntó si había IA y, como no la hay, no llamó a ningún motor
+    expect(proxy.calls.length).toBeGreaterThan(0);
+    expect(proxy.engineCalls()).toEqual([]);
   });
 });
