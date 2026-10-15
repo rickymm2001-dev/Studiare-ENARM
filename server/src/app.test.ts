@@ -12,10 +12,11 @@ describe('app del proxy', () => {
     const response = await createApp({ mode: 'mock' }).request('/health', { headers: LOCAL });
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
+    // Versión 2 del contrato C1, sin engines, que solo manda la Edge Function
     expect((await response.json()) as HealthResponse).toEqual({
       status: 'ok',
       mode: 'mock',
-      version: 1,
+      version: 2,
     });
   });
 

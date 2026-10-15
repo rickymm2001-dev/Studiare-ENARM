@@ -13,6 +13,7 @@ import type { AiEngine, EngineInputs } from './engines/aiContracts.ts';
 import { mockOutput, MOCK_MODEL } from './engines/aiMock.ts';
 import type { AiLimits, ModelChoice } from './config.ts';
 import { approximateTokens, type Usage } from './cost.ts';
+import { effortParam, thinkingParam } from './models.ts';
 
 export interface ProviderCall {
   engine: AiEngine;
@@ -31,11 +32,18 @@ export interface ProviderResult {
   usage: Usage;
   /** Por qué no hay salida que revisar, para el reintento */
   problem?: string;
+  /** El modelo se negó (stop_reason refusal). No se reintenta y cuesta lo que se usó (2.8) */
+  refusal?: { category: string | null };
   /** El modelo que respondió */
   model: string;
 }
 
-export type ProviderFailure = 'rate_limited' | 'provider_error';
+/**
+ * rate_limited es un 429 por minuto. org_limit es el tope mensual de la organización (429 con
+ * enforced_spend_limit_reached) o el límite de gasto de un espacio de trabajo (400), que la app dice
+ * como pausa. provider_error es todo lo demás
+ */
+export type ProviderFailure = 'rate_limited' | 'provider_error' | 'org_limit';
 
 /** Falla del proveedor. El mensaje es nuestro y nunca incluye lo que contestó la API */
 export class ProviderError extends Error {
@@ -79,15 +87,30 @@ export function createMockProvider(): AiProvider {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Real
+// Petición y lectura, iguales al momento y por lote (2.8)
 
-/** Lo único que se usa del cliente del SDK. Las pruebas ponen uno falso */
-export interface MessagesApi {
-  /** timeout en milisegundos y reintentos del SDK con espera exponencial ante fallas de red o 5xx */
-  create(
-    params: MessageCreateParamsNonStreaming,
-    options: { timeout: number; maxRetries: number },
-  ): Promise<Message>;
+/**
+ * La petición a la API. Igual para una llamada al momento y para una petición de un lote. El bloque
+ * fijo va con caché de 5 minutos, la salida con su esquema y el esfuerzo y el razonamiento según las
+ * reglas del modelo (models.ts). Nunca lleva metadata, herramientas ni datos del alumno aparte del
+ * mensaje
+ */
+export function buildMessageParams(
+  call: Pick<ProviderCall, 'model' | 'system' | 'user' | 'schema'>,
+): MessageCreateParamsNonStreaming {
+  const effort = effortParam(call.model);
+  const thinking = thinkingParam(call.model);
+  return {
+    model: call.model.id,
+    max_tokens: call.model.maxTokens,
+    system: [{ type: 'text', text: call.system, cache_control: { type: 'ephemeral' } }],
+    messages: [{ role: 'user', content: call.user }],
+    output_config: {
+      format: zodOutputFormat(call.schema),
+      ...(effort ? { effort } : {}),
+    },
+    ...(thinking ? { thinking } : {}),
+  };
 }
 
 function usageOf(message: Message): Usage {
@@ -99,14 +122,84 @@ function usageOf(message: Message): Usage {
   };
 }
 
-function toProviderError(error: unknown): ProviderError {
+/**
+ * Lee un mensaje de la API. El texto se busca por tipo de bloque, porque antes puede venir un bloque
+ * de razonamiento. Una negativa trae su categoría. Cortado por max_tokens o sin JSON es un problema
+ * que va al reintento, sin perder los tokens
+ */
+export function readMessage(message: Message): ProviderResult {
+  const usage = usageOf(message);
+  const model = message.model;
+  if (message.stop_reason === 'refusal') {
+    return {
+      raw: undefined,
+      usage,
+      model,
+      refusal: { category: message.stop_details?.category ?? null },
+    };
+  }
+  if (message.stop_reason === 'max_tokens') {
+    return { raw: undefined, usage, model, problem: 'La respuesta se cortó por tamaño' };
+  }
+  const text = message.content.find((block) => block.type === 'text')?.text;
+  if (text === undefined) {
+    return { raw: undefined, usage, model, problem: 'La respuesta no trajo texto' };
+  }
+  try {
+    return { raw: JSON.parse(text) as unknown, usage, model };
+  } catch {
+    return { raw: undefined, usage, model, problem: 'La respuesta no es un JSON válido' };
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Real
+
+/** Lo único que se usa del cliente del SDK. Las pruebas ponen uno falso */
+export interface MessagesApi {
+  /** timeout en milisegundos y reintentos del SDK con espera exponencial ante fallas de red o 5xx */
+  create(
+    params: MessageCreateParamsNonStreaming,
+    options: { timeout: number; maxRetries: number },
+  ): Promise<Message>;
+}
+
+/** El cuerpo de un error de la API, sin confiar en su forma */
+interface ErrorBody {
+  error?: { message?: unknown; details?: { error_code?: unknown } };
+}
+const bodyOf = (error: { error: unknown }): ErrorBody =>
+  error.error !== null && typeof error.error === 'object' ? error.error : {};
+
+/** El código del cuerpo del error, como enforced_spend_limit_reached. Nunca se copia el mensaje */
+function errorCodeOf(error: { error: unknown }): string | null {
+  const code = bodyOf(error).error?.details?.error_code;
+  return typeof code === 'string' ? code : null;
+}
+
+/**
+ * El límite de gasto que la cuenta puso a la organización o a un espacio de trabajo. La API lo
+ * contesta con 400 y un mensaje que empieza así (documentación de rate limits, 2026-10-15)
+ */
+function isOwnSpendLimit(error: { error: unknown }): boolean {
+  const message = bodyOf(error).error?.message;
+  return typeof message === 'string' && message.startsWith('You have reached your specified');
+}
+
+export function toProviderError(error: unknown): ProviderError {
   if (error instanceof RateLimitError) {
+    if (errorCodeOf(error) === 'enforced_spend_limit_reached') {
+      return new ProviderError('org_limit', 'Se alcanzó el límite de gasto de la IA', 429);
+    }
     return new ProviderError('rate_limited', 'El servicio de IA está saturado', 429);
   }
   if (error instanceof APIConnectionError) {
     return new ProviderError('provider_error', 'No se pudo conectar con el servicio de IA');
   }
   if (error instanceof APIError) {
+    if (error.status === 400 && isOwnSpendLimit(error)) {
+      return new ProviderError('org_limit', 'Se alcanzó el límite de gasto de la IA', 400);
+    }
     const text =
       error.status === 401 || error.status === 403
         ? 'La clave de IA no es válida o no tiene permiso'
@@ -128,42 +221,14 @@ export function createAnthropicProvider(
   return {
     mode: 'real',
     async call(call) {
-      let message: Message;
       const { timeoutMs, maxRetries } = limits();
+      let message: Message;
       try {
-        message = await api.create(
-          {
-            model: call.model.id,
-            max_tokens: call.model.maxTokens,
-            system: [{ type: 'text', text: call.system, cache_control: { type: 'ephemeral' } }],
-            messages: [{ role: 'user', content: call.user }],
-            output_config: {
-              format: zodOutputFormat(call.schema),
-              ...(call.model.effort ? { effort: call.model.effort } : {}),
-            },
-          },
-          { timeout: timeoutMs, maxRetries },
-        );
+        message = await api.create(buildMessageParams(call), { timeout: timeoutMs, maxRetries });
       } catch (error) {
         throw toProviderError(error);
       }
-      const usage = usageOf(message);
-      const model = message.model;
-      if (message.stop_reason === 'refusal') {
-        throw new ProviderError('provider_error', 'El modelo no atendió esta petición');
-      }
-      if (message.stop_reason === 'max_tokens') {
-        return { raw: undefined, usage, model, problem: 'La respuesta se cortó por tamaño' };
-      }
-      const text = message.content.find((block) => block.type === 'text')?.text;
-      if (text === undefined) {
-        return { raw: undefined, usage, model, problem: 'La respuesta no trajo texto' };
-      }
-      try {
-        return { raw: JSON.parse(text) as unknown, usage, model };
-      } catch {
-        return { raw: undefined, usage, model, problem: 'La respuesta no es un JSON válido' };
-      }
+      return readMessage(message);
     },
   };
 }

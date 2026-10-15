@@ -3,7 +3,7 @@
 // --mock fuerza el modo simulado aunque haya clave. --ephemeral no lee ni escribe la configuración
 // ni el libro del día, para que las pruebas no dependan del estado de otra corrida.
 import { ENV_FILE, PROXY_PORT } from './config.ts';
-import { createAiDeps } from './ai/index.ts';
+import { createAiDeps, startDevBatchLoop } from './ai/index.ts';
 import { loadAiCredentials } from './env.ts';
 import { startProxy } from './server.ts';
 
@@ -11,14 +11,13 @@ const forceMock = process.argv.includes('--mock');
 const ephemeral = process.argv.includes('--ephemeral');
 const credentials = loadAiCredentials({ envFile: ENV_FILE, forceMock });
 
-const proxy = await startProxy({
-  port: PROXY_PORT,
-  mode: credentials.mode,
-  ai: createAiDeps({
-    credentials,
-    ...(ephemeral ? { files: { config: null, ledger: null } } : {}),
-  }),
+const ai = createAiDeps({
+  credentials,
+  ...(ephemeral ? { files: { config: null, ledger: null } } : {}),
 });
+const proxy = await startProxy({ port: PROXY_PORT, mode: credentials.mode, ai });
+// La cola de lotes vive en memoria y su ciclo corre aquí, como pg_cron en la nube (B12, 3.4)
+const stopBatches = startDevBatchLoop(ai);
 const modeText =
   credentials.mode === 'real'
     ? 'modo real (clave encontrada en server/.env.local)'
@@ -28,6 +27,7 @@ console.log(
 );
 
 function shutdown() {
+  stopBatches();
   void proxy.close().finally(() => process.exit(0));
 }
 process.on('SIGINT', shutdown);

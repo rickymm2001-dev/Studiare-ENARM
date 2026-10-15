@@ -10,8 +10,9 @@ import type {
   MessageBatchResult,
 } from '@anthropic-ai/sdk/resources/messages';
 import { APIError } from '@anthropic-ai/sdk';
-import { mockBatchResolver, SimulatedBatchApi } from '../batchApi.ts';
-import type { BatchRequest } from '../ports.ts';
+import type { AnthropicClients } from '../anthropic.ts';
+import { mockBatchResolver, SimulatedBatchApi, type BatchesClient } from '../batchApi.ts';
+import type { BatchApi, BatchRequest } from '../ports.ts';
 import { bundledPromptSets, type PromptSets } from '../prompts.ts';
 import { fakeApi, fakeMessage, type FakeApi } from './fakes.ts';
 
@@ -61,6 +62,29 @@ export function createFakeAnthropic(
     }),
   };
 }
+
+/** El cliente de lotes con la forma del SDK, para armar la función con createSdkBatchApi */
+export function batchesClientOf(api: BatchApi): BatchesClient {
+  return {
+    create: (params) => api.create(params.requests),
+    retrieve: (batchId) => api.retrieve(batchId),
+    results: (batchId) => api.results(batchId),
+    cancel: (batchId) => api.cancel(batchId),
+    delete: async (batchId) => {
+      await api.delete(batchId);
+      return { id: batchId, type: 'message_batch_deleted' };
+    },
+    list: async function* (params) {
+      for (const batch of await api.recent(params.limit)) yield batch;
+    },
+  };
+}
+
+/** Los clientes que la función crea con la clave, pero simulados */
+export const anthropicClientsOf = (fake: FakeAnthropic): AnthropicClients => ({
+  messages: fake.messages,
+  batches: batchesClientOf(fake.batches),
+});
 
 // ---------------------------------------------------------------------------------------------
 // Respuestas especiales de la API

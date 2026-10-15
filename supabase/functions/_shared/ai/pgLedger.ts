@@ -1,13 +1,19 @@
-// Libro del día alojado (D-103, Fase G bloque G1). Hace lo mismo que Ledger, pero en Postgres, con
-// las funciones ai_admit, ai_release, ai_settle y ai_usage_summary de la migración 20261010000001.
-// Así los límites por alumno y el presupuesto sobreviven a reiniciar el servidor y se comparten
-// entre copias. Solo el servidor lo usa, con la llave de servicio. No guarda texto de alumnos.
+// Libro del día en Postgres (B12, 2.4 y 6.1). Hace lo mismo que DayLedger con las funciones
+// ai_admit_v2, ai_settle_v2, ai_release_v2 y ai_usage_summary_v2 de la migración 20261026000001. Así
+// los límites por alumno, las cuotas por motor y el presupuesto se comparten entre copias de la Edge
+// Function. Solo la función lo usa, con la llave de servicio. No guarda texto de alumnos.
 import { z } from 'zod';
-import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
-import type { Admission, LedgerPort, Settlement, UsageSummary } from './ledger.ts';
+import { AI_ENGINES, BATCH_ENGINES, type AiEngine } from './engines/aiContracts.ts';
+import type {
+  AdmissionV2,
+  AdmitV2Input,
+  LedgerPortV2,
+  SettlementV2,
+  UsageSummaryV2,
+} from './ports.ts';
+import type { Rpc } from './rest.ts';
 
-/** Llama a una función de Postgres y devuelve su resultado. Falla si el servidor contesta con error */
-export type Rpc = (name: string, args: Record<string, unknown>) => Promise<unknown>;
+export { createRestRpc, type Rpc } from './rest.ts';
 
 const SummarySchema = z.object({
   day: z.string(),
@@ -18,89 +24,83 @@ const SummarySchema = z.object({
     z.enum(AI_ENGINES),
     z.object({ calls: z.number(), costUsd: z.number() }),
   ),
+  pendingJobs: z.number(),
+  inFlightUsd: z.partialRecord(z.enum(BATCH_ENGINES), z.number()),
 });
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** El libro necesita un UUID de Supabase. Cualquier otra cosa es un error nuestro y se dice */
-function userOf(studentRef: string): string {
-  if (!UUID.test(studentRef)) throw new Error('El libro de IA alojado pide el ID de la cuenta');
-  return studentRef;
+function userOf(userId: string): string {
+  if (!UUID.test(userId)) throw new Error('El libro de IA en la nube pide el ID de la cuenta');
+  return userId;
 }
 
-export class PgLedger implements LedgerPort {
+export class PgLedger implements LedgerPortV2 {
   private readonly rpc: Rpc;
 
   constructor(rpc: Rpc) {
     this.rpc = rpc;
   }
 
-  async admit(input: {
-    studentRef: string;
-    engine: AiEngine;
-    perStudentPerDay: number;
-    dailyBudgetUsd: number;
-  }): Promise<Admission> {
-    const result = await this.rpc('ai_admit', {
-      p_user: userOf(input.studentRef),
+  async admit(input: AdmitV2Input): Promise<AdmissionV2> {
+    const result = await this.rpc('ai_admit_v2', {
+      p_user: userOf(input.userId),
       p_engine: input.engine,
+      p_staff: input.staff,
       p_per_student: input.perStudentPerDay,
       p_budget: input.dailyBudgetUsd,
+      p_engine_share: input.engineShare,
+      p_user_budget: input.perUserDailyUsd,
+      p_generation: input.generationRef,
+      p_max_generations: input.maxGenerations,
+      p_max_sections: input.maxSections,
     });
     if (result === 'ok') return { ok: true };
-    if (result === 'student_limit' || result === 'budget_exceeded') {
+    if (
+      result === 'student_limit' ||
+      result === 'generation_limit' ||
+      result === 'budget_exceeded'
+    ) {
       return { ok: false, reason: result };
     }
     throw new Error('Respuesta inesperada del libro de IA');
   }
 
-  async release(input: { studentRef: string; engine: AiEngine }): Promise<void> {
-    await this.rpc('ai_release', { p_user: userOf(input.studentRef), p_engine: input.engine });
-  }
-
-  async settle(input: Settlement): Promise<void> {
-    await this.rpc('ai_settle', {
-      p_user: input.studentRef ? userOf(input.studentRef) : null,
+  async release(input: {
+    userId: string;
+    engine: AiEngine;
+    generationRef: string | null;
+  }): Promise<void> {
+    await this.rpc('ai_release_v2', {
+      p_user: userOf(input.userId),
       p_engine: input.engine,
-      p_model: input.model ?? null,
+      p_generation: input.generationRef,
+    });
+  }
+
+  async settle(input: SettlementV2): Promise<void> {
+    await this.rpc('ai_settle_v2', {
+      p_user: input.userId === null ? null : userOf(input.userId),
+      p_engine: input.engine,
+      p_model: input.model,
       p_real: input.real,
-      p_ok: input.ok ?? true,
+      p_ok: input.ok,
       p_cost: input.costUsd,
-      p_input: input.inputTokens ?? null,
-      p_output: input.outputTokens ?? null,
-      p_latency: input.latencyMs === undefined ? null : Math.round(input.latencyMs),
+      p_input: input.inputTokens,
+      p_output: input.outputTokens,
+      p_cache_read: input.cacheReadTokens,
+      p_cache_write: input.cacheWriteTokens,
+      p_latency: Math.round(input.latencyMs),
+      p_mode: input.mode,
+      p_outcome: input.outcome,
+      p_prompt_version: input.promptVersion,
+      p_refusal: input.refusalCategory,
+      p_job: input.jobId,
     });
   }
 
-  async summary(): Promise<UsageSummary> {
-    return SummarySchema.parse(await this.rpc('ai_usage_summary', {}));
+  async summary(): Promise<UsageSummaryV2> {
+    return SummarySchema.parse(await this.rpc('ai_usage_summary_v2', {}));
   }
-}
-
-/** Llama a las funciones por la API REST de Supabase con la llave de servicio */
-export function createRestRpc(options: {
-  url: string;
-  serviceKey: string;
-  fetchImpl?: typeof fetch;
-}): Rpc {
-  const fetchImpl = options.fetchImpl ?? fetch;
-  return async (name, args) => {
-    const response = await fetchImpl(`${options.url}/rest/v1/rpc/${name}`, {
-      method: 'POST',
-      headers: {
-        apikey: options.serviceKey,
-        authorization: `Bearer ${options.serviceKey}`,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(args),
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!response.ok) {
-      // Nunca se vuelca el cuerpo, que podría traer datos de la petición
-      throw new Error(`La función ${name} contestó ${String(response.status)}`);
-    }
-    // Una función que no devuelve nada contesta con el cuerpo vacío
-    const text = await response.text();
-    return text === '' ? null : (JSON.parse(text) as unknown);
-  };
 }

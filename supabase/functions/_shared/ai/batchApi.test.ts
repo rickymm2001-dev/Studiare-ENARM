@@ -80,8 +80,11 @@ describe('lote simulado', () => {
     });
   });
 
-  it('termina en el siguiente ciclo, entrega por custom_id y se borra', async () => {
-    const api = new SimulatedBatchApi({ resolve: mockBatchResolver(prompts) });
+  it('termina después de las consultas que se le digan, entrega por custom_id y se borra', async () => {
+    const api = new SimulatedBatchApi({
+      resolve: mockBatchResolver(prompts),
+      retrievesBeforeEnd: 1,
+    });
     const batch = await api.create([
       requestFor('forgetting', 'job-1'),
       requestFor('restructure', 'job-2'),
@@ -100,6 +103,12 @@ describe('lote simulado', () => {
     await api.delete(batch.id);
     expect(api.deleted).toEqual([batch.id]);
     await expect(api.retrieve(batch.id)).rejects.toThrow();
+  });
+
+  it('por omisión termina en la primera consulta', async () => {
+    const api = new SimulatedBatchApi({ resolve: mockBatchResolver(prompts) });
+    const batch = await api.create([requestFor('forgetting', 'job-1')]);
+    expect((await api.retrieve(batch.id)).processing_status).toBe('ended');
   });
 
   it('con unknownAsEnded, un lote de otra copia termina sin resultados', async () => {

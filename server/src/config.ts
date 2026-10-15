@@ -28,4 +28,4 @@ export const ALLOWED_ORIGINS = new Set([
   'http://localhost:4173',
 ]);
 
-export const PROXY_VERSION = 1;
+/** La versión de /health es la del núcleo (HEALTH_VERSION de supabase/functions/_shared/ai/routes.ts) */

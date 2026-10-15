@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "zod": "npm:zod@4.6.5",
+    "hono": "npm:hono@4.13.12",
+    "hono/": "npm:/hono@4.13.12/",
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@0.132.1",
+    "@anthropic-ai/sdk/": "npm:/@anthropic-ai/sdk@0.132.1/"
+  }
+}

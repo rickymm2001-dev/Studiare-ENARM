@@ -140,8 +140,8 @@ interface SimulatedBatch {
 export interface SimulatedBatchOptions {
   resolve: (request: BatchRequest) => MessageBatchResult;
   /**
-   * Consultas con retrieve que un lote pasa en curso antes de terminar solo. Con 1 termina en el
-   * siguiente ciclo. Con Infinity solo termina con end()
+   * Consultas con retrieve que un lote pasa en curso antes de terminar solo. Con 0 termina en la
+   * primera consulta, que es el ciclo siguiente al que lo mandó. Con Infinity solo termina con end()
    */
   retrievesBeforeEnd?: number;
   now?: () => number;
@@ -248,7 +248,7 @@ export class SimulatedBatchApi implements BatchApi {
       if (this.options.unknownAsEnded) return Promise.resolve(this.unknown(batchId));
       return Promise.reject(new Error(`Lote simulado desconocido ${batchId}`));
     }
-    if (!found.results && found.retrieves >= (this.options.retrievesBeforeEnd ?? 1)) {
+    if (!found.results && found.retrieves >= (this.options.retrievesBeforeEnd ?? 0)) {
       this.end(batchId);
     }
     found.retrieves += 1;

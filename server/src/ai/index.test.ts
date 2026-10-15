@@ -2,12 +2,12 @@
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { hypothesisInput } from '../../../src/ai/testing/aiSamples.ts';
 import { bundledPromptSets } from '../../../supabase/functions/_shared/ai/prompts.ts';
 import { requestBody } from '../../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { createApp } from '../app.ts';
-import { createAiDeps } from './index.ts';
+import { createAiDeps, DEV_CALLER, startDevBatchLoop } from './index.ts';
 
 const HEADERS = {
   host: '127.0.0.1:8787',
@@ -79,11 +79,74 @@ describe('dependencias del proxy de desarrollo', () => {
       files: { config: null, ledger },
     });
     await ai.ledger.admit({
-      studentRef: 'alumno-uno-0001',
+      userId: DEV_CALLER.userId,
       engine: 'forgetting',
+      staff: true,
       perStudentPerDay: 2,
       dailyBudgetUsd: 1,
+      engineShare: 1,
+      perUserDailyUsd: 1,
+      generationRef: null,
+      maxGenerations: 20,
+      maxSections: 12,
     });
     expect(existsSync(ledger)).toBe(true);
+  });
+});
+
+describe('lotes en el proxy de desarrollo (B12, 3.4)', () => {
+  it('una hipótesis encolada sale lista con IA simulada después de dos ciclos', async () => {
+    const ai = createAiDeps({
+      credentials: { mode: 'mock', apiKey: null },
+      files: { config: null, ledger: null },
+    });
+    const app = createApp({ mode: 'mock', ai });
+    const jobKey = 'fgt_0123456789abcdef0123456789abcdef';
+    const enqueue = await app.request('/ai/jobs/forgetting', {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({ ...requestBody(hypothesisInput()), jobKey }),
+    });
+    expect(enqueue.status).toBe(202);
+    const status = async () =>
+      (await (
+        await app.request('/ai/jobs/status', {
+          method: 'POST',
+          headers: HEADERS,
+          body: JSON.stringify({ jobKeys: [jobKey] }),
+        })
+      ).json()) as { jobs: { status: string; meta?: { mode: string } }[] };
+    expect((await status()).jobs[0]?.status).toBe('queued');
+    expect(await ai.tick()).toMatchObject({ sent: 1 });
+    expect((await status()).jobs[0]?.status).toBe('running');
+    // El lote simulado termina en el ciclo siguiente
+    expect(await ai.tick()).toMatchObject({ ready: 1 });
+    expect((await status()).jobs[0]).toMatchObject({ status: 'ready', meta: { mode: 'mock' } });
+  });
+
+  it('el dueño local usa los cinco motores y el ciclo corre solo con su reloj', async () => {
+    vi.useFakeTimers();
+    try {
+      const ai = createAiDeps({
+        credentials: { mode: 'mock', apiKey: null },
+        files: { config: null, ledger: null },
+      });
+      expect(DEV_CALLER.role).toBe('owner');
+      let ticks = 0;
+      const stop = startDevBatchLoop({
+        ...ai,
+        tick: () => {
+          ticks += 1;
+          return ai.tick();
+        },
+      });
+      await vi.advanceTimersByTimeAsync(4_100);
+      expect(ticks).toBe(2);
+      stop();
+      await vi.advanceTimersByTimeAsync(10_000);
+      expect(ticks).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
