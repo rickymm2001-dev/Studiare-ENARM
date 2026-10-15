@@ -63,6 +63,34 @@ export function computeAgreement(
     if (physicians.length >= 2)
       pairs.push([(physicians[0] as LabelRecord).tag, (physicians[1] as LabelRecord).tag]);
   }
+  return reportFromPairs(pairs, thresholds);
+}
+
+/** Un par del etiquetado a ciegas de B11. La etiqueta del autor y la del revisor de un distractor */
+export interface TagPair {
+  authorTag: string;
+  reviewerTag: string;
+}
+
+/**
+ * El acuerdo de los pares de autor y revisor (B11, 4.4 del plan de B11). Cada revisión etiqueta a
+ * ciegas todos sus distractores y cada uno da un par con la etiqueta que puso el autor. Mismos umbrales
+ * y mismo kappa que el doble etiquetado entre médicos
+ */
+export function computePairAgreement(
+  pairs: readonly TagPair[],
+  thresholds: Thresholds['bias'],
+): AgreementReport {
+  return reportFromPairs(
+    pairs.map((pair): [string, string] => [pair.authorTag, pair.reviewerTag]),
+    thresholds,
+  );
+}
+
+function reportFromPairs(
+  pairs: readonly [string, string][],
+  thresholds: Thresholds['bias'],
+): AgreementReport {
   const global = cohenKappa(pairs);
   const calibrating = global === null || pairs.length < thresholds.minLabeledPairs;
   return {

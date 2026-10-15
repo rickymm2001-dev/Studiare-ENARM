@@ -65,12 +65,25 @@ async function open(
   return app;
 }
 
-const card = (prompt: string) => screen.findByRole('region', { name: prompt }, WAIT);
+// El título de cada grupo es el inicio de la pregunta, como lo da el repositorio editorial
+const card = (prompt: string) => screen.findByRole('region', { name: prompt.slice(0, 140) }, WAIT);
 
 describe('bandeja de reportes (pantalla 21)', () => {
   it('sin reportes dice que no hay abiertos', async () => {
     await open('admin');
     expect(await screen.findByText(text.empty.openTitle, undefined, WAIT)).toBeVisible();
+  });
+
+  it('la cola de distractores dice calibrando mientras la calibración no mande cifras', async () => {
+    await open('physician');
+    const queue = await screen.findByRole(
+      'region',
+      { name: physicianText.distractors.title },
+      WAIT,
+    );
+    expect(
+      await within(queue).findByText(physicianText.distractors.calibrating, undefined, WAIT),
+    ).toBeVisible();
   });
 
   it('el médico ve solo los reportes de las preguntas que le asignaron', async () => {
@@ -85,7 +98,7 @@ describe('bandeja de reportes (pantalla 21)', () => {
     const mine = await card(first.question.prompt);
     expect(within(mine).getByText(text.group.open(2))).toBeVisible();
     expect(within(mine).getByText(`${t.simulator.reportReasons.wrong_key} ×1`)).toBeVisible();
-    expect(screen.queryByRole('region', { name: second.question.prompt })).toBeNull();
+    expect(screen.queryByRole('region', { name: second.question.prompt.slice(0, 140) })).toBeNull();
     const stats = screen.getByRole('region', { name: text.stats.label });
     expect(within(stats).getByText(text.stats.open)).toBeVisible();
   });

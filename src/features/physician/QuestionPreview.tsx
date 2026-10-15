@@ -1,57 +1,54 @@
-// Vista de lectura de una pregunta del banco, con sus opciones, la etiqueta de cada distractor y la
-// explicación. La usan el banco (17) y la bandeja de reportes (21). Editar se hace en la pantalla 18.
-import { Link } from 'react-router';
-import { Pencil } from 'lucide-react';
-import { SCREENS } from '@/app/screens';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
-import type { Question } from '@/data/schemas/bank';
+// Vista de lectura de una versión del banco (B11), con sus opciones, la etiqueta y la justificación de
+// cada distractor y la explicación. La usan el editor en solo lectura y la bandeja de reportes. Durante
+// el paso a ciegas el revisor no la ve. Una opción escondida dice que lo está y no muestra nada del autor.
+import type { EditorVersion } from '@/data/bank/contracts';
 import { biasTaxonomy } from '@/demo/content';
 import { physicianText } from '@/i18n/physician';
-import { Button } from '@/ui/components/button';
 
 const biasName = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias.name]));
 
-export function QuestionPreview({
-  question,
-  hideEdit = false,
+export function VersionPreview({
+  version,
+  caseVignette,
 }: {
-  question: Question;
-  /** Sin el enlace al editor, para pantallas que ya lo ofrecen */
-  hideEdit?: boolean;
+  version: EditorVersion;
+  /** La viñeta del caso seriado, si la pregunta es de uno */
+  caseVignette?: string | null;
 }) {
-  const api = useDataApi();
-  const options = useLiveData(
-    () => api.repos.options.listForQuestionVersion(question.id),
-    [api.repos, question.id],
-  );
+  const text = physicianText.questionEditor;
+  const options = [...version.options].sort((a, b) => a.position - b.position);
   return (
-    <div className="mt-2 flex flex-col gap-2 rounded-md bg-muted p-3 text-sm">
-      {question.vignette ? <p>{question.vignette}</p> : null}
-      <ol className="flex flex-col gap-1">
-        {(options ?? []).map((option) => (
-          <li key={option.id} className={option.isCorrect ? 'font-semibold' : undefined}>
-            {option.text}
-            {option.isCorrect ? ` · ${physicianText.questionEditor.options.key}` : ''}
-            {option.biasTag ? (
-              <span className="ml-2 text-xs text-fg-muted">
-                ({biasName.get(option.biasTag) ?? option.biasTag})
-              </span>
-            ) : null}
+    <div className="flex flex-col gap-2 rounded-md bg-muted p-3 text-sm">
+      {caseVignette ? <p>{caseVignette}</p> : null}
+      {version.vignette ? <p>{version.vignette}</p> : null}
+      <p className="font-medium">{version.prompt}</p>
+      <ol className="flex flex-col gap-2">
+        {options.map((option) => (
+          <li key={option.id} className="flex flex-col gap-0.5">
+            <span className={option.isCorrect ? 'font-semibold' : undefined}>
+              {option.letter ? `${option.letter}. ` : ''}
+              {option.text}
+              {option.isCorrect ? ` · ${text.options.key}` : ''}
+              {option.biasTag ? (
+                <span className="ml-2 text-xs text-fg-muted">
+                  ({biasName.get(option.biasTag) ?? option.biasTag})
+                </span>
+              ) : null}
+            </span>
+            <span className="text-xs text-fg-muted">
+              {option.hidden ? physicianText.review.hiddenRationale : (option.rationale ?? '')}
+            </span>
           </li>
         ))}
       </ol>
-      <p className="text-fg-muted">{question.explanation}</p>
-      {hideEdit ? null : (
-        <div>
-          <Button asChild variant="secondary" size="sm">
-            <Link to={`${SCREENS.questionEditor.path}?pregunta=${question.questionId}`}>
-              <Pencil aria-hidden />
-              {physicianText.questionEditor.edit}
-            </Link>
-          </Button>
-        </div>
-      )}
+      {version.explanation ? <p className="text-fg-muted">{version.explanation}</p> : null}
+      {version.gpcRefs.length > 0 ? (
+        <ul className="list-disc pl-5 text-xs text-fg-muted">
+          {version.gpcRefs.map((ref, index) => (
+            <li key={index}>{ref.title}</li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 }

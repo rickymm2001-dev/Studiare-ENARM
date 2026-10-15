@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { newId, testApi } from '../testing/fixtures';
-import { InvalidLabelError, labelId, removeLabel, saveLabel, TAGGABLE_BIASES } from './labeling';
+import { InvalidLabelError, labelId, saveLabel, TAGGABLE_BIASES } from './labeling';
 
 const disposers: (() => Promise<unknown>)[] = [];
 afterEach(async () => {
@@ -63,16 +63,6 @@ describe('etiquetas de los médicos', () => {
       InvalidLabelError,
     );
     expect(await api.repos.biasLabels.list()).toHaveLength(0);
-  });
-
-  it('quita la etiqueta de una opción', async () => {
-    const api = setup();
-    const option = distractor();
-    await saveLabel(api, physician, option, tag);
-    await removeLabel(api, physician.id, option.optionId);
-    expect(await api.repos.biasLabels.list()).toHaveLength(0);
-    // Quitar la que no existe no falla
-    await removeLabel(api, physician.id, option.optionId);
   });
 
   it('solo se pueden usar etiquetas marcadas como etiquetables', () => {

@@ -2,7 +2,7 @@
 // vista, referencias de GPC, datos del caso y el historial de versiones.
 import { Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
-import type { Question } from '@/data/schemas/bank';
+import type { EditorVersion } from '@/data/bank/contracts';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
@@ -13,6 +13,7 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField, TextAreaField, TextField } from '@/ui/components/field';
 import {
   changedParts,
+  draftFromEditorVersion,
   emptyOption,
   MAX_OPTIONS,
   MAX_SECONDARY_TAGS,
@@ -366,14 +367,11 @@ export function CluesEditor({
 
 export function HistoryCard({
   versions,
-  drafts,
 }: {
-  /** De la más vieja a la más nueva */
-  versions: readonly Question[];
-  drafts: ReadonlyMap<string, QuestionDraft>;
+  /** De la más nueva a la más vieja */ versions: readonly EditorVersion[];
 }) {
   const text = physicianText.questionEditor.history;
-  const ordered = [...versions].reverse();
+  const decisions = physicianText.review.decisions;
   return (
     <Card aria-labelledby="editor-historial">
       <CardHeader>
@@ -381,22 +379,28 @@ export function HistoryCard({
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
       <ol className="flex flex-col divide-y divide-line">
-        {ordered.map((version, index) => {
-          const older = ordered[index + 1];
-          const after = drafts.get(version.id);
-          const before = older ? drafts.get(older.id) : undefined;
-          const parts = before && after ? changedParts(before, after) : [];
+        {versions.map((version, index) => {
+          const older = versions[index + 1];
+          const parts = older
+            ? changedParts(draftFromEditorVersion(older), draftFromEditorVersion(version))
+            : [];
           return (
-            <li key={version.id} className="flex flex-col gap-1 py-2">
+            <li key={version.versionId} className="flex flex-col gap-1 py-2">
               <p className="flex flex-wrap items-center gap-2 font-semibold">
                 {physicianText.questionEditor.status.version(version.version)}
-                <Badge variant={version.editorialStatus === 'approved' ? 'success' : 'neutral'}>
-                  {t.bank.status[version.editorialStatus]}
+                <Badge variant={version.status === 'approved' ? 'success' : 'neutral'}>
+                  {t.bank.status[version.status]}
                 </Badge>
                 {index === 0 ? <Badge variant="info">{text.current}</Badge> : null}
+                {version.source ? (
+                  <Badge>{physicianText.review.source[version.source] ?? version.source}</Badge>
+                ) : null}
               </p>
               <p className="text-sm text-fg-muted">
                 {text.at(new Date(version.createdAt).toLocaleDateString('es-MX'))}
+                {version.author
+                  ? ` · ${physicianText.bankScreen.author(version.author.alias)}`
+                  : ''}
               </p>
               <p className="text-sm">
                 {older === undefined
@@ -405,6 +409,16 @@ export function HistoryCard({
                     ? text.noChanges
                     : text.changed(parts.map((part) => text.parts[part] ?? part))}
               </p>
+              {version.decisions.map((decision, at) => (
+                <p key={at} className="text-sm text-fg-muted">
+                  {decisions.by(
+                    decisions.names[decision.decision] ?? decision.decision,
+                    decision.physician.alias,
+                    new Date(decision.decidedAt).toLocaleDateString('es-MX'),
+                  )}
+                  {decision.comment ? `. ${decision.comment}` : ''}
+                </p>
+              ))}
             </li>
           );
         })}

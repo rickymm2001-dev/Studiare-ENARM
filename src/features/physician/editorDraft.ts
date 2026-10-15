@@ -1,16 +1,16 @@
 // Borrador del editor de pregunta (pantalla 18). Convierte una versión del banco en algo que se puede
 // editar, valida el borrador, arma la versión siguiente y compara versiones para el historial. Sin
 // React ni Dexie. Editar nunca cambia una versión. Siempre sale una versión nueva en borrador (6.1).
+import type { EditorVersion } from '@/data/bank/contracts';
 import { newId } from '@/data/ids';
-import type { ClueStrength, ItemKind } from '@/data/schemas/common';
-import type { Clue, Option, Question } from '@/data/schemas/bank';
+import { ItemKindSchema, type ClueStrength, type ItemKind } from '@/data/schemas/common';
+import { QuestionTaskSchema, type Clue, type Option, type Question } from '@/data/schemas/bank';
 
 export const MIN_OPTIONS = 4;
 export const MAX_OPTIONS = 10;
 export const MAX_SECONDARY_TAGS = 5;
 
 type Structure = Pick<Question['structure'], 'polarity' | 'task' | 'format'>;
-type EditorialStatus = Question['editorialStatus'];
 
 export interface DraftOption {
   /** ID estable de la opción. Las etiquetas de los médicos se guardan con este ID */
@@ -58,10 +58,34 @@ export interface QuestionDraft {
   options: DraftOption[];
 }
 
+/** Lo que necesita una versión para volverse borrador. Lo cumplen Question y EditorVersion */
+export interface DraftSourceQuestion {
+  vignette: string;
+  prompt: string;
+  branch: string;
+  topic: string;
+  subtopic: string;
+  structure: Structure;
+  explanation: string;
+  gpcRefs: readonly { title: string; status: 'to_verify' | 'verified' }[];
+  physicianDifficulty: number;
+  itemKinds?: readonly ItemKind[] | undefined;
+  clues?: readonly Clue[] | undefined;
+  canonicalOptionIds: readonly string[];
+}
+
+export type DraftSourceOption = Pick<
+  Option,
+  'id' | 'optionId' | 'text' | 'isCorrect' | 'biasTag' | 'rationale'
+> & { secondaryBiasTags: readonly string[] };
+
 /** El borrador de una versión. Primero van las opciones del set canónico, en su orden */
-export function draftFromVersion(question: Question, options: readonly Option[]): QuestionDraft {
+export function draftFromVersion(
+  question: DraftSourceQuestion,
+  options: readonly DraftSourceOption[],
+): QuestionDraft {
   const canonical = new Set(question.canonicalOptionIds);
-  const rank = (option: Option) => {
+  const rank = (option: DraftSourceOption) => {
     const place = question.canonicalOptionIds.indexOf(option.id);
     return place === -1 ? Number.MAX_SAFE_INTEGER : place;
   };
@@ -92,6 +116,49 @@ export function draftFromVersion(question: Question, options: readonly Option[])
       canonical: canonical.has(option.id),
     })),
   };
+}
+
+/**
+ * El borrador de una versión del editor en la nube (EditorVersion, 5.7). Es tolerante como ella. Una
+ * justificación que falta queda vacía y una tarea o un tipo de reactivo que no conoce la app se deja
+ * como el editor lo mostraría, para que el médico lo elija
+ */
+export function draftFromEditorVersion(version: EditorVersion): QuestionDraft {
+  const task = QuestionTaskSchema.safeParse(version.structure.task);
+  return draftFromVersion(
+    {
+      vignette: version.vignette,
+      prompt: version.prompt,
+      branch: version.branch,
+      topic: version.topic,
+      subtopic: version.subtopic,
+      structure: {
+        polarity: version.structure.polarity,
+        task: task.success ? task.data : 'diagnosis',
+        format: version.structure.format,
+      },
+      explanation: version.explanation,
+      gpcRefs: version.gpcRefs,
+      physicianDifficulty: version.difficulty,
+      itemKinds: version.itemKinds.flatMap((kind) => {
+        const parsed = ItemKindSchema.safeParse(kind);
+        return parsed.success ? [parsed.data] : [];
+      }),
+      clues: version.clues,
+      canonicalOptionIds: version.canonicalOptionIds,
+    },
+    [...version.options]
+      .sort((a, b) => a.position - b.position)
+      .map((option) => ({
+        id: option.id,
+        optionId: option.optionId,
+        text: option.text,
+        isCorrect: option.isCorrect,
+        biasTag: option.isCorrect ? null : option.biasTag,
+        secondaryBiasTags: option.secondaryBiasTags,
+        rationale: option.rationale ?? '',
+      })),
+  );
 }
 
 export type IssueCode =
@@ -192,6 +259,26 @@ export function validateDraft(draft: QuestionDraft, taxonomy: TaxonomyView): Dra
   if (draft.gpcRefs.some((ref) => ref.title.trim().length === 0)) push('gpc_empty');
   if (draft.clues.some((clue) => clue.text.trim().length === 0)) push('clue_empty');
   return issues;
+}
+
+/**
+ * Lo que la nube deja guardar como borrador incompleto (3.4 del plan de B11). Una justificación vacía o
+ * un distractor sin sesgo no impiden guardar en la nube, quedan como pendientes que impiden aprobar. La
+ * base local guarda con OptionSchema, que los pide, así que ahí siguen impidiendo guardar
+ */
+export const CLOUD_PENDING_ISSUES: ReadonlySet<IssueCode> = new Set<IssueCode>([
+  'option_rationale_empty',
+  'option_tag_missing',
+]);
+
+/** Los problemas que impiden guardar en esa base */
+export function blockingIssues(
+  issues: readonly DraftIssue[],
+  kind: 'local' | 'cloud',
+): DraftIssue[] {
+  return kind === 'local'
+    ? [...issues]
+    : issues.filter((issue) => !CLOUD_PENDING_ISSUES.has(issue.code));
 }
 
 export interface NextVersionInput {
@@ -348,34 +435,6 @@ export function changedParts(before: QuestionDraft, after: QuestionDraft): Chang
   if (!same([...before.itemKinds].sort(), [...after.itemKinds].sort())) changed.add('itemKinds');
   if (!same(before.clues, after.clues)) changed.add('clues');
   return CHANGED_ORDER.filter((part) => changed.has(part));
-}
-
-/** A qué estados puede pasar una versión desde el que tiene (6.1, 4.2) */
-export const STATUS_FLOW: Readonly<Record<EditorialStatus, readonly EditorialStatus[]>> = {
-  draft: ['in_review'],
-  in_review: ['approved', 'rejected', 'draft'],
-  approved: ['in_review'],
-  rejected: ['draft'],
-};
-
-export const canMoveTo = (from: EditorialStatus, to: EditorialStatus) =>
-  STATUS_FLOW[from].includes(to);
-
-/**
- * El médico que está en el doble etiquetado de esta pregunta no ve lo que puso el autor hasta
- * terminar su propio etiquetado, para que sus etiquetas salgan a ciegas (7.11). El admin no
- * etiqueta y no tiene esa limitación
- */
-export function isBlindLocked(input: {
-  role: 'physician' | 'admin';
-  inSample: boolean;
-  /** Distractores de la versión actual */
-  distractorOptionIds: readonly string[];
-  /** Opciones que este médico ya etiquetó */
-  labeledByMe: ReadonlySet<string>;
-}): boolean {
-  if (input.role !== 'physician' || !input.inSample) return false;
-  return input.distractorOptionIds.some((optionId) => !input.labeledByMe.has(optionId));
 }
 
 /** La taxonomía del banco tal como la valida el editor */

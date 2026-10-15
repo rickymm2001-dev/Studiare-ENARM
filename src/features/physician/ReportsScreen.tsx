@@ -1,35 +1,38 @@
-// Bandeja de reportes de contenido (pantalla 21, 10.2). Los errores que los alumnos reportan en las
-// preguntas, agrupados por pregunta y con lo más grave primero. El médico ve los de las preguntas que
-// le asignaron y el admin todos. Cada reporte se resuelve, se descarta o se reabre (4.5).
+// Bandeja de reportes de contenido (pantalla 21, 10.2 y 4.2 del plan de B11). Los errores que los
+// alumnos reportan en las preguntas, agrupados por pregunta y con lo más grave primero, sin nada del
+// alumno. El médico ve los de lo que tiene asignado y el admin todos. Cada reporte se resuelve, se
+// descarta o se reabre. Debajo, la cola de distractores que casi nadie elige, que llena la calibración
+// de B14. Mientras no mande cifras la sección dice calibrando.
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { CheckCircle2, Hourglass, XCircle } from 'lucide-react';
-import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
-import { useSession } from '@/app/session';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
-import { setReportsStatus, type ReportStatus } from '@/data/usecases/contentReports';
+import {
+  errorCodeOf,
+  type DistractorResolution,
+  type EditorDistractorFlag,
+  type ReportStatus,
+} from '@/data/editorial/editorialRepo';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
-import { useBankReady } from '../shared/useBankReady';
 import { Badge } from '@/ui/components/badge';
 import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { Disclosure } from '@/ui/components/disclosure';
-import { SelectField } from '@/ui/components/field';
+import { SelectField, TextField } from '@/ui/components/field';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
-import { EmptyState, LoadingState } from '@/ui/states/states';
-import { QuestionPreview } from './QuestionPreview';
+import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
 import {
   buildReportsView,
   reasonsBySeverity,
   type ReportGroup,
   type StatusFilter,
 } from './reportsView';
+import { useEditorialRepo } from './useEditorialRepo';
+import { useRepoQuery } from './useRepoQuery';
 
 const branchName = new Map(topicTaxonomy.branches.map((branch) => [branch.key, branch.name]));
 const topicName = new Map(
@@ -42,32 +45,12 @@ const date = (iso: string) => new Date(iso).toLocaleDateString('es-MX');
 
 export function ReportsScreen() {
   const text = physicianText.reportsScreen;
-  const api = useDataApi();
   const role = usePreferences((state) => state.role);
-  const session = useSession();
-  const me = session.status === 'ready' ? session.user.id : null;
+  const { repo, ready, key } = useEditorialRepo();
   const [status, setStatus] = useState<StatusFilter>('open');
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
-  const bankReady = useBankReady();
-
-  const data = useLiveData(async () => {
-    const [reports, latest, assignments] = await Promise.all([
-      api.repos.contentReports.list(),
-      api.repos.questions.listLatest(),
-      api.repos.reviewAssignments.list(),
-    ]);
-    // Solo las versiones de las preguntas reportadas, que son pocas
-    const reported = new Set<string>();
-    const versions = await Promise.all(
-      reports
-        .filter((report) => report.targetKind === 'question')
-        .map((report) => api.repos.questions.get(report.targetId)),
-    );
-    for (const version of versions) if (version) reported.add(version.questionId);
-    const all = await Promise.all([...reported].map((id) => api.repos.questions.listVersions(id)));
-    return { reports, latest, assignments, versions: all.flat() };
-  }, [api.repos, bankReady]);
+  const { state, reload } = useRepoQuery(() => repo.reports(), key, ready);
 
   const header = (
     <ScreenHeader
@@ -75,7 +58,7 @@ export function ReportsScreen() {
       description={role === 'physician' ? text.hintPhysician : text.hintAdmin}
     />
   );
-  if (data === undefined || !bankReady) {
+  if (state.status === 'loading') {
     return (
       <>
         {header}
@@ -83,30 +66,26 @@ export function ReportsScreen() {
       </>
     );
   }
+  if (state.status === 'failed') {
+    return (
+      <>
+        {header}
+        <ErrorState description={physicianText.errors[state.code] ?? ''} onRetry={reload} />
+      </>
+    );
+  }
 
-  const view = buildReportsView({
-    reports: data.reports,
-    versionsById: new Map(data.versions.map((version) => [version.id, version])),
-    latestByStableId: new Map(data.latest.map((question) => [question.questionId, question])),
-    allowed:
-      role === 'physician'
-        ? new Set(
-            data.assignments
-              .filter((assignment) => assignment.physicianId === me)
-              .map((assignment) => assignment.questionId),
-          )
-        : null,
-    status,
-  });
+  const view = buildReportsView(state.value, status);
 
   const change = async (ids: readonly string[], to: ReportStatus) => {
     setError('');
     try {
-      const changed = await setReportsStatus(api, ids, to);
+      const changed = await repo.setReportsStatus(ids, to);
       setNotice(text.changed(changed, text.row.status[to] ?? to));
     } catch {
       setError(text.failed);
     }
+    reload();
   };
 
   return (
@@ -169,6 +148,8 @@ export function ReportsScreen() {
           ))}
         </ul>
       )}
+
+      <DistractorQueue />
     </>
   );
 }
@@ -181,7 +162,7 @@ function GroupCard({
   onChange: (ids: readonly string[], to: ReportStatus) => Promise<void>;
 }) {
   const text = physicianText.reportsScreen;
-  const { latest } = group;
+  const { question } = group;
   const openIds = group.rows
     .filter((row) => row.report.status === 'open')
     .map((row) => row.report.id);
@@ -191,13 +172,16 @@ function GroupCard({
     <Card aria-labelledby={titleId}>
       <CardHeader>
         <CardTitle id={titleId} className="text-base">
-          {latest.prompt}
+          {question.promptPreview ?? question.questionKey}
         </CardTitle>
         <CardDescription className="flex flex-wrap items-center gap-2">
-          <BranchBadge branch={latest.branch}>
-            {branchName.get(latest.branch) ?? latest.branch}
-          </BranchBadge>
-          <span>{topicName.get(latest.topic) ?? latest.topic}</span>
+          <span className="font-semibold">{question.questionKey}</span>
+          {question.branch ? (
+            <BranchBadge branch={question.branch}>
+              {branchName.get(question.branch) ?? question.branch}
+            </BranchBadge>
+          ) : null}
+          {question.topic ? <span>{topicName.get(question.topic) ?? question.topic}</span> : null}
           <span>· {text.group.total(group.rows.length)}</span>
           {group.openCount > 0 ? (
             <Badge variant="warning">{text.group.open(group.openCount)}</Badge>
@@ -229,7 +213,7 @@ function GroupCard({
               </p>
               <p className="text-xs text-fg-muted">
                 {text.row.reportedOn(date(row.report.createdAt))} ·{' '}
-                {text.row.version(row.version?.version ?? null)}
+                {text.row.version(row.report.version)}
                 {row.report.resolvedAt
                   ? ` · ${text.row.resolvedOn(date(row.report.resolvedAt))}`
                   : ''}
@@ -299,11 +283,142 @@ function GroupCard({
           </>
         ) : null}
       </div>
-      <div className="mt-3">
-        <Disclosure title={text.group.showQuestion}>
-          <QuestionPreview question={latest} hideEdit />
-        </Disclosure>
-      </div>
     </Card>
+  );
+}
+
+/** Distractores que casi nadie elige (4.7). Editar la pregunta, dejarla así o descartar la marca */
+function DistractorQueue() {
+  const text = physicianText.distractors;
+  const { repo, ready, key } = useEditorialRepo();
+  const { state, reload } = useRepoQuery(() => repo.distractorQueue('open'), key, ready);
+  const [notice, setNotice] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const resolve = async (
+    flag: EditorDistractorFlag,
+    resolution: DistractorResolution,
+    note: string,
+  ) => {
+    setError('');
+    try {
+      await repo.resolveDistractor(flag.id, resolution, note);
+      setNotice(text.resolved[resolution] ?? '');
+      if (resolution === 'edited') {
+        void navigate(`${SCREENS.questionEditor.path}?pregunta=${flag.questionId}`);
+        return;
+      }
+    } catch (caught) {
+      setError(physicianText.errors[errorCodeOf(caught)] ?? text.failed);
+    }
+    reload();
+  };
+
+  return (
+    <Card aria-labelledby="reportes-distractores">
+      <CardHeader>
+        <CardTitle id="reportes-distractores">{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      {state.status === 'loading' ? <LoadingState /> : null}
+      {state.status === 'failed' ? (
+        <ErrorState description={physicianText.errors[state.code] ?? ''} onRetry={reload} />
+      ) : null}
+      {state.status === 'ready' && state.value.length === 0 ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {text.calibrating}
+        </p>
+      ) : null}
+      {state.status === 'ready' && state.value.length > 0 ? (
+        <ul className="flex flex-col divide-y divide-line">
+          {state.value.map((flag) => (
+            <li key={flag.id}>
+              <DistractorRow flag={flag} onResolve={resolve} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p role="status" className="mt-2 text-sm font-medium text-success">
+        {notice}
+      </p>
+      {error ? (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      ) : null}
+    </Card>
+  );
+}
+
+function DistractorRow({
+  flag,
+  onResolve,
+}: {
+  flag: EditorDistractorFlag;
+  onResolve: (
+    flag: EditorDistractorFlag,
+    resolution: DistractorResolution,
+    note: string,
+  ) => Promise<void>;
+}) {
+  const text = physicianText.distractors;
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState(false);
+  const act = (resolution: DistractorResolution) => {
+    setBusy(true);
+    void onResolve(flag, resolution, note).finally(() => {
+      setBusy(false);
+    });
+  };
+  const attraction = (flag.attraction * 100).toLocaleString('es-MX', {
+    maximumFractionDigits: 1,
+  });
+  return (
+    <div className="flex flex-col gap-2 py-3">
+      <p className="text-sm font-medium">{text.question(flag.questionKey)}</p>
+      <p className="text-sm text-fg-muted">
+        {text.figures(flag.exposures, flag.choices, `${attraction} %`)}
+      </p>
+      <TextField
+        label={text.note}
+        value={note}
+        maxLength={500}
+        onChange={(event) => {
+          setNote(event.target.value);
+        }}
+      />
+      <div className="flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          disabled={busy}
+          onClick={() => {
+            act('edited');
+          }}
+        >
+          {text.edit}
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            act('kept');
+          }}
+        >
+          {text.keep}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={busy}
+          onClick={() => {
+            act('dismissed');
+          }}
+        >
+          {text.dismiss}
+        </Button>
+      </div>
+    </div>
   );
 }

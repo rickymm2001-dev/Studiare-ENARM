@@ -1,7 +1,7 @@
-// Doble etiquetado de distractores (7.11, pantalla 19). Cada médico etiqueta a ciegas, sin ver lo que
-// puso el autor ni lo que puso otro médico, el sesgo de cada distractor de las preguntas de la
-// muestra. Una etiqueta por médico y opción: etiquetar de nuevo la reemplaza. El acuerdo entre dos
-// médicos sale de estas etiquetas.
+// Etiquetado a ciegas de distractores en la base local (7.11 y B11, 4.4 del plan de B11). El revisor de
+// una pregunta en revisión etiqueta el sesgo de cada distractor sin ver lo que puso el autor. Una
+// etiqueta por médico y opción, y etiquetar de nuevo la reemplaza mientras no termine. El acuerdo sale
+// de comparar estas etiquetas con las del autor. Lo usa el repositorio editorial local.
 import { stableUlid } from '@/demo/stableId';
 import { biasTaxonomy } from '@/demo/content';
 import type { DataApi } from '../context';
@@ -10,8 +10,6 @@ import type { User } from '../schemas/people';
 
 type Api = Pick<DataApi, 'repos'>;
 
-/** Semilla de la muestra, fija para que todos los médicos etiqueten las mismas preguntas */
-export const DOUBLE_LABEL_SEED = 'doble-etiquetado-v1';
 const ID_TIME = Date.UTC(2026, 0, 1);
 
 /** Las etiquetas que se pueden poner a un distractor, con su definición a la vista (10.2) */
@@ -50,9 +48,4 @@ export async function saveLabel(
     labeledAt: now.toISOString(),
   };
   return api.repos.biasLabels.put(label);
-}
-
-/** Quita la etiqueta que el médico puso a una opción, por si se equivocó de opción */
-export async function removeLabel(api: Api, physicianId: string, optionId: string): Promise<void> {
-  await api.repos.biasLabels.remove(labelId(physicianId, optionId));
 }

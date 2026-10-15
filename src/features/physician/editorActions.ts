@@ -1,11 +1,11 @@
-// Guardar desde el editor de pregunta (pantalla 18). Una versión nueva por cada guardado y el cambio
-// de estado de la versión más reciente. Una versión que ya no es la última no se toca (6.1).
+// Guardar desde el editor de pregunta (pantalla 18) en la base local. Una versión nueva por cada
+// guardado y una versión que ya no es la última no se toca (6.1). Lo usa el repositorio editorial local
+// (src/data/editorial/localEditorialRepo.ts). Mover el estado ahora es mandar a revisión y decidir (B11).
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/ids';
 import type { Option, Question } from '@/data/schemas/bank';
 import {
   buildNextVersion,
-  canMoveTo,
   type QuestionDraft,
   type TaxonomyView,
   validateDraft,
@@ -53,18 +53,4 @@ export async function saveQuestionVersion(
   });
   await api.repos.questions.addVersion(next.question, next.options);
   return next;
-}
-
-/** Cambia el estado de la versión más reciente siguiendo el flujo editorial */
-export async function moveQuestionStatus(
-  api: Api,
-  question: Question,
-  to: Question['editorialStatus'],
-): Promise<void> {
-  const latest = await api.repos.questions.latest(question.questionId);
-  if (latest?.id !== question.id) throw new StaleVersionError();
-  if (!canMoveTo(latest.editorialStatus, to)) {
-    throw new Error(`No se puede pasar de ${latest.editorialStatus} a ${to}`);
-  }
-  await api.repos.questions.setEditorialStatus(latest.id, to);
 }

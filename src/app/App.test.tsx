@@ -37,15 +37,33 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3) y con Admin, Pagos (B10)', () => {
-    expect(SCREEN_KEYS).toHaveLength(31);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) y las tres del banco en la nube (B11)', () => {
+    expect(SCREEN_KEYS).toHaveLength(34);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(31);
+    expect(new Set(paths).size).toBe(34);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(31);
+    expect(new Set(numbers).size).toBe(34);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.bankAdmin).toEqual({
+      number: 35,
+      path: '/admin/banco',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.physicianReviews).toEqual({
+      number: 36,
+      path: '/admin/revisiones',
+      area: 'admin',
+      phase: 'E',
+    });
+    expect(SCREENS.deckCatalogAdmin).toEqual({
+      number: 37,
+      path: '/admin/mazos',
       area: 'admin',
       phase: 'E',
     });

@@ -1,6 +1,6 @@
 // Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
-// Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G) y Admin, Pagos
-// (B10), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
+// Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G), Admin, Pagos
+// (B10) y las tres del banco en la nube del admin (B11), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
 // (comentarios 6, 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
@@ -42,6 +42,9 @@ export const SCREEN_KEYS = [
   'privacyNotice',
   'terms',
   'adminBilling',
+  'bankAdmin',
+  'physicianReviews',
+  'deckCatalogAdmin',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -93,6 +96,11 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   terms: { number: 33, path: '/terminos', area: 'shared', phase: 'F' },
   // Admin, Pagos (B10 del plan del cambio, 3.3)
   adminBilling: { number: 34, path: '/admin/pagos', area: 'admin', phase: 'E' },
+  // Banco en la nube (B11, 4.3 del plan de B11). Banco y Sheet, revisiones para pagar a los médicos y
+  // el catálogo compartido de mazos
+  bankAdmin: { number: 35, path: '/admin/banco', area: 'admin', phase: 'E' },
+  physicianReviews: { number: 36, path: '/admin/revisiones', area: 'admin', phase: 'E' },
+  deckCatalogAdmin: { number: 37, path: '/admin/mazos', area: 'admin', phase: 'E' },
 };
 
 export function screenPath(key: ScreenKey): string {

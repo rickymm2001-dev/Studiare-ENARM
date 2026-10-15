@@ -4,10 +4,8 @@ import { QuestionSchema, OptionSchema } from '@/data/schemas/bank';
 import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
 import {
   buildNextVersion,
-  canMoveTo,
   changedParts,
   draftFromVersion,
-  isBlindLocked,
   taxonomyViewFrom,
   validateDraft,
   type DraftOption,
@@ -275,33 +273,5 @@ describe('historial', () => {
         edit((option) => ({ ...option, canonical: false })),
       ),
     ).toEqual(['canonical']);
-  });
-});
-
-describe('estados', () => {
-  it('sigue el flujo borrador, revisión y decisión', () => {
-    expect(canMoveTo('draft', 'in_review')).toBe(true);
-    expect(canMoveTo('draft', 'approved')).toBe(false);
-    expect(canMoveTo('in_review', 'approved')).toBe(true);
-    expect(canMoveTo('in_review', 'rejected')).toBe(true);
-    expect(canMoveTo('rejected', 'draft')).toBe(true);
-    expect(canMoveTo('rejected', 'approved')).toBe(false);
-    expect(canMoveTo('approved', 'in_review')).toBe(true);
-  });
-});
-
-describe('ceguera del doble etiquetado', () => {
-  const base = {
-    role: 'physician' as const,
-    inSample: true,
-    distractorOptionIds: ['a', 'b'],
-  };
-  it('bloquea al médico mientras le falte un distractor de la muestra', () => {
-    expect(isBlindLocked({ ...base, labeledByMe: new Set(['a']) })).toBe(true);
-    expect(isBlindLocked({ ...base, labeledByMe: new Set(['a', 'b']) })).toBe(false);
-  });
-  it('no bloquea fuera de la muestra ni al admin', () => {
-    expect(isBlindLocked({ ...base, inSample: false, labeledByMe: new Set() })).toBe(false);
-    expect(isBlindLocked({ ...base, role: 'admin', labeledByMe: new Set() })).toBe(false);
   });
 });

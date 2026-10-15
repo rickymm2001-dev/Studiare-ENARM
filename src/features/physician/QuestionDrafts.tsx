@@ -20,6 +20,7 @@ import { bankTaxonomy } from './bankTaxonomy';
 import { InvalidDraftError } from './editorActions';
 import { draftFromVersion, type DraftIssue, type QuestionDraft } from './editorDraft';
 import { OptionsEditor } from './EditorSections';
+import { useEditorialRepo } from './useEditorialRepo';
 import { draftFromProposal, TRANSFORMS, type Transform } from './restructure';
 import {
   decideRestructure,
@@ -309,6 +310,7 @@ function ProposalForm({
 }) {
   const text = physicianText.draftsScreen.questions;
   const api = useDataApi();
+  const { repo } = useEditorialRepo();
   const [draft, setDraft] = useState<QuestionDraft>(() =>
     draftFromProposal({
       original: draftFromVersion(original.question, original.options),
@@ -332,6 +334,12 @@ function ProposalForm({
           kind,
           draft,
           taxonomy: bankTaxonomy,
+          ...(repo.kind === 'cloud'
+            ? {
+                saveVariant: async (variant: QuestionDraft, source: Question) =>
+                  (await repo.createQuestion(variant, source.questionId)).questionId,
+              }
+            : {}),
         });
         onNotice(text.approvedNotice);
       }

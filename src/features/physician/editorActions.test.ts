@@ -3,12 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { makeQuestionWithOptions, testApi } from '@/data/testing/fixtures';
 import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
 import { draftFromVersion, taxonomyViewFrom } from './editorDraft';
-import {
-  InvalidDraftError,
-  moveQuestionStatus,
-  saveQuestionVersion,
-  StaleVersionError,
-} from './editorActions';
+import { InvalidDraftError, saveQuestionVersion, StaleVersionError } from './editorActions';
 
 const taxonomy = taxonomyViewFrom({
   branches: topicTaxonomy.branches,
@@ -67,31 +62,5 @@ describe('guardar versiones', () => {
       saveQuestionVersion(api, { current: question, draft, taxonomy }),
     ).rejects.toBeInstanceOf(StaleVersionError);
     expect(await api.repos.questions.listVersions(question.questionId)).toHaveLength(2);
-  });
-});
-
-describe('estado editorial', () => {
-  it('sigue el flujo y rechaza saltos', async () => {
-    const { api, question } = await seeded();
-    await moveQuestionStatus(api, question, 'in_review');
-    expect((await api.repos.questions.get(question.id))?.editorialStatus).toBe('in_review');
-    await expect(
-      moveQuestionStatus(api, { ...question, editorialStatus: 'in_review' }, 'draft'),
-    ).resolves.toBeUndefined();
-    await expect(
-      moveQuestionStatus(api, { ...question, editorialStatus: 'draft' }, 'approved'),
-    ).rejects.toThrow('No se puede pasar');
-  });
-
-  it('una versión que ya no es la última no cambia de estado', async () => {
-    const { api, question, options } = await seeded();
-    await saveQuestionVersion(api, {
-      current: question,
-      draft: draftFromVersion(question, options),
-      taxonomy,
-    });
-    await expect(moveQuestionStatus(api, question, 'in_review')).rejects.toBeInstanceOf(
-      StaleVersionError,
-    );
   });
 });

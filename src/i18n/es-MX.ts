@@ -144,6 +144,8 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Datos de demostración',
     description: 'Genera, borra y ajusta alumnos simulados, y regenera al alumno de la demo.',
   },
+  // Banco en la nube (B11, 4.3 del plan de B11)
+  ...bankAdminText.screens,
   adminBilling: {
     title: 'Pagos',
     description:
