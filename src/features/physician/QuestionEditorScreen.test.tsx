@@ -84,7 +84,10 @@ describe('editor de pregunta (pantalla 18)', () => {
   });
 
   it('el admin solo lee la pregunta, sin editarla ni decidir', async () => {
-    await open('admin', question.questionId);
+    // El banco demo se guarda aquí, porque la marca de banco listo de una prueba anterior sigue viva
+    await open('admin', question.questionId, async (api) => {
+      await ensureDemoBank(api);
+    });
     expect(await screen.findByText(review.readOnly, undefined, WAIT)).toBeVisible();
     expect(screen.getByText(question.prompt)).toBeVisible();
     expect(screen.queryByLabelText(text.meta.explanation)).toBeNull();
