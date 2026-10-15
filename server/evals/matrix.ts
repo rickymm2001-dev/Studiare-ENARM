@@ -15,6 +15,8 @@ export interface MatrixPlan {
   engines: readonly AiEngine[];
   /** null es la escalera completa de cada motor. Con nombres, solo esos y sin la regla de Opus */
   only: readonly CandidateName[] | null;
+  /** Candidatos fuera de la escalera, iguales para todos los motores, como los de OpenAI (4.5) */
+  explicit?: readonly Candidate[];
   repeat: number;
   limitPerEngine?: number;
   concurrency?: number;
@@ -92,8 +94,8 @@ export async function runMatrix(ctx: MatrixContext, plan: MatrixPlan): Promise<M
   const skipped: SkippedCandidate[] = [];
   const order = byExpectedCost(ctx.deps);
   for (const engine of plan.engines) {
-    const ladder = [...ladderFor(engine, plan.only)].sort(order);
-    const explicit = plan.only !== null;
+    const ladder = [...(plan.explicit ?? ladderFor(engine, plan.only))].sort(order);
+    const explicit = plan.only !== null || plan.explicit !== undefined;
     const first = ladder.filter((candidate) => explicit || !candidate.onlyIfNonePass);
     const fallback = ladder.filter((candidate) => !explicit && candidate.onlyIfNonePass);
     for (const candidate of first) {

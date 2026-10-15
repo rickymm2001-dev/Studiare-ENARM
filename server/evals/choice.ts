@@ -155,8 +155,15 @@ export function chooseForEngine(
     (item) => item.costPerCallUsd <= cheapest.costPerCallUsd * (1 + COST_TIE_RATIO),
   );
   const winner = [...tied].sort((a, b) => a.p95LatencyMs - b.p95LatencyMs)[0] ?? cheapest;
+  const fasterThanRest = tied.every(
+    (item) => item === winner || item.p95LatencyMs > winner.p95LatencyMs,
+  );
   const tieNote =
-    tied.length > 1 ? ` Empató en costo con ${tied.length - 1} más y ganó por latencia p95.` : '';
+    tied.length > 1
+      ? ` Empató en costo con ${tied.length - 1} más y ${
+          fasterThanRest ? 'ganó por latencia p95' : 'quedó primero en la escalera'
+        }.`
+      : '';
   return {
     engine,
     chosen: winner.candidate,

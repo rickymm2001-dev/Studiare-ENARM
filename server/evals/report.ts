@@ -6,10 +6,19 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { AI_ENGINES, type AiEngine } from '../../src/engines/aiContracts.ts';
 import { ENGINE_MAX_TOKENS } from './candidates.ts';
 import type { CaseSet } from './cases.ts';
-import { overallSummary, type EngineChoice, type RankedCandidate } from './choice.ts';
+import type { BatchEvalResult } from './batch.ts';
+import {
+  gateRun,
+  overallSummary,
+  runKey,
+  type EngineChoice,
+  type JudgeSummary,
+  type RankedCandidate,
+} from './choice.ts';
 import type { MatrixResult } from './matrix.ts';
 import { PROFILE_LABELS, STUDENT_PROFILES, type Projection } from './projection.ts';
-import { percent } from './run.ts';
+import type { OpenAiModel } from './openaiModels.ts';
+import { percent, summarizeGroup } from './run.ts';
 
 export interface MatrixReportInput {
   mode: 'real' | 'mock';
@@ -29,6 +38,12 @@ export interface MatrixReportInput {
 const usd = (value: number) => (value < 0.01 ? value.toFixed(5) : value.toFixed(4));
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
 
+/** El gasto de la corrida. En modo simulado es teórico y no hay tope */
+function spendText(mode: 'real' | 'mock', spent: number, max: number): string {
+  if (mode === 'mock') return `Costo teórico ${usd(spent)} dólares, sin gasto real.`;
+  return `Gasto ${usd(spent)} dólares de un tope de ${Number.isFinite(max) ? max : 'sin límite'}.`;
+}
+
 const SET_LABELS: Readonly<Record<CaseSet, string>> = {
   synthetic: 'sintéticos',
   demo: 'del banco de demostración',
@@ -36,10 +51,11 @@ const SET_LABELS: Readonly<Record<CaseSet, string>> = {
   bank: 'del banco real (private/)',
 };
 
-function judgeCell(item: RankedCandidate, judged: boolean): string {
+function judgeCell(item: RankedCandidate, judged: boolean, chosen: boolean): string {
   if (!judged) return 'sin juez';
   if (!item.gate.passed) return 'no aplica';
-  if (!item.judge) return 'no calificado';
+  // El juez va del más barato al más caro y para cuando uno pasa
+  if (!item.judge) return chosen ? 'no hizo falta' : 'sin calificar';
   const critical = item.judge.critical > 0 ? `, ${item.judge.critical} críticos` : '';
   return `${item.judge.mean.toFixed(2)}${critical}`;
 }
@@ -62,7 +78,7 @@ function engineSection(
     if (!run) continue;
     const summary = overallSummary(run);
     lines.push(
-      `| ${item.candidate.name} | ${item.candidate.id} | ${item.candidate.effort ?? 'ninguno'} | ${item.candidate.thinking ?? 'ninguno'} | ${usd(item.costPerCallUsd)} | ${percent(summary.schemaValid, summary.cases)} | ${percent(summary.grounded, summary.answerCases)} | ${percent(summary.rejectedRight, summary.rejectionCases)} | ${percent(summary.adversarialRight, summary.adversarialCases)} | ${summary.refusals} | ${summary.cutoffs} | ${seconds(item.p95LatencyMs)} | ${judgeCell(item, input.judge !== null)} | ${item.gate.passed ? 'pasa' : item.gate.failures.join('; ')} |`,
+      `| ${item.candidate.name} | ${item.candidate.id} | ${item.candidate.effort ?? 'ninguno'} | ${item.candidate.thinking ?? 'ninguno'} | ${usd(item.costPerCallUsd)} | ${percent(summary.schemaValid, summary.cases)} | ${percent(summary.grounded, summary.answerCases)} | ${percent(summary.rejectedRight, summary.rejectionCases)} | ${percent(summary.adversarialRight, summary.adversarialCases)} | ${summary.refusals} | ${summary.cutoffs} | ${seconds(item.p95LatencyMs)} | ${judgeCell(item, input.judge !== null, choice.chosen !== null)} | ${item.gate.passed ? 'pasa' : item.gate.failures.join('; ')} |`,
     );
   }
   for (const skipped of input.matrix.skipped.filter((entry) => entry.engine === engine)) {
@@ -122,13 +138,19 @@ export function formatMatrixReport(input: MatrixReportInput): string {
   const lines = [
     '# Evaluación de modelos de IA (B12)',
     '',
-    `Corrida del ${input.date} en modo ${input.mode === 'mock' ? 'simulado, con respuestas fijas y sin gasto real' : 'real'}. Casos por motor ${counts.join(', ')}, con ${input.repeat} ${input.repeat === 1 ? 'repetición' : 'repeticiones'}. ${
+    `Corrida del ${input.date} en modo ${input.mode === 'mock' ? 'simulado, con respuestas fijas y sin gasto real' : 'real'}. Casos ${counts.join(', ')}, con ${input.repeat} ${input.repeat === 1 ? 'repetición' : 'repeticiones'}. ${
       input.judge
         ? `Juez ${input.judge.kind === 'simulated' ? 'simulado, sin valor de calidad' : `${input.judge.model} a ciegas y por lote`}.`
         : 'Sin juez.'
-    } Gasto ${usd(input.spentUsd)} dólares de un tope de ${input.maxCostUsd}.`,
+    } ${spendText(input.mode, input.spentUsd, input.maxCostUsd)}`,
     '',
   ];
+  if (input.mode === 'mock') {
+    lines.push(
+      'Este reporte es del modo simulado y solo prueba el camino. Falta la corrida real con la clave de evaluaciones, que lo reemplaza con --write (9.2).',
+      '',
+    );
+  }
   if (input.matrix.stoppedByBudget) {
     lines.push(
       'La corrida se detuvo al llegar al tope de costo. Lo que no terminó no puede elegirse.',
@@ -145,7 +167,14 @@ export function formatMatrixReport(input: MatrixReportInput): string {
       ),
     );
   }
-  lines.push('## Configuración elegida', '', ...chosenConfig(input.choices));
+  lines.push('## Configuración elegida', '');
+  if (input.mode === 'mock') {
+    lines.push(
+      'Del modo simulado, solo para ver el formato. Con respuestas fijas todos los candidatos contestan igual, así que esto no se aplica.',
+      '',
+    );
+  }
+  lines.push(...chosenConfig(input.choices));
   lines.push('## Costo por alumno al mes', '', ...projectionSection(input.projection));
   lines.push(
     '## Notas',
@@ -178,4 +207,102 @@ export function writeReportSection(file: string, heading: string, body: string):
     ? readFileSync(file, 'utf8')
     : '# Evaluación de modelos de IA (B12)\n';
   writeFileSync(file, replaceSection(current, heading, body));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Secciones que escriben otras corridas
+
+export const OPENAI_SECTION = 'Comparación con OpenAI';
+export const BATCH_SECTION = 'Camino por lotes';
+export const CURRENT_SECTION = 'Casos con la configuración actual';
+const KEPT_SECTIONS = [CURRENT_SECTION, BATCH_SECTION, OPENAI_SECTION] as const;
+
+/** El texto de una sección de segundo nivel, sin su título, o null si no está */
+export function sectionOf(document: string, heading: string): string | null {
+  const title = `## ${heading}\n`;
+  const start = document.indexOf(title);
+  if (start === -1) return null;
+  const after = document.indexOf('\n## ', start + title.length);
+  return document.slice(start + title.length, after === -1 ? undefined : after).trim();
+}
+
+/** Escribe la elección de modelo y conserva las secciones de la comparación y del lote */
+export function writeMatrixReport(file: string, body: string): void {
+  const current = existsSync(file) ? readFileSync(file, 'utf8') : '';
+  let document = body;
+  for (const heading of KEPT_SECTIONS) {
+    const kept = sectionOf(current, heading);
+    if (kept !== null) document = replaceSection(document, heading, kept);
+  }
+  writeFileSync(file, `${document.trimEnd()}\n`);
+}
+
+export interface OpenAiSectionInput {
+  date: string;
+  matrix: MatrixResult;
+  judges: ReadonlyMap<string, JudgeSummary>;
+  judged: boolean;
+  models: readonly OpenAiModel[];
+  spentUsd: number;
+  maxCostUsd: number;
+}
+
+/** La comparación con OpenAI (4.5). Mismos casos, mismas guardas y mismo juez a ciegas */
+export function formatOpenAiSection(input: OpenAiSectionInput): string {
+  const lines = [
+    `Corrida del ${input.date}. ${spendText('real', input.spentUsd, input.maxCostUsd)} Solo viajaron casos de evaluación con texto del banco de demostración o sintético y referencias seudónimas. No cambia nada en producción.`,
+    '',
+    '| Motor | Modelo | Costo por llamada (USD) | Esquema al 1er intento | Anclaje | Rechazos | Adversarios | Negativas | Cortes | p95 | Juez | Compuertas |',
+    '|---|---|---|---|---|---|---|---|---|---|---|---|',
+  ];
+  for (const engine of AI_ENGINES) {
+    for (const run of input.matrix.runs.filter((entry) => entry.engine === engine)) {
+      const summary = overallSummary(run);
+      const gate = gateRun(run);
+      const judge = input.judges.get(runKey(engine, run.candidate.name));
+      const judgeText = !input.judged
+        ? 'sin juez'
+        : judge
+          ? `${judge.mean.toFixed(2)}${judge.critical > 0 ? `, ${judge.critical} críticos` : ''}`
+          : 'no aplica';
+      lines.push(
+        `| ${engine} | ${run.candidate.id} | ${usd(summary.costPerCallUsd)} | ${percent(summary.schemaValid, summary.cases)} | ${percent(summary.grounded, summary.answerCases)} | ${percent(summary.rejectedRight, summary.rejectionCases)} | ${percent(summary.adversarialRight, summary.adversarialCases)} | ${summary.refusals} | ${summary.cutoffs} | ${seconds(summary.p95LatencyMs)} | ${judgeText} | ${gate.passed ? 'pasa' : gate.failures.join('; ')} |`,
+      );
+    }
+  }
+  lines.push(
+    '',
+    ...input.models.map(
+      (model) =>
+        `- ${model.id}, gama ${model.tier === 'cheap' ? 'barata' : 'media'}, a ${model.price.input} y ${model.price.output} dólares por millón de tokens de entrada y salida, leídos el ${model.checkedAt} en ${model.source}`,
+    ),
+    '- El juez es Claude y puede preferir textos de Claude frente a los de OpenAI (10.8). La compuerta humana decide lo que llega a alumnos',
+  );
+  return lines.join('\n');
+}
+
+export interface BatchSectionInput {
+  date: string;
+  mode: 'real' | 'mock';
+  engine: AiEngine;
+  model: string;
+  result: BatchEvalResult;
+}
+
+/** La prueba del camino por lotes (4.7) */
+export function formatBatchSection(input: BatchSectionInput): string {
+  const summary = summarizeGroup(input.engine, input.result.results);
+  const waited = input.result.rounds.reduce((sum, round) => sum + round.waitedMs, 0);
+  const failures = Object.entries(input.result.failures)
+    .map(([type, count]) => `${count ?? 0} ${type}`)
+    .join(', ');
+  return [
+    `Corrida del ${input.date} en modo ${input.mode === 'mock' ? 'simulado' : 'real'}, ${input.engine} con ${input.model}.`,
+    '',
+    `- ${input.result.rounds.length} ${input.result.rounds.length === 1 ? 'lote' : 'lotes'} con ${input.result.rounds.reduce((sum, round) => sum + round.requests, 0)} peticiones, ${(waited / 60_000).toFixed(1)} minutos hasta ended${input.result.rounds.some((round) => round.canceled) ? ', con alguno cancelado por pasar de una hora' : ''}`,
+    `- Casos ${summary.cases}, esquema al primer intento ${percent(summary.schemaValid, summary.cases)}, anclaje ${percent(summary.grounded, summary.answerCases)}, rechazos ${percent(summary.rejectedRight, summary.rejectionCases)} y negativas ${summary.refusals}`,
+    `- Costo al 50% de ${usd(input.result.costUsd)} dólares, ${usd(summary.costPerCallUsd)} por llamada`,
+    `- Lotes borrados en Anthropic al terminar ${input.result.rounds.every((round) => round.deleted) ? 'sí' : 'no, revisar'}${failures ? `. Fallas del lote ${failures}` : ''}`,
+    '- Cada petición del lote es la misma del camino al momento, capturada del mismo proveedor del núcleo',
+  ].join('\n');
 }
