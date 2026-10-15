@@ -1,5 +1,6 @@
 // Casos dorados de los motores de IA (8.7). De 10 a 20 por motor, armados con los textos sintéticos
-// de data.ts. Cada caso trae la entrada y qué se espera. En los casos de respuesta, la salida tiene
+// de data.ts. B12 suma los del banco de demostración (bankCases.ts) y los adversarios
+// (adversarialCases.ts), que se juntan en suite.ts. Cada caso trae la entrada y qué se espera. En los casos de respuesta, la salida tiene
 // que cumplir el esquema y las guardas de anclaje. En los casos sin respuesta no hay con qué
 // sostener algo, y lo correcto es no producirlo, ya sea con una salida vacía o rechazándola.
 import {
@@ -16,18 +17,49 @@ import { EVAL_BIASES, EVAL_ITEMS, type EvalItem } from './data.ts';
 
 export type Expectation = 'answer' | 'no_answer';
 
+/**
+ * De dónde sale un caso (B12, 4.2). synthetic son los 60 de data.ts, demo los del banco de
+ * demostración, adversarial los que intentan que el motor falle y bank los del banco real exportado,
+ * que viven en private/ y nunca entran al repositorio
+ */
+export const CASE_SETS = ['synthetic', 'demo', 'adversarial', 'bank'] as const;
+export type CaseSet = (typeof CASE_SETS)[number];
+
+/** Qué intenta un caso adversario (4.2) */
+export const ADVERSARIAL_KINDS = [
+  'injection',
+  'mental_health',
+  'new_drug',
+  'diagnosis',
+  'score',
+  'bias_word',
+] as const;
+export type AdversarialKind = (typeof ADVERSARIAL_KINDS)[number];
+
+export interface AdversarialSpec {
+  kind: AdversarialKind;
+  /**
+   * Lo que no puede aparecer en la salida aunque las guardas no lo vean, por ejemplo un fármaco que la
+   * orden escondida pedía y que sí está en la entrada. Se buscan sobre el texto sin acentos y en
+   * minúsculas
+   */
+  forbidden: readonly RegExp[];
+}
+
 export interface GoldenCase<E extends AiEngine = AiEngine> {
   id: string;
   engine: E;
   description: string;
   input: EngineInputs[E];
   expect: Expectation;
+  set: CaseSet;
+  adversarial?: AdversarialSpec;
 }
 
-type CaseOf<E extends AiEngine> = GoldenCase<E>;
+type CaseOf<E extends AiEngine> = Omit<GoldenCase<E>, 'set'>;
 
 /** Acciones que la app ejecuta para cada regla, la misma tabla del tutor */
-const RULE_ACTIONS: Record<HypothesisInput['rule'], HypothesisInput['allowedActions']> = {
+export const RULE_ACTIONS: Record<HypothesisInput['rule'], HypothesisInput['allowedActions']> = {
   persistent_lapse: ['review_explanation', 'split_card'],
   list_card: ['split_card'],
   interference: ['create_contrast_card'],
@@ -254,12 +286,14 @@ function restructureCases(): CaseOf<'restructure'>[] {
   return [...cases, bare('to_except'), bare('next_step')];
 }
 
+/** Los 60 casos sintéticos de 8.7, de 10 a 20 por motor */
 export function buildCases(): GoldenCase[] {
-  return [
+  const cases: CaseOf<AiEngine>[] = [
     ...forgettingCases(),
     ...weeklyReportCases(),
     ...flashcardsCases(),
     ...biasTipCases(),
     ...restructureCases(),
   ];
+  return cases.map((golden): GoldenCase => ({ ...golden, set: 'synthetic' }));
 }
