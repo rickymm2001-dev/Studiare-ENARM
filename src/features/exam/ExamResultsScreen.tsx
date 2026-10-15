@@ -3,6 +3,9 @@
 // entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Son
 // cifras de este examen. No predicen el puntaje del ENARM y los patrones acumulados siguen
 // calibrando en Progreso. En modo enfoque (respuesta 82, B7) no muestra el XP.
+// Con la parte en inglés (B13, 3.6) suma un corte por sección, como Español 180 de 250 e Inglés 22 de 30,
+// con aciertos, en blanco y tiempo medio por reactivo de cada una, e Inglés médico queda en el corte por
+// rama aparte de las siete. Sin puntaje estimado del ENARM.
 import { CheckCheck, CircleDashed, Clock, Flag, Layers, RotateCcw, Target } from 'lucide-react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
@@ -14,6 +17,7 @@ import { useLiveData } from '@/data/hooks';
 import { biasTaxonomy } from '@/demo/content';
 import type { ExamScore } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
+import { englishText } from '@/i18n/english';
 import { taskNames } from '@/i18n/insights';
 import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
@@ -24,13 +28,13 @@ import { CalibratingNote, LoadingState } from '@/ui/states/states';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
-import { TOPIC_NAMES } from '../shared/topics';
+import { ENGLISH_BRANCHES, TOPIC_NAMES } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
 import { startPracticeWithQuestions } from '../simulator/practiceStart';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { formatClock } from './clock';
 import { ExamReview } from './ExamReview';
-import { MIN_QUESTIONS_PER_TOPIC, examScoreOf, rankedTallies } from './examResults';
+import { MIN_QUESTIONS_PER_TOPIC, examScoreOf, rankedTallies, sectionRows } from './examResults';
 import { closeExam, loadExamBundles } from './examSession';
 import { elapsedMs, isClosed, isFinished, type ExamState } from './examState';
 import { loadExamState } from './examStorage';
@@ -145,6 +149,7 @@ function ExamResults({ session }: { session: ReadySession }) {
       />
       <ErrorsCard state={state} score={score} sending={settings.errorsToReview} saving={saving} />
       <RetryCard session={session} score={score} events={events} saving={saving} />
+      <SectionsCard score={score} />
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-start">
         <BranchCard score={score} />
         <StructureCard score={score} />
@@ -411,24 +416,75 @@ function TallyRow({
   );
 }
 
+/**
+ * El corte por sección del examen (B13, 3.6). Solo sale si hubo reactivos de inglés. Un examen solo en español
+ * no tiene nada que separar, porque sus cifras ya son las del examen
+ */
+function SectionsCard({ score }: { score: ExamScore }) {
+  const copy = englishText.results;
+  const rows = sectionRows(score);
+  if (!rows.some((row) => row.section === 'english')) return null;
+  return (
+    <Card aria-labelledby="examen-secciones">
+      <CardHeader className="mb-3">
+        <CardTitle id="examen-secciones">{copy.sectionsTitle}</CardTitle>
+        <CardDescription>{copy.sectionsHint}</CardDescription>
+      </CardHeader>
+      <ul className="flex flex-col gap-3">
+        {rows.map((row) => {
+          const name = copy.sections[row.section];
+          return (
+            <li key={row.section} className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center justify-between gap-x-2">
+                <span className="font-medium">{copy.tally(name, row.correct, row.total)}</span>
+                <span className="text-sm text-fg-muted">
+                  {copy.detail(row.answered, row.blank)}
+                  {row.averageSeconds === null ? null : ` · ${copy.average(row.averageSeconds)}`}
+                </span>
+              </div>
+              <ProgressBar
+                value={row.correct}
+                max={row.total}
+                label={copy.sectionLabel(name, row.correct, row.total, row.blank)}
+                className="h-2"
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
+  );
+}
+
 function BranchCard({ score }: { score: ExamScore }) {
+  const rows = rankedTallies(score.byBranch);
+  const clinical = rows.filter((row) => !ENGLISH_BRANCHES.has(row.key));
+  const english = rows.filter((row) => ENGLISH_BRANCHES.has(row.key));
+  const rowOf = (row: (typeof rows)[number]) => (
+    <TallyRow
+      key={row.key}
+      name={t.branchNames[row.key] ?? row.key}
+      branch={row.key}
+      correct={row.correct}
+      answered={row.answered}
+      total={row.total}
+    />
+  );
   return (
     <Card aria-labelledby="examen-ramas">
       <CardHeader className="mb-3">
         <CardTitle id="examen-ramas">{t.examResults.branchesTitle}</CardTitle>
       </CardHeader>
-      <ul className="flex flex-col gap-3">
-        {rankedTallies(score.byBranch).map((row) => (
-          <TallyRow
-            key={row.key}
-            name={t.branchNames[row.key] ?? row.key}
-            branch={row.key}
-            correct={row.correct}
-            answered={row.answered}
-            total={row.total}
-          />
-        ))}
-      </ul>
+      <ul className="flex flex-col gap-3">{clinical.map(rowOf)}</ul>
+      {/* Inglés médico va aparte de las siete ramas, con su nombre y sin color de rama (B13, 8.15) */}
+      {english.length > 0 ? (
+        <>
+          <p className="mt-3 border-t border-line pt-2 text-xs text-fg-muted">
+            {englishText.results.aside}
+          </p>
+          <ul className="mt-2 flex flex-col gap-3">{english.map(rowOf)}</ul>
+        </>
+      ) : null}
     </Card>
   );
 }

@@ -9,11 +9,14 @@ export function DiscardReviewCard({
   shown,
   eliminated,
   chosenId,
+  lang,
 }: {
   /** Opciones en el orden en que se le mostraron */
   shown: QuestionBundle['options'];
   eliminated: readonly string[];
   chosenId: string | null;
+  /** Idioma de las opciones, cuando no son en español, como en Inglés médico (B13) */
+  lang?: string | undefined;
 }) {
   const review = discardReview({ shown, eliminated, chosenId });
   if (review.couldDiscard.length === 0 && !review.discardedCorrect) return null;
@@ -46,7 +49,7 @@ export function DiscardReviewCard({
             <li key={id} className="rounded-md border border-line p-3">
               <p>
                 <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                {option.text}
+                {lang === undefined ? option.text : <span lang={lang}>{option.text}</span>}
                 {dropped.has(id) ? (
                   <span className="ml-2 text-sm font-medium text-fg-muted">
                     ({text.youDiscarded})

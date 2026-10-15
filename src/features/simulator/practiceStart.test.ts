@@ -48,6 +48,17 @@ describe('startPracticeWithQuestions', () => {
     expect(state.ended).toBe(false);
   });
 
+  it('no arrastra la sección ni el tiempo del texto de una práctica de inglés anterior (B13)', async () => {
+    usePractice.getState().set({ section: 'english', secondsPerItem: 90, caseStartedAt: 12345 });
+    const recordEvent = vi.fn((event: AppEvent) => Promise.resolve(event));
+    await startPracticeWithQuestions({ recordEvent }, user, ['q1'], 'exam_missed');
+    expect(usePractice.getState()).toMatchObject({
+      section: 'clinical',
+      secondsPerItem: 0,
+      caseStartedAt: 0,
+    });
+  });
+
   it('con una lista vacía no hace nada', async () => {
     const recordEvent = vi.fn((event: AppEvent) => Promise.resolve(event));
     expect(await startPracticeWithQuestions({ recordEvent }, user, [], 'exam_missed')).toBe(false);

@@ -15,7 +15,12 @@ import { createDuel } from '@/data/usecases/party';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
-import { clock, usePractice, type PracticeState } from '../simulator/practice';
+import {
+  clock,
+  SPANISH_PRACTICE_DEFAULTS,
+  usePractice,
+  type PracticeState,
+} from '../simulator/practice';
 import { currentQuestionSource } from '../shared/useQuestionSource';
 import { duelAttemptSession } from './duels';
 
@@ -128,6 +133,7 @@ export async function startDuel(
     kind: 'challenge',
     duelId: duel.id,
     targetTags: [],
+    ...SPANISH_PRACTICE_DEFAULTS,
   });
   return 'started';
 }

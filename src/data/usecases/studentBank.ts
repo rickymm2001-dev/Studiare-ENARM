@@ -6,7 +6,6 @@
 // su práctica y la parte en inglés del examen. Así ningún lugar que pide solo español puede recibir un
 // texto en inglés por un descuido (2.8 del plan de B13).
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { sectionOf } from '@/engines/exam';
 import type { DataApi } from '../context';
 import type { Question } from '../schemas/bank';
 
@@ -37,7 +36,8 @@ export async function listStudentPool(
       exam.push(question);
     }
   }
-  const spanish = (question: Question) => sectionOf(question) === 'clinical';
+  // El idioma de la pregunta dice su sección. Sin el campo es español, como todo lo de antes de B13
+  const spanish = (question: Question) => question.language !== 'en';
   return {
     practice: practice.filter(spanish),
     exam: exam.filter(spanish),

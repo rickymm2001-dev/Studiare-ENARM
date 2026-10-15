@@ -10,6 +10,7 @@ export function OptionChoice({
   name,
   letter,
   text,
+  lang,
   selected,
   discarded,
   onChoose,
@@ -20,6 +21,8 @@ export function OptionChoice({
   name: string;
   letter: string;
   text: string;
+  /** Idioma del texto de la opción, cuando no es español, como en Inglés médico (B13) */
+  lang?: string | undefined;
   selected: boolean;
   discarded: boolean;
   onChoose: () => void;
@@ -42,7 +45,7 @@ export function OptionChoice({
         <input type="radio" name={name} className="mt-1" checked={selected} onChange={onChoose} />
         <span className={cn(discarded && 'text-fg-muted line-through')}>
           <span className="mr-1 font-semibold">{letter}.</span>
-          {text}
+          {lang === undefined ? text : <span lang={lang}>{text}</span>}
           {discarded ? <span className="sr-only"> ({t.choice.discardedLabel})</span> : null}
         </span>
       </label>

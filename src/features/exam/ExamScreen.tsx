@@ -9,6 +9,7 @@ import { Link, Navigate, useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { createEvent } from '@/data/events/createEvent';
 import { EXAM_SECONDS_PER_QUESTION } from '@/engines/exam';
 import { nextTimeAlerts, type TimeAlert } from '@/engines/timeAlerts';
@@ -25,7 +26,7 @@ import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { clock } from '../simulator/practice';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { formatClock } from './clock';
-import { alertMessage, alertVisibleMs } from './examAlerts';
+import { alertMessage, alertVisibleMs, stuckAfterMs } from './examAlerts';
 import { loadExamBundles, showQuestion } from './examSession';
 import {
   addFiredAlerts,
@@ -266,7 +267,23 @@ function ExamRunner({
     const here = answerOf(current, id ?? '');
     if (id !== undefined && here.optionId === null && !here.nudged) {
       const spent = here.msSpent + Math.max(0, at - current.enteredAtMs);
-      if (spent > 2 * EXAM_SECONDS_PER_QUESTION * 1000) {
+      // Una pregunta de inglés trae su texto, y su ritmo es el de todo el texto (B13)
+      const question = bundles.get(id)?.question;
+      const english = question?.language === 'en';
+      const textSize = english
+        ? current.questionIds.filter(
+            (other) => bundles.get(other)?.question.caseId === (question.caseId ?? null),
+          ).length
+        : 1;
+      if (
+        spent >
+        stuckAfterMs({
+          english,
+          textSize: question?.caseId ? textSize : 1,
+          clinicalSeconds: EXAM_SECONDS_PER_QUESTION,
+          englishSeconds: DEFAULT_THRESHOLDS.english.secondsPerItem,
+        })
+      ) {
         commit((s) => markNudged(s, id));
         setNudge(t.exam.stuck(formatClock(spent)));
       }
@@ -293,6 +310,10 @@ function ExamRunner({
   const shownIds = state.shownOptions[currentId];
   const firstBlank = state.questionIds.findIndex((id) => answerOf(state, id).optionId === null);
   const firstMarked = state.questionIds.findIndex((id) => answerOf(state, id).marked);
+  // Los reactivos de la parte en inglés, para marcarlos en el navegador
+  const englishIds = new Set(
+    state.questionIds.filter((id) => bundles.get(id)?.question.language === 'en'),
+  );
 
   // Teclado (D-087). Letras o números eligen, Mayús con la letra descarta, Enter o la flecha derecha
   // sigue, la flecha izquierda regresa y M marca. No actúa con la ventana de terminar abierta
@@ -452,7 +473,7 @@ function ExamRunner({
         </KeyHint>
       </ActionDock>
 
-      <ExamNavigator state={state} onGo={visit} />
+      <ExamNavigator state={state} onGo={visit} englishIds={englishIds} />
 
       <ExamFinishDialog
         open={finishOpen}

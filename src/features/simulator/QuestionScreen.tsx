@@ -1,12 +1,18 @@
 // Pregunta (pantalla 4). Caso clínico, opciones muestreadas, resaltado de negaciones en la frase de
 // la pregunta (7.5), temporizador y registro de cada cambio. Se contesta con el teclado o con el
 // ratón sin recorrer la pantalla, y la confianza previa es opcional y viene apagada (D-087).
+// Una pregunta de Inglés médico (B13, 2.3) usa siempre el diseño de lectura. El texto fijo a la izquierda
+// en computadora y arriba, plegable desde la segunda pregunta del caso, en el teléfono. El texto, la
+// pregunta y las opciones van en inglés (lang="en") con su fuente bajo el texto, y la interfaz sigue en
+// español. Además del reloj se ve el tiempo sugerido del texto y, si el alumno se pasa, una línea de
+// aviso. No detiene nada.
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { createEvent } from '@/data/events/createEvent';
 import type { AppEvent } from '@/data/schemas/events';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
@@ -28,8 +34,11 @@ import { recordAnswerWithXp } from './answerXp';
 import { HighlightedPrompt } from './HighlightedPrompt';
 import { OptionChoice } from './OptionChoice';
 import { correctPositionCounts, sampleForQuestion } from './optionSampling';
+import { secondsOnText, secondsOverSuggested, suggestedMsForText } from './passageTiming';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
+import { PassageTimeAdvice, ReadingPassage } from './ReadingPassage';
 import { useQuestion, type QuestionBundle } from './useQuestion';
+import { usePassageGroup, type PassageGroup } from './usePassageGroup';
 
 const topicName = new Map(
   topicTaxonomy.branches.flatMap((branch) =>
@@ -52,6 +61,13 @@ function Practice({ session }: { session: ReadySession }) {
   const currentId = active ? practice.questionIds[practice.index] : undefined;
   const bundle = useQuestion(currentId);
   const events = useUserEvents(session.user.id);
+  // Una pregunta de lectura en inglés necesita saber en qué lugar de su texto va (B13, 2.3)
+  const reading = bundle?.question.language === 'en';
+  const group = usePassageGroup(
+    practice.questionIds,
+    practice.index,
+    reading ? bundle.question.caseId : null,
+  );
   useVisibilityLog({
     userId: session.user.id,
     timeZone: session.user.timeZone,
@@ -91,7 +107,8 @@ function Practice({ session }: { session: ReadySession }) {
   // Mientras carga la siguiente, useLiveData conserva la pregunta que ya se contestó. Sin esto se
   // quedaba un momento bajo el número de la siguiente, con su botón apagado
   const stale = bundle != null && bundle.question.id !== currentId;
-  if (bundle === undefined || events === undefined || stale) {
+  const groupPending = reading && group?.index !== practice.index;
+  if (bundle === undefined || events === undefined || stale || groupPending) {
     return (
       <>
         {header}
@@ -103,7 +120,13 @@ function Practice({ session }: { session: ReadySession }) {
   return (
     <>
       {header}
-      <QuestionCard key={bundle.question.id} bundle={bundle} session={session} events={events} />
+      <QuestionCard
+        key={bundle.question.id}
+        bundle={bundle}
+        session={session}
+        events={events}
+        group={reading ? (group ?? null) : null}
+      />
     </>
   );
 }
@@ -128,10 +151,13 @@ function QuestionCard({
   bundle,
   session,
   events,
+  group,
 }: {
   bundle: QuestionBundle;
   session: ReadySession;
   events: AppEvent[];
+  /** En qué lugar de su texto va. Solo en las preguntas de lectura en inglés (B13) */
+  group: PassageGroup | null;
 }) {
   const api = useDataApi();
   const navigate = useNavigate();
@@ -174,7 +200,24 @@ function QuestionCard({
   const shown = sample.shown.map(
     (entry) => options.find((option) => option.id === entry.optionId) as (typeof options)[number],
   );
-  const ranges = highlightEnabled ? findNegations(question.prompt, structureDictionary) : [];
+  // El texto, la pregunta y las opciones de Inglés médico van en inglés. El resaltado usa sus negaciones
+  const english = question.language === 'en';
+  const ranges = highlightEnabled
+    ? findNegations(question.prompt, structureDictionary, english ? 'en' : 'es')
+    : [];
+  const lang = english ? 'en' : undefined;
+  // Tiempo sugerido del texto. Cuándo se mostró su primera pregunta lo guarda la práctica, y esa misma
+  // pregunta lo fija ahora. Si el alumno recarga a la mitad del texto se conserva
+  const secondsPerItem =
+    practice.secondsPerItem > 0
+      ? practice.secondsPerItem
+      : DEFAULT_THRESHOLDS.english.secondsPerItem;
+  const [textStartedAt] = useState(() =>
+    english && (group === null || group.position === 0) ? clock() : practice.caseStartedAt,
+  );
+  const [now, setNow] = useState(() => clock());
+  const textSize = group?.size ?? 1;
+  const suggestedMs = suggestedMsForText(textSize, secondsPerItem);
 
   const [selected, setSelected] = useState<string | null>(null);
   // Opciones que tachó. Descartar no cambia la respuesta, solo ayuda a pensar (D-080)
@@ -197,8 +240,13 @@ function QuestionCard({
     // Al pasar a la siguiente pregunta el foco va al enunciado, para que el lector de pantalla lo
     // lea y el teclado siga desde ahí
     if (practice.index > 0) titleRef.current?.focus();
+    // La primera pregunta de un texto abre su tiempo sugerido. Las demás siguen el mismo reloj
+    if (english && (group === null || group.position === 0)) {
+      usePractice.getState().set({ caseStartedAt: textStartedAt });
+    }
     const timer = window.setInterval(() => {
       setElapsed(clock() - shownAt.current);
+      setNow(clock());
     }, 1000);
     if (!logged.current) {
       logged.current = true;
@@ -345,8 +393,24 @@ function QuestionCard({
       ? t.simulator.answerAndFinish
       : t.simulator.answerAndNext;
   // Con caso clínico, en computadora el caso va a la izquierda y las opciones a la derecha, así
-  // ninguna línea pasa de unos 75 caracteres. Sin caso, la pregunta va en una columna de lectura
-  const twoColumns = Boolean(vignette);
+  // ninguna línea pasa de unos 75 caracteres. Sin caso, la pregunta va en una columna de lectura. Una
+  // pregunta de lectura en inglés usa siempre las dos columnas, con el texto fijo a la izquierda y la
+  // pregunta y las opciones a la derecha
+  const twoColumns = Boolean(vignette) || english;
+  const prompt = (
+    <CardTitle
+      id="pregunta-frase"
+      ref={titleRef}
+      tabIndex={-1}
+      lang={lang}
+      className={cn(
+        'text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus',
+        english ? 'mb-3' : 'mt-3',
+      )}
+    >
+      <HighlightedPrompt text={question.prompt} ranges={ranges} />
+    </CardTitle>
+  );
   return (
     <Card
       aria-labelledby="pregunta-frase"
@@ -368,23 +432,33 @@ function QuestionCard({
             {t.simulator.elapsed(formatDuration(elapsed))}
           </span>
         </div>
-        {vignette ? (
+        {english ? (
+          <div className="mt-2 flex flex-col gap-2">
+            <PassageTimeAdvice
+              position={group?.position ?? 0}
+              size={textSize}
+              suggestedSeconds={suggestedMs / 1000}
+              onTextSeconds={secondsOnText({ startedAt: textStartedAt, now })}
+              overSeconds={secondsOverSuggested({ startedAt: textStartedAt, now, suggestedMs })}
+            />
+            <ReadingPassage
+              text={vignette}
+              refs={question.gpcRefs}
+              fold={(group?.position ?? 0) > 0 ? 'phone' : 'never'}
+              scrollable
+            />
+          </div>
+        ) : vignette ? (
           <div className="mt-2 rounded-md bg-muted p-3">
             <p className="eyebrow mb-1 text-fg-muted">{t.simulator.caseLabel}</p>
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}
-        <CardTitle
-          id="pregunta-frase"
-          ref={titleRef}
-          tabIndex={-1}
-          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
-        >
-          <HighlightedPrompt text={question.prompt} ranges={ranges} />
-        </CardTitle>
+        {english ? null : prompt}
       </CardHeader>
 
       <div className="flex flex-col">
+        {english ? prompt : null}
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-1 text-sm text-fg-muted">
             <span className="sr-only">{t.simulator.options}. </span>
@@ -397,6 +471,7 @@ function QuestionCard({
                 name="opcion"
                 letter={String.fromCharCode(65 + position)}
                 text={option.text}
+                lang={lang}
                 selected={selected === option.id}
                 discarded={eliminated.includes(option.id)}
                 onChoose={() => {
