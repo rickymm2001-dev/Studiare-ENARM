@@ -5,6 +5,7 @@
 // texto completo, o no abre el texto. La práctica en español no trae inglés. Corre contra el Supabase
 // simulado con el banco de tests/e2e/support/fakeBankStore.ts. Todo el texto es simulado y lleva [Prueba].
 import type { Page } from '@playwright/test';
+import { SCREENS } from '@/app/screens';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
@@ -180,6 +181,14 @@ test.describe('Inglés médico en la práctica', () => {
     await row.getByRole('button', { name: reading.show }).click();
     await expect(passageText(row)).toBeVisible();
     await expect(row.locator('li span[lang="en"]').first()).toBeVisible();
+    await expectNoSeriousA11yViolations(page);
+
+    // Progreso cuenta lo contestado en su tarjeta de inglés, aparte de las ramas, y sigue en Calibrando
+    await page.goto(SCREENS.progress.path);
+    const progress = page.getByRole('region', { name: englishText.progress.title });
+    await expect(progress).toBeVisible({ timeout: 30_000 });
+    await expect(progress.getByText(englishText.progress.calibrating(20, 5))).toBeVisible();
+    await expect(progress.getByText(englishText.progress.texts(2))).toBeVisible();
     await expectNoSeriousA11yViolations(page);
   });
 

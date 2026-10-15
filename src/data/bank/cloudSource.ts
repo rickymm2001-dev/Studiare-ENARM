@@ -1,10 +1,11 @@
-// Fuente de preguntas de la nube (B11, 5.1 a 5.5 del plan de B11). Desde B13 el pool trae el inglés aparte. El catálogo, sin texto, vive en Dexie
+// Fuente de preguntas de la nube (B11, 5.1 a 5.5 del plan de B11). El catálogo, sin texto, vive en Dexie
 // (tabla catalog) y se baja por partes desde el último seq. Los cuerpos se bajan con fetch_questions
 // solo cuando el alumno va a contestar, en tandas de hasta 100 que nunca parten un caso seriado, y se
 // guardan en las tablas de siempre, así todo lo demás los lee igual que el banco de demostración. Una
 // versión ya guardada no se vuelve a pedir ni a escribir, así repasar lo ya bajado no gasta del tope.
 // Sin conexión se estudia con lo ya bajado. La cuota que dijo el servidor se guarda para contarla sin
-// conexión. Al servidor solo viajan ids de versión y el propósito de la lectura.
+// conexión. Al servidor solo viajan ids de versión y el propósito de la lectura. Desde B13 el pool parte
+// el catálogo por idioma, y el inglés va aparte del español.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   fetchAgreementSummary,
