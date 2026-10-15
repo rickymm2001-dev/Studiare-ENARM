@@ -61,6 +61,24 @@ const prefixOf = (fileName: string) =>
 export function BankImportScreen() {
   const kind = useEditorialKind();
   const role = usePreferences((state) => state.role);
+  // Con la nube del equipo nunca se importa a la base local (M6 de la revisión)
+  if (kind === 'checking' || kind === 'unavailable') {
+    return (
+      <>
+        <ScreenHeader
+          title={t.screens.bankImport.title}
+          description={physicianText.importScreen.hint}
+        />
+        {kind === 'checking' ? (
+          <LoadingState />
+        ) : (
+          <Card>
+            <p className="text-sm">{physicianText.errors.network}</p>
+          </Card>
+        )}
+      </>
+    );
+  }
   if (kind === 'cloud') {
     return role === 'physician' ? (
       <>

@@ -736,7 +736,8 @@ export const physicianText = {
     no_session: 'Tu sesión se cerró. Vuelve a entrar.',
     invalid: 'La base no aceptó el cambio. Revisa los datos e intenta de nuevo.',
     not_found: 'No encontramos esa pregunta.',
-    network: 'Sin conexión con el servidor. Revisa tu internet e intenta de nuevo.',
+    network:
+      'Necesitas conexión. El banco del equipo vive en el servidor. Revisa tu internet y tu sesión e intenta de nuevo.',
     unknown: 'Algo salió mal. Intenta de nuevo.',
   } as Record<string, string>,
 };
