@@ -288,6 +288,17 @@ describe('los planes del repo', () => {
     expect(fake.functions.get('delete_my_data')?.body).toContain('ai_jobs');
     expect(fake.edge.get('ai-proxy')).toMatchObject({ version: 1, verifyJwt: false });
     expect(fake.edge.get('ai-batch')).toMatchObject({ version: 1, verifyJwt: false });
+    // Las dos suben su deno.json y lo señalan, porque importan zod, hono y el SDK por su nombre
+    for (const slug of ['ai-proxy', 'ai-batch']) {
+      const published = fake.edge.get(slug);
+      expect(published?.metadata.import_map_path, slug).toBe(
+        `supabase/functions/${slug}/deno.json`,
+      );
+      expect(
+        published?.files.map((file) => file.name),
+        slug,
+      ).toContain(`supabase/functions/${slug}/deno.json`);
+    }
 
     // Otra corrida no repite SQL, porque todo quedó registrado con su nombre
     const before = fake.writes().length;

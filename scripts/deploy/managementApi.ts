@@ -40,6 +40,8 @@ export interface DeployFunctionInput {
   entrypointPath: string;
   verifyJwt: boolean;
   files: readonly DeployFile[];
+  /** Ruta desde la raíz del repo del deno.json de la función, si lo tiene. Va también entre los files */
+  importMapPath?: string | null;
 }
 
 export interface SecretInput {
@@ -267,6 +269,7 @@ export function createManagementClient(options: ManagementClientOptions): Manage
           name: input.slug,
           entrypoint_path: input.entrypointPath,
           verify_jwt: input.verifyJwt,
+          ...(input.importMapPath ? { import_map_path: input.importMapPath } : {}),
         }),
       );
       for (const file of input.files) {
