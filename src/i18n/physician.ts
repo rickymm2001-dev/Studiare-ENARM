@@ -9,7 +9,7 @@ export const physicianText = {
   /** Las descripciones de las pantallas del médico. Sus títulos siguen en t.screens */
   descriptions: {
     questionEditor:
-      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, versiones y la revisión a ciegas.',
+      'Caso, enunciado, hasta 10 opciones con su etiqueta, set canónico, explicación, referencias, la fuente del texto en inglés, versiones y la revisión a ciegas.',
     agreement:
       'Acuerdo entre la etiqueta del autor y la que pone a ciegas el revisor, con kappa, y lo que te falta etiquetar.',
   },
