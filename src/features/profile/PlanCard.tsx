@@ -1,24 +1,48 @@
 // Tu plan, lo primero de Perfil en Configuración (B3 del plan del cambio, comentario 5). Nombre,
-// precio, hasta cuándo vale si lo dio el servidor y el botón Cambiar tu plan, que abre Suscripción.
-// La prueba gratis llega en B10. Cuando exista, su fin va aquí junto a la renovación.
+// precio, la línea de su estado y el botón Cambiar tu plan, que abre Suscripción. Desde B10 la línea
+// dice la prueba gratis con su fecha de fin, la renovación, la cancelación, el pase, el cobro fallido o
+// el mes regalado (3.2). Qué línea toca lo decide planStateOf, igual que en Suscripción.
 import { CreditCard } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { PLANS, planOf } from '@/config/billing';
 import type { Subscription } from '@/data/schemas/people';
+import { longDate, planStateOf, type PlanState } from '@/features/billing/planState';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 
-const dateOf = (iso: string) =>
-  new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+const text = t.settingsPage.plan;
+
+function stateLine(state: PlanState): string {
+  switch (state.kind) {
+    case 'trialing':
+      return text.trialing(longDate(state.end), t.billing.price(PLANS[state.plan].priceMxn));
+    case 'trialCanceled':
+      return text.trialCanceled(longDate(state.end));
+    case 'renews': {
+      // Con un cambio programado se cobra el plan nuevo, así que la línea dice cuál y su precio
+      const price = t.billing.price(PLANS[state.plan].priceMxn);
+      return state.scheduled
+        ? text.renewsAs(longDate(state.date), t.billing.plans[state.plan], price)
+        : text.renews(longDate(state.date), price);
+    }
+    case 'canceled':
+      return text.canceled(longDate(state.until));
+    case 'pastDue':
+      return text.pastDue;
+    case 'pass':
+      return text.pass(longDate(state.until));
+    case 'referral':
+      return text.referralUntil(longDate(state.until));
+    case 'paidUntil':
+      return text.paidUntil(longDate(state.until));
+  }
+}
 
 export function PlanCard({ subscription }: { subscription: Subscription | null }) {
-  const text = t.settingsPage.plan;
   const plan = planOf(subscription);
-  // Hasta cuándo vale y de dónde viene solo se dicen de un plan de pago
-  const active = plan === 'free' ? null : subscription;
-  const until = active?.periodEnd ? dateOf(active.periodEnd) : null;
+  const state = planStateOf(subscription);
   return (
     <Card aria-labelledby="plan-titulo">
       <CardHeader>
@@ -32,12 +56,8 @@ export function PlanCard({ subscription }: { subscription: Subscription | null }
           <p className="text-sm text-fg-muted">
             {text.price(t.billing.price(PLANS[plan].priceMxn), t.billing.periods[plan])}
           </p>
-          {until ? (
-            <p className="text-sm">
-              {active?.source === 'referral' ? text.referralUntil(until) : text.paidUntil(until)}
-            </p>
-          ) : null}
-          {active?.isSimulated && plan !== 'free' ? (
+          {state ? <p className="text-sm">{stateLine(state)}</p> : null}
+          {subscription?.isSimulated && plan !== 'free' ? (
             <p className="text-sm text-fg-muted">{text.simulated}</p>
           ) : null}
         </div>

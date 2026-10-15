@@ -11,7 +11,9 @@ import { newId } from '@/data/ids';
 import type { User } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { changePlan } from '@/data/usecases/subscription';
+import { longDate } from '@/features/billing/planState';
 import { t } from '@/i18n/es-MX';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 
 let app: RenderedApp | undefined;
@@ -142,6 +144,29 @@ describe('Inicio con el diseño fijo', () => {
     const plan = await screen.findByRole('region', { name: t.home.plan.title });
     expect(await within(plan).findByText(t.billing.plans.annual)).toBeVisible();
     expect(within(plan).getByRole('link', { name: t.home.plan.change })).toBeVisible();
+  });
+
+  it('con la prueba gratis de la nube dice hasta cuándo dura (B10)', async () => {
+    const end = '2026-10-21T15:00:00.000Z';
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'founder',
+          status: 'active',
+          isSimulated: false,
+          periodEnd: end,
+          source: 'payment',
+          cloudStatus: 'trialing',
+          trialEnd: end,
+          provider: 'stripe',
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    const plan = await screen.findByRole('region', { name: t.home.plan.title });
+    expect(await within(plan).findByText(t.billing.plans.founder)).toBeVisible();
+    expect(await within(plan).findByText(billingCloudText.trialUntil(longDate(end)))).toBeVisible();
   });
 
   it('el saludo concuerda con el sexo que declaró el alumno', async () => {

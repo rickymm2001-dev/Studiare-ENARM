@@ -8,7 +8,8 @@
 import { z } from 'zod';
 import { RoleSchema, type Role } from '../../../src/data/schemas/common.ts';
 
-export type Plan = 'free' | 'founder' | 'monthly' | 'annual';
+// founder_annual es el anual Fundador de B10 (migración 20261022000002)
+export type Plan = 'free' | 'founder' | 'founder_annual' | 'monthly' | 'annual';
 
 export interface CloudUser {
   id: string;
@@ -27,7 +28,9 @@ export type AuthResult = { ok: true; user: CloudUser } | { ok: false; failure: A
 export type Authenticate = (token: string) => Promise<AuthResult>;
 
 const UserSchema = z.object({ id: z.uuid() });
-const PlanSchema = z.object({ plan: z.enum(['free', 'founder', 'monthly', 'annual']) });
+const PlanSchema = z.object({
+  plan: z.enum(['free', 'founder', 'founder_annual', 'monthly', 'annual']),
+});
 
 /**
  * Los alumnos usan la IA solo con un plan de pago, como pide el Tutor y la generación de tarjetas.

@@ -4,10 +4,20 @@
 import type { Browser, BrowserContext, ConsoleMessage, Page } from '@playwright/test';
 import { t } from '@/i18n/es-MX';
 import { installFakeSupabase, type FakeSupabaseServer } from './fakeSupabase';
-import { FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN, FAKE_SUPABASE_URL } from './fakeSupabaseConfig';
+import {
+  FAKE_GATEWAY_ORIGIN,
+  FAKE_MERCADOPAGO_ORIGIN,
+  FAKE_PORTAL_ORIGIN,
+  FAKE_SUPABASE_URL,
+} from './fakeSupabaseConfig';
 import { expect, test as base } from './fixtures';
 
-const FAKE_ORIGINS = [FAKE_SUPABASE_URL, FAKE_GATEWAY_ORIGIN, FAKE_PORTAL_ORIGIN];
+const FAKE_ORIGINS = [
+  FAKE_SUPABASE_URL,
+  FAKE_GATEWAY_ORIGIN,
+  FAKE_PORTAL_ORIGIN,
+  FAKE_MERCADOPAGO_ORIGIN,
+];
 
 /**
  * Chromium escribe en la consola una línea "Failed to load resource" por cada respuesta 4xx, y el
@@ -58,13 +68,31 @@ export async function expectHome(page: Page): Promise<void> {
   });
 }
 
+/** Si ir de una dirección a otra solo cambiaría el hash, sin cargar otro documento */
+function sameDocument(from: string, to: string): boolean {
+  try {
+    const current = new URL(from);
+    const next = new URL(to);
+    return (
+      current.origin === next.origin &&
+      current.pathname === next.pathname &&
+      current.search === next.search
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Abre el enlace del correo como lo haría el navegador al venir del correo, cargando la página de nuevo.
  * Si la página ya está en la app con la misma ruta, ir directo al enlace solo cambiaría el hash sin
- * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva
+ * recargar nada (navegación en el mismo documento) y Supabase no vería la sesión nueva. Solo entonces
+ * pasa antes por about:blank. En los demás casos va directo, porque desde about:blank Chromium a veces
+ * pide el ícono de la página anterior con origen null y lo bloquea por ser de loopback, un error de
+ * consola que no es de la app
  */
 export async function openEmailLink(page: Page, link: string): Promise<void> {
-  if (page.url() !== 'about:blank') await page.goto('about:blank');
+  if (sameDocument(page.url(), link)) await page.goto('about:blank');
   await page.goto(link);
 }
 
@@ -82,14 +110,38 @@ export async function enterWithLink(
   await expectHome(page);
 }
 
+/**
+ * Aplica las banderas que se prendieron en platform_settings.feature_flags del Supabase simulado, como
+ * lo hará Ricardo (B10, 5.4). La app copia las banderas del servidor al abrir, avisa que hay una
+ * configuración nueva y con Recargar ahora las aplica
+ */
+export async function reloadWithServerFlags(page: Page): Promise<void> {
+  const reload = page.getByRole('button', { name: t.configUpdate.reload });
+  await expect(reload).toBeVisible({ timeout: 20_000 });
+  await reload.click();
+  await page.waitForLoadState('load');
+  await expect(page.getByRole('button', { name: t.configUpdate.reload })).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 20_000 });
+}
+
+/** Una fecha larga como la escribe la app, en la zona horaria del navegador de la prueba */
+export function longDateIn(iso: string | number, timeZone: string): string {
+  return new Date(iso).toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone,
+  });
+}
+
 export interface SecondDevice {
   context: BrowserContext;
   page: Page;
 }
 
 /**
- * Otro navegador con la misma nube, con las mismas opciones del proyecto (tamaño, idioma y zona
- * horaria). Sus errores de consola también tumban la prueba. Quien lo abre lo cierra al terminar
+ * Otro navegador con la misma nube, con las mismas opciones del proyecto (tamaño, idioma, zona
+ * horaria y tema). Sus errores de consola también tumban la prueba. Quien lo abre lo cierra al terminar
  */
 export async function openSecondDevice(
   browser: Browser,
@@ -107,6 +159,7 @@ export async function openSecondDevice(
     locale: use.locale,
     timezoneId: use.timezoneId,
     reducedMotion: use.reducedMotion,
+    colorScheme: use.colorScheme,
     serviceWorkers: use.serviceWorkers,
   });
   await cloud.attach(context);

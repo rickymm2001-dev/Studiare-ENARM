@@ -42,6 +42,8 @@ const STUDENT_MAIN = [
 ];
 const ADMIN_GROUP = [
   t.navItems.users,
+  // Pagos, facturas y códigos de influencer (B10)
+  t.navItems.billing,
   t.navItems.costs,
   t.navItems.platform,
   t.navItems.bank,

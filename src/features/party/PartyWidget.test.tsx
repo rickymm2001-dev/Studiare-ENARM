@@ -14,6 +14,7 @@ import {
   joinPartyGroup,
   publishPartyNumbers,
 } from '@/data/cloud/party';
+import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { subscribe } from '@/data/testing/fixtures';
 import { setConsent } from '@/data/usecases/profile';
@@ -140,10 +141,12 @@ describe('widget de Party con la nube', () => {
     // Es un aviso fijo y no un cambio de estado, así el lector de pantalla no lo anuncia en cada visita
     expect(within(party).getByRole('note')).toHaveTextContent(t.freePlan.widget);
     expect(within(party).queryByRole('status')).toBeNull();
-    expect(within(party).getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
-      'href',
-      SCREENS.subscription.path,
-    );
+    // Con la nube y la prueba gratis el botón ofrece probarla y abre la forma de pago del Mensual (B10)
+    // my_plan dice que todavía le toca la prueba
+    await refreshCloudPlan(app.api, fake.cloud, app.user.id);
+    expect(
+      await within(party).findByRole('link', { name: t.billing.freeTrialCta }),
+    ).toHaveAttribute('href', `${SCREENS.subscription.path}?plan=mensual`);
     expect(within(party).queryByText('Guardia')).toBeNull();
     expect(fake.rpcCalls.slice(before).filter((name) => name.startsWith('party_'))).toEqual([]);
   });

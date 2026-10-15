@@ -5,10 +5,12 @@
 // repaso, en Repasar. La base de demostración y su panel pasaron a Datos de demostración del admin y el
 // modo de la IA a Costos de IA (5.4). Sin sesión o con la demostración vacía quedan el aviso de las
 // demás pantallas y Apariencia. En Perfil también va la tarjeta Invita y gana un mes de los referidos,
-// abierta en cualquier plan (4.3 del plan del cambio, B7).
+// abierta en cualquier plan (4.3 del plan del cambio, B7), y desde B10 Facturas, justo después de Tu
+// plan, solo con la cuenta de la nube conectada.
 import { LogIn } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router';
+import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { useSession } from '@/app/session';
@@ -20,6 +22,7 @@ import { scrollToElement } from '@/ui/scroll';
 import { LoadingState } from '@/ui/states/states';
 import { ReferralCard } from '../party/ReferralCard';
 import { AccountDataCard } from '../profile/AccountDataCard';
+import { InvoiceRequestCard } from '../profile/InvoiceRequestCard';
 import { PlanCard } from '../profile/PlanCard';
 import { SessionCard } from '../profile/SessionCard';
 import { useSubscription } from '../profile/useSubscription';
@@ -102,6 +105,10 @@ function ReadySettings({
 }) {
   const account = useAccount(session.user.id);
   const subscription = useSubscription(session.user.id);
+  // Los pagos viven en la nube, así que Facturas solo aparece con la cuenta conectada (B10)
+  const authId = useCloud((store) =>
+    store.state.status === 'linked' ? store.state.identity.authId : null,
+  );
   if (account === undefined || subscription === undefined) return <LoadingState />;
   const text = t.settingsPage.sections;
   return (
@@ -109,6 +116,9 @@ function ReadySettings({
       {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
       <SettingsSectionBlock id="perfil" title={text.profile} first>
         <PlanCard subscription={subscription} />
+        {authId ? (
+          <InvoiceRequestCard authId={authId} accountEmail={account?.email ?? null} />
+        ) : null}
         <ReferralCard headingAs="h3" />
         <AccountDataCard session={session} account={account} />
         <SessionCard session={session} />

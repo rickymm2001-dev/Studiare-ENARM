@@ -5,6 +5,7 @@
 // en el servidor vuelve el candado sin sacar al alumno de su grupo, que puede salir de todos desde el
 // candado. El mes regalado por un referido cuenta como plan de pago. Corre contra el Supabase simulado
 import { SCREENS } from '@/app/screens';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { t } from '@/i18n/es-MX';
 import { enterWithLink, expect, openSecondDevice, test } from '../support/cloudFixtures';
 import type { FakeSupabaseServer } from '../support/fakeSupabase';
@@ -117,13 +118,16 @@ test.describe('Plan Gratis con la nube', () => {
     await brunoCard.getByLabel(t.referrals.redeemLabel).fill(code);
     await brunoCard.getByRole('button', { name: t.referrals.redeem }).click();
     await expect(brunoCard.getByText(t.referrals.redeemed)).toBeVisible();
+    // Sin prueba gratis en el servidor, el pago es al momento y concreta el referido (B10)
+    cloud.setBillingRules({ trialDays: 0 });
     await second.page.goto(SCREENS.subscription.path);
     await second.page
+      .getByRole('region', { name: t.billing.plans.monthly, exact: true })
       .getByRole('button', { name: t.billing.choose(t.billing.plans.monthly) })
       .click();
-    await second.page.getByRole('button', { name: t.billing.cloud.go }).click();
+    await second.page.getByRole('button', { name: billingCloudText.go }).click();
     await second.page.getByRole('button', { name: gatewayText.pay }).click();
-    await expect(second.page.getByText(t.billing.cloud.returning.confirmed)).toBeVisible({
+    await expect(second.page.getByText(billingCloudText.returning.confirmed)).toBeVisible({
       timeout: 20_000,
     });
     expect(cloud.referralsOf(ANA)).toEqual({ pending: 0, completed: 1 });

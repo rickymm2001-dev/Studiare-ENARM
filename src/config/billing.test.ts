@@ -6,11 +6,16 @@ import {
   checkoutPlanFor,
   FOUNDER_SEATS,
   GATED_FEATURES,
+  GUARANTEE_DAYS,
+  isFounderPlan,
   isGatedFeature,
-  PAYMENT_PROVIDERS,
+  isYearlyPlan,
+  PASS_PRICES_MXN,
   PLAN_HIGHLIGHTS,
   PLANS,
   planOf,
+  regularPlanOf,
+  TRIAL_DAYS,
   VISIBLE_PLANS,
   visiblePlanOf,
   type FeatureAccess,
@@ -35,6 +40,39 @@ describe('planes y precios', () => {
     expect(PLANS.annual.priceMxn).toBeLessThan(PLANS.monthly.priceMxn * 12);
   });
 
+  it('el anual Fundador cuesta 749 al año y da lo mismo que el anual (B10, respuesta 16)', () => {
+    expect(PLANS.founder_annual.priceMxn).toBe(749);
+    expect(PLANS.founder_annual.access).toEqual(PLANS.annual.access);
+    expect(PLANS.founder_annual.features).toEqual(PLANS.annual.features);
+    expect(PLANS.founder_annual.priceMxn).toBeLessThan(PLANS.founder.priceMxn * 12);
+  });
+
+  it('la prueba gratis dura 7 días, la garantía otros 7 y los pases cuestan lo del plan regular', () => {
+    expect(TRIAL_DAYS).toBe(7);
+    expect(GUARANTEE_DAYS).toBe(7);
+    expect(PASS_PRICES_MXN).toEqual({
+      monthly: PLANS.monthly.priceMxn,
+      annual: PLANS.annual.priceMxn,
+    });
+  });
+
+  it('los Fundador comparten lugares, y pases y Mercado Pago usan siempre el plan regular', () => {
+    expect(isFounderPlan('founder')).toBe(true);
+    expect(isFounderPlan('founder_annual')).toBe(true);
+    expect(isFounderPlan('monthly')).toBe(false);
+    expect(isYearlyPlan('founder_annual')).toBe(true);
+    expect(isYearlyPlan('founder')).toBe(false);
+    expect(regularPlanOf('founder')).toBe('monthly');
+    expect(regularPlanOf('founder_annual')).toBe('annual');
+    expect(regularPlanOf('annual')).toBe('annual');
+  });
+
+  it('el ahorro del anual Fundador es 20% contra 12 meses del Fundador mensual', () => {
+    expect(annualSavingsPercent(PLANS, 'founder')).toBe(20);
+    // El regular no cambia con la promoción
+    expect(annualSavingsPercent(PLANS, 'regular')).toBe(16);
+  });
+
   it('el ahorro del anual es 16% contra 12 meses al precio regular, sin redondear hacia arriba', () => {
     expect(annualSavingsPercent()).toBe(16);
     const plans = { ...PLANS, monthly: { priceMxn: 100 }, annual: { priceMxn: 1000 } };
@@ -43,17 +81,16 @@ describe('planes y precios', () => {
     expect(annualSavingsPercent({ ...plans, annual: { priceMxn: 1500 } })).toBe(0);
   });
 
-  it('el Fundador es una promoción del mensual y no una tarjeta aparte', () => {
+  it('los Fundador son promociones del mensual y del anual y no tarjetas aparte', () => {
     expect(VISIBLE_PLANS).toEqual(['free', 'monthly', 'annual']);
     expect(checkoutPlanFor('monthly', true)).toBe('founder');
     expect(checkoutPlanFor('monthly', false)).toBe('monthly');
-    expect(checkoutPlanFor('annual', true)).toBe('annual');
+    expect(checkoutPlanFor('annual', true)).toBe('founder_annual');
+    expect(checkoutPlanFor('annual', false)).toBe('annual');
+    expect(checkoutPlanFor('free', true)).toBe('free');
     expect(visiblePlanOf('founder')).toBe('monthly');
+    expect(visiblePlanOf('founder_annual')).toBe('annual');
     expect(visiblePlanOf('annual')).toBe('annual');
-  });
-
-  it('solo se ofrece Stripe mientras Mercado Pago no esté configurado', () => {
-    expect(PAYMENT_PROVIDERS).toEqual(['stripe']);
   });
 
   it('el plan Gratis da 20 preguntas al día y deja fuera el examen completo, el tutor con IA, Party, subir mazos y el catálogo', () => {
@@ -68,8 +105,8 @@ describe('planes y precios', () => {
     });
   });
 
-  it('los tres planes de pago abren todo y sin límite de preguntas', () => {
-    for (const key of ['founder', 'monthly', 'annual'] as const) {
+  it('los cuatro planes de pago abren todo y sin límite de preguntas', () => {
+    for (const key of ['founder', 'founder_annual', 'monthly', 'annual'] as const) {
       expect(PLANS[key].access).toEqual({
         dailyQuestions: null,
         fullExam: true,
@@ -101,7 +138,7 @@ describe('banderas de acceso por función de carga diaria', () => {
 
   it('el plan Gratis no genera tarjetas con IA y los de pago tienen un tope diario', () => {
     expect(PLANS.free.aiCardsPerDay).toBe(0);
-    for (const key of ['founder', 'monthly', 'annual'] as const) {
+    for (const key of ['founder', 'founder_annual', 'monthly', 'annual'] as const) {
       expect(PLANS[key].aiCardsPerDay).toBe(AI_CARDS_PER_DAY_PAID);
     }
   });
@@ -127,6 +164,7 @@ describe('el plan de una suscripción', () => {
     expect(planOf(null)).toBe('free');
     expect(planOf({ plan: 'monthly', status: 'active' })).toBe('monthly');
     expect(planOf({ plan: 'founder', status: 'active' })).toBe('founder');
+    expect(planOf({ plan: 'founder_annual', status: 'active' })).toBe('founder_annual');
     expect(planOf({ plan: 'annual', status: 'canceled' })).toBe('free');
     expect(planOf({ plan: 'free', status: 'none' })).toBe('free');
   });

@@ -50,8 +50,23 @@ export const FEATURE_FLAGS = {
   },
   freeTrial: {
     description:
-      'Prueba gratis de 7 días en el botón de los candados de Gratis, como Apuntes, Party e Importar mazos (respuesta 20). Apagada hasta que B10 crea la prueba en Suscripción y la prende',
+      'Prueba gratis de 7 días con tarjeta (respuestas 18 y 20, B10). El servidor la hace cumplir con la misma clave de feature_flags, porque trial_available da false para todos si está apagada, y entonces create-checkout no abre ninguna prueba. En la app prende el texto Prueba 7 días gratis en la portada y en los candados de Gratis, estos solo para quien todavía puede tenerla según trialAvailable de my_plan. En producción se prende desde el servidor después de la corrida real en modo prueba',
+    defaults: { development: true, demo: false, production: false },
+  },
+  cashPasses: {
+    description:
+      'Pases de 1 mes o 1 año con OXXO y SPEI en la forma de pago (B10, 4.4). El servidor también la hace cumplir y create-checkout responde not_configured si está apagada. Se prende cuando Stripe tenga los dos métodos activados y pasen la corrida real',
+    defaults: { development: true, demo: false, production: false },
+  },
+  mercadoPago: {
+    description:
+      'Suscripción y pago único con Mercado Pago en la forma de pago (respuesta 8, B10). El servidor también la hace cumplir y create-checkout responde not_configured si está apagada. Se prende con la cuenta de Mercado Pago y su función de avisos desplegada',
     defaults: { development: false, demo: false, production: false },
+  },
+  paymentsTestMode: {
+    description:
+      'Aviso de modo prueba en la forma de pago, para usar una tarjeta de prueba de la pasarela (B10). Se apaga al pasar los pagos a modo real',
+    defaults: { development: true, demo: true, production: true },
   },
   googleSignIn: {
     description:

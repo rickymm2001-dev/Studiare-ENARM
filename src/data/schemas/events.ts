@@ -200,7 +200,8 @@ export const EventPayloadSchemas = {
   }),
   /** Cambio de plan con checkout simulado. Nunca hay cobro real ni datos de tarjeta (3.2) */
   subscription_changed: z.strictObject({
-    plan: z.enum(['free', 'founder', 'monthly', 'annual']),
+    // El anual Fundador llega con B10. Los eventos de antes se siguen leyendo igual
+    plan: z.enum(['free', 'founder', 'founder_annual', 'monthly', 'annual']),
     status: z.enum(['none', 'active', 'canceled']),
     amountMxn: z.number().nonnegative().max(100_000),
     receiptId: IdSchema.nullable(),
