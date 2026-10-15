@@ -217,11 +217,16 @@ describe('Banco y Sheet', () => {
     fakeCloud();
     showScreen();
     expect(await screen.findByText(text.overview.goal(120, 300))).toBeVisible();
-    expect(screen.getByText(text.overview.english(4))).toBeVisible();
+    // Inglés aparte de la meta de las siete ramas, con su propia meta de 30 para la parte del examen
+    expect(screen.getByText(text.overview.english(4, 30))).toBeVisible();
+    expect(screen.getByText(text.overview.englishHint(300, 30))).toBeVisible();
     expect(screen.getByRole('progressbar', { name: text.overview.title })).toHaveAttribute(
       'aria-valuenow',
       '120',
     );
+    const english = screen.getByRole('progressbar', { name: text.overview.english(4, 30) });
+    expect(english).toHaveAttribute('aria-valuenow', '4');
+    expect(english).toHaveAttribute('aria-valuemax', '30');
     expect(
       await screen.findByText(
         text.alerts.line('Carla', text.alerts.kinds.daily_volume ?? '', '2026-10-14', '650'),

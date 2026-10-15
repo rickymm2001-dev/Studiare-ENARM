@@ -9,8 +9,13 @@ import { adminText } from '@/i18n/admin';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
-import { THRESHOLD_FIELDS, fieldId, readThreshold } from './thresholdFields';
+import { THRESHOLD_FIELDS, fieldId, readThreshold, type ThresholdField } from './thresholdFields';
 import { initialDraft, patchFromDraft, validateDraft, type ThresholdDraft } from './thresholdDraft';
+
+// Los de Inglés médico (B13) van aparte, bajo su propio título, para que no se confundan con los de
+// calibración del resto de la app
+const GENERAL_FIELDS = THRESHOLD_FIELDS.filter((field) => field.group !== 'english');
+const ENGLISH_FIELDS = THRESHOLD_FIELDS.filter((field) => field.group === 'english');
 
 export function ThresholdsForm() {
   const text = adminText.adminConfig.thresholdsForm;
@@ -44,35 +49,42 @@ export function ThresholdsForm() {
     setMessage(ok ? 'reset' : 'failed');
   };
 
+  const renderField = (field: ThresholdField) => {
+    const id = fieldId(field);
+    const info =
+      adminText.adminConfig.thresholds[id as keyof typeof adminText.adminConfig.thresholds];
+    return (
+      <TextField
+        key={id}
+        label={info.label}
+        hint={`${info.hint} ${text.factory(String(readThreshold(FACTORY_THRESHOLDS, field)))}`}
+        type="number"
+        inputMode="decimal"
+        step={field.step}
+        value={draft[id] ?? ''}
+        error={errors[id] ?? null}
+        onChange={(event) => {
+          setMessage(null);
+          setDraft((current) => ({ ...current, [id]: event.target.value }));
+        }}
+      />
+    );
+  };
+
   return (
     <Card aria-labelledby="config-umbrales">
       <CardHeader>
         <CardTitle id="config-umbrales">{text.title}</CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {THRESHOLD_FIELDS.map((field) => {
-          const id = fieldId(field);
-          const info =
-            adminText.adminConfig.thresholds[id as keyof typeof adminText.adminConfig.thresholds];
-          return (
-            <TextField
-              key={id}
-              label={info.label}
-              hint={`${info.hint} ${text.factory(String(readThreshold(FACTORY_THRESHOLDS, field)))}`}
-              type="number"
-              inputMode="decimal"
-              step={field.step}
-              value={draft[id] ?? ''}
-              error={errors[id] ?? null}
-              onChange={(event) => {
-                setMessage(null);
-                setDraft((current) => ({ ...current, [id]: event.target.value }));
-              }}
-            />
-          );
-        })}
-      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{GENERAL_FIELDS.map(renderField)}</div>
+      <fieldset className="mt-5 flex flex-col gap-3 border-t border-line pt-4">
+        <legend className="font-semibold">{text.englishTitle}</legend>
+        <p className="text-sm text-fg-muted">{text.englishHint}</p>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {ENGLISH_FIELDS.map(renderField)}
+        </div>
+      </fieldset>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Button
           disabled={Object.keys(errors).length > 0 || !differsFromRunning}
