@@ -34,7 +34,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [ ] B14. Datos y modelo del alumno
 - [ ] B15. Analítica, errores, recordatorios y recorrido
 - [ ] B16. Legal y privacidad
+  - Borradores del aviso y los términos que hizo Gemini para el abogado, integrados el 2026-10-15 sobre lo de B9. El aviso pasa a la versión 2026-10-15 y sigue como borrador. Falta la finalidad de comparación y modelo del alumno, que entra con B14. Detalle en docs/legal/CAMBIOS-B16.md
 - [ ] B17. Publicación
+  - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
 - [ ] B18. Primeros alumnos
 - [ ] B19. Auditoría final y lanzamiento
 
