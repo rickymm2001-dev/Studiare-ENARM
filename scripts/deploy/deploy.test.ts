@@ -28,10 +28,17 @@ create table if not exists public.marca (id int);
 select true as listo;
 `;
 const OTRO = `create table if not exists public.otra (id int);\n`;
+const TABLA = `create table if not exists public.t (id int);
+create or replace function public.delta() returns int language sql as $$ select 4 $$;
+revoke all on function public.delta() from public, anon, authenticated, service_role;
+`;
 const VIEJO = `create or replace function public.beta() returns int language sql as $$ select 20 $$;\n`;
 
 const STEPS = {
-  base: { file: 'supabase/migrations/20260101000001_base.sql' },
+  base: {
+    file: 'supabase/migrations/20260101000001_base.sql',
+    recordedAs: ['base_1', 'base_2'],
+  },
   more: { file: 'supabase/migrations/20260101000002_more.sql' },
   arreglo: { file: 'supabase/manual/arreglo.sql', check: { listo: true } },
 };
@@ -44,6 +51,15 @@ const PLANS: Record<string, unknown> = {
     secrets: { STRIPE_PRICE_FOUNDER: { prefix: 'price_' }, STRIPE_PORTAL_CONFIG_REGULAR: {} },
   },
   'sin-arreglo': { description: 'Sin la pieza manual', migrations: [STEPS.base, STEPS.more] },
+  mas: { description: 'Solo more', migrations: [STEPS.more] },
+  'base-sin-registro': {
+    description: 'base sin registro, con more registrada',
+    migrations: [{ file: STEPS.base.file }, STEPS.more],
+  },
+  tabla: {
+    description: 'Una migración con una tabla además de su función',
+    migrations: [{ file: 'supabase/migrations/20260101000003_tabla.sql' }],
+  },
   'solo-base': { description: 'Solo base', migrations: [STEPS.base] },
   conflicto: {
     description: 'Con un archivo manual viejo',
@@ -77,6 +93,7 @@ beforeEach(() => {
   const files: Record<string, string> = {
     'supabase/migrations/20260101000001_base.sql': BASE,
     'supabase/migrations/20260101000002_more.sql': MORE,
+    'supabase/migrations/20260101000003_tabla.sql': TABLA,
     'supabase/manual/arreglo.sql': ARREGLO,
     'supabase/manual/viejo.sql': VIEJO,
     'supabase/manual/otro.sql': OTRO,
@@ -169,7 +186,7 @@ describe('qué ya está aplicado', () => {
     bytes: 0,
   });
 
-  it('reconoce la versión, el nombre y los trozos del conector, sin confundir nombres parecidos', () => {
+  it('reconoce la versión, el nombre y lo que el plan declara en recordedAs, sin deducir trozos', () => {
     const history = [
       { version: '20261015010327', name: 'billing_plans_1' },
       { version: '20261015010417', name: 'billing_plans_2' },
@@ -177,13 +194,17 @@ describe('qué ya está aplicado', () => {
       { version: '20261014143028', name: 'free_plan_locks' },
       { version: '20261022000003', name: 'otra' },
     ];
-    expect(recordedMatches(step('billing_plans'), history).map((r) => r.name)).toEqual([
-      'billing_plans_1',
-      'billing_plans_2',
-    ]);
-    expect(recordedMatches(step('privacy'), history)).toHaveLength(1);
-    expect(recordedMatches(step('billing'), history)).toEqual([]);
+    // Un trozo del conector solo cuenta si el plan lo declara
+    expect(recordedMatches(step('billing_plans'), history)).toEqual([]);
+    expect(recordedMatches(step('privacy'), history)).toEqual([]);
+    expect(
+      recordedMatches(
+        { ...step('billing_plans'), recordedAs: ['billing_plans_1', 'billing_plans_2'] },
+        history,
+      ).map((record) => record.name),
+    ).toEqual(['billing_plans_1', 'billing_plans_2']);
     expect(recordedMatches(step('free_plan'), history)).toEqual([]);
+    expect(recordedMatches(step('free_plan_locks'), history)).toHaveLength(1);
     expect(recordedMatches(step('invoice_requests', '20261022000003'), history)).toHaveLength(1);
   });
 });
@@ -208,15 +229,59 @@ describe('aplicar un plan', () => {
     expect(result.out.at(-1)).toBe('Todo en verde.');
   });
 
-  it('sin registro pero con las huellas del repo tampoco repite el SQL', async () => {
-    const result = await run({
-      ...REAL_LIKE,
-      history: [],
-      functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
-    });
+  it('un archivo de solo funciones sin registro, con sus funciones en la base, no se repite', async () => {
+    const result = await run(
+      { functions: { alfa: 'select 10', gamma: 'select 3' } },
+      { plan: 'mas' },
+    );
     expect(result.code).toBe(0);
-    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(appliedNames(result.fake)).toEqual([]);
     expect(result.all()).toContain('ya estaba aplicada sin registro (2 funciones iguales al repo)');
+  });
+
+  it('un archivo con más que funciones no se da por aplicado solo por sus funciones', async () => {
+    const result = await run({ functions: { delta: 'select 4' } }, { plan: 'tabla' });
+    expect(result.code).toBe(0);
+    expect(appliedNames(result.fake)).toEqual(['tabla']);
+    expect(result.all()).toContain(
+      'se aplica, trae más que funciones, sin registro ni comprobación',
+    );
+  });
+
+  it('compara con la versión del propio archivo, no con la última del repo', async () => {
+    // alfa está como la deja more, no como la deja base, así que base no cuenta como aplicada. Aplicarla
+    // regresaría alfa, porque more está registrada y no se vuelve a aplicar, y se detiene sin escribir
+    const result = await run(
+      {
+        history: [{ version: '20261014000003', name: 'more' }],
+        functions: { alfa: 'select 10', beta: 'select 2', gamma: 'select 3' },
+      },
+      { plan: 'base-sin-registro' },
+    );
+    expect(result.code).toBe(1);
+    expect(result.fake.writes()).toEqual([]);
+    expect(result.all()).toContain('1. base  se aplica, 1 función distinta o faltante');
+    expect(result.all()).toContain(
+      'Aplicarla dejaría alfa más vieja que supabase/migrations/20260101000002_more.sql',
+    );
+  });
+
+  it('una función con el mismo cuerpo pero otro security o set cuenta como distinta', async () => {
+    const definer = await run({
+      ...REAL_LIKE,
+      tamperDef: (name, def) => (name === 'beta' ? { ...def, securityDefiner: true } : def),
+    });
+    expect(definer.code).toBe(1);
+    expect(definer.all()).toContain(
+      'beta quedó distinta de supabase/migrations/20260101000001_base.sql',
+    );
+    const config = await run({
+      ...REAL_LIKE,
+      tamperDef: (name, def) =>
+        name === 'beta' ? { ...def, config: ['search_path=public'] } : def,
+    });
+    expect(config.code).toBe(1);
+    expect(config.all()).toContain('beta quedó distinta');
   });
 
   it('un archivo manual con la comprobación en verde y huellas iguales se salta', async () => {

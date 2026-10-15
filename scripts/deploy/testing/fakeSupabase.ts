@@ -1,7 +1,7 @@
 // Una API de administración de Supabase falsa en memoria, para probar la herramienta de despliegue sin
 // red. Contesta por fetch con las mismas rutas y formas que la real (docs/DESPLIEGUE.md) y guarda cada
 // petición para revisar qué se llamó. Al aplicar SQL lee sus funciones con el mismo lector del repo.
-import { extractFunctions, fingerprint } from '../sql.ts';
+import { applyFunctionSql, fingerprint, type FunctionDef } from '../sql.ts';
 
 export interface FakeRequest {
   method: string;
@@ -24,8 +24,8 @@ export interface FakeFunction {
 export interface FakeOptions {
   ref?: string;
   history?: { version: string; name: string }[];
-  /** Cuerpos de funciones que ya están en la base, por nombre */
-  functions?: Record<string, string>;
+  /** Funciones que ya están en la base, por nombre. Un texto es solo el cuerpo, sin security ni set */
+  functions?: Record<string, string | FunctionDef>;
   /** Funciones que anon puede ejecutar */
   anon?: string[];
   edge?: Record<string, { version: number; verifyJwt: boolean }>;
@@ -34,6 +34,8 @@ export interface FakeOptions {
   checkRow?: (applied: ReadonlySet<string>, query: string) => Record<string, unknown>;
   /** Cambia el cuerpo que queda en la base al aplicar, para simular una diferencia */
   tamper?: (name: string, body: string) => string;
+  /** Cambia la definición completa que queda en la base al aplicar, por ejemplo su security */
+  tamperDef?: (name: string, def: FunctionDef) => FunctionDef;
   /** Funciones que quedan abiertas a anon al aplicarlas */
   anonOnApply?: string[];
   /** Responde con este estado y mensaje en toda llamada */
@@ -58,7 +60,12 @@ export function fakeSupabase(options: FakeOptions = {}) {
   const ref = options.ref ?? 'abcdefghijklmnopqrst';
   const requests: FakeRequest[] = [];
   const history = [...(options.history ?? [])];
-  const functions = new Map(Object.entries(options.functions ?? {}));
+  const functions = new Map<string, FunctionDef>(
+    Object.entries(options.functions ?? {}).map(([name, value]) => [
+      name,
+      typeof value === 'string' ? { body: value, securityDefiner: false, config: [] } : value,
+    ]),
+  );
   const anon = new Set(options.anon ?? []);
   const applied = new Set<string>();
   const edge = new Map<string, FakeFunction>(
@@ -93,11 +100,16 @@ export function fakeSupabase(options: FakeOptions = {}) {
       const names = [...query.matchAll(/'([a-z_][a-z0-9_]*)'/g)].map((match) => match[1] ?? '');
       return names
         .filter((name) => functions.has(name))
-        .map((name) => ({
-          name,
-          fingerprint: fingerprint(functions.get(name) ?? ''),
-          anon: anon.has(name),
-        }));
+        .map((name) => {
+          const def = functions.get(name);
+          return {
+            name,
+            fingerprint: fingerprint(def?.body ?? ''),
+            security_definer: def?.securityDefiner ?? false,
+            config: (def?.config ?? []).join('\n'),
+            anon: anon.has(name),
+          };
+        });
     }
     return [options.checkRow?.(applied, query) ?? {}];
   }
@@ -126,10 +138,15 @@ export function fakeSupabase(options: FakeOptions = {}) {
       const name = String(payload.name);
       if (name === options.failApply) return json({ message: 'syntax error at or near x' }, 500);
       const query = String(payload.query);
-      for (const fn of extractFunctions(query)) {
-        if (fn.body === null) continue;
-        functions.set(fn.name, options.tamper ? options.tamper(fn.name, fn.body) : fn.body);
-        if (options.anonOnApply?.includes(fn.name)) anon.add(fn.name);
+      for (const fnName of applyFunctionSql(query, functions)) {
+        let def = functions.get(fnName);
+        if (!def) continue;
+        if (options.tamper && def.body !== null) {
+          def = { ...def, body: options.tamper(fnName, def.body) };
+        }
+        if (options.tamperDef) def = options.tamperDef(fnName, def);
+        functions.set(fnName, def);
+        if (options.anonOnApply?.includes(fnName)) anon.add(fnName);
       }
       applied.add(name);
       clock += 1;

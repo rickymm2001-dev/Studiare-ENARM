@@ -184,15 +184,107 @@ function closingParen(tokens: Token[], open: number): number {
   return -1;
 }
 
-export interface SqlFunction {
+/** Lo que se compara de una función entre el repo y la base */
+export interface FunctionDef {
+  /** El cuerpo como lo guarda Postgres en prosrc. null si es un begin atomic, que no tiene prosrc */
+  body: string | null;
+  /** prosecdef, security definer en el encabezado */
+  securityDefiner: boolean;
+  /**
+   * proconfig como lo guarda Postgres, por ejemplo search_path=public, pg_temp. null si el encabezado
+   * trae un set que no se puede leer con seguridad, como set ... from current, y entonces no se compara
+   */
+  config: string[] | null;
+}
+
+export interface SqlFunction extends FunctionDef {
   schema: string;
   name: string;
   /** Lo que va entre los paréntesis, tal cual */
   args: string;
-  /** El cuerpo como lo guarda Postgres en prosrc. null si es un begin atomic, que no tiene prosrc */
-  body: string | null;
   /** Línea donde empieza la sentencia, desde 1 */
   line: number;
+}
+
+/** Un valor de set que Postgres guarda sin comillas. Si no, va entre comillas dobles */
+const PLAIN_IDENTIFIER = /^[a-z_][a-z0-9_]*$/;
+
+/**
+ * Lee set nombre = valores desde at, que apunta a la palabra set. Devuelve la entrada como la guarda
+ * proconfig, o null si trae algo que no se puede reproducir con seguridad, y el índice que sigue
+ */
+function readSet(tokens: Token[], at: number): { entry: string | null; next: number } {
+  let index = at + 1;
+  const parts: string[] = [];
+  while (tokens[index]?.kind === 'word') {
+    parts.push(tokens[index]?.value ?? '');
+    index += 1;
+    if (!isPunct(tokens[index], '.')) break;
+    index += 1;
+  }
+  const name = parts.join('.');
+  if (name === '') return { entry: null, next: index };
+  if (isWord(tokens[index], 'from')) return { entry: null, next: index + 2 };
+  if (!isPunct(tokens[index], '=') && !isWord(tokens[index], 'to'))
+    return { entry: null, next: index };
+  index += 1;
+  const values: string[] = [];
+  for (;;) {
+    const token = tokens[index];
+    if (!token || !['word', 'quoted', 'string'].includes(token.kind)) {
+      return { entry: null, next: index + 1 };
+    }
+    // Un nombre sin comillas ya viene en minúsculas, como lo deja Postgres
+    values.push(
+      name === 'search_path' && !PLAIN_IDENTIFIER.test(token.value)
+        ? `"${token.value.replace(/"/g, '""')}"`
+        : token.value,
+    );
+    index += 1;
+    if (!isPunct(tokens[index], ',')) break;
+    index += 1;
+  }
+  return { entry: `${name}=${values.join(', ')}`, next: index };
+}
+
+/** El nombre de la variable de una entrada de proconfig */
+const configName = (entry: string) => entry.slice(0, entry.indexOf('='));
+
+/** Pone o cambia una entrada de proconfig, como alter function ... set */
+function setConfig(config: string[] | null, entry: string | null): string[] | null {
+  if (config === null || entry === null) return null;
+  const name = configName(entry);
+  const index = config.findIndex((current) => configName(current) === name);
+  if (index === -1) return [...config, entry];
+  return config.map((current, at) => (at === index ? entry : current));
+}
+
+/** Lee el encabezado de un create function, del paréntesis que cierra los argumentos al cuerpo */
+function readHeader(tokens: Token[], from: number): FunctionDef {
+  const def: FunctionDef = { body: null, securityDefiner: false, config: [] };
+  let index = from;
+  while (index < tokens.length) {
+    const token = tokens[index];
+    const following = tokens[index + 1];
+    if (isWord(token, 'as') && (following?.kind === 'dollar' || following?.kind === 'string')) {
+      def.body = following.value;
+      break;
+    }
+    if (isWord(token, 'begin') && isWord(following, 'atomic')) break;
+    if (isWord(token, 'security') && isWord(following, 'definer', 'invoker')) {
+      def.securityDefiner = following?.value === 'definer';
+      index += 2;
+      continue;
+    }
+    if (isWord(token, 'set')) {
+      const { entry, next } = readSet(tokens, index);
+      def.config = setConfig(def.config, entry);
+      index = next;
+      continue;
+    }
+    index += 1;
+  }
+  return def;
 }
 
 /** Las funciones y procedimientos que crea el archivo, en el orden en que aparecen */
@@ -214,25 +306,118 @@ export function extractFunctions(sql: string): SqlFunction[] {
     if (close === -1 || !first || !openToken || !closeToken) {
       throw new SqlParseError(`La función ${qualified.name} no cierra sus paréntesis`);
     }
-    let body: string | null = null;
-    for (let index = close + 1; index < statement.length; index += 1) {
-      const token = statement[index];
-      const following = statement[index + 1];
-      if (isWord(token, 'as') && (following?.kind === 'dollar' || following?.kind === 'string')) {
-        body = following.value;
-        break;
-      }
-      if (isWord(token, 'begin') && isWord(following, 'atomic')) break;
-    }
     found.push({
       schema: qualified.schema,
       name: qualified.name,
       args: sql.slice(openToken.end, closeToken.start).trim(),
-      body,
+      ...readHeader(statement, close + 1),
       line: lineOf(sql, first.start),
     });
   }
   return found;
+}
+
+/**
+ * Aplica sobre state, en orden, lo que el SQL hace con las funciones de public. create function las
+ * pone y alter function cambia su security o su set de las que ya están en state. Devuelve los nombres
+ * que tocó. Las sobrecargas cuentan como una sola función, por su nombre
+ */
+export function applyFunctionSql(sql: string, state: Map<string, FunctionDef>): string[] {
+  const touched: string[] = [];
+  const created = new Map(extractFunctions(sql).map((fn) => [fn.line, fn] as const));
+  for (const statement of statements(tokenize(sql))) {
+    const first = statement[0];
+    if (!first) continue;
+    const fn = created.get(lineOf(sql, first.start));
+    if (fn && isWord(first, 'create')) {
+      if (fn.schema !== 'public') continue;
+      state.set(fn.name, { body: fn.body, securityDefiner: fn.securityDefiner, config: fn.config });
+      touched.push(fn.name);
+      continue;
+    }
+    if (!isWord(first, 'alter') || !isWord(statement[1], 'function', 'procedure', 'routine')) {
+      continue;
+    }
+    const qualified = qualifiedName(statement, 2);
+    const current = qualified ? state.get(qualified.name) : undefined;
+    if (qualified?.schema !== 'public' || !current) continue;
+    let index = qualified.next;
+    if (isPunct(statement[index], '(')) index = closingParen(statement, index) + 1;
+    const next: FunctionDef = { ...current };
+    while (index > 0 && index < statement.length) {
+      const token = statement[index];
+      const following = statement[index + 1];
+      if (isWord(token, 'security') && isWord(following, 'definer', 'invoker')) {
+        next.securityDefiner = following?.value === 'definer';
+        index += 2;
+      } else if (isWord(token, 'set')) {
+        const read = readSet(statement, index);
+        next.config = setConfig(next.config, read.entry);
+        index = read.next;
+      } else if (isWord(token, 'reset')) {
+        const target = statement[index + 1]?.value ?? '';
+        next.config =
+          next.config === null
+            ? null
+            : target === 'all'
+              ? []
+              : next.config.filter((entry) => configName(entry) !== target);
+        index += 2;
+      } else {
+        index += 1;
+      }
+    }
+    state.set(qualified.name, next);
+    touched.push(qualified.name);
+  }
+  return touched;
+}
+
+/** Sentencias que puede traer un archivo para reconocerlo por la huella de sus funciones */
+const FUNCTION_ONLY_STATEMENTS = ['grant', 'revoke', 'comment'];
+
+/**
+ * true si cada sentencia del archivo es create function o create procedure, grant, revoke o comment.
+ * Solo un archivo así se puede dar por aplicado viendo sus funciones. Con otras sentencias, como una
+ * tabla o una llave, que las funciones estén no dice nada de lo demás
+ */
+export function onlyFunctionStatements(sql: string): boolean {
+  return statements(tokenize(sql)).every((statement) => {
+    const [first, second, third, fourth] = statement;
+    if (isWord(first, ...FUNCTION_ONLY_STATEMENTS)) return true;
+    if (!isWord(first, 'create')) return false;
+    if (isWord(second, 'or') && isWord(third, 'replace')) {
+      return isWord(fourth, 'function', 'procedure');
+    }
+    return isWord(second, 'function', 'procedure');
+  });
+}
+
+/**
+ * true si la definición del repo es la misma que la de la base. Compara la huella del cuerpo,
+ * security definer y el set de su encabezado, salvo que el set no se pudiera leer
+ */
+export function sameAsDb(
+  def: FunctionDef,
+  row: { fingerprint: string; securityDefiner: boolean; config: string },
+): boolean {
+  return (
+    def.body !== null &&
+    fingerprint(def.body) === row.fingerprint &&
+    def.securityDefiner === row.securityDefiner &&
+    (def.config === null || def.config.join('\n') === row.config)
+  );
+}
+
+/** true si dos definiciones del repo son la misma, con la misma regla que sameAsDb */
+export function sameDef(a: FunctionDef, b: FunctionDef): boolean {
+  return (
+    a.body !== null &&
+    b.body !== null &&
+    fingerprint(a.body) === fingerprint(b.body) &&
+    a.securityDefiner === b.securityDefiner &&
+    (a.config === null || b.config === null || a.config.join('\n') === b.config.join('\n'))
+  );
 }
 
 /**
@@ -257,6 +442,8 @@ export function fingerprintQuery(names: readonly string[]): string {
     '-- studiare-deploy huellas',
     'select p.proname::text as name,',
     "  md5(regexp_replace(regexp_replace(p.prosrc, '--[^\\n]*', '', 'g'), '\\s+', '', 'g')) as fingerprint,",
+    '  p.prosecdef as security_definer,',
+    "  coalesce(array_to_string(p.proconfig, chr(10)), '') as config,",
     "  has_function_privilege('anon', p.oid, 'execute') as anon",
     'from pg_catalog.pg_proc p',
     'join pg_catalog.pg_namespace n on n.oid = p.pronamespace',

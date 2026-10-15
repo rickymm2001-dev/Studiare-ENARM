@@ -1,20 +1,39 @@
 {
   "description": "Lo que falta de B10 en el proyecto real, con lo ya aplicado por el conector como referencia. Las tres migraciones de B10 ya están registradas (billing_emails, billing_plans_1 a billing_plans_5 e invoice_requests) y se saltan. Faltan las dos piezas con drop o delete de pagos-b10.sql, la llave foránea de Party de B7 y publicar cancel-subscription. Los ocho IDs de Stripe van después con --secrets-from.",
   "migrations": [
-    { "file": "supabase/migrations/20261022000001_billing_emails.sql" },
+    {
+      "file": "supabase/migrations/20261022000001_billing_emails.sql"
+    },
     {
       "file": "supabase/migrations/20261022000002_billing_plans.sql",
-      "note": "El conector la aplicó en cinco trozos sin la Sección con drop ni la Sección con delete. Esas dos van en el paso de pagos-b10.sql"
+      "note": "El conector la aplicó en cinco trozos sin la Sección con drop ni la Sección con delete. Esas dos van en el paso de pagos-b10.sql",
+      "recordedAs": [
+        "billing_plans_1",
+        "billing_plans_2",
+        "billing_plans_3",
+        "billing_plans_4",
+        "billing_plans_5"
+      ]
     },
-    { "file": "supabase/migrations/20261022000003_invoice_requests.sql" },
+    {
+      "file": "supabase/migrations/20261022000003_invoice_requests.sql"
+    },
     {
       "file": "supabase/manual/pagos-b10.sql",
-      "check": { "plan_fundador_anual": true, "estado_prueba": true, "borrar_cuenta_b10": true },
+      "check": {
+        "plan_fundador_anual": true,
+        "estado_prueba": true,
+        "borrar_cuenta_b10": true
+      },
       "note": "Las dos piezas de 20261022000002 que el conector no pudo correr, los check de subscriptions y delete_my_account"
     },
     {
       "file": "supabase/manual/party-dueno-al-borrar-cuenta.sql",
-      "check": { "regla_al_borrar": "n", "owner_id_opcional": true, "disparador_activo": true },
+      "check": {
+        "regla_al_borrar": "n",
+        "owner_id_opcional": true,
+        "disparador_activo": true
+      },
       "note": "De B7. Cambia la llave foránea de groups.owner_id a on delete set null y pasa el grupo al miembro más antiguo"
     }
   ],
@@ -26,13 +45,29 @@
     }
   ],
   "secrets": {
-    "STRIPE_PRICE_FOUNDER": { "prefix": "price_" },
-    "STRIPE_PRICE_FOUNDER_ANNUAL": { "prefix": "price_" },
-    "STRIPE_PRICE_MONTHLY": { "prefix": "price_" },
-    "STRIPE_PRICE_ANNUAL": { "prefix": "price_" },
-    "STRIPE_PRICE_PASS_MONTHLY": { "prefix": "price_" },
-    "STRIPE_PRICE_PASS_ANNUAL": { "prefix": "price_" },
-    "STRIPE_PORTAL_CONFIG_FOUNDER": { "prefix": "bpc_" },
-    "STRIPE_PORTAL_CONFIG_REGULAR": { "prefix": "bpc_" }
+    "STRIPE_PRICE_FOUNDER": {
+      "prefix": "price_"
+    },
+    "STRIPE_PRICE_FOUNDER_ANNUAL": {
+      "prefix": "price_"
+    },
+    "STRIPE_PRICE_MONTHLY": {
+      "prefix": "price_"
+    },
+    "STRIPE_PRICE_ANNUAL": {
+      "prefix": "price_"
+    },
+    "STRIPE_PRICE_PASS_MONTHLY": {
+      "prefix": "price_"
+    },
+    "STRIPE_PRICE_PASS_ANNUAL": {
+      "prefix": "price_"
+    },
+    "STRIPE_PORTAL_CONFIG_FOUNDER": {
+      "prefix": "bpc_"
+    },
+    "STRIPE_PORTAL_CONFIG_REGULAR": {
+      "prefix": "bpc_"
+    }
   }
 }

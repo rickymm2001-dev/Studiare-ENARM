@@ -3,14 +3,15 @@
 // el resultado. Con --secrets-from pasa al paso de secretos de secrets.ts.
 //
 // Cómo decide si un SQL ya está aplicado, para nunca repetirlo a ciegas
-//   - Registrado. La historia de migraciones tiene su versión, su nombre o un trozo de su nombre como
-//     lo deja el conector (billing_plans_1 a billing_plans_5). Se salta
-//   - Sin registro, pero cada función que crea ya está en la base con la huella del repo y, si es un
-//     archivo manual con comprobación, la comprobación sale en verde. Se salta
+//   - Registrado. La historia de migraciones tiene su versión, su nombre o uno de los nombres que el plan
+//     declara en recordedAs, como los trozos del conector (billing_plans_1 a billing_plans_5). Se salta
+//   - Sin registro, pero cada función que crea ya está en la base igual que en el archivo, y el archivo
+//     solo trae funciones, grant, revoke o comment, o su comprobación sale en verde. Se salta
 //   - Lo demás se aplica. Todo SQL del repo es idempotente, pero si aplicarlo dejaría una función en una
 //     versión más vieja que la del repo, o si uno registrado quedó distinto y nadie lo corrige, no se
 //     escribe nada y se explica por qué
-// La versión esperada de cada función es la de la última migración del repo que la define. Si solo vive
+// Una función es igual si coinciden la huella de su cuerpo, security definer y su set. La versión
+// esperada de cada función es la de la última migración del repo que la crea o la cambia. Si solo vive
 // en supabase/manual, la del último archivo manual del plan.
 import { functionClosure, type FunctionClosure } from './closure.ts';
 import {
@@ -38,7 +39,16 @@ import {
   type SqlStep,
 } from './plan.ts';
 import { runSecrets } from './secrets.ts';
-import { anonGrants, checkQuery, extractFunctions, fingerprint, fingerprintQuery } from './sql.ts';
+import {
+  anonGrants,
+  applyFunctionSql,
+  checkQuery,
+  fingerprintQuery,
+  onlyFunctionStatements,
+  sameAsDb,
+  sameDef,
+  type FunctionDef,
+} from './sql.ts';
 
 export type { DeployOptions, Io } from './output.ts';
 
@@ -46,23 +56,21 @@ export type { DeployOptions, Io } from './output.ts';
 // Huellas esperadas
 
 export interface Expected {
-  fingerprint: string;
+  def: FunctionDef;
+  /** El último archivo que la crea o la cambia */
   file: string;
 }
 
 interface StepFunction {
   name: string;
-  own: string;
+  own: FunctionDef;
 }
 
-/** Las funciones de public que crea un SQL. Si se crea dos veces, cuenta la última */
+/** Las funciones de public que crea un SQL, como quedan al final del archivo */
 function stepFunctions(sql: string): StepFunction[] {
-  const byName = new Map<string, string>();
-  for (const definition of extractFunctions(sql)) {
-    if (definition.schema !== 'public' || definition.body === null) continue;
-    byName.set(definition.name, fingerprint(definition.body));
-  }
-  return [...byName].map(([name, own]) => ({ name, own }));
+  const own = new Map<string, FunctionDef>();
+  applyFunctionSql(sql, own);
+  return [...own].filter(([, def]) => def.body !== null).map(([name, def]) => ({ name, own: def }));
 }
 
 /**
@@ -73,11 +81,15 @@ export function expectedFunctions(
   plan: Plan,
   migrations: readonly { file: string; sql: string }[],
 ): { expected: Map<string, Expected>; conflicts: string[] } {
-  const latest = new Map<string, Expected>();
+  // Las migraciones en orden de versión, con lo que cada una crea o cambia, como alter function ... set
+  const defs = new Map<string, FunctionDef>();
+  const files = new Map<string, string>();
   for (const migration of migrations) {
-    for (const fn of stepFunctions(migration.sql)) {
-      latest.set(fn.name, { fingerprint: fn.own, file: migration.file });
-    }
+    for (const name of applyFunctionSql(migration.sql, defs)) files.set(name, migration.file);
+  }
+  const latest = new Map<string, Expected>();
+  for (const [name, def] of defs) {
+    if (def.body !== null) latest.set(name, { def, file: files.get(name) ?? '' });
   }
   const manual = new Map<string, Expected>();
   const conflicts: string[] = [];
@@ -85,12 +97,12 @@ export function expectedFunctions(
     if (step.kind !== 'manual') continue;
     for (const fn of stepFunctions(step.sql)) {
       const fromMigration = latest.get(fn.name);
-      if (fromMigration && fromMigration.fingerprint !== fn.own) {
+      if (fromMigration && !sameDef(fromMigration.def, fn.own)) {
         conflicts.push(
           `${step.file} trae ${fn.name} distinta de ${fromMigration.file}, la última migración que la define. Aplicarlo la regresaría`,
         );
       }
-      manual.set(fn.name, { fingerprint: fn.own, file: step.file });
+      manual.set(fn.name, { def: fn.own, file: step.file });
     }
   }
   const expected = new Map<string, Expected>();
@@ -108,6 +120,9 @@ export function expectedFunctions(
 
 export interface DbFunction {
   fingerprint: string;
+  securityDefiner: boolean;
+  /** proconfig con sus entradas separadas por salto de línea */
+  config: string;
   anon: boolean;
 }
 
@@ -118,19 +133,21 @@ export function parseFunctionRows(rows: readonly Row[]): Map<string, DbFunction[
   for (const row of rows) {
     if (typeof row.name !== 'string' || typeof row.fingerprint !== 'string') continue;
     const list = result.get(row.name) ?? [];
-    list.push({ fingerprint: row.fingerprint, anon: truthy(row.anon) });
+    list.push({
+      fingerprint: row.fingerprint,
+      securityDefiner: truthy(row.security_definer),
+      config: typeof row.config === 'string' ? row.config : '',
+      anon: truthy(row.anon),
+    });
     result.set(row.name, list);
   }
   return result;
 }
 
-/** Un trozo como lo nombra el conector, por ejemplo billing_plans_1 o privacy_a_freno_bitacora */
-function isChunkOf(recorded: string, base: string): boolean {
-  if (!recorded.startsWith(`${base}_`)) return false;
-  return /^(?:\d+|[a-z])(?:_|$)/.test(recorded.slice(base.length + 1));
-}
-
-/** Las filas de la historia que corresponden a un paso, por versión, por nombre o por trozo */
+/**
+ * Las filas de la historia que corresponden a un paso, por versión, por nombre o por los nombres que el
+ * plan declara en recordedAs. Los trozos del conector no se deducen, se declaran
+ */
 export function recordedMatches(
   step: SqlStep,
   history: readonly MigrationRecord[],
@@ -139,8 +156,7 @@ export function recordedMatches(
     (record) =>
       (step.version !== null && record.version === step.version) ||
       record.name === step.name ||
-      step.recordedAs.includes(record.name) ||
-      isChunkOf(record.name, step.name),
+      step.recordedAs.includes(record.name),
   );
 }
 
@@ -186,18 +202,19 @@ export function decideSteps(
   expected: Map<string, Expected>,
   state: ProjectState,
 ): StepDecision[] {
-  const inDb = (name: string) => {
+  const rowsOf = (name: string) => state.functions.get(name) ?? [];
+  /** La base ya tiene la función como la deja este archivo */
+  const asInFile = (fn: StepFunction) => rowsOf(fn.name).some((row) => sameAsDb(fn.own, row));
+  /** La base tiene la versión esperada, la de la última migración que la define */
+  const asExpected = (name: string) => {
     const want = expected.get(name);
-    return (
-      want !== undefined &&
-      (state.functions.get(name) ?? []).some((row) => row.fingerprint === want.fingerprint)
-    );
+    return want !== undefined && rowsOf(name).some((row) => sameAsDb(want.def, row));
   };
   const decisions: StepDecision[] = plan.migrations.map((step, index) => {
     const functions = stepFunctions(step.sql);
     const recorded = recordedMatches(step, state.history);
     const checkProblems = step.check ? (state.checks.get(step.file) ?? []) : [];
-    const differing = functions.filter((fn) => !inDb(fn.name)).map((fn) => fn.name);
+    const differing = functions.filter((fn) => !asInFile(fn)).map((fn) => fn.name);
     if (recorded.length > 0) {
       // Las funciones que quedaron distintas se revisan abajo, cuando ya se sabe qué pasos se aplican.
       // Una comprobación en rojo no la corrige nadie, porque lo registrado no se vuelve a aplicar
@@ -215,7 +232,10 @@ export function decideSteps(
             : [],
       };
     }
-    const byFingerprint = functions.length > 0 && differing.length === 0;
+    // Las funciones solo dicen algo del archivo si es todo funciones. Con otras sentencias hace falta su
+    // comprobación en verde o que esté registrado
+    const functionsOnly = onlyFunctionStatements(step.sql);
+    const byFingerprint = functionsOnly && functions.length > 0 && differing.length === 0;
     const byCheck = step.check !== null && checkProblems.length === 0;
     if ((byFingerprint || byCheck) && differing.length === 0 && checkProblems.length === 0) {
       const how = [
@@ -238,6 +258,9 @@ export function decideSteps(
         ? plural(differing.length, 'función distinta o faltante', 'funciones distintas o faltantes')
         : '',
       checkProblems.length > 0 ? `comprobación en rojo (${checkProblems.join(', ')})` : '',
+      differing.length === 0 && checkProblems.length === 0 && !functionsOnly && step.check === null
+        ? 'trae más que funciones, sin registro ni comprobación'
+        : '',
     ].filter((part) => part !== '');
     return {
       step,
@@ -258,7 +281,7 @@ export function decideSteps(
         decision.action === 'apply' &&
         want !== undefined &&
         stepFunctions(decision.step.sql).some(
-          (fn) => fn.name === name && fn.own === want.fingerprint,
+          (fn) => fn.name === name && sameDef(fn.own, want.def),
         ),
     );
   };
@@ -266,7 +289,7 @@ export function decideSteps(
     for (const fn of stepFunctions(decision.step.sql)) {
       const want = expected.get(fn.name);
       if (!want) continue;
-      if (decision.action === 'skip' && !inDb(fn.name)) {
+      if (decision.action === 'skip' && !asExpected(fn.name)) {
         const later = fixer(decision.index, fn.name);
         if (later) {
           decision.notes.push(
@@ -280,7 +303,7 @@ export function decideSteps(
       }
       if (
         decision.action === 'apply' &&
-        fn.own !== want.fingerprint &&
+        !sameDef(fn.own, want.def) &&
         !fixer(decision.index, fn.name)
       ) {
         decision.problems.push(
@@ -310,7 +333,7 @@ export function verifyFunctions(
   let same = 0;
   for (const [name, want] of [...expected].sort(([a], [b]) => a.localeCompare(b))) {
     const rows = functions.get(name) ?? [];
-    const match = rows.find((row) => row.fingerprint === want.fingerprint);
+    const match = rows.find((row) => sameAsDb(want.def, row));
     if (rows.length > 1)
       notes.push(`${name} tiene ${rows.length} versiones en la base (sobrecarga)`);
     if (!match) {

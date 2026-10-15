@@ -151,9 +151,7 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
   const files = migrations.map((step) => step.file);
   const repeatedFile = files.find((value, index) => files.indexOf(value) !== index);
   if (repeatedFile) throw new PlanError(`${repeatedFile} aparece dos veces en el plan`);
-  const names = migrations.map((step) => step.name);
-  const repeatedName = names.find((value, index) => names.indexOf(value) !== index);
-  if (repeatedName) throw new PlanError(`Dos pasos del plan se registrarían como ${repeatedName}`);
+  checkHistoryNames(root, migrations);
 
   const functions = data.functions.map((step): FunctionStep => {
     if (!existsSync(join(root, FUNCTIONS_DIR, step.slug, 'index.ts'))) {
@@ -181,6 +179,62 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
       : null,
     anonExecutable: data.anonExecutable ?? {},
   };
+}
+
+/** Un nombre como los que deja el conector al aplicar por trozos, por ejemplo billing_plans_1 */
+function isChunkOf(candidate: string, base: string): boolean {
+  return (
+    candidate.startsWith(`${base}_`) &&
+    /^(?:\d+|[a-z])(?:_|$)/.test(candidate.slice(base.length + 1))
+  );
+}
+
+/**
+ * Los nombres con los que se reconoce lo aplicado deben ser inequívocos. Cada migración del repo con un
+ * nombre propio que no sea trozo de otro, y los nombres y recordedAs del plan sin repetirse ni
+ * coincidir con el nombre de otro archivo del repo
+ */
+function checkHistoryNames(root: string, steps: readonly SqlStep[]): void {
+  const owners = new Map<string, string>();
+  const repoFiles = [
+    ...readdirSync(join(root, MIGRATIONS_DIR)).map((name) => `${MIGRATIONS_DIR}/${name}`),
+    ...(existsSync(join(root, MANUAL_DIR))
+      ? readdirSync(join(root, MANUAL_DIR)).map((name) => `${MANUAL_DIR}/${name}`)
+      : []),
+  ].filter((file) => MIGRATION_FILE.test(file) || MANUAL_FILE.test(file));
+  for (const file of repoFiles) {
+    const name = defaultStepName(file);
+    const other = owners.get(name);
+    if (other)
+      throw new PlanError(`${other} y ${file} se registrarían con el mismo nombre ${name}`);
+    owners.set(name, file);
+  }
+  for (const [name, file] of owners) {
+    for (const [base, baseFile] of owners) {
+      if (name !== base && isChunkOf(name, base)) {
+        throw new PlanError(
+          `${file} se llama como un trozo de ${baseFile} (${name}). Cambia su nombre para que no se confundan en la historia`,
+        );
+      }
+    }
+  }
+  const claimed = new Map<string, string>();
+  for (const step of steps) {
+    for (const name of [step.name, ...step.recordedAs]) {
+      const owner = owners.get(name);
+      if (owner && owner !== step.file) {
+        throw new PlanError(`${step.file} usa el nombre ${name}, que es de ${owner}`);
+      }
+      const previous = claimed.get(name);
+      if (previous && previous !== step.file) {
+        throw new PlanError(`${previous} y ${step.file} usan el mismo nombre ${name} en el plan`);
+      }
+      if (previous === step.file) {
+        throw new PlanError(`${step.file} repite el nombre ${name}`);
+      }
+      claimed.set(name, step.file);
+    }
+  }
 }
 
 /** Todas las migraciones del repo en orden de versión, con su texto */

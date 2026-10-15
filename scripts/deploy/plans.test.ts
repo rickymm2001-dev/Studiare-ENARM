@@ -13,7 +13,7 @@ import { expectedFunctions, runDeploy, type Io } from './deploy.ts';
 import { readSecretsFile } from './secrets.ts';
 import { createManagementClient } from './managementApi.ts';
 import { loadPlan, repoMigrations } from './plan.ts';
-import { extractFunctions } from './sql.ts';
+import { applyFunctionSql, type FunctionDef } from './sql.ts';
 import { STUDIARE_PROJECT_REF, main, parseArgs, resolveToken } from './supabase.ts';
 import { fakeSupabase, type FakeOptions } from './testing/fakeSupabase.ts';
 
@@ -42,16 +42,17 @@ const REAL_HISTORY = [
  * delete_my_account, que sigue en su versión de antes de B10 porque la Sección con delete no se aplicó,
  * y sin la función de Party de supabase/manual
  */
-function realFunctions(): Record<string, string> {
-  const bodies: Record<string, string> = {};
-  for (const migration of repoMigrations(ROOT)) {
-    for (const fn of extractFunctions(migration.sql)) bodies[fn.name] = fn.body ?? '';
-  }
-  const privacy = extractFunctions(
+function realFunctions(): Record<string, FunctionDef> {
+  const defs = new Map<string, FunctionDef>();
+  for (const migration of repoMigrations(ROOT)) applyFunctionSql(migration.sql, defs);
+  const privacy = new Map<string, FunctionDef>();
+  applyFunctionSql(
     readFileSync(join(ROOT, 'supabase/migrations/20261009000001_privacy.sql'), 'utf8'),
-  ).find((fn) => fn.name === 'delete_my_account');
-  bodies.delete_my_account = privacy?.body ?? 'antes de B10';
-  return bodies;
+    privacy,
+  );
+  const old = privacy.get('delete_my_account');
+  if (old) defs.set('delete_my_account', old);
+  return Object.fromEntries(defs);
 }
 
 const REAL_STATE: FakeOptions = {
