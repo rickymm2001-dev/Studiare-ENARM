@@ -50,7 +50,8 @@ describe('casos dorados', () => {
   });
 
   it('ninguna entrada trae datos personales', async () => {
-    const { findPersonalData, hasPersonalData } = await import('../../supabase/functions/_shared/ai/pii.ts');
+    const { findPersonalData, hasPersonalData } =
+      await import('../../supabase/functions/_shared/ai/pii.ts');
     for (const golden of cases) {
       expect(hasPersonalData(findPersonalData(golden.input)), golden.id).toBe(false);
     }
@@ -69,6 +70,7 @@ describe('con las respuestas fijas', () => {
       schema: true,
       grounding: true,
       rejection: true,
+      adversarial: true,
       met: true,
     });
     expect(results.filter((result) => !result.passed).map((result) => result.id)).toEqual([]);
@@ -193,16 +195,25 @@ describe('métricas', () => {
   const result = (overrides: Partial<CaseResult>): CaseResult => ({
     id: 'x',
     engine: 'forgetting',
+    set: 'synthetic',
     expect: 'answer',
+    adversarial: null,
     schemaValid: true,
+    schemaValidFinal: true,
     accepted: true,
     empty: false,
     retried: false,
+    refused: false,
+    refusalCategory: null,
+    cutoff: false,
+    forbiddenHit: false,
     passed: true,
     error: null,
     costUsd: 0.01,
     latencyMs: 100,
+    warmup: false,
     issues: [],
+    output: null,
     ...overrides,
   });
 

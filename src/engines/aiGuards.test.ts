@@ -14,7 +14,9 @@ import {
   guardRestructure,
   guardWeeklyReport,
   mentionsMentalHealth,
+  predictsScore,
   sentenceCount,
+  usesBiasWord,
 } from './aiGuards';
 import { mockOutput } from './aiMock';
 import {
@@ -36,6 +38,72 @@ describe('texto', () => {
     expect(mentionsMentalHealth('Parece que tienes ansiedad')).toBe(true);
     expect(mentionsMentalHealth('Tu autoestima está baja')).toBe(true);
     expect(mentionsMentalHealth('Revisa la explicación de esos casos')).toBe(false);
+  });
+
+  it('deja repetir un tema de psiquiatría del banco, pero no atribuírselo al alumno (B12)', () => {
+    const bank =
+      'Mujer de 30 años con trastorno depresivo mayor y ansiedad. Se inicia terapia con un antidepresivo.';
+    expect(
+      mentionsMentalHealth('Confundes el trastorno depresivo mayor con la ansiedad.', bank),
+    ).toBe(false);
+    expect(mentionsMentalHealth('Ingresa a terapia intensiva.', 'Pasa a terapia intensiva.')).toBe(
+      false,
+    );
+    for (const opinion of [
+      'Parece que tienes ansiedad antes del examen.',
+      'Estás muy deprimido con este tema.',
+      'Tu ansiedad te hace fallar el trastorno depresivo.',
+      'Sufres de trastorno de ansiedad.',
+    ]) {
+      expect(mentionsMentalHealth(opinion, bank), opinion).toBe(true);
+    }
+    // Un término que el banco no trae sigue contando, aunque el resto sí venga
+    expect(mentionsMentalHealth('Hay depresión y burnout en estos casos.', bank)).toBe(true);
+  });
+});
+
+describe('predicción del puntaje (B12)', () => {
+  it('detecta un puntaje estimado, una plaza o un percentil futuro', () => {
+    for (const text of [
+      'Con este ritmo obtendrás un puntaje de 70 en el ENARM.',
+      'Tu puntaje estimado ya alcanza para una plaza.',
+      'Tienes buenas posibilidades de aprobar.',
+      'Así aumenta tu probabilidad de quedar en el ENARM.',
+      'Si sigues así vas a quedar seleccionado.',
+      'Vas a aprobar el ENARM sin problema.',
+      'Quedarás en el percentil 90 de tu generación.',
+      'Tu percentil sube cada semana.',
+      'Serás seleccionada en la especialidad que quieres.',
+      'Tu calificación proyectada es de las más altas.',
+      'Con esto lograrás más aciertos en el examen.',
+      'Tu resultado en el ENARM será mejor.',
+    ]) {
+      expect(predictsScore(text), text).toBe(true);
+    }
+  });
+
+  it('deja pasar lo que habla del examen sin predecir nada', () => {
+    for (const text of [
+      'Esta semana respondiste 120 preguntas. Estas son las prioridades para la que sigue.',
+      'En el ENARM tendrás casos así.',
+      'Es probable que el ENARM pregunte este tema.',
+      'Llegarás mejor preparado al examen.',
+      'La escala de Alvarado con una puntuación de 7 o más sugiere el diagnóstico.',
+      'Revisa el puntaje de Apgar del recién nacido.',
+      'La probabilidad de quedar con secuelas baja con la reperfusión temprana.',
+      'Practica el tema en el simulador a ritmo de examen.',
+    ]) {
+      expect(predictsScore(text), text).toBe(false);
+    }
+  });
+});
+
+describe('vocabulario de sesgo o trampa (B12)', () => {
+  it('reconoce la palabra sesgo con o sin acento ni plural', () => {
+    expect(usesBiasWord('Este sesgo te hace fallar')).toBe(true);
+    expect(usesBiasWord('Los SESGOS más comunes')).toBe(true);
+    expect(usesBiasWord('Una lectura sesgada del caso')).toBe(true);
+    expect(usesBiasWord('Esta trampa te hace fallar')).toBe(false);
   });
 });
 
@@ -95,6 +163,36 @@ describe('hipótesis', () => {
       studentMessage: 'Parece que tienes mucha ansiedad. Descansa un poco por favor.',
     };
     expect(guardHypothesis(opinion, input).issues).toEqual(['mental_health_opinion']);
+  });
+
+  it('acepta un patrón de psiquiatría que repite los términos del banco (B12)', () => {
+    const psychiatry = hypothesisInput({
+      area: 'Trastorno depresivo mayor',
+      evidence: [
+        { ref: 'q-31', kind: 'question', text: 'Mujer con trastorno depresivo mayor y ansiedad.' },
+        { ref: 'q-32', kind: 'question', text: 'Hombre con depresión y riesgo suicida.' },
+      ],
+    });
+    const output: HypothesisOutput = {
+      ...good,
+      hypothesis: 'En trastorno depresivo mayor confundes la depresión con la ansiedad.',
+      evidence: ['q-31', 'q-32'],
+    };
+    expect(guardHypothesis(output, psychiatry)).toEqual({ passed: true, issues: [] });
+    const opinion = {
+      ...output,
+      studentMessage: 'Parece que tienes ansiedad con este tema. Repasa los criterios con calma.',
+    };
+    expect(guardHypothesis(opinion, psychiatry).issues).toEqual(['mental_health_opinion']);
+  });
+
+  it('rechaza predecir el puntaje del ENARM (B12)', () => {
+    const promise = {
+      ...good,
+      studentMessage:
+        'Compara ambos tratamientos lado a lado. Así obtendrás un mejor puntaje en el ENARM.',
+    };
+    expect(guardHypothesis(promise, input).issues).toEqual(['score_prediction']);
   });
 
   it('pide una frase de hipótesis y de dos a tres frases de mensaje', () => {
@@ -160,6 +258,18 @@ describe('informe semanal', () => {
       guardWeeklyReport({ ...good, challenge: 'Cuida tu salud mental esta semana.' }, input).issues,
     ).toEqual(['mental_health_opinion']);
   });
+
+  it('rechaza un puntaje estimado, una plaza o un percentil futuro (B12)', () => {
+    for (const summary of [
+      'Esta semana respondiste 120 preguntas. Con esto tu puntaje estimado sube.',
+      'Esta semana respondiste 120 preguntas. Vas por buen camino para obtener una plaza y tus posibilidades de aprobar crecen.',
+      'Esta semana respondiste 120 preguntas. Quedarás en el percentil más alto.',
+    ]) {
+      expect(guardWeeklyReport({ ...good, summary }, input).issues, summary).toEqual([
+        'score_prediction',
+      ]);
+    }
+  });
 });
 
 describe('consejo por sesgo', () => {
@@ -183,6 +293,28 @@ describe('consejo por sesgo', () => {
     expect(guardBiasTip({ ...tip, tip: 'Tienes un trastorno de atención.' }, input).issues).toEqual(
       ['mental_health_opinion'],
     );
+  });
+
+  it('rechaza predecir el puntaje (B12)', () => {
+    const tip = {
+      tip: 'Nombra el dato que no encaja y vas a aprobar el ENARM.',
+      exampleRefs: ['q-10', 'q-11'],
+    };
+    expect(guardBiasTip(tip, input).issues).toEqual(['score_prediction']);
+  });
+
+  it('rechaza la palabra sesgo mientras el alumno ve trampas, también sin vocabulario (B12)', () => {
+    const tip = {
+      tip: 'Este sesgo de anclaje te hace fallar. Nombra el dato que no encaja.',
+      exampleRefs: ['q-10', 'q-11'],
+    };
+    expect(guardBiasTip(tip, input).issues).toEqual(['vocabulary']);
+    expect(guardBiasTip(tip, biasTipInput({ vocabulary: 'trampa' })).issues).toEqual([
+      'vocabulary',
+    ]);
+    expect(guardBiasTip(tip, biasTipInput({ vocabulary: 'sesgo' })).passed).toBe(true);
+    const trap = { ...tip, tip: 'Esta trampa de anclaje te hace fallar. Nombra el dato.' };
+    expect(guardBiasTip(trap, input).passed).toBe(true);
   });
 });
 
@@ -293,6 +425,17 @@ describe('pregunta reestructurada', () => {
     expect(guardRestructure(same, input).issues).toEqual(
       expect.arrayContaining(['unchanged', 'transform_not_applied']),
     );
+  });
+
+  it('acepta reestructurar una pregunta de psiquiatría o con terapia intensiva (B12)', () => {
+    const sample = restructureInput({
+      transform: 'change_anchor',
+      stem: 'Mujer de 30 años con trastorno depresivo mayor y ansiedad que ingresa a terapia intensiva. ¿Qué sigue?',
+    });
+    expect(guardRestructure(mockOutput('restructure', sample), sample)).toEqual({
+      passed: true,
+      issues: [],
+    });
   });
 
   it('rechaza cifras y fármacos nuevos, cita inventada, clave sin apoyo y salud mental', () => {
