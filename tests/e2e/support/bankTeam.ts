@@ -44,7 +44,15 @@ export const callerOf = (user: FakeUser): FakeBankCaller => ({
   flags: {},
 });
 
-/** Entra con el enlace del correo y espera la primera pantalla con su título */
+/** Las preferencias del dispositivo, donde el puente de la nube deja el rol de la cuenta */
+const PREFERENCES_KEY = 'enarm.preferences.v1';
+
+/**
+ * Entra con el enlace del correo y espera la primera pantalla con su título y el rol de la cuenta.
+ * El título sale antes de que el puente lea la sesión del enlace, y navegar en ese momento la pierde y
+ * deja al médico o al admin como alumno. El rol queda guardado después de la sesión, así que con él ya
+ * se puede navegar
+ */
 export async function enterTeam(
   page: Page,
   cloud: FakeSupabaseServer,
@@ -52,4 +60,19 @@ export async function enterTeam(
 ): Promise<void> {
   await openEmailLink(page, cloud.issueMagicLink(email));
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 20_000 });
+  const role = cloud.userByEmail(email)?.role ?? 'student';
+  await expect
+    .poll(
+      () =>
+        page.evaluate((key) => {
+          try {
+            const stored = JSON.parse(localStorage.getItem(key) ?? '{}') as { role?: unknown };
+            return typeof stored.role === 'string' ? stored.role : null;
+          } catch {
+            return null;
+          }
+        }, PREFERENCES_KEY),
+      { timeout: 20_000 },
+    )
+    .toBe(role);
 }
