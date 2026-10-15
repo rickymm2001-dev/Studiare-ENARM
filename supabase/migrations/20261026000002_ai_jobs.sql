@@ -19,8 +19,9 @@
 --   - La limpieza no borra filas. Pone en null la entrada de lo terminado y la salida 14 días después
 --     de entregada o fallida. Las filas se van con la cuenta, en cascada
 --
--- Borrar mis datos con los trabajos va en la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql
--- (D-113). Ninguna tabla tiene políticas. Las lee y escribe solo la función con la llave de servicio
+-- Borrar mis datos con los trabajos va en 20261026000004_ai_delete_my_data.sql y en
+-- supabase/manual/ia-b12.sql (D-113). Ninguna tabla tiene políticas. Las lee y escribe solo la función
+-- con la llave de servicio
 --
 -- Es idempotente, no lleva delete ni drop y no edita las migraciones anteriores (D-113). Va después
 -- de 20261026000001_ai_proxy_v2.sql

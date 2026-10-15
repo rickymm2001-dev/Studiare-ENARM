@@ -41,11 +41,11 @@ Sin clave y sin AI_ALLOW_MOCK, /health dice unavailable, los motores contestan q
 
 ## Pasos
 
-1. Aplica las tres migraciones de B12 y confirma con la consulta de docs/SUPABASE.md
+1. Aplica las cuatro migraciones de B12 y confirma con la consulta de docs/SUPABASE.md. Con el token de Supabase es npm run deploy:supabase -- --plan b12, que también aplica supabase/manual/ia-b12.sql y publica las dos funciones
 2. La sesión despliega ai-proxy y ai-batch sin verificación de JWT, con index.ts, deno.json y los archivos de supabase/functions/_shared/ai que importan, cada uno con su ruta. La prueba tests/architecture/edge-functions.test.ts revisa que esa lista se quede dentro de supabase/functions y sin pruebas
 3. La sesión pone APP_ORIGINS y AI_ALLOW_MOCK=1. /health debe decir mock. Una llamada como médico de prueba recibe una respuesta simulada y una como alumno de pago recibe que el motor está cerrado
 4. La sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea ai_tick_secret y programa el ciclo ia-lotes cada 10 minutos
-5. Tú pegas en el SQL Editor la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql, después de banco-b11.sql. Es la versión de Borrar mis datos que también quita los trabajos de IA
+5. Solo si no hay token de Supabase, tú pegas en el SQL Editor supabase/manual/ia-b12.sql. Es la versión de Borrar mis datos que también quita los trabajos de IA. Con el plan b12 ya quedó aplicada
 6. Tú pones ENARM_ANTHROPIC_KEY y avisas a la sesión. La sesión quita AI_ALLOW_MOCK, revisa que /health diga real y hace una llamada de prueba como médico
 7. La compuerta. El admin importa una muestra, la asigna a dos médicos, cierra la muestra y abre motor por motor los que pasaron
 

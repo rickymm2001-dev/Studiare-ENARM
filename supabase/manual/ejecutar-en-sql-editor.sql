@@ -20,10 +20,10 @@
 -- pieza 4, que se puso al día con B12 (2026-10-15). Si se vuelve a pegar después de B10 no deshace la
 -- restricción de planes ni el freno de borrar la cuenta. Con B10 la pieza 5 pide
 -- billing_blocks_account_deletion, de la migración 20261022000002. Con B12 la pieza 4 es la versión final
--- de borrar mis datos, con lo de banco-b11.sql y los trabajos de IA de 20261026000002, así que este
--- archivo se pega después de las migraciones de B12 y después de banco-b11.sql, que trae una versión
--- anterior. Si una migración cambia después, este archivo no se actualiza solo. Las migraciones de
--- supabase/migrations siguen siendo la fuente.
+-- de borrar mis datos (v3), con lo de banco-b11.sql y los trabajos de IA, igual a la Sección con delete
+-- de 20261026000004_ai_delete_my_data.sql, a supabase/manual/ia-b12.sql y a banco-b11.sql. Este archivo
+-- se pega después de las migraciones de B12. Si una migración cambia después, este archivo no se
+-- actualiza solo. Las migraciones de supabase/migrations siguen siendo la fuente.
 
 -- ################ 1. Liberar la cuenta de un alumno (device_barrier)
 -- ===================================================================== Funciones del admin
@@ -86,11 +86,11 @@ begin
   end loop;
 end $$;
 
--- ################ 4. Borrar mis datos (B12, versión final, con lo de banco-b11.sql)
+-- ################ 4. Borrar mis datos (B12, v3, versión final, con lo de banco-b11.sql)
 -- Lo de ai_hosted, más las lecturas del banco y los mazos bajados del catálogo de B11 (banco-b11.sql), más
 -- los trabajos de IA por lote y las generaciones de tarjetas de días anteriores de B12. Conserva el uso de
 -- IA de hoy, sus generaciones de hoy y las lecturas del día de estudio en curso, para que borrar los datos
--- no sirva para saltarse un límite
+-- no sirva para saltarse un límite. Igual a 20261026000004_ai_delete_my_data.sql y a ia-b12.sql
 create or replace function public.delete_my_data() returns jsonb
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare

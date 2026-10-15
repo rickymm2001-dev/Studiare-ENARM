@@ -1081,11 +1081,14 @@ Mientras falten los secretos de Google, cada corrida termina como skipped con no
 - 20261026000001_ai_proxy_v2. ai_whoami, con la que la función ai-proxy pregunta quién llama, su rol y si su plan es de pago. El libro de IA v2, que suma el gasto por alumno y las generaciones de tarjetas del día (ai_generations), y la bitácora con modo, resultado, tokens de caché, versión del prompt y categoría de negativa. admin_ai_cost_report da el costo por motor, por modo y por alumno al mes
 - 20261026000002_ai_jobs. La cola de lotes (ai_jobs, ai_batches y ai_tick_lease) y las funciones que usa ai-batch. ai_tick_secret_ok compara el secreto del ciclo sin sacarlo de Vault
 - 20261026000003_ai_gate. La compuerta 1. Muestras, textos asignados y reseñas de los médicos (ai_gate_samples, ai_gate_items y ai_gate_reviews), con el veredicto por motor. El estado vive en platform_settings con la llave ai_gate, nace con todos los motores cerrados y sin pausa, y solo cambia con admin_ai_gate_set y admin_ai_pause. Un disparador rechaza cualquier otra escritura, aunque venga de un admin
+- 20261026000004_ai_delete_my_data. Borrar mis datos v3 (delete_my_data). Parte de la versión final de B11 y además quita los trabajos de IA del alumno y sus generaciones de días anteriores. Conserva el uso de IA de hoy y las lecturas del banco del día en curso. delete_my_account no cambia, porque ai_jobs y ai_generations se van en cascada con la cuenta
 - No lleva textos de alumnos ni secretos. El detalle de las funciones de IA está en docs/IA_ALOJADA.md
 
-### Cómo aplicar las tres migraciones
+### Cómo aplicar las cuatro migraciones
 
-Aplica primero todas las anteriores, incluidas las de B11. Van en orden y las tres son seguras de repetir. Ninguna lleva delete ni drop, así el conector las aplica sin pedir confirmación.
+Con el token de Supabase la sesión lo hace todo con npm run deploy:supabase -- --plan b12 (docs/DESPLIEGUE.md). Aplica las cuatro migraciones en orden, la pieza supabase/manual/ia-b12.sql con su comprobación y publica ai-proxy y ai-batch. Sin el token, sigue esta sección.
+
+Aplica primero todas las anteriores, incluidas las de B11. Van en orden y las cuatro son seguras de repetir. Las tres primeras no llevan delete ni drop, así el conector las aplica sin pedir confirmación. La cuarta lleva un delete dentro de la función, así que el conector no la aplica sin una confirmación humana (D-113). Esa va en el último paso.
 
 1. supabase/migrations/20261026000001_ai_proxy_v2.sql
 2. supabase/migrations/20261026000002_ai_jobs.sql
@@ -1093,7 +1096,7 @@ Aplica primero todas las anteriores, incluidas las de B11. Van en orden y las tr
 
 Después la sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea en Vault ai_tick_secret y programa el trabajo ia-lotes cada 10 minutos. Necesita project_url en Vault, que guardó B11, y si falta se detiene y lo dice. Es repetible.
 
-Al final pega tú en SQL Editor la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql, después de banco-b11.sql. Es la versión de delete_my_data de B12, que conserva lo de B11 y además quita los trabajos de IA del alumno y sus generaciones de días anteriores. Es repetible. delete_my_account no cambia, porque ai_jobs y ai_generations se van en cascada con la cuenta.
+Al final pega tú en SQL Editor supabase/manual/ia-b12.sql completo, New query, Run. Es igual a la cuarta migración, la versión de delete_my_data de B12. Va después de banco-b11.sql y de ejecutar-en-sql-editor.sql, que traen la misma versión. Es repetible.
 
 Para confirmar que quedó, abre otra New query, pega esto y da clic en Run.
 
@@ -1118,7 +1121,7 @@ Debe salir
 - alumno_pregunta_quien_es en true
 - anonimo_pregunta_quien_es, alumno_prueba_secreto, alumno_toma_trabajos, alumno_lee_trabajos y alumno_lee_resenas en false
 - compuerta con paused en false y engines vacío, hasta que el admin abra un motor
-- borrar_datos_b12 en true. Si sale false, falta pegar la pieza 4
+- borrar_datos_b12 en true. Si sale false, falta pegar supabase/manual/ia-b12.sql
 - secreto_del_ciclo y ciclo_de_lotes en true. Si salen false, falta la pieza del ciclo de lotes
 
 ### Las funciones ai-proxy y ai-batch
