@@ -6,12 +6,13 @@
 // que fakeSupabase.ts ya mande ahí las rutas del equipo. Quedan en docs/screenshots/v3/b11:
 // npm run screenshots:v3 -- b11.spec.ts --project=390-claro --project=1280-claro
 // --project=1280-oscuro --project=1920-claro
-import type { Locator, Page } from '@playwright/test';
+import type { Browser, BrowserContext, Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { bankAdminText } from '@/i18n/bankAdmin';
 import { physicianText } from '@/i18n/physician';
 import { callerOf, enterTeam, teamBank } from '../../e2e/support/bankTeam';
-import { expect, openSecondDevice, test as cloudTest } from '../../e2e/support/cloudFixtures';
+import { expect, test as cloudTest, watchConsole } from '../../e2e/support/cloudFixtures';
+import type { FakeSupabaseServer } from '../../e2e/support/fakeSupabase';
 import { uploadDeckAsAdmin } from '../../e2e/support/deckCatalogAdmin';
 import { FAKE_BANK_TEXT_MARK, seedPairs, seedQuestions } from '../../e2e/support/fakeBankStore';
 import {
@@ -33,6 +34,35 @@ async function open(page: Page, path: string, ...ready: Locator[]) {
   await page.goto(path);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 60_000 });
   for (const locator of ready) await expect(locator).toBeVisible({ timeout: 60_000 });
+}
+
+/**
+ * El dispositivo del admin, contra el build con la nube. openSecondDevice toma la dirección del proyecto,
+ * que en las capturas es el build sin nube, y ahí cualquier cuenta se ve como alumno
+ */
+async function openCloudDevice(
+  browser: Browser,
+  cloud: FakeSupabaseServer,
+  consoleErrors: string[],
+): Promise<{ context: BrowserContext; page: Page }> {
+  const use = cloudTest.info().project.use;
+  const context = await browser.newContext({
+    baseURL: CLOUD_PREVIEW_URL,
+    serviceWorkers: 'block',
+    viewport: use.viewport,
+    deviceScaleFactor: use.deviceScaleFactor,
+    isMobile: use.isMobile,
+    hasTouch: use.hasTouch,
+    userAgent: use.userAgent,
+    locale: use.locale,
+    timezoneId: use.timezoneId,
+    reducedMotion: use.reducedMotion,
+    colorScheme: use.colorScheme,
+  });
+  await cloud.attach(context);
+  const page = await context.newPage();
+  watchConsole(page, consoleErrors);
+  return { context, page };
 }
 
 cloudTest.describe('Médico y admin del banco en la nube', () => {
@@ -114,7 +144,7 @@ cloudTest.describe('Médico y admin del banco en la nube', () => {
       await capture(page, B11_DIR, '04-acuerdo', project);
 
       // El admin. Banco y Sheet después de una corrida contra el Sheet de prueba
-      const adminDevice = await openSecondDevice(browser, cloud, consoleErrors);
+      const adminDevice = await openCloudDevice(browser, cloud, consoleErrors);
       const adminPage = adminDevice.page;
       await enterTeam(adminPage, cloud, ADMIN.email);
       editorialFunction(bank, callerOf(admin), { target: 'test' });
