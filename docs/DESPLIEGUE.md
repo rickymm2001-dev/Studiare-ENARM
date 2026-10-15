@@ -175,7 +175,7 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
   - b10 es lo que falta de B10
   - b11 es el banco en la nube y bank-sync
   - b12 es la IA real. Cuatro migraciones, supabase/manual/ia-b12.sql con su comprobación y las funciones ai-proxy y ai-batch, que llevan verifyJwt en false. Sus secretos son APP_ORIGINS y AI_ALLOW_MOCK. La clave ENARM_ANTHROPIC_KEY la pone Ricardo directo en Supabase. La pieza del ciclo de lotes (supabase/manual/ia-lotes-cron.sql) no entra, porque se corre después de comprobar /health en modo simulado
-- Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql, y por eso b11 y b12 se despliegan seguidos
+- Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql. Sus delete de las tablas de B12 van con execute y solo si la tabla existe, así que desplegar el plan b11 solo no deja Borrar mis datos roto y desplegar b12 enseguida ya no es obligatorio
 
 Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa. Si la función tiene un deno.json en su carpeta, como ai-proxy y ai-batch, que importan zod, hono y el SDK de Anthropic por su nombre, también se sube y su ruta va en import_map_path del metadata. Sin ese mapa el servidor no resuelve esos nombres.
 

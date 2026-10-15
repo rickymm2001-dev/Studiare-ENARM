@@ -206,6 +206,27 @@ select pg_temp.expect(
   'P4. Borrar los datos no debe tocar los pagos'
 );
 
+-- ===================================================================== P4b. Sin las tablas de la IA real
+-- Si solo se desplegó el plan b11, ai_jobs y ai_generations no existen. Borrar mis datos tiene que seguir
+-- funcionando, y no puede fallar con "relación inexistente" para cualquier alumno (revisión del hallazgo 12)
+begin;
+alter table public.ai_jobs rename to ai_jobs_ausente;
+alter table public.ai_generations rename to ai_generations_ausente;
+select pg_temp.as_user('e0000000-0000-0000-0000-000000000002');
+select pg_temp.expect(
+  (select r ->> 'ai_jobs' = '0' and r ->> 'ai_generations' = '0' and r ->> 'events' = '2'
+    from (select public.delete_my_data() as r) d),
+  'P4b. Sin las tablas de la IA real, Borrar mis datos falló o no borró lo demás'
+);
+select pg_temp.expect((select count(*) from public.events) = 0, 'P4b. Le quedaron eventos a V2');
+rollback;
+-- Y con las tablas de vuelta nada cambió: lo de V2 sigue completo
+select pg_temp.expect(
+  (select count(*) from public.ai_jobs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000002') = 2,
+  'P4b. La prueba sin tablas dejó cambios'
+);
+
 -- ===================================================================== P5. Borrar mi cuenta
 begin;
 select pg_temp.as_user('e0000000-0000-0000-0000-000000000001');

@@ -7,6 +7,9 @@
 --     generaciones de tarjetas de días anteriores (ai_generations). Conserva el uso de IA de hoy, sus
 --     generaciones de hoy y las lecturas del día de estudio en curso, así borrar los datos no sirve
 --     para saltarse un límite (D-103)
+--   - Esos dos delete van con execute y solo si la tabla existe (to_regclass). Así la versión no se rompe
+--     si solo se desplegó el plan b11 y todavía no existen ai_jobs ni ai_generations: cuenta cero en
+--     lo de la IA y borra lo demás (revisión independiente, hallazgo 12)
 --   - delete_my_account no cambia, porque ai_jobs y ai_generations se van en cascada con la cuenta
 --
 -- Es una Sección con delete, así que el conector de Supabase no la aplica sin una confirmación humana
@@ -32,8 +35,8 @@ declare
   v_ai bigint;
   v_reads bigint;
   v_downloads bigint;
-  v_jobs bigint;
-  v_generations bigint;
+  v_jobs bigint := 0;
+  v_generations bigint := 0;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -70,12 +73,18 @@ begin
   -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
   delete from public.deck_catalog_downloads where user_id = v_user;
   get diagnostics v_downloads = row_count;
+  -- Las tablas de la IA real existen desde las migraciones de B12. Si solo se desplegó el plan b11, no están,
+  -- y como el delete va con execute esta función no se rompe por eso: cuenta cero (revisión del hallazgo 12)
   -- Los trabajos de IA por lote, con su entrada y su salida (B12). Un lote en curso ya no los encuentra
-  delete from public.ai_jobs where user_id = v_user;
-  get diagnostics v_jobs = row_count;
+  if to_regclass('public.ai_jobs') is not null then
+    execute 'delete from public.ai_jobs where user_id = $1' using v_user;
+    get diagnostics v_jobs = row_count;
+  end if;
   -- Las generaciones de tarjetas de días anteriores. Las de hoy cuentan para el tope del día
-  delete from public.ai_generations where user_id = v_user and day < public.ai_day();
-  get diagnostics v_generations = row_count;
+  if to_regclass('public.ai_generations') is not null then
+    execute 'delete from public.ai_generations where user_id = $1 and day < public.ai_day()' using v_user;
+    get diagnostics v_generations = row_count;
+  end if;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
