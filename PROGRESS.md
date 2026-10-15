@@ -155,7 +155,8 @@ Evidencia
 ### Herramientas (D-131)
 - npm run deploy:supabase aplica el SQL, también las piezas con drop o delete, publica las funciones y pone los secretos desde el repo con el token de Supabase. Con el token, lo que falta de B10 son dos comandos (docs/DESPLIEGUE.md) y ya no pegas archivos en el SQL Editor
 - PW_PORT_OFFSET deja correr Playwright en varias copias del repositorio a la vez. Se probó con dos corridas simultáneas, 80 de 80 cada una
-- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts y del servidor en verde. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
+- Revisión independiente con 13 hallazgos, ninguno alto, todos corregidos con su prueba
+- Evidencia. Typecheck, lint y formato limpios. Vitest de scripts, servidor y la configuración de Stripe con 260 de 260. La herramienta se probó contra una API simulada y todavía no contra el proyecto, porque el token del entorno responde 401
 
 ### Estado de las ramas en paralelo (2026-10-14, 14:35 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
