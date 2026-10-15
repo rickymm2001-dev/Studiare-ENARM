@@ -66,6 +66,7 @@ Además siguen STRIPE_SECRET_KEY (recomendado cambiarla por una rk_test_ restrin
 - El cupón PRUEBA10 de 10% con duración repeating de 1 mes, que cubre el primer cobro con o sin prueba, y su código PRUEBA10 solo para clientes nuevos
 - Las dos configuraciones del portal, que encuentra al volver a correr por su metadata studiare_key y pone al día con los precios de hoy
 - Solo acepta llaves de prueba y nunca imprime la llave. Se puede correr las veces que haga falta
+- Con --write-ids=private/stripe-test-ids.json guarda además los ocho IDs en ese archivo, que no va al repo. La sesión los pone en los secretos de Supabase con npm run deploy:supabase -- --plan b10 --secrets-from private/stripe-test-ids.json (docs/DESPLIEGUE.md)
 
 ```bash
 STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts --app-url=https://rickymm2001-dev.github.io/Studiare-ENARM/

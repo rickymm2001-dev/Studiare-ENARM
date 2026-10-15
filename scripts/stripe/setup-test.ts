@@ -13,7 +13,12 @@
 // Solo acepta llaves de prueba (sk_test_ o rk_test_). La llave se lee de STRIPE_SECRET_KEY, no se guarda
 // ni se imprime. Todas las llamadas usan la versión fija de la API. Uso
 //   STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts [--app-url=https://...] [--archive-old]
-import { resolve } from 'node:path';
+//     [--write-ids=private/stripe-test-ids.json]
+// Las opciones con valor aceptan --nombre=valor y --nombre valor.
+// Con --write-ids guarda además los ocho IDs en ese JSON, que npm run deploy:supabase pone en los
+// secretos de Supabase con --secrets-from (docs/DESPLIEGUE.md). private/ no va al repo.
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { STRIPE_API_VERSION } from '../../supabase/functions/_shared/billingTypes.ts';
 import { subscriptionUrl } from '../../supabase/functions/_shared/http.ts';
 
@@ -482,27 +487,161 @@ export function summaryLines(result: SetupResult): string[] {
   return lines;
 }
 
-// Uso desde la línea de comandos
-if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename)) {
-  const key = process.env.STRIPE_SECRET_KEY ?? '';
-  const arg = (name: string) =>
-    process.argv.find((value) => value.startsWith(`--${name}=`))?.slice(name.length + 3);
-  const taxArg = arg('tax');
+/** Los ocho IDs como NOMBRE y valor, en el orden de 2.6. Es lo que lee deploy:supabase --secrets-from */
+export function idsRecord(result: SetupResult): Record<SecretName, string> {
+  return Object.fromEntries(result.ids.map((entry) => [entry.env, entry.id])) as Record<
+    SecretName,
+    string
+  >;
+}
+
+/** Guarda los IDs en un JSON local. Solo los IDs, nunca la llave */
+export function writeIdsFile(path: string, result: SetupResult): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(idsRecord(result), null, 2)}\n`, { mode: 0o600 });
+}
+
+/** Las opciones que llevan valor. Aceptan --nombre=valor y --nombre valor */
+const VALUE_FLAGS = ['app-url', 'tax', 'write-ids'] as const;
+type ValueFlag = (typeof VALUE_FLAGS)[number];
+
+export interface SetupArgs {
+  values: Partial<Record<ValueFlag, string>>;
+  archiveOld: boolean;
+}
+
+/** Lee las opciones. Devuelve un error si falta un valor o si una opción no existe */
+export function parseSetupArgs(argv: readonly string[]): SetupArgs | { error: string } {
+  const args: SetupArgs = { values: {}, archiveOld: false };
+  for (let index = 0; index < argv.length; index += 1) {
+    const raw = argv[index] ?? '';
+    if (raw === '--archive-old') {
+      args.archiveOld = true;
+      continue;
+    }
+    const [flag = '', inline] = raw.includes('=') ? raw.split(/=(.*)/s, 2) : [raw, undefined];
+    const name = VALUE_FLAGS.find((candidate) => `--${candidate}` === flag);
+    if (!name) {
+      // No se repite lo que llegó, por si alguien pegó ahí la llave
+      return {
+        error: `No conozco la opción número ${index + 1}. Las que hay son --app-url, --tax, --write-ids y --archive-old`,
+      };
+    }
+    let value = inline;
+    if (value === undefined) {
+      const next = argv[index + 1];
+      if (next !== undefined && !next.startsWith('--')) {
+        value = next;
+        index += 1;
+      }
+    }
+    if (!value) return { error: `--${name} necesita un valor, por ejemplo --${name}=...` };
+    args.values[name] = value;
+  }
+  return args;
+}
+
+/** Cuánto de cada cosa creó o reutilizó una corrida, sin la llave */
+function createdSummary(result: SetupResult): string {
+  const prices = result.ids.filter((entry) => entry.env.startsWith('STRIPE_PRICE_'));
+  const portals = result.ids.filter((entry) => entry.env.startsWith('STRIPE_PORTAL_'));
+  const count = (list: SetupId[], status: SetupId['status']) =>
+    list.filter((entry) => entry.status === status).length;
+  const parts = [
+    `${count(prices, 'created')} precios y ${count(portals, 'created')} configuraciones del portal creados`,
+    count(prices, 'reused') > 0 ? `${count(prices, 'reused')} precios que ya existían` : '',
+    count(portals, 'updated') > 0
+      ? `${count(portals, 'updated')} configuraciones del portal puestas al día`
+      : '',
+    `el cupón ${result.coupon.created ? 'creado' : 'que ya existía'}`,
+    `el código ${result.promotionCode.created ? 'creado' : 'que ya existía'}`,
+  ].filter((part) => part !== '');
+  return parts.join(', ');
+}
+
+export interface SetupCliDeps {
+  fetch: typeof fetch;
+  log: (line: string) => void;
+  error: (line: string) => void;
+  /** Para probar una falla al guardar. Por omisión writeIdsFile */
+  writeIds?: (path: string, result: SetupResult) => void;
+}
+
+/** La corrida desde la línea de comandos. Devuelve el código de salida */
+export async function runSetupCli(
+  argv: readonly string[],
+  env: Record<string, string | undefined>,
+  deps: SetupCliDeps,
+): Promise<number> {
+  const args = parseSetupArgs(argv);
+  if ('error' in args) {
+    deps.error(args.error);
+    return 2;
+  }
+  const taxArg = args.values.tax;
   const taxBehavior: TaxBehavior =
     taxArg === 'exclusive' || taxArg === 'unspecified' ? taxArg : 'inclusive';
-  setupStripeTest({
-    key,
+  let result: SetupResult;
+  try {
+    result = await setupStripeTest({
+      key: env.STRIPE_SECRET_KEY ?? '',
+      fetch: deps.fetch,
+      appUrl: args.values['app-url'] ?? env.APP_URL ?? DEFAULT_APP_URL,
+      taxBehavior,
+      archiveOld: args.archiveOld,
+    });
+  } catch (error) {
+    // Un error ajeno, como el de fetch con un encabezado inválido, podría traer la llave en su mensaje
+    deps.error(
+      error instanceof StripeSetupError
+        ? error.message
+        : `Falló la configuración (${error instanceof Error ? error.name : 'error'})`,
+    );
+    return 1;
+  }
+  for (const line of summaryLines(result)) deps.log(line);
+  const idsPath = args.values['write-ids'];
+  if (idsPath) {
+    try {
+      (deps.writeIds ?? writeIdsFile)(resolve(idsPath), result);
+    } catch (error) {
+      // Lo de Stripe ya quedó. Se dice qué y cómo seguir, sin el mensaje del error, que no hace falta
+      const code = (error as { code?: unknown } | null)?.code;
+      const reason =
+        typeof code === 'string' && /^E[A-Z]+$/.test(code)
+          ? code
+          : error instanceof Error
+            ? error.name
+            : 'error';
+      deps.error(
+        `No pude guardar los IDs en ${idsPath} (${reason}). En Stripe ya quedó lo de arriba, ${createdSummary(result)}. Los ocho IDs están en las líneas NOMBRE=valor de arriba. Corre otra vez con --write-ids en una carpeta donde se pueda escribir. Reutiliza todo sin crear nada nuevo`,
+      );
+      return 1;
+    }
+    deps.log(
+      `Guardé los ocho IDs en ${idsPath}. Ponlos con npm run deploy:supabase -- --plan b10 --secrets-from ${idsPath}`,
+    );
+  }
+  return 0;
+}
+
+// Uso desde la línea de comandos
+if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename)) {
+  runSetupCli(process.argv.slice(2), process.env, {
     fetch,
-    appUrl: arg('app-url') ?? process.env.APP_URL ?? DEFAULT_APP_URL,
-    taxBehavior,
-    archiveOld: process.argv.includes('--archive-old'),
-  }).then(
-    (result) => {
-      for (const line of summaryLines(result)) console.log(line);
+    log: (line) => {
+      console.log(line);
     },
-    (error: unknown) => {
-      console.error(error instanceof Error ? error.message : 'Falló la configuración');
-      process.exit(1);
+    error: (line) => {
+      console.error(line);
+    },
+  }).then(
+    (code) => {
+      process.exitCode = code;
+    },
+    () => {
+      console.error('Falló la configuración');
+      process.exitCode = 1;
     },
   );
 }

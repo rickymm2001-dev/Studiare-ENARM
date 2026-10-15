@@ -2,9 +2,13 @@
 // escritorio, y le da clic a lo que encuentra para ver si algo falla. No corre en el CI. Uso, npm run
 // audit:ui. El informe sale en AUDIT_OUT, por defecto docs/auditoria-2026-10-10/recorrido
 import { defineConfig, devices } from '@playwright/test';
+import { loopbackUrl, serverStartTimeout, testPorts } from './server/src/testPorts.ts';
 
-const PREVIEW_URL = 'http://127.0.0.1:4173';
-const PROXY_URL = 'http://127.0.0.1:8787';
+// Puertos de los servidores de prueba. Con PW_PORT_OFFSET se corren juntos para que varias copias del
+// repositorio corran Playwright a la vez (tests/e2e/README.md)
+const PORTS = testPorts(process.env);
+const PREVIEW_URL = loopbackUrl(PORTS.preview);
+const PROXY_URL = loopbackUrl(PORTS.proxy);
 
 export default defineConfig({
   testDir: './tests/audit',
@@ -43,13 +47,13 @@ export default defineConfig({
       command: 'node server/src/main.ts --mock --ephemeral',
       url: `${PROXY_URL}/health`,
       reuseExistingServer: false,
-      timeout: 30_000,
+      timeout: serverStartTimeout(30_000, PORTS),
     },
     {
       // AUDIT_DEV=1 corre contra el servidor de desarrollo, que sí avisa de los problemas de React
       command:
         process.env.AUDIT_DEV === '1'
-          ? 'npx vite --host 127.0.0.1 --port 4173 --strictPort'
+          ? `npx vite --host 127.0.0.1 --port ${PORTS.preview} --strictPort`
           : process.env.AUDIT_CLOUD === 'down'
             ? // La nube configurada pero que no responde. La URL tiene la forma de un proyecto de Supabase,
               // porque la app descarta cualquier otra, y ese proyecto no existe, así que nunca contesta
@@ -57,7 +61,7 @@ export default defineConfig({
             : 'npm run build && npm run preview',
       url: PREVIEW_URL,
       reuseExistingServer: false,
-      timeout: 180_000,
+      timeout: serverStartTimeout(180_000, PORTS),
     },
   ],
 });
