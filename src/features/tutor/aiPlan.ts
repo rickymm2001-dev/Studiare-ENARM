@@ -344,12 +344,33 @@ export interface CollectReport {
 export type CollectOutcome =
   ({ ok: true } & CollectReport) | { ok: false; reason: FailureReason; message: string };
 
+/** Las recolecciones en marcha, por alumno. Dos a la vez entregarían y asentarían lo mismo dos veces */
+const collecting = new Map<string, Promise<CollectOutcome>>();
+
 /**
  * Pregunta por las hipótesis pendientes y guarda las que ya llegaron. Lo que llega se vuelve a
  * validar con la entrada que guardó la app al pedirlo. Un trabajo que el servidor ya no conoce y
- * pasó de 26 horas se suelta, para que se vuelva a pedir
+ * pasó de 26 horas se suelta, para que se vuelva a pedir. Si ya hay una recolección en marcha para
+ * este alumno, como cuando una hipótesis nueva reinicia el sondeo mientras otra aún se guarda, se
+ * espera a esa y no se empieza otra
  */
-export async function collectPendingJobs(
+export function collectPendingJobs(
+  api: Api,
+  user: Person,
+  artifacts: readonly AiArtifact[],
+  options: Pick<CallOptions, 'fetchImpl'> = {},
+  now: Date = new Date(),
+): Promise<CollectOutcome> {
+  const running = collecting.get(user.id);
+  if (running) return running;
+  const run = collectNow(api, user, artifacts, options, now).finally(() => {
+    collecting.delete(user.id);
+  });
+  collecting.set(user.id, run);
+  return run;
+}
+
+async function collectNow(
   api: Api,
   user: Person,
   artifacts: readonly AiArtifact[],

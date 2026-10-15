@@ -602,6 +602,30 @@ describe('hipótesis por lote', () => {
       expect(await api.repos.aiCallLog.list()).toHaveLength(1);
     });
 
+    it('dos recolecciones a la vez entregan una sola vez y no asientan el costo dos veces', async () => {
+      const { api, user } = setup();
+      const artifacts = await queue(api, user);
+      const input = readPending(artifacts[0])?.input ?? hypothesisJob().input;
+      const ready = await job({ status: 'ready', output: mockHypothesis(input), meta });
+      const fetchImpl = reply({ jobs: [ready] });
+      // Una hipótesis nueva reinicia el sondeo mientras la recolección anterior aún está guardando
+      const [first, second] = await Promise.all([
+        collectPendingJobs(api, user, artifacts, { fetchImpl }, NOW),
+        collectPendingJobs(api, user, artifacts, { fetchImpl }, NOW),
+      ]);
+      expect(first).toEqual({ ok: true, delivered: 1, failed: 0, waiting: 0 });
+      expect(second).toEqual(first);
+      expect(fetchImpl).toHaveBeenCalledTimes(1);
+      expect(await api.repos.aiCallLog.list()).toHaveLength(1);
+      // Y cuando una termina se puede volver a recolectar
+      expect(await collectPendingJobs(api, user, artifacts, { fetchImpl }, NOW)).toEqual({
+        ok: true,
+        delivered: 0,
+        failed: 0,
+        waiting: 0,
+      });
+    });
+
     it('una salida con evidencia inventada no se guarda aunque el servidor diga listo', async () => {
       const { api, user } = setup();
       const artifacts = await queue(api, user);
