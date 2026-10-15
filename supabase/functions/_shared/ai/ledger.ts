@@ -42,9 +42,13 @@ export interface UsageSummary {
 // ai_usage_summary_v2 de la migración 20261026000001, para el proxy de desarrollo (con archivo) y
 // para las pruebas y las e2e (en memoria)
 
+/** Lo reservado por las llamadas en vuelo de un alumno en un motor, y desde cuándo (ms desde 1970) */
+const Held = z.strictObject({ usd: z.number().nonnegative(), since: z.number() });
 const UserTotals = z.strictObject({
   calls: z.partialRecord(z.enum(AI_ENGINES), z.int().nonnegative()),
   costUsd: z.number().nonnegative(),
+  /** Opcional para leer un archivo guardado antes de las reservas */
+  reserved: z.partialRecord(z.enum(AI_ENGINES), Held).optional(),
 });
 const DayStateSchema = z.strictObject({
   version: z.literal(2),
@@ -87,12 +91,21 @@ function validAdmitInput(input: AdmitV2Input): boolean {
     input.engineShare < 0 ||
     input.perUserDailyUsd < 0 ||
     input.maxGenerations < 1 ||
-    input.maxSections < 1
+    input.maxSections < 1 ||
+    !(Number.isFinite(input.reserveUsd ?? 0) && (input.reserveUsd ?? 0) >= 0)
   );
 }
 
 /** Reintentos que se aceptan dentro de una generación además de sus secciones (6.1) */
 export const GENERATION_RETRIES = 2;
+
+/**
+ * Cuánto dura lo que una llamada reserva al admitirse (B12, revisión del hallazgo 1). Una llamada que
+ * muere antes de asentarse o liberarse, como una función que la plataforma corta, deja su reserva
+ * colgada, y a los 5 minutos se da por perdida. Es más que el plazo de una petición (120 s). Igual que
+ * el intervalo de ai_admit_v2
+ */
+export const RESERVATION_TTL_MS = 5 * 60_000;
 
 export class DayLedger implements LedgerPortV2 {
   private state: DayLedgerState;
@@ -153,9 +166,66 @@ export class DayLedger implements LedgerPortV2 {
     return structuredClone(this.state);
   }
 
+  /** Quita las reservas de llamadas que murieron antes de asentarse (vencieron). Como ai_admit_v2 */
+  private expireReservations(now: number): void {
+    const limit = now - RESERVATION_TTL_MS;
+    for (const user of Object.values(this.state.users)) {
+      if (!user.reserved) continue;
+      user.reserved = Object.fromEntries(
+        Object.entries(user.reserved).filter(([, held]) => held.since > limit),
+      );
+    }
+  }
+
+  /** Lo reservado hoy por las llamadas en vuelo, de todos, de un motor o de un alumno */
+  private reservedUsd(filter: { engine?: AiEngine; userId?: string } = {}): number {
+    let total = 0;
+    for (const [userId, user] of Object.entries(this.state.users)) {
+      if (filter.userId !== undefined && userId !== filter.userId) continue;
+      for (const [engine, held] of Object.entries(user.reserved ?? {})) {
+        if (filter.engine === undefined || engine === filter.engine) total += held.usd;
+      }
+    }
+    return round6(total);
+  }
+
+  /** Suma una reserva. La hora es la de la primera reserva desde que el motor quedó sin nada en vuelo */
+  private hold(userId: string, engine: AiEngine, usd: number, now: number): void {
+    const user = this.user(userId);
+    const held = user.reserved?.[engine];
+    user.reserved = {
+      ...user.reserved,
+      [engine]:
+        held && held.usd > 0
+          ? { usd: round6(held.usd + usd), since: held.since }
+          : { usd, since: now },
+    };
+  }
+
+  /** Devuelve lo reservado por una llamada que se asentó o se liberó. Nunca baja de cero */
+  private giveBack(userId: string, engine: AiEngine, usd: number): void {
+    const user = this.state.users[userId];
+    const held = user?.reserved?.[engine];
+    if (!user || !held || usd <= 0) return;
+    const left = round6(Math.max(held.usd - usd, 0));
+    const reserved: NonNullable<DayLedgerState['users'][string]['reserved']> = {};
+    for (const name of AI_ENGINES) {
+      const entry =
+        name === engine
+          ? left > 0
+            ? { usd: left, since: held.since }
+            : undefined
+          : user.reserved?.[name];
+      if (entry) reserved[name] = entry;
+    }
+    user.reserved = reserved;
+  }
+
   admit(input: AdmitV2Input): Promise<AdmissionV2> {
     if (!validAdmitInput(input)) return Promise.reject(new Error('Límites de IA no válidos'));
     this.roll();
+    const now = this.now().getTime();
+    this.expireReservations(now);
     const mine = this.state.users[input.userId];
     if ((mine?.calls[input.engine] ?? 0) >= input.perStudentPerDay) {
       return Promise.resolve({ ok: false, reason: 'student_limit' });
@@ -171,16 +241,23 @@ export class DayLedger implements LedgerPortV2 {
         return Promise.resolve({ ok: false, reason: 'generation_limit' });
       }
     }
+    // Lo asentado más lo reservado por lo que está en vuelo, así varias llamadas a la vez no se saltan
+    // un tope. La reserva de esta llamada entra después: el tope sigue siendo blando por una sola llamada
     const engineCost = this.state.byEngine[input.engine]?.costUsd ?? 0;
     if (
-      this.state.spentUsd >= input.dailyBudgetUsd ||
-      engineCost >= input.dailyBudgetUsd * input.engineShare ||
-      (!input.staff && (mine?.costUsd ?? 0) >= input.perUserDailyUsd)
+      round6(this.state.spentUsd + this.reservedUsd()) >= input.dailyBudgetUsd ||
+      round6(engineCost + this.reservedUsd({ engine: input.engine })) >=
+        input.dailyBudgetUsd * input.engineShare ||
+      (!input.staff &&
+        round6((mine?.costUsd ?? 0) + this.reservedUsd({ userId: input.userId })) >=
+          input.perUserDailyUsd)
     ) {
       return Promise.resolve({ ok: false, reason: 'budget_exceeded' });
     }
     const user = this.user(input.userId);
     user.calls[input.engine] = (user.calls[input.engine] ?? 0) + 1;
+    const reserve = round6(Math.max(0, input.reserveUsd ?? 0));
+    if (reserve > 0) this.hold(input.userId, input.engine, reserve, now);
     if (input.generationRef !== null) {
       this.state.generations[input.userId] = {
         ...generations,
@@ -207,8 +284,9 @@ export class DayLedger implements LedgerPortV2 {
         const user = this.user(input.userId);
         user.costUsd = round6(user.costUsd + cost);
       }
-      this.save();
     }
+    if (input.userId !== null) this.giveBack(input.userId, input.engine, input.reservedUsd ?? 0);
+    if (cost > 0 || (input.reservedUsd ?? 0) > 0) this.save();
     this.log.push({ ...input, costUsd: cost, at: this.now().toISOString() });
     if (this.log.length > MAX_LOG) this.log.splice(0, this.log.length - MAX_LOG);
     return Promise.resolve();
@@ -218,8 +296,10 @@ export class DayLedger implements LedgerPortV2 {
     userId: string;
     engine: AiEngine;
     generationRef: string | null;
+    reservedUsd?: number;
   }): Promise<void> {
     this.roll();
+    this.giveBack(input.userId, input.engine, input.reservedUsd ?? 0);
     const user = this.state.users[input.userId];
     const used = user?.calls[input.engine] ?? 0;
     if (user && used > 0) user.calls[input.engine] = used - 1;

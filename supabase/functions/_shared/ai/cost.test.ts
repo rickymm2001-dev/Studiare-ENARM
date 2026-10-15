@@ -8,6 +8,7 @@ import {
   estimateBatchCostUsd,
   estimateCostUsd,
   worstBatchCostUsd,
+  worstCallCostUsd,
 } from './cost.ts';
 
 const sonnet = DEFAULT_CONFIG.prices['claude-sonnet-5-5'];
@@ -80,5 +81,37 @@ describe('costo por lote (3.4)', () => {
         cacheReadTokens: 0,
       }),
     );
+  });
+});
+
+describe('peor costo de una llamada al momento (reserva al admitir)', () => {
+  const price = { input: 2, output: 10, cacheWrite: 2.5, cacheRead: 0.2 };
+
+  it('cuenta cada intento con la entrada a la tarifa más cara y la salida llena', () => {
+    if (!sonnet) throw new Error('Falta precio');
+    // 3,000 caracteres son 1,000 tokens, escritos en caché a 2.5, y 6,000 de salida a 10
+    expect(worstCallCostUsd(price, 'a'.repeat(3000), 6000, 1)).toBe(
+      estimateCostUsd(price, {
+        inputTokens: 0,
+        outputTokens: 6000,
+        cacheWriteTokens: 1000,
+        cacheReadTokens: 0,
+      }),
+    );
+    expect(worstCallCostUsd(price, 'a'.repeat(3000), 6000, 1)).toBe(0.0625);
+  });
+
+  it('el reintento suma otro intento, con lo que agrega a su mensaje', () => {
+    const one = worstCallCostUsd(price, 'a'.repeat(3000), 1000, 1);
+    const two = worstCallCostUsd(price, 'a'.repeat(3000), 1000, 2);
+    // El segundo intento lleva 1,500 caracteres más, que son 500 tokens más de entrada
+    expect(two).toBeCloseTo(one + one + (500 * 2.5) / 1_000_000, 6);
+    expect(worstCallCostUsd(price, 'a'.repeat(3000), 1000, 0)).toBe(one);
+  });
+
+  it('si la entrada es más barata que escribir en caché usa la de caché, y al revés', () => {
+    const cheapWrite = { input: 5, output: 0, cacheWrite: 1, cacheRead: 0 };
+    expect(worstCallCostUsd(cheapWrite, 'a'.repeat(3_000_000), 0, 1)).toBe(5);
+    expect(worstCallCostUsd(price, 'a'.repeat(3_000_000), 0, 1)).toBe(2.5);
   });
 });

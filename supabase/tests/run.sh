@@ -99,3 +99,7 @@ psql_run -f "$here/deck_catalog_test.sql"
 psql_run -f "$here/ai_proxy_v2_test.sql"
 psql_run -f "$here/ai_jobs_test.sql"
 psql_run -f "$here/ai_gate_test.sql"
+# Lo que protege el candado por día del libro de IA solo se ve con varias conexiones a la vez
+# shellcheck source=supabase/tests/concurrency.sh
+source "$here/concurrency.sh"
+run_concurrency_tests

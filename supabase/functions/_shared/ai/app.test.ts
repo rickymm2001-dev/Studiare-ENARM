@@ -9,9 +9,10 @@ import {
 import { DEFAULT_CONFIG } from './config.ts';
 import { bundledPromptSets } from './prompts.ts';
 import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
-import { mockHypothesis } from './engines/aiMock.ts';
+import { mockHypothesis, mockOutput } from './engines/aiMock.ts';
 import { buildAiProxy, structuredLog } from './edge.ts';
 import type { AiProxyEnv } from './env.ts';
+import { worstCaseCostUsd } from './run.ts';
 import {
   anthropicClientsOf,
   createFakeAnthropic,
@@ -45,6 +46,8 @@ function edge(
   options: {
     key?: 'real' | 'mock' | 'none';
     replies?: Parameters<typeof createFakeAnthropic>[0];
+    /** Cuánto tarda el modelo en contestar, para que varias llamadas estén en vuelo a la vez */
+    modelDelayMs?: number;
   } = {},
 ) {
   let now = Date.parse('2026-10-15T15:00:00Z');
@@ -61,9 +64,23 @@ function edge(
     allowMock: key === 'mock',
     origins: new Set([ORIGIN]),
   };
+  const delayMs = options.modelDelayMs ?? 0;
+  const clients = anthropicClientsOf(anthropic);
+  const slowClients =
+    delayMs === 0
+      ? clients
+      : {
+          ...clients,
+          messages: {
+            create: async (...args: Parameters<typeof clients.messages.create>) => {
+              await new Promise((resolve) => setTimeout(resolve, delayMs));
+              return clients.messages.create(...args);
+            },
+          },
+        };
   const built = buildAiProxy(env, {
     fetch: rest.fetch,
-    anthropic: () => anthropicClientsOf(anthropic),
+    anthropic: () => slowClients,
     clock: () => now,
     log: structuredLog((line) => logs.push(line)),
   });
@@ -418,6 +435,129 @@ describe('presupuesto y generaciones', () => {
     expect(await errorOf(await cards(other.app, 'una-sola-generacion', 11))).toBe(
       'generation_limit',
     );
+  });
+});
+
+describe('reserva del peor costo con llamadas a la vez (revisión del hallazgo 1)', () => {
+  // Sonnet 5.5 con 2,000 tokens de entrada y 1,400 de salida cuesta 0.018 dólares por sección
+  const sonnet = (text: string) =>
+    fakeMessage(text, {
+      model: 'claude-sonnet-5-5',
+      usage: { input_tokens: 2000, output_tokens: 1400 },
+    });
+  const cardsOut = JSON.stringify(mockOutput('flashcards', flashcardsInput()));
+  const section = async (app: App, index: number, token = 'token-pago') =>
+    await call(
+      app,
+      'flashcards',
+      requestBody(flashcardsInput(), {
+        generation: { ref: `generacion-${String(index % 20).padStart(3, '0')}`, section: 0 },
+      }),
+      token,
+    );
+
+  it('60 llamadas a la vez de una alumna admiten solo las que caben bajo su tope en dólares', async () => {
+    const proxy = edge({ replies: { replies: [sonnet(cardsOut)] }, modelDelayMs: 30 });
+    await proxy.open(['flashcards']);
+    const config = proxy.deps.config();
+    const cap = config.limits.perUserDailyUsd;
+    const worst = worstCaseCostUsd(
+      { config, prompts: proxy.deps.prompts },
+      'flashcards',
+      flashcardsInput(),
+    );
+    // El tope es blando por una sola llamada: pasa mientras lo asentado más lo que está en vuelo no lo alcance
+    const fits = Math.ceil(cap / worst);
+    expect(fits).toBeGreaterThanOrEqual(2);
+    expect(fits).toBeLessThan(10);
+
+    const responses = await Promise.all(
+      Array.from({ length: 60 }, (_, index) => section(proxy.app, index)),
+    );
+    const statuses = responses.map((response) => response.status);
+    expect(statuses.filter((status) => status === 200)).toHaveLength(fits);
+    expect(statuses.filter((status) => status === 429)).toHaveLength(60 - fits);
+    const refused = responses.find((response) => response.status === 429);
+    expect(await errorOf(refused as Response)).toBe('budget_exceeded');
+    // Solo las admitidas llegaron al modelo, y gastaron mucho menos que el tope
+    expect(proxy.anthropic.messages.calls).toHaveLength(fits);
+    const summary = await proxy.memory.ledger.summary();
+    expect(summary.spentUsd).toBeCloseTo(fits * 0.018, 6);
+    expect(summary.spentUsd).toBeLessThanOrEqual(cap);
+    // Al terminar no queda nada reservado, ni de las que pasaron ni de las que no
+    expect(proxy.memory.ledger.snapshot().users[PAID]).toMatchObject({
+      costUsd: summary.spentUsd,
+      reserved: {},
+    });
+    // Y el alumno sigue con lo que le queda del día, sin una reserva fantasma que lo bloquee
+    expect((await section(proxy.app, 99)).status).toBe(200);
+  });
+
+  it('una llamada tras otra gasta lo de siempre: 17 secciones de 0.018 antes del tope de 0.30', async () => {
+    const proxy = edge({ replies: { replies: [sonnet(cardsOut)] } });
+    await proxy.open(['flashcards']);
+    const statuses: number[] = [];
+    for (let index = 0; index < 25; index += 1) {
+      statuses.push((await section(proxy.app, index)).status);
+    }
+    expect(statuses.filter((status) => status === 200)).toHaveLength(17);
+    expect((await proxy.memory.ledger.summary()).spentUsd).toBeCloseTo(0.306, 6);
+  });
+
+  it('varias alumnas a la vez no se pasan de la cuota del motor', async () => {
+    const proxy = edge({ replies: { replies: [sonnet(cardsOut)] }, modelDelayMs: 30 });
+    await proxy.open(['flashcards']);
+    // Una cuota de flashcards de medio dólar y alumnas distintas: cada una con su propio tope
+    await proxy.app.request('/ai-proxy/ai/config', {
+      method: 'PUT',
+      headers: headers('token-admin'),
+      body: JSON.stringify({ limits: { dailyBudgetUsd: 1, engineShare: { flashcards: 0.5 } } }),
+    });
+    const config = proxy.deps.config();
+    const worst = worstCaseCostUsd(
+      { config, prompts: proxy.deps.prompts },
+      'flashcards',
+      flashcardsInput(),
+    );
+    const quota = config.limits.dailyBudgetUsd * config.limits.engineShare.flashcards;
+    const staff = ['token-medico', 'token-admin', 'token-dueno'];
+    const responses = await Promise.all(
+      Array.from({ length: 30 }, (_, index) => section(proxy.app, index, staff[index % 3])),
+    );
+    const admitted = responses.filter((response) => response.status === 200).length;
+    expect(admitted).toBe(Math.ceil(quota / worst));
+    expect((await proxy.memory.ledger.summary()).spentUsd).toBeLessThanOrEqual(quota);
+  });
+
+  it('lo que reserva una llamada que muere vence a los 5 minutos', async () => {
+    const proxy = edge({ replies: { replies: [sonnet(cardsOut)] } });
+    await proxy.open(['flashcards']);
+    const worst = worstCaseCostUsd(
+      { config: proxy.deps.config(), prompts: proxy.deps.prompts },
+      'flashcards',
+      flashcardsInput(),
+    );
+    // Una llamada que admitió y murió antes de asentar, como una función que la plataforma cortó
+    for (let index = 0; index < 3; index += 1) {
+      await proxy.memory.ledger.admit({
+        userId: PAID,
+        engine: 'flashcards',
+        staff: false,
+        perStudentPerDay: 240,
+        dailyBudgetUsd: 5,
+        engineShare: 0.55,
+        perUserDailyUsd: 0.3,
+        generationRef: null,
+        maxGenerations: 20,
+        maxSections: 12,
+        reserveUsd: worst,
+      });
+    }
+    expect(await errorOf(await section(proxy.app, 1))).toBe('budget_exceeded');
+    proxy.advance(4 * 60_000);
+    expect(await errorOf(await section(proxy.app, 2))).toBe('budget_exceeded');
+    proxy.advance(60_000);
+    expect((await section(proxy.app, 3)).status).toBe(200);
   });
 });
 

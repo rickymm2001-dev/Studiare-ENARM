@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { DayLedger } from '../../../supabase/functions/_shared/ai/ledger.ts';
-import type { SettlementV2 } from '../../../supabase/functions/_shared/ai/ports.ts';
+import type { AdmitV2Input, SettlementV2 } from '../../../supabase/functions/_shared/ai/ports.ts';
 import { createLedger } from './ledgerFile.ts';
 
 const dirs: string[] = [];
@@ -17,19 +17,19 @@ afterEach(() => {
 });
 
 const USER = 'f0000000-0000-4000-8000-000000000001';
-const admit = (ledger: DayLedger) =>
-  ledger.admit({
-    userId: USER,
-    engine: 'forgetting',
-    staff: false,
-    perStudentPerDay: 2,
-    dailyBudgetUsd: 1,
-    engineShare: 1,
-    perUserDailyUsd: 1,
-    generationRef: null,
-    maxGenerations: 20,
-    maxSections: 12,
-  });
+const admitInput = (): AdmitV2Input => ({
+  userId: USER,
+  engine: 'forgetting',
+  staff: false,
+  perStudentPerDay: 5,
+  dailyBudgetUsd: 1,
+  engineShare: 1,
+  perUserDailyUsd: 1,
+  generationRef: null,
+  maxGenerations: 20,
+  maxSections: 12,
+});
+const admit = (ledger: DayLedger) => ledger.admit({ ...admitInput(), perStudentPerDay: 2 });
 const spend = (costUsd: number): SettlementV2 => ({
   userId: USER,
   engine: 'forgetting',
@@ -60,6 +60,28 @@ describe('archivo', () => {
     expect(existsSync(`${file}.tmp`)).toBe(false);
     const second = createLedger({ file, now });
     expect(await second.summary()).toMatchObject({ calls: 1, spentUsd: 0.4 });
+  });
+
+  it('la reserva de lo que está en vuelo también se guarda, y vence si el proxy murió con ella', async () => {
+    const file = tempFile();
+    let now = Date.parse('2026-10-08T15:00:00Z');
+    const clock = () => new Date(now);
+    const first = createLedger({ file, now: clock });
+    await first.admit({ ...admitInput(), reserveUsd: 0.6 });
+    expect(JSON.parse(readFileSync(file, 'utf8'))).toMatchObject({
+      users: { [USER]: { reserved: { forgetting: { usd: 0.6 } } } },
+    });
+    // El proxy se reinicia con la llamada en vuelo: su reserva sigue contando un rato
+    const second = createLedger({ file, now: clock });
+    expect(await second.admit({ ...admitInput(), reserveUsd: 0.6 })).toEqual({ ok: true });
+    expect(await second.admit({ ...admitInput(), reserveUsd: 0.6 })).toEqual({
+      ok: false,
+      reason: 'budget_exceeded',
+    });
+    // Como nadie la asienta, vence a los 5 minutos
+    now += 5 * 60_000;
+    const third = createLedger({ file, now: clock });
+    expect(await third.admit({ ...admitInput(), reserveUsd: 0.6 })).toEqual({ ok: true });
   });
 
   it('un archivo de otro día o dañado empieza en cero', async () => {

@@ -44,7 +44,7 @@ import {
 } from './ports.ts';
 import { sha256Hex, type PromptSets } from './prompts.ts';
 import type { AiProvider } from './provider.ts';
-import { runEngine } from './run.ts';
+import { runEngine, worstCaseCostUsd } from './run.ts';
 
 /** La versión de /health. La 2 suma unavailable y engines (B12, contrato C1) */
 export const HEALTH_VERSION = 2;
@@ -347,6 +347,12 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
     const { limits } = config;
     const generationRef =
       engine === 'flashcards' ? (request.data.generation?.ref ?? singleGeneration()) : null;
+    // Se reserva el peor costo de la llamada al admitirla, así varias a la vez no se saltan el tope en
+    // dólares del alumno, la cuota del motor ni el presupuesto del día. Lo simulado no gasta ni reserva
+    const real = provider.mode === 'real';
+    const reserveUsd = real
+      ? worstCaseCostUsd({ config, prompts: deps.prompts }, engine, input.data)
+      : 0;
     const slot = { userId: caller.userId, engine, generationRef };
     const admission = await deps.ledger.admit({
       ...slot,
@@ -357,6 +363,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
       perUserDailyUsd: limits.perUserDailyUsd,
       maxGenerations: limits.cardGenerationsPerDay,
       maxSections: limits.sectionsPerGeneration,
+      reserveUsd,
     });
     if (!admission.ok) return fail(c, admission.reason);
 
@@ -374,12 +381,11 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
         input.data,
       );
     } catch (error) {
-      // Un error nuestro, no del modelo. Se devuelve el cupo y lo maneja onError
-      await deps.ledger.release(slot);
+      // Un error nuestro, no del modelo. Se devuelve el cupo y la reserva, y lo maneja onError
+      await deps.ledger.release({ ...slot, reservedUsd: reserveUsd });
       throw error;
     }
 
-    const real = provider.mode === 'real';
     const usage = result.ok ? result.meta : result.cost;
     await deps.ledger.settle({
       userId: caller.userId,
@@ -398,6 +404,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono<{ Variables: AiVariable
       promptVersion: deps.prompts[engine].version,
       refusalCategory: result.ok ? null : result.refusalCategory,
       jobId: null,
+      reservedUsd: reserveUsd,
     });
     if (result.ok) return c.json({ output: result.output, meta: result.meta });
     log('ai.call.failed', { status: STATUS[result.error] });

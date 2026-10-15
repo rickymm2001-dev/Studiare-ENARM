@@ -18,7 +18,7 @@ import {
 } from './engines/aiGuards.ts';
 import { MOCK_MODEL } from './engines/aiMock.ts';
 import type { AiConfig } from './config.ts';
-import { addUsage, EMPTY_USAGE, estimateCostUsd, type Usage } from './cost.ts';
+import { addUsage, EMPTY_USAGE, estimateCostUsd, worstCallCostUsd, type Usage } from './cost.ts';
 import { ERROR_MESSAGES } from './messages.ts';
 import type { CallOutcome } from './ports.ts';
 import { buildUserMessage, type PromptSets } from './prompts.ts';
@@ -26,6 +26,25 @@ import { ProviderError, type AiProvider, type ProviderFailure } from './provider
 
 /** Intentos con reintento por validación. Uno extra, como pide la especificación */
 export const VALIDATION_RETRIES = 1;
+
+/**
+ * El peor costo de una llamada de este motor con esta entrada, antes de hacerla: sus dos intentos
+ * (el primero y el reintento por validación) con la entrada completa y la salida llena hasta max_tokens,
+ * según el modelo y los precios de la configuración. Es lo que la ruta reserva al admitirla (ai_admit_v2).
+ * 0 si el modelo no tiene precio, porque entonces tampoco se cobra nada que reservar. No cuenta los
+ * reintentos del SDK, que solo cobra la API cuando termina la respuesta
+ */
+export function worstCaseCostUsd(
+  deps: Pick<RunDeps, 'config' | 'prompts'>,
+  engine: AiEngine,
+  input: unknown,
+): number {
+  const model = deps.config.models[engine];
+  const price = deps.config.prices[model.id];
+  if (!price) return 0;
+  const text = `${deps.prompts[engine].text}${buildUserMessage(input)}`;
+  return worstCallCostUsd(price, text, model.maxTokens, VALIDATION_RETRIES + 1);
+}
 
 export interface RunDeps {
   provider: AiProvider;

@@ -55,6 +55,7 @@ export class PgLedger implements LedgerPortV2 {
       p_generation: input.generationRef,
       p_max_generations: input.maxGenerations,
       p_max_sections: input.maxSections,
+      p_reserve: input.reserveUsd ?? 0,
     });
     if (result === 'ok') return { ok: true };
     if (
@@ -71,11 +72,13 @@ export class PgLedger implements LedgerPortV2 {
     userId: string;
     engine: AiEngine;
     generationRef: string | null;
+    reservedUsd?: number;
   }): Promise<void> {
     await this.rpc('ai_release_v2', {
       p_user: userOf(input.userId),
       p_engine: input.engine,
       p_generation: input.generationRef,
+      p_reserved: input.reservedUsd ?? 0,
     });
   }
 
@@ -97,6 +100,7 @@ export class PgLedger implements LedgerPortV2 {
       p_prompt_version: input.promptVersion,
       p_refusal: input.refusalCategory,
       p_job: input.jobId,
+      p_reserved: input.reservedUsd ?? 0,
     });
   }
 

@@ -5,7 +5,8 @@
 --     del alumno. Revisa el dispositivo activo y devuelve el rol de current_app_role, que con la
 --     bandera requireMfa solo da el rol del equipo con segundo factor (B9), y paid como user_plan
 --     distinto de free, que incluye la prueba gratis, los pases y el mes de referido (B10)
---   - ai_usage_day.cost_usd, el gasto real de cada alumno en el día, para su tope en dólares
+--   - ai_usage_day.cost_usd, el gasto real de cada alumno en el día, para su tope en dólares, y
+--     reserved_usd con reserved_since, lo que reservan sus llamadas en vuelo
 --   - ai_generations, las generaciones de tarjetas de cada alumno por día y sus secciones
 --   - Columnas nuevas de ai_call_log, sin texto. Modo (al momento o por lote), resultado, tokens de
 --     caché, versión del prompt, categoría de una negativa del modelo y el trabajo por lote
@@ -19,6 +20,24 @@
 --   p_max_generations y llamadas por generación hasta p_max_sections más 2 reintentos), el
 --   presupuesto total, la cuota del motor (p_budget por p_engine_share) y, si no es del equipo, su
 --   tope en dólares. Las mismas reglas que DayLedger de supabase/functions/_shared/ai/ledger.ts
+--
+-- Reserva al admitir (revisión independiente, hallazgo 1)
+--   El gasto solo entra cuando la llamada termina, así que 60 llamadas a la vez pasaban todas el tope
+--   del alumno porque ninguna había gastado todavía. Ahora ai_admit_v2 recibe p_reserve, el peor costo
+--   de la llamada (todos sus intentos, con la entrada completa y la salida llena hasta max_tokens), y lo
+--   guarda en ai_usage_day.reserved_usd del alumno y del motor. Las tres comparaciones suman lo
+--   asentado más lo reservado por lo que está en vuelo, sin contar la reserva de la llamada que entra,
+--   así el tope sigue siendo blando por una sola llamada y quien manda de una en una gasta lo mismo
+--   que antes. El presupuesto del día y la cuota del motor suman las reservas de todos los alumnos
+--   leyendo ai_usage_day, que es la única fuente, sin una copia en ai_spend_day que se pueda desfasar.
+--   ai_settle_v2 y ai_release_v2 reciben p_reserved y la devuelven siempre que se asienta o se libera
+--   la llamada. Los lotes no reservan: su costo lo cuenta el ciclo como inFlightUsd (p_reserve 0)
+--
+--   Lo reservado huérfano, de una llamada que murió antes de asentarse (la plataforma corta una
+--   función, un reinicio), vence a los 5 minutos: reserved_since guarda la hora de la primera reserva
+--   desde que el alumno y el motor quedaron sin nada en vuelo, y ai_admit_v2 pone en cero, antes de
+--   comparar, lo que lleva más de 5 minutos. Una petición dura 120 s como máximo, así que ninguna
+--   llamada viva pierde su reserva. Igual que RESERVATION_TTL_MS de ledger.ts
 --
 -- Quién las usa
 --   ai_whoami la llama el alumno con su token. Las del libro, solo la función con la llave de
@@ -62,6 +81,26 @@ begin
   end if;
 end $$;
 
+-- Lo que reservan las llamadas en vuelo del alumno en este motor (ai_admit_v2) y desde cuándo. Sin
+-- nada en vuelo, reserved_usd es 0 y reserved_since es null
+alter table public.ai_usage_day
+  add column if not exists reserved_usd numeric(14, 6) not null default 0,
+  add column if not exists reserved_since timestamptz;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'ai_usage_day_reserved_check'
+      and conrelid = 'public.ai_usage_day'::regclass
+  ) then
+    alter table public.ai_usage_day add constraint ai_usage_day_reserved_check
+      check (reserved_usd >= 0 and ((reserved_usd > 0) = (reserved_since is not null)));
+  end if;
+end $$;
+-- Solo las filas con algo reservado, que casi siempre son pocas. Es lo que suma ai_admit_v2
+create index if not exists ai_usage_day_reserved on public.ai_usage_day (day, engine)
+  where reserved_usd > 0;
+
 create table if not exists public.ai_generations (
   day date not null,
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -100,21 +139,27 @@ alter table public.ai_generations enable row level security;
 revoke all on public.ai_generations from anon, authenticated;
 
 -- ===================================================================== Admitir una llamada
--- Devuelve ok, student_limit, generation_limit o budget_exceeded. Cuenta la llamada desde ahora
+-- Devuelve ok, student_limit, generation_limit o budget_exceeded. Cuenta la llamada desde ahora y
+-- reserva p_reserve, su peor costo en dólares, hasta que se asiente o se devuelva
 create or replace function public.ai_admit_v2(
   p_user uuid, p_engine text, p_staff boolean, p_per_student integer,
   p_budget numeric, p_engine_share numeric, p_user_budget numeric,
-  p_generation text, p_max_generations integer, p_max_sections integer
+  p_generation text, p_max_generations integer, p_max_sections integer,
+  p_reserve numeric default 0
 ) returns text
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_day date := public.ai_day();
+  v_reserve numeric := round(coalesce(p_reserve, 0), 6);
   v_calls integer;
   v_generation integer;
   v_open integer;
   v_spent numeric;
   v_engine_spent numeric;
   v_user_spent numeric;
+  v_reserved numeric;
+  v_engine_reserved numeric;
+  v_user_reserved numeric;
 begin
   perform public.ai_check_engine(p_engine);
   if p_user is null
@@ -124,10 +169,15 @@ begin
      or coalesce(p_user_budget, -1) < 0
      or coalesce(p_max_generations, 0) < 1
      or coalesce(p_max_sections, 0) < 1
-     or (p_generation is not null and p_generation !~ '^[A-Za-z0-9_-]{8,64}$') then
+     or (p_generation is not null and p_generation !~ '^[A-Za-z0-9_-]{8,64}$')
+     or v_reserve < 0 then
     raise exception 'Límites no válidos' using errcode = '22023';
   end if;
   perform pg_advisory_xact_lock(hashtextextended('ai:' || v_day::text, 0));
+
+  -- Lo reservado por una llamada que murió antes de asentarse vence a los 5 minutos
+  update public.ai_usage_day set reserved_usd = 0, reserved_since = null
+    where day = v_day and reserved_usd > 0 and reserved_since <= now() - interval '5 minutes';
 
   select calls into v_calls from public.ai_usage_day
     where day = v_day and user_id = p_user and engine = p_engine;
@@ -146,22 +196,35 @@ begin
     end if;
   end if;
 
+  -- Lo asentado más lo reservado por lo que está en vuelo. La reserva de esta llamada entra después
   select spent_usd, coalesce((cost_by_engine ->> p_engine)::numeric, 0)
     into v_spent, v_engine_spent
     from public.ai_spend_day where day = v_day;
-  if coalesce(v_spent, 0) >= p_budget or coalesce(v_engine_spent, 0) >= p_budget * p_engine_share then
+  select coalesce(sum(reserved_usd), 0), coalesce(sum(reserved_usd) filter (where engine = p_engine), 0)
+    into v_reserved, v_engine_reserved
+    from public.ai_usage_day where day = v_day and reserved_usd > 0;
+  if coalesce(v_spent, 0) + v_reserved >= p_budget
+     or coalesce(v_engine_spent, 0) + v_engine_reserved >= p_budget * p_engine_share then
     return 'budget_exceeded';
   end if;
   if not coalesce(p_staff, false) then
-    select coalesce(sum(cost_usd), 0) into v_user_spent from public.ai_usage_day
-      where day = v_day and user_id = p_user;
-    if v_user_spent >= p_user_budget then
+    select coalesce(sum(cost_usd), 0), coalesce(sum(reserved_usd), 0) into v_user_spent, v_user_reserved
+      from public.ai_usage_day where day = v_day and user_id = p_user;
+    if v_user_spent + v_user_reserved >= p_user_budget then
       return 'budget_exceeded';
     end if;
   end if;
 
-  insert into public.ai_usage_day (day, user_id, engine, calls) values (v_day, p_user, p_engine, 1)
-    on conflict (day, user_id, engine) do update set calls = public.ai_usage_day.calls + 1;
+  -- reserved_since es la hora de la primera reserva desde que el alumno y el motor quedaron sin nada en vuelo
+  insert into public.ai_usage_day (day, user_id, engine, calls, reserved_usd, reserved_since)
+    values (v_day, p_user, p_engine, 1, v_reserve, case when v_reserve > 0 then now() end)
+    on conflict (day, user_id, engine) do update set
+      calls = public.ai_usage_day.calls + 1,
+      reserved_usd = public.ai_usage_day.reserved_usd + v_reserve,
+      reserved_since = case
+        when v_reserve = 0 or public.ai_usage_day.reserved_usd > 0 then public.ai_usage_day.reserved_since
+        else now()
+      end;
   if p_generation is not null then
     insert into public.ai_generations (day, user_id, generation_ref, calls)
       values (v_day, p_user, p_generation, 1)
@@ -179,17 +242,26 @@ end;
 $$;
 
 -- ===================================================================== Devolver el cupo
--- Cuando la función falló antes de pedir al modelo. También la sección de la generación
-create or replace function public.ai_release_v2(p_user uuid, p_engine text, p_generation text)
-returns void
+-- Cuando la función falló antes de pedir al modelo. También la sección de la generación y la reserva
+-- (p_reserved, la misma con la que se admitió la llamada). Nunca baja de cero
+create or replace function public.ai_release_v2(
+  p_user uuid, p_engine text, p_generation text, p_reserved numeric default 0
+) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_day date := public.ai_day();
+  v_reserved numeric := round(greatest(coalesce(p_reserved, 0), 0), 6);
 begin
   perform public.ai_check_engine(p_engine);
   perform pg_advisory_xact_lock(hashtextextended('ai:' || v_day::text, 0));
   update public.ai_usage_day set calls = calls - 1
     where day = v_day and user_id = p_user and engine = p_engine and calls > 0;
+  if v_reserved > 0 then
+    update public.ai_usage_day set
+        reserved_usd = greatest(reserved_usd - v_reserved, 0),
+        reserved_since = case when reserved_usd > v_reserved then reserved_since else null end
+      where day = v_day and user_id = p_user and engine = p_engine and reserved_usd > 0;
+  end if;
   if p_generation is not null then
     update public.ai_generations set calls = calls - 1
       where day = v_day and user_id = p_user and generation_ref = p_generation and calls > 0;
@@ -204,18 +276,20 @@ end;
 $$;
 
 -- ===================================================================== Asentar el gasto
--- Suma el gasto real al presupuesto, a la cuota del motor y al tope del alumno, y deja su renglón en
--- la bitácora, también cuando la llamada falló. Solo el gasto real cuenta. Nunca guarda texto
+-- Suma el gasto real al presupuesto, a la cuota del motor y al tope del alumno, devuelve lo que
+-- reservó la llamada (p_reserved, 0 en los lotes) y deja su renglón en la bitácora, también cuando la
+-- llamada falló. Solo el gasto real cuenta. Nunca guarda texto
 create or replace function public.ai_settle_v2(
   p_user uuid, p_engine text, p_model text, p_real boolean, p_ok boolean, p_cost numeric,
   p_input integer, p_output integer, p_cache_read integer, p_cache_write integer,
   p_latency integer, p_mode text, p_outcome text, p_prompt_version text,
-  p_refusal text, p_job uuid
+  p_refusal text, p_job uuid, p_reserved numeric default 0
 ) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_day date := public.ai_day();
   v_cost numeric := case when coalesce(p_real, false) then greatest(coalesce(p_cost, 0), 0) else 0 end;
+  v_reserved numeric := round(greatest(coalesce(p_reserved, 0), 0), 6);
 begin
   perform public.ai_check_engine(p_engine);
   if p_mode is null or p_mode not in ('sync', 'batch')
@@ -240,6 +314,12 @@ begin
         on conflict (day, user_id, engine)
         do update set cost_usd = public.ai_usage_day.cost_usd + v_cost;
     end if;
+  end if;
+  if p_user is not null and v_reserved > 0 then
+    update public.ai_usage_day set
+        reserved_usd = greatest(reserved_usd - v_reserved, 0),
+        reserved_since = case when reserved_usd > v_reserved then reserved_since else null end
+      where day = v_day and user_id = p_user and engine = p_engine and reserved_usd > 0;
   end if;
   insert into public.ai_call_log (
     user_id, engine, model, ok, real, input_tokens, output_tokens, cost_usd, latency_ms,
@@ -330,17 +410,17 @@ $$;
 revoke all on function public.ai_whoami() from public, anon, authenticated, service_role;
 grant execute on function public.ai_whoami() to authenticated;
 
-revoke all on function public.ai_admit_v2(uuid, text, boolean, integer, numeric, numeric, numeric, text, integer, integer)
+revoke all on function public.ai_admit_v2(uuid, text, boolean, integer, numeric, numeric, numeric, text, integer, integer, numeric)
   from public, anon, authenticated, service_role;
-grant execute on function public.ai_admit_v2(uuid, text, boolean, integer, numeric, numeric, numeric, text, integer, integer)
+grant execute on function public.ai_admit_v2(uuid, text, boolean, integer, numeric, numeric, numeric, text, integer, integer, numeric)
   to service_role;
 
-revoke all on function public.ai_release_v2(uuid, text, text) from public, anon, authenticated, service_role;
-grant execute on function public.ai_release_v2(uuid, text, text) to service_role;
+revoke all on function public.ai_release_v2(uuid, text, text, numeric) from public, anon, authenticated, service_role;
+grant execute on function public.ai_release_v2(uuid, text, text, numeric) to service_role;
 
-revoke all on function public.ai_settle_v2(uuid, text, text, boolean, boolean, numeric, integer, integer, integer, integer, integer, text, text, text, text, uuid)
+revoke all on function public.ai_settle_v2(uuid, text, text, boolean, boolean, numeric, integer, integer, integer, integer, integer, text, text, text, text, uuid, numeric)
   from public, anon, authenticated, service_role;
-grant execute on function public.ai_settle_v2(uuid, text, text, boolean, boolean, numeric, integer, integer, integer, integer, integer, text, text, text, text, uuid)
+grant execute on function public.ai_settle_v2(uuid, text, text, boolean, boolean, numeric, integer, integer, integer, integer, integer, text, text, text, text, uuid, numeric)
   to service_role;
 
 revoke all on function public.admin_ai_cost_report(date, date) from public, anon, authenticated, service_role;

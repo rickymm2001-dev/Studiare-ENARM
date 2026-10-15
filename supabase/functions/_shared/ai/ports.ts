@@ -84,6 +84,14 @@ export interface AdmitV2Input {
   generationRef: string | null;
   maxGenerations: number;
   maxSections: number;
+  /**
+   * El peor costo de la llamada, en dólares, que se reserva al admitirla (p_reserve de ai_admit_v2). Cuenta
+   * junto con lo asentado en el tope del alumno, la cuota del motor y el presupuesto del día, así varias
+   * llamadas a la vez no se saltan el tope. Se devuelve al asentar o al liberar la llamada, y si esa llamada
+   * muere en el camino vence a los 5 minutos (RESERVATION_TTL_MS). Sin él (o con 0) no reserva nada, que es
+   * lo que hacen los trabajos por lote, cuyo costo cuenta el ciclo de lotes como inFlightUsd
+   */
+  reserveUsd?: number;
 }
 
 export type AdmissionV2Reason = 'student_limit' | 'generation_limit' | 'budget_exceeded';
@@ -124,6 +132,8 @@ export interface SettlementV2 {
   /** La categoría de stop_details cuando el modelo se negó */
   refusalCategory: string | null;
   jobId: string | null;
+  /** Lo que reservó esta llamada al admitirla (reserveUsd). Se devuelve al asentar. 0 en los lotes */
+  reservedUsd?: number;
 }
 
 export interface UsageSummaryV2 extends UsageSummary {
@@ -140,8 +150,14 @@ export interface LedgerPortV2 {
   /** Cuenta la llamada desde ahora, para que varias a la vez no se salten el límite */
   admit(input: AdmitV2Input): Promise<AdmissionV2>;
   settle(input: SettlementV2): Promise<void>;
-  /** Devuelve el cupo de una llamada que no llegó al modelo por un error nuestro */
-  release(input: { userId: string; engine: AiEngine; generationRef: string | null }): Promise<void>;
+  /** Devuelve el cupo y la reserva de una llamada que no llegó al modelo por un error nuestro */
+  release(input: {
+    userId: string;
+    engine: AiEngine;
+    generationRef: string | null;
+    /** La reserva con la que se admitió la llamada */
+    reservedUsd?: number;
+  }): Promise<void>;
   summary(): Promise<UsageSummaryV2>;
 }
 

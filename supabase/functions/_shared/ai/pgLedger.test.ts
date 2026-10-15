@@ -26,7 +26,10 @@ describe('libro del día en Postgres', () => {
     const rpc = vi.fn<(name: string, args: Record<string, unknown>) => Promise<unknown>>();
     const ledger = new PgLedger(rpc);
     rpc.mockResolvedValueOnce('generation_limit');
-    expect(await ledger.admit(admit())).toEqual({ ok: false, reason: 'generation_limit' });
+    expect(await ledger.admit(admit({ reserveUsd: 0.129384 }))).toEqual({
+      ok: false,
+      reason: 'generation_limit',
+    });
     expect(rpc).toHaveBeenLastCalledWith('ai_admit_v2', {
       p_user: USER,
       p_engine: 'flashcards',
@@ -38,7 +41,15 @@ describe('libro del día en Postgres', () => {
       p_generation: 'generacion-0001',
       p_max_generations: 20,
       p_max_sections: 12,
+      p_reserve: 0.129384,
     });
+    // Sin reserva (los lotes) manda 0
+    rpc.mockResolvedValueOnce('ok');
+    await ledger.admit(admit());
+    expect(rpc).toHaveBeenLastCalledWith(
+      'ai_admit_v2',
+      expect.objectContaining({ p_reserve: 0 }) as unknown,
+    );
     rpc.mockResolvedValueOnce(null);
     await ledger.settle({
       userId: USER,
@@ -57,6 +68,7 @@ describe('libro del día en Postgres', () => {
       promptVersion: 'forgetting.base.v1',
       refusalCategory: 'bio',
       jobId: 'f0000000-0000-4000-8000-0000000000aa',
+      reservedUsd: 0.129384,
     });
     expect(rpc).toHaveBeenLastCalledWith('ai_settle_v2', {
       p_user: USER,
@@ -75,6 +87,20 @@ describe('libro del día en Postgres', () => {
       p_prompt_version: 'forgetting.base.v1',
       p_refusal: 'bio',
       p_job: 'f0000000-0000-4000-8000-0000000000aa',
+      p_reserved: 0.129384,
+    });
+    rpc.mockResolvedValueOnce(null);
+    await ledger.release({
+      userId: USER,
+      engine: 'flashcards',
+      generationRef: 'generacion-0001',
+      reservedUsd: 0.129384,
+    });
+    expect(rpc).toHaveBeenLastCalledWith('ai_release_v2', {
+      p_user: USER,
+      p_engine: 'flashcards',
+      p_generation: 'generacion-0001',
+      p_reserved: 0.129384,
     });
   });
 
@@ -87,6 +113,52 @@ describe('libro del día en Postgres', () => {
     expect(await ledger.admit(admit())).toEqual({ ok: true });
     await ledger.release({ userId: USER, engine: 'flashcards', generationRef: 'generacion-0001' });
     expect(await ledger.summary()).toMatchObject({ calls: 0, pendingJobs: 0, inFlightUsd: {} });
+  });
+
+  it('la reserva viaja por la API REST: lo que está en vuelo cuenta y se devuelve al asentar o liberar', async () => {
+    const memory = createMemoryAi();
+    const rest = createFakeSupabaseRest({ memory });
+    const ledger = new PgLedger(
+      createRestRpc({ url: rest.url, serviceKey: rest.serviceKey, fetchImpl: rest.fetch }),
+    );
+    const call = (overrides: Partial<AdmitV2Input> = {}) =>
+      ledger.admit(admit({ generationRef: null, reserveUsd: 0.13, ...overrides }));
+    // Con 0.30 de tope pasan tres llamadas en vuelo y la cuarta no, sin que nada se haya asentado
+    expect(await call()).toEqual({ ok: true });
+    expect(await call()).toEqual({ ok: true });
+    expect(await call()).toEqual({ ok: true });
+    expect(await call()).toEqual({ ok: false, reason: 'budget_exceeded' });
+    expect(memory.ledger.snapshot().users[USER]?.reserved?.flashcards?.usd).toBe(0.39);
+    await ledger.release({
+      userId: USER,
+      engine: 'flashcards',
+      generationRef: null,
+      reservedUsd: 0.13,
+    });
+    expect(await call()).toEqual({ ok: true });
+    await ledger.settle({
+      userId: USER,
+      engine: 'flashcards',
+      model: 'claude-sonnet-5-5',
+      real: true,
+      ok: true,
+      costUsd: 0.018,
+      inputTokens: 2000,
+      outputTokens: 1400,
+      cacheReadTokens: 0,
+      cacheWriteTokens: 0,
+      latencyMs: 900,
+      mode: 'sync',
+      outcome: 'ok',
+      promptVersion: 'flashcards.provisional.v1',
+      refusalCategory: null,
+      jobId: null,
+      reservedUsd: 0.13,
+    });
+    expect(memory.ledger.snapshot().users[USER]).toMatchObject({
+      costUsd: 0.018,
+      reserved: { flashcards: { usd: 0.26 } },
+    });
   });
 
   it('rechaza un alumno que no es un id de cuenta y una respuesta que no entiende', async () => {

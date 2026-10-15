@@ -63,3 +63,28 @@ export function worstBatchCostUsd(price: ModelPrice, text: string, maxTokens: nu
     cacheReadTokens: 0,
   });
 }
+
+/** Lo que el mensaje del reintento suma al del primer intento: lo que falló, hasta 8 líneas (run.ts) */
+const RETRY_EXTRA_CHARS = 1_500;
+
+/**
+ * El peor costo de una llamada al momento antes de hacerla. Es lo que se reserva al admitirla para que
+ * varias a la vez no se salten el tope en dólares (B12, ai_admit_v2). Cuenta todos los intentos que puede
+ * hacer, cada uno con la entrada completa a 3 caracteres por token y a la tarifa más cara de entrada
+ * (escribir la caché), y la salida llena hasta max_tokens. Es una cota y no un cálculo: casi siempre la
+ * llamada cuesta mucho menos, y lo que sobra se devuelve al asentar o al liberar
+ */
+export function worstCallCostUsd(
+  price: ModelPrice,
+  text: string,
+  maxTokens: number,
+  attempts: number,
+): number {
+  const inputRate = Math.max(price.input, price.cacheWrite);
+  let dollars = 0;
+  for (let attempt = 0; attempt < Math.max(1, attempts); attempt += 1) {
+    const chars = text.length + (attempt > 0 ? RETRY_EXTRA_CHARS : 0);
+    dollars += (Math.ceil(chars / 3) * inputRate + maxTokens * price.output) / 1_000_000;
+  }
+  return Math.round(dollars * 1e6) / 1e6;
+}

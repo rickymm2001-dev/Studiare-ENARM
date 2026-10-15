@@ -15,6 +15,7 @@ import { alwaysOpenGate } from './gate.ts';
 import { DayLedger } from './ledger.ts';
 import { bundledPromptSets } from './prompts.ts';
 import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
+import { worstCaseCostUsd } from './run.ts';
 import { createAiRoutes, healthOf, type AiRoutesDeps } from './routes.ts';
 import { fakeApi, fakeMessage, requestBody, STUDENT } from './testing/fakes.ts';
 import { MemoryJobStore } from './testing/memory.ts';
@@ -238,6 +239,96 @@ describe('límites', () => {
     );
     expect(second.status).toBe(429);
     expect(((await second.json()) as { error: string }).error).toBe('budget_exceeded');
+  });
+});
+
+describe('reserva del peor costo (revisión del hallazgo 1)', () => {
+  const good = JSON.stringify(mockHypothesis(hypothesisInput()));
+
+  /** El libro del núcleo, pero anotando lo que le piden */
+  function spyLedger(ai: { ledger: DayLedger }) {
+    const seen = {
+      admit: [] as (number | undefined)[],
+      settle: [] as (number | undefined)[],
+      release: [] as (number | undefined)[],
+    };
+    const { ledger } = ai;
+    const admit = ledger.admit.bind(ledger);
+    const settle = ledger.settle.bind(ledger);
+    const release = ledger.release.bind(ledger);
+    ledger.admit = (input) => {
+      seen.admit.push(input.reserveUsd);
+      return admit(input);
+    };
+    ledger.settle = (input) => {
+      seen.settle.push(input.reservedUsd);
+      return settle(input);
+    };
+    ledger.release = (input) => {
+      seen.release.push(input.reservedUsd);
+      return release(input);
+    };
+    return seen;
+  }
+
+  it('reserva el peor costo al admitir y lo devuelve al asentar, sin dejar nada en vuelo', async () => {
+    const { app, ai } = realApp([fakeMessage(good)]);
+    const seen = spyLedger(ai);
+    expect((await post(app, 'forgetting', requestBody(hypothesisInput()))).status).toBe(200);
+    const worst = worstCaseCostUsd(
+      { config: ai.config(), prompts: ai.prompts },
+      'forgetting',
+      hypothesisInput(),
+    );
+    expect(worst).toBeGreaterThan(0);
+    expect(seen).toEqual({ admit: [worst], settle: [worst], release: [] });
+    expect(ai.ledger.snapshot().users[STUDENT]?.reserved).toEqual({});
+  });
+
+  it('una llamada que falla en el modelo también devuelve la reserva al asentarse', async () => {
+    const { app, ai } = realApp([new Error('se cayó')]);
+    const seen = spyLedger(ai);
+    expect((await post(app, 'forgetting', requestBody(hypothesisInput()))).status).toBe(502);
+    expect(seen.settle).toEqual(seen.admit);
+    expect(seen.admit[0]).toBeGreaterThan(0);
+    expect(ai.ledger.snapshot().users[STUDENT]?.reserved).toEqual({});
+  });
+
+  it('un error nuestro después de admitir devuelve el cupo y la misma reserva', async () => {
+    const { app, ai } = realApp([fakeMessage(good)]);
+    const seen = spyLedger(ai);
+    // El reloj lanza dentro de runEngine, fuera de lo que atrapa el proveedor
+    ai.clock = () => {
+      throw new Error('reloj roto');
+    };
+    expect((await post(app, 'forgetting', requestBody(hypothesisInput()))).status).toBe(500);
+    expect(seen.release).toEqual(seen.admit);
+    expect(seen.admit[0]).toBeGreaterThan(0);
+    expect(seen.settle).toEqual([]);
+    expect(ai.ledger.snapshot().users[STUDENT]).toMatchObject({
+      calls: { forgetting: 0 },
+      reserved: {},
+    });
+  });
+
+  it('en modo simulado no reserva nada, porque no gasta', async () => {
+    const { app, ai } = mockApp();
+    const seen = spyLedger(ai);
+    expect((await post(app, 'forgetting', requestBody(hypothesisInput()))).status).toBe(200);
+    expect(seen).toEqual({ admit: [0], settle: [0], release: [] });
+  });
+
+  it('un trabajo por lote no reserva, porque su costo lo cuenta el ciclo de lotes', async () => {
+    const { app, ai } = realApp([fakeMessage(good)]);
+    const seen = spyLedger(ai);
+    const queued = await app.request('/ai/jobs/forgetting', {
+      method: 'POST',
+      headers: studentHeaders(),
+      body: JSON.stringify({ ...requestBody(hypothesisInput()), jobKey: 'fgt_0123456789abcdef' }),
+    });
+    expect(queued.status).toBe(202);
+    expect(seen.admit).toEqual([undefined]);
+    expect(ai.ledger.snapshot().users[STUDENT]?.reserved).toBeUndefined();
   });
 });
 

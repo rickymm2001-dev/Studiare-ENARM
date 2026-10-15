@@ -99,6 +99,7 @@ export function createFakeSupabaseRest(options: {
         generationRef: (args.p_generation as string | null) ?? null,
         maxGenerations: num(args, 'p_max_generations'),
         maxSections: num(args, 'p_max_sections'),
+        reserveUsd: args.p_reserve === undefined ? 0 : num(args, 'p_reserve'),
       });
       return admission.ok ? 'ok' : admission.reason;
     },
@@ -120,6 +121,7 @@ export function createFakeSupabaseRest(options: {
         promptVersion: (args.p_prompt_version as string | null) ?? null,
         refusalCategory: (args.p_refusal as string | null) ?? null,
         jobId: (args.p_job as string | null) ?? null,
+        reservedUsd: args.p_reserved === undefined ? 0 : num(args, 'p_reserved'),
       });
       return undefined;
     },
@@ -128,6 +130,7 @@ export function createFakeSupabaseRest(options: {
         userId: str(args, 'p_user'),
         engine: str(args, 'p_engine') as AiEngine,
         generationRef: (args.p_generation as string | null) ?? null,
+        reservedUsd: args.p_reserved === undefined ? 0 : num(args, 'p_reserved'),
       });
       return undefined;
     },

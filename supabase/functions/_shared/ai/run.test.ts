@@ -9,11 +9,12 @@ import {
   weeklyReportInput,
 } from '../../../../src/ai/testing/aiSamples.ts';
 import { DEFAULT_CONFIG } from './config.ts';
+import { estimateCostUsd } from './cost.ts';
 import { AI_ENGINES, ENGINE_CONTRACTS } from './engines/aiContracts.ts';
 import { mockHypothesis } from './engines/aiMock.ts';
-import { bundledPromptSets } from './prompts.ts';
+import { buildUserMessage, bundledPromptSets } from './prompts.ts';
 import { createAnthropicProvider, createMockProvider, type AiProvider } from './provider.ts';
-import { runEngine, validateOutput, type RunDeps } from './run.ts';
+import { runEngine, validateOutput, worstCaseCostUsd, type RunDeps } from './run.ts';
 import { refusalMessage, spendLimitError } from './testing/fakeAnthropic.ts';
 import { fakeApi, fakeMessage } from './testing/fakes.ts';
 
@@ -243,5 +244,58 @@ describe('tarjetas', () => {
     const api = fakeApi([fakeMessage('{"cards":[]}')]);
     const result = await runEngine(deps(real(api)), 'flashcards', text);
     expect(result.ok && (result.output as { cards: unknown[] }).cards).toEqual([]);
+  });
+});
+
+describe('peor costo de una llamada, para reservarlo al admitirla', () => {
+  const inputs = {
+    forgetting: hypothesisInput(),
+    weekly_report: weeklyReportInput(),
+    flashcards: flashcardsInput(),
+    bias_tips: biasTipInput(),
+    restructure: restructureInput(),
+  };
+
+  it('cubre lo que cobra una llamada que llena max_tokens en sus dos intentos', () => {
+    for (const engine of AI_ENGINES) {
+      const worst = worstCaseCostUsd({ config: DEFAULT_CONFIG, prompts }, engine, inputs[engine]);
+      const model = DEFAULT_CONFIG.models[engine];
+      const price = DEFAULT_CONFIG.prices[model.id];
+      if (!price) throw new Error('Falta precio');
+      // La salida llena en los dos intentos y el prompt entero en cada uno, a la tarifa de entrada
+      const text = `${prompts[engine].text}${buildUserMessage(inputs[engine])}`;
+      const floor = estimateCostUsd(price, {
+        inputTokens: Math.ceil(text.length / 4) * 2,
+        outputTokens: model.maxTokens * 2,
+        cacheWriteTokens: 0,
+        cacheReadTokens: 0,
+      });
+      expect(worst, engine).toBeGreaterThanOrEqual(floor);
+      // Y no se pasa de largo, que bloquearía a quien llama de una en una
+      expect(worst, engine).toBeLessThan(floor * 1.5);
+    }
+  });
+
+  it('crece con max_tokens y con el modelo, y sin precio no reserva nada', () => {
+    const base = worstCaseCostUsd(
+      { config: DEFAULT_CONFIG, prompts },
+      'flashcards',
+      inputs.flashcards,
+    );
+    // Sonnet 5.5 con 6,000 tokens de salida y dos intentos pasa de 0.12 dólares
+    expect(base).toBeGreaterThan(0.12);
+    expect(base).toBeLessThan(0.2);
+    const bigger = {
+      ...DEFAULT_CONFIG,
+      models: {
+        ...DEFAULT_CONFIG.models,
+        flashcards: { ...DEFAULT_CONFIG.models.flashcards, maxTokens: 12_000 },
+      },
+    };
+    expect(
+      worstCaseCostUsd({ config: bigger, prompts }, 'flashcards', inputs.flashcards),
+    ).toBeGreaterThan(base * 1.9);
+    const noPrice = { ...DEFAULT_CONFIG, prices: {} };
+    expect(worstCaseCostUsd({ config: noPrice, prompts }, 'flashcards', inputs.flashcards)).toBe(0);
   });
 });
