@@ -7,6 +7,7 @@ import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { legalText } from '@/i18n/legal';
+import { legalDocs } from '@/i18n/legalDocs';
 import { t } from '@/i18n/es-MX';
 import { PrivacyNoticeScreen, TermsScreen } from './LegalScreen';
 
@@ -34,19 +35,65 @@ describe('páginas legales', () => {
       screen.getByRole('heading', { level: 1, name: t.screens.privacyNotice.title }),
     ).toBeInTheDocument();
     expect(screen.getByRole('note')).toHaveTextContent(legalText.draftNotice);
-    for (const section of legalText.privacy.sections) {
+    for (const section of legalDocs.privacy.sections) {
       expect(screen.getByRole('heading', { level: 2, name: section.title })).toBeInTheDocument();
     }
     // El índice lleva a cada sección
     const index = screen.getByRole('navigation', { name: legalText.links.contents });
-    expect(within(index).getAllByRole('link')).toHaveLength(legalText.privacy.sections.length);
+    expect(within(index).getAllByRole('link')).toHaveLength(legalDocs.privacy.sections.length);
   });
 
-  it('sin datos del responsable dice que faltan y no inventa nada', () => {
+  it('sin datos del responsable no muestra marcas de pendiente ni inventa nada (B16)', () => {
+    for (const name of [
+      'VITE_LEGAL_NAME',
+      'VITE_LEGAL_ADDRESS',
+      'VITE_PRIVACY_EMAIL',
+      'VITE_SUPPORT_EMAIL',
+    ]) {
+      vi.stubEnv(name, '');
+    }
+    for (const path of [SCREENS.privacyNotice.path, SCREENS.terms.path]) {
+      open(path);
+      const page = document.body.textContent;
+      expect(page).not.toMatch(/[[\]{}]/);
+      expect(page).not.toMatch(/\bpendiente/i);
+      expect(page).not.toMatch(/Plexus/i);
+      expect(page).not.toContain('@');
+      expect(page).toContain('la empresa que opera Studiare');
+      expect(page).toContain('al equipo de Studiare por el medio donde te dieron acceso');
+      // El borrador sigue a la vista
+      expect(screen.getByRole('note')).toHaveTextContent(legalText.draftNotice);
+      cleanup();
+    }
+  });
+
+  it('con VITE_LEGAL_NAME, el domicilio y los dos correos, cada uno va en su lugar (respuestas 42 y 43)', () => {
+    vi.stubEnv('VITE_LEGAL_NAME', 'Plexus Medica S. de R.L. de C.V.');
+    vi.stubEnv('VITE_LEGAL_ADDRESS', 'Calle 60 número 100, Centro, 97000 Mérida, Yucatán');
+    vi.stubEnv('VITE_PRIVACY_EMAIL', 'privacidad@studiare.mx');
+    vi.stubEnv('VITE_SUPPORT_EMAIL', 'soporte@studiare.mx');
     open(SCREENS.privacyNotice.path);
-    expect(
-      screen.getAllByText(new RegExp(legalText.pending.replace(/[[\]]/g, '\\$&'))).length,
-    ).toBeGreaterThan(0);
+    const responsible = screen.getByRole('heading', { level: 2, name: 'Quién es el responsable' });
+    const card = responsible.parentElement ?? document.body;
+    expect(card).toHaveTextContent(
+      'El responsable de tus datos personales es Plexus Medica S. de R.L. de C.V.',
+    );
+    expect(card).toHaveTextContent(
+      'Su domicilio es Calle 60 número 100, Centro, 97000 Mérida, Yucatán.',
+    );
+    expect(within(card).getByRole('link', { name: 'privacidad@studiare.mx' })).toHaveAttribute(
+      'href',
+      'mailto:privacidad@studiare.mx',
+    );
+    expect(screen.queryByRole('link', { name: 'soporte@studiare.mx' })).toBeNull();
+    cleanup();
+
+    open(SCREENS.terms.path);
+    expect(screen.getAllByText(/Plexus Medica S\. de R\.L\. de C\.V\./).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: 'soporte@studiare.mx' })[0]).toHaveAttribute(
+      'href',
+      'mailto:soporte@studiare.mx',
+    );
   });
 
   it('con el correo configurado lo muestra como enlace para escribir', () => {

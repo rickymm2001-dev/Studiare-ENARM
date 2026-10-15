@@ -56,6 +56,21 @@ describe('aceptar el aviso nuevo', () => {
     expect(await noticeNeedsAcceptance(api, user)).toBe(true);
   });
 
+  it('quien aceptó el aviso de B7 (2026-10-14), el de B9 (2026-10-14b) o el primer borrador de B16 (2026-10-15) ve el aviso nuevo', async () => {
+    api = testApi();
+    for (const version of ['2026-10-14', '2026-10-14b', '2026-10-15']) {
+      const user = newId();
+      await api.repos.consents.put(consent(user, version, 'party'));
+      expect(await noticeNeedsAcceptance(api, user), version).toBe(true);
+    }
+    // Con las dos versiones guardadas, la aceptada es la más nueva, la de B16
+    const user = newId();
+    await api.repos.consents.put(consent(user, PRIVACY_NOTICE_VERSION, 'party'));
+    await api.repos.consents.put(consent(user, '2026-10-14b', 'ai_analysis'));
+    expect(await acceptedNoticeVersion(api, user)).toBe(PRIVACY_NOTICE_VERSION);
+    expect(await noticeNeedsAcceptance(api, user)).toBe(false);
+  });
+
   it('quien decidió bajo la versión actual, o todavía no decide nada, no necesita aceptar', async () => {
     api = testApi();
     const user = newId();

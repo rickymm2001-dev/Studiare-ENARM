@@ -1,101 +1,175 @@
 # Cambios del bloque B16 en los textos legales
 
-En este documento se detallan los cambios realizados al aviso de privacidad y a los términos y condiciones de Studiare para la revisión legal del abogado de Ricardo. Los textos actualizados se encuentran en src/i18n/legal.ts y se exportan en formato Markdown en docs/legal/aviso-de-privacidad.md y docs/legal/terminos-y-condiciones.md.
+Lista de lo que cambió en el aviso de privacidad y en los términos y condiciones con el bloque B16 del plan del cambio (respuestas 42 a 49, 4.26 y 4.27), contra lo que había en main después de B9. Es para el abogado de Ricardo (respuesta 44) y para Ricardo.
 
----
+- El aviso de privacidad pasa a la versión 2026-10-15b y los términos a la 2026-10-15, los dos con fecha a la vista del 15 de octubre de 2026. El aviso lleva la letra porque main ya traía un primer borrador del aviso en la versión 2026-10-15, y quien lo aceptó tiene que aceptar este texto, que lo reemplaza
+- Siguen marcados como borrador para revisión del abogado, en la app y en docs/legal. La marca se quita solo cuando Ricardo diga que el abogado los aprobó (0.1 del plan del cambio)
+- Quien aceptó una versión anterior del aviso, como la 2026-10-14 de B7, la 2026-10-14b de B9 o la 2026-10-15 del primer borrador de B16, ve al entrar el aviso de que cambió y lo acepta de nuevo. Eso ya existía, y una prueba revisa que la versión nueva quede después de las tres al ordenarlas como texto
+- El texto vive en src/i18n/legalDocs.ts y los archivos de esta carpeta salen de ahí con npm run legal:export
 
-## 1. Aviso de privacidad (aviso-de-privacidad.md)
+## Cómo se leyó cada cosa
 
-### Quién es el responsable
-- Se define a **Plexus Medica S. de R.L. de C.V.** como la empresa responsable del tratamiento de los datos personales (respuestas 42 y 24 del plan V3).
-- El domicilio fiscal y los correos electrónicos específicos de privacidad y de soporte se dejan marcados como `[PENDIENTE DE RICARDO]` hasta que Ricardo los proporcione.
+- Cada frase se revisó contra el código de main, contra el plan del cambio y contra el código de los bloques que todavía no llegan a main (B11 en la rama b11int y su plan). B10 ya está en main. Lo que depende de un bloque que no está en main se dice abajo, en Lo que el texto da por hecho
+- Se usaron como material de partida el borrador de Gemini (rama gemini/legal-b16, con su propia lista de cambios) y la rama claude/keen-hopper-4oj3c2. De ahí se tomaron la factura, OpenAI, los proveedores nuevos y la estructura de los términos. Se dejó fuera lo que no coincide con el código o con el plan, que está al final de esta lista
+
+## Aviso de privacidad
+
+### Responsable y contacto
+
+- La razón social sale de la variable VITE_LEGAL_NAME, que llevará Plexus Medica S. de R.L. de C.V. (respuestas 24 y 42, 4.26). No va escrita en el texto, así un cambio que pida el contador no obliga a tocar el código. Una prueba lo revisa
+- El domicilio pasa a su propia frase, Su domicilio es, para poder omitirla en la app mientras falte
+- Hay un correo de privacidad aparte del de soporte (pregunta 43). Sale de la variable nueva VITE_PRIVACY_EMAIL y, si falta, se usa el de soporte, VITE_SUPPORT_EMAIL. El aviso usa el de privacidad y los términos el de soporte
+- Lo que falta ya no se le muestra al alumno como marca. Antes la página decía [pendiente de completar]. Ahora el alumno lee la empresa que opera Studiare donde falta la razón social, al equipo de Studiare por el medio donde te dieron acceso donde falta un correo, igual que el aviso del límite de dispositivos, y no ve la frase del domicilio. El abogado sí ve cada dato que falta entre corchetes, con quién lo pone
 
 ### Qué datos tratamos
-- **Foto de perfil**. Se mantiene la especificación técnica de la Fase B2 y D-121. La foto se almacena en Supabase Storage en un espacio privado del alumno, la ven únicamente el propio alumno y los integrantes de los grupos activos de Party a los que se una, y se suprime si el alumno elige iniciales o al eliminar la cuenta.
-- **Comparación y modelo del alumno**. Pendiente de B14. Al integrar estos borradores (2026-10-14) se dejó fuera del aviso visible como consentimiento, porque la app todavía no tiene ese permiso ni esa función. Cuando B14 lo construya, se añade el tratamiento de las respuestas para calcular percentiles históricos frente a la comunidad de aspirantes y calibrar la dificultad de las preguntas, aclarando que no se predice puntaje del examen ni probabilidad de plaza.
-- **Facturación**. Se agregan los datos necesarios para emitir comprobantes fiscales digitales por internet (CFDI): nombre o razón social, Registro Federal de Contribuyentes (RFC), régimen fiscal, código postal del domicilio fiscal y uso de CFDI.
-- **Exclusión de datos sensibles**. Se reitera que los textos clínicos de las preguntas son material pedagógico y no constituyen datos sensibles de salud del aspirante.
+
+- Se conservan tal cual Cuenta, Edad mínima, Entrar con Google y Cómo nos conociste (B9) y Foto de perfil (B2)
+- Estudio. Causas de tus errores pasa a motivos de tus errores, por los siete motivos de B5 (D-124). Se agregan los reportes de error que el alumno manda sobre una pregunta, que ya existían y no se decían
+- Nuevo, Lecturas del banco (B11). Qué preguntas abre cada día, con su plan y para qué, para contar en el servidor el tope de Gratis y frenar descargas masivas. Dice que el equipo ve un aviso con el alias y la cifra del día cuando el volumen es muy alto, porque así lo muestra la lista de avisos del admin en B11
+- Nuevo, Uso de la IA. El conteo diario por función y el costo, sin texto. Ya existía desde la IA alojada (ai_usage_day y ai_call_log) y no se decía
+- Pagos. Se agregan el estado de la prueba gratis, el plan o pase, la pasarela, el código de descuento y que la prueba se liga al correo para dar una por persona (trial_claims de B10). Se agrega la cuenta bancaria cuando se pide la garantía de un pago en OXXO, que B10 devuelve por transferencia
+- Nuevo, Prueba gratis usada (B10, tabla trial_history). Quien empieza una prueba deja una huella de su correo, un hash SHA-256 sin sal de su correo normalizado, con la pasarela, el identificador de la suscripción en la pasarela y la fecha. No guarda el correo. Sobrevive al borrado de la cuenta, ya sin ligarse a ella, solo para que nadie repita la prueba con el mismo correo. El aviso dice qué se guarda, por qué, que solo sirve para comparar el mismo correo y que no tiene fecha de borrado
+- Nuevo, Factura (B10). RFC, nombre o razón social, régimen fiscal, código postal fiscal, uso del CFDI y correo, solo si el alumno pide factura. Son los campos de invoice_requests
+- Nuevo, Referidos (B7). Quién invitó a quién y si ya hubo primer cobro. Quien invitó solo ve conteos, como devuelve my_referrals
+- Técnicos. Se agrega el registro de acceso de Supabase con la dirección IP
 
 ### Para qué los usamos
-- Se incorporan las finalidades de emisión de facturas fiscales a solicitud del usuario, la gestión de pases de estudio de un solo pago y el cumplimiento de las obligaciones fiscales aplicables.
 
-### Lo que solo hacemos si lo permites (consentimientos opcionales)
-- Se formaliza que cada finalidad opcional se solicita por separado y comienza desactivada por omisión (regla 4.27 del plan V3 y D-120).
-- Los consentimientos opcionales que existen hoy en la app son tres. Sus textos en el aviso son los que dejó B7, que describe Party como funciona ahora.
-  1. **Party**. Compartir alias, foto de perfil, XP de la semana y aporte a los retos con los miembros de los grupos, y en un duelo los aciertos y el tiempo.
-  2. **Análisis con IA**. Usar los errores para las hipótesis y el informe del tutor.
-  3. **Mejora anónima**. Medición del parecido entre el banco y el examen real, registro voluntario del puntaje oficial del ENARM y reporte técnico de fallas sin identificadores personales.
+- Nuevo. El modelo del alumno con su propio estudio, dominio por rama y tema, sesgos, ritmo y constancia, para recomendarle qué reforzar, sin predecir el puntaje (respuesta 84). Es una finalidad del servicio porque usa solo los datos del propio alumno
+- Nuevo. Aplicar los límites del plan en la app y en el servidor (B8 y B11)
+- Cobrar ahora incluye pases, una prueba por persona, garantía, reembolsos y factura a pedido (B10)
+- Nuevo. El mes gratis por referido (B7)
+- Nuevo. Los correos que necesita la cuenta, como el acceso, el fin de la prueba y el vencimiento de un pase (B10 y B15)
+- Prevenir abusos menciona la descarga masiva del banco (4.10). Obligaciones legales pasa a legales y fiscales
 
-### Qué pasa con la inteligencia artificial
-- Se clarifica el rol de **Anthropic** como encargado tecnológico de la inteligencia artificial de la plataforma.
-- Se establece expresamente que **OpenAI** se emplea únicamente para evaluaciones internas de calidad y consistencia del banco de preguntas; recibe únicamente texto del banco con identificadores seudónimos y nunca datos, nombres, correos ni actividad de los alumnos.
-- Se mantiene el compromiso de que al motor de IA en producción solo viajan identificadores seudónimos y texto de estudio, filtrando previamente nombres, correos y números telefónicos.
-- Se ratifica que las respuestas generadas son borradores que ningún médico ha validado, no existe chat libre y no se calcula predicción alguna sobre el puntaje del examen.
+### Lo opcional y los permisos
 
-### Con quién compartimos tus datos (encargados del tratamiento)
-Se actualiza la lista de terceros receptores y encargados con su finalidad específica:
-- **Supabase**. Alojamiento de la base de datos relacional, sistema de autenticación y almacenamiento de archivos (foto de perfil en Supabase Storage).
-- **Stripe y Mercado Pago**. Procesamiento de pagos, suscripciones con tarjeta, pases de OXXO y SPEI, y facturación.
-- **Resend**. Envío de correos electrónicos transaccionales (enlaces de acceso sin contraseña y notificaciones del servicio).
-- **PostHog**. Analítica del uso del producto, supeditada al consentimiento previo del alumno.
-- **Sentry**. Registro y análisis de errores técnicos y excepciones de la aplicación, sin datos personales sensibles.
-- **Google**. Mecanismo de inicio de sesión opcional (Google Sign-In) y sincronización del banco de preguntas desde la hoja de cálculo de los médicos revisores (Google Sheets).
-- **Anthropic**. Proveedor de modelos de lenguaje para el tutor y análisis pedagógico, bajo consentimiento y con datos seudónimos.
-- **Cloudflare / GitHub Pages**. Alojamiento de la interfaz web y red de entrega de contenido (CDN), con tratamiento de datos técnicos de conexión como la dirección IP.
-- **Autoridades**. Solo por mandato de ley o mandamiento fundado y motivado de autoridad competente.
+- La frase de entrada dice ahora que cada permiso se pide por separado y empieza apagado (4.27), como ya hace la app desde B9
+- Los tres permisos del aviso son exactamente los tres que guarda la app, Party, Análisis con IA y Mejora anónima. Una prueba lo revisa contra ConsentPurposeSchema y los textos de Configuración
+- Party queda con el texto de B7, sin cambios
+- Mejora anónima explica que usa un identificador seudónimo y qué se calcula con esos datos, la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y que alimenta la comparación con otros alumnos (respuestas 84 a 87)
+- Se avisa que la analítica del producto y los recordatorios de repaso por correo, cuando existan, también serán opcionales, aparte y apagados
 
-### Tus derechos y cómo ejercerlos
-- Se detallan las rutas dentro de la aplicación para el ejercicio directo de los derechos de acceso, rectificación, cancelación y oposición (Configuración, sección Perfil y sección Privacidad).
-- Se indica el medio por correo electrónico ante el correo de privacidad de la empresa.
+### Comparación con otros alumnos
 
-### Cuánto tiempo los conservamos
-- Se aclara que los datos de pago y facturación se retienen en las pasarelas y registros contables durante los plazos que fijan las leyes fiscales en México (Código Fiscal de la Federación), mientras que los datos de estudio y la foto de perfil se borran al eliminar la cuenta.
+- Sección nueva (B14). Percentiles de lo que ya pasó, contra todos y contra quien busca la misma especialidad, solo con datos de quienes dieron el permiso de mejora anónima (respuesta 87), solo con grupos de 30 o más, con estado calibrando y nunca un puntaje estimado ni probabilidad de plaza (4.2). Dice Cuando esté disponible, porque B14 todavía no existe
 
-### Personas menores de edad
-- Se fija expresamente la regla de que la plataforma no admite registros de menores de 18 años.
+### Inteligencia artificial
 
----
+- Se corrige algo que ya no era cierto. El aviso decía que a la IA solo viajaba texto del banco y solo con el permiso de análisis con IA. Desde la Fase C2 (D-085), B5 y B6, en los planes de pago el alumno pide tarjetas con IA desde una pregunta, desde sus apuntes o desde un texto o PDF que sube, y ese texto viaja a la IA sin depender de ese permiso. Ahora se dice, con el filtro de datos personales que ya existe
+- El permiso de análisis con IA queda descrito como lo que es en el código, el tutor con hipótesis e informe (useTutorAi)
+- OpenAI no recibe datos del alumno. Se usa solo en las evaluaciones internas con texto del banco (respuesta 38)
 
-## 2. Términos y condiciones (terminos-y-condiciones.md)
+### Con quién compartimos tus datos
 
-### Introducción
-- Se formaliza que el contrato de uso se celebra entre el alumno y **Plexus Medica S. de R.L. de C.V.**
+- Se nombra a cada proveedor con lo que recibe. Supabase, Google (entrar y el Sheet del banco, que Studiare solo lee y donde no va nada del alumno), Stripe, Mercado Pago, Anthropic, el servicio del proxy de IA, Resend, PostHog, Sentry, GitHub y el alojamiento de la página
+- Stripe y Mercado Pago reciben el correo y el identificador de la cuenta, porque así arman el cliente en B10. Antes decía solo lo necesario para cobrar
+- Los que no están activos dicen cuando se active, para que el texto sea cierto hoy y después. Son Mercado Pago, Resend, PostHog, Sentry y GitHub
+- PostHog solo con un permiso de analítica aparte y apagado (respuesta 78)
+- Sentry recibe los reportes de fallas de la app solo con el permiso de mejora anónima, como hoy los recibe Supabase (src/app/errorReporter.ts), y los errores de las funciones del servidor, sin nombre ni correo (respuesta 79)
+- GitHub aparece porque la calibración nocturna de B14 corre en GitHub Actions con los datos de quienes dieron el permiso (respuesta 85)
+- Hoy los correos de acceso los manda Supabase y después Resend (B17)
+- Se dice que algunos proveedores guardan los datos fuera de México
 
-### Tu cuenta
-- **Edad mínima**. Se establece como requisito indispensable tener 18 años cumplidos y capacidad legal.
-- **Registro por invitación**. Se estipula que durante la etapa de lanzamiento el acceso opera exclusivamente con invitación o código válido.
+### Derechos, conservación y navegador
 
-### Planes, pagos y cancelación
-- **Pasarelas de pago**. El alumno puede elegir entre Stripe y Mercado Pago para gestionar sus transacciones.
-- **Prueba gratis de 7 días**. Se aclara que aplica para suscripciones con tarjeta. La pantalla de pago informa de manera previa y visible el cobro automático recurrente al finalizar el séptimo día, salvo cancelación anticipada.
-- **Garantía de 7 días**. Se introduce la garantía de satisfacción de 7 días naturales a partir del primer cobro efectivo, con derecho a devolución íntegra del 100% de dicho cobro solicitándola por correo.
-- **Cambio de plan con prorrateo**. Se permite la modificación del plan (mensual a anual o viceversa) a través del portal de cliente, aplicando el prorrateo automático correspondiente.
-- **Pases de OXXO y SPEI**. Se define que los pagos en efectivo en OXXO y las transferencias SPEI corresponden a pases de acceso temporal (1 mes o 1 año) que no admiten renovación automática. Al expirar su vigencia, la cuenta regresa al plan Gratis sin cobros adicionales.
-- **Precio Fundador**. Se detallan sus reglas contractuales:
-  - Cupo cerrado y limitado a 100 lugares en total, unificados entre las modalidades mensual y anual.
-  - Exclusivo para suscripción con renovación automática por tarjeta.
-  - El lugar se aparta durante los 7 días de prueba gratis; si el usuario cancela antes del primer cobro, el lugar se libera para otro aspirante.
-  - Una vez efectuado el primer cobro, el precio se conserva de forma permanente mientras la suscripción no sea cancelada ni caiga en mora. Si se cancela después de haber pagado, el lugar y el precio preferencial se pierden de forma definitiva y el cupo no se reabre.
-  - El cambio entre Fundador mensual y Fundador anual dentro del portal preserva el lugar y el beneficio.
-- **Política de reembolsos complementaria**. Queda señalada como `[pendiente de definir la política de reembolsos por el abogado]` para los supuestos posteriores al vencimiento de la garantía de 7 días.
+- Por correo pasa a Por escrito, porque sin correo configurado el alumno lee el texto neutro
+- Cancelar dice qué deja Borrar mis datos. De su estudio solo quedan las preguntas del banco que abrió y su uso de la IA del día de estudio en curso, para no reiniciar los límites del día (B11 y la IA alojada). Eliminar la cuenta lo quita todo, con la foto y las solicitudes de factura, salvo la huella del correo de una prueba gratis usada
+- Conservación se corrige. Decía que a Studiare le quedaba el registro de los cobros, y en realidad los pagos se borran con la cuenta en cascada. Ahora lo dice, junto con que el registro de costos de la IA queda sin identificador, que la huella del correo de una prueba usada se queda sin la cuenta y sin fecha de borrado, y que la pasarela y el sistema de facturación conservan lo que pide la ley fiscal
+- Cookies dice que se guarda la sesión, que hoy no hay analítica de terceros y que PostHog solo funcionará con permiso
 
-### Ley aplicable y jurisdicción
-- Se reitera el sometimiento a la legislación mexicana. La designación de tribunales competentes queda señalada como `[pendiente de definir los tribunales competentes por el abogado]`.
+## Términos y condiciones
 
----
+- El acuerdo es con la razón social de VITE_LEGAL_NAME. La propiedad de la plataforma también se le atribuye a ella y no a la marca Studiare
+- Qué es Studiare. Se agrega que la comparación con otros alumnos es de percentiles y no un puntaje estimado
+- Tu cuenta. Edad mínima de 18 años con la confirmación (pregunta 45). Registro con invitación hasta que se abra (respuesta 52, D-129). Cuidar también la cuenta de Google si se entra con ella
+- Planes y precios, sección nueva. Gratis con hasta 20 preguntas al día y lo que es de pago (B8). Los planes de pago sin tope diario pero sin descarga masiva (4.10). Precios en pesos con IVA incluido (respuesta 13), Mensual 149, Anual 1,499, Fundador 79 o 749 y pases de 149 por 1 mes y 1,499 por 1 año, iguales a B10. Una prueba compara los que ya existen en main con src/config/billing.ts
+- Formas de pago y prueba gratis, sección nueva. Tarjeta, Apple Pay o Google Pay con renovación, pases en OXXO o SPEI sin renovación (4.4), Mercado Pago cuando se active, sin prueba ni Fundador. Un solo plan pagado a la vez (D-118). Prueba de 7 días con tarjeta, una por persona, que no se repite al eliminar la cuenta y volver con el mismo correo ni en una cuenta que ya pagó (trial_history y trial_already_used de b10fix), con la fecha y el monto del primer cobro dichos antes de pedir la tarjeta (4.18). Cancelar en la prueba no cobra. Los pases se suman. Los códigos de descuento solo descuentan el primer cobro (respuesta 21)
+- Cambio de plan, cancelación y garantía, sección nueva. Subir de mensual a anual cobra la diferencia con prorrateo y bajar se aplica al fin del periodo (respuesta 9). Con Mercado Pago se cancela y se contrata el otro. Cobro fallido. Garantía de 7 días naturales desde el primer cobro o desde cada pase, con reembolso completo y devolución por transferencia en OXXO (respuesta 10, 4.18). Antes la política de reembolsos estaba toda pendiente. Ahora solo queda pendiente qué pasa después de los 7 días
+- Precio Fundador, sección nueva (4.5, 4.6 y respuesta 17). 100 lugares compartidos, solo con tarjeta y renovación, el lugar se aparta con la prueba y se libera si se cancela antes del primer cobro, se conserva al cambiar entre Fundador mensual y anual, se pierde para siempre al cancelar después de pagar, qué pasa si se llenan mientras se paga y que la promoción puede terminar antes
+- Invita y gana un mes, sección nueva (B7). Primer cobro de más de 0 pesos, la prueba no cuenta, se revierte con un reembolso completo, el código se canjea en los primeros días y antes del primer pago, y no hay invitaciones en círculo
+- Uso. Se agregan los mazos del catálogo a lo que no se puede copiar ni publicar, y los alias o nombres de grupo de Party que ofendan o suplanten
+- Contenido. El catálogo incluye mazos de terceros con autorización escrita, que se estudian solo dentro de la plataforma (respuestas 46 y 49)
+- Ley aplicable. Los tribunales quedan como pendiente del abogado en una frase propia que el alumno no ve
 
-## 3. Preguntas para el abogado de Ricardo
+## Cambios en la app y en el código
 
-1. **Razón social y objeto social**. ¿La razón social Plexus Medica S. de R.L. de C.V. cuenta en su objeto social con facultades para la comercialización de servicios digitales, plataformas educativas y software como servicio (SaaS)?
-2. **Domicilio y datos de contacto**. Se requiere el domicilio fiscal completo y las cuentas oficiales de correo para atención de derechos ARCO y soporte técnico general.
-3. **Mecanismo de aceptación y consentimiento**. El sistema recaba consentimientos opcionales independientes y apagados por omisión (checkboxes desmarcados al registro y configurables en cualquier momento). ¿Considera conveniente recabar una firma electrónica simple adicional o el registro electrónico de fecha, hora, dirección IP y versión aceptada resulta suficiente conforme a la LFPDPPP y el Código de Comercio?
-4. **Transferencias internacionales y encargados**. Varios de los encargados tienen servidores en Estados Unidos u otras jurisdicciones (Supabase, Stripe, Anthropic, PostHog, Sentry, Cloudflare, Resend, Google). ¿Es recomendable incorporar alguna leyenda complementaria sobre cláusulas contractuales tipo o transferencia internacional de datos personales en el aviso de privacidad?
-5. **Garantía de 7 días y reembolsos posteriores**. Se fijó una garantía de satisfacción total de 7 días naturales desde el primer cobro con devolución del 100%. ¿Qué política de reembolsos sugiere establecer para reclamaciones posteriores a dicho plazo (por ejemplo, cargos no reconocidos, fallas imputables a la plataforma o solicitudes de cancelación extemporáneas)?
-6. **Contratos de adhesión y PROFECO**. Tratándose de una suscripción digital dirigida a personas físicas en México con cobro recurrente automático, ¿recomienda registrar el contrato de adhesión ante la Procuraduría Federal del Consumidor (PROFECO) conforme a la Ley Federal de Protección al Consumidor y la NOM-151-SCFI?
-7. **Jurisdicción y tribunales**. ¿Qué ciudad y fuero judicial recomienda fijar en la cláusula de jurisdicción y controversias (por ejemplo, los tribunales competentes de la Ciudad de México o del domicilio social de la empresa)?
-8. **Responsabilidad y limitación de daños**. En el sector médico es crucial limitar la responsabilidad respecto a los resultados del examen ENARM y la aplicación de decisiones clínicas en pacientes reales. ¿Considera suficiente la cláusula que tope la responsabilidad civil como máximo a las cantidades pagadas en los últimos 12 meses?
-9. **Propiedad de apuntes y mazos de estudio**. El estudiante conserva la titularidad de los apuntes y mazos que crea o importa (por ejemplo archivos .apkg de Anki), y otorga una licencia limitada de uso necesaria para la prestación del servicio en la nube. ¿Sugiere alguna previsión específica para prevenir infracciones de derechos de autor respecto a materiales médicos de terceros subidos por los alumnos?
+- src/features/legal/fillLegal.ts tiene dos lectores, el alumno y el abogado. Para el alumno, una línea que depende de un dato que falta sin texto neutro no se muestra. Para el abogado, cada falta va entre corchetes. Las marcas son {nombre}, {domicilio}, {contactoPrivacidad}, {contactoSoporte}, {reembolsos} y {jurisdiccion}. Las de contacto llevan su preposición para que el texto neutro se lea bien
+- La página legal muestra como enlace el correo de privacidad y el de soporte
+- src/config/legal.ts lee VITE_PRIVACY_EMAIL y sube PRIVACY_NOTICE_VERSION a 2026-10-15b. .github/workflows/pages.yml pasa la variable nueva al build
+- El aviso de borrador dice ahora Borrador para revisión del abogado, sin la palabra pendiente, para que ninguna marca de pendiente llegue al alumno
+- El resumen del aviso en el registro dice que los permisos empiezan apagados y que a la IA también viaja el texto que el alumno elige
+- Pruebas nuevas. Orden de las versiones con B7 y B9, la versión y fecha de B16, cada proveedor con lo que recibe, PostHog con permiso apagado, OpenAI solo con texto del banco, la comparación, la factura, la huella del correo de la prueba gratis, las lecturas del banco, los referidos y Borrar mis datos, los permisos iguales a los de la app, la razón social desde VITE_LEGAL_NAME, los precios contra la configuración de pagos, las condiciones de la prueba, la garantía, los pases y el Fundador, y que ninguna marca, corchete o la palabra pendiente llegue al alumno ni en la página ni en el texto
 
-## Nota de integración
+## Lo que el texto da por hecho de otros bloques
 
-El nombre del responsable vuelve a salir de VITE_LEGAL_NAME, como en el resto de la app, así que al publicar hay que fijarlo en Plexus Medica S. de R.L. de C.V. junto con VITE_LEGAL_ADDRESS y VITE_SUPPORT_EMAIL. Los textos ya no muestran corchetes de pendiente de Ricardo al alumno. Al unir esta rama con main el 2026-10-15 se conservaron el texto de Party que escribió B7 y lo que agregó B9 (edad mínima, entrar con Google y cómo nos conociste), y se dejó fuera la finalidad de comparación y modelo del alumno hasta que B14 la construya. La versión del aviso pasó de 2026-10-14b a 2026-10-15, así que quien ya lo aceptó verá el aviso de actualización. El aviso sigue marcado como borrador hasta que el abogado lo apruebe.
+El aviso y los términos describen el producto como queda al lanzar. Antes de quitar la marca de borrador tienen que estar en main y en producción estos bloques, o hay que ajustar el texto.
+
+- B10 ya está en main. Falta prender en producción las banderas freeTrial y cashPasses, que nacen apagadas, porque los términos describen la prueba gratis y los pases como vigentes. Si se lanza sin ellas, hay que ajustar el texto
+- B11. Lecturas del banco en el servidor y Borrar mis datos que conserva el día en curso
+- B14. Comparación con otros alumnos y calibración nocturna en GitHub Actions. Sus textos dicen cuando esté disponible y cuando se active
+- B15. PostHog, Sentry, Resend y recordatorios, con las condiciones de Huecos de consentimiento
+- B17. Correo con Resend y la página en Cloudflare
+
+## Huecos de consentimiento
+
+- La app guarda tres permisos, party, ai_analysis y anonymized_improvement (ConsentPurposeSchema). Los tres nacen apagados al crear el perfil (INITIAL_CONSENT_STATUS en src/data/usecases/profile.ts) y en Completa tu registro, cada uno con su evento. 4.27 ya se cumple para ellos
+- Falta el permiso de analítica para PostHog (respuesta 78). No existe en ConsentPurposeSchema ni en Configuración. B15 tiene que agregarlo como cuarto permiso, apagado, en el registro, en Privacidad y en la exportación, y no cargar PostHog sin él. El aviso ya lo dice como futuro y no lo presenta como un interruptor que hoy exista
+- Los recordatorios de repaso por correo de B15 tienen que empezar apagados. El plan de B15 no lo dice y el aviso ya lo promete
+- Sentry en el navegador tiene que seguir detrás del permiso de mejora anónima, como hoy hace errorReporter.ts con los reportes que van a Supabase. Si B15 decide otra cosa, cambia el aviso
+- La comparación con otros alumnos no pide un permiso aparte, usa el de mejora anónima (respuesta 87). No se inventó uno nuevo
+- La pista del permiso Mejora anónima en el registro y en Configuración decía Usar tus datos anonimizados para mejorar el banco. Ahora dice que usa un ID seudónimo, sin nombre ni correo, para mejorar el banco y revisar fallas de la app, como el aviso. Cuando llegue B14 se amplía con la calibración y la comparación, y Ricardo y el abogado deciden su nombre y si se pide de nuevo
+- Las tarjetas con IA desde el texto del alumno no dependen del permiso de análisis con IA, porque son una acción que el alumno pide cada vez. El aviso lo dice así. Queda como pregunta para el abogado
+
+## Correcciones de la revisión independiente
+
+- Acceder ya no promete que el archivo trae todos los datos. Dice qué trae y que lo demás se pide por escrito
+- Invitación entra en Qué datos tratamos. Al eliminar la cuenta ahora también se borra el correo de la invitación (delete_my_account, con su prueba SQL)
+- Conservación dice qué queda de los avisos de cobro de la pasarela
+- El tutor manda también el texto de las tarjetas en las que fallaste, incluidas las de tus mazos
+- Invita y gana un mes dice el tope de 12 meses y la ventana de 14 días para canjear el código, como la configuración del servidor
+- El plan Gratis dice hasta 20 preguntas al día, porque se cuenta cada respuesta
+- Rectificar dice que el correo y los datos de una factura se cambian por escrito
+- Lecturas del banco suma los tres avisos al equipo y las descargas de mazos del catálogo de B11, y Cancelar dice que los avisos que ya vio el equipo se quedan hasta eliminar la cuenta
+- El proxy de IA corre en las Edge Functions de Supabase desde B12, así que su encargado es Supabase y no hace falta nombrar otro
+
+## Preguntas para el abogado
+
+1. Ley vigente. ¿El aviso cumple la ley federal de protección de datos personales en posesión de los particulares vigente, que se reformó en 2025, y su reglamento? ¿Ante qué autoridad puede acudir el alumno y hay que nombrarla en el aviso?
+2. Plazo de respuesta. El aviso dice que se responde en un plazo razonable. ¿Hay que poner los plazos de la ley para las solicitudes de acceso, rectificación, cancelación y oposición?
+3. Proveedores fuera de México. Supabase, Stripe, Anthropic, Google, Resend, PostHog, Sentry, GitHub y Cloudflare tratan datos fuera de México. ¿Basta con decir que son encargados y que algunos guardan datos en Estados Unidos, o hace falta algo más?
+4. Party. Compartir alias, foto y cifras con los compañeros de grupo, ¿es una transferencia que pide algo más que el permiso aparte y apagado que ya existe?
+5. Tarjetas con IA. El texto que el alumno elige va a Anthropic cada vez que pide tarjetas, sin un permiso aparte. ¿Basta con que sea una acción explícita del alumno?
+6. Reembolsos fuera de la garantía. ¿Qué se hace después de los 7 días, por ejemplo con un cargo no reconocido, una falla de la plataforma o una cancelación tardía?
+7. Tribunales competentes y si conviene mencionar a la Profeco
+8. Contrato de adhesión. ¿Una suscripción con cobro automático a consumidores en México pide registrar el contrato ante la Profeco o algo más en la pantalla de pago?
+9. Aceptación. La app guarda la versión aceptada y la fecha, sin dirección IP. ¿Es suficiente, también para los términos, que hoy no guardan su propia aceptación aparte del aviso?
+10. Precio Fundador. ¿Son válidas la pérdida definitiva del precio al cancelar después de pagar y la posibilidad de terminar la promoción antes de que se llenen los lugares?
+11. Prueba gratis con cobro automático. ¿Hace falta un aviso por correo antes del cobro? El sistema ya lo deja listo para 3 días antes, y se manda cuando exista Resend (B15)
+12. Límite de responsabilidad a lo pagado en 12 meses y el aviso de que no es un servicio médico. ¿Son suficientes para una plataforma de estudio de medicina?
+13. Mazos de terceros en el catálogo con autorización escrita. ¿Qué debe decir esa autorización y qué responsabilidad queda con el alumno que importa material ajeno?
+14. Huella del correo de la prueba gratis. Se guarda un hash SHA-256 sin sal del correo normalizado, sin fecha de borrado y aunque se elimine la cuenta. Quien conozca un correo puede calcular su hash y ver si coincide. Al eliminar la cuenta ya se quitan la pasarela y el identificador de la suscripción. ¿Es un dato personal seudónimo que pide algo más, como un plazo de conservación o un hash con sal secreta? ¿Basta lo que dice el aviso para el derecho de cancelación?
+15. Conservación de pagos. Studiare borra los pagos con la cuenta y deja el registro a Stripe y al sistema de facturación. Los avisos de cobro de la pasarela se quedan sin nombre ni correo, con el identificador de la cuenta y los de la pasarela, sin fecha de borrado. ¿Hace falta un plazo para esos avisos? ¿La empresa debe conservar algo más por obligación fiscal?
+16. Datos opcionales del perfil, como año de nacimiento, sexo y estado. ¿Piden algo más que el aviso actual?
+17. Registro de acceso. Supabase guarda un registro de acceso con la dirección IP. ¿Hay que decir cuánto tiempo se conserva después de eliminar la cuenta?
+18. Reportes de fallas. Hoy se guardan 14 días en Supabase. Cuando entre Sentry (B15) su conservación puede ser otra y el aviso tendrá que decirla
+
+## Preguntas para Ricardo
+
+1. El domicilio de Plexus Medica S. de R.L. de C.V. y los dos correos, privacidad y soporte (pregunta 43). Pueden ser el mismo buzón
+2. Que el contador confirme la razón social como responsable y para facturar (4.26)
+3. ¿Con qué sistema emitirás las facturas? Si es un proveedor de facturación, entra a la lista de encargados del aviso
+4. Garantía de un pago en OXXO. ¿Cómo le pedirás al alumno la cuenta para devolverle por transferencia y dónde la guardarás? El aviso ya lo menciona
+5. Comparación con otros alumnos. ¿Quien no dio el permiso de mejora anónima puede ver su percentil, o solo quien aporta sus datos? El aviso no lo dice todavía
+
+## Lo que se dejó fuera de los borradores de partida
+
+- La razón social escrita en el texto. Va por VITE_LEGAL_NAME
+- Marcas como [PENDIENTE DE RICARDO] que el alumno veía en la página
+- Party con XP, nivel y racha. Se queda el texto de B7, que es lo que comparte la Party real
+- Comparación y modelo del alumno como un cuarto permiso. La app no lo tiene y el plan usa el permiso de mejora anónima (respuesta 87)
+- Análisis con IA con los apuntes. Los apuntes con IA no dependen de ese permiso
+- Stripe y Mercado Pago que facturan. Stripe no emite CFDI, la factura la emite Ricardo
+- PostHog, Sentry y Resend como si ya estuvieran activos
+- Cambio de plan con prorrateo de los días no usados en los dos sentidos. Bajar se aplica al fin del periodo, sin prorrateo
+- La versión 2026-10-14.2 de la otra rama, que al compararse como texto quedaba antes de 2026-10-14b

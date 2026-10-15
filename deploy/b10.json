@@ -23,9 +23,10 @@
       "check": {
         "plan_fundador_anual": true,
         "estado_prueba": true,
-        "borrar_cuenta_b10": true
+        "borrar_cuenta_b10": true,
+        "borra_la_invitacion": true
       },
-      "note": "Las dos piezas de 20261022000002 que el conector no pudo correr, los check de subscriptions y delete_my_account"
+      "note": "Las dos piezas de 20261022000002 que el conector no pudo correr, los check de subscriptions y delete_my_account, que también borra el correo de la invitación (B16)"
     },
     {
       "file": "supabase/manual/party-dueno-al-borrar-cuenta.sql",

@@ -66,6 +66,19 @@ Lo que hace la sesión después, sin pedirte nada más. Aplica las seis migracio
 
 Decisiones de B11 que esperan tu visto bueno, con la opción recomendada ya tomada. Subespecialidad deducida del subtema (8.2), De control con casilla para el revisor (8.4), la tarifa (8.8), el freno de los planes de pago (8.10), el día de abrir el banco (8.14), los temas de Salud pública (8.15), los pesos del examen completo (8.17), Pediatría y Cirugía solo en Storage (8.18), un médico con decisiones que quiere borrar su cuenta (8.33), las listas dependientes (8.34) y cómo se cuenta la meta de 300 (8.35). Ya aplicadas con el plan. El pago a médicos cuenta cada pregunta revisada una vez al mes (respuesta 58) y una Tarea que no se detecta entra como pendiente para aprobar (D-080). Queda tuya cómo cierras la cuenta de un médico con decisiones sin perder lo que respalda sus pagos.
 
+## Lo que salió de B16, legal y privacidad
+
+El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.
+
+- **Los datos del responsable** (pregunta 43). Mientras falten, el alumno lee un texto neutro y el abogado ve la marca de lo que falta. Ponlos en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, y después en Cloudflare (B17). Son públicos por diseño
+  - VITE_LEGAL_NAME con Plexus Medica S. de R.L. de C.V.
+  - VITE_LEGAL_ADDRESS con el domicilio de la empresa, cuando lo confirme tu contador
+  - VITE_PRIVACY_EMAIL con el correo de privacidad, por ejemplo privacidad arroba tu dominio
+  - VITE_SUPPORT_EMAIL con el correo de soporte. Si quieres un solo buzón, pon solo este y el aviso lo usa también para privacidad
+  - Después corre la publicación en Actions, con el flujo pages y Run workflow
+- **Manda los textos a tu abogado** (respuesta 44). Son docs/legal/aviso-de-privacidad.md, docs/legal/terminos-y-condiciones.md y docs/legal/CAMBIOS-B16.md. La marca de borrador se quita solo cuando me digas que los aprobó
+- **Contesta las cinco preguntas de CAMBIOS-B16.md**, sección Preguntas para Ricardo. Entre ellas con qué sistema emitirás las facturas y cómo le pedirás al alumno su cuenta para devolverle una garantía pagada en OXXO
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar
@@ -76,7 +89,7 @@ Decisiones de B11 que esperan tu visto bueno, con la opción recomendada ya toma
 8. **Platica con tu contador** (respuestas 6, 12, 13 y 14). Que la empresa cobre y facture, facturas a mano a quien las pida, precios con IVA incluido y si conviene Stripe Tax más adelante
 9. **Crea tu cuenta de Anthropic y carga saldo** (respuesta 33). En console.anthropic.com crea una clave y pégala tú en Supabase, Edge Functions, Secrets, con el nombre ENARM_ANTHROPIC_KEY. En el entorno de la sesión ya hay una con ese nombre
 10. **Dile a la sesión cuál es tu dominio** (respuesta 50) y empieza a pasarlo a nombre de tu empresa (respuesta 24)
-11. **Crea los correos de privacidad y de soporte** en tu dominio (pregunta 43), por ejemplo privacidad y soporte arroba tu dominio. Después van como variables VITE_SUPPORT_EMAIL, VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS en GitHub y luego en Cloudflare
+11. **Crea los correos de privacidad y de soporte** en tu dominio (pregunta 43), por ejemplo privacidad y soporte arroba tu dominio. Después van como variables VITE_PRIVACY_EMAIL, VITE_SUPPORT_EMAIL, VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS en GitHub y luego en Cloudflare, como dice Lo que salió de B16
 
 ## Entorno de la sesión (sección 10 del plan)
 
@@ -115,7 +128,7 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
 25. **Influencers.** Sus nombres y el descuento de cada código (respuesta 21), y quién escribe los textos de venta (respuesta 53)
 26. **Fer.** Su autorización escrita para el catálogo compartido (respuesta 49)
 27. **Paco.** Que comparta Pedia.apkg y Cirugia.apkg con tu cuenta de Drive o con cualquiera con el enlace mientras se suben (respuesta 47). Al terminar se revoca el enlace
-28. **Abogado.** Revisa el aviso, los términos y los reembolsos cuando B16 los deje listos (respuesta 44)
+28. **Abogado.** Revisa el aviso, los términos y los reembolsos (respuesta 44). B16 ya los dejó listos en docs/legal, con la lista de cambios y sus preguntas en docs/legal/CAMBIOS-B16.md
 29. **Tus 5 aspirantes.** Invítalos desde la pantalla de invitaciones cuando exista (B9 y B18)
 
 ## Al lanzar y después
