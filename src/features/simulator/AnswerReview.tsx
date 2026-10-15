@@ -239,6 +239,7 @@ export function AnswerReview({
               <p role="status" className="text-sm">
                 {t.simulator.reported}
                 {remote === 'offline' ? ` ${bankText.report.offline}` : null}
+                {remote === 'failed' ? ` ${bankText.report.failed}` : null}
               </p>
             ) : (
               <div className="flex flex-wrap items-end gap-2">

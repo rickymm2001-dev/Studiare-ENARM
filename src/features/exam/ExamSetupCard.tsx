@@ -24,6 +24,8 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField } from '@/ui/components/field';
 import { useBankNotice } from '../shared/bankNotice';
+import { chooseWithBodies } from '../shared/chooseWithBodies';
+import { useLockedCta } from '../shared/useLockedCta';
 import type { ReadySession } from '../shared/RequireSession';
 import { useQuestionSource } from '../shared/useQuestionSource';
 import { clock } from '../simulator/practice';
@@ -65,6 +67,8 @@ export function ExamSetupCard({
   const [alerts, setAlerts] = useState(true);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
+  // El botón del candado de Gratis, el mismo de Simular y los demás candados (B10)
+  const lockedCta = useLockedCta();
   const text = t.exam;
 
   const header = (
@@ -133,31 +137,42 @@ export function ExamSetupCard({
     setFailed(null);
     try {
       // Primero se arma con las cuotas por rama y se bajan esos cuerpos. startExam arma de nuevo solo
-      // con lo concedido, que cabe completo, y conserva cuántas faltaron de lo pedido
-      const plan = buildExam({
-        questions,
-        requested,
-        seed: newId(),
-        branchWeights: examBranchWeights(topicTaxonomy),
-        excludeBranches: nonClinicalBranches(topicTaxonomy),
+      // con lo concedido, que cabe completo, y conserva cuántas faltaron de lo pedido. Sin conexión se
+      // arma solo con lo ya bajado (M2)
+      const seed = newId();
+      const { ids, result, fromStored } = await chooseWithBodies({
+        source,
+        candidates: questions,
+        purpose: 'exam',
+        choose: (from) =>
+          buildExam({
+            questions: from,
+            requested,
+            seed,
+            branchWeights: examBranchWeights(topicTaxonomy),
+            excludeBranches: nonClinicalBranches(topicTaxonomy),
+          }).questionIds,
       });
-      const result = await source.ensureBodies(plan.questionIds, 'exam');
       const ready = new Set(result.ready);
       const chosen = questions.filter((question) => ready.has(question.id));
-      const reason = shortfallReason({
-        denied: result.denied,
-        offline: result.offline,
-        missing: plan.questionIds.length - chosen.length,
-      });
+      const reason = fromStored
+        ? 'offline'
+        : shortfallReason({
+            denied: result.denied,
+            offline: result.offline,
+            missing: ids.length - chosen.length,
+          });
       if (chosen.length === 0) {
         setFailed(reason ? bankText.shortfall.reasons[reason] : text.startError);
         return;
       }
-      if (chosen.length < plan.questionIds.length && reason) {
+      // Sin conexión se compara con lo que pidió, no con lo que alcanzó a armarse de lo bajado
+      const planned = fromStored ? requested : ids.length;
+      if (reason && (fromStored || chosen.length < planned)) {
         showNotice({
           reason,
           granted: chosen.length,
-          requested: plan.questionIds.length,
+          requested: planned,
           retryAt: result.quota?.brake.retryAt ?? null,
         });
       }
@@ -198,7 +213,7 @@ export function ExamSetupCard({
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           {left === 0 ? (
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
+              <Link to={lockedCta.path}>{lockedCta.label}</Link>
             </Button>
           ) : (
             <Button

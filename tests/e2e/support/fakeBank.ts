@@ -8,6 +8,7 @@
 // Todo el texto que siembra lleva [Prueba] y es simulado, nunca contenido médico (CLAUDE.md). Las
 // lecturas solo se agregan, como bank_reads.
 import { createHash, randomUUID } from 'node:crypto';
+import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { BrowserContext } from '@playwright/test';
@@ -551,15 +552,17 @@ const CLOUD_DIST = fileURLToPath(new URL('../../../dist-cloud/', import.meta.url
 
 /**
  * Corta la red como un teléfono sin señal, con la página ya cargada. En los proyectos de nube el
- * service worker está bloqueado, así que sin red nadie serviría los íconos de la raíz, como el de la
- * pestaña y el logo del marco, que en producción salen del precache. El navegador los vuelve a pedir
- * al cambiar de pantalla y escribiría "Failed to load resource" en la consola. Aquí salen del build,
- * como lo haría el precache. Lo de Supabase sigue pasando por el servidor simulado
+ * service worker está bloqueado, así que sin red nadie serviría lo que en producción sale del
+ * precache: los íconos de la raíz, que el navegador vuelve a pedir al cambiar de pantalla, y los
+ * pedazos de JavaScript que se cargan al usarse, como el aviso del banco. Aquí salen del build, como
+ * lo haría el precache. Lo de Supabase sigue pasando por el servidor simulado
  */
 export async function goOffline(context: BrowserContext): Promise<void> {
-  await context.route(`${CLOUD_PREVIEW_URL}/*.png`, (route) =>
-    route.fulfill({ path: join(CLOUD_DIST, new URL(route.request().url()).pathname) }),
-  );
+  await context.route(`${CLOUD_PREVIEW_URL}/**`, async (route) => {
+    const file = join(CLOUD_DIST, new URL(route.request().url()).pathname);
+    if (existsSync(file) && statSync(file).isFile()) await route.fulfill({ path: file });
+    else await route.abort('internetdisconnected');
+  });
   await context.setOffline(true);
 }
 

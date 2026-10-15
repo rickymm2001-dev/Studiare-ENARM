@@ -149,9 +149,10 @@ test.describe('Banco en la nube para el alumno', () => {
 
   test('sin conexión estudia con lo que ya bajó', async ({ page, context, cloud }) => {
     test.setTimeout(180_000);
-    const store = bankWith(cloud, 5);
+    // Un banco de 20 del que solo se bajan 5 (M2 de la revisión de B11)
+    const store = bankWith(cloud, 20);
     await enterWithOpenBank(page, cloud);
-    // Con conexión baja las cinco preguntas al empezar
+    // Con conexión baja cinco preguntas al empezar
     const practice = await openSimulator(page, '5');
     await practice.getByRole('button', { name: t.simulator.start }).click();
     await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible({
@@ -171,6 +172,8 @@ test.describe('Banco en la nube para el alumno', () => {
       timeout: 30_000,
     });
     await expect(page.getByText(t.offlineBanner)).toBeVisible();
+    // Las cinco salen de lo ya bajado y el marco lo dice
+    await expect(page.getByText(bankText.shortfall.fromStored)).toBeVisible();
     expect(rpcCalls(cloud, 'fetch_questions')).toBe(fetches);
     await context.setOffline(false);
   });

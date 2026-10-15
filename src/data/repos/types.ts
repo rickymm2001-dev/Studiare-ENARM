@@ -127,6 +127,8 @@ export interface QuestionRepo {
   listVersions(questionId: Id): Promise<Question[]>;
   latest(questionId: Id): Promise<Question | undefined>;
   listLatest(): Promise<Question[]>;
+  /** Cuáles de estas versiones ya están guardadas, sin leer su contenido (B11) */
+  storedIds(questionVersionIds: readonly Id[]): Promise<Set<Id>>;
   /** Agrega una versión nueva con sus opciones en una sola transacción */
   addVersion(question: Question, options: readonly Option[]): Promise<Question>;
   /** Cambia solo el estado editorial de una versión, sin tocar su contenido */

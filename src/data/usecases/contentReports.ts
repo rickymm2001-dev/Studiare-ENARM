@@ -4,13 +4,16 @@
 // Con el banco de la nube (B11, 5.4) el reporte va además a report_question con la versión que el
 // alumno tenía a la vista, que le avisa al médico asignado por correo. Solo viaja el motivo, de una
 // lista cerrada, nunca texto del alumno (8.30). El reporte se guarda también aquí, para que el alumno
-// vea que ya reportó, salvo que el servidor diga que ya llegó al tope del día.
+// vea que ya reportó, salvo que el servidor diga que ya llegó al tope del día. Sin conexión se guarda
+// aquí, queda pendiente y se manda solo cuando vuelve la red. Si la nube lo rechaza por otra razón, se
+// guarda aquí y la pantalla dice que no llegó al médico (B3 de la revisión de B11).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { reportQuestionInCloud } from '../cloud/bank';
 import { ulidToUuid } from '../cloud/cloudIds';
 import { newId } from '../ids';
 import type { DataApi } from '../context';
 import type { ContentReport } from '../schemas/bank';
+import { MAX_PENDING_REPORTS, type PendingReport } from '../schemas/bankCloud';
 
 type Api = Pick<DataApi, 'repos'>;
 
@@ -84,7 +87,8 @@ export async function submitContentReport(
 /**
  * Reporte de una pregunta con o sin la nube. Un reporte repetido no viaja. Con la nube, si el servidor
  * dice que ya llegó al tope del día no se guarda aquí, así lo puede mandar mañana. Sin conexión se guarda
- * aquí y la pantalla avisa que no llegó al médico
+ * aquí, queda pendiente y la pantalla avisa que llegará al médico cuando vuelva la red. Un rechazo de
+ * la nube se guarda aquí y la pantalla avisa que no llegó
  */
 export async function submitQuestionReport(
   api: Api,
@@ -100,7 +104,59 @@ export async function submitQuestionReport(
   const sent = remote ? await remote(input.targetId, input.reason) : undefined;
   if (sent === 'limit') return { outcome: 'limit', report: null, remote: sent };
   const { report } = await submitContentReport(api, full);
+  if (sent === 'offline') {
+    await addPendingReport(api, {
+      reportId: report.id,
+      questionVersionId: input.targetId,
+      reason: input.reason,
+      at: report.createdAt,
+    });
+  }
   return sent ? { outcome: 'created', report, remote: sent } : { outcome: 'created', report };
+}
+
+async function pendingReports(api: Api): Promise<PendingReport[]> {
+  return (await api.repos.bankState.get('reports'))?.pending ?? [];
+}
+
+async function addPendingReport(api: Api, item: PendingReport): Promise<void> {
+  const pending = [...(await pendingReports(api)), item].slice(-MAX_PENDING_REPORTS);
+  await api.repos.bankState.put({ key: 'reports', pending });
+}
+
+// Una sola vuelta a la vez por base, porque conectar y volver la red pueden llegar juntos
+const retrying = new WeakMap<object, Promise<number>>();
+
+/**
+ * Manda los reportes que se guardaron sin conexión. Corre al conectar la cuenta y cada vez que vuelve
+ * la red. Lo que llega, o lo que la nube rechaza, sale de la lista. Lo que topa el máximo del día se
+ * queda para otro día, y si se vuelve a cortar la red se deja lo demás para la próxima. Devuelve
+ * cuántos llegaron
+ */
+export function retryPendingReports(api: Api, remote: RemoteReporter): Promise<number> {
+  const running = retrying.get(api.repos);
+  if (running) return running;
+  const run = (async () => {
+    const done = new Set<string>();
+    let sent = 0;
+    for (const item of await pendingReports(api)) {
+      const outcome = await remote(item.questionVersionId, item.reason);
+      if (outcome === 'offline') break;
+      if (outcome === 'limit') continue;
+      done.add(item.reportId);
+      if (outcome === 'sent') sent += 1;
+    }
+    if (done.size > 0) {
+      // Se vuelve a leer, por si mientras tanto se guardó otro
+      const pending = (await pendingReports(api)).filter((item) => !done.has(item.reportId));
+      await api.repos.bankState.put({ key: 'reports', pending });
+    }
+    return sent;
+  })().finally(() => {
+    retrying.delete(api.repos);
+  });
+  retrying.set(api.repos, run);
+  return run;
 }
 
 /** Resuelve, descarta o reabre reportes. Reabrir borra la fecha de resolución. Devuelve cuántos cambió */

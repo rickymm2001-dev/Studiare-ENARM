@@ -12,6 +12,7 @@ import type { QuestionSource } from '@/data/bank/questionSource';
 import { loadCloud } from '@/data/cloud/client';
 import { useDataApi, type DataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
+import { cloudReporter, retryPendingReports } from '@/data/usecases/contentReports';
 import { currentSourceKind, sourceKindFor } from './questionSourceKind';
 
 type Api = Pick<DataApi, 'repos'>;
@@ -32,6 +33,16 @@ export function questionSourceFor(api: Api, kind: Kind): QuestionSource {
       : createLocalSource({ repos: api.repos });
   sources.set(api.repos, { ...known, [kind]: created });
   return created;
+}
+
+/**
+ * Pone al día el banco de la nube al conectar la cuenta, cada 6 horas y cada vez que vuelve la red. El
+ * catálogo, la cuota y el acuerdo, y los reportes que se guardaron sin conexión (B3 de la revisión)
+ */
+export async function catchUpCloudBank(api: Api): Promise<void> {
+  await questionSourceFor(api, 'cloud').refresh();
+  const cloud = await loadCloud();
+  if (cloud) await retryPendingReports(api, cloudReporter(cloud));
 }
 
 /** La fuente que toca ahora, fuera de React, como al crear o abrir un duelo */

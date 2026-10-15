@@ -55,7 +55,7 @@ function defaultDiscarded(what: string, count: number) {
 }
 
 /** La pregunta del catálogo como la elige el pool */
-export function poolQuestionOfEntry(entry: CatalogEntry): PoolQuestion {
+export function poolQuestionOfEntry(entry: CatalogEntry, cached = false): PoolQuestion {
   return {
     id: entry.versionId,
     questionId: entry.questionId,
@@ -73,6 +73,7 @@ export function poolQuestionOfEntry(entry: CatalogEntry): PoolQuestion {
     examEligible: entry.examEligible,
     language: entry.language,
     distractorBiases: entry.distractorBiases,
+    cached,
   };
 }
 
@@ -214,16 +215,20 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
       const state = await repos.bankState.get('catalog');
       if (state?.open === false) return { practice: [], exam: [] };
       // Inglés médico llega con su práctica y su examen en B13. Mientras tanto no se elige
-      const practice = (await repos.catalog.listPublished())
-        .filter((entry) => entry.language === 'es')
-        .map(poolQuestionOfEntry);
+      const entries = (await repos.catalog.listPublished()).filter(
+        (entry) => entry.language === 'es',
+      );
+      // Lo ya bajado se marca, así sin conexión se elige solo de ahí (M2 de la revisión de B11)
+      const stored = await repos.questions.storedIds(entries.map((entry) => entry.versionId));
+      const practice = entries.map((entry) =>
+        poolQuestionOfEntry(entry, stored.has(entry.versionId)),
+      );
       return { practice, exam: practice.filter((question) => question.examEligible) };
     },
 
     async ensureBodies(versionIds: readonly string[], purpose: ReadPurpose): Promise<EnsureResult> {
       const ids = [...new Set(versionIds)];
-      const present = new Set<string>();
-      for (const id of ids) if (await repos.questions.get(id)) present.add(id);
+      const present = await repos.questions.storedIds(ids);
       const missing = ids.filter((id) => !present.has(id));
       const cachedQuota = async () => (await repos.bankState.get('quota'))?.quota ?? null;
       const result = (

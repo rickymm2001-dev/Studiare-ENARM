@@ -29,6 +29,11 @@ export interface PoolQuestion extends Pick<
   language: 'es' | 'en';
   /** Sesgos de sus distractores, para el muestreo dirigido. Vacío en el banco de demostración */
   distractorBiases: readonly string[];
+  /**
+   * Su cuerpo ya está en este navegador y se puede estudiar sin conexión. Siempre en el banco de
+   * demostración. Con la nube, solo lo que ya se bajó
+   */
+  cached: boolean;
 }
 
 export interface StudentPool {

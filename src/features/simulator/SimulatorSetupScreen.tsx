@@ -5,7 +5,7 @@
 // y antes de empezar se bajan sus cuerpos. Si llega menos de lo pedido, la práctica arranca con lo
 // concedido y el marco de la app dice por qué. El tope de Gratis es el menor entre lo que cuenta la app
 // y lo que cuenta el servidor, y en un plan de pago el freno del servidor se avisa con su hora.
-import { Gauge, Library, ListChecks, Play } from 'lucide-react';
+import { Gauge, Library, ListChecks, Play, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -27,6 +27,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { useBankNotice } from '../shared/bankNotice';
+import { chooseWithBodies } from '../shared/chooseWithBodies';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { useLockedCta } from '../shared/useLockedCta';
 import { useSourceReadiness } from '../shared/useBankReady';
@@ -58,7 +59,7 @@ function Setup({ session }: { session: ReadySession }) {
   const navigate = useNavigate();
   const practice = usePractice();
   const source = useQuestionSource();
-  const readiness = useSourceReadiness(source);
+  const { readiness, retry } = useSourceReadiness(source);
   const pool = useLiveData(() => source.pool(), [source, readiness]);
   const serverQuota = useServerQuota(source);
   const showNotice = useBankNotice((state) => state.show);
@@ -117,6 +118,13 @@ function Setup({ session }: { session: ReadySession }) {
             <CardTitle id="banco-aviso">{notice.title}</CardTitle>
             <CardDescription>{notice.body}</CardDescription>
           </CardHeader>
+          {/* Con la red de vuelta se prepara solo, y el botón sirve si la red ya estaba */}
+          {readiness === 'never_downloaded' ? (
+            <Button variant="secondary" className="mt-2" onClick={retry}>
+              <RefreshCw aria-hidden />
+              {bankText.retry}
+            </Button>
+          ) : null}
         </Card>
       </>
     );
@@ -150,20 +158,29 @@ function Setup({ session }: { session: ReadySession }) {
 
   const start = async () => {
     const sessionId = newId();
-    // Los casos seriados se mantienen juntos y en orden
-    const picked = pickQuestions(filtered, `practice|${sessionId}`, wanted);
-    // Con la nube se bajan los cuerpos antes de empezar. Lo ya bajado no gasta del tope
-    const result = await source.ensureBodies(
-      picked.map((question) => question.id),
-      'practice',
-    );
-    const ready = new Set(result.ready);
-    const ordered = picked.filter((question) => ready.has(question.id));
-    const reason = shortfallReason({
-      denied: result.denied,
-      offline: result.offline,
-      missing: picked.length - ordered.length,
+    // Con la nube se bajan los cuerpos antes de empezar. Lo ya bajado no gasta del tope. Sin conexión
+    // se elige solo de lo ya bajado (M2)
+    const { ids, result, fromStored } = await chooseWithBodies({
+      source,
+      candidates: filtered,
+      purpose: 'practice',
+      // Los casos seriados se mantienen juntos y en orden
+      choose: (from) =>
+        pickQuestions(from, `practice|${sessionId}`, Math.min(wanted, from.length)).map(
+          (question) => question.id,
+        ),
     });
+    const ready = new Set(result.ready);
+    const ordered = ids.filter((id) => ready.has(id));
+    const reason = fromStored
+      ? 'offline'
+      : shortfallReason({
+          denied: result.denied,
+          offline: result.offline,
+          missing: ids.length - ordered.length,
+        });
+    // Sin conexión se compara con lo que pidió, no con lo que alcanzó a elegirse de lo bajado
+    const requested = fromStored ? wanted : ids.length;
     const retryAt = result.quota?.brake.retryAt ?? null;
     if (ordered.length === 0) {
       setBlocked(
@@ -175,8 +192,8 @@ function Setup({ session }: { session: ReadySession }) {
       );
       return;
     }
-    if (ordered.length < picked.length && reason) {
-      showNotice({ reason, granted: ordered.length, requested: picked.length, retryAt });
+    if (reason && (fromStored || ordered.length < requested)) {
+      showNotice({ reason, granted: ordered.length, requested, retryAt });
     }
     // Solo se dirige si la opción está encendida y el perfil ya tiene trampas que dirigir
     const targetTags = targeted && analysis ? targetBiasTags(analysis.report) : [];
@@ -200,7 +217,7 @@ function Setup({ session }: { session: ReadySession }) {
     practice.set({
       sessionId,
       userId: session.user.id,
-      questionIds: ordered.map((question) => question.id),
+      questionIds: ordered,
       index: 0,
       answers: [],
       startedAt: clock(),

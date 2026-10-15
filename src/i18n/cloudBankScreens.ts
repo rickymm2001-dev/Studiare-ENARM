@@ -21,6 +21,7 @@ export const cloudBankScreensText = {
     title: 'Conéctate una vez para bajar el banco',
     body: 'El banco de preguntas se baja la primera vez que abres Simular con conexión. Después puedes practicar sin conexión con lo que ya bajaste.',
   },
+  retry: 'Intentar de nuevo',
   closed: {
     title: 'El banco de preguntas todavía no abre',
     body: 'Los médicos siguen revisando las preguntas. Mientras tanto puedes repasar tus tarjetas y tus apuntes.',
@@ -42,6 +43,9 @@ export const cloudBankScreensText = {
       unavailable:
         'Algunas preguntas ya no están en el banco. Vuelve a elegir para ver las nuevas.',
     } satisfies Record<ShortfallReason, string>,
+    // Sin conexión, cuando lo ya bajado alcanzó para todo lo pedido (M2)
+    fromStored:
+      'Sin conexión. Tu sesión salió de las preguntas que ya bajaste. Conéctate para bajar más.',
     // Cuando no llegó ninguna y la sesión no empezó
     none: 'No se pudo empezar.',
     dismiss: 'Entendido',
@@ -49,6 +53,7 @@ export const cloudBankScreensText = {
   // Reportar un error con la nube (5.4)
   report: {
     limit: 'Ya mandaste los reportes que se permiten hoy. Mañana puedes mandar más.',
-    offline: 'Tu reporte quedó guardado aquí, pero no llegó al médico porque no hay conexión.',
+    offline: 'Tu reporte quedó guardado aquí y le llega al médico en cuanto vuelva la conexión.',
+    failed: 'No se pudo mandar al médico. Quedó guardado solo en este dispositivo.',
   },
 } as const;

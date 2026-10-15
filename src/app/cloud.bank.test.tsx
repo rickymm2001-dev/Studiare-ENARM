@@ -1,10 +1,13 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
 import { cleanup, render, waitFor } from '@testing-library/react';
+import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { forgetDeviceClaim } from '@/data/cloud/device';
+import { useDataApi, type DataApi } from '@/data/context';
 import { DataProvider } from '@/data/DataProvider';
+import { newId } from '@/data/testing/fixtures';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { CloudBridge } from './cloud';
 import { useCloud } from './cloudState';
@@ -63,6 +66,50 @@ describe('CloudBridge y el catálogo del banco de la nube', () => {
     expect(fake.rpcCalls.indexOf('claim_device')).toBeLessThan(
       fake.rpcCalls.indexOf('catalog_changes'),
     );
+  });
+
+  it('al volver la red se pone al día y manda los reportes que se guardaron sin conexión', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.flags = { cloudBank: true };
+    fake.rpcReplies.report_question = { data: { status: 'created', reportId: 'r1' }, error: null };
+    const captured: { api?: DataApi } = {};
+    function Capture() {
+      const api = useDataApi();
+      useEffect(() => {
+        captured.api = api;
+      }, [api]);
+      return null;
+    }
+    render(
+      <DataProvider kind="real">
+        <Capture />
+        <CloudBridge />
+      </DataProvider>,
+    );
+    await waitFor(() => {
+      expect(catalogCalls(fake)).toBeGreaterThan(0);
+    });
+    const before = catalogCalls(fake);
+    // Un reporte que se guardó mientras no había red (B3 de la revisión de B11)
+    await (captured.api as DataApi).repos.bankState.put({
+      key: 'reports',
+      pending: [
+        {
+          reportId: newId(),
+          questionVersionId: newId(),
+          reason: 'typo',
+          at: new Date().toISOString(),
+        },
+      ],
+    });
+    window.dispatchEvent(new Event('online'));
+    await waitFor(() => {
+      expect(fake.rpcCalls).toContain('report_question');
+    });
+    expect(catalogCalls(fake)).toBeGreaterThan(before);
+    await waitFor(async () => {
+      expect((await (captured.api as DataApi).repos.bankState.get('reports'))?.pending).toEqual([]);
+    });
   });
 
   it('con la bandera apagada no le pide nada al banco', async () => {

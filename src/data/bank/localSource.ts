@@ -33,6 +33,7 @@ export function poolQuestionOf(question: Question, examEligible: boolean): PoolQ
     language: 'es',
     // El banco de demostración no lleva el resumen de sesgos. El muestreo dirigido usa las opciones
     distractorBiases: [],
+    cached: true,
   };
 }
 

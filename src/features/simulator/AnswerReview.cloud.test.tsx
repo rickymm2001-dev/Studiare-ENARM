@@ -8,7 +8,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { writeStoredFlags } from '@/config/featureFlags';
 import { ulidToUuid } from '@/data/cloud/cloudIds';
-import { fakeRpc } from '@/data/testing/bankCloud';
+import { fakeRpc, FakeDbError } from '@/data/testing/bankCloud';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
@@ -117,5 +117,28 @@ describe('reporte de una pregunta de la nube', () => {
     const details = await sendReport('typo');
     expect(await within(details).findByText(bankText.report.limit)).toBeVisible();
     expect(await app?.api.repos.contentReports.list()).toEqual([]);
+  });
+
+  it('si la nube lo rechaza lo guarda aquí y dice que no llegó al médico', async () => {
+    holder.cloud = fakeRpc({ report_question: () => new FakeDbError('42501') });
+    await failedCloudQuestion();
+    const details = await sendReport('typo');
+    expect(await within(details).findByRole('status')).toHaveTextContent(bankText.report.failed);
+    expect(await app?.api.repos.contentReports.list()).toHaveLength(1);
+    expect(await app?.api.repos.bankState.get('reports')).toBeUndefined();
+  });
+
+  it('sin conexión queda pendiente para mandarse al volver la red', async () => {
+    holder.cloud = fakeRpc({
+      report_question: () => {
+        throw new Error('Failed to fetch');
+      },
+    });
+    await failedCloudQuestion();
+    const details = await sendReport('outdated');
+    expect(await within(details).findByRole('status')).toHaveTextContent(bankText.report.offline);
+    expect((await app?.api.repos.bankState.get('reports'))?.pending).toEqual([
+      expect.objectContaining({ reason: 'outdated' }),
+    ]);
   });
 });
