@@ -16,6 +16,7 @@
  */
 import { ACADEMIC_SOURCE_KEYS, type AcademicSourceKey } from '@/config/academicSources';
 import { clozeHoles, clozeOpenings } from './cloze';
+import { CONTROVERSY_REASON_MAX, CONTROVERSY_REASON_MIN } from './controversyLimits';
 import {
   CARDS_PER_SECTION_MAX,
   SECTIONS_MAX,
@@ -53,8 +54,7 @@ export {
 };
 
 export const FIELD_MAX_CHARS = 3000;
-export const CONTROVERSY_REASON_MIN = 20;
-export const CONTROVERSY_REASON_MAX = 600;
+export { CONTROVERSY_REASON_MAX, CONTROVERSY_REASON_MIN };
 
 // ---------------------------------------------------------------------------------------------
 // Revisión de una tarjeta propuesta

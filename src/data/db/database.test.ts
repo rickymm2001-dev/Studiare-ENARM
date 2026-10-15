@@ -202,14 +202,14 @@ describe('versiones de la base', () => {
     expect(await db.syncState.get(userId)).toMatchObject({ recordsCursor: 5, eventsCursor: 9 });
   });
 
-  it('una base nueva queda en la versión 7, con la tabla de apuntes y el índice de apunte en las notas', async () => {
+  it('una base nueva queda en la versión 8, con la tabla de apuntes y el índice de apunte en las notas', async () => {
     const name = `nueva-${newId()}`;
     names.push(name);
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(DB_VERSION).toBe(7);
-    expect(db.verno).toBe(7);
+    expect(DB_VERSION).toBe(8);
+    expect(db.verno).toBe(8);
     expect(db.tables.map((table) => table.name)).toContain('outlines');
     expect(db.table('outlines').schema.indexes.map((index) => index.name)).toEqual([
       'ownerId',
@@ -217,6 +217,39 @@ describe('versiones de la base', () => {
       'updatedAt',
     ]);
     expect(db.notes.schema.idxByName).toHaveProperty('outlineId');
+  });
+
+  it('una base de la versión 7 sube a la 8 con el catálogo del banco, su estado y las imágenes de los mazos, sin tocar sus datos (B11)', async () => {
+    const name = `migracion8-${newId()}`;
+    names.push(name);
+    const bankTables = ['catalog', 'bankState', 'deckMedia'];
+    const stores = Object.fromEntries(
+      Object.entries(storesFor('real')).filter(([table]) => !bankTables.includes(table)),
+    );
+    const old = new Dexie(name);
+    old.version(7).stores(stores);
+    await old.open();
+    const user = makeUser({ id: newId() });
+    await old.table('users').put(user);
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    expect(db.verno).toBe(DB_VERSION);
+    expect(await db.users.get(user.id)).toEqual(user);
+    for (const table of bankTables) expect(await db.table(table).count()).toBe(0);
+    expect(db.catalog.schema.primKey.name).toBe('questionId');
+    expect(db.catalog.schema.indexes.map((index) => index.name)).toEqual([
+      'versionId',
+      'branch',
+      'topic',
+      'status',
+      'seq',
+    ]);
+    expect(db.bankState.schema.primKey.name).toBe('key');
+    expect(db.deckMedia.schema.primKey.name).toBe('path');
+    expect(db.deckMedia.schema.idxByName).toHaveProperty('[deckKey+subjectKey]');
   });
 
   it('sube de la versión 5 a la 6 sin tocar ningún dato y deja listos la tabla de apuntes y el índice de las notas', async () => {

@@ -1,5 +1,5 @@
 // El paso del admin en el Catálogo de mazos (pantalla 37, 4.8 del plan de B11), para las e2e de nube.
-// Lo usan el bloque del admin de deck-catalog.spec.ts y, por contrato, la parte del alumno del paquete
+// Lo usan deck-catalog-admin.spec.ts y, por contrato, la parte del alumno del paquete
 // B antes de bajar el mazo. Arma un .apkg pequeño con texto simulado, lo sube desde la pantalla, que lo
 // parte por submazo en el navegador, y publica la versión. Un mazo de terceros necesita antes la
 // confirmación del dueño.

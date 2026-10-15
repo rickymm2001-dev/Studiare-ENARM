@@ -3,11 +3,15 @@ import type { Table } from 'dexie';
 import type { z } from 'zod';
 import type { EnarmDb } from '../../db/database';
 import { OptionSchema, QuestionSchema, type Option, type Question } from '../../schemas/bank';
+import type { BankState, BankStateKey, BankStateOf } from '../../schemas/bankCloud';
 import { CardSchema, NoteSchema } from '../../schemas/decks';
 import type {
   AppendOnlyRepo,
+  BankStateRepo,
   CacheReader,
   CardRepo,
+  CatalogRepo,
+  DeckMediaRepo,
   EntityRepo,
   NoteRepo,
   OptionRepo,
@@ -169,5 +173,60 @@ export function createDexieOptionRepo(db: EnarmDb): OptionRepo {
     get: (id) => db.options.get(id),
     listForQuestionVersion: (questionVersionId) =>
       db.options.where('questionVersionId').equals(questionVersionId).toArray(),
+  };
+}
+
+/**
+ * Los esquemas del banco de la nube se cargan la primera vez que se escribe, porque las pantallas que
+ * escriben esas tablas se cargan en diferido y estos repositorios van en el JavaScript inicial (14.4)
+ */
+const bankCloudSchemas = () => import('../../schemas/bankCloud');
+
+export function createDexieCatalogRepo(db: EnarmDb): CatalogRepo {
+  return {
+    get: (questionId) => db.catalog.get(questionId),
+    list: () => db.catalog.toArray(),
+    listPublished: () => db.catalog.where('status').equals('published').toArray(),
+    getByVersion: (versionId) => db.catalog.where('versionId').equals(versionId).first(),
+    async putMany(entries) {
+      const { CatalogEntrySchema } = await bankCloudSchemas();
+      const parsed = entries.map((entry) => CatalogEntrySchema.parse(entry));
+      await db.catalog.bulkPut(parsed);
+      return parsed.length;
+    },
+    count: () => db.catalog.count(),
+  };
+}
+
+export function createDexieBankStateRepo(db: EnarmDb): BankStateRepo {
+  return {
+    async get<K extends BankStateKey>(key: K) {
+      const state = await db.bankState.get(key);
+      return state?.key === key ? (state as BankStateOf<K>) : undefined;
+    },
+    async put<S extends BankState>(state: S) {
+      const { BankStateSchema } = await bankCloudSchemas();
+      const parsed = BankStateSchema.parse(state) as S;
+      await db.bankState.put(parsed);
+      return parsed;
+    },
+  };
+}
+
+export function createDexieDeckMediaRepo(db: EnarmDb): DeckMediaRepo {
+  return {
+    get: (path) => db.deckMedia.get(path),
+    async putMany(media) {
+      const { DeckMediaSchema } = await bankCloudSchemas();
+      const parsed = media.map((item) => DeckMediaSchema.parse(item));
+      await db.deckMedia.bulkPut(parsed);
+      return parsed.length;
+    },
+    // Las claves de submazo son minúsculas, números y guiones, así que caben entre '' y \uffff
+    removeForDeck: (deckKey) =>
+      db.deckMedia
+        .where('[deckKey+subjectKey]')
+        .between([deckKey, ''], [deckKey, '\uffff'])
+        .delete(),
   };
 }

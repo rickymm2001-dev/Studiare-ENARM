@@ -13,6 +13,7 @@ import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
 import { schedulerConfig } from '../review/schedulerConfig';
 import { latestCardStates, reviewedToday } from '../review/study';
+import type { QuotaInfo } from '@/data/bank/contracts';
 import { dailyQuestions } from '../shared/dailyLimit';
 import type { ReadySession } from '../shared/RequireSession';
 import { buildPlannerView, type PlannerView } from './planView';
@@ -54,6 +55,8 @@ export function buildWeekPlan(input: {
   subscription: Pick<Subscription, 'plan' | 'status'> | null;
   /** Preguntas de un examen abierto que cuentan para hoy aunque todavía no estén en la bitácora */
   reservedQuestions: number;
+  /** La última cuota del banco de la nube (B11, 5.5). Sin ella cuenta solo la app */
+  serverQuota?: QuotaInfo | null;
 }): WeekPlan {
   const { now, session, events } = input;
   const { user, settings } = session;
@@ -71,6 +74,7 @@ export function buildWeekPlan(input: {
     timeZone: user.timeZone,
     now,
     reserved: input.reservedQuestions,
+    serverQuota: input.serverQuota ?? null,
   });
   const { activity } = buildSnapshot({ events, user, settings, now });
   const view = buildPlannerView({

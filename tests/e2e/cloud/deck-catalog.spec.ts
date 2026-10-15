@@ -1,71 +1,123 @@
-// Catálogo de mazos en la nube (pantalla 37 y la parte del alumno, 4.8 del plan de B11, respuestas 46,
-// 47 y 49). La parte del alumno la escribe el paquete B en este mismo archivo. El paquete C agrega aquí
-// la del admin, en su propio bloque al final. El admin sube un .apkg de terceros, que se parte por
-// submazo en el navegador y sube por archivos sin upsert. Publicarlo sin la autorización confirmada
-// avisa con BK010. Solo el dueño la confirma con su nota y entonces la versión se publica.
+// El catálogo de mazos de la nube (B11, 4.8 y 5.8 del plan de B11, respuestas 46 y 47). Con la bandera
+// deckCatalogCloud, Mazos lista los mazos de deck_catalog_list. Un plan de pago baja una materia de
+// Storage con sus imágenes, sigue el mazo y lo repasa sin conexión con las imágenes guardadas en el
+// dispositivo. Gratis ve las materias y las notas de muestra con el candado y la prueba gratis, sin
+// bajar nada. Corre contra el Supabase simulado con el banco de tests/e2e/support/fakeBank.ts.
+//
+// Esta es la parte del alumno, que escribe el paquete B. El mazo se siembra publicado con
+// seedCatalogDeck, igual a como lo deja el admin. La parte del admin, que sube un .apkg chico de
+// prueba, confirma la autorización del dueño y publica con fakeEditorial.ts, está en
+// deck-catalog-admin.spec.ts. Todo el texto es simulado.
+import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
-import { bankAdminText } from '@/i18n/bankAdmin';
-import { enterTeam, teamBank } from '../support/bankTeam';
-import { expect, openSecondDevice, test } from '../support/cloudFixtures';
-import { deckEntry, publishDeckAsAdmin, uploadDeckAsAdmin } from '../support/deckCatalogAdmin';
+import { deckCatalogText as text } from '@/i18n/cloudDecks';
+import { t } from '@/i18n/es-MX';
+import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
+import { goOffline, seedCatalogDeck } from '../support/fakeBank';
+import { createFakeBankStore } from '../support/fakeBankStore';
+import { attachBank, type FakeSupabaseServer } from '../support/fakeSupabase';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
-const adminDecks = bankAdminText.decks;
-const CATALOG_ADMIN = { email: 'admin@ejemplo.mx', alias: 'Admin', role: 'admin' } as const;
-const CATALOG_OWNER = { email: 'dueno@ejemplo.mx', alias: 'Ricardo', role: 'owner' } as const;
-const THIRD_PARTY_DECK = {
-  deckKey: 'prueba-terceros',
-  name: '[Prueba] Mazo de terceros',
-  author: 'Autor simulado',
-  license: 'third_party',
-  note: '[Prueba] Autorización simulada por correo',
-} as const;
+const ANA = 'ana.mazos@ejemplo.mx';
+const DAY_MS = 86_400_000;
+const SUBJECT = 'Materia simulada';
 
-test.describe('Catálogo de mazos, el admin', () => {
-  test('un mazo de terceros se publica solo después de que el dueño confirma la autorización', async ({
+/** El banco simulado enganchado al Supabase de la prueba, con un mazo publicado de una nota */
+function catalogWith(cloud: FakeSupabaseServer) {
+  const store = createFakeBankStore();
+  attachBank(cloud, store);
+  const seeded = seedCatalogDeck(store, { notes: 1 });
+  return { store, ...seeded };
+}
+
+/** Entra con el catálogo de la nube y la prueba gratis prendidos en el servidor, como lo hará Ricardo */
+async function enterWithCatalog(page: Page, cloud: FakeSupabaseServer) {
+  cloud.setFeatureFlags({ deckCatalogCloud: true, freeTrial: true });
+  await enterWithLink(page, cloud, ANA, 'Ana');
+  await reloadWithServerFlags(page);
+}
+
+const storageReads = (cloud: FakeSupabaseServer) =>
+  cloud.calls.filter((call) => call.path.includes('/storage/v1/object/deck-catalog/')).length;
+
+async function openCatalog(page: Page) {
+  await page.goto(SCREENS.decks.path);
+  const catalog = page.getByRole('region', { name: text.title });
+  await expect(catalog).toBeVisible({ timeout: 30_000 });
+  await expect(catalog.getByText('[Prueba] Mazo simulado del catálogo')).toBeVisible({
+    timeout: 30_000,
+  });
+  return catalog;
+}
+
+test.describe('Catálogo de mazos de la nube para el alumno', () => {
+  test('un plan de pago baja una materia y la repasa sin conexión con sus imágenes', async ({
     page,
-    browser,
+    context,
     cloud,
-    consoleErrors,
   }) => {
     test.setTimeout(180_000);
-    const { bank } = teamBank(cloud, [CATALOG_ADMIN, CATALOG_OWNER]);
-
-    await enterTeam(page, cloud, CATALOG_ADMIN.email);
-    await uploadDeckAsAdmin(page, THIRD_PARTY_DECK);
-    const version = bank.decks.get(THIRD_PARTY_DECK.deckKey)?.versions[0];
-    expect(version).toMatchObject({ version: 1, status: 'uploading' });
-    expect(version?.subjects).toHaveLength(2);
-    const paths = [...bank.objects.keys()].filter((path) =>
-      path.startsWith(`${THIRD_PARTY_DECK.deckKey}/v1/`),
-    );
-    expect(paths.length).toBeGreaterThanOrEqual(2);
-
-    // Sin la confirmación del dueño no se publica. El admin no la puede confirmar
-    const entry = deckEntry(page, THIRD_PARTY_DECK.name);
-    await expect(entry.getByText(adminDecks.authorization.pending)).toBeVisible();
-    await expect(entry.getByText(adminDecks.authorization.ownerOnly)).toBeVisible();
-    await entry.getByRole('button', { name: adminDecks.publish }).click();
-    await expect(entry.getByRole('alert')).toHaveText(bankAdminText.errors.BK010 ?? '');
+    const { store, fronts } = catalogWith(cloud);
+    cloud.createUser({ email: ANA, alias: 'Ana' });
+    cloud.setSubscription(ANA, {
+      plan: 'monthly',
+      status: 'active',
+      provider: 'stripe',
+      currentPeriodEnd: new Date(Date.now() + 20 * DAY_MS).toISOString(),
+    });
+    await enterWithCatalog(page, cloud);
+    const catalog = await openCatalog(page);
+    // Los mazos empacados de la demo no salen con el catálogo de la nube
+    await expect(page.getByRole('region', { name: t.decks.preloadedTitle })).toHaveCount(0);
+    await catalog.getByText(text.subjects(1)).click();
+    await catalog.getByRole('button', { name: text.downloadLabel(SUBJECT) }).click();
+    await expect(catalog.getByText(text.done(1))).toBeVisible({ timeout: 30_000 });
+    await expect(catalog.getByText(text.downloaded, { exact: true })).toBeVisible();
+    // El servidor anotó la bajada de esa materia y esa versión
+    expect(store.deckDownloads).toEqual([
+      expect.objectContaining({
+        deckKey: 'prueba-catalogo',
+        version: 1,
+        subjectKey: 'materia-simulada',
+      }),
+    ]);
     await expectNoSeriousA11yViolations(page);
 
-    // El dueño confirma con su nota desde su dispositivo
-    const owner = await openSecondDevice(browser, cloud, consoleErrors);
-    await enterTeam(owner.page, cloud, CATALOG_OWNER.email);
-    await owner.page.goto(SCREENS.deckCatalogAdmin.path);
-    const ownerEntry = deckEntry(owner.page, THIRD_PARTY_DECK.name);
-    await ownerEntry.getByLabel(adminDecks.authorization.note).fill(THIRD_PARTY_DECK.note);
-    await ownerEntry.getByRole('button', { name: adminDecks.authorization.confirm }).click();
-    await expect(ownerEntry.getByText(adminDecks.authorization.confirmed_notice)).toBeVisible();
-    expect(bank.decks.get(THIRD_PARTY_DECK.deckKey)?.authorizationConfirmedAt).not.toBeNull();
-    await owner.context.close();
+    // Repasar con la página ya cargada, y sin red al empezar
+    await catalog.getByRole('link', { name: text.review }).click();
+    const start = page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ });
+    await expect(start).toBeVisible({ timeout: 30_000 });
+    const reads = storageReads(cloud);
+    await goOffline(context);
+    await start.click();
+    await expect(page.getByText(fronts[0] ?? '')).toBeVisible({ timeout: 30_000 });
+    // La imagen sale de lo guardado en el dispositivo y no de la red
+    const image = page.getByRole('img', { name: 'Imagen simulada' });
+    await expect(image).toHaveAttribute('src', /^blob:/);
+    await expect
+      .poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth))
+      .toBe(1);
+    expect(storageReads(cloud)).toBe(reads);
+    await context.setOffline(false);
+  });
 
-    // Ya se publica
-    await page.reload();
-    await publishDeckAsAdmin(page, THIRD_PARTY_DECK.name);
-    expect(bank.decks.get(THIRD_PARTY_DECK.deckKey)).toMatchObject({
-      status: 'published',
-      publishedVersion: 1,
-    });
+  test('Gratis ve las materias y las notas de muestra con el candado y no baja nada', async ({
+    page,
+    cloud,
+  }) => {
+    test.setTimeout(120_000);
+    const { store } = catalogWith(cloud);
+    await enterWithCatalog(page, cloud);
+    const catalog = await openCatalog(page);
+    await expect(catalog.getByText(t.freePlan.catalog.notice)).toBeVisible();
+    await expect(catalog.getByRole('link', { name: t.billing.freeTrialCta })).toBeVisible();
+    await catalog.getByText(text.subjects(1)).click();
+    await expect(catalog.getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
+    await expect(catalog.getByRole('button', { name: text.downloadLabel(SUBJECT) })).toHaveCount(0);
+    await catalog.getByText(text.preview).click();
+    await expect(catalog.getByText('[Prueba] Nota de muestra')).toBeVisible();
+    await expectNoSeriousA11yViolations(page);
+    expect(storageReads(cloud)).toBe(0);
+    expect(store.deckDownloads).toEqual([]);
   });
 });

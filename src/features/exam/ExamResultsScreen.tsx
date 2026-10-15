@@ -23,6 +23,7 @@ import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingNote, LoadingState } from '@/ui/states/states';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useQuestionSource, useServerQuota } from '../shared/useQuestionSource';
 import { TOPIC_NAMES } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
 import { startPracticeWithQuestions } from '../simulator/practiceStart';
@@ -318,8 +319,15 @@ function RetryCard({
     () => api.repos.subscriptions.get(session.user.id).then((value) => value ?? null),
     [api.repos, session.user.id],
   );
+  // Con el banco de la nube cuenta también lo que dice el servidor, como en Simular (B11, 5.5)
+  const serverQuota = useServerQuota(useQuestionSource());
   const [starting, setStarting] = useState(false);
-  if (score.missedIds.length === 0 || events === undefined || subscription === undefined) {
+  if (
+    score.missedIds.length === 0 ||
+    events === undefined ||
+    subscription === undefined ||
+    serverQuota === undefined
+  ) {
     return null;
   }
   const { left } = dailyQuestions({
@@ -327,6 +335,7 @@ function RetryCard({
     subscription,
     timeZone: session.user.timeZone,
     now: new Date(),
+    serverQuota,
   });
   const count = Math.min(score.missedIds.length, left ?? Number.POSITIVE_INFINITY);
   const start = () => {

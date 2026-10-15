@@ -3,14 +3,14 @@
 // nota guarda el ID del apunte y de la línea para seguir unida a ella. El apunte lleva fecha de
 // modificación y marca de borrado como mazos, notas y tarjetas, para sincronizar entre dispositivos.
 import { z } from 'zod';
+import type { OutlineSubject } from '../../engines/outline';
 import {
   countNodes,
   FREE_SUBJECT_MAX_LENGTH,
   OUTLINE_LIMITS,
   outlineDepth,
   type OutlineNode,
-  type OutlineSubject,
-} from '../../engines/outline';
+} from '../../engines/outlineLimits';
 import { IdSchema, TaxonomyKeySchema, UtcDateTimeSchema } from './common';
 import { SyncShape } from './decks';
 

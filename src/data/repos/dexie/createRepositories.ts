@@ -30,8 +30,11 @@ import {
 import type { Repositories } from '../types';
 import {
   createDexieAppendOnlyRepo,
+  createDexieBankStateRepo,
   createDexieCacheReader,
   createDexieCardRepo,
+  createDexieCatalogRepo,
+  createDexieDeckMediaRepo,
   createDexieEntityRepo,
   createDexieNoteRepo,
   createDexieOptionRepo,
@@ -60,6 +63,9 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     biasLabels: createDexieEntityRepo(db.biasLabels, BiasLabelSchema),
     contentReports: createDexieEntityRepo(db.contentReports, ContentReportSchema),
     reviewAssignments: createDexieEntityRepo(db.reviewAssignments, ReviewAssignmentSchema),
+    catalog: createDexieCatalogRepo(db),
+    bankState: createDexieBankStateRepo(db),
+    deckMedia: createDexieDeckMediaRepo(db),
     sessions: createDexieEntityRepo(db.sessions, SessionSchema),
     findings: createDexieEntityRepo(db.findings, FindingSchema),
     patterns: createDexieEntityRepo(db.patterns, PatternSchema),

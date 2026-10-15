@@ -20,9 +20,10 @@
 // portal y Mercado Pago simulados.
 //
 // Banco en la nube (B11). attachBank(server, store) engancha el modelo en memoria de fakeBankStore.ts.
-// Desde ahí las rpc del banco, la función bank-sync y el bucket deck-catalog van al banco. En el Paso 0
-// de B11 responden vacío. Los paquetes B y C de B11 cambian bankRpc, bankFunction y bankStorage para
-// que llamen a fakeBank.ts y a fakeEditorial.ts. Sin attachBank todo sigue como antes.
+// Desde ahí las rpc del banco, la función bank-sync y el bucket deck-catalog van al banco. Las del
+// alumno y la bajada de deck-catalog las atiende fakeBank.ts (paquete B). Las del médico y el admin,
+// bank-sync y la subida a deck-catalog responden vacío hasta que fakeEditorial.ts (paquete C) las
+// atienda. Sin attachBank todo sigue como antes.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -58,14 +59,14 @@ import {
   FAKE_SUPABASE_URL,
 } from './fakeSupabaseConfig';
 import { editorialFunction, editorialRpc, editorialStorage } from './fakeEditorial';
+import { fakeBankDownload, fakeBankRpc } from './fakeBank';
 import {
+  BANK_STUDENT_RPCS,
   DECK_CATALOG_BUCKET,
-  bankOpen,
-  fakeStudyDay,
-  fakeStudyDayResetsAt,
   isBankRpc,
   isTeam,
   type BankRpc,
+  type BankStudentRpc,
   type FakeBankCaller,
   type FakeBankReply,
   type FakeBankStore,
@@ -1454,7 +1455,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const flags = settings.get('feature_flags')?.value;
     return {
       userId: user.id,
-      role: user.role,
+      // Sin aal2, con requireMfa, el equipo cuenta como alumno, como current_app_role (B9)
+      role: roleOf(user, session),
       alias: user.alias,
       activeDevice: isActiveDevice(user, session),
       plan: userPlan(user.id),
@@ -2578,31 +2580,14 @@ const bankError = (code: string, message: string): FakeBankReply => ({
   json: { code, message, details: null, hint: null },
 });
 
-/** La cuota vacía de bank_quota, con el plan de quien llama */
-function emptyQuota(store: FakeBankStore, caller: FakeBankCaller) {
-  const team = isTeam(caller);
-  const free = !team && caller.plan === 'free';
-  return {
-    open: team || bankOpen(caller),
-    plan: team ? caller.role : caller.plan,
-    limit: free ? store.settings.freeDaily : null,
-    used: 0,
-    left: free ? store.settings.freeDaily : null,
-    day: fakeStudyDay(store),
-    resetsAt: fakeStudyDayResetsAt(store),
-    brake: { retryAt: null },
-  };
-}
-
-const NOT_ACTIVE: FakeBankReply = bankError(
-  '42501',
-  'Este dispositivo no es el activo de la cuenta',
-);
 const TEAM_ONLY: FakeBankReply = bankError('42501', 'Solo el equipo médico');
 
+const isStudentRpc = (name: BankRpc): name is BankStudentRpc =>
+  (BANK_STUDENT_RPCS as readonly string[]).includes(name);
+
 /**
- * Las rpc del banco. Paso 0 de B11. Responden vacío con las formas de src/data/bank/contracts.ts. El
- * paquete B manda las del alumno a fakeBank.ts y el paquete C las del equipo a fakeEditorial.ts
+ * Las rpc del banco. Las del alumno van a fakeBank.ts (paquete B de B11). Las del equipo responden vacío
+ * con las formas de src/data/bank/contracts.ts hasta que fakeEditorial.ts (paquete C) las atienda
  */
 function bankRpc(
   store: FakeBankStore,
@@ -2610,53 +2595,7 @@ function bankRpc(
   caller: FakeBankCaller,
   args: Record<string, unknown>,
 ): FakeBankReply {
-  const ok = (value: unknown): FakeBankReply => ({ status: 200, json: value });
-  switch (name) {
-    case 'catalog_changes': {
-      if (!caller.activeDevice) return NOT_ACTIVE;
-      const since = typeof args.p_since === 'number' ? args.p_since : 0;
-      return ok({
-        open: isTeam(caller) || bankOpen(caller),
-        rows: [],
-        nextSince: since,
-        done: true,
-      });
-    }
-    case 'fetch_questions': {
-      if (!caller.activeDevice) return NOT_ACTIVE;
-      const open = isTeam(caller) || bankOpen(caller);
-      const listOf = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
-      const asked = [...listOf(args.p_question_ids), ...listOf(args.p_version_ids)].filter(
-        (id): id is string => typeof id === 'string',
-      );
-      return ok({
-        questions: [],
-        cases: [],
-        denied: asked.map((id) => ({ id, reason: open ? 'not_found' : 'closed' })),
-        quota: emptyQuota(store, caller),
-      });
-    }
-    case 'bank_quota':
-      return caller.activeDevice ? ok(emptyQuota(store, caller)) : NOT_ACTIVE;
-    case 'report_question':
-      return caller.activeDevice ? ok({ status: 'not_found', reportId: null }) : NOT_ACTIVE;
-    case 'bias_agreement_summary':
-      return ok({
-        pairs: 0,
-        kappa: null,
-        vocabulary: 'trap',
-        calibrating: true,
-        minPairs: 30,
-        minKappa: 0.4,
-      });
-    case 'deck_catalog_list':
-      if (!caller.activeDevice) return NOT_ACTIVE;
-      return ok({ canDownload: isTeam(caller) || caller.plan !== 'free', decks: [] });
-    case 'record_deck_download':
-      return caller.activeDevice ? ok(null) : NOT_ACTIVE;
-    default:
-      break;
-  }
+  if (isStudentRpc(name)) return fakeBankRpc(store, name, caller, args);
   if (!isTeam(caller)) return TEAM_ONLY;
   // Las del equipo las atiende fakeEditorial.ts (paquete C de B11)
   return editorialRpc(store, name, caller, args);
@@ -2671,7 +2610,10 @@ function bankFunction(
   return editorialFunction(store, caller, body);
 }
 
-/** El bucket deck-catalog. Lo que sube el admin lo atiende fakeEditorial.ts (paquete C de B11) */
+/**
+ * El bucket deck-catalog. Bajar lo atiende fakeBank.ts con la política deck_catalog_select. Lo que sube
+ * el admin lo atiende fakeEditorial.ts (paquete C de B11)
+ */
 function bankStorage(
   store: FakeBankStore,
   caller: FakeBankCaller | null,
@@ -2679,12 +2621,15 @@ function bankStorage(
   objectName: string,
   file: Buffer | null,
 ): FakeBankReply {
-  const storageReply = (statusCode: string, error: string, message: string): FakeBankReply => ({
-    status: Number(statusCode),
-    json: { statusCode, error, message },
-  });
+  if (method === 'GET') return fakeBankDownload(store, caller, objectName);
   if (!caller)
-    return storageReply('400', 'Unauthorized', 'new row violates row-level security policy');
-  if (method === 'GET') return storageReply('404', 'not_found', `Object not found: ${objectName}`);
+    return {
+      status: 400,
+      json: {
+        statusCode: '400',
+        error: 'Unauthorized',
+        message: 'new row violates row-level security policy',
+      },
+    };
   return editorialStorage(store, caller, method, objectName, file);
 }

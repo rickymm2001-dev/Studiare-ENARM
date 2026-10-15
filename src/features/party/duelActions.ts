@@ -3,32 +3,38 @@
 // vuelve a abrir, y en la nube el inicio queda también en el servidor (party_start_duel), que sin él
 // no acepta el resultado. El resultado sale de la bitácora (duels.ts). En la demostración el rival es
 // simulado. En la nube (B7) el rival es otro alumno y el resultado se manda al servidor una sola vez.
+// Las preguntas salen de la fuente del alumno (B11, 5.4). Con el banco de la nube se eligen del catálogo
+// publicado, sin variantes, y el rival baja esas versiones exactas antes de empezar. La base rechaza un
+// duelo con ids que no sean versiones aprobadas (8.13).
 import type { DataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import type { Challenge, Group, Membership } from '@/data/schemas/activity';
 import type { User } from '@/data/schemas/people';
-import { ensureDemoBank } from '@/data/usecases/bank';
 import { createDuel } from '@/data/usecases/party';
-import { isVariant, listStudentPool } from '@/data/usecases/studentBank';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
 import { clock, usePractice, type PracticeState } from '../simulator/practice';
+import { currentQuestionSource } from '../shared/useQuestionSource';
 import { duelAttemptSession } from './duels';
 
 /**
- * Las preguntas de un duelo, siempre las mismas con la misma semilla. Solo entran las del banco de
- * demostración sin variantes, que es el banco que tienen igual los dos jugadores en cualquier
- * navegador. Con el banco real en la nube (B11) las elige el servidor. Vacío si no hay banco
+ * Las preguntas de un duelo, siempre las mismas con la misma semilla. Sin variantes, porque los dos
+ * jugadores deben tener el mismo banco. Con el banco de demostración solo entran sus preguntas, que son
+ * iguales en cualquier navegador. Con la nube, las publicadas del catálogo, que el rival baja con su id
+ * de versión. Vacío si no hay banco
  */
 export async function pickDuelQuestionIds(
   api: Pick<DataApi, 'repos'>,
   seed: string,
 ): Promise<string[]> {
-  await ensureDemoBank(api);
-  const { practice } = await listStudentPool(api);
-  const shared = practice.filter((question) => question.isDemo && !isVariant(question));
+  const source = currentQuestionSource(api);
+  if ((await source.prepare()) !== 'ready') return [];
+  const { practice } = await source.pool();
+  const shared = practice.filter(
+    (question) => question.variantOf === undefined && (source.kind === 'cloud' || question.isDemo),
+  );
   return pickQuestions(shared, seed, DUEL_QUESTIONS).map((question) => question.id);
 }
 
@@ -87,10 +93,12 @@ export async function startDuel(
   // La pantalla puede ir un paso atrás. Antes de abrir se revisa la bitácora guardada
   const stored = await api.repos.events.query({ userId: user.id });
   if (duelAttemptSession(stored, duel.id) !== null) return 'already_started';
-  // Quien recibe el reto puede no haber abierto nunca el simulador en este dispositivo
-  await ensureDemoBank(api);
-  const present = await Promise.all(questionIds.map((id) => api.repos.questions.get(id)));
-  if (present.some((question) => question === undefined)) return 'unavailable';
+  // Quien recibe el reto puede no haber abierto nunca el simulador en este dispositivo. Con la nube
+  // baja las versiones exactas del duelo. Si falta alguna, los dos no contestarían lo mismo
+  const source = currentQuestionSource(api);
+  await source.prepare();
+  const bodies = await source.ensureBodies(questionIds, 'duel');
+  if (bodies.ready.length < new Set(questionIds).size) return 'unavailable';
   if (claimStart) {
     const claim = await claimStart();
     if (claim === 'already') return 'already_started';

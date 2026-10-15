@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { storesFor, TABLES, TABLE_NAMES } from '../db/tables';
+import { storesFor, tableSchema, TABLES, TABLE_NAMES } from '../db/tables';
 import { makeQuestionWithOptions, makeUser, newId } from '../testing/fixtures';
 import { AiArtifactSchema } from './activity';
 import { OptionSchema, QuestionSchema } from './bank';
@@ -31,9 +31,10 @@ function indexedFields(indexes: string): string[] {
 }
 
 describe('esquemas y tablas', () => {
-  it('cada campo indexado en Dexie existe en el esquema zod de su tabla', () => {
+  it('cada campo indexado en Dexie existe en el esquema zod de su tabla', async () => {
     for (const name of TABLE_NAMES) {
-      const keys = topLevelKeys(TABLES[name].schema);
+      // Las tablas del banco de la nube cargan su esquema aparte (B11)
+      const keys = topLevelKeys(await tableSchema(name));
       for (const field of indexedFields(TABLES[name].indexes)) {
         expect(keys.has(field), `${name}.${field}`).toBe(true);
       }
