@@ -11,9 +11,12 @@
 // precio nuevo se la lleva (transfer_lookup_key) y el viejo se archiva solo con --archive-old.
 //
 // Solo acepta llaves de prueba (sk_test_ o rk_test_). La llave se lee de STRIPE_SECRET_KEY, no se guarda
-// ni se imprime. Todas las llamadas usan la versión fija de la API. Uso
+// ni se imprime. En la sesión en la nube, sin esa variable, la pone el proxy del entorno y la sesión no la
+// ve. Entonces lo primero es leer el saldo, que dice livemode, y si no sale en false no se crea nada.
+// Todas las llamadas usan la versión fija de la API. Uso
 //   STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts [--app-url=https://...] [--archive-old]
 //     [--write-ids=private/stripe-test-ids.json]
+//   node --use-env-proxy scripts/stripe/setup-test.ts ...   en la sesión en la nube
 // Las opciones con valor aceptan --nombre=valor y --nombre valor.
 // Con --write-ids guarda además los ocho IDs en ese JSON, que npm run deploy:supabase pone en los
 // secretos de Supabase con --secrets-from (docs/DESPLIEGUE.md). private/ no va al repo.
@@ -268,13 +271,14 @@ function samePrice(price: Json, spec: PriceSpec): boolean {
 }
 
 export async function setupStripeTest(input: {
-  key: string;
+  /** null cuando la pone el proxy del entorno, como en la sesión en la nube */
+  key: string | null;
   fetch: typeof fetch;
   appUrl?: string;
   taxBehavior?: TaxBehavior;
   archiveOld?: boolean;
 }): Promise<SetupResult> {
-  if (!isTestKey(input.key)) {
+  if (input.key !== null && !isTestKey(input.key)) {
     throw new StripeSetupError(
       'Solo se aceptan llaves de prueba, que empiezan con sk_test_ o rk_test_',
     );
@@ -293,7 +297,7 @@ export async function setupStripeTest(input: {
     const reply = await input.fetch(`https://api.stripe.com${path}${query}`, {
       method,
       headers: {
-        authorization: `Bearer ${input.key}`,
+        ...(input.key === null ? {} : { authorization: `Bearer ${input.key}` }),
         'stripe-version': STRIPE_API_VERSION,
         ...(method === 'POST' ? { 'content-type': 'application/x-www-form-urlencoded' } : {}),
         ...(options.idempotencyKey ? { 'idempotency-key': options.idempotencyKey } : {}),
@@ -309,6 +313,12 @@ export async function setupStripeTest(input: {
         `Stripe respondió ${reply.status} en ${method} ${path}. ${message}`.trim(),
       );
     }
+    // Nada de la cuenta real, aunque la llave pasara la revisión
+    if (body.livemode === true) {
+      throw new StripeSetupError(
+        `Stripe respondió en modo real en ${method} ${path}. Solo se trabaja en modo prueba. Revisa la llave`,
+      );
+    }
     return body;
   }
   const created = (body: Json | null, what: string): string => {
@@ -316,6 +326,16 @@ export async function setupStripeTest(input: {
     if (!id) throw new StripeSetupError(`Stripe no devolvió el id de ${what}`);
     return id;
   };
+
+  // Con la llave del proxy no se ve su prefijo. El saldo dice si es de prueba antes de crear nada
+  if (input.key === null) {
+    const balance = await call('GET', '/v1/balance');
+    if (balance?.livemode !== false) {
+      throw new StripeSetupError(
+        'La llave que pone el proxy del entorno no es de prueba. No se creó nada. Pon una sk_test_ o rk_test_',
+      );
+    }
+  }
 
   // Productos con id fijo
   for (const product of PRODUCT_SPECS) {
@@ -567,6 +587,16 @@ export interface SetupCliDeps {
   writeIds?: (path: string, result: SetupResult) => void;
 }
 
+/**
+ * La llave de STRIPE_SECRET_KEY o, sin ella y con el proxy del entorno, null, porque la pone el proxy.
+ * Sin las dos queda vacía y setupStripeTest la rechaza
+ */
+export function setupKey(env: Record<string, string | undefined>): string | null {
+  const key = env.STRIPE_SECRET_KEY ?? '';
+  if (key !== '') return key;
+  return (env.HTTPS_PROXY ?? env.https_proxy ?? '') !== '' ? null : '';
+}
+
 /** La corrida desde la línea de comandos. Devuelve el código de salida */
 export async function runSetupCli(
   argv: readonly string[],
@@ -584,7 +614,7 @@ export async function runSetupCli(
   let result: SetupResult;
   try {
     result = await setupStripeTest({
-      key: env.STRIPE_SECRET_KEY ?? '',
+      key: setupKey(env),
       fetch: deps.fetch,
       appUrl: args.values['app-url'] ?? env.APP_URL ?? DEFAULT_APP_URL,
       taxBehavior,

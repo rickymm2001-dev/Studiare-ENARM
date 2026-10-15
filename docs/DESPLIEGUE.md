@@ -31,6 +31,12 @@ npm run deploy:supabase -- --plan b10 --yes
 STRIPE_SECRET_KEY=rk_test_... node --use-env-proxy scripts/stripe/setup-test.ts --app-url=https://rickymm2001-dev.github.io/Studiare-ENARM/ --write-ids=private/stripe-test-ids.json
 ```
 
+En la sesión en la nube va sin STRIPE_SECRET_KEY, porque la llave la pone el proxy del entorno y la sesión no la ve. Como no se ve su prefijo, lo primero que hace es leer el saldo de Stripe, y si no dice livemode false se detiene sin crear nada. Cualquier respuesta en modo real también la detiene
+
+```bash
+node --use-env-proxy scripts/stripe/setup-test.ts --app-url=https://rickymm2001-dev.github.io/Studiare-ENARM/ --write-ids=private/stripe-test-ids.json
+```
+
 4. Poner esos ocho IDs en los secretos de las Edge Functions
 
 ```bash

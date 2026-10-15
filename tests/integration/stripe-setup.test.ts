@@ -18,6 +18,7 @@ import {
   isTestKey,
   portalParams,
   runSetupCli,
+  setupKey,
   setupStripeTest,
   summaryLines,
   type PriceKey,
@@ -41,7 +42,7 @@ type Row = Record<string, unknown>;
  * Sigue las reglas que importan aquí. Un id fijo no se repite, una clave de búsqueda vive en un solo
  * precio y solo se mueve con transfer_lookup_key, y un código necesita su cupón
  */
-function fakeStripe(seed: { prices?: Row[] } = {}) {
+function fakeStripe(seed: { prices?: Row[]; livemode?: boolean } = {}) {
   const calls: Call[] = [];
   const products = new Map<string, Row>();
   const prices: Row[] = [...(seed.prices ?? [])];
@@ -66,6 +67,10 @@ function fakeStripe(seed: { prices?: Row[] } = {}) {
     calls.push({ method, path: url.pathname, form, headers: new Headers(init?.headers) });
     const [, , resource = '', id = '', extra = ''] = url.pathname.split('/');
     const field = (name: string) => form.get(name);
+
+    if (resource === 'balance' && method === 'GET') {
+      return ok({ object: 'balance', livemode: seed.livemode ?? false, available: [] });
+    }
 
     if (resource === 'products') {
       if (method === 'GET') {
@@ -422,6 +427,44 @@ describe('configuración de Stripe en modo prueba', () => {
     expect(message).not.toContain(KEY);
   });
 
+  it('con la llave del proxy no manda authorization y lee el saldo antes de crear nada', async () => {
+    const stripe = fakeStripe();
+    const result = await setupStripeTest({ key: null, fetch: stripe.fetch, appUrl: APP });
+    expect(result.ids).toHaveLength(8);
+    expect(stripe.calls[0]).toMatchObject({ method: 'GET', path: '/v1/balance' });
+    expect(stripe.calls.every((call) => !call.headers.has('authorization'))).toBe(true);
+  });
+
+  it('si el saldo sale en modo real, o sin decirlo, con la llave del proxy no crea nada', async () => {
+    for (const livemode of [true, undefined]) {
+      const stripe = fakeStripe(livemode === undefined ? {} : { livemode });
+      const fetchImpl =
+        livemode === undefined
+          ? (((input: string | URL | Request, init?: RequestInit) =>
+              (input instanceof Request ? input.url : input.toString()).endsWith('/v1/balance')
+                ? Promise.resolve(Response.json({ object: 'balance' }))
+                : stripe.fetch(input, init)) as typeof fetch)
+          : stripe.fetch;
+      const error = await setupStripeTest({ key: null, fetch: fetchImpl, appUrl: APP }).catch(
+        (e: unknown) => e,
+      );
+      expect(error).toBeInstanceOf(Error);
+      expect(error instanceof Error ? error.message : '').toMatch(/no es de prueba|modo real/);
+      expect(stripe.calls.filter((call) => call.method === 'POST')).toEqual([]);
+    }
+  });
+
+  it('una respuesta en modo real detiene todo, aunque la llave diga test', async () => {
+    const real = (() =>
+      Promise.resolve(Response.json({ id: 'studiare_plan', livemode: true }))) as typeof fetch;
+    const error = await setupStripeTest({ key: KEY, fetch: real, appUrl: APP }).catch(
+      (e: unknown) => e,
+    );
+    expect(error instanceof Error ? error.message : '').toBe(
+      'Stripe respondió en modo real en GET /v1/products/studiare_plan. Solo se trabaja en modo prueba. Revisa la llave',
+    );
+  });
+
   it('imprime los ocho IDs en líneas NOMBRE=valor, sin la llave', async () => {
     const stripe = fakeStripe();
     const lines = summaryLines(
@@ -477,6 +520,26 @@ describe('setup-test.ts desde la línea de comandos', () => {
     expect(Object.keys(saved)).toHaveLength(8);
     expect(out.lines.join('\n')).toContain(`Guardé los ocho IDs en ${path}`);
     expect(out.lines.join('\n')).not.toContain(KEY);
+  });
+
+  it('sin STRIPE_SECRET_KEY usa la llave del proxy solo si hay proxy', async () => {
+    expect(setupKey({ STRIPE_SECRET_KEY: KEY, HTTPS_PROXY: 'http://proxy' })).toBe(KEY);
+    expect(setupKey({ HTTPS_PROXY: 'http://proxy' })).toBeNull();
+    expect(setupKey({ https_proxy: 'http://proxy', STRIPE_SECRET_KEY: '' })).toBeNull();
+    expect(setupKey({})).toBe('');
+
+    const stripe = fakeStripe();
+    const out = output();
+    expect(await runSetupCli([], { HTTPS_PROXY: 'http://proxy' }, out.deps(stripe.fetch))).toBe(0);
+    expect(stripe.calls[0]?.path).toBe('/v1/balance');
+
+    const none = fakeStripe();
+    const missing = output();
+    expect(await runSetupCli([], {}, missing.deps(none.fetch))).toBe(1);
+    expect(missing.lines).toEqual([
+      'Solo se aceptan llaves de prueba, que empiezan con sk_test_ o rk_test_',
+    ]);
+    expect(none.calls).toEqual([]);
   });
 
   it('--write-ids sin valor o una opción que no existe no llaman a Stripe', async () => {
