@@ -4,12 +4,15 @@ import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
+import type { AiEngine } from '@/engines/aiContracts';
+import { mockOutput } from '@/engines/aiMock';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import type { User } from '@/data/schemas/people';
 import { setConsent } from '@/data/usecases/profile';
 import { makeEvent, makeQuestionWithOptions, subscribe } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
+import { POLL_MS } from './useTutorAi';
 
 // Arma toda la pantalla del tutor con cinco errores seguros, así que necesita más de 5 segundos
 vi.setConfig({ testTimeout: 30_000 });
@@ -133,12 +136,12 @@ describe('análisis con IA en el tutor', () => {
     expect(artifact?.content.ai).toBeDefined();
   });
 
-  it('si el proxy no deja usar la IA, avisa, deja la plantilla y registra la llamada', async () => {
+  it('si el proxy no deja usar la IA, avisa, deja la plantilla y no cuenta nada', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn((url: string) => {
         if (url.endsWith('/api/health')) {
-          return Promise.resolve(Response.json({ status: 'ok', mode: 'real', version: 1 }));
+          return Promise.resolve(Response.json({ status: 'ok', mode: 'real', version: 2 }));
         }
         return Promise.resolve(
           Response.json(
@@ -161,8 +164,185 @@ describe('análisis con IA en el tutor', () => {
     ).toBeVisible();
     const card = await screen.findByRole('region', { name: rule.title }, WAIT);
     expect(within(card).queryByText(t.tutor.ai.draft)).toBeNull();
-    const [call] = await rendered.api.repos.aiCallLog.list();
-    expect(call).toMatchObject({ engine: 'forgetting', mode: 'real', outcome: 'fallback' });
+    // Encolar y que el servidor lo niegue no costó nada, así que no hay renglón de costo
+    expect(await rendered.api.repos.aiCallLog.list()).toHaveLength(0);
+    expect(within(card).queryByText(t.tutor.ai.pending)).toBeNull();
+  });
+});
+
+type Json = Record<string, unknown>;
+
+/**
+ * Un proxy de IA simulado. Contesta la salud, encola la hipótesis y la termina en la segunda pregunta
+ * por su estado, y contesta al momento el informe y los consejos con las respuestas fijas del motor
+ */
+function stubProxy(options: { engines?: Partial<Record<AiEngine, 'open' | 'gated'>> } = {}) {
+  const calls: { url: string; body: Json | undefined }[] = [];
+  let hypothesisInput: unknown;
+  let jobKey = '';
+  let polls = 0;
+  const meta = (engine: AiEngine) => ({
+    engine,
+    mode: 'mock',
+    model: 'claude-haiku-5-5',
+    promptVersion: `${engine}.base.v1`,
+    inputTokens: 1500,
+    outputTokens: 300,
+    cacheWriteTokens: 0,
+    cacheReadTokens: 0,
+    estimatedCostUsd: 0.0002,
+    latencyMs: 0,
+    outcome: 'ok',
+    validator: { passed: true, issues: [] },
+  });
+  const job = (status: 'queued' | 'ready') => ({
+    jobKey,
+    engine: 'forgetting',
+    status,
+    queuedAt: new Date().toISOString(),
+    readyAt: status === 'ready' ? new Date().toISOString() : null,
+    ...(status === 'ready'
+      ? { output: mockOutput('forgetting', hypothesisInput as never), meta: meta('forgetting') }
+      : {}),
+  });
+  const stub = vi.fn((url: string, init?: RequestInit) => {
+    const body = init?.body ? (JSON.parse(init.body as string) as Json) : undefined;
+    calls.push({ url, body });
+    if (url.endsWith('/api/health')) {
+      return Promise.resolve(
+        Response.json({
+          status: 'ok',
+          mode: 'mock',
+          version: 2,
+          ...(options.engines ? { engines: options.engines } : {}),
+        }),
+      );
+    }
+    if (url.endsWith('/api/ai/jobs/forgetting')) {
+      hypothesisInput = body?.input;
+      jobKey = body?.jobKey as string;
+      return Promise.resolve(Response.json(job('queued'), { status: 202 }));
+    }
+    if (url.endsWith('/api/ai/jobs/status')) {
+      polls += 1;
+      return Promise.resolve(Response.json({ jobs: [job(polls < 2 ? 'queued' : 'ready')] }));
+    }
+    const engine = /\/api\/ai\/(\w+)$/.exec(url)?.[1] as AiEngine | undefined;
+    if (engine && body) {
+      return Promise.resolve(
+        Response.json({ output: mockOutput(engine, body.input as never), meta: meta(engine) }),
+      );
+    }
+    return Promise.resolve(Response.json({ error: 'nope' }, { status: 404 }));
+  });
+  return { stub, calls };
+}
+
+const engineCalls = (calls: { url: string }[]) =>
+  calls.filter((call) => call.url.includes('/api/ai/')).map((call) => call.url.split('/api')[1]);
+
+describe('hipótesis por lote', () => {
+  const originalPoll = POLL_MS.mock;
+  afterEach(() => {
+    (POLL_MS as { mock: number }).mock = originalPoll;
+  });
+
+  it('se encola, enseña el aviso de pendiente con su plantilla y al llegar queda en borrador', async () => {
+    (POLL_MS as { mock: number }).mock = 50;
+    const { stub, calls } = stubProxy();
+    vi.stubGlobal('fetch', stub);
+    const rendered = await open('monthly', true);
+
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    // Primero la plantilla con el aviso. Todavía no hay texto de la IA ni renglón de costo
+    expect(await within(card).findByText(t.tutor.ai.pending, undefined, WAIT)).toBeVisible();
+    expect(within(card).getByText(rule.message)).toBeVisible();
+
+    // Después llega, la plantilla se reemplaza y queda como borrador sin validar por médico
+    await within(card).findByText(t.tutor.ai.written.mock, undefined, WAIT);
+    expect(within(card).getByText(t.tutor.ai.draft)).toBeVisible();
+    expect(within(card).queryByText(t.tutor.ai.pending)).toBeNull();
+    expect(within(card).queryByText(rule.message)).toBeNull();
+
+    const artifact = (await rendered.api.repos.aiArtifacts.list()).find(
+      (entry) => entry.kind === 'hypothesis',
+    );
+    expect(artifact).toMatchObject({ status: 'draft', mode: 'mock', decidedBy: null });
+    expect(artifact?.content.aiPending).toBeNull();
+    const log = await rendered.api.repos.aiCallLog.list();
+    expect(log.filter((call) => call.engine === 'forgetting')).toHaveLength(1);
+    expect(engineCalls(calls)).toContain('/ai/jobs/forgetting');
+    expect(engineCalls(calls)).toContain('/ai/jobs/status');
+  });
+
+  it('con los motores cerrados para alumnos no pide nada y dice cuándo se abre', async () => {
+    const { stub, calls } = stubProxy({
+      engines: {
+        forgetting: 'gated',
+        weekly_report: 'gated',
+        flashcards: 'gated',
+        bias_tips: 'gated',
+        restructure: 'gated',
+      },
+    });
+    vi.stubGlobal('fetch', stub);
+    const rendered = await open('monthly', true);
+    const intro = await screen.findByRole('region', { name: t.tutor.ai.title }, WAIT);
+    expect(await within(intro).findByText(t.ai.access.gated, undefined, WAIT)).toBeVisible();
+    expect(within(intro).queryByRole('button', { name: t.tutor.ai.turnOn })).toBeNull();
+    // La hipótesis sigue con su plantilla, sin aviso de pendiente ni etiqueta de IA
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    expect(within(card).getByText(rule.message)).toBeVisible();
+    expect(within(card).queryByText(t.tutor.ai.pending)).toBeNull();
+    expect(engineCalls(calls)).toEqual([]);
+    expect(await rendered.api.repos.aiCallLog.list()).toHaveLength(0);
+  });
+
+  it('con las hipótesis abiertas y lo demás cerrado pide solo ese motor', async () => {
+    (POLL_MS as { mock: number }).mock = 50;
+    const { stub, calls } = stubProxy({
+      engines: { forgetting: 'open', weekly_report: 'gated', bias_tips: 'gated' },
+    });
+    vi.stubGlobal('fetch', stub);
+    await open('monthly', true);
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    await within(card).findByText(t.tutor.ai.written.mock, undefined, WAIT);
+    expect(
+      engineCalls(calls).filter(
+        (url) => url !== '/ai/jobs/forgetting' && url !== '/ai/jobs/status',
+      ),
+    ).toEqual([]);
+  });
+
+  it('con las hipótesis cerradas y otro motor abierto la deja con su plantilla y sin pedirla', async () => {
+    const { stub, calls } = stubProxy({
+      engines: { forgetting: 'gated', weekly_report: 'open', bias_tips: 'gated' },
+    });
+    vi.stubGlobal('fetch', stub);
+    await open('monthly', true);
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    await screen.findByText(t.tutor.ai.on, undefined, WAIT);
+    expect(within(card).getByText(rule.message)).toBeVisible();
+    expect(within(card).queryByText(t.tutor.ai.pending)).toBeNull();
+    expect(engineCalls(calls)).not.toContain('/ai/jobs/forgetting');
+  });
+
+  it('en producción, sin IA, el Tutor usa sus plantillas sin hablar de IA', async () => {
+    vi.stubEnv('VITE_APP_ENV', 'production');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.reject(new TypeError('sin red'))),
+    );
+    const rendered = await open('monthly', true);
+    const card = await screen.findByRole('region', { name: rule.title }, WAIT);
+    expect(within(card).getByText(rule.message)).toBeVisible();
+    // Ni la tarjeta de análisis con IA ni sus avisos
+    await waitFor(() => {
+      expect(screen.queryByRole('region', { name: t.tutor.ai.title })).toBeNull();
+    });
+    expect(screen.queryByText(t.tutor.ai.written.template)).toBeNull();
+    expect(await rendered.api.repos.aiCallLog.list()).toHaveLength(0);
+    vi.unstubAllEnvs();
   });
 });
 

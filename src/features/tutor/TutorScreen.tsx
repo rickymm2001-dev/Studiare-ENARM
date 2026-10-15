@@ -251,6 +251,8 @@ function TutorBody({
       busy={pending.has(hypothesis.key)}
       compact={compact}
       ai={tutorAi.hypotheses.get(hypothesis.key)}
+      aiPending={tutorAi.pending.has(hypothesis.key)}
+      aiFailed={tutorAi.failed.has(hypothesis.key)}
       onAction={(action) => {
         void apply(hypothesis, action);
       }}

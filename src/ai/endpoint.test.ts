@@ -19,6 +19,8 @@ describe('aiBaseUrl', () => {
       'https://',
       'ia.studiare.mx',
       'https://ia.studiare.mx/ruta',
+      'https://ia.studiare.mx/functions/v1/otra-funcion',
+      'https://ia.studiare.mx/functions/v1/ai-proxy/health',
       'javascript:alert(1)',
       'https://ia studiare.mx',
       42,
@@ -34,9 +36,38 @@ describe('aiBaseUrl', () => {
     );
   });
 
+  it('acepta también un origen con la ruta de la función de Supabase', () => {
+    expect(aiBaseUrl({ VITE_AI_URL: 'https://abcd1234.supabase.co/functions/v1/ai-proxy/' })).toBe(
+      'https://abcd1234.supabase.co/functions/v1/ai-proxy',
+    );
+  });
+
+  it('en un build de producción con Supabase usa la función ai-proxy sin variables nuevas', () => {
+    expect(aiBaseUrl({ PROD: true, VITE_SUPABASE_URL: 'https://abcd1234.supabase.co' })).toBe(
+      'https://abcd1234.supabase.co/functions/v1/ai-proxy',
+    );
+    // VITE_AI_URL manda sobre la de Supabase
+    expect(
+      aiBaseUrl({
+        PROD: true,
+        VITE_SUPABASE_URL: 'https://abcd1234.supabase.co',
+        VITE_AI_URL: 'https://ia.studiare.mx',
+      }),
+    ).toBe('https://ia.studiare.mx');
+  });
+
+  it('en desarrollo, o con una dirección de Supabase rara, sigue en el proxy local', () => {
+    expect(aiBaseUrl({ VITE_SUPABASE_URL: 'https://abcd1234.supabase.co' })).toBe('/api');
+    expect(aiBaseUrl({ PROD: true })).toBe('/api');
+    for (const value of ['http://abcd1234.supabase.co', 'https://otro.dominio.com', 7]) {
+      expect(aiBaseUrl({ PROD: true, VITE_SUPABASE_URL: value })).toBe('/api');
+    }
+  });
+
   it('distingue el proxy alojado del local', () => {
     expect(aiIsHosted('/api')).toBe(false);
     expect(aiIsHosted('https://ia.studiare.mx')).toBe(true);
+    expect(aiIsHosted('https://abcd1234.supabase.co/functions/v1/ai-proxy')).toBe(true);
   });
 });
 

@@ -108,6 +108,8 @@ const adminGroup: NavGroup = {
     // Pagos, facturas y códigos de influencer (B10)
     { path: screenPath('adminBilling'), label: t.navItems.billing, icon: Receipt },
     { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
+    // Auditoría de la IA (B12), la compuerta 1 de los motores de IA
+    { path: screenPath('aiAudit'), label: t.navItems.audit, icon: ClipboardList },
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
@@ -145,6 +147,8 @@ export const NAV_BY_ROLE: Record<Role, RoleNav> = {
       { path: screenPath('agreement'), label: t.navItems.agreement, icon: Scale, bar: true },
       { path: screenPath('aiDrafts'), label: t.navItems.drafts, icon: FileText, bar: true },
       { path: screenPath('contentReports'), label: t.navItems.reports, icon: Flag, bar: true },
+      // Fuera de la barra del teléfono, que ya trae cuatro. Se abre desde Más
+      { path: screenPath('aiAudit'), label: t.navItems.audit, icon: ClipboardList },
     ],
     groups: [],
     pinned: [settings],

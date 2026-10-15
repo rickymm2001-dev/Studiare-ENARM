@@ -58,6 +58,8 @@ const ADMIN_GROUP = [
   // Pagos, facturas y códigos de influencer (B10)
   t.navItems.billing,
   t.navItems.costs,
+  // Auditoría de la IA (B12)
+  t.navItems.audit,
   t.navItems.platform,
   t.navItems.bank,
   // Banco en la nube (B11). Banco y Sheet, Revisiones y Catálogo de mazos
@@ -107,13 +109,14 @@ describe('riel de computadora', () => {
     },
   );
 
-  it('médico. Sus cuatro secciones y Configuración al final, sin Perfil', () => {
+  it('médico. Sus cuatro secciones, la Auditoría de la IA y Configuración al final, sin Perfil', () => {
     const nav = renderNav('physician', SCREENS.questionBank.path);
     expect(textOf(within(nav).getAllByRole('link'))).toEqual([
       t.navItems.bank,
       t.navItems.agreement,
       t.navItems.drafts,
       t.navItems.reports,
+      t.navItems.audit,
       t.navItems.settings,
     ]);
     expect(within(nav).getByRole('link', { name: t.navItems.bank })).toHaveAttribute(
@@ -217,12 +220,15 @@ describe('barra del teléfono', () => {
     expect(textOf(within(admin).getAllByRole('link'))).toEqual(ADMIN_GROUP);
   });
 
-  it('médico. Más solo trae Configuración', async () => {
+  it('médico. Más trae la Auditoría de la IA y Configuración', async () => {
     const user = userEvent.setup();
     const nav = renderNav('physician', SCREENS.agreement.path);
     await user.click(within(nav).getByRole('button', { name: t.navItems.more }));
     const sheet = screen.getByRole('dialog', { name: t.nav.more });
-    expect(textOf(within(sheet).getAllByRole('link'))).toEqual([t.navItems.settings]);
+    expect(textOf(within(sheet).getAllByRole('link'))).toEqual([
+      t.navItems.audit,
+      t.navItems.settings,
+    ]);
   });
 
   it('elegir una sección de Más navega, cierra la hoja y deja Más marcada', async () => {

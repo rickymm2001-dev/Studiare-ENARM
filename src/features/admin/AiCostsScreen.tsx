@@ -2,9 +2,12 @@
 // por motor y por día, cuánto costaría un alumno al mes y cada llamada con su modelo, sus tokens, su
 // costo, su latencia y cómo terminó. El gasto de las respuestas simuladas es teórico y se dice con
 // texto. Antes de proyectar espera a tener llamadas y días suficientes. Arriba, siempre, en qué modo
-// está la IA, real, simulada o sin conexión (B3 del plan del cambio).
+// está la IA, real, simulada o sin conexión (B3 del plan del cambio). Con la cuenta de la nube conectada
+// el costo de verdad es el de la nube (B12, 2.5), y la bitácora de este navegador solo se ve si hizo
+// llamadas, porque sus ceros y su aviso de que no hay llamadas contradirían a la nube.
 import { Coins, Gauge, Layers, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
+import { useCloud } from '@/app/cloudState';
 import { useSession } from '@/app/session';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { readStoredOverrides } from '@/config/overridesStore';
@@ -22,6 +25,7 @@ import { ProgressBar } from '@/ui/components/progress-bar';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingState, EmptyState, LoadingState } from '@/ui/states/states';
 import { AiModeCard } from './AiModeCard';
+import { CloudCostsCard } from './CloudCostsCard';
 import { formatDateTime, formatInt, formatUsd, shortId } from './format';
 import { useAiAdmin } from './useAiAdmin';
 
@@ -38,6 +42,7 @@ export function AiCostsScreen() {
   const timeZone = session.status === 'ready' ? session.user.timeZone : DEFAULT_TIME_ZONE;
   const calls = useLiveData(() => api.repos.aiCallLog.list(), [api.repos]);
   const admin = useAiAdmin();
+  const cloudLinked = useCloud((store) => store.state.status === 'linked');
   const [estimate] = useState(() => readStoredOverrides()?.aiCostEstimateUsd ?? null);
   const [engine, setEngine] = useState(ALL);
   const [mode, setMode] = useState(ALL);
@@ -60,6 +65,7 @@ export function AiCostsScreen() {
 
   const records = calls;
   const summary = summarizeCosts(records, timeZone);
+  const hideLocal = cloudLinked && summary.total.calls === 0;
   const projection = projectMonthlyPerStudent(records, timeZone);
   const failedShare =
     summary.total.calls === 0 ? 0 : Math.round((summary.total.failed / summary.total.calls) * 100);
@@ -77,32 +83,34 @@ export function AiCostsScreen() {
     <>
       {header}
 
-      <StatPanel label={text.stats.label} quad>
-        <StatCell
-          icon={<Coins />}
-          label={text.stats.real}
-          value={formatUsd(summary.real.costUsd)}
-          caption={text.stats.realCaption(summary.real.calls)}
-        />
-        <StatCell
-          icon={<Layers />}
-          label={text.stats.simulated}
-          value={formatUsd(summary.simulated.costUsd)}
-          caption={text.stats.simulatedCaption(summary.simulated.calls)}
-        />
-        <StatCell
-          icon={<Gauge />}
-          label={text.stats.latency}
-          value={`${formatInt(summary.total.avgLatencyMs)} ms`}
-          caption={text.stats.latencyCaption}
-        />
-        <StatCell
-          icon={<TriangleAlert />}
-          label={text.stats.failed}
-          value={`${failedShare}%`}
-          caption={text.stats.failedCaption(summary.total.failed, summary.total.retried)}
-        />
-      </StatPanel>
+      {hideLocal ? null : (
+        <StatPanel label={text.stats.label} quad>
+          <StatCell
+            icon={<Coins />}
+            label={text.stats.real}
+            value={formatUsd(summary.real.costUsd)}
+            caption={text.stats.realCaption(summary.real.calls)}
+          />
+          <StatCell
+            icon={<Layers />}
+            label={text.stats.simulated}
+            value={formatUsd(summary.simulated.costUsd)}
+            caption={text.stats.simulatedCaption(summary.simulated.calls)}
+          />
+          <StatCell
+            icon={<Gauge />}
+            label={text.stats.latency}
+            value={`${formatInt(summary.total.avgLatencyMs)} ms`}
+            caption={text.stats.latencyCaption}
+          />
+          <StatCell
+            icon={<TriangleAlert />}
+            label={text.stats.failed}
+            value={`${failedShare}%`}
+            caption={text.stats.failedCaption(summary.total.failed, summary.total.retried)}
+          />
+        </StatPanel>
+      )}
 
       <Card aria-labelledby="costos-hoy">
         <CardHeader className="mb-2">
@@ -140,8 +148,12 @@ export function AiCostsScreen() {
         )}
       </Card>
 
+      <CloudCostsCard />
+
       {summary.total.calls === 0 ? (
-        <EmptyState title={text.empty.title} description={text.empty.description} />
+        hideLocal ? null : (
+          <EmptyState title={text.empty.title} description={text.empty.description} />
+        )
       ) : (
         <>
           <Card aria-labelledby="costos-motor">

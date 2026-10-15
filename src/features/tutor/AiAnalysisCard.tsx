@@ -21,7 +21,8 @@ export function AiAnalysisCard({
   onTurnOn: () => void;
 }) {
   const text = t.tutor.ai;
-  if (state.access === 'loading') return null;
+  // Sin IA, en producción, el Tutor usa sus plantillas sin hablar de IA (B12, 3.5)
+  if (state.access === 'loading' || state.access === 'unavailable') return null;
   return (
     <Card aria-labelledby="analisis-ia">
       <CardHeader className="mb-2">
@@ -33,9 +34,11 @@ export function AiAnalysisCard({
         <CardDescription>
           {state.access === 'free-plan'
             ? text.freePlan
-            : state.access === 'off'
-              ? text.off
-              : text.on}
+            : state.access === 'gated'
+              ? t.ai.access.gated
+              : state.access === 'off'
+                ? text.off
+                : text.on}
         </CardDescription>
       </CardHeader>
       {state.access === 'free-plan' ? (

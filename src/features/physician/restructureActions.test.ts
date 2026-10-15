@@ -5,6 +5,7 @@ import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
 import { InvalidDraftError } from './editorActions';
 import { draftFromVersion, taxonomyViewFrom } from './editorDraft';
 import { draftFromProposal } from './restructure';
+import { restructureMarks } from './restructureEligibility';
 import {
   decideRestructure,
   DecisionError,
@@ -63,6 +64,41 @@ describe('pedir una propuesta', () => {
     expect(content?.original.stem).toContain('Mujer de 54 años');
     expect(content?.proposal.stem).toContain('Elige la opción que no corresponde');
     expect(await api.repos.aiCallLog.list()).toHaveLength(1);
+  });
+
+  it('con las preguntas marcadas, una que no está marcada no se pide y no cuesta nada', async () => {
+    const { api, question, options } = await setup();
+    const args = { question, options, transform: 'to_except' as const, status: noProxy };
+    const none = restructureMarks({ reports: [], distractors: [] });
+    const denied = await requestRestructure(api, physician, { ...args, marks: none });
+    expect(denied).toEqual({ ok: false, reason: 'not_marked', message: 'not_marked' });
+    expect(await api.repos.aiCallLog.list()).toHaveLength(0);
+    expect(await api.repos.aiArtifacts.list()).toHaveLength(0);
+
+    // Con un reporte abierto de esa pregunta sí se pide
+    const marked = restructureMarks({
+      reports: [{ questionId: question.questionId, status: 'open' }],
+      distractors: [],
+    });
+    const allowed = await requestRestructure(api, physician, { ...args, marks: marked });
+    expect(allowed.ok).toBe(true);
+    expect(await api.repos.aiCallLog.list()).toHaveLength(1);
+  });
+
+  it('un reporte ya resuelto deja de marcar la pregunta', async () => {
+    const { api, question, options } = await setup();
+    const resolved = restructureMarks({
+      reports: [{ questionId: question.questionId, status: 'resolved' }],
+      distractors: [],
+    });
+    const result = await requestRestructure(api, physician, {
+      question,
+      options,
+      transform: 'to_except',
+      status: noProxy,
+      marks: resolved,
+    });
+    expect(result).toMatchObject({ ok: false, reason: 'not_marked' });
   });
 
   it('no pide dos veces la misma propuesta mientras la primera siga pendiente', async () => {

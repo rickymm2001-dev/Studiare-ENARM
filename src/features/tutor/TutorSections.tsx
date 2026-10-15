@@ -84,7 +84,7 @@ export function WeeklyReportCard({
           <Target aria-hidden className="text-fg-muted" />
           {text.title}
         </CardTitle>
-        <CardDescription>{text.hint}</CardDescription>
+        <CardDescription>{ai ? text.hintAi : text.hint}</CardDescription>
       </CardHeader>
       {report.ready ? (
         <div className="flex flex-col gap-4">
