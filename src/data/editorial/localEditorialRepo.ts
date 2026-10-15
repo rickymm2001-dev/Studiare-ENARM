@@ -8,7 +8,6 @@
 // las claves del Sheet, la cola de distractores (llega con B14) y los conflictos con el Sheet. Por eso
 // la decisión local solo cambia el estado de la versión y Mis revisiones del mes queda en cero.
 import { OPTION_LETTERS } from '../content/bankColumns';
-import { parsePassageSource } from '../content/passageSource';
 import { versionIssues } from '../content/questionRules';
 import type { DataApi } from '../context';
 import { newId } from '../ids';
@@ -57,24 +56,16 @@ const TAGGABLE = new Set(TAGGABLE_BIASES.map((bias) => bias.key));
 const PREVIEW = 140;
 
 /**
- * Los pendientes de una versión local, con la misma regla que bank_version_issues. Una pregunta en inglés
- * pide además su fuente del texto con una licencia aceptada (B13, 1.6 del plan de B13), así que sin ella
- * no se manda a revisión ni se aprueba, aunque la demo no traiga textos en inglés
+ * Los pendientes de una versión local, con la misma regla que bank_version_issues. Con el idioma, una
+ * pregunta en inglés pide además su fuente del texto con una licencia aceptada (B13, 1.6 del plan de B13),
+ * así que sin ella no se manda a revisión ni se aprueba, aunque la demo no traiga textos en inglés
  */
 export function localVersionIssues(question: Question, options: readonly Option[]): string[] {
-  const issues = baseVersionIssues(question, options);
-  if (question.language === 'en') {
-    const source = parsePassageSource(question.gpcRefs);
-    if (!source.ok && !issues.includes(source.issue)) issues.push(source.issue);
-  }
-  return issues;
-}
-
-function baseVersionIssues(question: Question, options: readonly Option[]): string[] {
   const positionOf = new Map(options.map((option, index) => [option.id, index]));
   return versionIssues(
     {
       prompt: question.prompt,
+      language: question.language,
       explanation: question.explanation,
       refs: question.gpcRefs.map((ref) => ref.title),
       options: options.map((option, index) => ({
