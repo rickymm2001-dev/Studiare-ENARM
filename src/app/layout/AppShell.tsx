@@ -27,11 +27,13 @@ import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 import { TopBarContext } from './TopBarContext';
 
-// El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4)
+// El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4). Si su archivo
+// no llega, como sin red antes de que el service worker lo guarde, no se ve, pero la pantalla sigue
 const BankNoticeBanner = lazy(() =>
-  import('@/features/shared/BankNoticeBanner').then((module) => ({
-    default: module.BankNoticeBanner,
-  })),
+  import('@/features/shared/BankNoticeBanner').then(
+    (module) => ({ default: module.BankNoticeBanner }),
+    () => ({ default: () => null }),
+  ),
 );
 
 export function AppShell() {
