@@ -44,7 +44,7 @@ Sin clave y sin AI_ALLOW_MOCK, /health dice unavailable, los motores contestan q
 1. Aplica las cuatro migraciones de B12 y confirma con la consulta de docs/SUPABASE.md. Con el token de Supabase es npm run deploy:supabase -- --plan b12, que también aplica supabase/manual/ia-b12.sql y publica las dos funciones
 2. La sesión despliega ai-proxy y ai-batch sin verificación de JWT, con index.ts, deno.json y los archivos de supabase/functions/_shared/ai que importan, cada uno con su ruta. La prueba tests/architecture/edge-functions.test.ts revisa que esa lista se quede dentro de supabase/functions y sin pruebas
 3. La sesión pone APP_ORIGINS y AI_ALLOW_MOCK=1. /health debe decir mock. Una llamada como médico de prueba recibe una respuesta simulada y una como alumno de pago recibe que el motor está cerrado
-4. La sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea ai_tick_secret y programa el ciclo ia-lotes cada 10 minutos
+4. La sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea ai_tick_secret y programa el ciclo ia-lotes cada 10 minutos, que solo llama a ai-batch si hay algo pendiente, y ia-lotes-limpieza, una vez al día a las 09:17 UTC, que corre ai_jobs_scrub directo en la base. Así las salidas de más de 14 días y las entradas de lo terminado se limpian también en una semana sin hipótesis nuevas
 5. Solo si no hay token de Supabase, tú pegas en el SQL Editor supabase/manual/ia-b12.sql. Es la versión de Borrar mis datos que también quita los trabajos de IA. Con el plan b12 ya quedó aplicada
 6. Tú pones ENARM_ANTHROPIC_KEY y avisas a la sesión. La sesión quita AI_ALLOW_MOCK, revisa que /health diga real y hace una llamada de prueba como médico
 7. La compuerta. El admin importa una muestra, la asigna a dos médicos, cierra la muestra y abre motor por motor los que pasaron y traen el mínimo de textos. Para cambiar el mínimo de un motor, antes de la auditoría y nunca después de ver resultados, la clave ai_gate de platform_settings lleva minItems por motor, por ejemplo {"minItems": {"flashcards": 120}}, y la sesión la cambia con la marca de transacción app.ai_gate_writer
@@ -60,7 +60,7 @@ Sin clave y sin AI_ALLOW_MOCK, /health dice unavailable, los motores contestan q
 - El alumno ve que su cuenta está activa en otro dispositivo. Tiene que entrar ahí otra vez para tomarla
 - Un lote falla o desaparece. El ciclo de ai-batch registra el código de la falla en el log y sigue con los demás lotes, con el envío y con la limpieza, así un lote malo ya no congela todo. Si Anthropic ya no encuentra un lote (404), se da por procesado y sus trabajos vuelven a la cola con su tope de intentos
 - Un envío se corta. Si algo falla entre reclamar los trabajos y crear el lote, vuelven a la cola enseguida. Si crear el lote se queda sin respuesta, el lote pudo haberse creado y los trabajos esperan en el estado de envío hasta que el reconciliador los reconoce por custom_id o, a los 15 minutos sin ningún lote reciente que pudiera ser suyo, los regresa a la cola
-- Una hipótesis se queda pendiente más de media hora. Revisa en Integrations, Cron, que el trabajo ia-lotes corra, y en Edge Functions, ai-batch, Logs, el motivo
+- Una hipótesis se queda pendiente más de media hora. Revisa en Integrations, Cron, que el trabajo ia-lotes corra (y que ia-lotes-limpieza exista), y en Edge Functions, ai-batch, Logs, el motivo
 - La función contesta 503 en todo. Mira su registro. Dice cuáles variables faltan
 
 ## Seguridad

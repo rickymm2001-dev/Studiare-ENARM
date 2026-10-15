@@ -236,7 +236,7 @@ begin;
 \ir stub_cron_vault.sql
 -- Sin project_url la pieza se detiene y lo dice
 savepoint sin_url;
-\echo 'K. Se esperan dos errores. Sin project_url la pieza de cron se detiene y lo dice'
+\echo 'K. Se esperan tres errores. Sin project_url la pieza de cron se detiene y lo dice, y sus dos trabajos ya no corren'
 \set ON_ERROR_STOP off
 \ir ../manual/ia-lotes-cron.sql
 \set ON_ERROR_STOP on
@@ -250,6 +250,8 @@ select pg_temp.expect((select count(*) = 1 and bool_and(decrypted_secret ~ '^[0-
   from vault.decrypted_secrets where name = 'ai_tick_secret'), 'K. El secreto no quedó una sola vez con 256 bits');
 select pg_temp.expect((select count(*) = 1 and bool_and(schedule = '*/10 * * * *') from cron.job where jobname = 'ia-lotes'),
   'K. El trabajo no quedó una sola vez cada 10 minutos');
+select pg_temp.expect((select count(*) = 1 and bool_and(schedule = '17 9 * * *') from cron.job where jobname = 'ia-lotes-limpieza')
+  and (select count(*) from cron.job) = 2, 'K. La limpieza diaria no quedó una sola vez');
 select decrypted_secret as tick_secret from vault.decrypted_secrets where name = 'ai_tick_secret' \gset
 select pg_temp.expect(public.ai_tick_secret_ok(:'tick_secret') and not public.ai_tick_secret_ok(repeat('f', 64))
   and not public.ai_tick_secret_ok(null) and not public.ai_tick_secret_ok(''), 'K. ai_tick_secret_ok no compara contra Vault');
@@ -258,6 +260,23 @@ update public.ai_jobs set status = 'failed' where status in ('queued', 'submitti
 update public.ai_batches set status = 'processed';
 do $$ begin execute (select command from cron.job where jobname = 'ia-lotes'); end $$;
 select pg_temp.expect((select count(*) from net.requests) = 0, 'K. Llamó a la función sin nada pendiente');
+-- La limpieza diaria corre aunque no haya nada pendiente: una salida entregada hace 15 días se borra
+-- y la reciente, y la entrada de lo terminado, también
+select pg_temp.enqueue('c1300000-0000-0000-0000-000000000003', 'fgt_salida-vieja-01');
+select pg_temp.enqueue('c1300000-0000-0000-0000-000000000003', 'fgt_salida-nueva-01', repeat('b', 64));
+update public.ai_jobs set status = 'ready', output = '{"hypothesis":"vieja"}', finished_at = now() - interval '20 days',
+  delivered_at = now() - interval '15 days' where job_key = 'fgt_salida-vieja-01';
+update public.ai_jobs set status = 'ready', output = '{"hypothesis":"nueva"}', finished_at = now() - interval '2 days',
+  delivered_at = now() - interval '1 day' where job_key = 'fgt_salida-nueva-01';
+select pg_temp.expect(not exists (select 1 from public.ai_jobs where status in ('queued', 'submitting', 'submitted'))
+  and not exists (select 1 from public.ai_batches where status <> 'processed'), 'K. Quedó algo pendiente antes de limpiar');
+do $$ begin execute (select command from cron.job where jobname = 'ia-lotes-limpieza'); end $$;
+select pg_temp.expect((select output is null from public.ai_jobs where job_key = 'fgt_salida-vieja-01')
+  and (select output is not null from public.ai_jobs where job_key = 'fgt_salida-nueva-01')
+  and (select input is null from public.ai_jobs where job_key = 'fgt_salida-nueva-01'),
+  'K. La limpieza diaria no borró la salida de hace 14 días o borró la reciente');
+do $$ begin execute (select command from cron.job where jobname = 'ia-lotes'); end $$;
+select pg_temp.expect((select count(*) from net.requests) = 0, 'K. La limpieza hizo llamar a la función');
 -- Con un trabajo en cola llama con el secreto en el encabezado
 select pg_temp.enqueue('c1300000-0000-0000-0000-000000000003', 'fgt_para-el-cron-1');
 do $$ begin execute (select command from cron.job where jobname = 'ia-lotes'); end $$;

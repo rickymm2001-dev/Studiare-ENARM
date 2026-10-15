@@ -7,6 +7,10 @@
 --     project_url/functions/v1/ai-batch con el encabezado x-ai-tick y 5 segundos de espera, y solo si
 --     hay trabajos pendientes o lotes sin procesar. La función contesta 202 enseguida y sigue en
 --     segundo plano, así ese tiempo alcanza
+--   - Programa también ia-lotes-limpieza, una vez al día, que corre ai_jobs_scrub directo en la base. El
+--     ciclo de lotes limpia las salidas de más de 14 días al final de cada corrida, pero el trabajo de
+--     arriba solo llama a la función si hay algo pendiente, así que en una semana sin hipótesis nuevas
+--     las salidas entregadas seguían guardadas más de los 14 días prometidos (3.4)
 --   - project_url ya lo guardó la sesión en Vault al desplegar B11. Si falta, se detiene y lo dice
 --
 -- No es migración porque en el Postgres de las pruebas no hay pg_cron, pg_net ni Vault. Las pruebas la
@@ -79,6 +83,21 @@ begin
       where exists (select 1 from public.ai_jobs where status in ('queued', 'submitting', 'submitted'))
          or exists (select 1 from public.ai_batches where status <> 'processed');
       $job$
+    )
+  $sql$;
+end $$;
+
+-- ===================================================================== Limpieza diaria de salidas
+-- A las 09:17 UTC, de madrugada en la Ciudad de México. Corre aunque no haya trabajos ni lotes, sin
+-- llamar a ninguna función. Pone en null la entrada de lo terminado y la salida 14 días después de
+-- entregada o fallida. No borra filas
+do $$
+begin
+  execute $sql$
+    select cron.schedule(
+      'ia-lotes-limpieza',
+      '17 9 * * *',
+      $job$ select public.ai_jobs_scrub() $job$
     )
   $sql$;
 end $$;

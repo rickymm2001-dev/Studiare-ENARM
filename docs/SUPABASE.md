@@ -1095,7 +1095,7 @@ Aplica primero todas las anteriores, incluidas las de B11. Van en orden y las cu
 2. supabase/migrations/20261026000002_ai_jobs.sql
 3. supabase/migrations/20261026000003_ai_gate.sql
 
-Después la sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea en Vault ai_tick_secret y programa el trabajo ia-lotes cada 10 minutos. Necesita project_url en Vault, que guardó B11, y si falta se detiene y lo dice. Es repetible.
+Después la sesión corre supabase/manual/ia-lotes-cron.sql con el conector. Crea en Vault ai_tick_secret, programa el trabajo ia-lotes cada 10 minutos y el trabajo ia-lotes-limpieza una vez al día, que limpia las salidas viejas aunque no haya nada pendiente. Necesita project_url en Vault, que guardó B11, y si falta se detiene y lo dice. Es repetible.
 
 Al final pega tú en SQL Editor supabase/manual/ia-b12.sql completo, New query, Run. Es igual a la cuarta migración, la versión de delete_my_data de B12. Va después de banco-b11.sql y de ejecutar-en-sql-editor.sql, que traen la misma versión. Es repetible.
 
@@ -1114,7 +1114,8 @@ select
   (select value from public.platform_settings where key = 'ai_gate') as compuerta,
   position('ai_jobs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b12,
   exists (select 1 from vault.decrypted_secrets where name = 'ai_tick_secret') as secreto_del_ciclo,
-  exists (select 1 from cron.job where jobname = 'ia-lotes') as ciclo_de_lotes;
+  exists (select 1 from cron.job where jobname = 'ia-lotes') as ciclo_de_lotes,
+  exists (select 1 from cron.job where jobname = 'ia-lotes-limpieza') as limpieza_diaria;
 ```
 
 Debe salir
@@ -1123,7 +1124,7 @@ Debe salir
 - anonimo_pregunta_quien_es, alumno_prueba_secreto, alumno_toma_trabajos, alumno_lee_trabajos y alumno_lee_resenas en false
 - compuerta con paused en false y engines vacío, hasta que el admin abra un motor
 - borrar_datos_b12 en true. Si sale false, falta pegar supabase/manual/ia-b12.sql
-- secreto_del_ciclo y ciclo_de_lotes en true. Si salen false, falta la pieza del ciclo de lotes
+- secreto_del_ciclo, ciclo_de_lotes y limpieza_diaria en true. Si salen false, falta la pieza del ciclo de lotes
 
 ### Las funciones ai-proxy y ai-batch
 
