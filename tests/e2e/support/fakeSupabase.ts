@@ -57,6 +57,7 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './fakeSupabaseConfig';
+import { editorialFunction, editorialRpc, editorialStorage } from './fakeEditorial';
 import {
   DECK_CATALOG_BUCKET,
   bankOpen,
@@ -2657,59 +2658,26 @@ function bankRpc(
       break;
   }
   if (!isTeam(caller)) return TEAM_ONLY;
-  switch (name) {
-    case 'editor_list':
-      return ok({ total: 0, items: [] });
-    case 'editor_reports':
-    case 'editor_distractor_queue':
-    case 'editor_label_pairs':
-    case 'admin_bank_sync_runs':
-    case 'admin_bank_sync_rows':
-    case 'admin_review_report':
-    case 'admin_review_report_detail':
-    case 'admin_bank_read_alerts':
-      return ok([]);
-    case 'admin_bank_overview':
-      return ok({
-        goal: store.settings.bankGoal.approvedToOpen,
-        published: 0,
-        approved: 0,
-        byBranch: [],
-        drafts: 0,
-        incomplete: 0,
-        inReview: 0,
-        conflicts: 0,
-        missing: 0,
-        open: caller.flags.cloudBank === true,
-      });
-    case 'editor_set_report_status':
-    case 'admin_assign_questions':
-    case 'admin_confirm_missing':
-      return ok(0);
-    default:
-      return bankError('PGRST202', `El banco simulado todavía no atiende ${name}`);
-  }
+  // Las del equipo las atiende fakeEditorial.ts (paquete C de B11)
+  return editorialRpc(store, name, caller, args);
 }
 
-/** La función bank-sync. Paso 0 de B11. Solo el admin, y la corrida sale como apagada */
+/** La función bank-sync. La atiende fakeEditorial.ts con runSync de verdad (paquete C de B11) */
 function bankFunction(
-  _store: FakeBankStore,
+  store: FakeBankStore,
   caller: FakeBankCaller | null,
-  _body: unknown,
+  body: unknown,
 ): FakeBankReply {
-  if (!caller || (caller.role !== 'admin' && caller.role !== 'owner')) {
-    return { status: 401, json: { error: 'unauthorized' } };
-  }
-  return { status: 200, json: { runId: null, status: 'skipped', reason: 'disabled' } };
+  return editorialFunction(store, caller, body);
 }
 
-/** El bucket deck-catalog. Paso 0 de B11. No hay objetos y nadie sube */
+/** El bucket deck-catalog. Lo que sube el admin lo atiende fakeEditorial.ts (paquete C de B11) */
 function bankStorage(
-  _store: FakeBankStore,
+  store: FakeBankStore,
   caller: FakeBankCaller | null,
   method: string,
   objectName: string,
-  _file: Buffer | null,
+  file: Buffer | null,
 ): FakeBankReply {
   const storageReply = (statusCode: string, error: string, message: string): FakeBankReply => ({
     status: Number(statusCode),
@@ -2718,5 +2686,5 @@ function bankStorage(
   if (!caller)
     return storageReply('400', 'Unauthorized', 'new row violates row-level security policy');
   if (method === 'GET') return storageReply('404', 'not_found', `Object not found: ${objectName}`);
-  return storageReply('403', 'Unauthorized', 'new row violates row-level security policy');
+  return editorialStorage(store, caller, method, objectName, file);
 }
