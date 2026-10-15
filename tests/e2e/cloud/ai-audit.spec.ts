@@ -19,6 +19,7 @@ import {
 } from '../support/cloudFixtures';
 import { attachAi, type FakeSupabaseServer } from '../support/fakeSupabase';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
+import { DEFAULT_MIN_ITEMS } from '@/data/testing/fakeAiGateServer';
 import { seedTutorHistory } from '../support/tutorHistory';
 
 const reviewer = aiAuditText.reviewer;
@@ -226,11 +227,21 @@ test.describe('Auditoría de la IA', () => {
     await expect(verdict.getByText(/Anclaje 100%/)).toBeVisible();
     await expectNoSeriousA11yViolations(page);
 
-    // Los motores siguen cerrados hasta que el admin abre uno. Abre el de consejos, nada más
+    // Los motores siguen cerrados hasta que el admin abre uno. La base pide un mínimo de textos para
+    // abrirlo, porque un veredicto sobre pocos no prueba nada, y esta muestra de prueba trae 6
     expect(ai.gate.state.engines.bias_tips?.open ?? false).toBe(false);
-    await sample
-      .getByRole('button', { name: admin.openWith(aiAuditText.engines.bias_tips, SAMPLE_ID) })
-      .click();
+    const openTips = sample.getByRole('button', {
+      name: admin.openWith(aiAuditText.engines.bias_tips, SAMPLE_ID),
+    });
+    await openTips.click();
+    await expect(sample.getByRole('alert')).toHaveText(
+      `La muestra trae ${String(TEXTS)} textos de este motor y hacen falta al menos ${String(DEFAULT_MIN_ITEMS.bias_tips)}`,
+    );
+    expect(ai.gate.state.engines.bias_tips).toBeUndefined();
+    // Quien monta la auditoría lo ajusta antes de empezar, con la clave minItems de ai_gate. Aquí se baja
+    // a propósito, al tamaño de la muestra de prueba, y el admin abre el motor de consejos, nada más
+    ai.gate.minItems.bias_tips = TEXTS;
+    await openTips.click();
     await expect(page.getByText(admin.opened(aiAuditText.engines.bias_tips))).toBeVisible();
     expect(ai.gate.state.engines.bias_tips).toMatchObject({ open: true, sampleId: SAMPLE_ID });
     expect(ai.gate.state.engines.weekly_report).toBeUndefined();

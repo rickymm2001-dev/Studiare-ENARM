@@ -48,6 +48,19 @@ interface Sample {
   items: Item[];
 }
 
+/**
+ * Cuántos textos de un motor pide una muestra para poder abrirlo (admin_ai_gate_set, revisión independiente
+ * de B12, hallazgo 8). Es el menor entre la muestra completa de 5.1 y la auditoría corta de 5.5. La clave
+ * minItems de ai_gate lo cambia por motor, y las pruebas lo bajan a propósito con minItems del doble
+ */
+export const DEFAULT_MIN_ITEMS: Readonly<Record<AiEngine, number>> = {
+  forgetting: 60,
+  weekly_report: 30,
+  flashcards: 60,
+  bias_tips: 40,
+  restructure: 30,
+};
+
 export interface FakeAiGateServer {
   /** Atiende una función de la compuerta. null si el nombre no es de aquí */
   call(name: string, caller: FakeGateCaller, args: Readonly<Json>): FakeGateReply | null;
@@ -58,6 +71,8 @@ export interface FakeAiGateServer {
   /** Las reseñas de un médico, por id de texto */
   reviewsOf(userId: string): Map<string, AiGateReview>;
   sampleIds(): string[];
+  /** Lo lleva ai_gate.minItems. Lo que falte vale DEFAULT_MIN_ITEMS */
+  minItems: Partial<Record<AiEngine, number>>;
   /** Lo que ve cada cambio de la bandera, para que quien la sirva a /health la actualice */
   onStateChange: ((state: AiGateState) => void) | null;
 }
@@ -97,6 +112,8 @@ export function createFakeAiGateServer(
     now?: () => string;
     /** El rol de una cuenta, para revisar que los dos médicos sean del equipo */
     roleOf?: (userId: string) => string | undefined;
+    /** El mínimo de textos por motor para abrirlo, si no es el de fábrica */
+    minItems?: Partial<Record<AiEngine, number>>;
   } = {},
 ): FakeAiGateServer {
   const now = options.now ?? (() => new Date().toISOString());
@@ -115,6 +132,7 @@ export function createFakeAiGateServer(
       server.onStateChange?.(state);
     },
     onStateChange: null,
+    minItems: { ...options.minItems },
     reviewsOf(userId) {
       const own = new Map<string, AiGateReview>();
       for (const [pair, review] of reviews) {
@@ -452,6 +470,15 @@ export function createFakeAiGateServer(
         } | null;
         if (sample?.status !== 'closed' || verdict?.engines?.[engine]?.passed !== true) {
           return fail('55000', 'El motor no pasó en esa muestra cerrada');
+        }
+        // Un veredicto sobre pocos textos no prueba nada: la muestra trae el mínimo del motor
+        const texts = sample.items.filter((item) => item.engine === engine).length;
+        const min = server.minItems[engine] ?? DEFAULT_MIN_ITEMS[engine];
+        if (texts < min) {
+          return fail(
+            '55000',
+            `La muestra trae ${String(texts)} textos de este motor y hacen falta al menos ${String(min)}`,
+          );
         }
         const versions = new Set(
           sample.items

@@ -395,6 +395,8 @@ describe('el administrador', () => {
     const typing = userEvent.setup();
     const { server } = connect({ userId: ADMIN, role: 'admin' });
     seedSample(server, { bias_tips: 2, forgetting: 1 });
+    // La base pide 40 textos de consejos para abrir el motor y esta muestra de prueba trae 2
+    server.minItems.bias_tips = 2;
     // Los dos médicos califican todo bien salvo las hipótesis, que dejan sin calificar
     const good: AiGateReviewLike = {
       accuracy: 'correct',
@@ -474,6 +476,68 @@ describe('el administrador', () => {
     );
     expect(await screen.findByText(admin.closed(aiAuditText.engines.bias_tips))).toBeVisible();
     expect(server.state.engines.bias_tips?.open).toBe(false);
+  });
+
+  it('con menos textos que el mínimo del motor la base no lo abre y la pantalla dice cuántos faltan', async () => {
+    const typing = userEvent.setup();
+    const { server } = connect({ userId: ADMIN, role: 'admin' });
+    seedSample(server, { bias_tips: 2 });
+    for (const reviewerId of [P1, P2]) {
+      const mine = server.call(
+        'ai_gate_my_items',
+        { userId: reviewerId, role: 'physician' },
+        { p_sample: 'b12-2026-10' },
+      );
+      for (const item of (mine?.data as { items: { id: string }[] }).items) {
+        server.call(
+          'ai_gate_review',
+          { userId: reviewerId, role: 'physician' },
+          {
+            p_item: item.id,
+            p_review: {
+              accuracy: 'correct',
+              grounded: true,
+              safetyIssue: false,
+              usefulness: 4,
+              clarity: 4,
+              verdict: 'approved',
+              comment: null,
+            },
+          },
+        );
+      }
+    }
+    expect(
+      server.call(
+        'admin_ai_gate_close',
+        { userId: ADMIN, role: 'admin' },
+        { p_sample: 'b12-2026-10' },
+      )?.error,
+    ).toBeNull();
+    show();
+    await typing.click(
+      await screen.findByRole('button', { name: admin.selectLabel('b12-2026-10') }),
+    );
+    const detail = await screen.findByRole('region', { name: admin.selected('b12-2026-10') });
+    // El veredicto pasa, pero un veredicto sobre 2 textos no abre un motor
+    await typing.click(
+      await within(detail).findByRole('button', {
+        name: admin.openWith(aiAuditText.engines.bias_tips, 'b12-2026-10'),
+      }),
+    );
+    expect(await within(detail).findByRole('alert')).toHaveTextContent(
+      'La muestra trae 2 textos de este motor y hacen falta al menos 40',
+    );
+    expect(server.state.engines.bias_tips).toBeUndefined();
+    // Con el mínimo que ponen el servidor y los médicos antes de auditar, sí se abre
+    server.minItems.bias_tips = 2;
+    await typing.click(
+      within(detail).getByRole('button', {
+        name: admin.openWith(aiAuditText.engines.bias_tips, 'b12-2026-10'),
+      }),
+    );
+    expect(await screen.findByText(admin.opened(aiAuditText.engines.bias_tips))).toBeVisible();
+    expect(server.state.engines.bias_tips?.open).toBe(true);
   });
 
   it('un motor que no pasó no se abre, y la pausa global se pone y se quita', async () => {
