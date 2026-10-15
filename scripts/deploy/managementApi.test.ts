@@ -28,7 +28,10 @@ describe('forma de cada llamada a la API de administración', () => {
 
   it('si la ruta de solo lectura falla, repite en la general con read_only', async () => {
     const { fake, client } = setup({ readOnlyStatus: 500, checkRow: () => ({ ok: 1 }) });
-    expect(await client.readQuery('select 1 as ok')).toEqual([{ ok: 1 }]);
+    // Sin pedirlo no hay respaldo
+    await expect(client.readQuery('select 1 as ok')).rejects.toThrow(/500/);
+    fake.requests.splice(0);
+    expect(await client.readQuery('select 1 as ok', { fallback: true })).toEqual([{ ok: 1 }]);
     expect(fake.requests.map((request) => request.path)).toEqual([
       '/database/query/read-only',
       '/database/query',

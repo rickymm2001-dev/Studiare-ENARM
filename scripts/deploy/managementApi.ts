@@ -62,8 +62,11 @@ export interface ManagementClient {
   readonly ref: string;
   /** Corre SQL con permiso de escritura. Devuelve las filas del resultado */
   runQuery(query: string): Promise<Row[]>;
-  /** Corre una consulta de solo lectura. Nunca escribe */
-  readQuery(query: string): Promise<Row[]>;
+  /**
+   * Corre una consulta en la ruta de solo lectura. Con fallback, si esa ruta falla por algo que no es el
+   * token, la repite en la general con read_only. La simulación no lo pide
+   */
+  readQuery(query: string, options?: { fallback?: boolean }): Promise<Row[]>;
   listMigrations(): Promise<MigrationRecord[]>;
   /** Aplica la migración y la registra en la historia con ese nombre, como el conector */
   applyMigration(input: { name: string; query: string }): Promise<void>;
@@ -202,14 +205,18 @@ export function createManagementClient(options: ManagementClientOptions): Manage
       const { data } = await call('POST', '/database/query', { json: { query } });
       return toRows(data, 'database/query');
     },
-    async readQuery(query) {
+    async readQuery(query, readOptions = {}) {
       try {
         const { data } = await call('POST', '/database/query/read-only', { json: { query } });
         return toRows(data, 'database/query/read-only');
       } catch (error) {
         // El endpoint de solo lectura está en beta. Si falla por algo que no es el token, se repite en
         // el general con read_only, que es como lo llama el servidor MCP de Supabase
-        if (!(error instanceof ManagementApiError) || [401, 429].includes(error.status)) {
+        if (
+          readOptions.fallback !== true ||
+          !(error instanceof ManagementApiError) ||
+          [401, 429].includes(error.status)
+        ) {
           throw error;
         }
         const { data } = await call('POST', '/database/query', {

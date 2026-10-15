@@ -77,6 +77,11 @@ const PLANS: Record<string, unknown> = {
       { slug: 'adios', verifyJwt: false },
     ],
   },
+  'beta-sobrecargada': {
+    description: 'beta con una sobrecarga anotada',
+    migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
+    overloads: { beta: 'Prueba de una sobrecarga a propósito' },
+  },
   'beta-abierta': {
     description: 'beta abierta a anon a propósito',
     migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
@@ -332,6 +337,31 @@ describe('aplicar un plan', () => {
     const allowed = await run({ ...REAL_LIKE, anonOnApply: ['beta'] }, { plan: 'beta-abierta' });
     expect(allowed.code).toBe(0);
     expect(allowed.all()).toContain('beta sigue abierta a anon a propósito. Prueba');
+  });
+
+  it('una sobrecarga en la base es problema salvo que el plan la anote', async () => {
+    const extra = { name: 'beta', body: 'select 99', anon: false };
+    const result = await run({ ...REAL_LIKE, extraRows: [extra] });
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('beta tiene 2 versiones en la base');
+    const noted = await run({ ...REAL_LIKE, extraRows: [extra] }, { plan: 'beta-sobrecargada' });
+    expect(noted.code).toBe(0);
+    expect(noted.all()).toContain('beta tiene 2 versiones en la base. Prueba de una sobrecarga');
+  });
+
+  it('revisa anon en todas las versiones de una función, no solo en la del repo', async () => {
+    const result = await run(
+      { ...REAL_LIKE, extraRows: [{ name: 'beta', body: 'select 99', anon: true }] },
+      { plan: 'beta-sobrecargada' },
+    );
+    expect(result.code).toBe(1);
+    expect(result.all()).toContain('anon puede ejecutar una versión de beta');
+  });
+
+  it('la simulación no usa el respaldo de escritura para leer', async () => {
+    const result = await run({ ...REAL_LIKE, readOnlyStatus: 500 }, { dryRun: true });
+    expect(result.code).toBe(1);
+    expect(result.fake.requests.some((request) => request.path === '/database/query')).toBe(false);
   });
 
   it('no escribe nada si algo registrado quedó distinto y ningún paso lo corrige', async () => {

@@ -510,8 +510,41 @@ export function checkQuery(sql: string): string | null {
   const [only] = parts;
   const first = only?.[0];
   const last = only?.at(-1);
-  if (parts.length !== 1 || !first || !last || !isWord(first, 'select', 'with')) {
+  // Solo select. Un with puede llevar un insert, un update o un delete
+  if (parts.length !== 1 || !first || !last || !isWord(first, 'select')) {
     throw new SqlParseError('Después de la línea de Comprobación debe ir un solo select');
   }
   return tail.slice(first.start, last.end);
+}
+
+/**
+ * Los nombres de las columnas de un select, los que van con as en su primer nivel, sin los de las
+ * subconsultas. null si alguna columna no lleva as y no se puede saber su nombre
+ */
+export function checkColumns(query: string): string[] | null {
+  const [statement] = statements(tokenize(query));
+  if (!statement || !isWord(statement[0], 'select')) return null;
+  const columns: string[] = [];
+  let depth = 0;
+  let item: Token[] = [];
+  const close = () => {
+    const alias = item.at(-1);
+    if (item.length < 3 || !isWord(item.at(-2), 'as') || !alias || alias.kind === 'punct') {
+      return false;
+    }
+    columns.push(alias.value);
+    item = [];
+    return true;
+  };
+  for (const token of statement.slice(1)) {
+    if (isPunct(token, '(')) depth += 1;
+    if (isPunct(token, ')')) depth -= 1;
+    if (depth === 0 && isWord(token, 'from')) break;
+    if (depth === 0 && isPunct(token, ',')) {
+      if (!close()) return null;
+      continue;
+    }
+    item.push(token);
+  }
+  return close() ? columns : null;
 }

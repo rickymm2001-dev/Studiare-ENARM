@@ -5,6 +5,7 @@ import {
   SqlParseError,
   anonGrants,
   applyFunctionSql,
+  checkColumns,
   checkQuery,
   extractFunctions,
   fingerprint,
@@ -180,6 +181,22 @@ describe('consulta de comprobación de un archivo manual', () => {
     expect(checkQuery(sql)).toBe('select\n  true as listo');
     expect(checkQuery('select 1;')).toBeNull();
     expect(() => checkQuery('-- Comprobación\nselect 1; select 2;')).toThrow(SqlParseError);
+    // Solo select. Un with podría traer un insert o un delete
+    expect(() =>
+      checkQuery('-- Comprobación\nwith x as (delete from t returning 1) select * from x;'),
+    ).toThrow(SqlParseError);
+  });
+
+  it('lee los nombres de las columnas del select, sin los de las subconsultas', () => {
+    expect(
+      checkColumns(`select
+  (select count(*) as n from t) as tablas,
+  exists (select 1 from u where a = 'x') as hay,
+  1 + 2 as suma
+`),
+    ).toEqual(['tablas', 'hay', 'suma']);
+    // Si una columna no tiene as, no se puede saber su nombre
+    expect(checkColumns('select 1 as uno, 2')).toBeNull();
   });
 
   it('las de los archivos manuales del repo son un solo select', () => {

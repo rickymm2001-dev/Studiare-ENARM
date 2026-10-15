@@ -31,7 +31,6 @@ import {
   type Io,
 } from './output.ts';
 import {
-  PlanError,
   loadPlan,
   repoMigrations,
   type CheckExpectation,
@@ -161,19 +160,24 @@ export function recordedMatches(
 }
 
 function sameValue(actual: unknown, expected: CheckExpectation[string]): boolean {
-  if (typeof expected === 'boolean') return truthy(actual) === expected && actual !== null;
+  if (typeof expected === 'boolean') {
+    return expected ? truthy(actual) : actual === false || actual === 'f' || actual === 'false';
+  }
   if (expected === null) return actual === null;
   return String(actual) === String(expected);
 }
 
-/** Las columnas de la comprobación que no dieron lo esperado. Vacío es que salió en verde */
+/**
+ * Las columnas de la comprobación que no dieron lo esperado. Vacío es que salió en verde. Una fila que
+ * no llega o una columna que no viene nunca cuentan como verde
+ */
 export function checkDifferences(row: Row | undefined, expected: CheckExpectation): string[] {
-  return Object.entries(expected)
-    .filter(([column, value]) => !sameValue(row?.[column], value))
-    .map(
-      ([column, value]) =>
-        `${column} dio ${JSON.stringify(row?.[column] ?? null)} y debía dar ${JSON.stringify(value)}`,
-    );
+  return Object.entries(expected).flatMap(([column, value]) => {
+    if (!row) return [`${column} no llegó, la consulta no devolvió filas`];
+    if (!(column in row)) return [`${column} no viene en el resultado`];
+    if (sameValue(row[column], value)) return [];
+    return [`${column} dio ${JSON.stringify(row[column])} y debía dar ${JSON.stringify(value)}`];
+  });
 }
 
 export interface StepDecision {
@@ -334,8 +338,13 @@ export function verifyFunctions(
   for (const [name, want] of [...expected].sort(([a], [b]) => a.localeCompare(b))) {
     const rows = functions.get(name) ?? [];
     const match = rows.find((row) => sameAsDb(want.def, row));
-    if (rows.length > 1)
-      notes.push(`${name} tiene ${rows.length} versiones en la base (sobrecarga)`);
+    if (rows.length > 1) {
+      // Una sobrecarga vieja puede seguir abierta o tomar las llamadas. Solo pasa si el plan la anota
+      const reason = plan.overloads[name];
+      const text = `${name} tiene ${rows.length} versiones en la base`;
+      if (reason) notes.push(`${text}. ${reason}`);
+      else problems.push(`${text}. Si es a propósito, anótala en overloads del plan`);
+    }
     if (!match) {
       problems.push(
         rows.length === 0
@@ -345,11 +354,16 @@ export function verifyFunctions(
       continue;
     }
     same += 1;
-    if (!match.anon) continue;
+    // anon se revisa en todas las versiones con ese nombre, no solo en la del repo
+    if (!rows.some((row) => row.anon)) continue;
     const reason = plan.anonExecutable[name];
     if (reason) notes.push(`${name} sigue abierta a anon a propósito. ${reason}`);
     else if (!granted.has(name) && !grantsAll) {
-      problems.push(`anon puede ejecutar ${name} y ningún archivo del plan se lo concede`);
+      problems.push(
+        match.anon
+          ? `anon puede ejecutar ${name} y ningún archivo del plan se lo concede`
+          : `anon puede ejecutar una versión de ${name} que no es la del repo`,
+      );
     }
   }
   return { problems, notes, same };
@@ -367,11 +381,6 @@ interface LocalPlan {
 
 function loadLocal(root: string, name: string): LocalPlan {
   const plan = loadPlan(root, name);
-  for (const step of plan.migrations) {
-    if (step.check && checkQuery(step.sql) === null) {
-      throw new PlanError(`${step.file} no trae la consulta de Comprobación que pide el plan`);
-    }
-  }
   const closures = new Map(
     plan.functions.map((step) => [step.slug, functionClosure(root, step.slug)] as const),
   );
@@ -417,19 +426,20 @@ async function readState(
   client: ManagementClient,
   local: LocalPlan,
   withHistory: boolean,
+  fallback: boolean,
 ): Promise<ProjectState> {
   // Primero la historia, que es un GET. Con un token malo se detiene ahí, antes de cualquier consulta
   const history = withHistory ? await client.listMigrations() : [];
   const names = [...local.expected.keys()].sort();
   const functions =
     names.length > 0
-      ? parseFunctionRows(await client.readQuery(fingerprintQuery(names)))
+      ? parseFunctionRows(await client.readQuery(fingerprintQuery(names), { fallback }))
       : new Map<string, DbFunction[]>();
   const checks = new Map<string, string[]>();
   for (const step of local.plan.migrations) {
     if (!step.check) continue;
     try {
-      checks.set(step.file, await runCheck(client, step));
+      checks.set(step.file, await runCheck(client, step, fallback));
     } catch (error) {
       // Antes de aplicar es normal que la consulta falle porque falta un objeto, y Supabase contesta
       // 400 con el error de SQL. Eso cuenta como comprobación en rojo. Una falla de red, un 5xx o
@@ -442,10 +452,14 @@ async function readState(
 }
 
 /** Corre la consulta de comprobación de un archivo. Vacío es que salió en verde */
-async function runCheck(client: ManagementClient, step: SqlStep): Promise<string[]> {
+async function runCheck(
+  client: ManagementClient,
+  step: SqlStep,
+  fallback: boolean,
+): Promise<string[]> {
   const query = checkQuery(step.sql);
   if (!step.check || query === null) return [];
-  return checkDifferences((await client.readQuery(query))[0], step.check);
+  return checkDifferences((await client.readQuery(query, { fallback }))[0], step.check);
 }
 
 async function runPlan(options: DeployOptions): Promise<number> {
@@ -476,7 +490,8 @@ async function runPlan(options: DeployOptions): Promise<number> {
   const before = new Map<string, FunctionInfo | null>();
   try {
     if (doSql) {
-      const state = await readState(client, local, true);
+      // La simulación no usa el respaldo, que va por la ruta general de SQL
+      const state = await readState(client, local, true, !options.dryRun);
       decisions = decideSteps(plan, local.expected, state);
       for (const decision of decisions) {
         io.out(`  ${decision.index + 1}. ${decision.step.name}  ${decision.reason}`);
@@ -554,7 +569,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
           );
         }
         if (step.check) {
-          const differences = await runCheck(client, step);
+          const differences = await runCheck(client, step, true);
           if (differences.length > 0) {
             return stop(
               [`${step.file} quedó con la comprobación en rojo, ${differences.join(', ')}`],
@@ -576,7 +591,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
     io.out('Comprobación de la base');
     const problems: string[] = [];
     try {
-      const after = await readState(client, local, false);
+      const after = await readState(client, local, false, true);
       const verified = verifyFunctions(plan, local.expected, after.functions);
       for (const note of verified.notes) io.out(`  ${note}`);
       problems.push(...verified.problems);

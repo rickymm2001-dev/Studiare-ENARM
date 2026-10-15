@@ -5,6 +5,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { z } from 'zod';
 import { FUNCTIONS_DIR } from './closure.ts';
+import { checkColumns, checkQuery } from './sql.ts';
 
 export const PLANS_DIR = 'deploy';
 export const MIGRATIONS_DIR = 'supabase/migrations';
@@ -52,6 +53,8 @@ const PlanSchema = z.strictObject({
   secrets: z.record(z.string().regex(SECRET_NAME), SecretRuleSchema).optional(),
   /** Funciones que pueden quedar ejecutables por anon aunque el archivo no se lo conceda, con su porqué */
   anonExecutable: z.record(z.string(), z.string().min(1)).optional(),
+  /** Funciones que pueden tener más de una versión en la base, con su porqué */
+  overloads: z.record(z.string(), z.string().min(1)).optional(),
 });
 
 export type CheckExpectation = Record<string, z.infer<typeof CheckValue>>;
@@ -84,6 +87,7 @@ export interface Plan {
   functions: FunctionStep[];
   secrets: Record<string, { prefix: string | null }> | null;
   anonExecutable: Record<string, string>;
+  overloads: Record<string, string>;
 }
 
 export class PlanError extends Error {
@@ -152,6 +156,7 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
   const repeatedFile = files.find((value, index) => files.indexOf(value) !== index);
   if (repeatedFile) throw new PlanError(`${repeatedFile} aparece dos veces en el plan`);
   checkHistoryNames(root, migrations);
+  for (const step of migrations) checkExpectedColumns(step);
 
   const functions = data.functions.map((step): FunctionStep => {
     if (!existsSync(join(root, FUNCTIONS_DIR, step.slug, 'index.ts'))) {
@@ -178,7 +183,34 @@ export function loadPlan(root: string, nameOrPath: string): Plan {
         )
       : null,
     anonExecutable: data.anonExecutable ?? {},
+    overloads: data.overloads ?? {},
   };
+}
+
+/**
+ * Un plan con check debe nombrar justo las columnas que da la consulta de Comprobación del archivo,
+ * cuántas sean. Así una columna nueva en el archivo obliga a decir en el plan qué debe dar
+ */
+function checkExpectedColumns(step: SqlStep): void {
+  if (!step.check) return;
+  const query = checkQuery(step.sql);
+  if (query === null) {
+    throw new PlanError(`${step.file} no trae la consulta de Comprobación que pide el plan`);
+  }
+  const columns = checkColumns(query);
+  if (columns === null) return;
+  const expected = Object.keys(step.check);
+  const missing = columns.filter((column) => !expected.includes(column));
+  const extra = expected.filter((column) => !columns.includes(column));
+  if (missing.length > 0 || extra.length > 0) {
+    const parts = [
+      missing.length > 0 ? `falta decir qué debe dar ${missing.join(', ')}` : '',
+      extra.length > 0 ? `${extra.join(', ')} no sale en la consulta` : '',
+    ].filter((part) => part !== '');
+    throw new PlanError(
+      `La comprobación de ${step.file} en el plan no cuadra con el archivo. ${parts.join('. ')}`,
+    );
+  }
 }
 
 /** Un nombre como los que deja el conector al aplicar por trozos, por ejemplo billing_plans_1 */
@@ -197,7 +229,9 @@ function isChunkOf(candidate: string, base: string): boolean {
 function checkHistoryNames(root: string, steps: readonly SqlStep[]): void {
   const owners = new Map<string, string>();
   const repoFiles = [
-    ...readdirSync(join(root, MIGRATIONS_DIR)).map((name) => `${MIGRATIONS_DIR}/${name}`),
+    ...(existsSync(join(root, MIGRATIONS_DIR))
+      ? readdirSync(join(root, MIGRATIONS_DIR)).map((name) => `${MIGRATIONS_DIR}/${name}`)
+      : []),
     ...(existsSync(join(root, MANUAL_DIR))
       ? readdirSync(join(root, MANUAL_DIR)).map((name) => `${MANUAL_DIR}/${name}`)
       : []),

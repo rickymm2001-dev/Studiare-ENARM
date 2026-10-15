@@ -28,6 +28,8 @@ export interface FakeOptions {
   functions?: Record<string, string | FunctionDef>;
   /** Funciones que anon puede ejecutar */
   anon?: string[];
+  /** Otras versiones con el mismo nombre, como una sobrecarga vieja que quedó en la base */
+  extraRows?: { name: string; body: string; anon: boolean }[];
   edge?: Record<string, { version: number; verifyJwt: boolean }>;
   secrets?: Record<string, string>;
   /** La fila de una consulta de comprobación, con lo que ya se aplicó */
@@ -109,7 +111,18 @@ export function fakeSupabase(options: FakeOptions = {}) {
             config: (def?.config ?? []).join('\n'),
             anon: anon.has(name),
           };
-        });
+        })
+        .concat(
+          (options.extraRows ?? [])
+            .filter((row) => names.includes(row.name))
+            .map((row) => ({
+              name: row.name,
+              fingerprint: fingerprint(row.body),
+              security_definer: false,
+              config: '',
+              anon: row.anon,
+            })),
+        );
     }
     return [options.checkRow?.(applied, query) ?? {}];
   }

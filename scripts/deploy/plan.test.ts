@@ -2,6 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { checkDifferences } from './deploy.ts';
 import { PlanError, loadPlan } from './plan.ts';
 
 const dirs: string[] = [];
@@ -23,6 +24,41 @@ afterEach(() => {
 
 const SQL = 'select 1;\n';
 const plan = (migrations: unknown[]) => ({ description: 'Prueba', migrations });
+
+describe('la comprobación de un archivo manual', () => {
+  const MANUAL = `create table if not exists public.t (id int);
+-- Comprobación
+select (select count(*) from public.t) = 0 as vacia, true as lista;
+`;
+  it('el plan debe nombrar exactamente las columnas del select', () => {
+    const files = { 'supabase/manual/arreglo.sql': MANUAL };
+    const missing = repoWith(
+      files,
+      plan([{ file: 'supabase/manual/arreglo.sql', check: { lista: true } }]),
+    );
+    expect(() => loadPlan(missing, 'prueba')).toThrow(/vacia/);
+    const extra = repoWith(
+      files,
+      plan([{ file: 'supabase/manual/arreglo.sql', check: { vacia: true, lista: true, otra: 1 } }]),
+    );
+    expect(() => loadPlan(extra, 'prueba')).toThrow(/otra/);
+    const ok = repoWith(
+      files,
+      plan([{ file: 'supabase/manual/arreglo.sql', check: { vacia: true, lista: true } }]),
+    );
+    expect(loadPlan(ok, 'prueba').migrations[0]?.check).toEqual({ vacia: true, lista: true });
+  });
+
+  it('una fila que no llega o una columna que falta no cuentan como verde', () => {
+    expect(checkDifferences(undefined, { lista: false })).toEqual([
+      'lista no llegó, la consulta no devolvió filas',
+    ]);
+    expect(checkDifferences({ otra: true }, { lista: false })).toEqual([
+      'lista no viene en el resultado',
+    ]);
+    expect(checkDifferences({ lista: false }, { lista: false })).toEqual([]);
+  });
+});
 
 describe('nombres con los que se reconoce lo aplicado', () => {
   it('dos migraciones del repo no pueden llamarse igual', () => {
