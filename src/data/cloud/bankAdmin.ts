@@ -413,6 +413,25 @@ export function setPhysicianCode(
   );
 }
 
+const BankTeamSchema = z.object({
+  codes: z.array(z.object({ userId: z.string(), alias: z.string(), code: z.string() })),
+  topicReviewers: z.array(
+    z.object({
+      branch: z.string(),
+      topic: z.string(),
+      physicianId: z.string(),
+      alias: z.string(),
+      active: z.boolean(),
+    }),
+  ),
+});
+export type BankTeam = z.infer<typeof BankTeamSchema>;
+
+/** Las claves del Sheet de los médicos y el revisor por omisión de cada subespecialidad (B1) */
+export function readBankTeam(cloud: Cloud, onForbidden?: ForbiddenHandler) {
+  return callBankRpc(cloud, 'admin_bank_team', {}, BankTeamSchema, onForbidden);
+}
+
 /** La regla de la clave del Sheet, la misma que physician_codes.code */
 export const PHYSICIAN_CODE = /^[A-Z][A-Z0-9]{1,7}$/;
 

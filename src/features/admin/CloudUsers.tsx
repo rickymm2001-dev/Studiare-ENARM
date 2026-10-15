@@ -26,6 +26,7 @@ import {
   type CloudUser,
   type UsersFailure,
 } from '@/data/cloud/adminUsers';
+import { readBankTeam } from '@/data/cloud/bankAdmin';
 import { needsMfaRole, resetUserMfa } from '@/data/cloud/mfa';
 import type { Role } from '@/data/schemas/common';
 import { assignableRoles } from '@/engines/roles';
@@ -38,6 +39,7 @@ import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
 import { LoadingState } from '@/ui/states/states';
 import { InvitationsCard } from './InvitationsCard';
 import { PhysicianCodeForm } from './PhysicianCodeForm';
+import { useBankAdminQuery } from './useBankAdminQuery';
 import { SignupSourcesCard } from './SignupSourcesCard';
 
 type State =
@@ -62,6 +64,12 @@ export function CloudUsers() {
   const [page, setPage] = useState(0);
   const [state, setState] = useState<State>({ status: 'loading' });
   const [message, setMessage] = useState('');
+  // Las claves del Sheet de los médicos (B1 de la revisión). Si no se pueden leer, el formulario sigue
+  const team = useBankAdminQuery((cloud, onForbidden) => readBankTeam(cloud, onForbidden), 'team');
+  const codes =
+    team.state.status === 'ready'
+      ? new Map(team.state.value.codes.map((entry) => [entry.userId, entry.code] as const))
+      : null;
 
   useEffect(() => {
     let stopped = false;
@@ -214,6 +222,7 @@ export function CloudUsers() {
               onRole={changeRole}
               onReleaseDevice={releaseDevice}
               onResetMfa={resetMfa}
+              codes={codes}
             />
           )}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -249,8 +258,14 @@ export function CloudUsers() {
   );
 }
 
+/** La clave de un médico, null si no tiene y undefined mientras no se leen */
+const codeOf = (codes: ReadonlyMap<string, string> | null, userId: string) =>
+  codes === null ? undefined : (codes.get(userId) ?? null);
+
 interface RowHandlers {
   callerRole: Role;
+  /** La clave del Sheet de cada médico, por id de cuenta. null mientras no se lee */
+  codes: ReadonlyMap<string, string> | null;
   onRole: (user: CloudUser, next: Role) => Promise<void>;
   onReleaseDevice: (user: CloudUser) => Promise<void>;
   onResetMfa: (user: CloudUser) => Promise<void>;
@@ -480,7 +495,12 @@ function UserRow(props: RowProps) {
         <div className="flex flex-col gap-2">
           <AccountActions {...props} />
           {user.role === 'physician' ? (
-            <PhysicianCodeForm userId={user.id} alias={user.alias} />
+            <PhysicianCodeForm
+              key={codeOf(props.codes, user.id) ?? ''}
+              userId={user.id}
+              alias={user.alias}
+              current={codeOf(props.codes, user.id)}
+            />
           ) : null}
         </div>
       </td>
@@ -508,7 +528,14 @@ function UserItem(props: RowProps) {
       </div>
       <RoleControl {...props} labelHidden={false} />
       <AccountActions {...props} />
-      {user.role === 'physician' ? <PhysicianCodeForm userId={user.id} alias={user.alias} /> : null}
+      {user.role === 'physician' ? (
+        <PhysicianCodeForm
+          key={codeOf(props.codes, user.id) ?? ''}
+          userId={user.id}
+          alias={user.alias}
+          current={codeOf(props.codes, user.id)}
+        />
+      ) : null}
     </div>
   );
 }

@@ -685,7 +685,10 @@ function sendToReview(store: FakeBankStore, version: FakeBankVersion): string {
   let reviewer = assignee(store, version.questionId, 'reviewer');
   const author = assignee(store, version.questionId, 'author');
   if (reviewer === null) {
-    const fallback = store.topicReviewers.get(`${version.branch}/${version.topic}`) ?? null;
+    // Solo si sigue siendo médico, como el join con user_roles de bank_send_to_review
+    const saved = store.topicReviewers.get(`${version.branch}/${version.topic}`) ?? null;
+    const fallback =
+      saved !== null && sideOf(store).directory?.(saved)?.role === 'physician' ? saved : null;
     if (fallback !== null && fallback !== version.authorId && fallback !== author) {
       assignOrRaise(store, version.questionId, 'reviewer', fallback);
       reviewer = fallback;
@@ -1317,6 +1320,28 @@ const adminSetPhysicianCode: Handler = (store, caller, args) => {
   }
   store.physicianCodes.set(user, code);
   return 'ok';
+};
+
+/** admin_bank_team. Las claves del Sheet y los revisores por omisión, solo con alias */
+const adminBankTeam: Handler = (store, caller) => {
+  requireAdmin(caller);
+  const codes = [...store.physicianCodes]
+    .map(([userId, code]) => ({ userId, alias: personOf(store, caller, userId).alias, code }))
+    .sort((a, b) => a.code.localeCompare(b.code));
+  const topicReviewers = [...store.topicReviewers]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, physicianId]) => {
+      const [branch = '', topic = ''] = key.split('/');
+      const person = personOf(store, caller, physicianId);
+      return {
+        branch,
+        topic,
+        physicianId,
+        alias: person.alias,
+        active: person.role === 'physician',
+      };
+    });
+  return { codes, topicReviewers };
 };
 
 const adminRetireQuestion: Handler = (store, caller, args) => {
@@ -2286,6 +2311,7 @@ const HANDLERS: Readonly<Record<BankEditorialRpc, Handler>> = {
   admin_assign_questions: adminAssignQuestions,
   admin_set_topic_reviewer: adminSetTopicReviewer,
   admin_set_physician_code: adminSetPhysicianCode,
+  admin_bank_team: adminBankTeam,
   admin_retire_question: adminRetireQuestion,
   admin_restore_question: adminRestoreQuestion,
   admin_confirm_missing: adminConfirmMissing,

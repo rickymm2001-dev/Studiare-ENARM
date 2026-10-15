@@ -44,7 +44,38 @@ select pg_temp.expect(public.admin_set_physician_code(:'p3', 'PM') = 'taken', 'B
 select pg_temp.expect(public.admin_set_physician_code(:'s1', 'XX') = 'not_physician', 'BE1. Clave a un alumno');
 select pg_temp.expect(pg_temp.fails_with(format('select public.admin_set_physician_code(%L, %L)', :'p3', 'p')) = '22023', 'BE1. Clave corta');
 select public.admin_set_topic_reviewer('pediatrics', 'neonatology', :'p2');
+-- Lo que el admin ve de claves y revisores por omisión (B1 de la revisión)
+select pg_temp.expect(public.admin_bank_team() -> 'codes' @> jsonb_build_array(
+    jsonb_build_object('userId', :'p1', 'alias', 'Autora', 'code', 'PM'),
+    jsonb_build_object('userId', :'p2', 'alias', 'Revisor', 'code', 'AL'))
+  and public.admin_bank_team() -> 'topicReviewers' @> jsonb_build_array(jsonb_build_object('branch', 'pediatrics',
+    'topic', 'neonatology', 'physicianId', :'p2', 'alias', 'Revisor', 'active', true))
+  and position('@' in public.admin_bank_team()::text) = 0, 'BE1. admin_bank_team no da claves y revisores sin correos');
 commit;
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_bank_team()') = '42501', 'BE1. Un médico leyó las claves del equipo');
+rollback;
+-- Un revisor por omisión que dejó de ser médico no se usa al mandar a revisión (B1 de la revisión)
+begin;
+select pg_temp.bank_seed('BE-0099', 'draft') as q99 \gset
+update public.questions set branch = 'pediatrics', topic = 'neonatology', subtopic = (
+    select subtopic from public.bank_taxonomy where branch = 'pediatrics' and topic = 'neonatology' limit 1)
+  where id = pg_temp.latest(:'q99');
+select pg_temp.latest(:'q99') as q99v1 \gset
+select pg_temp.as_user(:'ad');
+select public.admin_assign_questions(array[:'q99']::uuid[], :'p1', null);
+reset role;
+update public.user_roles set role = 'student' where user_id = :'p2';
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(pg_temp.fails_with(format('select public.editor_submit(%L)', :'q99v1')) = 'BK003',
+  'BE1. Usó de revisor por omisión a quien ya no es médico');
+reset role;
+update public.user_roles set role = 'physician' where user_id = :'p2';
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(public.editor_submit(:'q99v1') ->> 'reviewerId' = :'p2',
+  'BE1. No usó al revisor por omisión de la subespecialidad');
+rollback;
 -- Reasignar al revisor como autor no deja a nadie con los dos papeles
 begin;
 select pg_temp.as_user(:'ad');
@@ -652,7 +683,8 @@ declare
     'public.admin_assign_questions(uuid[], uuid, uuid)', 'public.admin_set_topic_reviewer(text, text, uuid)',
     'public.admin_set_physician_code(uuid, text)', 'public.admin_retire_question(uuid, text)',
     'public.admin_restore_question(uuid)', 'public.admin_confirm_missing(uuid[], text)', 'public.admin_bank_read_alerts(integer)',
-    'public.admin_review_report(date, date)', 'public.admin_review_report_detail(date, date, uuid)'];
+    'public.admin_review_report(date, date)', 'public.admin_review_report_detail(date, date, uuid)',
+    'public.admin_bank_team()'];
   f text;
   r text;
 begin

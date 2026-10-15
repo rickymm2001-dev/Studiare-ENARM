@@ -44,6 +44,22 @@ describe('Clave del Sheet de un médico', () => {
     expect(calls).toEqual([['admin_set_physician_code', { p_user: DOCTOR, p_code: 'MR1' }]]);
   });
 
+  it('muestra la clave que ya tiene y la cambia al guardar otra', async () => {
+    fakeCloud('ok');
+    const typing = userEvent.setup();
+    render(<PhysicianCodeForm userId={DOCTOR} alias="Dra. Ruiz" current="PM" />);
+    expect(screen.getByText(text.current('PM'))).toBeVisible();
+    const field = screen.getByLabelText(text.code);
+    expect(field).toHaveValue('PM');
+    await typing.clear(field);
+    await typing.type(field, 'mr1');
+    await typing.click(screen.getByRole('button', { name: text.save }));
+    expect(await screen.findByText(text.current('MR1'))).toBeVisible();
+    cleanup();
+    render(<PhysicianCodeForm userId={DOCTOR} alias="Dra. Ruiz" current={null} />);
+    expect(screen.getByText(text.noCode)).toBeVisible();
+  });
+
   it('una clave que no sigue la regla no se manda y una ocupada avisa', async () => {
     const calls = fakeCloud('taken');
     const typing = userEvent.setup();

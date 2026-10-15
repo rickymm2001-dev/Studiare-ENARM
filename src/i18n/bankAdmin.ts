@@ -257,6 +257,12 @@ export const bankAdminText = {
     defaultReviewer: 'Revisor por omisión de la subespecialidad',
     setDefault: 'Guardar revisor por omisión',
     defaultSaved: 'Guardaste el revisor por omisión.',
+    currentDefault: (alias: string) => `Revisor por omisión ahora, ${alias}.`,
+    inactiveDefault: (alias: string) =>
+      `El revisor por omisión era ${alias}, pero ya no es médico. No se usa hasta que elijas otro.`,
+    noDefault: 'Esta subespecialidad no tiene revisor por omisión.',
+    defaults: 'Revisores por omisión',
+    inactive: 'ya no es médico',
     noPhysicians: 'No hay cuentas con rol de médico. Nombra médicos en Usuarios.',
     failed: 'No se pudo asignar. Intenta de nuevo.',
   },
@@ -358,6 +364,8 @@ export const bankAdminText = {
 
   users: {
     code: 'Clave del Sheet',
+    current: (code: string) => `Clave actual ${code}.`,
+    noCode: 'Todavía no tiene clave del Sheet.',
     codeHint: 'De 2 a 8 letras o números, empieza con letra. Va en Autor y Revisor del Sheet.',
     save: 'Guardar clave',
     saved: (alias: string, code: string) => `${alias} ahora firma como ${code} en el Sheet.`,

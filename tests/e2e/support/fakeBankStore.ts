@@ -49,6 +49,7 @@ export const BANK_EDITORIAL_RPCS = [
   'admin_assign_questions',
   'admin_set_topic_reviewer',
   'admin_set_physician_code',
+  'admin_bank_team',
   'admin_retire_question',
   'admin_restore_question',
   'admin_confirm_missing',

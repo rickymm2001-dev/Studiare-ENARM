@@ -9,10 +9,20 @@ import { TextField } from '@/ui/components/field';
 import { askSecondFactor } from '../physician/secondFactor';
 import { requireCloud } from './useBankAdminQuery';
 
-export function PhysicianCodeForm({ userId, alias }: { userId: string; alias: string }) {
+export function PhysicianCodeForm({
+  userId,
+  alias,
+  current,
+}: {
+  userId: string;
+  alias: string;
+  /** La clave que ya tiene, de admin_bank_team. null si no tiene y undefined si no se pudo leer */
+  current?: string | null;
+}) {
   const text = bankAdminText.users;
   const id = useId();
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(current ?? '');
+  const [saved, setSaved] = useState(current);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const valid = PHYSICIAN_CODE.test(code);
@@ -26,6 +36,7 @@ export function PhysicianCodeForm({ userId, alias }: { userId: string; alias: st
     setBusy(true);
     try {
       const result = await setPhysicianCode(await requireCloud(), userId, code, askSecondFactor);
+      if (result === 'ok') setSaved(code);
       setMessage(
         result === 'ok'
           ? text.saved(alias, code)
@@ -66,6 +77,11 @@ export function PhysicianCodeForm({ userId, alias }: { userId: string; alias: st
       <Button type="submit" size="sm" variant="secondary" disabled={busy}>
         {text.save}
       </Button>
+      {saved === undefined ? null : (
+        <p className="w-full text-sm text-fg-muted">
+          {saved === null ? text.noCode : text.current(saved)}
+        </p>
+      )}
       <p role="status" className="w-full text-sm text-fg-muted">
         {message}
       </p>

@@ -575,8 +575,10 @@ begin
   v_reviewer := public.bank_assignee(v_version.question_id, 'reviewer');
   v_author := public.bank_assignee(v_version.question_id, 'author');
   if v_reviewer is null then
-    select physician_id into v_default from public.bank_topic_reviewers
-      where branch = v_version.branch and topic = v_version.topic;
+    -- Solo si sigue siendo médico, como las claves del Sheet en bank_apply_row (B1 de la revisión)
+    select t.physician_id into v_default from public.bank_topic_reviewers t
+      join public.user_roles r on r.user_id = t.physician_id and r.role = 'physician'
+      where t.branch = v_version.branch and t.topic = v_version.topic;
     if v_default is not null and v_default is distinct from v_version.author_id
        and v_default is distinct from v_author then
       perform public.bank_assign(v_version.question_id, 'reviewer', v_default, p_by);
@@ -1431,6 +1433,31 @@ begin
 end;
 $$;
 
+-- Las claves del Sheet de cada médico y el revisor por omisión de cada subespecialidad, para verlos en
+-- Usuarios y en Banco y Sheet (B1 de la revisión). Solo alias, nunca correos. active dice si el revisor
+-- por omisión sigue siendo médico, porque si no bank_send_to_review no lo usa
+create or replace function public.admin_bank_team() returns jsonb
+language plpgsql stable security definer set search_path = public, pg_temp as $$
+begin
+  perform public.bank_require_admin();
+  return jsonb_build_object(
+    'codes', coalesce((
+      select jsonb_agg(jsonb_build_object('userId', c.user_id, 'alias', coalesce(p.alias, ''), 'code', c.code)
+        order by c.code)
+      from public.physician_codes c left join public.profiles p on p.id = c.user_id
+    ), '[]'::jsonb),
+    'topicReviewers', coalesce((
+      select jsonb_agg(jsonb_build_object('branch', t.branch, 'topic', t.topic, 'physicianId', t.physician_id,
+          'alias', coalesce(p.alias, ''), 'active', coalesce(r.role = 'physician', false))
+        order by t.branch, t.topic)
+      from public.bank_topic_reviewers t
+      left join public.profiles p on p.id = t.physician_id
+      left join public.user_roles r on r.user_id = t.physician_id
+    ), '[]'::jsonb)
+  );
+end;
+$$;
+
 -- Retira una pregunta entera. Los alumnos la dejan de recibir y conservan lo que ya bajaron
 create or replace function public.admin_retire_question(p_question_id uuid, p_reason text) returns text
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -1707,6 +1734,8 @@ revoke all on function public.admin_set_topic_reviewer(text, text, uuid) from pu
 grant execute on function public.admin_set_topic_reviewer(text, text, uuid) to authenticated;
 revoke all on function public.admin_set_physician_code(uuid, text) from public, anon, authenticated, service_role;
 grant execute on function public.admin_set_physician_code(uuid, text) to authenticated;
+revoke all on function public.admin_bank_team() from public, anon, authenticated, service_role;
+grant execute on function public.admin_bank_team() to authenticated;
 revoke all on function public.admin_retire_question(uuid, text) from public, anon, authenticated, service_role;
 grant execute on function public.admin_retire_question(uuid, text) to authenticated;
 revoke all on function public.admin_restore_question(uuid) from public, anon, authenticated, service_role;

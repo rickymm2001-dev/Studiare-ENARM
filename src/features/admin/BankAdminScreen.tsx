@@ -23,6 +23,7 @@ import {
   readSyncRuns,
   resolveConflict,
   setBankOpen,
+  readBankTeam,
   setTopicReviewer,
   startBankSync,
   type SyncTarget,
@@ -666,7 +667,14 @@ function AssignCard() {
   const [reviewer, setReviewer] = useState('');
   const [fallback, setFallback] = useState('');
   const action = useAction();
+  const team = useBankAdminQuery((cloud, onForbidden) => readBankTeam(cloud, onForbidden), 'team');
   const people = physicians.state.status === 'ready' ? physicians.state.value : [];
+  const defaults = team.state.status === 'ready' ? team.state.value.topicReviewers : [];
+  const current = defaults.find((entry) => entry.branch === branch && entry.topic === topic);
+  const topicNameOf = (branchKey: string, topicKey: string) =>
+    topicTaxonomy.branches
+      .find((item) => item.key === branchKey)
+      ?.topics.find((item) => item.key === topicKey)?.name ?? topicKey;
   const choices = [
     { value: '', label: copy.keep },
     ...people.map((person) => ({ value: person.id, label: person.alias })),
@@ -754,19 +762,43 @@ function AssignCard() {
           variant="secondary"
           disabled={action.busy || fallback === '' || topic === ''}
           onClick={() => {
-            void action.run(async () => {
-              await setTopicReviewer(
-                await requireCloud(),
-                { branch, topic, physician: fallback },
-                askSecondFactor,
-              );
-              return copy.defaultSaved;
-            });
+            void action
+              .run(async () => {
+                await setTopicReviewer(
+                  await requireCloud(),
+                  { branch, topic, physician: fallback },
+                  askSecondFactor,
+                );
+                return copy.defaultSaved;
+              })
+              .then(team.reload);
           }}
         >
           {copy.setDefault}
         </Button>
       </div>
+      <p className="text-sm text-fg-muted">
+        {current
+          ? current.active
+            ? copy.currentDefault(current.alias)
+            : copy.inactiveDefault(current.alias)
+          : copy.noDefault}
+      </p>
+      {defaults.length > 0 ? (
+        <section aria-labelledby="banco-omision" className="flex flex-col gap-1">
+          <h3 id="banco-omision" className="text-sm font-semibold">
+            {copy.defaults}
+          </h3>
+          <ul className="flex flex-col gap-0.5 text-sm">
+            {defaults.map((entry) => (
+              <li key={`${entry.branch}/${entry.topic}`}>
+                {topicNameOf(entry.branch, entry.topic)} · {entry.alias}
+                {entry.active ? '' : ` · ${copy.inactive}`}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <Feedback notice={action.notice} error={action.error} />
     </Card>
   );

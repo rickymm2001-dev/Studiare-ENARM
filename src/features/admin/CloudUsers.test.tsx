@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { DataProvider } from '@/data/DataProvider';
 import type { Role } from '@/data/schemas/common';
+import { bankAdminText } from '@/i18n/bankAdmin';
 import { t } from '@/i18n/es-MX';
 import { DESKTOP_QUERY } from '@/ui/hooks/use-media-query';
 import { CloudUsers } from './CloudUsers';
@@ -40,12 +41,15 @@ const ROWS = [
 
 function setup(
   callerRole: Role,
-  options: { rows?: unknown[]; listError?: object; setError?: object } = {},
+  options: { rows?: unknown[]; listError?: object; setError?: object; team?: unknown } = {},
 ) {
   const calls: { name: string; args: unknown }[] = [];
   holder.cloud = {
     rpc: (name: string, args: unknown) => {
       calls.push({ name, args });
+      if (name === 'admin_bank_team') {
+        return Promise.resolve({ data: options.team ?? null, error: null });
+      }
       if (name === 'admin_list_users') {
         return Promise.resolve(
           options.listError
@@ -122,6 +126,23 @@ describe('usuarios con la cuenta de la nube', () => {
     expect(screen.getByText(/Plan Mensual/)).toBeVisible();
     expect(screen.getByText(text.count(3))).toBeVisible();
     expect(screen.getByText(text.assignmentsNote)).toBeVisible();
+  });
+
+  it('cada médico muestra la clave del Sheet que ya tiene', async () => {
+    const doctor = '44444444-4444-4444-8444-444444444444';
+    setup('owner', {
+      rows: [
+        ...ROWS,
+        row(doctor, 'Dana', 'physician'),
+        row('55555555-5555-4555-8555-555555555555', 'Elio', 'physician'),
+      ],
+      team: { codes: [{ userId: doctor, alias: 'Dana', code: 'DM' }], topicReviewers: [] },
+    });
+    const dana = (await screen.findByText('Dana')).closest('li') as HTMLElement;
+    expect(await within(dana).findByText(bankAdminText.users.current('DM'))).toBeVisible();
+    expect(within(dana).getByLabelText(bankAdminText.users.code)).toHaveValue('DM');
+    const elio = screen.getByText('Elio').closest('li') as HTMLElement;
+    expect(within(elio).getByText(bankAdminText.users.noCode)).toBeVisible();
   });
 
   it('el dueño ve su propia fila sin selector, porque nadie cambia su propio rol', async () => {

@@ -9,6 +9,7 @@ import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { DataProvider } from '@/data/DataProvider';
+import { topicTaxonomy } from '@/demo/content';
 import { bankAdminText } from '@/i18n/bankAdmin';
 import { t } from '@/i18n/es-MX';
 import { BankAdminScreen } from './BankAdminScreen';
@@ -25,6 +26,8 @@ vi.mock('@/data/cloud/client', () => ({
 const text = bankAdminText;
 const RUN = '01234567-89ab-4cde-8f01-23456789abcd';
 const AT = '2026-10-14T15:00:00.000Z';
+const FIRST = topicTaxonomy.branches[0];
+const SECOND = topicTaxonomy.branches[1];
 
 interface FakeState {
   /** La corrida ya terminó. Mientras corre no tiene renglones */
@@ -115,6 +118,25 @@ function fakeCloud(options: { open?: boolean; running?: boolean } = {}): FakeSta
           },
         ],
         admin_list_users: [],
+        admin_bank_team: {
+          codes: [],
+          topicReviewers: [
+            {
+              branch: FIRST?.key,
+              topic: FIRST?.topics[0]?.key,
+              physicianId: 'p1',
+              alias: 'Dra. Ruiz',
+              active: true,
+            },
+            {
+              branch: SECOND?.key,
+              topic: SECOND?.topics[0]?.key,
+              physicianId: 'p2',
+              alias: 'Dr. Paz',
+              active: false,
+            },
+          ],
+        },
       };
       return Promise.resolve({ data: data[name] ?? null, error: null });
     },
@@ -244,6 +266,22 @@ describe('Banco y Sheet', () => {
     expect(within(rows).getByText('Renglón 46. Faltan las referencias.')).toBeVisible();
     expect(within(rows).getByText(`Renglón 46. ${text.sync.notices.topic_inferred}`)).toBeVisible();
     expect(within(rows).getByRole('button', { name: text.sync.rows.csv })).toBeVisible();
+  });
+
+  it('Asignaciones dice quién es el revisor por omisión y avisa si ya no es médico', async () => {
+    fakeCloud();
+    const typing = userEvent.setup();
+    showScreen();
+    const card = await screen.findByRole('region', { name: text.assign.title });
+    expect(await within(card).findByText(text.assign.currentDefault('Dra. Ruiz'))).toBeVisible();
+    const list = within(card).getByRole('region', { name: text.assign.defaults });
+    expect(
+      within(list).getByText(
+        `${SECOND?.topics[0]?.name ?? ''} · Dr. Paz · ${text.assign.inactive}`,
+      ),
+    ).toBeVisible();
+    await typing.selectOptions(within(card).getByLabelText(text.assign.branch), SECOND?.key ?? '');
+    expect(within(card).getByText(text.assign.inactiveDefault('Dr. Paz'))).toBeVisible();
   });
 
   it('los renglones de una corrida que seguía corriendo aparecen al actualizar cuando termina', async () => {
