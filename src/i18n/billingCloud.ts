@@ -124,6 +124,11 @@ export const billingCloudText = {
   portalOpening: 'Abriendo el portal…',
   portalFailed: 'No pudimos abrir el portal. Intenta de nuevo en unos minutos.',
 
+  // Recibos en Suscripción con la nube. Los pagos reales se ven en Facturas, en Perfil
+  receiptsInCloud:
+    'Tus pagos están en Configuración, en Facturas, donde también pides la factura de cada uno.',
+  receiptsInCloudLink: 'Ver mis pagos',
+
   // Estado del plan (3.1.3)
   status: {
     trialing: (date: string, price: string) =>

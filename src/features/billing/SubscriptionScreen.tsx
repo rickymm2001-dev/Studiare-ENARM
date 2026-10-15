@@ -6,9 +6,10 @@
 // suma otro pase (8.10).
 import { Check, Crown, Gauge, Minus, Receipt } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useCloud } from '@/app/cloudState';
+import { screenPath } from '@/app/screens';
 import {
   canUse,
   checkoutPlanFor,
@@ -346,7 +347,18 @@ function Billing({ session }: { session: ReadySession }) {
         <CardHeader>
           <CardTitle id="recibos-titulo">{t.billing.receiptsTitle}</CardTitle>
         </CardHeader>
-        {receipts.length === 0 ? (
+        {receipts.length === 0 && inCloud ? (
+          // Con la nube los pagos reales no son recibos simulados. Viven en Facturas, en Perfil
+          <p className="text-sm text-fg-muted">
+            {billingCloudText.receiptsInCloud}{' '}
+            <Link
+              to={`${screenPath('settings')}#perfil`}
+              className="font-semibold text-primary-ink underline underline-offset-2"
+            >
+              {billingCloudText.receiptsInCloudLink}
+            </Link>
+          </p>
+        ) : receipts.length === 0 ? (
           <p className="text-sm text-fg-muted">{t.billing.noReceipts}</p>
         ) : (
           <ul className="flex flex-col gap-2">
