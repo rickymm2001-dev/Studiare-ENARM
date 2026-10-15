@@ -133,6 +133,36 @@ La simulación con --dry-run solo usa rutas de lectura. Fuera de ella, si la rut
 | supabase/manual/limpiar-pagos-de-prueba.sql | Lo pegas tú | Sigue igual. Borra filas de pagos y va solo después de cancelar en Stripe, así que no entra en ningún plan |
 | supabase/manual/ejecutar-en-sql-editor.sql | Lo pegabas tú (D-113) | No está en un plan. Trae más que funciones y no tiene consulta de Comprobación, así que la herramienta no puede saber si ya se pegó. Para meterlo en un plan habría que agregarle una |
 
+## B11 y B13, el orden desde un proyecto con solo B10
+
+Se corren en este orden, cada uno primero con --dry-run.
+
+```bash
+npm run deploy:supabase -- --plan b11 --dry-run
+npm run deploy:supabase -- --plan b11 --yes
+npm run deploy:supabase -- --plan b13 --dry-run
+npm run deploy:supabase -- --plan b13 --yes
+```
+
+Por qué b11 lleva una migración de B13
+
+- La migración 20261027000001_english_section.sql de B13 vuelve a definir bank_version_issues y bank_incomplete_of, que crea la migración bank_core de B11. La herramienta espera de cada función la versión de la última migración del repo, así que el plan b11 sin esa migración se detenía antes de escribir nada con el mensaje `Aplicarla dejaría bank_version_issues más vieja que supabase/migrations/20261027000001_english_section.sql. Agrega ese archivo al plan después de este paso`
+- Se hizo lo que pide ese mensaje. deploy/b11.json lleva la migración de inglés como su paso 7, después de bank_sync_cron y antes de banco-b11.sql, con una nota que lo explica. deploy/b13.json la lleva también. El plan que corra primero la aplica y el otro la salta como ya aplicada
+- No se cambió la herramienta ni se quitó ninguna de sus protecciones. Las dos funciones se comparan con la última migración del repo, como todas
+- Una prueba (scripts/deploy/plans.test.ts, B11 y B13) corre los planes contra la API falsa desde una base con solo B10, y otra revisa que b11 sin la migración de inglés se detiene sin escribir nada
+
+Qué pasa en cada caso
+
+- Proyecto con solo B10. b11 aplica sus ocho archivos de SQL y publica bank-sync. b13 ya no tiene SQL por aplicar y vuelve a publicar bank-sync con la copia nueva del convertidor, la que deja npm run bank:shared en supabase/functions/_shared/bank/generated. Los dos terminan en verde y se pueden volver a correr en cualquier orden sin repetir SQL
+- Proyecto con B11 aplicado antes de que existiera la migración de inglés. b13 aplica solo esa migración y vuelve a publicar bank-sync. b11 hace lo mismo, y avisa que bank_version_issues y bank_incomplete_of están distintas del repo en la base y que las corrige el paso 7
+- b13 sin b11 no sirve. La migración de inglés agrega una fila a bank_taxonomy y vuelve a definir funciones de B11, y la base responde con un error de SQL que la herramienta muestra antes de seguir
+- bank-sync necesita el secreto GOOGLE_BANK_SHEET_ID del plan b11. El plan b13 no espera ninguno
+
+Para los bloques que siguen
+
+- Cuando una migración nueva vuelve a definir una función de un plan anterior, el plan anterior suma esa migración al final de sus archivos de SQL, con una nota que lo diga, y el plan nuevo la lleva también. Sin eso el plan anterior se detiene, y con eso se puede volver a correr cuando el bloque nuevo ya está en el repo
+- El plan de B12 todavía no está en esta rama. Cuando llegue va entre b11 y b13 en la lista FROM_B10 de la prueba, con las migraciones 20261026 que aplica, y la prueba sigue igual. Hay que volver a revisar ahí el orden de los tres
+
 ## Los planes
 
 Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma forma.

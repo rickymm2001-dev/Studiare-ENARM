@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -13,7 +13,7 @@ import { expectedFunctions, runDeploy, type Io } from './deploy.ts';
 import { readSecretsFile } from './secrets.ts';
 import { createManagementClient } from './managementApi.ts';
 import { loadPlan, repoMigrations } from './plan.ts';
-import { applyFunctionSql, type FunctionDef } from './sql.ts';
+import { applyFunctionSql, sameDef, type FunctionDef } from './sql.ts';
 import { STUDIARE_PROJECT_REF, main, parseArgs, resolveToken } from './supabase.ts';
 import { fakeSupabase, type FakeOptions } from './testing/fakeSupabase.ts';
 
@@ -128,7 +128,7 @@ describe('los planes del repo', () => {
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
   });
 
-  it('b11 lleva las seis migraciones del banco, Borrar mis datos y bank-sync sin verificar JWT', () => {
+  it('b11 lleva las seis migraciones del banco, la de inglés, Borrar mis datos y bank-sync sin verificar JWT', () => {
     const plan = loadPlan(ROOT, 'b11');
     expect(plan.migrations.map((step) => step.name)).toEqual([
       'bank_taxonomy',
@@ -137,6 +137,7 @@ describe('los planes del repo', () => {
       'bank_sync',
       'deck_catalog',
       'bank_sync_cron',
+      'english_section',
       'manual_banco_b11',
     ]);
     expect(plan.functions).toEqual([
@@ -341,5 +342,230 @@ describe('línea de comandos', () => {
     expect(all).toContain('[oculto]');
     expect(all.includes(TOKEN)).toBe(false);
     expect(all.includes('SECRETO')).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// B11 y B13 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11 y B13)
+
+/** La última migración de B10. Un proyecto con solo B10 llega hasta aquí */
+const LAST_B10 = '20261022000003';
+/** La última de B11, la del ciclo de Cron del banco */
+const LAST_B11 = '20261023000006';
+
+/** Lo que registra el plan b11 de B11 sin la migración de B13, en el orden del plan */
+const B11_STEPS = [
+  'bank_taxonomy',
+  'bank_core',
+  'bank_editorial',
+  'bank_sync',
+  'deck_catalog',
+  'bank_sync_cron',
+  'manual_banco_b11',
+] as const;
+
+/**
+ * Los planes en el orden en que se corren desde un proyecto con solo B10, con el SQL que aplica cada uno y
+ * las funciones que publica. b11 lleva la migración de B13, así que b13 ya no aplica SQL y solo vuelve a
+ * publicar bank-sync con la copia nueva del convertidor. Cuando el plan de B12 llegue a este árbol va entre
+ * b11 y b13, con sus cuatro migraciones 20261026, su pieza manual y ai-proxy y ai-batch. Nada más cambia
+ */
+const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: readonly string[] }[] =
+  [
+    {
+      plan: 'b11',
+      sql: [
+        'bank_taxonomy',
+        'bank_core',
+        'bank_editorial',
+        'bank_sync',
+        'deck_catalog',
+        'bank_sync_cron',
+        'english_section',
+        'manual_banco_b11',
+      ],
+      functions: ['bank-sync'],
+    },
+    { plan: 'b13', sql: [], functions: ['bank-sync'] },
+  ];
+
+/** Las funciones de las migraciones del repo hasta una versión, como las deja un proyecto que llegó ahí */
+function functionsUpTo(version: string): Record<string, FunctionDef> {
+  const defs = new Map<string, FunctionDef>();
+  for (const migration of repoMigrations(ROOT)) {
+    if (migration.version <= version) applyFunctionSql(migration.sql, defs);
+  }
+  return Object.fromEntries(defs);
+}
+
+/**
+ * La fila de cada consulta de comprobación según lo que se aplicó. Una columna que el plan no pide no estorba,
+ * así que ya trae la de B12 para cuando su plan entre en FROM_B10
+ */
+const checkRows = (applied: ReadonlySet<string>) => ({
+  borrar_mis_datos_b11: applied.has('manual_banco_b11'),
+  borrar_mis_datos_b12: applied.has('manual_ia_b12'),
+});
+
+/** La base con B10 aplicado y nada del banco */
+function onlyB10(): ReturnType<typeof fakeSupabase> {
+  return fakeSupabase({
+    ref: STUDIARE_PROJECT_REF,
+    history: REAL_HISTORY,
+    functions: functionsUpTo(LAST_B10),
+    anon: ['current_app_role', 'is_admin'],
+    checkRow: checkRows,
+  });
+}
+
+/**
+ * La base como la dejó el plan b11 de antes de B13, cuando la migración de inglés todavía no existía. Las
+ * funciones de las migraciones hasta la del Cron del banco y la de Borrar mis datos de banco-b11.sql
+ */
+function withB11BeforeEnglish(): ReturnType<typeof fakeSupabase> {
+  const functions = new Map(Object.entries(functionsUpTo(LAST_B11)));
+  applyFunctionSql(readFileSync(join(ROOT, 'supabase/manual/banco-b11.sql'), 'utf8'), functions);
+  return fakeSupabase({
+    ref: STUDIARE_PROJECT_REF,
+    history: [
+      ...REAL_HISTORY,
+      ...B11_STEPS.map((name, index) => ({
+        version: `2026101700${String(index).padStart(4, '0')}`,
+        name,
+      })),
+    ],
+    functions: Object.fromEntries(functions),
+    anon: ['current_app_role', 'is_admin'],
+    edge: { 'bank-sync': { version: 1, verifyJwt: false } },
+    checkRow: (applied) => ({ ...checkRows(applied), borrar_mis_datos_b11: true }),
+  });
+}
+
+/** Los nombres con los que quedó registrado el SQL que aplicó una corrida, en orden */
+function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): string[] {
+  return fake
+    .writes()
+    .slice(from)
+    .filter((request) => request.path === '/database/migrations')
+    .map((request) => (request.json as { name: string }).name);
+}
+
+describe('B11 y B13 desde un proyecto con solo B10', () => {
+  it('b13 lleva la migración de inglés y bank-sync sin verificar JWT, y sin SQL manual', () => {
+    const plan = loadPlan(ROOT, 'b13');
+    expect(plan.migrations.map((step) => step.name)).toEqual(['english_section']);
+    expect(plan.migrations.map((step) => step.kind)).toEqual(['migration']);
+    expect(plan.functions).toEqual([
+      { slug: 'bank-sync', verifyJwt: false, note: expect.any(String) as string },
+    ]);
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // Los secretos de bank-sync los puso el plan b11. Este no espera ninguno
+    expect(plan.secrets).toBeNull();
+    // Es idempotente y no lleva delete ni drop, así que el conector también puede aplicarla
+    const sql = plan.migrations[0]?.sql ?? '';
+    expect(sql).not.toMatch(/^\s*(delete|drop)\b/im);
+  });
+
+  it('la migración de inglés redefine las dos funciones de B11 que el plan b11 trae en bank_core', () => {
+    const plan = loadPlan(ROOT, 'b11');
+    const english = loadPlan(ROOT, 'b13').migrations[0];
+    const core = plan.migrations.find((step) => step.name === 'bank_core');
+    if (!english || !core) throw new Error('Faltan los pasos del plan');
+    const redefined = ['bank_version_issues', 'bank_incomplete_of'];
+    const coreDefs = new Map<string, FunctionDef>();
+    const englishDefs = new Map<string, FunctionDef>();
+    applyFunctionSql(core.sql, coreDefs);
+    applyFunctionSql(english.sql, englishDefs);
+    for (const name of redefined) {
+      const before = coreDefs.get(name);
+      const after = englishDefs.get(name);
+      expect(before && after && !sameDef(before, after), name).toBe(true);
+    }
+    // Y en el plan b11 la migración de inglés va después de bank_core, para que la corrija
+    const names = plan.migrations.map((step) => step.name);
+    expect(names.indexOf('english_section')).toBeGreaterThan(names.indexOf('bank_core'));
+  });
+
+  it('sin la migración de inglés el plan b11 se detiene antes de escribir, que es por lo que la lleva', async () => {
+    const plan = JSON.parse(readFileSync(join(ROOT, 'deploy/b11.json'), 'utf8')) as {
+      migrations: { file: string }[];
+    };
+    plan.migrations = plan.migrations.filter((step) => !step.file.endsWith('_english_section.sql'));
+    expect(plan.migrations).toHaveLength(B11_STEPS.length);
+    const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
+    dirs.push(dir);
+    const path = join(dir, 'b11-sin-ingles.json');
+    writeFileSync(path, JSON.stringify(plan));
+
+    const fake = onlyB10();
+    const run = await runReal(fake, path);
+    expect(run.code).toBe(1);
+    for (const name of ['bank_version_issues', 'bank_incomplete_of']) {
+      expect(run.text).toContain(
+        `Aplicarla dejaría ${name} más vieja que supabase/migrations/20261027000001_english_section.sql`,
+      );
+    }
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('b11 y luego b13 corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
+    const fake = onlyB10();
+    const versions = new Map<string, number>();
+    for (const step of FROM_B10) {
+      const before = fake.writes().length;
+      const run = await runReal(fake, step.plan);
+      expect(run.text, step.plan).toContain('Todo en verde.');
+      expect(run.code, step.plan).toBe(0);
+      expect(appliedSince(fake, before), step.plan).toEqual(step.sql);
+      for (const slug of step.functions) {
+        versions.set(slug, (versions.get(slug) ?? 0) + 1);
+        expect(fake.edge.get(slug), `${step.plan} ${slug}`).toMatchObject({
+          version: versions.get(slug),
+          verifyJwt: false,
+        });
+      }
+    }
+
+    // Las funciones que B13 redefine quedaron en su versión, y la fuente del texto existe
+    expect(fake.functions.get('bank_version_issues')?.body).toContain('language_branch_mismatch');
+    expect(fake.functions.get('bank_incomplete_of')?.body).toContain('language_branch_mismatch');
+    expect(fake.functions.get('bank_passage_source_issue')).toBeDefined();
+    expect(fake.functions.get('delete_my_data')?.body).toContain('bank_reads');
+    // bank-sync subió la copia generada del convertidor que lee la fuente del texto, igual a la del repo
+    const generated = 'supabase/functions/_shared/bank/generated/passageSource.ts';
+    const published = fake.edge.get('bank-sync')?.files.find((file) => file.name === generated);
+    expect(published?.content).toBe(readFileSync(join(ROOT, generated), 'utf8'));
+
+    // Cualquiera de los dos planes se puede volver a correr, en cualquier orden, sin repetir SQL
+    for (const plan of ['b13', 'b11']) {
+      const before = fake.writes().length;
+      const again = await runReal(fake, plan);
+      expect(again.code, plan).toBe(0);
+      expect(appliedSince(fake, before), plan).toEqual([]);
+    }
+    expect(fake.edge.get('bank-sync')?.version).toBe((versions.get('bank-sync') ?? 0) + 2);
+  });
+
+  it('un proyecto con B11 de antes de B13 recibe la migración de inglés con b13, o con b11 si se corre otra vez', async () => {
+    const withB13 = withB11BeforeEnglish();
+    const first = await runReal(withB13, 'b13');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(withB13, 0)).toEqual(['english_section']);
+    expect(withB13.edge.get('bank-sync')?.version).toBe(2);
+    expect(withB13.functions.get('bank_version_issues')?.body).toContain(
+      'language_branch_mismatch',
+    );
+
+    // b11 sobre el mismo proyecto de antes dice que la migración de inglés corrige las dos funciones y la aplica
+    const withB11 = withB11BeforeEnglish();
+    const second = await runReal(withB11, 'b11');
+    expect(second.code).toBe(0);
+    expect(appliedSince(withB11, 0)).toEqual(['english_section']);
+    expect(second.text).toContain('bank_version_issues está distinta del repo en la base');
+    expect(second.text).toContain(
+      'La corrige el paso 7 (supabase/migrations/20261027000001_english_section.sql)',
+    );
+    expect(withB11.edge.get('bank-sync')?.version).toBe(2);
   });
 });
