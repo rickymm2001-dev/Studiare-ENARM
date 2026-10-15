@@ -71,8 +71,20 @@ describe('revisión previa del razonamiento', () => {
   const current = (api: MessagesApi) =>
     createAnthropicProvider(api, () => ({ timeoutMs: 1000, maxRetries: 0 }));
 
-  it('detecta que el proveedor no apaga el razonamiento que pide un candidato', async () => {
-    const mismatches = await checkCandidateParams(ALL_LADDER_CANDIDATES, current);
+  it('el proveedor de producción manda el esfuerzo y el razonamiento de cada candidato', async () => {
+    // Desde que el paquete A manda el razonamiento (thinkingParam), la escalera completa cuadra
+    expect(await checkCandidateParams(ALL_LADDER_CANDIDATES, current)).toEqual([]);
+  });
+
+  it('detecta que un proveedor no apaga el razonamiento que pide un candidato', async () => {
+    // Un proveedor anterior al paquete A, que no manda thinking nunca
+    const forgetful = (api: MessagesApi) =>
+      current({
+        create({ thinking: _omitted, ...params }, options) {
+          return api.create(params, options);
+        },
+      });
+    const mismatches = await checkCandidateParams(ALL_LADDER_CANDIDATES, forgetful);
     expect(mismatches.map((item) => item.candidate)).toEqual(['haiku55-off']);
     expect(mismatches[0]?.problem).toBe('manda razonamiento ninguno y el candidato pide disabled');
   });

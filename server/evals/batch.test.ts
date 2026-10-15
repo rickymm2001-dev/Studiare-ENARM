@@ -116,7 +116,8 @@ describe('camino por lotes', () => {
     expect(result.results.map((item) => [item.passed, item.error, item.refused])).toEqual([
       [false, 'provider_error', false],
       [false, 'provider_error', false],
-      [false, 'provider_error', true],
+      // Una negativa del modelo es refused y no se reintenta (10.16), no una falla del proveedor
+      [false, 'refused', true],
     ]);
   });
 

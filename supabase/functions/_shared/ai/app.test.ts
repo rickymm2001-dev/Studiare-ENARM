@@ -7,6 +7,7 @@ import {
   restructureInput,
 } from '../../../../src/ai/testing/aiSamples.ts';
 import { DEFAULT_CONFIG } from './config.ts';
+import { bundledPromptSets } from './prompts.ts';
 import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
 import { mockHypothesis } from './engines/aiMock.ts';
 import { buildAiProxy, structuredLog } from './edge.ts';
@@ -454,7 +455,8 @@ describe('bitácora', () => {
         outcome: 'ok',
         cacheReadTokens: 700,
         cacheWriteTokens: 50,
-        promptVersion: 'forgetting.base.v1',
+        // La versión del prompt que lleva la copia generada, que sube cuando cambian los prompts
+        promptVersion: bundledPromptSets().forgetting.version,
         jobId: null,
       },
       { ok: false, outcome: 'invalid_output', inputTokens: 2000 },
