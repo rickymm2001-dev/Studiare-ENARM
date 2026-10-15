@@ -258,6 +258,20 @@ describe('el entorno de las funciones de IA', () => {
   });
 });
 
+describe('el cliente de Anthropic se arma en un solo lugar', () => {
+  // anthropic.ts lo crea con la clave explícita y sin leer credenciales del entorno (10.29). El proxy de
+  // desarrollo y las dos funciones lo usan de ahí, y nadie más llama al constructor del SDK
+  it('solo supabase/functions/_shared/ai/anthropic.ts crea el cliente del SDK', () => {
+    const dirs = [FUNCTIONS, join(ROOT, 'server', 'src'), join(ROOT, 'src')];
+    const creators = dirs
+      .flatMap((dir) => listFiles(dir))
+      .filter((file) => /\.(ts|tsx)$/.test(file))
+      .filter((file) => /\bnew\s+Anthropic\s*\(/.test(withoutComments(readFileSync(file, 'utf8'))))
+      .map(rel);
+    expect(creators).toEqual(['supabase/functions/_shared/ai/anthropic.ts']);
+  });
+});
+
 describe('nada de OpenAI ni del nombre prohibido en producción', () => {
   // Los textos se arman por partes para que esta prueba no se encuentre a sí misma si alguien la mueve
   const openAiNeedles = [
