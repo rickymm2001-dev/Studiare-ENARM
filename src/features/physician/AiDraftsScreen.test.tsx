@@ -33,12 +33,16 @@ afterEach(async () => {
 const WAIT = { timeout: 30_000 };
 const text = physicianText.draftsScreen;
 const entries = buildDemoBank().questions;
-// Una pregunta suelta cuya propuesta de ejemplo pasa las guardas
+// Una pregunta suelta, con un enunciado que empieza distinto al de todas las demás (la pantalla la busca por
+// sus primeros 30 caracteres), cuya propuesta de ejemplo pasa las guardas
 const target = entries.find((entry) => {
   const built = buildRestructureInput(entry.question, entry.options, 'to_except');
   return (
     built.ok &&
     entry.question.caseId === null &&
+    entries.filter(
+      (other) => other.question.prompt.slice(0, 30) === entry.question.prompt.slice(0, 30),
+    ).length === 1 &&
     guardRestructure(mockRestructure(built.input), built.input).passed
   );
 });

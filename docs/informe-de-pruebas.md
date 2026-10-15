@@ -10,7 +10,7 @@ Fase F, sección 17 de la especificación, actualizado al cierre de la Fase I. R
 | Pruebas de punta a punta (Playwright, teléfono y escritorio) | 218 pasan, 109 por cada tamaño de pantalla |
 | Auditoría funcional por recorrido (npm run audit:ui) | 10 recorridos de 32 pantallas, 10 flujos con interrupciones y la prueba de nube caída, todos sin hallazgos. Ver docs/auditoria-2026-10-10 |
 | Pruebas del esquema de Supabase contra Postgres local | Pasan las once suites, con la última migración y el archivo manual corridos dos veces |
-| Pruebas de seguridad del build | 18 pasan. Sin secretos, con política de contenido y HSTS, dentro del presupuesto y con una imagen de Docker sin llaves |
+| Pruebas de seguridad del build | 16 pasan. Sin secretos, con política de contenido y HSTS y dentro del presupuesto. Las funciones de IA tienen su prueba de arquitectura en tests/architecture |
 | Accesibilidad (axe) | Pasa en las pantallas que recorren las pruebas de punta a punta, en claro y oscuro |
 | npm audit con nivel high | 0 vulnerabilidades |
 | JavaScript inicial | 282.6 KB comprimidos contra un presupuesto de 300 KB. Subió 1 KB con la Fase H y el aviso de insignias de la Fase I se carga aparte |
