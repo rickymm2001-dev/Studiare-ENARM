@@ -189,6 +189,19 @@ describe('fuente de la nube (5.1 a 5.5)', () => {
     expect((await source.ensureBodies(ids.slice(0, 3), 'practice')).offline).toBe(false);
   });
 
+  it('el pool marca lo que ya tiene su cuerpo en el navegador, para elegir sin conexión', async () => {
+    const rows = rowsOf(5);
+    const { source } = setup(rows, { plan: 'monthly' });
+    await source.prepare();
+    expect((await source.pool()).practice.every((question) => !question.cached)).toBe(true);
+    const stored = rows.slice(0, 2).map((row) => ulid(row.versionId));
+    await source.ensureBodies(stored, 'practice');
+    const cached = (await source.pool()).practice
+      .filter((question) => question.cached)
+      .map((question) => question.id);
+    expect(cached.sort()).toEqual([...stored].sort());
+  });
+
   it('un cuerpo inválido se descarta completo y una retirada pide otra vez el catálogo', async () => {
     const rows = rowsOf(3);
     const { source, bank, discarded } = setup(rows);

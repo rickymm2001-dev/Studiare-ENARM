@@ -10,6 +10,7 @@ import { writeStoredFlags } from '@/config/featureFlags';
 import type { CatalogRow } from '@/data/bank/contracts';
 import { createCloudSource } from '@/data/bank/cloudSource';
 import { uuidToUlid } from '@/data/cloud/cloudIds';
+import type { DataApi } from '@/data/context';
 import { fakeBankServer, wireRow } from '@/data/testing/bankCloud';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
@@ -56,6 +57,7 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
+  vi.restoreAllMocks();
   cleanup();
   await resetApp(app?.api);
   app = undefined;
@@ -177,6 +179,53 @@ describe('Simular con el banco de la nube', () => {
       expect(usePractice.getState().questionIds).toHaveLength(5);
     });
     expect(screen.queryByText(bankText.shortfall.reasons.offline)).toBeNull();
+  });
+
+  // Un banco de 30 con solo 8 cuerpos ya bajados en este navegador (M2 de la revisión de B11)
+  function partlyDownloaded() {
+    const catalog = rows(30);
+    const server = bank(catalog, { plan: 'monthly' });
+    const stored = catalog.slice(0, 8).map((row) => uuidToUlid(row.versionId) ?? '');
+    const seed = async (api: DataApi) => {
+      const source = createCloudSource({ repos: api.repos, cloud: () => server.server });
+      await source.prepare();
+      await source.ensureBodies(stored, 'practice');
+    };
+    return { server, stored, seed };
+  }
+
+  it('sin conexión elige solo de lo ya bajado aunque el banco sea más grande, y lo dice', async () => {
+    const user = userEvent.setup();
+    const { server, stored, seed } = partlyDownloaded();
+    app = await renderApp(SCREENS.simulatorSetup.path, { seed });
+    const practice = await setup();
+    server.state.offline = true;
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '10');
+    await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
+    await waitFor(() => {
+      expect(usePractice.getState().questionIds).toHaveLength(8);
+    });
+    expect([...usePractice.getState().questionIds].sort()).toEqual([...stored].sort());
+    expect(await screen.findByText(bankText.shortfall.started(8, 10))).toBeVisible();
+    expect(screen.getByText(bankText.shortfall.reasons.offline)).toBeVisible();
+  });
+
+  it('si la bajada responde sin conexión vuelve a elegir de lo ya bajado', async () => {
+    const user = userEvent.setup();
+    const { server, stored, seed } = partlyDownloaded();
+    app = await renderApp(SCREENS.simulatorSetup.path, { seed });
+    const practice = await setup();
+    // El navegador cree que hay red, pero la petición no llega
+    server.state.offline = true;
+    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '5');
+    await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
+    await waitFor(() => {
+      expect(usePractice.getState().questionIds).toHaveLength(5);
+    });
+    const ids = usePractice.getState().questionIds;
+    expect(ids.every((id) => stored.includes(id))).toBe(true);
+    expect(await screen.findByText(bankText.shortfall.fromStored)).toBeVisible();
   });
 
   it('sin conexión y sin catálogo bajado pide conectarse una vez y no usa el banco de demostración', async () => {

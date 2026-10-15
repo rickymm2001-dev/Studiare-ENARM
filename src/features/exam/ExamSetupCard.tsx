@@ -24,6 +24,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField } from '@/ui/components/field';
 import { useBankNotice } from '../shared/bankNotice';
+import { chooseWithBodies } from '../shared/chooseWithBodies';
 import type { ReadySession } from '../shared/RequireSession';
 import { useQuestionSource } from '../shared/useQuestionSource';
 import { clock } from '../simulator/practice';
@@ -133,31 +134,42 @@ export function ExamSetupCard({
     setFailed(null);
     try {
       // Primero se arma con las cuotas por rama y se bajan esos cuerpos. startExam arma de nuevo solo
-      // con lo concedido, que cabe completo, y conserva cuántas faltaron de lo pedido
-      const plan = buildExam({
-        questions,
-        requested,
-        seed: newId(),
-        branchWeights: examBranchWeights(topicTaxonomy),
-        excludeBranches: nonClinicalBranches(topicTaxonomy),
+      // con lo concedido, que cabe completo, y conserva cuántas faltaron de lo pedido. Sin conexión se
+      // arma solo con lo ya bajado (M2)
+      const seed = newId();
+      const { ids, result, fromStored } = await chooseWithBodies({
+        source,
+        candidates: questions,
+        purpose: 'exam',
+        choose: (from) =>
+          buildExam({
+            questions: from,
+            requested,
+            seed,
+            branchWeights: examBranchWeights(topicTaxonomy),
+            excludeBranches: nonClinicalBranches(topicTaxonomy),
+          }).questionIds,
       });
-      const result = await source.ensureBodies(plan.questionIds, 'exam');
       const ready = new Set(result.ready);
       const chosen = questions.filter((question) => ready.has(question.id));
-      const reason = shortfallReason({
-        denied: result.denied,
-        offline: result.offline,
-        missing: plan.questionIds.length - chosen.length,
-      });
+      const reason = fromStored
+        ? 'offline'
+        : shortfallReason({
+            denied: result.denied,
+            offline: result.offline,
+            missing: ids.length - chosen.length,
+          });
       if (chosen.length === 0) {
         setFailed(reason ? bankText.shortfall.reasons[reason] : text.startError);
         return;
       }
-      if (chosen.length < plan.questionIds.length && reason) {
+      // Sin conexión se compara con lo que pidió, no con lo que alcanzó a armarse de lo bajado
+      const planned = fromStored ? requested : ids.length;
+      if (reason && (fromStored || chosen.length < planned)) {
         showNotice({
           reason,
           granted: chosen.length,
-          requested: plan.questionIds.length,
+          requested: planned,
           retryAt: result.quota?.brake.retryAt ?? null,
         });
       }

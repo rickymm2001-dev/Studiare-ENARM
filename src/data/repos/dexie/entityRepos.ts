@@ -140,6 +140,14 @@ export function createDexieQuestionRepo(db: EnarmDb): QuestionRepo {
       return [...latestById.values()];
     },
 
+    storedIds: async (ids) =>
+      new Set(
+        await db.questions
+          .where('id')
+          .anyOf([...ids])
+          .primaryKeys(),
+      ),
+
     async addVersion(question, options) {
       const parsedQuestion = QuestionSchema.parse(question);
       const parsedOptions: Option[] = options.map((option) => OptionSchema.parse(option));

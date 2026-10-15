@@ -7,8 +7,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { writeStoredFlags } from '@/config/featureFlags';
 import { catalogEntryOf } from '@/data/bank/catalogMerge';
-import { poolQuestionOfEntry } from '@/data/bank/cloudSource';
+import { createCloudSource, poolQuestionOfEntry } from '@/data/bank/cloudSource';
 import type { CatalogRow } from '@/data/bank/contracts';
+import { uuidToUlid } from '@/data/cloud/cloudIds';
+import { useDataApi, type DataApi } from '@/data/context';
 import { DataProvider } from '@/data/DataProvider';
 import { fakeBankServer, wireRow } from '@/data/testing/bankCloud';
 import { makeUser } from '@/data/testing/fixtures';
@@ -42,6 +44,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   cleanup();
   clearExamState(user.id);
   holder.cloud = null;
@@ -108,5 +111,64 @@ describe('examen completo con el banco de la nube', () => {
     await typing.click(screen.getByRole('button', { name: t.exam.start }));
     expect(await screen.findByRole('alert')).toHaveTextContent(bankText.shortfall.reasons.offline);
     expect(loadExamState(user.id)).toBeNull();
+  });
+
+  it('sin conexión arma el examen solo con lo ya bajado aunque el banco sea más grande', async () => {
+    const typing = userEvent.setup();
+    // Un banco de 40 con 25 cuerpos ya bajados en este navegador (M2 de la revisión de B11)
+    const rows = Array.from({ length: 40 }, (_, index) =>
+      wireRow({
+        seq: index + 1,
+        branch: index % 2 === 0 ? 'internal_medicine' : 'pediatrics',
+        topic: index % 2 === 0 ? 'cardiology' : 'neonatology',
+      }),
+    );
+    const server = fakeBankServer(rows, { plan: 'monthly' });
+    holder.cloud = server.server;
+    const stored = new Set(rows.slice(0, 25).map((row) => uuidToUlid(row.versionId) ?? ''));
+    let api: DataApi | undefined;
+    function Capture() {
+      api = useDataApi();
+      return null;
+    }
+    render(
+      <DataProvider kind="real">
+        <MemoryRouter>
+          <Capture />
+          <ExamSetupCard
+            session={session}
+            questions={pool(rows).map((question) => ({
+              ...question,
+              cached: stored.has(question.id),
+            }))}
+            plan="monthly"
+            left={null}
+          />
+        </MemoryRouter>
+      </DataProvider>,
+    );
+    await waitFor(() => {
+      expect(api).toBeDefined();
+    });
+    const source = createCloudSource({
+      repos: (api as DataApi).repos,
+      cloud: () => server.server,
+    });
+    await source.prepare();
+    await source.ensureBodies([...stored], 'exam');
+    server.state.offline = true;
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+    await typing.selectOptions(screen.getByLabelText(t.exam.size), '20');
+    await typing.click(screen.getByRole('button', { name: t.exam.start }));
+    await waitFor(() => {
+      expect(loadExamState(user.id)?.questionIds).toHaveLength(20);
+    });
+    expect(loadExamState(user.id)?.questionIds.every((id) => stored.has(id))).toBe(true);
+    expect(useBankNotice.getState().notice).toEqual({
+      reason: 'offline',
+      granted: 20,
+      requested: 20,
+      retryAt: null,
+    });
   });
 });

@@ -74,6 +74,11 @@ describe('repositorios de entidades', () => {
     expect(await repos.questions.listLatest()).toHaveLength(1);
     expect(await repos.questions.get(question.id)).toEqual(question);
     expect(await repos.options.listForQuestionVersion(question.id)).toHaveLength(4);
+    // Dice qué versiones ya están guardadas sin leerlas, para elegir sin conexión (B11)
+    const missing = newId();
+    expect(await repos.questions.storedIds([question.id, missing, v2Id])).toEqual(
+      new Set([question.id, v2Id]),
+    );
   });
 
   it('rechaza una versión con dos correctas o con set canónico ajeno', async () => {

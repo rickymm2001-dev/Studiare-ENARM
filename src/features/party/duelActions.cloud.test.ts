@@ -29,6 +29,7 @@ function pooled(overrides: Partial<PoolQuestion> = {}): PoolQuestion {
     examEligible: true,
     language: 'es',
     distractorBiases: [],
+    cached: false,
     ...overrides,
   };
 }

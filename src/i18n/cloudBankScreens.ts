@@ -42,6 +42,9 @@ export const cloudBankScreensText = {
       unavailable:
         'Algunas preguntas ya no están en el banco. Vuelve a elegir para ver las nuevas.',
     } satisfies Record<ShortfallReason, string>,
+    // Sin conexión, cuando lo ya bajado alcanzó para todo lo pedido (M2)
+    fromStored:
+      'Sin conexión. Tu sesión salió de las preguntas que ya bajaste. Conéctate para bajar más.',
     // Cuando no llegó ninguna y la sesión no empezó
     none: 'No se pudo empezar.',
     dismiss: 'Entendido',
