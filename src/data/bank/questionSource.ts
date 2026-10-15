@@ -68,6 +68,9 @@ export interface QuestionSource {
   refresh(): Promise<void>;
 }
 
+/** Cada cuánto se vuelve a pedir el catálogo con la app abierta (5.3) */
+export const CATALOG_REFRESH_MS = 6 * 60 * 60 * 1000;
+
 /** Lo que decide qué fuente usar */
 export interface SourceContext {
   database: DatabaseKind;

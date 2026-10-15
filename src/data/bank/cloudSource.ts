@@ -19,7 +19,15 @@ import type { CatalogEntry } from '../schemas/bankCloud';
 import { bodyEntitiesOf, caseEntityOf } from './bodies';
 import { mergeCatalogPage } from './catalogMerge';
 import type { DenyReason, QuotaInfo, ReadPurpose } from './contracts';
-import type { EnsureResult, PoolQuestion, QuestionSource, SourceReadiness } from './questionSource';
+import {
+  CATALOG_REFRESH_MS,
+  type EnsureResult,
+  type PoolQuestion,
+  type QuestionSource,
+  type SourceReadiness,
+} from './questionSource';
+
+export { CATALOG_REFRESH_MS };
 
 type Rpc = Pick<SupabaseClient, 'rpc'>;
 
@@ -36,8 +44,6 @@ export interface CloudSourceDeps {
 
 /** Cuerpos por petición. Es maxFetch de bank_limits, que la base no deja pasar */
 export const FETCH_BATCH = 100;
-/** Cada cuánto se vuelve a pedir el catálogo con la app abierta (5.3) */
-export const CATALOG_REFRESH_MS = 6 * 60 * 60 * 1000;
 /** Tope de páginas por bajada, para no quedarse en un ciclo si la base no avanza */
 const MAX_PAGES = 1000;
 

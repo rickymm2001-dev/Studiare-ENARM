@@ -12,7 +12,17 @@ import {
   TaxonomyKeySchema,
   UtcDateTimeSchema,
 } from './common';
-import { DeckCatalogKeySchema, DeckMediaPathSchema, DeckSubjectKeySchema } from './deckCatalog';
+
+// Las mismas reglas de deck_catalog.deck_key, subject_key y la ruta de imagen de deckCatalog.ts. Se
+// repiten aquí porque este archivo va en el JavaScript inicial con las tablas de Dexie y deckCatalog.ts
+// trae consigo los esquemas de contenido, que solo hacen falta al bajar un submazo
+const DeckCatalogKeySchema = z.string().regex(/^[a-z0-9-]{3,48}$/);
+const DeckSubjectKeySchema = z.string().regex(/^[a-z0-9-]{1,64}$/);
+const DeckMediaPathSchema = z
+  .string()
+  .regex(
+    /^\/deck-media\/[a-z0-9-]{3,48}\/[a-z0-9-]{1,64}\/[A-Za-z0-9._-]{1,120}\.(?:jpg|jpeg|png|gif|webp|svg)$/,
+  );
 
 /**
  * Una pregunta publicada o retirada del catálogo, con sus ids ya en ULID (src/data/cloud/cloudIds.ts).

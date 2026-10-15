@@ -1,6 +1,6 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
 import { FlaskConical, Info, Menu, WifiOff } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
@@ -10,8 +10,8 @@ import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
-import { BankNoticeBanner } from '@/features/shared/BankNoticeBanner';
-import { useQuestionSourceKind } from '@/features/shared/useQuestionSource';
+import { useBankNotice } from '@/features/shared/bankNotice';
+import { useQuestionSourceKind } from '@/features/shared/questionSourceKind';
 import { HOME_BY_ROLE, navForRole } from '../navigation';
 import { screenPath } from '../screens';
 import { useSession } from '../session';
@@ -26,6 +26,13 @@ import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 import { TopBarContext } from './TopBarContext';
+
+// El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4)
+const BankNoticeBanner = lazy(() =>
+  import('@/features/shared/BankNoticeBanner').then((module) => ({
+    default: module.BankNoticeBanner,
+  })),
+);
 
 export function AppShell() {
   const theme = usePreferences((state) => state.theme);
@@ -52,6 +59,7 @@ export function AppShell() {
   // el banco de la nube se va solo, sin que haga falta apagar demoBank (B11, 5.1)
   const sourceKind = useQuestionSourceKind();
   const demoBank = isFeatureEnabled('demoBank') && sourceKind === 'local';
+  const bankNotice = useBankNotice((state) => state.notice !== null);
 
   return (
     <div className="min-h-dvh text-fg">
@@ -190,7 +198,13 @@ export function AppShell() {
         </div>
       )}
 
-      <BankNoticeBanner className={rail} />
+      <div role="status" className={rail}>
+        {bankNotice ? (
+          <Suspense fallback={null}>
+            <BankNoticeBanner />
+          </Suspense>
+        ) : null}
+      </div>
       <OtherDeviceNotice className={rail} />
       <DeviceLimitNotice className={rail} />
       <OAuthErrorNotice className={rail} />

@@ -10,6 +10,7 @@ import { writeStoredFlags } from '@/config/featureFlags';
 import { ulidToUuid } from '@/data/cloud/cloudIds';
 import { fakeRpc } from '@/data/testing/bankCloud';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { usePractice } from './practice';
 
@@ -114,7 +115,7 @@ describe('reporte de una pregunta de la nube', () => {
     holder.cloud = fakeRpc({ report_question: () => ({ status: 'limit', reportId: null }) });
     await failedCloudQuestion();
     const details = await sendReport('typo');
-    expect(await within(details).findByText(t.cloudBank.report.limit)).toBeVisible();
+    expect(await within(details).findByText(bankText.report.limit)).toBeVisible();
     expect(await app?.api.repos.contentReports.list()).toEqual([]);
   });
 });

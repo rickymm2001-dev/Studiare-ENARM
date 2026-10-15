@@ -12,6 +12,7 @@ import type { CatalogRow } from '@/data/bank/contracts';
 import { DataProvider } from '@/data/DataProvider';
 import { fakeBankServer, wireRow } from '@/data/testing/bankCloud';
 import { makeUser } from '@/data/testing/fixtures';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { useBankNotice } from '../shared/bankNotice';
 import type { ReadySession } from '../shared/RequireSession';
@@ -105,9 +106,7 @@ describe('examen completo con el banco de la nube', () => {
       </DataProvider>,
     );
     await typing.click(screen.getByRole('button', { name: t.exam.start }));
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      t.cloudBank.shortfall.reasons.offline,
-    );
+    expect(await screen.findByRole('alert')).toHaveTextContent(bankText.shortfall.reasons.offline);
     expect(loadExamState(user.id)).toBeNull();
   });
 });

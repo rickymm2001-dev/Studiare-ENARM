@@ -31,8 +31,7 @@ import {
   resolveCloudSignup,
 } from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion } from '@/data/usecases/profile';
-import { CATALOG_REFRESH_MS } from '@/data/bank/cloudSource';
-import { questionSourceFor } from '@/features/shared/useQuestionSource';
+import { CATALOG_REFRESH_MS } from '@/data/bank/questionSource';
 import { NO_SIGNUP_PENDING, useAccess } from './accessState';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
@@ -87,10 +86,14 @@ export function CloudBridge() {
       };
       const startBank = () => {
         if (bankTimer || !isFeatureEnabled('cloudBank')) return;
-        const source = questionSourceFor(api, 'cloud');
-        void source.refresh();
+        // La fuente de la nube se carga aparte, para no pesar en el JavaScript inicial
+        const refresh = () =>
+          import('@/features/shared/useQuestionSource').then(({ questionSourceFor }) =>
+            questionSourceFor(api, 'cloud').refresh(),
+          );
+        void refresh();
         bankTimer = setInterval(() => {
-          void source.refresh();
+          void refresh();
         }, CATALOG_REFRESH_MS);
       };
       const stopSync = () => {

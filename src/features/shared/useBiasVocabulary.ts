@@ -8,11 +8,11 @@ import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { computeAgreement } from '@/engines/agreement';
 import type { Vocabulary } from '@/i18n/vocabulary';
-import { useQuestionSource } from './useQuestionSource';
+import { useQuestionSourceKind } from './questionSourceKind';
 
 export function useBiasVocabulary(): Vocabulary {
   const api = useDataApi();
-  const cloud = useQuestionSource().kind === 'cloud';
+  const cloud = useQuestionSourceKind() === 'cloud';
   const labels = useLiveData(
     () => (cloud ? Promise.resolve(null) : api.repos.biasLabels.list()),
     [api.repos, cloud],

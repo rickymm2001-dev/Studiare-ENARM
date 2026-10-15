@@ -17,6 +17,7 @@ import type { PoolQuestion } from '@/data/bank/questionSource';
 import { topicTaxonomy } from '@/demo/content';
 import { buildExam, examTotalMs } from '@/engines/exam';
 import { examBranchWeights, nonClinicalBranches } from '@/engines/topics';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -149,7 +150,7 @@ export function ExamSetupCard({
         missing: plan.questionIds.length - chosen.length,
       });
       if (chosen.length === 0) {
-        setFailed(reason ? t.cloudBank.shortfall.reasons[reason] : text.startError);
+        setFailed(reason ? bankText.shortfall.reasons[reason] : text.startError);
         return;
       }
       if (chosen.length < plan.questionIds.length && reason) {

@@ -1,6 +1,8 @@
 // Registro de tablas. Cada tabla dice con qué esquema zod se valida y qué índices tiene en Dexie.
 // La primera entrada de indexes es la llave primaria. [a+b] es índice compuesto y *x es multientrada.
-// Una prueba revisa que cada campo indexado exista en su esquema.
+// Una prueba revisa que cada campo indexado exista en su esquema. Las tablas del banco de la nube (B11)
+// traen su esquema aparte, porque solo las usan pantallas que se cargan en diferido y este registro va
+// en el JavaScript inicial, que está al límite de los 300 KB (14.4).
 import type { z } from 'zod';
 import type { DatabaseKind } from '../databases';
 import {
@@ -23,7 +25,6 @@ import {
   QuestionSchema,
   ReviewAssignmentSchema,
 } from '../schemas/bank';
-import { BankStateSchema, CatalogEntrySchema, DeckMediaSchema } from '../schemas/bankCloud';
 import {
   CardStateCacheSchema,
   ItemStatsCacheSchema,
@@ -43,8 +44,17 @@ import {
   UserSchema,
 } from '../schemas/people';
 
+/** Un esquema que se carga aparte, la primera vez que hace falta */
+export type LazySchema = () => Promise<z.ZodType>;
+
+/** Los esquemas de las tablas del banco de la nube, desde src/data/schemas/bankCloud.ts */
+const bankCloudSchema =
+  (name: 'CatalogEntrySchema' | 'BankStateSchema' | 'DeckMediaSchema'): LazySchema =>
+  () =>
+    import('../schemas/bankCloud').then((module) => module[name]);
+
 interface TableDef {
-  schema: z.ZodType;
+  schema: z.ZodType | LazySchema;
   indexes: string;
   /** Las cachés se pueden borrar y reconstruir desde la bitácora */
   kind: 'entity' | 'events' | 'cache';
@@ -90,12 +100,16 @@ export const TABLES = {
   // Banco en la nube (B11, 5.2). El catálogo sin texto, el estado de su bajada y las imágenes de los
   // submazos del catálogo de mazos. Los cuerpos de las preguntas van a questions, options y cases
   catalog: {
-    schema: CatalogEntrySchema,
+    schema: bankCloudSchema('CatalogEntrySchema'),
     indexes: 'questionId, versionId, branch, topic, status, seq',
     kind: 'entity',
   },
-  bankState: { schema: BankStateSchema, indexes: 'key', kind: 'entity' },
-  deckMedia: { schema: DeckMediaSchema, indexes: 'path, [deckKey+subjectKey]', kind: 'entity' },
+  bankState: { schema: bankCloudSchema('BankStateSchema'), indexes: 'key', kind: 'entity' },
+  deckMedia: {
+    schema: bankCloudSchema('DeckMediaSchema'),
+    indexes: 'path, [deckKey+subjectKey]',
+    kind: 'entity',
+  },
 
   events: {
     schema: AppEventSchema,
@@ -124,6 +138,12 @@ export const TABLES = {
 
 export type TableName = keyof typeof TABLES;
 export const TABLE_NAMES = Object.keys(TABLES) as TableName[];
+
+/** El esquema zod de una tabla, cargándolo si va aparte */
+export async function tableSchema(name: TableName): Promise<z.ZodType> {
+  const schema: TableDef['schema'] = TABLES[name].schema;
+  return typeof schema === 'function' ? schema() : schema;
+}
 
 /** Índices de Dexie para una base. enarm_real no tiene SimTruth */
 export function storesFor(kind: DatabaseKind): Record<string, string> {

@@ -20,6 +20,7 @@ import {
 } from '@/data/usecases/contentReports';
 import { biasTaxonomy } from '@/demo/content';
 import { latestMotive } from '@/engines/errorCauses';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -29,7 +30,7 @@ import { CreateCardButton } from '../questionCards/CreateCardDialog';
 import { useQuestionsWithCards } from '../questionCards/useQuestionsWithCards';
 import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
-import { useQuestionSource } from '../shared/useQuestionSource';
+import { useQuestionSourceKind } from '../shared/questionSourceKind';
 import type { ReadySession } from '../shared/RequireSession';
 import { DiscardReviewCard } from './DiscardReviewCard';
 import { usePractice, type PracticeAnswer } from './practice';
@@ -68,7 +69,7 @@ export function AnswerReview({
   const [reported, setReported] = useState(false);
   // Lo que dijo la nube del reporte, para avisar si no llegó al médico
   const [remote, setRemote] = useState<RemoteReportOutcome | null>(null);
-  const cloudBank = useQuestionSource().kind === 'cloud';
+  const cloudBank = useQuestionSourceKind() === 'cloud';
   const ctx = {
     userId: session.user.id,
     tz: session.user.timeZone,
@@ -237,7 +238,7 @@ export function AnswerReview({
             {reported ? (
               <p role="status" className="text-sm">
                 {t.simulator.reported}
-                {remote === 'offline' ? ` ${t.cloudBank.report.offline}` : null}
+                {remote === 'offline' ? ` ${bankText.report.offline}` : null}
               </p>
             ) : (
               <div className="flex flex-wrap items-end gap-2">
@@ -265,7 +266,7 @@ export function AnswerReview({
                 </Button>
                 {remote === 'limit' ? (
                   <p role="status" className="w-full text-sm font-medium">
-                    {t.cloudBank.report.limit}
+                    {bankText.report.limit}
                   </p>
                 ) : null}
               </div>

@@ -15,6 +15,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { brakeUntil, shortfallReason } from '@/data/bank/quota';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -105,7 +106,7 @@ function Setup({ session }: { session: ReadySession }) {
     );
   }
   if (readiness !== 'ready') {
-    const notice = readiness === 'closed' ? t.cloudBank.closed : t.cloudBank.neverDownloaded;
+    const notice = readiness === 'closed' ? bankText.closed : bankText.neverDownloaded;
     return (
       <>
         {header}
@@ -165,10 +166,10 @@ function Setup({ session }: { session: ReadySession }) {
     if (ordered.length === 0) {
       setBlocked(
         reason === 'brake' && retryAt
-          ? t.cloudBank.brake(retryAt)
+          ? bankText.brake(retryAt)
           : reason
-            ? t.cloudBank.shortfall.reasons[reason]
-            : t.cloudBank.shortfall.none,
+            ? bankText.shortfall.reasons[reason]
+            : bankText.shortfall.none,
       );
       return;
     }
@@ -312,7 +313,7 @@ function Setup({ session }: { session: ReadySession }) {
                   setBlocked(null);
                   void start()
                     .catch(() => {
-                      setBlocked(t.cloudBank.shortfall.none);
+                      setBlocked(bankText.shortfall.none);
                     })
                     .finally(() => {
                       setStarting(false);
@@ -331,7 +332,7 @@ function Setup({ session }: { session: ReadySession }) {
           </div>
           {brake ? (
             <p role="status" className="text-sm font-medium text-fg">
-              {t.cloudBank.brake(brake.toISOString())}
+              {bankText.brake(brake.toISOString())}
             </p>
           ) : null}
           {blocked ? (

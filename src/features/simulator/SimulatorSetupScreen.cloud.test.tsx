@@ -10,6 +10,7 @@ import { writeStoredFlags } from '@/config/featureFlags';
 import type { CatalogRow } from '@/data/bank/contracts';
 import { uuidToUlid } from '@/data/cloud/cloudIds';
 import { fakeBankServer, wireRow } from '@/data/testing/bankCloud';
+import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { useBankNotice } from '../shared/bankNotice';
 import { usePractice } from './practice';
@@ -94,7 +95,7 @@ describe('Simular con el banco de la nube', () => {
     app = await renderApp(SCREENS.simulatorSetup.path);
     const practice = await setup();
     expect(
-      await within(practice).findByText(t.cloudBank.brake(server.state.brakeUntil)),
+      await within(practice).findByText(bankText.brake(server.state.brakeUntil)),
     ).toBeVisible();
   });
 
@@ -115,17 +116,17 @@ describe('Simular con el banco de la nube', () => {
     expect([...usePractice.getState().questionIds].sort()).toEqual([...granted].sort());
     const fetch = server.server.calls.find((call) => call.name === 'fetch_questions');
     expect(fetch?.args?.p_purpose).toBe('practice');
-    expect(await screen.findByText(t.cloudBank.shortfall.started(3, 5))).toBeVisible();
-    expect(screen.getByText(t.cloudBank.shortfall.reasons.unavailable)).toBeVisible();
-    await user.click(screen.getByRole('button', { name: t.cloudBank.shortfall.dismiss }));
-    expect(screen.queryByText(t.cloudBank.shortfall.started(3, 5))).toBeNull();
+    expect(await screen.findByText(bankText.shortfall.started(3, 5))).toBeVisible();
+    expect(screen.getByText(bankText.shortfall.reasons.unavailable)).toBeVisible();
+    await user.click(screen.getByRole('button', { name: bankText.shortfall.dismiss }));
+    expect(screen.queryByText(bankText.shortfall.started(3, 5))).toBeNull();
   });
 
   it('sin conexión y sin catálogo bajado pide conectarse una vez y no usa el banco de demostración', async () => {
     const server = bank(rows(5));
     server.state.offline = true;
     app = await renderApp(SCREENS.simulatorSetup.path);
-    expect(await screen.findByText(t.cloudBank.neverDownloaded.title)).toBeVisible();
+    expect(await screen.findByText(bankText.neverDownloaded.title)).toBeVisible();
     expect(screen.queryByRole('region', { name: t.simulator.setupTitle })).toBeNull();
     expect(await app.api.repos.questions.listLatest()).toEqual([]);
   });
