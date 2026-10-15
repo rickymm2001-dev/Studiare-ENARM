@@ -23,9 +23,12 @@ const WhoAmISchema = z.object({
 const MAX_CACHED = 500;
 
 /**
- * ai_whoami por la API REST. 401 o 28000 es una sesión vencida, 42501 es otro dispositivo y lo demás
- * es Supabase sin contestar bien. Recuerda un token ya verificado cacheMs (30 s) en la memoria de la
- * copia de la función. Una falla nunca se recuerda, así un cambio de dispositivo se nota enseguida
+ * ai_whoami por la API REST. Un 401 o un 28000 es una sesión vencida o cerrada, un 42501 con estado 403
+ * es otro dispositivo y lo demás es Supabase sin contestar bien. El estado importa: PostgREST también
+ * contesta 401 con 42501 cuando el rol es anon, que es lo que pasa si la sesión está cerrada y la app
+ * manda la llave pública como Bearer, y eso no es otro dispositivo. Recuerda un token ya verificado
+ * cacheMs (30 s) en la memoria de la copia de la función. Una falla nunca se recuerda, así un cambio de
+ * dispositivo se nota enseguida
  */
 export function createSupabaseWhoAmI(options: {
   url: string;
@@ -51,9 +54,11 @@ export function createSupabaseWhoAmI(options: {
       return { ok: true, caller: parsed.data };
     } catch (error) {
       if (error instanceof RestError) {
-        if (error.code === '42501') return { ok: false, failure: 'other_device' };
         if (error.status === 401 || error.code === '28000') {
           return { ok: false, failure: 'unauthenticated' };
+        }
+        if (error.status === 403 && error.code === '42501') {
+          return { ok: false, failure: 'other_device' };
         }
       }
       return { ok: false, failure: 'unavailable' };

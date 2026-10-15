@@ -268,6 +268,9 @@ export function createFakeSupabaseRest(options: {
 
   function whoami(request: Request): Response {
     const token = /^Bearer (.+)$/.exec(request.headers.get('authorization') ?? '')?.[1];
+    // Con la llave pública como token el rol es anon, que no ejecuta ai_whoami: PostgREST contesta 401
+    // con 42501, lo mismo que cuando la barrera de dispositivo contesta 403 con ese código
+    if (token === fake.anonKey) return pgError(401, '42501');
     const account = token === undefined ? undefined : fake.accounts[token];
     if (account === undefined || account === 'expired') return pgError(401, 'PGRST301');
     if (account.device === 'other') return pgError(403, '42501');

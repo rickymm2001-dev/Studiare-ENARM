@@ -62,6 +62,39 @@ describe('ai_whoami', () => {
     expect(await check('pago')).toEqual({ ok: false, failure: 'unavailable' });
   });
 
+  it('la llave pública como token, de una sesión cerrada, es una sesión vencida y no otro dispositivo (revisión del hallazgo 6)', async () => {
+    // supabase-js manda la llave pública como Bearer cuando no hay sesión, y PostgREST contesta 401 con
+    // 42501 porque el rol anon no ejecuta ai_whoami
+    const { rest, check } = whoami({});
+    expect(await check(rest.anonKey)).toEqual({ ok: false, failure: 'unauthenticated' });
+    const identify = identifyWith(check);
+    expect(await identify(`Bearer ${rest.anonKey}`)).toEqual({
+      ok: false,
+      failure: 'unauthenticated',
+    });
+  });
+
+  it('42501 solo es otro dispositivo con estado 403, y cada estado y código se lee por separado', async () => {
+    const answer = (status: number, code: string) => {
+      const check = createSupabaseWhoAmI({
+        url: 'https://simulado.supabase.co',
+        anonKey: 'llave-publica-simulada-0000000000',
+        fetchImpl: () => Promise.resolve(Response.json({ code, message: 'error' }, { status })),
+      });
+      return check('token');
+    };
+    expect(await answer(403, '42501')).toEqual({ ok: false, failure: 'other_device' });
+    expect(await answer(401, '42501')).toEqual({ ok: false, failure: 'unauthenticated' });
+    expect(await answer(401, 'PGRST301')).toEqual({ ok: false, failure: 'unauthenticated' });
+    expect(await answer(403, '28000')).toEqual({ ok: false, failure: 'unauthenticated' });
+    expect(await answer(400, '28000')).toEqual({ ok: false, failure: 'unauthenticated' });
+    // Un 42501 con otro estado, o un 403 con otro código, no es un dispositivo desplazado
+    expect(await answer(500, '42501')).toEqual({ ok: false, failure: 'unavailable' });
+    expect(await answer(400, '42501')).toEqual({ ok: false, failure: 'unavailable' });
+    expect(await answer(403, 'PGRST301')).toEqual({ ok: false, failure: 'unavailable' });
+    expect(await answer(404, 'PGRST202')).toEqual({ ok: false, failure: 'unavailable' });
+  });
+
   it('una respuesta con otra forma no deja entrar', async () => {
     const rest = createFakeSupabaseRest({ memory: createMemoryAi() });
     const odd = createSupabaseWhoAmI({
