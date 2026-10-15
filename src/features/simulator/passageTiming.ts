@@ -25,3 +25,12 @@ export function secondsOverSuggested(input: {
 export function secondsOnText(input: { startedAt: number; now: number }): number {
   return input.startedAt <= 0 ? 0 : Math.max(0, Math.floor((input.now - input.startedAt) / 1000));
 }
+
+/**
+ * El inicio del texto después de una pausa. Lo que el alumno pasó leyendo la retroalimentación de una
+ * pregunta no es tiempo de leer el texto, así que el inicio se recorre lo mismo que duró la pausa y el
+ * tiempo sugerido solo mide lo que contestó. Sin hora de inicio (0) no hay nada que recorrer
+ */
+export function textStartAfterPause(startedAt: number, pausedMs: number): number {
+  return startedAt <= 0 ? startedAt : startedAt + Math.max(0, Math.round(pausedMs));
+}

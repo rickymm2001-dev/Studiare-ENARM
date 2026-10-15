@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FIELD_MAX } from '@/data/usecases/manualDecks';
+import { makeEnglishCase, TEST_ENGLISH_SOURCE } from '@/data/testing/english';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
 import { CASE_SHORT_MAX, questionCardDraft, shortenCase } from './questionCardDraft';
@@ -79,6 +80,33 @@ describe('la tarjeta de una pregunta con el texto del banco, sin IA', () => {
     expect(draft?.back.startsWith(t.examReview.createCard.correctAnswer)).toBe(true);
     expect(draft?.back.endsWith(`${t.examReview.createCard.references}. GPC uno; GPC dos`)).toBe(
       true,
+    );
+  });
+
+  it('con un texto de lectura en inglés pone al frente el fragmento que cabe con la pregunta y atrás la fuente (B13, 2.5)', () => {
+    const passage = Array.from(
+      { length: 60 },
+      (_, index) => `[Prueba] Sentence ${index + 1} of the invented passage.`,
+    ).join(' ');
+    const { bundles } = makeEnglishCase(2, { explanation: '[Prueba] Explicación simulada.' });
+    const first = bundles[0];
+    if (!first) throw new Error('Sin pregunta de prueba');
+    const draft = questionCardDraft({ ...first, vignette: passage });
+    const correct = first.options.find((option) => option.isCorrect);
+    // Del texto largo solo cabe el principio, con sus oraciones completas, y la pregunta sigue a continuación
+    const [text = '', prompt = ''] = (draft?.front ?? '').split('\n\n');
+    expect(text.length).toBeLessThanOrEqual(CASE_SHORT_MAX);
+    expect(text.startsWith('[Prueba] Sentence 1 of the invented passage.')).toBe(true);
+    expect(text.endsWith(' …')).toBe(true);
+    expect(prompt).toBe(first.question.prompt);
+    expect(draft?.front.length).toBeLessThanOrEqual(FIELD_MAX);
+    // Atrás van la respuesta, la explicación en español y la fuente del texto, con su licencia
+    expect(draft?.back).toBe(
+      [
+        `${t.examReview.createCard.correctAnswer}. ${correct?.text ?? ''}`,
+        '[Prueba] Explicación simulada.',
+        `${t.examReview.createCard.references}. ${TEST_ENGLISH_SOURCE}`,
+      ].join('\n\n'),
     );
   });
 
