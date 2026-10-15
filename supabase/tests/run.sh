@@ -22,13 +22,14 @@ for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
 # Las migraciones que siguen al freno son idempotentes. Se corren otra vez, por su nombre, la de la foto
 # de perfil de B2, las dos de B7, las dos del plan Gratis de B8, la de cuentas y acceso de B9, las tres de
-# pagos de B10 y las del banco en la nube de B11, para comprobarlo. Van en el orden del proyecto real. Las
-# de B8 vuelven a cerrar Party y los apuntes de la nube que la de Party de B7 deja abiertos. La de B9 lleva
-# una versión menor que las de B8, pero en el proyecto real se aplica después de ellas, así que va después
-# para probar ese orden y que no pise party_open, sync_push_records ni user_plan. Las de B10 van después
-# porque 20261019000001 trae otra versión de apply_payment_notice. Las de B11 van al final porque cierran
-# las tablas del banco y el tope viejo de preguntas que dejaron las anteriores. Se nombran para que una
-# migración nueva de otro bloque no saque a ninguna de la lista
+# pagos de B10, las del banco en la nube de B11 y las tres de la IA real de B12, para comprobarlo. Van en
+# el orden del proyecto real. Las de B8 vuelven a cerrar Party y los apuntes de la nube que la de Party de
+# B7 deja abiertos. La de B9 lleva una versión menor que las de B8, pero en el proyecto real se aplica
+# después de ellas, así que va después para probar ese orden y que no pise party_open, sync_push_records
+# ni user_plan. Las de B10 van después porque 20261019000001 trae otra versión de apply_payment_notice.
+# Las de B11 van después porque cierran las tablas del banco y el tope viejo de preguntas que dejaron las
+# anteriores. Las de B12 van al final. Se nombran para que una migración nueva de otro bloque no saque a
+# ninguna de la lista
 for name in \
   20261017000001_avatar_changed_at \
   20261018000001_party_cloud \
@@ -44,7 +45,10 @@ for name in \
   20261023000003_bank_editorial \
   20261023000004_bank_sync \
   20261023000005_deck_catalog \
-  20261023000006_bank_sync_cron; do
+  20261023000006_bank_sync_cron \
+  20261026000001_ai_proxy_v2 \
+  20261026000002_ai_jobs \
+  20261026000003_ai_gate; do
   psql_run -f "$here/../migrations/$name.sql"
 done
 # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
@@ -59,6 +63,10 @@ psql_run -f "$here/../manual/pagos-b10.sql"
 # La de B11 trae otra versión de delete_my_data, así que va después de ejecutar-en-sql-editor.sql
 psql_run -f "$here/../manual/banco-b11.sql"
 psql_run -f "$here/../manual/banco-b11.sql"
+# Con B12 la pieza 4 de ejecutar-en-sql-editor.sql es la versión final de delete_my_data, con lo de B11 y
+# los trabajos de IA, así que se pega otra vez después de banco-b11.sql, como dice su encabezado
+psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
+psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"
 psql_run -f "$here/rls_test.sql"
 psql_run -f "$here/device_barrier_test.sql"
 psql_run -f "$here/sync_test.sql"
@@ -85,3 +93,6 @@ psql_run -f "$here/bank_editorial_test.sql"
 psql_run -f "$here/physician_pay_test.sql"
 psql_run -f "$here/bank_sync_test.sql"
 psql_run -f "$here/deck_catalog_test.sql"
+psql_run -f "$here/ai_proxy_v2_test.sql"
+psql_run -f "$here/ai_jobs_test.sql"
+psql_run -f "$here/ai_gate_test.sql"
