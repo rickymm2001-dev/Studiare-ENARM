@@ -32,7 +32,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [ ] B13. Inglés médico
 - [ ] B14. Datos y modelo del alumno
 - [ ] B15. Analítica, errores, recordatorios y recorrido
-- [ ] B16. Legal y privacidad (listo con su revisión, se fusiona después de B11, D-131)
+- [ ] B16. Legal y privacidad (listo con su revisión, se fusiona después de B11, D-132)
 - [ ] B17. Publicación
   - Las imágenes de marca están en la rama gemini/imagenes-marca
 - [ ] B18. Primeros alumnos
@@ -153,11 +153,12 @@ Evidencia
 - Pendiente de Ricardo. Llave rk_test_ para la corrida real en modo prueba, webhook nuevo, medios de pago y cuenta de Mercado Pago. Sin la llave la sesión no puede crear los precios nuevos, así que el Fundador anual y los pases quedan sin precio en Stripe y sus banderas apagadas
 - En el proyecto. Las tres migraciones y sus 44 funciones verificadas por huella antes de fusionar, y desplegadas create-checkout, create-portal-session, payment-webhook-stripe, payment-webhook-mercadopago y admin-reset-mfa. Faltan cancel-subscription, las dos piezas de supabase/manual/pagos-b10.sql y los secretos de los precios nuevos. Quedan listos para subirse con el script de despliegue en cuanto llegue el token de Supabase
 
-### B16. Legal y privacidad (D-131)
+### B16. Legal y privacidad (D-132)
 - Hecho. Aviso de privacidad y términos en la versión 2026-10-15, como borrador para el abogado, con los encargados nuevos, la prueba gratis, los pases, el Fundador, la factura, los referidos y la comparación con otros alumnos. La lista de cambios con 18 preguntas para el abogado y 5 para ti está en docs/legal/CAMBIOS-B16.md
 - El alumno nunca ve una marca de pendiente. Donde falta un dato lee un texto neutro. El abogado sí ve qué falta en docs/legal
 - Los textos completos cargan solo con la página legal, para seguir debajo de 300 KB de JavaScript inicial
 - Entra con lo de Gemini para B17, la imagen para compartir con dirección completa y tres capturas de instalación. Las capturas muestran la app antes de la paleta y se rehacen en B17
+- Revisión independiente con 13 hallazgos, 12 corregidos. Los dos altos eran que el archivo de Acceder no trae todos los datos, como decía el aviso, y que el correo de la invitación se quedaba al eliminar la cuenta. Ahora se borra
 - Se fusiona después de B11, porque el aviso da por hechas las lecturas del banco en el servidor
 
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)

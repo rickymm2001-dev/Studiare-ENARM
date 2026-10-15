@@ -1326,7 +1326,7 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Pendiente de Ricardo para la corrida real en modo prueba. La llave rk_test_ (también con lectura de Invoices), el webhook nuevo con 12 eventos, los medios de pago y el portal por omisión en Stripe, y la cuenta de Mercado Pago. Los pasos están en docs/PENDIENTES_DE_RICARDO.md y docs/STRIPE.md
 - Antes de fusionar el PR 53 se aplicaron al proyecto sus tres migraciones (registradas como billing_emails, billing_plans_1 a billing_plans_5 e invoice_requests) y se verificaron por huella las 44 funciones. Se desplegaron create-checkout, create-portal-session, payment-webhook-stripe, payment-webhook-mercadopago y admin-reset-mfa. Faltan cancel-subscription, las dos piezas de supabase/manual/pagos-b10.sql y los secretos de los precios nuevos, que esperan el token de Supabase y la llave rk_test_ de Ricardo
 
-### D-131. Aviso de privacidad y términos al día para el abogado (B16 del plan del cambio)
+### D-132. Aviso de privacidad y términos al día para el abogado (B16 del plan del cambio)
 - Fecha 2026-10-15. Origen R, bloque B16 de D-119, respuestas 42 a 49, 4.26 y 4.27
 - Los dos textos pasan a la versión 2026-10-15 y siguen marcados como Borrador para revisión del abogado. La marca se quita solo cuando Ricardo diga que el abogado los aprobó. La versión queda después de 2026-10-14 y 2026-10-14b al ordenarlas como texto, así quien aceptó una anterior acepta de nuevo
 - Los datos del responsable no van escritos en el texto. Salen de VITE_LEGAL_NAME (Plexus Medica S. de R.L. de C.V.), VITE_LEGAL_ADDRESS, VITE_PRIVACY_EMAIL (nuevo, cae a VITE_SUPPORT_EMAIL) y VITE_SUPPORT_EMAIL. Un cambio del contador no toca el código
