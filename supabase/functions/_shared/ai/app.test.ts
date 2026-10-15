@@ -6,7 +6,7 @@ import {
   hypothesisInput,
   restructureInput,
 } from '../../../../src/ai/testing/aiSamples.ts';
-import { DEFAULT_CONFIG } from './config.ts';
+import { DEFAULT_CONFIG, mergeConfig } from './config.ts';
 import { bundledPromptSets } from './prompts.ts';
 import { AI_ENGINES, type AiEngine } from './engines/aiContracts.ts';
 import { mockHypothesis, mockOutput } from './engines/aiMock.ts';
@@ -169,6 +169,80 @@ describe('/health', () => {
     // En modo simulado nada gasta
     expect(mock.memory.ledger.log[0]).toMatchObject({ real: false, costUsd: 0 });
     expect((await mock.memory.ledger.summary()).spentUsd).toBe(0);
+  });
+});
+
+describe('/health y la configuración guardada (revisión del hallazgo 5)', () => {
+  // Una fila de ai_config distinta de la de fábrica: el motor de hipótesis con otro modelo
+  const HAIKU55 = {
+    id: 'claude-haiku-5-5',
+    effort: 'low',
+    thinking: 'adaptive',
+    maxTokens: 1500,
+  } as const;
+  const health = async (proxy: ReturnType<typeof edge>) =>
+    (await (await proxy.app.request('/ai-proxy/health')).json()) as {
+      engines: Record<string, string>;
+    };
+
+  it('una copia fría lee ai_config: un motor auditado con la de fábrica sale cerrado si la tabla dice otro modelo', async () => {
+    const proxy = edge({ key: 'mock' });
+    // El motor se auditó con la configuración de fábrica y después el admin cambió el modelo
+    await proxy.open(['forgetting']);
+    proxy.rest.configRow = { models: { forgetting: HAIKU55 } };
+    expect((await health(proxy)).engines.forgetting).toBe('gated');
+    // Y la llamada del alumno concuerda con lo que dijo /health
+    const call = await forgetting(proxy.app);
+    expect(call.status).toBe(403);
+    expect(await errorOf(call)).toBe('gate_closed');
+  });
+
+  it('al revés: un motor auditado con el modelo de la tabla sale abierto aunque la fábrica diga otro', async () => {
+    const proxy = edge({ key: 'mock' });
+    proxy.rest.configRow = { models: { forgetting: HAIKU55 } };
+    await proxy.memory.gate.open('forgetting', {
+      config: mergeConfig(DEFAULT_CONFIG, { models: { forgetting: HAIKU55 } }),
+      prompts: proxy.deps.prompts,
+    });
+    // Sin leer la tabla, una copia que solo atendió /health diría gated y la app escondería los botones
+    expect((await health(proxy)).engines.forgetting).toBe('open');
+    expect((await forgetting(proxy.app)).status).toBe(200);
+  });
+
+  it('la lee una vez por minuto y no en cada /health', async () => {
+    const proxy = edge({ key: 'mock' });
+    const reads = () =>
+      proxy.rest.calls.filter((entry) => entry.path === '/rest/v1/ai_config').length;
+    await health(proxy);
+    await health(proxy);
+    expect(reads()).toBe(1);
+    proxy.advance(61_000);
+    await health(proxy);
+    expect(reads()).toBe(2);
+  });
+
+  it('si no puede leerla dice que todos los motores están cerrados, y vuelve a intentar', async () => {
+    const proxy = edge({ key: 'mock' });
+    await proxy.open(AI_ENGINES);
+    proxy.rest.down = true;
+    const cold = await proxy.app.request('/ai-proxy/health');
+    expect(cold.status).toBe(200);
+    expect(await cold.json()).toMatchObject({
+      status: 'ok',
+      mode: 'mock',
+      engines: {
+        forgetting: 'gated',
+        weekly_report: 'gated',
+        flashcards: 'gated',
+        bias_tips: 'gated',
+        restructure: 'gated',
+      },
+    });
+    expect(proxy.logs.some((line) => line.includes('ai.config.unavailable'))).toBe(true);
+    // Las rutas de IA contestan not_configured en ese estado, así que ningún alumno las usa
+    expect((await forgetting(proxy.app)).status).toBe(503);
+    proxy.rest.down = false;
+    expect((await health(proxy)).engines).toMatchObject({ forgetting: 'open', flashcards: 'open' });
   });
 });
 

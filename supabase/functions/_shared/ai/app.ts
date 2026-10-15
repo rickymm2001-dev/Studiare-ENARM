@@ -8,9 +8,17 @@ import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
 import { corsHeadersFor, preflightHeadersFor } from './cors.ts';
 import type { Log } from './ports.ts';
+import { AI_ENGINES, type AiEngine, type AiEngineGate } from './engines/aiContracts.ts';
 import { createAiRoutes, healthOf, type AiRoutesDeps } from './routes.ts';
 
 export const AI_PROXY_BASE_PATH = '/ai-proxy';
+
+/** Todos los motores cerrados para alumnos, que es lo que /health dice si no puede leer la configuración */
+const closedEngines = (): Record<AiEngine, AiEngineGate> =>
+  Object.fromEntries(AI_ENGINES.map((engine) => [engine, 'gated'])) as Record<
+    AiEngine,
+    AiEngineGate
+  >;
 /** Tamaño máximo de una petición (2.2) */
 export const MAX_BODY_BYTES = 64 * 1024;
 
@@ -52,10 +60,23 @@ export function createAiProxyApp(options: AiProxyAppOptions) {
     }),
   );
 
-  // Pública, para que la app sepa si hay IA, en qué modo y qué motores ven los alumnos
+  // Pública, para que la app sepa si hay IA, en qué modo y qué motores ven los alumnos. Lee la
+  // configuración guardada antes de contestar, igual que las rutas de IA: en una copia que acaba de
+  // arrancar, o que solo atendió /health, la que hay en memoria es la de fábrica, y un motor auditado con
+  // otro modelo saldría abierto aquí mientras la llamada del alumno recibe gate_closed (o al revés)
   app.get('/health', async (c) => {
     c.header('Cache-Control', 'no-store');
-    return c.json(await healthOf(options.ai));
+    let known = true;
+    try {
+      await options.ai.refreshConfig?.();
+    } catch {
+      // Sin poder leerla no se sabe qué motores están abiertos. Las rutas de IA contestan not_configured
+      // en ese estado, así que ningún alumno puede usarlos
+      log('ai.config.unavailable');
+      known = false;
+    }
+    const health = await healthOf(options.ai);
+    return c.json(known ? health : { ...health, engines: closedEngines() });
   });
 
   app.route('/ai', createAiRoutes(options.ai));
