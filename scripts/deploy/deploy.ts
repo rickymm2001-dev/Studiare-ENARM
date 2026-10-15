@@ -398,18 +398,25 @@ async function readState(
       : new Map<string, DbFunction[]>();
   const checks = new Map<string, string[]>();
   for (const step of local.plan.migrations) {
-    const query = step.check ? checkQuery(step.sql) : null;
-    if (!step.check || query === null) continue;
+    if (!step.check) continue;
     try {
-      checks.set(step.file, checkDifferences((await client.readQuery(query))[0], step.check));
+      checks.set(step.file, await runCheck(client, step));
     } catch (error) {
-      // Antes de aplicar es normal que falle si falta un objeto. Cuenta como comprobación en rojo
-      if (error instanceof ManagementApiError && [401, 403, 429].includes(error.status))
-        throw error;
+      // Antes de aplicar es normal que la consulta falle porque falta un objeto, y Supabase contesta
+      // 400 con el error de SQL. Eso cuenta como comprobación en rojo. Una falla de red, un 5xx o
+      // cualquier otra cosa no dice nada de la base, así que se detiene sin escribir
+      if (!(error instanceof ManagementApiError && error.status === 400)) throw error;
       checks.set(step.file, [`la consulta falló, ${errorText(error)}`]);
     }
   }
   return { history, functions, checks };
+}
+
+/** Corre la consulta de comprobación de un archivo. Vacío es que salió en verde */
+async function runCheck(client: ManagementClient, step: SqlStep): Promise<string[]> {
+  const query = checkQuery(step.sql);
+  if (!step.check || query === null) return [];
+  return checkDifferences((await client.readQuery(query))[0], step.check);
 }
 
 async function runPlan(options: DeployOptions): Promise<number> {
@@ -493,19 +500,35 @@ async function runPlan(options: DeployOptions): Promise<number> {
   ];
   if (writes.length > 0 && !(await confirmWrites(options, writes))) return 1;
 
-  const problems: string[] = [];
   const summary: string[] = [];
+  /** Imprime los problemas y lo que ya no se hizo. Siempre termina en 1 */
+  const stop = (problems: readonly string[], rest: string) => {
+    for (const problem of problems) io.err(`  ${problem}`);
+    io.err(rest);
+    return 1;
+  };
 
-  // SQL en orden. Se detiene en el primero que falle
+  // SQL en orden. Se detiene en el primero que falle o que deje su comprobación en rojo
   if (doSql) {
     io.out('');
     for (const decision of toApply) {
-      io.out(`Aplicando ${decision.index + 1}. ${decision.step.file}`);
+      const { step } = decision;
+      io.out(`Aplicando ${decision.index + 1}. ${step.file}`);
       try {
-        await client.applyMigration({ name: decision.step.name, query: decision.step.sql });
+        await client.applyMigration({ name: step.name, query: step.sql });
+        if (step.check) {
+          const differences = await runCheck(client, step);
+          if (differences.length > 0) {
+            return stop(
+              [`${step.file} quedó con la comprobación en rojo, ${differences.join(', ')}`],
+              'Se detiene aquí. Lo que sigue en el plan no se aplicó y no se publicó ninguna función.',
+            );
+          }
+          io.out('  comprobación en verde');
+        }
       } catch (error) {
-        reportError(io, `Falló ${decision.step.file}`, error);
-        io.err('Lo que sigue en el plan no se aplicó.');
+        reportError(io, `Falló ${step.file}`, error);
+        io.err('Lo que sigue en el plan no se aplicó y no se publicó ninguna función.');
         return 1;
       }
     }
@@ -514,6 +537,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
     // Comprobación con huellas, permisos de anon y las consultas de los archivos manuales
     io.out('');
     io.out('Comprobación de la base');
+    const problems: string[] = [];
     try {
       const after = await readState(client, local, false);
       const verified = verifyFunctions(plan, local.expected, after.functions);
@@ -529,11 +553,18 @@ async function runPlan(options: DeployOptions): Promise<number> {
       summary.push(`Huellas ${verified.same} de ${local.expected.size} iguales al repo`);
     } catch (error) {
       reportError(io, 'No pude comprobar la base', error);
+      io.err('No se publicó ninguna función.');
       return 1;
+    }
+    if (problems.length > 0) {
+      return stop(
+        problems,
+        'La base quedó distinta de lo que dice el repo. No se publicó ninguna función. Revisa lo de arriba antes de seguir.',
+      );
     }
   }
 
-  // Edge Functions
+  // Edge Functions. Se detiene en la primera que no quede como dice el plan
   if (doFunctions) {
     io.out('');
     const deployed: string[] = [];
@@ -541,6 +572,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
       const closure = local.closures.get(step.slug);
       if (!closure) continue;
       io.out(`Publicando ${step.slug}`);
+      let after: FunctionInfo | null;
       try {
         await client.deployFunction({
           slug: step.slug,
@@ -548,29 +580,21 @@ async function runPlan(options: DeployOptions): Promise<number> {
           verifyJwt: step.verifyJwt,
           files: closure.files.map((file) => ({ path: file.path, content: file.content })),
         });
-        const after = await client.getFunction(step.slug);
-        const previous = before.get(step.slug)?.version ?? 0;
-        if (!after) {
-          problems.push(`${step.slug} no aparece después de publicarla`);
-        } else {
-          if (after.version <= previous) {
-            problems.push(`${step.slug} sigue en la versión ${after.version}, no subió`);
-          }
-          if (after.verifyJwt !== step.verifyJwt) {
-            problems.push(
-              `${step.slug} quedó con verify_jwt ${String(after.verifyJwt)} y el plan dice ${String(step.verifyJwt)}`,
-            );
-          }
-          if (after.status !== 'ACTIVE') {
-            problems.push(`${step.slug} quedó en estado ${after.status}`);
-          }
-          io.out(`  versión ${previous} a ${after.version}, verify_jwt ${String(after.verifyJwt)}`);
-          deployed.push(`${step.slug} v${after.version}`);
-        }
+        after = await client.getFunction(step.slug);
       } catch (error) {
         reportError(io, `Falló la publicación de ${step.slug}`, error);
+        io.err('Las funciones que siguen no se publicaron.');
         return 1;
       }
+      const previous = before.get(step.slug)?.version ?? 0;
+      const problems = publishedProblems(step, previous, after);
+      if (after) {
+        io.out(`  versión ${previous} a ${after.version}, verify_jwt ${String(after.verifyJwt)}`);
+      }
+      if (problems.length > 0) {
+        return stop(problems, 'Se detiene aquí. Las funciones que siguen no se publicaron.');
+      }
+      deployed.push(`${step.slug} v${after?.version ?? 0}`);
     }
     summary.push(`Funciones publicadas ${deployed.length > 0 ? deployed.join(', ') : 'ninguna'}`);
   }
@@ -578,13 +602,28 @@ async function runPlan(options: DeployOptions): Promise<number> {
   io.out('');
   io.out('Resumen');
   for (const line of summary) io.out(`  ${line}`);
-  if (problems.length > 0) {
-    for (const problem of problems) io.err(`  ${problem}`);
-    io.err('Quedó algo distinto de lo que dice el repo. Revisa lo de arriba antes de seguir.');
-    return 1;
-  }
   io.out('Todo en verde.');
   return 0;
+}
+
+/** Lo que no quedó como dice el plan después de publicar una función */
+function publishedProblems(
+  step: Plan['functions'][number],
+  previous: number,
+  after: FunctionInfo | null,
+): string[] {
+  if (!after) return [`${step.slug} no aparece después de publicarla`];
+  const problems: string[] = [];
+  if (after.version <= previous) {
+    problems.push(`${step.slug} sigue en la versión ${after.version}, no subió`);
+  }
+  if (after.verifyJwt !== step.verifyJwt) {
+    problems.push(
+      `${step.slug} quedó con verify_jwt ${String(after.verifyJwt)} y el plan dice ${String(step.verifyJwt)}`,
+    );
+  }
+  if (after.status !== 'ACTIVE') problems.push(`${step.slug} quedó en estado ${after.status}`);
+  return problems;
 }
 
 /** Corre lo que piden las opciones y devuelve el código de salida */

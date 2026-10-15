@@ -44,6 +44,10 @@ export interface FakeOptions {
   readOnlyStatus?: number;
   /** Al publicar no sube la versión */
   keepVersion?: boolean;
+  /** Al publicar deja este verify_jwt sin importar lo que pidió la herramienta */
+  forceVerifyJwt?: boolean;
+  /** Cómo falla una consulta de comprobación. Un estado HTTP, una falla de red o null si contesta */
+  checkFailure?: (applied: ReadonlySet<string>) => number | 'network' | null;
   /** Error de POST /secrets que repite lo que recibió, como haría una API indiscreta */
   echoSecretsError?: boolean;
 }
@@ -130,6 +134,12 @@ export function fakeSupabase(options: FakeOptions = {}) {
       history.push({ version: String(clock), name });
       return json(null);
     }
+    const isCheck =
+      (path === '/database/query/read-only' || path === '/database/query') &&
+      !String(payload.query).startsWith('-- studiare-deploy huellas');
+    const failure = isCheck ? (options.checkFailure?.(applied) ?? null) : null;
+    if (failure === 'network') throw new TypeError('fetch failed');
+    if (failure !== null) return json({ message: `la consulta falló con ${failure}` }, failure);
     if (method === 'POST' && path === '/database/query/read-only') {
       if (options.readOnlyStatus)
         return json({ message: 'read-only falló' }, options.readOnlyStatus);
@@ -162,7 +172,7 @@ export function fakeSupabase(options: FakeOptions = {}) {
       const previous = edge.get(slug);
       const next: FakeFunction = {
         version: options.keepVersion ? (previous?.version ?? 1) : (previous?.version ?? 0) + 1,
-        verifyJwt: metadata.verify_jwt === true,
+        verifyJwt: options.forceVerifyJwt ?? metadata.verify_jwt === true,
         status: 'ACTIVE',
         files,
         metadata,

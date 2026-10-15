@@ -27,6 +27,7 @@ create table if not exists public.marca (id int);
 -- Comprobación
 select true as listo;
 `;
+const OTRO = `create table if not exists public.otra (id int);\n`;
 const VIEJO = `create or replace function public.beta() returns int language sql as $$ select 20 $$;\n`;
 
 const STEPS = {
@@ -48,6 +49,18 @@ const PLANS: Record<string, unknown> = {
     description: 'Con un archivo manual viejo',
     migrations: [STEPS.base, STEPS.more, { file: 'supabase/manual/viejo.sql' }],
   },
+  'dos-manuales': {
+    description: 'Dos archivos manuales seguidos',
+    migrations: [STEPS.base, STEPS.more, STEPS.arreglo, { file: 'supabase/manual/otro.sql' }],
+    functions: [{ slug: 'hola', verifyJwt: false }],
+  },
+  'dos-funciones': {
+    description: 'Solo dos funciones',
+    functions: [
+      { slug: 'hola', verifyJwt: false },
+      { slug: 'adios', verifyJwt: false },
+    ],
+  },
   'beta-abierta': {
     description: 'beta abierta a anon a propósito',
     migrations: [STEPS.base, STEPS.more, STEPS.arreglo],
@@ -66,6 +79,8 @@ beforeEach(() => {
     'supabase/migrations/20260101000002_more.sql': MORE,
     'supabase/manual/arreglo.sql': ARREGLO,
     'supabase/manual/viejo.sql': VIEJO,
+    'supabase/manual/otro.sql': OTRO,
+    'supabase/functions/adios/index.ts': `import { hola } from '../_shared/util.ts';\nDeno.serve(hola);\n`,
     'supabase/functions/hola/index.ts': `import { hola } from '../_shared/util.ts';\nDeno.serve(hola);\n`,
     'supabase/functions/_shared/util.ts': `export const hola = () => new Response('hola');\n`,
     ...Object.fromEntries(
@@ -277,6 +292,51 @@ describe('aplicar un plan', () => {
     expect(result.code).toBe(1);
     expect(result.fake.requests).toEqual([]);
     expect(result.all()).toContain('supabase/manual/viejo.sql trae beta distinta de');
+  });
+
+  it('si la comprobación de la base sale en rojo no publica ninguna función', async () => {
+    const result = await run({ ...REAL_LIKE, tamper: (_name, body) => `${body} + 0` });
+    expect(result.code).toBe(1);
+    expect(result.fake.edge.has('hola')).toBe(false);
+    expect(result.all()).toContain('No se publicó ninguna función');
+  });
+
+  it('se detiene justo después de un archivo manual que queda con la comprobación en rojo', async () => {
+    const result = await run(
+      { ...REAL_LIKE, checkRow: () => ({ listo: false }) },
+      { plan: 'dos-manuales' },
+    );
+    expect(result.code).toBe(1);
+    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(result.all()).toContain('supabase/manual/arreglo.sql quedó con la comprobación en rojo');
+    expect(result.fake.edge.has('hola')).toBe(false);
+  });
+
+  it('se detiene en la función que queda con otro verify_jwt y no publica las que siguen', async () => {
+    const result = await run({ forceVerifyJwt: true }, { plan: 'dos-funciones' });
+    expect(result.code).toBe(1);
+    expect(result.fake.edge.get('hola')?.verifyJwt).toBe(true);
+    expect(result.fake.edge.has('adios')).toBe(false);
+    expect(result.all()).toContain('hola quedó con verify_jwt true y el plan dice false');
+  });
+
+  it('un 5xx o una falla de red en la comprobación previa terminan sin escribir', async () => {
+    for (const failure of [500, 502, 'network'] as const) {
+      const result = await run({ ...REAL_LIKE, checkFailure: () => failure });
+      expect(result.code, String(failure)).toBe(1);
+      expect(result.fake.writes(), String(failure)).toEqual([]);
+      expect(result.all()).toContain('No pude leer el estado del proyecto');
+    }
+  });
+
+  it('un 400 de SQL en la comprobación previa cuenta como rojo, porque falta algo, y se aplica', async () => {
+    const result = await run({
+      ...REAL_LIKE,
+      checkFailure: (applied) => (applied.has('manual_arreglo') ? null : 400),
+    });
+    expect(result.code).toBe(0);
+    expect(appliedNames(result.fake)).toEqual(['manual_arreglo']);
+    expect(result.all()).toContain('comprobación en rojo (la consulta falló');
   });
 
   it('se detiene en el primer SQL que falla y no publica', async () => {
