@@ -222,7 +222,11 @@ export function createDexieDeckMediaRepo(db: EnarmDb): DeckMediaRepo {
       await db.deckMedia.bulkPut(parsed);
       return parsed.length;
     },
-    countForSubject: (deckKey, subjectKey) =>
-      db.deckMedia.where('[deckKey+subjectKey]').equals([deckKey, subjectKey]).count(),
+    // Las claves de submazo son minúsculas, números y guiones, así que caben entre '' y \uffff
+    removeForDeck: (deckKey) =>
+      db.deckMedia
+        .where('[deckKey+subjectKey]')
+        .between([deckKey, ''], [deckKey, '\uffff'])
+        .delete(),
   };
 }

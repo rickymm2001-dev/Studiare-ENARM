@@ -166,6 +166,41 @@ describe('catálogo de mazos de la nube', () => {
     expect(within(catalog).getByText(text.downloaded)).toBeVisible();
   });
 
+  it('quitar descargas deja la materia por bajar y un mazo que dejó de seguir se sigue otra vez', async () => {
+    const user = userEvent.setup();
+    await catalogCloud(true);
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    await user.click(await within(catalog).findByText(text.subjects(1), undefined, WAIT));
+    await user.click(
+      within(catalog).getByRole('button', { name: text.downloadLabel('Obstetricia') }),
+    );
+    expect(await within(catalog).findByText(text.done(1), undefined, WAIT)).toBeVisible();
+    const api = app.api;
+    const userId = app.user.id;
+    const followed = async () => (await api.repos.users.get(userId))?.settings.followedDecks;
+
+    // Dejar de seguir no quita lo bajado y se vuelve a seguir sin bajar nada
+    await user.click(await within(catalog).findByRole('button', { name: t.decks.unfollow }));
+    await user.click(await within(catalog).findByRole('button', { name: t.decks.follow }, WAIT));
+    await waitFor(async () => {
+      expect(await followed()).toContain('paco-gyo');
+    });
+    expect(within(catalog).getByText(text.downloaded)).toBeVisible();
+
+    await user.click(
+      within(catalog).getByRole('button', {
+        name: text.removeDownloadsLabel('Ginecología y obstetricia (Paco)'),
+      }),
+    );
+    expect(await within(catalog).findByText(text.removed, undefined, WAIT)).toBeVisible();
+    expect(
+      await within(catalog).findByRole('button', { name: text.downloadLabel('Obstetricia') }, WAIT),
+    ).toBeVisible();
+    expect(await followed()).not.toContain('paco-gyo');
+    expect(within(catalog).queryByRole('button', { name: t.decks.follow })).toBeNull();
+  });
+
   it('Gratis ve las materias y las notas de muestra con el candado y la prueba gratis', async () => {
     const user = userEvent.setup();
     await catalogCloud(false);

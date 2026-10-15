@@ -279,22 +279,30 @@ describe('banco de la nube en el navegador (B11)', () => {
     ).rejects.toThrow();
   });
 
-  it('las imágenes de los mazos se guardan como Blob y se cuentan por submazo', async () => {
+  it('las imágenes de los mazos se guardan como Blob y se quitan por mazo', async () => {
     const { repos } = setup();
-    const media = (file: string, subjectKey = 'cardiologia') => ({
-      path: `/deck-media/paco-mi/${subjectKey}/${file}`,
-      deckKey: 'paco-mi',
+    const media = (file: string, subjectKey = 'cardiologia', deckKey = 'paco-mi') => ({
+      path: `/deck-media/${deckKey}/${subjectKey}/${file}`,
+      deckKey,
       subjectKey,
       deckVersion: 1,
       type: 'image/png' as const,
       blob: new Blob([new Uint8Array([1, 2, 3])], { type: 'image/png' }),
     });
     expect(
-      await repos.deckMedia.putMany([media('a.png'), media('b.png'), media('c.png', 'renal')]),
-    ).toBe(3);
-    expect(await repos.deckMedia.countForSubject('paco-mi', 'cardiologia')).toBe(2);
+      await repos.deckMedia.putMany([
+        media('a.png'),
+        media('b.png'),
+        media('c.png', 'renal'),
+        media('d.png', 'cardiologia', 'paco-mi-2'),
+      ]),
+    ).toBe(4);
     const stored = await repos.deckMedia.get('/deck-media/paco-mi/cardiologia/a.png');
     expect(stored?.blob.size).toBe(3);
     await expect(repos.deckMedia.putMany([media('../fuera.png')])).rejects.toThrow();
+    // Quitar un mazo no toca otro aunque su clave empiece igual
+    expect(await repos.deckMedia.removeForDeck('paco-mi')).toBe(3);
+    expect(await repos.deckMedia.get('/deck-media/paco-mi/renal/c.png')).toBeUndefined();
+    expect(await repos.deckMedia.get('/deck-media/paco-mi-2/cardiologia/d.png')).toBeDefined();
   });
 });

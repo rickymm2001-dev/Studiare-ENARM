@@ -52,4 +52,9 @@ export const deckCatalogText = {
   preview: 'Notas de muestra',
   previewHint: 'Así se ven algunas notas de este mazo, sin imágenes.',
   review: 'Repasar',
+  removeDownloads: 'Quitar descargas',
+  removeDownloadsLabel: (deck: string) => `Quitar descargas de ${deck}`,
+  removed:
+    'Quitaste las imágenes de este mazo del dispositivo y ya no sale en Repasar. Si lo vuelves a bajar, tus repasos siguen donde iban.',
+  removeFailed: 'No se pudieron quitar las descargas. Inténtalo de nuevo.',
 } as const;

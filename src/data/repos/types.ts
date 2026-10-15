@@ -169,8 +169,8 @@ export interface DeckMediaRepo {
   get(path: string): Promise<DeckMedia | undefined>;
   /** Valida con zod y guarda en una sola operación. Devuelve cuántas guardó */
   putMany(media: readonly DeckMedia[]): Promise<number>;
-  /** Cuántas imágenes de un submazo hay en este navegador */
-  countForSubject(deckKey: string, subjectKey: string): Promise<number>;
+  /** Quita todas las imágenes de un mazo de este navegador (8.32). Devuelve cuántas quitó */
+  removeForDeck(deckKey: string): Promise<number>;
 }
 
 /** Las cachés se leen desde la interfaz y solo las escriben las derivaciones */

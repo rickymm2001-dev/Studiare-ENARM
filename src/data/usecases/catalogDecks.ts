@@ -16,7 +16,7 @@ import {
   type DeckSubjectFile,
 } from '../schemas/deckCatalog';
 import type { User } from '../schemas/people';
-import { saveDeckFiles } from './decks';
+import { saveDeckFiles, unfollowDeck } from './decks';
 import { updateProfile } from './profile';
 
 /** Lo que el caso de uso necesita de la nube. Lo arma src/data/cloud/deckCatalog.ts */
@@ -239,6 +239,38 @@ export async function downloadCatalogSubject(input: {
     }),
   ).catch(() => undefined);
   return { notes: file.notes.length, images: media.length, bytes };
+}
+
+/**
+ * Quitar descargas de un mazo (8.32). Quita sus imágenes, que son lo que pesa, y sus bajadas de este
+ * navegador, y deja de seguirlo para que Repasar no muestre tarjetas sin imagen. Las notas, las
+ * tarjetas y sus repasos se quedan, así que al volver a bajarlo el alumno sigue donde iba
+ */
+export async function removeCatalogDownloads(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+  deckKey: string,
+): Promise<number> {
+  const removed = await api.repos.deckMedia.removeForDeck(deckKey);
+  const previous = (await api.repos.bankState.get('decks'))?.downloads ?? [];
+  await api.repos.bankState.put({
+    key: 'decks',
+    downloads: previous.filter((item) => item.deckKey !== deckKey),
+  });
+  if (user.settings.followedDecks.includes(deckKey)) await unfollowDeck(api, user, deckKey);
+  return removed;
+}
+
+/** Vuelve a seguir un mazo del catálogo que sigue bajado en este navegador, sin bajarlo otra vez */
+export async function refollowCatalogDeck(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+  deckKey: string,
+): Promise<void> {
+  if (user.settings.followedDecks.includes(deckKey)) return;
+  await updateProfile(api, user, {
+    settings: { followedDecks: [...user.settings.followedDecks, deckKey] },
+  });
 }
 
 /** Cómo está cada submazo en este navegador. update si la versión nueva trae otro .json */

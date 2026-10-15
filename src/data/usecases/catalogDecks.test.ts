@@ -9,6 +9,8 @@ import {
   askPersistentStorage,
   CatalogDeckError,
   downloadCatalogSubject,
+  refollowCatalogDeck,
+  removeCatalogDownloads,
   sha256Hex,
   subjectStates,
   type CatalogFiles,
@@ -137,7 +139,9 @@ describe('bajar un submazo del catálogo (4.8)', () => {
     const image = await api.repos.deckMedia.get('/deck-media/paco-mi/infectologia/m-0001.png');
     expect(image).toMatchObject({ type: 'image/png', deckVersion: 2 });
     // Solo las imágenes que el submazo dice que usa
-    expect(await api.repos.deckMedia.countForSubject('paco-mi', 'infectologia')).toBe(1);
+    expect(
+      await api.repos.deckMedia.get('/deck-media/paco-mi/infectologia/otro.png'),
+    ).toBeUndefined();
     expect((await api.repos.users.get(user.id))?.settings.followedDecks).toContain('paco-mi');
     expect((await api.repos.bankState.get('decks'))?.downloads).toEqual([
       expect.objectContaining({ deckKey: 'paco-mi', subjectKey: 'infectologia', version: 2 }),
@@ -216,6 +220,29 @@ describe('bajar un submazo del catálogo (4.8)', () => {
     await expect(
       downloadCatalogSubject({ api, user, deck, subject, files: failing({ network: false }) }),
     ).rejects.toMatchObject({ reason: 'denied' });
+  });
+
+  it('quitar descargas borra las imágenes y las bajadas, deja de seguirlo y conserva las notas', async () => {
+    const file = subjectFile();
+    const { api, user, deck, subject, files } = await setup(file, (json) => ({
+      'paco-mi/v2/infectologia.json': json,
+      'paco-mi/v2/infectologia.media-1.zip': zipOf({ 'm-0001.png': png }),
+    }));
+    await downloadCatalogSubject({ api, user, deck, subject, files });
+    const followed = (await api.repos.users.get(user.id)) ?? user;
+    expect(await removeCatalogDownloads(api, followed, 'paco-mi')).toBe(1);
+    expect(await api.repos.deckMedia.get('/deck-media/paco-mi/infectologia/m-0001.png')).toBe(
+      undefined,
+    );
+    expect((await api.repos.bankState.get('decks'))?.downloads).toEqual([]);
+    const after = (await api.repos.users.get(user.id)) ?? user;
+    expect(after.settings.followedDecks).not.toContain('paco-mi');
+    // Las notas y las tarjetas se quedan con sus claves, así sus repasos siguen al volver a bajarlo
+    expect(await api.repos.notes.get(deckIds.note('paco-mi-000000000001'))).toBeDefined();
+    expect(await api.repos.cards.list()).toHaveLength(3);
+
+    await refollowCatalogDeck(api, after, 'paco-mi');
+    expect((await api.repos.users.get(user.id))?.settings.followedDecks).toEqual(['paco-mi']);
   });
 
   it('una versión nueva marca para actualizar solo los submazos con otro .json', () => {

@@ -21,6 +21,8 @@ import {
   askPersistentStorage,
   CatalogDeckError,
   downloadCatalogSubject,
+  refollowCatalogDeck,
+  removeCatalogDownloads,
   subjectStates,
   type CatalogDeckFailure,
   type CatalogFiles,
@@ -163,6 +165,21 @@ function CatalogDeckCard({
     }
   };
 
+  // Quitar descargas libera el espacio de las imágenes y deja las notas con sus repasos (8.32)
+  const remove = async () => {
+    setMessage(null);
+    setBusy('remove');
+    try {
+      const user = (await api.repos.users.get(session.user.id)) ?? session.user;
+      await removeCatalogDownloads(api, user, deck.deckKey);
+      setMessage({ kind: 'done', text: text.removed });
+    } catch {
+      setMessage({ kind: 'error', text: text.removeFailed });
+    } finally {
+      setBusy(null);
+    }
+  };
+
   return (
     <li className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3">
       <span
@@ -283,19 +300,45 @@ function CatalogDeckCard({
             </ul>
           </Disclosure>
         ) : null}
-        {followed && downloadedCount > 0 ? (
+        {downloadedCount > 0 ? (
           <div className="flex flex-wrap gap-2">
-            <Button asChild size="sm" variant="ghost">
-              <Link to={screenPath('review')}>{text.review}</Link>
-            </Button>
+            {followed ? (
+              <>
+                <Button asChild size="sm" variant="ghost">
+                  <Link to={screenPath('review')}>{text.review}</Link>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    void unfollowDeck(api, session.user, deck.deckKey);
+                  }}
+                >
+                  {t.decks.unfollow}
+                </Button>
+              </>
+            ) : (
+              // Lo bajado sigue en el dispositivo, así que se vuelve a seguir sin bajarlo otra vez
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  void refollowCatalogDeck(api, session.user, deck.deckKey);
+                }}
+              >
+                {t.decks.follow}
+              </Button>
+            )}
             <Button
               size="sm"
               variant="ghost"
+              disabled={busy !== null}
+              aria-label={text.removeDownloadsLabel(deck.name)}
               onClick={() => {
-                void unfollowDeck(api, session.user, deck.deckKey);
+                void remove();
               }}
             >
-              {t.decks.unfollow}
+              {text.removeDownloads}
             </Button>
           </div>
         ) : null}
