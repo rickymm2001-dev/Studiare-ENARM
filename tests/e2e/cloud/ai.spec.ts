@@ -198,6 +198,9 @@ test.describe('IA alojada', () => {
     const report = page.getByRole('region', { name: t.tutor.report.title });
     await expect(report.getByText(t.tutor.ai.written.real)).toBeVisible({ timeout: 60_000 });
     await expect(report.getByText(t.tutor.ai.draft)).toBeVisible();
+    // El encabezado del resumen ya no dice que es de plantilla fija ni promete la IA para después
+    await expect(report.getByText(t.tutor.report.hintAi)).toBeVisible();
+    await expect(report.getByText(t.tutor.report.hint)).toHaveCount(0);
     const tips = page.getByRole('region', { name: t.tutor.biasTips.title });
     await expect(tips.getByText(t.tutor.ai.written.real)).toBeVisible({ timeout: 60_000 });
     await expect(tips.getByText(t.tutor.ai.draft)).toBeVisible();
@@ -377,6 +380,12 @@ test.describe('IA alojada', () => {
     // Un solo alumno con costo. Sin texto ni correo de nadie
     await expect(card.getByText(text.studentsCaption(1))).toBeVisible();
     await expect(card.getByText(ANA)).toHaveCount(0);
+    // Con la nube conectada no se ven los ceros de este navegador ni su aviso de que no hay llamadas,
+    // que contradirían a lo que cuenta la nube
+    await expect(admin.page.getByText(adminText.adminCosts.empty.title)).toHaveCount(0);
+    await expect(
+      admin.page.getByRole('region', { name: adminText.adminCosts.stats.label }),
+    ).toHaveCount(0);
     await expectNoSeriousA11yViolations(admin.page);
     await admin.context.close();
   });

@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { t } from '@/i18n/es-MX';
 import type { FocusItem } from '../progress/focusItems';
+import type { ReportAi } from './aiContent';
 import { BiasTipsCard, WeeklyReportCard } from './TutorSections';
 import type { WeeklyReport } from './weeklyReport';
 
@@ -100,6 +101,36 @@ describe('resumen del tutor', () => {
       </MemoryRouter>,
     );
     expect(screen.getAllByText(t.tutor.biasTips.draftLabel)).toHaveLength(1);
+  });
+
+  it('el encabezado dice si el resumen es de plantilla fija o lo redactó la IA, sin prometer una fase que ya llegó', () => {
+    const report = ready([item({ key: 'negation', title: 'Negaciones' })]);
+    const written: ReportAi = {
+      summary: 'Esta semana respondiste 48 preguntas.',
+      priorities: [{ ref: 'negation', text: 'Practica las negaciones.' }],
+      habit: null,
+      challenge: null,
+      generatedAt: '2026-10-15T12:00:00.000Z',
+      mode: 'real',
+      week: '2026-10-12',
+    };
+    const { rerender } = render(
+      <MemoryRouter>
+        <WeeklyReportCard report={report} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText(t.tutor.report.hint)).toBeVisible();
+    expect(screen.queryByText(t.tutor.report.hintAi)).toBeNull();
+    rerender(
+      <MemoryRouter>
+        <WeeklyReportCard report={report} ai={written} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText(t.tutor.report.hintAi)).toBeVisible();
+    expect(screen.queryByText(t.tutor.report.hint)).toBeNull();
+    // Ninguno habla de una fase futura, porque la IA ya redacta el resumen cuando el motor está abierto
+    expect(t.tutor.report.hint).not.toMatch(/fase/i);
+    expect(t.tutor.report.hintAi).not.toMatch(/fase/i);
   });
 
   it('antes de las respuestas mínimas calibra con cuántas lleva', () => {
