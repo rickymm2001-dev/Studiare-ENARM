@@ -4,6 +4,7 @@
 // no viven aquí. Van a las tablas de siempre (questions, options y cases) con su esquema, así el
 // simulador, el examen, el Tutor y Progreso los leen igual que el banco de demostración.
 import { z } from 'zod';
+import { ModelSettingsSchema } from '../../config/modelSettings';
 import { ContentReportSchema, QuestionTaskSchema } from './bank';
 import {
   CalendarDateSchema,
@@ -23,6 +24,26 @@ const DeckMediaPathSchema = z
   .regex(
     /^\/deck-media\/[a-z0-9-]{3,48}\/[a-z0-9-]{1,64}\/[A-Za-z0-9._-]{1,120}\.(?:jpg|jpeg|png|gif|webp|svg)$/,
   );
+
+/**
+ * La calibración de la noche de una pregunta (B14, 1.6 del plan de B14), con el id de la versión que se
+ * calibró ya en ULID. Lleva ese id porque bank_publish no la toca al publicar otra versión, y la app solo
+ * la usa si coincide con la versión publicada (src/data/bank/calibration.ts)
+ */
+export const CatalogCalibrationSchema = z.strictObject({
+  versionId: IdSchema,
+  state: z.enum(['physician_estimate', 'provisional', 'calibrated']),
+  /** Dificultad de Rasch en logits, ya enlazada. null si no tiene estimación finita */
+  difficulty: z.number().nullable(),
+  se: z.number().nullable(),
+  /** Alumnos distintos con primer intento válido */
+  students: z.int().min(0),
+  elo: z.number().nullable(),
+  /** Todos acertaron o todos fallaron, así que no hay estimación finita */
+  extreme: z.boolean(),
+  /** Día de estudio de la noche que la calculó */
+  studyDay: CalendarDateSchema,
+});
 
 /**
  * Una pregunta publicada o retirada del catálogo, con sus ids ya en ULID (src/data/cloud/cloudIds.ts).
@@ -57,6 +78,11 @@ export const CatalogEntrySchema = z
     status: z.enum(['published', 'retired']),
     /** El seq de la nube. La siguiente bajada pide desde el más alto */
     seq: z.int().min(0),
+    /**
+     * Lo que calculó la noche (B14). Ausente en una fila de antes de B14 o de un servidor sin la
+     * migración, y null si la pregunta todavía no se calibra
+     */
+    calibration: CatalogCalibrationSchema.nullable().optional(),
   })
   .refine((entry) => (entry.caseId === null) === (entry.caseOrder === null), {
     message: 'caseId y caseOrder van juntos',
@@ -99,11 +125,65 @@ export const DeckDownloadSchema = z.strictObject({
 export type DeckDownload = z.infer<typeof DeckDownloadSchema>;
 
 /**
+ * La foto de comparación que dejó la noche (comparison_snapshot, B14 1.9). Solo Todos y la especialidad de
+ * quien pregunta. Una celda con menos de minGroupSize alumnos no trae cortes y dice calibrando
+ */
+export const ComparisonSnapshotSchema = z.strictObject({
+  available: z.boolean(),
+  runAt: UtcDateTimeSchema.nullable(),
+  studyDay: CalendarDateSchema.nullable(),
+  windowDays: z.int().min(1).max(366),
+  minGroupSize: z.int().min(1),
+  specialty: z
+    .string()
+    .regex(/^[a-z_]{2,48}$/)
+    .nullable(),
+  cells: z
+    .array(
+      z.strictObject({
+        cohort: z.enum(['all', 'specialty']),
+        metric: z.enum(['sim_accuracy', 'reviews', 'consistency']),
+        /** La rama de la taxonomía, o * para el total */
+        branch: z.string().regex(/^(\*|[a-z_]{2,48})$/),
+        students: z.int().min(0),
+        state: z.enum(['ready', 'calibrating']),
+        /** 19 cortes, del percentil 5 al 95 */
+        cuts: z.array(z.number()).length(19).nullable(),
+      }),
+    )
+    .max(2000),
+});
+
+/** La línea base de la población (population_baselines, B14 1.9). Todo son números con llaves de la taxonomía */
+export const PopulationBaselinesSchema = z.strictObject({
+  available: z.boolean(),
+  runAt: UtcDateTimeSchema.nullable(),
+  bias: z.record(z.string(), z.strictObject({ students: z.int().min(0), rate: z.number() })),
+  motives: z.record(z.string(), z.record(z.string(), z.number())),
+  topics: z.record(
+    z.string(),
+    z.strictObject({
+      students: z.int().min(0),
+      accuracy: z.number(),
+      difficulty: z.number().nullable(),
+    }),
+  ),
+  indicators: z.record(z.string(), z.strictObject({ students: z.int().min(0), rate: z.number() })),
+  fatigue: z.strictObject({
+    state: z.enum(['calibrating', 'validated', 'not_valid']),
+    students: z.int().min(0),
+    longSessions: z.int().min(0),
+  }),
+});
+
+/**
  * Estado del banco de la nube en este navegador, una fila por clave
  *   catalog. Hasta qué seq se bajó el catálogo, si ya llegó completo y si el banco estaba abierto
  *   quota. La última cuota que dijo el servidor, para la cuenta del tope sin conexión (5.5)
  *   agreement. El último acuerdo entre médicos, para hablar de sesgos o de trampas (4.4)
  *   decks. Los submazos del catálogo de mazos que ya se bajaron (4.8)
+ *   comparison, population y model_settings. Lo que baja una vez por día de estudio de lo que calculó la
+ *   noche y de los ajustes del modelo (B14, 1.12). Cada uno dice el día de estudio en que se bajó
  */
 /**
  * Un reporte de error que se guardó sin conexión y todavía no llega al médico (B3 de la revisión de
@@ -139,6 +219,25 @@ export const BankStateSchema = z.discriminatedUnion('key', [
   z.strictObject({
     key: z.literal('reports'),
     pending: z.array(PendingReportSchema).max(MAX_PENDING_REPORTS),
+  }),
+  z.strictObject({
+    key: z.literal('comparison'),
+    snapshot: ComparisonSnapshotSchema,
+    /** El día de estudio de este dispositivo en que se bajó */
+    fetchedDay: CalendarDateSchema,
+    at: UtcDateTimeSchema,
+  }),
+  z.strictObject({
+    key: z.literal('population'),
+    baselines: PopulationBaselinesSchema,
+    fetchedDay: CalendarDateSchema,
+    at: UtcDateTimeSchema,
+  }),
+  z.strictObject({
+    key: z.literal('model_settings'),
+    settings: ModelSettingsSchema,
+    fetchedDay: CalendarDateSchema,
+    at: UtcDateTimeSchema,
   }),
 ]);
 export type BankState = z.infer<typeof BankStateSchema>;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { uuidToUlid } from '../cloud/cloudIds';
+import { CatalogEntrySchema } from '../schemas/bankCloud';
 import { cloudId, wireRow } from '../testing/bankCloud';
 import { catalogEntryOf, mergeCatalogPage } from './catalogMerge';
 
@@ -103,5 +104,106 @@ describe('catálogo incremental (5.3)', () => {
       open: false,
     });
     expect(mergeCatalogPage(new Map(), page([], 3), 12).nextSince).toBe(12);
+  });
+});
+
+describe('calibración de la noche en el catálogo (B14, 1.6)', () => {
+  /** Lo que devuelve catalog_changes en la llave calibration, con los ids en uuid */
+  const wireCalibration = (versionId: string, overrides: Record<string, unknown> = {}) => ({
+    versionId,
+    state: 'provisional',
+    difficulty: -0.42,
+    se: 0.21,
+    students: 134,
+    elo: -0.38,
+    extreme: false,
+    studyDay: '2026-10-15',
+    ...overrides,
+  });
+
+  it('guarda la calibración con el id de la versión en ULID', () => {
+    const row = wireRow();
+    const entry = catalogEntryOf({ ...row, calibration: wireCalibration(row.versionId) });
+    expect(entry?.calibration).toEqual({
+      versionId: uuidToUlid(row.versionId),
+      state: 'provisional',
+      difficulty: -0.42,
+      se: 0.21,
+      students: 134,
+      elo: -0.38,
+      extreme: false,
+      studyDay: '2026-10-15',
+    });
+    // La fila sigue siendo válida para el esquema que la guarda
+    expect(CatalogEntrySchema.safeParse(entry).success).toBe(true);
+  });
+
+  it('una calibración de otra versión se guarda con su propio id, y la app decide si vale', () => {
+    const row = wireRow();
+    const older = cloudId();
+    const entry = catalogEntryOf({ ...row, calibration: wireCalibration(older) });
+    expect(entry?.calibration?.versionId).toBe(uuidToUlid(older));
+    expect(entry?.calibration?.versionId).not.toBe(entry?.versionId);
+  });
+
+  it('una fila de un servidor de antes no trae la llave y la entrada tampoco', () => {
+    const entry = catalogEntryOf(wireRow());
+    expect(entry).not.toBeNull();
+    expect(Object.keys(entry ?? {})).not.toContain('calibration');
+  });
+
+  it('sin calibrar todavía, la fila dice null y la entrada también', () => {
+    expect(catalogEntryOf({ ...wireRow(), calibration: null })?.calibration).toBeNull();
+  });
+
+  it('una calibración que no se puede leer no tira la pregunta, que queda sin calibración', () => {
+    const row = wireRow();
+    for (const calibration of [
+      'texto',
+      [],
+      wireCalibration('no-es-uuid'),
+      wireCalibration(row.versionId, { state: 'estado_nuevo' }),
+      wireCalibration(row.versionId, { students: -3 }),
+      wireCalibration(row.versionId, { studyDay: 'ayer' }),
+      wireCalibration(row.versionId, { campo_nuevo: true }),
+    ]) {
+      const entry = catalogEntryOf({ ...row, calibration });
+      expect(entry).not.toBeNull();
+      expect(entry?.calibration).toBeNull();
+    }
+  });
+
+  it('una estimación sin valores finitos entra con difficulty y error estándar en null', () => {
+    const row = wireRow();
+    const entry = catalogEntryOf({
+      ...row,
+      calibration: wireCalibration(row.versionId, {
+        state: 'physician_estimate',
+        difficulty: null,
+        se: null,
+        elo: null,
+        extreme: true,
+        students: 8,
+      }),
+    });
+    expect(entry?.calibration).toMatchObject({
+      state: 'physician_estimate',
+      difficulty: null,
+      se: null,
+      extreme: true,
+      students: 8,
+    });
+  });
+
+  it('cuando la noche sube el seq, la fila nueva con su calibración reemplaza a la guardada', () => {
+    const row = wireRow({ seq: 3 });
+    const questionId = uuidToUlid(row.questionId) ?? '';
+    const merge = mergeCatalogPage(
+      new Map([[questionId, 3]]),
+      page([{ ...row, seq: 8, calibration: wireCalibration(row.versionId) }], 8),
+      3,
+    );
+    expect(merge.upserts).toHaveLength(1);
+    expect(merge.upserts[0]).toMatchObject({ seq: 8, calibration: { state: 'provisional' } });
   });
 });
