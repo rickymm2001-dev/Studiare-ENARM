@@ -9,24 +9,22 @@
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
-import { createEvent } from '@/data/events/createEvent';
-import { newId } from '@/data/testing/fixtures';
 import { percentileFromCuts } from '@/engines/comparison';
 import { modelTexts } from '@/i18n/model';
-import { t } from '@/i18n/es-MX';
-import { putRows, readTable } from '../support/b1';
-import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
-import { openBank, seedBank } from '../support/fakeBank';
-import { createFakeBankStore } from '../support/fakeBankStore';
+import { readTable } from '../support/b1';
 import {
-  createFakeModelStore,
+  cloudWith,
+  downloadQuestions,
+  enterWithOpenBank,
+  seedOwnHistory,
+} from '../support/comparisonHistory';
+import { expect, test } from '../support/cloudFixtures';
+import {
   seedComparison,
   type FakeComparisonCell,
   type FakeModelStore,
 } from '../support/fakeModelStore';
-import { attachBank, attachModel, type FakeSupabaseServer } from '../support/fakeSupabase';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
-import { sessionUserId } from '../support/tutorHistory';
 
 const text = modelTexts.comparison;
 /** Las ramas del banco simulado, con el nombre que les da la taxonomía. No se importa el JSON, que Playwright no carga */
@@ -36,176 +34,9 @@ const BRANCH_NAMES: ReadonlyMap<string, string> = new Map([
   ['obstetrics_gynecology', 'Ginecología y obstetricia'],
   ['general_surgery', 'Cirugía general'],
 ]);
-const ANA = 'ana.comparacion@ejemplo.mx';
 /** Lo que esta comparación nunca dice (5.5 del plan de B14) */
 const FORBIDDEN =
   /puntaje (estimado|esperado|probable)|probabilidad|\bplazas?\b|ranking|lugar n[uú]mero|posici[oó]n n[uú]mero/i;
-const DAY_MS = 86_400_000;
-const TIME_ZONE = 'America/Merida';
-
-interface QuestionRow {
-  id: string;
-  branch: string;
-}
-interface OptionRow {
-  id: string;
-  questionVersionId: string;
-  isCorrect: boolean;
-}
-
-/** El banco simulado con sus preguntas, el modelo con la foto de la noche y la especialidad de la cuenta */
-function cloudWith(
-  cloud: FakeSupabaseServer,
-  seed: (model: FakeModelStore) => void,
-  specialty: string | null,
-): { model: FakeModelStore } {
-  const bank = createFakeBankStore();
-  attachBank(cloud, bank);
-  seedBank(bank, 20);
-  const model = createFakeModelStore();
-  attachModel(cloud, model);
-  seed(model);
-  const user = cloud.createUser({ email: ANA, alias: 'Ana' });
-  model.specialties.set(user.id, specialty);
-  return { model };
-}
-
-/** Entra con el banco abierto y la prueba gratis prendidos en el servidor, como lo hará Ricardo */
-async function enterWithOpenBank(page: Page, cloud: FakeSupabaseServer) {
-  openBank(cloud);
-  cloud.setFeatureFlags({ freeTrial: true });
-  await enterWithLink(page, cloud, ANA, 'Ana');
-  await reloadWithServerFlags(page);
-}
-
-/** Empieza una práctica corta, que baja y guarda preguntas del banco en la cuenta, y vuelve a Inicio */
-async function downloadQuestions(page: Page): Promise<void> {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await expect(practice).toBeVisible({ timeout: 30_000 });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
-  await practice.getByRole('button', { name: t.simulator.start }).click();
-  await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible({
-    timeout: 30_000,
-  });
-  await expect
-    .poll(async () => (await readTable(page, 'questions')).length, { timeout: 30_000 })
-    .toBeGreaterThan(0);
-}
-
-interface OwnHistory {
-  branch: string;
-  answers: number;
-  correct: number;
-  reviews: number;
-  days: number;
-}
-
-/**
- * Siembra en la bitácora de la cuenta, en los días anteriores a hoy, respuestas de simulador de una rama con
- * las preguntas que ya bajó y repasos de tarjetas. Los eventos son los de la app, validados con createEvent
- */
-async function seedOwnHistory(
-  page: Page,
-  history: { answers: number; correct: number; reviews: number; days: number },
-): Promise<OwnHistory> {
-  const [questions, options, userId] = await Promise.all([
-    readTable<QuestionRow>(page, 'questions'),
-    readTable<OptionRow>(page, 'options'),
-    sessionUserId(page),
-  ]);
-  const first = questions[0];
-  if (!first) throw new Error('La cuenta no bajó ninguna pregunta');
-  const pool = questions.filter((question) => question.branch === first.branch);
-  // Cada sesión cae a las 12 del día en Mérida, de hace dos días hacia atrás. Así ninguna respuesta cruza el
-  // corte de las 4 de la mañana del día de estudio y todas quedan antes del día de estudio de hoy
-  const meridaNow = new Date(Date.now() - 6 * 3_600_000);
-  const noon = (daysAgo: number) =>
-    Date.UTC(
-      meridaNow.getUTCFullYear(),
-      meridaNow.getUTCMonth(),
-      meridaNow.getUTCDate() - daysAgo,
-      12 + 6,
-    );
-  const context = (at: number, sessionId: string | null) => ({
-    userId,
-    tz: TIME_ZONE,
-    sessionId,
-    clock: { now: () => new Date(at) },
-  });
-  const rows: unknown[] = [];
-  const sessions = Array.from({ length: history.days }, (_, index) => ({
-    id: newId(),
-    startedAt: noon(index + 2),
-  }));
-  for (const session of sessions) {
-    rows.push(
-      createEvent(
-        'session_started',
-        { kind: 'practice', config: {} },
-        context(session.startedAt, session.id),
-      ),
-    );
-  }
-  for (let index = 0; index < history.answers; index += 1) {
-    const session = sessions[index % history.days];
-    const question = pool[index % pool.length];
-    if (!session || !question) throw new Error('Falta una sesión o una pregunta');
-    const own = options.filter((option) => option.questionVersionId === question.id);
-    const correct = index < history.correct;
-    const option = own.find((item) => item.isCorrect === correct) ?? own[0];
-    if (!option) throw new Error('La pregunta no trae opciones');
-    rows.push(
-      createEvent(
-        'question_answered',
-        {
-          questionVersionId: question.id,
-          optionVersionId: option.id,
-          correct,
-          confidence: 'sure',
-          msToAnswer: 70_000,
-          changeCount: 0,
-          highlightEnabled: false,
-        },
-        context(session.startedAt + (index + 1) * 60_000, session.id),
-      ),
-    );
-  }
-  for (let index = 0; index < history.reviews; index += 1) {
-    const session = sessions[index % history.days];
-    if (!session) throw new Error('Falta una sesión');
-    const at = session.startedAt + 3_600_000 + index * 1000;
-    rows.push(
-      createEvent(
-        'card_reviewed',
-        {
-          cardId: newId(),
-          deckId: newId(),
-          source: 'card',
-          rating: 'good',
-          confidence: null,
-          msToReveal: 3000,
-          msToRate: 2000,
-          stateBefore: null,
-          stateAfter: {
-            due: new Date(at + 5 * DAY_MS).toISOString(),
-            stability: 5,
-            difficulty: 5,
-            scheduledDays: 5,
-            learningSteps: 0,
-            reps: 1,
-            lapses: 0,
-            state: 'review',
-            lastReview: new Date(at).toISOString(),
-          },
-        },
-        context(at, null),
-      ),
-    );
-  }
-  await putRows(page, 'events', rows);
-  return { branch: first.branch, ...history };
-}
 
 const cuts = (model: FakeModelStore, cell: Pick<FakeComparisonCell, 'metric' | 'branch'>) => {
   const found = model.cells.find(
