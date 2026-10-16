@@ -2,10 +2,11 @@
 // tutor, así dicen lo mismo. Cada foco sale del informe de Conócete, ya ordenado por peso, o de la
 // subespecialidad más débil, y lleva al lugar donde se practica.
 import { screenPath } from '@/app/screens';
-import { branchSection } from '@/data/schemas/content';
-import { biasTaxonomy, biasTips, topicTaxonomy } from '@/demo/content';
+import { biasTaxonomy, biasTips } from '@/demo/content';
 import type { Insight, InsightReport } from '@/engines/insights';
+import type { WeakTopic } from '@/engines/studentModel';
 import { t } from '@/i18n/es-MX';
+import { modelTexts } from '@/i18n/model';
 
 const text = t.insights;
 export const biasByKey = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias]));
@@ -39,7 +40,11 @@ export function describeInsight(insight: Insight): {
   if (!copy) return { title: insight.id, body: '', action: '', draft: false };
   return {
     title: copy.title,
-    body: copy.text(values, refs, level),
+    // La fatiga validada se mide con la tendencia dentro de la sesión y no con los tercios (B14, 3.6)
+    body:
+      insight.id === 'fatigue' && refs.method === 'trend'
+        ? modelTexts.fatigue.trendBody(values.sessions ?? 0, values.drop ?? 0)
+        : copy.text(values, refs, level),
     action: copy.action(values, refs, level),
     draft: false,
   };
@@ -54,14 +59,8 @@ export function practiceLink(insightId: string): { to: string; review: boolean }
   return { to: screenPath('simulatorSetup'), review: false };
 }
 
-export interface WeakTopic {
-  key: string;
-  name: string;
-  /** Clave de la rama troncal, para filtrar */
-  branch: string;
-  branchName: string;
-  mastery: number;
-}
+// El tema débil lo calcula el modelo del alumno. Aquí se sigue exportando el tipo para quien ya lo importa
+export type { WeakTopic };
 
 export interface FocusItem {
   key: string;
@@ -155,38 +154,4 @@ export function targetBiasTags(report: InsightReport): string[] {
 export function biasCalibration(report: InsightReport): { have: number; need: number } | null {
   const state = report.insights.find((insight) => insight.id === 'biases')?.state;
   return state?.kind === 'calibrating' ? { have: state.have, need: state.need } : null;
-}
-
-/** Dominio por debajo del cual una subespecialidad cuenta como débil */
-export const WEAK_TOPIC_BELOW = 0.6;
-
-/**
- * Subespecialidades con dominio bajo, de la más débil a la menos. Solo entran las que ya tienen
- * respuestas suficientes, las que calibran no cuentan. Inglés médico no entra: su práctica es aparte
- * y su tarjeta de Progreso tiene sus propias cifras (B13, 2.8)
- */
-export function weakTopicsFrom(
-  byTopic: ReadonlyMap<string, { state: { kind: string; mastery?: number } }>,
-): WeakTopic[] {
-  return topicTaxonomy.branches
-    .filter((branch) => branchSection(branch) === 'clinical')
-    .flatMap((branch) =>
-      branch.topics.flatMap((topic) => {
-        const state = byTopic.get(topic.key)?.state;
-        return state?.kind === 'ready' &&
-          state.mastery !== undefined &&
-          state.mastery < WEAK_TOPIC_BELOW
-          ? [
-              {
-                key: topic.key,
-                name: topic.name,
-                branch: branch.key,
-                branchName: branch.name,
-                mastery: state.mastery,
-              },
-            ]
-          : [];
-      }),
-    )
-    .sort((a, b) => a.mastery - b.mastery);
 }

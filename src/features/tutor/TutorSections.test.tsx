@@ -2,10 +2,12 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import type { StudentModel } from '@/data/model/contracts';
 import { t } from '@/i18n/es-MX';
+import { modelTexts } from '@/i18n/model';
 import type { FocusItem } from '../progress/focusItems';
 import type { ReportAi } from './aiContent';
-import { BiasTipsCard, WeeklyReportCard } from './TutorSections';
+import { BiasTipsCard, FatigueCard, WeeklyReportCard } from './TutorSections';
 import type { WeeklyReport } from './weeklyReport';
 
 describe('consejos por sesgo', () => {
@@ -44,6 +46,20 @@ describe('consejos por sesgo', () => {
     );
     expect(screen.getByText(t.tutor.biasTips.reviewedLabel)).toBeVisible();
     expect(screen.queryByText(t.tutor.biasTips.draftLabel)).toBeNull();
+  });
+
+  it('la trampa a la que es propenso lleva su etiqueta y las demás no', () => {
+    const tip = (tag: string, prone: boolean) => ({
+      tag,
+      name: `Trampa ${tag}`,
+      tip: 'Texto.',
+      level: 'focus' as const,
+      examples: [],
+      prone,
+    });
+    render(<BiasTipsCard tips={[tip('a', true), tip('b', false)]} calibration={null} />);
+    expect(screen.getAllByText(modelTexts.bias.prone)).toHaveLength(1);
+    expect(screen.getByText('Trampa a').parentElement).toHaveTextContent(modelTexts.bias.prone);
   });
 
   it('con datos suficientes y sin trampas repetidas lo dice', () => {
@@ -140,5 +156,51 @@ describe('resumen del tutor', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('status')).toHaveTextContent('7 de 20');
+  });
+});
+
+describe('fatiga con el estado global del detector (B14, 3.6)', () => {
+  const text = modelTexts.fatigue;
+  const calibratingWith = (
+    validation: StudentModel['fatigue']['validation'],
+    have = 5,
+  ): StudentModel['fatigue'] => ({ state: 'calibrating', have, need: 3, validation });
+
+  it('mientras el detector no esté validado dice calibrando, aunque ya tenga sus sesiones largas', () => {
+    render(<FatigueCard fatigue={calibratingWith('calibrating')} />);
+    expect(screen.getByRole('heading', { name: text.title })).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(text.validating);
+    // No le inventa un conteo de sesiones que no es lo que falta
+    expect(screen.queryByRole('progressbar')).toBeNull();
+    expect(screen.queryByText(text.detected)).toBeNull();
+    expect(screen.queryByText(text.notDetected)).toBeNull();
+  });
+
+  it('si el detector no resultó confiable lo dice y tampoco le dice si tiene fatiga', () => {
+    render(<FatigueCard fatigue={calibratingWith('not_valid')} />);
+    expect(screen.getByRole('status')).toHaveTextContent(text.notValid);
+  });
+
+  it('con el detector validado pide las sesiones largas que le faltan', () => {
+    render(<FatigueCard fatigue={calibratingWith('validated', 1)} />);
+    const note = screen.getByRole('status');
+    expect(note).toHaveTextContent(`1 de 3 ${text.unit}`);
+    expect(note).toHaveTextContent(t.states.calibrating.remaining(2, text.unit));
+  });
+
+  it('con el detector validado y sus sesiones dice si detecta la caída o no', () => {
+    const { rerender } = render(
+      <FatigueCard
+        fatigue={{ state: 'ready', value: { detected: true }, validation: 'validated' }}
+      />,
+    );
+    expect(screen.getByText(text.detected)).toBeVisible();
+    rerender(
+      <FatigueCard
+        fatigue={{ state: 'ready', value: { detected: false }, validation: 'validated' }}
+      />,
+    );
+    expect(screen.getByText(text.notDetected)).toBeVisible();
+    expect(screen.queryByText(text.detected)).toBeNull();
   });
 });

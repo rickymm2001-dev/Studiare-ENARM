@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
+import type { FatigueValidationState } from '@/data/model/contracts';
 import {
   INSIGHT_MINIMUMS,
   type Insight,
@@ -21,6 +22,7 @@ import {
   type InsightReport,
 } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
+import { modelTexts } from '@/i18n/model';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -110,7 +112,23 @@ export function WeeklyFocus({
   );
 }
 
-export function InsightsPanel({ report }: { report: InsightReport }) {
+/**
+ * Por qué la fatiga sigue calibrando aunque el alumno ya tenga sus sesiones largas: el detector se valida con
+ * los datos de todos (B14, 3.6). null si no es ese el caso
+ */
+function fatigueNote(insight: Insight, validation: FatigueValidationState): string | null {
+  if (insight.id !== 'fatigue' || validation === 'validated') return null;
+  return validation === 'not_valid' ? modelTexts.fatigue.notValid : modelTexts.fatigue.validating;
+}
+
+export function InsightsPanel({
+  report,
+  fatigueValidation = 'calibrating',
+}: {
+  report: InsightReport;
+  /** El estado global del detector de fatiga, que viene del modelo del alumno */
+  fatigueValidation?: FatigueValidationState;
+}) {
   const areas: InsightArea[] = ['exam', 'traps', 'study'];
   const profileRows = biasProfileRows(report);
   return (
@@ -154,7 +172,10 @@ export function InsightsPanel({ report }: { report: InsightReport }) {
                 {area === 'traps' ? <BiasProfileRow rows={profileRows} /> : null}
                 {waiting.map((insight) => (
                   <li key={insight.id}>
-                    <CalibratingRow insight={insight} />
+                    <CalibratingRow
+                      insight={insight}
+                      note={fatigueNote(insight, fatigueValidation)}
+                    />
                   </li>
                 ))}
               </ul>
@@ -219,9 +240,23 @@ function InsightRow({ insight }: { insight: Insight }) {
   );
 }
 
-function CalibratingRow({ insight }: { insight: Insight }) {
+function CalibratingRow({ insight, note }: { insight: Insight; note: string | null }) {
   if (insight.state.kind !== 'calibrating') return null;
   const { have, need, unit } = insight.state;
+  // Con una nota el motivo no es cuánto lleva el alumno, así que no hay barra de avance
+  if (note !== null) {
+    return (
+      <Row
+        lead={<Hourglass className="text-fg-muted" />}
+        title={calibratingTitle(insight)}
+        tail={<span className="shrink-0 text-xs text-fg-muted">{text.calibratingLabel}</span>}
+      >
+        <p className="text-fg-muted">
+          {text.calibratingLabel}. {note}
+        </p>
+      </Row>
+    );
+  }
   return (
     <Row
       lead={<Hourglass className="text-fg-muted" />}

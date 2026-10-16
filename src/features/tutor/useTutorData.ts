@@ -1,6 +1,7 @@
 // Los datos que necesita el tutor y la vista que sale de ellos. La pantalla del tutor y el widget
 // de la última hipótesis usan lo mismo, así dicen lo mismo. Carga el banco completo para detectar
-// confusiones entre preguntas parecidas, por eso solo se monta donde se necesita.
+// confusiones entre preguntas parecidas, por eso solo se monta donde se necesita. El dominio, el informe de
+// Conócete y la fatiga salen del modelo del alumno (B14), el mismo que lee Progreso.
 import { useMemo } from 'react';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
@@ -11,8 +12,10 @@ import type { Card, Note } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
 import { freeSubjectCardIds } from '@/data/usecases/outlines';
 import { deckIds } from '@/demo/content/deckEntities';
+import type { StudentModelBuild } from '@/engines/studentModel';
 import { studyDayOf } from '@/engines/studyDay';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
+import { useStudentModelBuild } from '../model/useStudentModel';
 import { cardFaces, topicFromTags } from '../review/study';
 import type { ReadySession } from '../shared/RequireSession';
 import { applyTipReviews, tipReviewsFrom, type TipReview } from '../shared/tipReviews';
@@ -31,14 +34,18 @@ export interface TutorData {
   tipReviews: ReadonlyMap<string, TipReview>;
   /** Cartas de una materia libre, que no cuentan en Conócete ni en el informe semanal (B6) */
   freeSubjectCards: ReadonlySet<string>;
+  /** El modelo del alumno, el mismo que lee Progreso */
+  model: StudentModelBuild;
 }
 
 export function useTutorData(
-  userId: string,
+  session: ReadySession,
   events: readonly AppEvent[] | undefined,
 ): TutorData | undefined {
   const api = useDataApi();
+  const userId = session.user.id;
   const catalog = useDeckCatalog();
+  const model = useStudentModelBuild(session, events);
   const answeredIds = [
     ...new Set(
       (events ?? []).flatMap((event) =>
@@ -83,10 +90,10 @@ export function useTutorData(
     [api.repos],
   );
   const freeSubjectCards = useLiveData(() => freeSubjectCardIds(api), [api.repos]);
-  if (!catalog || !bank || !content || !artifacts || !tipReviews || !freeSubjectCards) {
+  if (!catalog || !bank || !content || !artifacts || !tipReviews || !freeSubjectCards || !model) {
     return undefined;
   }
-  return { catalog, bank, content, artifacts, tipReviews, freeSubjectCards };
+  return { catalog, bank, content, artifacts, tipReviews, freeSubjectCards, model };
 }
 
 /**
@@ -101,7 +108,7 @@ export function useTutorView(
   data: TutorData,
 ): TutorView {
   const { user, settings } = session;
-  const { catalog, bank, content, tipReviews, freeSubjectCards } = data;
+  const { catalog, bank, content, tipReviews, freeSubjectCards, model } = data;
   const base = useMemo(() => {
     const noteById = new Map(content.notes.map((note) => [note.id, note]));
     const catalogTopic = new Map(
@@ -140,8 +147,18 @@ export function useTutorView(
       desiredRetention: settings.desiredRetention,
       thresholds: DEFAULT_THRESHOLDS,
       freeSubjectCards,
+      model,
     });
-  }, [events, catalog, bank, content, freeSubjectCards, user.timeZone, settings.desiredRetention]);
+  }, [
+    events,
+    catalog,
+    bank,
+    content,
+    freeSubjectCards,
+    model,
+    user.timeZone,
+    settings.desiredRetention,
+  ]);
   // El texto que revisó un médico reemplaza al base, y el que rechazó no se muestra
   return useMemo(
     () => ({ ...base, biasTips: applyTipReviews(base.biasTips, tipReviews) }),

@@ -1463,8 +1463,6 @@ export const featureText = {
     emptyHidden: (n: number) =>
       plural(n, 'subespecialidad sin datos todavía', 'subespecialidades sin datos todavía'),
     difficultyTitle: 'Según la dificultad',
-    difficultyHint:
-      'Tu exactitud en preguntas fáciles, medias y difíciles. La dificultad es la que estimó el médico y se calibra con las respuestas de todos los alumnos.',
     difficultyOf: (correct: number, total: number) =>
       `${correct.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} correctas`,
     difficultyCalibrating: (missing: number) =>

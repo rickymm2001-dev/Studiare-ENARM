@@ -15,7 +15,9 @@
  *   - Tarea, casos seriados y viñetas largas con exactitud por grupo e intervalo de Wilson
  *   - Sesgos con analyzeBias en error_share (D-051) contra una línea base de azar, la parte de
  *     errores que irían a cada etiqueta si eligiera al azar entre los distractores visibles. Es
- *     honesta sin población real y se calcula con sus propios datos
+ *     honesta sin población real y se calcula con sus propios datos. Con la población que publica la
+ *     calibración nocturna (B14, populationBias), las etiquetas que tienen 30 alumnos o más usan la
+ *     de la población y las demás siguen con la de azar
  *   - Retención, sanguijuelas, constancia y motivos de error (los siete de errorCauses.ts)
  * Umbrales. Todos (J) y en INSIGHT_MINIMUMS.
  */
@@ -85,6 +87,12 @@ export interface InsightInput {
   daysSinceStart: number;
   desiredRetention: number;
   thresholds: Pick<Thresholds, 'behavior' | 'bias' | 'structure'>;
+  /**
+   * Línea base de atracción por etiqueta de la población, con el método error_share (B14, 3.7 y 4.2 del
+   * plan de B14). Quien llama manda solo las etiquetas con alumnos suficientes. Cada una reemplaza a la
+   * de azar de su etiqueta. Sin ella, o sin esa etiqueta, vale la de azar
+   */
+  populationBias?: Readonly<Record<string, number>>;
 }
 
 export type InsightArea = 'exam' | 'traps' | 'study';
@@ -433,9 +441,14 @@ function trapInsights(input: InsightInput): { insights: Insight[]; taggedErrors:
     visibleTags: answer.visibleTags,
     chosenTag: answer.correct ? null : answer.chosenTag,
   }));
+  const population = input.populationBias ?? {};
   const analysis = analyzeBias({
     exposures,
-    baseline: { attraction: chanceBaseline(exposures), method: 'error_share', source: 'chance' },
+    baseline: {
+      attraction: { ...chanceBaseline(exposures), ...population },
+      method: 'error_share',
+      source: Object.keys(population).length > 0 ? 'real' : 'chance',
+    },
     thresholds: input.thresholds.bias,
   });
   const out: Insight[] = [];
@@ -595,20 +608,33 @@ function shiftDay(day: string, amount: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-export function buildInsights(input: InsightInput): InsightReport {
-  const traps = trapInsights(input);
-  const insights = [...examInsights(input), ...traps.insights, ...studyInsights(input)];
+/**
+ * Las lecturas con sus fortalezas y sus focos, cada lista de la que más pesa a la que menos. Lo usa
+ * buildInsights y lo usa el modelo del alumno cuando cambia una lectura, como la fatiga mientras el
+ * detector no está validado (B14, 3.6 del plan de B14)
+ */
+export function rankInsights(
+  insights: readonly Insight[],
+): Pick<InsightReport, 'insights' | 'strengths' | 'focus'> {
   const readyOnes = insights.filter((insight) => insight.state.kind === 'ready');
   const levelOf = (insight: Insight) =>
     insight.state.kind === 'ready' ? insight.state.level : null;
   return {
-    insights,
+    insights: [...insights],
     strengths: readyOnes
       .filter((insight) => levelOf(insight) === 'strength')
       .sort((a, b) => b.weight - a.weight),
     focus: readyOnes
       .filter((insight) => levelOf(insight) === 'focus')
       .sort((a, b) => b.weight - a.weight),
+  };
+}
+
+export function buildInsights(input: InsightInput): InsightReport {
+  const traps = trapInsights(input);
+  const insights = [...examInsights(input), ...traps.insights, ...studyInsights(input)];
+  return {
+    ...rankInsights(insights),
     totals: {
       answers: input.answers.length,
       reviews: input.reviews.length,

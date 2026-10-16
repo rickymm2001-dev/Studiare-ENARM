@@ -160,7 +160,7 @@ function Progress({ session }: { session: ReadySession }) {
 
       <WeeklyFocus report={report} weakTopics={weakTopics} />
 
-      <InsightsPanel report={report} />
+      <InsightsPanel report={report} fatigueValidation={analysis.model.model.fatigue.validation} />
 
       <TopicsCard
         byBranch={byBranch}
