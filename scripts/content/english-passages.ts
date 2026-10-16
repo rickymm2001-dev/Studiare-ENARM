@@ -10,12 +10,19 @@
 // (CC BY-NC o CC BY-ND), sin resumen o de más de 8,000 caracteres no entra, y el script dice por qué.
 //
 // Fuentes (5.2 del plan de B13)
-//   - Temas de MedlinePlus, de dominio público. Salen del mismo XML de temas de salud que usa el vocabulario
-//     (https://medlineplus.gov/xml.html, que se baja a mano), con el atributo --medlineplus
+//   - Temas de MedlinePlus. Se toman como dominio público por el aviso de uso de MedlinePlus, sin leer la
+//     página de cada tema, y el médico que elige el tema lo confirma en su página (docs/INGLES_MEDICO.md).
+//     Salen del mismo XML de temas de salud que usa el vocabulario (https://medlineplus.gov/xml.html, que se
+//     baja a mano), con el atributo --medlineplus
 //   - Resúmenes de artículos del subconjunto de acceso abierto de PubMed Central. La licencia se lee de los
 //     metadatos del propio artículo, nunca se supone, y se guarda el enlace exacto. Se piden por el servicio
 //     E-utilities de NLM, uno de los que PubMed Central aprueba para el acceso automático, o se leen de una
 //     carpeta con --pmc-dir (un archivo PMC<número>.xml por artículo)
+//
+// Pedidos a E-utilities. NCBI pide decir quién hace el pedido y no pasar de 3 por segundo sin clave de API.
+// Cada pedido lleva tool=studiare-english-passages y, solo si existe la variable de entorno NCBI_EMAIL, el
+// correo de contacto en email. Ese correo nunca se escribe en el código ni en el repo. Si falta, el script lo
+// avisa por pantalla y sigue. Entre un pedido y otro espera 350 ms
 //
 // El archivo de entrada es content-drafts/ingles/textos.json, con la lista que eligen los médicos
 //   { "texts": [ { "source": "medlineplus", "id": "2846", "subtopic": "english_pediatrics", "questions": 3 },
@@ -205,7 +212,8 @@ export function medlineplusPassage(
     request,
     title: topic.title,
     text,
-    // Los resúmenes de los temas son de dominio público y NLM pide decir que vienen de MedlinePlus.gov
+    // Se toma como dominio público por el aviso de uso de MedlinePlus, sin leer la página del tema. El médico
+    // lo confirma al elegirlo (docs/INGLES_MEDICO.md). NLM pide decir que viene de MedlinePlus.gov
     license: 'public_domain',
     sourceTitle: `${topic.title}, MedlinePlus.gov (NLM)`,
     url: topic.url,
@@ -591,6 +599,81 @@ export function buildPassagesWorkbook(
   return book;
 }
 
+// ===================================================================== E-utilities
+/** Los dominios que la red de la sesión tiene que abrir para los scripts de Inglés médico */
+const NETWORK_HOSTS = [
+  'medlineplus.gov',
+  'www.ncbi.nlm.nih.gov',
+  'pmc.ncbi.nlm.nih.gov',
+  'eutils.ncbi.nlm.nih.gov',
+];
+
+/** Cómo se presenta el script ante NCBI, en el parámetro tool. NCBI lo pide sin espacios */
+export const EUTILS_TOOL = 'studiare-english-passages';
+/** La variable de entorno con el correo de contacto que NCBI pide. Ese correo no se escribe en el repo */
+export const EUTILS_EMAIL_VARIABLE = 'NCBI_EMAIL';
+/** NCBI permite 3 pedidos por segundo sin clave de API. Con 350 ms entre uno y otro salen menos de 3 */
+export const EUTILS_PAUSE_MS = 350;
+const EUTILS_EFETCH = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi';
+
+/** El correo de la variable de entorno, o undefined si no existe o viene vacía */
+export function eutilsEmail(env: Readonly<Record<string, string | undefined>>): string | undefined {
+  const email = env[EUTILS_EMAIL_VARIABLE]?.trim();
+  return email === undefined || email === '' ? undefined : email;
+}
+
+/** La dirección del XML de un artículo, la que se abre a mano en el navegador. No lleva el correo */
+export function efetchUrl(pmcid: string): string {
+  return `${EUTILS_EFETCH}?db=pmc&id=${encodeURIComponent(pmcid)}&retmode=xml`;
+}
+
+/** El pedido del script. Dice quién lo hace con tool y, si hay correo, con email */
+export function efetchRequestUrl(pmcid: string, email?: string): string {
+  const contact = email === undefined ? '' : `&email=${encodeURIComponent(email)}`;
+  return `${efetchUrl(pmcid)}&tool=${EUTILS_TOOL}${contact}`;
+}
+
+const NO_EMAIL_NOTICE = `NCBI pide que cada pedido a E-utilities diga quién lo hace, con un correo de contacto, y no encontré la variable ${EUTILS_EMAIL_VARIABLE}. Defínela en tu terminal con tu correo antes de correr el script, sin escribirlo en ningún archivo del repo. Sigo con los pedidos sin el correo, solo con el nombre ${EUTILS_TOOL}.`;
+
+export interface PmcFetcherOptions {
+  /** El correo de contacto. Sin él, el pedido sale solo con tool */
+  email?: string | undefined;
+  /** Cómo esperar entre pedidos. Las pruebas lo cambian para no esperar de verdad */
+  sleep?: ((ms: number) => Promise<void>) | undefined;
+}
+
+/**
+ * Pide el XML de los artículos a E-utilities, uno por uno y con una pausa de EUTILS_PAUSE_MS entre un
+ * pedido y el siguiente, también si el anterior falló. Antes del primero no espera. Si la red no abre, dice
+ * cómo bajarlo a mano
+ */
+export function createPmcFetcher(
+  options: PmcFetcherOptions = {},
+): (pmcid: string) => Promise<string | null> {
+  const sleep =
+    options.sleep ??
+    ((ms: number) => new Promise<void>((resolveWait) => setTimeout(resolveWait, ms)));
+  let asked = false;
+  return async (pmcid) => {
+    if (asked) await sleep(EUTILS_PAUSE_MS);
+    asked = true;
+    let response: Response;
+    try {
+      response = await fetch(efetchRequestUrl(pmcid, options.email), {
+        signal: AbortSignal.timeout(20_000),
+      });
+    } catch {
+      throw new Error(
+        `No pude abrir eutils.ncbi.nlm.nih.gov. Agrega ${NETWORK_HOSTS.join(', ')} a los dominios permitidos de la sesión, o baja el XML a mano de ${efetchUrl(pmcid)} y guárdalo como ${pmcid}.xml en una carpeta para pasarla con --pmc-dir.`,
+      );
+    }
+    if (response.status === 404) return null;
+    if (!response.ok)
+      throw new Error(`eutils.ncbi.nlm.nih.gov contestó ${response.status} al pedir ${pmcid}.`);
+    return response.text();
+  };
+}
+
 // ===================================================================== Línea de comandos
 const HELP = `Textos con licencia para los casos de lectura en inglés
 
@@ -602,6 +685,10 @@ Opciones
   --out <ruta>         Dónde escribir el Excel, por omisión content-drafts/ingles/Studiare-ingles-textos.xlsx
   --first-case <n>     Número del primer caso, por omisión 1
   --case-prefix <txt>  Prefijo de la clave de cada caso, por omisión EN-C
+
+Variable de entorno
+  NCBI_EMAIL           Tu correo de contacto. NCBI lo pide en cada pedido a E-utilities. Se define en la
+                       terminal y no se escribe en ningún archivo del repo
 `;
 
 const EXAMPLE_LIST = `{
@@ -611,36 +698,19 @@ const EXAMPLE_LIST = `{
   ]
 }`;
 
-const NETWORK_HOSTS = [
-  'medlineplus.gov',
-  'www.ncbi.nlm.nih.gov',
-  'pmc.ncbi.nlm.nih.gov',
-  'eutils.ncbi.nlm.nih.gov',
-];
-
 function option(args: string[], name: string): string | undefined {
   const index = args.indexOf(name);
   return index === -1 ? undefined : args[index + 1];
 }
 
-/** Pide el XML de un artículo a E-utilities. Si la red no abre, dice cómo bajarlo a mano */
-async function fetchPmc(pmcid: string): Promise<string | null> {
-  const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=${encodeURIComponent(pmcid)}&retmode=xml`;
-  let response: Response;
-  try {
-    response = await fetch(url, { signal: AbortSignal.timeout(20_000) });
-  } catch {
-    throw new Error(
-      `No pude abrir eutils.ncbi.nlm.nih.gov. Agrega ${NETWORK_HOSTS.join(', ')} a los dominios permitidos de la sesión, o baja el XML a mano de ${url} y guárdalo como ${pmcid}.xml en una carpeta para pasarla con --pmc-dir.`,
-    );
-  }
-  if (response.status === 404) return null;
-  if (!response.ok)
-    throw new Error(`eutils.ncbi.nlm.nih.gov contestó ${response.status} al pedir ${pmcid}.`);
-  return response.text();
+export interface MainOptions {
+  /** Las variables de entorno. Por omisión las del proceso */
+  env?: Readonly<Record<string, string | undefined>> | undefined;
+  /** Cómo esperar entre pedidos a E-utilities. Las pruebas lo cambian para no esperar de verdad */
+  sleep?: ((ms: number) => Promise<void>) | undefined;
 }
 
-export async function main(args: string[]): Promise<number> {
+export async function main(args: string[], options: MainOptions = {}): Promise<number> {
   if (args.includes('--ayuda') || args.includes('--help')) {
     console.log(HELP);
     return 0;
@@ -670,6 +740,16 @@ export async function main(args: string[]): Promise<number> {
     return 2;
   }
   const pmcDir = option(args, '--pmc-dir');
+  const email = eutilsEmail(options.env ?? process.env);
+  // Con red, NCBI pide el correo de contacto en cada pedido. Si falta, lo dice una vez y sigue sin él
+  if (
+    pmcDir === undefined &&
+    email === undefined &&
+    requests.some((item) => item.source === 'pmc')
+  ) {
+    console.log(NO_EMAIL_NOTICE);
+  }
+  const fetchPmc = createPmcFetcher({ email, sleep: options.sleep });
   const sources: PassageSources = {
     medlineplus:
       medlineplusPath === undefined

@@ -8,6 +8,7 @@ import { parsePassageSource } from '@/data/content/passageSource';
 import { QuestionSchema } from '@/data/schemas/bank';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
 import { biasTaxonomy, topicTaxonomy } from '@/demo/content';
+import { physicianText } from '@/i18n/physician';
 import passageCases from '../../../tests/fixtures/passage-sources.json';
 import {
   buildNextVersion,
@@ -271,6 +272,13 @@ describe('reglas del borrador en inglés', () => {
       },
     };
     expect(codes(longTitle)).not.toContain('passage_long');
+  });
+
+  it('la frase de la fuente larga manda a acortar el enlace y no el título, que se recorta solo', () => {
+    const message = physicianText.questionEditor.issues.passage_long;
+    expect(message).toBe('La fuente del texto pasa de 300 caracteres. Acorta el enlace.');
+    // Es lo único que puede pasarse. Con un enlace que cabe el título largo nunca dispara el aviso
+    expect(message).not.toMatch(/título/i);
   });
 
   it('el historial dice cuando cambió la fuente del texto', () => {

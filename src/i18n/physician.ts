@@ -314,7 +314,7 @@ export const physicianText = {
       gpc_empty: 'Una referencia de GPC no tiene título.',
       clue_empty: 'Un dato del caso no tiene texto.',
       task_missing: 'Elige la tarea de la pregunta. No se pudo detectar sola.',
-      passage_long: 'La fuente del texto pasa de 300 caracteres. Acorta el título o el enlace.',
+      passage_long: 'La fuente del texto pasa de 300 caracteres. Acorta el enlace.',
       language_branch_mismatch:
         'El idioma no va con la rama. Inglés médico va en inglés y las demás ramas en español.',
     } as Record<string, string>,

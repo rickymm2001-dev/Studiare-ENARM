@@ -70,7 +70,8 @@ Las licencias que se aceptan son estas, y la lista se revisará con el abogado (
 - Sin fuente, sin título, sin licencia o sin enlace https cuando la licencia lo pide, la pregunta entra como borrador con el pendiente de falta de fuente del texto
 - La referencia mide hasta 300 caracteres. Si el título es muy largo, Studiare lo recorta y nunca recorta el enlace
 - Como espacio cuentan el espacio, el tabulador, el salto de línea, el espacio sin salto y la marca de orden de bytes que a veces trae un texto copiado de la web o de un PDF. La app y la base los leen igual, y una referencia que los trae se lee como si trajera espacios normales
-- La licencia se lee en la propia página o en los metadatos del artículo. Nunca se supone, y se guarda el enlace exacto
+- La licencia de un artículo se lee en sus metadatos o en la propia página. Nunca se supone, y se guarda el enlace exacto
+- La excepción es MedlinePlus. Sus temas se toman como dominio público por el aviso de uso de MedlinePlus.gov, sin leer la página de cada tema, y el médico que elige el tema lo confirma en su página antes de anotarlo en la lista. Si la página dice que el resumen viene de otra fuente o que tiene derechos reservados, ese tema no se usa
 
 ## De dónde sacar textos
 
@@ -133,6 +134,8 @@ La lista va en content-drafts/ingles/textos.json.
 - No entra, y el script dice por qué, un texto sin licencia en sus metadatos, con una licencia que no permite el uso comercial, sin resumen o de más de 8,000 caracteres, porque no se recorta. Los demás textos de la lista siguen
 - Si falta la lista, el script termina con un aviso y enseña la forma que debe tener
 - Sin carpeta con --pmc-dir pide cada artículo al servicio E-utilities de NLM, uno de los que PubMed Central aprueba para el acceso automático. Si la red no abre, dice qué dominios agregar y cómo bajar el archivo a mano
+- Cada pedido a E-utilities se presenta con tool=studiare-english-passages y espera 350 ms después del anterior, porque NCBI permite hasta 3 pedidos por segundo sin clave de API
+- NCBI también pide un correo de contacto. El script lo manda como email solo si existe la variable de entorno NCBI_EMAIL, que se define en la terminal antes de correrlo y nunca se escribe en el código ni en un archivo del repo. Si falta, el script lo avisa por pantalla y sigue sin él. Con --pmc-dir no hay pedidos y no avisa
 
 ### Mazo de vocabulario
 
