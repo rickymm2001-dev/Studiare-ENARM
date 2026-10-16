@@ -124,7 +124,13 @@ export function OfficialScoreCard({ session }: { session: ReadySession }) {
         // El permiso se da en Configuración, Privacidad. Sin caja gris dentro de la tarjeta (H06)
         <div className="mt-3 flex flex-col items-start gap-2">
           <p className="text-sm text-fg-muted">{text.scoreNeedsConsent}</p>
-          <Button asChild variant="secondary" size="sm">
+          {/* El texto del permiso es largo. En el teléfono baja a otro renglón en lugar de salirse de la pantalla */}
+          <Button
+            asChild
+            variant="secondary"
+            size="sm"
+            className="h-auto py-1.5 text-left whitespace-normal"
+          >
             <Link to={settingsPath('privacidad')}>{t.settingsPage.officialScore.turnOn}</Link>
           </Button>
         </div>
