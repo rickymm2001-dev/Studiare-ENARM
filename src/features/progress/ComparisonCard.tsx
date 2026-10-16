@@ -20,6 +20,7 @@ import { SimulatedDataLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { LoadingState } from '@/ui/states/states';
+import { dayInWords } from '../model/dayWords';
 import type { ComparisonState } from '../model/modelSnapshots';
 import { settingsPath } from '../settings/sections';
 import {
@@ -35,10 +36,6 @@ const BRANCH_NAMES: ReadonlyMap<string, string> = new Map(
   topicTaxonomy.branches.map((branch) => [branch.key, branch.name]),
 );
 const METRICS: readonly ComparisonMetric[] = ['sim_accuracy', 'reviews', 'consistency'];
-
-/** 14 de octubre, para la noche que calculó la foto */
-const dayInWords = (day: string) =>
-  new Date(`${day}T12:00:00`).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
 
 function rowLabel(row: ComparisonRow): string {
   return row.metric === 'sim_accuracy'

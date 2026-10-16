@@ -3,7 +3,8 @@
 // del 20 %. Cada revisión etiqueta todos sus distractores (8.9). Pares, kappa global con su intervalo,
 // kappa por etiqueta, el vocabulario que usa la app del alumno con su regla y estado calibrando hasta
 // 30 pares. Debajo, las preguntas en revisión que al médico le faltan por etiquetar a ciegas. El detalle
-// se calcula aquí con los pares de editor_label_pairs, sin texto.
+// se calcula aquí con los pares de editor_label_pairs, sin texto. Con la nube suma el historial noche por
+// noche del kappa que calcula la calibración, con su paridad contra este tablero (B14).
 import { Gauge, ListChecks, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { usePreferences } from '@/app/preferences';
@@ -19,6 +20,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingState, ErrorState, LoadingState } from '@/ui/states/states';
+import { AgreementHistoryCard } from './AgreementHistoryCard';
 import { sourceKeyLabel } from './reviewSteps';
 import { useEditorialRepo } from './useEditorialRepo';
 import { useRepoQuery } from './useRepoQuery';
@@ -182,6 +184,8 @@ export function AgreementScreen() {
           </div>
         )}
       </Card>
+
+      <AgreementHistoryCard cloud={repo.kind === 'cloud'} ready={ready} sourceKey={key} />
 
       <PendingQueue isPhysician={isPhysician} pending={pending} />
     </>

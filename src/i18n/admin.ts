@@ -305,8 +305,8 @@ export const adminText = {
         hint: 'Días en los que cuentan esos hallazgos (J).',
       },
       'fsrs.optimizeAfterReviews': {
-        label: 'Optimizar FSRS por alumno',
-        hint: 'Repasos para optimizar los parámetros de cada alumno. Por ahora FSRS va de fábrica para todos (J, respuesta 90).',
+        label: 'Optimizar FSRS por alumno (Sin uso)',
+        hint: 'Sin uso. FSRS va de fábrica para todos (J, respuesta 90) y ningún código lo lee, así que cambiar este número no hace nada. Queda como punto de extensión.',
       },
       'fsrs.desiredRetention': {
         label: 'Retención deseada',

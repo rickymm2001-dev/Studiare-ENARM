@@ -3,7 +3,7 @@ import { modelTexts } from './model';
 
 /** Lo que estos textos nunca dicen: ni una cifra de resultado, ni una probabilidad, ni un lugar en una lista */
 const FORBIDDEN =
-  /puntaje (estimado|esperado|probable)|probabilidad|plaza|ranking|lugar n[uú]mero|posici[oó]n n[uú]mero/i;
+  /puntaje (estimado|esperado|probable)|probabilidad|\bplazas?\b|ranking|lugar n[uú]mero|posici[oó]n n[uú]mero/i;
 
 /** Cada juego de argumentos con el que se prueban los textos que son funciones. Todos los números */
 const ARGUMENT_SETS: readonly (readonly number[])[] = [

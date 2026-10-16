@@ -11,7 +11,7 @@ import { ComparisonCard } from './ComparisonCard';
 
 const text = modelTexts.comparison;
 const FORBIDDEN =
-  /puntaje (estimado|esperado|probable)|probabilidad|plaza|ranking|lugar n[uú]mero/i;
+  /puntaje (estimado|esperado|probable)|probabilidad|\bplazas?\b|ranking|lugar n[uú]mero/i;
 
 const accuracyCuts = distributionCuts(
   Array.from({ length: 60 }, (_, index) => Math.round((0.3 + index * 0.01) * 100) / 100),

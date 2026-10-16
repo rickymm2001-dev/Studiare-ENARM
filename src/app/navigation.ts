@@ -110,6 +110,8 @@ const adminGroup: NavGroup = {
     { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
     // Auditoría de la IA (B12), la compuerta 1 de los motores de IA
     { path: screenPath('aiAudit'), label: t.navItems.audit, icon: ClipboardList },
+    // Calibración nocturna del modelo del alumno (B14). Con un ícono que ya carga la app
+    { path: screenPath('calibrationAdmin'), label: t.screens.calibrationAdmin.title, icon: Scale },
     // Sin engrane, que es solo de Configuración (comentario 3)
     { path: screenPath('adminSettings'), label: t.navItems.platform, icon: SlidersHorizontal },
     bank,
