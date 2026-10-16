@@ -282,3 +282,24 @@ revoke all on function public.editor_agreement_history(integer) from public, ano
 grant execute on function public.editor_agreement_history(integer) to authenticated;
 revoke all on function public.admin_calibration_runs(integer) from public, anon, authenticated, service_role;
 grant execute on function public.admin_calibration_runs(integer) to authenticated;
+
+-- Lo que revisa el plan b14 (deploy/b14.json) al terminar y cada vez que se vuelve a correr. Son hechos que no
+-- cambian con el tiempo, así que el plan se puede repetir. Si la calibración está encendida y en qué modo
+-- se lee aparte, con la consulta de docs/SUPABASE.md, sección Datos y modelo del alumno (B14).
+-- Comprobación. Las columnas deben salir como las pide el plan
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename in ('calibration_runs', 'item_calibrations',
+     'option_calibrations', 'population_snapshots', 'comparison_cells', 'agreement_snapshots', 'model_publication')) as tablas_nuevas,
+  (select count(*) from pg_indexes where schemaname = 'public' and tablename = 'events' and indexname in ('events_seq',
+     'events_consent_changed', 'events_session_started', 'events_answered_session')) as indices_nuevos,
+  has_function_privilege('service_role', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as llave_empieza_corrida,
+  has_function_privilege('authenticated', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as alumno_empieza_corrida,
+  has_function_privilege('anon', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as anonimo_empieza_corrida,
+  has_function_privilege('authenticated', 'public.comparison_snapshot()', 'execute') as alumno_lee_comparacion,
+  has_function_privilege('anon', 'public.comparison_snapshot()', 'execute') as anonimo_lee_comparacion,
+  has_function_privilege('authenticated', 'public.calibration_consenters(bigint)', 'execute') as alumno_lista_permisos,
+  has_function_privilege('service_role', 'public.calibration_apply(uuid)', 'execute') as llave_aplica_directo,
+  has_table_privilege('service_role', 'public.calibration_runs', 'select') as llave_lee_corridas_directo,
+  exists (select 1 from public.platform_settings where key = 'model_settings'
+    and (value #> '{calibration,mode}') is not null) as modelo_sembrado,
+  exists (select 1 from public.email_kinds where kind = 'distractor_flags') as correo_de_distractores;

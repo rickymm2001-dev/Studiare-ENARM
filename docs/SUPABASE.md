@@ -1160,9 +1160,16 @@ Aplica primero todas las anteriores, incluidas las de B12. Van en orden y las tr
 2. supabase/migrations/20261028000002_calibration_job.sql
 3. supabase/migrations/20261028000003_model_reads.sql
 
+Con el token de Supabase la sesión las aplica con la herramienta de despliegue, primero con --dry-run y luego sin él. Las tres van también en el plan b11, porque la tercera redefine bank_catalog_json de B11, y la que corra primero las aplica y la otra las salta (docs/DESPLIEGUE.md).
+
+```bash
+npm run deploy:supabase -- --plan b14 --dry-run
+npm run deploy:supabase -- --plan b14 --yes
+```
+
 Crear índices en la bitácora sin concurrently bloquea las escrituras mientras se crean. Antes de lanzar la tabla es chica y tarda segundos.
 
-Para confirmar que quedó, abre una New query, pega esto y da clic en Run.
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run. Es la misma consulta que viene al final de la migración 20261028000003 y la que corre el plan b14 (deploy/b14.json) cuando termina.
 
 ```sql
 select
@@ -1178,16 +1185,27 @@ select
   has_function_privilege('authenticated', 'public.calibration_consenters(bigint)', 'execute') as alumno_lista_permisos,
   has_function_privilege('service_role', 'public.calibration_apply(uuid)', 'execute') as llave_aplica_directo,
   has_table_privilege('service_role', 'public.calibration_runs', 'select') as llave_lee_corridas_directo,
-  (select value #>> '{calibration,enabled}' from public.platform_settings where key = 'model_settings') as calibracion_encendida,
-  (select value #>> '{calibration,mode}' from public.platform_settings where key = 'model_settings') as modo,
+  exists (select 1 from public.platform_settings where key = 'model_settings'
+    and (value #> '{calibration,mode}') is not null) as modelo_sembrado,
   exists (select 1 from public.email_kinds where kind = 'distractor_flags') as correo_de_distractores;
 ```
 
 Debe salir
 - tablas_nuevas en 7 e indices_nuevos en 4
-- llave_empieza_corrida, alumno_lee_comparacion y correo_de_distractores en true
+- llave_empieza_corrida, alumno_lee_comparacion, modelo_sembrado y correo_de_distractores en true
 - alumno_empieza_corrida, anonimo_empieza_corrida, anonimo_lee_comparacion, alumno_lista_permisos, llave_aplica_directo y llave_lee_corridas_directo en false
-- calibracion_encendida en false y modo en dry_run, hasta que la sesión la prenda con tu aviso
+
+Si la calibración está encendida y en qué modo se lee con esta otra. No va en el plan porque cambia con el tiempo, y con ella el plan no se podría volver a correr después de encenderla.
+
+```sql
+select
+  value #>> '{calibration,enabled}' as calibracion_encendida,
+  value #>> '{calibration,mode}' as modo
+from public.platform_settings
+where key = 'model_settings';
+```
+
+Debe salir calibracion_encendida en false y modo en dry_run, hasta que la sesión la prenda con tu aviso.
 
 ### La llave y el flujo de GitHub
 

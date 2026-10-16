@@ -134,8 +134,8 @@ Decisiones de B14 que esperan tu visto bueno, con la opción recomendada ya toma
 
 Lo que hace la sesión con el conector, sin pedirte nada más.
 
-1. Aplica 20261028000001 a 20261028000003 en orden. No hay archivo manual
-2. Revisa los permisos de las funciones con la consulta de docs/SUPABASE.md, sección Datos y modelo del alumno (B14)
+1. Aplica 20261028000001 a 20261028000003 en orden con la herramienta de despliegue (npm run deploy:supabase -- --plan b14, después de b11, b12 y b13). No hay archivo manual ni Edge Functions. El plan b11 lleva las mismas tres y la que corra primero las aplica (docs/DESPLIEGUE.md, B11 y B14)
+2. Revisa la estructura y los permisos de las funciones. El plan corre solo la consulta de docs/SUPABASE.md, sección Datos y modelo del alumno (B14), y la sesión lee aparte si la calibración está encendida
 3. Con tu aviso de la llave, prende model_settings.calibration.enabled en solo reporte y lanza el flujo calibration con Run workflow
 4. Lee solo calibration_runs, sus conteos y códigos, y los anota en PROGRESS.md
 5. Pasa a Publicar tras dos noches limpias, y lo anota
