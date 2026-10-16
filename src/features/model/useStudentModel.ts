@@ -40,7 +40,7 @@ export function useStudentModelState(
   const freeSubjectCards = useLiveData(() => freeSubjectCardIds(api), [api.repos]);
   const cards = useModelCards(session, events);
   const difficultyOf = useDifficultyOf(bank);
-  const population = usePopulation();
+  const population = usePopulation(session.user.id);
   const vocabulary = useBiasVocabulary();
   const { user, settings } = session;
   return useMemo(() => {

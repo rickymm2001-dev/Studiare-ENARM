@@ -4,6 +4,11 @@ import { buildDemoBank } from '@/demo/content/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { loadDemoDecks } from '@/demo/content/decks';
 import {
+  buildDemoSnapshotData,
+  type DemoSnapshotData,
+  type DemoSnapshotRequest,
+} from '@/demo/generator/snapshots';
+import {
   buildDemoSeed,
   DEFAULT_DEMO_SEED,
   provisionalExamDate,
@@ -15,6 +20,8 @@ import {
 export interface SimulateWorkerApi {
   /** Registros listos para sembrar. endDay es el día de estudio de hoy */
   buildSeed(input: { endDay: string } & Partial<DemoSeedOptions>): Promise<DemoSeedRecords>;
+  /** La comparación y la población que enseña la demostración, de una cohorte chica de simulados (B14) */
+  buildSnapshots(request: DemoSnapshotRequest): Promise<DemoSnapshotData>;
 }
 
 export const simulateApi: SimulateWorkerApi = {
@@ -26,5 +33,8 @@ export const simulateApi: SimulateWorkerApi = {
     };
     const decks = await loadDemoDecks();
     return toSeedRecords(buildDemoSeed(buildDemoBank(), topicTaxonomy, options, decks));
+  },
+  buildSnapshots(request) {
+    return Promise.resolve(buildDemoSnapshotData(request, buildDemoBank(), topicTaxonomy));
   },
 };

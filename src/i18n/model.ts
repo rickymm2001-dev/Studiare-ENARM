@@ -113,6 +113,7 @@ export const modelTexts = {
     below5: 'Por debajo del percentil 5',
     above95: 'Por arriba del percentil 95',
     calibratingLabel: 'Calibrando',
+    emptyGroup: 'Todavía no hay alumnos con datos en este grupo.',
     groupCalibrating: (missing: number) =>
       `Faltan ${plural(missing, 'alumno', 'alumnos')} con datos para comparar.`,
     ownCalibratingBranch: (have: number, need: number) =>

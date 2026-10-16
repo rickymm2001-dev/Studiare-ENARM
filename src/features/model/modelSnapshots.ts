@@ -51,11 +51,11 @@ export async function readStoredSnapshot<T>(
 }
 
 /** La foto de la comparación que toca a este alumno, o por qué todavía no hay */
-export function useComparisonSnapshot(): ComparisonState {
+export function useComparisonSnapshot(userId: string): ComparisonState {
   const api = useDataApi();
   const kind = useQuestionSourceKind();
   const isDemo = api.demo !== null;
-  const demo = useDemoSnapshots(isDemo);
+  const demo = useDemoSnapshots(isDemo, userId);
   const stored = useLiveData(
     () =>
       kind === 'cloud' && !isDemo
@@ -82,11 +82,11 @@ export function useComparisonSnapshot(): ComparisonState {
  * La línea base de la población. null mientras llega, si no hay publicación o si no hay nube. No frena el
  * modelo: sin ella los sesgos se comparan contra el azar y el detector de fatiga sigue calibrando
  */
-export function usePopulation(): PopulationBaselines | null {
+export function usePopulation(userId: string): PopulationBaselines | null {
   const api = useDataApi();
   const kind = useQuestionSourceKind();
   const isDemo = api.demo !== null;
-  const demo = useDemoSnapshots(isDemo);
+  const demo = useDemoSnapshots(isDemo, userId);
   const stored = useLiveData(
     () =>
       kind === 'cloud' && !isDemo

@@ -87,6 +87,8 @@ export interface Analysis {
   english: EnglishProgress;
   /** El modelo del alumno completo, el mismo que lee el Tutor (B14) */
   model: StudentModelBuild;
+  /** Las preguntas que contestó, con las que se armó */
+  bank: BankLookup;
 }
 
 /** El análisis de Progreso con lo que ya calculó el modelo del alumno */
@@ -102,6 +104,7 @@ export function analysisFrom(
     weakTopics: model.weakTopics,
     english: englishProgressFrom(events, bank),
     model,
+    bank,
   };
 }
 
