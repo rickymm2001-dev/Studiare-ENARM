@@ -171,13 +171,37 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(
       screen.getByText(/6 de 30 reactivos de inglés\. Faltan 24 reactivos de inglés/),
     ).toBeVisible();
-    expect(screen.getByText(copy.missing(6, 30))).toBeVisible();
+    expect(screen.getByText(copy.missing(6, 30, true))).toBeVisible();
     // 250 en español, 6 en inglés y 24 menos que los 280, con el tiempo de cada sección
     expect(
       screen.getByText(
         `${t.exam.timeTotal(250 * 77_000 + 6 * 90_000)} · ${copy.composition(250, 6)}`,
       ),
     ).toBeVisible();
+  });
+
+  it('el aviso de faltantes dice lo que pide este examen y solo el de 280 dice lo que trae el examen real', async () => {
+    const typing = userEvent.setup();
+    card({ englishQuestions: english([3, 3]) });
+    // Con el de 280 son los 30 del examen real
+    expect(
+      screen.getByText(
+        'Solo hay 6 reactivos de inglés de los 30 que trae el examen real. Tu examen llevará 6 y el español no los rellena.',
+      ),
+    ).toBeVisible();
+    // Con los cortos piden la misma proporción, y eso no es lo que trae el examen real
+    const size = screen.getByRole('combobox', { name: t.exam.size });
+    await typing.selectOptions(size, '100');
+    expect(
+      screen.getByText(
+        'Solo hay 6 reactivos de inglés de los 11 que pide este examen. Tu examen llevará 6 y el español no los rellena.',
+      ),
+    ).toBeVisible();
+    expect(screen.queryByText(/que trae el examen real/)).toBeNull();
+    expect(screen.getByText(copy.missing(6, 11, false))).toBeVisible();
+    // Con 50 piden 5 y con 6 reactivos no falta ninguno, así que no hay aviso de faltantes
+    await typing.selectOptions(size, '50');
+    expect(screen.queryByText(/Solo hay/)).toBeNull();
   });
 
   it('sin ningún reactivo de inglés lo avisa y el examen es solo en español', () => {
@@ -299,6 +323,6 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     card({ englishQuestions: english([3, 3]) });
     const region = screen.getByRole('region', { name: t.exam.cardTitle });
     expect(within(region).getByRole('checkbox', { name: copy.include })).toBeVisible();
-    expect(within(region).getByText(copy.missing(6, 30))).toBeVisible();
+    expect(within(region).getByText(copy.missing(6, 30, true))).toBeVisible();
   });
 });

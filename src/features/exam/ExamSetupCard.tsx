@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { PLANS, type PlanKey } from '@/config/billing';
-import { ENGLISH_PLACEMENT } from '@/config/exam';
+import { ENARM_FORMAT, ENGLISH_PLACEMENT } from '@/config/exam';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
@@ -389,6 +389,9 @@ function EnglishExamNotes({
   min: number;
 }) {
   const copy = englishText.exam;
+  const { picked, requested: wanted } = preview.sections.english;
+  // Solo el examen de 280 pide los 30 del examen real. Los cortos piden la misma proporción (11 de 100)
+  const real = wanted >= ENARM_FORMAT.english;
   return (
     <div className="flex flex-col gap-1.5">
       {have < min ? (
@@ -400,7 +403,7 @@ function EnglishExamNotes({
         </p>
       ) : preview.sections.english.shortfall > 0 ? (
         <p role="status" className="text-sm text-fg-muted">
-          {copy.missing(preview.sections.english.picked, preview.sections.english.requested)}
+          {copy.missing(picked, wanted, real)}
         </p>
       ) : null}
     </div>

@@ -187,7 +187,7 @@ test.describe('Examen completo con su parte en inglés', () => {
     await expect(
       card.getByText(/6 de 30 reactivos de inglés\. Faltan 24 reactivos de inglés/),
     ).toBeVisible();
-    await expect(card.getByText(exam.missing(6, 30))).toBeVisible();
+    await expect(card.getByText(exam.missing(6, 30, true))).toBeVisible();
     // 250 en español y las 6 de inglés que hay. Las 24 que faltan no las pone el español
     await expect(
       card.getByText(

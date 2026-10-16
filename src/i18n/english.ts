@@ -87,9 +87,13 @@ export const englishText = {
       `${clinical.toLocaleString('es-MX')} en español y ${english.toLocaleString('es-MX')} en inglés`,
     /** Con la parte en inglés incluida pero sin textos, el examen corre solo en español */
     onlySpanish: 'Todavía no hay textos en inglés. El examen será solo en español.',
-    /** Hay menos reactivos de inglés que los que pide el examen */
-    missing: (have: number, wanted: number) =>
-      `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que trae el examen real. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
+    /**
+     * Hay menos reactivos de inglés que los que pide el examen. wanted es lo que pide el examen elegido, y solo
+     * el de 280 pide los 30 del examen real. Los cortos piden la misma proporción, como 11 de 100, y decir que
+     * eso trae el examen real era falso
+     */
+    missing: (have: number, wanted: number, real: boolean) =>
+      `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que ${real ? 'trae el examen real' : 'pide este examen'}. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
     navigatorTag: 'Inglés',
   },
 
