@@ -23,6 +23,12 @@ const spanOf = (seconds: number) => {
   return rest === 0 ? `${Math.floor(total / 60)} min` : `${Math.floor(total / 60)} min ${rest} s`;
 };
 
+/**
+ * Lo que dicen la tarjeta de Simular y la de Progreso mientras no hay textos de lectura publicados. No
+ * promete vocabulario ni manda a los mazos, porque el mazo de vocabulario puede no existir todavía
+ */
+const NO_TEXTS = 'Todavía no hay textos de lectura. Los agregan los médicos.';
+
 export const englishText = {
   name: 'Inglés médico',
   /** Unidad de lo que cuenta la parte en inglés, para el estado calibrando */
@@ -37,9 +43,7 @@ export const englishText = {
     suggested: (seconds: number) => `${seconds} s sugeridos por reactivo`,
     none: {
       title: 'Sin textos',
-      body: 'Todavía no hay casos de lectura. Los están escribiendo los médicos.',
-      vocabulary: 'Mientras tanto puedes estudiar el vocabulario médico en inglés en tus mazos.',
-      goDecks: 'Ir a Mazos',
+      body: NO_TEXTS,
     },
     waiting: (cases: number, needed: number) =>
       `Ya hay ${plural(cases, 'texto', 'textos')}. La práctica abre cuando haya ${needed}.`,
@@ -129,6 +133,6 @@ export const englishText = {
       'El porcentaje es una estimación con un intervalo de 95%. Con más respuestas el intervalo se angosta.',
     statsLabel: 'Cifras de inglés médico',
     goPractice: 'Practicar inglés',
-    noTexts: 'Todavía no hay casos de lectura. Los están escribiendo los médicos.',
+    noTexts: NO_TEXTS,
   },
 } as const;

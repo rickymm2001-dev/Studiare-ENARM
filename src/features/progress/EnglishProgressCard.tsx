@@ -2,7 +2,8 @@
 // aciertos con su intervalo, el ritmo contra el tiempo sugerido y cuántos textos lleva. Mientras el
 // alumno no tiene las respuestas que pide el umbral de inglés (20 de fábrica) dice calibrando, cuánto
 // lleva y cuánto falta, y no muestra ninguna cifra. La comparación con otros alumnos y la dificultad
-// calibrada son de B14.
+// calibrada son de B14. Sin textos publicados no pide reactivos ni manda a practicar, porque no hay nada que
+// practicar. Dice que todavía no hay textos de lectura.
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { englishText } from '@/i18n/english';
@@ -24,12 +25,20 @@ function paceVerdict(median: number, suggested: number): string {
 export function EnglishProgressCard({
   summary,
   texts,
+  practiceAvailable,
 }: {
   summary: EnglishSummary;
   /** Textos distintos en los que ha contestado */
   texts: number;
+  /** Hay casos de lectura publicados que practicar. Sin ellos no se pide contestar ni se manda a Simular */
+  practiceAvailable: boolean;
 }) {
   const copy = englishText.progress;
+  const practice = practiceAvailable ? (
+    <Button asChild variant="secondary" size="sm" className="self-start">
+      <Link to={screenPath('simulatorSetup')}>{copy.goPractice}</Link>
+    </Button>
+  ) : null;
   return (
     <Card aria-labelledby="ingles-progreso">
       <CardHeader className="mb-3">
@@ -44,12 +53,12 @@ export function EnglishProgressCard({
             unit={englishText.itemsUnit}
           />
           <p className="text-sm text-fg-muted">
-            {copy.calibrating(summary.minAnswers, summary.answered)}
+            {practiceAvailable
+              ? copy.calibrating(summary.minAnswers, summary.answered)
+              : copy.noTexts}
           </p>
           {texts > 0 ? <p className="text-sm text-fg-muted">{copy.texts(texts)}</p> : null}
-          <Button asChild variant="secondary" size="sm" className="self-start">
-            <Link to={screenPath('simulatorSetup')}>{copy.goPractice}</Link>
-          </Button>
+          {practice}
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -93,9 +102,7 @@ export function EnglishProgressCard({
             </div>
           </dl>
           <p className="text-xs text-fg-muted">{copy.intervalNote}</p>
-          <Button asChild variant="secondary" size="sm" className="self-start">
-            <Link to={screenPath('simulatorSetup')}>{copy.goPractice}</Link>
-          </Button>
+          {practice}
         </div>
       )}
     </Card>

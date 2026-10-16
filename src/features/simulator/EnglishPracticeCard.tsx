@@ -74,15 +74,7 @@ export function EnglishPracticeCard({
     return (
       <Card aria-labelledby="ingles-titulo">
         {header}
-        <EmptyState
-          title={copy.none.title}
-          description={`${copy.none.body} ${copy.none.vocabulary}`}
-          action={
-            <Button asChild variant="secondary" size="sm">
-              <Link to={screenPath('decks')}>{copy.none.goDecks}</Link>
-            </Button>
-          }
-        />
+        <EmptyState title={copy.none.title} description={copy.none.body} />
       </Card>
     );
   }

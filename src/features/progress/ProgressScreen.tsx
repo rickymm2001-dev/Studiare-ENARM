@@ -40,6 +40,7 @@ import { MotivesCard } from './MotivesCard';
 import { motivesByBranch } from './motivesView';
 import { OfficialScoreCard } from './OfficialScoreCard';
 import { useAnalysis } from './useAnalysis';
+import { useEnglishCases } from './useEnglishCases';
 import { useMotiveBranches } from './useMotiveBranches';
 
 export function ProgressScreen() {
@@ -66,6 +67,10 @@ function Progress({ session }: { session: ReadySession }) {
     [events, motiveBranches, freeSubjectCards],
   );
 
+  // Inglés médico sin textos publicados no pide reactivos ni manda a practicar (B13)
+  const englishOn = isFeatureEnabled('medicalEnglish');
+  const englishCases = useEnglishCases(englishOn);
+
   const header = (
     <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
   );
@@ -73,7 +78,8 @@ function Progress({ session }: { session: ReadySession }) {
     events === undefined ||
     analysis === undefined ||
     catalog === undefined ||
-    content === undefined
+    content === undefined ||
+    englishCases === undefined
   ) {
     return (
       <>
@@ -169,10 +175,11 @@ function Progress({ session }: { session: ReadySession }) {
         cardsByTopic={cardsByTopic}
       />
 
-      {isFeatureEnabled('medicalEnglish') ? (
+      {englishOn ? (
         <EnglishProgressCard
           summary={summarizeEnglish(analysis.english.answers, DEFAULT_THRESHOLDS.english)}
           texts={analysis.english.texts}
+          practiceAvailable={englishCases}
         />
       ) : null}
 

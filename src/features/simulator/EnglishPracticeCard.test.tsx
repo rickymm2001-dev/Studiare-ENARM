@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { MemoryRouter, useLocation } from 'react-router';
@@ -82,12 +82,18 @@ afterEach(() => {
 });
 
 describe('tarjeta de Inglés médico en Simular (B13, 2.1)', () => {
-  it('sin textos dice Sin textos, que los están escribiendo los médicos, y lleva al mazo de vocabulario', () => {
+  it('sin textos dice Sin textos y que los agregan los médicos, sin prometer vocabulario ni mandar a los mazos', () => {
     renderCard({ pool: { practice: [], exam: [] } });
-    expect(screen.getByRole('region', { name: copy.title })).toBeVisible();
-    expect(screen.getByText(copy.none.title)).toBeVisible();
-    expect(screen.getByText(new RegExp(copy.none.body))).toBeVisible();
-    expect(screen.getByRole('link', { name: copy.none.goDecks })).toHaveAttribute('href', '/mazos');
+    const region = screen.getByRole('region', { name: copy.title });
+    expect(within(region).getByText(copy.none.title)).toBeVisible();
+    expect(
+      within(region).getByText('Todavía no hay textos de lectura. Los agregan los médicos.'),
+    ).toBeVisible();
+    // El mazo de vocabulario puede no existir todavía, así que la tarjeta no lo promete ni manda a Mazos
+    expect(region).not.toHaveTextContent(/vocabulario/i);
+    expect(within(region).queryByRole('link')).toBeNull();
+    expect(copy.none).not.toHaveProperty('vocabulary');
+    expect(copy.none).not.toHaveProperty('goDecks');
     expect(screen.queryByRole('button', { name: copy.start })).toBeNull();
     expect(screen.queryByText(t.states.calibrating.title)).toBeNull();
   });

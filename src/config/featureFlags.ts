@@ -85,8 +85,8 @@ export const FEATURE_FLAGS = {
   },
   medicalEnglish: {
     description:
-      'Tarjeta de Inglés médico en Simular y la parte en inglés del examen completo (B13, respuesta 61). Prendida en todos los entornos, porque sin textos publicados la tarjeta dice Sin textos. Ricardo la apaga desde platform_settings, clave feature_flags, si prefiere esconder el inglés mientras no haya textos. Apagada, el examen completo es solo en español',
-    defaults: { development: true, demo: true, production: true },
+      'Tarjeta de Inglés médico en Simular, la parte en inglés del examen completo y la tarjeta de Inglés médico en Progreso (B13, respuesta 61). Prendida en desarrollo y en la demo, para verla con los casos de prueba. Apagada en producción, porque sin casos publicados ni el mazo de vocabulario solo diría Sin textos. Ricardo la prende desde platform_settings, clave feature_flags, cuando haya casos y mazo. Apagada, el examen completo es solo en español',
+    defaults: { development: true, demo: true, production: false },
   },
   deckCatalogCloud: {
     description:

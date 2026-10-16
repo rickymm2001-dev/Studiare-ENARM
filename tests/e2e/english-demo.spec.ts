@@ -1,6 +1,7 @@
 // Inglés médico con el banco de demostración (B13, paquete B, 6.3 del plan de B13). La demostración no trae
-// textos médicos en inglés, así que la tarjeta de Simular dice Sin textos y manda a los mazos, y el examen
-// completo corre solo en español con su aviso, sin marcas de inglés. El mazo de vocabulario médico en
+// textos médicos en inglés, así que la tarjeta de Simular dice Sin textos, sin prometer vocabulario ni mandar
+// a los mazos, la de Progreso no pide reactivos ni manda a practicar, y el examen completo corre solo en
+// español con su aviso, sin marcas de inglés. El mazo de vocabulario médico en
 // inglés se sigue y se repasa una tarjeta con su fuente a la vista, pero ese mazo lo genera el paquete A
 // con el XML de MedlinePlus y todavía no existe en el repositorio (src/demo/content/decks/
 // vocabulario-ingles.json), así que esa prueba queda marcada como omitida, con su motivo a la vista, hasta
@@ -31,15 +32,14 @@ test('con el banco de demostración la tarjeta dice Sin textos y el examen compl
   await subscribeMonthly(page);
   await page.goto(SCREENS.simulatorSetup.path);
 
-  // Sin textos publicados, la tarjeta lo dice y manda al mazo de vocabulario. No hay nada que empezar
+  // Sin textos publicados, la tarjeta solo dice que todavía no hay. No promete el vocabulario, que puede no
+  // existir, ni manda a los mazos, y no hay nada que empezar
   const card = page.getByRole('region', { name: practice.title });
   await expect(card).toBeVisible({ timeout: 90_000 });
   await expect(card.getByText(practice.none.title, { exact: true })).toBeVisible();
   await expect(card.getByText(practice.none.body, { exact: false })).toBeVisible();
-  await expect(card.getByRole('link', { name: practice.none.goDecks })).toHaveAttribute(
-    'href',
-    SCREENS.decks.path,
-  );
+  await expect(card.getByRole('link')).toHaveCount(0);
+  await expect(card).not.toContainText(/vocabulario/i);
   await expect(card.getByRole('button', { name: practice.start })).toHaveCount(0);
   // La práctica en español no ofrece Inglés médico entre sus ramas
   const spanish = page.getByRole('region', { name: t.simulator.setupTitle });
@@ -73,6 +73,22 @@ test('con el banco de demostración la tarjeta dice Sin textos y el examen compl
   await expect(navigator.locator('ol svg.lucide-languages')).toHaveCount(0);
   await expect(navigator.getByRole('button', { name: /, Inglés$/ })).toHaveCount(0);
   await expect(navigator.getByText(exam.navigatorTag, { exact: true })).toHaveCount(0);
+  await expectNoSeriousA11yViolations(page);
+});
+
+test('Progreso sin textos publicados dice que todavía no hay y no manda a practicar inglés', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await page.goto(SCREENS.progress.path);
+  const card = page.getByRole('region', { name: englishText.progress.title });
+  await expect(card).toBeVisible({ timeout: 60_000 });
+  // Calibrando, porque no hay ni una respuesta, pero sin pedir los 20 reactivos de inglés
+  await expect(card.getByText(t.states.calibrating.title)).toBeVisible();
+  await expect(card.getByText(englishText.progress.noTexts)).toBeVisible();
+  await expect(card.getByText(englishText.progress.calibrating(20, 0))).toHaveCount(0);
+  await expect(card.getByRole('link', { name: englishText.progress.goPractice })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 });
 
