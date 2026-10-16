@@ -570,7 +570,9 @@ function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): stri
     .map((request) => (request.json as { name: string }).name);
 }
 
-describe('B11, B12 y B13 desde un proyecto con solo B10', () => {
+// Cada corrida lee y parte todo el SQL del repo. Con la cobertura de npm run check, o en un equipo lento, una
+// prueba de varias corridas pasa de los 5 s de Vitest, así que esta sección pide más
+describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
   it('b13 lleva la migración de inglés y bank-sync sin verificar JWT, y sin SQL manual', () => {
     const plan = loadPlan(ROOT, 'b13');
     expect(plan.migrations.map((step) => step.name)).toEqual(['english_section']);
