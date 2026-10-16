@@ -88,6 +88,33 @@ describe('la línea de la fuente del texto', () => {
     expect(link).toHaveTextContent(englishText.reading.newTab);
   });
 
+  it('el título de la fuente va en inglés para el lector de pantalla, y la licencia y la etiqueta no', () => {
+    render(<PassageSourceLine refs={PUBLIC_DOMAIN} />);
+    const title = screen.getByText('Heart Attack, MedlinePlus.gov (NLM)');
+    expect(title).toHaveAttribute('lang', 'en');
+    expect(title.tagName).toBe('SPAN');
+    // La línea sigue diciendo lo mismo, con el título marcado
+    expect(screen.getByText(/Fuente del texto\./)).toHaveTextContent(
+      'Fuente del texto. Heart Attack, MedlinePlus.gov (NLM). Dominio público. https://medlineplus.gov/heartattack.html',
+    );
+    expect(screen.getByText(/Fuente del texto\./)).not.toHaveAttribute('lang');
+    expect(
+      screen.getByRole('link', { name: /medlineplus\.gov\/heartattack\.html/ }),
+    ).not.toHaveAttribute('lang');
+  });
+
+  it('sin título no hay nada en inglés que marcar', () => {
+    const { container } = render(
+      <PassageSourceLine
+        refs={[{ title: 'Fuente del texto. Texto propio del equipo Studiare.' }]}
+      />,
+    );
+    expect(container.querySelector('[lang]')).toBeNull();
+    expect(screen.getByText(/Fuente del texto\./)).toHaveTextContent(
+      'Fuente del texto. Texto propio del equipo Studiare.',
+    );
+  });
+
   it('el texto propio del equipo no lleva enlace y respeta su título', () => {
     render(<PassageSourceLine refs={TEAM} />);
     expect(screen.getByText(/Fuente del texto\./)).toHaveTextContent(

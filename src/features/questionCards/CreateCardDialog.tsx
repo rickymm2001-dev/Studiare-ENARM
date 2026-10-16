@@ -35,7 +35,7 @@ import { usePlanText } from '../shared/useActivePlan';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { AiSuggestions } from './AiSuggestions';
 import { NEW_DECK, questionCardChoices } from './deckChoices';
-import { questionCardDraft } from './questionCardDraft';
+import { questionCardDraft, questionEnglishParts } from './questionCardDraft';
 
 type From = 'exam_review' | 'practice_review';
 
@@ -203,6 +203,8 @@ export function CreateCardDialog({
             ? { kind: 'new', deckId: newDeckId, name: newName }
             : { kind: 'deck', deckId: target },
         draft,
+        // En una pregunta de Inglés médico, lo que sigue en inglés se guarda con su idioma
+        english: questionEnglishParts(bundle),
         source,
         from,
         layer: { name: text.layerDeckName, description: text.layerDeckDescription },

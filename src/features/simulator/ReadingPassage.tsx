@@ -36,7 +36,12 @@ export function PassageSourceLine({
   const text = englishText.reading;
   return (
     <p className={cn('text-xs text-fg-muted', className)}>
-      {text.sourceLabel}. {title === '' ? null : `${title}. `}
+      {text.sourceLabel}.{' '}
+      {title === '' ? null : (
+        <>
+          <span lang="en">{title}</span>.{' '}
+        </>
+      )}
       {LICENSE_LABELS[license]}.
       {url === null ? null : (
         <>
