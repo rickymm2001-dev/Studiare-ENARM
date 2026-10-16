@@ -1,10 +1,12 @@
 // Una sincronización completa entre este navegador y el servidor (D-085 fila 12, D-095). Va en este
-// orden. Se comprueba el reloj, se bajan los registros y la bitácora, y después se suben los cambios
-// propios. Bajar primero hace que lo que se edita encima de lo recién bajado gane por su fecha. Cada
-// página que se baja o se sube deja guardado su avance, así un corte a la mitad continúa donde
-// quedó. Las decisiones de qué gana viven en el motor src/engines/sync.ts. En el plan Gratis el servidor
-// ignora sin error los apuntes nuevos o cambiados (B8). Se anota en el avance y, con el primer plan de
-// pago, se mandan todos otra vez, así nada de lo que el alumno escribió se queda sin subir.
+// orden. Se comprueba el reloj, se bajan los registros y la bitácora, se pone el perfil de acuerdo con la
+// bitácora (B14, reconcileProfile) y después se suben los cambios propios. Bajar primero hace que lo que
+// se edita encima de lo recién bajado gane por su fecha, y reconciliar antes de subir hace que lo que ese
+// paso crea suba en la misma corrida. Cada página que se baja o se sube deja guardado su avance, así un
+// corte a la mitad continúa donde quedó. Las decisiones de qué gana viven en el motor
+// src/engines/sync.ts. En el plan Gratis el servidor ignora sin error los apuntes nuevos o cambiados
+// (B8). Se anota en el avance y, con el primer plan de pago, se mandan todos otra vez, así nada de lo
+// que el alumno escribió se queda sin subir.
 import { canUse, planOf, type PlanKey } from '@/config/billing';
 import {
   PAGE_SIZE,
@@ -28,6 +30,7 @@ import type { DataApi } from '../context';
 import type { AppEvent } from '../schemas/events';
 import { emptySyncState, type SyncState } from '../schemas/sync';
 import { recordEventOnce } from '../usecases/recordEvent';
+import { reconcileProfile, touchesProfile, type ReconcileTriggers } from './reconcileProfile';
 import { SyncTransportError, type SyncFailure, type SyncTransport } from './transport';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
@@ -194,6 +197,7 @@ async function pullEvents(
   state: SyncState,
   counts: SyncCounts,
   onServer: Set<string>,
+  touched: ReconcileTriggers,
 ): Promise<SyncState> {
   let current = state;
   for (;;) {
@@ -222,6 +226,7 @@ async function pullEvents(
         if (known.has(event.id)) continue;
         await recordEventOnce(deps.api, event);
         counts.eventsPulled += 1;
+        if (touchesProfile(event)) touched.profileEvents = true;
       }
     }
     const moved = page.next > current.eventsCursor;
@@ -371,8 +376,16 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
     const eventsOnServer = new Set<string>();
 
     let state = await loadState(deps.api, deps.userId, deps.authId);
+    const touched: ReconcileTriggers = { profileEvents: false, records: false };
     state = await pullRecords(deps, state, counts, fromServer);
-    state = await pullEvents(deps, state, counts, eventsOnServer);
+    touched.records = counts.recordsPulled > 0;
+    state = await pullEvents(deps, state, counts, eventsOnServer, touched);
+    // Después de bajar todo y antes de subir (2.7 del plan de B14). Lo que crea sube en esta corrida
+    state = await reconcileProfile(
+      { api: deps.api, userId: deps.userId, authId: deps.authId, now },
+      state,
+      touched,
+    );
     state = await pushRecords(deps, state, counts, fromServer, now);
     state = await pushEvents(deps, state, counts, eventsOnServer, now);
 

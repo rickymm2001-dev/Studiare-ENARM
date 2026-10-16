@@ -20,6 +20,11 @@ export const SyncStateSchema = z.strictObject({
    * de pago se mandan todos otra vez sin mirar la marca de agua. Falta en el avance de antes de B8
    */
   outlinesPending: z.boolean().optional(),
+  /**
+   * Cuándo se registraron, en la primera sincronización de este dispositivo con esta cuenta, los ajustes
+   * que nacieron sin evento (B14, 2.3). Falta mientras no ha pasado, y en el avance de antes de B14
+   */
+  baselineAt: UtcDateTimeSchema.optional(),
 });
 export type SyncState = z.infer<typeof SyncStateSchema>;
 

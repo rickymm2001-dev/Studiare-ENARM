@@ -858,6 +858,9 @@ describe('Completa tu registro se decide por datos y no por proveedor (B9)', () 
       ai_analysis: false,
       anonymized_improvement: false,
     });
+    // No son decisiones del alumno, así que no dejan evento. Si lo dejaran, valdrían más que lo que ya
+    // decidió en otro dispositivo y lo apagarían en todos (B14, 2.2)
+    expect(await api.repos.events.query({ userId })).toEqual([]);
     expect(await hasLocalSignup(api, userId)).toBe(true);
   });
 
