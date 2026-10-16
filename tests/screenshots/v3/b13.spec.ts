@@ -4,17 +4,18 @@
 // la tarjeta de Progreso en calibrando y con cifras. Del paquete C además el mazo de vocabulario con su
 // fuente, el editor del médico con la fuente del texto y el banco con el filtro Sección. Corren contra el
 // build con la nube y el Supabase simulado de las e2e de nube, con el banco de fakeEditorial.ts, como las
-// de b11.spec.ts, y quedan en docs/screenshots/v3/b13:
-// npm run screenshots:v3 -- b13.spec.ts --project=390-claro --project=1280-claro --project=1280-oscuro
-// --project=1920-claro
+// de b11.spec.ts, y quedan en docs/screenshots/v3/b13, en 390, 1280 y 1920 y en claro y en oscuro (86
+// imágenes, unos 7 MB, porque las pantallas largas se capturan solo en lo que importa):
+// npm run screenshots:v3 -- b13.spec.ts
 //
-// Las pantallas del alumno son del paquete B y esta spec se escribió antes de que estuvieran. Sus textos
-// se juntan en el objeto B de abajo para ajustarlos en un solo lugar al unir los paquetes. Los textos
-// del mazo, del editor y del banco son del paquete C y salen de physicianText y deckCatalogText. La spec se
-// escribió sin poder correrla, y seedEnglishCases la agrega el paquete B en fakeBankStore.ts (6.3).
+// Lo que se busca en las pantallas del alumno, que son del paquete B, se junta en el objeto B de abajo y sale
+// de englishText, el mismo texto que pinta la app. Los textos del mazo, del editor y del banco son del
+// paquete C y salen de physicianText y deckCatalogText. Los casos de lectura salen de seedEnglishCases
+// (fakeBankStore.ts, 6.3).
 import type { Browser, BrowserContext, Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { deckCatalogText } from '@/i18n/cloudDecks';
+import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { callerOf, enterTeam, teamBank } from '../../e2e/support/bankTeam';
@@ -26,17 +27,18 @@ import {
   watchConsole,
 } from '../../e2e/support/cloudFixtures';
 import { openBank, seedBank, seedCatalogDeck } from '../../e2e/support/fakeBank';
-import * as fakeBankStoreModule from '../../e2e/support/fakeBankStore';
 import {
   createFakeBankStore,
+  seedEnglishCases,
   seedQuestions,
   type FakeBankStore,
 } from '../../e2e/support/fakeBankStore';
 import { assignQuestion, editorialRpc } from '../../e2e/support/fakeEditorial';
 import { CLOUD_PREVIEW_URL } from '../../e2e/support/fakeSupabaseConfig';
 import { attachBank, type FakeSupabaseServer } from '../../e2e/support/fakeSupabase';
+import { isPhone, passageText } from '../../e2e/support/english';
 import { answerPracticeQuestion } from '../../e2e/support/fixtures';
-import { capture, outDirFor } from './capture';
+import { capture, outDirFor, type CaptureOptions } from './capture';
 
 const B13_DIR = outDirFor('b13');
 const DAY_MS = 86_400_000;
@@ -47,37 +49,34 @@ const STUDENT = 'alumna.b13@ejemplo.mx';
 const FREE_STUDENT = 'gratis.b13@ejemplo.mx';
 
 /**
- * Lo que sale de las pantallas del alumno del paquete B (src/i18n/english.ts y las pantallas de Simular,
- * de la pregunta, de la retroalimentación, del examen y de Progreso). Al unir los paquetes se revisa que
- * cada uno encuentre su elemento. Las expresiones son anchas a propósito
+ * Lo que se busca en las pantallas del alumno del paquete B (src/i18n/english.ts y las pantallas de Simular,
+ * de la pregunta, del resumen, del examen y de Progreso). Si una pantalla cambia su texto, se ajusta aquí
  */
 const B = {
   /** La tarjeta de Inglés médico en Simular (2.1) */
-  card: /Inglés médico/i,
+  card: englishText.practice.title,
+  /** Su título cuando todavía no hay textos */
+  noTexts: englishText.practice.none.title,
   /** Su botón para empezar la práctica de inglés */
-  start: /empezar|iniciar|comenzar|practicar/i,
+  start: englishText.practice.start,
+  /** Su lista de cuántos textos se leen */
+  count: englishText.practice.countLabel,
+  /**
+   * La nota Calibrando de los reactivos de inglés. La tarjeta trae otra del muestreo dirigido, que dice
+   * Calibrando para un alumno sin errores etiquetados aunque los textos ya sean suficientes, así que se
+   * distingue por la unidad que cuenta
+   */
+  calibrating: (card: Locator) =>
+    card.getByRole('status').filter({ hasText: englishText.itemsUnit }),
+  /** El avance de una práctica, Pregunta N de M, y no el Pregunta N de M de este texto */
+  progress: /^Pregunta \d+ de \d+$/,
   /** La casilla de la parte en inglés del examen completo (3.7) */
-  examCheckbox: /parte en inglés/i,
+  examCheckbox: englishText.exam.include,
   /** El corte por sección de los resultados del examen (3.6) */
-  resultsBySection: /Español.*Inglés|Inglés.*Español/i,
+  resultsBySection: englishText.results.sectionsTitle,
   /** La tarjeta de Inglés médico en Progreso (2.7) */
-  progressCard: /Inglés médico/i,
+  progressCard: englishText.progress.title,
 };
-
-/** La forma que 6.3 del plan le da a seedEnglishCases, que agrega el paquete B */
-type SeedEnglishCases = (
-  store: FakeBankStore,
-  cases: number,
-  options: { itemsPerCase: number },
-) => unknown;
-
-function seedEnglish(store: FakeBankStore, cases: number, itemsPerCase: number): void {
-  const seed = (fakeBankStoreModule as unknown as { seedEnglishCases?: SeedEnglishCases })
-    .seedEnglishCases;
-  if (!seed)
-    throw new Error('Falta seedEnglishCases en tests/e2e/support/fakeBankStore.ts (paquete B)');
-  seed(store, cases, { itemsPerCase });
-}
 
 /** Un banco nuevo enganchado a la nube */
 function newBank(cloud: FakeSupabaseServer): FakeBankStore {
@@ -93,12 +92,16 @@ async function open(page: Page, path: string, ...ready: Locator[]) {
   for (const locator of ready) await expect(locator).toBeVisible({ timeout: 60_000 });
 }
 
-/** Captura la página completa desde arriba. Después de un clic la página queda desplazada */
-async function shot(page: Page, name: string, project: string) {
+/**
+ * Captura la página completa desde arriba. Después de un clic la página queda desplazada. Las pantallas muy
+ * largas, como el resumen de una práctica, los resultados o Progreso, se capturan solo en el elemento o la
+ * parte de arriba que importa, porque las 90 imágenes del bloque no deben pasar de unos 8 MB
+ */
+async function shot(page: Page, name: string, project: string, options: CaptureOptions = {}) {
   await page.evaluate(() => {
     window.scrollTo(0, 0);
   });
-  await capture(page, B13_DIR, name, project);
+  await capture(page, B13_DIR, name, project, options);
 }
 
 /**
@@ -146,6 +149,15 @@ async function enterPaidStudent(page: Page, cloud: FakeSupabaseServer) {
 
 const setup = (page: Page) => page.getByRole('region', { name: t.simulator.setupTitle });
 
+/** Abre la primera respuesta del resumen, sin cerrarla si ya viene abierta (las falladas lo están) */
+async function openFirstAnswer(page: Page) {
+  const answer = page.locator('ol > li > details').first();
+  if (!(await answer.evaluate((element: HTMLDetailsElement) => element.open))) {
+    await answer.locator('> summary').click();
+  }
+  await expect(answer).toHaveAttribute('open', '');
+}
+
 cloudTest.describe('Inglés médico', () => {
   cloudTest.use({ baseURL: CLOUD_PREVIEW_URL, serviceWorkers: 'block' });
 
@@ -160,38 +172,51 @@ cloudTest.describe('Inglés médico', () => {
 
       // Sin textos. El banco abierto tiene 250 en español y ningún caso de lectura
       await open(page, SCREENS.simulatorSetup.path, setup(page));
-      await expect(page.getByRole('region', { name: B.card })).toBeVisible();
+      const english = () => page.getByRole('region', { name: B.card });
+      await expect(english().getByText(B.noTexts)).toBeVisible();
       await shot(page, '01-simular-sin-textos', project);
 
       // Calibrando. Dos casos, uno de dos preguntas y otro de tres, o sea 5 de 30
-      seedEnglish(bank, 1, 2);
-      seedEnglish(bank, 1, 3);
+      seedEnglishCases(bank, 1, { itemsPerCase: 2 });
+      seedEnglishCases(bank, 1, { itemsPerCase: 3 });
       await open(page, SCREENS.simulatorSetup.path, setup(page));
-      await expect(page.getByRole('region', { name: B.card })).toContainText(/Calibrando/);
+      await expect(B.calibrating(english())).toBeVisible();
       await shot(page, '02-simular-calibrando', project);
 
-      // Lista. 12 casos con 30 reactivos o más
-      seedEnglish(bank, 9, 3);
+      // Lista. 11 casos con 32 reactivos. La nota de Calibrando de los reactivos se va y queda la del
+      // muestreo dirigido, que es de otra cosa
+      seedEnglishCases(bank, 9, { itemsPerCase: 3 });
       await open(page, SCREENS.simulatorSetup.path, setup(page));
-      await expect(page.getByRole('region', { name: B.card })).not.toContainText(/Calibrando/);
+      await expect(english().getByRole('button', { name: B.start })).toBeEnabled();
+      await expect(B.calibrating(english())).toHaveCount(0);
       await shot(page, '03-simular-lista', project);
 
       // Una práctica de inglés. El texto en inglés, su fuente y la pregunta, y en el teléfono el texto
       // se pliega desde la segunda pregunta del caso
-      await page
-        .getByRole('region', { name: B.card })
-        .getByRole('button', { name: B.start })
-        .click();
-      await expect(page.locator('[lang="en"]').first()).toBeVisible({ timeout: 60_000 });
+      await english().getByRole('button', { name: B.start }).click();
+      await expect(passageText(page)).toBeVisible({ timeout: 60_000 });
+      const first = page.getByText(B.progress);
+      await expect(first).toBeVisible();
+      const total = Number(/de (\d+)$/.exec(await first.innerText())?.[1] ?? '0');
       await shot(page, '04-pregunta-ingles', project);
-      await page.getByRole('radio').first().check();
-      await page.getByRole('button', { name: t.simulator.answerAndNext }).click();
-      await expect(page.locator('[lang="en"]').first()).toBeVisible();
-      await shot(page, '05-pregunta-ingles-texto-plegado', project);
+      await answerPracticeQuestion(page, 1, total);
+      // Un texto trae 2 o 3 preguntas y esta es la segunda de las de su texto
+      await expect(page.getByText(/^Pregunta 2 de [23] de este texto$/)).toBeVisible();
+      // El texto solo se pliega en el teléfono. En pantallas anchas se ve igual que la primera
+      if (isPhone(page)) {
+        await expect(page.getByRole('button', { name: englishText.reading.show })).toBeVisible();
+        await shot(page, '05-pregunta-ingles-texto-plegado', project);
+      }
 
-      // La retroalimentación del resumen, en español, con el texto en inglés plegado
-      await page.getByRole('radio').first().check();
-      await shot(page, '06-retroalimentacion', project);
+      // La retroalimentación llega al final, en el resumen (D-087), en español y con el texto en inglés
+      // plegado y su fuente a la vista
+      for (let number = 2; number <= total; number += 1) {
+        await answerPracticeQuestion(page, number, total);
+      }
+      await openFirstAnswer(page);
+      await shot(page, '06-retroalimentacion', project, {
+        element: page.locator('ol > li').first(),
+      });
 
       // El examen completo con la casilla de la parte en inglés
       await open(page, SCREENS.simulatorSetup.path, setup(page));
@@ -206,28 +231,35 @@ cloudTest.describe('Inglés médico', () => {
       await page.getByRole('dialog').getByRole('button', { name: t.exam.finishConfirm }).click();
       await expect(page).toHaveURL(new RegExp(`${SCREENS.examResults.path}$`));
       await expect(page.getByText(t.examResults.saving)).toHaveCount(0, { timeout: 90_000 });
-      await expect(page.getByText(B.resultsBySection).first()).toBeVisible();
-      await shot(page, '08-resultados-por-seccion', project);
+      await expect(page.getByRole('region', { name: B.resultsBySection })).toBeVisible();
+      // La parte de arriba trae Por sección y Por rama, y lo demás es la lista de las 20 preguntas
+      await shot(page, '08-resultados-por-seccion', project, { maxHeight: 1300 });
 
       // Progreso. La tarjeta de inglés dice Calibrando con pocas respuestas
       await open(page, SCREENS.progress.path);
-      await expect(page.getByRole('region', { name: B.progressCard })).toBeVisible();
-      await shot(page, '09-progreso-ingles-calibrando', project);
+      const card = page.getByRole('region', { name: B.progressCard });
+      await expect(card).toBeVisible();
+      // Llevas los reactivos de la práctica de arriba, y el examen se terminó en blanco
+      await expect(card.getByText(englishText.progress.calibrating(20, total))).toBeVisible();
+      await shot(page, '09-progreso-ingles-calibrando', project, { element: card });
 
-      // Con 20 reactivos de inglés contestados salen las cifras. Una práctica de 10 textos trae unos 25
+      // Con 20 reactivos de inglés contestados salen las cifras. Una práctica de 10 textos trae unos 27
       await open(page, SCREENS.simulatorSetup.path, setup(page));
-      const english = page.getByRole('region', { name: B.card });
-      await english.getByRole('combobox').first().selectOption('10');
-      await english.getByRole('button', { name: B.start }).click();
-      const progress = page.getByText(/^\d+ de \d+$/).first();
+      await english().getByRole('combobox', { name: B.count }).selectOption('10');
+      await english().getByRole('button', { name: B.start }).click();
+      const progress = page.getByText(B.progress);
       await expect(progress).toBeVisible({ timeout: 60_000 });
-      const total = Number(/de (\d+)$/.exec(await progress.innerText())?.[1] ?? '0');
-      for (let number = 1; number <= total; number += 1) {
-        await answerPracticeQuestion(page, number, total);
+      const all = Number(/de (\d+)$/.exec(await progress.innerText())?.[1] ?? '0');
+      // Cada reactivo toma poco más de un minuto, como una lectura de verdad, y no los 0 s de una prueba
+      const start = Date.now();
+      for (let number = 1; number <= all; number += 1) {
+        await page.clock.setFixedTime(new Date(start + number * 70_000));
+        await answerPracticeQuestion(page, number, all);
       }
       await open(page, SCREENS.progress.path);
-      await expect(page.getByRole('region', { name: B.progressCard })).toBeVisible();
-      await shot(page, '10-progreso-ingles-cifras', project);
+      const figures = page.getByRole('region', { name: B.progressCard });
+      await expect(figures.getByText(englishText.progress.accuracyLabel)).toBeVisible();
+      await shot(page, '10-progreso-ingles-cifras', project, { element: figures });
     },
   );
 
@@ -296,7 +328,7 @@ cloudTest.describe('Inglés médico', () => {
       if (!ana || !beto) throw new Error('Faltan las cuentas del equipo');
       // Cuatro preguntas en español y dos casos de lectura en inglés que llegan sin su fuente
       const spanish = seedQuestions(bank, 4, { status: 'draft', origin: 'app', authorId: ana.id });
-      seedEnglish(bank, 2, 1);
+      seedEnglishCases(bank, 2, { itemsPerCase: 1 });
       const english = [...bank.versions.values()].filter((version) => version.language === 'en');
       if (english.length < 2) throw new Error('seedEnglishCases no dejó preguntas en inglés');
       for (const [index, version] of english.entries()) {
@@ -368,7 +400,7 @@ cloudTest.describe('Inglés médico', () => {
         .getByLabel(physicianText.questionEditor.passage.license, { exact: true })
         .selectOption('CC BY');
       await expect(source.getByText(physicianText.questionEditor.passage.urlMissing)).toBeVisible();
-      await shot(authorPage, '13-editor-fuente-incompleta', project);
+      await shot(authorPage, '13-editor-fuente-incompleta', project, { element: source });
       await source
         .getByLabel(physicianText.questionEditor.passage.url, { exact: true })
         .fill('https://example.org/articulo');
