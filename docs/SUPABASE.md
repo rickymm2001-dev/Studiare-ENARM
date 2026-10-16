@@ -1143,6 +1143,67 @@ supabase functions deploy ai-batch --no-verify-jwt
 - Las reseñas de los médicos se quedan aunque un médico borre su cuenta, sin su nombre, para que el veredicto de una muestra cerrada no cambie
 - El ID de cada lote de Anthropic se guarda en ai_batches. La entrada de cada trabajo se borra al terminar y la salida 14 días después de entregarla, sin borrar la fila, que queda para el costo. El lote se borra en Anthropic en cuanto se procesa
 
+## Datos y modelo del alumno (B14)
+
+### Qué hace
+
+- 20261028000001_model_core. Las conversiones entre ULID y uuid que dan el mismo resultado que src/data/cloud/cloudIds.ts, tres índices más de la bitácora, las siete tablas de la calibración (calibration_runs, item_calibrations, option_calibrations, population_snapshots, comparison_cells, agreement_snapshots y model_publication) y la siembra de model_settings en platform_settings, apagada y en solo reporte. Las tablas nacen sin permisos para la API y con permisos por fila sin políticas. Las de resultados solo se agregan, con el freno de B11 que rechaza toda edición, también la del superusuario
+- 20261028000002_calibration_job. El corredor de la calibración nocturna. calibration_begin, las siete lecturas calibration_bank, calibration_people, calibration_answers, calibration_exposures, calibration_activity, calibration_motives y calibration_label_pairs, las cinco publicaciones calibration_publish_* y calibration_finish, que en modo apply aplica todo en una sola transacción. Suma el tipo de correo distractor_flags a email_kinds. Solo las ejecuta la llave secreta, que Supabase asocia al rol service_role
+- 20261028000003_model_reads. Lo que leen la app y las pantallas del equipo. bank_catalog_json suma la llave calibration, comparison_snapshot y population_baselines para el alumno con sesión y dispositivo activo, editor_agreement_history para el equipo y admin_calibration_runs para el admin
+- Todo nace apagado. calibration.enabled queda en false y calibration.mode en dry_run. El cálculo vive en GitHub Actions y el detalle está en docs/CALIBRACION.md
+
+### Cómo aplicar las tres migraciones
+
+Aplica primero todas las anteriores, incluidas las de B12. Van en orden y las tres son seguras de repetir. Ninguna lleva delete ni drop, así el conector las aplica sin pedir confirmación, y ninguna necesita archivo manual.
+
+1. supabase/migrations/20261028000001_model_core.sql
+2. supabase/migrations/20261028000002_calibration_job.sql
+3. supabase/migrations/20261028000003_model_reads.sql
+
+Crear índices en la bitácora sin concurrently bloquea las escrituras mientras se crean. Antes de lanzar la tabla es chica y tarda segundos.
+
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename in ('calibration_runs', 'item_calibrations',
+     'option_calibrations', 'population_snapshots', 'comparison_cells', 'agreement_snapshots', 'model_publication')) as tablas_nuevas,
+  (select count(*) from pg_indexes where schemaname = 'public' and tablename = 'events' and indexname in ('events_seq',
+     'events_consent_changed', 'events_session_started', 'events_answered_session')) as indices_nuevos,
+  has_function_privilege('service_role', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as llave_empieza_corrida,
+  has_function_privilege('authenticated', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as alumno_empieza_corrida,
+  has_function_privilege('anon', 'public.calibration_begin(text, boolean, jsonb)', 'execute') as anonimo_empieza_corrida,
+  has_function_privilege('authenticated', 'public.comparison_snapshot()', 'execute') as alumno_lee_comparacion,
+  has_function_privilege('anon', 'public.comparison_snapshot()', 'execute') as anonimo_lee_comparacion,
+  has_function_privilege('authenticated', 'public.calibration_consenters(bigint)', 'execute') as alumno_lista_permisos,
+  has_function_privilege('service_role', 'public.calibration_apply(uuid)', 'execute') as llave_aplica_directo,
+  has_table_privilege('service_role', 'public.calibration_runs', 'select') as llave_lee_corridas_directo,
+  (select value #>> '{calibration,enabled}' from public.platform_settings where key = 'model_settings') as calibracion_encendida,
+  (select value #>> '{calibration,mode}' from public.platform_settings where key = 'model_settings') as modo,
+  exists (select 1 from public.email_kinds where kind = 'distractor_flags') as correo_de_distractores;
+```
+
+Debe salir
+- tablas_nuevas en 7 e indices_nuevos en 4
+- llave_empieza_corrida, alumno_lee_comparacion y correo_de_distractores en true
+- alumno_empieza_corrida, anonimo_empieza_corrida, anonimo_lee_comparacion, alumno_lista_permisos, llave_aplica_directo y llave_lee_corridas_directo en false
+- calibracion_encendida en false y modo en dry_run, hasta que la sesión la prenda con tu aviso
+
+### La llave y el flujo de GitHub
+
+La corrida real usa una llave secreta nueva de Supabase con el nombre calibracion-nocturna, guardada como secreto del repositorio SUPABASE_CALIBRATION_KEY. La crea Ricardo, con los pasos de docs/PENDIENTES_DE_RICARDO.md, sección B14. Nunca va en el chat, en un archivo ni en el repo. La dirección del proyecto es la variable pública VITE_SUPABASE_URL, que ya usa la publicación de la demo. Sin la llave, la noche escribe not_configured con un aviso amarillo y termina en 0.
+
+La llave pasa por encima de los permisos por fila, pero el código solo llama a las funciones calibration_*, que no devuelven texto de preguntas, alias, correos ni ids de cuenta. Por la API el rol de servicio hereda un límite de 8 s por consulta y lo más que se puede configurar son 60 s, así que las funciones de lectura, de publicación y de cierre llevan statement_timeout de 50 s y las páginas son de hasta 20,000 filas.
+
+### Qué conviene saber
+
+- El chequeo de seguridad de Supabase marcará, a propósito, las siete tablas nuevas con permisos por fila y sin políticas. Ni anon ni authenticated ni service_role tienen permisos sobre ellas, y solo las tocan las funciones de la base
+- También marcará las funciones que la app llama con sesión, comparison_snapshot, population_baselines, editor_agreement_history y admin_calibration_runs. Revisan por dentro la sesión, el dispositivo activo o el rol, que con B9 pide segundo factor
+- Las calibration_* del corredor solo las ejecuta service_role. Las ayudas internas (uuid_to_ulid, ulid_to_uuid, model_setting, model_settings_json, calibration_consenters, calibration_pseudonym, calibration_apply y las demás) no las ejecuta nadie de la API. supabase/tests/function_grants_test.sql revisa la lista completa
+- Para encender la calibración, el admin cambia model_settings.calibration.enabled con settings_write. Se empieza en dry_run, que calcula y guarda la corrida sin tocar el catálogo, y se pasa a apply tras dos noches limpias
+- calibration_runs.counts solo acepta números, booleanos y códigos en minúsculas. Es lo único que la sesión lee de la calibración real
+- Una corrida cerrada ya no da seudónimos, porque su sal se borra al cerrar
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.

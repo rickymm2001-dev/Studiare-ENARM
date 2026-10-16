@@ -80,6 +80,41 @@ El servidor de IA, las funciones, los lotes, la auditoría de los médicos y las
 
 Decisiones de B12 que esperan tu visto bueno, con la opción recomendada ya tomada. Tope de 0.30 dólares por alumno al día (10.6), compuerta atada al modelo y al prompt (10.12), dos espacios de trabajo (10.21), qué hacer si ningún modelo pasa en tarjetas (10.23), pago de la auditoría (10.24) y api.openai.com en la red de la sesión (10.25).
 
+## Lo que salió de B14, datos y modelo del alumno
+
+El servidor de la calibración nocturna, sus motores y sus pruebas ya están, junto con el flujo de GitHub que la corre cada noche. Nada se ha aplicado ni lanzado en el proyecto real y la calibración nace apagada y en solo reporte. Ninguno de estos pasos lleva llaves al chat. El detalle técnico está en docs/CALIBRACION.md y docs/SUPABASE.md.
+
+La llave de la calibración te toca a ti, unos 5 minutos.
+
+- **Paso B14.1. Crea la llave secreta.** En Supabase abre el proyecto Studiare, Project Settings, API Keys, pestaña Publishable and secret API keys. Si ves el botón Create new API keys, dale clic. Es seguro y no apaga las llaves de hoy. En la parte de llaves secretas agrega una llave nueva con el nombre calibracion-nocturna y cópiala
+- **Paso B14.2. Guárdala en GitHub.** En tu repo Studiare-ENARM abre Settings, Secrets and variables, Actions, pestaña Secrets, New repository secret. Nombre SUPABASE_CALIBRATION_KEY. Pega la llave y guarda. Va como secreto del repositorio y no de un environment, para que siga funcionando cuando el repo pase a privado
+- **Paso B14.3. No la pegues en el chat ni en ningún archivo.** Si se filtra, crea otra igual, cámbiala en GitHub y revoca la vieja en Supabase. Recomendado rotarla cada año
+- **Paso B14.4. La dirección del proyecto ya existe.** Es la variable VITE_SUPABASE_URL, que usa la publicación de la demo. No tienes que crear nada
+- **Paso B14.5. Marca el autotest como requisito de fusión.** En GitHub, Settings, Branches, la regla de main, agrega el trabajo calibration de check.yml a los que ya pides, check, e2e y audit
+- **Paso B14.6. Avisa a la sesión.** Ella prende la calibración en solo reporte, lanza la primera corrida y te dice los conteos. Antes de lanzar se esperan cero o pocos alumnos con permiso y todo en calibrando, y eso es correcto
+
+Si GitHub apaga la calibración.
+
+- Mientras el repo sea público, GitHub apaga lo programado después de 60 días sin actividad en el repo
+- Si la pantalla Calibración avisa que no ha corrido, entra a GitHub, Actions, calibration y dale Enable workflow
+- Los correos de falla de lo programado le llegan a quien editó la línea del horario por última vez
+
+Con tu abogado.
+
+- El texto nuevo del permiso y si cambia el nombre de Mejora anónima
+- Si quien no da el permiso puede ver su percentil, que es la pregunta 5 que dejó B16
+- Si quien ya lo dio con el texto corto debe confirmarlo otra vez. La calibración solo cuenta el permiso dado con la versión 2026-10-15b del aviso o posterior
+
+Decisiones de B14 que esperan tu visto bueno, con la opción recomendada ya tomada. La llave como secreto del repositorio y solo en main (10.2), el permiso dado con el texto corto (10.5), el percentil para quien no da el permiso (10.7), comparación y modo adaptativo abiertos en Gratis (10.10 y 10.15), examen en curso y textos de la IA entre dispositivos (10.18 y 10.19), reestructuradas automáticas de noche (10.30), un correo al día por médico con las opciones que casi nadie elige (10.31) y la hora de la corrida, 4 con 23 minutos de la mañana en Mérida (10.24).
+
+Lo que hace la sesión con el conector, sin pedirte nada más.
+
+1. Aplica 20261028000001 a 20261028000003 en orden. No hay archivo manual
+2. Revisa los permisos de las funciones con la consulta de docs/SUPABASE.md, sección Datos y modelo del alumno (B14)
+3. Con tu aviso de la llave, prende model_settings.calibration.enabled en solo reporte y lanza el flujo calibration con Run workflow
+4. Lee solo calibration_runs, sus conteos y códigos, y los anota en PROGRESS.md
+5. Pasa a Publicar tras dos noches limpias, y lo anota
+
 ## Lo que salió de B16, legal y privacidad
 
 El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.

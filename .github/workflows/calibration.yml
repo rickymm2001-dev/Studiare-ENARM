@@ -1,0 +1,64 @@
+# Calibración nocturna (B14, respuestas 85 a 87). Primero el autotest contra una base temporal con
+# alumnos simulados y, si pasa, la corrida real con la llave dedicada. El repo es público hasta B17,
+# así que el proceso solo imprime códigos y números (docs/CALIBRACION.md).
+name: calibration
+
+on:
+  schedule:
+    # 10:23 UTC son las 4:23 de Mérida, que no cambia de horario. Justo después del corte del día de
+    # estudio y lejos del inicio de la hora, cuando GitHub más retrasa lo programado
+    - cron: '23 10 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Solo reporte, sin publicar'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# Una sola corrida a la vez. Si una noche se atrasa, la siguiente espera y no la cancela
+concurrency:
+  group: calibration
+  cancel-in-progress: false
+
+jobs:
+  # El mismo autotest que corre en cada push (check.yml). Sin secretos
+  selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run calibration:selftest
+
+  # La corrida real. Solo en la rama por omisión. Si se lanza a mano desde otra rama corre el autotest y
+  # salta esto. Es el único trabajo que recibe la llave, y solo en el paso que la usa
+  nightly:
+    needs: selftest
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run calibration:build
+      # Sin el secreto escribe not_configured con un aviso amarillo y termina en 0. Solo imprime códigos y
+      # números. No se suben artefactos y no se usa el modo de depuración de los pasos
+      - run: node dist-calibration/calibrate.mjs
+        env:
+          SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          SUPABASE_CALIBRATION_KEY: ${{ secrets.SUPABASE_CALIBRATION_KEY }}
+          CALIBRATION_TRIGGER: ${{ github.event_name == 'schedule' && 'schedule' || 'manual' }}
+          CALIBRATION_FORCE_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          CALIBRATION_RUN_ID: ${{ github.run_id }}
+          CALIBRATION_SHA: ${{ github.sha }}
