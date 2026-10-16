@@ -21,6 +21,13 @@ describe('textos de los permisos (B14, 6.2)', () => {
     }
   });
 
+  it('la mejora se llama Mejora con tus datos sin nombre, porque los datos son seudónimos (10.6)', () => {
+    expect(consentTexts.purposes.anonymized_improvement[0]).toBe('Mejora con tus datos sin nombre');
+    // El nombre de los otros dos permisos no cambia
+    expect(consentTexts.purposes.party[0]).toBe('Party');
+    expect(consentTexts.purposes.ai_analysis[0]).toBe('Análisis con IA');
+  });
+
   it('van sin dos puntos ni signos de exclamación, con trato de tú', () => {
     for (const text of all) expect(text).not.toMatch(/[!¡:]/);
     expect(improvement).toMatch(/\btu\b|\btus\b/);

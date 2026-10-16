@@ -76,11 +76,11 @@ export const settingsPageText = {
   },
   privacy: {
     scoreInProgress:
-      'Tu puntaje oficial del ENARM se guarda en Progreso y solo con el permiso de mejora anónima.',
+      'Tu puntaje oficial del ENARM se guarda en Progreso y solo con el permiso Mejora con tus datos sin nombre.',
     goToProgress: 'Ir a Progreso',
   },
   officialScore: {
-    turnOn: 'Activar la mejora anónima en Privacidad',
+    turnOn: 'Activar la mejora con tus datos sin nombre en Privacidad',
   },
   // Panel con todos los ajustes que se guardan del repaso, en Repasar (comentario 4)
   reviewSettings: {

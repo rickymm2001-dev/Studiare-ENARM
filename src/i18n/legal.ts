@@ -45,7 +45,7 @@ export const legalText = {
   onboarding: {
     accept: 'Leí y acepto el aviso de privacidad y los términos y condiciones',
     summary:
-      'Usamos tus datos para darte tu plan de estudio, tus estadísticas y tu repaso. Party, el análisis con IA y la mejora anónima son opcionales, empiezan apagados y los cambias cuando quieras. A la IA viajan identificadores seudónimos y el texto del banco o el que tú eliges, nunca tu nombre ni tu correo. Puedes descargar o borrar tus datos y eliminar tu cuenta cuando quieras. Es un borrador para revisión del abogado.',
+      'Usamos tus datos para darte tu plan de estudio, tus estadísticas y tu repaso. Party, el análisis con IA y la mejora con tus datos sin nombre son opcionales, empiezan apagados y los cambias cuando quieras. A la IA viajan identificadores seudónimos y el texto del banco o el que tú eliges, nunca tu nombre ni tu correo. Puedes descargar o borrar tus datos y eliminar tu cuenta cuando quieras. Es un borrador para revisión del abogado.',
     read: 'Leer el aviso de privacidad completo',
     readTerms: 'Leer los términos y condiciones',
     newTab: 'se abre en otra pestaña',

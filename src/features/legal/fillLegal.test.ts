@@ -230,8 +230,8 @@ describe('textos legales', () => {
     }
     expect(of('Mercado Pago')).toMatch(/solo si lo eliges para pagar/);
     expect(of('Resend')).toMatch(/correos de acceso/);
-    expect(of('Sentry')).toMatch(/solo con tu permiso de mejora anónima/);
-    expect(of('GitHub,')).toMatch(/permiso de mejora anónima/);
+    expect(of('Sentry')).toMatch(/solo con tu permiso Mejora con tus datos sin nombre/);
+    expect(of('GitHub,')).toMatch(/permiso Mejora con tus datos sin nombre/);
   });
 
   it('PostHog solo con un permiso aparte de analítica, que empieza apagado (respuesta 78 y 4.27)', () => {
@@ -278,7 +278,9 @@ describe('textos legales', () => {
   it('dice la comparación con otros alumnos, solo con permiso, en percentiles y con grupos de 30 (B14)', () => {
     const text = studentText(legalDocs.privacy);
     expect(text).toMatch(/en percentiles de lo que ya pasó/);
-    expect(text).toMatch(/solo con los datos de quienes dieron el permiso de mejora anónima/);
+    expect(text).toMatch(
+      /solo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre/,
+    );
     expect(text).toMatch(/grupos de al menos 30 alumnos/);
     expect(text).toMatch(/nunca es un puntaje estimado del examen/);
     expect(text).toMatch(/Ese modelo es solo para ti y no predice tu puntaje/);

@@ -7,7 +7,9 @@
 // La pista de la mejora dice todo lo que cubre el permiso (6.1). La calibración nocturna de la dificultad,
 // el aviso a los médicos de opciones que casi nadie elige, la comparación con otros alumnos por
 // percentiles, los reportes de fallas de la app y guardar el puntaje oficial. Los datos son seudónimos y
-// no anónimos, y el texto lo dice así.
+// no anónimos, y el texto lo dice así. Por eso la etiqueta es Mejora con tus datos sin nombre (10.6). Si
+// el abogado prefiere conservar Mejora anónima, solo cambia esa etiqueta y las menciones del permiso en
+// los textos de la app y del aviso, que el commit del nombre deja juntas para revertirlas.
 import type { ConsentPurposeSchema } from '@/data/schemas/common';
 import type { z } from 'zod';
 
@@ -25,7 +27,7 @@ export const consentTexts = {
       'Usar tus errores para hipótesis del tutor, con IDs seudónimos.',
     ],
     anonymized_improvement: [
-      'Mejora anónima',
+      'Mejora con tus datos sin nombre',
       'Usamos tus respuestas y repasos con un identificador seudónimo, sin tu nombre ni tu correo, para calcular cada noche la dificultad real de las preguntas, avisar a los médicos de opciones que casi nadie elige y comparar a los alumnos por percentiles. También sirve para mandar los reportes de fallas de la app y para guardar tu puntaje oficial si lo capturas. Lo puedes retirar cuando quieras.',
     ],
   },

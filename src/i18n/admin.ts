@@ -235,12 +235,12 @@ export const adminText = {
   clientErrors: {
     title: 'Errores del navegador',
     description:
-      'Fallas que la app detectó en los navegadores de alumnos que dieron el permiso de mejora anónima. No traen nombres, correos ni ids. Se guardan 14 días y hay un tope de 500 distintos por día.',
+      'Fallas que la app detectó en los navegadores de alumnos que dieron el permiso Mejora con tus datos sin nombre. No traen nombres, correos ni ids. Se guardan 14 días y hay un tope de 500 distintos por día.',
     needsCloud: 'Para verlos, conecta la cuenta de la nube de un admin.',
     refresh: 'Actualizar',
     loading: 'Cargando los errores…',
     empty:
-      'No hay errores registrados. Puede ser que todo vaya bien o que todavía nadie dé el permiso de mejora anónima.',
+      'No hay errores registrados. Puede ser que todo vaya bien o que todavía nadie dé el permiso Mejora con tus datos sin nombre.',
     failed:
       'No pudimos leer los errores. Puede faltar aplicar la octava migración de Supabase, o tu cuenta no es admin.',
     kinds: { error: 'Error', rejection: 'Promesa rechazada', render: 'Pantalla caída' },

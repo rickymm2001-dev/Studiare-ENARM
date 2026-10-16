@@ -346,9 +346,9 @@ export const featureText = {
       consentError: 'No pudimos guardar el cambio. Inténtalo de nuevo.',
       scoreTitle: 'Puntaje oficial del ENARM',
       scoreDescription:
-        'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso de mejora anónima.',
+        'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso Mejora con tus datos sin nombre.',
       scoreNeedsConsent:
-        'Para guardar tu puntaje, activa antes la mejora anónima en tus consentimientos.',
+        'Para guardar tu puntaje, activa antes la mejora con tus datos sin nombre en tus consentimientos.',
       year: 'Año de la convocatoria',
       score: 'Puntaje obtenido',
       scoreHint: 'De 0 a 100, con hasta dos decimales.',
@@ -362,7 +362,7 @@ export const featureText = {
       scoreErrors: {
         invalid_year: 'Escribe un año entre 2000 y 2100.',
         invalid_score: 'El puntaje va de 0 a 100.',
-        no_consent: 'Activa antes la mejora anónima.',
+        no_consent: 'Activa antes la mejora con tus datos sin nombre.',
       },
     },
     exportTitle: 'Exportar mis datos',

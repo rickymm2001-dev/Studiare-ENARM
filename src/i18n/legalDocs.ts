@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
         'Estudio. Tus respuestas a preguntas y tarjetas, los tiempos, la confianza que marcas, los motivos de tus errores, tus mazos y apuntes, tus metas, tus ajustes y los reportes de error que mandas sobre una pregunta.',
         'Lecturas del banco. Qué preguntas del banco abres cada día de estudio, con el plan que tenías y para qué las abriste, como práctica, examen o duelo. Con ellas el servidor cuenta el tope diario del plan Gratis y frena las descargas masivas del banco. Si un día lees mucho más de lo normal, si en una semana abres buena parte del banco o si llegas al freno de descargas, el equipo ve un aviso con tu alias y la cifra. También guardamos qué mazos del catálogo descargas, con su versión, su tamaño y la fecha, para el mismo fin.',
         'Uso de la IA. Cuántas veces usas cada función de IA al día y cuánto cuesta, sin el texto que mandas ni la respuesta, para los límites diarios y el presupuesto de la plataforma.',
-        'Puntaje oficial. Solo si tú decides capturarlo en Progreso, con tu permiso de mejora anónima, que das o retiras en Configuración, sección Privacidad.',
+        'Puntaje oficial. Solo si tú decides capturarlo en Progreso, con tu permiso Mejora con tus datos sin nombre, que das o retiras en Configuración, sección Privacidad.',
         'Pagos. El identificador y el estado de tus pagos, de tu plan o pase y de tu prueba gratis, la pasarela que usaste y el código de descuento si escribiste uno. Para dar una sola prueba gratis por persona, la ligamos a tu correo. Si pides el reembolso de un pago hecho en OXXO, también la cuenta bancaria a la que te lo transferimos. Nunca vemos ni guardamos los datos de tu tarjeta, que viven en la pasarela de pagos.',
         'Prueba gratis usada. Si empiezas una prueba gratis, guardamos una huella de tu correo, que es un hash SHA-256 de tu correo escrito de forma normalizada, junto con la pasarela, el identificador de esa suscripción en la pasarela y la fecha en que empezó. La huella no guarda tu correo y solo sirve para comparar, es decir, para saber si el mismo correo ya usó su prueba gratis. Al eliminar tu cuenta se conserva, ya sin ligarla a tu cuenta, para que nadie repita la prueba con el mismo correo.',
         'Factura. Solo si pides una factura (CFDI), tu RFC, tu nombre o razón social, tu régimen fiscal, el código postal de tu domicilio fiscal, el uso del CFDI y el correo donde quieres recibirla. Los usamos solo para emitir esa factura y los ve solo el equipo que la emite.',
@@ -98,7 +98,7 @@ const privacy: LegalDoc = {
       bullets: [
         'Party. Compartir tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos con los miembros de los grupos a los que te unas, y en un duelo tus aciertos y tu tiempo. Tus compañeros nunca ven tu correo ni tus demás datos de cuenta.',
         'Análisis con IA. Usar tus errores para que el tutor te dé hipótesis de por qué fallas y un informe con IA.',
-        'Mejora anónima. Usar tus datos con un identificador seudónimo, sin tu nombre ni tu correo, junto con los de otros alumnos que también dieron este permiso, para mejorar Studiare para todos. Con ellos se calcula la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y se arma la comparación con otros alumnos de la sección siguiente. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
+        'Mejora con tus datos sin nombre. Usar tus datos con un identificador seudónimo, sin tu nombre ni tu correo, junto con los de otros alumnos que también dieron este permiso, para mejorar Studiare para todos. Con ellos se calcula la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y se arma la comparación con otros alumnos de la sección siguiente. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
       ],
     },
     {
@@ -106,7 +106,7 @@ const privacy: LegalDoc = {
       title: 'Comparación con otros alumnos',
       paragraphs: [
         'Cuando esté disponible, en Progreso verás cómo vas frente a otros alumnos, en percentiles de lo que ya pasó, como tus aciertos en simuladores de los últimos 30 días, por rama, tus repasos y tu constancia. Se compara contra todos los alumnos y contra los que buscan tu misma especialidad.',
-        'Esa comparación se calcula solo con los datos de quienes dieron el permiso de mejora anónima. Solo se muestra con grupos de al menos 30 alumnos con datos, y si no hay suficientes dice calibrando. Nadie ve los datos de otro alumno, solo percentiles, y nunca es un puntaje estimado del examen ni una probabilidad de plaza.',
+        'Esa comparación se calcula solo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre. Solo se muestra con grupos de al menos 30 alumnos con datos, y si no hay suficientes dice calibrando. Nadie ve los datos de otro alumno, solo percentiles, y nunca es un puntaje estimado del examen ni una probabilidad de plaza.',
       ],
     },
     {
@@ -135,8 +135,8 @@ const privacy: LegalDoc = {
         'El servicio que aloja el proxy de IA, cuando usas una función de IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.',
         'Resend, cuando se active. Enviará los correos de acceso a tu cuenta, los avisos de tu plan, como el de que termina tu prueba gratis o vence tu pase, y los recordatorios de repaso si los prendes. Recibirá tu correo y el texto de cada correo.',
         'PostHog, cuando se active, para medir cómo se usa la app. Solo recibirá datos si das el permiso de analítica, que se pedirá aparte y empezará apagado, y recibirá los eventos de uso con tu identificador seudónimo, sin tu nombre ni tu correo.',
-        'Sentry, cuando se active, para enterarnos de las fallas. Recibirá los reportes de fallas de la app solo con tu permiso de mejora anónima, y los errores de nuestras funciones del servidor. Ninguno lleva tu nombre ni tu correo.',
-        'GitHub, cuando se active la calibración de las preguntas. Ahí corre cada noche el cálculo con los datos de quienes dieron el permiso de mejora anónima, con identificadores seudónimos y sin nombres ni correos.',
+        'Sentry, cuando se active, para enterarnos de las fallas. Recibirá los reportes de fallas de la app solo con tu permiso Mejora con tus datos sin nombre, y los errores de nuestras funciones del servidor. Ninguno lleva tu nombre ni tu correo.',
+        'GitHub, cuando se active la calibración de las preguntas. Ahí corre cada noche el cálculo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre, con identificadores seudónimos y sin nombres ni correos.',
         'El servicio que aloja la página, hoy GitHub Pages y después Cloudflare, que ve datos técnicos de tu conexión, como la dirección IP.',
         'Autoridades, cuando una ley o una orden de autoridad competente lo exija.',
       ],
