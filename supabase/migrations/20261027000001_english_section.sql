@@ -35,9 +35,19 @@ insert into public.bank_taxonomy (branch, topic, subtopic, section) values
 -- enlace, la licencia es lo que sigue al último punto con espacio (o todo, si es el nombre exacto de una
 -- licencia) y lo anterior es el título. Las licencias se reconocen solo por su nombre exacto, sin importar
 -- mayúsculas y con o sin el acento de público. Solo el texto propio del equipo no pide título ni enlace
+--
+-- Los espacios son los mismos que en passageSource.ts (SPACE_CHARS), no los de \s ni [[:space:]], que
+-- cambian con el motor y el idioma de la base. Son el espacio, la tabulación, el salto de línea, la
+-- tabulación vertical, el salto de página, el retorno de carro, el espacio sin salto (U+00A0) y la marca de
+-- orden de bytes (U+FEFF). Los dos últimos se escriben con sus bytes en octal, así son los mismos en una base
+-- UTF8 y en la de pruebas locales, que es SQL_ASCII, y van como alternativas y no dentro de un corchete, para
+-- que un solo byte de otro carácter no se tome por espacio. Antes se usaba \s, que en la base no cuenta el
+-- espacio sin salto ni la marca de orden de bytes, y una referencia con uno de ellos era válida en la app y
+-- no en la base (hallazgo 7 de la revisión)
 create or replace function public.bank_passage_source_issue(p_refs jsonb) returns text
 language plpgsql immutable set search_path = public, pg_temp as $$
 declare
+  v_spaces constant text := '(?:[ \t\n\v\f\r]|' || E'\302\240' || '|' || E'\357\273\277' || ')+';
   v_ref text;
   v_rest text;
   v_last text;
@@ -47,10 +57,10 @@ declare
   v_label text;
   v_license text;
 begin
-  select btrim(regexp_replace(coalesce(e.r ->> 'title', ''), '\s+', ' ', 'g')) into v_ref
+  select btrim(regexp_replace(coalesce(e.r ->> 'title', ''), v_spaces, ' ', 'g')) into v_ref
     from jsonb_array_elements(case when jsonb_typeof(p_refs) = 'array' then p_refs else '[]'::jsonb end)
          with ordinality as e (r, ord)
-    where btrim(regexp_replace(coalesce(e.r ->> 'title', ''), '\s+', ' ', 'g')) ~* '^fuente del texto\.( |$)'
+    where btrim(regexp_replace(coalesce(e.r ->> 'title', ''), v_spaces, ' ', 'g')) ~* '^fuente del texto\.( |$)'
     order by e.ord
     limit 1;
   if v_ref is null then
@@ -78,7 +88,7 @@ begin
   end if;
   -- Los nombres exactos, sin importar mayúsculas y con o sin el acento de público. Con expresiones y no
   -- con lower y translate, para que den lo mismo en una base UTF8 y en la de pruebas locales
-  v_label := btrim(regexp_replace(v_label, '\s+', ' ', 'g'));
+  v_label := btrim(regexp_replace(v_label, v_spaces, ' ', 'g'));
   v_license := case
     when v_label ~* '^texto propio del equipo studiare$' then 'team'
     when v_label ~* '^dominio p(ú|Ú|u)blico$' then 'public_domain'
@@ -90,7 +100,7 @@ begin
     return case when v_cut is null then 'passage_source_missing' else 'license_not_allowed' end;
   end if;
   if v_license <> 'team' and (
-    v_title = '' or v_url !~* '^https://[a-z0-9-]+(\.[a-z0-9-]+)+(:[0-9]+)?([/?#][^[:space:]]*)?$'
+    v_title = '' or v_url !~* '^https://[a-z0-9-]+(\.[a-z0-9-]+)+(:[0-9]+)?([/?#][^ ]*)?$'
   ) then
     return 'passage_source_missing';
   end if;

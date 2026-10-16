@@ -15,8 +15,9 @@
 // La lectura es de derecha a izquierda. El último pedazo que empieza con http es el enlace, antes va la
 // licencia, que se reconoce solo por su nombre exacto (sin importar mayúsculas y con o sin el acento de público),
 // y todo lo anterior es el título, que puede traer puntos. El prefijo se reconoce sin importar mayúsculas
-// ni espacios de más. Lo comparte la función bank-sync con una copia generada
-// (scripts/content/sync-bank-shared.ts). Funciones puras, sin Node ni React.
+// ni espacios de más. Los espacios son los mismos que cuenta la base, no los de \s (SPACE_CHARS). Lo comparte la
+// función bank-sync con una copia generada (scripts/content/sync-bank-shared.ts). Funciones puras, sin
+// Node ni React.
 import { normalizeText } from './bankColumns.ts';
 
 /** Las licencias que acepta Studiare para el texto de un caso de lectura (8.8). Cualquier otra no entra */
@@ -54,23 +55,52 @@ export function licenseNeedsUrl(license: PassageLicense): boolean {
 }
 
 const PREFIX_WORD = 'Fuente del texto.';
+
+/**
+ * Lo que cuenta como espacio al leer la fuente. El espacio, la tabulación, el salto de línea, la tabulación
+ * vertical, el salto de página, el retorno de carro, el espacio sin salto (U+00A0) y la marca de orden de
+ * bytes (U+FEFF), que una celda copiada de la web o de un PDF trae a menudo. Es la misma lista en la función
+ * SQL bank_passage_source_issue, que los escribe con sus bytes porque la base de pruebas es SQL_ASCII.
+ * No se usa \s en TypeScript, que además cuenta unos diez espacios más, ni [[:space:]] en SQL, que cambia
+ * con el motor y el idioma de la base. Con \s una referencia con un espacio sin salto era válida aquí y no en
+ * la base (hallazgo 7 de la revisión)
+ */
+const SPACE_CHARS = ' \\t\\n\\v\\f\\r\\u00a0\\ufeff';
+const SPACES = new RegExp(`[${SPACE_CHARS}]+`, 'g');
+const NOT_SPACE = `[^${SPACE_CHARS}]`;
+const HTTPS_URL = new RegExp(
+  `^https://[a-z0-9-]+(?:\\.[a-z0-9-]+)+(?::[0-9]+)?(?:[/?#]${NOT_SPACE}*)?$`,
+  'i',
+);
+const WRITTEN_URL = new RegExp(`^https?://${NOT_SPACE}+$`, 'i');
+
+/** Cada tramo de espacios queda en un solo espacio, y sin espacio al principio ni al final */
+function squeeze(text: string): string {
+  return text.replace(SPACES, ' ').replace(/^ | $/g, '');
+}
+
+/** Quita los espacios simples de los extremos y nada más, como el btrim de la base */
+function strip(text: string): string {
+  return text.replace(/^ +| +$/g, '');
+}
+
 /**
  * Minúsculas, la ú de público sin acento y espacios simples, para reconocer el nombre de la licencia.
  * Es lo que reconoce también la función SQL con sus expresiones, así que las dos aceptan lo mismo. Un
  * acento en cualquier otra letra no se perdona
  */
 function fold(text: string): string {
-  return text.toLowerCase().replace(/ú/g, 'u').replace(/\s+/g, ' ').trim();
+  return squeeze(text.toLowerCase().replace(/ú/g, 'u'));
 }
 
 /** Una dirección https con host con punto, sin espacios. Pedir más sería pedir de más */
 export function isHttpsUrl(value: string): boolean {
-  return /^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)+(?::[0-9]+)?(?:[/?#]\S*)?$/i.test(value);
+  return HTTPS_URL.test(value);
 }
 
 /** Si esta referencia es la fuente del texto, o sea, si empieza con Fuente del texto. */
 export function isPassageSourceRef(title: string): boolean {
-  return /^fuente del texto\.(?: |$)/i.test(title.replace(/\s+/g, ' ').trim());
+  return /^fuente del texto\.(?: |$)/i.test(squeeze(title));
 }
 
 const LABEL_KEYS: readonly (readonly [string, PassageLicense])[] = PASSAGE_LICENSES.map(
@@ -100,33 +130,32 @@ export interface PassageSourceParts {
  */
 export function splitPassageSource(reference: string): PassageSourceParts | null {
   if (!isPassageSourceRef(reference)) return null;
-  const collapsed = reference.replace(/\s+/g, ' ').trim();
-  let rest = collapsed.slice(PREFIX_WORD.length).trim();
+  const collapsed = squeeze(reference);
+  let rest = strip(collapsed.slice(PREFIX_WORD.length));
   let url = '';
   const lastSpace = rest.lastIndexOf(' ');
   const last = rest.slice(lastSpace + 1);
   if (/^https?:\/\//i.test(last)) {
     url = last;
-    rest = lastSpace < 0 ? '' : rest.slice(0, lastSpace).trim();
+    rest = lastSpace < 0 ? '' : strip(rest.slice(0, lastSpace));
   }
-  rest = rest.replace(/\.$/, '').trim();
+  rest = strip(rest.replace(/\.$/, ''));
   if (rest === '') return { title: '', licenseText: '', url };
-  const cut = /^(.*)\. (.*)$/.exec(rest);
+  // El punto de la expresión de la base toma cualquier carácter, también el salto de línea. Aquí hace lo
+  // mismo con la bandera s, porque un título con U+2028 no es espacio y no debe cambiar la lectura
+  const cut = /^(.*)\. (.*)$/s.exec(rest);
   if (!cut) {
     // Un solo pedazo. Si es el nombre de una licencia, no hay título. Si no, es el título sin licencia
     return labelLicense(rest) === null
       ? { title: rest, licenseText: '', url }
       : { title: '', licenseText: rest, url };
   }
-  return { title: (cut[1] ?? '').trim(), licenseText: (cut[2] ?? '').trim(), url };
+  return { title: strip(cut[1] ?? ''), licenseText: strip(cut[2] ?? ''), url };
 }
 
 /** Un texto de una sola línea, sin puntos al final, para que la referencia no repita el punto */
 function tidy(text: string): string {
-  return text
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/[.\s]+$/, '');
+  return squeeze(text).replace(/[. ]+$/, '');
 }
 
 /**
@@ -169,7 +198,7 @@ export function composePassageSource(parts: {
 }): string | null {
   const license = tidy(parts.license);
   const written = parts.url.trim();
-  const url = /^https?:\/\/\S+$/i.test(written) ? written : '';
+  const url = WRITTEN_URL.test(written) ? written : '';
   let title = tidy(takeChars(parts.title, PASSAGE_TITLE_READ_MAX, Infinity));
   if (title === '' && license === '' && url === '') return null;
   const build = (shownTitle: string) => {

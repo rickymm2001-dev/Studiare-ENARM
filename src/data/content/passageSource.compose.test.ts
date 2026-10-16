@@ -15,12 +15,18 @@ import {
   splitPassageSource,
 } from './passageSource';
 
+/**
+ * Los espacios que cuenta passageSource.ts al leer la fuente (hallazgo 7 de la revisión). El recorte no
+ * cambió con eso, así que la versión anterior de aquí abajo usa los mismos para que solo se compare el recorte
+ */
+const SPACE_CHARS = ' \\t\\n\\v\\f\\r\\u00a0\\ufeff';
+
 /** Un texto de una sola línea, sin puntos al final. Igual que el de passageSource.ts */
 function tidy(text: string): string {
   return text
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/[.\s]+$/, '');
+    .replace(new RegExp(`[${SPACE_CHARS}]+`, 'g'), ' ')
+    .replace(/^ | $/g, '')
+    .replace(/[. ]+$/, '');
 }
 
 /**
@@ -34,7 +40,7 @@ function composeOneLetterAtATime(parts: {
 }): string | null {
   const license = tidy(parts.license);
   const written = parts.url.trim();
-  const url = /^https?:\/\/\S+$/i.test(written) ? written : '';
+  const url = new RegExp(`^https?://[^${SPACE_CHARS}]+$`, 'i').test(written) ? written : '';
   let title = tidy(parts.title);
   if (title === '' && license === '' && url === '') return null;
   const build = (shownTitle: string) => {

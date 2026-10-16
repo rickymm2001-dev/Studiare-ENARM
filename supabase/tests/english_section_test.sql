@@ -355,6 +355,40 @@ select pg_temp.expect(jsonb_array_length((:'passage_json'::jsonb) -> 'cases') >=
   'EN9. La lista de casos compartida no llegó completa');
 select pg_temp.parity_failures(:'passage_json'::jsonb) as failures \gset
 select pg_temp.expect(:'failures' = '', 'EN9. bank_passage_source_issue no da lo mismo que passageSource.ts en: ' || :'failures');
+-- La lista trae los espacios que la base debe leer igual que la app (hallazgo 7 de la revisión). Se buscan por
+-- sus bytes, con las mismas secuencias octales que usa la función, así la comprobación es la misma en una base
+-- UTF8 y en la de pruebas locales, que es SQL_ASCII. Si alguien los quita del archivo, la paridad de arriba
+-- dejaría de probar lo que dice
+select pg_temp.expect(
+  exists (select 1 from jsonb_array_elements((:'passage_json'::jsonb) -> 'cases') c, jsonb_array_elements_text(c -> 'refs') r
+    where position(E'\302\240' in r) > 0)
+  and exists (select 1 from jsonb_array_elements((:'passage_json'::jsonb) -> 'cases') c, jsonb_array_elements_text(c -> 'refs') r
+    where position(E'\357\273\277' in r) > 0)
+  and exists (select 1 from jsonb_array_elements((:'passage_json'::jsonb) -> 'cases') c, jsonb_array_elements_text(c -> 'refs') r
+    where position(E'\t' in r) > 0)
+  and exists (select 1 from jsonb_array_elements((:'passage_json'::jsonb) -> 'cases') c, jsonb_array_elements_text(c -> 'refs') r
+    where position(E'\n' in r) > 0)
+  and exists (select 1 from jsonb_array_elements((:'passage_json'::jsonb) -> 'cases') c, jsonb_array_elements_text(c -> 'refs') r
+    where position(E'\342\200\203' in r) > 0),
+  'EN9. La lista compartida perdió los casos con espacio sin salto, marca de orden de bytes, tabulador, salto de línea o espacio largo');
+-- Los mismos espacios, escritos aquí con sus bytes para no depender del archivo. Todos dan la fuente buena
+select pg_temp.expect(
+  public.bank_passage_source_issue(jsonb_build_array(jsonb_build_object('title',
+    E'\357\273\277Fuente\302\240del\ttexto.\302\240\302\240[Prueba] Texto.\n\357\273\277CC BY.\r\nhttps://example.org/texto\302\240'))) is null
+  and public.bank_passage_source_issue(jsonb_build_array(jsonb_build_object('title',
+    E'Fuente del texto.\013[Prueba] Texto.\014Dominio p\303\272blico.\013https://example.org/texto'))) is null
+  and public.bank_passage_source_issue(jsonb_build_array(jsonb_build_object('title',
+    E'Fuente del texto. Texto propio del equipo Studiare\302\240'))) is null,
+  'EN9. Una fuente con espacios sin salto, marca de orden de bytes, tabulador o salto de línea no se lee como la app');
+-- Un carácter que solo comparte el primer byte con el espacio sin salto no es espacio, y tampoco un espacio
+-- largo de Unicode, que \s o [[:space:]] contarían según la base. La licencia queda pegada a su enlace y no se
+-- reconoce
+select pg_temp.expect(
+  public.bank_passage_source_issue(jsonb_build_array(jsonb_build_object('title',
+    E'Fuente del texto. [Prueba] Texto\302\242. CC BY. https://example.org/texto'))) is null
+  and public.bank_passage_source_issue(jsonb_build_array(jsonb_build_object('title',
+    E'Fuente del texto. [Prueba] Texto. CC BY.\342\200\203https://example.org/texto'))) = 'license_not_allowed',
+  'EN9. La función toma por espacio un carácter que no está en la lista de espacios de passageSource.ts');
 -- Entradas raras que no truenan
 select pg_temp.expect(
   public.bank_passage_source_issue('[]') = 'passage_source_missing'

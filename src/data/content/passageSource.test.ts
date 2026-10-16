@@ -277,6 +277,100 @@ describe('leer la referencia', () => {
   });
 });
 
+// Hallazgo 7 de la revisión. TypeScript colapsaba los espacios con \s, que cuenta el espacio sin salto, la marca
+// de orden de bytes y unos diez espacios más, y la base solo los de ASCII, así que una referencia con un
+// espacio sin salto era válida en la app y no en la base. Ahora los dos leen la misma lista y la prueba EN9 de
+// SQL la comprueba con los mismos casos de tests/fixtures/passage-sources.json
+describe('los espacios de la fuente del texto', () => {
+  const NBSP = '\u00a0';
+  const BOM = '\ufeff';
+  // Lo que cuenta como espacio, en TypeScript y en la función SQL
+  const SPACES = [' ', '\t', '\n', '\r\n', '\u000b', '\u000c', NBSP, BOM, ` ${NBSP}${BOM}\t\n `];
+  // Espacios de Unicode que \s contaba y la lista no. Son parte del texto, como cualquier otro carácter
+  const NOT_SPACES = [
+    '\u2003',
+    '\u2007',
+    '\u2028',
+    '\u202f',
+    '\u3000',
+    '\u0085',
+    '\u200b',
+    '\u1680',
+  ];
+  const reference = (gap: string) =>
+    `Fuente${gap}del${gap}texto.${gap}[Prueba] Artículo.${gap}CC BY.${gap}https://example.org/articulo`;
+  const GOOD = {
+    ok: true,
+    source: { title: '[Prueba] Artículo', license: 'cc_by', url: 'https://example.org/articulo' },
+  };
+
+  it.each(SPACES)('el espacio %j separa las partes igual que un espacio simple', (gap) => {
+    expect(parsePassageSource(refs(reference(gap)))).toEqual(GOOD);
+    expect(parsePassageSource(refs(`${gap}${reference(gap)}${gap}`))).toEqual(GOOD);
+    expect(isPassageSourceRef(reference(gap))).toBe(true);
+    expect(splitPassageSource(reference(gap))).toEqual(splitPassageSource(reference(' ')));
+  });
+
+  it.each(NOT_SPACES)('el carácter %j no es un espacio y no separa nada', (gap) => {
+    // Pegado al enlace, la licencia ya no es el nombre exacto de ninguna
+    expect(
+      parsePassageSource(
+        refs(`Fuente del texto. [Prueba] Artículo. CC BY.${gap}https://example.org/articulo`),
+      ),
+    ).toEqual({ ok: false, issue: 'license_not_allowed' });
+    // En el prefijo tampoco separa palabras
+    expect(
+      isPassageSourceRef(`Fuente${gap}del${gap}texto. [Prueba] Texto. CC BY. https://a.org/x`),
+    ).toBe(false);
+  });
+
+  it('un título con un carácter que no es espacio ni salto del punto sigue siendo un título', () => {
+    expect(
+      parsePassageSource(
+        refs(
+          'Fuente del texto. [Prueba] Texto\u2028con otra línea. CC BY. https://example.org/texto',
+        ),
+      ),
+    ).toMatchObject({ ok: true, source: { title: '[Prueba] Texto\u2028con otra línea' } });
+  });
+
+  it('un espacio sin salto o un tabulador dentro del enlace lo parte, y el enlace no queda bien', () => {
+    for (const gap of [NBSP, BOM, '\t', '\n']) {
+      expect(isHttpsUrl(`https://example.org/a${gap}b`)).toBe(false);
+      expect(isHttpsUrl(`https://example.org/a${gap}`)).toBe(false);
+    }
+    expect(isHttpsUrl('https://example.org/a\u2003b')).toBe(true);
+  });
+
+  it('armar la referencia con esos espacios los deja en uno solo', () => {
+    expect(
+      composePassageSource({
+        title: `${BOM}[Prueba]${NBSP}Artículo\t\ncon${NBSP}${NBSP}espacios. `,
+        license: `${NBSP}CC BY${BOM}`,
+        url: `${NBSP}https://example.org/articulo\t`,
+      }),
+    ).toBe('Fuente del texto. [Prueba] Artículo con espacios. CC BY. https://example.org/articulo');
+    // Un enlace con un espacio sin salto adentro no es un enlace y se deja fuera
+    expect(
+      composePassageSource({
+        title: 'Texto',
+        license: 'CC BY',
+        url: `https://example.org/a${NBSP}b`,
+      }),
+    ).toBe('Fuente del texto. Texto. CC BY.');
+  });
+
+  it('la lista compartida con la base trae esos espacios, para que la paridad pruebe lo que dice', () => {
+    const all = parity.flatMap((item) => item.refs);
+    for (const gap of [NBSP, BOM, '\t', '\n', '\u2003']) {
+      expect(
+        all.some((reference) => reference.includes(gap)),
+        JSON.stringify(gap),
+      ).toBe(true);
+    }
+  });
+});
+
 describe('la licencia que escribe el médico en el Sheet', () => {
   it.each([
     ['Texto propio del equipo Studiare', 'team'],

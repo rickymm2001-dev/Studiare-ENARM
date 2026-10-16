@@ -69,6 +69,7 @@ Las licencias que se aceptan son estas, y la lista se revisará con el abogado (
 - Cualquier otra licencia, como CC BY-NC o CC BY-ND, no se acepta, porque Studiare cobra. La pregunta entra como borrador con el pendiente de licencia fuera de la lista
 - Sin fuente, sin título, sin licencia o sin enlace https cuando la licencia lo pide, la pregunta entra como borrador con el pendiente de falta de fuente del texto
 - La referencia mide hasta 300 caracteres. Si el título es muy largo, Studiare lo recorta y nunca recorta el enlace
+- Como espacio cuentan el espacio, el tabulador, el salto de línea, el espacio sin salto y la marca de orden de bytes que a veces trae un texto copiado de la web o de un PDF. La app y la base los leen igual, y una referencia que los trae se lee como si trajera espacios normales
 - La licencia se lee en la propia página o en los metadatos del artículo. Nunca se supone, y se guarda el enlace exacto
 
 ## De dónde sacar textos
