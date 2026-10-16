@@ -1,6 +1,9 @@
 // Pregunta del examen. Caso clínico, frase con negaciones resaltadas si el alumno lo pidió y opciones
 // que se pueden descartar. Descartar no cambia la respuesta, solo ayuda a pensar, y queda registrado
 // para medir cómo descarta (D-080). No muestra si acertó, eso llega con los resultados.
+// Una pregunta de la parte en inglés (B13, 3.5) usa el diseño de lectura de la práctica. El texto fijo a la
+// izquierda en computadora, el texto, la pregunta y las opciones en inglés (lang="en") y la línea de la
+// fuente bajo el texto. El resaltado de negaciones sigue apagado por omisión, como en español.
 import { Flag } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { structureDictionary } from '@/demo/content';
@@ -13,6 +16,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { HighlightedPrompt } from '../simulator/HighlightedPrompt';
 import { OptionChoice } from '../simulator/OptionChoice';
+import { ReadingPassage } from '../simulator/ReadingPassage';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { ExamAnswerState } from './examState';
@@ -53,13 +57,41 @@ export function ExamQuestion({
     const option = options.find((candidate) => candidate.id === id);
     return option ? [option] : [];
   });
-  const ranges = highlight ? findNegations(question.prompt, structureDictionary) : [];
-  const twoColumns = Boolean(vignette);
+  const english = question.language === 'en';
+  const lang = english ? 'en' : undefined;
+  const ranges = highlight
+    ? findNegations(question.prompt, structureDictionary, english ? 'en' : 'es')
+    : [];
+  const twoColumns = Boolean(vignette) || english;
   const promptRef = useRef<HTMLHeadingElement>(null);
+  // La región del texto de una pregunta de lectura, que va antes del enunciado
+  const passageRef = useRef<HTMLDivElement>(null);
+  // La primera pregunta de un texto lleva el foco al texto y no al enunciado, que va después. Las demás, al
+  // enunciado. Una pregunta de inglés sin caso es su propio texto
+  const firstOfText = english && (question.caseOrder ?? 1) <= 1;
   // La pregunta se monta de nuevo en cada cambio (la pantalla le pone key), así que basta al montar
   useEffect(() => {
-    if (focusPrompt) promptRef.current?.focus();
-  }, [focusPrompt]);
+    if (!focusPrompt) return;
+    (firstOfText ? (passageRef.current ?? promptRef.current) : promptRef.current)?.focus();
+  }, [focusPrompt, firstOfText]);
+
+  const prompt = (
+    <CardTitle
+      id="examen-pregunta-frase"
+      ref={promptRef}
+      tabIndex={-1}
+      lang={lang}
+      className={cn(
+        'text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus',
+        english ? undefined : 'mt-3',
+      )}
+    >
+      <span id="examen-pregunta-lugar" className="sr-only" lang="es">
+        {position}.{' '}
+      </span>
+      <HighlightedPrompt text={question.prompt} ranges={ranges} />
+    </CardTitle>
+  );
 
   return (
     <Card
@@ -84,24 +116,27 @@ export function ExamQuestion({
             </Badge>
           ) : null}
         </div>
-        {vignette ? (
+        {english ? (
+          <ReadingPassage
+            text={vignette}
+            refs={question.gpcRefs}
+            fold={(question.caseOrder ?? 1) > 1 ? 'phone' : 'never'}
+            scrollable
+            regionRef={passageRef}
+            describedBy="examen-pregunta-lugar"
+            className="mt-2"
+          />
+        ) : vignette ? (
           <div className="mt-2 rounded-md bg-muted p-3">
             <p className="mb-1 text-xs font-semibold text-fg-muted">{t.simulator.caseLabel}</p>
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}
-        <CardTitle
-          id="examen-pregunta-frase"
-          ref={promptRef}
-          tabIndex={-1}
-          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
-        >
-          <span className="sr-only">{position}. </span>
-          <HighlightedPrompt text={question.prompt} ranges={ranges} />
-        </CardTitle>
+        {english ? null : prompt}
       </CardHeader>
 
       <div className="flex flex-col gap-3">
+        {english ? prompt : null}
         {nudge ? (
           <p
             role="status"
@@ -119,6 +154,7 @@ export function ExamQuestion({
                 name="opcion-examen"
                 letter={String.fromCharCode(65 + position)}
                 text={option.text}
+                lang={lang}
                 selected={answer.optionId === option.id}
                 discarded={answer.eliminated.includes(option.id)}
                 onChoose={() => {

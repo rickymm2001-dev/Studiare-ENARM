@@ -3,7 +3,7 @@
 import type { StructureDictionary } from './types.ts';
 
 export const structureDictionary: StructureDictionary = {
-  version: 1,
+  version: 2,
   status: 'pending_physician_review',
   negations: [
     {
@@ -67,6 +67,102 @@ export const structureDictionary: StructureDictionary = {
     'en caso de no',
     'aun cuando no',
   ],
+  english: {
+    negations: [
+      {
+        id: 'not',
+        pattern: 'not',
+        kind: 'negation',
+      },
+      {
+        id: 'cannot',
+        pattern: 'cannot',
+        kind: 'negation',
+      },
+      {
+        id: 'contraction',
+        pattern: "[a-z]+n['’]t",
+        kind: 'negation',
+      },
+      {
+        id: 'never',
+        pattern: 'never',
+        kind: 'negation',
+      },
+      {
+        id: 'except',
+        pattern: 'except(?: for)?',
+        kind: 'exception',
+      },
+      {
+        id: 'with-the-exception-of',
+        pattern: 'with the exception of',
+        kind: 'exception',
+      },
+      {
+        id: 'other-than',
+        pattern: 'other than',
+        kind: 'exception',
+      },
+      {
+        id: 'apart-from',
+        pattern: 'apart from',
+        kind: 'exception',
+      },
+      {
+        id: 'excluding',
+        pattern: 'excluding',
+        kind: 'exception',
+      },
+      {
+        id: 'false',
+        pattern: 'false',
+        kind: 'false_statement',
+      },
+      {
+        id: 'incorrect',
+        pattern: 'incorrect(?:ly)?',
+        kind: 'false_statement',
+      },
+      {
+        id: 'untrue',
+        pattern: 'untrue',
+        kind: 'false_statement',
+      },
+      {
+        id: 'inaccurate',
+        pattern: 'inaccurate',
+        kind: 'false_statement',
+      },
+      {
+        id: 'least',
+        pattern:
+          'least\\s+(?:likely|common|commonly|frequent|frequently|probable|appropriate|useful|helpful|effective|beneficial|indicated|recommended|associated|consistent|characteristic|suggestive|accurate|supported|important|relevant|reliable|expected|typical|serious)',
+        kind: 'least_likely',
+      },
+      {
+        id: 'most-unlikely',
+        pattern: 'most\\s+unlikely',
+        kind: 'least_likely',
+      },
+      {
+        id: 'contraindicated',
+        pattern: 'contraindicat(?:ed|ion|ions)',
+        kind: 'contraindication',
+      },
+    ],
+    falsePositives: [
+      'not only',
+      'not just',
+      'whether or not',
+      'or not',
+      'if not',
+      'at least',
+      'at the very least',
+      'false (?:positives?|negatives?|labor|aneurysms?)',
+      "(?:does|do|did|has|have|had|is|are|was|were)(?: not|n['’]t)(?: yet)? (?:respond|responding|responded|improve|improving|improved|tolerate|tolerating|tolerated|resolve|resolving|resolved)",
+    ],
+  },
   tasks: [
     {
       task: 'treatment_of_choice',

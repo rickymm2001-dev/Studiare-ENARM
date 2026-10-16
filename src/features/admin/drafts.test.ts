@@ -41,6 +41,36 @@ describe('umbrales', () => {
     });
   });
 
+  it('los de Inglés médico se editan, entran al parche y respetan su rango (B13)', () => {
+    const fields = THRESHOLD_FIELDS.filter((field) => field.group === 'english').map(fieldId);
+    expect(fields).toEqual([
+      'english.secondsPerItem',
+      'english.examMinItems',
+      'english.practiceMinCases',
+      'english.minAnswersForStats',
+    ]);
+    expect(
+      patchFromDraft({
+        ...initialDraft(),
+        'english.secondsPerItem': '75',
+        'english.examMinItems': '24',
+      }),
+    ).toEqual({ english: { secondsPerItem: 75, examMinItems: 24 } });
+    // Entre 30 y 300 segundos y sin decimales
+    expect(
+      Object.keys(validateDraft({ ...initialDraft(), 'english.secondsPerItem': '29' })),
+    ).toEqual(['english.secondsPerItem']);
+    expect(
+      Object.keys(validateDraft({ ...initialDraft(), 'english.secondsPerItem': '301' })),
+    ).toEqual(['english.secondsPerItem']);
+    expect(Object.keys(validateDraft({ ...initialDraft(), 'english.examMinItems': '0' }))).toEqual([
+      'english.examMinItems',
+    ]);
+    expect(
+      Object.keys(validateDraft({ ...initialDraft(), 'english.minAnswersForStats': '1.5' })),
+    ).toEqual(['english.minAnswersForStats']);
+  });
+
   it('señala lo que no es número, lo que no es entero y lo que rompe una regla', () => {
     const errors = validateDraft({
       ...initialDraft(),

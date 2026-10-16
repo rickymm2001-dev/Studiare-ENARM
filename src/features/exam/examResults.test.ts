@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import { makeEnglishCase } from '@/data/testing/english';
 import { makeQuestionWithOptions, newId } from '@/data/testing/fixtures';
 import { formatClock } from './clock';
 import {
   examAnswers,
+  examInfos,
   examOutcome,
   examScoreOf,
   rankedTallies,
+  sectionRows,
   type ExamBundles,
 } from './examResults';
 import {
@@ -123,5 +126,80 @@ describe('reloj del examen', () => {
     expect(formatClock(3_600_000)).toBe('1:00:00');
     expect(formatClock(5 * 3_600_000 + 59 * 60_000 + 20_000)).toBe('5:59:20');
     expect(formatClock(-5)).toBe('0:00');
+  });
+});
+
+describe('resultados por sección (B13, 3.6)', () => {
+  /** Un examen con dos preguntas en español y un caso de dos preguntas en inglés */
+  function mixed() {
+    const spanish = [makeQuestionWithOptions(), makeQuestionWithOptions()];
+    const english = makeEnglishCase(2);
+    const bundles = new Map(
+      [...spanish, ...english.bundles].map(({ question, options }) => [
+        question.id,
+        { question, options, vignette: '' },
+      ]),
+    ) as ExamBundles;
+    const ids = [...bundles.keys()];
+    const state = createExamState({
+      examId: newId(),
+      userId: newId(),
+      seed: 's',
+      questionIds: ids,
+      requested: 4,
+      shortfall: 0,
+      totalMs: 600_000,
+      nowMs: T0,
+      highlight: false,
+      askConfidence: false,
+      alerts: true,
+    });
+    return { state, ids, bundles };
+  }
+
+  it('la sección de cada pregunta sale del idioma que quedó en el banco local', () => {
+    const { state, ids, bundles } = mixed();
+    const infos = examInfos(state, bundles);
+    expect(infos.map((info) => info.section)).toEqual([
+      'clinical',
+      'clinical',
+      'english',
+      'english',
+    ]);
+    expect(infos.filter((info) => info.section === 'english').map((info) => info.branch)).toEqual([
+      'medical_english',
+      'medical_english',
+    ]);
+    expect(ids).toHaveLength(4);
+  });
+
+  it('corta Español e Inglés con aciertos, en blanco y tiempo medio, y el inglés queda en su rama', () => {
+    const { state: start, ids, bundles } = mixed();
+    const [s1, s2, e1, e2] = ids as [string, string, string, string];
+    const right = (id: string) =>
+      optionsOf(bundles, id).find((option) => option.isCorrect)?.id ?? '';
+    let state: ExamState = start;
+    state = choose(state, s1, right(s1), T0 + 1000).state;
+    state = choose(state, e1, right(e1), T0 + 2000).state;
+    // El español acierta una y deja la otra en blanco. El inglés acierta una y deja la otra en blanco
+    state = finishExamState(state, T0 + 60_000, 'completed');
+    const score = examScoreOf(state, bundles);
+    expect(score.bySection.clinical).toMatchObject({ total: 2, answered: 1, correct: 1, blank: 1 });
+    expect(score.bySection.english).toMatchObject({ total: 2, answered: 1, correct: 1, blank: 1 });
+    expect(score.byBranch.medical_english).toEqual({ total: 2, answered: 1, correct: 1 });
+    expect(score.missedIds).toEqual([]);
+    expect(score.blankIds).toEqual([s2, e2]);
+    const rows = sectionRows(score);
+    expect(rows.map((row) => row.section)).toEqual(['clinical', 'english']);
+    expect(rows[1]).toMatchObject({ total: 2, correct: 1, blank: 1 });
+  });
+
+  it('un examen solo en español trae una fila y uno sin respuestas no inventa un promedio', () => {
+    const { state, bundles } = build(2);
+    const finished = finishExamState(state, T0 + 1000, 'completed');
+    const rows = sectionRows(examScoreOf(finished, bundles));
+    expect(rows).toEqual([
+      { section: 'clinical', total: 2, answered: 0, correct: 0, blank: 2, averageSeconds: null },
+    ]);
   });
 });

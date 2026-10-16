@@ -176,11 +176,13 @@ export function ReviewSetup({
                 ))}
               </ul>
             </fieldset>
+            {/* Repasar sí muestra Inglés médico, porque ahí vive el mazo de vocabulario (B13, 2.8) */}
             <BranchTopicPicker
               selected={selection.topics}
               counts={counts}
               countLabel={text.cards}
               showCount={false}
+              scope="all"
               onChange={(topics) => {
                 setSelection({ ...selection, topics });
               }}

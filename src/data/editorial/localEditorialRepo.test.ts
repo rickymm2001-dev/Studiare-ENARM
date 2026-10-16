@@ -235,4 +235,87 @@ describe('repositorio editorial local', () => {
     expect((await asAdmin.reports()).rows).toHaveLength(2);
     expect(await asPhysician.distractorQueue('open')).toEqual([]);
   });
+
+  describe('Inglés médico (B13)', () => {
+    const SOURCE =
+      'Fuente del texto. [Prueba] Artículo simulado. CC BY. https://example.org/articulo';
+
+    /** Una pregunta en inglés ya en el banco, asignada al médico, con las referencias que se pidan */
+    async function englishSetup(refs: string[]) {
+      const api = testApi();
+      disposers.push(api.dispose);
+      const physician = makeUser({ role: 'physician', alias: 'Ana' });
+      await api.repos.users.put(physician);
+      const { question, options } = bankQuestion();
+      const english: Question = {
+        ...question,
+        branch: 'medical_english',
+        topic: 'reading_comprehension',
+        subtopic: 'english_internal_medicine',
+        language: 'en',
+        gpcRefs: refs.map((title) => ({ title, status: 'to_verify' as const })),
+      };
+      await api.repos.questions.addVersion(english, options);
+      await api.repos.reviewAssignments.put({
+        id: newId(),
+        questionId: english.questionId,
+        physicianId: physician.id,
+        assignedBy: null,
+        assignedAt: '2026-10-08T10:00:00.000Z',
+      });
+      return {
+        question: english,
+        options,
+        repo: createLocalEditorialRepo(api, { id: physician.id, role: 'physician' }),
+      };
+    }
+
+    it('sin fuente o con una licencia que no se acepta queda con su pendiente y no se manda a revisión', async () => {
+      const without = await englishSetup([]);
+      const read = await without.repo.question(without.question.questionId);
+      expect(read.versions[0]?.incomplete).toContain('passage_source_missing');
+      await expect(without.repo.submit(without.question.id)).rejects.toMatchObject({
+        code: 'incomplete',
+        detail: expect.stringContaining('passage_source_missing') as string,
+      });
+
+      const notAllowed = await englishSetup([
+        'Fuente del texto. [Prueba] Texto. CC BY-NC. https://example.org/a',
+      ]);
+      const item = (await notAllowed.repo.list({}, { limit: 10, offset: 0 })).items[0];
+      expect(item?.incomplete).toContain('license_not_allowed');
+      await expect(notAllowed.repo.submit(notAllowed.question.id)).rejects.toMatchObject({
+        code: 'incomplete',
+      });
+    });
+
+    it('con una fuente completa se manda a revisión, y en español no pide nada', async () => {
+      const complete = await englishSetup([SOURCE]);
+      expect(
+        (await complete.repo.question(complete.question.questionId)).versions[0]?.incomplete,
+      ).toEqual([]);
+      await expect(complete.repo.submit(complete.question.id)).resolves.toMatchObject({
+        status: 'in_review',
+      });
+      const { question, asPhysician } = await setup();
+      expect((await asPhysician.question(question.questionId)).versions[0]?.incomplete).toEqual([]);
+    });
+
+    it('guardar desde el editor arma la fuente como primera referencia y deja el idioma', async () => {
+      const { question, options, repo } = await englishSetup([]);
+      const draft = draftFromVersion(question, options);
+      expect(draft.language).toBe('en');
+      const saved = await repo.saveVersion(question.questionId, question.id, {
+        ...draft,
+        passage: {
+          title: '[Prueba] Artículo simulado',
+          license: 'CC BY',
+          url: 'https://example.org/articulo',
+        },
+      });
+      expect(saved.incomplete).toEqual([]);
+      const [next] = (await repo.question(question.questionId)).versions;
+      expect(next).toMatchObject({ version: 2, gpcRefs: [{ title: SOURCE, status: 'verified' }] });
+    });
+  });
 });

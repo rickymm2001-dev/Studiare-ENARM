@@ -1,5 +1,6 @@
 // Retroalimentación (pantalla 5). La ve quien eligió verla después de cada pregunta. Por defecto la
 // retroalimentación llega al final de la sesión, en el resumen (D-087).
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
@@ -11,7 +12,8 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
 import { AnswerReview } from './AnswerReview';
-import { usePractice, type PracticeAnswer } from './practice';
+import { textStartAfterPause } from './passageTiming';
+import { clock, usePractice, type PracticeAnswer } from './practice';
 import { NoActivePractice } from './QuestionScreen';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 
@@ -70,13 +72,21 @@ function FeedbackBody({
   const navigate = useNavigate();
   const practice = usePractice();
   const isLast = practice.answers.length >= practice.questionIds.length;
+  // Cuándo llegó a la retroalimentación. En Inglés médico lo que pasa aquí no cuenta en el tiempo
+  // sugerido del texto (B13, 2.3), que mide lo que tarda en contestar
+  const [arrivedAt] = useState(() => clock());
 
   const next = () => {
     if (isLast) {
       void navigate(screenPath('sessionSummary'));
       return;
     }
-    practice.set({ index: practice.answers.length });
+    practice.set({
+      index: practice.answers.length,
+      ...(practice.section === 'english'
+        ? { caseStartedAt: textStartAfterPause(practice.caseStartedAt, clock() - arrivedAt) }
+        : {}),
+    });
     void navigate(screenPath('question'));
   };
   // Enter sigue a la siguiente pregunta sin buscar el botón (D-087)

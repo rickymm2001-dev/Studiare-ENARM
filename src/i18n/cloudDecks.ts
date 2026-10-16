@@ -57,4 +57,12 @@ export const deckCatalogText = {
   removed:
     'Quitaste las imágenes de este mazo del dispositivo y ya no sale en Repasar. Si lo vuelves a bajar, tus repasos siguen donde iban.',
   removeFailed: 'No se pudieron quitar las descargas. Inténtalo de nuevo.',
+  // La fuente de un mazo que no se comparte con autorización sino que sale de una fuente pública, como el
+  // vocabulario de MedlinePlus (B13, 4.4). Dice quién publica la información y con qué licencia
+  source: {
+    line: (name: string, license: string) => `Fuente ${name}. ${license}.`,
+    // Al pie de la lista de temas del mazo
+    topicsFooter: (name: string, license: string) =>
+      `Fuente ${name}. ${license}. Los nombres en español son los que publica la fuente. Studiare no los tradujo.`,
+  },
 } as const;

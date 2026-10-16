@@ -106,6 +106,20 @@ export const ThresholdsSchema = z.strictObject({
     /** Nivel del intervalo de Wilson y de los demás intervalos */
     level: z.number().min(0.5).max(0.999).default(0.95),
   }),
+  english: z.strictObject({
+    /**
+     * Segundos sugeridos por reactivo de inglés (J, 8.3 del plan de B13). Sale de un texto de 300 a 400
+     * palabras leído a unas 150 por minuto, repartido entre dos o tres preguntas, más el tiempo de
+     * contestar. Es una estimación y no un dato del ENARM
+     */
+    secondsPerItem: z.int().min(30).max(300).default(90),
+    /** Reactivos de inglés publicados para que su parte del examen deje de decir calibrando (J) */
+    examMinItems: z.int().positive().default(30),
+    /** Casos completos publicados para abrir la práctica de inglés (J) */
+    practiceMinCases: z.int().positive().default(1),
+    /** Respuestas de inglés del alumno para mostrar sus cifras de inglés (J, como la estructura) */
+    minAnswersForStats: z.int().positive().default(20),
+  }),
 });
 
 export type Thresholds = z.infer<typeof ThresholdsSchema>;
@@ -123,6 +137,7 @@ export const FACTORY_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
   behavior: {},
   streak: {},
   confidence: {},
+  english: {},
 });
 
 export type ThresholdsPatch = Readonly<Record<string, Readonly<Record<string, number>>>>;

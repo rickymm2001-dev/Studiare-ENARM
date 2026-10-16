@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [Prueba] Artículo simulado CC BY-SA, con el identificador solo en número y la licencia solo en el texto -->
+<pmc-articleset>
+  <article xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+    <front>
+      <journal-meta><journal-title-group><journal-title>[Prueba] Journal of Simulated Things</journal-title></journal-title-group></journal-meta>
+      <article-meta>
+        <article-id pub-id-type="pmc">9900003</article-id>
+        <title-group><article-title>[Prueba] Share alike article</article-title></title-group>
+        <contrib-group><contrib contrib-type="author"><name><surname>Prueba</surname></name></contrib></contrib-group>
+        <permissions>
+          <license>
+            <license-p>[Prueba] Distributed under https://creativecommons.org/licenses/by-sa/3.0/ terms.</license-p>
+          </license>
+        </permissions>
+        <abstract><p>[Prueba] Simulated abstract of the share alike article.</p></abstract>
+      </article-meta>
+    </front>
+  </article>
+</pmc-articleset>

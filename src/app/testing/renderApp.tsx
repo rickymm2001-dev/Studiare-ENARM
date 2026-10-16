@@ -89,6 +89,9 @@ export async function resetApp(api?: DataApi): Promise<void> {
     kind: 'practice',
     duelId: null,
     targetTags: [],
+    section: 'clinical',
+    secondsPerItem: 0,
+    caseStartedAt: 0,
   });
   localStorage.clear();
 }

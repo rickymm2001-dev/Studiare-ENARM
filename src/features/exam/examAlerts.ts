@@ -26,3 +26,20 @@ export function alertMessage(alert: TimeAlert, progress: { answered: number; tot
 export function alertVisibleMs(alert: Pick<TimeAlert, 'severity'>): number {
   return alert.severity === 'critical' ? 15_000 : 10_000;
 }
+
+/**
+ * Cuánto tiempo en una pregunta sin contestar es más del doble del ritmo, que es cuando el examen avisa
+ * que se atoró. Una pregunta de la parte en inglés trae el texto, así que su ritmo es el de todo el texto
+ * (B13): el doble de los segundos sugeridos por reactivo de inglés por las preguntas que trae el texto
+ */
+export function stuckAfterMs(input: {
+  english: boolean;
+  /** Preguntas del texto en este examen. Solo cuenta en inglés */
+  textSize: number;
+  clinicalSeconds: number;
+  englishSeconds: number;
+}): number {
+  return input.english
+    ? 2 * input.englishSeconds * Math.max(1, input.textSize) * 1000
+    : 2 * input.clinicalSeconds * 1000;
+}

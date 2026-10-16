@@ -4,6 +4,9 @@
 // pendientes, avisos y la marca Viene del Sheet, y abre el editor. Arriba, Mis revisiones del mes.
 // El médico ve lo que tiene asignado y el admin todo. La búsqueda y las páginas son de lo ya leído,
 // hasta 500 preguntas por vista. Con la nube el médico no importa, escribe en el Sheet.
+// Con la nube, el filtro Sección separa Español, que son las ramas clínicas, de Inglés, que es Inglés
+// médico (B13, 5.4 del plan de B13), y una pregunta en inglés con la fuente del texto incompleta dice
+// en su renglón qué le falta.
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { BadgeCheck, ClipboardCheck, FilePen, Hourglass, PenLine, Undo2 } from 'lucide-react';
@@ -11,6 +14,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import type { EditorFilter, EditorListItem } from '@/data/bank/contracts';
+import type { TaxonomySection } from '@/data/schemas/content';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
@@ -21,8 +25,10 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SelectField, TextField } from '@/ui/components/field';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
+import { branchesOfSection, sectionOfBranch } from './bankTaxonomy';
 import { meridaMonthToDate } from './meridaMonth';
 import { sourceKeyLabel } from './reviewSteps';
+import { incompleteText } from './reviewTexts';
 import { useEditorialRepo } from './useEditorialRepo';
 import { useRepoQuery } from './useRepoQuery';
 
@@ -56,6 +62,9 @@ export function QuestionBankScreen() {
   const [filter, setFilter] = useState<Required<Pick<EditorFilter, 'view'>> & EditorFilter>({
     view: 'all',
   });
+  // Sección del examen (B13). Vacío son todas. Inglés es una sola rama, así que viaja al servidor como
+  // rama y no se pierde por el tope de 500. Español se separa de lo leído
+  const [section, setSection] = useState<TaxonomySection | ''>('');
   const { state, reload } = useRepoQuery(
     () => repo.list(filter, { limit: LIST_LIMIT, offset: 0 }),
     `${key}|${JSON.stringify(filter)}`,
@@ -80,13 +89,23 @@ export function QuestionBankScreen() {
   const filters = (
     <Filters
       filter={filter}
+      section={repo.kind === 'cloud' ? section : null}
+      onSection={(next) => {
+        setSection(next);
+        // Una rama de otra sección ya no aplica. Inglés se vuelve su única rama
+        const only = next === '' ? [] : branchesOfSection(next);
+        const { branch: _branch, topic: _topic, ...rest } = filter;
+        setFilter(
+          next === 'english' && only.length === 1 ? { ...rest, branch: only[0]?.key } : rest,
+        );
+      }}
       onChange={(next) => {
         setFilter(next);
       }}
     />
   );
   // Sin filtros y sin nada asignado, el médico todavía no tiene preguntas
-  const untouched = filter.view === 'all' && !filter.branch && !filter.status;
+  const untouched = filter.view === 'all' && !filter.branch && !filter.status && section === '';
   if (state.status === 'ready' && state.value.items.length === 0 && untouched) {
     return (
       <>
@@ -101,7 +120,9 @@ export function QuestionBankScreen() {
       </>
     );
   }
-  const items = state.status === 'ready' ? state.value.items : [];
+  const loaded = state.status === 'ready' ? state.value.items : [];
+  const items =
+    section === '' ? loaded : loaded.filter((item) => sectionOfBranch(item.branch) === section);
   const countOf = (status: EditorListItem['status']) =>
     items.filter((item) => item.status === status).length;
 
@@ -193,9 +214,14 @@ type FilterState = Required<Pick<EditorFilter, 'view'>> & EditorFilter;
 
 function Filters({
   filter,
+  section,
+  onSection,
   onChange,
 }: {
   filter: FilterState;
+  /** La sección elegida, o null cuando el filtro no se ofrece, como en la demo, que no trae inglés */
+  section: TaxonomySection | '' | null;
+  onSection: (next: TaxonomySection | '') => void;
   onChange: (next: FilterState) => void;
 }) {
   const text = physicianText.bankScreen;
@@ -204,8 +230,15 @@ function Filters({
     const { [field]: _removed, ...rest } = next;
     return rest as FilterState;
   };
+  // Con una sección elegida, la rama se elige entre las de esa sección
+  const branches =
+    section === null || section === ''
+      ? topicTaxonomy.branches
+      : topicTaxonomy.branches.filter((item) => sectionOfBranch(item.key) === section);
   return (
-    <div className="mb-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      className={`mb-3 grid gap-3 sm:grid-cols-2 ${section === null ? 'lg:grid-cols-4' : 'lg:grid-cols-5'}`}
+    >
       <SelectField
         label={text.views.label ?? ''}
         value={filter.view}
@@ -214,12 +247,29 @@ function Filters({
           onChange({ ...filter, view: event.target.value as View });
         }}
       />
+      {section === null ? null : (
+        <SelectField
+          label={physicianText.bank.sectionLabel}
+          value={section}
+          options={[
+            { value: '', label: physicianText.bank.all },
+            ...(['clinical', 'english'] as const).map((key) => ({
+              value: key,
+              label: physicianText.bank.sections[key] ?? key,
+            })),
+          ]}
+          onChange={(event) => {
+            const value = event.target.value;
+            onSection(value === 'clinical' || value === 'english' ? value : '');
+          }}
+        />
+      )}
       <SelectField
         label={t.topicPicker.trunks}
         value={filter.branch ?? ''}
         options={[
           { value: '', label: physicianText.bank.all },
-          ...topicTaxonomy.branches.map((item) => ({ value: item.key, label: item.name })),
+          ...branches.map((item) => ({ value: item.key, label: item.name })),
         ]}
         onChange={(event) => {
           const next = without(without(filter, 'topic'), 'branch');
@@ -341,6 +391,10 @@ function BankRow({ item, showPeople }: { item: EditorListItem; showPeople: boole
   const sheetKey = sourceKeyLabel(item.sourceKey);
   const fromSheet = item.sourceKey?.startsWith('sheet:') === true;
   const label = item.promptPreview || text.noPreview;
+  // La fuente del texto de una pregunta en inglés que falta o no se acepta, con su frase (B13, 5.4)
+  const sourceIssues = item.incomplete.filter(
+    (code) => code === 'passage_source_missing' || code === 'license_not_allowed',
+  );
   return (
     <div className="flex flex-wrap items-start gap-2">
       <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -364,6 +418,13 @@ function BankRow({ item, showPeople }: { item: EditorListItem; showPeople: boole
             <span>· {physicianText.bank.unassigned}</span>
           ) : null}
         </span>
+        {sourceIssues.length > 0 ? (
+          <ul className="flex flex-col gap-0.5 text-xs text-fg-muted">
+            {sourceIssues.map((code) => (
+              <li key={code}>{incompleteText(code)}</li>
+            ))}
+          </ul>
+        ) : null}
         <span className="flex flex-wrap gap-1.5">
           {fromSheet ? <Badge>{text.fromSheet}</Badge> : null}
           {item.reviewState === 'blind_pending' ? (

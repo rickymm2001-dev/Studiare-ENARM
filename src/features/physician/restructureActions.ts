@@ -11,7 +11,7 @@ import type { User } from '@/data/schemas/people';
 import { logAiCall } from '@/data/usecases/aiTutor';
 import type { RestructureOutput } from '@/engines/aiContracts';
 import { InvalidDraftError } from './editorActions';
-import { isMarked, type RestructureMarks } from './restructureEligibility';
+import { isEnglishQuestion, isMarked, type RestructureMarks } from './restructureEligibility';
 import { validateDraft, type QuestionDraft, type TaxonomyView } from './editorDraft';
 import {
   buildRestructureInput,
@@ -53,6 +53,10 @@ export async function requestRestructure(
     now?: Date;
   },
 ): Promise<RequestResult> {
+  // Una pregunta en inglés no pasa por IA, esté marcada o no (B13, 5.5 del plan de B13)
+  if (isEnglishQuestion(args.question)) {
+    return { ok: false, reason: 'english', message: 'english' };
+  }
   if (args.marks && !isMarked(args.marks, args.question.questionId)) {
     return { ok: false, reason: 'not_marked', message: 'not_marked' };
   }

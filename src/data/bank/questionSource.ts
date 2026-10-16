@@ -37,11 +37,24 @@ export interface PoolQuestion extends Pick<
 }
 
 export interface StudentPool {
-  /** Para práctica, duelos y planificador */
+  /** En español. Para práctica, duelos y planificador */
   practice: PoolQuestion[];
-  /** Para el examen completo */
+  /** En español. Para el examen completo */
   exam: PoolQuestion[];
+  /**
+   * En inglés (B13). Los casos de lectura de Inglés médico, aparte para que la práctica en español, los
+   * duelos y el planificador nunca los mezclen (2.8 del plan de B13). Para la práctica de inglés y la
+   * parte en inglés del examen completo
+   */
+  english: { practice: PoolQuestion[]; exam: PoolQuestion[] };
 }
+
+/** Un pool sin preguntas, como el de un banco cerrado o que nunca se bajó */
+export const EMPTY_POOL: StudentPool = {
+  practice: [],
+  exam: [],
+  english: { practice: [], exam: [] },
+};
 
 export interface EnsureResult {
   /** Ids de versión ya guardados en Dexie, en el orden pedido */

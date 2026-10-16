@@ -7,10 +7,13 @@
 // con las demás en blanco) y avisa con el número de fila lo que no se pueda representar. Una fila con
 // problemas no pasa a la salida. Funciones puras, sin Node ni React.
 import {
+  ENGLISH_CASE_SIZES,
+  ENGLISH_DEFAULT_TASK_KEY,
   EXAMPLE_PREFIX,
   HEADER_ALIASES,
   HEADERS,
   KIND_LABELS,
+  LANGUAGE_LABELS,
   MAX_CASE_ORDER,
   MIN_BANK_OPTIONS,
   NO_BIAS_LABEL,
@@ -32,6 +35,13 @@ import {
   type TaxonomyBranch,
   type TaxonomyTopic,
 } from './bankColumns.ts';
+import { looksEnglish } from './languageHint.ts';
+import {
+  LICENSE_LABELS,
+  composePassageSource,
+  licenseFromSheet,
+  parsePassageSource,
+} from './passageSource.ts';
 import type {
   SyncNoticeCode,
   SyncProblem,
@@ -79,8 +89,16 @@ export interface BankTable {
 
 export interface ConvertContext {
   data: ContentTaxonomies;
-  /** Polaridad y tarea que detecta el motor de estructura, para lo que el médico deja vacío */
-  analyze: (question: { vignette: string; prompt: string; serialCase: boolean }) => {
+  /**
+   * Polaridad y tarea que detecta el motor de estructura, para lo que el médico deja vacío. language
+   * solo viene en las preguntas en inglés (B13), que se analizan con sus negaciones en inglés
+   */
+  analyze: (question: {
+    vignette: string;
+    prompt: string;
+    serialCase: boolean;
+    language?: 'es' | 'en';
+  }) => {
     polarity: string;
     task: string | null;
   };
@@ -439,6 +457,14 @@ export function convertTable(
 // (SyncProblemCode y SyncNoticeCode) y los valores que repite son solo de listas cerradas, recortados
 // a 60 caracteres, para que el reporte nunca copie texto de una pregunta (PC 7.3). Lo comparte la
 // función bank-sync con una copia generada (scripts/content/sync-bank-shared.ts).
+//
+// Inglés médico (B13, 1.5 del plan de B13). Idioma vacío en Inglés médico se toma como inglés con un aviso,
+// e Inglés fuera de esa rama o Español dentro de ella rechaza el renglón. Un renglón en inglés lee además
+// Fuente del texto, Licencia del texto y Enlace del texto, y los guarda como la primera referencia con la
+// forma de passageSource.ts. Los demás renglones de un caso heredan la fuente. Una fuente que falta o una
+// licencia fuera de la lista no rechazan, dejan el pendiente que dice parsePassageSource, el mismo que
+// calcula la base. En español las tres columnas se ignoran. Un texto largo que parece inglés en un renglón
+// que quedó en español no se rechaza ni cambia de idioma, solo avisa con language_suspect (languageHint.ts).
 
 export interface SheetConvertContext {
   data: ContentTaxonomies;
@@ -563,13 +589,57 @@ function parseSheetStatus(
   return null;
 }
 
-function parseLanguage(text: string, notices: SyncNoticeCode[]): 'es' | 'en' {
+/**
+ * Lo que dice la celda Idioma. given es false si viene vacía, y unknown si trae algo que no es Español ni
+ * Inglés, que se toma como español. No avisa nada, porque el aviso va en su lugar del reporte
+ */
+function readLanguage(text: string): { language: 'es' | 'en'; given: boolean; unknown: boolean } {
   const value = normalizeText(text);
-  if (value === '' || ['es', 'espanol', 'spanish'].includes(value)) return 'es';
-  if (['en', 'ingles', 'english'].includes(value)) return 'en';
-  notices.push('language_unknown');
-  return 'es';
+  if (value === '') return { language: 'es', given: false, unknown: false };
+  if (['es', 'espanol', 'spanish'].includes(value))
+    return { language: 'es', given: true, unknown: false };
+  if (['en', 'ingles', 'english'].includes(value))
+    return { language: 'en', given: true, unknown: false };
+  return { language: 'es', given: true, unknown: true };
 }
+
+/** Las tres columnas de la fuente del texto, tal como las escribió el médico */
+interface PassageCells {
+  title: string;
+  license: string;
+  url: string;
+}
+
+const hasPassage = (cells: PassageCells | null): cells is PassageCells =>
+  cells !== null && (cells.title !== '' || cells.license !== '' || cells.url !== '');
+
+/** Con qué se compara la fuente de dos renglones de un caso. La licencia por su clave y el título sin acentos */
+function passageKey(cells: PassageCells): string {
+  const license = licenseFromSheet(cells.license);
+  return JSON.stringify([
+    normalizeText(cells.title),
+    license ?? normalizeText(cells.license),
+    cells.url.trim(),
+  ]);
+}
+
+/**
+ * La referencia que arma el Sheet con las tres columnas. Si la licencia es de la lista, usa su nombre
+ * exacto. Si no, deja lo que escribió el médico, para que el pendiente salga de leer la referencia y sea
+ * el mismo que calcula la base
+ */
+function composeFromCells(cells: PassageCells): string | null {
+  const license = licenseFromSheet(cells.license);
+  return composePassageSource({
+    title: cells.title,
+    license:
+      license === null || license === 'not_allowed' ? cells.license : LICENSE_LABELS[license],
+    url: cells.url,
+  });
+}
+
+/** Los pendientes que van antes de los de las opciones, en el orden de bank_version_issues */
+const HEAD_PENDING = ['task_undetected', 'explanation_missing', 'references_missing'];
 
 function parseCode(text: string): string | null | undefined {
   const value = text.trim().toUpperCase();
@@ -583,6 +653,32 @@ interface PendingRow extends SheetRowResult {
   caseOrder: number | null;
   /** El Caso clínico tal cual, que en el Orden 1 es la viñeta del caso */
   rawVignette: string;
+  language: 'es' | 'en';
+  /** Las columnas de la fuente del texto. null en español, donde se ignoran */
+  passage: PassageCells | null;
+}
+
+/**
+ * Le pone a una pregunta en inglés su fuente del texto como primera referencia y calcula sus pendientes
+ * de fuente con parsePassageSource, el espejo de bank_passage_source_issue. Una fuente que falta, que
+ * no trae enlace o con una licencia fuera de la lista no rechaza, es un pendiente. Si la referencia
+ * pasa del largo del esquema, el renglón se rechaza. Cuando hay fuente, ella ya cuenta como referencia
+ */
+function applyPassage(row: PendingRow, cells: PassageCells | null): void {
+  const question = row.question;
+  if (question?.language !== 'en') return;
+  const composed = hasPassage(cells) ? composeFromCells(cells) : null;
+  if (composed !== null) {
+    question.refs = [composed, ...question.refs];
+    row.incomplete = row.incomplete.filter((code) => code !== 'references_missing');
+    if (question.refs.length > TEXT_LIMITS.references || composed.length > TEXT_LIMITS.reference)
+      row.problems.push({ code: 'text_too_long', column: SHEET_HEADERS.passageSource });
+  }
+  const source = parsePassageSource(question.refs.map((title) => ({ title })));
+  if (source.ok) return;
+  let at = 0;
+  while (at < row.incomplete.length && HEAD_PENDING.includes(row.incomplete[at] ?? '')) at += 1;
+  row.incomplete.splice(at, 0, source.issue);
 }
 
 /** Convierte el Sheet renglón por renglón. Un renglón con problemas no frena a los demás */
@@ -675,6 +771,21 @@ export function convertSheetTable(
       }
     }
 
+    // Idioma (B13). Inglés médico es inglés aunque la celda venga vacía, y el idioma tiene que ir con la
+    // rama. La rama de Inglés médico es la de la sección english de la taxonomía
+    const languageRead = readLanguage(cell('language'));
+    let language = languageRead.language;
+    let languageInferred = false;
+    if (branch) {
+      const englishBranch = branch.section === 'english';
+      if (englishBranch && !languageRead.given) {
+        language = 'en';
+        languageInferred = true;
+      } else if ((language === 'en') !== englishBranch) {
+        problem('language_branch_mismatch', SHEET_HEADERS.language, LANGUAGE_LABELS[language]);
+      }
+    }
+
     const difficultyText = cell('difficulty');
     const difficulty = Number(difficultyText);
     if (difficultyText === '' || !Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5)
@@ -699,9 +810,16 @@ export function convertSheetTable(
     if (prompt.length > TEXT_LIMITS.prompt) problem('text_too_long', HEADERS.prompt);
     if (vignette.length > TEXT_LIMITS.vignette) problem('text_too_long', HEADERS.vignette);
 
-    const auto = context.analyze({ vignette, prompt, serialCase: caseKey !== null });
+    const auto = context.analyze({
+      vignette,
+      prompt,
+      serialCase: caseKey !== null,
+      ...(language === 'en' ? { language } : {}),
+    });
     const taskText = cell('task');
     let task: string | null = auto.task;
+    // Una pregunta en inglés sin tarea toma data_interpretation (8.10), con el aviso structure_auto de abajo
+    if (language === 'en' && task === null && taskText === '') task = ENGLISH_DEFAULT_TASK_KEY;
     if (taskText !== '') {
       task = findLabeled(TASK_LABELS, taskText) ?? null;
       if (task === null) problem('task_unknown', HEADERS.task, taskText);
@@ -815,7 +933,13 @@ export function convertSheetTable(
       problem('text_too_long', HEADERS.refs);
 
     const sheetStatus = parseSheetStatus(cell('status'), notices);
-    const language = parseLanguage(cell('language'), notices);
+    if (languageRead.unknown) notices.push('language_unknown');
+    if (languageInferred) notices.push('language_inferred');
+    // Un texto largo que parece inglés en un renglón que quedó en español, declarado o inferido, entra
+    // como español y sin pedir fuente ni licencia. Nunca se rechaza ni se cambia el idioma por el texto
+    // (D-080), solo se avisa para que el médico mire el Idioma y la rama
+    if (language === 'es' && branch?.section !== 'english' && looksEnglish(vignette))
+      notices.push('language_suspect');
     const authorCode = parseCode(cell('author'));
     let reviewerCode = parseCode(cell('reviewer'));
     if (authorCode === undefined) notice('author_unknown');
@@ -867,6 +991,16 @@ export function convertSheetTable(
       caseOrderText,
       caseOrder,
       rawVignette: vignette,
+      language,
+      // Solo las preguntas en inglés leen la fuente del texto. En español se ignora (B13)
+      passage:
+        language === 'en'
+          ? {
+              title: cell('passageSource'),
+              license: cell('passageLicense'),
+              url: cell('passageUrl'),
+            }
+          : null,
     });
   }
 
@@ -888,6 +1022,8 @@ export function convertSheetTable(
         row.problems.push({ code: 'case_inconsistent', column: SHEET_HEADERS.caseOrder });
         row.question = null;
       }
+      // Una pregunta suelta en inglés es válida y su fuente es la de su propio renglón
+      applyPassage(row, row.passage);
       continue;
     }
     const members = cases.get(row.caseKey) ?? [];
@@ -898,18 +1034,36 @@ export function convertSheetTable(
     const orders = members.map((row) => row.caseOrder);
     const sorted = [...orders].sort((a, b) => (a ?? 0) - (b ?? 0));
     const first = members.find((row) => row.caseOrder === 1);
-    const coherent =
+    const orderingOk =
       orders.every((order) => order !== null) &&
       members.length <= MAX_CASE_ORDER &&
       sorted.every((order, index) => order === index + 1) &&
       first !== undefined &&
       first.rawVignette !== '' &&
       first.rawVignette.length <= TEXT_LIMITS.vignette;
+    // Un caso lleva un solo idioma y una sola fuente del texto. Los renglones que no la repiten la
+    // heredan del primero, por su Orden, que la trae (B13)
+    const languageConflict = new Set(members.map((row) => row.language)).size > 1;
+    const sources = [...members]
+      .sort((a, b) => (a.caseOrder ?? MAX_CASE_ORDER + 1) - (b.caseOrder ?? MAX_CASE_ORDER + 1))
+      .map((row) => row.passage)
+      .filter(hasPassage);
+    const sourceConflict = new Set(sources.map(passageKey)).size > 1;
+    const coherent = orderingOk && !languageConflict && !sourceConflict;
+    // La fuente compartida se aplica antes de contar los rechazos, porque una referencia que pasa del
+    // largo rechaza el renglón y entonces el caso no entra partido
+    if (coherent) for (const row of members) applyPassage(row, sources[0] ?? null);
     const anyRejected = members.some((row) => row.problems.length > 0);
     if (!coherent || anyRejected) {
+      const column =
+        !orderingOk || coherent
+          ? SHEET_HEADERS.caseKey
+          : languageConflict
+            ? SHEET_HEADERS.language
+            : SHEET_HEADERS.passageSource;
       for (const row of members) {
         if (!coherent || row.problems.length === 0)
-          row.problems.push({ code: 'case_inconsistent', column: SHEET_HEADERS.caseKey });
+          row.problems.push({ code: 'case_inconsistent', column });
         row.question = null;
       }
       continue;
@@ -918,8 +1072,13 @@ export function convertSheetTable(
     const apart = numbers.some(
       (number, index) => index > 0 && number !== (numbers[index - 1] ?? 0) + 1,
     );
+    const oddEnglishSize =
+      first.language === 'en' &&
+      (members.length < ENGLISH_CASE_SIZES.min || members.length > ENGLISH_CASE_SIZES.max);
     for (const row of members) {
       if (apart && !row.notices.includes('case_rows_apart')) row.notices.push('case_rows_apart');
+      // Un caso de lectura con una pregunta, o con más de tres, entra igual y solo se avisa (D-080)
+      if (oddEnglishSize) row.notices.push('english_case_size');
       if (!row.question) continue;
       row.question.caseKey = row.caseKey;
       row.question.caseOrder = row.caseOrder;

@@ -1,9 +1,10 @@
-// Corre la sincronización del banco contra los dos Sheets simulados de tests/fixtures/bank-sheet, sin
+// Corre la sincronización del banco contra los tres Sheets simulados de tests/fixtures/bank-sheet, sin
 // red y sin base (B11, 6.4 paso 1 del plan de B11). Usa la misma función que corre en Supabase, con un
 // Google de mentira y una base en memoria, e imprime el reporte de renglones. Es la prueba de oro de
-// tests/content/bankSheetFixture.test.ts.
-// Uso: npm run bank:fixture             imprime los dos reportes
-//      npm run bank:fixture -- --write  reescribe expected-antes.json y expected-despues.json
+// tests/content/bankSheetFixture.test.ts. ingles es el Sheet de casos de lectura en inglés de B13 y no
+// toca los reportes de oro de antes y despues, que son de B11.
+// Uso: npm run bank:fixture             imprime los tres reportes
+//      npm run bank:fixture -- --write  reescribe expected-antes.json, expected-despues.json y expected-ingles.json
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as prettier from 'prettier';
@@ -18,7 +19,7 @@ import { expectedOutcome } from '../../supabase/functions/_shared/bank/plan.ts';
 import { runSync, type BankSyncDeps } from '../../supabase/functions/_shared/bank/sync.ts';
 
 const FIXTURES = resolve(import.meta.dirname, '..', '..', 'tests', 'fixtures', 'bank-sheet');
-export const FIXTURE_NAMES = ['antes', 'despues'] as const;
+export const FIXTURE_NAMES = ['antes', 'despues', 'ingles'] as const;
 export type FixtureName = (typeof FIXTURE_NAMES)[number];
 
 export interface FixtureReport {

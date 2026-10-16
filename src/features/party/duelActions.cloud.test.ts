@@ -34,12 +34,17 @@ function pooled(overrides: Partial<PoolQuestion> = {}): PoolQuestion {
   };
 }
 
-function cloudSource(practice: PoolQuestion[], ensure: (ids: readonly string[]) => EnsureResult) {
+function cloudSource(
+  practice: PoolQuestion[],
+  ensure: (ids: readonly string[]) => EnsureResult,
+  english: PoolQuestion[] = [],
+) {
   const ensureBodies = vi.fn((ids: readonly string[]) => Promise.resolve(ensure(ids)));
   source.current = {
     kind: 'cloud',
     prepare: () => Promise.resolve('ready'),
-    pool: () => Promise.resolve({ practice, exam: practice }),
+    pool: () =>
+      Promise.resolve({ practice, exam: practice, english: { practice: english, exam: english } }),
     ensureBodies,
     quota: () => Promise.resolve(null),
     refresh: () => Promise.resolve(),
@@ -80,6 +85,22 @@ describe('duelos con el banco de la nube', () => {
     expect(ids).toHaveLength(DUEL_QUESTIONS);
     expect(ids).not.toContain(variant.id);
     expect(await pickDuelQuestionIds(api().api, 'duel|semilla')).toEqual(ids);
+  });
+
+  it('un duelo no lleva casos de inglés, ni del pool de inglés ni por descuido en el de español (B13, 8.12)', async () => {
+    const loose = Array.from({ length: DUEL_QUESTIONS + 2 }, () => pooled());
+    const reading = Array.from({ length: 6 }, () =>
+      pooled({ language: 'en', branch: 'medical_english', topic: 'reading_comprehension' }),
+    );
+    const none = () => ({ ready: [], denied: [], quota: null, offline: false });
+    cloudSource([...loose, ...reading.slice(0, 3)], none, reading.slice(3));
+    const ids = await pickDuelQuestionIds(api().api, 'duel|ingles');
+    expect(ids).toHaveLength(DUEL_QUESTIONS);
+    const english = new Set(reading.map((question) => question.id));
+    expect(ids.some((id) => english.has(id))).toBe(false);
+    // Con solo inglés en el banco no hay duelo
+    cloudSource([], none, reading);
+    expect(await pickDuelQuestionIds(api().api, 'duel|ingles')).toEqual([]);
   });
 
   it('el rival baja las versiones exactas y sin todas no empieza ni gasta su intento', async () => {

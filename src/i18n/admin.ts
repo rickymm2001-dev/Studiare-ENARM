@@ -312,6 +312,23 @@ export const adminText = {
         label: 'Retención deseada',
         hint: 'Entre 0.80 y 0.97. Cuanto más alta, más repasos (J).',
       },
+      // Inglés médico (B13, 1.9 y 8.18 del plan de B13)
+      'english.secondsPerItem': {
+        label: 'Segundos por reactivo de inglés',
+        hint: 'Tiempo sugerido para cada reactivo de inglés en la práctica y en el examen, de 30 a 300. Es una estimación y no un dato del ENARM (J).',
+      },
+      'english.examMinItems': {
+        label: 'Reactivos de inglés para el examen',
+        hint: 'Reactivos de inglés publicados para que su parte del examen deje de decir calibrando. Es también la meta de inglés de Banco y Sheet (J).',
+      },
+      'english.practiceMinCases': {
+        label: 'Casos para la práctica de inglés',
+        hint: 'Casos completos publicados para abrir la práctica de inglés en Simular (J).',
+      },
+      'english.minAnswersForStats': {
+        label: 'Respuestas para las cifras de inglés',
+        hint: 'Respuestas de inglés del alumno para mostrar sus cifras en Progreso (J).',
+      },
     },
     thresholdsForm: {
       title: 'Umbrales de calibración',
@@ -325,6 +342,9 @@ export const adminText = {
       failed: 'No se pudo guardar. Revisa que el navegador permita guardar datos.',
       notNumber: 'Escribe un número.',
       notInteger: 'Escribe un número entero.',
+      englishTitle: 'Inglés médico',
+      englishHint:
+        'Qué tan pronto abre la parte en inglés, cuánto tiempo se sugiere por reactivo y cuándo salen las cifras del alumno.',
     },
     weightsForm: {
       title: 'Pesos del ENARM',

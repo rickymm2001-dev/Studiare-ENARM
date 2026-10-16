@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pickQuestions } from './pickQuestions';
+import { pickEnglishCases, pickQuestions } from './pickQuestions';
 
 interface Item {
   id: string;
@@ -45,5 +45,36 @@ describe('elegir preguntas con semilla', () => {
     const first = picked.indexOf('c1');
     expect(picked.slice(first, first + 3)).toEqual(['c1', 'c2', 'c3']);
     expect(picked).toHaveLength(items.length);
+  });
+});
+
+describe('elegir textos de lectura completos (B13)', () => {
+  const texts = [
+    ...[1, 2, 3].map((order) => serial(`a${order}`, 'texto-a', order)),
+    ...[1, 2].map((order) => serial(`b${order}`, 'texto-b', order)),
+    ...[1, 2, 3].map((order) => serial(`c${order}`, 'texto-c', order)),
+  ];
+
+  it('nunca parte un texto, aunque se pidan pocos', () => {
+    for (const seed of ['uno', 'dos', 'tres', 'cuatro']) {
+      const picked = pickEnglishCases(texts, seed, 2, null);
+      expect(picked.units).toBe(2);
+      const sizes = new Map<string, number>();
+      for (const item of picked.picked) {
+        sizes.set(item.caseId ?? item.id, (sizes.get(item.caseId ?? item.id) ?? 0) + 1);
+      }
+      for (const [key, count] of sizes) {
+        expect(count).toBe(texts.filter((item) => item.caseId === key).length);
+      }
+    }
+  });
+
+  it('con lo que le queda hoy a Gratis salta el texto que no cabe', () => {
+    for (const seed of ['uno', 'dos', 'tres', 'cuatro', 'cinco']) {
+      const picked = pickEnglishCases(texts, seed, 3, 5);
+      expect(picked.picked.length).toBeLessThanOrEqual(5);
+      expect(picked.units).toBeGreaterThan(0);
+    }
+    expect(pickEnglishCases(texts, 'sin cupo', 3, 1).picked).toEqual([]);
   });
 });

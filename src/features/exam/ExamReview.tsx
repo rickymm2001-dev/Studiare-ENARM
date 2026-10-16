@@ -20,6 +20,7 @@ import { MotivePicker } from '../shared/MotivePicker';
 import { reportMotive, useMotiveReports } from '../shared/motives';
 import type { ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
+import { ReadingPassage } from '../simulator/ReadingPassage';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { examOutcome, type ExamBundles, type ExamOutcome } from './examResults';
 import { answerOf, type ExamState } from './examState';
@@ -136,6 +137,9 @@ function ReviewItem({
   const { question, options, vignette } = bundle;
   const answer = answerOf(state, row.id);
   const text = t.examResults;
+  // Lo que está en inglés lo dice el lector de pantalla en inglés (B13)
+  const english = question.language === 'en';
+  const lang = english ? 'en' : undefined;
   // Las opciones en el orden que vio. Si no la vio, el set canónico
   const shownIds = state.shownOptions[row.id] ?? question.canonicalOptionIds;
   const shown = shownIds.flatMap((id) => {
@@ -172,8 +176,14 @@ function ReviewItem({
           </span>
         </summary>
         <div className="flex flex-col gap-3 pt-1 pb-4">
-          {vignette ? <p className="whitespace-pre-line text-sm">{vignette}</p> : null}
-          <p className="font-medium">{question.prompt}</p>
+          {english && vignette ? (
+            <ReadingPassage text={vignette} refs={question.gpcRefs} fold="always" />
+          ) : vignette ? (
+            <p className="whitespace-pre-line text-sm">{vignette}</p>
+          ) : null}
+          <p className="font-medium" lang={lang}>
+            {question.prompt}
+          </p>
           <ul className="flex flex-col gap-2">
             {shown.map((option, position) => {
               const chosen = answer.optionId === option.id;
@@ -191,7 +201,7 @@ function ReviewItem({
                     <span className="mr-1 font-semibold">
                       {String.fromCharCode(65 + position)}.
                     </span>
-                    {option.text}
+                    {english ? <span lang="en">{option.text}</span> : option.text}
                   </p>
                   <p className="mt-1 flex flex-wrap gap-x-3 text-sm font-medium">
                     {chosen ? <span>({text.yourAnswer})</span> : null}

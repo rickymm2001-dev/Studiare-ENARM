@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useCloud } from '@/app/cloudState';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SCREENS } from '@/app/screens';
 import type { EditorListItem, SyncRunSummary } from '@/data/bank/contracts';
@@ -146,7 +147,7 @@ function OverviewCard() {
             label={overview.title}
             tone="accent"
           />
-          <p className="text-sm text-fg-muted">{overview.english(state.value.englishPublished)}</p>
+          <EnglishGoal published={state.value.englishPublished} goal={state.value.goal} />
           <div>
             <p className="text-sm font-medium">{overview.byBranch}</p>
             {state.value.byBranch.length === 0 ? (
@@ -192,6 +193,29 @@ function OverviewCard() {
         </>
       ) : null}
     </Card>
+  );
+}
+
+/**
+ * Inglés médico aparte de la meta de las siete ramas (B13, 8.17 del plan de B13). Su meta son los reactivos
+ * de inglés publicados que piden los umbrales para que la parte en inglés del examen deje de decir
+ * calibrando, 30 de fábrica y editables en Plataforma
+ */
+function EnglishGoal({ published, goal }: { published: number; goal: number }) {
+  const overview = text.overview;
+  const target = DEFAULT_THRESHOLDS.english.examMinItems;
+  return (
+    <div className="flex flex-col gap-1">
+      <p className="text-sm font-medium">{overview.english(published, target)}</p>
+      <ProgressBar
+        value={published}
+        max={target}
+        label={overview.english(published, target)}
+        tone="accent"
+        className="h-2"
+      />
+      <p className="text-sm text-fg-muted">{overview.englishHint(goal, target)}</p>
+    </div>
   );
 }
 

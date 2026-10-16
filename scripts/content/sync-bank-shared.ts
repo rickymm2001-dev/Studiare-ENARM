@@ -49,6 +49,14 @@ export interface StructureDictionary {
     kind: 'negation' | 'exception' | 'false_statement' | 'least_likely' | 'contraindication';
   }[];
   falsePositives: string[];
+  english?: {
+    negations: {
+      id: string;
+      pattern: string;
+      kind: 'negation' | 'exception' | 'false_statement' | 'least_likely' | 'contraindication';
+    }[];
+    falsePositives: string[];
+  };
   tasks: { task: QuestionTask; patterns: string[] }[];
 }
 `;
@@ -62,6 +70,8 @@ export async function generateBankShared(root = ROOT): Promise<Map<string, strin
   };
 
   copy('src/data/content/bankColumns.ts', 'bankColumns.ts');
+  copy('src/data/content/passageSource.ts', 'passageSource.ts');
+  copy('src/data/content/languageHint.ts', 'languageHint.ts');
   copy('src/data/content/bankConvert.ts', 'bankConvert.ts', (text) =>
     replaceRequired(text, "from '../bank/contracts.ts'", "from './contracts.ts'", 'bankConvert.ts'),
   );

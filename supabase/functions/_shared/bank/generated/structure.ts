@@ -15,6 +15,10 @@
  * original, se buscan los patrones del diccionario con límites de palabra, se descartan los que
  * caen dentro de un falso positivo (por ejemplo al menos) y los rangos se traducen al texto
  * original. Un número impar de negaciones da polaridad negativa. Uno par marca doble negación.
+ * Inglés (B13). Una pregunta de Inglés médico se analiza con el bloque english del diccionario, que trae
+ * sus propias negaciones y falsos positivos en inglés (NOT, EXCEPT, LEAST, FALSE, INCORRECT, NEVER). Sin
+ * ese bloque no resalta nada. No tiene tareas en inglés: la tarea de una pregunta en inglés es
+ * data_interpretation, a menos que el médico elija otra (8.10 del plan de B13)
  * Umbrales. Ninguno. El análisis por estructura con beta-binomial vive en el motor topics.
  */
 import type { QuestionTask as SchemaTask, StructureDictionary } from './types.ts';
@@ -22,6 +26,11 @@ import type { QuestionTask as SchemaTask, StructureDictionary } from './types.ts
 export type QuestionTask = SchemaTask;
 export type Polarity = 'affirmative' | 'negative';
 export type QuestionFormat = 'clinical_case' | 'direct' | 'serial_case';
+/** Idioma de la frase de la pregunta. Sin él es español (B13) */
+export type StructureLanguage = 'es' | 'en';
+
+/** La tarea de una pregunta en inglés cuando nadie la elige (8.10 del plan de B13) */
+export const ENGLISH_DEFAULT_TASK: QuestionTask = 'data_interpretation';
 
 export interface HighlightRange {
   /** Posición en la frase original, incluida */
@@ -65,11 +74,28 @@ function wordRegex(pattern: string): RegExp {
   return new RegExp(`(?<![a-z0-9])(?:${pattern})(?![a-z0-9])`, 'g');
 }
 
-/** Busca todas las negaciones de la frase y devuelve sus rangos en el texto original */
-export function findNegations(prompt: string, dictionary: StructureDictionary): HighlightRange[] {
+/** Las negaciones y los falsos positivos que tocan al idioma. En inglés, los del bloque english */
+function negationEntries(
+  dictionary: StructureDictionary,
+  language: StructureLanguage,
+): Pick<StructureDictionary, 'negations' | 'falsePositives'> {
+  if (language === 'es') return dictionary;
+  return dictionary.english ?? { negations: [], falsePositives: [] };
+}
+
+/**
+ * Busca todas las negaciones de la frase y devuelve sus rangos en el texto original. Sin idioma busca en
+ * español. Con en usa las negaciones en inglés del diccionario
+ */
+export function findNegations(
+  prompt: string,
+  dictionary: StructureDictionary,
+  language: StructureLanguage = 'es',
+): HighlightRange[] {
   const { text, origin } = normalizeWithMap(prompt);
+  const entries = negationEntries(dictionary, language);
   const blocked: [number, number][] = [];
-  for (const phrase of dictionary.falsePositives) {
+  for (const phrase of entries.falsePositives) {
     for (const match of text.matchAll(wordRegex(phrase))) {
       blocked.push([match.index, match.index + match[0].length]);
     }
@@ -78,7 +104,7 @@ export function findNegations(prompt: string, dictionary: StructureDictionary): 
     blocked.some(([blockStart, blockEnd]) => start < blockEnd && end > blockStart);
 
   const found: HighlightRange[] = [];
-  for (const negation of dictionary.negations) {
+  for (const negation of entries.negations) {
     for (const match of text.matchAll(wordRegex(negation.pattern))) {
       const start = match.index;
       const end = start + match[0].length;
@@ -111,10 +137,17 @@ export function detectTask(prompt: string, dictionary: StructureDictionary): Que
 }
 
 export function analyzeStructure(
-  question: { vignette: string; prompt: string; serialCase: boolean },
+  question: {
+    vignette: string;
+    prompt: string;
+    serialCase: boolean;
+    /** Sin el campo es español. En inglés la tarea por omisión es data_interpretation */
+    language?: StructureLanguage | undefined;
+  },
   dictionary: StructureDictionary,
 ): AutoStructure {
-  const highlights = findNegations(question.prompt, dictionary);
+  const language = question.language ?? 'es';
+  const highlights = findNegations(question.prompt, dictionary, language);
   const format: QuestionFormat = question.serialCase
     ? 'serial_case'
     : question.vignette.trim().length > 0
@@ -122,7 +155,7 @@ export function analyzeStructure(
       : 'direct';
   return {
     polarity: highlights.length % 2 === 1 ? 'negative' : 'affirmative',
-    task: detectTask(question.prompt, dictionary),
+    task: language === 'en' ? ENGLISH_DEFAULT_TASK : detectTask(question.prompt, dictionary),
     format,
     doubleNegation: highlights.length >= 2 && highlights.length % 2 === 0,
     highlights,

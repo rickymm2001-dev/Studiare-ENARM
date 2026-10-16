@@ -54,7 +54,7 @@ function Summary({ session }: { session: ReadySession }) {
           )
         )
           .filter((question) => question !== undefined)
-          .map((question) => [question.id, question.prompt]),
+          .map((question) => [question.id, question]),
       ),
     [api.repos, answers],
   );
@@ -185,7 +185,8 @@ function Summary({ session }: { session: ReadySession }) {
                 key={answer.questionVersionId}
                 answer={answer}
                 index={index}
-                prompt={prompts?.get(answer.questionVersionId) ?? ''}
+                prompt={prompts?.get(answer.questionVersionId)?.prompt ?? ''}
+                lang={prompts?.get(answer.questionVersionId)?.language}
                 session={session}
                 defaultOpen={atEnd && !answer.correct}
               />
@@ -211,12 +212,15 @@ function AnswerRow({
   answer,
   index,
   prompt,
+  lang,
   session,
   defaultOpen,
 }: {
   answer: PracticeAnswer;
   index: number;
   prompt: string;
+  /** Idioma de la pregunta. Una de Inglés médico se lee en inglés (B13) */
+  lang?: 'es' | 'en' | undefined;
   session: ReadySession;
   defaultOpen: boolean;
 }) {
@@ -241,7 +245,7 @@ function AnswerRow({
             <XCircle aria-label={t.simulator.incorrect} className="size-5 shrink-0 text-danger" />
           )}
           <span>
-            {index + 1}. {prompt}{' '}
+            {index + 1}. {lang === 'en' ? <span lang="en">{prompt}</span> : prompt}{' '}
             <span className="text-fg-muted">({formatDuration(answer.msToAnswer)})</span>
           </span>
         </summary>

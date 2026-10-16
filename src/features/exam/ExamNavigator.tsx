@@ -1,7 +1,9 @@
 // Cuadrícula para ir a cualquier pregunta del examen. Muestra cuáles ya contestó, cuáles marcó para
-// revisar y cuáles siguen en blanco. Va plegada para no ocupar lugar y se abre cuando hace falta.
-import { Flag } from 'lucide-react';
+// revisar y cuáles siguen en blanco. Va plegada para no ocupar lugar y se abre cuando hace falta. Los
+// reactivos de la parte en inglés llevan un ícono y la palabra Inglés en su etiqueta accesible (B13, 3.5).
+import { Flag, Languages } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
+import { englishText } from '@/i18n/english';
 import { cn } from '@/ui/cn';
 import { Disclosure } from '@/ui/components/disclosure';
 import { answeredCount, answerOf, markedCount, type ExamState } from './examState';
@@ -9,9 +11,12 @@ import { answeredCount, answerOf, markedCount, type ExamState } from './examStat
 export function ExamNavigator({
   state,
   onGo,
+  englishIds,
 }: {
   state: ExamState;
   onGo: (index: number) => void;
+  /** Los reactivos de la parte en inglés. Sin ellos no se marca ninguno */
+  englishIds?: ReadonlySet<string>;
 }) {
   return (
     <Disclosure
@@ -26,6 +31,7 @@ export function ExamNavigator({
             isCurrent ? t.exam.status.current : null,
             answer.optionId !== null ? t.exam.status.answered : t.exam.status.blank,
             answer.marked ? t.exam.status.marked : null,
+            englishIds?.has(id) ? englishText.exam.navigatorTag : null,
           ]
             .filter(Boolean)
             .join(', ');
@@ -51,6 +57,12 @@ export function ExamNavigator({
                   <Flag
                     aria-hidden
                     className="absolute -top-1 -right-1 size-3.5 fill-warning text-warning"
+                  />
+                ) : null}
+                {englishIds?.has(id) ? (
+                  <Languages
+                    aria-hidden
+                    className="absolute -right-1 -bottom-1 size-3.5 rounded-full bg-surface text-primary-ink"
                   />
                 ) : null}
               </button>
@@ -81,6 +93,12 @@ export function ExamNavigator({
           />
           {t.exam.legend.current}
         </li>
+        {englishIds && englishIds.size > 0 ? (
+          <li className="flex items-center gap-1.5">
+            <Languages aria-hidden className="size-3.5 text-primary-ink" />
+            {englishText.exam.navigatorTag}
+          </li>
+        ) : null}
       </ul>
     </Disclosure>
   );
