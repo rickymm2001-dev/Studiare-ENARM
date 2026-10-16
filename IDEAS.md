@@ -56,3 +56,13 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Límites de IA distintos por plan.** Hoy el tope por alumno y las cuotas por motor son iguales para todos los planes de pago. Surgió en el plan de B12
 - **Que la pregunta reestructurada pueda señalar una controversia del original.** Sin corregirla por su cuenta, solo avisar al médico con texto de la lista cerrada de textos académicos. Surgió en el plan de B12
 - **Reserva de lotes que descuente las llamadas síncronas en vuelo.** UsageSummaryV2 no expone lo reservado, así que el envío de lotes no las resta. No afecta el tope por alumno. Surgió en la revisión de B12
+
+- **Falso cognado como sesgo.** Es la trampa de lectura más común en inglés y no está en tu lista de sesgos. Entraría con una migración de una línea y su texto en bias-taxonomy.json, sin tocar nada más. Se propone sin sembrar. Surgió en el plan de B13
+- **Tareas de lectura propias.** Idea principal, detalle, inferencia y vocabulario en contexto como tareas de la estructura de la pregunta, en lugar de data_interpretation para todo el inglés. Pide redefinir más funciones de B11. Surgió en el plan de B13
+- **IA que proponga preguntas de inglés.** Como borrador anclado a un texto del equipo, con la etiqueta de no validada por médico. B13 no la hizo para que el módulo no tenga contenido médico de la IA. Surgió en el plan de B13
+- **Plan de despliegue que evalúe cada bloque con sus migraciones hasta su versión.** Hoy, cuando un bloque redefine una función de una migración anterior, hay que sumar su migración al plan anterior, y eso se acumula. Quitaría una protección de la herramienta, así que pide decisión. Surgió en la integración de B13
+- **Decidir si el plan b12 debe registrar ai_delete_my_data cuando b11 ya dejó la función igual.** Hoy la herramienta la da por aplicada por huella y no queda en la historia de migraciones. Surgió en la integración de B13
+- **Que el recorrido en oscuro pase por Repasar con la respuesta mostrada.** theme-dark.spec.ts no lo cubre y ahí estaba el contraste del botón Otra vez. Surgió en la integración de B13
+- **Que el doble del editor y la aprobación local reproduzcan language_branch_mismatch.** Hoy no pasan englishBranch y esa regla solo se prueba en el servidor. Surgió en la integración de B13
+- **Capturas de teléfono con el ActionDock estático y resultados del examen con respuestas sembradas.** Mejoran las capturas de cierre de los bloques. Surgió en la integración de B13
+- **Ignorar en git los .xlsx y .apkg que genera el script de textos con licencia.** Salen en content-drafts/ingles, que sí está en git. Surgió en el paquete A de B13
