@@ -239,14 +239,15 @@ export function estimateAbility(answers: readonly AbilityAnswer[]): { theta: num
       ),
   );
   const top = Math.max(...logPosterior);
-  const weights = logPosterior.map((value) => Math.exp(value - top));
-  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  // La masa de probabilidad de cada punto de la cuadratura, sin normalizar
+  const mass = logPosterior.map((value) => Math.exp(value - top));
+  const total = mass.reduce((sum, part) => sum + part, 0);
   const theta = ABILITY_GRID.reduce(
-    (sum, point, i) => sum + (point * (weights[i] as number)) / total,
+    (sum, point, i) => sum + (point * (mass[i] as number)) / total,
     0,
   );
   const variance = ABILITY_GRID.reduce(
-    (sum, point, i) => sum + ((point - theta) ** 2 * (weights[i] as number)) / total,
+    (sum, point, i) => sum + ((point - theta) ** 2 * (mass[i] as number)) / total,
     0,
   );
   return { theta, se: Math.sqrt(variance) };
