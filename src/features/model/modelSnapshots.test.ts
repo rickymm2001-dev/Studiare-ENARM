@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ComparisonSnapshot, PopulationBaselines } from '@/data/model/contracts';
-import { readStoredSnapshot } from './modelSnapshots';
+import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
+import { readStoredSettings, readStoredSnapshot } from './modelSnapshots';
 import { ComparisonSnapshotSchema, PopulationBaselinesSchema } from './modelSchemas';
 
 const cuts = Array.from({ length: 19 }, (_, index) => 0.3 + index * 0.03);
@@ -102,5 +103,42 @@ describe('línea base de la población guardada en el navegador', () => {
     expect(
       await readStoredSnapshot(repos(row), 'population', PopulationBaselinesSchema),
     ).toBeNull();
+  });
+});
+
+describe('ajustes del modelo guardados en el navegador', () => {
+  it('los lee bajo settings, value o data', async () => {
+    for (const row of [
+      { key: 'model_settings', settings: { thresholds: { minBranchAnswers: 35 } } },
+      { key: 'model_settings', value: { thresholds: { minBranchAnswers: 35 } } },
+      { key: 'model_settings', data: { thresholds: { minBranchAnswers: 35 } } },
+    ]) {
+      const settings = await readStoredSettings(repos(row));
+      expect(settings?.thresholds.minBranchAnswers).toBe(35);
+      // Lo que no dice queda de fábrica
+      expect(settings?.thresholds.comparisonWindowDays).toBe(30);
+    }
+  });
+
+  it('sin fila o sin ajustes no hay nada guardado', async () => {
+    for (const row of [undefined, null, 'texto', { key: 'model_settings' }]) {
+      expect(await readStoredSettings(repos(row))).toBeNull();
+    }
+  });
+
+  it('un valor fuera de rango queda de fábrica y minGroupSize no baja de 30', async () => {
+    const settings = await readStoredSettings(
+      repos({
+        key: 'model_settings',
+        settings: {
+          thresholds: { minBranchAnswers: 9999, minGroupSize: 5, populationMinStudents: 2 },
+        },
+      }),
+    );
+    expect(settings?.thresholds.minBranchAnswers).toBe(
+      FACTORY_MODEL_SETTINGS.thresholds.minBranchAnswers,
+    );
+    expect(settings?.thresholds.minGroupSize).toBe(30);
+    expect(settings?.thresholds.populationMinStudents).toBe(30);
   });
 });

@@ -132,10 +132,13 @@ function Rows({ view, days }: { view: ComparisonView; days: number }) {
 export function ComparisonCard({
   state,
   facts,
+  minBranchAnswers = FACTORY_MODEL_SETTINGS.thresholds.minBranchAnswers,
 }: {
   state: ComparisonState;
   /** Lo que ya hizo el alumno, para su percentil. Se calcula en este navegador */
   facts: readonly ComparisonFact[];
+  /** Respuestas de simulador en una rama para entrar a la comparación de esa rama. Lo ajusta el admin */
+  minBranchAnswers?: number;
 }) {
   const [cohort, setCohort] = useState<ComparisonCohort>('all');
   const snapshot = state.status === 'ready' ? state.snapshot : null;
@@ -148,18 +151,18 @@ export function ComparisonCard({
               snapshot,
               cohort: 'all',
               facts,
-              minBranchAnswers: FACTORY_MODEL_SETTINGS.thresholds.minBranchAnswers,
+              minBranchAnswers,
               branchOrder: BRANCH_ORDER,
             }),
             specialty: buildComparisonView({
               snapshot,
               cohort: 'specialty',
               facts,
-              minBranchAnswers: FACTORY_MODEL_SETTINGS.thresholds.minBranchAnswers,
+              minBranchAnswers,
               branchOrder: BRANCH_ORDER,
             }),
           },
-    [snapshot, facts],
+    [snapshot, facts, minBranchAnswers],
   );
 
   const days = snapshot?.windowDays ?? 30;

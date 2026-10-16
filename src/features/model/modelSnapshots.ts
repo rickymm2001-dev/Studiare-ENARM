@@ -5,10 +5,16 @@
 // no tiene nube: saca las dos de los alumnos simulados (demoSnapshots.ts) y lo dice con su etiqueta.
 //
 // Esta lectura es lo único de Progreso, Inicio, Simular y el Tutor que depende de cómo guarda B la fila.
-// Acepta la foto en la propia fila o bajo snapshot, value o data, y la población bajo baselines, population,
-// value o data. Si B la guarda de otra forma, se cambia aquí y nada más.
+// Acepta la foto en la propia fila o bajo snapshot, value o data, la población bajo baselines, population,
+// value o data, y los ajustes del modelo (llave model_settings) bajo settings, value o data. Si B la guarda de
+// otra forma, se cambia aquí y nada más.
 import { useMemo } from 'react';
 import type { ZodType } from 'zod';
+import {
+  FACTORY_MODEL_SETTINGS,
+  readModelSettings,
+  type ModelSettings,
+} from '@/config/modelSettings';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { ComparisonSnapshot, PopulationBaselines } from '@/data/model/contracts';
@@ -48,6 +54,40 @@ export async function readStoredSnapshot<T>(
   }
   const whole = schema.safeParse(record);
   return whole.success ? whole.data : null;
+}
+
+/**
+ * Los ajustes del modelo que bajó la app, o null si todavía no bajaron. Un valor que no se entiende queda de
+ * fábrica campo por campo (readModelSettings), así que aquí solo se distingue que haya fila con ajustes
+ */
+export async function readStoredSettings(
+  repos: Pick<Repositories, 'bankState'>,
+): Promise<ModelSettings | null> {
+  const reader = repos.bankState as unknown as { get(key: string): Promise<unknown> };
+  const row = await reader.get('model_settings');
+  if (typeof row !== 'object' || row === null) return null;
+  const record = row as Record<string, unknown>;
+  for (const name of ['settings', 'value', 'data'] as const) {
+    const candidate = record[name];
+    if (typeof candidate === 'object' && candidate !== null) return readModelSettings(candidate);
+  }
+  return null;
+}
+
+/**
+ * Los ajustes del modelo con los que decide la app (cuántas respuestas pide una rama, cuántos alumnos pide cada
+ * dato de la población). Los que bajó de la nube y, mientras no han bajado o sin la nube, los de fábrica. La
+ * demostración siempre usa los de fábrica, porque su cohorte se calcula con ellos
+ */
+export function useModelSettings(): ModelSettings {
+  const api = useDataApi();
+  const kind = useQuestionSourceKind();
+  const isDemo = api.demo !== null;
+  const stored = useLiveData(
+    () => (kind === 'cloud' && !isDemo ? readStoredSettings(api.repos) : Promise.resolve(null)),
+    [api.repos, kind, isDemo],
+  );
+  return stored ?? FACTORY_MODEL_SETTINGS;
 }
 
 /** La foto de la comparación que toca a este alumno, o por qué todavía no hay */

@@ -4,7 +4,7 @@
 import { useMemo } from 'react';
 import type { AppEvent } from '@/data/schemas/events';
 import type { Question } from '@/data/schemas/bank';
-import { useComparisonSnapshot } from '../model/modelSnapshots';
+import { useComparisonSnapshot, useModelSettings } from '../model/modelSnapshots';
 import type { ReadySession } from '../shared/RequireSession';
 import { ComparisonCard } from './ComparisonCard';
 import { comparisonFactsFrom } from './comparisonView';
@@ -20,6 +20,10 @@ export default function ComparisonSection({
   questions: ReadonlyMap<string, Pick<Question, 'branch'>>;
 }) {
   const state = useComparisonSnapshot(session.user.id);
+  // Las respuestas que pide una rama son un ajuste del admin, y el percentil propio se arma con el mismo
+  const { thresholds } = useModelSettings();
   const facts = useMemo(() => comparisonFactsFrom(events, questions), [events, questions]);
-  return <ComparisonCard state={state} facts={facts} />;
+  return (
+    <ComparisonCard state={state} facts={facts} minBranchAnswers={thresholds.minBranchAnswers} />
+  );
 }

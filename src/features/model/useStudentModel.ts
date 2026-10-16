@@ -20,7 +20,7 @@ import type { ReadySession } from '../shared/RequireSession';
 import { useAnsweredBank } from '../shared/useAnsweredBank';
 import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import { useUserEvents } from '../shared/useUserEvents';
-import { usePopulation } from './modelSnapshots';
+import { useModelSettings, usePopulation } from './modelSnapshots';
 import { useDifficultyOf } from './useDifficultyOf';
 import { useModelCards } from './useModelCards';
 
@@ -41,6 +41,7 @@ export function useStudentModelState(
   const cards = useModelCards(session, events);
   const difficultyOf = useDifficultyOf(bank);
   const population = usePopulation(session.user.id);
+  const modelSettings = useModelSettings();
   const vocabulary = useBiasVocabulary();
   const { user, settings } = session;
   return useMemo(() => {
@@ -67,6 +68,7 @@ export function useStudentModelState(
         cards,
         difficultyOf,
         population,
+        settings: { populationMinStudents: modelSettings.thresholds.populationMinStudents },
         vocabulary,
       }),
     };
@@ -77,6 +79,7 @@ export function useStudentModelState(
     cards,
     difficultyOf,
     population,
+    modelSettings.thresholds.populationMinStudents,
     vocabulary,
     user.timeZone,
     settings.desiredRetention,

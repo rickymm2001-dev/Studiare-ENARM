@@ -135,6 +135,23 @@ describe('Cómo vas frente a otros', () => {
     );
   });
 
+  it('si el admin pide más respuestas por rama, la tarjeta pide esas', () => {
+    // 25 respuestas alcanzan para 20, que es lo de fábrica, y no para 30
+    const { unmount } = renderCard(ready(snapshotOf()));
+    const pediatrics = () => screen.getByText('Pediatría').closest('li') as HTMLElement;
+    expect(within(pediatrics()).getByText('Percentil 70')).toBeVisible();
+    unmount();
+    render(
+      <MemoryRouter>
+        <ComparisonCard state={ready(snapshotOf())} facts={facts} minBranchAnswers={30} />
+      </MemoryRouter>,
+    );
+    expect(within(pediatrics()).getByRole('status')).toHaveTextContent(
+      text.ownCalibratingBranch(25, 30),
+    );
+    expect(within(pediatrics()).queryByText('Percentil 70')).toBeNull();
+  });
+
   it('sin especialidad elegida solo hay Todos y un enlace a Tus datos', () => {
     renderCard(ready(snapshotOf({ specialty: null })));
     expect(screen.queryByRole('button', { name: text.cohorts.specialty })).toBeNull();
