@@ -48,6 +48,11 @@ insert into public.email_kinds (kind, description) values
   on conflict (kind) do nothing;
 
 -- ===================================================================== Ayudas internas
+-- Las respuestas de una sesión, para saber en qué lugar de la sesión cayó un motivo de error sin recorrer toda
+-- la bitácora del alumno. Crear un índice en events sin concurrently bloquea las escrituras mientras se crea
+create index if not exists events_answered_session on public.events (user_id, session_id, seq)
+  where type = 'question_answered';
+
 -- Palabras de un texto, como las cuenta la app. Solo se cuentan, el texto nunca sale
 create or replace function public.calibration_words(p_text text) returns integer
 language sql immutable set search_path = public, pg_temp as $$
@@ -544,7 +549,7 @@ begin
     order by e.seq
     limit v_limit
   ),
-  reports as (
+  reports as materialized (
     select p.seq, p.user_id, p.at, p.payload ->> 'cause' as cause, q.branch, q.vulids
     from page p
     join by_question q on q.qulid = upper(p.payload ->> 'targetId')
@@ -554,8 +559,9 @@ begin
         'knowledge', 'time', 'misinterpretation', 'superficial_reading', 'anxiety', 'overconfidence', 'fatigue',
         'not_studied', 'forgot', 'confused', 'misread', 'missed_detail', 'rushed_or_tired', 'changed_answer', 'other')
   ),
-  placed as (
-    select r.*, att.session_id, att.seq as attempt_seq, sess.started_at
+  -- La respuesta a la que se refiere el motivo, la última de esa versión antes de reportarlo
+  placed as materialized (
+    select r.seq, r.user_id, r.at, r.cause, r.branch, att.session_id, att.seq as attempt_seq
     from reports r
     left join lateral (
       select a.session_id, a.seq
@@ -565,29 +571,45 @@ begin
       order by a.seq desc
       limit 1
     ) att on true
-    left join lateral (
-      select s.at as started_at
-      from public.events s
-      where s.user_id = r.user_id and s.type = 'session_started' and s.session_id = att.session_id
-        and s.seq <= att.seq
-      order by s.seq desc
-      limit 1
-    ) sess on att.session_id is not null
+  ),
+  -- De cada sesión, cuándo empezó, cuántas respuestas lleva y la hora de la última. Se calcula una vez
+  -- por sesión y no una vez por motivo
+  session_info as materialized (
+    select s.user_id, s.session_id,
+           (select ss.at from public.events ss
+             where ss.user_id = s.user_id and ss.type = 'session_started' and ss.session_id = s.session_id
+               and ss.seq <= s.last_attempt
+             order by ss.seq desc limit 1) as started_at,
+           count(*) as answers, max(a.at) as last_at
+    from (
+      select user_id, session_id, max(attempt_seq) as last_attempt
+      from placed where session_id is not null group by user_id, session_id
+    ) s
+    join public.events a
+      on a.user_id = s.user_id and a.type = 'question_answered' and a.session_id = s.session_id
+         and a.seq <= v_run.as_of_seq
+    group by s.user_id, s.session_id, s.last_attempt
+  ),
+  -- Cuántas respuestas de la sesión van hasta la del motivo, ella incluida
+  position_in_session as materialized (
+    select p.seq as report_seq, count(*) as pos
+    from placed p
+    join public.events a
+      on a.user_id = p.user_id and a.type = 'question_answered' and a.session_id = p.session_id
+         and a.seq <= p.attempt_seq
+    where p.session_id is not null
+    group by p.seq
   ),
   flagged as (
     select p.seq, p.user_id, p.at, p.cause, p.branch,
-           coalesce((
-             select count(*) >= 6
-                    and max(extract(epoch from (a2.at - p.started_at)) / 60) > v_minutes
-                    and count(*) filter (where a2.seq <= p.attempt_seq) > count(*) - floor(count(*) / 3.0)
-             from public.events a2
-             where a2.user_id = p.user_id and a2.type = 'question_answered' and a2.session_id = p.session_id
-               and a2.seq <= v_run.as_of_seq
-           ), false) as last_third
+           coalesce(
+             si.answers >= 6
+             and extract(epoch from (si.last_at - si.started_at)) / 60 > v_minutes
+             and ps.pos > si.answers - floor(si.answers / 3.0),
+             false) as last_third
     from placed p
-    where p.started_at is not null
-    union all
-    select p.seq, p.user_id, p.at, p.cause, p.branch, false from placed p where p.started_at is null
+    left join session_info si on si.user_id = p.user_id and si.session_id = p.session_id
+    left join position_in_session ps on ps.report_seq = p.seq
   )
   select
     (select coalesce(jsonb_agg(jsonb_build_array(

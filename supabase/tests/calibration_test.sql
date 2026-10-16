@@ -1307,6 +1307,13 @@ reset role;
 select pg_temp.expect(:'parity_w' = 't', 'CA12. Sin pares, pairs 0 y kappa null no dieron paridad');
 rollback;
 
+-- Los índices que sostienen las exportaciones sobre la bitácora
+select pg_temp.expect((
+  select count(*) = 4 from pg_indexes
+  where schemaname = 'public' and tablename = 'events'
+    and indexname in ('events_seq', 'events_consent_changed', 'events_session_started', 'events_answered_session')),
+  'CA15. Faltan los índices de la bitácora que usan las exportaciones');
+
 -- ===================================================================== Limpieza
 -- La calibración vuelve a nacer apagada y en solo reporte, como la deja la migración
 update public.platform_settings set value = jsonb_set(jsonb_set(value, '{calibration,enabled}', 'false'), '{calibration,mode}', '"dry_run"')
