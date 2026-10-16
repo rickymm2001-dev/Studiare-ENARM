@@ -63,7 +63,11 @@ export interface ExamQuestion {
 
 /** Lo que pasó con una sección al armar el examen (B13) */
 export interface ExamSectionPlan {
-  /** Reactivos que se pidieron de esta sección */
+  /**
+   * Reactivos que se pidieron de esta sección. En la de inglés, si hay de sobra pero los casos no cuadran
+   * con la proporción, es lo que entró y no la proporción, que sale de englishTargetFor (la tarjeta del
+   * examen avisa con eso). Solo si no hay inglés suficiente suma también lo que faltó
+   */
   requested: number;
   /** Reactivos que salieron en el examen */
   picked: number;

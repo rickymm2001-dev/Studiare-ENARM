@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from '@testing-library/react';
+import { createRef } from 'react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { englishText } from '@/i18n/english';
@@ -30,6 +31,48 @@ function desktop() {
   }));
 }
 
+describe('la región del texto (hallazgo 10 de la revisión)', () => {
+  it('con scrollable es una región con nombre, se puede enfocar desde afuera y dice su lugar', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(
+      <>
+        <span id="lugar">Pregunta 3 de 20</span>
+        <ReadingPassage
+          text="[Prueba] Simulated passage."
+          refs={TEAM}
+          fold="never"
+          scrollable
+          regionRef={ref}
+          describedBy="lugar"
+        />
+      </>,
+    );
+    const region = screen.getByRole('region', { name: englishText.reading.label });
+    expect(ref.current).toBe(region);
+    expect(region).toHaveAttribute('tabindex', '0');
+    expect(region).toHaveAccessibleDescription('Pregunta 3 de 20');
+    expect(region).toHaveTextContent('[Prueba] Simulated passage.');
+    ref.current?.focus();
+    expect(region).toHaveFocus();
+  });
+
+  it('sin scrollable no es una región ni se enfoca, y la referencia queda en el mismo recuadro', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(
+      <ReadingPassage
+        text="[Prueba] Simulated passage."
+        refs={TEAM}
+        fold="never"
+        regionRef={ref}
+        describedBy="lugar"
+      />,
+    );
+    expect(screen.queryByRole('region')).toBeNull();
+    expect(ref.current).not.toHaveAttribute('tabindex');
+    expect(ref.current).not.toHaveAttribute('aria-describedby');
+  });
+});
+
 describe('la línea de la fuente del texto', () => {
   it('dice el título, la licencia y, si la licencia pide enlace, abre el enlace en otra pestaña', () => {
     render(<PassageSourceLine refs={PUBLIC_DOMAIN} />);
@@ -43,6 +86,33 @@ describe('la línea de la fuente del texto', () => {
     expect(link.getAttribute('rel')).toContain('noopener');
     // Quien usa lector de pantalla oye que se abre en otra pestaña
     expect(link).toHaveTextContent(englishText.reading.newTab);
+  });
+
+  it('el título de la fuente va en inglés para el lector de pantalla, y la licencia y la etiqueta no', () => {
+    render(<PassageSourceLine refs={PUBLIC_DOMAIN} />);
+    const title = screen.getByText('Heart Attack, MedlinePlus.gov (NLM)');
+    expect(title).toHaveAttribute('lang', 'en');
+    expect(title.tagName).toBe('SPAN');
+    // La línea sigue diciendo lo mismo, con el título marcado
+    expect(screen.getByText(/Fuente del texto\./)).toHaveTextContent(
+      'Fuente del texto. Heart Attack, MedlinePlus.gov (NLM). Dominio público. https://medlineplus.gov/heartattack.html',
+    );
+    expect(screen.getByText(/Fuente del texto\./)).not.toHaveAttribute('lang');
+    expect(
+      screen.getByRole('link', { name: /medlineplus\.gov\/heartattack\.html/ }),
+    ).not.toHaveAttribute('lang');
+  });
+
+  it('sin título no hay nada en inglés que marcar', () => {
+    const { container } = render(
+      <PassageSourceLine
+        refs={[{ title: 'Fuente del texto. Texto propio del equipo Studiare.' }]}
+      />,
+    );
+    expect(container.querySelector('[lang]')).toBeNull();
+    expect(screen.getByText(/Fuente del texto\./)).toHaveTextContent(
+      'Fuente del texto. Texto propio del equipo Studiare.',
+    );
   });
 
   it('el texto propio del equipo no lleva enlace y respeta su título', () => {

@@ -128,6 +128,8 @@ export function buildInsightInput(input: {
         const caseVignette = question.caseId
           ? (bank.cases.get(question.caseId)?.vignette ?? '')
           : '';
+        // En un caso de lectura en inglés cada pregunta cuenta todo el texto como suyo. Ese número no se
+        // usa para el inglés, que el motor deja fuera del tiempo por palabra
         const words =
           countWords(caseVignette) +
           countWords(question.vignette) +
@@ -161,6 +163,9 @@ export function buildInsightInput(input: {
           topic: question.topic,
           visibleTags: shownOptions.flatMap((option) => (option.biasTag ? [option.biasTag] : [])),
           chosenTag: chosen?.biasTag ?? null,
+          // Solo el inglés lleva el idioma. El motor deja esas respuestas fuera de lo que mide tiempo
+          // contra el largo del texto (B13)
+          ...(question.language === 'en' ? { language: 'en' as const } : {}),
         });
         break;
       }
@@ -169,8 +174,13 @@ export function buildInsightInput(input: {
     }
   }
 
-  // La mala lectura usa el ritmo personal, así que va en una segunda pasada
-  const pace = personalPace(drafts, input.thresholds.behavior);
+  // La mala lectura usa el ritmo personal, así que va en una segunda pasada. El ritmo se saca de las
+  // respuestas en español, y una de inglés nunca cuenta como contestada demasiado rápido, porque su texto
+  // ya se leyó en la pregunta anterior y sus palabras no son las que se leen en esa respuesta (B13)
+  const pace = personalPace(
+    drafts.filter((draft) => draft.language !== 'en'),
+    input.thresholds.behavior,
+  );
   const answers: AnswerFact[] = drafts.map((draft) => {
     const motive = motiveOfAnswer.get(draft.id) ?? null;
     return {
@@ -178,7 +188,9 @@ export function buildInsightInput(input: {
       misread: isProbableMisread({
         polarity: draft.polarity,
         correct: draft.correct,
-        answeredFast: responseSignals(draft, pace, input.thresholds.behavior).rapidGuess,
+        answeredFast:
+          draft.language !== 'en' &&
+          responseSignals(draft, pace, input.thresholds.behavior).rapidGuess,
         // Malinterpretación y Lectura superficial son las dos de lectura
         reportedMisread: motive !== null && READING_MOTIVES.has(motive),
       }),

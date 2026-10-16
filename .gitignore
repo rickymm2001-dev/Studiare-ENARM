@@ -25,6 +25,13 @@ server/.env.local
 # del juez. Nunca entran al repositorio
 private/
 
+# Lo que escriben por omisión los scripts de Inglés médico (B13, npm run english:passages y english:vocabulary)
+# para subir a mano al Sheet y al catálogo de mazos. content-drafts sí está en git, y estos archivos no: traen
+# textos con licencia y el paquete del mazo, que no se guardan en el repo (docs/INGLES_MEDICO.md). La lista
+# de textos que eligen los médicos, textos.json, sí puede entrar
+content-drafts/ingles/*.xlsx
+content-drafts/ingles/*.apkg
+
 # Sistema y editores
 .DS_Store
 Thumbs.db

@@ -30,15 +30,23 @@ let app: RenderedApp | undefined;
 
 const NAME = '[Prueba] Vocabulario médico en inglés';
 
-function catalogWith(canDownload: boolean, branch: string | null = 'medical_english') {
+function catalogWith(
+  canDownload: boolean,
+  branch: string | null = 'medical_english',
+  deck: { deckKey: string; name: string; author: string } = {
+    deckKey: 'vocabulario-ingles',
+    name: NAME,
+    author: 'MedlinePlus.gov (NLM)',
+  },
+) {
   holder.cloud = fakeRpc({
     deck_catalog_list: () => ({
       canDownload,
       decks: [
         {
-          deckKey: 'vocabulario-ingles',
-          name: NAME,
-          author: 'MedlinePlus.gov (NLM)',
+          deckKey: deck.deckKey,
+          name: deck.name,
+          author: deck.author,
           description: '[Prueba] Mazo simulado',
           version: 1,
           notes: 4,
@@ -153,6 +161,51 @@ describe('vocabulario médico en el catálogo de la nube', () => {
     expect(within(catalog).getByRole('button', { name: /^Bajar todo/ })).toBeEnabled();
     // Con plan de pago no hay vista previa, baja el mazo completo
     expect(within(catalog).queryByText(text.preview)).toBeNull();
+  });
+
+  it('el mazo de un tercero de Inglés médico, con la rama y el tema del vocabulario, sigue diciendo su autor', async () => {
+    const THIRD = '[Prueba] Inglés médico de una tercera persona';
+    catalogWith(true, 'medical_english', {
+      deckKey: 'ingles-medico-de-un-tercero',
+      name: THIRD,
+      author: '[Prueba] Dra. Pérez',
+    });
+    app = await renderApp(SCREENS.decks.path, {
+      seed: async (api, user) => {
+        await api.repos.subscriptions.put({
+          userId: user.id,
+          plan: 'monthly',
+          status: 'active',
+          isSimulated: false,
+          trialAvailable: false,
+          updatedAt: new Date().toISOString(),
+        });
+      },
+    });
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(await within(catalog).findByText(THIRD, undefined, WAIT)).toBeVisible();
+    expect(within(catalog).getByText(t.decks.author('[Prueba] Dra. Pérez'))).toBeVisible();
+    expect(
+      within(catalog).queryByText(
+        text.source.line(MEDLINEPLUS_SOURCE.name, MEDLINEPLUS_SOURCE.license),
+      ),
+    ).toBeNull();
+  });
+
+  it('con otra clave pero con MedlinePlus.gov (NLM) como autor también dice su fuente', async () => {
+    catalogWith(false, 'medical_english', {
+      deckKey: 'vocabulario-medlineplus',
+      name: NAME,
+      author: MEDLINEPLUS_SOURCE.name,
+    });
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(await within(catalog).findByText(NAME, undefined, WAIT)).toBeVisible();
+    expect(
+      within(catalog).getByText(
+        text.source.line(MEDLINEPLUS_SOURCE.name, MEDLINEPLUS_SOURCE.license),
+      ),
+    ).toBeVisible();
   });
 
   it('sin la rama de Inglés médico en sus materias, pero con la clave del vocabulario, también dice su fuente', async () => {

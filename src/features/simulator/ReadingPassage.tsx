@@ -8,7 +8,7 @@
 // retroalimentación va plegado siempre, para no ocupar la pantalla. La fuente se ve aunque el texto esté
 // plegado, porque es la atribución de la licencia.
 import { AlarmClock } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useId, useState, type Ref } from 'react';
 import { LICENSE_LABELS, parsePassageSource } from '@/data/content/passageSource';
 import { englishText } from '@/i18n/english';
 import { cn } from '@/ui/cn';
@@ -36,7 +36,12 @@ export function PassageSourceLine({
   const text = englishText.reading;
   return (
     <p className={cn('text-xs text-fg-muted', className)}>
-      {text.sourceLabel}. {title === '' ? null : `${title}. `}
+      {text.sourceLabel}.{' '}
+      {title === '' ? null : (
+        <>
+          <span lang="en">{title}</span>.{' '}
+        </>
+      )}
       {LICENSE_LABELS[license]}.
       {url === null ? null : (
         <>
@@ -61,6 +66,8 @@ export function ReadingPassage({
   refs,
   fold,
   scrollable = false,
+  regionRef,
+  describedBy,
   className,
 }: {
   /** El texto en inglés, que es la viñeta del caso */
@@ -73,6 +80,13 @@ export function ReadingPassage({
    * sigan a la vista. Entonces se puede enfocar con el teclado para recorrerlo
    */
   scrollable?: boolean;
+  /**
+   * La región del texto, para pasarle el foco. El texto va antes que el enunciado, así que al empezar un
+   * texto nuevo el foco va aquí y no al enunciado. Solo hay región con scrollable (hallazgo 10 de la revisión)
+   */
+  regionRef?: Ref<HTMLDivElement>;
+  /** Un elemento que describe la región al enfocarla, como el lugar de la pregunta en el examen */
+  describedBy?: string;
   className?: string;
 }) {
   const id = useId();
@@ -105,11 +119,13 @@ export function ReadingPassage({
       </div>
       <div
         id={bodyId}
+        ref={regionRef}
         hidden={folds && !open}
         {...(scrollable
           ? {
               role: 'region',
               'aria-labelledby': labelId,
+              'aria-describedby': describedBy,
               tabIndex: 0,
             }
           : {})}

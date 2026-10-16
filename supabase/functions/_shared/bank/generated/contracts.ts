@@ -492,9 +492,11 @@ export type SyncNoticeCode =
   | 'author_is_reviewer'
   | 'case_rows_apart'
   | 'language_unknown'
-  // Idioma vacío en Inglés médico, que queda en inglés. Un caso de inglés sin 2 o 3 preguntas (B13)
+  // Idioma vacío en Inglés médico, que queda en inglés. Un caso de inglés sin 2 o 3 preguntas. Un texto largo
+  // que parece inglés en un renglón que quedó en español (B13)
   | 'language_inferred'
   | 'english_case_size'
+  | 'language_suspect'
   | 'not_ready';
 
 /** Un problema de un renglón. value es solo de listas cerradas, recortado a 60 caracteres */

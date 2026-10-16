@@ -8,6 +8,7 @@ Cómo se escribe, se revisa y se prepara la parte de inglés de Studiare (bloque
 - Los textos los escribe el equipo o vienen de una fuente con licencia que permite el uso comercial. Las preguntas las escriben siempre los médicos. Ninguna parte de este módulo la escribe la IA, y la IA de reestructurar preguntas (Borradores de IA) no ofrece ni acepta preguntas en inglés, aunque tengan un reporte abierto. Solo reestructura el banco en español
 - Cada texto lleva su fuente y su licencia, y la app las muestra junto al texto. Sin fuente válida la pregunta entra como borrador, pero no se puede aprobar
 - El examen real es imperfecto y Studiare también (D-080). Un texto largo, una pregunta de inferencia, un distractor con un falso cognado o un caso de una o de cuatro preguntas no se rechazan
+- En Conócete las respuestas de inglés no entran al ritmo, a la adivinanza rápida, al tiempo atascado ni a las viñetas largas, porque el texto se lee una vez y sus preguntas se contestan sobre él, y la segunda y la tercera salen en unos 35 segundos. Su ritmo se ve en su tarjeta de Progreso. Sí entran a lo demás, como las trampas y los sesgos
 - El formato del examen vive en un solo lugar, src/config/exam.ts, y los umbrales de calibrando en otro, src/config/thresholds.ts. Si la convocatoria cambia, se cambia ahí y no en cada pantalla
 
 ## Forma de un caso de lectura
@@ -68,7 +69,9 @@ Las licencias que se aceptan son estas, y la lista se revisará con el abogado (
 - Cualquier otra licencia, como CC BY-NC o CC BY-ND, no se acepta, porque Studiare cobra. La pregunta entra como borrador con el pendiente de licencia fuera de la lista
 - Sin fuente, sin título, sin licencia o sin enlace https cuando la licencia lo pide, la pregunta entra como borrador con el pendiente de falta de fuente del texto
 - La referencia mide hasta 300 caracteres. Si el título es muy largo, Studiare lo recorta y nunca recorta el enlace
-- La licencia se lee en la propia página o en los metadatos del artículo. Nunca se supone, y se guarda el enlace exacto
+- Como espacio cuentan el espacio, el tabulador, el salto de línea, el espacio sin salto y la marca de orden de bytes que a veces trae un texto copiado de la web o de un PDF. La app y la base los leen igual, y una referencia que los trae se lee como si trajera espacios normales
+- La licencia de un artículo se lee en sus metadatos o en la propia página. Nunca se supone, y se guarda el enlace exacto
+- La excepción es MedlinePlus. Sus temas se toman como dominio público por el aviso de uso de MedlinePlus.gov, sin leer la página de cada tema, y el médico que elige el tema lo confirma en su página antes de anotarlo en la lista. Si la página dice que el resumen viene de otra fuente o que tiene derechos reservados, ese tema no se usa
 
 ## De dónde sacar textos
 
@@ -101,7 +104,8 @@ El falso cognado, una palabra que se parece al español y significa otra cosa, e
 - Studiare revisa solo lo siguiente al leer el Sheet y al guardar en la app
   - Se rechaza el renglón si está en inglés fuera de Inglés médico o en español dentro de Inglés médico, o si un caso mezcla idiomas o trae fuentes distintas
   - Queda incompleto, sin poder aprobarse, si falta la fuente, la licencia o el enlace, o si la licencia no es de la lista
-  - Solo se avisa si el Idioma estaba vacío en Inglés médico, que se toma como inglés, o si un caso trae una sola pregunta o más de tres
+  - Solo se avisa si el Idioma estaba vacío en Inglés médico, que se toma como inglés, si un caso trae una sola pregunta o más de tres, o si el texto largo de una pregunta que quedó como español parece estar en inglés
+  - Este último aviso mira el Caso clínico cuando pasa de 200 caracteres y compara sus palabras más comunes en inglés (the, of, and, is, with, was, for, that) contra las del español. Es una pista y no una regla, porque Studiare nunca decide el idioma por el texto (D-080). No cambia el idioma, no rechaza nada y no pide la fuente. Si el texto es de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente
 - El detalle de cada caso, con la frase del reporte, está en docs/SHEET_DEL_BANCO.md
 
 ## Scripts
@@ -130,6 +134,8 @@ La lista va en content-drafts/ingles/textos.json.
 - No entra, y el script dice por qué, un texto sin licencia en sus metadatos, con una licencia que no permite el uso comercial, sin resumen o de más de 8,000 caracteres, porque no se recorta. Los demás textos de la lista siguen
 - Si falta la lista, el script termina con un aviso y enseña la forma que debe tener
 - Sin carpeta con --pmc-dir pide cada artículo al servicio E-utilities de NLM, uno de los que PubMed Central aprueba para el acceso automático. Si la red no abre, dice qué dominios agregar y cómo bajar el archivo a mano
+- Cada pedido a E-utilities se presenta con tool=studiare-english-passages y espera 350 ms después del anterior, porque NCBI permite hasta 3 pedidos por segundo sin clave de API
+- NCBI también pide un correo de contacto. El script lo manda como email solo si existe la variable de entorno NCBI_EMAIL, que se define en la terminal antes de correrlo y nunca se escribe en el código ni en un archivo del repo. Si falta, el script lo avisa por pantalla y sigue sin él. Con --pmc-dir no hay pedidos y no avisa
 
 ### Mazo de vocabulario
 
@@ -139,6 +145,7 @@ La lista va en content-drafts/ingles/textos.json.
 - Cada nota tiene un id estable, así una versión nueva del archivo conserva los repasos. Un tema sin par en español no entra
 - El submazo es el grupo de MedlinePlus en español, por ejemplo Corazón y circulación, Infecciones o Embarazo y reproducción. Así el alumno baja el mazo por partes
 - Escribe el mazo de la demo, src/demo/content/decks/vocabulario-ingles.json, y el paquete content-drafts/ingles/Vocabulario-ingles.apkg para subir en Administración, Catálogo de mazos, con la nota Dominio público, MedlinePlus.gov
+- La app dice Fuente MedlinePlus.gov (NLM) y Dominio público en lugar del autor solo en el mazo con la clave vocabulario-ingles o con MedlinePlus.gov (NLM) como autor. La rama y el tema no bastan, y el mazo de otra persona que también es de Inglés médico conserva el crédito de su autor
 
 ### Cómo bajar los archivos a mano
 

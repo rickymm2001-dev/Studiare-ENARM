@@ -3,7 +3,12 @@ import { FIELD_MAX } from '@/data/usecases/manualDecks';
 import { makeEnglishCase, TEST_ENGLISH_SOURCE } from '@/data/testing/english';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
-import { CASE_SHORT_MAX, questionCardDraft, shortenCase } from './questionCardDraft';
+import {
+  CASE_SHORT_MAX,
+  questionCardDraft,
+  questionEnglishParts,
+  shortenCase,
+} from './questionCardDraft';
 
 const LONG_CASE =
   'Mujer de 54 años con disnea de esfuerzo de 3 meses de evolución. Refiere ortopnea de dos almohadas y edema de miembros inferiores. Tiene hipertensión arterial de 10 años con mal apego al tratamiento. A la exploración hay ingurgitación yugular, estertores crepitantes basales y un tercer ruido. La radiografía muestra cardiomegalia y redistribución de flujo.';
@@ -118,5 +123,52 @@ describe('la tarjeta de una pregunta con el texto del banco, sin IA', () => {
         options: source.options.map((option) => ({ ...option, isCorrect: false })),
       }),
     ).toBeNull();
+  });
+});
+
+describe('los pedazos en inglés de la tarjeta (B13, hallazgo 11 de la revisión)', () => {
+  it('en una pregunta de lectura son el caso en corto, la pregunta, la clave y el título de la fuente', () => {
+    const passage = Array.from(
+      { length: 60 },
+      (_, index) => `[Prueba] Sentence ${index + 1} of the invented passage.`,
+    ).join(' ');
+    const { bundles } = makeEnglishCase(2);
+    const first = bundles[0];
+    if (!first) throw new Error('Sin pregunta de prueba');
+    const parts = questionEnglishParts({ ...first, vignette: passage });
+    const correct = first.options.find((option) => option.isCorrect);
+    expect(parts).toEqual([
+      shortenCase(passage),
+      first.question.prompt,
+      correct?.text,
+      '[Prueba] Texto simulado',
+    ]);
+    // Cada pedazo está tal cual en la tarjeta que arma questionCardDraft, que es lo que se marca
+    const draft = questionCardDraft({ ...first, vignette: passage });
+    for (const part of parts) expect(`${draft?.front}\n\n${draft?.back}`).toContain(part);
+  });
+
+  it('sin viñeta, sin clave o sin fuente válida deja fuera ese pedazo', () => {
+    const { bundles } = makeEnglishCase(1, {
+      gpcRefs: [{ title: 'Guía simulada', status: 'to_verify' }],
+    });
+    const first = bundles[0];
+    if (!first) throw new Error('Sin pregunta de prueba');
+    const parts = questionEnglishParts({ ...first, vignette: '  ' });
+    expect(parts).toEqual([
+      first.question.prompt,
+      first.options.find((option) => option.isCorrect)?.text,
+    ]);
+    expect(
+      questionEnglishParts({
+        ...first,
+        vignette: '',
+        options: first.options.map((option) => ({ ...option, isCorrect: false })),
+      }),
+    ).toEqual([first.question.prompt]);
+  });
+
+  it('una pregunta en español no tiene pedazos en inglés', () => {
+    expect(questionEnglishParts(bundle())).toEqual([]);
   });
 });

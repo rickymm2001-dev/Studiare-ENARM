@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { PLANS, type PlanKey } from '@/config/billing';
-import { ENGLISH_PLACEMENT } from '@/config/exam';
+import { ENARM_FORMAT, ENGLISH_PLACEMENT } from '@/config/exam';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
@@ -23,7 +23,13 @@ import { newId } from '@/data/ids';
 import { shortfallReason } from '@/data/bank/quota';
 import type { PoolQuestion } from '@/data/bank/questionSource';
 import { topicTaxonomy } from '@/demo/content';
-import { buildExam, sectionOf, type ExamPlan, type ExamQuestion } from '@/engines/exam';
+import {
+  buildExam,
+  englishTargetFor,
+  sectionOf,
+  type ExamPlan,
+  type ExamQuestion,
+} from '@/engines/exam';
 import { examBranchWeights } from '@/engines/topics';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
@@ -377,7 +383,9 @@ export function ExamSetupCard({
 /**
  * Lo que dice la tarjeta de la parte en inglés cuando hay pocos reactivos (3.7). Con menos de los que pide el
  * umbral lleva la marca Calibrando y dice cuántos hay. Si no hay ninguno el examen es solo en español, y si
- * hay algunos pero no alcanzan para los 30 dice cuántos traerá el examen, porque el español no los rellena
+ * hay algunos pero no alcanzan para los que pide el examen dice cuántos traerá, porque el español no los
+ * rellena. Si hay de sobra pero los casos no suman lo que pide el examen, por ejemplo solo casos de tres
+ * preguntas para un examen de 5, también dice cuántos entran, porque un texto entra completo
  */
 function EnglishExamNotes({
   have,
@@ -389,6 +397,12 @@ function EnglishExamNotes({
   min: number;
 }) {
   const copy = englishText.exam;
+  const { picked, requested: wanted } = preview.sections.english;
+  // Solo el examen de 280 pide los 30 del examen real. Los cortos piden la misma proporción (11 de 100)
+  const real = wanted >= ENARM_FORMAT.english;
+  // Lo que pide la proporción del tamaño del examen. En el plan, requested de la sección es lo que sobrevivió
+  // al tamaño de los casos, así que aquí se vuelve a sacar
+  const target = Math.min(englishTargetFor(preview.requested), preview.requested);
   return (
     <div className="flex flex-col gap-1.5">
       {have < min ? (
@@ -400,7 +414,11 @@ function EnglishExamNotes({
         </p>
       ) : preview.sections.english.shortfall > 0 ? (
         <p role="status" className="text-sm text-fg-muted">
-          {copy.missing(preview.sections.english.picked, preview.sections.english.requested)}
+          {copy.missing(picked, wanted, real)}
+        </p>
+      ) : picked < target ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {copy.fits(picked, target)}
         </p>
       ) : null}
     </div>

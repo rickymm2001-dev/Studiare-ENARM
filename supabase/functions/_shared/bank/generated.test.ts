@@ -11,7 +11,7 @@ const ROOT = resolve(import.meta.dirname, '../../../..');
 describe('copias generadas para bank-sync', () => {
   it('cada archivo en disco es igual al que se genera y no sobra ninguno', async () => {
     const files = await generateBankShared(ROOT);
-    expect(files.size).toBe(10);
+    expect(files.size).toBe(11);
     for (const [path, text] of files) {
       expect(readFileSync(resolve(ROOT, path), 'utf8'), path).toBe(text);
     }

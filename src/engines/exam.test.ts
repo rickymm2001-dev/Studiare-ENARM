@@ -472,6 +472,10 @@ describe('la parte en inglés del examen (B13)', () => {
     expect(plan.sections.english).toMatchObject({ requested: 3, picked: 3, shortfall: 0 });
     expect(plan.sections.clinical).toMatchObject({ requested: 47, picked: 47, shortfall: 0 });
     expect(plan.shortfall).toBe(0);
+    // En el plan, requested ya no es el objetivo. Lo que pide la proporción sale de englishTargetFor, y con
+    // eso la tarjeta del examen dice que entran 3 de los 5 aunque no haya faltante (hallazgo 9 de la revisión)
+    expect(englishTargetFor(plan.requested)).toBe(5);
+    expect(englishTargetFor(plan.requested)).toBeGreaterThan(plan.sections.english.picked);
   });
 
   it('sin inglés suficiente toma lo que hay, avisa cuántos faltaron y el español no lo rellena', () => {

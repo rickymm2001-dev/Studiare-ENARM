@@ -109,6 +109,7 @@ El renglón se queda fuera y el reporte dice el motivo. Lo demás del Sheet entr
 - Un Idioma que no es Español ni Inglés, que se toma como español
 - Idioma vacío en Inglés médico, que se toma como inglés
 - Un caso de lectura en inglés con una sola pregunta o con más de tres, que entra igual
+- Un texto largo que parece estar en inglés en una pregunta que quedó como español, porque el Idioma está vacío o dice Español. Entra como español y sin pedir fuente ni licencia. Si es un caso de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente. Un texto en español con términos en inglés no avisa
 
 ## Lo que nunca es error
 

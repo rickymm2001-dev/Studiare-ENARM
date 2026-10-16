@@ -9,7 +9,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'no
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import ExcelJS from 'exceljs';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BankTable } from '@/data/content/bankConvert';
 import {
   LICENSE_LABELS,
@@ -25,8 +25,14 @@ import {
 } from '../../scripts/content/bankColumns.ts';
 import { workbookTable } from '../../scripts/content/bankImport.ts';
 import {
+  EUTILS_PAUSE_MS,
+  EUTILS_TOOL,
   buildPassagesWorkbook,
   citation,
+  createPmcFetcher,
+  efetchRequestUrl,
+  efetchUrl,
+  eutilsEmail,
   htmlToText,
   licenseFromCreativeCommons,
   main,
@@ -36,6 +42,7 @@ import {
   preparePassages,
   sheetHeaders,
   sheetRows,
+  type MainOptions,
   type PassageProblem,
   type PassageRequest,
   type PassageSources,
@@ -152,12 +159,20 @@ const tmp = () => {
   dirs.push(dir);
   return dir;
 };
+// Las pruebas no dependen del correo de contacto que tenga quien las corre. Sin NCBI_EMAIL por omisión
+beforeEach(() => {
+  vi.stubEnv('NCBI_EMAIL', '');
+});
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-async function run(args: string[]): Promise<{ code: number; out: string; err: string }> {
+async function run(
+  args: string[],
+  options?: MainOptions,
+): Promise<{ code: number; out: string; err: string }> {
   const out: string[] = [];
   const err: string[] = [];
   vi.spyOn(console, 'log').mockImplementation(
@@ -166,7 +181,7 @@ async function run(args: string[]): Promise<{ code: number; out: string; err: st
   vi.spyOn(console, 'error').mockImplementation(
     (...items: unknown[]) => void err.push(items.join(' ')),
   );
-  const code = await main(args);
+  const code = await main(args, options);
   return { code, out: out.join('\n'), err: err.join('\n') };
 }
 
@@ -855,6 +870,8 @@ describe('la línea de comandos', () => {
     expect(out).toContain('--medlineplus');
     expect(out).toContain('--pmc-dir');
     expect(out).toContain('--first-case');
+    // También dice de dónde sale el correo de contacto que pide NCBI
+    expect(out).toContain('NCBI_EMAIL');
   });
 
   it('sin la lista de los médicos termina con 2 y enseña la forma que debe tener', async () => {
@@ -997,8 +1014,9 @@ describe('la línea de comandos', () => {
       const { dir, path } = one();
       const { code, out, err } = await run(['--list', path, '--out', join(dir, 'salida.xlsx')]);
       expect(code).toBe(1);
+      // El pedido del script dice quién lo hace con tool (B13, hallazgo 13 de la revisión independiente)
       expect(calls).toEqual([
-        'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC9900001&retmode=xml',
+        'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC9900001&retmode=xml&tool=studiare-english-passages',
       ]);
       for (const host of [
         'medlineplus.gov',
@@ -1009,6 +1027,10 @@ describe('la línea de comandos', () => {
         expect(out).toContain(host);
       expect(out).toContain('PMC9900001.xml');
       expect(out).toContain('--pmc-dir');
+      // La dirección para bajarlo a mano es la que se abre en el navegador, sin tool
+      expect(out).toContain(
+        'a mano de https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC9900001&retmode=xml y guárdalo',
+      );
       expect(err).toContain('No quedó ningún texto');
     });
 
@@ -1032,6 +1054,255 @@ describe('la línea de comandos', () => {
       expect(code).toBe(0);
       expect(out).toContain('1 textos y 2 renglones por escribir');
       expect(existsSync(outFile)).toBe(true);
+    });
+  });
+
+  describe('el pedido a E-utilities dice quién es, espera entre pedidos y no escribe ningún correo', () => {
+    // Un correo de mentira armado aquí, para que ninguno quede escrito en el repo
+    const EMAIL = ['revisor.b13', 'prueba.invalid'].join('@');
+    const noWait = () => Promise.resolve();
+    const TOOL = `tool=${EUTILS_TOOL}`;
+
+    /** fetch simulado. Contesta con el XML de la muestra del artículo que se pide, y 404 si no hay */
+    function eutils(log: string[], failing: readonly string[] = []) {
+      const articles: Record<string, string> = {
+        PMC9900001: pmcXml(1),
+        PMC9900003: pmcXml(3),
+      };
+      return (url: string) => {
+        const pmcid = /[?&]id=(PMC\d+)/.exec(url)?.[1] ?? '';
+        log.push(url);
+        if (failing.includes(pmcid)) return Promise.resolve(new Response('', { status: 503 }));
+        const xml = articles[pmcid];
+        return Promise.resolve(
+          xml === undefined
+            ? new Response('', { status: 404 })
+            : new Response(xml, { status: 200 }),
+        );
+      };
+    }
+    const one = () =>
+      list([{ source: 'pmc', id: 'PMC9900001', subtopic: 'english_pediatrics', questions: 2 }]);
+    const three = () =>
+      list([
+        { source: 'pmc', id: 'PMC9900001', subtopic: 'english_pediatrics', questions: 2 },
+        { source: 'pmc', id: 'PMC9900003', subtopic: 'english_public_health', questions: 1 },
+        { source: 'pmc', id: 'PMC9900099', subtopic: 'english_pediatrics' },
+      ]);
+    /** Todo el texto de las celdas de un Excel */
+    async function cellsOf(file: string): Promise<string[]> {
+      const book = new ExcelJS.Workbook();
+      await book.xlsx.readFile(file);
+      const cells: string[] = [];
+      for (const sheet of book.worksheets) {
+        sheet.eachRow((row) => {
+          row.eachCell((cell) => {
+            cells.push(cell.text);
+          });
+        });
+      }
+      return cells;
+    }
+
+    it('los pedidos se presentan con tool, y la dirección de bajarlo a mano no lleva ni tool ni correo', () => {
+      expect(efetchUrl('PMC9900001')).toBe(
+        'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC9900001&retmode=xml',
+      );
+      expect(efetchRequestUrl('PMC9900001')).toBe(`${efetchUrl('PMC9900001')}&${TOOL}`);
+      expect(EUTILS_TOOL).toBe('studiare-english-passages');
+      // Con correo, va codificado para que un + o un & no rompan la dirección
+      const tricky = ['a+b&c', 'x.invalid'].join('@');
+      const url = efetchRequestUrl('PMC9900001', tricky);
+      expect(url).toBe(`${efetchUrl('PMC9900001')}&${TOOL}&email=a%2Bb%26c%40x.invalid`);
+      expect(new URL(url).searchParams.get('email')).toBe(tricky);
+    });
+
+    it('el correo sale solo de la variable NCBI_EMAIL, sin espacios, y vacía o ausente es que falta', () => {
+      expect(eutilsEmail({ NCBI_EMAIL: `  ${EMAIL}\n` })).toBe(EMAIL);
+      expect(eutilsEmail({ NCBI_EMAIL: '' })).toBeUndefined();
+      expect(eutilsEmail({ NCBI_EMAIL: '   \t' })).toBeUndefined();
+      expect(eutilsEmail({})).toBeUndefined();
+      // Otra variable no cuenta, ni siquiera una parecida
+      expect(eutilsEmail({ EMAIL, NCBI_API_KEY: EMAIL, ncbi_email: EMAIL })).toBeUndefined();
+    });
+
+    it('sin NCBI_EMAIL los pedidos salen sin email, avisa una sola vez que NCBI lo pide y sigue', async () => {
+      const calls: string[] = [];
+      vi.stubGlobal('fetch', eutils(calls));
+      const { dir, path } = three();
+      const outFile = join(dir, 'salida.xlsx');
+      const { code, out } = await run(['--list', path, '--out', outFile], {
+        env: {},
+        sleep: noWait,
+      });
+      expect(calls).toHaveLength(3);
+      for (const url of calls) {
+        expect(url).toContain(`&${TOOL}`);
+        expect(url).not.toContain('email');
+      }
+      expect(out.match(/NCBI pide/g)).toHaveLength(1);
+      expect(out).toContain('NCBI_EMAIL');
+      expect(out).toContain('sin escribirlo en ningún archivo del repo');
+      // El aviso no detiene el trabajo
+      expect(code).toBe(0);
+      expect(out).toContain('2 textos y 3 renglones por escribir');
+      expect(existsSync(outFile)).toBe(true);
+    });
+
+    it('una variable vacía o de solo espacios se trata como que falta', async () => {
+      for (const value of ['', '   ']) {
+        const calls: string[] = [];
+        vi.stubGlobal('fetch', eutils(calls));
+        const { dir, path } = three();
+        const { out } = await run(['--list', path, '--out', join(dir, 'salida.xlsx')], {
+          env: { NCBI_EMAIL: value },
+          sleep: noWait,
+        });
+        expect(out, JSON.stringify(value)).toContain('NCBI pide');
+        for (const url of calls) expect(url).not.toContain('email');
+      }
+    });
+
+    it('con NCBI_EMAIL los pedidos llevan tool y email, no avisa y el correo no sale en ningún lado', async () => {
+      const calls: string[] = [];
+      vi.stubGlobal('fetch', eutils(calls));
+      const { dir, path } = three();
+      const outFile = join(dir, 'salida.xlsx');
+      const { code, out, err } = await run(['--list', path, '--out', outFile], {
+        env: { NCBI_EMAIL: ` ${EMAIL} ` },
+        sleep: noWait,
+      });
+      expect(code).toBe(0);
+      expect(calls).toHaveLength(3);
+      for (const url of calls) {
+        expect(url).toContain(`&${TOOL}&email=${encodeURIComponent(EMAIL)}`);
+        expect(url).toContain('%40');
+      }
+      expect(out).not.toContain('NCBI pide');
+      // Ni en pantalla ni en el Excel que suben los médicos
+      expect(out + err).not.toContain(EMAIL);
+      expect((await cellsOf(outFile)).filter((cell) => cell.includes(EMAIL))).toEqual([]);
+    });
+
+    it('si la red no abre, lo que dice para bajarlo a mano no repite el correo', async () => {
+      vi.stubGlobal('fetch', () => Promise.reject(new TypeError('fetch failed')));
+      const { dir, path } = three();
+      const { out, err } = await run(['--list', path, '--out', join(dir, 'salida.xlsx')], {
+        env: { NCBI_EMAIL: EMAIL },
+        sleep: noWait,
+      });
+      expect(out).toContain('No pude abrir eutils.ncbi.nlm.nih.gov');
+      expect(out + err).not.toContain(EMAIL);
+      expect(out).not.toContain('email=');
+    });
+
+    it('sin que se le pase el entorno lee NCBI_EMAIL de las variables del proceso', async () => {
+      const calls: string[] = [];
+      vi.stubGlobal('fetch', eutils(calls));
+      vi.stubEnv('NCBI_EMAIL', EMAIL);
+      const { dir, path } = one();
+      const { out } = await run(['--list', path, '--out', join(dir, 'salida.xlsx')]);
+      expect(calls).toEqual([
+        `${efetchUrl('PMC9900001')}&${TOOL}&email=${encodeURIComponent(EMAIL)}`,
+      ]);
+      expect(out).not.toContain('NCBI pide');
+    });
+
+    it('con la carpeta de artículos, o sin textos de PubMed Central, no pide nada y no avisa del correo', async () => {
+      const calls: string[] = [];
+      vi.stubGlobal('fetch', eutils(calls));
+      const { dir, path } = three();
+      const withDir = await run(
+        ['--list', path, '--pmc-dir', PMC_DIR, '--out', join(dir, 'a.xlsx')],
+        { env: {}, sleep: noWait },
+      );
+      expect(withDir.code).toBe(0);
+      expect(withDir.out).not.toContain('NCBI pide');
+      const medline = list([{ source: 'medlineplus', id: '9501', subtopic: 'english_pediatrics' }]);
+      const onlyMedline = await run(
+        ['--list', medline.path, '--medlineplus', SUMMARIES, '--out', join(dir, 'b.xlsx')],
+        { env: {}, sleep: noWait },
+      );
+      expect(onlyMedline.code).toBe(0);
+      expect(onlyMedline.out).not.toContain('NCBI pide');
+      expect(calls).toEqual([]);
+    });
+
+    it('espera entre un pedido y el siguiente, no antes del primero ni después del último', async () => {
+      const events: string[] = [];
+      const calls: string[] = [];
+      const answer = eutils(calls);
+      vi.stubGlobal('fetch', (url: string) => {
+        events.push(`pide ${/id=(PMC\d+)/.exec(url)?.[1] ?? '?'}`);
+        return answer(url);
+      });
+      const sleep = (ms: number) => {
+        events.push(`espera ${String(ms)}`);
+        return Promise.resolve();
+      };
+      const { dir, path } = three();
+      const { code } = await run(['--list', path, '--out', join(dir, 'salida.xlsx')], {
+        env: { NCBI_EMAIL: EMAIL },
+        sleep,
+      });
+      expect(code).toBe(0);
+      expect(events).toEqual([
+        'pide PMC9900001',
+        'espera 350',
+        'pide PMC9900003',
+        'espera 350',
+        'pide PMC9900099',
+      ]);
+    });
+
+    it('también espera después de un pedido que falló, y lo que no sale a la red no gasta pausa', async () => {
+      const events: string[] = [];
+      const answer = eutils([], ['PMC9900001']);
+      vi.stubGlobal('fetch', (url: string) => {
+        events.push(`pide ${/id=(PMC\d+)/.exec(url)?.[1] ?? '?'}`);
+        return answer(url);
+      });
+      const sleep = (ms: number) => {
+        events.push(`espera ${String(ms)}`);
+        return Promise.resolve();
+      };
+      const { dir, path } = list([
+        { source: 'medlineplus', id: '9501', subtopic: 'english_pediatrics' },
+        { source: 'pmc', id: 'PMC9900001', subtopic: 'english_pediatrics' },
+        { source: 'pmc', id: 'PMC9900002', subtopic: 'no_existe' },
+        { source: 'pmc', id: 'PMC9900003', subtopic: 'english_public_health' },
+      ]);
+      const { out } = await run(
+        ['--list', path, '--medlineplus', SUMMARIES, '--out', join(dir, 'salida.xlsx')],
+        { env: { NCBI_EMAIL: EMAIL }, sleep },
+      );
+      expect(out).toContain('contestó 503 al pedir PMC9900001');
+      // Un solo salto entre los dos pedidos de PubMed Central. MedlinePlus y el subtema malo no salen a la red
+      expect(events).toEqual(['pide PMC9900001', 'espera 350', 'pide PMC9900003']);
+    });
+
+    it('la pausa deja menos de 3 pedidos por segundo, que es lo que NCBI permite sin clave', () => {
+      expect(EUTILS_PAUSE_MS).toBe(350);
+      expect(1000 / EUTILS_PAUSE_MS).toBeLessThan(3);
+    });
+
+    it('sin otra forma de esperar, la pausa es de 350 ms de reloj', async () => {
+      vi.useFakeTimers();
+      try {
+        const calls: string[] = [];
+        vi.stubGlobal('fetch', eutils(calls));
+        const fetchPmc = createPmcFetcher({ email: EMAIL });
+        expect(await fetchPmc('PMC9900001')).toContain('<article');
+        expect(calls).toHaveLength(1);
+        const second = fetchPmc('PMC9900003');
+        await vi.advanceTimersByTimeAsync(EUTILS_PAUSE_MS - 1);
+        expect(calls).toHaveLength(1);
+        await vi.advanceTimersByTimeAsync(1);
+        expect(await second).toContain('<article');
+        expect(calls).toHaveLength(2);
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 

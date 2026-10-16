@@ -133,9 +133,11 @@ test.describe('Inglés médico en la práctica', () => {
     await expect(page.getByRole('status').filter({ hasText: reading.overAnnounce })).toHaveCount(1);
     await expectNoSeriousA11yViolations(page);
 
-    // La segunda pregunta del mismo texto sigue con el mismo reloj. En el teléfono el texto va plegado
+    // La segunda pregunta del mismo texto sigue con el mismo reloj. En el teléfono el texto va plegado. El
+    // foco va al enunciado, porque el texto ya se leyó
     await answerPracticeQuestion(page, 1, 5);
     await expect(page.getByText(reading.position(2, size))).toBeVisible();
+    await expect(page.locator('#pregunta-frase')).toBeFocused();
     await expect(over).toBeVisible();
     expect(await passageNumber(page)).toBe(first);
     if (isPhone(page)) {
@@ -161,6 +163,8 @@ test.describe('Inglés médico en la práctica', () => {
     }
     await expect(page.getByText(t.simulator.progress(size + 1, 5), { exact: true })).toBeVisible();
     expect(await passageNumber(page)).not.toBe(first);
+    // El texto nuevo va antes del enunciado, así que el foco va a su región y no al enunciado
+    await expect(page.getByRole('region', { name: reading.label })).toBeFocused();
     await expect(page.getByText(/Llevas 0:00 en este texto/)).toBeVisible();
     await expect(page.getByText(/arriba del tiempo sugerido/)).toHaveCount(0);
     await expect(page.getByRole('button', { name: reading.show })).toHaveCount(0);

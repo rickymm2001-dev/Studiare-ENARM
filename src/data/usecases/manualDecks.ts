@@ -109,26 +109,29 @@ export function sameDraft(a: NoteDraft, b: NoteDraft): boolean {
   return a.kind !== 'cloze' && b.kind !== 'cloze' && a.front === b.front && a.back === b.back;
 }
 
-/** Los campos de la nota con el texto ya escapado, para guardarlo como HTML (14.3) */
-export function contentOf(draft: NoteDraft) {
+/**
+ * Los campos de la nota con el texto ya escapado, para guardarlo como HTML (14.3). english son fragmentos
+ * del banco en inglés que, si siguen tal cual en el texto, se marcan con lang="en" (B13)
+ */
+export function contentOf(draft: NoteDraft, english: readonly string[] = []) {
   switch (draft.kind) {
     case 'basic':
       return {
         kind: 'basic',
-        front: textToHtml(draft.front),
-        back: textToHtml(draft.back),
+        front: textToHtml(draft.front, english),
+        back: textToHtml(draft.back, english),
       } as const;
     case 'basic_reverse':
       return {
         kind: 'basic_reverse',
-        front: textToHtml(draft.front),
-        back: textToHtml(draft.back),
+        front: textToHtml(draft.front, english),
+        back: textToHtml(draft.back, english),
       } as const;
     case 'cloze':
       return {
         kind: 'cloze',
-        text: textToHtml(draft.text),
-        extra: textToHtml(draft.extra),
+        text: textToHtml(draft.text, english),
+        extra: textToHtml(draft.extra, english),
       } as const;
   }
 }

@@ -71,6 +71,7 @@ export async function generateBankShared(root = ROOT): Promise<Map<string, strin
 
   copy('src/data/content/bankColumns.ts', 'bankColumns.ts');
   copy('src/data/content/passageSource.ts', 'passageSource.ts');
+  copy('src/data/content/languageHint.ts', 'languageHint.ts');
   copy('src/data/content/bankConvert.ts', 'bankConvert.ts', (text) =>
     replaceRequired(text, "from '../bank/contracts.ts'", "from './contracts.ts'", 'bankConvert.ts'),
   );

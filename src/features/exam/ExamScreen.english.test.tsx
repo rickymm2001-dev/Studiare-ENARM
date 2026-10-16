@@ -91,6 +91,40 @@ describe('examen con su parte en inglés (B13, 3.5)', () => {
     expect(within(grid).getByText(englishText.exam.navigatorTag)).toBeVisible();
   });
 
+  it('al llegar a la primera pregunta de un texto el foco va al texto, y en las demás del texto al enunciado', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.exam.path, { seed: seedMixedExam() });
+    await screen.findByText(t.exam.progress(1, 4), { exact: true });
+    // En español el foco sigue yendo al enunciado
+    await typing.click(screen.getByRole('button', { name: t.exam.next }));
+    const spanish = await screen.findByRole('heading', { level: 2, name: /Pregunta 2 de 4/ });
+    await waitFor(() => {
+      expect(spanish).toHaveFocus();
+    });
+    // La 3 es la primera de su texto, y el texto va antes del enunciado: el foco va al texto, que lleva
+    // su nombre y dice en qué pregunta va
+    await typing.click(screen.getByRole('button', { name: t.exam.next }));
+    const passage = await screen.findByRole('region', { name: englishText.reading.label });
+    await waitFor(() => {
+      expect(passage).toHaveFocus();
+    });
+    expect(passage).toHaveAccessibleDescription(/Pregunta 3 de 4/);
+    expect(passage).toBeVisible();
+    // La 4 es la segunda del texto: el foco va al enunciado
+    await typing.click(screen.getByRole('button', { name: t.exam.next }));
+    const prompt = await screen.findByRole('heading', { level: 2, name: /Pregunta 4 de 4/ });
+    await waitFor(() => {
+      expect(prompt).toHaveFocus();
+    });
+    // Volver a la primera del texto lleva otra vez el foco al texto
+    await typing.click(screen.getByRole('button', { name: t.exam.previous }));
+    const again = await screen.findByRole('region', { name: englishText.reading.label });
+    await waitFor(() => {
+      expect(again).toHaveFocus();
+    });
+    expect(again).toHaveAccessibleDescription(/Pregunta 3 de 4/);
+  });
+
   it('la pregunta de inglés lleva el texto, la pregunta y las opciones en inglés con su fuente', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.exam.path, { seed: seedMixedExam() });

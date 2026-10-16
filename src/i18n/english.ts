@@ -23,6 +23,12 @@ const spanOf = (seconds: number) => {
   return rest === 0 ? `${Math.floor(total / 60)} min` : `${Math.floor(total / 60)} min ${rest} s`;
 };
 
+/**
+ * Lo que dicen la tarjeta de Simular y la de Progreso mientras no hay textos de lectura publicados. No
+ * promete vocabulario ni manda a los mazos, porque el mazo de vocabulario puede no existir todavía
+ */
+const NO_TEXTS = 'Todavía no hay textos de lectura. Los agregan los médicos.';
+
 export const englishText = {
   name: 'Inglés médico',
   /** Unidad de lo que cuenta la parte en inglés, para el estado calibrando */
@@ -37,9 +43,7 @@ export const englishText = {
     suggested: (seconds: number) => `${seconds} s sugeridos por reactivo`,
     none: {
       title: 'Sin textos',
-      body: 'Todavía no hay casos de lectura. Los están escribiendo los médicos.',
-      vocabulary: 'Mientras tanto puedes estudiar el vocabulario médico en inglés en tus mazos.',
-      goDecks: 'Ir a Mazos',
+      body: NO_TEXTS,
     },
     waiting: (cases: number, needed: number) =>
       `Ya hay ${plural(cases, 'texto', 'textos')}. La práctica abre cuando haya ${needed}.`,
@@ -83,9 +87,20 @@ export const englishText = {
       `${clinical.toLocaleString('es-MX')} en español y ${english.toLocaleString('es-MX')} en inglés`,
     /** Con la parte en inglés incluida pero sin textos, el examen corre solo en español */
     onlySpanish: 'Todavía no hay textos en inglés. El examen será solo en español.',
-    /** Hay menos reactivos de inglés que los que pide el examen */
-    missing: (have: number, wanted: number) =>
-      `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que trae el examen real. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
+    /**
+     * Hay menos reactivos de inglés que los que pide el examen. wanted es lo que pide el examen elegido, y solo
+     * el de 280 pide los 30 del examen real. Los cortos piden la misma proporción, como 11 de 100, y decir que
+     * eso trae el examen real era falso
+     */
+    missing: (have: number, wanted: number, real: boolean) =>
+      `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que ${real ? 'trae el examen real' : 'pide este examen'}. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
+    /**
+     * Hay reactivos de inglés de sobra, pero los casos no suman lo que pide el examen, porque un texto entra
+     * completo. Entran los que más se acercan sin pasarse y el español toma los que sobran. Con 3 de 5 o con
+     * ninguno de 2 el examen no lo decía y el alumno no sabía por qué no veía el inglés que esperaba
+     */
+    fits: (picked: number, wanted: number) =>
+      `Con los casos que hay ${picked === 0 ? 'no entra ninguno' : picked === 1 ? 'entra 1' : `entran ${picked.toLocaleString('es-MX')}`} de inglés. Este examen pide ${plural(wanted, 'reactivo', 'reactivos')} y un texto entra completo, así que el español toma los que sobran.`,
     navigatorTag: 'Inglés',
   },
 
@@ -129,6 +144,6 @@ export const englishText = {
       'El porcentaje es una estimación con un intervalo de 95%. Con más respuestas el intervalo se angosta.',
     statsLabel: 'Cifras de inglés médico',
     goPractice: 'Practicar inglés',
-    noTexts: 'Todavía no hay casos de lectura. Los están escribiendo los médicos.',
+    noTexts: NO_TEXTS,
   },
 } as const;

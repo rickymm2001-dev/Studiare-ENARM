@@ -20,10 +20,14 @@ function answers(n: number, correct: number, seconds: number): EnglishAnswer[] {
   }));
 }
 
-function card(list: EnglishAnswer[], texts: number) {
+function card(list: EnglishAnswer[], texts: number, practiceAvailable = true) {
   return render(
     <MemoryRouter>
-      <EnglishProgressCard summary={summarizeEnglish(list, THRESHOLDS)} texts={texts} />
+      <EnglishProgressCard
+        summary={summarizeEnglish(list, THRESHOLDS)}
+        texts={texts}
+        practiceAvailable={practiceAvailable}
+      />
     </MemoryRouter>,
   );
 }
@@ -43,6 +47,41 @@ describe('tarjeta de Inglés médico en Progreso (B13, 2.7)', () => {
       'href',
       '/simular',
     );
+  });
+
+  it('sin textos publicados dice que todavía no hay, sin pedir reactivos ni mandar a practicar', () => {
+    card([], 0, false);
+    const region = screen.getByRole('region', { name: copy.title });
+    // Sigue en Calibrando, porque no hay ni una respuesta, pero no pide contestar lo que no existe
+    expect(within(region).getByText(t.states.calibrating.title)).toBeVisible();
+    expect(within(region).getByText(copy.noTexts)).toBeVisible();
+    expect(copy.noTexts).toBe('Todavía no hay textos de lectura. Los agregan los médicos.');
+    expect(within(region).queryByText(copy.calibrating(20, 0))).toBeNull();
+    expect(within(region).queryByRole('link')).toBeNull();
+    expect(within(region).queryByText(copy.goPractice)).toBeNull();
+    expect(within(region).queryByText(copy.accuracyLabel)).toBeNull();
+  });
+
+  it('con textos publicados pide los reactivos y manda a practicar', () => {
+    card([], 0, true);
+    const region = screen.getByRole('region', { name: copy.title });
+    expect(within(region).getByText(copy.calibrating(20, 0))).toBeVisible();
+    expect(within(region).queryByText(copy.noTexts)).toBeNull();
+    expect(within(region).getByRole('link', { name: copy.goPractice })).toBeVisible();
+  });
+
+  it('con respuestas de antes y sin textos ahora sigue contando lo que lleva, sin botón', () => {
+    card(answers(19, 15, 60), 7, false);
+    expect(screen.getByText(copy.noTexts)).toBeVisible();
+    expect(screen.getByText(copy.texts(7))).toBeVisible();
+    expect(screen.queryByRole('link')).toBeNull();
+    cleanup();
+    // Y con 20 respuestas muestra sus cifras igual, solo que sin mandar a practicar
+    card(answers(20, 15, 60), 8, false);
+    expect(screen.getByLabelText(copy.statsLabel)).toBeVisible();
+    expect(screen.getByText(copy.accuracyCaption(15, 20))).toBeVisible();
+    expect(screen.queryByRole('link')).toBeNull();
+    expect(screen.queryByText(copy.noTexts)).toBeNull();
   });
 
   it('con 19 respuestas sigue calibrando, dice cuántas lleva y cuántos textos', () => {
