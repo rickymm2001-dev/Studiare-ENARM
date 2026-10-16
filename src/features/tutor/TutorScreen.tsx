@@ -31,11 +31,16 @@ import { enableNegationHighlight, shortenPomodoro } from './tutorActions';
 import { confusedPairs, pickTop, type Hypothesis, type TutorAction } from './tutorModel';
 import { useTutorData, useTutorView, type TutorData } from './useTutorData';
 import { cardLabel } from './cardLabel';
-import { BiasTipsCard, DraftCardsCard, FormingPatterns, WeeklyReportCard } from './TutorSections';
+import {
+  BiasTipsCard,
+  DraftCardsCard,
+  FatigueCard,
+  FormingPatterns,
+  WeeklyReportCard,
+} from './TutorSections';
 import { AiAnalysisCard } from './AiAnalysisCard';
 import type { ItemTexts } from './aiInputs';
 import { useTutorAi } from './useTutorAi';
-import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 
 /** Hipótesis abiertas de entrada. Con mucha actividad salen decenas y no se pueden leer todas */
 const TOP_HYPOTHESES = 3;
@@ -46,7 +51,7 @@ export function TutorScreen() {
 
 function Tutor({ session }: { session: ReadySession }) {
   const events = useUserEvents(session.user.id);
-  const data = useTutorData(session.user.id, events);
+  const data = useTutorData(session, events);
   const header = (
     <ScreenHeader title={t.screens.tutor.title} description={t.screens.tutor.description} />
   );
@@ -156,7 +161,6 @@ function TutorBody({
     answersThisWeek: view.answersThisWeek,
   });
   const [turningOn, setTurningOn] = useState(false);
-  const vocabulary = useBiasVocabulary();
 
   const run = async (
     hypothesis: Hypothesis,
@@ -369,11 +373,12 @@ function TutorBody({
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <WeeklyReportCard report={view.report} ai={tutorAi.report} />
         <div className="flex flex-col gap-3">
+          <FatigueCard fatigue={view.fatigue} />
           <BiasTipsCard
             tips={view.biasTips}
             calibration={view.biasCalibration}
             ai={tutorAi.tips}
-            vocabulary={vocabulary}
+            vocabulary={view.vocabulary}
           />
           <DraftCardsCard errorCards={errorCards} />
         </div>

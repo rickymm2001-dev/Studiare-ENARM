@@ -38,12 +38,12 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11) y la Auditoría de la IA (B12)', () => {
-    expect(SCREEN_KEYS).toHaveLength(35);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12) y la Calibración (B14)', () => {
+    expect(SCREEN_KEYS).toHaveLength(36);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(35);
+    expect(new Set(paths).size).toBe(36);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(35);
+    expect(new Set(numbers).size).toBe(36);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
@@ -72,6 +72,13 @@ describe('rutas', () => {
       number: 38,
       path: '/medico/auditoria-ia',
       area: 'physician',
+      phase: 'E',
+    });
+    // Calibración nocturna (B14), solo admin y dueño. Toma el número que sigue al último
+    expect(SCREENS.calibrationAdmin).toEqual({
+      number: 39,
+      path: '/admin/calibracion',
+      area: 'admin',
       phase: 'E',
     });
     // Los números de la especificación no se reusan y las rutas viejas no chocan con ninguna pantalla

@@ -8,3 +8,6 @@ export const DEMO_SEED_DEFAULT = 'enarm-demo-1';
 export const DEMO_COHORT_DEFAULT = 300;
 export const DEMO_COHORT_MIN = 10;
 export const DEMO_COHORT_MAX = 300;
+
+/** Alumnos simulados que entran a la comparación de la demostración (B14). Con 30 por celda se ve lista */
+export const DEMO_SNAPSHOT_STUDENTS = 60;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { difficultyRows } from './difficultyView';
+import { difficultyGroupOf } from '../shared/difficulty';
+import { difficultyRows, groupOfLogit } from './difficultyView';
 
 const answers = (level: number, correct: number, wrong: number) => [
   ...Array.from({ length: correct }, () => ({ level, correct: true })),
@@ -48,5 +49,65 @@ describe('dificultad en Progreso (7.7)', () => {
     expect(rows).toHaveLength(3);
     expect(rows.every((row) => row.total === 0)).toBe(true);
     expect(rows.every((row) => row.accuracy === null && row.responsesNeeded === 1)).toBe(true);
+  });
+});
+
+describe('dificultad medida con alumnos (B14, 4.4)', () => {
+  const measured = (logit: number, state: 'provisional' | 'calibrated') => ({ logit, state });
+
+  it('los cortes en logits dan los mismos grupos que el nivel del médico', () => {
+    // El nivel del médico en logits es 1 → −2, 2 → −1, 3 → 0, 4 → 1 y 5 → 2
+    expect([-2, -1, 0, 1, 2].map(groupOfLogit)).toEqual(['easy', 'easy', 'medium', 'hard', 'hard']);
+    expect([1, 2, 3, 4, 5].map((level) => groupOfLogit(level - 3))).toEqual(
+      [1, 2, 3, 4, 5].map(difficultyGroupOf),
+    );
+    // Los bordes de la media
+    expect(groupOfLogit(-0.5)).toBe('medium');
+    expect(groupOfLogit(0.5)).toBe('medium');
+    expect(groupOfLogit(-0.51)).toBe('easy');
+    expect(groupOfLogit(0.51)).toBe('hard');
+  });
+
+  it('una respuesta con dificultad medida va al grupo de su dificultad medida y no al del médico', () => {
+    const rows = difficultyRows({
+      responses: [
+        // El médico dijo difícil (5) pero con alumnos salió fácil
+        { level: 5, correct: true, measured: measured(-1.4, 'calibrated') },
+        // El médico dijo fácil (1) y con alumnos salió difícil
+        { level: 1, correct: false, measured: measured(1.2, 'provisional') },
+      ],
+      minResponses: 1,
+    });
+    expect(rows.map((row) => [row.group, row.total, row.correct])).toEqual([
+      ['easy', 1, 1],
+      ['medium', 0, 0],
+      ['hard', 1, 0],
+    ]);
+  });
+
+  it('cada grupo dice de dónde salió la dificultad de sus respuestas', () => {
+    const rows = difficultyRows({
+      responses: [
+        { level: 1, correct: true },
+        { level: 2, correct: true },
+        { level: 2, correct: false, measured: measured(-1.1, 'provisional') },
+        { level: 1, correct: true, measured: measured(-1.8, 'calibrated') },
+        { level: 3, correct: true },
+      ],
+      minResponses: 20,
+    });
+    expect(rows.map((row) => row.sources)).toEqual([
+      { physician: 2, provisional: 1, calibrated: 1 },
+      { physician: 1, provisional: 0, calibrated: 0 },
+      { physician: 0, provisional: 0, calibrated: 0 },
+    ]);
+  });
+
+  it('una respuesta con nivel inválido no cuenta aunque traiga dificultad medida', () => {
+    const rows = difficultyRows({
+      responses: [{ level: 9, correct: true, measured: measured(0, 'calibrated') }],
+      minResponses: 1,
+    });
+    expect(rows.every((row) => row.total === 0)).toBe(true);
   });
 });

@@ -33,4 +33,20 @@ describe('API del worker de simulación', () => {
     expect(provisionalExamDate('2026-03-01')).toBe('2026-09-15');
     expect(provisionalExamDate('2026-07-01')).toBe('2027-09-15');
   });
+
+  it('arma la comparación y la población de la demostración con alumnos simulados (B14)', async () => {
+    const data = await simulateApi.buildSnapshots({
+      seed: 'worker',
+      size: 6,
+      days: 8,
+      endDay: '2026-10-01',
+    });
+    expect(data.asOfDay).toBe('2026-10-02');
+    expect(data.students).toBe(6);
+    // Con 6 alumnos ningún grupo llega al piso de 30: todo queda calibrando y sin cortes
+    expect(data.comparison.every((cell) => cell.cuts === null)).toBe(true);
+    expect(data.population.fatigue.state).toBe('calibrating');
+    // Lo que sale del worker se puede guardar en el navegador y mandar entre hilos
+    expect(JSON.parse(JSON.stringify(data))).toEqual(data);
+  });
 });

@@ -3,13 +3,17 @@
 import { Lightbulb, Play, Target } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
+import type { StudentModel } from '@/data/model/contracts';
 import { t } from '@/i18n/es-MX';
+import { modelTexts } from '@/i18n/model';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
+import { SimulatedDataLabel } from '@/ui/components/labels';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote } from '@/ui/states/states';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
+import { useIsDemo } from '../model/useIsDemo';
 import { DraftBadge } from '../shared/DraftBadge';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { Vocabulary } from '@/i18n/vocabulary';
@@ -203,6 +207,7 @@ export function BiasTipsCard({
             <li key={tip.tag} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold">{tip.name}</span>
+                {tip.prone ? <Badge>{modelTexts.bias.prone}</Badge> : null}
                 {tip.reviewed ? (
                   <Badge variant="success">{text.reviewedLabel}</Badge>
                 ) : ai?.has(tip.tag) ? null : (
@@ -224,6 +229,44 @@ export function BiasTipsCard({
           ))}
         </ul>
       )}
+    </Card>
+  );
+}
+
+/**
+ * La fatiga del alumno con el estado global del detector (B14, 3.6). Mientras la calibración nocturna no
+ * lo valide con los datos de todos dice calibrando, aunque el alumno ya tenga sus sesiones largas. Con el
+ * detector validado se muestra con el mínimo de 3 sesiones largas
+ */
+export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
+  const text = modelTexts.fatigue;
+  // La validación del detector sale de los demás alumnos, que en la demostración son simulados
+  const simulated = useIsDemo() && fatigue.validation !== 'calibrating';
+  return (
+    <Card aria-labelledby="fatiga-estado">
+      <CardHeader className="mb-2">
+        <CardTitle id="fatiga-estado">{text.title}</CardTitle>
+        <CardDescription>{text.hint}</CardDescription>
+      </CardHeader>
+      {fatigue.validation === 'calibrating' ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {text.validating}
+        </p>
+      ) : fatigue.validation === 'not_valid' ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {simulated ? text.notValidSimulated : text.notValid}
+        </p>
+      ) : fatigue.state === 'calibrating' ? (
+        <CalibratingNote current={fatigue.have} target={fatigue.need} unit={text.unit} />
+      ) : (
+        <p className="text-sm">{fatigue.value.detected ? text.detected : text.notDetected}</p>
+      )}
+      {simulated ? (
+        <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+          <SimulatedDataLabel />
+          {text.simulatedValidation}
+        </p>
+      ) : null}
     </Card>
   );
 }

@@ -61,6 +61,8 @@ export function ThresholdsForm() {
         type="number"
         inputMode="decimal"
         step={field.step}
+        // Un número sin uso se enseña y no se cambia, para no dar la idea de que hace algo
+        disabled={field.unused === true}
         value={draft[id] ?? ''}
         error={errors[id] ?? null}
         onChange={(event) => {

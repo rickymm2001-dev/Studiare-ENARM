@@ -10,6 +10,8 @@ export interface ThresholdField {
   key: string;
   kind: 'int' | 'float';
   step: number;
+  /** Sin uso: el número existe como punto de extensión, pero ningún código lo lee. Se muestra y no se cambia */
+  unused?: boolean;
 }
 
 export const THRESHOLD_FIELDS: readonly ThresholdField[] = [
@@ -25,7 +27,9 @@ export const THRESHOLD_FIELDS: readonly ThresholdField[] = [
   { group: 'structure', key: 'minResponsesPerCategory', kind: 'int', step: 1 },
   { group: 'forgetting', key: 'findingsForPattern', kind: 'int', step: 1 },
   { group: 'forgetting', key: 'patternWindowDays', kind: 'int', step: 1 },
-  { group: 'fsrs', key: 'optimizeAfterReviews', kind: 'int', step: 1 },
+  // Sin uso (B14, 4.6 del plan de B14, respuesta 90): FSRS va de fábrica para todos y la calibración no
+  // ajusta parámetros por alumno. Queda como punto de extensión y la pantalla lo dice
+  { group: 'fsrs', key: 'optimizeAfterReviews', kind: 'int', step: 1, unused: true },
   { group: 'fsrs', key: 'desiredRetention', kind: 'float', step: 0.01 },
   // Inglés médico (B13, 1.9 del plan de B13). El formulario los junta bajo su propio título
   { group: 'english', key: 'secondsPerItem', kind: 'int', step: 5 },
