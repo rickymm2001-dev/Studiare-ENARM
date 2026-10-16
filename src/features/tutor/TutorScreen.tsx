@@ -7,8 +7,9 @@ import { Hourglass, Lightbulb, ListX } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
+import { useLiveData } from '@/data/hooks';
 import type { Option } from '@/data/schemas/bank';
-import { errorIds } from '@/data/usecases/errorCards';
+import { countErrorCards } from '@/data/usecases/errorCards';
 import { setConsent } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -114,7 +115,8 @@ function TutorBody({
   const dismissed = view.confirmed.filter((hypothesis) => statusFor(hypothesis) === 'rejected');
   // Una que descartó no se le vuelve a mostrar, ni siquiera como patrón que se está formando
   const formingShown = view.forming.filter((hypothesis) => statusFor(hypothesis) !== 'rejected');
-  const errorCards = content.notes.filter((note) => note.deckId === errorIds.deck(user.id)).length;
+  // Mis errores es uno solo por cuenta y sus ids dependen de la clave del dueño (B14, 2.6)
+  const errorCards = useLiveData(() => countErrorCards(api, user.id), [api.repos, user.id]) ?? 0;
   const questionById = new Map(bank.questions.map((question) => [question.id, question]));
 
   const lookup: EvidenceLookup = {

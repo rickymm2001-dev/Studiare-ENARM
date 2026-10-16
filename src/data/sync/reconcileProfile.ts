@@ -26,6 +26,7 @@ import {
 } from '@/engines/profileReplay';
 import type { DataApi } from '../context';
 import { ConsentSchema } from '../schemas/people';
+import { reconcileErrorDecks } from './reconcileErrorDecks';
 import type { AppEvent } from '../schemas/events';
 import type { SyncState } from '../schemas/sync';
 
@@ -171,5 +172,7 @@ export async function reconcileProfile(
   if (first || touched.profileEvents) {
     current = (await reconcileSettings(deps, state, first)).state;
   }
+  // Bajaron mazos, notas o tarjetas, o es la primera vez. Se une Mis errores en uno solo (2.6)
+  if (first || touched.records) await reconcileErrorDecks(deps);
   return current;
 }
