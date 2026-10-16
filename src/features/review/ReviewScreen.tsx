@@ -936,7 +936,8 @@ function ReviewSession({
                     }}
                   >
                     <span>{t.review.ratings[rating]}</span>
-                    <span className="text-xs opacity-80">
+                    {/* Sin opacidad. Sobre el rojo de Otra vez bajaba la letra chica a 4.2 a 1 */}
+                    <span className="text-xs">
                       {t.review.interval(intervalLabel(preview[rating].state, new Date()))}
                     </span>
                   </Button>
