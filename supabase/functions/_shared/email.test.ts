@@ -19,6 +19,7 @@ const samples: Record<EmailKind, Record<string, unknown>> = {
   pass_expiring: { passEnd: '2026-11-13T05:59:59+00:00', plan: 'monthly' },
   invoice_requested: { requestId: '0b8f5f8e-1d6a-4c55-9e8e-7f3c2a1b0c9d', amountMxn: 1499 },
   content_report: { questionKey: 'GO-0001', reason: 'wrong_key', openReports: 1 },
+  distractor_flags: { flags: 3, questionKeys: ['GO-0001', 'MI-0420'] },
 };
 
 /** El texto sin direcciones web, que sí llevan dos puntos */
@@ -111,6 +112,55 @@ describe('plantillas de correo', () => {
     expect(() =>
       renderEmail('content_report', { questionKey: 'GO-0001', reason: 'toString' }, ctx),
     ).toThrow('Falta reason para el correo content_report');
+  });
+
+  it('el resumen de opciones que casi nadie elige va al médico con las claves y sin texto ni alumnos', () => {
+    const email = renderEmail('distractor_flags', samples.distractor_flags, ctx);
+    expect(email.subject).toBe('Opciones por revisar en tus preguntas');
+    expect(email.text).toBe(
+      [
+        'Hola, Dra. Luna.',
+        'La calibración de anoche encontró 3 opciones que casi nadie elige en preguntas que revisas (GO-0001, MI-0420). Revísalas en Studiare, Médico, Reportes.',
+        'Ver los reportes en https://app.ejemplo.mx/Studiare-ENARM/medico/reportes',
+        'Recibes este correo por tu cuenta de Studiare.',
+      ].join('\n\n'),
+    );
+    const one = renderEmail(
+      'distractor_flags',
+      { flags: 1, questionKeys: ['GO-0001'] },
+      { ...ctx, alias: null },
+    );
+    expect(one.text).toContain(
+      'Hola.\n\nLa calibración de anoche encontró 1 opción que casi nadie elige en preguntas que revisas (GO-0001).',
+    );
+  });
+
+  it('el resumen de opciones no sale sin conteo, sin claves o con claves que no lo son', () => {
+    expect(() => renderEmail('distractor_flags', { questionKeys: ['GO-0001'] }, ctx)).toThrow(
+      'Falta flags para el correo distractor_flags',
+    );
+    expect(() =>
+      renderEmail('distractor_flags', { flags: 0, questionKeys: ['GO-0001'] }, ctx),
+    ).toThrow('Falta flags');
+    expect(() =>
+      renderEmail('distractor_flags', { flags: 2.5, questionKeys: ['GO-0001'] }, ctx),
+    ).toThrow('Falta flags');
+    expect(() => renderEmail('distractor_flags', { flags: 2 }, ctx)).toThrow(
+      'Falta questionKeys para el correo distractor_flags',
+    );
+    expect(() => renderEmail('distractor_flags', { flags: 2, questionKeys: [] }, ctx)).toThrow(
+      'Falta questionKeys',
+    );
+    expect(() =>
+      renderEmail('distractor_flags', { flags: 2, questionKeys: ['<b>GO</b>'] }, ctx),
+    ).toThrow('Falta questionKeys');
+    expect(() =>
+      renderEmail(
+        'distractor_flags',
+        { flags: 2, questionKeys: Array.from({ length: 11 }, (_, i) => `GO-${i + 1}`) },
+        ctx,
+      ),
+    ).toThrow('Falta questionKeys');
   });
 
   it('ningún correo lleva dos puntos en sus frases, correos de personas ni RFC, y trata de tú', () => {

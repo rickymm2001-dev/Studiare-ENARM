@@ -31,6 +31,7 @@
   },
   "include": [
     "tests",
+    "scripts/calibration",
     "playwright.config.ts",
     "playwright.screenshots.config.ts",
     "playwright.screenshots.v3.config.ts",
