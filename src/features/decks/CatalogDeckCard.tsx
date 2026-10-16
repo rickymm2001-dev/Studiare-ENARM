@@ -156,11 +156,7 @@ function CatalogDeckCard({
   const branch = deck.subjects.find((subject) => subject.branch)?.branch ?? deck.deckKey;
   // Un mazo de una fuente pública, como el vocabulario de MedlinePlus, dice su fuente y su licencia en
   // lugar del crédito de un autor, y sus notas de muestra se leen en inglés (B13, 4.4 y 8.16)
-  const source = deckSourceOf({
-    key: deck.deckKey,
-    branches: deck.subjects.map((subject) => subject.branch),
-    topics: deck.subjects.map((subject) => subject.topic),
-  });
+  const source = deckSourceOf({ key: deck.deckKey, author: deck.author });
   const lang = isEnglishDeck({ branches: deck.subjects.map((subject) => subject.branch) })
     ? 'en'
     : undefined;

@@ -91,11 +91,7 @@ function Decks({ session }: { session: ReadySession }) {
       new Map(
         (catalog ?? []).map((file) => [
           file.key,
-          deckSourceOf({
-            key: file.key,
-            branches: file.notes.map((note) => note.branch),
-            topics: file.notes.map((note) => note.topic),
-          }),
+          deckSourceOf({ key: file.key, author: file.author }),
         ]),
       ),
     [catalog],

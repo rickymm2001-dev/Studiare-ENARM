@@ -140,6 +140,7 @@ La lista va en content-drafts/ingles/textos.json.
 - Cada nota tiene un id estable, así una versión nueva del archivo conserva los repasos. Un tema sin par en español no entra
 - El submazo es el grupo de MedlinePlus en español, por ejemplo Corazón y circulación, Infecciones o Embarazo y reproducción. Así el alumno baja el mazo por partes
 - Escribe el mazo de la demo, src/demo/content/decks/vocabulario-ingles.json, y el paquete content-drafts/ingles/Vocabulario-ingles.apkg para subir en Administración, Catálogo de mazos, con la nota Dominio público, MedlinePlus.gov
+- La app dice Fuente MedlinePlus.gov (NLM) y Dominio público en lugar del autor solo en el mazo con la clave vocabulario-ingles o con MedlinePlus.gov (NLM) como autor. La rama y el tema no bastan, y el mazo de otra persona que también es de Inglés médico conserva el crédito de su autor
 
 ### Cómo bajar los archivos a mano
 

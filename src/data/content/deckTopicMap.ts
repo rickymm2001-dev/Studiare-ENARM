@@ -152,7 +152,10 @@ export function proposeDeckTopic(
     });
     if (topic) return { branch: item.key, topic: topic.key };
   }
-  // Un mazo cuyo primer nivel es Inglés médico es el de vocabulario, y todos sus submazos son de ese tema
+  // Un mazo cuyo primer nivel es Inglés médico es el de vocabulario, y todos sus submazos son de ese tema.
+  // Es solo una propuesta que el admin revisa. De quién es el mazo no sale de aquí: la fuente de MedlinePlus
+  // se reconoce por la clave o por el autor del mazo (deckSource.ts), así el mazo de un tercero que cae en
+  // este mismo tema conserva su crédito
   const english = taxonomy.branches.find(
     (item) => item.key === branch && item.section === 'english',
   );

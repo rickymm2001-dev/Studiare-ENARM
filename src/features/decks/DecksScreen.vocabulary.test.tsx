@@ -39,8 +39,32 @@ const deck = DemoDeckFileSchema.parse({
   ),
 });
 
-// Solo el mazo de muestra, para no cargar los mazos de Paco en esta prueba
-vi.mock('@/demo/content/decks', () => ({ loadDemoDecks: () => Promise.resolve([deck]) }));
+// El mazo de un tercero que también es de Inglés médico y trae el tema del vocabulario. Debe seguir
+// diciendo de quién es y no heredar la fuente de MedlinePlus
+const thirdParty = DemoDeckFileSchema.parse({
+  version: 1,
+  key: 'ingles-medico-de-un-tercero',
+  name: '[Prueba] Inglés médico de una tercera persona',
+  description: '[Prueba] Mazo simulado',
+  author: '[Prueba] Dra. Pérez',
+  status: 'pending_physician_review',
+  media: [],
+  notes: [1, 2].map((number) => ({
+    kind: 'basic',
+    key: `tercero-prueba-${String(number)}`,
+    sourceTag: 'Inglés médico::Palabras',
+    tags: ['Inglés médico::Palabras', 'topic:medical_vocabulary'],
+    branch: 'medical_english',
+    topic: 'medical_vocabulary',
+    front: `[Prueba] Word ${String(number)}`,
+    back: `[Prueba] Palabra ${String(number)}`,
+  })),
+});
+
+// Solo los mazos de muestra, para no cargar los mazos de Paco en esta prueba
+vi.mock('@/demo/content/decks', () => ({
+  loadDemoDecks: () => Promise.resolve([deck, thirdParty]),
+}));
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
@@ -52,11 +76,13 @@ afterEach(async () => {
 const WAIT = { timeout: 15_000 };
 const source = deckCatalogText.source;
 
-async function vocabularyRow(): Promise<{ catalog: HTMLElement; row: HTMLElement }> {
+async function vocabularyRow(
+  name: string = deck.name,
+): Promise<{ catalog: HTMLElement; row: HTMLElement }> {
   const catalog = await screen.findByRole('region', { name: t.decks.preloadedTitle }, WAIT);
-  const title = await within(catalog).findByText(deck.name, undefined, WAIT);
+  const title = await within(catalog).findByText(name, undefined, WAIT);
   const row = title.closest('li');
-  if (!row) throw new Error('No está la fila del mazo de vocabulario');
+  if (!row) throw new Error('No está la fila del mazo');
   return { catalog, row };
 }
 
@@ -82,6 +108,26 @@ describe('mazo de vocabulario en la lista de mazos', () => {
     expect(
       within(row).getByText(
         source.topicsFooter(MEDLINEPLUS_SOURCE.name, MEDLINEPLUS_SOURCE.license),
+      ),
+    ).toBeVisible();
+  });
+
+  it('el mazo de un tercero de Inglés médico sigue diciendo su autor y no la fuente de MedlinePlus', async () => {
+    app = await renderApp(SCREENS.decks.path, {
+      seed: async (api, user) => {
+        await changePlan(api, user, 'monthly');
+      },
+    });
+    const { row } = await vocabularyRow(thirdParty.name);
+    expect(within(row).getByText(t.decks.author('[Prueba] Dra. Pérez'))).toBeVisible();
+    expect(
+      within(row).queryByText(source.line(MEDLINEPLUS_SOURCE.name, MEDLINEPLUS_SOURCE.license)),
+    ).toBeNull();
+    // Y el del vocabulario, en la misma pantalla, conserva su fuente
+    const { row: vocabulary } = await vocabularyRow();
+    expect(
+      within(vocabulary).getByText(
+        source.line(MEDLINEPLUS_SOURCE.name, MEDLINEPLUS_SOURCE.license),
       ),
     ).toBeVisible();
   });
