@@ -8,18 +8,21 @@
 // Vitest (D-096).
 //
 // Los tipos de correo viven en la tabla email_kinds. La tabla ya trae content_report, cuya plantilla
-// suma B11 (4.6 del plan de B11), y daily_review_reminder (B15), que suma la suya en su bloque
+// suma B11 (4.6 del plan de B11), distractor_flags, cuya plantilla suma B14 (3.5 del plan de B14), y
+// daily_review_reminder (B15), que suma la suya en su bloque
 import { PLAN_PRICES_MXN, isPaidPlan, type PaidPlan } from './billingTypes.ts';
 import { subscriptionUrl } from './http.ts';
 import { GUARANTEE_DAYS } from './stripe.ts';
 
-export type EmailKind = 'trial_ending' | 'pass_expiring' | 'invoice_requested' | 'content_report';
+export type EmailKind =
+  'trial_ending' | 'pass_expiring' | 'invoice_requested' | 'content_report' | 'distractor_flags';
 
 export const EMAIL_KINDS: readonly EmailKind[] = [
   'trial_ending',
   'pass_expiring',
   'invoice_requested',
   'content_report',
+  'distractor_flags',
 ];
 
 export interface EmailMessage {
@@ -99,11 +102,38 @@ const REPORT_REASONS = new Map<unknown, string>([
   ['other', 'otro problema'],
 ]);
 
+const QUESTION_KEY = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$/;
+
 /** La clave de la pregunta en el Sheet, como GO-0001. Nunca el texto de la pregunta */
 function questionKeyOf(kind: EmailKind, data: Record<string, unknown>): string {
   const value = data.questionKey;
-  if (typeof value !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$/.test(value)) {
+  if (typeof value !== 'string' || !QUESTION_KEY.test(value)) {
     throw new MissingEmailData(kind, 'questionKey');
+  }
+  return value;
+}
+
+/** Las claves de pregunta de un resumen, de 1 a 10. Nunca el texto de las preguntas */
+function questionKeysOf(kind: EmailKind, data: Record<string, unknown>): string[] {
+  const value = data.questionKeys;
+  if (!Array.isArray(value) || value.length < 1 || value.length > 10) {
+    throw new MissingEmailData(kind, 'questionKeys');
+  }
+  const keys: string[] = [];
+  for (const item of value as unknown[]) {
+    if (typeof item !== 'string' || !QUESTION_KEY.test(item)) {
+      throw new MissingEmailData(kind, 'questionKeys');
+    }
+    keys.push(item);
+  }
+  return keys;
+}
+
+/** Un conteo entero de 1 o más, como las marcas de un resumen */
+function countOf(kind: EmailKind, data: Record<string, unknown>, field: string): number {
+  const value = data[field];
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 1) {
+    throw new MissingEmailData(kind, field);
   }
   return value;
 }
@@ -192,6 +222,21 @@ function template(kind: EmailKind, data: Record<string, unknown>, ctx: EmailCont
           greeting(ctx.alias),
           `Un alumno reportó ${reason} en la pregunta ${key}. Revísala en Studiare, Médico, Reportes.`,
           ...(open > 1 ? [`La pregunta tiene ${open} reportes abiertos.`] : []),
+        ],
+        link: { label: 'Ver los reportes', url: appPage(ctx.appUrl, '/medico/reportes') },
+      };
+    }
+    case 'distractor_flags': {
+      // Para el médico asignado. Cuántas opciones y hasta 10 claves de pregunta, sin texto ni alumnos
+      const flags = countOf(kind, data, 'flags');
+      const keys = questionKeysOf(kind, data);
+      const options =
+        flags === 1 ? '1 opción que casi nadie elige' : `${flags} opciones que casi nadie elige`;
+      return {
+        subject: 'Opciones por revisar en tus preguntas',
+        paragraphs: [
+          greeting(ctx.alias),
+          `La calibración de anoche encontró ${options} en preguntas que revisas (${keys.join(', ')}). Revísalas en Studiare, Médico, Reportes.`,
         ],
         link: { label: 'Ver los reportes', url: appPage(ctx.appUrl, '/medico/reportes') },
       };
