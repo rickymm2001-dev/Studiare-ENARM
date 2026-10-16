@@ -2,6 +2,8 @@
 node_modules/
 dist/
 dist-cloud/
+# Build de la calibración nocturna (B14), otro build que no entra a la app
+dist-calibration/
 dev-dist/
 coverage/
 *.tsbuildinfo

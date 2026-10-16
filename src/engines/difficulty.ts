@@ -12,8 +12,11 @@
  * convierte a logit con 1 → −2, 2 → −1, 3 → 0, 4 → 1 y 5 → 2 (J).
  * Umbrales. Provisional desde 30 respuestas y calibrada desde 100 (V, Linacre). Bandas fácil
  * (< −1), media (−1 a 0), difícil (0 a 1) y muy difícil (> 1) (J).
+ * Con B14, la calibración nocturna también pide un error estándar chico para cada estado, provisional
+ * con 0.5 o menos y calibrada con 0.3 o menos (PC 5.5), en calibrationStatusWithError.
  */
 import type { Thresholds } from '@/config/thresholds';
+import type { CalibrationState } from '@/data/model/contracts';
 import type { Rng } from './random';
 
 export interface EloParameters {
@@ -70,7 +73,8 @@ export function updateElo(input: {
   };
 }
 
-export type CalibrationState = 'physician_estimate' | 'provisional' | 'calibrated';
+// El tipo vive en los contratos de B14 y aquí se sigue exportando para quien ya lo importa de este motor
+export type { CalibrationState };
 
 export interface CalibrationStatus {
   state: CalibrationState;
@@ -90,6 +94,51 @@ export function calibrationStatus(
   return {
     state: 'physician_estimate',
     responsesToNext: thresholds.provisionalResponses - responses,
+  };
+}
+
+export interface CalibrationPrecision {
+  /** Error estándar máximo de una pregunta provisional (PC 5.5, 0.5) */
+  provisionalMaxSe: number;
+  /** Error estándar máximo de una pregunta calibrada (PC 5.5, 0.3) */
+  calibratedMaxSe: number;
+}
+
+/**
+ * Estado de calibración de la noche (PC 5.5). Cuenta alumnos distintos con su primer intento y pide
+ * además un error estándar chico. Calibrada con 100 o más alumnos y error estándar de calibratedMaxSe o
+ * menos. Provisional con 30 o más y provisionalMaxSe o menos. Si no, la estimada por el médico. Una
+ * estimación sin error estándar, como la de una pregunta que todos aciertan o todos fallan, no pasa de
+ * la estimada por el médico. responsesToNext cuenta alumnos que faltan para el siguiente umbral y es 0
+ * cuando lo que falta es precisión y no alumnos
+ */
+export function calibrationStatusWithError(
+  input: { students: number; standardError: number | null },
+  thresholds: Thresholds['difficulty'],
+  precision: CalibrationPrecision,
+): CalibrationStatus {
+  const { students, standardError } = input;
+  const finite = standardError !== null && Number.isFinite(standardError);
+  if (
+    finite &&
+    students >= thresholds.calibratedResponses &&
+    standardError <= precision.calibratedMaxSe
+  ) {
+    return { state: 'calibrated', responsesToNext: 0 };
+  }
+  if (
+    finite &&
+    students >= thresholds.provisionalResponses &&
+    standardError <= precision.provisionalMaxSe
+  ) {
+    return {
+      state: 'provisional',
+      responsesToNext: Math.max(0, thresholds.calibratedResponses - students),
+    };
+  }
+  return {
+    state: 'physician_estimate',
+    responsesToNext: Math.max(0, thresholds.provisionalResponses - students),
   };
 }
 

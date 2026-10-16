@@ -22,7 +22,8 @@ const ROOT = join(import.meta.dirname, '..', '..');
 
 /** Debe coincidir con ENGINE_ALLOWED_IMPORTS de eslint.config.js */
 const ALLOWED_PACKAGES = [/^zod$/, /^ts-fsrs$/, /^date-fns(\/.*)?$/, /^@date-fns\/tz$/];
-const ALLOWED_INTERNAL_DIRS = ['src/engines', 'src/data/schemas', 'src/config'];
+// src/data/model solo trae los contratos de B14, que son tipos sin importaciones
+const ALLOWED_INTERNAL_DIRS = ['src/engines', 'src/data/schemas', 'src/data/model', 'src/config'];
 const FORBIDDEN_GLOBALS = [/\bDate\.now\s*\(/, /\bnew Date\s*\(\s*\)/, /\bMath\.random\s*\(/];
 
 function specifiersOf(source: string): string[] {
@@ -164,6 +165,7 @@ describe('fronteras de src/engines', () => {
       './stats',
       '@/engines/stats/wilson',
       '@/data/schemas/common',
+      '@/data/model/contracts',
       '@/config/thresholds',
     ];
     for (const specifier of forbidden) expect(regex.test(specifier), specifier).toBe(true);
@@ -199,10 +201,12 @@ describe('fronteras de src/engines', () => {
     expect(findTransitiveViolations(ROOT)).toEqual([]);
   });
 
-  it('los esquemas y la configuración que pueden usar los motores tampoco traen React ni Dexie', () => {
-    // Se revisan como si un motor importara cada uno de ellos
+  it('los esquemas, los contratos y la configuración que pueden usar los motores tampoco traen React ni Dexie', () => {
+    // Se revisan como si un motor importara cada uno de ellos. Con los esquemas y la configuración van
+    // los contratos de B14
     const entries = [
       ...listSourceFiles(join(ROOT, 'src', 'data', 'schemas')),
+      ...listSourceFiles(join(ROOT, 'src', 'data', 'model')),
       ...listSourceFiles(join(ROOT, 'src', 'config')),
     ];
     expect(entries.length).toBeGreaterThan(0);

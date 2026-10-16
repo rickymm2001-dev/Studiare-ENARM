@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import {
   calibrationStatus,
+  calibrationStatusWithError,
   DEFAULT_ELO,
   difficultyBand,
   kFactor,
@@ -63,6 +64,42 @@ describe('Elo (7.7)', () => {
       responsesToNext: 70,
     });
     expect(calibrationStatus(100, thresholds)).toEqual({ state: 'calibrated', responsesToNext: 0 });
+  });
+
+  it('estados de calibración con error estándar, en los bordes de PC 5.5', () => {
+    const thresholds = DEFAULT_THRESHOLDS.difficulty;
+    const precision = { provisionalMaxSe: 0.5, calibratedMaxSe: 0.3 };
+    const status = (students: number, standardError: number | null) =>
+      calibrationStatusWithError({ students, standardError }, thresholds, precision);
+    // 29 y 30 alumnos
+    expect(status(29, 0.2)).toEqual({ state: 'physician_estimate', responsesToNext: 1 });
+    expect(status(30, 0.2)).toEqual({ state: 'provisional', responsesToNext: 70 });
+    // 99 y 100 alumnos
+    expect(status(99, 0.2)).toEqual({ state: 'provisional', responsesToNext: 1 });
+    expect(status(100, 0.2)).toEqual({ state: 'calibrated', responsesToNext: 0 });
+    // 0.3 y 0.5 de error estándar, el borde cuenta
+    expect(status(100, 0.3).state).toBe('calibrated');
+    expect(status(100, 0.3001)).toEqual({ state: 'provisional', responsesToNext: 0 });
+    expect(status(30, 0.5).state).toBe('provisional');
+    expect(status(30, 0.5001)).toEqual({ state: 'physician_estimate', responsesToNext: 0 });
+    // Con mucha gente y poca precisión no pasa de provisional, y con ninguna tampoco
+    expect(status(500, 0.4).state).toBe('provisional');
+    expect(status(500, 0.9).state).toBe('physician_estimate');
+    // Una estimación extrema no tiene error estándar finito
+    expect(status(500, null).state).toBe('physician_estimate');
+    expect(status(500, Number.POSITIVE_INFINITY).state).toBe('physician_estimate');
+    expect(status(0, null)).toEqual({ state: 'physician_estimate', responsesToNext: 30 });
+  });
+
+  it('respeta los umbrales de alumnos que el admin cambió', () => {
+    const custom = { provisionalResponses: 10, calibratedResponses: 20 };
+    const precision = { provisionalMaxSe: 0.5, calibratedMaxSe: 0.3 };
+    expect(
+      calibrationStatusWithError({ students: 10, standardError: 0.2 }, custom, precision).state,
+    ).toBe('provisional');
+    expect(
+      calibrationStatusWithError({ students: 20, standardError: 0.2 }, custom, precision).state,
+    ).toBe('calibrated');
   });
 
   it('bandas de dificultad', () => {
