@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pickEnglishCases, pickQuestions } from './pickQuestions';
+import { pickAdaptiveQuestions, pickEnglishCases, pickQuestions } from './pickQuestions';
 
 interface Item {
   id: string;
@@ -76,5 +76,77 @@ describe('elegir textos de lectura completos (B13)', () => {
       expect(picked.units).toBeGreaterThan(0);
     }
     expect(pickEnglishCases(texts, 'sin cupo', 3, 1).picked).toEqual([]);
+  });
+});
+
+describe('elegir preguntas de una práctica adaptativa (B14, 4.5)', () => {
+  interface Pooled extends Item {
+    physicianDifficulty: number;
+    effectiveDifficulty?: {
+      logit: number;
+      source: 'physician_estimate' | 'provisional' | 'calibrated';
+      students: number;
+    };
+  }
+  const pooled = (index: number, logit: number, measured: boolean): Pooled => ({
+    ...single(`p${String(index).padStart(2, '0')}`),
+    physicianDifficulty: 3,
+    effectiveDifficulty: {
+      logit,
+      source: measured ? 'calibrated' : 'physician_estimate',
+      students: measured ? 120 : 0,
+    },
+  });
+  const options = { ability: 1, targetOffset: 0, exploreShare: 0, count: 6, seed: 'a' };
+
+  it('devuelve las preguntas del pool cercanas al nivel, con la dificultad efectiva', () => {
+    const items = Array.from({ length: 40 }, (_, index) => pooled(index, -2 + index * 0.1, true));
+    const picked = pickAdaptiveQuestions(items, options);
+    expect(picked).toHaveLength(6);
+    // Son los mismos objetos del pool, no copias
+    expect(picked.every((question) => items.includes(question))).toBe(true);
+    const gap = picked.reduce(
+      (sum, question) => sum + Math.abs((question.effectiveDifficulty?.logit ?? 9) - 1),
+      0,
+    );
+    expect(gap / picked.length).toBeLessThan(0.6);
+  });
+
+  it('una pregunta sin dificultad calculada usa la del médico y cuenta como una que todavía calibra', () => {
+    const items = [
+      ...Array.from({ length: 10 }, (_, index) => pooled(index, index - 5, true)),
+      // Sin effectiveDifficulty, como las del banco de demostración. El médico dice 5, es decir +2 logits
+      ...Array.from({ length: 10 }, (_, index) => ({
+        ...single(`d${String(index)}`),
+        physicianDifficulty: 5,
+      })),
+    ];
+    const picked = pickAdaptiveQuestions(items, {
+      ...options,
+      ability: 2,
+      exploreShare: 0.5,
+      count: 6,
+    });
+    expect(picked).toHaveLength(6);
+    expect(picked.filter((question) => question.id.startsWith('d'))).toHaveLength(3);
+  });
+
+  it('la misma semilla da la misma lista y un caso seriado entra entero', () => {
+    const items = [
+      ...Array.from({ length: 20 }, (_, index) => pooled(index, (index - 10) / 5, true)),
+      ...[1, 2, 3].map((order) => ({
+        ...pooled(50 + order, 1, true),
+        caseId: 'caso',
+        caseOrder: order,
+      })),
+    ];
+    const first = pickAdaptiveQuestions(items, options).map((question) => question.id);
+    expect(pickAdaptiveQuestions(items, options).map((question) => question.id)).toEqual(first);
+    for (const seed of ['b', 'c', 'd', 'e', 'f', 'g']) {
+      const inCase = pickAdaptiveQuestions(items, { ...options, seed }).filter(
+        (question) => question.caseId === 'caso',
+      );
+      expect([0, 3]).toContain(inCase.length);
+    }
   });
 });

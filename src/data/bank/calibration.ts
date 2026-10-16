@@ -5,6 +5,7 @@
 // se queda con la del médico. Los filtros de dificultad de Simular, la tarjeta Dificultad de Progreso, el
 // ajuste por dificultad de la fatiga y el modo adaptativo usan esta misma función, así una pregunta Media
 // es la misma en todos lados.
+import { isMeasuredState } from '@/engines/adaptive';
 import { physicianToLogit } from '@/engines/difficulty';
 import type { CalibrationState, CatalogCalibration } from '../model/contracts';
 import type { CatalogEntry } from '../schemas/bankCloud';
@@ -36,8 +37,7 @@ export function calibrationOf(
 }
 
 /** Si la dificultad sale de las respuestas de los alumnos y no del médico */
-export const isMeasured = (source: CalibrationState) =>
-  source === 'provisional' || source === 'calibrated';
+export const isMeasured = (source: CalibrationState) => isMeasuredState(source);
 
 export function effectiveDifficulty(entry: DifficultySubject): EffectiveDifficulty {
   const calibration = calibrationOf(entry);
