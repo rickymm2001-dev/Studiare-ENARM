@@ -141,12 +141,17 @@ describe('propiedades de la unión de Mis errores', () => {
       fc.property(scenario, (input) => {
         const plan = planErrorDeckMerge(input);
         const retired = new Set(plan.retireNotes);
+        // El plan solo mira las notas de los mazos vivos. Una nota viva dentro de un mazo borrado queda
+        // fuera de su alcance y no compite con las de los demás, porque ese mazo ya no se repasa
+        const liveDecks = new Set(
+          input.decks.filter((entry) => !entry.deletedAt).map((entry) => entry.id),
+        );
         const repsOfNote = (id: string) =>
           input.cards
             .filter((entry) => entry.noteId === id && !entry.deletedAt)
             .reduce((sum, entry) => sum + (input.reps.get(entry.id) ?? 0), 0);
         for (const kept of input.notes) {
-          if (kept.deletedAt || retired.has(kept.id)) continue;
+          if (kept.deletedAt || retired.has(kept.id) || !liveDecks.has(kept.deckId)) continue;
           const key = errorGroupKeyOfNote(kept) ?? `n:${kept.id}`;
           for (const other of input.notes) {
             if (other.deletedAt || !retired.has(other.id)) continue;
