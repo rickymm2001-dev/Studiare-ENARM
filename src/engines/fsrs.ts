@@ -25,8 +25,13 @@
  *     semilla de cada elección sale del estado nuevo y, si se pasa, de la clave de la tarjeta, así
  *     las tarjetas que se aprendieron el mismo día y tienen el mismo estado no se mueven en bloque
  * Umbrales. Retención 0.90 (0.80 a 0.97), 0.93 en los últimos 30 días, sanguijuela con 8 lapsos,
- * 20 nuevas y 200 repasos por día. Optimizar parámetros por alumno desde 1,000 repasos queda fuera
- * del prototipo. El punto de extensión es config.weights.
+ * 20 nuevas y 200 repasos por día.
+ * FSRS de fábrica (B14, 4.6, respuesta 90). Todos los alumnos usan los parámetros por defecto de ts-fsrs y
+ * nadie le pasa pesos propios al programador. La calibración de la noche calcula la dificultad de las
+ * preguntas y nunca parámetros de FSRS. Optimizar los parámetros por alumno desde 1,000 repasos
+ * (thresholds.fsrs.optimizeAfterReviews) queda como punto de extensión documentado y sin uso, y su entrada
+ * es config.weights. La retención deseada, el intervalo máximo y el espaciado son ajustes del alumno y no
+ * parámetros del modelo, y se quedan. src/engines/fsrsFactory.test.ts vigila todo esto.
  */
 import { createEmptyCard, fsrs, Rating, State, type Card, type FSRS, type Grade } from 'ts-fsrs';
 import type { Thresholds } from '@/config/thresholds';
@@ -46,7 +51,10 @@ export interface SchedulerConfig {
   examDate: string | null;
   timeZone: string;
   thresholds: Thresholds['fsrs'];
-  /** Pesos optimizados por alumno. Punto de extensión desde 1,000 repasos, fuera del prototipo */
+  /**
+   * Pesos optimizados por alumno. Punto de extensión sin uso: FSRS va de fábrica para todos (4.6, respuesta
+   * 90) y ningún código de src lo llena
+   */
   weights?: readonly number[];
   /**
    * Intervalo máximo en días que elige el alumno, con compresión suave (D-064). null o ausente es
