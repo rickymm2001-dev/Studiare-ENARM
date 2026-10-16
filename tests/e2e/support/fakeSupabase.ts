@@ -34,10 +34,11 @@
 //
 // Datos y modelo del alumno (B14). attachModel(server, store) engancha el modelo en memoria de
 // fakeModelStore.ts. Desde ahí comparison_snapshot, population_baselines, editor_agreement_history y
-// admin_calibration_runs responden con lo que haya sembrado. En el Paso 0 contestan vacío, con las formas
-// de src/data/model/contracts.ts, hasta que fakeModel.ts (paquete B) y fakeCalibrationAdmin.ts (paquete C)
-// las atiendan. Sin attachModel esas funciones no existen y la app trata la comparación como no
-// disponible, igual que un servidor sin las migraciones de B14.
+// admin_calibration_runs responden con lo que haya sembrado. Las del alumno y la calibración dentro de
+// catalog_changes las atiende fakeModel.ts (paquete B), que también publica la clave model_settings de
+// platform_settings. Las del equipo contestan vacío, con las formas de src/data/model/contracts.ts, hasta
+// que fakeCalibrationAdmin.ts (paquete C) las atienda. Sin attachModel esas funciones no existen y la app
+// trata la comparación como no disponible, igual que un servidor sin las migraciones de B14.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -84,10 +85,15 @@ import {
 import { editorialFunction, editorialRpc, editorialStorage } from './fakeEditorial';
 import { fakeBankDownload, fakeBankRpc } from './fakeBank';
 import {
+  comparisonSnapshotFor,
+  modelSettingsValue,
+  populationBaselinesFor,
+  specialtyOfCaller,
+  withCatalogCalibration,
+} from './fakeModel';
+import {
   emptyAdminRuns,
   emptyAgreementHistory,
-  emptyComparisonSnapshot,
-  emptyPopulation,
   isModelRpc,
   type FakeModelStore,
   type ModelRpc,
@@ -1549,9 +1555,10 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   // ------------------------------------------------------------------ Datos y modelo del alumno (B14)
 
   /**
-   * Las rpc del modelo. En el Paso 0 responden vacío, con las formas de src/data/model/contracts.ts.
-   * Las del alumno piden sesión y dispositivo activo, historial de Acuerdo pide al equipo y Calibración
-   * pide al admin. fakeModel.ts (paquete B) y fakeCalibrationAdmin.ts (paquete C) las reemplazan
+   * Las rpc del modelo. Las del alumno piden sesión y dispositivo activo y las atiende fakeModel.ts
+   * (paquete B), con la especialidad de la cuenta de quien pregunta. Historial de Acuerdo pide al equipo
+   * y Calibración pide al admin, y responden vacío, con las formas de src/data/model/contracts.ts, hasta
+   * que fakeCalibrationAdmin.ts (paquete C) las reemplace
    */
   function modelRpc(
     store: FakeModelStore,
@@ -1560,12 +1567,15 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     session: Session,
   ): Reply {
     switch (name) {
-      case 'comparison_snapshot':
-        return isActiveDevice(user, session)
-          ? json(emptyComparisonSnapshot(store))
-          : NOT_ACTIVE_DEVICE;
+      case 'comparison_snapshot': {
+        if (!isActiveDevice(user, session)) return NOT_ACTIVE_DEVICE;
+        const account = asString(accounts.get(user.id)?.target_specialty);
+        return json(comparisonSnapshotFor(store, specialtyOfCaller(store, user.id, account)));
+      }
       case 'population_baselines':
-        return isActiveDevice(user, session) ? json(emptyPopulation()) : NOT_ACTIVE_DEVICE;
+        return isActiveDevice(user, session)
+          ? json(populationBaselinesFor(store))
+          : NOT_ACTIVE_DEVICE;
       case 'editor_agreement_history':
         return roleOf(user, session) === 'student'
           ? pgError('42501', 'Solo el equipo médico')
@@ -1661,7 +1671,13 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     const requireActiveDevice = (): Reply | null =>
       isActiveDevice(user, session) ? null : NOT_ACTIVE_DEVICE;
     if (server.bank && isBankRpc(name)) {
-      return fromBankReply(bankRpc(server.bank, name, bankCaller(user, session), args));
+      const reply = bankRpc(server.bank, name, bankCaller(user, session), args);
+      // Con el modelo enganchado, cada fila del catálogo trae su calibración, como bank_catalog_json (B14)
+      return fromBankReply(
+        server.model && name === 'catalog_changes'
+          ? withCatalogCalibration(server.model, reply)
+          : reply,
+      );
     }
     if (server.model && isModelRpc(name)) return modelRpc(server.model, name, user, session);
     if (server.ai && AI_GATE_RPCS.has(name)) {
@@ -1779,6 +1795,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
                 {
                   key: 'ai_gate',
                   value: server.ai.gate.state,
+                  updated_at: new Date().toISOString(),
+                },
+              ]
+            : []),
+          // Los ajustes del modelo (B14, 1.5). Todos los leen. Si una prueba escribió la clave con
+          // setSetting, esa manda sobre la del modelo en memoria
+          ...(server.model && !settings.has('model_settings')
+            ? [
+                {
+                  key: 'model_settings',
+                  value: modelSettingsValue(server.model),
                   updated_at: new Date().toISOString(),
                 },
               ]
