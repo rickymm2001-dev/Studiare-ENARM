@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ulidToUuid } from '@/data/cloud/cloudIds';
 import {
   comparableQuestionId,
+  isEnglishQuestion,
   isMarked,
   isNonFunctional,
   marksOf,
@@ -96,5 +97,26 @@ describe('preguntas marcadas para reestructurar', () => {
     const marks = restructureMarks({ reports: [report(Q1, 'open')], distractors: [] });
     expect(isMarked(marks, Q3)).toBe(false);
     expect(marksOf(marks, Q3)).toEqual([]);
+  });
+});
+
+describe('preguntas en inglés', () => {
+  it('una pregunta de Inglés médico o con language en es una pregunta en inglés', () => {
+    expect(isEnglishQuestion({ branch: 'medical_english' })).toBe(true);
+    expect(isEnglishQuestion({ branch: 'medical_english', language: 'en' })).toBe(true);
+    // El idioma de la pregunta cuenta aunque la rama no sea la de inglés
+    expect(isEnglishQuestion({ branch: 'internal_medicine', language: 'en' })).toBe(true);
+  });
+
+  it('las del banco en español, con o sin idioma, no lo son', () => {
+    expect(isEnglishQuestion({ branch: 'internal_medicine' })).toBe(false);
+    expect(isEnglishQuestion({ branch: 'pediatrics', language: 'es' })).toBe(false);
+    expect(isEnglishQuestion({ branch: 'public_health', language: 'es' })).toBe(false);
+  });
+
+  it('estar marcada no la vuelve elegible, porque la marca y el idioma son cosas distintas', () => {
+    const marks = restructureMarks({ reports: [report(Q1, 'open')], distractors: [] });
+    expect(isMarked(marks, Q1)).toBe(true);
+    expect(isEnglishQuestion({ branch: 'medical_english' })).toBe(true);
   });
 });

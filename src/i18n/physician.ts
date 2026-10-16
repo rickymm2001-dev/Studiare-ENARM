@@ -398,7 +398,7 @@ export const physicianText = {
       requestHint:
         'Elige una pregunta marcada y cómo reestructurarla. La propuesta llega aquí como borrador, con la original al lado.',
       markedHint:
-        'Solo se reestructuran las preguntas marcadas, las que tienen un reporte de error abierto o un distractor que casi nadie elige.',
+        'Solo se reestructuran las preguntas marcadas, las que tienen un reporte de error abierto o un distractor que casi nadie elige. Las de Inglés médico no se reestructuran con IA.',
       markedEmpty:
         'Todavía no hay preguntas marcadas. Aparecen cuando un alumno reporta un error o cuando un distractor casi no se elige.',
       markedFailed:
@@ -427,6 +427,8 @@ export const physicianText = {
         serial_case: 'Las preguntas de un caso seriado no se reestructuran.',
         variant: 'Una variante no se reestructura otra vez.',
         few_options: 'La pregunta necesita al menos dos opciones en su set canónico.',
+        english:
+          'Las preguntas en inglés no se reestructuran con IA. Solo se reestructura el banco en español.',
         offline: 'Esta función necesita conexión.',
         not_marked:
           'Esa pregunta no está marcada. Solo se reestructuran las que tienen un reporte abierto o un distractor que casi nadie elige.',

@@ -25,7 +25,7 @@ import { draftFromVersion, type DraftIssue, type QuestionDraft } from './editorD
 import { OptionsEditor } from './EditorSections';
 import { useEditorialRepo } from './useEditorialRepo';
 import { draftFromProposal, TRANSFORMS, type Transform } from './restructure';
-import { marksOf, type RestructureMarks } from './restructureEligibility';
+import { isEnglishQuestion, marksOf, type RestructureMarks } from './restructureEligibility';
 import {
   decideRestructure,
   DecisionError,
@@ -150,9 +150,12 @@ function RequestCard({
   const status = useAiStatus();
   const role = usePreferences((state) => state.role);
   const access = engineAccess(status, 'restructure', role);
-  // Solo las marcadas se ofrecen (B12, 5.3). Sin leer las marcas no se ofrece ninguna
+  // Solo las marcadas se ofrecen (B12, 5.3), y nunca las de inglés (B13). Sin leer las marcas no se ofrece ninguna
   const marked = marks
-    ? questions.filter((question) => marksOf(marks, question.questionId).length > 0)
+    ? questions.filter(
+        (question) =>
+          !isEnglishQuestion(question) && marksOf(marks, question.questionId).length > 0,
+      )
     : [];
   const [query, setQuery] = useState('');
   const [chosen, setChosen] = useState<Question | null>(null);

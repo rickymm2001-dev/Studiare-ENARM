@@ -2,10 +2,20 @@
 // marcada si tiene un reporte de error abierto o un distractor no funcional, el que casi nadie elige
 // (menos de 5% con 100 exposiciones, src/engines/distractors.ts). La IA no recorre el banco por su
 // cuenta. Propone variantes para la cola del médico en las preguntas que ya piden atención, y nunca
-// reemplaza la original (D-099). Sin React ni Dexie.
+// reemplaza la original (D-099). Nunca las de inglés, que no pasan por IA (B13). Sin React ni Dexie.
 import { DEFAULT_THRESHOLDS, type Thresholds } from '@/config/thresholds';
 import { uuidToUlid } from '@/data/cloud/cloudIds';
 import type { EditorDistractorFlag, EditorReportRow } from '@/data/editorial/editorialRepo';
+import type { Question } from '@/data/schemas/bank';
+import { languageOfBranch } from './branchLanguage';
+
+/**
+ * Una pregunta en inglés, que es una de Inglés médico o una que lleva language en. La IA de reestructurar es
+ * solo para el banco en español y B13 no pone IA en el inglés (5.5 del plan de B13), así que una pregunta en
+ * inglés ni se ofrece ni se pide, aunque tenga un reporte abierto o un distractor que nadie elige
+ */
+export const isEnglishQuestion = (question: Pick<Question, 'branch' | 'language'>): boolean =>
+  question.language === 'en' || languageOfBranch(question.branch) === 'en';
 
 export const MARK_REASONS = ['open_report', 'non_functional_distractor'] as const;
 export type MarkReason = (typeof MARK_REASONS)[number];
