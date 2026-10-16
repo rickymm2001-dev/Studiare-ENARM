@@ -181,7 +181,7 @@ Evidencia
 ### B12. IA real (D-134)
 - Hecho. El proxy de IA pasó a las Edge Functions ai-proxy y ai-batch, con el mismo núcleo que el servidor de desarrollo. Los cinco motores están prendidos en el servidor y cerrados a los alumnos por la compuerta 1. Hipótesis por lotes a mitad de costo, tope en dólares por alumno con reserva del peor costo, bitácora sin texto, reporte de costos de la nube, pantalla Auditoría de la IA para los dos médicos y npm run eval-ai con matriz de modelos, juez y comparación con OpenAI
 - Revisión independiente con 14 hallazgos (1 alto, 3 medios y 10 bajos), todos corregidos con su prueba. El alto era que las llamadas en paralelo se saltaban el tope en dólares por alumno. Ninguno tocaba secretos, permisos ni privacidad
-- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios. Vitest con 4,513 pruebas. SQL en 29 suites, con dos pruebas de varias conexiones. eval-ai simulado con 135 casos y sus cuatro metas cumplidas. E2e de IA, tutor, tarjetas, médico, menú y admin en teléfono, computadora y nube con {{E2E}}. JS inicial de 289.9 KB de 300
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios. Vitest con 4,513 pruebas. SQL en 29 suites, con dos pruebas de varias conexiones. eval-ai simulado con 135 casos y sus cuatro metas cumplidas. E2e de IA, tutor, tarjetas, médico, menú y admin en teléfono, computadora y nube con 62 de 62 sobre la rama unida. JS inicial de 289.9 KB de 300
 - Capturas en docs/screenshots/v3/b12 (36)
 - No se corrió ninguna evaluación real ni se llamó a Anthropic. La corrida real y la elección de modelos esperan la clave de evaluaciones y tu aprobación del gasto. Nada de B12 se ha desplegado todavía. Los pasos tuyos están en docs/PENDIENTES_DE_RICARDO.md
 
