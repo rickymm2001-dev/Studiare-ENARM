@@ -2,6 +2,7 @@
 // Próximamente del examen completo, y Privacidad con los consentimientos opcionales apagados.
 import { expect, test } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { signUp } from '../../e2e/support/fixtures';
 import { capture, outDirFor } from './capture';
@@ -28,7 +29,7 @@ test('suscripción y privacidad', async ({ page }, info) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   for (const purpose of ['party', 'ai_analysis', 'anonymized_improvement'] as const) {
     await expect(
-      page.getByRole('checkbox', { name: t.onboarding.consents[purpose][0] }),
+      page.getByRole('checkbox', { name: consentTexts.purposes[purpose][0] }),
     ).not.toBeChecked();
   }
   await capture(page, OUT_DIR, 'privacidad', info.project.name);

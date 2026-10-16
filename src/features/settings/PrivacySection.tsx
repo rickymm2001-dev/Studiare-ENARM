@@ -10,7 +10,9 @@ import { useLiveData } from '@/data/hooks';
 import type { ConsentPurposeSchema } from '@/data/schemas/common';
 import { changeConsent } from '@/data/usecases/privacy';
 import { currentConsents } from '@/data/usecases/profile';
+import { consentTexts, privacyHint } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
+import { studentSyncTexts } from '@/i18n/studentSync';
 import { legalText } from '@/i18n/legal';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField } from '@/ui/components/field';
@@ -56,16 +58,12 @@ function ConsentsCard({ session }: { session: ReadySession }) {
       <fieldset className="flex flex-col gap-3">
         <legend className="sr-only">{t.settings.privacy.consentsTitle}</legend>
         {PURPOSES.map((purpose) => {
-          const [label, hint] = t.onboarding.consents[purpose];
+          const [label] = consentTexts.purposes[purpose];
           return (
             <CheckboxField
               key={purpose}
               label={label}
-              hint={
-                purpose === 'anonymized_improvement'
-                  ? `${hint} ${t.settings.privacy.revokeScoreWarning}`
-                  : hint
-              }
+              hint={privacyHint(purpose)}
               checked={shown(purpose) ?? false}
               disabled={consents === undefined}
               onChange={(event) => {
@@ -91,6 +89,7 @@ function ConsentsCard({ session }: { session: ReadySession }) {
       <p role="status" className="text-sm text-fg-muted">
         {status}
       </p>
+      <p className="text-sm text-fg-muted">{studentSyncTexts.officialScoreStaysHere}</p>
       <p className="text-sm text-fg-muted">
         {t.settingsPage.privacy.scoreInProgress}{' '}
         <Link

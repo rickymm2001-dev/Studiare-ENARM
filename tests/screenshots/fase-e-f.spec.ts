@@ -5,6 +5,7 @@ import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { signUp } from '../e2e/support/fixtures';
 
@@ -38,7 +39,7 @@ test('privacidad y borrado en Configuración', async ({ page }, info) => {
   await page.goto(`${SCREENS.settings.path}#privacidad`);
   await expect(page.getByRole('heading', { name: t.settings.privacy.consentsTitle })).toBeVisible();
   await page
-    .getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] })
+    .getByRole('checkbox', { name: consentTexts.purposes.anonymized_improvement[0] })
     .check();
   await expect(page.getByText(t.settings.privacy.consentSaved)).toBeVisible();
   await page.goto(SCREENS.progress.path);

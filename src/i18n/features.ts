@@ -66,20 +66,6 @@ export const featureText = {
     privacyBody: legalText.onboarding.summary,
     privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
-    consents: {
-      party: [
-        'Party',
-        'Compartir con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana, tu aporte a los retos y tus duelos.',
-      ],
-      ai_analysis: [
-        'Análisis con IA',
-        'Usar tus errores para hipótesis del tutor, con IDs seudónimos.',
-      ],
-      anonymized_improvement: [
-        'Mejora anónima',
-        'Usar tus datos con un ID seudónimo, sin tu nombre ni tu correo, para mejorar el banco y revisar fallas de la app.',
-      ],
-    },
     create: 'Crear cuenta y empezar',
     creating: 'Creando…',
     demoNote: 'En la demostración entras como el alumno de demostración.',
@@ -358,7 +344,6 @@ export const featureText = {
         'Aceptaste el aviso de privacidad al crear tu perfil. Aquí das o retiras cada permiso cuando quieras, y cada cambio queda en tu bitácora.',
       consentSaved: 'Guardamos tu decisión.',
       consentError: 'No pudimos guardar el cambio. Inténtalo de nuevo.',
-      revokeScoreWarning: 'Si retiras la mejora anónima, también se borra tu puntaje oficial.',
       scoreTitle: 'Puntaje oficial del ENARM',
       scoreDescription:
         'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso de mejora anónima.',

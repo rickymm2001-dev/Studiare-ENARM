@@ -10,7 +10,7 @@ import {
 } from '../../config/billing';
 import { PRIVACY_NOTICE_VERSION, type LegalIdentity } from '../../config/legal';
 import { ConsentPurposeSchema } from '../../data/schemas/common';
-import { t } from '../../i18n/es-MX';
+import { consentTexts } from '../../i18n/consents';
 import { legalText, type LegalDoc } from '../../i18n/legal';
 import { legalDocs } from '../../i18n/legalDocs';
 import { LEGAL_MARKS, fillLegal, legalLines, legalToMarkdown } from './fillLegal';
@@ -256,7 +256,7 @@ describe('textos legales', () => {
 
   it('las finalidades opcionales son justo los permisos que guarda la app, cada uno aparte y apagado (4.27)', () => {
     const optional = section(legalDocs.privacy, 'opcionales');
-    const labels = ConsentPurposeSchema.options.map((purpose) => t.onboarding.consents[purpose][0]);
+    const labels = ConsentPurposeSchema.options.map((purpose) => consentTexts.purposes[purpose][0]);
     expect(optional.bullets?.map((bullet) => bullet.split('.')[0])).toEqual(labels);
     expect(optional.paragraphs?.[0]).toMatch(/Cada una se pide por separado y empieza apagada/);
   });
