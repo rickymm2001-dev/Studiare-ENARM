@@ -128,11 +128,37 @@ function tidy(text: string): string {
 }
 
 /**
+ * Lo más que se lee de la celda del título. Una referencia mide 300 caracteres como máximo, así que un
+ * título de más de unos 500 no cabe ni con el prefijo y la licencia más cortos, y leer el resto solo cuesta
+ * tiempo. El bank-sync arma una referencia por cada renglón de un caso, y el editor del médico la arma en
+ * cada render, con una celda de hasta 50,000 caracteres
+ */
+export const PASSAGE_TITLE_READ_MAX = 500;
+
+/**
+ * Los primeros caracteres de un texto, hasta count puntos de código o hasta units unidades de largo, lo
+ * que llegue primero. Recorre solo lo que toma, así el costo no depende de lo largo que sea el texto, y
+ * nunca parte un carácter fuera del plano básico, que ocupa dos unidades
+ */
+function takeChars(text: string, count: number, units: number): string {
+  let end = 0;
+  let taken = 0;
+  for (const char of text) {
+    if (taken === count || end + char.length > units) break;
+    end += char.length;
+    taken += 1;
+  }
+  return text.slice(0, end);
+}
+
+/**
  * Arma la referencia con lo que haya, aunque la licencia no sea de la lista o falte, para que el
  * Sheet conserve lo que escribió el médico y el pendiente salga de leer la referencia con
  * parsePassageSource. Un enlace que no empieza con http o https, o que trae espacios, no es un enlace y
  * se deja fuera, así la fuente queda sin enlace y el pendiente es passage_source_missing. null si no
- * hay nada. Si pasa de 300 caracteres recorta el título y nunca el enlace
+ * hay nada. Si pasa de 300 caracteres recorta el título y nunca el enlace. El recorte se calcula de una
+ * vez, con lo que sobra de los 300 después del prefijo, la licencia y el enlace, y no quitando letras
+ * una por una, que costaba más con cada letra de más (30 segundos con un título de 50,000)
  */
 export function composePassageSource(parts: {
   title: string;
@@ -142,7 +168,7 @@ export function composePassageSource(parts: {
   const license = tidy(parts.license);
   const written = parts.url.trim();
   const url = /^https?:\/\/\S+$/i.test(written) ? written : '';
-  let title = tidy(parts.title);
+  let title = tidy(takeChars(parts.title, PASSAGE_TITLE_READ_MAX, Infinity));
   if (title === '' && license === '' && url === '') return null;
   const build = (shownTitle: string) => {
     const body = [shownTitle, license].filter((part) => part !== '').join('. ');
@@ -151,10 +177,11 @@ export function composePassageSource(parts: {
   };
   let reference = build(title);
   if (reference.length > PASSAGE_SOURCE_MAX_LENGTH && title !== '') {
-    const letters = Array.from(title);
-    while (letters.length > 0 && build(`${letters.join('')}…`).length > PASSAGE_SOURCE_MAX_LENGTH)
-      letters.pop();
-    title = letters.length > 0 ? `${tidy(letters.join(''))}…` : '';
+    // Cada unidad del título suma una al largo de la referencia. build('…') ya cuenta los puntos suspensivos
+    // y todo lo demás, así que lo que cabe del título es lo que le falta a eso para los 300
+    const room = PASSAGE_SOURCE_MAX_LENGTH - build('…').length;
+    const kept = takeChars(title, Infinity, room);
+    title = kept === '' ? '' : `${tidy(kept)}…`;
     reference = build(title);
   }
   return reference;
