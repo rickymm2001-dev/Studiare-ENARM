@@ -298,9 +298,9 @@ select pg_temp.expect((select r -> 'calibration' = jsonb_build_object('versionId
          'se', 0.21, 'students', 134, 'elo', -0.38, 'extreme', false, 'studyDay', '2026-10-15')
        from jsonb_array_elements(:'cat'::jsonb -> 'rows') r where r ->> 'questionId' = :'q1'),
   'MR5. catalog_changes no trae calibration de la pregunta calibrada');
-select pg_temp.expect((select not r ? 'calibration' and r ? 'distractorBiases' and r ? 'seq' and r ->> 'status' = 'published'
+select pg_temp.expect((select (r -> 'calibration') = 'null'::jsonb and r ? 'distractorBiases' and r ? 'seq' and r ->> 'status' = 'published'
        from jsonb_array_elements(:'cat'::jsonb -> 'rows') r where r ->> 'questionId' = :'q2'),
-  'MR5. Una pregunta sin calibración trae la llave o perdió una de las de antes');
+  'MR5. Una pregunta sin calibración no trae la llave en null o perdió una de las de antes');
 select pg_temp.expect(not (:'cat'::text ~ '"(prompt|vignette|explanation|options|rationale|text)"') and position('[Prueba]' in :'cat') = 0,
   'MR5. El catálogo trae texto con la calibración');
 -- Una app de antes ignora la llave: las demás son las de siempre

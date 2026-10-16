@@ -2,9 +2,9 @@
 -- cambio, 1.6, 1.7, 1.8, 1.9 y 5 del plan de B14).
 --
 -- Qué agrega
---   - bank_catalog_json suma la llave calibration (create or replace con la misma firma). Una fila sin
---     calibración queda igual que antes, sin la llave. Una app de antes de B14 la ignora, porque
---     catalogEntryOf solo copia los campos que conoce. catalog_changes no cambia
+--   - bank_catalog_json suma la llave calibration (create or replace con la misma firma), null mientras la
+--     fila no tenga calibración. Una app de antes de B14 la ignora, porque catalogEntryOf solo copia los
+--     campos que conoce. catalog_changes no cambia
 --   - comparison_snapshot, para cualquier alumno con sesión y dispositivo activo. Devuelve solo las celdas
 --     de Todos y de la especialidad de quien pregunta, de la corrida publicada, y los cortes solo donde
 --     hay minGroupSize alumnos o más, que nunca baja de 30. Quien no dio el permiso también la lee, porque
@@ -25,8 +25,9 @@
 -- Va después de 20261028000002_calibration_job.sql
 
 -- ===================================================================== Catálogo con calibración
--- La misma firma que la de 20261023000002_bank_core.sql, con una llave más cuando la fila ya tiene
--- calibración. Las funciones que la llaman (catalog_changes) no cambian
+-- La misma firma que la de 20261023000002_bank_core.sql, con una llave más, calibration, que es null
+-- mientras la fila no tenga calibración (CatalogRow.calibration de los contratos de B14). Las funciones
+-- que la llaman (catalog_changes) no cambian
 create or replace function public.bank_catalog_json(c public.question_catalog) returns jsonb
 language sql stable set search_path = public, pg_temp as $$
   select jsonb_build_object(
@@ -35,9 +36,9 @@ language sql stable set search_path = public, pg_temp as $$
     'itemKinds', to_jsonb(c.item_kinds), 'polarity', c.polarity, 'task', c.task, 'format', c.format,
     'caseId', c.case_id, 'caseOrder', c.case_order, 'caseSize', c.case_size, 'variantOf', c.variant_of,
     'examEligible', c.exam_eligible, 'distractorBiases', to_jsonb(c.distractor_biases),
-    'optionCount', c.option_count, 'language', c.language, 'status', c.status, 'seq', c.seq
-  ) || case when c.calibration is null then '{}'::jsonb
-            else jsonb_build_object('calibration', c.calibration) end
+    'optionCount', c.option_count, 'language', c.language, 'status', c.status, 'seq', c.seq,
+    'calibration', c.calibration
+  )
 $$;
 
 -- ===================================================================== Comparación
