@@ -609,6 +609,88 @@ describe('Inglés médico (B13, 1.5 y 1.6 del plan de B13)', () => {
     });
   });
 
+  describe('texto largo que parece inglés en un renglón en español', () => {
+    // Texto simulado de más de 200 caracteres, con las palabras vacías de la prosa en inglés
+    const LONG_ENGLISH =
+      '[Prueba] You should take this simulated medicine with food. If you miss a dose, take it as soon as you remember, but do not take two doses at the same time. Tell your doctor if you are pregnant, because the medicine may harm the baby.';
+    const LONG_SPANISH =
+      '[Prueba] Mujer de 54 años con lupus eritematoso sistémico que acude por disnea progresiva. La tomografía muestra un patrón en ground-glass con crazy paving en ambos campos pulmonares y el point-of-care ultrasound descarta derrame, el score de Wells es bajo y el D-dimer resulta normal.';
+
+    it('con el Idioma vacío en una rama de español entra como español, sin fuente, y solo avisa', () => {
+      const result = only({ [HEADERS.vignette]: LONG_ENGLISH });
+      expect(result.problems).toEqual([]);
+      expect(result.incomplete).toEqual([]);
+      expect(result.notices).toEqual(['language_suspect']);
+      expect(result.question).toMatchObject({ language: 'es', branch: 'obstetrics_gynecology' });
+    });
+
+    it('con Español escrito en Idioma avisa igual, y con un Idioma desconocido avisa y dice que no lo conoce', () => {
+      expect(
+        only({ [HEADERS.vignette]: LONG_ENGLISH, [SHEET_HEADERS.language]: 'Español' }).notices,
+      ).toEqual(['language_suspect']);
+      expect(
+        only({ [HEADERS.vignette]: LONG_ENGLISH, [SHEET_HEADERS.language]: 'Francés' }).notices,
+      ).toEqual(['language_unknown', 'language_suspect']);
+    });
+
+    it('no cambia el renglón. Con y sin el aviso, lo demás queda igual', () => {
+      const suspect = only({ [HEADERS.vignette]: LONG_ENGLISH });
+      const plain = only({ [HEADERS.vignette]: LONG_SPANISH });
+      expect(suspect.notices).toEqual(['language_suspect']);
+      expect(plain.notices).toEqual([]);
+      expect({ ...suspect.question, vignette: '' }).toEqual({ ...plain.question, vignette: '' });
+      expect(suspect.incomplete).toEqual(plain.incomplete);
+    });
+
+    it('un texto en español, aunque traiga términos en inglés, no avisa', () => {
+      expect(only({ [HEADERS.vignette]: LONG_SPANISH }).notices).toEqual([]);
+    });
+
+    it('un texto corto en inglés no avisa, porque es un término o una frase y no un texto de lectura', () => {
+      expect(
+        only({ [HEADERS.vignette]: '[Prueba] You should take this medicine with food.' }).notices,
+      ).toEqual([]);
+      expect(only({ [HEADERS.vignette]: '' }).notices).toEqual([]);
+    });
+
+    it('en Inglés médico no avisa, ni con el idioma inferido ni con el declarado', () => {
+      const text = { [HEADERS.vignette]: LONG_ENGLISH };
+      expect(onlyEnglish(text).notices).toEqual(['structure_auto']);
+      expect(onlyEnglish({ ...text, [SHEET_HEADERS.language]: '' }).notices).toEqual([
+        'structure_auto',
+        'language_inferred',
+      ]);
+    });
+
+    it('Idioma Inglés en una rama de español sigue rechazando por la rama y no suma el aviso', () => {
+      const result = only({
+        [HEADERS.vignette]: LONG_ENGLISH,
+        [SHEET_HEADERS.language]: 'Inglés',
+      });
+      expect(result.problems.map((problem) => problem.code)).toEqual(['language_branch_mismatch']);
+      expect(result.notices).toEqual([]);
+    });
+
+    it('en un caso el aviso va en el renglón que trae el texto', () => {
+      const result = convert(
+        row({
+          [HEADERS.id]: 'GO-0001',
+          [SHEET_HEADERS.caseKey]: 'go-c020',
+          [SHEET_HEADERS.caseOrder]: '1',
+          [HEADERS.vignette]: LONG_ENGLISH,
+        }),
+        row({
+          [HEADERS.id]: 'GO-0002',
+          [SHEET_HEADERS.caseKey]: 'go-c020',
+          [SHEET_HEADERS.caseOrder]: '2',
+          [HEADERS.vignette]: '',
+        }),
+      );
+      expect(result.rows.map((item) => item.problems)).toEqual([[], []]);
+      expect(result.rows.map((item) => item.notices)).toEqual([['language_suspect'], []]);
+    });
+  });
+
   describe('fuente del texto y licencia', () => {
     it('sin fuente queda el pendiente passage_source_missing, después de la explicación y las referencias', () => {
       const result = onlyEnglish({

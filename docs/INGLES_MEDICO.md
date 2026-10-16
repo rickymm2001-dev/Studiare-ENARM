@@ -101,7 +101,8 @@ El falso cognado, una palabra que se parece al español y significa otra cosa, e
 - Studiare revisa solo lo siguiente al leer el Sheet y al guardar en la app
   - Se rechaza el renglón si está en inglés fuera de Inglés médico o en español dentro de Inglés médico, o si un caso mezcla idiomas o trae fuentes distintas
   - Queda incompleto, sin poder aprobarse, si falta la fuente, la licencia o el enlace, o si la licencia no es de la lista
-  - Solo se avisa si el Idioma estaba vacío en Inglés médico, que se toma como inglés, o si un caso trae una sola pregunta o más de tres
+  - Solo se avisa si el Idioma estaba vacío en Inglés médico, que se toma como inglés, si un caso trae una sola pregunta o más de tres, o si el texto largo de una pregunta que quedó como español parece estar en inglés
+  - Este último aviso mira el Caso clínico cuando pasa de 200 caracteres y compara sus palabras más comunes en inglés (the, of, and, is, with, was, for, that) contra las del español. Es una pista y no una regla, porque Studiare nunca decide el idioma por el texto (D-080). No cambia el idioma, no rechaza nada y no pide la fuente. Si el texto es de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente
 - El detalle de cada caso, con la frase del reporte, está en docs/SHEET_DEL_BANCO.md
 
 ## Scripts

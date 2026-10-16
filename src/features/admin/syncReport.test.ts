@@ -42,6 +42,21 @@ describe('reporte de renglones', () => {
     expect(new Set(phrases).size).toBe(phrases.length);
   });
 
+  it('ningún código del contrato cae en la frase de respaldo que solo repite el código', () => {
+    for (const code of SYNC_PROBLEM_CODES) {
+      const phrase = problemMessage({ code, column: 'Subtema', value: 'Control prenatal' });
+      expect(phrase, code).not.toBe(bankAdminText.sync.problemOther(code, 'Subtema'));
+      expect(phrase, code).not.toContain(code);
+    }
+    for (const code of SYNC_NOTICE_CODES) {
+      expect(noticeMessage(code), code).not.toBe(bankAdminText.sync.noticeOther(code));
+      expect(noticeMessage(code), code).not.toContain(code);
+    }
+    // Y cada código de la lista tiene su frase en la tabla, no solo una que se parezca a otra
+    expect(Object.keys(bankAdminText.sync.notices).sort()).toEqual([...SYNC_NOTICE_CODES].sort());
+    expect(Object.keys(bankAdminText.sync.problems).sort()).toEqual([...SYNC_PROBLEM_CODES].sort());
+  });
+
   it('dice el renglón, el valor de la lista y la acción', () => {
     const message = problemMessage({
       code: 'subtopic_is_topic',

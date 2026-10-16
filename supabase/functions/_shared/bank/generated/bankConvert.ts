@@ -35,6 +35,7 @@ import {
   type TaxonomyBranch,
   type TaxonomyTopic,
 } from './bankColumns.ts';
+import { looksEnglish } from './languageHint.ts';
 import {
   LICENSE_LABELS,
   composePassageSource,
@@ -462,7 +463,8 @@ export function convertTable(
 // Fuente del texto, Licencia del texto y Enlace del texto, y los guarda como la primera referencia con la
 // forma de passageSource.ts. Los demás renglones de un caso heredan la fuente. Una fuente que falta o una
 // licencia fuera de la lista no rechazan, dejan el pendiente que dice parsePassageSource, el mismo que
-// calcula la base. En español las tres columnas se ignoran.
+// calcula la base. En español las tres columnas se ignoran. Un texto largo que parece inglés en un renglón
+// que quedó en español no se rechaza ni cambia de idioma, solo avisa con language_suspect (languageHint.ts).
 
 export interface SheetConvertContext {
   data: ContentTaxonomies;
@@ -933,6 +935,11 @@ export function convertSheetTable(
     const sheetStatus = parseSheetStatus(cell('status'), notices);
     if (languageRead.unknown) notices.push('language_unknown');
     if (languageInferred) notices.push('language_inferred');
+    // Un texto largo que parece inglés en un renglón que quedó en español, declarado o inferido, entra
+    // como español y sin pedir fuente ni licencia. Nunca se rechaza ni se cambia el idioma por el texto
+    // (D-080), solo se avisa para que el médico mire el Idioma y la rama
+    if (language === 'es' && branch?.section !== 'english' && looksEnglish(vignette))
+      notices.push('language_suspect');
     const authorCode = parseCode(cell('author'));
     let reviewerCode = parseCode(cell('reviewer'));
     if (authorCode === undefined) notice('author_unknown');

@@ -10,7 +10,7 @@ import { flagText, incompleteText } from './reviewTexts';
 
 const PENDING = ['passage_source_missing', 'license_not_allowed'] as const;
 const REJECTION = 'language_branch_mismatch';
-const NOTICES = ['language_inferred', 'english_case_size'] as const;
+const NOTICES = ['language_inferred', 'english_case_size', 'language_suspect'] as const;
 
 const clean = (phrase: string) => {
   expect(phrase.length).toBeGreaterThan(20);
@@ -39,7 +39,7 @@ describe('frases de los códigos de Inglés médico', () => {
     clean(phrase);
   });
 
-  it('los avisos de idioma inferido y de tamaño del caso tienen su frase', () => {
+  it('los avisos de idioma inferido, de tamaño del caso y de texto en inglés tienen su frase', () => {
     for (const code of NOTICES) {
       const phrase = noticeMessage(code);
       expect(phrase).not.toBe(bankAdminText.sync.noticeOther(code));

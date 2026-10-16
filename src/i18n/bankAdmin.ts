@@ -83,6 +83,8 @@ const notices: Record<SyncNoticeCode | ServerNoticeCode, string> = {
   language_inferred: 'El Idioma estaba vacío en Inglés médico. Quedó en inglés.',
   english_case_size:
     'Un caso de lectura en inglés lleva dos o tres preguntas, como en el ENARM. Este tiene otro número y entró igual.',
+  language_suspect:
+    'El texto de este renglón parece estar en inglés y quedó como español, sin fuente ni licencia. Si es un caso de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente. Si es español, ignora este aviso.',
   not_ready:
     'Pide Lista para revisión pero le faltan pendientes o un revisor distinto del autor. Quedó en borrador.',
   author_differs:
