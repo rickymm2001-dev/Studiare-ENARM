@@ -2,8 +2,17 @@
 -- confirmación humana (D-113). Pégalo completo en SQL Editor, New query, Run, después de aplicar las
 -- migraciones 20261023000001 a 20261023000006 y después de ejecutar-en-sql-editor.sql, que trae otra
 -- versión de delete_my_data. Es repetible, así que pegarlo dos veces no hace daño.
--- Es igual a la Sección con delete de 20261023000005_deck_catalog.sql. Con un token válido de Supabase no
--- lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b11 (docs/DESPLIEGUE.md).
+-- Con un token válido de Supabase no lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b11
+-- (docs/DESPLIEGUE.md).
+--
+-- Con B12 trae la versión final de delete_my_data (v3), igual a la Sección con delete de
+-- 20261026000004_ai_delete_my_data.sql y a supabase/manual/ia-b12.sql. La herramienta de despliegue
+-- exige que un archivo manual traiga cada función igual a la última migración que la define, así que
+-- este archivo sigue a esa migración. Parte de la versión de B11, que es la de la Sección con delete de
+-- 20261023000005_deck_catalog.sql, y suma al final lo de la IA real. Quita los trabajos de IA y las
+-- generaciones de días anteriores, que existen desde 20261026000001 y 20261026000002. Esos delete van
+-- con execute y solo si la tabla existe (to_regclass), así que aplicar el plan b11 solo, sin el b12, deja
+-- Borrar mis datos funcionando: cuenta cero en lo de la IA. Desplegar el b12 enseguida ya no es obligatorio
 --
 -- Borrar mis datos y la bitácora de lecturas (8.24). bank_reads es un dato del alumno y también el
 -- contador de su tope de Gratis. Borrar mis datos quita todas sus lecturas menos las del día de estudio
@@ -27,6 +36,8 @@ declare
   v_ai bigint;
   v_reads bigint;
   v_downloads bigint;
+  v_jobs bigint := 0;
+  v_generations bigint := 0;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -63,6 +74,18 @@ begin
   -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
   delete from public.deck_catalog_downloads where user_id = v_user;
   get diagnostics v_downloads = row_count;
+  -- Las tablas de la IA real existen desde las migraciones de B12. Si solo se desplegó el plan b11, no están,
+  -- y como el delete va con execute esta función no se rompe por eso: cuenta cero (revisión del hallazgo 12)
+  -- Los trabajos de IA por lote, con su entrada y su salida (B12). Un lote en curso ya no los encuentra
+  if to_regclass('public.ai_jobs') is not null then
+    execute 'delete from public.ai_jobs where user_id = $1' using v_user;
+    get diagnostics v_jobs = row_count;
+  end if;
+  -- Las generaciones de tarjetas de días anteriores. Las de hoy cuentan para el tope del día
+  if to_regclass('public.ai_generations') is not null then
+    execute 'delete from public.ai_generations where user_id = $1 and day < public.ai_day()' using v_user;
+    get diagnostics v_generations = row_count;
+  end if;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
@@ -74,7 +97,9 @@ begin
     'decks', v_decks,
     'ai_usage', v_ai,
     'bank_reads', v_reads,
-    'deck_downloads', v_downloads
+    'deck_downloads', v_downloads,
+    'ai_jobs', v_jobs,
+    'ai_generations', v_generations
   );
 end;
 $$;

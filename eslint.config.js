@@ -21,6 +21,36 @@ const ENGINE_ALLOWED_IMPORTS = [
 ];
 const ENGINE_FORBIDDEN_IMPORT_REGEX = `^(?!(?:${ENGINE_ALLOWED_IMPORTS.join('|')})$).*`;
 
+// Lo compartido de las Edge Functions corre en Deno y se prueba en Node, así que no usa nada propio de
+// ninguno de los dos ni importa fuera de supabase/functions (B12, 1.1 y 7.6 del plan). Lo de src llega
+// por las copias generadas (npm run ai:sync y npm run bank:shared)
+const FUNCTIONS_ESCAPE_REGEX = String.raw`^(?:\.\./)+(?:src|server|scripts|tests)/`;
+const NODE_BUILTIN_REGEX = String.raw`^(?:node:.*|(?:fs|path|os|crypto|url|util|child_process|http|https|net|stream|buffer|events|zlib|worker_threads)(?:/.*)?)$`;
+const SHARED_IMPORT_PATTERNS = [
+  {
+    regex: NODE_BUILTIN_REGEX,
+    message: 'Lo compartido de las funciones corre en Deno. Sin módulos de Node.',
+  },
+  {
+    regex: FUNCTIONS_ESCAPE_REGEX,
+    message:
+      'Las funciones no importan de src, server, scripts ni tests. Lo de src llega por su copia generada.',
+  },
+  {
+    regex: '^@/',
+    message: 'Las funciones no importan de src. Lo de src llega por su copia generada.',
+  },
+];
+// El núcleo de IA solo importa los paquetes que mapean los deno.json de ai-proxy y ai-batch, con su
+// versión exacta del package.json (B12, 1.4 del plan), y archivos de supabase/functions
+const AI_SHARED_ALLOWED_IMPORTS = [
+  'zod',
+  'hono(?:/.*)?',
+  '@anthropic-ai/sdk(?:/.*)?',
+  String.raw`\.{1,2}/.*`,
+];
+const AI_SHARED_FORBIDDEN_IMPORT_REGEX = `^(?!(?:${AI_SHARED_ALLOWED_IMPORTS.join('|')})$).*`;
+
 export default defineConfig([
   globalIgnores([
     'dist',
@@ -152,6 +182,49 @@ export default defineConfig([
         {
           selector: "MemberExpression[object.name='Math'][property.name='random']",
           message: 'Los motores reciben la semilla del azar como parámetro.',
+        },
+      ],
+    },
+  },
+
+  // Lo compartido de las Edge Functions. Sin Node, sin Deno y sin importar fuera de supabase/functions.
+  // Solo runtime.ts arma las dependencias desde el entorno de Deno
+  {
+    files: ['supabase/functions/_shared/**/*.ts'],
+    ignores: ['supabase/functions/_shared/**/*.test.ts', 'supabase/functions/_shared/runtime.ts'],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: SHARED_IMPORT_PATTERNS }],
+      'no-restricted-globals': [
+        'error',
+        'process',
+        'Buffer',
+        'Deno',
+        'EdgeRuntime',
+        'require',
+        'module',
+        '__dirname',
+        '__filename',
+        'global',
+      ],
+    },
+  },
+
+  // El núcleo de IA, además, solo con zod, hono y el SDK de Anthropic (B12, 1.4 del plan)
+  {
+    files: ['supabase/functions/_shared/ai/**/*.ts'],
+    ignores: ['supabase/functions/_shared/ai/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            ...SHARED_IMPORT_PATTERNS,
+            {
+              regex: AI_SHARED_FORBIDDEN_IMPORT_REGEX,
+              message:
+                'El núcleo de IA solo importa zod, hono, @anthropic-ai/sdk y archivos de supabase/functions. Un paquete nuevo necesita su entrada en deno.json.',
+            },
+          ],
         },
       ],
     },

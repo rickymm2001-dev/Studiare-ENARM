@@ -1,0 +1,47 @@
+{
+  "description": "B12, IA real en Edge Functions. Las cuatro migraciones (libro de IA v2, cola de lotes, compuerta 1 y Borrar mis datos v3), la pieza con delete de Borrar mis datos (supabase/manual/ia-b12.sql) y las funciones ai-proxy y ai-batch. Se publican primero en modo simulado, con APP_ORIGINS y AI_ALLOW_MOCK en --secrets-from. La clave ENARM_ANTHROPIC_KEY la pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasa por este plan. La pieza del ciclo de lotes (supabase/manual/ia-lotes-cron.sql) no entra aquí. Se corre después de comprobar /health en modo simulado, porque ai-batch ya debe existir (docs/IA_ALOJADA.md).",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261026000001_ai_proxy_v2.sql"
+    },
+    {
+      "file": "supabase/migrations/20261026000002_ai_jobs.sql"
+    },
+    {
+      "file": "supabase/migrations/20261026000003_ai_gate.sql"
+    },
+    {
+      "file": "supabase/migrations/20261026000004_ai_delete_my_data.sql",
+      "note": "Borrar mis datos v3. Lleva un delete, así que el conector no la aplica sin una confirmación humana. Esta herramienta sí"
+    },
+    {
+      "file": "supabase/manual/ia-b12.sql",
+      "check": {
+        "borrar_mis_datos_b12": true
+      },
+      "note": "La misma Borrar mis datos v3 de la migración anterior, para pegarla a mano si el despliegue no puede con un delete. Quita los trabajos de IA y las generaciones de días anteriores y conserva lo de B11"
+    }
+  ],
+  "functions": [
+    {
+      "slug": "ai-proxy",
+      "verifyJwt": false,
+      "note": "/health es público y las rutas de IA verifican la sesión por su cuenta con ai_whoami"
+    },
+    {
+      "slug": "ai-batch",
+      "verifyJwt": false,
+      "note": "Cron no manda una sesión. La función rechaza toda petición con Origin y la que no traiga el secreto de Vault"
+    }
+  ],
+  "secrets": {
+    "APP_ORIGINS": {
+      "pattern": "^https://[a-z0-9.-]+(:[0-9]{1,5})?(,https://[a-z0-9.-]+(:[0-9]{1,5})?)*$",
+      "note": "Las direcciones de la app separadas por comas, sin ruta ni comodines. Solo la usa ai-proxy"
+    },
+    "AI_ALLOW_MOCK": {
+      "pattern": "^[01]$",
+      "note": "1 mientras no existe la clave, para que las funciones contesten con respuestas fijas. Con la clave puesta, 0"
+    }
+  }
+}

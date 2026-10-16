@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
@@ -115,5 +115,41 @@ describe('tarjeta de una hipótesis del tutor', () => {
         name: t.tutor.actions.enable_highlight,
       }),
     ).toBeNull();
+  });
+
+  it('con la explicación con IA en camino enseña la plantilla con el aviso de pendiente', () => {
+    renderCard(undefined, { aiPending: true });
+    expect(screen.getByText(t.tutor.rules.misreading.message)).toBeVisible();
+    expect(screen.getByText(t.tutor.ai.pending)).toBeVisible();
+    expect(screen.queryByText(t.tutor.ai.draft)).toBeNull();
+  });
+
+  it('si el trabajo falló lo dice y deja la plantilla. Pendiente gana sobre fallido', () => {
+    renderCard(undefined, { aiFailed: true });
+    expect(screen.getByText(t.tutor.ai.jobFailed)).toBeVisible();
+    cleanup();
+    renderCard(undefined, { aiFailed: true, aiPending: true });
+    expect(screen.getByText(t.tutor.ai.pending)).toBeVisible();
+    expect(screen.queryByText(t.tutor.ai.jobFailed)).toBeNull();
+  });
+
+  it('lo que redactó la IA reemplaza la plantilla y lleva sus etiquetas', () => {
+    renderCard(undefined, {
+      ai: {
+        hypothesis: 'Confundes dos lecturas parecidas.',
+        evidence: ['e1'],
+        confidence: 'low',
+        actions: [],
+        studentMessage: 'Lee el final del enunciado antes de las opciones.',
+        generatedAt: '2026-10-05T10:00:00.000Z',
+        mode: 'mock',
+      },
+      aiPending: true,
+    });
+    expect(screen.getByText('Confundes dos lecturas parecidas.')).toBeVisible();
+    expect(screen.getByText(t.tutor.ai.written.mock)).toBeVisible();
+    expect(screen.getByText(t.tutor.ai.draft)).toBeVisible();
+    // Lo que ya está escrito no repite el aviso de pendiente
+    expect(screen.queryByText(t.tutor.ai.pending)).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 // Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
 // Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G), Admin, Pagos
-// (B10) y las tres del banco en la nube del admin (B11), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
+// (B10) y las tres del banco en la nube del admin (B11) y la Auditoría de la IA (B12), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
 // (comentarios 6, 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
@@ -45,6 +45,7 @@ export const SCREEN_KEYS = [
   'bankAdmin',
   'physicianReviews',
   'deckCatalogAdmin',
+  'aiAudit',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -101,6 +102,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   bankAdmin: { number: 35, path: '/admin/banco', area: 'admin', phase: 'E' },
   physicianReviews: { number: 36, path: '/admin/revisiones', area: 'admin', phase: 'E' },
   deckCatalogAdmin: { number: 37, path: '/admin/mazos', area: 'admin', phase: 'E' },
+  // Auditoría de la IA (B12, 5.3). La compuerta 1 de la IA, para los dos médicos y el administrador
+  aiAudit: { number: 38, path: '/medico/auditoria-ia', area: 'physician', phase: 'E' },
 };
 
 export function screenPath(key: ScreenKey): string {

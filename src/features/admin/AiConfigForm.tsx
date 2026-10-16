@@ -4,9 +4,10 @@
 // vive en este navegador y sirve para comparar en la pantalla de costos.
 import { useState } from 'react';
 import type { AdminConfig } from '@/ai/admin';
+import { fetchGateState } from '@/data/cloud/aiGate';
 import { readStoredOverrides } from '@/config/overridesStore';
 import { commitOverrides } from './commitOverrides';
-import { AI_ENGINES } from '@/engines/aiContracts';
+import { AI_ENGINES, type AiEngine } from '@/engines/aiContracts';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
 import { Badge } from '@/ui/components/badge';
@@ -14,7 +15,16 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
 import { LoadingState } from '@/ui/states/states';
-import { EFFORTS, draftOf, patchOf, validateAiDraft, type AiDraft } from './aiConfigDraft';
+import {
+  EFFORTS,
+  THINKINGS,
+  draftOf,
+  enginesClosedBy,
+  patchOf,
+  validateAiDraft,
+  type AiDraft,
+} from './aiConfigDraft';
+import { useAuditQuery } from '../physician/useAuditQuery';
 import type { AiAdmin } from './useAiAdmin';
 
 export function AiConfigForm({ admin }: { admin: AiAdmin }) {
@@ -32,6 +42,12 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
     return stored === null || stored === undefined ? '' : String(stored);
   });
   const [estimateMessage, setEstimateMessage] = useState<'saved' | 'failed' | null>(null);
+  // Los motores abiertos a los alumnos. Cambiar su modelo los cierra hasta una auditoría corta (B12, 5.5)
+  const gate = useAuditQuery((cloud) => fetchGateState(cloud), 'gate-config');
+  const gateState = gate.state.status === 'ready' ? gate.state.value : null;
+  const openEngines = new Set<AiEngine>(
+    gateState ? AI_ENGINES.filter((engine) => gateState.engines[engine]?.open === true) : [],
+  );
 
   const estimateValid =
     estimate.trim() === '' ||
@@ -116,6 +132,8 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
   const errors = validateAiDraft(draft, config);
   const patch = patchOf(draft, config);
   const dirty = Object.keys(patch).length > 0;
+  const cloudDraft = draft.cloud;
+  const closing = enginesClosedBy(patch, config, openEngines);
   const modelOptions = Object.keys(config.prices)
     .concat(
       draft.newModel.id.trim() !== '' && !(draft.newModel.id.trim() in config.prices)
@@ -139,10 +157,19 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
           <div className="flex flex-wrap items-center gap-2">
             <CardTitle id="config-ia">{text.title}</CardTitle>
             <Badge variant={admin.config?.mode === 'real' ? 'info' : 'simulated'}>
-              {admin.config?.mode === 'real' ? t.ai.badge.real : t.ai.badge.mock}
+              {
+                t.ai.badge[
+                  admin.config?.mode === 'real'
+                    ? 'real'
+                    : admin.config?.mode === 'unavailable'
+                      ? 'unavailable'
+                      : 'mock'
+                ]
+              }
             </Badge>
           </div>
           <CardDescription>{text.hint}</CardDescription>
+          <CardDescription>{text.gateNote}</CardDescription>
         </CardHeader>
 
         <h3 className="mt-2 mb-2 font-bold">{text.modelsTitle}</h3>
@@ -157,7 +184,7 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
                 <p className="mb-2 text-xs text-fg-muted">
                   {text.promptVersion(admin.config?.prompts[engine] ?? '—')}
                 </p>
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
                   <SelectField
                     label={text.model}
                     value={row.id}
@@ -184,6 +211,27 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
                         models: {
                           ...current.models,
                           [engine]: { ...row, effort: event.target.value },
+                        },
+                      }));
+                    }}
+                  />
+                  <SelectField
+                    label={text.thinking}
+                    hint={text.thinkingHint}
+                    value={row.thinking}
+                    options={THINKINGS.map((value) => ({
+                      value,
+                      label: value === '' ? text.thinkingNone : text.thinkings[value],
+                    }))}
+                    onChange={(event) => {
+                      update((current) => ({
+                        ...current,
+                        models: {
+                          ...current.models,
+                          [engine]: {
+                            ...row,
+                            thinking: event.target.value as (typeof THINKINGS)[number],
+                          },
                         },
                       }));
                     }}
@@ -238,6 +286,106 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
             update((current) => ({ ...current, budget: event.target.value }));
           }}
         />
+
+        {cloudDraft ? (
+          <>
+            <h3 className="mt-5 mb-2 font-bold">{text.cloudLimitsTitle}</h3>
+            <p className="mb-2 text-sm text-fg-muted">{text.cloudLimitsHint}</p>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+              <TextField
+                label={text.perUserDaily}
+                hint={text.perUserDailyHint}
+                type="number"
+                inputMode="decimal"
+                step={0.05}
+                min={0}
+                value={cloudDraft.perUserDailyUsd}
+                error={errors.perUserDailyUsd ?? null}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  update((current) =>
+                    current.cloud
+                      ? { ...current, cloud: { ...current.cloud, perUserDailyUsd: value } }
+                      : current,
+                  );
+                }}
+              />
+              <TextField
+                label={text.cardGenerations}
+                type="number"
+                inputMode="numeric"
+                value={cloudDraft.cardGenerationsPerDay}
+                error={errors.cardGenerationsPerDay ?? null}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  update((current) =>
+                    current.cloud
+                      ? { ...current, cloud: { ...current.cloud, cardGenerationsPerDay: value } }
+                      : current,
+                  );
+                }}
+              />
+              <TextField
+                label={text.sections}
+                type="number"
+                inputMode="numeric"
+                value={cloudDraft.sectionsPerGeneration}
+                error={errors.sectionsPerGeneration ?? null}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  update((current) =>
+                    current.cloud
+                      ? { ...current, cloud: { ...current.cloud, sectionsPerGeneration: value } }
+                      : current,
+                  );
+                }}
+              />
+              <TextField
+                label={text.maxPending}
+                type="number"
+                inputMode="numeric"
+                value={cloudDraft.maxPendingJobs}
+                error={errors.maxPendingJobs ?? null}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  update((current) =>
+                    current.cloud
+                      ? { ...current, cloud: { ...current.cloud, maxPendingJobs: value } }
+                      : current,
+                  );
+                }}
+              />
+            </div>
+            <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-5">
+              {AI_ENGINES.map((engine) => (
+                <TextField
+                  key={engine}
+                  label={text.share(adminText.adminCosts.engines[engine])}
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  max={100}
+                  value={cloudDraft.engineShare[engine]}
+                  error={errors[`share.${engine}`] ?? null}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    update((current) =>
+                      current.cloud
+                        ? {
+                            ...current,
+                            cloud: {
+                              ...current.cloud,
+                              engineShare: { ...current.cloud.engineShare, [engine]: value },
+                            },
+                          }
+                        : current,
+                    );
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        ) : null}
 
         <h3 className="mt-5 mb-2 font-bold">{text.pricesTitle}</h3>
         <p className="mb-2 text-sm text-fg-muted">{text.pricesHint}</p>
@@ -311,6 +459,16 @@ export function AiConfigForm({ admin }: { admin: AiAdmin }) {
           ))}
         </div>
 
+        {closing.length > 0 ? (
+          <p
+            role="status"
+            className="mt-4 rounded-md bg-warning-soft p-3 text-sm font-medium text-warning"
+          >
+            {text.gateAffected(
+              closing.map((engine) => adminText.adminCosts.engines[engine]).join(', '),
+            )}
+          </p>
+        ) : null}
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Button
             disabled={saving || !dirty || Object.keys(errors).length > 0}

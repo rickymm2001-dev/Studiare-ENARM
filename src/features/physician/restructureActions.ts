@@ -11,6 +11,7 @@ import type { User } from '@/data/schemas/people';
 import { logAiCall } from '@/data/usecases/aiTutor';
 import type { RestructureOutput } from '@/engines/aiContracts';
 import { InvalidDraftError } from './editorActions';
+import { isMarked, type RestructureMarks } from './restructureEligibility';
 import { validateDraft, type QuestionDraft, type TaxonomyView } from './editorDraft';
 import {
   buildRestructureInput,
@@ -43,10 +44,18 @@ export async function requestRestructure(
     options: readonly Option[];
     transform: Transform;
     status: AiStatus;
+    /**
+     * Las preguntas marcadas para reestructurar (B12, 5.3). Con ellas, una pregunta que no está
+     * marcada no se pide. La pantalla siempre las manda, y solo una prueba o una herramienta puede omitirlas
+     */
+    marks?: RestructureMarks;
     fetchImpl?: typeof fetch;
     now?: Date;
   },
 ): Promise<RequestResult> {
+  if (args.marks && !isMarked(args.marks, args.question.questionId)) {
+    return { ok: false, reason: 'not_marked', message: 'not_marked' };
+  }
   const built = buildRestructureInput(args.question, args.options, args.transform);
   if (!built.ok) return { ok: false, reason: built.reason, message: built.reason };
 

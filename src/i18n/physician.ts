@@ -396,10 +396,21 @@ export const physicianText = {
     questions: {
       requestTitle: 'Pedir una propuesta',
       requestHint:
-        'Elige una pregunta del banco y cómo reestructurarla. La propuesta llega aquí como borrador, con la original al lado.',
-      search: 'Buscar una pregunta',
+        'Elige una pregunta marcada y cómo reestructurarla. La propuesta llega aquí como borrador, con la original al lado.',
+      markedHint:
+        'Solo se reestructuran las preguntas marcadas, las que tienen un reporte de error abierto o un distractor que casi nadie elige.',
+      markedEmpty:
+        'Todavía no hay preguntas marcadas. Aparecen cuando un alumno reporta un error o cuando un distractor casi no se elige.',
+      markedFailed:
+        'No se pudieron leer los reportes y los distractores. Intenta de nuevo más tarde.',
+      markedCount: (n: number) => plural(n, 'pregunta marcada', 'preguntas marcadas'),
+      markReasons: {
+        open_report: 'Reporte de error abierto',
+        non_functional_distractor: 'Distractor que casi nadie elige',
+      } as Record<string, string>,
+      search: 'Buscar una pregunta marcada',
       searchHint: 'Escribe parte de la frase o del caso.',
-      noResults: 'No hay preguntas con ese texto que se puedan reestructurar.',
+      noResults: 'No hay preguntas marcadas con ese texto que se puedan reestructurar.',
       pick: 'Elegir',
       chosen: 'Pregunta elegida',
       transform: 'Cómo reestructurarla',
@@ -408,7 +419,7 @@ export const physicianText = {
         change_anchor: 'Cambiar el dato que ancla el caso',
         next_step: 'Mover la pregunta al siguiente paso del manejo',
       } as Record<string, string>,
-      ask: 'Pedir propuesta',
+      ask: 'Proponer con IA',
       asking: 'Pidiendo la propuesta',
       created: 'La propuesta quedó en la cola, abajo.',
       reused: 'Ya había una propuesta igual esperando revisión. Es la de abajo.',
@@ -417,6 +428,8 @@ export const physicianText = {
         variant: 'Una variante no se reestructura otra vez.',
         few_options: 'La pregunta necesita al menos dos opciones en su set canónico.',
         offline: 'Esta función necesita conexión.',
+        not_marked:
+          'Esa pregunta no está marcada. Solo se reestructuran las que tienen un reporte abierto o un distractor que casi nadie elige.',
         invalid_output:
           'La propuesta no pasó las revisiones automáticas. Pasa con las preguntas de salud mental, que no se reestructuran con IA. Prueba con otra pregunta.',
         bad_response:

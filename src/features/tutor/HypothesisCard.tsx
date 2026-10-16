@@ -12,7 +12,7 @@ import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { HypothesisAi } from './aiContent';
-import { AiWritten } from './AiWritten';
+import { AiJobFailed, AiPending, AiWritten } from './AiWritten';
 import type { Hypothesis, TutorAction } from './tutorModel';
 
 const dayFormat = new Intl.DateTimeFormat('es-MX', {
@@ -37,6 +37,8 @@ export function HypothesisCard({
   busy,
   compact = false,
   ai,
+  aiPending = false,
+  aiFailed = false,
   onAction,
   onRespond,
 }: {
@@ -53,6 +55,10 @@ export function HypothesisCard({
   compact?: boolean;
   /** Lo que redactó la IA para esta hipótesis. undefined si todavía no hay */
   ai?: HypothesisAi | undefined;
+  /** La explicación con IA viene en camino. Mientras tanto se ve la versión sin IA con el aviso (B12, 3.4) */
+  aiPending?: boolean;
+  /** El trabajo de IA falló y se queda la versión sin IA */
+  aiFailed?: boolean;
   onAction: (action: TutorAction) => void;
   onRespond: (helpful: boolean) => void;
 }) {
@@ -100,6 +106,8 @@ export function HypothesisCard({
           {ai?.hypothesis === null ? (
             <p className="mt-2 text-sm text-fg-muted">{text.ai.noEvidence}</p>
           ) : null}
+          {aiPending ? <AiPending className="mt-2" /> : null}
+          {aiFailed && !aiPending ? <AiJobFailed className="mt-2" /> : null}
         </>
       )}
       {hypothesis.causeMismatches > 0 ? (

@@ -19,6 +19,13 @@
 // (prueba gratis, pases, lugares Fundador, códigos, facturas y Admin, Pagos), con su pasarela, su
 // portal y Mercado Pago simulados.
 //
+// IA alojada (B12). attachAi(server, options) engancha la Edge Function ai-proxy corriendo dentro de la
+// prueba (fakeAi.ts, con el núcleo real y los dobles del paquete A). Atiende /functions/v1/ai-proxy/**
+// con la sesión, el plan y el dispositivo de este servidor, y las funciones de la compuerta de la IA
+// (ai_gate_*, admin_ai_gate_*, admin_ai_pause y admin_ai_cost_report) con el doble de las pruebas
+// unitarias (src/data/testing/fakeAiGateServer.ts). Sin attachAi la función contesta 404, como una que
+// no se ha desplegado, y la app usa sus plantillas.
+//
 // Banco en la nube (B11). attachBank(server, store) engancha el modelo en memoria de fakeBankStore.ts.
 // Desde ahí las rpc del banco, la función bank-sync y el bucket deck-catalog van al banco. Las del
 // alumno y la bajada de deck-catalog las atiende fakeBank.ts (paquete B). Las del médico y el admin,
@@ -29,7 +36,9 @@ import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { Role } from '@/data/schemas/common';
+import type { FakeGateCaller, FakeGateReply } from '@/data/testing/fakeAiGateServer';
 import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
+import type { WhoAmIResult } from '../../../supabase/functions/_shared/ai/ports.ts';
 import {
   createFakeBilling,
   type BillingSubscription,
@@ -49,6 +58,13 @@ import {
   gatewayPage,
   portalPage,
 } from './fakeGateway';
+import {
+  createFakeAi,
+  serveAiRoute,
+  type FakeAi,
+  type FakeAiIdentity,
+  type FakeAiMode,
+} from './fakeAi';
 import { handleMercadoPagoRequest } from './fakeMercadoPago';
 import {
   CLOUD_PREVIEW_URL,
@@ -289,6 +305,13 @@ export interface FakeSupabaseServer {
   enrollFactor(email: string): void;
   /** El banco en la nube enganchado con attachBank (B11). null sin banco */
   bank: FakeBankStore | null;
+  /** La función ai-proxy enganchada con attachAi (B12). null sin función, que contesta 404 */
+  ai: FakeAi | null;
+  /**
+   * Lo que la función de IA le pregunta a la base (B12, 2.3). ai_whoami, de quién es un token de sesión:
+   * su cuenta, su rol con el segundo factor, si tiene un plan de pago y si es el dispositivo activo
+   */
+  readonly aiIdentity: FakeAiIdentity;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -742,6 +765,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     portalError: null as PortalFailure | null,
     googleAccount: null as string | null,
     bank: null as FakeBankStore | null,
+    ai: null as FakeAi | null,
   };
   // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
   // el admin lo cambie desde Usuarios
@@ -1503,6 +1527,75 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     }
   }
 
+  // ------------------------------------------------------------------ IA alojada (B12)
+
+  /** ai_whoami. La cuenta del token, su rol, su plan y si este es su dispositivo activo */
+  function whoAmI(token: string): WhoAmIResult {
+    const session = sessions.get(token);
+    const user = session ? users.get(session.userId) : undefined;
+    if (!session || !user || session.expiresAt <= now()) {
+      return { ok: false, failure: 'unauthenticated' };
+    }
+    if (!isActiveDevice(user, session)) return { ok: false, failure: 'other_device' };
+    return {
+      ok: true,
+      caller: {
+        userId: user.id,
+        role: roleOf(user, session),
+        paid: userPlan(user.id) !== 'free',
+      },
+    };
+  }
+
+  const aiIdentity: FakeAiIdentity = {
+    whoAmI,
+    roleOf: (userId) => users.get(userId)?.role,
+    paidStudents: () =>
+      [...users.values()].filter((user) => user.role === 'student' && userPlan(user.id) !== 'free')
+        .length,
+  };
+
+  /** Las funciones de la compuerta 1 de la IA que atiende fakeAiGateServer.ts */
+  const AI_GATE_RPCS = new Set([
+    'ai_gate_my_samples',
+    'ai_gate_my_items',
+    'ai_gate_review',
+    'admin_ai_gate_samples',
+    'admin_ai_gate_progress',
+    'admin_ai_gate_sample_create',
+    'admin_ai_gate_close',
+    'admin_ai_gate_set',
+    'admin_ai_pause',
+  ]);
+
+  function gateCaller(user: FakeUser, session: Session): FakeGateCaller {
+    return {
+      userId: user.id,
+      role: roleOf(user, session),
+      activeDevice: isActiveDevice(user, session),
+      isAdmin: isAdmin(user, session),
+    };
+  }
+
+  const gateReply = (reply: FakeGateReply): Reply =>
+    reply.error ? pgError(reply.error.code, reply.error.message) : json(reply.data);
+
+  /** admin_ai_cost_report. El costo de la nube de un periodo, solo para un admin con su segundo factor */
+  function aiCostReport(user: FakeUser, session: Session, args: Json): Reply {
+    const ai = server.ai;
+    if (!ai) return pgError('PGRST202', 'Could not find the function public.admin_ai_cost_report');
+    if (!isAdmin(user, session)) {
+      return pgError('42501', 'Solo un administrador ve el costo de la IA');
+    }
+    const from = asString(args.p_from);
+    const to = asString(args.p_to);
+    const span = from && to ? (Date.parse(to) - Date.parse(from)) / DAY_MS : Number.NaN;
+    if (from === null || to === null || !(span >= 0) || span > 366) {
+      return pgError('22023', 'El periodo va de una fecha a otra, de hasta un año');
+    }
+    return json(ai.costReport(from, to));
+  }
+
   function handleRpc(name: string, auth: Auth, body: unknown): Reply {
     const args: Json = isRecord(body) ? body : {};
     if (auth.kind === 'invalid') return pgError('PGRST301', 'JWT expired');
@@ -1520,7 +1613,13 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (server.bank && isBankRpc(name)) {
       return fromBankReply(bankRpc(server.bank, name, bankCaller(user, session), args));
     }
+    if (server.ai && AI_GATE_RPCS.has(name)) {
+      const reply = server.ai.gate.call(name, gateCaller(user, session), args);
+      if (reply) return gateReply(reply);
+    }
     switch (name) {
+      case 'admin_ai_cost_report':
+        return aiCostReport(user, session, args);
       case 'claim_device':
         return claimDevice(user, session, args);
       case 'log_rejected_claim':
@@ -1617,11 +1716,23 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       user ? list.filter((item) => item.userId === user.id) : [];
     switch (table) {
       case 'platform_settings':
-        return [...settings.entries()].map(([key, item]) => ({
-          key,
-          value: item.value,
-          updated_at: item.updatedAt,
-        }));
+        return [
+          ...[...settings.entries()].map(([key, item]) => ({
+            key,
+            value: item.value,
+            updated_at: item.updatedAt,
+          })),
+          // La compuerta de la IA (B12). Todos la leen y solo la cambian las funciones del admin
+          ...(server.ai
+            ? [
+                {
+                  key: 'ai_gate',
+                  value: server.ai.gate.state,
+                  updated_at: new Date().toISOString(),
+                },
+              ]
+            : []),
+        ];
       case 'user_roles':
         return (user ? (admin ? [...users.values()] : [user]) : []).map((item) => ({
           user_id: item.id,
@@ -2266,6 +2377,29 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     }
   }
 
+  /**
+   * La función ai-proxy. Va al núcleo real de fakeAi.ts, que es asíncrono, y no al enrutado de arriba.
+   * Sin función enganchada contesta 404 con CORS, como una que no se ha desplegado
+   */
+  async function fulfillAi(route: Route): Promise<void> {
+    const ai = server.ai;
+    if (!ai) {
+      await fulfill(
+        route,
+        (request) =>
+          request.method() === 'OPTIONS'
+            ? preflight(request)
+            : json({ code: 'NOT_FOUND', message: 'Requested function was not found' }, 404),
+        true,
+      );
+      return;
+    }
+    const request = route.request();
+    const body = parseJsonBody(request);
+    const done = await serveAiRoute(route, ai);
+    calls.push({ method: done.method, path: done.path, body, status: done.status });
+  }
+
   const emailOf = (email: string): FakeUser | undefined => userByEmail(email);
   const requireUser = (email: string): FakeUser => {
     const user = emailOf(email);
@@ -2312,6 +2446,11 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     async attach(context) {
       await context.route(`${FAKE_SUPABASE_URL}/**`, (route) =>
         fulfill(route, (request) => handleSupabase(request), true),
+      );
+      // La función de IA alojada va después de la ruta general, que es la que Playwright prueba primero
+      // con las registradas al final
+      await context.route(`${FAKE_SUPABASE_URL}/functions/v1/ai-proxy/**`, (route) =>
+        fulfillAi(route),
       );
       await context.route(`${FAKE_GATEWAY_ORIGIN}/**`, (route) =>
         fulfill(route, handleGateway, false),
@@ -2559,6 +2698,13 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     set bank(value) {
       server.bank = value;
     },
+    get ai() {
+      return server.ai;
+    },
+    set ai(value) {
+      server.ai = value;
+    },
+    aiIdentity,
   };
 }
 
@@ -2570,6 +2716,23 @@ export async function installFakeSupabase(
   const server = createFakeSupabase(options);
   await server.attach(context);
   return server;
+}
+
+// ---------------------------------------------------------------------------------------------
+// IA alojada (B12)
+
+/**
+ * Engancha la función ai-proxy al Supabase simulado. real contesta con el Anthropic simulado, mock es la
+ * función sin clave y con AI_ALLOW_MOCK, y unavailable es la que no tiene ni una ni otra. Devuelve la
+ * función para abrir motores, pausar, fijar el gasto del día y correr el ciclo de lotes
+ */
+export function attachAi(server: FakeSupabaseServer, options: { mode?: FakeAiMode } = {}): FakeAi {
+  const ai = createFakeAi({
+    identity: server.aiIdentity,
+    ...(options.mode ? { mode: options.mode } : {}),
+  });
+  server.ai = ai;
+  return ai;
 }
 
 // ---------------------------------------------------------------------------------------------

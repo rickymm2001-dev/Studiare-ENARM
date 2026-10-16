@@ -3,7 +3,7 @@
 // publicada, no hay nada que leer y las pantallas lo dicen. Los esquemas repiten los del proxy,
 // porque el cliente no puede cargar los archivos del servidor.
 import { z } from 'zod';
-import { AI_ENGINES } from '@/engines/aiContracts';
+import { AI_ENGINES, AiEffortSchema, AiErrorSchema, AiThinkingSchema } from '@/engines/aiContracts';
 import type { AiStatus } from './client';
 import { AI_BASE_URL, aiAuthHeaders } from './endpoint';
 
@@ -16,7 +16,9 @@ export const AdminConfigSchema = z.strictObject({
   models: EngineRecord(
     z.strictObject({
       id: z.string(),
-      effort: z.enum(['low', 'medium', 'high']).nullable(),
+      effort: AiEffortSchema.nullable(),
+      // B12. Razonamiento del modelo. Opcional en un cambio, el proxy conserva el de antes si no se manda
+      thinking: AiThinkingSchema.nullable().optional(),
       maxTokens: z.int(),
     }),
   ),
@@ -32,21 +34,30 @@ export const AdminConfigSchema = z.strictObject({
   limits: z.strictObject({
     perStudentPerDay: EngineRecord(z.int()),
     dailyBudgetUsd: z.number(),
+    // Límites de B12 (2.4 del plan). Opcionales para leer también un proxy de desarrollo anterior
+    perUserDailyUsd: z.number().optional(),
+    engineShare: EngineRecord(z.number()).optional(),
+    cardGenerationsPerDay: z.int().optional(),
+    sectionsPerGeneration: z.int().optional(),
+    maxPendingJobs: z.int().optional(),
     timeoutMs: z.int(),
     maxRetries: z.int(),
   }),
 });
 export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 
+/** unavailable es una función sin clave y sin permiso de respuestas simuladas (B12, 2.9) */
+const ProxyModeSchema = z.enum(['real', 'mock', 'unavailable']);
+
 const ConfigResponseSchema = z.strictObject({
-  mode: z.enum(['real', 'mock']),
+  mode: ProxyModeSchema,
   config: AdminConfigSchema,
   prompts: z.record(z.string(), z.string()),
 });
 export type AdminConfigResponse = z.infer<typeof ConfigResponseSchema>;
 
 const UsageResponseSchema = z.strictObject({
-  mode: z.enum(['real', 'mock']),
+  mode: ProxyModeSchema,
   limits: AdminConfigSchema.shape.limits,
   usage: z.strictObject({
     day: z.string(),
@@ -61,9 +72,14 @@ const UsageResponseSchema = z.strictObject({
 });
 export type AdminUsageResponse = z.infer<typeof UsageResponseSchema>;
 
-/** Hay proxy al que preguntarle. Sin proxy, sin conexión o todavía revisando no se intenta */
+/**
+ * Hay proxy al que preguntarle. Sin proxy, sin conexión o todavía revisando no se intenta. Una
+ * función que respondió que no tiene IA sí se consulta, porque el admin necesita ver su configuración
+ */
 export const proxyAvailable = (status: AiStatus) =>
-  status.kind === 'real' || status.kind === 'mock';
+  status.kind === 'real' ||
+  status.kind === 'mock' ||
+  (status.kind === 'unavailable' && status.reachable);
 
 async function getJson<S extends z.ZodType>(
   path: string,
@@ -97,6 +113,11 @@ export interface AdminConfigPatch {
   limits?: {
     perStudentPerDay?: Partial<AdminConfig['limits']['perStudentPerDay']>;
     dailyBudgetUsd?: number;
+    perUserDailyUsd?: number;
+    engineShare?: Partial<AdminConfig['limits']['perStudentPerDay']>;
+    cardGenerationsPerDay?: number;
+    sectionsPerGeneration?: number;
+    maxPendingJobs?: number;
     timeoutMs?: number;
     maxRetries?: number;
   };
@@ -121,7 +142,14 @@ export async function saveAdminConfig(
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!response.ok) {
-      return { ok: false, message: 'El proxy no aceptó los cambios. Revisa los valores.' };
+      // El servidor dice por qué en español, como que un modelo no acepta ese esfuerzo (B12, 2.8)
+      const failure = AiErrorSchema.safeParse(await response.json().catch(() => null));
+      return {
+        ok: false,
+        message: failure.success
+          ? failure.data.message
+          : 'El proxy no aceptó los cambios. Revisa los valores.',
+      };
     }
     // La respuesta de un cambio no trae las versiones de los prompts. Se vuelve a pedir completa
     const fresh = await fetchAdminConfig(fetchImpl);

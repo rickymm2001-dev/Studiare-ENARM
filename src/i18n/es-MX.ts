@@ -112,6 +112,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   questionEditor: { title: 'Editor de pregunta', description: '' },
   agreement: { title: 'Acuerdo del etiquetado', description: '' },
   aiDrafts: { title: 'Borradores de IA', description: '' },
+  // Su descripción vive en aiAudit.ts, que carga la pantalla, para no pesar en lo que la app descarga al abrir
+  aiAudit: { title: 'Auditoría de la IA', description: '' },
   contentReports: { title: 'Reportes de contenido', description: '' },
   bankImport: { title: 'Importar banco', description: '' },
   aiCosts: {
@@ -188,6 +190,7 @@ export const t = {
     bank: 'Banco',
     agreement: 'Acuerdo',
     drafts: 'Borradores',
+    audit: 'Auditoría de IA',
     reports: 'Reportes',
     costs: 'Costos',
     settings: 'Configuración',
@@ -290,15 +293,31 @@ export const t = {
       real: 'IA real',
       mock: 'IA simulada',
       'no-proxy': 'IA simulada',
+      unavailable: 'IA no disponible',
       offline: 'IA sin conexión',
     },
     detail: {
-      checking: 'Revisando el proxy local de IA.',
-      real: 'El proxy local tiene clave. Los motores de IA llaman al modelo y todo lo que generan queda en borrador.',
-      mock: 'El proxy local no tiene clave. Las respuestas de IA son fijas, de demostración.',
+      checking: 'Revisando el servicio de IA.',
+      real: 'El servicio de IA tiene clave. Los motores de IA llaman al modelo y todo lo que generan queda en borrador.',
+      mock: 'El servicio de IA no tiene clave. Las respuestas de IA son fijas, de demostración.',
       'no-proxy':
-        'No hay proxy local, como en la demo publicada. Las respuestas de IA son fijas, de demostración.',
+        'No hay servicio de IA, como en la demo publicada. Las respuestas de IA son fijas, de demostración.',
+      unavailable: 'La IA no está disponible. La app usa sus plantillas, sin IA.',
       offline: 'Las funciones de IA necesitan conexión. Lo demás sigue funcionando.',
+    },
+    /** La función de IA responde, pero no tiene clave ni permiso de respuestas simuladas (B12, 2.9) */
+    detailReachable:
+      'La función de IA responde, pero no tiene clave ni permiso de respuestas simuladas. Mientras tanto la app usa sus plantillas, sin IA.',
+    /** Lo que ve quien no puede usar un motor ahora. Los motivos del servidor llegan con su propio texto */
+    access: {
+      gated:
+        'El análisis con IA se abre cuando dos médicos terminen de revisarlo. Mientras tanto ves la versión sin IA.',
+      gatedCards:
+        'Las tarjetas con IA se abren cuando dos médicos terminen de revisarlas. Mientras tanto puedes crear tus tarjetas a mano.',
+      unavailable: 'La IA no está disponible ahora. Ves la versión sin IA.',
+      offline: 'Esta función de IA necesita conexión. Se usa la versión sin IA.',
+      checking: 'Revisando si la IA está disponible…',
+      staffOnly: 'Esta función es solo para médicos y administradores.',
     },
   },
   // Cuando cambia el aviso de privacidad, como el propio aviso promete (Fase H)

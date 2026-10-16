@@ -631,6 +631,7 @@ async function runPlan(options: DeployOptions): Promise<number> {
           entrypointPath: closure.entrypointPath,
           verifyJwt: step.verifyJwt,
           files: closure.files.map((file) => ({ path: file.path, content: file.content })),
+          importMapPath: closure.importMapPath,
         });
         after = await client.getFunction(step.slug);
       } catch (error) {

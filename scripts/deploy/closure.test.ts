@@ -68,6 +68,51 @@ describe('cierre de una Edge Function', () => {
     expect(closure.external).toEqual(['npm:zod@4']);
   });
 
+  it('sin deno.json no hay mapa de imports, y con él se sube y se señala', () => {
+    const plain = repoWith({
+      'supabase/functions/hola/index.ts': `Deno.serve(() => new Response('ok'));`,
+    });
+    expect(functionClosure(plain, 'hola').importMapPath).toBeNull();
+    const root = repoWith({
+      'supabase/functions/hola/index.ts': `import { z } from 'zod';\nDeno.serve(() => new Response(String(z)));`,
+      'supabase/functions/hola/deno.json': `{"imports":{"zod":"npm:zod@4.6.5"}}`,
+      'supabase/functions/otra/deno.json': `{"imports":{}}`,
+    });
+    const closure = functionClosure(root, 'hola');
+    expect(closure.importMapPath).toBe('supabase/functions/hola/deno.json');
+    expect(closure.files.map((file) => file.path)).toEqual([
+      'supabase/functions/hola/index.ts',
+      'supabase/functions/hola/deno.json',
+    ]);
+    expect(closure.external).toEqual(['zod']);
+  });
+
+  it('ai-proxy y ai-batch del repo llevan su deno.json y nunca sus pruebas', () => {
+    for (const slug of ['ai-proxy', 'ai-batch']) {
+      const closure = functionClosure(ROOT, slug);
+      const paths = closure.files.map((file) => file.path);
+      expect(closure.importMapPath, slug).toBe(`supabase/functions/${slug}/deno.json`);
+      expect(paths, slug).toContain(`supabase/functions/${slug}/deno.json`);
+      expect(paths, slug).toContain('supabase/functions/_shared/ai/run.ts');
+      expect(
+        paths.filter((path) => path.endsWith('.test.ts') || path.includes('/testing/')),
+        slug,
+      ).toEqual([]);
+      // Cada paquete que importan por su nombre está en su mapa
+      const map = JSON.parse(
+        closure.files.find((f) => f.path === closure.importMapPath)?.content ?? '{}',
+      ) as {
+        imports: Record<string, string>;
+      };
+      for (const name of closure.external) {
+        const known = Object.keys(map.imports).some(
+          (key) => name === key || (key.endsWith('/') && name.startsWith(key)),
+        );
+        expect(known, `${slug} importa ${name}`).toBe(true);
+      }
+    }
+  });
+
   it('falla si un import no existe o sale de supabase/functions', () => {
     const missing = repoWith({
       'supabase/functions/hola/index.ts': `import { a } from '../_shared/falta.ts';`,

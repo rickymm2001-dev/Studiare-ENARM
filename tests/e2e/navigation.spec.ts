@@ -31,6 +31,8 @@ const ADMIN_GROUP = [
   // Admin, Pagos de B10, después de Usuarios
   t.navItems.billing,
   t.navItems.costs,
+  // Auditoría de la IA (B12), después de Costos de IA
+  t.navItems.audit,
   t.navItems.platform,
   t.navItems.bank,
   // Banco en la nube (B11). Banco y Sheet, Revisiones de médicos y Catálogo de mazos
@@ -45,6 +47,8 @@ const PHYSICIAN_MAIN = [
   t.navItems.drafts,
   t.navItems.reports,
 ];
+// La Auditoría de la IA (B12) no cabe en la barra del teléfono, que ya trae cuatro, y se abre desde Más
+const PHYSICIAN_MORE = [t.navItems.audit];
 
 /**
  * En computadora revisa el riel completo y que Configuración quede abajo a la izquierda. En el
@@ -130,13 +134,17 @@ test('alumno. Sus secciones, Configuración abajo y en el teléfono Más con lo 
   );
 });
 
-test('médico. Banco, Acuerdo, Borradores y Reportes, y Configuración abajo o en Más', async ({
+test('médico. Banco, Acuerdo, Borradores y Reportes, la Auditoría de la IA y Configuración abajo o en Más', async ({
   page,
 }) => {
   await presetPreferences(page, { role: 'physician' });
   await page.goto(SCREENS.questionBank.path);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.questionBank.title);
-  await expectMenu(page, { rail: PHYSICIAN_MAIN, bar: PHYSICIAN_MAIN, more: [] });
+  await expectMenu(page, {
+    rail: [...PHYSICIAN_MAIN, ...PHYSICIAN_MORE],
+    bar: PHYSICIAN_MAIN,
+    more: PHYSICIAN_MORE,
+  });
 });
 
 test('admin. Lo del alumno y su grupo de administración, en el riel o en Más', async ({ page }) => {

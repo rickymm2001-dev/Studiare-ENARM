@@ -1,6 +1,8 @@
 // Tarjetas con IA desde un texto o PDF (D-085). Con la app compilada, el plan Gratis no la incluye,
 // un plan de pago genera con el modo simulado, de un PDF y de un texto pegado, las tarjetas quedan
 // en borrador con su cita, la señal de controversia se puede verificar y la cuota del día se respeta.
+// Cuando el servidor dice que ya no hay generaciones de hoy (B12, 2.4) la app lo avisa con el texto del
+// servidor y no tapa el tope con tarjetas simuladas.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { buildPdf } from '@/data/import/testing/pdf';
@@ -91,4 +93,53 @@ test('un PDF con texto llena el campo y uno sin texto avisa que no se puede leer
   await expect(card.getByRole('alert')).toHaveText(t.aiCards.fileErrors.no_text ?? '', {
     timeout: 30_000,
   });
+});
+
+/** Lo que contesta el servidor cuando se pasa de las generaciones de tarjetas del día (B12, 2.2) */
+const GENERATION_MESSAGE =
+  'Llegaste al límite de generaciones de tarjetas con IA de hoy. Vuelve mañana.';
+
+test('cuando el servidor contesta generation_limit la app avisa de las generaciones de hoy y no inventa tarjetas', async ({
+  page,
+  consoleErrors,
+}) => {
+  await signUp(page);
+  await subscribeMonthly(page);
+  await page.goto(SCREENS.decks.path);
+  const card = page.getByRole('region', { name: t.aiCards.title });
+  await expect(card).toBeVisible();
+
+  // La primera generación pasa por el proxy de verdad. A la segunda el servidor le dice que ya no hay
+  let requests = 0;
+  await page.route('**/api/ai/flashcards', async (route) => {
+    requests += 1;
+    if (requests === 1) {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 429,
+      json: { error: 'generation_limit', message: GENERATION_MESSAGE },
+    });
+  });
+  await card.getByLabel(t.aiCards.textLabel).fill(MATERIAL);
+  await card.getByRole('button', { name: t.aiCards.generate }).click();
+  await expect(card.getByRole('heading', { name: t.aiCards.resultTitle })).toBeVisible();
+  await card.getByRole('button', { name: t.aiCards.again }).first().click();
+
+  await card.getByLabel(t.aiCards.textLabel).fill(MATERIAL);
+  await card.getByRole('button', { name: t.aiCards.generate }).click();
+  await expect(card.getByRole('alert')).toHaveText(GENERATION_MESSAGE);
+  // La app no tapa el tope con tarjetas del generador simulado, y el texto sigue ahí para otro día
+  await expect(card.getByRole('heading', { name: t.aiCards.resultTitle })).toHaveCount(0);
+  await expect(card.getByLabel(t.aiCards.textLabel)).toHaveValue(MATERIAL);
+  expect(requests).toBe(2);
+  await expectNoSeriousA11yViolations(page);
+
+  // Chromium anota en la consola cada 429 como un recurso que no cargó. Es el que provocó la prueba y
+  // ningún otro error pasa
+  expect(consoleErrors).toEqual([
+    'Failed to load resource: the server responded with a status of 429 (Too Many Requests)',
+  ]);
+  consoleErrors.length = 0;
 });

@@ -59,10 +59,37 @@ const CONFIG: AdminConfig = {
   },
 };
 
+/** Lo que manda la Edge Function de B12, con razonamiento por motor y los límites de la nube */
+const CLOUD_CONFIG: AdminConfig = {
+  ...CONFIG,
+  models: {
+    ...CONFIG.models,
+    flashcards: { id: 'claude-haiku-5-5', effort: 'low', thinking: 'adaptive', maxTokens: 8000 },
+  },
+  prices: {
+    ...CONFIG.prices,
+    'claude-haiku-5-5': { input: 0.1, output: 0.5, cacheWrite: 0.125, cacheRead: 0.01 },
+  },
+  limits: {
+    ...CONFIG.limits,
+    perUserDailyUsd: 0.3,
+    cardGenerationsPerDay: 20,
+    sectionsPerGeneration: 12,
+    maxPendingJobs: 12,
+    engineShare: {
+      forgetting: 0.1,
+      weekly_report: 0.1,
+      flashcards: 0.55,
+      bias_tips: 0.1,
+      restructure: 0.15,
+    },
+  },
+};
+
 /** Un proxy falso que guarda los cambios como el verdadero */
-function stubProxy() {
+function stubProxy(initial: AdminConfig = CONFIG) {
   const puts: unknown[] = [];
-  let config = CONFIG;
+  let config = initial;
   vi.stubGlobal(
     'fetch',
     vi.fn((url: string, init?: RequestInit) => {
@@ -71,14 +98,25 @@ function stubProxy() {
       }
       if (url.endsWith('/api/ai/config') && init?.method === 'PUT') {
         const patch = JSON.parse(init.body as string) as {
-          limits?: { dailyBudgetUsd?: number };
+          limits?: Partial<AdminConfig['limits']>;
           models?: Partial<AdminConfig['models']>;
         };
         puts.push(patch);
         config = {
           ...config,
           models: { ...config.models, ...patch.models },
-          limits: { ...config.limits, ...patch.limits },
+          // Como mergeConfig del servicio, que mezcla también las cuotas y los límites por motor
+          limits: {
+            ...config.limits,
+            ...patch.limits,
+            ...(config.limits.engineShare
+              ? { engineShare: { ...config.limits.engineShare, ...patch.limits?.engineShare } }
+              : {}),
+            perStudentPerDay: {
+              ...config.limits.perStudentPerDay,
+              ...patch.limits?.perStudentPerDay,
+            },
+          },
         };
         return Promise.resolve(Response.json({ mode: 'mock', config }));
       }
@@ -355,5 +393,103 @@ describe('modelos, precios y límites de la IA', () => {
     expect(
       within(card).getByRole('button', { name: adminText.adminConfig.aiForm.save }),
     ).toBeDisabled();
+  });
+
+  it('con la Edge Function muestra el razonamiento por motor y los límites de la nube, y avisa lo de la compuerta', async () => {
+    const typing = userEvent.setup();
+    const puts = stubProxy(CLOUD_CONFIG);
+    await open();
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
+    const text = adminText.adminConfig.aiForm;
+    expect(await within(card).findByText(text.gateNote)).toBeVisible();
+    const fieldsets = await within(card).findAllByRole('group');
+    expect(fieldsets).toHaveLength(5);
+    // Tarjetas con Haiku 5.5 y razonamiento automático
+    expect(within(fieldsets[2] as HTMLElement).getByLabelText(text.thinking)).toHaveValue(
+      'adaptive',
+    );
+    expect(within(fieldsets[0] as HTMLElement).getByLabelText(text.thinking)).toHaveValue('');
+    expect(within(card).getByLabelText(text.perUserDaily)).toHaveValue(0.3);
+    expect(within(card).getByLabelText(text.cardGenerations)).toHaveValue(20);
+    expect(within(card).getByLabelText(text.sections)).toHaveValue(12);
+    expect(within(card).getByLabelText(text.maxPending)).toHaveValue(12);
+    expect(
+      within(card).getByLabelText(text.share(adminText.adminCosts.engines.flashcards)),
+    ).toHaveValue(55);
+
+    // Un esfuerzo de los nuevos y un tope de la nube. Solo viaja lo que cambió
+    await typing.selectOptions(
+      within(fieldsets[2] as HTMLElement).getByLabelText(text.effort),
+      text.efforts.max,
+    );
+    fireEvent.change(within(card).getByLabelText(text.perUserDaily), { target: { value: '0.5' } });
+    fireEvent.change(
+      within(card).getByLabelText(text.share(adminText.adminCosts.engines.flashcards)),
+      { target: { value: '60' } },
+    );
+    await typing.click(within(card).getByRole('button', { name: text.save }));
+    expect(await within(card).findByText(text.saved)).toBeVisible();
+    expect(puts).toEqual([
+      {
+        models: {
+          flashcards: { id: 'claude-haiku-5-5', effort: 'max', maxTokens: 8000 },
+        },
+        limits: { perUserDailyUsd: 0.5, engineShare: { flashcards: 0.6 } },
+      },
+    ]);
+  });
+
+  it('un límite de la nube fuera de rango no deja guardar', async () => {
+    stubProxy(CLOUD_CONFIG);
+    await open();
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
+    const text = adminText.adminConfig.aiForm;
+    fireEvent.change(await within(card).findByLabelText(text.sections), {
+      target: { value: '13' },
+    });
+    expect(await within(card).findByText(text.sectionsError)).toBeVisible();
+    expect(within(card).getByRole('button', { name: text.save })).toBeDisabled();
+  });
+
+  it('si el servicio rechaza el cambio, muestra por qué', async () => {
+    const typing = userEvent.setup();
+    stubProxy(CLOUD_CONFIG);
+    const base = globalThis.fetch;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) =>
+        url.endsWith('/api/ai/config') && init?.method === 'PUT'
+          ? Promise.resolve(
+              Response.json(
+                {
+                  error: 'invalid_request',
+                  message: 'claude-opus-5-5 no deja apagar el razonamiento',
+                },
+                { status: 400 },
+              ),
+            )
+          : base(url, init),
+      ),
+    );
+    await open();
+    const card = await screen.findByRole(
+      'region',
+      { name: adminText.adminConfig.aiForm.title },
+      WAIT,
+    );
+    const text = adminText.adminConfig.aiForm;
+    fireEvent.change(await within(card).findByLabelText(text.budget), { target: { value: '3' } });
+    await typing.click(within(card).getByRole('button', { name: text.save }));
+    expect(
+      await within(card).findByText('claude-opus-5-5 no deja apagar el razonamiento'),
+    ).toBeVisible();
   });
 });

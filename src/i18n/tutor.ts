@@ -151,7 +151,10 @@ export const tutorText = {
 
     report: {
       title: 'Tu resumen',
-      hint: 'Un resumen con plantilla fija, armado con todos tus números hasta hoy. Las secciones que todavía calibran no aparecen. El informe de cada semana llega con la IA en la siguiente fase.',
+      hint: 'Un resumen con plantilla fija, armado con todos tus números hasta hoy. Las secciones que todavía calibran no aparecen.',
+      // Cuando la IA redactó el resumen de la semana (B12). Los números y las prioridades son los mismos
+      hintAi:
+        'Un resumen armado con todos tus números hasta hoy. La IA lo redacta con esos mismos números y no agrega nada nuevo. Las secciones que todavía calibran no aparecen.',
       calibrating: (have: number, need: number) =>
         `Calibrando. El resumen aparece al juntar ${need} respuestas y llevas ${have}.`,
       priorities: 'Tus prioridades',
@@ -195,6 +198,9 @@ export const tutorText = {
         template: 'Redactado con respuestas fijas de demostración',
       },
       draft: 'Borrador, no validado por médico',
+      pending:
+        'Tu tutor está preparando esta explicación con IA. Suele llegar en menos de una hora y puede tardar hasta un día.',
+      jobFailed: 'La IA no pudo preparar esta explicación. Ves la versión sin IA.',
       noEvidence:
         'La IA no encontró evidencia suficiente para añadir una lectura, así que se queda la explicación base.',
     },

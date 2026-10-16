@@ -200,9 +200,14 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
 - verifyJwt va en true para las funciones que llama la app con la sesión del alumno y en false para los avisos de Stripe y de Mercado Pago, que se identifican con su firma. Una prueba revisa que coincida con lo que dice el index.ts de cada función
 - secrets son los nombres que espera --secrets-from, cada uno con pattern, la forma completa de su valor con ^ y $
 - anonExecutable y overloads anotan, con su porqué, lo que la comprobación de la base aceptaría como excepción
-- Hoy hay dos. b10, lo que falta de B10. b9, que solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
+- Hoy hay cuatro
+  - b9 solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
+  - b10 es lo que falta de B10
+  - b11 es el banco en la nube y bank-sync
+  - b12 es la IA real. Cuatro migraciones, supabase/manual/ia-b12.sql con su comprobación y las funciones ai-proxy y ai-batch, que llevan verifyJwt en false. Sus secretos son APP_ORIGINS y AI_ALLOW_MOCK. La clave ENARM_ANTHROPIC_KEY la pone Ricardo directo en Supabase. La pieza del ciclo de lotes (supabase/manual/ia-lotes-cron.sql) no entra, porque se corre después de comprobar /health en modo simulado
+- Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql. Sus delete de las tablas de B12 van con execute y solo si la tabla existe, así que desplegar el plan b11 solo no deja Borrar mis datos roto y desplegar b12 enseguida ya no es obligatorio
 
-Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa.
+Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa. Si la función tiene un deno.json en su carpeta, como ai-proxy y ai-batch, que importan zod, hono y el SDK de Anthropic por su nombre, también se sube y su ruta va en import_map_path del metadata. Sin ese mapa el servidor no resuelve esos nombres.
 
 ## Fuentes
 
@@ -232,6 +237,7 @@ La primera corrida real fue el 2026-10-15 con el plan b10, todo en verde. Confir
 - Que un error de SQL en database/query y en database/query/read-only responda 400. La herramienta solo cuenta un 400 como comprobación en rojo antes de aplicar, y cualquier otro estado la detiene sin escribir
 - Que POST database/migrations con la misma Idempotency-Key no registre dos veces, como dice la especificación, y que GET database/migrations muestre el registro justo después de aplicar
 
+- Que la API acepte import_map_path con la ruta desde la raíz del repo del deno.json de la función, como entrypoint_path, y que con él publique ai-proxy y ai-batch. Se escribió con la especificación y el esquema del conector, pero no se ha corrido contra el proyecto real. Si la API lo rechaza, se publican con el conector (docs/IA_ALOJADA.md)
 - Que POST database/migrations corra bien los archivos con begin y commit propios, como party-dueno-al-borrar-cuenta.sql. Postgres solo avisa si llega un begin dentro de otra transacción, así que se espera que pase
 - Que database/query/read-only pueda leer pg_proc y auth.users. Si falla por permisos, la herramienta repite la lectura en database/query con read_only, como el servidor MCP
 - Que la respuesta de una consulta sea la lista de filas, como la trata el servidor MCP

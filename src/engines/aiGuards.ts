@@ -13,21 +13,26 @@
  * vez con los problemas, y el cliente, que no confía en nadie. Sin importaciones de la app.
  * Umbrales. Mensaje al alumno de 2 a 3 frases, una frase de hipótesis, de 2 a 3 ejemplos en un
  * consejo y cita de 20 caracteres y 4 palabras como mínimo.
+ * B12. Dos guardas nuevas. score_prediction rechaza en lo que lee el alumno (hipótesis, informe y
+ * consejo) un puntaje estimado, una probabilidad de plaza o un percentil futuro, porque la regla de
+ * CLAUDE.md prohíbe predecir el puntaje del ENARM. vocabulary rechaza la palabra sesgo en un consejo
+ * cuando la app todavía dice trampas (D-099, 10.14 del plan de B12).
  */
-import type {
-  BiasTipInput,
-  BiasTipOutput,
-  EngineInputs,
-  EngineOutputs,
-  FlashcardsInput,
-  FlashcardsOutput,
-  HypothesisInput,
-  HypothesisOutput,
-  RestructureInput,
-  RestructureOutput,
-  WeeklyReportInput,
-  WeeklyReportOutput,
-  AiEngine,
+import {
+  DEFAULT_BIAS_VOCABULARY,
+  type BiasTipInput,
+  type BiasTipOutput,
+  type EngineInputs,
+  type EngineOutputs,
+  type FlashcardsInput,
+  type FlashcardsOutput,
+  type HypothesisInput,
+  type HypothesisOutput,
+  type RestructureInput,
+  type RestructureOutput,
+  type WeeklyReportInput,
+  type WeeklyReportOutput,
+  type AiEngine,
 } from './aiContracts.ts';
 import { clozeHoles } from './cloze.ts';
 import {
@@ -60,7 +65,9 @@ export type GuardIssue =
   | 'number_not_in_quote'
   | 'drug_not_in_quote'
   | 'answer_not_grounded'
-  | 'controversy_invalid';
+  | 'controversy_invalid'
+  | 'score_prediction'
+  | 'vocabulary';
 
 export interface GuardResult {
   passed: boolean;
@@ -91,6 +98,9 @@ export const GUARD_MESSAGES: Readonly<Record<GuardIssue, string>> = {
   drug_not_in_quote: 'Hay un fármaco que la cita no trae',
   answer_not_grounded: 'La respuesta no se apoya en las palabras de la cita',
   controversy_invalid: 'La controversia no cita una fuente de la lista cerrada',
+  score_prediction:
+    'Predijiste un puntaje, una plaza o un percentil del ENARM, y eso nunca se hace',
+  vocabulary: 'Usaste la palabra sesgo y con este alumno se dice trampa',
 };
 
 const result = (issues: Iterable<GuardIssue>): GuardResult => {
@@ -102,19 +112,161 @@ const result = (issues: Iterable<GuardIssue>): GuardResult => {
  * Términos de salud mental. El tutor habla de cómo estudia el alumno y nunca opina sobre cómo está
  * (8.2). Se revisan sobre el texto normalizado, sin acentos
  */
-const MENTAL_HEALTH =
-  /\b(depresion|deprimid[oa]|ansiedad|ansios[oa]|trastorno|burnout|agotamiento emocional|estres cronico|salud mental|psicolog\w*|psiquiatr\w*|terapia|suicid\w*|panico|angustia|autoestima)\b/;
+const MENTAL_HEALTH_TERMS = String.raw`depresion|deprimid[oa]|ansiedad|ansios[oa]|trastorno|burnout|agotamiento emocional|estres cronico|salud mental|psicolog\w*|psiquiatr\w*|terapia|suicid\w*|panico|angustia|autoestima`;
+const MENTAL_HEALTH = new RegExp(String.raw`\b(${MENTAL_HEALTH_TERMS})\b`, 'g');
+/**
+ * Lo que se le atribuye al alumno. Son los términos de arriba y además los que solo valen cuando la frase
+ * habla de él, como estresado, agotado, angustiado, triste, estrés o ánimo. Solos no cuentan, porque un
+ * estrés oxidativo o el estrés de tiempo del simulador son tema de estudio (B12, revisión del hallazgo 4)
+ */
+const STUDENT_STATE_TERMS = String.raw`${MENTAL_HEALTH_TERMS}|estres|tristeza`;
+const STUDENT_STATES = String.raw`deprimid[oa]|ansios[oa]|estresad[oa]|agotad[oa]|angustiad[oa]|triste`;
+/**
+ * Una frase que le atribuye al alumno un estado de ánimo, como tienes ansiedad, estás deprimido, te
+ * sientes triste o tu estrés (B12). Aunque el término venga en el texto del banco, eso ya es opinar sobre
+ * el alumno
+ */
+const ABOUT_STUDENT = [
+  new RegExp(
+    String.raw`\b(tienes|tengas|sientes|sufres|padeces|vives con|muestras) (de |un |una |mucha |mucho |cierta |cierto |algo de )?(${STUDENT_STATE_TERMS})\b`,
+  ),
+  new RegExp(
+    String.raw`\b(estas|estes|te sientes|te notas|te ves|pareces|eres|andas) (muy |algo |un poco |bastante )?(${STUDENT_STATES})\b`,
+  ),
+  new RegExp(String.raw`\btu (${STUDENT_STATE_TERMS}|animo)\b`),
+];
 
-export function mentionsMentalHealth(text: string): boolean {
-  return MENTAL_HEALTH.test(normalizeForMatch(text));
+/**
+ * Si el texto opina sobre la salud mental del alumno. Un término de salud mental cuenta si no viene
+ * en el apoyo, que es el texto del banco o los datos que recibió el motor, o si la frase se lo
+ * atribuye al alumno, tenga o no un término de la lista. Así un tema de psiquiatría del banco o una
+ * terapia intensiva se pueden repetir y "parece que tienes ansiedad" o "estás muy estresado" nunca
+ * pasan (B12, para no rechazar el banco imperfecto, D-080)
+ */
+export function mentionsMentalHealth(text: string, support = ''): boolean {
+  const supported = new Set(normalizeForMatch(support).match(MENTAL_HEALTH) ?? []);
+  return sentencesOf(text).some((raw) => {
+    const sentence = normalizeForMatch(raw);
+    // Antes esto se probaba solo si la frase traía un término de la lista, y "estás muy estresado" o
+    // "tu ánimo" nunca llegaban hasta aquí
+    if (ABOUT_STUDENT.some((pattern) => pattern.test(sentence))) return true;
+    return (sentence.match(MENTAL_HEALTH) ?? []).some((term) => !supported.has(term));
+  });
 }
 
 /** Frases de un texto. Un punto dentro de una cifra como 3.5 no corta la frase */
-export function sentenceCount(text: string): number {
+function sentencesOf(text: string): string[] {
   return text
     .trim()
     .split(/(?<=[.!?…])\s+(?=[¿¡"“(\p{Lu}\d])/u)
-    .filter((part) => part.replace(/[^\p{L}\d]/gu, '').length > 0).length;
+    .filter((part) => part.replace(/[^\p{L}\d]/gu, '').length > 0);
+}
+
+export function sentenceCount(text: string): number {
+  return sentencesOf(text).length;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Predicción del puntaje (CLAUDE.md, B12)
+
+/**
+ * Lo que una predicción promete. El puntaje, la calificación, los aciertos o el percentil del
+ * examen, una plaza o la selección. Se revisa frase por frase sobre el texto normalizado, sin acentos
+ */
+const EXAM_OUTCOME =
+  /\b(puntajes?|calificacion(es)?|aciertos|percentil(es)?|plazas?|seleccion|seleccionad[oa]s?|residencias?)\b/;
+/** Verbos en futuro sobre el resultado del alumno, como obtendrás o vas a aprobar */
+const OUTCOME_FUTURE =
+  /\b(obtendras|sacaras|alcanzaras|lograras|aprobaras|pasaras|quedaras|vas a (sacar|obtener|alcanzar|lograr|aprobar|pasar|quedar))\b/;
+/** Palabras de estimación, como puntaje estimado o percentil proyectado */
+const ESTIMATE =
+  /\b(estimad[oa]s?|estimacion(es)?|proyectad[oa]s?|proyeccion(es)?|pronostic\w*|predic\w*)\b/;
+/** Probabilidad de aprobar o de ser seleccionado, que siempre es del examen */
+const CHANCE_TO_PASS =
+  /\b(probabilidad(es)?|posibilidad(es)?|chances?|oportunidad(es)?) de (aprobar|ser seleccionad[oa])\b/;
+/** Probabilidad de quedar, de entrar o de conseguir algo, que es del examen si nombra su resultado */
+const CHANCE_TO_GET =
+  /\b(probabilidad(es)?|posibilidad(es)?|chances?|oportunidad(es)?) de (pasar|quedar|entrar|obtener|conseguir|ganar|alcanzar)\b/;
+const EXAM = /\b(enarm|examen)\b/;
+/** Una predicción sin rodeos sobre el examen, como aprobarás el ENARM o tu percentil */
+const DIRECT_PREDICTION = [
+  /\b(aprobaras|pasaras|vas a aprobar|vas a pasar) (el )?(enarm|examen)\b/,
+  /\bseras seleccionad[oa]\b/,
+  /\btu percentil\b/,
+  /\btu (nota|puntaje|calificacion|lugar|resultado|ranking|posicion)( final)? (en|del|de) (el )?enarm\b/,
+];
+/**
+ * Promesas que no nombran el resultado del examen (B12, revisión del hallazgo 13). En esta app lo que se
+ * aprueba es el ENARM, así que aprobarás, vas a aprobar o es muy probable que apruebes ya predicen, aunque
+ * no digan qué. Pasarás o quedarás solos no, porque son pasar a la siguiente tarjeta o quedar con diez
+ * tarjetas, y "es posible que pases por alto la dosis" tampoco
+ */
+const PASS_PROMISE = [
+  /\b(aprobaras|vas a aprobar)\b/,
+  /\b(es|sera|seria) (muy |bastante |altamente |casi )?(probable|posible|seguro) que apruebes\b/,
+  /\b(probablemente|seguramente|seguro( que)?) (apruebes|apruebas)\b/,
+];
+/** Entrar, ingresar o ganar una especialidad, una residencia o una plaza */
+const ENTRY_PROMISE =
+  /\b(entras|entraras|ingresas|ingresaras|conseguiras|ganaras|obtendras)( a| en)? (la|tu|una|esa) (especialidad|residencia|plaza)\b/;
+/** Quedar entre los mejores, que es un lugar en el ranking del examen */
+const RANK_PROMISE =
+  /\b(quedaras|estaras|terminaras) (entre|dentro de) (los|las) (mejores|primeros|primeras|\d+|top)\b/;
+/**
+ * Ir por buen camino, que promete algo solo si lo que sigue es un lugar del examen: una plaza, una
+ * residencia, el ranking, entrar a una especialidad, o una calificación o un puntaje del ENARM. "Vas por
+ * buen camino con tus repasos" o "tu puntaje de práctica subió, vas por buen camino" no prometen nada
+ */
+const ON_THE_WAY = /\b(vas|estas|andas) (por |en )?(muy |buen |el |un )*(camino|rumbo|ruta)\b/;
+const EXAM_SEAT = /\b(plazas?|residencias?|ranking)\b/;
+const GOAL_SEAT =
+  /\b(entrar|ingresar|conseguir|ganar|obtener|alcanzar) (a |en )?(la|tu|una|esa) (especialidad|residencia|plaza)\b/;
+const SCORE_WORD = /\b(calificacion(es)?|puntajes?|notas?)\b/;
+const ENARM = /\benarm\b/;
+/** Tu nota o tu calificación, o la del ENARM, que con un verbo en futuro y el ENARM es una predicción */
+const OWN_GRADE =
+  /\b(tu|tus|su|sus) (nota|notas|calificacion|calificaciones)\b|\b(nota|calificacion)( final)? (del|en el|de) enarm\b|\bcalificacion que (obtengas|saques|logres|alcances)\b/;
+const WILL_BE = /\b(sera|seran|estara|estaran|quedara|quedaran)\b/;
+
+/**
+ * Si el texto predice el puntaje del ENARM, una plaza o un percentil del alumno. La app nunca predice
+ * el puntaje (CLAUDE.md), así que la IA tampoco. Una frase cuenta si junta un resultado del examen con
+ * un futuro o una estimación, si habla de la probabilidad de aprobar o de quedar en el examen, si lo
+ * dice sin rodeos, o si promete aprobar, entrar a una especialidad o quedar entre los mejores aunque no
+ * nombre el resultado. Frases como "en el ENARM tendrás casos así", "la probabilidad de quedar con
+ * secuelas", "es posible que pases por alto la dosis" o "la escala de Alvarado da una puntuación de 7"
+ * no cuentan
+ */
+export function predictsScore(text: string): boolean {
+  return sentencesOf(text).some((raw) => {
+    const sentence = normalizeForMatch(raw);
+    if (DIRECT_PREDICTION.some((pattern) => pattern.test(sentence))) return true;
+    if (PASS_PROMISE.some((pattern) => pattern.test(sentence))) return true;
+    if (ENTRY_PROMISE.test(sentence) || RANK_PROMISE.test(sentence)) return true;
+    if (
+      ON_THE_WAY.test(sentence) &&
+      (EXAM_SEAT.test(sentence) ||
+        GOAL_SEAT.test(sentence) ||
+        (SCORE_WORD.test(sentence) && ENARM.test(sentence)))
+    ) {
+      return true;
+    }
+    if (OWN_GRADE.test(sentence) && WILL_BE.test(sentence) && ENARM.test(sentence)) return true;
+    if (CHANCE_TO_PASS.test(sentence)) return true;
+    const outcome = EXAM_OUTCOME.test(sentence);
+    if (CHANCE_TO_GET.test(sentence) && (outcome || EXAM.test(sentence))) return true;
+    return outcome && (OUTCOME_FUTURE.test(sentence) || ESTIMATE.test(sentence));
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Vocabulario de sesgo o trampa (D-099, B12)
+
+const BIAS_WORD = /\bsesg\w*/;
+
+/** Si el texto usa la palabra sesgo, o sesgado, que no se dice mientras el alumno ve trampas */
+export function usesBiasWord(text: string): boolean {
+  return BIAS_WORD.test(normalizeForMatch(text));
 }
 
 const joinTexts = (...parts: readonly (string | null | undefined)[]) =>
@@ -153,10 +305,10 @@ export function guardHypothesis(output: HypothesisOutput, input: HypothesisInput
     const sentences = sentenceCount(output.studentMessage);
     if (sentences < 2 || sentences > 3) issues.push('message_sentences');
   }
-  if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
-
   // Los datos médicos salen de los ítems implicados y de nada más
   const support = joinTexts(input.area, ...input.evidence.map((item) => item.text));
+  if (mentionsMentalHealth(text, support)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
   if (hasNewFact(text, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -186,8 +338,6 @@ export function guardWeeklyReport(
     output.habit,
     output.challenge,
   );
-  if (mentionsMentalHealth(text)) issues.push('mental_health_opinion');
-
   const support = joinTexts(
     String(input.answers),
     ...input.priorities.flatMap((line) => [line.title, line.detail]),
@@ -196,6 +346,8 @@ export function guardWeeklyReport(
     input.challenge?.title,
     input.challenge?.detail,
   );
+  if (mentionsMentalHealth(text, support)) issues.push('mental_health_opinion');
+  if (predictsScore(text)) issues.push('score_prediction');
   if (hasNewFact(text, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -209,9 +361,12 @@ export function guardBiasTip(output: BiasTipOutput, input: BiasTipInput): GuardR
 
   if (output.exampleRefs.some((ref) => !refs.has(ref))) issues.push('ref_not_in_input');
   if (new Set(output.exampleRefs).size !== output.exampleRefs.length) issues.push('examples_count');
-  if (mentionsMentalHealth(output.tip)) issues.push('mental_health_opinion');
-
   const support = joinTexts(input.baseTip, input.biasLabel, ...input.examples.map((e) => e.text));
+  if (mentionsMentalHealth(output.tip, support)) issues.push('mental_health_opinion');
+  if (predictsScore(output.tip)) issues.push('score_prediction');
+  // Sin el vocabulario en la entrada cuenta como trampa, que es lo que dice la app sin acuerdo medido
+  const vocabulary = input.vocabulary ?? DEFAULT_BIAS_VOCABULARY;
+  if (vocabulary === 'trampa' && usesBiasWord(output.tip)) issues.push('vocabulary');
   if (hasNewFact(output.tip, support)) issues.push('new_medical_fact');
   return result(issues);
 }
@@ -306,7 +461,8 @@ export function guardRestructure(output: RestructureOutput, input: RestructureIn
   if (key && groundedRatio(key.text, original) < ANSWER_GROUNDED_RATIO) {
     issues.push('answer_not_grounded');
   }
-  if (mentionsMentalHealth(proposed)) issues.push('mental_health_opinion');
+  // Un tema de psiquiatría puede repetir sus términos. Lo nuevo no
+  if (mentionsMentalHealth(proposed, original)) issues.push('mental_health_opinion');
   return result(issues);
 }
 

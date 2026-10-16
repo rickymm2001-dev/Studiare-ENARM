@@ -20,7 +20,7 @@ Este repositorio es público desde D-055 y pasará a privado al publicarse en Cl
 - docs/asvs.md es la revisión contra OWASP ASVS 5.0
 - docs/SUPABASE.md guía a Ricardo para conectar la nube, paso a paso y sin terminal
 - docs/PENDIENTES_DE_RICARDO.md lista, en orden, lo que falta de Ricardo para que la plataforma funcione completa
-- docs/IA_ALOJADA.md explica cómo poner el proxy de IA en un alojamiento
+- docs/IA_ALOJADA.md explica cómo corre la IA real en las Edge Functions ai-proxy y ai-batch de Supabase
 - docs/BANCO_EN_LA_NUBE.md es el diseño para pasar el banco de preguntas a Supabase
 - docs/legal tiene el aviso de privacidad y los términos para el abogado
 

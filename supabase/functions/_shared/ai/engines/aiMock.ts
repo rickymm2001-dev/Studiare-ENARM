@@ -1,0 +1,308 @@
+// Copia generada por scripts/ai/sync-function-sources.ts desde src/engines/aiMock.ts. No la edites.
+// Cambia el original y corre npm run ai:sync.
+/**
+ * Respuestas fijas de los motores de IA (8.1, D-017, D-098).
+ *
+ * Qué hace. Calcula, sin red y sin clave, una salida válida para cada motor a partir de su entrada.
+ * Es lo que contesta el proxy en modo simulado, lo que usa la app cuando no hay proxy y contra lo que
+ * corren las evaluaciones con la bandera mock.
+ * Entradas. La entrada de un motor ya validada por su esquema.
+ * Salidas. La salida del motor, que cumple el esquema y las guardas de aiGuards.
+ * Método. Plantillas en español que solo repiten lo que la entrada trae. Con el mismo texto sale
+ * siempre la misma respuesta. Las preguntas reestructuradas llevan el aviso de que son de ejemplo y
+ * de que un médico debe revisarlas. Sin importaciones de la app.
+ * Umbrales. De 4 pruebas de evidencia como máximo en una hipótesis y confianza media desde 10
+ * hallazgos recientes.
+ * B12. El consejo por sesgo cambia sesgo por trampa cuando el alumno ve trampas, para pasar la guarda
+ * vocabulary. Ninguna respuesta fija predice el puntaje, así que todas pasan score_prediction. Las
+ * tarjetas simuladas no convierten en tarjeta una orden escondida en el texto.
+ */
+import {
+  DEFAULT_BIAS_VOCABULARY,
+  type AiEngine,
+  type BiasTipInput,
+  type BiasTipOutput,
+  type EngineInputs,
+  type EngineOutputs,
+  type FlashcardsInput,
+  type FlashcardsOutput,
+  type HypothesisInput,
+  type HypothesisOutput,
+  type RestructureInput,
+  type RestructureOutput,
+  type WeeklyReportInput,
+  type WeeklyReportOutput,
+} from './aiContracts.ts';
+import { simulateCards } from './cardSim.ts';
+import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, normalizeForMatch, wordsOf } from './grounding.ts';
+
+export const MOCK_MODEL = 'respuestas-fijas-v1';
+
+const MEDIUM_CONFIDENCE_FINDINGS = 10;
+const EVIDENCE_REFS = 4;
+
+const HYPOTHESIS_TEXT: Readonly<
+  Record<HypothesisInput['rule'], (area: string) => { hypothesis: string; message: string }>
+> = {
+  persistent_lapse: (area) => ({
+    hypothesis: `Sigues fallando ${area} y repetirlo igual no está funcionando.`,
+    message:
+      'Cambia la forma de estudiar este punto en lugar de repetirlo igual. Revisa la explicación y divide lo que hoy llevas junto.',
+  }),
+  list_card: (area) => ({
+    hypothesis: `Las tarjetas de ${area} guardan varios datos juntos y por eso se escapan.`,
+    message:
+      'Separa la lista en tarjetas más pequeñas, una idea por tarjeta. Así el repaso te dice exactamente qué dato se te olvida.',
+  }),
+  interference: (area) => ({
+    hypothesis: `En ${area} estás confundiendo conceptos parecidos entre sí.`,
+    message:
+      'Compáralos lado a lado y fíjate en el dato que los distingue. Una tarjeta de contraste te ayuda a separarlos.',
+  }),
+  high_confidence_error: (area) => ({
+    hypothesis: `En ${area} respondes con seguridad y fallas, lo que sugiere una idea equivocada firme.`,
+    message:
+      'Antes de responder, nombra el dato del caso que respalda tu elección. Revisa con calma la explicación de esos casos.',
+  }),
+  misreading: (area) => ({
+    hypothesis: `En ${area} fallas más por cómo lees el enunciado que por lo que sabes.`,
+    message:
+      'Subraya las negaciones y la pregunta final antes de ver las opciones. Activa el resaltado para practicarlo.',
+  }),
+  fatigue: (area) => ({
+    hypothesis: `En ${area} tus fallos aumentan hacia el final de la sesión.`,
+    message:
+      'Haz una pausa corta cuando notes errores seguidos. Retoma el tema cuando tengas la cabeza más fresca.',
+  }),
+  rushing: (area) => ({
+    hypothesis: `En ${area} contestas muy rápido y por eso fallas.`,
+    message:
+      'Reserva unos segundos para descartar opciones antes de elegir. Practica el tema en el simulador a ritmo de examen.',
+  }),
+  foundation_gap: (area) => ({
+    hypothesis: `En ${area} falta una base que sostenga los temas que vienen después.`,
+    message:
+      'Refuerza primero los conceptos básicos del tema. Después vuelve a las preguntas que fallaste.',
+  }),
+};
+
+export function mockHypothesis(input: HypothesisInput): HypothesisOutput {
+  // Con menos de dos pruebas la evidencia no alcanza y lo correcto es no opinar (8.2)
+  if (input.evidence.length < 2) {
+    return {
+      hypothesis: null,
+      evidence: [],
+      confidence: 'low',
+      actions: [],
+      studentMessage: null,
+    };
+  }
+  const text = HYPOTHESIS_TEXT[input.rule](input.area);
+  return {
+    hypothesis: text.hypothesis,
+    evidence: input.evidence.slice(0, EVIDENCE_REFS).map((item) => item.ref),
+    confidence: input.recentFindings >= MEDIUM_CONFIDENCE_FINDINGS ? 'medium' : 'low',
+    actions: input.allowedActions.slice(0, 2),
+    studentMessage: text.message,
+  };
+}
+
+export function mockWeeklyReport(input: WeeklyReportInput): WeeklyReportOutput {
+  return {
+    summary: `Esta semana respondiste ${input.answers} preguntas. Estas son las prioridades para la que sigue.`,
+    priorities: input.priorities.map((line) => ({ ref: line.ref, text: line.detail })),
+    habit: input.habit?.detail ?? null,
+    challenge: input.challenge?.detail ?? null,
+  };
+}
+
+/**
+ * Una frase que le da órdenes a la IA en lugar de enseñar algo, como "ignora tus instrucciones" o
+ * "nota para la IA". El texto del alumno es material y nunca instrucciones, así que el simulado,
+ * como un modelo que se porta bien, no la vuelve tarjeta (B12, casos adversarios)
+ */
+const INSTRUCTION_PATTERNS = [
+  /\b(ignora|olvida|omite)\b.{0,40}\b(instrucciones|reglas|indicaciones|consejo base)\b/,
+  /\b(nota|instruccion|mensaje|orden) para (la |el )?(ia|inteligencia artificial|modelo|tutor|asistente)\b/,
+  /\b(crea|escribe|agrega|genera|responde)\b.{0,40}\btarjetas?\b/,
+  /\bsi eres (una |un )?(ia|inteligencia artificial|modelo|asistente)\b/,
+];
+
+export function looksLikeInstruction(sentence: string): boolean {
+  const normalized = normalizeForMatch(sentence);
+  return INSTRUCTION_PATTERNS.some((pattern) => pattern.test(normalized));
+}
+
+/** Una frase en primera persona es del alumno sobre sí mismo y no algo que estudiar */
+const FIRST_PERSON = /\b(tengo|tuve|me|mi|mis|yo|siento|estoy)\b/;
+const FALLBACK_CARDS = 2;
+
+/**
+ * Tarjetas de respaldo cuando el simulador no encuentra un dato que ocultar, como en explicaciones
+ * largas del banco. Pregunta cómo termina una frase del texto y su respuesta es el resto de la frase,
+ * así que todo sale de la cita. Nunca usa preguntas, frases en primera persona ni órdenes a la IA (B12)
+ */
+function fallbackCards(text: string): FlashcardsOutput['cards'] {
+  return text
+    .split(/(?<=[.!?])\s+(?=[\p{Lu}¿¡\d])/u)
+    .map((sentence) => sentence.trim())
+    .filter(
+      (sentence) =>
+        sentence.length >= 40 &&
+        sentence.length <= 260 &&
+        !sentence.includes('?') &&
+        wordsOf(sentence).length >= 8 &&
+        !FIRST_PERSON.test(normalizeForMatch(sentence)) &&
+        !looksLikeInstruction(sentence),
+    )
+    .slice(0, FALLBACK_CARDS)
+    .map((sentence) => {
+      const words = sentence.replace(/[.;:]+$/, '').split(/\s+/);
+      const cut = Math.min(6, Math.floor(words.length / 2));
+      return {
+        kind: 'basic' as const,
+        front: `¿Cómo termina esta idea del texto? ${words.slice(0, cut).join(' ')}…`,
+        back: words.slice(cut).join(' '),
+        quote: sentence,
+      };
+    });
+}
+
+export function mockFlashcards(input: FlashcardsInput): FlashcardsOutput {
+  const cards = simulateCards({ index: 0, title: input.title, text: input.text }).filter(
+    (card) => !looksLikeInstruction(card.quote),
+  );
+  if (cards.length === 0) return { cards: fallbackCards(input.text) };
+  return {
+    cards: cards.map((card) => ({
+      kind: card.kind,
+      front: card.front,
+      back: card.back,
+      quote: card.quote,
+      ...(card.controversy
+        ? {
+            controversy: {
+              reason: card.controversy.reason,
+              sources: card.controversy.sources.map((entry) => ({
+                key: entry.key,
+                locator: entry.locator ?? null,
+              })),
+            },
+          }
+        : {}),
+    })),
+  };
+}
+
+/** La palabra sesgo con su artículo, y cómo queda en femenino al cambiarla por trampa */
+const BIAS_WORDS: readonly [RegExp, string][] = [
+  [/\b(el|un|este|ese|del|al) sesgo\b/giu, '$1 trampa'],
+  [/\b(los|unos|estos|esos) sesgos\b/giu, '$1 trampas'],
+  [/\bsesgos\b/giu, 'trampas'],
+  [/\bsesgo\b/giu, 'trampa'],
+  [/\bsesgad[oa]s?\b/giu, 'con trampa'],
+];
+const FEMININE: Readonly<Record<string, string>> = {
+  el: 'la',
+  un: 'una',
+  este: 'esta',
+  ese: 'esa',
+  del: 'de la',
+  al: 'a la',
+  los: 'las',
+  unos: 'unas',
+  estos: 'estas',
+  esos: 'esas',
+};
+
+/** Cambia sesgo por trampa con su artículo en femenino, respetando la mayúscula inicial */
+export function toTrapVocabulary(text: string): string {
+  let result = text;
+  for (const [pattern, replacement] of BIAS_WORDS) {
+    result = result.replace(pattern, (match: string, article?: string) => {
+      const swapped =
+        typeof article === 'string'
+          ? replacement.replace('$1', FEMININE[article.toLowerCase()] ?? article)
+          : replacement;
+      const initial = match.charAt(0);
+      return initial === initial.toUpperCase()
+        ? `${swapped.charAt(0).toUpperCase()}${swapped.slice(1)}`
+        : swapped;
+    });
+  }
+  return result;
+}
+
+export function mockBiasTip(input: BiasTipInput): BiasTipOutput {
+  const tip = `${input.baseTip} Practícalo con las preguntas donde te pasó.`;
+  // Mientras la app dice trampas el consejo tampoco dice sesgo (D-099, B12)
+  const vocabulary = input.vocabulary ?? DEFAULT_BIAS_VOCABULARY;
+  return {
+    tip: vocabulary === 'trampa' ? toTrapVocabulary(tip) : tip,
+    exampleRefs: input.examples.map((example) => example.ref),
+  };
+}
+
+const TRANSFORM_NOTE: Readonly<Record<RestructureInput['transform'], string>> = {
+  to_except: 'Se cambió a una pregunta de excepción.',
+  change_anchor: 'Se pidió considerar el dato que cambia el enfoque del caso.',
+  next_step: 'Se movió la pregunta al siguiente paso del manejo.',
+};
+
+/** La primera frase de la explicación que sirve de cita, o la explicación recortada */
+function quoteFrom(explanation: string): string {
+  const sentences = explanation
+    .split(/(?<=[.!?;])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(
+      (sentence) =>
+        sentence.length >= MIN_QUOTE_CHARS && wordsOf(sentence).length >= MIN_QUOTE_WORDS,
+    );
+  return (sentences[0] ?? explanation).slice(0, 1_000);
+}
+
+export function mockRestructure(input: RestructureInput): RestructureOutput {
+  const stemByTransform: Record<RestructureInput['transform'], string> = {
+    to_except: `${input.stem} Elige la opción que no corresponde.`,
+    change_anchor: `${input.stem} Considera ahora el dato que cambia el enfoque del caso.`,
+    next_step: `${input.stem} ¿Cuál es el siguiente paso en el manejo?`,
+  };
+  // Para la excepción la clave pasa a la primera opción que no era la clave. Las demás no cambian
+  const newKey =
+    input.transform === 'to_except' ? input.options.findIndex((option) => !option.isKey) : -1;
+  return {
+    stem: stemByTransform[input.transform],
+    options: input.options.map((option, index) => ({
+      label: option.label,
+      text: option.text,
+      isKey: input.transform === 'to_except' ? index === newKey : option.isKey,
+    })),
+    explanation: input.explanation,
+    rationale: `${TRANSFORM_NOTE[input.transform]} Propuesta de ejemplo del modo simulado. Un médico debe revisarla.`,
+    quote: quoteFrom(input.explanation),
+  };
+}
+
+/** La salida fija de un motor para una entrada */
+export function mockOutput<E extends AiEngine>(
+  engine: E,
+  input: EngineInputs[E],
+): EngineOutputs[E] {
+  const output = (() => {
+    switch (engine) {
+      case 'forgetting':
+        return mockHypothesis(input as HypothesisInput);
+      case 'weekly_report':
+        return mockWeeklyReport(input as WeeklyReportInput);
+      case 'flashcards':
+        return mockFlashcards(input as FlashcardsInput);
+      case 'bias_tips':
+        return mockBiasTip(input as BiasTipInput);
+      case 'restructure':
+        return mockRestructure(input as RestructureInput);
+      default:
+        throw new Error(`Motor desconocido ${String(engine)}`);
+    }
+  })();
+  return output as EngineOutputs[E];
+}

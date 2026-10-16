@@ -45,6 +45,8 @@ const ADMIN_GROUP = [
   // Pagos, facturas y códigos de influencer (B10)
   t.navItems.billing,
   t.navItems.costs,
+  // Auditoría de la IA (B12). Es la misma pantalla del médico y la usa el administrador para abrir los motores
+  t.navItems.audit,
   t.navItems.platform,
   t.navItems.bank,
   // Banco en la nube (B11). Banco y Sheet, Revisiones y Catálogo de mazos
@@ -60,6 +62,10 @@ const PHYSICIAN_BAR = [
   t.navItems.drafts,
   t.navItems.reports,
 ];
+
+// Lo que el médico ve arriba en el riel. Su cuarta sección es Reportes y la Auditoría de la IA va
+// después, fuera de la barra del teléfono
+const PHYSICIAN_MAIN = [...PHYSICIAN_BAR, t.navItems.audit];
 
 describe('menú en computadora', () => {
   it('alumno. Arriba sus siete secciones y abajo solo Configuración, con el engrane', () => {
@@ -82,9 +88,9 @@ describe('menú en computadora', () => {
     },
   );
 
-  it('médico. Banco, Acuerdo, Borradores y Reportes, y Configuración abajo sin Perfil', () => {
+  it('médico. Banco, Acuerdo, Borradores, Reportes y Auditoría de la IA, y Configuración abajo sin Perfil', () => {
     const nav = NAV_BY_ROLE.physician;
-    expect(labels(nav.main)).toEqual(PHYSICIAN_BAR);
+    expect(labels(nav.main)).toEqual(PHYSICIAN_MAIN);
     expect(nav.groups).toEqual([]);
     expect(labels(nav.pinned)).toEqual([t.navItems.settings]);
   });
@@ -143,10 +149,11 @@ describe('menú en el teléfono', () => {
     },
   );
 
-  it('médico. Sus cuatro secciones en la barra y Más solo con Configuración', () => {
+  it('médico. Sus cuatro secciones en la barra y en Más la Auditoría de la IA y Configuración', () => {
     const nav = NAV_BY_ROLE.physician;
     expect(labels(phoneBarItems(nav))).toEqual(PHYSICIAN_BAR);
     expect(moreSections(nav).map((section) => labels(section.items))).toEqual([
+      [t.navItems.audit],
       [t.navItems.settings],
     ]);
   });

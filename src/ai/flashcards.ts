@@ -2,8 +2,11 @@
 // personales, parte el texto en secciones, pide las tarjetas a un generador y deja pasar solo las que
 // aprueba el validador, que revisa cada una contra el texto de donde dice que sale. Lo que no pasa
 // no llega al alumno. El generador es el proxy de IA, real o simulado, o uno simulado y
-// determinista del propio cliente cuando no hay proxy, como en la demo publicada (D-017). Si el
-// proxy falla, se usa el simulado y se dice. Todo lo que sale es borrador.
+// determinista del propio cliente cuando no hay proxy, como en la demo publicada (D-017), y solo
+// fuera de producción (B12, 10.20). Si el proxy falla, se usa el simulado y se dice, también solo
+// fuera de producción. Un tope, la compuerta cerrada o la pausa no se tapan con el simulado, se
+// avisan. Todo lo que sale es borrador.
+import { readAppEnv } from '@/config/featureFlags';
 import { newId } from '@/data/ids';
 import { buildDuplicateIndex, findDuplicates, type DuplicateNote } from '@/engines/duplicates';
 import {
@@ -15,9 +18,10 @@ import {
   type ProposedControversy,
   type SourceSection,
 } from '@/engines/cardGen';
+import { MAX_GENERATION_SECTIONS } from '@/engines/aiContracts';
 import { scrubPersonalData, type PiiCounts } from '@/engines/piiFilter';
 import type { AiStatus } from './client';
-import { callEngine, type CallMeta } from './engines';
+import { callEngine, type CallMeta, type FailureReason } from './engines';
 
 export const FLASHCARDS_PROMPT_VERSION = 'flashcards.provisional.v1';
 export const SIMULATED_MODEL = 'plantilla-simulada-v1';
@@ -25,6 +29,37 @@ export const SIMULATED_MODEL = 'plantilla-simulada-v1';
 export const SECTIONS_PER_GENERATION = 12;
 
 export type GeneratorMode = 'real' | 'mock' | 'template';
+
+/**
+ * Por qué una sección no salió, con la razón del proxy. Si el motivo es un tope, la compuerta, la
+ * pausa o la falta de sesión o de plan, no se tapa con el generador simulado y se avisa tal cual
+ */
+export class CardGenerationError extends Error {
+  readonly reason: FailureReason;
+  /** Lo que costó cada llamada que se hizo antes de fallar, para la bitácora */
+  readonly metas: CallMeta[];
+  constructor(reason: FailureReason, message: string, metas: CallMeta[] = []) {
+    super(message);
+    this.name = 'CardGenerationError';
+    this.reason = reason;
+    this.metas = metas;
+  }
+}
+
+/** Fallas que paran la generación, porque el generador simulado las taparía y las siguientes fallarían igual */
+export const STOPPING_REASONS: ReadonlySet<FailureReason> = new Set<FailureReason>([
+  'generation_limit',
+  'student_limit',
+  'budget_exceeded',
+  'rate_limited',
+  'paused',
+  'gate_closed',
+  'plan_required',
+  'staff_only',
+  'unauthorized',
+  'not_configured',
+  'offline',
+]);
 
 export interface CardGenerator {
   readonly mode: GeneratorMode;
@@ -42,6 +77,23 @@ export const simulatedGenerator: CardGenerator = {
   generate: (section) => Promise.resolve(simulateCards(section)),
 };
 
+/** En producción no hay respuestas fijas del cliente. Pedirle algo es pedirle a una IA que no está */
+const unavailableGenerator: CardGenerator = {
+  mode: 'template',
+  model: SIMULATED_MODEL,
+  generate: () =>
+    Promise.reject(
+      new CardGenerationError(
+        'not_configured',
+        'La IA no está disponible ahora. Ves la versión sin IA.',
+      ),
+    ),
+};
+
+/** El generador simulado del cliente, solo fuera de producción */
+export const clientGenerator = (): CardGenerator =>
+  readAppEnv() === 'production' ? unavailableGenerator : simulatedGenerator;
+
 export interface ProxyGeneratorOptions {
   /** El estado de la IA. Solo real y mock hablan con el proxy */
   status: Extract<AiStatus, { kind: 'real' | 'mock' }>;
@@ -58,12 +110,17 @@ export interface ProxyGeneratorOptions {
 export function createProxyGenerator(options: ProxyGeneratorOptions): CardGenerator {
   let metas: CallMeta[] = [];
   let model = 'proxy';
+  // Una generación es una sola ref para todas sus secciones, que el servidor cuenta (B12, 2.4)
+  const generationRef = newId();
+  let nextSection = 0;
   return {
     mode: options.status.kind,
     get model() {
       return model;
     },
     async generate(section) {
+      const index = nextSection;
+      nextSection += 1;
       const result = await callEngine(
         'flashcards',
         { title: section.title, text: section.text },
@@ -72,11 +129,14 @@ export function createProxyGenerator(options: ProxyGeneratorOptions): CardGenera
           studentRef: options.studentRef,
           ...(options.names ? { names: options.names } : {}),
           ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
+          ...(index < MAX_GENERATION_SECTIONS
+            ? { generation: { ref: generationRef, section: index } }
+            : {}),
         },
       );
       // Una llamada que falló también costó y queda en la bitácora
       if (result.meta) metas.push(result.meta);
-      if (!result.ok) throw new Error(`La IA no atendió la sección: ${result.reason}`);
+      if (!result.ok) throw new CardGenerationError(result.reason, result.message);
       model = result.meta.model;
       return result.output.cards.map((card) => ({
         kind: card.kind,
@@ -105,7 +165,7 @@ export function generatorFor(
 ): CardGenerator {
   return status.kind === 'real' || status.kind === 'mock'
     ? createProxyGenerator({ ...options, status })
-    : simulatedGenerator;
+    : clientGenerator();
 }
 
 export interface FlashcardProposal {
@@ -136,6 +196,11 @@ export interface GenerationResult {
   model: string;
   /** El proxy falló y se usó el generador simulado */
   fellBack: boolean;
+  /**
+   * La generación se detuvo en una sección por un tope, la compuerta o la pausa y entrega lo que
+   * alcanzó a salir. null si llegó al final (B12, 2.4)
+   */
+  stopped?: { reason: FailureReason; message: string } | null;
   promptVersion: string;
   durationMs: number;
   /** El texto que se procesó, ya sin datos personales */
@@ -150,8 +215,11 @@ export interface GenerateOptions {
   names?: readonly string[];
   existing?: Iterable<DuplicateNote>;
   generator: CardGenerator;
-  /** Se usa si el generador principal falla */
-  fallback?: CardGenerator;
+  /**
+   * Se usa si el generador principal falla por algo que no es un tope. Sin él, el simulado del
+   * cliente fuera de producción. null no tiene respaldo, que es lo que pasa en producción
+   */
+  fallback?: CardGenerator | null;
   maxSections?: number;
   now?: () => number;
 }
@@ -167,6 +235,7 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
 
   let generator = options.generator;
   let fellBack = false;
+  let stopped: GenerationResult['stopped'] = null;
   const metas: CallMeta[] = [];
   const collect = () => {
     metas.push(...(generator.drainMetas?.() ?? []));
@@ -175,16 +244,37 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
   const rejectedBy: Partial<Record<CardIssue, number>> = {};
   let rejected = 0;
 
-  for (const section of sections) {
+  for (const [position, section] of sections.entries()) {
     let cards: ProposedCard[];
     try {
       cards = await generator.generate(section);
       collect();
-    } catch {
+    } catch (error) {
       collect();
-      // Si el proxy falla se sigue con el simulado, una sola vez, y se dice
-      const fallback = options.fallback ?? simulatedGenerator;
-      if (generator === fallback) throw new Error('El generador de tarjetas falló');
+      const failure =
+        error instanceof CardGenerationError
+          ? error
+          : new CardGenerationError('network', 'La IA no respondió.');
+      const fallback =
+        options.fallback === undefined
+          ? readAppEnv() === 'production'
+            ? null
+            : simulatedGenerator
+          : options.fallback;
+      if (STOPPING_REASONS.has(failure.reason)) {
+        // Un tope, la compuerta o la pausa no se tapan con el simulado. Si ya salieron secciones
+        // se entregan, y si no, se avisa
+        if (position === 0) {
+          throw new CardGenerationError(failure.reason, failure.message, metas);
+        }
+        stopped = { reason: failure.reason, message: failure.message };
+        break;
+      }
+      // Si el proxy falla se sigue con el simulado, una sola vez, y se dice. En producción no hay
+      if (fallback === null) throw new CardGenerationError(failure.reason, failure.message, metas);
+      if (generator === fallback) {
+        throw new CardGenerationError(failure.reason, 'El generador de tarjetas falló', metas);
+      }
       generator = fallback;
       fellBack = true;
       cards = await generator.generate(section);
@@ -231,6 +321,7 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
     rejectedBy,
     sections: sections.length,
     sectionsCut: all.length > sections.length,
+    stopped,
     scrubbed: scrub.counts,
     scrubbedTotal: scrub.total,
     mode: generator.mode,

@@ -7,6 +7,9 @@ import { jwtRole } from '../src/data/cloud/keyRole.ts';
 import { ENV_FILE, KEY_VARIABLE } from '../server/src/config.ts';
 import { loadAiCredentials } from '../server/src/env.ts';
 
+/** Nombre de la clave de OpenAI de las evaluaciones (server/evals). Nunca va al build ni a Supabase */
+export const OPENAI_KEY_VARIABLE = 'ENARM_OPENAI_KEY';
+
 export interface Needle {
   /** Nombre que se puede mostrar. Nunca el valor de la clave */
   label: string;
@@ -21,6 +24,8 @@ export function defaultNeedles(): Needle[] {
     { label: 'nombre de la variable de la clave', value: KEY_VARIABLE },
     { label: 'nombre de variable prohibido', value: forbiddenName },
     { label: 'prefijo de claves de Anthropic', value: 'sk-ant-' },
+    // La clave de OpenAI solo existe para comparar en npm run eval-ai y nunca llega a producción (B12, 4.5)
+    { label: 'nombre de la clave de OpenAI de evaluaciones', value: OPENAI_KEY_VARIABLE },
   ];
   const { apiKey } = loadAiCredentials({ envFile: ENV_FILE });
   if (apiKey && apiKey.length >= 8) {
@@ -48,11 +53,17 @@ const SECRET_KEY_SHAPE = /sb_secret_[A-Za-z0-9_-]{16,}/;
  * y puede ir en el build. Se busca con la forma de una llave real y no solo el prefijo
  */
 const STRIPE_SECRET_SHAPE = /\b[sr]k_(?:test|live)_[A-Za-z0-9]{20,}/;
+/**
+ * Llave de OpenAI. Las de proyecto, de cuenta de servicio y de admin llevan sk-proj-, sk-svcacct- o
+ * sk-admin-, y las anteriores son sk- con letras y números seguidos. Se busca con la forma de una llave
+ * real, así que sk-ant- de Anthropic y el prefijo solo no cuentan
+ */
+const OPENAI_KEY_SHAPE = /\bsk-(?:(?:proj|svcacct|admin)-[A-Za-z0-9_-]{20,}|[A-Za-z0-9]{32,})/;
 /** Un JWT. Encabezado y datos empiezan en eyJ porque son JSON en base64 */
 const JWT_SHAPE = /eyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/g;
 
 /**
- * Llaves de Supabase con permiso de servicio, y llaves secretas de Stripe, dentro del contenido de un archivo. La llave pública
+ * Llaves de Supabase con permiso de servicio, llaves secretas de Stripe y llaves de OpenAI, dentro del contenido de un archivo. La llave pública
  * anterior es un JWT con rol anon y puede ir en el build, así que solo se marcan los JWT con otro
  * rol, como service_role, que se saltan los permisos por fila. Devuelve la etiqueta de cada una
  */
@@ -60,6 +71,7 @@ export function findServiceKeys(content: string): string[] {
   const labels: string[] = [];
   if (SECRET_KEY_SHAPE.test(content)) labels.push('llave secreta de Supabase (sb_secret_)');
   if (STRIPE_SECRET_SHAPE.test(content)) labels.push('llave secreta de Stripe (sk_ o rk_)');
+  if (OPENAI_KEY_SHAPE.test(content)) labels.push('llave de OpenAI (sk-)');
   for (const match of content.matchAll(JWT_SHAPE)) {
     const role = jwtRole(match[0]);
     if (role !== null && role !== 'anon') labels.push(`llave JWT con rol ${role}`);

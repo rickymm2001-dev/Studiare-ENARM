@@ -18,7 +18,9 @@ server/.env.local
 .env.*
 !.env.example
 !server/.env.example
-# IDs y secretos locales para la herramienta de despliegue (docs/DESPLIEGUE.md)
+# IDs y secretos locales para la herramienta de despliegue (docs/DESPLIEGUE.md) y datos privados de las
+# evaluaciones de IA (B12, 10.27), como el banco real exportado, las muestras de la compuerta y el detalle
+# del juez. Nunca entran al repositorio
 private/
 
 # Sistema y editores

@@ -72,6 +72,8 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
     import('@/features/physician/ReportsScreen').then((module) => module.ReportsScreen),
   aiDrafts: () =>
     import('@/features/physician/AiDraftsScreen').then((module) => module.AiDraftsScreen),
+  aiAudit: () =>
+    import('@/features/physician/AiAuditScreen').then((module) => module.AiAuditScreen),
   bankImport: () =>
     import('@/features/physician/BankImportScreen').then((module) => module.BankImportScreen),
   privacyNotice: () =>
