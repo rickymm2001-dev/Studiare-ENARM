@@ -80,7 +80,9 @@ export const settingsPageText = {
     goToProgress: 'Ir a Progreso',
   },
   officialScore: {
-    turnOn: 'Activar la mejora con tus datos sin nombre en Privacidad',
+    // Va en un botón que no parte líneas. Con el nombre completo del permiso se pasa del ancho de un
+    // teléfono de 390 px, así que el texto de arriba lo nombra y el botón solo dice a dónde ir
+    turnOn: 'Activar el permiso en Privacidad',
   },
   // Panel con todos los ajustes que se guardan del repaso, en Repasar (comentario 4)
   reviewSettings: {
