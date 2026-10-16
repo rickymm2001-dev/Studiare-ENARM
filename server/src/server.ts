@@ -1,7 +1,7 @@
 import type { AddressInfo } from 'node:net';
 import { serve, type ServerType } from '@hono/node-server';
 import { createApp } from './app.ts';
-import type { AiRoutesDeps } from './ai/route.ts';
+import type { AiRoutesDeps } from '../../supabase/functions/_shared/ai/routes.ts';
 import { PROXY_HOST } from './config.ts';
 import type { AiMode } from './env.ts';
 

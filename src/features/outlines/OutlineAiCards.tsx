@@ -12,7 +12,7 @@ import {
   OUTLINE_AI_MIN_CHARS,
   type OutlineProposal,
 } from '@/ai/outlineCards';
-import { useAiStatus } from '@/ai/useAiStatus';
+import { AiAccessNotice } from '@/ai/AiAccessNotice';
 import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -30,6 +30,7 @@ import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { useActivePlan } from '../shared/useActivePlan';
+import { cardsFailureText, logFailedGeneration, useCardsAi } from '../shared/useCardsAi';
 
 interface AiProps {
   session: ReadySession;
@@ -75,7 +76,7 @@ interface EditDraft {
 
 function AiPanel({ session, outline, nodes, deckName, onJump }: AiProps) {
   const api = useDataApi();
-  const status = useAiStatus();
+  const { status, access, offered, canGenerate } = useCardsAi(session);
   const plan = useActivePlan(session.user.id);
   const text = t.outlines.ai;
   const [busy, setBusy] = useState(false);
@@ -128,10 +129,12 @@ function AiPanel({ session, outline, nodes, deckName, onJump }: AiProps) {
           ...(result.scrubbedTotal > 0 ? [t.aiCards.scrubbed(result.scrubbedTotal)] : []),
           ...(result.rejected > 0 ? [t.aiCards.rejected(result.rejected)] : []),
           ...(result.fellBack ? [t.aiCards.fellBack] : []),
+          ...(result.stopped ? [result.stopped.message] : []),
         ],
       });
     } catch (error) {
-      setProblem(error instanceof GenerationLimitError ? t.aiCards.limitReached : t.aiCards.error);
+      await logFailedGeneration(api, session.user, error);
+      setProblem(cardsFailureText(error, t.aiCards.error));
     } finally {
       setBusy(false);
     }
@@ -176,12 +179,15 @@ function AiPanel({ session, outline, nodes, deckName, onJump }: AiProps) {
     }).catch(() => undefined);
   };
 
+  // Con la compuerta cerrada o sin IA no se ofrece el botón y se ve el aviso
+  if (!offered) return <AiAccessNotice access={access} gatedText={t.ai.access.gatedCards} />;
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm text-fg-muted">{text.intro}</p>
       <p className="text-sm text-fg-muted">
         {t.aiCards.modes[status.kind === 'real' ? 'real' : 'template']}
       </p>
+      <AiAccessNotice access={access} gatedText={t.ai.access.gatedCards} />
       {review === null ? (
         <>
           {left !== undefined && left !== null ? (
@@ -192,7 +198,7 @@ function AiPanel({ session, outline, nodes, deckName, onJump }: AiProps) {
           <Button
             type="button"
             className="self-start"
-            disabled={busy || left === 0 || plan === undefined}
+            disabled={busy || left === 0 || plan === undefined || !canGenerate}
             onClick={() => {
               void generate();
             }}

@@ -3,6 +3,7 @@
 // los motores llaman al modelo de verdad (B3 del plan del cambio). Antes vivía en Datos de
 // demostración y, antes, en Configuración.
 import { AiModeBadge } from '@/ai/AiModeBadge';
+import { aiDetailText } from '@/ai/text';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -16,7 +17,7 @@ export function AiModeCard() {
           <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
           <AiModeBadge status={aiStatus} />
         </div>
-        <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
+        <CardDescription>{aiDetailText(aiStatus)}</CardDescription>
       </CardHeader>
     </Card>
   );

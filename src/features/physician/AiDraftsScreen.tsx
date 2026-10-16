@@ -19,7 +19,10 @@ import { tipReviewsFrom } from '../shared/tipReviews';
 import { CardDrafts } from './CardDrafts';
 import { pendingPublicNotes } from './draftActions';
 import { QuestionDrafts } from './QuestionDrafts';
+import { restructureMarks } from './restructureEligibility';
 import { TipDrafts } from './TipDrafts';
+import { useEditorialRepo } from './useEditorialRepo';
+import { useRepoQuery } from './useRepoQuery';
 
 type Section = 'questions' | 'tips' | 'cards';
 const SECTIONS: readonly Section[] = ['questions', 'tips', 'cards'];
@@ -32,6 +35,20 @@ export function AiDraftsScreen() {
   const bankReady = useBankReady();
   const [section, setSection] = useState<Section>('questions');
   const [notice, setNotice] = useState('');
+  // Solo las preguntas marcadas se reestructuran: con un reporte de error abierto o con un
+  // distractor que casi nadie elige (B12, 5.3)
+  const { repo, ready, key } = useEditorialRepo();
+  const marks = useRepoQuery(
+    async () => {
+      const [reports, distractors] = await Promise.all([
+        repo.reports(),
+        repo.distractorQueue('open'),
+      ]);
+      return restructureMarks({ reports: reports.rows, distractors });
+    },
+    key,
+    ready,
+  );
 
   const data = useLiveData(async () => {
     const [artifacts, latest, assignments, decks, notes] = await Promise.all([
@@ -67,6 +84,7 @@ export function AiDraftsScreen() {
       question.variantOf === undefined &&
       (!isPhysician || mine.has(question.questionId)),
   );
+  const markedState = marks.state.status === 'ready' ? marks.state.value : null;
   const reviews = tipReviewsFrom(data.artifacts);
   const pendingCards = pendingPublicNotes(data.decks, data.notes);
   const pendingQuestions = data.artifacts.filter(
@@ -111,6 +129,8 @@ export function AiDraftsScreen() {
         <QuestionDrafts
           physician={{ id: me.id, alias: me.alias }}
           questions={candidates}
+          marks={markedState}
+          marksFailed={marks.state.status === 'failed'}
           artifacts={data.artifacts}
           notice={notice}
           onNotice={setNotice}

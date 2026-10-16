@@ -7,7 +7,7 @@
 export interface CspOptions {
   /** Origen del proyecto de Supabase, por ejemplo https://abc.supabase.co. Sin él no se permite ninguno */
   supabaseOrigin?: string | undefined;
-  /** Origen del proxy de IA alojado, por ejemplo https://ia.studiare.mx. Sin él, solo el propio sitio */
+  /** Origen del proxy de IA alojado, por ejemplo https://ia.studiare.mx. Sin él, solo el propio sitio. Con la función de Supabase ya está permitido por supabaseOrigin */
   aiOrigin?: string | undefined;
 }
 
@@ -21,14 +21,17 @@ export function supabaseOriginOf(url: string | undefined): string | undefined {
 }
 
 /**
- * Origen del proxy de IA a partir de la dirección que se configura al construir. Solo acepta un
- * origen https sin ruta ni comodines, así una variable mal puesta no abre la política a otro dominio
+ * Origen del proxy de IA a partir de la dirección que se configura al construir. Acepta la dirección
+ * con ruta, como la de la Edge Function, y se queda solo con el origen. Rechaza http, comodines,
+ * espacios y cualquier cosa que no sea una dirección, así una variable mal puesta no abre la política
+ * a otro dominio
  */
 export function aiOriginOf(url: string | undefined): string | undefined {
-  const match = /^https:\/\/[a-z0-9]([a-z0-9.-]*[a-z0-9])?(:\d{1,5})?\/?$/i.exec(
-    (url ?? '').trim(),
-  );
-  return match ? match[0].replace(/\/$/, '') : undefined;
+  const match =
+    /^(https:\/\/[a-z0-9]([a-z0-9.-]*[a-z0-9])?(:\d{1,5})?)(\/[A-Za-z0-9._~/-]*)?$/i.exec(
+      (url ?? '').trim(),
+    );
+  return match?.[1];
 }
 
 /** Directivas que funcionan en una etiqueta meta y en un encabezado */

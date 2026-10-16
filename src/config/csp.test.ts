@@ -43,13 +43,22 @@ describe('aiOriginOf', () => {
     expect(aiOriginOf(' https://ia.studiare.mx:8443/ ')).toBe('https://ia.studiare.mx:8443');
   });
 
-  it('rechaza http, comodines, rutas, espacios y texto que no es una dirección', () => {
+  it('acepta la dirección con ruta, como la de la función de Supabase, y se queda con el origen', () => {
+    expect(aiOriginOf('https://abcd1234.supabase.co/functions/v1/ai-proxy')).toBe(
+      'https://abcd1234.supabase.co',
+    );
+    expect(aiOriginOf(' https://ia.studiare.mx:8443/ia/ ')).toBe('https://ia.studiare.mx:8443');
+  });
+
+  it('rechaza http, comodines, espacios, consultas y texto que no es una dirección', () => {
     for (const url of [
       undefined,
       '',
       'http://ia.studiare.mx',
       'https://*.studiare.mx',
-      'https://ia.studiare.mx/ia',
+      'https://ia.studiare.mx/ia?x=1',
+      'https://ia.studiare.mx/ia#a',
+      'https://ia.studiare.mx/a b',
       'https://ia studiare.mx',
       'https://ia.studiare.mx; script-src *',
       'javascript:alert(1)',

@@ -1,0 +1,32 @@
+{
+  // Revisa las Edge Functions con las API web que trae Deno (fetch, Request, Web Crypto) y sin pedir los
+  // tipos de Node (B12, 1.4 y 10.3 del plan). Lo poco de Deno que usan los index.ts está en
+  // supabase/functions/deno.d.ts. Es el respaldo de deno check mientras Deno no está en el proyecto. El
+  // SDK de Anthropic trae los tipos de Node por undici-types, así que los globales de Node en _shared
+  // los frena ESLint (eslint.config.js). Las pruebas y sus dobles corren en Vitest y quedan fuera.
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": [],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["supabase/functions"],
+  "exclude": ["supabase/functions/**/*.test.ts", "supabase/functions/**/testing/**"]
+}

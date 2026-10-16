@@ -2,11 +2,14 @@
 // que el alumno ve trampas. El médico sin preguntas en revisión no tiene nada por etiquetar y el admin
 // no etiqueta. Pantalla 18, editor de pregunta, que el admin solo lee desde B11 (la médica que edita,
 // etiqueta a ciegas y decide está en physician-labeling.spec). Pantalla 21, reportes de contenido.
-// Pantalla 20, borradores de IA. Pantalla 22, importador del banco.
+// Pantalla 20, borradores de IA, donde solo se pide una propuesta de una pregunta marcada (B12, 3.2). Pantalla 22,
+// importador del banco.
 import { SCREENS } from '@/app/screens';
 import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
+import { newId } from '@/data/ids';
+import { putRows, readTable } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -125,37 +128,70 @@ test('reportes. El alumno reporta un error y desde la bandeja se resuelve', asyn
   await expect(page.getByText(physicianText.reportsScreen.empty.openTitle)).toBeVisible();
 });
 
-test('borradores de IA. Se pide una propuesta, llega como borrador con el original y se rechaza', async ({
+test('borradores de IA. Solo se pide una propuesta de una pregunta marcada, llega como borrador con el original y se rechaza', async ({
   page,
 }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(240_000);
+  const questions = physicianText.draftsScreen.questions;
   await signUp(page);
   await enterAs(page, 'admin');
   await page.goto(SCREENS.aiDrafts.path);
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.aiDrafts.title }),
   ).toBeVisible();
-  await expect(page.getByText(physicianText.draftsScreen.questions.pendingEmpty)).toBeVisible({
-    timeout: 90_000,
-  });
+  await expect(page.getByText(questions.pendingEmpty)).toBeVisible({ timeout: 90_000 });
 
-  await page.getByLabel(physicianText.draftsScreen.questions.search).fill(RESTRUCTURABLE);
-  const pick = page.getByRole('button', {
-    name: new RegExp(`^${physicianText.draftsScreen.questions.pick}`),
-  });
+  // Sin un reporte abierto ni un distractor que casi nadie elige no hay preguntas marcadas. La IA no
+  // recorre el banco por su cuenta, y pedir una propuesta de cualquier pregunta no se puede
+  await expect(page.getByText(questions.markedEmpty)).toBeVisible();
+  await page.getByLabel(questions.search).fill(RESTRUCTURABLE);
+  await expect(page.getByText(questions.noResults)).toBeVisible();
+  await expect(page.getByRole('button', { name: new RegExp(`^${questions.pick}`) })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: questions.ask })).toBeDisabled();
+  await expectNoSeriousA11yViolations(page);
+
+  // Un alumno reporta un error en esa pregunta. El reporte abierto la marca
+  const bank = await readTable<{ id: string; vignette: string; prompt: string }>(page, 'questions');
+  const target = bank.find((question) =>
+    `${question.vignette} ${question.prompt}`.includes(RESTRUCTURABLE),
+  );
+  if (!target) throw new Error('El banco de demostración no trae la pregunta de la prueba');
+  await putRows(page, 'contentReports', [
+    {
+      id: newId(),
+      reporterId: newId(),
+      targetKind: 'question',
+      targetId: target.id,
+      reason: 'clinical_error',
+      status: 'open',
+      createdAt: new Date().toISOString(),
+      resolvedAt: null,
+    },
+  ]);
+  await page.reload();
+  await expect(page.getByText(questions.markedCount(1))).toBeVisible({ timeout: 60_000 });
+  await page.getByLabel(questions.search).fill(RESTRUCTURABLE);
+  const pick = page.getByRole('button', { name: new RegExp(`^${questions.pick}`) });
   await expect(pick.first()).toBeVisible();
+  // Dice por qué está marcada, y las demás preguntas del banco siguen sin poder elegirse
+  await expect(
+    page.getByText(questions.markReasons.open_report ?? '', { exact: true }),
+  ).toBeVisible();
+  await page.getByLabel(questions.search).fill('ánimo bajo');
+  await expect(page.getByText(questions.noResults)).toBeVisible();
+  await page.getByLabel(questions.search).fill(RESTRUCTURABLE);
   await pick.first().click();
-  await page.getByRole('button', { name: physicianText.draftsScreen.questions.ask }).click();
+  await page.getByRole('button', { name: questions.ask }).click();
 
   const form = page.getByRole('form');
   await expect(form).toBeVisible({ timeout: 30_000 });
   await expect(form.getByText(physicianText.draftsScreen.draftLabel)).toBeVisible();
-  await expect(form.getByText(physicianText.draftsScreen.questions.original)).toBeVisible();
+  await expect(form.getByText(questions.original)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
-  await form.getByRole('button', { name: physicianText.draftsScreen.questions.reject }).click();
-  await expect(page.getByText(physicianText.draftsScreen.questions.rejectedNotice)).toBeVisible();
-  await expect(page.getByText(physicianText.draftsScreen.questions.pendingEmpty)).toBeVisible();
+  await form.getByRole('button', { name: questions.reject }).click();
+  await expect(page.getByText(questions.rejectedNotice)).toBeVisible();
+  await expect(page.getByText(questions.pendingEmpty)).toBeVisible();
 });
 
 test('importador. Revisa el archivo, reporta la fila con problema e importa solo lo bueno', async ({

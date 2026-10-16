@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { hypothesisInput } from '../../src/ai/testing/aiSamples.ts';
+import { requestBody } from '../../supabase/functions/_shared/ai/testing/fakes.ts';
+import { createAiDeps } from './ai/index.ts';
 import { createApp, type HealthResponse } from './app.ts';
 import { MAX_BODY_BYTES } from './config.ts';
 import { proxyAllowedOrigins, testPorts } from './testPorts.ts';
@@ -10,10 +13,11 @@ describe('app del proxy', () => {
     const response = await createApp({ mode: 'mock' }).request('/health', { headers: LOCAL });
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
+    // Versión 2 del contrato C1, sin engines, que solo manda la Edge Function
     expect((await response.json()) as HealthResponse).toEqual({
       status: 'ok',
       mode: 'mock',
-      version: 1,
+      version: 2,
     });
   });
 
@@ -98,5 +102,25 @@ describe('app del proxy', () => {
     const response = await createApp({ mode: 'mock' }).request('/no-existe', { headers: LOCAL });
     expect(response.status).toBe(404);
     expect(await response.json()).toEqual({ error: 'not_found' });
+  });
+
+  it('las rutas de IA exigen JSON y respetan el filtro de Host y de Origin del proxy', async () => {
+    const ai = createAiDeps({
+      credentials: { mode: 'mock', apiKey: null },
+      files: { config: null, ledger: null },
+    });
+    const app = createApp({ mode: 'mock', ai });
+    const headers = {
+      host: '127.0.0.1:8787',
+      origin: 'http://127.0.0.1:5173',
+      'content-type': 'application/json',
+    };
+    const body = JSON.stringify(requestBody(hypothesisInput()));
+    const send = (extra: Record<string, string>) =>
+      app.request('/ai/forgetting', { method: 'POST', headers: { ...headers, ...extra }, body });
+    expect((await send({})).status).toBe(200);
+    expect((await send({ 'content-type': 'text/plain' })).status).toBe(415);
+    expect((await send({ origin: 'https://evil.example' })).status).toBe(403);
+    expect((await send({ host: 'evil.example' })).status).toBe(403);
   });
 });

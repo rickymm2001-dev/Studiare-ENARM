@@ -32,8 +32,14 @@ export interface ClosureFile {
 export interface FunctionClosure {
   slug: string;
   entrypointPath: string;
-  /** El index.ts primero y después en orden alfabético */
+  /** El index.ts primero y después en orden alfabético. Incluye el deno.json de la función si lo tiene */
   files: ClosureFile[];
+  /**
+   * La ruta del deno.json de la función, desde la raíz del repo, o null si no tiene. Es su mapa de
+   * imports. Las funciones que importan zod, hono o el SDK de Anthropic por su nombre lo necesitan,
+   * porque el servidor no puede resolver esos nombres sin él
+   */
+  importMapPath: string | null;
   /** Importaciones que no son relativas, como npm: o https:. No se suben, el servidor las baja */
   external: string[];
 }
@@ -103,8 +109,24 @@ export function functionClosure(
       pending.push(target);
     }
   }
+  // El mapa de imports no lo importa nadie, pero la función lo necesita para resolver sus paquetes
+  const importMapPath = `${FUNCTIONS_DIR}/${slug}/deno.json`;
+  let importMap: ClosureFile | null = null;
+  try {
+    const content = readFile(importMapPath);
+    importMap = { path: importMapPath, content, bytes: Buffer.byteLength(content, 'utf8') };
+  } catch {
+    // Sin deno.json, la función solo usa rutas relativas y npm: o https: completos
+  }
+  if (importMap) seen.set(importMap.path, importMap);
   const files = [...seen.values()].sort((a, b) =>
     a.path === entrypointPath ? -1 : b.path === entrypointPath ? 1 : a.path.localeCompare(b.path),
   );
-  return { slug, entrypointPath, files, external: [...external].sort() };
+  return {
+    slug,
+    entrypointPath,
+    files,
+    importMapPath: importMap ? importMapPath : null,
+    external: [...external].sort(),
+  };
 }

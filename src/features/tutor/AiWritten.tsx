@@ -24,3 +24,21 @@ export function AiWritten({
     </span>
   );
 }
+
+/** La explicación con IA de esta hipótesis viene en camino y mientras tanto se ve la versión sin IA */
+export function AiPending({ className }: { className?: string }) {
+  return (
+    <p role="status" className={cn('text-sm text-fg-muted', className)}>
+      {t.tutor.ai.pending}
+    </p>
+  );
+}
+
+/** El trabajo de IA de esta hipótesis falló y se queda la versión sin IA */
+export function AiJobFailed({ className }: { className?: string }) {
+  return (
+    <p role="status" className={cn('text-sm text-fg-muted', className)}>
+      {t.tutor.ai.jobFailed}
+    </p>
+  );
+}

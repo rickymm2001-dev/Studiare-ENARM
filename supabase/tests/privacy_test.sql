@@ -80,6 +80,17 @@ insert into public.bank_reads (user_id, question_id, version_id, day, plan, purp
   ('e0000000-0000-0000-0000-000000000002', 'e3000000-0000-0000-0000-0000000000f1', 'e3000000-0000-0000-0000-000000000001',
    public.study_day() - 3, 'free', 'practice');
 
+-- Trabajos de IA de V1 y de V2 y sus generaciones de tarjetas, una de hoy y una de hace tres días (B12).
+-- Borrar mis datos quita los trabajos y las generaciones viejas, y deja la de hoy para no reiniciar el
+-- tope diario de generaciones, como deja el gasto del día en ai_usage_day
+insert into public.ai_jobs (user_id, engine, job_key, input, input_hash, prompt_version, model) values
+  ('e0000000-0000-0000-0000-000000000001', 'forgetting', 'priv-job-v1', '{}', repeat('a', 64), 'forgetting.v1', 'claude-haiku-4-5'),
+  ('e0000000-0000-0000-0000-000000000002', 'forgetting', 'priv-job-v2', '{}', repeat('b', 64), 'forgetting.v1', 'claude-haiku-4-5');
+insert into public.ai_generations (day, user_id, generation_ref, calls) values
+  (public.ai_day(), 'e0000000-0000-0000-0000-000000000001', 'priv-gen-hoy', 3),
+  (public.ai_day() - 3, 'e0000000-0000-0000-0000-000000000001', 'priv-gen-vieja', 5),
+  (public.ai_day() - 3, 'e0000000-0000-0000-0000-000000000002', 'priv-gen-v2', 2);
+
 -- ===================================================================== P1. La bitácora sigue cerrada
 -- Ni siquiera el dueño de la base la edita o la borra fuera de las funciones de borrado
 select pg_temp.expect(
@@ -141,14 +152,29 @@ rollback;
 begin;
 select pg_temp.as_user('e0000000-0000-0000-0000-000000000001');
 select pg_temp.expect(
-  (public.delete_my_data() ->> 'events')::int = 2,
-  'P4. Debía borrar sus 2 eventos'
+  (select r ->> 'events' = '2' and r ->> 'ai_jobs' = '1' and r ->> 'ai_generations' = '1'
+    from (select public.delete_my_data() as r) d),
+  'P4. Debía borrar sus 2 eventos, su trabajo de IA y su generación vieja'
 );
 select pg_temp.expect((select count(*) from public.events) = 0, 'P4. Le quedaron eventos a V1');
 select pg_temp.expect((select count(*) from public.sync_records) = 0, 'P4. Le quedaron registros a V1');
 select pg_temp.expect((select count(*) from public.content_reports) = 0, 'P4. Le quedaron reportes a V1');
 select pg_temp.expect((select count(*) from public.ai_artifacts) = 0, 'P4. Le quedaron borradores de IA a V1');
 commit;
+select pg_temp.expect(
+  (select count(*) from public.ai_jobs where user_id = 'e0000000-0000-0000-0000-000000000001') = 0,
+  'P4. Le quedaron trabajos de IA a V1'
+);
+select pg_temp.expect(
+  (select array_agg(generation_ref) from public.ai_generations where user_id = 'e0000000-0000-0000-0000-000000000001')
+    = array['priv-gen-hoy'],
+  'P4. Borrar mis datos no dejó solo la generación de tarjetas de hoy de V1'
+);
+select pg_temp.expect(
+  (select count(*) from public.ai_jobs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.ai_generations where user_id = 'e0000000-0000-0000-0000-000000000002') = 1,
+  'P4. Borrar los datos de V1 tocó los trabajos o las generaciones de V2'
+);
 -- Las lecturas del banco de días anteriores se van y la de hoy se queda, para no reiniciar el tope
 select pg_temp.expect(
   (select array_agg(day order by day) from public.bank_reads where user_id = 'e0000000-0000-0000-0000-000000000001')
@@ -178,6 +204,27 @@ select pg_temp.expect(
 select pg_temp.expect(
   (select count(*) from public.payments where user_id = 'e0000000-0000-0000-0000-000000000001') = 1,
   'P4. Borrar los datos no debe tocar los pagos'
+);
+
+-- ===================================================================== P4b. Sin las tablas de la IA real
+-- Si solo se desplegó el plan b11, ai_jobs y ai_generations no existen. Borrar mis datos tiene que seguir
+-- funcionando, y no puede fallar con "relación inexistente" para cualquier alumno (revisión del hallazgo 12)
+begin;
+alter table public.ai_jobs rename to ai_jobs_ausente;
+alter table public.ai_generations rename to ai_generations_ausente;
+select pg_temp.as_user('e0000000-0000-0000-0000-000000000002');
+select pg_temp.expect(
+  (select r ->> 'ai_jobs' = '0' and r ->> 'ai_generations' = '0' and r ->> 'events' = '2'
+    from (select public.delete_my_data() as r) d),
+  'P4b. Sin las tablas de la IA real, Borrar mis datos falló o no borró lo demás'
+);
+select pg_temp.expect((select count(*) from public.events) = 0, 'P4b. Le quedaron eventos a V2');
+rollback;
+-- Y con las tablas de vuelta nada cambió: lo de V2 sigue completo
+select pg_temp.expect(
+  (select count(*) from public.ai_jobs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000002') = 2,
+  'P4b. La prueba sin tablas dejó cambios'
 );
 
 -- ===================================================================== P5. Borrar mi cuenta

@@ -125,6 +125,31 @@ describe('forma de cada llamada a la API de administración', () => {
     expect(fake.edge.get('cancel-subscription')?.files).toHaveLength(2);
   });
 
+  it('con un deno.json manda import_map_path en el metadata y el archivo entre los demás', async () => {
+    const { fake, client } = setup();
+    await client.deployFunction({
+      slug: 'ai-proxy',
+      entrypointPath: 'supabase/functions/ai-proxy/index.ts',
+      verifyJwt: false,
+      files: [
+        { path: 'supabase/functions/ai-proxy/index.ts', content: "import { z } from 'zod';" },
+        { path: 'supabase/functions/ai-proxy/deno.json', content: '{"imports":{}}' },
+      ],
+      importMapPath: 'supabase/functions/ai-proxy/deno.json',
+    });
+    const request = fake.requests[0];
+    expect(JSON.parse(request?.form?.get('metadata') as string)).toEqual({
+      name: 'ai-proxy',
+      entrypoint_path: 'supabase/functions/ai-proxy/index.ts',
+      verify_jwt: false,
+      import_map_path: 'supabase/functions/ai-proxy/deno.json',
+    });
+    const names = (request?.form?.getAll('file') ?? []).map((file) =>
+      file instanceof File ? file.name : '',
+    );
+    expect(names).toContain('supabase/functions/ai-proxy/deno.json');
+  });
+
   it('secretos en una sola llamada y la lista solo con nombres', async () => {
     const { fake, client } = setup({ secrets: { APP_URL: 'https://app.example' } });
     await client.setSecrets([

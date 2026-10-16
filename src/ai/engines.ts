@@ -1,14 +1,18 @@
 // Cliente de los motores de IA (8.1, D-098). La app nunca llama a Anthropic. Le pide cada motor al
-// proxy local, que filtra, limita y valida, y aquí se vuelve a validar todo porque el cliente no
-// confía en nadie. Sin proxy, como en la demo publicada, la respuesta sale de las respuestas fijas
-// del propio cliente, y sin conexión la función dice que necesita conexión. Cuando algo falla, quien
-// llama usa su plantilla sin IA y la falla queda en la bitácora de costo.
+// proxy (el local en desarrollo, la Edge Function ai-proxy en el build publicado), que filtra,
+// limita y valida, y aquí se vuelve a validar todo porque el cliente no confía en nadie. Sin proxy,
+// en desarrollo y en la demo publicada, la respuesta sale de las respuestas fijas del propio cliente
+// con su etiqueta, y sin conexión la función dice que necesita conexión. En producción no hay
+// respuestas fijas del cliente (B12, 10.20). Cuando algo falla, quien llama usa su plantilla sin IA
+// y la falla queda en la bitácora de costo.
 import { ACADEMIC_SOURCE_KEYS } from '@/config/academicSources';
+import { readAppEnv, type AppEnv } from '@/config/featureFlags';
 import {
   AiErrorSchema,
   AiSuccessSchema,
   ENGINE_CONTRACTS,
   type AiEngine,
+  type AiGeneration,
   type AiErrorCode,
   type EngineInputs,
   type EngineOutputs,
@@ -20,7 +24,14 @@ import type { AiStatus } from './client';
 import { AI_BASE_URL, aiAuthHeaders } from './endpoint';
 
 export const ENGINE_URL = `${AI_BASE_URL}/ai`;
-const TIMEOUT_MS = 40_000;
+/** Cuánto espera el cliente a cada motor (B12, 2.8). Las tarjetas piensan más que el resto */
+export const ENGINE_TIMEOUT_MS: Readonly<Record<AiEngine, number>> = {
+  forgetting: 45_000,
+  weekly_report: 45_000,
+  flashcards: 75_000,
+  bias_tips: 45_000,
+  restructure: 45_000,
+};
 const SOURCE_KEYS: ReadonlySet<string> = new Set(ACADEMIC_SOURCE_KEYS);
 
 export type CallMode = 'real' | 'mock' | 'template';
@@ -57,6 +68,10 @@ export interface CallOptions {
   fetchImpl?: typeof fetch;
   /** Reloj en milisegundos, para medir la latencia */
   clock?: () => number;
+  /** Solo en tarjetas. La generación y el número de sección, para que el servidor cuente (B12, 2.4) */
+  generation?: AiGeneration;
+  /** El entorno de la app. Fuera de producción hay respuestas fijas del cliente. Las pruebas lo pasan a mano */
+  appEnv?: AppEnv;
 }
 
 /** Un ID, no un texto. Los IDs no se filtran porque una corrida de dígitos al azar no es un teléfono */
@@ -81,6 +96,7 @@ export function scrubInput<T>(input: T, names: readonly string[] = []): T {
 }
 
 const OFFLINE_MESSAGE = 'Esta función de IA necesita conexión. Se usa la versión sin IA.';
+const UNAVAILABLE_MESSAGE = 'La IA no está disponible ahora. Ves la versión sin IA.';
 const NETWORK_MESSAGE = 'No se pudo conectar con la IA. Se usa la versión sin IA.';
 const BAD_RESPONSE_MESSAGE =
   'La IA respondió algo que no pasó la revisión. Se usa la versión sin IA.';
@@ -100,8 +116,11 @@ const empty = (engine: AiEngine, mode: CallMode, latencyMs: number): CallMeta =>
   validator: { passed: false, issues: [] },
 });
 
-/** Revisa la salida contra el esquema del motor y sus guardas. null si no pasó */
-function checkOutput<E extends AiEngine>(
+/**
+ * Revisa la salida contra el esquema del motor y sus guardas. null si no pasó. También la usan los
+ * trabajos por lote, cuya salida vuelve a validarse con la entrada que guardó la app
+ */
+export function checkOutput<E extends AiEngine>(
   engine: E,
   raw: unknown,
   input: EngineInputs[E],
@@ -144,7 +163,18 @@ export async function callEngine<E extends AiEngine>(
     return { ok: false, reason: 'offline', message: OFFLINE_MESSAGE, meta: null };
   }
 
-  // Sin proxy o todavía sin saber si hay. Las respuestas fijas del cliente, que son las mismas
+  // En producción no hay respuestas fijas del cliente. Sin proxy, o con la IA no disponible, quien
+  // llama se queda con su plantilla y no se habla de IA (B12, 3.5)
+  const appEnv = options.appEnv ?? readAppEnv();
+  if (
+    status.kind === 'unavailable' ||
+    ((status.kind === 'no-proxy' || status.kind === 'checking') && appEnv === 'production')
+  ) {
+    return { ok: false, reason: 'not_configured', message: UNAVAILABLE_MESSAGE, meta: null };
+  }
+
+  // Sin proxy o todavía sin saber si hay, en desarrollo y en la demo. Las respuestas fijas del
+  // cliente, que son las mismas
   if (status.kind === 'no-proxy' || status.kind === 'checking') {
     const checked = checkOutput(engine, mockOutput(engine, input), input);
     if (!checked) {
@@ -184,8 +214,9 @@ export async function callEngine<E extends AiEngine>(
           ? { blockedNames: options.names.slice(0, 5) }
           : {}),
         input,
+        ...(options.generation ? { generation: options.generation } : {}),
       }),
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      signal: AbortSignal.timeout(ENGINE_TIMEOUT_MS[engine]),
     });
   } catch {
     return {

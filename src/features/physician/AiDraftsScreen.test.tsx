@@ -33,12 +33,16 @@ afterEach(async () => {
 const WAIT = { timeout: 30_000 };
 const text = physicianText.draftsScreen;
 const entries = buildDemoBank().questions;
-// Una pregunta suelta cuya propuesta de ejemplo pasa las guardas
+// Una pregunta suelta, con un enunciado que empieza distinto al de todas las demás (la pantalla la busca por
+// sus primeros 30 caracteres), cuya propuesta de ejemplo pasa las guardas
 const target = entries.find((entry) => {
   const built = buildRestructureInput(entry.question, entry.options, 'to_except');
   return (
     built.ok &&
     entry.question.caseId === null &&
+    entries.filter(
+      (other) => other.question.prompt.slice(0, 30) === entry.question.prompt.slice(0, 30),
+    ).length === 1 &&
     guardRestructure(mockRestructure(built.input), built.input).passed
   );
 });
@@ -51,6 +55,19 @@ const assign = (api: DataApi, user: User, questionId: string) =>
     physicianId: user.id,
     assignedBy: null,
     assignedAt: '2026-10-08T10:00:00.000Z',
+  });
+
+// Solo se reestructuran las preguntas marcadas (B12, 3.2). Un reporte de error abierto la marca
+const flag = (api: DataApi, user: User, questionVersionId: string) =>
+  api.repos.contentReports.put({
+    id: newId(),
+    reporterId: user.id,
+    targetKind: 'question',
+    targetId: questionVersionId,
+    reason: 'clinical_error',
+    status: 'open',
+    createdAt: '2026-10-09T10:00:00.000Z',
+    resolvedAt: null,
   });
 
 async function open(
@@ -79,6 +96,7 @@ describe('cola de borradores de IA (pantalla 20)', () => {
     const typing = userEvent.setup();
     const rendered = await open('physician', async (api, user) => {
       await assign(api, user, target.question.questionId);
+      await flag(api, user, target.question.id);
     });
     await typing.type(
       await screen.findByLabelText(text.questions.search, undefined, WAIT),
@@ -105,6 +123,22 @@ describe('cola de borradores de IA (pantalla 20)', () => {
     ).toBe(true);
   });
 
+  it('una pregunta que nadie marcó no se puede elegir, aunque el médico la tenga asignada', async () => {
+    const typing = userEvent.setup();
+    await open('physician', async (api, user) => {
+      await assign(api, user, target.question.questionId);
+    });
+    expect(await screen.findByText(text.questions.markedEmpty, undefined, WAIT)).toBeVisible();
+    await typing.type(
+      await screen.findByLabelText(text.questions.search, undefined, WAIT),
+      target.question.prompt.slice(0, 30),
+    );
+    expect(await screen.findByText(text.questions.noResults, undefined, WAIT)).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: new RegExp(`^${text.questions.pick}`) }),
+    ).toBeNull();
+  });
+
   it('un médico sin la pregunta asignada no puede elegirla', async () => {
     const typing = userEvent.setup();
     await open('physician');
@@ -117,7 +151,9 @@ describe('cola de borradores de IA (pantalla 20)', () => {
 
   it('aprobar pide completar etiquetas y razones, y luego crea la variante', async () => {
     const typing = userEvent.setup();
-    const rendered = await open('admin');
+    const rendered = await open('admin', async (api, user) => {
+      await flag(api, user, target.question.id);
+    });
     await typing.type(
       await screen.findByLabelText(text.questions.search, undefined, WAIT),
       target.question.prompt.slice(0, 30),

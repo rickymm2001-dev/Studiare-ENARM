@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { AI_ENGINES } from '../../src/engines/aiContracts.ts';
 import { mockOutput } from '../../src/engines/aiMock.ts';
 import { createAiDeps } from '../src/ai/index.ts';
-import { createAnthropicProvider, type AiProvider } from '../src/ai/provider.ts';
-import type { RunDeps } from '../src/ai/run.ts';
-import { fakeApi, fakeMessage } from '../src/ai/testing/fakes.ts';
+import {
+  createAnthropicProvider,
+  type AiProvider,
+} from '../../supabase/functions/_shared/ai/provider.ts';
+import type { RunDeps } from '../../supabase/functions/_shared/ai/run.ts';
+import { fakeApi, fakeMessage } from '../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { buildCases } from './cases.ts';
 import {
   checkTargets,
@@ -47,7 +50,8 @@ describe('casos dorados', () => {
   });
 
   it('ninguna entrada trae datos personales', async () => {
-    const { findPersonalData, hasPersonalData } = await import('../src/ai/pii.ts');
+    const { findPersonalData, hasPersonalData } =
+      await import('../../supabase/functions/_shared/ai/pii.ts');
     for (const golden of cases) {
       expect(hasPersonalData(findPersonalData(golden.input)), golden.id).toBe(false);
     }
@@ -66,6 +70,7 @@ describe('con las respuestas fijas', () => {
       schema: true,
       grounding: true,
       rejection: true,
+      adversarial: true,
       met: true,
     });
     expect(results.filter((result) => !result.passed).map((result) => result.id)).toEqual([]);
@@ -190,16 +195,25 @@ describe('métricas', () => {
   const result = (overrides: Partial<CaseResult>): CaseResult => ({
     id: 'x',
     engine: 'forgetting',
+    set: 'synthetic',
     expect: 'answer',
+    adversarial: null,
     schemaValid: true,
+    schemaValidFinal: true,
     accepted: true,
     empty: false,
     retried: false,
+    refused: false,
+    refusalCategory: null,
+    cutoff: false,
+    forbiddenHit: false,
     passed: true,
     error: null,
     costUsd: 0.01,
     latencyMs: 100,
+    warmup: false,
     issues: [],
+    output: null,
     ...overrides,
   });
 

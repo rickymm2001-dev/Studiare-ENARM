@@ -2,7 +2,10 @@
 // formato en los cinco motores, que los límites del proxy llegan a la app con su mensaje y que lo
 // que cuesta una llamada real queda en la bitácora.
 import { describe, expect, it } from 'vitest';
+import { fetchAdminConfig, fetchAdminUsage, saveAdminConfig } from '@/ai/admin';
 import { callEngine, type CallOptions } from '@/ai/engines';
+import { SECTIONS_PER_GENERATION } from '@/ai/flashcards';
+import { AI_CARDS_PER_DAY_PAID } from '@/config/billing';
 import { urlOf } from '@/ai/testing/fetch';
 import {
   biasTipInput,
@@ -13,9 +16,10 @@ import {
 } from '@/ai/testing/aiSamples';
 import { AI_ENGINES } from '@/engines/aiContracts';
 import { mockHypothesis } from '@/engines/aiMock';
+import { DEFAULT_CONFIG } from '../../supabase/functions/_shared/ai/config.ts';
 import { createAiDeps } from '../../server/src/ai/index.ts';
-import { createAnthropicProvider } from '../../server/src/ai/provider.ts';
-import { fakeApi, fakeMessage } from '../../server/src/ai/testing/fakes.ts';
+import { createAnthropicProvider } from '../../supabase/functions/_shared/ai/provider.ts';
+import { fakeApi, fakeMessage } from '../../supabase/functions/_shared/ai/testing/fakes.ts';
 import { createApp } from '../../server/src/app.ts';
 
 const STUDENT = '01HZX0000000000000000000AA';
@@ -120,5 +124,39 @@ describe('app y proxy con un modelo falso', () => {
       reason: 'invalid_output',
       meta: { outcome: 'fallback', inputTokens: 2000 },
     });
+  });
+});
+
+describe('pantallas del admin contra el proxy (B12, paso 0)', () => {
+  it('leen la configuración y el gasto del proxy, con los campos nuevos de B12', async () => {
+    const ai = createAiDeps({ credentials: { mode: 'mock', apiKey: null }, files });
+    const fetchImpl = proxyFetch(createApp({ mode: 'mock', ai }));
+    const config = await fetchAdminConfig(fetchImpl);
+    expect(config?.config.models.flashcards).toMatchObject({ thinking: 'adaptive' });
+    expect(config?.config.limits.perUserDailyUsd).toBe(DEFAULT_CONFIG.limits.perUserDailyUsd);
+    expect((await fetchAdminUsage(fetchImpl))?.usage.calls).toBe(0);
+  });
+
+  it('un cambio de la pantalla sin razonamiento conserva el del motor', async () => {
+    const ai = createAiDeps({ credentials: { mode: 'mock', apiKey: null }, files });
+    const fetchImpl = proxyFetch(createApp({ mode: 'mock', ai }));
+    const saved = await saveAdminConfig(
+      { models: { flashcards: { id: 'claude-sonnet-5-5', effort: 'medium', maxTokens: 7000 } } },
+      fetchImpl,
+    );
+    expect(saved.ok).toBe(true);
+    expect(ai.config().models.flashcards).toEqual({
+      id: 'claude-sonnet-5-5',
+      effort: 'medium',
+      thinking: 'adaptive',
+      maxTokens: 7000,
+    });
+  });
+});
+
+describe('límites de tarjetas del servidor (B12, 2.4)', () => {
+  it('son los mismos que muestra la app', () => {
+    expect(DEFAULT_CONFIG.limits.cardGenerationsPerDay).toBe(AI_CARDS_PER_DAY_PAID);
+    expect(DEFAULT_CONFIG.limits.sectionsPerGeneration).toBe(SECTIONS_PER_GENERATION);
   });
 });

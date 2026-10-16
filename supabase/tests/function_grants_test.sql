@@ -107,4 +107,46 @@ begin
   end if;
 end $$;
 
+-- ===================================================================== G6. IA real (B12)
+-- Ninguna función de la IA queda para public ni para anon. La sesión del alumno solo llama a ai_whoami
+-- y a las de la compuerta, que revisan el rol por dentro. El libro de gastos, la cola de lotes y el
+-- secreto del reloj son solo de service_role. Las auxiliares no las ejecuta nadie de la API
+do $$
+declare
+  r record;
+  n integer := 0;
+  v_session constant text[] := array['ai_whoami', 'ai_gate_my_items', 'ai_gate_my_samples', 'ai_gate_review',
+    'admin_ai_gate_sample_create', 'admin_ai_gate_samples', 'admin_ai_gate_progress', 'admin_ai_gate_close',
+    'admin_ai_gate_set', 'admin_ai_pause', 'admin_ai_cost_report'];
+  v_service constant text[] := array['ai_admit_v2', 'ai_release_v2', 'ai_settle_v2', 'ai_usage_summary_v2',
+    'ai_job_enqueue', 'ai_job_status', 'ai_jobs_claim', 'ai_jobs_submitted', 'ai_jobs_unclaim', 'ai_jobs_stale',
+    'ai_batches_due', 'ai_jobs_pending', 'ai_job_requeue', 'ai_batch_mark', 'ai_job_finish', 'ai_jobs_scrub',
+    'ai_tick_lease_take', 'ai_tick_secret_ok'];
+  v_internal constant text[] := array['ai_job_row_json', 'ai_job_stored_json', 'ai_gate_write', 'ai_gate_now',
+    'ai_gate_assert_reviewer', 'ai_gate_verdict', 'ai_gate_guard', 'ai_gate_min_items'];
+begin
+  for r in
+    select p.oid::regprocedure::text as f, p.proname::text as name, p.proacl
+    from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public' and p.proname = any (v_session || v_service || v_internal)
+  loop
+    n := n + 1;
+    if r.proacl is null or exists (select 1 from aclexplode(r.proacl) a where a.grantee = 0) then
+      raise exception 'FALLA G6. public puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('anon', r.f, 'execute') then
+      raise exception 'FALLA G6. anon puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('authenticated', r.f, 'execute') <> (r.name = any (v_session)) then
+      raise exception 'FALLA G6. authenticated tiene un permiso equivocado en %', r.f;
+    end if;
+    if has_function_privilege('service_role', r.f, 'execute') <> (r.name = any (v_service)) then
+      raise exception 'FALLA G6. service_role tiene un permiso equivocado en %', r.f;
+    end if;
+  end loop;
+  if n <> cardinality(v_session || v_service || v_internal) then
+    raise exception 'FALLA G6. Se esperaban % funciones de la IA y hay %', cardinality(v_session || v_service || v_internal), n;
+  end if;
+end $$;
+
 select 'TODAS LAS PRUEBAS DE PERMISOS DE FUNCIONES PASARON' as resultado;

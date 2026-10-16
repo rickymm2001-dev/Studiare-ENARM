@@ -13,14 +13,13 @@ import {
   type FlashcardProposal,
   type GenerationResult,
 } from '@/ai/flashcards';
-import { useAiStatus } from '@/ai/useAiStatus';
+import { AiAccessNotice } from '@/ai/AiAccessNotice';
 import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { extractPdfText } from '@/data/import/pdf';
 import { ImportError } from '@/data/import/types';
 import {
-  GenerationLimitError,
   generationsLeft,
   recordGeneration,
   saveProposals,
@@ -37,6 +36,7 @@ import { ControversySignal } from '../shared/ControversySignal';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { useActivePlan } from '../shared/useActivePlan';
+import { cardsFailureText, logFailedGeneration, useCardsAi } from '../shared/useCardsAi';
 import { FileChooser } from '@/ui/components/file-chooser';
 
 export function AiCardsCard({ session }: { session: ReadySession }) {
@@ -56,7 +56,7 @@ type Step =
 
 function AiCards({ session }: { session: ReadySession }) {
   const api = useDataApi();
-  const status = useAiStatus();
+  const { status, access, offered, canGenerate } = useCardsAi(session);
   const plan = useActivePlan(session.user.id);
   const fileId = useId();
   const [text, setText] = useState('');
@@ -140,7 +140,8 @@ function AiCards({ session }: { session: ReadySession }) {
       );
       setStep({ name: 'results', result, artifactId: recorded.artifactId, sourceTitle });
     } catch (error) {
-      setProblem(error instanceof GenerationLimitError ? t.aiCards.limitReached : t.aiCards.error);
+      await logFailedGeneration(api, session.user, error);
+      setProblem(cardsFailureText(error, t.aiCards.error));
       setStep({ name: 'idle' });
     }
   };
@@ -201,11 +202,14 @@ function AiCards({ session }: { session: ReadySession }) {
         </CardTitle>
         <CardDescription>{t.aiCards.intro}</CardDescription>
       </CardHeader>
-      <p className="text-sm text-fg-muted">
-        {t.aiCards.modes[status.kind === 'real' ? 'real' : 'template']}
-      </p>
+      {offered ? (
+        <p className="text-sm text-fg-muted">
+          {t.aiCards.modes[status.kind === 'real' ? 'real' : 'template']}
+        </p>
+      ) : null}
+      <AiAccessNotice access={access} gatedText={t.ai.access.gatedCards} />
 
-      {step.name === 'saved' ? (
+      {!offered ? null : step.name === 'saved' ? (
         <div className="flex flex-col gap-2">
           <p role="status" className="font-semibold">
             {t.aiCards.savedTitle}
@@ -297,7 +301,7 @@ function AiCards({ session }: { session: ReadySession }) {
           <Button
             type="submit"
             className="self-start"
-            disabled={busy || reading || left === 0 || plan === undefined}
+            disabled={busy || reading || left === 0 || plan === undefined || !canGenerate}
           >
             {step.name === 'generating' ? t.aiCards.generating : t.aiCards.generate}
           </Button>
@@ -353,6 +357,7 @@ function Results({
         {result.rejected > 0 ? <li>{t.aiCards.rejected(result.rejected)}</li> : null}
         {result.sectionsCut ? <li>{t.aiCards.cut(result.sections)}</li> : null}
         {result.fellBack ? <li>{t.aiCards.fellBack}</li> : null}
+        {result.stopped ? <li>{result.stopped.message}</li> : null}
       </ul>
       {proposals.length === 0 ? (
         <p className="text-sm">{t.aiCards.nothing}</p>

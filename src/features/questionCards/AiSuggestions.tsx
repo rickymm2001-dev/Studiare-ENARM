@@ -11,22 +11,18 @@ import {
   type FlashcardProposal,
   type GenerationResult,
 } from '@/ai/flashcards';
-import { useAiStatus } from '@/ai/useAiStatus';
+import { AiAccessNotice } from '@/ai/AiAccessNotice';
 import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import {
-  controversyOf,
-  GenerationLimitError,
-  generationsLeft,
-  recordGeneration,
-} from '@/data/usecases/aiCards';
+import { controversyOf, generationsLeft, recordGeneration } from '@/data/usecases/aiCards';
 import type { NoteDraft } from '@/data/usecases/manualDecks';
 import type { QuestionCardSource } from '@/data/usecases/questionCards';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { ControversySignal } from '../shared/ControversySignal';
+import { cardsFailureText, logFailedGeneration, useCardsAi } from '../shared/useCardsAi';
 import type { ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
 import { useActivePlan } from '../shared/useActivePlan';
@@ -62,7 +58,7 @@ export function AiSuggestions({
   ) => void;
 }) {
   const api = useDataApi();
-  const status = useAiStatus();
+  const { status, access, offered, canGenerate } = useCardsAi(session);
   const plan = useActivePlan(session.user.id);
   const text = t.examReview.ai;
   const [step, setStep] = useState<Step>({ name: 'idle' });
@@ -97,7 +93,8 @@ export function AiSuggestions({
       const recorded = await recordGeneration(api, session.user, plan, result, sourceTitle);
       setStep({ name: 'results', result, artifactId: recorded.artifactId, sourceTitle });
     } catch (error) {
-      setProblem(error instanceof GenerationLimitError ? t.aiCards.limitReached : text.error);
+      await logFailedGeneration(api, session.user, error);
+      setProblem(cardsFailureText(error, text.error));
       setStep({ name: 'idle' });
     }
   };
@@ -105,12 +102,17 @@ export function AiSuggestions({
   if (explanation === '') return <p className="text-sm text-fg-muted">{text.noExplanation}</p>;
 
   const perDay = plan ? PLANS[plan].aiCardsPerDay : 0;
+  // Con la compuerta cerrada, sin IA o sin ser del equipo no se ofrece el botón y se ve el aviso
+  if (!offered) {
+    return <AiAccessNotice access={access} gatedText={t.ai.access.gatedCards} />;
+  }
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm text-fg-muted">{text.hint}</p>
       <p className="text-sm text-fg-muted">
         {t.aiCards.modes[status.kind === 'real' ? 'real' : 'template']}
       </p>
+      <AiAccessNotice access={access} gatedText={t.ai.access.gatedCards} />
       {left !== undefined && left !== null ? (
         <p className="text-sm font-medium">{t.aiCards.left(left, perDay)}</p>
       ) : null}
@@ -118,7 +120,7 @@ export function AiSuggestions({
         type="button"
         variant="secondary"
         className="self-start"
-        disabled={step.name === 'generating' || left === 0 || plan === undefined}
+        disabled={step.name === 'generating' || left === 0 || plan === undefined || !canGenerate}
         onClick={() => {
           void generate();
         }}
@@ -129,6 +131,11 @@ export function AiSuggestions({
       {problem ? (
         <p role="alert" className="text-sm font-medium text-danger">
           {problem}
+        </p>
+      ) : null}
+      {step.name === 'results' && step.result.stopped ? (
+        <p role="status" className="text-sm text-fg-muted">
+          {step.result.stopped.message}
         </p>
       ) : null}
       {step.name === 'results' ? (

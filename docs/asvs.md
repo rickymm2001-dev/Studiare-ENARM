@@ -72,11 +72,12 @@ Cumple, con una salvedad documentada.
 
 Cumple.
 
-- El proxy de IA solo escucha en 127.0.0.1, rechaza un Host que no sea local (contra DNS rebinding) y rechaza un Origin que no sea la app. Las escrituras exigen JSON, lo que obliga al navegador a preguntar antes (server/src/app.ts)
+- El proxy de IA de desarrollo solo escucha en 127.0.0.1, rechaza un Host que no sea local (contra DNS rebinding) y rechaza un Origin que no sea la app. Las escrituras exigen JSON, lo que obliga al navegador a preguntar antes (server/src/app.ts)
+- En producción la IA corre en las Edge Functions ai-proxy y ai-batch de Supabase (B12), con el mismo núcleo. ai-proxy solo contesta a los orígenes de APP_ORIGINS, exige JSON y revisa la sesión de Supabase en cada ruta de IA. ai-batch rechaza toda petición con Origin y toda la que no traiga el secreto del ciclo, que la base compara sin sacarlo de Vault. Ya no hay alojamiento con Docker (docs/IA_ALOJADA.md)
 - Tamaño máximo del cuerpo, esquemas estrictos y límites por alumno, por motor y por día, además de un presupuesto diario
 - Nunca devuelve el detalle de un error, que podría traer datos de la petición
 - Las funciones de pago verifican la firma de la pasarela antes de hacer nada (Stripe con marca de tiempo y tolerancia, y Mercado Pago con su encabezado propio), comparan en tiempo constante y guardan el aviso para auditarlo
-- Pruebas: server/src/app.test.ts, server/src/server.test.ts y supabase/functions/_shared/payments.test.ts
+- Pruebas: server/src/app.test.ts, server/src/server.test.ts, supabase/functions/_shared/ai/app.test.ts, supabase/functions/_shared/ai/jobs.test.ts y supabase/functions/_shared/payments.test.ts
 
 ## V5. Manejo de archivos
 
@@ -147,14 +148,15 @@ Cumple, con una salvedad.
 - La política de contenido impide que la app se conecte por http a otro lugar
 - HSTS por un año (Strict-Transport-Security max-age=31536000) en el archivo _headers del build, sin includeSubDomains ni preload, que son difíciles de deshacer. Vale en Cloudflare Pages y en Netlify. GitHub Pages no lee _headers, pero ya impone HTTPS y manda su propio HSTS
 - Producción. Revisar que el proyecto de Supabase solo acepte HTTPS (lo hace por defecto). Subir a includeSubDomains y preload solo cuando todo el dominio propio esté en HTTPS
-- El proxy de IA es local y por http en 127.0.0.1. La demo publicada no lo usa y trabaja con respuestas fijas
+- El proxy de IA de desarrollo es local y por http en 127.0.0.1. En producción la IA va por las Edge Functions de Supabase, siempre por HTTPS
 
 ## V13. Configuración
 
 Cumple.
 
-- Ningún secreto en el código, en el repositorio ni en el build. La clave de IA se llama ENARM_ANTHROPIC_KEY, vive solo en server/.env.local y no se sube
-- tests/security/no-secrets.test.ts construye la app y busca la clave, el nombre de la variable, el nombre de variable prohibido, el prefijo sk-ant-, archivos .env y llaves de servicio. Además corre al final de npm run build
+- Ningún secreto en el código, en el repositorio ni en el build. La clave de IA se llama ENARM_ANTHROPIC_KEY. En desarrollo vive solo en server/.env.local, que no se sube, y en producción como secreto de las Edge Functions de Supabase, que pone Ricardo. La clave de OpenAI de las evaluaciones (ENARM_OPENAI_KEY) nunca va a Supabase ni al repositorio
+- tests/security/no-secrets.test.ts construye la app y busca la clave, el nombre de la variable, el nombre de variable prohibido, el prefijo sk-ant-, el nombre y la forma de las llaves de OpenAI, archivos .env y llaves de servicio. Además corre al final de npm run build
+- tests/architecture/edge-functions.test.ts revisa que las Edge Functions solo lean los nombres de entorno previstos, que lo que importan se quede dentro de supabase/functions y que nada de producción mencione OpenAI ni el nombre de variable prohibido
 - Encabezados de seguridad en _headers y política de contenido en el HTML
 - Dependencias bloqueadas por package-lock.json y versiones exactas
 - npm audit sin vulnerabilidades altas ni críticas. Ver la sección de dependencias

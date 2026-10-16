@@ -1,6 +1,6 @@
 # Real contra simulado, función por función
 
-Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-10. Incluye las Fases G y H.
+Fase F, sección 17 de la especificación. Para cada función dice qué hace de verdad hoy, qué es de demostración y qué falta para producción. Fecha de esta versión, 2026-10-10. Incluye las Fases G y H. Las filas de IA, de la auditoría y de los costos de la nube están al día con el bloque B12 (2026-10-15).
 
 ## Cómo leer las etiquetas
 
@@ -55,12 +55,17 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 
 | Función | Hoy | Etiqueta | Qué falta para producción |
 |---|---|---|---|
-| Proxy de IA | Local, en 127.0.0.1, con límites por alumno y por motor, presupuesto diario y filtro de datos personales. Alojado, pide la sesión de Supabase y un plan de pago o un rol de médico, y lleva sus límites y su bitácora en Postgres (D-103) | Real el local. El alojado está programado y probado con un servidor falso | Elegir alojamiento, poner las variables de docs/IA_ALOJADA.md, aplicar la sexta migración y probar con la clave de Ricardo |
-| Hipótesis de olvidos, informe semanal, tarjetas, consejos por sesgo y preguntas reestructuradas | Sin clave corren con respuestas fijas que cumplen los mismos contratos. Con la clave de Ricardo llaman al modelo | Simulado, y real con la clave | Correr npm run eval-ai con la clave para medir costo y latencia reales, y la compuerta 1 del plan maestro con dos médicos |
-| Tarjetas desde PDF y texto | Cada tarjeta cita la frase literal que la respalda y queda en borrador | Simulado, y real con la clave | Revisión médica |
+| Proxy de IA local | En 127.0.0.1, solo para desarrollo. Límites por alumno y por motor, presupuesto diario, filtro de datos personales, cola de lotes en memoria y la compuerta siempre abierta, con la IA simulada y su etiqueta | Real | Nada, es la herramienta de desarrollo |
+| Proxy de IA alojado | Dos Edge Functions de Supabase, ai-proxy y ai-batch, con el mismo núcleo que el local (B12). Piden la sesión de Supabase en cada llamada, un plan de pago o un rol de equipo, y aplican la compuerta, la pausa, los límites y la bitácora, que viven en Postgres. La app arma su dirección con la de Supabase, sin variables nuevas | Programado y probado con Supabase y Anthropic simulados, también en el navegador | Aplicar las migraciones, desplegar las funciones en modo simulado, que Ricardo ponga la clave y probar con ella como médico (docs/IA_ALOJADA.md) |
+| Compuerta 1 y Auditoría de la IA | Cada motor nace cerrado para los alumnos. Dos médicos califican a ciegas una muestra de textos de la IA y la base calcula si cada motor pasa. El admin abre los que pasaron. Cambiar el modelo, el razonamiento o el prompt de un motor abierto lo cierra hasta una auditoría corta. Médicos y administradores usan todo para auditar | Real con la nube, probado con una nube simulada | Que dos médicos auditen la muestra de 300 textos que arma npm run ai:gate-sample |
+| Hipótesis de olvidos | Sale de reglas sobre los errores y la IA solo redacta la explicación, por lote a mitad de costo. La app la pide, la hipótesis sigue con su plantilla y la explicación llega en una hora o hasta en un día, siempre en borrador | Simulado hasta que haya clave, y real con ella | Correr npm run eval-ai con la clave para elegir los modelos, y la compuerta 1 |
+| Informe semanal y consejos por sesgo | Se piden una vez al momento y valen 7 días. Un consejo solo se redacta sobre un texto base que un médico ya revisó cuando la app corre en producción | Simulado hasta que haya clave, y real con ella | Lo mismo, y que un médico revise los textos base de los consejos |
+| Tarjetas desde PDF y texto | Se generan por secciones, cada tarjeta cita la frase literal que la respalda y queda en borrador. Hay un tope de generaciones por día que aplica el servidor y, con la compuerta cerrada, el botón no aparece para alumnos | Simulado hasta que haya clave, y real con ella | Revisión médica y la compuerta 1 |
+| Preguntas reestructuradas | Solo de preguntas marcadas, con un reporte de error abierto o un distractor que casi nadie elige. La propuesta llega a la cola del médico como borrador con la original al lado y nunca la reemplaza. Es solo del equipo | Simulado hasta que haya clave, y real con ella | La compuerta 1 y médicos que revisen la cola |
+| Sin IA, o sin proxy | En producción la app usa sus plantillas y no habla de IA. Las respuestas fijas del propio cliente quedan solo en desarrollo y en la demo, con su etiqueta | Real | Nada en lo funcional |
 | Textos académicos de las señales de controversia | Lista cerrada provisional | Pendiente de Ricardo | Que Ricardo o un médico confirmen la lista |
-| Segundo proveedor de IA | No está | Pendiente de Ricardo | Confirmar el proveedor |
-| Demo publicada | Sin proxy, con respuestas fijas de IA | Simulado | Nada, es lo esperado de una demo |
+| Segundo proveedor de IA | OpenAI solo para comparar la calidad en las evaluaciones con npm run eval-ai. Nunca llega a producción ni al navegador | Pendiente de Ricardo | Su clave, que vive fuera del repositorio, y elegir los dos modelos de la comparación |
+| Demo publicada | En la base de demostración no llama a la función. Usa respuestas fijas de IA con la etiqueta de IA simulada, así no gasta presupuesto ni choca con la compuerta | Simulado | Nada, es lo esperado de una demo |
 
 ## Dinero
 
@@ -80,12 +85,12 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 |---|---|---|---|
 | Editor de pregunta con versiones | Cada guardado crea una versión nueva en borrador y el médico edita solo lo asignado | Real | Roles reales ya existen con la nube |
 | Doble etiquetado con acuerdo | A ciegas, con kappa por etiqueta y su intervalo | Real | Médicos reales etiquetando |
-| Cola de borradores de IA | El médico aprueba o rechaza preguntas reestructuradas, consejos y tarjetas | Real | Nada en lo funcional |
+| Cola de borradores de IA | El médico aprueba o rechaza preguntas reestructuradas, consejos y tarjetas. Pedir una propuesta con IA solo se puede en una pregunta marcada | Real | Nada en lo funcional |
 | Importador del banco | CSV, Excel o JSON con reporte de errores por fila | Real | Importar casos seriados |
 | Usuarios y roles | Con la nube conectada lista las cuentas reales de Supabase, con su correo, plan y rol, y cambia el rol con las reglas del servidor (D-108). Sin la nube trabaja sobre los perfiles del navegador | Real con la nube | Aplicar la novena migración |
 | Asignar preguntas a un médico | El admin elige subespecialidades y se le asignan sus preguntas. Hoy vive en el navegador donde se hace | Real sin la nube. No llega a la nube | Que el banco viva en Supabase (docs/BANCO_EN_LA_NUBE.md) |
 | Aviso de privacidad nuevo | Cuando cambia la versión, una franja pide aceptarla de nuevo y deja constancia sin cambiar los permisos | Real | Nada en lo funcional |
-| Costos de IA, datos de demostración y configuración | Gasto real y teórico, siembra de alumnos simulados, umbrales y pesos. Con la nube, la configuración vive en el servidor y vale para todos (D-105) | Real, y real con la nube | Nada en lo funcional |
+| Costos de IA, datos de demostración y configuración | Gasto real y teórico del proxy local, y con la nube el costo de la IA alojada por motor, por modo (al momento o por lote) y por alumno al mes, sin el texto de nadie. Siembra de alumnos simulados, umbrales y pesos. Con la nube, la configuración vive en el servidor y vale para todos (D-105). Los modelos, los precios y los límites de la IA se cambian ahí y avisan cuándo cierran un motor para los alumnos | Real, y real con la nube | Nada en lo funcional |
 
 ## Textos legales y errores
 
@@ -102,6 +107,6 @@ Todo contenido de demostración y todo dato simulado lleva una etiqueta visible 
 | Página web e instalación como PWA | Funciona completa en el navegador. Instalarla es opcional | Real | Nada |
 | Sin conexión | Abre y se navega sin red después de la primera carga. La IA avisa que necesita conexión | Real | Nada |
 | Alumnos y amigos de Party | Grupos con tabla semanal y retos. Los amigos de la demo son simulados | Simulado en la demo, real con la nube | Tiempo real y términos legales |
-| Demo en GitHub Pages | Publicada con cada push a main, con IA simulada | Simulado | Dominio propio |
+| Demo en GitHub Pages | Publicada con cada push a main, con IA simulada que no llama a la función | Simulado | Dominio propio |
 | Demo en Cloudflare Pages | El build ya trae el archivo de encabezados. Falta publicar | Pendiente de Ricardo | Cuenta de Cloudflare y aprobación de Ricardo para publicar (D-017) |
 | Apps nativas | Descartadas. Todo vive como página web | Descartada | Nada |

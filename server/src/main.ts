@@ -5,7 +5,7 @@
 // Con --mock, PW_PORT_OFFSET corre el puerto y suma la vista previa corrida a los orígenes aceptados
 // (server/src/testPorts.ts). El proxy que puede tener clave siempre escucha en 127.0.0.1:8787 (D-040)
 import { ENV_FILE, PROXY_PORT } from './config.ts';
-import { createAiDeps } from './ai/index.ts';
+import { createAiDeps, startDevBatchLoop } from './ai/index.ts';
 import { loadAiCredentials } from './env.ts';
 import { startProxy } from './server.ts';
 import { PORT_OFFSET_VARIABLE, proxyAllowedOrigins, testPorts } from './testPorts.ts';
@@ -21,15 +21,18 @@ if (ports.offset !== 0 && !forceMock) {
 }
 const credentials = loadAiCredentials({ envFile: ENV_FILE, forceMock });
 
+const ai = createAiDeps({
+  credentials,
+  ...(ephemeral ? { files: { config: null, ledger: null } } : {}),
+});
 const proxy = await startProxy({
   port: ports.proxy,
   mode: credentials.mode,
   allowedOrigins: proxyAllowedOrigins(ports),
-  ai: createAiDeps({
-    credentials,
-    ...(ephemeral ? { files: { config: null, ledger: null } } : {}),
-  }),
+  ai,
 });
+// La cola de lotes vive en memoria y su ciclo corre aquí, como pg_cron en la nube (B12, 3.4)
+const stopBatches = startDevBatchLoop(ai);
 const modeText =
   credentials.mode === 'real'
     ? 'modo real (clave encontrada en server/.env.local)'
@@ -39,6 +42,7 @@ console.log(
 );
 
 function shutdown() {
+  stopBatches();
   void proxy.close().finally(() => process.exit(0));
 }
 process.on('SIGINT', shutdown);
