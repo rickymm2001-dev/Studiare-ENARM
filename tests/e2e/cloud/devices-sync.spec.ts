@@ -85,16 +85,21 @@ const changedConsent = (cloud: FakeSupabaseServer, status: 'granted' | 'revoked'
       event.payload.status === status,
   );
 
-/** Respuestas distintas que llegaron al servidor, aunque un navegador repita el envío de alguna */
+/**
+ * Los eventos de un tipo que llegaron al servidor, uno por id. Un navegador que cambia de pantalla a medio
+ * envío no se entera de que llegó y lo manda otra vez, y el servidor lo recibe igual una sola vez
+ */
+function pushedEventsOf(cloud: FakeSupabaseServer, type: string): PushedEvent[] {
+  const byId = new Map<string, PushedEvent>();
+  for (const event of pushedEvents(cloud)) if (event.type === type) byId.set(event.id, event);
+  return [...byId.values()];
+}
+
 const answersPushed = (cloud: FakeSupabaseServer) =>
-  new Set(
-    pushedEvents(cloud)
-      .filter((event) => event.type === 'question_answered')
-      .map((event) => event.id),
-  ).size;
+  pushedEventsOf(cloud, 'question_answered').length;
 
 const scoreEvents = (cloud: FakeSupabaseServer) =>
-  pushedEvents(cloud).filter((event) => event.type === 'official_score_submitted');
+  pushedEventsOf(cloud, 'official_score_submitted');
 
 /** Sincroniza desde Configuración las veces que haga falta hasta que el servidor tenga lo que se espera */
 async function syncUntil(page: Page, ready: () => boolean) {

@@ -3,6 +3,7 @@
 // revisar su fila, avisa y cierra su sesión. Cambiar de dispositivo demasiadas veces en un día lo
 // frena el servidor con la hora en que puede volver a intentarlo
 import { SCREENS } from '@/app/screens';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import {
   enterWithLink,
@@ -37,6 +38,12 @@ test.describe('Dispositivo único por cuenta', () => {
     const second = await openSecondDevice(browser, cloud, consoleErrors);
     await enterWithLink(second.page, cloud, EMAIL);
     await expect.poll(() => cloud.deviceSessionOf(EMAIL)?.deviceId).not.toBe(firstDevice);
+
+    // El primero tiene algo que subir, un permiso que cambia. Un navegador que acaba de entrar ya no deja
+    // eventos suyos al entrar (B14, los permisos de un dispositivo nuevo no son decisiones del alumno), y sin
+    // nada que subir la sincronización termina bien y el aviso lo da la revisión del dispositivo
+    await page.getByRole('checkbox', { name: consentTexts.purposes.ai_analysis[0] }).check();
+    await expect(page.getByText(t.settings.privacy.consentSaved)).toBeVisible();
 
     // El primero ya no puede subir nada
     await page.getByRole('button', { name: t.cloud.sync.syncNow }).click();
