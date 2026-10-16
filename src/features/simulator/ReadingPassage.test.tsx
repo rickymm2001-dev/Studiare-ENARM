@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from '@testing-library/react';
+import { createRef } from 'react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { englishText } from '@/i18n/english';
@@ -29,6 +30,48 @@ function desktop() {
     removeEventListener: () => undefined,
   }));
 }
+
+describe('la región del texto (hallazgo 10 de la revisión)', () => {
+  it('con scrollable es una región con nombre, se puede enfocar desde afuera y dice su lugar', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(
+      <>
+        <span id="lugar">Pregunta 3 de 20</span>
+        <ReadingPassage
+          text="[Prueba] Simulated passage."
+          refs={TEAM}
+          fold="never"
+          scrollable
+          regionRef={ref}
+          describedBy="lugar"
+        />
+      </>,
+    );
+    const region = screen.getByRole('region', { name: englishText.reading.label });
+    expect(ref.current).toBe(region);
+    expect(region).toHaveAttribute('tabindex', '0');
+    expect(region).toHaveAccessibleDescription('Pregunta 3 de 20');
+    expect(region).toHaveTextContent('[Prueba] Simulated passage.');
+    ref.current?.focus();
+    expect(region).toHaveFocus();
+  });
+
+  it('sin scrollable no es una región ni se enfoca, y la referencia queda en el mismo recuadro', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(
+      <ReadingPassage
+        text="[Prueba] Simulated passage."
+        refs={TEAM}
+        fold="never"
+        regionRef={ref}
+        describedBy="lugar"
+      />,
+    );
+    expect(screen.queryByRole('region')).toBeNull();
+    expect(ref.current).not.toHaveAttribute('tabindex');
+    expect(ref.current).not.toHaveAttribute('aria-describedby');
+  });
+});
 
 describe('la línea de la fuente del texto', () => {
   it('dice el título, la licencia y, si la licencia pide enlace, abre el enlace en otra pestaña', () => {

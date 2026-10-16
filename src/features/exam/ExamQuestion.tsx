@@ -64,10 +64,16 @@ export function ExamQuestion({
     : [];
   const twoColumns = Boolean(vignette) || english;
   const promptRef = useRef<HTMLHeadingElement>(null);
+  // La región del texto de una pregunta de lectura, que va antes del enunciado
+  const passageRef = useRef<HTMLDivElement>(null);
+  // La primera pregunta de un texto lleva el foco al texto y no al enunciado, que va después. Las demás, al
+  // enunciado. Una pregunta de inglés sin caso es su propio texto
+  const firstOfText = english && (question.caseOrder ?? 1) <= 1;
   // La pregunta se monta de nuevo en cada cambio (la pantalla le pone key), así que basta al montar
   useEffect(() => {
-    if (focusPrompt) promptRef.current?.focus();
-  }, [focusPrompt]);
+    if (!focusPrompt) return;
+    (firstOfText ? (passageRef.current ?? promptRef.current) : promptRef.current)?.focus();
+  }, [focusPrompt, firstOfText]);
 
   const prompt = (
     <CardTitle
@@ -80,7 +86,7 @@ export function ExamQuestion({
         english ? undefined : 'mt-3',
       )}
     >
-      <span className="sr-only" lang="es">
+      <span id="examen-pregunta-lugar" className="sr-only" lang="es">
         {position}.{' '}
       </span>
       <HighlightedPrompt text={question.prompt} ranges={ranges} />
@@ -116,6 +122,8 @@ export function ExamQuestion({
             refs={question.gpcRefs}
             fold={(question.caseOrder ?? 1) > 1 ? 'phone' : 'never'}
             scrollable
+            regionRef={passageRef}
+            describedBy="examen-pregunta-lugar"
             className="mt-2"
           />
         ) : vignette ? (

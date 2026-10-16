@@ -72,6 +72,39 @@ async function startReading(options: { items?: number; at?: number; prompt?: str
   return fixture;
 }
 
+/** Una práctica de varios textos de lectura, uno tras otro. Cada número es cuántas preguntas trae el texto */
+async function startTexts(sizes: readonly number[]) {
+  const fixtures = sizes.map((size, at) => makeEnglishCase(size, {}, at + 1));
+  app = await renderApp(SCREENS.question.path, {
+    seed: async (api, user) => {
+      for (const fixture of fixtures) {
+        await api.repos.cases.add(fixture.clinicalCase);
+        for (const { question, options: rows } of fixture.bundles) {
+          await api.repos.questions.addVersion(question, rows);
+        }
+      }
+      usePractice.getState().set({
+        sessionId: newId(),
+        userId: user.id,
+        questionIds: fixtures.flatMap((fixture) =>
+          fixture.bundles.map(({ question }) => question.id),
+        ),
+        index: 0,
+        answers: [],
+        startedAt: Date.now(),
+        ended: false,
+        kind: 'practice',
+        duelId: null,
+        targetTags: [],
+        section: 'english',
+        secondsPerItem: 90,
+        caseStartedAt: 0,
+      });
+    },
+  });
+  return fixtures;
+}
+
 describe('pregunta de lectura en inglés (B13, 2.3)', () => {
   it('muestra el texto, la pregunta y las opciones en inglés con su fuente, y la interfaz en español', async () => {
     const fixture = await startReading();
@@ -208,6 +241,64 @@ describe('pregunta de lectura en inglés (B13, 2.3)', () => {
     expect(await screen.findByText(fixture.bundles[1]?.question.prompt ?? '')).toBeInTheDocument();
     expect(usePractice.getState().index).toBe(1);
     expect(screen.getByText(/Fuente del texto\./)).toBeVisible();
+  });
+
+  it('al empezar un texto nuevo el foco va al texto, que va antes del enunciado, y en las demás preguntas del texto al enunciado', async () => {
+    const typing = userEvent.setup();
+    const [first] = await startTexts([2, 2]);
+    await screen.findByText(first?.bundles[0]?.question.prompt ?? '');
+    // La primera pregunta de la práctica no le quita el foco a la página
+    expect(document.activeElement?.tagName).toBe('BODY');
+    const answerAndNext = async () => {
+      await typing.click(screen.getAllByRole('radio')[0] as HTMLElement);
+      await typing.click(screen.getByRole('button', { name: t.simulator.answerAndNext }));
+    };
+
+    // La segunda pregunta del primer texto: el foco va al enunciado
+    await answerAndNext();
+    await waitFor(() => {
+      expect(usePractice.getState().index).toBe(1);
+    });
+    await waitFor(() => {
+      expect(document.activeElement?.id).toBe('pregunta-frase');
+    });
+    expect(document.activeElement).toHaveTextContent(first?.bundles[1]?.question.prompt ?? '');
+
+    // La primera pregunta del segundo texto: el foco va a la región del texto, con su nombre
+    await answerAndNext();
+    await waitFor(() => {
+      expect(usePractice.getState().index).toBe(2);
+    });
+    const passage = await screen.findByRole('region', { name: englishText.reading.label });
+    await waitFor(() => {
+      expect(passage).toHaveFocus();
+    });
+    expect(passage).toHaveTextContent('Simulated reading passage 2');
+    expect(passage).toBeVisible();
+
+    // La segunda del segundo texto: otra vez el enunciado
+    await answerAndNext();
+    await waitFor(() => {
+      expect(usePractice.getState().index).toBe(3);
+    });
+    await waitFor(() => {
+      expect(document.activeElement?.id).toBe('pregunta-frase');
+    });
+  });
+
+  it('una pregunta suelta en inglés es la primera de su texto y lleva el foco al texto', async () => {
+    const typing = userEvent.setup();
+    await startTexts([1, 1]);
+    await screen.findByText(/Tiempo sugerido para este texto 1:30/);
+    await typing.click(screen.getAllByRole('radio')[0] as HTMLElement);
+    await typing.click(screen.getByRole('button', { name: t.simulator.answerAndNext }));
+    await waitFor(() => {
+      expect(usePractice.getState().index).toBe(1);
+    });
+    const passage = await screen.findByRole('region', { name: englishText.reading.label });
+    await waitFor(() => {
+      expect(passage).toHaveFocus();
+    });
   });
 
   it('el tiempo del texto no se cuenta en una práctica en español', async () => {

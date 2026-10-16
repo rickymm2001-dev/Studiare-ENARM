@@ -230,6 +230,8 @@ function QuestionCard({
   const shownAt = useRef(0);
   const logged = useRef(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  // La región del texto de una pregunta de lectura, que va antes del enunciado
+  const passageRef = useRef<HTMLDivElement>(null);
   const feedbackAtEnd = settings.practiceFeedback === 'end';
   const isLast = practice.index + 1 >= practice.questionIds.length;
 
@@ -238,8 +240,12 @@ function QuestionCard({
   useEffect(() => {
     shownAt.current = clock();
     // Al pasar a la siguiente pregunta el foco va al enunciado, para que el lector de pantalla lo
-    // lea y el teclado siga desde ahí
-    if (practice.index > 0) titleRef.current?.focus();
+    // lea y el teclado siga desde ahí. Al empezar un texto nuevo de inglés, que va antes del enunciado,
+    // va al texto, y el enunciado se lee después. En las demás preguntas del texto, al enunciado
+    if (practice.index > 0) {
+      const newText = english && (group === null || group.position === 0);
+      (newText ? (passageRef.current ?? titleRef.current) : titleRef.current)?.focus();
+    }
     // La primera pregunta de un texto abre su tiempo sugerido. Las demás siguen el mismo reloj
     if (english && (group === null || group.position === 0)) {
       usePractice.getState().set({ caseStartedAt: textStartedAt });
@@ -446,6 +452,7 @@ function QuestionCard({
               refs={question.gpcRefs}
               fold={(group?.position ?? 0) > 0 ? 'phone' : 'never'}
               scrollable
+              regionRef={passageRef}
             />
           </div>
         ) : vignette ? (
