@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { DataContext, type DataApi } from '@/data/context';
 import type { StudentModel } from '@/data/model/contracts';
 import { t } from '@/i18n/es-MX';
 import { modelTexts } from '@/i18n/model';
@@ -202,5 +203,48 @@ describe('fatiga con el estado global del detector (B14, 3.6)', () => {
     );
     expect(screen.getByText(text.notDetected)).toBeVisible();
     expect(screen.queryByText(text.detected)).toBeNull();
+  });
+});
+
+/** Una base de demostración mínima: solo importa que `demo` no sea null, como en la app con enarm_demo */
+const demoApi = {
+  repos: {},
+  recordEvent: () => Promise.reject(new Error('Sin base')),
+  rebuildDerivedState: () => Promise.resolve(),
+  demo: {
+    generate: () => Promise.reject(new Error('Sin base')),
+    regenerate: () => Promise.reject(new Error('Sin base')),
+    clear: () => Promise.resolve(),
+  },
+  deleteAllData: null,
+} as unknown as DataApi;
+
+describe('fatiga en la demostración, donde el detector se valida con alumnos simulados (B14, 4.7)', () => {
+  const text = modelTexts.fatigue;
+  const inDemo = (fatigue: StudentModel['fatigue']) =>
+    render(
+      <DataContext.Provider value={demoApi}>
+        <FatigueCard fatigue={fatigue} />
+      </DataContext.Provider>,
+    );
+
+  it('un detector validado lo dice con la etiqueta de datos simulados', () => {
+    inDemo({ state: 'ready', value: { detected: true }, validation: 'validated' });
+    expect(screen.getByText(text.detected)).toBeVisible();
+    expect(screen.getByText(text.simulatedValidation)).toBeVisible();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+  });
+
+  it('uno que no resultó confiable habla de los alumnos simulados y no de los que dieron su permiso', () => {
+    inDemo({ state: 'calibrating', have: 0, need: 3, validation: 'not_valid' });
+    expect(screen.getByRole('status')).toHaveTextContent(text.notValidSimulated);
+    expect(screen.queryByText(text.notValid)).toBeNull();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+  });
+
+  it('mientras sigue calibrando no hay nada que etiquetar', () => {
+    inDemo({ state: 'calibrating', have: 5, need: 3, validation: 'calibrating' });
+    expect(screen.getByRole('status')).toHaveTextContent(text.validating);
+    expect(screen.queryByText(t.labels.simulatedData)).toBeNull();
   });
 });

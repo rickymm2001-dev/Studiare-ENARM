@@ -42,6 +42,10 @@ export const modelTexts = {
       'Todavía estamos validando este detector con los datos de los alumnos que dieron su permiso de mejora. Hasta entonces no te decimos si lo tienes, aunque ya tengas varias sesiones largas.',
     notValid:
       'Con los datos de los alumnos que dieron su permiso, este detector todavía no es lo bastante confiable para decirte si tienes fatiga. Lo seguimos revisando.',
+    /** En la demostración el detector se valida con una cohorte de alumnos simulados */
+    notValidSimulated:
+      'Con los alumnos simulados de la demostración, este detector todavía no es lo bastante confiable para decirte si tienes fatiga.',
+    simulatedValidation: 'El detector se validó con alumnos simulados.',
     waiting: (have: number, need: number) =>
       `Hacen falta ${plural(need, 'sesión larga', 'sesiones largas')} para revisar tu fatiga y llevas ${have}.`,
     detected:
@@ -58,6 +62,8 @@ export const modelTexts = {
   reinforce: {
     /** La pista de la población. Sale de los temas del cuarto más bajo de acierto, desde 30 alumnos */
     hard: 'Este tema le cuesta a la mayoría',
+    /** En la demostración los otros alumnos son simulados */
+    hardSimulated: 'Este tema le cuesta a la mayoría de los alumnos simulados',
     fading: 'Tus tarjetas de este tema se te están olvidando',
     reviewCards: (topic: string) => `Repasar las tarjetas de ${topic}`,
   },
@@ -65,6 +71,7 @@ export const modelTexts = {
   // ------------------------------------------------------------------ Sesgos a los que eres propenso
   bias: {
     populationNote: 'Comparado con lo que eligen los demás alumnos cuando fallan.',
+    populationNoteSimulated: 'Comparado con lo que eligen los alumnos simulados cuando fallan.',
     prone: 'Te atrapa seguido',
   },
 

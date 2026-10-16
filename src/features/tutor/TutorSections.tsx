@@ -8,10 +8,12 @@ import { t } from '@/i18n/es-MX';
 import { modelTexts } from '@/i18n/model';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
+import { SimulatedDataLabel } from '@/ui/components/labels';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote } from '@/ui/states/states';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
+import { useIsDemo } from '../model/useIsDemo';
 import { DraftBadge } from '../shared/DraftBadge';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { Vocabulary } from '@/i18n/vocabulary';
@@ -238,6 +240,8 @@ export function BiasTipsCard({
  */
 export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
   const text = modelTexts.fatigue;
+  // La validación del detector sale de los demás alumnos, que en la demostración son simulados
+  const simulated = useIsDemo() && fatigue.validation !== 'calibrating';
   return (
     <Card aria-labelledby="fatiga-estado">
       <CardHeader className="mb-2">
@@ -250,13 +254,19 @@ export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
         </p>
       ) : fatigue.validation === 'not_valid' ? (
         <p role="status" className="text-sm text-fg-muted">
-          {text.notValid}
+          {simulated ? text.notValidSimulated : text.notValid}
         </p>
       ) : fatigue.state === 'calibrating' ? (
         <CalibratingNote current={fatigue.have} target={fatigue.need} unit={text.unit} />
       ) : (
         <p className="text-sm">{fatigue.value.detected ? text.detected : text.notDetected}</p>
       )}
+      {simulated ? (
+        <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+          <SimulatedDataLabel />
+          {text.simulatedValidation}
+        </p>
+      ) : null}
     </Card>
   );
 }

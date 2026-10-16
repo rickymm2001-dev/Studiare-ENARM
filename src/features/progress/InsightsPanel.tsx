@@ -27,6 +27,7 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { useIsDemo } from '../model/useIsDemo';
 import { DraftBadge } from '../shared/DraftBadge';
 import {
   biasProfileRows,
@@ -116,9 +117,14 @@ export function WeeklyFocus({
  * Por qué la fatiga sigue calibrando aunque el alumno ya tenga sus sesiones largas: el detector se valida con
  * los datos de todos (B14, 3.6). null si no es ese el caso
  */
-function fatigueNote(insight: Insight, validation: FatigueValidationState): string | null {
+function fatigueNote(
+  insight: Insight,
+  validation: FatigueValidationState,
+  simulated: boolean,
+): string | null {
   if (insight.id !== 'fatigue' || validation === 'validated') return null;
-  return validation === 'not_valid' ? modelTexts.fatigue.notValid : modelTexts.fatigue.validating;
+  if (validation !== 'not_valid') return modelTexts.fatigue.validating;
+  return simulated ? modelTexts.fatigue.notValidSimulated : modelTexts.fatigue.notValid;
 }
 
 export function InsightsPanel({
@@ -131,6 +137,8 @@ export function InsightsPanel({
 }) {
   const areas: InsightArea[] = ['exam', 'traps', 'study'];
   const profileRows = biasProfileRows(report);
+  // En la demostración el detector de fatiga se validó con alumnos simulados
+  const simulated = useIsDemo();
   return (
     <Card aria-labelledby="conocete-titulo">
       <CardHeader className="mb-3">
@@ -174,7 +182,7 @@ export function InsightsPanel({
                   <li key={insight.id}>
                     <CalibratingRow
                       insight={insight}
-                      note={fatigueNote(insight, fatigueValidation)}
+                      note={fatigueNote(insight, fatigueValidation, simulated)}
                     />
                   </li>
                 ))}

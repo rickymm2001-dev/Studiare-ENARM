@@ -15,9 +15,11 @@ import { modelTexts } from '@/i18n/model';
 import { Badge } from '@/ui/components/badge';
 import { BranchMark } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
+import { SimulatedDataLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { CalibratingNote } from '@/ui/states/states';
+import { useIsDemo } from '../../model/useIsDemo';
 import { topicsCalibration } from '../../progress/analysis';
 import { biasCalibration, biasProfileRows } from '../../progress/focusItems';
 import { masteryDot } from '../../progress/masteryChip';
@@ -74,6 +76,8 @@ export function WeakTopicRow({
   item?: StudentModel['reinforce'][number] | undefined;
 }) {
   const text = t.widgets.weakTopics;
+  // En la demostración los otros alumnos son simulados y lo dice con su etiqueta
+  const simulated = useIsDemo();
   // La rama se lee por su nombre, con la marca de su color al lado (D-128), y el porcentaje va en texto
   // neutro con el color de estado solo en un punto (H02)
   return (
@@ -86,7 +90,10 @@ export function WeakTopicRow({
           <span className="text-xs text-fg-muted">{modelTexts.reinforce.fading}</span>
         ) : null}
         {item?.populationHard ? (
-          <span className="text-xs text-fg-muted">{modelTexts.reinforce.hard}</span>
+          <span className="flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">
+            {simulated ? modelTexts.reinforce.hardSimulated : modelTexts.reinforce.hard}
+            {simulated ? <SimulatedDataLabel /> : null}
+          </span>
         ) : null}
       </span>
       <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold tabular-nums">
@@ -158,6 +165,7 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
 export function BiasPatternWidget({ session, events }: AnalysisWidgetProps) {
   const text = t.widgets.biasPattern;
   const analysis = useAnalysis(session, events);
+  const simulated = useIsDemo();
   // Tres filas de nombre y barra, como las que va a mostrar
   if (!analysis) return <WidgetLoading rows={3} rowClassName="h-8" />;
 
@@ -172,11 +180,16 @@ export function BiasPatternWidget({ session, events }: AnalysisWidgetProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs text-fg-muted">
-        {text.hint}
-        {analysis.model.model.bias.baseline === 'population'
-          ? ` ${modelTexts.bias.populationNote}`
-          : ''}
+      <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-fg-muted">
+        <span>
+          {text.hint}
+          {analysis.model.model.bias.baseline === 'population'
+            ? ` ${simulated ? modelTexts.bias.populationNoteSimulated : modelTexts.bias.populationNote}`
+            : ''}
+        </span>
+        {analysis.model.model.bias.baseline === 'population' && simulated ? (
+          <SimulatedDataLabel />
+        ) : null}
       </p>
       <ul className="flex flex-col gap-2">
         {rows.map((row) => (
