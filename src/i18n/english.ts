@@ -94,6 +94,13 @@ export const englishText = {
      */
     missing: (have: number, wanted: number, real: boolean) =>
       `Solo hay ${plural(have, 'reactivo', 'reactivos')} de inglés de los ${wanted.toLocaleString('es-MX')} que ${real ? 'trae el examen real' : 'pide este examen'}. Tu examen llevará ${have.toLocaleString('es-MX')} y el español no los rellena.`,
+    /**
+     * Hay reactivos de inglés de sobra, pero los casos no suman lo que pide el examen, porque un texto entra
+     * completo. Entran los que más se acercan sin pasarse y el español toma los que sobran. Con 3 de 5 o con
+     * ninguno de 2 el examen no lo decía y el alumno no sabía por qué no veía el inglés que esperaba
+     */
+    fits: (picked: number, wanted: number) =>
+      `Con los casos que hay ${picked === 0 ? 'no entra ninguno' : picked === 1 ? 'entra 1' : `entran ${picked.toLocaleString('es-MX')}`} de inglés. Este examen pide ${plural(wanted, 'reactivo', 'reactivos')} y un texto entra completo, así que el español toma los que sobran.`,
     navigatorTag: 'Inglés',
   },
 

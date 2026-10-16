@@ -196,6 +196,17 @@ test.describe('Examen completo con su parte en inglés', () => {
     ).toBeVisible();
     await expectNoSeriousA11yViolations(page);
 
+    // Un examen más corto pide 5 de inglés y un texto de tres entra completo, así que entran 3 y la tarjeta
+    // lo dice sin hablar de faltantes. De vuelta en 280, vuelve el aviso de los 24 que faltan
+    const size = card.getByRole('combobox', { name: t.exam.size });
+    await size.selectOption('50');
+    await expect(card.getByText(exam.fits(3, 5))).toBeVisible();
+    await expect(card.getByText(exam.composition(47, 3))).toBeVisible();
+    await expect(card.getByText(/Solo hay /)).toHaveCount(0);
+    await size.selectOption(String(TOTAL));
+    await expect(card.getByText(exam.missing(6, 30, true))).toBeVisible();
+    await expect(card.getByText(/Con los casos que hay/)).toHaveCount(0);
+
     await startExam(page, 256);
     expect(store.reads).toHaveLength(256);
     expect(languagesRead(store).filter((language) => language === 'en')).toHaveLength(6);

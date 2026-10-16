@@ -204,6 +204,61 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(screen.queryByText(/Solo hay/)).toBeNull();
   });
 
+  it('si hay inglés de sobra pero los casos no suman lo que pide el examen, dice cuántos entran', async () => {
+    const typing = userEvent.setup();
+    // Solo casos de tres preguntas, 36 reactivos. Hay más que los 30 del examen real, pero un texto entra completo
+    card({ englishQuestions: english(Array.from({ length: 12 }, () => 3)) });
+    const size = screen.getByRole('combobox', { name: t.exam.size });
+    // El de 280 pide 30 y diez casos de tres suman 30, así que no hay nada que avisar
+    expect(screen.queryByText(/Con los casos que hay/)).toBeNull();
+    expect(screen.getByText(new RegExp(copy.composition(250, 30)))).toBeVisible();
+
+    // El de 100 pide 11 y entran tres casos, 9
+    await typing.selectOptions(size, '100');
+    expect(screen.getByText(copy.fits(9, 11))).toBeVisible();
+    expect(screen.getByText(new RegExp(copy.composition(91, 9)))).toBeVisible();
+    expect(screen.queryByText(/Solo hay/)).toBeNull();
+
+    // El de 50 pide 5 y entra un caso, 3
+    await typing.selectOptions(size, '50');
+    expect(screen.getByText(copy.fits(3, 5))).toBeVisible();
+    expect(
+      screen.getByText(
+        /^Con los casos que hay entran 3 de inglés\. Este examen pide 5 reactivos y un texto entra completo/,
+      ),
+    ).toBeVisible();
+    expect(screen.getByText(new RegExp(copy.composition(47, 3)))).toBeVisible();
+
+    // El de 20 pide 2 y no cabe ningún caso: sale sin inglés y lo dice
+    await typing.selectOptions(size, '20');
+    expect(screen.getByText(copy.fits(0, 2))).toBeVisible();
+    expect(screen.getByText(/^Con los casos que hay no entra ninguno de inglés\./)).toBeVisible();
+    expect(screen.queryByText(new RegExp(' en español y .* en inglés'))).toBeNull();
+    // No es que falte inglés ni que no haya textos, así que no dice lo de los otros avisos
+    expect(screen.queryByText(copy.onlySpanish)).toBeNull();
+    expect(screen.queryByText(t.states.calibrating.title)).toBeNull();
+  });
+
+  it('cuando los casos suman justo lo que pide el examen no hay aviso en ningún tamaño', async () => {
+    const typing = userEvent.setup();
+    card();
+    const size = screen.getByRole('combobox', { name: t.exam.size });
+    for (const value of ['280', '100', '50', '20']) {
+      await typing.selectOptions(size, value);
+      expect(screen.queryByText(/Con los casos que hay/), value).toBeNull();
+      expect(screen.queryByText(/Solo hay/), value).toBeNull();
+    }
+  });
+
+  it('con pocos reactivos y un examen chico dice cuántos entran, sin decir que faltan', async () => {
+    const typing = userEvent.setup();
+    // 6 reactivos de inglés: el de 50 pide 5 y entra un caso de 3, pero no falta inglés
+    card({ englishQuestions: english([3, 3]) });
+    await typing.selectOptions(screen.getByRole('combobox', { name: t.exam.size }), '50');
+    expect(screen.getByText(copy.fits(3, 5))).toBeVisible();
+    expect(screen.queryByText(/Solo hay/)).toBeNull();
+  });
+
   it('sin ningún reactivo de inglés lo avisa y el examen es solo en español', () => {
     card({ englishQuestions: [] });
     expect(screen.getByText(copy.onlySpanish)).toBeVisible();
