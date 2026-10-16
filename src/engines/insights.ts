@@ -9,6 +9,10 @@
  * Salidas. Hallazgos ordenados y el resumen de fortalezas y focos.
  * Método
  *   - Ritmo contra los 77 segundos por reactivo del ENARM (280 en unas 6 horas)
+ *   - Las respuestas de Inglés médico (B13) no entran al ritmo, a la adivinanza rápida, al tiempo
+ *     atascado ni a las viñetas largas. El texto se lee una vez y sus preguntas se contestan sobre él,
+ *     así que el tiempo por palabra de cada una no dice lo mismo que en español. Sí entran a lo demás,
+ *     como las trampas. Sus cifras de ritmo viven en la tarjeta de inglés de Progreso (englishSection.ts)
  *   - Adivinanza rápida contra el ritmo de lectura plausible, tiempo atascado, cambios de respuesta, calibración de la confianza y
  *     fatiga con el motor behavior. Fatiga con tercios, el método vigente de 7.6 (D-054 pendiente)
  *   - Negativas con negationSignal y la marca de probable mala lectura de cada respuesta
@@ -61,6 +65,8 @@ export interface AnswerFact extends ResponseRecord {
   chosenTag: string | null;
   /** El motor structure la marcó como probable mala lectura */
   misread: boolean;
+  /** Idioma de la pregunta. Falta en español. Las de inglés no cuentan en lo que mide tiempo contra el largo del texto (B13) */
+  language?: 'es' | 'en';
 }
 
 export interface ReviewFact {
@@ -174,14 +180,21 @@ export function chanceBaseline(exposures: readonly BiasExposure[]): Record<strin
   return baseline;
 }
 
+/** Una respuesta de Inglés médico (B13). Su texto se lee una vez y varias preguntas se contestan sobre él */
+const isEnglish = (answer: Pick<AnswerFact, 'language'>) => answer.language === 'en';
+
 function examInsights(input: InsightInput): Insight[] {
   const { answers, thresholds } = input;
   const min = INSIGHT_MINIMUMS;
   const out: Insight[] = [];
-  const enough = answers.length >= min.answers;
+  // Lo que mide tiempo contra el largo del texto deja fuera el inglés. La segunda y la tercera pregunta de
+  // un texto se contestan en unos 35 segundos porque el texto ya se leyó, y contando todas sus palabras en
+  // cada pregunta salían como adivinanza rápida. No se inventa otra medida, solo no entran (B13)
+  const timed = answers.filter((answer) => !isEnglish(answer));
+  const enough = timed.length >= min.answers;
 
   // Ritmo
-  const seconds = median(answers.map((answer) => answer.msToAnswer / 1000));
+  const seconds = median(timed.map((answer) => answer.msToAnswer / 1000));
   out.push({
     id: 'pace',
     area: 'exam',
@@ -195,35 +208,35 @@ function examInsights(input: InsightInput): Insight[] {
               : 'strength',
           { seconds: Math.round(seconds), target: ENARM_SECONDS_PER_ITEM },
         )
-      : calibrating(answers.length, min.answers, 'answers'),
+      : calibrating(timed.length, min.answers, 'answers'),
   });
 
   // Adivinanza rápida. Respuestas más rápidas que el ritmo de lectura plausible, que no dependen
   // del percentil personal (ese siempre deja cerca del 10% debajo por construcción)
-  const pace = personalPace(answers, thresholds.behavior);
-  const signals = answers.map((answer) => responseSignals(answer, pace, thresholds.behavior));
-  const rapid = answers.filter(
+  const pace = personalPace(timed, thresholds.behavior);
+  const signals = timed.map((answer) => responseSignals(answer, pace, thresholds.behavior));
+  const rapid = timed.filter(
     (answer, index) => answer.msToAnswer < (signals[index]?.minReadingMs ?? 0),
   );
-  const rapidShare = answers.length === 0 ? 0 : rapid.length / answers.length;
+  const rapidShare = timed.length === 0 ? 0 : rapid.length / timed.length;
   out.push({
     id: 'rapid_guess',
     area: 'exam',
     weight: 4,
     state: enough
       ? ready(
-          rapidShare > 0.05 && accuracy(rapid) < accuracy(answers)
+          rapidShare > 0.05 && accuracy(rapid) < accuracy(timed)
             ? 'focus'
             : rapidShare > 0.02
               ? 'watch'
               : 'strength',
           { share: rapidShare, accuracy: accuracy(rapid), count: rapid.length },
         )
-      : calibrating(answers.length, min.answers, 'answers'),
+      : calibrating(timed.length, min.answers, 'answers'),
   });
   // Tiempo atascado. Más de 2 desviaciones sobre su ritmo personal
-  const stuck = answers.filter((_, index) => (signals[index]?.timeZ ?? 0) > 2);
-  const stuckShare = answers.length === 0 ? 0 : stuck.length / answers.length;
+  const stuck = timed.filter((_, index) => (signals[index]?.timeZ ?? 0) > 2);
+  const stuckShare = timed.length === 0 ? 0 : stuck.length / timed.length;
   out.push({
     id: 'stuck',
     area: 'exam',
@@ -237,7 +250,7 @@ function examInsights(input: InsightInput): Insight[] {
               : 'strength',
           { count: stuck.length, share: stuckShare, accuracy: accuracy(stuck) },
         )
-      : calibrating(answers.length, min.answers, 'answers'),
+      : calibrating(timed.length, min.answers, 'answers'),
   });
 
   // Negativas y mala lectura
@@ -314,9 +327,9 @@ function examInsights(input: InsightInput): Insight[] {
         : calibrating(Math.min(later.length, first.length), min.perGroup, 'answers'),
   });
 
-  // Viñetas largas contra cortas
-  const long = answers.filter((answer) => answer.words >= min.longVignetteWords);
-  const short = answers.filter((answer) => answer.words < min.longVignetteWords);
+  // Viñetas largas contra cortas. Un texto de lectura en inglés no es una viñeta y no entra
+  const long = timed.filter((answer) => answer.words >= min.longVignetteWords);
+  const short = timed.filter((answer) => answer.words < min.longVignetteWords);
   out.push({
     id: 'long_vignettes',
     area: 'exam',

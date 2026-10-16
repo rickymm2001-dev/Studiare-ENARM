@@ -8,6 +8,7 @@ Cómo se escribe, se revisa y se prepara la parte de inglés de Studiare (bloque
 - Los textos los escribe el equipo o vienen de una fuente con licencia que permite el uso comercial. Las preguntas las escriben siempre los médicos. Ninguna parte de este módulo la escribe la IA, y la IA de reestructurar preguntas (Borradores de IA) no ofrece ni acepta preguntas en inglés, aunque tengan un reporte abierto. Solo reestructura el banco en español
 - Cada texto lleva su fuente y su licencia, y la app las muestra junto al texto. Sin fuente válida la pregunta entra como borrador, pero no se puede aprobar
 - El examen real es imperfecto y Studiare también (D-080). Un texto largo, una pregunta de inferencia, un distractor con un falso cognado o un caso de una o de cuatro preguntas no se rechazan
+- En Conócete las respuestas de inglés no entran al ritmo, a la adivinanza rápida, al tiempo atascado ni a las viñetas largas, porque el texto se lee una vez y sus preguntas se contestan sobre él, y la segunda y la tercera salen en unos 35 segundos. Su ritmo se ve en su tarjeta de Progreso. Sí entran a lo demás, como las trampas y los sesgos
 - El formato del examen vive en un solo lugar, src/config/exam.ts, y los umbrales de calibrando en otro, src/config/thresholds.ts. Si la convocatoria cambia, se cambia ahí y no en cada pantalla
 
 ## Forma de un caso de lectura
