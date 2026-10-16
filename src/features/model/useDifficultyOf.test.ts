@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { CatalogCalibration } from '@/data/model/contracts';
+import { effectiveDifficulty, effectiveDifficultyFromStats } from '@/data/bank/calibration';
+import type { CalibrationState, CatalogCalibration } from '@/data/model/contracts';
 import { newId } from '@/data/testing/fixtures';
+import { physicianDifficultyOf } from '@/engines/studentModel';
 import { question } from '../tutor/testing/fixtures';
 import { cacheDifficulty, catalogDifficulty, loadMeasuredDifficulties } from './useDifficultyOf';
 
@@ -111,5 +113,56 @@ describe('dificultades medidas de lo que contestó', () => {
     const found = await loadMeasuredDifficulties(api, 'local', [a, b]);
     expect([...found.keys()]).toEqual([b.id]);
     expect(found.get(b.id)).toEqual({ logit: 1.1, state: 'calibrated', students: 150 });
+  });
+});
+
+// El modelo del alumno (Progreso, Inicio, el Tutor) y el banco (Simular, los filtros de dificultad) cuentan
+// la dificultad cada uno con su función. Aquí se vigila que den lo mismo, para que una pregunta Media sea la
+// misma en todos lados (4.4)
+describe('la dificultad del modelo y la del banco son la misma', () => {
+  const physician = 4;
+  const subject = question({ id: VERSION, physicianDifficulty: physician });
+  const fromModel = (found: ReturnType<typeof catalogDifficulty>) =>
+    found ?? physicianDifficultyOf(subject);
+
+  it('con el catálogo de la nube, en cada estado y en sus bordes', () => {
+    const states: CalibrationState[] = ['physician_estimate', 'provisional', 'calibrated'];
+    const cases = states.flatMap((state) =>
+      [
+        {},
+        { extreme: true },
+        { difficulty: null },
+        { difficulty: Number.POSITIVE_INFINITY },
+        { versionId: newId() },
+      ].map((override) => calibration({ state, ...override })),
+    );
+    for (const given of [...cases, null, undefined]) {
+      const entry = { versionId: VERSION, difficulty: physician, calibration: given };
+      const bank = effectiveDifficulty(entry);
+      const model = fromModel(catalogDifficulty(entry));
+      expect({ logit: model.logit, source: model.state }).toEqual({
+        logit: bank.logit,
+        source: bank.source,
+      });
+    }
+  });
+
+  it('con la caché de la demostración, en cada estado y con o sin estimación', () => {
+    const states: CalibrationState[] = ['physician_estimate', 'provisional', 'calibrated'];
+    const stats = states.flatMap((state) =>
+      [0.4, null, Number.NaN].map((raschDifficulty) => ({
+        calibration: state,
+        raschDifficulty,
+        responses: 80,
+      })),
+    );
+    for (const given of [...stats, undefined]) {
+      const bank = effectiveDifficultyFromStats(physician, given);
+      const model = fromModel(given ? cacheDifficulty(given) : null);
+      expect({ logit: model.logit, source: model.state }).toEqual({
+        logit: bank.logit,
+        source: bank.source,
+      });
+    }
   });
 });

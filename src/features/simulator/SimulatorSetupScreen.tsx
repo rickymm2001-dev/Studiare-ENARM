@@ -36,7 +36,6 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
-import { useStudentModel } from '../model/useStudentModel';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { CLINICAL_TOPICS } from '../shared/topics';
 import { useBankNotice } from '../shared/bankNotice';
@@ -106,9 +105,12 @@ function Setup({ session }: { session: ReadySession }) {
   const [adaptive, setAdaptive] = useState(false);
   // Los ajustes del modelo que bajó la noche, de fábrica mientras no hayan bajado (B14, 1.12)
   const modelStored = useLiveData(() => readStoredModel(api), [api.repos]);
-  const studentModel = useStudentModel(session);
+  // El modelo del alumno es el que ya calculó el análisis de arriba, el mismo que lee Progreso, así las dos
+  // pantallas dicen lo mismo y no se calcula dos veces
+  const studentModel = analysis?.model.model;
   // La habilidad. La del modelo del alumno si ya está lista y, si no, la que sale de sus respuestas a las
-  // preguntas ya medidas, que con pocas respuestas queda cerca de 0 y funciona desde el primer día
+  // preguntas ya medidas con el mismo estimador, que con pocas respuestas queda cerca de 0 y funciona
+  // desde el primer día
   const ability = useMemo(() => {
     if (studentModel?.ability.state === 'ready') return studentModel.ability.value;
     if (questions === undefined || events === undefined) return undefined;
@@ -378,6 +380,7 @@ function Setup({ session }: { session: ReadySession }) {
             </Link>
           </p>
           <TargetedSamplingField
+            model={studentModel}
             report={analysis?.report}
             checked={targeted}
             onChange={setTargeted}
@@ -457,6 +460,7 @@ function Setup({ session }: { session: ReadySession }) {
           left={left}
           reserved={reserved}
           report={analysis?.report}
+          model={studentModel}
         />
       ) : null}
       <ExamSetupCard

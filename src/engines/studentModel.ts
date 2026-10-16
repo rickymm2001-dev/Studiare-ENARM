@@ -21,9 +21,10 @@
  *     retrievability promedio de las tarjetas del tema (2 menos R) y sin tarjetas vale 1, así los
  *     mazos y los apuntes del alumno pesan en la prioridad. populationHard marca los temas que le
  *     cuestan a la mayoría, los del cuarto más bajo de acierto de la población (desde 30 alumnos)
- *   - Habilidad. Estimado a posteriori sobre una normal de media 0 y desviación 1 con cuadratura de
- *     41 puntos, con el primer intento del alumno en cada pregunta cuya dificultad ya se midió con
- *     alumnos (provisional o calibrada). Con pocas respuestas se queda cerca de 0
+ *   - Habilidad. El estimador de adaptive.ts (estimado a posteriori sobre una normal de media 0 y
+ *     desviación 1 con cuadratura de 41 puntos), el mismo con el que Simular elige las preguntas del
+ *     modo adaptativo. Usa el primer intento del alumno en cada pregunta cuya dificultad ya se midió
+ *     con alumnos (provisional o calibrada). Con pocas respuestas se queda cerca de 0
  *   - Sesgos. analyzeBias con error_share (D-051) contra la línea base de la población en las
  *     etiquetas que tienen alumnos suficientes y contra la de azar en las demás. Los que le atraen son
  *     los tres primeros del perfil de Conócete, que es lo que dirige el muestreo del simulador
@@ -49,6 +50,7 @@ import type { Question } from '@/data/schemas/bank';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { branchSection, type TopicTaxonomy } from '@/data/schemas/content';
 import type { AppEvent } from '@/data/schemas/events';
+import { estimateAbility, type AbilityResponse } from './adaptive';
 import { analyzeBias, type BiasExposure } from './bias';
 import { fatigueTrendSignal, MIN_LONG_SESSIONS_FOR_FATIGUE } from './behavior';
 import { physicianToLogit } from './difficulty';
@@ -209,48 +211,13 @@ function quantile(sorted: readonly number[], q: number): number {
   return low + (high - low) * (position - lower);
 }
 
-/** log(1 + e^x) sin desbordar */
-const softplus = (x: number): number => (x > 30 ? x : Math.log1p(Math.exp(x)));
-
-export interface AbilityAnswer {
-  /** Dificultad de la pregunta en logits */
-  difficulty: number;
-  correct: boolean;
-}
-
-/** Puntos de la cuadratura, de −4 a 4 en pasos de 0.2 */
-const ABILITY_GRID: readonly number[] = Array.from({ length: 41 }, (_, i) => -4 + i * 0.2);
-
 /**
- * Habilidad del alumno en logits, la misma escala que la dificultad de Rasch. Estimado a posteriori
- * sobre una normal de media 0 y desviación 1, con cuadratura de 41 puntos. Da la media de la
- * posterior y su desviación como error estándar. Sin respuestas devuelve la media y la desviación del
- * prior, 0 y 1, y cada respuesta lo acerca a la habilidad que la explica
+ * La habilidad que ve Progreso. Es la cuenta de adaptive.ts, la misma con la que Simular elige las
+ * preguntas del modo adaptativo, así las dos dicen lo mismo. Solo se queda con el nivel y su error
  */
-export function estimateAbility(answers: readonly AbilityAnswer[]): { theta: number; se: number } {
-  const logPosterior = ABILITY_GRID.map(
-    (theta) =>
-      -0.5 * theta * theta +
-      answers.reduce(
-        (sum, answer) =>
-          // log p si acertó y log (1 − p) si falló, con p = 1 / (1 + e^−(θ − b))
-          sum - softplus(answer.correct ? answer.difficulty - theta : theta - answer.difficulty),
-        0,
-      ),
-  );
-  const top = Math.max(...logPosterior);
-  // La masa de probabilidad de cada punto de la cuadratura, sin normalizar
-  const mass = logPosterior.map((value) => Math.exp(value - top));
-  const total = mass.reduce((sum, part) => sum + part, 0);
-  const theta = ABILITY_GRID.reduce(
-    (sum, point, i) => sum + (point * (mass[i] as number)) / total,
-    0,
-  );
-  const variance = ABILITY_GRID.reduce(
-    (sum, point, i) => sum + ((point - theta) ** 2 * (mass[i] as number)) / total,
-    0,
-  );
-  return { theta, se: Math.sqrt(variance) };
+function abilityOf(answers: readonly AbilityResponse[]): { theta: number; se: number } {
+  const { theta, se } = estimateAbility(answers);
+  return { theta, se };
 }
 
 /** El primer intento de cada pregunta estable, en orden de tiempo */
@@ -461,7 +428,7 @@ export function buildStudentModel(input: StudentModelInput): StudentModelBuild {
   });
   const ability: StudentModel['ability'] =
     measured.length >= ABILITY_MIN_ANSWERS
-      ? ready(estimateAbility(measured))
+      ? ready(abilityOf(measured))
       : calibrating(measured.length, ABILITY_MIN_ANSWERS);
 
   // Sesgos. error_share contra la población donde la hay y contra el azar donde no

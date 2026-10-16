@@ -14,11 +14,10 @@ import {
   state,
   T0,
 } from '@/features/tutor/testing/fixtures';
-import { createRng } from './random';
+import { estimateAbility } from './adaptive';
 import {
   ABILITY_MIN_ANSWERS,
   buildStudentModel,
-  estimateAbility,
   physicianDifficultyOf,
   type DifficultyOf,
   type ModelCard,
@@ -116,72 +115,6 @@ function topicAnswers(
   );
   return { bundles, events };
 }
-
-describe('habilidad del alumno (4.5 del plan de B14)', () => {
-  it('sin respuestas queda en la media y la desviación del prior', () => {
-    const { theta, se } = estimateAbility([]);
-    expect(theta).toBeCloseTo(0, 6);
-    expect(se).toBeCloseTo(1, 1);
-  });
-
-  it('coincide con la integración numérica fina de la posterior', () => {
-    const answers = [
-      { difficulty: -1, correct: true },
-      { difficulty: 0.5, correct: true },
-      { difficulty: 1.5, correct: false },
-    ];
-    // Trapecios de −8 a 8 con 4,001 puntos, lo bastante fino para comparar con la cuadratura de 41
-    let total = 0;
-    let first = 0;
-    let second = 0;
-    const steps = 4000;
-    for (let i = 0; i <= steps; i += 1) {
-      const point = -8 + (16 * i) / steps;
-      let density = Math.exp(-0.5 * point * point);
-      for (const answer of answers) {
-        const p = 1 / (1 + Math.exp(-(point - answer.difficulty)));
-        density *= answer.correct ? p : 1 - p;
-      }
-      total += density;
-      first += density * point;
-      second += density * point * point;
-    }
-    const mean = first / total;
-    const sd = Math.sqrt(second / total - mean * mean);
-    const result = estimateAbility(answers);
-    expect(result.theta).toBeCloseTo(mean, 2);
-    expect(result.se).toBeCloseTo(sd, 2);
-  });
-
-  it('sube con los aciertos, baja con los fallos y pesa más lo que pasa en lo difícil', () => {
-    const right = estimateAbility(
-      Array.from({ length: 12 }, () => ({ difficulty: 0, correct: true })),
-    );
-    const wrong = estimateAbility(
-      Array.from({ length: 12 }, () => ({ difficulty: 0, correct: false })),
-    );
-    expect(right.theta).toBeGreaterThan(0.8);
-    expect(wrong.theta).toBeLessThan(-0.8);
-    const easyMiss = estimateAbility([{ difficulty: -2, correct: false }]);
-    const hardMiss = estimateAbility([{ difficulty: 2, correct: false }]);
-    // Fallar lo fácil dice más que fallar lo difícil
-    expect(easyMiss.theta).toBeLessThan(hardMiss.theta);
-    // Más respuestas dan menos error estándar
-    expect(right.se).toBeLessThan(estimateAbility([{ difficulty: 0, correct: true }]).se);
-  });
-
-  it('recupera la habilidad de un alumno simulado', () => {
-    const rng = createRng('habilidad-1');
-    const truth = 1.2;
-    const answers = Array.from({ length: 80 }, (_, index) => {
-      const difficulty = -2 + (4 * index) / 79;
-      return { difficulty, correct: rng.chance(1 / (1 + Math.exp(-(truth - difficulty)))) };
-    });
-    const { theta, se } = estimateAbility(answers);
-    expect(Math.abs(theta - truth)).toBeLessThan(0.45);
-    expect(se).toBeLessThan(0.4);
-  });
-});
 
 describe('modelo del alumno sin datos', () => {
   const { model, report, weakTopics, responses } = buildStudentModel(base());
@@ -410,6 +343,28 @@ describe('habilidad dentro del modelo', () => {
     expect(thetaOf(wrong).theta).toBeLessThan(-0.5);
     expect(thetaOf(right).se).toBeGreaterThan(0);
     expect(right.responses[0]?.measured).toEqual({ logit: 0, state: 'calibrated', students: 120 });
+  });
+
+  it('es la cuenta de adaptive.ts, la que usa Simular, con el mismo resultado exacto', () => {
+    // Siete aciertos y cinco fallos, cada uno a una pregunta nueva de dificultad medida
+    const right = bundles.slice(0, 7);
+    const wrong = bundles.slice(7);
+    const events = [
+      ...right.map((b, i) => answered(b.q, b.right.id, true, minute(i))),
+      ...wrong.map((b, i) => answered(b.q, b.wrong[0]?.id ?? '', false, minute(10 + i))),
+    ];
+    const built = buildStudentModel(base({ events, bank, difficultyOf: measured }));
+    const direct = estimateAbility(
+      bundles.map((b, index) => ({ difficulty: measured(b.q).logit, correct: index < 7 })),
+    );
+    expect(built.model.ability).toEqual({
+      state: 'ready',
+      value: { theta: direct.theta, se: direct.se },
+    });
+    // La habilidad del modelo no lleva el conteo de respuestas, que es de quien la estima
+    expect(
+      Object.keys(built.model.ability.state === 'ready' ? built.model.ability.value : {}),
+    ).toEqual(['theta', 'se']);
   });
 
   it('solo cuenta el primer intento de cada pregunta estable', () => {
