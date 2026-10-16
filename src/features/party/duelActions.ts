@@ -5,7 +5,7 @@
 // simulado. En la nube (B7) el rival es otro alumno y el resultado se manda al servidor una sola vez.
 // Las preguntas salen de la fuente del alumno (B11, 5.4). Con el banco de la nube se eligen del catálogo
 // publicado, sin variantes, y el rival baja esas versiones exactas antes de empezar. La base rechaza un
-// duelo con ids que no sean versiones aprobadas (8.13).
+// duelo con ids que no sean versiones aprobadas (8.13). Los duelos no llevan casos de inglés (B13, 8.12).
 import type { DataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
@@ -15,7 +15,12 @@ import { createDuel } from '@/data/usecases/party';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
 import { pickQuestions } from '../simulator/pickQuestions';
-import { clock, usePractice, type PracticeState } from '../simulator/practice';
+import {
+  clock,
+  SPANISH_PRACTICE_DEFAULTS,
+  usePractice,
+  type PracticeState,
+} from '../simulator/practice';
 import { currentQuestionSource } from '../shared/useQuestionSource';
 import { duelAttemptSession } from './duels';
 
@@ -32,8 +37,13 @@ export async function pickDuelQuestionIds(
   const source = currentQuestionSource(api);
   if ((await source.prepare()) !== 'ready') return [];
   const { practice } = await source.pool();
+  // Sin inglés (8.12 del plan de B13). Un duelo de 20 preguntas con un texto largo cambia el ritmo y el
+  // reto es de casos clínicos. El pool ya trae el inglés aparte y aquí también se descarta por idioma
   const shared = practice.filter(
-    (question) => question.variantOf === undefined && (source.kind === 'cloud' || question.isDemo),
+    (question) =>
+      question.variantOf === undefined &&
+      question.language === 'es' &&
+      (source.kind === 'cloud' || question.isDemo),
   );
   return pickQuestions(shared, seed, DUEL_QUESTIONS).map((question) => question.id);
 }
@@ -123,6 +133,7 @@ export async function startDuel(
     kind: 'challenge',
     duelId: duel.id,
     targetTags: [],
+    ...SPANISH_PRACTICE_DEFAULTS,
   });
   return 'started';
 }

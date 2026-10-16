@@ -14,6 +14,7 @@ import type {
   SyncRowResult,
   SyncRunSummary,
 } from '@/data/bank/contracts';
+import { formatPassageSource } from '@/data/content/passageSource';
 import type { Role } from '@/data/schemas/common';
 
 /** Marca de todo texto simulado del banco */
@@ -619,6 +620,167 @@ export function seedQuestions(
     store.versions.set(versionId, version);
     if (status === 'approved') publishQuestion(store, questionId);
     created.push(question);
+  }
+  return created;
+}
+
+// ===================================================================== Casos de lectura en inglés (B13)
+
+/**
+ * La fuente de los textos simulados de inglés, con la forma fija de passageSource.ts. Es la primera
+ * referencia de cada pregunta, como la deja el editor del médico (1.4 del plan de B13)
+ */
+export const FAKE_ENGLISH_SOURCE = formatPassageSource({
+  title: '[Prueba] Texto simulado',
+  license: 'team',
+  url: null,
+});
+
+/** Los siete subtemas de Comprensión de lectura, uno por rama clínica de la que trata el texto */
+const ENGLISH_SUBTOPICS = [
+  'english_internal_medicine',
+  'english_pediatrics',
+  'english_obstetrics_gynecology',
+  'english_general_surgery',
+  'english_family_medicine',
+  'english_emergency_medicine',
+  'english_public_health',
+] as const;
+
+/** Los sesgos que más aplican a la lectura (1.3 del plan de B13) */
+const READING_TAGS = [
+  'belief_bias',
+  'inattentional_blindness',
+  'focusing_illusion',
+  'framing_effect',
+  'anchoring',
+];
+
+export interface SeedEnglishCasesOptions {
+  /**
+   * Preguntas de cada caso. Un número, o una lista que se repite caso por caso, por ejemplo [2, 3] para
+   * alternar casos de dos y de tres preguntas. 3 por omisión
+   */
+  itemsPerCase?: number | readonly number[];
+  /** Estado de las versiones. approved las publica, con el caso completo, como bank_publish */
+  status?: EditorialStatus;
+  origin?: FakeBankQuestion['origin'];
+  authorId?: string | null;
+}
+
+/**
+ * Siembra casos de lectura en inglés (B13). Cada caso es un caso seriado con su texto en inglés como viñeta,
+ * de dos o tres preguntas con cuatro opciones en inglés, justificaciones y explicación en español y la
+ * fuente del texto como primera referencia. Va en Inglés médico, Comprensión de lectura, con un subtema
+ * por rama clínica. Todo el texto lleva [Prueba] y es simulado, nunca contenido médico. Con status
+ * approved publica los casos completos, y las preguntas salen en el orden del caso
+ */
+export function seedEnglishCases(
+  store: FakeBankStore,
+  cases: number,
+  options: SeedEnglishCasesOptions = {},
+): FakeBankQuestion[] {
+  const status = options.status ?? 'approved';
+  const origin = options.origin ?? 'sheet';
+  const perCase = options.itemsPerCase ?? 3;
+  const sizes: readonly number[] = typeof perCase === 'number' ? [perCase] : perCase;
+  if (sizes.length === 0 || sizes.some((size) => !Number.isInteger(size) || size < 1)) {
+    throw new Error('itemsPerCase pide enteros de 1 en adelante');
+  }
+  const created: FakeBankQuestion[] = [];
+  for (let index = 0; index < cases; index += 1) {
+    // Los textos y las preguntas siguen contando entre una siembra y otra
+    const textNumber =
+      [...store.cases.values()].filter((item) => item.caseKey?.startsWith('EN-C') === true).length +
+      1;
+    const size = sizes[index % sizes.length] ?? 3;
+    const at = iso(store);
+    const caseId = randomUUID();
+    const vignette =
+      `[Prueba] Simulated reading passage ${textNumber}. This short text is invented for tests and has ` +
+      `no medical value. It describes a fictional clinic visit in plain words, so that the reading ` +
+      `screen has something to show. Read it carefully before answering.`;
+    store.cases.set(caseId, {
+      id: caseId,
+      caseKey: `EN-C${String(textNumber).padStart(3, '0')}`,
+      vignette,
+      createdAt: at,
+    });
+    const subtopic =
+      ENGLISH_SUBTOPICS[textNumber % ENGLISH_SUBTOPICS.length] ?? ENGLISH_SUBTOPICS[0];
+    const questions: FakeBankQuestion[] = [];
+    for (let order = 1; order <= size; order += 1) {
+      const number =
+        [...store.versions.values()].filter((item) => item.language === 'en').length + 1;
+      const questionId = randomUUID();
+      const versionId = randomUUID();
+      const bankOptions: FakeBankOption[] = Array.from({ length: 4 }, (_, position) => ({
+        id: randomUUID(),
+        optionId: randomUUID(),
+        letter: LETTERS[position] ?? null,
+        position,
+        text: `[Prueba] Option ${LETTERS[position] ?? position} of item ${order} of passage ${textNumber}`,
+        isCorrect: position === 0,
+        biasTag:
+          position === 0 ? null : (READING_TAGS[(position + number) % READING_TAGS.length] ?? null),
+        secondaryBiasTags: [],
+        rationale: `[Prueba] Justificación simulada de la opción ${LETTERS[position] ?? position}`,
+      }));
+      const version: FakeBankVersion = {
+        id: versionId,
+        questionId,
+        version: 1,
+        status,
+        source: origin,
+        authorId: options.authorId ?? null,
+        branch: 'medical_english',
+        topic: 'reading_comprehension',
+        subtopic,
+        difficulty: (number % 5) + 1,
+        itemKinds: [],
+        polarity: 'affirmative',
+        task: 'data_interpretation',
+        format: 'serial_case',
+        structureSource: 'auto',
+        caseId,
+        caseOrder: order,
+        variantOf: null,
+        language: 'en',
+        vignette: '',
+        prompt: `[Prueba] According to the passage, which statement is correct? (item ${order})`,
+        explanation: `${FAKE_BANK_TEXT_MARK} Explicación simulada del texto ${textNumber}, pregunta ${order}.`,
+        gpcRefs: [{ title: FAKE_ENGLISH_SOURCE, status: 'to_verify' }],
+        clues: [],
+        canonicalOptionIds: bankOptions.map((option) => option.id),
+        options: bankOptions,
+        incomplete: [],
+        flags: [],
+        createdAt: at,
+        submittedAt: status === 'draft' ? null : at,
+        decidedAt: status === 'approved' || status === 'rejected' ? at : null,
+      };
+      const question: FakeBankQuestion = {
+        questionId,
+        origin,
+        sourceKey: origin === 'sheet' ? `sheet:EN-${String(number).padStart(4, '0')}` : null,
+        latestVersionId: versionId,
+        publishedVersionId: null,
+        status: 'active',
+        retireRequestedAt: null,
+        conflictSince: null,
+        missingSince: null,
+        createdAt: at,
+        updatedAt: at,
+      };
+      store.questions.set(questionId, question);
+      store.versions.set(versionId, version);
+      questions.push(question);
+    }
+    // El caso se publica completo, con todas sus preguntas ya creadas para que caseSize sea el real
+    if (status === 'approved') {
+      for (const question of questions) publishQuestion(store, question.questionId);
+    }
+    created.push(...questions);
   }
   return created;
 }

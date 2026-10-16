@@ -45,7 +45,24 @@ Studiare busca cada columna por su nombre, sin importar acentos ni mayúsculas, 
 | Estado | No | Borrador, Lista para revisión o Retirar |
 | Autor | No | La clave de quien escribió la pregunta, por ejemplo PM. Las claves las da el admin |
 | Revisor | No | La clave del médico que la revisa. No puede ser el mismo que el autor. Si la dejas vacía, revisa quien tiene asignada la subespecialidad |
-| Idioma | No | Español o Inglés. Vacío es español |
+| Idioma | No | Español o Inglés. Vacío es español, y en Inglés médico es inglés |
+| Fuente del texto | Solo en inglés | El título del texto o del artículo de donde sale. Va en el renglón con Orden 1 o en la pregunta suelta, y los demás renglones del caso la heredan |
+| Licencia del texto | Solo en inglés | Elige de la lista. Texto propio del equipo Studiare, Dominio público, CC0, CC BY o CC BY-SA |
+| Enlace del texto | Solo en inglés, con cualquier licencia que no sea Texto propio | La dirección exacta del texto, que empieza con https |
+
+## Casos de lectura en inglés
+
+La parte de inglés del ENARM son textos médicos con dos o tres preguntas cada uno. Se escriben en esta misma pestaña. La guía completa está en docs/INGLES_MEDICO.md.
+
+- Rama troncal Inglés médico y Subespecialidad Comprensión de lectura. El Subtema es la rama clínica de la que trata el texto
+- Idioma Inglés. Si lo dejas vacío en Inglés médico, Studiare lo toma como inglés. Inglés en otra rama, o Español en Inglés médico, no entra
+- Caso y Orden en el caso, como en cualquier caso seriado. Un caso de lectura lleva dos o tres preguntas, y con otro número entra igual
+- El texto en inglés va en Caso clínico del renglón con Orden 1. Por ahora la pregunta y las opciones van en inglés, y la justificación de cada opción y la explicación en español. Ricardo confirma con la convocatoria si eso cambia
+- Fuente del texto, Licencia del texto y Enlace del texto van en el renglón con Orden 1. Los demás renglones del caso heredan la fuente, y si los llenas tienen que decir lo mismo
+- La licencia se elige de la lista de la pestaña Listas. Texto propio del equipo Studiare no pide título ni enlace. Las demás piden título y una dirección https
+- La fuente del texto cuenta como referencia, así que Referencias es opcional en inglés
+- Tarea vacía se toma como Interpretación de datos
+- Las tres columnas del texto se ignoran en las preguntas en español
 
 ## Estado
 
@@ -61,6 +78,9 @@ Estas preguntas sí entran como borrador, pero no se pueden aprobar hasta que se
 - Sin Referencias
 - Una opción sin Justificación
 - Una opción incorrecta sin Sesgo, con Ninguno o con un sesgo que no está en la lista
+- Sin Tarea, cuando Studiare no pudo detectarla por la frase de la pregunta
+- Un texto en inglés sin Fuente del texto, sin Licencia del texto o, con una licencia que no sea Texto propio del equipo Studiare, sin una dirección https en Enlace del texto
+- Un texto en inglés con una Licencia del texto que no está en la lista, como CC BY-NC o CC BY-ND
 
 ## Lo que no entra
 
@@ -72,9 +92,10 @@ El renglón se queda fuera y el reporte dice el motivo. Lo demás del Sheet entr
 - Rama, Subespecialidad o Subtema que no están en la lista
 - Dificultad fuera de 1 a 5
 - Un valor que no está en la lista de Tipo de reactivo, Tarea o Polaridad
-- Una Tarea que Studiare no pudo detectar
 - Texto que se quedó como Escribe aquí o Elige de la lista
 - Un caso seriado con órdenes repetidos, con huecos o sin el 1. Entra el caso completo o no entra ninguna de sus preguntas
+- Idioma Inglés en una rama que no es Inglés médico, o Idioma Español en Inglés médico
+- Un caso con preguntas en español y en inglés, o con Fuente del texto distinta en sus renglones. Entra el caso completo o no entra ninguna de sus preguntas
 
 ## Lo que solo se avisa
 
@@ -86,6 +107,9 @@ El renglón se queda fuera y el reporte dice el motivo. Lo demás del Sheet entr
 - Una clave de Autor o Revisor que no existe, o el mismo médico en las dos
 - Preguntas de un mismo caso en renglones separados
 - Un Idioma que no es Español ni Inglés, que se toma como español
+- Idioma vacío en Inglés médico, que se toma como inglés
+- Un caso de lectura en inglés con una sola pregunta o con más de tres, que entra igual
+- Un texto largo que parece estar en inglés en una pregunta que quedó como español, porque el Idioma está vacío o dice Español. Entra como español y sin pedir fuente ni licencia. Si es un caso de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente. Un texto en español con términos en inglés no avisa
 
 ## Lo que nunca es error
 
@@ -97,6 +121,7 @@ El examen real tiene preguntas raras y Studiare las quiere. Ninguna de estas cos
 - Preguntas negativas
 - Una pregunta que casi todos fallan
 - Un caso largo o una redacción incómoda
+- Un texto en inglés largo, una pregunta de inferencia o un distractor con un falso cognado
 
 ## Quién ve este Sheet
 

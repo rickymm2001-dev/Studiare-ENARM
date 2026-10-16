@@ -2,6 +2,7 @@
 // el caso en corto y la pregunta, y atrás la respuesta correcta, la explicación y la referencia. No
 // escribe medicina nueva. Todo sale del banco tal cual, recortado si no cabe, y solo las etiquetas
 // son de la interfaz. El alumno la puede cambiar antes de guardarla.
+import { parsePassageSource } from '@/data/content/passageSource';
 import { FIELD_MAX, type NoteDraft } from '@/data/usecases/manualDecks';
 import { t } from '@/i18n/es-MX';
 import type { QuestionBundle } from '../simulator/useQuestion';
@@ -70,4 +71,24 @@ export function questionCardDraft(
     .filter(Boolean)
     .join('\n\n');
   return { kind: 'basic', front: cutAtWord(front, FIELD_MAX), back: cutAtWord(back, FIELD_MAX) };
+}
+
+/**
+ * Los pedazos de la tarjeta que están en inglés en una pregunta de Inglés médico (B13). Son los que arma
+ * questionCardDraft con el texto del banco, el caso en corto, la pregunta, la clave y el título de la fuente
+ * del texto, para guardarlos con lang="en". Vacío en una pregunta en español. Si el alumno cambia un pedazo
+ * de la tarjeta, ese ya no se marca, y lo que escribe él nunca se marca como inglés
+ */
+export function questionEnglishParts(
+  bundle: Pick<QuestionBundle, 'question' | 'options' | 'vignette'>,
+): string[] {
+  const { question, options, vignette } = bundle;
+  if (question.language !== 'en') return [];
+  const source = parsePassageSource(question.gpcRefs);
+  return [
+    vignette.trim() === '' ? '' : shortenCase(vignette),
+    question.prompt.trim(),
+    options.find((option) => option.isCorrect)?.text.trim() ?? '',
+    source.ok ? source.source.title : '',
+  ].filter((part) => part !== '');
 }

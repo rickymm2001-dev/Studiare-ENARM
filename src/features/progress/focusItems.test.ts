@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { Insight, InsightReport, InsightState } from '@/engines/insights';
-import { biasCalibration, biasProfileRows, describeInsight, weeklyFocusItems } from './focusItems';
+import {
+  biasCalibration,
+  biasProfileRows,
+  describeInsight,
+  weakTopicsFrom,
+  weeklyFocusItems,
+} from './focusItems';
 
 const insight = (id: string, state: InsightState): Insight => ({
   id,
@@ -112,5 +118,20 @@ describe('consejos por sesgo como borrador', () => {
       ['negation', false],
       ['cardiology', false],
     ]);
+  });
+});
+
+describe('temas débiles sin Inglés médico (B13, 2.8)', () => {
+  it('un tema de la sección de inglés no entra aunque su dominio sea bajo', () => {
+    const weak = { state: { kind: 'ready', mastery: 0.3 } };
+    const weakTopics = weakTopicsFrom(
+      new Map([
+        ['cardiology', weak],
+        ['reading_comprehension', weak],
+        ['medical_vocabulary', weak],
+      ]),
+    );
+    expect(weakTopics.map((topic) => topic.key)).toEqual(['cardiology']);
+    expect(weakTopics.every((topic) => topic.branch !== 'medical_english')).toBe(true);
   });
 });

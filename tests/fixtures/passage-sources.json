@@ -1,0 +1,371 @@
+{
+  "_aviso": "[Prueba] Fuentes simuladas de textos, no son contenido médico. Las leen passageSource.test.ts y la prueba EN9 de supabase/tests/english_section_test.sql, para que passageSource.ts y bank_passage_source_issue den lo mismo sobre los mismos casos. issue es null si la fuente está bien. Los casos con espacio sin salto (U+00A0), marca de orden de bytes (U+FEFF), espacio largo (U+2003) y separador de línea (U+2028) traen esos caracteres escritos tal cual y no con un escape, porque la base de pruebas es SQL_ASCII y ahí jsonb no acepta un escape de Unicode fuera de ASCII. No los cambies por escapes ni por espacios normales",
+  "cases": [
+    {
+      "name": "texto propio del equipo, sin título ni enlace",
+      "refs": ["Fuente del texto. Texto propio del equipo Studiare."],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con título",
+      "refs": ["Fuente del texto. [Prueba] Caso de ejemplo. Texto propio del equipo Studiare."],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con un enlace que no hacía falta",
+      "refs": [
+        "Fuente del texto. [Prueba] Caso. Texto propio del equipo Studiare. https://example.org/caso"
+      ],
+      "issue": null
+    },
+    {
+      "name": "texto propio del equipo con un enlace http, que se ignora",
+      "refs": [
+        "Fuente del texto. [Prueba] Caso. Texto propio del equipo Studiare. http://example.org/caso"
+      ],
+      "issue": null
+    },
+    {
+      "name": "dominio público con enlace",
+      "refs": [
+        "Fuente del texto. Heart Attack, MedlinePlus.gov (NLM). Dominio público. https://medlineplus.gov/heartattack.html"
+      ],
+      "issue": null
+    },
+    {
+      "name": "CC0 con enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo simulado. CC0. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "CC BY con enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo simulado. CC BY. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "CC BY-SA con enlace",
+      "refs": [
+        "Fuente del texto. [Prueba] Artículo simulado. CC BY-SA. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "el título trae puntos y siglas",
+      "refs": [
+        "Fuente del texto. Smith J. et al. Cardiac outcomes, vol. 3. CC BY. https://example.org/a/b?x=1#y"
+      ],
+      "issue": null
+    },
+    {
+      "name": "enlace con puerto y camino",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org:8443/a/b"],
+      "issue": null
+    },
+    {
+      "name": "la fuente va después de otra referencia",
+      "refs": [
+        "[Prueba] Guía de práctica clínica simulada",
+        "Fuente del texto. [Prueba] Artículo simulado. CC BY. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "mayúsculas y espacios de más en el prefijo, y licencia en mayúsculas y sin acento",
+      "refs": [
+        "  FUENTE   DEL TEXTO.   [Prueba] Texto simulado.   DOMINIO PUBLICO.   https://example.org/texto  "
+      ],
+      "issue": null
+    },
+    {
+      "name": "licencia en minúsculas",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. cc by-sa. https://example.org/texto"],
+      "issue": null
+    },
+    {
+      "name": "sin punto antes del enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. CC BY https://example.org/texto"],
+      "issue": null
+    },
+    {
+      "name": "sin referencias",
+      "refs": [],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo una guía de práctica clínica",
+      "refs": ["Guía de Práctica Clínica de diabetes gestacional"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "una referencia que menciona la fuente pero no empieza con ella",
+      "refs": ["Ver la Fuente del texto. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "el prefijo con dos puntos en lugar de punto",
+      "refs": ["Fuente del texto: [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "el prefijo con una letra de más",
+      "refs": ["Fuente del textos. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el prefijo",
+      "refs": ["Fuente del texto."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el título, sin licencia",
+      "refs": ["Fuente del texto. Heart Attack, MedlinePlus.gov (NLM)"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "título y enlace, sin licencia",
+      "refs": ["Fuente del texto. [Prueba] Texto. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el enlace",
+      "refs": ["Fuente del texto. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "CC BY sin enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con enlace http",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. http://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con un enlace sin punto en el host",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. https://localhost/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "dominio público con un enlace cortado",
+      "refs": ["Fuente del texto. [Prueba] Texto. Dominio público. https://"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "licencia sin título",
+      "refs": ["Fuente del texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "CC BY-NC",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-NC. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "CC BY-ND",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-ND. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "CC BY-NC-SA",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-NC-SA. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "todos los derechos reservados",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto. Todos los derechos reservados. https://example.org/texto"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia con versión, que en la referencia no es el nombre exacto",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY 4.0. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "texto propio escrito de otra forma",
+      "refs": ["Fuente del texto. [Prueba] Texto. Texto propio. "],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia fuera de la lista sin enlace",
+      "refs": ["Fuente del texto. [Prueba] Texto. Licencia desconocida."],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia en mayúsculas y con el acento de público",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto simulado. DOMINIO PÚBLICO. https://example.org/texto"
+      ],
+      "issue": null
+    },
+    {
+      "name": "licencia con un acento en otra letra",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto simulado. Dominio públíco. https://example.org/texto"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "texto propio con un acento de más, que sin otro pedazo se lee como un título sin licencia",
+      "refs": ["Fuente del texto. Téxto propio del equipo Studiare."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "texto propio con un acento de más y un título antes",
+      "refs": ["Fuente del texto. [Prueba] Texto simulado. Téxto propio del equipo Studiare."],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "con dos fuentes manda la primera, mala",
+      "refs": [
+        "Fuente del texto. [Prueba] Uno. CC BY-NC. https://example.org/uno",
+        "Fuente del texto. [Prueba] Dos. CC BY. https://example.org/dos"
+      ],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "con dos fuentes manda la primera, buena",
+      "refs": [
+        "Fuente del texto. [Prueba] Uno. CC BY. https://example.org/uno",
+        "Fuente del texto. [Prueba] Dos. CC BY-NC. https://example.org/dos"
+      ],
+      "issue": null
+    },
+    {
+      "name": "espacios sin salto (U+00A0) entre el prefijo, el título, la licencia y el enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo. CC BY. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "un espacio sin salto (U+00A0) al final del texto propio",
+      "refs": ["Fuente del texto. Texto propio del equipo Studiare "],
+      "issue": null
+    },
+    {
+      "name": "un espacio sin salto (U+00A0) al final del enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo. CC BY. https://example.org/articulo "],
+      "issue": null
+    },
+    {
+      "name": "espacios sin salto (U+00A0) dentro del prefijo",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": null
+    },
+    {
+      "name": "la marca de orden de bytes (U+FEFF) antes del prefijo",
+      "refs": ["﻿Fuente del texto. [Prueba] Artículo. CC BY. https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "la marca de orden de bytes (U+FEFF) entre la licencia y el enlace",
+      "refs": ["Fuente del texto. [Prueba] Artículo. CC BY.﻿https://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "tabuladores entre las partes",
+      "refs": ["Fuente del texto.\t[Prueba] Artículo.\tCC BY.\thttps://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "saltos de línea entre las partes",
+      "refs": ["Fuente del texto.\n[Prueba] Artículo.\nCC BY.\nhttps://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "saltos de línea de Windows entre las partes",
+      "refs": ["Fuente del texto.\r\n[Prueba] Artículo.\r\nCC BY.\r\nhttps://example.org/articulo"],
+      "issue": null
+    },
+    {
+      "name": "tabulación vertical y salto de página entre las partes",
+      "refs": [
+        "Fuente del texto.\u000b[Prueba] Artículo.\fCC BY.\u000bhttps://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "mezcla de espacio sin salto, marca de orden de bytes, tabulador y salto de línea",
+      "refs": ["﻿Fuente del\ttexto.  [Prueba] Texto.\t﻿CC0.\n https://example.org/texto "],
+      "issue": null
+    },
+    {
+      "name": "el título trae un espacio sin salto (U+00A0) en medio",
+      "refs": [
+        "Fuente del texto. [Prueba] Artículo con  espacios. Dominio público. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "licencia fuera de la lista separada con espacios sin salto",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY-NC. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "licencia fuera de la lista con la marca de orden de bytes",
+      "refs": ["﻿Fuente del texto. [Prueba] Texto. CC BY-ND.﻿https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "sin licencia, con espacios sin salto",
+      "refs": ["Fuente del texto. [Prueba] Texto. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "CC BY sin enlace, con espacios sin salto",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el prefijo y un espacio sin salto",
+      "refs": ["Fuente del texto. "],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "solo el prefijo con la marca de orden de bytes",
+      "refs": ["﻿Fuente del texto."],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "el prefijo con dos puntos y la marca de orden de bytes",
+      "refs": ["﻿Fuente del texto: [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "passage_source_missing"
+    },
+    {
+      "name": "un espacio sin salto (U+00A0) dentro del enlace lo parte en dos pedazos",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org/a b"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "un tabulador dentro del enlace lo parte en dos pedazos",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org/a\tb"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "el espacio largo (U+2003) no cuenta como espacio, ni en la app ni en la base",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org/texto"],
+      "issue": "license_not_allowed"
+    },
+    {
+      "name": "el espacio largo (U+2003) dentro del enlace no lo parte",
+      "refs": ["Fuente del texto. [Prueba] Texto. CC BY. https://example.org/a b"],
+      "issue": null
+    },
+    {
+      "name": "el separador de línea (U+2028) no es espacio y el título lo conserva",
+      "refs": [
+        "Fuente del texto. [Prueba] Texto con otra línea. CC BY. https://example.org/articulo"
+      ],
+      "issue": null
+    },
+    {
+      "name": "dos referencias, la segunda es la fuente y trae espacios sin salto",
+      "refs": [
+        "[Prueba] Guía de práctica clínica simulada",
+        "﻿Fuente del texto. [Prueba] Texto. CC0. https://example.org/texto"
+      ],
+      "issue": null
+    }
+  ]
+}

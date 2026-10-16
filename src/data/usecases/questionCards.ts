@@ -95,6 +95,12 @@ export interface QuestionCardInput {
   question: Pick<Question, 'id' | 'questionId' | 'version' | 'topic' | 'isDemo'>;
   target: QuestionCardTarget;
   draft: NoteDraft;
+  /**
+   * Fragmentos del banco que están en inglés, como el caso en corto o la clave de una pregunta de Inglés
+   * médico (B13). Los que siguen tal cual en la tarjeta se guardan con lang="en", para que el lector de
+   * pantalla los diga en inglés. Sin ellos la tarjeta queda igual que siempre
+   */
+  english?: readonly string[];
   source: QuestionCardSource;
   from: 'exam_review' | 'practice_review';
   /** Nombre y descripción de la capa del alumno, que pone la interfaz */
@@ -218,7 +224,7 @@ function noteOf(
     createdAt,
     updatedAt: stamp,
     deletedAt: null,
-    ...contentOf(input.draft),
+    ...contentOf(input.draft, input.english),
   };
   const { source } = input;
   if (source.kind === 'bank') {

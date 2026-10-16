@@ -105,3 +105,85 @@ describe('pendientes de una versión', () => {
     expect(incompleteOnly(issues)).toEqual(['bias_missing:A']);
   });
 });
+
+describe('pendientes de una versión en inglés (B13, 1.6 del plan de B13)', () => {
+  const source = 'Fuente del texto. [Prueba] Texto simulado. CC BY. https://example.org/texto';
+  const english: RuleVersion = {
+    ...complete,
+    language: 'en',
+    englishBranch: true,
+    refs: [source, '[Prueba] Guía simulada'],
+  };
+
+  it('una versión en inglés con su fuente se puede aprobar', () => {
+    expect(versionIssues(english, taggable)).toEqual([]);
+    // La fuente cuenta como referencia, así que sola basta
+    expect(versionIssues({ ...english, refs: [source] }, taggable)).toEqual([]);
+  });
+
+  it('sin fuente falta passage_source_missing, después de las referencias y antes de las opciones', () => {
+    const noSource: RuleVersion = {
+      ...english,
+      refs: ['[Prueba] Guía simulada'],
+      explanation: '',
+      options: complete.options.map((option) =>
+        option.position === 1 ? { ...option, rationale: null } : option,
+      ),
+    };
+    expect(versionIssues(noSource, taggable)).toEqual([
+      'explanation_missing',
+      'passage_source_missing',
+      'rationale_missing:B',
+    ]);
+    expect(versionIssues({ ...english, refs: [] }, taggable)).toEqual([
+      'references_missing',
+      'passage_source_missing',
+    ]);
+  });
+
+  it('una licencia fuera de la lista es license_not_allowed y un enlace que falta es passage_source_missing', () => {
+    expect(
+      versionIssues(
+        { ...english, refs: ['Fuente del texto. [Prueba] Texto. CC BY-NC. https://example.org/x'] },
+        taggable,
+      ),
+    ).toEqual(['license_not_allowed']);
+    expect(
+      versionIssues({ ...english, refs: ['Fuente del texto. [Prueba] Texto. CC BY.'] }, taggable),
+    ).toEqual(['passage_source_missing']);
+    expect(
+      versionIssues(
+        { ...english, refs: ['Fuente del texto. Texto propio del equipo Studiare.'] },
+        taggable,
+      ),
+    ).toEqual([]);
+  });
+
+  it('el idioma tiene que ir con la rama y eso no se arregla con una celda', () => {
+    const outside = versionIssues({ ...english, englishBranch: false }, taggable);
+    expect(outside).toEqual(['language_branch_mismatch']);
+    const spanishInside = versionIssues(
+      { ...complete, language: 'es', englishBranch: true },
+      taggable,
+    );
+    expect(spanishInside).toEqual(['language_branch_mismatch']);
+    expect(incompleteOnly(outside)).toEqual([]);
+    // Después de la estructura y antes de la tarea
+    const order = versionIssues(
+      { ...english, englishBranch: false, task: '', canonicalPositions: [1] },
+      taggable,
+    );
+    expect(order).toEqual(['canonical_invalid', 'language_branch_mismatch', 'task_undetected']);
+  });
+
+  it('el español no cambia y sin idioma o sin rama no se revisa nada del inglés', () => {
+    expect(versionIssues({ ...complete, language: 'es', englishBranch: false }, taggable)).toEqual(
+      [],
+    );
+    expect(
+      versionIssues({ ...complete, refs: ['[Prueba] Guía'], language: 'es' }, taggable),
+    ).toEqual([]);
+    expect(versionIssues({ ...english, englishBranch: undefined }, taggable)).toEqual([]);
+    expect(versionIssues({ ...complete, englishBranch: true }, taggable)).toEqual([]);
+  });
+});

@@ -1,5 +1,5 @@
 {
-  "description": "B11, banco en la nube y Google Sheets. Las seis migraciones del banco, la pieza con delete de Borrar mis datos (supabase/manual/banco-b11.sql) y la función bank-sync. La cuenta de servicio de Google (GOOGLE_SA_KEY) la pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasa por este plan. El ID del Sheet va con --secrets-from cuando exista.",
+  "description": "B11, banco en la nube y Google Sheets. Las seis migraciones del banco, la migración de Inglés médico de B13 (20261027000001), la pieza con delete de Borrar mis datos (supabase/manual/banco-b11.sql) y la función bank-sync. La migración de B13 va aquí porque redefine dos funciones de la segunda migración, y la herramienta compara cada función con la última versión del repo, así que sin ella el plan se detiene (docs/DESPLIEGUE.md, B11 y B13). Si el plan b13 ya la aplicó, este paso se salta. La cuenta de servicio de Google (GOOGLE_SA_KEY) la pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasa por este plan. El ID del Sheet va con --secrets-from cuando exista.",
   "migrations": [
     {
       "file": "supabase/migrations/20261023000001_bank_taxonomy.sql"
@@ -19,6 +19,10 @@
     {
       "file": "supabase/migrations/20261023000006_bank_sync_cron.sql",
       "note": "Crea la ficha de Cron en Vault y programa bank-sync cada hora. Usa project_url de Vault"
+    },
+    {
+      "file": "supabase/migrations/20261027000001_english_section.sql",
+      "note": "De B13. Redefine bank_version_issues y bank_incomplete_of de la migración bank_core con la misma firma, sin tocar nada de una versión en español. Va aquí para que bank_core no deje esas dos funciones más viejas que el repo. El plan b13 la lleva también y la salta si ya está"
     },
     {
       "file": "supabase/manual/banco-b11.sql",

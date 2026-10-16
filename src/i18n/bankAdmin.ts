@@ -51,8 +51,15 @@ const problems: Record<SyncProblemCode, (column: string, value?: string) => stri
     `El set canónico${quoted(value)} no tiene la correcta y un distractor. Corrige las letras.`,
   template_placeholder: (column) =>
     `${column} todavía tiene el texto de ejemplo de la plantilla. Reemplázalo con el tuyo.`,
-  case_inconsistent: (_column, value) =>
-    `El caso${quoted(value)} tiene órdenes repetidos, con huecos o sin el 1. Corrige Caso y Orden en el caso de todos sus renglones.`,
+  // Los dos primeros son de los casos de lectura en inglés (B13). La columna dice cuál fue la causa
+  case_inconsistent: (column, value) =>
+    column === 'Fuente del texto'
+      ? `El caso${quoted(value)} trae fuentes del texto distintas. Deja la fuente solo en el Orden 1 o escribe la misma en todos sus renglones.`
+      : column === 'Idioma'
+        ? `El caso${quoted(value)} mezcla preguntas en español y en inglés. Un caso de lectura va todo en inglés, corrige el Idioma de sus renglones.`
+        : `El caso${quoted(value)} tiene órdenes repetidos, con huecos o sin el 1. Corrige Caso y Orden en el caso de todos sus renglones.`,
+  language_branch_mismatch: (_column, value) =>
+    `El Idioma${quoted(value)} no va con la rama. Inglés médico va en Inglés y las demás ramas en Español. Corrige el Idioma o la Rama troncal.`,
 };
 
 /** Cada aviso de un renglón que sí entra (3.4), con los que solo pone la base */
@@ -73,6 +80,11 @@ const notices: Record<SyncNoticeCode | ServerNoticeCode, string> = {
   case_rows_apart:
     'Los renglones de este caso no están juntos. Entraron igual, juntarlos ayuda a leer.',
   language_unknown: 'El Idioma no está en la lista. Quedó en español.',
+  language_inferred: 'El Idioma estaba vacío en Inglés médico. Quedó en inglés.',
+  english_case_size:
+    'Un caso de lectura en inglés lleva dos o tres preguntas, como en el ENARM. Este tiene otro número y entró igual.',
+  language_suspect:
+    'El texto de este renglón parece estar en inglés y quedó como español, sin fuente ni licencia. Si es un caso de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente. Si es español, ignora este aviso.',
   not_ready:
     'Pide Lista para revisión pero le faltan pendientes o un revisor distinto del autor. Quedó en borrador.',
   author_differs:
@@ -99,8 +111,11 @@ export const bankAdminText = {
     title: 'Avance del banco',
     goal: (published: number, goal: number) =>
       `${num(published)} de ${num(goal)} preguntas aprobadas y publicadas para abrir el banco.`,
-    english: (n: number) =>
-      `Inglés médico aparte, ${plural(n, 'pregunta publicada', 'preguntas publicadas')}.`,
+    // Inglés médico aparte de la meta de las siete ramas, con su propia meta (B13, 8.17)
+    english: (published: number, goal: number) =>
+      `Inglés, ${num(published)} de ${num(goal)} para la parte del examen.`,
+    englishHint: (goal: number, englishGoal: number) =>
+      `Aparte de las ${num(goal)} de las siete ramas. Con menos de ${num(englishGoal)} reactivos de inglés publicados, la parte en inglés del examen dice calibrando.`,
     byBranch: 'Publicadas por rama',
     noBranch: 'Todavía no hay preguntas publicadas.',
     counts: {

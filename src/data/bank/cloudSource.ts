@@ -4,7 +4,8 @@
 // guardan en las tablas de siempre, así todo lo demás los lee igual que el banco de demostración. Una
 // versión ya guardada no se vuelve a pedir ni a escribir, así repasar lo ya bajado no gasta del tope.
 // Sin conexión se estudia con lo ya bajado. La cuota que dijo el servidor se guarda para contarla sin
-// conexión. Al servidor solo viajan ids de versión y el propósito de la lectura.
+// conexión. Al servidor solo viajan ids de versión y el propósito de la lectura. Desde B13 el pool parte
+// el catálogo por idioma, y el inglés va aparte del español.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   fetchAgreementSummary,
@@ -21,6 +22,7 @@ import { mergeCatalogPage } from './catalogMerge';
 import type { DenyReason, QuotaInfo, ReadPurpose } from './contracts';
 import {
   CATALOG_REFRESH_MS,
+  EMPTY_POOL,
   type EnsureResult,
   type PoolQuestion,
   type QuestionSource,
@@ -213,17 +215,22 @@ export function createCloudSource(deps: CloudSourceDeps): QuestionSource {
 
     async pool() {
       const state = await repos.bankState.get('catalog');
-      if (state?.open === false) return { practice: [], exam: [] };
-      // Inglés médico llega con su práctica y su examen en B13. Mientras tanto no se elige
-      const entries = (await repos.catalog.listPublished()).filter(
-        (entry) => entry.language === 'es',
-      );
+      if (state?.open === false) return EMPTY_POOL;
+      const entries = await repos.catalog.listPublished();
       // Lo ya bajado se marca, así sin conexión se elige solo de ahí (M2 de la revisión de B11)
       const stored = await repos.questions.storedIds(entries.map((entry) => entry.versionId));
-      const practice = entries.map((entry) =>
-        poolQuestionOfEntry(entry, stored.has(entry.versionId)),
-      );
-      return { practice, exam: practice.filter((question) => question.examEligible) };
+      const all = entries.map((entry) => poolQuestionOfEntry(entry, stored.has(entry.versionId)));
+      // El inglés va aparte (B13). La práctica en español, los duelos y el planificador nunca lo ven
+      const spanish = all.filter((question) => question.language === 'es');
+      const english = all.filter((question) => question.language === 'en');
+      return {
+        practice: spanish,
+        exam: spanish.filter((question) => question.examEligible),
+        english: {
+          practice: english,
+          exam: english.filter((question) => question.examEligible),
+        },
+      };
     },
 
     async ensureBodies(versionIds: readonly string[], purpose: ReadPurpose): Promise<EnsureResult> {

@@ -2,7 +2,7 @@
 // especificación, más la retención deseada. El resto de los números de configuración de los motores
 // no se editan desde la interfaz. Desde B11 el doble etiquetado del 20 % ya no existe, porque cada
 // revisión etiqueta a ciegas todos sus distractores (8.9 del plan de B11), así que doubleLabelShare
-// sigue en el esquema por compatibilidad y ya no se muestra.
+// sigue en el esquema por compatibilidad y ya no se muestra. Los de Inglés médico (B13) son el grupo english.
 import type { Thresholds } from '@/config/thresholds';
 
 export interface ThresholdField {
@@ -27,6 +27,11 @@ export const THRESHOLD_FIELDS: readonly ThresholdField[] = [
   { group: 'forgetting', key: 'patternWindowDays', kind: 'int', step: 1 },
   { group: 'fsrs', key: 'optimizeAfterReviews', kind: 'int', step: 1 },
   { group: 'fsrs', key: 'desiredRetention', kind: 'float', step: 0.01 },
+  // Inglés médico (B13, 1.9 del plan de B13). El formulario los junta bajo su propio título
+  { group: 'english', key: 'secondsPerItem', kind: 'int', step: 5 },
+  { group: 'english', key: 'examMinItems', kind: 'int', step: 1 },
+  { group: 'english', key: 'practiceMinCases', kind: 'int', step: 1 },
+  { group: 'english', key: 'minAnswersForStats', kind: 'int', step: 1 },
 ];
 
 export const fieldId = (field: Pick<ThresholdField, 'group' | 'key'>) =>

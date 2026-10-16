@@ -35,6 +35,22 @@ describe('fuente local, el banco de demostración de siempre (5.1)', () => {
     );
   });
 
+  it('el inglés sale en su pool, con su idioma, y el español no lo trae (B13)', async () => {
+    const { api, source } = setup();
+    await source.prepare();
+    const { question, options } = makeQuestionWithOptions();
+    await api.repos.questions.addVersion(
+      { ...question, language: 'en', branch: 'medical_english', topic: 'reading_comprehension' },
+      options,
+    );
+    const pool = await source.pool();
+    expect(pool.practice.some((item) => item.id === question.id)).toBe(false);
+    expect(pool.english.practice.map((item) => item.id)).toEqual([question.id]);
+    expect(pool.english.exam.map((item) => item.id)).toEqual([question.id]);
+    expect(pool.english.practice[0]).toMatchObject({ language: 'en', examEligible: true });
+    expect(pool.practice.every((item) => item.language === 'es')).toBe(true);
+  });
+
   it('ensureBodies no baja nada, revisa lo que hay y no tiene cuota del servidor', async () => {
     const { api, source } = setup();
     await source.prepare();

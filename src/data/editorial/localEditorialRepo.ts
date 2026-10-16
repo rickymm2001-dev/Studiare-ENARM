@@ -55,12 +55,17 @@ export interface LocalViewer {
 const TAGGABLE = new Set(TAGGABLE_BIASES.map((bias) => bias.key));
 const PREVIEW = 140;
 
-/** Los pendientes de una versión local, con la misma regla que bank_version_issues */
+/**
+ * Los pendientes de una versión local, con la misma regla que bank_version_issues. Con el idioma, una
+ * pregunta en inglés pide además su fuente del texto con una licencia aceptada (B13, 1.6 del plan de B13),
+ * así que sin ella no se manda a revisión ni se aprueba, aunque la demo no traiga textos en inglés
+ */
 export function localVersionIssues(question: Question, options: readonly Option[]): string[] {
   const positionOf = new Map(options.map((option, index) => [option.id, index]));
   return versionIssues(
     {
       prompt: question.prompt,
+      language: question.language,
       explanation: question.explanation,
       refs: question.gpcRefs.map((ref) => ref.title),
       options: options.map((option, index) => ({

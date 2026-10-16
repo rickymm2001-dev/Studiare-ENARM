@@ -149,4 +149,18 @@ begin
   end if;
 end $$;
 
+-- ===================================================================== G7. Inglés médico (B13)
+-- La función que lee la fuente del texto es interna, como las demás del banco, y las dos que redefine
+-- 20261027000001 conservan los permisos de B11. G5 ya revisa que public y anon no ejecuten ninguna
+select pg_temp.expect(
+  to_regprocedure('public.bank_passage_source_issue(jsonb)') is not null
+  and not has_function_privilege('authenticated', 'public.bank_passage_source_issue(jsonb)', 'execute')
+  and not has_function_privilege('service_role', 'public.bank_passage_source_issue(jsonb)', 'execute')
+  and not has_function_privilege('authenticated', 'public.bank_version_issues(uuid)', 'execute')
+  and not has_function_privilege('service_role', 'public.bank_version_issues(uuid)', 'execute')
+  and not has_function_privilege('authenticated', 'public.bank_incomplete_of(text[])', 'execute')
+  and not has_function_privilege('service_role', 'public.bank_incomplete_of(text[])', 'execute'),
+  'G7. Las funciones internas de Inglés médico no deben ser ejecutables por la API'
+);
+
 select 'TODAS LAS PRUEBAS DE PERMISOS DE FUNCIONES PASARON' as resultado;

@@ -5,11 +5,14 @@
 // y antes de empezar se bajan sus cuerpos. Si llega menos de lo pedido, la práctica arranca con lo
 // concedido y el marco de la app dice por qué. El tope de Gratis es el menor entre lo que cuenta la app
 // y lo que cuenta el servidor, y en un plan de pago el freno del servidor se avisa con su hora.
+// La práctica en español deja fuera el inglés siempre (B13, 2.8). Los casos de lectura en inglés tienen
+// su tarjeta aparte, entre esta práctica y el examen completo, si la bandera medicalEnglish está prendida.
 import { Gauge, Library, ListChecks, Play, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
@@ -25,7 +28,7 @@ import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
-import { ALL_TOPICS } from '../shared/topics';
+import { CLINICAL_TOPICS } from '../shared/topics';
 import { useBankNotice } from '../shared/bankNotice';
 import { chooseWithBodies } from '../shared/chooseWithBodies';
 import { dailyQuestions } from '../shared/dailyLimit';
@@ -39,7 +42,8 @@ import { reservedByStoredExam } from '../exam/examStorage';
 import { useAnalysis } from '../progress/useAnalysis';
 import { targetBiasTags } from '../progress/focusItems';
 import { reviewSettingsLinkState, reviewSettingsPath } from '../review/settings/panelParam';
-import { clock, usePractice } from './practice';
+import { EnglishPracticeCard } from './EnglishPracticeCard';
+import { clock, SPANISH_PRACTICE_DEFAULTS, usePractice } from './practice';
 import { pickQuestions } from './pickQuestions';
 import { TargetedSamplingField } from './TargetedSamplingField';
 
@@ -79,7 +83,7 @@ function Setup({ session }: { session: ReadySession }) {
   const [params] = useSearchParams();
   const [topics, setTopics] = useState<Set<string>>(() => {
     const preset = params.get('topic');
-    return new Set(preset && ALL_TOPICS.includes(preset) ? [preset] : ALL_TOPICS);
+    return new Set(preset && CLINICAL_TOPICS.includes(preset) ? [preset] : CLINICAL_TOPICS);
   });
   const [difficulty, setDifficulty] = useState<Difficulty>('all');
   const [structure, setStructure] = useState<Structure>(() =>
@@ -225,6 +229,7 @@ function Setup({ session }: { session: ReadySession }) {
       kind: 'practice',
       duelId: null,
       targetTags,
+      ...SPANISH_PRACTICE_DEFAULTS,
     });
     void navigate(screenPath('question'));
   };
@@ -368,18 +373,34 @@ function Setup({ session }: { session: ReadySession }) {
           ) : null}
           <Disclosure
             title={t.topicPicker.title}
-            summary={t.topicPicker.selected(topics.size, ALL_TOPICS.length)}
+            summary={t.topicPicker.selected(topics.size, CLINICAL_TOPICS.length)}
           >
             <BranchTopicPicker
               selected={topics}
               onChange={setTopics}
               counts={countsByTopic}
               showCount={false}
+              scope="clinical"
             />
           </Disclosure>
         </div>
       </Card>
-      <ExamSetupCard session={session} questions={pool?.exam ?? []} plan={plan} left={left} />
+      {isFeatureEnabled('medicalEnglish') ? (
+        <EnglishPracticeCard
+          session={session}
+          pool={pool?.english ?? { practice: [], exam: [] }}
+          left={left}
+          reserved={reserved}
+          report={analysis?.report}
+        />
+      ) : null}
+      <ExamSetupCard
+        session={session}
+        questions={pool?.exam ?? []}
+        englishQuestions={pool?.english.exam ?? []}
+        plan={plan}
+        left={left}
+      />
     </>
   );
 }

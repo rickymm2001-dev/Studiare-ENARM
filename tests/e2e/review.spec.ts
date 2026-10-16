@@ -32,6 +32,10 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   // Sin pregunta de confianza (D-087). Tarjeta 1 con el ratón, mostrar y Bien
   await expect(page.getByRole('button', { name: t.review.confidence.sure })).toHaveCount(0);
   await page.getByRole('button', { name: t.review.show }).click();
+  // Con la respuesta a la vista salen los cuatro botones con su intervalo en letra chica. Otra vez, con
+  // su fondo rojo, dejaba ese texto abajo de 4.5 a 1 y antes nadie lo revisaba
+  await expect(rating('again')).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
   await rating('good').click();
 
   // Tarjeta 2 solo con el teclado. Espacio muestra, 1 es Otra vez y pide el motivo, 2 es Tiempo

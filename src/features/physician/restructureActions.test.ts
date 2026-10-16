@@ -128,6 +128,38 @@ describe('pedir una propuesta', () => {
     expect(await api.repos.aiArtifacts.list()).toHaveLength(0);
   });
 
+  it('una pregunta en inglés no se pide, esté o no marcada, y no cuesta nada', async () => {
+    const { api, question, options } = await setup();
+    const english = { ...question, branch: 'medical_english', language: 'en' as const };
+    const args = { question: english, options, transform: 'to_except' as const, status: noProxy };
+    // Sin marcas, marcada con un reporte abierto, y por el idioma aunque la rama sea otra
+    const marked = restructureMarks({
+      reports: [{ questionId: question.questionId, status: 'open' }],
+      distractors: [],
+    });
+    const attempts = [
+      requestRestructure(api, physician, args),
+      requestRestructure(api, physician, { ...args, marks: marked }),
+      requestRestructure(api, physician, {
+        ...args,
+        question: { ...question, language: 'en' as const },
+        marks: marked,
+      }),
+    ];
+    for (const result of await Promise.all(attempts)) {
+      expect(result).toEqual({ ok: false, reason: 'english', message: 'english' });
+    }
+    expect(await api.repos.aiCallLog.list()).toHaveLength(0);
+    expect(await api.repos.aiArtifacts.list()).toHaveLength(0);
+    // La misma pregunta en español, marcada, sí se pide
+    const spanish = await requestRestructure(api, physician, {
+      ...args,
+      question,
+      marks: marked,
+    });
+    expect(spanish.ok).toBe(true);
+  });
+
   it('un caso seriado no se reestructura', async () => {
     const { api, question, options } = await setup();
     const result = await requestRestructure(api, physician, {

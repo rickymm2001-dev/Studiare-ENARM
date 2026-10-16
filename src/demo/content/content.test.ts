@@ -61,14 +61,21 @@ describe('taxonomía de temas (13.4)', () => {
     expect(topicsOf('family_medicine')).not.toContain('public_health');
   });
 
-  it('Inglés médico es la sección english con un subtema por rama clínica (B13 la afina)', () => {
+  it('Inglés médico es la sección english con un subtema por rama clínica y el tema de vocabulario (B13)', () => {
     const english = topicTaxonomy.branches.find((branch) => branch.key === 'medical_english');
     expect(english && branchSection(english)).toBe('english');
     const clinicalKeys = topicTaxonomy.branches
       .filter((branch) => branchSection(branch) === 'clinical')
       .map((branch) => `english_${branch.key}`);
-    expect(english?.topics.map((topic) => topic.key)).toEqual(['reading_comprehension']);
+    expect(english?.topics.map((topic) => topic.key)).toEqual([
+      'reading_comprehension',
+      'medical_vocabulary',
+    ]);
     expect(english?.topics[0]?.subtopics.map((subtopic) => subtopic.key)).toEqual(clinicalKeys);
+    // El vocabulario solo lo usan las tarjetas del mazo de MedlinePlus. Ninguna pregunta lo usa
+    expect(english?.topics[1]?.subtopics).toEqual([
+      { key: 'english_terms', name: 'Términos médicos' },
+    ]);
   });
 
   it('las claves de tema y de subtema son únicas en toda la taxonomía', () => {

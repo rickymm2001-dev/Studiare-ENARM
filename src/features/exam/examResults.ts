@@ -1,7 +1,14 @@
 // Resultados de un examen terminado (pantalla 9). Convierte el estado del examen y las preguntas
 // que se usaron en lo que califica el motor exam. Sin React ni Dexie, para probarlo con datos
 // armados a mano.
-import { scoreExam, type ExamAnswer, type ExamQuestionInfo, type ExamScore } from '@/engines/exam';
+import {
+  scoreExam,
+  sectionOf,
+  type ExamAnswer,
+  type ExamQuestionInfo,
+  type ExamScore,
+  type ExamSection,
+} from '@/engines/exam';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { answerOf, type ExamState } from './examState';
 
@@ -19,6 +26,8 @@ export function examInfos(state: ExamState, bundles: ExamBundles): ExamQuestionI
   return bundlesInOrder(state, bundles).map(({ id, bundle: { question } }) => ({
     id,
     branch: question.branch,
+    // La sección sale del idioma de la pregunta que quedó en el banco local (B13, 3.2)
+    section: sectionOf(question),
     topic: question.topic,
     polarity: question.structure.polarity,
     task: question.structure.task,
@@ -73,4 +82,39 @@ export function rankedTallies(
     .filter(([, tally]) => tally.total >= minTotal)
     .map(([key, tally]) => ({ key, ...tally, missed: tally.answered - tally.correct }))
     .sort((a, b) => b.missed - a.missed || b.total - a.total || a.key.localeCompare(b.key));
+}
+
+export interface SectionRow {
+  section: ExamSection;
+  total: number;
+  answered: number;
+  correct: number;
+  blank: number;
+  /** Segundos medios por reactivo contestado. null si no contestó ninguno */
+  averageSeconds: number | null;
+}
+
+/**
+ * El corte por sección de un examen, como Español 180 de 250 e Inglés 22 de 30 (B13, 3.6). Solo salen las
+ * secciones que tuvieron reactivos, primero la clínica. Un examen solo en español trae una fila
+ */
+export function sectionRows(score: ExamScore): SectionRow[] {
+  return (['clinical', 'english'] as const).flatMap((section) => {
+    const cut = score.bySection[section];
+    return cut.total === 0
+      ? []
+      : [
+          {
+            section,
+            total: cut.total,
+            answered: cut.answered,
+            correct: cut.correct,
+            blank: cut.blank,
+            averageSeconds:
+              cut.averageMsPerAnswered === null
+                ? null
+                : Math.round(cut.averageMsPerAnswered / 1000),
+          },
+        ];
+  });
 }

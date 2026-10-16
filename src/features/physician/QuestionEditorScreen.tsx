@@ -6,6 +6,10 @@
 // completa, lo que cambió, sus pendientes y las casillas por confirmar, y decide. El autor manda a
 // revisión. El admin y el dueño solo leen. Lo que viene del Sheet se corrige en el Sheet, y un
 // conflicto con el Sheet se resuelve aquí sin pisar nada.
+// Inglés médico (B13, 5.4 del plan de B13). Al elegir esa rama el idioma queda en inglés, el texto, la
+// pregunta y las opciones se escriben en inglés (lang="en") y aparece la fuente del texto con su
+// licencia, que al guardar se vuelve la primera referencia. Sin fuente válida la versión queda con su
+// pendiente y no se puede mandar a revisión. En la demo, que no trae textos en inglés, la rama no se ofrece.
 import { useMemo, useState, type SyntheticEvent } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ArrowLeft, Sparkles } from 'lucide-react';
@@ -28,19 +32,28 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { CheckboxField, SelectField, TextAreaField } from '@/ui/components/field';
 import { SaveBar } from '@/ui/components/save-bar';
 import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
-import { bankTaxonomy } from './bankTaxonomy';
+import { bankTaxonomy, languageOfBranch, sectionOfBranch } from './bankTaxonomy';
 import { InvalidDraftError } from './editorActions';
 import {
   blockingIssues,
+  draftForSave,
   draftFromEditorVersion,
+  EMPTY_PASSAGE,
   validateDraft,
   type DraftIssue,
   type QuestionDraft,
 } from './editorDraft';
-import { CluesEditor, GpcEditor, HistoryCard, OptionsEditor } from './EditorSections';
+import {
+  CluesEditor,
+  GpcEditor,
+  HistoryCard,
+  OptionsEditor,
+  PassageSourceEditor,
+} from './EditorSections';
 import { VersionPreview } from './QuestionPreview';
 import { approvalBlockers, reviewViewOf, type ReviewView } from './reviewSteps';
 import { flagText, incompleteText } from './reviewTexts';
+import { SourceLine } from './SourceLine';
 import { useEditorialRepo } from './useEditorialRepo';
 import { useRepoQuery } from './useRepoQuery';
 
@@ -213,6 +226,7 @@ function StatusCard({
           {text.status.title}
           {view.sheetKey ? <Badge>{physicianText.bankScreen.sheetId(view.sheetKey)}</Badge> : null}
           <Badge variant="info">{text.status.version(latest.version)}</Badge>
+          {languageOfBranch(latest.branch) === 'en' ? <Badge>{text.language.badge}</Badge> : null}
           <Badge variant={latest.status === 'approved' ? 'success' : 'neutral'}>
             {physicianText.bank.status[latest.status]}
           </Badge>
@@ -324,6 +338,9 @@ function BlindStep({
   const mine = new Map(question.review.myLabels.map((label) => [label.optionId, label.tag]));
   const [busy, setBusy] = useState<string | null>(null);
   const ordered = [...latest.options].sort((a, b) => a.position - b.position);
+  // En Inglés médico el texto, la pregunta y las opciones están en inglés, con su fuente bajo el texto
+  const english = languageOfBranch(latest.branch) === 'en';
+  const lang = english ? 'en' : undefined;
 
   const choose = async (optionId: string, letter: string, tag: string) => {
     if (tag === '') return;
@@ -352,17 +369,26 @@ function BlindStep({
       ) : null}
       <div className="flex flex-col gap-3">
         {question.case ? (
-          <p className="rounded-md bg-muted p-3 text-sm">{question.case.vignette}</p>
+          <p className="rounded-md bg-muted p-3 text-sm" lang={lang}>
+            {question.case.vignette}
+          </p>
         ) : null}
-        {latest.vignette ? <p className="text-sm">{latest.vignette}</p> : null}
-        <p className="font-medium">{latest.prompt}</p>
+        {latest.vignette ? (
+          <p className="text-sm" lang={lang}>
+            {latest.vignette}
+          </p>
+        ) : null}
+        {english ? <SourceLine refs={latest.gpcRefs} /> : null}
+        <p className="font-medium" lang={lang}>
+          {latest.prompt}
+        </p>
         <ol className="flex flex-col gap-3">
           {ordered.map((option) => {
             const letter = option.letter ?? String(option.position + 1);
             const current = mine.get(option.optionId) ?? '';
             return (
               <li key={option.id} className="flex flex-col gap-1">
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium" lang={lang}>
                   {letter}. {option.text}
                 </p>
                 {option.isCorrect ? (
@@ -676,13 +702,28 @@ function EditorForm({
     setDraft((current) => ({ ...current, ...change }));
   };
 
+  const english = draft.language === 'en';
+  const lang = english ? 'en' : undefined;
   const auto = useMemo(
     () =>
       analyzeStructure(
-        { vignette: draft.vignette, prompt: draft.prompt, serialCase: latest.caseId !== null },
+        {
+          vignette: draft.vignette,
+          prompt: draft.prompt,
+          serialCase: latest.caseId !== null,
+          language: draft.language,
+        },
         structureDictionary,
       ),
-    [draft.vignette, draft.prompt, latest.caseId],
+    [draft.vignette, draft.prompt, draft.language, latest.caseId],
+  );
+  // Inglés médico solo se ofrece donde hay textos en inglés, que es la nube. La demo no trae ninguno, y
+  // una pregunta que ya está en esa rama la conserva (5.6 del plan de B13)
+  const branchChoices = topicTaxonomy.branches.filter(
+    (item) =>
+      repo.kind === 'cloud' ||
+      sectionOfBranch(item.key) === 'clinical' ||
+      item.key === draft.branch,
   );
   const topics = topicTaxonomy.branches.find((item) => item.key === draft.branch)?.topics ?? [];
   const subtopics = topics.find((item) => item.key === draft.topic)?.subtopics ?? [];
@@ -698,7 +739,7 @@ function EditorForm({
     }
     setBusy(true);
     try {
-      const saved = await repo.saveVersion(questionId, latest.versionId, draft);
+      const saved = await repo.saveVersion(questionId, latest.versionId, draftForSave(draft));
       setIssues([]);
       onSaved(
         saved.incomplete.length > 0
@@ -740,17 +781,23 @@ function EditorForm({
           <CardTitle id="editor-caso">{text.sections.case}</CardTitle>
         </CardHeader>
         <div className="flex flex-col gap-3">
+          {english ? <p className="text-sm text-fg-muted">{text.language.note}</p> : null}
           {latest.caseId !== null ? (
             <>
-              <p className="font-medium">{text.case.vignette}</p>
-              <p className="rounded-md bg-muted p-3 text-sm">{caseVignette ?? ''}</p>
+              <p className="font-medium">
+                {english ? text.case.vignetteEnglish : text.case.vignette}
+              </p>
+              <p className="rounded-md bg-muted p-3 text-sm" lang={lang}>
+                {caseVignette ?? ''}
+              </p>
               <p className="text-sm text-fg-muted">{text.case.vignetteSerial}</p>
             </>
           ) : (
             <TextAreaField
-              label={text.case.vignette}
-              hint={text.case.vignetteHint}
+              label={english ? text.case.vignetteEnglish : text.case.vignette}
+              hint={english ? text.case.vignetteEnglishHint : text.case.vignetteHint}
               rows={5}
+              lang={lang}
               value={draft.vignette}
               onChange={(event) => {
                 patch({ vignette: event.target.value });
@@ -758,9 +805,10 @@ function EditorForm({
             />
           )}
           <TextAreaField
-            label={text.case.prompt}
-            hint={text.case.promptHint}
+            label={english ? text.case.promptEnglish : text.case.prompt}
+            hint={english ? text.case.promptEnglishHint : text.case.promptHint}
             rows={2}
+            lang={lang}
             value={draft.prompt}
             onChange={(event) => {
               patch({ prompt: event.target.value });
@@ -769,9 +817,19 @@ function EditorForm({
         </div>
       </Card>
 
+      {english ? (
+        <PassageSourceEditor
+          passage={draft.passage ?? EMPTY_PASSAGE}
+          onChange={(passage) => {
+            patch({ passage });
+          }}
+        />
+      ) : null}
+
       <OptionsEditor
         options={draft.options}
         issues={issues}
+        language={draft.language}
         onChange={(next) => {
           patch({ options: next });
         }}
@@ -795,7 +853,7 @@ function EditorForm({
             <SelectField
               label={text.meta.branch}
               value={draft.branch}
-              options={topicTaxonomy.branches.map((item) => ({
+              options={branchChoices.map((item) => ({
                 value: item.key,
                 label: item.name,
               }))}
@@ -804,10 +862,15 @@ function EditorForm({
                   (item) => item.key === event.target.value,
                 );
                 const topic = branch?.topics[0];
+                // El idioma sale de la rama. En inglés aparece la fuente del texto. Al pasar a otra rama
+                // en español se quita, porque un texto en español no lleva fuente de lectura
+                const toEnglish = languageOfBranch(event.target.value) === 'en';
                 patch({
                   branch: event.target.value,
                   topic: topic?.key ?? '',
                   subtopic: topic?.subtopics[0]?.key ?? '',
+                  language: toEnglish ? 'en' : undefined,
+                  passage: toEnglish ? (draft.passage ?? EMPTY_PASSAGE) : undefined,
                 });
               }}
             />

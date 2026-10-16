@@ -102,9 +102,14 @@ export interface TaxonomyNames {
   branches: readonly {
     key: string;
     name: string;
+    /** clinical o english. Sin el campo es clinical */
+    section?: string | undefined;
     topics: readonly { key: string; name: string }[];
   }[];
 }
+
+/** El tema de los submazos del mazo de vocabulario médico en inglés (B13), que viven en Inglés médico */
+export const VOCABULARY_TOPIC = 'medical_vocabulary';
 
 const normalize = (text: string) =>
   text
@@ -118,7 +123,8 @@ const normalize = (text: string) =>
 /**
  * La rama y el tema que se proponen para un submazo. Primero las tablas de Paco por la raíz y el
  * submazo de la etiqueta, después el nombre del submazo contra los nombres de los temas, dentro de la
- * rama si ya se sabe. null en lo que no se encuentra. El admin siempre revisa la propuesta
+ * rama si ya se sabe. Los submazos de un mazo de Inglés médico son del tema de vocabulario. null en lo
+ * que no se encuentra. El admin siempre revisa la propuesta
  */
 export function proposeDeckTopic(
   segments: readonly string[],
@@ -146,5 +152,14 @@ export function proposeDeckTopic(
     });
     if (topic) return { branch: item.key, topic: topic.key };
   }
+  // Un mazo cuyo primer nivel es Inglés médico es el de vocabulario, y todos sus submazos son de ese tema.
+  // Es solo una propuesta que el admin revisa. De quién es el mazo no sale de aquí: la fuente de MedlinePlus
+  // se reconoce por la clave o por el autor del mazo (deckSource.ts), así el mazo de un tercero que cae en
+  // este mismo tema conserva su crédito
+  const english = taxonomy.branches.find(
+    (item) => item.key === branch && item.section === 'english',
+  );
+  if (english?.topics.some((entry) => entry.key === VOCABULARY_TOPIC))
+    return { branch, topic: VOCABULARY_TOPIC };
   return { branch, topic: null };
 }

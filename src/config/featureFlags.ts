@@ -83,6 +83,11 @@ export const FEATURE_FLAGS = {
       'Los alumnos estudian con el banco de la nube (B11, respuestas 56 y 68). La prende Ricardo en el servidor cuando haya 300 preguntas aprobadas. La base la lee también con bank_open_for_students, así una copia manipulada no abre el banco antes',
     defaults: { development: false, demo: false, production: false },
   },
+  medicalEnglish: {
+    description:
+      'Tarjeta de Inglés médico en Simular, la parte en inglés del examen completo y la tarjeta de Inglés médico en Progreso (B13, respuesta 61). Prendida en desarrollo y en la demo, para verla con los casos de prueba. Apagada en producción, porque sin casos publicados ni el mazo de vocabulario solo diría Sin textos. Ricardo la prende desde platform_settings, clave feature_flags, cuando haya casos y mazo. Apagada, el examen completo es solo en español',
+    defaults: { development: true, demo: true, production: false },
+  },
   deckCatalogCloud: {
     description:
       'El catálogo de mazos precargados sale de Supabase Storage, por submazo y para los planes de pago (B11, 4.21 y 4.25 del plan del cambio). En la demo y en desarrollo siguen los mazos empacados',

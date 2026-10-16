@@ -56,6 +56,23 @@ describe('cuerpos que bajan de la nube (5.2)', () => {
     });
   });
 
+  it('copia el idioma inglés de un caso de lectura y deja el español sin el campo (B13)', () => {
+    const spanish = bodyEntitiesOf(wireBody(wireRow()));
+    expect(spanish?.question).not.toHaveProperty('language');
+    const row = wireRow({ language: 'en', branch: 'medical_english' });
+    const english = bodyEntitiesOf(
+      wireBody(row, {
+        gpcRefs: [
+          { title: 'Fuente del texto. Texto propio del equipo Studiare.', status: 'to_verify' },
+        ],
+      }),
+    );
+    expect(english?.question).toMatchObject({ language: 'en', branch: 'medical_english' });
+    // Un idioma que esta versión de la app no conoce se queda como español en vez de descartar la pregunta
+    const odd = bodyEntitiesOf({ ...wireBody(wireRow()), language: 'fr' });
+    expect(odd?.question).not.toHaveProperty('language');
+  });
+
   it('las opciones quedan en el orden del médico aunque lleguen revueltas', () => {
     const body = wireBody(wireRow());
     const reversed = { ...body, options: [...body.options].reverse() };

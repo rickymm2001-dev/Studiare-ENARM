@@ -4,6 +4,8 @@ import type { Option } from '@/data/schemas/bank';
 import type { AppEvent } from '@/data/schemas/events';
 import { makeQuestionWithOptions, makeUser, newId, testApi } from '@/data/testing/fixtures';
 import { errorIds } from '@/data/usecases/errorCards';
+import { buildExam } from '@/engines/exam';
+import { makeEnglishCase } from '@/data/testing/english';
 import { closeExam, loadExamBundles, showQuestion, startExam } from './examSession';
 import {
   answerOf,
@@ -72,6 +74,147 @@ describe('inicio del examen', () => {
     const bundles = await loadExamBundles(api, [...questions.map((q) => q.id), 'no-existe']);
     expect(bundles.size).toBe(3);
     expect(bundles.get(questions[0]?.id ?? '')?.options).toHaveLength(4);
+  });
+});
+
+describe('inicio del examen con su parte en inglés (B13, 3.2)', () => {
+  /** Preguntas en español y casos de lectura de dos preguntas, todos guardados en Dexie */
+  async function mixedSetup(spanish: number, cases: number) {
+    const env = await setup(spanish);
+    const english: Awaited<ReturnType<typeof setup>>['questions'] = [];
+    for (let index = 0; index < cases; index += 1) {
+      const fixture = makeEnglishCase(2, {}, index + 1);
+      await env.repos.cases.add(fixture.clinicalCase);
+      for (const { question, options: rows } of fixture.bundles) {
+        await env.repos.questions.addVersion(question, rows);
+        english.push(question);
+      }
+    }
+    return { ...env, english };
+  }
+  const englishOptions = { include: true, secondsPerQuestion: 90, placement: 'mixed' as const };
+
+  it('arma las dos secciones con el ritmo de cada una y deja en la bitácora lo pedido, lo que entró y lo que faltó', async () => {
+    const env = await mixedSetup(20, 4);
+    const state = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: [...env.questions, ...env.english],
+      requested: 20,
+      options,
+      english: englishOptions,
+      nowMs: T0,
+    });
+    // 20 preguntas piden 2 de inglés, que es un caso de 2
+    expect(state?.questionIds).toHaveLength(20);
+    const englishIds = new Set(env.english.map((question) => question.id));
+    const picked = state?.questionIds.filter((id) => englishIds.has(id)) ?? [];
+    expect(picked).toHaveLength(2);
+    const position = state?.questionIds.indexOf(picked[0] ?? '') ?? -1;
+    expect(state?.questionIds.slice(position, position + 2)).toEqual(picked);
+    expect(state?.totalMs).toBe(18 * 77_000 + 2 * 90_000);
+    const [started] = await env.events();
+    expect(started?.payload).toMatchObject({
+      kind: 'exam',
+      config: {
+        requested: 20,
+        count: 20,
+        shortfall: 0,
+        englishRequested: 2,
+        englishPicked: 2,
+        englishShortfall: 0,
+      },
+    });
+  });
+
+  it('sin la parte en inglés es solo en español y la bitácora lo dice en ceros', async () => {
+    const env = await mixedSetup(20, 4);
+    const state = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: [...env.questions, ...env.english],
+      requested: 20,
+      options,
+      english: { ...englishOptions, include: false },
+      nowMs: T0,
+    });
+    const englishIds = new Set(env.english.map((question) => question.id));
+    expect(state?.questionIds.some((id) => englishIds.has(id))).toBe(false);
+    expect(state?.totalMs).toBe(20 * 77_000);
+    const [started] = await env.events();
+    expect(started?.payload).toMatchObject({
+      config: { englishRequested: 0, englishPicked: 0, englishShortfall: 0 },
+    });
+  });
+
+  it('con el plan armado con todo el banco conserva su orden y solo quita lo que el servidor no concedió', async () => {
+    const env = await mixedSetup(95, 12);
+    const all = [...env.questions, ...env.english];
+    const plan = buildExam({
+      questions: all.map(({ id, caseId, caseOrder, branch, language }) => ({
+        id,
+        caseId,
+        caseOrder,
+        branch,
+        section: language === 'en' ? ('english' as const) : ('clinical' as const),
+      })),
+      requested: 100,
+      seed: 'plan',
+      english: englishOptions,
+    });
+    const englishIds = new Set(env.english.map((question) => question.id));
+    const plannedEnglish = plan.questionIds.filter((id) => englishIds.has(id));
+    // 100 preguntas piden 11 de inglés y con casos de 2 salen 10, lo que más se acerca sin pasarse
+    expect(plannedEnglish).toHaveLength(10);
+    // El servidor no concedió uno de los casos
+    const deniedCase = plannedEnglish.slice(0, 2);
+    const granted = all.filter(
+      (question) => plan.questionIds.includes(question.id) && !deniedCase.includes(question.id),
+    );
+    const state = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: granted,
+      requested: 100,
+      options,
+      english: englishOptions,
+      plan,
+      nowMs: T0,
+    });
+    expect(state?.questionIds).toEqual(plan.questionIds.filter((id) => !deniedCase.includes(id)));
+    expect(state).toMatchObject({ requested: 100, shortfall: 2 });
+    expect(state?.totalMs).toBe(plan.sections.clinical.picked * 77_000 + 8 * 90_000);
+    const [started] = await env.events();
+    expect(started?.payload).toMatchObject({
+      config: {
+        requested: 100,
+        count: 98,
+        shortfall: 2,
+        englishRequested: 10,
+        englishPicked: 8,
+        englishShortfall: 2,
+      },
+    });
+  });
+
+  it('con inglés insuficiente la bitácora dice cuántos faltaron y el español no los rellena', async () => {
+    const env = await mixedSetup(40, 1);
+    const state = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: [...env.questions, ...env.english],
+      requested: 100,
+      options,
+      english: englishOptions,
+      nowMs: T0,
+    });
+    // Un caso de 2 de los 11 que pide el examen. El español pone sus 89
+    expect(state?.questionIds).toHaveLength(40 + 2);
+    expect(state).toMatchObject({ requested: 100, shortfall: 58 });
+    const [started] = await env.events();
+    expect(started?.payload).toMatchObject({
+      config: { englishRequested: 11, englishPicked: 2, englishShortfall: 9 },
+    });
   });
 });
 

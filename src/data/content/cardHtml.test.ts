@@ -26,6 +26,26 @@ describe('saneado del HTML de tarjetas (14.3)', () => {
     );
   });
 
+  it('conserva el idioma es o en de un término y quita cualquier otro lang', () => {
+    expect(sanitizer.sanitize('<span lang="en">Heart attack</span>', media)).toBe(
+      '<span lang="en">Heart attack</span>',
+    );
+    expect(sanitizer.sanitize('<span lang="en-US" class="x">Heart</span>', media)).toBe(
+      '<span lang="en-US">Heart</span>',
+    );
+    expect(sanitizer.sanitize('<b lang="es">Infarto</b>', media)).toBe('<b lang="es">Infarto</b>');
+    for (const lang of ['fr', 'javascript:alert(1)', 'en x', 'english', '']) {
+      expect(sanitizer.sanitize(`<span lang="${lang}">a</span>`, media), lang).toBe(
+        '<span>a</span>',
+      );
+    }
+    // lang no abre la puerta a otros atributos ni a etiquetas que no están en la lista
+    expect(sanitizer.sanitize('<span lang="en" onclick="x" id="y">a</span>', media)).toBe(
+      '<span lang="en">a</span>',
+    );
+    expect(sanitizer.sanitize('<font lang="en">a</font>', media)).toBe('a');
+  });
+
   it('quita scripts, eventos y enlaces', () => {
     const html = sanitizer.sanitize(
       '<img src="x" onerror="alert(1)"><script>alert(2)</script><a href="javascript:alert(3)">liga</a><iframe src="https://x"></iframe>',

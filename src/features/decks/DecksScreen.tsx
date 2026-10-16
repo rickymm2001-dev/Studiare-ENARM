@@ -21,6 +21,7 @@ import { useLiveData } from '@/data/hooks';
 import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { topicTaxonomy } from '@/demo/content';
 import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
+import { deckCatalogText } from '@/i18n/cloudDecks';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { BranchBadge } from '@/ui/components/branch-tag';
@@ -44,6 +45,7 @@ import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch } from './deckBranch';
+import { deckSourceOf } from './deckSource';
 import { catalogTopicOutline, deckTopicOutlines } from './topicPaths';
 import { useDeckCatalog } from './useDeckCatalog';
 
@@ -79,6 +81,19 @@ function Decks({ session }: { session: ReadySession }) {
   // Todos los temas de cada mazo precargado, del archivo del mazo aunque no lo sigas (comentario 8)
   const catalogTopics = useMemo(
     () => new Map((catalog ?? []).map((file) => [file.key, catalogTopicOutline(file.notes)])),
+    [catalog],
+  );
+
+  // La fuente de los mazos que salen de una fuente pública, como el vocabulario de MedlinePlus (B13, 4.4).
+  // Dice su fuente y su licencia en lugar del crédito de un autor
+  const sources = useMemo(
+    () =>
+      new Map(
+        (catalog ?? []).map((file) => [
+          file.key,
+          deckSourceOf({ key: file.key, author: file.author }),
+        ]),
+      ),
     [catalog],
   );
 
@@ -170,6 +185,7 @@ function Decks({ session }: { session: ReadySession }) {
                     (deckId) => stored.cardsByDeck.get(deckId) ?? [],
                   );
                   const studied = cardIds.filter((cardId) => states.has(cardId)).length;
+                  const source = sources.get(file.key) ?? null;
                   // En el teléfono el ícono va junto al nombre y lo demás a todo lo ancho. En
                   // computadora lo demás queda bajo el nombre y las acciones a la derecha
                   return (
@@ -186,7 +202,9 @@ function Decks({ session }: { session: ReadySession }) {
                       <div className="flex min-w-0 flex-col">
                         <span className="font-semibold">{file.name}</span>
                         <span className="text-xs text-fg-muted sm:text-sm">
-                          {t.decks.author(file.author)}
+                          {source
+                            ? deckCatalogText.source.line(source.name, source.license)
+                            : t.decks.author(file.author)}
                         </span>
                       </div>
                       <div className="col-span-2 flex min-w-0 flex-col gap-2 sm:col-span-1 sm:col-start-2">
@@ -209,7 +227,15 @@ function Decks({ session }: { session: ReadySession }) {
                             </span>
                           </div>
                         ) : null}
-                        <DeckTopics deckName={file.name} outline={catalogTopics.get(file.key)} />
+                        <DeckTopics
+                          deckName={file.name}
+                          outline={catalogTopics.get(file.key)}
+                          source={
+                            source
+                              ? deckCatalogText.source.topicsFooter(source.name, source.license)
+                              : undefined
+                          }
+                        />
                       </div>
                       <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:justify-end">
                         {session.isDemo ? (

@@ -3,8 +3,11 @@
 // la nube. La usa la aprobación local de la demo para pedir lo mismo que la base, y el convertidor del
 // Sheet da los mismos códigos de pendiente. Nunca marca un reactivo por imperfecto (D-080). Solo pide
 // lo que un revisor necesita para aprobar, que es explicación, referencias, la justificación de cada
-// opción y el sesgo de cada distractor, y la tarea cuando el convertidor no la detectó. Funciones puras.
+// opción y el sesgo de cada distractor, y la tarea cuando el convertidor no la detectó. Una pregunta en
+// inglés pide además su fuente del texto con una licencia aceptada (B13, 1.6 del plan de B13), y el idioma
+// tiene que ir con la rama. Funciones puras.
 import { OPTION_LETTERS } from './bankColumns.ts';
+import { parsePassageSource } from './passageSource.ts';
 
 /** Una versión, con lo mínimo para revisar sus pendientes. Tolera borradores incompletos */
 export interface RuleVersion {
@@ -28,6 +31,16 @@ export interface RuleVersion {
   }[];
   /** Posiciones de las opciones del set canónico */
   canonicalPositions: readonly number[];
+  /**
+   * Idioma de la pregunta (B13). Con él se pide la fuente del texto de las preguntas en inglés. Sin la
+   * propiedad no se revisan las reglas del inglés, como en la demo, donde todo es español
+   */
+  language?: 'es' | 'en';
+  /**
+   * Si la rama es de la sección english, o sea Inglés médico. Junto con language dice si el idioma va con
+   * la rama (language_branch_mismatch). Sin alguno de los dos no se revisa
+   */
+  englishBranch?: boolean;
 }
 
 /** Códigos que impiden aprobar y que no se arreglan en el Sheet con una celda vacía */
@@ -36,6 +49,7 @@ export const STRUCTURE_ISSUES = [
   'options_count',
   'correct_count',
   'canonical_invalid',
+  'language_branch_mismatch',
 ] as const;
 
 export const MIN_VERSION_OPTIONS = 4;
@@ -63,9 +77,21 @@ export function versionIssues(version: RuleVersion, taggable: ReadonlySet<string
     !canonical.some((option) => !option.isCorrect)
   )
     issues.push('canonical_invalid');
+  // Inglés fuera de Inglés médico, o español dentro de esa rama. No se arregla con una celda vacía
+  if (
+    version.language !== undefined &&
+    version.englishBranch !== undefined &&
+    (version.language === 'en') !== version.englishBranch
+  )
+    issues.push('language_branch_mismatch');
   if (version.task !== undefined && blank(version.task)) issues.push('task_undetected');
   if (blank(version.explanation)) issues.push('explanation_missing');
   if (version.refs.every((ref) => blank(ref))) issues.push('references_missing');
+  // Una pregunta en inglés lleva su fuente del texto con una licencia aceptada, que cuenta como referencia
+  if (version.language === 'en') {
+    const source = parsePassageSource(version.refs.map((title) => ({ title })));
+    if (!source.ok) issues.push(source.issue);
+  }
   for (const option of options) {
     const letter = (
       option.letter ??

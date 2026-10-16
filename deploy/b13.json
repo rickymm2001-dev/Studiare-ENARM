@@ -1,0 +1,16 @@
+{
+  "description": "B13, Inglés médico. La migración 20261027000001 (el tema de vocabulario, la fuente del texto de los casos en inglés y dos reglas más en bank_version_issues y bank_incomplete_of de B11, sin archivo manual porque es idempotente y no lleva delete ni drop) y bank-sync otra vez, con la copia nueva del convertidor del Sheet que lee Idioma, Fuente del texto, Licencia del texto y Enlace del texto. Va después de b11. El plan b11 lleva la misma migración al final, así que si ya la aplicó este paso se salta (docs/DESPLIEGUE.md, B11 y B13).",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261027000001_english_section.sql",
+      "note": "Redefine dos funciones de la migración bank_core de B11 con la misma firma. Nada cambia para una versión en español"
+    }
+  ],
+  "functions": [
+    {
+      "slug": "bank-sync",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar con la copia generada nueva del convertidor (supabase/functions/_shared/bank/generated). Cron la llama con la ficha de Vault y el admin con su sesión. La función verifica las dos por su cuenta"
+    }
+  ]
+}

@@ -41,8 +41,26 @@ export interface PracticeState {
   duelId: string | null;
   /** Trampas a las que el alumno dirigió las opciones. Vacío es el muestreo variado */
   targetTags: string[];
+  /** La práctica de Inglés médico es aparte de la de español (B13, 2.4). clinical por omisión */
+  section: PracticeSection;
+  /**
+   * Segundos sugeridos por reactivo de inglés, como estaban al empezar. 0 si la práctica no es de inglés,
+   * y entonces la pregunta en inglés que salga, como una fallada de un examen, usa el umbral de hoy
+   */
+  secondsPerItem: number;
+  /** Cuándo se mostró la primera pregunta del texto en que va, para su tiempo sugerido. 0 si no hay */
+  caseStartedAt: number;
   set: (patch: Partial<Omit<PracticeState, 'set'>>) => void;
 }
+
+export type PracticeSection = 'clinical' | 'english';
+
+/** Los campos de B13 al empezar una práctica que no es de inglés. Así no queda nada de la anterior */
+export const SPANISH_PRACTICE_DEFAULTS = {
+  section: 'clinical',
+  secondsPerItem: 0,
+  caseStartedAt: 0,
+} as const satisfies Pick<PracticeState, 'section' | 'secondsPerItem' | 'caseStartedAt'>;
 
 const answerSchema = z.object({
   questionVersionId: z.string(),
@@ -68,6 +86,10 @@ const savedPracticeSchema = z.object({
   kind: z.enum(['practice', 'challenge']),
   duelId: z.string().nullable(),
   targetTags: z.array(z.string()),
+  // Los campos de B13 pueden faltar en lo que se guardó antes. Entonces es una práctica en español
+  section: z.enum(['clinical', 'english']).default('clinical'),
+  secondsPerItem: z.number().default(0),
+  caseStartedAt: z.number().default(0),
 });
 
 export const PRACTICE_STORAGE_KEY = 'enarm.practice.v1';
@@ -113,6 +135,7 @@ export const usePractice = create<PracticeState>()(
       kind: 'practice',
       duelId: null,
       targetTags: [],
+      ...SPANISH_PRACTICE_DEFAULTS,
       set: (patch) => {
         set(patch);
       },

@@ -4,7 +4,7 @@ import { isAiNote, type Deck, type Note } from '../schemas/decks';
 import { makeQuestionWithOptions, makeUser, newId, testApi } from '../testing/fixtures';
 import { AI_TAG } from './aiCards';
 import { errorIds, TOPIC_TAG_PREFIX } from './errorCards';
-import { createManualDeck, deleteManualNote, type NoteDraft } from './manualDecks';
+import { createManualDeck, deleteManualNote, draftOf, type NoteDraft } from './manualDecks';
 import { moveDeck, renameDeck } from './organize';
 import {
   createQuestionCard,
@@ -91,6 +91,71 @@ async function eventsOf(api: ReturnType<typeof testApi>, userId: string) {
     (event) => event.type === 'question_card_created',
   );
 }
+
+describe('tarjeta de una pregunta de inglés médico (B13, hallazgo 11 de la revisión)', () => {
+  const ENGLISH_DRAFT: NoteDraft = {
+    kind: 'basic',
+    front: '[Prueba] Simulated passage, short.\n\n[Prueba] Which statement is correct?',
+    back: 'Respuesta correcta. [Prueba] English option 1\n\nExplicación en español.\n\nReferencias. Fuente del texto. [Prueba] Texto simulado. Texto propio del equipo Studiare.',
+  };
+  const PARTS = [
+    '[Prueba] Simulated passage, short.',
+    '[Prueba] Which statement is correct?',
+    '[Prueba] English option 1',
+    '[Prueba] Texto simulado',
+  ];
+
+  it('guarda el inglés del banco con lang en y el español sin marca', async () => {
+    const { api, user } = setup();
+    const { question } = makeQuestionWithOptions();
+    const deck = await createManualDeck(api, user, { name: 'Inglés' }, NOW);
+    await createQuestionCard(
+      api,
+      user,
+      input(question, { kind: 'deck', deckId: deck.id }, { draft: ENGLISH_DRAFT, english: PARTS }),
+      NOW,
+    );
+    const noteId = questionCardIds.note(user.id, question.questionId, question.version, deck.id);
+    const note = await api.repos.notes.get(noteId);
+    expect(note?.kind === 'basic' ? note.front : '').toBe(
+      '<p><span lang="en">[Prueba] Simulated passage, short.</span></p><p><span lang="en">[Prueba] Which statement is correct?</span></p>',
+    );
+    expect(note?.kind === 'basic' ? note.back : '').toBe(
+      '<p>Respuesta correcta. <span lang="en">[Prueba] English option 1</span></p><p>Explicación en español.</p><p>Referencias. Fuente del texto. <span lang="en">[Prueba] Texto simulado</span>. Texto propio del equipo Studiare.</p>',
+    );
+  });
+
+  it('al editar la tarjeta guardada el editor ve el texto sin etiquetas', async () => {
+    const { api, user } = setup();
+    const { question } = makeQuestionWithOptions();
+    const deck = await createManualDeck(api, user, { name: 'Inglés' }, NOW);
+    await createQuestionCard(
+      api,
+      user,
+      input(question, { kind: 'deck', deckId: deck.id }, { draft: ENGLISH_DRAFT, english: PARTS }),
+      NOW,
+    );
+    const noteId = questionCardIds.note(user.id, question.questionId, question.version, deck.id);
+    const note = await api.repos.notes.get(noteId);
+    if (!note) throw new Error('No quedó la nota');
+    expect(draftOf(note)).toEqual(ENGLISH_DRAFT);
+  });
+
+  it('sin fragmentos en inglés la tarjeta queda como siempre, sin lang', async () => {
+    const { api, user } = setup();
+    const { question } = makeQuestionWithOptions();
+    const deck = await createManualDeck(api, user, { name: 'Inglés' }, NOW);
+    await createQuestionCard(
+      api,
+      user,
+      input(question, { kind: 'deck', deckId: deck.id }, { draft: ENGLISH_DRAFT }),
+      NOW,
+    );
+    const noteId = questionCardIds.note(user.id, question.questionId, question.version, deck.id);
+    const note = await api.repos.notes.get(noteId);
+    expect(note?.kind === 'basic' ? `${note.front}${note.back}` : '').not.toContain('lang=');
+  });
+});
 
 describe('tarjeta desde una pregunta del banco (B5, comentario 1)', () => {
   it('en un mazo propio crea la tarjeta con el texto del banco y deja el evento con la pregunta y su versión', async () => {
