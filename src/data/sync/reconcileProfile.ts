@@ -41,14 +41,6 @@ export interface ReconcileDeps {
   now: () => Date;
 }
 
-/** Lo que bajó en esta sincronización y puede cambiar el perfil */
-export interface ReconcileTriggers {
-  /** Bajó algún evento de ajustes, de permisos o de puntaje oficial */
-  profileEvents: boolean;
-  /** Bajó algún mazo, nota o tarjeta */
-  records: boolean;
-}
-
 /** Si un evento que acaba de bajar puede cambiar el perfil */
 export const touchesProfile = (event: Pick<AppEvent, 'type'>) => isProfileEventType(event.type);
 
@@ -59,21 +51,22 @@ export interface ReconcileCounts {
   baseline: number;
 }
 
-/** Los ajustes, permisos y puntaje de este dispositivo según la bitácora, con la línea base de la primera vez */
+/**
+ * Los ajustes, permisos y puntaje de este dispositivo según la bitácora, con la línea base de la primera
+ * vez. Devuelve null si no hay perfil local, y entonces no hay nada que reconciliar
+ */
 async function reconcileSettings(
   deps: ReconcileDeps,
-  state: SyncState,
   first: boolean,
-): Promise<{ state: SyncState; counts: ReconcileCounts }> {
+): Promise<ReconcileCounts | null> {
   const { repos } = deps.api;
   const counts: ReconcileCounts = { settings: 0, consents: 0, scoreRemoved: false, baseline: 0 };
   const user = await repos.users.get(deps.userId);
-  if (!user) return { state, counts };
+  if (!user) return null;
 
   const events = await repos.events.query({ userId: deps.userId, types: PROFILE_EVENT_TYPES });
   const replay = replayProfile(events);
 
-  let next = state;
   if (first) {
     for (const { key, value } of planBaseline(replay, user)) {
       await deps.api.recordEvent(
@@ -85,8 +78,6 @@ async function reconcileSettings(
       );
       counts.baseline += 1;
     }
-    next = { ...state, baselineAt: deps.now().toISOString() };
-    await repos.syncState.put(next);
   }
 
   const consents = (await repos.consents.list()).filter(
@@ -154,25 +145,34 @@ async function reconcileSettings(
       counts.scoreRemoved = true;
     }
   }
-  return { state: next, counts };
+  return counts;
 }
 
 /**
  * Reconcilia el perfil con la bitácora y une Mis errores. Corre la primera vez en un dispositivo, cuando
- * bajó algún evento de ajustes, de permisos o de puntaje, y cuando bajaron mazos, notas o tarjetas.
- * Devuelve el avance con baselineAt si era la primera vez
+ * bajó algún evento de ajustes, de permisos o de puntaje, y cuando bajaron mazos, notas o tarjetas. Eso
+ * último no se decide con lo que bajó en esta corrida sino con las marcas profilePending y recordsPending
+ * del avance, que la bajada deja escritas antes de guardar. Así un corte a la mitad no deja ajustes ni
+ * permisos sin aplicar para siempre (revisión de B14, hallazgo 1).
+ *
+ * Las marcas y baselineAt se escriben hasta el final, cuando todo se aplicó. Si algo se corta antes, la
+ * siguiente corrida lo repite, y repetirlo es seguro porque la reconciliación es idempotente.
+ * Devuelve el avance con baselineAt si era la primera vez y sin las marcas
  */
-export async function reconcileProfile(
-  deps: ReconcileDeps,
-  state: SyncState,
-  touched: ReconcileTriggers,
-): Promise<SyncState> {
+export async function reconcileProfile(deps: ReconcileDeps, state: SyncState): Promise<SyncState> {
   const first = state.baselineAt === undefined;
-  let current = state;
-  if (first || touched.profileEvents) {
-    current = (await reconcileSettings(deps, state, first)).state;
+  let markBaseline = first;
+  if (first || state.profilePending === true) {
+    const counts = await reconcileSettings(deps, first);
+    // Sin perfil local no hay línea base que dejar. Se intenta de nuevo cuando exista
+    if (counts === null) markBaseline = false;
   }
   // Bajaron mazos, notas o tarjetas, o es la primera vez. Se une Mis errores en uno solo (2.6)
-  if (first || touched.records) await reconcileErrorDecks(deps);
-  return current;
+  if (first || state.recordsPending === true) await reconcileErrorDecks(deps);
+
+  const { profilePending, recordsPending, ...rest } = state;
+  if (profilePending === undefined && recordsPending === undefined && !markBaseline) return state;
+  const next: SyncState = markBaseline ? { ...rest, baselineAt: deps.now().toISOString() } : rest;
+  await deps.api.repos.syncState.put(next);
+  return next;
 }

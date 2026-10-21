@@ -260,6 +260,30 @@ describe('un solo Mis errores entre dos dispositivos (H05)', () => {
     );
   });
 
+  it('un corte después de bajar los mazos y antes de bajar la bitácora igual los une en la siguiente corrida (revisión de B14, hallazgo 1)', async () => {
+    const server = createMemoryServer();
+    const a = await device(server);
+    const b = await device(server);
+    // B ya sincronizó antes, así que la primera vez no lo salva
+    await b.sync();
+    await a.fail([input(0), input(1)], 1000);
+    a.clock.seconds = 1200;
+    await a.sync();
+    await b.fail([input(1), input(2)], 1250);
+
+    b.clock.seconds = 1300;
+    server.failNext = { call: 'pullEvents', failure: 'network' };
+    expect(await b.sync()).toMatchObject({ status: 'failed', failure: 'network' });
+    // Los mazos de A ya bajaron, pero la unión no corrió
+    expect(await liveDecks(b)).toHaveLength(2);
+
+    b.clock.seconds = 1400;
+    expect((await b.sync()).status).toBe('ok');
+    expect(await liveDecks(b)).toHaveLength(1);
+    expect(await questionsOf(b)).toEqual([0, 1, 2].map((q) => QUESTIONS[q] as string).sort());
+    expect((await b.repos.syncState.get(b.userId))?.recordsPending).toBeUndefined();
+  });
+
   it('sincronizar otra vez no mueve nada', async () => {
     const server = createMemoryServer();
     const a = await device(server);

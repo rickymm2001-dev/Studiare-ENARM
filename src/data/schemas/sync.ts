@@ -25,6 +25,14 @@ export const SyncStateSchema = z.strictObject({
    * que nacieron sin evento (B14, 2.3). Falta mientras no ha pasado, y en el avance de antes de B14
    */
   baselineAt: UtcDateTimeSchema.optional(),
+  /**
+   * Bajó y se guardó algún evento de ajustes, de permisos o de puntaje oficial que reconcileProfile todavía
+   * no aplicó (B14, revisión H1). Se anota antes de guardar el evento y se quita cuando la reconciliación
+   * termina, así un corte a la mitad de la bajada no deja el perfil sin aplicar para siempre
+   */
+  profilePending: z.boolean().optional(),
+  /** Lo mismo para los mazos, notas y tarjetas que bajaron y la unión de Mis errores todavía no revisó */
+  recordsPending: z.boolean().optional(),
 });
 export type SyncState = z.infer<typeof SyncStateSchema>;
 

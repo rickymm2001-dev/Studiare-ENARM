@@ -14,6 +14,7 @@ import { submitOfficialScore, changeConsent } from '../usecases/privacy';
 import { reconcileProfile } from './reconcileProfile';
 import { runSync } from './runSync';
 import { createMemoryServer, memoryTransport, type MemoryServer } from './testing/memoryTransport';
+import { SyncTransportError, type SyncTransport } from './transport';
 
 const AUTH = 'cuenta-de-prueba';
 const BASE = Date.parse('2026-10-15T12:00:00.000Z');
@@ -219,8 +220,11 @@ describe('ajustes entre dos dispositivos', () => {
     });
     await reconcileProfile(
       { api: wrapped, userId: b.user.id, authId: AUTH, now: () => at(1600) },
-      { ...emptySyncState(b.user.id, AUTH), baselineAt: at(1000).toISOString() },
-      { profileEvents: true, records: false },
+      {
+        ...emptySyncState(b.user.id, AUTH),
+        baselineAt: at(1000).toISOString(),
+        profilePending: true,
+      },
     );
     expect(reads).toBe(1);
     // El 45 de B es más nuevo que el 60 de A y no lo pisa lo que ya se había planeado
@@ -242,14 +246,14 @@ describe('ajustes entre dos dispositivos', () => {
     });
     expect((await b.settings()).settings.optionsShown).toBe(7);
     // Sin el perfil local no hay nada que reconciliar
-    const state = emptySyncState('01J0000000000000000000NONE', AUTH);
+    const state = { ...emptySyncState(newId(), AUTH), profilePending: true };
+    const { profilePending: _pending, ...cleared } = state;
     await expect(
       reconcileProfile(
         { api: b.api, userId: state.userId, authId: AUTH, now: () => at(1600) },
         state,
-        { profileEvents: true, records: false },
       ),
-    ).resolves.toEqual(state);
+    ).resolves.toEqual(cleared);
   });
 });
 
@@ -460,5 +464,132 @@ describe('línea base de los ajustes que nacieron sin evento', () => {
     const state = await a.api.repos.syncState.get(a.user.id);
     expect(state?.authId).toBe('otra-cuenta');
     expect(state?.baselineAt).toBeDefined();
+  });
+});
+
+describe('un corte a la mitad de la bajada (revisión de B14, hallazgo 1)', () => {
+  /** Baja la bitácora de a un evento y falla en la llamada a pullEvents que se le diga */
+  function slicedTransport(
+    server: MemoryServer,
+    now: () => Date,
+    failOnCall: number,
+  ): SyncTransport {
+    const inner = memoryTransport(server, now);
+    let calls = 0;
+    return {
+      ...inner,
+      pullEvents: (after) => {
+        calls += 1;
+        if (calls === failOnCall) throw new SyncTransportError('network', 'Corte simulado');
+        return inner.pullEvents(after, 1);
+      },
+    };
+  }
+
+  it('un ajuste que ya se guardó antes del corte se aplica en la siguiente corrida', async () => {
+    const server = createMemoryServer();
+    const a = await device(server);
+    const b = await device(server);
+    // B ya sincronizó antes, así que la línea base no lo salva
+    await b.sync();
+    a.clock.seconds = 1100;
+    await a.change('settings.dailyGoal', { metric: 'questions', value: 30 });
+    await a.sync();
+
+    b.clock.seconds = 1200;
+    const now = () => at(b.clock.seconds);
+    const cut = await runSync({
+      api: b.api,
+      transport: slicedTransport(server, now, 2),
+      userId: b.user.id,
+      authId: AUTH,
+      now,
+    });
+    expect(cut).toMatchObject({ status: 'failed', failure: 'network' });
+    // El evento ya quedó en la bitácora de B y su cursor avanzó, pero el perfil no se tocó
+    expect(await eventsOf(b, 'settings_changed')).toHaveLength(1);
+    expect((await b.settings()).settings.dailyGoal).not.toEqual({
+      metric: 'questions',
+      value: 30,
+    });
+
+    b.clock.seconds = 1300;
+    expect((await b.sync()).status).toBe('ok');
+    expect((await b.settings()).settings.dailyGoal).toEqual({ metric: 'questions', value: 30 });
+    // Ya aplicado, la marca de pendiente se quita
+    expect((await b.api.repos.syncState.get(b.user.id))?.profilePending).toBeUndefined();
+  });
+
+  it('un permiso retirado en el otro dispositivo se retira aquí aunque la bajada se haya cortado', async () => {
+    const server = createMemoryServer();
+    const a = await device(server);
+    const b = await device(server);
+    await changeConsent(a.api, a.user, 'anonymized_improvement', true);
+    await a.sync();
+    await b.sync();
+    expect((await currentConsents(b.api, b.user.id)).anonymized_improvement).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    await changeConsent(a.api, a.user, 'anonymized_improvement', false);
+    a.clock.seconds = 1100;
+    await a.sync();
+
+    b.clock.seconds = 1200;
+    const now = () => at(b.clock.seconds);
+    const cut = await runSync({
+      api: b.api,
+      transport: slicedTransport(server, now, 2),
+      userId: b.user.id,
+      authId: AUTH,
+      now,
+    });
+    expect(cut.status).toBe('failed');
+    expect((await currentConsents(b.api, b.user.id)).anonymized_improvement).toBe(true);
+
+    b.clock.seconds = 1300;
+    expect((await b.sync()).status).toBe('ok');
+    expect((await currentConsents(b.api, b.user.id)).anonymized_improvement).toBe(false);
+  });
+
+  it('un corte entre guardar la línea base y aplicar lo de los demás no deja al dispositivo nuevo sin recibirlo', async () => {
+    const server = createMemoryServer();
+    const a = await device(server);
+    a.clock.seconds = 1100;
+    await a.change('settings.dailyGoal', { metric: 'questions', value: 30 });
+    await a.sync();
+
+    // B es nuevo. La pestaña se cierra al escribir su perfil
+    const b = await device(server);
+    b.clock.seconds = 1200;
+    const now = () => at(b.clock.seconds);
+    let failed = false;
+    const closing = {
+      ...b.api,
+      repos: {
+        ...b.api.repos,
+        users: {
+          ...b.api.repos.users,
+          put: async (user: User) => {
+            if (!failed) {
+              failed = true;
+              throw new Error('La pestaña se cerró');
+            }
+            return b.api.repos.users.put(user);
+          },
+        },
+      },
+    };
+    const cut = await runSync({
+      api: closing,
+      transport: memoryTransport(server, now),
+      userId: b.user.id,
+      authId: AUTH,
+      now,
+    });
+    expect(cut.status).toBe('failed');
+    expect(failed).toBe(true);
+
+    b.clock.seconds = 1300;
+    expect((await b.sync()).status).toBe('ok');
+    expect((await b.settings()).settings.dailyGoal).toEqual({ metric: 'questions', value: 30 });
   });
 });
