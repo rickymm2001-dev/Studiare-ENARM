@@ -57,6 +57,7 @@ export const CODE_WORDS: ReadonlySet<string> = new Set([
   'compute_error',
   'publish_error',
   'unexpected',
+  'unknown',
   'bad_log_code',
   'network',
   // lecturas y publicaciones

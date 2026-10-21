@@ -195,6 +195,22 @@ describe('errores sin mensaje', () => {
     expect(describeError(network)).toEqual({ errorClass: 'StoreError', errorCode: 'network' });
   });
 
+  it('el código unknown de una excepción inesperada sale en la línea y no se descarta (revisión de B14, hallazgo 9)', () => {
+    const { lines, logger } = capture();
+    logger.log('error', {
+      ...describeError(new Error('mensaje con Ana López')),
+      reason: 'unexpected',
+    });
+    const line = JSON.parse(lines[0] as string) as Record<string, unknown>;
+    expect(line).toEqual({
+      code: 'error',
+      errorClass: 'Error',
+      errorCode: 'unknown',
+      reason: 'unexpected',
+    });
+    expect(lines[0]).not.toMatch(/Ana|mensaje/);
+  });
+
   it('una clase que no está en la lista sale como Error y nunca con su mensaje', () => {
     class Nombrada extends Error {}
     const error = new Nombrada('mensaje con Ana López y eyJhbGciOiJIUzI1NiJ9');
