@@ -60,6 +60,8 @@ const ADMIN_GROUP = [
   t.navItems.costs,
   // Auditoría de la IA (B12)
   t.navItems.audit,
+  // Calibración nocturna del modelo del alumno (B14)
+  t.screens.calibrationAdmin.title,
   t.navItems.platform,
   t.navItems.bank,
   // Banco en la nube (B11). Banco y Sheet, Revisiones y Catálogo de mazos

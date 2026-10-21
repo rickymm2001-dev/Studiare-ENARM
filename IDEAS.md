@@ -66,3 +66,22 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Que el doble del editor y la aprobación local reproduzcan language_branch_mismatch.** Hoy no pasan englishBranch y esa regla solo se prueba en el servidor. Surgió en la integración de B13
 - **Capturas de teléfono con el ActionDock estático y resultados del examen con respuestas sembradas.** Mejoran las capturas de cierre de los bloques. Surgió en la integración de B13
 - **Ignorar en git los .xlsx y .apkg que genera el script de textos con licencia.** Salen en content-drafts/ingles, que sí está en git. Surgió en el paquete A de B13
+
+- **Rótulo de dónde sale la dificultad.** Estimada por el médico, Provisional con N alumnos o Calibrada con N alumnos, en la tarjeta Dificultad de Progreso y en Simular. PoolQuestion.effectiveDifficulty y el modelo ya traen la fuente y los alumnos. Surgió en el paquete B de B14
+- **Una sola copia de la dificultad.** Hoy hay dos pares de funciones (las del modelo y las del banco) que una prueba mantiene iguales. Sería mejor que el modelo llamara a las del banco. Surgió en la integración de B14
+- **Una sola cohorte simulada en la demostración.** Hoy son 300 alumnos en la siembra de dificultades y 60 en la comparación. Surgió en la integración de B14
+- **Contar la habilidad igual en el modelo y en Simular.** El modelo la cuenta por pregunta estable y Simular por versión. Surgió en la integración de B14
+- **Preparación incremental de la bitácora en la base.** Para pasar de unos 2,000 alumnos con permiso. Pediría un delete en Borrar mis datos. Surgió en el paquete A de B14
+- **Autotest de la calibración solo en cambios que la tocan.** Si faltan minutos de GitHub al pasar a privado. Surgió en el paquete A de B14
+- **omitApiKeyAsBearer en las llamadas REST.** Cuando supabase-js lo exponga. Surgió en el paquete A de B14
+- **Puntaje oficial entre dispositivos.** Con una tabla privada con RLS y borrado al retirar el permiso. D-101 hoy lo deja en el dispositivo. Surgió en el paquete B de B14
+- **Textos de la IA entre dispositivos.** aiArtifacts no viaja (10.19). Surgió en el paquete B de B14
+- **Adaptativo por rama y exploración dirigida.** Preguntas que más información dan para calibrar más rápido. Surgió en el paquete B de B14
+- **Que la demostración enseñe provisional y estimada.** Con la cohorte de 300 todo sale calibrado. Haría que cada alumno conteste solo una parte del banco. Surgió en el paquete B de B14
+- **Pruebas con reloj.** Revisar de una vez las pruebas y los dobles que escriben fechas en un futuro cercano (examDate 2027-09-14 en src/data/testing/fixtures.ts vence en septiembre de 2027) y correr la suite con el reloj movido. Surgió en la integración de B14
+- **tests/content/preloaded-tree-migration.test.ts.** Tarda 104 segundos sola y con la máquina cargada pasa de su límite de 300. Conviene aligerarla o darle un proyecto aparte. Surgió en la integración de B14
+- **Capturas de página completa de pantallas largas en computadora.** Dejan el riel lateral cortado a la altura de la primera pantalla. Se podría capturar solo el contenido. Surgió en la integración de B14
+- **Piloto con una universidad y puntaje oficial en la validación del modelo.** Surgió en el plan de B14
+- **Reestructuradas automáticas de noche.** Las transformaciones de B12 no arreglan un distractor débil. Surgió en el plan de B14
+- **Validar al escribir los ajustes del modelo.** Hoy zod y SQL difieren en tipo y rango de unos 15 campos de model_settings si alguien escribe a mano por la API. Lo correcto es una función que valide al escribir. Surgió en la revisión de B14
+- **Fijar las acciones de GitHub por hash.** Todos los workflows usan etiqueta (checkout, setup-node). Resolver el hash pide llamar a GitHub desde una sesión con red. Surgió en la revisión de B14

@@ -7,8 +7,9 @@ import { Hourglass, Lightbulb, ListX } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
+import { useLiveData } from '@/data/hooks';
 import type { Option } from '@/data/schemas/bank';
-import { errorIds } from '@/data/usecases/errorCards';
+import { countErrorCards } from '@/data/usecases/errorCards';
 import { setConsent } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -30,11 +31,16 @@ import { enableNegationHighlight, shortenPomodoro } from './tutorActions';
 import { confusedPairs, pickTop, type Hypothesis, type TutorAction } from './tutorModel';
 import { useTutorData, useTutorView, type TutorData } from './useTutorData';
 import { cardLabel } from './cardLabel';
-import { BiasTipsCard, DraftCardsCard, FormingPatterns, WeeklyReportCard } from './TutorSections';
+import {
+  BiasTipsCard,
+  DraftCardsCard,
+  FatigueCard,
+  FormingPatterns,
+  WeeklyReportCard,
+} from './TutorSections';
 import { AiAnalysisCard } from './AiAnalysisCard';
 import type { ItemTexts } from './aiInputs';
 import { useTutorAi } from './useTutorAi';
-import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 
 /** Hipótesis abiertas de entrada. Con mucha actividad salen decenas y no se pueden leer todas */
 const TOP_HYPOTHESES = 3;
@@ -45,7 +51,7 @@ export function TutorScreen() {
 
 function Tutor({ session }: { session: ReadySession }) {
   const events = useUserEvents(session.user.id);
-  const data = useTutorData(session.user.id, events);
+  const data = useTutorData(session, events);
   const header = (
     <ScreenHeader title={t.screens.tutor.title} description={t.screens.tutor.description} />
   );
@@ -114,7 +120,8 @@ function TutorBody({
   const dismissed = view.confirmed.filter((hypothesis) => statusFor(hypothesis) === 'rejected');
   // Una que descartó no se le vuelve a mostrar, ni siquiera como patrón que se está formando
   const formingShown = view.forming.filter((hypothesis) => statusFor(hypothesis) !== 'rejected');
-  const errorCards = content.notes.filter((note) => note.deckId === errorIds.deck(user.id)).length;
+  // Mis errores es uno solo por cuenta y sus ids dependen de la clave del dueño (B14, 2.6)
+  const errorCards = useLiveData(() => countErrorCards(api, user.id), [api.repos, user.id]) ?? 0;
   const questionById = new Map(bank.questions.map((question) => [question.id, question]));
 
   const lookup: EvidenceLookup = {
@@ -154,7 +161,6 @@ function TutorBody({
     answersThisWeek: view.answersThisWeek,
   });
   const [turningOn, setTurningOn] = useState(false);
-  const vocabulary = useBiasVocabulary();
 
   const run = async (
     hypothesis: Hypothesis,
@@ -367,11 +373,12 @@ function TutorBody({
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <WeeklyReportCard report={view.report} ai={tutorAi.report} />
         <div className="flex flex-col gap-3">
+          <FatigueCard fatigue={view.fatigue} />
           <BiasTipsCard
             tips={view.biasTips}
             calibration={view.biasCalibration}
             ai={tutorAi.tips}
-            vocabulary={vocabulary}
+            vocabulary={view.vocabulary}
           />
           <DraftCardsCard errorCards={errorCards} />
         </div>

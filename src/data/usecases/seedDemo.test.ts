@@ -4,6 +4,7 @@ import { buildDemoBank } from '@/demo/content/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { buildDemoSeed } from '@/demo/generator/seed';
 import type { EnarmDb } from '../db/database';
+import { rebuildDerivedState } from '../derive/derivations';
 import { freshDb } from '../testing/fixtures';
 import {
   clearDemoDatabase,
@@ -60,6 +61,21 @@ describe('siembra de la demo (11.2, 11.3)', () => {
     );
     expect(xp?.totalXp).toBe(expected);
     expect(expected).toBeGreaterThan(0);
+  });
+
+  it('guarda la dificultad que calculó la cohorte y regenerar no la pierde (B14, 4.4)', async () => {
+    const db = freshDb('demo');
+    openDbs.push(db);
+    await seedDemoDatabase(db, seed);
+    expect(seed.itemStats.length).toBeGreaterThan(0);
+    expect(await db.itemStatsCache.count()).toBe(seed.itemStats.length);
+    const stored = await db.itemStatsCache.get(seed.itemStats[0]?.questionVersionId ?? '');
+    expect(stored).toEqual(seed.itemStats[0]);
+    // Reconstruir las cachés desde la bitácora no la toca, porque la cohorte no se guarda
+    await rebuildDerivedState(db);
+    expect(await db.itemStatsCache.count()).toBe(seed.itemStats.length);
+    await resetDemoDatabase(db, seed);
+    expect(await db.itemStatsCache.count()).toBe(seed.itemStats.length);
   });
 
   it('no siembra datos simulados en la base real', async () => {

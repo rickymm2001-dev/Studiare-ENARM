@@ -5,7 +5,8 @@ import { PAGE_SIZE } from '@/engines/sync';
 import { createEvent } from '../events/createEvent';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { Outline } from '../schemas/outlines';
-import { newId, testApi } from '../testing/fixtures';
+import { UserSettingsSchema } from '../schemas/people';
+import { makeUser, newId, testApi } from '../testing/fixtures';
 import { runSync, type SyncResult } from './runSync';
 import { createMemoryServer, memoryTransport, type MemoryServer } from './testing/memoryTransport';
 import { SyncTransportError, type Page, type PulledRecord, type SyncTransport } from './transport';
@@ -629,5 +630,73 @@ describe('apuntes con el plan Gratis', () => {
     ok(await b.sync({ plan: 'free' }));
     expect(await b.api.repos.outlines.get(made.outline.id)).toBeUndefined();
     expect(await b.api.repos.outlines.getRaw(made.outline.id)).toMatchObject({ deletedAt: stamp });
+  });
+});
+
+describe('el perfil dentro de la sincronización (B14, 2.7)', () => {
+  it('se reconcilia después de bajar registros y bitácora y antes de subir, y lo que crea sube en la misma corrida', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    ok(await a.sync());
+
+    // B es un perfil de antes de B14, con un ajuste distinto de fábrica y sin evento
+    const b = device(server);
+    b.clock.seconds = 200;
+    await b.api.repos.users.put(
+      makeUser({
+        id: b.userId,
+        examDate: null,
+        dailyMinutes: null,
+        settings: UserSettingsSchema.parse({ dailyGoal: { metric: 'questions', value: 30 } }),
+      }),
+    );
+    const order: string[] = [];
+    const inner = memoryTransport(server, () => at(b.clock.seconds));
+    const transport: SyncTransport = {
+      serverTime: () => inner.serverTime(),
+      pullRecords: async (after, limit) => {
+        order.push('pullRecords');
+        return inner.pullRecords(after, limit);
+      },
+      pullEvents: async (after, limit) => {
+        order.push('pullEvents');
+        return inner.pullEvents(after, limit);
+      },
+      pushRecords: async (records) => {
+        order.push('pushRecords');
+        return inner.pushRecords(records);
+      },
+      pushEvents: async (events) => {
+        order.push(`pushEvents:${events.map((event) => event.type).join(',')}`);
+        return inner.pushEvents(events);
+      },
+    };
+    const recording = {
+      ...b.api,
+      recordEvent: async (event: Parameters<typeof b.api.recordEvent>[0]) => {
+        if (event.type === 'settings_changed') order.push('reconcile');
+        return b.api.recordEvent(event);
+      },
+    };
+    const result = ok(
+      await runSync({
+        api: recording,
+        transport,
+        userId: b.userId,
+        authId: AUTH,
+        now: () => at(b.clock.seconds),
+      }),
+    );
+    expect(result.eventsPulled).toBe(2);
+    expect(order.indexOf('reconcile')).toBeGreaterThan(order.lastIndexOf('pullEvents'));
+    expect(order.indexOf('reconcile')).toBeLessThan(
+      order.findIndex((step) => step.startsWith('pushEvents')),
+    );
+    // El evento que creó la reconciliación subió en esta misma corrida
+    expect(order.at(-1)).toBe('pushEvents:settings_changed');
+    expect(
+      [...server.events.values()].filter((row) => row.event.type === 'settings_changed'),
+    ).toHaveLength(1);
   });
 });

@@ -2,10 +2,13 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { DataContext, type DataApi } from '@/data/context';
+import type { StudentModel } from '@/data/model/contracts';
 import { t } from '@/i18n/es-MX';
+import { modelTexts } from '@/i18n/model';
 import type { FocusItem } from '../progress/focusItems';
 import type { ReportAi } from './aiContent';
-import { BiasTipsCard, WeeklyReportCard } from './TutorSections';
+import { BiasTipsCard, FatigueCard, WeeklyReportCard } from './TutorSections';
 import type { WeeklyReport } from './weeklyReport';
 
 describe('consejos por sesgo', () => {
@@ -44,6 +47,20 @@ describe('consejos por sesgo', () => {
     );
     expect(screen.getByText(t.tutor.biasTips.reviewedLabel)).toBeVisible();
     expect(screen.queryByText(t.tutor.biasTips.draftLabel)).toBeNull();
+  });
+
+  it('la trampa a la que es propenso lleva su etiqueta y las demás no', () => {
+    const tip = (tag: string, prone: boolean) => ({
+      tag,
+      name: `Trampa ${tag}`,
+      tip: 'Texto.',
+      level: 'focus' as const,
+      examples: [],
+      prone,
+    });
+    render(<BiasTipsCard tips={[tip('a', true), tip('b', false)]} calibration={null} />);
+    expect(screen.getAllByText(modelTexts.bias.prone)).toHaveLength(1);
+    expect(screen.getByText('Trampa a').parentElement).toHaveTextContent(modelTexts.bias.prone);
   });
 
   it('con datos suficientes y sin trampas repetidas lo dice', () => {
@@ -140,5 +157,98 @@ describe('resumen del tutor', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('status')).toHaveTextContent('7 de 20');
+  });
+});
+
+describe('fatiga con el estado global del detector (B14, 3.6)', () => {
+  const text = modelTexts.fatigue;
+  const calibratingWith = (
+    validation: StudentModel['fatigue']['validation'],
+    have = 5,
+  ): StudentModel['fatigue'] => ({ state: 'calibrating', have, need: 3, validation });
+
+  it('mientras el detector no esté validado dice calibrando, aunque ya tenga sus sesiones largas', () => {
+    render(<FatigueCard fatigue={calibratingWith('calibrating')} />);
+    expect(screen.getByRole('heading', { name: text.title })).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(text.validating);
+    // No le inventa un conteo de sesiones que no es lo que falta
+    expect(screen.queryByRole('progressbar')).toBeNull();
+    expect(screen.queryByText(text.detected)).toBeNull();
+    expect(screen.queryByText(text.notDetected)).toBeNull();
+  });
+
+  it('si el detector no resultó confiable lo dice y tampoco le dice si tiene fatiga', () => {
+    render(<FatigueCard fatigue={calibratingWith('not_valid')} />);
+    expect(screen.getByRole('status')).toHaveTextContent(text.notValid);
+  });
+
+  it('con el detector validado pide las sesiones largas que le faltan', () => {
+    render(<FatigueCard fatigue={calibratingWith('validated', 1)} />);
+    const note = screen.getByRole('status');
+    expect(note).toHaveTextContent(`1 de 3 ${text.unit}`);
+    expect(note).toHaveTextContent(t.states.calibrating.remaining(2, text.unit));
+  });
+
+  it('con el detector validado y sus sesiones dice si detecta la caída o no', () => {
+    const { rerender } = render(
+      <FatigueCard
+        fatigue={{ state: 'ready', value: { detected: true }, validation: 'validated' }}
+      />,
+    );
+    expect(screen.getByText(text.detected)).toBeVisible();
+    rerender(
+      <FatigueCard
+        fatigue={{ state: 'ready', value: { detected: false }, validation: 'validated' }}
+      />,
+    );
+    expect(screen.getByText(text.notDetected)).toBeVisible();
+    expect(screen.queryByText(text.detected)).toBeNull();
+  });
+});
+
+/** Una base de demostración mínima: solo importa que `demo` no sea null, como en la app con enarm_demo */
+const demoApi = {
+  repos: {},
+  recordEvent: () => Promise.reject(new Error('Sin base')),
+  rebuildDerivedState: () => Promise.resolve(),
+  demo: {
+    generate: () => Promise.reject(new Error('Sin base')),
+    regenerate: () => Promise.reject(new Error('Sin base')),
+    clear: () => Promise.resolve(),
+  },
+  deleteAllData: null,
+} as unknown as DataApi;
+
+describe('fatiga en la demostración, donde el detector se valida con alumnos simulados (B14, 4.7)', () => {
+  const text = modelTexts.fatigue;
+  const inDemo = (fatigue: StudentModel['fatigue']) =>
+    render(
+      <DataContext.Provider value={demoApi}>
+        <FatigueCard fatigue={fatigue} />
+      </DataContext.Provider>,
+    );
+
+  it('un detector validado lo dice con la etiqueta de datos simulados', () => {
+    inDemo({ state: 'ready', value: { detected: true }, validation: 'validated' });
+    expect(screen.getByText(text.detected)).toBeVisible();
+    expect(screen.getByText(text.simulatedValidation)).toBeVisible();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+  });
+
+  it('uno que no resultó confiable habla de los alumnos simulados y no de los que dieron su permiso', () => {
+    inDemo({ state: 'calibrating', have: 0, need: 3, validation: 'not_valid' });
+    expect(screen.getByRole('status')).toHaveTextContent(text.notValidSimulated);
+    expect(screen.queryByText(text.notValid)).toBeNull();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+  });
+
+  it('mientras sigue calibrando también dice que es con alumnos simulados y lleva la etiqueta (revisión de B14, hallazgo 10)', () => {
+    inDemo({ state: 'calibrating', have: 5, need: 3, validation: 'calibrating' });
+    expect(screen.getByRole('status')).toHaveTextContent(text.validatingSimulated);
+    // No habla de alumnos que dieron su permiso, que en la demostración no existen
+    expect(screen.queryByText(text.validating)).toBeNull();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+    // Y no dice que el detector ya se validó
+    expect(screen.queryByText(text.simulatedValidation)).toBeNull();
   });
 });

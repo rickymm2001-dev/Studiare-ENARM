@@ -12,6 +12,7 @@ import { screenPath } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { PoolQuestion } from '@/data/bank/questionSource';
 import { useDataApi } from '@/data/context';
+import type { StudentModel } from '@/data/model/contracts';
 import type { InsightReport } from '@/engines/insights';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { englishText } from '@/i18n/english';
@@ -37,6 +38,7 @@ export function EnglishPracticeCard({
   left,
   reserved,
   report,
+  model,
 }: {
   session: ReadySession;
   /** El inglés del pool del alumno. El de práctica da los textos y el del examen, los 30 del ENARM */
@@ -47,6 +49,8 @@ export function EnglishPracticeCard({
   reserved: number;
   /** El informe de Conócete, para dirigir las opciones a sus trampas. undefined mientras carga */
   report: InsightReport | undefined;
+  /** El modelo del alumno (B14), del que lee la casilla de las trampas. undefined mientras carga */
+  model?: StudentModel | undefined;
 }) {
   const api = useDataApi();
   const navigate = useNavigate();
@@ -134,7 +138,12 @@ export function EnglishPracticeCard({
             }}
           />
         </div>
-        <TargetedSamplingField report={report} checked={targeted} onChange={setTargeted} />
+        <TargetedSamplingField
+          model={model}
+          report={report}
+          checked={targeted}
+          onChange={setTargeted}
+        />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           {left === 0 && reserved > 0 ? (
             // El límite del día lo tiene apartado un examen que todavía no termina

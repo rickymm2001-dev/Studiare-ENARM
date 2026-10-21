@@ -10,7 +10,7 @@ import {
 } from '../../config/billing';
 import { PRIVACY_NOTICE_VERSION, type LegalIdentity } from '../../config/legal';
 import { ConsentPurposeSchema } from '../../data/schemas/common';
-import { t } from '../../i18n/es-MX';
+import { consentTexts } from '../../i18n/consents';
 import { legalText, type LegalDoc } from '../../i18n/legal';
 import { legalDocs } from '../../i18n/legalDocs';
 import { LEGAL_MARKS, fillLegal, legalLines, legalToMarkdown } from './fillLegal';
@@ -230,8 +230,8 @@ describe('textos legales', () => {
     }
     expect(of('Mercado Pago')).toMatch(/solo si lo eliges para pagar/);
     expect(of('Resend')).toMatch(/correos de acceso/);
-    expect(of('Sentry')).toMatch(/solo con tu permiso de mejora anónima/);
-    expect(of('GitHub,')).toMatch(/permiso de mejora anónima/);
+    expect(of('Sentry')).toMatch(/solo con tu permiso Mejora con tus datos sin nombre/);
+    expect(of('GitHub,')).toMatch(/permiso Mejora con tus datos sin nombre/);
   });
 
   it('PostHog solo con un permiso aparte de analítica, que empieza apagado (respuesta 78 y 4.27)', () => {
@@ -256,7 +256,7 @@ describe('textos legales', () => {
 
   it('las finalidades opcionales son justo los permisos que guarda la app, cada uno aparte y apagado (4.27)', () => {
     const optional = section(legalDocs.privacy, 'opcionales');
-    const labels = ConsentPurposeSchema.options.map((purpose) => t.onboarding.consents[purpose][0]);
+    const labels = ConsentPurposeSchema.options.map((purpose) => consentTexts.purposes[purpose][0]);
     expect(optional.bullets?.map((bullet) => bullet.split('.')[0])).toEqual(labels);
     expect(optional.paragraphs?.[0]).toMatch(/Cada una se pide por separado y empieza apagada/);
   });
@@ -278,7 +278,9 @@ describe('textos legales', () => {
   it('dice la comparación con otros alumnos, solo con permiso, en percentiles y con grupos de 30 (B14)', () => {
     const text = studentText(legalDocs.privacy);
     expect(text).toMatch(/en percentiles de lo que ya pasó/);
-    expect(text).toMatch(/solo con los datos de quienes dieron el permiso de mejora anónima/);
+    expect(text).toMatch(
+      /solo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre/,
+    );
     expect(text).toMatch(/grupos de al menos 30 alumnos/);
     expect(text).toMatch(/nunca es un puntaje estimado del examen/);
     expect(text).toMatch(/Ese modelo es solo para ti y no predice tu puntaje/);

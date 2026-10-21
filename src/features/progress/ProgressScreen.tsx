@@ -5,7 +5,7 @@
 // Cada dato muestra calibrando hasta tener datos suficientes. Inglés médico tiene su tarjeta aparte de las
 // ramas, con sus propias cifras (B13, 2.7).
 import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
@@ -42,6 +42,9 @@ import { OfficialScoreCard } from './OfficialScoreCard';
 import { useAnalysis } from './useAnalysis';
 import { useEnglishCases } from './useEnglishCases';
 import { useMotiveBranches } from './useMotiveBranches';
+
+// La comparación con otros alumnos se baja cuando la pantalla llega a su tarjeta (B14, 5.4)
+const ComparisonSection = lazy(() => import('./ComparisonSection'));
 
 export function ProgressScreen() {
   return (
@@ -166,7 +169,11 @@ function Progress({ session }: { session: ReadySession }) {
 
       <WeeklyFocus report={report} weakTopics={weakTopics} />
 
-      <InsightsPanel report={report} />
+      <InsightsPanel report={report} fatigueValidation={analysis.model.model.fatigue.validation} />
+
+      <Suspense fallback={<LoadingState />}>
+        <ComparisonSection session={session} events={events} questions={analysis.bank.questions} />
+      </Suspense>
 
       <TopicsCard
         byBranch={byBranch}

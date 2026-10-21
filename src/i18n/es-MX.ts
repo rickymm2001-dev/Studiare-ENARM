@@ -114,6 +114,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   aiDrafts: { title: 'Borradores de IA', description: '' },
   // Su descripción vive en aiAudit.ts, que carga la pantalla, para no pesar en lo que la app descarga al abrir
   aiAudit: { title: 'Auditoría de la IA', description: '' },
+  // Su descripción vive en calibrationAdmin.ts, que carga la pantalla (B14)
+  calibrationAdmin: { title: 'Calibración', description: '' },
   contentReports: { title: 'Reportes de contenido', description: '' },
   bankImport: { title: 'Importar banco', description: '' },
   aiCosts: {

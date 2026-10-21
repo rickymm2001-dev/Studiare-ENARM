@@ -1,12 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import { newId } from '@/data/testing/fixtures';
 import type { Insight, InsightReport, InsightState } from '@/engines/insights';
-import {
-  biasCalibration,
-  biasProfileRows,
-  describeInsight,
-  weakTopicsFrom,
-  weeklyFocusItems,
-} from './focusItems';
+import { answered, minute, option, question } from '../tutor/testing/fixtures';
+import { buildAnalysis } from './analysis';
+import { biasCalibration, biasProfileRows, describeInsight, weeklyFocusItems } from './focusItems';
 
 const insight = (id: string, state: InsightState): Insight => ({
   id,
@@ -123,14 +121,31 @@ describe('consejos por sesgo como borrador', () => {
 
 describe('temas débiles sin Inglés médico (B13, 2.8)', () => {
   it('un tema de la sección de inglés no entra aunque su dominio sea bajo', () => {
-    const weak = { state: { kind: 'ready', mastery: 0.3 } };
-    const weakTopics = weakTopicsFrom(
-      new Map([
-        ['cardiology', weak],
-        ['reading_comprehension', weak],
-        ['medical_vocabulary', weak],
-      ]),
+    // 30 respuestas con 27 fallos en un tema clínico y en dos de inglés
+    const right = option(newId(), true, 'Correcta');
+    const wrong = option(newId(), false, 'Mala');
+    const make = (branch: string, topic: string) =>
+      Array.from({ length: 30 }, () => question({ id: newId(), branch, topic }));
+    const questions = [
+      ...make('internal_medicine', 'cardiology'),
+      ...make('medical_english', 'reading_comprehension'),
+      ...make('medical_english', 'medical_vocabulary'),
+    ];
+    const events = questions.map((q, index) =>
+      answered(q, index % 10 === 0 ? right.id : wrong.id, index % 10 === 0, minute(index)),
     );
+    const { weakTopics } = buildAnalysis({
+      events,
+      bank: {
+        questions: new Map(questions.map((q) => [q.id, q])),
+        options: new Map([right, wrong].map((o) => [o.id, o])),
+        cases: new Map(),
+      },
+      timeZone: 'America/Merida',
+      today: '2026-10-02',
+      desiredRetention: 0.9,
+      thresholds: DEFAULT_THRESHOLDS,
+    });
     expect(weakTopics.map((topic) => topic.key)).toEqual(['cardiology']);
     expect(weakTopics.every((topic) => topic.branch !== 'medical_english')).toBe(true);
   });

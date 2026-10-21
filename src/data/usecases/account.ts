@@ -2,7 +2,9 @@
 // Sin la nube vive en este navegador y no hay contraseña. Con Supabase se entra con el enlace o el
 // código del correo, o con Google (B9), y la cuenta se guarda también en la nube.
 import type { HeardFromChannel } from '@/config/signup';
+import { planBaseline, replayProfile } from '@/engines/profileReplay';
 import type { DataApi } from '../context';
+import { createEvent } from '../events/createEvent';
 import type { ConsentPurposeSchema } from '../schemas/common';
 import {
   ACCOUNT_DETAIL_KEYS,
@@ -52,6 +54,23 @@ export interface SignupExtras {
 }
 
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+/**
+ * Los ajustes con los que nace un perfil y que no son los de fábrica, como la meta diaria que el alumno
+ * eligió al registrarse, dejan cada uno su settings_changed. Sin él, otro dispositivo de la cuenta no
+ * los sabría (B14, 2.3). Va aquí y no en createProfile, que está en el JavaScript inicial
+ */
+async function recordInitialSettings(api: Api, user: User): Promise<void> {
+  for (const { key, value } of planBaseline(replayProfile([]), user)) {
+    await api.recordEvent(
+      createEvent(
+        'settings_changed',
+        { key, value: value as never },
+        { userId: user.id, tz: user.timeZone },
+      ),
+    );
+  }
+}
 
 /** true si dos elecciones de foto se ven igual. Un avatar generado de antes se ve como iniciales */
 export function sameAvatarChoice(a: Account['avatar'], b: Account['avatar']): boolean {
@@ -128,6 +147,7 @@ export async function registerAccount(
     dailyGoal: input.dailyGoal,
     noticeSeen: input.noticeSeen ?? true,
   });
+  await recordInitialSettings(api, user);
   const now = new Date().toISOString();
   await api.repos.accounts.put({
     userId: user.id,

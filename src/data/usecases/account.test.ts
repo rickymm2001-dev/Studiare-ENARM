@@ -71,6 +71,41 @@ describe('cuenta con correo (D-068)', () => {
   });
 });
 
+describe('ajustes con los que nace el perfil (B14, 2.3)', () => {
+  const signup = (
+    api: ReturnType<typeof setup>['api'],
+    dailyGoal: { metric: 'cards' | 'questions'; value: number },
+  ) =>
+    registerAccount(api, {
+      alias: 'Rick',
+      email: 'rick@example.com',
+      dailyGoal,
+      details: EMPTY_DETAILS,
+    });
+  const changes = async (api: ReturnType<typeof setup>['api'], userId: string) =>
+    (await api.repos.events.query({ userId, types: ['settings_changed'] })).flatMap((event) =>
+      event.type === 'settings_changed'
+        ? [{ key: event.payload.key, value: event.payload.value }]
+        : [],
+    );
+
+  it('una meta diaria distinta de la de fábrica deja su settings_changed', async () => {
+    const { api } = setup();
+    const result = await signup(api, { metric: 'questions', value: 35 });
+    if (!result.ok) throw new Error('no se registró');
+    expect(await changes(api, result.user.id)).toEqual([
+      { key: 'settings.dailyGoal', value: { metric: 'questions', value: 35 } },
+    ]);
+  });
+
+  it('con los ajustes de fábrica no deja ninguno', async () => {
+    const { api } = setup();
+    const result = await signup(api, { metric: 'cards', value: 20 });
+    if (!result.ok) throw new Error('no se registró');
+    expect(await changes(api, result.user.id)).toEqual([]);
+  });
+});
+
 describe('fecha de la elección de foto (B2)', () => {
   const JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRg==';
   const OTHER_JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRgAB';

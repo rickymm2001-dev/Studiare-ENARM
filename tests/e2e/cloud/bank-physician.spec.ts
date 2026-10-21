@@ -5,6 +5,7 @@
 // historial, sin poder mandar otra vez la misma versión. Todo contra fakeEditorial.ts, con el texto
 // simulado de fakeBankStore.ts.
 import { SCREENS } from '@/app/screens';
+import { calibrationAdminTexts } from '@/i18n/calibrationAdmin';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { callerOf, enterTeam, teamBank } from '../support/bankTeam';
@@ -173,5 +174,50 @@ test.describe('Banco en la nube, médicos', () => {
     await expect(second.page.getByRole('button', { name: review.submit.action })).toBeDisabled();
     await expectNoSeriousA11yViolations(second.page);
     await second.context.close();
+  });
+
+  test('Reportes dice la noche en que la calibración marcó cada distractor y con cuántas exposiciones (B14)', async ({
+    page,
+    cloud,
+  }) => {
+    test.setTimeout(120_000);
+    const {
+      bank,
+      users: [ana],
+    } = teamBank(cloud, [AUTHOR]);
+    if (!ana) throw new Error('Falta la autora');
+    const [seeded] = seedQuestions(bank, 1, { status: 'draft', origin: 'app', authorId: ana.id });
+    if (!seeded) throw new Error('Sin pregunta sembrada');
+    assignQuestion(bank, seeded.questionId, ana.id, 'author');
+    const version = latestOf(bank, seeded.questionId);
+    const option = version.options.find((item) => !item.isCorrect);
+    if (!option) throw new Error('La pregunta no trae distractores');
+    // La marca la dejó la calibración a las 4:30 de la mañana de Mérida del 16 de octubre, que cuenta los
+    // datos hasta la noche del 15, con 140 exposiciones y 3 elecciones
+    bank.distractorFlags.push({
+      id: '0f000000-0000-4000-8000-000000000001',
+      questionId: seeded.questionId,
+      optionId: option.optionId,
+      versionId: version.id,
+      exposures: 140,
+      choices: 3,
+      attraction: 3 / 140,
+      status: 'open',
+      flaggedAt: '2026-10-16T10:30:00.000Z',
+      resolvedAt: null,
+      resolvedBy: null,
+      note: null,
+    });
+
+    await enterTeam(page, cloud, AUTHOR.email);
+    await page.goto(SCREENS.contentReports.path);
+    const queue = page.getByRole('region', { name: physicianText.distractors.title });
+    await expect(queue).toBeVisible({ timeout: 30_000 });
+    await expect(
+      queue.getByText(calibrationAdminTexts.distractors.flagged('15 de octubre')),
+    ).toBeVisible({ timeout: 30_000 });
+    // Las cifras de siempre siguen a la vista
+    await expect(queue.getByText(physicianText.distractors.figures(140, 3, '2.1 %'))).toBeVisible();
+    await expectNoSeriousA11yViolations(page);
   });
 });

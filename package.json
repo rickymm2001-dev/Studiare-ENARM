@@ -46,6 +46,8 @@
     "legal:export": "node scripts/legal-export.ts",
     "audit:high": "npm audit --audit-level=high",
     "test:sql": "bash supabase/tests/run.sh",
+    "calibration:build": "vite build --config vite.calibration.config.ts",
+    "calibration:selftest": "bash scripts/calibration/selftest.sh",
     "deploy:supabase": "node --use-env-proxy --disable-warning=UNDICI-EHPA scripts/deploy/supabase.ts",
     "audit:ui": "node scripts/playwright.ts test --config playwright.audit.config.ts"
   },
@@ -121,11 +123,12 @@
     "fast-check": "4.10.2",
     "globals": "17.13.0",
     "jsdom": "30.1.1",
+    "postgres": "^3.4.9",
     "prettier": "3.9.9",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.0",
-    "vite": "8.3.2",
+    "vite": "8.3.5",
     "vite-plugin-pwa": "1.3.0",
     "vitest": "5.0.3"
   },

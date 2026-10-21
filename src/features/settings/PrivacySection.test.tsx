@@ -10,6 +10,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { newId } from '@/data/testing/fixtures';
 import { currentConsents } from '@/data/usecases/profile';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 
@@ -24,9 +25,9 @@ afterEach(async () => {
 });
 
 const [PARTY, AI, IMPROVEMENT] = [
-  t.onboarding.consents.party[0],
-  t.onboarding.consents.ai_analysis[0],
-  t.onboarding.consents.anonymized_improvement[0],
+  consentTexts.purposes.party[0],
+  consentTexts.purposes.ai_analysis[0],
+  consentTexts.purposes.anonymized_improvement[0],
 ];
 
 /** El alumno de la prueba con los tres permisos dados, como al crear su perfil */

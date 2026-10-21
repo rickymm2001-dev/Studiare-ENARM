@@ -15,6 +15,7 @@ import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { EMPTY_DETAILS, findAccountByEmail, registerAccount } from '@/data/usecases/account';
 import { PLACEHOLDER_ALIAS } from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion, currentConsents } from '@/data/usecases/profile';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { useAccess, type MfaGateState } from '../accessState';
 import { useCloud } from '../cloudState';
@@ -240,7 +241,7 @@ describe('completa tu registro', () => {
     await typing.type(alias, 'Gugle MD');
     await typing.selectOptions(screen.getByLabelText(t.account.targetSpecialty), 'geriatrics');
     await typing.selectOptions(screen.getByLabelText(t.accounts.signup.heardFrom.label), 'google');
-    await typing.click(screen.getByLabelText(t.onboarding.consents.anonymized_improvement[0]));
+    await typing.click(screen.getByLabelText(consentTexts.purposes.anonymized_improvement[0]));
     await typing.click(screen.getByLabelText(t.accounts.signup.adultAccept(18)));
     await typing.click(screen.getByLabelText(t.onboarding.privacyAccept));
     await typing.click(screen.getByRole('button', { name: t.accounts.completeSignup.save }));

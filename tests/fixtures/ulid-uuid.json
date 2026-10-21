@@ -1,0 +1,188 @@
+{
+  "note": "Pares ULID y uuid de src/data/cloud/cloudIds.ts. Los usan tests/calibration/idParity.test.ts y CA14 de supabase/tests/calibration_test.sql",
+  "pairs": [
+    {
+      "ulid": "00000000000000000000000000",
+      "uuid": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ulid": "00000000000000000000000001",
+      "uuid": "00000000-0000-0000-0000-000000000001"
+    },
+    {
+      "ulid": "0000000000000000000000000Z",
+      "uuid": "00000000-0000-0000-0000-00000000001f"
+    },
+    {
+      "ulid": "7ZZZZZZZZZZZZZZZZZZZZZZZZZ",
+      "uuid": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+    },
+    {
+      "ulid": "70000000000000000000000000",
+      "uuid": "e0000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ulid": "40000000000000000000000000",
+      "uuid": "80000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ulid": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "uuid": "01563e3a-b5d3-d676-4c61-efb99302bd5b"
+    },
+    {
+      "ulid": "01K6QZ0000ABCDEFGHJKMNPQRS",
+      "uuid": "0199aff0-0000-52d8-d73e-1194e95b5f19"
+    },
+    {
+      "ulid": "01KXYZPD4G5S8A1B2C3D4E5F6G",
+      "uuid": "019f7dfb-3490-2e50-a0ac-4c1b48e2bcd0"
+    },
+    {
+      "ulid": "0SYTNZQGZSREMKWRZAYXZZYR2W",
+      "uuid": "19f6abfb-c3f9-c3a9-3e63-eaf77fff605c"
+    },
+    {
+      "ulid": "09AE1M6TB17TYYEZXK9MP5X6VM",
+      "uuid": "09538343-6961-3ebd-e77f-b34d2c5e9b74"
+    },
+    {
+      "ulid": "0EXX4F8Q59RMRE0KF2CGBCXBQ7",
+      "uuid": "0eef48f4-5ca9-c530-e04d-e26416ceaee7"
+    },
+    {
+      "ulid": "007BP15ZV0446RVCH9W9FRVCDX",
+      "uuid": "003aec12-ff60-210d-8db2-29e25f8db1bd"
+    },
+    {
+      "ulid": "1A1X2XCYZ9N0NFKQR35VFPVGVD",
+      "uuid": "2a0f45d6-7be9-a82a-f9df-032edf6dc36d"
+    },
+    {
+      "ulid": "11X15RSRJCED6DFHGRXMMS2MQE",
+      "uuid": "21e84b8c-e24c-734c-d7c6-18ed299152ee"
+    },
+    {
+      "ulid": "1HCB3P6TG52S4KH807W63CY68H",
+      "uuid": "3162c763-6a05-1649-38a0-07e186cf1911"
+    },
+    {
+      "ulid": "1KFNGFD6AKE596BP9NYPCD7PER",
+      "uuid": "337d60f6-9953-7152-65d9-35f598d3d9d8"
+    },
+    {
+      "ulid": "2C60NXREATTTGSZ21HP4AR3KA4",
+      "uuid": "4c302bdc-395a-d6a1-9f88-31b11581cd44"
+    },
+    {
+      "ulid": "2G02E4QPR052RNHCFEWX1PKJS9",
+      "uuid": "50009c4b-db00-28b1-58b1-eee74369cb29"
+    },
+    {
+      "ulid": "28EJCAKP5G7RJGDQ9EXJXBSMW8",
+      "uuid": "487498a9-d8b0-3e25-06dd-2eecbabcd388"
+    },
+    {
+      "ulid": "2K30RNY77X46TGSBFR47EVJH5K",
+      "uuid": "5318315f-1cfd-21b5-0cad-f821ddb944b3"
+    },
+    {
+      "ulid": "3YRATYXQG4818VB0EHSXQ0VR3F",
+      "uuid": "7ec2b5ee-de04-4051-b581-d1cf6e0de06f"
+    },
+    {
+      "ulid": "3KGV1MQ37ZS22NDZBY1MEBPRXF",
+      "uuid": "7386c34b-8cff-c885-56fd-7e0d1cbb63af"
+    },
+    {
+      "ulid": "3PDDHJ6VVZFFBY4JHHRPWHN970",
+      "uuid": "766b6323-6f7f-7bd7-e24a-31c5b91aa4e0"
+    },
+    {
+      "ulid": "3YBWQVWJQY64P9YCY822PVHYBJ",
+      "uuid": "7e5f2fbe-4afe-312c-9f33-c810adb8f972"
+    },
+    {
+      "ulid": "4AYE19WN4EQN9RC7Q7DY0D998S",
+      "uuid": "8af3829e-548e-bd53-861e-e76f80d4a519"
+    },
+    {
+      "ulid": "4V9D9ZHJFC614NG0CC81M729CQ",
+      "uuid": "9b4b53f8-c9ec-3049-5801-8c4068712597"
+    },
+    {
+      "ulid": "49NS8A02VYN428G26YYCQEZ5B3",
+      "uuid": "89ae50a0-0b7e-a904-8808-def32eef9563"
+    },
+    {
+      "ulid": "4P0B91REEXDV128RSCDMM847K8",
+      "uuid": "9602d21c-39dd-6ec2-2463-2c6d28821e68"
+    },
+    {
+      "ulid": "5ZJYYNPZNBTFNCHC4A8YWPW8TV",
+      "uuid": "bf97bd5b-7eab-d3ea-c8b0-8a47b96e235b"
+    },
+    {
+      "ulid": "5Q45DBAYJ66XBZATDC2R4BQ68Z",
+      "uuid": "b7215ab5-7a46-3757-f569-ac1608bb991f"
+    },
+    {
+      "ulid": "5DFCPE9YTCG3B7926P4NW3TC3Q",
+      "uuid": "ad7b2ce4-fb4c-80d6-7488-d625783d3077"
+    },
+    {
+      "ulid": "5S2551F9KTKHPWCZZV06154RQV",
+      "uuid": "b9114a17-a67a-9c6d-c67f-fb01825262fb"
+    },
+    {
+      "ulid": "66F90Q285TXSDZ73XN22TM9334",
+      "uuid": "c67a4171-20ba-ee5b-f38f-b510b5448c64"
+    },
+    {
+      "ulid": "64BAN9FWAXEVR9N92QKHRBPCRD",
+      "uuid": "c45aaa97-f15d-76f0-9aa4-579c70bb330d"
+    },
+    {
+      "ulid": "6DQ3N5KCTQTMCE6KTZRFDZ50J0",
+      "uuid": "cdb8ea59-b357-d518-e34f-5fc3dbf28240"
+    },
+    {
+      "ulid": "6H09PPG6J4TYKX88P48YVEARPW",
+      "uuid": "d1026d68-1a44-d7a7-d422-c447b6e562dc"
+    },
+    {
+      "ulid": "70C2BJWKT73HX0DNXK9N7KNWVS",
+      "uuid": "e060972e-4f47-1c7a-06d7-b34d4f3af379"
+    },
+    {
+      "ulid": "79CM7T64514CYVV2GAYR478Z89",
+      "uuid": "e9650fa3-10a1-233d-bd8a-0af608747d09"
+    },
+    {
+      "ulid": "7C0N84W8PK3FBBRVZ8A5BF0BJW",
+      "uuid": "ec05504e-22d3-1bd6-bc6f-e85156f02e5c"
+    },
+    {
+      "ulid": "7DCGVWT684J5NCCVDPPWYHWBRR",
+      "uuid": "ed6437cd-1904-916a-c66d-b6b73d1e2f18"
+    }
+  ],
+  "invalidUlids": [
+    "80000000000000000000000000",
+    "8ZZZZZZZZZZZZZZZZZZZZZZZZZ",
+    "ZZZZZZZZZZZZZZZZZZZZZZZZZZ",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAI",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAL",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAO",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAU",
+    "01ARZ3NDEKTSV4RRFFQ69G5FA",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAVV",
+    "",
+    "no es un ulid"
+  ],
+  "invalidUuids": [
+    "",
+    "no-es-uuid",
+    "00000000-0000-0000-0000-00000000000",
+    "00000000-0000-0000-0000-0000000000000"
+  ]
+}

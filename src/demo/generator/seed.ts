@@ -5,6 +5,7 @@
 // baraja de tarjetas sintéticas marcada como tal (D-050).
 import { SimTruthSchema, type SimTruth } from '@/data/schemas/activity';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
+import type { ItemStatsCache } from '@/data/schemas/caches';
 import type { DemoDeckFile, TopicTaxonomy } from '@/data/schemas/content';
 import {
   CardSchema,
@@ -23,6 +24,7 @@ import { DEMO_COHORT_DEFAULT, DEMO_SEED_DEFAULT } from '../constants';
 import { DEMO_CONTENT_TIME } from '../stableId';
 import { generateCohort, generateDemoStudent, type Cohort, type SimStudent } from './cohort';
 import { syntheticIds, toEvents } from './events';
+import { buildItemStats } from './itemStats';
 import { GENERATOR_VERSION } from './model';
 import { createRng } from '@/engines/random';
 import { SIM_TIME_ZONE, syntheticCards, type SimCard } from './simulate';
@@ -64,6 +66,11 @@ export interface DemoSeed {
   simTruth: SimTruth[];
   /** Bitácora del alumno de la demo, y de la cohorte si se pidió su historial de tarjetas */
   events: AppEvent[];
+  /**
+   * Dificultad de las preguntas que calcula la cohorte con los motores de la noche, con los estados de
+   * PC 5.5 (B14, 4.4). La caché itemStatsCache de la demo
+   */
+  itemStats: ItemStatsCache[];
   demoUserId: string;
   cohort: Cohort;
   demoStudent: SimStudent;
@@ -274,6 +281,9 @@ export function buildDemoSeed(
       ...cohort.students.map((student) => truthOf(student)),
     ],
     events,
+    // Solo los alumnos simulados de la cohorte cuentan, como solo cuentan los que dieron el permiso. El
+    // alumno de la demo no
+    itemStats: buildItemStats({ students: cohort.students, bank, at: createdAt }),
     demoUserId: demoStudent.userId,
     cohort,
     demoStudent,

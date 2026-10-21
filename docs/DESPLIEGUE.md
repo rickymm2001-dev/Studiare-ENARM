@@ -133,7 +133,7 @@ La simulación con --dry-run solo usa rutas de lectura. Fuera de ella, si la rut
 | supabase/manual/limpiar-pagos-de-prueba.sql | Lo pegas tú | Sigue igual. Borra filas de pagos y va solo después de cancelar en Stripe, así que no entra en ningún plan |
 | supabase/manual/ejecutar-en-sql-editor.sql | Lo pegabas tú (D-113) | No está en un plan. Trae más que funciones y no tiene consulta de Comprobación, así que la herramienta no puede saber si ya se pegó. Para meterlo en un plan habría que agregarle una |
 
-## B11, B12 y B13, el orden desde un proyecto con solo B10
+## B11, B12, B13 y B14, el orden desde un proyecto con solo B10
 
 Se corren en este orden, cada uno primero con --dry-run.
 
@@ -144,14 +144,16 @@ npm run deploy:supabase -- --plan b12 --dry-run
 npm run deploy:supabase -- --plan b12 --yes
 npm run deploy:supabase -- --plan b13 --dry-run
 npm run deploy:supabase -- --plan b13 --yes
+npm run deploy:supabase -- --plan b14 --dry-run
+npm run deploy:supabase -- --plan b14 --yes
 ```
 
-Lo que revisa la prueba de scripts/deploy/plans.test.ts (B11, B12 y B13) contra la API falsa
+Lo que revisa la prueba de scripts/deploy/plans.test.ts (B11, B12, B13 y B14) contra la API falsa
 
-- b11, b12 y b13 cierran en verde en ese orden, desde una base con solo B10
-- b12 y b13 pueden ir en cualquier orden entre sí después de b11
+- b11, b12, b13 y b14 cierran en verde en ese orden, desde una base con solo B10
+- b12 y b13 pueden ir en cualquier orden entre sí después de b11, y b14 va al final
 - Cada plan corre también solo sobre un proyecto que ya tiene B11
-- Los tres se pueden volver a correr, en cualquier orden, sin repetir SQL
+- Los cuatro se pueden volver a correr, en cualquier orden, sin repetir SQL
 
 Por qué b11 lleva una migración de B13
 
@@ -159,6 +161,15 @@ Por qué b11 lleva una migración de B13
 - Se hizo lo que pide ese mensaje. deploy/b11.json lleva la migración de inglés como su paso 7, después de bank_sync_cron y antes de banco-b11.sql, con una nota que lo explica. deploy/b13.json la lleva también. El plan que corra primero la aplica y el otro la salta como ya aplicada
 - No se cambió la herramienta ni se quitó ninguna de sus protecciones. Las dos funciones se comparan con la última migración del repo, como todas
 - Una prueba revisa que b11 sin la migración de inglés se detiene sin escribir nada
+
+Por qué b11 lleva las tres migraciones de B14
+
+- La migración 20261028000003_model_reads.sql de B14 vuelve a definir bank_catalog_json, que crea la migración bank_core de B11, con una llave más, calibration. La herramienta espera la versión de la última migración del repo, así que el plan b11 sin ella se detenía antes de escribir nada con el mensaje `Aplicarla dejaría bank_catalog_json más vieja que supabase/migrations/20261028000003_model_reads.sql. Agrega ese archivo al plan después de este paso`
+- Se hizo lo mismo que con B13. deploy/b11.json lleva las tres migraciones de B14 después de la de inglés y antes de banco-b11.sql, con una nota en cada una. Van las tres y no solo la tercera, porque la tercera lee tablas que crea la primera y porque así quedan en el orden del repo. deploy/b14.json las lleva también. El plan que corra primero las aplica y el otro las salta como ya aplicadas
+- Ninguna de las tres cambia una función de B12 ni de B13, así que b12 y b13 no llevan nada de B14
+- El plan b14 no publica Edge Functions, porque la calibración corre en GitHub Actions (docs/CALIBRACION.md), ni espera secretos. La llave de la calibración la pone Ricardo directo en GitHub
+- b14 trae una comprobación en la última migración, que va al final del archivo. Revisa hechos de la estructura (las siete tablas, los cuatro índices de la bitácora, quién puede ejecutar qué, la siembra de model_settings y el tipo de correo distractor_flags) y no revisa si la calibración está encendida ni en qué modo, porque eso cambia con el tiempo y con ello el plan no se podría volver a correr. Esa lectura va aparte, en docs/SUPABASE.md. Una prueba revisa que la consulta del plan y la primera de la sección B14 de docs/SUPABASE.md sean la misma
+- Una prueba revisa que b11 sin las tres se detiene sin escribir nada, y otra que una comprobación de b14 en rojo detiene el plan aunque las migraciones ya estén registradas
 
 Por qué b11 no se detiene con Borrar mis datos de B12
 
@@ -168,13 +179,15 @@ Por qué b11 no se detiene con Borrar mis datos de B12
 
 Qué pasa en cada caso
 
-- Proyecto con solo B10. b11 aplica sus ocho archivos de SQL y publica bank-sync. b12 aplica ai_proxy_v2, ai_jobs, ai_gate y ia-b12.sql y publica ai-proxy y ai-batch. b13 ya no tiene SQL por aplicar y vuelve a publicar bank-sync con la copia nueva del convertidor, la que deja npm run bank:shared en supabase/functions/_shared/bank/generated
+- Proyecto con solo B10. b11 aplica sus once archivos de SQL y publica bank-sync. b12 aplica ai_proxy_v2, ai_jobs, ai_gate y ia-b12.sql y publica ai-proxy y ai-batch. b13 ya no tiene SQL por aplicar y vuelve a publicar bank-sync con la copia nueva del convertidor, la que deja npm run bank:shared en supabase/functions/_shared/bank/generated. b14 tampoco tiene SQL por aplicar, no publica nada y solo corre su comprobación
+- Proyecto con B11, B12 y B13 aplicados antes de que existiera B14. b14 aplica model_core, calibration_job y model_reads y corre su comprobación. b11 hace lo mismo, y avisa que bank_catalog_json está distinta del repo en la base y que la corrige el paso 10
+- b14 sin b11 no sirve. La tercera migración redefine bank_catalog_json sobre la tabla question_catalog de B11, y la segunda agrega un tipo a email_kinds, que crea B10. La herramienta no lo exige, porque no revisa tablas
 - Proyecto con B11 aplicado antes de que existiera la migración de inglés. b13 aplica solo esa migración y vuelve a publicar bank-sync. b11 hace lo mismo, y avisa que bank_version_issues y bank_incomplete_of están distintas del repo en la base y que las corrige el paso 7. b12 aplica los suyos
 - b13 sin b11 no sirve. La migración de inglés agrega una fila a bank_taxonomy y vuelve a definir funciones de B11, y la base responde con un error de SQL que la herramienta muestra antes de seguir
 - b12 va después de b11. La herramienta no lo exige, porque no revisa tablas, pero Borrar mis datos v3 borra de bank_reads y de deck_catalog_downloads, que crea B11
 - bank-sync necesita el secreto GOOGLE_BANK_SHEET_ID del plan b11. El plan b13 no espera ninguno. Los secretos de b12 son APP_ORIGINS y AI_ALLOW_MOCK
 
-Para los bloques que siguen
+Para los bloques que siguen (ya pasó con B13 y con B14)
 
 - Cuando un bloque nuevo vuelve a definir una función de un plan anterior hay dos casos. Si la función vive en un archivo manual del plan anterior, como delete_my_data en banco-b11.sql, el archivo manual sigue a la última migración. Si vive en una migración, como bank_version_issues en bank_core, el plan anterior suma la migración nueva al final de sus archivos de SQL, con una nota que lo diga, y el plan nuevo la lleva también. Sin eso el plan anterior se detiene, y con eso se puede volver a correr cuando el bloque nuevo ya está en el repo
 - El plan de un bloque nuevo va al final de la lista FROM_B10 de la prueba, con su SQL y sus funciones. El resto de la prueba corre con él sin cambios
@@ -211,17 +224,18 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
 ```
 
 - migrations va en orden y acepta migraciones completas de supabase/migrations, con sus secciones con drop y delete, y archivos de supabase/manual
-- check compara, columna por columna, el select que va después de la última línea de comentario que dice Comprobación en el archivo. Solo se acepta un select, y el plan debe nombrar justo las columnas que da, cuántas sean. Si el archivo gana una columna, por ejemplo borra_la_invitacion en la versión de pagos-b10.sql de B16, el plan no carga hasta que diga qué debe dar
+- check compara, columna por columna, el select que va después de la última línea de comentario que dice Comprobación en el archivo. Lo normal es un archivo de supabase/manual, pero también sirve en una migración, como la tercera de b14. Solo se acepta un select, y el plan debe nombrar justo las columnas que da, cuántas sean. Si el archivo gana una columna, por ejemplo borra_la_invitacion en la versión de pagos-b10.sql de B16, el plan no carga hasta que diga qué debe dar
 - name cambia el nombre con el que queda registrado y recordedAs declara otros nombres con los que ya quedó, como los trozos del conector
 - verifyJwt va en true para las funciones que llama la app con la sesión del alumno y en false para los avisos de Stripe y de Mercado Pago, que se identifican con su firma. Una prueba revisa que coincida con lo que dice el index.ts de cada función
 - secrets son los nombres que espera --secrets-from, cada uno con pattern, la forma completa de su valor con ^ y $
 - anonExecutable y overloads anotan, con su porqué, lo que la comprobación de la base aceptaría como excepción
-- Hoy hay cinco
+- Hoy hay seis
   - b9 solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
   - b10 es lo que falta de B10
   - b11 es el banco en la nube y bank-sync
   - b12 es la IA real. Cuatro migraciones, supabase/manual/ia-b12.sql con su comprobación y las funciones ai-proxy y ai-batch, que llevan verifyJwt en false. Sus secretos son APP_ORIGINS y AI_ALLOW_MOCK. La clave ENARM_ANTHROPIC_KEY la pone Ricardo directo en Supabase. La pieza del ciclo de lotes (supabase/manual/ia-lotes-cron.sql) no entra, porque se corre después de comprobar /health en modo simulado
   - b13 es Inglés médico. La migración 20261027000001 y bank-sync otra vez con la copia nueva del convertidor, sin verificar JWT. La migración también está en b11, y la que corra primero la aplica
+  - b14 es datos y modelo del alumno. Las migraciones 20261028000001 a 20261028000003, sin archivo manual ni Edge Functions, con la comprobación de la estructura en la última. Las tres también están en b11, y las que corra primero las aplica
 - Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql. Sus delete de las tablas de B12 van con execute y solo si la tabla existe, así que desplegar el plan b11 solo no deja Borrar mis datos roto y desplegar b12 enseguida ya no es obligatorio
 
 Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa. Si la función tiene un deno.json en su carpeta, como ai-proxy y ai-batch, que importan zod, hono y el SDK de Anthropic por su nombre, también se sube y su ruta va en import_map_path del metadata. Sin ese mapa el servidor no resuelve esos nombres.

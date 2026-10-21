@@ -4,6 +4,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { ulidToUuid } from '../cloud/cloudIds';
 import { newId } from '../ids';
+import { studyDayEnd, studyDayOf } from '../../engines/studyDay';
 import type { CatalogRow, DenyReason, FetchedQuestion, QuotaInfo } from '../bank/contracts';
 
 /** Un uuid nuevo que la app puede convertir a ULID */
@@ -81,15 +82,20 @@ export function wireBody(
   };
 }
 
+/**
+ * El día de estudio de Mérida de este instante y cuándo termina. No llevan fecha fija, porque una cuota con
+ * un resetsAt ya vencido la app la da por caducada y las pruebas dejarían de ver los topes
+ */
 export function wireQuota(overrides: Partial<QuotaInfo> = {}): QuotaInfo {
+  const day = studyDayOf(new Date(), 'America/Merida');
   return {
     open: true,
     plan: 'free',
     limit: 20,
     used: 0,
     left: 20,
-    day: '2026-10-20',
-    resetsAt: '2026-10-21T10:00:00.000Z',
+    day,
+    resetsAt: studyDayEnd(day, 'America/Merida').toISOString(),
     brake: { retryAt: null },
     ...overrides,
   };

@@ -18,6 +18,7 @@ import { ulidToUuid, uuidToUlid } from '../cloud/cloudIds';
 import type { Repositories } from '../repos/types';
 import type { CatalogEntry } from '../schemas/bankCloud';
 import { bodyEntitiesOf, caseEntityOf } from './bodies';
+import { effectiveDifficulty } from './calibration';
 import { mergeCatalogPage } from './catalogMerge';
 import type { DenyReason, QuotaInfo, ReadPurpose } from './contracts';
 import {
@@ -75,6 +76,7 @@ export function poolQuestionOfEntry(entry: CatalogEntry, cached = false): PoolQu
     examEligible: entry.examEligible,
     language: entry.language,
     distractorBiases: entry.distractorBiases,
+    effectiveDifficulty: effectiveDifficulty(entry),
     cached,
   };
 }

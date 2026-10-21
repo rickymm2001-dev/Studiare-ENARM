@@ -13,7 +13,7 @@ import { expectedFunctions, runDeploy, type Io } from './deploy.ts';
 import { readSecretsFile } from './secrets.ts';
 import { createManagementClient } from './managementApi.ts';
 import { loadPlan, repoMigrations } from './plan.ts';
-import { applyFunctionSql, sameDef, type FunctionDef } from './sql.ts';
+import { applyFunctionSql, checkQuery, sameDef, type FunctionDef } from './sql.ts';
 import { STUDIARE_PROJECT_REF, main, parseArgs, resolveToken } from './supabase.ts';
 import { fakeSupabase, type FakeOptions } from './testing/fakeSupabase.ts';
 
@@ -137,7 +137,7 @@ describe('los planes del repo', () => {
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
   });
 
-  it('b11 lleva las seis migraciones del banco, la de inglés, Borrar mis datos y bank-sync sin verificar JWT', () => {
+  it('b11 lleva las seis migraciones del banco, la de inglés, las tres de B14, Borrar mis datos y bank-sync sin verificar JWT', () => {
     const plan = loadPlan(ROOT, 'b11');
     expect(plan.migrations.map((step) => step.name)).toEqual([
       'bank_taxonomy',
@@ -147,6 +147,9 @@ describe('los planes del repo', () => {
       'deck_catalog',
       'bank_sync_cron',
       'english_section',
+      'model_core',
+      'calibration_job',
+      'model_reads',
       'manual_banco_b11',
     ]);
     expect(plan.functions).toEqual([
@@ -172,6 +175,48 @@ describe('los planes del repo', () => {
       { slug: 'ai-batch', verifyJwt: false, note: expect.any(String) as string },
     ]);
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+  });
+
+  it('b14 lleva las tres migraciones del modelo del alumno en orden, sin SQL manual ni Edge Functions', () => {
+    const plan = loadPlan(ROOT, 'b14');
+    expect(plan.migrations.map((step) => step.name)).toEqual([
+      'model_core',
+      'calibration_job',
+      'model_reads',
+    ]);
+    expect(plan.migrations.map((step) => step.kind)).toEqual([
+      'migration',
+      'migration',
+      'migration',
+    ]);
+    // La calibración corre en GitHub Actions y su llave la pone Ricardo, así que no hay funciones ni secretos
+    expect(plan.functions).toEqual([]);
+    expect(plan.secrets).toBeNull();
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // Ninguna lleva delete ni drop, así que el conector también puede aplicarlas
+    for (const step of plan.migrations) {
+      expect(step.sql, step.file).not.toMatch(/^\s*(delete|drop)\b/im);
+    }
+  });
+
+  it('la comprobación de b14 va en la última migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
+    const plan = loadPlan(ROOT, 'b14');
+    const [core, job, reads] = plan.migrations;
+    expect(core?.check).toBeNull();
+    expect(job?.check).toBeNull();
+    const check = reads?.check ?? {};
+    // Solo hechos de la estructura. Si la calibración está encendida y en qué modo cambian con el tiempo, y
+    // con ellos en la comprobación el plan no se podría volver a correr después de encenderla
+    expect(Object.keys(check)).not.toContain('calibracion_encendida');
+    expect(Object.keys(check)).not.toContain('modo');
+    expect(check).toMatchObject({ tablas_nuevas: 7, indices_nuevos: 4, modelo_sembrado: true });
+    // La consulta de la migración y el primer bloque de SQL de la sección B14 de docs/SUPABASE.md son la misma
+    const docs = readFileSync(join(ROOT, 'docs/SUPABASE.md'), 'utf8');
+    const section = docs.slice(docs.indexOf('## Datos y modelo del alumno (B14)'));
+    const block = /```sql\n([\s\S]*?)```/.exec(section)?.[1] ?? '';
+    const squash = (sql: string) => sql.replace(/\s+/g, ' ').replace(/;\s*$/, '').trim();
+    expect(block).not.toBe('');
+    expect(squash(block)).toBe(squash(checkQuery(reads?.sql ?? '') ?? ''));
   });
 
   it('los secretos de b12 son los dos que pone la sesión, y la clave de Anthropic no pasa por el plan', () => {
@@ -457,12 +502,14 @@ describe('línea de comandos', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// B11, B12 y B13 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12 y B13)
+// B11, B12, B13 y B14 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12, B13 y B14)
 
 /** La última migración de B10. Un proyecto con solo B10 llega hasta aquí */
 const LAST_B10 = '20261022000003';
 /** La última de B11, la del ciclo de Cron del banco */
 const LAST_B11 = '20261023000006';
+/** La última de B13, la de Inglés médico. Un proyecto con B11, B12 y B13 y sin B14 llega hasta aquí */
+const LAST_B13 = '20261027000001';
 
 /** Lo que registra el plan b11 de B11 sin la migración de B13, en el orden del plan */
 const B11_STEPS = [
@@ -478,8 +525,8 @@ const B11_STEPS = [
 /**
  * Los planes en el orden en que se corren desde un proyecto con solo B10, con el SQL que aplica cada uno y
  * las funciones que publica. Dos cosas que se ven aquí y no son errores
- *   - b11 lleva la migración de B13, así que b13 ya no aplica SQL y solo vuelve a publicar bank-sync con la
- *     copia nueva del convertidor
+ *   - b11 lleva la migración de B13 y las tres de B14, así que b13 ya no aplica SQL y solo vuelve a publicar
+ *     bank-sync con la copia nueva del convertidor, y b14 no aplica ni publica nada
  *   - b12 no aplica ai_delete_my_data. banco-b11.sql, que corrió en b11, ya dejó Borrar mis datos v3 igual
  *     a la de esa migración, y la herramienta la da por aplicada por la huella de su función, sin registrarla
  * Cuando llegue el plan de un bloque nuevo va al final de esta lista con su SQL y sus funciones, y el resto
@@ -497,6 +544,9 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
         'deck_catalog',
         'bank_sync_cron',
         'english_section',
+        'model_core',
+        'calibration_job',
+        'model_reads',
         'manual_banco_b11',
       ],
       functions: ['bank-sync'],
@@ -507,6 +557,7 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
       functions: ['ai-proxy', 'ai-batch'],
     },
     { plan: 'b13', sql: [], functions: ['bank-sync'] },
+    { plan: 'b14', sql: [], functions: [] },
   ];
 
 /** Las funciones de las migraciones del repo hasta una versión, como las deja un proyecto que llegó ahí */
@@ -519,12 +570,30 @@ function functionsUpTo(version: string): Record<string, FunctionDef> {
 }
 
 /**
+ * La fila de la comprobación de b14 según lo que se aplicó: lo que pide el propio plan cuando las tres
+ * migraciones están, y lo contrario (ceros y falsos) cuando falta alguna
+ */
+let modelCheck: Record<string, unknown> | undefined;
+function modelCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
+  modelCheck ??= loadPlan(ROOT, 'b14').migrations.at(-1)?.check ?? {};
+  const expected = modelCheck;
+  const done = ['model_core', 'calibration_job', 'model_reads'].every((name) => applied.has(name));
+  return Object.fromEntries(
+    Object.entries(expected).map(([column, value]) => [
+      column,
+      done ? value : typeof value === 'boolean' ? !value : 0,
+    ]),
+  );
+}
+
+/**
  * La fila de cada consulta de comprobación según lo que se aplicó. Una columna que el plan no pide no estorba,
- * así que trae la de B11 y la de B12 para cualquier plan de FROM_B10
+ * así que trae la de B11, la de B12 y la de B14 para cualquier plan de FROM_B10
  */
 const checkRows = (applied: ReadonlySet<string>) => ({
   borrar_mis_datos_b11: applied.has('manual_banco_b11'),
   borrar_mis_datos_b12: applied.has('manual_ia_b12'),
+  ...modelCheckRow(applied),
 });
 
 /** La base con B10 aplicado y nada del banco */
@@ -561,6 +630,48 @@ function withB11BeforeEnglish(): ReturnType<typeof fakeSupabase> {
   });
 }
 
+/**
+ * La base como la dejan b11, b12 y b13 de antes de B14, cuando las tres migraciones del modelo del alumno
+ * todavía no existían. Las funciones de las migraciones hasta la de Inglés médico y la de Borrar mis datos de
+ * banco-b11.sql, con todo lo de B11, B12 y B13 registrado
+ */
+function withB13BeforeB14(): ReturnType<typeof fakeSupabase> {
+  const functions = new Map(Object.entries(functionsUpTo(LAST_B13)));
+  applyFunctionSql(readFileSync(join(ROOT, 'supabase/manual/banco-b11.sql'), 'utf8'), functions);
+  const done = [
+    ...B11_STEPS.slice(0, -1),
+    'english_section',
+    'ai_proxy_v2',
+    'ai_jobs',
+    'ai_gate',
+    'ai_delete_my_data',
+    'manual_banco_b11',
+    'manual_ia_b12',
+  ];
+  return fakeSupabase({
+    ref: STUDIARE_PROJECT_REF,
+    history: [
+      ...REAL_HISTORY,
+      ...done.map((name, index) => ({
+        version: `2026101700${String(index).padStart(4, '0')}`,
+        name,
+      })),
+    ],
+    functions: Object.fromEntries(functions),
+    anon: ['current_app_role', 'is_admin'],
+    edge: {
+      'bank-sync': { version: 2, verifyJwt: false },
+      'ai-proxy': { version: 1, verifyJwt: false },
+      'ai-batch': { version: 1, verifyJwt: false },
+    },
+    checkRow: (applied) => ({
+      ...checkRows(applied),
+      borrar_mis_datos_b11: true,
+      borrar_mis_datos_b12: true,
+    }),
+  });
+}
+
 /** Los nombres con los que quedó registrado el SQL que aplicó una corrida, en orden */
 function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): string[] {
   return fake
@@ -572,7 +683,7 @@ function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): stri
 
 // Cada corrida lee y parte todo el SQL del repo. Con la cobertura de npm run check, o en un equipo lento, una
 // prueba de varias corridas pasa de los 5 s de Vitest, así que esta sección pide más
-describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
+describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
   it('b13 lleva la migración de inglés y bank-sync sin verificar JWT, y sin SQL manual', () => {
     const plan = loadPlan(ROOT, 'b13');
     expect(plan.migrations.map((step) => step.name)).toEqual(['english_section']);
@@ -613,7 +724,8 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
       migrations: { file: string }[];
     };
     plan.migrations = plan.migrations.filter((step) => !step.file.endsWith('_english_section.sql'));
-    expect(plan.migrations).toHaveLength(B11_STEPS.length);
+    // Los siete de antes más las tres migraciones de B14
+    expect(plan.migrations).toHaveLength(B11_STEPS.length + 3);
     const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
     dirs.push(dir);
     const path = join(dir, 'b11-sin-ingles.json');
@@ -630,7 +742,52 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
     expect(fake.writes()).toEqual([]);
   });
 
-  it('b11, b12 y b13 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
+  it('la migración 3 de B14 redefine bank_catalog_json de B11, y el plan b11 la trae después de bank_core y de las otras dos', () => {
+    const plan = loadPlan(ROOT, 'b11');
+    const reads = loadPlan(ROOT, 'b14').migrations.at(-1);
+    const core = plan.migrations.find((step) => step.name === 'bank_core');
+    if (!reads || !core) throw new Error('Faltan los pasos del plan');
+    const coreDefs = new Map<string, FunctionDef>();
+    const readsDefs = new Map<string, FunctionDef>();
+    applyFunctionSql(core.sql, coreDefs);
+    applyFunctionSql(reads.sql, readsDefs);
+    const before = coreDefs.get('bank_catalog_json');
+    const after = readsDefs.get('bank_catalog_json');
+    expect(before && after && !sameDef(before, after)).toBe(true);
+    // Y en el plan b11 las tres van en orden, una tras otra, después de bank_core y de la de inglés
+    const names = plan.migrations.map((step) => step.name);
+    expect(names.slice(names.indexOf('english_section'))).toEqual([
+      'english_section',
+      'model_core',
+      'calibration_job',
+      'model_reads',
+      'manual_banco_b11',
+    ]);
+    expect(names.indexOf('model_reads')).toBeGreaterThan(names.indexOf('bank_core'));
+  });
+
+  it('sin las migraciones de B14 el plan b11 se detiene antes de escribir, que es por lo que las lleva', async () => {
+    const plan = JSON.parse(readFileSync(join(ROOT, 'deploy/b11.json'), 'utf8')) as {
+      migrations: { file: string }[];
+    };
+    plan.migrations = plan.migrations.filter((step) => !/\/202610280000\d\d_/.test(step.file));
+    // Los siete de antes más la de inglés y la de Borrar mis datos
+    expect(plan.migrations).toHaveLength(B11_STEPS.length + 1);
+    const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
+    dirs.push(dir);
+    const path = join(dir, 'b11-sin-modelo.json');
+    writeFileSync(path, JSON.stringify(plan));
+
+    const fake = onlyB10();
+    const run = await runReal(fake, path);
+    expect(run.code).toBe(1);
+    expect(run.text).toContain(
+      'Aplicarla dejaría bank_catalog_json más vieja que supabase/migrations/20261028000003_model_reads.sql',
+    );
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('b11, b12, b13 y b14 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
     const fake = onlyB10();
     const versions = new Map<string, number>();
     /** Lo que sube una corrida de cada función que publica, con el verify_jwt que dice su plan */
@@ -659,6 +816,11 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
     expect(fake.functions.get('bank_passage_source_issue')).toBeDefined();
     expect(fake.functions.get('delete_my_data')?.body).toContain('bank_reads');
     expect(fake.functions.get('delete_my_data')?.body).toContain('ai_jobs');
+    // El catálogo de B11 con la llave calibration, y lo que lee la app y el equipo de B14, en la base
+    expect(fake.functions.get('bank_catalog_json')?.body).toContain("'calibration'");
+    for (const name of ['comparison_snapshot', 'population_baselines', 'admin_calibration_runs']) {
+      expect(fake.functions.get(name), name).toBeDefined();
+    }
     // bank-sync subió la copia generada del convertidor que lee la fuente del texto, igual a la del repo
     const generated = 'supabase/functions/_shared/bank/generated/passageSource.ts';
     const published = fake.edge.get('bank-sync')?.files.find((file) => file.name === generated);
@@ -674,10 +836,10 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
     }
   });
 
-  it('b13 antes que b12 da lo mismo, porque los dos no comparten ninguna función', async () => {
+  it('b13 antes que b12 da lo mismo, porque los dos no comparten ninguna función, y b14 va al final', async () => {
     const fake = onlyB10();
     const byPlan = new Map(FROM_B10.map((step) => [step.plan, step]));
-    for (const plan of ['b11', 'b13', 'b12']) {
+    for (const plan of ['b11', 'b13', 'b12', 'b14']) {
       const before = fake.writes().length;
       const run = await runReal(fake, plan);
       expect(run.text, plan).toContain('Todo en verde.');
@@ -690,11 +852,13 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
 
   it('cada plan corre solo sobre un proyecto con B11 aplicado, sin los otros dos', async () => {
     // Lo que aplica cada uno con la base de B11 de antes de B13. b11 y b13 la completan con la migración de
-    // inglés, y b12 con los suyos
+    // inglés, b11 y b14 con las tres del modelo del alumno, y b12 con los suyos
+    const modelo = ['model_core', 'calibration_job', 'model_reads'];
     const expected: Record<string, readonly string[]> = {
-      b11: ['english_section'],
+      b11: ['english_section', ...modelo],
       b12: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'manual_ia_b12'],
       b13: ['english_section'],
+      b14: modelo,
     };
     for (const [plan, sql] of Object.entries(expected)) {
       const fake = withB11BeforeEnglish();
@@ -720,11 +884,76 @@ describe('B11, B12 y B13 desde un proyecto con solo B10', { timeout: 60_000 }, (
     const withB11 = withB11BeforeEnglish();
     const second = await runReal(withB11, 'b11');
     expect(second.code).toBe(0);
-    expect(appliedSince(withB11, 0)).toEqual(['english_section']);
+    expect(appliedSince(withB11, 0)).toEqual([
+      'english_section',
+      'model_core',
+      'calibration_job',
+      'model_reads',
+    ]);
     expect(second.text).toContain('bank_version_issues está distinta del repo en la base');
     expect(second.text).toContain(
       'La corrige el paso 7 (supabase/migrations/20261027000001_english_section.sql)',
     );
     expect(withB11.edge.get('bank-sync')?.version).toBe(2);
+  });
+
+  it('un proyecto con B11, B12 y B13 de antes de B14 recibe las tres migraciones con b14, o con b11 si se corre otra vez', async () => {
+    const withB14 = withB13BeforeB14();
+    const first = await runReal(withB14, 'b14');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(withB14, 0)).toEqual(['model_core', 'calibration_job', 'model_reads']);
+    // La comprobación de la última migración corre justo después de aplicarla, y de nuevo al final
+    expect(first.text).toContain('comprobación en verde');
+    expect(first.text).toContain(
+      'supabase/migrations/20261028000003_model_reads.sql comprobación en verde',
+    );
+    // El plan no publica funciones de Edge, así que ninguna cambia de versión
+    expect(withB14.edge.get('bank-sync')?.version).toBe(2);
+    expect(withB14.edge.get('ai-proxy')?.version).toBe(1);
+    expect(withB14.functions.get('bank_catalog_json')?.body).toContain("'calibration'");
+
+    // Volver a correrlo no repite SQL, con la comprobación en verde de lo ya registrado
+    const before = withB14.writes().length;
+    const again = await runReal(withB14, 'b14');
+    expect(again.code).toBe(0);
+    expect(appliedSince(withB14, before)).toEqual([]);
+    expect(again.text).toContain('ya aplicada, registrada como model_reads');
+
+    // b11 sobre el mismo proyecto de antes dice que la tercera migración corrige bank_catalog_json y aplica las tres
+    const withB11 = withB13BeforeB14();
+    const second = await runReal(withB11, 'b11');
+    expect(second.code).toBe(0);
+    expect(appliedSince(withB11, 0)).toEqual(['model_core', 'calibration_job', 'model_reads']);
+    expect(second.text).toContain('bank_catalog_json está distinta del repo en la base');
+    expect(second.text).toContain(
+      'La corrige el paso 10 (supabase/migrations/20261028000003_model_reads.sql)',
+    );
+    expect(withB11.edge.get('bank-sync')?.version).toBe(3);
+  });
+
+  it('b14 con --dry-run solo lee: dice qué aplicaría y no escribe nada', async () => {
+    const fake = withB13BeforeB14();
+    const dry = await runReal(fake, 'b14', true);
+    expect(dry.code).toBe(0);
+    expect(fake.writes()).toEqual([]);
+    for (const name of ['model_core', 'calibration_job', 'model_reads']) {
+      expect(dry.text).toContain(`${name}  se aplica`);
+    }
+    // El plan no publica funciones de Edge, y la simulación tampoco lo anuncia
+    expect(dry.text).not.toContain('Publicando');
+  });
+
+  it('una comprobación de b14 en rojo detiene el plan sin aplicar nada, aunque las migraciones ya estén registradas', async () => {
+    // Las tres registradas por el conector, pero sin las tablas: la base dice otra cosa que la historia
+    const fake = withB13BeforeB14();
+    for (const [index, name] of ['model_core', 'calibration_job', 'model_reads'].entries()) {
+      fake.history.push({ version: `2026102800${String(index).padStart(4, '0')}`, name });
+    }
+    const run = await runReal(fake, 'b14');
+    expect(run.code).toBe(1);
+    expect(run.text).toContain('su comprobación sale en rojo');
+    expect(run.text).toContain('tablas_nuevas dio 0 y debía dar 7');
+    expect(fake.writes()).toEqual([]);
   });
 });

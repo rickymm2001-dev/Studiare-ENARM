@@ -23,6 +23,7 @@ import { useDataApi, type DataApi } from '@/data/context';
 import { DataProvider } from '@/data/DataProvider';
 import { makeFakeCloud, type FakeCloud } from '@/data/testing/fakeCloud';
 import { currentConsents } from '@/data/usecases/profile';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -260,7 +261,7 @@ describe('lo que pide el registro (B9)', () => {
     expect(fake.otpRequests).toEqual([]);
     await typing.clear(screen.getByLabelText(t.accounts.signup.heardFrom.code));
     await typing.type(screen.getByLabelText(t.accounts.signup.heardFrom.code), 'ana_2026');
-    await typing.click(screen.getByLabelText(t.onboarding.consents.party[0]));
+    await typing.click(screen.getByLabelText(consentTexts.purposes.party[0]));
     await typing.click(screen.getByRole('button', { name: t.onboarding.create }));
     expect(await screen.findByText(t.cloud.sentBody(EMAIL))).toBeVisible();
 

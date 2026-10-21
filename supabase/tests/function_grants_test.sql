@@ -163,4 +163,69 @@ select pg_temp.expect(
   'G7. Las funciones internas de Inglés médico no deben ser ejecutables por la API'
 );
 
+-- ===================================================================== G8. Calibración y modelo (B14)
+-- Ninguna función de la calibración queda para public ni para anon. El corredor nocturno solo lo ejecuta
+-- service_role. La app y las pantallas del equipo llaman a las cuatro de lectura, que revisan sesión,
+-- dispositivo y rol por dentro. Las auxiliares no las ejecuta nadie de la API. Las tablas nuevas no dan
+-- permisos de tabla a nadie de la API, ni a service_role
+do $$
+declare
+  r record;
+  n integer := 0;
+  v_session constant text[] := array['comparison_snapshot', 'population_baselines', 'editor_agreement_history',
+    'admin_calibration_runs'];
+  v_service constant text[] := array['calibration_begin', 'calibration_bank', 'calibration_people', 'calibration_answers',
+    'calibration_exposures', 'calibration_activity', 'calibration_motives', 'calibration_label_pairs',
+    'calibration_publish_items', 'calibration_publish_options', 'calibration_publish_population',
+    'calibration_publish_comparison', 'calibration_publish_agreement', 'calibration_finish'];
+  v_internal constant text[] := array['uuid_to_ulid', 'ulid_to_uuid', 'model_json_numeric_only', 'model_setting',
+    'model_settings_json', 'calibration_consenters', 'calibration_hash', 'calibration_pseudonym', 'calibration_apply',
+    'calibration_words', 'calibration_study_day', 'calibration_run_row', 'calibration_label_kappa',
+    'model_population_filter', 'model_population_fatigue'];
+  v_table text;
+begin
+  for r in
+    select p.oid::regprocedure::text as f, p.proname::text as name, p.proacl
+    from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public' and p.proname = any (v_session || v_service || v_internal)
+  loop
+    n := n + 1;
+    if r.proacl is null or exists (select 1 from aclexplode(r.proacl) a where a.grantee = 0) then
+      raise exception 'FALLA G8. public puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('anon', r.f, 'execute') then
+      raise exception 'FALLA G8. anon puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('authenticated', r.f, 'execute') <> (r.name = any (v_session)) then
+      raise exception 'FALLA G8. authenticated tiene un permiso equivocado en %', r.f;
+    end if;
+    if has_function_privilege('service_role', r.f, 'execute') <> (r.name = any (v_service)) then
+      raise exception 'FALLA G8. service_role tiene un permiso equivocado en %', r.f;
+    end if;
+    if not (select prosecdef from pg_proc where oid = r.f::regprocedure) and r.name = any (v_session || v_service) then
+      raise exception 'FALLA G8. % no es security definer', r.f;
+    end if;
+  end loop;
+  if n <> cardinality(v_session || v_service || v_internal) then
+    raise exception 'FALLA G8. Se esperaban % funciones de la calibración y hay %', cardinality(v_session || v_service || v_internal), n;
+  end if;
+  -- Ninguna función calibration_* queda fuera de las listas
+  if exists (
+    select 1 from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public' and p.proname like 'calibration\_%'
+      and not p.proname = any (v_session || v_service || v_internal)
+  ) then
+    raise exception 'FALLA G8. Hay una función calibration_ que esta prueba no conoce';
+  end if;
+  foreach v_table in array array['calibration_runs', 'item_calibrations', 'option_calibrations', 'population_snapshots',
+    'comparison_cells', 'agreement_snapshots', 'model_publication'] loop
+    if has_table_privilege('anon', 'public.' || v_table, 'select,insert,update,delete')
+       or has_table_privilege('authenticated', 'public.' || v_table, 'select,insert,update,delete')
+       or has_table_privilege('service_role', 'public.' || v_table, 'select,insert,update,delete')
+       or not (select relrowsecurity from pg_class where oid = ('public.' || v_table)::regclass) then
+      raise exception 'FALLA G8. % tiene permisos de tabla para la API o no tiene RLS', v_table;
+    end if;
+  end loop;
+end $$;
+
 select 'TODAS LAS PRUEBAS DE PERMISOS DE FUNCIONES PASARON' as resultado;

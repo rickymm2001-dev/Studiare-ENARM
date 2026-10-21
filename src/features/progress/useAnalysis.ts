@@ -1,37 +1,22 @@
-// El análisis de respuestas del alumno listo para pintar. Carga el banco de lo que contestó y las
-// tarjetas de una materia libre, que Conócete deja fuera (B6), y lo recalcula solo cuando cambian.
-// undefined mientras carga.
+// El análisis de respuestas del alumno listo para pintar. Sale del modelo del alumno (useStudentModelState), el
+// mismo que lee el Tutor, y se recalcula solo cuando cambian sus datos. Es la envoltura que usan Progreso y los
+// widgets de Inicio desde antes de B14. undefined mientras carga.
 import { useMemo } from 'react';
-import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
 import type { AppEvent } from '@/data/schemas/events';
-import { freeSubjectCardIds } from '@/data/usecases/outlines';
-import { studyDayOf } from '@/engines/studyDay';
+import { useStudentModelState } from '../model/useStudentModel';
 import type { ReadySession } from '../shared/RequireSession';
-import { useAnsweredBank } from '../shared/useAnsweredBank';
-import { buildAnalysis, type Analysis } from './analysis';
+import { analysisFrom, type Analysis } from './analysis';
 
 export function useAnalysis(
   session: ReadySession,
   events: readonly AppEvent[] | undefined,
 ): Analysis | undefined {
-  const api = useDataApi();
-  const bank = useAnsweredBank(events);
-  const freeSubjectCards = useLiveData(() => freeSubjectCardIds(api), [api.repos]);
-  const { user, settings } = session;
-  return useMemo(() => {
-    if (events === undefined || bank === undefined || freeSubjectCards === undefined) {
-      return undefined;
-    }
-    return buildAnalysis({
-      events,
-      bank,
-      timeZone: user.timeZone,
-      today: studyDayOf(new Date(), user.timeZone),
-      desiredRetention: settings.desiredRetention,
-      thresholds: DEFAULT_THRESHOLDS,
-      freeSubjectCards,
-    });
-  }, [events, bank, freeSubjectCards, user.timeZone, settings.desiredRetention]);
+  const state = useStudentModelState(session, events);
+  return useMemo(
+    () =>
+      state === undefined || events === undefined
+        ? undefined
+        : analysisFrom(state.build, events, state.bank),
+    [state, events],
+  );
 }

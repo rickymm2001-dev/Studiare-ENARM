@@ -29,6 +29,13 @@ export const DeckSchema = z.strictObject({
   isDemo: z.boolean(),
   /** Mazo del que cuelga. null o ausente es un mazo de primer nivel (D-085, fila 3) */
   parentId: IdSchema.nullable().optional(),
+  /**
+   * Mazo que arma la app y no el alumno. errors es Mis errores, uno solo por cuenta en todos sus
+   * dispositivos (B14, 2.6 y H05). Con la marca, un dispositivo reconoce el Mis errores que nació en
+   * otro con otra clave y los une. Ausente en los demás mazos, y en el de antes de B14 hasta que el
+   * dispositivo lo reconoce y se la pone
+   */
+  system: z.literal('errors').optional(),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,
 });
@@ -81,6 +88,12 @@ const NoteBaseShape = {
   sourceGuid: z.string().max(200).nullable().optional(),
   /** Nombre del texto o PDF del alumno de donde sale una tarjeta generada (D-085) */
   sourceTitle: z.string().max(200).nullable().optional(),
+  /**
+   * Clave de una tarjeta de Mis errores, que es la versión de la pregunta que falló o la clave de la
+   * tarjeta de contraste. Con ella se reconoce la misma tarjeta nacida en otro dispositivo y no se
+   * duplica (B14, 2.6). Ausente en las demás notas y en las de Mis errores de antes de B14
+   */
+  errorKey: z.string().min(1).max(200).optional(),
   /** Señal de controversia puesta por la IA. null o ausente si no hay o ya se atendió */
   controversy: ControversySchema.nullable().optional(),
   isDemo: z.boolean(),

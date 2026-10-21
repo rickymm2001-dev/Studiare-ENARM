@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import {
   calibrationStatus,
+  calibrationStatusWithError,
   DEFAULT_ELO,
   difficultyBand,
   kFactor,
@@ -12,7 +13,7 @@ import {
 } from './difficulty';
 import { createRng } from './random';
 import { estimateRasch, type RaschResponse } from './rasch';
-import { pearson } from './stats/correlation';
+import { pearson, regressionSlope } from './stats/correlation';
 
 describe('correlación de Pearson', () => {
   it('valores conocidos', () => {
@@ -22,6 +23,13 @@ describe('correlación de Pearson', () => {
     expect(pearson([1, 2, 3, 4, 5], [2, 4, 5, 4, 5])).toBeCloseTo(6 / Math.sqrt(10 * 6), 12);
     expect(pearson([1, 1, 1], [1, 2, 3])).toBeNaN();
     expect(() => pearson([1], [1])).toThrow(RangeError);
+  });
+
+  it('la pendiente distingue una escala inflada aunque la correlación sea perfecta', () => {
+    expect(regressionSlope([1, 2, 3, 4], [2, 4, 6, 8])).toBeCloseTo(2, 12);
+    expect(regressionSlope([-1, 0, 1], [-0.5, 0, 0.5])).toBeCloseTo(0.5, 12);
+    expect(regressionSlope([1, 1, 1], [1, 2, 3])).toBeNaN();
+    expect(() => regressionSlope([1], [1])).toThrow(RangeError);
   });
 });
 
@@ -63,6 +71,42 @@ describe('Elo (7.7)', () => {
       responsesToNext: 70,
     });
     expect(calibrationStatus(100, thresholds)).toEqual({ state: 'calibrated', responsesToNext: 0 });
+  });
+
+  it('estados de calibración con error estándar, en los bordes de PC 5.5', () => {
+    const thresholds = DEFAULT_THRESHOLDS.difficulty;
+    const precision = { provisionalMaxSe: 0.5, calibratedMaxSe: 0.3 };
+    const status = (students: number, standardError: number | null) =>
+      calibrationStatusWithError({ students, standardError }, thresholds, precision);
+    // 29 y 30 alumnos
+    expect(status(29, 0.2)).toEqual({ state: 'physician_estimate', responsesToNext: 1 });
+    expect(status(30, 0.2)).toEqual({ state: 'provisional', responsesToNext: 70 });
+    // 99 y 100 alumnos
+    expect(status(99, 0.2)).toEqual({ state: 'provisional', responsesToNext: 1 });
+    expect(status(100, 0.2)).toEqual({ state: 'calibrated', responsesToNext: 0 });
+    // 0.3 y 0.5 de error estándar, el borde cuenta
+    expect(status(100, 0.3).state).toBe('calibrated');
+    expect(status(100, 0.3001)).toEqual({ state: 'provisional', responsesToNext: 0 });
+    expect(status(30, 0.5).state).toBe('provisional');
+    expect(status(30, 0.5001)).toEqual({ state: 'physician_estimate', responsesToNext: 0 });
+    // Con mucha gente y poca precisión no pasa de provisional, y con ninguna tampoco
+    expect(status(500, 0.4).state).toBe('provisional');
+    expect(status(500, 0.9).state).toBe('physician_estimate');
+    // Una estimación extrema no tiene error estándar finito
+    expect(status(500, null).state).toBe('physician_estimate');
+    expect(status(500, Number.POSITIVE_INFINITY).state).toBe('physician_estimate');
+    expect(status(0, null)).toEqual({ state: 'physician_estimate', responsesToNext: 30 });
+  });
+
+  it('respeta los umbrales de alumnos que el admin cambió', () => {
+    const custom = { provisionalResponses: 10, calibratedResponses: 20 };
+    const precision = { provisionalMaxSe: 0.5, calibratedMaxSe: 0.3 };
+    expect(
+      calibrationStatusWithError({ students: 10, standardError: 0.2 }, custom, precision).state,
+    ).toBe('provisional');
+    expect(
+      calibrationStatusWithError({ students: 20, standardError: 0.2 }, custom, precision).state,
+    ).toBe('calibrated');
   });
 
   it('bandas de dificultad', () => {
@@ -172,7 +216,7 @@ describe('Rasch por máxima verosimilitud conjunta (D-025)', () => {
     expect(result.persons['todo-bien']).toBeUndefined();
   });
 
-  it('la corrección de Wright multiplica por (L − 1) / L', () => {
+  it('la corrección de Wright multiplica por (K − 1) / K, y con datos completos K es el número de preguntas', () => {
     const { responses } = simulate('rasch-wright', 100, 20);
     const corrected = estimateRasch(responses);
     const raw = estimateRasch(responses, { wrightCorrection: false });
@@ -182,7 +226,97 @@ describe('Rasch por máxima verosimilitud conjunta (D-025)', () => {
     );
   });
 
+  it('con datos ralos la corrección usa las respuestas por alumno y no el número de preguntas (revisión de B14, hallazgo 3)', () => {
+    // 300 alumnos y 60 preguntas, cada alumno contesta unas 6. En producción cada alumno ve una parte
+    // chica del banco, y el sesgo de JML crece con K / (K − 1), con K las respuestas por alumno
+    const { difficulties, responses } = simulate('rasch-ralo', 300, 60, 0.1);
+    const corrected = estimateRasch(responses);
+    const raw = estimateRasch(responses, { wrightCorrection: false });
+    const persons = Object.values(corrected.persons);
+    const perPerson = persons.reduce((sum, person) => sum + person.responses, 0) / persons.length;
+    expect(perPerson).toBeGreaterThan(4);
+    expect(perPerson).toBeLessThan(10);
+    expect(corrected.items.i3?.difficulty).toBeCloseTo(
+      (raw.items.i3?.difficulty ?? 0) * ((perPerson - 1) / perPerson),
+      9,
+    );
+    // Y la escala sale menos inflada que con la corrección por número de preguntas (59 / 60)
+    const ids = Object.keys(corrected.items);
+    const truth = ids.map((id) => difficulties[Number(id.slice(1))] as number);
+    const slopeOf = (get: (id: string) => number) => regressionSlope(truth, ids.map(get));
+    const fixed = slopeOf((id) => corrected.items[id]?.difficulty ?? 0);
+    const byItems = slopeOf((id) => (raw.items[id]?.difficulty ?? 0) * (59 / 60));
+    expect(fixed).toBeLessThan(byItems - 0.1);
+    expect(fixed).toBeLessThan(1.45);
+  });
+
+  it('con grupos sin nada en común los reconoce y centra cada uno por separado (revisión de B14, hallazgo 4)', () => {
+    // Dos grupos de 80 alumnos y 12 preguntas, uno con dificultad media -2 y otro +2. Rasch no puede
+    // decir dónde queda un grupo respecto del otro. Centrados juntos salían en -0.6 y +0.6 y "convergidos"
+    const rng = createRng('rasch-desconectado');
+    const responses: RaschResponse[] = [];
+    for (const [name, center] of [
+      ['f', -2],
+      ['d', 2],
+    ] as const) {
+      const difficulties = Array.from({ length: 12 }, () => center + rng.normal(0, 1));
+      for (let person = 0; person < 80; person += 1) {
+        const ability = rng.normal(center, 1);
+        difficulties.forEach((difficulty, item) => {
+          responses.push({
+            person: `${name}-p${person}`,
+            item: `${name}${item}`,
+            correct: rng.chance(probabilityCorrect(ability, difficulty)),
+          });
+        });
+      }
+    }
+    const result = estimateRasch(responses, { wrightCorrection: false });
+    expect(result.converged).toBe(true);
+    expect(result.components).toBe(2);
+    const of = (name: string) => Object.entries(result.items).filter(([id]) => id.startsWith(name));
+    for (const name of ['f', 'd']) {
+      const group = of(name);
+      expect(new Set(group.map(([, item]) => item.component)).size).toBe(1);
+      const mean = group.reduce((sum, [, item]) => sum + item.difficulty, 0) / group.length;
+      expect(Math.abs(mean)).toBeLessThan(1e-9);
+    }
+    // El grupo con el id más chico es el 0 cuando empatan en preguntas
+    expect(of('d')[0]?.[1].component).toBe(0);
+    expect(of('f')[0]?.[1].component).toBe(1);
+  });
+
+  it('un puente de un solo alumno conecta los grupos', () => {
+    const rng = createRng('rasch-puente');
+    const responses: RaschResponse[] = [];
+    for (const name of ['f', 'd']) {
+      for (let person = 0; person < 60; person += 1) {
+        const ability = rng.normal(0, 1);
+        for (let item = 0; item < 10; item += 1) {
+          responses.push({
+            person: `${name}-p${person}`,
+            item: `${name}${item}`,
+            correct: rng.chance(probabilityCorrect(ability, item / 5 - 1)),
+          });
+        }
+      }
+    }
+    expect(estimateRasch(responses).components).toBe(2);
+    // Un alumno que contesta cinco preguntas de cada grupo los une
+    for (const name of ['f', 'd']) {
+      for (let item = 0; item < 5; item += 1) {
+        responses.push({ person: 'puente', item: `${name}${item}`, correct: item % 2 === 0 });
+      }
+    }
+    expect(estimateRasch(responses).components).toBe(1);
+  });
+
   it('sin respuestas devuelve un resultado vacío', () => {
-    expect(estimateRasch([])).toMatchObject({ items: {}, persons: {}, converged: false });
+    expect(estimateRasch([])).toMatchObject({
+      items: {},
+      persons: {},
+      components: 0,
+      converged: false,
+    });
   });
 });

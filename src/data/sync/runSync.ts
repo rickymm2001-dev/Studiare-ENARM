@@ -1,10 +1,12 @@
 // Una sincronización completa entre este navegador y el servidor (D-085 fila 12, D-095). Va en este
-// orden. Se comprueba el reloj, se bajan los registros y la bitácora, y después se suben los cambios
-// propios. Bajar primero hace que lo que se edita encima de lo recién bajado gane por su fecha. Cada
-// página que se baja o se sube deja guardado su avance, así un corte a la mitad continúa donde
-// quedó. Las decisiones de qué gana viven en el motor src/engines/sync.ts. En el plan Gratis el servidor
-// ignora sin error los apuntes nuevos o cambiados (B8). Se anota en el avance y, con el primer plan de
-// pago, se mandan todos otra vez, así nada de lo que el alumno escribió se queda sin subir.
+// orden. Se comprueba el reloj, se bajan los registros y la bitácora, se pone el perfil de acuerdo con la
+// bitácora (B14, reconcileProfile) y después se suben los cambios propios. Bajar primero hace que lo que
+// se edita encima de lo recién bajado gane por su fecha, y reconciliar antes de subir hace que lo que ese
+// paso crea suba en la misma corrida. Cada página que se baja o se sube deja guardado su avance, así un
+// corte a la mitad continúa donde quedó. Las decisiones de qué gana viven en el motor
+// src/engines/sync.ts. En el plan Gratis el servidor ignora sin error los apuntes nuevos o cambiados
+// (B8). Se anota en el avance y, con el primer plan de pago, se mandan todos otra vez, así nada de lo
+// que el alumno escribió se queda sin subir.
 import { canUse, planOf, type PlanKey } from '@/config/billing';
 import {
   PAGE_SIZE,
@@ -28,6 +30,7 @@ import type { DataApi } from '../context';
 import type { AppEvent } from '../schemas/events';
 import { emptySyncState, type SyncState } from '../schemas/sync';
 import { recordEventOnce } from '../usecases/recordEvent';
+import { reconcileProfile, touchesProfile } from './reconcileProfile';
 import { SyncTransportError, type SyncFailure, type SyncTransport } from './transport';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
@@ -112,18 +115,22 @@ async function localItem(
 }
 
 /**
- * Guarda lo que bajó y le gana a lo local. Se vuelve a leer cada registro justo antes de guardar,
- * porque el alumno pudo editarlo mientras la página viajaba. Devuelve cuántos guardó
+ * Lo que bajó y le gana a lo local. Se lee cada registro justo antes de decidir, y se guarda enseguida
+ * con writeWinners, porque el alumno pudo editarlo mientras la página viajaba
  */
-async function applyIncoming(
+async function pickWinners(
   api: Api,
   userId: string,
   items: readonly SyncItem[],
-): Promise<number> {
+): Promise<SyncItem[]> {
   const winners: SyncItem[] = [];
   for (const incoming of items) {
     if (remoteWins(await localItem(api, userId, incoming), incoming)) winners.push(incoming);
   }
+  return winners;
+}
+
+async function writeWinners(api: Api, winners: readonly SyncItem[]): Promise<void> {
   const { repos } = api;
   for (const kind of KIND_ORDER) {
     const group = winners.filter((item) => item.kind === kind);
@@ -156,7 +163,6 @@ async function applyIncoming(
         break;
     }
   }
-  return winners.length;
 }
 
 async function pullRecords(
@@ -178,7 +184,15 @@ async function pullRecords(
         counts.rejected += 1;
       }
     }
-    counts.recordsPulled += await applyIncoming(deps.api, deps.userId, items);
+    const winners = await pickWinners(deps.api, deps.userId, items);
+    if (winners.length > 0 && current.recordsPending !== true) {
+      // Se anota antes de guardar. Si algo se corta después, la siguiente corrida sabe que falta unir
+      // Mis errores aunque ya no vea estos registros como nuevos (revisión de B14, hallazgo 1)
+      current = { ...current, recordsPending: true };
+      await deps.api.repos.syncState.put(current);
+    }
+    await writeWinners(deps.api, winners);
+    counts.recordsPulled += winners.length;
     // Un servidor que no hace avanzar el cursor no puede dejar esto girando
     const moved = page.next > current.recordsCursor;
     if (moved) {
@@ -220,6 +234,12 @@ async function pullEvents(
       for (const event of events) {
         onServer.add(event.id);
         if (known.has(event.id)) continue;
+        if (touchesProfile(event) && current.profilePending !== true) {
+          // Igual que con los registros. Se anota antes de guardar el evento, porque un corte después
+          // lo deja en la bitácora y con el cursor avanzado, y la reconciliación ya no lo vería nuevo
+          current = { ...current, profilePending: true };
+          await deps.api.repos.syncState.put(current);
+        }
         await recordEventOnce(deps.api, event);
         counts.eventsPulled += 1;
       }
@@ -373,6 +393,11 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
     let state = await loadState(deps.api, deps.userId, deps.authId);
     state = await pullRecords(deps, state, counts, fromServer);
     state = await pullEvents(deps, state, counts, eventsOnServer);
+    // Después de bajar todo y antes de subir (2.7 del plan de B14). Lo que crea sube en esta corrida
+    state = await reconcileProfile(
+      { api: deps.api, userId: deps.userId, authId: deps.authId, now },
+      state,
+    );
     state = await pushRecords(deps, state, counts, fromServer, now);
     state = await pushEvents(deps, state, counts, eventsOnServer, now);
 

@@ -3,7 +3,16 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
 import { freshDb, makeUser, newId } from '../testing/fixtures';
-import { errorIds, queueErrorCards, TOPIC_TAG_PREFIX, type ErrorCardInput } from './errorCards';
+import type { Note } from '../schemas/decks';
+import { emptySyncState } from '../schemas/sync';
+import {
+  countErrorCards,
+  errorIds,
+  errorOwnerKey,
+  queueErrorCards,
+  TOPIC_TAG_PREFIX,
+  type ErrorCardInput,
+} from './errorCards';
 
 const openDbs: EnarmDb[] = [];
 afterEach(async () => {
@@ -170,5 +179,186 @@ describe('errores al repaso (7.1)', () => {
     expect(errorIds.deck(user)).toBe(errorIds.deck(user));
     expect(errorIds.note(user, 'a')).not.toBe(errorIds.note(user, 'b'));
     expect(errorIds.note(user, 'a')).not.toBe(errorIds.card(user, 'a'));
+  });
+});
+
+describe('Mis errores entre dispositivos (B14, 2.6)', () => {
+  const AUTH = 'cuenta-de-prueba';
+  /** Un dispositivo que ya conoce la cuenta de la nube, como después de su primera sincronización */
+  async function linked(api: ReturnType<typeof setup>['api'], userId: string) {
+    await api.repos.syncState.put({ ...emptySyncState(userId, AUTH) });
+  }
+
+  it('sin cuenta de la nube los ids siguen saliendo del perfil local, como antes de B14', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    expect(await errorOwnerKey(api, user.id)).toBe(user.id);
+    await queueErrorCards(api, user, [input()], deck, NOW);
+    expect(await api.repos.decks.get(errorIds.deck(user.id))).toMatchObject({ system: 'errors' });
+  });
+
+  it('con cuenta de la nube los ids salen de la cuenta, los mismos en cualquier dispositivo', async () => {
+    const [one, two] = [setup(), setup()];
+    const [ana, anaToo] = [makeUser(), makeUser()];
+    await linked(one.api, ana.id);
+    await linked(two.api, anaToo.id);
+    expect(await errorOwnerKey(one.api, ana.id)).toBe(AUTH);
+    const failed = input();
+    await queueErrorCards(one.api, ana, [failed], deck, NOW);
+    await queueErrorCards(two.api, anaToo, [failed], deck, NOW);
+    const [first] = await one.api.repos.notes.list();
+    const [second] = await two.api.repos.notes.list();
+    expect(first?.id).toBe(second?.id);
+    expect(first?.id).toBe(errorIds.note(AUTH, failed.questionVersionId));
+    expect((await one.api.repos.decks.list())[0]?.id).toBe(errorIds.deck(AUTH));
+    expect((await two.api.repos.decks.list())[0]?.id).toBe(errorIds.deck(AUTH));
+  });
+
+  it('el mazo nace con la marca y la nota con su clave de error', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    const failed = input();
+    const contrast = input({ questionVersionId: failed.questionVersionId, key: 'contraste|a|b' });
+    await queueErrorCards(api, user, [failed, contrast], deck, NOW);
+    const [stored] = await api.repos.decks.list();
+    expect(stored?.system).toBe('errors');
+    const keys = (await api.repos.notes.list()).map((note) => note.errorKey).sort();
+    expect(keys).toEqual([failed.questionVersionId, 'contraste|a|b'].sort());
+  });
+
+  it('no crea una tarjeta que otro dispositivo ya creó con otra clave de dueño', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    await linked(api, user.id);
+    const failed = input();
+    // Lo que bajó de otro dispositivo: un mazo con la marca y su nota y tarjeta, con ids de otra clave
+    const other = errorIds.deck('perfil-de-otro-dispositivo');
+    await api.repos.decks.put({
+      id: other,
+      name: 'Mis errores',
+      description: '',
+      ownerId: user.id,
+      origin: 'generated',
+      visibility: 'private',
+      system: 'errors',
+      isDemo: false,
+      createdAt: '2026-10-01T00:00:00.000Z',
+    });
+    const noteId = errorIds.note('perfil-de-otro-dispositivo', failed.questionVersionId);
+    await api.repos.notes.put({
+      id: noteId,
+      deckId: other,
+      kind: 'basic',
+      front: failed.front,
+      back: failed.back,
+      tags: [],
+      origin: 'generated',
+      editorialStatus: 'approved',
+      sourceQuote: failed.quote,
+      sourceQuestionVersionId: failed.questionVersionId,
+      errorKey: failed.questionVersionId,
+      isDemo: false,
+      createdAt: '2026-10-01T00:00:00.000Z',
+    });
+    await api.repos.cards.put({
+      id: errorIds.card('perfil-de-otro-dispositivo', failed.questionVersionId),
+      noteId,
+      deckId: other,
+      ordinal: 0,
+      createdAt: '2026-10-01T00:00:00.000Z',
+    });
+    expect(await queueErrorCards(api, user, [failed], deck, NOW)).toBe(0);
+    expect(await api.repos.notes.list()).toHaveLength(1);
+    expect(await api.repos.decks.list()).toHaveLength(1);
+  });
+
+  it('una nota de antes de B14, sin clave, se reconoce por su pregunta y su frente', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    await linked(api, user.id);
+    const failed = input();
+    const old = errorIds.deck('perfil-de-otro-dispositivo');
+    await api.repos.decks.put({
+      id: old,
+      name: 'Mis errores',
+      description: '',
+      ownerId: user.id,
+      origin: 'generated',
+      visibility: 'private',
+      system: 'errors',
+      isDemo: false,
+      createdAt: '2026-10-01T00:00:00.000Z',
+    });
+    const oldNote = (overrides: Partial<Note>) =>
+      ({
+        id: newId(),
+        deckId: old,
+        kind: 'basic',
+        front: failed.front,
+        back: '<p>x</p>',
+        tags: [],
+        origin: 'generated',
+        editorialStatus: 'approved',
+        sourceQuote: 'Cita',
+        sourceQuestionVersionId: failed.questionVersionId,
+        isDemo: false,
+        createdAt: '2026-10-01T00:00:00.000Z',
+        ...overrides,
+      }) as Note;
+    const same = oldNote({});
+    await api.repos.notes.put(same);
+    await api.repos.cards.put({
+      id: newId(),
+      noteId: same.id,
+      deckId: old,
+      ordinal: 0,
+      createdAt: '2026-10-01T00:00:00.000Z',
+    });
+    expect(await queueErrorCards(api, user, [failed], deck, NOW)).toBe(0);
+
+    // Una tarjeta de contraste de esa pregunta, de otro frente, no cuenta como la tarjeta de la pregunta
+    const other = input({ topic: 'nephrology', front: '<p>Otro frente</p>' });
+    await api.repos.notes.put(oldNote({ front: '<p>Contraste</p>', id: newId() }));
+    expect(
+      await queueErrorCards(
+        api,
+        user,
+        [{ ...other, questionVersionId: failed.questionVersionId }],
+        deck,
+        NOW,
+      ),
+    ).toBe(1);
+  });
+
+  it('las tarjetas nuevas van al mazo de errores que ya hay y no crean otro', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    // El mazo de antes de B14, con el id del perfil local y sin la marca
+    await queueErrorCards(api, user, [input()], deck, NOW);
+    const [existing] = await api.repos.decks.list();
+    const { system: _system, ...legacy } = existing as NonNullable<typeof existing>;
+    await api.repos.decks.put(legacy);
+    await linked(api, user.id);
+    // Ahora con la cuenta, una pregunta nueva
+    expect(await queueErrorCards(api, user, [input()], deck, NOW)).toBe(1);
+    expect(await api.repos.decks.list()).toHaveLength(1);
+    const cards = await api.repos.cards.list();
+    expect(cards).toHaveLength(2);
+    expect(new Set(cards.map((card) => card.deckId))).toEqual(new Set([errorIds.deck(user.id)]));
+  });
+
+  it('cuenta las notas de Mis errores sin importar con qué clave nacieron', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    expect(await countErrorCards(api, user.id)).toBe(0);
+    await queueErrorCards(api, user, [input(), input()], deck, NOW);
+    expect(await countErrorCards(api, user.id)).toBe(2);
+    // Con la cuenta, las nuevas llevan ids de la cuenta y el mazo de antes sigue contando
+    await linked(api, user.id);
+    await queueErrorCards(api, user, [input()], deck, NOW);
+    expect(await countErrorCards(api, user.id)).toBe(3);
+    // Las de otro alumno o de otros mazos no cuentan
+    await queueErrorCards(api, makeUser(), [input()], deck, NOW);
+    expect(await countErrorCards(api, user.id)).toBe(3);
   });
 });

@@ -3,14 +3,24 @@
 // del servidor, así que ensureBodies solo revisa que las versiones estén en este navegador.
 import type { DataApi } from '../context';
 import type { Question } from '../schemas/bank';
+import type { ItemStatsCache } from '../schemas/caches';
 import { ensureDemoBank } from '../usecases/bank';
 import { listStudentPool } from '../usecases/studentBank';
+import { effectiveDifficultyFromStats } from './calibration';
 import type { PoolQuestion, QuestionSource } from './questionSource';
 
 type Api = Pick<DataApi, 'repos'>;
 
-/** La pregunta del banco local como la elige el pool */
-export function poolQuestionOf(question: Question, examEligible: boolean): PoolQuestion {
+/**
+ * La pregunta del banco local como la elige el pool. Con las estadísticas que calculó la cohorte simulada
+ * (itemStatsCache, solo en la demostración) lleva su dificultad efectiva, y sin ellas se queda con la del
+ * médico
+ */
+export function poolQuestionOf(
+  question: Question,
+  examEligible: boolean,
+  stats?: ItemStatsCache,
+): PoolQuestion {
   return {
     id: question.id,
     questionId: question.questionId,
@@ -34,6 +44,9 @@ export function poolQuestionOf(question: Question, examEligible: boolean): PoolQ
     // El banco de demostración no lleva el resumen de sesgos. El muestreo dirigido usa las opciones
     distractorBiases: [],
     cached: true,
+    ...(stats
+      ? { effectiveDifficulty: effectiveDifficultyFromStats(question.physicianDifficulty, stats) }
+      : {}),
   };
 }
 
@@ -47,14 +60,20 @@ export function createLocalSource(api: Api): QuestionSource {
     },
     async pool() {
       const { practice, exam, english } = await listStudentPool(api);
+      const stats = new Map(
+        (await api.repos.caches.itemStats.list()).map((row) => [row.questionVersionId, row]),
+      );
       const forExam = new Set([...exam, ...english.exam].map((question) => question.id));
-      const toPool = (question: Question) => poolQuestionOf(question, forExam.has(question.id));
+      const toPool = (question: Question) =>
+        poolQuestionOf(question, forExam.has(question.id), stats.get(question.id));
+      const examPool = (question: Question) =>
+        poolQuestionOf(question, true, stats.get(question.id));
       return {
         practice: practice.map(toPool),
-        exam: exam.map((question) => poolQuestionOf(question, true)),
+        exam: exam.map(examPool),
         english: {
           practice: english.practice.map(toPool),
-          exam: english.exam.map((question) => poolQuestionOf(question, true)),
+          exam: english.exam.map(examPool),
         },
       };
     },

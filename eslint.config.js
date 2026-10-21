@@ -17,6 +17,8 @@ const ENGINE_ALLOWED_IMPORTS = [
   String.raw`\./.*`,
   '@/engines/.*',
   '@/data/schemas/.*',
+  // Los contratos de B14 (solo tipos, sin importaciones) que comparten los motores y la app
+  '@/data/model/contracts',
   '@/config/.*',
 ];
 const ENGINE_FORBIDDEN_IMPORT_REGEX = `^(?!(?:${ENGINE_ALLOWED_IMPORTS.join('|')})$).*`;
@@ -56,6 +58,8 @@ export default defineConfig([
     'dist',
     // Build de las e2e de nube, con el Supabase simulado (B1 del plan del cambio)
     'dist-cloud',
+    // Build de la calibración nocturna (B14), con su propio vite.calibration.config.ts
+    'dist-calibration',
     'dev-dist',
     'coverage',
     'playwright-report',

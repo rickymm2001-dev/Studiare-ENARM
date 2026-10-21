@@ -6,7 +6,11 @@
 // app se descarta y solo se cuenta, sin guardar nada de ella.
 import type { CatalogPageWire } from '../cloud/bank';
 import { uuidToUlid } from '../cloud/cloudIds';
-import { CatalogEntrySchema, type CatalogEntry } from '../schemas/bankCloud';
+import {
+  CatalogCalibrationSchema,
+  CatalogEntrySchema,
+  type CatalogEntry,
+} from '../schemas/bankCloud';
 import { ItemKindSchema, type ItemKind } from '../schemas/common';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -19,8 +23,23 @@ function ulidOf(value: unknown): string | null | undefined {
 }
 
 /**
+ * La calibración de la fila (B14, 1.6). undefined si la fila no trae la llave, que es un servidor de
+ * antes de B14. null si la trae vacía o si no se puede leer, porque una calibración rara no debe tirar la
+ * pregunta, que sigue valiendo con la dificultad del médico. El id de la versión llega en uuid
+ */
+function calibrationOf(value: unknown): CatalogEntry['calibration'] {
+  if (value === undefined) return undefined;
+  if (!isRecord(value)) return null;
+  const versionId = ulidOf(value.versionId);
+  if (!versionId) return null;
+  const parsed = CatalogCalibrationSchema.safeParse({ ...value, versionId });
+  return parsed.success ? parsed.data : null;
+}
+
+/**
  * La fila del catálogo como la guarda la app, o null si no se puede guardar. Los tipos de reactivo que
- * esta app no conoce se ignoran, porque la pregunta sigue siendo válida sin ellos (D-080)
+ * esta app no conoce se ignoran, porque la pregunta sigue siendo válida sin ellos (D-080). La
+ * calibración de la noche entra si la fila la trae (B14)
  */
 export function catalogEntryOf(row: unknown): CatalogEntry | null {
   if (!isRecord(row)) return null;
@@ -28,6 +47,7 @@ export function catalogEntryOf(row: unknown): CatalogEntry | null {
   const versionId = ulidOf(row.versionId);
   const caseId = ulidOf(row.caseId);
   const variantOf = ulidOf(row.variantOf);
+  const calibration = calibrationOf(row.calibration);
   if (!questionId || !versionId || caseId === undefined || variantOf === undefined) return null;
   const kinds = Array.isArray(row.itemKinds) ? row.itemKinds : [];
   const parsed = CatalogEntrySchema.safeParse({
@@ -52,6 +72,7 @@ export function catalogEntryOf(row: unknown): CatalogEntry | null {
     language: row.language,
     status: row.status,
     seq: row.seq,
+    ...(calibration === undefined ? {} : { calibration }),
   });
   return parsed.success ? parsed.data : null;
 }
