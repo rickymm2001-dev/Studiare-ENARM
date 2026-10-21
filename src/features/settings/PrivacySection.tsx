@@ -89,8 +89,8 @@ function ConsentsCard({ session }: { session: ReadySession }) {
       <p role="status" className="text-sm text-fg-muted">
         {status}
       </p>
-      <p className="text-sm text-fg-muted">{studentSyncTexts.officialScoreStaysHere}</p>
-      <p className="text-sm text-fg-muted">
+      <p className="mt-3 text-sm text-fg-muted">{studentSyncTexts.officialScoreStaysHere}</p>
+      <p className="mt-2 text-sm text-fg-muted">
         {t.settingsPage.privacy.scoreInProgress}{' '}
         <Link
           to={screenPath('progress')}
@@ -99,7 +99,7 @@ function ConsentsCard({ session }: { session: ReadySession }) {
           {t.settingsPage.privacy.goToProgress}
         </Link>
       </p>
-      <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
         <Link to={screenPath('privacyNotice')} className="underline underline-offset-4">
           {legalText.links.privacy}
         </Link>

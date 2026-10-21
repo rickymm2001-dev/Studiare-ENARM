@@ -3,13 +3,15 @@
 // Calibración del admin con su aviso de más de 48 horas, la sección Modelo del alumno y calibración de
 // Plataforma, el historial de Acuerdo con una paridad que falla y la marca de la noche en Reportes. Del
 // modelo en la demostración, la tarjeta con los alumnos simulados, los temas para reforzar y la fatiga del
-// Tutor. Las de nube corren contra el build con la nube y el Supabase simulado de las e2e de nube, con la
-// foto de la noche de fakeModelStore.ts y las funciones del equipo de fakeCalibrationAdmin.ts. Quedan en
+// Tutor. De lo que dejó el paquete B, Simular con Adaptativo, calibrando y disponible, y Privacidad con el texto
+// nuevo del permiso. Las de nube corren contra el build con la nube y el Supabase simulado de las e2e de nube,
+// con la foto de la noche de fakeModelStore.ts y las funciones del equipo de fakeCalibrationAdmin.ts. Quedan en
 // docs/screenshots/v3/b14, en 390, 1280 y 1920 y en claro y en oscuro: npm run screenshots:v3 -- b14.spec.ts
-// No se corren al escribirlas. La sesión principal las toma al integrar el bloque.
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
+import { adaptiveTexts } from '@/i18n/adaptive';
 import { calibrationAdminTexts } from '@/i18n/calibrationAdmin';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { modelTexts } from '@/i18n/model';
 import { physicianText } from '@/i18n/physician';
@@ -21,17 +23,28 @@ import {
   enterWithOpenBank,
   seedOwnHistory,
 } from '../../e2e/support/comparisonHistory';
-import { expect, test as cloudTest } from '../../e2e/support/cloudFixtures';
+import {
+  enterWithLink,
+  expect,
+  reloadWithServerFlags,
+  test as cloudTest,
+} from '../../e2e/support/cloudFixtures';
+import { openBank, seedBank } from '../../e2e/support/fakeBank';
 import { attachCalibrationAdmin } from '../../e2e/support/fakeCalibrationAdmin';
-import { seedQuestions, type FakeBankStore } from '../../e2e/support/fakeBankStore';
+import {
+  createFakeBankStore,
+  seedQuestions,
+  type FakeBankStore,
+} from '../../e2e/support/fakeBankStore';
 import { assignQuestion } from '../../e2e/support/fakeEditorial';
 import {
   createFakeModelStore,
   emptyPopulation,
+  seedCalibration,
   seedComparison,
   seedRuns,
 } from '../../e2e/support/fakeModelStore';
-import { attachModel } from '../../e2e/support/fakeSupabase';
+import { attachBank, attachModel } from '../../e2e/support/fakeSupabase';
 import { CLOUD_PREVIEW_URL } from '../../e2e/support/fakeSupabaseConfig';
 import { test as demoTest } from '../../e2e/support/fixtures';
 import { capture as takeShot, outDirFor } from './capture';
@@ -41,6 +54,8 @@ const ADMIN: TeamMember = { email: 'admin.b14@ejemplo.mx', alias: 'Admin', role:
 const PHYSICIAN: TeamMember = { email: 'medica.b14@ejemplo.mx', alias: 'Carla', role: 'physician' };
 const comparison = modelTexts.comparison;
 const admin = calibrationAdminTexts;
+/** La alumna de las capturas de Simular con Adaptativo */
+const ADAPTIVE_STUDENT = 'ana.adaptativo.b14@ejemplo.mx';
 
 /** Captura desde arriba. Si la página quedó desplazada, la barra fija sale a media imagen */
 async function capture(
@@ -125,6 +140,42 @@ cloudTest.describe('Modelo del alumno, comparación y pantallas del equipo', () 
       await capture(page, '03-comparacion-grupo-chico-calibrando', project, { element: target });
     },
   );
+
+  for (const scenario of [
+    { calibrated: 10, name: 'calibrando con cuántas preguntas hay' },
+    { calibrated: 80, name: 'disponible, con el nivel que elige la app' },
+  ]) {
+    cloudTest(`B14. Simular con Adaptativo, ${scenario.name}`, async ({ page, cloud }, info) => {
+      cloudTest.setTimeout(300_000);
+      const project = info.project.name;
+      const bank = createFakeBankStore();
+      attachBank(cloud, bank);
+      seedBank(bank, 80);
+      const model = createFakeModelStore();
+      attachModel(cloud, model);
+      // Cuántas de las 80 preguntas ya tienen dificultad calculada con las respuestas de otros alumnos
+      seedCalibration(model, bank, scenario.calibrated);
+      openBank(cloud);
+      cloud.setFeatureFlags({ freeTrial: true });
+      await enterWithLink(page, cloud, ADAPTIVE_STUDENT, 'Ana');
+      await reloadWithServerFlags(page);
+
+      await page.goto(SCREENS.simulatorSetup.path);
+      const practice = card(page, t.simulator.setupTitle);
+      await expect(practice).toBeVisible({ timeout: 60_000 });
+      if (scenario.calibrated < 50) {
+        await expect(practice.getByText(adaptiveTexts.calibrating(50))).toBeVisible();
+        await capture(page, '12-simular-adaptativo-calibrando', project, { element: practice });
+        return;
+      }
+      // Con la dificultad calculada la opción aparece, y al prenderla el nivel lo elige la app
+      const adaptive = practice.getByRole('checkbox', { name: adaptiveTexts.label });
+      await expect(adaptive).toBeVisible({ timeout: 60_000 });
+      await adaptive.check();
+      await expect(practice.getByText(adaptiveTexts.difficultyLocked)).toBeVisible();
+      await capture(page, '13-simular-adaptativo-disponible', project, { element: practice });
+    });
+  }
 
   cloudTest(
     'B14. Calibración, aviso de más de 48 horas, ajustes del modelo en Plataforma, historial de Acuerdo y marca de la noche',
@@ -215,6 +266,24 @@ cloudTest.describe('Modelo del alumno, comparación y pantallas del equipo', () 
       const queue = card(page, physicianText.distractors.title);
       await expect(queue.getByText(/^Calculado la noche del /)).toBeVisible({ timeout: 60_000 });
       await capture(page, '08-reportes-marca-de-la-noche', project, { element: queue });
+    },
+  );
+});
+
+demoTest.describe('Privacidad con el texto nuevo', () => {
+  demoTest(
+    'B14. Privacidad con el texto nuevo del permiso de mejora con tus datos sin nombre',
+    async ({ page }, info) => {
+      demoTest.setTimeout(300_000);
+      const project = info.project.name;
+      await generateDemo(page);
+      await page.goto(`${SCREENS.settings.path}?seccion=privacy`);
+      const consents = card(page, t.settings.privacy.consentsTitle);
+      await expect(consents).toBeVisible({ timeout: 60_000 });
+      const [label] = consentTexts.purposes.anonymized_improvement;
+      await expect(consents.getByRole('checkbox', { name: label })).toBeVisible();
+      await expect(consents.getByText(consentTexts.withdrawal)).toBeVisible();
+      await capture(page, '14-privacidad-texto-nuevo', project, { element: consents });
     },
   );
 });
