@@ -52,6 +52,7 @@ describe('admin_calibration_runs del doble', () => {
   it('con corridas sembradas la app las lee todas, la más reciente primero, con su enlace de GitHub', async () => {
     const store = createFakeModelStore();
     seedRuns(store, { count: 5, lastOkHoursAgo: 3 });
+    store.settings.calibration.enabled = true;
     const result = await readCalibrationRuns(clientOf(store));
     expect(result.runs).toHaveLength(5);
     expect(result.runs.map((run) => run.githubRunId)).toEqual([
@@ -71,8 +72,17 @@ describe('admin_calibration_runs del doble', () => {
   it('con la última corrida buena de hace 60 horas la app avisa que pasó de 48', async () => {
     const store = createFakeModelStore();
     seedRuns(store, { count: 2, lastOkHoursAgo: 60 });
+    store.settings.calibration.enabled = true;
     const result = await readCalibrationRuns(clientOf(store));
     expect(calibrationHealth(result, new Date())).toMatchObject({ kind: 'stale' });
+  });
+
+  it('apagada a propósito la app no avisa de las 48 horas aunque la última buena sea vieja', async () => {
+    const store = createFakeModelStore();
+    seedRuns(store, { count: 2, lastOkHoursAgo: 60 });
+    const result = await readCalibrationRuns(clientOf(store));
+    expect(result.settings.calibration.enabled).toBe(false);
+    expect(calibrationHealth(result, new Date())).toEqual({ kind: 'off' });
   });
 
   it('una paridad falsa deja la corrida en partial y se ve en el resumen', async () => {
