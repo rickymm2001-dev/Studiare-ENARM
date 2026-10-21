@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 a B12 y B16 hechos y fusionados en main, ver sus secciones. B13 inglés médico en su PR y B14 modelo del alumno en construcción. Siguen B14 modelo del alumno, B15 analítica y recorrido, B17 publicación, B18 primeros alumnos y B19 auditoría final
+- Bloques. B0 a B13 y B16 hechos y fusionados en main, ver sus secciones. B14 modelo del alumno en su PR y B15 analítica y recorrido con sus tres paquetes terminados, en integración. Siguen B17 publicación, B18 primeros alumnos y B19 auditoría final (los diseños de B17 y B18 están hechos)
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -31,7 +31,7 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B11. Banco en la nube y Google Sheets (D-133, PR 55 fusionado)
 - [x] B12. IA real (D-134, PR en curso)
 - [x] B13. Inglés médico (D-135, PR en curso)
-- [ ] B14. Datos y modelo del alumno
+- [x] B14. Datos y modelo del alumno (D-136, PR en curso)
 - [ ] B15. Analítica, errores, recordatorios y recorrido
 - [x] B16. Legal y privacidad (D-132, PR en curso)
 - [ ] B17. Publicación
@@ -192,6 +192,14 @@ Evidencia
 - Capturas en docs/screenshots/v3/b13 (86), tomadas antes de las correcciones de la revisión, que solo cambiaron textos de los estados sin casos
 - Todo es contenido simulado con la marca [Prueba]. Faltan los casos de lectura, que escriben los médicos, y el mazo de vocabulario, que espera la red abierta a MedlinePlus. La bandera medicalEnglish queda apagada en producción. Los pasos tuyos están en docs/PENDIENTES_DE_RICARDO.md
 
+### B14. Datos y modelo del alumno (D-136)
+- Hecho. Calibración nocturna en GitHub Actions con los motores puros de la app (Rasch con enlace de escala, Elo de apoyo, distractores, variantes, validación de la fatiga, acuerdo de etiquetado y comparación), tres migraciones (20261028000001 a 20261028000003) con sus lecturas, workflow calibration.yml y autotest de 25 metas en cada push. Sincronización entre dispositivos de ajustes, permisos y Mis errores desde la bitácora. Catálogo calibrado con dificultad efectiva. Modo adaptativo en Simular. Un solo modelo del alumno (src/engines/studentModel.ts) que leen Progreso, Inicio, Simular y el Tutor. Tarjeta Cómo vas frente a otros, pantalla Calibración del admin, ajustes del modelo en Plataforma, historial de Acuerdo y marcas de la noche en Reportes. FSRS de fábrica vigilado por prueba. Nombre nuevo del permiso, Mejora con tus datos sin nombre
+- Revisión independiente con 17 hallazgos (ninguno alto, 4 medios o medio-bajos y 13 bajos). 13 corregidos o aceptados por escrito con su prueba, 3 sin construir con el camino trazado y 1 que es tu decisión (el permiso dado con la pista corta)
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios. Vitest con 5,722 pruebas en 534 archivos. SQL en 32 suites más la prueba de concurrencia. Autotest de la calibración 25 de 25 metas (Rasch 0.981, Rasch con datos ralos 1.013 y Elo 0.962 contra la verdad). Plan de despliegue b14, y b11 lleva sus tres migraciones. Orden b11, b12, b13 y b14 probado contra la API falsa. E2e de modelo, comparación, calibración del admin, adaptativo y dos dispositivos en teléfono, computadora y nube (374 de 378 en la corrida amplia, la falla era de tiempo y pasa sola). JS inicial de 294.2 KB de 300
+- Capturas en docs/screenshots/v3/b14 (84)
+- Nada de B14 se ha desplegado ni corrido contra el Supabase real. La calibración queda apagada (enabled en false) y en solo reporte. Los pasos tuyos están en docs/PENDIENTES_DE_RICARDO.md, sobre todo el secreto SUPABASE_CALIBRATION_KEY de GitHub y la decisión del permiso antes de prender la calibración
+- Arreglo de paso. Tres pruebas de Simular fallaban en main desde el 21 de octubre porque un doble de prueba (wireQuota) traía el día y su fin escritos a mano. Ahora salen del reloj
+
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
@@ -201,8 +209,8 @@ Evidencia
 - B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
 - B10 fusionado en main (PR 53). Sus tres migraciones y cinco funciones se aplicaron al proyecto antes de fusionar y se verificaron por huella. Lo que falta subir espera el token de Supabase
 - B16 unido con lo de Gemini para B17 y con B11 ya en main. Su PR sigue al de B11
-- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) está en su PR y B14 (modelo del alumno) en construcción. Siguen B15 y B17 a B19. Los despliegues de B11, B12 y B13 a Supabase esperan la autorización escrita de Ricardo
-- Los diseños de B10 a B13 y B15 están en /home/user/wt/plans
+- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) también, y B14 (modelo del alumno) está en su PR, con B15 en integración. Siguen B17 a B19. Los despliegues de B11, B12, B13 y B14 a Supabase esperan la autorización escrita de Ricardo
+- Los diseños de B10 a B15, B17 y B18 están en /home/user/wt/plans
 - Los subagentes se detuvieron varias veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
 ### Preguntas para Ricardo
@@ -220,6 +228,10 @@ Evidencia
 - B4 y B5. Revisé la versión que se revirtió. Todo lo que pide el plan ya estaba en la que se quedó y se rescataron tres detalles chicos (el aviso de tarjeta ya creada en la revisión del examen, el atajo X que dice seleccionar y dos pruebas que fallaban en Windows). Quedan a tu gusto, y cada uno es un cambio chico. Un número junto a cada tema de los mazos. Un total global de motivos de error en Progreso, además del reparto por rama. Una marca propia del alumno como la bandera de Anki, porque hoy Marcadas son las tarjetas con señal de la IA. Elegir temas dentro de cada mazo en Repasar (hoy se eligen mazo y subespecialidad). Pasar al documento de revisión médica las 22 diferencias de nombres de temas de la otra versión como alternativas
 - B12. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Tope de 0.30 dólares por alumno al día (10.6), mínimos de textos para abrir un motor en la compuerta, 60 en hipótesis y tarjetas, 40 en consejos y 30 en informes y reestructuradas (cámbialos antes de ver resultados), compuerta atada al modelo y al prompt con una auditoría corta de 60 textos por cambio (10.12), dos espacios de trabajo en Anthropic, producción y evaluaciones (10.21), qué hacer si ningún modelo pasa en tarjetas (10.23), el pago de la auditoría a los médicos (10.24) y permitir api.openai.com en la red de la sesión (10.25)
 - B13. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. La pregunta y las opciones de la parte en inglés van en inglés y las explicaciones en español (8.2, confírmalo con la convocatoria vigente), 90 segundos por reactivo de inglés (8.3), el inglés mezclado por casos y no al final (8.4), las licencias aceptadas con tu abogado (8.8), si agregamos Falso cognado a tu lista de sesgos (8.9), el vocabulario en el catálogo de pago con vista previa en Gratis y no completo (8.16), la meta propia de 30 reactivos de inglés (8.17) y dar prioridad a resúmenes CC BY de PubMed Central (8.19)
+- B14. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. El nombre del permiso, Mejora con tus datos sin nombre, porque los datos son seudónimos y no anónimos (10.6, con tu abogado), pedir de nuevo el permiso a quien lo dio con el texto corto (10.5, con tu abogado), que quien no da el permiso también vea su percentil calculado en su navegador (10.7, con tu abogado), comparación y modo adaptativo abiertos también en Gratis (10.10 y 10.15), un examen en curso no pasa a otro dispositivo (10.18), los textos de la IA no se sincronizan entre dispositivos (10.19), la hora de la corrida a las 4 con 23 de la mañana en Mérida (10.24), no encolar de noche las reestructuradas de B12 (10.30), un correo al día de distractores por médico (10.31), el autotest de la calibración como trabajo requerido de fusión (cuesta 3 o 4 minutos por push) y la llave dedicada como secreto del repositorio y no de un environment (10.2)
+- B14. Hoy un permiso de mejora dado con la pista corta cuenta igual que uno dado con el texto nuevo, porque no se subió la versión del aviso. La opción recomendada es pedir que se confirme otra vez y subir entonces PRIVACY_NOTICE_VERSION y minNoticeVersion. Prender la calibración espera tu respuesta y la de tu abogado
+- B14. Hallazgo sin resolver. Progreso y el Tutor en un dispositivo nuevo con el banco en la nube dicen Exactitud sin dato hasta que se abren las preguntas, porque necesitan el cuerpo de cada una. Se propone que useAnsweredBank use la fila del catálogo (rama, tema y dificultad) como respaldo. Bajar los cuerpos en bloque gastaría el tope diario de Gratis. Queda sin hacer
+- B14. Volver a entrar con el enlace del correo en un navegador que ya tenía sesión deja un segundo en que se ve el perfil de antes. Conviene que alguien revise src/app/cloud.tsx y device.ts antes de abrir a alumnos reales
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 
