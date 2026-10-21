@@ -81,7 +81,9 @@ Los umbrales de 30 y 100 respuestas y los de distractores, 5 por ciento y 100 ex
 - Una sola corrida a la vez, por el índice único de corridas en curso y por la concurrencia de GitHub
 - La corrida real termina en 0 con ok, partial, skipped y not_configured, y en 1 con failed, para que GitHub avise por correo a quien editó el horario por última vez
 - Si la paridad del kappa con bias_agreement_summary falla, la corrida queda partial con kappa_mismatch y la pantalla del admin lo avisa
-- Sin la llave o sin SUPABASE_URL el proceso escribe not_configured con un aviso amarillo y termina en 0
+- Sin la llave o sin SUPABASE_URL el proceso escribe not_configured con un aviso amarillo y termina en 0. Lo mismo si la dirección no es de un proyecto de Supabase (algo.supabase.co), para que una variable mal puesta no mande la llave a otro servidor. Con un dominio propio de Supabase hay que agregarlo a isAllowedUrl en scripts/calibration/calibrate.ts
+- Un 401 de la base no se trata como not_configured. Sale como error con http_401 y el proceso termina en 1. Es una decisión, aunque el plan 8.2 pedía lo contrario. Una llave mal pegada, revocada o que no es secreta es algo que Ricardo tiene que arreglar, y que la noche salga en rojo es lo que hace que GitHub le avise
+- Los trabajos de los workflows hacen checkout con persist-credentials en false, así el token del repo no queda en el disco del trabajo que recibe la llave. Las acciones siguen fijadas por etiqueta (v7) y no por hash, como el resto de los workflows del repo
 
 ## Límites conocidos
 

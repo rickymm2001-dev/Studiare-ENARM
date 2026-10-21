@@ -13,12 +13,18 @@ import { createRestStore } from './restStore.ts';
 
 type Env = Readonly<Record<string, string | undefined>>;
 
-/** Una dirección https, o http solo hacia esta misma máquina. Cualquier otra cosa no se usa */
-function validUrl(value: string): boolean {
+/**
+ * La dirección a la que viaja la llave. Una dirección https de un proyecto de Supabase (algo.supabase.co),
+ * o http solo hacia esta misma máquina para las pruebas locales. Cualquier otra cosa no se usa, así que
+ * una variable VITE_SUPABASE_URL mal puesta no manda la llave a otro servidor. Con un dominio propio de
+ * Supabase hay que agregarlo aquí a propósito
+ */
+export function isAllowedUrl(value: string): boolean {
   try {
     const url = new URL(value);
+    if (url.username !== '' || url.password !== '') return false;
     return (
-      url.protocol === 'https:' ||
+      (url.protocol === 'https:' && /^[a-z0-9-]+\.supabase\.co$/.test(url.hostname)) ||
       (url.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(url.hostname))
     );
   } catch {
@@ -30,7 +36,7 @@ export async function main(env: Env, log: Logger): Promise<number> {
   const url = (env.SUPABASE_URL ?? '').trim();
   const key = (env.SUPABASE_CALIBRATION_KEY ?? '').trim();
   log.log('start', { configured: url !== '' && key !== '' });
-  if (url === '' || key === '' || !validUrl(url)) {
+  if (url === '' || key === '' || !isAllowedUrl(url)) {
     log.warning('not_configured');
     log.log('not_configured');
     return 0;
