@@ -2,9 +2,9 @@
 // devuelven catalog_changes y fetch_questions (2.5 del plan de B11), con ids uuid como en la nube, y un
 // doble de rpc que responde con funciones. Todo el texto lleva [Prueba] y es simulado, nunca médico.
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { studyDayEnd, studyDayOf } from '@/engines/studyDay';
 import { ulidToUuid } from '../cloud/cloudIds';
 import { newId } from '../ids';
+import { studyDayEnd, studyDayOf } from '../../engines/studyDay';
 import type { CatalogRow, DenyReason, FetchedQuestion, QuotaInfo } from '../bank/contracts';
 
 /** Un uuid nuevo que la app puede convertir a ULID */
@@ -82,10 +82,11 @@ export function wireBody(
   };
 }
 
+/**
+ * El día de estudio de Mérida de este instante y cuándo termina. No llevan fecha fija, porque una cuota con
+ * un resetsAt ya vencido la app la da por caducada y las pruebas dejarían de ver los topes
+ */
 export function wireQuota(overrides: Partial<QuotaInfo> = {}): QuotaInfo {
-  // El día de estudio en curso y la hora en que el servidor lo reinicia salen del reloj, como en el
-  // servidor. Con fechas fijas la cuota pasaba a ser de ayer en cuanto el reloj rebasaba la hora fija, y
-  // la app la ignoraba (quotaIsCurrent) y toda prueba con el tope de Gratis fallaba
   const day = studyDayOf(new Date(), 'America/Merida');
   return {
     open: true,
