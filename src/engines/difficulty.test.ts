@@ -250,7 +250,73 @@ describe('Rasch por máxima verosimilitud conjunta (D-025)', () => {
     expect(fixed).toBeLessThan(1.45);
   });
 
+  it('con grupos sin nada en común los reconoce y centra cada uno por separado (revisión de B14, hallazgo 4)', () => {
+    // Dos grupos de 80 alumnos y 12 preguntas, uno con dificultad media -2 y otro +2. Rasch no puede
+    // decir dónde queda un grupo respecto del otro. Centrados juntos salían en -0.6 y +0.6 y "convergidos"
+    const rng = createRng('rasch-desconectado');
+    const responses: RaschResponse[] = [];
+    for (const [name, center] of [
+      ['f', -2],
+      ['d', 2],
+    ] as const) {
+      const difficulties = Array.from({ length: 12 }, () => center + rng.normal(0, 1));
+      for (let person = 0; person < 80; person += 1) {
+        const ability = rng.normal(center, 1);
+        difficulties.forEach((difficulty, item) => {
+          responses.push({
+            person: `${name}-p${person}`,
+            item: `${name}${item}`,
+            correct: rng.chance(probabilityCorrect(ability, difficulty)),
+          });
+        });
+      }
+    }
+    const result = estimateRasch(responses, { wrightCorrection: false });
+    expect(result.converged).toBe(true);
+    expect(result.components).toBe(2);
+    const of = (name: string) => Object.entries(result.items).filter(([id]) => id.startsWith(name));
+    for (const name of ['f', 'd']) {
+      const group = of(name);
+      expect(new Set(group.map(([, item]) => item.component)).size).toBe(1);
+      const mean = group.reduce((sum, [, item]) => sum + item.difficulty, 0) / group.length;
+      expect(Math.abs(mean)).toBeLessThan(1e-9);
+    }
+    // El grupo con el id más chico es el 0 cuando empatan en preguntas
+    expect(of('d')[0]?.[1].component).toBe(0);
+    expect(of('f')[0]?.[1].component).toBe(1);
+  });
+
+  it('un puente de un solo alumno conecta los grupos', () => {
+    const rng = createRng('rasch-puente');
+    const responses: RaschResponse[] = [];
+    for (const name of ['f', 'd']) {
+      for (let person = 0; person < 60; person += 1) {
+        const ability = rng.normal(0, 1);
+        for (let item = 0; item < 10; item += 1) {
+          responses.push({
+            person: `${name}-p${person}`,
+            item: `${name}${item}`,
+            correct: rng.chance(probabilityCorrect(ability, item / 5 - 1)),
+          });
+        }
+      }
+    }
+    expect(estimateRasch(responses).components).toBe(2);
+    // Un alumno que contesta cinco preguntas de cada grupo los une
+    for (const name of ['f', 'd']) {
+      for (let item = 0; item < 5; item += 1) {
+        responses.push({ person: 'puente', item: `${name}${item}`, correct: item % 2 === 0 });
+      }
+    }
+    expect(estimateRasch(responses).components).toBe(1);
+  });
+
   it('sin respuestas devuelve un resultado vacío', () => {
-    expect(estimateRasch([])).toMatchObject({ items: {}, persons: {}, converged: false });
+    expect(estimateRasch([])).toMatchObject({
+      items: {},
+      persons: {},
+      components: 0,
+      converged: false,
+    });
   });
 });

@@ -52,6 +52,8 @@ Lo que se aplica en modo apply, siempre completo o nada.
 - provisional con 30 o más y error estándar de 0.5 o menos
 - physician_estimate en cualquier otro caso. Una pregunta que todos aciertan o todos fallan no tiene estimación finita, queda aquí y se marca extreme
 - La escala se enlaza entre noches con las preguntas que ya eran al menos provisionales en la corrida publicada (mínimo 20). Sin ellas se centra en la dificultad del médico en logits
+- Si los alumnos y las preguntas forman grupos sin nada en común, Rasch no puede decir dónde queda un grupo respecto de otro. Cada grupo conectado se enlaza por su cuenta con sus propias 20 anclas. Sin ellas solo se enlaza con la dificultad del médico el único grupo que hay o el único de 20 preguntas o más. Los demás se quedan en physician_estimate hasta que algún alumno los conecte. Los conteos raschComponents y raschUnlinked dicen cuántos grupos hubo y cuántas versiones quedaron sin enlace
+- Si Rasch no converge en una noche no se publica ninguna dificultad de Rasch (raschConverged en 0)
 - La app usa la dificultad de Rasch solo si calibration.versionId es la versión publicada
 
 ## Ajustes

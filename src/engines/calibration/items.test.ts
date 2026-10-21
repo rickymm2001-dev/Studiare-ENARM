@@ -259,6 +259,147 @@ describe('enlace de escala', () => {
   });
 });
 
+describe('diseño desconectado (revisión de B14, hallazgo 4)', () => {
+  /**
+   * Una isla de alumnos y preguntas que no comparte nada con las demás. Cada alumno contesta todas las
+   * preguntas de su isla, con dificultades repartidas alrededor de `center`. `previousShift` pone en cada
+   * pregunta la calibración de la noche anterior, esa cantidad por encima de la verdad
+   */
+  function island(
+    name: string,
+    input: { items: number; students: number; center: number; previousShift?: number },
+  ) {
+    const rng = createRng(`isla-${name}`);
+    const abilities = Array.from({ length: input.students }, () => rng.normal(0, 1));
+    const items: BankItemRow[] = [];
+    const attempts: FirstAttempt[] = [];
+    let seq = 0;
+    for (let index = 0; index < input.items; index += 1) {
+      const difficulty = input.center - 1 + (2 * index) / Math.max(input.items - 1, 1);
+      const item = bankItem(`${name}${index}`, {
+        physician: Math.max(1, Math.min(5, Math.round(difficulty + 3))),
+        previous:
+          input.previousShift === undefined
+            ? null
+            : { difficulty: difficulty + input.previousShift, se: 0.2, state: 'calibrated' },
+      });
+      items.push(item);
+      for (let person = 0; person < input.students; person += 1) {
+        seq += 1;
+        attempts.push(
+          attempt(
+            `${name}-p${person}`,
+            item,
+            rng.chance(sigmoid((abilities[person] as number) - difficulty)),
+            seq,
+          ),
+        );
+      }
+    }
+    return { items, attempts };
+  }
+  const merge = (...islands: ReturnType<typeof island>[]) => ({
+    items: islands.flatMap((entry) => entry.items),
+    attempts: islands.flatMap((entry) => entry.attempts),
+  });
+  const mean = (values: readonly number[]) => values.reduce((a, b) => a + b, 0) / values.length;
+
+  it('dos grupos chicos sin nada en común no publican dificultades que no se pueden comparar', () => {
+    // El caso de la revisión. Dos grupos de 80 alumnos y 12 preguntas, uno fácil y otro difícil
+    const { items, attempts } = merge(
+      island('f', { items: 12, students: 80, center: -2 }),
+      island('d', { items: 12, students: 80, center: 2 }),
+    );
+    const { items: results, counts } = run(attempts, items);
+    expect(counts).toMatchObject({ raschComponents: 2, raschUnlinked: 24, raschConverged: 1 });
+    for (const row of results) {
+      expect(row).toMatchObject({ difficulty: null, se: null, state: 'physician_estimate' });
+    }
+  });
+
+  it('un grupo conectado de 20 preguntas o más se enlaza y el grupo suelto no publica nada', () => {
+    const { items, attempts } = merge(
+      island('m', { items: 30, students: 40, center: 0 }),
+      island('s', { items: 8, students: 40, center: 1.5 }),
+    );
+    const { items: results, counts } = run(attempts, items);
+    expect(counts).toMatchObject({ raschComponents: 2, raschUnlinked: 8 });
+    const main = results.filter((row) => row.versionId.startsWith('v-m'));
+    const stray = results.filter((row) => row.versionId.startsWith('v-s'));
+    expect(main).toHaveLength(30);
+    expect(main.every((row) => row.difficulty !== null && row.state !== 'physician_estimate')).toBe(
+      true,
+    );
+    // El grupo principal se enlaza con la escala del médico, como un diseño conectado
+    const logits = items
+      .filter((item) => item.versionId.startsWith('v-m'))
+      .map((item) => physicianToLogit(item.physician));
+    expect(Math.abs(mean(main.map((row) => row.difficulty as number)) - mean(logits))).toBeLessThan(
+      0.002,
+    );
+    expect(stray.every((row) => row.difficulty === null && row.se === null)).toBe(true);
+    expect(stray.every((row) => row.state === 'physician_estimate')).toBe(true);
+  });
+
+  it('dos grupos grandes sin anclas no se publican porque no se pueden poner uno respecto del otro', () => {
+    const { items, attempts } = merge(
+      island('a', { items: 25, students: 40, center: -1 }),
+      island('b', { items: 25, students: 40, center: 1 }),
+    );
+    const { items: results, counts } = run(attempts, items);
+    expect(counts).toMatchObject({ raschComponents: 2, raschUnlinked: 50, anchors: 0 });
+    expect(results.every((row) => row.difficulty === null)).toBe(true);
+  });
+
+  it('dos grupos grandes con sus propias anclas se enlazan cada uno por su cuenta', () => {
+    // Los dos traen la calibración de ayer, uno 0.7 arriba y otro 0.3 abajo de lo de hoy
+    const { items, attempts } = merge(
+      island('a', { items: 25, students: 40, center: -1, previousShift: 0.7 }),
+      island('b', { items: 25, students: 40, center: 1, previousShift: -0.3 }),
+    );
+    const { items: results, counts } = run(attempts, items);
+    expect(counts).toMatchObject({ raschComponents: 2, raschUnlinked: 0 });
+    expect(counts.anchors).toBeGreaterThanOrEqual(2 * MIN_ANCHORS);
+    for (const key of ['a', 'b']) {
+      // La media de las anclas de cada grupo, las que ya eran al menos provisionales hoy, coincide con la de ayer
+      const anchors = results.filter(
+        (row) => row.versionId.startsWith(`v-${key}`) && row.state !== 'physician_estimate',
+      );
+      const previous = anchors.map(
+        (row) => items.find((item) => item.versionId === row.versionId)?.previous?.difficulty,
+      );
+      expect(anchors.length).toBeGreaterThanOrEqual(MIN_ANCHORS);
+      expect(
+        Math.abs(mean(anchors.map((row) => row.difficulty as number)) - mean(previous as number[])),
+      ).toBeLessThan(0.003);
+    }
+  });
+
+  it('un diseño conectado queda igual que antes, con un solo grupo', () => {
+    const { items, attempts } = island('c', { items: 30, students: 60, center: 0 });
+    const { counts } = run(attempts, items);
+    expect(counts).toMatchObject({ raschComponents: 1, raschUnlinked: 0, raschConverged: 1 });
+  });
+
+  it('si Rasch no convergió no publica ninguna dificultad', () => {
+    const { items, attempts } = island('n', { items: 30, students: 60, center: 0 });
+    const bank = new Map(items.map((item) => [item.versionId, item]));
+    const result = calibrateItems({
+      attempts,
+      bank,
+      thresholds: FACTORY_THRESHOLDS,
+      settings: FACTORY_MODEL_SETTINGS,
+      rasch: { maxIterations: 2 },
+    });
+    expect(result.counts.raschConverged).toBe(0);
+    for (const row of result.items) {
+      expect(row).toMatchObject({ difficulty: null, se: null, state: 'physician_estimate' });
+      // Elo no depende de Rasch y sigue
+      expect(row.elo).not.toBeNull();
+    }
+  });
+});
+
 describe('Elo', () => {
   it('parte de la dificultad del médico y se mueve con la primera respuesta', () => {
     const item = bankItem('elo1', { physician: 5 });

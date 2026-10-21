@@ -7,7 +7,8 @@
  * Entradas. Respuestas como tripletas de alumno, pregunta y acierto. Puede haber datos faltantes,
  * porque no todos los alumnos responden todas las preguntas.
  * Salidas. Dificultad y error estándar por pregunta, habilidad por alumno, iteraciones, si
- * convergió y qué alumnos o preguntas se excluyeron por puntaje extremo.
+ * convergió, qué alumnos o preguntas se excluyeron por puntaje extremo y a qué grupo conectado
+ * pertenece cada pregunta (component, 0 el más grande).
  * Método. Máxima verosimilitud conjunta (JML) con pasos de Newton alternados para alumnos y
  * preguntas, dificultades centradas en 0 en cada vuelta y corrección de sesgo de Wright
  * (multiplicar las dificultades por (K − 1) / K, con K el promedio de respuestas por alumno que
@@ -17,6 +18,12 @@
  * preguntas con todo correcto o todo incorrecto no tienen estimación finita y se excluyen de forma
  * iterativa, como es estándar en JML. Se eligió JML porque no supone una distribución de
  * habilidades, es simple y converge rápido con 300 alumnos (D-025).
+ * Diseño desconectado. Si los alumnos y las preguntas forman grupos sin alumnos ni preguntas en común,
+ * la posición de un grupo respecto de otro no se puede identificar y JML la deja donde caiga, aunque
+ * "converja". Por eso las dificultades se centran en 0 dentro de cada grupo conectado y no en todo el
+ * banco, y cada pregunta dice a qué grupo pertenece. Quien use el resultado decide cómo enlazar cada
+ * grupo a una escala y no debe comparar la posición de un grupo con la de otro (revisión de B14,
+ * hallazgo 4).
  * Umbrales. Convergencia cuando ningún parámetro cambia más de 1e-4, con máximo 200 iteraciones.
  */
 
@@ -27,8 +34,19 @@ export interface RaschResponse {
 }
 
 export interface RaschResult {
-  items: Record<string, { difficulty: number; standardError: number; responses: number }>;
+  items: Record<
+    string,
+    {
+      difficulty: number;
+      standardError: number;
+      responses: number;
+      /** Grupo conectado de alumnos y preguntas al que pertenece. 0 es el que tiene más preguntas */
+      component: number;
+    }
+  >;
   persons: Record<string, { ability: number; responses: number }>;
+  /** Cuántos grupos conectados quedaron. 1 si todas las preguntas comparten alumnos entre sí */
+  components: number;
   iterations: number;
   converged: boolean;
   excludedItems: string[];
@@ -43,6 +61,57 @@ export interface RaschOptions {
 }
 
 const clampStep = (value: number) => Math.max(-1, Math.min(1, value));
+
+/**
+ * Los grupos conectados del grafo de alumnos y preguntas. Dos preguntas están en el mismo grupo si algún
+ * alumno contestó las dos, o si una cadena de alumnos y preguntas las une. Los grupos se numeran por su
+ * número de preguntas, el mayor primero y a igualdad el de la pregunta de id más chico, así el número no
+ * depende del orden de entrada
+ */
+function connectedGroups(
+  personCount: number,
+  itemIds: readonly string[],
+  pairs: readonly { person: number; item: number }[],
+): { itemComponent: Int32Array; personComponent: Int32Array; count: number } {
+  const parent = Int32Array.from({ length: personCount + itemIds.length }, (_, index) => index);
+  const find = (start: number): number => {
+    let node = start;
+    while (parent[node] !== node) {
+      parent[node] = parent[parent[node] as number] as number;
+      node = parent[node] as number;
+    }
+    return node;
+  };
+  for (const pair of pairs) {
+    const a = find(pair.person);
+    const b = find(personCount + pair.item);
+    if (a !== b) parent[a] = b;
+  }
+  const groups = new Map<number, { items: number; firstId: string }>();
+  itemIds.forEach((id, index) => {
+    const root = find(personCount + index);
+    const group = groups.get(root);
+    if (group === undefined) groups.set(root, { items: 1, firstId: id });
+    else {
+      group.items += 1;
+      if (id < group.firstId) group.firstId = id;
+    }
+  });
+  const order = new Map(
+    [...groups]
+      .sort(([, a], [, b]) => b.items - a.items || (a.firstId < b.firstId ? -1 : 1))
+      .map(([root], position) => [root, position]),
+  );
+  const itemComponent = Int32Array.from(
+    itemIds,
+    (_, index) => order.get(find(personCount + index)) as number,
+  );
+  const personComponent = Int32Array.from(
+    { length: personCount },
+    (_, index) => order.get(find(index)) as number,
+  );
+  return { itemComponent, personComponent, count: order.size };
+}
 
 export function estimateRasch(
   responses: readonly RaschResponse[],
@@ -93,6 +162,11 @@ export function estimateRasch(
   }));
   const ability = new Float64Array(personIds.length);
   const difficulty = new Float64Array(itemIds.length);
+  const {
+    itemComponent,
+    personComponent,
+    count: componentCount,
+  } = connectedGroups(personIds.length, itemIds, pairs);
 
   let iterations = 0;
   let converged = false;
@@ -138,12 +212,25 @@ export function estimateRasch(
       maxChange = Math.max(maxChange, Math.abs(step));
     }
 
-    // Identificación. Dificultades centradas en 0
-    const mean = difficulty.reduce((sum, value) => sum + value, 0) / Math.max(difficulty.length, 1);
-    for (let index = 0; index < difficulty.length; index += 1)
-      difficulty[index] = (difficulty[index] as number) - mean;
-    for (let index = 0; index < ability.length; index += 1)
-      ability[index] = (ability[index] as number) - mean;
+    // Identificación. Dificultades centradas en 0 dentro de cada grupo conectado, y las habilidades con
+    // el mismo desplazamiento que las de su grupo
+    const sums = new Float64Array(componentCount);
+    const sizes = new Float64Array(componentCount);
+    for (let index = 0; index < difficulty.length; index += 1) {
+      const group = itemComponent[index] as number;
+      sums[group] = (sums[group] as number) + (difficulty[index] as number);
+      sizes[group] = (sizes[group] as number) + 1;
+    }
+    for (let index = 0; index < difficulty.length; index += 1) {
+      const group = itemComponent[index] as number;
+      difficulty[index] =
+        (difficulty[index] as number) - (sums[group] as number) / (sizes[group] as number);
+    }
+    for (let index = 0; index < ability.length; index += 1) {
+      const group = personComponent[index] as number;
+      ability[index] =
+        (ability[index] as number) - (sums[group] as number) / (sizes[group] as number);
+    }
 
     if (maxChange < tolerance) {
       converged = true;
@@ -175,6 +262,7 @@ export function estimateRasch(
       difficulty: (difficulty[index] as number) * correction,
       standardError: 1 / Math.sqrt(information[index] as number),
       responses: itemResponses[index] as number,
+      component: itemComponent[index] as number,
     };
   });
   const persons: RaschResult['persons'] = {};
@@ -187,6 +275,7 @@ export function estimateRasch(
   return {
     items,
     persons,
+    components: componentCount,
     iterations,
     converged,
     excludedItems: [...excludedItems].sort(),
