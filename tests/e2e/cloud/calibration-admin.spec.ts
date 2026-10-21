@@ -115,6 +115,8 @@ test.describe('Calibración del admin', () => {
     test.setTimeout(120_000);
     const { model } = await setup(context, cloud);
     seedRuns(model, { lastOkHoursAgo: 60, count: 3 });
+    // Encendida. Si el admin la apagó a propósito no hay nada que avisar (revisión de B14, hallazgo 8)
+    model.settings.calibration.enabled = true;
     await openCalibration(page, cloud);
 
     const notice = page.getByRole('status').filter({ hasText: text.status.stale.title });
@@ -127,6 +129,23 @@ test.describe('Calibración del admin', () => {
       'href',
       /\/actions\/workflows\/calibration\.yml$/,
     );
+    await expectNoSeriousA11yViolations(page);
+  });
+
+  test('apagada a propósito no avisa de las 48 horas ni manda a prenderla en GitHub', async ({
+    page,
+    cloud,
+    context,
+  }) => {
+    test.setTimeout(120_000);
+    const { model } = await setup(context, cloud);
+    seedRuns(model, { lastOkHoursAgo: 60, count: 3 });
+    await openCalibration(page, cloud);
+
+    const status = card(page, text.status.title);
+    await expect(status.getByText(text.status.switchOff)).toBeVisible();
+    await expect(page.getByText(text.status.stale.title)).toHaveCount(0);
+    await expect(page.getByRole('link', { name: text.status.stale.open })).toHaveCount(0);
     await expectNoSeriousA11yViolations(page);
   });
 

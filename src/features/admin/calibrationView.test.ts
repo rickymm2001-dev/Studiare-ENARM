@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
 import type { CalibrationRun } from '@/data/cloud/calibrationAdmin';
 import {
   STALE_AFTER_HOURS,
@@ -13,30 +14,64 @@ import {
 const now = new Date('2026-10-16T12:00:00.000Z');
 const run = (counts: CalibrationRun['counts']): Pick<CalibrationRun, 'counts'> => ({ counts });
 
+/** Los ajustes con la calibración encendida o apagada */
+const settings = (enabled: boolean) => ({
+  ...FACTORY_MODEL_SETTINGS,
+  calibration: { ...FACTORY_MODEL_SETTINGS.calibration, enabled },
+});
+
 describe('si la calibración está al día', () => {
   it('sin corridas ni corrida buena dice que nunca ha corrido', () => {
-    expect(calibrationHealth({ lastOkAt: null, runs: [] }, now)).toEqual({ kind: 'never' });
+    expect(calibrationHealth({ lastOkAt: null, runs: [], settings: settings(true) }, now)).toEqual({
+      kind: 'never',
+    });
   });
 
   it('con corridas pero ninguna buena lo dice aparte', () => {
     const runs = [{ id: 'a' }] as CalibrationRun[];
-    expect(calibrationHealth({ lastOkAt: null, runs }, now)).toEqual({ kind: 'no_good_run' });
+    expect(calibrationHealth({ lastOkAt: null, runs, settings: settings(true) }, now)).toEqual({
+      kind: 'no_good_run',
+    });
   });
 
   it('avisa solo cuando la última buena pasa de 48 horas', () => {
     const at = (hours: number) => new Date(now.getTime() - hours * 3_600_000).toISOString();
     const runs = [{ id: 'a' }] as CalibrationRun[];
     expect(STALE_AFTER_HOURS).toBe(48);
-    expect(calibrationHealth({ lastOkAt: at(5), runs }, now)).toEqual({ kind: 'fresh', hours: 5 });
-    expect(calibrationHealth({ lastOkAt: at(48), runs }, now)).toEqual({
+    expect(calibrationHealth({ lastOkAt: at(5), runs, settings: settings(true) }, now)).toEqual({
+      kind: 'fresh',
+      hours: 5,
+    });
+    expect(calibrationHealth({ lastOkAt: at(48), runs, settings: settings(true) }, now)).toEqual({
       kind: 'fresh',
       hours: 48,
     });
-    expect(calibrationHealth({ lastOkAt: at(49), runs }, now)).toEqual({
+    expect(calibrationHealth({ lastOkAt: at(49), runs, settings: settings(true) }, now)).toEqual({
       kind: 'stale',
       hours: 49,
     });
-    expect(calibrationHealth({ lastOkAt: at(200), runs }, now)).toEqual({
+    expect(calibrationHealth({ lastOkAt: at(200), runs, settings: settings(true) }, now)).toEqual({
+      kind: 'stale',
+      hours: 200,
+    });
+  });
+
+  it('apagada a propósito no avisa ni de las 48 horas ni de que no hay corrida buena (revisión de B14, hallazgo 8)', () => {
+    const at = (hours: number) => new Date(now.getTime() - hours * 3_600_000).toISOString();
+    const runs = [{ id: 'a' }] as CalibrationRun[];
+    const off = settings(false);
+    expect(calibrationHealth({ lastOkAt: at(200), runs, settings: off }, now)).toEqual({
+      kind: 'off',
+    });
+    expect(calibrationHealth({ lastOkAt: null, runs, settings: off }, now)).toEqual({
+      kind: 'off',
+    });
+    // Sin ninguna corrida sigue diciendo que nunca ha corrido, porque puede faltar la llave
+    expect(calibrationHealth({ lastOkAt: null, runs: [], settings: off }, now)).toEqual({
+      kind: 'never',
+    });
+    // Encendida de nuevo, el aviso vuelve
+    expect(calibrationHealth({ lastOkAt: at(200), runs, settings: settings(true) }, now)).toEqual({
       kind: 'stale',
       hours: 200,
     });

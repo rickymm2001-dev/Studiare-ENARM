@@ -17,7 +17,9 @@ export type CalibrationHealth =
   | { kind: 'no_good_run' }
   /** La última buena pasó de 48 horas. hours son las horas completas que lleva */
   | { kind: 'stale'; hours: number }
-  | { kind: 'fresh'; hours: number };
+  | { kind: 'fresh'; hours: number }
+  /** El admin la apagó. Las corridas salen saltadas a propósito y no hay nada que avisar (revisión de B14, hallazgo 8) */
+  | { kind: 'off' };
 
 /** Horas completas entre un instante y ahora. null si el instante no se entiende. Nunca negativas */
 export function hoursSince(iso: string | null, now: Date): number | null {
@@ -28,10 +30,14 @@ export function hoursSince(iso: string | null, now: Date): number | null {
 }
 
 export function calibrationHealth(
-  data: Pick<AdminCalibration, 'lastOkAt' | 'runs'>,
+  data: Pick<AdminCalibration, 'lastOkAt' | 'runs' | 'settings'>,
   now: Date,
 ): CalibrationHealth {
   if (data.runs.length === 0 && data.lastOkAt === null) return { kind: 'never' };
+  // Apagada, calibration_begin deja una corrida saltada con disabled en cada noche. Que la última buena
+  // envejezca o que ninguna haya terminado bien es lo esperado, y mandar a dar Enable workflow en GitHub
+  // sería mandar a prender lo que el admin apagó
+  if (!data.settings.calibration.enabled) return { kind: 'off' };
   const hours = hoursSince(data.lastOkAt, now);
   if (hours === null) return { kind: 'no_good_run' };
   return hours > STALE_AFTER_HOURS ? { kind: 'stale', hours } : { kind: 'fresh', hours };

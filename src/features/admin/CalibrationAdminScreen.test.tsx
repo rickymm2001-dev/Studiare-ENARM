@@ -169,10 +169,11 @@ describe('Calibración', () => {
     fakeCloud(
       reply({
         lastOkAt: '2026-10-13T10:31:40.000Z',
+        settings: { calibration: { enabled: true, mode: 'dry_run' } },
         runs: [
           run({
-            status: 'skipped',
-            reason: 'disabled',
+            status: 'failed',
+            reason: 'store_error',
             startedAt: '2026-10-16T10:23:05.000Z',
             counts: {},
           }),
@@ -190,7 +191,34 @@ describe('Calibración', () => {
       'https://github.com/rickymm2001-dev/Studiare-ENARM/actions/workflows/calibration.yml',
     );
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
-    // La corrida saltada dice por qué
+    // La corrida fallida dice por qué
+    expect(screen.getAllByText(text.reasons.store_error as string).length).toBeGreaterThan(0);
+  });
+
+  it('si el admin la apagó a propósito no avisa de las 48 horas ni manda a prenderla en GitHub (revisión de B14, hallazgo 8)', async () => {
+    // Apagada, todas las corridas salen saltadas con disabled y la última buena envejece
+    fakeCloud(
+      reply({
+        lastOkAt: '2026-10-13T10:31:40.000Z',
+        runs: [
+          run({
+            status: 'skipped',
+            reason: 'disabled',
+            startedAt: '2026-10-16T10:23:05.000Z',
+            counts: {},
+          }),
+        ],
+      }),
+    );
+    showScreen();
+    const card = (await screen.findByRole('heading', { name: text.status.title })).closest(
+      'section',
+    ) as HTMLElement;
+    expect(within(card).getByText(text.status.switchOff)).toBeVisible();
+    expect(within(card).queryByText(text.status.stale.title)).toBeNull();
+    expect(within(card).queryByRole('link', { name: text.status.stale.open })).toBeNull();
+    expect(within(card).queryByText(text.status.noGoodRun)).toBeNull();
+    // La corrida saltada sigue diciendo por qué
     expect(screen.getAllByText(text.reasons.disabled as string).length).toBeGreaterThan(0);
   });
 
