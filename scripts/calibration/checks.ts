@@ -228,7 +228,7 @@ export async function recountOptions(
      select version_id::text as version, stable_id::text as option,
             count(*)::int as exposures, (count(*) filter (where stable_id = chosen))::int as choices
      from valid
-     where has_chosen and not (ms is not null and ms < (greatest(total_words, 1)::numeric / $2::numeric) * 1000)
+     where has_chosen and ms >= (greatest(total_words, 1)::numeric / $2::numeric) * 1000
      group by 1, 2 order by 1, 2`,
     [run, maxWordsPerSecond],
   );

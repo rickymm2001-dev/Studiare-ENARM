@@ -14,7 +14,9 @@
  *   - Tope de primeros intentos por alumno y día (400, J). Un día arriba del tope no cuenta
  *   - Se quitan las respuestas más rápidas que la lectura plausible, palabras entre 6 por segundo (el
  *     umbral de behavior.ts), porque son azar y harían ver la pregunta más difícil de lo que es. Las
- *     palabras son las del caso, la viñeta y la pregunta, más las de las opciones que se mostraron
+ *     palabras son las del caso, la viñeta y la pregunta, más las de las opciones que se mostraron. Una
+ *     respuesta sin tiempo (msToAnswer ausente o que no es un número) tampoco tiene lectura plausible
+ *     que demostrar, y el servidor no lo exige, así que se quita igual y se cuenta como rápida
  *   - La pantalla de opciones es la última question_shown de ese alumno y esa versión antes de la
  *     respuesta. Si no hay, o la opción elegida no estaba en ella, el intento sirve para la dificultad
  *     pero no para exposiciones y elecciones
@@ -132,15 +134,13 @@ export function selectFirstAttempts(input: {
     const shown = lastBefore(exposureIndex.get(`${row.person}|${row.versionId}`), row.seq);
     const exposed = shown?.options.includes(row.optionId) ? shown.options : null;
 
-    if (row.ms !== null) {
-      const shownWords = optionWords(item);
-      const words =
-        item.words + (exposed ?? []).reduce((sum, id) => sum + (shownWords.get(id) ?? 0), 0);
-      const minimumMs = (Math.max(words, 1) / input.thresholds.behavior.maxWordsPerSecond) * 1000;
-      if (row.ms < minimumMs) {
-        counts.rapidExcluded += 1;
-        continue;
-      }
+    const shownWords = optionWords(item);
+    const words =
+      item.words + (exposed ?? []).reduce((sum, id) => sum + (shownWords.get(id) ?? 0), 0);
+    const minimumMs = (Math.max(words, 1) / input.thresholds.behavior.maxWordsPerSecond) * 1000;
+    if (row.ms === null || row.ms < minimumMs) {
+      counts.rapidExcluded += 1;
+      continue;
     }
     if (shown === null) counts.noExposure += 1;
     else if (exposed === null) counts.inconsistentExposure += 1;

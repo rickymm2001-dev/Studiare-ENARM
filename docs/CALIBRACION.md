@@ -43,7 +43,7 @@ Lo que se aplica en modo apply, siempre completo o nada.
 - Cuenta solo quien dio el permiso de mejora anónima con un aviso igual o posterior a model_settings.calibration.minNoticeVersion, y solo hasta el corte de esa noche. Quien lo retiró deja de contar desde la noche siguiente. Los médicos, admins y el dueño no cuentan aunque prendan el permiso
 - El seudónimo es la primera parte de un hash sha256 del id de la cuenta con una sal de 32 bytes que solo existe mientras corre la noche. Es otro cada noche y nadie puede volver a ligarlo después
 - Ningún dato sale con menos de 30 alumnos. El piso vive en el esquema de zod, en los motores, en la función de la base y en la restricción de comparison_cells, así que el admin no puede bajarlo
-- Una respuesta cuenta solo si el alumno pidió esa versión al servidor, es decir, si hay una lectura suya en bank_reads de ese día de estudio o antes. El acierto sale de la opción que eligió, no de lo que sube el cliente. Cuenta el primer intento de cada alumno en cada pregunta, con un tope de 400 por día, y se quitan las respuestas más rápidas que la lectura plausible (más de 6 palabras por segundo)
+- Una respuesta cuenta solo si el alumno pidió esa versión al servidor, es decir, si hay una lectura suya en bank_reads de ese día de estudio o antes. El acierto sale de la opción que eligió, no de lo que sube el cliente. Cuenta el primer intento de cada alumno en cada pregunta, con un tope de 400 por día, y se quitan las respuestas más rápidas que la lectura plausible (más de 6 palabras por segundo) y las que no traen tiempo de respuesta
 - calibration_runs.counts y la población solo aceptan números, booleanos y códigos en minúsculas. Un texto con espacios o con mayúsculas se rechaza
 
 ## Estados de la dificultad

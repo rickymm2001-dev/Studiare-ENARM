@@ -161,12 +161,34 @@ describe('respuestas más rápidas que la lectura plausible', () => {
         // 60 palabras son 10 s
         answer({ person: 'a', key: 'r1', seq: 2, ms: 9_900 }),
         answer({ person: 'b', key: 'r1', seq: 4, ms: 10_100 }),
-        answer({ person: 'c', key: 'r1', seq: 6, ms: null }),
       ],
       [item],
     );
-    expect(attempts.map((attempt) => attempt.person)).toEqual(['b', 'c']);
+    expect(attempts.map((attempt) => attempt.person)).toEqual(['b']);
     expect(counts.rapidExcluded).toBe(1);
+  });
+
+  it('una respuesta sin tiempo no se salta el filtro y cuenta como rápida (revisión de B14, hallazgo 6)', () => {
+    // El servidor no exige msToAnswer. Sin él no hay lectura plausible que demostrar
+    const { attempts, counts } = select(
+      [
+        answer({ person: 'a', key: 'r1', seq: 2, ms: null }),
+        answer({ person: 'b', key: 'r1', seq: 4, ms: 40_000 }),
+      ],
+      [item],
+    );
+    expect(attempts.map((attempt) => attempt.person)).toEqual(['b']);
+    expect(counts.rapidExcluded).toBe(1);
+    // Es un primer intento que no cuenta, y una respuesta posterior con tiempo ya es repetida
+    const again = select(
+      [
+        answer({ person: 'a', key: 'r1', seq: 2, ms: null }),
+        answer({ person: 'a', key: 'r1', seq: 4, ms: 40_000 }),
+      ],
+      [item],
+    );
+    expect(again.attempts).toHaveLength(0);
+    expect(again.counts).toMatchObject({ rapidExcluded: 1, repeatAttempts: 1 });
   });
 
   it('una respuesta rápida es un primer intento que no cuenta y la siguiente ya es repetida', () => {
