@@ -83,6 +83,10 @@ Los umbrales de 30 y 100 respuestas y los de distractores, 5 por ciento y 100 ex
 - Si la paridad del kappa con bias_agreement_summary falla, la corrida queda partial con kappa_mismatch y la pantalla del admin lo avisa
 - Sin la llave o sin SUPABASE_URL el proceso escribe not_configured con un aviso amarillo y termina en 0
 
+## Límites conocidos
+
+- El corte de una noche es el mayor seq de la bitácora al empezar. Un seq se asigna antes de que la transacción confirme, así que una transacción con el seq 100 que confirma después de que otra con el 101 ya estaba confirmada, y después de que una página pasó por ahí, queda fuera de esa noche. Es el mismo borde que ya tiene la bajada de la bitácora de la sincronización. Afecta una fila a la vez y se corrige sola, porque cada noche vuelve a calcular los primeros intentos desde toda la bitácora y la fila entra en la noche siguiente. Se aceptó en lugar de tomar el corte con el candado de sync_push_events, que frenaría las subidas de todos los alumnos mientras empieza la noche
+
 ## Qué imprime el proceso
 
 Solo líneas JSON con un código de la lista cerrada de scripts/calibration/log.ts y valores que son números, booleanos o palabras de otra lista cerrada. Lo demás se descarta y la línea trae dropped_field con cuántos fueron. Los errores salen con su clase y su código, el SQLSTATE de Postgres o el estado HTTP, nunca con su mensaje. No se suben artefactos, no se usa el modo de depuración de los pasos y la llave nunca se imprime.
