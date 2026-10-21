@@ -164,7 +164,9 @@ $$;
 
 -- ===================================================================== Pantallas del equipo
 -- El acuerdo del etiquetado, una línea por noche que terminó bien (ok o partial), la más reciente primero.
--- Lo ven el médico, el admin y el dueño. Son cifras de los pares de etiquetas, sin quiénes son los médicos
+-- Si dos corridas terminaron bien el mismo día de estudio, una programada y otra a mano, la línea es la de la
+-- que terminó al último. Lo ven el médico, el admin y el dueño. Son cifras de los pares de etiquetas, sin
+-- quiénes son los médicos
 create or replace function public.editor_agreement_history(p_limit integer default 60) returns jsonb
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 declare
@@ -175,9 +177,9 @@ begin
     select jsonb_agg(jsonb_build_object(
         'studyDay', to_char(n.study_day, 'YYYY-MM-DD'), 'at', public.bank_iso(n.finished_at), 'pairs', n.pairs,
         'kappa', n.kappa, 'observed', n.observed, 'expected', n.expected, 'parity', n.parity
-      ) order by n.study_day desc, n.finished_at desc, n.id desc)
+      ) order by n.study_day desc)
     from (
-      select r.id, r.study_day, r.finished_at, s.pairs, s.kappa, s.observed, s.expected, s.parity
+      select distinct on (r.study_day) r.id, r.study_day, r.finished_at, s.pairs, s.kappa, s.observed, s.expected, s.parity
       from public.agreement_snapshots s
       join public.calibration_runs r on r.id = s.run_id
       where r.status in ('ok', 'partial')

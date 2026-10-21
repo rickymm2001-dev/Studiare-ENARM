@@ -341,6 +341,22 @@ select pg_temp.expect(jsonb_array_length(:'hist2'::jsonb -> 'nights') = 2 and :'
   'MR6. El tope de noches del historial no se respetó o el admin ve otra cosa que el médico');
 select pg_temp.expect((select array_agg(k order by k collate "C") from jsonb_object_keys(:'hist'::jsonb) k) = array['nights'],
   'MR6. El historial no es un objeto con nights');
+-- Dos corridas buenas el mismo día de estudio, una programada y otra a mano. El historial dice una línea por
+-- noche, la de la corrida que terminó al último, y no repite el día (revisión de B14, hallazgo 7)
+begin;
+select pg_temp.mr_seed();
+insert into public.calibration_runs (id, run_trigger, mode, status, study_day, started_at, finished_at)
+  values ('ab100000-0000-0000-0000-000000000006', 'manual', 'dry_run', 'ok', public.study_day(),
+          now() - interval '20 minutes', now() - interval '10 minutes');
+insert into public.agreement_snapshots (run_id, pairs, kappa, observed, expected, by_tag, sql_kappa, parity)
+  values ('ab100000-0000-0000-0000-000000000006', 33, 0.55, 0.72, 0.4, '{}', 0.55, true);
+select pg_temp.as_user(:'m1');
+select public.editor_agreement_history() as hist_twice \gset
+rollback;
+select pg_temp.expect(jsonb_array_length(:'hist_twice'::jsonb -> 'nights') = 1
+  and (:'hist_twice'::jsonb -> 'nights' -> 0 ->> 'pairs') = '33'
+  and (:'hist_twice'::jsonb -> 'nights' -> 0 ->> 'studyDay') = to_char(public.study_day(), 'YYYY-MM-DD'),
+  'MR6. El historial de acuerdo repitió el día de estudio de dos corridas o no se quedó con la última');
 -- La pantalla del admin
 select pg_temp.expect(:'runs'::jsonb ->> 'lastOkAt' ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]{12}Z$'
   and :'runs'::jsonb #>> '{publication,runId}' = 'ab100000-0000-0000-0000-000000000001'
