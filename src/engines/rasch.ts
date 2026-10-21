@@ -10,7 +10,10 @@
  * convergió y qué alumnos o preguntas se excluyeron por puntaje extremo.
  * Método. Máxima verosimilitud conjunta (JML) con pasos de Newton alternados para alumnos y
  * preguntas, dificultades centradas en 0 en cada vuelta y corrección de sesgo de Wright
- * (multiplicar las dificultades por (L − 1) / L, con L el número de preguntas). Los alumnos o
+ * (multiplicar las dificultades por (K − 1) / K, con K el promedio de respuestas por alumno que
+ * quedó después de excluir extremos. Con todos contestando todo K es el número de preguntas. En
+ * producción cada alumno ve una parte chica del banco y el sesgo de JML crece con las respuestas
+ * por alumno y no con el tamaño del banco, así que con L la corrección valdría casi 1). Los alumnos o
  * preguntas con todo correcto o todo incorrecto no tienen estimación finita y se excluyen de forma
  * iterativa, como es estándar en JML. Se eligió JML porque no supone una distribución de
  * habilidades, es simple y converge rápido con 300 alumnos (D-025).
@@ -160,8 +163,11 @@ export function estimateRasch(
     itemResponses[pair.item] = (itemResponses[pair.item] as number) + 1;
     personResponses[pair.person] = (personResponses[pair.person] as number) + 1;
   }
-  const length = itemIds.length;
-  const correction = options.wrightCorrection === false || length < 2 ? 1 : (length - 1) / length;
+  // K, las respuestas por alumno que quedaron. Con menos de 2 no hay corrección que valga (y un alumno con
+  // una sola respuesta es extremo y ya se excluyó)
+  const perPerson = personIds.length === 0 ? 0 : pairs.length / personIds.length;
+  const correction =
+    options.wrightCorrection === false || perPerson < 2 ? 1 : (perPerson - 1) / perPerson;
 
   const items: RaschResult['items'] = {};
   itemIds.forEach((id, index) => {

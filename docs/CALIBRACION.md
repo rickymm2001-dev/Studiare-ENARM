@@ -97,9 +97,10 @@ Solo líneas JSON con un código de la lista cerrada de scripts/calibration/log.
 
 npm run calibration:selftest levanta el mismo Postgres temporal de npm run test:sql, sin Docker, lo migra como el proyecto real, empaqueta la calibración, corre dist-calibration/selftest.mjs y apaga la base. Usa el puerto 54502 y tarda unos 4 minutos.
 
-Siembra, como superusuario, 300 alumnos simulados con 90 días de práctica, el banco de la demo con textos marcados, alias y correos marcados, permisos de todos los tipos (85 por ciento lo dio, 10 por ciento no decidió, 5 por ciento lo dio y lo retiró, tres con un aviso anterior), dos médicos y un admin con permiso, cinco alumnos que inventan respuestas sin haber pedido las preguntas, 40 alumnos de cirugía general, 12 de pediatría y 60 pares de etiquetas. Corre la misma pipeline de producción con el transporte de Postgres y revisa 24 metas con cuentas independientes.
+Siembra, como superusuario, 300 alumnos simulados con 90 días de práctica, el banco de la demo con textos marcados, alias y correos marcados, permisos de todos los tipos (85 por ciento lo dio, 10 por ciento no decidió, 5 por ciento lo dio y lo retiró, tres con un aviso anterior), dos médicos y un admin con permiso, cinco alumnos que inventan respuestas sin haber pedido las preguntas, 40 alumnos de cirugía general, 12 de pediatría y 60 pares de etiquetas. Corre la misma pipeline de producción con el transporte de Postgres y revisa 25 metas con cuentas independientes.
 
 - Rasch contra la dificultad verdadera con correlación de 0.90 o más y Elo con 0.80 o más
+- Rasch con datos ralos, donde cada alumno contesta de 5 a 20 preguntas, con la pendiente de lo estimado contra lo verdadero entre 0.9 y 1.05. La correlación no ve una escala inflada y la pendiente sí
 - Quién entra, exactamente los de permiso vigente, y ninguna fila de quien retiró el permiso, del equipo o de quien inventa
 - Exposiciones y elecciones por opción, las marcas de distractores y las variantes listas contra un recuento directo en SQL
 - Las celdas de la comparación contra el motor sobre los datos simulados, la de cirugía general con 40 lista y la de pediatría con 12 calibrando

@@ -8,7 +8,12 @@ import {
   studentMetrics,
   type ComparisonFact,
 } from '@/engines/comparison';
-import { pearson } from '@/engines/stats/correlation';
+import { calibrateItems } from '@/engines/calibration/items';
+import type { BankItemRow, FirstAttempt } from '@/engines/calibration/types';
+import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
+import { FACTORY_THRESHOLDS } from '@/config/thresholds';
+import { createRng } from '@/engines/random';
+import { pearson, regressionSlope } from '@/engines/stats/correlation';
 import { daysBetween, studyDayOf } from '@/engines/studyDay';
 import { SIM_TIME_ZONE } from '@/demo/generator/simulate';
 import type { PgSql } from './pgStore.ts';
@@ -69,6 +74,83 @@ export async function difficultyCorrelations(
     items: rows.length,
     calibrated: rows.filter((row) => row.state === 'calibrated').length,
     provisional: rows.filter((row) => row.state === 'provisional').length,
+  };
+}
+
+// ===================================================================== Dificultad con datos ralos
+/** Una versión mínima del banco. calibrateItems solo mira su id, su pregunta y la dificultad del médico */
+const sparseBankRow = (index: number): BankItemRow => ({
+  versionId: `ralo-v${index}`,
+  questionId: `ralo-q${index}`,
+  branch: 'pediatrics',
+  topic: 'neonatology',
+  subtopic: 'neonatal_jaundice',
+  language: 'es',
+  physician: 3,
+  variantOf: null,
+  words: 60,
+  current: true,
+  canonical: [],
+  options: [],
+  previous: null,
+});
+
+/**
+ * La pendiente de la dificultad publicada contra la verdadera cuando cada alumno contesta una parte chica
+ * del banco, que es el caso real y el que el universo del autotest (alumnos que contestan casi todo) no
+ * ve. El sesgo de JML crece con las respuestas por alumno y no con el tamaño del banco, así que con datos
+ * densos no hay sesgo y la correlación sale alta aunque la escala quede inflada (revisión de B14,
+ * hallazgo 3). Simula con semilla, pasa por calibrateItems, el mismo motor de la noche, y promedia las
+ * semillas para no depender de una sola muestra. 1 es una escala fiel
+ */
+export function sparseRaschSlope(
+  seeds: readonly string[],
+  size = { persons: 1500, items: 60, minAnswers: 5, maxAnswers: 20 },
+): { slope: number; perPerson: number } {
+  const bank = Array.from({ length: size.items }, (_, index) => sparseBankRow(index));
+  const slopes: number[] = [];
+  let answers = 0;
+  for (const seed of seeds) {
+    const rng = createRng(`ralo|${seed}`);
+    const truth = bank.map(() => rng.normal(0, 1));
+    const attempts: FirstAttempt[] = [];
+    for (let person = 0; person < size.persons; person += 1) {
+      const ability = rng.normal(0, 1);
+      const count = rng.int(size.minAnswers, size.maxAnswers);
+      for (const index of rng.shuffle(bank.map((_, position) => position)).slice(0, count)) {
+        const item = bank[index] as BankItemRow;
+        attempts.push({
+          person: `ralo-p${person}`,
+          questionId: item.questionId,
+          versionId: item.versionId,
+          optionId: 'o',
+          correct: rng.chance(1 / (1 + Math.exp(-(ability - (truth[index] as number))))),
+          daysBefore: 3,
+          seq: attempts.length + 1,
+          exposed: null,
+        });
+      }
+    }
+    answers += attempts.length;
+    const { items } = calibrateItems({
+      attempts,
+      bank: new Map(bank.map((item) => [item.versionId, item])),
+      thresholds: FACTORY_THRESHOLDS,
+      settings: FACTORY_MODEL_SETTINGS,
+    });
+    const estimated = items.filter((item) => item.difficulty !== null);
+    slopes.push(
+      regressionSlope(
+        estimated.map(
+          (item) => truth[bank.findIndex((row) => row.versionId === item.versionId)] as number,
+        ),
+        estimated.map((item) => item.difficulty as number),
+      ),
+    );
+  }
+  return {
+    slope: slopes.reduce((sum, value) => sum + value, 0) / slopes.length,
+    perPerson: answers / (seeds.length * size.persons),
   };
 }
 

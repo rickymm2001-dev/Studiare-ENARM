@@ -27,6 +27,7 @@ import {
   intruders,
   linesWithSecrets,
   recountOptions,
+  sparseRaschSlope,
   storedCells,
   storedFlags,
   storedOptions,
@@ -237,6 +238,15 @@ async function main(socketDir: string, port: number): Promise<number> {
       'correlación de 0.90 o más',
       corr.rasch,
       corr.rasch >= 0.9,
+    );
+    // El universo sembrado es denso (casi todos contestan casi todo) y no ve el sesgo de JML. Con pocas
+    // respuestas por alumno, como en producción, la pendiente delata una escala inflada (hallazgo 3)
+    const sparse = sparseRaschSlope(['a', 'b', 'c']);
+    goal(
+      'Rasch con datos ralos (5 a 20 respuestas por alumno), pendiente contra la verdadera',
+      'de 0.9 a 1.05',
+      `${round(sparse.slope)} con ${round(sparse.perPerson)} respuestas por alumno`,
+      sparse.slope >= 0.9 && sparse.slope <= 1.05,
     );
     goal(
       'Elo contra la dificultad verdadera',
