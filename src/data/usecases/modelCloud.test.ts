@@ -178,3 +178,64 @@ describe('baja lo que publica la noche una vez por día de estudio', () => {
     expect(calls()).toBe(3);
   });
 });
+
+describe('una foto que la noche todavía no publica no se da por buena todo el día (revisión de B14, hallazgo 12)', () => {
+  // La corrida programada empieza a las 4:23 de Mérida del 16, que son las 10:23 UTC, y puede atrasarse horas
+  const BEFORE_RUN = new Date('2026-10-16T10:05:00.000Z'); // 4:05 a. m. del 16, ya día de estudio 16
+  const SOON_AFTER = new Date('2026-10-16T10:40:00.000Z'); // 4:40, menos de 3 horas después
+  const LATER = new Date('2026-10-16T13:30:00.000Z'); // 7:30 a. m., más de 3 horas después
+  const NOON_16 = new Date('2026-10-16T18:00:00.000Z');
+  const unavailable = {
+    ...snapshot(null),
+    available: false,
+    runAt: null,
+    studyDay: null,
+    cells: [],
+  };
+  const publishedOn16 = {
+    ...snapshot(null),
+    runAt: '2026-10-16T10:31:02.000Z',
+    studyDay: '2026-10-16',
+  };
+  const populationOn16 = { ...population, runAt: '2026-10-16T10:31:02.000Z' };
+
+  it('si abrió antes de que la noche publique, vuelve a pedir pasadas unas horas y no hasta mañana', async () => {
+    const { api, cloud, server, calls } = setup();
+    server.comparison = () => unavailable;
+    server.population = () => ({ ...population, available: false, runAt: null });
+    await ensureModelSnapshots(api, cloud, { now: BEFORE_RUN });
+    expect(calls()).toBe(3);
+    // Un rato después no vuelve a preguntar en cada conexión
+    expect(await ensureModelSnapshots(api, cloud, { now: SOON_AFTER })).toEqual({
+      status: 'fresh',
+    });
+    expect(calls()).toBe(3);
+    // La noche publicó mientras tanto. Pasadas unas horas lo recoge el mismo día
+    server.comparison = () => publishedOn16;
+    server.population = () => populationOn16;
+    expect((await ensureModelSnapshots(api, cloud, { now: LATER })).status).toBe('updated');
+    expect(calls()).toBe(5);
+    const stored = await readStoredModel(api);
+    expect(stored.comparison).toMatchObject({ available: true, studyDay: '2026-10-16' });
+    expect(stored.population?.available).toBe(true);
+    // Ya con la foto de hoy no vuelve a pedir en todo el día
+    expect(await ensureModelSnapshots(api, cloud, { now: NOON_16 })).toEqual({ status: 'fresh' });
+    expect(calls()).toBe(5);
+  });
+
+  it('la foto de ayer guardada con la fecha de hoy tampoco se queda todo el día', async () => {
+    const { api, cloud, server, calls } = setup();
+    // A las 4:05 del 16 el servidor todavía publica la foto del 15
+    await ensureModelSnapshots(api, cloud, { now: BEFORE_RUN });
+    expect(calls()).toBe(3);
+    expect(await ensureModelSnapshots(api, cloud, { now: SOON_AFTER })).toEqual({
+      status: 'fresh',
+    });
+    server.comparison = () => publishedOn16;
+    server.population = () => populationOn16;
+    expect((await ensureModelSnapshots(api, cloud, { now: LATER })).status).toBe('updated');
+    expect((await readStoredModel(api)).comparison?.studyDay).toBe('2026-10-16');
+    // Los ajustes del modelo no dependen de la noche y no se piden de más
+    expect(calls()).toBe(5);
+  });
+});

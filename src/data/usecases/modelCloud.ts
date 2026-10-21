@@ -1,8 +1,10 @@
 // Baja lo que la noche publica para el alumno y lo guarda en el navegador (B14, 1.12 y 4.5 del plan de
 // B14). La foto de comparación, la línea base de la población y los ajustes del modelo cambian una vez
 // por noche, así que se piden una vez por día de estudio, la primera vez que la app se conecta ese día, y
-// se guardan en bankState. Sin conexión o sin foto nueva se usa la última, y sin ninguna dice calibrando.
-// Nada del alumno viaja al servidor. Las pantallas lo cargan en diferido.
+// se guardan en bankState. Si lo que bajó todavía no es de la noche de hoy (abrió antes de que termine la
+// corrida, que además puede atrasarse horas, o la calibración está apagada), se vuelve a pedir pasadas
+// unas horas y no hasta mañana. Sin conexión o sin foto nueva se usa la última, y sin ninguna dice
+// calibrando. Nada del alumno viaja al servidor. Las pantallas lo cargan en diferido.
 import { FACTORY_MODEL_SETTINGS, type ModelSettings } from '@/config/modelSettings';
 import { studyDayOf } from '@/engines/studyDay';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -48,6 +50,13 @@ export type ModelRefresh =
   /** No bajó ninguna. Se queda con lo último que hubiera */
   | { status: 'failed'; failure: ModelFailure };
 
+/**
+ * Cuánto esperar para volver a pedir una foto que bajó hoy y todavía no es de la noche de hoy. Alcanza para
+ * no preguntar en cada conexión cuando la calibración está apagada y para recoger la corrida de las 4:23
+ * aunque se atrase unas horas (revisión de B14, hallazgo 12)
+ */
+export const RECHECK_AFTER_MS = 3 * 3_600_000;
+
 export interface ModelRefreshOptions {
   now?: Date;
   /** Pide aunque ya se haya bajado hoy */
@@ -73,12 +82,27 @@ export async function ensureModelSnapshots(
     repos.bankState.get('population'),
     repos.bankState.get('model_settings'),
   ]);
-  const stale = (state: { fetchedDay: string } | undefined) =>
-    options.force === true || state?.fetchedDay !== today;
+  const stale = (
+    state: { fetchedDay: string; at: string } | undefined,
+    publishedToday: boolean,
+  ) => {
+    if (options.force === true || state?.fetchedDay !== today) return true;
+    // Bajó hoy. Si es de la noche de hoy ya está. Si no, se vuelve a pedir pasadas unas horas
+    return !publishedToday && !(now.getTime() - Date.parse(state.at) < RECHECK_AFTER_MS);
+  };
   const needs = {
-    comparison: stale(comparison),
-    population: stale(population),
-    settings: stale(settings),
+    comparison: stale(
+      comparison,
+      comparison?.snapshot.available === true && comparison.snapshot.studyDay === today,
+    ),
+    population: stale(
+      population,
+      population?.baselines.available === true &&
+        population.baselines.runAt !== null &&
+        studyDayOf(new Date(population.baselines.runAt), DEFAULT_TIME_ZONE) === today,
+    ),
+    // Los ajustes no dependen de la noche
+    settings: stale(settings, true),
   };
   if (!needs.comparison && !needs.population && !needs.settings) return { status: 'fresh' };
 

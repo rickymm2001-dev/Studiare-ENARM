@@ -38,8 +38,9 @@ export function questionSourceFor(api: Api, kind: Kind): QuestionSource {
 /**
  * Pone al día el banco de la nube al conectar la cuenta, cada 6 horas y cada vez que vuelve la red. El
  * catálogo, la cuota y el acuerdo, y los reportes que se guardaron sin conexión (B3 de la revisión).
- * También lo que publica la noche, la comparación, la línea base y los ajustes del modelo, que solo se
- * piden una vez por día de estudio y se cargan aparte (B14, 1.12)
+ * También lo que publica la noche, la comparación, la línea base y los ajustes del modelo, que se piden una
+ * vez por día de estudio (otra vez pasadas unas horas si lo que bajó todavía no es de la noche de hoy) y se
+ * cargan aparte (B14, 1.12)
  */
 export async function catchUpCloudBank(api: Api): Promise<void> {
   await questionSourceFor(api, 'cloud').refresh();
