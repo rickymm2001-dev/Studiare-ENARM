@@ -242,9 +242,13 @@ describe('fatiga en la demostración, donde el detector se valida con alumnos si
     expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
   });
 
-  it('mientras sigue calibrando no hay nada que etiquetar', () => {
+  it('mientras sigue calibrando también dice que es con alumnos simulados y lleva la etiqueta (revisión de B14, hallazgo 10)', () => {
     inDemo({ state: 'calibrating', have: 5, need: 3, validation: 'calibrating' });
-    expect(screen.getByRole('status')).toHaveTextContent(text.validating);
-    expect(screen.queryByText(t.labels.simulatedData)).toBeNull();
+    expect(screen.getByRole('status')).toHaveTextContent(text.validatingSimulated);
+    // No habla de alumnos que dieron su permiso, que en la demostración no existen
+    expect(screen.queryByText(text.validating)).toBeNull();
+    expect(screen.getByText(t.labels.simulatedData)).toBeVisible();
+    // Y no dice que el detector ya se validó
+    expect(screen.queryByText(text.simulatedValidation)).toBeNull();
   });
 });

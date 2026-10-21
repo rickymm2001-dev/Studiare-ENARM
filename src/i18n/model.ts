@@ -40,6 +40,9 @@ export const modelTexts = {
     /** Mientras el detector no esté validado con los datos de todos, aunque ya tengas tus sesiones */
     validating:
       'Todavía estamos validando este detector con los datos de los alumnos que dieron su permiso de mejora. Hasta entonces no te decimos si lo tienes, aunque ya tengas varias sesiones largas.',
+    /** En la demostración no hay alumnos con permiso. El detector se valida con la cohorte simulada */
+    validatingSimulated:
+      'Todavía estamos validando este detector con los alumnos simulados de la demostración. Hasta entonces no te decimos si lo tienes, aunque ya tengas varias sesiones largas.',
     notValid:
       'Con los datos de los alumnos que dieron su permiso, este detector todavía no es lo bastante confiable para decirte si tienes fatiga. Lo seguimos revisando.',
     /** En la demostración el detector se valida con una cohorte de alumnos simulados */

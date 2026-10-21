@@ -240,8 +240,9 @@ export function BiasTipsCard({
  */
 export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
   const text = modelTexts.fatigue;
-  // La validación del detector sale de los demás alumnos, que en la demostración son simulados
-  const simulated = useIsDemo() && fatigue.validation !== 'calibrating';
+  // La validación del detector sale de los demás alumnos, que en la demostración son simulados. Esto incluye
+  // el texto de que todavía se está validando, que sin la variante simulada hablaría de alumnos con permiso
+  const simulated = useIsDemo();
   return (
     <Card aria-labelledby="fatiga-estado">
       <CardHeader className="mb-2">
@@ -250,7 +251,7 @@ export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
       </CardHeader>
       {fatigue.validation === 'calibrating' ? (
         <p role="status" className="text-sm text-fg-muted">
-          {text.validating}
+          {simulated ? text.validatingSimulated : text.validating}
         </p>
       ) : fatigue.validation === 'not_valid' ? (
         <p role="status" className="text-sm text-fg-muted">
@@ -264,7 +265,7 @@ export function FatigueCard({ fatigue }: { fatigue: StudentModel['fatigue'] }) {
       {simulated ? (
         <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
           <SimulatedDataLabel />
-          {text.simulatedValidation}
+          {fatigue.validation === 'calibrating' ? null : text.simulatedValidation}
         </p>
       ) : null}
     </Card>

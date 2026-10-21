@@ -123,7 +123,9 @@ function fatigueNote(
   simulated: boolean,
 ): string | null {
   if (insight.id !== 'fatigue' || validation === 'validated') return null;
-  if (validation !== 'not_valid') return modelTexts.fatigue.validating;
+  if (validation !== 'not_valid') {
+    return simulated ? modelTexts.fatigue.validatingSimulated : modelTexts.fatigue.validating;
+  }
   return simulated ? modelTexts.fatigue.notValidSimulated : modelTexts.fatigue.notValid;
 }
 

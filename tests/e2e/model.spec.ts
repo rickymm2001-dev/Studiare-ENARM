@@ -75,7 +75,7 @@ test('la demostración enseña la comparación y los temas del modelo con los ot
   const fatigue = page.getByRole('region', { name: modelTexts.fatigue.title });
   await expect(fatigue).toBeVisible({ timeout: 60_000 });
   const states = [
-    modelTexts.fatigue.validating,
+    modelTexts.fatigue.validatingSimulated,
     modelTexts.fatigue.notValidSimulated,
     modelTexts.fatigue.detected,
     modelTexts.fatigue.notDetected,
@@ -84,10 +84,10 @@ test('la demostración enseña la comparación y los temas del modelo con los ot
   await expect(
     fatigue.getByText(new RegExp(states.map(escapeRegExp).join('|'))).first(),
   ).toBeVisible();
-  // Si la validación salió de la cohorte, lo dice con su etiqueta
-  if ((await fatigue.getByText(modelTexts.fatigue.simulatedValidation).count()) > 0) {
-    await expect(fatigue.getByText(t.labels.simulatedData)).toBeVisible();
-  }
+  // En la demostración el detector siempre se valida con la cohorte simulada, también mientras calibra, y lo
+  // dice con su etiqueta. Nunca habla de alumnos que dieron su permiso
+  await expect(fatigue.getByText(t.labels.simulatedData)).toBeVisible();
+  await expect(fatigue.getByText(/alumnos que dieron su permiso/)).toHaveCount(0);
   expect(await fatigue.innerText()).not.toMatch(FORBIDDEN);
   await expectNoSeriousA11yViolations(page);
 });
