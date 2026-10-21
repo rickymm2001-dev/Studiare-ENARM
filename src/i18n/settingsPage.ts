@@ -76,11 +76,13 @@ export const settingsPageText = {
   },
   privacy: {
     scoreInProgress:
-      'Tu puntaje oficial del ENARM se guarda en Progreso y solo con el permiso de mejora anónima.',
+      'Tu puntaje oficial del ENARM se guarda en Progreso y solo con el permiso Mejora con tus datos sin nombre.',
     goToProgress: 'Ir a Progreso',
   },
   officialScore: {
-    turnOn: 'Activar la mejora anónima en Privacidad',
+    // Va en un botón que no parte líneas. Con el nombre completo del permiso se pasa del ancho de un
+    // teléfono de 390 px, así que el texto de arriba lo nombra y el botón solo dice a dónde ir
+    turnOn: 'Activar el permiso en Privacidad',
   },
   // Panel con todos los ajustes que se guardan del repaso, en Repasar (comentario 4)
   reviewSettings: {

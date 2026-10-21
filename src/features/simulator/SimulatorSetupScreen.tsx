@@ -7,17 +7,26 @@
 // y lo que cuenta el servidor, y en un plan de pago el freno del servidor se avisa con su hora.
 // La práctica en español deja fuera el inglés siempre (B13, 2.8). Los casos de lectura en inglés tienen
 // su tarjeta aparte, entre esta práctica y el examen completo, si la bandera medicalEnglish está prendida.
+// Los filtros de dificultad usan la dificultad efectiva (B14, 4.4), la que calculó la noche con las
+// respuestas de otros alumnos y, si no hay, la del médico. La casilla Adaptativo (B14, 4.5) elige
+// preguntas cerca del nivel del alumno cuando lo que eligió tiene suficientes preguntas calibradas, y no
+// cambia el tope de preguntas que da el plan.
 import { Gauge, Library, ListChecks, Play, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { isFeatureEnabled } from '@/config/featureFlags';
+import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
+import { effectiveLevel, poolDifficulty } from '@/data/bank/calibration';
 import { brakeUntil, shortfallReason } from '@/data/bank/quota';
+import { readStoredModel } from '@/data/usecases/modelCloud';
+import { adaptiveAvailability } from '@/engines/adaptive';
+import { adaptiveTexts } from '@/i18n/adaptive';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -43,8 +52,10 @@ import { useAnalysis } from '../progress/useAnalysis';
 import { targetBiasTags } from '../progress/focusItems';
 import { reviewSettingsLinkState, reviewSettingsPath } from '../review/settings/panelParam';
 import { EnglishPracticeCard } from './EnglishPracticeCard';
+import { abilityFromEvents } from './adaptiveAbility';
+import { AdaptiveField } from './AdaptiveField';
 import { clock, SPANISH_PRACTICE_DEFAULTS, usePractice } from './practice';
-import { pickQuestions } from './pickQuestions';
+import { pickAdaptiveQuestions, pickQuestions } from './pickQuestions';
 import { TargetedSamplingField } from './TargetedSamplingField';
 
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
@@ -91,6 +102,21 @@ function Setup({ session }: { session: ReadySession }) {
   );
   const [count, setCount] = useState('10');
   const [targeted, setTargeted] = useState(false);
+  const [adaptive, setAdaptive] = useState(false);
+  // Los ajustes del modelo que bajó la noche, de fábrica mientras no hayan bajado (B14, 1.12)
+  const modelStored = useLiveData(() => readStoredModel(api), [api.repos]);
+  // El modelo del alumno es el que ya calculó el análisis de arriba, el mismo que lee Progreso, así las dos
+  // pantallas dicen lo mismo y no se calcula dos veces
+  const studentModel = analysis?.model.model;
+  // La habilidad. La del modelo del alumno si ya está lista y, si no, la que sale de sus respuestas a las
+  // preguntas ya medidas con el mismo estimador, que con pocas respuestas queda cerca de 0 y funciona
+  // desde el primer día
+  const ability = useMemo(() => {
+    if (studentModel?.ability.state === 'ready') return studentModel.ability.value;
+    if (questions === undefined || events === undefined) return undefined;
+    const estimate = abilityFromEvents(events, questions);
+    return { theta: estimate.theta, se: estimate.se };
+  }, [studentModel, questions, events]);
 
   const header = (
     <ScreenHeader
@@ -144,11 +170,32 @@ function Setup({ session }: { session: ReadySession }) {
     serverQuota,
   });
   const brake = brakeUntil(serverQuota, now);
-  // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
+  // Lo que el alumno eligió sin el nivel, que es lo que cuenta para ofrecer el modo adaptativo (B14, 4.5)
+  const matchesStructure = (question: (typeof questions)[number]) =>
+    structure === 'all' || question.structure.polarity === structure;
+  const modelSettings = modelStored?.settings ?? FACTORY_MODEL_SETTINGS;
+  const adaptiveFeature = modelSettings.features.adaptive;
+  const availability =
+    modelStored === undefined
+      ? undefined
+      : adaptiveAvailability(
+          questions
+            .filter((question) => topics.has(question.topic) && matchesStructure(question))
+            .map((question) => poolDifficulty(question).source),
+          modelSettings.thresholds.adaptiveMinItems,
+        );
+  const adaptiveOn =
+    adaptive && adaptiveFeature && availability?.available === true && ability !== undefined;
+  // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector. Con el
+  // modo adaptativo prendido el nivel lo elige la app y el filtro de dificultad no cuenta
   const matchesLevel = (question: (typeof questions)[number]) => {
-    if (difficulty !== 'all' && difficultyGroupOf(question.physicianDifficulty) !== difficulty)
+    if (
+      !adaptiveOn &&
+      difficulty !== 'all' &&
+      difficultyGroupOf(effectiveLevel(poolDifficulty(question))) !== difficulty
+    )
       return false;
-    return structure === 'all' || question.structure.polarity === structure;
+    return matchesStructure(question);
   };
   const countsByTopic = new Map<string, number>();
   for (const question of questions) {
@@ -170,9 +217,16 @@ function Setup({ session }: { session: ReadySession }) {
       purpose: 'practice',
       // Los casos seriados se mantienen juntos y en orden
       choose: (from) =>
-        pickQuestions(from, `practice|${sessionId}`, Math.min(wanted, from.length)).map(
-          (question) => question.id,
-        ),
+        (adaptiveOn
+          ? pickAdaptiveQuestions(from, {
+              ability: ability.theta,
+              targetOffset: modelSettings.thresholds.adaptiveTargetOffset,
+              exploreShare: modelSettings.thresholds.adaptiveExploreShare,
+              count: Math.min(wanted, from.length),
+              seed: `practice|${sessionId}`,
+            })
+          : pickQuestions(from, `practice|${sessionId}`, Math.min(wanted, from.length))
+        ).map((question) => question.id),
     });
     const ready = new Set(result.ready);
     const ordered = ids.filter((id) => ready.has(id));
@@ -213,6 +267,14 @@ function Setup({ session }: { session: ReadySession }) {
             count: ordered.length,
             sampling: targetTags.length > 0 ? 'targeted' : 'diverse',
             ...(targetTags.length > 0 ? { targetTags } : {}),
+            // El modo adaptativo y el nivel con el que empezó, sin un evento nuevo (B14, 4.5)
+            ...(adaptiveOn
+              ? {
+                  adaptive: true,
+                  ability: Math.round(ability.theta * 100) / 100,
+                  abilitySe: Math.round(ability.se * 100) / 100,
+                }
+              : {}),
           },
         },
         { userId: session.user.id, tz: session.user.timeZone, sessionId },
@@ -273,6 +335,8 @@ function Setup({ session }: { session: ReadySession }) {
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}
+              disabled={adaptiveOn}
+              {...(adaptiveOn ? { hint: adaptiveTexts.difficultyLocked } : {})}
               options={(['all', 'easy', 'medium', 'hard'] as Difficulty[]).map((value) => ({
                 value,
                 label: t.simulator.difficulties[value],
@@ -316,10 +380,14 @@ function Setup({ session }: { session: ReadySession }) {
             </Link>
           </p>
           <TargetedSamplingField
+            model={studentModel}
             report={analysis?.report}
             checked={targeted}
             onChange={setTargeted}
           />
+          {adaptiveFeature ? (
+            <AdaptiveField availability={availability} checked={adaptive} onChange={setAdaptive} />
+          ) : null}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {left === 0 && reserved > 0 ? (
               // El límite del día lo tiene apartado un examen que todavía no termina
@@ -392,6 +460,7 @@ function Setup({ session }: { session: ReadySession }) {
           left={left}
           reserved={reserved}
           report={analysis?.report}
+          model={studentModel}
         />
       ) : null}
       <ExamSetupCard

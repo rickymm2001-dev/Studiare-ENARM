@@ -5,6 +5,7 @@
 // ensureBodies antes de empezar y después leen de Dexie como siempre.
 import type { DatabaseKind } from '../databases';
 import type { Question } from '../schemas/bank';
+import type { EffectiveDifficulty } from './calibration';
 import type { DenyReason, QuotaInfo, ReadPurpose } from './contracts';
 
 /** Lo que se necesita de una pregunta para elegirla, sin su texto */
@@ -29,6 +30,11 @@ export interface PoolQuestion extends Pick<
   language: 'es' | 'en';
   /** Sesgos de sus distractores, para el muestreo dirigido. Vacío en el banco de demostración */
   distractorBiases: readonly string[];
+  /**
+   * La dificultad que usa la app, la de Rasch si la noche ya calibró esta versión y si no la del médico
+   * (B14, 4.4). Falta en el banco de demostración, que usa la del médico (poolDifficulty)
+   */
+  effectiveDifficulty?: EffectiveDifficulty;
   /**
    * Su cuerpo ya está en este navegador y se puede estudiar sin conexión. Siempre en el banco de
    * demostración. Con la nube, solo lo que ya se bajó

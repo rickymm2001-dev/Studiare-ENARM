@@ -1,0 +1,31 @@
+{
+  "description": "B14, datos y modelo del alumno. Las tres migraciones (20261028000001 a 20261028000003) con las siete tablas de la calibración, el corredor de la calibración nocturna y lo que leen la app y las pantallas del equipo. No lleva archivo manual porque ninguna trae delete ni drop, y no publica Edge Functions porque la calibración corre en GitHub Actions (docs/CALIBRACION.md). Va después de b11, b12 y b13. El plan b11 lleva las mismas tres migraciones, porque la última redefine bank_catalog_json de la migración bank_core, así que la que corra primero las aplica y la otra las salta (docs/DESPLIEGUE.md). Todo nace apagado, con model_settings.calibration.enabled en false, y la llave de la calibración la pone Ricardo directo en GitHub (docs/PENDIENTES_DE_RICARDO.md, B14).",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261028000001_model_core.sql",
+      "note": "Las conversiones entre ULID y uuid, tres índices de la bitácora, las siete tablas de la calibración sin permisos para la API y la siembra de model_settings, apagada y en solo reporte"
+    },
+    {
+      "file": "supabase/migrations/20261028000002_calibration_job.sql",
+      "note": "El corredor de la calibración nocturna. Solo lo ejecuta la llave secreta de la calibración (service_role)"
+    },
+    {
+      "file": "supabase/migrations/20261028000003_model_reads.sql",
+      "check": {
+        "tablas_nuevas": 7,
+        "indices_nuevos": 4,
+        "llave_empieza_corrida": true,
+        "alumno_empieza_corrida": false,
+        "anonimo_empieza_corrida": false,
+        "alumno_lee_comparacion": true,
+        "anonimo_lee_comparacion": false,
+        "alumno_lista_permisos": false,
+        "llave_aplica_directo": false,
+        "llave_lee_corridas_directo": false,
+        "modelo_sembrado": true,
+        "correo_de_distractores": true
+      },
+      "note": "Redefine bank_catalog_json de la migración bank_core con la llave calibration, que lee de la columna que ya trae el catálogo desde B11, y suma lo que leen la app y el equipo. Su comprobación es la de docs/SUPABASE.md, sección B14, sin las dos columnas que cambian con el tiempo (si la calibración está encendida y en qué modo), para poder volver a correr el plan"
+    }
+  ]
+}

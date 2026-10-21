@@ -70,6 +70,7 @@ export function createDexieNoteRepo(db: EnarmDb): NoteRepo {
   return {
     ...createDexieSyncableRepo(db.notes, NoteSchema),
     listAllByOutline: (outlineId) => db.notes.where('outlineId').equals(outlineId).toArray(),
+    listAllByDeck: (deckId) => db.notes.where('deckId').equals(deckId).toArray(),
     // El índice de etiquetas es de varias entradas, así que una nota con dos etiquetas que
     // coinciden saldría dos veces sin distinct
     listAllByTagPrefix: (prefix) =>

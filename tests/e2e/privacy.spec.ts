@@ -4,13 +4,14 @@
 // solo existe con la cuenta en la nube conectada.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const text = t.settings.privacy;
 const section = `${SCREENS.settings.path}#privacidad`;
 const improvement = (page: Page) =>
-  page.getByRole('checkbox', { name: t.onboarding.consents.anonymized_improvement[0] });
+  page.getByRole('checkbox', { name: consentTexts.purposes.anonymized_improvement[0] });
 const scoreCard = (page: Page) => page.getByRole('region', { name: text.scoreTitle });
 
 test('el puntaje oficial se guarda en Progreso, sobrevive a recargar y se borra al retirar la mejora anónima', async ({

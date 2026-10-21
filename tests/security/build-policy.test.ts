@@ -122,6 +122,43 @@ describe('presupuesto del JavaScript inicial', () => {
     expect(all.some((code) => code.includes('sync_push_records'))).toBe(true);
   });
 
+  it('el modelo del alumno, la calibración y el modo adaptativo no están en lo inicial (B14, 7.3)', () => {
+    // Las funciones de la base que lee la app, los nombres de los motores y los textos que solo existen en
+    // pantallas diferidas. Si algo de esto se cuela a lo inicial, el presupuesto de 300 KB se rompe de a poco
+    const markers = [
+      'comparison_snapshot',
+      'population_baselines',
+      'calibration_',
+      'buildStudentModel',
+      'estimateAbility',
+      'Adaptativo, cerca de tu nivel',
+      'para calcular cada noche la dificultad real de las preguntas',
+    ];
+    for (const dir of [withoutCloud, withCloud]) {
+      const initial = initialScripts(read(dir, 'index.html')).map((file) => read(dir, file));
+      for (const marker of markers) {
+        const found = initial.some((code) => code.includes(marker));
+        expect(found, `"${marker}" no debería estar en el JavaScript inicial`).toBe(false);
+      }
+    }
+    // Y los que se escriben como texto sí existen en algún archivo del build, para que la búsqueda no pase
+    // en vacío. Los nombres de funciones se acortan al construir, así que esos solo se buscan arriba
+    const all = readdirSync(join(withCloud, 'assets'))
+      .filter((file) => file.endsWith('.js'))
+      .map((file) => read(withCloud, join('assets', file)));
+    for (const marker of [
+      'comparison_snapshot',
+      'population_baselines',
+      'Adaptativo, cerca de tu nivel',
+      'para calcular cada noche la dificultad real de las preguntas',
+    ]) {
+      expect(
+        all.some((code) => code.includes(marker)),
+        `"${marker}" debería estar en algún archivo diferido`,
+      ).toBe(true);
+    }
+  });
+
   it('el panel médico, el de administración y el importador no están en lo inicial', () => {
     const html = read(withoutCloud, 'index.html');
     const initial = initialScripts(html).map((file) =>

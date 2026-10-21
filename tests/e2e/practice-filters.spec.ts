@@ -1,10 +1,14 @@
 // Práctica por dificultad y muestreo dirigido (pantalla 7, D-080). Con el filtro en Difícil, la
 // cifra de disponibles baja a las preguntas de 4 y 5 del banco, la práctica solo trae de esas y la
 // bitácora anota el filtro. Sin errores con trampa etiquetada, el muestreo dirigido dice que
-// calibra, cuánto le falta, y no se puede encender, así las opciones salen variadas.
+// calibra, cuánto le falta, y no se puede encender, así las opciones salen variadas. Adaptativo también
+// dice que calibra, con su propia nota, porque el banco de demostración no tiene preguntas con
+// dificultad calculada por otros alumnos (B14, 4.5).
 import { SCREENS } from '@/app/screens';
+import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { PRACTICE_STORAGE_KEY } from '@/features/simulator/practice';
+import { adaptiveTexts } from '@/i18n/adaptive';
 import { t } from '@/i18n/es-MX';
 import { readTable, statNumber } from './support/b1';
 import {
@@ -117,13 +121,27 @@ test('sin errores con trampa etiquetada, el muestreo dirigido calibra, dice cuá
   // No hay casilla que encender, solo la nota de calibración con el umbral del motor de sesgos
   await expect(setup.getByRole('checkbox', { name: text.label })).toHaveCount(0);
   await expect(setup.getByText(text.calibrating)).toBeVisible();
-  const note = setup.getByRole('status').filter({ hasText: t.states.calibrating.title });
+  // Hay dos notas de calibrando, la de este muestreo y la de Adaptativo. Cada una se busca por su unidad
+  const note = setup
+    .getByRole('status')
+    .filter({ hasText: t.states.calibrating.title })
+    .filter({ hasText: text.unit });
   await expect(note).toContainText(
     t.states.calibrating.progress(0, DEFAULT_THRESHOLDS.bias.minTaggedErrors, text.unit),
   );
   await expect(note).toContainText(
     t.states.calibrating.remaining(DEFAULT_THRESHOLDS.bias.minTaggedErrors, text.unit),
   );
+  // Adaptativo dice cuántas preguntas calibradas hay y no ofrece casilla, igual que el muestreo dirigido
+  const needed = FACTORY_MODEL_SETTINGS.thresholds.adaptiveMinItems;
+  const adaptive = setup
+    .getByRole('status')
+    .filter({ hasText: t.states.calibrating.title })
+    .filter({ hasText: adaptiveTexts.unit });
+  await expect(adaptive).toContainText(
+    t.states.calibrating.progress(0, needed, adaptiveTexts.unit),
+  );
+  await expect(setup.getByRole('checkbox', { name: adaptiveTexts.label })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
   // Una práctica que arranca así queda con el muestreo variado

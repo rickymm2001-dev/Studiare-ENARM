@@ -16,6 +16,7 @@ import {
   type ReportStatus,
 } from '@/data/editorial/editorialRepo';
 import { topicTaxonomy } from '@/demo/content';
+import { calibrationAdminTexts } from '@/i18n/calibrationAdmin';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
@@ -31,6 +32,7 @@ import {
   type ReportGroup,
   type StatusFilter,
 } from './reportsView';
+import { dayInWords, nightOfInstant } from '../model/dayWords';
 import { useEditorialRepo } from './useEditorialRepo';
 import { useRepoQuery } from './useRepoQuery';
 
@@ -334,7 +336,7 @@ function DistractorQueue() {
         <ul className="flex flex-col divide-y divide-line">
           {state.value.map((flag) => (
             <li key={flag.id}>
-              <DistractorRow flag={flag} onResolve={resolve} />
+              <DistractorRow flag={flag} nightly={repo.kind === 'cloud'} onResolve={resolve} />
             </li>
           ))}
         </ul>
@@ -353,9 +355,12 @@ function DistractorQueue() {
 
 function DistractorRow({
   flag,
+  nightly,
   onResolve,
 }: {
   flag: EditorDistractorFlag;
+  /** La marca la creó la calibración nocturna: con la nube, todas. En la demostración no hay noche */
+  nightly: boolean;
   onResolve: (
     flag: EditorDistractorFlag,
     resolution: DistractorResolution,
@@ -374,12 +379,20 @@ function DistractorRow({
   const attraction = (flag.attraction * 100).toLocaleString('es-MX', {
     maximumFractionDigits: 1,
   });
+  // La noche en que la calibración marcó la opción por primera vez, por el día de estudio de Mérida de su
+  // hora. flaggedAt no cambia cuando una noche posterior actualiza las cifras, así que no se llama cálculo
+  const night = nightly ? nightOfInstant(flag.flaggedAt) : null;
   return (
     <div className="flex flex-col gap-2 py-3">
       <p className="text-sm font-medium">{text.question(flag.questionKey)}</p>
       <p className="text-sm text-fg-muted">
         {text.figures(flag.exposures, flag.choices, `${attraction} %`)}
       </p>
+      {night !== null ? (
+        <p className="text-sm text-fg-muted">
+          {calibrationAdminTexts.distractors.flagged(dayInWords(night))}
+        </p>
+      ) : null}
       <TextField
         label={text.note}
         value={note}

@@ -1,26 +1,30 @@
-// El análisis de las respuestas del alumno que comparten Progreso y los widgets de Inicio. Junta cada
-// respuesta con su rama, tema y dificultad, el dominio por subespecialidad, el informe de Conócete y
-// las subespecialidades débiles, así todos dicen lo mismo. Conócete deja fuera las tarjetas de una
-// materia libre (B6). Los temas a reforzar y los focos no incluyen la sección de inglés, que tiene su
-// propia tarjeta en Progreso con sus respuestas aparte (B13, 2.8). Sin React ni Dexie.
+// El análisis de las respuestas del alumno que comparten Progreso y los widgets de Inicio. Desde B14 sale del
+// modelo del alumno (src/engines/studentModel.ts), el mismo que lee el Tutor, así todos dicen lo mismo. Junta
+// cada respuesta con su rama, tema y dificultad, el dominio por subespecialidad, el informe de Conócete y las
+// subespecialidades a reforzar. Conócete deja fuera las tarjetas de una materia libre (B6). Los temas a
+// reforzar y los focos no incluyen la sección de inglés, que tiene su propia tarjeta en Progreso con sus
+// respuestas aparte (B13, 2.8). Sin React ni Dexie.
 import type { Thresholds } from '@/config/thresholds';
-import type { Question } from '@/data/schemas/bank';
+import type { ModelThresholds } from '@/config/modelSettings';
+import type { PopulationBaselines } from '@/data/model/contracts';
 import type { AppEvent } from '@/data/schemas/events';
 import { topicTaxonomy } from '@/demo/content';
-import { buildInsights, type InsightReport } from '@/engines/insights';
 import { branchSection } from '@/data/schemas/content';
 import type { EnglishAnswer } from '@/engines/englishSection';
-import { analyzeTopics, type TopicMastery } from '@/engines/topics';
-import { weakTopicsFrom, type WeakTopic } from './focusItems';
-import { buildInsightInput, type BankLookup } from './insightFacts';
+import type { InsightReport } from '@/engines/insights';
+import {
+  buildStudentModel,
+  type AnsweredQuestion,
+  type DifficultyOf,
+  type ModelCard,
+  type StudentModelBuild,
+  type WeakTopic,
+} from '@/engines/studentModel';
+import { studyDayStart } from '@/engines/studyDay';
+import type { TopicMastery } from '@/engines/topics';
+import type { BankLookup } from './insightFacts';
 
-export interface AnsweredQuestion {
-  branch: string;
-  topic: string;
-  /** Dificultad que le puso el médico, de 1 a 5 */
-  level: Question['physicianDifficulty'];
-  correct: boolean;
-}
+export type { AnsweredQuestion };
 
 /** Las ramas que no son de la sección clínica. Sus temas no entran a los temas a reforzar */
 const englishBranches: ReadonlySet<string> = new Set(
@@ -77,10 +81,31 @@ export interface Analysis {
   /** Dominio de cada subespecialidad por su clave. Calibra hasta tener respuestas suficientes */
   byTopic: ReadonlyMap<string, TopicMastery>;
   report: InsightReport;
-  /** Subespecialidades con dominio bajo, de la más débil a la menos. Sin Inglés médico */
+  /** Subespecialidades con dominio bajo, de la que más urge reforzar a la que menos. Sin Inglés médico */
   weakTopics: WeakTopic[];
   /** Lo que lleva de Inglés médico, que tiene su tarjeta aparte (B13) */
   english: EnglishProgress;
+  /** El modelo del alumno completo, el mismo que lee el Tutor (B14) */
+  model: StudentModelBuild;
+  /** Las preguntas que contestó, con las que se armó */
+  bank: BankLookup;
+}
+
+/** El análisis de Progreso con lo que ya calculó el modelo del alumno */
+export function analysisFrom(
+  model: StudentModelBuild,
+  events: readonly AppEvent[],
+  bank: BankLookup,
+): Analysis {
+  return {
+    responses: model.responses,
+    byTopic: model.topics,
+    report: model.report,
+    weakTopics: model.weakTopics,
+    english: englishProgressFrom(events, bank),
+    model,
+    bank,
+  };
 }
 
 export function buildAnalysis(input: {
@@ -88,52 +113,38 @@ export function buildAnalysis(input: {
   bank: BankLookup;
   timeZone: string;
   today: string;
+  /** El instante del cálculo. Sin él se usa la tarde del día de estudio de today */
+  now?: Date;
   desiredRetention: number;
   thresholds: Thresholds;
   /** Cartas de una materia libre, que no cuentan en Conócete (B6) */
   freeSubjectCards?: ReadonlySet<string>;
+  /** Las tarjetas de los mazos que sigue, para el factor de olvido de los temas a reforzar (B14) */
+  cards?: readonly ModelCard[];
+  difficultyOf?: DifficultyOf;
+  population?: PopulationBaselines | null;
+  vocabulary?: 'bias' | 'trap';
+  settings?: Pick<ModelThresholds, 'populationMinStudents'>;
 }): Analysis {
-  const { events, bank, thresholds } = input;
-  const responses = events.flatMap((event): AnsweredQuestion[] => {
-    if (event.type !== 'question_answered') return [];
-    const question = bank.questions.get(event.payload.questionVersionId);
-    return question
-      ? [
-          {
-            branch: question.branch,
-            topic: question.topic,
-            level: question.physicianDifficulty,
-            correct: event.payload.correct,
-          },
-        ]
-      : [];
+  const { events, bank } = input;
+  const now =
+    input.now ?? new Date(studyDayStart(input.today, input.timeZone).getTime() + 12 * 3_600_000);
+  const model = buildStudentModel({
+    now,
+    timeZone: input.timeZone,
+    desiredRetention: input.desiredRetention,
+    events,
+    bank,
+    taxonomy: topicTaxonomy,
+    thresholds: input.thresholds,
+    ...(input.settings ? { settings: input.settings } : {}),
+    ...(input.freeSubjectCards ? { freeSubjectCards: input.freeSubjectCards } : {}),
+    ...(input.cards ? { cards: input.cards } : {}),
+    ...(input.difficultyOf ? { difficultyOf: input.difficultyOf } : {}),
+    ...(input.population !== undefined ? { population: input.population } : {}),
+    ...(input.vocabulary ? { vocabulary: input.vocabulary } : {}),
   });
-  const byTopic = new Map(
-    analyzeTopics({
-      responses,
-      taxonomy: topicTaxonomy,
-      averageRetrievability: {},
-      thresholds: thresholds.topics,
-    }).topics.map((entry) => [entry.topic, entry]),
-  );
-  const report = buildInsights(
-    buildInsightInput({
-      events,
-      bank,
-      timeZone: input.timeZone,
-      today: input.today,
-      desiredRetention: input.desiredRetention,
-      thresholds,
-      freeSubjectCards: input.freeSubjectCards,
-    }),
-  );
-  return {
-    responses,
-    byTopic,
-    report,
-    weakTopics: weakTopicsFrom(byTopic),
-    english: englishProgressFrom(events, bank),
-  };
+  return analysisFrom(model, events, bank);
 }
 
 /**

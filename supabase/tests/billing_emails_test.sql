@@ -59,8 +59,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
 -- ===================================================================== E1. Tipos de correo extensibles
 select pg_temp.expect(
   (select array_agg(kind order by kind) from public.email_kinds)
-    = array['content_report', 'daily_review_reminder', 'invoice_requested', 'pass_expiring', 'trial_ending'],
-  'E1. Faltan los tipos sembrados, los de B10 más content_report de B11 y daily_review_reminder de B15'
+    = array['content_report', 'daily_review_reminder', 'distractor_flags', 'invoice_requested', 'pass_expiring', 'trial_ending'],
+  'E1. Faltan los tipos sembrados, los de B10 más content_report de B11, daily_review_reminder de B15 y distractor_flags de B14'
 );
 select pg_temp.is(
   pg_temp.fails_with($q$select public.enqueue_email('ba200000-0000-0000-0000-000000000006', null, 'promocion', 'e1-x', '{}')$q$),

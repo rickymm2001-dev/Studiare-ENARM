@@ -16,6 +16,7 @@ import { newId } from '@/data/testing/fixtures';
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { buildDemoBank } from '@/demo/content/bank';
+import { calibrationAdminTexts } from '@/i18n/calibrationAdmin';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 
@@ -116,6 +117,17 @@ describe('acuerdo del etiquetado (pantalla 19)', () => {
     await open({ role: 'physician' });
     const queue = await screen.findByRole('region', { name: text.queue.title }, WAIT);
     expect(await within(queue).findByText(text.queue.empty, undefined, WAIT)).toBeVisible();
+  });
+
+  it('en la demostración el historial por noche dice que no hay calibración nocturna (B14)', async () => {
+    await open({ role: 'physician' });
+    const history = await screen.findByRole(
+      'region',
+      { name: calibrationAdminTexts.agreementHistory.title },
+      WAIT,
+    );
+    expect(within(history).getByText(calibrationAdminTexts.agreementHistory.local)).toBeVisible();
+    expect(within(history).queryByRole('table')).toBeNull();
   });
 
   it('el admin ve el tablero y no etiqueta', async () => {

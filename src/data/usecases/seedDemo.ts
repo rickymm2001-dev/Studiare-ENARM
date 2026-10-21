@@ -45,6 +45,7 @@ export async function seedDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Prom
       db.users,
       db.simTruth,
       db.events,
+      db.itemStatsCache,
     ],
     async () => {
       // Evita duplicar la bitácora si dos pestañas generan a la vez o en días distintos
@@ -59,6 +60,9 @@ export async function seedDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Prom
       await db.cards.bulkPut(seed.cards);
       await db.users.bulkPut(seed.users);
       await db.simTruth.bulkPut(seed.simTruth);
+      // La dificultad de las preguntas que calculó la cohorte simulada (B14, 4.4). Es una caché, pero solo
+      // la genera la siembra, porque la cohorte no se guarda. Regenerar la demo la vuelve a calcular
+      await db.itemStatsCache.bulkPut(seed.itemStats);
       // La bitácora solo acepta agregar. Cada evento ya viene validado por su esquema
       await db.events.bulkAdd(seed.events);
     },

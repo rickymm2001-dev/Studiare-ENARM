@@ -30,9 +30,11 @@ import {
   type RemoteAvatarState,
 } from '@/data/cloud/avatars';
 import type { PendingSignup } from '@/data/cloud/pendingSignup';
-import { ACCOUNT_DETAIL_KEYS, type Account } from '@/data/schemas/people';
+import { ConsentPurposeSchema } from '@/data/schemas/common';
+import { ACCOUNT_DETAIL_KEYS, ConsentSchema, type Account } from '@/data/schemas/people';
+import { newId } from '@/data/ids';
 import { EMPTY_DETAILS, findAccountByEmail, registerAccount, sameAvatarChoice } from './account';
-import { acceptedNoticeVersion, recordInitialConsents } from './profile';
+import { acceptedNoticeVersion } from './profile';
 
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
@@ -295,6 +297,38 @@ export async function hasLocalSignup(
 export type CloudSignupCheck = 'complete' | 'required' | 'unknown';
 
 /**
+ * La hora de las filas de permisos que solo cuentan qué versión del aviso aceptó la cuenta. Es la más
+ * antigua posible, así ninguna decisión real, que lleva la hora de su evento, queda por debajo de ellas
+ */
+const NOTICE_PLACEHOLDER_AT = '1970-01-01T00:00:00.000Z';
+
+/**
+ * En un dispositivo nuevo de una cuenta que ya aceptó una versión del aviso, deja cada finalidad apagada
+ * bajo esa versión, para que el aviso no se pida otra vez. No son decisiones del alumno y por eso no dejan
+ * evento ni llevan la hora de hoy. Las decisiones de verdad llegan con la bitácora y las pone
+ * reconcileProfile (B14, 2.2). Con un evento y la hora de hoy, estas filas valdrían más que las que
+ * el alumno ya dio en otro dispositivo y las apagarían en todos
+ */
+async function recordAcceptedNotice(
+  api: Pick<DataApi, 'repos'>,
+  userId: string,
+  noticeVersion: string,
+): Promise<void> {
+  await api.repos.consents.putMany(
+    ConsentPurposeSchema.options.map((purpose) =>
+      ConsentSchema.parse({
+        id: newId(),
+        userId,
+        purpose,
+        noticeVersion,
+        status: 'revoked',
+        decidedAt: NOTICE_PLACEHOLDER_AT,
+      }),
+    ),
+  );
+}
+
+/**
  * Revisa con la nube un perfil que nació sin formulario (B9). Si la cuenta ya confirmó su edad o ya
  * aceptó una versión del aviso, como una cuenta de antes de B9 o una que completó su registro en otro
  * dispositivo, lo copia aquí. La edad con su fecha y, sin ninguna decisión todavía, cada finalidad
@@ -314,9 +348,8 @@ export async function resolveCloudSignup(
   if (account && remote.adultConfirmedAt && !account.adultConfirmedAt) {
     await api.repos.accounts.put({ ...account, adultConfirmedAt: remote.adultConfirmedAt });
   }
-  const user = await api.repos.users.get(userId);
-  if (user && remote.noticeVersion && (await acceptedNoticeVersion(api, userId)) === null) {
-    await recordInitialConsents(api, user, remote.noticeVersion);
+  if (remote.noticeVersion && (await acceptedNoticeVersion(api, userId)) === null) {
+    await recordAcceptedNotice(api, userId, remote.noticeVersion);
   }
   return 'complete';
 }

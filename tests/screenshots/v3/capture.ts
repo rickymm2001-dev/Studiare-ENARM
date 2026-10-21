@@ -42,9 +42,16 @@ export async function capture(
     quality: 60,
   } as const;
   if (options.element) {
-    // Un elemento más alto que la pantalla se captura por tramos, y la barra de arriba, que es sticky,
-    // saldría a media imagen
-    await page.addStyleTag({ content: '.sticky { position: static !important; }' });
+    // Un elemento más alto que la pantalla se captura por tramos, y la barra de arriba, que es sticky, saldría
+    // a media imagen. En computadora el título de la pantalla, la racha y el nivel van con position fixed
+    // sobre esa barra (TOP_BAR_SLOT), y también saldrían encima del elemento. Las sticky pasan a relative,
+    // sin desplazamiento, y esas fixed a absolute, así quedan arriba de la página, que es donde están al
+    // empezar, y no siguen a la captura
+    await page.addStyleTag({
+      content:
+        '.sticky { position: relative !important; top: auto !important; bottom: auto !important; } ' +
+        '.lg\\:fixed { position: absolute !important; }',
+    });
     await options.element.screenshot(image);
     return;
   }

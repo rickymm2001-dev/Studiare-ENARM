@@ -6,6 +6,7 @@
 // y después con el texto de la IA simulada, y todo va en borrador y con la etiqueta de no validado por
 // médico. El consentimiento queda en Privacidad.
 import { SCREENS } from '@/app/screens';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { generateDemo, readTable, subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
@@ -161,7 +162,7 @@ test('con un plan de pago el análisis se enciende desde el tutor, la hipótesis
   // El consentimiento se ve encendido en Configuración, Privacidad, con su evento
   await page.goto(`${SCREENS.settings.path}#privacidad`);
   await expect(
-    page.getByRole('checkbox', { name: t.onboarding.consents.ai_analysis[0] }),
+    page.getByRole('checkbox', { name: consentTexts.purposes.ai_analysis[0] }),
   ).toBeChecked();
   const events = await readTable<{ type: string; payload: { purpose?: string; status?: string } }>(
     page,

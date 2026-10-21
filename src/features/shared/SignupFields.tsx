@@ -5,6 +5,7 @@
 import { HEARD_FROM_CHANNELS, MINIMUM_AGE, type HeardFromChannel } from '@/config/signup';
 import { SPECIALTIES } from '@/config/specialties';
 import type { ConsentPurposeSchema } from '@/data/schemas/common';
+import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import type { z } from 'zod';
@@ -99,7 +100,7 @@ export function OptionalConsentsFields({
       <legend className="font-semibold">{t.accounts.signup.consentsTitle}</legend>
       <p className="text-sm text-fg-muted">{t.accounts.signup.consentsDescription}</p>
       {CONSENT_PURPOSES.map((purpose) => {
-        const [label, hint] = t.onboarding.consents[purpose];
+        const [label, hint] = consentTexts.purposes[purpose];
         return (
           <CheckboxField
             key={purpose}

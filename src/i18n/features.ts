@@ -66,20 +66,6 @@ export const featureText = {
     privacyBody: legalText.onboarding.summary,
     privacyAccept: legalText.onboarding.accept,
     privacyError: 'Necesitas aceptar el aviso para continuar.',
-    consents: {
-      party: [
-        'Party',
-        'Compartir con tus grupos tu alias, tu foto de perfil si subiste una, tu XP de la semana, tu aporte a los retos y tus duelos.',
-      ],
-      ai_analysis: [
-        'Análisis con IA',
-        'Usar tus errores para hipótesis del tutor, con IDs seudónimos.',
-      ],
-      anonymized_improvement: [
-        'Mejora anónima',
-        'Usar tus datos con un ID seudónimo, sin tu nombre ni tu correo, para mejorar el banco y revisar fallas de la app.',
-      ],
-    },
     create: 'Crear cuenta y empezar',
     creating: 'Creando…',
     demoNote: 'En la demostración entras como el alumno de demostración.',
@@ -358,12 +344,11 @@ export const featureText = {
         'Aceptaste el aviso de privacidad al crear tu perfil. Aquí das o retiras cada permiso cuando quieras, y cada cambio queda en tu bitácora.',
       consentSaved: 'Guardamos tu decisión.',
       consentError: 'No pudimos guardar el cambio. Inténtalo de nuevo.',
-      revokeScoreWarning: 'Si retiras la mejora anónima, también se borra tu puntaje oficial.',
       scoreTitle: 'Puntaje oficial del ENARM',
       scoreDescription:
-        'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso de mejora anónima.',
+        'Es voluntario. Sirve para comparar, con datos reales, si lo que estudiaste se parece al examen. Studiare no lo usa para predecir tu puntaje ni lo muestra a otras personas. Solo se guarda con el permiso Mejora con tus datos sin nombre.',
       scoreNeedsConsent:
-        'Para guardar tu puntaje, activa antes la mejora anónima en tus consentimientos.',
+        'Para guardar tu puntaje, activa antes la mejora con tus datos sin nombre en tus consentimientos.',
       year: 'Año de la convocatoria',
       score: 'Puntaje obtenido',
       scoreHint: 'De 0 a 100, con hasta dos decimales.',
@@ -377,7 +362,7 @@ export const featureText = {
       scoreErrors: {
         invalid_year: 'Escribe un año entre 2000 y 2100.',
         invalid_score: 'El puntaje va de 0 a 100.',
-        no_consent: 'Activa antes la mejora anónima.',
+        no_consent: 'Activa antes la mejora con tus datos sin nombre.',
       },
     },
     exportTitle: 'Exportar mis datos',
@@ -1463,8 +1448,6 @@ export const featureText = {
     emptyHidden: (n: number) =>
       plural(n, 'subespecialidad sin datos todavía', 'subespecialidades sin datos todavía'),
     difficultyTitle: 'Según la dificultad',
-    difficultyHint:
-      'Tu exactitud en preguntas fáciles, medias y difíciles. La dificultad es la que estimó el médico y se calibra con las respuestas de todos los alumnos.',
     difficultyOf: (correct: number, total: number) =>
       `${correct.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} correctas`,
     difficultyCalibrating: (missing: number) =>

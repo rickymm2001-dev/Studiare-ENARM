@@ -96,6 +96,8 @@ export interface SyncableRepo<T, K extends string = Id> extends Omit<EntityRepo<
 export interface NoteRepo extends SyncableRepo<Note> {
   /** Las notas del apunte, también las marcadas como borradas, que reviven si vuelve su marca */
   listAllByOutline(outlineId: Id): Promise<Note[]>;
+  /** Las notas del mazo, también las marcadas como borradas. Usa el índice deckId (B14, Mis errores) */
+  listAllByDeck(deckId: Id): Promise<Note[]>;
   /**
    * Las notas con alguna etiqueta que empieza con prefix, sin distinguir mayúsculas, cada una una
    * vez y también las marcadas como borradas. Sirve para las de una materia libre, Materia:: (B6)

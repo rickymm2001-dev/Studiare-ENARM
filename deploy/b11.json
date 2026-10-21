@@ -1,5 +1,5 @@
 {
-  "description": "B11, banco en la nube y Google Sheets. Las seis migraciones del banco, la migración de Inglés médico de B13 (20261027000001), la pieza con delete de Borrar mis datos (supabase/manual/banco-b11.sql) y la función bank-sync. La migración de B13 va aquí porque redefine dos funciones de la segunda migración, y la herramienta compara cada función con la última versión del repo, así que sin ella el plan se detiene (docs/DESPLIEGUE.md, B11 y B13). Si el plan b13 ya la aplicó, este paso se salta. La cuenta de servicio de Google (GOOGLE_SA_KEY) la pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasa por este plan. El ID del Sheet va con --secrets-from cuando exista.",
+  "description": "B11, banco en la nube y Google Sheets. Las seis migraciones del banco, la migración de Inglés médico de B13 (20261027000001), las tres de datos y modelo del alumno de B14 (20261028000001 a 20261028000003), la pieza con delete de Borrar mis datos (supabase/manual/banco-b11.sql) y la función bank-sync. Las de B13 y B14 van aquí porque redefinen funciones que crea la segunda migración (bank_version_issues, bank_incomplete_of y bank_catalog_json), y la herramienta compara cada función con la última versión del repo, así que sin ellas el plan se detiene (docs/DESPLIEGUE.md, B11, B13 y B14). Si el plan b13 o el b14 ya las aplicó, esos pasos se saltan. La cuenta de servicio de Google (GOOGLE_SA_KEY) la pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasa por este plan. El ID del Sheet va con --secrets-from cuando exista.",
   "migrations": [
     {
       "file": "supabase/migrations/20261023000001_bank_taxonomy.sql"
@@ -23,6 +23,18 @@
     {
       "file": "supabase/migrations/20261027000001_english_section.sql",
       "note": "De B13. Redefine bank_version_issues y bank_incomplete_of de la migración bank_core con la misma firma, sin tocar nada de una versión en español. Va aquí para que bank_core no deje esas dos funciones más viejas que el repo. El plan b13 la lleva también y la salta si ya está"
+    },
+    {
+      "file": "supabase/migrations/20261028000001_model_core.sql",
+      "note": "De B14. Las siete tablas de la calibración, las conversiones entre ULID y uuid, tres índices de la bitácora y la siembra de model_settings. Las lee la tercera migración de B14, así que las tres van juntas y en orden, para que bank_core no deje bank_catalog_json más vieja que el repo. El plan b14 la lleva también y la salta si ya está"
+    },
+    {
+      "file": "supabase/migrations/20261028000002_calibration_job.sql",
+      "note": "De B14. El corredor de la calibración nocturna, que solo ejecuta la llave secreta de la calibración. No cambia nada de B11. Va entre las otras dos de B14, en el orden del repo"
+    },
+    {
+      "file": "supabase/migrations/20261028000003_model_reads.sql",
+      "note": "De B14. Redefine bank_catalog_json de la migración bank_core con la misma firma y una llave más, calibration, que es null mientras la fila no tenga calibración. Va aquí para que bank_core no deje esa función más vieja que el repo. El plan b14 la lleva también y la salta si ya está"
     },
     {
       "file": "supabase/manual/banco-b11.sql",

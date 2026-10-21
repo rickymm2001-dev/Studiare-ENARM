@@ -21,7 +21,6 @@ import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import type { ReadySession } from '../shared/RequireSession';
 import { useActivePlan } from '../shared/useActivePlan';
-import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import {
   BiasTipAiSchema,
   HypothesisAiSchema,
@@ -102,7 +101,6 @@ export function useTutorAi(input: {
   const api = useDataApi();
   const status = useAiStatus({ demo: session.isDemo });
   const role = usePreferences((state) => state.role);
-  const vocabulary = useBiasVocabulary();
   const plan = useActivePlan(user.id);
   const consents = useLiveData(() => currentConsents(api, user.id), [api.repos, user.id]);
   const [notice, setNotice] = useState<string | null>(null);
@@ -180,7 +178,7 @@ export function useTutorAi(input: {
           texts,
           engines: new Set(TUTOR_ENGINES.filter((engine) => engineOpenFor(status, engine, role))),
           reviewedTipsOnly: readAppEnv() === 'production',
-          vocabulary: biasVocabularyOf(vocabulary),
+          vocabulary: biasVocabularyOf(view.vocabulary),
         }).filter((job) => !attempted.has(job.key))
       : [];
   const next = jobs[0];

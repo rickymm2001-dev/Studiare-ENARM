@@ -1,6 +1,6 @@
 # Corre npm run check en cada push a cualquier rama y en cada pull request (typecheck, lint y pruebas con cobertura).
 # En un trabajo aparte corre las pruebas de punta a punta con Playwright (e2e), que se habían quedado viejas
-# porque nadie las corría. No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
+# porque nadie las corría, y en otro el autotest de la calibración nocturna (B14). No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
 name: check
 
 on:
@@ -22,6 +22,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -32,6 +34,23 @@ jobs:
       # Permisos por fila y roles del esquema de Supabase contra un Postgres local temporal (D-069)
       - run: npm run test:sql
 
+  # Autotest de la calibración nocturna (B14, 8.3 del plan de B14). Siembra 300 alumnos simulados en un
+  # Postgres temporal, corre la pipeline real contra él y revisa sus metas con cuentas independientes.
+  # Tarda unos 4 minutos. Es el mismo que corre calibration.yml antes de cada noche. No usa secretos
+  calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run calibration:selftest
+
   # Vulnerabilidades altas o críticas en las dependencias (14.3). Va aparte porque un aviso nuevo de npm
   # puede aparecer cualquier día y no debe tapar el resultado de las pruebas
   audit:
@@ -39,6 +58,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -54,6 +75,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24

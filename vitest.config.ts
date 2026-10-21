@@ -21,6 +21,7 @@ export default defineConfig({
       'server/**/*.test.ts',
       'supabase/functions/**/*.test.ts',
       'scripts/**/*.test.ts',
+      'tests/calibration/**/*.test.ts',
       'tests/security/**/*.test.ts',
       'tests/architecture/**/*.test.ts',
       'tests/recovery/**/*.test.ts',
