@@ -25,7 +25,7 @@ const NAMED_SENTENCES: readonly string[] = [
   calibrationAdminTexts.settings.factory('30'),
   calibrationAdminTexts.settings.noticeVersion('2026-10-15b'),
   calibrationAdminTexts.agreementHistory.nightOf('14 de octubre'),
-  calibrationAdminTexts.distractors.calculated('14 de octubre', 140),
+  calibrationAdminTexts.distractors.flagged('14 de octubre'),
 ];
 
 function sentencesOf(

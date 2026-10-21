@@ -335,7 +335,8 @@ export const calibrationAdminTexts = {
 
   // ------------------------------------------------------------------ Marcas de distractores
   distractors: {
-    calculated: (date: string, exposures: number) =>
-      `Calculado la noche del ${date} con ${plural(exposures, 'exposición', 'exposiciones')}`,
+    // La noche en que la calibración marcó la opción por primera vez. Las cifras de arriba son las de la
+    // última noche que la contó, así que esta línea no repite las exposiciones ni dice que son de esa noche
+    flagged: (date: string) => `Marcada la noche del ${date}`,
   },
 } as const;

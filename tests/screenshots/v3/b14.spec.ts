@@ -264,7 +264,7 @@ cloudTest.describe('Modelo del alumno, comparación y pantallas del equipo', () 
       });
       await page.goto(SCREENS.contentReports.path);
       const queue = card(page, physicianText.distractors.title);
-      await expect(queue.getByText(/^Calculado la noche del /)).toBeVisible({ timeout: 60_000 });
+      await expect(queue.getByText(/^Marcada la noche del /)).toBeVisible({ timeout: 60_000 });
       await capture(page, '08-reportes-marca-de-la-noche', project, { element: queue });
     },
   );

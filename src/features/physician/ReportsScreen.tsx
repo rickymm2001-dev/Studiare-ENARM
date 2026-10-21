@@ -379,7 +379,8 @@ function DistractorRow({
   const attraction = (flag.attraction * 100).toLocaleString('es-MX', {
     maximumFractionDigits: 1,
   });
-  // La noche que la calibración calculó la marca, por el día de estudio de Mérida de su hora
+  // La noche en que la calibración marcó la opción por primera vez, por el día de estudio de Mérida de su
+  // hora. flaggedAt no cambia cuando una noche posterior actualiza las cifras, así que no se llama cálculo
   const night = nightly ? nightOfInstant(flag.flaggedAt) : null;
   return (
     <div className="flex flex-col gap-2 py-3">
@@ -389,7 +390,7 @@ function DistractorRow({
       </p>
       {night !== null ? (
         <p className="text-sm text-fg-muted">
-          {calibrationAdminTexts.distractors.calculated(dayInWords(night), flag.exposures)}
+          {calibrationAdminTexts.distractors.flagged(dayInWords(night))}
         </p>
       ) : null}
       <TextField

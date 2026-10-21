@@ -214,7 +214,7 @@ test.describe('Banco en la nube, médicos', () => {
     const queue = page.getByRole('region', { name: physicianText.distractors.title });
     await expect(queue).toBeVisible({ timeout: 30_000 });
     await expect(
-      queue.getByText(calibrationAdminTexts.distractors.calculated('15 de octubre', 140)),
+      queue.getByText(calibrationAdminTexts.distractors.flagged('15 de octubre')),
     ).toBeVisible({ timeout: 30_000 });
     // Las cifras de siempre siguen a la vista
     await expect(queue.getByText(physicianText.distractors.figures(140, 3, '2.1 %'))).toBeVisible();

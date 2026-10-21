@@ -79,7 +79,7 @@ async function open(kind: EditorialRepo['kind'], flags: readonly EditorDistracto
 // screen y no con un elemento guardado de antes
 
 describe('marcas de distractores de la noche', () => {
-  it('con la nube cada marca dice la noche que la calculó y con cuántas exposiciones', async () => {
+  it('con la nube cada marca dice la noche en que se marcó y las cifras no se atribuyen a esa noche', async () => {
     await open('cloud', [
       flag('1'),
       // 3:30 de la mañana en Mérida del 17: todavía cuenta para el día de estudio 16, la noche del 15
@@ -87,17 +87,32 @@ describe('marcas de distractores de la noche', () => {
       // 5 de la mañana en Mérida del 17, ya del día de estudio 17: la noche del 16
       flag('3', { flaggedAt: '2026-10-17T11:00:00.000Z', exposures: 101 }),
     ]);
-    const calculated = calibrationAdminTexts.distractors.calculated;
+    const flagged = calibrationAdminTexts.distractors.flagged;
     // La lista se vuelve a leer cuando la sesión termina de cargar, así que se espera a que se asiente
     await waitFor(() => {
-      expect(screen.getByText(calculated('15 de octubre', 140))).toBeVisible();
-      expect(screen.getByText(calculated('15 de octubre', 212))).toBeVisible();
-      expect(screen.getByText(calculated('16 de octubre', 101))).toBeVisible();
+      expect(screen.getAllByText(flagged('15 de octubre'))).toHaveLength(2);
+      expect(screen.getByText(flagged('16 de octubre'))).toBeVisible();
     }, WAIT);
     // Así se lee entero
-    expect(
-      screen.getByText('Calculado la noche del 15 de octubre con 140 exposiciones'),
-    ).toBeVisible();
+    expect(screen.getAllByText('Marcada la noche del 15 de octubre')[0]).toBeVisible();
+  });
+
+  it('una marca que una noche posterior actualizó no dice que sus exposiciones son de la primera noche (revisión de B14, hallazgo 5)', async () => {
+    // flaggedAt es de la primera noche. Una segunda noche subió las exposiciones a 600 sin cambiarlo
+    await open('cloud', [
+      flag('1', {
+        flaggedAt: '2026-10-16T21:45:45.000Z',
+        exposures: 600,
+        choices: 9,
+        attraction: 9 / 600,
+      }),
+    ]);
+    await waitFor(() => {
+      expect(screen.getByText(text.figures(600, 9, '1.5 %'))).toBeVisible();
+    }, WAIT);
+    expect(screen.getByText('Marcada la noche del 15 de octubre')).toBeVisible();
+    expect(screen.queryByText(/Calculado la noche/)).toBeNull();
+    expect(screen.queryByText(/con 600 exposiciones/)).toBeNull();
   });
 
   it('sigue diciendo las cifras de siempre', async () => {
@@ -112,6 +127,6 @@ describe('marcas de distractores de la noche', () => {
     await waitFor(() => {
       expect(screen.getByText(text.figures(140, 3, '2.1 %'))).toBeVisible();
     }, WAIT);
-    expect(screen.queryByText(/Calculado la noche/)).toBeNull();
+    expect(screen.queryByText(/Marcada la noche/)).toBeNull();
   });
 });
