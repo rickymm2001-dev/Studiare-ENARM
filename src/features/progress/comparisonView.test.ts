@@ -116,9 +116,25 @@ describe('hechos de la bitácora para la comparación', () => {
     ]);
   });
 
-  it('el día de estudio corta a las 4 de la mañana de la zona del evento', () => {
+  it('el día de estudio corta a las 4 de la mañana de Mérida', () => {
     const early = answered(q, right.id, true, Date.UTC(2026, 9, 2, 8, 0)); // 2:00 en Mérida
     expect(comparisonFactsFrom([early], bank)[0]?.day).toBe('2026-10-01');
+  });
+
+  it('un alumno de otra zona cuenta el día como la calibración de la noche y no como su navegador (revisión de B14, hallazgo 11)', () => {
+    // 4:30 en Cancún (UTC-5) del 16 de octubre es la 3:30 de Mérida, todavía del día de estudio 15. La foto de la
+    // noche lo cuenta en el 15, así que la ventana y la constancia del navegador tienen que coincidir
+    const instant = Date.UTC(2026, 9, 16, 9, 30);
+    const cancun = { ...answered(q, right.id, true, instant), tz: 'America/Cancun' } as AppEvent;
+    // Y 3:30 en Tijuana (UTC-7) es la 4:30 de Mérida, que ya es del día de estudio 16
+    const pacific = {
+      ...answered(q, right.id, true, Date.UTC(2026, 9, 16, 10, 30)),
+      tz: 'America/Tijuana',
+    } as AppEvent;
+    expect(comparisonFactsFrom([cancun, pacific], bank).map((fact) => fact.day)).toEqual([
+      '2026-10-15',
+      '2026-10-16',
+    ]);
   });
 
   it('una sesión de repaso no es de simulador', () => {

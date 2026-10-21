@@ -22,6 +22,7 @@ import {
   type PercentileResult,
 } from '@/engines/comparison';
 import { addDays, daysBetween, studyDayOf } from '@/engines/studyDay';
+import { CALIBRATION_TIME_ZONE } from '../model/dayWords';
 
 // ===================================================================== Lo que hizo el alumno
 
@@ -29,7 +30,9 @@ type SessionKind = NonNullable<ComparisonFact['sessionKind']>;
 
 /**
  * Los hechos de su bitácora que cuenta la comparación: cada respuesta con su rama y el tipo de su sesión, y
- * cada repaso. Una respuesta a una pregunta que ya no está en el banco no cuenta
+ * cada repaso. Una respuesta a una pregunta que ya no está en el banco no cuenta. El día de estudio se corta
+ * en la zona de la calibración (Mérida) y no en la del evento, porque la foto de la noche y su ventana de 30
+ * días cuentan así, y un alumno de otra zona tiene eventos en la franja de 1 a 2 horas que caerían en otro día
  */
 export function comparisonFactsFrom(
   events: readonly AppEvent[],
@@ -44,12 +47,12 @@ export function comparisonFactsFrom(
   const facts: ComparisonFact[] = [];
   for (const event of events) {
     if (event.type === 'card_reviewed') {
-      facts.push({ day: studyDayOf(new Date(event.at), event.tz), kind: 'review' });
+      facts.push({ day: studyDayOf(new Date(event.at), CALIBRATION_TIME_ZONE), kind: 'review' });
     } else if (event.type === 'question_answered') {
       const question = questions.get(event.payload.questionVersionId);
       if (!question) continue;
       facts.push({
-        day: studyDayOf(new Date(event.at), event.tz),
+        day: studyDayOf(new Date(event.at), CALIBRATION_TIME_ZONE),
         kind: 'answer',
         branch: question.branch,
         correct: event.payload.correct,
