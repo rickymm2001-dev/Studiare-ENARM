@@ -116,7 +116,7 @@ La llave de la calibración te toca a ti, unos 5 minutos.
 - **Paso B14.3. No la pegues en el chat ni en ningún archivo.** Si se filtra, crea otra igual, cámbiala en GitHub y revoca la vieja en Supabase. Recomendado rotarla cada año
 - **Paso B14.4. La dirección del proyecto ya existe.** Es la variable VITE_SUPABASE_URL, que usa la publicación de la demo. No tienes que crear nada
 - **Paso B14.5. Marca el autotest como requisito de fusión.** En GitHub, Settings, Branches, la regla de main, agrega el trabajo calibration de check.yml a los que ya pides, check, e2e y audit
-- **Paso B14.6. Avisa a la sesión.** Ella prende la calibración en solo reporte, lanza la primera corrida y te dice los conteos. Antes de lanzar se esperan cero o pocos alumnos con permiso y todo en calibrando, y eso es correcto
+- **Paso B14.6. Avisa a la sesión.** Antes de este paso resuelve con tu abogado lo del permiso dado con el texto corto, que está más abajo en Con tu abogado. Prender la calibración espera esa decisión. Ella prende la calibración en solo reporte, lanza la primera corrida y te dice los conteos. Antes de lanzar se esperan cero o pocos alumnos con permiso y todo en calibrando, y eso es correcto
 
 Si GitHub apaga la calibración.
 
@@ -129,6 +129,7 @@ Con tu abogado.
 - El texto nuevo del permiso y si cambia el nombre de Mejora anónima
 - Si quien no da el permiso puede ver su percentil, que es la pregunta 5 que dejó B16
 - Si quien ya lo dio con el texto corto debe confirmarlo otra vez. La calibración solo cuenta el permiso dado con la versión 2026-10-15b del aviso o posterior
+- **Esta decisión frena el paso B14.6.** B14 reescribe la pista del permiso, que ahora cubre la calibración de la dificultad, el aviso a médicos y la comparación por percentiles, pero no sube la versión del aviso. Sigue en 2026-10-15b. Por eso quien dio el permiso con la pista corta (mejorar el banco y revisar fallas) ya cuenta para la calibración y para la comparación en cuanto se prenda. El código ya soporta las dos respuestas. Si tu abogado dice que deben confirmarlo otra vez, la sesión sube PRIVACY_NOTICE_VERSION (src/config/legal.ts) y model_settings.calibration.minNoticeVersion a la misma versión nueva antes de prender, y el permiso viejo deja de contar hasta que cada alumno lo confirme. Si dice que no hace falta, se prende como está. Mientras decides, la calibración se queda apagada y no sale nada de nadie. Recomendado confirmarlo otra vez, porque es lo que pedía el plan 6.3 y cuesta poco antes de tener alumnos reales
 
 Decisiones de B14 que esperan tu visto bueno, con la opción recomendada ya tomada. La llave como secreto del repositorio y solo en main (10.2), el permiso dado con el texto corto (10.5), el percentil para quien no da el permiso (10.7), comparación y modo adaptativo abiertos en Gratis (10.10 y 10.15), examen en curso y textos de la IA entre dispositivos (10.18 y 10.19), reestructuradas automáticas de noche (10.30), un correo al día por médico con las opciones que casi nadie elige (10.31) y la hora de la corrida, 4 con 23 minutos de la mañana en Mérida (10.24).
 
