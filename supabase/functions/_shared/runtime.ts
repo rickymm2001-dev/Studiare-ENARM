@@ -6,6 +6,7 @@ import type {
   MercadoPagoWebhookDeps,
 } from './billingTypes.ts';
 import type { CheckoutDeps, PortalDeps, StripeWebhookDeps } from './payments.ts';
+import { resolveSupabaseKeys } from './keys.ts';
 import {
   adminSessionOkViaRest,
   analyticsTickOkViaRest,
@@ -66,6 +67,7 @@ const NAMES = [
   'MERCADOPAGO_ACCESS_TOKEN',
   'MERCADOPAGO_WEBHOOK_SECRET',
   'APP_URL',
+  'APP_ORIGINS',
   'FUNCTIONS_URL',
 ] as const satisfies readonly (keyof FunctionEnv)[];
 
@@ -75,13 +77,20 @@ export function readEnv(): { env: FunctionEnv; supabase: SupabaseEnv } {
     const value = Deno.env.get(name);
     if (value) env[name] = value;
   }
+  // Supabase inyecta la dirección y las llaves en toda función. No se piden ni se guardan en ningún otro lado.
+  // Las llaves nuevas (sb_secret_ y sb_publishable_) ganan si existen y, si no, siguen las de siempre (B17, 4.2)
+  const keys = resolveSupabaseKeys({
+    SUPABASE_SECRET_KEYS: Deno.env.get('SUPABASE_SECRET_KEYS'),
+    SUPABASE_PUBLISHABLE_KEYS: Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'),
+    SUPABASE_SERVICE_ROLE_KEY: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'),
+    SUPABASE_ANON_KEY: Deno.env.get('SUPABASE_ANON_KEY'),
+  });
   return {
     env,
-    // Supabase inyecta estas tres en toda función. No se piden ni se guardan en ningún otro lado
     supabase: {
       url: Deno.env.get('SUPABASE_URL') ?? '',
-      anonKey: Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      anonKey: keys.anonKey,
+      serviceKey: keys.serviceKey,
     },
   };
 }
@@ -191,6 +200,7 @@ export function bankSyncDeps(onRun?: (runId: string | null) => void): BankSyncDe
   return {
     env: {
       appUrl: Deno.env.get('APP_URL'),
+      appOrigins: Deno.env.get('APP_ORIGINS'),
       serviceAccountKey: Deno.env.get('GOOGLE_SA_KEY'),
       sheetId: Deno.env.get('GOOGLE_BANK_SHEET_ID'),
       testSheetId: Deno.env.get('GOOGLE_BANK_TEST_SHEET_ID'),
@@ -221,6 +231,7 @@ export function bankSyncDeps(onRun?: (runId: string | null) => void): BankSyncDe
 /** Los nombres de 5.3 del plan de B15. Lo que no esté aquí no llega a las funciones nuevas */
 const ENGAGEMENT_NAMES = [
   'APP_URL',
+  'APP_ORIGINS',
   'RESEND_API_KEY',
   'EMAIL_FROM',
   'SUPPORT_EMAIL',
@@ -279,6 +290,7 @@ export function emailUnsubscribeDeps(): UnsubscribeDeps {
   const { env, supabase } = readEngagementEnv();
   return {
     appUrl: env.APP_URL,
+    appOrigins: env.APP_ORIGINS,
     unsubscribe: (token) => emailUnsubscribeViaRest(supabase, token),
     log,
   };
@@ -302,6 +314,7 @@ export function monitoringTestDeps(): MonitoringTestDeps {
   const { env, supabase } = readEngagementEnv();
   return {
     appUrl: env.APP_URL,
+    appOrigins: env.APP_ORIGINS,
     adminOk: (authorization) => adminSessionOkViaRest(supabase, authorization),
     monitoring: monitoringDeps(),
   };

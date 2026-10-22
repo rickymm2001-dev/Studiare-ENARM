@@ -74,6 +74,7 @@ import {
   subscriptionSessionParams,
   trialEndingNotice,
   unixToIso,
+  walletSubscriptionSessionParams,
   type StripeClient,
 } from './stripe.ts';
 
@@ -444,11 +445,15 @@ export interface CheckoutDeps extends CoreDeps {
 /** Revisa el cuerpo de create-checkout (regla 1 de 2.2). null si la combinación no vale */
 export function parseCheckoutRequest(value: unknown): CheckoutRequest | null {
   const body = asRecord(value);
-  const { plan, provider, method, expectTrial } = body;
+  const { plan, provider, method, expectTrial, ui } = body;
   const mode = body.mode ?? 'subscription';
   if (!isPaidPlan(plan) || (provider !== 'stripe' && provider !== 'mercadopago')) return null;
   if (mode !== 'subscription' && mode !== 'pass') return null;
   if (expectTrial !== undefined && typeof expectTrial !== 'boolean') return null;
+  // Sin ui es la página de pago de Stripe. Los botones de Apple Pay y Google Pay (wallet) son solo de la
+  // suscripción con Stripe (B17, 6.4)
+  if (ui !== undefined && ui !== 'hosted' && ui !== 'wallet') return null;
+  if (ui === 'wallet' && (provider !== 'stripe' || mode !== 'subscription')) return null;
   if (mode === 'subscription') {
     // Mercado Pago no lleva precio Fundador (8.3). La suscripción no lleva método
     if (method !== undefined) return null;
@@ -464,6 +469,7 @@ export function parseCheckoutRequest(value: unknown): CheckoutRequest | null {
     mode,
     ...(method === 'oxxo' || method === 'spei' ? { method } : {}),
     ...(typeof expectTrial === 'boolean' ? { expectTrial } : {}),
+    ...(ui === 'wallet' ? { ui } : {}),
   };
 }
 
@@ -616,9 +622,13 @@ export async function handleCreateCheckout(
     return fail('not_configured');
   }
   const client: StripeClient = { key, fetch: deps.fetch };
+  // Los botones de Apple Pay y Google Pay piden la sesión ui_mode elements de la misma suscripción. No hay
+  // bandera del servidor que la cierre: no concede nada nuevo y la bandera expressWallets del cliente decide
+  // si la app la ofrece (B17, 6.4). parseCheckoutRequest ya limitó wallet a Stripe y suscripción
+  const wallet = ask.ui === 'wallet';
   const paramsFor = (customerId: string) =>
     mode === 'subscription' || !passPlan
-      ? subscriptionSessionParams({
+      ? (wallet ? walletSubscriptionSessionParams : subscriptionSessionParams)({
           appUrl,
           userId: user.id,
           customerId,
@@ -652,6 +662,16 @@ export async function handleCreateCheckout(
     }
     if (!reply.ok) {
       deps.log(`Stripe rechazó el pago del plan ${ask.plan}. ${stripeFailureLine(reply)}`);
+      return fail('provider');
+    }
+    if (wallet) {
+      // El secreto del cliente es del navegador que lo pidió: va en la respuesta y no se guarda ni se
+      // registra en ningún lado. Sin caché, por si algún intermediario la guardara
+      const clientSecret = asString(reply.body.client_secret);
+      if (clientSecret) {
+        return json({ clientSecret, trial }, 200, { ...cors, 'cache-control': 'no-store' });
+      }
+      deps.log(`Stripe creó el pago del plan ${ask.plan} pero no mandó el secreto del cliente`);
       return fail('provider');
     }
     const url = asString(reply.body.url);

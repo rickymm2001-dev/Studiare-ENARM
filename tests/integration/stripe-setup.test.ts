@@ -418,7 +418,9 @@ describe('configuración de Stripe en modo prueba', () => {
           { status: 403 },
         ),
       )) as typeof fetch;
-    const error = await setupStripeTest({ key: KEY, fetch: failing }).catch((e: unknown) => e);
+    const error = await setupStripeTest({ key: KEY, fetch: failing, appUrl: APP }).catch(
+      (e: unknown) => e,
+    );
     expect(error).toBeInstanceOf(Error);
     const message = error instanceof Error ? error.message : '';
     expect(message).toBe(
@@ -530,7 +532,13 @@ describe('setup-test.ts desde la línea de comandos', () => {
 
     const stripe = fakeStripe();
     const out = output();
-    expect(await runSetupCli([], { HTTPS_PROXY: 'http://proxy' }, out.deps(stripe.fetch))).toBe(0);
+    expect(
+      await runSetupCli(
+        ['--app-url', APP],
+        { HTTPS_PROXY: 'http://proxy' },
+        out.deps(stripe.fetch),
+      ),
+    ).toBe(0);
     expect(stripe.calls[0]?.path).toBe('/v1/balance');
 
     const none = fakeStripe();
@@ -540,6 +548,37 @@ describe('setup-test.ts desde la línea de comandos', () => {
       'Solo se aceptan llaves de prueba, que empiezan con sk_test_ o rk_test_',
     ]);
     expect(none.calls).toEqual([]);
+  });
+
+  it('sin dirección de la app no hay una por omisión: pide --app-url o APP_URL y no llama a Stripe (B17, 4.5)', async () => {
+    for (const env of [{ STRIPE_SECRET_KEY: KEY }, { HTTPS_PROXY: 'http://proxy' }]) {
+      const stripe = fakeStripe();
+      const out = output();
+      expect(await runSetupCli([], env, out.deps(stripe.fetch))).toBe(1);
+      expect(out.lines.join('\n')).toContain('Falta la dirección de la app');
+      expect(out.lines.join('\n')).toContain('--app-url');
+      expect(out.lines.join('\n')).not.toContain('github.io');
+      expect(stripe.calls).toEqual([]);
+    }
+    // La variable APP_URL sirve igual que la opción
+    const stripe = fakeStripe();
+    const out = output();
+    expect(
+      await runSetupCli([], { STRIPE_SECRET_KEY: KEY, APP_URL: APP }, out.deps(stripe.fetch)),
+    ).toBe(0);
+    const [portal] = posts(stripe.calls, '/v1/billing_portal/configurations').map(formOf);
+    expect(portal?.default_return_url).toBe(`${APP}suscripcion`);
+    // Y la opción gana sobre la variable
+    const other = fakeStripe();
+    expect(
+      await runSetupCli(
+        ['--app-url=https://nuevo.ejemplo.mx/'],
+        { STRIPE_SECRET_KEY: KEY, APP_URL: APP },
+        output().deps(other.fetch),
+      ),
+    ).toBe(0);
+    const [moved] = posts(other.calls, '/v1/billing_portal/configurations').map(formOf);
+    expect(moved?.default_return_url).toBe('https://nuevo.ejemplo.mx/suscripcion');
   });
 
   it('--write-ids sin valor o una opción que no existe no llaman a Stripe', async () => {
@@ -555,7 +594,7 @@ describe('setup-test.ts desde la línea de comandos', () => {
     const stripe = fakeStripe();
     const out = output();
     const code = await runSetupCli(
-      ['--write-ids=/sin-permiso/ids.json'],
+      ['--write-ids=/sin-permiso/ids.json', `--app-url=${APP}`],
       { STRIPE_SECRET_KEY: KEY },
       out.deps(stripe.fetch, () => {
         throw Object.assign(new Error(`EACCES: permission denied ${KEY}`), { code: 'EACCES' });

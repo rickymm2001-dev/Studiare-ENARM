@@ -147,6 +147,22 @@ export const FEATURE_FLAGS = {
       'Sección Recordatorios por correo en Ajustes del repaso (B15). La prende el servidor',
     defaults: { development: true, demo: false, production: false },
   },
+  // Botones de un toque de Apple Pay y Google Pay dentro de Suscripción, con Stripe.js cargado solo ahí
+  // (B17, 6.6, comentario 19 y 4.29 del plan del cambio). Apagada en los tres entornos. Se prende en modo
+  // prueba escribiendo platform_settings, clave feature_flags, con el SQL de docs/STRIPE.md (ninguna pantalla del
+  // admin cambia banderas, el módulo del Banco solo cambia cloudBank), después de las pruebas en teléfonos reales
+  // (W1 a W8). Es solo de cliente: create-checkout acepta ui wallet sin consultarla, porque solo cambia el modo de
+  // la pantalla de pago y no concede nada nuevo (misma suscripción, mismo precio, misma prueba y mismo aviso de
+  // Stripe). Por eso "apagada" no es una orden del servidor: quien prenda la copia de banderas de su propio
+  // navegador puede cargar Stripe.js y abrir sesiones de ese modo. Sin la llave VITE_STRIPE_PUBLISHABLE_KEY la
+  // sección no aparece aunque la bandera esté prendida, y la política de seguridad no abre Stripe. Apagada no se
+  // pierde nada: el Checkout hospedado de Stripe sigue mostrando Apple Pay y Google Pay solo en los aparatos que
+  // los tienen
+  expressWallets: {
+    description:
+      'Botones de un toque de Apple Pay y Google Pay en Suscripción, con Stripe.js (B17). Se prende con el SQL de docs/STRIPE.md y el servidor no la consulta',
+    defaults: { development: false, demo: false, production: false },
+  },
 } as const satisfies Record<string, FlagDef>;
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS;

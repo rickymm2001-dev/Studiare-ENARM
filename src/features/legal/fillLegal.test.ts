@@ -154,11 +154,11 @@ describe('textos legales', () => {
   });
 
   it('aviso y términos llevan su versión y la fecha de B16 a la vista', () => {
-    // El aviso lleva la versión que acepta el alumno, la de B15 (2026-10-21), que suma Medición de uso. Los
-    // términos siguen en la de B16
-    expect(legalDocs.privacy.version).toBe('2026-10-21');
+    // El aviso lleva la versión que acepta el alumno, la de B17 (2026-10-22), que nombra a Cloudflare, a GitHub
+    // y al componente de Stripe, sobre la de B15 (2026-10-21) con Medición de uso. Los términos siguen en la de B16
+    expect(legalDocs.privacy.version).toBe('2026-10-22');
     expect(legalDocs.terms.version).toBe('2026-10-15');
-    expect(legalDocs.privacy.updated).toBe('21 de octubre de 2026');
+    expect(legalDocs.privacy.updated).toBe('22 de octubre de 2026');
     expect(legalDocs.terms.updated).toBe('15 de octubre de 2026');
   });
 
@@ -170,13 +170,21 @@ describe('textos legales', () => {
     expect(isAfter('2026-10-15b', '2026-10-15')).toBe(true);
     expect(isAfter('2026-10-16', '2026-10-15b')).toBe(true);
     expect(isAfter('2026-10-21', '2026-10-15b')).toBe(true);
-    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16, B16 y B15
-    expect(['2026-10-21', '2026-10-15b', '2026-10-14', '2026-10-15', '2026-10-14b'].sort()).toEqual(
-      ['2026-10-14', '2026-10-14b', '2026-10-15', '2026-10-15b', '2026-10-21'],
-    );
+    expect(isAfter('2026-10-22', '2026-10-21')).toBe(true);
+    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16, B16, B15 y B17
+    expect(
+      ['2026-10-22', '2026-10-21', '2026-10-15b', '2026-10-14', '2026-10-15', '2026-10-14b'].sort(),
+    ).toEqual([
+      '2026-10-14',
+      '2026-10-14b',
+      '2026-10-15',
+      '2026-10-15b',
+      '2026-10-21',
+      '2026-10-22',
+    ]);
     // La versión vigente es la mayor de todas las conocidas, para que quien aceptó una anterior,
     // incluido el primer borrador de B16, vuelva a aceptar
-    const earlier = ['2026-10-14', '2026-10-14b', '2026-10-15', '2026-10-15b'];
+    const earlier = ['2026-10-14', '2026-10-14b', '2026-10-15', '2026-10-15b', '2026-10-21'];
     for (const version of earlier) {
       expect(isAfter(PRIVACY_NOTICE_VERSION, version), version).toBe(true);
     }
@@ -232,6 +240,43 @@ describe('textos legales', () => {
     expect(of('Resend')).toMatch(/correos de acceso/);
     expect(of('Sentry')).toMatch(/solo con tu permiso Mejora con tus datos sin nombre/);
     expect(of('GitHub,')).toMatch(/permiso Mejora con tus datos sin nombre/);
+  });
+
+  it('Cloudflare, GitHub y el componente de Stripe están en el aviso con lo que ven, y la frase vieja ya no (B17, 7.1)', () => {
+    const bullets = section(legalDocs.privacy, 'terceros').bullets ?? [];
+    const of = (name: string) => {
+      const found = bullets.find((bullet) => bullet.startsWith(name));
+      if (!found) throw new Error(`Falta ${name} en Con quién compartimos tus datos`);
+      return found;
+    };
+    // Cloudflare. Qué hace, qué ve, que no usa su analítica y que puede tratar datos fuera de México
+    const cloudflare = of('Cloudflare,');
+    expect(cloudflare).toMatch(/cuando la página se mude a su dominio propio/);
+    expect(cloudflare).toMatch(/Aloja y entrega la página y administra el nombre del sitio/);
+    expect(cloudflare).toMatch(/dirección IP.*registros técnicos de seguridad/);
+    expect(cloudflare).toMatch(/Studiare no usa su analítica ni cookies de publicidad/);
+    expect(cloudflare).toMatch(/fuera de México/);
+    expect(cloudflare).toMatch(/reenvío de correo.*privacidad y de soporte.*lee los correos/);
+    // GitHub. Donde vive el código, la página de hoy hasta la mudanza y la calibración, sin perder lo de B14
+    const github = of('GitHub,');
+    expect(github).toMatch(/donde vive el código de Studiare y que hoy aloja la página/);
+    expect(github).toMatch(/hasta que se mude a su dominio propio/);
+    expect(github).toMatch(/dirección IP/);
+    expect(github).toMatch(/cuando se active la calibración de las preguntas/);
+    // Stripe. Solo cambia lo del componente en el navegador, que es de las billeteras en Suscripción
+    expect(of('Stripe')).toMatch(
+      /Apple Pay o Google Pay dentro de Suscripción, y solo si lo eliges, la página carga en tu navegador el componente de Stripe, y Stripe recibe señales de tu aparato para prevenir fraude/,
+    );
+    // El componente puede guardar identificadores propios, y se dice en Cookies y almacenamiento
+    const storage = (section(legalDocs.privacy, 'almacenamiento').paragraphs ?? []).join(' ');
+    expect(storage).toMatch(/componente de Stripe puede guardar en tu navegador identificadores/);
+    expect(storage).toMatch(/No usamos cookies de publicidad ni de rastreo/);
+    // La frase de antes, que mezclaba los dos proveedores en uno, ya no está
+    const text = legalToMarkdown(legalDocs.privacy, EMPTY);
+    expect(text).not.toMatch(/hoy GitHub Pages y después Cloudflare/);
+    expect(text).not.toMatch(/El servicio que aloja la página/);
+    // Y no dice que no haya terceros en el sitio, porque Cloudflare está en medio
+    expect(text).not.toMatch(/no hay terceros|sin terceros/i);
   });
 
   it('PostHog solo con el permiso Medición de uso, que empieza apagado y se pide aparte (respuesta 78 y 4.27, B15)', () => {

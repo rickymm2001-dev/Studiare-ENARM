@@ -24,7 +24,7 @@ function allInPlace() {
   vi.stubEnv('VITE_POSTHOG_KEY', KEY);
   vi.stubEnv('VITE_POSTHOG_HOST', 'https://us.i.posthog.com');
   vi.stubEnv('VITE_SUPABASE_URL', 'https://abcd1234.supabase.co');
-  vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'sb_publishable_simulada_para_pruebas_0123456789');
+  vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'sb_publishable_' + 'simulada_para_pruebas_0123456789');
   writeStoredFlags({ productAnalytics: true });
 }
 

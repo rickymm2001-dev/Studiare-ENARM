@@ -7,8 +7,13 @@
 //
 // Solo la tarjeta con Stripe lleva el precio Fundador y la prueba. OXXO, SPEI y Mercado Pago usan el
 // plan regular (8.3, checkoutRequestFor). Los códigos de descuento se escriben en la página de Stripe.
-import { useState } from 'react';
-import { Link } from 'react-router';
+//
+// Con la bandera expressWallets y la llave publicable de Stripe (B17, 6.5), la tarjeta suma debajo del resumen
+// los botones de Apple Pay y Google Pay (WalletPay, con lazy: Stripe.js solo se descarga aquí y solo con la
+// tarjeta elegida). El resumen de arriba es el aviso del cobro automático para los dos caminos. Al pagar con
+// la billetera se vuelve a Suscripción con ?pago=ok, igual que al regresar de la página hospedada.
+import { lazy, Suspense, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { screenPath } from '@/app/screens';
 import {
   PASS_PRICES_MXN,
@@ -33,6 +38,10 @@ import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { RadioCards, type RadioCardOption } from '@/ui/components/radio-cards';
 import { longDate } from './planState';
 import { paymentOptionsFor, readPaymentFlags, type PaymentFlags } from './paymentOptions';
+import { readWalletSetup, type WalletSetup } from './wallet/walletSetup';
+
+// El código de Stripe vive en este chunk y en el de stripe-js, que no se piden hasta mostrar los botones
+const WalletPay = lazy(() => import('./wallet/WalletPay'));
 
 const text = billingCloudText;
 type Failure = Extract<CheckoutResult, { ok: false }>;
@@ -67,6 +76,7 @@ export function CheckoutOptions({
   trialAvailable,
   passEnd = null,
   flags = readPaymentFlags(),
+  wallets = readWalletSetup(),
   onBack,
   onTrialMismatch,
   open = (url: string) => {
@@ -85,6 +95,8 @@ export function CheckoutOptions({
   /** Fin del pase vigente, desde el que se suma uno nuevo */
   passEnd?: string | null;
   flags?: PaymentFlags;
+  /** Los botones de Apple Pay y Google Pay. null si la bandera o la llave de Stripe no están (B17) */
+  wallets?: WalletSetup | null;
   onBack: () => void;
   /** El servidor dijo otra cosa de la prueba. Quien llama vuelve a leer el plan */
   onTrialMismatch?: () => void;
@@ -98,6 +110,7 @@ export function CheckoutOptions({
   const [charged, setCharged] = useState<PaidPlanKey>(requested);
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<Failure | null>(null);
+  const navigate = useNavigate();
   const regular = regularPlanOf(charged);
   const period = t.billing.periods[regular];
   const passPrice = t.billing.price(PASS_PRICES_MXN[regular]);
@@ -190,6 +203,18 @@ export function CheckoutOptions({
     (failure?.reason === 'founder_full' || failure?.reason === 'founder_lost') &&
     isFounderPlan(charged);
 
+  // El pago con la billetera se confirmó en Stripe. Se vuelve a Suscripción con ?pago=ok, que revisa el plan
+  // hasta verlo y lo dice, como al regresar de la página hospedada
+  const walletPaid = () => {
+    onBack();
+    void navigate(`${screenPath('subscription')}?pago=ok`);
+  };
+  // El servidor no dejó abrir el pago con la billetera. Se dice igual que cuando falla la página hospedada
+  const walletFailed = (result: Failure) => {
+    setFailure(result);
+    if (result.reason === 'trial_mismatch') onTrialMismatch?.();
+  };
+
   return (
     <Card aria-labelledby="forma-de-pago-titulo" className="flex flex-col gap-3">
       <CardHeader>
@@ -215,6 +240,19 @@ export function CheckoutOptions({
       </div>
       {flags.testMode ? (
         <p className="rounded-md bg-sim px-3 py-2 text-sm text-sim-fg">{text.testMode}</p>
+      ) : null}
+      {wallets && option === 'card' && !lostFounder ? (
+        <Suspense fallback={null}>
+          {/* Con otro plan cobrado o con otra prueba es otra sesión de pago, así que es otro componente */}
+          <WalletPay
+            key={`${charged}:${String(trialAvailable)}`}
+            publishableKey={wallets.publishableKey}
+            plan={charged}
+            trialAvailable={trialAvailable}
+            onPaid={walletPaid}
+            onFailure={walletFailed}
+          />
+        </Suspense>
       ) : null}
       <p role="status" className="min-h-5 text-sm text-fg-muted">
         {busy ? text.opening : failure ? failureText(failure, option) : null}

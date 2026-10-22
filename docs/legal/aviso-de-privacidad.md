@@ -1,6 +1,6 @@
 # Aviso de privacidad
 
-Versión 2026-10-21. Última actualización, 21 de octubre de 2026
+Versión 2026-10-22. Última actualización, 22 de octubre de 2026
 
 > Borrador para revisión del abogado. Todavía no es el texto legal definitivo.
 
@@ -86,15 +86,15 @@ No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a ope
 
 - Supabase, que aloja la base de datos, el inicio de sesión, los archivos, como tu foto de perfil en Supabase Storage, y las funciones del servidor. Hoy también envía los correos de acceso a tu cuenta.
 - Google, solo si eliges entrar con Google. Confirma quién eres y nos manda los datos de tu cuenta de Google que se explican arriba. No le mandamos tus datos de estudio. Aparte, el banco de preguntas que escriben los médicos vive en una hoja de Google Sheets que Studiare solo lee, y ahí no va ningún dato tuyo.
-- Stripe, que procesa los pagos con tarjeta, Apple Pay, Google Pay, OXXO y SPEI. Recibe tu correo y el identificador de tu cuenta para ligar el pago, y lo que escribes en su página de pago, como los datos de tu tarjeta.
+- Stripe, que procesa los pagos con tarjeta, Apple Pay, Google Pay, OXXO y SPEI. Recibe tu correo y el identificador de tu cuenta para ligar el pago, y lo que escribes en su página de pago, como los datos de tu tarjeta. Cuando esté disponible pagar con Apple Pay o Google Pay dentro de Suscripción, y solo si lo eliges, la página carga en tu navegador el componente de Stripe, y Stripe recibe señales de tu aparato para prevenir fraude.
 - Mercado Pago, cuando se active y solo si lo eliges para pagar. Recibirá tu correo y el identificador de tu cuenta, y lo que escribas en su página de pago.
 - Anthropic, cuando usas una función de IA, con lo que se explica en la sección de inteligencia artificial.
 - El servicio que aloja el proxy de IA, cuando usas una función de IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.
 - Resend, cuando se active. Enviará los correos de acceso a tu cuenta, los avisos de tu plan, como el de que termina tu prueba gratis o vence tu pase, y los recordatorios de repaso si los prendes. Recibirá tu correo y el texto de cada correo. No medimos si los abres ni si das clic.
 - PostHog, cuando se active, para medir cómo se usa la app. Solo recibirá datos si prendes el permiso Medición de uso, que empieza apagado, y recibirá los eventos de uso con tu identificador seudónimo, sin tu nombre, tu correo ni lo que escribes. No usa cookies, no graba tu pantalla y está configurado para no guardar tu dirección IP.
 - Sentry, cuando se active, para enterarnos de las fallas. Recibirá los reportes de fallas de la app solo con tu permiso Mejora con tus datos sin nombre, y los errores de nuestras funciones del servidor. Ninguno lleva tu nombre, tu correo ni tus textos, Sentry está configurado para no guardar tu dirección IP y conserva los reportes el tiempo de su plan, hoy 30 días.
-- GitHub, cuando se active la calibración de las preguntas. Ahí corre cada noche el cálculo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre, con identificadores seudónimos y sin nombres ni correos.
-- El servicio que aloja la página, hoy GitHub Pages y después Cloudflare, que ve datos técnicos de tu conexión, como la dirección IP.
+- GitHub, donde vive el código de Studiare y que hoy aloja la página, hasta que se mude a su dominio propio. Mientras la aloja, ve datos técnicos de tu conexión, como la dirección IP. Además, cuando se active la calibración de las preguntas, ahí corre cada noche el cálculo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre, con identificadores seudónimos y sin nombres ni correos.
+- Cloudflare, cuando la página se mude a su dominio propio. Aloja y entrega la página y administra el nombre del sitio. Ve datos técnicos de tu conexión, como la dirección IP, y puede guardar registros técnicos de seguridad. Studiare no usa su analítica ni cookies de publicidad. Puede tratar datos fuera de México. Si usamos su reenvío de correo para las direcciones de privacidad y de soporte, también lee los correos que escribes ahí al reenviarlos.
 - Autoridades, cuando una ley o una orden de autoridad competente lo exija.
 
 ## Tus derechos y cómo ejercerlos
@@ -113,7 +113,7 @@ Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu 
 
 ## Cookies y almacenamiento en tu navegador
 
-Studiare guarda en tu navegador tu sesión, tus datos de estudio y tus preferencias, para funcionar sin conexión. No usamos cookies de publicidad ni de rastreo. Si prendes el permiso Medición de uso, tu navegador manda los eventos a PostHog sin cookies y sin guardar nada tuyo en él. Sentry, cuando se active, tampoco usa cookies. El recorrido de bienvenida guarda en tu navegador solo si ya lo viste o lo saltaste.
+Studiare guarda en tu navegador tu sesión, tus datos de estudio y tus preferencias, para funcionar sin conexión. No usamos cookies de publicidad ni de rastreo. Si prendes el permiso Medición de uso, tu navegador manda los eventos a PostHog sin cookies y sin guardar nada tuyo en él. Sentry, cuando se active, tampoco usa cookies. El recorrido de bienvenida guarda en tu navegador solo si ya lo viste o lo saltaste. Si pagas con Apple Pay o Google Pay dentro de Suscripción, el componente de Stripe puede guardar en tu navegador identificadores propios para prevenir fraude.
 
 ## Personas menores de edad
 

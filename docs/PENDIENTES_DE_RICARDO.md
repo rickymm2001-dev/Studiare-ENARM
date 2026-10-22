@@ -145,7 +145,7 @@ Lo que hace la sesión con el conector, sin pedirte nada más.
 
 El servidor de los correos, de la analítica y de las alertas ya está, con el interruptor de cada uno. Nada se ha aplicado ni lanzado en el proyecto real y todo nace apagado. Las cuentas de PostHog, Sentry y Resend todavía no existen y el producto funciona completo sin ellas. Ningún paso lleva llaves al chat, cada llave va directo al servicio o a los secretos. El detalle técnico está en docs/CORREOS.md, docs/ALERTAS.md y docs/SUPABASE.md.
 
-Una aclaración sobre las variables de GitHub. El flujo de GitHub Pages (.github/workflows/pages.yml) ya las pasa al build, que son VITE_POSTHOG_KEY, VITE_POSTHOG_HOST, VITE_SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT y, como secreto, SENTRY_AUTH_TOKEN. Pero esa publicación es la demo, y en la demo la medición de uso y los avisos de errores del navegador nacen apagados por diseño, así que ahí no verás efecto aunque las pongas. Se ven cuando la app de producción se publique con el flujo de B17 en Cloudflare, que tiene que pasar las mismas variables.
+Una aclaración sobre las variables de GitHub. El flujo de GitHub Pages (.github/workflows/pages.yml) ya las pasa al build, que son VITE_POSTHOG_KEY, VITE_POSTHOG_HOST, VITE_SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT y, como secreto, SENTRY_AUTH_TOKEN. Pero esa publicación es la demo, y en la demo la medición de uso y los avisos de errores del navegador nacen apagados por diseño, así que ahí no verás efecto aunque las pongas. Se ven cuando la app de producción se publique con el flujo de B17 en Cloudflare, que pasa las mismas variables desde GitHub. No se repiten en Cloudflare.
 
 Lo que hace la sesión con el conector, sin pedirte nada más.
 
@@ -162,7 +162,7 @@ PostHog, unos 10 minutos. Prende la medición de uso, que cada alumno además ti
 
 - **Paso B15.2. Crea la cuenta.** En posthog.com crea tu cuenta y un proyecto llamado Studiare en la nube de EE. UU. (recomendado, más cerca de México)
 - **Paso B15.3. Cierra lo que no se usa.** En Project settings activa Discard client IP data (que no guarde la IP) y deja apagadas la grabación de sesiones, las encuestas y la autocaptura. La app no usa ninguna
-- **Paso B15.4. Copia la llave y la dirección.** Son la llave del proyecto, la que empieza con phc_, y la dirección de captura, https://us.i.posthog.com. Ponlas en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, como VITE_POSTHOG_KEY y VITE_POSTHOG_HOST, y después en Cloudflare. Ponlas también en Supabase, Edge Functions, Secrets, como POSTHOG_PROJECT_KEY y POSTHOG_HOST
+- **Paso B15.4. Copia la llave y la dirección.** Son la llave del proyecto, la que empieza con phc_, y la dirección de captura, https://us.i.posthog.com. Ponlas en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, como VITE_POSTHOG_KEY y VITE_POSTHOG_HOST. Solo en GitHub, porque la publicación de B17 construye la página allí y no se repiten en Cloudflare. Ponlas también en Supabase, Edge Functions, Secrets, como POSTHOG_PROJECT_KEY y POSTHOG_HOST
 - **Paso B15.5. Nunca crees una llave personal.** La que empieza con phx_ no se usa para la app, y las funciones la rechazan
 - **Paso B15.6. Avisa a la sesión.** Ella prende analytics en el servidor, revisa que lleguen eventos de su cuenta de prueba con el permiso y te deja el embudo escrito en docs/ANALITICA.md para que lo armes en Insights, Funnel
 
@@ -170,7 +170,7 @@ Sentry, unos 15 minutos. Prende los avisos de errores.
 
 - **Paso B15.7. Crea la cuenta.** En sentry.io con el plan Developer, que es gratis, y dos proyectos. studiare-web (Browser JavaScript) y studiare-funciones
 - **Paso B15.8. Protege los datos.** En cada proyecto, Settings, Security & Privacy, prende Prevent Storing of IP Addresses y la limpieza de datos del servidor
-- **Paso B15.9. Copia los dos DSN.** El de studiare-web va a GitHub y Cloudflare como VITE_SENTRY_DSN. El de studiare-funciones va a Supabase, Edge Functions, Secrets, como SENTRY_DSN
+- **Paso B15.9. Copia los dos DSN.** El de studiare-web va a GitHub como VITE_SENTRY_DSN, solo allí y no en Cloudflare. El de studiare-funciones va a Supabase, Edge Functions, Secrets, como SENTRY_DSN
 - **Paso B15.10. Crea la regla de alerta.** En Alerts crea una regla para cada proyecto. Cuando se cree un problema nuevo o regrese uno resuelto, que mande un correo a tu cuenta
 - **Paso B15.11. Para subir los mapas de código.** Crea un token de organización y guárdalo en GitHub, Settings, Secrets and variables, Actions, pestaña Secrets, como SENTRY_AUTH_TOKEN. Pon SENTRY_ORG y SENTRY_PROJECT en la pestaña Variables. Los mapas se suben en cualquier build que tenga las tres, y solo sirven cuando ese build es el de producción
 - **Paso B15.12. Avisa a la sesión.** Ella prende errorMonitoring si hiciera falta y tú tocas Mandar error de prueba en Plataforma, Correos y alertas. Deben llegarte dos correos de Sentry, uno del navegador y otro de las funciones
@@ -196,7 +196,7 @@ Decisiones de B15 que esperan tu visto bueno, con la opción recomendada ya toma
 
 El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.
 
-- **Los datos del responsable** (pregunta 43). Mientras falten, el alumno lee un texto neutro y el abogado ve la marca de lo que falta. Ponlos en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, y después en Cloudflare (B17). Son públicos por diseño
+- **Los datos del responsable** (pregunta 43). Mientras falten, el alumno lee un texto neutro y el abogado ve la marca de lo que falta. Ponlos en GitHub, Settings, Secrets and variables, Actions, pestaña Variables. Solo en GitHub, porque la publicación de B17 construye la página allí y no se repiten en Cloudflare. Son públicos por diseño
   - VITE_LEGAL_NAME con Plexus Medica S. de R.L. de C.V.
   - VITE_LEGAL_ADDRESS con el domicilio de la empresa, cuando lo confirme tu contador
   - VITE_PRIVACY_EMAIL con el correo de privacidad, por ejemplo privacidad arroba tu dominio
@@ -204,6 +204,73 @@ El aviso de privacidad y los términos quedaron al día (el aviso en la versión
   - Después corre la publicación en Actions, con el flujo pages y Run workflow
 - **Manda los textos a tu abogado** (respuesta 44). Son docs/legal/aviso-de-privacidad.md, docs/legal/terminos-y-condiciones.md y docs/legal/CAMBIOS-B16.md. La marca de borrador se quita solo cuando me digas que los aprobó
 - **Contesta las cinco preguntas de CAMBIOS-B16.md**, sección Preguntas para Ricardo. Entre ellas con qué sistema emitirás las facturas y cómo le pedirás al alumno su cuenta para devolverle una garantía pagada en OXXO
+
+## Lo que salió de B17, publicación en tu dominio
+
+El código y los documentos de B17 ya están y se probaron con servicios simulados. Todo queda apagado hasta tus pasos. Cloudflare no publica nada hasta que pongas la variable CLOUDFLARE_DEPLOY en true, y las funciones de Supabase salen con las llaves de siempre, así que nada cambia para nadie hasta que hagas tu parte. Está escrito para alguien que nunca ha hecho esto. Los nombres de los menús son los de la documentación de cada servicio y pueden cambiar un poco. Si no encuentras uno, dime lo que ves en pantalla. Ningún paso lleva llaves al chat, cada llave se pega directo en el servicio. Los avisos de la sesión que dicen ya quedó son de lo que ella puede comprobar sin llaves. El detalle de cada servicio está en docs/DOMINIO_Y_CORREO.md, docs/PUBLICACION.md, docs/SUPABASE.md, docs/DESPLIEGUE.md y docs/STRIPE.md. En todos los pasos tu dominio se escribe tudominio.mx, y se pone siempre sin www.
+
+Antes de empezar.
+
+- **Paso B17.1. Seguridad de tus cuentas, unos 10 minutos.** Activa la verificación en dos pasos en GitHub, Supabase, Cloudflare, Stripe, Resend y en la cuenta donde compraste el dominio. Guarda los códigos de respaldo en tu gestor de contraseñas. Con esas cuentas se publica, se cobra y se manda correo en tu nombre
+- **Paso B17.2. Dime tu dominio en el chat.** Por ejemplo tudominio.mx, en qué empresa lo compraste y si ya tiene correo (Gmail, Google Workspace, Zoho, el del mismo registrador o ninguno). Eso decide los pasos B17.3 y B17.16. No pegues contraseñas
+
+Cloudflare, unos 45 minutos más la espera. Cloudflare es quien entrega la página en tu dominio y administra su DNS, que es la libreta que dice a dónde va cada nombre.
+
+- **Paso B17.3. Agrega tu dominio.** Entra a dash.cloudflare.com, Domains, Onboard a domain, escribe tu dominio sin www y elige el plan Free. Revisa la lista de registros DNS que Cloudflare encontró y compárala con la del lugar donde compraste el dominio. Presta atención a los registros MX y TXT, que son los del correo, y no borres ninguno. Cloudflare te da dos nameservers. En el lugar donde compraste el dominio, apaga DNSSEC si estaba prendido, quita los nameservers que tiene y pon esos dos, copiados exactamente. Llega un correo de Cloudflare cuando el dominio queda Active, hasta 24 horas después. Mientras tanto nada se rompe. Si tu dominio ya estaba en Cloudflare, salta este paso
+- **Paso B17.4. Crea el token que usará GitHub, unos 5 minutos.** Un token es una llave con permisos limitados. En Cloudflare abre API Tokens (en Manage Account, Account API Tokens), Create Token, Custom token, Get started. Nombre studiare-github. En Permissions elige Account, Cloudflare Pages, Edit. En Account Resources elige tu cuenta. Continue to summary, Create Token. El valor se muestra una sola vez. Cópialo y pásalo al paso B17.5 enseguida, no lo guardes en ningún otro lado. Si se filtra, lo único que alguien puede hacer es publicar en Pages, y se revoca en el panel en un minuto. Tu Account ID está en Overview de tu dominio, columna derecha, sección API
+- **Paso B17.5. Pon los secretos y variables en GitHub.** En el repositorio, Settings, Secrets and variables, Actions. En la pestaña Secrets, New repository secret, crea CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID. En la pestaña Variables, New repository variable, crea CLOUDFLARE_PAGES_PROJECT con el valor studiare y SITE_URL con https://tudominio.mx sin diagonal al final. Al último crea CLOUDFLARE_DEPLOY con true, que es lo que prende el despliegue. Las variables VITE_ que ya tienes (Supabase, PostHog, Sentry y los datos legales) se quedan como están y solo viven en GitHub
+- **Paso B17.6. Crea el proyecto.** En GitHub abre Actions, el flujo cloudflare, Run workflow, marca Crear el proyecto y toca Run workflow. Espera la palomita verde. Si sale en rojo, copia el mensaje y dímelo. Se crea desde GitHub y no desde una sesión, porque Cloudflare convierte en proyecto de Workers lo que crea un agente de IA, y tú elegiste Pages
+- **Paso B17.7. Primera publicación.** Run workflow otra vez sin marcar nada, o cualquier push a main. En el resumen del flujo está una dirección que termina en pages.dev. Ábrela, debe abrir Studiare. La sesión corre la prueba de humo y te dice si está en verde
+- **Paso B17.8. Pon tu dominio en el proyecto.** En Cloudflare abre Workers & Pages, el proyecto studiare, Custom domains, Set up a domain, escribe tu dominio y toca Continue. Confirma el registro que propone. Espera a que diga Active
+- **Paso B17.9. Que www lleve al dominio sin www.** En el DNS de tu dominio agrega un registro tipo A, nombre www, dirección 192.0.2.1 y Proxy status en Proxied. Luego, Rules, Create rule, Redirect Rule, la plantilla Redirect from WWW to root (o patrón https://www.*, destino https://${1}, código 301, conservar la consulta) y Deploy. Se redirige y no se sirve en los dos, porque cada dirección tiene sus propios datos guardados en el navegador
+- **Paso B17.10. Que http lleve a https.** En SSL/TLS, Edge Certificates, Always Use HTTPS en On
+- **Paso B17.11. Apaga lo que no queremos.** En el panel de la zona, Rocket Loader y Auto Minify en Off si los ves, Web Analytics apagado, y no actives HSTS ahí, porque el sitio ya lo manda. No agregues reglas de caché. Estas cosas cambian el HTML o meten scripts, y chocan con la política de seguridad y con el aviso de privacidad
+
+Supabase.
+
+- **Paso B17.12. Plan de pago, antes de invitar a los 5 (B18).** En supabase.com, tu organización, Billing, Upgrade a Pro. Deja el tope de gasto prendido. Da copias diarias, no pausa el proyecto y abre la protección de contraseñas filtradas. Es un gasto y lo decides tú. Después, en Authentication, Sign In / Providers, Email, prende Prevent use of leaked passwords y pon el largo mínimo en 8. En Database, Settings, SSL Configuration, prende Enforce SSL. En Organization, Team, agrega a una segunda persona de confianza como dueña, para no quedarte fuera si se pierde una cuenta
+- **Paso B17.13. Direcciones de regreso, el día de la mudanza.** Authentication, URL Configuration. En Site URL pon https://tudominio.mx/. En Redirect URLs deja http://localhost:5173/**, agrega https://tudominio.mx/ y, por 30 días, https://rickymm2001-dev.github.io/Studiare-ENARM/. Nunca pongas un comodín sobre pages.dev. Si me avisas, la sesión puede ponerlas por ti con el token de Supabase
+
+Correo propio con Resend, unos 30 minutos más la espera del DNS. Resend es quien manda el código de acceso desde tu dominio.
+
+- **Paso B17.14. Dominio en Resend.** Crea la cuenta en resend.com, Domains, Add Domain, y escribe mail.tudominio.mx, que es un subdominio y no el dominio solo. Resend te muestra una tabla de registros. En Cloudflare, DNS, Add record, copia cada uno exactamente como aparece, con el proxy apagado (nube gris). Si Resend dice que omitas el dominio al pegar el nombre, escribe solo send o resend._domainkey, como lo muestra. Luego, en Resend, Verify DNS Records. Tarda desde minutos hasta unas horas. Después, agrega un registro TXT con nombre _dmarc y valor v=DMARC1; p=none; rua=mailto:tu correo. Si ya existe un _dmarc, edítalo y no crees otro
+- **Paso B17.15. Llaves y SMTP.** En Resend, API Keys, crea dos llaves con permiso de envío (Sending access) y solo para ese dominio. Llámalas supabase-smtp y funciones. La segunda la pegas tú en Supabase, Edge Functions, Secrets, como RESEND_API_KEY (B15). La primera va en Supabase, Authentication, SMTP Settings. Enable Custom SMTP, Sender email no-responder@mail.tudominio.mx, Sender name Studiare, Host smtp.resend.com, Port 465, Username resend y Password la llave supabase-smtp. Save. Mándate un código de acceso a tu Gmail, abre el correo, Mostrar original, y confirma que dice SPF PASS, DKIM PASS y DMARC PASS. Si Supabase te dice que llegaste al tope de correos por hora, es el límite de 30 que pone al guardar, y se sube en Authentication, Rate Limits. Los mismos pasos, con más explicación, están en docs/DOMINIO_Y_CORREO.md
+- **Paso B17.16. Buzones de privacidad y soporte.** Crea privacidad@tudominio.mx y soporte@tudominio.mx. Si tu dominio no tiene correo, lo más simple es Cloudflare Email Routing (Email, Email Routing, Get started), que reenvía esas dos direcciones a tu Gmail gratis y agrega los registros MX por ti. Si ya tiene correo, no lo actives y crea las dos direcciones en tu proveedor, porque los dos usan los mismos registros MX. Después ponlas en GitHub, Variables, como VITE_PRIVACY_EMAIL y VITE_SUPPORT_EMAIL, junto con VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS (B16) y vuelve a publicar con Run workflow. Pon también el de soporte en Supabase, Edge Functions, Secrets, como SUPPORT_EMAIL, y en EMAIL_FROM el remitente de tu subdominio, por ejemplo Studiare, no-responder@mail.tudominio.mx
+
+Llaves nuevas de Supabase.
+
+- **Paso B17.17. Antes de que termine 2026.** Supabase retira las llaves anon y service_role a fin de año y las reemplazan las llaves sb_publishable_ y sb_secret_. Las funciones ya aceptan las dos formas. En Supabase, Project Settings, API Keys, pestaña Publishable and secret API keys, Create new API keys. Es seguro y no apaga las llaves de hoy. Copia la llave sb_publishable_ y pégala como el valor de la variable VITE_SUPABASE_ANON_KEY de GitHub (el mismo nombre) y vuelve a publicar. Avísame para que la sesión revise el sitio y publique las funciones con el plan b17. Cuando todo funcione y la sesión te lo diga, en esa misma página desactiva las llaves anon y service_role. Se pueden volver a activar si algo falla. No pegues ninguna llave en el chat. Si se deja para B19, el riesgo es una caída a fin de año el mismo mes del lanzamiento
+
+Stripe y Google.
+
+- **Paso B17.18. Dominio de pagos, en modo prueba.** Cuando el dominio esté activo, la sesión lo registra en Stripe con la llave restringida de prueba y te dice el estado de Apple Pay y Google Pay. Si Apple Pay queda inactivo, en Stripe abre Settings, Payment method domains, tu dominio, Apple Pay, y baja el archivo. Pásaselo a la sesión (no es secreto). Ella lo publica y lo valida. En modo real se repite con la llave real (B19). La sesión también corre scripts/stripe/setup-test.ts con --app-url=https://tudominio.mx/ para que el portal de Stripe regrese a la dirección nueva. En Stripe, Settings, Public details, pon el sitio web de la empresa
+- **Paso B17.19. Google Cloud.** En tu proyecto Studiare, pantalla de consentimiento de OAuth, agrega tudominio.mx como dominio autorizado. La dirección de regreso de Supabase no cambia
+
+Pruebas en tus teléfonos y mudanza.
+
+- **Paso B17.20. Billeteras.** Cuando la sesión te avise que está lista, prueba en modo prueba. En tu iPhone con Safari y una tarjeta guardada en Wallet, y en un Android con Chrome y una tarjeta real guardada en Google Wallet, entra a Suscripción, elige Tarjeta y sigue la tabla W1 a W8 de docs/STRIPE.md. Antes, en GitHub, Settings, Secrets and variables, Actions, Variables, crea VITE_STRIPE_PUBLISHABLE_KEY con la llave publicable de prueba de Stripe (empieza con pk_test_, es pública y no es secreta, está en Stripe, Developers, API keys) y vuelve a publicar. Sin esa variable la sección de billeteras no aparece aunque la bandera esté prendida. En modo prueba no se cobra la tarjeta real. Si todo sale bien, la sesión prende la bandera expressWallets. Si algo falla, se queda apagada y no pasa nada
+- **Paso B17.21. Mudanza de GitHub Pages.** Catorce días antes, pon en GitHub las variables VITE_MOVED_TO (https://tudominio.mx) y VITE_MOVED_ON (la fecha de la mudanza, como 2026-12-15) y corre el flujo pages. El día de la mudanza, pon la variable PAGES_MOVED_TO con https://tudominio.mx y corre pages otra vez. Ese día la sesión también cambia APP_URL y APP_ORIGINS con npm run deploy:supabase -- --plan b17 --secrets-from private/b17-secrets.json (docs/DESPLIEGUE.md). Treinta días después, quita el origen viejo de Supabase (paso B17.13) y avísame para quitarlo de APP_ORIGINS
+- **Paso B17.22. Cierre, 30 días después.** En Cloudflare, borra el proyecto enarm-prototipo (Workers & Pages, el proyecto, Settings, Delete project) o desconéctalo del repositorio. En GitHub, Settings, Pages, deja de publicar el sitio y después haz privado el repositorio (Settings, Danger zone, Change visibility), como pediste en la respuesta 48. Avísame para quitar del aviso de privacidad que GitHub aloja la página y subir su versión
+
+Decisiones de B17 que esperan tu visto bueno, con la opción recomendada ya tomada.
+
+- Publicar con GitHub Actions y carga directa, en un proyecto nuevo llamado studiare, y seguir con Pages y no con Workers (11.1 a 11.3 del plan de B17)
+- El dominio sin www para la app y la portada, con www redirigiendo (11.4)
+- Las billeteras de Apple Pay y Google Pay construidas y apagadas, sin campo de código de descuento en esa pantalla (11.6)
+- Los buzones de privacidad y soporte, empezando con el reenvío gratis de Cloudflare a tu Gmail si tu dominio no tiene correo, y pasando a un buzón real antes de abrir el registro (11.8)
+- El aviso de privacidad con Cloudflare, GitHub y el componente de Stripe, en borrador para tu abogado (docs/legal/CAMBIOS-B17.md). **Sube a la versión 2026-10-22.** Recomendado subirla, porque el texto cambió y todavía no hay alumnos reales. Si prefieres esperar al día de la mudanza, dímelo y se revierte ese commit
+- Un aviso de 14 días en la demo y un sitio de mudanza por 30 días, sin importar datos entre dominios (11.10)
+- Las llaves nuevas de Supabase dentro de B17, con el código aceptando las dos formas y las viejas desactivadas solo después de probar (11.11)
+- Supabase de pago antes de invitar a los 5 aspirantes (11.16). Es un gasto y lo decides tú
+- Una dirección de pages.dev nunca se acepta en APP_ORIGINS ni en las direcciones de regreso de Supabase. Cualquiera puede publicar una página en un subdominio de pages.dev
+- scripts/stripe/setup-test.ts ya no trae una dirección por omisión, y hay que pasarle --app-url o la variable APP_URL
+
+Lo que hace la sesión, sin pedirte nada más.
+
+1. Con el token de Supabase corre npm run deploy:supabase -- --plan b17 --dry-run y después sin él. Vuelve a publicar las trece funciones con el código de las llaves nuevas, que sale con las llaves de siempre, y no aplica SQL
+2. Pone APP_URL y APP_ORIGINS con --secrets-from cuando le digas la fecha de la mudanza, sin mostrar los valores
+3. Corre la prueba de humo contra el dominio con npm run smoke -- https://tudominio.mx --strict, registra el dominio en Stripe y corre setup-test.ts con la dirección nueva
+4. Puede poner Site URL y Redirect URLs de Supabase con tu token, porque son direcciones públicas. El bloque de SMTP lo pones tú, porque lleva la llave de Resend
 
 ## Esta semana
 
@@ -215,14 +282,14 @@ El aviso de privacidad y los términos quedaron al día (el aviso en la versión
 8. **Platica con tu contador** (respuestas 6, 12, 13 y 14). Que la empresa cobre y facture, facturas a mano a quien las pida, precios con IVA incluido y si conviene Stripe Tax más adelante
 9. **Crea tu cuenta de Anthropic y carga saldo** (respuesta 33). En console.anthropic.com crea una clave y pégala tú en Supabase, Edge Functions, Secrets, con el nombre ENARM_ANTHROPIC_KEY. En el entorno de la sesión ya hay una con ese nombre
 10. **Dile a la sesión cuál es tu dominio** (respuesta 50) y empieza a pasarlo a nombre de tu empresa (respuesta 24)
-11. **Crea los correos de privacidad y de soporte** en tu dominio (pregunta 43), por ejemplo privacidad y soporte arroba tu dominio. Después van como variables VITE_PRIVACY_EMAIL, VITE_SUPPORT_EMAIL, VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS en GitHub y luego en Cloudflare, como dice Lo que salió de B16
+11. **Crea los correos de privacidad y de soporte** en tu dominio (pregunta 43), por ejemplo privacidad y soporte arroba tu dominio. Después van como variables VITE_PRIVACY_EMAIL, VITE_SUPPORT_EMAIL, VITE_LEGAL_NAME y VITE_LEGAL_ADDRESS en GitHub, como dice Lo que salió de B16. No se repiten en Cloudflare
 
 ## Entorno de la sesión (sección 10 del plan)
 
 12. **Red, secretos, conectores y modo Auto.** Ya están GitHub, Supabase y Google Drive como conectores, y en la red api.stripe.com, api.supabase.com y api.cloudflare.com. Faltan o hay que corregir
     - MP_ACCESS_TOKEN con la credencial de prueba de Mercado Pago, cuando exista la cuenta (paso 15)
     - ENARM_OPENAI_KEY para comparar calidad en las evaluaciones (B12)
-    - CLOUDFLARE_API_TOKEN junto al CLOUDFLARE_ACCOUNT_ID que ya está (paso 20)
+    - Opcional, CLOUDFLARE_API_TOKEN con permiso de DNS para tu zona, junto al CLOUDFLARE_ACCOUNT_ID que ya está (paso 20). No hace falta para publicar, que usa el token de GitHub
     - En Allowed domains, para B13, medlineplus.gov, www.ncbi.nlm.nih.gov, pmc.ncbi.nlm.nih.gov y eutils.ncbi.nlm.nih.gov (paso B13.1)
     - En Allowed domains, api.mercadopago.com, drive.google.com y drive.usercontent.google.com, y la documentación que la sesión debe leer antes de usar cada servicio. docs.stripe.com, www.mercadopago.com.mx, supabase.com, developers.google.com, resend.com, posthog.com, docs.sentry.io y developers.cloudflare.com
     - Los secretos y conectores nuevos solo se leen al abrir una sesión. Ponlos antes del siguiente mensaje de arranque
@@ -238,15 +305,15 @@ Cada una desbloquea un bloque. Mientras no existan, la sesión deja el código l
     - Activa la API de Google Sheets, crea una cuenta de servicio sin roles y crea una llave JSON. Bájala una sola vez
     - Pega tú la llave en Supabase, Edge Functions, Secrets, como GOOGLE_SA_KEY, y el ID de tu Sheet como GOOGLE_BANK_SHEET_ID. Después borra el archivo bajado
     - Comparte tu Sheet Banco de preguntas con el correo de la cuenta de servicio como Lector, sin notificar. Deja apagado que los editores puedan compartir y el acceso general en Restringido
-14. **Resend** (B15 y B17). Crea la cuenta, agrega tu dominio y pon en tu DNS los registros SPF, DKIM y DMARC que te da. En Supabase, Authentication, SMTP Settings, pon sus datos. Crea una clave de API y pégala en Supabase, Edge Functions, Secrets, como RESEND_API_KEY
+14. **Resend** (B15 y B17). Crea la cuenta, agrega el subdominio mail de tu dominio y pon en tu DNS los registros SPF, DKIM y DMARC que te da. En Supabase, Authentication, SMTP Settings, pon sus datos. Crea dos llaves de API, una para Supabase y otra para las funciones, y pega la segunda en Supabase, Edge Functions, Secrets, como RESEND_API_KEY. Los pasos están en B17.14 y B17.15
 15. **Mercado Pago** (B10). Cuenta de negocio de tu empresa. Con ella, sus credenciales de prueba, un usuario de prueba vendedor y uno comprador de México, y en Webhooks la dirección https://bkjbcdwglyllizupokqm.supabase.co/functions/v1/payment-webhook-mercadopago con los temas payment, subscription_preapproval y subscription_authorized_payment, y su clave secreta. En Supabase, Edge Functions, Secrets, van MERCADOPAGO_ACCESS_TOKEN y MERCADOPAGO_WEBHOOK_SECRET. En el entorno de la sesión va MP_ACCESS_TOKEN. La guía completa está en docs/MERCADOPAGO.md
 16. **Stripe en modo prueba** (B10). En Settings, Payment methods, activa OXXO, transferencias bancarias de México, Apple Pay y Google Pay (comentario 19). La sesión crea en modo prueba los precios, los cupones y las configuraciones del portal con la llave restringida del paso 3. El resto de los pasos de Stripe están en la sección de B10 de arriba
-17. **PostHog** (B15). Crea la cuenta y un proyecto. Su clave pública va como variable VITE_POSTHOG_KEY, junto con su dirección, en GitHub y después en Cloudflare
+17. **PostHog** (B15). Crea la cuenta y un proyecto. Su clave pública va como variable VITE_POSTHOG_KEY, junto con su dirección, en GitHub. No se repite en Cloudflare
 18. **Sentry** (B15). Crea la cuenta y un proyecto. Su DSN va como variable VITE_SENTRY_DSN. Pon tu correo en sus alertas. Crea un token para subir los mapas de código y guárdalo como secreto de GitHub SENTRY_AUTH_TOKEN
 19. **Secreto de GitHub para la calibración** (B14). En Supabase crea una llave secreta dedicada a ese proceso y guárdala en GitHub, Settings, Secrets and variables, Actions, como SUPABASE_CALIBRATION_KEY
-20. **Cloudflare** (B17). Crea la cuenta, conecta tu dominio y crea un token con permiso solo para Pages y DNS. Va al entorno de la sesión como CLOUDFLARE_API_TOKEN, junto con CLOUDFLARE_ACCOUNT_ID
-21. **Supabase de pago** antes de abrir a alumnos de pago (respuesta 27). Después activa la protección de contraseñas filtradas en Authentication (respuesta 28)
-22. **Repo privado** al pasar a Cloudflare (respuesta 48). En GitHub, Settings, Danger zone, Change visibility
+20. **Cloudflare** (B17). Crea la cuenta, conecta tu dominio y crea un token con un solo permiso, Pages Edit. Va a GitHub como secreto CLOUDFLARE_API_TOKEN, junto con CLOUDFLARE_ACCOUNT_ID. Los pasos están en B17.3 a B17.5. Un segundo token con permiso de DNS para tu zona, en el entorno de la sesión, es opcional y solo sirve para que la sesión cree registros por ti
+21. **Supabase de pago** antes de abrir a alumnos de pago (respuesta 27). Después activa la protección de contraseñas filtradas en Authentication (respuesta 28). Es el paso B17.12
+22. **Repo privado** al pasar a Cloudflare (respuesta 48), pero no antes de 30 días después de la mudanza, porque sin GitHub Pages desaparece el sitio que redirige a tu dominio nuevo. En GitHub, Settings, Danger zone, Change visibility. Es el paso B17.22
 
 ## Personas
 

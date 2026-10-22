@@ -11,6 +11,7 @@ import {
   type AiEngineGate,
   type AiGateState,
 } from './engines/aiContracts.ts';
+import { serviceHeaders } from '../keys.ts';
 import type { AiConfig } from './config.ts';
 import type { Clock, GateReader } from './ports.ts';
 import { promptHash, type PromptSet, type PromptSets } from './prompts.ts';
@@ -148,11 +149,7 @@ export function createRestGateReader(options: {
       const response = await fetchImpl(
         `${options.url}/rest/v1/platform_settings?key=eq.ai_gate&select=value`,
         {
-          headers: {
-            apikey: options.serviceKey,
-            authorization: `Bearer ${options.serviceKey}`,
-            accept: 'application/json',
-          },
+          headers: { ...serviceHeaders(options.serviceKey), accept: 'application/json' },
           signal: AbortSignal.timeout(8000),
         },
       );

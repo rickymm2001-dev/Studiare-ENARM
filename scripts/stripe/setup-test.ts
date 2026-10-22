@@ -14,10 +14,12 @@
 // ni se imprime. En la sesión en la nube, sin esa variable, la pone el proxy del entorno y la sesión no la
 // ve. Entonces lo primero es leer el saldo, que dice livemode, y si no sale en false no se crea nada.
 // Todas las llamadas usan la versión fija de la API. Uso
-//   STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts [--app-url=https://...] [--archive-old]
+//   STRIPE_SECRET_KEY=rk_test_... node scripts/stripe/setup-test.ts --app-url=https://... [--archive-old]
 //     [--write-ids=private/stripe-test-ids.json]
 //   node --use-env-proxy scripts/stripe/setup-test.ts ...   en la sesión en la nube
-// Las opciones con valor aceptan --nombre=valor y --nombre valor.
+// Las opciones con valor aceptan --nombre=valor y --nombre valor. La dirección de la app es obligatoria,
+// de --app-url o de la variable APP_URL, y no hay una por omisión. El día de la mudanza de dominio se
+// vuelve a correr con la dirección nueva, que pone al día las dos configuraciones del portal (B17, 4.5).
 // Con --write-ids guarda además los ocho IDs en ese JSON, que npm run deploy:supabase pone en los
 // secretos de Supabase con --secrets-from (docs/DESPLIEGUE.md). private/ no va al repo.
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -26,8 +28,6 @@ import { STRIPE_API_VERSION } from '../../supabase/functions/_shared/billingType
 import { subscriptionUrl } from '../../supabase/functions/_shared/http.ts';
 
 export type TaxBehavior = 'inclusive' | 'exclusive' | 'unspecified';
-
-export const DEFAULT_APP_URL = 'https://rickymm2001-dev.github.io/Studiare-ENARM/';
 
 export interface ProductSpec {
   id: 'studiare_plan' | 'studiare_pase';
@@ -283,7 +283,14 @@ export async function setupStripeTest(input: {
       'Solo se aceptan llaves de prueba, que empiezan con sk_test_ o rk_test_',
     );
   }
-  const appUrl = input.appUrl ?? DEFAULT_APP_URL;
+  // Sin una dirección por omisión (B17, 4.5). El portal de Stripe regresa al alumno a esa dirección y a la
+  // vista previa de la política y los términos, y una dirección vieja o inventada lo dejaría en otro sitio
+  const appUrl = input.appUrl;
+  if (appUrl === undefined || appUrl === '') {
+    throw new StripeSetupError(
+      'Falta la dirección de la app. Pásala con --app-url=https://tudominio.mx/ o en la variable APP_URL',
+    );
+  }
   if (!URL.canParse(appUrl)) throw new StripeSetupError('La dirección de la app no es una URL');
 
   /** Una llamada a Stripe. Con missingIsNull un 404 devuelve null. Cualquier otro error lanza */
@@ -616,7 +623,7 @@ export async function runSetupCli(
     result = await setupStripeTest({
       key: setupKey(env),
       fetch: deps.fetch,
-      appUrl: args.values['app-url'] ?? env.APP_URL ?? DEFAULT_APP_URL,
+      appUrl: args.values['app-url'] ?? env.APP_URL,
       taxBehavior,
       archiveOld: args.archiveOld,
     });

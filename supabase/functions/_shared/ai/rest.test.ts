@@ -29,6 +29,36 @@ describe('funciones de la base por REST', () => {
     );
   });
 
+  it('con la llave nueva (sb_secret_) la manda solo en apikey, y la plataforma rechaza un Bearer con ella', async () => {
+    const rest = createFakeSupabaseRest({ memory: createMemoryAi(), keys: 'new' });
+    const rpc = createRestRpc({
+      url: rest.url,
+      serviceKey: rest.serviceKey,
+      fetchImpl: rest.fetch,
+    });
+    expect(await rpc('ai_jobs_scrub', {})).toBe(0);
+    expect(rest.calls).toMatchObject([{ key: 'service', bearer: 'none' }]);
+    // Lo que no debe hacer ninguna función: mandar la llave nueva como token
+    const target = { url: rest.url, apiKey: rest.serviceKey, fetchImpl: rest.fetch };
+    await expect(callRpc(target, 'ai_jobs_scrub', {}, rest.serviceKey)).rejects.toMatchObject({
+      status: 401,
+      code: 'PGRST301',
+    });
+  });
+
+  it('con un token de sesión la llave va en apikey y el token en authorization, en las dos formas', async () => {
+    for (const keys of ['legacy', 'new'] as const) {
+      const rest = createFakeSupabaseRest({
+        memory: createMemoryAi(),
+        keys,
+        accounts: { 'token-ana': { userId: USER, role: 'student', paid: true } },
+      });
+      const target = { url: rest.url, apiKey: rest.anonKey, fetchImpl: rest.fetch };
+      expect(await callRpc(target, 'ai_whoami', {}, 'token-ana')).toMatchObject({ userId: USER });
+      expect(rest.calls, keys).toMatchObject([{ key: 'anon', bearer: 'user' }]);
+    }
+  });
+
   it('un error trae el estado y el código de Postgres, nunca el cuerpo', async () => {
     const rest = createFakeSupabaseRest({
       memory: createMemoryAi(),

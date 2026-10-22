@@ -201,7 +201,7 @@ Hay cuatro interruptores. Para que salgan los eventos de la app hacen falta la l
 
 | Interruptor | Dónde | Quién |
 |---|---|---|
-| La llave y el host de PostHog | Variables VITE_POSTHOG_KEY y VITE_POSTHOG_HOST del build de producción (GitHub y Cloudflare) | Ricardo |
+| La llave y el host de PostHog | Variables VITE_POSTHOG_KEY y VITE_POSTHOG_HOST del build de producción (solo en GitHub, el flujo de B17 las pasa al build) | Ricardo |
 | La bandera productAnalytics | Nace prendida en producción. El servidor puede apagarla en platform_settings, clave feature_flags | La sesión, si hace falta |
 | El interruptor de eventos de dinero | Plataforma, Correos y alertas, Eventos de dinero a PostHog. Es platform_settings, clave analytics | Ricardo o la sesión, con segundo factor |
 | El permiso Medición de uso | Cada alumno, en el registro o en Configuración, Privacidad | El alumno |
@@ -211,7 +211,7 @@ Pasos, cuando tengas cuenta de PostHog.
 1. Crea la cuenta y un proyecto llamado Studiare en la nube de EE. UU., que es lo recomendado por estar más cerca de México.
 2. En Project settings prende Discard client IP data y deja apagadas la grabación de sesiones, las encuestas y la autocaptura. La app no usa ninguna.
 3. Copia la llave del proyecto, la que empieza con phc_, y la dirección de captura, https://us.i.posthog.com. Nunca uses una llave personal, la que empieza con phx_. La app y las funciones la rechazan.
-4. Ponlas como VITE_POSTHOG_KEY y VITE_POSTHOG_HOST en las variables de GitHub, y después en Cloudflare. Ponlas también en Supabase, Edge Functions, Secrets, como POSTHOG_PROJECT_KEY y POSTHOG_HOST. Una llave en el chat no se pega nunca.
+4. Ponlas como VITE_POSTHOG_KEY y VITE_POSTHOG_HOST en las variables de GitHub, y solo allí, porque la publicación de B17 construye la página en GitHub Actions y no se repiten en Cloudflare. Ponlas también en Supabase, Edge Functions, Secrets, como POSTHOG_PROJECT_KEY y POSTHOG_HOST. Una llave en el chat no se pega nunca.
 5. Despliega la función analytics-flush sin verificación de JWT, que lo hace la sesión con el plan b15 (docs/SUPABASE.md). Cron la llama cada 5 minutos, solo si el interruptor está prendido y hay eventos pendientes.
 6. Avisa a la sesión. Ella prende analytics, revisa que lleguen eventos de su cuenta de prueba con el permiso y te deja el embudo listo. Para apagar los eventos de dinero de golpe, apaga el mismo interruptor en Plataforma.
 

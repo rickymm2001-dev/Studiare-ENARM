@@ -11,6 +11,7 @@ import {
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './tests/e2e/support/fakeSupabaseConfig';
+import { FAKE_STRIPE_PUBLISHABLE_KEY } from './tests/e2e/support/fakeStripeJs';
 import { loopbackUrl, serverStartTimeout, testPorts } from './server/src/testPorts.ts';
 
 // Puertos de los servidores de prueba. Con PW_PORT_OFFSET se corren juntos para que varias copias del
@@ -80,6 +81,8 @@ export default defineConfig({
         VITE_POSTHOG_KEY: FAKE_POSTHOG_KEY,
         VITE_POSTHOG_HOST: FAKE_POSTHOG_HOST,
         VITE_SENTRY_DSN: FAKE_SENTRY_DSN,
+        // La llave publicable simulada de Stripe (B17), para las capturas de Apple Pay y Google Pay (b17.spec.ts)
+        VITE_STRIPE_PUBLISHABLE_KEY: FAKE_STRIPE_PUBLISHABLE_KEY,
       },
       url: CLOUD_PREVIEW_URL,
       reuseExistingServer: false,

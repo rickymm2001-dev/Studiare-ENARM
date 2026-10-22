@@ -648,6 +648,7 @@ const B11_STEPS = [
  *     igual a la de 20261029000004_delete_my_data_v4.sql, así que b12 sí aplica su migración ai_delete_my_data (la v3,
  *     que la v4 de banco-b11.sql ya pasó) y la pieza ia-b12.sql la deja otra vez en v4 en el mismo plan
  *   - b15 vuelve a publicar bank-sync, ai-proxy y ai-batch, porque ahora van envueltas con withMonitoring
+ *   - b17 no aplica SQL y vuelve a publicar las trece funciones, porque todas empaquetan las llaves y el CORS nuevos
  * Cuando llegue el plan de un bloque nuevo va al final de esta lista con su SQL y sus funciones, y el resto
  * de las pruebas de esta sección corre con él sin cambios
  */
@@ -680,6 +681,25 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
     {
       plan: 'b15',
       sql: ['email_reminders', 'product_analytics', 'engagement_cron', 'delete_my_data_v4'],
+      functions: [
+        'send-emails',
+        'email-unsubscribe',
+        'analytics-flush',
+        'monitoring-test',
+        'create-checkout',
+        'create-portal-session',
+        'cancel-subscription',
+        'admin-reset-mfa',
+        'payment-webhook-stripe',
+        'payment-webhook-mercadopago',
+        'bank-sync',
+        'ai-proxy',
+        'ai-batch',
+      ],
+    },
+    {
+      plan: 'b17',
+      sql: [],
       functions: [
         'send-emails',
         'email-unsubscribe',

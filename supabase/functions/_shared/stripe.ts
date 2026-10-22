@@ -212,11 +212,13 @@ export interface SubscriptionSessionInput {
 }
 
 /**
- * La sesión de suscripción (2.2). Sin payment_method_types ni allowed_payment_method_types, así Stripe
- * muestra tarjeta, Apple Pay y Google Pay según el dispositivo. Sin payment_method_collection, que por
- * omisión es always y guarda la tarjeta aunque la prueba cobre 0
+ * Lo que comparten la sesión hospedada y la de las billeteras. El plan, el precio y la prueba, quién paga y
+ * qué plan sale en la metadata (la suscripción y sus facturas llevan el mismo dato, para los cobros
+ * siguientes), el español de América Latina y Stripe Tax. Sin payment_method_types ni
+ * allowed_payment_method_types, así Stripe muestra tarjeta, Apple Pay y Google Pay según el dispositivo. Sin
+ * payment_method_collection, que por omisión es always y guarda la tarjeta aunque la prueba cobre 0
  */
-export function subscriptionSessionParams(input: SubscriptionSessionInput): URLSearchParams {
+function subscriptionBaseParams(input: SubscriptionSessionInput): URLSearchParams {
   const trial = input.trialDays !== null && input.trialDays > 0;
   const params = new URLSearchParams({
     mode: 'subscription',
@@ -228,20 +230,11 @@ export function subscriptionSessionParams(input: SubscriptionSessionInput): URLS
     'metadata[plan]': input.plan,
     'metadata[mode]': 'subscription',
     'metadata[trial]': String(trial),
-    // La suscripción y sus facturas llevan el mismo dato, para los cobros siguientes
     'subscription_data[metadata][user_id]': input.userId,
     'subscription_data[metadata][plan]': input.plan,
     'subscription_data[metadata][trial]': String(trial),
-    allow_promotion_codes: 'true',
     // La página de pago en el español de América Latina, como la app
     locale: 'es-419',
-    'custom_text[submit][message]': subscriptionNoticeText(
-      input.plan,
-      trial ? input.trialDays : null,
-      input.nowMs,
-    ),
-    success_url: subscriptionUrl(input.appUrl, { pago: 'ok' }),
-    cancel_url: subscriptionUrl(input.appUrl, { pago: 'cancelado' }),
   });
   if (trial) params.set('subscription_data[trial_period_days]', String(input.trialDays));
   if (input.automaticTax) {
@@ -253,6 +246,38 @@ export function subscriptionSessionParams(input: SubscriptionSessionInput): URLS
     params.set('customer_update[address]', 'auto');
     params.set('customer_update[name]', 'auto');
   }
+  return params;
+}
+
+/**
+ * La sesión de suscripción de la página de pago de Stripe (2.2). Deja los códigos de descuento, el aviso del
+ * cobro automático junto al botón y los regresos a la app
+ */
+export function subscriptionSessionParams(input: SubscriptionSessionInput): URLSearchParams {
+  const trial = input.trialDays !== null && input.trialDays > 0;
+  const params = subscriptionBaseParams(input);
+  params.set('allow_promotion_codes', 'true');
+  params.set(
+    'custom_text[submit][message]',
+    subscriptionNoticeText(input.plan, trial ? input.trialDays : null, input.nowMs),
+  );
+  params.set('success_url', subscriptionUrl(input.appUrl, { pago: 'ok' }));
+  params.set('cancel_url', subscriptionUrl(input.appUrl, { pago: 'cancelado' }));
+  return params;
+}
+
+/**
+ * La sesión de suscripción de los botones de Apple Pay y Google Pay dentro de Suscripción (B17, 6.2 y 6.4). Es
+ * la misma suscripción, el mismo precio, la misma prueba y la misma metadata que la hospedada, con ui_mode
+ * elements. Con ese modo Stripe no admite success_url, cancel_url, custom_text, branding_settings ni
+ * custom_fields (por eso el aviso del cobro automático lo dice nuestra pantalla antes de los botones) y el
+ * regreso es return_url, que solo se usa si un método pide salir de la página. Sin allow_promotion_codes: en
+ * esta versión no hay campo de código, y quien tenga uno paga con la página hospedada
+ */
+export function walletSubscriptionSessionParams(input: SubscriptionSessionInput): URLSearchParams {
+  const params = subscriptionBaseParams(input);
+  params.set('ui_mode', 'elements');
+  params.set('return_url', subscriptionUrl(input.appUrl, { pago: 'ok' }));
   return params;
 }
 
@@ -491,6 +516,8 @@ const PAYER_KEYS = new Set([
   'shipping_address',
   'collected_information',
   'custom_fields',
+  // El secreto de la sesión con ui_mode elements es del navegador que la pidió y no se guarda en ningún lado
+  'client_secret',
   'receipt_email',
   'receipt_url',
   'payment_method_details',

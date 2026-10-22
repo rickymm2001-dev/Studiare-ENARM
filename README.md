@@ -21,6 +21,9 @@ Este repositorio es público desde D-055 y pasará a privado al publicarse en Cl
 - docs/SUPABASE.md guía a Ricardo para conectar la nube, paso a paso y sin terminal
 - docs/PENDIENTES_DE_RICARDO.md lista, en orden, lo que falta de Ricardo para que la plataforma funcione completa
 - docs/IA_ALOJADA.md explica cómo corre la IA real en las Edge Functions ai-proxy y ai-batch de Supabase
+- docs/PUBLICACION.md explica cómo se publica en Cloudflare Pages, la prueba de humo, la reversión y la mudanza de GitHub Pages (B17)
+- docs/DOMINIO_Y_CORREO.md guía el dominio, el DNS en Cloudflare, el correo con Resend y las direcciones de regreso de Supabase Auth (B17)
+- docs/PORTADA.md es el documento para la agencia o el influencer, con los lugares del texto de la portada y lo que no se puede prometer (B17)
 - docs/BANCO_EN_LA_NUBE.md es el diseño para pasar el banco de preguntas a Supabase
 - docs/legal tiene el aviso de privacidad y los términos para el abogado
 

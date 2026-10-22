@@ -7,6 +7,8 @@
 // 3. Las funciones de IA leen exactamente los nombres de la sección 2.7, y env.ts valida los mismos
 // 4. Nada que llegue a producción menciona la clave ni la API de OpenAI, que solo usan las evaluaciones,
 //    ni el nombre de variable que CLAUDE.md prohíbe
+// 5. Las llaves de Supabase tienen dos formas (B17, 4.2) y solo keys.ts sabe cómo mandarlas. Ningún otro archivo
+//    arma un Bearer con la llave de servicio, y quien lee la llave de siempre lee también la nueva
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -16,8 +18,17 @@ const ROOT = join(import.meta.dirname, '..', '..');
 const FUNCTIONS = join(ROOT, 'supabase', 'functions');
 const SHARED = join(FUNCTIONS, '_shared');
 
-/** Sección 2.7 del plan de B12. ai-batch no atiende al navegador, así que no lee APP_ORIGINS */
-const SUPABASE_NAMES = ['SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY'];
+/**
+ * Sección 2.7 del plan de B12 y 4.2 del de B17. ai-batch no atiende al navegador, así que no lee APP_ORIGINS. Las
+ * llaves de Supabase llegan en sus dos formas, las de siempre y las nuevas (sb_publishable_ y sb_secret_)
+ */
+const SUPABASE_NAMES = [
+  'SUPABASE_URL',
+  'SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_PUBLISHABLE_KEYS',
+  'SUPABASE_SECRET_KEYS',
+];
 const EXPECTED_ENV: Record<string, string[]> = {
   'ai-proxy': ['ENARM_ANTHROPIC_KEY', 'APP_ORIGINS', 'AI_ALLOW_MOCK', ...SUPABASE_NAMES],
   'ai-batch': ['ENARM_ANTHROPIC_KEY', 'AI_ALLOW_MOCK', 'AI_TICK_DEADLINE_MS', ...SUPABASE_NAMES],
@@ -258,6 +269,86 @@ describe('el entorno de las funciones de IA', () => {
   it('env.ts valida los mismos nombres que leen los index.ts', () => {
     expect([...AI_PROXY_ENV_NAMES].sort()).toEqual([...(EXPECTED_ENV['ai-proxy'] ?? [])].sort());
     expect([...AI_BATCH_ENV_NAMES].sort()).toEqual([...(EXPECTED_ENV['ai-batch'] ?? [])].sort());
+  });
+});
+
+describe('las llaves de Supabase tienen un solo lugar donde se mandan', () => {
+  const sharedSources = listFiles(SHARED).filter(
+    (file) =>
+      file.endsWith('.ts') && !file.endsWith('.test.ts') && !file.split(sep).includes('testing'),
+  );
+  const KEYS = join(SHARED, 'keys.ts');
+  /** Las expresiones que van después de Bearer en una plantilla, como Bearer ${token} */
+  const bearerExpressions = (source: string) =>
+    [...withoutComments(source).matchAll(/Bearer\s*\$\{([^}]*)\}/g)].map((match) => match[1] ?? '');
+
+  it('ningún archivo fuera de keys.ts manda como Bearer una llave de servicio o la pública', () => {
+    const offending = sharedSources
+      .filter((file) => file !== KEYS)
+      .flatMap((file) =>
+        bearerExpressions(readFileSync(file, 'utf8'))
+          .filter((expression) => /service|secret|anon|publishable/i.test(expression))
+          .map((expression) => `${rel(file)} manda Bearer \${${expression}}`),
+      );
+    expect(offending).toEqual([]);
+  });
+
+  it('keys.ts sí arma el Bearer de la llave de siempre, y es el único que lo hace con una llave', () => {
+    expect(bearerExpressions(readFileSync(KEYS, 'utf8'))).toEqual(['key']);
+  });
+
+  it('la revisión sí ve un Bearer armado a mano con la llave de servicio', () => {
+    const bad = 'headers: { authorization: `Bearer ${options.serviceKey}` }';
+    expect(bearerExpressions(bad)).toEqual(['options.serviceKey']);
+    expect(
+      withoutComments('// authorization: `Bearer ${serviceKey}` en un comentario'),
+    ).not.toMatch(/Bearer/);
+  });
+
+  it('quien lee la llave de siempre lee también las nuevas, para no quedarse con una sola forma', () => {
+    const readers = [join(SHARED, 'runtime.ts'), ...ENTRIES.map(({ entry }) => entry)].filter(
+      (file) => denoEnvReads(readFileSync(file, 'utf8')).includes('SUPABASE_SERVICE_ROLE_KEY'),
+    );
+    expect(readers.map(rel).sort()).toEqual([
+      'supabase/functions/_shared/runtime.ts',
+      'supabase/functions/admin-reset-mfa/index.ts',
+      'supabase/functions/ai-batch/index.ts',
+      'supabase/functions/ai-proxy/index.ts',
+    ]);
+    for (const file of readers) {
+      const names = denoEnvReads(readFileSync(file, 'utf8'));
+      for (const name of [
+        'SUPABASE_ANON_KEY',
+        'SUPABASE_SECRET_KEYS',
+        'SUPABASE_PUBLISHABLE_KEYS',
+      ]) {
+        expect(names, `${rel(file)} lee ${name}`).toContain(name);
+      }
+    }
+  });
+});
+
+describe('los orígenes de la app se leen de APP_URL y de APP_ORIGINS', () => {
+  it('runtime.ts y admin-reset-mfa leen APP_ORIGINS junto a APP_URL, para el CORS de todas las funciones', () => {
+    for (const file of [
+      join(SHARED, 'runtime.ts'),
+      join(FUNCTIONS, 'admin-reset-mfa', 'index.ts'),
+    ]) {
+      const names = denoEnvReads(readFileSync(file, 'utf8'));
+      expect(names, rel(file)).toContain('APP_URL');
+      expect(names, rel(file)).toContain('APP_ORIGINS');
+    }
+  });
+
+  it('ningún archivo de _shared arma el CORS por su cuenta: todos usan corsHeaders de http.ts', () => {
+    const offending = listFiles(SHARED)
+      .filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'))
+      .filter((file) => file !== join(SHARED, 'http.ts') && !file.split(sep).includes('ai'))
+      .filter((file) =>
+        /access-control-allow-origin/i.test(withoutComments(readFileSync(file, 'utf8'))),
+      )
+      .map(rel);
+    expect(offending).toEqual([]);
   });
 });
 

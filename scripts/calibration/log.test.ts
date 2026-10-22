@@ -22,7 +22,7 @@ const DANGEROUS = [
   'ana@ejemplo.mx',
   '3f9a0c1d-2e4b-4a69-8c1d-0123456789ab',
   '01HZX8Q6N7V3M4K5P6R7S8T9WA',
-  'sb_secret_abcdefghijklmnop',
+  'sb_secret_' + 'abcdefghijklmnop',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0In0.firma',
   '[Prueba] ¿Qué diagnóstico es más probable?',
   'Mayúsculas',

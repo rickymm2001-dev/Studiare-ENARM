@@ -9,14 +9,22 @@ import {
   handleResetMfa,
   listFactorsViaRest,
 } from '../_shared/mfaReset.ts';
+import { resolveSupabaseKeys } from '../_shared/keys.ts';
 import { monitoringDepsFrom, withMonitoring } from '../_shared/monitoring.ts';
 import type { SupabaseEnv } from '../_shared/supabase.ts';
 
-// Supabase inyecta estas tres en toda función. No se piden ni se guardan en ningún otro lado
+// Supabase inyecta la dirección y las llaves en toda función. No se piden ni se guardan en ningún otro lado.
+// Las llaves nuevas (sb_secret_ y sb_publishable_) ganan si existen y, si no, siguen las de siempre (B17, 4.2)
+const keys = resolveSupabaseKeys({
+  SUPABASE_SECRET_KEYS: Deno.env.get('SUPABASE_SECRET_KEYS'),
+  SUPABASE_PUBLISHABLE_KEYS: Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'),
+  SUPABASE_SERVICE_ROLE_KEY: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'),
+  SUPABASE_ANON_KEY: Deno.env.get('SUPABASE_ANON_KEY'),
+});
 const env: SupabaseEnv = {
   url: Deno.env.get('SUPABASE_URL') ?? '',
-  anonKey: Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-  serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+  anonKey: keys.anonKey,
+  serviceKey: keys.serviceKey,
 };
 
 Deno.serve(
@@ -25,6 +33,7 @@ Deno.serve(
     (request) =>
       handleResetMfa(request, {
         appUrl: Deno.env.get('APP_URL'),
+        appOrigins: Deno.env.get('APP_ORIGINS'),
         authorize: (authorization, target) => authorizeViaRest(env, authorization, target),
         listFactors: (userId) => listFactorsViaRest(env, userId),
         deleteFactor: (userId, factorId) => deleteFactorViaRest(env, userId, factorId),

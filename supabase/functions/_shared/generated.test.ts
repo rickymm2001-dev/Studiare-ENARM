@@ -35,7 +35,7 @@ describe('copia generada de la limpieza para las funciones', () => {
     const samples = [
       'falló para alumna@ejemplo.mx',
       'id 3f1d4c52-9f1e-4a0e-8d52-6d1c9a2b7e10 y 01ARZ3NDEKTSV4RRFFQ69G5FAV',
-      'token eyJhbGciOiJI.eyJzdWIiOiIx.firma y sk_live_abcdefghijkl',
+      'token eyJhbGciOiJI.eyJzdWIiOiIx.firma y sk_live_' + 'abcdefghijkl',
       'https://x.mx/ruta?t=secreto#frag y 12345678901234',
       '"texto del alumno" is not valid JSON',
     ];

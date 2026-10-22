@@ -3,6 +3,7 @@
 // aparte para que payments.ts (Stripe) y mercadopago.ts (Mercado Pago) no se importen entre sí. No
 // depende de Deno, así se prueba con Vitest (D-096).
 import type { FunctionEnv } from './billingTypes.ts';
+import { parseOriginList } from './origins.ts';
 
 export type Json = Record<string, unknown>;
 
@@ -73,15 +74,33 @@ export function originOf(value: string | undefined): string {
   }
 }
 
-/** Solo la página de la app puede llamar a la función desde el navegador */
-export function corsHeaders(env: FunctionEnv, origin: string | null): Record<string, string> {
-  const allowed = originOf(env.APP_URL);
+// ---------------------------------------------------------------------------------------------
+// Orígenes que pueden llamar desde el navegador (B17, 4.1)
+
+/** El origen de APP_URL y los de APP_ORIGINS. Lo único que puede llamar a las funciones desde un navegador */
+export function allowedOrigins(env: Pick<FunctionEnv, 'APP_URL' | 'APP_ORIGINS'>): string[] {
+  const main = originOf(env.APP_URL);
+  const extra = parseOriginList(env.APP_ORIGINS).origins;
+  return [...(main === '' ? [] : [main]), ...extra.filter((origin) => origin !== main)];
+}
+
+/**
+ * Solo la página de la app puede llamar a la función desde el navegador. La app es el origen de APP_URL y,
+ * mientras dure una mudanza de dominio, los de APP_ORIGINS. Un origen que no está en la lista no recibe
+ * access-control-allow-origin y el navegador bloquea la respuesta
+ */
+export function corsHeaders(
+  env: Pick<FunctionEnv, 'APP_URL' | 'APP_ORIGINS'>,
+  origin: string | null,
+): Record<string, string> {
   const headers: Record<string, string> = {
     'access-control-allow-headers': 'authorization, content-type, apikey, x-client-info',
     'access-control-allow-methods': 'POST, OPTIONS',
     vary: 'origin',
   };
-  if (allowed !== '' && origin === allowed) headers['access-control-allow-origin'] = allowed;
+  if (origin !== null && allowedOrigins(env).includes(origin)) {
+    headers['access-control-allow-origin'] = origin;
+  }
   return headers;
 }
 

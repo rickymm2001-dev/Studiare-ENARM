@@ -1,6 +1,10 @@
 // Portada de venta (D-060, D-068). Lo primero que ve quien no tiene sesión. Qué es Studiare, qué
 // lo hace distinto, para quién es, precios y registro. Página aparte, sin navegación. Sobria, con
 // un solo color de acción y sin degradados ni brillos (B2 del plan del cambio, D-121).
+// Cada texto que escribe la agencia o el influencer lleva data-slot con el id de su lugar, solo para
+// verlo al inspeccionar la página (el botón del cierre repite el de hero.cta y lleva data-slot-repeat, así
+// ningún id sale dos veces), y los bloques del creador y de testimonios no se muestran mientras
+// estén vacíos (B17, 5.2). El texto vive en src/i18n/landing.ts y sus reglas en slots.ts.
 import {
   BookOpenCheck,
   Brain,
@@ -12,7 +16,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import {
@@ -32,6 +36,10 @@ import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
+import { CreatorSection, TestimonialsSection } from './LandingBlocks';
+import { hasLandingPreview } from './previewKey';
+import { slotId } from './slotId';
+import type { LandingBlocks } from './slots';
 
 const FEATURES: { icon: ReactNode; key: keyof typeof t.landing.features }[] = [
   { icon: <Gauge />, key: 'technique' },
@@ -42,9 +50,32 @@ const FEATURES: { icon: ReactNode; key: keyof typeof t.landing.features }[] = [
   { icon: <Stethoscope />, key: 'physicians' },
 ];
 
+/**
+ * Los bloques del creador y de testimonios. En producción, solo lo publicado en src/i18n/landing.ts. Fuera
+ * de producción, si el navegador trae una vista previa (preview.ts), la pinta con su etiqueta de prueba.
+ * Las reglas de esa vista previa se bajan aparte y solo entonces, y en producción Rollup quita la rama
+ */
+function useLandingBlocks(): LandingBlocks {
+  const [preview, setPreview] = useState<LandingBlocks | null>(null);
+  useEffect(() => {
+    if (import.meta.env.VITE_APP_ENV === 'production' || !hasLandingPreview()) return;
+    let current = true;
+    void import('./preview').then((module) => {
+      if (current) setPreview(module.readLandingPreview());
+    });
+    return () => {
+      current = false;
+    };
+  }, []);
+  return (
+    preview ?? { creator: t.landing.creator, testimonials: t.landing.testimonials, sample: false }
+  );
+}
+
 export function LandingScreen() {
   const text = t.landing;
   const offersTrial = trialAdvertised();
+  const blocks = useLandingBlocks();
   return (
     <div className="flex flex-col gap-10 pb-6">
       <title>{t.app.documentTitle(text.documentTitle)}</title>
@@ -52,23 +83,33 @@ export function LandingScreen() {
           héroe va en el ancho de lectura y con menos alto (H16 de la revisión de B2) */}
       <section className="animate-rise rounded-lg border border-line bg-surface px-5 py-10 sm:px-10">
         <div className="flex max-w-reading flex-col items-start">
-          <Badge variant="neutral" className="mb-3">
+          <Badge variant="neutral" className="mb-3" data-slot="hero.badge">
             <Sparkles aria-hidden className="size-3.5" />
             {text.badge}
           </Badge>
-          <h1 tabIndex={-1} className="text-3xl leading-tight font-bold outline-none sm:text-4xl">
+          <h1
+            tabIndex={-1}
+            className="text-3xl leading-tight font-bold outline-none sm:text-4xl"
+            data-slot="hero.title"
+          >
             {text.title}
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-fg-muted">{text.subtitle}</p>
+          <p className="mt-4 max-w-xl text-lg text-fg-muted" data-slot="hero.subtitle">
+            {text.subtitle}
+          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to={screenPath('onboarding')}>{text.cta}</Link>
+              <Link to={screenPath('onboarding')} data-slot="hero.cta">
+                {text.cta}
+              </Link>
             </Button>
             <Button asChild size="lg" variant="secondary">
               <Link to={screenPath('onboarding')}>{text.login}</Link>
             </Button>
           </div>
-          <p className="mt-4 text-sm text-fg-muted">{text.trust}</p>
+          <p className="mt-4 text-sm text-fg-muted" data-slot="hero.trust">
+            {text.trust}
+          </p>
         </div>
       </section>
 
@@ -77,7 +118,7 @@ export function LandingScreen() {
           {text.featuresTitle}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((feature) => (
+          {FEATURES.map((feature, index) => (
             <Card key={feature.key} className="flex flex-col gap-2">
               <span
                 aria-hidden
@@ -85,8 +126,12 @@ export function LandingScreen() {
               >
                 {feature.icon}
               </span>
-              <h3 className="text-lg font-bold">{text.features[feature.key][0]}</h3>
-              <p className="text-sm text-fg-muted">{text.features[feature.key][1]}</p>
+              <h3 className="text-lg font-bold" data-slot={slotId('features.N.title', index + 1)}>
+                {text.features[feature.key][0]}
+              </h3>
+              <p className="text-sm text-fg-muted" data-slot={slotId('features.N.text', index + 1)}>
+                {text.features[feature.key][1]}
+              </p>
             </Card>
           ))}
         </div>
@@ -97,17 +142,25 @@ export function LandingScreen() {
           {text.personasTitle}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          {text.personas.map(([who, what]) => (
+          {text.personas.map(([who, what], index) => (
             <div key={who} className="flex gap-3 rounded-lg border border-line bg-surface p-4">
               <Users aria-hidden className="mt-0.5 size-5 shrink-0 text-fg-muted" />
               <p>
-                <span className="font-bold">{who}.</span>{' '}
-                <span className="text-fg-muted">{what}</span>
+                <span className="font-bold">
+                  <span data-slot={slotId('personas.N.who', index + 1)}>{who}</span>.
+                </span>{' '}
+                <span className="text-fg-muted" data-slot={slotId('personas.N.text', index + 1)}>
+                  {what}
+                </span>
               </p>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Vacíos no pintan nada. Con texto van entre las funciones y los planes */}
+      <CreatorSection creator={blocks.creator} sample={blocks.sample} />
+      <TestimonialsSection testimonials={blocks.testimonials} sample={blocks.sample} />
 
       <section aria-labelledby="precios" className="flex flex-col gap-4">
         <div>
@@ -170,18 +223,30 @@ export function LandingScreen() {
         <h2 id="preguntas" className="screen-title">
           {text.faqTitle}
         </h2>
-        {text.faq.map(([question, answer]) => (
+        {text.faq.map(([question, answer], index) => (
           <details key={question} className="rounded-lg border border-line bg-surface p-4">
-            <summary className="cursor-pointer font-semibold">{question}</summary>
-            <p className="mt-2 text-fg-muted">{answer}</p>
+            <summary
+              className="cursor-pointer font-semibold"
+              data-slot={slotId('faq.N.question', index + 1)}
+            >
+              {question}
+            </summary>
+            <p className="mt-2 text-fg-muted" data-slot={slotId('faq.N.answer', index + 1)}>
+              {answer}
+            </p>
           </details>
         ))}
       </section>
 
       <section className="flex flex-col items-start gap-3 rounded-lg border border-line bg-surface p-6 sm:p-8">
-        <h2 className="screen-title">{text.finalTitle}</h2>
+        <h2 className="screen-title" data-slot="final.title">
+          {text.finalTitle}
+        </h2>
         <Button asChild size="lg">
-          <Link to={screenPath('onboarding')}>{text.cta}</Link>
+          {/* Repite el texto de hero.cta. Lleva su propia marca para que cada data-slot salga una sola vez */}
+          <Link to={screenPath('onboarding')} data-slot-repeat="hero.cta">
+            {text.cta}
+          </Link>
         </Button>
       </section>
 

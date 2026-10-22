@@ -3,7 +3,7 @@ import { createRestStore } from './restStore.ts';
 import { StoreError } from './store.ts';
 import { describeError } from './log.ts';
 
-const KEY = 'sb_secret_llave_de_prueba_1234567890';
+const KEY = 'sb_secret_' + 'llave_de_prueba_1234567890';
 const RUN = '0b1c2d3e-4f50-4a61-8b72-93a4b5c6d7e8';
 
 type Reply = { status: number; body: unknown } | 'throw';

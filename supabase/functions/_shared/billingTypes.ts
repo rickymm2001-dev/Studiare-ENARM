@@ -29,13 +29,37 @@ export type CheckoutError =
   | 'founder_lost'
   | 'trial_mismatch';
 
-/** Lo que manda la app a create-checkout. Sin mode cuenta como subscription (app vieja, 8.19) */
+/**
+ * Cómo se paga con Stripe (B17, 6.4). hosted es la página de pago de Stripe, que ya muestra Apple Pay y Google
+ * Pay sola. wallet es la sesión ui_mode elements de la pantalla Suscripción, con los botones de un toque, y solo
+ * vale para Stripe, suscripción y tarjeta
+ */
+export type CheckoutUi = 'hosted' | 'wallet';
+
+/**
+ * Lo que manda la app a create-checkout. Sin mode cuenta como subscription (app vieja, 8.19) y sin ui como
+ * hosted. Con ui wallet la función responde WalletCheckoutReply en lugar de una dirección. La función no
+ * consulta ninguna bandera del servidor para ui wallet: solo cambia el modo de la pantalla de pago (misma
+ * suscripción, mismo precio, misma prueba y mismo aviso de Stripe) y no concede nada nuevo. Quien decide si la
+ * app ofrece las billeteras es la bandera expressWallets del cliente (B17, decisión de la sesión principal)
+ */
 export interface CheckoutRequest {
   plan: PaidPlan;
   provider: Provider;
   mode?: CheckoutMode;
   method?: 'oxxo' | 'spei';
   expectTrial?: boolean;
+  ui?: CheckoutUi;
+}
+
+/**
+ * La respuesta de create-checkout con ui wallet (B17, 9.6). El clientSecret es del navegador que lo pidió: no
+ * se guarda ni se registra en ningún lado. Los errores son los de siempre (CheckoutError). La respuesta
+ * hospedada de hoy es { url, mode, trial } y no cambia
+ */
+export interface WalletCheckoutReply {
+  clientSecret: string;
+  trial: boolean;
 }
 
 /** Lo que la función manda a apply_charge, con los mismos nombres en snake_case y prefijo p_ */
@@ -101,7 +125,8 @@ export interface CheckoutSubscription {
 /**
  * Las banderas de lanzamiento que el servidor hace cumplir al abrir un pago. Son las de feature_flags en
  * platform_settings, la misma clave que lee la app, y solo el booleano true las prende. freeTrial no viene
- * aquí porque ya decide trialAvailable
+ * aquí porque ya decide trialAvailable. expressWallets tampoco: ui wallet no concede nada nuevo y solo la
+ * bandera del cliente decide si la app lo ofrece (B17)
  */
 export interface CheckoutFlags {
   /** Pases de un solo pago con OXXO o SPEI en Stripe */
@@ -169,6 +194,12 @@ export interface FunctionEnv {
   MERCADOPAGO_WEBHOOK_SECRET?: string;
   /** Dirección pública de la app, con la que se arman las URL de regreso y el CORS */
   APP_URL?: string;
+  /**
+   * Más orígenes https que pueden llamar a las funciones, separados por comas, además del de APP_URL (B17,
+   * 4.1). Sirve para la mudanza de dominio, con el nuevo y el viejo juntos por 30 días. Sin comodines, sin
+   * rutas y nunca una dirección de pages.dev. ai-proxy solo lee esta lista
+   */
+  APP_ORIGINS?: string;
   /** Dirección pública de las funciones, para la notificación de Mercado Pago */
   FUNCTIONS_URL?: string;
 }

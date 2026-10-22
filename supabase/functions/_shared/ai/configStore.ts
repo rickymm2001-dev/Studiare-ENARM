@@ -8,6 +8,7 @@ import {
   mergeConfig,
   type AiConfig,
 } from './config.ts';
+import { serviceHeaders } from '../keys.ts';
 import type { Clock, ConfigStore, Log } from './ports.ts';
 
 /** Una fila guardada a mano que no se entiende o que rompe las reglas de un modelo no frena la función */
@@ -29,11 +30,7 @@ export function createRestConfigStore(options: {
   log?: Log;
 }): ConfigStore {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const headers = {
-    apikey: options.serviceKey,
-    authorization: `Bearer ${options.serviceKey}`,
-    'content-type': 'application/json',
-  };
+  const headers = { ...serviceHeaders(options.serviceKey), 'content-type': 'application/json' };
   return {
     async load() {
       const response = await fetchImpl(`${options.url}/rest/v1/ai_config?select=value&limit=1`, {

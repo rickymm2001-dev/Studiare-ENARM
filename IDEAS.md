@@ -102,3 +102,16 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Que capture() quite sus estilos al terminar.** Hoy deja la barra estática y cualquier spec que siga usando la página la hereda. Surgió en la revisión de B15
 - **Más pasos del recorrido.** Tutor y Mazos, un botón Recordármelo después, un recorrido propio para el médico y medir en qué paso se salta más gente. Surgió en el paquete C de B15
 - **Bajar la memoria del lint.** Con B15 `eslint .` llega a unos 5.3 GB y a 4 GB se cortaba en el CI (heap out of memory). El script lint ya sube el límite a 6 GB, pero un repo privado corre en máquinas de 7 GB. Convendría partir el lint con tipos por carpeta o por tsconfig antes de pasar el repo a privado. Surgió en el PR de B15
+
+- **Botón Quedarme aquí en la página de mudanza.** Para cumplir WCAG 2.2.1, hoy hay una espera de 5 segundos con enlace visible. Surgió en el paquete A de B17
+- **actionlint en check.yml y revisión diaria de la prueba de humo.** `npm run smoke -- https://tudominio.mx --strict` una vez al día. Surgió en el paquete A de B17
+- **Migrar a Workers con archivos estáticos.** Cloudflare lo recomienda para proyectos nuevos y Pages sigue soportado. Surgió en el diseño de B17
+- **Dominio propio para Supabase, Turnstile, WAF, Cloudflare Web Analytics y proxy inverso de PostHog.** Ideas de la publicación. Surgió en el diseño de B17
+- **Registro de forma de llave al arrancar cada función.** Una línea con si tomó llave nueva o vieja, y que monitoring busque también sb_secret_ y sb_publishable_. Surgió en el paquete B de B17
+- **Leer expressWallets en checkout_context para cerrar ui wallet desde el servidor.** Hoy solo manda la bandera de la app, por decisión. Surgió en el paso 0 de B17
+- **Constante de cliente para ofrecer las billeteras solo a quien ya no tiene prueba.** Si la hoja de Apple Pay no acepta la prueba con total de hoy en 0. Surgió en el paquete C de B17
+- **Test clocks de Stripe y segundo dispositivo con el doble de Stripe.js.** Surgió en el paquete C de B17
+- **Script landing-check con JSON para validar el texto de la agencia.** Y sacar landingText de t para hacer lazy el cuerpo de la portada. Surgió en el paquete D de B17
+- **Cambiar capture.ts para esperar con toHaveCount(0).** Hoy espera con waitFor detached sobre un texto que suele estar en varios esqueletos y el catch se traga el error, así que capturas de otros bloques pudieron salir con esqueletos. Surgió en la integración de B17
+- **Separar los builds de build-policy.test.ts en otro archivo.** Su beforeAll ya tarda 720 segundos. Surgió en la integración de B17
+- **Cambiar el título Contenido con médicos detrás y las frases viejas de docs/ANALISIS_PLATAFORMA.md.** Surgió en la integración de B17

@@ -10,6 +10,21 @@ describe('orígenes de APP_ORIGINS', () => {
     });
   });
 
+  it('usa la misma lectura que las demás funciones y no repite un origen', () => {
+    expect(parseOrigins('https://a.mx,https://a.mx/, https://b.mx')).toEqual({
+      ok: true,
+      origins: ['https://a.mx', 'https://b.mx'],
+    });
+  });
+
+  it('una dirección de pages.dev no sirve, y el problema no la repite', () => {
+    const result = parseOrigins('https://a.mx,https://secreta.studiare.pages.dev');
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.problem).toContain('pages.dev');
+    expect(result.problem).not.toContain('secreta');
+  });
+
   it('rechaza vacío, http, comodines y rutas', () => {
     for (const value of [
       '',

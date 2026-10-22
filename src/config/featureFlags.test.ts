@@ -5,6 +5,7 @@ import {
   FEATURE_FLAGS,
   FEATURE_FLAG_NAMES,
   FLAGS_KEY,
+  StoredFlagsSchema,
   isFeatureEnabled,
   readAppEnv,
   readStoredFlags,
@@ -133,6 +134,31 @@ describe('banderas de lanzamiento', () => {
         stored: { productAnalytics: false },
       }),
     ).toBe(false);
+  });
+
+  it('las billeteras de un toque (expressWallets) nacen apagadas en los tres entornos y se prenden escribiendo feature_flags (B17, 6.6)', () => {
+    for (const appEnv of APP_ENVS) {
+      expect(isFeatureEnabled('expressWallets', { appEnv, stored: null }), appEnv).toBe(false);
+      expect(isFeatureEnabled('expressWallets', { appEnv, stored: {} }), appEnv).toBe(false);
+      expect(FEATURE_FLAGS.expressWallets.defaults[appEnv], appEnv).toBe(false);
+    }
+    // Sin remoteEnable en false, el servidor la puede prender también en producción, que es como Ricardo la maneja
+    expect(
+      isFeatureEnabled('expressWallets', {
+        appEnv: 'production',
+        stored: { expressWallets: true },
+      }),
+    ).toBe(true);
+    expect(
+      isFeatureEnabled('expressWallets', {
+        appEnv: 'development',
+        stored: { expressWallets: true },
+      }),
+    ).toBe(true);
+    expect('remoteEnable' in FEATURE_FLAGS.expressWallets).toBe(false);
+    // La copia guardada la reconoce y una bandera que no es booleana invalida todo el objeto
+    expect(StoredFlagsSchema.safeParse({ expressWallets: true }).success).toBe(true);
+    expect(StoredFlagsSchema.safeParse({ expressWallets: 'true' }).success).toBe(false);
   });
 
   it('lo que dice el servidor manda sobre el valor del entorno', () => {

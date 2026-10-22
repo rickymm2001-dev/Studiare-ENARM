@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 a B14 y B16 hechos y fusionados en main, ver sus secciones. B15 analítica, errores, recordatorios y recorrido en su PR. Siguen B17 publicación, B18 primeros alumnos y B19 auditoría final (los diseños de B17 y B18 están hechos)
+- Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación en su PR. Siguen B18 primeros alumnos (diseño hecho) y B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -32,9 +32,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B12. IA real (D-134, PR en curso)
 - [x] B13. Inglés médico (D-135, PR en curso)
 - [x] B14. Datos y modelo del alumno (D-136, PR 59 fusionado)
-- [x] B15. Analítica, errores, recordatorios y recorrido (D-137, PR en curso)
+- [x] B15. Analítica, errores, recordatorios y recorrido (D-137, PR 60 fusionado)
 - [x] B16. Legal y privacidad (D-132, PR en curso)
-- [ ] B17. Publicación
+- [x] B17. Publicación (D-138, PR en curso)
   - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
 - [ ] B18. Primeros alumnos
 - [ ] B19. Auditoría final y lanzamiento
@@ -207,6 +207,12 @@ Evidencia
 - Capturas en docs/screenshots/v3/b15 (114)
 - Nada de B15 se ha desplegado ni probado contra PostHog, Sentry o Resend reales. Los pasos tuyos (cuentas, llaves y DNS) están en docs/PENDIENTES_DE_RICARDO.md, B15.1 a B15.17
 
+### B17. Publicación (D-138)
+- Hecho y apagado. Despliegue a Cloudflare Pages desde GitHub Actions con carga directa (sin la variable CLOUDFLARE_DEPLOY termina en verde), cabeceras reales con la política de seguridad, robots, sitemap y security.txt, prueba de humo sin llaves, aviso de 14 días y sitio de mudanza para la demo de GitHub Pages, orígenes por secreto, llaves nuevas de Supabase con respaldo a las viejas, plan de despliegue b17 (13 funciones, 2 secretos), Apple Pay y Google Pay en Suscripción detrás de una bandera apagada, y portada lista para los textos de la agencia con reglas automáticas. Aviso de privacidad 2026-10-22 en borrador
+- Revisión independiente con 11 hallazgos (ninguno alto), todos atendidos con su prueba
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios, npm audit sin vulnerabilidades altas. Vitest con 7,061 pruebas, prueba de humo 9 de 9, 58 mutaciones de la revisión con 51 atrapadas (las que no, eran equivalentes o ya tienen prueba). Playwright de portada, mudanza, billeteras, pagos, privacidad y recorrido en teléfono, computadora y nube. JS inicial de 291.4 KB sin nube y 291.8 KB en producción. Capturas en docs/screenshots/v3/b17 (60)
+- Nada se ha desplegado ni probado con cuentas reales (Cloudflare, dominio, Resend, Supabase de pago, Stripe real, Apple y Google). Los pasos tuyos, B17.1 a B17.22, están en docs/PENDIENTES_DE_RICARDO.md. Por confirmar con cuentas reales, que wrangler suba la carpeta .well-known y que el proyecto se cree sin redirección a Workers, la política con el Stripe.js real y checkout.session.completed con ui_mode elements, la hoja de Apple Pay con prueba gratis (total de hoy en 0), que Auth admin acepte la llave secreta nueva solo en apikey y los menús de Email Routing
+
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
@@ -216,7 +222,7 @@ Evidencia
 - B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
 - B10 fusionado en main (PR 53). Sus tres migraciones y cinco funciones se aplicaron al proyecto antes de fusionar y se verificaron por huella. Lo que falta subir espera el token de Supabase
 - B16 unido con lo de Gemini para B17 y con B11 ya en main. Su PR sigue al de B11
-- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) también, y B14 (modelo del alumno) también y B15 (analítica y recorrido) está en su PR. Siguen B17 a B19. Los despliegues de B11, B12, B13, B14 y B15 a Supabase esperan la autorización escrita de Ricardo
+- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) también, y B14 (modelo del alumno) y B15 (analítica y recorrido) también y B17 (publicación) está en su PR. Siguen B18 y B19. Los despliegues de B11 a B15 y B17 a Supabase esperan la autorización escrita de Ricardo
 - Los diseños de B10 a B15, B17 y B18 están en /home/user/wt/plans
 - Los subagentes se detuvieron varias veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
@@ -241,6 +247,9 @@ Evidencia
 - B14. Volver a entrar con el enlace del correo en un navegador que ya tenía sesión deja un segundo en que se ve el perfil de antes. Conviene que alguien revise src/app/cloud.tsx y device.ts antes de abrir a alumnos reales
 - B15. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Resend empieza en el plan gratis (3,000 correos al mes, alcanza para unos 80 alumnos con recordatorio diario) y pasa a Pro (20 dólares al mes) antes de abrir el registro. Una sola versión del aviso de privacidad para B15 y B16, la 2026-10-21, que hace aceptarlo otra vez a quien ya lo aceptó (con tu abogado). Que los reportes de fallas sin el permiso de mejora sigan sin salir (mandarlos limpios sería un interés legítimo que decide el abogado). Que el aviso diga la ventana de quien retira Medición de uso sin conexión y no vuelve a abrir la app (recomendado que no, el efecto son solo eventos de dinero seudónimos). Que el recorrido no lo vean admin ni dueño. El texto de la bienvenida dice siete paradas y el contador Paso 1 de 8 (recomendado dejarlo)
 - B15. Antes de prender cada cosa. Confirmar en sentry.io la retención de los reportes (el aviso dice 30 días), mandar un evento de prueba a PostHog con la cuenta real para confirmar que descarta la IP y acepta el envío por lotes, y poner SENTRY_AUTH_TOKEN, SENTRY_ORG y SENTRY_PROJECT en GitHub solo cuando exista el build de producción en Cloudflare (B17)
+- B17. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Dos frases de la portada cambiadas por no tener respaldo, FSRS ya no es el algoritmo más preciso sino un algoritmo moderno de repaso espaciado, y el contenido médico generado por IA queda como borrador marcado hasta que un médico lo aprueba (con tu abogado). El título de esa tarjeta, Contenido con médicos detrás, sugiere más que su texto y conviene cambiarlo cuando llegue el texto de la agencia. Dominio sin www y proyecto nuevo studiare en Cloudflare Pages y no en Workers. Billeteras construidas y apagadas, y sin campo de código de descuento. Llaves nuevas de Supabase dentro de B17. Buzones de privacidad y soporte con reenvío de Cloudflare a tu Gmail al principio. Aviso de privacidad con Cloudflare, GitHub y Stripe.js como encargados (seis preguntas para el abogado en docs/legal/CAMBIOS-B17.md). Aviso de 14 días y sitio de mudanza por 30 días. Dejar /privacidad y /terminos fuera del sitemap. Las capturas de instalación con Versión de demostración quedan fuera de producción. La opción de Resend gratis al principio y Pro antes de abrir el registro
+- B17. Supabase de pago antes de invitar a los 5 aspirantes es un gasto (11.16), lo decides tú. La consulta de solo lectura de cuántos alumnos hay antes de mudar el dominio toca producción, así que espera tu frase
+- B17. La frase Gratis para empezar. Sin tarjeta. de la portada hay que revisarla cuando se prenda la prueba gratis, que sí pide tarjeta
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 

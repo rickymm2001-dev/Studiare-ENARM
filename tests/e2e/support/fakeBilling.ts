@@ -297,6 +297,14 @@ export interface FakeBilling {
   adminPromotionCodeStats(): RpcResult;
 }
 
+/**
+ * El secreto de cliente de una sesión de las billeteras simulada (B17). Tiene la forma de uno de verdad, cs_ y el
+ * id de la sesión, y el Stripe.js simulado lo devuelve para pagar esa sesión. No es de ninguna cuenta de Stripe
+ */
+export const walletSecretOf = (checkoutId: string): string => `${checkoutId}_secret_simulado`;
+export const walletCheckoutIdOf = (clientSecret: string): string =>
+  clientSecret.split('_secret_')[0] ?? '';
+
 export interface FakeBillingOptions {
   /** Dirección pública de la app, para las URL de regreso */
   appUrl: string;
@@ -1057,6 +1065,11 @@ export function createFakeBilling(options: FakeBillingOptions): FakeBilling {
       subscriptionId: null,
     };
     checkouts.set(id, checkout);
+    // Los botones de Apple Pay y Google Pay (B17, 6.4) piden el secreto de la sesión y no una dirección. Quien
+    // paga es el Stripe.js simulado, que avisa a completeCheckout con ese secreto
+    if (ask.ui === 'wallet') {
+      return { status: 200, body: { clientSecret: walletSecretOf(id), trial } };
+    }
     const url =
       ask.provider === 'stripe'
         ? `${options.gatewayOrigin}/c/pay/${id}`
