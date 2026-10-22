@@ -364,6 +364,89 @@ function ExamRunner({
   };
   useShortcuts(keys, !finishOpen);
 
+  const questionNode =
+    bundle && shownIds ? (
+      <ExamQuestion
+        key={currentId}
+        bundle={bundle}
+        shownIds={shownIds}
+        answer={answer}
+        highlight={state.highlight}
+        askConfidence={state.askConfidence}
+        nudge={nudge}
+        position={t.exam.progress(state.current + 1, total)}
+        focusPrompt={focusPrompt}
+        onChoose={onChoose}
+        onToggleDiscard={(optionId) => {
+          edit((current) => toggleEliminated(current, currentId, optionId));
+        }}
+        onConfidence={(level) => {
+          edit((current) => setConfidence(current, currentId, level));
+        }}
+        sheetMode={state.answerSheet}
+      />
+    ) : (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.exam.loading}</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+
+  // Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono marcar queda
+  // solo con su ícono, para que su texto no se parta en tres renglones, y deja el espacio a Anterior y
+  // Siguiente (H14 de la revisión de B2). Con la hoja de respuestas las letras no eligen, así que su
+  // recordatorio de teclas no las ofrece
+  const dock = (placement?: string) => (
+    <ActionDock className={cn('lg:mx-auto lg:w-full lg:max-w-session', placement)}>
+      <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
+        <Button
+          variant="secondary"
+          disabled={state.current === 0}
+          onClick={() => {
+            visit(state.current - 1);
+          }}
+        >
+          <ChevronLeft aria-hidden />
+          {t.exam.previous}
+        </Button>
+        <Button
+          variant={answer.marked ? 'primary' : 'secondary'}
+          aria-pressed={answer.marked}
+          aria-label={markLabel}
+          className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
+          onClick={() => {
+            edit((current) => toggleMarked(current, currentId));
+          }}
+        >
+          <Flag aria-hidden />
+          <span className="max-sm:hidden">{markLabel}</span>
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={state.current >= total - 1}
+          onClick={() => {
+            visit(state.current + 1);
+          }}
+        >
+          {t.exam.next}
+          <ChevronRight aria-hidden />
+        </Button>
+      </div>
+      <KeyHint>
+        {state.answerSheet ? null : (
+          <>
+            <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
+            {t.exam.keys.choose} ·{' '}
+          </>
+        )}
+        <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter} {t.exam.keys.discard} ·{' '}
+        <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd> {t.exam.keys.previous} · <Kbd>M</Kbd>{' '}
+        {t.exam.keys.mark}
+      </KeyHint>
+    </ActionDock>
+  );
+
   return (
     <>
       <SessionHeader
@@ -420,84 +503,14 @@ function ExamRunner({
       </div>
 
       {state.answerSheet ? (
-        // La hoja va a un lado en computadora y debajo en el teléfono, como la hoja aparte del examen
-        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_21rem]">
-          <div className="flex min-w-0 flex-col gap-5">
-            {bundle && shownIds ? (
-              <ExamQuestion
-                key={currentId}
-                bundle={bundle}
-                shownIds={shownIds}
-                answer={answer}
-                highlight={state.highlight}
-                askConfidence={state.askConfidence}
-                nudge={nudge}
-                position={t.exam.progress(state.current + 1, total)}
-                focusPrompt={focusPrompt}
-                onChoose={onChoose}
-                onToggleDiscard={(optionId) => {
-                  edit((current) => toggleEliminated(current, currentId, optionId));
-                }}
-                onConfidence={(level) => {
-                  edit((current) => setConfidence(current, currentId, level));
-                }}
-                sheetMode={state.answerSheet}
-              />
-            ) : (
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t.exam.loading}</CardTitle>
-                </CardHeader>
-              </Card>
-            )}
-
-            {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono
-          marcar queda solo con su ícono, para que su texto no se parta en tres renglones, y deja
-          el espacio a Anterior y Siguiente (H14 de la revisión de B2) */}
-            <ActionDock className="lg:mx-auto lg:w-full lg:max-w-session">
-              <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
-                <Button
-                  variant="secondary"
-                  disabled={state.current === 0}
-                  onClick={() => {
-                    visit(state.current - 1);
-                  }}
-                >
-                  <ChevronLeft aria-hidden />
-                  {t.exam.previous}
-                </Button>
-                <Button
-                  variant={answer.marked ? 'primary' : 'secondary'}
-                  aria-pressed={answer.marked}
-                  aria-label={markLabel}
-                  className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
-                  onClick={() => {
-                    edit((current) => toggleMarked(current, currentId));
-                  }}
-                >
-                  <Flag aria-hidden />
-                  <span className="max-sm:hidden">{markLabel}</span>
-                </Button>
-                <Button
-                  variant="secondary"
-                  disabled={state.current >= total - 1}
-                  onClick={() => {
-                    visit(state.current + 1);
-                  }}
-                >
-                  {t.exam.next}
-                  <ChevronRight aria-hidden />
-                </Button>
-              </div>
-              <KeyHint>
-                <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
-                {t.exam.keys.choose} · <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter}{' '}
-                {t.exam.keys.discard} · <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd>{' '}
-                {t.exam.keys.previous} · <Kbd>M</Kbd> {t.exam.keys.mark}
-              </KeyHint>
-            </ActionDock>
-          </div>
-          <aside className="min-w-0 xl:sticky xl:top-24">
+        // En el teléfono y la tableta es una columna con la pregunta, la hoja y al final Anterior, marcar y
+        // Siguiente, que se quedan pegados abajo mientras se recorre la hoja (D-078). Un elemento pegajoso
+        // solo se queda en pantalla si su lugar natural está debajo, así que va después de la hoja, y en
+        // una columna flex y no en una cuadrícula, donde solo se pega dentro de su propia celda. En
+        // computadora, donde ya no es pegajoso, la hoja va a un lado y el dock bajo la pregunta
+        <div className="flex flex-col gap-5 xl:grid xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start">
+          <div className="min-w-0 xl:col-start-1 xl:row-start-1">{questionNode}</div>
+          <aside className="min-w-0 xl:sticky xl:top-24 xl:col-start-2 xl:row-span-2 xl:row-start-1">
             <AnswerSheet
               rows={sheetRows}
               current={state.current}
@@ -509,82 +522,12 @@ function ExamRunner({
               onGo={visit}
             />
           </aside>
+          {dock('xl:col-start-1 xl:row-start-2')}
         </div>
       ) : (
         <>
-          {bundle && shownIds ? (
-            <ExamQuestion
-              key={currentId}
-              bundle={bundle}
-              shownIds={shownIds}
-              answer={answer}
-              highlight={state.highlight}
-              askConfidence={state.askConfidence}
-              nudge={nudge}
-              position={t.exam.progress(state.current + 1, total)}
-              focusPrompt={focusPrompt}
-              onChoose={onChoose}
-              onToggleDiscard={(optionId) => {
-                edit((current) => toggleEliminated(current, currentId, optionId));
-              }}
-              onConfidence={(level) => {
-                edit((current) => setConfidence(current, currentId, level));
-              }}
-              sheetMode={state.answerSheet}
-            />
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>{t.exam.loading}</CardTitle>
-              </CardHeader>
-            </Card>
-          )}
-
-          {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono
-          marcar queda solo con su ícono, para que su texto no se parta en tres renglones, y deja
-          el espacio a Anterior y Siguiente (H14 de la revisión de B2) */}
-          <ActionDock className="lg:mx-auto lg:w-full lg:max-w-session">
-            <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
-              <Button
-                variant="secondary"
-                disabled={state.current === 0}
-                onClick={() => {
-                  visit(state.current - 1);
-                }}
-              >
-                <ChevronLeft aria-hidden />
-                {t.exam.previous}
-              </Button>
-              <Button
-                variant={answer.marked ? 'primary' : 'secondary'}
-                aria-pressed={answer.marked}
-                aria-label={markLabel}
-                className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
-                onClick={() => {
-                  edit((current) => toggleMarked(current, currentId));
-                }}
-              >
-                <Flag aria-hidden />
-                <span className="max-sm:hidden">{markLabel}</span>
-              </Button>
-              <Button
-                variant="secondary"
-                disabled={state.current >= total - 1}
-                onClick={() => {
-                  visit(state.current + 1);
-                }}
-              >
-                {t.exam.next}
-                <ChevronRight aria-hidden />
-              </Button>
-            </div>
-            <KeyHint>
-              <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
-              {t.exam.keys.choose} · <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter}{' '}
-              {t.exam.keys.discard} · <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd>{' '}
-              {t.exam.keys.previous} · <Kbd>M</Kbd> {t.exam.keys.mark}
-            </KeyHint>
-          </ActionDock>
+          {questionNode}
+          {dock()}
         </>
       )}
 

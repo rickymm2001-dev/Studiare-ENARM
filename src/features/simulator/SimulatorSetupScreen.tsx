@@ -30,6 +30,7 @@ import { adaptiveAvailability } from '@/engines/adaptive';
 import { adaptiveTexts } from '@/i18n/adaptive';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
@@ -72,6 +73,9 @@ export function SimulatorSetupScreen() {
 }
 
 function Setup({ session }: { session: ReadySession }) {
+  // Con la bandera apagada, como en producción, el examen completo es la única tarjeta de la fila y
+  // ocupa todo el ancho, en lugar de media pantalla con la otra mitad vacía
+  const englishCards = isFeatureEnabled('medicalEnglish');
   const api = useDataApi();
   const navigate = useNavigate();
   const practice = usePractice();
@@ -481,8 +485,8 @@ function Setup({ session }: { session: ReadySession }) {
       </Card>
       <ExamGuideCard />
       {/* Inglés médico y el examen completo, lado a lado en computadora (V4-B1) */}
-      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
-        {isFeatureEnabled('medicalEnglish') ? (
+      <div className={cn('grid grid-cols-1 items-start gap-5', englishCards && 'xl:grid-cols-2')}>
+        {englishCards ? (
           <EnglishPracticeCard
             session={session}
             pool={pool?.english ?? { practice: [], exam: [] }}

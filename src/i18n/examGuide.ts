@@ -38,15 +38,19 @@ export const examGuideText = {
       'Las preguntas suelen ser largas y a veces están mal redactadas.',
       'A veces no queda claro qué se quiere responder con la pregunta.',
       'Las imágenes de radiografías o de laboratorio pueden verse con mala calidad.',
-      'Las respuestas se marcan en una hoja, rellenando alveolos como en una hoja de Ceneval.',
+      'Las respuestas se marcan en una hoja, rellenando burbujas como en una hoja de Ceneval.',
     ],
     practiceNote:
       'Por eso el simulador de Studiare no es perfecto a propósito. Incluye casos largos, datos oscuros y hasta la hoja de respuestas, para que no te sorprendan el día del examen.',
+    sources:
+      'Fuentes. La estructura sale de la convocatoria de la CIFRHS y de los comunicados de la Secretaría de Salud. Lo que cuentan quienes ya lo presentaron no es un dato oficial.',
   },
   answerSheet: {
     title: 'Hoja de respuestas',
-    hint: 'Llena aquí el alveolo de tu respuesta, como en la hoja del examen. Las opciones de la pregunta solo se leen. Una pregunta se puede llenar después de verla.',
-    listLabel: 'Alveolos de todas las preguntas',
+    hint: 'Llena aquí la burbuja de tu respuesta, como en la hoja del examen. Las opciones de la pregunta solo se leen. Una pregunta se puede llenar después de verla.',
+    keyboardHint:
+      'Tab entra a la hoja. Las flechas mueven entre burbujas y filas, y Espacio o Enter llena la burbuja.',
+    listLabel: 'Burbujas de todas las preguntas',
     rowLabel: (number: number) => `Pregunta ${number}`,
     bubble: (number: number, letter: string) => `Pregunta ${number}, opción ${letter}`,
     goTo: (number: number) => `Ir a la pregunta ${number}`,

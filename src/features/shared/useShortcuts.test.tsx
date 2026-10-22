@@ -10,6 +10,11 @@ function Harness({ bindings, enabled }: { bindings: ShortcutBindings; enabled?: 
       <input aria-label="texto" />
       <button type="button">botón</button>
       <input type="radio" aria-label="opción" />
+      <div role="radiogroup" aria-label="fila">
+        <button type="button" role="radio" aria-checked="false">
+          burbuja
+        </button>
+      </div>
     </div>
   );
 }
@@ -83,6 +88,20 @@ describe('atajos de teclado', () => {
     fireEvent.keyDown(screen.getByRole('button', { name: 'botón' }), { key: ' ' });
     expect(enter).not.toHaveBeenCalled();
     expect(space).not.toHaveBeenCalled();
+  });
+
+  it('las flechas dentro de un grupo de radios son del grupo y no cambian de pantalla', () => {
+    const arrowright = vi.fn();
+    const a = vi.fn();
+    render(<Harness bindings={{ arrowright, a }} />);
+    const bubble = screen.getByRole('radio', { name: 'burbuja' });
+    fireEvent.keyDown(bubble, { key: 'ArrowRight' });
+    expect(arrowright).not.toHaveBeenCalled();
+    // Las demás teclas siguen valiendo y las flechas fuera del grupo también
+    fireEvent.keyDown(bubble, { key: 'a' });
+    expect(a).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(arrowright).toHaveBeenCalledTimes(1);
   });
 
   it('ignora Ctrl, Alt y Cmd, y mantener la tecla no repite la acción', () => {
