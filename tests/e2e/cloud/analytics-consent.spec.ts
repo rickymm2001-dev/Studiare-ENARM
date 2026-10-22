@@ -12,6 +12,7 @@ import type { FakeSupabaseServer } from '../support/fakeSupabase';
 import {
   COMMON_EVENT_PROPERTIES,
   flushAnalytics,
+  gotoWhenMeasuring,
   seedFlags,
   watchRequestedUrls,
 } from '../support/fakeTelemetry';
@@ -46,7 +47,8 @@ async function untilSent(page: Page, cloud: FakeSupabaseServer, name: string, co
         await flushAnalytics(page);
         return sentNamed(cloud, name).length;
       },
-      // En el CI, con la máquina cargada, 5 segundos no alcanzaban a veces (pasaba al reintentar)
+      // Margen para el envío con la máquina cargada. Que el evento salga lo decide haber esperado a la medición
+      // antes de la acción (gotoWhenMeasuring), no este plazo
       { timeout: 20_000 },
     )
     .toBe(count);
@@ -68,9 +70,14 @@ async function setConsent(page: Page, box: ReturnType<typeof usage>, granted: bo
   await expect(page.getByText(text.consentSaved)).toBeVisible();
 }
 
-/** Guarda un puntaje oficial en Progreso, que es un evento que la medición cuenta (sin el puntaje) */
-async function captureScore(page: Page, score: number) {
-  await page.goto(SCREENS.progress.path);
+/**
+ * Guarda un puntaje oficial en Progreso, que es un evento que la medición cuenta (sin el puntaje). Con cloud, la
+ * prueba espera a que la medición esté lista antes de guardarlo, porque se espera que ese evento salga. Sin
+ * cloud no espera, que es lo que hace falta cuando el permiso no está dado
+ */
+async function captureScore(page: Page, score: number, measuredBy?: FakeSupabaseServer) {
+  if (measuredBy) await gotoWhenMeasuring(page, measuredBy, SCREENS.progress.path);
+  else await page.goto(SCREENS.progress.path);
   const card = scoreCard(page);
   await card.getByLabel(text.score, { exact: true }).fill(String(score));
   await card.getByRole('button', { name: text.saveScore }).click();
@@ -123,7 +130,7 @@ test.describe('Medición de uso con permiso', () => {
     // El mismo camino con el permiso sí mide, y solo lo que pasa después de darlo
     await setConsent(page, usage(page), true);
     await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
-    await captureScore(page, 80);
+    await captureScore(page, 80, cloud);
     await untilSent(page, cloud, 'official_score_captured');
     expectOnlyCatalogEvents(cloud, ['official_score_captured', 'paywall_viewed']);
   });
@@ -142,7 +149,7 @@ test.describe('Medición de uso con permiso', () => {
     // No es el id de la cuenta ni se parece a él
     expect(analyticsId).not.toBe(cloud.userIdOf(ANA));
 
-    await captureScore(page, 72.5);
+    await captureScore(page, 72.5, cloud);
     await untilSent(page, cloud, 'official_score_captured');
 
     const [request] = cloud.telemetry.posthog;
@@ -185,7 +192,7 @@ test.describe('Medición de uso con permiso', () => {
     await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
     const first = identityOf(cloud, ANA)?.analyticsId;
 
-    await captureScore(page, 70);
+    await captureScore(page, 70, cloud);
     await untilSent(page, cloud, 'official_score_captured');
     expect(sentNamed(cloud, 'official_score_captured')[0]?.distinct_id).toBe(first);
 
@@ -209,7 +216,7 @@ test.describe('Medición de uso con permiso', () => {
     // Lo vuelve a dar. Mide otra vez, pero con el identificador nuevo
     await setConsent(page, usage(page), true);
     await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
-    await captureScore(page, 78);
+    await captureScore(page, 78, cloud);
     await untilSent(page, cloud, 'official_score_captured', 2);
     const last = sentNamed(cloud, 'official_score_captured')[1]?.distinct_id;
     expect(last).toBe(identityOf(cloud, ANA)?.analyticsId);
@@ -315,7 +322,7 @@ test.describe('Medición de uso con permiso', () => {
     await setConsent(page, improvement(page), true);
     await setConsent(page, usage(page), true);
     await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
-    await captureScore(page, 72.5);
+    await captureScore(page, 72.5, cloud);
     await untilSent(page, cloud, 'official_score_captured');
 
     // El navegador pasa a la base de demostración, como lo hace quien abre el selector de la demo

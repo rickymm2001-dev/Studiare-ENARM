@@ -13,7 +13,12 @@ import { t } from '@/i18n/es-MX';
 import { enterWithLink, expect, openSecondDevice, test } from '../support/cloudFixtures';
 import type { FakeSupabaseServer } from '../support/fakeSupabase';
 import { unsubscribeTokenOf } from '../support/fakeEngagement';
-import { COMMON_EVENT_PROPERTIES, flushAnalytics, seedFlags } from '../support/fakeTelemetry';
+import {
+  COMMON_EVENT_PROPERTIES,
+  flushAnalytics,
+  gotoWhenMeasuring,
+  seedFlags,
+} from '../support/fakeTelemetry';
 import { expectNoSeriousA11yViolations } from '../support/fixtures';
 
 const ANA = 'ana@ejemplo.mx';
@@ -32,8 +37,10 @@ const savedPrefs = (cloud: FakeSupabaseServer) => {
   return userId === undefined ? undefined : cloud.engagement.prefs.get(userId)?.prefs;
 };
 
-async function openReminders(page: Page) {
-  await page.goto(REMINDERS_PANEL);
+/** Abre Ajustes del repaso en Recordatorios. Con measuredBy espera a que la medición esté lista, para lo que debe medirse */
+async function openReminders(page: Page, measuredBy?: FakeSupabaseServer) {
+  if (measuredBy) await gotoWhenMeasuring(page, measuredBy, REMINDERS_PANEL);
+  else await page.goto(REMINDERS_PANEL);
   await expect(panel(page)).toBeVisible();
   await expect(section(page)).toBeVisible();
 }
@@ -270,7 +277,7 @@ test.describe('Recordatorios por correo', () => {
     await expect
       .poll(() => cloud.engagement.identities.get(cloud.userIdOf(ANA) ?? '')?.consent)
       .toBe(true);
-    await openReminders(page);
+    await openReminders(page, cloud);
     await section(page).getByRole('button', { name: text.frequencies.weekdays }).click();
     await section(page)
       .getByLabel(text.hour)

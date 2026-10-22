@@ -11,7 +11,7 @@
 // en el cliente, con su prueba.
 //
 // Todo es simulado y nunca se mezcla con datos reales
-import type { BrowserContext, Page, Request, Route } from '@playwright/test';
+import { expect, type BrowserContext, type Page, type Request, type Route } from '@playwright/test';
 import { FLAGS_KEY } from '@/config/featureFlags';
 import { FAKE_POSTHOG_HOST, FAKE_SENTRY_ORIGIN } from './fakeSupabaseConfig';
 
@@ -64,6 +64,31 @@ export async function flushAnalytics(page: Page): Promise<void> {
   await page.evaluate(() => {
     window.dispatchEvent(new Event('pagehide'));
   });
+}
+
+/**
+ * Abre una ruta y espera a que la medición esté lista antes de devolver el control a la prueba. Quien la use puede
+ * hacer enseguida algo que debe medirse. Hace falta porque cada page.goto es un documento nuevo: el guardián de la
+ * analítica (AnalyticsGate) se baja aparte, lee el permiso de la bitácora y solo entonces la analítica sabe que el
+ * alumno lo dio. Un evento que pasa antes se descarta por diseño, porque sin saber el permiso no se junta nada ni
+ * en memoria (1.1), y nunca llega a PostHog. Con la máquina cargada la prueba llegaba a ese evento antes que el
+ * guardián y contaba 0 para siempre. La señal de que el guardián ya sabe el permiso es que le pidió su
+ * identificador al servidor: lo hace en el mismo efecto que se lo pasa a la analítica. Solo sirve con el permiso
+ * prendido, la bandera puesta y la nube conectada. Sin permiso no hay llamada, y ahí no hay nada que esperar
+ */
+export async function gotoWhenMeasuring(
+  page: Page,
+  cloud: { rpcCalls(name: string): readonly unknown[] },
+  path: string,
+): Promise<void> {
+  const asked = cloud.rpcCalls('analytics_identity').length;
+  await page.goto(path);
+  await expect
+    .poll(() => cloud.rpcCalls('analytics_identity').length, {
+      message: 'El guardián de la analítica no le pidió su identificador al servidor',
+      timeout: 30_000,
+    })
+    .toBeGreaterThan(asked);
 }
 
 /** Junta las direcciones de todo lo que la página pide, para revisar qué archivos se bajaron y cuáles no */
