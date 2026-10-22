@@ -19,7 +19,7 @@
       "check": {
         "borrar_mis_datos_b12": true
       },
-      "note": "La misma Borrar mis datos v3 de la migración anterior, para pegarla a mano si el despliegue no puede con un delete. Quita los trabajos de IA y las generaciones de días anteriores y conserva lo de B11"
+      "note": "Borrar mis datos, para pegarla a mano si el despliegue no puede con un delete. Quita los trabajos de IA y las generaciones de días anteriores y conserva lo de B11. Con B15 trae la v4, igual a 20261029000004_delete_my_data_v4.sql, porque la herramienta exige que un archivo manual siga a la última migración que define la función. La migración anterior de este plan es la v3 y esta pieza la deja en la v4"
     }
   ],
   "functions": [

@@ -14,7 +14,7 @@ import { ErrorState, LoadingState } from '@/ui/states/states';
 import { useAccess } from '../accessState';
 import { useCloud } from '../cloudState';
 import { usePreferences } from '../preferences';
-import { screenPath } from '../screens';
+import { isPublicScreenPath, screenPath } from '../screens';
 
 const CompleteSignupCard = lazy(() =>
   import('@/features/access/CompleteSignupCard').then((module) => ({
@@ -56,7 +56,8 @@ export function AccessGate({ children }: { children: ReactNode }) {
   const signup = useAccess((store) => store.signup);
   const mfa = useAccess((store) => store.mfa);
   const recheck = useAccess((store) => store.recheck);
-  const legal = pathname === screenPath('privacyNotice') || pathname === screenPath('terms');
+  // El aviso, los términos y la baja de los recordatorios no se tapan (B15, isPublicScreenPath)
+  const legal = isPublicScreenPath(pathname);
   // La bienvenida tampoco se tapa. Ahí se escribe el código del correo y, al unirse la cuenta, lleva a
   // Inicio, donde se pide lo que falte. No muestra nada de la app
   const welcome = pathname === screenPath('onboarding');

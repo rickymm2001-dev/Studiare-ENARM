@@ -8,11 +8,11 @@
 // de los candados de Gratis, que dice Prueba 7 días gratis cuando B10 prende la bandera freeTrial y
 // Ver planes mientras tanto (respuesta 20).
 //
-// ANALÍTICA B15. Aquí se medirá el uso de Apuntes cuando llegue la analítica con permiso del bloque
-// B15 (respuesta 78). Solo conteos y claves, nunca el texto del alumno. Apunte creado, con su
-// plantilla y si es modo clase. Línea vuelta tarjeta con el botón, con su tipo. Mazo o tema cambiado.
-// Búsqueda hecha y resultado abierto. Salto desde el esquema. Tarjetas con IA propuestas, aceptadas,
-// editadas y descartadas. Vista previa de Gratis vista y su botón tocado.
+// Medición de uso (B15, 1.5). Solo con el permiso, con conteos y claves, nunca el texto del alumno
+//   - outline_created, en NewOutline.tsx, con la plantilla y si es modo clase
+//   - outline_line_to_card, en OutlineEditor.tsx, con el tipo de tarjeta de la línea
+//   - outline_search_used, en OutlinesList.tsx, con los resultados en rangos, cuando deja de teclear
+//   - paywall_viewed con outlines, en OutlinesLocked.tsx, cuando se ve la vista previa de Gratis
 import { Link, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';

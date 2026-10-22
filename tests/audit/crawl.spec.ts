@@ -9,6 +9,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
+import { presetTourOffer } from '../e2e/support/fixtures';
 
 const OUT_DIR =
   process.env.AUDIT_OUT ?? join(process.cwd(), 'docs', 'auditoria-2026-10-10', 'recorrido');
@@ -82,7 +83,9 @@ async function setupRole(page: Page, role: Role, mode: Mode) {
     await expect(generator.getByRole('status')).toHaveText(/Listo\./, { timeout: 240_000 });
     await enterRole(page, role);
   } else if (role === 'student') {
-    // Con una cuenta local, como la de un alumno nuevo
+    // Con una cuenta local, como la de un alumno nuevo. Sin el recorrido guiado de B15, que taparía lo que
+    // se audita
+    await presetTourOffer(page.context());
     await page.goto(SCREENS.onboarding.path);
     await page.getByLabel(t.onboarding.alias, { exact: true }).fill('Auditoria');
     await page.getByLabel(t.account.email, { exact: true }).fill('auditoria@ejemplo.mx');

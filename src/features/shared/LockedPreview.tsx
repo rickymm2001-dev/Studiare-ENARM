@@ -7,13 +7,27 @@
 // planes (lockedCta.ts, B10). Son avisos fijos, así que no se anuncian como un cambio en cada visita. LockedLoading ocupa su
 // lugar mientras se sabe el plan.
 import { Check, Lock } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Link } from 'react-router';
+import { track, type PAYWALL_FEATURES } from '@/data/analytics/catalog';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { useLockedCta } from './useLockedCta';
+
+/** Cuál candado de Gratis se ve, para medirlo (B15, 1.5). Los de la lista cerrada de la analítica */
+export type PaywallFeature = (typeof PAYWALL_FEATURES)[number];
+
+/**
+ * Mide que se ve un candado de Gratis, una vez cada vez que aparece. Solo dice cuál, y solo con el permiso
+ * Medición de uso. Sin feature, que es un candado que la lista no mide, no hace nada
+ */
+function usePaywallViewed(feature: PaywallFeature | undefined): void {
+  useEffect(() => {
+    if (feature !== undefined) track('paywall_viewed', { feature });
+  }, [feature]);
+}
 
 export function LockedPreview({
   id,
@@ -22,7 +36,10 @@ export function LockedPreview({
   points,
   kept = [],
   children,
+  feature,
 }: {
+  /** Qué candado es, para medir cuándo se ve (B15, 1.5) */
+  feature?: PaywallFeature;
   /** id del título, que da nombre a la región */
   id: string;
   title: string;
@@ -35,6 +52,7 @@ export function LockedPreview({
   children?: ReactNode;
 }) {
   const cta = useLockedCta();
+  usePaywallViewed(feature);
   return (
     <Card aria-labelledby={id} className="flex flex-col gap-3">
       <CardHeader>
@@ -66,8 +84,16 @@ export function LockedPreview({
 }
 
 /** El aviso corto de un candado, con una frase y el mismo botón */
-export function LockedNote({ children }: { children: ReactNode }) {
+export function LockedNote({
+  children,
+  feature,
+}: {
+  children: ReactNode;
+  /** Qué candado es, para medir cuándo se ve (B15, 1.5) */
+  feature?: PaywallFeature;
+}) {
   const cta = useLockedCta();
+  usePaywallViewed(feature);
   return (
     <div role="note" className="flex flex-wrap items-center gap-3 rounded-lg bg-muted p-3 text-sm">
       <Lock aria-hidden className="size-4 shrink-0 text-fg-muted" />

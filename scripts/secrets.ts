@@ -59,11 +59,33 @@ const STRIPE_SECRET_SHAPE = /\b[sr]k_(?:test|live)_[A-Za-z0-9]{20,}/;
  * real, así que sk-ant- de Anthropic y el prefijo solo no cuentan
  */
 const OPENAI_KEY_SHAPE = /\bsk-(?:(?:proj|svcacct|admin)-[A-Za-z0-9_-]{20,}|[A-Za-z0-9]{32,})/;
+/**
+ * Tokens de Sentry (B15, 2.3). El de organización para subir mapas de código empieza con sntrys_ y el de usuario
+ * con sntryu_. Son secretos de GitHub y nunca van al bundle. El DSN no es un token, es público por diseño y
+ * puede ir en el build
+ */
+const SENTRY_TOKEN_SHAPE = /\bsntry[su]_[A-Za-z0-9+/=_-]{20,}/;
+/**
+ * Llave personal de PostHog (B15, 1.4). Lee y borra datos, y la app no la usa nunca. La llave de proyecto
+ * (phc_) es pública por diseño y sí puede ir en el build, así que solo se busca la personal
+ */
+const POSTHOG_PERSONAL_SHAPE = /\bphx_[A-Za-z0-9]{20,}/;
+/** Llave de la API de Resend (B15, 3.5). Va en los secretos de las funciones, nunca en el cliente */
+const RESEND_KEY_SHAPE = /\bre_(?:[A-Za-z0-9]{6,}_[A-Za-z0-9]{16,}|[A-Za-z0-9]{32,})/;
+/**
+ * Credenciales de la API de Cloudflare (B17, 1.4 y 11.12). Las de ahora llevan un prefijo que identifica el tipo
+ * y 40 caracteres más una suma de verificación: cfk_ la llave global, cfut_ el token de usuario y cfat_ el de
+ * cuenta (documentación de Cloudflare sobre el formato de los tokens, 2026). El de Studiare es de cuenta, con un
+ * solo permiso de Pages, y vive solo en los secretos de GitHub. Los tokens anteriores a ese formato no tienen
+ * prefijo y no se pueden reconocer sin falsos positivos
+ */
+const CLOUDFLARE_TOKEN_SHAPE = /\bcf(?:k|ut|at)_[A-Za-z0-9]{40,}/;
 /** Un JWT. Encabezado y datos empiezan en eyJ porque son JSON en base64 */
 const JWT_SHAPE = /eyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/g;
 
 /**
- * Llaves de Supabase con permiso de servicio, llaves secretas de Stripe y llaves de OpenAI, dentro del contenido de un archivo. La llave pública
+ * Llaves de Supabase con permiso de servicio, llaves secretas de Stripe, llaves de OpenAI, tokens de Sentry y llaves
+ * personales de PostHog, de Resend o de Cloudflare, dentro del contenido de un archivo. La llave pública
  * anterior es un JWT con rol anon y puede ir en el build, así que solo se marcan los JWT con otro
  * rol, como service_role, que se saltan los permisos por fila. Devuelve la etiqueta de cada una
  */
@@ -72,6 +94,12 @@ export function findServiceKeys(content: string): string[] {
   if (SECRET_KEY_SHAPE.test(content)) labels.push('llave secreta de Supabase (sb_secret_)');
   if (STRIPE_SECRET_SHAPE.test(content)) labels.push('llave secreta de Stripe (sk_ o rk_)');
   if (OPENAI_KEY_SHAPE.test(content)) labels.push('llave de OpenAI (sk-)');
+  if (SENTRY_TOKEN_SHAPE.test(content)) labels.push('token de Sentry (sntrys_ o sntryu_)');
+  if (POSTHOG_PERSONAL_SHAPE.test(content)) labels.push('llave personal de PostHog (phx_)');
+  if (RESEND_KEY_SHAPE.test(content)) labels.push('llave de Resend (re_)');
+  if (CLOUDFLARE_TOKEN_SHAPE.test(content)) {
+    labels.push('token o llave de Cloudflare (cfat_, cfut_ o cfk_)');
+  }
   for (const match of content.matchAll(JWT_SHAPE)) {
     const role = jwtRole(match[0]);
     if (role !== null && role !== 'anon') labels.push(`llave JWT con rol ${role}`);

@@ -1,5 +1,7 @@
 import { Info } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
+import { useLocation } from 'react-router';
+import { screenKeyOfPath } from '@/features/tour/anchors';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { HeaderStats } from './HeaderStats';
@@ -33,9 +35,14 @@ export function ScreenHeader({
   const [showInfo, setShowInfo] = useState(false);
   const infoId = useId();
   const inBar = useInTopBar();
+  // La clave de la pantalla es el ancla del recorrido guiado (B15, 4.3). Sale de la ruta, así ninguna pantalla se toca
+  const screenKey = screenKeyOfPath(useLocation().pathname);
   return (
     <>
-      <header className={cn('flex flex-col gap-1.5', inBar ? TOP_BAR_SLOT : 'animate-rise')}>
+      <header
+        data-tour-screen={screenKey}
+        className={cn('flex flex-col gap-1.5', inBar ? TOP_BAR_SLOT : 'animate-rise')}
+      >
         <title>{t.app.documentTitle(documentTitle ?? title)}</title>
         {badges ? <div className="flex shrink-0 flex-wrap gap-2">{badges}</div> : null}
         <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3 lg:flex-1 lg:flex-nowrap">

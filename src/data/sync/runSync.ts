@@ -33,7 +33,11 @@ import { recordEventOnce } from '../usecases/recordEvent';
 import { reconcileProfile, touchesProfile } from './reconcileProfile';
 import { SyncTransportError, type SyncFailure, type SyncTransport } from './transport';
 
-type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
+/**
+ * recordEventQuiet guarda sin pasar por la analítica (B15, 1.6). Lo que baja de otros dispositivos entra por
+ * ahí, porque ya se midió donde pasó. Sin él, que solo pasa en pruebas, se usa recordEvent
+ */
+type Api = Pick<DataApi, 'repos' | 'recordEvent'> & Partial<Pick<DataApi, 'recordEventQuiet'>>;
 
 export interface SyncDeps {
   api: Api;
@@ -240,7 +244,10 @@ async function pullEvents(
           current = { ...current, profilePending: true };
           await deps.api.repos.syncState.put(current);
         }
-        await recordEventOnce(deps.api, event);
+        await recordEventOnce(
+          { repos: deps.api.repos, recordEvent: deps.api.recordEventQuiet ?? deps.api.recordEvent },
+          event,
+        );
         counts.eventsPulled += 1;
       }
     }

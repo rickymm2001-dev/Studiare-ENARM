@@ -2,6 +2,7 @@
 // Se integran en t desde es-MX.ts.
 import { deviceLimitText } from './device';
 import { causeNames, insightText } from './insights';
+import { landingText } from './landing';
 import { legalText } from './legal';
 
 export const branchNames: Record<string, string> = {
@@ -1278,81 +1279,7 @@ export const featureText = {
     assigned: (alias: string, added: number, removed: number) =>
       `Asignación de ${alias} guardada. ${added} nuevas y ${removed} retiradas.`,
   },
-  landing: {
-    documentTitle: 'Prepara el ENARM',
-    badge: 'Para médicos generales que van por su residencia',
-    title: 'Prepara el ENARM entendiendo cómo respondes',
-    subtitle:
-      'Repaso espaciado con FSRS, preguntas tipo ENARM y estadísticas que te dicen cómo lees, dónde te equivocas y qué trampa te atrapa. Con un toque de juego para que vuelvas cada día.',
-    cta: 'Crear cuenta gratis',
-    login: 'Ya tengo cuenta',
-    trust: 'Gratis para empezar. Sin tarjeta.',
-    featuresTitle: 'Lo que nos hace distintos',
-    features: {
-      technique: [
-        'Entrenador de técnica de examen',
-        'Medimos tu ritmo, tus cambios de respuesta, tu confianza y tu fatiga para enseñarte a contestar mejor, no solo a saber más.',
-      ],
-      fsrs: [
-        'Repaso que no se te olvida',
-        'FSRS, el algoritmo de repaso espaciado más preciso, decide qué repasar y cuándo. Tú ajustas qué tan seguido.',
-      ],
-      biases: [
-        'Sesgos en cada distractor',
-        'Cada opción incorrecta lleva el sesgo cognitivo que explota. Te decimos cuál te atrapa más y cómo evitarlo.',
-      ],
-      game: [
-        'Estudio que se juega',
-        'XP, niveles de R0 a Eminencia, rachas, retos de grupo y tablas semanales con tus amigos.',
-      ],
-      decks: [
-        'Tus mazos también cuentan',
-        'Usa los mazos precargados o sube los tuyos y entran al mismo repaso y a tus estadísticas.',
-      ],
-      physicians: [
-        'Contenido con médicos detrás',
-        'Todo texto médico pasa por revisión de médicos antes de llegar a ti.',
-      ],
-    },
-    personasTitle: 'Para tu forma de estudiar',
-    personas: [
-      ['Si estudias todo el día', 'Te decimos si tu esfuerzo rinde y cuándo te estás cansando.'],
-      ['Si estudias porque toca', 'Misiones cortas y una racha que no vas a querer romper.'],
-      [
-        'Si te va bien sin matarte',
-        'Duelos con tus amigos y preguntas que suben de nivel contigo.',
-      ],
-      ['Si estás de guardia', 'Sesiones de 5 minutos que funcionan sin conexión.'],
-      [
-        'Si vas por segunda vez',
-        'Evidencia de por qué fallaste y tu avance contra tu intento anterior.',
-      ],
-      [
-        'Si estudias en grupo',
-        'Grupos con tu generación, tabla semanal, retos y duelos para estudiar juntos.',
-      ],
-    ],
-    pricingTitle: 'Planes',
-    bestValue: 'Mejor precio',
-    founderBadge: 'Promoción Fundador',
-    startWith: (plan: string) => `Empezar con ${plan}`,
-    faqTitle: 'Preguntas frecuentes',
-    faq: [
-      [
-        '¿Me dicen qué puntaje voy a sacar?',
-        'No. Nadie puede predecir tu puntaje del ENARM con honestidad. Te mostramos tu dominio por rama y por subespecialidad y cómo mejorar tu técnica.',
-      ],
-      [
-        '¿Funciona en el teléfono?',
-        'Sí. Es una página web que funciona completa en el navegador y, si quieres, la instalas como app desde el navegador.',
-      ],
-      [
-        '¿Qué pasa con mis datos?',
-        'Tu correo y tus datos personales nunca viajan a la IA. Puedes exportarlos o borrarlos cuando quieras.',
-      ],
-    ],
-    finalTitle: 'Tu residencia empieza con el siguiente repaso',
-  },
+  landing: landingText,
   account: {
     email: 'Correo electrónico',
     emailHint:

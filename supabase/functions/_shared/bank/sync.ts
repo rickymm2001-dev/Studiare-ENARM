@@ -70,6 +70,8 @@ export interface BankSyncStore {
 export interface BankSyncEnv {
   /** Dirección de la app, para CORS de Sincronizar ahora */
   appUrl?: string | undefined;
+  /** APP_ORIGINS, más orígenes de la app para ese CORS mientras dura una mudanza de dominio (B17, 4.1) */
+  appOrigins?: string | undefined;
   /** GOOGLE_SA_KEY, la llave JSON de la cuenta de servicio. Nunca se registra */
   serviceAccountKey?: string | undefined;
   /** GOOGLE_BANK_SHEET_ID y GOOGLE_BANK_TEST_SHEET_ID */
@@ -183,8 +185,11 @@ function reply(body: unknown, status: number, headers: Record<string, string>): 
 
 /** La petición a bank-sync. 401 sin ficha ni sesión de admin, sin tocar Google */
 export async function handleBankSync(request: Request, deps: BankSyncDeps): Promise<Response> {
-  // El mismo CORS que las demás funciones (http.ts). Solo la dirección de la app
-  const headers = corsHeaders({ APP_URL: deps.env.appUrl }, request.headers.get('origin'));
+  // El mismo CORS que las demás funciones (http.ts). Solo la dirección de la app y las de APP_ORIGINS
+  const headers = corsHeaders(
+    { APP_URL: deps.env.appUrl, APP_ORIGINS: deps.env.appOrigins },
+    request.headers.get('origin'),
+  );
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
   if (request.method !== 'POST') return reply({ error: 'method' }, 405, headers);
 

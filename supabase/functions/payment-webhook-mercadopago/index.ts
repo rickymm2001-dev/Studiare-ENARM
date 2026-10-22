@@ -4,6 +4,13 @@
 // y se identifica con su firma:
 //   supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
 import { handleMercadoPagoWebhook } from '../_shared/mercadopago.ts';
-import { mercadoPagoWebhookDeps } from '../_shared/runtime.ts';
+import { withMonitoring } from '../_shared/monitoring.ts';
+import { mercadoPagoWebhookDeps, monitoringDeps } from '../_shared/runtime.ts';
 
-Deno.serve((request) => handleMercadoPagoWebhook(request, mercadoPagoWebhookDeps()));
+Deno.serve(
+  withMonitoring(
+    'payment-webhook-mercadopago',
+    (request) => handleMercadoPagoWebhook(request, mercadoPagoWebhookDeps()),
+    monitoringDeps,
+  ),
+);

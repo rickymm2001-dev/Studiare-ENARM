@@ -6,6 +6,8 @@
 import { createAnthropicClients } from '../_shared/ai/anthropic.ts';
 import { buildAiProxy, misconfigured, structuredLog } from '../_shared/ai/edge.ts';
 import { readAiProxyEnv } from '../_shared/ai/env.ts';
+import { withMonitoring } from '../_shared/monitoring.ts';
+import { monitoringDeps } from '../_shared/monitoringRuntime.ts';
 
 const log = structuredLog((line) => {
   console.error(line);
@@ -18,6 +20,9 @@ const parsed = readAiProxyEnv({
   SUPABASE_URL: Deno.env.get('SUPABASE_URL'),
   SUPABASE_ANON_KEY: Deno.env.get('SUPABASE_ANON_KEY'),
   SUPABASE_SERVICE_ROLE_KEY: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'),
+  // Las llaves nuevas de Supabase (B17, 4.2). Si existen, env.ts las prefiere a las dos de arriba
+  SUPABASE_PUBLISHABLE_KEYS: Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'),
+  SUPABASE_SECRET_KEYS: Deno.env.get('SUPABASE_SECRET_KEYS'),
 });
 
 let handler: (request: Request) => Response | Promise<Response>;
@@ -35,4 +40,6 @@ if (parsed.ok) {
   handler = misconfigured(parsed.problems, log);
 }
 
-Deno.serve(handler);
+// El aviso a Sentry lee SENTRY_DSN al avisar, no al cargar, y ese entorno lo lee monitoringRuntime.ts, que no carga
+// el resto de runtime.ts. Aquí solo se leen los nombres de 2.7
+Deno.serve(withMonitoring('ai-proxy', handler, monitoringDeps));

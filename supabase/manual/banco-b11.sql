@@ -5,14 +5,15 @@
 -- Con un token válido de Supabase no lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b11
 -- (docs/DESPLIEGUE.md).
 --
--- Con B12 trae la versión final de delete_my_data (v3), igual a la Sección con delete de
--- 20261026000004_ai_delete_my_data.sql y a supabase/manual/ia-b12.sql. La herramienta de despliegue
+-- Con B15 trae la versión final de delete_my_data (v4), igual a la Sección con delete de
+-- 20261029000004_delete_my_data_v4.sql y a supabase/manual/ia-b12.sql. La herramienta de despliegue
 -- exige que un archivo manual traiga cada función igual a la última migración que la define, así que
 -- este archivo sigue a esa migración. Parte de la versión de B11, que es la de la Sección con delete de
--- 20261023000005_deck_catalog.sql, y suma al final lo de la IA real. Quita los trabajos de IA y las
--- generaciones de días anteriores, que existen desde 20261026000001 y 20261026000002. Esos delete van
--- con execute y solo si la tabla existe (to_regclass), así que aplicar el plan b11 solo, sin el b12, deja
--- Borrar mis datos funcionando: cuenta cero en lo de la IA. Desplegar el b12 enseguida ya no es obligatorio
+-- 20261023000005_deck_catalog.sql, suma lo de la IA real (B12, v3) y al final lo de B15 (v4). Quita los
+-- trabajos de IA y las generaciones de días anteriores, que existen desde 20261026000001 y 20261026000002, y los
+-- recordatorios por correo, la foto de tarjetas vencidas y el ID de analítica de 20261029000001 y
+-- 20261029000002. Esos delete van con execute y solo si la tabla existe (to_regclass), así que aplicar el plan
+-- b11 solo, sin el b12 ni el b15, deja Borrar mis datos funcionando: cuenta cero en lo que falta
 --
 -- Borrar mis datos y la bitácora de lecturas (8.24). bank_reads es un dato del alumno y también el
 -- contador de su tope de Gratis. Borrar mis datos quita todas sus lecturas menos las del día de estudio
@@ -38,6 +39,10 @@ declare
   v_downloads bigint;
   v_jobs bigint := 0;
   v_generations bigint := 0;
+  v_reminders bigint := 0;
+  v_snapshots bigint := 0;
+  v_analytics bigint := 0;
+  v_pending bigint := 0;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -86,6 +91,31 @@ begin
     execute 'delete from public.ai_generations where user_id = $1 and day < public.ai_day()' using v_user;
     get diagnostics v_generations = row_count;
   end if;
+  -- Lo de B15. Como lo de la IA, solo si las tablas existen, para que no se rompa si falta una migración
+  -- Los recordatorios de repaso por correo, con su ficha de baja, y la foto de tarjetas vencidas
+  if to_regclass('public.review_reminder_prefs') is not null then
+    execute 'delete from public.review_reminder_prefs where user_id = $1' using v_user;
+    get diagnostics v_reminders = row_count;
+  end if;
+  if to_regclass('public.review_due_snapshots') is not null then
+    execute 'delete from public.review_due_snapshots where user_id = $1' using v_user;
+    get diagnostics v_snapshots = row_count;
+  end if;
+  -- Los recordatorios que seguían por mandarse. Los correos de cobro no, porque la cuenta y el plan se quedan
+  if to_regclass('public.email_outbox') is not null then
+    execute $q$delete from public.email_outbox
+      where recipient_user = $1 and kind = 'daily_review_reminder' and status in ('queued', 'failed')$q$ using v_user;
+    get diagnostics v_pending = row_count;
+  end if;
+  -- El ID seudónimo de la analítica con su permiso y los eventos de dinero que seguían en la cola. Quien
+  -- vuelva a dar el permiso empieza con un ID nuevo
+  if to_regclass('public.analytics_outbox') is not null then
+    execute 'delete from public.analytics_outbox where user_id = $1' using v_user;
+  end if;
+  if to_regclass('public.analytics_subjects') is not null then
+    execute 'delete from public.analytics_subjects where user_id = $1' using v_user;
+    get diagnostics v_analytics = row_count;
+  end if;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
@@ -99,7 +129,11 @@ begin
     'bank_reads', v_reads,
     'deck_downloads', v_downloads,
     'ai_jobs', v_jobs,
-    'ai_generations', v_generations
+    'ai_generations', v_generations,
+    'reminder_prefs', v_reminders,
+    'due_snapshots', v_snapshots,
+    'pending_reminders', v_pending,
+    'analytics_ids', v_analytics
   );
 end;
 $$;

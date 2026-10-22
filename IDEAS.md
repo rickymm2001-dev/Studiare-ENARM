@@ -86,8 +86,47 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Validar al escribir los ajustes del modelo.** Hoy zod y SQL difieren en tipo y rango de unos 15 campos de model_settings si alguien escribe a mano por la API. Lo correcto es una función que valide al escribir. Surgió en la revisión de B14
 - **Fijar las acciones de GitHub por hash.** Todos los workflows usan etiqueta (checkout, setup-node). Resolver el hash pide llamar a GitHub desde una sesión con red. Surgió en la revisión de B14
 
-- **Foro general por especialidad.** Temas y respuestas entre alumnos, con seudónimo, reportes y cola de moderación para el médico y el admin. Entra cuando haya 300 alumnos activos y después de los hilos por pregunta de V4-B7. Surgió en el plan V4 (D-137)
-- **Reprogramar con parámetros propios de FSRS.** Lo que FSRS Helper llama reschedule. Pide FSRS ajustado por alumno, que Ricardo dejó de fábrica (respuesta 90). Surgió en el plan V4 (D-137)
-- **Regex en Buscar tarjetas.** La sintaxis campo y valor de V4-B3 no la incluye. Surgió en el plan V4 (D-137)
-- **Tabla de posiciones abierta entre grupos de Party.** Hoy solo se planea una opcional y con seudónimo para simuladores completos. Surgió en el plan V4 (D-137)
-- **Quitar los plugins de la sesión que no se usan.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata no entran en V4. Es limpieza del menú de Ricardo, no del repo. Surgió en el plan V4 (D-137)
+- **Preferencias de correo por tipo.** Hoy solo el recordatorio se puede apagar y los de servicio no llevan baja. Surgió en el paquete A de B15
+- **Resumen semanal de progreso por correo.** Con el mismo canal y el mismo interruptor. Surgió en el paquete A de B15
+- **Compartir el tope de avisos a Sentry entre instancias.** Con un contador en la base. Surgió en el paquete A de B15
+- **Mostrar en Plataforma la tasa de saltados por motivo.** Baja, correo sin confirmar o vencido. Surgió en el paquete A de B15
+- **Lotes de Resend.** Si el ritmo de 20 correos por minuto se queda corto. Surgió en el paquete A de B15
+- **Medir duel_completed.** Agregando el resultado al evento de la bitácora, solo agregando. Surgió en el paquete B de B15
+- **Embudo en PostHog del registro al primer repaso y al primer pago.** Cuando existan la cuenta y la llave. Surgió en el paquete B de B15
+- **Alerta de Sentry por pico de errores en la misma pantalla.** Surgió en el paquete B de B15
+- **Ver qué se mide en Privacidad.** Un enlace al catálogo de eventos. Surgió en el paquete B de B15
+- **CI que verifique el DSN y la llave de PostHog.** Con una petición de prueba antes de publicar. Surgió en el paquete B de B15
+- **Derivar Medición de uso en el servidor desde consent_changed.** Solo vale con otro cambio que sincronice el retiro al instante. Surgió en la revisión de B15
+- **Volver a preguntar analytics_identity al volver la pestaña a primer plano.** Para enterarse pronto de un retiro hecho en otro dispositivo. Surgió en la revisión de B15
+- **Poda del inicial por textos por área, tailwind-merge y zod.** Si B17 pide más del margen. Surgió en la revisión de B15
+- **Que capture() quite sus estilos al terminar.** Hoy deja la barra estática y cualquier spec que siga usando la página la hereda. Surgió en la revisión de B15
+- **Más pasos del recorrido.** Tutor y Mazos, un botón Recordármelo después, un recorrido propio para el médico y medir en qué paso se salta más gente. Surgió en el paquete C de B15
+- **Bajar la memoria del lint.** Con B15 `eslint .` llega a unos 5.3 GB y a 4 GB se cortaba en el CI (heap out of memory). El script lint ya sube el límite a 6 GB, pero un repo privado corre en máquinas de 7 GB. Convendría partir el lint con tipos por carpeta o por tsconfig antes de pasar el repo a privado. Surgió en el PR de B15
+
+- **Botón Quedarme aquí en la página de mudanza.** Para cumplir WCAG 2.2.1, hoy hay una espera de 5 segundos con enlace visible. Surgió en el paquete A de B17
+- **actionlint en check.yml y revisión diaria de la prueba de humo.** `npm run smoke -- https://tudominio.mx --strict` una vez al día. Surgió en el paquete A de B17
+- **Migrar a Workers con archivos estáticos.** Cloudflare lo recomienda para proyectos nuevos y Pages sigue soportado. Surgió en el diseño de B17
+- **Dominio propio para Supabase, Turnstile, WAF, Cloudflare Web Analytics y proxy inverso de PostHog.** Ideas de la publicación. Surgió en el diseño de B17
+- **Registro de forma de llave al arrancar cada función.** Una línea con si tomó llave nueva o vieja, y que monitoring busque también sb_secret_ y sb_publishable_. Surgió en el paquete B de B17
+- **Leer expressWallets en checkout_context para cerrar ui wallet desde el servidor.** Hoy solo manda la bandera de la app, por decisión. Surgió en el paso 0 de B17
+- **Constante de cliente para ofrecer las billeteras solo a quien ya no tiene prueba.** Si la hoja de Apple Pay no acepta la prueba con total de hoy en 0. Surgió en el paquete C de B17
+- **Test clocks de Stripe y segundo dispositivo con el doble de Stripe.js.** Surgió en el paquete C de B17
+- **Script landing-check con JSON para validar el texto de la agencia.** Y sacar landingText de t para hacer lazy el cuerpo de la portada. Surgió en el paquete D de B17
+- **Cambiar capture.ts para esperar con toHaveCount(0).** Hoy espera con waitFor detached sobre un texto que suele estar en varios esqueletos y el catch se traga el error, así que capturas de otros bloques pudieron salir con esqueletos. Surgió en la integración de B17
+- **Separar los builds de build-policy.test.ts en otro archivo.** Su beforeAll ya tarda 720 segundos. Surgió en la integración de B17
+- **Cambiar el título Contenido con médicos detrás y las frases viejas de docs/ANALISIS_PLATAFORMA.md.** Surgió en la integración de B17
+- **Segunda encuesta a los 30 días con otro id.** La tabla y la pantalla ya lo soportan (el id viaja en la fila y en el ajuste). Haría falta una migración que sume el id a survey_answers_ok y a survey_setting, el texto de las preguntas y su entrada en surveys.ts. Surgió en B18
+- **Vista de tendencia por semana de registro en la tarjeta de la encuesta.** Solo con más de 20 respuestas. Surgió en B18
+- **Recordatorio por correo de la encuesta.** Solo si el recordatorio de repaso ya lo permite y con otro permiso aparte. Hoy se pide por chat, por el guion. Surgió en B18
+- **Botón que genere la liga de invitación con el correo ya puesto.** Además del mensaje copiable. Surgió en B18
+- **Módulo común para las reglas de comentario (correo y teléfono).** Para las pantallas que acepten texto libre. Surgió en B18
+- **Que el enlace Tu perfil del encabezado tenga un nombre accesible que contenga su texto visible.** La regla label-content-name-mismatch de axe lo marca y no es de B18. Surgió en los arreglos de B18
+- **Análisis por días de cuenta con una vista de bandas.** Por ejemplo 7 a 9, 10 a 13 y 14 o más, nunca por código, si algún día hace falta. Surgió en los arreglos de B18
+- **Quitar solo la entrada de la cuenta que sale al cerrar sesión.** Si se guarda el id de la nube donde signOut pueda leerlo, para no tocar a otra persona del mismo navegador. Surgió en los arreglos de B18
+- **Cubrir los caracteres de etiqueta (U+E0000) en el filtro del comentario.** Solo si alguna vez se ve que los usen. Surgió en los arreglos de B18
+
+- **Foro general por especialidad.** Temas y respuestas entre alumnos, con seudónimo, reportes y cola de moderación para el médico y el admin. Entra cuando haya 300 alumnos activos y después de los hilos por pregunta de V4-B7. Surgió en el plan V4 (D-140)
+- **Reprogramar con parámetros propios de FSRS.** Lo que FSRS Helper llama reschedule. Pide FSRS ajustado por alumno, que Ricardo dejó de fábrica (respuesta 90). Surgió en el plan V4 (D-140)
+- **Regex en Buscar tarjetas.** La sintaxis campo y valor de V4-B3 no la incluye. Surgió en el plan V4 (D-140)
+- **Tabla de posiciones abierta entre grupos de Party.** Hoy solo se planea una opcional y con seudónimo para simuladores completos. Surgió en el plan V4 (D-140)
+- **Quitar los plugins de la sesión que no se usan.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata no entran en V4. Es limpieza del menú de Ricardo, no del repo. Surgió en el plan V4 (D-140)

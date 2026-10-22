@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { applySiteMetadata } from '../../scripts/site-files.ts';
 import { BRAND } from './brand';
 
 const root = new URL('../../', import.meta.url);
@@ -27,7 +28,10 @@ describe('marca Studiare (D-119, respuesta 54)', () => {
   });
 
   it('index.html dice lo mismo que la marca, para Google y WhatsApp (4.17 del plan)', () => {
-    const html = read('index.html');
+    // El título y la descripción salen de BRAND por los marcadores %BRAND_TITLE% y %BRAND_DESCRIPTION%, que
+    // reemplaza vite.config.ts con esta misma función (B17, 2.6). Aquí se revisa el resultado
+    const html = applySiteMetadata(read('index.html'), { site: undefined, base: '/' });
+    expect(html).not.toContain('%BRAND_');
     expect(html).toContain(`<title>${BRAND.name}</title>`);
     expect(html).toContain(`<meta name="theme-color" content="${BRAND.themeColor}" />`);
     expect(html).toContain(`content="${BRAND.description}"`);

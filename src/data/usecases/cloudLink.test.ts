@@ -51,9 +51,9 @@ describe('configuración de la nube (D-075)', () => {
     expect(
       readCloudConfig({
         VITE_SUPABASE_URL: url,
-        VITE_SUPABASE_ANON_KEY: 'sb_publishable_abcdefghijklmnop',
+        VITE_SUPABASE_ANON_KEY: 'sb_publishable_' + 'abcdefghijklmnop',
       }),
-    ).toEqual({ url, publicKey: 'sb_publishable_abcdefghijklmnop' });
+    ).toEqual({ url, publicKey: 'sb_publishable_' + 'abcdefghijklmnop' });
   });
 
   it('sin variables, con URL extraña o con llave secreta no hay nube', () => {
@@ -67,7 +67,7 @@ describe('configuración de la nube (D-075)', () => {
     expect(
       readCloudConfig({
         VITE_SUPABASE_URL: url,
-        VITE_SUPABASE_ANON_KEY: 'sb_secret_abcdefghijklmnopqrst',
+        VITE_SUPABASE_ANON_KEY: 'sb_secret_' + 'abcdefghijklmnopqrst',
       }),
     ).toBeNull();
   });
@@ -101,7 +101,7 @@ describe('llaves de servicio en el navegador (D-075)', () => {
   });
 
   it('un texto que no es JWT o que no se puede leer no cambia lo que ya se aceptaba', () => {
-    expect(jwtRole('sb_publishable_abcdefghijklmnop')).toBeNull();
+    expect(jwtRole('sb_publishable_' + 'abcdefghijklmnop')).toBeNull();
     expect(jwtRole('a.b.c')).toBeNull();
     expect(jwtRole('')).toBeNull();
     expect(jwtRole(`${jwt('anon').split('.')[0]}.%%%.firma`)).toBeNull();
@@ -723,6 +723,7 @@ describe('el registro con Google y lo que pide el registro (B9)', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
     // Si el perfil ya existía, lo pendiente no lo cambia
     const again = await linkCloudIdentity(api, google, { ...pending, alias: 'Otro' });
@@ -857,6 +858,7 @@ describe('Completa tu registro se decide por datos y no por proveedor (B9)', () 
       party: false,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
     // No son decisiones del alumno, así que no dejan evento. Si lo dejaran, valdrían más que lo que ya
     // decidió en otro dispositivo y lo apagarían en todos (B14, 2.2)

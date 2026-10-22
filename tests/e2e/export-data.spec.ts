@@ -54,6 +54,7 @@ test('descarga un JSON v2 con los datos del alumno que lo pide y nada del otro p
     'ai_analysis',
     'anonymized_improvement',
     'party',
+    'product_analytics',
   ]);
   expect(data.consents.every((consent) => consent.userId === data.user.id)).toBe(true);
   expect(data.events.length).toBeGreaterThan(0);

@@ -85,3 +85,24 @@ test('después de la primera carga abre sin conexión', async ({ page, context }
   await expect(page.getByText(t.offlineBanner)).toBeVisible();
   await context.setOffline(false);
 });
+
+// El service worker contesta con la aplicación cualquier navegación que no esté en su lista de exclusión. Abrir a
+// mano /robots.txt (o /sitemap.xml, o /.well-known/security.txt) con la app instalada debe dar el archivo
+test('con el service worker controlando la página, robots.txt se abre como archivo y no como la aplicación', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await expect
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
+    .toBe(true);
+
+  const response = await page.goto('/robots.txt');
+  expect(response?.status()).toBe(200);
+  expect(response?.headers()['content-type']).toContain('text/plain');
+  expect(await response?.text()).toMatch(/^User-agent: \*/);
+  await expect(page.locator('#root')).toHaveCount(0);
+});

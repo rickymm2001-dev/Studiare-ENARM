@@ -1,13 +1,25 @@
 import 'fake-indexeddb/auto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it } from 'vitest';
+import {
+  resetAnalytics,
+  setAnalyticsConsent,
+  setAnalyticsSink,
+  type AnalyticsRecord,
+} from '../analytics/catalog';
 import { newId, testApi } from '../testing/fixtures';
 import { cancelMercadoPagoSubscription } from './cancel';
 import {
   checkoutRequestFor,
   isAllowedCheckoutUrl,
+  measuredMethodOf,
   startCheckout,
+  trackCheckoutStarted,
+  walletCheckoutRequestFor,
+  type CheckoutFailureResult,
   type CheckoutRequest,
+  type HostedCheckoutResult,
+  type WalletCheckoutResult,
 } from './checkout';
 import { isAllowedPortalUrl, openBillingPortal } from './portal';
 import {
@@ -302,6 +314,188 @@ describe('iniciar el pago', () => {
       },
     });
     expect(await startCheckout(throwing.cloud, CARD)).toEqual({ ok: false, reason: 'failed' });
+  });
+});
+
+describe('contrato de las billeteras (B17, 9.6)', () => {
+  const CARD: CheckoutRequest = {
+    plan: 'monthly',
+    provider: 'stripe',
+    mode: 'subscription',
+    expectTrial: false,
+  };
+
+  it('sin ui el resultado es siempre el hospedado, que no trae kind ni clientSecret', async () => {
+    const { cloud } = fakeCloud({
+      invoke: { data: { url: 'https://checkout.stripe.com/c/pay/cs_1', trial: false } },
+    });
+    // Si el tipo de retorno trajera la variante wallet, result.url no compilaría
+    const result: HostedCheckoutResult | CheckoutFailureResult = await startCheckout(cloud, CARD);
+    expect(result).toEqual({
+      ok: true,
+      url: 'https://checkout.stripe.com/c/pay/cs_1',
+      trial: false,
+    });
+    expect(result.ok && result.kind).toBeUndefined();
+    const hosted = await startCheckout(cloud, { ...CARD, ui: 'hosted' });
+    if (hosted.ok) expect(hosted.url).toBe('https://checkout.stripe.com/c/pay/cs_1');
+  });
+
+  it('con ui wallet manda ui, valida { clientSecret, trial } y devuelve la variante wallet sin tocar la dirección', async () => {
+    const { cloud, calls } = fakeCloud({
+      invoke: { data: { clientSecret: 'cs_test_a1b2c3_secret_d4e5f6', trial: true } },
+    });
+    const result: WalletCheckoutResult | CheckoutFailureResult = await startCheckout(
+      cloud,
+      walletCheckoutRequestFor('founder', true),
+    );
+    expect(result).toEqual({
+      ok: true,
+      kind: 'wallet',
+      clientSecret: 'cs_test_a1b2c3_secret_d4e5f6',
+      trial: true,
+    });
+    expect(calls.invoke).toEqual([
+      [
+        'create-checkout',
+        {
+          body: {
+            plan: 'founder',
+            provider: 'stripe',
+            mode: 'subscription',
+            expectTrial: true,
+            ui: 'wallet',
+          },
+        },
+      ],
+    ]);
+    // La pantalla de pago hospedada nunca manda ui
+    const hosted = fakeCloud({
+      invoke: { data: { url: 'https://checkout.stripe.com/c/pay/cs_1' } },
+    });
+    await startCheckout(hosted.cloud, { ...CARD, ui: 'hosted' });
+    expect(hosted.calls.invoke[0]?.[1]).toEqual({
+      body: { plan: 'monthly', provider: 'stripe', mode: 'subscription', expectTrial: false },
+    });
+  });
+
+  it('la respuesta wallet que no tiene la forma pedida es un fallo, también si trae una dirección', async () => {
+    for (const data of [
+      {},
+      null,
+      { trial: true },
+      { clientSecret: 'cs_test_a1b2c3_secret_d4e5f6' },
+      { clientSecret: 'cs_test_a1b2c3_secret_d4e5f6', trial: 'si' },
+      { clientSecret: '', trial: true },
+      { clientSecret: 'pi_123_secret_456', trial: true },
+      { clientSecret: 'cs_con espacio', trial: true },
+      { clientSecret: 'cs_corto', trial: true },
+      { url: 'https://checkout.stripe.com/c/pay/cs_1', trial: true },
+    ]) {
+      const { cloud } = fakeCloud({ invoke: { data } });
+      expect(await startCheckout(cloud, { ...CARD, ui: 'wallet' }), JSON.stringify(data)).toEqual({
+        ok: false,
+        reason: 'failed',
+      });
+    }
+  });
+
+  it('con ui wallet traduce los errores como el pago hospedado y nunca lanza', async () => {
+    const wallet = { ...CARD, ui: 'wallet' } as const;
+    const reply = (body: unknown, status: number) =>
+      startCheckout(fakeCloud({ invoke: withBody(body, status) }).cloud, wallet);
+    expect(await reply({ error: 'trial_mismatch', trialAvailable: false }, 409)).toEqual({
+      ok: false,
+      reason: 'trial_mismatch',
+      trialAvailable: false,
+    });
+    expect(await reply({ error: 'already_subscribed' }, 409)).toEqual({
+      ok: false,
+      reason: 'already_subscribed',
+    });
+    expect(await reply({ error: 'founder_full' }, 409)).toEqual({
+      ok: false,
+      reason: 'founder_full',
+    });
+    expect(await reply({ error: 'not_configured' }, 503)).toEqual({
+      ok: false,
+      reason: 'not_configured',
+    });
+    expect(await reply({ error: 'provider' }, 502)).toEqual({ ok: false, reason: 'failed' });
+    const throwing = fakeCloud({
+      invoke: () => {
+        throw new Error('boom');
+      },
+    });
+    expect(await startCheckout(throwing.cloud, wallet)).toEqual({ ok: false, reason: 'failed' });
+  });
+
+  it('walletCheckoutRequestFor es la tarjeta con Stripe de siempre, con el plan Fundador y la prueba', () => {
+    expect(walletCheckoutRequestFor('founder_annual', true)).toEqual({
+      plan: 'founder_annual',
+      provider: 'stripe',
+      mode: 'subscription',
+      expectTrial: true,
+      ui: 'wallet',
+    });
+    expect(walletCheckoutRequestFor('monthly', false)).toEqual({
+      ...checkoutRequestFor('card', 'monthly', false),
+      ui: 'wallet',
+    });
+  });
+});
+
+describe('medir el botón de pagar (B15, 1.5)', () => {
+  afterEach(() => {
+    resetAnalytics();
+  });
+  const watch = () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    return seen;
+  };
+  const failing = () => fakeCloud({ invoke: { error: new Error('red') } }).cloud;
+
+  it('con permiso manda el plan, la forma de pago y si llevaba prueba, y nada más', async () => {
+    const seen = watch();
+    setAnalyticsConsent(true);
+    await startCheckout(failing(), checkoutRequestFor('card', 'founder', true));
+    await startCheckout(failing(), checkoutRequestFor('oxxo', 'annual', false));
+    await startCheckout(failing(), checkoutRequestFor('mercadopago_pass', 'monthly', false));
+    expect(seen.map((record) => [record.event, record.properties])).toEqual([
+      ['checkout_started', { plan: 'founder', method: 'card', with_trial: true }],
+      ['checkout_started', { plan: 'annual', method: 'oxxo', with_trial: false }],
+      ['checkout_started', { plan: 'monthly', method: 'mercadopago', with_trial: false }],
+    ]);
+  });
+
+  it('pedir la sesión de las billeteras no mide nada, y tocar la billetera sí, como tarjeta', async () => {
+    const seen = watch();
+    setAnalyticsConsent(true);
+    await startCheckout(failing(), walletCheckoutRequestFor('monthly', true));
+    expect(seen).toEqual([]);
+    trackCheckoutStarted(walletCheckoutRequestFor('founder', true));
+    expect(seen.map((record) => [record.event, record.properties])).toEqual([
+      ['checkout_started', { plan: 'founder', method: 'card', with_trial: true }],
+    ]);
+  });
+
+  it('sin permiso, o sin saber si lo hay, no manda nada y el pago sigue igual', async () => {
+    const seen = watch();
+    await startCheckout(failing(), checkoutRequestFor('card', 'monthly', true));
+    setAnalyticsConsent(false);
+    expect(await startCheckout(failing(), checkoutRequestFor('spei', 'monthly', false))).toEqual({
+      ok: false,
+      reason: 'failed',
+    });
+    expect(seen).toEqual([]);
+  });
+
+  it('cada forma de pago se mide con las cuatro de la lista', () => {
+    const options = ['card', 'oxxo', 'spei', 'mercadopago', 'mercadopago_pass'] as const;
+    expect(
+      options.map((option) => measuredMethodOf(checkoutRequestFor(option, 'founder', true))),
+    ).toEqual(['card', 'oxxo', 'spei', 'mercadopago', 'mercadopago']);
   });
 });
 

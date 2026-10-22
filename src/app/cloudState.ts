@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import type { CloudIdentity } from '@/data/cloud/account';
 import { cloudConfigured, getCloud } from '@/data/cloud/client';
 import type { DataApi } from '@/data/context';
-import { pushLocalAccount } from '@/data/usecases/cloudLink';
 
 /**
  * Por qué la app cerró la sesión sin que el alumno lo pidiera. other_device, ganó otro dispositivo.
@@ -42,5 +41,8 @@ export async function pushAccountIfLinked(api: Pick<DataApi, 'repos'>, userId: s
   const state = useCloud.getState().state;
   const cloud = getCloud();
   if (!cloud || state.status !== 'linked') return;
+  // El enlace con la nube (cuenta, avatar y detalles) pesa unos KB y solo se usa aquí, con la nube conectada, así
+  // que se baja al usarse y no cuenta en el JavaScript inicial (14.4)
+  const { pushLocalAccount } = await import('@/data/usecases/cloudLink');
   await pushLocalAccount(api, cloud, state.identity.authId, userId);
 }

@@ -6,7 +6,6 @@ import { FileText } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
-import { recordPrivacyAcceptance } from '@/data/cloud/account';
 import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -38,8 +37,11 @@ export function NoticeUpdateNotice({ className = '' }: { className?: string }) {
       // Con la cuenta de la nube conectada, también queda la aceptación allá
       if (cloudState.status === 'linked') {
         const cloud = await loadCloud();
-        if (cloud)
+        if (cloud) {
+          // Se baja al aceptar, porque la cuenta de la nube no hace falta para abrir la app (14.4)
+          const { recordPrivacyAcceptance } = await import('@/data/cloud/account');
           await recordPrivacyAcceptance(cloud, cloudState.identity.authId, PRIVACY_NOTICE_VERSION);
+        }
       }
       setStatus('idle');
       setAccepted((value) => value + 1);

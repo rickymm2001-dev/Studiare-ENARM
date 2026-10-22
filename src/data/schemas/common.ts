@@ -140,7 +140,16 @@ export const AiArtifactKindSchema = z.enum([
   'restructured_question',
 ]);
 
-export const ConsentPurposeSchema = z.enum(['party', 'ai_analysis', 'anonymized_improvement']);
+/**
+ * Los permisos por finalidad. Los cuatro empiezan apagados (PC 4.27). product_analytics es Medición de uso
+ * (B15, 1.2), que deja medir con PostHog qué partes de la app se usan, con un identificador seudónimo
+ */
+export const ConsentPurposeSchema = z.enum([
+  'party',
+  'ai_analysis',
+  'anonymized_improvement',
+  'product_analytics',
+]);
 
 /** Modos de muestreo de opciones (7.8) */
 export const SamplingModeSchema = z.enum(['canonical', 'diverse', 'targeted', 'stratified']);

@@ -3,6 +3,13 @@
 // Supabase, y además comprueba el token por su cuenta para saber de quién es la suscripción:
 //   supabase functions deploy cancel-subscription
 import { handleCancelSubscription } from '../_shared/mercadopago.ts';
-import { cancelSubscriptionDeps } from '../_shared/runtime.ts';
+import { withMonitoring } from '../_shared/monitoring.ts';
+import { cancelSubscriptionDeps, monitoringDeps } from '../_shared/runtime.ts';
 
-Deno.serve((request) => handleCancelSubscription(request, cancelSubscriptionDeps()));
+Deno.serve(
+  withMonitoring(
+    'cancel-subscription',
+    (request) => handleCancelSubscription(request, cancelSubscriptionDeps()),
+    monitoringDeps,
+  ),
+);

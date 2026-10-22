@@ -3,6 +3,8 @@
 // vuelca el cuerpo de una respuesta con error, que podría traer datos de la petición. Solo se lee
 // su código de Postgres, como 42501 para el dispositivo que ya no es el activo.
 
+import { serviceHeaders } from '../keys.ts';
+
 /** Llama a una función de Postgres y devuelve su resultado. Falla con RestError si contesta con error */
 export type Rpc = (name: string, args: Record<string, unknown>) => Promise<unknown>;
 
@@ -37,19 +39,24 @@ async function codeOf(response: Response): Promise<string | null> {
   }
 }
 
-/** Llama a una función con la llave dada y, si no se dice otra cosa, ella misma como token */
+/**
+ * Llama a una función con la llave dada. Con bearer, ese token de sesión va como authorization y la llave solo
+ * en apikey (ai_whoami). Sin él, la llave se manda como pide su forma (keys.ts), y la nueva sb_secret_ nunca
+ * va como Bearer
+ */
 export async function callRpc(
   target: RestTarget,
   name: string,
   args: Record<string, unknown>,
-  bearer: string = target.apiKey,
+  bearer?: string,
 ): Promise<unknown> {
   const fetchImpl = target.fetchImpl ?? fetch;
   const response = await fetchImpl(`${target.url}/rest/v1/rpc/${name}`, {
     method: 'POST',
     headers: {
-      apikey: target.apiKey,
-      authorization: `Bearer ${bearer}`,
+      ...(bearer === undefined
+        ? serviceHeaders(target.apiKey)
+        : { apikey: target.apiKey, authorization: `Bearer ${bearer}` }),
       'content-type': 'application/json',
       accept: 'application/json',
     },

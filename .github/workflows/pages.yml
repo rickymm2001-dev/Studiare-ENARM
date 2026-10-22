@@ -1,5 +1,12 @@
 # Publica la app en GitHub Pages en cada push a main (D-055).
 # La demo publicada corre con la IA en modo simulado. No usa secretos y la clave nunca llega aquí.
+#
+# Mudanza a Cloudflare (B17, 3 del plan de B17). Con la variable de GitHub PAGES_MOVED_TO (por ejemplo
+# https://tudominio.mx) este flujo deja de construir la app y publica un sitio chico que solo dice a dónde se
+# mudó Studiare, lleva a la persona allá con la misma ruta y quita el service worker viejo
+# (scripts/deploy/moved-site.ts). Sin la variable todo queda como siempre. Catorce días antes, las variables
+# VITE_MOVED_TO y VITE_MOVED_ON ponen un aviso con la fecha dentro de la demo. Los pasos están en
+# docs/PUBLICACION.md. Este flujo se borra 30 días después de la mudanza
 name: pages
 
 on:
@@ -29,9 +36,19 @@ jobs:
           cache: npm
       - id: pages
         uses: actions/configure-pages@v6
+      # El sitio de mudanza. Es puro Node, no necesita npm ci. La dirección nueva y la ruta de la demo pasan por
+      # variables de entorno y el programa las valida antes de escribir nada
+      - name: Construir el sitio de mudanza
+        if: vars.PAGES_MOVED_TO != ''
+        run: node scripts/deploy/moved-site.ts --to "$MOVED_TO" --base "$BASE_PATH" --out dist
+        env:
+          MOVED_TO: ${{ vars.PAGES_MOVED_TO }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
       - run: npm ci
+        if: vars.PAGES_MOVED_TO == ''
       # base_path es /Studiare-ENARM sin dominio propio y vacío con dominio propio
       - run: npm run build
+        if: vars.PAGES_MOVED_TO == ''
         env:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
           # Dirección pública completa, para que la imagen de compartir lleve URL absoluta
@@ -52,8 +69,28 @@ jobs:
           VITE_PRIVACY_EMAIL: ${{ vars.VITE_PRIVACY_EMAIL }}
           # Correo de ayuda que ve el alumno en los avisos. Es público. Si falta, la app no muestra enlace
           VITE_SUPPORT_EMAIL: ${{ vars.VITE_SUPPORT_EMAIL }}
-      # GitHub Pages responde 404.html a cualquier ruta que no existe. Así abren bien los enlaces directos como /perfil
+          # Medición de uso y avisos de errores del navegador (B15, PENDIENTES B15.4 y B15.9). La llave de proyecto
+          # de PostHog (phc_), su dirección de captura y el DSN de Sentry son públicos por diseño. Si faltan, la
+          # app no mide ni avisa nada. En esta demo las banderas productAnalytics y errorMonitoring nacen apagadas
+          # (src/config/featureFlags.ts), así que aquí solo abren la política de seguridad. Se prenden con el build
+          # de producción (B17), que debe pasar estas mismas variables
+          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          # Aviso de la mudanza (B17, 3.4). Solo se ponen catorce días antes y dejan un aviso con la fecha en la demo.
+          # Sin las dos el build no trae el aviso. Son públicas por diseño
+          VITE_MOVED_TO: ${{ vars.VITE_MOVED_TO }}
+          VITE_MOVED_ON: ${{ vars.VITE_MOVED_ON }}
+          # Mapas de código para Sentry (PENDIENTES B15.11, scripts/sentry-build.ts). Sin los tres el build sale sin
+          # mapas, como siempre. El token es un secreto de GitHub y no empieza con VITE_, así que nunca llega al
+          # bundle. Los mapas se borran de dist después de subirlos, porque la demo es pública
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+      # GitHub Pages responde 404.html a cualquier ruta que no existe. Así abren bien los enlaces directos como /perfil.
+      # El sitio de mudanza ya trae su propio 404.html
       - run: cp dist/index.html dist/404.html
+        if: vars.PAGES_MOVED_TO == ''
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

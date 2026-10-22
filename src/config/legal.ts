@@ -14,9 +14,12 @@ import { parsePublicEmail, readSupportEmail } from './support.ts';
  * anterior ve el aviso de que cambió (NoticeUpdateNotice). El orden de las que hubo es 2026-10-14,
  * 2026-10-14b (B9), 2026-10-15 (el primer borrador de B16, ya publicado en main) y 2026-10-15b, el
  * texto de B16 que lo reemplaza. Se dejó con letra, y no con 2026-10-16, para que quien aceptó el
- * primer borrador lo vuelva a aceptar sin saltar de día
+ * primer borrador lo vuelva a aceptar sin saltar de día. Después viene 2026-10-21, el de B15, que suma el
+ * permiso Medición de uso, a PostHog, a Sentry y a los recordatorios por correo, y 2026-10-22, el de B17, que
+ * nombra a Cloudflare, a GitHub como quien aloja la página y al componente de Stripe de Apple Pay y Google Pay, y
+ * 2026-10-22b, el de B18, segunda versión del mismo día, que suma la encuesta de los primeros días
  */
-export const PRIVACY_NOTICE_VERSION = '2026-10-15b';
+export const PRIVACY_NOTICE_VERSION = '2026-10-22b';
 
 export interface LegalIdentity {
   /** Razón social del responsable */

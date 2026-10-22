@@ -6,7 +6,10 @@
 //   APP_ORIGINS          orígenes de la app para CORS, separados por comas (solo ai-proxy)
 //   AI_ALLOW_MOCK        1 mientras no existe la clave. Respuestas fijas con su etiqueta
 //   AI_TICK_DEADLINE_MS  plazo interno del ciclo de lotes (solo ai-batch, 100 s por omisión)
-//   SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY, que pone Supabase
+//   SUPABASE_URL y las llaves, que pone Supabase. Las nuevas (SUPABASE_SECRET_KEYS y SUPABASE_PUBLISHABLE_KEYS,
+//                        JSON con la llave default) si existen y, si no, las de siempre (SUPABASE_SERVICE_ROLE_KEY y
+//                        SUPABASE_ANON_KEY). Eligen y se validan en _shared/keys.ts (B17, 4.2)
+import { keyLevel, resolveSupabaseKeys } from '../keys.ts';
 import { parseOrigins } from './cors.ts';
 
 /** Los nombres que leen las funciones de IA. Ninguno más (prueba de arquitectura, 7.6) */
@@ -17,6 +20,8 @@ export const AI_PROXY_ENV_NAMES = [
   'SUPABASE_URL',
   'SUPABASE_ANON_KEY',
   'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_PUBLISHABLE_KEYS',
+  'SUPABASE_SECRET_KEYS',
 ] as const;
 export const AI_BATCH_ENV_NAMES = [
   'ENARM_ANTHROPIC_KEY',
@@ -25,6 +30,8 @@ export const AI_BATCH_ENV_NAMES = [
   'SUPABASE_URL',
   'SUPABASE_ANON_KEY',
   'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_PUBLISHABLE_KEYS',
+  'SUPABASE_SECRET_KEYS',
 ] as const;
 
 export type AiProxyEnvSource = Readonly<
@@ -56,19 +63,6 @@ export type EnvResult<T> = { ok: true; env: T } | { ok: false; problems: string[
 const SUPABASE_URL = /^https:\/\/[a-z0-9-]+\.supabase\.co$/;
 export const DEFAULT_TICK_DEADLINE_MS = 100_000;
 
-/** El rol de una llave JWT anterior de Supabase, o null si no es un JWT */
-function jwtRole(key: string): string | null {
-  const payload = key.split('.')[1];
-  if (key.split('.').length !== 3 || !payload) return null;
-  try {
-    const text = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-    const role = (JSON.parse(text) as { role?: unknown }).role;
-    return typeof role === 'string' ? role : null;
-  } catch {
-    return null;
-  }
-}
-
 function readSupabase(
   source: Readonly<Record<string, string | undefined>>,
   problems: string[],
@@ -78,20 +72,25 @@ function readSupabase(
   if (!SUPABASE_URL.test(supabaseUrl)) {
     problems.push('SUPABASE_URL debe ser la dirección del proyecto, como https://abc.supabase.co');
   }
-  const anonKey = get('SUPABASE_ANON_KEY');
-  if (anonKey.length < 20) problems.push('Falta SUPABASE_ANON_KEY, la llave pública del proyecto');
-  else if (anonKey.startsWith('sb_secret_') || jwtRole(anonKey) === 'service_role') {
-    problems.push('SUPABASE_ANON_KEY trae una llave secreta. Va la llave pública');
+  // Las nuevas si Supabase las pone y, si no, las de siempre. Aquí solo se revisa que no estén cruzadas
+  const { anonKey, serviceKey } = resolveSupabaseKeys(source);
+  if (anonKey.length < 20) {
+    problems.push(
+      'Falta la llave pública de Supabase (SUPABASE_PUBLISHABLE_KEYS o SUPABASE_ANON_KEY)',
+    );
+  } else if (keyLevel(anonKey) === 'service') {
+    problems.push(
+      'La llave pública de Supabase (SUPABASE_PUBLISHABLE_KEYS o SUPABASE_ANON_KEY) trae una llave secreta. Va la llave pública',
+    );
   }
-  const serviceKey = get('SUPABASE_SERVICE_ROLE_KEY');
   if (serviceKey.length < 20) {
-    problems.push('Falta SUPABASE_SERVICE_ROLE_KEY, la llave de servicio del proyecto');
-  } else if (
-    serviceKey === anonKey ||
-    serviceKey.startsWith('sb_publishable_') ||
-    jwtRole(serviceKey) === 'anon'
-  ) {
-    problems.push('SUPABASE_SERVICE_ROLE_KEY trae la llave pública. Falta la de servicio');
+    problems.push(
+      'Falta la llave de servicio de Supabase (SUPABASE_SECRET_KEYS o SUPABASE_SERVICE_ROLE_KEY)',
+    );
+  } else if (serviceKey === anonKey || keyLevel(serviceKey) === 'public') {
+    problems.push(
+      'La llave de servicio de Supabase (SUPABASE_SECRET_KEYS o SUPABASE_SERVICE_ROLE_KEY) trae la llave pública. Falta la de servicio',
+    );
   }
   const key = get('ENARM_ANTHROPIC_KEY');
   return {

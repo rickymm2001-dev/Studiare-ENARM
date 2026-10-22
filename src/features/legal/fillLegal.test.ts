@@ -154,10 +154,13 @@ describe('textos legales', () => {
   });
 
   it('aviso y términos llevan su versión y la fecha de B16 a la vista', () => {
-    // El aviso lleva la versión que acepta el alumno, 2026-10-15b, del mismo día que el primer borrador
-    expect(legalDocs.privacy.version).toBe('2026-10-15b');
+    // El aviso lleva la versión que acepta el alumno, la de B18 (2026-10-22b), que suma la encuesta de los primeros
+    // días a la de B17 (2026-10-22), que nombra a Cloudflare, a GitHub y al componente de Stripe, sobre la de B15
+    // (2026-10-21) con Medición de uso. Los términos siguen en la de B16
+    expect(legalDocs.privacy.version).toBe('2026-10-22b');
     expect(legalDocs.terms.version).toBe('2026-10-15');
-    for (const doc of docs) expect(doc.updated).toBe('15 de octubre de 2026');
+    expect(legalDocs.privacy.updated).toBe('22 de octubre de 2026');
+    expect(legalDocs.terms.updated).toBe('15 de octubre de 2026');
   });
 
   it('las versiones se comparan como texto, así que la de B16 va después de todas las anteriores', () => {
@@ -167,16 +170,39 @@ describe('textos legales', () => {
     expect(isAfter('2026-10-15', '2026-10-14b')).toBe(true);
     expect(isAfter('2026-10-15b', '2026-10-15')).toBe(true);
     expect(isAfter('2026-10-16', '2026-10-15b')).toBe(true);
-    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16 y B16
-    expect(['2026-10-15b', '2026-10-14', '2026-10-15', '2026-10-14b'].sort()).toEqual([
+    expect(isAfter('2026-10-21', '2026-10-15b')).toBe(true);
+    expect(isAfter('2026-10-22', '2026-10-21')).toBe(true);
+    expect(isAfter('2026-10-22b', '2026-10-22')).toBe(true);
+    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16, B16, B15, B17 y B18
+    expect(
+      [
+        '2026-10-22b',
+        '2026-10-22',
+        '2026-10-21',
+        '2026-10-15b',
+        '2026-10-14',
+        '2026-10-15',
+        '2026-10-14b',
+      ].sort(),
+    ).toEqual([
       '2026-10-14',
       '2026-10-14b',
       '2026-10-15',
       '2026-10-15b',
+      '2026-10-21',
+      '2026-10-22',
+      '2026-10-22b',
     ]);
     // La versión vigente es la mayor de todas las conocidas, para que quien aceptó una anterior,
     // incluido el primer borrador de B16, vuelva a aceptar
-    const earlier = ['2026-10-14', '2026-10-14b', '2026-10-15'];
+    const earlier = [
+      '2026-10-14',
+      '2026-10-14b',
+      '2026-10-15',
+      '2026-10-15b',
+      '2026-10-21',
+      '2026-10-22',
+    ];
     for (const version of earlier) {
       expect(isAfter(PRIVACY_NOTICE_VERSION, version), version).toBe(true);
     }
@@ -234,14 +260,101 @@ describe('textos legales', () => {
     expect(of('GitHub,')).toMatch(/permiso Mejora con tus datos sin nombre/);
   });
 
-  it('PostHog solo con un permiso aparte de analítica, que empieza apagado (respuesta 78 y 4.27)', () => {
+  it('Cloudflare, GitHub y el componente de Stripe están en el aviso con lo que ven, y la frase vieja ya no (B17, 7.1)', () => {
+    const bullets = section(legalDocs.privacy, 'terceros').bullets ?? [];
+    const of = (name: string) => {
+      const found = bullets.find((bullet) => bullet.startsWith(name));
+      if (!found) throw new Error(`Falta ${name} en Con quién compartimos tus datos`);
+      return found;
+    };
+    // Cloudflare. Qué hace, qué ve, que no usa su analítica y que puede tratar datos fuera de México
+    const cloudflare = of('Cloudflare,');
+    expect(cloudflare).toMatch(/cuando la página se mude a su dominio propio/);
+    expect(cloudflare).toMatch(/Aloja y entrega la página y administra el nombre del sitio/);
+    expect(cloudflare).toMatch(/dirección IP.*registros técnicos de seguridad/);
+    expect(cloudflare).toMatch(/Studiare no usa su analítica ni cookies de publicidad/);
+    expect(cloudflare).toMatch(/fuera de México/);
+    expect(cloudflare).toMatch(/reenvío de correo.*privacidad y de soporte.*lee los correos/);
+    // GitHub. Donde vive el código, la página de hoy hasta la mudanza y la calibración, sin perder lo de B14
+    const github = of('GitHub,');
+    expect(github).toMatch(/donde vive el código de Studiare y que hoy aloja la página/);
+    expect(github).toMatch(/hasta que se mude a su dominio propio/);
+    expect(github).toMatch(/dirección IP/);
+    expect(github).toMatch(/cuando se active la calibración de las preguntas/);
+    // Stripe. Solo cambia lo del componente en el navegador, que es de las billeteras en Suscripción
+    expect(of('Stripe')).toMatch(
+      /Apple Pay o Google Pay dentro de Suscripción, y solo si lo eliges, la página carga en tu navegador el componente de Stripe, y Stripe recibe señales de tu aparato para prevenir fraude/,
+    );
+    // El componente puede guardar identificadores propios, y se dice en Cookies y almacenamiento
+    const storage = (section(legalDocs.privacy, 'almacenamiento').paragraphs ?? []).join(' ');
+    expect(storage).toMatch(/componente de Stripe puede guardar en tu navegador identificadores/);
+    expect(storage).toMatch(/No usamos cookies de publicidad ni de rastreo/);
+    // La frase de antes, que mezclaba los dos proveedores en uno, ya no está
+    const text = legalToMarkdown(legalDocs.privacy, EMPTY);
+    expect(text).not.toMatch(/hoy GitHub Pages y después Cloudflare/);
+    expect(text).not.toMatch(/El servicio que aloja la página/);
+    // Y no dice que no haya terceros en el sitio, porque Cloudflare está en medio
+    expect(text).not.toMatch(/no hay terceros|sin terceros/i);
+  });
+
+  it('PostHog solo con el permiso Medición de uso, que empieza apagado y se pide aparte (respuesta 78 y 4.27, B15)', () => {
     const text = studentText(legalDocs.privacy);
     expect(text).toMatch(
-      /PostHog, cuando se active.*Solo recibirá datos si das el permiso de analítica, que se pedirá aparte y empezará apagado/,
+      /PostHog, cuando se active.*Solo recibirá datos si prendes el permiso Medición de uso, que empieza apagado/,
+    );
+    expect(text).toMatch(/No usa cookies, no graba tu pantalla/);
+    expect(text).toMatch(
+      /Si prendes el permiso Medición de uso, tu navegador manda los eventos a PostHog sin cookies y sin guardar nada tuyo en él/,
+    );
+    // Ya no se dice que la analítica es futura ni que hoy no hay herramientas de analítica
+    expect(text).not.toMatch(/Hoy no usamos herramientas de analítica/);
+    expect(text).not.toMatch(/Cuando activemos la analítica del producto/);
+  });
+
+  it('Medición de uso dice qué se mide, qué nunca, el identificador que cambia y los eventos de dinero (B15, 5.5)', () => {
+    const datos = (section(legalDocs.privacy, 'datos').bullets ?? []).find((bullet) =>
+      bullet.startsWith('Medición de uso.'),
+    );
+    expect(datos).toMatch(/Solo si prendes ese permiso/);
+    expect(datos).toMatch(
+      /identificador seudónimo que da el servidor y que no se deriva de tu cuenta/,
+    );
+    expect(datos).toMatch(
+      /Nunca tu nombre, tu correo, tus textos, tus respuestas, tus puntajes ni la especialidad/,
+    );
+    expect(datos).toMatch(/cuándo empezó o terminó tu prueba, cuándo se te cobró/);
+    const opcional = (section(legalDocs.privacy, 'opcionales').bullets ?? []).find((bullet) =>
+      bullet.startsWith('Medición de uso.'),
+    );
+    expect(opcional).toMatch(/Lo hace PostHog por encargo nuestro/);
+    expect(opcional).toMatch(/tu identificador cambia por uno nuevo/);
+    // El texto del permiso en la app y la viñeta del aviso dicen lo mismo en lo esencial
+    const [, hint] = consentTexts.purposes.product_analytics;
+    expect(hint).toMatch(/PostHog por encargo nuestro/);
+    expect(studentText(legalDocs.privacy)).toMatch(
+      /al eliminar tu cuenta se borra el identificador seudónimo que los ligaba contigo/,
+    );
+  });
+
+  it('los recordatorios por correo son opcionales y dicen la foto de conteos que sube la app (B15, 3.3)', () => {
+    const text = studentText(legalDocs.privacy);
+    expect(text).toMatch(/Los recordatorios de repaso por correo también son opcionales/);
+    expect(text).toMatch(
+      /Los prendes tú en Ajustes del repaso, aparte de estos permisos, y empiezan apagados/,
     );
     expect(text).toMatch(
-      /Cuando activemos PostHog, solo funcionará en tu navegador si das el permiso/,
+      /una foto de conteos con las fechas de tus próximos 14 días y cuántas tarjetas vencen cada día, sin el contenido de ninguna tarjeta/,
     );
+    expect(text).toMatch(/No medimos si abres el correo ni si das clic/);
+    expect(text).toMatch(
+      /Borrar tus datos también quita tus recordatorios de repaso, la foto de conteos/,
+    );
+  });
+
+  it('Sentry dice cuánto conserva los reportes en lugar de solo los 14 días de Supabase (nota de B16, B15)', () => {
+    const text = studentText(legalDocs.privacy);
+    expect(text).toMatch(/Se guardan 14 días en nuestra base de datos y, cuando se active Sentry/);
+    expect(text).toMatch(/conserva los reportes el tiempo de su plan, hoy 30 días/);
   });
 
   it('OpenAI solo recibe texto del banco en evaluaciones internas, nunca datos del alumno (respuesta 38)', () => {
@@ -360,6 +473,38 @@ describe('términos de B16', () => {
   it('dice el registro con invitación y la edad mínima (respuesta 52 y pregunta 45)', () => {
     expect(terms).toMatch(/Registro con invitación\. Hasta que Studiare abra el registro/);
     expect(terms).toMatch(/Debes tener 18 años o más/);
+  });
+
+  it('dice qué se guarda de la encuesta de los primeros días, quién la ve, que no va a la analítica y cómo se borra (B18, 2.5)', () => {
+    const datos = (section(legalDocs.privacy, 'datos').bullets ?? []).find((bullet) =>
+      bullet.startsWith('Encuesta de los primeros días.'),
+    );
+    expect(datos).toBeDefined();
+    expect(datos).toMatch(/Es opcional\. Si decides contestarla/);
+    expect(datos).toMatch(/tus respuestas y tu comentario con un código/);
+    expect(datos).toMatch(
+      /los días que pasaron desde que creaste tu cuenta y la versión de la encuesta/,
+    );
+    expect(datos).toMatch(/sin tu nombre ni tu correo/);
+    expect(datos).toMatch(/Solo la ven el dueño y los administradores de Studiare/);
+    expect(datos).toMatch(/No va a herramientas de analítica ni a la inteligencia artificial/);
+    expect(datos).toMatch(/se borra sola al eliminar tu cuenta/);
+    // Nunca la llama anónima, porque con un código y pocas personas se puede deducir de quién es
+    expect(datos).not.toMatch(/an[oó]nim/i);
+    // Borrar mis datos no la quita, y el aviso lo dice
+    const cancelar = (section(legalDocs.privacy, 'derechos').bullets ?? []).join(' ');
+    expect(cancelar).toMatch(/no se quita con Borrar mis datos/);
+    expect(cancelar).toMatch(/Borrar mi respuesta/);
+    // Es opcional y no depende de ningún permiso, y sirve para corregir lo que falle antes de abrir
+    expect((section(legalDocs.privacy, 'opcionales').paragraphs ?? []).join(' ')).toMatch(
+      /encuesta de los primeros días también es opcional.*no depende de ninguno de estos permisos/,
+    );
+    expect((section(legalDocs.privacy, 'finalidades').bullets ?? []).join(' ')).toMatch(
+      /antes de abrir Studiare a más gente/,
+    );
+    expect((section(legalDocs.privacy, 'conservacion').paragraphs ?? []).join(' ')).toMatch(
+      /respuesta a la encuesta de los primeros días se queda mientras tengas cuenta o hasta que la borres/,
+    );
   });
 
   it('dice las condiciones del Fundador (4.5, 4.6 y respuesta 17)', () => {

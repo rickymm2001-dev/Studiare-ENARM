@@ -24,6 +24,43 @@ describe('quitar datos de personas', () => {
     );
   });
 
+  it('quita los correos con acentos, eñes y mayúsculas enteros, no solo desde la última letra sin acento', () => {
+    expect(scrub('falló josé.pérez@gmail.com al entrar', 300)).toBe('falló [correo] al entrar');
+    expect(scrub('Key (email)=(jesús.núñez@gmail.com) ya existe', 300)).toBe(
+      'Key (email)=([correo]) ya existe',
+    );
+    expect(scrub('ÁNGEL@GMAIL.COM', 300)).toBe('[correo]');
+    expect(scrub('user@ñandú.mx falló', 300)).toBe('[correo] falló');
+    expect(scrub('Ñandú.Ruiz+beca@Correo.Unam.MX', 300)).toBe('[correo]');
+  });
+
+  it('quita el correo con la arroba escrita como %40 o de ancho completo', () => {
+    expect(scrub('GET /usuarios/ana%40gmail.com falló', 300)).toBe('GET /usuarios/[correo] falló');
+    expect(scrub('GET /u/jos%C3%A9%40gmail.com falló', 300)).toBe('GET /u/[correo] falló');
+    expect(scrub('ana＠gmail.com', 300)).toBe('[correo]');
+  });
+
+  it('no toma por correo lo que no lo es', () => {
+    expect(scrub('at run (https://x.mx/node_modules/@sentry/core/index.js:1:23)', 300)).toBe(
+      'at run (https://x.mx/node_modules/@sentry/core/index.js:1:23)',
+    );
+    expect(scrub('render@https://x.mx/assets/a.js:10:5', 300)).toBe(
+      'render@https://x.mx/assets/a.js:10:5',
+    );
+    expect(scrub('escribe a @ana o a ana @ gmail', 300)).toBe('escribe a @ana o a ana @ gmail');
+  });
+
+  it('quita una ficha en hexadecimal suelta, sola o pegada a un guion bajo, y deja lo corto', () => {
+    const token = '0123456789abcdef0123456789abcdef0123';
+    expect(scrub(`token ${token} inválido`, 300)).toBe('token [token] inválido');
+    expect(scrub(`baja_${token.toUpperCase()}`, 300)).toBe('baja_[token]');
+    expect(scrub(`huella ${'a1b2c3d4'.repeat(8)}`, 300)).toBe('huella [token]');
+    // Un commit corto y una huella de 31 caracteres se quedan
+    expect(scrub(`versión a1b2c3d y huella ${'a1b2c3d4'.repeat(3)}a1b2c3d`, 300)).toBe(
+      `versión a1b2c3d y huella ${'a1b2c3d4'.repeat(3)}a1b2c3d`,
+    );
+  });
+
   it('quita el pedazo de texto que el navegador copia al fallar al leer un JSON', () => {
     expect(
       scrub(`SyntaxError: Unexpected token 'a', "texto privado del alumno" is not valid JSON`, 300),
@@ -45,7 +82,7 @@ describe('quitar datos de personas', () => {
   });
 
   it('recorta, quita caracteres de control y conserva los saltos de línea solo si se pide', () => {
-    expect(scrub('a'.repeat(500), 300)).toHaveLength(300);
+    expect(scrub('z'.repeat(500), 300)).toHaveLength(300);
     expect(scrub('uno\ndos\t\u0007tres', 300)).toBe('uno dos tres');
     expect(scrub('uno\ndos\u0007tres', 300, true)).toBe('uno\ndos tres');
   });

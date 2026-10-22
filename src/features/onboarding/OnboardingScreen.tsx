@@ -12,6 +12,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { isFeatureEnabled } from '@/config/featureFlags';
+import { trackSignupCompleted } from '@/data/analytics/control';
 import { requestEmailLink, type LinkResult } from '@/data/cloud/account';
 import { cloudConfigured, loadCloud } from '@/data/cloud/client';
 import { readRegistrationOpen } from '@/data/cloud/invitations';
@@ -26,6 +27,7 @@ import {
   registerAccount,
   type AccountDetails,
 } from '@/data/usecases/account';
+import { markTourPending } from '@/features/tour/steps';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { celebrate } from '@/ui/celebrate';
@@ -238,6 +240,15 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
         setTaken(true);
         return;
       }
+      // Medición de uso (B15, 1.5). Solo si marcó la casilla del registro, y sin cómo nos conoció (D-132)
+      trackSignupCompleted(consents.product_analytics, {
+        method: 'email',
+        target_specialty_set: Boolean(details.targetSpecialty),
+      });
+      // Cuenta nueva en este navegador. El recorrido guiado aparece al llegar a Inicio (B15, 4.1). Se marca
+      // aquí y no al entrar, para que también cuente cuando el alumno abre el enlace del correo. Es la única
+      // llamada de este camino, porque onCreated ya no marca
+      markTourPending(result.user.id);
       if (link) setSent({ userId: result.user.id, result: link });
       else onCreated(result.user.id);
     } finally {

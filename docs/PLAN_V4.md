@@ -166,7 +166,7 @@ Tamaño. S es menos de media sesión, M una sesión, L dos sesiones. Una sesión
 
 ### V4-B0. Arranque (S)
 
-- Se crea este plan, se enlaza desde CLAUDE.md y PROGRESS.md, y se registra D-137 con el resumen y las decisiones tomadas por omisión
+- Se crea este plan, se enlaza desde CLAUDE.md y PROGRESS.md, y se registra D-140 con el resumen y las decisiones tomadas por omisión
 - Se cierran los PR abiertos de V3 (B12, B13, B14, B16) si siguen abiertos, y se fusiona B15 cuando esté. V4 arranca sobre main limpio
 - Bandera nueva v4Density para poder comparar antes y después durante V4-B1 y quitarla al cerrar
 

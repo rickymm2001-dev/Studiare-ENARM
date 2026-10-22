@@ -2,9 +2,13 @@ import { defineConfig, devices } from '@playwright/test';
 import {
   CLOUD_PREVIEW_PORT,
   CLOUD_PREVIEW_URL,
+  FAKE_POSTHOG_HOST,
+  FAKE_POSTHOG_KEY,
+  FAKE_SENTRY_DSN,
   FAKE_SUPABASE_ANON_KEY,
   FAKE_SUPABASE_URL,
 } from './tests/e2e/support/fakeSupabaseConfig';
+import { FAKE_STRIPE_PUBLISHABLE_KEY } from './tests/e2e/support/fakeStripeJs';
 import {
   loopbackUrl,
   mayReuseServer,
@@ -104,12 +108,22 @@ export default defineConfig({
     },
     {
       // El mismo build con la nube configurada hacia el proyecto falso, en su propia carpeta y puerto.
-      // El escáner de secretos revisa también este build, porque la llave falsa queda dentro de él
+      // El escáner de secretos revisa también este build, porque la llave falsa queda dentro de él.
+      // Solo este build lleva la llave de PostHog y el DSN de Sentry simulados (B15, 5.3 y 6.4), así las
+      // specs de nube comprueban que sin permiso no sale nada. fakeTelemetry.ts atiende los dos
+      // orígenes dentro del navegador de la prueba, y los builds sin nube no pueden medir ni reportar.
+      // También lleva una llave publicable de Stripe simulada (B17, 6.7), que abre Stripe en la política de
+      // este build y deja que wallets.spec.ts pruebe las billeteras con Stripe.js simulado
+      // (fakeStripeJs.ts). La bandera expressWallets sigue apagada salvo en esa spec
       name: 'cloud',
       command: `npx vite build --outDir dist-cloud && node scripts/secrets.ts dist-cloud && npx vite preview --outDir dist-cloud --port ${CLOUD_PREVIEW_PORT} --strictPort`,
       env: {
         VITE_SUPABASE_URL: FAKE_SUPABASE_URL,
         VITE_SUPABASE_ANON_KEY: FAKE_SUPABASE_ANON_KEY,
+        VITE_POSTHOG_KEY: FAKE_POSTHOG_KEY,
+        VITE_POSTHOG_HOST: FAKE_POSTHOG_HOST,
+        VITE_SENTRY_DSN: FAKE_SENTRY_DSN,
+        VITE_STRIPE_PUBLISHABLE_KEY: FAKE_STRIPE_PUBLISHABLE_KEY,
       },
       url: CLOUD_PREVIEW_URL,
       reuseExistingServer: mayReuseServer(PORTS, process.env),

@@ -43,7 +43,7 @@ describe('a qué dirección puede viajar la llave', () => {
     const code = await main(
       {
         SUPABASE_URL: 'https://evil.example',
-        SUPABASE_CALIBRATION_KEY: 'sb_secret_llave_de_prueba_1234567890',
+        SUPABASE_CALIBRATION_KEY: 'sb_secret_' + 'llave_de_prueba_1234567890',
       },
       createLogger((line) => {
         lines.push(line);

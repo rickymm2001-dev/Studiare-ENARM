@@ -764,6 +764,38 @@ describe('CORS', () => {
     expect(cli.headers.get('access-control-allow-origin')).toBeNull();
   });
 
+  it('un origen que solo se parece al permitido recibe 403, en la llamada y en el preflight', async () => {
+    // Una comparación por sufijo, prefijo o subcadena en lugar de la igualdad exacta los dejaría pasar
+    const proxy = edge({ key: 'mock' });
+    await proxy.open(['forgetting']);
+    for (const origin of [
+      'https://evil-rickymm2001-dev.github.io', // termina igual que el permitido
+      'https://rickymm2001-dev.github.io.evil.com', // empieza igual que el permitido
+      'https://sub.rickymm2001-dev.github.io', // subdominio
+      'https://rickymm2001-dev.github.io:8443', // otro puerto
+      'http://rickymm2001-dev.github.io', // otro esquema
+      'https://rickymm2001-dev.github.io/', // con diagonal final, que un Origin real nunca trae
+    ]) {
+      const post = await call(
+        proxy.app,
+        'forgetting',
+        requestBody(hypothesisInput()),
+        'token-pago',
+        { origin },
+      );
+      expect(post.status, origin).toBe(403);
+      expect(await post.json(), origin).toEqual({ error: 'origin_not_allowed' });
+      expect(post.headers.get('access-control-allow-origin'), origin).toBeNull();
+      const preflight = await proxy.app.request('/ai-proxy/ai/forgetting', {
+        method: 'OPTIONS',
+        headers: { origin, 'access-control-request-method': 'POST' },
+      });
+      expect(preflight.status, origin).toBe(403);
+      expect(preflight.headers.get('access-control-allow-origin'), origin).toBeNull();
+    }
+    expect(proxy.rest.calls).toHaveLength(0);
+  });
+
   it('exige JSON, limita el tamaño y no devuelve detalles de un error', async () => {
     const proxy = edge({ key: 'mock' });
     const text = await proxy.app.request('/ai-proxy/ai/forgetting', {

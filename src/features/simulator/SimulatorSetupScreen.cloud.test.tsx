@@ -266,6 +266,8 @@ describe('Simular con el banco de la nube', () => {
     const practice = await setup();
     expect(screen.getByRole('region', { name: t.labels.demoVersion })).toBeVisible();
     expect(within(practice).getByText(/^Banco de demostración con/)).toBeVisible();
-    expect(server.server.calls).toEqual([]);
+    // La franja de la encuesta de los primeros días (B18) sí le pregunta al servidor si le toca, y no tiene que ver con
+    // el banco. Lo que no puede salir es ninguna otra llamada
+    expect(server.server.calls.filter((call) => call.name !== 'my_survey_status')).toEqual([]);
   });
 });

@@ -91,6 +91,29 @@ insert into public.ai_generations (day, user_id, generation_ref, calls) values
   (public.ai_day() - 3, 'e0000000-0000-0000-0000-000000000001', 'priv-gen-vieja', 5),
   (public.ai_day() - 3, 'e0000000-0000-0000-0000-000000000002', 'priv-gen-v2', 2);
 
+-- Lo de B15 de V1 y de V2 (recordatorios, foto de vencidas, ID de analítica y las dos colas). Borrar mis datos
+-- en delete_my_data v4 quita los recordatorios, la foto, el ID con su permiso, los eventos de dinero y los
+-- recordatorios que seguían por mandarse. No toca los correos de cobro, que el plan sigue necesitando, ni los
+-- recordatorios ya mandados
+insert into public.review_reminder_prefs (user_id, enabled, hour, days, time_zone) values
+  ('e0000000-0000-0000-0000-000000000001', true, 20, '{1,2,3}', 'America/Merida'),
+  ('e0000000-0000-0000-0000-000000000002', true, 8, '{0,6}', 'America/Tijuana');
+insert into public.review_due_snapshots (user_id, computed_at, time_zone, days, new_available) values
+  ('e0000000-0000-0000-0000-000000000001', now(), 'America/Merida', '[{"day":"2026-10-20","due":4}]', 2),
+  ('e0000000-0000-0000-0000-000000000002', now(), 'America/Tijuana', '[{"day":"2026-10-20","due":9}]', 5);
+insert into public.analytics_subjects (user_id, consent) values
+  ('e0000000-0000-0000-0000-000000000001', true),
+  ('e0000000-0000-0000-0000-000000000002', true);
+insert into public.analytics_outbox (user_id, analytics_id, event, properties, occurred_at)
+  select user_id, analytics_id, 'trial_started', '{"plan":"monthly"}'::jsonb, now()
+  from public.analytics_subjects where user_id in ('e0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000002');
+insert into public.email_outbox (recipient_user, kind, dedupe_key, data, status) values
+  ('e0000000-0000-0000-0000-000000000001', 'daily_review_reminder', 'priv-rec-pend-v1', '{"due":1,"newAvailable":0,"day":"2026-10-20"}', 'queued'),
+  ('e0000000-0000-0000-0000-000000000001', 'daily_review_reminder', 'priv-rec-falla-v1', '{"due":1,"newAvailable":0,"day":"2026-10-19"}', 'failed'),
+  ('e0000000-0000-0000-0000-000000000001', 'daily_review_reminder', 'priv-rec-sent-v1', '{"due":1,"newAvailable":0,"day":"2026-10-18"}', 'sent'),
+  ('e0000000-0000-0000-0000-000000000001', 'trial_ending', 'priv-trial-v1', '{"plan":"monthly"}', 'queued'),
+  ('e0000000-0000-0000-0000-000000000002', 'daily_review_reminder', 'priv-rec-pend-v2', '{"due":2,"newAvailable":0,"day":"2026-10-20"}', 'queued');
+
 -- ===================================================================== P1. La bitácora sigue cerrada
 -- Ni siquiera el dueño de la base la edita o la borra fuera de las funciones de borrado
 select pg_temp.expect(
@@ -153,8 +176,10 @@ begin;
 select pg_temp.as_user('e0000000-0000-0000-0000-000000000001');
 select pg_temp.expect(
   (select r ->> 'events' = '2' and r ->> 'ai_jobs' = '1' and r ->> 'ai_generations' = '1'
+          and r ->> 'reminder_prefs' = '1' and r ->> 'due_snapshots' = '1' and r ->> 'pending_reminders' = '2'
+          and r ->> 'analytics_ids' = '1'
     from (select public.delete_my_data() as r) d),
-  'P4. Debía borrar sus 2 eventos, su trabajo de IA y su generación vieja'
+  'P4. Debía borrar sus 2 eventos, su trabajo de IA, su generación vieja y lo de B15'
 );
 select pg_temp.expect((select count(*) from public.events) = 0, 'P4. Le quedaron eventos a V1');
 select pg_temp.expect((select count(*) from public.sync_records) = 0, 'P4. Le quedaron registros a V1');
@@ -206,6 +231,29 @@ select pg_temp.expect(
   'P4. Borrar los datos no debe tocar los pagos'
 );
 
+-- Lo de B15 de V1 se fue y lo de V2 sigue. Los correos de cobro y los recordatorios ya mandados se quedan
+select pg_temp.expect(
+  not exists (select 1 from public.review_reminder_prefs where user_id = 'e0000000-0000-0000-0000-000000000001')
+  and not exists (select 1 from public.review_due_snapshots where user_id = 'e0000000-0000-0000-0000-000000000001')
+  and not exists (select 1 from public.analytics_subjects where user_id = 'e0000000-0000-0000-0000-000000000001')
+  and not exists (select 1 from public.analytics_outbox where user_id = 'e0000000-0000-0000-0000-000000000001'),
+  'P4. Le quedaron a V1 recordatorios, foto de vencidas, ID de analítica o eventos'
+);
+select pg_temp.expect(
+  (select array_agg(dedupe_key order by dedupe_key) from public.email_outbox
+    where recipient_user = 'e0000000-0000-0000-0000-000000000001' and dedupe_key like 'priv-%')
+    = array['priv-rec-sent-v1', 'priv-trial-v1'],
+  'P4. Borrar mis datos debía quitar los recordatorios pendientes y fallidos y dejar el ya mandado y el de cobro'
+);
+select pg_temp.expect(
+  (select count(*) from public.review_reminder_prefs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.review_due_snapshots where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.analytics_subjects where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.analytics_outbox where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and exists (select 1 from public.email_outbox where dedupe_key = 'priv-rec-pend-v2'),
+  'P4. Borrar los datos de V1 tocó lo de B15 de V2'
+);
+
 -- ===================================================================== P4b. Sin las tablas de la IA real
 -- Si solo se desplegó el plan b11, ai_jobs y ai_generations no existen. Borrar mis datos tiene que seguir
 -- funcionando, y no puede fallar con "relación inexistente" para cualquier alumno (revisión del hallazgo 12)
@@ -225,6 +273,26 @@ select pg_temp.expect(
   (select count(*) from public.ai_jobs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
   and (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000002') = 2,
   'P4b. La prueba sin tablas dejó cambios'
+);
+
+-- ===================================================================== P4c. Sin las tablas de B15
+-- Si no se aplicaron las migraciones de B15, Borrar mis datos tiene que seguir funcionando
+begin;
+alter table public.review_reminder_prefs rename to review_reminder_prefs_ausente;
+alter table public.review_due_snapshots rename to review_due_snapshots_ausente;
+alter table public.analytics_subjects rename to analytics_subjects_ausente;
+alter table public.analytics_outbox rename to analytics_outbox_ausente;
+select pg_temp.as_user('e0000000-0000-0000-0000-000000000002');
+select pg_temp.expect(
+  (select r ->> 'reminder_prefs' = '0' and r ->> 'analytics_ids' = '0' and r ->> 'due_snapshots' = '0' and r ->> 'events' = '2'
+    from (select public.delete_my_data() as r) d),
+  'P4c. Sin las tablas de B15, Borrar mis datos falló o no borró lo demás'
+);
+rollback;
+select pg_temp.expect(
+  (select count(*) from public.review_reminder_prefs where user_id = 'e0000000-0000-0000-0000-000000000002') = 1
+  and (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000002') = 2,
+  'P4c. La prueba sin tablas dejó cambios'
 );
 
 -- ===================================================================== P5. Borrar mi cuenta
@@ -253,6 +321,14 @@ commit;
 select pg_temp.expect(
   (select count(*) from public.events where user_id = 'e0000000-0000-0000-0000-000000000002') = 0,
   'P5. Quedó la bitácora de V2 tras darse de baja'
+);
+select pg_temp.expect(
+  not exists (select 1 from public.review_reminder_prefs where user_id = 'e0000000-0000-0000-0000-000000000002')
+  and not exists (select 1 from public.review_due_snapshots where user_id = 'e0000000-0000-0000-0000-000000000002')
+  and not exists (select 1 from public.analytics_subjects where user_id = 'e0000000-0000-0000-0000-000000000002')
+  and not exists (select 1 from public.analytics_outbox where user_id = 'e0000000-0000-0000-0000-000000000002')
+  and not exists (select 1 from public.email_outbox where dedupe_key = 'priv-rec-pend-v2'),
+  'P5. Borrar la cuenta de V2 no se llevó en cascada lo de B15'
 );
 select pg_temp.expect(
   (select count(*) from auth.users where id = 'e0000000-0000-0000-0000-000000000003') = 1,

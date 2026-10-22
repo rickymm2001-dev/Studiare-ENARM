@@ -44,6 +44,7 @@ function setup(options: { seeded?: boolean; demo?: boolean; failWith?: Error } =
   const value: DataApi = {
     repos: api.repos,
     recordEvent: api.recordEvent,
+    recordEventQuiet: api.recordEvent,
     rebuildDerivedState: () => Promise.resolve(),
     demo: options.demo === false ? null : actions,
     deleteAllData: null,

@@ -267,6 +267,7 @@ describe('completa tu registro', () => {
       party: false,
       ai_analysis: false,
       anonymized_improvement: true,
+      product_analytics: false,
     });
     // La aceptación del aviso queda también en la nube
     await waitFor(() => {

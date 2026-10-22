@@ -14,6 +14,7 @@ import {
   type TrialEndingNotice,
 } from './billingTypes.ts';
 import { asArray, asRecord, asString } from './http.ts';
+import { serviceHeaders as keyHeaders } from './keys.ts';
 
 export interface SupabaseEnv {
   url: string;
@@ -40,9 +41,9 @@ export async function authenticateUser(
     : null;
 }
 
+/** La llave de servicio como la pide su forma (keys.ts) y el cuerpo en JSON */
 const serviceHeaders = (env: SupabaseEnv) => ({
-  apikey: env.serviceKey,
-  authorization: `Bearer ${env.serviceKey}`,
+  ...keyHeaders(env.serviceKey),
   'content-type': 'application/json',
 });
 
@@ -442,4 +443,199 @@ export function bankSyncFinishViaRest(
     },
     fetchImpl,
   );
+}
+
+// ---------------------------------------------------------------------------------------------
+// Correos, analítica y alertas de B15. Las funciones de la base de 20261029000001_email_reminders.sql y
+// 20261029000002_product_analytics.sql. Todas con la llave de servicio, menos la comprobación del admin, que
+// usa la sesión de quien llama. Los nombres de los parámetros son el contrato con esas migraciones
+
+/** Un correo de la cola como lo devuelve claim_email_batch, con lo que necesita el envío y nada más */
+export interface QueuedEmail {
+  id: string;
+  kind: string;
+  /** Los datos del correo: fechas, montos, plan, conteos. Sin correos, porque la cola lo rechaza */
+  data: Record<string, unknown>;
+  dedupeKey: string;
+  attempts: number;
+}
+
+/** A quién va un correo, como lo devuelve email_recipients */
+export interface EmailRecipient {
+  /** Vacío si la cuenta no tiene el correo confirmado */
+  emails: string[];
+  alias: string | null;
+  /** Solo el recordatorio, y solo de quien lo tiene prendido y sin baja */
+  unsubscribeToken: string | null;
+}
+
+/** Si la ficha de Cron es la de Vault. false ante cualquier falla */
+async function tickOkViaRest(
+  env: SupabaseEnv,
+  rpc: 'email_tick_ok' | 'analytics_tick_ok',
+  token: string,
+  fetchImpl: typeof fetch,
+): Promise<boolean> {
+  try {
+    return (await callRpc(env, rpc, { p_token: token }, fetchImpl)) === true;
+  } catch {
+    return false;
+  }
+}
+
+export const emailTickOkViaRest = (
+  env: SupabaseEnv,
+  token: string,
+  fetchImpl: typeof fetch = fetch,
+) => tickOkViaRest(env, 'email_tick_ok', token, fetchImpl);
+
+export const analyticsTickOkViaRest = (
+  env: SupabaseEnv,
+  token: string,
+  fetchImpl: typeof fetch = fetch,
+) => tickOkViaRest(env, 'analytics_tick_ok', token, fetchImpl);
+
+/** Toma hasta limit correos listos con claim_email_batch. Lanza si la base falla. Salta una fila sin forma */
+export async function claimEmailBatchViaRest(
+  env: SupabaseEnv,
+  limit: number,
+  fetchImpl: typeof fetch = fetch,
+): Promise<QueuedEmail[]> {
+  const rows = await callRpc(env, 'claim_email_batch', { p_limit: limit }, fetchImpl);
+  if (!Array.isArray(rows)) throw new Error('claim_email_batch no devolvió una lista');
+  const emails: QueuedEmail[] = [];
+  for (const value of asArray(rows)) {
+    const row = asRecord(value);
+    const id = asString(row.id);
+    const kind = asString(row.kind);
+    const dedupeKey = asString(row.dedupe_key);
+    if (!id || !kind || !dedupeKey) continue;
+    emails.push({
+      id,
+      kind,
+      data: asRecord(row.data),
+      dedupeKey,
+      attempts: typeof row.attempts === 'number' ? row.attempts : 0,
+    });
+  }
+  return emails;
+}
+
+/** A quién va cada correo reclamado, con email_recipients. Lanza si la base falla */
+export async function emailRecipientsViaRest(
+  env: SupabaseEnv,
+  ids: readonly string[],
+  fetchImpl: typeof fetch = fetch,
+): Promise<Map<string, EmailRecipient>> {
+  const rows = await callRpc(env, 'email_recipients', { p_ids: ids }, fetchImpl);
+  if (!Array.isArray(rows)) throw new Error('email_recipients no devolvió una lista');
+  const recipients = new Map<string, EmailRecipient>();
+  for (const value of asArray(rows)) {
+    const row = asRecord(value);
+    const id = asString(row.id);
+    if (!id) continue;
+    recipients.set(id, {
+      emails: asArray(row.emails).filter(
+        (item): item is string => typeof item === 'string' && item !== '',
+      ),
+      alias: asString(row.alias),
+      unsubscribeToken: asString(row.unsubscribe_token),
+    });
+  }
+  return recipients;
+}
+
+/** Cierra un correo con finish_email. error nunca lleva datos del correo ni del alumno */
+export async function finishEmailViaRest(
+  env: SupabaseEnv,
+  result: { id: string; status: 'sent' | 'skipped' | 'failed'; error: string | null },
+  fetchImpl: typeof fetch = fetch,
+): Promise<void> {
+  await callRpcVoid(
+    env,
+    'finish_email',
+    { p_id: result.id, p_status: result.status, p_error: result.error },
+    fetchImpl,
+  );
+}
+
+/** Devuelve a la cola, sin gastar el intento, un correo que no se alcanzó a mandar */
+export async function releaseEmailViaRest(
+  env: SupabaseEnv,
+  id: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<void> {
+  await callRpcVoid(env, 'release_email', { p_id: id }, fetchImpl);
+}
+
+/** La baja de un recordatorio con su ficha. done, already o invalid. Lanza si la base falla */
+export async function emailUnsubscribeViaRest(
+  env: SupabaseEnv,
+  token: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<'done' | 'already' | 'invalid'> {
+  const result = await callRpcText(env, 'email_unsubscribe', { p_token: token }, fetchImpl);
+  return result === 'done' || result === 'already' ? result : 'invalid';
+}
+
+/** Un evento de dinero de la cola de analítica, como lo devuelve claim_analytics_batch */
+export interface QueuedAnalyticsEvent {
+  id: string;
+  analyticsId: string;
+  event: string;
+  properties: Record<string, unknown>;
+  occurredAt: string;
+}
+
+/** Toma hasta limit eventos con claim_analytics_batch. Lanza si la base falla. Salta una fila sin forma */
+export async function claimAnalyticsBatchViaRest(
+  env: SupabaseEnv,
+  limit: number,
+  fetchImpl: typeof fetch = fetch,
+): Promise<QueuedAnalyticsEvent[]> {
+  const rows = await callRpc(env, 'claim_analytics_batch', { p_limit: limit }, fetchImpl);
+  if (!Array.isArray(rows)) throw new Error('claim_analytics_batch no devolvió una lista');
+  const events: QueuedAnalyticsEvent[] = [];
+  for (const value of asArray(rows)) {
+    const row = asRecord(value);
+    const id = asString(row.id);
+    const analyticsId = asString(row.analyticsId);
+    const event = asString(row.event);
+    const occurredAt = asString(row.occurredAt);
+    if (!id || !analyticsId || !event || !occurredAt) continue;
+    events.push({ id, analyticsId, event, properties: asRecord(row.properties), occurredAt });
+  }
+  return events;
+}
+
+/** Cierra eventos de analítica con finish_analytics_batch */
+export async function finishAnalyticsBatchViaRest(
+  env: SupabaseEnv,
+  ids: readonly string[],
+  status: 'sent' | 'dropped' | 'failed' | 'queued',
+  fetchImpl: typeof fetch = fetch,
+): Promise<void> {
+  await callRpcVoid(env, 'finish_analytics_batch', { p_ids: ids, p_status: status }, fetchImpl);
+}
+
+/**
+ * Si quien llama es un admin con su segundo factor, con su propia sesión y la llave pública. Pregunta a
+ * admin_email_overview, que solo contesta a un admin. false ante cualquier falla o rechazo
+ */
+export async function adminSessionOkViaRest(
+  env: SupabaseEnv,
+  authorization: string | null,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  if (!authorization?.toLowerCase().startsWith('bearer ')) return false;
+  try {
+    const reply = await fetchImpl(`${env.url}/rest/v1/rpc/admin_email_overview`, {
+      method: 'POST',
+      headers: { apikey: env.anonKey, authorization, 'content-type': 'application/json' },
+      body: JSON.stringify({ p_days: 1 }),
+    });
+    return reply.ok;
+  } catch {
+    return false;
+  }
 }

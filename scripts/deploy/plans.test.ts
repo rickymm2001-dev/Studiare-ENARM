@@ -219,6 +219,83 @@ describe('los planes del repo', () => {
     expect(squash(block)).toBe(squash(checkQuery(reads?.sql ?? '') ?? ''));
   });
 
+  it('b15 lleva las cuatro migraciones del servidor en orden y las funciones de correos, analítica y alertas, con las de siempre envueltas', () => {
+    const plan = loadPlan(ROOT, 'b15');
+    expect(plan.migrations.map((step) => step.name)).toEqual([
+      'email_reminders',
+      'product_analytics',
+      'engagement_cron',
+      'delete_my_data_v4',
+    ]);
+    expect(plan.migrations.map((step) => step.kind)).toEqual([
+      'migration',
+      'migration',
+      'migration',
+      'migration',
+    ]);
+    const jwt = Object.fromEntries(plan.functions.map((fn) => [fn.slug, fn.verifyJwt]));
+    // Las tres que llaman Cron o el correo no llevan sesión y se identifican por su cuenta. monitoring-test sí
+    expect(jwt).toMatchObject({
+      'send-emails': false,
+      'email-unsubscribe': false,
+      'analytics-flush': false,
+      'monitoring-test': true,
+    });
+    // Las nueve que ya existían se vuelven a publicar con el verify_jwt de siempre, porque ahora van con withMonitoring
+    const wrapped = [
+      'create-checkout',
+      'create-portal-session',
+      'cancel-subscription',
+      'admin-reset-mfa',
+      'payment-webhook-stripe',
+      'payment-webhook-mercadopago',
+      'bank-sync',
+      'ai-proxy',
+      'ai-batch',
+    ];
+    for (const slug of wrapped) {
+      const index = readFileSync(join(ROOT, 'supabase/functions', slug, 'index.ts'), 'utf8');
+      expect(index, slug).toMatch(/withMonitoring/);
+      // El verify_jwt de siempre es el que dice su index.ts (otra prueba lo revisa en todos los planes)
+      expect(jwt[slug], slug).toBe(!index.includes('--no-verify-jwt'));
+    }
+    // Todas las funciones del repo que usan withMonitoring están en el plan, ni una menos
+    const withMonitoringSlugs = readdirSync(join(ROOT, 'supabase/functions'), {
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
+      .map((entry) => entry.name)
+      .filter((slug) =>
+        readFileSync(join(ROOT, 'supabase/functions', slug, 'index.ts'), 'utf8').includes(
+          'withMonitoring',
+        ),
+      );
+    expect(plan.functions.map((fn) => fn.slug).toSorted()).toEqual(withMonitoringSlugs.toSorted());
+    // Las llaves de Resend, PostHog y Sentry las pone Ricardo directo en Supabase y no pasan por el plan
+    expect(plan.secrets).toBeNull();
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+  });
+
+  it('la comprobación de b15 va en la última migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
+    const plan = loadPlan(ROOT, 'b15');
+    for (const step of plan.migrations.slice(0, -1)) expect(step.check, step.name).toBeNull();
+    const last = plan.migrations.at(-1);
+    const check = last?.check ?? {};
+    // Solo hechos de la estructura. Si el envío de correos y la analítica están encendidos cambia con el tiempo, y
+    // los trabajos de Cron y las fichas de Vault no existen en toda base, así que no entran
+    for (const column of ['correos_encendidos', 'analitica_encendida', 'trabajos_de_cron']) {
+      expect(Object.keys(check)).not.toContain(column);
+    }
+    expect(check).toMatchObject({ tablas_de_b15: 4, borrar_mis_datos_b15: true });
+    // La consulta de la migración y el primer bloque de SQL de la sección B15 de docs/SUPABASE.md son la misma
+    const docs = readFileSync(join(ROOT, 'docs/SUPABASE.md'), 'utf8');
+    const section = docs.slice(docs.indexOf('## Recordatorios, analítica y alertas (B15)'));
+    const block = /```sql\n([\s\S]*?)```/.exec(section)?.[1] ?? '';
+    const squash = (sql: string) => sql.replace(/\s+/g, ' ').replace(/;\s*$/, '').trim();
+    expect(block).not.toBe('');
+    expect(squash(block)).toBe(squash(checkQuery(last?.sql ?? '') ?? ''));
+  });
+
   it('los secretos de b12 son los dos que pone la sesión, y la clave de Anthropic no pasa por el plan', () => {
     const plan = loadPlan(ROOT, 'b12');
     expect(Object.keys(plan.secrets ?? {})).toEqual(['APP_ORIGINS', 'AI_ALLOW_MOCK']);
@@ -239,11 +316,14 @@ describe('los planes del repo', () => {
     for (const bad of ['2', 'true', '']) expect(mock?.test(bad), bad).toBe(false);
   });
 
-  it('Borrar mis datos v3 es la misma en la última migración y en las tres piezas manuales', () => {
+  it('Borrar mis datos v4 es la misma en la última migración, en banco-b11, en ia-b12 y en la pieza 4, y suma lo de B15 a la v3', () => {
     const latest = new Map<string, FunctionDef>();
     for (const migration of repoMigrations(ROOT)) applyFunctionSql(migration.sql, latest);
     const want = latest.get('delete_my_data');
     expect(want?.body).toContain('ai_jobs');
+    expect(want?.body).toContain('review_reminder_prefs');
+    // La herramienta exige que un archivo manual traiga cada función igual a la última migración que la
+    // define, así que los tres archivos manuales siguen a la migración de B15
     for (const file of [
       'supabase/manual/ia-b12.sql',
       'supabase/manual/banco-b11.sql',
@@ -254,6 +334,41 @@ describe('los planes del repo', () => {
       const own = defs.get('delete_my_data');
       expect(own && want && sameDef(own, want), file).toBe(true);
     }
+    // La v4 es la v3 de B12 más lo de los recordatorios y la analítica, sin quitar ni cambiar una sola línea de la v3
+    const v3Defs = new Map<string, FunctionDef>();
+    applyFunctionSql(
+      readFileSync(join(ROOT, 'supabase/migrations/20261026000004_ai_delete_my_data.sql'), 'utf8'),
+      v3Defs,
+    );
+    const v3 = v3Defs.get('delete_my_data');
+    expect(v3?.body).not.toContain('review_reminder_prefs');
+    expect(want?.securityDefiner).toBe(v3?.securityDefiner);
+    expect(want?.config?.join()).toBe(v3?.config?.join());
+    const lines = (body: string | null) =>
+      (body ?? '')
+        .split('\n')
+        .map((line) => line.replace(/--.*$/, '').trim())
+        .filter((line) => line !== '');
+    const v4Lines = new Set(lines(want?.body ?? null));
+    for (const line of lines(v3?.body ?? null)) {
+      if (line.startsWith("'ai_generations', v_generations")) continue;
+      expect(v4Lines.has(line), `la v4 perdió esta línea de la v3, ${line}`).toBe(true);
+    }
+    for (const table of [
+      'review_reminder_prefs',
+      'review_due_snapshots',
+      'analytics_subjects',
+      'analytics_outbox',
+      'email_outbox',
+    ]) {
+      expect(want?.body, table).toContain(`public.${table}`);
+    }
+    // Lleva delete, así que es la única migración de B15 con uno. Las otras tres las aplica también el conector
+    const b15 = loadPlan(ROOT, 'b15').migrations;
+    for (const step of b15.slice(0, -1)) {
+      expect(step.sql, step.file).not.toMatch(/^\s*(delete|drop)\b/im);
+    }
+    expect(b15.at(-1)?.sql).toMatch(/^\s*delete\b/im);
   });
 
   it('los secretos de b10 son los ocho IDs que crea setup-test.ts, con su prefijo', () => {
@@ -502,7 +617,7 @@ describe('línea de comandos', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// B11, B12, B13 y B14 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12, B13 y B14)
+// B11 a B18 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12, B13, B14, B15, B17 y B18)
 
 /** La última migración de B10. Un proyecto con solo B10 llega hasta aquí */
 const LAST_B10 = '20261022000003';
@@ -510,6 +625,8 @@ const LAST_B10 = '20261022000003';
 const LAST_B11 = '20261023000006';
 /** La última de B13, la de Inglés médico. Un proyecto con B11, B12 y B13 y sin B14 llega hasta aquí */
 const LAST_B13 = '20261027000001';
+/** La última de B14, la que lee la app y el equipo. Un proyecto con B11 a B14 y sin B15 llega hasta aquí */
+const LAST_B14 = '20261028000003';
 
 /** Lo que registra el plan b11 de B11 sin la migración de B13, en el orden del plan */
 const B11_STEPS = [
@@ -524,11 +641,16 @@ const B11_STEPS = [
 
 /**
  * Los planes en el orden en que se corren desde un proyecto con solo B10, con el SQL que aplica cada uno y
- * las funciones que publica. Dos cosas que se ven aquí y no son errores
+ * las funciones que publica. Tres cosas que se ven aquí y no son errores
  *   - b11 lleva la migración de B13 y las tres de B14, así que b13 ya no aplica SQL y solo vuelve a publicar
  *     bank-sync con la copia nueva del convertidor, y b14 no aplica ni publica nada
- *   - b12 no aplica ai_delete_my_data. banco-b11.sql, que corrió en b11, ya dejó Borrar mis datos v3 igual
- *     a la de esa migración, y la herramienta la da por aplicada por la huella de su función, sin registrarla
+ *   - Con B15, banco-b11.sql, ia-b12.sql y la pieza 4 de ejecutar-en-sql-editor.sql traen Borrar mis datos v4,
+ *     igual a la de 20261029000004_delete_my_data_v4.sql, así que b12 sí aplica su migración ai_delete_my_data (la v3,
+ *     que la v4 de banco-b11.sql ya pasó) y la pieza ia-b12.sql la deja otra vez en v4 en el mismo plan
+ *   - b15 vuelve a publicar bank-sync, ai-proxy y ai-batch, porque ahora van envueltas con withMonitoring
+ *   - b17 no aplica SQL y vuelve a publicar las trece funciones, porque todas empaquetan las llaves y el CORS nuevos
+ *   - b18 aplica las dos migraciones de la encuesta de los primeros días y no publica nada. No comparte ninguna
+ *     función con los demás, y por eso va al final
  * Cuando llegue el plan de un bloque nuevo va al final de esta lista con su SQL y sus funciones, y el resto
  * de las pruebas de esta sección corre con él sin cambios
  */
@@ -553,11 +675,50 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
     },
     {
       plan: 'b12',
-      sql: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'manual_ia_b12'],
+      sql: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'ai_delete_my_data', 'manual_ia_b12'],
       functions: ['ai-proxy', 'ai-batch'],
     },
     { plan: 'b13', sql: [], functions: ['bank-sync'] },
     { plan: 'b14', sql: [], functions: [] },
+    {
+      plan: 'b15',
+      sql: ['email_reminders', 'product_analytics', 'engagement_cron', 'delete_my_data_v4'],
+      functions: [
+        'send-emails',
+        'email-unsubscribe',
+        'analytics-flush',
+        'monitoring-test',
+        'create-checkout',
+        'create-portal-session',
+        'cancel-subscription',
+        'admin-reset-mfa',
+        'payment-webhook-stripe',
+        'payment-webhook-mercadopago',
+        'bank-sync',
+        'ai-proxy',
+        'ai-batch',
+      ],
+    },
+    {
+      plan: 'b17',
+      sql: [],
+      functions: [
+        'send-emails',
+        'email-unsubscribe',
+        'analytics-flush',
+        'monitoring-test',
+        'create-checkout',
+        'create-portal-session',
+        'cancel-subscription',
+        'admin-reset-mfa',
+        'payment-webhook-stripe',
+        'payment-webhook-mercadopago',
+        'bank-sync',
+        'ai-proxy',
+        'ai-batch',
+      ],
+    },
+    { plan: 'b18', sql: ['first_week_survey', 'survey_erase'], functions: [] },
   ];
 
 /** Las funciones de las migraciones del repo hasta una versión, como las deja un proyecto que llegó ahí */
@@ -587,13 +748,54 @@ function modelCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
 }
 
 /**
+ * La fila de la comprobación de b15 según lo que se aplicó, como la de b14: lo que pide el plan cuando las cuatro
+ * migraciones están, y lo contrario (ceros y falsos) cuando falta alguna
+ */
+let engagementCheck: Record<string, unknown> | undefined;
+function engagementCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
+  engagementCheck ??= loadPlan(ROOT, 'b15').migrations.at(-1)?.check ?? {};
+  const expected = engagementCheck;
+  const done = [
+    'email_reminders',
+    'product_analytics',
+    'engagement_cron',
+    'delete_my_data_v4',
+  ].every((name) => applied.has(name));
+  return Object.fromEntries(
+    Object.entries(expected).map(([column, value]) => [
+      column,
+      done ? value : typeof value === 'boolean' ? !value : 0,
+    ]),
+  );
+}
+
+/**
+ * La fila de la comprobación de b18 según lo que se aplicó, como la de b15: lo que pide el plan cuando las dos
+ * migraciones de la encuesta están, y lo contrario (ceros y falsos) cuando falta alguna
+ */
+let surveyCheck: Record<string, unknown> | undefined;
+function surveyCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
+  surveyCheck ??= loadPlan(ROOT, 'b18').migrations.at(-1)?.check ?? {};
+  const expected = surveyCheck;
+  const done = ['first_week_survey', 'survey_erase'].every((name) => applied.has(name));
+  return Object.fromEntries(
+    Object.entries(expected).map(([column, value]) => [
+      column,
+      done ? value : typeof value === 'boolean' ? !value : 0,
+    ]),
+  );
+}
+
+/**
  * La fila de cada consulta de comprobación según lo que se aplicó. Una columna que el plan no pide no estorba,
- * así que trae la de B11, la de B12 y la de B14 para cualquier plan de FROM_B10
+ * así que trae la de B11, la de B12, la de B14, la de B15 y la de B18 para cualquier plan de FROM_B10
  */
 const checkRows = (applied: ReadonlySet<string>) => ({
   borrar_mis_datos_b11: applied.has('manual_banco_b11'),
   borrar_mis_datos_b12: applied.has('manual_ia_b12'),
   ...modelCheckRow(applied),
+  ...engagementCheckRow(applied),
+  ...surveyCheckRow(applied),
 });
 
 /** La base con B10 aplicado y nada del banco */
@@ -672,6 +874,56 @@ function withB13BeforeB14(): ReturnType<typeof fakeSupabase> {
   });
 }
 
+/**
+ * La base como la dejan b11, b12, b13 y b14 de antes de B15, cuando las cuatro migraciones del servidor todavía no
+ * existían. Las funciones de las migraciones hasta la de Borrar mis datos de B12 y las del modelo del alumno, con Borrar
+ * mis datos en la v3, todo lo de B11 a B14 registrado y las funciones de Edge de esos planes publicadas
+ */
+function withB14BeforeB15(): ReturnType<typeof fakeSupabase> {
+  const functions = functionsUpTo(LAST_B14);
+  const done = [
+    ...B11_STEPS.slice(0, -1),
+    'english_section',
+    'ai_proxy_v2',
+    'ai_jobs',
+    'ai_gate',
+    'ai_delete_my_data',
+    'model_core',
+    'calibration_job',
+    'model_reads',
+    'manual_banco_b11',
+    'manual_ia_b12',
+  ];
+  return fakeSupabase({
+    ref: STUDIARE_PROJECT_REF,
+    history: [
+      ...REAL_HISTORY,
+      ...done.map((name, index) => ({
+        version: `2026101700${String(index).padStart(4, '0')}`,
+        name,
+      })),
+    ],
+    functions,
+    anon: ['current_app_role', 'is_admin'],
+    edge: {
+      'bank-sync': { version: 3, verifyJwt: false },
+      'ai-proxy': { version: 1, verifyJwt: false },
+      'ai-batch': { version: 1, verifyJwt: false },
+      'create-checkout': { version: 16, verifyJwt: true },
+      'create-portal-session': { version: 5, verifyJwt: true },
+      'cancel-subscription': { version: 1, verifyJwt: true },
+      'admin-reset-mfa': { version: 2, verifyJwt: true },
+      'payment-webhook-stripe': { version: 9, verifyJwt: false },
+      'payment-webhook-mercadopago': { version: 4, verifyJwt: false },
+    },
+    checkRow: (applied) => ({
+      ...checkRows(applied),
+      borrar_mis_datos_b11: true,
+      borrar_mis_datos_b12: true,
+    }),
+  });
+}
+
 /** Los nombres con los que quedó registrado el SQL que aplicó una corrida, en orden */
 function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): string[] {
   return fake
@@ -683,7 +935,7 @@ function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): stri
 
 // Cada corrida lee y parte todo el SQL del repo. Con la cobertura de npm run check, o en un equipo lento, una
 // prueba de varias corridas pasa de los 5 s de Vitest, así que esta sección pide más
-describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
+describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
   it('b13 lleva la migración de inglés y bank-sync sin verificar JWT, y sin SQL manual', () => {
     const plan = loadPlan(ROOT, 'b13');
     expect(plan.migrations.map((step) => step.name)).toEqual(['english_section']);
@@ -787,7 +1039,7 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
     expect(fake.writes()).toEqual([]);
   });
 
-  it('b11, b12, b13 y b14 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
+  it('b11, b12, b13, b14, b15, b17 y b18 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
     const fake = onlyB10();
     const versions = new Map<string, number>();
     /** Lo que sube una corrida de cada función que publica, con el verify_jwt que dice su plan */
@@ -810,12 +1062,23 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
       expectPublished(step.plan, step.plan);
     }
 
-    // Las funciones que B13 redefine y Borrar mis datos v3 de B12 quedaron en su versión
+    // Las funciones que B13 redefine y Borrar mis datos v4 de B15 (con lo de B11 y B12) quedaron en su versión
     expect(fake.functions.get('bank_version_issues')?.body).toContain('language_branch_mismatch');
     expect(fake.functions.get('bank_incomplete_of')?.body).toContain('language_branch_mismatch');
     expect(fake.functions.get('bank_passage_source_issue')).toBeDefined();
     expect(fake.functions.get('delete_my_data')?.body).toContain('bank_reads');
     expect(fake.functions.get('delete_my_data')?.body).toContain('ai_jobs');
+    expect(fake.functions.get('delete_my_data')?.body).toContain('review_reminder_prefs');
+    // Lo que B15 agrega en la base: el interruptor de correos, los recordatorios, la analítica y su cola
+    for (const name of [
+      'enqueue_review_reminders',
+      'email_unsubscribe',
+      'analytics_identity',
+      'claim_analytics_batch',
+      'admin_email_overview',
+    ]) {
+      expect(fake.functions.get(name), name).toBeDefined();
+    }
     // El catálogo de B11 con la llave calibration, y lo que lee la app y el equipo de B14, en la base
     expect(fake.functions.get('bank_catalog_json')?.body).toContain("'calibration'");
     for (const name of ['comparison_snapshot', 'population_baselines', 'admin_calibration_runs']) {
@@ -836,10 +1099,10 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
     }
   });
 
-  it('b13 antes que b12 da lo mismo, porque los dos no comparten ninguna función, y b14 va al final', async () => {
+  it('b13 antes que b12 da lo mismo, porque los dos no comparten ninguna función, y b14 y b15 van al final', async () => {
     const fake = onlyB10();
     const byPlan = new Map(FROM_B10.map((step) => [step.plan, step]));
-    for (const plan of ['b11', 'b13', 'b12', 'b14']) {
+    for (const plan of ['b11', 'b13', 'b12', 'b14', 'b15']) {
       const before = fake.writes().length;
       const run = await runReal(fake, plan);
       expect(run.text, plan).toContain('Todo en verde.');
@@ -848,6 +1111,7 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
     }
     expect(fake.functions.get('bank_version_issues')?.body).toContain('language_branch_mismatch');
     expect(fake.functions.get('delete_my_data')?.body).toContain('ai_jobs');
+    expect(fake.functions.get('delete_my_data')?.body).toContain('review_reminder_prefs');
   });
 
   it('cada plan corre solo sobre un proyecto con B11 aplicado, sin los otros dos', async () => {
@@ -856,9 +1120,11 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
     const modelo = ['model_core', 'calibration_job', 'model_reads'];
     const expected: Record<string, readonly string[]> = {
       b11: ['english_section', ...modelo],
-      b12: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'manual_ia_b12'],
+      b12: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'ai_delete_my_data', 'manual_ia_b12'],
       b13: ['english_section'],
       b14: modelo,
+      b15: ['email_reminders', 'product_analytics', 'engagement_cron', 'delete_my_data_v4'],
+      b18: ['first_week_survey', 'survey_erase'],
     };
     for (const [plan, sql] of Object.entries(expected)) {
       const fake = withB11BeforeEnglish();
@@ -955,5 +1221,237 @@ describe('B11, B12, B13 y B14 desde un proyecto con solo B10', { timeout: 60_000
     expect(run.text).toContain('su comprobación sale en rojo');
     expect(run.text).toContain('tablas_nuevas dio 0 y debía dar 7');
     expect(fake.writes()).toEqual([]);
+  });
+  it('un proyecto con B11 a B14 de antes de B15 recibe las cuatro migraciones con b15 y publica las trece funciones', async () => {
+    const fake = withB14BeforeB15();
+    const first = await runReal(fake, 'b15');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(fake, 0)).toEqual([
+      'email_reminders',
+      'product_analytics',
+      'engagement_cron',
+      'delete_my_data_v4',
+    ]);
+    // La comprobación de la última migración corre justo después de aplicarla, y de nuevo al final
+    expect(first.text).toContain(
+      'supabase/migrations/20261029000004_delete_my_data_v4.sql comprobación en verde',
+    );
+    // Borrar mis datos pasó de la v3 a la v4, y claim_email_batch de B10 a su segunda versión
+    expect(fake.functions.get('delete_my_data')?.body).toContain('review_reminder_prefs');
+    expect(fake.functions.get('claim_email_batch')?.body).toContain('stale');
+    // Las funciones de siempre subieron de versión con el verify_jwt que tenían, y las nuevas nacen en 1
+    const wanted = new Map(loadPlan(ROOT, 'b15').functions.map((fn) => [fn.slug, fn.verifyJwt]));
+    expect(wanted.size).toBe(13);
+    for (const [slug, verifyJwt] of wanted) {
+      expect(fake.edge.get(slug), slug).toMatchObject({ status: 'ACTIVE', verifyJwt });
+    }
+    expect(fake.edge.get('create-checkout')?.version).toBe(17);
+    expect(fake.edge.get('bank-sync')?.version).toBe(4);
+    expect(fake.edge.get('send-emails')?.version).toBe(1);
+    expect(fake.edge.get('monitoring-test')).toMatchObject({ version: 1, verifyJwt: true });
+
+    // Volver a correrlo no repite SQL, con la comprobación en verde de lo ya registrado
+    const before = fake.writes().length;
+    const again = await runReal(fake, 'b15');
+    expect(again.code).toBe(0);
+    expect(appliedSince(fake, before)).toEqual([]);
+    expect(again.text).toContain('ya aplicada, registrada como delete_my_data_v4');
+  });
+
+  it('b15 con --dry-run solo lee: dice qué aplicaría y qué publicaría, y no escribe nada', async () => {
+    const fake = withB14BeforeB15();
+    const dry = await runReal(fake, 'b15', true);
+    expect(dry.code).toBe(0);
+    expect(fake.writes()).toEqual([]);
+    for (const name of [
+      'email_reminders',
+      'product_analytics',
+      'engagement_cron',
+      'delete_my_data_v4',
+    ]) {
+      expect(dry.text).toContain(`${name}  se aplica`);
+    }
+    expect(dry.text).toContain('send-emails');
+    expect(dry.text).toContain('monitoring-test');
+    expect(dry.text).not.toContain('Publicando');
+    expect(fake.edge.get('send-emails')).toBeUndefined();
+  });
+
+  it('una comprobación de b15 en rojo detiene el plan sin aplicar nada, aunque las migraciones ya estén registradas', async () => {
+    // Las cuatro registradas por el conector, pero sin las tablas: la base dice otra cosa que la historia
+    const fake = withB14BeforeB15();
+    for (const [index, name] of [
+      'email_reminders',
+      'product_analytics',
+      'engagement_cron',
+      'delete_my_data_v4',
+    ].entries()) {
+      fake.history.push({ version: `2026102900${String(index).padStart(4, '0')}`, name });
+    }
+    const run = await runReal(fake, 'b15');
+    expect(run.code).toBe(1);
+    expect(run.text).toContain('su comprobación sale en rojo');
+    expect(run.text).toContain('tablas_de_b15 dio 0 y debía dar 4');
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('b18 lleva las dos migraciones de la encuesta en orden, sin SQL manual, Edge Functions ni secretos', () => {
+    const plan = loadPlan(ROOT, 'b18');
+    expect(plan.migrations.map((step) => step.name)).toEqual(['first_week_survey', 'survey_erase']);
+    expect(plan.migrations.map((step) => step.kind)).toEqual(['migration', 'migration']);
+    expect(plan.functions).toEqual([]);
+    expect(plan.secrets).toBeNull();
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // La primera no lleva delete ni drop, así que el conector también la puede aplicar (D-113). El borrado de la
+    // respuesta, que es lo único que los necesita, va solo en la segunda
+    const [first, second] = plan.migrations;
+    expect(first?.sql).not.toMatch(/^\s*(delete|drop)\b/im);
+    const code = (sql = '') => sql.replace(/--.*$/gm, '');
+    expect(code(first?.sql)).not.toMatch(/\bdelete\s+from\b|\bdrop\b/i);
+    expect(code(second?.sql)).toMatch(/^\s*delete\s+from\s+public\.survey_responses\b/im);
+    expect(code(second?.sql)).not.toMatch(/\bdrop\b/i);
+    // Ninguna otra migración del repo toca la tabla de la encuesta ni Borrar mis datos
+    for (const migration of repoMigrations(ROOT)) {
+      if (migration.version < '20261030000001') continue;
+      expect(migration.sql, migration.file).not.toMatch(
+        /create or replace function public\.delete_my_data\(/,
+      );
+    }
+  });
+
+  it('la comprobación de b18 va en la última migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
+    const plan = loadPlan(ROOT, 'b18');
+    expect(plan.migrations[0]?.check).toBeNull();
+    const last = plan.migrations.at(-1);
+    const check = last?.check ?? {};
+    // Solo hechos de la estructura. Si la encuesta está prendida, cuántos días espera o hasta qué fecha cambia con el
+    // tiempo, y con ello en la comprobación el plan no se podría volver a correr después de prenderla
+    for (const column of [
+      'encuesta_prendida',
+      'dias_de_espera',
+      'fecha_limite',
+      'ajuste_prendido',
+    ]) {
+      expect(Object.keys(check)).not.toContain(column);
+    }
+    expect(check).toMatchObject({
+      tabla_de_encuesta: 1,
+      tabla_sin_permisos_directos: true,
+      solo_se_agrega: 1,
+      anonimo_entra: false,
+      llave_lee_respuestas: false,
+    });
+    // La consulta de la migración y el primer bloque de SQL de la sección B18 de docs/SUPABASE.md son la misma
+    const docs = readFileSync(join(ROOT, 'docs/SUPABASE.md'), 'utf8');
+    const start = docs.indexOf('## Primeros alumnos y encuesta (B18)');
+    const section = docs.slice(start, docs.indexOf('\n## ', start + 1));
+    const block = /```sql\n([\s\S]*?)```/.exec(section)?.[1] ?? '';
+    const squash = (sql: string) => sql.replace(/\s+/g, ' ').replace(/;\s*$/, '').trim();
+    expect(block).not.toBe('');
+    expect(squash(block)).toBe(squash(checkQuery(last?.sql ?? '') ?? ''));
+    // Ninguna consulta de esa sección lee comentarios ni respuestas una por una (la sesión no los lee, 8.5)
+    for (const query of section.match(/```sql\n[\s\S]*?```/g) ?? []) {
+      expect(query).not.toMatch(
+        /\bcomment\b|\banswers\b|from\s+public\.survey_responses|respondent_code|user_id/i,
+      );
+    }
+  });
+
+  it('un proyecto con B11 a B17 recibe las dos migraciones con b18, no publica nada y volver a correrlo no repite SQL', async () => {
+    const fake = withB14BeforeB15();
+    // Con b15 aplicado, como un proyecto que ya llegó a B17
+    expect((await runReal(fake, 'b15')).code).toBe(0);
+    const edgeBefore = JSON.stringify(
+      [...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]),
+    );
+    const first = await runReal(fake, 'b18');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(fake, 0).slice(-2)).toEqual(['first_week_survey', 'survey_erase']);
+    // La comprobación de la última migración corre justo después de aplicarla, y de nuevo al final
+    expect(first.text).toContain(
+      'supabase/migrations/20261030000002_survey_erase.sql comprobación en verde',
+    );
+    // El plan no publica funciones de Edge, así que ninguna cambia de versión
+    expect(first.text).not.toContain('Publicando');
+    expect(JSON.stringify([...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]))).toBe(
+      edgeBefore,
+    );
+    // Las seis funciones de la encuesta quedaron en la base y Borrar mis datos no cambió
+    for (const name of [
+      'my_survey_status',
+      'submit_survey',
+      'my_survey_response',
+      'delete_my_survey_response',
+      'admin_survey_summary',
+      'admin_survey_responses',
+    ]) {
+      expect(fake.functions.get(name), name).toBeDefined();
+    }
+    expect(fake.functions.get('delete_my_data')?.body).not.toContain('survey');
+
+    const before = fake.writes().length;
+    const again = await runReal(fake, 'b18');
+    expect(again.code).toBe(0);
+    expect(appliedSince(fake, before)).toEqual([]);
+    expect(again.text).toContain('ya aplicada, registrada como survey_erase');
+  });
+
+  it('b18 con --dry-run solo lee: dice qué aplicaría y no escribe nada', async () => {
+    const fake = withB14BeforeB15();
+    const dry = await runReal(fake, 'b18', true);
+    expect(dry.code).toBe(0);
+    expect(fake.writes()).toEqual([]);
+    for (const name of ['first_week_survey', 'survey_erase']) {
+      expect(dry.text).toContain(`${name}  se aplica`);
+    }
+    expect(dry.text).not.toContain('Publicando');
+  });
+
+  it('una comprobación de b18 en rojo detiene el plan sin aplicar nada, aunque las migraciones ya estén registradas', async () => {
+    // Las dos registradas por el conector, pero sin la tabla: la base dice otra cosa que la historia
+    const fake = withB14BeforeB15();
+    for (const [index, name] of ['first_week_survey', 'survey_erase'].entries()) {
+      fake.history.push({ version: `2026103000${String(index).padStart(4, '0')}`, name });
+    }
+    const run = await runReal(fake, 'b18');
+    expect(run.code).toBe(1);
+    expect(run.text).toContain('su comprobación sale en rojo');
+    expect(run.text).toContain('tabla_de_encuesta dio 0 y debía dar 1');
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('b11 y b12 no llevan la migración de Borrar mis datos v4, porque sus archivos manuales ya traen la v4 y la dejan igual a ella', () => {
+    // b11 y b12 no publican ni esperan nada más de B15. Solo sus archivos manuales traen la v4 de Borrar mis datos
+    for (const plan of ['b11', 'b12']) {
+      const loaded = loadPlan(ROOT, plan);
+      expect(loaded.migrations.map((step) => step.file)).not.toContain(
+        'supabase/migrations/20261029000004_delete_my_data_v4.sql',
+      );
+      expect(expectedFunctions(loaded, repoMigrations(ROOT)).conflicts, plan).toEqual([]);
+    }
+  });
+
+  it('b11 y b12 sobre un proyecto de antes de B15 se detienen sin escribir, y después de b15 ya se pueden repetir', async () => {
+    // Registrados desde antes, banco-b11.sql y ia-b12.sql no se vuelven a aplicar, y Borrar mis datos sigue en la
+    // v3 en la base. La herramienta lo dice y no escribe nada hasta que b15 la deje en la v4
+    for (const plan of ['b11', 'b12']) {
+      const fake = withB14BeforeB15();
+      const run = await runReal(fake, plan);
+      expect(run.code, plan).toBe(1);
+      expect(run.text, plan).toContain(
+        'delete_my_data está distinta del repo en la base y ningún paso del plan la deja como supabase/migrations/20261029000004_delete_my_data_v4.sql',
+      );
+      expect(fake.writes(), plan).toEqual([]);
+    }
+    const fake = withB14BeforeB15();
+    expect((await runReal(fake, 'b15')).code).toBe(0);
+    for (const plan of ['b11', 'b12']) {
+      const before = fake.writes().length;
+      const again = await runReal(fake, plan);
+      expect(again.code, plan).toBe(0);
+      expect(appliedSince(fake, before), plan).toEqual([]);
+    }
   });
 });

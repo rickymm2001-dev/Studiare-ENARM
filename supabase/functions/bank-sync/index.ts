@@ -4,7 +4,8 @@
 // Cualquier otra petición recibe 401 sin tocar Google.
 //   supabase functions deploy bank-sync --no-verify-jwt
 import { handleBankSync } from '../_shared/bank/sync.ts';
-import { bankSyncDeps } from '../_shared/runtime.ts';
+import { withMonitoring } from '../_shared/monitoring.ts';
+import { bankSyncDeps, monitoringDeps } from '../_shared/runtime.ts';
 
 let currentRun: string | null = null;
 const deps = bankSyncDeps((runId) => {
@@ -19,4 +20,4 @@ addEventListener('beforeunload', () => {
     .catch(() => undefined);
 });
 
-Deno.serve((request) => handleBankSync(request, deps));
+Deno.serve(withMonitoring('bank-sync', (request) => handleBankSync(request, deps), monitoringDeps));

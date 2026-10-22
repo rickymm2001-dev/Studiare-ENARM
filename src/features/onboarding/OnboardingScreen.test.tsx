@@ -278,6 +278,31 @@ describe('lo que pide el registro (B9)', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
+    });
+  });
+});
+
+describe('Medición de uso en el registro (B15, 1.2)', () => {
+  it('se ofrece como cuarto permiso, apagado como los demás, y se guarda si lo prende', async () => {
+    const fake = phoneOnlyCloud();
+    const typing = userEvent.setup();
+    mount(fake);
+    await fillRequired(typing);
+    await typing.type(screen.getByLabelText(t.account.email), EMAIL);
+    for (const [label] of Object.values(consentTexts.purposes)) {
+      expect(screen.getByLabelText(label)).not.toBeChecked();
+    }
+    expect(screen.getByText(/Lo hace PostHog por encargo nuestro/)).toBeVisible();
+    await typing.click(screen.getByLabelText(consentTexts.purposes.product_analytics[0]));
+    await typing.click(screen.getByRole('button', { name: t.onboarding.create }));
+    expect(await screen.findByText(t.cloud.sentBody(EMAIL))).toBeVisible();
+    const [account] = (await captured.api?.repos.accounts.list()) ?? [];
+    expect(await currentConsents(captured.api as DataApi, account?.userId ?? '')).toEqual({
+      party: false,
+      ai_analysis: false,
+      anonymized_improvement: false,
+      product_analytics: true,
     });
   });
 });

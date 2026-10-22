@@ -13,6 +13,16 @@ const ctx: EmailContext = {
   alias: 'Dra. Luna',
 };
 
+/** La ficha de baja de un alumno de prueba, 36 caracteres hexadecimales como la deja la base */
+const TOKEN = '0123456789abcdef0123456789abcdef0123';
+
+/** El contexto del recordatorio, con el enlace de baja de la página de la app y el de un clic de la función */
+const reminderCtx: EmailContext = {
+  ...ctx,
+  unsubscribeUrl: `https://app.ejemplo.mx/Studiare-ENARM/correo/baja?t=${TOKEN}`,
+  oneClickUrl: `https://proyecto.supabase.co/functions/v1/email-unsubscribe?t=${TOKEN}`,
+};
+
 /** Los datos como los deja la base en email_outbox, con las fechas como las manda PostgREST */
 const samples: Record<EmailKind, Record<string, unknown>> = {
   trial_ending: { trialEnd: '2026-10-21T16:00:00+00:00', plan: 'founder', amountMxn: 79 },
@@ -20,7 +30,12 @@ const samples: Record<EmailKind, Record<string, unknown>> = {
   invoice_requested: { requestId: '0b8f5f8e-1d6a-4c55-9e8e-7f3c2a1b0c9d', amountMxn: 1499 },
   content_report: { questionKey: 'GO-0001', reason: 'wrong_key', openReports: 1 },
   distractor_flags: { flags: 3, questionKeys: ['GO-0001', 'MI-0420'] },
+  daily_review_reminder: { due: 37, newAvailable: 10, day: '2026-10-20' },
 };
+
+/** El contexto de cada tipo: el recordatorio necesita su enlace de baja y los demás no */
+const ctxOf = (kind: EmailKind): EmailContext =>
+  kind === 'daily_review_reminder' ? reminderCtx : ctx;
 
 /** El texto sin direcciones web, que sí llevan dos puntos */
 const withoutUrls = (value: string) => value.replace(/https?:\/\/\S+/g, '');
@@ -165,7 +180,7 @@ describe('plantillas de correo', () => {
 
   it('ningún correo lleva dos puntos en sus frases, correos de personas ni RFC, y trata de tú', () => {
     for (const kind of EMAIL_KINDS) {
-      const email = renderEmail(kind, samples[kind], ctx);
+      const email = renderEmail(kind, samples[kind], ctxOf(kind));
       expect(withoutUrls(email.subject)).not.toContain(':');
       expect(withoutUrls(email.text)).not.toContain(':');
       expect(`${email.text} ${email.html}`).not.toContain('@');
@@ -217,7 +232,133 @@ describe('plantillas de correo', () => {
   });
 });
 
-describe('envío de B10', () => {
+describe('recordatorio diario de repaso', () => {
+  it('dice cuántas tarjetas vencen, las nuevas, y lleva el botón, el cambio de ajustes y la baja', () => {
+    const email = renderEmail('daily_review_reminder', samples.daily_review_reminder, reminderCtx);
+    expect(email.subject).toBe('Hoy te tocan 37 tarjetas en Studiare');
+    expect(email.text).toBe(
+      [
+        'Hola, Dra. Luna.',
+        'Hoy te tocan 37 tarjetas. Repasarlas a tiempo es lo que hace que no se te olviden.',
+        'Además tienes 10 tarjetas nuevas.',
+        'Repasar ahora en https://app.ejemplo.mx/Studiare-ENARM/repasar',
+        'Cambiar mis recordatorios en https://app.ejemplo.mx/Studiare-ENARM/repasar?ajustes=recordatorios',
+        `Darme de baja en https://app.ejemplo.mx/Studiare-ENARM/correo/baja?t=${TOKEN}`,
+        'Recibes este correo porque prendiste los recordatorios en Ajustes del repaso. Ahí cambias la hora y los días.',
+      ].join('\n\n'),
+    );
+    expect(email.html).toContain(
+      '<a href="https://app.ejemplo.mx/Studiare-ENARM/repasar">Repasar ahora</a>',
+    );
+    expect(email.html).toContain(
+      `<a href="https://app.ejemplo.mx/Studiare-ENARM/correo/baja?t=${TOKEN}">Darme de baja</a>`,
+    );
+    expect(email.html).toContain(
+      '<a href="https://app.ejemplo.mx/Studiare-ENARM/repasar?ajustes=recordatorios">Cambiar mis recordatorios</a>',
+    );
+  });
+
+  it('sin conteo conocido dice que el repaso espera y no inventa un número', () => {
+    const email = renderEmail(
+      'daily_review_reminder',
+      { due: null, newAvailable: 0, day: '2026-10-20' },
+      reminderCtx,
+    );
+    expect(email.subject).toBe('Tu repaso de hoy te espera');
+    expect(email.text).toContain('Tu repaso de hoy te espera. Repasar a tiempo');
+    expect(email.text).not.toMatch(/\d+ tarjeta|Además/);
+    // El conteo ausente cuenta igual que null
+    expect(renderEmail('daily_review_reminder', { day: '2026-10-20' }, reminderCtx).subject).toBe(
+      'Tu repaso de hoy te espera',
+    );
+  });
+
+  it('cuida el singular, el cero y las nuevas', () => {
+    const one = renderEmail(
+      'daily_review_reminder',
+      { due: 1, newAvailable: 1, day: '2026-10-20' },
+      reminderCtx,
+    );
+    expect(one.subject).toBe('Hoy te toca 1 tarjeta en Studiare');
+    expect(one.text).toContain(
+      'Hoy te toca 1 tarjeta. Repasarla a tiempo es lo que hace que no se te olvide.',
+    );
+    expect(one.text).toContain('Además tienes 1 tarjeta nueva.');
+    const zero = renderEmail(
+      'daily_review_reminder',
+      { due: 0, newAvailable: 3, day: '2026-10-20' },
+      reminderCtx,
+    );
+    expect(zero.subject).toBe('Hoy no tienes tarjetas vencidas en Studiare');
+    expect(zero.text).toContain('Hoy no tienes tarjetas vencidas.');
+    expect(zero.text).toContain('Además tienes 3 tarjetas nuevas.');
+  });
+
+  it('la baja de un clic va en los encabezados List-Unsubscribe y List-Unsubscribe-Post', () => {
+    const email = renderEmail('daily_review_reminder', samples.daily_review_reminder, reminderCtx);
+    expect(email.headers).toEqual({
+      'List-Unsubscribe': `<https://proyecto.supabase.co/functions/v1/email-unsubscribe?t=${TOKEN}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    });
+    // El enlace del pie va a la página de la app y no a la función, para que un revisor de enlaces no dé de baja
+    expect(email.text).not.toContain('functions/v1');
+    expect(email.html).not.toContain('functions/v1');
+    // Sin la dirección de un clic sale solo con el enlace del pie
+    const { oneClickUrl: _omitted, ...withoutOneClick } = reminderCtx;
+    expect(
+      renderEmail('daily_review_reminder', samples.daily_review_reminder, withoutOneClick).headers,
+    ).toBeUndefined();
+  });
+
+  it('solo el recordatorio lleva baja. Los correos de servicio no traen encabezados ni enlace', () => {
+    for (const kind of EMAIL_KINDS.filter((item) => item !== 'daily_review_reminder')) {
+      const email = renderEmail(kind, samples[kind], reminderCtx);
+      expect(email.headers, kind).toBeUndefined();
+      expect(email.text, kind).not.toMatch(/Darme de baja|baja\?t=/);
+      expect(email.text, kind).toContain('Recibes este correo por tu cuenta de Studiare.');
+    }
+  });
+
+  it('no sale sin el enlace de baja ni con un conteo que no se entiende', () => {
+    expect(() => renderEmail('daily_review_reminder', samples.daily_review_reminder, ctx)).toThrow(
+      'Falta unsubscribeUrl para el correo daily_review_reminder',
+    );
+    for (const due of [-1, 2.5, '3', {}]) {
+      expect(() =>
+        renderEmail('daily_review_reminder', { due, newAvailable: 0 }, reminderCtx),
+      ).toThrow('Falta due para el correo daily_review_reminder');
+    }
+    expect(() =>
+      renderEmail('daily_review_reminder', { due: 3, newAvailable: 'muchas' }, reminderCtx),
+    ).toThrow('Falta newAvailable');
+  });
+
+  it('trata de tú, limpia el alias y suma el correo de ayuda al pie del recordatorio', () => {
+    const email = renderEmail('daily_review_reminder', samples.daily_review_reminder, {
+      ...reminderCtx,
+      alias: '<b>Luna</b>',
+      supportEmail: 'ayuda@studiare.mx',
+    });
+    expect(email.html).toContain('<p>Hola, &lt;b&gt;Luna&lt;/b&gt;.</p>');
+    expect(email.text).toMatch(
+      /Ajustes del repaso\. Ahí cambias la hora y los días\. Si tienes dudas, escríbenos a ayuda@studiare\.mx\.$/,
+    );
+    expect(email.text).not.toMatch(/\busted\b|\bsu cuenta\b/i);
+  });
+
+  it('un ajuste de la consulta del enlace no se cuela. La ficha se pone como viene', () => {
+    const email = renderEmail('daily_review_reminder', samples.daily_review_reminder, {
+      ...reminderCtx,
+      settingsUrl: 'https://app.ejemplo.mx/Studiare-ENARM/repasar?ajustes=recordatorios&x=1',
+    });
+    expect(email.text).toContain(
+      'Cambiar mis recordatorios en https://app.ejemplo.mx/Studiare-ENARM/repasar?ajustes=recordatorios&x=1',
+    );
+    expect(email.html).toContain('ajustes=recordatorios&amp;x=1');
+  });
+});
+
+describe('envío sin llaves', () => {
   it('no manda nada y deja una línea sin destinatario, alias ni clave', async () => {
     const lines: string[] = [];
     const sender = createNoopSender((line) => lines.push(line));
@@ -228,7 +369,9 @@ describe('envío de B10', () => {
       idempotencyKey: 'trial_ending:sub_1:2026-10-21',
     });
     expect(result).toEqual({ id: 'noop' });
-    expect(lines).toEqual(['Correo trial_ending sin enviar. El envío de correos llega en B15']);
+    expect(lines).toEqual([
+      'Correo trial_ending sin enviar. El envío de correos no está configurado',
+    ]);
     expect(lines.join(' ')).not.toMatch(/alumna|Luna|sub_1/);
   });
 });

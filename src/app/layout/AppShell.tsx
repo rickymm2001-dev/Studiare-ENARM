@@ -12,8 +12,9 @@ import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
 import { useBankNotice } from '@/features/shared/bankNotice';
 import { useQuestionSourceKind } from '@/features/shared/questionSourceKind';
+import { TourLauncher } from '@/features/tour/TourLauncher';
 import { HOME_BY_ROLE, navForRole } from '../navigation';
-import { screenPath } from '../screens';
+import { isPublicScreenPath, screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { AccessGate } from './AccessGate';
@@ -21,10 +22,12 @@ import { BottomNav, NAV_ID } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
+import { MovedNoticeLauncher } from './MovedNoticeLauncher';
 import { OAuthErrorNotice } from './OAuthErrorNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
+import { SurveyNoticeLauncher } from './SurveyNoticeLauncher';
 import { TopBarContext } from './TopBarContext';
 
 // El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4). Si su archivo
@@ -50,8 +53,9 @@ export function AppShell() {
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const { pathname } = useLocation();
   const session = useSession();
-  // Sin sesión, el aviso de privacidad y los términos también van sin navegación
-  const legal = pathname === screenPath('privacyNotice') || pathname === screenPath('terms');
+  // Sin sesión, el aviso de privacidad, los términos y la baja de los recordatorios (B15) también van sin
+  // navegación. La lista de pantallas públicas vive en screens.ts
+  const legal = isPublicScreenPath(pathname);
   const bare =
     pathname === screenPath('onboarding') ||
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
@@ -214,6 +218,10 @@ export function AppShell() {
       <OAuthErrorNotice className={rail} />
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
+      {/* La mudanza de la demo de GitHub Pages (B17). Sin las variables del build no pinta ni baja nada */}
+      <MovedNoticeLauncher className={rail} />
+      {/* La encuesta de los primeros días (B18). Solo baja algo para un alumno con la nube, fuera de estudiar */}
+      <SurveyNoticeLauncher className={rail} />
       <OrganizationSync />
 
       <div className={rail}>
@@ -238,6 +246,8 @@ export function AppShell() {
 
       {bare ? null : <BottomNav nav={navForRole(role)} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
+      {/* El recorrido guiado (B15). Solo esto va en el JavaScript inicial, el recorrido se baja al empezar */}
+      <TourLauncher userId={session.status === 'ready' ? session.user.id : null} />
     </div>
   );
 }

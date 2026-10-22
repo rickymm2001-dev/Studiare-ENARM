@@ -17,13 +17,14 @@
 --   puede liberar el dispositivo de un alumno. Sin la 6 no se guardan los errores del navegador.
 --
 -- Es una foto de esa fecha, salvo las piezas 2 y 5, que se pusieron al día con B10 (2026-10-14), y la
--- pieza 4, que se puso al día con B12 (2026-10-15). Si se vuelve a pegar después de B10 no deshace la
--- restricción de planes ni el freno de borrar la cuenta. Con B10 la pieza 5 pide
--- billing_blocks_account_deletion, de la migración 20261022000002. Con B12 la pieza 4 es la versión final
--- de borrar mis datos (v3), con lo de banco-b11.sql y los trabajos de IA, igual a la Sección con delete
--- de 20261026000004_ai_delete_my_data.sql, a supabase/manual/ia-b12.sql y a banco-b11.sql. Este archivo
--- se pega después de las migraciones de B12. Si una migración cambia después, este archivo no se
--- actualiza solo. Las migraciones de supabase/migrations siguen siendo la fuente.
+-- pieza 4, que se puso al día con B12 (2026-10-15) y otra vez con B15 (2026-10-21). Si se vuelve a pegar
+-- después de B10 no deshace la restricción de planes ni el freno de borrar la cuenta. Con B10 la pieza 5
+-- pide billing_blocks_account_deletion, de la migración 20261022000002. Con B12 la pieza 4 era la versión
+-- final de borrar mis datos (v3), con lo de banco-b11.sql y los trabajos de IA, igual a la Sección con
+-- delete de 20261026000004_ai_delete_my_data.sql. Con B15 es la v4, que suma lo de los recordatorios y la
+-- analítica, igual a la Sección con delete de 20261029000004_delete_my_data_v4.sql, a supabase/manual/ia-b12.sql
+-- y a banco-b11.sql. Este archivo se pega después de las migraciones de B15. Si una migración cambia después,
+-- este archivo no se actualiza solo. Las migraciones de supabase/migrations siguen siendo la fuente.
 
 -- ################ 1. Liberar la cuenta de un alumno (device_barrier)
 -- ===================================================================== Funciones del admin
@@ -86,12 +87,17 @@ begin
   end loop;
 end $$;
 
--- ################ 4. Borrar mis datos (B12, v3, versión final, con lo de banco-b11.sql)
+-- ################ 4. Borrar mis datos (B15, v4, versión final, con lo de banco-b11.sql y ia-b12.sql)
 -- Lo de ai_hosted, más las lecturas del banco y los mazos bajados del catálogo de B11 (banco-b11.sql), más
--- los trabajos de IA por lote y las generaciones de tarjetas de días anteriores de B12. Conserva el uso de
--- IA de hoy, sus generaciones de hoy y las lecturas del día de estudio en curso, para que borrar los datos
--- no sirva para saltarse un límite. Los delete de lo de la IA van con execute y solo si la tabla existe.
--- Igual a 20261026000004_ai_delete_my_data.sql y a ia-b12.sql
+-- los trabajos de IA por lote y las generaciones de tarjetas de días anteriores de B12 (ia-b12.sql), más lo
+-- que guarda B15 del alumno: sus recordatorios de repaso por correo con la ficha de baja, la foto de tarjetas
+-- vencidas, su ID seudónimo de la analítica con su permiso y los eventos de dinero que seguían en la cola, y
+-- los recordatorios que seguían por mandarse. Conserva el uso de IA de hoy, sus generaciones de hoy y las
+-- lecturas del día de estudio en curso, para que borrar los datos no sirva para saltarse un límite. Los
+-- correos de cobro que siguen pendientes (fin de prueba, pase por vencer) no se tocan, porque la cuenta y el
+-- plan se quedan. Los delete de lo de la IA y de B15 van con execute y solo si la tabla existe.
+-- Es igual a la Sección con delete de 20261029000004_delete_my_data_v4.sql, a banco-b11.sql y a ia-b12.sql,
+-- que son la fuente. Con un token válido de Supabase no la pegas tú, la aplican los planes b11, b12 y b15
 create or replace function public.delete_my_data() returns jsonb
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
@@ -107,6 +113,10 @@ declare
   v_downloads bigint;
   v_jobs bigint := 0;
   v_generations bigint := 0;
+  v_reminders bigint := 0;
+  v_snapshots bigint := 0;
+  v_analytics bigint := 0;
+  v_pending bigint := 0;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -155,6 +165,31 @@ begin
     execute 'delete from public.ai_generations where user_id = $1 and day < public.ai_day()' using v_user;
     get diagnostics v_generations = row_count;
   end if;
+  -- Lo de B15. Como lo de la IA, solo si las tablas existen, para que no se rompa si falta una migración
+  -- Los recordatorios de repaso por correo, con su ficha de baja, y la foto de tarjetas vencidas
+  if to_regclass('public.review_reminder_prefs') is not null then
+    execute 'delete from public.review_reminder_prefs where user_id = $1' using v_user;
+    get diagnostics v_reminders = row_count;
+  end if;
+  if to_regclass('public.review_due_snapshots') is not null then
+    execute 'delete from public.review_due_snapshots where user_id = $1' using v_user;
+    get diagnostics v_snapshots = row_count;
+  end if;
+  -- Los recordatorios que seguían por mandarse. Los correos de cobro no, porque la cuenta y el plan se quedan
+  if to_regclass('public.email_outbox') is not null then
+    execute $q$delete from public.email_outbox
+      where recipient_user = $1 and kind = 'daily_review_reminder' and status in ('queued', 'failed')$q$ using v_user;
+    get diagnostics v_pending = row_count;
+  end if;
+  -- El ID seudónimo de la analítica con su permiso y los eventos de dinero que seguían en la cola. Quien
+  -- vuelva a dar el permiso empieza con un ID nuevo
+  if to_regclass('public.analytics_outbox') is not null then
+    execute 'delete from public.analytics_outbox where user_id = $1' using v_user;
+  end if;
+  if to_regclass('public.analytics_subjects') is not null then
+    execute 'delete from public.analytics_subjects where user_id = $1' using v_user;
+    get diagnostics v_analytics = row_count;
+  end if;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
@@ -168,7 +203,11 @@ begin
     'bank_reads', v_reads,
     'deck_downloads', v_downloads,
     'ai_jobs', v_jobs,
-    'ai_generations', v_generations
+    'ai_generations', v_generations,
+    'reminder_prefs', v_reminders,
+    'due_snapshots', v_snapshots,
+    'pending_reminders', v_pending,
+    'analytics_ids', v_analytics
   );
 end;
 $$;

@@ -5,6 +5,7 @@
 // servicio, que nunca sale de aquí. Borrar un factor verificado cierra las sesiones de esa persona, que
 // lo vuelve a dar de alta al entrar. Sin Deno, para probarla con Vitest.
 import { corsHeaders } from './http.ts';
+import { serviceHeaders } from './keys.ts';
 import type { SupabaseEnv } from './supabase.ts';
 
 export type AuthorizeOutcome = 'ok' | 'not_owner' | 'self' | 'not_found' | 'no_session';
@@ -12,6 +13,8 @@ export type AuthorizeOutcome = 'ok' | 'not_owner' | 'self' | 'not_found' | 'no_s
 export interface MfaResetDeps {
   /** Dirección pública de la app, para el CORS */
   appUrl: string | undefined;
+  /** APP_ORIGINS, más orígenes de la app para el CORS mientras dura una mudanza de dominio */
+  appOrigins?: string | undefined;
   /** Revisa en la base, con la sesión de quien pide, que pueda restablecer el factor de target */
   authorize: (authorization: string, target: string) => Promise<AuthorizeOutcome>;
   /** Los ids de los factores de la cuenta. Lanza si Auth no responde */
@@ -38,7 +41,10 @@ const STATUS: Record<Exclude<AuthorizeOutcome, 'ok'>, number> = {
 };
 
 export async function handleResetMfa(request: Request, deps: MfaResetDeps): Promise<Response> {
-  const cors = corsHeaders({ APP_URL: deps.appUrl }, request.headers.get('origin'));
+  const cors = corsHeaders(
+    { APP_URL: deps.appUrl, APP_ORIGINS: deps.appOrigins },
+    request.headers.get('origin'),
+  );
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
   if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
   const authorization = request.headers.get('authorization') ?? '';
@@ -89,10 +95,8 @@ export async function authorizeViaRest(
   throw new Error(`authorize_mfa_reset respondió ${String(reply.status)}`);
 }
 
-const adminHeaders = (env: SupabaseEnv) => ({
-  apikey: env.serviceKey,
-  authorization: `Bearer ${env.serviceKey}`,
-});
+/** La llave de servicio para la API de administración de Auth, como la pide su forma (keys.ts) */
+const adminHeaders = (env: SupabaseEnv) => serviceHeaders(env.serviceKey);
 
 /** Los factores de una cuenta con la API de administración de Auth */
 export async function listFactorsViaRest(

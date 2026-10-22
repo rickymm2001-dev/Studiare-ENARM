@@ -19,7 +19,9 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # El lint con tipos del repo entero pasó de 4 GB de memoria con B15 (se cortó con heap out of memory) y todo
+    # el trabajo ya rozaba los 15 minutos con B14. El script lint sube el límite de memoria y aquí se da más tiempo
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -71,8 +73,8 @@ jobs:
   # con el proxy de IA en modo simulado (14.1). Los navegadores van dentro del proyecto (D-033)
   e2e:
     runs-on: ubuntu-latest
-    # Cuatro proyectos y dos builds desde B1 (los de nube con el Supabase simulado)
-    timeout-minutes: 45
+    # Cuatro proyectos y dos builds desde B1 (los de nube con el Supabase simulado). Con B14 tardaba 32 minutos
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
         with:

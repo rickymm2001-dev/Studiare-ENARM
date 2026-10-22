@@ -19,7 +19,9 @@ pg_start() {
     chown postgres "$work"
     run_as=(runuser -u postgres --)
   fi
-  "${run_as[@]}" "$bin/initdb" -D "$work/data" -A trust -U postgres >/dev/null
+  # UTF8 y no el SQL_ASCII que daría un entorno sin idioma: Supabase es UTF8, y normalize() de la encuesta (B18) y las
+  # expresiones regulares con caracteres Unicode solo se prueban de verdad así. El CI ya corría en UTF8
+  "${run_as[@]}" "$bin/initdb" -D "$work/data" -A trust -U postgres -E UTF8 --locale=C.UTF-8 >/dev/null
   "${run_as[@]}" "$bin/pg_ctl" -D "$work/data" -o "-p $port -k $work -c listen_addresses=''" -l "$work/log" start >/dev/null
 }
 
@@ -43,8 +45,9 @@ pg_migrate() {
   psql_run -f "$here/grants.sql"
   # Las migraciones que siguen al freno son idempotentes. Se corren otra vez, por su nombre, la de la foto
   # de perfil de B2, las dos de B7, las dos del plan Gratis de B8, la de cuentas y acceso de B9, las tres de
-  # pagos de B10, las del banco en la nube de B11, las cuatro de la IA real de B12 y la de Inglés médico de B13,
-  # para comprobarlo. Van en
+  # pagos de B10, las del banco en la nube de B11, las cuatro de la IA real de B12, la de Inglés médico de B13,
+  # las de la calibración de B14, las tres de recordatorios, analítica y Cron de B15 y las dos de la encuesta de los
+# primeros días de B18, para comprobarlo. Van en
   # el orden del proyecto real. Las de B8 vuelven a cerrar Party y los apuntes de la nube que la de Party de
   # B7 deja abiertos. La de B9 lleva una versión menor que las de B8, pero en el proyecto real se aplica
   # después de ellas, así que va después para probar ese orden y que no pise party_open, sync_push_records
@@ -76,7 +79,13 @@ pg_migrate() {
     20261027000001_english_section \
     20261028000001_model_core \
     20261028000002_calibration_job \
-    20261028000003_model_reads; do
+    20261028000003_model_reads \
+    20261029000001_email_reminders \
+    20261029000002_product_analytics \
+    20261029000003_engagement_cron \
+    20261029000004_delete_my_data_v4 \
+    20261030000001_first_week_survey \
+    20261030000002_survey_erase; do
     psql_run -f "$here/../migrations/$name.sql"
   done
   # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias
@@ -88,9 +97,10 @@ pg_migrate() {
   psql_run -f "$here/../manual/party-dueno-al-borrar-cuenta.sql"
   psql_run -f "$here/../manual/pagos-b10.sql"
   psql_run -f "$here/../manual/pagos-b10.sql"
-  # Con B12, banco-b11.sql, la pieza 4 de ejecutar-en-sql-editor.sql, ia-b12.sql y la Sección con delete de
-  # 20261026000004_ai_delete_my_data.sql traen la misma versión final de delete_my_data (v3), con lo de B11
-  # y los trabajos de IA. Se pegan en cualquier orden y se repiten sin daño. ia-b12.sql va al final
+  # Con B15, banco-b11.sql, la pieza 4 de ejecutar-en-sql-editor.sql, ia-b12.sql y la Sección con delete de
+  # 20261029000004_delete_my_data_v4.sql traen la misma versión final de delete_my_data (v4), con lo de B11, los
+  # trabajos de IA y los recordatorios y la analítica. Se pegan en cualquier orden y se repiten sin daño.
+  # ia-b12.sql va al final
   psql_run -f "$here/../manual/banco-b11.sql"
   psql_run -f "$here/../manual/banco-b11.sql"
   psql_run -f "$here/../manual/ejecutar-en-sql-editor.sql"

@@ -15,6 +15,7 @@ export function OutlinesLocked() {
   return (
     <LockedPreview
       id="apuntes-cerrado"
+      feature="outlines"
       title={text.title}
       intro={text.intro}
       points={text.points}

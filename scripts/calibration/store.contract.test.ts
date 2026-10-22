@@ -144,7 +144,7 @@ describe('los dos transportes usan la misma lista', () => {
     };
     const store = createRestStore({
       url: 'https://proyecto.supabase.co',
-      key: 'sb_secret_llave_de_prueba',
+      key: 'sb_secret_' + 'llave_de_prueba',
       fetch: fetcher,
     });
     for (const method of METHODS) await CALLS[method](store);
@@ -154,7 +154,7 @@ describe('los dos transportes usan la misma lista', () => {
       const request = requests[index];
       expect(request?.path).toBe(`/rest/v1/rpc/${spec.name}`);
       expect(request?.method).toBe('POST');
-      expect(request?.apikey).toBe('sb_secret_llave_de_prueba');
+      expect(request?.apikey).toBe('sb_secret_' + 'llave_de_prueba');
       expect(Object.keys(request?.body ?? {})).toEqual(spec.params.map(([name]) => name));
     });
   });

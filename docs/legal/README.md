@@ -7,6 +7,9 @@ Borradores del aviso de privacidad y de los términos y condiciones de Studiare,
 - aviso-de-privacidad.md es el aviso que ve el alumno en la página de Privacidad y al crear su cuenta
 - terminos-y-condiciones.md son los términos y condiciones, que se leen en la página de Términos
 - CAMBIOS-B16.md es la lista de lo que cambió en B16, con el porqué y las preguntas para el abogado y para Ricardo
+- CAMBIOS-B15.md es la lista de lo que cambió en B15 (Medición de uso, PostHog, Sentry y recordatorios por correo), con sus preguntas
+- CAMBIOS-B17.md es la lista de lo que cambió en B17 (Cloudflare, GitHub como quien aloja la página y el componente de Stripe de Apple Pay y Google Pay), con la decisión sobre la versión del aviso y sus preguntas
+- CAMBIOS-B18.md es la lista de lo que cambió en B18 (la encuesta de los primeros días, con lo que se guarda, quién la ve y cómo se borra), con la decisión sobre la versión del aviso y sus preguntas
 
 Son el mismo texto que muestra la app. Se generan con npm run legal:export a partir de src/i18n/legalDocs.ts, y una prueba falla si estos archivos se quedan atrás del texto de la app.
 
@@ -23,14 +26,14 @@ La lista completa está en CAMBIOS-B16.md, sección Preguntas para el abogado. L
 
 ## Cómo poner los datos del responsable
 
-Son públicos por diseño, porque la ley obliga a decirlos. En GitHub, en Settings, Secrets and variables, Actions, pestaña Variables, crea estas cuatro. Cuando la página pase a Cloudflare (B17), van también ahí.
+Son públicos por diseño, porque la ley obliga a decirlos. En GitHub, en Settings, Secrets and variables, Actions, pestaña Variables, crea estas cuatro. Viven solo en GitHub. Con B17 la página se publica en Cloudflare con carga directa desde GitHub Actions, que construye la página con las variables de GitHub, así que no se repiten en Cloudflare.
 
 - VITE_LEGAL_NAME con la razón social, Plexus Medica S. de R.L. de C.V. (respuestas 24 y 42)
 - VITE_LEGAL_ADDRESS con el domicilio
 - VITE_PRIVACY_EMAIL con el correo de privacidad, que atiende las solicitudes de acceso, rectificación, cancelación y oposición. Si falta, el aviso usa el de soporte
 - VITE_SUPPORT_EMAIL con el correo de soporte. Es la misma variable que ya usa el aviso de ayuda, y la usan los términos para la garantía y las aclaraciones
 
-Vuelve a publicar la página. Mientras alguna falte, la app no inventa nada y el alumno lee el texto neutro.
+Vuelve a publicar la página, con Run workflow en el flujo pages mientras la demo siga en GitHub Pages y en el flujo cloudflare después. Mientras alguna falte, la app no inventa nada y el alumno lee el texto neutro.
 
 Para mandarle al abogado los textos con los datos ya puestos, corre el comando con las variables, por ejemplo VITE_LEGAL_NAME="Plexus Medica S. de R.L. de C.V." npm run legal:export. Los archivos llenos no se suben al repositorio, porque la prueba compara contra la versión con los datos pendientes. Después de mandarlos, corre npm run legal:export sin variables para dejarlos como estaban.
 

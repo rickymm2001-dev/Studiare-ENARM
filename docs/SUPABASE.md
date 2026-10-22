@@ -56,6 +56,7 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 1. En Supabase abre Authentication, URL Configuration
 2. En Site URL pon https://rickymm2001-dev.github.io/Studiare-ENARM/
 3. En Redirect URLs agrega esa misma dirección y http://localhost:5173/**
+4. Cuando Studiare se mude a tu dominio propio, estas direcciones cambian el día de la mudanza. Mira Dominio propio, llaves nuevas y plan de pago (B17) más abajo
 
 ## Paso 6b. Código en los correos de acceso (D-115)
 
@@ -1222,6 +1223,299 @@ La llave pasa por encima de los permisos por fila, pero el código solo llama a 
 - calibration_runs.counts solo acepta números, booleanos y códigos en minúsculas. Es lo único que la sesión lee de la calibración real
 - Una corrida cerrada ya no da seudónimos, porque su sal se borra al cerrar
 
+## Recordatorios, analítica y alertas (B15)
+
+### Qué hace
+
+- 20261029000001_email_reminders. El interruptor único de envío email_delivery con pausa por tipo, los ajustes de recordatorio de cada alumno (review_reminder_prefs, con su ficha de baja aleatoria), la foto de tarjetas vencidas que sube la app (review_due_snapshots), el encolado de recordatorios cada 15 minutos (enqueue_review_reminders), claim_email_batch v2 con la misma firma que salta los tipos en pausa y marca stale lo que ya no tiene sentido mandar, release_email, email_recipients, email_unsubscribe, email_tick_ok y los conteos del admin (admin_email_overview)
+- 20261029000002_product_analytics. El ID seudónimo aleatorio de la analítica con el permiso Medición de uso (analytics_subjects), la cola de eventos de dinero (analytics_outbox) que llenan disparadores en subscriptions y payments sin poder hacer fallar un pago, el reclamo y cierre de esa cola y analytics_tick_ok. El interruptor analytics nace apagado
+- 20261029000003_engagement_cron. Las fichas email_tick_secret y analytics_tick_secret en Vault y cuatro trabajos de Cron en GMT. correos-recordatorios cada 15 minutos, correos-pases a las 14:07 (8:07 en Mérida), correos-enviar cada minuto y analitica-enviar cada 5, estos dos solo si el interruptor está prendido y hay algo listo
+- 20261029000004_delete_my_data_v4. Borrar mis datos v4, que suma a la v3 de B12 los recordatorios, la foto de vencidas, el ID de analítica y los recordatorios pendientes. Es la única de las cuatro con delete
+- Todo nace apagado. email_delivery sale con el valor de billing_emails.enabled, que en el proyecto real es false, y analytics con false. Las cuatro tablas nuevas nacen sin permisos para la API y con permisos por fila sin políticas
+- Las funciones de apoyo, send-emails, email-unsubscribe, analytics-flush y monitoring-test, y cómo funcionan los correos y las alertas están en docs/CORREOS.md y docs/ALERTAS.md
+
+### Cómo aplicar las cuatro migraciones
+
+Aplica primero todas las anteriores, incluidas las de B14. Van en orden y las cuatro son seguras de repetir. Las tres primeras no llevan delete ni drop, así el conector las aplica sin pedir confirmación. La tercera no hace nada donde no existan pg_cron, pg_net y Vault, y necesita project_url en Vault, que guardó la sesión con B11. La cuarta lleva delete, así que el conector no la aplica sin una confirmación y la aplica la herramienta de despliegue.
+
+1. supabase/migrations/20261029000001_email_reminders.sql
+2. supabase/migrations/20261029000002_product_analytics.sql
+3. supabase/migrations/20261029000003_engagement_cron.sql
+4. supabase/migrations/20261029000004_delete_my_data_v4.sql
+
+Con un token válido de Supabase no las aplicas tú. Lo hace npm run deploy:supabase -- --plan b15 (docs/DESPLIEGUE.md), que también publica las funciones de abajo.
+
+**Borrar mis datos v4.** Quitar los recordatorios, la foto de vencidas, el ID de analítica y los recordatorios pendientes lleva delete, así que va en su propia migración, la cuarta, como pasó con 20261026000004 en B12. Es la v3 de B12 más lo de B15, sin cambiar una línea de la v3, y plans.test.ts lo comprueba. La herramienta de despliegue exige que un archivo manual traiga cada función igual a la última migración que la define, así que supabase/manual/banco-b11.sql, supabase/manual/ia-b12.sql y la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql traen la misma v4, para pegarlas a mano si el token no llega. Los delete de lo nuevo van con execute y solo si la tabla existe, así la función no se rompe si falta una migración. Borrar la cuenta lo quita todo en cascada sin necesitarla. Conserva los avisos de cobro pendientes (fin de prueba, pase por vencer), porque la cuenta y el plan se quedan.
+
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run. Es la comprobación del final de la cuarta migración, la misma que revisa el plan b15, y solo mira hechos de la estructura.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public'
+     and tablename in ('review_reminder_prefs', 'review_due_snapshots', 'analytics_subjects', 'analytics_outbox')) as tablas_de_b15,
+  (select bool_and(relrowsecurity) from pg_class where oid in (
+     'public.review_reminder_prefs'::regclass, 'public.review_due_snapshots'::regclass,
+     'public.analytics_subjects'::regclass, 'public.analytics_outbox'::regclass)) as tablas_con_seguridad_por_fila,
+  has_function_privilege('authenticated', 'public.set_reminder_prefs(boolean, integer, integer[], boolean, text)', 'execute') as alumno_guarda_recordatorios,
+  has_function_privilege('anon', 'public.set_reminder_prefs(boolean, integer, integer[], boolean, text)', 'execute') as anonimo_guarda_recordatorios,
+  has_function_privilege('authenticated', 'public.claim_email_batch(integer)', 'execute') as alumno_reclama_correos,
+  has_function_privilege('service_role', 'public.claim_email_batch(integer)', 'execute') as llave_reclama_correos,
+  has_function_privilege('service_role', 'public.email_unsubscribe(text)', 'execute') as llave_da_de_baja,
+  has_function_privilege('authenticated', 'public.analytics_identity()', 'execute') as alumno_pide_su_id,
+  has_function_privilege('authenticated', 'public.claim_analytics_batch(integer)', 'execute') as alumno_reclama_eventos,
+  (select count(*) from public.platform_settings where key in ('email_delivery', 'analytics')) = 2 as interruptores_sembrados,
+  position('review_reminder_prefs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_mis_datos_b15;
+```
+
+Debe salir
+- tablas_de_b15 en 4 y tablas_con_seguridad_por_fila en true
+- alumno_guarda_recordatorios, llave_reclama_correos, llave_da_de_baja y alumno_pide_su_id en true
+- anonimo_guarda_recordatorios, alumno_reclama_correos y alumno_reclama_eventos en false
+- interruptores_sembrados y borrar_mis_datos_b15 en true. Si borrar_mis_datos_b15 sale false, falta aplicar la cuarta migración
+
+Lo que cambia con el tiempo y lo que solo existe en Supabase se lee aparte, con esta segunda consulta.
+
+```sql
+select
+  (select value ->> 'enabled' from public.platform_settings where key = 'email_delivery') as correos_encendidos,
+  (select value ->> 'enabled' from public.platform_settings where key = 'analytics') as analitica_encendida,
+  (select count(*) from cron.job where jobname in ('correos-recordatorios', 'correos-pases', 'correos-enviar', 'analitica-enviar')) as trabajos_de_cron,
+  exists (select 1 from vault.decrypted_secrets where name = 'email_tick_secret') as ficha_de_correos,
+  exists (select 1 from vault.decrypted_secrets where name = 'analytics_tick_secret') as ficha_de_analitica;
+```
+
+Debe salir
+- correos_encendidos y analitica_encendida en false, hasta que prendas cada uno
+- trabajos_de_cron en 4 y las dos fichas en true
+
+Si cualquiera de los permisos sale distinto, avísame antes de abrir a alumnos.
+
+### Las funciones y sus secretos
+
+En Supabase, Edge Functions, Secrets. Los nombres son exactos y ninguno va en el repo. Ninguno pasa por el chat.
+
+| Nombre | Qué es |
+|---|---|
+| RESEND_API_KEY | La llave de envío de Resend, solo de envío y solo de tu dominio |
+| EMAIL_FROM | El remitente con el dominio de Ricardo, por ejemplo Studiare con la dirección de los recordatorios |
+| SUPPORT_EMAIL | El correo de soporte, que va al pie de los correos y como dirección de respuesta |
+| POSTHOG_PROJECT_KEY y POSTHOG_HOST | La llave del proyecto de PostHog (empieza con phc_, nunca la personal phx_) y su dirección, us.i.posthog.com o eu.i.posthog.com |
+| SENTRY_DSN | El DSN del proyecto studiare-funciones de Sentry |
+| APP_URL | Sin cambio. De ahí salen los enlaces de los correos y la página de baja |
+
+Sin cada llave, su función responde que falta la configuración y no manda nada. Las fichas de Cron no son secretos que pongas tú, las crea la tercera migración dentro de Vault.
+
+Después de las migraciones se despliegan las funciones nuevas. Las tres primeras no llevan sesión de Supabase, porque quien las llama es Cron o el correo de una persona, y se identifican con su ficha. El plan b15 las publica con su verify_jwt.
+
+```bash
+supabase functions deploy send-emails --no-verify-jwt
+supabase functions deploy email-unsubscribe --no-verify-jwt
+supabase functions deploy analytics-flush --no-verify-jwt
+supabase functions deploy monitoring-test
+```
+
+Las nueve funciones de siempre se vuelven a desplegar, porque ahora van envueltas con withMonitoring. El plan b15 también lo hace, cada una con el verify_jwt que tenía (create-checkout, create-portal-session, cancel-subscription, admin-reset-mfa, payment-webhook-stripe, payment-webhook-mercadopago, bank-sync, ai-proxy y ai-batch).
+
+### Prueba de humo sin llaves
+
+Después de desplegar, con todo apagado y sin ninguna llave, estas son las respuestas correctas.
+
+| Llamada | Respuesta |
+|---|---|
+| email-unsubscribe con una ficha falsa (POST con ?t=) | 200 en blanco |
+| send-emails sin la ficha de Cron | 401 |
+| monitoring-test con una llave pública cualquiera | 401 o 403, porque exige un admin con segundo factor |
+| monitoring-test con la sesión de un admin y sin SENTRY_DSN | missing_dsn |
+
+### Qué conviene saber
+
+- Los trabajos de Cron leen la dirección del proyecto de project_url en Vault. Si falta, los dos trabajos de envío fallan en cron.job_run_details sin mandar nada. Los de encolar no la necesitan
+- Las horas de Cron son GMT. El aviso de pases por vencer corre a las 14:07, las 8:07 de la mañana en Mérida
+- El chequeo de seguridad de Supabase marcará, a propósito, las cuatro tablas nuevas con permisos por fila y sin políticas, y las funciones que la app llama con sesión (my_reminder_prefs, set_reminder_prefs, put_due_snapshot, analytics_identity, set_analytics_consent y admin_email_overview), que revisan por dentro la sesión, el dispositivo activo o el rol. supabase/tests/function_grants_test.sql (G9 a G11) revisa la lista completa
+- analytics_outbox lleva una columna más que el diseño, send_after, para que dos envíos a la vez no tomen los mismos eventos y para espaciar los reintentos
+- email_recipients solo da correos de cuentas con el correo confirmado y solo da la ficha de baja a quien tiene el recordatorio prendido y sin baja
+- Los eventos de dinero solo se encolan si analytics está prendido y el alumno dio el permiso Medición de uso. Retirarlo marca dropped lo pendiente y cambia su ID. Nunca borra
+- Para apagar todo de golpe, pon email_delivery.enabled y analytics.enabled en false en Plataforma, Correos y alertas
+- Exportar mis datos incluye los recordatorios por correo que el alumno tiene en la nube (hora, días, zona, si es solo con pendientes y si se dio de baja), leídos con my_reminder_prefs, sin la ficha de baja ni el correo. Si la nube no contesta, el archivo sale igual y dice que no se pudieron leer. Si el alumno dio el permiso Medición de uso ya sale en sus permisos, que son de su dispositivo
+
+## Dominio propio, llaves nuevas y plan de pago (B17)
+
+### Qué hace
+
+- Las funciones aceptan más de una dirección de la app. APP_URL sigue siendo la dirección principal, con la que se arman las direcciones de regreso de los pagos, y el secreto nuevo APP_ORIGINS suma más orígenes https separados por comas. Sirve para la mudanza de dominio, con el nuevo y el viejo juntos por 30 días. Una dirección de pages.dev nunca se permite. Si APP_ORIGINS falta, todo queda como antes
+- Las funciones aceptan las dos formas de llave de Supabase. Las llaves anon y service_role se retiran a fin de 2026 y las reemplazan las llaves sb_publishable_ y sb_secret_. Mientras no crees las nuevas, todo sigue con las de siempre y nada cambia para nadie
+- El plan deploy/b17.json vuelve a publicar las trece funciones con el código nuevo y pone los dos secretos. No tiene SQL (docs/DESPLIEGUE.md)
+- El paso a paso para ti, con el correo y el DNS, está en docs/DOMINIO_Y_CORREO.md y la lista en el orden en que conviene hacerla en docs/PENDIENTES_DE_RICARDO.md, sección B17
+
+### Los dos secretos de direcciones
+
+En Supabase, Edge Functions, Secrets, o con npm run deploy:supabase -- --plan b17 --secrets-from private/b17-secrets.json (docs/DESPLIEGUE.md). Son direcciones públicas, no llaves. Se leen al momento, así que cambiarlos no pide volver a publicar.
+
+| Nombre | Qué es | Ejemplo |
+|---|---|---|
+| APP_URL | La dirección principal de la app, con diagonal al final | https://tudominio.mx/ |
+| APP_ORIGINS | Los orígenes que pueden llamar a las funciones desde el navegador, sin ruta y sin comodines | https://tudominio.mx,https://rickymm2001-dev.github.io |
+
+- ai-proxy solo lee APP_ORIGINS, así que el dominio nuevo tiene que estar en esa lista
+- Durante los 30 días de la mudanza van los dos orígenes. Después se deja solo el nuevo
+- Una dirección de pages.dev en APP_ORIGINS deja a ai-proxy sin atender hasta que la quites. Cualquiera puede publicar una página en un subdominio de pages.dev, así que nunca es de confianza
+
+### Direcciones de regreso de Auth
+
+Es el paso 6 de arriba, que cambia el día de la mudanza. En Authentication, URL Configuration
+
+- Site URL, https://tudominio.mx/
+- Redirect URLs, http://localhost:5173/**, https://tudominio.mx/ y, por 30 días, https://rickymm2001-dev.github.io/Studiare-ENARM/
+- Nunca un comodín sobre pages.dev
+- La sesión puede ponerlas con la API de administración (los campos site_url y uri_allow_list de PATCH /v1/projects/{ref}/config/auth), porque son direcciones públicas. El bloque de SMTP no, porque lleva la llave de Resend
+
+### Correo propio (SMTP)
+
+Antes de invitar a la primera persona real. En Authentication, SMTP Settings, con Resend. Los datos exactos, los registros de DNS y cómo comprobar SPF, DKIM y DMARC están en docs/DOMINIO_Y_CORREO.md. Al guardar, Supabase baja el tope a 30 correos nuevos por hora. Las plantillas conservan la línea del código con {{ .Token }} (paso 6b).
+
+### Plan de pago y seguridad de la cuenta
+
+Antes de invitar a la primera persona real (respuesta 27). Es un gasto y lo decides tú.
+
+- Supabase Pro da copias diarias por 7 días, no pausa el proyecto por inactividad y abre la protección de contraseñas filtradas. El plan gratis pausa los proyectos con poca actividad y no deja bajar copias
+- Deja prendido el tope de gasto de la organización
+- En Authentication, Sign In / Providers, Email, prende Prevent use of leaked passwords y pon el largo mínimo en 8. Studiare entra sin contraseña, así que pesa poco, pero se pidió y no cuesta nada
+- En Database, Settings, SSL Configuration, prende Enforce SSL
+- En Organization, Team, agrega a una segunda persona de confianza como dueña, para no quedarte fuera si pierdes tu cuenta
+- Activa la verificación en dos pasos en tu cuenta de Supabase y de GitHub
+- Ninguno de estos ajustes se puede comprobar desde el repositorio. Los anotas tú
+
+### Llaves nuevas de Supabase
+
+#### Cómo funciona
+
+- Las funciones eligen la llave en _shared/keys.ts. Si Supabase pone SUPABASE_SECRET_KEYS y SUPABASE_PUBLISHABLE_KEYS (un JSON con la llave llamada default), usan esas. Si no, usan SUPABASE_SERVICE_ROLE_KEY y SUPABASE_ANON_KEY, como hasta hoy
+- La llave sb_secret_ no es un JWT. Va solo en el encabezado apikey y nunca como authorization Bearer, que la plataforma intenta leer como JWT y rechaza. La de siempre sigue en los dos. Un solo ayudante, serviceHeaders, arma los encabezados en los cinco lugares que llaman con la llave de servicio, y una prueba de arquitectura falla si alguien arma un Bearer a mano con una llave
+- La sesión del alumno no cambia. Las funciones con verify_jwt y la llamada a /auth/v1/user usan el token del alumno, y la llave pública nueva tiene los mismos privilegios que anon
+- El navegador no pide código. La variable VITE_SUPABASE_ANON_KEY acepta la llave sb_publishable_. Solo cambias su valor y vuelves a publicar la página
+- Los trabajos de Cron del proyecto (correos, analítica, banco y lotes de IA) se identifican con su propia ficha de Vault en un encabezado aparte, no con una llave de Supabase, así que desactivar las llaves viejas no los toca
+- La llave de la calibración nocturna (SUPABASE_CALIBRATION_KEY, B14) ya es una sb_secret_ propia y no cambia
+
+#### Orden, sin apuro y sin cortes
+
+1. Crea las llaves nuevas. En Supabase, Project Settings, API Keys, pestaña Publishable and secret API keys, botón Create new API keys. Crea una publicable y una secreta llamadas default y no apaga las de hoy. No pegues ninguna en el chat
+2. La sesión publica las funciones con el código nuevo (plan b17). Mientras no existan llaves nuevas usa las viejas, y cuando existen usa las nuevas
+3. Cambia el valor de la variable VITE_SUPABASE_ANON_KEY en GitHub por la llave sb_publishable_ y vuelve a publicar la página. Avísale a la sesión
+4. La sesión prueba todo. Entrar con correo y con Google, sincronizar, pagar en modo prueba, restablecer el segundo factor y una llamada de IA. También corre npm run smoke -- DIRECCIÓN --supabase DIRECCIÓN, que hace un OPTIONS a ai-proxy sin llaves
+5. Hasta entonces, y solo si todo funciona, desactiva las llaves anon y service_role en la misma página de API Keys. La desactivación se puede revertir. Si algo falla, vuelve a activarlas y avísame
+6. Hazlo antes de que termine 2026. Si se deja a B19, el riesgo es una caída a fin de año el mismo mes del lanzamiento
+
+#### Por confirmar con una llamada real antes de desactivar las viejas
+
+- Que la API de administración de Auth, la que usa admin-reset-mfa para borrar los factores de una persona, acepte la llave secreta solo en apikey
+- Que un GET sin llaves a /auth/v1/settings con la llave pública nueva conteste 200
+- Que el código de cada función sea igual al del repositorio (la herramienta de despliegue lo compara)
+
+### Qué conviene saber
+
+- APP_ORIGINS y APP_URL no son lo mismo que Redirect URLs de Auth. Las primeras dicen quién puede llamar a las funciones desde un navegador. Las otras dicen a dónde puede regresar Supabase a una persona después de entrar
+- Si un origen de APP_ORIGINS no cumple la forma (http, ruta, comodín, mayúsculas), las funciones de pagos lo ignoran sin cambiar lo demás, y ai-proxy deja de atender y lo dice en su registro con el nombre de la variable y nunca con el valor
+- Tras la mudanza, ai-proxy, el cliente y los pagos solo atienden al dominio nuevo y al viejo mientras esté en la lista. Una vista previa de pages.dev nunca llama a las funciones
+
+## Primeros alumnos y encuesta (B18)
+
+### Qué hace
+
+- 20261030000001_first_week_survey. El ajuste survey_first_week en platform_settings, apagado. La tabla survey_responses, una fila por cuenta y por encuesta que solo se agrega, con permisos por fila, sin políticas y sin permisos de tabla para la API. Las reglas de las respuestas y del comentario como funciones puras, el freno que deja la tabla solo para agregar, tres funciones del alumno (my_survey_status, submit_survey y my_survey_response) y dos del equipo (admin_survey_summary y admin_survey_responses)
+- 20261030000002_survey_erase. delete_my_survey_response, la cuarta función del alumno. Va aparte porque es la única pieza con delete y así la primera migración queda sin delete ni drop
+- La encuesta se pide a los 7 días de la cuenta, con siete preguntas cerradas y un comentario libre opcional, y se contesta una sola vez. Es un dato que el alumno da a propósito y no depende de Medición de uso ni de Mejora con tus datos sin nombre
+- Al equipo solo le llega un código al azar (R y 6 caracteres hexadecimales). Ninguna función del equipo devuelve user_id, correo, alias, fecha ni los días de la cuenta, y ordenan por código y no por fecha. Los días se guardan en days_since_signup para el análisis interno y solo se los devuelven a su dueña (my_survey_status y my_survey_response), porque con 5 personas y la fecha de alta que ya se ve en Usuarios darían la cuenta. La respuesta queda ligada a la cuenta en la tabla, para poder borrarla y para que sea una sola por alumno, pero ninguna función la muestra
+- Todo nace apagado. survey_first_week.enabled queda en false y se prende justo antes de invitar a los primeros alumnos (docs/PRIMEROS_ALUMNOS.md)
+
+### Cómo aplicar las dos migraciones
+
+Aplica primero todas las anteriores, incluidas las de B15. Van en orden y las dos son seguras de repetir. La primera no lleva delete ni drop, así el conector la aplica sin pedir confirmación. La segunda lleva un delete dentro de la función, así que el conector no la aplica sin una confirmación y la aplica la herramienta de despliegue.
+
+1. supabase/migrations/20261030000001_first_week_survey.sql
+2. supabase/migrations/20261030000002_survey_erase.sql
+
+Con un token válido de Supabase no las aplicas tú. Lo hace npm run deploy:supabase -- --plan b18 (docs/DESPLIEGUE.md), primero con --dry-run. El plan no publica Edge Functions ni espera secretos.
+
+```bash
+npm run deploy:supabase -- --plan b18 --dry-run
+npm run deploy:supabase -- --plan b18 --yes
+```
+
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run. Es la comprobación del final de la segunda migración, la misma que revisa el plan b18, y solo mira hechos de la estructura. No lee ninguna respuesta.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename = 'survey_responses') as tabla_de_encuesta,
+  (select relrowsecurity from pg_class where oid = 'public.survey_responses'::regclass) as tabla_con_seguridad_por_fila,
+  not has_table_privilege('anon', 'public.survey_responses', 'select,insert,update,delete')
+    and not has_table_privilege('authenticated', 'public.survey_responses', 'select,insert,update,delete')
+    and not has_table_privilege('service_role', 'public.survey_responses', 'select,insert,update,delete') as tabla_sin_permisos_directos,
+  (select count(*) from pg_trigger
+    where tgrelid = 'public.survey_responses'::regclass and tgname = 'survey_responses_append_only') as solo_se_agrega,
+  has_function_privilege('authenticated', 'public.my_survey_status()', 'execute') as alumno_ve_su_estado,
+  has_function_privilege('authenticated', 'public.submit_survey(text, jsonb, text)', 'execute') as alumno_contesta,
+  has_function_privilege('authenticated', 'public.my_survey_response()', 'execute') as alumno_exporta,
+  has_function_privilege('authenticated', 'public.delete_my_survey_response()', 'execute') as alumno_borra_la_suya,
+  has_function_privilege('authenticated', 'public.admin_survey_summary(text)', 'execute') as equipo_ve_conteos,
+  has_function_privilege('authenticated', 'public.admin_survey_responses(text)', 'execute') as equipo_ve_respuestas,
+  has_function_privilege('anon', 'public.my_survey_status()', 'execute')
+    or has_function_privilege('anon', 'public.submit_survey(text, jsonb, text)', 'execute')
+    or has_function_privilege('anon', 'public.admin_survey_summary(text)', 'execute') as anonimo_entra,
+  has_function_privilege('service_role', 'public.admin_survey_responses(text)', 'execute') as llave_lee_respuestas,
+  exists (select 1 from public.platform_settings where key = 'survey_first_week') as ajuste_sembrado;
+```
+
+Debe salir
+- tabla_de_encuesta y solo_se_agrega en 1
+- tabla_con_seguridad_por_fila, tabla_sin_permisos_directos, alumno_ve_su_estado, alumno_contesta, alumno_exporta, alumno_borra_la_suya, equipo_ve_conteos, equipo_ve_respuestas y ajuste_sembrado en true
+- anonimo_entra y llave_lee_respuestas en false
+
+Si la encuesta está prendida y con qué espera se lee con esta otra. No va en el plan porque cambia con el tiempo, y con ella el plan no se podría volver a correr después de prenderla. Solo lee el ajuste.
+
+```sql
+select
+  value ->> 'enabled' as encuesta_prendida,
+  value ->> 'delay_days' as dias_de_espera,
+  value ->> 'accounts_until' as fecha_limite
+from public.platform_settings
+where key = 'survey_first_week';
+```
+
+Debe salir encuesta_prendida en false, hasta que la prendas desde Usuarios, Encuesta de los primeros días, con el guion de docs/PRIMEROS_ALUMNOS.md.
+
+### Prender la encuesta
+
+La prende el dueño o un admin en Usuarios, tarjeta Encuesta de los primeros días, con el interruptor, los días de espera y la fecha límite. Guarda el ajuste survey_first_week con settings_write, el mismo camino con el que se abre el registro. survey_setting valida cada campo al leerlo y, si alguno no sirve, usa el de fábrica.
+
+| Campo | Qué es | Valores |
+|---|---|---|
+| enabled | Si la encuesta está prendida | Solo el booleano true la prende |
+| id | Qué encuesta es | first-week-v1, que es la única que la base conoce. Con otro id, aunque tenga buena forma, la base usa first-week-v1, para que la franja nunca salga con una encuesta que no se puede contestar. Una segunda encuesta, por ejemplo a los 30 días, no pide otra tabla, pero sí una migración que sume su id a survey_answers_ok y a la lista de survey_setting, y el cambio en src/config/surveys.ts |
+| delay_days | Días que espera la cuenta nueva | De 0 a 30, entero. Con 0 se prueba sin esperar |
+| accounts_until | Las cuentas creadas ese día o después ya no la reciben | Una fecha AAAA-MM-DD, contada desde la medianoche de la Ciudad de México, o null |
+
+### Prueba de humo sin llaves
+
+Después de desplegar, con todo apagado y sin ninguna llave, estas son las respuestas correctas. Ninguna lee una respuesta de nadie.
+
+| Llamada | Respuesta |
+|---|---|
+| POST /rest/v1/rpc/my_survey_status con la llave pública y sin sesión | 401, 403 o 404 |
+| POST /rest/v1/rpc/admin_survey_summary con la llave pública y sin sesión | 401, 403 o 404 |
+| GET /rest/v1/survey_responses con la llave pública y sin sesión | 401, 403 o 404 |
+
+Cualquiera de los tres códigos cuenta como rechazada, y lo único que no puede salir es un 200, ni con filas ni con una lista vacía. 401 y 403 son que la base dijo que no hay permiso. 404 es que el servicio no encontró el recurso para quien llama sin sesión. Pasa porque la tabla no da permisos a ningún rol de la API (a propósito) y, según la versión de PostgREST, una tabla que nadie puede ver ni siquiera entra a su caché de esquema (error PGRST205). Con las funciones puede salir igual. Como un 404 también saldría si las migraciones no se aplicaron, esta prueba solo confirma que sin sesión no se abre nada. Que sí se aplicaron lo dice la comprobación de estructura de arriba.
+
+### Qué conviene saber
+
+- El chequeo de seguridad de Supabase marcará, a propósito, la tabla nueva con permisos por fila y sin políticas, y las funciones que la app llama con sesión (my_survey_status, submit_survey, my_survey_response, delete_my_survey_response, admin_survey_summary y admin_survey_responses), que revisan por dentro la sesión, el dispositivo activo o el rol. supabase/tests/function_grants_test.sql (G12) revisa la lista completa
+- El rol que cuenta es el guardado en user_roles y no el que da current_app_role, que para el equipo sin segundo factor se ve como alumno. Un médico, un admin o el dueño nunca ven ni contestan la encuesta
+- Las cuentas elegibles que cuenta admin_survey_summary son las de alumnos con el correo confirmado que se crearon antes de la fecha límite, si la hay, y ya esperaron los días. No dice cuáles
+- Borrar mis datos no borra la encuesta, a propósito (8.4 del diseño de B18). Eliminar la cuenta sí, en cascada. La respuesta se quita con delete_my_survey_response, desde Configuración, Privacidad
+- El comentario de la encuesta se revisa con survey_comment_ok. Normaliza el texto (NFKC, que vuelve ＠ en @ y los dígitos de ancho completo en dígitos), quita los caracteres de ancho cero y de formato, y rechaza cualquier arroba, las formas (at), [at] y {at}, la palabra arroba y un teléfono de diez dígitos o más con a lo mucho tres separadores entre uno y otro. Es un apoyo y no una garantía, porque no lee un nombre, un número escrito con palabras ni un correo dictado. Pide una base UTF8 por normalize, y la de Supabase lo es. La app aplica las mismas reglas antes de enviar (COMMENT_RULES en src/config/surveys.ts) y los mismos casos de tests/fixtures/survey-comments.json corren en Vitest y en supabase/tests/first_week_survey_test.sql
+- Cualquier cambio o borrado directo de survey_responses falla, también el del dueño de la base. Para vaciarla en una prueba hay que apagar el disparador survey_responses_append_only, y no hay razón de hacerlo en el proyecto real
+- Que la sesión que mantiene el proyecto no lea los comentarios ni las respuestas una por una es una regla de conducta (D-139, CLAUDE.md, al LLM solo viajan IDs seudónimos y texto del banco) y no un control técnico. admin_survey_responses devuelve los comentarios a quien sea dueño o admin con su sesión, y una conexión con acceso a la base como postgres, como la del conector con execute_sql, podría leer survey_responses. El control técnico real es que la sesión no tiene la llave de admin de Ricardo ni la usa para esta tabla, y que a la sesión solo se le pasa el resumen por conteos (admin_survey_summary) y nunca la lista. Ninguna consulta de esta sección lee comentarios ni respuestas, y Ricardo le pasa solo las cifras de la tarjeta y su lista de hallazgos. Si alguna vez hace falta que la sesión las lea, es una decisión de Ricardo por escrito (8.5)
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
@@ -1243,7 +1537,7 @@ La herramienta del conector pide una confirmación humana para toda sentencia co
 - Liberar la cuenta de un alumno (admin_release_device)
 - Aceptar el plan Fundador en la tabla de suscripciones. Sin esto no se puede activar ese plan
 - Quitar las llaves foráneas sin regla, para poder borrar a un médico o a un admin
-- Borrar mis datos y borrar mi cuenta (delete_my_data y delete_my_account)
+- Borrar mis datos y borrar mi cuenta (delete_my_data y delete_my_account). Con B15 la pieza de Borrar mis datos es la versión 4, que también quita lo de los recordatorios y la analítica. Si ya pegaste este archivo antes, pégalo otra vez después de aplicar las migraciones de B15
 - Guardar los errores del navegador (report_client_error)
 
 Comprobación. Debe salir true en las tres columnas.
@@ -1265,12 +1559,12 @@ select
 - Las funciones se subieron con el conector, con los módulos de supabase/functions/_shared incluidos. El repo manda. Si cambias algo ahí, vuelve a desplegar con supabase functions deploy o pídemelo
 - Los secretos de las funciones (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, APP_URL y FUNCTIONS_URL) los pones tú en Edge Functions, Secrets. FUNCTIONS_URL es https://bkjbcdwglyllizupokqm.supabase.co/functions/v1 y el webhook de Stripe apunta a esa dirección con /payment-webhook-stripe al final
 - El chequeo de seguridad todavía marca avisos que son a propósito. Nueve tablas con permisos por fila y sin políticas, que solo toca el servidor, y las funciones que la app llama con sesión, que revisan por dentro quién las llama. También marca cuatro funciones auxiliares que siguen abiertas a anónimos, current_app_role, is_admin, is_group_member y shares_group, porque las políticas de varias tablas las llaman con el rol de quien consulta y solo contestan sobre quien llama. Con 20261021000002_free_plan_party_moderation (B8) is_group_member y shares_group se cierran a anónimos y quedan current_app_role e is_admin
-- Falta activar la protección contra contraseñas filtradas en Authentication. Es un interruptor del panel y puede requerir el plan de pago de Supabase
+- Falta activar la protección contra contraseñas filtradas en Authentication. Es un interruptor del panel y requiere el plan de pago de Supabase (B17 lo deja en la lista de Ricardo, junto con el plan Pro)
 
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora
-- Hay que conectar un proveedor de correo propio en Authentication, Emails, SMTP Settings. Opciones comunes son Resend, Brevo o Amazon SES
+- Hay que conectar un proveedor de correo propio en Authentication, Emails, SMTP Settings. Opciones comunes son Resend, Brevo o Amazon SES. Con B17 se usa Resend, y los datos exactos y los registros de DNS están en docs/DOMINIO_Y_CORREO.md
 
 ## Qué protege el esquema
 

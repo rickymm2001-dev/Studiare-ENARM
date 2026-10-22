@@ -4,8 +4,9 @@
 // La búsqueda recorre los títulos y todas las líneas de todos los apuntes, sin importar acentos ni
 // mayúsculas, y muestra las líneas que coinciden. Abrir una deja el cursor en esa línea (B6).
 import { CornerDownRight, FileText } from 'lucide-react';
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
+import { resultBandOf, track } from '@/data/analytics/catalog';
 import type { Deck } from '@/data/schemas/decks';
 import type { Outline } from '@/data/schemas/outlines';
 import { cardCountOf, countNodes, freeSubjects, planCards } from '@/engines/outline';
@@ -18,6 +19,9 @@ import type { ReadySession } from '../shared/RequireSession';
 import { NewOutline } from './NewOutline';
 import { outlineHref } from './outlineNav';
 import { subjectLabel } from './subjectDraft';
+
+/** Cuánto espera sin teclear antes de medir una búsqueda, para no medir cada letra (B15, 1.5) */
+const SEARCH_MEASURE_IDLE_MS = 1500;
 
 /** Lo que se tocó más reciente va primero */
 const byRecent = (a: Outline, b: Outline) =>
@@ -56,6 +60,19 @@ export function OutlinesList({
     return found;
   }, [outlines, deferred]);
   const shown = searching ? rows.filter((row) => hits.has(row.outline.id)) : rows;
+
+  // Medición de uso (B15, 1.5). Una búsqueda cuenta cuando el alumno deja de teclear, y solo dice cuántos
+  // apuntes dio en rangos, nunca lo que buscó
+  const resultCount = shown.length;
+  useEffect(() => {
+    if (!searching) return;
+    const timer = setTimeout(() => {
+      track('outline_search_used', { results: resultBandOf(resultCount) });
+    }, SEARCH_MEASURE_IDLE_MS);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searching, deferred, resultCount]);
 
   return (
     <div className="flex flex-col gap-4">

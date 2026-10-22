@@ -229,7 +229,12 @@ export function DeleteAccountCard({ loadCloud, wipeLocal, onDone }: DeleteProps)
           }}
         />
         <ErrorLine reason={failure} />
-        <Button type="submit" variant="danger" className="self-start" disabled={!confirmed || busy}>
+        <Button
+          type="submit"
+          variant="danger"
+          className="max-w-full self-start whitespace-normal"
+          disabled={!confirmed || busy}
+        >
           <UserX aria-hidden />
           {busy ? t.settings.deleting : t.settings.accountDeleteAction}
         </Button>

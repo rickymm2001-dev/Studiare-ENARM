@@ -1,0 +1,29 @@
+{
+  "description": "B18, primeros alumnos. Las dos migraciones de la encuesta de los primeros días (20261030000001 y 20261030000002) con el ajuste survey_first_week, la tabla survey_responses que solo se agrega, las funciones del alumno (my_survey_status, submit_survey, my_survey_response, delete_my_survey_response) y las dos del equipo (admin_survey_summary y admin_survey_responses). No lleva archivo manual, no publica Edge Functions y no espera secretos. Va después de b15 y de b17, aunque no comparte ninguna función con ellos. Todo nace apagado, con survey_first_week.enabled en false, y se prende justo antes de invitar a los primeros alumnos (docs/PRIMEROS_ALUMNOS.md).",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261030000001_first_week_survey.sql",
+      "note": "El ajuste survey_first_week apagado, las reglas puras de las respuestas y del comentario, la tabla survey_responses con permisos por fila, sin políticas y sin permisos de tabla para la API, el freno que la deja solo para agregar y las cinco funciones que no borran. No lleva delete ni drop, así que el conector también la puede aplicar"
+    },
+    {
+      "file": "supabase/migrations/20261030000002_survey_erase.sql",
+      "check": {
+        "tabla_de_encuesta": 1,
+        "tabla_con_seguridad_por_fila": true,
+        "tabla_sin_permisos_directos": true,
+        "solo_se_agrega": 1,
+        "alumno_ve_su_estado": true,
+        "alumno_contesta": true,
+        "alumno_exporta": true,
+        "alumno_borra_la_suya": true,
+        "equipo_ve_conteos": true,
+        "equipo_ve_respuestas": true,
+        "anonimo_entra": false,
+        "llave_lee_respuestas": false,
+        "ajuste_sembrado": true
+      },
+      "note": "delete_my_survey_response, la única pieza con delete, en su propia migración para que la primera quede sin delete ni drop (D-113). Esta la aplica la herramienta de despliegue, como Borrar mis datos v4 de B15. Su comprobación del final revisa solo hechos de la estructura y no si la encuesta está prendida, para que el plan se pueda repetir después de prenderla"
+    }
+  ],
+  "functions": []
+}
