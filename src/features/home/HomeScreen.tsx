@@ -19,6 +19,7 @@ import { monthlyReviewLoad } from '@/engines/monthlyLoad';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
+import { homePlanText } from '@/i18n/homePlan';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -39,8 +40,8 @@ import { MissionList } from './missions/MissionList';
 import { useMissions } from './missions/useMissions';
 import { ReviewLoadCard } from './sections/ReviewLoadCard';
 import { buildSnapshot, type Snapshot } from './snapshot';
-import { dailyPlan, type PlanRow } from '@/engines/dailyPlan';
-import { reviewedToday } from '../review/study';
+import { dailyPlan, newCardsStudiedToday, type PlanRow } from '@/engines/dailyPlan';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { BiasPatternWidget, WeakTopicsWidget } from './widgets/AnalysisWidgets';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 
@@ -61,6 +62,7 @@ function Dashboard({ session }: { session: ReadySession }) {
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const account = useAccount(user.id);
+  const subscription = useSubscription(user.id);
   const focus = useFocusMode();
   // Las tarjetas que Repasar sí ofrece, para que las vencidas cuenten lo mismo
   const cards = useLiveData(async () => {
@@ -84,11 +86,25 @@ function Dashboard({ session }: { session: ReadySession }) {
     [events, cards, user.timeZone],
   );
 
-  if (events === undefined || cards === undefined || account === undefined || load === null) {
+  if (
+    events === undefined ||
+    cards === undefined ||
+    account === undefined ||
+    subscription === undefined ||
+    load === null
+  ) {
     return <LoadingState />;
   }
   const snapshot = buildSnapshot({ events, user, settings, now: new Date(), activeCardIds: cards });
+  // Las preguntas del plan de hoy no pasan del tope diario del plan, que en Gratis es de 20
+  const questionsCap = dailyQuestions({
+    events,
+    subscription,
+    timeZone: user.timeZone,
+    now: new Date(),
+  }).limit;
   const plan = dailyPlan({
+    questionsCap,
     limits: {
       reviewsPerDay: settings.reviewsPerDay,
       newCardsPerDay: settings.newCardsPerDay,
@@ -97,7 +113,7 @@ function Dashboard({ session }: { session: ReadySession }) {
     },
     done: {
       cards: snapshot.todayActivity.cards,
-      newCards: reviewedToday(events, snapshot.today, new Map()).newCount,
+      newCards: newCardsStudiedToday(events, snapshot.today),
       questions: snapshot.todayActivity.questions,
     },
   });
@@ -123,7 +139,7 @@ function Dashboard({ session }: { session: ReadySession }) {
           {/* Las tarjetas crecen hasta la altura de la fila, para que nada quede en blanco */}
           <div className="grid grow grid-cols-1 gap-5 sm:grid-cols-2">
             <div className="flex flex-col gap-5">
-              <DailyGoalCard snapshot={snapshot} plan={plan} />
+              <DailyGoalCard snapshot={snapshot} plan={plan} questionsCap={questionsCap} />
               <DueCard snapshot={snapshot} />
             </div>
             <ReviewLoadCard load={load} />
@@ -163,6 +179,14 @@ function Dashboard({ session }: { session: ReadySession }) {
             settings={{ range: 365, metric: 'cards' }}
             summaryAtEnd
             fluid
+            detailLink={
+              <Link
+                to={screenPath('calendar')}
+                className="font-medium text-primary-ink underline underline-offset-2"
+              >
+                {t.calendar.heatmapLink}
+              </Link>
+            }
           />
         </Card>
       </div>
@@ -206,7 +230,15 @@ function CardHeading({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-function DailyGoalCard({ snapshot, plan }: { snapshot: Snapshot; plan: PlanRow[] }) {
+function DailyGoalCard({
+  snapshot,
+  plan,
+  questionsCap,
+}: {
+  snapshot: Snapshot;
+  plan: PlanRow[];
+  questionsCap: number | null;
+}) {
   const id = useId();
   const { goal } = snapshot;
   const done = snapshot.todayActivity[goal.metric];
@@ -248,6 +280,11 @@ function DailyGoalCard({ snapshot, plan }: { snapshot: Snapshot; plan: PlanRow[]
                     max={row.target}
                     label={t.widgets.plan.label(name, row.done, row.target)}
                   />
+                  {row.capped && questionsCap !== null ? (
+                    <span className="text-xs text-fg-muted">
+                      {homePlanText.capped(questionsCap)}
+                    </span>
+                  ) : null}
                 </li>
               );
             })}

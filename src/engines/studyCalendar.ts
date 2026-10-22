@@ -16,6 +16,11 @@
  *     máximo y sin tocar las semanas en que todavía hay temas por estudiar si hay pocas semanas
  *   - La primera semana empieza hoy y la última es la del examen, que no lleva simulador
  *   - Con la fecha del examen ya pasada o sin ramas no hay plan por semanas
+ *   - Si el examen queda más allá de MAX_PLAN_WEEKS el plan se corta antes de llegar a él y no lleva
+ *     simuladores, porque serían los últimos del recorte y no los del final real
+ *   - En el .ics cada evento lleva un UID que sale de su clave lógica, el lunes de la semana, el
+ *     domingo del simulador o el examen, y no de su posición. Así volver a llevar el plan al
+ *     calendario actualiza los eventos en vez de duplicarlos
  * Lo que no hace. No cambia lo que le toca repasar a nadie. Es un mapa, no una cola
  */
 import { addDays, daysBetween } from './studyDay';
@@ -87,8 +92,12 @@ export function studyWeeks(input: {
     start = addDays(end, 1);
   }
   // Los domingos de simulador son los últimos antes de la semana del examen. Si hay pocas semanas,
-  // los simuladores se quedan en la mitad final y la otra mitad es de temas
-  const candidates = weeks.filter((week) => !week.examWeek && daysBetween(week.end, examDate) > 0);
+  // los simuladores se quedan en la mitad final y la otra mitad es de temas. Si el plan se cortó antes
+  // de llegar al examen no hay de dónde contar hacia atrás, así que no hay simuladores
+  const reachesExam = weeks.at(-1)?.examWeek === true;
+  const candidates = reachesExam
+    ? weeks.filter((week) => !week.examWeek && daysBetween(week.end, examDate) > 0)
+    : [];
   const sundays = Math.min(FINAL_SIMULATOR_SUNDAYS, Math.floor(candidates.length / 2));
   const chosen = candidates.slice(candidates.length - sundays);
   chosen.forEach((week, index) => {
@@ -102,6 +111,11 @@ export function studyWeeks(input: {
 }
 
 export interface CalendarEvent {
+  /**
+   * Clave lógica del evento para su UID en el .ics, de letras minúsculas, números y guiones. Debe ser
+   * la misma cada vez que se exporta el mismo evento. Sin ella el UID sale del día y la posición
+   */
+  uid?: string;
   /** Día completo, AAAA-MM-DD */
   day: string;
   /** Días que dura, 1 por omisión */
@@ -109,6 +123,8 @@ export interface CalendarEvent {
   title: string;
   description?: string;
 }
+
+const compactDay = (day: string) => day.replace(/-/g, '');
 
 /** Los eventos del plan por semanas y del examen, con los textos que da quien llama */
 export function planEvents(
@@ -124,29 +140,47 @@ export function planEvents(
   const events: CalendarEvent[] = [];
   for (const week of weeks) {
     if (week.branch !== null && !week.examWeek) {
+      // La semana de temas va de lunes a domingo aunque hoy sea jueves, así su inicio y su UID no
+      // cambian de un día de exportar a otro
+      const monday = addDays(week.start, -weekdayIndex(week.start));
       events.push({
-        day: week.start,
-        days: daysBetween(week.start, week.end) + 1,
+        uid: `week-${compactDay(monday)}`,
+        day: monday,
+        days: 7,
         title: labels.week(week.branch),
       });
     }
     if (week.simulatorSunday !== null && week.simulatorNumber !== null) {
       events.push({
+        uid: `simulator-${compactDay(week.simulatorSunday)}`,
         day: week.simulatorSunday,
         title: labels.simulator(week.simulatorNumber, total),
       });
     }
   }
-  events.push({ day: examDate, title: labels.exam });
+  events.push({ uid: 'exam', day: examDate, title: labels.exam });
   return events.sort((a, b) => a.day.localeCompare(b.day) || a.title.localeCompare(b.title));
 }
 
+/**
+ * Quita los caracteres de control, que en un .ics pueden abrir una línea nueva o romper el archivo,
+ * menos el tabulador y los saltos de línea, que se escapan después
+ */
+function withoutControls(value: string): string {
+  return Array.from(value)
+    .filter((char) => {
+      const code = char.charCodeAt(0);
+      return code === 9 || code === 10 || code === 13 || (code >= 32 && code !== 127);
+    })
+    .join('');
+}
+
 function escapeText(value: string): string {
-  return value
+  return withoutControls(value)
     .replace(/\\/g, '\\\\')
     .replace(/;/g, '\\;')
     .replace(/,/g, '\\,')
-    .replace(/\r?\n/g, '\\n');
+    .replace(/\r\n?|\n/g, '\\n');
 }
 
 /** Dobla una línea a 75 octetos, como pide el formato, sin partir un carácter de varios bytes */
@@ -172,8 +206,6 @@ function fold(line: string): string[] {
   return parts.map((part, index) => (index === 0 ? part : ` ${part}`));
 }
 
-const compactDay = (day: string) => day.replace(/-/g, '');
-
 function stamp(now: Date): string {
   return now
     .toISOString()
@@ -192,7 +224,7 @@ export function icsOf(events: readonly CalendarEvent[], now: Date): string {
   events.forEach((event, index) => {
     lines.push(
       'BEGIN:VEVENT',
-      `UID:${compactDay(event.day)}-${String(index)}@studiare`,
+      `UID:${event.uid ?? `${compactDay(event.day)}-${String(index)}`}@studiare`,
       `DTSTAMP:${stamp(now)}`,
       `DTSTART;VALUE=DATE:${compactDay(event.day)}`,
       `DTEND;VALUE=DATE:${compactDay(addDays(event.day, Math.max(1, event.days ?? 1)))}`,

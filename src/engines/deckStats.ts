@@ -60,6 +60,21 @@ function bucketOf(days: number): IntervalBucketKey {
   return 'd180plus';
 }
 
+/**
+ * El estado de cada tarjeta de un mazo que Repasar sí ofrece. Las suspendidas no entran a la cola, así
+ * que tampoco cuentan en las cifras del mazo, porque de otro modo el panel diría 120 que tocan y
+ * Repasar ofrecería 80
+ */
+export function activeDeckStates(
+  cardIds: readonly string[],
+  states: ReadonlyMap<string, FsrsCardState>,
+  suspended: ReadonlySet<string>,
+): (FsrsCardState | null)[] {
+  return cardIds
+    .filter((cardId) => !suspended.has(cardId))
+    .map((cardId) => states.get(cardId) ?? null);
+}
+
 export function deckStats(input: {
   states: readonly (FsrsCardState | null)[];
   now: Date;

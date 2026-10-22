@@ -36,8 +36,12 @@ export function DeckStatsPanel({
         {figures.map((figure) => (
           <div key={figure.label} className="flex flex-col">
             <dt className="text-xs text-fg-muted">{figure.label}</dt>
-            <dd className="text-lg font-bold tabular-nums">{number(figure.value)}</dd>
-            {figure.hint ? <p className="text-xs text-fg-muted">{figure.hint}</p> : null}
+            <dd className="text-lg font-bold tabular-nums">
+              {number(figure.value)}
+              {figure.hint ? (
+                <span className="block text-xs font-normal text-fg-muted">{figure.hint}</span>
+              ) : null}
+            </dd>
           </div>
         ))}
       </dl>
@@ -70,7 +74,7 @@ export function DeckStatsPanel({
                 <span className="text-sm">{text.buckets[bucket.key]}</span>
                 <span aria-hidden className="h-2 rounded-sm bg-muted">
                   <span
-                    className="block h-2 rounded-sm bg-primary"
+                    className="block h-2 rounded-sm bg-indicator"
                     style={{ width: `${(count / largest) * 100}%` }}
                   />
                 </span>

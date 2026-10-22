@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { FsrsCardState } from '@/data/schemas/common';
-import { deckStats, INTERVAL_BUCKETS, MIN_FOR_RETENTION } from './deckStats';
+import { activeDeckStates, deckStats, INTERVAL_BUCKETS, MIN_FOR_RETENTION } from './deckStats';
 
 const TZ = 'America/Merida';
 /** 9:00 a. m. en Mérida. El día de estudio empieza a las 10:00 UTC del mismo día */
@@ -107,5 +107,30 @@ describe('deckStats', () => {
     const stats = deckStats({ states: [broken], now: NOW, timeZone: TZ });
     expect(stats.overdue).toBe(0);
     expect(stats.review).toBe(1);
+  });
+});
+
+describe('activeDeckStates', () => {
+  it('deja fuera las tarjetas suspendidas, que Repasar no ofrece, y marca como nueva la que no tiene estado', () => {
+    const states = new Map<string, FsrsCardState>([
+      ['a', review(10, -2)],
+      ['b', review(10, -1)],
+      ['c', review(10, 5)],
+    ]);
+    // d no tiene estado, así que es nueva
+    const cardIds = ['a', 'b', 'c', 'd'];
+    const all = deckStats({
+      states: activeDeckStates(cardIds, states, new Set()),
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(all).toMatchObject({ total: 4, fresh: 1, review: 3, overdue: 2 });
+    // Con a y d suspendidas el panel cuenta lo mismo que la cola de Repasar
+    const active = deckStats({
+      states: activeDeckStates(cardIds, states, new Set(['a', 'd'])),
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(active).toMatchObject({ total: 2, fresh: 0, review: 2, overdue: 1 });
   });
 });

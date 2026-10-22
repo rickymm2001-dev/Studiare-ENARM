@@ -57,4 +57,33 @@ describe('dailyPlan', () => {
     expect(matchesGuidePlan(limits())).toBe(false);
     expect(matchesGuidePlan({ ...GUIDE_PLAN, unlimitedNewCards: true })).toBe(false);
   });
+
+  it('el tope de preguntas del plan manda sobre el ajuste y marca la fila como topada', () => {
+    const rows = dailyPlan({
+      limits: limits({ questionsPerDay: 50 }),
+      done: { cards: 0, newCards: 0, questions: 12 },
+      questionsCap: 20,
+    });
+    const questions = rows.find((r) => r.key === 'questions');
+    expect(questions).toMatchObject({ target: 20, done: 12, capped: true });
+    expect(questions?.fraction).toBe(0.6);
+    // Las otras filas no se topan
+    expect(rows.filter((r) => r.key !== 'questions').every((r) => !r.capped)).toBe(true);
+  });
+
+  it('sin tope, o con un tope mayor al ajuste, la meta es la del alumno y no se marca topada', () => {
+    for (const questionsCap of [undefined, null, 50, 100]) {
+      const questions = dailyPlan({
+        limits: limits({ questionsPerDay: 50 }),
+        done,
+        ...(questionsCap === undefined ? {} : { questionsCap }),
+      }).find((r) => r.key === 'questions');
+      expect(questions).toMatchObject({ target: 50, capped: false });
+    }
+  });
+
+  it('con las preguntas apagadas el tope no hace aparecer la fila', () => {
+    const rows = dailyPlan({ limits: limits({ questionsPerDay: 0 }), done, questionsCap: 20 });
+    expect(rows.find((r) => r.key === 'questions')).toBeUndefined();
+  });
 });

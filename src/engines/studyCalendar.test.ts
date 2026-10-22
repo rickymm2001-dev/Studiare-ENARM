@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   FINAL_SIMULATOR_SUNDAYS,
   icsOf,
+  MAX_PLAN_WEEKS,
   monthGrid,
   planEvents,
   studyWeeks,
@@ -80,6 +81,31 @@ describe('studyWeeks', () => {
     expect(studyWeeks({ today: '2026-10-05', examDate: '2026-10-04', branches })).toEqual([]);
   });
 
+  it('con el examen a más de 120 semanas el plan se corta y no pone simuladores lejos del examen', () => {
+    // Septiembre de 2030 queda a casi 4 años, más allá del tope del plan
+    const weeks = studyWeeks({ today: '2026-10-22', examDate: '2030-09-13', branches });
+    expect(weeks).toHaveLength(MAX_PLAN_WEEKS);
+    expect(weeks.some((week) => week.examWeek)).toBe(false);
+    expect(weeks.filter((week) => week.simulatorSunday !== null)).toEqual([]);
+    // El .ics tampoco exporta simuladores, y el examen va una sola vez en su fecha
+    const events = planEvents(weeks, '2030-09-13', {
+      week: (branch) => `Semana de ${branch}`,
+      simulator: (n, total) => `Simulador ${n} de ${total}`,
+      exam: 'ENARM',
+    });
+    expect(events.filter((event) => event.title.startsWith('Simulador'))).toEqual([]);
+    expect(events.at(-1)).toMatchObject({ day: '2030-09-13', title: 'ENARM' });
+  });
+
+  it('con el examen justo dentro del tope sí hay simuladores', () => {
+    // 119 semanas completas más la parte de la primera caben en 120
+    const weeks = studyWeeks({ today: '2026-10-22', examDate: '2028-12-20', branches });
+    expect(weeks.at(-1)?.examWeek).toBe(true);
+    expect(weeks.filter((week) => week.simulatorSunday !== null)).toHaveLength(
+      FINAL_SIMULATOR_SUNDAYS,
+    );
+  });
+
   it('el examen hoy es una sola semana de examen', () => {
     const weeks = studyWeeks({ today: '2026-10-05', examDate: '2026-10-05', branches });
     expect(weeks).toHaveLength(1);
@@ -97,7 +123,7 @@ describe('planEvents e icsOf', () => {
   it('da un evento por semana de temas, uno por simulador y el del examen, en orden', () => {
     const weeks = studyWeeks({ today: '2026-10-05', examDate: '2026-12-13', branches: ['a', 'b'] });
     const events = planEvents(weeks, '2026-12-13', labels);
-    expect(events.at(-1)).toEqual({ day: '2026-12-13', title: 'ENARM' });
+    expect(events.at(-1)).toEqual({ uid: 'exam', day: '2026-12-13', title: 'ENARM' });
     expect([...events].sort((x, y) => x.day.localeCompare(y.day))).toEqual(events);
     expect(events.some((event) => /^Simulador \d+ de \d+$/.test(event.title))).toBe(true);
   });
@@ -122,6 +148,63 @@ describe('planEvents e icsOf', () => {
       true,
     );
     expect((ics.match(/BEGIN:VEVENT/g) ?? []).length).toBe(2);
+  });
+
+  it('el evento de cada semana empieza en su lunes y dura 7 días aunque hoy sea jueves', () => {
+    const weeks = studyWeeks({ today: '2026-10-22', examDate: '2026-12-13', branches: ['a', 'b'] });
+    const events = planEvents(weeks, '2026-12-13', labels);
+    const first = events.find((event) => event.title.startsWith('Semana de'));
+    expect(first).toMatchObject({ day: '2026-10-19', days: 7 });
+    expect(
+      events
+        .filter((event) => event.title.startsWith('Semana de'))
+        .every((event) => event.days === 7),
+    ).toBe(true);
+  });
+
+  it('los UID salen de la clave del evento y no cambian al exportar otro día', () => {
+    const at = new Date('2026-10-22T15:00:00.000Z');
+    const uidsOf = (today: string) => {
+      const weeks = studyWeeks({ today, examDate: '2027-09-13', branches: ['a', 'b', 'c'] });
+      const ics = icsOf(planEvents(weeks, '2027-09-13', labels), at);
+      return [...ics.matchAll(/^UID:(.+)$/gm)].map((match) => match[1] as string);
+    };
+    const thursday = uidsOf('2026-10-22');
+    const nextThursday = uidsOf('2026-10-29');
+    // Sin repetidos dentro de un mismo archivo
+    expect(new Set(thursday).size).toBe(thursday.length);
+    // Los simuladores y el examen son los mismos, y también las semanas que siguen en el plan
+    const stable = (uid: string) => uid.startsWith('simulator-') || uid === 'exam@studiare';
+    expect(thursday.filter(stable).sort()).toEqual(nextThursday.filter(stable).sort());
+    expect(thursday.filter(stable)).toHaveLength(FINAL_SIMULATOR_SUNDAYS + 1);
+    const weekUids = new Set(thursday.filter((uid) => uid.startsWith('week-')));
+    expect(
+      nextThursday.filter((uid) => uid.startsWith('week-')).every((uid) => weekUids.has(uid)),
+    ).toBe(true);
+    // El de la semana del 26 de octubre es el mismo, porque se llama por su lunes
+    expect(thursday).toContain('week-20261026@studiare');
+    expect(nextThursday).toContain('week-20261026@studiare');
+  });
+
+  it('un salto de línea suelto o un carácter de control no abren líneas nuevas en el .ics', () => {
+    const ics = icsOf(
+      [
+        {
+          day: '2026-10-05',
+          title: 'x\rBEGIN:VALARM\rACTION:DISPLAY\u0007\u001b',
+          description: 'a\rb\nc\r\nd',
+        },
+      ],
+      new Date('2026-10-22T15:00:00.000Z'),
+    );
+    // Todo CR del archivo es parte de un CRLF y no queda ningún otro carácter de control
+    expect(ics.replace(/\r\n/g, '')).not.toMatch(/[\r\n]/);
+    expect(ics.split('\r\n')).not.toContain('BEGIN:VALARM');
+    expect(ics.split('\r\n').filter((line) => line === 'BEGIN:VEVENT')).toHaveLength(1);
+    expect(ics).toContain('SUMMARY:x\\nBEGIN:VALARM\\nACTION:DISPLAY');
+    expect(ics).toContain('DESCRIPTION:a\\nb\\nc\\nd');
+    expect(ics).not.toContain('\u0007');
+    expect(ics).not.toContain('\u001b');
   });
 
   it('dobla una línea larga sin partir caracteres de varios bytes', () => {

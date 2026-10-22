@@ -8,10 +8,20 @@ export const calendarText = {
     weekdays: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
     weekdaysLong: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
     weekColumn: 'Semana',
-    done: (n: number) => `${n.toLocaleString('es-MX')} hechas`,
+    done: (n: number) => (n === 1 ? '1 hecha' : `${n.toLocaleString('es-MX')} hechas`),
     forecast: (n: number) => `~${n.toLocaleString('es-MX')} por repasar`,
     simulatorShort: 'Sim.',
     examShort: 'ENARM',
+    // Lo mismo dicho completo, para el nombre accesible de cada día. Las notas cortas de arriba
+    // son para la vista y un lector de pantalla las leería como abreviaturas o símbolos
+    doneLong: (n: number) =>
+      n === 1 ? '1 tarjeta hecha' : `${n.toLocaleString('es-MX')} tarjetas hechas`,
+    forecastLong: (n: number) =>
+      n === 1
+        ? '1 tarjeta por repasar en la proyección'
+        : `${n.toLocaleString('es-MX')} tarjetas por repasar en la proyección`,
+    simulatorLong: 'Domingo de simulador completo',
+    examLong: 'Día del ENARM',
     cellLabel: (day: string, notes: readonly string[]) =>
       notes.length === 0 ? day : `${day}. ${notes.join('. ')}`,
     legend:
@@ -21,7 +31,12 @@ export const calendarText = {
       `Hiciste ${cards.toLocaleString('es-MX')} tarjetas, ${questions.toLocaleString('es-MX')} preguntas y ${minutes.toLocaleString('es-MX')} minutos de estudio.`,
     detailForecast: (reviews: number, news: number) =>
       `Se proyectan ${reviews.toLocaleString('es-MX')} repasos y ${news.toLocaleString('es-MX')} tarjetas nuevas.`,
-    detailNothing: 'No hay actividad ni carga proyectada este día.',
+    detailNothingPast: 'No registraste actividad este día.',
+    detailNothingToday: 'Todavía no registras actividad hoy.',
+    detailNoLoad: 'No hay carga proyectada este día.',
+    detailNoDecks: 'Todavía no sigues mazos, así que no hay carga proyectada.',
+    detailBeyond: (days: number) =>
+      `La proyección de repasos llega a ${days.toLocaleString('es-MX')} días, así que este día todavía no tiene carga.`,
     detailWeek: (branch: string) => `Esta semana te enfocas en ${branch}.`,
     detailSimulator: (n: number, total: number) =>
       `Domingo de simulador completo ${n} de ${total}.`,
@@ -32,15 +47,21 @@ export const calendarText = {
         : days === 1
           ? 'Falta 1 día para tu ENARM.'
           : `Faltan ${days.toLocaleString('es-MX')} días para tu ENARM.`,
+    heatmapLink: 'Ver día por día en el Calendario',
+    // Una rama de los ajustes que no está en el catálogo se llama así, y nunca con su clave cruda
+    unknownBranch: 'Otra rama',
     provisionalDate:
       'La fecha del ENARM es provisional hasta que se publique la convocatoria. El plan se recalcula solo cuando cambie.',
     plan: {
       title: 'Plan por semanas hasta el examen',
-      hint: 'Cada semana te enfocas en una rama, para hacer tus bloques de preguntas siempre de la misma especialidad. Los simuladores de todas las especialidades llegan al final y solo en domingo. Las ramas salen en el orden de tus ajustes.',
+      hint: 'Cada semana te enfocas en una rama, para hacer tus bloques de preguntas siempre de la misma especialidad. Los simuladores de todas las especialidades llegan al final y solo en domingo.',
       week: (start: string, end: string, branch: string) => `${start} al ${end}. ${branch}`,
       simulator: (n: number, total: number) => `Simulador completo ${n} de ${total}`,
       exam: 'Semana del examen',
       empty: 'No hay semanas que planear antes de la fecha de tu examen.',
+      // En Gratis no hay examen completo, así que los domingos de simulador se dicen de pago
+      simulatorPaid:
+        'El simulador completo es de los planes de pago. En Gratis haces simulacros más cortos, de una especialidad.',
       showAll: (n: number) => `Ver las ${n.toLocaleString('es-MX')} semanas`,
       showLess: 'Ver menos',
       export: 'Llevar el plan a mi calendario (.ics)',

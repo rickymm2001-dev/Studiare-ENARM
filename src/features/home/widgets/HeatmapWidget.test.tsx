@@ -95,4 +95,46 @@ describe('detalle de un día', () => {
     fireEvent.click(cell);
     expect(screen.queryByRole('status')).toBeNull();
   });
+
+  it('el día elegido se marca con el color de indicador, que pasa 3 a 1 también en oscuro', () => {
+    const { container } = render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+      />,
+    );
+    const cell = container.querySelector(
+      `[title="${t.widgets.heatmap.cell('2026-10-13', 30, metric)}"]`,
+    ) as HTMLElement;
+    fireEvent.click(cell);
+    expect(cell).toHaveClass('ring-indicator');
+    expect(container.innerHTML).not.toMatch(/ring-primary/);
+  });
+
+  it('pone el enlace que le pasan justo después del resumen, para llegar al detalle con teclado', () => {
+    render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+        detailLink={<a href="/calendario">{t.calendar.heatmapLink}</a>}
+      />,
+    );
+    const link = screen.getByRole('link', { name: t.calendar.heatmapLink });
+    // Va dentro del mismo párrafo del resumen, así el lector lo lee junto
+    expect(link.parentElement?.textContent).toMatch(/días con actividad/);
+    expect(link.closest('[aria-hidden]')).toBeNull();
+  });
+
+  it('sin enlace el resumen queda como estaba', () => {
+    render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+      />,
+    );
+    expect(screen.queryByRole('link')).toBeNull();
+  });
 });

@@ -38,7 +38,9 @@ import { CloudDeckCatalog } from './CatalogDeckCard';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
+import { activeDeckStates } from '@/engines/deckStats';
 import { descendantIds } from '@/engines/deckTree';
+import { suspendedCardIds } from '@/engines/suspension';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
 import { DeckStatsPanel } from './DeckStatsPanel';
@@ -103,6 +105,8 @@ function Decks({ session }: { session: ReadySession }) {
   // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
   const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
+  // Las suspendidas no se ofrecen en Repasar y tampoco cuentan en las cifras de cada mazo
+  const suspended = suspendedCardIds(events ?? []);
   // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
   // el alumno ya siguió, porque sus repasos son suyos. Lo dice que esté en este dispositivo o que su
   // bitácora, que sí viaja entre dispositivos, tenga un repaso de alguna de sus tarjetas
@@ -232,7 +236,7 @@ function Decks({ session }: { session: ReadySession }) {
                         ) : null}
                         {isFollowed && cardIds.length > 0 ? (
                           <DeckStatsPanel
-                            states={cardIds.map((cardId) => states.get(cardId) ?? null)}
+                            states={activeDeckStates(cardIds, states, suspended)}
                             timeZone={session.user.timeZone}
                           />
                         ) : null}

@@ -11,6 +11,7 @@ import {
   signUp,
   test,
 } from './support/fixtures';
+import { isPhone } from './support/navigation';
 
 test('el calendario muestra el mes, cambia de mes y arma el plan por semanas con su .ics', async ({
   page,
@@ -32,10 +33,18 @@ test('el calendario muestra el mes, cambia de mes y arma el plan por semanas con
   // El día elegido dice qué pasa ese día. Hoy es el elegido al entrar
   const todayButton = grid.locator('button[aria-current="date"]');
   await expect(todayButton).toHaveAttribute('aria-pressed', 'true');
+  // En teléfono cada día mide al menos 44 px de ancho, el objetivo táctil de la app
+  if (isPhone(page)) {
+    const box = await todayButton.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
   await expect(
     page
       .getByRole('region', { name: /^\w/ })
-      .filter({ hasText: /Hiciste|Se proyectan|No hay actividad|Esta semana/ })
+      .filter({
+        hasText:
+          /Hiciste|Se proyectan|Todavía no registras|No hay carga|Todavía no sigues|Esta semana/,
+      })
       .first(),
   ).toBeVisible();
 
@@ -47,9 +56,18 @@ test('el calendario muestra el mes, cambia de mes y arma el plan por semanas con
   await page.getByRole('button', { name: t.calendar.today }).click();
   await expect(title).toHaveText(before ?? '');
 
-  // El plan por semanas llega hasta el examen y termina con 10 domingos de simulador
+  // La fecha del examen es la de la plataforma, provisional, y el aviso va junto a la cuenta regresiva
+  await expect(page.getByText(t.calendar.provisionalDate)).toBeVisible();
+
+  // El plan por semanas llega hasta el examen y termina con 10 domingos de simulador. En Gratis dice
+  // que el simulador completo es de pago y lleva a Suscripción
   const plan = page.getByRole('region', { name: t.calendar.plan.title });
   await expect(plan.getByRole('listitem').first()).toBeVisible();
+  await expect(plan.getByText(t.calendar.plan.simulatorPaid, { exact: false })).toBeVisible();
+  await expect(plan.getByRole('link', { name: t.billing.featureSeePlans })).toHaveAttribute(
+    'href',
+    SCREENS.subscription.path,
+  );
   await plan.getByRole('button', { name: /^Ver las \d+ semanas$/ }).click();
   await expect(plan.getByText(t.calendar.plan.simulator(10, 10))).toBeVisible();
   await expect(plan.getByText(t.calendar.plan.exam)).toBeVisible();
