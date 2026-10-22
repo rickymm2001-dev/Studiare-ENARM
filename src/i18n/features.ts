@@ -196,6 +196,14 @@ export const featureText = {
       },
       met: 'Meta cumplida',
     },
+    // Plan de hoy dentro de la meta diaria. Las tres cifras de la guía (V4-B4)
+    plan: {
+      title: 'Plan de hoy',
+      rows: { cards: 'Tarjetas', newCards: 'Nuevas', questions: 'Preguntas' },
+      label: (row: string, done: number, target: number) =>
+        `${row}, ${done.toLocaleString('es-MX')} de ${target.toLocaleString('es-MX')}`,
+      change: 'Cambiar',
+    },
     // Widgets de análisis. Dicen lo mismo que Progreso y el tutor, en chico (9.1)
     weakTopics: {
       hint: 'Los temas con menor dominio estimado, de los que ya hay respuestas suficientes.',
@@ -298,6 +306,13 @@ export const featureText = {
       days === null ? 'Sin tope, FSRS puro' : days === 21 ? '21 días, recomendado' : `${days} días`,
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
+    questionsPerDay: 'Preguntas por día (0 la apaga)',
+    // Las cifras de la guía en un toque (V4-B4)
+    guidePlanTitle: 'Plan de la guía',
+    guidePlanBody:
+      '300 tarjetas al día con 50 nuevas entre ellas, y 50 preguntas. Son 250 repasos, 50 nuevas y 50 preguntas. Se aplican al guardar.',
+    guidePlanApply: 'Usar el plan de la guía',
+    guidePlanActive: 'Ya usas el plan de la guía.',
     unlimitedNewCards: 'Sin límite de tarjetas nuevas',
     unlimitedNewCardsHint:
       'Con muchas nuevas juntas, los repasos de los días siguientes se acumulan como una avalancha. Úsalo solo si sabes cuánto tiempo tienes.',
@@ -636,7 +651,7 @@ export const featureText = {
   importer: {
     title: 'Sube tu mazo',
     intro:
-      'Trae tus tarjetas de otra app o de un archivo. Aceptamos paquetes .apkg de Anki, CSV, Excel (.xlsx) y Word (.docx). Tu mazo queda privado y las tarjetas empiezan como nuevas.',
+      'Trae tus tarjetas de otra app o de un archivo. Aceptamos paquetes .apkg de Anki, CSV y TSV (Quizlet), Excel (.xlsx), Word (.docx) y esquemas en Markdown (.md) u OPML, que exportan Obsidian, Notion, Logseq, Roam y Dynalist. Tu mazo queda privado y las tarjetas empiezan como nuevas.',
     fileLabel: 'Archivo para importar',
     fileHint: 'Hasta 600 MB en un paquete y 50 MB en una hoja o un documento.',
     // El botón propio que reemplaza al del navegador, que sale en inglés (H07 de la revisión de B2)
@@ -650,13 +665,20 @@ export const featureText = {
       unsafe_path: 'El paquete tiene rutas que no son seguras, así que no se importó.',
       corrupt: 'El archivo está dañado o no se pudo abrir.',
       unsupported:
-        'Ese tipo de archivo no se puede importar. Usa .apkg, CSV, Excel (.xlsx) o Word (.docx).',
+        'Ese tipo de archivo no se puede importar. Usa .apkg, CSV, Excel (.xlsx), Word (.docx), Markdown (.md) u OPML.',
       no_collection: 'El paquete no trae una colección de Anki.',
       empty: 'El archivo no trae tarjetas.',
     } as Record<string, string>,
     previewTitle: 'Esto es lo que vamos a importar',
     previewSource: (source: string, file: string) => `${source} · ${file}`,
-    sources: { apkg: 'Paquete de Anki', csv: 'Texto con columnas', xlsx: 'Excel', docx: 'Word' },
+    sources: {
+      apkg: 'Paquete de Anki',
+      csv: 'Texto con columnas',
+      xlsx: 'Excel',
+      docx: 'Word',
+      markdown: 'Esquema en Markdown',
+      opml: 'Esquema OPML',
+    },
     kinds: { basic: 'Pregunta y respuesta', basic_reverse: 'Con inversa', cloze: 'Con huecos' },
     summary: (notes: number, decks: number) =>
       `${plural(notes, 'nota', 'notas')} en ${plural(decks, 'mazo', 'mazos')}`,

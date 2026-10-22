@@ -1483,3 +1483,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Heatmap. Tocar un día dice sus cifras debajo
 - Tipos de tarjeta. La ayuda de cada tipo lleva un ejemplo médico
 - No se hizo. Editar durante el repaso una tarjeta de un mazo precargado. Esas tarjetas son contenido compartido y editarlas pide crear una copia en Mis tarjetas y decidir qué pasa con el original y su historial, así que va a IDEAS.md. Sí se edita en cualquier mazo del alumno, como ya era
+
+### D-143. V4-B4, métodos de estudio y plan de hoy
+- Fecha 2026-10-22. Origen R, la lista de métodos de estudio y los consejos
+- Plan de hoy. Las tres cifras de la guía, tarjetas del día, nuevas y preguntas, con barras en la tarjeta de Meta diaria de Inicio, que así llena el espacio que antes quedaba vacío y no cambia el diseño fijo de D-116. Un motor puro, src/engines/dailyPlan.ts. La meta de tarjetas es el límite de repasos más el de nuevas, porque la guía cuenta las 300 con sus 50 nuevas adentro. Las cifras de la guía como límites son 250 repasos, 50 nuevas y 50 preguntas. Un botón en Ajustes del repaso las aplica al borrador y se guardan con Guardar. Los límites por omisión no cambian, la guía es una propuesta
+- Ajuste nuevo questionsPerDay, de 0 a 1000 y 50 por omisión, que apaga su fila con cero. No hay migración porque el esquema pone el valor por omisión y ninguna tabla de Supabase lo valida
+- Guía de métodos, texto propio y fijo, nunca de la IA. Feynman, Recall sprint y el ritmo diario de la guía. Se ve en Tutor y en Apuntes. No se usa el nombre de Pandanote porque no se pudo confirmar en qué consiste
+- Recall sprint dentro de cada apunte, en los planes de pago. Tres minutos para escribir de memoria, después el apunte junto a lo escrito, y las líneas que el alumno marca como faltantes se vuelven tarjetas básicas en el mazo del apunte, con el contexto de la línea al frente. Las líneas que ya tienen su tarjeta no se repiten. No usa IA ni califica lo escrito (src/engines/recall.ts)
+- Importador de Markdown y OPML, que cubre Obsidian, Notion, Logseq, Roam y Dynalist. Toma las líneas con las mismas marcas de Apuntes y de Word y pone los títulos y los temas con hijos como etiqueta en ruta. Quizlet ya entraba como TSV. Se reconoce el OPML por su contenido y el Markdown por su nombre. El evento de importar acepta los dos formatos nuevos
+- No se hizo. Plegado de secciones y contador de puntos en Apuntes, y seleccionar texto de un PDF. Van a IDEAS.md

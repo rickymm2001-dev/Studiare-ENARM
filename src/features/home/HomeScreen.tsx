@@ -39,6 +39,8 @@ import { MissionList } from './missions/MissionList';
 import { useMissions } from './missions/useMissions';
 import { ReviewLoadCard } from './sections/ReviewLoadCard';
 import { buildSnapshot, type Snapshot } from './snapshot';
+import { dailyPlan, type PlanRow } from '@/engines/dailyPlan';
+import { reviewedToday } from '../review/study';
 import { BiasPatternWidget, WeakTopicsWidget } from './widgets/AnalysisWidgets';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 
@@ -86,6 +88,19 @@ function Dashboard({ session }: { session: ReadySession }) {
     return <LoadingState />;
   }
   const snapshot = buildSnapshot({ events, user, settings, now: new Date(), activeCardIds: cards });
+  const plan = dailyPlan({
+    limits: {
+      reviewsPerDay: settings.reviewsPerDay,
+      newCardsPerDay: settings.newCardsPerDay,
+      unlimitedNewCards: settings.unlimitedNewCards,
+      questionsPerDay: settings.questionsPerDay,
+    },
+    done: {
+      cards: snapshot.todayActivity.cards,
+      newCards: reviewedToday(events, snapshot.today, new Map()).newCount,
+      questions: snapshot.todayActivity.questions,
+    },
+  });
 
   return (
     <>
@@ -108,7 +123,7 @@ function Dashboard({ session }: { session: ReadySession }) {
           {/* Las tarjetas crecen hasta la altura de la fila, para que nada quede en blanco */}
           <div className="grid grow grid-cols-1 gap-5 sm:grid-cols-2">
             <div className="flex flex-col gap-5">
-              <DailyGoalCard snapshot={snapshot} />
+              <DailyGoalCard snapshot={snapshot} plan={plan} />
               <DueCard snapshot={snapshot} />
             </div>
             <ReviewLoadCard load={load} />
@@ -191,7 +206,7 @@ function CardHeading({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
+function DailyGoalCard({ snapshot, plan }: { snapshot: Snapshot; plan: PlanRow[] }) {
   const id = useId();
   const { goal } = snapshot;
   const done = snapshot.todayActivity[goal.metric];
@@ -213,6 +228,32 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
           </span>
         </div>
       </div>
+      {plan.length > 0 ? (
+        <div className="flex flex-col gap-1.5">
+          <h4 className="text-sm font-semibold">{t.widgets.plan.title}</h4>
+          <ul className="flex flex-col gap-1.5">
+            {plan.map((row) => {
+              const name = t.widgets.plan.rows[row.key];
+              return (
+                <li key={row.key} className="flex flex-col gap-0.5">
+                  <span className="flex items-baseline justify-between gap-2 text-sm">
+                    <span>{name}</span>
+                    <span className="tabular-nums text-fg-muted">
+                      {t.widgets.goal.ratio(row.done, row.target)}
+                    </span>
+                  </span>
+                  <ProgressBar
+                    className="h-1.5"
+                    value={row.done}
+                    max={row.target}
+                    label={t.widgets.plan.label(name, row.done, row.target)}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
       <figure className="text-sm">
         <blockquote>{quote.text}</blockquote>
         <figcaption className="text-xs text-fg-muted">{quote.author}</figcaption>

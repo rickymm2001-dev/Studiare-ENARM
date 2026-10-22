@@ -69,7 +69,13 @@ describe('Inicio con el diseño fijo', () => {
     expect(screen.getByRole('heading', { level: 2, name: t.home.simulatorsTitle })).toBeVisible();
 
     const goal = screen.getByRole('region', { name: t.widgets.names.daily_goal });
-    expect(within(goal).getByText(t.widgets.goal.ratio(0, 20))).toBeVisible();
+    // La meta y la fila de nuevas del plan de hoy dicen 0 de 20, porque el límite de nuevas es el mismo
+    expect(within(goal).getAllByText(t.widgets.goal.ratio(0, 20))[0]).toBeVisible();
+    // El plan de hoy con las tres cifras de la guía, con los límites por omisión
+    expect(within(goal).getByText(t.widgets.plan.title)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.plan.rows.cards)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.plan.rows.questions)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.goal.ratio(0, 220))).toBeVisible();
     // La frase del día lleva su autor
     expect(within(goal).getByRole('figure')).toBeVisible();
 

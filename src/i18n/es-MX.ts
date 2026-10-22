@@ -11,6 +11,7 @@ import { outlineText } from './outlines';
 import { partyCloudText } from './partyCloud';
 import { qualityText } from './quality';
 import { settingsPageText } from './settingsPage';
+import { studyMethodsText } from './studyMethods';
 import { tutorText } from './tutor';
 import { vocabularyText } from './vocabulary';
 import { weekPlanText } from './weekPlan';
@@ -162,6 +163,7 @@ export const t = {
   ...tutorText,
   ...vocabularyText,
   ...cardSearchText,
+  ...studyMethodsText,
   weekPlan: weekPlanText,
   examReview: examReviewText,
   partyCloud: partyCloudText,

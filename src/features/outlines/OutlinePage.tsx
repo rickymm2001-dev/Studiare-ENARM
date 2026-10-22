@@ -4,7 +4,7 @@
 //
 // B6 del plan del cambio. Arriba del editor van el mazo y el tema del apunte y su esquema para saltar
 // a una sección. El modo clase deja solo el editor, a todo lo ancho, para escribir rápido.
-import { ArrowLeft, Maximize2, Minimize2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Maximize2, Minimize2, Timer, Trash2 } from 'lucide-react';
 import { lazy, Suspense, useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -42,6 +42,7 @@ import { OutlineAiCards } from './OutlineAiCards';
 import { OutlineLinks } from './OutlineLinks';
 import { OutlineSettings, type SettingsResult } from './OutlineSettings';
 import { OutlineStructure } from './OutlineStructure';
+import { RecallSprint } from './RecallSprint';
 import { useOutlineAutosave, type SaveStatus } from './useOutlineAutosave';
 
 const OutlineEditor = lazy(() =>
@@ -75,6 +76,7 @@ export function OutlinePage({
   const [params, setParams] = useSearchParams();
   const text = t.outlines;
   const classMode = params.get('modo') === 'clase';
+  const [recallOpen, setRecallOpen] = useState(false);
 
   // El editor y el título se alimentan una sola vez del apunte guardado y de ahí en adelante mandan
   // ellos. Si no, cada guardado volvería a cargar el editor y le quitaría el cursor
@@ -238,6 +240,16 @@ export function OutlinePage({
           type="button"
           variant="secondary"
           className="ml-auto"
+          onClick={() => {
+            setRecallOpen(true);
+          }}
+        >
+          <Timer aria-hidden />
+          {t.recallSprint.open}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
           aria-pressed={classMode}
           title={text.editor.classModeHint}
           onClick={() => {
@@ -248,6 +260,15 @@ export function OutlinePage({
           {text.editor.classMode}
         </Button>
       </div>
+      {recallOpen ? (
+        <RecallSprint
+          session={session}
+          outline={outline}
+          onClose={() => {
+            setRecallOpen(false);
+          }}
+        />
+      ) : null}
       {conflict ? (
         <div role="alert" className="flex flex-col items-start gap-2 text-sm text-danger">
           <p>{text.editor.conflict}</p>

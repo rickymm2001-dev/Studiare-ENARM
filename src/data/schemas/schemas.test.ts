@@ -176,6 +176,7 @@ describe('esquemas y tablas', () => {
       spacing: { hard: 1, good: 1, easy: 1 },
       newCardsPerDay: 20,
       reviewsPerDay: 200,
+      questionsPerDay: 50,
       unlimitedNewCards: false,
       // Temporizador apagado y todos los días normales (D-085)
       cardTimer: { enabled: false, seconds: 30, autoReveal: false },

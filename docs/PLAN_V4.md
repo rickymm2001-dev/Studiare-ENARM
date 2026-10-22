@@ -220,6 +220,10 @@ Lo de Paco y los complementos de la sección 5.
 
 Se acepta cuando las e2e de review, review-tools, deck-topics y explore cubren los tres niveles de atrasos, la sesión por tema y la pantalla de mazo, los motores nuevos tienen unitarias y la bitácora sigue sin editar ni borrar.
 
+Estado de V4-B3 (2026-10-22, D-142)
+- Hecho. Atrasos por riesgo con posponer solo lo que aguanta y un último recurso con confirmación. Estudiar un tema aparte de la cola del día sin gastar su cupo. Estadísticas por mazo con histograma y retención estimada. Buscar con campo:valor y ejemplos con un toque. Detalle por día en el heatmap. Ejemplos médicos en los tipos de tarjeta
+- No se hizo. Editar durante el repaso una tarjeta de un mazo precargado, que pide una copia en Mis tarjetas. Va a IDEAS.md
+
 ### V4-B4. Métodos de estudio y plan de hoy (M)
 
 - Plan de hoy en Inicio y en Repasar con las tres cifras que da la guía. Tarjetas del día con el cupo de nuevas, preguntas del día y simulacros cortos. Los valores por omisión son los tuyos, 300 tarjetas, 50 nuevas y 50 preguntas, y el alumno los cambia en Ajustes del repaso. El cupo real de nuevas sigue mandando desde dailyLoad y el plan avisa cuando la cifra es imposible con el tiempo que declaró
@@ -230,6 +234,10 @@ Se acepta cuando las e2e de review, review-tools, deck-topics y explore cubren l
 - Consejos de la guía como texto fijo en Tutor y en el calendario. Simulacros cortos tres veces al día de la misma especialidad y de los mismos temas, nunca de todas las especialidades hasta las últimas semanas, y 8 a 10 simuladores completos los domingos al final
 
 Se acepta cuando el plan de hoy se calcula en un motor puro con unitarias, el recall sprint tiene su e2e, el importador lee un archivo de muestra de cada formato y nada de la guía viene de la IA.
+
+Estado de V4-B4 (2026-10-22, D-143)
+- Hecho. Plan de hoy con las tres cifras en la meta diaria de Inicio y el plan de la guía en Ajustes del repaso. Guía de métodos en Tutor y Apuntes. Recall sprint dentro de cada apunte. Importador de Markdown y OPML
+- No se hizo. Plegado de secciones, contador de puntos y seleccionar texto de un PDF. Van a IDEAS.md
 
 ### V4-B5. Estructura del examen con Bloom (M)
 

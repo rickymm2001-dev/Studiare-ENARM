@@ -2,9 +2,10 @@
 // bruto y una lista de avisos. Nada de esto toca la base. Guardar es otro paso (importParsed) que
 // sanea el texto, evita duplicados y crea los mazos privados del alumno.
 
-export type ImportSource = 'apkg' | 'csv' | 'xlsx' | 'docx';
+export type ImportSource = 'apkg' | 'csv' | 'xlsx' | 'docx' | 'markdown' | 'opml';
 
-export type ImportFormat = 'apkg_legacy' | 'apkg_new' | 'csv' | 'xlsx' | 'docx';
+export type ImportFormat =
+  'apkg_legacy' | 'apkg_new' | 'csv' | 'xlsx' | 'docx' | 'markdown' | 'opml';
 
 export type ImportNoteKind = 'basic' | 'basic_reverse' | 'cloze';
 

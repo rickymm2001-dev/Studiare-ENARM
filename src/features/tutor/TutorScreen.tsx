@@ -16,6 +16,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { Disclosure } from '@/ui/components/disclosure';
 import { LoadingState } from '@/ui/states/states';
+import { StudyMethodsCard } from '../shared/StudyMethodsCard';
 import { TOPIC_NAMES } from '../shared/topics';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
@@ -389,6 +390,7 @@ function TutorBody({
           <DraftCardsCard errorCards={errorCards} />
         </div>
       </div>
+      <StudyMethodsCard />
     </>
   );
 }
