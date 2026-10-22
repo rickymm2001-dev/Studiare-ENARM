@@ -252,7 +252,7 @@ Estado de V4-B4 (2026-10-22, D-143)
 - Simular con filtro por nivel y, en el examen completo, una mezcla por omisión que el admin cambia en Umbrales junto con los pesos por rama
 - Progreso con la exactitud por nivel cognitivo al lado de la de dificultad, con estado calibrando
 - Página Cómo es el examen dentro de la app, con la estructura de la sección 6 de V3 (280 reactivos, 250 en español y 30 de inglés, casos de 2 a 3 preguntas, las siete áreas) y las imperfecciones que listaste como entrenamiento, preguntas largas y mal redactadas, lo que se pregunta es confuso, imágenes de mala calidad. Enlaza con el simulador imperfecto a propósito que ya existe (D-080)
-- Hoja de respuestas al estilo Ceneval como opción del examen completo. El alumno marca el alveolo en una hoja aparte en lugar de tocar la opción, para entrenar el llenado y el error de renglón. Se guarda igual, como evento de respuesta. Es barato y nadie más lo tiene
+- Hoja de respuestas al estilo Ceneval como opción del examen completo. El alumno marca la burbuja en una hoja aparte en lugar de tocar la opción, para entrenar el llenado y el error de renglón. Se guarda igual, como evento de respuesta. Es barato y nadie más lo tiene
 - Imágenes del banco con calidad baja a propósito solo donde el médico lo marque. No se degradan imágenes solas
 
 Se acepta cuando una pregunta con nivel entra por el Sheet y sale en Simular con su filtro, el examen reparte por nivel, la hoja de respuestas tiene su e2e y la pantalla Cómo es el examen cita sus fuentes.

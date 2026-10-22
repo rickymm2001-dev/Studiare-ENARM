@@ -1,5 +1,5 @@
 // Examen con hoja de respuestas (V4-B5). Con la opción encendida las opciones de la pregunta solo se
-// leen y la respuesta se llena en un burbuja de la hoja, como en la hoja de lectura óptica del examen
+// leen y la respuesta se llena en una burbuja de la hoja, como en la hoja de lectura óptica del examen
 // real. Un burbuja solo se llena si la pregunta ya se vio y el llenado sobrevive a una recarga.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
@@ -46,12 +46,12 @@ test('la respuesta se llena en la hoja y no en la opción de la pregunta', async
   await expect(bubble(page, 1, 'B')).toHaveAttribute('aria-checked', 'true');
   await expect(bubble(page, 1, 'A')).toHaveAttribute('aria-checked', 'false');
 
-  // Cambiarla mueve la marca, un burbuja a la vez
+  // Cambiarla mueve la marca, una burbuja a la vez
   await bubble(page, 1, 'C').click();
   await expect(bubble(page, 1, 'C')).toHaveAttribute('aria-checked', 'true');
   await expect(bubble(page, 1, 'B')).toHaveAttribute('aria-checked', 'false');
 
-  // Una recarga retoma el examen con el burbuja llenado
+  // Una recarga retoma el examen con la burbuja llena
   await page.reload();
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(bubble(page, 1, 'C')).toHaveAttribute('aria-checked', 'true');
