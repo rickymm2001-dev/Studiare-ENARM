@@ -378,9 +378,9 @@
 
 /*
   Cristal de 6 px. Con respaldo sólido para quien no tiene backdrop-filter, y sin animación, así que el
-  movimiento reducido no cambia nada. En computadora glass-off lo vuelve sólido y glass-clear lo deja
-  transparente, según la barra. Solo lo usan la barra superior, el dock del teléfono y las barras de acciones fijas
-  (src/ui/glass.test.ts)
+  movimiento reducido no cambia nada. Con prefers-reduced-transparency queda sólido y sin desenfoque. En
+  computadora glass-off lo vuelve sólido y glass-clear lo deja transparente, según la barra. Solo lo usan
+  la barra superior, el dock del teléfono y las barras de acciones fijas (src/ui/glass.test.ts)
 */
 @utility glass {
   background-color: var(--enarm-surface);
@@ -392,6 +392,12 @@
     );
     -webkit-backdrop-filter: blur(var(--enarm-glass-blur));
     backdrop-filter: blur(var(--enarm-glass-blur));
+  }
+  /* Quien pide menos transparencia lo ve sólido y sin desenfoque */
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--enarm-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

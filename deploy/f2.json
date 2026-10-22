@@ -1,20 +1,22 @@
 {
-  "description": "Fase 2 del plan V4. La migración 20261024000001 con el acceso gratis por mazo (free_access y admin_deck_catalog_set_free_access), la confirmación del dueño ligada a la versión del mazo, los topes por alumno de bajadas del catálogo y de cuota de sincronización en platform_quota_settings, y las funciones del catálogo y sync_push_records que los usan. No lleva delete ni drop, así que la aplica la herramienta de despliegue o el conector con el mismo archivo.",
+  "description": "Fase 2 del plan V4. La migración 20261024000001 con el acceso gratis por mazo (free_access y admin_deck_catalog_set_free_access, que guarda quién y cuándo y que retirar un mazo cierra), la confirmación del dueño ligada a la versión del mazo (owner_confirm_deck_version, con la nota del dueño aparte de la del admin), los topes por alumno en platform_quota_settings (registros y bytes de sincronización, eventos y bajadas del catálogo por día) y las funciones del catálogo, sync_push_records y sync_push_events que los usan. No lleva delete ni drop, así que la aplica la herramienta de despliegue o el conector con el mismo archivo. El tope de bajadas (BK012) es contabilidad y un freno al registro de la bajada, no frena las descargas reales de Storage, que no lo consultan, y el egress real lo limita Supabase. Lo que protege el acceso a los archivos es la regla de deck_catalog_can_read.",
   "migrations": [
     {
       "file": "supabase/migrations/20261024000001_catalog_free_access_and_caps.sql",
       "check": {
-        "columnas_del_catalogo": 2,
-        "topes_sembrados": 3,
+        "columnas_del_catalogo": 5,
+        "topes_sembrados": 4,
         "topes_sin_permisos_directos": true,
         "confirmacion_ligada": 1,
         "admin_abre_mazos": true,
         "anonimo_abre_mazos": false,
         "api_decide_por_mazo": false,
         "api_lee_topes": false,
-        "alumno_sube_registros": true
+        "dueno_confirma_con_version": true,
+        "alumno_sube_registros": true,
+        "alumno_sube_eventos": true
       },
-      "note": "Agrega dos columnas a deck_catalog, la tabla de topes sin permisos de tabla y redefine deck_catalog_can_read, deck_catalog_list, record_deck_download, admin_deck_catalog_publish, owner_confirm_deck_authorization, admin_deck_catalog_overview y sync_push_records. Lo que un mazo de terceros ya tenía confirmado queda confirmado para sus versiones actuales"
+      "note": "Agrega cinco columnas a deck_catalog, la tabla de topes sin permisos de tabla y redefine deck_catalog_can_read, deck_catalog_list, record_deck_download, admin_deck_catalog_retire, admin_deck_catalog_publish, owner_confirm_deck_authorization, admin_deck_catalog_overview, sync_push_records y sync_push_events, y crea owner_confirm_deck_version. Lo que un mazo de terceros ya tenía confirmado queda confirmado para sus versiones publicadas. BK012 es contabilidad y un freno al registro de la bajada, no frena las descargas reales de Storage, que no consultan el tope, y el egress real lo limita Supabase. La regla de deck_catalog_can_read es la que protege el acceso"
     }
   ],
   "functions": []

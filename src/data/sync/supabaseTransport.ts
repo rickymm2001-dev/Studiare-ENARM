@@ -2,6 +2,11 @@
 // sync_push_events, que aplican la regla de la fecha más reciente en el servidor, y lee con las
 // políticas por fila de sync_records y events. Lo que baja se valida de nuevo con zod, porque el
 // servidor es un tercero.
+// Versiones mezcladas (D-146). Los eventos llevan su versión y la bajada se pausa ante una mayor a la
+// que la app entiende. Los registros (mazos, notas, tarjetas, apuntes y la distribución del Inicio) no
+// la llevan. Uno que falla el esquema estricto, por ejemplo con un campo nuevo de una app más reciente,
+// cuenta como rechazado y el cursor avanza. Por eso los cambios de esquema de los registros deben ser
+// aditivos y opcionales hasta que exista una versión en la fila.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { SYNC_KINDS, type WireEvent, type WireRecord } from '@/engines/sync';

@@ -36,7 +36,15 @@ export function BranchOrder({
     const id = pendingFocus.current;
     if (id === null) return;
     pendingFocus.current = null;
-    listRef.current?.querySelector<HTMLElement>(`[data-focus-id="${id}"]`)?.focus();
+    const find = (focusId: string) =>
+      listRef.current?.querySelector<HTMLInputElement | HTMLButtonElement>(
+        `[data-focus-id="${focusId}"]`,
+      );
+    let target = find(id);
+    // Una rama que llegó al primer o al último lugar deja deshabilitado el botón que se usó, y un botón
+    // deshabilitado no recibe el foco. Pasa al contrario de la misma rama
+    if (target?.disabled) target = find(oppositeId(id));
+    target?.focus();
   }, [settings.branches]);
 
   const save = (next: string[], focus: string | null) => {
@@ -75,8 +83,9 @@ export function BranchOrder({
                 label={name}
                 checked={choice.included}
                 disabled={last}
+                data-focus-id={`${choice.key}-check`}
                 onChange={() => {
-                  save(toggleBranch(settings.branches, choice.key, all), null);
+                  save(toggleBranch(settings.branches, choice.key, all), `${choice.key}-check`);
                 }}
               />
               {choice.included ? (
@@ -121,4 +130,13 @@ export function BranchOrder({
       </p>
     </Disclosure>
   );
+}
+
+/** El botón contrario de la misma rama, para cuando el que se usó quedó deshabilitado */
+function oppositeId(id: string): string {
+  return id.endsWith('-up')
+    ? `${id.slice(0, -3)}-down`
+    : id.endsWith('-down')
+      ? `${id.slice(0, -5)}-up`
+      : id;
 }

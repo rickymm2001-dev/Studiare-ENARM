@@ -39,14 +39,13 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { schedulerConfig } from '../review/schedulerConfig';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
-import { activeDeckStates } from '@/engines/deckStats';
+import { activeDeckStates, suspendedDeckStates } from '@/engines/deckStats';
 import { descendantIds, selectionUnitId } from '@/engines/deckTree';
 import { suspendedCardIds } from '@/engines/suspension';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
 import { DeckInsights } from './DeckInsights';
 import { DeckStatsList } from './DeckStatsList';
-import { unitIdsOf } from './deckActions';
 import { DeckTopics } from './DeckTopics';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
@@ -111,8 +110,7 @@ function Decks({ session }: { session: ReadySession }) {
   // Las suspendidas no se ofrecen en Repasar y tampoco cuentan en las cifras de cada mazo
   const suspended = suspendedCardIds(events ?? []);
   const leechLapses = schedulerConfig(session).thresholds.leechLapses;
-  const allUnitIds = useMemo(() => unitIdsOf(stored?.decks ?? []), [stored?.decks]);
-  // Con el catálogo de la nube los mazos seguidos y los propios salen en Tus mazos en cifras. Con el
+  // Con el catálogo de la nube los mazos seguidos y los propios salen en Cifras por mazo. Con el
   // que viene en la app los precargados ya llevan sus cifras en su fila
   const cloudCatalog = isFeatureEnabled('deckCatalogCloud') && !session.isDemo;
   const catalogUnitIds = useMemo(
@@ -251,9 +249,9 @@ function Decks({ session }: { session: ReadySession }) {
                             unitId={selectionUnitId(stored.decks, id, CONTAINER_DECKS)}
                             name={file.name}
                             states={activeDeckStates(cardIds, states, suspended)}
+                            suspendedStates={suspendedDeckStates(cardIds, states, suspended)}
                             timeZone={session.user.timeZone}
                             leechLapses={leechLapses}
-                            allUnitIds={allUnitIds}
                           />
                         ) : null}
                         <DeckTopics

@@ -68,6 +68,16 @@ export function viewFromParams(params: URLSearchParams): SearchView {
   };
 }
 
+/**
+ * La vista sin un mazo que ya no existe. Una dirección con ?mazo= de un mazo borrado, o escrita a mano,
+ * dejaría un filtro activo sin resultados ni nombre, así que cuando los mazos cargan se suelta ese
+ * filtro. Si el mazo existe, o la vista no pide ninguno, devuelve la misma vista
+ */
+export function withKnownDeck(view: SearchView, decks: readonly DeckLike[]): SearchView {
+  if (view.deckId === '' || decks.some((deck) => deck.id === view.deckId)) return view;
+  return { ...view, deckId: '' };
+}
+
 /** La consulta del motor. Elegir un mazo incluye a los que cuelgan de él */
 export function queryOf(view: SearchView, decks: readonly DeckLike[]): CardSearchQuery {
   return {

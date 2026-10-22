@@ -1536,20 +1536,23 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
       expect(Object.keys(check)).not.toContain(column);
     }
     expect(check).toMatchObject({
-      columnas_del_catalogo: 2,
-      topes_sembrados: 3,
+      columnas_del_catalogo: 5,
+      topes_sembrados: 4,
       topes_sin_permisos_directos: true,
       admin_abre_mazos: true,
       anonimo_abre_mazos: false,
       api_decide_por_mazo: false,
       api_lee_topes: false,
+      dueno_confirma_con_version: true,
+      alumno_sube_registros: true,
+      alumno_sube_eventos: true,
     });
     // Son las columnas de la consulta con la que cierra la migración, ni una más ni una menos
     const query = checkQuery(last?.sql ?? '') ?? '';
     for (const column of Object.keys(check)) expect(query, column).toContain(` as ${column}`);
   });
 
-  it('la migración de F2 redefine seis funciones de deck_catalog, y en b11 va después de ella y antes de la de inglés', () => {
+  it('la migración de F2 redefine siete funciones de deck_catalog, y en b11 va después de ella y antes de la de inglés', () => {
     const plan = loadPlan(ROOT, 'b11');
     const catalog = plan.migrations.find((step) => step.name === 'deck_catalog');
     const freeAccess = loadPlan(ROOT, 'f2').migrations[0];
@@ -1562,6 +1565,7 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
       'deck_catalog_can_read',
       'deck_catalog_list',
       'record_deck_download',
+      'admin_deck_catalog_retire',
       'admin_deck_catalog_publish',
       'owner_confirm_deck_authorization',
       'admin_deck_catalog_overview',
@@ -1617,12 +1621,17 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     expect(JSON.stringify([...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]))).toBe(
       edgeBefore,
     );
-    for (const name of ['admin_deck_catalog_set_free_access', 'deck_catalog_can_download_deck']) {
+    for (const name of [
+      'admin_deck_catalog_set_free_access',
+      'deck_catalog_can_download_deck',
+      'owner_confirm_deck_version',
+    ]) {
       expect(fake.functions.get(name), name).toBeDefined();
     }
     // platform_quota es la lectura de los topes y ningún rol la llama, así que la base la trae con sus permisos cerrados
     expect(fake.functions.get('platform_quota')?.body).toContain('deck_downloads_per_day');
     expect(fake.functions.get('sync_push_records')?.body).toContain('SY003');
+    expect(fake.functions.get('sync_push_events')?.body).toContain('sync_events');
 
     const before = fake.writes().length;
     const again = await runReal(fake, 'f2');
@@ -1647,7 +1656,7 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const run = await runReal(fake, 'f2');
     expect(run.code).toBe(1);
     expect(run.text).toContain('su comprobación sale en rojo');
-    expect(run.text).toContain('topes_sembrados dio 0 y debía dar 3');
+    expect(run.text).toContain('topes_sembrados dio 0 y debía dar 4');
     expect(fake.writes()).toEqual([]);
   });
 

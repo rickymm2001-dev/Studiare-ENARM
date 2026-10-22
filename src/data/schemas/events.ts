@@ -23,16 +23,24 @@ import {
 import { EvidenceSchema } from './activity';
 
 /**
- * Versión del esquema de eventos. Sube cuando cambia un payload, y la derivación sabe leer ambas.
+ * Versión del esquema de eventos. Sube cuando cambia un payload de forma que una app anterior no lo pueda
+ * leer.
  *
- * Regla para cambiar un evento (D-146). Un cambio que una app anterior no pueda leer, por ejemplo un campo
- * nuevo obligatorio, un valor nuevo en una lista cerrada o un tipo de evento nuevo, es incompatible hacia
- * atrás y debe subir esta versión, y los eventos que lo usen deben llevar la versión nueva. Una app que baja
- * un evento de una versión mayor a la que entiende no lo descarta, porque su cursor pasaría de largo y lo
- * perdería. Pausa la bajada de la bitácora justo antes de ese evento, avisa que hay una versión nueva y retoma
- * cuando el alumno actualiza (src/engines/sync.ts, classifyEventRow). Un campo opcional que las apps
- * anteriores pueden ignorar no necesita subir la versión, pero con schemas estrictos hoy tampoco lo
- * aceptan, así que en la práctica casi todo cambio pide subirla.
+ * Regla para cambiar un evento (D-146)
+ * - Un cambio incompatible hacia atrás, por ejemplo un campo nuevo obligatorio, un valor nuevo en una lista
+ *   cerrada o un tipo de evento nuevo, sube esta versión, y los eventos que lo usen llevan la versión nueva.
+ * - Al subirla se conserva el esquema de la versión anterior de cada payload que cambie, porque los
+ *   eventos viejos siguen en la bitácora y al bajar el historial en un dispositivo nuevo deben seguir
+ *   pasando. El sobre acepta de la versión 1 a esta, y la derivación lee las dos formas.
+ * - Una app que baja un evento de una versión mayor a la que entiende no lo descarta, porque su cursor
+ *   pasaría de largo y lo perdería. Pausa la bajada de la bitácora justo antes de ese evento, avisa que hay
+ *   una versión nueva y retoma cuando el alumno actualiza (src/engines/sync.ts, classifyEventRow). Una
+ *   versión que pase de la soportada más 10 se toma por dato dañado y se rechaza, para que un valor absurdo
+ *   no deje la bajada en pausa para siempre.
+ *
+ * Los registros (mazos, notas, tarjetas, apuntes y la distribución del Inicio) no tienen versión en la
+ * fila. Un registro que falla el esquema estricto cuenta como rechazado y el cursor avanza, así que sus
+ * cambios de esquema deben ser aditivos y opcionales hasta que exista una versión en la fila.
  */
 export const EVENT_SCHEMA_VERSION = 1;
 
@@ -324,7 +332,8 @@ const EventEnvelopeShape = {
   at: UtcDateTimeSchema,
   /** Zona horaria del alumno en ese momento, para calcular el día de estudio */
   tz: TimeZoneSchema,
-  schemaVersion: z.literal(EVENT_SCHEMA_VERSION),
+  /** De la versión 1 a la actual. Los eventos de versiones anteriores siguen siendo válidos */
+  schemaVersion: z.int().min(1).max(EVENT_SCHEMA_VERSION),
   sessionId: IdSchema.nullable(),
 };
 

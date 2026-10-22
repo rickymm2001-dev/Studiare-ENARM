@@ -32,6 +32,7 @@ const DeckAdminEntrySchema = z.object({
   authorizationConfirmedAt: z.string().nullable(),
   // Un servidor anterior a 20261024000001 no los manda
   authorizationConfirmedVersion: count.nullable().default(null),
+  authorizationConfirmedNote: z.string().nullable().default(null),
   pendingConfirmationVersion: count.nullable().default(null),
   freeAccess: z.boolean().default(false),
   status: z.enum(['draft', 'published', 'retired']),
@@ -168,17 +169,21 @@ export function setDeckFreeAccess(
   );
 }
 
-/** Solo el dueño. Con la nota de quién autorizó, cuándo y dónde vive el documento */
+/**
+ * Solo el dueño. Con la nota de quién autorizó, cuándo y dónde vive el documento, y la versión que ve en la pantalla.
+ * Si el mazo ya tiene una más nueva el servidor responde BK002 y la pantalla le pide recargar
+ */
 export async function confirmDeckAuthorization(
   cloud: Cloud,
   deckKey: string,
   note: string,
+  version: number | null,
   onForbidden?: ForbiddenHandler,
 ): Promise<void> {
   await callBankRpc(
     cloud,
-    'owner_confirm_deck_authorization',
-    { p_deck_key: deckKey, p_note: note.trim() },
+    'owner_confirm_deck_version',
+    { p_deck_key: deckKey, p_note: note.trim(), p_version: version },
     z.unknown(),
     onForbidden,
   );

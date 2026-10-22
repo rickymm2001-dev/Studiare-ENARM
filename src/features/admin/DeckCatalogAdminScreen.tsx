@@ -107,9 +107,20 @@ export function DeckCatalogAdminScreen() {
   );
 }
 
+/** La versión más nueva que muestra la tarjeta del mazo, o null si todavía no tiene ninguna */
+function newestVersion(entry: DeckAdminEntry): number | null {
+  return entry.versions.reduce<number | null>(
+    (newest, version) => (newest === null || version.version > newest ? version.version : newest),
+    null,
+  );
+}
+
 function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () => void }) {
   const role = usePreferences((state) => state.role);
-  const [note, setNote] = useState(entry.authorizationNote ?? '');
+  // La nota del dueño, que es la suya y no la del admin. Si todavía no confirma, se parte de la del admin
+  const [note, setNote] = useState(
+    entry.authorizationConfirmedNote ?? entry.authorizationNote ?? '',
+  );
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -229,10 +240,13 @@ function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () 
                   disabled={busy || note.trim() === ''}
                   onClick={() => {
                     void run(async () => {
+                      // Confirma la versión más nueva de las que muestra la tarjeta. Si el servidor tiene otra
+                      // más nueva responde que recargue
                       await confirmDeckAuthorization(
                         await requireCloud(),
                         entry.deckKey,
                         note,
+                        newestVersion(entry),
                         askSecondFactor,
                       );
                       return auth.confirmed_notice;

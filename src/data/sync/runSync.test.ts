@@ -890,4 +890,109 @@ describe('versiones mezcladas de la app (D-146)', () => {
     expect(result.rejected).toBe(1);
     expect((await localIds(b)).has(after.id)).toBe(true);
   });
+
+  it('mientras la bajada está en pausa pide solo el primer evento pendiente y al actualizar vuelve a la página completa', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    futureEvent(server, a, 200);
+    const after = laterEvent(server, a, 201);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const limits: number[] = [];
+    const base = memoryTransport(server, () => at(b.clock.seconds));
+    const spy: SyncTransport = {
+      ...base,
+      pullEvents: (afterSeq, limit) => {
+        limits.push(limit);
+        return base.pullEvents(afterSeq, limit);
+      },
+    };
+    expect(ok(await b.sync({ transport: spy })).blockedByNewerVersion).toBe(true);
+    expect(limits).toEqual([PAGE_SIZE]);
+    // Con la pausa ya conocida, la siguiente bajada pide una sola fila
+    b.clock.seconds = 400;
+    expect(ok(await b.sync({ transport: spy })).blockedByNewerVersion).toBe(true);
+    expect(limits).toEqual([PAGE_SIZE, 1]);
+    // Una app que ya entiende esa versión baja el resto con páginas completas
+    const row = [...server.events.values()].find((entry) => entry.event.schemaVersion === 2);
+    if (!row) throw new Error('Falta el evento nuevo');
+    row.event = { ...eventToWire(xpEvent(a, 200)), id: row.event.id };
+    b.clock.seconds = 500;
+    const resumed = ok(await b.sync({ transport: spy }));
+    expect(resumed.blockedByNewerVersion).toBeUndefined();
+    expect(limits).toEqual([PAGE_SIZE, 1, 1, PAGE_SIZE]);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+
+  it('un evento con una versión absurda es un dato dañado y no deja la bajada en pausa', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const junk = { ...eventToWire(xpEvent(a, 50)), id: newId(), schemaVersion: 2147483647 };
+    server.seq += 1;
+    server.events.set(junk.id, { event: junk, seq: server.seq });
+    const after = laterEvent(server, a, 51);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const result = ok(await b.sync());
+    expect(result.blockedByNewerVersion).toBeUndefined();
+    expect(result.rejected).toBe(1);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+});
+
+describe('el tope de registros de la cuenta (SY003)', () => {
+  const quota = () => new SyncTransportError('quota', 'Se llenó el espacio de la cuenta');
+
+  it('con el tope lleno los eventos igual suben y el resultado dice quota', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const made = await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const full: SyncTransport = { ...base, pushRecords: () => Promise.reject(quota()) };
+
+    const result = await a.sync({ transport: full });
+    expect(result).toMatchObject({ status: 'failed', failure: 'quota' });
+    // Los registros no subieron, pero los eventos sí
+    expect(server.records.size).toBe(0);
+    expect([...server.events.keys()].sort()).toEqual(made.events.map((event) => event.id).sort());
+    // No cuenta como sincronización buena y el avance de la bitácora quedó guardado
+    const state = await a.api.repos.syncState.get(a.userId);
+    expect(state?.lastSyncAt).toBeNull();
+    expect(state?.eventsWatermark).not.toBeNull();
+    // Cuando hay lugar otra vez, todo termina sin duplicar nada
+    ok(await a.sync());
+    expect(server.records.size).toBeGreaterThan(0);
+    expect(server.events.size).toBe(made.events.length);
+  });
+
+  it('si también la bitácora llega al tope, el resultado sigue diciendo quota', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const full: SyncTransport = {
+      ...base,
+      pushRecords: () => Promise.reject(quota()),
+      pushEvents: () => Promise.reject(quota()),
+    };
+    expect(await a.sync({ transport: full })).toMatchObject({ status: 'failed', failure: 'quota' });
+  });
+
+  it('un fallo de red al subir registros no se confunde con el tope y corta como siempre', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const down: SyncTransport = {
+      ...base,
+      pushRecords: () => Promise.reject(new SyncTransportError('network', 'Sin red')),
+    };
+    expect(await a.sync({ transport: down })).toMatchObject({
+      status: 'failed',
+      failure: 'network',
+    });
+    expect(server.events.size).toBe(0);
+  });
 });

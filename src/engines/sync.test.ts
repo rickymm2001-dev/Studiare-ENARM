@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { WidgetLayout } from '@/data/schemas/activity';
 import type { Card, Deck, Note } from '@/data/schemas/decks';
 import { createEvent } from '@/data/events/createEvent';
+import { AppEventSchema } from '@/data/schemas/events';
 import type { Outline } from '@/data/schemas/outlines';
 import {
   MAX_CLOCK_SKEW_MS,
@@ -13,6 +14,7 @@ import {
   canonical,
   classifyEventRow,
   clockIsTrustworthy,
+  NEWER_VERSION_WINDOW,
   clockSkewMs,
   collectSyncable,
   deletedAtOf,
@@ -488,6 +490,36 @@ describe('bitácora', () => {
     ).toEqual({ kind: 'newer_version', version: 7 });
     // Con una app que entiende la versión 2 la misma fila ya no espera
     expect(classifyEventRow({ ...wire, schemaVersion: 2 }, USER, 2)).toEqual({ kind: 'rejected' });
+  });
+
+  it('solo las versiones dentro de la ventana por encima de la soportada se toman por una app más nueva', () => {
+    const wire = eventToWire(xp(T1));
+    const top = 1 + NEWER_VERSION_WINDOW;
+    expect(classifyEventRow({ ...wire, schemaVersion: top }, USER)).toEqual({
+      kind: 'newer_version',
+      version: top,
+    });
+    // Más allá es un dato dañado, y no deja la bajada en pausa para siempre
+    expect(classifyEventRow({ ...wire, schemaVersion: top + 1 }, USER)).toEqual({
+      kind: 'rejected',
+    });
+    expect(classifyEventRow({ ...wire, schemaVersion: 2147483647 }, USER)).toEqual({
+      kind: 'rejected',
+    });
+  });
+
+  it('el sobre acepta la versión 1 y rechaza una mayor, que la clasificación toma por versión nueva', () => {
+    const event = xp(T1);
+    const wire = eventToWire(event);
+    // Un evento válido de la versión 1 sigue pasando el esquema
+    expect(AppEventSchema.safeParse(event).success).toBe(true);
+    expect(AppEventSchema.safeParse({ ...event, schemaVersion: 0 }).success).toBe(false);
+    // Uno de una versión mayor no cumple el esquema de esta app, pero no se descarta, se deja esperando
+    expect(AppEventSchema.safeParse({ ...event, schemaVersion: 2 }).success).toBe(false);
+    expect(classifyEventRow({ ...wire, schemaVersion: 2 }, USER)).toEqual({
+      kind: 'newer_version',
+      version: 2,
+    });
   });
 
   it('una fila dañada de la versión que sí se entiende, o de una anterior, se rechaza', () => {

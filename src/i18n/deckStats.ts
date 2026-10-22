@@ -12,6 +12,10 @@ export const deckStatsText = {
     'Aparecen cuando repasas el mazo y una tarjeta se te olvida varias veces. Todavía no hay repasos.',
   leechesNone: 'Ninguna por ahora.',
   leechesValue: (n: number) => `${n.toLocaleString('es-MX')} ${plural(n, 'tarjeta', 'tarjetas')}`,
+  leechesSuspended: (n: number) =>
+    n === 1
+      ? 'De ellas, 1 está suspendida'
+      : `De ellas, ${n.toLocaleString('es-MX')} están suspendidas`,
   seeLeeches: 'Verlas en Buscar tarjetas',
   lastStudied: 'Última vez que lo estudiaste',
   lastStudiedValue: (daysAgo: number) =>
@@ -24,7 +28,7 @@ export const deckStatsText = {
     search: 'Buscar tarjetas de este mazo',
   },
   list: {
-    title: 'Tus mazos en cifras',
+    title: 'Cifras por mazo',
     description:
       'Cuántas tarjetas tocan hoy, qué tan bien las recuerdas y cuáles se te olvidan una y otra vez en cada mazo que sigues o creaste.',
     cards: (n: number) => `${n.toLocaleString('es-MX')} ${plural(n, 'tarjeta', 'tarjetas')}`,

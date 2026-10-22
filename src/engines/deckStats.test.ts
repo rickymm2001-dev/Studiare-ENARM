@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { FsrsCardState } from '@/data/schemas/common';
-import { activeDeckStates, deckStats, INTERVAL_BUCKETS, MIN_FOR_RETENTION } from './deckStats';
+import {
+  activeDeckStates,
+  deckStats,
+  INTERVAL_BUCKETS,
+  MIN_FOR_RETENTION,
+  suspendedDeckStates,
+} from './deckStats';
 
 const TZ = 'America/Merida';
 /** 9:00 a. m. en Mérida. El día de estudio empieza a las 10:00 UTC del mismo día */
@@ -168,6 +174,93 @@ describe('deckStats, sanguijuelas y última vez', () => {
     expect(stats.daysSinceLastReview).toBe(1);
     const only = deckStats({ states: [none], now: NOW, timeZone: TZ });
     expect(only).toMatchObject({ reviewed: 1, lastReview: null, daysSinceLastReview: null });
+  });
+});
+
+describe('deckStats con tarjetas suspendidas', () => {
+  it('una sanguijuela suspendida sigue contando y se dice cuántas están suspendidas', () => {
+    const stats = deckStats({
+      states: [review(10, 5, { lapses: 9 })],
+      suspendedStates: [review(10, 5, { lapses: 12 }), review(10, 5, { lapses: 2 })],
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(stats.leeches).toBe(2);
+    expect(stats.leechesSuspended).toBe(1);
+  });
+
+  it('las demás cifras siguen sin las suspendidas, que es lo que Repasar ofrece', () => {
+    const suspended = [review(10, -3, { lapses: 12 }), review(10, 0)];
+    const withSuspended = deckStats({
+      states: [review(10, -1)],
+      suspendedStates: suspended,
+      now: NOW,
+      timeZone: TZ,
+    });
+    const without = deckStats({ states: [review(10, -1)], now: NOW, timeZone: TZ });
+    expect(withSuspended).toMatchObject({
+      total: 1,
+      review: 1,
+      overdue: 1,
+      dueToday: without.dueToday,
+    });
+    expect(withSuspended.intervals).toEqual(without.intervals);
+    expect(withSuspended.retentionNeeded).toBe(without.retentionNeeded);
+  });
+
+  it('si todas las repasadas están suspendidas el mazo no calibra y tiene su última vez', () => {
+    const recent = review(10, 5, { lapses: 9, lastReview: '2026-10-06T16:00:00.000Z' });
+    const stats = deckStats({
+      states: [null, null],
+      suspendedStates: [recent],
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(stats).toMatchObject({
+      reviewed: 1,
+      leeches: 1,
+      leechesSuspended: 1,
+      lastReview: '2026-10-06T16:00:00.000Z',
+      daysSinceLastReview: 2,
+      total: 2,
+      fresh: 2,
+    });
+  });
+
+  it('la última vez es la más reciente entre las activas y las suspendidas', () => {
+    const active = review(10, 5, { lastReview: '2026-10-02T16:00:00.000Z' });
+    const suspended = review(10, 5, { lastReview: '2026-10-07T16:00:00.000Z' });
+    const stats = deckStats({
+      states: [active],
+      suspendedStates: [suspended],
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(stats.lastReview).toBe('2026-10-07T16:00:00.000Z');
+    expect(stats.daysSinceLastReview).toBe(1);
+  });
+
+  it('una suspendida nueva no cuenta como vista', () => {
+    const stats = deckStats({
+      states: [],
+      suspendedStates: [null, review(0, 0, { state: 'new', lapses: 20 })],
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(stats).toMatchObject({ reviewed: 0, leeches: 0, leechesSuspended: 0 });
+  });
+});
+
+describe('suspendedDeckStates', () => {
+  it('da el estado de las suspendidas, que activeDeckStates deja fuera', () => {
+    const states = new Map<string, FsrsCardState>([
+      ['a', review(10, -2)],
+      ['b', review(10, -1)],
+    ]);
+    const cardIds = ['a', 'b', 'c'];
+    const suspended = new Set(['a', 'c']);
+    expect(suspendedDeckStates(cardIds, states, suspended)).toEqual([states.get('a'), null]);
+    expect(activeDeckStates(cardIds, states, suspended)).toEqual([states.get('b')]);
   });
 });
 

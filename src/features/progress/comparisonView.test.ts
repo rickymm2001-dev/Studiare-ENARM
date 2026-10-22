@@ -125,12 +125,12 @@ describe('hechos de la bitácora para la comparación', () => {
     // 4:30 en Cancún (UTC-5) del 16 de octubre es la 3:30 de Mérida, todavía del día de estudio 15. La foto de la
     // noche lo cuenta en el 15, así que la ventana y la constancia del navegador tienen que coincidir
     const instant = Date.UTC(2026, 9, 16, 9, 30);
-    const cancun = { ...answered(q, right.id, true, instant), tz: 'America/Cancun' } as AppEvent;
+    const cancun = { ...answered(q, right.id, true, instant), tz: 'America/Cancun' };
     // Y 3:30 en Tijuana (UTC-7) es la 4:30 de Mérida, que ya es del día de estudio 16
     const pacific = {
       ...answered(q, right.id, true, Date.UTC(2026, 9, 16, 10, 30)),
       tz: 'America/Tijuana',
-    } as AppEvent;
+    };
     expect(comparisonFactsFrom([cancun, pacific], bank).map((fact) => fact.day)).toEqual([
       '2026-10-15',
       '2026-10-16',

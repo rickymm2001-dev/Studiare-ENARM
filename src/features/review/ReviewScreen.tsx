@@ -73,6 +73,7 @@ import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
+import { useReviewPresetFromRoute } from './reviewPreset';
 import { TodayPlanCard } from './TodayPlanCard';
 import { useReviewSettingsPanel } from './settings/panelParam';
 import { ReviewSettingsButton, ReviewSettingsDialog } from './settings/ReviewSettingsDialog';
@@ -136,6 +137,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   }, [api.repos]);
   const catalog = useDeckCatalog();
   const [selection, setSelection] = useState<ReviewSelection | null>(null);
+  // Un botón de Mazos puede pedir un mazo y un modo de una sola vez por el estado de la ruta (V4-B3)
+  useReviewPresetFromRoute();
   // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
   const panel = useReviewSettingsPanel();
   if (events === undefined || content === undefined || catalog === undefined)
@@ -233,6 +236,17 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       mode: candidate.mode,
     });
 
+  // Lo que de verdad queda por estudiar hoy en todos los mazos que sigues, para el plan de hoy. La
+  // cola ya respeta los límites del día, y el plan suma lo que ya se hizo
+  const todayCounters = remainingCounters(
+    buildQueue({ cards, events, config, timeZone: session.user.timeZone, mode: 'today' }),
+    (cardId) => cardStates.get(cardId) ?? null,
+  );
+  const todayPending = {
+    reviews: todayCounters.learning + todayCounters.review,
+    newCards: todayCounters.new,
+  };
+
   if (selection === null) {
     return (
       <>
@@ -249,6 +263,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
             <TodayPlanCard
               session={session}
               events={events}
+              pending={todayPending}
               onOpenSettings={() => {
                 panel.open();
               }}

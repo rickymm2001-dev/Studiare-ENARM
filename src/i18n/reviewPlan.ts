@@ -9,8 +9,10 @@ export const reviewPlanText = {
   goToMinutes: 'Poner mis minutos',
   /** Falta historial propio, así que no se avisa de nada con tiempos de referencia */
   historyUnit: 'repasos tuyos',
+  /** Faltan tarjetas nuevas propias, y sin ellas no se cuenta el tiempo de las nuevas */
+  newHistoryUnit: 'tarjetas nuevas tuyas',
   over: (need: number, budget: number) =>
-    `Si llegas a tus límites de hoy, las tarjetas piden unos ${minutes(need)} y tienes ${minutes(budget)} al día para ellas.`,
+    `Tu trabajo de tarjetas de hoy pide unos ${minutes(need)} y tienes ${minutes(budget)} al día para ellas.`,
   overHint: 'Baja tus tarjetas nuevas o tus repasos, o sube tus minutos de estudio.',
   openSettings: 'Ajustes del repaso',
 } as const;

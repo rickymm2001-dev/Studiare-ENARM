@@ -22,7 +22,7 @@
     },
     {
       "file": "supabase/migrations/20261024000001_catalog_free_access_and_caps.sql",
-      "note": "De F2. Redefine las funciones del catálogo de mazos de la migración deck_catalog (deck_catalog_can_read, deck_catalog_list, record_deck_download, admin_deck_catalog_publish, owner_confirm_deck_authorization y admin_deck_catalog_overview), con el acceso gratis por mazo, la confirmación ligada a la versión y el tope de bajadas por alumno. Va aquí para que deck_catalog no deje esas funciones más viejas que el repo. El plan f2 la lleva también y la salta si ya está"
+      "note": "De F2. Redefine las funciones del catálogo de mazos de la migración deck_catalog (deck_catalog_can_read, deck_catalog_list, record_deck_download, admin_deck_catalog_retire, admin_deck_catalog_publish, owner_confirm_deck_authorization y admin_deck_catalog_overview), con el acceso gratis por mazo, la confirmación ligada a la versión y el tope de bajadas por alumno (BK012, contabilidad y un freno al registro, no frena las descargas reales de Storage, que limita el egress de Supabase). Va aquí para que deck_catalog no deje esas funciones más viejas que el repo. El plan f2 la lleva también y la salta si ya está"
     },
     {
       "file": "supabase/migrations/20261027000001_english_section.sql",

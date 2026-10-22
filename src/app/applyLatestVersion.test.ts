@@ -86,6 +86,13 @@ describe('actualizar a la versión nueva (D-146)', () => {
     expect(reload).toHaveBeenCalledTimes(1);
   });
 
+  it('reintentar con la versión nueva ya activa y sin nada esperando recarga directo', async () => {
+    const update = vi.fn(() => Promise.resolve());
+    const { env, reload } = setup({ update, waiting: null, installing: null });
+    await applyLatestVersion(env);
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
   it('si no aparece una versión nueva a tiempo, recarga sin ella', async () => {
     vi.useFakeTimers();
     const installing = fakeWorker('installing');

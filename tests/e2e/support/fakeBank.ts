@@ -696,6 +696,7 @@ export function seedCatalogDeck(
     authorizationNote: null,
     authorizationConfirmedAt: null,
     authorizationConfirmedVersion: null,
+    authorizationConfirmedNote: null,
     freeAccess: false,
     status: 'published',
     publishedVersion: version,

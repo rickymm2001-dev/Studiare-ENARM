@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-// Tus mazos en cifras (V4-B3). Lista los mazos que el alumno sigue o creó, con sus estadísticas y sus
+// Cifras por mazo (V4-B3). Lista los mazos que el alumno sigue o creó, con sus estadísticas y sus
 // botones, y deja fuera los que ya muestran sus cifras en otro lado.
 import { cleanup, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { FsrsCardState } from '@/data/schemas/common';
@@ -10,7 +11,6 @@ import { ROOT_DECK_KEY } from '@/demo/content/deckEntities';
 import { deckIds } from '@/demo/content/deckEntities';
 import { deckStatsText } from '@/i18n/deckStats';
 import { t } from '@/i18n/es-MX';
-import { unitIdsOf } from './deckActions';
 import { DeckStatsList } from './DeckStatsList';
 
 afterEach(() => {
@@ -79,12 +79,6 @@ function renderList(
   );
 }
 
-describe('unitIdsOf', () => {
-  it('da los mazos por los que Repasar elige, sin la raíz ni las materias', () => {
-    expect(unitIdsOf(decks)).toEqual([urgencias, propio]);
-  });
-});
-
 /** Los mazos de la lista, sin contar las listas que cada panel lleva dentro */
 function rowsOf(): HTMLElement[] {
   const card = screen.getByRole('region', { name: deckStatsText.list.title });
@@ -130,5 +124,32 @@ describe('DeckStatsList', () => {
     expect(within(own).queryByRole('button', { name: deckStatsText.actions.review })).toBeNull();
     // Las cifras siguen, en cero
     expect(within(own).getByText(t.deckStats.title)).toBeTruthy();
+  });
+
+  it('una sanguijuela suspendida sigue contando en las cifras del mazo y se dice cuántas lo están', async () => {
+    const leech = { ...reviewed(), lapses: 9 };
+    render(
+      <MemoryRouter>
+        <DeckStatsList
+          decks={decks}
+          cardsByDeck={cardsByDeck}
+          states={new Map([['c3', leech]])}
+          suspended={new Set(['c3'])}
+          followed={new Set([propio])}
+          excludeUnitIds={new Set()}
+          timeZone="America/Merida"
+          leechLapses={8}
+        />
+      </MemoryRouter>,
+    );
+    const own = rowsOf()[0] as HTMLElement;
+    await userEvent.click(within(own).getByText(t.deckStats.title));
+    // El valor "1 tarjeta" también es el conteo de la fila, así que se busca dentro de su figura
+    const leechFigure = within(own).getByText(deckStatsText.leeches).closest('div') as HTMLElement;
+    expect(within(leechFigure).getByText(deckStatsText.leechesValue(1))).toBeTruthy();
+    expect(within(leechFigure).getByText(deckStatsText.leechesSuspended(1))).toBeTruthy();
+    expect(within(leechFigure).queryByText(deckStatsText.leechesNone)).toBeNull();
+    // La retención sigue calibrando, pero las sanguijuelas ya no
+    expect(within(leechFigure).queryByText(t.insights.calibratingLabel)).toBeNull();
   });
 });

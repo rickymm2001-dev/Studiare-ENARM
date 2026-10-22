@@ -234,6 +234,8 @@ export interface DeckAdminEntry {
   authorizationConfirmedAt: string | null;
   /** La versión más alta que el dueño confirmó, en un mazo de terceros */
   authorizationConfirmedVersion: number | null;
+  /** La nota que escribió el dueño al confirmar. La del admin es authorizationNote y no se pisan */
+  authorizationConfirmedNote: string | null;
   /** La versión en subida que espera la confirmación del dueño, o null si no espera ninguna */
   pendingConfirmationVersion: number | null;
   /** El plan Gratis puede bajar este mazo */

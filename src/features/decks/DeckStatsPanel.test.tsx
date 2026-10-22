@@ -99,4 +99,44 @@ describe('DeckStatsPanel', () => {
     expect(screen.getByText(deckStatsText.lastStudied)).toBeTruthy();
     expect(screen.getByText(deckStatsText.lastStudiedValue(0))).toBeTruthy();
   });
+
+  it('si todas las repasadas están suspendidas no calibra y cuenta sus sanguijuelas y su última vez', async () => {
+    const suspended = { ...inReview(3), lapses: 9 };
+    render(
+      <MemoryRouter>
+        <DeckStatsPanel
+          states={[null]}
+          suspendedStates={[suspended]}
+          timeZone="America/Merida"
+          leechHref="/buscar?mazo=x&estado=sanguijuelas"
+        />
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByText(t.deckStats.title));
+    const leeches = screen.getByText(deckStatsText.leeches).parentElement as HTMLElement;
+    expect(within(leeches).queryByText(t.insights.calibratingLabel)).toBeNull();
+    expect(within(leeches).queryByText(deckStatsText.leechesNone)).toBeNull();
+    expect(within(leeches).getByText(deckStatsText.leechesValue(1))).toBeTruthy();
+    expect(within(leeches).getByText(deckStatsText.leechesSuspended(1))).toBeTruthy();
+    // La última vez también cuenta ese repaso
+    expect(screen.getByText(deckStatsText.lastStudiedValue(0))).toBeTruthy();
+    expect(screen.queryByText(deckStatsText.neverStudied)).toBeNull();
+    // Las cifras de hoy siguen sin la suspendida. Del mazo solo queda la nueva
+    const fresh = screen.getByText(t.deckStats.fresh).parentElement as HTMLElement;
+    expect(within(fresh).getByText('1')).toBeTruthy();
+    const review = screen.getByText(t.deckStats.review).parentElement as HTMLElement;
+    expect(within(review).getByText('0')).toBeTruthy();
+  });
+
+  it('sin sanguijuelas suspendidas no dice nada de suspendidas', async () => {
+    const leech = { ...inReview(10), lapses: 9 };
+    render(
+      <MemoryRouter>
+        <DeckStatsPanel states={[leech]} timeZone="America/Merida" leechHref="/x" />
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByText(t.deckStats.title));
+    expect(screen.getByText(deckStatsText.leechesValue(1))).toBeTruthy();
+    expect(screen.queryByText(deckStatsText.leechesSuspended(1))).toBeNull();
+  });
 });

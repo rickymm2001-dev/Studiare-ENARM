@@ -50,12 +50,15 @@ const AT = '2026-10-14T15:00:00.000Z';
 
 function fakeCloud(options: { note?: string; version?: boolean } = {}): {
   calls: [string, unknown][];
+  confirmed: boolean;
+  newerVersion: boolean;
 } {
   const state = {
     calls: [] as [string, unknown][],
     confirmed: false,
     note: options.note ?? null,
     free: false,
+    newerVersion: false,
   };
   holder.cloud = {
     rpc: (name: string, args: unknown) => {
@@ -115,7 +118,11 @@ function fakeCloud(options: { note?: string; version?: boolean } = {}): {
         state.free = (args as { p_free: boolean }).p_free;
         return Promise.resolve({ data: state.free ? 'free' : 'paid', error: null });
       }
-      if (name === 'owner_confirm_deck_authorization') {
+      if (name === 'owner_confirm_deck_version') {
+        // El servidor ya tiene una versión más nueva que la que ve el dueño
+        if (state.newerVersion) {
+          return Promise.resolve({ data: null, error: { code: 'BK002', details: null } });
+        }
         state.confirmed = true;
         return Promise.resolve({ data: null, error: null });
       }
@@ -197,8 +204,12 @@ describe('Catálogo de mazos', () => {
     await typing.click(confirm);
     await waitFor(() => {
       expect(state.calls).toContainEqual([
-        'owner_confirm_deck_authorization',
-        { p_deck_key: 'paco-pediatria', p_note: 'Correo de Paco del 3 de octubre, carpeta Mazos' },
+        'owner_confirm_deck_version',
+        {
+          p_deck_key: 'paco-pediatria',
+          p_note: 'Correo de Paco del 3 de octubre, carpeta Mazos',
+          p_version: 1,
+        },
       ]);
     });
     const refreshed = await screen.findByRole('region', { name: /Pediatría de Paco/ });
@@ -215,6 +226,25 @@ describe('Catálogo de mazos', () => {
     expect(await within(refreshed).findByRole('alert')).toHaveTextContent(
       bankAdminText.errors.BK011 ?? '',
     );
+  });
+
+  it('si el mazo ya tiene una versión más nueva que la que ve el dueño, avisa que recargue y no confirma', async () => {
+    usePreferences.setState({ role: 'owner' });
+    const state = fakeCloud();
+    state.newerVersion = true;
+    const typing = userEvent.setup();
+    showScreen();
+    const deck = await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    await typing.type(within(deck).getByLabelText(text.authorization.note), 'Correo de Paco');
+    await typing.click(within(deck).getByRole('button', { name: text.authorization.confirm }));
+    expect(await within(deck).findByRole('alert')).toHaveTextContent(
+      bankAdminText.errors.BK002 ?? '',
+    );
+    expect(state.confirmed).toBe(false);
+    expect(state.calls).toContainEqual([
+      'owner_confirm_deck_version',
+      { p_deck_key: 'paco-pediatria', p_note: 'Correo de Paco', p_version: 1 },
+    ]);
   });
 
   it('al volver a subir un mazo precarga su licencia y su nota, y pasarlo a propio es solo del dueño', async () => {

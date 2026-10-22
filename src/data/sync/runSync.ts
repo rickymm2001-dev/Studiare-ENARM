@@ -226,6 +226,14 @@ interface PullEventsResult {
   newerVersion: number | null;
 }
 
+/**
+ * Las cuentas cuya bajada de la bitácora está en pausa por una versión más nueva, en esta pestaña. Mientras
+ * lo estén, cada sincronización pide solo el primer evento pendiente para ver si ya se entiende, en lugar
+ * de bajar una página entera que se tiraría. Si la pestaña se recarga se pierde y la primera bajada pide la
+ * página completa, que es lo que debe pasar tras actualizar
+ */
+const pausedPulls = new Set<string>();
+
 async function pullEvents(
   deps: SyncDeps,
   state: SyncState,
@@ -233,8 +241,11 @@ async function pullEvents(
   onServer: Set<string>,
 ): Promise<PullEventsResult> {
   let current = state;
+  const pausedKey = `${deps.authId}:${deps.userId}`;
+  let limit = pausedPulls.has(pausedKey) ? 1 : PAGE_SIZE;
   for (;;) {
-    const page = await deps.transport.pullEvents(current.eventsCursor, PAGE_SIZE);
+    const page = await deps.transport.pullEvents(current.eventsCursor, limit);
+    limit = PAGE_SIZE;
     const events: AppEvent[] = [];
     // El primer evento de una versión más nueva frena la bajada. Lo que viene antes se guarda y lo que viene
     // después espera, porque el cursor no puede pasar de ese evento sin perderlo (D-146)
@@ -278,6 +289,7 @@ async function pullEvents(
       }
     }
     if (blocked) {
+      pausedPulls.add(pausedKey);
       // El cursor queda justo antes del evento que esta app no entiende. La siguiente bajada, ya con la app
       // actualizada, empieza en él y aplica lo que quedó pendiente
       const stopAt = blocked.seq - 1;
@@ -287,6 +299,7 @@ async function pullEvents(
       }
       return { state: current, newerVersion: blocked.version };
     }
+    pausedPulls.delete(pausedKey);
     const moved = page.next > current.eventsCursor;
     if (moved) {
       current = { ...current, eventsCursor: page.next };
@@ -442,8 +455,24 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
       { api: deps.api, userId: deps.userId, authId: deps.authId, now },
       state,
     );
-    state = await pushRecords(deps, state, counts, fromServer, now);
+    // Con el tope de la cuenta (SY003) el servidor rechaza la subida de registros entera. Los eventos son
+    // otro canal y siguen su camino, así lo que el alumno hizo no se queda sin subir por un tope de
+    // registros. El resultado final dice quota para que la interfaz avise (D-146)
+    let quota: SyncTransportError | null = null;
+    try {
+      state = await pushRecords(deps, state, counts, fromServer, now);
+    } catch (error) {
+      if (!(error instanceof SyncTransportError) || error.failure !== 'quota') throw error;
+      quota = error;
+      // pushRecords deja guardado lo que alcanzó a subir, y de ahí sigue la bitácora
+      state = await loadState(deps.api, deps.userId, deps.authId);
+    }
     state = await pushEvents(deps, state, counts, eventsOnServer, now);
+    if (quota) {
+      // No se anota como sincronización buena, pero el avance de la bitácora queda guardado
+      await deps.api.repos.syncState.put(state);
+      return { status: 'failed', failure: 'quota', detail: quota.message };
+    }
 
     const at = now().toISOString();
     await deps.api.repos.syncState.put({ ...state, lastSyncAt: at });

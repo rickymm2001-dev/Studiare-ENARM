@@ -2194,6 +2194,7 @@ const adminDeckCatalogRegister: Handler = (store, caller, args) => {
     authorizationNote: note,
     authorizationConfirmedAt: null,
     authorizationConfirmedVersion: null,
+    authorizationConfirmedNote: null,
     freeAccess: false,
     status: 'draft',
     publishedVersion: null,
@@ -2205,10 +2206,12 @@ const adminDeckCatalogRegister: Handler = (store, caller, args) => {
   deck.author = manifest.author;
   deck.license = manifest.license;
   deck.authorizationNote = note;
-  // Otra licencia u otra nota quitan la confirmación y la versión confirmada, como el disparador de la base
+  // Otra licencia u otra nota del admin quitan la confirmación, su versión y la nota del dueño, como el disparador de
+  // la base. La nota del dueño no entra en la comparación, solo la del admin
   if (!sameAuthorization) {
     deck.authorizationConfirmedAt = null;
     deck.authorizationConfirmedVersion = null;
+    deck.authorizationConfirmedNote = null;
   }
   for (const version of deck.versions) {
     if (version.status === 'uploading') version.status = 'retired';
@@ -2274,7 +2277,7 @@ const adminDeckCatalogPublish: Handler = (store, caller, args) => {
   }
   if (
     deck.license === 'third_party' &&
-    (deck.authorizationNote === null ||
+    (deck.authorizationConfirmedNote === null ||
       deck.authorizationConfirmedAt === null ||
       (deck.authorizationConfirmedVersion ?? 0) < number)
   ) {
@@ -2294,6 +2297,8 @@ const adminDeckCatalogPublish: Handler = (store, caller, args) => {
 const adminDeckCatalogRetire: Handler = (store, caller, args) => {
   requireAdmin(caller);
   const deck = deckOf(store, str(args.p_deck_key) ?? '');
+  // Retirar cierra el mazo en Gratis, esté ya retirado o no
+  deck.freeAccess = false;
   if (deck.status === 'retired') return 'already_retired';
   for (const version of deck.versions) {
     if (version.status === 'published' || version.status === 'uploading') {
@@ -2304,7 +2309,8 @@ const adminDeckCatalogRetire: Handler = (store, caller, args) => {
   return 'retired';
 };
 
-const ownerConfirmDeckAuthorization: Handler = (store, caller, args) => {
+/** owner_confirm_deck_version. Sin versión confirma la más nueva, y con ella tiene que ser justo esa o da BK002 */
+const ownerConfirmDeckVersion: Handler = (store, caller, args) => {
   if (caller.role !== 'owner') raise('42501', 'Solo el dueño confirma autorizaciones');
   const note = (str(args.p_note) ?? '').trim();
   if (note === '' || note.length > 500) {
@@ -2313,16 +2319,26 @@ const ownerConfirmDeckAuthorization: Handler = (store, caller, args) => {
   const deck = store.decks.get(str(args.p_deck_key) ?? '');
   if (deck?.license !== 'third_party') raise('22023', 'Ese mazo no existe o no es de terceros');
   const current = deck as FakeDeck;
-  current.authorizationNote = note;
+  const newest = Math.max(0, ...current.versions.map((version) => version.version));
+  const wanted = args.p_version;
+  if (wanted !== null && wanted !== undefined && wanted !== newest) {
+    raise('BK002', 'La versión más nueva del mazo no es la que confirmaste. Recarga');
+  }
+  // La nota del dueño va aparte y la del admin no se toca
+  current.authorizationConfirmedNote = note;
   current.authorizationConfirmedAt = iso(store);
   // Confirma la versión más nueva que existe, y la confirmación de una cubre las anteriores
   current.authorizationConfirmedVersion = Math.max(
     current.authorizationConfirmedVersion ?? 0,
-    ...current.versions.map((version) => version.version),
+    newest,
     1,
   );
   return null;
 };
+
+/** La llamada de antes, sin versión */
+const ownerConfirmDeckAuthorization: Handler = (store, caller, args) =>
+  ownerConfirmDeckVersion(store, caller, { ...args, p_version: null });
 
 const adminDeckCatalogSetFreeAccess: Handler = (store, caller, args) => {
   requireAdmin(caller);
@@ -2346,6 +2362,7 @@ const adminDeckCatalogOverview: Handler = (store, caller) => {
       authorizationNote: deck.authorizationNote,
       authorizationConfirmedAt: deck.authorizationConfirmedAt,
       authorizationConfirmedVersion: deck.authorizationConfirmedVersion,
+      authorizationConfirmedNote: deck.authorizationConfirmedNote,
       pendingConfirmationVersion:
         deck.license === 'third_party'
           ? (deck.versions
@@ -2459,6 +2476,7 @@ const HANDLERS: Readonly<Record<BankEditorialRpc, Handler>> = {
   admin_deck_catalog_retire: adminDeckCatalogRetire,
   admin_deck_catalog_overview: adminDeckCatalogOverview,
   owner_confirm_deck_authorization: ownerConfirmDeckAuthorization,
+  owner_confirm_deck_version: ownerConfirmDeckVersion,
   admin_deck_catalog_set_free_access: adminDeckCatalogSetFreeAccess,
 };
 

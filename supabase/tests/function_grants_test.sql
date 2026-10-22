@@ -92,7 +92,7 @@ begin
         'bias_agreement_summary', 'record_deck_download', 'upsert_distractor_stats', 'party_duels_check_questions',
         'content_reports_guard', 'content_reports_notify', 'forbid_bank_changes', 'admin_assign_questions',
         'admin_set_topic_reviewer', 'admin_set_physician_code', 'admin_retire_question', 'admin_restore_question',
-        'admin_confirm_missing', 'owner_confirm_deck_authorization', 'platform_quota'))
+        'admin_confirm_missing', 'owner_confirm_deck_authorization', 'owner_confirm_deck_version', 'platform_quota'))
   loop
     n := n + 1;
     if r.proacl is null or exists (select 1 from aclexplode(r.proacl) a where a.grantee = 0) then

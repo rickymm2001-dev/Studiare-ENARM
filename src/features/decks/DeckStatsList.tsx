@@ -1,4 +1,4 @@
-// Tus mazos en cifras (V4-B3). Cada mazo que el alumno sigue o creó, con sus estadísticas y lo que se
+// Cifras por mazo (V4-B3). Cada mazo que el alumno sigue o creó, con sus estadísticas y lo que se
 // puede hacer con él. Sirve a los mazos del catálogo en la nube y a los propios, que no tienen una
 // fila de catálogo donde mostrarlas. Los del catálogo que viene en la app ya llevan sus cifras en su
 // propia fila, así que se dejan fuera con excludeUnitIds.
@@ -6,12 +6,11 @@ import { Layers } from 'lucide-react';
 import { useMemo } from 'react';
 import type { Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
-import { activeDeckStates } from '@/engines/deckStats';
+import { activeDeckStates, suspendedDeckStates } from '@/engines/deckStats';
 import { descendantIds, selectionUnitId } from '@/engines/deckTree';
 import { deckStatsText } from '@/i18n/deckStats';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { DeckInsights } from './DeckInsights';
-import { unitIdsOf } from './deckActions';
 import { CONTAINER_DECKS } from './topicPaths';
 
 export function DeckStatsList({
@@ -35,7 +34,6 @@ export function DeckStatsList({
   timeZone: string;
   leechLapses: number;
 }) {
-  const allUnitIds = useMemo(() => unitIdsOf(decks), [decks]);
   const items = useMemo(
     () =>
       decks
@@ -57,9 +55,9 @@ export function DeckStatsList({
   if (items.length === 0) return null;
   const text = deckStatsText.list;
   return (
-    <Card aria-labelledby="mazos-en-cifras">
+    <Card aria-labelledby="cifras-por-mazo">
       <CardHeader>
-        <CardTitle id="mazos-en-cifras">{text.title}</CardTitle>
+        <CardTitle id="cifras-por-mazo">{text.title}</CardTitle>
         <CardDescription>{text.description}</CardDescription>
       </CardHeader>
       <ul className="flex flex-col divide-y divide-line">
@@ -74,9 +72,9 @@ export function DeckStatsList({
               unitId={deck.id}
               name={deck.name}
               states={activeDeckStates(cardIds, states, suspended)}
+              suspendedStates={suspendedDeckStates(cardIds, states, suspended)}
               timeZone={timeZone}
               leechLapses={leechLapses}
-              allUnitIds={allUnitIds}
             />
           </li>
         ))}

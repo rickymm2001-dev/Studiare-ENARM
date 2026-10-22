@@ -10,26 +10,26 @@ export function DeckInsights({
   unitId,
   name,
   states,
+  suspendedStates,
   timeZone,
   leechLapses,
-  allUnitIds,
 }: {
   /** El mazo por el que Repasar elige y cuenta */
   unitId: string;
   name: string;
   /** El estado de cada tarjeta que Repasar ofrece del mazo, sin las suspendidas */
   states: readonly (FsrsCardState | null)[];
+  /** El estado de las suspendidas del mazo, que solo cuentan en las sanguijuelas y la última vez */
+  suspendedStates: readonly (FsrsCardState | null)[];
   timeZone: string;
   leechLapses: number;
-  allUnitIds: readonly string[];
 }) {
   return (
     <div className="flex flex-col gap-2">
-      {states.length > 0 ? (
-        <DeckActions unitId={unitId} name={name} allUnitIds={allUnitIds} />
-      ) : null}
+      {states.length > 0 ? <DeckActions unitId={unitId} name={name} /> : null}
       <DeckStatsPanel
         states={states}
+        suspendedStates={suspendedStates}
         timeZone={timeZone}
         leechLapses={leechLapses}
         leechHref={searchPathOfDeck(unitId, { leechesOnly: true })}

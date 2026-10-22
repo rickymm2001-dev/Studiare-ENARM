@@ -1,4 +1,6 @@
 // Selección de qué repasar (D-072). Modo, mazos y subespecialidades, recordada en este dispositivo.
+import { activeReviewPreset, finishReviewPreset, rememberBuiltSelection } from './reviewPreset';
+
 /** topic estudia las tarjetas elegidas aparte de la cola del día, sin gastar su cupo (V4-B3) */
 export type ReviewMode = 'today' | 'due' | 'new' | 'topic';
 
@@ -16,6 +18,18 @@ export function loadSelection(
   deckIds: readonly string[],
   allTopics: readonly string[],
 ): ReviewSelection {
+  // Un botón de Mazos pide un mazo y un modo de una sola vez. No toca lo guardado, que vuelve al salir
+  const preset = activeReviewPreset();
+  if (preset && deckIds.includes(preset.unitId)) {
+    const asked: ReviewSelection = {
+      mode: preset.mode,
+      decks: new Set([preset.unitId]),
+      topics: new Set(allTopics),
+      includeUntagged: true,
+    };
+    rememberBuiltSelection(asked);
+    return asked;
+  }
   const fallback: ReviewSelection = {
     mode: 'today',
     decks: new Set(deckIds),
@@ -56,6 +70,9 @@ export function loadSelection(
 
 /** deckIds son todos los mazos que había al guardar, para distinguir los nuevos después */
 export function saveSelection(selection: ReviewSelection, deckIds: readonly string[]): void {
+  // Empezar justo con lo que pidió un botón de Mazos es una sesión de una sola vez. No pisa la selección
+  // que el alumno tenía guardada, ni deja a Repasar abriendo mañana en el modo por tema
+  if (finishReviewPreset(selection)) return;
   try {
     localStorage.setItem(
       KEY,

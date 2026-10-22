@@ -1,7 +1,7 @@
 // El cristal de V4-B2 (decisión 2). Solo la barra superior, el dock inferior del teléfono y las barras de
 // acciones fijas. Las superficies de contenido son sólidas, sin fondos personalizados ni degradados. Esta
-// prueba fija dónde se usa y que el texto sigue pasando 4.5 a 1 aunque debajo del cristal haya algo
-// negro o blanco, que es el peor caso.
+// prueba fija dónde se usa, que la utilidad se arma con los tokens y con su respaldo sólido, y que el texto
+// sigue pasando 4.5 a 1 aunque debajo del cristal haya algo negro o blanco, que es el peor caso.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -17,6 +17,10 @@ const GLASS_FILES = [
   'ui/components/save-bar.tsx',
 ];
 
+/** Sin comentarios de bloque ni de línea, para buscar solo en el código. No toca las URL con // */
+const withoutComments = (text: string) =>
+  text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
@@ -25,30 +29,47 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
-const FILES = sourceFiles(SRC).map((path) => ({
-  rel: relative(SRC, path).split('\\').join('/'),
-  lines: readFileSync(path, 'utf8').split('\n'),
-}));
+const FILES = sourceFiles(SRC).map((path) => {
+  const rel = relative(SRC, path).split('\\').join('/');
+  return { rel, code: withoutComments(readFileSync(path, 'utf8')) };
+});
 
-/** Una línea de código, no de comentario */
-const isCode = (line: string) => !/^\s*(\/\/|\/\*|\*)/.test(line);
+/** El bloque de una utilidad de tokens.css, desde su @utility hasta la siguiente */
+const utility = (name: string, next: string) =>
+  css.slice(css.indexOf(`@utility ${name} {`), css.indexOf(`@utility ${next}`));
 
 describe('cristal de 6 px', () => {
   it('la utilidad glass solo la usan la barra superior, el dock del teléfono y las barras de acciones fijas', () => {
-    const usage = /(?:^|[\s'"`])(?:[a-z0-9-]+:)*glass(?:-off|-clear)?(?=[\s'"`])/;
-    const users = FILES.filter(
-      (file) =>
-        !file.rel.endsWith('.css') && file.lines.some((line) => isCode(line) && usage.test(line)),
-    ).map((file) => file.rel);
+    // Cualquier aparición de la palabra, sea una clase, una llave de objeto o parte de una plantilla. Con
+    // variantes como lg:glass-off o con guiones como bg-glass también cuenta, porque el borde de palabra
+    // las separa
+    const usage = /\bglass(?:-off|-clear)?\b/;
+    const users = FILES.filter((file) => file.rel !== 'ui/tokens.css' && usage.test(file.code)).map(
+      (file) => file.rel,
+    );
     expect(users.sort()).toEqual([...GLASS_FILES].sort());
+  });
+
+  it('la detección ve el cristal en una llave de objeto, en una plantilla y en una variante', () => {
+    const usage = /\bglass(?:-off|-clear)?\b/;
+    for (const sample of [
+      "const styles = { glass: 'p-2' };",
+      'const cls = `glass ${extra}`;',
+      "cn('lg:glass-off', x)",
+      "className={'bg-glass'}",
+    ]) {
+      expect(usage.test(withoutComments(sample)), sample).toBe(true);
+    }
+    expect(usage.test(withoutComments('// el cristal usa glass\nconst a = 1;'))).toBe(false);
+    expect(usage.test(withoutComments('const glassware = 1;'))).toBe(false);
   });
 
   it('ningún otro desenfoque de fondo, salvo el velo de los diálogos', () => {
     const offenders: string[] = [];
     for (const file of FILES) {
       if (file.rel === 'ui/tokens.css') continue;
-      file.lines.forEach((line, index) => {
-        if (!isCode(line) || !/backdrop-(blur|filter)/.test(line)) return;
+      file.code.split('\n').forEach((line, index) => {
+        if (!/backdrop-(blur|filter)/.test(line)) return;
         // El velo oscuro detrás de un diálogo no es cristal. Va con bg-black y desenfoque chico
         const scrim = /bg-black\/\d+/.test(line) && line.includes('backdrop-blur-sm');
         if (!scrim) offenders.push(`${file.rel}:${index + 1}`);
@@ -57,12 +78,29 @@ describe('cristal de 6 px', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('la utilidad pone 6 px con respaldo sólido y no anima nada', () => {
+  it('la utilidad pone 6 px con respaldo sólido, la opacidad de su token y no anima nada', () => {
     expect(css).toMatch(/--enarm-glass-blur:\s*6px;/);
-    const utility = css.slice(css.indexOf('@utility glass {'), css.indexOf('@utility glass-off'));
-    expect(utility).toContain('@supports');
-    expect(utility).toMatch(/background-color:\s*var\(--enarm-surface\);\s*@supports/);
-    expect(utility).not.toMatch(/transition|animation|gradient/);
+    const glass = utility('glass', 'glass-off');
+    expect(glass).toContain('@supports');
+    expect(glass).toMatch(/background-color:\s*var\(--enarm-surface\);\s*@supports/);
+    // La opacidad sale del token y no de un porcentaje escrito aquí
+    expect(glass).toMatch(
+      /color-mix\(\s*in srgb,\s*var\(--enarm-surface\)\s+var\(--enarm-glass-opacity\),\s*transparent\s*\)/,
+    );
+    expect(glass).not.toMatch(/var\(--enarm-surface\)\s+\d+%/);
+    expect(glass).toMatch(/backdrop-filter:\s*blur\(var\(--enarm-glass-blur\)\)/);
+    expect(glass).not.toMatch(/transition|animation|gradient/);
+  });
+
+  it('con prefers-reduced-transparency la superficie vuelve a ser sólida y sin desenfoque', () => {
+    const glass = utility('glass', 'glass-off');
+    expect(glass).toMatch(
+      /@media \(prefers-reduced-transparency: reduce\)\s*\{[^}]*background-color:\s*var\(--enarm-surface\);[^}]*backdrop-filter:\s*none;[^}]*\}/,
+    );
+    // Va después del @supports, para que mande sobre el color-mix cuando los dos aplican
+    expect(glass.indexOf('prefers-reduced-transparency')).toBeGreaterThan(
+      glass.indexOf('@supports'),
+    );
   });
 
   it('la superficie queda entre el 90 y el 95 por ciento y el texto pasa 4.5 a 1 con negro o blanco debajo', () => {
@@ -98,8 +136,15 @@ describe('cristal de 6 px', () => {
       { name: 'oscuro', tokens: tokens(css.slice(darkMedia, darkClass)) },
       { name: 'oscuro por clase', tokens: tokens(css.slice(darkClass, themeAt)) },
     ];
-    // Lo que se escribe sobre el cristal. Texto, texto tenue, el color de acción y el de la racha
-    const inks = ['--enarm-fg', '--enarm-fg-muted', '--enarm-primary-ink', '--enarm-accent-ink'];
+    // Lo que se escribe sobre el cristal. Texto, texto tenue, el color de acción, el de la racha y el
+    // aviso de cambios sin guardar de la barra de guardar
+    const inks = [
+      '--enarm-fg',
+      '--enarm-fg-muted',
+      '--enarm-primary-ink',
+      '--enarm-accent-ink',
+      '--enarm-warning',
+    ];
     for (const mode of modes) {
       const surface = mode.tokens.get('--enarm-surface');
       expect(surface, mode.name).toBeDefined();

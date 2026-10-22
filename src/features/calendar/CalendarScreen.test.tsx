@@ -156,6 +156,42 @@ describe('ramas del plan y su orden', () => {
     }, WAIT);
   });
 
+  it('si la rama llega al primer lugar el foco pasa a su botón de bajar, y al último a su botón de subir', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { card } = await openBranches(typing);
+    const button = (name: string) => within(card).getByRole('button', { name });
+    // Pediatría sube al primer lugar y su botón de subir queda deshabilitado
+    await typing.click(button(calendarBranchesText.moveUp('Pediatría')));
+    await waitFor(() => {
+      expect(button(calendarBranchesText.moveUp('Pediatría'))).toBeDisabled();
+      expect(button(calendarBranchesText.moveDown('Pediatría'))).toHaveFocus();
+    }, WAIT);
+    // Con Pediatría primero, Ginecología y obstetricia baja al último de las cuatro y su botón de bajar se deshabilita
+    await typing.click(button(calendarBranchesText.moveDown('Ginecología y obstetricia')));
+    await waitFor(() => {
+      expect(button(calendarBranchesText.moveDown('Ginecología y obstetricia'))).toBeDisabled();
+      expect(button(calendarBranchesText.moveUp('Ginecología y obstetricia'))).toHaveFocus();
+    }, WAIT);
+  });
+
+  it('al marcar una rama la casilla conserva el foco aunque la rama cambie de grupo', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { list } = await openBranches(typing);
+    const box = () => within(list).getByRole('checkbox', { name: 'Urgencias' });
+    await typing.click(box());
+    await waitFor(() => {
+      expect(box()).toBeChecked();
+      expect(box()).toHaveFocus();
+    }, WAIT);
+    await typing.click(box());
+    await waitFor(() => {
+      expect(box()).not.toBeChecked();
+      expect(box()).toHaveFocus();
+    }, WAIT);
+  });
+
   it('no deja quitar la última rama y lo dice', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.calendar.path, {

@@ -15,14 +15,23 @@ import { Disclosure } from '@/ui/components/disclosure';
 
 const number = (value: number) => value.toLocaleString('es-MX');
 
+/** Sin tarjetas suspendidas. Una constante para que no cambie en cada render */
+const NO_SUSPENDED: readonly (FsrsCardState | null)[] = [];
+
 export function DeckStatsPanel({
   states,
+  suspendedStates = NO_SUSPENDED,
   timeZone,
   leechLapses = DEFAULT_THRESHOLDS.fsrs.leechLapses,
   leechHref,
 }: {
-  /** El estado FSRS de cada tarjeta del mazo. null si nunca se ha visto */
+  /** El estado FSRS de cada tarjeta del mazo que Repasar ofrece. null si nunca se ha visto */
   states: readonly (FsrsCardState | null)[];
+  /**
+   * El de las suspendidas del mazo. No cuentan en las cifras de hoy, pero sus olvidos y su último repaso
+   * siguen siendo del mazo, así que entran en las sanguijuelas y en la última vez
+   */
+  suspendedStates?: readonly (FsrsCardState | null)[];
   timeZone: string;
   /** Olvidos desde los que una tarjeta es sanguijuela. Por omisión el umbral del modelo */
   leechLapses?: number;
@@ -30,8 +39,8 @@ export function DeckStatsPanel({
   leechHref?: string;
 }) {
   const stats = useMemo(
-    () => deckStats({ states, now: new Date(), timeZone, leechLapses }),
-    [states, timeZone, leechLapses],
+    () => deckStats({ states, suspendedStates, now: new Date(), timeZone, leechLapses }),
+    [states, suspendedStates, timeZone, leechLapses],
   );
   const text = t.deckStats;
   const extra = deckStatsText;
@@ -79,6 +88,11 @@ export function DeckStatsPanel({
                 <span className="text-lg font-bold tabular-nums">
                   {extra.leechesValue(stats.leeches)}
                 </span>
+                {stats.leechesSuspended > 0 ? (
+                  <span className="text-fg-muted">
+                    {extra.leechesSuspended(stats.leechesSuspended)}
+                  </span>
+                ) : null}
                 {leechHref ? (
                   <Link to={leechHref} className="font-medium text-primary-ink underline">
                     {extra.seeLeeches}

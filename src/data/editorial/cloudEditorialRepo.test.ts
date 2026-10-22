@@ -61,11 +61,12 @@ describe('repositorio editorial de la nube', () => {
     expect(options[1]?.biasTag).toBe('anchoring');
   });
 
-  it('el nivel cognitivo viaja en el borrador solo si la pregunta lo tiene (V4-B5)', () => {
+  it('el nivel cognitivo siempre lleva su llave, con null para quitarlo (V4-B5)', () => {
     expect(draftForCloud({ ...draft(), cognitiveLevel: 'analysis' })).toMatchObject({
       cognitiveLevel: 'analysis',
     });
-    expect(draftForCloud(draft())).not.toHaveProperty('cognitiveLevel');
+    // La base entiende la llave ausente como un cliente anterior y conserva el nivel, así que quitarlo es null
+    expect(draftForCloud(draft())).toHaveProperty('cognitiveLevel', null);
   });
 
   it('una versión del servidor sin la columna del nivel o con null se lee igual', () => {

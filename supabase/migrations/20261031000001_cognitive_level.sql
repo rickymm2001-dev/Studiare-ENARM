@@ -161,7 +161,10 @@ begin
 end;
 $$;
 
--- El borrador del editor lleva el nivel cognitivo a la forma interna
+-- El borrador del editor lleva el nivel cognitivo a la forma interna. Un cliente anterior, con la PWA en caché,
+-- guarda el borrador sin la llave cognitiveLevel. Eso no es quitar el nivel, y la versión nueva hereda el de la
+-- versión más reciente de la pregunta, para que publicarla no borre el que ya tenía. Quitarlo es mandar la llave
+-- con null explícito. Una pregunta nueva no tiene de quién heredar
 create or replace function public.bank_draft_content(p_draft jsonb, p_question_id uuid) returns jsonb
 language plpgsql stable security definer set search_path = public, pg_temp as $$
 declare
@@ -184,7 +187,10 @@ begin
   return jsonb_build_object(
     'branch', p_draft ->> 'branch', 'topic', p_draft ->> 'topic', 'subtopic', p_draft ->> 'subtopic',
     'difficulty', p_draft -> 'physicianDifficulty', 'itemKinds', coalesce(p_draft -> 'itemKinds', '[]'::jsonb),
-    'cognitiveLevel', p_draft ->> 'cognitiveLevel',
+    'cognitiveLevel', case when p_draft ? 'cognitiveLevel' then p_draft ->> 'cognitiveLevel' else (
+      select q.cognitive_level from public.questions q where q.question_id = p_question_id
+      order by q.version desc limit 1
+    ) end,
     'polarity', p_draft -> 'structure' ->> 'polarity', 'task', p_draft -> 'structure' ->> 'task',
     'format', p_draft -> 'structure' ->> 'format', 'structureSource', 'physician',
     'language', coalesce(p_draft ->> 'language', 'es'),

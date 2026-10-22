@@ -94,7 +94,7 @@ describe('dailyPlan', () => {
   });
 
   describe('planFeasibility', () => {
-    const measured = { secondsPerReview: 8, secondsPerNew: 20, measured: true };
+    const measured = { secondsPerReview: 8, secondsPerNew: 20, measured: true, newMeasured: true };
 
     it('sin minutos declarados o sin historial propio es calibrando y no avisa', () => {
       for (const dailyMinutes of [null, 0, -5, Number.NaN]) {
@@ -112,19 +112,15 @@ describe('dailyPlan', () => {
       ).toEqual({ status: 'calibrating', reason: 'needs_history' });
     });
 
-    it('cuando los límites caben en los minutos de tarjetas dice ok con sus cifras', () => {
-      // 100 repasos de 8 s y 10 nuevas de 20 s son 1000 s, unos 16.7 min, y hay 30 min para tarjetas
+    it('cuando los límites caben en los minutos de tarjetas dice ok con sus cifras redondeadas', () => {
+      // 100 repasos de 8 s y 10 nuevas de 20 s son 1000 s, unos 17 min, y hay 30 min para tarjetas
       const result = planFeasibility({
         limits: limits({ reviewsPerDay: 100, newCardsPerDay: 10 }),
         dailyMinutes: 60,
         times: measured,
         cardsTimeShare: 0.5,
       });
-      expect(result.status).toBe('ok');
-      if (result.status === 'ok') {
-        expect(result.needMinutes).toBeCloseTo(16.67, 1);
-        expect(result.budgetMinutes).toBe(30);
-      }
+      expect(result).toEqual({ status: 'ok', needMinutes: 17, budgetMinutes: 30 });
     });
 
     it('cuando no caben dice over, con la guía de 300 tarjetas y media hora de estudio', () => {
@@ -135,8 +131,7 @@ describe('dailyPlan', () => {
         cardsTimeShare: 0.5,
       });
       // 250 repasos de 8 s y 50 nuevas de 20 s son 3000 s, 50 min, contra 15 min de tarjetas
-      expect(result.status).toBe('over');
-      if (result.status === 'over') expect(result.needMinutes).toBeCloseTo(50, 5);
+      expect(result).toEqual({ status: 'over', needMinutes: 50, budgetMinutes: 15 });
     });
 
     it('justo en el límite todavía cabe, y con nuevas sin límite solo cuentan los repasos', () => {
@@ -155,6 +150,80 @@ describe('dailyPlan', () => {
         cardsTimeShare: 0.5,
       });
       expect(unlimited).toMatchObject({ status: 'ok', needMinutes: 8 });
+    });
+
+    it('con repasos medidos pero ninguna nueva medida, las nuevas no se cuentan con un tiempo de referencia', () => {
+      // El caso de la revisión. 100 repasos a 3 segundos, ninguna nueva medida, 50 repasos y 20
+      // nuevas de límite y 20 minutos al día. Con 30 s de referencia por nueva diría over
+      const result = planFeasibility({
+        limits: limits({ reviewsPerDay: 50, newCardsPerDay: 20 }),
+        dailyMinutes: 20,
+        times: { secondsPerReview: 3, secondsPerNew: 30, measured: true, newMeasured: false },
+        cardsTimeShare: 0.5,
+      });
+      expect(result).toEqual({ status: 'calibrating', reason: 'needs_new_history' });
+      // Sin límite de nuevas, o con cero, no hacen falta y se calcula solo con los repasos
+      for (const patch of [{ newCardsPerDay: 0 }, { unlimitedNewCards: true }]) {
+        expect(
+          planFeasibility({
+            limits: limits({ reviewsPerDay: 50, ...patch }),
+            dailyMinutes: 20,
+            times: { secondsPerReview: 3, secondsPerNew: 30, measured: true, newMeasured: false },
+            cardsTimeShare: 0.5,
+          }),
+        ).toEqual({ status: 'ok', needMinutes: 3, budgetMinutes: 10 });
+      }
+    });
+
+    it('usa lo que de verdad hay hoy y no los topes, y hoy sin nuevas no pide su ritmo', () => {
+      // Con los valores de fábrica y 60 minutos, pero hoy solo tocan 15 tarjetas
+      const real = planFeasibility({
+        limits: { ...GUIDE_PLAN, unlimitedNewCards: false },
+        available: { reviews: 15, newCards: 0 },
+        dailyMinutes: 60,
+        times: { secondsPerReview: 8, secondsPerNew: 20, measured: true, newMeasured: false },
+        cardsTimeShare: 0.5,
+      });
+      expect(real).toEqual({ status: 'ok', needMinutes: 2, budgetMinutes: 30 });
+      // Lo que hay no pasa del límite aunque haya más
+      const capped = planFeasibility({
+        limits: limits({ reviewsPerDay: 100, newCardsPerDay: 10 }),
+        available: { reviews: 500, newCards: 400 },
+        dailyMinutes: 20,
+        times: measured,
+        cardsTimeShare: 0.5,
+      });
+      expect(capped).toEqual({ status: 'over', needMinutes: 17, budgetMinutes: 10 });
+      // Con nuevas sin límite cuentan las que hay hoy, y ya hay que conocer su ritmo
+      expect(
+        planFeasibility({
+          limits: limits({ unlimitedNewCards: true }),
+          available: { reviews: 0, newCards: 30 },
+          dailyMinutes: 60,
+          times: { ...measured, newMeasured: false },
+          cardsTimeShare: 0.5,
+        }),
+      ).toEqual({ status: 'calibrating', reason: 'needs_new_history' });
+    });
+
+    it('compara los minutos ya redondeados y nunca avisa de unos 30 contra 30', () => {
+      // 30.4 minutos de trabajo contra 30 de presupuesto redondean los dos a 30 y caben
+      const near = planFeasibility({
+        limits: limits({ reviewsPerDay: 228, newCardsPerDay: 0 }),
+        dailyMinutes: 60,
+        times: { secondsPerReview: 8, secondsPerNew: 20, measured: true, newMeasured: true },
+        cardsTimeShare: 0.5,
+      });
+      expect(near).toEqual({ status: 'ok', needMinutes: 30, budgetMinutes: 30 });
+      // 31 contra 30 sí es over
+      expect(
+        planFeasibility({
+          limits: limits({ reviewsPerDay: 233, newCardsPerDay: 0 }),
+          dailyMinutes: 60,
+          times: { secondsPerReview: 8, secondsPerNew: 20, measured: true, newMeasured: true },
+          cardsTimeShare: 0.5,
+        }),
+      ).toEqual({ status: 'over', needMinutes: 31, budgetMinutes: 30 });
     });
   });
 });

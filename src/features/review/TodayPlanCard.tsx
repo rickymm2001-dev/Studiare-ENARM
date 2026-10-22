@@ -1,13 +1,14 @@
 // Plan de hoy dentro de Repasar (V4-B10, fase 2). Las mismas tres cifras de Inicio, tarjetas, nuevas y
 // preguntas, en una tarjeta compacta de la columna de empezar. Debajo dice si los límites de hoy caben en
-// los minutos que el alumno declaró. Ese aviso sale solo con su ritmo real de repaso y con sus minutos
-// puestos, y mientras no los hay dice calibrando y no avisa de nada (planFeasibility).
+// los minutos que el alumno declaró. Compara lo que de verdad toca hoy, no los topes, y sale solo con su
+// ritmo real de repaso y de tarjetas nuevas y con sus minutos puestos. Mientras falte algo de eso dice
+// calibrando y no avisa de nada (planFeasibility).
 import { useMemo } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
-import { estimateCardTimes } from '@/engines/dailyLoad';
+import { estimateCardTimes, MIN_NEW_SAMPLES_TO_MEASURE } from '@/engines/dailyLoad';
 import { dailyPlan, newCardsStudiedToday, planFeasibility } from '@/engines/dailyPlan';
 import { t } from '@/i18n/es-MX';
 import { homePlanText } from '@/i18n/homePlan';
@@ -27,10 +28,13 @@ const RULES = DEFAULT_THRESHOLDS.daily;
 export function TodayPlanCard({
   session,
   events,
+  pending,
   onOpenSettings,
 }: {
   session: ReadySession;
   events: readonly AppEvent[];
+  /** Lo que queda por estudiar hoy en la cola, que ya respeta los límites del día */
+  pending: { reviews: number; newCards: number };
   /** Abre Ajustes del repaso, donde se bajan los límites */
   onOpenSettings?: () => void;
 }) {
@@ -75,6 +79,11 @@ export function TodayPlanCard({
   if (rows.length === 0) return null;
   const feasibility = planFeasibility({
     limits,
+    // Lo que ya hizo hoy más lo que queda. Los repasos son las tarjetas hechas menos las nuevas
+    available: {
+      reviews: Math.max(0, data.cards - data.newCards) + pending.reviews,
+      newCards: data.newCards + pending.newCards,
+    },
     dailyMinutes: user.dailyMinutes,
     times: data.times,
     cardsTimeShare: RULES.cardsTimeShare,
@@ -114,10 +123,7 @@ export function TodayPlanCard({
       {feasibility.status === 'over' ? (
         <div className="flex flex-col items-start gap-1.5 rounded-md border border-warning bg-warning-soft p-2.5 text-sm">
           <p className="font-medium">
-            {reviewPlanText.over(
-              Math.round(feasibility.needMinutes),
-              Math.round(feasibility.budgetMinutes),
-            )}
+            {reviewPlanText.over(feasibility.needMinutes, feasibility.budgetMinutes)}
           </p>
           <p>{reviewPlanText.overHint}</p>
           {onOpenSettings ? (
@@ -140,6 +146,13 @@ export function TodayPlanCard({
           current={data.times.reviews}
           target={RULES.minReviewsToMeasure}
           unit={reviewPlanText.historyUnit}
+        />
+      ) : null}
+      {feasibility.status === 'calibrating' && feasibility.reason === 'needs_new_history' ? (
+        <CalibratingNote
+          current={data.times.newSamples ?? 0}
+          target={MIN_NEW_SAMPLES_TO_MEASURE}
+          unit={reviewPlanText.newHistoryUnit}
         />
       ) : null}
     </Card>

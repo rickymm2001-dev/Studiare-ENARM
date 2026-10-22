@@ -49,13 +49,18 @@
     font-size: 125%;
   }
 
-  /* Lo que recibe el foco o se ancla no queda debajo de la barra fija de arriba (D-117) */
+  /* Lo que recibe el foco o se ancla no queda debajo de la barra fija de arriba (D-117) ni de las de
+     abajo. En el teléfono abajo hay el dock de la navegación, con su margen de seguridad, y encima las
+     acciones fijas de una sesión o la barra de guardar, que miden unos 4.5 rem (WCAG 2.4.11) */
   html {
     scroll-padding-top: 3.5rem;
+    scroll-padding-bottom: calc(var(--spacing-nav) + env(safe-area-inset-bottom) + 4.5rem);
   }
   @media (width >= 64rem) {
     html {
       scroll-padding-top: calc(var(--spacing-topbar) + 0.5rem);
+      /* En computadora la navegación es el riel de al lado y solo queda la barra de guardar */
+      scroll-padding-bottom: 4.5rem;
     }
   }
 
