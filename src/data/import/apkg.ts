@@ -7,7 +7,13 @@ import { normalizeTags } from '../../engines/tagPath';
 import { detectKind, splitFields } from './kinds';
 import { IMPORT_LIMITS, type ImportLimits } from './limits';
 import { readVarintFields } from './protobuf';
-import { ImportError, WarningTally, type ParsedImport, type ParsedNote } from './types';
+import {
+  ImportError,
+  WarningTally,
+  type ParsedImport,
+  type ParsedNote,
+  type RowError,
+} from './types';
 import { readZip } from './zip';
 import { decompressZstd } from './zstd';
 
@@ -35,13 +41,33 @@ function rows<T>(db: Database, sql: string): T[] {
   return result;
 }
 
-function tableNames(db: Database): Set<string> {
-  return new Set(
-    rows<{ name: string }>(db, "select name from sqlite_master where type = 'table'").map(
-      (row) => row.name,
-    ),
-  );
+/**
+ * Las tablas del paquete. Un paquete de Anki solo trae tablas e índices. Una vista, un disparador o
+ * una tabla virtual es de un archivo hecho a propósito, porque una vista con el nombre de cards puede
+ * ser una consulta recursiva que nunca termina y llena la memoria del worker, así que se rechaza sin
+ * consultar nada
+ */
+function plainTables(db: Database): Set<string> {
+  const tables = new Set<string>();
+  for (const object of rows<{ type: string; name: string; sql: string | null }>(
+    db,
+    'select type, name, sql from sqlite_master',
+  )) {
+    if (object.type === 'view' || object.type === 'trigger') throw new ImportError('corrupt');
+    if (object.type !== 'table') continue;
+    if (/^\s*create\s+virtual\s+table/i.test(object.sql ?? '')) throw new ImportError('corrupt');
+    tables.add(object.name);
+  }
+  return tables;
 }
+
+/** Cada tabla que se va a consultar tiene que existir como tabla */
+function requireTables(tables: ReadonlySet<string>, names: readonly string[]): void {
+  if (names.some((name) => !tables.has(name))) throw new ImportError('corrupt');
+}
+
+/** Cartas que se leen por nota como máximo, para que un archivo con millones de filas no llene la memoria */
+const CARDS_PER_NOTE_CAP = 20;
 
 /** Tipos de nota y mazos del formato viejo, que viven como JSON en la tabla col */
 function legacyCollection(db: Database): {
@@ -134,16 +160,21 @@ export function parseApkg(
   }
   const warnings = new WarningTally();
   const notes: ParsedNote[] = [];
+  const errors: RowError[] = [];
   try {
-    const tables = tableNames(db);
-    if (!tables.has('notes')) throw new ImportError('corrupt');
-    const { models, decks } = tables.has('notetypes') ? modernCollection(db) : legacyCollection(db);
+    const tables = plainTables(db);
+    const modern = tables.has('notetypes');
+    requireTables(
+      tables,
+      modern ? ['notes', 'cards', 'notetypes', 'templates', 'decks'] : ['notes', 'cards', 'col'],
+    );
+    const { models, decks } = modern ? modernCollection(db) : legacyCollection(db);
 
     // La carta de cada nota dice en qué mazo vive y si tiene inversa
     const cardsByNote = new Map<number, { deck: number | undefined; ordinals: Set<number> }>();
     for (const card of rows<{ nid: number; did: number; ord: number }>(
       db,
-      'select nid, did, ord from cards order by id',
+      `select nid, did, ord from cards order by id limit ${limits.maxNotes * CARDS_PER_NOTE_CAP}`,
     )) {
       const known = cardsByNote.get(card.nid);
       if (known) known.ordinals.add(card.ord);
@@ -157,7 +188,15 @@ export function parseApkg(
       mid: number;
       flds: string;
       tags: string;
-    }>(db, 'select id, guid, mid, flds, tags from notes order by id')) {
+    }>(
+      db,
+      `select id, guid, mid, flds, tags from notes order by id limit ${limits.maxNotes + 1}`,
+    )) {
+      // Una nota de más que el máximo no se lee, y se avisa como en las hojas de cálculo
+      if (notes.length >= limits.maxNotes) {
+        errors.push({ position: position + 1, code: 'too_many_notes' });
+        break;
+      }
       position += 1;
       const model = models.get(row.mid);
       const fields = row.flds.split(FIELD_SEPARATOR);
@@ -219,6 +258,6 @@ export function parseApkg(
     fileName,
     notes,
     warnings: warnings.toList(),
-    errors: [],
+    errors,
   };
 }

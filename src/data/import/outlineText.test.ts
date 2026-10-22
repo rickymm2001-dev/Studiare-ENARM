@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { normalizeTags, sanitizeTag } from '../../engines/tagPath';
+import { decodeText } from './csv';
 import { IMPORT_LIMITS } from './limits';
 import {
   isMarkdownName,
   looksLikeOpml,
   markdownLines,
+  markdownOutline,
   opmlLines,
   parseMarkdown,
   parseOpml,
@@ -162,5 +165,224 @@ describe('isMarkdownName', () => {
     expect(isMarkdownName('Notas.MD')).toBe(true);
     expect(isMarkdownName('a.markdown')).toBe(true);
     expect(isMarkdownName('a.csv')).toBe(false);
+  });
+});
+
+/** Las etiquetas que da una ruta de contexto, saneadas como las saca el importador */
+const tagsOf = (...path: string[]) => normalizeTags([sanitizeTag(path.join('::'))]);
+const elapsed = (run: () => void) => {
+  const start = performance.now();
+  run();
+  return performance.now() - start;
+};
+
+describe('contexto de las etiquetas', () => {
+  it('una viñeta con hijos bajo un título no borra el contexto del título', () => {
+    const result = parseMarkdown(
+      bytes(['# Cardiología', '## Arritmias', '- FA', '  - Pregunta :: Respuesta'].join('\n')),
+      'a.md',
+    );
+    expect(result.notes[0]?.tags).toEqual(tagsOf('Cardiología', 'Arritmias', 'FA'));
+  });
+
+  it('las hermanas de un tema ya no llevan el contexto de lo que estaba más hondo', () => {
+    const result = parseMarkdown(
+      bytes(['- Tema A', '  - Sub A1', '    - P1 :: R1', '  - P2 :: R2', '- P3 :: R3'].join('\n')),
+      'a.md',
+    );
+    expect(result.notes.map((note) => note.tags)).toEqual([
+      tagsOf('Tema A', 'Sub A1'),
+      tagsOf('Tema A'),
+      [],
+    ]);
+  });
+
+  it('una tarjeta hermana de un grupo no hereda el grupo', () => {
+    const result = parseMarkdown(
+      bytes(['# H1', '- P1 :: R1', '- Grupo', '  - P2 :: R2', '- P3 :: R3'].join('\n')),
+      'a.md',
+    );
+    expect(result.notes.map((note) => note.tags)).toEqual([
+      tagsOf('H1'),
+      tagsOf('H1', 'Grupo'),
+      tagsOf('H1'),
+    ]);
+  });
+
+  it('un título entre las líneas que cuelgan de una pregunta con >>> corta su respuesta', () => {
+    const result = parseMarkdown(
+      bytes(['- Causas >>>', '  - Una', '## Otro tema', '- A :: B'].join('\n')),
+      'a.md',
+    );
+    expect(result.notes.map((note) => [note.front, note.back])).toEqual([
+      ['Causas', 'Una'],
+      ['A', 'B'],
+    ]);
+    expect(result.notes[1]?.tags).toEqual(tagsOf('Otro tema'));
+  });
+});
+
+describe('propiedades y macros de Logseq y de Roam', () => {
+  it('salta tags, title, alias y source con valores de varias palabras y deja las tarjetas', () => {
+    const lines = markdownLines(
+      [
+        'title:: Mi página larga',
+        'tags:: cardio, hta',
+        'alias:: otro nombre',
+        '- Tema',
+        '  source:: libro x',
+        '  created-at:: 1699999999',
+        '- Title :: Una tarjeta con la palabra Title',
+        '- dosis:: 5 mg',
+      ].join('\n'),
+    );
+    expect(lines.map((line) => line.text)).toEqual([
+      'Tema',
+      'Title :: Una tarjeta con la palabra Title',
+      'dosis:: 5 mg',
+    ]);
+  });
+
+  it('las macros de Roam y de Logseq no se vuelven huecos de cloze', () => {
+    const result = parseMarkdown(
+      bytes(
+        [
+          '- {{[[TODO]]}} comprar',
+          '- {{embed: ((abc123))}}',
+          '- {{[[table]]}}',
+          '- {{query: (and [[x]])}}',
+          '- {{video: https://example.com/v}}',
+          '- La {{c1::penicilina}} trata la sífilis',
+          '- A :: B',
+        ].join('\n'),
+      ),
+      'a.md',
+    );
+    expect(result.notes.map((note) => note.kind)).toEqual(['cloze', 'basic_reverse']);
+    expect(result.notes[0]?.front).toBe('La {{c1::penicilina}} trata la sífilis');
+  });
+});
+
+describe('cercas de código y comentarios', () => {
+  it('una cerca se cierra con el mismo carácter y no se invierte con otra marca adentro', () => {
+    const lines = markdownLines(
+      ['````', '```', '~~~', '- dentro :: no', '````', '- fuera :: sí'].join('\n'),
+    );
+    expect(lines.map((line) => line.text)).toEqual(['fuera :: sí']);
+    const tildes = markdownLines(
+      ['~~~', '```', '- dentro :: no', '~~~', '- fuera :: sí'].join('\n'),
+    );
+    expect(tildes.map((line) => line.text)).toEqual(['fuera :: sí']);
+  });
+
+  it('una cerca que nunca se cierra se avisa y se traga el resto', () => {
+    const open = markdownOutline(['- P1 :: R1', '```', 'code', '- P2 :: R2'].join('\n'));
+    expect(open.openFence).toBe(true);
+    expect(open.lines.map((line) => line.text)).toEqual(['P1 :: R1']);
+    const result = parseMarkdown(bytes('- P1 :: R1\n```\n- P2 :: R2'), 'a.md');
+    expect(result.warnings).toEqual([{ code: 'unclosed_code_fence', count: 1 }]);
+    expect(parseMarkdown(bytes('- P1 :: R1\n```\nx\n```\n- P2 :: R2'), 'a.md').warnings).toEqual(
+      [],
+    );
+  });
+
+  it('un comentario de varias líneas se salta completo', () => {
+    const lines = markdownLines(
+      ['- antes :: sí', '<!--', '- comentado :: no', '- otro :: no', '-->', '- después :: sí'].join(
+        '\n',
+      ),
+    );
+    expect(lines.map((line) => line.text)).toEqual(['antes :: sí', 'después :: sí']);
+  });
+});
+
+describe('límites del importador de esquemas', () => {
+  it('maxNotes deja exactamente maxNotes notas y avisa del resto', () => {
+    const lines = Array.from({ length: 5 }, (_, index) => `- P${index} :: R${index}`).join('\n');
+    const result = parseMarkdown(bytes(lines), 'a.md', { ...IMPORT_LIMITS, maxNotes: 3 });
+    expect(result.notes).toHaveLength(3);
+    expect(result.errors).toEqual([{ position: 4, code: 'too_many_notes' }]);
+  });
+
+  it('una línea más larga que un campo se rechaza sin leerla y el resto se importa', () => {
+    const huge = `- ${'a'.repeat(30_000)} :: b`;
+    const result = parseMarkdown(bytes(`${huge}\n- A :: B`), 'a.md');
+    expect(result.errors).toEqual([{ position: 1, code: 'too_long' }]);
+    expect(result.notes).toHaveLength(1);
+  });
+
+  it('una línea de 80,000 espacios no congela la lectura', () => {
+    const text = `- a${' '.repeat(80_000)}b\n- A :: B`;
+    let result: ReturnType<typeof parseMarkdown> | undefined;
+    expect(
+      elapsed(() => {
+        result = parseMarkdown(bytes(text), 'a.md');
+      }),
+    ).toBeLessThan(1000);
+    expect(result?.notes.map((note) => note.front)).toEqual(['A']);
+  });
+
+  it('decenas de miles de etiquetas en una línea no congelan la lectura', () => {
+    const tags = Array.from({ length: 4_000 }, (_, index) => `#t${index}a`).join(' ');
+    expect(elapsed(() => parseMarkdown(bytes(`- ${tags} P :: R`), 'a.md'))).toBeLessThan(2000);
+  });
+});
+
+describe('texto del archivo', () => {
+  it('un UTF-8 válido con un carácter de reemplazo escrito a propósito no se lee como Windows-1252', () => {
+    const text = '- ¿Qué símbolo es \ufffd? :: Ninguno, está dañado';
+    const result = parseMarkdown(bytes(text), 'a.md');
+    expect(result.notes[0]?.front).toBe('¿Qué símbolo es \ufffd?');
+    expect(decodeText(bytes('Cuál es la dosis de acetaminofén'))).toBe(
+      'Cuál es la dosis de acetaminofén',
+    );
+  });
+
+  it('lo que no es UTF-8 se lee como Windows-1252', () => {
+    expect(decodeText(new Uint8Array([0x43, 0x61, 0x66, 0xe9]))).toBe('Café');
+  });
+
+  it('quita la marca de orden de bytes', () => {
+    expect(decodeText(new Uint8Array([0xef, 0xbb, 0xbf, 0x61]))).toBe('a');
+  });
+});
+
+describe('OPML endurecido', () => {
+  const wrap = (body: string) =>
+    `<?xml version="1.0"?><opml version="2.0"><body>${body}</body></opml>`;
+
+  it('un > dentro de un atributo no corta la etiqueta ni descuadra los niveles', () => {
+    const lines = opmlLines(
+      wrap(
+        '<outline text="Tema"><outline text="PA > 140 es HTA :: sí"/><outline text="Otra :: cosa"/></outline><outline text="Fuera :: nivel cero"/>',
+      ),
+    );
+    expect(lines.map((line) => [line.depth, line.text])).toEqual([
+      [0, 'Tema'],
+      [1, 'PA > 140 es HTA :: sí'],
+      [1, 'Otra :: cosa'],
+      [0, 'Fuera :: nivel cero'],
+    ]);
+  });
+
+  it('salta los comentarios y los CDATA, y ancla el atributo text', () => {
+    const lines = opmlLines(
+      wrap(
+        '<!-- <outline text="comentado :: no"/> --><![CDATA[<outline text="cdata :: no"/>]]><outline data-text="mal :: no" text="bien :: sí"/><outline _note="a text=\'b :: no\'" text="otra :: sí"/>',
+      ),
+    );
+    expect(lines.map((line) => line.text)).toEqual(['bien :: sí', 'otra :: sí']);
+  });
+
+  it('las referencias numéricas inválidas se dejan como están', () => {
+    const [line] = opmlLines(wrap('<outline text="a &#xD800; b &#0; c &#65; d"/>'));
+    expect(line?.text).toBe('a &#xD800; b &#0; c A d');
+  });
+
+  it('una etiqueta sin cerrar repetida miles de veces no congela la lectura', () => {
+    const hostile = `<opml><body>${'<outline text="'.repeat(50_000)}`;
+    expect(elapsed(() => opmlLines(hostile))).toBeLessThan(1000);
+    const angles = `<opml><body>${'<outline text="<<<<'.repeat(20_000)}"/></body></opml>`;
+    expect(elapsed(() => opmlLines(angles))).toBeLessThan(1000);
   });
 });

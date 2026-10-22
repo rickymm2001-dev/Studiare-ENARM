@@ -17,7 +17,7 @@ import { AiAccessNotice } from '@/ai/AiAccessNotice';
 import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import { extractPdfText } from '@/data/import/pdf';
+import { extractPdfText, PDF_LIMITS } from '@/data/import/pdf';
 import { ImportError } from '@/data/import/types';
 import {
   generationsLeft,
@@ -83,6 +83,8 @@ function AiCards({ session }: { session: ReadySession }) {
     setFileName(file.name);
     setReading(true);
     try {
+      // El tamaño se mira antes de leer el archivo a memoria. Un texto o un PDF que pasa de aquí no sirve
+      if (file.size > PDF_LIMITS.maxBytes) throw new ImportError('too_large');
       const bytes = new Uint8Array(await file.arrayBuffer());
       const isPdf =
         bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46;

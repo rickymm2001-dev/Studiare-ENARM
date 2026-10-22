@@ -234,6 +234,71 @@ describe('importador de .apkg ante archivos dañados o hechos para fallar', () =
   });
 });
 
+describe('importador de .apkg con una base de datos hecha a propósito', () => {
+  const codeOf = async (bytes: Uint8Array) => {
+    try {
+      await run(bytes);
+    } catch (error) {
+      if (error instanceof ImportError) return error.code;
+      throw error;
+    }
+    return 'ok';
+  };
+  const small: ApkgFixture = {
+    models: standardModels,
+    notes: [{ guid: 'g1', model: 'basic', fields: ['Frente', 'Reverso'], deck: 'Default' }],
+  };
+  const recursiveView =
+    'create view cards as with recursive c(x) as (select 1 union all select x+1 from c) ' +
+    'select x nid, x did, x ord, x id from c';
+
+  it('una vista con el nombre de cards, que nunca terminaría, se rechaza sin consultarla', async () => {
+    const bytes = await buildLegacyApkg(small, ['drop table cards', recursiveView]);
+    expect(await codeOf(bytes)).toBe('corrupt');
+  });
+
+  it('un disparador o una vista cualquiera también se rechazan', async () => {
+    const trigger = await buildLegacyApkg(small, [
+      'create trigger t after insert on notes begin select 1; end',
+    ]);
+    expect(await codeOf(trigger)).toBe('corrupt');
+    const view = await buildLegacyApkg(small, ['create view v as select 1']);
+    expect(await codeOf(view)).toBe('corrupt');
+  });
+
+  it('una tabla virtual se rechaza', async () => {
+    const bytes = await buildLegacyApkg(small, ['create virtual table x using fts4(a)']);
+    expect(await codeOf(bytes)).toBe('corrupt');
+  });
+
+  it('sin la tabla cards o col el paquete está dañado', async () => {
+    expect(await codeOf(await buildLegacyApkg(small, ['drop table cards']))).toBe('corrupt');
+    expect(await codeOf(await buildLegacyApkg(small, ['drop table col']))).toBe('corrupt');
+  });
+
+  it('un paquete normal sigue entrando', async () => {
+    expect(await codeOf(await buildLegacyApkg(small))).toBe('ok');
+  });
+
+  it('con más notas que el máximo se leen solo las permitidas y se avisa', async () => {
+    const many: ApkgFixture = {
+      models: standardModels,
+      notes: Array.from({ length: 5 }, (_, index) => ({
+        guid: `g${index}`,
+        model: 'basic',
+        fields: [`Frente ${index}`, 'Reverso'],
+        deck: 'Default',
+      })),
+    };
+    const parsed = await run(await buildLegacyApkg(many), { ...IMPORT_LIMITS, maxNotes: 3 });
+    expect(parsed.notes).toHaveLength(3);
+    expect(parsed.errors).toEqual([{ position: 4, code: 'too_many_notes' }]);
+    const exact = await run(await buildLegacyApkg(many), { ...IMPORT_LIMITS, maxNotes: 5 });
+    expect(exact.notes).toHaveLength(5);
+    expect(exact.errors).toEqual([]);
+  });
+});
+
 async function run(bytes: Uint8Array, limits = IMPORT_LIMITS) {
   return parseApkg(bytes, await loadSqlForTests(), 'prueba.apkg', limits);
 }

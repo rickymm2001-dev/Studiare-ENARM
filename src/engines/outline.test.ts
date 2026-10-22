@@ -554,3 +554,39 @@ describe('plantillas (B6)', () => {
     expect(planCards(nodes).plans).toEqual([]);
   });
 });
+
+describe('líneas hechas para congelar al leerlas', () => {
+  /** Mide cuánto tarda algo. Con el arreglo todas bajan de 200 ms y sin él tardan segundos o minutos */
+  const elapsed = (run: () => void) => {
+    const start = performance.now();
+    run();
+    return performance.now() - start;
+  };
+
+  it('una línea con decenas de miles de espacios al final se lee casi al instante', () => {
+    const line = `- a${' '.repeat(80_000)}b`;
+    expect(elapsed(() => parseLine(line))).toBeLessThan(1000);
+    expect(elapsed(() => markSpan(line))).toBeLessThan(1000);
+  });
+
+  it('una etiqueta con miles de signos de puntuación seguidos no congela y se recorta igual', () => {
+    const line = `Tema #t${'.'.repeat(60_000)}x y #corta..`;
+    expect(elapsed(() => parseLine(line))).toBeLessThan(1000);
+    expect(parseLine('Tema #corta... y más').tags).toEqual(['corta']);
+    expect(parseLine('Tema (ver #corta); y más').tags).toEqual(['corta']);
+  });
+
+  it('una línea con decenas de miles de etiquetas se lee casi al instante', () => {
+    const line = Array.from({ length: 30_000 }, (_, index) => `#t${index}a`).join(' ');
+    expect(elapsed(() => parseLine(`${line} Pregunta :: Respuesta`))).toBeLessThan(2000);
+  });
+
+  it('muchos {{ sin cerrar no hacen cuadrática la búsqueda de huecos', () => {
+    const line = '{{ '.repeat(40_000);
+    expect(numberClozeHoles(line)).toBeNull();
+    expect(elapsed(() => markSpan(line))).toBeLessThan(1000);
+    expect(numberClozeHoles('La {{penicilina}} y la {{ampicilina}}')).toBe(
+      'La {{c1::penicilina}} y la {{c2::ampicilina}}',
+    );
+  });
+});

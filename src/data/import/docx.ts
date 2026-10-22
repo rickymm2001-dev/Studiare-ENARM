@@ -15,7 +15,59 @@ import { notesFromRows } from './rows';
 import { ImportError, WarningTally, type ParsedImport, type ParsedNote } from './types';
 import { readZip } from './zip';
 
-const TOKEN = /<(\/?)([A-Za-z0-9:_-]+)((?:\s[^>]*?)?)(\/?)>|([^<]+)/g;
+/**
+ * Una pieza del XML. O una etiqueta, con su diagonal de cierre, su nombre, sus atributos y su diagonal
+ * de autocierre, o un texto
+ */
+type XmlToken = readonly [
+  whole: string,
+  closing: string | undefined,
+  name: string | undefined,
+  attributes: string | undefined,
+  selfClosing: string | undefined,
+  text: string | undefined,
+];
+
+const TAG_NAME = /^[A-Za-z0-9:_-]+/;
+
+/**
+ * Recorre el XML una sola vez con indexOf, en lugar de una expresión regular con atributos perezosos,
+ * que con miles de etiquetas sin cerrar se vuelve cuadrática. Lo que no es una etiqueta completa se
+ * entrega como texto, y si un < nunca encuentra su > lo que queda es texto suelto
+ */
+function* xmlTokens(xml: string): Generator<XmlToken> {
+  let at = 0;
+  while (at < xml.length) {
+    if (xml.charAt(at) !== '<') {
+      const next = xml.indexOf('<', at);
+      const end = next === -1 ? xml.length : next;
+      yield [xml.slice(at, end), undefined, undefined, undefined, undefined, xml.slice(at, end)];
+      at = end;
+      continue;
+    }
+    const close = xml.indexOf('>', at + 1);
+    if (close === -1) {
+      yield [xml.slice(at), undefined, undefined, undefined, undefined, xml.slice(at + 1)];
+      return;
+    }
+    const inner = xml.slice(at + 1, close);
+    const closing = inner.startsWith('/') ? '/' : '';
+    const name = TAG_NAME.exec(inner.slice(closing.length))?.[0];
+    const rest = name === undefined ? '' : inner.slice(closing.length + name.length);
+    const selfClosing = rest.endsWith('/') ? '/' : '';
+    const attributes = selfClosing ? rest.slice(0, -1) : rest;
+    if (name !== undefined && (attributes === '' || /^\s/.test(attributes))) {
+      yield [xml.slice(at, close + 1), closing, name, attributes, selfClosing, undefined];
+      at = close + 1;
+      continue;
+    }
+    // No es una etiqueta. Lo que sigue al < hasta el siguiente < es texto
+    const next = xml.indexOf('<', at + 1);
+    const end = next === -1 ? xml.length : next;
+    yield [xml.slice(at, end), undefined, undefined, undefined, undefined, xml.slice(at + 1, end)];
+    at = end;
+  }
+}
 const HEADING = /^(?:Heading|T[íi]tulo|Ttulo|Titre|Titel)\s*([1-3])$/i;
 
 const decodeEntities = (text: string) =>
@@ -90,8 +142,7 @@ function readBlocks(xml: string): { blocks: Block[]; drawings: number } {
     if (done.plain !== '') blocks.push({ type: 'paragraph', paragraph: done });
   };
 
-  for (const match of xml.matchAll(TOKEN)) {
-    const [, closing, name, attributes = '', selfClosing, text] = match;
+  for (const [, closing, name, attributes = '', selfClosing, text] of xmlTokens(xml)) {
     if (text !== undefined) {
       if (inText && run) run.text += decodeEntities(text);
       continue;

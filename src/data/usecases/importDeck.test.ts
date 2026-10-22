@@ -188,6 +188,44 @@ describe('guardar una importación', () => {
     expect(result.rejected).toEqual([{ position: 2, code: 'too_long' }]);
   });
 
+  it('un campo gigante se rechaza sin pasarlo por el saneador', async () => {
+    const { api, user } = setup();
+    let sanitized = 0;
+    const parsed = csv('Frente,Reverso\nbien,bien\n');
+    const huge = {
+      ...(parsed.notes[0] as ParsedImport['notes'][number]),
+      front: 'x'.repeat(20_000 * 20 + 1),
+      position: 9,
+    };
+    const result = await importParsed(
+      api,
+      user,
+      { ...parsed, notes: [...parsed.notes, huge] },
+      options({
+        sanitize: (html) => {
+          sanitized += 1;
+          return html;
+        },
+      }),
+    );
+    expect(result.notesCreated).toBe(1);
+    expect(result.rejected).toEqual([{ position: 9, code: 'too_long' }]);
+    // Solo se saneó la nota buena, su frente y su reverso
+    expect(sanitized).toBe(2);
+  });
+
+  it('con miles de notas cede el hilo a la interfaz entre tandas', async () => {
+    const { api, user } = setup();
+    const notes = Array.from({ length: 1200 }, (_, index) => `Frente ${index},Reverso ${index}`);
+    let ticks = 0;
+    const timer = setInterval(() => {
+      ticks += 1;
+    }, 0);
+    await importParsed(api, user, csv(`Frente,Reverso\n${notes.join('\n')}\n`), options());
+    clearInterval(timer);
+    expect(ticks).toBeGreaterThan(0);
+  });
+
   it('un archivo sin nada guardable avisa en lugar de crear un mazo vacío', async () => {
     const { api, user } = setup();
     await expect(

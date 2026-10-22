@@ -73,14 +73,18 @@ export interface ParsedLine {
 const TAG_PATTERN = /(^|\s)#(\p{L}[^\s#]*)/gu;
 const LINK_PATTERN = /\[\[([^[\]]+)\]\]/g;
 
-/** Cambia cada carácter de una región por un relleno del mismo largo, para no tocar los índices */
-function maskRegion(text: string, start: number, end: number): string {
-  return text.slice(0, start) + '\u0000'.repeat(end - start) + text.slice(end);
-}
+/** Puntuación que se pega al final de una etiqueta al escribir una frase */
+const TAG_TRAILING_PUNCTUATION = new Set(['.', ',', ';', ':', ')', ']']);
 
-/** Quita la puntuación que se pega al final de una etiqueta al escribir una frase */
+/**
+ * Quita la puntuación que se pega al final de una etiqueta al escribir una frase. Se recorta con un
+ * ciclo y no con una expresión regular anclada al final, que con miles de signos seguidos se
+ * vuelve cuadrática
+ */
 function cleanTag(raw: string): string {
-  return sanitizeTag(raw.replace(/[.,;:)\]]+$/, ''));
+  let end = raw.length;
+  while (end > 0 && TAG_TRAILING_PUNCTUATION.has(raw.charAt(end - 1))) end -= 1;
+  return sanitizeTag(raw.slice(0, end));
 }
 
 /** Etiquetas y enlaces de una línea, y el texto limpio. No decide nada sobre las marcas */
@@ -107,12 +111,11 @@ function extractInline(text: string): Pick<ParsedLine, 'tags' | 'links' | 'plain
 /** El texto con huecos, etiquetas y enlaces tapados, para buscar marcas sin falsos positivos */
 function maskedForMarks(text: string): string {
   let masked = text;
-  // Un hueco sin cerrar tapa hasta el final, así su :: no se toma por una marca
+  // Un hueco sin cerrar tapa hasta el final, así su :: no se toma por una marca. Cada región se
+  // cambia por un relleno del mismo largo para no mover los índices, y todas las de un patrón en una
+  // sola pasada, porque rehacer la cadena por cada región es cuadrático en líneas con miles de etiquetas
   for (const pattern of [/\{\{[\s\S]*?(?:\}\}|$)/g, LINK_PATTERN, /(^|\s)#[^\s#]+/g]) {
-    const found = [...masked.matchAll(pattern)];
-    for (const match of found) {
-      masked = maskRegion(masked, match.index, match.index + match[0].length);
-    }
+    masked = masked.replace(pattern, (region) => '\u0000'.repeat(region.length));
   }
   return masked;
 }
@@ -147,6 +150,8 @@ const MARK_TYPE: Record<Separator, 'forward' | 'backward' | 'both'> = {
  * Devuelve el texto con huecos al estilo Anki, {{c1::texto}}, o null si no hay ninguno
  */
 export function numberClozeHoles(text: string): string | null {
+  // Sin ninguna llave de cierre no hay hueco, y buscar cada {{ hasta el final es cuadrático
+  if (!text.includes('}}')) return null;
   const blocks = [...text.matchAll(/\{\{([\s\S]*?)\}\}/g)];
   if (blocks.length === 0) return null;
   const used = new Set<number>();
@@ -188,7 +193,7 @@ export function parseLine(text: string): ParsedLine {
 
   // Con tres signos al final la respuesta son las líneas que cuelgan
   const masked = maskedForMarks(line);
-  const trimmedEnd = masked.replace(/\s+$/, '');
+  const trimmedEnd = masked.trimEnd();
   if (trimmedEnd.endsWith('>>>')) {
     const front = extractInline(line.slice(0, trimmedEnd.length - 3)).plain;
     return { ...base, mark: front === '' ? { type: 'none' } : { type: 'multiline', front } };
@@ -230,7 +235,7 @@ export type MarkSpan =
 export function markSpan(text: string): MarkSpan {
   const line = text.replace(/\r?\n/g, ' ');
   const masked = maskedForMarks(line);
-  const trimmedEnd = masked.replace(/\s+$/, '');
+  const trimmedEnd = masked.trimEnd();
   if (trimmedEnd.endsWith('>>>')) {
     return { type: 'multiline', start: trimmedEnd.length - 3, end: trimmedEnd.length };
   }
@@ -243,7 +248,9 @@ export function markSpan(text: string): MarkSpan {
       end: found.index + found.separator.length,
     };
   }
-  return /\{\{[\s\S]*?\}\}/.test(line) ? { type: 'cloze' } : { type: 'none' };
+  return line.includes('}}') && /\{\{[\s\S]*?\}\}/.test(line)
+    ? { type: 'cloze' }
+    : { type: 'none' };
 }
 
 /** El texto de la línea con huecos, etiquetas y enlaces tapados, con las mismas posiciones */
@@ -271,7 +278,7 @@ export function markTokens(text: string): MarkToken[] {
   const masked = maskedForMarks(line);
 
   if (parsed.mark.type === 'multiline') {
-    const end = masked.replace(/\s+$/, '').length;
+    const end = masked.trimEnd().length;
     tokens.push({ start: end - 3, end, kind: 'multiline' });
   } else if (parsed.mark.type !== 'none' && parsed.mark.type !== 'cloze') {
     const found = findSeparator(masked);

@@ -33,7 +33,9 @@ export type ImportWarningCode =
   | 'extra_templates'
   | 'extra_columns'
   | 'deck_too_deep'
-  | 'revlog_ignored';
+  | 'revlog_ignored'
+  /** Un Markdown que termina con un bloque de código sin cerrar, que se tragó el resto del archivo */
+  | 'unclosed_code_fence';
 
 export interface ImportWarning {
   code: ImportWarningCode;
@@ -70,7 +72,9 @@ export type ImportErrorCode =
   | 'no_collection'
   | 'empty'
   /** Un PDF escaneado, sin texto que se pueda seleccionar */
-  | 'no_text';
+  | 'no_text'
+  /** La lectura pasó del tiempo permitido y se canceló */
+  | 'too_slow';
 
 export class ImportError extends Error {
   readonly code: ImportErrorCode;

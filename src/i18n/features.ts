@@ -668,6 +668,8 @@ export const featureText = {
         'Ese tipo de archivo no se puede importar. Usa .apkg, CSV, Excel (.xlsx), Word (.docx), Markdown (.md) u OPML.',
       no_collection: 'El paquete no trae una colección de Anki.',
       empty: 'El archivo no trae tarjetas.',
+      too_slow:
+        'El archivo tardó demasiado en leerse y se canceló. Prueba con uno más chico o divídelo en partes.',
     } as Record<string, string>,
     previewTitle: 'Esto es lo que vamos a importar',
     previewSource: (source: string, file: string) => `${source} · ${file}`,
@@ -695,6 +697,8 @@ export const featureText = {
         `${plural(n, 'nota está', 'notas están')} en mazos de demasiados niveles y se acomodan en el último nivel permitido.`,
       revlog_ignored: (n: number) =>
         `Los ${n.toLocaleString('es-MX')} repasos del archivo no se importan. Todas las tarjetas empiezan como nuevas.`,
+      unclosed_code_fence: () =>
+        'El archivo termina con un bloque de código sin cerrar, y lo que venía después no se importó. Cierra el bloque y vuelve a subirlo.',
     } as Record<string, (n: number) => string>,
     rowErrors: {
       empty_front: 'sin frente',
