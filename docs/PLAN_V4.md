@@ -334,6 +334,12 @@ Estado de V4-B10 (2026-10-22, D-146)
 - No se hizo. Las skills code-review, security-review y accessibility-review no se invocaron aparte, porque las cuatro revisiones independientes cubrieron esas áreas. Si quieres una segunda pasada con ellas antes de lanzar, se corren sobre el diff completo del plan V4. La lista de lanzamiento es la de la sección 11 de PLAN_DEL_CAMBIO.md y depende de ti
 - Pendientes que salieron de la auditoría y esperan a Ricardo están en docs/PENDIENTES_DE_RICARDO.md. Los menores van a IDEAS.md
 
+Estado de la fase 2 del plan V4 (2026-10-22, D-147)
+- Ricardo autorizó las versiones recomendadas de lo que quedó pendiente y pidió publicar los cambios. El PR 63 se fusionó con el CI en verde y la página principal se publicó. Lo que sigue va en el PR siguiente
+- Hecho. Cristal de 6 px solo en la barra superior y los docks (decisión 2 recomendada), con su prueba de que no se usa en otro lado. Plan de hoy también en Repasar, con estado calibrando y el aviso de cifra imposible. Orden y selección de ramas del plan del Calendario. Pantalla de mazo completa con las cifras también en producción, sanguijuelas, última vez estudiado y botones a Repasar, Estudiar un tema y Buscar con el filtro del mazo. Compuerta de versión de la sincronización con su aviso. Causa quota para el tope por alumno del servidor. JavaScript inicial de 245.0 KB de 300, con 55 KB de margen, al cargar el idioma por pantalla
+- Servidor, escrito y probado contra un Postgres local, sin aplicar al proyecto real. Acceso gratis por mazo, confirmación del dueño ligada a la versión, topes por alumno y nivel cognitivo en la nube. Aplicarlo es la decisión de Ricardo de docs/PENDIENTES_DE_RICARDO.md
+- No se hizo. Imágenes degradadas a propósito, porque las preguntas no tienen imágenes. La mezcla por nivel cognitivo del examen completo y su ajuste en Umbrales, que no tiene datos con los que probarse. Simulacros cortos como cifra aparte. Hilos por pregunta y foro, que esperan 50 y 300 alumnos activos. La ilustración propia para estados vacíos y la portada, que queda para cuando lleguen los textos de la agencia
+
 ## 8. Decisiones que esperan a Ricardo
 
 Con la opción recomendada que se toma si no contestas.

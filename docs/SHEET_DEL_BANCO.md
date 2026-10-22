@@ -30,6 +30,7 @@ Studiare busca cada columna por su nombre, sin importar acentos ni mayúsculas, 
 | Dificultad | Sí | Del 1 (muy fácil) al 5 (muy difícil) |
 | Tipo de reactivo | No | Vacío en una pregunta normal. Si la pregunta es especial, uno o varios separados por coma. De control, Con incoherencias, Resolución inversa, Datos oscuros o Desde el paciente |
 | Tarea | No | Lo que pide la pregunta, por ejemplo Diagnóstico o Siguiente paso. Si la dejas vacía, Studiare la detecta por la frase de la pregunta |
+| Nivel cognitivo | No | Elige de la lista. Conocimiento, Comprensión, Aplicación, Análisis, Síntesis o Evaluación, de la taxonomía de Bloom. Si lo dejas vacío la pregunta queda sin nivel y Studiare nunca lo adivina |
 | Polaridad | No | Afirmativa o Negativa. Una pregunta con EXCEPTO es negativa. Si la dejas vacía, Studiare la detecta |
 | Caso | Solo en casos seriados | La misma clave en todas las preguntas del caso, por ejemplo GO-C001 |
 | Orden en el caso | Solo en casos seriados | 1, 2, 3, 4 o 5, sin repetir ni saltar números |

@@ -1523,3 +1523,14 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - DOMPurify actualizado de 3.4.16 a 3.4.17 por un aviso crítico que salió el mismo día. Es de parche, con versión exacta como ya estaba, y limpia el HTML de las tarjetas importadas y del catálogo
 - Presupuesto de JavaScript inicial en 298.0 KB de 300, con 2 KB de margen
 
+### D-147. Fase 2 del plan V4, publicar y completar lo pendiente
+- Fecha 2026-10-22. Origen R, "autoriza las versiones recomendadas de tus sugerencias, sube los cambios para que los pueda ver en la página y continúa con el plan"
+- Publicar. Se fusionó el PR 63 con merge commit, con check, e2e, audit y calibración en verde, que es lo que exige main. Se publica en GitHub Pages con el flujo pages y en Cloudflare con su integración. Cloudflare por el flujo de GitHub sigue apagado
+- Se aplicaron las versiones recomendadas de la sección 8 del plan. Cristal solo en la barra superior y los docks, superficies sólidas, sin fondos personalizados, sin comprar plantilla, Bloom independiente de la dificultad
+- Servidor. Acceso gratis por mazo dirigido por datos (columna free_access y una función de administración) y no por una clave fija, para que Urgencias y cualquier otro mazo se abra desde Administración. La confirmación del dueño de un mazo de terceros queda ligada a la versión. Tres topes por alumno en platform_quota_settings, 500 bajadas al día, 600,000 registros y 400 MB de sincronización, generosos frente a los límites del cliente, y una subida que los pasa se rechaza entera con SY003, que la app muestra como la causa quota. El nivel cognitivo viaja completo por el Sheet, el convertidor, las funciones del banco y el editor. Todo se probó contra un Postgres local de 16 que sí existe en la sesión, y no se aplicó al proyecto real
+- No se aplicó nada al proyecto real de Supabase. Tiene el esquema hasta B10 y las migraciones nuevas dependen de B11, así que aplicarlas pide desplegar la cadena de B11 a B18, una decisión mucho mayor que la que se autorizó. Quedó como pendiente de Ricardo con su orden en docs/DESPLIEGUE.md
+- Compuerta de versión de la sincronización. Una fila con schemaVersion mayor a la que la app entiende ya no se descarta ni mueve la marca. La bajada de eventos se pausa justo ahí, lo demás sigue y la app ofrece actualizar. Las filas dañadas de la versión actual siguen contando como rechazadas. No cambia ningún evento existente
+- Imágenes degradadas a propósito no se hicieron, porque las preguntas del banco no tienen imágenes. Primero haría falta esa función
+- Margen del JavaScript inicial. Los textos del shell viven en src/i18n/core.ts y el idioma completo carga con la primera pantalla en un chunk aparte. El inicial bajó de 298.0 a 245.0 KB
+- Cristal con backdrop-blur de 6 px y superficie al 92 por ciento, con respaldo sólido, en la barra superior, el dock del teléfono, ActionDock y la barra de guardar. Los velos de los diálogos siguen como estaban
+
