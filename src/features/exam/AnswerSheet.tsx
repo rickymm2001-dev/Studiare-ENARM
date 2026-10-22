@@ -4,11 +4,7 @@
 // llenar si la pregunta ya se vio, porque el orden de sus opciones se fija al verla por primera vez.
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
-
-/** La letra de una opción por su posición, A para la primera */
-export function optionLetter(index: number): string {
-  return String.fromCharCode(65 + index);
-}
+import { optionLetter } from './optionLetter';
 
 export interface SheetRow {
   /** Número de la pregunta en el examen, desde 1 */

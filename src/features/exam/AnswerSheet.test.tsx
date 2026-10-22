@@ -5,7 +5,8 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { t } from '@/i18n/es-MX';
-import { AnswerSheet, optionLetter, type SheetRow } from './AnswerSheet';
+import { AnswerSheet, type SheetRow } from './AnswerSheet';
+import { optionLetter } from './optionLetter';
 
 afterEach(() => {
   cleanup();

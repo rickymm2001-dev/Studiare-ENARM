@@ -116,7 +116,7 @@ describe('planEvents e icsOf', () => {
     expect(ics).toContain('DTSTART;VALUE=DATE:20261213');
     expect(ics).toContain('DTEND;VALUE=DATE:20261214');
     expect(ics).toContain('DTEND;VALUE=DATE:20261012');
-    expect(ics).toContain('SUMMARY:Examen\\, de cirugía\; ¡ya!');
+    expect(ics).toContain('SUMMARY:Examen\\, de cirugía\\; ¡ya!');
     expect(ics).toContain('DESCRIPTION:Línea 1\\nLínea 2');
     expect(ics.split('\r\n').every((line) => new TextEncoder().encode(line).length <= 75)).toBe(
       true,
