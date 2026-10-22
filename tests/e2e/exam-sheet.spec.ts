@@ -1,6 +1,6 @@
 // Examen con hoja de respuestas (V4-B5). Con la opción encendida las opciones de la pregunta solo se
 // leen y la respuesta se llena en una burbuja de la hoja, como en la hoja de lectura óptica del examen
-// real. Un burbuja solo se llena si la pregunta ya se vio y el llenado sobrevive a una recarga.
+// real. Una burbuja solo se llena si la pregunta ya se vio y el llenado sobrevive a una recarga.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { examTotalMs } from '@/engines/exam';
@@ -36,7 +36,7 @@ test('la respuesta se llena en la hoja y no en la opción de la pregunta', async
   await expect(page.getByText(t.answerSheet.readOnlyNote)).toBeVisible();
 
   // Las opciones de la pregunta solo se leen. Las demás preguntas aún no se ven, así que su burbuja
-  // está cerrado
+  // está cerrada
   const options = page.getByRole('radio', { name: /^[A-J]\./ });
   await expect(options.first()).toBeDisabled();
   await expect(bubble(page, 2, 'A')).toBeDisabled();

@@ -18,7 +18,8 @@ import { t } from '@/i18n/es-MX';
 import { schedulerConfig } from '../review/schedulerConfig';
 import { loadCatalog } from './useDeckCatalog';
 
-vi.setConfig({ testTimeout: 30_000 });
+// Seguir un mazo de más de mil notas tarda en el runner del CI, que corre con cobertura
+vi.setConfig({ testTimeout: 150_000 });
 
 let app: RenderedApp | undefined;
 afterEach(async () => {
@@ -28,6 +29,8 @@ afterEach(async () => {
 });
 
 const WAIT = { timeout: 15_000 };
+/** Para esperar a que termine de seguirse o dejarse un mazo grande */
+const LONG_WAIT = { timeout: 90_000 };
 /** Urgencias, el mazo del catálogo que Gratis puede seguir (V4-B8) */
 const FREE_DECK = 'Urgencias (Paco)';
 /** Mazos de pago, que en Gratis solo se vuelven a seguir si ya eran del alumno */
@@ -81,7 +84,9 @@ describe('catálogo de mazos según el plan', () => {
     expect(screen.queryByText(t.freePlan.catalog.notice)).toBeNull();
     expect(screen.queryByText(t.freePlan.catalog.rowLocked)).toBeNull();
     await typing.click(follow);
-    expect(await within(row).findByRole('button', { name: t.decks.unfollow }, WAIT)).toBeVisible();
+    expect(
+      await within(row).findByRole('button', { name: t.decks.unfollow }, LONG_WAIT),
+    ).toBeVisible();
   });
 
   it('en Gratis el mazo que ya estaba en el dispositivo se deja y se vuelve a seguir, y los demás siguen cerrados', async () => {
@@ -103,9 +108,11 @@ describe('catálogo de mazos según el plan', () => {
     expect(within(await deckRow(BIG)).getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
 
     await typing.click(follow);
-    const unfollow = await within(row).findByRole('button', { name: t.decks.unfollow }, WAIT);
+    const unfollow = await within(row).findByRole('button', { name: t.decks.unfollow }, LONG_WAIT);
     await typing.click(unfollow);
-    expect(await within(row).findByRole('button', { name: t.decks.follow }, WAIT)).toBeVisible();
+    expect(
+      await within(row).findByRole('button', { name: t.decks.follow }, LONG_WAIT),
+    ).toBeVisible();
   });
 
   it('en Gratis un mazo ya estudiado en otro dispositivo se vuelve a seguir aunque no esté en este', async () => {
@@ -151,6 +158,8 @@ describe('catálogo de mazos según el plan', () => {
     expect(within(row).queryByText(t.freePlan.catalog.rowLocked)).toBeNull();
     expect(within(await deckRow(BIG)).getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
     await typing.click(follow);
-    expect(await within(row).findByRole('button', { name: t.decks.unfollow }, WAIT)).toBeVisible();
+    expect(
+      await within(row).findByRole('button', { name: t.decks.unfollow }, LONG_WAIT),
+    ).toBeVisible();
   });
 });
