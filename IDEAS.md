@@ -101,3 +101,4 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Poda del inicial por textos por área, tailwind-merge y zod.** Si B17 pide más del margen. Surgió en la revisión de B15
 - **Que capture() quite sus estilos al terminar.** Hoy deja la barra estática y cualquier spec que siga usando la página la hereda. Surgió en la revisión de B15
 - **Más pasos del recorrido.** Tutor y Mazos, un botón Recordármelo después, un recorrido propio para el médico y medir en qué paso se salta más gente. Surgió en el paquete C de B15
+- **Bajar la memoria del lint.** Con B15 `eslint .` llega a unos 5.3 GB y a 4 GB se cortaba en el CI (heap out of memory). El script lint ya sube el límite a 6 GB, pero un repo privado corre en máquinas de 7 GB. Convendría partir el lint con tipos por carpeta o por tsconfig antes de pasar el repo a privado. Surgió en el PR de B15
