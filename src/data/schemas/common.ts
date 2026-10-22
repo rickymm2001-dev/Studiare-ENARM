@@ -1,5 +1,6 @@
 // Piezas comunes de los esquemas. Única fuente de verdad del modelo de datos (6.1).
 import { z } from 'zod';
+import { COGNITIVE_LEVELS } from '../../engines/bloom.ts';
 
 /** IDs con ULID, ordenables por tiempo (6.1) */
 export const IdSchema = z.ulid();
@@ -64,6 +65,10 @@ export const ItemKindSchema = z.enum([
   'patient_perspective',
 ]);
 export type ItemKind = z.infer<typeof ItemKindSchema>;
+
+/** Nivel cognitivo de Bloom de una pregunta. Ausente es sin nivel, nunca se adivina (V4-B5) */
+export const CognitiveLevelSchema = z.enum(COGNITIVE_LEVELS);
+export type CognitiveLevel = z.infer<typeof CognitiveLevelSchema>;
 
 /** Qué tanto define un dato del caso al diagnóstico. Patognomónico y característico son distintos */
 export const ClueStrengthSchema = z.enum(['pathognomonic', 'characteristic', 'nonspecific']);

@@ -250,6 +250,10 @@ Estado de V4-B4 (2026-10-22, D-143)
 
 Se acepta cuando una pregunta con nivel entra por el Sheet y sale en Simular con su filtro, el examen reparte por nivel, la hoja de respuestas tiene su e2e y la pantalla Cómo es el examen cita sus fuentes.
 
+Estado de V4-B5 (2026-10-22, D-144)
+- Hecho. Nivel cognitivo como campo independiente de la dificultad, opcional en el esquema del banco local y en el editor del médico, filtro por nivel en Simular, tarjeta de exactitud por nivel en Progreso con estado calibrando, tarjeta Cómo es el examen con las imperfecciones como entrenamiento y hoja de respuestas al estilo Ceneval como opción del examen, con su e2e (tests/e2e/exam-sheet.spec.ts)
+- No se hizo. La columna del Sheet con su lista de validación, el convertidor y las columnas SQL del banco en la nube, porque no hay Postgres para probarlas aquí. Queda en docs/PENDIENTES_DE_RICARDO.md. El nivel está dormido hasta que haya preguntas con nivel. La mezcla por nivel del examen completo y su ajuste en Umbrales quedan en IDEAS.md hasta tener preguntas etiquetadas. Degradar imágenes a propósito sigue siendo solo donde el médico lo marque
+
 ### V4-B6. Calendario (M)
 
 - Pantalla Calendario en el menú, en lugar de la ruta vieja de planificador que hoy redirige a Progreso. Vista de mes y de semana con react-day-picker
@@ -259,6 +263,10 @@ Se acepta cuando una pregunta con nivel entra por el Sheet y sale en Simular con
 - Exportar el plan como archivo .ics para Google Calendar o el del teléfono. Sin integración de servidor
 
 Se acepta cuando el plan de semanas se calcula en el motor con unitarias, el calendario pasa axe por teclado, y hay e2e de crear el plan, verlo en el mes y exportar el .ics.
+
+Estado de V4-B6 (2026-10-22, D-144)
+- Hecho. Pantalla Calendario en el menú con vista de mes, detalle del día, carga prevista a 60 días, plan por semanas hasta el examen con los domingos de simulador completo en las últimas 10 semanas, y exportar el plan como .ics. Motor puro en src/engines/studyCalendar.ts con sus pruebas, e2e en tests/e2e/calendar.spec.ts
+- Cambio frente al plan. La cuadrícula del mes es propia, una tabla con botones, y no react-day-picker, porque el calendario necesita marcas por día y teclado propio y así no suma una dependencia. No se hizo la vista de semana aparte, porque el plan por semanas ya cubre esa lectura
 
 ### V4-B7. Comunidad (M, por etapas)
 
@@ -271,6 +279,10 @@ El foro completo que describes se evalúa y se parte en tres etapas, porque con 
 
 Se acepta cuando la etapa 1 tiene su e2e y sus pruebas de permisos por fila en SQL, y las etapas 2 y 3 están escritas con sus condiciones en IDEAS.md y en este plan.
 
+Estado de V4-B7 (2026-10-22, D-144)
+- Etapa 1 ya existía. La especialidad a la que aspiras está en el perfil (targetSpecialty) y la comparación de B14 ya arma cortes por especialidad y para todos, con el permiso que ya existe, sin nombres y con estado calibrando bajo el mínimo de alumnos (src/engines/calibration/comparisonCells.ts). No se escribió código nuevo. Falta solo separar el percentil de simulador completo del de práctica, que va a IDEAS.md
+- Etapas 2 y 3 siguen con sus condiciones, 50 alumnos activos para los hilos por pregunta y 300 para el foro general. Están en IDEAS.md
+
 ### V4-B8. Pendientes de la reunión con Paco (S)
 
 Lo que no quedó en otro bloque.
@@ -282,6 +294,10 @@ Lo que no quedó en otro bloque.
 - El tutor con IA ya tiene su compuerta de costo (B12). Se prende cuando pongas la clave y el presupuesto, ver docs/PENDIENTES_DE_RICARDO.md
 - Precio de los planes fundadores. No toca código, los precios viven en Stripe y en la configuración. Cuando decidas subirlos, es un cambio de S
 - Revisión pantalla por pantalla de Paco. Se le avisa después de V4-B2, cuando la apariencia esté estable, para que no revise algo que va a cambiar
+
+Estado de V4-B8 (2026-10-22, D-144)
+- Hecho en la interfaz. Urgencias se puede seguir en el plan Gratis (FREE_CATALOG_DECK_KEYS en src/config/billing.ts) y el aviso del catálogo lo dice. Su e2e queda en tests/e2e/free-plan.spec.ts
+- Pendiente de Ricardo. La regla del servidor. deck_catalog_can_download(), deck_catalog_can_read() y record_deck_download() en supabase/migrations/20261023000005_deck_catalog.sql piden plan de pago, así que con el catálogo en la nube un alumno Gratis no podría bajar Urgencias. El cambio es una migración nueva que deje pasar el mazo paco-urgencias, con su prueba SQL. No se escribió porque no hay Postgres para probarla y no se toca Supabase sin tu autorización
 
 ### V4-B9. Lo que queda de V3
 

@@ -14,6 +14,7 @@ import { useLiveData } from '@/data/hooks';
 import { freeSubjectCardIds } from '@/data/usecases/outlines';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
+import { cognitiveRows } from '@/engines/bloom';
 import { summarizeEnglish } from '@/engines/englishSection';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
@@ -29,6 +30,7 @@ import { useDecksAndCards } from '../decks/useDecksAndCards';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { CognitiveCard } from './CognitiveCard';
 import { DifficultyCard } from './DifficultyCard';
 import { EnglishProgressCard } from './EnglishProgressCard';
 import { difficultyRows } from './difficultyView';
@@ -196,6 +198,12 @@ function Progress({ session }: { session: ReadySession }) {
           </Suspense>
           <DifficultyCard
             rows={difficultyRows({
+              responses,
+              minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+            })}
+          />
+          <CognitiveCard
+            rows={cognitiveRows({
               responses,
               minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
             })}

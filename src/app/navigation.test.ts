@@ -37,6 +37,7 @@ const STUDENT_MAIN = [
   t.navItems.outlines,
   t.navItems.simulate,
   t.navItems.progress,
+  t.navItems.calendar,
   t.navItems.tutor,
   t.navItems.party,
 ];
@@ -70,7 +71,7 @@ const PHYSICIAN_BAR = [
 const PHYSICIAN_MAIN = [...PHYSICIAN_BAR, t.navItems.audit];
 
 describe('menú en computadora', () => {
-  it('alumno. Arriba sus siete secciones y abajo solo Configuración, con el engrane', () => {
+  it('alumno. Arriba sus ocho secciones y abajo solo Configuración, con el engrane', () => {
     const nav = NAV_BY_ROLE.student;
     expect(labels(nav.main)).toEqual(STUDENT_MAIN);
     expect(nav.groups).toEqual([]);
@@ -121,12 +122,12 @@ describe('menú en computadora', () => {
 });
 
 describe('menú en el teléfono', () => {
-  it('alumno. Inicio, Repasar, Simular y Progreso en la barra, y Más con Apuntes, Tutor, Party y Configuración', () => {
+  it('alumno. Inicio, Repasar, Simular y Progreso en la barra, y Más con Apuntes, Calendario, Tutor, Party y Configuración', () => {
     const nav = NAV_BY_ROLE.student;
     expect(labels(phoneBarItems(nav))).toEqual(STUDENT_BAR);
     const more = moreSections(nav);
     expect(more.map((section) => labels(section.items))).toEqual([
-      [t.navItems.outlines, t.navItems.tutor, t.navItems.party],
+      [t.navItems.outlines, t.navItems.calendar, t.navItems.tutor, t.navItems.party],
       [t.navItems.settings],
     ]);
     expect(more.map((section) => section.label)).toEqual([undefined, undefined]);
@@ -144,7 +145,7 @@ describe('menú en el teléfono', () => {
         undefined,
       ]);
       expect(more.map((section) => labels(section.items))).toEqual([
-        [t.navItems.outlines, t.navItems.tutor, t.navItems.party],
+        [t.navItems.outlines, t.navItems.calendar, t.navItems.tutor, t.navItems.party],
         ADMIN_GROUP,
         [t.navItems.settings],
       ]);

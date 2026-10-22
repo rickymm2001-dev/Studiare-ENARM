@@ -6,6 +6,7 @@
 // vive en layout/BottomNav.tsx.
 import {
   Award,
+  CalendarDays,
   FlaskConical,
   BookOpenCheck,
   ChartLine,
@@ -97,6 +98,7 @@ const studentMain: readonly MainNavItem[] = [
     bar: true,
   },
   { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine, bar: true },
+  { path: screenPath('calendar'), label: t.navItems.calendar, icon: CalendarDays },
   { path: screenPath('tutor'), label: t.navItems.tutor, icon: GraduationCap },
   { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper },
 ];

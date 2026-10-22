@@ -294,6 +294,7 @@ export function createLocalEditorialRepo(
     subtopic: question.subtopic,
     difficulty: question.physicianDifficulty,
     itemKinds: [...(question.itemKinds ?? [])],
+    cognitiveLevel: question.cognitiveLevel ?? null,
     structure: question.structure,
     vignette: question.vignette,
     prompt: question.prompt,

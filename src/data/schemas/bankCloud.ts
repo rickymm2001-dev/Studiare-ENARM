@@ -12,6 +12,7 @@ import {
   ItemKindSchema,
   TaxonomyKeySchema,
   UtcDateTimeSchema,
+  CognitiveLevelSchema,
 } from './common';
 
 // Las mismas reglas de deck_catalog.deck_key, subject_key y la ruta de imagen de deckCatalog.ts. Se
@@ -62,6 +63,8 @@ export const CatalogEntrySchema = z
     difficulty: z.int().min(1).max(5),
     /** Solo los tipos de reactivo que esta app conoce (D-080). Un tipo nuevo del servidor se ignora */
     itemKinds: z.array(ItemKindSchema).max(5),
+    /** Nivel cognitivo de Bloom. Lo trae el servidor cuando su base lo guarda (V4-B5) */
+    cognitiveLevel: CognitiveLevelSchema.optional(),
     polarity: z.enum(['affirmative', 'negative']),
     task: QuestionTaskSchema,
     format: z.enum(['clinical_case', 'direct', 'serial_case']),

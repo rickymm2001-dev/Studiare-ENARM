@@ -24,6 +24,7 @@ import {
 import { TAGGABLE_BIASES } from '@/data/usecases/labeling';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { analyzeStructure } from '@/engines/structure';
+import { COGNITIVE_LEVELS, isCognitiveLevel } from '@/engines/bloom';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { Badge } from '@/ui/components/badge';
@@ -903,6 +904,25 @@ function EditorForm({
               patch({ physicianDifficulty: Number(event.target.value) });
             }}
           />
+          {/* El nivel solo se guarda en el banco de este navegador. La base de la nube todavía no lo guarda */}
+          {repo.kind === 'cloud' ? null : (
+            <SelectField
+              label={t.cognitive.editor}
+              hint={t.cognitive.editorHint}
+              value={draft.cognitiveLevel ?? ''}
+              options={[
+                { value: '', label: t.cognitive.editorNone },
+                ...COGNITIVE_LEVELS.map((level) => ({
+                  value: level,
+                  label: t.cognitive.levels[level],
+                })),
+              ]}
+              onChange={(event) => {
+                const value = event.target.value;
+                patch({ cognitiveLevel: isCognitiveLevel(value) ? value : undefined });
+              }}
+            />
+          )}
           <fieldset className="flex flex-col gap-3">
             <legend className="font-medium">{text.meta.structure}</legend>
             <p className="text-sm text-fg-muted">{text.meta.structureHint}</p>

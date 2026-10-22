@@ -94,6 +94,7 @@ export function ExamSetupCard({
   const [highlight, setHighlight] = useState(settings.negationHighlightExam);
   const [askConfidence, setAskConfidence] = useState(false);
   const [alerts, setAlerts] = useState(true);
+  const [answerSheet, setAnswerSheet] = useState(false);
   // La parte en inglés va incluida, como en el ENARM, y el alumno la puede quitar (3.1)
   const [includeEnglish, setIncludeEnglish] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -246,7 +247,7 @@ export function ExamSetupCard({
         user,
         questions: chosen,
         requested,
-        options: { highlight, askConfidence, alerts },
+        options: { highlight, askConfidence, alerts, answerSheet },
         english: englishOptions,
         ...(armed.plan ? { plan: armed.plan } : {}),
       });
@@ -357,6 +358,14 @@ export function ExamSetupCard({
             checked={alerts}
             onChange={(event) => {
               setAlerts(event.target.checked);
+            }}
+          />
+          <CheckboxField
+            label={t.answerSheet.optionLabel}
+            hint={t.answerSheet.optionHint}
+            checked={answerSheet}
+            onChange={(event) => {
+              setAnswerSheet(event.target.checked);
             }}
           />
         </Disclosure>

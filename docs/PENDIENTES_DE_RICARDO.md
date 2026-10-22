@@ -316,6 +316,16 @@ Lo que hace la sesión, sin pedirte nada más.
 2. Prueba la encuesta con 0 días en una cuenta tuya y la deja prendida con 7 cuando tú lo digas
 3. Convierte tu lista de hallazgos en tareas y las arregla. No lee comentarios, códigos ni respuestas una por una
 
+## Lo que salió del plan V4 (D-140 a D-144)
+
+- **Contesta las nueve decisiones de la sección 8 de docs/PLAN_V4.md.** Si no contestas se toma la opción recomendada de cada una. Las que más pesan son la 2 (cristal solo en la barra superior y el dock, sin fondos personalizados) y la 5 (Bloom independiente de la dificultad, que ya se aplicó así)
+- **Autoriza la regla del servidor para Urgencias gratis.** En supabase/migrations/20261023000005_deck_catalog.sql las funciones deck_catalog_can_download, deck_catalog_can_read y record_deck_download piden plan de pago. Con el catálogo en la nube un alumno Gratis no podría bajar Urgencias aunque la interfaz ya se lo ofrezca. Hace falta una migración nueva que deje pasar el mazo paco-urgencias y su prueba SQL. La sesión la escribe cuando lo autorices y haya un Postgres para probarla
+- **Autoriza la parte en la nube del nivel cognitivo.** Columna en el Sheet del banco con su lista de validación, el convertidor y las columnas SQL. Mientras tanto el nivel solo vive en el banco local y en el editor
+- **Plantilla web.** La recomendación es no comprar. Si decides comprar, Tailwind Plus pide que el repo sea privado
+- **Skill frontend-design.** Si existe en tu catálogo de Anthropic, instálala antes de la identidad visual. Si no, el plugin design basta
+- **Plugins sin uso.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata se pueden quitar de tu menú. Es limpieza tuya, no del repo
+- **Avisa a Paco cuando termine V4-B2.** Para que su revisión pantalla por pantalla sea de la apariencia final
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar

@@ -3,6 +3,7 @@
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { accountsText } from './accounts';
+import { calendarText } from './calendar';
 import { cardSearchText } from './cardSearch';
 import { examText } from './exam';
 import { examReviewText } from './examReview';
@@ -10,6 +11,7 @@ import { featureText } from './features';
 import { outlineText } from './outlines';
 import { partyCloudText } from './partyCloud';
 import { qualityText } from './quality';
+import { examGuideText } from './examGuide';
 import { settingsPageText } from './settingsPage';
 import { studyMethodsText } from './studyMethods';
 import { tutorText } from './tutor';
@@ -139,6 +141,12 @@ const screens: Record<ScreenKey, ScreenText> = {
   unsubscribe: { title: 'Darte de baja', description: '' },
   // Encuesta de los primeros días (B18). Su texto vive en survey.ts, que carga la pantalla
   survey: { title: 'Encuesta', description: '' },
+  // Calendario (V4-B6)
+  calendar: {
+    title: 'Calendario',
+    description:
+      'Lo que hiciste cada día, lo que se proyecta, tus simuladores y el plan por semanas hasta tu examen.',
+  },
   privacyNotice: {
     title: 'Aviso de privacidad',
     description:
@@ -164,6 +172,8 @@ export const t = {
   ...vocabularyText,
   ...cardSearchText,
   ...studyMethodsText,
+  ...calendarText,
+  ...examGuideText,
   weekPlan: weekPlanText,
   examReview: examReviewText,
   partyCloud: partyCloudText,
@@ -195,6 +205,7 @@ export const t = {
     outlines: 'Apuntes',
     simulate: 'Simular',
     progress: 'Progreso',
+    calendar: 'Calendario',
     bank: 'Banco',
     agreement: 'Acuerdo',
     drafts: 'Borradores',

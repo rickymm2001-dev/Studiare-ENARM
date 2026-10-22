@@ -32,6 +32,7 @@ export function poolQuestionOf(
     subtopic: question.subtopic,
     physicianDifficulty: question.physicianDifficulty,
     ...(question.itemKinds ? { itemKinds: question.itemKinds } : {}),
+    ...(question.cognitiveLevel ? { cognitiveLevel: question.cognitiveLevel } : {}),
     ...(question.variantOf ? { variantOf: question.variantOf } : {}),
     isDemo: question.isDemo,
     structure: {

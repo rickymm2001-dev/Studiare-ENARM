@@ -38,12 +38,12 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12), la Calibración (B14), Darte de baja (B15) y la Encuesta de los primeros días (B18)', () => {
-    expect(SCREEN_KEYS).toHaveLength(38);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12), la Calibración (B14), Darte de baja (B15) y la Encuesta de los primeros días (B18) y el Calendario (V4-B6)', () => {
+    expect(SCREEN_KEYS).toHaveLength(39);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(38);
+    expect(new Set(paths).size).toBe(39);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(38);
+    expect(new Set(numbers).size).toBe(39);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
@@ -122,7 +122,7 @@ describe('rutas', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('el menú del alumno trae sus siete secciones, Más para el teléfono y Configuración al final, sin Plan, Logros ni Perfil (B3)', async () => {
+  it('el menú del alumno trae sus ocho secciones, Más para el teléfono y Configuración al final, sin Plan, Logros ni Perfil (B3)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
@@ -138,6 +138,7 @@ describe('rutas', () => {
       t.navItems.outlines,
       t.navItems.simulate,
       t.navItems.progress,
+      t.navItems.calendar,
       t.navItems.tutor,
       t.navItems.party,
       t.navItems.settings,

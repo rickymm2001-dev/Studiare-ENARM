@@ -22,6 +22,7 @@ import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { topicTaxonomy } from '@/demo/content';
 import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
 import { deckCatalogText } from '@/i18n/cloudDecks';
+import { isFreeCatalogDeck } from '@/config/billing';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { BranchBadge } from '@/ui/components/branch-tag';
@@ -263,6 +264,7 @@ function Decks({ session }: { session: ReadySession }) {
                           </Button>
                         ) : catalogOpen === false &&
                           !onDevice.has(id) &&
+                          !isFreeCatalogDeck(file.key) &&
                           !alreadyStudied(file.key) ? (
                           <CatalogRowLock />
                         ) : (

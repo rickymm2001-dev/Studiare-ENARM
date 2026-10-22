@@ -133,3 +133,9 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Editar durante el repaso una tarjeta de un mazo precargado.** Esas tarjetas son contenido compartido. Editarlas pide crear una copia en Mis tarjetas, decidir si la original se suspende y qué pasa con su historial de repasos. Hoy se edita en los mazos del alumno. Surgió al programar V4-B3 (D-142)
 - **Plegado de secciones y contador de puntos por recordar en Apuntes.** Plegar con el triángulo y decir cuántos puntos tiene cada tarjeta generada de un esquema, como RemNote. Surgió al programar V4-B4 (D-143)
 - **Seleccionar texto de un PDF para mandar solo esa parte a la IA de tarjetas.** Pide un visor de PDF con selección. Hoy se lee todo el PDF. Surgió al programar V4-B4 (D-143)
+- **Mezcla por nivel cognitivo en el examen completo.** Un reparto por omisión que el admin cambie en Umbrales junto con los pesos por rama. Entra cuando haya preguntas con nivel. Surgió al programar V4-B5 (D-144)
+- **Nivel cognitivo en el banco en la nube y en el Sheet.** Columna con su lista de validación, el convertidor y las columnas SQL con su prueba. Surgió al programar V4-B5 (D-144)
+- **Columna de nivel en la plantilla de Excel de preguntas.** Para que el médico lo llene al subir un lote. Surgió al programar V4-B5 (D-144)
+- **Vista de semana en el Calendario.** El plan por semanas cubre la lectura, pero un día a día de la semana podría servir a quien estudia por horas. Surgió al programar V4-B6 (D-144)
+- **Percentil de simulador completo separado del de práctica.** La comparación de B14 junta respuestas de práctica y de examen. Separarlas pide otra métrica en las celdas de la noche. Surgió al revisar V4-B7 (D-144)
+

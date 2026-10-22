@@ -37,6 +37,8 @@ export interface ExamOptions {
   highlight: boolean;
   askConfidence: boolean;
   alerts: boolean;
+  /** Hoja de respuestas al estilo del examen real (V4-B5) */
+  answerSheet?: boolean;
 }
 
 const clockAt = (ms: number): Clock => ({ now: () => new Date(ms) });

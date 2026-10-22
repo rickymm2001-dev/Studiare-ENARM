@@ -46,6 +46,8 @@ export const ExamStateSchema = z.strictObject({
   askConfidence: z.boolean(),
   /** Alarmas de tiempo encendidas */
   alerts: z.boolean(),
+  /** Las respuestas se llenan en una hoja de respuestas y no tocando la opción (V4-B5) */
+  answerSheet: z.boolean().default(false),
   current: z.int().nonnegative(),
   /** Cuándo entró a la pregunta actual, para sumar su tiempo al salir */
   enteredAtMs: z.number(),
@@ -94,6 +96,7 @@ export function createExamState(input: {
   highlight: boolean;
   askConfidence: boolean;
   alerts: boolean;
+  answerSheet?: boolean;
 }): ExamState {
   return {
     version: EXAM_STATE_VERSION,
@@ -108,6 +111,7 @@ export function createExamState(input: {
     highlight: input.highlight,
     askConfidence: input.askConfidence,
     alerts: input.alerts,
+    answerSheet: input.answerSheet ?? false,
     current: 0,
     enteredAtMs: input.nowMs,
     answers: {},

@@ -279,6 +279,7 @@ export const physicianText = {
         difficulty: 'la dificultad',
         gpc: 'las referencias',
         itemKinds: 'el tipo de reactivo',
+        cognitive: 'el nivel cognitivo',
         clues: 'los datos del caso',
       } as Record<string, string>,
       at: (date: string) => `Guardada el ${date}`,

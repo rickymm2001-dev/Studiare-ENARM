@@ -46,6 +46,7 @@ import type {
   PopulationBaselines,
   StudentModel,
 } from '@/data/model/contracts';
+import type { CognitiveLevel } from './bloom';
 import type { Question } from '@/data/schemas/bank';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { branchSection, type TopicTaxonomy } from '@/data/schemas/content';
@@ -149,6 +150,8 @@ export interface AnsweredQuestion {
   topic: string;
   /** Dificultad que le puso el médico, de 1 a 5 */
   level: Question['physicianDifficulty'];
+  /** Nivel cognitivo de Bloom de la pregunta, si el médico lo puso (V4-B5) */
+  cognitiveLevel?: CognitiveLevel;
   correct: boolean;
   /** La dificultad medida con alumnos. Ausente mientras la pregunta sigue con la del médico */
   measured?: QuestionDifficulty;
@@ -359,6 +362,7 @@ export function buildStudentModel(input: StudentModelInput): StudentModelBuild {
         branch: question.branch,
         topic: question.topic,
         level: question.physicianDifficulty,
+        ...(question.cognitiveLevel ? { cognitiveLevel: question.cognitiveLevel } : {}),
         correct: event.payload.correct,
         ...(difficulty.state === 'physician_estimate' ? {} : { measured: difficulty }),
       },

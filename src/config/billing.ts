@@ -86,6 +86,16 @@ export interface PlanDef {
 /** Generaciones de tarjetas con IA por día en los planes de pago. Juicio de diseño, ajustable */
 export const AI_CARDS_PER_DAY_PAID = 20;
 
+/**
+ * Mazos del catálogo que se pueden seguir en el plan Gratis (V4-B8, reunión con Paco). Urgencias va
+ * abierto como puerta de entrada. La lista es de la interfaz. Bajarlo de la nube sigue pidiendo plan
+ * de pago hasta que Ricardo autorice la regla del servidor (docs/PENDIENTES_DE_RICARDO.md)
+ */
+export const FREE_CATALOG_DECK_KEYS: readonly string[] = ['paco-urgencias'];
+
+export const isFreeCatalogDeck = (deckKey: string): boolean =>
+  FREE_CATALOG_DECK_KEYS.includes(deckKey);
+
 /** Lo que abre un plan de pago. Los tres planes de pago dan lo mismo y solo cambia el precio */
 const PAID_ACCESS: PlanAccess = {
   dailyQuestions: null,

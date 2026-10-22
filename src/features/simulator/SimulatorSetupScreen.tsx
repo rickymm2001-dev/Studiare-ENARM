@@ -23,6 +23,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { effectiveLevel, poolDifficulty } from '@/data/bank/calibration';
+import { COGNITIVE_GROUPS, cognitiveGroupOf, type CognitiveGroup } from '@/engines/bloom';
 import { brakeUntil, shortfallReason } from '@/data/bank/quota';
 import { readStoredModel } from '@/data/usecases/modelCloud';
 import { adaptiveAvailability } from '@/engines/adaptive';
@@ -33,6 +34,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
 import { Disclosure } from '@/ui/components/disclosure';
+import { ExamGuideCard } from './ExamGuideCard';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -97,6 +99,7 @@ function Setup({ session }: { session: ReadySession }) {
     return new Set(preset && CLINICAL_TOPICS.includes(preset) ? [preset] : CLINICAL_TOPICS);
   });
   const [difficulty, setDifficulty] = useState<Difficulty>('all');
+  const [cognitive, setCognitive] = useState<'all' | CognitiveGroup>('all');
   const [structure, setStructure] = useState<Structure>(() =>
     params.get('structure') === 'negative' ? 'negative' : 'all',
   );
@@ -195,8 +198,15 @@ function Setup({ session }: { session: ReadySession }) {
       difficultyGroupOf(effectiveLevel(poolDifficulty(question))) !== difficulty
     )
       return false;
+    // El nivel cognitivo solo filtra a las preguntas que ya lo traen. Las demás no entran si se elige uno
+    if (
+      cognitive !== 'all' &&
+      (!question.cognitiveLevel || cognitiveGroupOf(question.cognitiveLevel) !== cognitive)
+    )
+      return false;
     return matchesStructure(question);
   };
+  const withLevel = questions.filter((question) => question.cognitiveLevel !== undefined).length;
   const countsByTopic = new Map<string, number>();
   for (const question of questions) {
     if (matchesLevel(question))
@@ -264,6 +274,7 @@ function Setup({ session }: { session: ReadySession }) {
             topics: [...topics],
             difficulty,
             structure,
+            ...(cognitive !== 'all' ? { cognitive } : {}),
             count: ordered.length,
             sampling: targetTags.length > 0 ? 'targeted' : 'diverse',
             ...(targetTags.length > 0 ? { targetTags } : {}),
@@ -331,7 +342,7 @@ function Setup({ session }: { session: ReadySession }) {
         </CardHeader>
         <div className="flex flex-col gap-3">
           {/* Una columna en el teléfono para que ninguna opción se corte (H09 de la revisión de B2) */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}
@@ -343,6 +354,21 @@ function Setup({ session }: { session: ReadySession }) {
               }))}
               onChange={(event) => {
                 setDifficulty(event.target.value as Difficulty);
+              }}
+            />
+            <SelectField
+              label={t.cognitive.label}
+              value={cognitive}
+              disabled={withLevel === 0}
+              hint={
+                withLevel === 0 ? t.cognitive.none : t.cognitive.some(withLevel, questions.length)
+              }
+              options={(['all', ...COGNITIVE_GROUPS] as const).map((value) => ({
+                value,
+                label: t.cognitive.options[value],
+              }))}
+              onChange={(event) => {
+                setCognitive(event.target.value as 'all' | CognitiveGroup);
               }}
             />
             <SelectField
@@ -453,6 +479,7 @@ function Setup({ session }: { session: ReadySession }) {
           </Disclosure>
         </div>
       </Card>
+      <ExamGuideCard />
       {/* Inglés médico y el examen completo, lado a lado en computadora (V4-B1) */}
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
         {isFeatureEnabled('medicalEnglish') ? (

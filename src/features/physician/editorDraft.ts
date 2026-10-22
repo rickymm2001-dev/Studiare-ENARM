@@ -21,7 +21,13 @@ import {
   type PassageSourceIssue,
 } from '@/data/content/passageSource';
 import { newId } from '@/data/ids';
-import { ItemKindSchema, type ClueStrength, type ItemKind } from '@/data/schemas/common';
+import {
+  CognitiveLevelSchema,
+  ItemKindSchema,
+  type ClueStrength,
+  type CognitiveLevel,
+  type ItemKind,
+} from '@/data/schemas/common';
 import {
   QuestionTaskSchema,
   type Clue,
@@ -98,6 +104,8 @@ export interface QuestionDraft {
   gpcRefs: { title: string; status: 'to_verify' | 'verified' }[];
   physicianDifficulty: number;
   itemKinds: ItemKind[];
+  /** Nivel cognitivo de Bloom. Ausente es sin nivel, nunca se adivina (V4-B5) */
+  cognitiveLevel?: CognitiveLevel | undefined;
   clues: DraftClue[];
   options: DraftOption[];
   /**
@@ -124,6 +132,7 @@ export interface DraftSourceQuestion {
   gpcRefs: readonly { title: string; status: 'to_verify' | 'verified' }[];
   physicianDifficulty: number;
   itemKinds?: readonly ItemKind[] | undefined;
+  cognitiveLevel?: CognitiveLevel | undefined;
   clues?: readonly Clue[] | undefined;
   canonicalOptionIds: readonly string[];
   /** Sin el campo se toma del idioma de la rama. La nube no lo devuelve en editor_question (B13) */
@@ -182,6 +191,7 @@ export function draftFromVersion(
     gpcRefs: refs.map((ref) => ({ ...ref })),
     physicianDifficulty: question.physicianDifficulty,
     itemKinds: [...(question.itemKinds ?? [])],
+    ...(question.cognitiveLevel ? { cognitiveLevel: question.cognitiveLevel } : {}),
     clues: (question.clues ?? []).map((clue) => ({ ...clue })),
     options: ordered.map((option) => ({
       optionId: option.optionId,
@@ -224,6 +234,9 @@ export function draftFromEditorVersion(version: EditorVersion): QuestionDraft {
         const parsed = ItemKindSchema.safeParse(kind);
         return parsed.success ? [parsed.data] : [];
       }),
+      ...(CognitiveLevelSchema.safeParse(version.cognitiveLevel).success
+        ? { cognitiveLevel: CognitiveLevelSchema.parse(version.cognitiveLevel) }
+        : {}),
       clues: version.clues,
       canonicalOptionIds: version.canonicalOptionIds,
     },
@@ -522,6 +535,7 @@ export function buildNextVersion(input: NextVersionInput): {
     // Solo la pregunta en inglés lleva el idioma. Sin el campo es español, como todo lo de antes
     ...(draft.language === 'en' ? { language: 'en' as const } : {}),
     ...(draft.itemKinds.length > 0 ? { itemKinds: [...draft.itemKinds] } : {}),
+    ...(draft.cognitiveLevel ? { cognitiveLevel: draft.cognitiveLevel } : {}),
     ...(draft.clues.length > 0
       ? {
           clues: draft.clues.map((clue): Clue => ({
@@ -549,6 +563,7 @@ export type ChangedPart =
   | 'gpc'
   | 'difficulty'
   | 'itemKinds'
+  | 'cognitive'
   | 'clues'
   | 'options'
   | 'tags'
@@ -567,6 +582,7 @@ const CHANGED_ORDER: readonly ChangedPart[] = [
   'difficulty',
   'gpc',
   'itemKinds',
+  'cognitive',
   'clues',
 ];
 
@@ -617,6 +633,7 @@ export function changedParts(before: QuestionDraft, after: QuestionDraft): Chang
   if (before.physicianDifficulty !== after.physicianDifficulty) changed.add('difficulty');
   if (!same(before.gpcRefs, after.gpcRefs)) changed.add('gpc');
   if (!same([...before.itemKinds].sort(), [...after.itemKinds].sort())) changed.add('itemKinds');
+  if (before.cognitiveLevel !== after.cognitiveLevel) changed.add('cognitive');
   if (!same(before.clues, after.clues)) changed.add('clues');
   return CHANGED_ORDER.filter((part) => changed.has(part));
 }
