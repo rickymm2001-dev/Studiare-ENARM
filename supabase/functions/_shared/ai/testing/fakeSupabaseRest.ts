@@ -4,6 +4,10 @@
 // memoria de memory.ts, que siguen las reglas de las migraciones 20261026000001 a 20261026000003.
 // Revisa las llaves como el proyecto real. Las funciones del servidor piden la llave de servicio y
 // ai_whoami el token del alumno con la llave pública. Contesta los errores con su código de Postgres.
+// Reconoce las dos formas de llave (B17, 4.2). La anterior es un JWT y va en apikey y en authorization. La
+// nueva (sb_secret_ y sb_publishable_) no es un JWT, va solo en apikey, y la plataforma rechaza con 401 la que
+// llega como authorization Bearer, que es lo que no debe hacer ninguna función.
+import { isOpaqueKey } from '../../keys.ts';
 import type { AiEngine, AiErrorCode, BatchEngine } from '../engines/aiContracts.ts';
 import type { FinishPayload } from '../jobStore.ts';
 import type {
@@ -72,12 +76,22 @@ export function createFakeSupabaseRest(options: {
   serviceKey?: string;
   tickSecret?: string | null;
   configRow?: unknown;
+  /** La forma de las llaves por omisión. legacy (JWT) si no se dice, new para sb_publishable_ y sb_secret_ */
+  keys?: 'legacy' | 'new';
 }): FakeSupabaseRest {
   const { memory } = options;
   const fake: FakeSupabaseRest = {
     url: options.url ?? 'https://simulado.supabase.co',
-    anonKey: options.anonKey ?? 'llave-publica-simulada-0000000000',
-    serviceKey: options.serviceKey ?? 'llave-de-servicio-simulada-000000',
+    anonKey:
+      options.anonKey ??
+      (options.keys === 'new'
+        ? 'sb_publishable_' + 'simulada0000000000'
+        : 'llave-publica-simulada-0000000000'),
+    serviceKey:
+      options.serviceKey ??
+      (options.keys === 'new'
+        ? 'sb_secret_' + 'simulada000000000000000'
+        : 'llave-de-servicio-simulada-000000'),
     calls: [],
     down: false,
     accounts: { ...options.accounts },
@@ -220,6 +234,14 @@ export function createFakeSupabaseRest(options: {
     return 'user';
   };
 
+  /**
+   * Si la petición llega como la llave de servicio. La anterior pide apikey y Bearer, porque PostgREST lee el
+   * rol del JWT. La nueva basta con apikey, que la plataforma cambia por el rol de servicio
+   */
+  const isService = (call: FakeRestCall) =>
+    call.key === 'service' &&
+    (call.bearer === 'service' || (isOpaqueKey(fake.serviceKey) && call.bearer === 'none'));
+
   async function handle(input: string | URL | Request, init?: RequestInit): Promise<Response> {
     const request = new Request(input, init);
     const url = new URL(request.url);
@@ -233,6 +255,10 @@ export function createFakeSupabaseRest(options: {
     if (fake.down) return json({ message: 'Supabase simulado caído' }, 503);
     if (!url.href.startsWith(fake.url)) return json({ message: 'otro sitio' }, 404);
     if (call.key === 'other') return json({ message: 'Invalid API key' }, 401);
+    // Una llave nueva como Bearer no es un JWT y la plataforma la rechaza antes de llegar a la función
+    if ((request.headers.get('authorization') ?? '').startsWith('Bearer sb_')) {
+      return pgError(401, 'PGRST301');
+    }
 
     const rpc = /^\/rest\/v1\/rpc\/([a-z0-9_]+)$/.exec(url.pathname)?.[1];
     if (rpc !== undefined) {
@@ -240,7 +266,7 @@ export function createFakeSupabaseRest(options: {
       if (rpc === 'ai_whoami') return whoami(request);
       const handler = serviceRpc[rpc];
       if (!handler) return pgError(404, 'PGRST202');
-      if (call.key !== 'service' || call.bearer !== 'service') return pgError(401, '42501');
+      if (!isService(call)) return pgError(401, '42501');
       try {
         return json(await handler(args));
       } catch {
@@ -254,7 +280,7 @@ export function createFakeSupabaseRest(options: {
     }
 
     if (url.pathname === '/rest/v1/ai_config') {
-      if (call.key !== 'service' || call.bearer !== 'service') return pgError(401, '42501');
+      if (!isService(call)) return pgError(401, '42501');
       if (request.method === 'GET')
         return json(fake.configRow === null ? [] : [{ value: fake.configRow }]);
       if (request.method === 'POST') {

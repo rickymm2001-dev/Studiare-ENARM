@@ -1,0 +1,171 @@
+# Publica la app en Cloudflare Pages con carga directa desde GitHub Actions (B17, 1 del plan de B17).
+# Producción es el push a main. Todo lo demás (cada pull request del mismo repositorio, o Run workflow en otra
+# rama) sale como vista previa, con la demo y sin ninguna variable de Supabase, de pagos ni de medición.
+#
+# ESTÁ APAGADO. El trabajo no corre hasta que exista la variable de GitHub CLOUDFLARE_DEPLOY con el valor true, y
+# sin ella el flujo termina en verde sin hacer nada. Si la variable está y falta un secreto, el paso Revisar
+# credenciales dice cuál falta y el flujo también termina en verde. Los pasos para prenderlo, para quien no ha
+# hecho esto nunca, están en docs/PUBLICACION.md.
+#
+# Reglas de este flujo
+# - Ningún secreto en el repositorio. CLOUDFLARE_API_TOKEN lleva un solo permiso (Account, Cloudflare Pages, Edit) y
+#   solo lo ven los pasos que hablan con Cloudflare. Ni npm ci ni el build lo reciben
+# - Nada de acciones de terceros. wrangler se baja con npx y versión exacta, solo en este trabajo. No entra a
+#   package.json ni se instala nada global
+# - Ningún valor de GitHub (rama, nombre del proyecto, direcciones) se escribe dentro de un comando. Todo pasa por
+#   variables de entorno y se cita. Antes de usarse, el nombre del proyecto y las direcciones se validan en
+#   scripts/deploy/cloudflare-preflight.ts
+# - Nunca copia index.html a 404.html (como hace pages.yml para GitHub Pages). Sin 404.html, Pages sirve la
+#   aplicación de una sola página y rutas como /repasar responden 200
+# - Un push a main no espera al flujo check. El build ya corre tsc y el revisor de secretos, y la regla de
+#   fusionar a main solo con check, e2e y audit en verde es la que protege la producción
+name: cloudflare
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      crear_proyecto:
+        description: Crear el proyecto de Pages (una sola vez) y no publicar
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  # Una vista previa nueva reemplaza a la que va en curso. Una producción nunca se cancela a la mitad
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  deploy:
+    # Apagado hasta que exista la variable CLOUDFLARE_DEPLOY con el valor true. Sin ella no corre y no falla.
+    # Los pull requests de otro repositorio no reciben secretos, así que tampoco corren
+    if: vars.CLOUDFLARE_DEPLOY == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # true solo para el push a main (o Run workflow sobre main)
+      PRODUCTION: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      # Dice qué falta, por nombre, y nunca su valor. No falla en rojo. Deja como salidas solo valores ya validados
+      - name: Revisar credenciales
+        id: creds
+        run: node scripts/deploy/cloudflare-preflight.ts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+          SITE_URL: ${{ vars.SITE_URL }}
+
+      # Una sola vez, con la casilla de Run workflow. Corre aquí y no en una sesión de IA, porque wrangler convierte
+      # en proyecto de Workers lo que crea un agente (H1 del plan de B17)
+      - name: Crear el proyecto
+        if: steps.creds.outputs.ready == 'true' && inputs.crear_proyecto == true
+        run: npx --yes wrangler@4.146.0 pages project create "$PROJECT" --production-branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ steps.creds.outputs.project }}
+          WRANGLER_SEND_METRICS: 'false'
+
+      # Producción. Las variables VITE_ son públicas por diseño. SENTRY_AUTH_TOKEN solo sube los mapas de código y
+      # el build los borra de dist
+      - name: Construir producción
+        if: steps.creds.outputs.ready == 'true' && inputs.crear_proyecto != true && env.PRODUCTION == 'true'
+        run: npm run build
+        env:
+          VITE_APP_ENV: production
+          SITE_URL: ${{ steps.creds.outputs.site_url }}
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_LEGAL_NAME: ${{ vars.VITE_LEGAL_NAME }}
+          VITE_LEGAL_ADDRESS: ${{ vars.VITE_LEGAL_ADDRESS }}
+          VITE_PRIVACY_EMAIL: ${{ vars.VITE_PRIVACY_EMAIL }}
+          VITE_SUPPORT_EMAIL: ${{ vars.VITE_SUPPORT_EMAIL }}
+          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          # Llave publicable de Stripe (pk_test_ y después pk_live_). Vacía, la sección de billeteras no aparece y la
+          # política de seguridad no abre Stripe
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ vars.VITE_STRIPE_PUBLISHABLE_KEY }}
+
+      # Vista previa. Solo la demo, sin ninguna variable de Supabase, de pagos, de PostHog ni de Sentry: funciona como
+      # el prototipo local y no puede tocar la base real (1.5 y 11.15)
+      - name: Construir vista previa
+        if: steps.creds.outputs.ready == 'true' && inputs.crear_proyecto != true && env.PRODUCTION != 'true'
+        run: npm run build
+        env:
+          VITE_APP_ENV: demo
+
+      - name: Publicar
+        id: publish
+        if: steps.creds.outputs.ready == 'true' && inputs.crear_proyecto != true
+        # No pasa --commit-message, para no meter el texto de un commit en un comando
+        run: |
+          WRANGLER_OUTPUT_FILE_PATH="$RUNNER_TEMP/wrangler.ndjson" \
+          npx --yes wrangler@4.146.0 pages deploy dist \
+            --project-name="$PROJECT" \
+            --branch="$BRANCH" \
+            --commit-hash="$GITHUB_SHA" \
+            --commit-dirty=true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ steps.creds.outputs.project }}
+          # La rama llega por una variable de entorno y se cita. Cloudflare la vuelve el alias de la vista previa
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          WRANGLER_SEND_METRICS: 'false'
+
+      # La dirección que escribió wrangler, validada como una dirección de pages.dev
+      - name: Dirección del despliegue
+        id: deployed
+        if: steps.publish.outcome == 'success'
+        run: node scripts/smoke/deploy-url.ts "$RUNNER_TEMP/wrangler.ndjson" >> "$GITHUB_OUTPUT"
+
+      # Hasta 4 intentos con 15 segundos entre uno y otro, porque una dirección recién publicada puede tardar unos
+      # segundos en responder. Si ninguno pasa, este paso sí termina en rojo: lo publicado no está bien
+      - name: Prueba de humo
+        if: steps.deployed.outcome == 'success'
+        run: |
+          for attempt in 1 2 3 4; do
+            if node scripts/smoke/post-deploy.ts "$DEPLOY_URL" --mode "$SMOKE_MODE"; then exit 0; fi
+            if [ "$attempt" -lt 4 ]; then sleep 15; fi
+          done
+          exit 1
+        env:
+          DEPLOY_URL: ${{ steps.deployed.outputs.url }}
+          SMOKE_MODE: ${{ steps.creds.outputs.smoke_mode }}
+          # La dirección pública que el build puso en canonical y sitemap, para probar pages.dev antes del dominio
+          SITE_URL: ${{ steps.creds.outputs.site_url }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ steps.creds.outputs.project }}
+
+      - name: Resumen
+        if: steps.deployed.outcome == 'success'
+        run: |
+          {
+            echo "### Publicado en Cloudflare Pages"
+            echo
+            echo "- Ambiente: $DEPLOY_ENVIRONMENT"
+            echo "- Dirección: $DEPLOY_URL"
+            if [ -n "$DEPLOY_ALIAS" ]; then echo "- Alias de la rama: $DEPLOY_ALIAS"; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          DEPLOY_URL: ${{ steps.deployed.outputs.url }}
+          DEPLOY_ALIAS: ${{ steps.deployed.outputs.alias }}
+          DEPLOY_ENVIRONMENT: ${{ steps.deployed.outputs.environment }}

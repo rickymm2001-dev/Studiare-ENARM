@@ -51,9 +51,9 @@ describe('configuración de la nube (D-075)', () => {
     expect(
       readCloudConfig({
         VITE_SUPABASE_URL: url,
-        VITE_SUPABASE_ANON_KEY: 'sb_publishable_abcdefghijklmnop',
+        VITE_SUPABASE_ANON_KEY: 'sb_publishable_' + 'abcdefghijklmnop',
       }),
-    ).toEqual({ url, publicKey: 'sb_publishable_abcdefghijklmnop' });
+    ).toEqual({ url, publicKey: 'sb_publishable_' + 'abcdefghijklmnop' });
   });
 
   it('sin variables, con URL extraña o con llave secreta no hay nube', () => {
@@ -67,7 +67,7 @@ describe('configuración de la nube (D-075)', () => {
     expect(
       readCloudConfig({
         VITE_SUPABASE_URL: url,
-        VITE_SUPABASE_ANON_KEY: 'sb_secret_abcdefghijklmnopqrst',
+        VITE_SUPABASE_ANON_KEY: 'sb_secret_' + 'abcdefghijklmnopqrst',
       }),
     ).toBeNull();
   });
@@ -101,7 +101,7 @@ describe('llaves de servicio en el navegador (D-075)', () => {
   });
 
   it('un texto que no es JWT o que no se puede leer no cambia lo que ya se aceptaba', () => {
-    expect(jwtRole('sb_publishable_abcdefghijklmnop')).toBeNull();
+    expect(jwtRole('sb_publishable_' + 'abcdefghijklmnop')).toBeNull();
     expect(jwtRole('a.b.c')).toBeNull();
     expect(jwtRole('')).toBeNull();
     expect(jwtRole(`${jwt('anon').split('.')[0]}.%%%.firma`)).toBeNull();

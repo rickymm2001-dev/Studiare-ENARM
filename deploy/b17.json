@@ -1,0 +1,81 @@
+{
+  "description": "B17, orígenes por secreto y llaves nuevas de Supabase. Sin migraciones. Vuelve a publicar las trece funciones que ya existen, porque todas empaquetan _shared/keys.ts (la elección de las llaves de Supabase y sus encabezados) y _shared/origins.ts (la lista de APP_ORIGINS), y las que atienden al navegador o llaman a la base también _shared/http.ts, _shared/supabase.ts y _shared/runtime.ts. Salen con las llaves de siempre y nada cambia para nadie hasta que Ricardo cree las llaves nuevas en Supabase, Settings, API Keys. Los secretos son APP_URL y APP_ORIGINS, dos direcciones públicas que se cambian el día de la mudanza de dominio sin volver a publicar (docs/DESPLIEGUE.md, docs/DOMINIO_Y_CORREO.md). Va después de b15. Si B15 aún no se había publicado, b15 y b17 se corren seguidos y las funciones suben dos veces, sin daño.",
+  "migrations": [],
+  "functions": [
+    {
+      "slug": "send-emails",
+      "verifyJwt": false,
+      "note": "Cron la llama cada minuto con la ficha email_tick de Vault. Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "email-unsubscribe",
+      "verifyJwt": false,
+      "note": "La baja de un clic del correo y de la página /correo/baja. Quien llama no tiene sesión y la ficha de baja es lo que lo identifica. Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "analytics-flush",
+      "verifyJwt": false,
+      "note": "Cron la llama cada 5 minutos con la ficha analytics_tick de Vault. Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "monitoring-test",
+      "verifyJwt": true,
+      "note": "La llama el botón Mandar error de prueba de Plataforma y pide la sesión de un admin con segundo factor. Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "create-checkout",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "create-portal-session",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "cancel-subscription",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "admin-reset-mfa",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre. Es la única que borra factores con la llave de servicio en la API de administración de Auth"
+    },
+    {
+      "slug": "payment-webhook-stripe",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre, porque Stripe se identifica con su firma"
+    },
+    {
+      "slug": "payment-webhook-mercadopago",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre, porque Mercado Pago se identifica con su firma"
+    },
+    {
+      "slug": "bank-sync",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "ai-proxy",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre. Solo lee APP_ORIGINS, así que el dominio nuevo tiene que estar en esa lista"
+    },
+    {
+      "slug": "ai-batch",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque empaqueta las llaves nuevas de Supabase (_shared/keys.ts) y el CORS con APP_ORIGINS. Mismo verify_jwt de siempre"
+    }
+  ],
+  "secrets": {
+    "APP_URL": {
+      "pattern": "^https://[a-z0-9.-]+(:[0-9]{1,5})?(/[A-Za-z0-9._~/-]*)?$",
+      "note": "La dirección principal de la app, con diagonal final, como https://tudominio.mx/. Con ella se arman las direcciones de regreso de los pagos y el CORS. Sin comodines ni espacios"
+    },
+    "APP_ORIGINS": {
+      "pattern": "^https://(?!(?:[a-z0-9-]+\\.)*pages\\.dev(?::[0-9]{1,5})?(?:,|$))[a-z0-9.-]+(?::[0-9]{1,5})?(,https://(?!(?:[a-z0-9-]+\\.)*pages\\.dev(?::[0-9]{1,5})?(?:,|$))[a-z0-9.-]+(?::[0-9]{1,5})?)*$",
+      "note": "Los orígenes https que pueden llamar a las funciones desde el navegador, separados por comas y sin ruta, como https://tudominio.mx,https://rickymm2001-dev.github.io. Durante la mudanza van el nuevo y el viejo, y a los 30 días solo el nuevo. Nunca una dirección de pages.dev. ai-proxy solo lee esta lista"
+    }
+  }
+}

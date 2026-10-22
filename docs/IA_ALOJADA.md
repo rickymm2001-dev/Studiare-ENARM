@@ -30,10 +30,10 @@ Van en Supabase, Edge Functions, Secrets. Ninguno va al repositorio.
 | Nombre | Quién lo pone | Qué lleva |
 |---|---|---|
 | ENARM_ANTHROPIC_KEY | Ricardo | La clave de Anthropic del espacio de trabajo de producción. La sesión nunca la ve |
-| APP_ORIGINS | La sesión | Las direcciones de la app, separadas por comas, como https://rickymm2001-dev.github.io. Sin ruta y sin comodines. Solo la usa ai-proxy |
+| APP_ORIGINS | La sesión | Las direcciones de la app, separadas por comas, como https://rickymm2001-dev.github.io. Sin ruta y sin comodines, y nunca una dirección de pages.dev. Con la mudanza de dominio (B17) lleva la nueva y la vieja por 30 días. Ahora la leen todas las funciones que atienden al navegador, pero ai-proxy solo lee esta |
 | AI_ALLOW_MOCK | La sesión | 1 solo mientras no existe la clave. La función contesta con respuestas fijas y la app dice IA simulada. Se quita al poner la clave |
 | AI_TICK_DEADLINE_MS | Nadie, es opcional | Plazo interno de cada ciclo de ai-batch, de 10,000 a 380,000 milisegundos. Por omisión 100,000 |
-| SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY | Supabase, solas | Las llamadas a la base |
+| SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY | Supabase, solas | Las llamadas a la base. Con las llaves nuevas de Supabase (B17), la función prefiere SUPABASE_PUBLISHABLE_KEYS y SUPABASE_SECRET_KEYS, que también pone Supabase, y usa estas tres si no existen (docs/SUPABASE.md, Dominio propio, llaves nuevas y plan de pago) |
 
 En Vault, y no en los secretos de las funciones, van project_url, que ya guardó B11, y ai_tick_secret, que crea la pieza del ciclo de lotes sin que nadie vea su valor.
 

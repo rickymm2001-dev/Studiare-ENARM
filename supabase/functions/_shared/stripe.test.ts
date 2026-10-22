@@ -21,11 +21,13 @@ import {
   sessionReadParams,
   stripeCall,
   stripeFailureLine,
+  storedEvent,
   stripeSubscriptionStatus,
   subscriptionNotice,
   subscriptionNoticeText,
   subscriptionSessionParams,
   trialEndingNotice,
+  walletSubscriptionSessionParams,
   type NoticeContext,
 } from './stripe.ts';
 
@@ -271,6 +273,225 @@ describe('sesión de suscripción', () => {
     }
     expect(passNoticeText('oxxo')).toContain('por transferencia');
     expect(passNoticeText('spei')).toContain('monto exacto');
+  });
+});
+
+describe('sesión de las billeteras (B17, 6.2 y 6.4)', () => {
+  const base = {
+    appUrl: APP,
+    userId: USER,
+    customerId: 'cus_1',
+    plan: 'founder' as const,
+    priceId: 'price_fundador',
+    trialDays: 7,
+    automaticTax: false,
+    nowMs: NOW,
+  };
+
+  it('es la misma suscripción con prueba, pero en ui_mode elements y con return_url', () => {
+    const params = walletSubscriptionSessionParams(base);
+    // Exacta. Todo lo que no está aquí no se manda, y con ui_mode elements Stripe rechaza varios campos
+    expect(form(params)).toEqual({
+      ui_mode: 'elements',
+      mode: 'subscription',
+      customer: 'cus_1',
+      'line_items[0][price]': 'price_fundador',
+      'line_items[0][quantity]': '1',
+      client_reference_id: USER,
+      'metadata[user_id]': USER,
+      'metadata[plan]': 'founder',
+      'metadata[mode]': 'subscription',
+      'metadata[trial]': 'true',
+      'subscription_data[metadata][user_id]': USER,
+      'subscription_data[metadata][plan]': 'founder',
+      'subscription_data[metadata][trial]': 'true',
+      'subscription_data[trial_period_days]': '7',
+      locale: 'es-419',
+      return_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+    });
+  });
+
+  it('no manda lo que ui_mode elements no admite ni el campo de código de descuento', () => {
+    for (const automaticTax of [false, true]) {
+      const keys = [...walletSubscriptionSessionParams({ ...base, automaticTax }).keys()];
+      for (const forbidden of [
+        'success_url',
+        'cancel_url',
+        'custom_text',
+        'branding_settings',
+        'custom_fields',
+        'submit_type',
+        'optional_items',
+        'origin_context',
+        'after_expiration',
+        'allow_promotion_codes',
+      ]) {
+        expect(
+          keys.filter((key) => key === forbidden || key.startsWith(`${forbidden}[`)),
+          forbidden,
+        ).toEqual([]);
+      }
+      expect(keys).not.toContain('tax_id_collection[required]');
+    }
+  });
+
+  it('Apple Pay y Google Pay aparecen solos, porque la sesión no limita los medios de pago', () => {
+    const keys = [...walletSubscriptionSessionParams(base).keys()];
+    expect(keys.some((key) => key.includes('payment_method_types'))).toBe(false);
+    expect(keys).not.toContain('payment_method_collection');
+    expect(keys).not.toContain('customer_email');
+  });
+
+  it('sin prueba no pide días y con Stripe Tax pide lo mismo que la hospedada', () => {
+    const noTrial = walletSubscriptionSessionParams({ ...base, trialDays: null });
+    expect(noTrial.has('subscription_data[trial_period_days]')).toBe(false);
+    expect(noTrial.get('metadata[trial]')).toBe('false');
+    const taxed = walletSubscriptionSessionParams({ ...base, automaticTax: true });
+    expect(form(taxed)).toMatchObject({
+      'automatic_tax[enabled]': 'true',
+      billing_address_collection: 'required',
+      'tax_id_collection[enabled]': 'true',
+      'customer_update[address]': 'auto',
+      'customer_update[name]': 'auto',
+    });
+  });
+
+  it('comparte con la hospedada todo menos lo propio de cada modo, para los 4 planes', () => {
+    const hostedOnly = [
+      'allow_promotion_codes',
+      'custom_text[submit][message]',
+      'success_url',
+      'cancel_url',
+    ];
+    const walletOnly = ['ui_mode', 'return_url'];
+    for (const plan of ['founder', 'founder_annual', 'monthly', 'annual'] as const) {
+      for (const trialDays of [7, null]) {
+        for (const automaticTax of [false, true]) {
+          const input = { ...base, plan, trialDays, automaticTax };
+          const hosted = form(subscriptionSessionParams(input));
+          const wallet = form(walletSubscriptionSessionParams(input));
+          for (const key of hostedOnly) expect(hosted[key], `${plan} ${key}`).toBeDefined();
+          for (const key of walletOnly) expect(wallet[key], `${plan} ${key}`).toBeDefined();
+          const without = (fields: Record<string, string>, drop: string[]) =>
+            Object.fromEntries(Object.entries(fields).filter(([key]) => !drop.includes(key)));
+          // Misma metadata para el webhook (user_id, plan, mode y trial) y mismos precios
+          expect(
+            without(wallet, walletOnly),
+            `${plan} prueba ${String(trialDays)} impuesto ${String(automaticTax)}`,
+          ).toEqual(without(hosted, hostedOnly));
+        }
+      }
+    }
+  });
+
+  it('el regreso es la pantalla Suscripción con pago ok, también bajo una ruta', () => {
+    expect(
+      walletSubscriptionSessionParams({ ...base, appUrl: 'https://tudominio.mx/' }).get(
+        'return_url',
+      ),
+    ).toBe('https://tudominio.mx/suscripcion?pago=ok');
+    expect(walletSubscriptionSessionParams(base).get('return_url')).toBe(
+      'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+    );
+  });
+});
+
+describe('sesión con ui_mode elements en el aviso (B17, 6.4)', () => {
+  // Como llega checkout.session.completed de una sesión de las billeteras: sin url, con el secreto del
+  // cliente y con return_url
+  const elementsSession = (overrides: Record<string, unknown> = {}) => ({
+    id: 'cs_el',
+    object: 'checkout.session',
+    ui_mode: 'elements',
+    url: null,
+    client_secret: 'cs_test_el_secret_no_se_guarda',
+    return_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+    mode: 'subscription',
+    customer: 'cus_1',
+    client_reference_id: USER,
+    metadata: { user_id: USER, plan: 'monthly', mode: 'subscription', trial: 'true' },
+    payment_status: 'no_payment_required',
+    amount_total: 0,
+    currency: 'mxn',
+    total_details: { amount_discount: 0 },
+    discounts: [],
+    ...overrides,
+  });
+  const hostedSession = () => {
+    const {
+      ui_mode: _uiMode,
+      client_secret: _secret,
+      return_url: _return,
+      ...rest
+    } = elementsSession();
+    return { ...rest, url: null };
+  };
+  const readSubscription = {
+    id: 'sub_1',
+    status: 'trialing',
+    metadata: { user_id: USER, plan: 'monthly', trial: 'true' },
+    items: {
+      data: [
+        { price: { id: 'price_mensual' }, current_period_end: seconds('2026-11-14T16:00:00.000Z') },
+      ],
+    },
+    trial_end: seconds('2026-10-21T16:00:00.000Z'),
+    cancel_at_period_end: false,
+    cancel_at: null,
+    schedule: null,
+    discounts: [],
+  };
+
+  it('se lee, se liga y se aplica igual que la sesión de la página hospedada', () => {
+    const elements = { ...elementsSession(), subscription: readSubscription };
+    const hosted = { ...hostedSession(), subscription: readSubscription };
+    expect(sessionNeedsRead(elementsSession())).toBe(true);
+    const fromElements = checkoutSessionSteps('checkout.session.completed', elements, context());
+    const fromHosted = checkoutSessionSteps('checkout.session.completed', hosted, context());
+    expect(fromElements).toEqual(fromHosted);
+    expect(fromElements?.link).toEqual({ userId: USER, customerId: 'cus_1' });
+    expect(fromElements?.state).toMatchObject({
+      plan: 'monthly',
+      status: 'trialing',
+      userId: USER,
+    });
+    // La prueba no es un cobro
+    expect(fromElements?.charge).toBeNull();
+  });
+
+  it('una sesión pagada sin prueba aplica el cobro con la factura', () => {
+    const paid = {
+      ...elementsSession({
+        payment_status: 'paid',
+        amount_total: 14_900,
+        invoice: 'in_1',
+        metadata: { user_id: USER, plan: 'monthly', mode: 'subscription', trial: 'false' },
+      }),
+      subscription: { ...readSubscription, status: 'active', trial_end: null },
+    };
+    const steps = checkoutSessionSteps('checkout.session.completed', paid, context());
+    expect(steps?.state?.status).toBe('active');
+    expect(steps?.charge).toMatchObject({
+      kind: 'paid',
+      purpose: 'subscription',
+      userId: USER,
+      providerPaymentId: 'in_1',
+      amountMxn: 149,
+    });
+  });
+
+  it('el evento que se guarda no lleva el secreto del cliente', () => {
+    const stored = storedEvent({
+      id: 'evt_1',
+      type: 'checkout.session.completed',
+      data: { object: elementsSession() },
+    });
+    const text = JSON.stringify(stored);
+    expect(text).not.toContain('client_secret');
+    expect(text).not.toContain('cs_test_el_secret_no_se_guarda');
+    // Lo que sí necesita la base se conserva
+    expect(text).toContain('cs_el');
+    expect(text).toContain(USER);
   });
 });
 

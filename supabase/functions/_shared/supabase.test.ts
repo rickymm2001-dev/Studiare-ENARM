@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { ChargeNotice, SubscriptionNotice, TrialEndingNotice } from './billingTypes.ts';
 import {
+  adminSessionOkViaRest,
+  analyticsTickOkViaRest,
   applyChargeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
@@ -11,12 +13,21 @@ import {
   bankSyncFinishViaRest,
   bankSyncVersionsContentViaRest,
   checkoutContextViaRest,
+  claimAnalyticsBatchViaRest,
   claimBillingActionsViaRest,
+  claimEmailBatchViaRest,
+  emailRecipientsViaRest,
+  emailTickOkViaRest,
+  emailUnsubscribeViaRest,
+  finishAnalyticsBatchViaRest,
   finishBillingActionViaRest,
+  finishEmailViaRest,
   linkCustomerViaRest,
   noteTrialWillEndViaRest,
   parseCheckoutContext,
+  releaseEmailViaRest,
   userOfCustomerViaRest,
+  type SupabaseEnv,
 } from './supabase.ts';
 
 const bodyText = (init: RequestInit | undefined): string =>
@@ -462,5 +473,106 @@ describe('sincronización del banco por REST (B11)', () => {
     await expect(
       bankSyncBeginViaRest(env, { trigger: 'cron', target: 'real', actorId: null }, broken),
     ).rejects.toThrow('bank_sync_begin respondió 500');
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// Las dos formas de llave (B17, 4.2). La de siempre es un JWT y va en apikey y en authorization. La nueva
+// (sb_secret_) no es un JWT, va solo en apikey, y mandarla como Bearer la rechaza la plataforma
+
+const NEW_ENV: SupabaseEnv = {
+  url: 'https://proyecto.supabase.co',
+  anonKey: 'sb_publishable_' + 'simulada_para_pruebas_0123456789',
+  serviceKey: 'sb_secret_' + 'simulada_para_pruebas_0123456789',
+};
+const SESSION = 'Bearer sesion-del-alumno';
+const NOTICE = {} as never;
+
+/** Cada llamada con la llave de servicio. Devuelven lo que la base conteste, así que aquí solo importa el encabezado */
+const SERVICE_CALLS: [string, (env: SupabaseEnv, fetchImpl: typeof fetch) => Promise<unknown>][] = [
+  ['linkCustomerViaRest', (e, f) => linkCustomerViaRest(e, { userId: USER, customerId: 'c' }, f)],
+  ['userOfCustomerViaRest', (e, f) => userOfCustomerViaRest(e, 'c', f)],
+  ['checkoutContextViaRest', (e, f) => checkoutContextViaRest(e, USER, f)],
+  ['applyChargeViaRest', (e, f) => applyChargeViaRest(e, NOTICE, f)],
+  ['applySubscriptionStateViaRest', (e, f) => applySubscriptionStateViaRest(e, NOTICE, f)],
+  ['noteTrialWillEndViaRest', (e, f) => noteTrialWillEndViaRest(e, NOTICE, f)],
+  [
+    'claimBillingActionsViaRest',
+    (e, f) => claimBillingActionsViaRest(e, { limit: 1, provider: null }, f),
+  ],
+  [
+    'finishBillingActionViaRest',
+    (e, f) => finishBillingActionViaRest(e, { id: 'a', ok: true, error: null }, f),
+  ],
+  ['bankSyncCronOkViaRest', (e, f) => bankSyncCronOkViaRest(e, 'ficha', f)],
+  [
+    'bankSyncBeginViaRest',
+    (e, f) => bankSyncBeginViaRest(e, { trigger: 'cron', target: 'real', actorId: null }, f),
+  ],
+  ['bankSyncVersionsContentViaRest', (e, f) => bankSyncVersionsContentViaRest(e, ['v1'], f)],
+  [
+    'bankSyncApplyViaRest',
+    (e, f) => bankSyncApplyViaRest(e, { runId: 'r', rows: [], forceDryRun: true }, f),
+  ],
+  [
+    'bankSyncFinishViaRest',
+    (e, f) =>
+      bankSyncFinishViaRest(
+        e,
+        { runId: 'r', seenKeys: null, summary: {}, status: 'ok', reason: null },
+        f,
+      ),
+  ],
+  ['emailTickOkViaRest', (e, f) => emailTickOkViaRest(e, 'ficha', f)],
+  ['analyticsTickOkViaRest', (e, f) => analyticsTickOkViaRest(e, 'ficha', f)],
+  ['claimEmailBatchViaRest', (e, f) => claimEmailBatchViaRest(e, 1, f)],
+  ['emailRecipientsViaRest', (e, f) => emailRecipientsViaRest(e, ['e1'], f)],
+  [
+    'finishEmailViaRest',
+    (e, f) => finishEmailViaRest(e, { id: 'e', status: 'sent', error: null }, f),
+  ],
+  ['releaseEmailViaRest', (e, f) => releaseEmailViaRest(e, 'e', f)],
+  ['emailUnsubscribeViaRest', (e, f) => emailUnsubscribeViaRest(e, 'ficha', f)],
+  ['claimAnalyticsBatchViaRest', (e, f) => claimAnalyticsBatchViaRest(e, 1, f)],
+  ['finishAnalyticsBatchViaRest', (e, f) => finishAnalyticsBatchViaRest(e, ['a'], 'sent', f)],
+];
+
+describe('la llave de servicio en las dos formas', () => {
+  it.each(SERVICE_CALLS)('%s manda la llave nueva solo en apikey', async (_name, call) => {
+    const { calls, fetchImpl } = recorder(() => new Response('[]'));
+    await call(NEW_ENV, fetchImpl).catch(() => undefined);
+    expect(calls).toHaveLength(1);
+    const headers = new Headers(calls[0]?.init?.headers);
+    expect(headers.get('apikey')).toBe(NEW_ENV.serviceKey);
+    expect(headers.has('authorization')).toBe(false);
+    expect(headers.get('content-type')).toBe('application/json');
+  });
+
+  it.each(SERVICE_CALLS)(
+    '%s sigue mandando la de siempre en apikey y en Bearer',
+    async (_name, call) => {
+      const { calls, fetchImpl } = recorder(() => new Response('[]'));
+      await call(env, fetchImpl).catch(() => undefined);
+      expect(calls).toHaveLength(1);
+      const headers = new Headers(calls[0]?.init?.headers);
+      expect(headers.get('apikey')).toBe('servicio-de-prueba');
+      expect(headers.get('authorization')).toBe('Bearer servicio-de-prueba');
+    },
+  );
+
+  it('con la sesión del alumno usa la llave pública nueva en apikey y el token de la sesión, nunca la de servicio', async () => {
+    const checks: [string, (fetchImpl: typeof fetch) => Promise<unknown>][] = [
+      ['authenticateUser', (f) => authenticateUser(NEW_ENV, SESSION, f)],
+      ['bankSyncAuthorizeViaRest', (f) => bankSyncAuthorizeViaRest(NEW_ENV, SESSION, f)],
+      ['adminSessionOkViaRest', (f) => adminSessionOkViaRest(NEW_ENV, SESSION, f)],
+    ];
+    for (const [name, call] of checks) {
+      const { calls, fetchImpl } = recorder(() => new Response('{}'));
+      await call(fetchImpl).catch(() => undefined);
+      const headers = new Headers(calls[0]?.init?.headers);
+      expect(headers.get('apikey'), name).toBe(NEW_ENV.anonKey);
+      expect(headers.get('authorization'), name).toBe(SESSION);
+      expect(JSON.stringify([...headers.entries()]), name).not.toContain('sb_secret_');
+    }
   });
 });

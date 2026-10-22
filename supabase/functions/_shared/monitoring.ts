@@ -138,7 +138,8 @@ const LEAKS: readonly RegExp[] = [
   /[0-9a-f]{33,}/i,
   /eyJ[\w-]+\.[\w-]+\.[\w-]+/,
   /\bBearer\s+(?!\[clave\])\S+/i,
-  /\b(?:re|phc|phx|sntrys|sntryu|sk|pk|rk|whsec)_[A-Za-z0-9_-]{8,}/,
+  // Las llaves nuevas de Supabase (sb_secret_ y sb_publishable_) también, como en la limpieza de generated/scrub.ts
+  /\b(?:re|phc|phx|sntrys|sntryu|sk|pk|rk|whsec|sb_secret|sb_publishable)_[A-Za-z0-9_-]{8,}/,
 ];
 export const leaksData = (text: string): boolean => LEAKS.some((pattern) => pattern.test(text));
 

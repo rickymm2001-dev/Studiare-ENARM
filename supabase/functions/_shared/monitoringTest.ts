@@ -19,6 +19,8 @@ import {
 export interface MonitoringTestDeps {
   /** APP_URL, para el CORS del botón */
   appUrl: string | undefined;
+  /** APP_ORIGINS, más orígenes del botón para el CORS mientras dura una mudanza de dominio (B17, 4.1) */
+  appOrigins?: string | undefined;
   /** Si la sesión de quien llama es de un admin con su segundo factor */
   adminOk: (authorization: string) => Promise<boolean>;
   monitoring: MonitoringDeps;
@@ -28,7 +30,10 @@ export async function handleMonitoringTest(
   request: Request,
   deps: MonitoringTestDeps,
 ): Promise<Response> {
-  const cors = corsHeaders({ APP_URL: deps.appUrl }, request.headers.get('origin'));
+  const cors = corsHeaders(
+    { APP_URL: deps.appUrl, APP_ORIGINS: deps.appOrigins },
+    request.headers.get('origin'),
+  );
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
   if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
   const authorization = request.headers.get('authorization');

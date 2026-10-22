@@ -191,4 +191,28 @@ describe('admin-reset-mfa por REST', () => {
       listFactorsViaRest(env, TARGET, recorder(() => new Response('{}')).fetchImpl),
     ).rejects.toThrow('no es una lista');
   });
+  it('con la llave nueva (sb_secret_) la API de administración la recibe solo en apikey', async () => {
+    const newEnv = {
+      url: 'https://proyecto.supabase.co',
+      anonKey: 'sb_publishable_' + 'simulada_para_pruebas_0123456789',
+      serviceKey: 'sb_secret_' + 'simulada_para_pruebas_0123456789',
+    };
+    const list = recorder(() => new Response(JSON.stringify([{ id: 'f1' }])));
+    expect(await listFactorsViaRest(newEnv, TARGET, list.fetchImpl)).toEqual(['f1']);
+    const remove = recorder(() => new Response(null, { status: 200 }));
+    await deleteFactorViaRest(newEnv, TARGET, 'f1', remove.fetchImpl);
+    for (const call of [list.calls[0], remove.calls[0]]) {
+      const headers = new Headers(call?.init?.headers);
+      expect(headers.get('apikey')).toBe(newEnv.serviceKey);
+      expect(headers.has('authorization')).toBe(false);
+    }
+    // Quien pide sigue con su sesión y la llave pública nueva, nunca la de servicio
+    const authorize = recorder(() => new Response(null, { status: 204 }));
+    expect(
+      await authorizeViaRest(newEnv, 'Bearer token-del-dueno', TARGET, authorize.fetchImpl),
+    ).toBe('ok');
+    const headers = new Headers(authorize.calls[0]?.init?.headers);
+    expect(headers.get('apikey')).toBe(newEnv.anonKey);
+    expect(headers.get('authorization')).toBe('Bearer token-del-dueno');
+  });
 });

@@ -234,7 +234,8 @@ describe('con SENTRY_DSN', () => {
       }
     }
     const boom = new PagoError(
-      'no se pudo cobrar a alumna@ejemplo.mx, id 3f1d4c52-9f1e-4a0e-8d52-6d1c9a2b7e10, pago pi_3Abcdef123456 con sk_live_abcdefghijkl',
+      'no se pudo cobrar a alumna@ejemplo.mx, id 3f1d4c52-9f1e-4a0e-8d52-6d1c9a2b7e10, pago pi_3Abcdef123456 con sk_live_' +
+        'abcdefghijkl',
     );
     const failing = withMonitoring('create-checkout', () => Promise.reject(boom), deps);
     await expect(failing(request())).rejects.toBe(boom);
@@ -497,7 +498,8 @@ describe('con SENTRY_DSN', () => {
 describe('la limpieza', () => {
   it('quita correos, ids, tokens, claves y ids de los servicios', () => {
     const text = scrubServerText(
-      'a ana@x.mx, 3f1d4c52-9f1e-4a0e-8d52-6d1c9a2b7e10, eyJhbGciOiJI.eyJzdWIiOiIx.firma, sk_live_abcdefghijkl, re_AbCdEfGh12345, phc_Abcdefghij0123456789, sntrys_abcdefgh1234, cus_Abc123456, sub_1Abcdef123, in_1Abcdef123, Bearer secreto123, abcdefghijklmnopqrst.supabase.co',
+      'a ana@x.mx, 3f1d4c52-9f1e-4a0e-8d52-6d1c9a2b7e10, eyJhbGciOiJI.eyJzdWIiOiIx.firma, sk_live_' +
+        'abcdefghijkl, re_AbCdEfGh12345, phc_Abcdefghij0123456789, sntrys_abcdefgh1234, cus_Abc123456, sub_1Abcdef123, in_1Abcdef123, Bearer secreto123, abcdefghijklmnopqrst.supabase.co',
       400,
     );
     expect(text).toBe(
@@ -523,6 +525,19 @@ describe('la limpieza', () => {
     expect(leaksData('Bearer abc123')).toBe(true);
     expect(leaksData('re_AbCdEfGh12345')).toBe(true);
     expect(leaksData('una frase normal')).toBe(false);
+  });
+
+  it('leaksData reconoce las llaves nuevas de Supabase, secreta y publicable, y la limpieza las tapa', () => {
+    // Valores de mentira con la forma de las llaves nuevas, que ya no son un JWT
+    const secret = 'sb_secret_' + 'SimuladaPruebasStudiare00';
+    const publishable = 'sb_publishable_' + 'SimuladaPruebasStudiare00';
+    expect(leaksData(`fallo con ${secret}`)).toBe(true);
+    expect(leaksData(`fallo con ${publishable}`)).toBe(true);
+    // La última guarda no depende de que la limpieza haya corrido antes
+    expect(leaksData('una frase con sb_secreto y sb_publicable sin llave')).toBe(false);
+    const cleaned = scrubServerText(`fallo con ${secret} y ${publishable}`, 400);
+    expect(cleaned).toBe('fallo con [clave] y [clave]');
+    expect(leaksData(cleaned)).toBe(false);
   });
 
   it('leaksData también reconoce correos con acentos, con %40, de ancho completo y fichas largas', () => {

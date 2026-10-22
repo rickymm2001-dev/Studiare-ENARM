@@ -22,6 +22,7 @@ import { BottomNav, NAV_ID } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
+import { MovedNoticeLauncher } from './MovedNoticeLauncher';
 import { OAuthErrorNotice } from './OAuthErrorNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
@@ -216,6 +217,8 @@ export function AppShell() {
       <OAuthErrorNotice className={rail} />
       <ConfigUpdateNotice className={rail} />
       <NoticeUpdateNotice className={rail} />
+      {/* La mudanza de la demo de GitHub Pages (B17). Sin las variables del build no pinta ni baja nada */}
+      <MovedNoticeLauncher className={rail} />
       <OrganizationSync />
 
       <div className={rail}>

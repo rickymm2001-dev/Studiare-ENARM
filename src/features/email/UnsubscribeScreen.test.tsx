@@ -25,7 +25,7 @@ beforeEach(() => {
   requests = [];
   reply = () => Promise.resolve(Response.json({ result: 'done' }));
   vi.stubEnv('VITE_SUPABASE_URL', CONFIG.url);
-  vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'sb_publishable_simulada_para_pruebas_0123456789');
+  vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'sb_publishable_' + 'simulada_para_pruebas_0123456789');
   vi.stubGlobal(
     'fetch',
     vi.fn((url: string, init: RequestInit) => {

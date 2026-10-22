@@ -21,6 +21,9 @@ const parsed = readAiBatchEnv({
   SUPABASE_URL: Deno.env.get('SUPABASE_URL'),
   SUPABASE_ANON_KEY: Deno.env.get('SUPABASE_ANON_KEY'),
   SUPABASE_SERVICE_ROLE_KEY: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'),
+  // Las llaves nuevas de Supabase (B17, 4.2). Si existen, env.ts las prefiere a las dos de arriba
+  SUPABASE_PUBLISHABLE_KEYS: Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'),
+  SUPABASE_SECRET_KEYS: Deno.env.get('SUPABASE_SECRET_KEYS'),
 });
 
 let handler: (request: Request) => Promise<Response>;

@@ -31,6 +31,24 @@ describe('formas de B15 en el escáner de secretos', () => {
     expect(findServiceKeys(`k="re_${some(36, 'z')}"`)).toEqual(['llave de Resend (re_)']);
   });
 
+  it('marca los tres tipos de credencial de Cloudflare y deja pasar el código que los nombra (B17, 1.4)', () => {
+    const label = 'token o llave de Cloudflare (cfat_, cfut_ o cfk_)';
+    for (const prefix of ['cfat_', 'cfut_', 'cfk_']) {
+      expect(findServiceKeys(`t="${prefix}${some(40, 'Z')}${some(8, '0')}"`), prefix).toEqual([
+        label,
+      ]);
+    }
+    for (const code of [
+      "if (token.startsWith('cfat_')) return;",
+      'const cfat_ = 1;',
+      'cfut_corto',
+      'cfk_ABC',
+      'const cfat_token_de_prueba = 1;',
+    ]) {
+      expect(findServiceKeys(code), code).toEqual([]);
+    }
+  });
+
   it('no confunde el código con una llave: prefijos solos, nombres de funciones y textos que mencionan la forma', () => {
     for (const code of [
       "if (key.startsWith('sntrys_')) return false;",

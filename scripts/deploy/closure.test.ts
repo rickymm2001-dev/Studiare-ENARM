@@ -154,7 +154,8 @@ describe('cierre de una Edge Function', () => {
       ]) {
         expect(paths).not.toContain(`supabase/functions/_shared/${heavy}`);
       }
-      // Lo que lleva la IA es lo suyo (_shared/ai), el aviso a Sentry y su limpieza, y nada más de _shared
+      // Lo que lleva la IA es lo suyo (_shared/ai), el aviso a Sentry y su limpieza, las llaves de Supabase en sus dos
+      // formas (keys.ts) y la lectura de la lista de orígenes (origins.ts), y nada más de _shared
       const others = paths.filter(
         (path) =>
           path.startsWith('supabase/functions/_shared/') &&
@@ -162,8 +163,10 @@ describe('cierre de una Edge Function', () => {
       );
       expect(others).toEqual([
         'supabase/functions/_shared/generated/scrub.ts',
+        'supabase/functions/_shared/keys.ts',
         'supabase/functions/_shared/monitoring.ts',
         'supabase/functions/_shared/monitoringRuntime.ts',
+        'supabase/functions/_shared/origins.ts',
       ]);
     },
   );

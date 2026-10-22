@@ -56,12 +56,14 @@ describe('puntos de salida a servicios externos', () => {
     ]);
   });
 
-  it('ninguna función nueva lleva la llave de servicio fuera de supabase.ts y runtime.ts', () => {
+  it('ninguna función nueva lleva la llave de servicio fuera de keys.ts, runtime.ts y los index.ts', () => {
     expect(
       mentioning(/SUPABASE_SERVICE_ROLE_KEY/).filter(
         (path) =>
           !path.startsWith('_shared/ai/') &&
           ![
+            // keys.ts es quien elige entre la llave nueva y la de siempre (B17, 4.2)
+            '_shared/keys.ts',
             '_shared/runtime.ts',
             'admin-reset-mfa/index.ts',
             'ai-proxy/index.ts',

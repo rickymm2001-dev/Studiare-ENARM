@@ -14,6 +14,7 @@ import {
   type TrialEndingNotice,
 } from './billingTypes.ts';
 import { asArray, asRecord, asString } from './http.ts';
+import { serviceHeaders as keyHeaders } from './keys.ts';
 
 export interface SupabaseEnv {
   url: string;
@@ -40,9 +41,9 @@ export async function authenticateUser(
     : null;
 }
 
+/** La llave de servicio como la pide su forma (keys.ts) y el cuerpo en JSON */
 const serviceHeaders = (env: SupabaseEnv) => ({
-  apikey: env.serviceKey,
-  authorization: `Bearer ${env.serviceKey}`,
+  ...keyHeaders(env.serviceKey),
   'content-type': 'application/json',
 });
 

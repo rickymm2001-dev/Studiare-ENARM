@@ -309,7 +309,10 @@ describe('sin permiso no sale nada, por el control de lo inicial', () => {
           vi.stubEnv('VITE_POSTHOG_KEY', fixed.key ? CONFIG.key : '');
           vi.stubEnv('VITE_POSTHOG_HOST', CONFIG.host);
           vi.stubEnv('VITE_SUPABASE_URL', fixed.cloud ? 'https://abcd1234.supabase.co' : '');
-          vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'sb_publishable_simulada_para_pruebas_0123456789');
+          vi.stubEnv(
+            'VITE_SUPABASE_ANON_KEY',
+            'sb_publishable_' + 'simulada_para_pruebas_0123456789',
+          );
           writeStoredFlags({ productAnalytics: fixed.flag });
 
           let model: GateInput = {

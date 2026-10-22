@@ -390,6 +390,12 @@ const action = (overrides: Partial<BillingAction> = {}): BillingAction => ({
 
 // ---------------------------------------------------------------------------------------------
 
+/** Un aviso sin su carga original, para comparar lo que la base entiende y no el evento tal cual llegó */
+const withoutPayload = <T extends { payload: unknown }>(notice: T): Omit<T, 'payload'> => {
+  const { payload: _payload, ...rest } = notice;
+  return rest;
+};
+
 describe('comparación sin atajos', () => {
   it('compara textos', () => {
     expect(safeEqual('abc', 'abc')).toBe(true);
@@ -1481,6 +1487,67 @@ describe('lo que pide la app para pagar', () => {
   });
 });
 
+describe('lo que pide la app para las billeteras (B17, 6.4)', () => {
+  it('ui wallet vale solo para la suscripción con Stripe y se conserva', () => {
+    expect(
+      parseCheckoutRequest({
+        plan: 'monthly',
+        provider: 'stripe',
+        expectTrial: true,
+        ui: 'wallet',
+      }),
+    ).toEqual({
+      plan: 'monthly',
+      provider: 'stripe',
+      mode: 'subscription',
+      expectTrial: true,
+      ui: 'wallet',
+    });
+    expect(
+      parseCheckoutRequest({
+        plan: 'founder',
+        provider: 'stripe',
+        mode: 'subscription',
+        ui: 'wallet',
+      }),
+    ).toMatchObject({ plan: 'founder', ui: 'wallet' });
+  });
+
+  it('ui hosted o sin ui es la página de pago de siempre y no cambia lo que ya se entendía', () => {
+    const plain = parseCheckoutRequest({ plan: 'monthly', provider: 'stripe' });
+    expect(parseCheckoutRequest({ plan: 'monthly', provider: 'stripe', ui: 'hosted' })).toEqual(
+      plain,
+    );
+    expect(plain).not.toHaveProperty('ui');
+    // Los pases y Mercado Pago aceptan hosted, que no hace nada
+    expect(
+      parseCheckoutRequest({
+        plan: 'annual',
+        provider: 'stripe',
+        mode: 'pass',
+        method: 'spei',
+        ui: 'hosted',
+      }),
+    ).toEqual({ plan: 'annual', provider: 'stripe', mode: 'pass', method: 'spei' });
+  });
+
+  it('rechaza un ui desconocido y las billeteras con pases o con Mercado Pago', () => {
+    for (const body of [
+      { plan: 'monthly', provider: 'stripe', ui: 'embedded' },
+      { plan: 'monthly', provider: 'stripe', ui: 'elements' },
+      { plan: 'monthly', provider: 'stripe', ui: 'WALLET' },
+      { plan: 'monthly', provider: 'stripe', ui: true },
+      { plan: 'monthly', provider: 'stripe', ui: null },
+      { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo', ui: 'wallet' },
+      { plan: 'annual', provider: 'stripe', mode: 'pass', method: 'spei', ui: 'wallet' },
+      { plan: 'monthly', provider: 'mercadopago', ui: 'wallet' },
+      { plan: 'monthly', provider: 'mercadopago', mode: 'pass', ui: 'wallet' },
+    ]) {
+      expect(parseCheckoutRequest(body), JSON.stringify(body)).toBeNull();
+    }
+  });
+});
+
 describe('crear el pago', () => {
   it('abre la suscripción con 7 días de prueba, con quién paga y los regresos del servidor', async () => {
     const { deps, calls, contexts } = checkoutDeps();
@@ -1915,6 +1982,312 @@ describe('crear el pago', () => {
       deps,
     );
     expect(get.status).toBe(405);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// Crear el pago de las billeteras (B17, 6.4)
+
+const WALLET_SECRET = 'cs_test_a1b2c3_secret_d4e5f6';
+const walletSession = reply({
+  id: 'cs_test_wallet',
+  ui_mode: 'elements',
+  url: null,
+  client_secret: WALLET_SECRET,
+});
+const askWallet = (deps: CheckoutDeps, body: Record<string, unknown> = {}) =>
+  askCheckout({ plan: 'monthly', provider: 'stripe', ui: 'wallet', ...body }, deps);
+
+describe('crear el pago de las billeteras', () => {
+  it('responde el secreto del cliente y la prueba, sin dirección, y pide la sesión ui_mode elements', async () => {
+    const { deps, calls, contexts } = checkoutDeps({
+      routes: { 'POST /v1/checkout/sessions': walletSession },
+    });
+    const answer = await askWallet(deps, { expectTrial: true, user_id: 'otra-persona' });
+    expect(answer.status).toBe(200);
+    expect(await answer.json()).toEqual({ clientSecret: WALLET_SECRET, trial: true });
+    // El secreto es de quien lo pidió y no se deja en ninguna caché
+    expect(answer.headers.get('cache-control')).toBe('no-store');
+    expect(answer.headers.get('access-control-allow-origin')).toBe(APP_ORIGIN);
+    expect(contexts).toEqual([USER]);
+    expect(calls).toHaveLength(1);
+    const session = form(calls[0]);
+    expect(session).toMatchObject({
+      ui_mode: 'elements',
+      mode: 'subscription',
+      customer: 'cus_1',
+      'line_items[0][price]': 'price_mensual',
+      client_reference_id: USER,
+      'metadata[user_id]': USER,
+      'metadata[plan]': 'monthly',
+      'metadata[mode]': 'subscription',
+      'metadata[trial]': 'true',
+      'subscription_data[metadata][user_id]': USER,
+      'subscription_data[trial_period_days]': '7',
+      return_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+    });
+    for (const key of [
+      'success_url',
+      'cancel_url',
+      'custom_text[submit][message]',
+      'allow_promotion_codes',
+    ]) {
+      expect(session[key], key).toBeUndefined();
+    }
+    const headers = new Headers(calls[0]?.init?.headers);
+    expect(headers.get('authorization')).toBe(`Bearer ${KEY}`);
+    expect(headers.get('stripe-version')).toBe(STRIPE_API_VERSION);
+  });
+
+  it('sin prueba cobra hoy, y cada plan usa su precio', async () => {
+    const prices: Record<string, string> = {};
+    for (const plan of ['founder', 'founder_annual', 'monthly', 'annual']) {
+      const { deps, calls } = checkoutDeps({
+        context: { trialAvailable: false },
+        routes: { 'POST /v1/checkout/sessions': walletSession },
+      });
+      const answer = await askWallet(deps, { plan });
+      expect(await answer.json()).toEqual({ clientSecret: WALLET_SECRET, trial: false });
+      expect(form(calls[0])['subscription_data[trial_period_days]']).toBeUndefined();
+      expect(form(calls[0])['metadata[trial]']).toBe('false');
+      prices[plan] = form(calls[0])['line_items[0][price]'] ?? '';
+    }
+    expect(prices).toEqual({
+      founder: 'price_fundador',
+      founder_annual: 'price_fundador_anual',
+      monthly: 'price_mensual',
+      annual: 'price_anual',
+    });
+  });
+
+  it('no consulta ninguna bandera del servidor, con ellas apagadas o ausentes responde igual', async () => {
+    const { flags: _flags, ...withoutFlags } = baseContext;
+    for (const overrides of [
+      { context: { flags: { cashPasses: false, mercadoPago: false } } },
+      { context: { flags: { cashPasses: true, mercadoPago: true } } },
+      { overrides: { checkoutContext: () => Promise.resolve(withoutFlags) } },
+    ]) {
+      const { deps, lines } = checkoutDeps({
+        ...overrides,
+        routes: { 'POST /v1/checkout/sessions': walletSession },
+      });
+      const answer = await askWallet(deps);
+      expect(answer.status).toBe(200);
+      expect(await answer.json()).toEqual({ clientSecret: WALLET_SECRET, trial: true });
+      expect(lines).toEqual([]);
+    }
+  });
+
+  it('las revisiones de siempre valen igual y no llaman a Stripe', async () => {
+    const cases: [string, Partial<CheckoutContext>, Record<string, unknown>, number, unknown][] = [
+      [
+        'ya tiene un plan',
+        { inForce: 'subscription', subscription: liveSubscription() },
+        {},
+        409,
+        { error: 'already_subscribed' },
+      ],
+      [
+        'tiene un pase',
+        { inForce: 'pass', passEnd: '2026-11-10T06:00:00.000Z' },
+        {},
+        409,
+        { error: 'pass_in_force', passEnd: '2026-11-10T06:00:00.000Z' },
+      ],
+      [
+        'Fundador lleno',
+        { founderOpen: false },
+        { plan: 'founder' },
+        409,
+        { error: 'founder_full' },
+      ],
+      [
+        'Fundador perdido',
+        { founderLost: true },
+        { plan: 'founder_annual' },
+        409,
+        { error: 'founder_lost' },
+      ],
+      [
+        'la prueba cambió',
+        { trialAvailable: false },
+        { expectTrial: true },
+        409,
+        { error: 'trial_mismatch', trialAvailable: false },
+      ],
+    ];
+    for (const [name, context, body, status, expected] of cases) {
+      const { deps, calls } = checkoutDeps({ context });
+      const answer = await askWallet(deps, body);
+      expect(answer.status, name).toBe(status);
+      expect(await answer.json(), name).toEqual(expected);
+      expect(calls, name).toEqual([]);
+    }
+  });
+
+  it('sin sesión contesta 401 y los pases o Mercado Pago con ui wallet contestan 400, sin tocar nada', async () => {
+    const { deps, calls, contexts } = checkoutDeps();
+    const anonymous = await askCheckout(
+      { plan: 'monthly', provider: 'stripe', ui: 'wallet' },
+      deps,
+      {
+        headers: { origin: APP_ORIGIN },
+      },
+    );
+    expect(anonymous.status).toBe(401);
+    for (const body of [
+      { plan: 'monthly', provider: 'stripe', mode: 'pass', method: 'oxxo', ui: 'wallet' },
+      { plan: 'monthly', provider: 'mercadopago', ui: 'wallet' },
+      { plan: 'monthly', provider: 'stripe', ui: 'otro' },
+    ]) {
+      const answer = await askCheckout(body, deps);
+      expect(answer.status).toBe(400);
+      expect(await answer.json()).toEqual({ error: 'invalid' });
+    }
+    expect(calls).toEqual([]);
+    expect(contexts).toEqual([]);
+  });
+
+  it('quien no tiene cliente recibe uno ligado, y uno que ya no existe se reemplaza y se reintenta', async () => {
+    const fresh = checkoutDeps({
+      context: { customerId: null },
+      routes: { 'POST /v1/checkout/sessions': walletSession },
+    });
+    expect((await askWallet(fresh.deps)).status).toBe(200);
+    expect(fresh.calls.map((call) => `${call.method} ${call.url.pathname}`)).toEqual([
+      'POST /v1/customers',
+      'POST /v1/checkout/sessions',
+    ]);
+    expect(fresh.linked).toEqual([{ userId: USER, customerId: 'cus_nuevo' }]);
+    expect(form(fresh.calls[1]).customer).toBe('cus_nuevo');
+
+    let tries = 0;
+    const missing = stripeError(400, {
+      code: 'resource_missing',
+      param: 'customer',
+      message: "No such customer: 'cus_1'",
+    });
+    const stale = checkoutDeps({
+      routes: {
+        'POST /v1/checkout/sessions': (url, init) => {
+          tries += 1;
+          return tries === 1 ? missing(url, init) : walletSession(url, init);
+        },
+      },
+    });
+    const answer = await askWallet(stale.deps);
+    expect(await answer.json()).toEqual({ clientSecret: WALLET_SECRET, trial: true });
+    expect(form(stale.calls[2])).toMatchObject({ customer: 'cus_nuevo', ui_mode: 'elements' });
+  });
+
+  it('si Stripe no manda el secreto o rechaza la sesión contesta 502 y el registro no lo lleva', async () => {
+    const noSecret = checkoutDeps({
+      routes: { 'POST /v1/checkout/sessions': reply({ id: 'cs_1', url: CHECKOUT_URL }) },
+    });
+    const missing = await askWallet(noSecret.deps);
+    expect(missing.status).toBe(502);
+    expect(await missing.json()).toEqual({ error: 'provider' });
+    expect(noSecret.lines).toEqual([
+      'Stripe creó el pago del plan monthly pero no mandó el secreto del cliente',
+    ]);
+
+    const rejected = checkoutDeps({
+      routes: {
+        'POST /v1/checkout/sessions': stripeError(400, {
+          code: 'parameter_unknown',
+          param: 'custom_text',
+          message: 'Received unknown parameter: custom_text',
+        }),
+      },
+    });
+    expect((await askWallet(rejected.deps)).status).toBe(502);
+    expect(rejected.lines[0]).toMatch(/^Stripe rechazó el pago del plan monthly\. estado 400/);
+
+    const down = checkoutDeps({ routes: { 'POST /v1/checkout/sessions': offline } });
+    expect((await askWallet(down.deps)).status).toBe(502);
+    expect(down.lines).toEqual(['No se pudo crear el pago del plan monthly con stripe. TypeError']);
+    for (const { lines } of [noSecret, rejected, down]) {
+      expect(lines.join(' ')).not.toContain(KEY);
+      expect(lines.join(' ')).not.toContain(WALLET_SECRET);
+    }
+  });
+
+  it('el secreto del cliente no aparece en el registro ni siquiera cuando todo sale bien', async () => {
+    const { deps, lines } = checkoutDeps({
+      routes: { 'POST /v1/checkout/sessions': walletSession },
+    });
+    await askWallet(deps);
+    expect(lines.join(' ')).not.toContain(WALLET_SECRET);
+  });
+
+  it('la sesión hospedada de siempre sigue igual cuando no se pide wallet', async () => {
+    const { deps, calls } = checkoutDeps();
+    const answer = await askCheckout({ plan: 'monthly', provider: 'stripe', ui: 'hosted' }, deps);
+    expect(await answer.json()).toEqual({ url: CHECKOUT_URL, mode: 'subscription', trial: true });
+    expect(answer.headers.get('cache-control')).toBeNull();
+    expect(form(calls[0])).toMatchObject({
+      allow_promotion_codes: 'true',
+      success_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+    });
+    expect(form(calls[0]).ui_mode).toBeUndefined();
+  });
+});
+
+describe('aviso de una sesión de las billeteras (B17, 6.4)', () => {
+  const elementsSession = (overrides: Record<string, unknown> = {}) =>
+    subscriptionSession({
+      ui_mode: 'elements',
+      url: null,
+      client_secret: WALLET_SECRET,
+      return_url: 'https://app.ejemplo.mx/Studiare-ENARM/suscripcion?pago=ok',
+      ...overrides,
+    });
+
+  it('la prueba queda igual que con la página hospedada, y el secreto del cliente no se guarda', async () => {
+    const trialing = subscriptionObject({ status: 'trialing', trial_end: TRIAL_END });
+    const hosted = webhookDeps({
+      routes: sessionRead(subscriptionSession(), trialing),
+    });
+    await send(event('checkout.session.completed', subscriptionSession()), hosted.deps);
+
+    const session = elementsSession();
+    const wallet = webhookDeps({ routes: sessionRead(session, trialing) });
+    const answer = await send(event('checkout.session.completed', session), wallet.deps);
+    expect(answer.status).toBe(200);
+    expect(await answer.text()).toBe('applied');
+    expect(wallet.record.order).toEqual(['link:cus_1', 'state:trialing']);
+    expect(wallet.record.linked).toEqual(hosted.record.linked);
+    expect(wallet.record.charges).toEqual([]);
+    expect(wallet.record.states.map(withoutPayload)).toEqual(
+      hosted.record.states.map(withoutPayload),
+    );
+
+    // Lo que llega a la base no trae el secreto de la sesión
+    const stored = JSON.stringify(wallet.record.states[0]?.payload);
+    expect(stored).not.toContain('client_secret');
+    expect(stored).not.toContain(WALLET_SECRET);
+  });
+
+  it('una sesión pagada sin prueba aplica el estado y el cobro, con el mismo resultado', async () => {
+    const overrides = {
+      payment_status: 'paid',
+      amount_total: 14_900,
+      invoice: 'in_1',
+      metadata: { user_id: USER, plan: 'monthly', mode: 'subscription', trial: 'false' },
+    };
+    const hosted = webhookDeps({
+      routes: sessionRead(subscriptionSession(overrides), subscriptionObject()),
+    });
+    await send(event('checkout.session.completed', subscriptionSession(overrides)), hosted.deps);
+    const session = elementsSession(overrides);
+    const wallet = webhookDeps({ routes: sessionRead(session, subscriptionObject()) });
+    const answer = await send(event('checkout.session.completed', session), wallet.deps);
+    expect(await answer.text()).toBe('applied, applied');
+    expect(wallet.record.order).toEqual(hosted.record.order);
+    expect(wallet.record.charges.map(withoutPayload)).toEqual(
+      hosted.record.charges.map(withoutPayload),
+    );
+    expect(JSON.stringify(wallet.record.charges[0]?.payload)).not.toContain(WALLET_SECRET);
   });
 });
 

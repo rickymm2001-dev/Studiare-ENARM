@@ -6,6 +6,7 @@ import { test as base, expect, type BrowserContext, type Page } from '@playwrigh
 import { SCREENS } from '@/app/screens';
 import { TOUR_AUTO_OFFER_OFF, TOUR_STORAGE_KEY } from '@/features/tour/steps';
 import { t } from '@/i18n/es-MX';
+import { installFakeStripeJs } from './fakeStripeJs';
 
 /** Opciones de las pruebas. Cada spec las cambia con test.use({ ... }) */
 export interface E2eOptions {
@@ -61,9 +62,11 @@ export async function presetTourOffer(context: BrowserContext, autoOffer = false
 export const test = base.extend<{ consoleErrors: string[] } & E2eOptions>({
   tourAutoOffer: [false, { option: true }],
   expectedPageErrors: [[], { option: true }],
-  // Sustituye al contexto de Playwright para apagar el recorrido antes de la primera carga
+  // Sustituye al contexto de Playwright para apagar el recorrido antes de la primera carga y para que ninguna
+  // petición salga a Stripe de verdad (B17). fakeStripeJsOf(context).requests dice qué le pidió la app
   context: async ({ context, tourAutoOffer }, use) => {
     await presetTourOffer(context, tourAutoOffer);
+    await installFakeStripeJs(context);
     await use(context);
   },
   consoleErrors: [

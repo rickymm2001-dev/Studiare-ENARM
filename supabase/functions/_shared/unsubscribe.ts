@@ -20,6 +20,8 @@ const MAX_BODY = 2048;
 export interface UnsubscribeDeps {
   /** APP_URL, para el CORS de la página y para la redirección del GET */
   appUrl: string | undefined;
+  /** APP_ORIGINS, más orígenes de la página para el CORS mientras dura una mudanza de dominio (B17, 4.1) */
+  appOrigins?: string | undefined;
   /** email_unsubscribe. Lanza si la base falla */
   unsubscribe: (token: string) => Promise<'done' | 'already' | 'invalid'>;
   log: (line: string) => void;
@@ -40,7 +42,10 @@ export async function handleEmailUnsubscribe(
   request: Request,
   deps: UnsubscribeDeps,
 ): Promise<Response> {
-  const cors = corsHeaders({ APP_URL: deps.appUrl }, request.headers.get('origin'));
+  const cors = corsHeaders(
+    { APP_URL: deps.appUrl, APP_ORIGINS: deps.appOrigins },
+    request.headers.get('origin'),
+  );
   if (request.method === 'OPTIONS') return blank(204, cors);
   const queryToken = new URL(request.url).searchParams.get('t') ?? '';
 
