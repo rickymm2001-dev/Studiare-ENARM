@@ -50,6 +50,7 @@ const STUDENT_RAIL = [
   t.navItems.outlines,
   t.navItems.simulate,
   t.navItems.progress,
+  t.navItems.calendar,
   t.navItems.tutor,
   t.navItems.party,
 ];
@@ -72,7 +73,7 @@ const ADMIN_GROUP = [
 ];
 
 describe('riel de computadora', () => {
-  it('alumno. Siete secciones arriba y Configuración sola al final, separada y con el engrane', () => {
+  it('alumno. Ocho secciones arriba y Configuración sola al final, separada y con el engrane', () => {
     const nav = renderNav('student', SCREENS.home.path);
     expect(nav).toHaveAttribute('id', NAV_ID);
     expect(textOf(within(nav).getAllByRole('link'))).toEqual([
@@ -167,7 +168,7 @@ describe('barra del teléfono', () => {
     ]);
   });
 
-  it('Más abre una hoja con nombre y foco atrapado, con Apuntes, Tutor, Party y Configuración, y Escape la cierra', async () => {
+  it('Más abre una hoja con nombre y foco atrapado, con Apuntes, Calendario, Tutor, Party y Configuración, y Escape la cierra', async () => {
     const user = userEvent.setup();
     const nav = renderNav('student', SCREENS.home.path);
     const more = within(nav).getByRole('button', { name: t.navItems.more });
@@ -180,6 +181,7 @@ describe('barra del teléfono', () => {
     expect(more).toHaveAttribute('aria-expanded', 'true');
     expect(textOf(within(sheet).getAllByRole('link'))).toEqual([
       t.navItems.outlines,
+      t.navItems.calendar,
       t.navItems.tutor,
       t.navItems.party,
       t.navItems.settings,
@@ -213,6 +215,7 @@ describe('barra del teléfono', () => {
     const sheet = screen.getByRole('dialog', { name: t.nav.more });
     expect(textOf(within(sheet).getAllByRole('link'))).toEqual([
       t.navItems.outlines,
+      t.navItems.calendar,
       t.navItems.tutor,
       t.navItems.party,
       ...ADMIN_GROUP,

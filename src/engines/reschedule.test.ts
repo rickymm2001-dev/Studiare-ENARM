@@ -4,6 +4,7 @@ import type { FsrsCardState } from '@/data/schemas/common';
 import {
   examDeadline,
   newCardState,
+  retrievabilityAt,
   retrievabilityOf,
   type QueueCard,
   type SchedulerConfig,
@@ -12,7 +13,9 @@ import {
   advanceReviews,
   MAX_ADVANCE_COUNT,
   overdueCards,
+  MAX_SAFE_LOSS,
   postponeCards,
+  postponeSafely,
   rescheduleBatches,
   spreadOverdue,
   summarizeOverdue,
@@ -904,5 +907,107 @@ describe('rendimiento con 5,000 tarjetas', () => {
     expect(overdue.ms).toBeLessThan(LIMIT_MS);
     expect(postponed.ms).toBeLessThan(LIMIT_MS);
     expect(advanced.ms).toBeLessThan(LIMIT_MS);
+  });
+});
+
+describe('postponeSafely', () => {
+  // Una tarjeta con mucha estabilidad apenas pierde memoria en dos días. Una con poca la pierde
+  const firm = (id: string) => card(id, TODAY_START, { stability: 200, scheduledDays: 200 });
+  const fragile = (id: string) => card(id, TODAY_START, { stability: 1.5, scheduledDays: 2 });
+
+  it('deja fuera las que perderían memoria y reporta cuántas movería posponer a ciegas', () => {
+    const cards = [firm('a'), fragile('b'), firm('c')];
+    const result = postponeSafely({ cards, now: NOW, config, days: 3 });
+    expect(result.total).toBe(3);
+    expect(result.safe.map((entry) => entry.cardId).sort()).toEqual(['a', 'c']);
+  });
+
+  it('solo mueve fechas y cada tarjeta llega al mismo día que con posponer a ciegas', () => {
+    const cards = [firm('a'), fragile('b')];
+    const blind = postponeCards({ cards, now: NOW, config, days: 2 });
+    const safe = postponeSafely({ cards, now: NOW, config, days: 2 }).safe;
+    for (const entry of safe) {
+      expect(blind).toContainEqual(entry);
+    }
+  });
+
+  it('ordena de la tarjeta que mejor se sostiene a la que menos', () => {
+    const cards = [
+      card('x', TODAY_START, { stability: 60, scheduledDays: 60 }),
+      card('y', TODAY_START, { stability: 400, scheduledDays: 400 }),
+      card('z', TODAY_START, { stability: 120, scheduledDays: 120 }),
+    ];
+    const ids = postponeSafely({ cards, now: NOW, config, days: 1 }).safe.map((e) => e.cardId);
+    expect(ids).toEqual(['y', 'z', 'x']);
+  });
+
+  it('con una tolerancia de cero solo se mueven las que no pierden nada', () => {
+    const cards = [firm('a'), fragile('b')];
+    const strict = postponeSafely({ cards, now: NOW, config, days: 3, maxLoss: 0 });
+    expect(strict.safe.length).toBeLessThanOrEqual(1);
+    const loose = postponeSafely({ cards, now: NOW, config, days: 3, maxLoss: 1 });
+    expect(loose.safe).toHaveLength(2);
+  });
+
+  it('la tolerancia por omisión es de cinco puntos', () => {
+    expect(MAX_SAFE_LOSS).toBe(0.05);
+  });
+
+  it('no mueve las nuevas ni las que ya vencen después del día elegido', () => {
+    const cards = [unseen('n'), card('later', '2026-12-01T10:00:00.000Z', { stability: 90 })];
+    const result = postponeSafely({ cards, now: NOW, config, days: 2 });
+    expect(result).toEqual({ safe: [], total: 0 });
+  });
+
+  it('es determinista aunque cambie el orden de entrada', () => {
+    const cards = [firm('b'), firm('a'), firm('c')];
+    const one = postponeSafely({ cards, now: NOW, config, days: 2 });
+    const two = postponeSafely({ cards: [...cards].reverse(), now: NOW, config, days: 2 });
+    expect(two).toEqual(one);
+  });
+
+  it('con menos de un día desde el último repaso cuenta los días fraccionarios', () => {
+    // Repasada hace tres minutos con poca estabilidad. retrievabilityOf redondea a días enteros y da 1
+    const lastReview = new Date(NOW.getTime() - 3 * 60_000).toISOString();
+    const recent = card('recent', TODAY_START, { stability: 0.3, scheduledDays: 1, lastReview });
+    const tomorrow = new Date(TOMORROW_START);
+    expect(retrievabilityOf(recent.state, tomorrow)).toBe(1);
+    expect(retrievabilityAt(recent.state, tomorrow)).toBeLessThan(0.85);
+    expect(postponeSafely({ cards: [recent], now: NOW, config, days: 1 })).toEqual({
+      safe: [],
+      total: 1,
+    });
+  });
+
+  it('las que están aprendiendo o reaprendiendo nunca se posponen', () => {
+    const cards = [
+      card('l', TODAY_START, { state: 'learning', stability: 200, scheduledDays: 0 }),
+      card('r', TODAY_START, { state: 'relearning', stability: 200, scheduledDays: 0 }),
+      firm('ok'),
+    ];
+    const result = postponeSafely({ cards, now: NOW, config, days: 1 });
+    expect(result.total).toBe(3);
+    expect(result.safe.map((entry) => entry.cardId)).toEqual(['ok']);
+  });
+
+  it('en los últimos 30 días antes del examen el piso sube con la retención vigente', () => {
+    // Un día exacto de olvido con estabilidad de 0.629 da una retención entre 0.85 y 0.88
+    const edge = card('edge', TODAY_START, {
+      stability: 0.629,
+      scheduledDays: 1,
+      lastReview: TODAY_START,
+    });
+    const retention = retrievabilityAt(edge.state, new Date(TOMORROW_START));
+    expect(retention).toBeGreaterThan(0.85);
+    expect(retention).toBeLessThan(0.88);
+    const normal = postponeSafely({ cards: [edge], now: NOW, config, days: 1 });
+    expect(normal.safe).toHaveLength(1);
+    const nearExam = postponeSafely({
+      cards: [edge],
+      now: NOW,
+      config: { ...config, examDate: '2026-11-05' },
+      days: 1,
+    });
+    expect(nearExam).toEqual({ safe: [], total: 1 });
   });
 });

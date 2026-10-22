@@ -124,3 +124,27 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Análisis por días de cuenta con una vista de bandas.** Por ejemplo 7 a 9, 10 a 13 y 14 o más, nunca por código, si algún día hace falta. Surgió en los arreglos de B18
 - **Quitar solo la entrada de la cuenta que sale al cerrar sesión.** Si se guarda el id de la nube donde signOut pueda leerlo, para no tocar a otra persona del mismo navegador. Surgió en los arreglos de B18
 - **Cubrir los caracteres de etiqueta (U+E0000) en el filtro del comentario.** Solo si alguna vez se ve que los usen. Surgió en los arreglos de B18
+
+- **Foro general por especialidad.** Temas y respuestas entre alumnos, con seudónimo, reportes y cola de moderación para el médico y el admin. Entra cuando haya 300 alumnos activos y después de los hilos por pregunta de V4-B7. Surgió en el plan V4 (D-140)
+- **Reprogramar con parámetros propios de FSRS.** Lo que FSRS Helper llama reschedule. Pide FSRS ajustado por alumno, que Ricardo dejó de fábrica (respuesta 90). Surgió en el plan V4 (D-140)
+- **Regex en Buscar tarjetas.** La sintaxis campo y valor de V4-B3 no la incluye. Surgió en el plan V4 (D-140)
+- **Tabla de posiciones abierta entre grupos de Party.** Hoy solo se planea una opcional y con seudónimo para simuladores completos. Surgió en el plan V4 (D-140)
+- **Quitar los plugins de la sesión que no se usan.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata no entran en V4. Es limpieza del menú de Ricardo, no del repo. Surgió en el plan V4 (D-140)
+- **Editar durante el repaso una tarjeta de un mazo precargado.** Esas tarjetas son contenido compartido. Editarlas pide crear una copia en Mis tarjetas, decidir si la original se suspende y qué pasa con su historial de repasos. Hoy se edita en los mazos del alumno. Surgió al programar V4-B3 (D-142)
+- **Plegado de secciones y contador de puntos por recordar en Apuntes.** Plegar con el triángulo y decir cuántos puntos tiene cada tarjeta generada de un esquema, como RemNote. Surgió al programar V4-B4 (D-143)
+- **Seleccionar texto de un PDF para mandar solo esa parte a la IA de tarjetas.** Pide un visor de PDF con selección. Hoy se lee todo el PDF. Surgió al programar V4-B4 (D-143)
+- **Mezcla por nivel cognitivo en el examen completo.** Un reparto por omisión que el admin cambie en Umbrales junto con los pesos por rama. Entra cuando haya preguntas con nivel. Surgió al programar V4-B5 (D-144)
+- **Nivel cognitivo en el banco en la nube y en el Sheet.** Columna con su lista de validación, el convertidor y las columnas SQL con su prueba. Surgió al programar V4-B5 (D-144)
+- **Columna de nivel en la plantilla de Excel de preguntas.** Para que el médico lo llene al subir un lote. Surgió al programar V4-B5 (D-144)
+- **Vista de semana en el Calendario.** El plan por semanas cubre la lectura, pero un día a día de la semana podría servir a quien estudia por horas. Surgió al programar V4-B6 (D-144)
+- **Percentil de simulador completo separado del de práctica.** La comparación de B14 junta respuestas de práctica y de examen. Separarlas pide otra métrica en las celdas de la noche. Surgió al revisar V4-B7 (D-144)
+- **Elegir el orden de las ramas del plan del Calendario.** Hoy el plan usa las cuatro ramas troncales por omisión y ninguna pantalla edita ese ajuste. Debe incluir las demás ramas del examen. Surgió en la auditoría de V4-B10 (D-146)
+- **Estadísticas por mazo con el catálogo de la nube.** El panel solo se monta con el catálogo que viene en la app. Faltan también las sanguijuelas, la última vez estudiado y los botones a Estudiar un tema y a Buscar con el filtro. Surgió en la auditoría de V4-B10 (D-146)
+- **Plan de hoy dentro de Repasar, simulacros cortos como cifra y aviso de cifra imposible.** Surgió en la auditoría de V4-B10 (D-146)
+- **Marcar para degradar la calidad de una imagen a propósito.** Pide un campo en la pregunta y en el editor del médico. Surgió en la auditoría de V4-B10 (D-146)
+- **Búsqueda de tarjetas con el tema completo y sin recalcular por tecla.** El campo tema solo ve los tres primeros niveles y con 50 mil tarjetas los campos con texto plegado tardan unos 200 ms por tecla. Surgió en la auditoría de V4-B10 (D-146)
+- **Sanear por lotes en el importador.** Hoy se sanea todo en el hilo principal sin ceder, y un archivo con millones de notas lo congela unos segundos. Surgió en la auditoría de V4-B10 (D-146)
+- **Pedir al alumno que cuente cuántas tarjetas esperaba al importar un mazo muy grande.** Surgió en la auditoría de V4-B10 (D-146)
+- **Cargar los textos de cada pantalla bajo demanda.** El JavaScript inicial está en 298.0 KB de 300 y los textos del idioma común (src/i18n/es-MX.ts) viajan todos en él. Moverlos a módulos que cargue cada pantalla devuelve varios KB de margen. Surgió en la auditoría de V4-B10 (D-146)
+- **Campo sin indicador de foco en Datos de demostración y un 400 en consola en Configuración de plataforma.** Los marcó el barrido audit de interfaz en las pantallas de administración, que V4 no tocó. Surgió en la auditoría de V4-B10 (D-146)
+

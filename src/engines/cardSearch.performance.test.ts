@@ -159,6 +159,21 @@ describe('rendimiento de Buscar tarjetas con 10,000 tarjetas', () => {
     }
   });
 
+  it('los campos con texto tardan menos de 100 ms, porque ya vienen plegados', () => {
+    const fields = [
+      'frente:lupus',
+      'reverso:asma',
+      'mazo:materia',
+      'tema:medicina',
+      'etiqueta:interna',
+      'frente:lupus mazo:materia tema:medicina etiqueta:interna',
+    ];
+    for (const text of fields) {
+      const ms = medianMs(() => searchCards(sorted, query({ text }), NOW));
+      expect(ms, `${text}, mediana ${ms.toFixed(1)} ms`).toBeLessThan(LIMIT_MS);
+    }
+  });
+
   it('ordenar por cualquier columna también tarda menos de 100 ms', () => {
     const sorts: CardSort[] = [
       { key: 'front', direction: 'asc' },
@@ -171,6 +186,23 @@ describe('rendimiento de Buscar tarjetas con 10,000 tarjetas', () => {
     for (const sort of sorts) {
       const ms = medianMs(() => sortCards(rows, sort));
       expect(ms, `${sort.key}, mediana ${ms.toFixed(1)} ms`).toBeLessThan(LIMIT_MS);
+    }
+  });
+});
+
+describe('rendimiento de los campos con 50,000 tarjetas', () => {
+  // Cinco copias de las mismas tarjetas con otro id, para no armar 50,000 distintas
+  const base = makeSources();
+  const many = Array.from({ length: 5 }, (_, copy) =>
+    base.map((source) => ({ ...source, cardId: `${source.cardId}-${String(copy)}` })),
+  ).flat();
+  const rows = buildSearchRows(many, new Set(), 8);
+
+  it('buscar con campo y valor mientras se teclea tarda menos de 100 ms', () => {
+    expect(rows).toHaveLength(CARDS * 5);
+    for (const text of ['frente:lupus', 'mazo:materia', 'tema:medicina', 'etiqueta:interna']) {
+      const ms = medianMs(() => searchCards(rows, { ...EMPTY_QUERY, text }, NOW));
+      expect(ms, `${text}, mediana ${ms.toFixed(1)} ms`).toBeLessThan(LIMIT_MS);
     }
   });
 });

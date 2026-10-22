@@ -26,6 +26,7 @@ export const draftOf = (settings: UserSettings) => ({
   cardTimer: settings.cardTimer,
   easyDays: settings.easyDays,
   reviews: String(settings.reviewsPerDay),
+  questions: String(settings.questionsPerDay),
   metric: settings.dailyGoal.metric,
   goal: String(settings.dailyGoal.value),
   cardConfidenceStep: settings.cardConfidenceStep,
@@ -50,6 +51,7 @@ export const patchOf = (draft: StudyDraft) => ({
   cardTimer: draft.cardTimer,
   easyDays: draft.easyDays,
   reviewsPerDay: clamp(draft.reviews, 0, 5000),
+  questionsPerDay: clamp(draft.questions, 0, 1000),
   dailyGoal: { metric: draft.metric, value: clamp(draft.goal, 1, 1000) },
   cardConfidenceStep: draft.cardConfidenceStep,
   negationHighlightPractice: draft.negationHighlightPractice,
@@ -75,6 +77,7 @@ export function differs(patch: StudyPatch, settings: UserSettings): boolean {
     patch.cardTimer.autoReveal !== settings.cardTimer.autoReveal ||
     WEEKDAY_KEYS.some((day) => patch.easyDays[day] !== settings.easyDays[day]) ||
     patch.reviewsPerDay !== settings.reviewsPerDay ||
+    patch.questionsPerDay !== settings.questionsPerDay ||
     patch.dailyGoal.metric !== settings.dailyGoal.metric ||
     patch.dailyGoal.value !== settings.dailyGoal.value ||
     STUDY_KEYS.some((key) => patch[key] !== settings[key]) ||

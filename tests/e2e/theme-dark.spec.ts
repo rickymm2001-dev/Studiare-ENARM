@@ -37,6 +37,7 @@ const STUDENT: readonly (readonly [ScreenKey, string?])[] = [
   ['outlines'],
   ['simulatorSetup', t.exam.cardTitle],
   ['progress', t.progress.futureLoad.title],
+  ['calendar', t.calendar.plan.title],
   ['tutor', t.tutor.report.title],
   ['party'],
   ['subscription'],

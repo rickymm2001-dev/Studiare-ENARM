@@ -19,6 +19,14 @@ import type { ParsedImport, ParsedNote, RowError } from '../import/types';
 type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
 export const IMPORT_BATCH = 500;
+/**
+ * Un campo en bruto puede ser mucho más largo que el guardado, porque sanear quita estilos y atributos.
+ * Pasado este múltiplo del largo máximo ya no cabe aunque se sanee, y se rechaza sin pasarlo por el
+ * saneador, que en el hilo de la interfaz tardaría en un campo de decenas de megas
+ */
+const RAW_FIELD_FACTOR = 20;
+/** Cede el hilo a la interfaz, para que sanear un archivo grande no la deje congelada */
+const yieldToInterface = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 /** Largo máximo de un nombre de mazo, igual que el esquema */
 const DECK_NAME_MAX = 120;
 
@@ -79,6 +87,8 @@ function prepare(
   options: ImportOptions,
   limits: ImportLimits,
 ): Prepared | RowError['code'] {
+  const rawMax = limits.maxFieldChars * RAW_FIELD_FACTOR;
+  if (note.front.length > rawMax || note.back.length > rawMax) return 'too_long';
   const html = (text: string) => options.sanitize(note.html ? text : textToHtml(text)).trim();
   const front = html(note.front);
   const back = html(note.back);
@@ -155,7 +165,8 @@ export async function importParsed(
 
   const rejected: RowError[] = [...parsed.errors];
   const prepared: Prepared[] = [];
-  for (const note of parsed.notes) {
+  for (const [index, note] of parsed.notes.entries()) {
+    if (index > 0 && index % IMPORT_BATCH === 0) await yieldToInterface();
     const result = prepare(note, options, limits);
     if (typeof result === 'string') rejected.push({ position: note.position, code: result });
     else prepared.push(result);

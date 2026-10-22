@@ -19,11 +19,11 @@ const COLOR = {
   action: '#156082',
   onAction: '#ffffff',
   onActionSoft: 'rgba(255, 255, 255, 0.85)',
-  tile: '#f5f6f7',
-  line: '#dde2e6',
+  tile: '#f6f3ee',
+  line: '#ddd6c9',
   ink: '#16212b',
   muted: '#576570',
-  sim: '#eef0f2',
+  sim: '#eeeae2',
   simInk: '#3f4b55',
 } as const;
 

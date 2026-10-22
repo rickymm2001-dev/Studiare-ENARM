@@ -52,6 +52,8 @@ export function reviewedToday(
   for (const event of events) {
     if (event.type !== 'card_reviewed' || studyDayOf(new Date(event.at), event.tz) !== today)
       continue;
+    // Lo estudiado en una sesión por tema es adicional y no gasta el cupo del día (V4-B3)
+    if (event.payload.extra === true) continue;
     if (event.payload.stateBefore === null || event.payload.stateBefore.state === 'new')
       newCount += 1;
     else reviewCount += 1;

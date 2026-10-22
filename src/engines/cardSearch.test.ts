@@ -4,6 +4,7 @@ import {
   EMPTY_QUERY,
   buildSearchRows,
   compareSortKeys,
+  extractFieldFilters,
   foldText,
   parseTextQuery,
   plainText,
@@ -371,5 +372,131 @@ describe('orden por columna', () => {
     expect(order('created', 'asc')).toEqual(['a', 'b', 'c']);
     // A igual fecha desempata el ID, en el mismo sentido siempre
     expect(order('updated', 'desc')).toEqual(['a', 'b', 'c']);
+  });
+});
+
+describe('búsqueda con campo:valor', () => {
+  const rows = rowsOf(
+    [
+      source('a', {
+        deckPath: ['Medicina interna (Paco)', 'Infectología'],
+        topicPath: ['Medicina interna', 'Infectología', 'Sepsis'],
+        tags: ['Medicina-Interna::Infectología::Sepsis'],
+        state: state({ lapses: 4, scheduledDays: 30, lastReview: '2026-09-08T12:00:00.000Z' }),
+      }),
+      source('b', {
+        kind: 'cloze',
+        deckPath: ['Ginecología y obstetricia (Paco)', 'Obstetricia'],
+        topicPath: ['Ginecología y obstetricia', 'Obstetricia', 'Control prenatal'],
+        tags: ['Gineco::Control_prenatal'],
+        front: '<p>El {{c1::ácido fólico}} previene defectos del tubo neural</p>',
+        back: 'Cuatro miligramos al día',
+        state: state({ due: '2026-10-20T12:00:00.000Z', lapses: 0 }),
+      }),
+      source('c', { kind: 'basic_reverse', origin: 'own', state: null }),
+    ],
+    ['c'],
+  );
+
+  it('mazo y tema buscan en la ruta, sin importar acentos', () => {
+    expect(found(rows, { text: 'mazo:gineco' })).toEqual(['b']);
+    expect(found(rows, { text: 'tema:infectologia' })).toEqual(['a', 'c']);
+    expect(found(rows, { text: 'tema:"control prenatal"' })).toEqual(['b']);
+  });
+
+  it('estado acepta los nombres en español y la suspendida cuenta aparte', () => {
+    expect(found(rows, { text: 'estado:repaso' })).toEqual(['a', 'b']);
+    expect(found(rows, { text: 'estado:suspendida' })).toEqual(['c']);
+    // c está suspendida y nunca se ha visto, así que también es nueva, como en el chip
+    expect(found(rows, { text: 'estado:nueva' })).toEqual(['c']);
+  });
+
+  it('estado da lo mismo que el chip de estado, también con una suspendida', () => {
+    const withSuspendedReview = buildSearchRows(
+      [
+        source('r', { state: state({}) }),
+        source('s', { state: state({}) }),
+        source('n', { state: null }),
+      ],
+      new Set(['s']),
+      8,
+    );
+    const states = [
+      ['repaso', 'review'],
+      ['nueva', 'new'],
+      ['suspendida', 'suspended'],
+    ] as const;
+    for (const [word, chip] of states) {
+      expect(found(withSuspendedReview, { text: `estado:${word}` })).toEqual(
+        found(withSuspendedReview, { states: new Set([chip]) }),
+      );
+    }
+    expect(found(withSuspendedReview, { text: 'estado:repaso' })).toEqual(['r', 's']);
+  });
+
+  it('una comilla sin cerrar agrupa hasta el final mientras el alumno escribe', () => {
+    expect(extractFieldFilters('tema:"control pren')).toEqual({
+      rest: '',
+      fields: [{ field: 'tema', value: 'control pren', negate: false }],
+    });
+    expect(found(rows, { text: 'tema:"control pren' })).toEqual(['b']);
+    // En texto libre es una frase abierta y no una palabra que lleva la comilla
+    expect(found(rows, { text: '"ácido fól' })).toEqual(['b']);
+    expect(found(rows, { text: 'estado:repaso "ácido fól' })).toEqual(['b']);
+    // Una comilla sola no busca nada
+    expect(found(rows, { text: '"' })).toEqual(['a', 'b', 'c']);
+  });
+
+  it('vence:hoy y vence:N miran el próximo repaso y nunca incluyen las suspendidas', () => {
+    expect(found(rows, { text: 'vence:hoy' })).toEqual(['a']);
+    expect(found(rows, { text: 'vence:7' })).toEqual(['a']);
+    expect(found(rows, { text: 'vence:30' })).toEqual(['a', 'b']);
+  });
+
+  it('intervalo y fallos comparan con mayor, menor o igual', () => {
+    expect(found(rows, { text: 'intervalo:>21' })).toEqual(['a']);
+    expect(found(rows, { text: 'intervalo:<=16' })).toEqual(['b']);
+    expect(found(rows, { text: 'fallos:>=3' })).toEqual(['a']);
+    expect(found(rows, { text: 'fallos:0' })).toEqual(['b', 'c']);
+  });
+
+  it('tipo, etiqueta, frente y reverso', () => {
+    expect(found(rows, { text: 'tipo:cloze' })).toEqual(['b']);
+    expect(found(rows, { text: 'tipo:inversa' })).toEqual(['c']);
+    expect(found(rows, { text: 'etiqueta:control_prenatal' })).toEqual(['b']);
+    expect(found(rows, { text: 'frente:acido' })).toEqual(['b']);
+    expect(found(rows, { text: 'reverso:disfuncion' })).toEqual(['a', 'c']);
+  });
+
+  it('un guion niega el filtro y se combina con texto y con otros campos', () => {
+    expect(found(rows, { text: '-tipo:cloze' })).toEqual(['a', 'c']);
+    expect(found(rows, { text: 'estado:repaso -mazo:gineco' })).toEqual(['a']);
+    expect(found(rows, { text: 'sepsis fallos:>=3' })).toEqual(['a']);
+  });
+
+  it('un campo desconocido o un valor que no vale se busca como texto', () => {
+    expect(extractFieldFilters('dosis:5 estado:raro')).toEqual({
+      rest: 'dosis:5 estado:raro',
+      fields: [],
+    });
+    expect(found(rows, { text: 'estado:raro' })).toEqual([]);
+    expect(found(rows, { text: 'vence:0' })).toEqual([]);
+  });
+
+  it('extractFieldFilters deja el resto y valida cada campo', () => {
+    expect(extractFieldFilters('sepsis mazo:"Medicina interna" -estado:nueva')).toEqual({
+      rest: 'sepsis  ',
+      fields: [
+        { field: 'mazo', value: 'medicina interna', negate: false },
+        { field: 'estado', value: 'nueva', negate: true },
+      ],
+    });
+  });
+
+  it('los filtros de campo no cambian los conteos de los chips de otros filtros', () => {
+    const base = searchCards(rows, query({ text: '' }), NOW);
+    const withField = searchCards(rows, query({ text: 'tipo:cloze' }), NOW);
+    expect(withField.rows.map((row) => row.cardId)).toEqual(['b']);
+    expect(base.facets.decks.size).toBeGreaterThanOrEqual(withField.facets.decks.size);
   });
 });

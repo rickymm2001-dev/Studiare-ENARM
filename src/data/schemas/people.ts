@@ -31,6 +31,8 @@ export const UserSettingsSchema = z.strictObject({
     .default({ hard: 1, good: 1, easy: 1 }),
   newCardsPerDay: z.int().min(0).max(MAX_NEW_CARDS_PER_DAY).default(20),
   reviewsPerDay: z.int().min(0).max(5000).default(200),
+  /** Preguntas que el alumno se propone contestar cada día. 0 la apaga. La guía propone 50 (V4-B4) */
+  questionsPerDay: z.int().min(0).max(1000).default(50),
   /**
    * Sin límite de tarjetas nuevas por día. Apagado por defecto y se enciende con un aviso, porque
    * muchas nuevas juntas se vuelven una avalancha de repasos (D-085, fila 6)

@@ -70,6 +70,7 @@ export function poolQuestionOfEntry(entry: CatalogEntry, cached = false): PoolQu
     subtopic: entry.subtopic,
     physicianDifficulty: entry.difficulty,
     ...(entry.itemKinds.length > 0 ? { itemKinds: entry.itemKinds } : {}),
+    ...(entry.cognitiveLevel ? { cognitiveLevel: entry.cognitiveLevel } : {}),
     ...(entry.variantOf ? { variantOf: entry.variantOf } : {}),
     isDemo: false,
     structure: { polarity: entry.polarity, task: entry.task, format: entry.format },

@@ -69,6 +69,7 @@ import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
 import { ReviewCounters } from './ReviewCounters';
+import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
@@ -241,13 +242,15 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         />
         <StudyTabs />
         {settingsPanel}
-        {hasScheduled ? (
-          <FeatureGate userId={session.user.id} feature="overdueTools">
-            <OverdueTools session={session} cards={cards} events={events} />
-          </FeatureGate>
-        ) : null}
         <ReviewSetup
           addDeck={<AddDeckButton />}
+          overdue={
+            hasScheduled ? (
+              <FeatureGate userId={session.user.id} feature="overdueTools">
+                <OverdueTools session={session} cards={cards} events={events} />
+              </FeatureGate>
+            ) : null
+          }
           cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
           deckNames={unitNames}
           // Todos los temas de cada mazo, también los de sus tarjetas suspendidas (comentario 8)
@@ -331,6 +334,17 @@ function buildQueue(input: {
 }): string[] {
   const now = new Date();
   const states = latestCardStates(input.events);
+  // Estudiar un tema es aparte de la cola del día, con todas las tarjetas elegidas y sin límite diario
+  if (input.mode === 'topic') {
+    return buildTopicQueue({
+      cards: input.cards.map((card) => ({
+        cardId: card.id,
+        noteId: card.noteId,
+        state: states.get(card.id) ?? null,
+      })),
+      now,
+    });
+  }
   const noteOfCard = new Map(input.cards.map((card) => [card.id, card.noteId]));
   const daily = buildDailyQueue({
     cards: input.cards.map((card) => ({
@@ -518,6 +532,7 @@ function ReviewSession({
           msToRate: Math.max(0, msToRate),
           stateBefore: before,
           stateAfter: outcome.state,
+          ...(mode === 'topic' ? { extra: true } : {}),
         },
         ctx(),
       ),
@@ -781,7 +796,7 @@ function ReviewSession({
       {extras}
       <Card
         aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}
-        className="w-full lg:max-w-reading"
+        className="w-full lg:mx-auto lg:w-full lg:max-w-session"
       >
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge variant={isNew ? 'info' : 'neutral'}>
@@ -802,7 +817,7 @@ function ReviewSession({
       </Card>
 
       {note.controversy ? (
-        <div className="lg:max-w-reading">
+        <div className="lg:mx-auto lg:w-full lg:max-w-session">
           <ControversySignal
             controversy={note.controversy}
             onVerify={async () => {
@@ -821,7 +836,7 @@ function ReviewSession({
       ) : null}
 
       {timerRuns ? (
-        <div className="lg:max-w-reading">
+        <div className="lg:mx-auto lg:w-full lg:max-w-session">
           <CardTimerBar
             remainingMs={timer.remainingMs}
             totalSeconds={settings.cardTimer.seconds}
@@ -849,7 +864,7 @@ function ReviewSession({
           }}
         />
       ) : step === 'cause' ? (
-        <fieldset className="flex flex-col gap-2 lg:max-w-reading">
+        <fieldset className="flex flex-col gap-2 lg:mx-auto lg:w-full lg:max-w-session">
           <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(Object.keys(t.review.causes) as Cause[]).map((cause) => (
@@ -882,7 +897,7 @@ function ReviewSession({
         </fieldset>
       ) : (
         // Confianza, revelar y calificar, siempre a la mano en el teléfono (D-078)
-        <ActionDock className="lg:max-w-reading">
+        <ActionDock className="lg:mx-auto lg:w-full lg:max-w-session">
           {step === 'confidence' ? (
             <>
               <p className="text-sm font-medium">{t.review.confidenceQuestion}</p>

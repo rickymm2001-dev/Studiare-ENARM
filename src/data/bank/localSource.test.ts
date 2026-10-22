@@ -132,3 +132,13 @@ describe('fuente local, el banco de demostración de siempre (5.1)', () => {
     expect(poolQuestionOf(question, true)).not.toHaveProperty('variantOf');
   });
 });
+
+describe('nivel cognitivo en el pool (V4-B5)', () => {
+  it('pasa el nivel de la pregunta al pool y sin nivel no inventa el campo', () => {
+    const { question } = makeQuestionWithOptions();
+    expect(poolQuestionOf(question, true)).not.toHaveProperty('cognitiveLevel');
+    expect(poolQuestionOf({ ...question, cognitiveLevel: 'synthesis' }, true).cognitiveLevel).toBe(
+      'synthesis',
+    );
+  });
+});

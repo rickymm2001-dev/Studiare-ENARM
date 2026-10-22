@@ -3,6 +3,7 @@
 // #columns, y también un CSV común con encabezados o sin ellos. Detecta el separador si no se
 // declaró y, si el archivo no es UTF-8, lo lee como Windows-1252, que es lo que guarda Excel.
 import Papa from 'papaparse';
+import { restoreFormula } from './exportCsv';
 import { IMPORT_LIMITS, type ImportLimits } from './limits';
 import { notesFromRows, type RowsOptions } from './rows';
 import { ImportError, type ParsedImport } from './types';
@@ -16,16 +17,22 @@ const SEPARATORS: Record<string, string> = {
   colon: ':',
 };
 
-// La marca de orden de bytes y el carácter de reemplazo se escriben con su código para que ningún
-// editor ni formateador los convierta en un carácter invisible dentro del archivo
+// La marca de orden de bytes se escribe con su código para que ningún editor ni formateador la
+// convierta en un carácter invisible dentro del archivo
 const BOM = String.fromCharCode(0xfeff);
-const REPLACEMENT = String.fromCharCode(0xfffd);
 
-/** Texto del archivo. UTF-8, sin la marca de orden de bytes, o Windows-1252 si no es UTF-8 */
+/**
+ * Texto del archivo. UTF-8, sin la marca de orden de bytes, o Windows-1252 si no es UTF-8. La
+ * decodificación estricta es la que dice si lo es, y no buscar un carácter de reemplazo en el
+ * resultado, porque un archivo UTF-8 válido puede traer ese carácter escrito a propósito
+ */
 export function decodeText(bytes: Uint8Array): string {
-  const decoded = new TextDecoder('utf-8').decode(bytes);
-  const utf8 = decoded.startsWith(BOM) ? decoded.slice(1) : decoded;
-  return utf8.includes(REPLACEMENT) ? new TextDecoder('windows-1252').decode(bytes) : utf8;
+  try {
+    const decoded = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    return decoded.startsWith(BOM) ? decoded.slice(1) : decoded;
+  } catch {
+    return new TextDecoder('windows-1252').decode(bytes);
+  }
 }
 
 interface Directives {
@@ -96,8 +103,9 @@ export function parseCsv(
     quoteChar: '"',
   });
   if (parsed.data.length === 0) throw new ImportError('empty');
+  // El CSV que exporta Studiare antepone un apóstrofo a las celdas que parecen fórmulas
   const result = notesFromRows(
-    parsed.data,
+    parsed.data.map((row) => row.map(restoreFormula)),
     {
       html: directives.html,
       columns: directives.columns,

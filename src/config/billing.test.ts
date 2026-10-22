@@ -6,8 +6,10 @@ import {
   checkoutPlanFor,
   FOUNDER_SEATS,
   GATED_FEATURES,
+  FREE_CATALOG_DECK_KEYS,
   GUARANTEE_DAYS,
   isFounderPlan,
+  isFreeCatalogDeck,
   isGatedFeature,
   isYearlyPlan,
   PASS_PRICES_MXN,
@@ -200,5 +202,13 @@ describe('candados del plan (B8)', () => {
     // Todo lo que se compara está incluido en los de pago y algo de eso falta en Gratis
     expect(PLAN_HIGHLIGHTS.every((lock) => canUse('monthly', lock))).toBe(true);
     expect(PLAN_HIGHLIGHTS.filter((lock) => !canUse('free', lock)).length).toBeGreaterThan(0);
+  });
+
+  it('Urgencias es el único mazo del catálogo abierto en Gratis (V4-B8)', () => {
+    expect(FREE_CATALOG_DECK_KEYS).toEqual(['paco-urgencias']);
+    expect(isFreeCatalogDeck('paco-urgencias')).toBe(true);
+    expect(isFreeCatalogDeck('paco-mi')).toBe(false);
+    // La bandera del plan no cambia, la excepción es solo de ese mazo
+    expect(canUse('free', 'deckCatalog')).toBe(false);
   });
 });

@@ -49,6 +49,7 @@ import {
 import { loadExamState, saveExamState } from './examStorage';
 import { ExamFinishDialog } from './ExamFinishDialog';
 import { ExamNavigator } from './ExamNavigator';
+import { AnswerSheet, type SheetRow } from './AnswerSheet';
 import { ExamQuestion } from './ExamQuestion';
 import { ExamTimer } from './ExamTimer';
 
@@ -211,19 +212,25 @@ function ExamRunner({
     showCurrent();
   };
 
-  const onChoose = (optionId: string) => {
+  /**
+   * Llena la respuesta de una pregunta. Con la hoja de respuestas puede ser una que no es la que se ve,
+   * así que el tiempo que llevaba solo se suma a la pregunta actual
+   */
+  const chooseFor = (questionId: string, optionId: string) => {
     if (closeIfTimeIsUp()) return;
     const at = clock();
     const current = stateRef.current;
-    const result = choose(current, currentId, optionId, at);
+    const result = choose(current, questionId, optionId, at);
     if (!result.changed) return;
     commit(() => result.state);
-    const spent = answerOf(current, currentId).msSpent + Math.max(0, at - current.enteredAtMs);
+    const here = questionId === (current.questionIds[current.current] ?? '');
+    const spent =
+      answerOf(current, questionId).msSpent + (here ? Math.max(0, at - current.enteredAtMs) : 0);
     void api.recordEvent(
       createEvent(
         'answer_changed',
         {
-          questionVersionId: currentId,
+          questionVersionId: questionId,
           fromOptionVersionId: result.from,
           toOptionVersionId: optionId,
           msSinceShown: Math.round(spent),
@@ -231,6 +238,9 @@ function ExamRunner({
         ctx,
       ),
     );
+  };
+  const onChoose = (optionId: string) => {
+    chooseFor(currentId, optionId);
   };
 
   /** Un segundo del examen. Cierra por tiempo, da los avisos y detecta si se atoró */
@@ -308,6 +318,12 @@ function ExamRunner({
   const marked = markedCount(state);
   const bundle = bundles.get(currentId);
   const shownIds = state.shownOptions[currentId];
+  const sheetRows: SheetRow[] = state.questionIds.map((id, index) => ({
+    number: index + 1,
+    optionIds: state.shownOptions[id] ?? null,
+    chosenId: answerOf(state, id).optionId,
+    marked: answerOf(state, id).marked,
+  }));
   const firstBlank = state.questionIds.findIndex((id) => answerOf(state, id).optionId === null);
   const firstMarked = state.questionIds.findIndex((id) => answerOf(state, id).marked);
   // Los reactivos de la parte en inglés, para marcarlos en el navegador
@@ -320,17 +336,20 @@ function ExamRunner({
   const keys: Record<string, () => void> = {};
   (shownIds ?? []).forEach((optionId, position) => {
     const letter = String.fromCharCode(97 + position);
-    keys[letter] = () => {
-      onChoose(optionId);
-    };
+    // Con la hoja de respuestas las letras no eligen, la respuesta se llena en la hoja
+    if (!state.answerSheet) {
+      keys[letter] = () => {
+        onChoose(optionId);
+      };
+      if (position < 9) {
+        keys[String(position + 1)] = () => {
+          onChoose(optionId);
+        };
+      }
+    }
     keys[`shift+${letter}`] = () => {
       edit((current) => toggleEliminated(current, currentId, optionId));
     };
-    if (position < 9) {
-      keys[String(position + 1)] = () => {
-        onChoose(optionId);
-      };
-    }
   });
   const goNext = () => {
     if (state.current < total - 1) visit(state.current + 1);
@@ -344,6 +363,89 @@ function ExamRunner({
     edit((current) => toggleMarked(current, currentId));
   };
   useShortcuts(keys, !finishOpen);
+
+  const questionNode =
+    bundle && shownIds ? (
+      <ExamQuestion
+        key={currentId}
+        bundle={bundle}
+        shownIds={shownIds}
+        answer={answer}
+        highlight={state.highlight}
+        askConfidence={state.askConfidence}
+        nudge={nudge}
+        position={t.exam.progress(state.current + 1, total)}
+        focusPrompt={focusPrompt}
+        onChoose={onChoose}
+        onToggleDiscard={(optionId) => {
+          edit((current) => toggleEliminated(current, currentId, optionId));
+        }}
+        onConfidence={(level) => {
+          edit((current) => setConfidence(current, currentId, level));
+        }}
+        sheetMode={state.answerSheet}
+      />
+    ) : (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.exam.loading}</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+
+  // Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono marcar queda
+  // solo con su ícono, para que su texto no se parta en tres renglones, y deja el espacio a Anterior y
+  // Siguiente (H14 de la revisión de B2). Con la hoja de respuestas las letras no eligen, así que su
+  // recordatorio de teclas no las ofrece
+  const dock = (placement?: string) => (
+    <ActionDock className={cn('lg:mx-auto lg:w-full lg:max-w-session', placement)}>
+      <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
+        <Button
+          variant="secondary"
+          disabled={state.current === 0}
+          onClick={() => {
+            visit(state.current - 1);
+          }}
+        >
+          <ChevronLeft aria-hidden />
+          {t.exam.previous}
+        </Button>
+        <Button
+          variant={answer.marked ? 'primary' : 'secondary'}
+          aria-pressed={answer.marked}
+          aria-label={markLabel}
+          className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
+          onClick={() => {
+            edit((current) => toggleMarked(current, currentId));
+          }}
+        >
+          <Flag aria-hidden />
+          <span className="max-sm:hidden">{markLabel}</span>
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={state.current >= total - 1}
+          onClick={() => {
+            visit(state.current + 1);
+          }}
+        >
+          {t.exam.next}
+          <ChevronRight aria-hidden />
+        </Button>
+      </div>
+      <KeyHint>
+        {state.answerSheet ? null : (
+          <>
+            <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
+            {t.exam.keys.choose} ·{' '}
+          </>
+        )}
+        <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter} {t.exam.keys.discard} ·{' '}
+        <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd> {t.exam.keys.previous} · <Kbd>M</Kbd>{' '}
+        {t.exam.keys.mark}
+      </KeyHint>
+    </ActionDock>
+  );
 
   return (
     <>
@@ -400,78 +502,34 @@ function ExamRunner({
         ) : null}
       </div>
 
-      {bundle && shownIds ? (
-        <ExamQuestion
-          key={currentId}
-          bundle={bundle}
-          shownIds={shownIds}
-          answer={answer}
-          highlight={state.highlight}
-          askConfidence={state.askConfidence}
-          nudge={nudge}
-          position={t.exam.progress(state.current + 1, total)}
-          focusPrompt={focusPrompt}
-          onChoose={onChoose}
-          onToggleDiscard={(optionId) => {
-            edit((current) => toggleEliminated(current, currentId, optionId));
-          }}
-          onConfidence={(level) => {
-            edit((current) => setConfidence(current, currentId, level));
-          }}
-        />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t.exam.loading}</CardTitle>
-          </CardHeader>
-        </Card>
-      )}
-
-      {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono
-          marcar queda solo con su ícono, para que su texto no se parta en tres renglones, y deja
-          el espacio a Anterior y Siguiente (H14 de la revisión de B2) */}
-      <ActionDock className="lg:max-w-reading">
-        <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
-          <Button
-            variant="secondary"
-            disabled={state.current === 0}
-            onClick={() => {
-              visit(state.current - 1);
-            }}
-          >
-            <ChevronLeft aria-hidden />
-            {t.exam.previous}
-          </Button>
-          <Button
-            variant={answer.marked ? 'primary' : 'secondary'}
-            aria-pressed={answer.marked}
-            aria-label={markLabel}
-            className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
-            onClick={() => {
-              edit((current) => toggleMarked(current, currentId));
-            }}
-          >
-            <Flag aria-hidden />
-            <span className="max-sm:hidden">{markLabel}</span>
-          </Button>
-          <Button
-            variant="secondary"
-            disabled={state.current >= total - 1}
-            onClick={() => {
-              visit(state.current + 1);
-            }}
-          >
-            {t.exam.next}
-            <ChevronRight aria-hidden />
-          </Button>
+      {state.answerSheet ? (
+        // En el teléfono y la tableta es una columna con la pregunta, la hoja y al final Anterior, marcar y
+        // Siguiente, que se quedan pegados abajo mientras se recorre la hoja (D-078). Un elemento pegajoso
+        // solo se queda en pantalla si su lugar natural está debajo, así que va después de la hoja, y en
+        // una columna flex y no en una cuadrícula, donde solo se pega dentro de su propia celda. En
+        // computadora, donde ya no es pegajoso, la hoja va a un lado y el dock bajo la pregunta
+        <div className="flex flex-col gap-5 xl:grid xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start">
+          <div className="min-w-0 xl:col-start-1 xl:row-start-1">{questionNode}</div>
+          <aside className="min-w-0 xl:sticky xl:top-24 xl:col-start-2 xl:row-span-2 xl:row-start-1">
+            <AnswerSheet
+              rows={sheetRows}
+              current={state.current}
+              disabled={isFinished(state)}
+              onChoose={(index, optionId) => {
+                const id = state.questionIds[index];
+                if (id !== undefined) chooseFor(id, optionId);
+              }}
+              onGo={visit}
+            />
+          </aside>
+          {dock('xl:col-start-1 xl:row-start-2')}
         </div>
-        <KeyHint>
-          <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
-          {t.exam.keys.choose} · <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter}{' '}
-          {t.exam.keys.discard} · <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd>{' '}
-          {t.exam.keys.previous} · <Kbd>M</Kbd> {t.exam.keys.mark}
-        </KeyHint>
-      </ActionDock>
+      ) : (
+        <>
+          {questionNode}
+          {dock()}
+        </>
+      )}
 
       <ExamNavigator state={state} onGo={visit} englishIds={englishIds} />
 

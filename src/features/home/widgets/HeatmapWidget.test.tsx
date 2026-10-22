@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // El heatmap pinta cada día con la escala de cinco pasos de la paleta (D-128), del token heatmap-0
 // para el día sin actividad al heatmap-4 para el más activo, y la leyenda enseña los cinco pasos
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { makeUser } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
@@ -66,5 +66,75 @@ describe('heatmap de estudio', () => {
       'bg-heatmap-3',
       'bg-heatmap-4',
     ]);
+  });
+});
+
+describe('detalle de un día', () => {
+  it('tocar un día dice sus cifras debajo y tocarlo otra vez lo quita', () => {
+    const { container } = render(
+      <HeatmapWidget
+        snapshot={{
+          ...snapshot,
+          activity: {
+            ...snapshot.activity,
+            '2026-10-13': { ...day(30), questions: 12, focusMinutes: 45 },
+          },
+        }}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+      />,
+    );
+    const cell = container.querySelector(
+      `[title="${t.widgets.heatmap.cell('2026-10-13', 30, metric)}"]`,
+    ) as HTMLElement;
+    expect(screen.queryByRole('status')).toBeNull();
+    fireEvent.click(cell);
+    expect(screen.getByRole('status').textContent).toBe(
+      t.widgets.heatmap.detail('martes, 13 de octubre', 30, 12, 45),
+    );
+    fireEvent.click(cell);
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('el día elegido se marca con el color de indicador, que pasa 3 a 1 también en oscuro', () => {
+    const { container } = render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+      />,
+    );
+    const cell = container.querySelector(
+      `[title="${t.widgets.heatmap.cell('2026-10-13', 30, metric)}"]`,
+    ) as HTMLElement;
+    fireEvent.click(cell);
+    expect(cell).toHaveClass('ring-indicator');
+    expect(container.innerHTML).not.toMatch(/ring-primary/);
+  });
+
+  it('pone el enlace que le pasan justo después del resumen, para llegar al detalle con teclado', () => {
+    render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+        detailLink={<a href="/calendario">{t.calendar.heatmapLink}</a>}
+      />,
+    );
+    const link = screen.getByRole('link', { name: t.calendar.heatmapLink });
+    // Va dentro del mismo párrafo del resumen, así el lector lo lee junto
+    expect(link.parentElement?.textContent).toMatch(/días con actividad/);
+    expect(link.closest('[aria-hidden]')).toBeNull();
+  });
+
+  it('sin enlace el resumen queda como estaba', () => {
+    render(
+      <HeatmapWidget
+        snapshot={snapshot}
+        settings={{ range: 90, metric: 'cards' }}
+        since="2026-07-01"
+      />,
+    );
+    expect(screen.queryByRole('link')).toBeNull();
   });
 });

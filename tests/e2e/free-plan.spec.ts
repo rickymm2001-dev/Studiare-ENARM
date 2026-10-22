@@ -52,9 +52,15 @@ test('en Gratis cada candado muestra su vista previa y su botón lleva a los pla
   await page.goto(SCREENS.decks.path);
   const catalog = page.getByRole('region', { name: t.decks.preloadedTitle });
   await expect(catalog.getByText(t.freePlan.catalog.notice)).toBeVisible({ timeout: 30_000 });
+  // Urgencias va abierto en Gratis (V4-B8). Los demás mazos nuevos llevan el candado
   const small = catalog.getByRole('listitem').filter({ hasText: SMALL });
-  await expect(small.getByText(t.freePlan.catalog.rowLocked)).toBeVisible({ timeout: 30_000 });
-  await expect(catalog.getByRole('button', { name: t.decks.follow })).toHaveCount(0);
+  await expect(small.getByRole('button', { name: t.decks.follow })).toBeEnabled({
+    timeout: 30_000,
+  });
+  await expect(small.getByText(t.freePlan.catalog.rowLocked)).toHaveCount(0);
+  const bigRow = catalog.getByRole('listitem').filter({ hasText: BIG });
+  await expect(bigRow.getByText(t.freePlan.catalog.rowLocked)).toBeVisible();
+  await expect(catalog.getByRole('button', { name: t.decks.follow })).toHaveCount(1);
   const upload = page.getByRole('region', { name: t.freePlan.importDecks.title });
   await expect(upload).toBeVisible();
   for (const point of t.freePlan.importDecks.points) {

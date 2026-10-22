@@ -35,6 +35,7 @@ export function ExamQuestion({
   onChoose,
   onToggleDiscard,
   onConfidence,
+  sheetMode = false,
 }: {
   bundle: QuestionBundle;
   /** Opciones en el orden en que se le muestran */
@@ -51,6 +52,8 @@ export function ExamQuestion({
   onChoose: (optionId: string) => void;
   onToggleDiscard: (optionId: string) => void;
   onConfidence: (level: Confidence | null) => void;
+  /** La respuesta se llena en la hoja de respuestas. Las opciones solo se leen y se pueden descartar */
+  sheetMode?: boolean;
 }) {
   const { question, options, vignette } = bundle;
   const shown = shownIds.flatMap((id) => {
@@ -98,7 +101,9 @@ export function ExamQuestion({
       aria-labelledby="examen-pregunta-frase"
       className={cn(
         'w-full',
-        twoColumns ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6' : 'lg:max-w-reading',
+        twoColumns
+          ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6'
+          : 'lg:mx-auto lg:w-full lg:max-w-session',
       )}
     >
       <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
@@ -146,7 +151,9 @@ export function ExamQuestion({
           </p>
         ) : null}
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 text-sm text-fg-muted">{t.choice.optionsHint}</legend>
+          <legend className="mb-1 text-sm text-fg-muted">
+            {sheetMode ? t.answerSheet.readOnlyNote : t.choice.optionsHint}
+          </legend>
           <ul className="flex flex-col gap-2">
             {shown.map((option, position) => (
               <OptionChoice
@@ -156,6 +163,7 @@ export function ExamQuestion({
                 text={option.text}
                 lang={lang}
                 selected={answer.optionId === option.id}
+                readOnlyChoice={sheetMode}
                 discarded={answer.eliminated.includes(option.id)}
                 onChoose={() => {
                   onChoose(option.id);

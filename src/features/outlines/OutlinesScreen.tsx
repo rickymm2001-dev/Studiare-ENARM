@@ -22,6 +22,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 import { FeatureGate } from '../shared/FeatureGate';
+import { StudyMethodsCard } from '../shared/StudyMethodsCard';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { OutlinePage } from './OutlinePage';
 import { OutlinesList } from './OutlinesList';
@@ -86,5 +87,10 @@ function Outlines({ session }: { session: ReadySession }) {
       />
     );
   }
-  return <OutlinesList session={session} outlines={data.outlines} decks={data.decks} />;
+  return (
+    <>
+      <OutlinesList session={session} outlines={data.outlines} decks={data.decks} />
+      <StudyMethodsCard />
+    </>
+  );
 }

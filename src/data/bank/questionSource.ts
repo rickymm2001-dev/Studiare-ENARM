@@ -21,6 +21,7 @@ export interface PoolQuestion extends Pick<
   | 'subtopic'
   | 'physicianDifficulty'
   | 'itemKinds'
+  | 'cognitiveLevel'
   | 'variantOf'
   | 'isDemo'
 > {

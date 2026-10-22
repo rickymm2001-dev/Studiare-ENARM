@@ -7,10 +7,15 @@ import { Lock } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { LockedNote } from '../shared/LockedPreview';
 
-export function CatalogLockNotice() {
+/**
+ * El aviso de arriba de la lista. freeDeck agrega que Urgencias va abierto, y solo lo dice el catálogo
+ * que viene en la app, porque el de la nube lo cierra el servidor hasta que se autorice su regla
+ */
+export function CatalogLockNotice({ freeDeck = false }: { freeDeck?: boolean }) {
   return (
-    <div className="mb-3">
+    <div className="mb-3 flex flex-col gap-1">
       <LockedNote feature="catalog">{t.freePlan.catalog.notice}</LockedNote>
+      {freeDeck ? <p className="text-sm text-fg-muted">{t.freePlan.catalog.freeDeckNote}</p> : null}
     </div>
   );
 }

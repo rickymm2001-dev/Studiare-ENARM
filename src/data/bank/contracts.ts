@@ -341,6 +341,8 @@ export interface EditorVersion {
   subtopic: string;
   difficulty: number;
   itemKinds: string[];
+  /** Nivel cognitivo de Bloom. Ausente si el servidor no lo guarda o la pregunta no lo trae (V4-B5) */
+  cognitiveLevel?: string | null;
   structure: {
     polarity: 'affirmative' | 'negative';
     task: string;

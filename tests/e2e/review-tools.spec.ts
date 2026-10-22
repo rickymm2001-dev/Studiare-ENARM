@@ -171,6 +171,9 @@ test('atrasos. Adelantar trae un repaso a hoy, posponer mueve lo de hoy y se des
   const postpone = page.getByRole('region', { name: t.overdue.postponeTitle });
   await expect(postpone.getByText(t.overdue.postponeBody(3))).toBeVisible();
   await postpone.getByRole('combobox', { name: t.overdue.postponeDays }).selectOption('2');
+  // Posponer todo es el último recurso y pide confirmar. Sin confirmar el botón no se activa
+  await expect(postpone.getByRole('button', { name: t.overdue.postponeButton(3) })).toBeDisabled();
+  await postpone.getByRole('checkbox', { name: t.overdue.postponeConfirm }).check();
   await postpone.getByRole('button', { name: t.overdue.postponeButton(3) }).click();
   await expect(page.getByText(t.overdue.done.postpone(3))).toBeVisible();
 

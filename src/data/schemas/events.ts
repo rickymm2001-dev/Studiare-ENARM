@@ -46,6 +46,8 @@ export const EventPayloadSchemas = {
     msToRate: Ms,
     stateBefore: FsrsCardStateSchema.nullable(),
     stateAfter: FsrsCardStateSchema,
+    /** true cuando se estudió en una sesión por tema, aparte de la cola del día. No gasta su cupo (V4-B3) */
+    extra: z.boolean().optional(),
   }),
   question_shown: z.strictObject({
     questionVersionId: IdSchema,
@@ -174,7 +176,7 @@ export const EventPayloadSchemas = {
   }),
   deck_imported: z.strictObject({
     deckId: IdSchema,
-    format: z.enum(['apkg_legacy', 'apkg_new', 'csv', 'xlsx', 'docx']),
+    format: z.enum(['apkg_legacy', 'apkg_new', 'csv', 'xlsx', 'docx', 'markdown', 'opml']),
     notes: z.int().nonnegative(),
     cards: z.int().nonnegative(),
     media: z.int().nonnegative(),

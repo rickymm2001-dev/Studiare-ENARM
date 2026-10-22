@@ -483,6 +483,7 @@ describe('las anclas del menú de verdad', () => {
       'nav-outlines',
       'nav-simulatorSetup',
       'nav-progress',
+      'nav-calendar',
       'nav-tutor',
       'nav-party',
       'nav-more',

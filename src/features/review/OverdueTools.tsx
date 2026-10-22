@@ -15,6 +15,7 @@ import {
   MAX_POSTPONE_DAYS,
   MAX_SPREAD_DAYS,
   postponeCards,
+  postponeSafely,
   spreadOverdue,
   summarizeOverdue,
 } from '@/engines/reschedule';
@@ -26,7 +27,7 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card as Panel, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
-import { SelectField, TextField } from '@/ui/components/field';
+import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
 import { queueCardsOf } from './dailyLoadData';
 import { dayLabel } from './dayLabel';
@@ -86,6 +87,8 @@ export function OverdueTools({
     String(summary.needsRecovery ? summary.suggestedDays : 3),
   );
   const [postponeDays, setPostponeDays] = useState('1');
+  const [safeDays, setSafeDays] = useState('2');
+  const [confirmAll, setConfirmAll] = useState(false);
   const [advanceCount, setAdvanceCount] = useState('20');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<Done | null>(null);
@@ -130,6 +133,16 @@ export function OverdueTools({
     config,
     days: Number(postponeDays),
   });
+  const safePostpone = useMemo(
+    () =>
+      postponeSafely({
+        cards: view.dueByToday,
+        now: view.now,
+        config,
+        days: Number(safeDays),
+      }),
+    [view, config, safeDays],
+  );
   const advanceAmount = Math.min(
     MAX_ADVANCE_COUNT,
     Math.max(0, Math.round(Number(advanceCount) || 0)),
@@ -148,11 +161,18 @@ export function OverdueTools({
   const text = t.overdue;
 
   const tools = (
-    <div className="flex flex-col gap-4">
+    // El contenedor decide las columnas por su propio ancho y no por el de la ventana, porque
+    // en Repasar vive en una columna angosta y en el teléfono ocupa todo el ancho
+    <div className="@container flex flex-col gap-4">
       <p className="text-sm text-fg-muted">{text.memoryNote}</p>
-      <div className="grid gap-4 lg:grid-cols-3">
-        <section aria-label={text.spreadTitle} className="flex flex-col gap-2">
-          <h3 className="font-semibold">{text.spreadTitle}</h3>
+      <p className="text-sm font-medium">{text.orderNote}</p>
+      <div className="grid gap-4 @2xl:grid-cols-2">
+        <section
+          aria-label={text.spreadTitle}
+          className="flex flex-col gap-2 rounded-lg border border-line p-3"
+        >
+          <RiskHeading title={text.spreadTitle} level="safe" />
+          <p className="text-sm text-fg-muted">{text.spreadBody}</p>
           <SelectField
             label={text.spreadDays}
             value={spreadDays}
@@ -188,8 +208,57 @@ export function OverdueTools({
           </Button>
         </section>
 
-        <section aria-label={text.postponeTitle} className="flex flex-col gap-2">
-          <h3 className="font-semibold">{text.postponeTitle}</h3>
+        <section
+          aria-label={text.safeTitle}
+          className="flex flex-col gap-2 rounded-lg border border-line p-3"
+        >
+          <RiskHeading title={text.safeTitle} level="care" />
+          <p className="text-sm text-fg-muted">{text.safeBody}</p>
+          <SelectField
+            label={text.postponeDays}
+            value={safeDays}
+            options={POSTPONE_OPTIONS.map((days) => ({
+              value: String(days),
+              label: text.postponeOption(days),
+            }))}
+            onChange={(event) => {
+              setSafeDays(event.target.value);
+            }}
+          />
+          <p className="text-sm">{text.safeCount(safePostpone.safe.length, safePostpone.total)}</p>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="self-start"
+            disabled={busy || safePostpone.safe.length === 0}
+            onClick={() => {
+              void run(async () => ({
+                kind: 'postpone',
+                count: await recordReschedule(api, actor, {
+                  kind: 'postpone',
+                  assignments: postponeSafely({
+                    cards: view.dueByToday,
+                    now: new Date(),
+                    config,
+                    days: Number(safeDays),
+                  }).safe,
+                  days: Number(safeDays),
+                }),
+              }));
+            }}
+          >
+            {text.safeButton(safePostpone.safe.length)}
+          </Button>
+        </section>
+
+        <section
+          aria-label={text.postponeTitle}
+          className="flex flex-col gap-2 rounded-lg border border-danger p-3"
+        >
+          <RiskHeading title={text.postponeTitle} level="last" />
+          <p role="note" className="text-sm text-danger">
+            {text.postponeWarning}
+          </p>
           <p className="text-sm text-fg-muted">{text.postponeBody(view.dueByToday.length)}</p>
           <SelectField
             label={text.postponeDays}
@@ -202,15 +271,21 @@ export function OverdueTools({
               setPostponeDays(event.target.value);
             }}
           />
+          <CheckboxField
+            label={text.postponeConfirm}
+            checked={confirmAll}
+            onChange={(event) => {
+              setConfirmAll(event.target.checked);
+            }}
+          />
           <Button
-            variant="secondary"
+            variant="danger"
             size="sm"
             className="self-start"
-            disabled={busy || postponeItems.length === 0}
+            disabled={busy || postponeItems.length === 0 || !confirmAll}
             onClick={() => {
-              void run(async () => ({
-                kind: 'postpone',
-                count: await recordReschedule(api, actor, {
+              void run(async () => {
+                const count = await recordReschedule(api, actor, {
                   kind: 'postpone',
                   // Con la hora de ahora y no la de cuando se abrió la pantalla
                   assignments: postponeCards({
@@ -220,16 +295,21 @@ export function OverdueTools({
                     days: Number(postponeDays),
                   }),
                   days: Number(postponeDays),
-                }),
-              }));
+                });
+                setConfirmAll(false);
+                return { kind: 'postpone', count };
+              });
             }}
           >
             {text.postponeButton(postponeItems.length)}
           </Button>
         </section>
 
-        <section aria-label={text.advanceTitle} className="flex flex-col gap-2">
-          <h3 className="font-semibold">{text.advanceTitle}</h3>
+        <section
+          aria-label={text.advanceTitle}
+          className="flex flex-col gap-2 rounded-lg border border-line p-3"
+        >
+          <RiskHeading title={text.advanceTitle} level="free" />
           <p className="text-sm text-fg-muted">{text.advanceBody(view.aheadCount)}</p>
           <TextField
             label={text.advanceCount}
@@ -345,5 +425,22 @@ export function OverdueTools({
               : ''}
       </p>
     </>
+  );
+}
+
+/** El título de una herramienta con la etiqueta de cuánto riesgo tiene para la memoria */
+function RiskHeading({
+  title,
+  level,
+}: {
+  title: string;
+  level: 'safe' | 'care' | 'last' | 'free';
+}) {
+  const variant = { safe: 'success', care: 'warning', last: 'danger', free: 'neutral' } as const;
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <h3 className="font-semibold">{title}</h3>
+      <Badge variant={variant[level]}>{t.overdue.risk[level]}</Badge>
+    </div>
   );
 }

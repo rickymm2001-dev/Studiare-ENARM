@@ -49,6 +49,7 @@ export const SCREEN_KEYS = [
   'calibrationAdmin',
   'unsubscribe',
   'survey',
+  'calendar',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -115,6 +116,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   // Encuesta de los primeros días (B18, 1.2 del diseño). Solo la abre un alumno con la cuenta de la nube, desde la franja de
   // arriba o desde Configuración, Privacidad. Toma el 41 porque B15 ya usó el 40
   survey: { number: 41, path: '/encuesta', area: 'student', phase: 'F' },
+  // Calendario (V4-B6 del plan V4). El mes, el plan por semanas hasta el examen y el .ics
+  calendar: { number: 42, path: '/calendario', area: 'student', phase: 'F' },
 };
 
 /**

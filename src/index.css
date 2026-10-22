@@ -7,6 +7,7 @@
 @layer base {
   :root {
     --enarm-font-body: 'Plus Jakarta Sans Variable';
+    --enarm-font-heading: 'Source Serif 4 Variable';
   }
 
   html {
@@ -23,10 +24,11 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Títulos con la misma familia, solo más peso y un poco más juntos */
+  /* Títulos en la familia de títulos, más peso y un poco más juntos (V4-B2) */
   h1,
   h2,
   h3 {
+    font-family: var(--font-display);
     font-weight: 700;
     letter-spacing: -0.01em;
   }

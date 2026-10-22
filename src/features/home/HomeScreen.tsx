@@ -19,6 +19,7 @@ import { monthlyReviewLoad } from '@/engines/monthlyLoad';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
+import { homePlanText } from '@/i18n/homePlan';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -39,11 +40,15 @@ import { MissionList } from './missions/MissionList';
 import { useMissions } from './missions/useMissions';
 import { ReviewLoadCard } from './sections/ReviewLoadCard';
 import { buildSnapshot, type Snapshot } from './snapshot';
+import { dailyPlan, newCardsStudiedToday, type PlanRow } from '@/engines/dailyPlan';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { BiasPatternWidget, WeakTopicsWidget } from './widgets/AnalysisWidgets';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 
 const text = t.home;
 const NO_SETTINGS = {} as const;
+/** Tres temas y no cinco, para que la columna de Tus simuladores no deje huecos en la de Tus repasos (V4-B1). Ver todos los temas lleva al resto */
+const HOME_WEAK_TOPICS = { count: 3 };
 
 export function HomeScreen() {
   // Sin sesión, la raíz es la portada de venta (D-068)
@@ -57,6 +62,7 @@ function Dashboard({ session }: { session: ReadySession }) {
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const account = useAccount(user.id);
+  const subscription = useSubscription(user.id);
   const focus = useFocusMode();
   // Las tarjetas que Repasar sí ofrece, para que las vencidas cuenten lo mismo
   const cards = useLiveData(async () => {
@@ -80,10 +86,37 @@ function Dashboard({ session }: { session: ReadySession }) {
     [events, cards, user.timeZone],
   );
 
-  if (events === undefined || cards === undefined || account === undefined || load === null) {
+  if (
+    events === undefined ||
+    cards === undefined ||
+    account === undefined ||
+    subscription === undefined ||
+    load === null
+  ) {
     return <LoadingState />;
   }
   const snapshot = buildSnapshot({ events, user, settings, now: new Date(), activeCardIds: cards });
+  // Las preguntas del plan de hoy no pasan del tope diario del plan, que en Gratis es de 20
+  const questionsCap = dailyQuestions({
+    events,
+    subscription,
+    timeZone: user.timeZone,
+    now: new Date(),
+  }).limit;
+  const plan = dailyPlan({
+    questionsCap,
+    limits: {
+      reviewsPerDay: settings.reviewsPerDay,
+      newCardsPerDay: settings.newCardsPerDay,
+      unlimitedNewCards: settings.unlimitedNewCards,
+      questionsPerDay: settings.questionsPerDay,
+    },
+    done: {
+      cards: snapshot.todayActivity.cards,
+      newCards: newCardsStudiedToday(events, snapshot.today),
+      questions: snapshot.todayActivity.questions,
+    },
+  });
 
   return (
     <>
@@ -106,7 +139,7 @@ function Dashboard({ session }: { session: ReadySession }) {
           {/* Las tarjetas crecen hasta la altura de la fila, para que nada quede en blanco */}
           <div className="grid grow grid-cols-1 gap-5 sm:grid-cols-2">
             <div className="flex flex-col gap-5">
-              <DailyGoalCard snapshot={snapshot} />
+              <DailyGoalCard snapshot={snapshot} plan={plan} questionsCap={questionsCap} />
               <DueCard snapshot={snapshot} />
             </div>
             <ReviewLoadCard load={load} />
@@ -121,7 +154,7 @@ function Dashboard({ session }: { session: ReadySession }) {
             <BiasPatternWidget session={session} events={events} settings={NO_SETTINGS} />
           </AnalysisCard>
           <AnalysisCard title={text.topicsTitle}>
-            <WeakTopicsWidget session={session} events={events} settings={NO_SETTINGS} />
+            <WeakTopicsWidget session={session} events={events} settings={HOME_WEAK_TOPICS} />
           </AnalysisCard>
         </Group>
 
@@ -146,6 +179,14 @@ function Dashboard({ session }: { session: ReadySession }) {
             settings={{ range: 365, metric: 'cards' }}
             summaryAtEnd
             fluid
+            detailLink={
+              <Link
+                to={screenPath('calendar')}
+                className="font-medium text-primary-ink underline underline-offset-2"
+              >
+                {t.calendar.heatmapLink}
+              </Link>
+            }
           />
         </Card>
       </div>
@@ -189,7 +230,15 @@ function CardHeading({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
+function DailyGoalCard({
+  snapshot,
+  plan,
+  questionsCap,
+}: {
+  snapshot: Snapshot;
+  plan: PlanRow[];
+  questionsCap: number | null;
+}) {
   const id = useId();
   const { goal } = snapshot;
   const done = snapshot.todayActivity[goal.metric];
@@ -211,6 +260,37 @@ function DailyGoalCard({ snapshot }: { snapshot: Snapshot }) {
           </span>
         </div>
       </div>
+      {plan.length > 0 ? (
+        <div className="flex flex-col gap-1.5">
+          <h4 className="text-sm font-semibold">{t.widgets.plan.title}</h4>
+          <ul className="flex flex-col gap-1.5">
+            {plan.map((row) => {
+              const name = t.widgets.plan.rows[row.key];
+              return (
+                <li key={row.key} className="flex flex-col gap-0.5">
+                  <span className="flex items-baseline justify-between gap-2 text-sm">
+                    <span>{name}</span>
+                    <span className="tabular-nums text-fg-muted">
+                      {t.widgets.goal.ratio(row.done, row.target)}
+                    </span>
+                  </span>
+                  <ProgressBar
+                    className="h-1.5"
+                    value={row.done}
+                    max={row.target}
+                    label={t.widgets.plan.label(name, row.done, row.target)}
+                  />
+                  {row.capped && questionsCap !== null ? (
+                    <span className="text-xs text-fg-muted">
+                      {homePlanText.capped(questionsCap)}
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
       <figure className="text-sm">
         <blockquote>{quote.text}</blockquote>
         <figcaption className="text-xs text-fg-muted">{quote.author}</figcaption>

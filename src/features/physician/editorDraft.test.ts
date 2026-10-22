@@ -284,3 +284,41 @@ describe('historial', () => {
     ).toEqual(['canonical']);
   });
 });
+
+describe('nivel cognitivo de Bloom (V4-B5)', () => {
+  it('una pregunta sin nivel queda sin nivel y el borrador no inventa uno', () => {
+    const { draft } = sample();
+    expect(draft.cognitiveLevel).toBeUndefined();
+  });
+
+  it('el nivel que pone el médico pasa a la versión siguiente, vuelve al borrador y cuenta como cambio', () => {
+    const { question, options, draft } = sample();
+    const next = buildNextVersion({
+      current: question,
+      draft: { ...draft, cognitiveLevel: 'analysis' },
+      newId,
+      now: new Date(),
+    });
+    expect(next.question.cognitiveLevel).toBe('analysis');
+    expect(QuestionSchema.safeParse(next.question).success).toBe(true);
+    const after = draftFromVersion(next.question, next.options);
+    expect(after.cognitiveLevel).toBe('analysis');
+    expect(changedParts(draft, after)).toEqual(['cognitive']);
+    expect(changedParts(draft, draftFromVersion(question, options))).toEqual([]);
+  });
+
+  it('quitar el nivel también es un cambio y la versión nueva sale sin el campo', () => {
+    const { question, draft } = sample();
+    const withLevel = { ...draft, cognitiveLevel: 'knowledge' as const };
+    const removed = buildNextVersion({
+      current: question,
+      draft: { ...withLevel, cognitiveLevel: undefined },
+      newId,
+      now: new Date(),
+    });
+    expect(removed.question).not.toHaveProperty('cognitiveLevel');
+    expect(changedParts(withLevel, draftFromVersion(removed.question, removed.options))).toEqual([
+      'cognitive',
+    ]);
+  });
+});

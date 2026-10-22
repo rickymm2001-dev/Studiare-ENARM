@@ -14,6 +14,7 @@ import { changePlan } from '@/data/usecases/subscription';
 import { longDate } from '@/features/billing/planState';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
+import { homePlanText } from '@/i18n/homePlan';
 import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 
 let app: RenderedApp | undefined;
@@ -24,7 +25,7 @@ afterEach(async () => {
 });
 
 /** Repasos hechos hoy, cada uno con su siguiente fecha en dos semanas */
-async function reviewToday(api: DataApi, user: User, count: number) {
+async function reviewToday(api: DataApi, user: User, count: number, extra = false) {
   const now = new Date();
   for (let index = 0; index < count; index += 1) {
     const stamp = new Date(now.getTime() - (count - index) * 1000);
@@ -41,6 +42,7 @@ async function reviewToday(api: DataApi, user: User, count: number) {
           msToReveal: 2000,
           msToRate: 1500,
           stateBefore: null,
+          ...(extra ? { extra: true } : {}),
           stateAfter: {
             due,
             stability: 10,
@@ -69,7 +71,13 @@ describe('Inicio con el diseño fijo', () => {
     expect(screen.getByRole('heading', { level: 2, name: t.home.simulatorsTitle })).toBeVisible();
 
     const goal = screen.getByRole('region', { name: t.widgets.names.daily_goal });
-    expect(within(goal).getByText(t.widgets.goal.ratio(0, 20))).toBeVisible();
+    // La meta y la fila de nuevas del plan de hoy dicen 0 de 20, porque el límite de nuevas es el mismo
+    expect(within(goal).getAllByText(t.widgets.goal.ratio(0, 20))[0]).toBeVisible();
+    // El plan de hoy con las tres cifras de la guía, con los límites por omisión
+    expect(within(goal).getByText(t.widgets.plan.title)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.plan.rows.cards)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.plan.rows.questions)).toBeVisible();
+    expect(within(goal).getByText(t.widgets.goal.ratio(0, 220))).toBeVisible();
     // La frase del día lleva su autor
     expect(within(goal).getByRole('figure')).toBeVisible();
 
@@ -256,5 +264,65 @@ describe('Inicio con el diseño fijo', () => {
     // El modo enfoque oculta también las misiones de hoy (4.12). El plan se queda
     expect(screen.queryByRole('region', { name: t.widgets.names.missions })).toBeNull();
     expect(screen.getByRole('region', { name: t.home.plan.title })).toBeVisible();
+  });
+});
+
+describe('plan de hoy en Inicio', () => {
+  const bar = (
+    goal: HTMLElement,
+    row: 'cards' | 'newCards' | 'questions',
+    done: number,
+    of: number,
+  ) =>
+    within(goal).getByRole('progressbar', {
+      name: t.widgets.plan.label(t.widgets.plan.rows[row], done, of),
+    });
+
+  it('en Gratis las preguntas del plan no pasan del tope de 20 al día y lo dice', async () => {
+    app = await renderApp(SCREENS.home.path);
+    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    // El ajuste del alumno es de 50, pero el plan Gratis solo da 20
+    expect(bar(goal, 'questions', 0, 20)).toBeVisible();
+    expect(within(goal).getByText(homePlanText.capped(20))).toBeVisible();
+  });
+
+  it('con un plan de pago las preguntas del plan son las del ajuste y no hay tope', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await changePlan(api, user, 'monthly');
+      },
+    });
+    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    expect(
+      await within(goal).findByRole('progressbar', {
+        name: t.widgets.plan.label(t.widgets.plan.rows.questions, 0, 50),
+      }),
+    ).toBeVisible();
+    expect(within(goal).queryByText(homePlanText.capped(20))).toBeNull();
+  });
+
+  it('las nuevas del plan incluyen las que se estudiaron por tema, que no gastan el cupo', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await reviewToday(api, user, 2, true);
+      },
+    });
+    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    // Dos tarjetas nuevas, las dos de una sesión por tema
+    expect(
+      await within(goal).findByRole('progressbar', {
+        name: t.widgets.plan.label(t.widgets.plan.rows.newCards, 2, 20),
+      }),
+    ).toBeVisible();
+    expect(bar(goal, 'cards', 2, 220)).toBeVisible();
+  });
+
+  it('el heatmap lleva un enlace al Calendario, que sí da el detalle por día con teclado', async () => {
+    app = await renderApp(SCREENS.home.path);
+    const heatmap = await screen.findByRole('region', { name: t.widgets.names.heatmap });
+    expect(within(heatmap).getByRole('link', { name: t.calendar.heatmapLink })).toHaveAttribute(
+      'href',
+      SCREENS.calendar.path,
+    );
   });
 });

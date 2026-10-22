@@ -2,8 +2,9 @@
 
 ## Estado actual
 
+- Plan V4 escrito el 2026-10-22 en docs/PLAN_V4.md (D-140). Continúa V3 y manda sobre él donde no coincidan. Siete bloques nuevos (densidad y espacio, identidad visual, repaso completo al estilo Anki, métodos y plan de hoy, Bloom y estructura del examen, calendario, comunidad por etapas) más los pendientes de Paco, y los B15, B17 y B18 de V3 se reacomodan antes de la auditoría final V4-B10. La auditoría por bloque se mueve al final por decisión de Ricardo. Nueve decisiones esperan su respuesta en la sección 8 del plan. V4-B0, V4-B1 (densidad y espacio), V4-B3 (repaso completo), V4-B4 (métodos y plan de hoy), V4-B5 (Bloom, Cómo es el examen y hoja de respuestas), V4-B6 (calendario), V4-B7 (etapa 1 ya cubierta por B14) V4-B8 (Urgencias gratis en la interfaz) y V4-B2 (identidad visual, D-145) hechos, ver el estado de cada uno en el plan y D-144. Sigue V4-B10 auditoría final
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación (PR 61) también. B18 primeros alumnos construido y revisado, en su PR. Sigue B19 auditoría final
+- Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación (PR 61) también. B18 primeros alumnos (D-139) fusionado. El B19 de V3 pasó a V4-B10, la auditoría final del plan V4
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -38,6 +39,19 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
   - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
 - [x] B18. Primeros alumnos (D-139, PR en curso)
 - [ ] B19. Auditoría final y lanzamiento
+
+Plan V4 (docs/PLAN_V4.md, D-140 a D-146). El estado de cada bloque está en su propia sección del plan
+- [x] V4-B0. Arranque (D-140)
+- [x] V4-B1. Densidad y espacio (D-141)
+- [x] V4-B2. Identidad visual con papel cálido y títulos en serif (D-145). Cristal y fondos esperan la decisión 2
+- [x] V4-B3. Repaso completo al estilo Anki (D-142)
+- [x] V4-B4. Métodos de estudio y plan de hoy (D-143)
+- [x] V4-B5. Bloom, Cómo es el examen y hoja de respuestas (D-144). El nivel cognitivo en la nube queda pendiente
+- [x] V4-B6. Calendario (D-144)
+- [x] V4-B7. Comunidad, etapa 1 ya cubierta por la comparación de B14 (D-144)
+- [x] V4-B8. Urgencias gratis solo en la interfaz con el catálogo de la app. La regla del servidor espera a Ricardo (D-144)
+- [ ] V4-B9. Cuentas de Ricardo, ver docs/PENDIENTES_DE_RICARDO.md
+- [x] V4-B10. Auditoría final (D-146). Revisión independiente por cuatro áreas, arreglos aplicados, suite e2e completa, capturas finales y DOMPurify al día. Falta solo lo que espera a Ricardo en docs/PENDIENTES_DE_RICARDO.md
 
 ### B0. Arranque
 

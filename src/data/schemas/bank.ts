@@ -8,6 +8,7 @@ import {
   ItemKindSchema,
   TaxonomyKeySchema,
   UtcDateTimeSchema,
+  CognitiveLevelSchema,
 } from './common';
 
 /**
@@ -87,6 +88,8 @@ export const QuestionSchema = z
     gpcRefs: z.array(GpcReferenceSchema).max(10),
     /** Tipos de reactivo raros. Ausente es un reactivo estándar (D-080) */
     itemKinds: z.array(ItemKindSchema).max(5).optional(),
+    /** Nivel cognitivo de Bloom, que pone el médico. Ausente es sin nivel (V4-B5) */
+    cognitiveLevel: CognitiveLevelSchema.optional(),
     /** Datos del caso con su fuerza diagnóstica, que pone el médico (D-080) */
     clues: z.array(ClueSchema).max(20).optional(),
     /** Dificultad que estima el médico, de 1 a 5 (7.7) */

@@ -9,7 +9,7 @@ import { motionAllowed } from './appearance';
 export type CelebrationKind = 'goal' | 'level' | 'challenge' | 'session' | 'small';
 
 // Tonos del color de acción y grises, como las gráficas (4.7 del plan del cambio)
-const COLORS = ['#156082', '#4a8aa9', '#8fb3c6', '#b7cdda', '#576570', '#dde2e6'];
+const COLORS = ['#156082', '#4a8aa9', '#8fb3c6', '#b7cdda', '#576570', '#ddd6c9'];
 
 const NOTES: Record<CelebrationKind, number[]> = {
   small: [880],

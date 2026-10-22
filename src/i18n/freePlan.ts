@@ -46,6 +46,9 @@ export const freePlanText = {
     // este o en otro dispositivo
     notice:
       'Seguir mazos nuevos del catálogo es parte de los planes de pago. Los que ya estudiaste o tienes en este dispositivo los sigues repasando y los puedes volver a seguir.',
+    // Solo con el catálogo que viene en la app. Con el catálogo de la nube Urgencias sigue de pago hasta
+    // que el servidor lo deje pasar (docs/PENDIENTES_DE_RICARDO.md)
+    freeDeckNote: 'Urgencias va abierto en Gratis.',
     rowLocked: 'Plan de pago',
     // Repasar sin mazos en Gratis. Sin el catálogo, el repaso sale de los mazos propios y de los errores
     reviewEmpty:

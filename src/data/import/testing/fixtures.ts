@@ -104,7 +104,11 @@ function fillNotes(
 }
 
 /** Un paquete en el formato viejo, con collection.anki21 y los tipos de nota como JSON en col */
-export async function buildLegacyApkg(fixture: ApkgFixture): Promise<Uint8Array> {
+export async function buildLegacyApkg(
+  fixture: ApkgFixture,
+  /** Sentencias que se corren al final sobre la base, para armar paquetes hechos a propósito */
+  extraSql: readonly string[] = [],
+): Promise<Uint8Array> {
   const SQL = await loadSqlForTests();
   const db = new SQL.Database();
   createCommonTables(db);
@@ -132,6 +136,7 @@ export async function buildLegacyApkg(fixture: ApkgFixture): Promise<Uint8Array>
   deckIds.set('Default', 1);
   db.run('insert into col values (1, ?, ?)', [JSON.stringify(models), JSON.stringify(decks)]);
   fillNotes(db, fixture, modelIds, deckIds);
+  for (const statement of extraSql) db.run(statement);
   const collection = db.export();
   db.close();
   return zipSync({

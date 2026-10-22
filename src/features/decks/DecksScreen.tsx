@@ -22,6 +22,7 @@ import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { topicTaxonomy } from '@/demo/content';
 import { catalogCardIds, deckIds } from '@/demo/content/deckEntities';
 import { deckCatalogText } from '@/i18n/cloudDecks';
+import { isFreeCatalogDeck } from '@/config/billing';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { BranchBadge } from '@/ui/components/branch-tag';
@@ -37,9 +38,12 @@ import { CloudDeckCatalog } from './CatalogDeckCard';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
+import { activeDeckStates } from '@/engines/deckStats';
 import { descendantIds } from '@/engines/deckTree';
+import { suspendedCardIds } from '@/engines/suspension';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
+import { DeckStatsPanel } from './DeckStatsPanel';
 import { DeckTopics } from './DeckTopics';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
@@ -101,6 +105,8 @@ function Decks({ session }: { session: ReadySession }) {
   // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
   const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
+  // Las suspendidas no se ofrecen en Repasar y tampoco cuentan en las cifras de cada mazo
+  const suspended = suspendedCardIds(events ?? []);
   // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
   // el alumno ya siguió, porque sus repasos son suyos. Lo dice que esté en este dispositivo o que su
   // bitácora, que sí viaja entre dispositivos, tenga un repaso de alguna de sus tarjetas
@@ -171,12 +177,13 @@ function Decks({ session }: { session: ReadySession }) {
             <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
             <CardDescription>{t.decks.preloadedDescription}</CardDescription>
           </CardHeader>
-          {catalogOpen === false && !session.isDemo ? <CatalogLockNotice /> : null}
+          {catalogOpen === false && !session.isDemo ? <CatalogLockNotice freeDeck /> : null}
           {catalog === undefined || stored === undefined ? (
             <LoadingState label={t.decks.loading} />
           ) : (
             <div className="flex flex-col gap-3">
-              <ul className="flex flex-col divide-y divide-line">
+              {/* En pantalla ancha los mazos van en dos columnas, cada uno en su tarjeta (V4-B1) */}
+              <ul className="flex flex-col divide-y divide-line xl:grid xl:grid-cols-2 xl:gap-4 xl:divide-y-0">
                 {orderedFiles.map((file) => {
                   const id = deckIds.deck(file.key);
                   const isFollowed = followed.has(id);
@@ -191,7 +198,7 @@ function Decks({ session }: { session: ReadySession }) {
                   return (
                     <li
                       key={file.key}
-                      className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]"
+                      className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] xl:rounded-lg xl:border xl:border-line xl:p-4"
                     >
                       <span
                         aria-hidden
@@ -227,6 +234,12 @@ function Decks({ session }: { session: ReadySession }) {
                             </span>
                           </div>
                         ) : null}
+                        {isFollowed && cardIds.length > 0 ? (
+                          <DeckStatsPanel
+                            states={activeDeckStates(cardIds, states, suspended)}
+                            timeZone={session.user.timeZone}
+                          />
+                        ) : null}
                         <DeckTopics
                           deckName={file.name}
                           outline={catalogTopics.get(file.key)}
@@ -255,6 +268,7 @@ function Decks({ session }: { session: ReadySession }) {
                           </Button>
                         ) : catalogOpen === false &&
                           !onDevice.has(id) &&
+                          !isFreeCatalogDeck(file.key) &&
                           !alreadyStudied(file.key) ? (
                           <CatalogRowLock />
                         ) : (
@@ -291,16 +305,23 @@ function Decks({ session }: { session: ReadySession }) {
           )}
         </Card>
       )}
-      <OwnDecksCard
-        session={session}
-        decks={ownDecks}
-        cardsByDeck={stored?.cardsByDeck ?? new Map()}
-        topics={stored?.ownTopics ?? new Map()}
-        states={states}
-      />
-      <AiCardsCard session={session} />
-      <ImportDeckCard session={session} />
-      <ExportDecksCard session={session} decks={ownDecks} />
+      {/* Dos pilas en computadora. Lo de crear y exportar a un lado y la IA y la importación al otro */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-5">
+          <OwnDecksCard
+            session={session}
+            decks={ownDecks}
+            cardsByDeck={stored?.cardsByDeck ?? new Map()}
+            topics={stored?.ownTopics ?? new Map()}
+            states={states}
+          />
+          <ExportDecksCard session={session} decks={ownDecks} />
+        </div>
+        <div className="flex min-w-0 flex-col gap-5">
+          <AiCardsCard session={session} />
+          <ImportDeckCard session={session} />
+        </div>
+      </div>
     </>
   );
 }

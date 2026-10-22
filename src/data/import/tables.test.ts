@@ -207,6 +207,31 @@ describe('Excel', () => {
   });
 });
 
+describe('Word, lectura del XML', () => {
+  const elapsed = (run: () => void) => {
+    const start = performance.now();
+    run();
+    return performance.now() - start;
+  };
+
+  it('miles de etiquetas sin cerrar no vuelven cuadrática la lectura', () => {
+    const body = docxParagraph('Dato :: Valor') + '<a '.repeat(60_000);
+    let parsed: ReturnType<typeof parseDocx> | undefined;
+    expect(
+      elapsed(() => {
+        parsed = parseDocx(buildDocx(body), 'hostil.docx');
+      }),
+    ).toBeLessThan(1500);
+    expect(parsed?.notes.map((note) => note.front)).toEqual(['Dato']);
+  });
+
+  it('un < suelto en medio del texto de un párrafo no rompe lo que sigue', () => {
+    const body = '<w:p><w:r><w:t>a <b c</w:t></w:r></w:p>' + docxParagraph('Término ;; Definición');
+    const parsed = parseDocx(buildDocx(body), 'raro.docx');
+    expect(parsed.notes.map((note) => note.front)).toEqual(['Término']);
+  });
+});
+
 describe('Word', () => {
   it('lee las tablas como tarjetas, con el título como etiqueta', () => {
     const parsed = parseDocx(

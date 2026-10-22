@@ -190,4 +190,18 @@ describe('tarjetas con IA en Mazos', () => {
     }, WAIT);
     expect(within(card).getByLabelText(t.aiCards.sourceName)).toHaveValue('Guía de diabetes.txt');
   });
+
+  it('un archivo de más de 50 MB se rechaza sin leerlo a memoria', async () => {
+    const typing = userEvent.setup();
+    const card = await open();
+    const huge = new File([MATERIAL], 'enorme.txt', { type: 'text/plain' });
+    Object.defineProperty(huge, 'size', { value: 51 * 1024 * 1024 });
+    const read = vi.spyOn(huge, 'arrayBuffer');
+    await typing.upload(within(card).getByLabelText(t.aiCards.fileLabel), huge);
+    expect(
+      await within(card).findByText(t.aiCards.fileErrors.too_large ?? '', undefined, WAIT),
+    ).toBeVisible();
+    expect(read).not.toHaveBeenCalled();
+    expect(within(card).getByLabelText(t.aiCards.textLabel)).toHaveValue('');
+  });
 });

@@ -174,5 +174,18 @@ describe('Simular con Inglés médico', () => {
     });
     expect(screen.queryByRole('region', { name: copy.title })).toBeNull();
     expect(screen.queryByRole('checkbox', { name: englishText.exam.include })).toBeNull();
+    // El examen completo es la única tarjeta de la fila y no deja media pantalla vacía
+    const row = screen.getByRole('region', { name: t.exam.cardTitle }).parentElement;
+    expect(row).not.toBeNull();
+    expect(row).not.toHaveClass('xl:grid-cols-2');
+  });
+
+  it('con la bandera prendida la fila de las dos tarjetas va a dos columnas en pantalla ancha', async () => {
+    bank([...spanish(25), ...reading([2, 3], 25)]);
+    app = await renderApp(SCREENS.simulatorSetup.path);
+    await setup();
+    await englishCard();
+    const row = screen.getByRole('region', { name: t.exam.cardTitle }).parentElement;
+    expect(row).toHaveClass('xl:grid-cols-2');
   });
 });

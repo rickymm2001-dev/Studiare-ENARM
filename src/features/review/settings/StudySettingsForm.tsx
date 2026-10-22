@@ -4,6 +4,7 @@
 // settings_changed. Una sola barra de guardar que aparece al haber cambios (D-078). Retención, tope
 // e intervalos por botón quedan plegados porque casi nadie los cambia.
 import { useEffect, useState } from 'react';
+import { GUIDE_PLAN, matchesGuidePlan } from '@/engines/dailyPlan';
 import { WEEKDAY_KEYS } from '@/engines/easyDays';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
@@ -98,6 +99,17 @@ export function StudySettingsForm({
               change({ reviews: event.target.value });
             }}
           />
+          <TextField
+            label={t.settings.questionsPerDay}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={1000}
+            value={draft.questions}
+            onChange={(event) => {
+              change({ questions: event.target.value });
+            }}
+          />
           <SelectField
             label={t.onboarding.goalMetric}
             value={draft.metric}
@@ -120,6 +132,38 @@ export function StudySettingsForm({
               change({ goal: event.target.value });
             }}
           />
+        </div>
+        {/* Las cifras de la guía en un toque. Cambian el borrador y se guardan con Guardar */}
+        <div className="mt-3 flex flex-col gap-1 rounded-lg border border-line p-3">
+          <p className="text-sm font-semibold">{t.settings.guidePlanTitle}</p>
+          <p className="text-sm text-fg-muted">{t.settings.guidePlanBody}</p>
+          {matchesGuidePlan({
+            reviewsPerDay: Number(draft.reviews),
+            newCardsPerDay: Number(draft.newCards),
+            unlimitedNewCards: draft.unlimitedNewCards,
+            questionsPerDay: Number(draft.questions),
+          }) ? (
+            <p role="status" className="text-sm font-medium">
+              {t.settings.guidePlanActive}
+            </p>
+          ) : (
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="self-start"
+              onClick={() => {
+                change({
+                  reviews: String(GUIDE_PLAN.reviewsPerDay),
+                  newCards: String(GUIDE_PLAN.newCardsPerDay),
+                  questions: String(GUIDE_PLAN.questionsPerDay),
+                  unlimitedNewCards: false,
+                });
+              }}
+            >
+              {t.settings.guidePlanApply}
+            </Button>
+          )}
         </div>
         <CheckboxField
           className="mt-3"

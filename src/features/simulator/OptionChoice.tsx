@@ -16,6 +16,7 @@ export function OptionChoice({
   onChoose,
   onToggleDiscard,
   onActivate,
+  readOnlyChoice = false,
 }: {
   /** Nombre del grupo de opciones, para que las de una pregunta formen un solo grupo */
   name: string;
@@ -29,6 +30,8 @@ export function OptionChoice({
   onToggleDiscard: () => void;
   /** Doble clic en la opción. Sin esto el doble clic solo la elige */
   onActivate?: () => void;
+  /** La opción solo se lee. La respuesta se llena en otra parte, como en la hoja de respuestas (V4-B5) */
+  readOnlyChoice?: boolean;
 }) {
   return (
     <li
@@ -39,10 +42,20 @@ export function OptionChoice({
       )}
     >
       <label
-        className="flex min-w-0 flex-1 cursor-pointer items-start gap-3 p-3 hover:bg-muted/60"
-        onDoubleClick={onActivate}
+        className={cn(
+          'flex min-w-0 flex-1 items-start gap-3 p-3',
+          readOnlyChoice ? 'cursor-default' : 'cursor-pointer hover:bg-muted/60',
+        )}
+        onDoubleClick={readOnlyChoice ? undefined : onActivate}
       >
-        <input type="radio" name={name} className="mt-1" checked={selected} onChange={onChoose} />
+        <input
+          type="radio"
+          name={name}
+          className="mt-1"
+          checked={selected}
+          disabled={readOnlyChoice}
+          onChange={onChoose}
+        />
         <span className={cn(discarded && 'text-fg-muted line-through')}>
           <span className="mr-1 font-semibold">{letter}.</span>
           {lang === undefined ? text : <span lang={lang}>{text}</span>}
