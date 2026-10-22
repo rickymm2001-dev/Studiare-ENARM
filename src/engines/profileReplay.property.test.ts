@@ -1,6 +1,7 @@
 // Propiedades del rearmado del perfil (B14, 2.2 del plan), con fast-check
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+import { ConsentPurposeSchema } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { UserSettingsSchema } from '@/data/schemas/people';
 import {
@@ -74,11 +75,8 @@ const consentEvent = fc
   .record({
     n: fc.integer({ min: 5001, max: 9000 }),
     seconds: fc.integer({ min: 0, max: 30 }),
-    purpose: fc.constantFrom(
-      'party' as const,
-      'ai_analysis' as const,
-      'anonymized_improvement' as const,
-    ),
+    // Todas las finalidades del esquema, así una nueva entra sola a la propiedad (B15)
+    purpose: fc.constantFrom(...ConsentPurposeSchema.options),
     status: fc.constantFrom('granted' as const, 'revoked' as const),
     noticeVersion: fc.constantFrom('2026-09-01', '2026-10-15b'),
   })
@@ -221,7 +219,7 @@ describe('propiedades del rearmado del perfil', () => {
     fc.assert(
       fc.property(events, (list) => {
         const replay = replayProfile(list);
-        for (const purpose of ['party', 'ai_analysis', 'anonymized_improvement'] as const) {
+        for (const purpose of ConsentPurposeSchema.options) {
           const own = replay.decisions.filter((decision) => decision.purpose === purpose);
           expect(replay.current[purpose]).toBe(own.at(-1)?.status === 'granted');
         }

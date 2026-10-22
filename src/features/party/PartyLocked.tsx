@@ -13,6 +13,7 @@ export function PartyLocked() {
   return (
     <LockedPreview
       id="party-cerrada"
+      feature="party"
       title={text.title}
       intro={text.intro}
       points={text.points}
@@ -25,5 +26,5 @@ export function PartyLocked() {
 
 /** El reto de Party en Inicio con el plan Gratis */
 export function PartyWidgetLocked() {
-  return <LockedNote>{t.freePlan.widget}</LockedNote>;
+  return <LockedNote feature="party">{t.freePlan.widget}</LockedNote>;
 }

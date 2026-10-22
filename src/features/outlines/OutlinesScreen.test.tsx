@@ -10,6 +10,12 @@ import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { writeStoredFlags } from '@/config/featureFlags';
+import {
+  resetAnalytics,
+  setAnalyticsConsent,
+  setAnalyticsSink,
+  type AnalyticsRecord,
+} from '@/data/analytics/catalog';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/ids';
 import { isLive, isAiNote } from '@/data/schemas/decks';
@@ -59,6 +65,7 @@ afterEach(async () => {
   cleanup();
   await resetApp(app?.api);
   app = undefined;
+  resetAnalytics();
 });
 
 const WAIT = { timeout: 15_000 };
@@ -273,6 +280,79 @@ describe('pantalla de Apuntes', () => {
       await screen.findByRole('textbox', { name: t.outlines.editor.label }, WAIT),
     ).toBeInTheDocument();
     expect(screen.getByLabelText(t.outlines.editor.titleLabel)).toHaveValue('Asma');
+  });
+
+  it('crear un apunte mide la plantilla y si es modo clase, y nada del título ni la materia (B15, 1.5)', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(true);
+    const typing = userEvent.setup();
+    app = await openPaid();
+    await screen.findByText(t.outlines.empty, {}, WAIT);
+    await typing.type(screen.getByLabelText(t.outlines.newTitle), 'Asma secreta');
+    await typing.click(screen.getByRole('button', { name: t.outlines.create }));
+    await screen.findByRole('textbox', { name: t.outlines.editor.label }, WAIT);
+    expect(seen.map((record) => [record.event, record.properties])).toEqual([
+      ['outline_created', { template: 'blank', class_mode: false }],
+    ]);
+    expect(JSON.stringify(seen)).not.toMatch(/Asma|secreta/);
+  });
+
+  it('el modo clase se mide como clase, con su plantilla', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(true);
+    const typing = userEvent.setup();
+    app = await openPaid();
+    await screen.findByText(t.outlines.empty, {}, WAIT);
+    const form = t.outlines.form;
+    await typing.click(screen.getByRole('button', { name: form.purposes.class }));
+    await typing.type(screen.getByLabelText(t.outlines.subject.freeName), 'Anatomía');
+    await typing.click(screen.getByRole('button', { name: form.startClass }));
+    await screen.findByRole('textbox', { name: t.outlines.editor.label }, WAIT);
+    expect(seen.map((record) => record.properties)).toEqual([
+      { template: 'class', class_mode: true },
+    ]);
+  });
+
+  it('sin el permiso crear y buscar no miden nada', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(false);
+    const typing = userEvent.setup();
+    app = await openPaid();
+    await screen.findByText(t.outlines.empty, {}, WAIT);
+    await typing.type(screen.getByLabelText(t.outlines.newTitle), 'Asma');
+    await typing.click(screen.getByRole('button', { name: t.outlines.create }));
+    await screen.findByRole('textbox', { name: t.outlines.editor.label }, WAIT);
+    expect(seen).toEqual([]);
+  });
+
+  it('buscar mide los resultados en rangos una vez que se deja de teclear, no cada letra (B15, 1.5)', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(true);
+    const typing = userEvent.setup();
+    app = await openPaid(async (api, user) => {
+      const asma = await createOutline(api, user, { title: 'Asma' });
+      await saveOutline(api, user, {
+        outlineId: asma.id,
+        nodes: [node('Primera línea >> Salbutamol')],
+      });
+    });
+    const box = await screen.findByRole('searchbox', { name: t.outlines.search }, WAIT);
+    await typing.type(box, 'salbutamol');
+    // Mientras sigue tecleando no se mide nada
+    expect(seen).toEqual([]);
+    await waitFor(() => {
+      expect(seen).toHaveLength(1);
+    }, WAIT);
+    expect(seen[0]).toMatchObject({
+      event: 'outline_search_used',
+      properties: { results: '1-4' },
+    });
+    // Ni lo buscado ni lo encontrado sale
+    expect(JSON.stringify(seen)).not.toMatch(/salbutamol|Asma/i);
   });
 
   it('un apunte abierto muestra sus tarjetas, sus enlaces, su esquema y las marcas a la vista', async () => {

@@ -723,6 +723,7 @@ describe('el registro con Google y lo que pide el registro (B9)', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
     // Si el perfil ya existía, lo pendiente no lo cambia
     const again = await linkCloudIdentity(api, google, { ...pending, alias: 'Otro' });
@@ -857,6 +858,7 @@ describe('Completa tu registro se decide por datos y no por proveedor (B9)', () 
       party: false,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
     // No son decisiones del alumno, así que no dejan evento. Si lo dejaran, valdrían más que lo que ya
     // decidió en otro dispositivo y lo apagarían en todos (B14, 2.2)

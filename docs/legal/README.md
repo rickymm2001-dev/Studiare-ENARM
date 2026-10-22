@@ -7,6 +7,7 @@ Borradores del aviso de privacidad y de los términos y condiciones de Studiare,
 - aviso-de-privacidad.md es el aviso que ve el alumno en la página de Privacidad y al crear su cuenta
 - terminos-y-condiciones.md son los términos y condiciones, que se leen en la página de Términos
 - CAMBIOS-B16.md es la lista de lo que cambió en B16, con el porqué y las preguntas para el abogado y para Ricardo
+- CAMBIOS-B15.md es la lista de lo que cambió en B15 (Medición de uso, PostHog, Sentry y recordatorios por correo), con sus preguntas
 
 Son el mismo texto que muestra la app. Se generan con npm run legal:export a partir de src/i18n/legalDocs.ts, y una prueba falla si estos archivos se quedan atrás del texto de la app.
 

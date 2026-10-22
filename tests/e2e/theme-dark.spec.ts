@@ -20,7 +20,13 @@ import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/f
 test.use({ colorScheme: 'dark' });
 
 /** Sin sesión. La raíz es la portada */
-const PUBLIC: readonly ScreenKey[] = ['home', 'onboarding', 'privacyNotice', 'terms'];
+const PUBLIC: readonly ScreenKey[] = [
+  'home',
+  'onboarding',
+  'privacyNotice',
+  'terms',
+  'unsubscribe',
+];
 
 /** Con la sesión de la demostración. La región que se espera es la que más tarda en cargar */
 const STUDENT: readonly (readonly [ScreenKey, string?])[] = [

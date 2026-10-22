@@ -136,4 +136,35 @@ describe('cierre de una Edge Function', () => {
     expect(paths.some((path) => path.endsWith('.test.ts'))).toBe(false);
     expect(closure.external).toEqual([]);
   });
+
+  it.each(['ai-proxy', 'ai-batch'])(
+    '%s lleva el aviso a Sentry pero no runtime.ts ni lo que él importa (pagos, banco, correos)',
+    (slug) => {
+      const paths = functionClosure(ROOT, slug).files.map((file) => file.path);
+      expect(paths).toContain('supabase/functions/_shared/monitoring.ts');
+      expect(paths).toContain('supabase/functions/_shared/monitoringRuntime.ts');
+      for (const heavy of [
+        'runtime.ts',
+        'stripe.ts',
+        'mercadopago.ts',
+        'resend.ts',
+        'payments.ts',
+        'bank/sync.ts',
+        'bank/google.ts',
+      ]) {
+        expect(paths).not.toContain(`supabase/functions/_shared/${heavy}`);
+      }
+      // Lo que lleva la IA es lo suyo (_shared/ai), el aviso a Sentry y su limpieza, y nada más de _shared
+      const others = paths.filter(
+        (path) =>
+          path.startsWith('supabase/functions/_shared/') &&
+          !path.startsWith('supabase/functions/_shared/ai/'),
+      );
+      expect(others).toEqual([
+        'supabase/functions/_shared/generated/scrub.ts',
+        'supabase/functions/_shared/monitoring.ts',
+        'supabase/functions/_shared/monitoringRuntime.ts',
+      ]);
+    },
+  );
 });

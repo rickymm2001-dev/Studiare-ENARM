@@ -16,6 +16,17 @@ let withoutCloud = '';
 let withCloud = '';
 let withAi = '';
 let production = '';
+let withTelemetry = '';
+
+// Las variables públicas de B15 que arman la CSP: la llave y el host de PostHog y el DSN de Sentry. Son valores
+// de mentira con la forma de los de verdad (los mismos que usan las pruebas de punta a punta)
+const TELEMETRY_ENV = {
+  VITE_SUPABASE_URL: 'https://abcd1234.supabase.co',
+  VITE_POSTHOG_KEY: 'phc_SimuladaPruebasStudiare00000000000000000000',
+  VITE_POSTHOG_HOST: 'https://us.i.posthog.com',
+  VITE_SENTRY_DSN:
+    'https://0123456789abcdef0123456789abcdef@o4500000000000000.ingest.sentry.io/4500000000000001',
+};
 
 beforeAll(() => {
   withoutCloud = buildApp({ VITE_SUPABASE_URL: '' });
@@ -25,10 +36,11 @@ beforeAll(() => {
     VITE_SUPABASE_URL: 'https://abcd1234.supabase.co',
     VITE_AI_URL: 'https://ia.studiare.mx',
   });
-}, 320_000);
+  withTelemetry = buildApp(TELEMETRY_ENV);
+}, 480_000);
 
 afterAll(() => {
-  for (const dir of [withoutCloud, withCloud, withAi, production]) {
+  for (const dir of [withoutCloud, withCloud, withAi, production, withTelemetry]) {
     if (dir) rmSync(dir, { recursive: true, force: true });
   }
 });
@@ -94,6 +106,44 @@ describe('política de seguridad de contenido en el build', () => {
   });
 });
 
+describe('PostHog y Sentry en la política (B15, 5.1)', () => {
+  const POLICY_CONNECT =
+    "'self' https://abcd1234.supabase.co https://us.i.posthog.com https://o4500000000000000.ingest.sentry.io";
+
+  it('con las variables suma los dos orígenes exactos solo a connect-src, en el HTML y en _headers', () => {
+    const header = /Content-Security-Policy: (.+)/.exec(read(withTelemetry, '_headers'))?.[1];
+    for (const policy of [metaPolicy(read(withTelemetry, 'index.html')), header]) {
+      expect(directive(policy, 'connect-src')).toBe(POLICY_CONNECT);
+      expect(directive(policy, 'script-src')).toBe("'self' 'wasm-unsafe-eval'");
+      expect(directive(policy, 'default-src')).toBe("'self'");
+      expect(policy?.match(/posthog|sentry/g)).toHaveLength(2);
+    }
+  });
+
+  it('sin las variables ningún build nombra a PostHog ni a Sentry en su política', () => {
+    for (const dir of [withoutCloud, withCloud, withAi, production]) {
+      expect(metaPolicy(read(dir, 'index.html'))).not.toMatch(/posthog|sentry/);
+      expect(read(dir, '_headers')).not.toMatch(/posthog|sentry/);
+    }
+  });
+
+  it('un host de PostHog o un DSN con otra forma no abren la política', () => {
+    const odd = buildApp({
+      ...TELEMETRY_ENV,
+      VITE_POSTHOG_HOST: 'https://posthog.malo.com',
+      VITE_SENTRY_DSN: 'https://llave@malo.com/1',
+    });
+    try {
+      expect(directive(metaPolicy(read(odd, 'index.html')), 'connect-src')).toBe(
+        "'self' https://abcd1234.supabase.co",
+      );
+    } finally {
+      rmSync(odd, { recursive: true, force: true });
+    }
+    // Este caso arma su propio build, que tarda más que el límite de 5 segundos de una prueba
+  }, 240_000);
+});
+
 describe('presupuesto del JavaScript inicial', () => {
   it('lo que index.html carga al abrir pesa menos de 300 KB comprimido', () => {
     const report = measureInitialBundle(withoutCloud);
@@ -120,6 +170,48 @@ describe('presupuesto del JavaScript inicial', () => {
       .map((file) => read(withCloud, join('assets', file)));
     expect(all.some((code) => code.includes('AuthApiError'))).toBe(true);
     expect(all.some((code) => code.includes('sync_push_records'))).toBe(true);
+  });
+
+  it('el SDK de Sentry y posthog-js no están en lo inicial y el SDK es un archivo aparte (B15, 5.4)', () => {
+    // Textos que solo existen en el SDK de Sentry. Si el import dinámico se volviera estático, aparecerían
+    const sdkMarkers = ['sentry.javascript.browser', 'SentryError', 'sentry-trace'];
+    for (const dir of [withoutCloud, withCloud, withTelemetry]) {
+      const report = measureInitialBundle(dir);
+      expect(report.withinBudget, formatReport(report)).toBe(true);
+      const initial = initialScripts(read(dir, 'index.html')).map((file) => read(dir, file));
+      for (const marker of [...sdkMarkers, 'posthog-js', '@sentry', 'posthog.com/static']) {
+        expect(
+          initial.some((code) => code.includes(marker)),
+          `"${marker}" no debería estar en el JavaScript inicial`,
+        ).toBe(false);
+      }
+    }
+    // Y el SDK sí existe, en su archivo aparte, que el service worker no precarga
+    const files = readdirSync(join(withTelemetry, 'assets')).filter((file) => file.endsWith('.js'));
+    const sentryChunks = files.filter((file) => file.startsWith('sentry-'));
+    expect(sentryChunks).toHaveLength(1);
+    expect(read(withTelemetry, join('assets', sentryChunks[0] as string))).toContain(
+      'sentry.javascript.browser',
+    );
+    expect(initialScripts(read(withTelemetry, 'index.html')).join(' ')).not.toContain('sentry-');
+    expect(read(withTelemetry, 'sw.js')).not.toContain('sentry-');
+    // Ningún otro archivo, fuera del SDK, trae su código
+    for (const file of files.filter((name) => !name.startsWith('sentry-'))) {
+      expect(read(withTelemetry, join('assets', file)), file).not.toContain(
+        'sentry.javascript.browser',
+      );
+    }
+  });
+
+  it('la analítica propia, sin PostHog, mide poco en lo inicial: la llave pública está y no hay llaves personales (B15)', () => {
+    const initial = initialScripts(read(withTelemetry, 'index.html')).map((file) =>
+      read(withTelemetry, file),
+    );
+    // La llave de proyecto es pública por diseño y llega al cliente con VITE_POSTHOG_KEY
+    expect(initial.some((code) => code.includes(TELEMETRY_ENV.VITE_POSTHOG_KEY))).toBe(true);
+    for (const code of initial) {
+      expect(code).not.toMatch(/phx_[A-Za-z0-9]{20,}|sntrys_|sntryu_/);
+    }
   });
 
   it('el modelo del alumno, la calibración y el modo adaptativo no están en lo inicial (B14, 7.3)', () => {
@@ -186,6 +278,27 @@ describe('presupuesto del JavaScript inicial', () => {
       expect(initialScripts(read(fake, 'index.html'))).toEqual(['assets/a.js', 'assets/b.js']);
     } finally {
       rmSync(fake, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('mapas de código (B15, 2.3)', () => {
+  /** Todos los archivos de un build */
+  const everyFile = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+      entry.isDirectory() ? everyFile(join(dir, entry.name)) : [join(dir, entry.name)],
+    );
+
+  it('ningún build publica mapas de código ni deja el comentario que los señala', () => {
+    for (const dir of [withoutCloud, withCloud, withAi, production, withTelemetry]) {
+      const files = everyFile(dir);
+      expect(
+        files.filter((file) => file.endsWith('.map')),
+        dir,
+      ).toEqual([]);
+      for (const file of files.filter((name) => /\.(js|mjs|css)$/.test(name))) {
+        expect(readFileSync(file, 'utf8'), file).not.toMatch(/sourceMappingURL=/);
+      }
     }
   });
 });

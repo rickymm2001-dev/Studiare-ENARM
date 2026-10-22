@@ -5,6 +5,7 @@
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { expect, test } from '@playwright/test';
+import { presetTourOffer } from '../e2e/support/fixtures';
 
 const NETWORK_NOISE =
   /Failed to load resource|ERR_NAME_NOT_RESOLVED|ERR_INTERNET|ERR_NETWORK|net::|Failed to fetch/i;
@@ -27,6 +28,8 @@ test('nube caída. Se crea la cuenta en el navegador y todas las pantallas abren
 
   // La cuenta se crea aunque no se pueda mandar el enlace, y se puede seguir en el navegador
   current = 'crear cuenta';
+  // El recorrido guiado aparece solo al terminar el registro (B15, 4.1) y taparía lo que se audita
+  await presetTourOffer(page.context());
   await page.goto(SCREENS.onboarding.path);
   await page.getByLabel(t.onboarding.alias, { exact: true }).fill('Sin nube');
   await page.getByLabel(t.account.email, { exact: true }).fill('sinnube@ejemplo.mx');

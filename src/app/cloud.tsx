@@ -7,6 +7,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect } from 'react';
 import { isFeatureEnabled } from '@/config/featureFlags';
+import { trackSignupCompleted } from '@/data/analytics/control';
 import {
   readCloudIdentity,
   recordPrivacyAcceptance,
@@ -31,7 +32,9 @@ import {
   resolveCloudSignup,
 } from '@/data/usecases/cloudLink';
 import { acceptedNoticeVersion } from '@/data/usecases/profile';
+import type { DueSnapshotSync } from '@/features/review/dueSnapshot';
 import { CATALOG_REFRESH_MS } from '@/data/bank/questionSource';
+import { markTourPending } from '@/features/tour/steps';
 import { NO_SIGNUP_PENDING, useAccess } from './accessState';
 import { useConfigUpdate } from './configUpdate';
 import { signedOutState, useCloud, type CloudState } from './cloudState';
@@ -78,6 +81,16 @@ export function CloudBridge() {
       // La sincronización vive mientras viva el vigilante. Si otro dispositivo gana la cuenta o se
       // cierra la sesión, deja de subir y de bajar en el acto (D-095)
       let syncing: { authId: string; handle: SyncScheduler } | null = null;
+      // La foto de tarjetas vencidas del recordatorio por correo (B15, 3.3). Cuando toca, sube con cada sync buena
+      let dueSnapshots: Promise<DueSnapshotSync> | null = null;
+      const afterGoodSync = (userId: string) => {
+        // Se baja en diferido, solo con la bandera de los recordatorios prendida
+        if (!isFeatureEnabled('emailReminders')) return;
+        dueSnapshots ??= import('@/features/review/dueSnapshot').then((module) =>
+          module.createDueSnapshotSync(),
+        );
+        void dueSnapshots.then((sync) => sync.afterSync(api, cloud, userId));
+      };
       // El catálogo del banco de la nube se baja mientras viva la sincronización (B11, 5.3)
       let bankTimer: ReturnType<typeof setInterval> | null = null;
       const stopBank = () => {
@@ -99,6 +112,8 @@ export function CloudBridge() {
       };
       const stopSync = () => {
         stopBank();
+        // Otra cuenta o otra sesión vuelve a leer sus recordatorios desde cero
+        dueSnapshots = null;
         syncing?.handle.stop();
         syncing = null;
         useSyncStatus.getState().reset();
@@ -207,6 +222,15 @@ export function CloudBridge() {
           clearPendingSignup();
           if (stopped() || isLeaving() || signedOutMeanwhile()) return;
           const { userId } = linked;
+          // Una cuenta nueva que entró con Google y trae el registro que llenó antes (B15, 1.5 y 4.1). Las
+          // que llegan sin formulario terminan en Completa tu registro, que lo mide al guardar
+          if (linked.created && identity.provider && identity.provider !== 'email' && pending) {
+            trackSignupCompleted(pending.consents.product_analytics === true, {
+              method: 'google',
+              target_specialty_set: Boolean(pending.details.targetSpecialty),
+            });
+            markTourPending(userId);
+          }
           // Un perfil que nació sin formulario no vio el aviso ni confirmó su edad. No abre la sesión de
           // este navegador, ni sube ni sincroniza nada, hasta saber si la cuenta ya completó su registro
           // en otro lado. Así recargar o quedarse sin red no lo deja pasar. Se decide con lo que tiene el
@@ -285,7 +309,7 @@ export function CloudBridge() {
                 // quedó guardado, los candados dejan de esperarlo (B8, planCheck.ts)
                 const cloudPlan = await refreshCloudPlan(api, cloud, userId);
                 await settlePlanCheck(api, userId, identity.authId);
-                return runSync({
+                const result = await runSync({
                   api,
                   transport: createSupabaseTransport(cloud),
                   userId,
@@ -294,6 +318,8 @@ export function CloudBridge() {
                   // ignorar se vuelven a mandar con el primer plan de pago confirmado (B8)
                   plan: cloudPlan?.plan ?? 'free',
                 });
+                if (result.status === 'ok') afterGoodSync(userId);
+                return result;
               },
               report: status.set,
               paused: () => useSyncStatus.getState().paused,

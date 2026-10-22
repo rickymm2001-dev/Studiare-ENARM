@@ -59,6 +59,7 @@ export function ImportDeckCard(props: ImportDeckProps) {
       locked={
         <LockedPreview
           id="importar-cerrado"
+          feature="import_decks"
           title={text.title}
           intro={text.intro}
           points={text.points}

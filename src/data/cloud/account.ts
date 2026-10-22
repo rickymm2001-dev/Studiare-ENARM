@@ -14,6 +14,7 @@ import {
   type DetailsSide,
 } from './accountDetails';
 import { parseRemoteAvatar, type CloudAvatarColumns, type RemoteAvatarState } from './avatars';
+import { INVITATION_REQUIRED_MARK } from './oauth';
 import { settleWithin } from './timeout';
 
 export interface CloudIdentity {
@@ -30,12 +31,6 @@ export interface CloudIdentity {
 
 export type LinkResult =
   { ok: true } | { ok: false; reason: 'rate_limited' | 'invitation_required' | 'failed' };
-
-/**
- * Marca con la que el gancho Before User Created rechaza un correo sin invitación (migración
- * 20261020000001). El mensaje del gancho llega tal cual en el error de Supabase Auth
- */
-export const INVITATION_REQUIRED_MARK = 'invitation_required';
 
 /** Si un error de Auth es el rechazo del registro por invitación */
 export function isInvitationRejection(error: unknown): boolean {

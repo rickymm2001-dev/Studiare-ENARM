@@ -2,6 +2,7 @@
 import 'fake-indexeddb/auto';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { writeStoredFlags } from '@/config/featureFlags';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { DataProvider } from '@/data/DataProvider';
@@ -145,5 +146,78 @@ describe('CloudBridge y la sincronización entre dispositivos', () => {
     window.dispatchEvent(new Event('online'));
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(syncCalls(fake)).toBe(before);
+  });
+});
+
+describe('la foto de tarjetas vencidas con la sincronización (B15, 3.3)', () => {
+  const PREFS = {
+    available: true,
+    enabled: true,
+    hour: 20,
+    days: [0, 1, 2, 3, 4, 5, 6],
+    frequency: 'daily',
+    onlyWhenDue: true,
+    timeZone: 'America/Merida',
+    unsubscribed: false,
+  };
+
+  afterEach(() => {
+    writeStoredFlags(null);
+  });
+
+  it('con los recordatorios prendidos, una sincronización buena sube la foto', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.sync = 'ok';
+    fake.rpcReplies.my_reminder_prefs = { data: PREFS, error: null };
+    fake.rpcReplies.put_due_snapshot = { data: null, error: null };
+    mount();
+    await waitFor(() => {
+      expect(fake.rpcCalls).toContain('put_due_snapshot');
+    });
+    // Primero lee los recordatorios y después sube, y solo una vez en esta sincronización
+    expect(fake.rpcCalls.filter((name) => name === 'my_reminder_prefs')).toHaveLength(1);
+    expect(fake.rpcCalls.filter((name) => name === 'put_due_snapshot')).toHaveLength(1);
+    expect(fake.rpcCalls.indexOf('my_reminder_prefs')).toBeLessThan(
+      fake.rpcCalls.indexOf('put_due_snapshot'),
+    );
+  });
+
+  it('con los recordatorios apagados lee el ajuste y no sube nada', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.sync = 'ok';
+    fake.rpcReplies.my_reminder_prefs = { data: { ...PREFS, enabled: false }, error: null };
+    mount();
+    await waitFor(() => {
+      expect(fake.rpcCalls).toContain('my_reminder_prefs');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    expect(fake.rpcCalls).not.toContain('put_due_snapshot');
+  });
+
+  it('con la bandera emailReminders apagada no pregunta ni sube nada', async () => {
+    const fake = useFake(makeFakeCloud());
+    // La bandera llega del servidor y manda sobre la copia de este navegador (D-119)
+    fake.flags = { emailReminders: false };
+    writeStoredFlags({ emailReminders: false });
+    fake.sync = 'ok';
+    fake.rpcReplies.my_reminder_prefs = { data: PREFS, error: null };
+    mount();
+    await waitFor(() => {
+      expect(useSyncStatus.getState().state.outcome.status).toBe('ok');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    expect(fake.rpcCalls).not.toContain('my_reminder_prefs');
+    expect(fake.rpcCalls).not.toContain('put_due_snapshot');
+  });
+
+  it('si la sincronización falla no sube la foto', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.rpcReplies.my_reminder_prefs = { data: PREFS, error: null };
+    mount();
+    await waitFor(() => {
+      expect(useSyncStatus.getState().state.outcome.status).toBe('failed');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    expect(fake.rpcCalls).not.toContain('put_due_snapshot');
   });
 });

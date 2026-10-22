@@ -4,6 +4,8 @@ import {
   buildHeaderCsp,
   buildHeadersFile,
   buildMetaCsp,
+  posthogOriginOf,
+  sentryOriginOf,
   supabaseOriginOf,
 } from './csp';
 
@@ -68,6 +70,67 @@ describe('aiOriginOf', () => {
   });
 });
 
+describe('posthogOriginOf (B15, 5.1)', () => {
+  it('acepta solo los dos orígenes de captura de PostHog Cloud, con o sin diagonal final', () => {
+    expect(posthogOriginOf('https://us.i.posthog.com')).toBe('https://us.i.posthog.com');
+    expect(posthogOriginOf(' https://eu.i.posthog.com/ ')).toBe('https://eu.i.posthog.com');
+  });
+
+  it('rechaza cualquier otro dominio, protocolo, ruta o comodín', () => {
+    for (const url of [
+      undefined,
+      '',
+      'http://us.i.posthog.com',
+      'https://app.posthog.com',
+      'https://us.posthog.com',
+      'https://us.i.posthog.com.malo.com',
+      'https://us.i.posthog.com/batch/',
+      'https://*.posthog.com',
+      'https://malo.com/us.i.posthog.com',
+      'https://us.i.posthog.com; script-src *',
+    ]) {
+      expect(posthogOriginOf(url)).toBeUndefined();
+    }
+  });
+});
+
+describe('sentryOriginOf (B15, 5.1)', () => {
+  const KEY = '0123456789abcdef0123456789abcdef';
+
+  it('saca el origen de un DSN con la forma de Sentry, con o sin región en medio', () => {
+    expect(
+      sentryOriginOf(`https://${KEY}@o4500000000000000.ingest.sentry.io/4500000000000001`),
+    ).toBe('https://o4500000000000000.ingest.sentry.io');
+    expect(sentryOriginOf(`https://${KEY}@o123.ingest.us.sentry.io/456`)).toBe(
+      'https://o123.ingest.us.sentry.io',
+    );
+    expect(sentryOriginOf(` https://${KEY}@o123.ingest.de.sentry.io/456 `)).toBe(
+      'https://o123.ingest.de.sentry.io',
+    );
+  });
+
+  it('rechaza un DSN con otro dominio, sin proyecto, sin llave, con http o con rutas raras', () => {
+    for (const dsn of [
+      undefined,
+      '',
+      `http://${KEY}@o123.ingest.sentry.io/456`,
+      `https://${KEY}@o123.ingest.sentry.io`,
+      `https://${KEY}@o123.ingest.sentry.io/456/extra`,
+      `https://${KEY}@o123.ingest.sentry.io/abc`,
+      `https://${KEY}@malo.com/456`,
+      `https://${KEY}@o123.ingest.sentry.io.malo.com/456`,
+      `https://${KEY}@sentry.malo.com/456`,
+      `https://${KEY}@o123.ingest.xx.sentry.io/456`,
+      'https://o123.ingest.sentry.io/456',
+      `https://corta@o123.ingest.sentry.io/456`,
+      `https://${KEY}@o123.ingest.sentry.io/456; script-src *`,
+      `https://*@o123.ingest.sentry.io/456`,
+    ]) {
+      expect(sentryOriginOf(dsn)).toBeUndefined();
+    }
+  });
+});
+
 describe('política de seguridad de contenido', () => {
   it('no permite scripts en línea ni eval, solo scripts propios y WebAssembly', () => {
     for (const policy of [buildMetaCsp(), buildHeaderCsp()]) {
@@ -96,6 +159,34 @@ describe('política de seguridad de contenido', () => {
     );
     expect(directive(buildMetaCsp({ aiOrigin: 'https://ia.studiare.mx' }), 'connect-src')).toBe(
       "'self' https://ia.studiare.mx",
+    );
+  });
+
+  it('PostHog y Sentry se suman solo a connect-src y script-src no cambia (B15, 5.1)', () => {
+    const options = {
+      supabaseOrigin: 'https://abcd1234.supabase.co',
+      posthogOrigin: 'https://us.i.posthog.com',
+      sentryOrigin: 'https://o123.ingest.sentry.io',
+    };
+    for (const policy of [buildMetaCsp(options), buildHeaderCsp(options)]) {
+      expect(directive(policy, 'connect-src')).toBe(
+        "'self' https://abcd1234.supabase.co https://us.i.posthog.com https://o123.ingest.sentry.io",
+      );
+      expect(directive(policy, 'script-src')).toBe("'self' 'wasm-unsafe-eval'");
+      expect(directive(policy, 'default-src')).toBe("'self'");
+      // Ni el origen de PostHog ni el de Sentry aparecen en otra directiva
+      for (const name of ['img-src', 'frame-src', 'form-action', 'worker-src']) {
+        expect(directive(policy, name)).not.toMatch(/posthog|sentry/);
+      }
+    }
+    expect(buildMetaCsp({ posthogOrigin: 'https://eu.i.posthog.com' })).toContain(
+      "connect-src 'self' https://eu.i.posthog.com;",
+    );
+  });
+
+  it('sin las variables de PostHog y de Sentry la política queda como estaba (B15)', () => {
+    expect(buildMetaCsp({ posthogOrigin: undefined, sentryOrigin: undefined })).toBe(
+      buildMetaCsp(),
     );
   });
 

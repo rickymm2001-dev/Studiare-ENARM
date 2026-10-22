@@ -141,6 +141,57 @@ Lo que hace la sesión con el conector, sin pedirte nada más.
 4. Lee solo calibration_runs, sus conteos y códigos, y los anota en PROGRESS.md
 5. Pasa a Publicar tras dos noches limpias, y lo anota
 
+## Lo que salió de B15, analítica, errores y recordatorios
+
+El servidor de los correos, de la analítica y de las alertas ya está, con el interruptor de cada uno. Nada se ha aplicado ni lanzado en el proyecto real y todo nace apagado. Las cuentas de PostHog, Sentry y Resend todavía no existen y el producto funciona completo sin ellas. Ningún paso lleva llaves al chat, cada llave va directo al servicio o a los secretos. El detalle técnico está en docs/CORREOS.md, docs/ALERTAS.md y docs/SUPABASE.md.
+
+Una aclaración sobre las variables de GitHub. El flujo de GitHub Pages (.github/workflows/pages.yml) ya las pasa al build, que son VITE_POSTHOG_KEY, VITE_POSTHOG_HOST, VITE_SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT y, como secreto, SENTRY_AUTH_TOKEN. Pero esa publicación es la demo, y en la demo la medición de uso y los avisos de errores del navegador nacen apagados por diseño, así que ahí no verás efecto aunque las pongas. Se ven cuando la app de producción se publique con el flujo de B17 en Cloudflare, que tiene que pasar las mismas variables.
+
+Lo que hace la sesión con el conector, sin pedirte nada más.
+
+1. Con el token de Supabase corre npm run deploy:supabase -- --plan b15 --dry-run y después sin él. Aplica 20261029000001 a 20261029000004 en orden. Las tres primeras no llevan delete ni drop y la cuarta es Borrar mis datos v4, que lleva delete y por eso no la aplica el conector
+2. El mismo plan despliega send-emails, email-unsubscribe y analytics-flush sin verificación de JWT y monitoring-test con ella, y vuelve a desplegar las nueve funciones de siempre, que ahora van envueltas con el aviso a Sentry
+3. Hace la prueba de humo sin llaves de docs/SUPABASE.md. email-unsubscribe responde 200 en blanco a una ficha falsa y send-emails responde 401 sin la ficha
+4. Revisa los permisos con la consulta de docs/SUPABASE.md, sección Recordatorios, analítica y alertas (B15)
+
+Lo primero que te toca.
+
+- **Paso B15.1. Ya no pegas Borrar mis datos v4.** Con el token de Supabase, la sesión la aplica con el plan b15, como la cuarta migración, y revisa con la consulta de comprobación de docs/SUPABASE.md que borrar_mis_datos_b15 dé true. Solo si el token no llega, abre Supabase, SQL Editor, New query, pega completo supabase/migrations/20261029000004_delete_my_data_v4.sql y dale Run. Es repetible. Sin ella todo funciona, pero Borrar mis datos no quita los recordatorios ni el ID de la analítica del alumno
+
+PostHog, unos 10 minutos. Prende la medición de uso, que cada alumno además tiene que dar por su cuenta.
+
+- **Paso B15.2. Crea la cuenta.** En posthog.com crea tu cuenta y un proyecto llamado Studiare en la nube de EE. UU. (recomendado, más cerca de México)
+- **Paso B15.3. Cierra lo que no se usa.** En Project settings activa Discard client IP data (que no guarde la IP) y deja apagadas la grabación de sesiones, las encuestas y la autocaptura. La app no usa ninguna
+- **Paso B15.4. Copia la llave y la dirección.** Son la llave del proyecto, la que empieza con phc_, y la dirección de captura, https://us.i.posthog.com. Ponlas en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, como VITE_POSTHOG_KEY y VITE_POSTHOG_HOST, y después en Cloudflare. Ponlas también en Supabase, Edge Functions, Secrets, como POSTHOG_PROJECT_KEY y POSTHOG_HOST
+- **Paso B15.5. Nunca crees una llave personal.** La que empieza con phx_ no se usa para la app, y las funciones la rechazan
+- **Paso B15.6. Avisa a la sesión.** Ella prende analytics en el servidor, revisa que lleguen eventos de su cuenta de prueba con el permiso y te deja el embudo escrito en docs/ANALITICA.md para que lo armes en Insights, Funnel
+
+Sentry, unos 15 minutos. Prende los avisos de errores.
+
+- **Paso B15.7. Crea la cuenta.** En sentry.io con el plan Developer, que es gratis, y dos proyectos. studiare-web (Browser JavaScript) y studiare-funciones
+- **Paso B15.8. Protege los datos.** En cada proyecto, Settings, Security & Privacy, prende Prevent Storing of IP Addresses y la limpieza de datos del servidor
+- **Paso B15.9. Copia los dos DSN.** El de studiare-web va a GitHub y Cloudflare como VITE_SENTRY_DSN. El de studiare-funciones va a Supabase, Edge Functions, Secrets, como SENTRY_DSN
+- **Paso B15.10. Crea la regla de alerta.** En Alerts crea una regla para cada proyecto. Cuando se cree un problema nuevo o regrese uno resuelto, que mande un correo a tu cuenta
+- **Paso B15.11. Para subir los mapas de código.** Crea un token de organización y guárdalo en GitHub, Settings, Secrets and variables, Actions, pestaña Secrets, como SENTRY_AUTH_TOKEN. Pon SENTRY_ORG y SENTRY_PROJECT en la pestaña Variables. Los mapas se suben en cualquier build que tenga las tres, y solo sirven cuando ese build es el de producción
+- **Paso B15.12. Avisa a la sesión.** Ella prende errorMonitoring si hiciera falta y tú tocas Mandar error de prueba en Plataforma, Correos y alertas. Deben llegarte dos correos de Sentry, uno del navegador y otro de las funciones
+
+Resend, unos 15 minutos, junto con B17. Prende los correos.
+
+- **Paso B15.13. Crea la cuenta y el dominio.** En resend.com crea tu cuenta, agrega tu dominio y pon en tu DNS los registros que te da (SPF, DKIM y DMARC). Hasta que el dominio esté verificado, Resend solo deja mandar a tu propio correo
+- **Paso B15.14. Crea la llave.** Una llave de API con permiso solo de envío y solo para tu dominio. Pégala en Supabase, Edge Functions, Secrets, como RESEND_API_KEY
+- **Paso B15.15. Pon el remitente y el soporte.** EMAIL_FROM, por ejemplo Studiare con la dirección de los recordatorios en tu dominio, y SUPPORT_EMAIL con tu correo de soporte, en los mismos secretos
+- **Paso B15.16. Decide el plan.** El gratis da 3,000 correos al mes y, según terceros, 100 al día. Alcanza para unos 80 alumnos con recordatorios diarios. Pro cuesta 20 dólares al mes con 50,000. Recomendado empezar en el gratis con los primeros aspirantes y pasar a Pro antes de abrir el registro
+- **Paso B15.17. Avisa a la sesión.** Ella manda un correo de cada tipo a tu cuenta de prueba. Con eso conforme, tú prendes Mandar los correos de la cola en Plataforma, Correos y alertas, y la sesión prende la bandera emailReminders para que el alumno vea la sección en Ajustes del repaso
+
+Decisiones de B15 que esperan tu visto bueno, con la opción recomendada ya tomada.
+
+- La región de PostHog, EE. UU.
+- Los errores del navegador siguen saliendo solo con el permiso de mejora anónima. Mandarlos sin permiso, con los datos ya limpios, es una línea, pero lo debe ver tu abogado
+- El plan de Resend, empezar en el gratis
+- El recorrido solo para cuentas nuevas de alumno
+- El aviso de privacidad con la finalidad Medición de uso y PostHog, Sentry y Resend como encargados. Va en borrador para tu abogado
+- Borrar datos en PostHog al eliminar una cuenta. Recomendado no usar su API de borrado, que pide una llave personal con permisos amplios. Al borrar la cuenta se borra el ID en la base y lo que quedó en PostHog ya no se puede ligar a nadie
+
 ## Lo que salió de B16, legal y privacidad
 
 El aviso de privacidad y los términos quedaron al día (el aviso en la versión 2026-10-15b y los términos en la 2026-10-15), todavía como borrador para revisión del abogado. La lista de cambios, las preguntas para el abogado y las tuyas están en docs/legal/CAMBIOS-B16.md.

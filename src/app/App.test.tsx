@@ -38,12 +38,12 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12) y la Calibración (B14)', () => {
-    expect(SCREEN_KEYS).toHaveLength(36);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12), la Calibración (B14) y Darte de baja (B15)', () => {
+    expect(SCREEN_KEYS).toHaveLength(37);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(36);
+    expect(new Set(paths).size).toBe(37);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(36);
+    expect(new Set(numbers).size).toBe(37);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
@@ -81,6 +81,13 @@ describe('rutas', () => {
       area: 'admin',
       phase: 'E',
     });
+    // Darte de baja de los recordatorios (B15), pública. Toma el 40 porque B14 ya usó el 39
+    expect(SCREENS.unsubscribe).toEqual({
+      number: 40,
+      path: '/correo/baja',
+      area: 'shared',
+      phase: 'F',
+    });
     // Los números de la especificación no se reusan y las rutas viejas no chocan con ninguna pantalla
     for (const removed of [13, 15, 31]) expect(numbers).not.toContain(removed);
     for (const key of ['planner', 'profile', 'rewards']) expect(SCREEN_KEYS).not.toContain(key);
@@ -95,6 +102,17 @@ describe('rutas', () => {
     await waitFor(() => {
       expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
     });
+  });
+
+  it('sin sesión la página de baja de los recordatorios abre sin navegación y sin recorrido (B15, 3.6)', async () => {
+    renderAt(`${SCREENS.unsubscribe.path}?t=0123456789abcdef0123456789abcdef0123`);
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.screens.unsubscribe.title }),
+    ).toBeVisible();
+    await waitFor(() => {
+      expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 
   it('el menú del alumno trae sus siete secciones, Más para el teléfono y Configuración al final, sin Plan, Logros ni Perfil (B3)', async () => {

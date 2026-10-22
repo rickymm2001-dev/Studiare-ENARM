@@ -4,8 +4,13 @@ import { Download } from 'lucide-react';
 import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { loadCloud } from '@/data/cloud/client';
+import { fetchReminderPrefs } from '@/data/cloud/reminders';
 import { useDataApi } from '@/data/context';
-import { exportUserData, type PartyCloudExport } from '@/data/usecases/exportData';
+import {
+  exportUserData,
+  type PartyCloudExport,
+  type RemindersCloudExport,
+} from '@/data/usecases/exportData';
 import { exportMyPartyData } from '@/data/usecases/partyCloud';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -25,6 +30,13 @@ export function DataSection({ session }: { session: ReadySession }) {
     if (session.isDemo || cloudStatus !== 'linked') return null;
     const cloud = await loadCloud();
     return cloud ? exportMyPartyData(cloud) : { status: 'unavailable', reason: 'network' };
+  };
+  // Los recordatorios por correo (B15) también viven en la nube, con la misma regla
+  const remindersCloud = async (): Promise<RemindersCloudExport | null> => {
+    if (session.isDemo || cloudStatus !== 'linked') return null;
+    const cloud = await loadCloud();
+    const prefs = cloud ? await fetchReminderPrefs(cloud) : null;
+    return prefs ? { status: 'included', data: prefs } : { status: 'unavailable' };
   };
   // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay que leer
   // los perfiles antes, porque con la base borrada ya no se sabe de quién eran
@@ -47,7 +59,7 @@ export function DataSection({ session }: { session: ReadySession }) {
           variant="secondary"
           className="self-start"
           onClick={() => {
-            void exportUserData(api.repos, user.id, { partyCloud }).then((data) => {
+            void exportUserData(api.repos, user.id, { partyCloud, remindersCloud }).then((data) => {
               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
               const url = URL.createObjectURL(blob);
               const link = document.createElement('a');

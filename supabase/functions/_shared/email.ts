@@ -1,21 +1,27 @@
-// Correos de pagos (B10 del plan del cambio, 4 del diseño).
+// Correos de la plataforma (B10 y B15 del plan del cambio, 4 del diseño de B10 y 3 del de B15).
 //
 // Aquí viven las plantillas y la interfaz del envío. La base deja cada correo en la cola email_outbox
 // (migración 20261022000001) con su tipo y unos pocos datos, fechas, montos y plan, nunca correos ni RFC.
-// B15 agrega quien los manda de verdad (Resend), la función que toma la cola con claim_email_batch,
-// resuelve el destinatario con la llave de servicio, arma el correo con renderEmail y lo cierra con
-// finish_email. En B10 solo existe noopSender, que no manda nada. No depende de Deno, así se prueba con
-// Vitest (D-096).
+// La función send-emails (B15) toma la cola con claim_email_batch, resuelve el destinatario con la llave de
+// servicio, arma el correo con renderEmail, lo manda con ResendSender (resend.ts) y lo cierra con
+// finish_email. Sin llaves de Resend queda noopSender, que no manda nada. No depende de Deno, así se prueba
+// con Vitest (D-096).
 //
 // Los tipos de correo viven en la tabla email_kinds. La tabla ya trae content_report, cuya plantilla
 // suma B11 (4.6 del plan de B11), distractor_flags, cuya plantilla suma B14 (3.5 del plan de B14), y
-// daily_review_reminder (B15), que suma la suya en su bloque
+// daily_review_reminder, el recordatorio diario de repaso de B15 (3.2), el único que se puede dejar de
+// recibir. Los demás son correos de servicio y no llevan baja
 import { PLAN_PRICES_MXN, isPaidPlan, type PaidPlan } from './billingTypes.ts';
 import { subscriptionUrl } from './http.ts';
 import { GUARANTEE_DAYS } from './stripe.ts';
 
 export type EmailKind =
-  'trial_ending' | 'pass_expiring' | 'invoice_requested' | 'content_report' | 'distractor_flags';
+  | 'trial_ending'
+  | 'pass_expiring'
+  | 'invoice_requested'
+  | 'content_report'
+  | 'distractor_flags'
+  | 'daily_review_reminder';
 
 export const EMAIL_KINDS: readonly EmailKind[] = [
   'trial_ending',
@@ -23,7 +29,14 @@ export const EMAIL_KINDS: readonly EmailKind[] = [
   'invoice_requested',
   'content_report',
   'distractor_flags',
+  'daily_review_reminder',
 ];
+
+export const isEmailKind = (value: unknown): value is EmailKind =>
+  typeof value === 'string' && (EMAIL_KINDS as readonly string[]).includes(value);
+
+/** Lo que se pide a la base y a los encabezados de un correo que se puede dejar de recibir (RFC 8058) */
+export const LIST_UNSUBSCRIBE_POST = 'List-Unsubscribe=One-Click';
 
 export interface EmailMessage {
   to: string;
@@ -33,6 +46,8 @@ export interface EmailMessage {
   /** El dedupe_key de la cola, para el encabezado Idempotency-Key de Resend */
   idempotencyKey: string;
   tags: { name: string; value: string }[];
+  /** Encabezados del correo, como List-Unsubscribe. Solo los lleva el recordatorio */
+  headers?: Record<string, string>;
 }
 
 export interface EmailSender {
@@ -46,9 +61,23 @@ export interface EmailContext {
   supportEmail: string | null;
   /** El alias del alumno para el saludo, o null para saludar sin nombre */
   alias: string | null;
+  /**
+   * La página de la app donde el alumno confirma que se da de baja, con su ficha. Es el enlace del pie del
+   * recordatorio, y abre con GET sin dar de baja a nadie, así los revisores de enlaces del correo no lo
+   * hacen (3.6). Sin ella el recordatorio no sale
+   */
+  unsubscribeUrl?: string;
+  /**
+   * La dirección de la función email-unsubscribe con la ficha. Va en el encabezado List-Unsubscribe, a la
+   * que el correo de Gmail o de Yahoo hace POST para la baja de un clic. Sin ella el recordatorio sale solo
+   * con el enlace del pie
+   */
+  oneClickUrl?: string;
+  /** Ajustes del repaso en la sección de recordatorios. Si falta se arma desde appUrl */
+  settingsUrl?: string;
 }
 
-export type RenderedEmail = Pick<EmailMessage, 'subject' | 'text' | 'html' | 'tags'>;
+export type RenderedEmail = Pick<EmailMessage, 'subject' | 'text' | 'html' | 'tags' | 'headers'>;
 
 /** Nombre de cada plan como lo ve el alumno, igual que en la app */
 const PLAN_NAMES: Record<PaidPlan, string> = {
@@ -145,6 +174,13 @@ function appPage(appUrl: string, path: string): string {
   return target.toString();
 }
 
+/** Una pantalla de la app con su consulta, como /repasar?ajustes=recordatorios */
+function appLink(appUrl: string, path: string, params: Record<string, string> = {}): string {
+  const target = new URL(appPage(appUrl, path));
+  for (const [name, value] of Object.entries(params)) target.searchParams.set(name, value);
+  return target.toString();
+}
+
 const escapeHtml = (value: string) =>
   value
     .replace(/&/g, '&amp;')
@@ -165,6 +201,79 @@ interface Template {
   paragraphs: string[];
   /** El botón del correo */
   link: { label: string; url: string };
+  /** Enlaces del pie, como cambiar los recordatorios o darse de baja */
+  footerLinks?: { label: string; url: string }[];
+  /** El pie propio de un correo que se puede dejar de recibir. Los de servicio usan el de siempre */
+  footer?: string;
+  /** Encabezados del correo */
+  headers?: Record<string, string>;
+}
+
+/** Un conteo entero de 0 o más que puede venir como null o no venir */
+function optionalCountOf(
+  kind: EmailKind,
+  data: Record<string, unknown>,
+  field: string,
+): number | null {
+  const value = data[field];
+  if (value === null || value === undefined) return null;
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+    throw new MissingEmailData(kind, field);
+  }
+  return value;
+}
+
+const cards = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`;
+
+/**
+ * El recordatorio diario de repaso (3.2). Dice cuántas tarjetas vencen si la foto del alumno es reciente y,
+ * si no, que su repaso lo espera. Lleva el botón a Repasar, el enlace para cambiar los recordatorios y el de
+ * baja, y los encabezados de la baja de un clic. Sin el enlace de baja no sale
+ */
+function reminderTemplate(
+  kind: EmailKind,
+  data: Record<string, unknown>,
+  ctx: EmailContext,
+): Template {
+  const due = optionalCountOf(kind, data, 'due');
+  const fresh = optionalCountOf(kind, data, 'newAvailable') ?? 0;
+  if (!ctx.unsubscribeUrl) throw new MissingEmailData(kind, 'unsubscribeUrl');
+  const subject =
+    due === null
+      ? 'Tu repaso de hoy te espera'
+      : due === 0
+        ? 'Hoy no tienes tarjetas vencidas en Studiare'
+        : `Hoy ${due === 1 ? 'te toca' : 'te tocan'} ${cards(due, 'tarjeta', 'tarjetas')} en Studiare`;
+  const main =
+    due === null
+      ? 'Tu repaso de hoy te espera. Repasar a tiempo es lo que hace que no se te olvide lo que ya estudiaste.'
+      : due === 0
+        ? 'Hoy no tienes tarjetas vencidas. Es un buen momento para estudiar tarjetas nuevas o practicar preguntas.'
+        : due === 1
+          ? 'Hoy te toca 1 tarjeta. Repasarla a tiempo es lo que hace que no se te olvide.'
+          : `Hoy te tocan ${due} tarjetas. Repasarlas a tiempo es lo que hace que no se te olviden.`;
+  const headers: Record<string, string> | undefined = ctx.oneClickUrl
+    ? { 'List-Unsubscribe': `<${ctx.oneClickUrl}>`, 'List-Unsubscribe-Post': LIST_UNSUBSCRIBE_POST }
+    : undefined;
+  return {
+    subject,
+    paragraphs: [
+      greeting(ctx.alias),
+      main,
+      ...(fresh > 0 ? [`Además tienes ${cards(fresh, 'tarjeta nueva', 'tarjetas nuevas')}.`] : []),
+    ],
+    link: { label: 'Repasar ahora', url: appLink(ctx.appUrl, '/repasar') },
+    footerLinks: [
+      {
+        label: 'Cambiar mis recordatorios',
+        url: ctx.settingsUrl ?? appLink(ctx.appUrl, '/repasar', { ajustes: 'recordatorios' }),
+      },
+      { label: 'Darme de baja', url: ctx.unsubscribeUrl },
+    ],
+    footer:
+      'Recibes este correo porque prendiste los recordatorios en Ajustes del repaso. Ahí cambias la hora y los días.',
+    ...(headers ? { headers } : {}),
+  };
 }
 
 function template(kind: EmailKind, data: Record<string, unknown>, ctx: EmailContext): Template {
@@ -241,6 +350,8 @@ function template(kind: EmailKind, data: Record<string, unknown>, ctx: EmailCont
         link: { label: 'Ver los reportes', url: appPage(ctx.appUrl, '/medico/reportes') },
       };
     }
+    case 'daily_review_reminder':
+      return reminderTemplate(kind, data, ctx);
   }
 }
 
@@ -253,19 +364,37 @@ export function renderEmail(
   data: Record<string, unknown>,
   ctx: EmailContext,
 ): RenderedEmail {
-  const { subject, paragraphs, link } = template(kind, data, ctx);
+  const {
+    subject,
+    paragraphs,
+    link,
+    footerLinks = [],
+    footer: ownFooter,
+    headers,
+  } = template(kind, data, ctx);
   const support = ctx.supportEmail?.trim() ?? '';
+  const baseFooter = ownFooter ?? 'Recibes este correo por tu cuenta de Studiare.';
   const footer =
-    support === ''
-      ? 'Recibes este correo por tu cuenta de Studiare.'
-      : `Recibes este correo por tu cuenta de Studiare. Si tienes dudas, escríbenos a ${support}.`;
-  const text = [...paragraphs, `${link.label} en ${link.url}`, footer].join('\n\n');
+    support === '' ? baseFooter : `${baseFooter} Si tienes dudas, escríbenos a ${support}.`;
+  const text = [
+    ...paragraphs,
+    `${link.label} en ${link.url}`,
+    ...footerLinks.map((item) => `${item.label} en ${item.url}`),
+    footer,
+  ].join('\n\n');
   const html = [
     '<!doctype html>',
     '<html lang="es-MX">',
     '<body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #1f2937;">',
     ...paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`),
     `<p><a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a></p>`,
+    ...(footerLinks.length > 0
+      ? [
+          `<p style="font-size: 12px;">${footerLinks
+            .map((item) => `<a href="${escapeHtml(item.url)}">${escapeHtml(item.label)}</a>`)
+            .join(' · ')}</p>`,
+        ]
+      : []),
     `<p style="font-size: 12px; color: #6b7280;">${escapeHtml(footer)}</p>`,
     '</body>',
     '</html>',
@@ -279,18 +408,20 @@ export function renderEmail(
       { name: 'app', value: 'studiare' },
       { name: 'kind', value: kind },
     ],
+    ...(headers ? { headers } : {}),
   };
 }
 
 /**
- * El envío de B10, que no manda nada. Deja una línea en el registro con el tipo de correo, sin
- * destinatario, alias ni clave, y devuelve un id que dice que no salió
+ * El envío sin llaves, que no manda nada. Deja una línea en el registro con el tipo de correo, sin
+ * destinatario, alias ni clave, y devuelve un id que dice que no salió. Es el de desarrollo y el de las
+ * pruebas; en producción el envío real es ResendSender
  */
 export function createNoopSender(log: (line: string) => void): EmailSender {
   return {
     send(message) {
       const kind = message.tags.find((tag) => tag.name === 'kind')?.value ?? 'desconocido';
-      log(`Correo ${kind} sin enviar. El envío de correos llega en B15`);
+      log(`Correo ${kind} sin enviar. El envío de correos no está configurado`);
       return Promise.resolve({ id: 'noop' });
     },
   };

@@ -1,11 +1,18 @@
 import 'fake-indexeddb/auto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it } from 'vitest';
+import {
+  resetAnalytics,
+  setAnalyticsConsent,
+  setAnalyticsSink,
+  type AnalyticsRecord,
+} from '../analytics/catalog';
 import { newId, testApi } from '../testing/fixtures';
 import { cancelMercadoPagoSubscription } from './cancel';
 import {
   checkoutRequestFor,
   isAllowedCheckoutUrl,
+  measuredMethodOf,
   startCheckout,
   type CheckoutRequest,
 } from './checkout';
@@ -302,6 +309,49 @@ describe('iniciar el pago', () => {
       },
     });
     expect(await startCheckout(throwing.cloud, CARD)).toEqual({ ok: false, reason: 'failed' });
+  });
+});
+
+describe('medir el botón de pagar (B15, 1.5)', () => {
+  afterEach(() => {
+    resetAnalytics();
+  });
+  const watch = () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    return seen;
+  };
+  const failing = () => fakeCloud({ invoke: { error: new Error('red') } }).cloud;
+
+  it('con permiso manda el plan, la forma de pago y si llevaba prueba, y nada más', async () => {
+    const seen = watch();
+    setAnalyticsConsent(true);
+    await startCheckout(failing(), checkoutRequestFor('card', 'founder', true));
+    await startCheckout(failing(), checkoutRequestFor('oxxo', 'annual', false));
+    await startCheckout(failing(), checkoutRequestFor('mercadopago_pass', 'monthly', false));
+    expect(seen.map((record) => [record.event, record.properties])).toEqual([
+      ['checkout_started', { plan: 'founder', method: 'card', with_trial: true }],
+      ['checkout_started', { plan: 'annual', method: 'oxxo', with_trial: false }],
+      ['checkout_started', { plan: 'monthly', method: 'mercadopago', with_trial: false }],
+    ]);
+  });
+
+  it('sin permiso, o sin saber si lo hay, no manda nada y el pago sigue igual', async () => {
+    const seen = watch();
+    await startCheckout(failing(), checkoutRequestFor('card', 'monthly', true));
+    setAnalyticsConsent(false);
+    expect(await startCheckout(failing(), checkoutRequestFor('spei', 'monthly', false))).toEqual({
+      ok: false,
+      reason: 'failed',
+    });
+    expect(seen).toEqual([]);
+  });
+
+  it('cada forma de pago se mide con las cuatro de la lista', () => {
+    const options = ['card', 'oxxo', 'spei', 'mercadopago', 'mercadopago_pass'] as const;
+    expect(
+      options.map((option) => measuredMethodOf(checkoutRequestFor(option, 'founder', true))),
+    ).toEqual(['card', 'oxxo', 'spei', 'mercadopago', 'mercadopago']);
   });
 });
 

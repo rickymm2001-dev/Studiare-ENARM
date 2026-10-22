@@ -27,8 +27,16 @@ export interface DemoDataActions {
 /** Lo que la interfaz puede usar. La base de Dexie queda escondida en src/data */
 export interface DataApi {
   repos: Repositories;
-  /** Agrega un evento y actualiza las cachés en la misma transacción */
+  /**
+   * Agrega un evento y actualiza las cachés en la misma transacción. Lo que se guarda en este dispositivo
+   * pasa además por el puente de la analítica (B15, 1.6), que sin el permiso Medición de uso no hace nada
+   */
   recordEvent: (event: AppEvent) => Promise<AppEvent>;
+  /**
+   * Lo mismo que recordEvent, sin el puente de la analítica. Lo usa la sincronización para guardar lo que
+   * baja de otros dispositivos, que ya se midió donde pasó, así no se mide dos veces (B15, 1.6)
+   */
+  recordEventQuiet: (event: AppEvent) => Promise<AppEvent>;
   rebuildDerivedState: () => Promise<void>;
   /** null en enarm_real */
   demo: DemoDataActions | null;
@@ -53,6 +61,7 @@ export function useRepositories(): Repositories {
 }
 
 export function useDataApi(): DataApi {
-  const { repos, recordEvent, rebuildDerivedState, demo, deleteAllData } = useDataContext();
-  return { repos, recordEvent, rebuildDerivedState, demo, deleteAllData };
+  const { repos, recordEvent, recordEventQuiet, rebuildDerivedState, demo, deleteAllData } =
+    useDataContext();
+  return { repos, recordEvent, recordEventQuiet, rebuildDerivedState, demo, deleteAllData };
 }

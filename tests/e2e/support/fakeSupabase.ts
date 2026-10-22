@@ -39,10 +39,20 @@
 // platform_settings. Las del equipo contestan vacío, con las formas de src/data/model/contracts.ts, hasta
 // que fakeCalibrationAdmin.ts (paquete C) las atienda. Sin attachModel esas funciones no existen y la app
 // trata la comparación como no disponible, igual que un servidor sin las migraciones de B14.
+//
+// Recordatorios, analítica y errores (B15). No hay que enganchar nada, están siempre. cloud.engagement
+// (fakeEngagement.ts) atiende my_reminder_prefs, set_reminder_prefs, put_due_snapshot, analytics_identity,
+// set_analytics_consent y admin_email_overview, y las funciones email-unsubscribe (sin verificación de JWT,
+// así que atiende también sin la llave pública) y monitoring-test (solo admin con segundo factor). Borrar
+// mis datos y borrar la cuenta quitan lo suyo. cloud.telemetry (fakeTelemetry.ts) atiende en cada contexto
+// los orígenes simulados de PostHog y de Sentry y guarda lo que llega, que es como una spec demuestra que
+// sin permiso no sale nada. Con cloud.engagement.deployed en false esas funciones no existen, como en un
+// proyecto sin las migraciones de B15.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
+import { MONITORING_TEST_FUNCTION } from '@/data/cloud/engagementContracts';
 import type { Role } from '@/data/schemas/common';
 import type { FakeGateCaller, FakeGateReply } from '@/data/testing/fakeAiGateServer';
 import { createFakePartyServer, type FakePartyServer } from '@/data/testing/fakePartyServer';
@@ -109,6 +119,19 @@ import {
   type FakeBankReply,
   type FakeBankStore,
 } from './fakeBankStore';
+import {
+  EMAIL_UNSUBSCRIBE_PATH,
+  createFakeEngagementStore,
+  fakeEmailUnsubscribe,
+  fakeEngagementRpc,
+  fakeMonitoringTest,
+  forgetEngagementUser,
+  isEngagementRpc,
+  type FakeEngagementCaller,
+  type FakeEngagementReply,
+  type FakeEngagementStore,
+} from './fakeEngagement';
+import { createFakeTelemetry, type FakeTelemetry } from './fakeTelemetry';
 
 export type PaidPlan = Exclude<PlanKey, 'free'>;
 export type Provider = 'stripe' | 'mercadopago';
@@ -329,6 +352,17 @@ export interface FakeSupabaseServer {
   bank: FakeBankStore | null;
   /** El modelo de B14 enganchado con attachModel. null sin modelo, que responde como sin las migraciones */
   model: FakeModelStore | null;
+  /**
+   * Recordatorios por correo, foto de vencidas, identidad de la analítica y las funciones email-unsubscribe y
+   * monitoring-test (B15, fakeEngagement.ts). Está siempre, como en el servidor real. Con deployed en false
+   * imita un proyecto sin las migraciones de B15
+   */
+  readonly engagement: FakeEngagementStore;
+  /**
+   * PostHog y Sentry simulados (B15, fakeTelemetry.ts). Se atienden en cada contexto que atiende este
+   * servidor, el de un segundo dispositivo también, así ninguna petición sale a esos servicios de verdad
+   */
+  readonly telemetry: FakeTelemetry;
   /** La función ai-proxy enganchada con attachAi (B12). null sin función, que contesta 404 */
   ai: FakeAi | null;
   /**
@@ -792,6 +826,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     model: null as FakeModelStore | null,
     ai: null as FakeAi | null,
   };
+  // Siempre presentes, como en el servidor real (B15)
+  const engagement = createFakeEngagementStore();
+  const telemetry = createFakeTelemetry();
   // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
   // el admin lo cambie desde Usuarios
   settings.set('registration_open', {
@@ -990,6 +1027,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
 
   function deleteUser(userId: string): void {
     party.forgetUser(userId);
+    forgetEngagementUser(engagement, userId);
     users.delete(userId);
     accounts.delete(userId);
     factors.delete(userId);
@@ -1348,6 +1386,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     events.push(...left);
     // Borrar las membresías se lleva en cascada lo de Party de esa cuenta
     const memberships = party.forgetMemberships(user.id);
+    // Y delete_my_data v4 quita los recordatorios, la foto de vencidas y el ID de la analítica (B15, 3.8)
+    forgetEngagementUser(engagement, user.id);
     return json({
       events: before - left.length,
       records,
@@ -1640,6 +1680,15 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const gateReply = (reply: FakeGateReply): Reply =>
     reply.error ? pgError(reply.error.code, reply.error.message) : json(reply.data);
 
+  /** Quien llama a las funciones de B15, como lo ven las funciones de la base */
+  function engagementCaller(user: FakeUser, session: Session): FakeEngagementCaller {
+    return {
+      userId: user.id,
+      activeDevice: isActiveDevice(user, session),
+      isAdmin: isAdmin(user, session),
+    };
+  }
+
   /** admin_ai_cost_report. El costo de la nube de un periodo, solo para un admin con su segundo factor */
   function aiCostReport(user: FakeUser, session: Session, args: Json): Reply {
     const ai = server.ai;
@@ -1680,6 +1729,11 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       );
     }
     if (server.model && isModelRpc(name)) return modelRpc(server.model, name, user, session);
+    if (isEngagementRpc(name)) {
+      return fromEngagementReply(
+        fakeEngagementRpc(engagement, name, engagementCaller(user, session), args),
+      );
+    }
     if (server.ai && AI_GATE_RPCS.has(name)) {
       const reply = server.ai.gate.call(name, gateCaller(user, session), args);
       if (reply) return gateReply(reply);
@@ -2244,6 +2298,11 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       const caller = auth.kind === 'user' ? bankCaller(auth.user, auth.session) : null;
       return fromBankReply(bankFunction(server.bank, caller, parseJsonBody(request)));
     }
+    // El error de prueba de Plataforma, solo admin con segundo factor (B15, 2.4)
+    if (name === MONITORING_TEST_FUNCTION) {
+      const caller = auth.kind === 'user' ? engagementCaller(auth.user, auth.session) : null;
+      return fromEngagementReply(fakeMonitoringTest(engagement, caller));
+    }
     if (auth.kind !== 'user') return json({ error: 'unauthorized' }, 401);
     const { user } = auth;
     const body = parseJsonBody(request);
@@ -2385,6 +2444,19 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     };
   }
 
+  /** La baja de un clic de los recordatorios. Sin sesión, y la atiende fakeEngagement.ts (B15, 3.6) */
+  function handleEmailUnsubscribe(request: Request, url: URL): Reply {
+    return fromEngagementReply(
+      fakeEmailUnsubscribe(engagement, {
+        method: request.method(),
+        queryToken: url.searchParams.get('t'),
+        contentType: request.headers()['content-type'] ?? null,
+        json: parseJsonBody(request),
+        appUrl,
+      }),
+    );
+  }
+
   function handleSupabase(request: Request): Reply {
     const url = new URL(request.url());
     if (request.method() === 'OPTIONS') return preflight(request);
@@ -2392,6 +2464,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (url.pathname === '/auth/v1/authorize' && request.method() === 'GET') {
       return handleAuthorize(url);
     }
+    // email-unsubscribe se despliega sin verificación de JWT (B15, 3.6), así que el clic del correo llega
+    // sin la llave pública ni sesión
+    if (url.pathname === EMAIL_UNSUBSCRIBE_PATH) return handleEmailUnsubscribe(request, url);
     const apiKey = request.headers().apikey ?? url.searchParams.get('apikey');
     if (apiKey !== FAKE_SUPABASE_ANON_KEY) {
       return json(
@@ -2540,6 +2615,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       await context.route(`${FAKE_MERCADOPAGO_ORIGIN}/**`, (route) =>
         fulfill(route, (request, url) => handleMercadoPagoRequest(request, url, billing), false),
       );
+      // PostHog y Sentry simulados en cada contexto, el de un segundo dispositivo también (B15, 6.4)
+      await telemetry.attach(context);
     },
     createUser,
     userByEmail,
@@ -2788,6 +2865,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     set ai(value) {
       server.ai = value;
     },
+    engagement,
+    telemetry,
     aiIdentity,
   };
 }
@@ -2833,6 +2912,13 @@ export function attachBank(server: FakeSupabaseServer, store: FakeBankStore): vo
 /** Engancha el modelo en memoria al Supabase simulado. Desde aquí las rpc del modelo van a él */
 export function attachModel(server: FakeSupabaseServer, store: FakeModelStore): void {
   server.model = store;
+}
+
+/** La respuesta de fakeEngagement.ts con la forma de las de este servidor. Sin json va en blanco */
+function fromEngagementReply(reply: FakeEngagementReply): Reply {
+  const body: Reply =
+    reply.json === undefined ? { status: reply.status } : json(reply.json, reply.status);
+  return reply.headers ? { ...body, headers: { ...body.headers, ...reply.headers } } : body;
 }
 
 function fromBankReply(reply: FakeBankReply): Reply {

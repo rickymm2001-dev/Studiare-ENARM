@@ -1,0 +1,101 @@
+{
+  "description": "B15, analítica, errores, recordatorios y recorrido. Las cuatro migraciones del servidor (20261029000001 a 20261029000004) con el interruptor único de correos, los recordatorios de repaso, la analítica con permiso, la programación con Cron y Borrar mis datos v4, más las funciones send-emails, email-unsubscribe, analytics-flush y monitoring-test, y las nueve que ya existían otra vez, porque ahora van envueltas con withMonitoring para avisar a Sentry. Va después de b11, b12, b13 y b14. Todo nace apagado, con email_delivery y analytics en false y sin llaves. Las llaves de Resend, PostHog y Sentry (RESEND_API_KEY, EMAIL_FROM, SUPPORT_EMAIL, POSTHOG_PROJECT_KEY, POSTHOG_HOST y SENTRY_DSN) las pone Ricardo directo en Supabase, Edge Functions, Secrets, y no pasan por este plan (docs/PENDIENTES_DE_RICARDO.md, B15). La tercera migración necesita project_url en Vault, que guardó B11. Los planes b11 y b12 llevan su archivo manual de Borrar mis datos en la misma versión v4 (docs/DESPLIEGUE.md).",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261029000001_email_reminders.sql",
+      "note": "El interruptor único de envío email_delivery, los ajustes de recordatorio de cada alumno con su ficha de baja, la foto de tarjetas vencidas, el encolado de recordatorios, claim_email_batch v2 con la misma firma y las funciones de envío y de baja. Redefine claim_email_batch de la migración billing_emails de B10 sin cambiar su firma"
+    },
+    {
+      "file": "supabase/migrations/20261029000002_product_analytics.sql",
+      "note": "El ID seudónimo de la analítica con el permiso Medición de uso, la cola de eventos de dinero con sus disparadores en subscriptions y payments, que nunca hacen fallar un pago, y el reclamo y cierre de esa cola. El interruptor analytics nace en false"
+    },
+    {
+      "file": "supabase/migrations/20261029000003_engagement_cron.sql",
+      "note": "Las fichas email_tick_secret y analytics_tick_secret en Vault y cuatro trabajos de Cron en GMT. Usa project_url de Vault y no hace nada donde falten pg_cron, pg_net o Vault"
+    },
+    {
+      "file": "supabase/migrations/20261029000004_delete_my_data_v4.sql",
+      "check": {
+        "tablas_de_b15": 4,
+        "tablas_con_seguridad_por_fila": true,
+        "alumno_guarda_recordatorios": true,
+        "anonimo_guarda_recordatorios": false,
+        "alumno_reclama_correos": false,
+        "llave_reclama_correos": true,
+        "llave_da_de_baja": true,
+        "alumno_pide_su_id": true,
+        "alumno_reclama_eventos": false,
+        "interruptores_sembrados": true,
+        "borrar_mis_datos_b15": true
+      },
+      "note": "Borrar mis datos v4. Quita los recordatorios, la foto de vencidas, el ID de analítica y los recordatorios pendientes, y lleva delete, así que el conector de Supabase no la aplica sin una confirmación y la aplica esta herramienta. Es la misma de la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql, de banco-b11.sql y de ia-b12.sql, que siguen a esta migración. La comprobación del final revisa solo hechos de la estructura y no si el envío de correos o la analítica están encendidos, para que el plan se pueda repetir"
+    }
+  ],
+  "functions": [
+    {
+      "slug": "send-emails",
+      "verifyJwt": false,
+      "note": "Cron la llama cada minuto con la ficha email_tick de Vault. La función verifica la ficha por su cuenta y sin ella responde 401"
+    },
+    {
+      "slug": "email-unsubscribe",
+      "verifyJwt": false,
+      "note": "La baja de un clic del correo y de la página /correo/baja. Quien llama no tiene sesión y la ficha de baja es lo que lo identifica. Responde 200 en blanco aunque la ficha no exista"
+    },
+    {
+      "slug": "analytics-flush",
+      "verifyJwt": false,
+      "note": "Cron la llama cada 5 minutos con la ficha analytics_tick de Vault. La función verifica la ficha por su cuenta"
+    },
+    {
+      "slug": "monitoring-test",
+      "verifyJwt": true,
+      "note": "La llama el botón Mandar error de prueba de Plataforma. Pide la sesión de un admin con segundo factor"
+    },
+    {
+      "slug": "create-checkout",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "create-portal-session",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "cancel-subscription",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "admin-reset-mfa",
+      "verifyJwt": true,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "payment-webhook-stripe",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre, porque Stripe se identifica con su firma"
+    },
+    {
+      "slug": "payment-webhook-mercadopago",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre, porque Mercado Pago se identifica con su firma"
+    },
+    {
+      "slug": "bank-sync",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "ai-proxy",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    },
+    {
+      "slug": "ai-batch",
+      "verifyJwt": false,
+      "note": "Se vuelve a publicar porque ahora va envuelta con withMonitoring. Mismo verify_jwt de siempre"
+    }
+  ]
+}

@@ -6,6 +6,8 @@
 import { createAnthropicClients } from '../_shared/ai/anthropic.ts';
 import { buildAiProxy, misconfigured, structuredLog } from '../_shared/ai/edge.ts';
 import { readAiProxyEnv } from '../_shared/ai/env.ts';
+import { withMonitoring } from '../_shared/monitoring.ts';
+import { monitoringDeps } from '../_shared/monitoringRuntime.ts';
 
 const log = structuredLog((line) => {
   console.error(line);
@@ -35,4 +37,6 @@ if (parsed.ok) {
   handler = misconfigured(parsed.problems, log);
 }
 
-Deno.serve(handler);
+// El aviso a Sentry lee SENTRY_DSN al avisar, no al cargar, y ese entorno lo lee monitoringRuntime.ts, que no carga
+// el resto de runtime.ts. Aquí solo se leen los nombres de 2.7
+Deno.serve(withMonitoring('ai-proxy', handler, monitoringDeps));

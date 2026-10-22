@@ -1,6 +1,6 @@
 // Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
 // Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G), Admin, Pagos
-// (B10) y las tres del banco en la nube del admin (B11), la Auditoría de la IA (B12) y la Calibración (B14), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
+// (B10), las tres del banco en la nube del admin (B11), la Auditoría de la IA (B12), la Calibración (B14) y Darte de baja (B15), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
 // (comentarios 6, 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
@@ -47,6 +47,7 @@ export const SCREEN_KEYS = [
   'deckCatalogAdmin',
   'aiAudit',
   'calibrationAdmin',
+  'unsubscribe',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -107,7 +108,20 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   aiAudit: { number: 38, path: '/medico/auditoria-ia', area: 'physician', phase: 'E' },
   // Calibración nocturna del modelo del alumno (B14, 7.2 del plan de B14). Solo admin y dueño
   calibrationAdmin: { number: 39, path: '/admin/calibracion', area: 'admin', phase: 'E' },
+  // Darte de baja de los recordatorios por correo (B15, 3.6). Pública y sin sesión: la abre el enlace del
+  // pie del correo, con la ficha de baja en ?t=. Toma el 40 porque B14 ya usó el 39
+  unsubscribe: { number: 40, path: '/correo/baja', area: 'shared', phase: 'F' },
 };
+
+/**
+ * Las pantallas que se leen sin sesión y no piden cuenta completa: el aviso de privacidad, los términos y la baja
+ * de los recordatorios (B15). El resto de la app las trata igual, sin la compuerta de acceso
+ */
+export const PUBLIC_SCREEN_KEYS = ['privacyNotice', 'terms', 'unsubscribe'] as const;
+
+export function isPublicScreenPath(pathname: string): boolean {
+  return PUBLIC_SCREEN_KEYS.some((key) => SCREENS[key].path === pathname);
+}
 
 export function screenPath(key: ScreenKey): string {
   return SCREENS[key].path;

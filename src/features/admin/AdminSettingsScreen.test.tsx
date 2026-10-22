@@ -11,6 +11,7 @@ import { readStoredOverrides } from '@/config/overridesStore';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
+import { adminEngagementText } from '@/i18n/adminEngagement';
 import { bankAdminText } from '@/i18n/bankAdmin';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -491,5 +492,14 @@ describe('modelos, precios y límites de la IA', () => {
     expect(
       await within(card).findByText('claude-opus-5-5 no deja apagar el razonamiento'),
     ).toBeVisible();
+  });
+});
+
+describe('correos y alertas', () => {
+  it('aparece en Plataforma y, sin la nube, explica que los interruptores viven en el servidor', async () => {
+    await open();
+    const card = screen.getByRole('region', { name: adminEngagementText.title });
+    expect(within(card).getByText(adminEngagementText.needsCloud)).toBeVisible();
+    expect(within(card).queryByRole('checkbox')).not.toBeInTheDocument();
   });
 });

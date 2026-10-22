@@ -29,9 +29,14 @@ const REDACTIONS: readonly [RegExp, string][] = [
   [/"[^"]*" is not valid JSON/g, '"[texto]" is not valid JSON'],
   [/eyJ[\w-]+\.[\w-]+\.[\w-]+/g, '[token]'],
   [/\b(?:sk|pk|rk|whsec|sb_secret|sb_publishable)[-_][\w-]{8,}/gi, '[clave]'],
-  [/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '[correo]'],
+  // Con letras y números de cualquier idioma (los acentos y la ñ son comunes en los nombres), y con la arroba
+  // también como %40 (una ruta o un mensaje de fetch) o de ancho completo
+  [/[\p{L}\p{N}._%+-]+(?:@|%40|＠)[\p{L}\p{N}-]+(?:\.[\p{L}\p{N}-]+)+/gu, '[correo]'],
   [/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, '[id]'],
   [/\b[0-9A-HJKMNP-TV-Z]{26}\b/g, '[id]'],
+  // Una ficha suelta (la de baja de un correo son 36 hexadecimales) o una huella larga no dice nada al diagnóstico.
+  // Sin \b a propósito, para que también caiga pegada a un guion bajo, como en token_ + ficha
+  [/[0-9a-f]{32,}/gi, '[token]'],
   // Lo que va después de ? o # en una dirección puede traer tokens o textos del alumno
   [/([?#])[^\s)'"]+/g, '$1[q]'],
   // Los números de línea y columna del código llegan a 7 dígitos, un teléfono o una CURP tienen más

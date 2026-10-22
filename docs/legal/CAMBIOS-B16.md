@@ -45,7 +45,7 @@ Lista de lo que cambió en el aviso de privacidad y en los términos y condicion
 ### Lo opcional y los permisos
 
 - La frase de entrada dice ahora que cada permiso se pide por separado y empieza apagado (4.27), como ya hace la app desde B9
-- Los tres permisos del aviso son exactamente los tres que guarda la app, Party, Análisis con IA y Mejora anónima. Una prueba lo revisa contra ConsentPurposeSchema y los textos de Configuración
+- Los tres permisos del aviso son exactamente los tres que guarda la app, Party, Análisis con IA y Mejora anónima. Una prueba lo revisa contra ConsentPurposeSchema y los textos de Configuración. Con B15 se suma el cuarto, Medición de uso, y la prueba lo exige (ver CAMBIOS-B15.md)
 - Party queda con el texto de B7, sin cambios
 - Mejora anónima explica que usa un identificador seudónimo y qué se calcula con esos datos, la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y que alimenta la comparación con otros alumnos (respuestas 84 a 87)
 - Se avisa que la analítica del producto y los recordatorios de repaso por correo, cuando existan, también serán opcionales, aparte y apagados
@@ -114,6 +114,7 @@ El aviso y los términos describen el producto como queda al lanzar. Antes de qu
 ## Huecos de consentimiento
 
 - La app guarda tres permisos, party, ai_analysis y anonymized_improvement (ConsentPurposeSchema). Los tres nacen apagados al crear el perfil (INITIAL_CONSENT_STATUS en src/data/usecases/profile.ts) y en Completa tu registro, cada uno con su evento. 4.27 ya se cumple para ellos
+- Este hueco lo cerró B15, que agregó el cuarto permiso, Medición de uso, y subió el aviso a la versión 2026-10-21 (ver CAMBIOS-B15.md). Lo que sigue es lo que se dijo en B16
 - Falta el permiso de analítica para PostHog (respuesta 78). No existe en ConsentPurposeSchema ni en Configuración. B15 tiene que agregarlo como cuarto permiso, apagado, en el registro, en Privacidad y en la exportación, y no cargar PostHog sin él. El aviso ya lo dice como futuro y no lo presenta como un interruptor que hoy exista
 - Los recordatorios de repaso por correo de B15 tienen que empezar apagados. El plan de B15 no lo dice y el aviso ya lo promete
 - Sentry en el navegador tiene que seguir detrás del permiso de mejora anónima, como hoy hace errorReporter.ts con los reportes que van a Supabase. Si B15 decide otra cosa, cambia el aviso

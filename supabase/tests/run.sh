@@ -44,6 +44,11 @@ psql_run -f "$here/ai_jobs_test.sql"
 psql_run -f "$here/ai_gate_test.sql"
 psql_run -f "$here/calibration_test.sql"
 psql_run -f "$here/model_reads_test.sql"
+# B15. Los recordatorios, la analítica y la programación con Cron. Van al final de la lista de pruebas porque
+# apartan lo que otras dejaron en las colas de correos y de eventos
+psql_run -f "$here/reminders_test.sql"
+psql_run -f "$here/analytics_test.sql"
+psql_run -f "$here/engagement_cron_test.sql"
 # Lo que protegen el candado por día del libro de IA y el reclamo de la cola de lotes solo se ve con varias
 # conexiones a la vez. Va al final porque deja la cola de lotes sin trabajos pendientes
 # shellcheck source=supabase/tests/concurrency.sh

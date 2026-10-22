@@ -7,6 +7,8 @@ import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-libra
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
+import { writeStoredFlags } from '@/config/featureFlags';
+import { engagementTexts } from '@/i18n/engagement';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { seedManualCards } from '@/data/testing/seedCards';
 import { t } from '@/i18n/es-MX';
@@ -30,6 +32,7 @@ beforeEach(() => {
 });
 afterEach(async () => {
   cleanup();
+  writeStoredFlags(null);
   Reflect.deleteProperty(Element.prototype, 'scrollIntoView');
   await resetApp(app?.api);
   app = undefined;
@@ -226,6 +229,46 @@ describe('Ajustes del repaso', () => {
     const pomodoro = within(dialog).getByRole('region', { name: t.settings.pomodoroTitle });
     await waitFor(() => {
       expect(scrolled.mock.contexts).toContain(pomodoro);
+    });
+  });
+
+  it('trae la sección de recordatorios por correo, que sin cuenta en la nube dice que la necesita (B15, 3.7)', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.review.path);
+    await typing.click(await screen.findByRole('button', { name: text.open }, WAIT));
+    const dialog = await panel();
+    const reminders = within(dialog).getByRole('region', {
+      name: engagementTexts.reminders.title,
+    });
+    expect(within(reminders).getByText(engagementTexts.reminders.needsCloud)).toBeVisible();
+    // Va después del Pomodoro
+    const order = within(dialog)
+      .getAllByRole('region')
+      .map((region) => region.getAttribute('aria-labelledby'));
+    expect(order.indexOf('ajustes-recordatorios-titulo')).toBeGreaterThan(
+      order.indexOf('ajustes-pomodoro-titulo'),
+    );
+    expect(order.indexOf('ajustes-pomodoro-titulo')).toBeGreaterThan(-1);
+  });
+
+  it('con la bandera emailReminders apagada la sección no aparece', async () => {
+    writeStoredFlags({ emailReminders: false });
+    app = await renderApp(`${SCREENS.review.path}?ajustes=1`);
+    const dialog = await panel();
+    expect(within(dialog).getByRole('region', { name: t.settings.pomodoroTitle })).toBeVisible();
+    expect(
+      within(dialog).queryByRole('region', { name: engagementTexts.reminders.title }),
+    ).toBeNull();
+  });
+
+  it('?ajustes=recordatorios abre el panel en la sección de recordatorios', async () => {
+    app = await renderApp(`${SCREENS.review.path}?ajustes=recordatorios`);
+    const dialog = await panel();
+    const reminders = within(dialog).getByRole('region', {
+      name: engagementTexts.reminders.title,
+    });
+    await waitFor(() => {
+      expect(scrolled.mock.contexts).toContain(reminders);
     });
   });
 });

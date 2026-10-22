@@ -49,3 +49,24 @@ export const FAKE_SUPABASE_ANON_KEY = [
   ),
   base64Url('firma simulada para las pruebas de punta a punta'),
 ].join('.');
+
+/**
+ * Analítica y errores simulados (B15, 5.3 y 6.4 del plan de B15). Solo el build de nube de las pruebas lleva
+ * estas variables (playwright.config.ts), así las specs pueden comprobar que sin permiso no sale nada.
+ * fakeTelemetry.ts atiende dentro del navegador de la prueba los dos orígenes y guarda lo que llega, así
+ * que ninguna petición sale a PostHog ni a Sentry de verdad.
+ *
+ * Nada de aquí es un secreto ni se parece a uno. La llave de proyecto de PostHog (phc_) y el DSN de Sentry
+ * son públicos por diseño, y aun así estos valores no son de ninguna cuenta. La llave dice en su texto que
+ * es simulada y rellena con ceros, y la del DSN es la secuencia 0123456789abcdef repetida. Tienen la forma
+ * que la app valida (phc_ con 43 caracteres, un DSN https con origen o{número}.ingest.sentry.io) para que
+ * el cliente los acepte. El host de PostHog es uno de los dos que acepta la app (src/config/csp.ts), así
+ * que la prueba lo intercepta, no lo reemplaza
+ */
+export const FAKE_POSTHOG_KEY = 'phc_SimuladaPruebasStudiare00000000000000000000';
+export const FAKE_POSTHOG_HOST = 'https://us.i.posthog.com';
+const FAKE_SENTRY_HOST = 'o4500000000000000.ingest.sentry.io';
+export const FAKE_SENTRY_PUBLIC_KEY = '0123456789abcdef0123456789abcdef';
+export const FAKE_SENTRY_PROJECT = '4500000000000001';
+export const FAKE_SENTRY_ORIGIN = `https://${FAKE_SENTRY_HOST}`;
+export const FAKE_SENTRY_DSN = `https://${FAKE_SENTRY_PUBLIC_KEY}@${FAKE_SENTRY_HOST}/${FAKE_SENTRY_PROJECT}`;

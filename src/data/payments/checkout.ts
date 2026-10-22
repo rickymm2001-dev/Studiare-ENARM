@@ -7,6 +7,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { regularPlanOf, type PaidPlanKey } from '@/config/billing';
+import { track } from '../analytics/catalog';
 import { functionErrorBody } from './functionError';
 
 export type { PaidPlanKey };
@@ -94,6 +95,14 @@ export function checkoutRequestFor(
   }
 }
 
+/** La forma de pago como la mide la analítica (B15, 1.5). Los pases de Mercado Pago cuentan como Mercado Pago */
+export function measuredMethodOf(
+  request: CheckoutRequest,
+): 'card' | 'oxxo' | 'spei' | 'mercadopago' {
+  if (request.provider === 'mercadopago') return 'mercadopago';
+  return request.mode === 'pass' && request.method ? request.method : 'card';
+}
+
 const KNOWN_FAILURES = new Set<string>([
   'founder_full',
   'founder_lost',
@@ -107,6 +116,13 @@ export async function startCheckout(
   cloud: SupabaseClient,
   request: CheckoutRequest,
 ): Promise<CheckoutResult> {
+  // El botón de pagar se tocó. Se mide aunque el pago no llegue a abrirse, para ver dónde se atora el
+  // embudo. Solo plan, forma de pago y si llevaba prueba, y solo con el permiso Medición de uso (B15, 1.5)
+  track('checkout_started', {
+    plan: request.plan,
+    method: measuredMethodOf(request),
+    with_trial: request.expectTrial,
+  });
   try {
     const reply = await cloud.functions.invoke<unknown>('create-checkout', {
       body: {

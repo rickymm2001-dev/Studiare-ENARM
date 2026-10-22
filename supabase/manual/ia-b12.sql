@@ -1,17 +1,23 @@
 -- IA real (B12 del plan del cambio). La pieza con delete que el conector no aplica sin una confirmación
 -- humana (D-113). Pégalo completo en SQL Editor, New query, Run, después de aplicar las migraciones
 -- 20261026000001 a 20261026000004. Es repetible, así que pegarlo dos veces no hace daño.
--- Es igual a la Sección con delete de 20261026000004_ai_delete_my_data.sql. Con un token válido de
--- Supabase no lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b12 (docs/DESPLIEGUE.md).
+-- Con un token válido de Supabase no lo pegas tú. Lo aplica npm run deploy:supabase -- --plan b12
+-- (docs/DESPLIEGUE.md).
 --
--- Borrar mis datos v3. Parte de la versión final de B11 (supabase/manual/banco-b11.sql, con las lecturas
--- del banco del día en curso y los mazos bajados del catálogo) y agrega lo de la IA real. Quita todos los
--- trabajos de IA por lote del alumno (ai_jobs, con su entrada y su salida) y sus generaciones de tarjetas
--- de días anteriores (ai_generations). Conserva el uso de IA de hoy, sus generaciones de hoy y las
--- lecturas del día de estudio en curso, así borrar los datos no sirve para saltarse un límite (D-103).
--- Los delete de lo de la IA van con execute y solo si la tabla existe, así que la misma versión no se
--- rompe si solo se desplegó el plan b11.
--- Borrar mi cuenta no cambia, porque ai_jobs y ai_generations se van en cascada con la cuenta
+-- Con B15 trae la versión final de delete_my_data (v4), igual a la Sección con delete de
+-- 20261029000004_delete_my_data_v4.sql y a supabase/manual/banco-b11.sql. La herramienta de despliegue
+-- exige que un archivo manual traiga cada función igual a la última migración que la define, así que este
+-- archivo sigue a esa migración.
+--
+-- Borrar mis datos. Parte de la versión final de B11 (supabase/manual/banco-b11.sql, con las lecturas
+-- del banco del día en curso y los mazos bajados del catálogo), agrega lo de la IA real (v3) y lo de B15 (v4).
+-- Quita todos los trabajos de IA por lote del alumno (ai_jobs, con su entrada y su salida) y sus
+-- generaciones de tarjetas de días anteriores (ai_generations), y sus recordatorios de repaso por correo,
+-- la foto de tarjetas vencidas, los recordatorios por mandarse y su ID de analítica. Conserva el uso de IA
+-- de hoy, sus generaciones de hoy y las lecturas del día de estudio en curso, así borrar los datos no sirve
+-- para saltarse un límite (D-103). Los delete de lo de la IA y de B15 van con execute y solo si la tabla
+-- existe, así que la misma versión no se rompe si solo se desplegó el plan b11.
+-- Borrar mi cuenta no cambia, porque todo eso se va en cascada con la cuenta
 
 create or replace function public.delete_my_data() returns jsonb
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -28,6 +34,10 @@ declare
   v_downloads bigint;
   v_jobs bigint := 0;
   v_generations bigint := 0;
+  v_reminders bigint := 0;
+  v_snapshots bigint := 0;
+  v_analytics bigint := 0;
+  v_pending bigint := 0;
 begin
   if v_user is null then
     raise exception 'Hace falta iniciar sesión' using errcode = '28000';
@@ -76,6 +86,31 @@ begin
     execute 'delete from public.ai_generations where user_id = $1 and day < public.ai_day()' using v_user;
     get diagnostics v_generations = row_count;
   end if;
+  -- Lo de B15. Como lo de la IA, solo si las tablas existen, para que no se rompa si falta una migración
+  -- Los recordatorios de repaso por correo, con su ficha de baja, y la foto de tarjetas vencidas
+  if to_regclass('public.review_reminder_prefs') is not null then
+    execute 'delete from public.review_reminder_prefs where user_id = $1' using v_user;
+    get diagnostics v_reminders = row_count;
+  end if;
+  if to_regclass('public.review_due_snapshots') is not null then
+    execute 'delete from public.review_due_snapshots where user_id = $1' using v_user;
+    get diagnostics v_snapshots = row_count;
+  end if;
+  -- Los recordatorios que seguían por mandarse. Los correos de cobro no, porque la cuenta y el plan se quedan
+  if to_regclass('public.email_outbox') is not null then
+    execute $q$delete from public.email_outbox
+      where recipient_user = $1 and kind = 'daily_review_reminder' and status in ('queued', 'failed')$q$ using v_user;
+    get diagnostics v_pending = row_count;
+  end if;
+  -- El ID seudónimo de la analítica con su permiso y los eventos de dinero que seguían en la cola. Quien
+  -- vuelva a dar el permiso empieza con un ID nuevo
+  if to_regclass('public.analytics_outbox') is not null then
+    execute 'delete from public.analytics_outbox where user_id = $1' using v_user;
+  end if;
+  if to_regclass('public.analytics_subjects') is not null then
+    execute 'delete from public.analytics_subjects where user_id = $1' using v_user;
+    get diagnostics v_analytics = row_count;
+  end if;
 
   perform set_config('app.erasing_user', '', true);
   return jsonb_build_object(
@@ -89,7 +124,11 @@ begin
     'bank_reads', v_reads,
     'deck_downloads', v_downloads,
     'ai_jobs', v_jobs,
-    'ai_generations', v_generations
+    'ai_generations', v_generations,
+    'reminder_prefs', v_reminders,
+    'due_snapshots', v_snapshots,
+    'pending_reminders', v_pending,
+    'analytics_ids', v_analytics
   );
 end;
 $$;

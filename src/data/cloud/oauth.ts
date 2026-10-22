@@ -5,7 +5,13 @@
 // ya usado regresa igual, así que la salida a Google se marca en la pestaña y solo con esa marca el
 // error se lee como de Google.
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { INVITATION_REQUIRED_MARK } from './account';
+
+/**
+ * Marca con la que el gancho Before User Created rechaza un correo sin invitación (migración
+ * 20261020000001). El mensaje del gancho llega tal cual en el error de Supabase Auth. Vive aquí y no en account.ts
+ * porque este archivo va en el JavaScript inicial y account.ts no: importarla de allá lo arrastraba (14.4)
+ */
+export const INVITATION_REQUIRED_MARK = 'invitation_required';
 
 /** Marca de que esta pestaña salió a Google. Vive en sessionStorage, que sobrevive al viaje de ida y vuelta */
 export const GOOGLE_REDIRECT_KEY = 'enarm.google-redirect.v1';
