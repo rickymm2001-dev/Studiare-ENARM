@@ -3,7 +3,7 @@
 // faltaron. Las marcadas se vuelven tarjetas básicas en el mazo del apunte. Todo el cálculo vive en
 // src/engines/recall.ts. No usa IA ni califica lo escrito, porque comparar con el apunte es el método.
 import { X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Dialog } from 'radix-ui';
 import { useDataApi } from '@/data/context';
 import type { Outline } from '@/data/schemas/outlines';
@@ -39,23 +39,42 @@ export function RecallSprint({
   const [written, setWritten] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(RECALL_SECONDS);
   const [missed, setMissed] = useState<ReadonlySet<string>>(() => new Set());
+  // Las líneas que ya se volvieron tarjeta en este sprint. Se tratan como líneas con tarjeta, así marcar
+  // otra vez o reintentar después de un fallo no duplica
+  const [created, setCreated] = useState<ReadonlySet<string>>(() => new Set());
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ created: number; skipped: number } | null>(null);
   const [failed, setFailed] = useState(false);
 
+  // Con un apunte sin líneas no hay nada que recordar ni que comparar, así que no corre el reloj
+  const empty = lines.length === 0;
   const step: Step = finished || secondsLeft <= 0 ? 'compare' : 'write';
+  const timedOut = !finished && secondsLeft <= 0;
+  const compareHeading = useRef<HTMLHeadingElement>(null);
   // El reloj baja cada segundo mientras se escribe
   useEffect(() => {
-    if (step !== 'write') return undefined;
+    if (empty || step !== 'write') return undefined;
     const timer = setInterval(() => {
       setSecondsLeft((value) => value - 1);
     }, 1000);
     return () => {
       clearInterval(timer);
     };
+  }, [empty, step]);
+
+  // Al pasar a comparar se va el cuadro de escribir, así que el foco pasa al título de lo escrito
+  useEffect(() => {
+    if (step === 'compare') compareHeading.current?.focus();
   }, [step]);
 
-  const { drafts, skipped } = useMemo(() => recallCardDrafts(lines, missed), [lines, missed]);
+  const shownLines = useMemo(
+    () => lines.map((line) => (created.has(line.id) ? { ...line, hasCard: true } : line)),
+    [lines, created],
+  );
+  const { drafts, skipped } = useMemo(
+    () => recallCardDrafts(shownLines, missed),
+    [shownLines, missed],
+  );
 
   const toggle = (id: string, on: boolean) => {
     setMissed((current) => {
@@ -70,13 +89,22 @@ export function RecallSprint({
     setBusy(true);
     setFailed(false);
     try {
+      let made = 0;
       for (const draft of drafts) {
         await saveManualNote(api, session.user, {
           deckId: outline.deckId,
           draft: { kind: 'basic', front: draft.front, back: draft.back },
         });
+        made += 1;
+        // Cada tarjeta guardada sale de lo marcado, así un fallo a la mitad no se repite al reintentar
+        setCreated((current) => new Set(current).add(draft.id));
+        setMissed((current) => {
+          const next = new Set(current);
+          next.delete(draft.id);
+          return next;
+        });
       }
-      setResult({ created: drafts.length, skipped });
+      setResult({ created: made, skipped });
       setMissed(new Set());
     } catch {
       setFailed(true);
@@ -101,7 +129,7 @@ export function RecallSprint({
                 {text.title(outline.title)}
               </Dialog.Title>
               <Dialog.Description className="text-sm text-fg-muted">
-                {step === 'write' ? text.writeIntro : text.compareIntro}
+                {empty ? text.emptyOutline : step === 'write' ? text.writeIntro : text.compareIntro}
               </Dialog.Description>
             </div>
             <Dialog.Close
@@ -112,7 +140,12 @@ export function RecallSprint({
             </Dialog.Close>
           </div>
 
-          {step === 'write' ? (
+          {/* Siempre montada para que el lector de pantalla anuncie el cambio cuando se acaba el tiempo */}
+          <p role="status" className={timedOut ? 'text-sm font-medium' : 'sr-only'}>
+            {timedOut && !empty ? text.timeUp : ''}
+          </p>
+
+          {empty ? null : step === 'write' ? (
             <div className="flex flex-col gap-3">
               <p role="timer" aria-live="off" className="text-lg font-bold tabular-nums">
                 {text.timeLeft(clockOf(secondsLeft))}
@@ -140,7 +173,12 @@ export function RecallSprint({
           ) : (
             <div className="grid gap-4 lg:grid-cols-2">
               <section aria-labelledby="recall-escrito" className="flex min-w-0 flex-col gap-2">
-                <h3 id="recall-escrito" className="font-semibold">
+                <h3
+                  id="recall-escrito"
+                  ref={compareHeading}
+                  tabIndex={-1}
+                  className="font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
+                >
                   {text.yours}
                 </h3>
                 <p className="rounded-lg border border-line bg-muted p-3 text-sm whitespace-pre-wrap">
@@ -151,25 +189,21 @@ export function RecallSprint({
                 <h3 id="recall-apunte" className="font-semibold">
                   {text.outlineHeading}
                 </h3>
-                {lines.length === 0 ? (
-                  <p className="text-sm text-fg-muted">{text.emptyOutline}</p>
-                ) : (
-                  <ul className="flex flex-col gap-1">
-                    {lines.map((line) => (
-                      <li key={line.id} style={{ paddingLeft: `${line.depth * 1.25}rem` }}>
-                        <CheckboxField
-                          label={line.text}
-                          hint={line.hasCard ? text.alreadyCard : undefined}
-                          aria-label={text.missed(line.text)}
-                          checked={missed.has(line.id)}
-                          onChange={(event) => {
-                            toggle(line.id, event.target.checked);
-                          }}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ul className="flex flex-col gap-1">
+                  {shownLines.map((line) => (
+                    <li key={line.id} style={{ paddingLeft: `${line.depth * 1.25}rem` }}>
+                      <CheckboxField
+                        label={line.text}
+                        hint={line.hasCard ? text.alreadyCard : undefined}
+                        aria-label={text.missed(line.text)}
+                        checked={missed.has(line.id)}
+                        onChange={(event) => {
+                          toggle(line.id, event.target.checked);
+                        }}
+                      />
+                    </li>
+                  ))}
+                </ul>
                 <p className="text-xs text-fg-muted">{text.limit(MAX_RECALL_CARDS)}</p>
                 <Button
                   type="button"

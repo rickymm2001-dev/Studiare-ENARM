@@ -232,11 +232,10 @@ export function ReviewSetup({
             <span className="text-sm text-fg-muted">{filtersSummary}</span>
           </CardHeader>
           {/* La lista completa de temas es larga. Se desplaza dentro de la tarjeta para que el botón de
-              empezar y los modos no se vayan de la pantalla */}
+              empezar y los modos no se vayan de la pantalla. Solo la tarjeta lleva el nombre, porque dos
+              regiones anidadas con el mismo nombre confunden al lector de pantalla */}
           <div
             tabIndex={0}
-            role="region"
-            aria-labelledby="mazos-y-temas"
             className="flex max-h-[calc(100dvh-15rem)] min-h-64 flex-col gap-3 overflow-y-auto pr-2"
           >
             {filtersBody}

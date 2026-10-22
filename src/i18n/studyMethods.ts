@@ -54,12 +54,13 @@ export const studyMethodsText = {
     writePlaceholder: 'Empieza a escribir…',
     timeLeft: (clock: string) => `Te quedan ${clock}`,
     done: 'Ya terminé',
+    timeUp: 'Se acabó el tiempo. Compara lo que escribiste con tu apunte.',
     compareIntro:
       'Aquí está tu apunte junto a lo que escribiste. Marca las líneas que te faltaron.',
     yours: 'Lo que escribiste',
     nothingWritten: 'No escribiste nada. Está bien, marca lo que quieras reforzar.',
     outlineHeading: 'Tu apunte',
-    missed: (line: string) => `Me faltó: ${line}`,
+    missed: (line: string) => `Me faltó. ${line}`,
     alreadyCard: 'Ya tiene tarjeta',
     emptyOutline: 'Este apunte todavía no tiene líneas para comparar.',
     create: (n: number) =>

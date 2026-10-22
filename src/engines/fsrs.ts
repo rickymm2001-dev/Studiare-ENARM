@@ -325,6 +325,20 @@ export function retrievabilityOf(state: FsrsCardState | null, now: Date): number
   );
 }
 
+/**
+ * Probabilidad de recordar la tarjeta en el instante dado, con los días transcurridos como fracción.
+ * retrievabilityOf redondea hacia abajo a días enteros, así que con menos de 24 horas desde el último
+ * repaso da 1 aunque la tarjeta ya haya perdido memoria. Esta usa la misma curva de olvido de
+ * ts-fsrs, R(t, S) con t fraccionario, para decidir lo que se pospone sin daño. 0 en tarjetas nuevas
+ */
+export function retrievabilityAt(state: FsrsCardState | null, at: Date): number {
+  if (!state || state.state === 'new') return 0;
+  const lastReview =
+    state.lastReview === null ? at.getTime() : new Date(state.lastReview).getTime();
+  const elapsedDays = Math.max(0, (at.getTime() - lastReview) / DAY_MS);
+  return schedulerFor(0.9).forgetting_curve(elapsedDays, +state.stability.toFixed(8));
+}
+
 export function isLeech(state: FsrsCardState | null, thresholds: Thresholds['fsrs']): boolean {
   return state !== null && state.lapses >= thresholds.leechLapses;
 }

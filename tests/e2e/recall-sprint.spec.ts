@@ -39,7 +39,9 @@ test('el recall sprint compara con el apunte y crea una tarjeta con lo que falt�
   await expect(dialog.getByText('Hay que dar líquidos')).toBeVisible();
   await dialog.getByLabel(t.recallSprint.missed('Antibióticos en la primera hora')).check();
   await dialog.getByRole('button', { name: t.recallSprint.create(1) }).click();
-  await expect(dialog.getByRole('status')).toContainText(t.recallSprint.created(1, 0));
+  await expect(
+    dialog.getByRole('status').filter({ hasText: t.recallSprint.created(1, 0) }),
+  ).toBeVisible();
 
   const notes = await readTable<{ front?: string; fields?: unknown; kind?: string }>(page, 'notes');
   expect(JSON.stringify(notes)).toContain('Antibióticos en la primera hora');

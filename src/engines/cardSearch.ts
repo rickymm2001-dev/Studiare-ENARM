@@ -12,7 +12,11 @@
 // busca como texto normal, así una frase con dos puntos no se pierde.
 // La ruta de temas llega hasta la misma profundidad que los temas de cada mazo (TOPIC_OUTLINE_DEPTH,
 // rama, materia y tema), así la columna, la lista, el panel y el filtro dicen lo mismo que Repasar.
-// Los niveles de más abajo, como Linfoma de Hodgkin debajo de Linfomas, solo sirven para buscar.
+// Los niveles de más abajo, como Linfoma de Hodgkin debajo de Linfomas, solo sirven para buscar con
+// texto libre. El campo tema: mira solo esos tres niveles, los mismos que ve el alumno en la columna
+// y en el árbol, así que tema:avanzado no encuentra lo que solo vive en un cuarto nivel.
+// Los textos de los campos se pliegan una sola vez al armar las filas (folded*), así buscar con
+// campo:valor no vuelve a normalizar cada tarjeta en cada tecla.
 // Las columnas de texto se ordenan como el español, con Intl.Collator es-MX sin distinguir acentos.
 import type { FsrsCardState } from '@/data/schemas/common';
 import { htmlToPlain } from './cardText';
@@ -96,6 +100,12 @@ export interface CardSearchRow {
   topicKeys: readonly string[];
   /** Texto en minúsculas y sin acentos donde se busca */
   search: string;
+  /** Lo que miran los campos frente:, reverso:, mazo:, tema: y etiqueta:, ya plegado al armar la fila */
+  foldedFront: string;
+  foldedBack: string;
+  foldedDeck: string;
+  foldedTopic: string;
+  foldedTags: readonly string[];
   /** Claves para ordenar sin volver a normalizar el texto */
   sortFront: string;
   sortDeck: string;
@@ -192,6 +202,11 @@ export function buildSearchRows(
       search: foldText(
         `${front} ${back} ${source.tags.join(' ')} ${deckLabel} ${fullTopicPath.join(' ')}`,
       ),
+      foldedFront: foldText(front),
+      foldedBack: foldText(back),
+      foldedDeck: foldText(deckLabel),
+      foldedTopic: foldText(topicPath.join(' ')),
+      foldedTags: source.tags.map(foldText),
       sortFront: sortKey(front),
       sortDeck: sortKey(deckLabel),
       sortTopic: sortKey(topicPath.join(PATH_SEPARATOR)),
@@ -240,11 +255,14 @@ interface TextQuery {
   mustNot: string[];
 }
 
-/** Separa la búsqueda en lo que debe estar y lo que no. Las comillas agrupan una frase */
+/**
+ * Separa la búsqueda en lo que debe estar y lo que no. Las comillas agrupan una frase. Una comilla que
+ * todavía no se cierra, porque el alumno sigue escribiendo, agrupa hasta el final del texto
+ */
 export function parseTextQuery(text: string): TextQuery {
   const query: TextQuery = { must: [], mustNot: [] };
-  for (const match of foldText(text).matchAll(/(-?)(?:"([^"]+)"|(\S+))/g)) {
-    const term = (match[2] ?? match[3] ?? '').trim();
+  for (const match of foldText(text).matchAll(/(-?)(?:"([^"]+)"|"([^"]*)$|(\S+))/g)) {
+    const term = (match[2] ?? match[3] ?? match[4] ?? '').trim();
     if (term === '') continue;
     (match[1] === '-' ? query.mustNot : query.must).push(term);
   }
@@ -310,16 +328,28 @@ function isValidFieldValue(field: SearchField, value: string): boolean {
 
 /**
  * Separa de la búsqueda los campo:valor válidos y deja el resto como texto. Va sobre el texto ya sin
- * acentos. Con comillas el valor puede llevar espacios, como tema:"cancer de mama"
+ * acentos. Con comillas el valor puede llevar espacios, como tema:"cancer de mama". Si la comilla
+ * todavía no se cierra, porque el alumno sigue escribiendo, el valor llega hasta el final del texto
  */
 export function extractFieldFilters(text: string): { rest: string; fields: FieldFilter[] } {
   const fields: FieldFilter[] = [];
-  const pattern = new RegExp(`(^|\\s)(-?)(${SEARCH_FIELDS.join('|')}):(?:"([^"]+)"|(\\S+))`, 'g');
+  const pattern = new RegExp(
+    `(^|\\s)(-?)(${SEARCH_FIELDS.join('|')}):(?:"([^"]+)"|"([^"]*)$|(\\S+))`,
+    'g',
+  );
   const folded = foldText(text);
   const rest = folded.replace(
     pattern,
-    (whole: string, lead: string, minus: string, field: string, quoted?: string, bare?: string) => {
-      const value = (quoted ?? bare ?? '').trim();
+    (
+      whole: string,
+      lead: string,
+      minus: string,
+      field: string,
+      quoted?: string,
+      open?: string,
+      bare?: string,
+    ) => {
+      const value = (quoted ?? open ?? bare ?? '').trim();
       if (!isValidFieldValue(field as SearchField, value)) return whole;
       fields.push({ field: field as SearchField, value, negate: minus === '-' });
       return lead;
@@ -350,18 +380,19 @@ function matchesField(row: CardSearchRow, filter: FieldFilter, nowMs: number): b
   const { value } = filter;
   switch (filter.field) {
     case 'mazo':
-      return foldText(row.deckLabel).includes(value);
+      return row.foldedDeck.includes(value);
     case 'tema':
-      return foldText(row.topicPath.join(' ')).includes(value);
+      return row.foldedTopic.includes(value);
     case 'estado': {
+      // Igual que el chip de estado. Una suspendida sigue siendo del estado en que quedó
       const state = STATE_VALUES[value];
-      return state === 'suspended' ? row.suspended : row.fsrs === state && !row.suspended;
+      return state === 'suspended' ? row.suspended : row.fsrs === state;
     }
     case 'vence':
       if (value === 'hoy') return isDue(row, nowMs);
       return !row.suspended && row.dueMs !== null && row.dueMs <= nowMs + Number(value) * DAY_MS;
     case 'etiqueta':
-      return row.tags.some((tag) => foldText(tag).includes(value));
+      return row.foldedTags.some((tag) => tag.includes(value));
     case 'intervalo':
       return compares(row.interval, value);
     case 'fallos':
@@ -369,9 +400,9 @@ function matchesField(row: CardSearchRow, filter: FieldFilter, nowMs: number): b
     case 'tipo':
       return row.kind === KIND_VALUES[value];
     case 'frente':
-      return foldText(row.front).includes(value);
+      return row.foldedFront.includes(value);
     case 'reverso':
-      return foldText(row.back).includes(value);
+      return row.foldedBack.includes(value);
   }
 }
 

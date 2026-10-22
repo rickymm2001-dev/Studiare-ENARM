@@ -904,7 +904,10 @@ function EditorForm({
               patch({ physicianDifficulty: Number(event.target.value) });
             }}
           />
-          {/* El nivel solo se guarda en el banco de este navegador. La base de la nube todavía no lo guarda */}
+          {/* Nivel cognitivo dormido en la nube (V4-B5). Solo se guarda en el banco de este navegador, porque la
+              columna del Sheet, el convertidor y la base de la nube todavía no lo llevan. Ofrecerlo contra la nube
+              haría que el médico lo elija y al recargar vuelva a Sin nivel. Está pendiente de Ricardo en
+              docs/PENDIENTES_DE_RICARDO.md */}
           {repo.kind === 'cloud' ? null : (
             <SelectField
               label={t.cognitive.editor}

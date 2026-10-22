@@ -42,10 +42,18 @@ describe('recallCardDrafts', () => {
   it('arma una tarjeta básica con el contexto al frente y la línea al reverso', () => {
     const { drafts, skipped } = recallCardDrafts(lines, new Set(['b', 'e']));
     expect(drafts).toEqual([
-      { front: 'Choque séptico', back: 'Antibióticos en la primera hora' },
-      { front: 'Sepsis', back: 'Líquidos' },
+      { id: 'b', front: 'Choque séptico', back: 'Antibióticos en la primera hora' },
+      { id: 'e', front: 'Sepsis', back: 'Líquidos' },
     ]);
     expect(skipped).toBe(0);
+  });
+
+  it('una línea que se marca con tarjeta ya creada no se vuelve a crear', () => {
+    // La pantalla marca como hasCard cada línea que guarda, así reintentar no duplica
+    const created = lines.map((line) => (line.id === 'b' ? { ...line, hasCard: true } : line));
+    const { drafts, skipped } = recallCardDrafts(created, new Set(['b', 'e']));
+    expect(drafts.map((draft) => draft.id)).toEqual(['e']);
+    expect(skipped).toBe(1);
   });
 
   it('una línea que ya tiene tarjeta no se repite y se cuenta aparte', () => {

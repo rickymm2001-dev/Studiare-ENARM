@@ -4,6 +4,7 @@ import type { FsrsCardState } from '@/data/schemas/common';
 import {
   examDeadline,
   newCardState,
+  retrievabilityAt,
   retrievabilityOf,
   type QueueCard,
   type SchedulerConfig,
@@ -963,5 +964,50 @@ describe('postponeSafely', () => {
     const one = postponeSafely({ cards, now: NOW, config, days: 2 });
     const two = postponeSafely({ cards: [...cards].reverse(), now: NOW, config, days: 2 });
     expect(two).toEqual(one);
+  });
+
+  it('con menos de un día desde el último repaso cuenta los días fraccionarios', () => {
+    // Repasada hace tres minutos con poca estabilidad. retrievabilityOf redondea a días enteros y da 1
+    const lastReview = new Date(NOW.getTime() - 3 * 60_000).toISOString();
+    const recent = card('recent', TODAY_START, { stability: 0.3, scheduledDays: 1, lastReview });
+    const tomorrow = new Date(TOMORROW_START);
+    expect(retrievabilityOf(recent.state, tomorrow)).toBe(1);
+    expect(retrievabilityAt(recent.state, tomorrow)).toBeLessThan(0.85);
+    expect(postponeSafely({ cards: [recent], now: NOW, config, days: 1 })).toEqual({
+      safe: [],
+      total: 1,
+    });
+  });
+
+  it('las que están aprendiendo o reaprendiendo nunca se posponen', () => {
+    const cards = [
+      card('l', TODAY_START, { state: 'learning', stability: 200, scheduledDays: 0 }),
+      card('r', TODAY_START, { state: 'relearning', stability: 200, scheduledDays: 0 }),
+      firm('ok'),
+    ];
+    const result = postponeSafely({ cards, now: NOW, config, days: 1 });
+    expect(result.total).toBe(3);
+    expect(result.safe.map((entry) => entry.cardId)).toEqual(['ok']);
+  });
+
+  it('en los últimos 30 días antes del examen el piso sube con la retención vigente', () => {
+    // Un día exacto de olvido con estabilidad de 0.629 da una retención entre 0.85 y 0.88
+    const edge = card('edge', TODAY_START, {
+      stability: 0.629,
+      scheduledDays: 1,
+      lastReview: TODAY_START,
+    });
+    const retention = retrievabilityAt(edge.state, new Date(TOMORROW_START));
+    expect(retention).toBeGreaterThan(0.85);
+    expect(retention).toBeLessThan(0.88);
+    const normal = postponeSafely({ cards: [edge], now: NOW, config, days: 1 });
+    expect(normal.safe).toHaveLength(1);
+    const nearExam = postponeSafely({
+      cards: [edge],
+      now: NOW,
+      config: { ...config, examDate: '2026-11-05' },
+      days: 1,
+    });
+    expect(nearExam).toEqual({ safe: [], total: 1 });
   });
 });

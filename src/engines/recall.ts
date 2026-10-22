@@ -55,6 +55,8 @@ export function recallLines(title: string, nodes: readonly OutlineNode[]): Recal
 }
 
 export interface RecallCardDraft {
+  /** La línea del apunte de la que sale, para marcarla como ya creada y no repetirla al reintentar */
+  id: string;
   front: string;
   back: string;
 }
@@ -72,7 +74,11 @@ export function recallCardDrafts(
       continue;
     }
     if (drafts.length >= MAX_RECALL_CARDS) break;
-    drafts.push({ front: line.context.slice(0, FIELD_MAX), back: line.text.slice(0, FIELD_MAX) });
+    drafts.push({
+      id: line.id,
+      front: line.context.slice(0, FIELD_MAX),
+      back: line.text.slice(0, FIELD_MAX),
+    });
   }
   return { drafts, skipped };
 }

@@ -407,7 +407,44 @@ describe('búsqueda con campo:valor', () => {
   it('estado acepta los nombres en español y la suspendida cuenta aparte', () => {
     expect(found(rows, { text: 'estado:repaso' })).toEqual(['a', 'b']);
     expect(found(rows, { text: 'estado:suspendida' })).toEqual(['c']);
-    expect(found(rows, { text: 'estado:nueva' })).toEqual([]);
+    // c está suspendida y nunca se ha visto, así que también es nueva, como en el chip
+    expect(found(rows, { text: 'estado:nueva' })).toEqual(['c']);
+  });
+
+  it('estado da lo mismo que el chip de estado, también con una suspendida', () => {
+    const withSuspendedReview = buildSearchRows(
+      [
+        source('r', { state: state({}) }),
+        source('s', { state: state({}) }),
+        source('n', { state: null }),
+      ],
+      new Set(['s']),
+      8,
+    );
+    const states = [
+      ['repaso', 'review'],
+      ['nueva', 'new'],
+      ['suspendida', 'suspended'],
+    ] as const;
+    for (const [word, chip] of states) {
+      expect(found(withSuspendedReview, { text: `estado:${word}` })).toEqual(
+        found(withSuspendedReview, { states: new Set([chip]) }),
+      );
+    }
+    expect(found(withSuspendedReview, { text: 'estado:repaso' })).toEqual(['r', 's']);
+  });
+
+  it('una comilla sin cerrar agrupa hasta el final mientras el alumno escribe', () => {
+    expect(extractFieldFilters('tema:"control pren')).toEqual({
+      rest: '',
+      fields: [{ field: 'tema', value: 'control pren', negate: false }],
+    });
+    expect(found(rows, { text: 'tema:"control pren' })).toEqual(['b']);
+    // En texto libre es una frase abierta y no una palabra que lleva la comilla
+    expect(found(rows, { text: '"ácido fól' })).toEqual(['b']);
+    expect(found(rows, { text: 'estado:repaso "ácido fól' })).toEqual(['b']);
+    // Una comilla sola no busca nada
+    expect(found(rows, { text: '"' })).toEqual(['a', 'b', 'c']);
   });
 
   it('vence:hoy y vence:N miran el próximo repaso y nunca incluyen las suspendidas', () => {

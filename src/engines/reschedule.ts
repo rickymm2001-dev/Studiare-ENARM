@@ -46,7 +46,14 @@
  */
 import type { FsrsCardState } from '@/data/schemas/common';
 import { weekdayOf } from './easyDays';
-import { examDeadline, retrievabilityOf, type QueueCard, type SchedulerConfig } from './fsrs';
+import {
+  examDeadline,
+  retentionFor,
+  retrievabilityAt,
+  retrievabilityOf,
+  type QueueCard,
+  type SchedulerConfig,
+} from './fsrs';
 import { addDays, studyDayEnd, studyDayOf, studyDayStart } from './studyDay';
 import { inBatches } from './suspension';
 
@@ -334,7 +341,11 @@ export interface SafePostpone {
 /**
  * Pospone solo las tarjetas que se sostienen bien hasta el día elegido. Mueve lo mismo que
  * postponeCards, pero se queda con las que, en la fecha nueva, todavía se recordarían a menos de
- * MAX_SAFE_LOSS puntos de la retención deseada. Las demás se quedan para repasarse
+ * MAX_SAFE_LOSS puntos de la retención vigente en esa fecha, que sube en los últimos días antes del
+ * ENARM. La retención se calcula con días fraccionarios, porque una tarjeta repasada hace unas horas
+ * ya perdió memoria aunque no haya pasado un día entero. Las que están aprendiendo o reaprendiendo
+ * nunca se posponen, porque su estabilidad todavía no dice cuánto aguantan. Las demás se quedan para
+ * repasarse
  */
 export function postponeSafely(input: {
   cards: readonly QueueCard[];
@@ -345,14 +356,18 @@ export function postponeSafely(input: {
 }): SafePostpone {
   const candidates = postponeCards(input);
   const maxLoss = Math.max(0, input.maxLoss ?? MAX_SAFE_LOSS);
-  const floor = input.config.desiredRetention - maxLoss;
+  // Todas llegan al mismo instante, así que la retención vigente ese día es una sola
+  const first = candidates[0];
+  const retention = first
+    ? retentionFor(input.config, new Date(first.to)).retention
+    : input.config.desiredRetention;
+  const floor = retention - maxLoss;
   const states = new Map(input.cards.map((card) => [card.cardId, card.state]));
   const scored: { assignment: RescheduledCard; retrievability: number }[] = [];
   for (const assignment of candidates) {
-    const retrievability = retrievabilityOf(
-      states.get(assignment.cardId) ?? null,
-      new Date(assignment.to),
-    );
+    const state = states.get(assignment.cardId) ?? null;
+    if (state?.state === 'learning' || state?.state === 'relearning') continue;
+    const retrievability = retrievabilityAt(state, new Date(assignment.to));
     if (retrievability >= floor) scored.push({ assignment, retrievability });
   }
   scored.sort(

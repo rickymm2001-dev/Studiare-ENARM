@@ -366,7 +366,7 @@ function CardSearch({ session }: { session: ReadySession }) {
                   <button
                     type="button"
                     aria-label={t.cardSearch.advanced.insert(example.text)}
-                    className="min-h-8 rounded-sm border border-line bg-muted px-2 py-0.5 font-mono text-sm text-fg hover:bg-surface"
+                    className="min-h-touch rounded-sm border border-line bg-muted px-2 py-0.5 font-mono text-sm text-fg hover:bg-surface sm:min-h-8"
                     onClick={() => {
                       change({ text: `${view.text.trim()} ${example.text}`.trim() + ' ' });
                       searchRef.current?.focus();
