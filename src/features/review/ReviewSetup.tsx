@@ -24,7 +24,7 @@ import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
-const MODES: readonly ReviewMode[] = ['today', 'due', 'new'];
+const MODES: readonly ReviewMode[] = ['today', 'due', 'new', 'topic'];
 
 export function ReviewSetup({
   addDeck,
@@ -176,6 +176,9 @@ export function ReviewSetup({
               }}
               itemClassName="grow"
             />
+            {selection.mode === 'topic' ? (
+              <p className="text-sm text-fg-muted">{text.topicHint}</p>
+            ) : null}
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Button

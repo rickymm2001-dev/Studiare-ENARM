@@ -1473,3 +1473,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Configuración, Progreso, Mazos, Party, Simular y Tutor pasan a dos columnas cuando hay ancho. Se usan pilas independientes y no una cuadrícula de filas, para que una tarjeta vacía no deje un hueco ni una tarjeta que se abre mueva las del otro lado
 - Inicio. Tres temas para reforzar y no cinco, con el enlace a ver todos
 - Pendiente a propósito. Unir los avisos de demostración y el token de densidad de la tarjeta se hacen en V4-B2 con los tokens nuevos
+
+### D-142. V4-B3, repaso completo al estilo Anki
+- Fecha 2026-10-22. Origen R, la lista de complementos de Anki y la reunión con Paco. Ningún complemento se instala, cada uno se vuelve una función propia
+- Atrasos ordenados por riesgo. Repartir es seguro, Posponer solo lo que aguanta es con cuidado y Posponer todo es el último recurso, con advertencia y una casilla de confirmación. Lo que aguanta lo calcula el motor src/engines/reschedule.ts con la retención deseada del alumno. Una tarjeta se pospone sin daño si el día al que se mueve todavía la recordaría a menos de 5 puntos de su retención deseada, que es MAX_SAFE_LOSS. Es la cifra de cuántas se pueden posponer sin consecuencias que Paco ve en FSRS Helper. Sigue sin tocar la estabilidad
+- Estudiar un tema es un modo nuevo de Repasar, aparte de la cola del día. Entran todas las tarjetas elegidas, también las nuevas y las que no tocan hoy, hasta 200 por sesión (src/engines/topicStudy.ts). El evento de repaso lleva el campo opcional extra en verdadero, que reviewedToday no cuenta, así no gasta el cupo de nuevas ni de repasos del día. Calificar sí actualiza FSRS. No hay cambio en Supabase porque ninguna función ni tabla valida ese payload
+- Estadísticas por mazo dentro de cada mazo que se sigue en Mazos (src/engines/deckStats.ts). Cuenta por estado, tocan hoy y atrasadas, maduras de 21 días o más, histograma de intervalos y retención estimada, que calibra hasta tener 20 tarjetas en repaso
+- Buscar tarjetas acepta campo:valor, con mazo, tema, estado, vence, etiqueta, intervalo, fallos, tipo, frente y reverso, y un guion para negar. Un campo desconocido o con un valor que no vale se busca como texto. Sin regex, que va a IDEAS.md. Los ejemplos se ponen en el cuadro con un toque
+- Heatmap. Tocar un día dice sus cifras debajo
+- Tipos de tarjeta. La ayuda de cada tipo lleva un ejemplo médico
+- No se hizo. Editar durante el repaso una tarjeta de un mazo precargado. Esas tarjetas son contenido compartido y editarlas pide crear una copia en Mis tarjetas y decidir qué pasa con el original y su historial, así que va a IDEAS.md. Sí se edita en cualquier mazo del alumno, como ya era

@@ -9,6 +9,7 @@ import {
   isQuestionNote,
   latestCardStates,
   renderCloze,
+  reviewedToday,
   reviewEndReason,
   topicFromTags,
 } from './study';
@@ -203,5 +204,56 @@ describe('estado más reciente de cada tarjeta', () => {
     expect(
       latestCardStates([review(first, minute(1)), reset, review(again, minute(3))]).get(cardId),
     ).toEqual(again);
+  });
+});
+
+describe('reviewedToday con sesiones por tema', () => {
+  const TODAY = '2026-10-08';
+  const at = new Date('2026-10-08T15:00:00.000Z').getTime();
+  const reviewed = (
+    cardId: string,
+    stateBefore: ReturnType<typeof state> | null,
+    extra?: boolean,
+  ) =>
+    event(
+      'card_reviewed',
+      {
+        cardId,
+        deckId: deck,
+        source: 'card',
+        rating: 'good',
+        confidence: null,
+        msToReveal: 1000,
+        msToRate: 1000,
+        stateBefore,
+        stateAfter: state(),
+        ...(extra === undefined ? {} : { extra }),
+      },
+      at,
+    );
+  const [c1, c2, c3] = [newId(), newId(), newId()] as const;
+  const deck = newId();
+  const notes = new Map([
+    [c1, 'n1'],
+    [c2, 'n2'],
+    [c3, 'n3'],
+  ]);
+
+  it('lo estudiado por tema no gasta el cupo de nuevas ni de repasos del día', () => {
+    const events = [
+      reviewed(c1, null),
+      reviewed(c2, state(), false),
+      reviewed(c3, null, true),
+      reviewed(c3, state(), true),
+    ];
+    const result = reviewedToday(events, TODAY, notes);
+    expect(result.newCount).toBe(1);
+    expect(result.reviewCount).toBe(1);
+    expect(result.noteIds).toEqual(['n1', 'n2']);
+  });
+
+  it('sin la marca extra se cuenta igual que siempre', () => {
+    const result = reviewedToday([reviewed(c1, null), reviewed(c2, state())], TODAY, notes);
+    expect(result).toEqual({ newCount: 1, reviewCount: 1, noteIds: ['n1', 'n2'] });
   });
 });

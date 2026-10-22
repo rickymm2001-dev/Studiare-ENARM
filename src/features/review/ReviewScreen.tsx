@@ -69,6 +69,7 @@ import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
 import { ReviewCounters } from './ReviewCounters';
+import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
@@ -333,6 +334,17 @@ function buildQueue(input: {
 }): string[] {
   const now = new Date();
   const states = latestCardStates(input.events);
+  // Estudiar un tema es aparte de la cola del día, con todas las tarjetas elegidas y sin límite diario
+  if (input.mode === 'topic') {
+    return buildTopicQueue({
+      cards: input.cards.map((card) => ({
+        cardId: card.id,
+        noteId: card.noteId,
+        state: states.get(card.id) ?? null,
+      })),
+      now,
+    });
+  }
   const noteOfCard = new Map(input.cards.map((card) => [card.id, card.noteId]));
   const daily = buildDailyQueue({
     cards: input.cards.map((card) => ({
@@ -520,6 +532,7 @@ function ReviewSession({
           msToRate: Math.max(0, msToRate),
           stateBefore: before,
           stateAfter: outcome.state,
+          ...(mode === 'topic' ? { extra: true } : {}),
         },
         ctx(),
       ),

@@ -27,6 +27,7 @@ import { t } from '@/i18n/es-MX';
 import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
+import { Disclosure } from '@/ui/components/disclosure';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
 import { SkeletonRows } from '@/ui/components/skeleton';
 import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
@@ -353,6 +354,31 @@ function CardSearch({ session }: { session: ReadySession }) {
           <p id={`${searchId}-ayuda`} className="text-sm text-fg-muted">
             {t.cardSearch.searchHint}
           </p>
+          <Disclosure
+            title={t.cardSearch.advanced.title}
+            summary={t.cardSearch.advanced.summary}
+            className="mt-1"
+          >
+            <p className="text-sm text-fg-muted">{t.cardSearch.advanced.intro}</p>
+            <ul className="grid gap-x-6 gap-y-2 md:grid-cols-2">
+              {t.cardSearch.advanced.examples.map((example) => (
+                <li key={example.text} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <button
+                    type="button"
+                    aria-label={t.cardSearch.advanced.insert(example.text)}
+                    className="min-h-8 rounded-sm border border-line bg-muted px-2 py-0.5 font-mono text-sm text-fg hover:bg-surface"
+                    onClick={() => {
+                      change({ text: `${view.text.trim()} ${example.text}`.trim() + ' ' });
+                      searchRef.current?.focus();
+                    }}
+                  >
+                    {example.text}
+                  </button>
+                  <span className="text-sm text-fg-muted">{example.meaning}</span>
+                </li>
+              ))}
+            </ul>
+          </Disclosure>
         </div>
         {desktop ? <DesktopFilters {...filters} /> : <PhoneFilters {...filters} />}
         <KeyHint>

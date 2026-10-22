@@ -40,6 +40,7 @@ import { StudyTabs } from '../review/StudyTabs';
 import { descendantIds } from '@/engines/deckTree';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
+import { DeckStatsPanel } from './DeckStatsPanel';
 import { DeckTopics } from './DeckTopics';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
@@ -227,6 +228,12 @@ function Decks({ session }: { session: ReadySession }) {
                               {t.decks.progress(studied, cardIds.length)}
                             </span>
                           </div>
+                        ) : null}
+                        {isFollowed && cardIds.length > 0 ? (
+                          <DeckStatsPanel
+                            states={cardIds.map((cardId) => states.get(cardId) ?? null)}
+                            timeZone={session.user.timeZone}
+                          />
                         ) : null}
                         <DeckTopics
                           deckName={file.name}

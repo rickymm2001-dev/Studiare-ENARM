@@ -28,6 +28,10 @@
  *   - Las que se quedan hoy no generan asignación. Su fecha ya pasó y siguen vencidas hoy
  *   - Posponer. Lleva todas las tarjetas programadas, estén vencidas o no, al menos hasta el inicio
  *     del día de estudio dentro de N días. Nunca adelanta una tarjeta
+ *   - Posponer sin daño. De lo que posponer movería, solo las tarjetas cuya probabilidad de
+ *     recordarse, el día al que se mueven, sigue a menos de MAX_SAFE_LOSS puntos de la retención
+ *     deseada. Va primero la que mejor se sostiene. Es la cifra de cuántas se pueden posponer sin
+ *     consecuencias que da FSRS Helper en Anki. Un cambio de fecha nunca toca la estabilidad
  *   - Adelantar. Trae al presente los próximos repasos que todavía no vencen hoy
  *   - Deshacer. Solo regresa las tarjetas cuyo vencimiento sigue siendo el del cambio. Si la persona
  *     ya la repasó o la movió otra vez, no se toca
@@ -54,6 +58,12 @@ export const MAX_POSTPONE_DAYS = 30;
 export const MAX_ADVANCE_COUNT = 5000;
 /** Tarjetas por evento cards_rescheduled. Lo que pasa de ahí se parte en lotes */
 export const RESCHEDULE_BATCH = 500;
+/**
+ * Cuánto puede bajar, en puntos de probabilidad, la probabilidad de recordar una tarjeta pospuesta
+ * respecto de la retención que el alumno busca, para que posponerla se considere sin daño. Con 90%
+ * de retención, una tarjeta se pospone solo si el día al que se mueve todavía la recordaría al 85%
+ */
+export const MAX_SAFE_LOSS = 0.05;
 
 /** Cambio de fecha de una tarjeta. Las dos fechas son ISO UTC */
 export interface RescheduledCard {
@@ -311,6 +321,45 @@ export function postponeCards(input: {
   return moved
     .sort(byDueThenId)
     .map((entry) => ({ cardId: entry.card.cardId, from: entry.state.due, to }));
+}
+
+/** Resultado de posponer solo lo que se sostiene bien hasta el nuevo día */
+export interface SafePostpone {
+  /** Lo que se puede mover sin daño, de la tarjeta que mejor se sostiene a la que menos */
+  safe: RescheduledCard[];
+  /** Todo lo que posponer a ciegas movería. Las que sobran son las que sí perderían memoria */
+  total: number;
+}
+
+/**
+ * Pospone solo las tarjetas que se sostienen bien hasta el día elegido. Mueve lo mismo que
+ * postponeCards, pero se queda con las que, en la fecha nueva, todavía se recordarían a menos de
+ * MAX_SAFE_LOSS puntos de la retención deseada. Las demás se quedan para repasarse
+ */
+export function postponeSafely(input: {
+  cards: readonly QueueCard[];
+  now: Date;
+  config: SchedulerConfig;
+  days: number;
+  maxLoss?: number;
+}): SafePostpone {
+  const candidates = postponeCards(input);
+  const maxLoss = Math.max(0, input.maxLoss ?? MAX_SAFE_LOSS);
+  const floor = input.config.desiredRetention - maxLoss;
+  const states = new Map(input.cards.map((card) => [card.cardId, card.state]));
+  const scored: { assignment: RescheduledCard; retrievability: number }[] = [];
+  for (const assignment of candidates) {
+    const retrievability = retrievabilityOf(
+      states.get(assignment.cardId) ?? null,
+      new Date(assignment.to),
+    );
+    if (retrievability >= floor) scored.push({ assignment, retrievability });
+  }
+  scored.sort(
+    (a, b) =>
+      b.retrievability - a.retrievability || compareIds(a.assignment.cardId, b.assignment.cardId),
+  );
+  return { safe: scored.map((entry) => entry.assignment), total: candidates.length };
 }
 
 /**

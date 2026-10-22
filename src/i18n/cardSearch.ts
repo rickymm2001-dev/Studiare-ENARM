@@ -22,6 +22,38 @@ export const cardSearchText = {
     searchLabel: 'Buscar en tus tarjetas',
     searchPlaceholder: 'Escribe para buscar',
     searchHint: 'Busca palabras, una "frase exacta" o -palabra para excluir.',
+    // Búsqueda con campo:valor (V4-B3). Cada ejemplo se pone en la búsqueda con un toque
+    advanced: {
+      title: 'Búsqueda avanzada',
+      summary: 'mazo, estado, vence, intervalo y más',
+      intro:
+        'Escribe campo:valor para afinar la búsqueda y combínalos con palabras. Un guion delante lo niega. Toca un ejemplo para ponerlo en la búsqueda.',
+      insert: (example: string) => `Poner ${example} en la búsqueda`,
+      examples: [
+        {
+          text: 'estado:nueva',
+          meaning: 'Solo las nuevas. También aprendizaje, repaso, reaprendizaje y suspendida',
+        },
+        { text: 'vence:hoy', meaning: 'Las que ya tocan. Con vence:7, las de los próximos 7 días' },
+        { text: 'mazo:gineco', meaning: 'Las de un mazo, aunque escribas solo parte del nombre' },
+        {
+          text: 'tema:"cáncer de mama"',
+          meaning: 'Las de un tema. Con comillas si lleva espacios',
+        },
+        {
+          text: 'intervalo:>21',
+          meaning: 'Con más de 21 días de intervalo. También <, >=, <= y =',
+        },
+        { text: 'fallos:>=3', meaning: 'Con 3 olvidos o más' },
+        { text: 'tipo:cloze', meaning: 'Con huecos. También basica e inversa' },
+        { text: 'etiqueta:sepsis', meaning: 'Con una etiqueta que lleva esa palabra' },
+        { text: 'frente:dosis', meaning: 'Solo en la cara que pregunta. Con reverso:, en la otra' },
+        {
+          text: '-estado:suspendida',
+          meaning: 'El guion niega. Aquí, todas menos las suspendidas',
+        },
+      ],
+    },
     filtersLabel: 'Filtros',
     deck: 'Mazo',
     allDecks: 'Todos los mazos',

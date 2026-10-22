@@ -46,6 +46,8 @@ export const EventPayloadSchemas = {
     msToRate: Ms,
     stateBefore: FsrsCardStateSchema.nullable(),
     stateAfter: FsrsCardStateSchema,
+    /** true cuando se estudió en una sesión por tema, aparte de la cola del día. No gasta su cupo (V4-B3) */
+    extra: z.boolean().optional(),
   }),
   question_shown: z.strictObject({
     questionVersionId: IdSchema,

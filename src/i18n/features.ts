@@ -154,6 +154,9 @@ export const featureText = {
       summary: (active: number, total: number, sum: number, metric: string) =>
         `${active} de ${total} días con actividad. ${sum.toLocaleString('es-MX')} ${metric} en total.`,
       cell: (day: string, value: number, metric: string) => `${day}, ${value} ${metric}`,
+      /** El detalle de un día que se toca (V4-B3) */
+      detail: (day: string, cards: number, questions: number, minutes: number) =>
+        `${day}. ${cards.toLocaleString('es-MX')} tarjetas, ${questions.toLocaleString('es-MX')} preguntas y ${minutes.toLocaleString('es-MX')} minutos de estudio.`,
       /** Inicial de cada día, de lunes a domingo, a la izquierda de las filas */
       weekdays: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
       less: 'Menos',
@@ -893,12 +896,14 @@ export const featureText = {
       basic: 'Básica',
       basicReverse: 'Básica con tarjeta inversa',
       cloze: 'Con huecos (cloze)',
+      // Cada tipo con un ejemplo médico, para que se entienda sin haber usado Anki (V4-B3)
       kindHelp: {
-        basic: 'Una pregunta y su respuesta. Genera una carta.',
+        basic:
+          'Una pregunta y su respuesta. Genera una carta. Por ejemplo, ¿Cuál es el tratamiento de primera línea de la anafilaxia? Epinefrina intramuscular.',
         basic_reverse:
-          'Un frente y un reverso. Genera dos cartas, una que pregunta el frente y otra que pregunta el reverso.',
+          'Un frente y un reverso. Genera dos cartas, una que pregunta el frente y otra que pregunta el reverso. Sirve para lo que quieres reconocer en los dos sentidos, como un signo y su enfermedad.',
         cloze:
-          'Un texto con huecos que se ocultan al repasar. Genera una carta por cada número de hueco.',
+          'Un texto con huecos que se ocultan al repasar. Genera una carta por cada número de hueco. Por ejemplo, La triada de Beck es {{c1::hipotensión}}, {{c2::ruidos cardiacos apagados}} y {{c3::ingurgitación yugular}}.',
       },
       front: 'Pregunta',
       back: 'Respuesta',
@@ -1423,6 +1428,24 @@ export const featureText = {
     recoveryBody:
       'Se juntaron repasos de días anteriores. Repartirlos en varios días evita una avalancha. Tus tarjetas no pierden lo aprendido, solo cambia el día en que las ves.',
     noOverdue: 'No tienes tarjetas atrasadas.',
+    // Las cuatro herramientas van de la más segura a la más arriesgada, con su etiqueta (V4-B3)
+    orderNote: 'Van de la más segura a la más arriesgada. Empieza por la primera.',
+    risk: {
+      safe: 'Seguro',
+      care: 'Con cuidado',
+      last: 'Último recurso',
+      free: 'Si te sobra tiempo',
+    },
+    spreadBody:
+      'Reparte las vencidas en varios días, las más olvidadas primero. No pierdes nada y no se acumula una avalancha.',
+    safeTitle: 'Posponer solo lo que aguanta',
+    safeBody:
+      'Mueve las tarjetas que, para ese día, todavía recordarías casi igual de bien. Las que se olvidarían más se quedan para que las repases hoy.',
+    safeCount: (safe: number, total: number) =>
+      total === 0
+        ? 'No hay tarjetas que venzan hoy ni antes.'
+        : `${safe.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} se pueden posponer sin daño.`,
+    safeButton: (n: number) => `Posponer ${plural(n, 'tarjeta', 'tarjetas')} sin daño`,
     memoryNote:
       'La memoria de cada tarjeta no cambia, solo su fecha. En su próximo repaso se toma en cuenta el tiempo que pasó.',
     spreadTitle: 'Repartir los atrasos',
@@ -1435,7 +1458,10 @@ export const featureText = {
       'Son más de las que caben con tu límite de repasos por día. Se reparten parejo de todos modos.',
     noDays: 'Ya no hay días antes de tu examen para repartir.',
     spreadButton: (n: number) => `Repartir ${plural(n, 'tarjeta', 'tarjetas')}`,
-    postponeTitle: 'Posponer lo de hoy y lo atrasado',
+    postponeTitle: 'Posponer todo, sin elegir',
+    postponeWarning:
+      'Mueve todas las tarjetas de hoy y las atrasadas, también las que se olvidarían más. En su próximo repaso las verás más difíciles y fallarás más. Úsalo solo si no hay de otra, por ejemplo antes de un viaje.',
+    postponeConfirm: 'Entiendo que algunas tarjetas se van a olvidar más',
     postponeBody: (n: number) =>
       n === 0
         ? 'No hay tarjetas que venzan hoy ni antes.'
@@ -1464,6 +1490,34 @@ export const featureText = {
       nothing: 'No hubo nada que mover.',
     },
     error: 'No se pudieron mover las fechas. Intenta de nuevo.',
+  },
+  // Estadísticas de un mazo que se sigue (V4-B3)
+  deckStats: {
+    title: 'Estadísticas del mazo',
+    summary: (due: number, total: number) =>
+      `${due.toLocaleString('es-MX')} ${due === 1 ? 'toca' : 'tocan'} hoy de ${total.toLocaleString('es-MX')}`,
+    fresh: 'Nuevas',
+    learning: 'Aprendiendo',
+    review: 'En repaso',
+    mature: 'Maduras',
+    matureHint: 'En repaso con 21 días o más de intervalo',
+    dueToday: 'Tocan hoy',
+    overdue: 'Atrasadas',
+    retention: 'Retención estimada',
+    retentionValue: (value: number) => `${Math.round(value * 100)}%`,
+    retentionHint:
+      'Qué tanto recordarías hoy, en promedio, las tarjetas que ya repasas. Es una estimación del modelo de memoria, no una predicción de tu puntaje.',
+    calibrating: (needed: number) =>
+      `Faltan ${needed.toLocaleString('es-MX')} tarjetas en repaso para estimarla.`,
+    intervals: 'Intervalos de las tarjetas en repaso',
+    buckets: {
+      under1: 'Menos de 1 día',
+      d1to6: '1 a 6 días',
+      d7to20: '7 a 20 días',
+      d21to59: '21 a 59 días',
+      d60to179: '60 a 179 días',
+      d180plus: '180 días o más',
+    },
   },
   // Carga diaria. Perfil guía y tarjetas nuevas por día (D-085, fila 6)
   dailyLoad: {
@@ -1508,7 +1562,15 @@ export const featureText = {
     title: 'Qué quieres repasar',
     hint: 'Elige el modo, tus mazos y las ramas o subespecialidades. Tu avance se guarda en cada tarjeta, así que puedes cambiar cuando quieras.',
     mode: 'Modo',
-    modes: { today: 'Lo que toca hoy', due: 'Solo vencidas', new: 'Solo nuevas' },
+    modes: {
+      today: 'Lo que toca hoy',
+      due: 'Solo vencidas',
+      new: 'Solo nuevas',
+      topic: 'Estudiar un tema',
+    },
+    // Estudiar un tema es aparte de lo que toca hoy (V4-B3)
+    topicHint:
+      'Estudias todas las tarjetas que elegiste, también las que no te tocan hoy y las nuevas, hasta 200 por sesión. Es adicional a tu repaso del día y no gasta tus tarjetas nuevas ni tus repasos de hoy. Lo que califiques sí cuenta para tu memoria.',
     decks: 'Mazos',
     cards: (n: number) => `${n.toLocaleString('es-MX')} en total`,
     filters: 'Mazos y temas',

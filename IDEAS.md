@@ -130,3 +130,6 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Regex en Buscar tarjetas.** La sintaxis campo y valor de V4-B3 no la incluye. Surgió en el plan V4 (D-140)
 - **Tabla de posiciones abierta entre grupos de Party.** Hoy solo se planea una opcional y con seudónimo para simuladores completos. Surgió en el plan V4 (D-140)
 - **Quitar los plugins de la sesión que no se usan.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata no entran en V4. Es limpieza del menú de Ricardo, no del repo. Surgió en el plan V4 (D-140)
+- **Editar durante el repaso una tarjeta de un mazo precargado.** Esas tarjetas son contenido compartido. Editarlas pide crear una copia en Mis tarjetas, decidir si la original se suspende y qué pasa con su historial de repasos. Hoy se edita en los mazos del alumno. Surgió al programar V4-B3 (D-142)
+- **Plegado de secciones y contador de puntos por recordar en Apuntes.** Plegar con el triángulo y decir cuántos puntos tiene cada tarjeta generada de un esquema, como RemNote. Surgió al programar V4-B4 (D-143)
+- **Seleccionar texto de un PDF para mandar solo esa parte a la IA de tarjetas.** Pide un visor de PDF con selección. Hoy se lee todo el PDF. Surgió al programar V4-B4 (D-143)

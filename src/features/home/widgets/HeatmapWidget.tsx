@@ -3,13 +3,23 @@
 // o 365 días y métrica configurables (9.1). En Inicio las celdas se estiran para ocupar todo el ancho
 // (D-117), y en el teléfono, donde el año no cabe, se desplaza de lado. A la izquierda va la inicial
 // de cada día, de lunes a domingo. Las celdas usan la escala de cinco pasos de la paleta (D-128).
-import { useEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { addDays, daysBetween } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import type { Snapshot } from '../snapshot';
 
 import type { HeatmapSettings } from './heatmapSettings';
+
+/** Día largo en español, como miércoles 14 de octubre */
+function longDayLabel(day: string): string {
+  return new Intl.DateTimeFormat('es-MX', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(`${day}T12:00:00Z`));
+}
 
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -57,6 +67,7 @@ export function HeatmapWidget({
   }, [snapshot.today]);
   // Rango automático. Del primer día del mes en que empezó, o de su primera actividad si es antes,
   // hasta hoy. Así el calendario crece mes con mes
+  const [selected, setSelected] = useState<string | null>(null);
   const firstActivity = Object.keys(snapshot.activity).sort()[0] ?? since;
   const start = `${(firstActivity < since ? firstActivity : since).slice(0, 7)}-01`;
   const length =
@@ -93,6 +104,11 @@ export function HeatmapWidget({
     ) : (
       <span
         key={day}
+        // Tocar un día dice sus cifras debajo, porque en el teléfono no hay cursor para el título.
+        // No es un botón porque todo el calendario va oculto al lector de pantalla, que lee el resumen
+        onClick={() => {
+          setSelected((current) => (current === day ? null : day));
+        }}
         title={t.widgets.heatmap.cell(
           day,
           snapshot.activity[day]?.[settings.metric] ?? 0,
@@ -103,6 +119,8 @@ export function HeatmapWidget({
           fluid ? 'rounded-[4px]' : 'rounded-[3px]',
           HEATMAP_LEVELS[levelOf(snapshot.activity[day]?.[settings.metric] ?? 0)],
           day === snapshot.today && 'ring-1 ring-fg',
+          day === selected && 'ring-2 ring-primary',
+          'cursor-pointer',
         )}
       />
     );
@@ -182,6 +200,16 @@ export function HeatmapWidget({
           })}
         </div>
       </div>
+      {selected ? (
+        <p role="status" className="text-sm font-medium">
+          {t.widgets.heatmap.detail(
+            longDayLabel(selected),
+            snapshot.activity[selected]?.cards ?? 0,
+            snapshot.activity[selected]?.questions ?? 0,
+            snapshot.activity[selected]?.focusMinutes ?? 0,
+          )}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center justify-between gap-2">
         {summaryAtEnd ? summary : <span />}
         <div className="flex items-center gap-1 text-xs text-fg-muted" aria-hidden>

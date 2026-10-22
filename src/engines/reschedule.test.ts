@@ -12,7 +12,9 @@ import {
   advanceReviews,
   MAX_ADVANCE_COUNT,
   overdueCards,
+  MAX_SAFE_LOSS,
   postponeCards,
+  postponeSafely,
   rescheduleBatches,
   spreadOverdue,
   summarizeOverdue,
@@ -904,5 +906,62 @@ describe('rendimiento con 5,000 tarjetas', () => {
     expect(overdue.ms).toBeLessThan(LIMIT_MS);
     expect(postponed.ms).toBeLessThan(LIMIT_MS);
     expect(advanced.ms).toBeLessThan(LIMIT_MS);
+  });
+});
+
+describe('postponeSafely', () => {
+  // Una tarjeta con mucha estabilidad apenas pierde memoria en dos días. Una con poca la pierde
+  const firm = (id: string) => card(id, TODAY_START, { stability: 200, scheduledDays: 200 });
+  const fragile = (id: string) => card(id, TODAY_START, { stability: 1.5, scheduledDays: 2 });
+
+  it('deja fuera las que perderían memoria y reporta cuántas movería posponer a ciegas', () => {
+    const cards = [firm('a'), fragile('b'), firm('c')];
+    const result = postponeSafely({ cards, now: NOW, config, days: 3 });
+    expect(result.total).toBe(3);
+    expect(result.safe.map((entry) => entry.cardId).sort()).toEqual(['a', 'c']);
+  });
+
+  it('solo mueve fechas y cada tarjeta llega al mismo día que con posponer a ciegas', () => {
+    const cards = [firm('a'), fragile('b')];
+    const blind = postponeCards({ cards, now: NOW, config, days: 2 });
+    const safe = postponeSafely({ cards, now: NOW, config, days: 2 }).safe;
+    for (const entry of safe) {
+      expect(blind).toContainEqual(entry);
+    }
+  });
+
+  it('ordena de la tarjeta que mejor se sostiene a la que menos', () => {
+    const cards = [
+      card('x', TODAY_START, { stability: 60, scheduledDays: 60 }),
+      card('y', TODAY_START, { stability: 400, scheduledDays: 400 }),
+      card('z', TODAY_START, { stability: 120, scheduledDays: 120 }),
+    ];
+    const ids = postponeSafely({ cards, now: NOW, config, days: 1 }).safe.map((e) => e.cardId);
+    expect(ids).toEqual(['y', 'z', 'x']);
+  });
+
+  it('con una tolerancia de cero solo se mueven las que no pierden nada', () => {
+    const cards = [firm('a'), fragile('b')];
+    const strict = postponeSafely({ cards, now: NOW, config, days: 3, maxLoss: 0 });
+    expect(strict.safe.length).toBeLessThanOrEqual(1);
+    const loose = postponeSafely({ cards, now: NOW, config, days: 3, maxLoss: 1 });
+    expect(loose.safe).toHaveLength(2);
+  });
+
+  it('la tolerancia por omisión es de cinco puntos', () => {
+    expect(MAX_SAFE_LOSS).toBe(0.05);
+  });
+
+  it('no mueve las nuevas ni las que ya vencen después del día elegido', () => {
+    const cards = [unseen('n'), card('later', '2026-12-01T10:00:00.000Z', { stability: 90 })];
+    const result = postponeSafely({ cards, now: NOW, config, days: 2 });
+    expect(result).toEqual({ safe: [], total: 0 });
+  });
+
+  it('es determinista aunque cambie el orden de entrada', () => {
+    const cards = [firm('b'), firm('a'), firm('c')];
+    const one = postponeSafely({ cards, now: NOW, config, days: 2 });
+    const two = postponeSafely({ cards: [...cards].reverse(), now: NOW, config, days: 2 });
+    expect(two).toEqual(one);
   });
 });

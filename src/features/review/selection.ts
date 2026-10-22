@@ -1,5 +1,6 @@
 // Selección de qué repasar (D-072). Modo, mazos y subespecialidades, recordada en este dispositivo.
-export type ReviewMode = 'today' | 'due' | 'new';
+/** topic estudia las tarjetas elegidas aparte de la cola del día, sin gastar su cupo (V4-B3) */
+export type ReviewMode = 'today' | 'due' | 'new' | 'topic';
 
 export interface ReviewSelection {
   mode: ReviewMode;
@@ -39,7 +40,10 @@ export function loadSelection(
       ...deckIds.filter((id) => !known.has(id)),
     ];
     return {
-      mode: saved.mode === 'due' || saved.mode === 'new' ? saved.mode : 'today',
+      mode:
+        saved.mode === 'due' || saved.mode === 'new' || saved.mode === 'topic'
+          ? saved.mode
+          : 'today',
       // Si los mazos guardados ya no se siguen, se usan todos
       decks: new Set(decks.length > 0 ? decks : deckIds),
       topics: new Set((saved.topics ?? allTopics).filter((key) => allTopics.includes(key))),
