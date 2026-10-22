@@ -93,8 +93,10 @@ describe('marcas de distractores de la noche', () => {
       expect(screen.getAllByText(flagged('15 de octubre'))).toHaveLength(2);
       expect(screen.getByText(flagged('16 de octubre'))).toBeVisible();
     }, WAIT);
-    // Así se lee entero
-    expect(screen.getAllByText('Marcada la noche del 15 de octubre')[0]).toBeVisible();
+    // Así se lee entero. Con la máquina cargada la lista se vuelve a pintar entre una espera y la otra
+    await waitFor(() => {
+      expect(screen.getAllByText('Marcada la noche del 15 de octubre')[0]).toBeVisible();
+    }, WAIT);
   });
 
   it('una marca que una noche posterior actualizó no dice que sus exposiciones son de la primera noche (revisión de B14, hallazgo 5)', async () => {
@@ -109,8 +111,8 @@ describe('marcas de distractores de la noche', () => {
     ]);
     await waitFor(() => {
       expect(screen.getByText(text.figures(600, 9, '1.5 %'))).toBeVisible();
+      expect(screen.getByText('Marcada la noche del 15 de octubre')).toBeVisible();
     }, WAIT);
-    expect(screen.getByText('Marcada la noche del 15 de octubre')).toBeVisible();
     expect(screen.queryByText(/Calculado la noche/)).toBeNull();
     expect(screen.queryByText(/con 600 exposiciones/)).toBeNull();
   });
