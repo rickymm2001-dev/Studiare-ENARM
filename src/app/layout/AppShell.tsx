@@ -27,6 +27,7 @@ import { OAuthErrorNotice } from './OAuthErrorNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
+import { SurveyNoticeLauncher } from './SurveyNoticeLauncher';
 import { TopBarContext } from './TopBarContext';
 
 // El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4). Si su archivo
@@ -219,6 +220,8 @@ export function AppShell() {
       <NoticeUpdateNotice className={rail} />
       {/* La mudanza de la demo de GitHub Pages (B17). Sin las variables del build no pinta ni baja nada */}
       <MovedNoticeLauncher className={rail} />
+      {/* La encuesta de los primeros días (B18). Solo baja algo para un alumno con la nube, fuera de estudiar */}
+      <SurveyNoticeLauncher className={rail} />
       <OrganizationSync />
 
       <div className={rail}>

@@ -228,7 +228,7 @@ describe('lo demás de la bitácora', () => {
       ['party_group_joined', {}],
       ['official_score_captured', {}],
     ]);
-    expect(JSON.stringify(seen)).not.toMatch(/2026/);
+    expect(JSON.stringify(seen.map((record) => record.properties))).not.toMatch(/2026/);
   });
 
   it('deck_imported mide apkg y csv, y no xlsx ni docx, que el catálogo no tiene', async () => {

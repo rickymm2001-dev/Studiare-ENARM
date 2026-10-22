@@ -133,6 +133,11 @@ export const ANALYTICS_EVENTS = {
   tour_step_viewed: { step: TOUR_STEPS },
   tour_completed: { step: TOUR_STEPS },
   tour_skipped: { step: TOUR_STEPS },
+  // La encuesta de los primeros días (B18, 3 del diseño). Nunca una respuesta ni el comentario. Contestarla no depende de
+  // este permiso, pero medir que se ofreció, se escondió o se terminó sí
+  survey_shown: {},
+  survey_dismissed: { how: ['later', 'never'] },
+  survey_completed: { answered: [7, 8] },
 } as const satisfies Record<string, EventShape>;
 
 export type AnalyticsEvent = keyof typeof ANALYTICS_EVENTS;

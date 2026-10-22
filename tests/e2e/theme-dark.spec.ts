@@ -41,6 +41,7 @@ const STUDENT: readonly (readonly [ScreenKey, string?])[] = [
   ['party'],
   ['subscription'],
   ['roleSelector'],
+  ['survey'],
 ];
 
 /**

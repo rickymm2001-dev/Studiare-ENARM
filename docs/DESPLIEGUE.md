@@ -133,7 +133,7 @@ La simulación con --dry-run solo usa rutas de lectura. Fuera de ella, si la rut
 | supabase/manual/limpiar-pagos-de-prueba.sql | Lo pegas tú | Sigue igual. Borra filas de pagos y va solo después de cancelar en Stripe, así que no entra en ningún plan |
 | supabase/manual/ejecutar-en-sql-editor.sql | Lo pegabas tú (D-113) | No está en un plan. Trae más que funciones y no tiene consulta de Comprobación, así que la herramienta no puede saber si ya se pegó. Para meterlo en un plan habría que agregarle una |
 
-## B11 a B15 y B17, el orden desde un proyecto con solo B10
+## B11 a B15, B17 y B18, el orden desde un proyecto con solo B10
 
 Se corren en este orden, cada uno primero con --dry-run.
 
@@ -150,14 +150,16 @@ npm run deploy:supabase -- --plan b15 --dry-run
 npm run deploy:supabase -- --plan b15 --yes
 npm run deploy:supabase -- --plan b17 --dry-run
 npm run deploy:supabase -- --plan b17 --yes
+npm run deploy:supabase -- --plan b18 --dry-run
+npm run deploy:supabase -- --plan b18 --yes
 ```
 
-Lo que revisa la prueba de scripts/deploy/plans.test.ts (B11, B12, B13, B14, B15 y B17) contra la API falsa
+Lo que revisa la prueba de scripts/deploy/plans.test.ts (B11, B12, B13, B14, B15, B17 y B18) contra la API falsa
 
-- b11, b12, b13, b14, b15 y b17 cierran en verde en ese orden, desde una base con solo B10
-- b12 y b13 pueden ir en cualquier orden entre sí después de b11, y b14, b15 y b17 van al final, en ese orden
+- b11, b12, b13, b14, b15, b17 y b18 cierran en verde en ese orden, desde una base con solo B10
+- b12 y b13 pueden ir en cualquier orden entre sí después de b11, y b14, b15, b17 y b18 van al final, en ese orden
 - Cada plan corre también solo sobre un proyecto que ya tiene B11
-- Los seis se pueden volver a correr, en cualquier orden, sin repetir SQL
+- Los siete se pueden volver a correr, en cualquier orden, sin repetir SQL
 - b15 con --dry-run solo lee. Dice qué migraciones aplicaría y qué funciones publicaría, y no escribe nada
 - Una comprobación de b15 en rojo detiene el plan sin aplicar nada, aunque las migraciones ya estén registradas
 
@@ -199,6 +201,21 @@ Qué pasa en cada caso
 - b15 no espera secretos. Las llaves de Resend, PostHog y Sentry las pone Ricardo directo en Supabase, Edge Functions, Secrets (docs/PENDIENTES_DE_RICARDO.md, B15). La tercera migración necesita project_url en Vault, que guardó B11, y no hace nada donde falten pg_cron, pg_net o Vault
 - Proyecto con b15 publicado. b17 no aplica SQL y vuelve a publicar las mismas trece funciones, cada una con una versión más y el verify_jwt que tenía. Un proyecto sin las funciones de b15 las crea en la versión 1
 - Las funciones del plan b15 que ya existían tienen el verify_jwt de siempre. create-checkout, create-portal-session, cancel-subscription y admin-reset-mfa verifican la sesión. payment-webhook-stripe, payment-webhook-mercadopago, bank-sync, ai-proxy y ai-batch no, porque se identifican con su firma o con la ficha de Cron. Una prueba revisa que cada una coincida con su index.ts
+
+### B18, la encuesta de los primeros días
+
+El plan b18 aplica dos migraciones y no publica funciones ni espera secretos.
+
+```bash
+npm run deploy:supabase -- --plan b18 --dry-run
+npm run deploy:supabase -- --plan b18 --yes
+```
+
+- 20261030000001_first_week_survey.sql no lleva delete ni drop, así que el conector también la puede aplicar. Trae el ajuste survey_first_week apagado, la tabla survey_responses y cinco de las seis funciones
+- 20261030000002_survey_erase.sql trae delete_my_survey_response, la única pieza con delete. Va aparte para que la primera quede sin delete ni drop (D-113) y la aplica esta herramienta. Su comprobación del final es la del plan y la misma de la primera consulta de docs/SUPABASE.md, sección B18
+- La comprobación revisa solo hechos de la estructura (la tabla, que no tenga permisos de tabla para la API, el freno que la deja solo para agregar y quién ejecuta qué). No revisa si la encuesta está prendida ni con qué espera, porque cambia con el tiempo y con ello el plan no se podría volver a correr después de prenderla. Eso se lee con la segunda consulta de esa sección
+- El plan no toca Borrar mis datos. La encuesta se borra con su propia función (8.4 del diseño de B18) y por eso no hay una cuarta versión de delete_my_data que mantener en cuatro copias
+- Una prueba revisa que la primera migración no tenga delete ni drop, que la comprobación sea la de la documentación y que ninguna consulta de esa sección lea comentarios ni respuestas
 
 ### B17, orígenes por secreto y llaves nuevas de Supabase
 
@@ -274,7 +291,7 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
 - verifyJwt va en true para las funciones que llama la app con la sesión del alumno y en false para los avisos de Stripe y de Mercado Pago, que se identifican con su firma. Una prueba revisa que coincida con lo que dice el index.ts de cada función
 - secrets son los nombres que espera --secrets-from, cada uno con pattern, la forma completa de su valor con ^ y $
 - anonExecutable y overloads anotan, con su porqué, lo que la comprobación de la base aceptaría como excepción
-- Hoy hay ocho
+- Hoy hay nueve
   - b9 solo publica admin-reset-mfa, porque su migración 20261020000001 ya está registrada como accounts_access y se salta
   - b10 es lo que falta de B10
   - b11 es el banco en la nube y bank-sync
@@ -283,6 +300,7 @@ Viven en deploy/. Cada bloque nuevo, como B11 o B12, agrega el suyo con la misma
   - b14 es datos y modelo del alumno. Las migraciones 20261028000001 a 20261028000003, sin archivo manual ni Edge Functions, con la comprobación de la estructura en la última. Las tres también están en b11, y las que corra primero las aplica
   - b15 es analítica, errores, recordatorios y recorrido. Las migraciones 20261029000001 a 20261029000004, sin archivo manual, con la comprobación de la estructura en la última, que es Borrar mis datos v4, y trece funciones. Las nuevas son send-emails, email-unsubscribe y analytics-flush (sin verificar JWT) y monitoring-test (verificando la sesión), y las nueve que ya existían se vuelven a publicar con withMonitoring. No espera secretos
   - b17 son los orígenes por secreto y las llaves nuevas de Supabase. Sin migraciones y con las mismas trece funciones de b15, cada una con su verify_jwt de siempre, que se vuelven a publicar con el código nuevo. Espera dos secretos, APP_URL y APP_ORIGINS, dos direcciones públicas
+  - b18 es la encuesta de los primeros días. Las migraciones 20261030000001 y 20261030000002, sin archivo manual ni Edge Functions, con la comprobación de la estructura en la última, que trae delete_my_survey_response. No espera secretos
 - Cuando un bloque nuevo cambia una función de un plan anterior, el archivo manual de ese plan sigue a la última migración. Con B12, banco-b11.sql trae la versión v3 de delete_my_data, la misma de ia-b12.sql. Sus delete de las tablas de B12 van con execute y solo si la tabla existe, así que desplegar el plan b11 solo no deja Borrar mis datos roto y desplegar b12 enseguida ya no es obligatorio
 
 Cada función se sube con todos los archivos que importa, también los de solo tipos, con su ruta desde la raíz del repo. Así ../\_shared/x.ts se resuelve igual en el servidor. Los archivos de prueba no viajan porque nadie los importa. Si la función tiene un deno.json en su carpeta, como ai-proxy y ai-batch, que importan zod, hono y el SDK de Anthropic por su nombre, también se sube y su ruta va en import_map_path del metadata. Sin ese mapa el servidor no resuelve esos nombres.

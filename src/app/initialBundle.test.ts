@@ -5,6 +5,7 @@
 // antes de compilar y dice quién fue.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 
 const SRC = join(import.meta.dirname, '..');
@@ -35,5 +36,42 @@ describe('el JavaScript inicial no arrastra la cuenta de la nube', () => {
     expect(read('app/preferences.ts')).toContain("import('@/data/cloud/account')");
     expect(read('app/layout/NoticeUpdateNotice.tsx')).toContain("import('@/data/cloud/account')");
     expect(read('app/cloudState.ts')).toContain("import('@/data/usecases/cloudLink')");
+  });
+});
+
+describe('la franja de la encuesta no pesa en el JavaScript inicial (B18)', () => {
+  const read = (file: string) => withoutComments(readFileSync(join(SRC, file), 'utf8'));
+  const staticImports = (code: string) =>
+    [...code.matchAll(/^import\s+(?!type\b)[^;]*?from\s+['"]([^'"]+)['"]/gm)].map(
+      (match) => match[1],
+    );
+
+  it('el lanzador solo importa de forma estática lo que ya viaja en el inicial, y baja la franja con lazy', () => {
+    const code = read('app/layout/SurveyNoticeLauncher.tsx');
+    expect(staticImports(code).sort()).toEqual([
+      '../cloudState',
+      '../screens',
+      'react',
+      'react-router',
+    ]);
+    expect(code).toContain("import('@/features/survey/SurveyNotice')");
+  });
+
+  it('el lanzador es chico, menos de 1 KB comprimido', () => {
+    const code = read('app/layout/SurveyNoticeLauncher.tsx');
+    expect(gzipSync(code).length).toBeLessThan(1024);
+  });
+
+  it('el marco de la app solo conoce el lanzador, no la franja, la pantalla, los textos ni la capa de datos', () => {
+    const code = read('app/layout/AppShell.tsx');
+    expect(code).toContain("from './SurveyNoticeLauncher'");
+    expect(code).not.toMatch(/features\/survey|i18n\/survey|data\/cloud\/survey|config\/surveys/);
+  });
+
+  it('la pantalla de la encuesta baja su formulario con lazy', () => {
+    const code = read('features/survey/SurveyScreen.tsx');
+    // Solo el tipo de lo que devuelve, que el compilador quita
+    expect(staticImports(code)).not.toContain('./SurveyForm');
+    expect(code).toContain("import('./SurveyForm')");
   });
 });

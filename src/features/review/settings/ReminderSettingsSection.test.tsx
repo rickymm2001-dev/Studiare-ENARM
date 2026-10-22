@@ -326,8 +326,11 @@ describe('medición al guardar los recordatorios', () => {
     expect(seen.map((record) => [record.event, record.properties])).toEqual([
       ['reminder_prefs_saved', { enabled: true, frequency: 'weekdays', hour_band: 'night' }],
     ]);
-    // Nunca la hora exacta, los días, la zona ni el correo
-    expect(JSON.stringify(seen)).not.toMatch(/@|America|"hour"|20/);
+    // Nunca la hora exacta, los días, la zona ni el correo. Se revisan solo las propiedades, porque la marca de
+    // tiempo del registro (at) es un número que puede traer cualquier par de dígitos
+    expect(JSON.stringify(seen.map((record) => record.properties))).not.toMatch(
+      /@|America|"hour"|20/,
+    );
   });
 
   it('sin el permiso guarda igual y no mide nada', async () => {

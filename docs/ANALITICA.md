@@ -48,6 +48,9 @@ La lista cerrada vive en src/data/analytics/catalog.ts. Una prueba compara la de
 | reminder_prefs_saved | Se guardan los recordatorios por correo | enabled, frequency (daily, weekdays o custom), hour_band (morning, afternoon o night) |
 | tour_started | Empieza el recorrido | trigger (auto o settings) |
 | tour_step_viewed, tour_completed y tour_skipped | Se ve un paso, se termina o se salta | step (welcome, home, review, outlines, simulator, progress, party o settings) |
+| survey_shown | Se le ofrece la encuesta de los primeros días, una vez por carga de la app | ninguna |
+| survey_dismissed | La esconde con Ahora no o con No quiero contestarla | how (later o never) |
+| survey_completed | Envía la encuesta | answered (7 o 8, cuántas preguntas contestó, con o sin comentario) |
 
 Dos aclaraciones.
 
@@ -90,6 +93,7 @@ La factura de 0 pesos de la prueba nunca cuenta como pago. Los planes posibles s
 - Texto del alumno, de las preguntas, de las tarjetas, de los apuntes, de la IA ni lo que busca.
 - Puntajes, aciertos por pregunta, sesgos del alumno y su especialidad.
 - Cómo nos conociste y el código de influencer. El aviso de privacidad dice que no van a ninguna herramienta de analítica, por eso signup_completed no lleva heard_from ni has_code (D-132).
+- Las respuestas de la encuesta de los primeros días ni su comentario. Esa encuesta se guarda en la base con un código y no pasa por la analítica. De ella solo salen survey_shown, survey_dismissed y survey_completed, que dicen que se ofreció, que se escondió o cuántas preguntas se contestaron.
 - Direcciones con consulta. La IP se descarta en el proyecto de PostHog (paso B15.3 de docs/PENDIENTES_DE_RICARDO.md) y además cada evento pide no resolver la ubicación.
 - Nada de lo anterior aunque alguien lo pida por error en el código. Cada propiedad acepta solo valores de su lista, y un evento con una propiedad de más o de menos se descarta completo.
 
@@ -164,6 +168,7 @@ Cómo leerlo.
 - Si alguien retira el permiso y lo da de nuevo, su identificador cambia y cuenta como otra persona.
 - Los pasos 5 y 6 salen del servidor, y llegan unos minutos después, porque la función analytics-flush corre cada 5 minutos.
 - El recorrido (tour_started, tour_step_viewed, tour_completed y tour_skipped) no es parte de este embudo. Se mide aparte, también solo entre quienes dieron el permiso.
+- La encuesta de los primeros días (survey_shown, survey_dismissed y survey_completed) tampoco. Contestarla no depende de este permiso y se guarda en la base con un código, pero medir que se ofreció, que se escondió o que se terminó sí lo pide. Nunca sale una respuesta ni el comentario, solo cuántas preguntas contestó. El embudo de los primeros alumnos está en docs/PRIMEROS_ALUMNOS.md.
 
 ## Cómo probar sin ninguna cuenta
 

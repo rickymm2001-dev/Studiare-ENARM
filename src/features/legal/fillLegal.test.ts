@@ -154,9 +154,10 @@ describe('textos legales', () => {
   });
 
   it('aviso y términos llevan su versión y la fecha de B16 a la vista', () => {
-    // El aviso lleva la versión que acepta el alumno, la de B17 (2026-10-22), que nombra a Cloudflare, a GitHub
-    // y al componente de Stripe, sobre la de B15 (2026-10-21) con Medición de uso. Los términos siguen en la de B16
-    expect(legalDocs.privacy.version).toBe('2026-10-22');
+    // El aviso lleva la versión que acepta el alumno, la de B18 (2026-10-22b), que suma la encuesta de los primeros
+    // días a la de B17 (2026-10-22), que nombra a Cloudflare, a GitHub y al componente de Stripe, sobre la de B15
+    // (2026-10-21) con Medición de uso. Los términos siguen en la de B16
+    expect(legalDocs.privacy.version).toBe('2026-10-22b');
     expect(legalDocs.terms.version).toBe('2026-10-15');
     expect(legalDocs.privacy.updated).toBe('22 de octubre de 2026');
     expect(legalDocs.terms.updated).toBe('15 de octubre de 2026');
@@ -171,9 +172,18 @@ describe('textos legales', () => {
     expect(isAfter('2026-10-16', '2026-10-15b')).toBe(true);
     expect(isAfter('2026-10-21', '2026-10-15b')).toBe(true);
     expect(isAfter('2026-10-22', '2026-10-21')).toBe(true);
-    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16, B16, B15 y B17
+    expect(isAfter('2026-10-22b', '2026-10-22')).toBe(true);
+    // Las que hubo, en desorden, quedan en este orden: B7, B9, el primer borrador de B16, B16, B15, B17 y B18
     expect(
-      ['2026-10-22', '2026-10-21', '2026-10-15b', '2026-10-14', '2026-10-15', '2026-10-14b'].sort(),
+      [
+        '2026-10-22b',
+        '2026-10-22',
+        '2026-10-21',
+        '2026-10-15b',
+        '2026-10-14',
+        '2026-10-15',
+        '2026-10-14b',
+      ].sort(),
     ).toEqual([
       '2026-10-14',
       '2026-10-14b',
@@ -181,10 +191,18 @@ describe('textos legales', () => {
       '2026-10-15b',
       '2026-10-21',
       '2026-10-22',
+      '2026-10-22b',
     ]);
     // La versión vigente es la mayor de todas las conocidas, para que quien aceptó una anterior,
     // incluido el primer borrador de B16, vuelva a aceptar
-    const earlier = ['2026-10-14', '2026-10-14b', '2026-10-15', '2026-10-15b', '2026-10-21'];
+    const earlier = [
+      '2026-10-14',
+      '2026-10-14b',
+      '2026-10-15',
+      '2026-10-15b',
+      '2026-10-21',
+      '2026-10-22',
+    ];
     for (const version of earlier) {
       expect(isAfter(PRIVACY_NOTICE_VERSION, version), version).toBe(true);
     }
@@ -455,6 +473,38 @@ describe('términos de B16', () => {
   it('dice el registro con invitación y la edad mínima (respuesta 52 y pregunta 45)', () => {
     expect(terms).toMatch(/Registro con invitación\. Hasta que Studiare abra el registro/);
     expect(terms).toMatch(/Debes tener 18 años o más/);
+  });
+
+  it('dice qué se guarda de la encuesta de los primeros días, quién la ve, que no va a la analítica y cómo se borra (B18, 2.5)', () => {
+    const datos = (section(legalDocs.privacy, 'datos').bullets ?? []).find((bullet) =>
+      bullet.startsWith('Encuesta de los primeros días.'),
+    );
+    expect(datos).toBeDefined();
+    expect(datos).toMatch(/Es opcional\. Si decides contestarla/);
+    expect(datos).toMatch(/tus respuestas y tu comentario con un código/);
+    expect(datos).toMatch(
+      /los días que pasaron desde que creaste tu cuenta y la versión de la encuesta/,
+    );
+    expect(datos).toMatch(/sin tu nombre ni tu correo/);
+    expect(datos).toMatch(/Solo la ven el dueño y los administradores de Studiare/);
+    expect(datos).toMatch(/No va a herramientas de analítica ni a la inteligencia artificial/);
+    expect(datos).toMatch(/se borra sola al eliminar tu cuenta/);
+    // Nunca la llama anónima, porque con un código y pocas personas se puede deducir de quién es
+    expect(datos).not.toMatch(/an[oó]nim/i);
+    // Borrar mis datos no la quita, y el aviso lo dice
+    const cancelar = (section(legalDocs.privacy, 'derechos').bullets ?? []).join(' ');
+    expect(cancelar).toMatch(/no se quita con Borrar mis datos/);
+    expect(cancelar).toMatch(/Borrar mi respuesta/);
+    // Es opcional y no depende de ningún permiso, y sirve para corregir lo que falle antes de abrir
+    expect((section(legalDocs.privacy, 'opcionales').paragraphs ?? []).join(' ')).toMatch(
+      /encuesta de los primeros días también es opcional.*no depende de ninguno de estos permisos/,
+    );
+    expect((section(legalDocs.privacy, 'finalidades').bullets ?? []).join(' ')).toMatch(
+      /antes de abrir Studiare a más gente/,
+    );
+    expect((section(legalDocs.privacy, 'conservacion').paragraphs ?? []).join(' ')).toMatch(
+      /respuesta a la encuesta de los primeros días se queda mientras tengas cuenta o hasta que la borres/,
+    );
   });
 
   it('dice las condiciones del Fundador (4.5, 4.6 y respuesta 17)', () => {

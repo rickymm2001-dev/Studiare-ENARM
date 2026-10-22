@@ -1,0 +1,245 @@
+{
+  "_aviso": "[Prueba] Comentarios simulados de la encuesta de los primeros días (B18), no son de ningún alumno. Los leen src/config/surveys.test.ts y la prueba S2 de supabase/tests/first_week_survey_test.sql, para que el filtro de la app (commentProblem) y el de la base (survey_comment_ok) den lo mismo sobre los mismos casos. problem es null si el comentario sirve, email si trae una arroba (también escondida) y phone si trae un teléfono. Los caracteres invisibles y los de ancho completo van escritos con su escape de Unicode (\\uXXXX) para que se vean en una revisión. El filtro es un apoyo y no una garantía: estos casos son las formas comunes, no todas las posibles",
+  "cases": [
+    {
+      "name": "números cortos y plurales de días",
+      "comment": "Tardó 3 segundos en cargar, como 12 veces en 2 días",
+      "problem": null
+    },
+    {
+      "name": "un simulacro con número",
+      "comment": "Quiero que el 5 de enero salga el simulacro 7",
+      "problem": null
+    },
+    {
+      "name": "paréntesis normales",
+      "comment": "Las preguntas de cardiología (las del bloque 2) me parecieron largas",
+      "problem": null
+    },
+    {
+      "name": "corchetes normales",
+      "comment": "Faltan mazos [de pediatría y de ginecología] para repasar",
+      "problem": null
+    },
+    {
+      "name": "la sigla at sin paréntesis",
+      "comment": "El aviso decía look at this y no lo entendí",
+      "problem": null
+    },
+    {
+      "name": "una palabra que empieza como at entre paréntesis",
+      "comment": "(atención) no encontré el botón de Simular",
+      "problem": null
+    },
+    {
+      "name": "arrobas en plural no es la palabra sola",
+      "comment": "Me tomó arrobas de paciencia entender el progreso",
+      "problem": null
+    },
+    {
+      "name": "fecha con diagonales",
+      "comment": "El examen del 12/10/2026 no abrió a tiempo",
+      "problem": null
+    },
+    {
+      "name": "versión con puntos",
+      "comment": "Con la versión 2.0.1 de la app se trabó dos veces",
+      "problem": null
+    },
+    {
+      "name": "números de preguntas separados por palabras",
+      "comment": "Las preguntas 101 a 110 y de la 201 a la 210 estaban repetidas",
+      "problem": null
+    },
+    {
+      "name": "acentos, eñes y emoji",
+      "comment": "Me encantó 😀 la sección de repaso, pero faltó café para el año entero",
+      "problem": null
+    },
+    {
+      "name": "un teléfono a medias",
+      "comment": "Mi promedio fue de 9.5 y pasé 3 horas diarias",
+      "problem": null
+    },
+    {
+      "name": "correo normal",
+      "comment": "escríbeme a alguien@correo.mx para platicar",
+      "problem": "email"
+    },
+    {
+      "name": "correo con mayúsculas, punto y signo más",
+      "comment": "mi correo es A.B+c@Sub.Dominio.COM",
+      "problem": "email"
+    },
+    {
+      "name": "sin dominio",
+      "comment": "ana@gmail",
+      "problem": "email"
+    },
+    {
+      "name": "con espacios alrededor de la arroba y del punto",
+      "comment": "ana @ ejemplo . mx",
+      "problem": "email"
+    },
+    {
+      "name": "arroba de ancho completo",
+      "comment": "ana\uff20ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "arroba pequeña",
+      "comment": "ana\ufe6bejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "ancho cero antes de la arroba",
+      "comment": "ana\u200b@ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "ancho cero después de la arroba",
+      "comment": "ana@\u200bejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "unión de ancho cero",
+      "comment": "ana\u200d@ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "marca de orden de bytes",
+      "comment": "ana\ufeff@ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "guion suave",
+      "comment": "a\u00adna@ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "arroba suelta como etiqueta",
+      "comment": "pregúntale a @ana sobre eso",
+      "problem": "email"
+    },
+    {
+      "name": "(at)",
+      "comment": "ana (at) ejemplo . mx",
+      "problem": "email"
+    },
+    {
+      "name": "[at] sin espacios",
+      "comment": "ana[at]ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "{ AT } con mayúsculas y espacios",
+      "comment": "ana { AT } ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "(at) de ancho completo",
+      "comment": "ana\uff08at\uff09ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "la palabra arroba",
+      "comment": "ana arroba ejemplo punto mx",
+      "problem": "email"
+    },
+    {
+      "name": "arroba en mayúsculas",
+      "comment": "ana ARROBA ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "arroba entre signos",
+      "comment": "ana,arroba,ejemplo",
+      "problem": "email"
+    },
+    {
+      "name": "arroba con letras y espacios de ancho completo",
+      "comment": "\uff41\uff4e\uff41\u3000\uff41\uff52\uff52\uff4f\uff42\uff41\u3000\uff45\uff4a\uff45\uff4d\uff50\uff4c\uff4f",
+      "problem": "email"
+    },
+    {
+      "name": "arroba con un carácter de ancho cero adentro",
+      "comment": "ana arr\u200boba ejemplo.mx",
+      "problem": "email"
+    },
+    {
+      "name": "teléfono con espacios",
+      "comment": "mi cel es 55 1234 5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con lada y paréntesis",
+      "comment": "llámame al +52 (55) 1234-5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono pegado",
+      "comment": "5512345678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con puntos",
+      "comment": "55.1234.5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con guion y espacios",
+      "comment": "55 - 1234 - 5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con rayas y espacios",
+      "comment": "55 \u2013 1234 \u2013 5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con puntos medios",
+      "comment": "55\u00b71234\u00b75678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con viñetas",
+      "comment": "55\u20221234\u20225678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con guion bajo",
+      "comment": "55_1234_5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con dígitos de ancho completo",
+      "comment": "\uff15\uff15\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con dígitos de ancho completo y espacios",
+      "comment": "\uff15\uff15 \uff11\uff12\uff13\uff14 \uff15\uff16\uff17\uff18",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con un dígito por espacio",
+      "comment": "5 5 1 2 3 4 5 6 7 8",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con ancho cero entre los grupos",
+      "comment": "55\u200b1234\u200b5678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono con espacio sin salto",
+      "comment": "55\u00a01234\u00a05678",
+      "problem": "phone"
+    },
+    {
+      "name": "teléfono dentro de una frase",
+      "comment": "háblame al 55 1234 5678 después de las 5",
+      "problem": "phone"
+    }
+  ]
+}

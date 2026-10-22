@@ -37,6 +37,7 @@ import { Button } from '@/ui/components/button';
 import { SelectField, TextField } from '@/ui/components/field';
 import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
 import { LoadingState } from '@/ui/states/states';
+import { FirstWeekSurveyCard } from './FirstWeekSurveyCard';
 import { InvitationsCard } from './InvitationsCard';
 import { PhysicianCodeForm } from './PhysicianCodeForm';
 import { useBankAdminQuery } from './useBankAdminQuery';
@@ -254,6 +255,8 @@ export function CloudUsers() {
         </>
       ) : null}
       <SignupSourcesCard />
+      {/* La encuesta de los primeros días (B18), debajo de Cómo nos conociste */}
+      <FirstWeekSurveyCard />
     </>
   );
 }

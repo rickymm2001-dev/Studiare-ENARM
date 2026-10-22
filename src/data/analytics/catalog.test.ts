@@ -41,7 +41,7 @@ const everyProperty = [
 );
 
 describe('la lista de eventos es cerrada', () => {
-  it('trae los eventos de la tabla 1.5 de la app y los ocho de dinero del servidor', () => {
+  it('trae los eventos de la tabla 1.5 de la app, los tres de la encuesta de B18 y los ocho de dinero del servidor', () => {
     expect(Object.keys(ANALYTICS_EVENTS).sort()).toEqual(
       [
         'signup_completed',
@@ -66,6 +66,9 @@ describe('la lista de eventos es cerrada', () => {
         'tour_step_viewed',
         'tour_completed',
         'tour_skipped',
+        'survey_shown',
+        'survey_dismissed',
+        'survey_completed',
       ].sort(),
     );
     expect(Object.keys(SERVER_ANALYTICS_EVENTS)).toEqual([
@@ -92,6 +95,13 @@ describe('la lista de eventos es cerrada', () => {
         }
       }
     }
+  });
+
+  it('los tres eventos de la encuesta solo dicen que se ofreció, cómo se escondió y cuántas preguntas se contestaron', () => {
+    // Nunca una respuesta ni el comentario (B18, 3 del diseño). Si alguien suma una propiedad, esta prueba lo avisa
+    expect(ANALYTICS_EVENTS.survey_shown).toEqual({});
+    expect(ANALYTICS_EVENTS.survey_dismissed).toEqual({ how: ['later', 'never'] });
+    expect(ANALYTICS_EVENTS.survey_completed).toEqual({ answered: [7, 8] });
   });
 
   it('ninguna propiedad se llama como un dato de la persona', () => {

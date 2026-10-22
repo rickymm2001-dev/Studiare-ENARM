@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { afterEach, expect, it } from 'vitest';
 import type { ReminderPrefs } from '../cloud/engagementContracts';
+import type { MySurveyResponse } from '../cloud/survey';
 import { makeUser, newId, testApi } from '../testing/fixtures';
 import { exportUserData } from './exportData';
 import { createOutline, saveOutline } from './outlines';
@@ -111,5 +112,50 @@ it('incluye los recordatorios por correo de la nube, y sin la nube o si falla el
     remindersCloud: () => Promise.reject(new Error('sin red')),
   });
   expect(failed.remindersCloud).toEqual({ status: 'unavailable' });
+  expect(failed.user?.id).toBe(user.id);
+});
+
+it('incluye la respuesta a la encuesta de los primeros días con su código, sin cuenta, correo ni fecha de cuenta (B18)', async () => {
+  const api = testApi('real');
+  disposers.push(api.dispose);
+  const user = makeUser();
+  await api.repos.users.put(user);
+
+  // Sin la nube conectada no hay encuesta que pedir
+  expect((await exportUserData(api.repos, user.id)).surveyCloud).toBeNull();
+
+  const mine: MySurveyResponse = {
+    surveyId: 'first-week-v1',
+    code: 'R1A2B3C',
+    daysSinceSignup: 8,
+    answers: {
+      days_used: 'd5_6',
+      used: ['review', 'practice'],
+      clarity: 4,
+      ease: 5,
+      useful: 4,
+      blockers: ['slow'],
+      recommend: 'yes',
+    },
+    comment: 'Me costó ubicar Simular',
+    answeredAt: '2026-11-02T10:00:00Z',
+  };
+  const included = await exportUserData(api.repos, user.id, {
+    surveyCloud: () => Promise.resolve({ status: 'included', data: mine }),
+  });
+  expect(included.surveyCloud).toEqual({ status: 'included', data: mine });
+  expect(JSON.stringify(included.surveyCloud)).not.toMatch(/@|user_id/);
+
+  // Quien no la contestó la ve incluida y vacía, y no como algo que falló
+  const empty = await exportUserData(api.repos, user.id, {
+    surveyCloud: () => Promise.resolve({ status: 'included', data: null }),
+  });
+  expect(empty.surveyCloud).toEqual({ status: 'included', data: null });
+
+  // Si la nube falla, el resto del archivo sale y dice que no se pudo leer
+  const failed = await exportUserData(api.repos, user.id, {
+    surveyCloud: () => Promise.reject(new Error('sin red')),
+  });
+  expect(failed.surveyCloud).toEqual({ status: 'unavailable' });
   expect(failed.user?.id).toBe(user.id);
 });

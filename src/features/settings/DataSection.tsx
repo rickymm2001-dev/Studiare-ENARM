@@ -5,17 +5,20 @@ import { useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { loadCloud } from '@/data/cloud/client';
 import { fetchReminderPrefs } from '@/data/cloud/reminders';
+import { readMySurveyResponse } from '@/data/cloud/survey';
 import { useDataApi } from '@/data/context';
 import {
   exportUserData,
   type PartyCloudExport,
   type RemindersCloudExport,
+  type SurveyCloudExport,
 } from '@/data/usecases/exportData';
 import { exportMyPartyData } from '@/data/usecases/partyCloud';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { clearExamState } from '../exam/examStorage';
+import { forgetSurveyLocal } from '../survey/surveyLocal';
 import { DeleteAccountCard, DeleteDataCard } from '../profile/DeleteCards';
 import type { ReadySession } from '../shared/RequireSession';
 
@@ -38,13 +41,22 @@ export function DataSection({ session }: { session: ReadySession }) {
     const prefs = cloud ? await fetchReminderPrefs(cloud) : null;
     return prefs ? { status: 'included', data: prefs } : { status: 'unavailable' };
   };
+  // La respuesta a la encuesta de los primeros días (B18) vive en la nube, con la misma regla. Sin respuesta sale null
+  const surveyCloud = async (): Promise<SurveyCloudExport | null> => {
+    if (session.isDemo || cloudStatus !== 'linked') return null;
+    const cloud = await loadCloud();
+    const mine = cloud ? await readMySurveyResponse(cloud) : null;
+    return mine?.ok ? { status: 'included', data: mine.response } : { status: 'unavailable' };
+  };
   // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay que leer
-  // los perfiles antes, porque con la base borrada ya no se sabe de quién eran
+  // los perfiles antes, porque con la base borrada ya no se sabe de quién eran. Lo mismo el borrador de la encuesta y lo
+  // que se decidió con su franja (B18), que también viven solo en este navegador
   const wipeLocal = async () => {
     if (!deleteAllData) return;
     const users = await api.repos.users.list();
     await deleteAllData();
     for (const { id } of users) clearExamState(id);
+    forgetSurveyLocal();
   };
   return (
     <>
@@ -59,7 +71,11 @@ export function DataSection({ session }: { session: ReadySession }) {
           variant="secondary"
           className="self-start"
           onClick={() => {
-            void exportUserData(api.repos, user.id, { partyCloud, remindersCloud }).then((data) => {
+            void exportUserData(api.repos, user.id, {
+              partyCloud,
+              remindersCloud,
+              surveyCloud,
+            }).then((data) => {
               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
               const url = URL.createObjectURL(blob);
               const link = document.createElement('a');

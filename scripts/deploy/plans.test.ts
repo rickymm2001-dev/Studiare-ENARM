@@ -617,7 +617,7 @@ describe('línea de comandos', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// B11 a B15 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12, B13, B14 y B15)
+// B11 a B18 desde un proyecto con solo B10 aplicado (docs/DESPLIEGUE.md, B11, B12, B13, B14, B15, B17 y B18)
 
 /** La última migración de B10. Un proyecto con solo B10 llega hasta aquí */
 const LAST_B10 = '20261022000003';
@@ -649,6 +649,8 @@ const B11_STEPS = [
  *     que la v4 de banco-b11.sql ya pasó) y la pieza ia-b12.sql la deja otra vez en v4 en el mismo plan
  *   - b15 vuelve a publicar bank-sync, ai-proxy y ai-batch, porque ahora van envueltas con withMonitoring
  *   - b17 no aplica SQL y vuelve a publicar las trece funciones, porque todas empaquetan las llaves y el CORS nuevos
+ *   - b18 aplica las dos migraciones de la encuesta de los primeros días y no publica nada. No comparte ninguna
+ *     función con los demás, y por eso va al final
  * Cuando llegue el plan de un bloque nuevo va al final de esta lista con su SQL y sus funciones, y el resto
  * de las pruebas de esta sección corre con él sin cambios
  */
@@ -716,6 +718,7 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
         'ai-batch',
       ],
     },
+    { plan: 'b18', sql: ['first_week_survey', 'survey_erase'], functions: [] },
   ];
 
 /** Las funciones de las migraciones del repo hasta una versión, como las deja un proyecto que llegó ahí */
@@ -767,14 +770,32 @@ function engagementCheckRow(applied: ReadonlySet<string>): Record<string, unknow
 }
 
 /**
+ * La fila de la comprobación de b18 según lo que se aplicó, como la de b15: lo que pide el plan cuando las dos
+ * migraciones de la encuesta están, y lo contrario (ceros y falsos) cuando falta alguna
+ */
+let surveyCheck: Record<string, unknown> | undefined;
+function surveyCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
+  surveyCheck ??= loadPlan(ROOT, 'b18').migrations.at(-1)?.check ?? {};
+  const expected = surveyCheck;
+  const done = ['first_week_survey', 'survey_erase'].every((name) => applied.has(name));
+  return Object.fromEntries(
+    Object.entries(expected).map(([column, value]) => [
+      column,
+      done ? value : typeof value === 'boolean' ? !value : 0,
+    ]),
+  );
+}
+
+/**
  * La fila de cada consulta de comprobación según lo que se aplicó. Una columna que el plan no pide no estorba,
- * así que trae la de B11, la de B12, la de B14 y la de B15 para cualquier plan de FROM_B10
+ * así que trae la de B11, la de B12, la de B14, la de B15 y la de B18 para cualquier plan de FROM_B10
  */
 const checkRows = (applied: ReadonlySet<string>) => ({
   borrar_mis_datos_b11: applied.has('manual_banco_b11'),
   borrar_mis_datos_b12: applied.has('manual_ia_b12'),
   ...modelCheckRow(applied),
   ...engagementCheckRow(applied),
+  ...surveyCheckRow(applied),
 });
 
 /** La base con B10 aplicado y nada del banco */
@@ -914,7 +935,7 @@ function appliedSince(fake: ReturnType<typeof fakeSupabase>, from: number): stri
 
 // Cada corrida lee y parte todo el SQL del repo. Con la cobertura de npm run check, o en un equipo lento, una
 // prueba de varias corridas pasa de los 5 s de Vitest, así que esta sección pide más
-describe('B11, B12, B13, B14 y B15 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
+describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => {
   it('b13 lleva la migración de inglés y bank-sync sin verificar JWT, y sin SQL manual', () => {
     const plan = loadPlan(ROOT, 'b13');
     expect(plan.migrations.map((step) => step.name)).toEqual(['english_section']);
@@ -1018,7 +1039,7 @@ describe('B11, B12, B13, B14 y B15 desde un proyecto con solo B10', { timeout: 6
     expect(fake.writes()).toEqual([]);
   });
 
-  it('b11, b12, b13, b14 y b15 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
+  it('b11, b12, b13, b14, b15, b17 y b18 en ese orden corren completos, la base queda como el repo y volver a correrlos no repite SQL', async () => {
     const fake = onlyB10();
     const versions = new Map<string, number>();
     /** Lo que sube una corrida de cada función que publica, con el verify_jwt que dice su plan */
@@ -1103,6 +1124,7 @@ describe('B11, B12, B13, B14 y B15 desde un proyecto con solo B10', { timeout: 6
       b13: ['english_section'],
       b14: modelo,
       b15: ['email_reminders', 'product_analytics', 'engagement_cron', 'delete_my_data_v4'],
+      b18: ['first_week_survey', 'survey_erase'],
     };
     for (const [plan, sql] of Object.entries(expected)) {
       const fake = withB11BeforeEnglish();
@@ -1271,6 +1293,132 @@ describe('B11, B12, B13, B14 y B15 desde un proyecto con solo B10', { timeout: 6
     expect(run.code).toBe(1);
     expect(run.text).toContain('su comprobación sale en rojo');
     expect(run.text).toContain('tablas_de_b15 dio 0 y debía dar 4');
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('b18 lleva las dos migraciones de la encuesta en orden, sin SQL manual, Edge Functions ni secretos', () => {
+    const plan = loadPlan(ROOT, 'b18');
+    expect(plan.migrations.map((step) => step.name)).toEqual(['first_week_survey', 'survey_erase']);
+    expect(plan.migrations.map((step) => step.kind)).toEqual(['migration', 'migration']);
+    expect(plan.functions).toEqual([]);
+    expect(plan.secrets).toBeNull();
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // La primera no lleva delete ni drop, así que el conector también la puede aplicar (D-113). El borrado de la
+    // respuesta, que es lo único que los necesita, va solo en la segunda
+    const [first, second] = plan.migrations;
+    expect(first?.sql).not.toMatch(/^\s*(delete|drop)\b/im);
+    const code = (sql = '') => sql.replace(/--.*$/gm, '');
+    expect(code(first?.sql)).not.toMatch(/\bdelete\s+from\b|\bdrop\b/i);
+    expect(code(second?.sql)).toMatch(/^\s*delete\s+from\s+public\.survey_responses\b/im);
+    expect(code(second?.sql)).not.toMatch(/\bdrop\b/i);
+    // Ninguna otra migración del repo toca la tabla de la encuesta ni Borrar mis datos
+    for (const migration of repoMigrations(ROOT)) {
+      if (migration.version < '20261030000001') continue;
+      expect(migration.sql, migration.file).not.toMatch(
+        /create or replace function public\.delete_my_data\(/,
+      );
+    }
+  });
+
+  it('la comprobación de b18 va en la última migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
+    const plan = loadPlan(ROOT, 'b18');
+    expect(plan.migrations[0]?.check).toBeNull();
+    const last = plan.migrations.at(-1);
+    const check = last?.check ?? {};
+    // Solo hechos de la estructura. Si la encuesta está prendida, cuántos días espera o hasta qué fecha cambia con el
+    // tiempo, y con ello en la comprobación el plan no se podría volver a correr después de prenderla
+    for (const column of [
+      'encuesta_prendida',
+      'dias_de_espera',
+      'fecha_limite',
+      'ajuste_prendido',
+    ]) {
+      expect(Object.keys(check)).not.toContain(column);
+    }
+    expect(check).toMatchObject({
+      tabla_de_encuesta: 1,
+      tabla_sin_permisos_directos: true,
+      solo_se_agrega: 1,
+      anonimo_entra: false,
+      llave_lee_respuestas: false,
+    });
+    // La consulta de la migración y el primer bloque de SQL de la sección B18 de docs/SUPABASE.md son la misma
+    const docs = readFileSync(join(ROOT, 'docs/SUPABASE.md'), 'utf8');
+    const start = docs.indexOf('## Primeros alumnos y encuesta (B18)');
+    const section = docs.slice(start, docs.indexOf('\n## ', start + 1));
+    const block = /```sql\n([\s\S]*?)```/.exec(section)?.[1] ?? '';
+    const squash = (sql: string) => sql.replace(/\s+/g, ' ').replace(/;\s*$/, '').trim();
+    expect(block).not.toBe('');
+    expect(squash(block)).toBe(squash(checkQuery(last?.sql ?? '') ?? ''));
+    // Ninguna consulta de esa sección lee comentarios ni respuestas una por una (la sesión no los lee, 8.5)
+    for (const query of section.match(/```sql\n[\s\S]*?```/g) ?? []) {
+      expect(query).not.toMatch(
+        /\bcomment\b|\banswers\b|from\s+public\.survey_responses|respondent_code|user_id/i,
+      );
+    }
+  });
+
+  it('un proyecto con B11 a B17 recibe las dos migraciones con b18, no publica nada y volver a correrlo no repite SQL', async () => {
+    const fake = withB14BeforeB15();
+    // Con b15 aplicado, como un proyecto que ya llegó a B17
+    expect((await runReal(fake, 'b15')).code).toBe(0);
+    const edgeBefore = JSON.stringify(
+      [...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]),
+    );
+    const first = await runReal(fake, 'b18');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(fake, 0).slice(-2)).toEqual(['first_week_survey', 'survey_erase']);
+    // La comprobación de la última migración corre justo después de aplicarla, y de nuevo al final
+    expect(first.text).toContain(
+      'supabase/migrations/20261030000002_survey_erase.sql comprobación en verde',
+    );
+    // El plan no publica funciones de Edge, así que ninguna cambia de versión
+    expect(first.text).not.toContain('Publicando');
+    expect(JSON.stringify([...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]))).toBe(
+      edgeBefore,
+    );
+    // Las seis funciones de la encuesta quedaron en la base y Borrar mis datos no cambió
+    for (const name of [
+      'my_survey_status',
+      'submit_survey',
+      'my_survey_response',
+      'delete_my_survey_response',
+      'admin_survey_summary',
+      'admin_survey_responses',
+    ]) {
+      expect(fake.functions.get(name), name).toBeDefined();
+    }
+    expect(fake.functions.get('delete_my_data')?.body).not.toContain('survey');
+
+    const before = fake.writes().length;
+    const again = await runReal(fake, 'b18');
+    expect(again.code).toBe(0);
+    expect(appliedSince(fake, before)).toEqual([]);
+    expect(again.text).toContain('ya aplicada, registrada como survey_erase');
+  });
+
+  it('b18 con --dry-run solo lee: dice qué aplicaría y no escribe nada', async () => {
+    const fake = withB14BeforeB15();
+    const dry = await runReal(fake, 'b18', true);
+    expect(dry.code).toBe(0);
+    expect(fake.writes()).toEqual([]);
+    for (const name of ['first_week_survey', 'survey_erase']) {
+      expect(dry.text).toContain(`${name}  se aplica`);
+    }
+    expect(dry.text).not.toContain('Publicando');
+  });
+
+  it('una comprobación de b18 en rojo detiene el plan sin aplicar nada, aunque las migraciones ya estén registradas', async () => {
+    // Las dos registradas por el conector, pero sin la tabla: la base dice otra cosa que la historia
+    const fake = withB14BeforeB15();
+    for (const [index, name] of ['first_week_survey', 'survey_erase'].entries()) {
+      fake.history.push({ version: `2026103000${String(index).padStart(4, '0')}`, name });
+    }
+    const run = await runReal(fake, 'b18');
+    expect(run.code).toBe(1);
+    expect(run.text).toContain('su comprobación sale en rojo');
+    expect(run.text).toContain('tabla_de_encuesta dio 0 y debía dar 1');
     expect(fake.writes()).toEqual([]);
   });
 

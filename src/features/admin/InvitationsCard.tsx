@@ -2,7 +2,7 @@
 // cerrado solo crean cuenta los correos invitados, con el correo o con Google. Lo decide el gancho
 // Before User Created del servidor. Aquí el dueño y los admins invitan, ven quién ya creó su cuenta,
 // quitan invitaciones y abren el registro el día del lanzamiento. Solo con la cuenta de la nube.
-import { MailPlus, Trash2 } from 'lucide-react';
+import { ClipboardCopy, MailPlus, Trash2 } from 'lucide-react';
 import { useEffect, useState, type SyntheticEvent } from 'react';
 import { loadCloud } from '@/data/cloud/client';
 import {
@@ -15,11 +15,13 @@ import {
   type InvitationsFailure,
 } from '@/data/cloud/invitations';
 import { t } from '@/i18n/es-MX';
+import { surveyAdminTexts } from '@/i18n/survey';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
 import { LoadingState } from '@/ui/states/states';
+import { appAddress } from './appAddress';
 
 type ListState =
   | { status: 'loading' }
@@ -27,6 +29,8 @@ type ListState =
   | { status: 'ready'; invitations: Invitation[] };
 
 type Message = { kind: 'ok' | 'error'; text: string } | null;
+
+const invitationText = surveyAdminTexts.invitation;
 
 export function InvitationsCard() {
   const text = t.accounts.admin.invitations;
@@ -37,6 +41,8 @@ export function InvitationsCard() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<Message>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  // Si el navegador no deja copiar, el mensaje se muestra para copiarlo a mano
+  const [manualCopy, setManualCopy] = useState<string | null>(null);
 
   useEffect(() => {
     let stopped = false;
@@ -100,6 +106,20 @@ export function InvitationsCard() {
         : { kind: 'error', text: text.errors[result.reason] },
     );
     if (result.ok) refresh();
+  };
+
+  // El mensaje que Ricardo pega en su chat. La invitación de la base no manda nada, solo deja crear la cuenta con ese correo
+  const copyInvitation = async (email: string) => {
+    setMessage(null);
+    setManualCopy(null);
+    const invitation = invitationText.message(appAddress(), email);
+    try {
+      await navigator.clipboard.writeText(invitation);
+      setMessage({ kind: 'ok', text: invitationText.copied(email) });
+    } catch {
+      setManualCopy(invitation);
+      setMessage({ kind: 'error', text: invitationText.copyFailed });
+    }
   };
 
   const changeRegistration = async (next: boolean) => {
@@ -186,17 +206,31 @@ export function InvitationsCard() {
             {busy ? text.inviting : text.invite}
           </Button>
         </form>
+        <p className="text-sm text-fg-muted">{invitationText.sameEmail}</p>
         {message ? (
           <p
             role={message.kind === 'error' ? 'alert' : 'status'}
             className={
               message.kind === 'error'
-                ? 'rounded-md bg-danger-soft p-3 text-sm text-danger'
-                : 'rounded-md bg-muted p-3 text-sm'
+                ? 'rounded-md bg-danger-soft p-3 text-sm break-words text-danger'
+                : 'rounded-md bg-muted p-3 text-sm break-words'
             }
           >
             {message.text}
           </p>
+        ) : null}
+
+        {manualCopy ? (
+          <textarea
+            readOnly
+            rows={10}
+            aria-label={invitationText.copy}
+            value={manualCopy}
+            className="w-full rounded-md border border-line-strong bg-surface p-3 text-sm"
+            onFocus={(event) => {
+              event.target.select();
+            }}
+          />
         ) : null}
 
         {list.status === 'loading' ? <LoadingState label={text.loading} /> : null}
@@ -222,6 +256,17 @@ export function InvitationsCard() {
                   <Badge variant="neutral">
                     {invitation.registered ? text.registered : text.pending}
                   </Badge>
+                  {invitation.registered ? null : (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      aria-label={invitationText.copyLabel(invitation.email)}
+                      onClick={() => void copyInvitation(invitation.email)}
+                    >
+                      <ClipboardCopy aria-hidden />
+                      {invitationText.copy}
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="ghost"

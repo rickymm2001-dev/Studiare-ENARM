@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Los dos destinos del reporte de errores con el emisor de verdad (B15, 2.1): Supabase de siempre, que no
 // depende de la bandera, y Sentry. Los dos con el mismo permiso
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { writeStoredFlags } from '@/config/featureFlags';
 
 const rpc = vi.hoisted(() => vi.fn(() => Promise.resolve({ data: 'recorded', error: null })));
@@ -15,6 +15,13 @@ vi.mock('./sentrySink', () => ({ reportToSentry: toSentry }));
 import { reportClientError, resetErrorReporter, setErrorReportingAllowed } from './errorReporter';
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 20));
+
+// El envío a Supabase baja su módulo con un import dinámico. Con la máquina cargada esa primera bajada tarda
+// más que la espera fija de settle, y la llamada tardía caía en la prueba siguiente. Se baja antes de empezar
+// y lo que sí debe llegar se espera con waitFor
+beforeAll(async () => {
+  await import('@/data/cloud/clientErrors');
+});
 
 beforeEach(() => {
   rpc.mockClear();
@@ -35,8 +42,9 @@ describe('destinos del reporte de errores', () => {
     setErrorReportingAllowed(true);
     const original = new Error('uno');
     reportClientError('error', original);
-    await settle();
-    expect(rpc).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => {
+      expect(rpc).toHaveBeenCalledTimes(1);
+    });
     expect(rpc.mock.calls[0]).toEqual([
       'report_client_error',
       expect.objectContaining({ p_kind: 'error' }),
@@ -51,8 +59,10 @@ describe('destinos del reporte de errores', () => {
     writeStoredFlags({ errorMonitoring: false });
     setErrorReportingAllowed(true);
     reportClientError('error', new Error('dos'));
+    await vi.waitFor(() => {
+      expect(rpc).toHaveBeenCalledTimes(1);
+    });
     await settle();
-    expect(rpc).toHaveBeenCalledTimes(1);
     expect(toSentry).not.toHaveBeenCalled();
   });
 
@@ -60,8 +70,10 @@ describe('destinos del reporte de errores', () => {
     vi.stubEnv('VITE_SENTRY_DSN', '');
     setErrorReportingAllowed(true);
     reportClientError('error', new Error('dos bis'));
+    await vi.waitFor(() => {
+      expect(rpc).toHaveBeenCalledTimes(1);
+    });
     await settle();
-    expect(rpc).toHaveBeenCalledTimes(1);
     expect(toSentry).not.toHaveBeenCalled();
   });
 
@@ -87,6 +99,10 @@ describe('destinos del reporte de errores', () => {
     setErrorReportingAllowed(true);
     for (let index = 0; index < 9; index += 1)
       reportClientError('error', new Error(`falla ${String(index)}`));
+    await vi.waitFor(() => {
+      expect(rpc).toHaveBeenCalledTimes(5);
+    });
+    // Que no llegue un sexto
     await settle();
     expect(rpc).toHaveBeenCalledTimes(5);
     // El doble del módulo de Sentry cuenta mal las bajadas simultáneas del mismo archivo, así que aquí solo se
