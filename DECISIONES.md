@@ -1504,3 +1504,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Urgencias abierto en Gratis solo en la interfaz, con FREE_CATALOG_DECK_KEYS en src/config/billing.ts. La bandera deckCatalog del plan no cambia. La regla del servidor, tres funciones en la migración del catálogo, no se tocó y queda en PENDIENTES_DE_RICARDO.md, porque no se toca Supabase sin autorización y no hay cómo probar SQL aquí
 - No se hizo. Mezcla por nivel en el examen completo y su ajuste en Umbrales, vista de semana aparte en el calendario y percentil de simulador completo separado del de práctica. Van a IDEAS.md
 
+### D-145. V4-B2, identidad visual
+- Fecha 2026-10-22. Origen R, "me molesta que el diseño se vea genérico de IA"
+- Se publicaron tres direcciones como Artifact privado y se aplicó la A, editorial clínico, que era la recomendada. No se compró plantilla, porque una plantilla de dashboard traería su propio sistema de componentes y pelearía con los tokens, con el modo oscuro y con la prueba de contraste que ya existen
+- Modo claro con papel cálido en lienzo, tarjetas, bordes, heatmap y etiquetas de demostración (#f6f3ee, #fffdf9, #eeeae2 y #ddd6c9). El color de acción #156082 y los colores de rama no cambian. El modo oscuro no cambia
+- Títulos en Source Serif 4, que ya viajaba con la app como opción de lectura. Un token --enarm-font-heading, que el alumno que elige Atkinson o Lexend lleva igual que el texto, porque esas fuentes están pensadas para leer mejor y no se mezclan con una serif
+- Marca, tarjeta de logros y confeti toman los tonos nuevos. La decisión de dejar el cristal y los fondos personalizados fuera sigue en la decisión 2 de la sección 8 del plan
+

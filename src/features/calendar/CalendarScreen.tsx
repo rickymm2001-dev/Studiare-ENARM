@@ -167,7 +167,7 @@ function Calendar({ session }: { session: ReadySession }) {
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Card aria-labelledby="calendario-mes">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 id="calendario-mes" className="text-lg font-bold capitalize">
+            <h2 id="calendario-mes" className="text-lg font-bold first-letter:uppercase">
               {monthName(cursor.year, cursor.month)}
             </h2>
             <div className="flex items-center gap-1">
@@ -276,7 +276,7 @@ function Calendar({ session }: { session: ReadySession }) {
             aria-labelledby="calendario-dia"
             className="mt-3 flex flex-col gap-1 rounded-lg border border-line p-3"
           >
-            <h3 id="calendario-dia" className="font-semibold capitalize">
+            <h3 id="calendario-dia" className="font-semibold first-letter:uppercase">
               {text.detailTitle(longDay(selected))}
             </h3>
             {detail.map((line) => (

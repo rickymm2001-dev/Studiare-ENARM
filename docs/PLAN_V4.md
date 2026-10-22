@@ -205,6 +205,12 @@ Estado de V4-B1 (2026-10-22)
 
 Se acepta cuando eliges una dirección, los tokens están aplicados en toda la app sin estilos sueltos, el contraste pasa 4.5 a 1 en claro y oscuro, y las e2e de theme-dark y smoke pasan.
 
+Estado de V4-B2 (2026-10-22, D-145)
+- Hecho. Las tres direcciones están publicadas como Artifact privado (Studiare, tres direcciones visuales) y se aplicó la A, editorial clínico, que era la recomendada. Papel cálido en el modo claro, títulos en Source Serif 4 y el color de acción de siempre. Los títulos siguen a la fuente del texto cuando el alumno elige Atkinson o Lexend. El modo oscuro no cambia. La prueba de contraste de design.test.ts pasa con los tonos nuevos
+- Capturas en docs/screenshots/v4/b2 (Inicio, Calendario, Progreso y repaso, en 390 y 1280 claro y en 1280 oscuro)
+- No se hizo por ahora. Cristal en la barra superior y el dock, porque espera tu respuesta a la decisión 2 de la sección 8. Ilustración propia para estados vacíos y portada, que pide a Canva o Adobe y queda para después del barrido. Tokens de densidad de tarjeta y unir las dos etiquetas de demostración en el teléfono, porque ya caben en dos renglones. Si prefieres la B o la C, cambiar es editar los tokens y la regla de títulos, un commit
+- Si las e2e de theme-dark y smoke pasan se confirma en el barrido de V4-B10
+
 ### V4-B3. Repaso completo al estilo Anki (L)
 
 Lo de Paco y los complementos de la sección 5.
