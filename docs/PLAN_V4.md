@@ -326,6 +326,13 @@ Es el B19 de V3 más el barrido de todo lo nuevo.
 - Skills de la sesión que se usan aquí y no antes. code-review, security-review, accessibility-review y deploy-checklist
 - La lista de lanzamiento de la sección 11 de V3
 
+Estado de V4-B10 (2026-10-22, D-146)
+- Hecho. Suite e2e completa en las tres modalidades (teléfono, computadora y nube) y revisión independiente por cuatro áreas con subagentes que no escribieron el código (interfaz y accesibilidad, motores y lógica, seguridad y datos, planes y reglas del proyecto). Arreglos aplicados y verificados. Capturas finales en docs/screenshots/v4/final, en 390, 1280 y 1920 px, en claro y oscuro
+- Resultados. Antes de los arreglos, 693 e2e pasaron, 3 fallaron y 4 se omitieron. Las fallas fueron el recorrido en oscuro, que no incluía el Calendario, y el rendimiento en computadora con 150.5 ms contra un tope de 150, medido mientras la máquina corría otras pruebas. Ya pasan, y el rendimiento pasa aislado en teléfono y en computadora. Después de los arreglos, 217 e2e de las áreas tocadas pasaron, Vitest 7,504 pruebas, ESLint y Prettier sin avisos, npm audit sin vulnerabilidades y el barrido audit de interfaz con sus 20 pruebas
+- Presupuesto. JavaScript inicial de 298.0 KB de 300. Pasa, pero con 2 KB de margen, así que cualquier texto nuevo en el idioma común lo puede romper. Va a IDEAS.md cargar los textos de cada pantalla bajo demanda
+- No se hizo. Las skills code-review, security-review y accessibility-review no se invocaron aparte, porque las cuatro revisiones independientes cubrieron esas áreas. Si quieres una segunda pasada con ellas antes de lanzar, se corren sobre el diff completo del plan V4. La lista de lanzamiento es la de la sección 11 de PLAN_DEL_CAMBIO.md y depende de ti
+- Pendientes que salieron de la auditoría y esperan a Ricardo están en docs/PENDIENTES_DE_RICARDO.md. Los menores van a IDEAS.md
+
 ## 8. Decisiones que esperan a Ricardo
 
 Con la opción recomendada que se toma si no contestas.

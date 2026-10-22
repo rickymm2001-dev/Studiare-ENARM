@@ -145,4 +145,6 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Búsqueda de tarjetas con el tema completo y sin recalcular por tecla.** El campo tema solo ve los tres primeros niveles y con 50 mil tarjetas los campos con texto plegado tardan unos 200 ms por tecla. Surgió en la auditoría de V4-B10 (D-146)
 - **Sanear por lotes en el importador.** Hoy se sanea todo en el hilo principal sin ceder, y un archivo con millones de notas lo congela unos segundos. Surgió en la auditoría de V4-B10 (D-146)
 - **Pedir al alumno que cuente cuántas tarjetas esperaba al importar un mazo muy grande.** Surgió en la auditoría de V4-B10 (D-146)
+- **Cargar los textos de cada pantalla bajo demanda.** El JavaScript inicial está en 298.0 KB de 300 y los textos del idioma común (src/i18n/es-MX.ts) viajan todos en él. Moverlos a módulos que cargue cada pantalla devuelve varios KB de margen. Surgió en la auditoría de V4-B10 (D-146)
+- **Campo sin indicador de foco en Datos de demostración y un 400 en consola en Configuración de plataforma.** Los marcó el barrido audit de interfaz en las pantallas de administración, que V4 no tocó. Surgió en la auditoría de V4-B10 (D-146)
 
