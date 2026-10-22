@@ -41,10 +41,14 @@ const sentNamed = (cloud: FakeSupabaseServer, name: string) =>
 /** Espera a que lleguen n eventos con ese nombre, pidiendo a la analítica que entregue lo que tenga en cola */
 async function untilSent(page: Page, cloud: FakeSupabaseServer, name: string, count = 1) {
   await expect
-    .poll(async () => {
-      await flushAnalytics(page);
-      return sentNamed(cloud, name).length;
-    })
+    .poll(
+      async () => {
+        await flushAnalytics(page);
+        return sentNamed(cloud, name).length;
+      },
+      // En el CI, con la máquina cargada, 5 segundos no alcanzaban a veces (pasaba al reintentar)
+      { timeout: 20_000 },
+    )
     .toBe(count);
 }
 
