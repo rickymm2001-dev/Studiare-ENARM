@@ -7,7 +7,7 @@
 import { LogOut } from 'lucide-react';
 import { lazy, Suspense, type ReactNode } from 'react';
 import { useLocation } from 'react-router';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { Skeleton } from '@/ui/components/skeleton';
 import { ErrorState, LoadingState } from '@/ui/states/states';

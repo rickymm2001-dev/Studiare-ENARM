@@ -36,21 +36,24 @@ import { usePlanAllows } from '../shared/useActivePlan';
 import { CatalogLockNotice, CatalogRowLock } from './CatalogLock';
 import { CloudDeckCatalog } from './CatalogDeckCard';
 import { useUserEvents } from '../shared/useUserEvents';
+import { schedulerConfig } from '../review/schedulerConfig';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
 import { activeDeckStates } from '@/engines/deckStats';
-import { descendantIds } from '@/engines/deckTree';
+import { descendantIds, selectionUnitId } from '@/engines/deckTree';
 import { suspendedCardIds } from '@/engines/suspension';
 import { followedDeckIds } from './followed';
 import { AiCardsCard } from './AiCardsCard';
-import { DeckStatsPanel } from './DeckStatsPanel';
+import { DeckInsights } from './DeckInsights';
+import { DeckStatsList } from './DeckStatsList';
+import { unitIdsOf } from './deckActions';
 import { DeckTopics } from './DeckTopics';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch } from './deckBranch';
 import { deckSourceOf } from './deckSource';
-import { catalogTopicOutline, deckTopicOutlines } from './topicPaths';
+import { CONTAINER_DECKS, catalogTopicOutline, deckTopicOutlines } from './topicPaths';
 import { useDeckCatalog } from './useDeckCatalog';
 
 export function DecksScreen() {
@@ -107,6 +110,15 @@ function Decks({ session }: { session: ReadySession }) {
   const states = latestCardStates(events ?? []);
   // Las suspendidas no se ofrecen en Repasar y tampoco cuentan en las cifras de cada mazo
   const suspended = suspendedCardIds(events ?? []);
+  const leechLapses = schedulerConfig(session).thresholds.leechLapses;
+  const allUnitIds = useMemo(() => unitIdsOf(stored?.decks ?? []), [stored?.decks]);
+  // Con el catálogo de la nube los mazos seguidos y los propios salen en Tus mazos en cifras. Con el
+  // que viene en la app los precargados ya llevan sus cifras en su fila
+  const cloudCatalog = isFeatureEnabled('deckCatalogCloud') && !session.isDemo;
+  const catalogUnitIds = useMemo(
+    () => new Set(cloudCatalog ? [] : (catalog ?? []).map((file) => deckIds.deck(file.key))),
+    [cloudCatalog, catalog],
+  );
   // Seguir mazos nuevos del catálogo es de pago (4.25). En Gratis se puede volver a seguir un mazo que
   // el alumno ya siguió, porque sus repasos son suyos. Lo dice que esté en este dispositivo o que su
   // bitácora, que sí viaja entre dispositivos, tenga un repaso de alguna de sus tarjetas
@@ -169,7 +181,7 @@ function Decks({ session }: { session: ReadySession }) {
           />
         </StatPanel>
       ) : null}
-      {isFeatureEnabled('deckCatalogCloud') && !session.isDemo ? (
+      {cloudCatalog ? (
         <CloudDeckCatalog session={session} />
       ) : (
         <Card aria-labelledby="precargados-titulo">
@@ -235,9 +247,13 @@ function Decks({ session }: { session: ReadySession }) {
                           </div>
                         ) : null}
                         {isFollowed && cardIds.length > 0 ? (
-                          <DeckStatsPanel
+                          <DeckInsights
+                            unitId={selectionUnitId(stored.decks, id, CONTAINER_DECKS)}
+                            name={file.name}
                             states={activeDeckStates(cardIds, states, suspended)}
                             timeZone={session.user.timeZone}
+                            leechLapses={leechLapses}
+                            allUnitIds={allUnitIds}
                           />
                         ) : null}
                         <DeckTopics
@@ -305,6 +321,18 @@ function Decks({ session }: { session: ReadySession }) {
           )}
         </Card>
       )}
+      {stored !== undefined ? (
+        <DeckStatsList
+          decks={stored.decks}
+          cardsByDeck={stored.cardsByDeck}
+          states={states}
+          suspended={suspended}
+          followed={followed}
+          excludeUnitIds={catalogUnitIds}
+          timeZone={session.user.timeZone}
+          leechLapses={leechLapses}
+        />
+      ) : null}
       {/* Dos pilas en computadora. Lo de crear y exportar a un lado y la IA y la importación al otro */}
       <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
         <div className="flex min-w-0 flex-col gap-5">

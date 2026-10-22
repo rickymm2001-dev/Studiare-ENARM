@@ -54,6 +54,23 @@ const planOf = (caller: FakeBankCaller) => (isTeam(caller) ? caller.role : calle
 const isFree = (caller: FakeBankCaller) => !isTeam(caller) && caller.plan === 'free';
 const canDownloadDecks = (caller: FakeBankCaller) => isTeam(caller) || caller.plan !== 'free';
 
+/**
+ * La licencia en regla de la versión publicada, como deck_catalog_license_ok. Uno propio siempre. Uno de
+ * terceros solo si el dueño confirmó esa versión o una más nueva
+ */
+const licenseOk = (deck: FakeDeck) =>
+  deck.license === 'own' ||
+  (deck.authorizationConfirmedAt !== null &&
+    (deck.authorizationConfirmedVersion ?? 0) >= (deck.publishedVersion ?? 1));
+
+/** deck_catalog_can_download_deck. Quien baja todo el catálogo, o Gratis en un mazo publicado y abierto */
+const canDownloadDeck = (caller: FakeBankCaller, deck: FakeDeck | undefined) =>
+  canDownloadDecks(caller) ||
+  (deck?.status === 'published' &&
+    deck.publishedVersion !== null &&
+    deck.freeAccess &&
+    licenseOk(deck));
+
 // ===================================================================== Cuota y lecturas
 
 /** Preguntas distintas que el alumno abrió en el día de estudio */
@@ -432,7 +449,9 @@ export function agreementSummary(store: FakeBankStore) {
 /** deck_catalog_list. Gratis ve los mazos con canDownload en false y su vista previa */
 function deckCatalogList(store: FakeBankStore, caller: FakeBankCaller): FakeBankReply {
   const decks = [...store.decks.values()]
-    .filter((deck) => deck.status === 'published' && deck.publishedVersion !== null)
+    .filter(
+      (deck) => deck.status === 'published' && deck.publishedVersion !== null && licenseOk(deck),
+    )
     .sort((a, b) => a.name.localeCompare(b.name) || a.deckKey.localeCompare(b.deckKey))
     .map((deck) => {
       const version = deck.versions.find((item) => item.version === deck.publishedVersion);
@@ -445,6 +464,7 @@ function deckCatalogList(store: FakeBankStore, caller: FakeBankCaller): FakeBank
         author: deck.author,
         description: deck.description,
         version: deck.publishedVersion,
+        canDownload: canDownloadDeck(caller, deck),
         notes: subjects.reduce((sum, subject) => sum + subject.notes, 0),
         cards: subjects.reduce((sum, subject) => sum + subject.cards, 0),
         bytes: subjects.reduce((sum, subject) => sum + subject.jsonBytes + subject.mediaBytes, 0),
@@ -470,11 +490,20 @@ function recordDeckDownload(
   caller: FakeBankCaller,
   args: Args,
 ): FakeBankReply {
-  if (!canDownloadDecks(caller)) return pgError('42501', 'Bajar mazos es de los planes de pago');
   const deck = typeof args.p_deck_key === 'string' ? store.decks.get(args.p_deck_key) : undefined;
+  if (!canDownloadDeck(caller, deck)) {
+    return pgError('42501', 'Bajar mazos es de los planes de pago');
+  }
   const version = deck?.versions.find((item) => item.version === args.p_version);
   const subject = version?.subjects.find((item) => item.subjectKey === args.p_subject_key);
-  if (!deck || !version || !subject || typeof args.p_bytes !== 'number' || args.p_bytes < 0) {
+  if (
+    !deck ||
+    !version ||
+    !subject ||
+    typeof args.p_bytes !== 'number' ||
+    args.p_bytes < 0 ||
+    args.p_bytes > subject.jsonBytes + subject.mediaBytes
+  ) {
     return pgError('22023', 'Bajada de mazo inválida');
   }
   store.deckDownloads.push({
@@ -530,10 +559,15 @@ export function fakeBankDownload(
   objectName: string,
 ): FakeBankReply {
   const notFound = storageReply(400, 'not_found', 'Object not found');
-  if (!caller?.activeDevice || !canDownloadDecks(caller)) return notFound;
+  if (!caller?.activeDevice) return notFound;
   const match = /^([a-z0-9-]{3,48})\/v([1-9][0-9]*)\//.exec(objectName);
   const deck = match ? store.decks.get(match[1] as string) : undefined;
-  if (deck?.status !== 'published' || deck.publishedVersion !== Number(match?.[2])) {
+  if (!canDownloadDeck(caller, deck)) return notFound;
+  if (
+    deck?.status !== 'published' ||
+    deck.publishedVersion !== Number(match?.[2]) ||
+    !licenseOk(deck)
+  ) {
     return notFound;
   }
   const object = store.objects.get(objectName);
@@ -661,6 +695,8 @@ export function seedCatalogDeck(
     license: 'own',
     authorizationNote: null,
     authorizationConfirmedAt: null,
+    authorizationConfirmedVersion: null,
+    freeAccess: false,
     status: 'published',
     publishedVersion: version,
     preview: [{ kind: 'basic', front: '[Prueba] Nota de muestra', back: 'Reverso de muestra' }],

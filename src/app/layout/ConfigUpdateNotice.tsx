@@ -2,7 +2,7 @@
 // los pesos al abrir la app, así que para aplicarlos hay que recargar. No obliga, porque el alumno
 // puede estar a la mitad de una sesión, y se descarta con Después.
 import { RefreshCw } from 'lucide-react';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { useConfigUpdate } from '../configUpdate';
 

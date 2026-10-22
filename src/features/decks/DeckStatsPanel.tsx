@@ -1,10 +1,14 @@
 // Estadísticas de un mazo que el alumno sigue (V4-B3). Cuántas tarjetas hay por estado, cuáles ya
-// tocan o están atrasadas, el histograma de intervalos y la retención estimada, que calibra hasta
-// tener suficientes tarjetas en repaso. Todo sale del motor puro src/engines/deckStats.ts.
+// tocan o están atrasadas, las sanguijuelas, la última vez que lo estudió, el histograma de intervalos y
+// la retención estimada, que calibra hasta tener suficientes tarjetas en repaso. Todo sale del motor
+// puro src/engines/deckStats.ts.
 import { Hourglass } from 'lucide-react';
 import { useMemo } from 'react';
+import { Link } from 'react-router';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { deckStats, INTERVAL_BUCKETS } from '@/engines/deckStats';
+import { deckStatsText } from '@/i18n/deckStats';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -14,13 +18,23 @@ const number = (value: number) => value.toLocaleString('es-MX');
 export function DeckStatsPanel({
   states,
   timeZone,
+  leechLapses = DEFAULT_THRESHOLDS.fsrs.leechLapses,
+  leechHref,
 }: {
   /** El estado FSRS de cada tarjeta del mazo. null si nunca se ha visto */
   states: readonly (FsrsCardState | null)[];
   timeZone: string;
+  /** Olvidos desde los que una tarjeta es sanguijuela. Por omisión el umbral del modelo */
+  leechLapses?: number;
+  /** A dónde lleva ver las sanguijuelas del mazo, que es Buscar tarjetas con el filtro puesto */
+  leechHref?: string;
 }) {
-  const stats = useMemo(() => deckStats({ states, now: new Date(), timeZone }), [states, timeZone]);
+  const stats = useMemo(
+    () => deckStats({ states, now: new Date(), timeZone, leechLapses }),
+    [states, timeZone, leechLapses],
+  );
   const text = t.deckStats;
+  const extra = deckStatsText;
   const largest = Math.max(1, ...Object.values(stats.intervals));
   const figures = [
     { label: text.fresh, value: stats.fresh },
@@ -44,6 +58,49 @@ export function DeckStatsPanel({
             </dd>
           </div>
         ))}
+      </dl>
+
+      <dl className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <dt className="text-sm font-semibold">{extra.leeches}</dt>
+          <dd className="flex flex-col gap-1 text-sm">
+            {stats.reviewed === 0 ? (
+              <span className="flex flex-wrap items-center gap-2 text-fg-muted">
+                <Badge className="[&_svg]:size-3.5">
+                  <Hourglass aria-hidden />
+                  {t.insights.calibratingLabel}
+                </Badge>
+                {extra.leechesCalibrating}
+              </span>
+            ) : stats.leeches === 0 ? (
+              <span className="text-fg-muted">{extra.leechesNone}</span>
+            ) : (
+              <>
+                <span className="text-lg font-bold tabular-nums">
+                  {extra.leechesValue(stats.leeches)}
+                </span>
+                {leechHref ? (
+                  <Link to={leechHref} className="font-medium text-primary-ink underline">
+                    {extra.seeLeeches}
+                  </Link>
+                ) : null}
+              </>
+            )}
+            <span className="text-xs text-fg-muted">{extra.leechesHint(leechLapses)}</span>
+          </dd>
+        </div>
+        <div className="flex flex-col gap-1">
+          <dt className="text-sm font-semibold">{extra.lastStudied}</dt>
+          <dd className="text-sm">
+            {stats.daysSinceLastReview === null ? (
+              <span className="text-fg-muted">{extra.neverStudied}</span>
+            ) : (
+              <span className="text-lg font-bold">
+                {extra.lastStudiedValue(stats.daysSinceLastReview)}
+              </span>
+            )}
+          </dd>
+        </div>
       </dl>
 
       <div className="flex flex-col gap-1">

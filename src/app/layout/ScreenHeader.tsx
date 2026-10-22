@@ -2,7 +2,7 @@ import { Info } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router';
 import { screenKeyOfPath } from '@/features/tour/anchors';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import { HeaderStats } from './HeaderStats';
 import { TOP_BAR_SLOT, useInTopBar } from './TopBarContext';

@@ -551,4 +551,58 @@ select public.bank_catalog_retire(:'first_q');
 select pg_temp.expect(pg_temp.holds_catalog_seq_lock(), 'BC12. bank_catalog_retire no tomó el candado del seq');
 rollback;
 
+-- ===================================================================== BC13. Nivel cognitivo (V4-B5)
+-- La versión guarda el nivel, publicar lo copia al catálogo y el catálogo y el cuerpo lo dicen con su
+-- llave cognitiveLevel. Sin nivel va null, nunca se adivina. Una pregunta de antes no cambia
+select pg_temp.set_flag('cloudBank', true);
+select pg_temp.bank_seed('BC-COG-N') as cog_none \gset
+select public.stable_bank_uuid('test-q', 'BC-COG-A') as cog_q \gset
+select public.bank_insert_version(:'cog_q', pg_temp.bank_content(11) || '{"cognitiveLevel":"analysis"}'::jsonb,
+  'sheet', null, null, null, null, '{}') as cog_v \gset
+insert into public.bank_questions (question_id, origin, source_key, latest_version_id)
+  values (:'cog_q', 'sheet', 'sheet:BC-COG-A', :'cog_v');
+update public.questions set editorial_status = 'approved', decided_at = now() where id = :'cog_v';
+select public.bank_publish(:'cog_q') as cog_published \gset
+select pg_temp.expect(:'cog_published' = 'published', 'BC13. No se publicó la pregunta con nivel');
+select pg_temp.expect((select cognitive_level from public.questions where id = :'cog_v') = 'analysis',
+  'BC13. La versión no guardó el nivel');
+select pg_temp.expect((select cognitive_level from public.question_catalog where question_id = :'cog_q') = 'analysis',
+  'BC13. Publicar no copió el nivel al catálogo');
+select pg_temp.expect((select cognitive_level from public.question_catalog where question_id = :'cog_none') is null,
+  'BC13. Una pregunta sin nivel quedó con nivel');
+select pg_temp.expect((select cognitive_level from public.questions where id = pg_temp.latest(:'cog_none')) is null,
+  'BC13. Una versión sin nivel quedó con nivel');
+-- Un nivel de la lista de Bloom o ninguno. Cualquier otro lanza 22023, aunque venga vacío o en otro idioma
+select pg_temp.expect(pg_temp.fails_with(format('select public.bank_check_content(%L::jsonb)',
+  (pg_temp.bank_content(12) || '{"cognitiveLevel":"dificil"}'::jsonb)::text)) = '22023', 'BC13. Aceptó un nivel inventado');
+select pg_temp.expect(pg_temp.fails_with(format('select public.bank_check_content(%L::jsonb)',
+  (pg_temp.bank_content(12) || '{"cognitiveLevel":"Analysis"}'::jsonb)::text)) = '22023', 'BC13. Aceptó un nivel con mayúscula');
+select pg_temp.expect(pg_temp.fails_with(format('select public.bank_check_content(%L::jsonb)',
+  (pg_temp.bank_content(12) || '{"cognitiveLevel":""}'::jsonb)::text)) is null, 'BC13. Rechazó un nivel vacío, que es sin nivel');
+select pg_temp.expect(pg_temp.fails_with(format('select public.bank_check_content(%L::jsonb)',
+  (pg_temp.bank_content(12) || '{"cognitiveLevel":null}'::jsonb)::text)) is null, 'BC13. Rechazó un nivel null');
+select pg_temp.expect(pg_temp.fails_with(format('select public.bank_check_content(%L::jsonb)',
+  pg_temp.bank_content(12)::text)) is null, 'BC13. Rechazó una pregunta sin la llave del nivel');
+-- El esquema no deja guardar a mano un valor fuera de la lista
+select pg_temp.expect(pg_temp.fails_with(format('update public.questions set cognitive_level = %L where id = %L',
+  'dificil', :'cog_v')) = '23514', 'BC13. La tabla aceptó un nivel inventado');
+select pg_temp.expect(pg_temp.fails_with(format('update public.question_catalog set cognitive_level = %L where question_id = %L',
+  'dificil', :'cog_q')) = '23514', 'BC13. El catálogo aceptó un nivel inventado');
+-- Lo que lee un alumno de pago
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect((select r -> 'cognitiveLevel' from jsonb_array_elements(public.catalog_changes() -> 'rows') r
+  where (r ->> 'questionId')::uuid = :'cog_q') = '"analysis"'::jsonb, 'BC13. El catálogo no dijo el nivel');
+select pg_temp.expect((select r -> 'cognitiveLevel' from jsonb_array_elements(public.catalog_changes() -> 'rows') r
+  where (r ->> 'questionId')::uuid = :'cog_none') = 'null'::jsonb, 'BC13. El catálogo no dijo null sin nivel');
+rollback;
+-- El cuerpo lo pide el equipo, que no tiene freno de lecturas
+begin;
+select pg_temp.as_user(:'m1');
+select pg_temp.expect((public.fetch_questions(array[:'cog_q'::uuid]) -> 'questions' -> 0 ->> 'cognitiveLevel') = 'analysis',
+  'BC13. El cuerpo no dijo el nivel');
+select pg_temp.expect((public.fetch_questions(array[:'cog_none'::uuid]) -> 'questions' -> 0 -> 'cognitiveLevel') = 'null'::jsonb,
+  'BC13. El cuerpo sin nivel no dijo null');
+rollback;
+
 \echo 'TODAS LAS PRUEBAS DEL BANCO, LECTURA DEL ALUMNO, PASARON'

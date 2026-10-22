@@ -333,4 +333,89 @@ select pg_temp.as_user('c0000000-0000-0000-0000-000000000003', 'ses-b');
 select pg_temp.expect((select count(*) from public.sync_records where record_id = 'DA') = 1, 'Y8. El dispositivo nuevo no bajó lo del anterior');
 commit;
 
+-- ===================================================================== Y9. Cuota por alumno (20261024000001)
+-- La cuota de registros y de bytes de cada cuenta vive en platform_quota_settings. Con valores chicos se prueba
+-- que una subida que la pasa se rechaza entera con SY003, que una que no cambia nada no cuenta y que lo de una
+-- cuenta no frena a otra
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('c0000000-0000-0000-0000-0000000000a9', 'y9@x.mx', '{"alias":"Nueve"}'),
+  ('c0000000-0000-0000-0000-0000000000a8', 'y9b@x.mx', '{"alias":"Nueve B"}');
+update public.platform_quota_settings set value = 3 where key = 'sync_records';
+
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a9');
+select pg_temp.expect(
+  public.sync_push_records('[
+    {"kind":"deck","id":"Q1","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"Q1"}},
+    {"kind":"deck","id":"Q2","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"Q2"}},
+    {"kind":"deck","id":"Q3","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"Q3"}}]'::jsonb) = 3,
+  'Y9. No dejó subir tres registros con un tope de tres'
+);
+-- Dos más pasan el tope. La subida entera se rechaza y no queda ninguno de los dos
+select pg_temp.expect(
+  pg_temp.fails_with($q$select public.sync_push_records('[
+    {"kind":"deck","id":"Q4","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"Q4"}},
+    {"kind":"deck","id":"Q5","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"Q5"}}]'::jsonb)$q$) = 'SY003',
+  'Y9. Pasó el tope de registros'
+);
+select pg_temp.expect((select count(*) from public.sync_records) = 3, 'Y9. Una subida rechazada dejó registros');
+-- Cambiar uno que ya estaba no suma
+select pg_temp.expect(
+  public.sync_push_records('[{"kind":"deck","id":"Q1","updatedAt":"2026-10-08T11:00:00.000Z","deletedAt":null,"data":{"id":"Q1","name":"Nueva"}}]'::jsonb) = 1,
+  'Y9. Cambiar un registro dentro del tope falló'
+);
+commit;
+
+-- Con el tope por debajo de lo que ya tiene, una subida que no cambia nada sigue pasando y una que cambia algo no
+update public.platform_quota_settings set value = 2 where key = 'sync_records';
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a9');
+select pg_temp.expect(
+  public.sync_push_records('[{"kind":"deck","id":"Q1","updatedAt":"2026-10-08T09:00:00.000Z","deletedAt":null,"data":{"id":"Q1","name":"Vieja"}}]'::jsonb) = 0,
+  'Y9. Una subida que no cambia nada falló por la cuota'
+);
+select pg_temp.expect(
+  pg_temp.fails_with($q$select public.sync_push_records('[{"kind":"deck","id":"Q2","updatedAt":"2026-10-08T12:00:00.000Z","deletedAt":null,"data":{"id":"Q2","name":"Otra"}}]'::jsonb)$q$) = 'SY003',
+  'Y9. Una cuenta pasada de su tope pudo seguir cambiando registros'
+);
+select pg_temp.expect((select count(*) from public.sync_records) = 3, 'Y9. Bajar sus registros dejó de funcionar');
+commit;
+-- Lo de una cuenta no frena a otra
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a8');
+select pg_temp.expect(
+  public.sync_push_records('[{"kind":"deck","id":"R1","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"R1"}}]'::jsonb) = 1,
+  'Y9. La cuota de una cuenta frenó a otra'
+);
+commit;
+
+-- La cuota de bytes cuenta el tamaño guardado de lo que tiene la cuenta
+update public.platform_quota_settings set value = 600000 where key = 'sync_records';
+update public.platform_quota_settings set value = 10 where key = 'sync_bytes';
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a8');
+select pg_temp.expect(
+  pg_temp.fails_with($q$select public.sync_push_records('[{"kind":"deck","id":"R2","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"R2","name":"Un registro que ya pasa de diez bytes"}}]'::jsonb)$q$) = 'SY003',
+  'Y9. Pasó el tope de bytes'
+);
+commit;
+-- Los eventos tienen su propia puerta y la cuota de registros no los frena
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a8');
+select pg_temp.expect(
+  public.sync_push_events('[{"id":"y9e1","type":"x","at":"2026-10-08T10:00:00.000Z","tz":"America/Merida","payload":{}}]'::jsonb) = 1,
+  'Y9. La cuota de registros frenó los eventos'
+);
+commit;
+-- Los de fábrica vuelven para lo que sigue
+update public.platform_quota_settings set value = 600000 where key = 'sync_records';
+update public.platform_quota_settings set value = 400000000 where key = 'sync_bytes';
+begin;
+select pg_temp.as_user('c0000000-0000-0000-0000-0000000000a8');
+select pg_temp.expect(
+  public.sync_push_records('[{"kind":"deck","id":"R2","updatedAt":"2026-10-08T10:00:00.000Z","deletedAt":null,"data":{"id":"R2","name":"Un registro que ya pasa de diez bytes"}}]'::jsonb) = 1,
+  'Y9. Con los topes de fábrica una subida normal no pasó'
+);
+commit;
+
 \echo 'TODAS LAS PRUEBAS DE LA SINCRONIZACION PASARON'

@@ -30,6 +30,10 @@ const DeckAdminEntrySchema = z.object({
   license: z.enum(['own', 'third_party']),
   authorizationNote: z.string().nullable(),
   authorizationConfirmedAt: z.string().nullable(),
+  // Un servidor anterior a 20261024000001 no los manda
+  authorizationConfirmedVersion: count.nullable().default(null),
+  pendingConfirmationVersion: count.nullable().default(null),
+  freeAccess: z.boolean().default(false),
   status: z.enum(['draft', 'published', 'retired']),
   publishedVersion: count.nullable(),
   versions: z.array(
@@ -144,6 +148,22 @@ export function retireDeck(
     'admin_deck_catalog_retire',
     { p_deck_key: deckKey },
     z.enum(['retired', 'already_retired']),
+    onForbidden,
+  );
+}
+
+/** Deja un mazo abierto o cerrado para el plan Gratis. Solo el admin */
+export function setDeckFreeAccess(
+  cloud: Cloud,
+  deckKey: string,
+  free: boolean,
+  onForbidden?: ForbiddenHandler,
+): Promise<'free' | 'paid'> {
+  return callBankRpc(
+    cloud,
+    'admin_deck_catalog_set_free_access',
+    { p_deck_key: deckKey, p_free: free },
+    z.enum(['free', 'paid']),
     onForbidden,
   );
 }

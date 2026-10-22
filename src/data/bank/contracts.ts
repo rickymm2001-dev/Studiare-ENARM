@@ -52,6 +52,8 @@ export interface CatalogRow {
   examEligible: boolean;
   /** Sesgos de los distractores sin decir cuál es cuál, para el muestreo dirigido (D-080) */
   distractorBiases: string[];
+  /** Nivel cognitivo de Bloom. null o ausente si la pregunta no lo trae. Un valor que la app no conoce se ignora */
+  cognitiveLevel?: string | null;
   optionCount: number;
   language: 'es' | 'en';
   status: 'published' | 'retired';
@@ -103,6 +105,8 @@ export interface FetchedQuestion {
   explanation: string;
   gpcRefs: { title: string; status: 'to_verify' | 'verified' }[];
   itemKinds: string[];
+  /** Nivel cognitivo de Bloom. null o ausente si la versión no lo trae */
+  cognitiveLevel?: string | null;
   clues: { text: string; strength: 'pathognomonic' | 'characteristic' | 'nonspecific' }[];
   physicianDifficulty: number;
   variantOf: string | null;
@@ -169,6 +173,11 @@ export interface DeckCatalogEntry {
   author: string;
   description: string;
   version: number;
+  /**
+   * Si quien consulta puede bajar este mazo. En Gratis es verdadero solo en los que el admin dejó abiertos
+   * (acceso gratis por mazo). Un servidor anterior no lo manda y entonces vale el canDownload de la lista
+   */
+  canDownload?: boolean;
   notes: number;
   cards: number;
   bytes: number;
@@ -221,6 +230,12 @@ export interface DeckAdminEntry {
   license: 'own' | 'third_party';
   authorizationNote: string | null;
   authorizationConfirmedAt: string | null;
+  /** La versión más alta que el dueño confirmó, en un mazo de terceros */
+  authorizationConfirmedVersion: number | null;
+  /** La versión en subida que espera la confirmación del dueño, o null si no espera ninguna */
+  pendingConfirmationVersion: number | null;
+  /** El plan Gratis puede bajar este mazo */
+  freeAccess: boolean;
   status: 'draft' | 'published' | 'retired';
   publishedVersion: number | null;
   versions: DeckAdminVersion[];
@@ -497,6 +512,8 @@ export type SyncNoticeCode =
   | 'language_inferred'
   | 'english_case_size'
   | 'language_suspect'
+  // El Nivel cognitivo no está en la lista. La pregunta entra sin nivel, nunca se adivina (V4-B5)
+  | 'cognitive_unknown'
   | 'not_ready';
 
 /** Un problema de un renglón. value es solo de listas cerradas, recortado a 60 caracteres */
@@ -546,6 +563,8 @@ export interface SyncQuestion {
   subtopic: string;
   difficulty: number;
   itemKinds: string[];
+  /** Clave del nivel cognitivo de Bloom. Ausente si la celda va vacía o no está en la lista */
+  cognitiveLevel?: string;
   task: string;
   polarity: 'affirmative' | 'negative';
   /** El médico escribió Tarea y Polaridad. Si no, las detectó el motor de estructura */

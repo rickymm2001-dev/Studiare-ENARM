@@ -96,6 +96,27 @@ describe('programador de la sincronización', () => {
     });
   });
 
+  it('avisa que la bajada está en pausa por una versión nueva y lo quita al actualizar', async () => {
+    start([{ ...OK, blockedByNewerVersion: true }, OK]);
+    await vi.advanceTimersByTimeAsync(0);
+    expect(last()).toMatchObject({ running: false, blockedByNewerVersion: true });
+    await vi.advanceTimersByTimeAsync(SYNC_INTERVAL_MS);
+    expect(last()).toMatchObject({ running: false, blockedByNewerVersion: false });
+  });
+
+  it('conserva el aviso de versión nueva aunque la siguiente falle por la red', async () => {
+    start([
+      { ...OK, blockedByNewerVersion: true },
+      { status: 'failed', failure: 'network', detail: 'x' },
+    ]);
+    await vi.advanceTimersByTimeAsync(0);
+    await vi.advanceTimersByTimeAsync(SYNC_INTERVAL_MS);
+    expect(last()).toMatchObject({
+      outcome: { status: 'failed', failure: 'network' },
+      blockedByNewerVersion: true,
+    });
+  });
+
   it('repite cada 5 minutos', async () => {
     const { run } = start([OK, OK, OK]);
     await vi.advanceTimersByTimeAsync(0);
@@ -151,6 +172,13 @@ describe('programador de la sincronización', () => {
     const { run } = start([{ status: 'failed', failure: 'auth', detail: 'x' }]);
     await vi.advanceTimersByTimeAsync(SYNC_INTERVAL_MS * 3);
     expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it('si la cuenta llegó al tope de la nube no insiste y lo dice', async () => {
+    const { run } = start([{ status: 'failed', failure: 'quota', detail: 'x' }]);
+    await vi.advanceTimersByTimeAsync(SYNC_INTERVAL_MS * 3);
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(last()?.outcome).toEqual({ status: 'failed', failure: 'quota' });
   });
 
   it('con el reloj desfasado avisa y lo intenta de nuevo en el siguiente ciclo', async () => {

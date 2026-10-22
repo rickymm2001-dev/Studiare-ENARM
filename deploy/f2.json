@@ -1,0 +1,21 @@
+{
+  "description": "Fase 2 del plan V4. La migración 20261024000001 con el acceso gratis por mazo (free_access y admin_deck_catalog_set_free_access), la confirmación del dueño ligada a la versión del mazo, los topes por alumno de bajadas del catálogo y de cuota de sincronización en platform_quota_settings, y las funciones del catálogo y sync_push_records que los usan. No lleva delete ni drop, así que la aplica la herramienta de despliegue o el conector con el mismo archivo.",
+  "migrations": [
+    {
+      "file": "supabase/migrations/20261024000001_catalog_free_access_and_caps.sql",
+      "check": {
+        "columnas_del_catalogo": 2,
+        "topes_sembrados": 3,
+        "topes_sin_permisos_directos": true,
+        "confirmacion_ligada": 1,
+        "admin_abre_mazos": true,
+        "anonimo_abre_mazos": false,
+        "api_decide_por_mazo": false,
+        "api_lee_topes": false,
+        "alumno_sube_registros": true
+      },
+      "note": "Agrega dos columnas a deck_catalog, la tabla de topes sin permisos de tabla y redefine deck_catalog_can_read, deck_catalog_list, record_deck_download, admin_deck_catalog_publish, owner_confirm_deck_authorization, admin_deck_catalog_overview y sync_push_records. Lo que un mazo de terceros ya tenía confirmado queda confirmado para sus versiones actuales"
+    }
+  ],
+  "functions": []
+}

@@ -99,7 +99,13 @@ export function CloudDeckCatalog({ session }: { session: ReadySession }) {
         <CardTitle id="catalogo-nube-titulo">{text.title}</CardTitle>
         <CardDescription>{text.description}</CardDescription>
       </CardHeader>
-      {state.status === 'ready' && !state.list.canDownload ? <CatalogLockNotice /> : null}
+      {state.status === 'ready' && !state.list.canDownload ? (
+        <CatalogLockNotice
+          freeDeckNames={state.list.decks
+            .filter((deck) => deck.canDownload === true)
+            .map((deck) => deck.name)}
+        />
+      ) : null}
       {state.status === 'loading' || downloads === undefined ? (
         <LoadingState label={text.loading} />
       ) : state.status === 'offline' ? (
@@ -122,7 +128,8 @@ export function CloudDeckCatalog({ session }: { session: ReadySession }) {
             <CatalogDeckCard
               key={deck.deckKey}
               deck={deck}
-              canDownload={state.list.canDownload}
+              // Cada mazo trae su permiso. Un servidor anterior no lo manda y vale el de la lista
+              canDownload={deck.canDownload ?? state.list.canDownload}
               downloads={downloads}
               session={session}
             />

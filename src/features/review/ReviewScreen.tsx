@@ -73,6 +73,7 @@ import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
+import { TodayPlanCard } from './TodayPlanCard';
 import { useReviewSettingsPanel } from './settings/panelParam';
 import { ReviewSettingsButton, ReviewSettingsDialog } from './settings/ReviewSettingsDialog';
 import { StudyTabs } from './StudyTabs';
@@ -244,6 +245,15 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         {settingsPanel}
         <ReviewSetup
           addDeck={<AddDeckButton />}
+          plan={
+            <TodayPlanCard
+              session={session}
+              events={events}
+              onOpenSettings={() => {
+                panel.open();
+              }}
+            />
+          }
           overdue={
             hasScheduled ? (
               <FeatureGate userId={session.user.id} feature="overdueTools">

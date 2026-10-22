@@ -2,6 +2,7 @@
 // y los permisos opcionales, entrar con Google, registro por invitación, segundo factor del equipo y lo
 // que el admin ve de todo eso. Español de México con trato de tú.
 import type { HeardFromChannel } from '@/config/signup';
+import { accessGateText, mfaCheckingText, oauthErrorText } from './shell';
 
 const date = (iso: string) =>
   new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -47,19 +48,7 @@ export const accountsText = {
       'Ese correo no tiene invitación. Mientras preparamos el lanzamiento solo entran personas invitadas. Si te invitaron, usa el mismo correo de la invitación.',
   },
   // Lo que Supabase manda de regreso cuando Google o el enlace del correo no dejan entrar
-  oauthError: {
-    title: 'No pudiste entrar con Google',
-    linkTitle: 'No pudiste entrar con el enlace',
-    invitation_required:
-      'Tu correo de Google no tiene invitación. Mientras preparamos el lanzamiento solo entran personas invitadas. Si te invitaron con otro correo, entra con ese.',
-    cancelled: 'Cancelaste la entrada con Google. No se creó ninguna cuenta.',
-    failed: 'Google o el servidor no respondieron. Intenta de nuevo o entra con tu correo.',
-    link_expired:
-      'El enlace venció o ya se usó. Pide otro correo en Ya tengo cuenta y entra con su enlace o con su código.',
-    link_failed:
-      'No pudimos abrir tu sesión con ese enlace. Pide otro correo en Ya tengo cuenta y entra con su enlace o con su código.',
-    dismiss: 'Entendido',
-  },
+  oauthError: oauthErrorText,
   completeSignup: {
     title: 'Completa tu registro',
     description:
@@ -70,13 +59,7 @@ export const accountsText = {
     signOut: 'Salir sin completar',
   },
   // Mientras se revisa con la nube lo que falta para entrar
-  access: {
-    checkingSignup: 'Revisando tu registro…',
-    unknownTitle: 'No pudimos revisar tu registro',
-    unknownBody:
-      'Necesitamos la nube para saber si ya completaste tu registro. Revisa tu conexión e intenta de nuevo.',
-    signOut: 'Cerrar sesión',
-  },
+  access: accessGateText,
   mfa: {
     enrollTitle: 'Activa tu segundo factor',
     enrollDescription: (role: string) =>
@@ -105,7 +88,7 @@ export const accountsText = {
     },
     lost: 'Si perdiste tu teléfono, pide al dueño de la plataforma que restablezca tu segundo factor.',
     signOut: 'Cerrar sesión',
-    checking: 'Revisando tu segundo factor…',
+    checking: mfaCheckingText,
   },
   admin: {
     invitations: {

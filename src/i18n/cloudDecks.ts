@@ -43,6 +43,11 @@ export const deckCatalogText = {
   updateAvailable:
     'Hay una versión nueva de este mazo. Solo se bajan las materias que cambiaron y tus repasos se conservan.',
   done: (notes: number) => `Listo. Bajaste ${plural(notes, 'nota', 'notas')}.`,
+  /** El aviso de arriba cuando el plan no baja todo el catálogo y el admin dejó mazos abiertos */
+  freeDecks: (names: readonly string[]) => {
+    const list = new Intl.ListFormat('es-MX', { style: 'long', type: 'conjunction' }).format(names);
+    return names.length === 1 ? `${list} va abierto en Gratis.` : `${list} van abiertos en Gratis.`;
+  },
   failures: {
     network: 'Sin conexión. Inténtalo cuando vuelvas a tener red.',
     missing: 'Falta un archivo de este mazo en el catálogo. Inténtalo más tarde.',

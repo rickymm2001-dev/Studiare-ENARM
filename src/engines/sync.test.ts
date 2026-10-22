@@ -11,6 +11,7 @@ import {
   SELF,
   WIDGET_LAYOUT_ID,
   canonical,
+  classifyEventRow,
   clockIsTrustworthy,
   clockSkewMs,
   collectSyncable,
@@ -470,6 +471,39 @@ describe('bitácora', () => {
     expect(eventFromWire({ ...wire, type: 'no_existe' }, USER)).toBeNull();
     expect(eventFromWire({ ...wire, payload: { amount: -5 } }, USER)).toBeNull();
     expect(eventFromWire({ ...wire, schemaVersion: 99 }, USER)).toBeNull();
+  });
+
+  it('una fila de una versión más nueva se deja esperando y no se descarta (D-146)', () => {
+    const wire = eventToWire(xp(T1));
+    // Aunque el tipo sea desconocido o el payload no encaje, una versión mayor no es un dato dañado
+    expect(classifyEventRow({ ...wire, schemaVersion: 2 }, USER)).toEqual({
+      kind: 'newer_version',
+      version: 2,
+    });
+    expect(
+      classifyEventRow(
+        { ...wire, type: 'evento_nuevo', payload: { x: 1 }, schemaVersion: 7 },
+        USER,
+      ),
+    ).toEqual({ kind: 'newer_version', version: 7 });
+    // Con una app que entiende la versión 2 la misma fila ya no espera
+    expect(classifyEventRow({ ...wire, schemaVersion: 2 }, USER, 2)).toEqual({ kind: 'rejected' });
+  });
+
+  it('una fila dañada de la versión que sí se entiende, o de una anterior, se rechaza', () => {
+    const wire = eventToWire(xp(T1));
+    expect(classifyEventRow({ ...wire, payload: { amount: -5 } }, USER)).toEqual({
+      kind: 'rejected',
+    });
+    expect(classifyEventRow({ ...wire, type: 'no_existe' }, USER)).toEqual({ kind: 'rejected' });
+    expect(classifyEventRow({ ...wire, schemaVersion: 0 }, USER)).toEqual({ kind: 'rejected' });
+    expect(classifyEventRow({ ...wire, schemaVersion: -3 }, USER)).toEqual({ kind: 'rejected' });
+    expect(classifyEventRow({ ...wire, schemaVersion: 1.5 }, USER)).toEqual({ kind: 'rejected' });
+  });
+
+  it('una fila buena sale tal cual con el ID del navegador', () => {
+    const event = xp(T1);
+    expect(classifyEventRow(eventToWire(event), USER)).toEqual({ kind: 'event', event });
   });
 
   it('la marca de agua avanza con cada página, no pasa de hace 30 segundos y nunca retrocede', () => {

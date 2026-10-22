@@ -16,6 +16,11 @@
  *     aunque no gaste el cupo de la cola. Las nuevas también, y newCardsStudiedToday las cuenta aparte
  *     de reviewedToday, que deja fuera esas sesiones para no gastar el cupo
  *   - La fracción nunca pasa de 1, para no dibujar una barra más larga que su pista
+ * Alcanzable (planFeasibility). Compara el tiempo que piden las tarjetas del plan con los minutos que el
+ *   alumno declaró. Los minutos de tarjetas son la parte de su tiempo que ya usa la carga diaria
+ *   (cardsTimeShare). El tiempo por tarjeta sale de su propio historial y nunca de una referencia, porque
+ *   un aviso con tiempos inventados sería un dato falso. Sin minutos declarados o sin historial
+ *   suficiente el estado es calibrando y no avisa de nada
  * Lo que no hace. No cambia ningún límite ni la cola del día. La guía solo propone cifras y el
  * alumno decide si las aplica
  */
@@ -86,6 +91,50 @@ export function dailyPlan(input: {
     rows.push(row('questions', done.questions, capped ? cap : limits.questionsPerDay, capped));
   }
   return rows;
+}
+
+/** Tiempo por tarjeta del alumno, del estimador de la carga diaria (estimateCardTimes) */
+export interface PlanTimes {
+  secondsPerReview: number;
+  secondsPerNew: number;
+  /** true si salen de su historial. Con los tiempos de referencia no se avisa de nada */
+  measured: boolean;
+}
+
+export type PlanFeasibility =
+  | { status: 'calibrating'; reason: 'needs_minutes' | 'needs_history' }
+  | {
+      status: 'ok' | 'over';
+      /** Minutos que piden los límites de hoy si se llegara a todos */
+      needMinutes: number;
+      /** Minutos al día que el alumno dedica a tarjetas */
+      budgetMinutes: number;
+    };
+
+/**
+ * Si los límites de tarjetas de hoy caben en el tiempo que el alumno dijo que estudia. Los límites son
+ * topes y la cola puede tener menos, así que over dice que llegar a todos no cabe, no que hoy toquen
+ * tantas
+ */
+export function planFeasibility(input: {
+  limits: PlanLimits;
+  /** Minutos de estudio al día que declaró. null si no los ha puesto */
+  dailyMinutes: number | null;
+  times: PlanTimes;
+  /** Fracción de sus minutos que va a tarjetas, de 0 a 1 (la misma de la carga diaria) */
+  cardsTimeShare: number;
+}): PlanFeasibility {
+  const { limits, dailyMinutes, times } = input;
+  if (dailyMinutes === null || !Number.isFinite(dailyMinutes) || dailyMinutes <= 0) {
+    return { status: 'calibrating', reason: 'needs_minutes' };
+  }
+  if (!times.measured) return { status: 'calibrating', reason: 'needs_history' };
+  const seconds =
+    limits.reviewsPerDay * times.secondsPerReview +
+    (limits.unlimitedNewCards ? 0 : limits.newCardsPerDay * times.secondsPerNew);
+  const needMinutes = seconds / 60;
+  const budgetMinutes = dailyMinutes * input.cardsTimeShare;
+  return { status: needMinutes > budgetMinutes ? 'over' : 'ok', needMinutes, budgetMinutes };
 }
 
 /**

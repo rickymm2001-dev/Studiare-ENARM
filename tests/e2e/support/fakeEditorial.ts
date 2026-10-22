@@ -2193,6 +2193,8 @@ const adminDeckCatalogRegister: Handler = (store, caller, args) => {
     license: manifest.license,
     authorizationNote: note,
     authorizationConfirmedAt: null,
+    authorizationConfirmedVersion: null,
+    freeAccess: false,
     status: 'draft',
     publishedVersion: null,
     preview: [],
@@ -2203,7 +2205,11 @@ const adminDeckCatalogRegister: Handler = (store, caller, args) => {
   deck.author = manifest.author;
   deck.license = manifest.license;
   deck.authorizationNote = note;
-  if (!sameAuthorization) deck.authorizationConfirmedAt = null;
+  // Otra licencia u otra nota quitan la confirmación y la versión confirmada, como el disparador de la base
+  if (!sameAuthorization) {
+    deck.authorizationConfirmedAt = null;
+    deck.authorizationConfirmedVersion = null;
+  }
   for (const version of deck.versions) {
     if (version.status === 'uploading') version.status = 'retired';
   }
@@ -2268,9 +2274,11 @@ const adminDeckCatalogPublish: Handler = (store, caller, args) => {
   }
   if (
     deck.license === 'third_party' &&
-    (deck.authorizationNote === null || deck.authorizationConfirmedAt === null)
+    (deck.authorizationNote === null ||
+      deck.authorizationConfirmedAt === null ||
+      (deck.authorizationConfirmedVersion ?? 0) < number)
   ) {
-    raise('BK010', 'El dueño no ha confirmado la autorización del mazo');
+    raise('BK010', 'El dueño no ha confirmado la autorización de esta versión del mazo');
   }
   for (const item of deck.versions) {
     if (item.status === 'published') item.status = 'retired';
@@ -2307,7 +2315,22 @@ const ownerConfirmDeckAuthorization: Handler = (store, caller, args) => {
   const current = deck as FakeDeck;
   current.authorizationNote = note;
   current.authorizationConfirmedAt = iso(store);
+  // Confirma la versión más nueva que existe, y la confirmación de una cubre las anteriores
+  current.authorizationConfirmedVersion = Math.max(
+    current.authorizationConfirmedVersion ?? 0,
+    ...current.versions.map((version) => version.version),
+    1,
+  );
   return null;
+};
+
+const adminDeckCatalogSetFreeAccess: Handler = (store, caller, args) => {
+  requireAdmin(caller);
+  const free = args.p_free;
+  if (typeof free !== 'boolean')
+    return raise('22023', 'Falta decir si el mazo va abierto en Gratis');
+  deckOf(store, str(args.p_deck_key) ?? '').freeAccess = free;
+  return free ? 'free' : 'paid';
 };
 
 const adminDeckCatalogOverview: Handler = (store, caller) => {
@@ -2322,6 +2345,20 @@ const adminDeckCatalogOverview: Handler = (store, caller) => {
       license: deck.license,
       authorizationNote: deck.authorizationNote,
       authorizationConfirmedAt: deck.authorizationConfirmedAt,
+      authorizationConfirmedVersion: deck.authorizationConfirmedVersion,
+      pendingConfirmationVersion:
+        deck.license === 'third_party'
+          ? (deck.versions
+              .filter(
+                (version) =>
+                  version.status === 'uploading' &&
+                  (deck.authorizationConfirmedAt === null ||
+                    version.version > (deck.authorizationConfirmedVersion ?? 0)),
+              )
+              .map((version) => version.version)
+              .sort((a, b) => b - a)[0] ?? null)
+          : null,
+      freeAccess: deck.freeAccess,
       status: deck.status,
       publishedVersion: deck.publishedVersion,
       versions: [...deck.versions]
@@ -2422,6 +2459,7 @@ const HANDLERS: Readonly<Record<BankEditorialRpc, Handler>> = {
   admin_deck_catalog_retire: adminDeckCatalogRetire,
   admin_deck_catalog_overview: adminDeckCatalogOverview,
   owner_confirm_deck_authorization: ownerConfirmDeckAuthorization,
+  admin_deck_catalog_set_free_access: adminDeckCatalogSetFreeAccess,
 };
 
 /** Una rpc del equipo, con la respuesta y el código de error que daría la base */

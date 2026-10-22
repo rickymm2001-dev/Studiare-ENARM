@@ -28,7 +28,7 @@ import {
   type Deck,
   type Note,
 } from '@/data/schemas/decks';
-import { AppEventSchema, type AppEvent } from '@/data/schemas/events';
+import { AppEventSchema, EVENT_SCHEMA_VERSION, type AppEvent } from '@/data/schemas/events';
 import { OutlineSchema, type Outline } from '@/data/schemas/outlines';
 
 export const SYNC_KINDS = ['deck', 'note', 'card', 'outline', 'widget_layout'] as const;
@@ -320,6 +320,30 @@ export function eventFromWire(wire: WireEvent, userId: string): AppEvent | null 
     payload: wire.payload,
   });
   return parsed.success ? parsed.data : null;
+}
+
+/**
+ * Qué hacer con una fila de la bitácora que bajó. Una de una versión más nueva que la que esta app
+ * entiende no está dañada, la escribió otro dispositivo con una app más reciente. No se descarta ni se
+ * cuenta como rechazada, porque el cursor pasaría de largo y esos eventos no se recuperarían nunca. Se
+ * deja a la espera y la bajada se pausa ahí hasta que esta app se actualice. Una que falla el esquema con
+ * la versión que sí entiende está dañada y se rechaza como siempre
+ */
+export type EventRow =
+  | { kind: 'event'; event: AppEvent }
+  | { kind: 'newer_version'; version: number }
+  | { kind: 'rejected' };
+
+export function classifyEventRow(
+  wire: WireEvent,
+  userId: string,
+  supportedVersion: number = EVENT_SCHEMA_VERSION,
+): EventRow {
+  if (Number.isInteger(wire.schemaVersion) && wire.schemaVersion > supportedVersion) {
+    return { kind: 'newer_version', version: wire.schemaVersion };
+  }
+  const event = eventFromWire(wire, userId);
+  return event ? { kind: 'event', event } : { kind: 'rejected' };
 }
 
 /**

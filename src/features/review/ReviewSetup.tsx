@@ -28,6 +28,7 @@ const MODES: readonly ReviewMode[] = ['today', 'due', 'new', 'topic'];
 
 export function ReviewSetup({
   addDeck,
+  plan,
   overdue,
   cards,
   deckNames,
@@ -42,6 +43,8 @@ export function ReviewSetup({
 }: {
   /** Atajo para agregar un mazo, junto al título */
   addDeck?: ReactNode;
+  /** Plan de hoy en chico. Va en la columna de empezar, después de los contadores */
+  plan?: ReactNode;
   /** Herramientas de atrasos. Van al final de la columna del botón de empezar */
   overdue?: ReactNode;
   cards: CardEntity[];
@@ -158,6 +161,7 @@ export function ReviewSetup({
             />
           </StatPanel>
         ) : null}
+        {plan}
         <Card aria-labelledby="que-repasar">
           <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
             <CardTitle id="que-repasar" className="text-base sm:text-lg">

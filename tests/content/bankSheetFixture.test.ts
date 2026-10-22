@@ -189,6 +189,20 @@ describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
     ]);
   });
 
+  it('la pestaña Listas trae los seis niveles de Bloom de la columna opcional (V4-B5)', () => {
+    const layout = buildListsLayout(data);
+    const levels = layout.columns.find((column) => column.name === 'LISTA_NIVELES');
+    expect(levels?.header).toBe('Nivel cognitivo');
+    expect(levels?.values).toEqual([
+      'Conocimiento',
+      'Comprensión',
+      'Aplicación',
+      'Análisis',
+      'Síntesis',
+      'Evaluación',
+    ]);
+  });
+
   it('el .xlsx del Sheet de prueba se lee igual que el Sheet simulado despues', async () => {
     const book = buildTestSheetWorkbook(readFixture('despues'), data);
     const reread = new ExcelJS.Workbook();
@@ -216,6 +230,7 @@ describe('Sheet de prueba y pestaña Listas en .xlsx', () => {
     expect(defined).toContain('LISTA_LICENCIAS');
     expect(defined).toContain('SUB_OBSTETRICS_GYNECOLOGY');
     expect(defined).toContain('LISTA_SESGOS');
+    expect(defined).toContain('LISTA_NIVELES');
     const preguntas = reread.getWorksheet('Preguntas') as unknown as {
       dataValidations: { model: Record<string, { formulae?: unknown[] }> };
     };

@@ -5,10 +5,10 @@ import type { WireEvent, WireRecord } from '@/engines/sync';
 
 /**
  * network, sin conexión o el servidor no respondió. auth, la sesión venció. device, este dispositivo
- * ya no es el activo de la cuenta. clock, el reloj de este dispositivo está fuera de rango. server,
+ * ya no es el activo de la cuenta. clock, el reloj de este dispositivo está fuera de rango. quota, la cuenta llegó al tope de lo que se guarda en la nube. server,
  * el servidor respondió con un error. local, falló algo en este navegador
  */
-export type SyncFailure = 'network' | 'auth' | 'device' | 'clock' | 'server' | 'local';
+export type SyncFailure = 'network' | 'auth' | 'device' | 'clock' | 'quota' | 'server' | 'local';
 
 export class SyncTransportError extends Error {
   readonly failure: SyncFailure;

@@ -10,7 +10,7 @@ import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { acceptCurrentNotice, noticeNeedsAcceptance } from '@/data/usecases/profile';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { useCloud } from '../cloudState';
 import { screenPath } from '../screens';

@@ -26,6 +26,8 @@ export function failureOf(error: CloudError): SyncFailure {
   if (code === '42501') return 'device';
   if (code === '28000' || code === 'PGRST301' || error.status === 401) return 'auth';
   if (code === 'SY002') return 'clock';
+  // El servidor rechaza la subida entera cuando la cuenta pasa su tope de registros o de bytes (SY003)
+  if (code === 'SY003') return 'quota';
   if (code === '') return 'network';
   return 'server';
 }

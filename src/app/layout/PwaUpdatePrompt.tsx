@@ -5,7 +5,7 @@
 import { RefreshCw, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 
 /** Cuánto dura el aviso de que la app ya abre sin conexión */

@@ -55,7 +55,11 @@ const subjectFile: DeckSubjectFile = {
   ],
 };
 
-async function catalogCloud(canDownload: boolean) {
+/**
+ * El catálogo simulado. canDownload es el de toda la lista y deckCanDownload el del mazo, que un servidor
+ * anterior a 20261024000001 no manda
+ */
+async function catalogCloud(canDownload: boolean, deckCanDownload?: boolean) {
   const json = new TextEncoder().encode(JSON.stringify(subjectFile));
   const sha256 = await sha256Hex(json);
   const records: unknown[] = [];
@@ -69,6 +73,7 @@ async function catalogCloud(canDownload: boolean) {
           author: 'Paco',
           description: '[Prueba] Mazo simulado',
           version: 1,
+          ...(deckCanDownload === undefined ? {} : { canDownload: deckCanDownload }),
           notes: 1,
           cards: 1,
           bytes: json.length,
@@ -231,6 +236,44 @@ describe('catálogo de mazos de la nube', () => {
     ).toBeNull();
     await user.click(within(catalog).getByText(text.preview));
     expect(within(catalog).getByText('[Prueba] Nota de muestra')).toBeVisible();
+  });
+
+  it('Gratis baja un mazo que el admin dejó abierto y el aviso lo dice, sin abrirle el resto', async () => {
+    const user = userEvent.setup();
+    const { records } = await catalogCloud(false, true);
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    // El aviso del plan sigue arriba y dice qué mazos van abiertos
+    expect(
+      await within(catalog).findByText(t.freePlan.catalog.notice, undefined, WAIT),
+    ).toBeVisible();
+    expect(
+      within(catalog).getByText(text.freeDecks(['Ginecología y obstetricia (Paco)'])),
+    ).toBeVisible();
+    await user.click(await within(catalog).findByText(text.subjects(1), undefined, WAIT));
+    expect(within(catalog).queryByText(t.freePlan.catalog.rowLocked)).toBeNull();
+    await user.click(
+      within(catalog).getByRole('button', { name: text.downloadLabel('Obstetricia') }),
+    );
+    expect(await within(catalog).findByText(text.done(1), undefined, WAIT)).toBeVisible();
+    await waitFor(() => {
+      expect(records).toHaveLength(1);
+    });
+    // Un mazo abierto no lleva la vista previa de los cerrados
+    expect(within(catalog).queryByText(text.preview)).toBeNull();
+  });
+
+  it('con un servidor anterior, sin el permiso por mazo, vale el de la lista', async () => {
+    await catalogCloud(false);
+    app = await renderApp(SCREENS.decks.path);
+    const catalog = await screen.findByRole('region', { name: text.title }, WAIT);
+    expect(
+      await within(catalog).findByText(t.freePlan.catalog.notice, undefined, WAIT),
+    ).toBeVisible();
+    expect(within(catalog).queryByText(/va abierto en Gratis/)).toBeNull();
+    expect(
+      within(catalog).queryByRole('button', { name: text.downloadLabel('Obstetricia') }),
+    ).toBeNull();
   });
 
   it('al abrir la app espera a que la cuenta se conecte y entonces pide el catálogo', async () => {

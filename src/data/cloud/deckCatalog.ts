@@ -1,8 +1,8 @@
 // Catálogo compartido de mazos para el alumno (B11, 4.8 y 5.8 del plan de B11, respuestas 46 y 47).
 // Lista los mazos publicados con deck_catalog_list y baja los archivos de un submazo del bucket privado
 // deck-catalog con la sesión del alumno. Storage solo deja bajar a los planes de pago y al equipo, desde
-// el dispositivo activo y de una versión publicada (deck_catalog_can_read). Gratis ve la lista y la
-// vista previa sin imágenes. Cada respuesta se valida con zod, porque el servidor es un tercero.
+// el dispositivo activo y de una versión publicada (deck_catalog_can_read), y a Gratis los mazos que el
+// admin dejó abiertos (free_access). Gratis ve la lista y la vista previa sin imágenes de los demás. Cada respuesta se valida con zod, porque el servidor es un tercero.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import type { DeckCatalogList } from '../bank/contracts';
@@ -36,6 +36,8 @@ const DeckSchema = z.object({
   author: z.string().min(1).max(80),
   description: z.string().max(1000),
   version: z.int().min(1),
+  // Un servidor anterior no lo manda y entonces vale el de toda la lista
+  canDownload: z.boolean().optional(),
   notes: z.int().min(0),
   cards: z.int().min(0),
   bytes: z.number().int().min(0),
@@ -51,7 +53,7 @@ const DeckSchema = z.object({
 
 const ListSchema = z.object({ canDownload: z.boolean(), decks: z.array(DeckSchema) });
 
-/** Los mazos publicados con sus submazos. canDownload es false en Gratis */
+/** Los mazos publicados con sus submazos. canDownload es false en Gratis, salvo en los mazos que el admin abrió */
 export async function fetchDeckCatalog(cloud: Rpc): Promise<BankReply<DeckCatalogList>> {
   try {
     const reply = await cloud.rpc('deck_catalog_list');

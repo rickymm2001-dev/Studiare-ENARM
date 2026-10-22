@@ -56,9 +56,16 @@ const STATUS_PARAMS: Readonly<Record<string, Partial<SearchView>>> = {
   marcadas: { flagged: true },
 };
 
-/** La vista con la que abre la pantalla según su dirección */
+/**
+ * La vista con la que abre la pantalla según su dirección. ?estado= pone un filtro de estado y ?mazo=
+ * el mazo con todo lo que cuelga de él, que es como llegan los botones de la pantalla Mazos
+ */
 export function viewFromParams(params: URLSearchParams): SearchView {
-  return { ...INITIAL_VIEW, ...STATUS_PARAMS[params.get('estado') ?? ''] };
+  return {
+    ...INITIAL_VIEW,
+    ...STATUS_PARAMS[params.get('estado') ?? ''],
+    deckId: params.get('mazo') ?? '',
+  };
 }
 
 /** La consulta del motor. Elegir un mazo incluye a los que cuelgan de él */

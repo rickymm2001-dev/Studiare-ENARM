@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { dailyPlan, GUIDE_PLAN, matchesGuidePlan, type PlanLimits } from './dailyPlan';
+import {
+  dailyPlan,
+  GUIDE_PLAN,
+  matchesGuidePlan,
+  planFeasibility,
+  type PlanLimits,
+} from './dailyPlan';
 
 const limits = (patch: Partial<PlanLimits> = {}): PlanLimits => ({
   reviewsPerDay: 200,
@@ -85,5 +91,70 @@ describe('dailyPlan', () => {
   it('con las preguntas apagadas el tope no hace aparecer la fila', () => {
     const rows = dailyPlan({ limits: limits({ questionsPerDay: 0 }), done, questionsCap: 20 });
     expect(rows.find((r) => r.key === 'questions')).toBeUndefined();
+  });
+
+  describe('planFeasibility', () => {
+    const measured = { secondsPerReview: 8, secondsPerNew: 20, measured: true };
+
+    it('sin minutos declarados o sin historial propio es calibrando y no avisa', () => {
+      for (const dailyMinutes of [null, 0, -5, Number.NaN]) {
+        expect(
+          planFeasibility({ limits: limits(), dailyMinutes, times: measured, cardsTimeShare: 0.5 }),
+        ).toEqual({ status: 'calibrating', reason: 'needs_minutes' });
+      }
+      expect(
+        planFeasibility({
+          limits: limits(),
+          dailyMinutes: 120,
+          times: { ...measured, measured: false },
+          cardsTimeShare: 0.5,
+        }),
+      ).toEqual({ status: 'calibrating', reason: 'needs_history' });
+    });
+
+    it('cuando los límites caben en los minutos de tarjetas dice ok con sus cifras', () => {
+      // 100 repasos de 8 s y 10 nuevas de 20 s son 1000 s, unos 16.7 min, y hay 30 min para tarjetas
+      const result = planFeasibility({
+        limits: limits({ reviewsPerDay: 100, newCardsPerDay: 10 }),
+        dailyMinutes: 60,
+        times: measured,
+        cardsTimeShare: 0.5,
+      });
+      expect(result.status).toBe('ok');
+      if (result.status === 'ok') {
+        expect(result.needMinutes).toBeCloseTo(16.67, 1);
+        expect(result.budgetMinutes).toBe(30);
+      }
+    });
+
+    it('cuando no caben dice over, con la guía de 300 tarjetas y media hora de estudio', () => {
+      const result = planFeasibility({
+        limits: { ...GUIDE_PLAN, unlimitedNewCards: false },
+        dailyMinutes: 30,
+        times: measured,
+        cardsTimeShare: 0.5,
+      });
+      // 250 repasos de 8 s y 50 nuevas de 20 s son 3000 s, 50 min, contra 15 min de tarjetas
+      expect(result.status).toBe('over');
+      if (result.status === 'over') expect(result.needMinutes).toBeCloseTo(50, 5);
+    });
+
+    it('justo en el límite todavía cabe, y con nuevas sin límite solo cuentan los repasos', () => {
+      expect(
+        planFeasibility({
+          limits: limits({ reviewsPerDay: 90, newCardsPerDay: 0 }),
+          dailyMinutes: 24,
+          times: measured,
+          cardsTimeShare: 0.5,
+        }).status,
+      ).toBe('ok');
+      const unlimited = planFeasibility({
+        limits: limits({ reviewsPerDay: 60, newCardsPerDay: 500, unlimitedNewCards: true }),
+        dailyMinutes: 60,
+        times: measured,
+        cardsTimeShare: 0.5,
+      });
+      expect(unlimited).toMatchObject({ status: 'ok', needMinutes: 8 });
+    });
   });
 });

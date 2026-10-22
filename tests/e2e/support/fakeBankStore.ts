@@ -66,6 +66,7 @@ export const BANK_EDITORIAL_RPCS = [
   'admin_deck_catalog_publish',
   'admin_deck_catalog_retire',
   'admin_deck_catalog_overview',
+  'admin_deck_catalog_set_free_access',
   'owner_confirm_deck_authorization',
 ] as const;
 
@@ -278,6 +279,10 @@ export interface FakeDeck {
   license: 'own' | 'third_party';
   authorizationNote: string | null;
   authorizationConfirmedAt: string | null;
+  /** La versión más alta que confirmó el dueño, como authorization_confirmed_version */
+  authorizationConfirmedVersion: number | null;
+  /** El plan Gratis puede bajar este mazo, como free_access */
+  freeAccess: boolean;
   status: 'draft' | 'published' | 'retired';
   publishedVersion: number | null;
   preview: (

@@ -72,6 +72,7 @@ pg_migrate() {
     20261023000004_bank_sync \
     20261023000005_deck_catalog \
     20261023000006_bank_sync_cron \
+    20261024000001_catalog_free_access_and_caps \
     20261026000001_ai_proxy_v2 \
     20261026000002_ai_jobs \
     20261026000003_ai_gate \
@@ -85,7 +86,8 @@ pg_migrate() {
     20261029000003_engagement_cron \
     20261029000004_delete_my_data_v4 \
     20261030000001_first_week_survey \
-    20261030000002_survey_erase; do
+    20261030000002_survey_erase \
+    20261031000001_cognitive_level; do
     psql_run -f "$here/../migrations/$name.sql"
   done
   # Las piezas con delete o drop que se pegan a mano en el proyecto real también tienen que correr limpias

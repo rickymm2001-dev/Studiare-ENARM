@@ -22,7 +22,18 @@ import {
 } from './common';
 import { EvidenceSchema } from './activity';
 
-/** Versión del esquema de eventos. Sube cuando cambia un payload, y la derivación sabe leer ambas */
+/**
+ * Versión del esquema de eventos. Sube cuando cambia un payload, y la derivación sabe leer ambas.
+ *
+ * Regla para cambiar un evento (D-146). Un cambio que una app anterior no pueda leer, por ejemplo un campo
+ * nuevo obligatorio, un valor nuevo en una lista cerrada o un tipo de evento nuevo, es incompatible hacia
+ * atrás y debe subir esta versión, y los eventos que lo usen deben llevar la versión nueva. Una app que baja
+ * un evento de una versión mayor a la que entiende no lo descarta, porque su cursor pasaría de largo y lo
+ * perdería. Pausa la bajada de la bitácora justo antes de ese evento, avisa que hay una versión nueva y retoma
+ * cuando el alumno actualiza (src/engines/sync.ts, classifyEventRow). Un campo opcional que las apps
+ * anteriores pueden ignorar no necesita subir la versión, pero con schemas estrictos hoy tampoco lo
+ * aceptan, así que en la práctica casi todo cambio pide subirla.
+ */
 export const EVENT_SCHEMA_VERSION = 1;
 
 const Ms = z

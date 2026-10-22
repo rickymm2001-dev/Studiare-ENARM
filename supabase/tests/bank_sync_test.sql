@@ -481,4 +481,37 @@ select pg_temp.expect(to_regnamespace('cron') is null and not exists (select 1 f
   'BS14. Sin pg_cron programó algo');
 rollback;
 
+-- ===================================================================== BS15. Nivel cognitivo (V4-B5)
+-- La columna opcional Nivel cognitivo del Sheet llega a la versión nueva y a su contenido para comparar. Un
+-- renglón sin la columna queda sin nivel, y su huella de contenido no cambia por esta columna
+select pg_temp.set_setting('bank_sync', 'enabled', 'true');
+select pg_temp.set_setting('bank_sync', 'minIntervalSeconds', '0');
+select pg_temp.set_setting('bank_sync', 'mode', '"apply"');
+select public.bank_sync_begin('manual', 'real', :'ad') ->> 'runId' as r15 \gset
+select public.bank_sync_apply(:'r15', jsonb_build_array(
+  jsonb_set(pg_temp.sync_row(70, 'GO-0501', 'create', 'hash-501'), '{question,cognitiveLevel}', '"application"'),
+  pg_temp.sync_row(71, 'GO-0502', 'create', 'hash-502'))) as res15 \gset
+select public.bank_sync_finish(:'r15', array['GO-0501', 'GO-0502'], '{"read":2,"created":2}', 'ok', null);
+select pg_temp.expect((select array_agg(r ->> 'outcome' order by r ->> 'rowNumber') from jsonb_array_elements((:'res15')::jsonb) r) = '{created,created}',
+  'BS15. No se crearon los dos renglones');
+select pg_temp.latest(public.stable_bank_uuid('sheet-q', 'GO-0501')) as c1 \gset
+select pg_temp.latest(public.stable_bank_uuid('sheet-q', 'GO-0502')) as c2 \gset
+select pg_temp.expect((select cognitive_level from public.questions where id = :'c1') = 'application',
+  'BS15. El renglón con nivel no lo dejó en la versión');
+select pg_temp.expect((select cognitive_level from public.questions where id = :'c2') is null,
+  'BS15. El renglón sin nivel quedó con nivel');
+-- Lo que compara la función con la huella del renglón
+select pg_temp.as_service();
+select public.bank_sync_versions_content(array[:'c1', :'c2']::uuid[]) as content15 \gset
+reset role;
+select pg_temp.expect((select x -> 'content' ->> 'cognitiveLevel' from jsonb_array_elements((:'content15')::jsonb) x
+  where x ->> 'versionId' = :'c1') = 'application', 'BS15. El contenido de la versión no dijo el nivel');
+select pg_temp.expect((select x -> 'content' -> 'cognitiveLevel' from jsonb_array_elements((:'content15')::jsonb) x
+  where x ->> 'versionId' = :'c2') = 'null'::jsonb, 'BS15. El contenido sin nivel no dijo null');
+-- El contenido interno trae el nivel solo si el renglón lo trae
+select pg_temp.expect(public.bank_sheet_content('sheet', 'GO-0501', pg_temp.sync_row(1, 'GO-0501', 'create') -> 'question'
+    || '{"cognitiveLevel":"evaluation"}'::jsonb) ->> 'cognitiveLevel' = 'evaluation', 'BS15. bank_sheet_content no pasó el nivel');
+select pg_temp.expect(public.bank_sheet_content('sheet', 'GO-0501', pg_temp.sync_row(1, 'GO-0501', 'create') -> 'question') ->> 'cognitiveLevel' is null,
+  'BS15. bank_sheet_content inventó un nivel');
+
 \echo 'TODAS LAS PRUEBAS DE LA SINCRONIZACION DEL BANCO PASARON'

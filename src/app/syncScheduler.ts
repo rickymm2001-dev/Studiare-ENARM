@@ -22,12 +22,19 @@ export interface SyncUiState {
   outcome: SyncOutcome;
   /** Cuándo terminó la última sincronización buena. Se conserva aunque la siguiente falle */
   lastSyncAt: string | null;
+  /**
+   * La bajada de la bitácora está en pausa porque hay eventos de una versión más nueva que esta app, de otro
+   * dispositivo ya actualizado. Se conserva aunque la siguiente falle por red y se quita cuando una
+   * sincronización termina sin esa pausa, o sea con la app actualizada (D-146)
+   */
+  blockedByNewerVersion?: boolean;
 }
 
 export const INITIAL_SYNC_UI: SyncUiState = {
   running: false,
   outcome: { status: 'never' },
   lastSyncAt: null,
+  blockedByNewerVersion: false,
 };
 
 /** Lo que el programador necesita saber del navegador, para probarlo sin uno */
@@ -131,6 +138,7 @@ export function startSyncScheduler(deps: SchedulerDeps): SyncScheduler {
       publish({
         running: false,
         lastSyncAt: result.at,
+        blockedByNewerVersion: result.blockedByNewerVersion === true,
         outcome: {
           status: 'ok',
           at: result.at,

@@ -3,6 +3,7 @@
 import { RefreshCw } from 'lucide-react';
 import { useSyncStatus } from '@/app/syncState';
 import { t } from '@/i18n/es-MX';
+import { syncVersionText } from '@/i18n/syncVersion';
 import { Button } from '@/ui/components/button';
 import { syncMessage } from './syncMessage';
 
@@ -16,6 +17,9 @@ export function SyncStatus() {
       <p className="text-fg-muted" role="status" aria-live="polite">
         {message}
       </p>
+      {state.blockedByNewerVersion === true ? (
+        <p className="text-fg-muted">{syncVersionText.profileLine}</p>
+      ) : null}
       {!state.running && state.outcome.status === 'ok' && state.outcome.rejected > 0 ? (
         <p className="text-fg-muted">{text.rejected(state.outcome.rejected)}</p>
       ) : null}

@@ -53,6 +53,7 @@ export const SYNC_NOTICE_CODES = [
   'language_inferred',
   'english_case_size',
   'language_suspect',
+  'cognitive_unknown',
   'not_ready',
   ...SERVER_NOTICE_CODES,
 ] as const satisfies readonly (SyncNoticeCode | ServerNoticeCode)[];

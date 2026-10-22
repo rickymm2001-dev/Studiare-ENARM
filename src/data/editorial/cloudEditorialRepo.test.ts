@@ -4,6 +4,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ulidToUuid } from '../cloud/cloudIds';
 import { emptyOption, type QuestionDraft } from '@/features/physician/editorDraft';
+import { EditorVersionSchema } from '../cloud/editorial';
 import { cloudIdOf, createCloudEditorialRepo, draftForCloud } from './cloudEditorialRepo';
 import { EditorialError } from './editorialRepo';
 
@@ -58,6 +59,58 @@ describe('repositorio editorial de la nube', () => {
     expect(options[0]).toMatchObject({ optionId: UUID, biasTag: null });
     expect(options[1]?.optionId).toBeNull();
     expect(options[1]?.biasTag).toBe('anchoring');
+  });
+
+  it('el nivel cognitivo viaja en el borrador solo si la pregunta lo tiene (V4-B5)', () => {
+    expect(draftForCloud({ ...draft(), cognitiveLevel: 'analysis' })).toMatchObject({
+      cognitiveLevel: 'analysis',
+    });
+    expect(draftForCloud(draft())).not.toHaveProperty('cognitiveLevel');
+  });
+
+  it('una versión del servidor sin la columna del nivel o con null se lee igual', () => {
+    const version = {
+      versionId: UUID,
+      version: 1,
+      status: 'draft',
+      source: 'app',
+      author: null,
+      createdAt: '2026-10-22T10:00:00Z',
+      submittedAt: null,
+      decidedAt: null,
+      branch: 'internal_medicine',
+      topic: 'cardiology',
+      subtopic: 'hypertension',
+      difficulty: 3,
+      itemKinds: [],
+      structure: {
+        polarity: 'affirmative',
+        task: 'diagnosis',
+        format: 'clinical_case',
+        source: 'physician',
+      },
+      vignette: '[Prueba] Caso',
+      prompt: '[Prueba] ¿Pregunta?',
+      explanation: '[Prueba] Explicación',
+      gpcRefs: [],
+      clues: [],
+      caseId: null,
+      caseOrder: null,
+      variantOf: null,
+      canonicalOptionIds: [],
+      options: [],
+      incomplete: [],
+      flags: [],
+      decisions: [],
+    };
+    // Un servidor viejo no manda la llave, uno nuevo sin nivel manda null y uno con nivel manda la clave
+    expect(EditorVersionSchema.parse(version).cognitiveLevel).toBeUndefined();
+    expect(
+      EditorVersionSchema.parse({ ...version, cognitiveLevel: null }).cognitiveLevel,
+    ).toBeNull();
+    expect(
+      EditorVersionSchema.parse({ ...version, cognitiveLevel: 'synthesis' }).cognitiveLevel,
+    ).toBe('synthesis');
   });
 
   it('acepta ids de la nube y ULID de la app y rechaza lo demás', () => {

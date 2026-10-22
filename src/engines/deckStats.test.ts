@@ -110,6 +110,67 @@ describe('deckStats', () => {
   });
 });
 
+describe('deckStats, sanguijuelas y última vez', () => {
+  it('cuenta como sanguijuela la tarjeta con el umbral de olvidos o más, y solo las que ya se vieron', () => {
+    const stats = deckStats({
+      states: [
+        null,
+        review(0, 0, { state: 'new', lapses: 12 }),
+        review(10, 5, { lapses: 7 }),
+        review(10, 5, { lapses: 8 }),
+        review(0, 0, { state: 'relearning', scheduledDays: 1, lapses: 15 }),
+      ],
+      now: NOW,
+      timeZone: TZ,
+    });
+    expect(stats.leeches).toBe(2);
+    expect(stats.reviewed).toBe(3);
+  });
+
+  it('el umbral de olvidos es el que pide quien llama', () => {
+    const states = [review(10, 5, { lapses: 3 }), review(10, 5, { lapses: 4 })];
+    expect(deckStats({ states, now: NOW, timeZone: TZ, leechLapses: 4 }).leeches).toBe(1);
+    expect(deckStats({ states, now: NOW, timeZone: TZ, leechLapses: 3 }).leeches).toBe(2);
+  });
+
+  it('sin tarjetas vistas el mazo calibra, no hay sanguijuelas ni última vez', () => {
+    const stats = deckStats({ states: [null, null], now: NOW, timeZone: TZ });
+    expect(stats).toMatchObject({
+      reviewed: 0,
+      leeches: 0,
+      lastReview: null,
+      daysSinceLastReview: null,
+    });
+  });
+
+  it('la última vez es el repaso más reciente de cualquier tarjeta y cuenta días de estudio', () => {
+    const old = review(10, 5, { lastReview: '2026-10-01T16:00:00.000Z' });
+    const recent = review(10, 5, { lastReview: '2026-10-05T16:00:00.000Z' });
+    const stats = deckStats({ states: [old, recent, null], now: NOW, timeZone: TZ });
+    expect(stats.lastReview).toBe('2026-10-05T16:00:00.000Z');
+    // Del 5 al 8 de octubre, tres días de estudio
+    expect(stats.daysSinceLastReview).toBe(3);
+  });
+
+  it('un repaso de hoy da cero días, y uno con fecha del futuro no da negativos', () => {
+    const today = review(10, 5, { lastReview: '2026-10-08T14:00:00.000Z' });
+    expect(deckStats({ states: [today], now: NOW, timeZone: TZ }).daysSinceLastReview).toBe(0);
+    const future = review(10, 5, { lastReview: '2026-10-20T14:00:00.000Z' });
+    expect(deckStats({ states: [future], now: NOW, timeZone: TZ }).daysSinceLastReview).toBe(0);
+  });
+
+  it('una tarjeta sin lastReview no rompe la última vez de las demás', () => {
+    // Una tarjeta en aprendizaje que todavía no guardó su último repaso
+    const none = review(0, 0, { state: 'learning', lastReview: null });
+    const ok = review(10, 5, { lastReview: '2026-10-07T16:00:00.000Z' });
+    const stats = deckStats({ states: [none, ok], now: NOW, timeZone: TZ });
+    expect(stats.lastReview).toBe('2026-10-07T16:00:00.000Z');
+    expect(stats.daysSinceLastReview).toBe(1);
+    const only = deckStats({ states: [none], now: NOW, timeZone: TZ });
+    expect(only).toMatchObject({ reviewed: 1, lastReview: null, daysSinceLastReview: null });
+  });
+});
+
 describe('activeDeckStates', () => {
   it('deja fuera las tarjetas suspendidas, que Repasar no ofrece, y marca como nueva la que no tiene estado', () => {
     const states = new Map<string, FsrsCardState>([

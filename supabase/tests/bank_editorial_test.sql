@@ -754,4 +754,50 @@ begin
   end loop;
 end $$;
 
+-- ===================================================================== BE9. Nivel cognitivo (V4-B5)
+-- El borrador del editor lleva el nivel a la versión nueva, y cada versión lo dice en editor_question. Sin
+-- nivel es null y la versión de antes no cambia. Un nivel fuera de la lista de Bloom lanza 22023
+select pg_temp.bank_seed('BE-COG1', 'draft') as cog_q \gset
+select pg_temp.latest(:'cog_q') as cog_v1 \gset
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_assign_questions(array[:'cog_q']::uuid[], :'p1', :'p2');
+commit;
+select pg_temp.expect((select cognitive_level from public.questions where id = :'cog_v1') is null,
+  'BE9. La versión sembrada sin nivel quedó con nivel');
+select pg_temp.expect(public.bank_draft_content(pg_temp.draft_of(:'cog_v1', '{"cognitiveLevel":"synthesis"}'), :'cog_q')
+  ->> 'cognitiveLevel' = 'synthesis', 'BE9. El borrador no llevó el nivel a la forma interna');
+select pg_temp.expect(public.bank_draft_content(pg_temp.draft_of(:'cog_v1'), :'cog_q') ->> 'cognitiveLevel' is null,
+  'BE9. Un borrador sin nivel llegó con nivel');
+select pg_temp.draft_of(:'cog_v1', '{"cognitiveLevel":"synthesis"}')::text as cog_draft \gset
+begin;
+select pg_temp.as_user(:'p1');
+select (public.editor_save_version(:'cog_q', :'cog_v1', :'cog_draft')) ->> 'versionId' as cog_v2 \gset
+commit;
+select pg_temp.expect((select cognitive_level from public.questions where id = :'cog_v2') = 'synthesis',
+  'BE9. Guardar no dejó el nivel en la versión');
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect((select v ->> 'cognitiveLevel' from jsonb_array_elements(public.editor_question(:'cog_q') -> 'versions') v
+  where v ->> 'versionId' = :'cog_v2') = 'synthesis', 'BE9. El editor no recibió el nivel de la versión nueva');
+select pg_temp.expect((select v -> 'cognitiveLevel' from jsonb_array_elements(public.editor_question(:'cog_q') -> 'versions') v
+  where v ->> 'versionId' = :'cog_v1') = 'null'::jsonb, 'BE9. La versión anterior debía decir null');
+rollback;
+-- Quitar el nivel en el editor crea otra versión sin nivel, porque las versiones no se editan
+select pg_temp.draft_of(:'cog_v2', '{"cognitiveLevel":null}')::text as cog_draft_none \gset
+begin;
+select pg_temp.as_user(:'p1');
+select (public.editor_save_version(:'cog_q', :'cog_v2', :'cog_draft_none')) ->> 'versionId' as cog_v3 \gset
+commit;
+select pg_temp.expect((select cognitive_level from public.questions where id = :'cog_v3') is null
+  and (select cognitive_level from public.questions where id = :'cog_v2') = 'synthesis',
+  'BE9. Quitar el nivel cambió la versión anterior o no dejó la nueva sin nivel');
+-- Un nivel inventado no se guarda
+select pg_temp.draft_of(:'cog_v3', '{"cognitiveLevel":"dificil"}')::text as cog_draft_bad \gset
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(pg_temp.fails_with(format('select public.editor_save_version(%L, %L, %L)', :'cog_q', :'cog_v3', :'cog_draft_bad')) = '22023',
+  'BE9. Guardó un nivel inventado');
+rollback;
+
 \echo 'TODAS LAS PRUEBAS DEL FLUJO EDITORIAL DEL BANCO PASARON'
