@@ -7,8 +7,7 @@ import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
 import { newId } from '../ids';
-import type { ConsentPurposeSchema } from '../schemas/common';
-import { DEFAULT_TIME_ZONE } from '../schemas/common';
+import { ConsentPurposeSchema, DEFAULT_TIME_ZONE } from '../schemas/common';
 import {
   ConsentSchema,
   type Consent,
@@ -34,7 +33,8 @@ export interface NewProfile {
   noticeSeen?: boolean;
 }
 
-const PURPOSES: ConsentPurpose[] = ['party', 'ai_analysis', 'anonymized_improvement'];
+/** Todas las finalidades, las del esquema y en su orden. Una nueva queda aquí sin tocar esta lista (B15) */
+const PURPOSES: readonly ConsentPurpose[] = ConsentPurposeSchema.options;
 
 /**
  * Estado inicial de cada finalidad opcional. Apagada, porque usar los datos para algo opcional pide
@@ -180,6 +180,7 @@ export async function currentConsents(
     party: false,
     ai_analysis: false,
     anonymized_improvement: false,
+    product_analytics: false,
   };
   for (const consent of list) result[consent.purpose] = consent.status === 'granted';
   return result;

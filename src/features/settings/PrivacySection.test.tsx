@@ -24,10 +24,11 @@ afterEach(async () => {
   app = undefined;
 });
 
-const [PARTY, AI, IMPROVEMENT] = [
+const [PARTY, AI, IMPROVEMENT, USAGE] = [
   consentTexts.purposes.party[0],
   consentTexts.purposes.ai_analysis[0],
   consentTexts.purposes.anonymized_improvement[0],
+  consentTexts.purposes.product_analytics[0],
 ];
 
 /** El alumno de la prueba con los tres permisos dados, como al crear su perfil */
@@ -47,8 +48,53 @@ const open = () =>
     },
   });
 
+describe('Medición de uso en Privacidad (B15, 1.2)', () => {
+  it('es el cuarto permiso, empieza apagado y prenderlo y apagarlo deja su evento', async () => {
+    const typing = userEvent.setup();
+    const { api, user } = (app = await open());
+    const usage = await screen.findByRole('checkbox', { name: USAGE }, WAIT);
+    // Los otros tres vienen dados en esta prueba y este no
+    await waitFor(() => {
+      expect(screen.getByRole('checkbox', { name: PARTY })).toBeChecked();
+    }, WAIT);
+    expect(usage).not.toBeChecked();
+    // Su pista dice qué se mide, quién lo hace y que se puede apagar
+    expect(screen.getByText(/Lo hace PostHog por encargo nuestro/)).toBeVisible();
+
+    await typing.click(usage);
+    await waitFor(async () => {
+      expect((await currentConsents(api, user.id)).product_analytics).toBe(true);
+    }, WAIT);
+    await typing.click(screen.getByRole('checkbox', { name: USAGE }));
+    await waitFor(async () => {
+      expect((await currentConsents(api, user.id)).product_analytics).toBe(false);
+    }, WAIT);
+
+    const events = (await api.repos.events.query({ userId: user.id, types: ['consent_changed'] }))
+      .filter((event) => event.type === 'consent_changed')
+      .map((event) => [event.payload.purpose, event.payload.status]);
+    expect(events).toContainEqual(['product_analytics', 'granted']);
+    expect(events).toContainEqual(['product_analytics', 'revoked']);
+  });
+
+  it('los otros permisos no cambian cuando se toca este', async () => {
+    const typing = userEvent.setup();
+    const { api, user } = (app = await open());
+    await typing.click(await screen.findByRole('checkbox', { name: USAGE }, WAIT));
+    await waitFor(async () => {
+      expect((await currentConsents(api, user.id)).product_analytics).toBe(true);
+    }, WAIT);
+    expect(await currentConsents(api, user.id)).toEqual({
+      party: true,
+      ai_analysis: true,
+      anonymized_improvement: true,
+      product_analytics: true,
+    });
+  });
+});
+
 describe('Privacidad en Configuración', () => {
-  it('muestra los tres permisos y retirar uno lo guarda como evento', async () => {
+  it('muestra los permisos y retirar uno lo guarda como evento', async () => {
     const typing = userEvent.setup();
     const { api, user } = (app = await open());
     const party = await screen.findByRole('checkbox', { name: PARTY }, WAIT);

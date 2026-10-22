@@ -41,7 +41,7 @@
       "check": {
         "borrar_mis_datos_b11": true
       },
-      "note": "Borrar mis datos conserva las lecturas del banco del día en curso y quita las descargas del catálogo. Va después de ejecutar-en-sql-editor.sql, que trae otra versión"
+      "note": "Borrar mis datos conserva las lecturas del banco del día en curso y quita las descargas del catálogo. Con B15 trae la v4, igual a 20261029000004_delete_my_data_v4.sql, que suma lo de los recordatorios y la analítica y no se rompe si esas tablas todavía no existen. Va después de ejecutar-en-sql-editor.sql, que trae la misma"
     }
   ],
   "functions": [

@@ -3,7 +3,7 @@
 //    pruebas ni dobles de prueba, y que todo paquete sale del deno.json de esa función, con la misma
 //    versión que package.json
 // 2. _shared no usa Deno, process, Buffer ni node:, y solo los index.ts leen el entorno. runtime.ts es la
-//    excepción de las funciones de pagos y del banco, que lo leen ahí
+//    excepción de las funciones de pagos y del banco, que lo leen ahí, y monitoringRuntime.ts la del aviso a Sentry
 // 3. Las funciones de IA leen exactamente los nombres de la sección 2.7, y env.ts valida los mismos
 // 4. Nada que llegue a producción menciona la clave ni la API de OpenAI, que solo usan las evaluaciones,
 //    ni el nombre de variable que CLAUDE.md prohíbe
@@ -205,7 +205,10 @@ describe('_shared no depende del entorno', () => {
       file.endsWith('.ts') &&
       !file.endsWith('.test.ts') &&
       !file.split(sep).includes('testing') &&
-      file !== join(SHARED, 'runtime.ts'),
+      // runtime.ts y monitoringRuntime.ts (el aviso a Sentry, aparte para que la IA no cargue todo runtime.ts)
+      // son los dos que leen el entorno de Deno
+      file !== join(SHARED, 'runtime.ts') &&
+      file !== join(SHARED, 'monitoringRuntime.ts'),
   );
 
   it('revisa los archivos del núcleo de IA', () => {

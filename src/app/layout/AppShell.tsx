@@ -12,8 +12,9 @@ import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
 import { useBankNotice } from '@/features/shared/bankNotice';
 import { useQuestionSourceKind } from '@/features/shared/questionSourceKind';
+import { TourLauncher } from '@/features/tour/TourLauncher';
 import { HOME_BY_ROLE, navForRole } from '../navigation';
-import { screenPath } from '../screens';
+import { isPublicScreenPath, screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { AccessGate } from './AccessGate';
@@ -50,8 +51,9 @@ export function AppShell() {
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const { pathname } = useLocation();
   const session = useSession();
-  // Sin sesión, el aviso de privacidad y los términos también van sin navegación
-  const legal = pathname === screenPath('privacyNotice') || pathname === screenPath('terms');
+  // Sin sesión, el aviso de privacidad, los términos y la baja de los recordatorios (B15) también van sin
+  // navegación. La lista de pantallas públicas vive en screens.ts
+  const legal = isPublicScreenPath(pathname);
   const bare =
     pathname === screenPath('onboarding') ||
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
@@ -238,6 +240,8 @@ export function AppShell() {
 
       {bare ? null : <BottomNav nav={navForRole(role)} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
+      {/* El recorrido guiado (B15). Solo esto va en el JavaScript inicial, el recorrido se baja al empezar */}
+      <TourLauncher userId={session.status === 'ready' ? session.user.id : null} />
     </div>
   );
 }

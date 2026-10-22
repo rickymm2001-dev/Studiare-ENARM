@@ -7,8 +7,10 @@
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { useDataApi } from '@/data/context';
 import { updateProfile } from '@/data/usecases/profile';
+import { engagementTexts } from '@/i18n/engagement';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { useReturnFocus } from '@/ui/hooks/use-return-focus';
@@ -17,6 +19,7 @@ import { PomodoroSettingsForm } from '../../pomodoro/Pomodoro';
 import type { ReadySession } from '../../shared/RequireSession';
 import { UnsavedChangesGuard } from '../../shared/UnsavedChangesGuard';
 import { leavesReviewSettings, type ReviewSettingsFocus } from './panelParam';
+import { ReminderSettingsSection } from './ReminderSettingsSection';
 import { StudySettingsForm } from './StudySettingsForm';
 
 /** Dentro del panel no hay barra de navegación abajo, así que la barra de guardar va cerca del borde */
@@ -99,12 +102,15 @@ function PanelBody({
   const api = useDataApi();
   const { user, settings } = session;
   const pomodoro = useRef<HTMLElement>(null);
+  const reminders = useRef<HTMLElement>(null);
   // Cada formulario dice si tiene cambios sin guardar. Con alguno, cerrar el panel pregunta antes
   const [studyDirty, setStudyDirty] = useState(false);
   const [pomodoroDirty, setPomodoroDirty] = useState(false);
-  // Abierto desde el engrane del Pomodoro, el panel empieza en sus ajustes
+  const [remindersDirty, setRemindersDirty] = useState(false);
+  // Abierto desde el engrane del Pomodoro o desde el enlace del correo, el panel empieza en esa parte
   useEffect(() => {
     if (focus === 'pomodoro') scrollToElement(pomodoro.current);
+    if (focus === 'reminders') scrollToElement(reminders.current);
   }, [focus]);
   return (
     <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
@@ -112,7 +118,7 @@ function PanelBody({
           pregunta dentro de la app. Al recargar, la dirección vuelve a abrir el panel con lo guardado,
           sin el aviso del navegador */}
       <UnsavedChangesGuard
-        dirty={studyDirty || pomodoroDirty}
+        dirty={studyDirty || pomodoroDirty || remindersDirty}
         leaves={leavesReviewSettings}
         text={t.settingsPage.reviewSettings.unsaved}
         warnOnUnload={false}
@@ -141,8 +147,21 @@ function PanelBody({
           }}
         />
       </PanelSection>
-      {/* B15. Recordatorios por correo (respuesta 81). Van aquí como su propia PanelSection, después
-          del Pomodoro, y se guardan con los demás ajustes del alumno */}
+      {/* Recordatorios por correo (B15, respuesta 81). Su propia sección después del Pomodoro, con su propio
+          Guardar. Con la bandera emailReminders apagada la sección no aparece */}
+      {isFeatureEnabled('emailReminders') ? (
+        <PanelSection
+          ref={reminders}
+          id="ajustes-recordatorios"
+          title={engagementTexts.reminders.title}
+        >
+          <ReminderSettingsSection
+            userId={user.id}
+            saveBarClassName={PANEL_SAVE_BAR}
+            onDirtyChange={setRemindersDirty}
+          />
+        </PanelSection>
+      ) : null}
     </div>
   );
 }

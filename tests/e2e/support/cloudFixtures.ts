@@ -10,7 +10,7 @@ import {
   FAKE_PORTAL_ORIGIN,
   FAKE_SUPABASE_URL,
 } from './fakeSupabaseConfig';
-import { expect, test as base } from './fixtures';
+import { expect, presetTourOffer, test as base, unexpectedPageErrors } from './fixtures';
 
 const FAKE_ORIGINS = [
   FAKE_SUPABASE_URL,
@@ -46,12 +46,16 @@ export function watchConsole(page: Page, errors: string[]): void {
 }
 
 export const test = base.extend<{ consoleErrors: string[]; cloud: FakeSupabaseServer }>({
-  // Sustituye a la fixture compartida con el mismo nombre. Sigue siendo automática, eso lo hereda
-  consoleErrors: async ({ page }, use) => {
+  // Sustituye a la fixture compartida con el mismo nombre. Sigue siendo automática, eso lo hereda. Honra
+  // expectedPageErrors, la opción de las fixtures compartidas para un error provocado a propósito
+  consoleErrors: async ({ page, expectedPageErrors }, use) => {
     const errors: string[] = [];
     watchConsole(page, errors);
     await use(errors);
-    expect(errors, 'errores en la consola del navegador').toEqual([]);
+    expect(
+      unexpectedPageErrors(errors, expectedPageErrors),
+      'errores en la consola del navegador',
+    ).toEqual([]);
   },
   // El Supabase simulado de esta prueba. Cada prueba tiene el suyo, con su estado en memoria
   cloud: async ({ context }, use) => {
@@ -163,6 +167,8 @@ export async function openSecondDevice(
     serviceWorkers: use.serviceWorkers,
   });
   await cloud.attach(context);
+  // Como el contexto de la prueba, este navegador no ofrece el recorrido solo (B15, 4.1)
+  await presetTourOffer(context);
   const page = await context.newPage();
   watchConsole(page, consoleErrors);
   return { context, page };

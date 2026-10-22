@@ -1,6 +1,7 @@
 // Ajustes del repaso se abren con ?ajustes en la dirección de Repasar (B3 del plan del cambio). Así se
 // pueden enlazar, sobreviven a recargar y los enlaces viejos a Configuración, Estudio y Pomodoro
-// llegan directo al panel. ?ajustes=pomodoro lo abre en la parte del Pomodoro. Abrir deja un paso en
+// llegan directo al panel. ?ajustes=pomodoro lo abre en la parte del Pomodoro y ?ajustes=recordatorios en la de
+// los recordatorios por correo, a donde lleva el enlace del correo (B15, 3.7). Abrir deja un paso en
 // el historial, así el botón de atrás del teléfono cierra el panel y no saca al alumno de Repasar.
 import { useLocation, useNavigate, useSearchParams, type Location } from 'react-router';
 import { screenPath } from '@/app/screens';
@@ -8,15 +9,17 @@ import { screenPath } from '@/app/screens';
 export const REVIEW_SETTINGS_PARAM = 'ajustes';
 
 /** A qué parte del panel se va al abrirlo */
-export type ReviewSettingsFocus = 'all' | 'pomodoro';
+export type ReviewSettingsFocus = 'all' | 'pomodoro' | 'reminders';
 
 /** Qué parte pide la dirección, o null con el panel cerrado */
 export function focusFromParam(value: string | null): ReviewSettingsFocus | null {
   if (value === null) return null;
-  return value === 'pomodoro' ? 'pomodoro' : 'all';
+  if (value === 'pomodoro') return 'pomodoro';
+  return value === 'recordatorios' ? 'reminders' : 'all';
 }
 
-const paramValue = (focus: ReviewSettingsFocus) => (focus === 'pomodoro' ? 'pomodoro' : '1');
+const paramValue = (focus: ReviewSettingsFocus) =>
+  focus === 'pomodoro' ? 'pomodoro' : focus === 'reminders' ? 'recordatorios' : '1';
 
 /** Dirección de Repasar con el panel abierto */
 export function reviewSettingsPath(focus: ReviewSettingsFocus = 'all'): string {

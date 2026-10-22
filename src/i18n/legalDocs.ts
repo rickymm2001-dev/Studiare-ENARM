@@ -33,7 +33,7 @@ export interface LegalDoc {
 const privacy: LegalDoc = {
   title: 'Aviso de privacidad',
   version: PRIVACY_NOTICE_VERSION,
-  updated: '15 de octubre de 2026',
+  updated: '21 de octubre de 2026',
   intro: [
     'En Studiare cuidamos tus datos. Este aviso explica quién los trata, cuáles son, para qué los usamos, con quién se comparten y cómo ejerces tus derechos. Si algo no queda claro, escríbenos.',
   ],
@@ -65,6 +65,8 @@ const privacy: LegalDoc = {
         'Prueba gratis usada. Si empiezas una prueba gratis, guardamos una huella de tu correo, que es un hash SHA-256 de tu correo escrito de forma normalizada, junto con la pasarela, el identificador de esa suscripción en la pasarela y la fecha en que empezó. La huella no guarda tu correo y solo sirve para comparar, es decir, para saber si el mismo correo ya usó su prueba gratis. Al eliminar tu cuenta se conserva, ya sin ligarla a tu cuenta, para que nadie repita la prueba con el mismo correo.',
         'Factura. Solo si pides una factura (CFDI), tu RFC, tu nombre o razón social, tu régimen fiscal, el código postal de tu domicilio fiscal, el uso del CFDI y el correo donde quieres recibirla. Los usamos solo para emitir esa factura y los ve solo el equipo que la emite.',
         'Referidos. Tu código de invitación y, si entraste con el de un compañero, quién te invitó y si ya hiciste tu primer cobro, para darle su mes gratis. Quien te invitó solo ve cuántos de sus referidos ya se concretaron y cuántos todavía no, nunca tu nombre ni tu correo.',
+        'Medición de uso. Solo si prendes ese permiso. Los eventos de cómo usas la app, como terminar un repaso o un examen, ver el candado de una función de tu plan o abrir la página de pago, con un identificador seudónimo que da el servidor y que no se deriva de tu cuenta, y con datos de listas cerradas o en rangos, como cuántas tarjetas repasaste en grupos de 1 a 9, de 10 a 49 y así. Nunca tu nombre, tu correo, tus textos, tus respuestas, tus puntajes ni la especialidad que buscas. Si pagas, el servidor manda además con ese mismo identificador cuándo empezó o terminó tu prueba, cuándo se te cobró, cuándo cambiaste o cancelaste tu plan y si hubo un reembolso, sin montos ni datos de pago. No usa cookies ni guarda nada tuyo en tu navegador.',
+        'Recordatorios de repaso por correo. Solo si los prendes en Ajustes del repaso. La hora y los días que elegiste, tu zona horaria, si los quieres solo cuando tengas tarjetas por repasar y, para decirte cuántas tarjetas te tocan, una foto de conteos con las fechas de tus próximos 14 días y cuántas tarjetas vencen cada día, sin el contenido de ninguna tarjeta. No medimos si abres el correo ni si das clic en un enlace.',
         'Técnicos. Qué dispositivo tiene activa tu cuenta, la zona horaria, los avisos de seguridad de tu sesión y el registro de acceso de Supabase, con la dirección IP desde la que entras.',
       ],
       paragraphs: [
@@ -93,12 +95,13 @@ const privacy: LegalDoc = {
       title: 'Lo que solo hacemos si lo permites',
       paragraphs: [
         'Estas finalidades son opcionales. Cada una se pide por separado y empieza apagada. Las prendes o las apagas cuando quieras en Configuración, sección Privacidad. Decir que no a una no te quita el resto del servicio.',
-        'Cuando activemos la analítica del producto o los recordatorios de repaso por correo, también serán opcionales, se pedirán por separado y empezarán apagados.',
+        'Los recordatorios de repaso por correo también son opcionales. Los prendes tú en Ajustes del repaso, aparte de estos permisos, y empiezan apagados.',
       ],
       bullets: [
         'Party. Compartir tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos con los miembros de los grupos a los que te unas, y en un duelo tus aciertos y tu tiempo. Tus compañeros nunca ven tu correo ni tus demás datos de cuenta.',
         'Análisis con IA. Usar tus errores para que el tutor te dé hipótesis de por qué fallas y un informe con IA.',
-        'Mejora con tus datos sin nombre. Usar tus datos con un identificador seudónimo, sin tu nombre ni tu correo, junto con los de otros alumnos que también dieron este permiso, para mejorar Studiare para todos. Con ellos se calcula la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y se arma la comparación con otros alumnos de la sección siguiente. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores, y se guardan 14 días.',
+        'Mejora con tus datos sin nombre. Usar tus datos con un identificador seudónimo, sin tu nombre ni tu correo, junto con los de otros alumnos que también dieron este permiso, para mejorar Studiare para todos. Con ellos se calcula la dificultad real de cada pregunta, los distractores que no funcionan, los temas que más cuestan y los motivos de error que más pesan, y se arma la comparación con otros alumnos de la sección siguiente. Aquí entra tu puntaje oficial, si lo capturas. Si retiras este permiso, tu puntaje se borra. También entran los reportes de fallas de la app, que dicen qué falló, en qué pantalla y en qué versión, sin tu nombre, tu correo ni tus identificadores. Se guardan 14 días en nuestra base de datos y, cuando se active Sentry, también en su servicio, hoy por 30 días.',
+        'Medición de uso. Contamos qué partes de Studiare usas, por ejemplo si terminaste un repaso o un examen, si viste el candado de una función de tu plan o si abriste la página de pago, con un identificador seudónimo y sin tu nombre, tu correo ni lo que escribes. Lo hace PostHog por encargo nuestro. Sirve para saber qué mejorar y cuántas personas llegan del registro al pago. Si lo retiras, lo que estaba por mandarse se descarta y tu identificador cambia por uno nuevo, así lo que se mida si lo vuelves a dar no se une con lo de antes.',
       ],
     },
     {
@@ -133,9 +136,9 @@ const privacy: LegalDoc = {
         'Mercado Pago, cuando se active y solo si lo eliges para pagar. Recibirá tu correo y el identificador de tu cuenta, y lo que escribas en su página de pago.',
         'Anthropic, cuando usas una función de IA, con lo que se explica en la sección de inteligencia artificial.',
         'El servicio que aloja el proxy de IA, cuando usas una función de IA. Recibe el identificador seudónimo de tu cuenta, el texto de la llamada de IA y los datos técnicos de tu conexión, como la dirección IP.',
-        'Resend, cuando se active. Enviará los correos de acceso a tu cuenta, los avisos de tu plan, como el de que termina tu prueba gratis o vence tu pase, y los recordatorios de repaso si los prendes. Recibirá tu correo y el texto de cada correo.',
-        'PostHog, cuando se active, para medir cómo se usa la app. Solo recibirá datos si das el permiso de analítica, que se pedirá aparte y empezará apagado, y recibirá los eventos de uso con tu identificador seudónimo, sin tu nombre ni tu correo.',
-        'Sentry, cuando se active, para enterarnos de las fallas. Recibirá los reportes de fallas de la app solo con tu permiso Mejora con tus datos sin nombre, y los errores de nuestras funciones del servidor. Ninguno lleva tu nombre ni tu correo.',
+        'Resend, cuando se active. Enviará los correos de acceso a tu cuenta, los avisos de tu plan, como el de que termina tu prueba gratis o vence tu pase, y los recordatorios de repaso si los prendes. Recibirá tu correo y el texto de cada correo. No medimos si los abres ni si das clic.',
+        'PostHog, cuando se active, para medir cómo se usa la app. Solo recibirá datos si prendes el permiso Medición de uso, que empieza apagado, y recibirá los eventos de uso con tu identificador seudónimo, sin tu nombre, tu correo ni lo que escribes. No usa cookies, no graba tu pantalla y está configurado para no guardar tu dirección IP.',
+        'Sentry, cuando se active, para enterarnos de las fallas. Recibirá los reportes de fallas de la app solo con tu permiso Mejora con tus datos sin nombre, y los errores de nuestras funciones del servidor. Ninguno lleva tu nombre, tu correo ni tus textos, Sentry está configurado para no guardar tu dirección IP y conserva los reportes el tiempo de su plan, hoy 30 días.',
         'GitHub, cuando se active la calibración de las preguntas. Ahí corre cada noche el cálculo con los datos de quienes dieron el permiso Mejora con tus datos sin nombre, con identificadores seudónimos y sin nombres ni correos.',
         'El servicio que aloja la página, hoy GitHub Pages y después Cloudflare, que ve datos técnicos de tu conexión, como la dirección IP.',
         'Autoridades, cuando una ley o una orden de autoridad competente lo exija.',
@@ -150,7 +153,7 @@ const privacy: LegalDoc = {
       bullets: [
         'Acceder. En Configuración, sección Privacidad, descargas en un archivo tus datos de estudio, tus ajustes, tus permisos y lo tuyo en Party. Para una copia de lo demás, como tus pagos, tus solicitudes de factura o tus lecturas del banco, escribe {contactoPrivacidad}.',
         'Rectificar. Cambias tu alias, tu foto y tus datos de cuenta en Configuración, sección Perfil, y tus ajustes de estudio en Repasar. Para cambiar tu correo o los datos de una factura, escribe {contactoPrivacidad}.',
-        'Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio del dispositivo y de la nube. De tu estudio solo se quedan las preguntas del banco que abriste y tu uso de la IA del día de estudio en curso, para que borrar no reinicie los límites de ese día, y los avisos de lectura del banco que ya vio el equipo. También puedes eliminar tu cuenta completa, y entonces se borra todo eso, tu foto de perfil, tus solicitudes de factura y el correo de tu invitación. Si usaste una prueba gratis, se queda solo la huella de tu correo que se explica arriba.',
+        'Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio del dispositivo y de la nube. De tu estudio solo se quedan las preguntas del banco que abriste y tu uso de la IA del día de estudio en curso, para que borrar no reinicie los límites de ese día, y los avisos de lectura del banco que ya vio el equipo. También puedes eliminar tu cuenta completa, y entonces se borra todo eso, tu foto de perfil, tus solicitudes de factura y el correo de tu invitación. Si usaste una prueba gratis, se queda solo la huella de tu correo que se explica arriba. Borrar tus datos también quita tus recordatorios de repaso, la foto de conteos de tarjetas y tu identificador de Medición de uso.',
         'Oponerte o retirar un permiso. En Configuración, sección Privacidad.',
         'Por escrito. Si prefieres, escribe {contactoPrivacidad} con tu nombre y lo que pides, y respondemos en un plazo razonable.',
       ],
@@ -159,14 +162,14 @@ const privacy: LegalDoc = {
       id: 'conservacion',
       title: 'Cuánto tiempo los conservamos',
       paragraphs: [
-        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base como se explica arriba, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. El registro de costos de la IA se queda sin tu identificador. La huella del correo de una prueba gratis usada se queda sin tu cuenta y sin fecha de borrado, solo para evitar pruebas repetidas. En Studiare tus pagos se borran con tu cuenta. Los avisos de cobro que manda la pasarela se guardan sin tu nombre ni tu correo, con el identificador de tu cuenta y los del cobro y la suscripción en la pasarela, para poder revisar los cobros. Los cobros que ya procesó la pasarela de pagos se conservan allá, y las facturas ya emitidas en el sistema de facturación, el tiempo que exige la ley fiscal.',
+        'Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base como se explica arriba, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. El registro de costos de la IA se queda sin tu identificador. La huella del correo de una prueba gratis usada se queda sin tu cuenta y sin fecha de borrado, solo para evitar pruebas repetidas. En Studiare tus pagos se borran con tu cuenta. Los avisos de cobro que manda la pasarela se guardan sin tu nombre ni tu correo, con el identificador de tu cuenta y los del cobro y la suscripción en la pasarela, para poder revisar los cobros. Los cobros que ya procesó la pasarela de pagos se conservan allá, y las facturas ya emitidas en el sistema de facturación, el tiempo que exige la ley fiscal. Los eventos de Medición de uso que ya recibió PostHog no llevan tu nombre ni tu correo, y al eliminar tu cuenta se borra el identificador seudónimo que los ligaba contigo, así que ya no se pueden ligar a ti.',
       ],
     },
     {
       id: 'almacenamiento',
       title: 'Cookies y almacenamiento en tu navegador',
       paragraphs: [
-        'Studiare guarda en tu navegador tu sesión, tus datos de estudio y tus preferencias, para funcionar sin conexión. No usamos cookies de publicidad. Hoy no usamos herramientas de analítica ni de rastreo de terceros. Cuando activemos PostHog, solo funcionará en tu navegador si das el permiso de analítica.',
+        'Studiare guarda en tu navegador tu sesión, tus datos de estudio y tus preferencias, para funcionar sin conexión. No usamos cookies de publicidad ni de rastreo. Si prendes el permiso Medición de uso, tu navegador manda los eventos a PostHog sin cookies y sin guardar nada tuyo en él. Sentry, cuando se active, tampoco usa cookies. El recorrido de bienvenida guarda en tu navegador solo si ya lo viste o lo saltaste.',
       ],
     },
     {

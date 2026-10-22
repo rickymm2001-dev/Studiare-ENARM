@@ -1,13 +1,21 @@
-import { rmSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readdirSync, rmSync, statSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { BRAND } from './src/config/brand.ts';
-import { aiOriginOf, buildHeadersFile, buildMetaCsp, supabaseOriginOf } from './src/config/csp.ts';
+import {
+  aiOriginOf,
+  buildHeadersFile,
+  buildMetaCsp,
+  posthogOriginOf,
+  sentryOriginOf,
+  supabaseOriginOf,
+} from './src/config/csp.ts';
 import { loopbackUrl, testPorts } from './server/src/testPorts.ts';
+import { buildIdOf, sentryUploadConfig } from './scripts/sentry-build.ts';
 
 // Puertos de la vista previa (4173) y del proxy de IA local (8787, el de server/src/config.ts). Solo
 // cambian con PW_PORT_OFFSET, que usan las pruebas de Playwright para no chocar entre copias del
@@ -41,6 +49,9 @@ function contentSecurityPolicy(env: Record<string, string>): Plugin {
   const options = {
     supabaseOrigin: supabaseOriginOf(env.VITE_SUPABASE_URL),
     aiOrigin: aiOriginOf(env.VITE_AI_URL),
+    // Solo a connect-src (B15, 5.1). La captura de PostHog y la ingesta de Sentry, de las dos variables públicas
+    posthogOrigin: posthogOriginOf(env.VITE_POSTHOG_HOST),
+    sentryOrigin: sentryOriginOf(env.VITE_SENTRY_DSN),
   };
   return {
     name: 'enarm-content-security-policy',
@@ -98,6 +109,55 @@ function absoluteShareImage(): Plugin {
         site === ''
           ? html
           : html.replaceAll(`content="${BASE_PATH}og-image.png"`, `content="${site}/og-image.png"`),
+    },
+  };
+}
+
+/**
+ * Mapas de código para Sentry (B15, 2.3). Solo si el build trae SENTRY_AUTH_TOKEN, SENTRY_ORG y
+ * SENTRY_PROJECT, es decir, el build de producción del CI. Los mapas se suben a Sentry con el nombre de
+ * versión de VITE_BUILD_ID, y después se quitan de la carpeta del build, que se publica. El plugin se baja
+ * solo cuando hace falta, así los demás builds no pagan por él
+ */
+const SENTRY_UPLOAD = sentryUploadConfig(process.env);
+
+async function sentryUpload(): Promise<Plugin[]> {
+  if (!SENTRY_UPLOAD) return [];
+  const { sentryVitePlugin } = await import('@sentry/vite-plugin');
+  const plugin = sentryVitePlugin({
+    org: SENTRY_UPLOAD.org,
+    project: SENTRY_UPLOAD.project,
+    authToken: SENTRY_UPLOAD.authToken,
+    release: { name: SENTRY_UPLOAD.release },
+    // Sin enviar datos de uso del plugin a Sentry
+    telemetry: false,
+    sourcemaps: { filesToDeleteAfterUpload: ['dist/**/*.map'] },
+  }) as Plugin | Plugin[];
+  return Array.isArray(plugin) ? plugin : [plugin];
+}
+
+/**
+ * Cinturón y tirantes: después de subir, ningún .map se queda en la carpeta que se publica, sea cual sea
+ * la carpeta de salida. El borrado del plugin de Sentry usa una ruta fija
+ */
+function withoutSourceMaps(): Plugin | null {
+  if (!SENTRY_UPLOAD) return null;
+  let outDir = '';
+  const maps = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const path = join(dir, name);
+      return statSync(path).isDirectory() ? maps(path) : path.endsWith('.map') ? [path] : [];
+    });
+  return {
+    name: 'enarm-without-source-maps',
+    apply: 'build',
+    enforce: 'post',
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      if (outDir === '') return;
+      for (const file of maps(outDir)) rmSync(file, { force: true });
     },
   };
 }
@@ -177,6 +237,8 @@ export default defineConfig(({ mode }) => ({
           'assets/simulate.worker-*.js',
           'assets/import.worker-*.js',
           'assets/pdf-*.js',
+          // El SDK de Sentry solo se baja cuando hay un error que mandar y la red está, así que no se precarga
+          'assets/sentry-*.js',
           // La imagen para compartir solo la leen WhatsApp, Facebook y los buscadores, no la app
           'og-image.png',
         ],
@@ -225,6 +287,9 @@ export default defineConfig(({ mode }) => ({
       },
       devOptions: { enabled: false },
     }),
+    // Al final de la lista, como pide el plugin. Sin las variables del CI no hace nada (B15, 2.3)
+    sentryUpload(),
+    withoutSourceMaps(),
   ],
   resolve: {
     alias: {
@@ -236,9 +301,19 @@ export default defineConfig(({ mode }) => ({
   // Los primeros 7 caracteres del commit, que son públicos. Van en cada reporte de error para saber
   // qué versión de la app lo causó
   define: {
-    'import.meta.env.VITE_BUILD_ID': JSON.stringify(
-      (process.env.GITHUB_SHA ?? '').slice(0, 7) || 'local',
-    ),
+    'import.meta.env.VITE_BUILD_ID': JSON.stringify(buildIdOf(process.env)),
+  },
+  build: {
+    // Ocultos (sin el comentario sourceMappingURL) y solo cuando se suben a Sentry. Sin eso no hay mapas
+    ...(SENTRY_UPLOAD ? { sourcemap: 'hidden' as const } : {}),
+    rollupOptions: {
+      output: {
+        // El SDK de Sentry se carga aparte, solo cuando hay un error que mandar (B15, 2.1). Con nombre propio
+        // para dejarlo fuera de lo que el service worker precarga
+        manualChunks: (id: string) =>
+          id.includes('/node_modules/@sentry/') ? 'sentry' : undefined,
+      },
+    },
   },
   server: {
     host: '127.0.0.1',

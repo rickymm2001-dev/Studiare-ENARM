@@ -105,6 +105,36 @@ describe('banderas de lanzamiento', () => {
     );
   });
 
+  it('las cuatro banderas de B15 valen lo que dice la tabla 5.2 en cada entorno', () => {
+    const table = {
+      productAnalytics: { development: false, demo: false, production: true },
+      errorMonitoring: { development: false, demo: false, production: true },
+      guidedTour: { development: true, demo: true, production: true },
+      emailReminders: { development: true, demo: false, production: false },
+    } as const;
+    for (const [flag, expected] of Object.entries(table)) {
+      for (const appEnv of APP_ENVS) {
+        expect(
+          isFeatureEnabled(flag as keyof typeof table, { appEnv, stored: null }),
+          `${flag} en ${appEnv}`,
+        ).toBe(expected[appEnv]);
+      }
+    }
+    // El servidor puede prender o apagar cualquiera, que es como Ricardo las maneja
+    expect(
+      isFeatureEnabled('emailReminders', {
+        appEnv: 'production',
+        stored: { emailReminders: true },
+      }),
+    ).toBe(true);
+    expect(
+      isFeatureEnabled('productAnalytics', {
+        appEnv: 'production',
+        stored: { productAnalytics: false },
+      }),
+    ).toBe(false);
+  });
+
   it('lo que dice el servidor manda sobre el valor del entorno', () => {
     expect(isFeatureEnabled('demoTools', { appEnv: 'demo', stored: { demoTools: false } })).toBe(
       false,

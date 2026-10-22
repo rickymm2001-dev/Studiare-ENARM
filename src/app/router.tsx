@@ -4,7 +4,6 @@ import type { ComponentType } from 'react';
 import { createBrowserRouter, replace, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
-import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
 import { LEGACY_REDIRECTS, SCREEN_KEYS, SCREENS, screenPath, type ScreenKey } from './screens';
 
 /**
@@ -83,13 +82,25 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, () => Promise<ComponentType>>> = 
   privacyNotice: () =>
     import('@/features/legal/LegalScreen').then((module) => module.PrivacyNoticeScreen),
   terms: () => import('@/features/legal/LegalScreen').then((module) => module.TermsScreen),
+  unsubscribe: () =>
+    import('@/features/email/UnsubscribeScreen').then((module) => module.UnsubscribeScreen),
   roleSelector: () =>
     import('@/features/role/RoleSelectorScreen').then((module) => module.RoleSelectorScreen),
 };
 
 function routeFor(key: ScreenKey): RouteObject {
   const load = BUILT_SCREENS[key];
-  if (!load) return { path: SCREENS[key].path, element: <ScreenPlaceholder screenKey={key} /> };
+  if (!load) {
+    // Hoy todas las pantallas tienen componente. El aviso de Próximamente se baja aparte, solo si alguna vez
+    // vuelve a hacer falta, para que no pese en el JavaScript inicial (B15, 5.4)
+    return {
+      path: SCREENS[key].path,
+      lazy: async () => {
+        const { ScreenPlaceholder } = await import('./layout/ScreenPlaceholder');
+        return { Component: () => <ScreenPlaceholder screenKey={key} /> };
+      },
+    };
+  }
   return {
     path: SCREENS[key].path,
     lazy: async () => ({ Component: await load() }),

@@ -11,11 +11,14 @@ export const CONSENT_PURPOSES: readonly ConsentPurpose[] = [
   'party',
   'ai_analysis',
   'anonymized_improvement',
+  // B15, 1.2. Cuarto permiso, apagado como los demás. El aviso de privacidad ya lo presenta (5.5)
+  'product_analytics',
 ];
 export const NO_CONSENTS: Record<ConsentPurpose, boolean> = {
   party: false,
   ai_analysis: false,
   anonymized_improvement: false,
+  product_analytics: false,
 };
 
 export interface HeardFromDraft {

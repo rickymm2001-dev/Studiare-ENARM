@@ -146,6 +146,7 @@ export function replayProfile(events: readonly AppEvent[]): ProfileReplay {
     party: false,
     ai_analysis: false,
     anonymized_improvement: false,
+    product_analytics: false,
   };
   let lastScoreRevocationAt: string | null = null;
   for (const event of unique) {

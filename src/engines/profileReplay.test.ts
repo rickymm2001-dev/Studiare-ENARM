@@ -1,4 +1,6 @@
+import type { z } from 'zod';
 import { describe, expect, it } from 'vitest';
+import type { ConsentPurposeSchema } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { UserSettingsSchema } from '@/data/schemas/people';
 import {
@@ -14,6 +16,8 @@ import {
   replayProfile,
   type LocalProfile,
 } from './profileReplay';
+
+type ConsentPurpose = z.infer<typeof ConsentPurposeSchema>;
 
 const USER = '01J0000000000000000000USER';
 const CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -47,7 +51,7 @@ function setting(id: number, seconds: number, key: string, value: unknown): AppE
 function consent(
   id: number,
   seconds: number,
-  purpose: 'party' | 'ai_analysis' | 'anonymized_improvement',
+  purpose: ConsentPurpose,
   status: 'granted' | 'revoked',
   noticeVersion = '2026-10-15b',
 ): AppEvent {
@@ -200,6 +204,7 @@ describe('ajustes desde la bitácora', () => {
       party: false,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
     expect(empty.officialScore).toBeNull();
     expect(empty.lastScoreRevocationAt).toBeNull();
@@ -225,7 +230,33 @@ describe('permisos desde la bitácora', () => {
       party: false,
       ai_analysis: true,
       anonymized_improvement: false,
+      product_analytics: false,
     });
+  });
+
+  it('Medición de uso se prende y se apaga sola, sin mover los otros permisos ni el puntaje (B15)', () => {
+    const granted = replayProfile([
+      consent(1, 10, 'anonymized_improvement', 'granted'),
+      score(2, 15),
+      consent(3, 20, 'product_analytics', 'granted'),
+    ]);
+    expect(granted.current).toEqual({
+      party: false,
+      ai_analysis: false,
+      anonymized_improvement: true,
+      product_analytics: true,
+    });
+    const revoked = replayProfile([
+      consent(1, 10, 'anonymized_improvement', 'granted'),
+      score(2, 15),
+      consent(3, 20, 'product_analytics', 'granted'),
+      consent(4, 30, 'product_analytics', 'revoked'),
+    ]);
+    expect(revoked.current.product_analytics).toBe(false);
+    expect(revoked.current.anonymized_improvement).toBe(true);
+    // Solo retirar la mejora quita el puntaje oficial. Retirar la medición no lo toca
+    expect(revoked.officialScore).not.toBeNull();
+    expect(revoked.lastScoreRevocationAt).toBeNull();
   });
 
   it('con la misma hora gana el id mayor', () => {

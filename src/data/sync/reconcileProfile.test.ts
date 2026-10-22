@@ -271,6 +271,7 @@ describe('permisos entre dos dispositivos', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: true,
+      product_analytics: false,
     });
     // Cada fila de B es la de un evento, con el id del evento
     const eventIds = new Set((await eventsOf(b, 'consent_changed')).map((event) => event.id));
@@ -313,6 +314,7 @@ describe('permisos entre dos dispositivos', () => {
       party: false,
       ai_analysis: false,
       anonymized_improvement: false,
+      product_analytics: false,
     });
 
     const now = () => at(1200);
@@ -322,6 +324,7 @@ describe('permisos entre dos dispositivos', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: true,
+      product_analytics: false,
     });
     // Y sigue así en A, que no recibió nada de B
     await a.sync();
@@ -329,6 +332,7 @@ describe('permisos entre dos dispositivos', () => {
       party: true,
       ai_analysis: false,
       anonymized_improvement: true,
+      product_analytics: false,
     });
     expect(
       [...server.events.values()].filter((row) => row.event.type === 'consent_changed'),

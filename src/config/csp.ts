@@ -9,6 +9,35 @@ export interface CspOptions {
   supabaseOrigin?: string | undefined;
   /** Origen del proxy de IA alojado, por ejemplo https://ia.studiare.mx. Sin él, solo el propio sitio. Con la función de Supabase ya está permitido por supabaseOrigin */
   aiOrigin?: string | undefined;
+  /** Origen de captura de PostHog (B15, 5.1). Solo uno de los dos que acepta posthogOriginOf. Sin él no se permite ninguno */
+  posthogOrigin?: string | undefined;
+  /** Origen del DSN de Sentry (B15, 5.1). Solo el que acepta sentryOriginOf. Sin él no se permite ninguno */
+  sentryOrigin?: string | undefined;
+}
+
+/** Los dos orígenes de captura de PostHog Cloud, el de Estados Unidos y el de la Unión Europea (B15, 8.2) */
+export const POSTHOG_ORIGINS = ['https://us.i.posthog.com', 'https://eu.i.posthog.com'] as const;
+
+/**
+ * Origen de captura de PostHog a partir de la dirección que se configura al construir. Solo acepta uno
+ * de los dos de PostHog Cloud, sin ruta, así una variable mal puesta no abre la política a otro dominio
+ */
+export function posthogOriginOf(url: string | undefined): string | undefined {
+  const clean = (url ?? '').trim().replace(/\/$/, '');
+  return (POSTHOG_ORIGINS as readonly string[]).includes(clean) ? clean : undefined;
+}
+
+/**
+ * Origen de ingesta de Sentry a partir de su DSN (B15, 5.1). Solo acepta la forma
+ * https://llave@o{número}.ingest.sentry.io/{proyecto}, con us. o de. en medio si los trae. Un DSN con
+ * otro dominio, sin proyecto o con una llave rara no abre la política
+ */
+export function sentryOriginOf(dsn: string | undefined): string | undefined {
+  const match =
+    /^https:\/\/[A-Za-z0-9]{8,64}(?::[^@/\s]*)?@(o\d{1,19}\.ingest\.(?:(?:us|de)\.)?sentry\.io)\/\d{1,19}$/.exec(
+      (dsn ?? '').trim(),
+    );
+  return match ? `https://${match[1]}` : undefined;
 }
 
 /**
@@ -35,7 +64,12 @@ export function aiOriginOf(url: string | undefined): string | undefined {
 }
 
 /** Directivas que funcionan en una etiqueta meta y en un encabezado */
-function sharedDirectives({ supabaseOrigin, aiOrigin }: CspOptions): [string, string][] {
+function sharedDirectives({
+  supabaseOrigin,
+  aiOrigin,
+  posthogOrigin,
+  sentryOrigin,
+}: CspOptions): [string, string][] {
   return [
     ['default-src', "'self'"],
     // wasm-unsafe-eval deja compilar WebAssembly, que usa el lector de mazos de Anki (sql.js). No
@@ -47,9 +81,14 @@ function sharedDirectives({ supabaseOrigin, aiOrigin }: CspOptions): [string, st
     // Vite incrusta como data: las fuentes más chicas de 4 KB, y la política las bloquearía sin esto
     ['font-src', "'self' data:"],
     ['media-src', "'self' data: blob:"],
-    // Solo el servidor propio (el proxy de IA local vive bajo /api) y, si están configurados,
-    // Supabase y el proxy de IA alojado
-    ['connect-src', ["'self'", supabaseOrigin, aiOrigin].filter(Boolean).join(' ')],
+    // Solo el servidor propio (el proxy de IA local vive bajo /api) y, si están configurados, Supabase,
+    // el proxy de IA alojado, la captura de PostHog y la ingesta de Sentry (B15). Los dos últimos solo
+    // aquí: script-src no cambia, porque el SDK de Sentry es un archivo del propio sitio y la analítica
+    // no carga scripts de fuera
+    [
+      'connect-src',
+      ["'self'", supabaseOrigin, aiOrigin, posthogOrigin, sentryOrigin].filter(Boolean).join(' '),
+    ],
     // Los lectores de archivos corren en workers del propio sitio, y canvas-confetti usa uno de blob
     ['worker-src', "'self' blob:"],
     ['manifest-src', "'self'"],

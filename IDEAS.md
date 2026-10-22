@@ -85,3 +85,19 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Reestructuradas automáticas de noche.** Las transformaciones de B12 no arreglan un distractor débil. Surgió en el plan de B14
 - **Validar al escribir los ajustes del modelo.** Hoy zod y SQL difieren en tipo y rango de unos 15 campos de model_settings si alguien escribe a mano por la API. Lo correcto es una función que valide al escribir. Surgió en la revisión de B14
 - **Fijar las acciones de GitHub por hash.** Todos los workflows usan etiqueta (checkout, setup-node). Resolver el hash pide llamar a GitHub desde una sesión con red. Surgió en la revisión de B14
+
+- **Preferencias de correo por tipo.** Hoy solo el recordatorio se puede apagar y los de servicio no llevan baja. Surgió en el paquete A de B15
+- **Resumen semanal de progreso por correo.** Con el mismo canal y el mismo interruptor. Surgió en el paquete A de B15
+- **Compartir el tope de avisos a Sentry entre instancias.** Con un contador en la base. Surgió en el paquete A de B15
+- **Mostrar en Plataforma la tasa de saltados por motivo.** Baja, correo sin confirmar o vencido. Surgió en el paquete A de B15
+- **Lotes de Resend.** Si el ritmo de 20 correos por minuto se queda corto. Surgió en el paquete A de B15
+- **Medir duel_completed.** Agregando el resultado al evento de la bitácora, solo agregando. Surgió en el paquete B de B15
+- **Embudo en PostHog del registro al primer repaso y al primer pago.** Cuando existan la cuenta y la llave. Surgió en el paquete B de B15
+- **Alerta de Sentry por pico de errores en la misma pantalla.** Surgió en el paquete B de B15
+- **Ver qué se mide en Privacidad.** Un enlace al catálogo de eventos. Surgió en el paquete B de B15
+- **CI que verifique el DSN y la llave de PostHog.** Con una petición de prueba antes de publicar. Surgió en el paquete B de B15
+- **Derivar Medición de uso en el servidor desde consent_changed.** Solo vale con otro cambio que sincronice el retiro al instante. Surgió en la revisión de B15
+- **Volver a preguntar analytics_identity al volver la pestaña a primer plano.** Para enterarse pronto de un retiro hecho en otro dispositivo. Surgió en la revisión de B15
+- **Poda del inicial por textos por área, tailwind-merge y zod.** Si B17 pide más del margen. Surgió en la revisión de B15
+- **Que capture() quite sus estilos al terminar.** Hoy deja la barra estática y cualquier spec que siga usando la página la hereda. Surgió en la revisión de B15
+- **Más pasos del recorrido.** Tutor y Mazos, un botón Recordármelo después, un recorrido propio para el médico y medir en qué paso se salta más gente. Surgió en el paquete C de B15

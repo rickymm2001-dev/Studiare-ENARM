@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
+import { ConsentPurposeSchema } from '../schemas/common';
 import { freshDb } from '../testing/fixtures';
 import {
   addAccountToProfile,
@@ -269,6 +270,7 @@ describe('fecha de los datos opcionales y lo que pide el registro (H29, B9)', ()
       party: false,
       ai_analysis: true,
       anonymized_improvement: false,
+      product_analytics: false,
     });
   });
 
@@ -359,7 +361,11 @@ describe('fecha de los datos opcionales y lo que pide el registro (H29, B9)', ()
       dailyGoal: { metric: 'cards', value: 20 },
     });
     const decided = (await api.repos.consents.list()).filter((item) => item.userId === seen.id);
-    expect(decided).toHaveLength(3);
+    // Una decisión por cada finalidad, las cuatro (con Medición de uso, B15), y todas apagadas
+    expect(decided.map((item) => item.purpose).sort()).toEqual(
+      [...ConsentPurposeSchema.options].sort(),
+    );
+    expect(decided.every((item) => item.status === 'revoked')).toBe(true);
     expect(profile.id).not.toBe(seen.id);
   });
 });

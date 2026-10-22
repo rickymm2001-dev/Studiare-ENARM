@@ -181,6 +181,43 @@ describe('sincronizar un dispositivo con el servidor', () => {
     expect(server.pushedEvents.flat()).toHaveLength(2);
   });
 
+  it('lo que baja de otros dispositivos se guarda sin pasar por la analítica, que ya lo midió donde pasó (B15, 1.6)', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const made = await fill(a);
+    ok(await a.sync());
+
+    const b = device(server);
+    b.clock.seconds = 200;
+    const loud: string[] = [];
+    const quiet: string[] = [];
+    const now = () => at(b.clock.seconds);
+    const api = {
+      repos: b.api.repos,
+      recordEvent: (event: Parameters<typeof b.api.recordEvent>[0]) => {
+        loud.push(event.id);
+        return b.api.recordEvent(event);
+      },
+      recordEventQuiet: (event: Parameters<typeof b.api.recordEvent>[0]) => {
+        quiet.push(event.id);
+        return b.api.recordEvent(event);
+      },
+    };
+    const result = ok(
+      await runSync({
+        api,
+        transport: memoryTransport(server, now),
+        userId: b.userId,
+        authId: AUTH,
+        now,
+      }),
+    );
+    expect(result.eventsPulled).toBe(2);
+    expect(quiet.sort()).toEqual(made.events.map((event) => event.id).sort());
+    // Ninguno de los que bajaron entró por el camino que mide
+    expect(loud.filter((id) => quiet.includes(id))).toEqual([]);
+  });
+
   it('sincronizar otra vez no mueve nada', async () => {
     const server = createMemoryServer();
     const a = device(server);

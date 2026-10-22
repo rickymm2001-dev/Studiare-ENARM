@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 a B13 y B16 hechos y fusionados en main, ver sus secciones. B14 modelo del alumno en su PR y B15 analítica y recorrido con sus tres paquetes terminados, en integración. Siguen B17 publicación, B18 primeros alumnos y B19 auditoría final (los diseños de B17 y B18 están hechos)
+- Bloques. B0 a B14 y B16 hechos y fusionados en main, ver sus secciones. B15 analítica, errores, recordatorios y recorrido en su PR. Siguen B17 publicación, B18 primeros alumnos y B19 auditoría final (los diseños de B17 y B18 están hechos)
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -31,8 +31,8 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B11. Banco en la nube y Google Sheets (D-133, PR 55 fusionado)
 - [x] B12. IA real (D-134, PR en curso)
 - [x] B13. Inglés médico (D-135, PR en curso)
-- [x] B14. Datos y modelo del alumno (D-136, PR en curso)
-- [ ] B15. Analítica, errores, recordatorios y recorrido
+- [x] B14. Datos y modelo del alumno (D-136, PR 59 fusionado)
+- [x] B15. Analítica, errores, recordatorios y recorrido (D-137, PR en curso)
 - [x] B16. Legal y privacidad (D-132, PR en curso)
 - [ ] B17. Publicación
   - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
@@ -200,6 +200,13 @@ Evidencia
 - Nada de B14 se ha desplegado ni corrido contra el Supabase real. La calibración queda apagada (enabled en false) y en solo reporte. Los pasos tuyos están en docs/PENDIENTES_DE_RICARDO.md, sobre todo el secreto SUPABASE_CALIBRATION_KEY de GitHub y la decisión del permiso antes de prender la calibración
 - Arreglo de paso. Tres pruebas de Simular fallaban en main desde el 21 de octubre porque un doble de prueba (wireQuota) traía el día y su fin escritos a mano. Ahora salen del reloj
 
+### B15. Analítica, errores, recordatorios y recorrido (D-137)
+- Hecho. Permiso Medición de uso y analítica propia con PostHog (sin permiso no sale nada), errores con Sentry en el navegador y en las funciones (limpios de datos personales), correos con Resend y un interruptor general, recordatorio diario de repaso con baja de un clic y su página pública, ajustes del repaso con la hora y los días, y recorrido guiado de ocho pasos con Saltar introducción. Borrar mis datos y Exportar mis datos cubren lo nuevo. Plan de despliegue b15 (cuatro migraciones, trece funciones). Todo apagado hasta que pongas las llaves
+- Revisión independiente con 10 hallazgos (ninguno alto), todos atendidos con su prueba. Los medios eran de privacidad (el permiso de una cuenta aplicado a la siguiente en un cambio directo, la limpieza de correos con acentos y una prueba de SQL que no habría detectado un filtro faltante)
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios, npm audit sin vulnerabilidades altas. Vitest completo, SQL en 35 bloques, autotest de la calibración 25 de 25. Playwright con más de 270 pruebas relacionadas en teléfono, computadora y nube, y 80 de 80 y 129 de 129 después de las correcciones. JS inicial de 290.4 KB sin nube y 291.7 KB con nube, de 300
+- Capturas en docs/screenshots/v3/b15 (114)
+- Nada de B15 se ha desplegado ni probado contra PostHog, Sentry o Resend reales. Los pasos tuyos (cuentas, llaves y DNS) están en docs/PENDIENTES_DE_RICARDO.md, B15.1 a B15.17
+
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
@@ -209,7 +216,7 @@ Evidencia
 - B9 fusionado en main (PR 52). Su migración 20261020000001 se aplicó al proyecto y se verificó por huella antes de fusionar. La función admin-reset-mfa se publica con B10, porque ahí deja de depender del módulo grande de pagos, y nadie la usa hasta que prendas el segundo factor
 - B10 fusionado en main (PR 53). Sus tres migraciones y cinco funciones se aplicaron al proyecto antes de fusionar y se verificaron por huella. Lo que falta subir espera el token de Supabase
 - B16 unido con lo de Gemini para B17 y con B11 ya en main. Su PR sigue al de B11
-- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) también, y B14 (modelo del alumno) está en su PR, con B15 en integración. Siguen B17 a B19. Los despliegues de B11, B12, B13 y B14 a Supabase esperan la autorización escrita de Ricardo
+- B11, B16 y la herramienta de despliegue ya están en main. B12 (IA real) ya está en main, B13 (inglés médico) también, y B14 (modelo del alumno) también y B15 (analítica y recorrido) está en su PR. Siguen B17 a B19. Los despliegues de B11, B12, B13, B14 y B15 a Supabase esperan la autorización escrita de Ricardo
 - Los diseños de B10 a B15, B17 y B18 están en /home/user/wt/plans
 - Los subagentes se detuvieron varias veces por el límite de uso de la cuenta y se reanudaron con su contexto
 
@@ -232,6 +239,8 @@ Evidencia
 - B14. Hoy un permiso de mejora dado con la pista corta cuenta igual que uno dado con el texto nuevo, porque no se subió la versión del aviso. La opción recomendada es pedir que se confirme otra vez y subir entonces PRIVACY_NOTICE_VERSION y minNoticeVersion. Prender la calibración espera tu respuesta y la de tu abogado
 - B14. Hallazgo sin resolver. Progreso y el Tutor en un dispositivo nuevo con el banco en la nube dicen Exactitud sin dato hasta que se abren las preguntas, porque necesitan el cuerpo de cada una. Se propone que useAnsweredBank use la fila del catálogo (rama, tema y dificultad) como respaldo. Bajar los cuerpos en bloque gastaría el tope diario de Gratis. Queda sin hacer
 - B14. Volver a entrar con el enlace del correo en un navegador que ya tenía sesión deja un segundo en que se ve el perfil de antes. Conviene que alguien revise src/app/cloud.tsx y device.ts antes de abrir a alumnos reales
+- B15. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Resend empieza en el plan gratis (3,000 correos al mes, alcanza para unos 80 alumnos con recordatorio diario) y pasa a Pro (20 dólares al mes) antes de abrir el registro. Una sola versión del aviso de privacidad para B15 y B16, la 2026-10-21, que hace aceptarlo otra vez a quien ya lo aceptó (con tu abogado). Que los reportes de fallas sin el permiso de mejora sigan sin salir (mandarlos limpios sería un interés legítimo que decide el abogado). Que el aviso diga la ventana de quien retira Medición de uso sin conexión y no vuelve a abrir la app (recomendado que no, el efecto son solo eventos de dinero seudónimos). Que el recorrido no lo vean admin ni dueño. El texto de la bienvenida dice siete paradas y el contador Paso 1 de 8 (recomendado dejarlo)
+- B15. Antes de prender cada cosa. Confirmar en sentry.io la retención de los reportes (el aviso dice 30 días), mandar un evento de prueba a PostHog con la cuenta real para confirmar que descarta la IP y acepta el envío por lotes, y poner SENTRY_AUTH_TOKEN, SENTRY_ORG y SENTRY_PROJECT en GitHub solo cuando exista el build de producción en Cloudflare (B17)
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 

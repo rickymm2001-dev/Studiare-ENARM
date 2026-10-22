@@ -5,6 +5,7 @@
 // y la fecha. Al crearlo se abre el editor con el cursor en la primera línea en blanco.
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { track } from '@/data/analytics/catalog';
 import { useDataApi } from '@/data/context';
 import { newId } from '@/data/ids';
 import type { Deck } from '@/data/schemas/decks';
@@ -88,6 +89,8 @@ export function NewOutline({
         subject: chosen.subject,
         nodes: nodesFromTemplate(text.templateLines[template], newId),
       });
+      // Medición de uso (B15, 1.5). Solo la plantilla y si es modo clase, nunca el título ni la materia
+      track('outline_created', { template, class_mode: isClass });
       setTitle('');
       void navigate(
         outlineHref(outline.id, { line: firstBlankLine(outline.nodes), classMode: isClass }),

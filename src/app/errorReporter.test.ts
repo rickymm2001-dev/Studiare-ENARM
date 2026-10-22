@@ -3,17 +3,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ClientErrorReport } from '@/data/telemetry/clientErrors';
 import {
   MAX_REPORTS_PER_SESSION,
+  errorReportingAllowed,
   installErrorReporter,
   reportClientError,
   resetErrorReporter,
+  sendToDestinations,
   setErrorReportingAllowed,
 } from './errorReporter';
 
 let sent: ClientErrorReport[];
+let originals: unknown[];
 beforeEach(() => {
   sent = [];
-  resetErrorReporter((report) => {
+  originals = [];
+  resetErrorReporter((report, error) => {
     sent.push(report);
+    originals.push(error);
     return Promise.resolve();
   });
 });
@@ -47,6 +52,16 @@ describe('reportar un error', () => {
     reportClientError('error', new Error('uno'));
     setErrorReportingAllowed(false);
     setErrorReportingAllowed(true);
+    expect(sent).toHaveLength(0);
+  });
+
+  it('si se deja de saber el permiso (cambió la cuenta), lo que llegue espera y no sale con el permiso anterior', () => {
+    setErrorReportingAllowed(true);
+    setErrorReportingAllowed(null);
+    expect(errorReportingAllowed()).toBeNull();
+    reportClientError('error', new Error('uno'));
+    expect(sent).toHaveLength(0);
+    setErrorReportingAllowed(false);
     expect(sent).toHaveLength(0);
   });
 
@@ -129,3 +144,61 @@ vi.mock('@/data/cloud/client', () => ({
   cloudConfigured: () => false,
   loadCloud: () => Promise.resolve(null),
 }));
+
+describe('el error original y los dos destinos (B15, 2.1)', () => {
+  it('el emisor recibe el error original, para que Sentry lea la traza', () => {
+    setErrorReportingAllowed(true);
+    const original = new Error('uno');
+    reportClientError('error', original);
+    expect(originals).toEqual([original]);
+  });
+
+  it('un error que esperaba el permiso conserva su error original al entregarse', () => {
+    const original = new Error('uno');
+    reportClientError('error', original);
+    expect(originals).toEqual([]);
+    setErrorReportingAllowed(true);
+    expect(originals).toEqual([original]);
+  });
+
+  it('sendToDestinations manda a Supabase y a Sentry, cada uno con lo suyo', async () => {
+    const supabase = vi.fn(() => Promise.resolve());
+    const sentry = vi.fn(() => Promise.resolve());
+    const report = {
+      fingerprint: 'a',
+      kind: 'error',
+      message: 'm',
+      stack: null,
+      screen: '/',
+      version: 'v',
+    } as const;
+    const error = new Error('x');
+    await sendToDestinations(report, error, { supabase, sentry });
+    expect(supabase).toHaveBeenCalledWith(report);
+    expect(sentry).toHaveBeenCalledWith(report, error);
+  });
+
+  it('si un destino falla o lanza, el otro igual recibe el reporte y nada lanza', async () => {
+    const supabase = vi.fn(() => Promise.reject(new Error('sin red')));
+    const sentry = vi.fn(() => Promise.resolve());
+    const report = {
+      fingerprint: 'a',
+      kind: 'error',
+      message: 'm',
+      stack: null,
+      screen: '/',
+      version: 'v',
+    } as const;
+    await expect(sendToDestinations(report, null, { supabase, sentry })).resolves.toBeUndefined();
+    expect(sentry).toHaveBeenCalledTimes(1);
+    const throwing = vi.fn(() => {
+      throw new Error('boom');
+    });
+    await expect(
+      sendToDestinations(report, null, {
+        supabase: vi.fn(() => Promise.resolve()),
+        sentry: throwing,
+      }),
+    ).resolves.toBeUndefined();
+  });
+});

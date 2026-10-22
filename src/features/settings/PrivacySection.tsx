@@ -22,7 +22,12 @@ import { DataSection } from './DataSection';
 import type { z } from 'zod';
 
 type Purpose = z.infer<typeof ConsentPurposeSchema>;
-const PURPOSES: readonly Purpose[] = ['party', 'ai_analysis', 'anonymized_improvement'];
+const PURPOSES: readonly Purpose[] = [
+  'party',
+  'ai_analysis',
+  'anonymized_improvement',
+  'product_analytics',
+];
 
 export function PrivacySection({ session }: { session: ReadySession }) {
   return (

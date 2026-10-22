@@ -9,6 +9,7 @@ import {
   handleResetMfa,
   listFactorsViaRest,
 } from '../_shared/mfaReset.ts';
+import { monitoringDepsFrom, withMonitoring } from '../_shared/monitoring.ts';
 import type { SupabaseEnv } from '../_shared/supabase.ts';
 
 // Supabase inyecta estas tres en toda función. No se piden ni se guardan en ningún otro lado
@@ -18,14 +19,26 @@ const env: SupabaseEnv = {
   serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
 };
 
-Deno.serve((request) =>
-  handleResetMfa(request, {
-    appUrl: Deno.env.get('APP_URL'),
-    authorize: (authorization, target) => authorizeViaRest(env, authorization, target),
-    listFactors: (userId) => listFactorsViaRest(env, userId),
-    deleteFactor: (userId, factorId) => deleteFactorViaRest(env, userId, factorId),
-    log: (line) => {
-      console.error(line);
-    },
-  }),
+Deno.serve(
+  withMonitoring(
+    'admin-reset-mfa',
+    (request) =>
+      handleResetMfa(request, {
+        appUrl: Deno.env.get('APP_URL'),
+        authorize: (authorization, target) => authorizeViaRest(env, authorization, target),
+        listFactors: (userId) => listFactorsViaRest(env, userId),
+        deleteFactor: (userId, factorId) => deleteFactorViaRest(env, userId, factorId),
+        log: (line) => {
+          console.error(line);
+        },
+      }),
+    // El aviso a Sentry lee SENTRY_DSN al avisar y no al cargar la función
+    () =>
+      monitoringDepsFrom(
+        (name) => Deno.env.get(name),
+        (work) => {
+          EdgeRuntime.waitUntil(work);
+        },
+      ),
+  ),
 );

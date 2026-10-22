@@ -12,6 +12,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
+import { trackSignupCompleted } from '@/data/analytics/control';
 import { recordPrivacyAcceptance } from '@/data/cloud/account';
 import { loadCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
@@ -20,6 +21,7 @@ import type { Account, User } from '@/data/schemas/people';
 import { completeSignup } from '@/data/usecases/account';
 import { PLACEHOLDER_ALIAS } from '@/data/usecases/cloudLink';
 import { decideAllConsents, updateProfile } from '@/data/usecases/profile';
+import { markTourPending } from '@/features/tour/steps';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { Button } from '@/ui/components/button';
@@ -106,6 +108,15 @@ function CompleteSignupForm({ user, account }: { user: User; account: Account })
           // Sigue. Lo de este navegador ya quedó guardado
         }
       }
+      // Una cuenta nueva que acaba de completar su registro (B15, 1.5 y 4.1). Sin cómo nos conoció (D-132)
+      trackSignupCompleted(consents.product_analytics, {
+        method:
+          cloudState.status === 'linked' && cloudState.identity.provider === 'google'
+            ? 'google'
+            : 'email',
+        target_specialty_set: Boolean(specialty),
+      });
+      markTourPending(user.id);
       // Ya con su registro, este navegador abre su perfil y el puente sube la cuenta y sincroniza
       signIn(user.id);
       finishSignup();

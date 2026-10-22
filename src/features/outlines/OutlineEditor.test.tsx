@@ -5,6 +5,12 @@ import type { Editor } from '@tiptap/core';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import {
+  resetAnalytics,
+  setAnalyticsConsent,
+  setAnalyticsSink,
+  type AnalyticsRecord,
+} from '@/data/analytics/catalog';
 import { countNodes, type OutlineNode, type ParsedLine } from '@/engines/outline';
 import { t } from '@/i18n/es-MX';
 import { OutlineEditor } from './OutlineEditor';
@@ -54,6 +60,7 @@ beforeAll(() => {
 });
 afterEach(() => {
   cleanup();
+  resetAnalytics();
 });
 
 const badgeOf = (line: ParsedLine) => (line.mark.type === 'none' ? null : 'Tarjeta');
@@ -253,6 +260,44 @@ describe('OutlineEditor', () => {
     await waitFor(() => {
       expect(lastCall(onChange)[0]).toMatchObject({ id: A, text: 'Tratamiento: salbutamol' });
     });
+  });
+
+  it('volver tarjeta una línea mide solo el tipo de tarjeta, nunca el texto, y quitarla no mide nada (B15, 1.5)', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(true);
+    const typing = userEvent.setup();
+    const { editor } = await mount([node(A, 'Tratamiento: salbutamol'), node(B, '')]);
+    act(() => {
+      editor.commands.focus();
+      editor.commands.setTextSelection(posIn(editor, 0, 4));
+    });
+    const kinds = t.outlines.editor.lineCard.kinds;
+    await typing.click(await screen.findByRole('button', { name: t.outlines.editor.lineButton }));
+    await typing.click(await screen.findByRole('button', { name: kinds.both }));
+    await typing.click(await screen.findByRole('button', { name: t.outlines.editor.lineButton }));
+    await typing.click(await screen.findByRole('button', { name: kinds.none }));
+    expect(seen.map((record) => [record.event, record.properties])).toEqual([
+      ['outline_line_to_card', { card_kind: 'both' }],
+    ]);
+    expect(JSON.stringify(seen)).not.toMatch(/salbutamol|Tratamiento/);
+  });
+
+  it('sin el permiso volver tarjeta una línea no mide nada', async () => {
+    const seen: AnalyticsRecord[] = [];
+    setAnalyticsSink((record) => seen.push(record));
+    setAnalyticsConsent(false);
+    const typing = userEvent.setup();
+    const { editor } = await mount([node(A, 'Tratamiento: salbutamol'), node(B, '')]);
+    act(() => {
+      editor.commands.focus();
+      editor.commands.setTextSelection(posIn(editor, 0, 4));
+    });
+    await typing.click(await screen.findByRole('button', { name: t.outlines.editor.lineButton }));
+    await typing.click(
+      await screen.findByRole('button', { name: t.outlines.editor.lineCard.kinds.both }),
+    );
+    expect(seen).toEqual([]);
   });
 
   it('en una línea en blanco no sale el botón y en la barra los tipos esperan texto', async () => {

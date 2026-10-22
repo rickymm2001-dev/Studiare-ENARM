@@ -48,19 +48,28 @@ export const FEATURE_FLAGS = {
       'Aviso global Versión de demostración mientras la app usa el banco de demostración (4.1 del plan del cambio). Se apaga cuando llega el banco real (B11)',
     defaults: { development: true, demo: true, production: true },
   },
+  // Prueba gratis de 7 días con tarjeta (respuestas 18 y 20, B10). El servidor la hace cumplir con
+  // la misma clave de feature_flags, porque trial_available da false para todos si está apagada, y
+  // entonces create-checkout no abre ninguna prueba. En la app prende el texto Prueba 7 días gratis
+  // en la portada y en los candados de Gratis, estos solo para quien todavía puede tenerla según
+  // trialAvailable de my_plan. En producción se prende desde el servidor después de la corrida real
+  // en modo prueba
   freeTrial: {
-    description:
-      'Prueba gratis de 7 días con tarjeta (respuestas 18 y 20, B10). El servidor la hace cumplir con la misma clave de feature_flags, porque trial_available da false para todos si está apagada, y entonces create-checkout no abre ninguna prueba. En la app prende el texto Prueba 7 días gratis en la portada y en los candados de Gratis, estos solo para quien todavía puede tenerla según trialAvailable de my_plan. En producción se prende desde el servidor después de la corrida real en modo prueba',
+    description: 'Prueba gratis de 7 días con tarjeta (respuestas 18 y 20, B10)',
     defaults: { development: true, demo: false, production: false },
   },
+  // Pases de 1 mes o 1 año con OXXO y SPEI en la forma de pago (B10, 4.4). El servidor también la
+  // hace cumplir y create-checkout responde not_configured si está apagada. Se prende cuando Stripe
+  // tenga los dos métodos activados y pasen la corrida real
   cashPasses: {
-    description:
-      'Pases de 1 mes o 1 año con OXXO y SPEI en la forma de pago (B10, 4.4). El servidor también la hace cumplir y create-checkout responde not_configured si está apagada. Se prende cuando Stripe tenga los dos métodos activados y pasen la corrida real',
+    description: 'Pases de 1 mes o 1 año con OXXO y SPEI en la forma de pago (B10, 4.4)',
     defaults: { development: true, demo: false, production: false },
   },
+  // Suscripción y pago único con Mercado Pago en la forma de pago (respuesta 8, B10). El servidor
+  // también la hace cumplir y create-checkout responde not_configured si está apagada. Se prende
+  // con la cuenta de Mercado Pago y su función de avisos desplegada
   mercadoPago: {
-    description:
-      'Suscripción y pago único con Mercado Pago en la forma de pago (respuesta 8, B10). El servidor también la hace cumplir y create-checkout responde not_configured si está apagada. Se prende con la cuenta de Mercado Pago y su función de avisos desplegada',
+    description: 'Suscripción y pago único con Mercado Pago en la forma de pago (respuesta 8, B10)',
     defaults: { development: false, demo: false, production: false },
   },
   paymentsTestMode: {
@@ -68,30 +77,75 @@ export const FEATURE_FLAGS = {
       'Aviso de modo prueba en la forma de pago, para usar una tarjeta de prueba de la pasarela (B10). Se apaga al pasar los pagos a modo real',
     defaults: { development: true, demo: true, production: true },
   },
+  // Botón Continuar con Google en la bienvenida (B9, respuesta 26). Apagado en todos lados hasta
+  // que el proveedor de Google esté configurado en Supabase, porque sin él el botón lleva a una
+  // página de error
   googleSignIn: {
-    description:
-      'Botón Continuar con Google en la bienvenida (B9, respuesta 26). Apagado en todos lados hasta que el proveedor de Google esté configurado en Supabase, porque sin él el botón lleva a una página de error',
+    description: 'Botón Continuar con Google en la bienvenida (B9, respuesta 26)',
     defaults: { development: false, demo: false, production: false },
   },
+  // Segundo factor obligatorio para médicos, admins y dueño (B9, respuesta 30). El servidor lee la
+  // misma bandera en feature_flags.requireMfa y sin sesión aal2 no les da su rol en los permisos
+  // por fila. Apagada en todos lados, igual que en el servidor sin la clave
   requireMfa: {
-    description:
-      'Segundo factor obligatorio para médicos, admins y dueño (B9, respuesta 30). El servidor lee la misma bandera en feature_flags.requireMfa y sin sesión aal2 no les da su rol en los permisos por fila. Apagada en todos lados, igual que en el servidor sin la clave',
+    description: 'Segundo factor obligatorio para médicos, admins y dueño (B9, respuesta 30)',
     defaults: { development: false, demo: false, production: false },
   },
+  // Los alumnos estudian con el banco de la nube (B11, respuestas 56 y 68). La prende Ricardo en el
+  // servidor cuando haya 300 preguntas aprobadas. La base la lee también con
+  // bank_open_for_students, así una copia manipulada no abre el banco antes
   cloudBank: {
-    description:
-      'Los alumnos estudian con el banco de la nube (B11, respuestas 56 y 68). La prende Ricardo en el servidor cuando haya 300 preguntas aprobadas. La base la lee también con bank_open_for_students, así una copia manipulada no abre el banco antes',
+    description: 'Los alumnos estudian con el banco de la nube (B11, respuestas 56 y 68)',
     defaults: { development: false, demo: false, production: false },
   },
+  // Tarjeta de Inglés médico en Simular, la parte en inglés del examen completo y la tarjeta de
+  // Inglés médico en Progreso (B13, respuesta 61). Prendida en desarrollo y en la demo, para verla
+  // con los casos de prueba. Apagada en producción, porque sin casos publicados ni el mazo de
+  // vocabulario solo diría Sin textos. Ricardo la prende desde platform_settings, clave
+  // feature_flags, cuando haya casos y mazo. Apagada, el examen completo es solo en español
   medicalEnglish: {
     description:
-      'Tarjeta de Inglés médico en Simular, la parte en inglés del examen completo y la tarjeta de Inglés médico en Progreso (B13, respuesta 61). Prendida en desarrollo y en la demo, para verla con los casos de prueba. Apagada en producción, porque sin casos publicados ni el mazo de vocabulario solo diría Sin textos. Ricardo la prende desde platform_settings, clave feature_flags, cuando haya casos y mazo. Apagada, el examen completo es solo en español',
+      'Inglés médico en Simular y en Progreso, y la parte en inglés del examen completo (B13)',
     defaults: { development: true, demo: true, production: false },
   },
+  // El catálogo de mazos precargados sale de Supabase Storage, por submazo y para los planes de
+  // pago (B11, 4.21 y 4.25 del plan del cambio). En la demo y en desarrollo siguen los mazos
+  // empacados
   deckCatalogCloud: {
     description:
-      'El catálogo de mazos precargados sale de Supabase Storage, por submazo y para los planes de pago (B11, 4.21 y 4.25 del plan del cambio). En la demo y en desarrollo siguen los mazos empacados',
+      'El catálogo de mazos precargados sale de Supabase Storage, para los planes de pago (B11)',
     defaults: { development: false, demo: false, production: true },
+  },
+  // Medición de uso con PostHog (B15, respuesta 78). Prendida en producción, pero sin la llave
+  // VITE_POSTHOG_KEY y sin el permiso Medición de uso del alumno no sale ni un evento. Apagada en
+  // desarrollo y en la demo, que nunca miden
+  productAnalytics: {
+    description:
+      'Medición de uso con PostHog (B15). Sin llave y sin permiso del alumno no sale ni un evento',
+    defaults: { development: false, demo: false, production: true },
+  },
+  // Destino Sentry del reporte de errores del navegador (B15, respuesta 79). Prendida en
+  // producción, pero sin VITE_SENTRY_DSN y sin el permiso de mejora con tus datos sin nombre no
+  // sale ni un reporte. El destino Supabase de siempre no depende de esta bandera
+  errorMonitoring: {
+    description:
+      'Destino Sentry del reporte de errores del navegador (B15). Sin DSN y sin permiso no sale nada',
+    defaults: { development: false, demo: false, production: true },
+  },
+  // Recorrido guiado de ocho pasos al entrar por primera vez y el botón Ver el recorrido en
+  // Configuración (B15, respuesta 80). No usa ningún servicio de fuera
+  guidedTour: {
+    description:
+      'Recorrido guiado de ocho pasos y el botón Ver el recorrido en Configuración (B15)',
+    defaults: { development: true, demo: true, production: true },
+  },
+  // Sección Recordatorios por correo en Ajustes del repaso (B15, respuesta 81). Prendida en
+  // desarrollo para verla. En producción la prende el servidor cuando Resend y el dominio funcionen
+  // y email_delivery esté prendido
+  emailReminders: {
+    description:
+      'Sección Recordatorios por correo en Ajustes del repaso (B15). La prende el servidor',
+    defaults: { development: true, demo: false, production: false },
   },
 } as const satisfies Record<string, FlagDef>;
 

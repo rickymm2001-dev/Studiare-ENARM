@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, expect, it } from 'vitest';
+import type { ReminderPrefs } from '../cloud/engagementContracts';
 import { makeUser, newId, testApi } from '../testing/fixtures';
 import { exportUserData } from './exportData';
 import { createOutline, saveOutline } from './outlines';
@@ -76,5 +77,39 @@ it('incluye lo de Party que vive solo en la nube, y sin la nube el archivo sale 
     partyCloud: () => Promise.reject(new Error('sin red')),
   });
   expect(failed.partyCloud).toEqual({ status: 'unavailable', reason: 'network' });
+  expect(failed.user?.id).toBe(user.id);
+});
+
+it('incluye los recordatorios por correo de la nube, y sin la nube o si falla el archivo sale igual', async () => {
+  const api = testApi('real');
+  disposers.push(api.dispose);
+  const user = makeUser();
+  await api.repos.users.put(user);
+
+  // Sin la nube conectada no hay recordatorios que pedir
+  expect((await exportUserData(api.repos, user.id)).remindersCloud).toBeNull();
+
+  const prefs: ReminderPrefs = {
+    available: true,
+    enabled: true,
+    hour: 20,
+    days: [1, 2, 3, 4, 5],
+    frequency: 'weekdays',
+    onlyWhenDue: true,
+    timeZone: 'America/Merida',
+    unsubscribed: false,
+  };
+  const included = await exportUserData(api.repos, user.id, {
+    remindersCloud: () => Promise.resolve({ status: 'included', data: prefs }),
+  });
+  expect(included.remindersCloud).toEqual({ status: 'included', data: prefs });
+  // Ni la ficha de baja ni el correo viajan en el archivo
+  expect(JSON.stringify(included)).not.toMatch(/unsubscribe_token|@/);
+
+  // Si la nube falla, el resto del archivo sale y dice que no se pudieron leer
+  const failed = await exportUserData(api.repos, user.id, {
+    remindersCloud: () => Promise.reject(new Error('sin red')),
+  });
+  expect(failed.remindersCloud).toEqual({ status: 'unavailable' });
   expect(failed.user?.id).toBe(user.id);
 });

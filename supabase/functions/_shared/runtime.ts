@@ -7,6 +7,8 @@ import type {
 } from './billingTypes.ts';
 import type { CheckoutDeps, PortalDeps, StripeWebhookDeps } from './payments.ts';
 import {
+  adminSessionOkViaRest,
+  analyticsTickOkViaRest,
   applyChargeViaRest,
   applySubscriptionStateViaRest,
   authenticateUser,
@@ -17,13 +19,28 @@ import {
   bankSyncFinishViaRest,
   bankSyncVersionsContentViaRest,
   checkoutContextViaRest,
+  claimAnalyticsBatchViaRest,
   claimBillingActionsViaRest,
+  claimEmailBatchViaRest,
+  emailRecipientsViaRest,
+  emailTickOkViaRest,
+  emailUnsubscribeViaRest,
+  finishAnalyticsBatchViaRest,
   finishBillingActionViaRest,
+  finishEmailViaRest,
   linkCustomerViaRest,
   noteTrialWillEndViaRest,
+  releaseEmailViaRest,
   userOfCustomerViaRest,
   type SupabaseEnv,
 } from './supabase.ts';
+import type { AnalyticsFlushDeps } from './analyticsFlush.ts';
+import { captureException } from './monitoring.ts';
+import { monitoringDeps } from './monitoringRuntime.ts';
+import type { MonitoringTestDeps } from './monitoringTest.ts';
+import { createResendSender } from './resend.ts';
+import type { SendEmailsDeps } from './sendEmails.ts';
+import type { UnsubscribeDeps } from './unsubscribe.ts';
 import { createGoogleClient } from './bank/google.ts';
 import {
   parseApplyResults,
@@ -194,3 +211,101 @@ export function bankSyncDeps(onRun?: (runId: string | null) => void): BankSyncDe
     ...(onRun ? { onRun } : {}),
   };
 }
+
+// ---------------------------------------------------------------------------------------------
+// Correos, analítica y alertas de B15 (5.3 del plan de B15). Nada de esto manda algo sin sus llaves: sin
+// RESEND_API_KEY y EMAIL_FROM no hay envío de correos, sin POSTHOG_PROJECT_KEY y POSTHOG_HOST no hay
+// analítica del servidor y sin SENTRY_DSN no hay alertas. Las llaves las pone Ricardo como secretos de las
+// Edge Functions y nunca se registran
+
+/** Los nombres de 5.3 del plan de B15. Lo que no esté aquí no llega a las funciones nuevas */
+const ENGAGEMENT_NAMES = [
+  'APP_URL',
+  'RESEND_API_KEY',
+  'EMAIL_FROM',
+  'SUPPORT_EMAIL',
+  'SENTRY_DSN',
+  'POSTHOG_PROJECT_KEY',
+  'POSTHOG_HOST',
+] as const;
+export type EngagementEnv = Partial<Record<(typeof ENGAGEMENT_NAMES)[number], string>>;
+
+export function readEngagementEnv(): { env: EngagementEnv; supabase: SupabaseEnv } {
+  const env: EngagementEnv = {};
+  for (const name of ENGAGEMENT_NAMES) {
+    const value = Deno.env.get(name)?.trim();
+    if (value) env[name] = value;
+  }
+  return { env, supabase: readEnv().supabase };
+}
+
+/** Envío de correos con Resend (send-emails). Sin las llaves de Resend el envío queda en null */
+export function sendEmailsDeps(): SendEmailsDeps {
+  const { env, supabase } = readEngagementEnv();
+  return {
+    env: {
+      appUrl: env.APP_URL,
+      supabaseUrl: supabase.url === '' ? undefined : supabase.url,
+      supportEmail: env.SUPPORT_EMAIL,
+    },
+    sender:
+      env.RESEND_API_KEY && env.EMAIL_FROM
+        ? createResendSender({
+            apiKey: env.RESEND_API_KEY,
+            from: env.EMAIL_FROM,
+            replyTo: env.SUPPORT_EMAIL,
+            fetch,
+          })
+        : null,
+    tickOk: (token) => emailTickOkViaRest(supabase, token),
+    claim: (limit) => claimEmailBatchViaRest(supabase, limit),
+    recipients: (ids) => emailRecipientsViaRest(supabase, ids),
+    finish: (result) => finishEmailViaRest(supabase, result),
+    release: (id) => releaseEmailViaRest(supabase, id),
+    sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+    log,
+    waitUntil: (work) => {
+      EdgeRuntime.waitUntil(work);
+    },
+    // Un error del trabajo en segundo plano ya no lo ve la envoltura de la función, y se avisa aquí
+    onError: (error) => {
+      void captureException(monitoringDeps, 'send-emails', error);
+    },
+  };
+}
+
+/** La baja de los recordatorios (email-unsubscribe) */
+export function emailUnsubscribeDeps(): UnsubscribeDeps {
+  const { env, supabase } = readEngagementEnv();
+  return {
+    appUrl: env.APP_URL,
+    unsubscribe: (token) => emailUnsubscribeViaRest(supabase, token),
+    log,
+  };
+}
+
+/** El envío de los eventos de dinero a PostHog (analytics-flush). Sin la llave y el host no manda nada */
+export function analyticsFlushDeps(): AnalyticsFlushDeps {
+  const { env, supabase } = readEngagementEnv();
+  return {
+    env: { projectKey: env.POSTHOG_PROJECT_KEY, host: env.POSTHOG_HOST },
+    fetch,
+    tickOk: (token) => analyticsTickOkViaRest(supabase, token),
+    claim: (limit) => claimAnalyticsBatchViaRest(supabase, limit),
+    finish: (ids, status) => finishAnalyticsBatchViaRest(supabase, ids, status),
+    log,
+  };
+}
+
+/** La prueba de alertas del admin (monitoring-test). Comprueba la sesión con admin_email_overview */
+export function monitoringTestDeps(): MonitoringTestDeps {
+  const { env, supabase } = readEngagementEnv();
+  return {
+    appUrl: env.APP_URL,
+    adminOk: (authorization) => adminSessionOkViaRest(supabase, authorization),
+    monitoring: monitoringDeps(),
+  };
+}
+
+// Las demás funciones siguen importándolo de aquí. Vive en monitoringRuntime.ts para que las de IA no carguen este archivo
+export { monitoringDeps } from './monitoringRuntime.ts';

@@ -1,4 +1,5 @@
-// Textos de los tres permisos por finalidad (B14, 6.2 y 6.5 del plan de B14). Fuera de t para que no
+// Textos de los cuatro permisos por finalidad (B14, 6.2 y 6.5 del plan de B14, y Medición de uso de B15,
+// 1.2 del plan de B15, que el paso 0 deja escrita porque el tipo la pide). Fuera de t para que no
 // entren al JavaScript inicial. Solo los importan SignupFields (Crear cuenta y Completa tu registro) y
 // PrivacySection (Configuración, Privacidad), todas en pantallas diferidas. Una sola fuente, así el
 // registro, Completa tu registro y Privacidad dicen lo mismo. Español de México con trato de tú, sin
@@ -29,6 +30,11 @@ export const consentTexts = {
     anonymized_improvement: [
       'Mejora con tus datos sin nombre',
       'Usamos tus respuestas y repasos con un identificador seudónimo, sin tu nombre ni tu correo, para calcular cada noche la dificultad real de las preguntas, avisar a los médicos de opciones que casi nadie elige y comparar a los alumnos por percentiles. También sirve para mandar los reportes de fallas de la app y para guardar tu puntaje oficial si lo capturas. Lo puedes retirar cuando quieras.',
+    ],
+    // B15, 1.2. El responsable no se nombra aquí. Su nombre legal sale solo en el aviso de privacidad
+    product_analytics: [
+      'Medición de uso',
+      'Contamos qué partes de Studiare usas, por ejemplo si terminaste un repaso o un examen, con un identificador seudónimo y sin tu nombre, tu correo ni lo que escribes. Lo hace PostHog por encargo nuestro. Puedes apagarlo cuando quieras.',
     ],
   },
   /** Se suma a la pista de la mejora en Configuración, Privacidad */

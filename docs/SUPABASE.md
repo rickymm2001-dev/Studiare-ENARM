@@ -1222,6 +1222,121 @@ La llave pasa por encima de los permisos por fila, pero el código solo llama a 
 - calibration_runs.counts solo acepta números, booleanos y códigos en minúsculas. Es lo único que la sesión lee de la calibración real
 - Una corrida cerrada ya no da seudónimos, porque su sal se borra al cerrar
 
+## Recordatorios, analítica y alertas (B15)
+
+### Qué hace
+
+- 20261029000001_email_reminders. El interruptor único de envío email_delivery con pausa por tipo, los ajustes de recordatorio de cada alumno (review_reminder_prefs, con su ficha de baja aleatoria), la foto de tarjetas vencidas que sube la app (review_due_snapshots), el encolado de recordatorios cada 15 minutos (enqueue_review_reminders), claim_email_batch v2 con la misma firma que salta los tipos en pausa y marca stale lo que ya no tiene sentido mandar, release_email, email_recipients, email_unsubscribe, email_tick_ok y los conteos del admin (admin_email_overview)
+- 20261029000002_product_analytics. El ID seudónimo aleatorio de la analítica con el permiso Medición de uso (analytics_subjects), la cola de eventos de dinero (analytics_outbox) que llenan disparadores en subscriptions y payments sin poder hacer fallar un pago, el reclamo y cierre de esa cola y analytics_tick_ok. El interruptor analytics nace apagado
+- 20261029000003_engagement_cron. Las fichas email_tick_secret y analytics_tick_secret en Vault y cuatro trabajos de Cron en GMT. correos-recordatorios cada 15 minutos, correos-pases a las 14:07 (8:07 en Mérida), correos-enviar cada minuto y analitica-enviar cada 5, estos dos solo si el interruptor está prendido y hay algo listo
+- 20261029000004_delete_my_data_v4. Borrar mis datos v4, que suma a la v3 de B12 los recordatorios, la foto de vencidas, el ID de analítica y los recordatorios pendientes. Es la única de las cuatro con delete
+- Todo nace apagado. email_delivery sale con el valor de billing_emails.enabled, que en el proyecto real es false, y analytics con false. Las cuatro tablas nuevas nacen sin permisos para la API y con permisos por fila sin políticas
+- Las funciones de apoyo, send-emails, email-unsubscribe, analytics-flush y monitoring-test, y cómo funcionan los correos y las alertas están en docs/CORREOS.md y docs/ALERTAS.md
+
+### Cómo aplicar las cuatro migraciones
+
+Aplica primero todas las anteriores, incluidas las de B14. Van en orden y las cuatro son seguras de repetir. Las tres primeras no llevan delete ni drop, así el conector las aplica sin pedir confirmación. La tercera no hace nada donde no existan pg_cron, pg_net y Vault, y necesita project_url en Vault, que guardó la sesión con B11. La cuarta lleva delete, así que el conector no la aplica sin una confirmación y la aplica la herramienta de despliegue.
+
+1. supabase/migrations/20261029000001_email_reminders.sql
+2. supabase/migrations/20261029000002_product_analytics.sql
+3. supabase/migrations/20261029000003_engagement_cron.sql
+4. supabase/migrations/20261029000004_delete_my_data_v4.sql
+
+Con un token válido de Supabase no las aplicas tú. Lo hace npm run deploy:supabase -- --plan b15 (docs/DESPLIEGUE.md), que también publica las funciones de abajo.
+
+**Borrar mis datos v4.** Quitar los recordatorios, la foto de vencidas, el ID de analítica y los recordatorios pendientes lleva delete, así que va en su propia migración, la cuarta, como pasó con 20261026000004 en B12. Es la v3 de B12 más lo de B15, sin cambiar una línea de la v3, y plans.test.ts lo comprueba. La herramienta de despliegue exige que un archivo manual traiga cada función igual a la última migración que la define, así que supabase/manual/banco-b11.sql, supabase/manual/ia-b12.sql y la pieza 4 de supabase/manual/ejecutar-en-sql-editor.sql traen la misma v4, para pegarlas a mano si el token no llega. Los delete de lo nuevo van con execute y solo si la tabla existe, así la función no se rompe si falta una migración. Borrar la cuenta lo quita todo en cascada sin necesitarla. Conserva los avisos de cobro pendientes (fin de prueba, pase por vencer), porque la cuenta y el plan se quedan.
+
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run. Es la comprobación del final de la cuarta migración, la misma que revisa el plan b15, y solo mira hechos de la estructura.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public'
+     and tablename in ('review_reminder_prefs', 'review_due_snapshots', 'analytics_subjects', 'analytics_outbox')) as tablas_de_b15,
+  (select bool_and(relrowsecurity) from pg_class where oid in (
+     'public.review_reminder_prefs'::regclass, 'public.review_due_snapshots'::regclass,
+     'public.analytics_subjects'::regclass, 'public.analytics_outbox'::regclass)) as tablas_con_seguridad_por_fila,
+  has_function_privilege('authenticated', 'public.set_reminder_prefs(boolean, integer, integer[], boolean, text)', 'execute') as alumno_guarda_recordatorios,
+  has_function_privilege('anon', 'public.set_reminder_prefs(boolean, integer, integer[], boolean, text)', 'execute') as anonimo_guarda_recordatorios,
+  has_function_privilege('authenticated', 'public.claim_email_batch(integer)', 'execute') as alumno_reclama_correos,
+  has_function_privilege('service_role', 'public.claim_email_batch(integer)', 'execute') as llave_reclama_correos,
+  has_function_privilege('service_role', 'public.email_unsubscribe(text)', 'execute') as llave_da_de_baja,
+  has_function_privilege('authenticated', 'public.analytics_identity()', 'execute') as alumno_pide_su_id,
+  has_function_privilege('authenticated', 'public.claim_analytics_batch(integer)', 'execute') as alumno_reclama_eventos,
+  (select count(*) from public.platform_settings where key in ('email_delivery', 'analytics')) = 2 as interruptores_sembrados,
+  position('review_reminder_prefs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_mis_datos_b15;
+```
+
+Debe salir
+- tablas_de_b15 en 4 y tablas_con_seguridad_por_fila en true
+- alumno_guarda_recordatorios, llave_reclama_correos, llave_da_de_baja y alumno_pide_su_id en true
+- anonimo_guarda_recordatorios, alumno_reclama_correos y alumno_reclama_eventos en false
+- interruptores_sembrados y borrar_mis_datos_b15 en true. Si borrar_mis_datos_b15 sale false, falta aplicar la cuarta migración
+
+Lo que cambia con el tiempo y lo que solo existe en Supabase se lee aparte, con esta segunda consulta.
+
+```sql
+select
+  (select value ->> 'enabled' from public.platform_settings where key = 'email_delivery') as correos_encendidos,
+  (select value ->> 'enabled' from public.platform_settings where key = 'analytics') as analitica_encendida,
+  (select count(*) from cron.job where jobname in ('correos-recordatorios', 'correos-pases', 'correos-enviar', 'analitica-enviar')) as trabajos_de_cron,
+  exists (select 1 from vault.decrypted_secrets where name = 'email_tick_secret') as ficha_de_correos,
+  exists (select 1 from vault.decrypted_secrets where name = 'analytics_tick_secret') as ficha_de_analitica;
+```
+
+Debe salir
+- correos_encendidos y analitica_encendida en false, hasta que prendas cada uno
+- trabajos_de_cron en 4 y las dos fichas en true
+
+Si cualquiera de los permisos sale distinto, avísame antes de abrir a alumnos.
+
+### Las funciones y sus secretos
+
+En Supabase, Edge Functions, Secrets. Los nombres son exactos y ninguno va en el repo. Ninguno pasa por el chat.
+
+| Nombre | Qué es |
+|---|---|
+| RESEND_API_KEY | La llave de envío de Resend, solo de envío y solo de tu dominio |
+| EMAIL_FROM | El remitente con el dominio de Ricardo, por ejemplo Studiare con la dirección de los recordatorios |
+| SUPPORT_EMAIL | El correo de soporte, que va al pie de los correos y como dirección de respuesta |
+| POSTHOG_PROJECT_KEY y POSTHOG_HOST | La llave del proyecto de PostHog (empieza con phc_, nunca la personal phx_) y su dirección, us.i.posthog.com o eu.i.posthog.com |
+| SENTRY_DSN | El DSN del proyecto studiare-funciones de Sentry |
+| APP_URL | Sin cambio. De ahí salen los enlaces de los correos y la página de baja |
+
+Sin cada llave, su función responde que falta la configuración y no manda nada. Las fichas de Cron no son secretos que pongas tú, las crea la tercera migración dentro de Vault.
+
+Después de las migraciones se despliegan las funciones nuevas. Las tres primeras no llevan sesión de Supabase, porque quien las llama es Cron o el correo de una persona, y se identifican con su ficha. El plan b15 las publica con su verify_jwt.
+
+```bash
+supabase functions deploy send-emails --no-verify-jwt
+supabase functions deploy email-unsubscribe --no-verify-jwt
+supabase functions deploy analytics-flush --no-verify-jwt
+supabase functions deploy monitoring-test
+```
+
+Las nueve funciones de siempre se vuelven a desplegar, porque ahora van envueltas con withMonitoring. El plan b15 también lo hace, cada una con el verify_jwt que tenía (create-checkout, create-portal-session, cancel-subscription, admin-reset-mfa, payment-webhook-stripe, payment-webhook-mercadopago, bank-sync, ai-proxy y ai-batch).
+
+### Prueba de humo sin llaves
+
+Después de desplegar, con todo apagado y sin ninguna llave, estas son las respuestas correctas.
+
+| Llamada | Respuesta |
+|---|---|
+| email-unsubscribe con una ficha falsa (POST con ?t=) | 200 en blanco |
+| send-emails sin la ficha de Cron | 401 |
+| monitoring-test con una llave pública cualquiera | 401 o 403, porque exige un admin con segundo factor |
+| monitoring-test con la sesión de un admin y sin SENTRY_DSN | missing_dsn |
+
+### Qué conviene saber
+
+- Los trabajos de Cron leen la dirección del proyecto de project_url en Vault. Si falta, los dos trabajos de envío fallan en cron.job_run_details sin mandar nada. Los de encolar no la necesitan
+- Las horas de Cron son GMT. El aviso de pases por vencer corre a las 14:07, las 8:07 de la mañana en Mérida
+- El chequeo de seguridad de Supabase marcará, a propósito, las cuatro tablas nuevas con permisos por fila y sin políticas, y las funciones que la app llama con sesión (my_reminder_prefs, set_reminder_prefs, put_due_snapshot, analytics_identity, set_analytics_consent y admin_email_overview), que revisan por dentro la sesión, el dispositivo activo o el rol. supabase/tests/function_grants_test.sql (G9 a G11) revisa la lista completa
+- analytics_outbox lleva una columna más que el diseño, send_after, para que dos envíos a la vez no tomen los mismos eventos y para espaciar los reintentos
+- email_recipients solo da correos de cuentas con el correo confirmado y solo da la ficha de baja a quien tiene el recordatorio prendido y sin baja
+- Los eventos de dinero solo se encolan si analytics está prendido y el alumno dio el permiso Medición de uso. Retirarlo marca dropped lo pendiente y cambia su ID. Nunca borra
+- Para apagar todo de golpe, pon email_delivery.enabled y analytics.enabled en false en Plataforma, Correos y alertas
+- Exportar mis datos incluye los recordatorios por correo que el alumno tiene en la nube (hora, días, zona, si es solo con pendientes y si se dio de baja), leídos con my_reminder_prefs, sin la ficha de baja ni el correo. Si la nube no contesta, el archivo sale igual y dice que no se pudieron leer. Si el alumno dio el permiso Medición de uso ya sale en sus permisos, que son de su dispositivo
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.
@@ -1243,7 +1358,7 @@ La herramienta del conector pide una confirmación humana para toda sentencia co
 - Liberar la cuenta de un alumno (admin_release_device)
 - Aceptar el plan Fundador en la tabla de suscripciones. Sin esto no se puede activar ese plan
 - Quitar las llaves foráneas sin regla, para poder borrar a un médico o a un admin
-- Borrar mis datos y borrar mi cuenta (delete_my_data y delete_my_account)
+- Borrar mis datos y borrar mi cuenta (delete_my_data y delete_my_account). Con B15 la pieza de Borrar mis datos es la versión 4, que también quita lo de los recordatorios y la analítica. Si ya pegaste este archivo antes, pégalo otra vez después de aplicar las migraciones de B15
 - Guardar los errores del navegador (report_client_error)
 
 Comprobación. Debe salir true en las tres columnas.

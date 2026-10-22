@@ -10,7 +10,7 @@ import { LockedNote } from '../shared/LockedPreview';
 export function CatalogLockNotice() {
   return (
     <div className="mb-3">
-      <LockedNote>{t.freePlan.catalog.notice}</LockedNote>
+      <LockedNote feature="catalog">{t.freePlan.catalog.notice}</LockedNote>
     </div>
   );
 }

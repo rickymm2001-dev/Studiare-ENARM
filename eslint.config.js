@@ -192,10 +192,15 @@ export default defineConfig([
   },
 
   // Lo compartido de las Edge Functions. Sin Node, sin Deno y sin importar fuera de supabase/functions.
-  // Solo runtime.ts arma las dependencias desde el entorno de Deno
+  // Solo runtime.ts y monitoringRuntime.ts (el aviso a Sentry, aparte para que la IA no cargue todo runtime.ts)
+  // arman las dependencias desde el entorno de Deno
   {
     files: ['supabase/functions/_shared/**/*.ts'],
-    ignores: ['supabase/functions/_shared/**/*.test.ts', 'supabase/functions/_shared/runtime.ts'],
+    ignores: [
+      'supabase/functions/_shared/**/*.test.ts',
+      'supabase/functions/_shared/runtime.ts',
+      'supabase/functions/_shared/monitoringRuntime.ts',
+    ],
     rules: {
       'no-restricted-imports': ['error', { patterns: SHARED_IMPORT_PATTERNS }],
       'no-restricted-globals': [

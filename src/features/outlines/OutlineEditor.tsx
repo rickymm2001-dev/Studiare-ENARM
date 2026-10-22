@@ -30,6 +30,7 @@ import {
   useState,
   type RefObject,
 } from 'react';
+import { track } from '@/data/analytics/catalog';
 import { newId } from '@/data/ids';
 import {
   docToOutline,
@@ -265,6 +266,8 @@ export function OutlineEditor({
   const choose = (kind: LineCardKind | 'none') => {
     setMenu(null);
     convertCurrentLine(editor, kind);
+    // Medición de uso (B15, 1.5). Solo el tipo de tarjeta, nunca el texto de la línea
+    if (kind !== 'none') track('outline_line_to_card', { card_kind: kind });
   };
 
   const tools = [

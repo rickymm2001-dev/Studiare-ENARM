@@ -6,7 +6,6 @@
 import { z } from 'zod';
 import { create } from 'zustand';
 import { isFeatureEnabled } from '@/config/featureFlags';
-import { signOutCloud } from '@/data/cloud/account';
 import { cloudConfigured, forgetStoredCloudSession, loadCloud } from '@/data/cloud/client';
 import { RoleSchema } from '@/data/schemas/common';
 import { AppearanceSchema, DEFAULT_APPEARANCE } from '@/ui/appearance';
@@ -174,6 +173,8 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
       // se pudo bajar, se quita la sesión guardada para que no vuelva a abrirse sola
       void loadCloud().then(async (cloud) => {
         if (cloud) {
+          // El cierre de sesión de la nube vive con el resto de la cuenta, que no hace falta para abrir la app (14.4)
+          const { signOutCloud } = await import('@/data/cloud/account');
           await signOutCloud(cloud);
           return;
         }

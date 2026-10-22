@@ -49,7 +49,8 @@ export function FeatureGate({
   if (canUse(plan, feature, plans)) return <>{children}</>;
   if (locked !== undefined) return <>{locked}</>;
   return (
-    <LockedNote>
+    // Las tarjetas con IA son el candado que mide la analítica en este aviso corto (B15, 1.5)
+    <LockedNote {...(feature === 'aiCards' ? { feature: 'ai' as const } : {})}>
       {isGatedFeature(feature)
         ? t.billing.featureLocked(t.billing.featureNames[feature])
         : t.freePlan.accessLocked[feature]}

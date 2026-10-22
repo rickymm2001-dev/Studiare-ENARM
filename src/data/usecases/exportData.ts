@@ -2,13 +2,20 @@
 // lo que creó él mismo, sus mazos, tarjetas y apuntes (D-092). Lo precargado no se exporta porque
 // no es suyo y lo trae la app. Lo de Party que vive solo en la nube (B7), sus grupos, el XP que
 // publicó, sus aportes, sus retos y sus duelos, lo pone quien conoce la nube con partyCloud. Si la
-// nube no contesta, el archivo sale igual con lo de este dispositivo y dice por qué falta Party.
+// nube no contesta, el archivo sale igual con lo de este dispositivo y dice por qué falta Party. Los
+// recordatorios por correo (B15, 3.8) también viven en la nube y se piden igual. Si el alumno dio el
+// permiso Medición de uso ya sale en sus permisos, que son de este dispositivo.
 import type { PartyExport, PartyFailure } from '../cloud/party';
+import type { ReminderPrefs } from '../cloud/engagementContracts';
 import type { Repositories } from '../repos/types';
 
 /** Lo de Party en la nube dentro del archivo */
 export type PartyCloudExport =
   { status: 'included'; data: PartyExport } | { status: 'unavailable'; reason: PartyFailure };
+
+/** Los recordatorios por correo que tiene guardados en la nube, sin su ficha de baja */
+export type RemindersCloudExport =
+  { status: 'included'; data: ReminderPrefs } | { status: 'unavailable' };
 
 export async function exportUserData(
   repos: Repositories,
@@ -16,6 +23,8 @@ export async function exportUserData(
   options: {
     /** Pide a la nube lo de Party. null si la cuenta no está conectada a la nube */
     partyCloud?: () => Promise<PartyCloudExport | null>;
+    /** Pide a la nube sus recordatorios por correo. null si la cuenta no está conectada a la nube */
+    remindersCloud?: () => Promise<RemindersCloudExport | null>;
   } = {},
 ) {
   const [
@@ -31,6 +40,7 @@ export async function exportUserData(
     outlines,
     officialScore,
     partyCloud,
+    remindersCloud,
   ] = await Promise.all([
     repos.users.get(userId),
     repos.accounts.get(userId),
@@ -48,6 +58,9 @@ export async function exportUserData(
           status: 'unavailable',
           reason: 'network',
         }))
+      : Promise.resolve(null),
+    options.remindersCloud
+      ? options.remindersCloud().catch((): RemindersCloudExport => ({ status: 'unavailable' }))
       : Promise.resolve(null),
   ]);
   const ownDecks = decks.filter((deck) => deck.ownerId === userId);
@@ -71,5 +84,7 @@ export async function exportUserData(
     events,
     // Party en la nube. Solo las filas propias, sin nada de los compañeros
     partyCloud,
+    // Los recordatorios por correo de la nube, con la hora, los días, la zona y si se dio de baja
+    remindersCloud,
   };
 }

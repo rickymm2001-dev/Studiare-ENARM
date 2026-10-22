@@ -52,6 +52,20 @@ jobs:
           VITE_PRIVACY_EMAIL: ${{ vars.VITE_PRIVACY_EMAIL }}
           # Correo de ayuda que ve el alumno en los avisos. Es público. Si falta, la app no muestra enlace
           VITE_SUPPORT_EMAIL: ${{ vars.VITE_SUPPORT_EMAIL }}
+          # Medición de uso y avisos de errores del navegador (B15, PENDIENTES B15.4 y B15.9). La llave de proyecto
+          # de PostHog (phc_), su dirección de captura y el DSN de Sentry son públicos por diseño. Si faltan, la
+          # app no mide ni avisa nada. En esta demo las banderas productAnalytics y errorMonitoring nacen apagadas
+          # (src/config/featureFlags.ts), así que aquí solo abren la política de seguridad. Se prenden con el build
+          # de producción (B17), que debe pasar estas mismas variables
+          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          # Mapas de código para Sentry (PENDIENTES B15.11, scripts/sentry-build.ts). Sin los tres el build sale sin
+          # mapas, como siempre. El token es un secreto de GitHub y no empieza con VITE_, así que nunca llega al
+          # bundle. Los mapas se borran de dist después de subirlos, porque la demo es pública
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
       # GitHub Pages responde 404.html a cualquier ruta que no existe. Así abren bien los enlaces directos como /perfil
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v5

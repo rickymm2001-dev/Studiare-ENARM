@@ -3,6 +3,9 @@
 -- error si algo no cumple.
 --   E1 tipos de correo extensibles, E2 fin de la prueba, E3 pase por vencer, E4 la cola de B15,
 --   E5 lo que puede guardar la cola y E6 permisos
+-- Con B15 (20261029000001_email_reminders.sql) el envío lo manda email_delivery y no billing_emails, y
+-- claim_email_batch salta los tipos en pausa y marca stale lo que ya no tiene sentido mandar. Aquí se prueba
+-- que la cola de B10 sigue igual con el interruptor nuevo. reminders_test.sql prueba lo de B15 a fondo
 \set ON_ERROR_STOP on
 
 -- ===================================================================== Ayudas de prueba
@@ -136,7 +139,7 @@ select pg_temp.is((select count(*) from public.email_outbox where recipient_user
   'E3. Debía haber un aviso por cada fecha de fin');
 
 -- ===================================================================== E4. La cola de B15
--- Con billing_emails.enabled en false nada sale
+-- Con email_delivery apagado nada sale
 select pg_temp.is((select count(*) from public.claim_email_batch(100))::text, '0', 'E4. Con los correos apagados no debía entregar nada');
 select pg_temp.expect(public.enqueue_email(null, 'team', 'invoice_requested', 'e4-equipo', '{"amountMxn":149}'),
   'E4. Debía encolar un correo al equipo');
@@ -144,7 +147,10 @@ select pg_temp.expect(not public.enqueue_email(null, 'team', 'invoice_requested'
   'E4. La misma clave no debía encolar otro');
 select pg_temp.expect(not public.enqueue_email('ffffffff-ffff-ffff-ffff-fffffffffff3', null, 'trial_ending', 'e4-nadie', '{}'),
   'E4. Un alumno que no existe no debía encolar nada');
+-- El interruptor de B10 ya no abre nada: manda email_delivery
 update public.platform_settings set value = '{"enabled":true}' where key = 'billing_emails';
+select pg_temp.is((select count(*) from public.claim_email_batch(100))::text, '0', 'E4. billing_emails todavía abría el envío');
+update public.platform_settings set value = '{"enabled":true,"paused":[]}' where key = 'email_delivery';
 create temp table e4_batch as select * from public.claim_email_batch(100);
 select pg_temp.expect(
   (select count(*) from e4_batch) = (select count(*) from public.email_outbox where status = 'queued')
@@ -172,6 +178,19 @@ select pg_temp.is((select count(*) from public.claim_email_batch(100) where reci
   'E4. Después de 5 intentos no debía volver a entregarse');
 select pg_temp.is(pg_temp.fails_with($q$select public.finish_email(gen_random_uuid(), 'perdido')$q$), '22023',
   'E4. Un estado de correo desconocido debía rechazarse');
+-- Un tipo en pausa no sale, y un correo vencido se marca stale en lugar de mandarse
+insert into public.email_outbox (recipient_user, kind, dedupe_key, data) values
+  (:'e6', 'pass_expiring', 'e4-pase-vencido', jsonb_build_object('passEnd', now() - interval '1 hour', 'plan', 'monthly')),
+  (:'e6', 'trial_ending', 'e4-prueba-pausada', jsonb_build_object('trialEnd', now() + interval '1 day', 'plan', 'monthly'));
+update public.platform_settings set value = '{"enabled":true,"paused":["trial_ending"]}' where key = 'email_delivery';
+select pg_temp.is((select count(*) from public.claim_email_batch(100) where dedupe_key like 'e4-%')::text, '0',
+  'E4. Un tipo en pausa o un pase vencido no debían entregarse');
+select pg_temp.expect(
+  (select status = 'skipped' and last_error = 'stale' from public.email_outbox where dedupe_key = 'e4-pase-vencido')
+  and (select status = 'queued' and attempts = 0 from public.email_outbox where dedupe_key = 'e4-prueba-pausada'),
+  'E4. El pase vencido debía quedar stale y el tipo en pausa seguir en la cola'
+);
+update public.platform_settings set value = '{"enabled":false,"paused":[]}' where key = 'email_delivery';
 update public.platform_settings set value = '{"enabled":false}' where key = 'billing_emails';
 
 -- ===================================================================== E5. Lo que puede guardar la cola

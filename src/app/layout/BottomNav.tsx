@@ -8,6 +8,7 @@ import { Ellipsis, X, type LucideIcon } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { NAV_MORE_ANCHOR, navAnchorOfPath } from '@/features/tour/anchors';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import {
@@ -51,7 +52,13 @@ function ItemIcon({ icon: Icon, active }: { icon: LucideIcon; active: boolean })
 function RailLink({ item, pathname }: { item: NavItem; pathname: string }) {
   const active = isNavItemActive(item, pathname);
   return (
-    <Link to={item.path} aria-current={active ? 'page' : undefined} className={itemClass(active)}>
+    <Link
+      to={item.path}
+      aria-current={active ? 'page' : undefined}
+      // El ancla del recorrido guiado (B15, 4.3)
+      data-tour={navAnchorOfPath(item.path)}
+      className={itemClass(active)}
+    >
       <ItemIcon icon={item.icon} active={active} />
       <span className="truncate">{item.label}</span>
     </Link>
@@ -172,6 +179,7 @@ function MoreSheet({
           ref={trigger}
           type="button"
           aria-current={active ? 'true' : undefined}
+          data-tour={NAV_MORE_ANCHOR}
           className={cn(itemClass(active), 'w-full')}
         >
           <ItemIcon icon={Ellipsis} active={active} />
