@@ -138,4 +138,11 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Columna de nivel en la plantilla de Excel de preguntas.** Para que el médico lo llene al subir un lote. Surgió al programar V4-B5 (D-144)
 - **Vista de semana en el Calendario.** El plan por semanas cubre la lectura, pero un día a día de la semana podría servir a quien estudia por horas. Surgió al programar V4-B6 (D-144)
 - **Percentil de simulador completo separado del de práctica.** La comparación de B14 junta respuestas de práctica y de examen. Separarlas pide otra métrica en las celdas de la noche. Surgió al revisar V4-B7 (D-144)
+- **Elegir el orden de las ramas del plan del Calendario.** Hoy el plan usa las cuatro ramas troncales por omisión y ninguna pantalla edita ese ajuste. Debe incluir las demás ramas del examen. Surgió en la auditoría de V4-B10 (D-146)
+- **Estadísticas por mazo con el catálogo de la nube.** El panel solo se monta con el catálogo que viene en la app. Faltan también las sanguijuelas, la última vez estudiado y los botones a Estudiar un tema y a Buscar con el filtro. Surgió en la auditoría de V4-B10 (D-146)
+- **Plan de hoy dentro de Repasar, simulacros cortos como cifra y aviso de cifra imposible.** Surgió en la auditoría de V4-B10 (D-146)
+- **Marcar para degradar la calidad de una imagen a propósito.** Pide un campo en la pregunta y en el editor del médico. Surgió en la auditoría de V4-B10 (D-146)
+- **Búsqueda de tarjetas con el tema completo y sin recalcular por tecla.** El campo tema solo ve los tres primeros niveles y con 50 mil tarjetas los campos con texto plegado tardan unos 200 ms por tecla. Surgió en la auditoría de V4-B10 (D-146)
+- **Sanear por lotes en el importador.** Hoy se sanea todo en el hilo principal sin ceder, y un archivo con millones de notas lo congela unos segundos. Surgió en la auditoría de V4-B10 (D-146)
+- **Pedir al alumno que cuente cuántas tarjetas esperaba al importar un mazo muy grande.** Surgió en la auditoría de V4-B10 (D-146)
 

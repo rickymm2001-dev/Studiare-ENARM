@@ -918,14 +918,15 @@ export const featureText = {
       basic: 'Básica',
       basicReverse: 'Básica con tarjeta inversa',
       cloze: 'Con huecos (cloze)',
-      // Cada tipo con un ejemplo médico, para que se entienda sin haber usado Anki (V4-B3)
+      // Cada tipo con un ejemplo, para que se entienda sin haber usado Anki (V4-B3). Los ejemplos no son
+      // de medicina a propósito, porque ningún texto médico sale sin la validación de un médico
       kindHelp: {
         basic:
-          'Una pregunta y su respuesta. Genera una carta. Por ejemplo, ¿Cuál es el tratamiento de primera línea de la anafilaxia? Epinefrina intramuscular.',
+          'Una pregunta y su respuesta. Genera una carta. Por ejemplo, ¿Qué es la repetición espaciada? Repasar justo antes de olvidar.',
         basic_reverse:
-          'Un frente y un reverso. Genera dos cartas, una que pregunta el frente y otra que pregunta el reverso. Sirve para lo que quieres reconocer en los dos sentidos, como un signo y su enfermedad.',
+          'Un frente y un reverso. Genera dos cartas, una que pregunta el frente y otra que pregunta el reverso. Sirve para lo que quieres reconocer en los dos sentidos, como un término y su definición.',
         cloze:
-          'Un texto con huecos que se ocultan al repasar. Genera una carta por cada número de hueco. Por ejemplo, La triada de Beck es {{c1::hipotensión}}, {{c2::ruidos cardiacos apagados}} y {{c3::ingurgitación yugular}}.',
+          'Un texto con huecos que se ocultan al repasar. Genera una carta por cada número de hueco. Por ejemplo, Studiare usa {{c1::repetición espaciada}} para decidir {{c2::cuándo}} repasas cada tarjeta.',
       },
       front: 'Pregunta',
       back: 'Respuesta',

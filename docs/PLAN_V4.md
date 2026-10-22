@@ -227,8 +227,9 @@ Lo de Paco y los complementos de la sección 5.
 Se acepta cuando las e2e de review, review-tools, deck-topics y explore cubren los tres niveles de atrasos, la sesión por tema y la pantalla de mazo, los motores nuevos tienen unitarias y la bitácora sigue sin editar ni borrar.
 
 Estado de V4-B3 (2026-10-22, D-142)
-- Hecho. Atrasos por riesgo con posponer solo lo que aguanta y un último recurso con confirmación. Estudiar un tema aparte de la cola del día sin gastar su cupo. Estadísticas por mazo con histograma y retención estimada. Buscar con campo:valor y ejemplos con un toque. Detalle por día en el heatmap. Ejemplos médicos en los tipos de tarjeta
-- No se hizo. Editar durante el repaso una tarjeta de un mazo precargado, que pide una copia en Mis tarjetas. Va a IDEAS.md
+- Hecho. Atrasos por riesgo con posponer solo lo que aguanta y un último recurso con confirmación. Estudiar un tema aparte de la cola del día sin gastar su cupo. Estadísticas por mazo con histograma y retención estimada. Buscar con campo y valor, con ejemplos de un toque. Detalle por día en el heatmap, con su salida accesible en el Calendario. Ejemplos de cada tipo de tarjeta, que son de formato y no de medicina a propósito, porque ningún texto médico sale sin la validación de un médico
+- Con salvedad. Las estadísticas por mazo viven en la pantalla Mazos con el catálogo que viene en la app. Con el catálogo de la nube, que es el de producción, todavía no se montan. Queda en IDEAS.md
+- No se hizo. Editar durante el repaso una tarjeta de un mazo precargado, que pide una copia en Mis tarjetas. En la pantalla de mazo faltan las sanguijuelas, la última vez estudiado y los botones a Estudiar un tema y a Buscar tarjetas con el filtro puesto. Todo va a IDEAS.md
 
 ### V4-B4. Métodos de estudio y plan de hoy (M)
 
@@ -243,7 +244,7 @@ Se acepta cuando el plan de hoy se calcula en un motor puro con unitarias, el re
 
 Estado de V4-B4 (2026-10-22, D-143)
 - Hecho. Plan de hoy con las tres cifras en la meta diaria de Inicio y el plan de la guía en Ajustes del repaso. Guía de métodos en Tutor y Apuntes. Recall sprint dentro de cada apunte. Importador de Markdown y OPML
-- No se hizo. Plegado de secciones, contador de puntos y seleccionar texto de un PDF. Van a IDEAS.md
+- No se hizo. Plan de hoy dentro de Repasar, los simulacros cortos como cifra aparte, el aviso de que una cifra es imposible con el tiempo declarado, el estado calibrando del plan, el plegado de secciones, el contador de puntos y seleccionar texto de un PDF. Todo va a IDEAS.md
 
 ### V4-B5. Estructura del examen con Bloom (M)
 
@@ -258,7 +259,7 @@ Se acepta cuando una pregunta con nivel entra por el Sheet y sale en Simular con
 
 Estado de V4-B5 (2026-10-22, D-144)
 - Hecho. Nivel cognitivo como campo independiente de la dificultad, opcional en el esquema del banco local y en el editor del médico, filtro por nivel en Simular, tarjeta de exactitud por nivel en Progreso con estado calibrando, tarjeta Cómo es el examen con las imperfecciones como entrenamiento y hoja de respuestas al estilo Ceneval como opción del examen, con su e2e (tests/e2e/exam-sheet.spec.ts)
-- No se hizo. La columna del Sheet con su lista de validación, el convertidor y las columnas SQL del banco en la nube, porque no hay Postgres para probarlas aquí. Queda en docs/PENDIENTES_DE_RICARDO.md. El nivel está dormido hasta que haya preguntas con nivel. La mezcla por nivel del examen completo y su ajuste en Umbrales quedan en IDEAS.md hasta tener preguntas etiquetadas. Degradar imágenes a propósito sigue siendo solo donde el médico lo marque
+- No se hizo. La columna del Sheet con su lista de validación, el convertidor y las columnas SQL del banco en la nube, porque no hay Postgres para probarlas aquí. Queda en docs/PENDIENTES_DE_RICARDO.md. El nivel está dormido hasta que haya preguntas con nivel. La mezcla por nivel del examen completo y su ajuste en Umbrales quedan en IDEAS.md hasta tener preguntas etiquetadas. Degradar imágenes a propósito todavía no existe, porque pide un campo en la pregunta para que el médico lo marque, y va a IDEAS.md
 
 ### V4-B6. Calendario (M)
 
@@ -273,6 +274,7 @@ Se acepta cuando el plan de semanas se calcula en el motor con unitarias, el cal
 Estado de V4-B6 (2026-10-22, D-144)
 - Hecho. Pantalla Calendario en el menú con vista de mes, detalle del día, carga prevista a 60 días, plan por semanas hasta el examen con los domingos de simulador completo en las últimas 10 semanas, y exportar el plan como .ics. Motor puro en src/engines/studyCalendar.ts con sus pruebas, e2e en tests/e2e/calendar.spec.ts
 - Cambio frente al plan. La cuadrícula del mes es propia, una tabla con botones, y no react-day-picker, porque el calendario necesita marcas por día y teclado propio y así no suma una dependencia. No se hizo la vista de semana aparte, porque el plan por semanas ya cubre esa lectura
+- No se hizo. Que el alumno elija el orden de las ramas. El plan usa las ramas de sus ajustes, que hoy son las cuatro troncales por omisión y ninguna pantalla edita. Va a IDEAS.md. El Calendario es libre en todos los planes, y en Gratis el plan avisa que el simulador completo es de pago
 
 ### V4-B7. Comunidad (M, por etapas)
 
@@ -302,8 +304,8 @@ Lo que no quedó en otro bloque.
 - Revisión pantalla por pantalla de Paco. Se le avisa después de V4-B2, cuando la apariencia esté estable, para que no revise algo que va a cambiar
 
 Estado de V4-B8 (2026-10-22, D-144)
-- Hecho en la interfaz. Urgencias se puede seguir en el plan Gratis (FREE_CATALOG_DECK_KEYS en src/config/billing.ts) y el aviso del catálogo lo dice. Su e2e queda en tests/e2e/free-plan.spec.ts
-- Pendiente de Ricardo. La regla del servidor. deck_catalog_can_download(), deck_catalog_can_read() y record_deck_download() en supabase/migrations/20261023000005_deck_catalog.sql piden plan de pago, así que con el catálogo en la nube un alumno Gratis no podría bajar Urgencias. El cambio es una migración nueva que deje pasar el mazo paco-urgencias, con su prueba SQL. No se escribió porque no hay Postgres para probarla y no se toca Supabase sin tu autorización
+- Hecho en la interfaz, solo con el catálogo que viene en la app (demo y desarrollo). Urgencias se puede seguir en el plan Gratis (FREE_CATALOG_DECK_KEYS en src/config/billing.ts) y el aviso de ese catálogo lo dice. Con el catálogo de la nube, que es el de producción, Urgencias sigue de pago hasta que se autorice el cambio del servidor, y su aviso no lo promete. Su e2e queda en tests/e2e/free-plan.spec.ts
+- Pendiente de Ricardo. La regla del servidor. deck_catalog_can_download(), deck_catalog_can_read() y record_deck_download() en supabase/migrations/20261023000005_deck_catalog.sql piden plan de pago, y deck_catalog_list() devuelve un solo canDownload para todo el catálogo, que el cliente valida como un booleano único (src/data/cloud/deckCatalog.ts). Con el catálogo en la nube un alumno Gratis no podría bajar Urgencias. El cambio es una migración nueva que deje pasar el mazo paco-urgencias, un canDownload por mazo en el contrato y en CloudDeckCatalog, con su prueba SQL. No se escribió porque no hay Postgres para probarla y no se toca Supabase sin tu autorización
 
 ### V4-B9. Lo que queda de V3
 

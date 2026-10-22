@@ -173,7 +173,7 @@ function Decks({ session }: { session: ReadySession }) {
             <CardTitle id="precargados-titulo">{t.decks.preloadedTitle}</CardTitle>
             <CardDescription>{t.decks.preloadedDescription}</CardDescription>
           </CardHeader>
-          {catalogOpen === false && !session.isDemo ? <CatalogLockNotice /> : null}
+          {catalogOpen === false && !session.isDemo ? <CatalogLockNotice freeDeck /> : null}
           {catalog === undefined || stored === undefined ? (
             <LoadingState label={t.decks.loading} />
           ) : (
