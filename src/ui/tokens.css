@@ -13,11 +13,11 @@
 :root {
   color-scheme: light;
 
-  /* Superficies. Gris muy claro y tarjetas blancas con borde fino */
-  --enarm-canvas: #f5f6f7;
-  --enarm-surface: #ffffff;
-  --enarm-muted: #eef0f2;
-  --enarm-line: #dde2e6;
+  /* Superficies. Papel cálido y tarjetas casi blancas con borde fino (V4-B2, D-145) */
+  --enarm-canvas: #f6f3ee;
+  --enarm-surface: #fffdf9;
+  --enarm-muted: #eeeae2;
+  --enarm-line: #ddd6c9;
   /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos, 4.3 sobre blanco, 3.8 sobre muted
      y 3.6 sobre el lienzo (H12 de la revisión de B2) */
   --enarm-line-strong: #707b85;
@@ -55,7 +55,7 @@
      actividad, al 4, el día más activo (HeatmapWidget.tsx) */
   --enarm-chart-scheduled: #156082;
   --enarm-chart-done: #5687a1;
-  --enarm-heatmap-0: #eef0f2;
+  --enarm-heatmap-0: #eeeae2;
   --enarm-heatmap-1: #c4dbe6;
   --enarm-heatmap-2: #84b7cf;
   --enarm-heatmap-3: #428fae;
@@ -95,12 +95,12 @@
   --enarm-urg-ink: #432462;
 
   /* Etiquetas obligatorias (4.6), en neutro con borde */
-  --enarm-demo: #eef0f2;
+  --enarm-demo: #eeeae2;
   --enarm-demo-fg: #3f4b55;
-  --enarm-demo-line: #c9d1d8;
-  --enarm-sim: #eef0f2;
+  --enarm-demo-line: #d2cabb;
+  --enarm-sim: #eeeae2;
   --enarm-sim-fg: #3f4b55;
-  --enarm-sim-line: #c9d1d8;
+  --enarm-sim-line: #d2cabb;
 
   /* Sombras neutras y discretas. Los bordes finos hacen el trabajo */
   --enarm-shadow-card: 0 1px 2px rgb(22 33 43 / 0.06);
@@ -328,11 +328,13 @@
 @theme {
   /*
     Tipografía. Las fuentes se sirven desde la propia app, así funcionan sin conexión (D-061).
-    Una sola familia para todo, la de lectura que elige el alumno. Los títulos solo cambian de peso
+    El texto va en la familia de lectura que elige el alumno. Los títulos van en serif, que le da a la
+    app una voz propia, salvo que el alumno elija una fuente pensada para leer mejor, Atkinson o
+    Lexend, y entonces todo va en esa (V4-B2, D-145)
   */
   --font-sans:
     var(--enarm-font-body), system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-display: var(--font-sans);
+  --font-display: var(--enarm-font-heading), Georgia, 'Times New Roman', serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   /* Escala corta y fija. Título de pantalla de 20 px en el teléfono y 24 px desde 640 px (D-121) */

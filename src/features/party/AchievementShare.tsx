@@ -109,7 +109,7 @@ function WeekSharePreview({ card }: { card: WeekShareCard }) {
   return (
     <figure
       aria-label={text.previewLabel}
-      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-lg border border-[#dde2e6] bg-white text-[#16212b]"
+      className="flex w-full max-w-xs shrink-0 flex-col overflow-hidden rounded-lg border border-[#ddd6c9] bg-white text-[#16212b]"
     >
       <div className="flex flex-col gap-0.5 bg-[#156082] px-4 pt-3 pb-4 text-white">
         <p className="text-xs font-bold text-white/85">{card.brand}</p>
@@ -121,7 +121,7 @@ function WeekSharePreview({ card }: { card: WeekShareCard }) {
           <div
             key={figure.label}
             className={cn(
-              'flex flex-col-reverse gap-0.5 rounded-md border border-[#dde2e6] bg-[#f5f6f7] px-3 py-2',
+              'flex flex-col-reverse gap-0.5 rounded-md border border-[#ddd6c9] bg-[#f6f3ee] px-3 py-2',
               figures.length % 2 === 1 && index === 0 && 'col-span-2',
             )}
           >
@@ -132,7 +132,7 @@ function WeekSharePreview({ card }: { card: WeekShareCard }) {
       </dl>
       {card.alias ? <p className="px-4 pb-3 font-semibold">{card.alias}</p> : null}
       {card.simulated ? (
-        <figcaption className="bg-[#eef0f2] px-3 py-2 text-center text-xs font-bold text-[#3f4b55]">
+        <figcaption className="bg-[#eeeae2] px-3 py-2 text-center text-xs font-bold text-[#3f4b55]">
           {text.simulatedBanner}
         </figcaption>
       ) : null}
