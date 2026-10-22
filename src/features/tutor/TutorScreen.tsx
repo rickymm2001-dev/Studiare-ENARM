@@ -290,31 +290,37 @@ function TutorBody({
           caption={text.stats.errorsCaption}
         />
       </StatPanel>
-      <Card aria-labelledby="tutor-intro">
-        <CardHeader>
-          <CardTitle id="tutor-intro">{text.hypothesesTitle}</CardTitle>
-          <CardDescription>{text.intro}</CardDescription>
-        </CardHeader>
-        <p className="text-sm text-fg-muted">{text.howItWorks}</p>
-        {shown.length === 0 && dismissed.length === 0 ? (
-          <p role="status" className="mt-2 rounded-md bg-muted px-3 py-2 text-sm text-fg">
-            {text.calibrating(view.recentErrors)}
-          </p>
-        ) : null}
-      </Card>
+      {/* La explicación y el análisis con IA, lado a lado en computadora (V4-B1) */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
+        <Card aria-labelledby="tutor-intro">
+          <CardHeader>
+            <CardTitle id="tutor-intro">{text.hypothesesTitle}</CardTitle>
+            <CardDescription>{text.intro}</CardDescription>
+          </CardHeader>
+          <p className="text-sm text-fg-muted">{text.howItWorks}</p>
+          {shown.length === 0 && dismissed.length === 0 ? (
+            <p role="status" className="mt-2 rounded-md bg-muted px-3 py-2 text-sm text-fg">
+              {text.calibrating(view.recentErrors)}
+            </p>
+          ) : null}
+        </Card>
 
-      <AiAnalysisCard
-        state={tutorAi}
-        busy={turningOn}
-        onTurnOn={() => {
-          setTurningOn(true);
-          void setConsent(api, user, 'ai_analysis', true).finally(() => {
-            setTurningOn(false);
-          });
-        }}
-      />
+        <AiAnalysisCard
+          state={tutorAi}
+          busy={turningOn}
+          onTurnOn={() => {
+            setTurningOn(true);
+            void setConsent(api, user, 'ai_analysis', true).finally(() => {
+              setTurningOn(false);
+            });
+          }}
+        />
+      </div>
 
-      {top.map((hypothesis) => card(hypothesis, false))}
+      {/* Las hipótesis principales en dos columnas cuando hay ancho */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
+        {top.map((hypothesis) => card(hypothesis, false))}
+      </div>
       {notice ? (
         <p role="status" className="text-sm text-fg-muted">
           {notice}

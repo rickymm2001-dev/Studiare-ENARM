@@ -113,8 +113,8 @@ Para no construir dos veces. Verificado en el código el 2026-10-22.
 | Foro | No existe | | Ver V4-B7 y sección 8 |
 | Calendario | Parcial | Motor en planner.ts, tarjeta de la semana en Progreso. La pantalla se quitó en B3 | Pantalla de calendario, V4-B6 |
 | Taxonomía de Bloom | No existe | Solo dificultad 1 a 5 | V4-B5 |
-| Recorrido guiado | No existe | /bienvenida es una pantalla fija | B15 de V3 |
-| PostHog, Sentry, Resend | No existen | Los errores van a Supabase con permiso. Hay cola de correos sin envío real | B15 de V3 |
+| Recorrido guiado | Existe desde B15 | TourLauncher en el cascarón | Revisarlo tras V4-B1 y V4-B2 |
+| PostHog, Sentry, Resend | Código hecho en B15, falta tu cuenta | D-137 de DECISIONES.md | Tus cuentas |
 
 ## 5. Cómo se traduce cada complemento de Anki
 
@@ -187,6 +187,13 @@ El bloque que más pediste. Toca el cascarón y los componentes base una vez, y 
 - Menú Más del teléfono con las mismas entradas, y en la barra de cinco entra Apuntes en lugar de Progreso si la analítica de B15 confirma que se usa más. Mientras tanto no cambia
 
 Se acepta cuando Inicio, Repasar, Progreso y Configuración caben en una pantalla de 1,280 por 800 sin desplazarse en lo esencial, el repaso usa las dos columnas, ninguna pantalla rebasa su ancho declarado, las e2e de smoke, navigation, review, explore, progress y settings pasan en teléfono y computadora, y el JavaScript inicial sigue bajo 300 KB.
+
+Estado de V4-B1 (2026-10-22)
+- Respeta D-116 y D-117. La estructura de Inicio y los 20 px de separación que Ricardo fijó no se tocaron. Inicio gana espacio quitando huecos, con tres temas para reforzar en lugar de cinco. Esto cambia lo que dice la lista de arriba sobre Inicio como tablero de dos filas, que no se hizo para no pisar su diseño
+- Hecho. Tope de ancho de 120rem en el cascarón, tokens de ancho de sesión, trabajo y contenido. Repasar en dos columnas con mazos y temas siempre a la vista y con su propio desplazamiento, y la columna del botón fija. Repaso, pregunta y examen centrados. Configuración con índice lateral y Perfil en dos columnas. Progreso en dos pilas. Mazos en dos columnas y las tarjetas de abajo en dos pilas. Party con lo compartible a un lado. Simular con Inglés médico y Examen completo lado a lado. Tutor en dos columnas
+- Queda. Unir los avisos de demostración y de datos simulados en una sola franja corta en el teléfono, y el token de densidad de la tarjeta base. Se hacen en V4-B2, junto con los tokens nuevos, para no tocar dos veces los mismos archivos
+- Pruebas. 7,314 unitarias pasan, lint y formato limpios, y las e2e de las pantallas tocadas en teléfono y computadora pasan, 48 de smoke y modo oscuro con axe, 43 de las de repaso y Configuración, 38 de las de Tutor, Simular, Mazos y Party, y 14 más de Party y Gratis después de un arreglo
+
 
 ### V4-B2. Identidad visual (M)
 
@@ -270,9 +277,11 @@ Lo que no quedó en otro bloque.
 
 ### V4-B9. Lo que queda de V3
 
-- B15 analítica, errores, recordatorios y recorrido. Igual que en V3. El recorrido guiado se hace después de V4-B1 y V4-B2 para no grabarlo dos veces. Los recordatorios por correo entran al calendario de V4-B6
-- B17 publicación. Sin cambios. Depende solo de tus cuentas y corre en paralelo cuando quieras
-- B18 primeros alumnos. Sin cambios. Conviene que entren después de V4-B3 para que vean el repaso completo
+Al 2026-10-22 main ya trae B15 (analítica, errores, recordatorios y recorrido guiado, D-137 de DECISIONES.md) y B17 (publicación, D-138). B18 primeros alumnos (D-139) está construido. Lo que sigue aquí es solo lo que depende de Ricardo.
+
+- Las cuentas de PostHog, Sentry y Resend, el dominio y Cloudflare, con sus pasos en docs/PENDIENTES_DE_RICARDO.md
+- Revisar el recorrido guiado de B15 después de V4-B1 y V4-B2, porque cambió dónde está cada cosa en pantalla. Se cubre en la auditoría final
+- B18. Que los 5 aspirantes entren cuando V4-B3 esté, para que vean el repaso completo
 
 ### V4-B10. Auditoría final y lanzamiento (L)
 
@@ -326,9 +335,8 @@ Con la opción recomendada que se toma si no contestas.
 | 7 | V4-B6 Calendario | M | V4-B4 |
 | 8 | V4-B7 Comunidad etapa 1 | M | V4-B2 |
 | 9 | V4-B8 Pendientes de Paco | S | V4-B3 |
-| 10 | B15 de V3 | M | V4-B2 y tus cuentas de PostHog, Sentry y Resend |
-| En paralelo | B17 de V3 publicación | M | Solo tus cuentas |
-| 11 | B18 de V3 primeros alumnos | S | V4-B3 y B17 |
+| 10 | Cuentas de B15 y B17 y revisión del recorrido | S | Tus cuentas, y V4-B2 |
+| 11 | B18 de V3 primeros alumnos | S | V4-B3 |
 | 12 | V4-B10 Auditoría final y lanzamiento | L | Todo lo anterior |
 
 Son unas 14 sesiones de trabajo de código más la auditoría. Si el tiempo aprieta, lo que se puede recortar sin romper la promesa a los alumnos es V4-B7 etapa 1 (se queda la comparación por rama que ya existe), la hoja de respuestas de V4-B5 y el .ics de V4-B6.

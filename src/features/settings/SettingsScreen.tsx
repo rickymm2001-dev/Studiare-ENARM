@@ -31,7 +31,12 @@ import type { ReadySession } from '../shared/RequireSession';
 import { useAccount } from '../shared/useAccount';
 import { AppearanceSettings } from './AppearanceSettings';
 import { PrivacySection } from './PrivacySection';
-import { legacyRedirect, requestedSection, type SettingsSection } from './sections';
+import {
+  legacyRedirect,
+  requestedSection,
+  SETTINGS_SECTIONS,
+  type SettingsSection,
+} from './sections';
 
 export function SettingsScreen() {
   const session = useSession();
@@ -112,38 +117,65 @@ function ReadySettings({
   if (account === undefined || subscription === undefined) return <LoadingState />;
   const text = t.settingsPage.sections;
   return (
-    <>
-      {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
-      <SettingsSectionBlock id="perfil" title={text.profile} first>
-        <PlanCard subscription={subscription} />
-        {authId ? (
-          <InvoiceRequestCard authId={authId} accountEmail={account?.email ?? null} />
-        ) : null}
-        <ReferralCard headingAs="h3" />
-        <AccountDataCard session={session} account={account} />
-        <SessionCard session={session} />
-      </SettingsSectionBlock>
-      <SettingsSectionBlock id="apariencia" title={text.appearance}>
-        <AppearanceSettings />
-      </SettingsSectionBlock>
-      <SettingsSectionBlock id="privacidad" title={text.privacy}>
-        <PrivacySection session={session} />
-      </SettingsSectionBlock>
+    // En computadora un índice a la izquierda y las secciones al lado, para no apilar tarjetas con
+    // poco contenido en una sola columna (V4-B1)
+    <div className="lg:grid lg:grid-cols-[11rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+      <nav
+        aria-label={t.settingsPage.indexLabel}
+        className="sticky top-24 hidden flex-col gap-1 lg:flex"
+      >
+        {SETTINGS_SECTIONS.map((section) => (
+          <a
+            key={section}
+            href={`#${section}`}
+            className="rounded-md px-3 py-2 text-sm font-semibold text-fg-muted hover:bg-muted hover:text-fg"
+          >
+            {text[SECTION_TITLE[section]]}
+          </a>
+        ))}
+      </nav>
+      <div className="flex min-w-0 flex-col gap-5">
+        {/* Primero el plan, después tus datos y al final tu sesión (comentarios 5 y 6) */}
+        <SettingsSectionBlock id="perfil" title={text.profile} first columns>
+          <PlanCard subscription={subscription} />
+          {authId ? (
+            <InvoiceRequestCard authId={authId} accountEmail={account?.email ?? null} />
+          ) : null}
+          <ReferralCard headingAs="h3" />
+          <AccountDataCard session={session} account={account} />
+          <SessionCard session={session} />
+        </SettingsSectionBlock>
+        <SettingsSectionBlock id="apariencia" title={text.appearance}>
+          <AppearanceSettings />
+        </SettingsSectionBlock>
+        <SettingsSectionBlock id="privacidad" title={text.privacy}>
+          <PrivacySection session={session} />
+        </SettingsSectionBlock>
+      </div>
       <ScrollToSection target={target} />
-    </>
+    </div>
   );
 }
+
+const SECTION_TITLE = {
+  perfil: 'profile',
+  apariencia: 'appearance',
+  privacidad: 'privacy',
+} as const;
 
 /** Una sección de la página con su subtítulo. Desde la segunda lleva una línea arriba */
 function SettingsSectionBlock({
   id,
   title,
   first = false,
+  columns = false,
   children,
 }: {
   id: SettingsSection;
   title: string;
   first?: boolean;
+  /** Las tarjetas de la sección en dos columnas desde lg, para que no queden apiladas con poco contenido */
+  columns?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -155,7 +187,11 @@ function SettingsSectionBlock({
       <h2 id={`${id}-subtitulo`} className="text-lg font-bold text-fg">
         {title}
       </h2>
-      {children}
+      {columns ? (
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-start">{children}</div>
+      ) : (
+        children
+      )}
     </section>
   );
 }

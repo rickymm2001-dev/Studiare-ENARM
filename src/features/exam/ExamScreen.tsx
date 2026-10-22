@@ -430,7 +430,7 @@ function ExamRunner({
       {/* Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono
           marcar queda solo con su ícono, para que su texto no se parta en tres renglones, y deja
           el espacio a Anterior y Siguiente (H14 de la revisión de B2) */}
-      <ActionDock className="lg:max-w-reading">
+      <ActionDock className="lg:mx-auto lg:w-full lg:max-w-session">
         <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
           <Button
             variant="secondary"

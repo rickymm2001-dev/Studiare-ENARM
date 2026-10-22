@@ -167,38 +167,48 @@ function Progress({ session }: { session: ReadySession }) {
         />
       </StatPanel>
 
-      <WeeklyFocus report={report} weakTopics={weakTopics} />
+      {/* Dos pilas independientes en computadora, para que una tarjeta vacía no deje un hueco y para
+          que abrir una rama no mueva las tarjetas del otro lado (V4-B1) */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-5">
+          <WeeklyFocus report={report} weakTopics={weakTopics} />
+          <TopicsCard
+            byBranch={byBranch}
+            byTopic={byTopic}
+            cardsByBranch={cardsByBranch}
+            cardsByTopic={cardsByTopic}
+          />
+          {englishOn ? (
+            <EnglishProgressCard
+              summary={summarizeEnglish(analysis.english.answers, DEFAULT_THRESHOLDS.english)}
+              texts={analysis.english.texts}
+              practiceAvailable={englishCases}
+            />
+          ) : null}
+        </div>
+        <div className="flex min-w-0 flex-col gap-5">
+          <Suspense fallback={<LoadingState />}>
+            <ComparisonSection
+              session={session}
+              events={events}
+              questions={analysis.bank.questions}
+            />
+          </Suspense>
+          <DifficultyCard
+            rows={difficultyRows({
+              responses,
+              minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+            })}
+          />
+          <MotivesCard rows={motiveRows} />
+          <FutureLoadSection session={session} events={events} content={content} />
+        </div>
+      </div>
 
       <InsightsPanel report={report} fatigueValidation={analysis.model.model.fatigue.validation} />
 
-      <Suspense fallback={<LoadingState />}>
-        <ComparisonSection session={session} events={events} questions={analysis.bank.questions} />
-      </Suspense>
-
-      <TopicsCard
-        byBranch={byBranch}
-        byTopic={byTopic}
-        cardsByBranch={cardsByBranch}
-        cardsByTopic={cardsByTopic}
-      />
-
-      {englishOn ? (
-        <EnglishProgressCard
-          summary={summarizeEnglish(analysis.english.answers, DEFAULT_THRESHOLDS.english)}
-          texts={analysis.english.texts}
-          practiceAvailable={englishCases}
-        />
-      ) : null}
-
-      <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
-        <DifficultyCard
-          rows={difficultyRows({
-            responses,
-            minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
-          })}
-        />
-        <MotivesCard rows={motiveRows} />
-        <FutureLoadSection session={session} events={events} content={content} />
+      {/* La tarjeta de la semana ya ocupa las dos columnas por su cuenta */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
         <WeekPlanCard session={session} events={events} content={content} />
       </div>
       <OfficialScoreCard session={session} />

@@ -176,7 +176,8 @@ function Decks({ session }: { session: ReadySession }) {
             <LoadingState label={t.decks.loading} />
           ) : (
             <div className="flex flex-col gap-3">
-              <ul className="flex flex-col divide-y divide-line">
+              {/* En pantalla ancha los mazos van en dos columnas, cada uno en su tarjeta (V4-B1) */}
+              <ul className="flex flex-col divide-y divide-line xl:grid xl:grid-cols-2 xl:gap-4 xl:divide-y-0">
                 {orderedFiles.map((file) => {
                   const id = deckIds.deck(file.key);
                   const isFollowed = followed.has(id);
@@ -191,7 +192,7 @@ function Decks({ session }: { session: ReadySession }) {
                   return (
                     <li
                       key={file.key}
-                      className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]"
+                      className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] xl:rounded-lg xl:border xl:border-line xl:p-4"
                     >
                       <span
                         aria-hidden
@@ -291,16 +292,23 @@ function Decks({ session }: { session: ReadySession }) {
           )}
         </Card>
       )}
-      <OwnDecksCard
-        session={session}
-        decks={ownDecks}
-        cardsByDeck={stored?.cardsByDeck ?? new Map()}
-        topics={stored?.ownTopics ?? new Map()}
-        states={states}
-      />
-      <AiCardsCard session={session} />
-      <ImportDeckCard session={session} />
-      <ExportDecksCard session={session} decks={ownDecks} />
+      {/* Dos pilas en computadora. Lo de crear y exportar a un lado y la IA y la importación al otro */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-5">
+          <OwnDecksCard
+            session={session}
+            decks={ownDecks}
+            cardsByDeck={stored?.cardsByDeck ?? new Map()}
+            topics={stored?.ownTopics ?? new Map()}
+            states={states}
+          />
+          <ExportDecksCard session={session} decks={ownDecks} />
+        </div>
+        <div className="flex min-w-0 flex-col gap-5">
+          <AiCardsCard session={session} />
+          <ImportDeckCard session={session} />
+        </div>
+      </div>
     </>
   );
 }

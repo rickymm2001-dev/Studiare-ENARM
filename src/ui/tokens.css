@@ -358,6 +358,12 @@
   --spacing-topbar: 4rem;
   --spacing-topbar-logo: 4rem;
   --container-reading: 44rem;
+  /* Columna de una sesión de estudio (repaso, pregunta, examen) en computadora. Va centrada (V4-B1) */
+  --container-session: 52rem;
+  /* Ancho de trabajo para formularios y paneles que no necesitan toda la pantalla (V4-B1) */
+  --container-work: 72rem;
+  /* Tope del contenido en pantallas muy anchas. En 1920 px no recorta nada (V4-B1) */
+  --container-content: 120rem;
   /* Ancho máximo del marco de la app en computadora. Los textos largos siguen en el ancho de lectura (D-057) */
   --container-app: 88rem;
 }

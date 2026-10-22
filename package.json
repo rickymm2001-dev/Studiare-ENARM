@@ -29,6 +29,7 @@
     "e2e:install": "node scripts/playwright.ts install chromium",
     "screenshots": "node scripts/playwright.ts test --config playwright.screenshots.config.ts",
     "screenshots:v3": "node scripts/playwright.ts test --config playwright.screenshots.v3.config.ts",
+    "screenshots:v4": "node scripts/playwright.ts test --config playwright.screenshots.v4.config.ts",
     "eval-ai": "node scripts/eval-ai.ts",
     "ai:sync": "node scripts/ai/sync-function-sources.ts",
     "ai:gate-sample": "node scripts/ai/gate-sample.ts",

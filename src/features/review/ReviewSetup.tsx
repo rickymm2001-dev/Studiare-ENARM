@@ -12,6 +12,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
 import type { TopicOutline } from '@/engines/deckTopics';
 import { t } from '@/i18n/es-MX';
+import { DESKTOP_QUERY, useMediaQuery } from '@/ui/hooks/use-media-query';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
@@ -27,6 +28,7 @@ const MODES: readonly ReviewMode[] = ['today', 'due', 'new'];
 
 export function ReviewSetup({
   addDeck,
+  overdue,
   cards,
   deckNames,
   deckTopics,
@@ -40,6 +42,8 @@ export function ReviewSetup({
 }: {
   /** Atajo para agregar un mazo, junto al título */
   addDeck?: ReactNode;
+  /** Herramientas de atrasos. Van al final de la columna del botón de empezar */
+  overdue?: ReactNode;
   cards: CardEntity[];
   deckNames: Map<string, string>;
   /** Ramas y temas de cada mazo, por el mismo ID que deckNames */
@@ -74,143 +78,172 @@ export function ReviewSetup({
   const counters = countersFor(selection);
   const text = t.reviewSetup;
   const panelText = t.settingsPage.reviewSettings;
+  const desktop = useMediaQuery(DESKTOP_QUERY);
+
+  // Mazos, ramas y temas. En computadora van siempre a la vista en su propia columna, porque ahí sobra
+  // el ancho, y en el teléfono quedan plegados con un resumen (V4-B1)
+  const filtersBody = (
+    <>
+      <fieldset>
+        <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
+        <ul className="flex flex-col divide-y divide-line">
+          {deckIds.map((deckId) => (
+            <li key={deckId} className="flex flex-col gap-1 py-2 first:pt-0 last:pb-0">
+              <CheckboxField
+                label={deckNames.get(deckId) ?? deckId}
+                checked={selection.decks.has(deckId)}
+                onChange={(event) => {
+                  const decks = new Set(selection.decks);
+                  if (event.target.checked) decks.add(deckId);
+                  else decks.delete(deckId);
+                  setSelection({ ...selection, decks });
+                }}
+              />
+              <DeckTopics
+                deckName={deckNames.get(deckId) ?? deckId}
+                outline={deckTopics.get(deckId)}
+                collapsible={false}
+                className="pl-8"
+              />
+            </li>
+          ))}
+        </ul>
+      </fieldset>
+      {/* Repasar sí muestra Inglés médico, porque ahí vive el mazo de vocabulario (B13, 2.8) */}
+      <BranchTopicPicker
+        selected={selection.topics}
+        counts={counts}
+        countLabel={text.cards}
+        showCount={false}
+        scope="all"
+        onChange={(topics) => {
+          setSelection({ ...selection, topics });
+        }}
+      />
+      <CheckboxField
+        label={text.untagged}
+        hint={text.untaggedHint}
+        checked={selection.includeUntagged}
+        onChange={(event) => {
+          setSelection({ ...selection, includeUntagged: event.target.checked });
+        }}
+      />
+    </>
+  );
+  const filtersSummary = text.filtersSummary(
+    selection.decks.size,
+    selection.topics.size,
+    ALL_TOPICS.length,
+  );
 
   return (
-    <>
-      {total > 0 ? (
-        <StatPanel label={text.countersLabel}>
-          <StatCell
-            icon={<Sparkles />}
-            label={t.review.counters.new}
-            value={counters.new.toLocaleString('es-MX')}
-          />
-          <StatCell
-            icon={<RotateCw />}
-            label={t.review.counters.learning}
-            value={counters.learning.toLocaleString('es-MX')}
-          />
-          <StatCell
-            icon={<CalendarCheck />}
-            label={t.review.counters.review}
-            value={counters.review.toLocaleString('es-MX')}
-          />
-        </StatPanel>
-      ) : null}
-      <Card aria-labelledby="que-repasar">
-        <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
-          <CardTitle id="que-repasar" className="text-base sm:text-lg">
-            {text.title}
-          </CardTitle>
-          {addDeck}
-        </CardHeader>
-        <div className="flex flex-col gap-3">
-          {/* En el teléfono los modos ocupan dos renglones y cada uno se estira para llenar el suyo */}
-          <SegmentedControl
-            label={text.mode}
-            options={MODES.map((mode) => ({ value: mode, label: text.modes[mode] }))}
-            value={selection.mode}
-            onChange={(mode) => {
-              setSelection({ ...selection, mode });
-            }}
-            itemClassName="grow"
-          />
-
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              disabled={total === 0}
-              onClick={() => {
-                saveSelection(selection, deckIds);
-                onStart(selection);
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
+      <div className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-24">
+        {total > 0 ? (
+          <StatPanel label={text.countersLabel}>
+            <StatCell
+              icon={<Sparkles />}
+              label={t.review.counters.new}
+              value={counters.new.toLocaleString('es-MX')}
+            />
+            <StatCell
+              icon={<RotateCw />}
+              label={t.review.counters.learning}
+              value={counters.learning.toLocaleString('es-MX')}
+            />
+            <StatCell
+              icon={<CalendarCheck />}
+              label={t.review.counters.review}
+              value={counters.review.toLocaleString('es-MX')}
+            />
+          </StatPanel>
+        ) : null}
+        <Card aria-labelledby="que-repasar">
+          <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
+            <CardTitle id="que-repasar" className="text-base sm:text-lg">
+              {text.title}
+            </CardTitle>
+            {addDeck}
+          </CardHeader>
+          <div className="flex flex-col gap-3">
+            {/* En el teléfono los modos ocupan dos renglones y cada uno se estira para llenar el suyo */}
+            <SegmentedControl
+              label={text.mode}
+              options={MODES.map((mode) => ({ value: mode, label: text.modes[mode] }))}
+              value={selection.mode}
+              onChange={(mode) => {
+                setSelection({ ...selection, mode });
               }}
-            >
-              <Play aria-hidden />
-              {text.start(total)}
-            </Button>
-            {total === 0 ? <p className="text-sm text-fg-muted">{text.nothing}</p> : null}
-          </div>
-          {leechCount > 0 ? (
+              itemClassName="grow"
+            />
+
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto"
+                disabled={total === 0}
+                onClick={() => {
+                  saveSelection(selection, deckIds);
+                  onStart(selection);
+                }}
+              >
+                <Play aria-hidden />
+                {text.start(total)}
+              </Button>
+              {total === 0 ? <p className="text-sm text-fg-muted">{text.nothing}</p> : null}
+            </div>
+            {leechCount > 0 ? (
+              <p className="text-sm text-fg-muted">
+                {text.leeches(leechCount)}{' '}
+                <Link
+                  to={`${screenPath('explore')}?estado=sanguijuelas`}
+                  className="font-semibold text-primary-ink underline underline-offset-2"
+                >
+                  {text.seeLeeches}
+                </Link>
+              </p>
+            ) : null}
             <p className="text-sm text-fg-muted">
-              {text.leeches(leechCount)}{' '}
-              <Link
-                to={`${screenPath('explore')}?estado=sanguijuelas`}
+              {limits.unlimitedNewCards
+                ? panelText.limitsUnlimited(limits.reviewsPerDay)
+                : panelText.limits(limits.newCardsPerDay, limits.reviewsPerDay)}{' '}
+              <button
+                type="button"
+                onClick={onOpenSettings}
                 className="font-semibold text-primary-ink underline underline-offset-2"
               >
-                {text.seeLeeches}
-              </Link>
+                {panelText.change}
+              </button>
             </p>
-          ) : null}
+          </div>
+        </Card>
+        {overdue}
+      </div>
 
-          <Disclosure
-            title={text.filters}
-            summary={text.filtersSummary(
-              selection.decks.size,
-              selection.topics.size,
-              ALL_TOPICS.length,
-            )}
-            defaultOpen={total === 0}
+      {desktop ? (
+        <Card aria-labelledby="mazos-y-temas" className="flex min-w-0 flex-col">
+          <CardHeader className="mb-3 flex-row flex-wrap items-baseline justify-between gap-2">
+            <CardTitle id="mazos-y-temas" className="text-base sm:text-lg">
+              {text.filters}
+            </CardTitle>
+            <span className="text-sm text-fg-muted">{filtersSummary}</span>
+          </CardHeader>
+          {/* La lista completa de temas es larga. Se desplaza dentro de la tarjeta para que el botón de
+              empezar y los modos no se vayan de la pantalla */}
+          <div
+            tabIndex={0}
+            role="region"
+            aria-labelledby="mazos-y-temas"
+            className="flex max-h-[calc(100dvh-15rem)] min-h-64 flex-col gap-3 overflow-y-auto pr-2"
           >
-            <fieldset>
-              <legend className="eyebrow mb-1 text-fg-muted">{text.decks}</legend>
-              <ul className="flex flex-col divide-y divide-line">
-                {deckIds.map((deckId) => (
-                  <li key={deckId} className="flex flex-col gap-1 py-2 first:pt-0 last:pb-0">
-                    <CheckboxField
-                      label={deckNames.get(deckId) ?? deckId}
-                      checked={selection.decks.has(deckId)}
-                      onChange={(event) => {
-                        const decks = new Set(selection.decks);
-                        if (event.target.checked) decks.add(deckId);
-                        else decks.delete(deckId);
-                        setSelection({ ...selection, decks });
-                      }}
-                    />
-                    <DeckTopics
-                      deckName={deckNames.get(deckId) ?? deckId}
-                      outline={deckTopics.get(deckId)}
-                      collapsible={false}
-                      className="pl-8"
-                    />
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
-            {/* Repasar sí muestra Inglés médico, porque ahí vive el mazo de vocabulario (B13, 2.8) */}
-            <BranchTopicPicker
-              selected={selection.topics}
-              counts={counts}
-              countLabel={text.cards}
-              showCount={false}
-              scope="all"
-              onChange={(topics) => {
-                setSelection({ ...selection, topics });
-              }}
-            />
-            <CheckboxField
-              label={text.untagged}
-              hint={text.untaggedHint}
-              checked={selection.includeUntagged}
-              onChange={(event) => {
-                setSelection({ ...selection, includeUntagged: event.target.checked });
-              }}
-            />
-          </Disclosure>
-
-          <p className="text-sm text-fg-muted">
-            {limits.unlimitedNewCards
-              ? panelText.limitsUnlimited(limits.reviewsPerDay)
-              : panelText.limits(limits.newCardsPerDay, limits.reviewsPerDay)}{' '}
-            <button
-              type="button"
-              onClick={onOpenSettings}
-              className="font-semibold text-primary-ink underline underline-offset-2"
-            >
-              {panelText.change}
-            </button>
-          </p>
-        </div>
-      </Card>
-    </>
+            {filtersBody}
+          </div>
+        </Card>
+      ) : (
+        <Disclosure title={text.filters} summary={filtersSummary} defaultOpen={total === 0}>
+          {filtersBody}
+        </Disclosure>
+      )}
+    </div>
   );
 }

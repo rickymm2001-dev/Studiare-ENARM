@@ -1464,3 +1464,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Foro. Por etapas. Especialidad a la que aspiras y comparación segmentada ahora, hilos por pregunta con 50 alumnos activos, foro general con 300. El foro general va a IDEAS.md
 - Decisiones por omisión mientras Ricardo no conteste la sección 8. Gamificación como quedó en B3, cristal solo en barra y dock sin fondos personalizados, no comprar plantilla, Bloom como campo independiente de la dificultad, orden de la sección 10
 - Inventario de herramientas de la sesión en la sección 3 del plan. Ningún plugin de pago hace falta. Bibliotecas nuevas solo react-day-picker en V4-B6 y motion en V4-B2 si cabe en el presupuesto
+
+### D-141. V4-B1, densidad y espacio respetando el diseño fijo de Inicio
+- Fecha 2026-10-22. Origen R, que pidió optimizar el espacio de la página. Claude respeta D-116 y D-117, que fijaron el diseño de Inicio y 20 px de separación, y gana espacio de otras formas
+- Tres anchos con tokens en src/ui/tokens.css. Sesión de 52rem, trabajo de 72rem y contenido de 120rem. El cascarón centra el contenido con el tope de 120rem, que en 1920 px no recorta nada y solo evita que una pantalla de 2560 px estire todo
+- Repasar usa dos columnas en computadora. Los mazos y temas van siempre a la vista en su propia tarjeta con desplazamiento interno, porque la lista completa es larga, y la columna de los modos y del botón queda fija. En el teléfono sigue el pliegue de antes
+- El repaso, la pregunta y el examen van centrados en la columna de sesión y no pegados a la izquierda
+- Configuración, Progreso, Mazos, Party, Simular y Tutor pasan a dos columnas cuando hay ancho. Se usan pilas independientes y no una cuadrícula de filas, para que una tarjeta vacía no deje un hueco ni una tarjeta que se abre mueva las del otro lado
+- Inicio. Tres temas para reforzar y no cinco, con el enlace a ver todos
+- Pendiente a propósito. Unir los avisos de demostración y el token de densidad de la tarjeta se hacen en V4-B2 con los tokens nuevos

@@ -453,23 +453,26 @@ function Setup({ session }: { session: ReadySession }) {
           </Disclosure>
         </div>
       </Card>
-      {isFeatureEnabled('medicalEnglish') ? (
-        <EnglishPracticeCard
+      {/* Inglés médico y el examen completo, lado a lado en computadora (V4-B1) */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
+        {isFeatureEnabled('medicalEnglish') ? (
+          <EnglishPracticeCard
+            session={session}
+            pool={pool?.english ?? { practice: [], exam: [] }}
+            left={left}
+            reserved={reserved}
+            report={analysis?.report}
+            model={studentModel}
+          />
+        ) : null}
+        <ExamSetupCard
           session={session}
-          pool={pool?.english ?? { practice: [], exam: [] }}
+          questions={pool?.exam ?? []}
+          englishQuestions={pool?.english.exam ?? []}
+          plan={plan}
           left={left}
-          reserved={reserved}
-          report={analysis?.report}
-          model={studentModel}
         />
-      ) : null}
-      <ExamSetupCard
-        session={session}
-        questions={pool?.exam ?? []}
-        englishQuestions={pool?.english.exam ?? []}
-        plan={plan}
-        left={left}
-      />
+      </div>
     </>
   );
 }

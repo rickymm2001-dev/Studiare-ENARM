@@ -98,7 +98,9 @@ export function ExamQuestion({
       aria-labelledby="examen-pregunta-frase"
       className={cn(
         'w-full',
-        twoColumns ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6' : 'lg:max-w-reading',
+        twoColumns
+          ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6'
+          : 'lg:mx-auto lg:w-full lg:max-w-session',
       )}
     >
       <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>

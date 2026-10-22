@@ -35,6 +35,7 @@
     "playwright.config.ts",
     "playwright.screenshots.config.ts",
     "playwright.screenshots.v3.config.ts",
+    "playwright.screenshots.v4.config.ts",
     "playwright.audit.config.ts"
   ]
 }

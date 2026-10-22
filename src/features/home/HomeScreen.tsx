@@ -44,6 +44,8 @@ import { HeatmapWidget } from './widgets/HeatmapWidget';
 
 const text = t.home;
 const NO_SETTINGS = {} as const;
+/** Tres temas y no cinco, para que la columna de Tus simuladores no deje huecos en la de Tus repasos (V4-B1). Ver todos los temas lleva al resto */
+const HOME_WEAK_TOPICS = { count: 3 };
 
 export function HomeScreen() {
   // Sin sesión, la raíz es la portada de venta (D-068)
@@ -121,7 +123,7 @@ function Dashboard({ session }: { session: ReadySession }) {
             <BiasPatternWidget session={session} events={events} settings={NO_SETTINGS} />
           </AnalysisCard>
           <AnalysisCard title={text.topicsTitle}>
-            <WeakTopicsWidget session={session} events={events} settings={NO_SETTINGS} />
+            <WeakTopicsWidget session={session} events={events} settings={HOME_WEAK_TOPICS} />
           </AnalysisCard>
         </Group>
 

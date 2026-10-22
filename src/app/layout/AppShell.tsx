@@ -233,7 +233,7 @@ export function AppShell() {
               bare
                 ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
                 : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
-                  'flex w-full flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
+                  'mx-auto flex w-full max-w-content flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
             }
           >
             {/* Segundo factor del equipo y registro de Google por completar (B9) */}

@@ -9,6 +9,8 @@ export const settingsPageText = {
     appearance: 'Apariencia',
     privacy: 'Privacidad',
   },
+  // Índice de las secciones, a la izquierda en computadora (V4-B1)
+  indexLabel: 'Secciones de Configuración',
   // Sin sesión quedan el aviso para entrar, como en las otras pantallas, y Apariencia
   signedOut: {
     body: 'Entra a tu cuenta para ver tu perfil, tu plan y tu privacidad.',

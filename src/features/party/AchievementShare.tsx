@@ -61,12 +61,12 @@ export function AchievementShare({
   };
 
   return (
-    <Card aria-labelledby="compartir-semana">
+    <Card aria-labelledby="compartir-semana" className="@container">
       <CardHeader className="mb-3">
         <CardTitle id="compartir-semana">{text.title}</CardTitle>
         <CardDescription>{focus ? text.hintFocus : text.hint}</CardDescription>
       </CardHeader>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+      <div className="flex flex-col gap-3 @xl:flex-row @xl:items-start">
         <WeekSharePreview card={card} />
         <div className="flex flex-1 flex-col gap-3">
           <CheckboxField

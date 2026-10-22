@@ -70,50 +70,52 @@ function Party({ session, inviteCode }: { session: ReadySession; inviteCode: str
   const share = (
     <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
   );
-  const locked = (
-    <>
-      <PartyLocked />
-      {share}
-    </>
-  );
+  const locked = <PartyLocked />;
 
   return (
     <>
       {header}
-      <FeatureGate userId={user.id} feature="party" locked={locked}>
-        {closedByServer ? (
-          locked
-        ) : (
-          <>
-            <p className="text-sm text-fg-muted">
-              {mode === 'demo' ? text.privacyDemo : text.privacy}
-            </p>
-            {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
-            {share}
-            {mode === 'demo' ? (
-              <DemoParty
-                session={session}
-                events={events}
-                snapshot={snapshot}
-                focus={focus}
-                inviteCode={inviteCode}
-              />
-            ) : mode === 'cloud' ? (
-              <CloudParty
-                session={session}
-                events={events}
-                snapshot={snapshot}
-                focus={focus}
-                inviteCode={inviteCode}
-                onClosed={onClosed}
-              />
+      {/* En computadora los grupos van a la izquierda y lo que se comparte, a un lado (V4-B1) */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="flex min-w-0 flex-col gap-5">
+          <FeatureGate userId={user.id} feature="party" locked={locked}>
+            {closedByServer ? (
+              locked
             ) : (
-              <PartyNeedsCloud mode={mode} />
+              <>
+                <p className="text-sm text-fg-muted">
+                  {mode === 'demo' ? text.privacyDemo : text.privacy}
+                </p>
+                {focus ? <p className="text-sm font-medium">{text.focusNote}</p> : null}
+                {mode === 'demo' ? (
+                  <DemoParty
+                    session={session}
+                    events={events}
+                    snapshot={snapshot}
+                    focus={focus}
+                    inviteCode={inviteCode}
+                  />
+                ) : mode === 'cloud' ? (
+                  <CloudParty
+                    session={session}
+                    events={events}
+                    snapshot={snapshot}
+                    focus={focus}
+                    inviteCode={inviteCode}
+                    onClosed={onClosed}
+                  />
+                ) : (
+                  <PartyNeedsCloud mode={mode} />
+                )}
+              </>
             )}
-          </>
-        )}
-      </FeatureGate>
-      <ReferralCard />
+          </FeatureGate>
+        </div>
+        <aside className="flex min-w-0 flex-col gap-5">
+          {share}
+          <ReferralCard />
+        </aside>
+      </div>
     </>
   );
 }
