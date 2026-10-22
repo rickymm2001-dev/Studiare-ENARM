@@ -85,3 +85,9 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Reestructuradas automáticas de noche.** Las transformaciones de B12 no arreglan un distractor débil. Surgió en el plan de B14
 - **Validar al escribir los ajustes del modelo.** Hoy zod y SQL difieren en tipo y rango de unos 15 campos de model_settings si alguien escribe a mano por la API. Lo correcto es una función que valide al escribir. Surgió en la revisión de B14
 - **Fijar las acciones de GitHub por hash.** Todos los workflows usan etiqueta (checkout, setup-node). Resolver el hash pide llamar a GitHub desde una sesión con red. Surgió en la revisión de B14
+
+- **Foro general por especialidad.** Temas y respuestas entre alumnos, con seudónimo, reportes y cola de moderación para el médico y el admin. Entra cuando haya 300 alumnos activos y después de los hilos por pregunta de V4-B7. Surgió en el plan V4 (D-137)
+- **Reprogramar con parámetros propios de FSRS.** Lo que FSRS Helper llama reschedule. Pide FSRS ajustado por alumno, que Ricardo dejó de fábrica (respuesta 90). Surgió en el plan V4 (D-137)
+- **Regex en Buscar tarjetas.** La sintaxis campo y valor de V4-B3 no la incluye. Surgió en el plan V4 (D-137)
+- **Tabla de posiciones abierta entre grupos de Party.** Hoy solo se planea una opcional y con seudónimo para simuladores completos. Surgió en el plan V4 (D-137)
+- **Quitar los plugins de la sesión que no se usan.** Ventas, finanzas, legal, recursos humanos, bio, datarobot, carta, wix y brightdata no entran en V4. Es limpieza del menú de Ricardo, no del repo. Surgió en el plan V4 (D-137)
