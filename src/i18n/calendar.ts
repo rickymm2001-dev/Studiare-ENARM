@@ -32,8 +32,8 @@ export const calendarText = {
         : days === 1
           ? 'Falta 1 día para tu ENARM.'
           : `Faltan ${days.toLocaleString('es-MX')} días para tu ENARM.`,
-    noExamDate: 'Pon la fecha de tu ENARM en Configuración para ver el plan por semanas.',
-    setExamDate: 'Poner la fecha',
+    provisionalDate:
+      'La fecha del ENARM es provisional hasta que se publique la convocatoria. El plan se recalcula solo cuando cambie.',
     plan: {
       title: 'Plan por semanas hasta el examen',
       hint: 'Cada semana te enfocas en una rama, para hacer tus bloques de preguntas siempre de la misma especialidad. Los simuladores de todas las especialidades llegan al final y solo en domingo. Las ramas salen en el orden de tus ajustes.',

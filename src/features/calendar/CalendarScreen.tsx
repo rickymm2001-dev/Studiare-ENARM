@@ -5,9 +5,8 @@
 // carga futura de Progreso, así que cambia si repasas más o menos que hoy.
 import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { screenPath } from '@/app/screens';
+import { ENARM_EXAM, examDateFor } from '@/config/exam';
 import { topicTaxonomy } from '@/demo/content';
 import {
   icsOf,
@@ -75,12 +74,12 @@ function Calendar({ session }: { session: ReadySession }) {
     () => (events ? buildSnapshot({ events, user, settings, now: new Date() }) : null),
     [events, user, settings],
   );
+  // La fecha del ENARM es de la plataforma y la del perfil solo la sustituye en la demo (D-059)
+  const examDate = examDateFor(user);
+  const provisionalDate = !user.examDate && ENARM_EXAM.provisional;
   const weeks = useMemo(
-    () =>
-      user.examDate
-        ? studyWeeks({ today, examDate: user.examDate, branches: settings.branches })
-        : [],
-    [today, user.examDate, settings.branches],
+    () => studyWeeks({ today, examDate, branches: settings.branches }),
+    [today, examDate, settings.branches],
   );
 
   if (events === undefined || content === undefined || snapshot === null) {
@@ -109,7 +108,7 @@ function Calendar({ session }: { session: ReadySession }) {
     }
     const week = weekOf(day);
     if (week?.simulatorSunday === day) notes.push(text.simulatorShort);
-    if (user.examDate === day) notes.push(text.examShort);
+    if (examDate === day) notes.push(text.examShort);
     return notes;
   };
 
@@ -134,14 +133,13 @@ function Calendar({ session }: { session: ReadySession }) {
     if (week?.simulatorSunday === selected && week.simulatorNumber !== null) {
       lines.push(text.detailSimulator(week.simulatorNumber, simulatorTotal));
     }
-    if (user.examDate === selected) lines.push(text.detailExam);
+    if (examDate === selected) lines.push(text.detailExam);
     return lines.length === 0 ? [text.detailNothing] : lines;
   })();
 
   const exportPlan = () => {
-    if (!user.examDate) return;
     const ics = icsOf(
-      planEvents(weeks, user.examDate, {
+      planEvents(weeks, examDate, {
         week: (branch) => text.plan.eventWeek(branchName(branch)),
         simulator: text.plan.eventSimulator,
         exam: text.plan.eventExam,
@@ -159,14 +157,12 @@ function Calendar({ session }: { session: ReadySession }) {
   };
 
   const shown = showAllWeeks ? weeks : weeks.slice(0, WEEKS_SHOWN);
-  const daysLeft = user.examDate ? daysBetween(today, user.examDate) : null;
+  const daysLeft = daysBetween(today, examDate);
 
   return (
     <>
       <ScreenHeader title={t.screens.calendar.title} description={t.screens.calendar.description} />
-      {daysLeft !== null && daysLeft >= 0 ? (
-        <p className="text-sm font-medium">{text.countdown(daysLeft)}</p>
-      ) : null}
+      {daysLeft >= 0 ? <p className="text-sm font-medium">{text.countdown(daysLeft)}</p> : null}
 
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Card aria-labelledby="calendario-mes">
@@ -297,14 +293,10 @@ function Calendar({ session }: { session: ReadySession }) {
               <CardTitle id="plan-semanas">{text.plan.title}</CardTitle>
               <CardDescription>{text.plan.hint}</CardDescription>
             </CardHeader>
-            {!user.examDate ? (
-              <div className="flex flex-col items-start gap-2">
-                <p className="text-sm text-fg-muted">{text.noExamDate}</p>
-                <Button asChild variant="secondary" size="sm">
-                  <Link to={`${screenPath('settings')}#perfil`}>{text.setExamDate}</Link>
-                </Button>
-              </div>
-            ) : weeks.length === 0 ? (
+            {provisionalDate ? (
+              <p className="mb-3 text-sm text-fg-muted">{text.provisionalDate}</p>
+            ) : null}
+            {weeks.length === 0 ? (
               <p className="text-sm text-fg-muted">{text.plan.empty}</p>
             ) : (
               <div className="flex flex-col gap-3">

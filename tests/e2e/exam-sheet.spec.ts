@@ -62,7 +62,7 @@ test('la respuesta se llena en la hoja y no en la opción de la pregunta', async
   await expect(bubble(page, 2, 'A')).toHaveAttribute('aria-checked', 'true');
 
   // Ir a una pregunta desde el número de su fila
-  await page.getByRole('button', { name: t.answerSheet.goTo(1) }).click();
+  await page.getByRole('button', { name: t.answerSheet.goTo(1), exact: true }).click();
   await expect(page.getByText(t.exam.progress(1, QUESTIONS), { exact: true })).toBeVisible();
   await expect(bubble(page, 1, 'C')).toHaveAttribute('aria-checked', 'true');
   await expectNoSeriousA11yViolations(page);

@@ -20,11 +20,12 @@ const STUDENT_MAIN = [
   t.navItems.outlines,
   t.navItems.simulate,
   t.navItems.progress,
+  t.navItems.calendar,
   t.navItems.tutor,
   t.navItems.party,
 ];
 const STUDENT_BAR = [t.navItems.home, t.navItems.review, t.navItems.simulate, t.navItems.progress];
-const STUDENT_MORE = [t.navItems.outlines, t.navItems.tutor, t.navItems.party];
+const STUDENT_MORE = [t.navItems.outlines, t.navItems.calendar, t.navItems.tutor, t.navItems.party];
 // Datos de demostración aparece porque el build de las pruebas es la demo, con demoTools prendida (5.4)
 const ADMIN_GROUP = [
   t.navItems.users,
