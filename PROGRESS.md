@@ -3,7 +3,7 @@
 ## Estado actual
 
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
-- Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación en su PR. Siguen B18 primeros alumnos (diseño hecho) y B19 auditoría final
+- Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación (PR 61) también. B18 primeros alumnos construido y revisado, en su PR. Sigue B19 auditoría final
 - Lo que falta de Ricardo vive en docs/PENDIENTES_DE_RICARDO.md. Las dudas que no frenan están en Preguntas para Ricardo, dentro de la sección del plan V3 de este archivo
 - Marca Studiare en el manifest, la pestaña, la portada y el README (D-119). La demo publicada en GitHub Pages sigue en https://rickymm2001-dev.github.io/Studiare-ENARM/ hasta pasar a Cloudflare Pages (B17)
 - Nube. El proyecto real de Supabase tiene el esquema hasta B10, verificado por huella antes de cada fusión, y las funciones de pago, de Mercado Pago, de restablecer el segundo factor y de cancelar la suscripción desplegadas, con los secretos de Stripe de prueba (D-113, D-118, D-130). El 2026-10-15 se aplicó el plan b10 completo (pagos-b10.sql y el archivo de Party). Las suscripciones de prueba de Ricardo ya están canceladas y reembolsadas en Stripe. Sus filas en la base se borran con su autorización
@@ -34,9 +34,9 @@ Arrancó el 2026-10-12 con el mensaje de Ricardo que autoriza la sección 0.1 de
 - [x] B14. Datos y modelo del alumno (D-136, PR 59 fusionado)
 - [x] B15. Analítica, errores, recordatorios y recorrido (D-137, PR 60 fusionado)
 - [x] B16. Legal y privacidad (D-132, PR en curso)
-- [x] B17. Publicación (D-138, PR en curso)
+- [x] B17. Publicación (D-138, PR 61 fusionado)
   - Imagen para compartir y capturas de instalación que hizo Gemini, integradas el 2026-10-15. En el build de GitHub Pages la imagen lleva la dirección completa (SITE_URL) para que WhatsApp y Facebook la muestren
-- [ ] B18. Primeros alumnos
+- [x] B18. Primeros alumnos (D-139, PR en curso)
 - [ ] B19. Auditoría final y lanzamiento
 
 ### B0. Arranque
@@ -213,6 +213,14 @@ Evidencia
 - Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios, npm audit sin vulnerabilidades altas. Vitest con 7,061 pruebas, prueba de humo 9 de 9, 58 mutaciones de la revisión con 51 atrapadas (las que no, eran equivalentes o ya tienen prueba). Playwright de portada, mudanza, billeteras, pagos, privacidad y recorrido en teléfono, computadora y nube. JS inicial de 291.4 KB sin nube y 291.8 KB en producción. Capturas en docs/screenshots/v3/b17 (60)
 - Nada se ha desplegado ni probado con cuentas reales (Cloudflare, dominio, Resend, Supabase de pago, Stripe real, Apple y Google). Los pasos tuyos, B17.1 a B17.22, están en docs/PENDIENTES_DE_RICARDO.md. Por confirmar con cuentas reales, que wrangler suba la carpeta .well-known y que el proyecto se cree sin redirección a Workers, la política con el Stripe.js real y checkout.session.completed con ui_mode elements, la hoja de Apple Pay con prueba gratis (total de hoy en 0), que Auth admin acepte la llave secreta nueva solo en apikey y los menús de Email Routing
 
+### B18. Primeros alumnos (D-139)
+- Hecho y apagado. Encuesta de los primeros días dentro de la app (siete preguntas cerradas y un comentario opcional a los 7 días, con franja Contestar, Ahora no y No quiero contestarla, pantalla 41 en /encuesta, borrador en el dispositivo), tabla privada survey_responses que solo se agrega, cuatro funciones del alumno y dos del equipo sin correo, nombre, cuenta ni fecha, tarjeta Encuesta de los primeros días en Usuarios con interruptor, conteos, lista y CSV, botón Copiar mensaje de invitación, tres eventos de analítica solo con permiso, la encuesta dentro de Exportar mis datos, Borrar mi respuesta en Configuración, Privacidad, aviso de privacidad 2026-10-22b y el plan de despliegue b18 (dos migraciones). La guía para ti está en docs/PRIMEROS_ALUMNOS.md
+- Revisión independiente con 10 hallazgos (ninguno alto, 3 medios y 7 bajos), todos atendidos con su prueba. El principal era que los días de la cuenta ligaban cada respuesta con quien se dio de alta ese día en Usuarios, así que el equipo ya no los ve
+- Evidencia. Typecheck de las cuatro configuraciones, lint y formato limpios, npm audit sin vulnerabilidades altas. Vitest con 7,314 pruebas, SQL en 36 bloques con la encuesta de S0 a S7 y 48 casos de comentarios en SQL y en Vitest, 60 de 60 pruebas e2e de nube de la encuesta con axe en claro y oscuro y a 320 px, 26 mutaciones en total y todas atrapadas. JS inicial de 292.0 KB, de 300. Capturas en docs/screenshots/v3/b18 (48)
+- Nada de B18 se ha aplicado a Supabase ni probado con personas reales. Tus pasos, B18.1 a B18.12 (aplicar el plan b18, probar con 0 días en una cuenta tuya, prender la encuesta justo antes de invitar, invitar a los 5 y mandar el aviso al abogado), están en docs/PENDIENTES_DE_RICARDO.md
+- Regla que importa. Que la sesión no lea los comentarios es una regla de conducta y no un control técnico (D-139). A la sesión solo le pasas los conteos de la tarjeta y tu lista de hallazgos, nunca sus comentarios
+- Resumen de grupo que se llena al terminar la prueba, sin nombres, correos, comentarios ni códigos. Invitados 5, con cuenta N, dieron Medición de uso N, contestaron N. Repasar y Simular según la encuesta y según la analítica. Medianas de claridad, facilidad y utilidad con 3 o más respuestas. Lo que frenó por conteo. Recomendarían sí N, tal vez N, no N. Hallazgos numerados que escribes tú, cada uno con su decisión (antes de abrir, después o descartar)
+
 ### Estado de las ramas en paralelo (2026-10-15, 05:40 UTC)
 - Cada bloque se construye en un worktree fuera del repo (/home/user/wt) y se une a la rama de trabajo ccr-60b5d3a7-f40uky al cerrar, con un PR a main por bloque
 - B3 a B6 fusionados en main (PR 42, 43 y 44)
@@ -250,6 +258,9 @@ Evidencia
 - B17. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. Dos frases de la portada cambiadas por no tener respaldo, FSRS ya no es el algoritmo más preciso sino un algoritmo moderno de repaso espaciado, y el contenido médico generado por IA queda como borrador marcado hasta que un médico lo aprueba (con tu abogado). El título de esa tarjeta, Contenido con médicos detrás, sugiere más que su texto y conviene cambiarlo cuando llegue el texto de la agencia. Dominio sin www y proyecto nuevo studiare en Cloudflare Pages y no en Workers. Billeteras construidas y apagadas, y sin campo de código de descuento. Llaves nuevas de Supabase dentro de B17. Buzones de privacidad y soporte con reenvío de Cloudflare a tu Gmail al principio. Aviso de privacidad con Cloudflare, GitHub y Stripe.js como encargados (seis preguntas para el abogado en docs/legal/CAMBIOS-B17.md). Aviso de 14 días y sitio de mudanza por 30 días. Dejar /privacidad y /terminos fuera del sitemap. Las capturas de instalación con Versión de demostración quedan fuera de producción. La opción de Resend gratis al principio y Pro antes de abrir el registro
 - B17. Supabase de pago antes de invitar a los 5 aspirantes es un gasto (11.16), lo decides tú. La consulta de solo lectura de cuántos alumnos hay antes de mudar el dominio toca producción, así que espera tu frase
 - B17. La frase Gratis para empezar. Sin tarjeta. de la portada hay que revisarla cuando se prenda la prueba gratis, que sí pide tarjeta
+- B18. Decisiones con la opción recomendada ya tomada, que esperan tu visto bueno. La encuesta no es anónima, es con un código, y los comentarios los lees solo tú (8.5, con tu abogado). Borrar mis datos no borra la respuesta de la encuesta y Eliminar mi cuenta sí (8.4, con tu abogado). Cerrar sesión borra la elección de No quiero contestarla y Ahora no en ese navegador, así que la franja puede volver a salir una vez más, y la alternativa es dejarla hasta Borrar mis datos o Eliminar mi cuenta, un cambio de una línea. Los 7 días de espera se prueban antes con 0 días en una cuenta tuya
+- B18. El aviso de privacidad sube a la versión 2026-10-22b y hace aceptarlo otra vez a quien ya aceptó el de B17, con la pregunta para el abogado de quién tiene acceso de administración a la base y podría leer los comentarios (docs/legal/CAMBIOS-B18.md)
+- B18. Supabase de pago con copias antes de invitar a los 5 es un gasto, lo decides tú. Con el correo de fábrica de Supabase los códigos de acceso no llegan a los aspirantes, así que primero deben estar Resend como SMTP o Entrar con Google (B17). Si solo 2 de los 5 dan el permiso de analítica no se insiste, y el resumen lo dice
 
 ## Fase L. Primer pago real en modo prueba y un solo plan pagado (D-118)
 

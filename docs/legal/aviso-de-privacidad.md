@@ -1,6 +1,6 @@
 # Aviso de privacidad
 
-Versión 2026-10-22. Última actualización, 22 de octubre de 2026
+Versión 2026-10-22b. Última actualización, 22 de octubre de 2026
 
 > Borrador para revisión del abogado. Todavía no es el texto legal definitivo.
 
@@ -22,6 +22,7 @@ Tratamos los datos de la lista. No tratamos datos sensibles de salud tuyos, porq
 - Edad mínima. Al crear tu cuenta confirmas que tienes 18 años o más. Guardamos solo la fecha y la hora en que lo confirmaste, no tu fecha de nacimiento. Esa fecha ya no cambia y se borra al eliminar tu cuenta.
 - Entrar con Google. Es opcional. Si lo eliges, Google nos comparte el correo, el nombre y la foto de tu cuenta de Google. Usamos solo tu correo, para tu cuenta. Tu nombre y tu foto de Google quedan guardados en el registro de acceso de Supabase, pero Studiare no los usa ni los muestra. Tu alias y tu foto en Studiare son los que tú eliges. Nunca recibimos tu contraseña de Google.
 - Cómo nos conociste. Es opcional. Si contestas, guardamos el canal que elegiste, como Instagram, un amigo o tu universidad, el código de influencer si escribiste uno y la fecha. Solo lo usamos para medir, en conteos totales, por dónde llega la gente a Studiare. En la app el equipo solo ve esos conteos, nunca tu respuesta junto a tu cuenta. No la usamos para mandarte publicidad, no va a herramientas de analítica y se borra al eliminar tu cuenta.
+- Encuesta de los primeros días. Es opcional. Si decides contestarla, guardamos tus respuestas y tu comentario con un código, los días que pasaron desde que creaste tu cuenta y la versión de la encuesta, sin tu nombre ni tu correo. Solo la ven el dueño y los administradores de Studiare. No va a herramientas de analítica ni a la inteligencia artificial. La puedes borrar en Configuración, sección Privacidad, y se borra sola al eliminar tu cuenta.
 - Invitación. Mientras el registro sea solo con invitación, guardamos el correo invitado, quién del equipo lo invitó y la fecha. Sirve para dejarte crear tu cuenta y se borra al eliminarla.
 - Foto de perfil. Es opcional. Si subes una, la guardamos en Supabase Storage, en un espacio privado de tu cuenta. La ves tú y, mientras compartan un grupo activo de Party, los miembros de ese grupo. Si eliges tus iniciales la quitamos de la nube, y se borra al eliminar tu cuenta.
 - Estudio. Tus respuestas a preguntas y tarjetas, los tiempos, la confianza que marcas, los motivos de tus errores, tus mazos y apuntes, tus metas, tus ajustes y los reportes de error que mandas sobre una pregunta.
@@ -48,6 +49,7 @@ Para lo que necesitamos hacer para darte el servicio.
 - Cobrar tu plan o tu pase, dar una sola prueba gratis por persona, atender la garantía, los reembolsos y las aclaraciones, y emitir tu factura si la pides.
 - Darte un mes gratis cuando alguien que invitaste hace su primer cobro.
 - Mandarte los correos que necesita tu cuenta, como el de acceso, el aviso de que termina tu prueba gratis o el de que vence tu pase.
+- Corregir lo que falle antes de abrir Studiare a más gente, con las respuestas de la encuesta de los primeros días de quien decida contestarla.
 - Cuidar la seguridad de la plataforma y prevenir abusos, como la descarga masiva del banco.
 - Responder a tus solicitudes y cumplir obligaciones legales y fiscales.
 
@@ -56,6 +58,8 @@ Para lo que necesitamos hacer para darte el servicio.
 Estas finalidades son opcionales. Cada una se pide por separado y empieza apagada. Las prendes o las apagas cuando quieras en Configuración, sección Privacidad. Decir que no a una no te quita el resto del servicio.
 
 Los recordatorios de repaso por correo también son opcionales. Los prendes tú en Ajustes del repaso, aparte de estos permisos, y empiezan apagados.
+
+La encuesta de los primeros días también es opcional. La contestas tú, a propósito, cuando te la ofrecemos, y no depende de ninguno de estos permisos. Lo que contestes se guarda como se explica en Qué datos tratamos y puedes borrarlo cuando quieras.
 
 - Party. Compartir tu alias, tu foto de perfil si subiste una, tu XP de la semana y tu aporte a los retos con los miembros de los grupos a los que te unas, y en un duelo tus aciertos y tu tiempo. Tus compañeros nunca ven tu correo ni tus demás datos de cuenta.
 - Análisis con IA. Usar tus errores para que el tutor te dé hipótesis de por qué fallas y un informe con IA.
@@ -101,15 +105,15 @@ No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a ope
 
 Tienes derecho a acceder a tus datos, rectificarlos, cancelarlos y oponerte a que se usen, y a retirar tu consentimiento. Casi todo lo haces tú solo en la app.
 
-- Acceder. En Configuración, sección Privacidad, descargas en un archivo tus datos de estudio, tus ajustes, tus permisos y lo tuyo en Party. Para una copia de lo demás, como tus pagos, tus solicitudes de factura o tus lecturas del banco, escribe a [Pendiente de Ricardo. Correo de privacidad].
+- Acceder. En Configuración, sección Privacidad, descargas en un archivo tus datos de estudio, tus ajustes, tus permisos, lo tuyo en Party, tus recordatorios por correo y tu respuesta a la encuesta de los primeros días. Para una copia de lo demás, como tus pagos, tus solicitudes de factura o tus lecturas del banco, escribe a [Pendiente de Ricardo. Correo de privacidad].
 - Rectificar. Cambias tu alias, tu foto y tus datos de cuenta en Configuración, sección Perfil, y tus ajustes de estudio en Repasar. Para cambiar tu correo o los datos de una factura, escribe a [Pendiente de Ricardo. Correo de privacidad].
-- Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio del dispositivo y de la nube. De tu estudio solo se quedan las preguntas del banco que abriste y tu uso de la IA del día de estudio en curso, para que borrar no reinicie los límites de ese día, y los avisos de lectura del banco que ya vio el equipo. También puedes eliminar tu cuenta completa, y entonces se borra todo eso, tu foto de perfil, tus solicitudes de factura y el correo de tu invitación. Si usaste una prueba gratis, se queda solo la huella de tu correo que se explica arriba. Borrar tus datos también quita tus recordatorios de repaso, la foto de conteos de tarjetas y tu identificador de Medición de uso.
+- Cancelar. En Configuración, sección Privacidad, borras tus datos de estudio del dispositivo y de la nube. De tu estudio solo se quedan las preguntas del banco que abriste y tu uso de la IA del día de estudio en curso, para que borrar no reinicie los límites de ese día, y los avisos de lectura del banco que ya vio el equipo. También puedes eliminar tu cuenta completa, y entonces se borra todo eso, tu foto de perfil, tus solicitudes de factura y el correo de tu invitación. Si usaste una prueba gratis, se queda solo la huella de tu correo que se explica arriba. Borrar tus datos también quita tus recordatorios de repaso, la foto de conteos de tarjetas y tu identificador de Medición de uso. Tu respuesta a la encuesta de los primeros días no se quita con Borrar mis datos. Se quita aparte, con Borrar mi respuesta en esa misma sección, y al eliminar tu cuenta se borra sola.
 - Oponerte o retirar un permiso. En Configuración, sección Privacidad.
 - Por escrito. Si prefieres, escribe a [Pendiente de Ricardo. Correo de privacidad] con tu nombre y lo que pides, y respondemos en un plazo razonable.
 
 ## Cuánto tiempo los conservamos
 
-Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base como se explica arriba, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. El registro de costos de la IA se queda sin tu identificador. La huella del correo de una prueba gratis usada se queda sin tu cuenta y sin fecha de borrado, solo para evitar pruebas repetidas. En Studiare tus pagos se borran con tu cuenta. Los avisos de cobro que manda la pasarela se guardan sin tu nombre ni tu correo, con el identificador de tu cuenta y los del cobro y la suscripción en la pasarela, para poder revisar los cobros. Los cobros que ya procesó la pasarela de pagos se conservan allá, y las facturas ya emitidas en el sistema de facturación, el tiempo que exige la ley fiscal. Los eventos de Medición de uso que ya recibió PostHog no llevan tu nombre ni tu correo, y al eliminar tu cuenta se borra el identificador seudónimo que los ligaba contigo, así que ya no se pueden ligar a ti.
+Conservamos tus datos mientras tengas cuenta. Si borras tus datos o eliminas tu cuenta, los quitamos de nuestra base como se explica arriba, y al eliminar tu cuenta también quitamos tu foto de perfil de Supabase Storage. El registro de costos de la IA se queda sin tu identificador. La huella del correo de una prueba gratis usada se queda sin tu cuenta y sin fecha de borrado, solo para evitar pruebas repetidas. En Studiare tus pagos se borran con tu cuenta. Los avisos de cobro que manda la pasarela se guardan sin tu nombre ni tu correo, con el identificador de tu cuenta y los del cobro y la suscripción en la pasarela, para poder revisar los cobros. Los cobros que ya procesó la pasarela de pagos se conservan allá, y las facturas ya emitidas en el sistema de facturación, el tiempo que exige la ley fiscal. Tu respuesta a la encuesta de los primeros días se queda mientras tengas cuenta o hasta que la borres. Los eventos de Medición de uso que ya recibió PostHog no llevan tu nombre ni tu correo, y al eliminar tu cuenta se borra el identificador seudónimo que los ligaba contigo, así que ya no se pueden ligar a ti.
 
 ## Cookies y almacenamiento en tu navegador
 

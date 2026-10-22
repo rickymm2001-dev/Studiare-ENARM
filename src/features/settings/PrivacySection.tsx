@@ -18,6 +18,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { CheckboxField } from '@/ui/components/field';
 import { afterPartyConsentChange } from '../party/cloudConsent';
 import type { ReadySession } from '../shared/RequireSession';
+import { SurveyPrivacyLine } from '../survey/SurveyPrivacyLine';
 import { DataSection } from './DataSection';
 import type { z } from 'zod';
 
@@ -34,6 +35,8 @@ export function PrivacySection({ session }: { session: ReadySession }) {
     <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
       <ConsentsCard session={session} />
       <DataSection session={session} />
+      {/* La encuesta de los primeros días (B18). Sin la línea si está apagada o no le toca */}
+      {session.isDemo ? null : <SurveyPrivacyLine />}
     </div>
   );
 }

@@ -9,6 +9,7 @@ Borradores del aviso de privacidad y de los términos y condiciones de Studiare,
 - CAMBIOS-B16.md es la lista de lo que cambió en B16, con el porqué y las preguntas para el abogado y para Ricardo
 - CAMBIOS-B15.md es la lista de lo que cambió en B15 (Medición de uso, PostHog, Sentry y recordatorios por correo), con sus preguntas
 - CAMBIOS-B17.md es la lista de lo que cambió en B17 (Cloudflare, GitHub como quien aloja la página y el componente de Stripe de Apple Pay y Google Pay), con la decisión sobre la versión del aviso y sus preguntas
+- CAMBIOS-B18.md es la lista de lo que cambió en B18 (la encuesta de los primeros días, con lo que se guarda, quién la ve y cómo se borra), con la decisión sobre la versión del aviso y sus preguntas
 
 Son el mismo texto que muestra la app. Se generan con npm run legal:export a partir de src/i18n/legalDocs.ts, y una prueba falla si estos archivos se quedan atrás del texto de la app.
 

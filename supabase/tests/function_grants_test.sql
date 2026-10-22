@@ -377,4 +377,67 @@ begin
   end loop;
 end $$;
 
+-- ===================================================================== G12. Encuesta de los primeros días (B18)
+-- Ninguna función de la encuesta queda para public ni para anon, y ninguna para service_role. La app llama a las del
+-- alumno, que piden sesión, dispositivo activo y rol por dentro, y la pantalla del equipo a las dos de admin, que
+-- piden is_admin(). Las ayudas no las ejecuta nadie de la API. La tabla no da permisos a nadie de la API, ni a
+-- service_role, y tiene RLS sin políticas
+do $$
+declare
+  r record;
+  n integer := 0;
+  v_session constant text[] := array[
+    'my_survey_status', 'submit_survey', 'my_survey_response', 'delete_my_survey_response',
+    'admin_survey_summary', 'admin_survey_responses'];
+  v_internal constant text[] := array[
+    'survey_answers_ok', 'survey_comment_ok', 'survey_waited', 'survey_days_since', 'survey_new_code',
+    'survey_setting', 'survey_user', 'forbid_survey_changes'];
+begin
+  for r in
+    select p.oid::regprocedure::text as f, p.proname::text as name, p.proacl, p.prosecdef
+    from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public' and p.proname = any (v_session || v_internal)
+  loop
+    n := n + 1;
+    if r.proacl is null or exists (select 1 from aclexplode(r.proacl) a where a.grantee = 0) then
+      raise exception 'FALLA G12. public puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('anon', r.f, 'execute') then
+      raise exception 'FALLA G12. anon puede ejecutar %', r.f;
+    end if;
+    if has_function_privilege('authenticated', r.f, 'execute') <> (r.name = any (v_session)) then
+      raise exception 'FALLA G12. authenticated tiene un permiso equivocado en %', r.f;
+    end if;
+    if has_function_privilege('service_role', r.f, 'execute') then
+      raise exception 'FALLA G12. service_role puede ejecutar %', r.f;
+    end if;
+    if not r.prosecdef and r.name = any (v_session) then
+      raise exception 'FALLA G12. % no es security definer', r.f;
+    end if;
+    if not exists (
+      select 1 from pg_proc q, unnest(q.proconfig) c where q.oid = r.f::regprocedure and c like 'search_path=%') then
+      raise exception 'FALLA G12. % no fija search_path', r.f;
+    end if;
+  end loop;
+  if n <> cardinality(v_session || v_internal) then
+    raise exception 'FALLA G12. Se esperaban % funciones y hay %', cardinality(v_session || v_internal), n;
+  end if;
+  -- Ninguna función con un nombre de esta parte queda fuera de las listas
+  if exists (
+    select 1 from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+    where ns.nspname = 'public'
+      and p.proname ~ '(^survey_|_survey_|_survey$|^forbid_survey)'
+      and not p.proname = any (v_session || v_internal)
+  ) then
+    raise exception 'FALLA G12. Hay una función que esta prueba no conoce';
+  end if;
+  if has_table_privilege('anon', 'public.survey_responses', 'select,insert,update,delete')
+     or has_table_privilege('authenticated', 'public.survey_responses', 'select,insert,update,delete')
+     or has_table_privilege('service_role', 'public.survey_responses', 'select,insert,update,delete')
+     or not (select relrowsecurity from pg_class where oid = 'public.survey_responses'::regclass)
+     or exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'survey_responses') then
+    raise exception 'FALLA G12. survey_responses tiene permisos de tabla para la API, políticas o no tiene RLS';
+  end if;
+end $$;
+
 select 'TODAS LAS PRUEBAS DE PERMISOS DE FUNCIONES PASARON' as resultado;

@@ -1,6 +1,6 @@
 // Registro de las pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
 // Explorar (D-085), Apuntes (D-092), el aviso de privacidad y los términos (Fase G), Admin, Pagos
-// (B10), las tres del banco en la nube del admin (B11), la Auditoría de la IA (B12), la Calibración (B14) y Darte de baja (B15), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
+// (B10), las tres del banco en la nube del admin (B11), la Auditoría de la IA (B12), la Calibración (B14), Darte de baja (B15) y la Encuesta (B18), con su ruta, área y fase. Planificador, Perfil y Logros se quitaron en B3 del plan del cambio
 // (comentarios 6, 13 y 14) y sus rutas llevan a donde quedó lo suyo.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
@@ -48,6 +48,7 @@ export const SCREEN_KEYS = [
   'aiAudit',
   'calibrationAdmin',
   'unsubscribe',
+  'survey',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -111,6 +112,9 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   // Darte de baja de los recordatorios por correo (B15, 3.6). Pública y sin sesión: la abre el enlace del
   // pie del correo, con la ficha de baja en ?t=. Toma el 40 porque B14 ya usó el 39
   unsubscribe: { number: 40, path: '/correo/baja', area: 'shared', phase: 'F' },
+  // Encuesta de los primeros días (B18, 1.2 del diseño). Solo la abre un alumno con la cuenta de la nube, desde la franja de
+  // arriba o desde Configuración, Privacidad. Toma el 41 porque B15 ya usó el 40
+  survey: { number: 41, path: '/encuesta', area: 'student', phase: 'F' },
 };
 
 /**

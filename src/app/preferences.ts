@@ -8,6 +8,7 @@ import { create } from 'zustand';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { cloudConfigured, forgetStoredCloudSession, loadCloud } from '@/data/cloud/client';
 import { RoleSchema } from '@/data/schemas/common';
+import { forgetSurveyLocal } from '@/features/survey/surveyLocal';
 import { AppearanceSchema, DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { THEME_PREFERENCES } from '@/ui/theme';
 
@@ -165,6 +166,9 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
     },
     signOut: () => {
       signOuts += 1;
+      // El borrador de la encuesta (texto libre) y lo que se decidió con su franja no se quedan en un navegador que se
+      // comparte. También cubre Borrar mis datos y Eliminar mi cuenta, que terminan aquí
+      forgetSurveyLocal();
       // Con cuenta en la nube el rol lo da el servidor, así que al salir vuelve a alumno (D-075)
       update(
         cloudConfigured() ? { sessionUserId: null, role: 'student' } : { sessionUserId: null },

@@ -1417,6 +1417,105 @@ Antes de invitar a la primera persona real (respuesta 27). Es un gasto y lo deci
 - Si un origen de APP_ORIGINS no cumple la forma (http, ruta, comodín, mayúsculas), las funciones de pagos lo ignoran sin cambiar lo demás, y ai-proxy deja de atender y lo dice en su registro con el nombre de la variable y nunca con el valor
 - Tras la mudanza, ai-proxy, el cliente y los pagos solo atienden al dominio nuevo y al viejo mientras esté en la lista. Una vista previa de pages.dev nunca llama a las funciones
 
+## Primeros alumnos y encuesta (B18)
+
+### Qué hace
+
+- 20261030000001_first_week_survey. El ajuste survey_first_week en platform_settings, apagado. La tabla survey_responses, una fila por cuenta y por encuesta que solo se agrega, con permisos por fila, sin políticas y sin permisos de tabla para la API. Las reglas de las respuestas y del comentario como funciones puras, el freno que deja la tabla solo para agregar, tres funciones del alumno (my_survey_status, submit_survey y my_survey_response) y dos del equipo (admin_survey_summary y admin_survey_responses)
+- 20261030000002_survey_erase. delete_my_survey_response, la cuarta función del alumno. Va aparte porque es la única pieza con delete y así la primera migración queda sin delete ni drop
+- La encuesta se pide a los 7 días de la cuenta, con siete preguntas cerradas y un comentario libre opcional, y se contesta una sola vez. Es un dato que el alumno da a propósito y no depende de Medición de uso ni de Mejora con tus datos sin nombre
+- Al equipo solo le llega un código al azar (R y 6 caracteres hexadecimales). Ninguna función del equipo devuelve user_id, correo, alias, fecha ni los días de la cuenta, y ordenan por código y no por fecha. Los días se guardan en days_since_signup para el análisis interno y solo se los devuelven a su dueña (my_survey_status y my_survey_response), porque con 5 personas y la fecha de alta que ya se ve en Usuarios darían la cuenta. La respuesta queda ligada a la cuenta en la tabla, para poder borrarla y para que sea una sola por alumno, pero ninguna función la muestra
+- Todo nace apagado. survey_first_week.enabled queda en false y se prende justo antes de invitar a los primeros alumnos (docs/PRIMEROS_ALUMNOS.md)
+
+### Cómo aplicar las dos migraciones
+
+Aplica primero todas las anteriores, incluidas las de B15. Van en orden y las dos son seguras de repetir. La primera no lleva delete ni drop, así el conector la aplica sin pedir confirmación. La segunda lleva un delete dentro de la función, así que el conector no la aplica sin una confirmación y la aplica la herramienta de despliegue.
+
+1. supabase/migrations/20261030000001_first_week_survey.sql
+2. supabase/migrations/20261030000002_survey_erase.sql
+
+Con un token válido de Supabase no las aplicas tú. Lo hace npm run deploy:supabase -- --plan b18 (docs/DESPLIEGUE.md), primero con --dry-run. El plan no publica Edge Functions ni espera secretos.
+
+```bash
+npm run deploy:supabase -- --plan b18 --dry-run
+npm run deploy:supabase -- --plan b18 --yes
+```
+
+Para confirmar que quedó, abre una New query, pega esto y da clic en Run. Es la comprobación del final de la segunda migración, la misma que revisa el plan b18, y solo mira hechos de la estructura. No lee ninguna respuesta.
+
+```sql
+select
+  (select count(*) from pg_tables where schemaname = 'public' and tablename = 'survey_responses') as tabla_de_encuesta,
+  (select relrowsecurity from pg_class where oid = 'public.survey_responses'::regclass) as tabla_con_seguridad_por_fila,
+  not has_table_privilege('anon', 'public.survey_responses', 'select,insert,update,delete')
+    and not has_table_privilege('authenticated', 'public.survey_responses', 'select,insert,update,delete')
+    and not has_table_privilege('service_role', 'public.survey_responses', 'select,insert,update,delete') as tabla_sin_permisos_directos,
+  (select count(*) from pg_trigger
+    where tgrelid = 'public.survey_responses'::regclass and tgname = 'survey_responses_append_only') as solo_se_agrega,
+  has_function_privilege('authenticated', 'public.my_survey_status()', 'execute') as alumno_ve_su_estado,
+  has_function_privilege('authenticated', 'public.submit_survey(text, jsonb, text)', 'execute') as alumno_contesta,
+  has_function_privilege('authenticated', 'public.my_survey_response()', 'execute') as alumno_exporta,
+  has_function_privilege('authenticated', 'public.delete_my_survey_response()', 'execute') as alumno_borra_la_suya,
+  has_function_privilege('authenticated', 'public.admin_survey_summary(text)', 'execute') as equipo_ve_conteos,
+  has_function_privilege('authenticated', 'public.admin_survey_responses(text)', 'execute') as equipo_ve_respuestas,
+  has_function_privilege('anon', 'public.my_survey_status()', 'execute')
+    or has_function_privilege('anon', 'public.submit_survey(text, jsonb, text)', 'execute')
+    or has_function_privilege('anon', 'public.admin_survey_summary(text)', 'execute') as anonimo_entra,
+  has_function_privilege('service_role', 'public.admin_survey_responses(text)', 'execute') as llave_lee_respuestas,
+  exists (select 1 from public.platform_settings where key = 'survey_first_week') as ajuste_sembrado;
+```
+
+Debe salir
+- tabla_de_encuesta y solo_se_agrega en 1
+- tabla_con_seguridad_por_fila, tabla_sin_permisos_directos, alumno_ve_su_estado, alumno_contesta, alumno_exporta, alumno_borra_la_suya, equipo_ve_conteos, equipo_ve_respuestas y ajuste_sembrado en true
+- anonimo_entra y llave_lee_respuestas en false
+
+Si la encuesta está prendida y con qué espera se lee con esta otra. No va en el plan porque cambia con el tiempo, y con ella el plan no se podría volver a correr después de prenderla. Solo lee el ajuste.
+
+```sql
+select
+  value ->> 'enabled' as encuesta_prendida,
+  value ->> 'delay_days' as dias_de_espera,
+  value ->> 'accounts_until' as fecha_limite
+from public.platform_settings
+where key = 'survey_first_week';
+```
+
+Debe salir encuesta_prendida en false, hasta que la prendas desde Usuarios, Encuesta de los primeros días, con el guion de docs/PRIMEROS_ALUMNOS.md.
+
+### Prender la encuesta
+
+La prende el dueño o un admin en Usuarios, tarjeta Encuesta de los primeros días, con el interruptor, los días de espera y la fecha límite. Guarda el ajuste survey_first_week con settings_write, el mismo camino con el que se abre el registro. survey_setting valida cada campo al leerlo y, si alguno no sirve, usa el de fábrica.
+
+| Campo | Qué es | Valores |
+|---|---|---|
+| enabled | Si la encuesta está prendida | Solo el booleano true la prende |
+| id | Qué encuesta es | first-week-v1, que es la única que la base conoce. Con otro id, aunque tenga buena forma, la base usa first-week-v1, para que la franja nunca salga con una encuesta que no se puede contestar. Una segunda encuesta, por ejemplo a los 30 días, no pide otra tabla, pero sí una migración que sume su id a survey_answers_ok y a la lista de survey_setting, y el cambio en src/config/surveys.ts |
+| delay_days | Días que espera la cuenta nueva | De 0 a 30, entero. Con 0 se prueba sin esperar |
+| accounts_until | Las cuentas creadas ese día o después ya no la reciben | Una fecha AAAA-MM-DD, contada desde la medianoche de la Ciudad de México, o null |
+
+### Prueba de humo sin llaves
+
+Después de desplegar, con todo apagado y sin ninguna llave, estas son las respuestas correctas. Ninguna lee una respuesta de nadie.
+
+| Llamada | Respuesta |
+|---|---|
+| POST /rest/v1/rpc/my_survey_status con la llave pública y sin sesión | 401, 403 o 404 |
+| POST /rest/v1/rpc/admin_survey_summary con la llave pública y sin sesión | 401, 403 o 404 |
+| GET /rest/v1/survey_responses con la llave pública y sin sesión | 401, 403 o 404 |
+
+Cualquiera de los tres códigos cuenta como rechazada, y lo único que no puede salir es un 200, ni con filas ni con una lista vacía. 401 y 403 son que la base dijo que no hay permiso. 404 es que el servicio no encontró el recurso para quien llama sin sesión. Pasa porque la tabla no da permisos a ningún rol de la API (a propósito) y, según la versión de PostgREST, una tabla que nadie puede ver ni siquiera entra a su caché de esquema (error PGRST205). Con las funciones puede salir igual. Como un 404 también saldría si las migraciones no se aplicaron, esta prueba solo confirma que sin sesión no se abre nada. Que sí se aplicaron lo dice la comprobación de estructura de arriba.
+
+### Qué conviene saber
+
+- El chequeo de seguridad de Supabase marcará, a propósito, la tabla nueva con permisos por fila y sin políticas, y las funciones que la app llama con sesión (my_survey_status, submit_survey, my_survey_response, delete_my_survey_response, admin_survey_summary y admin_survey_responses), que revisan por dentro la sesión, el dispositivo activo o el rol. supabase/tests/function_grants_test.sql (G12) revisa la lista completa
+- El rol que cuenta es el guardado en user_roles y no el que da current_app_role, que para el equipo sin segundo factor se ve como alumno. Un médico, un admin o el dueño nunca ven ni contestan la encuesta
+- Las cuentas elegibles que cuenta admin_survey_summary son las de alumnos con el correo confirmado que se crearon antes de la fecha límite, si la hay, y ya esperaron los días. No dice cuáles
+- Borrar mis datos no borra la encuesta, a propósito (8.4 del diseño de B18). Eliminar la cuenta sí, en cascada. La respuesta se quita con delete_my_survey_response, desde Configuración, Privacidad
+- El comentario de la encuesta se revisa con survey_comment_ok. Normaliza el texto (NFKC, que vuelve ＠ en @ y los dígitos de ancho completo en dígitos), quita los caracteres de ancho cero y de formato, y rechaza cualquier arroba, las formas (at), [at] y {at}, la palabra arroba y un teléfono de diez dígitos o más con a lo mucho tres separadores entre uno y otro. Es un apoyo y no una garantía, porque no lee un nombre, un número escrito con palabras ni un correo dictado. Pide una base UTF8 por normalize, y la de Supabase lo es. La app aplica las mismas reglas antes de enviar (COMMENT_RULES en src/config/surveys.ts) y los mismos casos de tests/fixtures/survey-comments.json corren en Vitest y en supabase/tests/first_week_survey_test.sql
+- Cualquier cambio o borrado directo de survey_responses falla, también el del dueño de la base. Para vaciarla en una prueba hay que apagar el disparador survey_responses_append_only, y no hay razón de hacerlo en el proyecto real
+- Que la sesión que mantiene el proyecto no lea los comentarios ni las respuestas una por una es una regla de conducta (D-139, CLAUDE.md, al LLM solo viajan IDs seudónimos y texto del banco) y no un control técnico. admin_survey_responses devuelve los comentarios a quien sea dueño o admin con su sesión, y una conexión con acceso a la base como postgres, como la del conector con execute_sql, podría leer survey_responses. El control técnico real es que la sesión no tiene la llave de admin de Ricardo ni la usa para esta tabla, y que a la sesión solo se le pasa el resumen por conteos (admin_survey_summary) y nunca la lista. Ninguna consulta de esta sección lee comentarios ni respuestas, y Ricardo le pasa solo las cifras de la tarjeta y su lista de hallazgos. Si alguna vez hace falta que la sesión las lea, es una decisión de Ricardo por escrito (8.5)
+
 ## Proyecto real conectado
 
 Desde el 2026-10-10 Claude tiene conectado el proyecto Studiare de Supabase (referencia bkjbcdwglyllizupokqm, dirección https://bkjbcdwglyllizupokqm.supabase.co) por el conector de claude.ai. Esto es lo que se hizo y lo que sigue pendiente.

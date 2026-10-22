@@ -49,6 +49,11 @@ psql_run -f "$here/model_reads_test.sql"
 psql_run -f "$here/reminders_test.sql"
 psql_run -f "$here/analytics_test.sql"
 psql_run -f "$here/engagement_cron_test.sql"
+# B18. La encuesta de los primeros días. Vacía su propia tabla para armar casos conocidos, así que va después de
+# todo lo demás que pudiera contestarla. Compara survey_comment_ok con la lista de comentarios que también lee Vitest
+# (src/config/surveys.test.ts), y psql la lee de esta ruta
+export SURVEY_COMMENTS_FILE="$here/../../tests/fixtures/survey-comments.json"
+psql_run -f "$here/first_week_survey_test.sql"
 # Lo que protegen el candado por día del libro de IA y el reclamo de la cola de lotes solo se ve con varias
 # conexiones a la vez. Va al final porque deja la cola de lotes sin trabajos pendientes
 # shellcheck source=supabase/tests/concurrency.sh

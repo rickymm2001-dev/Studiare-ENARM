@@ -136,6 +136,8 @@ const screens: Record<ScreenKey, ScreenText> = {
   adminSettings: { title: 'Configuración', description: '' },
   // Darte de baja de los recordatorios (B15). Su descripción vive en engagement.ts, que carga la pantalla
   unsubscribe: { title: 'Darte de baja', description: '' },
+  // Encuesta de los primeros días (B18). Su texto vive en survey.ts, que carga la pantalla
+  survey: { title: 'Encuesta', description: '' },
   privacyNotice: {
     title: 'Aviso de privacidad',
     description:

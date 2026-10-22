@@ -272,6 +272,50 @@ Lo que hace la sesión, sin pedirte nada más.
 3. Corre la prueba de humo contra el dominio con npm run smoke -- https://tudominio.mx --strict, registra el dominio en Stripe y corre setup-test.ts con la dirección nueva
 4. Puede poner Site URL y Redirect URLs de Supabase con tu token, porque son direcciones públicas. El bloque de SMTP lo pones tú, porque lleva la llave de Resend
 
+## Lo que salió de B18, primeros alumnos
+
+El código de B18 ya está y se probó con un Supabase simulado. La encuesta nace apagada y no cambia nada para nadie hasta tus pasos. Está escrito para alguien que nunca ha hecho esto. Ningún paso lleva llaves al chat. El guion completo, con qué decirles a los 5 y cómo anotar lo que encuentres, está en docs/PRIMEROS_ALUMNOS.md, y el detalle técnico en docs/SUPABASE.md, sección Primeros alumnos y encuesta (B18).
+
+Antes de invitar.
+
+- **Paso B18.1. Que B17 haya quedado, unos 10 minutos.** Sin esto no se invita. Abre tu dominio y pide un código de acceso con un Gmail que no sea del equipo. Debe llegar en un minuto. Si no llega, falta el correo de Resend (pasos B17.14 y B17.15). Los 5 aspirantes solo entran con ese código o con Google, porque el correo de fábrica de Supabase manda únicamente a los del proyecto y pocos por hora
+- **Paso B18.2. Activa y prueba el gancho, unos 5 minutos.** En Supabase, Authentication, Hooks, Before User Created, tipo Postgres, función public.before_user_created_hook (ya está en Lo que salió de B9). Luego abre una ventana de incógnito de tu navegador, ve a tu dominio e intenta crear una cuenta con un correo que no invitaste. Debe decir que Studiare está abierto solo con invitación. Si te deja entrar, el gancho no está activo y no invites a nadie
+- **Paso B18.3. Plan de pago de Supabase.** Es el paso B17.12. El plan gratis no baja copias y pausa el proyecto si pasa tiempo sin uso, y esta vez hay cuentas de personas reales. Es un gasto y lo decides tú
+- **Paso B18.4. Tu segundo factor.** Si todavía no lo prendes, prende la bandera requireMfa con la consulta de docs/SUPABASE.md y da de alta tu código con una app de autenticación. La tarjeta de la encuesta tiene respuestas de personas reales y solo la ves con él
+- **Paso B18.5. Pídele a la sesión que aplique B18.** Con el token de Supabase corre npm run deploy:supabase -- --plan b18 --dry-run y después sin el dry-run. No pide secretos. Comprueba que las seis funciones de la encuesta existen y que el ajuste survey_first_week está apagado, y hace una llamada anónima que debe rechazarse
+
+El día de la invitación.
+
+- **Paso B18.6. Averigua con qué correo entra cada uno.** Pregunta a cada aspirante qué correo usará y si entrará con el código del correo o con Google. Si usa Google, invita el correo de su cuenta de Google. Un correo distinto al invitado no entra
+- **Paso B18.7. Invítalos.** Entra a tu dominio con tu cuenta de dueño, Usuarios, Invitaciones. Escribe el correo, toca Invitar y luego Copiar mensaje de invitación. Pégalo en tu chat con esa persona. La invitación no manda nada por sí sola
+- **Paso B18.8. Prende la encuesta.** Pídele a la sesión que la pruebe con 0 días de espera en una cuenta tuya y la deje con 7. O hazlo tú en Usuarios, Encuesta de los primeros días, prende Pedir la encuesta a los alumnos, deja los días de espera en 7 y toca Guardar. Hazlo justo antes de invitar y no antes
+- **Paso B18.9. Dales el mensaje.** Lo que les dices y lo que no les dices está en docs/PRIMEROS_ALUMNOS.md. Lo importante, que la encuesta no es anónima, que no prometas nada a cambio de contestarla o de prender la analítica, y que no compartan su cuenta
+
+Durante y después.
+
+- **Paso B18.10. Anota lo que encuentres.** En una libreta fuera del repositorio, con pantalla, qué pasó, cuántos de los 5 y la decisión (antes de abrir, después o descartar). La plantilla está en docs/PRIMEROS_ALUMNOS.md. A la sesión le pasas solo esa lista y el resumen por conteos de la tarjeta, no los comentarios ni la lista de respuestas
+- **Paso B18.11. Decide cuándo abrir el registro.** Cuando los 5 entraron, al menos 4 hicieron Repasar y Simular y ninguna falla marcada Antes de abrir sigue sin arreglar. Ese día, en Usuarios, Invitaciones, toca Abrir el registro y en la tarjeta de la encuesta escribe la fecha de ese día en Solo cuentas creadas antes de, para que las cuentas nuevas ya no reciban esa encuesta
+- **Paso B18.12. Manda a tu abogado lo del aviso.** docs/legal/CAMBIOS-B18.md junto con los de B17, B16 y B15. El aviso de privacidad sube a la versión 2026-10-22b y sigue marcado como borrador
+
+Decisiones de B18 que esperan tu visto bueno, con la opción recomendada ya tomada.
+
+- Guardar la cuenta junto a cada respuesta, para poder borrarla y para que sea una sola por alumno, y mostrar al equipo solo un código al azar. La pantalla nunca dice que es anónima (8.1)
+- Una franja arriba con Contestar, Ahora no y No quiero contestarla, y nunca dentro de una pregunta, un examen o un repaso (8.2)
+- Siete preguntas cerradas y un comentario. Sin precio ni NPS (8.3)
+- Borrar la respuesta con su propia función, desde Configuración, Privacidad. Borrar mis datos no la quita y el aviso lo dice. Eliminar la cuenta sí (8.4). Recomendado, y lo dice el aviso para tu abogado
+- Solo tú lees los comentarios. La sesión no los recibe, porque al modelo de IA solo viajan identificadores seudónimos y texto del banco (8.5). Es una regla de conducta y no un control técnico, porque una sesión con acceso a la base podría leer la tabla. Lo que la sostiene es que la sesión no tiene tu llave de admin y que tú solo le pasas el resumen por conteos. Si algún día quieres que los lea, dímelo por escrito y se revisa el aviso
+- Los elegibles se controlan con la fecha límite del ajuste y no con una columna en las invitaciones (8.6)
+- La encuesta no depende de ningún permiso de Privacidad, y sus tres eventos de medición sí piden Medición de uso (8.7)
+- Solo el dueño y los administradores con segundo factor ven las respuestas. Que un médico las viera sería una decisión nueva (8.8)
+- El aviso de privacidad sube a 2026-10-22b (8.9). Recomendado subirla, porque todavía no hay alumnos reales
+- Si solo 2 de los 5 dan el permiso de analítica, no se insiste. Se decide con la encuesta y la plática (8.11)
+
+Lo que hace la sesión, sin pedirte nada más.
+
+1. Aplica el plan b18 con la herramienta de despliegue, primero con --dry-run, y comprueba que las seis funciones existen y que el ajuste está apagado
+2. Prueba la encuesta con 0 días en una cuenta tuya y la deja prendida con 7 cuando tú lo digas
+3. Convierte tu lista de hallazgos en tareas y las arregla. No lee comentarios, códigos ni respuestas una por una
+
 ## Esta semana
 
 5. **Borra la función vacía stripe-config-check** (respuesta 4). En Supabase, Edge Functions, stripe-config-check, Delete function. Desde la sesión no se puede borrar

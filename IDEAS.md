@@ -115,3 +115,12 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Cambiar capture.ts para esperar con toHaveCount(0).** Hoy espera con waitFor detached sobre un texto que suele estar en varios esqueletos y el catch se traga el error, así que capturas de otros bloques pudieron salir con esqueletos. Surgió en la integración de B17
 - **Separar los builds de build-policy.test.ts en otro archivo.** Su beforeAll ya tarda 720 segundos. Surgió en la integración de B17
 - **Cambiar el título Contenido con médicos detrás y las frases viejas de docs/ANALISIS_PLATAFORMA.md.** Surgió en la integración de B17
+- **Segunda encuesta a los 30 días con otro id.** La tabla y la pantalla ya lo soportan (el id viaja en la fila y en el ajuste). Haría falta una migración que sume el id a survey_answers_ok y a survey_setting, el texto de las preguntas y su entrada en surveys.ts. Surgió en B18
+- **Vista de tendencia por semana de registro en la tarjeta de la encuesta.** Solo con más de 20 respuestas. Surgió en B18
+- **Recordatorio por correo de la encuesta.** Solo si el recordatorio de repaso ya lo permite y con otro permiso aparte. Hoy se pide por chat, por el guion. Surgió en B18
+- **Botón que genere la liga de invitación con el correo ya puesto.** Además del mensaje copiable. Surgió en B18
+- **Módulo común para las reglas de comentario (correo y teléfono).** Para las pantallas que acepten texto libre. Surgió en B18
+- **Que el enlace Tu perfil del encabezado tenga un nombre accesible que contenga su texto visible.** La regla label-content-name-mismatch de axe lo marca y no es de B18. Surgió en los arreglos de B18
+- **Análisis por días de cuenta con una vista de bandas.** Por ejemplo 7 a 9, 10 a 13 y 14 o más, nunca por código, si algún día hace falta. Surgió en los arreglos de B18
+- **Quitar solo la entrada de la cuenta que sale al cerrar sesión.** Si se guarda el id de la nube donde signOut pueda leerlo, para no tocar a otra persona del mismo navegador. Surgió en los arreglos de B18
+- **Cubrir los caracteres de etiqueta (U+E0000) en el filtro del comentario.** Solo si alguna vez se ve que los usen. Surgió en los arreglos de B18

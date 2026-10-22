@@ -48,6 +48,12 @@
 // los orígenes simulados de PostHog y de Sentry y guarda lo que llega, que es como una spec demuestra que
 // sin permiso no sale nada. Con cloud.engagement.deployed en false esas funciones no existen, como en un
 // proyecto sin las migraciones de B15.
+//
+// La encuesta de los primeros días (B18). No hay que enganchar nada, está siempre. cloud.survey (fakeSurvey.ts)
+// atiende my_survey_status, submit_survey, my_survey_response, delete_my_survey_response, admin_survey_summary y
+// admin_survey_responses con las reglas de la migración, y la clave survey_first_week de platform_settings se cambia con
+// setSetting. advanceDays adelanta el reloj de la encuesta, así una cuenta recién creada cumple 7 días. Borrar mi cuenta
+// quita la respuesta y borrar mis datos no (8.4). Con cloud.survey.deployed en false esas funciones no existen.
 import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
@@ -131,6 +137,16 @@ import {
   type FakeEngagementReply,
   type FakeEngagementStore,
 } from './fakeEngagement';
+import {
+  advanceSurveyDays,
+  createFakeSurveyStore,
+  fakeSurveyRpc,
+  forgetSurveyUser,
+  isSurveyRpc,
+  type FakeSurveyCaller,
+  type FakeSurveyReply,
+  type FakeSurveyStore,
+} from './fakeSurvey';
 import { createFakeTelemetry, type FakeTelemetry } from './fakeTelemetry';
 
 export type PaidPlan = Exclude<PlanKey, 'free'>;
@@ -344,6 +360,8 @@ export interface FakeSupabaseServer {
   accountOf(email: string): Json | null;
   /** Cambia una clave de platform_settings, como feature_flags o registration_open */
   setSetting(key: string, value: unknown): void;
+  /** El valor de una clave de platform_settings, o undefined si no existe. Para revisar lo que guardó el admin */
+  settingOf(key: string): unknown;
   /** Cuántas sesiones abiertas tiene la cuenta */
   sessionsOf(email: string): number;
   /** Deja a la cuenta con un factor TOTP ya verificado, como si lo hubiera dado de alta antes */
@@ -363,6 +381,14 @@ export interface FakeSupabaseServer {
    * servidor, el de un segundo dispositivo también, así ninguna petición sale a esos servicios de verdad
    */
   readonly telemetry: FakeTelemetry;
+  /**
+   * La encuesta de los primeros días (B18, fakeSurvey.ts). Está siempre, como en el servidor real. Con deployed en
+   * false imita un proyecto sin las migraciones de B18. advanceDays hace más viejas a las cuentas de la prueba
+   */
+  readonly survey: FakeSurveyStore & {
+    /** Adelanta el reloj de la encuesta esos días, sin mover las sesiones ni los pagos */
+    advanceDays(days: number): void;
+  };
   /** La función ai-proxy enganchada con attachAi (B12). null sin función, que contesta 404 */
   ai: FakeAi | null;
   /**
@@ -828,6 +854,11 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   };
   // Siempre presentes, como en el servidor real (B15)
   const engagement = createFakeEngagementStore();
+  const survey = Object.assign(createFakeSurveyStore(), {
+    advanceDays: (days: number) => {
+      advanceSurveyDays(survey, days);
+    },
+  });
   const telemetry = createFakeTelemetry();
   // El interruptor del registro vive en platform_settings, como en la base, para que la app lo lea y
   // el admin lo cambie desde Usuarios
@@ -1028,6 +1059,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   function deleteUser(userId: string): void {
     party.forgetUser(userId);
     forgetEngagementUser(engagement, userId);
+    // Borrar la cuenta arrastra la respuesta de la encuesta en cascada (B18, 2.5)
+    forgetSurveyUser(survey, userId);
     users.delete(userId);
     accounts.delete(userId);
     factors.delete(userId);
@@ -1689,6 +1722,22 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     };
   }
 
+  /** Quien llama a las funciones de la encuesta de B18, como las ve la base. Los días salen del reloj de la encuesta */
+  function surveyCaller(user: FakeUser, session: Session): FakeSurveyCaller {
+    return {
+      userId: user.id,
+      activeDevice: isActiveDevice(user, session),
+      isAdmin: isAdmin(user, session),
+      assignedRole: user.role,
+      createdAt: Date.parse(user.createdAt),
+      settingValue: settings.get('survey_first_week')?.value,
+      students: [...users.values()]
+        .filter((item) => item.role === 'student' && item.emailConfirmedAt !== null)
+        .map((item) => ({ createdAt: Date.parse(item.createdAt) })),
+      now: now() + survey.skewDays * DAY_MS,
+    };
+  }
+
   /** admin_ai_cost_report. El costo de la nube de un periodo, solo para un admin con su segundo factor */
   function aiCostReport(user: FakeUser, session: Session, args: Json): Reply {
     const ai = server.ai;
@@ -1733,6 +1782,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       return fromEngagementReply(
         fakeEngagementRpc(engagement, name, engagementCaller(user, session), args),
       );
+    }
+    if (isSurveyRpc(name)) {
+      return fromSurveyReply(fakeSurveyRpc(survey, name, surveyCaller(user, session), args));
     }
     if (server.ai && AI_GATE_RPCS.has(name)) {
       const reply = server.ai.gate.call(name, gateCaller(user, session), args);
@@ -2827,6 +2879,9 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     setSetting(key, value) {
       settings.set(key, { value, updatedAt: new Date(now()).toISOString() });
     },
+    settingOf(key) {
+      return settings.get(key)?.value;
+    },
     sessionsOf(email) {
       const user = emailOf(email);
       return [...sessions.values()].filter((session) => session.userId === user?.id).length;
@@ -2866,6 +2921,7 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       server.ai = value;
     },
     engagement,
+    survey,
     telemetry,
     aiIdentity,
   };
@@ -2919,6 +2975,11 @@ function fromEngagementReply(reply: FakeEngagementReply): Reply {
   const body: Reply =
     reply.json === undefined ? { status: reply.status } : json(reply.json, reply.status);
   return reply.headers ? { ...body, headers: { ...body.headers, ...reply.headers } } : body;
+}
+
+/** La respuesta de fakeSurvey.ts con la forma de las de este servidor */
+function fromSurveyReply(reply: FakeSurveyReply): Reply {
+  return reply.json === undefined ? { status: reply.status } : json(reply.json, reply.status);
 }
 
 function fromBankReply(reply: FakeBankReply): Reply {

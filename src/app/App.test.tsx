@@ -38,12 +38,12 @@ afterEach(async () => {
 });
 
 describe('rutas', () => {
-  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12), la Calibración (B14) y Darte de baja (B15)', () => {
-    expect(SCREEN_KEYS).toHaveLength(37);
+  it('registra las pantallas con rutas y números únicos, ya sin Plan, Perfil ni Logros (B3), con Admin, Pagos (B10) las tres del banco en la nube (B11), la Auditoría de la IA (B12), la Calibración (B14), Darte de baja (B15) y la Encuesta de los primeros días (B18)', () => {
+    expect(SCREEN_KEYS).toHaveLength(38);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(37);
+    expect(new Set(paths).size).toBe(38);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number);
-    expect(new Set(numbers).size).toBe(37);
+    expect(new Set(numbers).size).toBe(38);
     expect(SCREENS.adminBilling).toEqual({
       number: 34,
       path: '/admin/pagos',
@@ -86,6 +86,13 @@ describe('rutas', () => {
       number: 40,
       path: '/correo/baja',
       area: 'shared',
+      phase: 'F',
+    });
+    // La encuesta de los primeros días (B18), de alumno. Toma el 41 porque B15 ya usó el 40
+    expect(SCREENS.survey).toEqual({
+      number: 41,
+      path: '/encuesta',
+      area: 'student',
       phase: 'F',
     });
     // Los números de la especificación no se reusan y las rutas viejas no chocan con ninguna pantalla
