@@ -46,6 +46,9 @@ async function openReminders(page: Page, measuredBy?: FakeSupabaseServer) {
 }
 
 test.describe('Recordatorios por correo', () => {
+  // Cada prueba navega muchas veces y espera al servidor simulado. Con la máquina cargada pasan de los 30 segundos
+  test.describe.configure({ timeout: 90_000 });
+
   test('con la bandera apagada la sección no aparece en Ajustes del repaso', async ({
     page,
     cloud,
@@ -275,7 +278,9 @@ test.describe('Recordatorios por correo', () => {
     await page.getByRole('checkbox', { name: consentTexts.purposes.product_analytics[0] }).check();
     await expect(page.getByText(t.settings.privacy.consentSaved)).toBeVisible();
     await expect
-      .poll(() => cloud.engagement.identities.get(cloud.userIdOf(ANA) ?? '')?.consent)
+      .poll(() => cloud.engagement.identities.get(cloud.userIdOf(ANA) ?? '')?.consent, {
+        timeout: 20_000,
+      })
       .toBe(true);
     await openReminders(page, cloud);
     await section(page).getByRole('button', { name: text.frequencies.weekdays }).click();
@@ -285,12 +290,15 @@ test.describe('Recordatorios por correo', () => {
     await section(page).getByRole('button', { name: t.settings.saveChanges }).click();
     await expect(section(page).getByText(text.saved)).toBeVisible();
     await expect
-      .poll(async () => {
-        await flushAnalytics(page);
-        return cloud.telemetry
-          .posthogEvents()
-          .filter((item) => item.event === 'reminder_prefs_saved').length;
-      })
+      .poll(
+        async () => {
+          await flushAnalytics(page);
+          return cloud.telemetry
+            .posthogEvents()
+            .filter((item) => item.event === 'reminder_prefs_saved').length;
+        },
+        { timeout: 20_000 },
+      )
       .toBe(1);
     const [event] = cloud.telemetry
       .posthogEvents()

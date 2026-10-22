@@ -35,6 +35,13 @@ const identityOf = (cloud: FakeSupabaseServer, email: string) => {
   return userId === undefined ? undefined : cloud.engagement.identities.get(userId);
 };
 
+/**
+ * Espera a que el servidor tenga el permiso de la cuenta en ese valor. Es una señal real, la llamada del guardián,
+ * y con la máquina cargada tarda más que los 5 segundos de siempre
+ */
+const serverConsentIs = (cloud: FakeSupabaseServer, granted: boolean) =>
+  expect.poll(() => identityOf(cloud, ANA)?.consent, { timeout: 20_000 }).toBe(granted);
+
 /** Los eventos que llegaron a PostHog con ese nombre */
 const sentNamed = (cloud: FakeSupabaseServer, name: string) =>
   cloud.telemetry.posthogEvents().filter((item) => item.event === name);
@@ -85,6 +92,9 @@ async function captureScore(page: Page, score: number, measuredBy?: FakeSupabase
 }
 
 test.describe('Medición de uso con permiso', () => {
+  // Cada prueba navega muchas veces y espera al servidor simulado. Con la máquina cargada pasan de los 30 segundos
+  test.describe.configure({ timeout: 90_000 });
+
   test('sin el permiso no sale ni un evento aunque la bandera y la llave estén puestas, y al darlo solo se mide lo de después', async ({
     page,
     cloud,
@@ -129,7 +139,7 @@ test.describe('Medición de uso con permiso', () => {
 
     // El mismo camino con el permiso sí mide, y solo lo que pasa después de darlo
     await setConsent(page, usage(page), true);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     await captureScore(page, 80, cloud);
     await untilSent(page, cloud, 'official_score_captured');
     expectOnlyCatalogEvents(cloud, ['official_score_captured', 'paywall_viewed']);
@@ -143,7 +153,7 @@ test.describe('Medición de uso con permiso', () => {
     await enterWithLink(page, cloud, ANA, 'Ana');
     await setConsent(page, improvement(page), true);
     await setConsent(page, usage(page), true);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     const analyticsId = identityOf(cloud, ANA)?.analyticsId;
     expect(analyticsId).toMatch(/^[0-9a-f-]{36}$/);
     // No es el id de la cuenta ni se parece a él
@@ -189,7 +199,7 @@ test.describe('Medición de uso con permiso', () => {
     await enterWithLink(page, cloud, ANA, 'Ana');
     await setConsent(page, improvement(page), true);
     await setConsent(page, usage(page), true);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     const first = identityOf(cloud, ANA)?.analyticsId;
 
     await captureScore(page, 70, cloud);
@@ -198,7 +208,7 @@ test.describe('Medición de uso con permiso', () => {
 
     // Lo retira. El servidor se entera y el identificador cambia, así lo que se mida después no se une con lo de antes
     await setConsent(page, usage(page), false);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(false);
+    await serverConsentIs(cloud, false);
     const rotated = identityOf(cloud, ANA)?.analyticsId;
     expect(rotated).not.toBe(first);
 
@@ -215,7 +225,7 @@ test.describe('Medición de uso con permiso', () => {
 
     // Lo vuelve a dar. Mide otra vez, pero con el identificador nuevo
     await setConsent(page, usage(page), true);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     await captureScore(page, 78, cloud);
     await untilSent(page, cloud, 'official_score_captured', 2);
     const last = sentNamed(cloud, 'official_score_captured')[1]?.distinct_id;
@@ -248,7 +258,7 @@ test.describe('Medición de uso con permiso', () => {
     await form.getByRole('button', { name: t.cloud.code.submit }).click();
     await expectHome(page);
 
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     await untilSent(page, cloud, 'signup_completed');
     // Mientras corre la prueba también puede salir un paywall_viewed, que es otro evento de la lista
     expectOnlyCatalogEvents(cloud, ['signup_completed', 'paywall_viewed']);
@@ -321,7 +331,7 @@ test.describe('Medición de uso con permiso', () => {
     await enterWithLink(page, cloud, ANA, 'Ana');
     await setConsent(page, improvement(page), true);
     await setConsent(page, usage(page), true);
-    await expect.poll(() => identityOf(cloud, ANA)?.consent).toBe(true);
+    await serverConsentIs(cloud, true);
     await captureScore(page, 72.5, cloud);
     await untilSent(page, cloud, 'official_score_captured');
 
@@ -357,7 +367,9 @@ test.describe('Medición de uso con permiso', () => {
     await setConsent(page, improvement(page), true);
     await setConsent(page, usage(page), true);
     await expect(usage(page)).toBeChecked();
-    await expect.poll(() => cloud.rpcCalls('analytics_identity').length).toBeGreaterThan(0);
+    await expect
+      .poll(() => cloud.rpcCalls('analytics_identity').length, { timeout: 20_000 })
+      .toBeGreaterThan(0);
     await captureScore(page, 72.5);
     await flushAnalytics(page);
     await page.goto(SCREENS.home.path);
