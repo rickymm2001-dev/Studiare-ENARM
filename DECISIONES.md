@@ -1538,3 +1538,14 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Sincronización. El sobre de un evento acepta cualquier schemaVersion de 1 a la actual, para que el primer cambio de versión no rechace el historial. Una fila con una versión de la soportada más 1 a la soportada más 10 pausa la bajada y más allá se toma por dañada. Si tras actualizar sigue en pausa, el aviso lo dice y ya no ofrece el botón. Con la cuota llena los eventos siguen subiendo. Los registros no tienen versión, así que sus cambios de esquema deben ser aditivos y opcionales hasta que la tengan
 - Plan de hoy en Repasar usa la cola real y mide las tarjetas nuevas aparte, y con menos de 20 muestras dice calibrando en lugar de inventar un tiempo. Los botones del mazo pasan su preselección por el estado de la ruta y ya no pisan la selección guardada del alumno. La tarjeta de cifras por mazo se llama Cifras por mazo, porque Tus mazos chocaba con la región del mismo nombre
 
+
+### D-148. Fase 3 del plan V4, portada e Inicio editoriales, ficha de tema y perla del día
+- Fecha 2026-10-23. Origen R. Ricardo revisó 17 plantillas de Envato con una sesión local, se compiló el material en compilacion-plantillas-enarm.html, elementos-adoptables-enarm.md y capturas/, y en entrevista definió qué adoptar. El plan está en la sección 11 de docs/PLAN_V4.md y el prompt de la sesión que lo ejecuta en prompts/v4-fase3.md
+- La sesión local trabajaba sobre una copia 849 commits atrás de main. Se sincronizó antes de registrar nada y el brief se reescribió contra el estado real. Un primer brief que pedía pausar la Fase B y numeraba D-050 se descartó
+- Referente visual. Editorial clínico con Nature como guía, que profundiza la dirección A de D-145. Capturas reales y SVG propios. Sin stock, 3D, degradados ni plantilla comprada
+- Cambia D-116 y D-117 solo en esto. Inicio recibe una franja editorial arriba de lo que ya existe, con índice de preparación, mapa de especialidades, cifras con sparkline y próximos. Lo demás no se mueve. La frase del día cede su lugar a la perla del día cuando hay banco con explicaciones
+- Índice de preparación. Mide dominio ponderado, constancia y cobertura, con calibrando hasta 200 respuestas y 14 días. Lleva siempre la leyenda de que no predice el puntaje del ENARM
+- Perla del día. Sale del banco con la frase citada y el enlace a la pregunta, como permite la sección 9 del plan. Etiqueta de revisión médica pendiente mientras el banco sea demo
+- Portada. El método como proceso numerado en lugar de la rejilla de seis tarjetas, demo interactiva con una pregunta real cargada en diferido y perfiles como lista numerada. Lugares de texto nuevos para la agencia. Creador y testimonios siguen apagados
+- Ficha de tema como ruta nueva bajo Progreso, con entradas desde Ramas, Temas para reforzar, focos y el mapa
+- El trabajo se hace en la computadora de Ricardo, un PR por bloque, con la auditoría completa al final

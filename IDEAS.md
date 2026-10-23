@@ -153,3 +153,5 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Mezcla por nivel cognitivo en el examen completo con su ajuste en Umbrales.** Entra cuando haya preguntas con nivel
 - **Imágenes en las preguntas del banco y la marca de imagen degradada a propósito.** Hoy solo hay imágenes en mazos y tarjetas
 
+- **Reporte PDF exportable.** Informe semanal o de simulacro en PDF con la estructura del folleto tríptico revisado, para compartir con tutor o grupo. Surgió en la revisión de plantillas del 2026-10-23 (D-148)
+- **Buscador global con atajo Ctrl+K.** Como el de la plantilla Carpenter. Tiene sentido cuando el banco real y los mazos crezcan (D-148)
