@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router';
 import { reportClientError } from '@/app/errorReporter';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { EmptyState, ErrorState, LoadingState } from '@/ui/states/states';
 import { ScreenHeader } from './ScreenHeader';

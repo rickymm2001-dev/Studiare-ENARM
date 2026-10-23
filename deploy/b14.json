@@ -1,5 +1,5 @@
 {
-  "description": "B14, datos y modelo del alumno. Las tres migraciones (20261028000001 a 20261028000003) con las siete tablas de la calibración, el corredor de la calibración nocturna y lo que leen la app y las pantallas del equipo. No lleva archivo manual porque ninguna trae delete ni drop, y no publica Edge Functions porque la calibración corre en GitHub Actions (docs/CALIBRACION.md). Va después de b11, b12 y b13. El plan b11 lleva las mismas tres migraciones, porque la última redefine bank_catalog_json de la migración bank_core, así que la que corra primero las aplica y la otra las salta (docs/DESPLIEGUE.md). Todo nace apagado, con model_settings.calibration.enabled en false, y la llave de la calibración la pone Ricardo directo en GitHub (docs/PENDIENTES_DE_RICARDO.md, B14).",
+  "description": "B14, datos y modelo del alumno. Las tres migraciones (20261028000001 a 20261028000003) con las siete tablas de la calibración, el corredor de la calibración nocturna y lo que leen la app y las pantallas del equipo, y la del nivel cognitivo de V4-B5 (20261031000001), que va al final porque redefine bank_catalog_json después de la tercera y la herramienta compara cada función con la última versión del repo. No lleva archivo manual porque ninguna trae delete ni drop, y no publica Edge Functions porque la calibración corre en GitHub Actions (docs/CALIBRACION.md). Va después de b11, b12 y b13. El plan b11 lleva las mismas cuatro migraciones, porque la última redefine bank_catalog_json de la migración bank_core, así que la que corra primero las aplica y la otra las salta (docs/DESPLIEGUE.md). Todo nace apagado, con model_settings.calibration.enabled en false, y la llave de la calibración la pone Ricardo directo en GitHub (docs/PENDIENTES_DE_RICARDO.md, B14).",
   "migrations": [
     {
       "file": "supabase/migrations/20261028000001_model_core.sql",
@@ -26,6 +26,10 @@
         "correo_de_distractores": true
       },
       "note": "Redefine bank_catalog_json de la migración bank_core con la llave calibration, que lee de la columna que ya trae el catálogo desde B11, y suma lo que leen la app y el equipo. Su comprobación es la de docs/SUPABASE.md, sección B14, sin las dos columnas que cambian con el tiempo (si la calibración está encendida y en qué modo), para poder volver a correr el plan"
+    },
+    {
+      "file": "supabase/migrations/20261031000001_cognitive_level.sql",
+      "note": "De V4-B5. Agrega cognitive_level a questions y a question_catalog y vuelve a definir bank_catalog_json con esa llave junto a calibration, más las otras ocho funciones del banco que la leen o la escriben. Va aquí para que model_reads no deje bank_catalog_json más vieja que el repo. El plan b11 la lleva también y la salta si ya está"
     }
   ]
 }

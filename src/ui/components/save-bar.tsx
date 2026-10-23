@@ -28,7 +28,7 @@ export function SaveBar({
       {dirty ? (
         <div
           className={cn(
-            'sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] z-10 flex flex-wrap items-center gap-2 rounded-xl border border-line bg-surface/95 p-2.5 shadow-raised backdrop-blur lg:bottom-4',
+            'glass sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] z-10 flex flex-wrap items-center gap-2 rounded-xl border border-line p-2.5 shadow-raised lg:bottom-4',
             className,
           )}
         >

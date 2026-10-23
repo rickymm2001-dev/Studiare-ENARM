@@ -56,9 +56,26 @@ const STATUS_PARAMS: Readonly<Record<string, Partial<SearchView>>> = {
   marcadas: { flagged: true },
 };
 
-/** La vista con la que abre la pantalla según su dirección */
+/**
+ * La vista con la que abre la pantalla según su dirección. ?estado= pone un filtro de estado y ?mazo=
+ * el mazo con todo lo que cuelga de él, que es como llegan los botones de la pantalla Mazos
+ */
 export function viewFromParams(params: URLSearchParams): SearchView {
-  return { ...INITIAL_VIEW, ...STATUS_PARAMS[params.get('estado') ?? ''] };
+  return {
+    ...INITIAL_VIEW,
+    ...STATUS_PARAMS[params.get('estado') ?? ''],
+    deckId: params.get('mazo') ?? '',
+  };
+}
+
+/**
+ * La vista sin un mazo que ya no existe. Una dirección con ?mazo= de un mazo borrado, o escrita a mano,
+ * dejaría un filtro activo sin resultados ni nombre, así que cuando los mazos cargan se suelta ese
+ * filtro. Si el mazo existe, o la vista no pide ninguno, devuelve la misma vista
+ */
+export function withKnownDeck(view: SearchView, decks: readonly DeckLike[]): SearchView {
+  if (view.deckId === '' || decks.some((deck) => deck.id === view.deckId)) return view;
+  return { ...view, deckId: '' };
 }
 
 /** La consulta del motor. Elegir un mazo incluye a los que cuelgan de él */

@@ -65,6 +65,19 @@ test.describe('Catálogo de mazos, el admin', () => {
     expect(bank.decks.get(THIRD_PARTY_DECK.deckKey)).toMatchObject({
       status: 'published',
       publishedVersion: 1,
+      authorizationConfirmedVersion: 1,
     });
+
+    // El admin lo deja abierto en Gratis desde la pantalla y la etiqueta lo dice
+    await page.reload();
+    const published = deckEntry(page, THIRD_PARTY_DECK.name);
+    // La casilla cambia cuando responde el servidor, así que se toca y se espera su estado
+    const freeBox = published.getByRole('checkbox', { name: adminDecks.freeAccess.label });
+    await freeBox.click();
+    await expect(freeBox).toBeChecked();
+    await expect(published.getByText(adminDecks.freeAccess.opened)).toBeVisible();
+    await expect(published.getByText(adminDecks.freeAccess.badge, { exact: true })).toBeVisible();
+    expect(bank.decks.get(THIRD_PARTY_DECK.deckKey)?.freeAccess).toBe(true);
+    await expectNoSeriousA11yViolations(page);
   });
 });

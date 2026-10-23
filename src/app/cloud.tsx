@@ -318,7 +318,8 @@ export function CloudBridge() {
                   // ignorar se vuelven a mandar con el primer plan de pago confirmado (B8)
                   plan: cloudPlan?.plan ?? 'free',
                 });
-                if (result.status === 'ok') afterGoodSync(userId);
+                // Con la bajada de la bitácora en pausa por una versión nueva, lo que se calcula vería una bitácora incompleta
+                if (result.status === 'ok' && !result.blockedByNewerVersion) afterGoodSync(userId);
                 return result;
               },
               report: status.set,

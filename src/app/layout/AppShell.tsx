@@ -5,7 +5,7 @@ import { Link, Outlet, useLocation } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
 import { isFeatureEnabled } from '@/config/featureFlags';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyAppearance } from '@/ui/appearance';
@@ -27,6 +27,7 @@ import { OAuthErrorNotice } from './OAuthErrorNotice';
 import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
+import { SyncVersionNotice } from './SyncVersionNotice';
 import { SurveyNoticeLauncher } from './SurveyNoticeLauncher';
 import { TopBarContext } from './TopBarContext';
 
@@ -80,10 +81,7 @@ export function AppShell() {
           con el botón que oculta o muestra el menú lateral, el símbolo de Studiare y, encima, el
           título de la pantalla con la racha y el nivel, que pone ScreenHeader (D-117) */}
       <header
-        className={cn(
-          'sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur',
-          !bare && 'lg:h-topbar lg:bg-surface lg:backdrop-blur-none',
-        )}
+        className={cn('glass sticky top-0 z-20 border-b border-line', !bare && 'lg:h-topbar')}
       >
         <div
           className={cn(
@@ -246,6 +244,7 @@ export function AppShell() {
 
       {bare ? null : <BottomNav nav={navForRole(role)} collapsed={navCollapsed} />}
       <PwaUpdatePrompt />
+      <SyncVersionNotice />
       {/* El recorrido guiado (B15). Solo esto va en el JavaScript inicial, el recorrido se baja al empezar */}
       <TourLauncher userId={session.status === 'ready' ? session.user.id : null} />
     </div>

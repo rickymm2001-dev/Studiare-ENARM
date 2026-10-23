@@ -1011,7 +1011,7 @@ Aplica primero todas las anteriores, incluidas las tres de B10, porque content_r
 5. supabase/migrations/20261023000005_deck_catalog.sql
 6. supabase/migrations/20261023000006_bank_sync_cron.sql
 
-Después pega supabase/manual/banco-b11.sql en SQL Editor, New query, Run. Va después de ejecutar-en-sql-editor.sql, porque trae otra versión de delete_my_data que conserva las lecturas del día en curso y quita la bitácora de bajadas de mazos. Es repetible.
+Después pega supabase/manual/banco-b11.sql en SQL Editor, New query, Run. Va después de ejecutar-en-sql-editor.sql, porque trae otra versión de delete_my_data que conserva las lecturas del día en curso y quita la bitácora de bajadas de mazos, menos las de las últimas 24 horas, que cuentan para el tope de bajadas del día. Es repetible.
 
 La sexta migración crea en Vault la ficha de Cron (bank_sync_cron_token) y el trabajo bank-sync-hourly. Falta guardar la dirección del proyecto en Vault, una sola vez. Lo hace la sesión con el conector o tú en el SQL Editor.
 
@@ -1035,7 +1035,7 @@ select
   (select value ->> 'enabled' from public.platform_settings where key = 'bank_sync') as sincronizacion_encendida,
   (select count(*) from public.bank_taxonomy) as subtemas,
   (select public from storage.buckets where id = 'deck-catalog') as mazos_publicos,
-  position('deck_catalog_downloads' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b11,
+  position('created_at < now() - interval ''24 hours''' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b11,
   exists (select 1 from vault.decrypted_secrets where name = 'bank_sync_cron_token') as ficha_de_cron,
   exists (select 1 from vault.decrypted_secrets where name = 'project_url') as direccion_del_proyecto,
   exists (select 1 from cron.job where jobname = 'bank-sync-hourly') as trabajo_por_hora;
@@ -1113,7 +1113,8 @@ select
   has_table_privilege('authenticated', 'public.ai_jobs', 'select') as alumno_lee_trabajos,
   has_table_privilege('authenticated', 'public.ai_gate_reviews', 'select') as alumno_lee_resenas,
   (select value from public.platform_settings where key = 'ai_gate') as compuerta,
-  position('ai_jobs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b12,
+  position('ai_jobs' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0
+    and position('created_at < now() - interval ''24 hours''' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0 as borrar_datos_b12,
   exists (select 1 from vault.decrypted_secrets where name = 'ai_tick_secret') as secreto_del_ciclo,
   exists (select 1 from cron.job where jobname = 'ia-lotes') as ciclo_de_lotes,
   exists (select 1 from cron.job where jobname = 'ia-lotes-limpieza') as limpieza_diaria;

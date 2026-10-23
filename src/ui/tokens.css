@@ -106,6 +106,12 @@
   --enarm-shadow-card: 0 1px 2px rgb(22 33 43 / 0.06);
   --enarm-shadow-raised: 0 4px 16px -8px rgb(22 33 43 / 0.2);
   --enarm-shadow-nav: 0 -1px 0 rgb(22 33 43 / 0.08);
+
+  /* Cristal (V4-B2, decisión 2). Solo la barra superior, el dock inferior del teléfono y la barra de
+     acciones fijas (utilidad glass, abajo). La superficie queda al 92 por ciento, así el texto pasa 4.5
+     a 1 aunque debajo haya algo negro o blanco (src/ui/glass.test.ts lo calcula) */
+  --enarm-glass-blur: 6px;
+  --enarm-glass-opacity: 92%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -368,4 +374,41 @@
   --container-content: 120rem;
   /* Ancho máximo del marco de la app en computadora. Los textos largos siguen en el ancho de lectura (D-057) */
   --container-app: 88rem;
+}
+
+/*
+  Cristal de 6 px. Con respaldo sólido para quien no tiene backdrop-filter, y sin animación, así que el
+  movimiento reducido no cambia nada. Con prefers-reduced-transparency queda sólido y sin desenfoque. En
+  computadora glass-off lo vuelve sólido y glass-clear lo deja transparente, según la barra. Solo lo usan
+  la barra superior, el dock del teléfono y las barras de acciones fijas (src/ui/glass.test.ts)
+*/
+@utility glass {
+  background-color: var(--enarm-surface);
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background-color: color-mix(
+      in srgb,
+      var(--enarm-surface) var(--enarm-glass-opacity),
+      transparent
+    );
+    -webkit-backdrop-filter: blur(var(--enarm-glass-blur));
+    backdrop-filter: blur(var(--enarm-glass-blur));
+  }
+  /* Quien pide menos transparencia lo ve sólido y sin desenfoque */
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--enarm-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@utility glass-off {
+  background-color: var(--enarm-surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@utility glass-clear {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }

@@ -14,6 +14,7 @@ import {
   type Option,
   type Question,
 } from '../schemas/bank';
+import { CognitiveLevelSchema } from '../schemas/common';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -94,6 +95,10 @@ export function bodyEntitiesOf(raw: unknown): BodyEntities | null {
     explanation: typeof raw.explanation === 'string' ? raw.explanation : '',
     gpcRefs: Array.isArray(raw.gpcRefs) ? raw.gpcRefs : [],
     ...(nonEmpty(raw.itemKinds) ? { itemKinds: raw.itemKinds } : {}),
+    // Nivel cognitivo de Bloom. null, ausente o un valor que la app no conoce es sin nivel (V4-B5)
+    ...(CognitiveLevelSchema.safeParse(raw.cognitiveLevel).success
+      ? { cognitiveLevel: CognitiveLevelSchema.parse(raw.cognitiveLevel) }
+      : {}),
     ...(nonEmpty(raw.clues) ? { clues: raw.clues } : {}),
     physicianDifficulty: raw.physicianDifficulty,
     // Sin el campo, o con uno que no se conoce, es español como todo lo de antes de B13 (en queda guardado)

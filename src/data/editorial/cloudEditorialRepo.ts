@@ -41,11 +41,14 @@ const LIST_LIMIT = 500;
 
 /**
  * El borrador del editor como lo recibe la base (QuestionDraft con ids uuid). Solo conservan su id las
- * opciones que ya existían en la nube. Las nuevas van con optionId null
+ * opciones que ya existían en la nube. Las nuevas van con optionId null. El nivel cognitivo siempre lleva su
+ * llave, con null si el borrador no tiene nivel, porque la base entiende la llave ausente como un cliente
+ * anterior y entonces conserva el nivel de la versión de antes
  */
 export function draftForCloud(draft: QuestionDraft): Record<string, unknown> {
   return {
     ...draft,
+    cognitiveLevel: draft.cognitiveLevel ?? null,
     options: draft.options.map((option) => ({
       ...option,
       optionId: UUID.test(option.optionId) ? option.optionId.toLowerCase() : null,

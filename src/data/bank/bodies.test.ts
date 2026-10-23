@@ -28,6 +28,17 @@ describe('cuerpos que bajan de la nube (5.2)', () => {
     );
   });
 
+  it('copia el nivel cognitivo si es de la lista y lo deja sin nivel si falta, es null o no se conoce (V4-B5)', () => {
+    const row = wireRow();
+    const withLevel = bodyEntitiesOf(wireBody(row, { cognitiveLevel: 'synthesis' }));
+    expect(withLevel?.question.cognitiveLevel).toBe('synthesis');
+    for (const value of [null, undefined, '', 'dificil']) {
+      const entities = bodyEntitiesOf({ ...wireBody(row), cognitiveLevel: value });
+      expect(entities).not.toBeNull();
+      expect(entities?.question).not.toHaveProperty('cognitiveLevel');
+    }
+  });
+
   it('acepta reactivos imperfectos y de tipos raros, con casos seriados y variantes', () => {
     const caseId = cloudId();
     const original = cloudId();

@@ -9,7 +9,7 @@ import { Dialog } from 'radix-ui';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { NAV_MORE_ANCHOR, navAnchorOfPath } from '@/features/tour/anchors';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import {
   isMoreActive,
@@ -81,8 +81,8 @@ export function BottomNav({
       id={NAV_ID}
       aria-label={t.nav.label}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-20 border-t border-line/70 bg-surface/90 pb-[env(safe-area-inset-bottom)] shadow-nav backdrop-blur-md',
-        'lg:top-topbar lg:right-auto lg:bottom-0 lg:left-0 lg:flex lg:w-rail lg:flex-col lg:border-t-0 lg:border-r lg:bg-surface lg:pb-0 lg:shadow-none lg:backdrop-blur-none',
+        'glass fixed inset-x-0 bottom-0 z-20 border-t border-line/70 pb-[env(safe-area-inset-bottom)] shadow-nav',
+        'lg:glass-off lg:top-topbar lg:right-auto lg:bottom-0 lg:left-0 lg:flex lg:w-rail lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:shadow-none',
         collapsed && 'lg:hidden',
       )}
     >

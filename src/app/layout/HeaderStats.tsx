@@ -12,7 +12,7 @@ import type { User, UserSettings } from '@/data/schemas/people';
 import { buildSnapshot } from '@/features/home/snapshot';
 import { useAccount } from '@/features/shared/useAccount';
 import { useUserEvents } from '@/features/shared/useUserEvents';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Avatar } from '@/ui/components/avatar';
 import { useFocusMode } from '../focusMode';
 import { screenPath } from '../screens';

@@ -1,6 +1,8 @@
 // Textos de las pantallas del alumno de la Fase C, en español de México con trato de tú (4.9).
 // Se integran en t desde es-MX.ts.
 import { deviceLimitText } from './device';
+import { plural } from './plural';
+import { headerStatsText, levelLadderText, otherDeviceText } from './shell';
 import { causeNames, insightText } from './insights';
 import { landingText } from './landing';
 import { legalText } from './legal';
@@ -16,8 +18,7 @@ export const branchNames: Record<string, string> = {
   medical_english: 'Inglés médico',
 };
 
-export const plural = (n: number, one: string, many: string) =>
-  `${n.toLocaleString('es-MX')} ${n === 1 ? one : many}`;
+export { plural };
 
 /** Un nombre a media frase. Baja solo la primera letra y respeta siglas como IA (H18 de B2) */
 const midSentence = (name: string) =>
@@ -1625,34 +1626,8 @@ export const featureText = {
     resume: 'Reanudar',
     finish: 'Finalizar sesión',
   },
-  levelLadder: {
-    title: 'Niveles y títulos',
-    current: (level: number, title: string, xp: string) =>
-      `Vas en el nivel ${level}, ${title}, con ${xp} XP en total.`,
-    close: 'Cerrar',
-    toNextLevel: (left: string, level: number) => `Te faltan ${left} XP para el nivel ${level}`,
-    nextTitle: (title: string, level: number, left: string) =>
-      `Siguiente título, ${title} en el nivel ${level}. Te faltan ${left} XP.`,
-    maxTitle: 'Ya tienes el título más alto. Sigue sumando niveles.',
-    levels: 'Niveles',
-    titleColumn: 'Título',
-    xpColumn: 'XP total para llegar',
-    range: (from: number, to: number) => `${from} a ${to}`,
-    fromLevel: (from: number) => `${from} en adelante`,
-    you: 'tú',
-    howTo:
-      'Ganas XP con cada tarjeta repasada (3), cada pregunta correcta (10 a 30 según dificultad) o intentada (2), y con los retos. La racha suma hasta 50% extra.',
-  },
-  headerStats: {
-    streak: (days: number) => `Racha de ${plural(days, 'día', 'días')}`,
-    level: (level: number, title: string, into: number, next: number) =>
-      `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
-    short: (level: number) => `Nivel ${level}`,
-    titled: (level: number, title: string) => `Nivel ${level} · ${title}`,
-    left: (xp: number, next: number) => `${xp.toLocaleString('es-MX')} XP para el nivel ${next}`,
-    profile: 'Tu perfil',
-    openLevels: 'Ver niveles y títulos',
-  },
+  levelLadder: levelLadderText,
+  headerStats: headerStatsText,
   party: {
     privacy:
       'En un grupo compartes tu alias, tu XP, tu nivel y tu racha. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu exactitud por tema, tus sesgos ni tu conducta de estudio. Por ahora los grupos viven en este navegador.',
@@ -1773,11 +1748,7 @@ export const featureText = {
     error: 'No pudimos conectar con la nube. Tu avance sigue guardado en este navegador.',
     roleFromCloud: 'Tu rol viene de tu cuenta en la nube y solo un administrador lo puede cambiar.',
     // Dispositivo único por cuenta. Aparece cuando otro dispositivo entró y esta sesión se cerró
-    otherDevice: {
-      title: 'Tu cuenta se abrió en otro dispositivo',
-      body: 'Cada cuenta tiene un solo dispositivo activo, así que cerramos tu sesión aquí. Si quieres seguir en este dispositivo, vuelve a entrar. Eso cerrará la sesión del otro.',
-      dismiss: 'Entendido',
-    },
+    otherDevice: otherDeviceText,
     // Aparece cuando el servidor no dejó cambiar de dispositivo por el límite de cambios al día
     deviceLimit: deviceLimitText,
     // Sincronización entre dispositivos (D-095). Se muestra con la cuenta en la nube conectada
@@ -1802,6 +1773,8 @@ export const featureText = {
       local: 'Algo falló al guardar en este navegador. Se vuelve a intentar en unos minutos.',
       clock:
         'La nube rechazó cambios con una fecha en el futuro. Activa la fecha y hora automáticas de este dispositivo.',
+      quota:
+        'Tu cuenta llegó al límite de lo que se guarda en la nube. Tus cambios siguen en este navegador. Borra mazos o apuntes que ya no uses, o escribe a soporte, para seguir sincronizando.',
       clockSkew: (minutes: number) =>
         `La hora de este dispositivo difiere ${String(minutes)} minutos de la de la nube. Activa la fecha y hora automáticas para poder sincronizar.`,
       lastWas: (when: string) => `La última sincronización buena fue ${when}.`,

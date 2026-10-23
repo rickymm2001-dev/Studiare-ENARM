@@ -147,4 +147,9 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Pedir al alumno que cuente cuántas tarjetas esperaba al importar un mazo muy grande.** Surgió en la auditoría de V4-B10 (D-146)
 - **Cargar los textos de cada pantalla bajo demanda.** El JavaScript inicial está en 298.0 KB de 300 y los textos del idioma común (src/i18n/es-MX.ts) viajan todos en él. Moverlos a módulos que cargue cada pantalla devuelve varios KB de margen. Surgió en la auditoría de V4-B10 (D-146)
 - **Campo sin indicador de foco en Datos de demostración y un 400 en consola en Configuración de plataforma.** Los marcó el barrido audit de interfaz en las pantallas de administración, que V4 no tocó. Surgió en la auditoría de V4-B10 (D-146)
+- **Versión en cada registro de la nube.** La compuerta de versión cubre eventos. Los mazos, notas, tarjetas y apuntes de una app más nueva que fallan el esquema estricto se cuentan como rechazados y el cursor avanza. Con una versión en la fila se podría pausar igual. Surgió en la revisión de la fase 2 (D-147)
+- **Concesión previa a cada bajada del catálogo.** Hoy el tope BK012 solo frena el registro de una bajada, no la bajada de Storage. Una función que cree una concesión por mazo, versión y submazo con vencimiento, y una política de lectura que la exija, lo volvería un tope real de egress. Surgió en la revisión de la fase 2 (D-147)
+- **Contadores de cuota por alumno.** El recuento de registros y bytes de sincronización es lineal y cuesta unos 80 ms con 300 mil registros. Unas filas de contadores actualizadas por delta lo dejarían en tiempo constante. Surgió en la revisión de la fase 2 (D-147)
+- **Mezcla por nivel cognitivo en el examen completo con su ajuste en Umbrales.** Entra cuando haya preguntas con nivel
+- **Imágenes en las preguntas del banco y la marca de imagen degradada a propósito.** Hoy solo hay imágenes en mazos y tarjetas
 

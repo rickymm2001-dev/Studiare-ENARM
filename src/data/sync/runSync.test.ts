@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { PlanKey } from '@/config/billing';
-import { PAGE_SIZE } from '@/engines/sync';
+import { PAGE_SIZE, eventToWire } from '@/engines/sync';
 import { createEvent } from '../events/createEvent';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { Outline } from '../schemas/outlines';
@@ -23,6 +23,7 @@ interface Device {
     transport?: SyncTransport;
     authId?: string;
     plan?: PlanKey;
+    supportedEventVersion?: number;
   }) => Promise<SyncResult>;
 }
 
@@ -48,6 +49,9 @@ function device(server: MemoryServer): Device {
         userId,
         authId: overrides?.authId ?? AUTH,
         ...(overrides?.plan ? { plan: overrides.plan } : {}),
+        ...(overrides?.supportedEventVersion
+          ? { supportedEventVersion: overrides.supportedEventVersion }
+          : {}),
         now,
       }),
   };
@@ -735,5 +739,260 @@ describe('el perfil dentro de la sincronización (B14, 2.7)', () => {
     expect(
       [...server.events.values()].filter((row) => row.event.type === 'settings_changed'),
     ).toHaveLength(1);
+  });
+});
+
+describe('versiones mezcladas de la app (D-146)', () => {
+  /**
+   * Un evento que subió otro dispositivo con una app más nueva. Se mete directo al servidor con su
+   * contador, como lo dejaría esa app
+   */
+  function futureEvent(server: MemoryServer, d: Device, seconds: number) {
+    const id = newId();
+    server.seq += 1;
+    server.events.set(id, {
+      event: {
+        ...eventToWire(xpEvent(d, seconds)),
+        id,
+        type: 'evento_de_la_version_2',
+        schemaVersion: 2,
+        payload: { campo: 'nuevo' },
+      },
+      seq: server.seq,
+    });
+    return { id, seq: server.seq };
+  }
+
+  /** Un evento bueno de la versión actual que subió otro dispositivo después */
+  function laterEvent(server: MemoryServer, d: Device, seconds: number) {
+    const event = xpEvent(d, seconds);
+    server.seq += 1;
+    server.events.set(event.id, { event: eventToWire(event), seq: server.seq });
+    return event;
+  }
+
+  async function localIds(d: Device) {
+    return new Set((await d.api.repos.events.query({ userId: d.userId })).map((event) => event.id));
+  }
+
+  it('pausa la bajada de la bitácora en el evento nuevo, guarda lo anterior y no pierde nada', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const made = await fill(a);
+    ok(await a.sync());
+    const future = futureEvent(server, a, 200);
+    const after = laterEvent(server, a, 201);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const own = xpEvent(b, 299);
+    await b.api.repos.events.append(own);
+    const result = ok(await b.sync());
+
+    expect(result.blockedByNewerVersion).toBe(true);
+    // Lo anterior al evento nuevo se guardó, y lo que viene después espera
+    const ids = await localIds(b);
+    expect(ids.has(made.events[0]?.id ?? '')).toBe(true);
+    expect(ids.has(made.events[1]?.id ?? '')).toBe(true);
+    expect(ids.has(after.id)).toBe(false);
+    expect(ids.has(future.id)).toBe(false);
+    expect(result.rejected).toBe(0);
+    // El cursor queda justo antes del evento nuevo, no más allá
+    const state = await b.api.repos.syncState.get(b.userId);
+    expect(state?.eventsCursor).toBe(future.seq - 1);
+    // El resto de la sincronización siguió. Lo propio subió, y los registros bajaron
+    expect(server.events.has(own.id)).toBe(true);
+    expect((await b.api.repos.decks.listAll()).map((deck) => deck.id)).toEqual([made.deck.id]);
+  });
+
+  it('con la app actualizada la bajada retoma justo donde se pausó y aplica lo pendiente', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    ok(await a.sync());
+    const future = futureEvent(server, a, 200);
+    const after = laterEvent(server, a, 201);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    expect(ok(await b.sync()).blockedByNewerVersion).toBe(true);
+    const paused = await b.api.repos.syncState.get(b.userId);
+
+    // Una segunda sincronización sin actualizar sigue en pausa y no mueve nada
+    b.clock.seconds = 400;
+    expect(ok(await b.sync()).blockedByNewerVersion).toBe(true);
+    expect((await b.api.repos.syncState.get(b.userId))?.eventsCursor).toBe(paused?.eventsCursor);
+
+    // La app se actualiza. Aquí se simula dándole a esa fila la forma y la versión que la app nueva entiende
+    const row = server.events.get(future.id);
+    if (!row) throw new Error('Falta el evento nuevo en el servidor');
+    row.event = { ...eventToWire(xpEvent(a, 200)), id: future.id };
+
+    b.clock.seconds = 500;
+    const resumed = ok(await b.sync());
+    expect(resumed.blockedByNewerVersion).toBeUndefined();
+    expect(resumed.eventsPulled).toBe(2);
+    const ids = await localIds(b);
+    expect(ids.has(future.id)).toBe(true);
+    expect(ids.has(after.id)).toBe(true);
+    const state = await b.api.repos.syncState.get(b.userId);
+    expect(state?.eventsCursor).toBe(server.events.get(after.id)?.seq);
+  });
+
+  it('con una bajada de varias páginas pausa en la página donde está el evento nuevo', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    // Más eventos buenos que una página, y después el nuevo
+    const goods = Array.from({ length: PAGE_SIZE + 5 }, (_, index) =>
+      laterEvent(server, a, 10 + index),
+    );
+    const future = futureEvent(server, a, 9000);
+    const after = laterEvent(server, a, 9001);
+
+    const b = device(server);
+    b.clock.seconds = 20_000;
+    const result = ok(await b.sync());
+    expect(result.blockedByNewerVersion).toBe(true);
+    expect(result.eventsPulled).toBe(goods.length);
+    const ids = await localIds(b);
+    expect(goods.every((event) => ids.has(event.id))).toBe(true);
+    expect(ids.has(after.id)).toBe(false);
+    expect((await b.api.repos.syncState.get(b.userId))?.eventsCursor).toBe(future.seq - 1);
+  });
+
+  it('un evento dañado de la versión que sí se entiende se rechaza y no atora la bajada', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const broken = { ...eventToWire(xpEvent(a, 50)), id: newId(), payload: { amount: -5 } };
+    server.seq += 1;
+    server.events.set(broken.id, { event: broken, seq: server.seq });
+    const after = laterEvent(server, a, 51);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const result = ok(await b.sync());
+    expect(result.blockedByNewerVersion).toBeUndefined();
+    expect(result.rejected).toBe(1);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+
+  it('una app que declara entender la versión 2 ya no se frena con esa versión', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    futureEvent(server, a, 200);
+    const after = laterEvent(server, a, 201);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    // El payload de esta fila no cumple el esquema de la versión 1, así que cuenta como rechazada
+    const result = ok(await b.sync({ supportedEventVersion: 2 }));
+    expect(result.blockedByNewerVersion).toBeUndefined();
+    expect(result.rejected).toBe(1);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+
+  it('mientras la bajada está en pausa pide solo el primer evento pendiente y al actualizar vuelve a la página completa', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    futureEvent(server, a, 200);
+    const after = laterEvent(server, a, 201);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const limits: number[] = [];
+    const base = memoryTransport(server, () => at(b.clock.seconds));
+    const spy: SyncTransport = {
+      ...base,
+      pullEvents: (afterSeq, limit) => {
+        limits.push(limit);
+        return base.pullEvents(afterSeq, limit);
+      },
+    };
+    expect(ok(await b.sync({ transport: spy })).blockedByNewerVersion).toBe(true);
+    expect(limits).toEqual([PAGE_SIZE]);
+    // Con la pausa ya conocida, la siguiente bajada pide una sola fila
+    b.clock.seconds = 400;
+    expect(ok(await b.sync({ transport: spy })).blockedByNewerVersion).toBe(true);
+    expect(limits).toEqual([PAGE_SIZE, 1]);
+    // Una app que ya entiende esa versión baja el resto con páginas completas
+    const row = [...server.events.values()].find((entry) => entry.event.schemaVersion === 2);
+    if (!row) throw new Error('Falta el evento nuevo');
+    row.event = { ...eventToWire(xpEvent(a, 200)), id: row.event.id };
+    b.clock.seconds = 500;
+    const resumed = ok(await b.sync({ transport: spy }));
+    expect(resumed.blockedByNewerVersion).toBeUndefined();
+    expect(limits).toEqual([PAGE_SIZE, 1, 1, PAGE_SIZE]);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+
+  it('un evento con una versión absurda es un dato dañado y no deja la bajada en pausa', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const junk = { ...eventToWire(xpEvent(a, 50)), id: newId(), schemaVersion: 2147483647 };
+    server.seq += 1;
+    server.events.set(junk.id, { event: junk, seq: server.seq });
+    const after = laterEvent(server, a, 51);
+
+    const b = device(server);
+    b.clock.seconds = 300;
+    const result = ok(await b.sync());
+    expect(result.blockedByNewerVersion).toBeUndefined();
+    expect(result.rejected).toBe(1);
+    expect((await localIds(b)).has(after.id)).toBe(true);
+  });
+});
+
+describe('el tope de registros de la cuenta (SY003)', () => {
+  const quota = () => new SyncTransportError('quota', 'Se llenó el espacio de la cuenta');
+
+  it('con el tope lleno los eventos igual suben y el resultado dice quota', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    const made = await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const full: SyncTransport = { ...base, pushRecords: () => Promise.reject(quota()) };
+
+    const result = await a.sync({ transport: full });
+    expect(result).toMatchObject({ status: 'failed', failure: 'quota' });
+    // Los registros no subieron, pero los eventos sí
+    expect(server.records.size).toBe(0);
+    expect([...server.events.keys()].sort()).toEqual(made.events.map((event) => event.id).sort());
+    // No cuenta como sincronización buena y el avance de la bitácora quedó guardado
+    const state = await a.api.repos.syncState.get(a.userId);
+    expect(state?.lastSyncAt).toBeNull();
+    expect(state?.eventsWatermark).not.toBeNull();
+    // Cuando hay lugar otra vez, todo termina sin duplicar nada
+    ok(await a.sync());
+    expect(server.records.size).toBeGreaterThan(0);
+    expect(server.events.size).toBe(made.events.length);
+  });
+
+  it('si también la bitácora llega al tope, el resultado sigue diciendo quota', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const full: SyncTransport = {
+      ...base,
+      pushRecords: () => Promise.reject(quota()),
+      pushEvents: () => Promise.reject(quota()),
+    };
+    expect(await a.sync({ transport: full })).toMatchObject({ status: 'failed', failure: 'quota' });
+  });
+
+  it('un fallo de red al subir registros no se confunde con el tope y corta como siempre', async () => {
+    const server = createMemoryServer();
+    const a = device(server);
+    await fill(a);
+    const base = memoryTransport(server, () => at(a.clock.seconds));
+    const down: SyncTransport = {
+      ...base,
+      pushRecords: () => Promise.reject(new SyncTransportError('network', 'Sin red')),
+    };
+    expect(await a.sync({ transport: down })).toMatchObject({
+      status: 'failed',
+      failure: 'network',
+    });
+    expect(server.events.size).toBe(0);
   });
 });

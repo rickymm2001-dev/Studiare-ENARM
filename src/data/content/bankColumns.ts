@@ -80,12 +80,27 @@ export const SHEET_HEADERS = {
   author: 'Autor',
   reviewer: 'Revisor',
   language: 'Idioma',
+  // Nivel cognitivo de Bloom, opcional (V4-B5). Vacío deja la pregunta sin nivel y nunca se adivina
+  cognitiveLevel: 'Nivel cognitivo',
   // Solo se leen en las preguntas en inglés, con la fuente y la licencia del texto (B13, 1.5 del plan de
   // B13). En español se ignoran, así ningún renglón de antes cambia
   passageSource: 'Fuente del texto',
   passageLicense: 'Licencia del texto',
   passageUrl: 'Enlace del texto',
 } as const;
+
+/**
+ * Valores de la columna Nivel cognitivo, con las claves de COGNITIVE_LEVELS de src/engines/bloom.ts (una
+ * prueba las compara). Es la taxonomía de Bloom, seis niveles que se agrupan en bajo, medio y alto
+ */
+export const COGNITIVE_LABELS: Readonly<Record<string, string>> = {
+  knowledge: 'Conocimiento',
+  comprehension: 'Comprensión',
+  application: 'Aplicación',
+  analysis: 'Análisis',
+  synthesis: 'Síntesis',
+  evaluation: 'Evaluación',
+};
 
 /** Lo que escriben los médicos en Sesgo cuando no hay sesgo. En la correcta cuenta como vacío */
 export const NO_BIAS_LABEL = 'Ninguno';

@@ -105,6 +105,31 @@ describe('huella del contenido', () => {
     for (const variant of variants) expect(await hashOf(variant)).not.toBe(base);
   });
 
+  it('sin nivel cognitivo la huella es la de antes del nivel, para no volver a versionar todo (V4-B5)', async () => {
+    // Esta huella se calculó con la versión anterior de contentHash.ts y no debe cambiar nunca
+    expect(await hashOf(sheetRow)).toBe(
+      '2d9b681fb26f93c00380996942f801447c6dba3960e91173982b87f4e7f23d3a',
+    );
+    expect(Object.keys(canonicalFromSheet(sheetRow))).not.toContain('cognitiveLevel');
+    expect(
+      Object.keys(canonicalFromVersion({ ...appVersion, cognitiveLevel: null })),
+    ).not.toContain('cognitiveLevel');
+  });
+
+  it('con nivel cognitivo cambia, y un renglón y su versión con el mismo nivel dan la misma huella (V4-B5)', async () => {
+    const base = await hashOf(sheetRow);
+    const leveled = await hashOf({ ...sheetRow, cognitiveLevel: 'analysis' });
+    expect(leveled).not.toBe(base);
+    expect(await hashOf({ ...sheetRow, cognitiveLevel: 'synthesis' })).not.toBe(leveled);
+    expect(
+      await contentHash(canonicalFromVersion({ ...appVersion, cognitiveLevel: 'analysis' })),
+    ).toBe(leveled);
+    // El nivel está al final de la forma canónica, así la huella de lo demás no se mueve
+    expect(
+      Object.keys(canonicalFromSheet({ ...sheetRow, cognitiveLevel: 'analysis' })).at(-1),
+    ).toBe('cognitiveLevel');
+  });
+
   it('el sesgo de la correcta no cuenta, porque la correcta no lleva sesgo', async () => {
     const withBias = {
       ...sheetRow,

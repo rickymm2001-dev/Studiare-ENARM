@@ -48,6 +48,19 @@ describe('catálogo incremental (5.3)', () => {
     expect(entry?.itemKinds).toEqual(['control']);
   });
 
+  it('el nivel cognitivo entra si es de la lista de Bloom, y null o uno desconocido es sin nivel (V4-B5)', () => {
+    expect(catalogEntryOf(wireRow({ cognitiveLevel: 'analysis' }))?.cognitiveLevel).toBe(
+      'analysis',
+    );
+    for (const value of [null, undefined, '', 'dificil', 'Analysis', 7]) {
+      const entry = catalogEntryOf({ ...wireRow(), cognitiveLevel: value });
+      // La fila sigue valiendo, solo queda sin nivel
+      expect(entry).not.toBeNull();
+      expect(entry).not.toHaveProperty('cognitiveLevel');
+    }
+    expect(catalogEntryOf(wireRow())).not.toHaveProperty('cognitiveLevel');
+  });
+
   it('descarta lo que la app no puede guardar', () => {
     expect(catalogEntryOf(null)).toBeNull();
     expect(catalogEntryOf([])).toBeNull();

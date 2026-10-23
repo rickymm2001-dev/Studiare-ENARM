@@ -44,9 +44,10 @@ async function openCatalog(page: Page) {
   await page.goto(SCREENS.decks.path);
   const catalog = page.getByRole('region', { name: text.title });
   await expect(catalog).toBeVisible({ timeout: 30_000 });
-  await expect(catalog.getByText('[Prueba] Mazo simulado del catálogo')).toBeVisible({
-    timeout: 30_000,
-  });
+  // El aviso del candado también nombra al mazo cuando va abierto en Gratis, así que se busca su título
+  await expect(
+    catalog.getByRole('heading', { name: '[Prueba] Mazo simulado del catálogo' }),
+  ).toBeVisible({ timeout: 30_000 });
   return catalog;
 }
 
@@ -119,5 +120,26 @@ test.describe('Catálogo de mazos de la nube para el alumno', () => {
     await expectNoSeriousA11yViolations(page);
     expect(storageReads(cloud)).toBe(0);
     expect(store.deckDownloads).toEqual([]);
+  });
+  test('Gratis baja el mazo que el admin dejó abierto y el aviso lo dice', async ({
+    page,
+    cloud,
+  }) => {
+    test.setTimeout(180_000);
+    const { store, deck } = catalogWith(cloud);
+    // El admin lo dejó abierto en Gratis con admin_deck_catalog_set_free_access
+    deck.freeAccess = true;
+    await enterWithCatalog(page, cloud);
+    const catalog = await openCatalog(page);
+    await expect(catalog.getByText(t.freePlan.catalog.notice)).toBeVisible();
+    await expect(catalog.getByText(text.freeDecks([deck.name]))).toBeVisible();
+    await catalog.getByText(text.subjects(1)).click();
+    await expect(catalog.getByText(t.freePlan.catalog.rowLocked)).toHaveCount(0);
+    await catalog.getByRole('button', { name: text.downloadLabel(SUBJECT) }).click();
+    await expect(catalog.getByText(text.done(1))).toBeVisible({ timeout: 30_000 });
+    expect(store.deckDownloads).toEqual([
+      expect.objectContaining({ deckKey: deck.deckKey, subjectKey: 'materia-simulada' }),
+    ]);
+    await expectNoSeriousA11yViolations(page);
   });
 });

@@ -49,6 +49,31 @@ describe('catálogo de mazos del alumno', () => {
     ).toEqual({ ok: false, reason: 'other_device' });
   });
 
+  it('lee el permiso de cada mazo y, sin él, deja el de toda la lista', async () => {
+    const cloud = fakeRpc({
+      deck_catalog_list: () => ({
+        canDownload: false,
+        decks: [
+          { ...deck, canDownload: true },
+          { ...deck, deckKey: 'paco-gyo' },
+        ],
+      }),
+    });
+    const reply = await fetchDeckCatalog(cloud);
+    expect(reply.ok && reply.value.canDownload).toBe(false);
+    // Un servidor anterior no manda el permiso por mazo y entonces cada mazo usa el de la lista
+    expect(reply.ok && reply.value.decks.map((item) => item.canDownload)).toEqual([
+      true,
+      undefined,
+    ]);
+    const wrong = await fetchDeckCatalog(
+      fakeRpc({
+        deck_catalog_list: () => ({ canDownload: false, decks: [{ ...deck, canDownload: 'sí' }] }),
+      }),
+    );
+    expect(wrong).toEqual({ ok: false, reason: 'unknown' });
+  });
+
   it('anota la bajada con los nombres de la base y no lanza si falla', async () => {
     const cloud = fakeRpc({ record_deck_download: () => null });
     expect(

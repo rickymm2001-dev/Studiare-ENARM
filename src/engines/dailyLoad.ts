@@ -79,6 +79,13 @@ export interface TimeEstimate {
   measured: boolean;
   /** Muestras válidas que no eran nuevas */
   reviews: number;
+  /**
+   * true si el tiempo de las tarjetas nuevas también salió de ella (MIN_NEW_SAMPLES_TO_MEASURE o más
+   * muestras). Solo viene cuando measured es true. Ausente o false es la referencia
+   */
+  newMeasured?: boolean;
+  /** Muestras válidas de tarjetas nuevas. Solo viene cuando measured es true */
+  newSamples?: number;
 }
 
 export interface NewPerDayRules {
@@ -152,14 +159,14 @@ export function estimateCardTimes(
       reviews,
     };
   }
+  const newMeasured = newSeconds.length >= MIN_NEW_SAMPLES_TO_MEASURE;
   return {
     secondsPerReview: median(reviewSeconds),
-    secondsPerNew:
-      newSeconds.length >= MIN_NEW_SAMPLES_TO_MEASURE
-        ? median(newSeconds)
-        : rules.referenceSecondsPerNew,
+    secondsPerNew: newMeasured ? median(newSeconds) : rules.referenceSecondsPerNew,
     measured: true,
     reviews,
+    newMeasured,
+    newSamples: newSeconds.length,
   };
 }
 

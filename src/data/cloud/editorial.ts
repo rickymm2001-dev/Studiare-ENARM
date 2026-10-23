@@ -100,6 +100,8 @@ export const EditorVersionSchema = z.object({
   subtopic: z.string(),
   difficulty: count,
   itemKinds: z.array(z.string()),
+  // Nivel cognitivo de Bloom. Un servidor sin la columna no lo manda, y sin nivel llega null (V4-B5)
+  cognitiveLevel: z.string().nullable().optional(),
   structure,
   vignette: z.string(),
   prompt: z.string(),

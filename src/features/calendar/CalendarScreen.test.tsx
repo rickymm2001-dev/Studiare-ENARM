@@ -4,14 +4,16 @@
 // regresiva, un día más allá del horizonte de la proyección no afirma que no hay carga, el cambio de
 // mes se anuncia y cada día se nombra completo para el lector de pantalla.
 import 'fake-indexeddb/auto';
-import { cleanup, screen, within } from '@testing-library/react';
+import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
+import { UserSettingsSchema } from '@/data/schemas/people';
 import { changePlan } from '@/data/usecases/subscription';
+import { calendarBranchesText } from '@/i18n/calendarBranches';
 import { t } from '@/i18n/es-MX';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -66,10 +68,145 @@ describe('plan por semanas según el plan del alumno', () => {
     expect(within(card).queryByText(text.plan.simulatorPaid, { exact: false })).toBeNull();
   });
 
-  it('la pista no promete un orden de ramas que nadie puede elegir', async () => {
+  it('la pista del plan no manda a unos ajustes que no existen, porque el orden se elige en la misma tarjeta', async () => {
     app = await renderApp(SCREENS.calendar.path);
     const card = await plan();
     expect(within(card).queryByText(/orden de tus ajustes/)).toBeNull();
+    expect(within(card).getByText(calendarBranchesText.title)).toBeInTheDocument();
+  });
+});
+
+describe('ramas del plan y su orden', () => {
+  const NAMES = ['Medicina interna', 'Pediatría', 'Ginecología y obstetricia', 'Cirugía general'];
+
+  /** Abre la sección y devuelve la lista de ramas */
+  async function openBranches(typing: ReturnType<typeof userEvent.setup>) {
+    const card = await plan();
+    await typing.click(within(card).getByText(calendarBranchesText.title));
+    return {
+      card,
+      list: within(card).getByRole('list', { name: calendarBranchesText.listLabel }),
+    };
+  }
+
+  it('trae todas las ramas del examen y las cuatro troncales marcadas, en su orden', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { list } = await openBranches(typing);
+    const boxes = within(list).getAllByRole('checkbox');
+    expect(boxes).toHaveLength(8);
+    expect(boxes.filter((box) => (box as HTMLInputElement).checked)).toHaveLength(4);
+    // Las marcadas van primero y en el orden de los ajustes
+    const names = within(list)
+      .getAllByRole('listitem')
+      .map((item) => item.textContent);
+    NAMES.forEach((name, index) => {
+      expect(names[index]).toContain(name);
+    });
+    for (const rest of ['Medicina familiar', 'Urgencias', 'Salud pública']) {
+      expect(within(list).getByRole('checkbox', { name: rest })).not.toBeChecked();
+    }
+  });
+
+  it('incluir una rama y bajar otra guardan el orden en los ajustes con un evento por cambio', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { card, list } = await openBranches(typing);
+    await typing.click(within(list).getByRole('checkbox', { name: 'Urgencias' }));
+    await typing.click(
+      await within(card).findByRole('button', { name: calendarBranchesText.moveUp('Urgencias') }),
+    );
+    await typing.click(
+      within(card).getByRole('button', { name: calendarBranchesText.moveDown('Medicina interna') }),
+    );
+    expect(await within(card).findByText(calendarBranchesText.saved)).toBeInTheDocument();
+
+    const { user, api } = app;
+    const saved = await api.repos.users.get(user.id);
+    expect(saved?.settings.branches).toEqual([
+      'pediatrics',
+      'internal_medicine',
+      'obstetrics_gynecology',
+      'emergency_medicine',
+      'general_surgery',
+    ]);
+    const changes = (await api.repos.events.query({ userId: user.id })).filter(
+      (event) => event.type === 'settings_changed' && event.payload.key === 'settings.branches',
+    );
+    expect(changes).toHaveLength(3);
+    // El plan ya empieza por la primera rama de la lista
+    await waitFor(() => {
+      expect(card.querySelector('ol li')?.textContent).toContain('Pediatría');
+    }, WAIT);
+  });
+
+  it('después de bajar una rama el foco se queda en su botón aunque cambie de lugar', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { card } = await openBranches(typing);
+    await typing.click(
+      within(card).getByRole('button', { name: calendarBranchesText.moveDown('Medicina interna') }),
+    );
+    await waitFor(() => {
+      expect(
+        within(card).getByRole('button', {
+          name: calendarBranchesText.moveDown('Medicina interna'),
+        }),
+      ).toHaveFocus();
+    }, WAIT);
+  });
+
+  it('si la rama llega al primer lugar el foco pasa a su botón de bajar, y al último a su botón de subir', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { card } = await openBranches(typing);
+    const button = (name: string) => within(card).getByRole('button', { name });
+    // Pediatría sube al primer lugar y su botón de subir queda deshabilitado
+    await typing.click(button(calendarBranchesText.moveUp('Pediatría')));
+    await waitFor(() => {
+      expect(button(calendarBranchesText.moveUp('Pediatría'))).toBeDisabled();
+      expect(button(calendarBranchesText.moveDown('Pediatría'))).toHaveFocus();
+    }, WAIT);
+    // Con Pediatría primero, Ginecología y obstetricia baja al último de las cuatro y su botón de bajar se deshabilita
+    await typing.click(button(calendarBranchesText.moveDown('Ginecología y obstetricia')));
+    await waitFor(() => {
+      expect(button(calendarBranchesText.moveDown('Ginecología y obstetricia'))).toBeDisabled();
+      expect(button(calendarBranchesText.moveUp('Ginecología y obstetricia'))).toHaveFocus();
+    }, WAIT);
+  });
+
+  it('al marcar una rama la casilla conserva el foco aunque la rama cambie de grupo', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const { list } = await openBranches(typing);
+    const box = () => within(list).getByRole('checkbox', { name: 'Urgencias' });
+    await typing.click(box());
+    await waitFor(() => {
+      expect(box()).toBeChecked();
+      expect(box()).toHaveFocus();
+    }, WAIT);
+    await typing.click(box());
+    await waitFor(() => {
+      expect(box()).not.toBeChecked();
+      expect(box()).toHaveFocus();
+    }, WAIT);
+  });
+
+  it('no deja quitar la última rama y lo dice', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path, {
+      user: { settings: UserSettingsSchema.parse({ branches: ['internal_medicine'] }) },
+    });
+    const { card, list } = await openBranches(typing);
+    expect(within(list).getByRole('checkbox', { name: 'Medicina interna' })).toBeDisabled();
+    expect(within(card).getByText(calendarBranchesText.atLeastOne)).toBeInTheDocument();
+    // Con una sola rama no hay a dónde moverla
+    expect(
+      within(card).getByRole('button', { name: calendarBranchesText.moveUp('Medicina interna') }),
+    ).toBeDisabled();
+    expect(
+      within(card).getByRole('button', { name: calendarBranchesText.moveDown('Medicina interna') }),
+    ).toBeDisabled();
   });
 });
 

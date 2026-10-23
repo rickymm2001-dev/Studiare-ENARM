@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 import { isFeatureEnabled, type FeatureFlag } from '@/config/featureFlags';
 import type { Role } from '@/data/schemas/common';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { screenPath } from './screens';
 
 export interface NavItem {

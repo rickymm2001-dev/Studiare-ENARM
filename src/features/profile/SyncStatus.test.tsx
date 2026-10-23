@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { INITIAL_SYNC_UI, type SyncUiState } from '@/app/syncScheduler';
 import { useSyncStatus } from '@/app/syncState';
 import { t } from '@/i18n/es-MX';
+import { syncVersionText } from '@/i18n/syncVersion';
 import { SyncStatus } from './SyncStatus';
 import { syncMessage, when } from './syncMessage';
 
@@ -37,6 +38,21 @@ describe('estado de la sincronización', () => {
     });
     expect(screen.getByRole('status')).toHaveTextContent(t.cloud.sync.ok(when(AT)));
     expect(screen.getByText(t.cloud.sync.okChanges(3, 5))).toBeVisible();
+  });
+
+  it('avisa que la bajada de datos está en pausa por una versión más nueva', () => {
+    show({
+      running: false,
+      lastSyncAt: AT,
+      blockedByNewerVersion: true,
+      outcome: { status: 'ok', at: AT, pulled: 0, pushed: 0, rejected: 0 },
+    });
+    expect(screen.getByText(syncVersionText.profileLine)).toBeVisible();
+  });
+
+  it('sin la pausa no dice nada de versiones', () => {
+    show(INITIAL_SYNC_UI);
+    expect(screen.queryByText(syncVersionText.profileLine)).toBeNull();
   });
 
   it('avisa de los registros que no se pudieron validar', () => {
@@ -75,6 +91,7 @@ describe('texto de cada resultado', () => {
     ['server', t.cloud.sync.server],
     ['local', t.cloud.sync.local],
     ['clock', t.cloud.sync.clock],
+    ['quota', t.cloud.sync.quota],
   ] as const)('un fallo %s tiene su mensaje', (failure, message) => {
     expect(syncMessage({ status: 'failed', failure }, null)).toBe(message);
   });

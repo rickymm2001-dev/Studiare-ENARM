@@ -2,7 +2,7 @@
 // cuando CloudBridge deja el motivo other_device en el estado de la nube. Va en el marco de la app
 // junto a los otros avisos, así se ve también en la pantalla de entrada. El alumno lo descarta.
 import { MonitorSmartphone } from 'lucide-react';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { useCloud } from '../cloudState';
 

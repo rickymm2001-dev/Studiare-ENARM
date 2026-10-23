@@ -62,6 +62,7 @@ describe('causa de un error del servidor', () => {
     expect(failureOf({ code: 'PGRST301' })).toBe('auth');
     expect(failureOf({ code: 'XX000', status: 401 })).toBe('auth');
     expect(failureOf({ code: 'SY002' })).toBe('clock');
+    expect(failureOf({ code: 'SY003' })).toBe('quota');
     expect(failureOf({ code: '22023' })).toBe('server');
     // Sin código es que la red no respondió
     expect(failureOf({ message: 'TypeError: Failed to fetch' })).toBe('network');

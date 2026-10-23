@@ -12,9 +12,9 @@ import {
   PAGE_SIZE,
   SETTLE_MS,
   clockIsTrustworthy,
+  classifyEventRow,
   clockSkewMs,
   collectSyncable,
-  eventFromWire,
   eventToWire,
   fromWire,
   keyOf,
@@ -52,6 +52,11 @@ export interface SyncDeps {
    */
   plan?: PlanKey;
   now?: () => Date;
+  /**
+   * La versión del esquema de eventos que esta app entiende. Solo la cambian las pruebas, para simular una
+   * app más nueva o más vieja. Por omisión es EVENT_SCHEMA_VERSION
+   */
+  supportedEventVersion?: number;
 }
 
 export interface SyncCounts {
@@ -64,7 +69,15 @@ export interface SyncCounts {
 }
 
 export type SyncResult =
-  | ({ status: 'ok'; at: string } & SyncCounts)
+  | ({
+      status: 'ok';
+      at: string;
+      /**
+       * La bajada de la bitácora se pausó porque llegó un evento de una versión más nueva que la de esta
+       * app. Lo demás de la sincronización siguió. Con la app actualizada la bajada retoma sin perder nada
+       */
+      blockedByNewerVersion?: boolean;
+    } & SyncCounts)
   | { status: 'clock_skew'; skewMs: number }
   | { status: 'failed'; failure: SyncFailure; detail: string };
 
@@ -207,19 +220,43 @@ async function pullRecords(
   }
 }
 
+/** Lo que deja la bajada de la bitácora. newerVersion es la versión que la pausó, si la hubo */
+interface PullEventsResult {
+  state: SyncState;
+  newerVersion: number | null;
+}
+
+/**
+ * Las cuentas cuya bajada de la bitácora está en pausa por una versión más nueva, en esta pestaña. Mientras
+ * lo estén, cada sincronización pide solo el primer evento pendiente para ver si ya se entiende, en lugar
+ * de bajar una página entera que se tiraría. Si la pestaña se recarga se pierde y la primera bajada pide la
+ * página completa, que es lo que debe pasar tras actualizar
+ */
+const pausedPulls = new Set<string>();
+
 async function pullEvents(
   deps: SyncDeps,
   state: SyncState,
   counts: SyncCounts,
   onServer: Set<string>,
-): Promise<SyncState> {
+): Promise<PullEventsResult> {
   let current = state;
+  const pausedKey = `${deps.authId}:${deps.userId}`;
+  let limit = pausedPulls.has(pausedKey) ? 1 : PAGE_SIZE;
   for (;;) {
-    const page = await deps.transport.pullEvents(current.eventsCursor, PAGE_SIZE);
+    const page = await deps.transport.pullEvents(current.eventsCursor, limit);
+    limit = PAGE_SIZE;
     const events: AppEvent[] = [];
+    // El primer evento de una versión más nueva frena la bajada. Lo que viene antes se guarda y lo que viene
+    // después espera, porque el cursor no puede pasar de ese evento sin perderlo (D-146)
+    let blocked: { seq: number; version: number } | null = null;
     for (const row of page.rows) {
-      const event = eventFromWire(row.event, deps.userId);
-      if (event) events.push(event);
+      const parsed = classifyEventRow(row.event, deps.userId, deps.supportedEventVersion);
+      if (parsed.kind === 'newer_version') {
+        blocked = { seq: row.seq, version: parsed.version };
+        break;
+      }
+      if (parsed.kind === 'event') events.push(parsed.event);
       else counts.rejected += 1;
     }
     if (events.length > 0) {
@@ -251,12 +288,24 @@ async function pullEvents(
         counts.eventsPulled += 1;
       }
     }
+    if (blocked) {
+      pausedPulls.add(pausedKey);
+      // El cursor queda justo antes del evento que esta app no entiende. La siguiente bajada, ya con la app
+      // actualizada, empieza en él y aplica lo que quedó pendiente
+      const stopAt = blocked.seq - 1;
+      if (stopAt > current.eventsCursor) {
+        current = { ...current, eventsCursor: stopAt };
+        await deps.api.repos.syncState.put(current);
+      }
+      return { state: current, newerVersion: blocked.version };
+    }
+    pausedPulls.delete(pausedKey);
     const moved = page.next > current.eventsCursor;
     if (moved) {
       current = { ...current, eventsCursor: page.next };
       await deps.api.repos.syncState.put(current);
     }
-    if (!page.more || !moved) return current;
+    if (!page.more || !moved) return { state: current, newerVersion: null };
   }
 }
 
@@ -399,18 +448,40 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
 
     let state = await loadState(deps.api, deps.userId, deps.authId);
     state = await pullRecords(deps, state, counts, fromServer);
-    state = await pullEvents(deps, state, counts, eventsOnServer);
+    const pulled = await pullEvents(deps, state, counts, eventsOnServer);
+    state = pulled.state;
     // Después de bajar todo y antes de subir (2.7 del plan de B14). Lo que crea sube en esta corrida
     state = await reconcileProfile(
       { api: deps.api, userId: deps.userId, authId: deps.authId, now },
       state,
     );
-    state = await pushRecords(deps, state, counts, fromServer, now);
+    // Con el tope de la cuenta (SY003) el servidor rechaza la subida de registros entera. Los eventos son
+    // otro canal y siguen su camino, así lo que el alumno hizo no se queda sin subir por un tope de
+    // registros. El resultado final dice quota para que la interfaz avise (D-146)
+    let quota: SyncTransportError | null = null;
+    try {
+      state = await pushRecords(deps, state, counts, fromServer, now);
+    } catch (error) {
+      if (!(error instanceof SyncTransportError) || error.failure !== 'quota') throw error;
+      quota = error;
+      // pushRecords deja guardado lo que alcanzó a subir, y de ahí sigue la bitácora
+      state = await loadState(deps.api, deps.userId, deps.authId);
+    }
     state = await pushEvents(deps, state, counts, eventsOnServer, now);
+    if (quota) {
+      // No se anota como sincronización buena, pero el avance de la bitácora queda guardado
+      await deps.api.repos.syncState.put(state);
+      return { status: 'failed', failure: 'quota', detail: quota.message };
+    }
 
     const at = now().toISOString();
     await deps.api.repos.syncState.put({ ...state, lastSyncAt: at });
-    return { status: 'ok', at, ...counts };
+    return {
+      status: 'ok',
+      at,
+      ...counts,
+      ...(pulled.newerVersion === null ? {} : { blockedByNewerVersion: true }),
+    };
   } catch (error) {
     if (error instanceof SyncTransportError) {
       return { status: 'failed', failure: error.failure, detail: error.message };

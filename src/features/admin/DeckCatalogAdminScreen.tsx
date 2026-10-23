@@ -31,6 +31,7 @@ import {
   readDeckCatalog,
   registerDeckVersion,
   retireDeck,
+  setDeckFreeAccess,
   uploadDeckFile,
 } from '@/data/cloud/deckCatalogAdmin';
 import { EditorialError } from '@/data/editorial/editorialRepo';
@@ -44,7 +45,7 @@ import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SelectField, TextAreaField, TextField } from '@/ui/components/field';
+import { CheckboxField, SelectField, TextAreaField, TextField } from '@/ui/components/field';
 import { FileChooser } from '@/ui/components/file-chooser';
 import { ErrorState, LoadingState } from '@/ui/states/states';
 import { parseFileInWorker } from '@/workers/importClient';
@@ -106,9 +107,20 @@ export function DeckCatalogAdminScreen() {
   );
 }
 
+/** La versión más nueva que muestra la tarjeta del mazo, o null si todavía no tiene ninguna */
+function newestVersion(entry: DeckAdminEntry): number | null {
+  return entry.versions.reduce<number | null>(
+    (newest, version) => (newest === null || version.version > newest ? version.version : newest),
+    null,
+  );
+}
+
 function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () => void }) {
   const role = usePreferences((state) => state.role);
-  const [note, setNote] = useState(entry.authorizationNote ?? '');
+  // La nota del dueño, que es la suya y no la del admin. Si todavía no confirma, se parte de la del admin
+  const [note, setNote] = useState(
+    entry.authorizationConfirmedNote ?? entry.authorizationNote ?? '',
+  );
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -140,6 +152,7 @@ function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () 
           {text.status[entry.status] ?? entry.status}
         </Badge>
         <Badge>{text.license[entry.license] ?? entry.license}</Badge>
+        {entry.freeAccess ? <Badge variant="success">{text.freeAccess.badge}</Badge> : null}
       </h3>
       <p className="text-sm text-fg-muted">
         {entry.deckKey} · {entry.author} · {text.downloads(entry.downloads)}
@@ -177,15 +190,38 @@ function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () 
           </li>
         ))}
       </ul>
+      <CheckboxField
+        label={text.freeAccess.label}
+        hint={text.freeAccess.hint}
+        checked={entry.freeAccess}
+        disabled={busy}
+        onChange={(event) => {
+          const free = event.target.checked;
+          void run(async () => {
+            await setDeckFreeAccess(await requireCloud(), entry.deckKey, free, askSecondFactor);
+            return free ? text.freeAccess.opened : text.freeAccess.closed;
+          });
+        }}
+      />
       <div className="flex flex-col gap-2 border-t border-line pt-2">
         <p className="text-sm font-medium">{auth.title}</p>
         <p className="text-sm">
           {entry.license === 'own'
             ? auth.own
             : entry.authorizationConfirmedAt
-              ? auth.confirmed(date(entry.authorizationConfirmedAt))
+              ? entry.authorizationConfirmedVersion !== null
+                ? auth.confirmedUpTo(
+                    date(entry.authorizationConfirmedAt),
+                    entry.authorizationConfirmedVersion,
+                  )
+                : auth.confirmed(date(entry.authorizationConfirmedAt))
               : auth.pending}
         </p>
+        {entry.license === 'third_party' && entry.pendingConfirmationVersion !== null ? (
+          <p className="text-sm font-medium">
+            {auth.pendingVersion(entry.pendingConfirmationVersion)}
+          </p>
+        ) : null}
         {entry.license === 'third_party' ? (
           role === 'owner' ? (
             <>
@@ -204,10 +240,13 @@ function DeckEntry({ entry, onChanged }: { entry: DeckAdminEntry; onChanged: () 
                   disabled={busy || note.trim() === ''}
                   onClick={() => {
                     void run(async () => {
+                      // Confirma la versión más nueva de las que muestra la tarjeta. Si el servidor tiene otra
+                      // más nueva responde que recargue
                       await confirmDeckAuthorization(
                         await requireCloud(),
                         entry.deckKey,
                         note,
+                        newestVersion(entry),
                         askSecondFactor,
                       );
                       return auth.confirmed_notice;

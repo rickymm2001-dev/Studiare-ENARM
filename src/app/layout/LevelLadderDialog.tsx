@@ -4,7 +4,7 @@ import { Award, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import type { ReactNode } from 'react';
 import { levelFor, nextTitle, titleLadder } from '@/engines/xp';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import { ProgressBar } from '@/ui/components/progress-bar';
 

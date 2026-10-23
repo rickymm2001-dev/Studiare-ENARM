@@ -202,6 +202,15 @@ Qué pasa en cada caso
 - Proyecto con b15 publicado. b17 no aplica SQL y vuelve a publicar las mismas trece funciones, cada una con una versión más y el verify_jwt que tenía. Un proyecto sin las funciones de b15 las crea en la versión 1
 - Las funciones del plan b15 que ya existían tienen el verify_jwt de siempre. create-checkout, create-portal-session, cancel-subscription y admin-reset-mfa verifican la sesión. payment-webhook-stripe, payment-webhook-mercadopago, bank-sync, ai-proxy y ai-batch no, porque se identifican con su firma o con la ficha de Cron. Una prueba revisa que cada una coincida con su index.ts
 
+### F2, el catálogo y el nivel cognitivo (plan V4, D-147)
+
+Dos migraciones nuevas, las dos aditivas y sin delete ni drop, que corren sobre un proyecto que ya tiene B11.
+
+- 20261024000001_catalog_free_access_and_caps. Acceso gratis por mazo (free_access y admin_deck_catalog_set_free_access), la confirmación del dueño de un mazo de terceros ligada a su versión, y los topes por alumno de bajadas del catálogo y de cuota de sincronización en platform_quota_settings. Un envío que pasa la cuota de sincronización se rechaza entero con el código SY003
+- 20261031000001_cognitive_level. La columna opcional cognitive_level de Bloom en questions y en question_catalog, y nueve funciones del banco que la leen o la escriben. Con ella la hoja del Sheet acepta la columna Nivel cognitivo (docs/SHEET_DEL_BANCO.md) y la función bank-sync trae el convertidor nuevo
+
+Como las dos redefinen funciones que crea B11, los planes b11 y b14 las llevan y las saltan si ya están aplicadas, y el plan f2 aplica solo la primera sobre un proyecto que ya tiene B11. En el proyecto real, que hoy tiene el esquema hasta B10, no se aplica f2 aislado. Se aplica la cadena de B11 en adelante en el orden de arriba, y con ella entran las dos. Nada de esto se ha aplicado todavía al proyecto real. Cada comando se corre primero con --dry-run.
+
 ### B18, la encuesta de los primeros días
 
 El plan b18 aplica dos migraciones y no publica funciones ni espera secretos.

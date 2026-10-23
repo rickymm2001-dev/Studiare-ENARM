@@ -1,4 +1,5 @@
--- Pruebas del catálogo compartido de mazos (B11, migración 20261023000005, 6.1 del plan de B11), sobre
+-- Pruebas del catálogo compartido de mazos (B11, migración 20261023000005, 6.1 del plan de B11) y de lo que
+-- agrega 20261024000001 (acceso gratis por mazo, confirmación por versión y topes por alumno, DC6), sobre
 -- stub_storage.sql. Usuarios propios que empiezan con dd, con los cinco tipos (sin sesión, Gratis, de
 -- pago, médico y admin) y el dueño. Los mazos y sus notas son simulados.
 \set ON_ERROR_STOP on
@@ -94,7 +95,8 @@ begin
       'public.deck_catalog_can_read(text)', 'public.deck_catalog_can_write(text)',
       'public.admin_deck_catalog_register(jsonb)', 'public.admin_deck_catalog_publish(text, integer)',
       'public.admin_deck_catalog_retire(text)', 'public.admin_deck_catalog_overview()',
-      'public.owner_confirm_deck_authorization(text, text)'] loop
+      'public.owner_confirm_deck_authorization(text, text)', 'public.owner_confirm_deck_version(text, text, integer)',
+      'public.admin_deck_catalog_set_free_access(text, boolean)'] loop
     if not has_function_privilege('authenticated', f, 'execute') then raise exception 'FALLA DC0. authenticated no ejecuta %', f; end if;
     foreach r in array array['anon', 'service_role'] loop
       if has_function_privilege(r, f, 'execute') then raise exception 'FALLA DC0. % ejecuta %', r, f; end if;
@@ -102,12 +104,15 @@ begin
   end loop;
   foreach f in array array['public.deck_catalog_path(text)', 'public.deck_catalog_expected(text, integer)',
       'public.deck_catalog_can_download()', 'public.deck_catalog_preview_ok(jsonb)', 'public.deck_catalog_part_max()',
-      'public.deck_catalog_int(jsonb, bigint, bigint)', 'public.deck_catalog_manifest_ok(jsonb)'] loop
+      'public.deck_catalog_int(jsonb, bigint, bigint)', 'public.deck_catalog_manifest_ok(jsonb)',
+      'public.deck_catalog_can_download_deck(text)', 'public.deck_catalog_license_ok(text, timestamptz, integer, integer)',
+      'public.deck_catalog_confirmation_sync()', 'public.platform_quota(text)'] loop
     foreach r in array array['anon', 'authenticated', 'service_role'] loop
       if has_function_privilege(r, f, 'execute') then raise exception 'FALLA DC0. % ejecuta %', r, f; end if;
     end loop;
   end loop;
-  foreach f in array array['deck_catalog', 'deck_catalog_versions', 'deck_catalog_subjects', 'deck_catalog_downloads'] loop
+  foreach f in array array['deck_catalog', 'deck_catalog_versions', 'deck_catalog_subjects', 'deck_catalog_downloads',
+      'platform_quota_settings'] loop
     foreach r in array array['anon', 'authenticated', 'service_role'] loop
       if has_table_privilege(r, 'public.' || f, 'select') or has_table_privilege(r, 'public.' || f, 'insert') then
         raise exception 'FALLA DC0. % tiene permisos sobre %', r, f;
@@ -220,10 +225,14 @@ select pg_temp.expect(pg_temp.fails_with('select public.owner_confirm_deck_autho
   'DC3. El dueño confirmó sin nota');
 select pg_temp.expect(pg_temp.fails_with('select public.owner_confirm_deck_authorization(''no-existe'', ''[Prueba] Nota'')') = '22023',
   'DC3. Confirmó un mazo que no existe');
-select public.owner_confirm_deck_authorization('paco-gyo', '[Prueba] Autorización simulada');
+select public.owner_confirm_deck_authorization('paco-gyo', '[Prueba] Contrato firmado el 12 de octubre');
 commit;
 select pg_temp.expect((select authorization_confirmed_by = :'owner' and authorization_confirmed_at is not null
   from public.deck_catalog where deck_key = 'paco-gyo'), 'DC3. No quedó la confirmación del dueño');
+-- La nota del dueño va aparte y la del admin no se toca
+select pg_temp.expect((select authorization_confirmed_note = '[Prueba] Contrato firmado el 12 de octubre'
+    and authorization_note = '[Prueba] Autorización simulada' from public.deck_catalog where deck_key = 'paco-gyo'),
+  'DC3. La nota del dueño pisó la del admin');
 -- Un paquete o una parte con otro tamaño que el del manifiesto. Solo el superusuario cambia el archivo
 update storage.objects set metadata = metadata || '{"size":1999999}' where name = 'paco-gyo/v1/preeclampsia.media-2.zip';
 begin;
@@ -293,8 +302,9 @@ select public.admin_deck_catalog_register(pg_temp.manifest('paco-gyo', 'third_pa
   jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as v2 \gset
 select pg_temp.expect(:'v2' = '2' and pg_temp.upload('paco-gyo/v2/control-prenatal.json', 1200), 'DC1. No registró ni subió la versión 2');
 commit;
-select pg_temp.expect((select authorization_confirmed_at is not null from public.deck_catalog where deck_key = 'paco-gyo'),
-  'DC1. La misma nota perdió la confirmación');
+select pg_temp.expect((select authorization_confirmed_at is not null and authorization_confirmed_version = 1
+  from public.deck_catalog where deck_key = 'paco-gyo'),
+  'DC1. La misma nota perdió la confirmación de la versión 1 o la dio por buena para la 2');
 begin;
 select pg_temp.as_user(:'p1');
 select pg_temp.expect(pg_temp.visible() = 6
@@ -302,7 +312,24 @@ select pg_temp.expect(pg_temp.visible() = 6
   'DC1. Leyó una versión en subida');
 select pg_temp.expect(public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo","version":1,"preview":[{"kind":"basic"}]}]',
   'DC1. La vista previa nueva salió antes de publicar');
+-- La versión nueva no sale sin que el dueño la confirme, y mientras tanto la 1 sigue a la vista
 select pg_temp.as_user(:'ad');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_publish(''paco-gyo'', 2)') = 'BK010',
+  'DC1. Publicó la versión 2 de un mazo de terceros sin que el dueño la confirmara');
+select pg_temp.as_user(:'owner');
+-- Confirma justo la versión que ve. Una que ya no es la más nueva, o que no existe, se rechaza con BK002
+select pg_temp.expect(pg_temp.fails_with('select public.owner_confirm_deck_version(''paco-gyo'', ''[Prueba] Contrato'', 1)') = 'BK002'
+  and pg_temp.fails_with('select public.owner_confirm_deck_version(''paco-gyo'', ''[Prueba] Contrato'', 3)') = 'BK002',
+  'DC1. El dueño confirmó una versión que no es la más nueva');
+select pg_temp.expect(pg_temp.fails_with('select public.owner_confirm_deck_version(''no-existe'', ''[Prueba] Contrato'', 1)') = '22023'
+  and pg_temp.fails_with('select public.owner_confirm_deck_version(''paco-gyo'', ''  '', 2)') = '22023',
+  'DC1. El dueño confirmó un mazo que no existe o sin nota');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","authorizationConfirmedVersion":1}]',
+  'DC1. Un rechazo cambió la confirmación');
+select public.owner_confirm_deck_version('paco-gyo', '[Prueba] Contrato firmado el 12 de octubre', 2);
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(pg_temp.fails_with('select public.owner_confirm_deck_version(''paco-gyo'', ''[Prueba] Contrato'', 2)') = '42501',
+  'DC1. El admin confirmó con versión');
 select pg_temp.expect(public.admin_deck_catalog_publish('paco-gyo', 2) = 'published', 'DC1. No publicó la versión 2');
 select pg_temp.as_user(:'p1');
 select pg_temp.expect(pg_temp.visible() = 2
@@ -312,6 +339,8 @@ select pg_temp.expect(pg_temp.visible() = 2
 commit;
 select pg_temp.expect((select array_agg(status order by version) from public.deck_catalog_versions where deck_key = 'paco-gyo')
   = array['retired', 'published'], 'DC1. La versión 1 no quedó retirada');
+select pg_temp.expect((select authorization_confirmed_version from public.deck_catalog where deck_key = 'paco-gyo') = 2,
+  'DC1. La confirmación del dueño no quedó en la versión más nueva');
 
 -- Otra nota pide confirmar de nuevo
 begin;
@@ -366,8 +395,12 @@ rollback;
 -- El dueño confirma la nota nueva y paco-gyo vuelve a la lista
 begin;
 select pg_temp.as_user(:'owner');
-select public.owner_confirm_deck_authorization('paco-gyo', '[Prueba] Otra nota');
+select public.owner_confirm_deck_authorization('paco-gyo', '[Prueba] Confirmé con el correo del autor');
 commit;
+-- El dueño escribió otra nota que la del admin y cada una quedó en su columna
+select pg_temp.expect((select authorization_note = '[Prueba] Otra nota'
+    and authorization_confirmed_note = '[Prueba] Confirmé con el correo del autor'
+  from public.deck_catalog where deck_key = 'paco-gyo'), 'DC4. La nota del dueño reemplazó a la del admin');
 begin;
 select pg_temp.as_user(:'f1');
 select public.deck_catalog_list() as free_list \gset
@@ -401,10 +434,316 @@ commit;
 select pg_temp.expect((select count(*) from public.deck_catalog_downloads where user_id = :'p1') = 2, 'DC4. No quedaron las dos bajadas');
 
 -- ===================================================================== DC5. Borrar mis datos
+-- Las bajadas de las últimas 24 horas se conservan, porque cuentan para el tope del día (BK012) y borrar los datos no
+-- debe reiniciarlo
 begin;
 select pg_temp.as_user(:'p1');
-select pg_temp.expect((public.delete_my_data() ->> 'deck_downloads')::int = 2, 'DC5. Borrar mis datos no quitó las bajadas');
+select pg_temp.expect((public.delete_my_data() ->> 'deck_downloads')::int = 0, 'DC5. Borrar mis datos quitó bajadas de hoy');
+commit;
+select pg_temp.expect((select count(*) from public.deck_catalog_downloads where user_id = :'p1') = 2, 'DC5. Se perdieron bajadas de hoy');
+update public.deck_catalog_downloads set created_at = now() - interval '25 hours'
+  where user_id = :'p1' and subject_key = 'control-prenatal';
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect((public.delete_my_data() ->> 'deck_downloads')::int = 1, 'DC5. Borrar mis datos no quitó la bajada de hace 25 horas');
+commit;
+select pg_temp.expect((select array_agg(subject_key) from public.deck_catalog_downloads where user_id = :'p1') = array['preeclampsia'],
+  'DC5. No quedó solo la bajada de hoy');
+-- Con tope de una bajada por día, borrar los datos no deja bajar otra
+update public.platform_quota_settings set value = 1 where key = 'deck_downloads_per_day';
+begin;
+select pg_temp.as_user(:'p1');
+select public.delete_my_data();
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 2, ''control-prenatal'', 1200)') = 'BK012',
+  'DC5. Borrar mis datos reinició el tope de bajadas');
+commit;
+update public.platform_quota_settings set value = 500 where key = 'deck_downloads_per_day';
+update public.deck_catalog_downloads set created_at = now() - interval '25 hours' where user_id = :'p1';
+begin;
+select pg_temp.as_user(:'p1');
+select pg_temp.expect((public.delete_my_data() ->> 'deck_downloads')::int = 1, 'DC5. Borrar mis datos no quitó la última bajada vieja');
 commit;
 select pg_temp.expect(not exists (select 1 from public.deck_catalog_downloads where user_id = :'p1'), 'DC5. Quedaron bajadas');
+
+-- ===================================================================== DC6. Acceso gratis por mazo, versión confirmada y topes
+-- paco-gyo es de terceros con la versión 4 en subida y confirmada. Lo publicado es la versión 2
+begin;
+select pg_temp.as_user(:'m1');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_set_free_access(''paco-gyo'', true)') = '42501',
+  'DC6. Una médica abrió un mazo en Gratis');
+select pg_temp.as_user(:'f1');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_set_free_access(''paco-gyo'', true)') = '42501',
+  'DC6. Un alumno de Gratis abrió un mazo en Gratis');
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_set_free_access(''no-existe'', true)') = '22023'
+  and pg_temp.fails_with('select public.admin_deck_catalog_set_free_access(''paco-gyo'', null)') = '22023',
+  'DC6. Abrió un mazo que no existe o sin decir si va abierto');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","freeAccess":false}]',
+  'DC6. El resumen del admin no dice que el mazo va cerrado en Gratis');
+rollback;
+
+-- Cerrado en Gratis. Un mazo propio publicado que nadie abrió
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('cerrado-gratis', 'own', null) || jsonb_build_object('subjects',
+  jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as vc \gset
+select pg_temp.expect(pg_temp.upload('cerrado-gratis/v1/control-prenatal.json', 1200)
+  and public.admin_deck_catalog_publish('cerrado-gratis', 1) = 'published', 'DC6. No publicó el mazo cerrado');
+commit;
+
+begin;
+select pg_temp.as_user(:'f1');
+select public.deck_catalog_list() as list_closed \gset
+select pg_temp.expect((:'list_closed')::jsonb ->> 'canDownload' = 'false'
+  and (select bool_and((d ->> 'canDownload')::boolean = false) from jsonb_array_elements((:'list_closed')::jsonb -> 'decks') d),
+  'DC6. Gratis puede bajar un mazo que nadie abrió');
+select pg_temp.expect(pg_temp.visible() = 0, 'DC6. Gratis leyó un archivo de un mazo cerrado');
+rollback;
+
+-- El admin abre paco-gyo. Gratis baja ese mazo y no el cerrado
+begin;
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_set_free_access('paco-gyo', true) = 'free', 'DC6. No abrió el mazo');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","freeAccess":true}]',
+  'DC6. El resumen no dice que el mazo va abierto');
+commit;
+
+begin;
+select pg_temp.as_user(:'f1');
+select public.deck_catalog_list() as list_open \gset
+select pg_temp.expect((:'list_open')::jsonb ->> 'canDownload' = 'false'
+  and (select (d ->> 'canDownload')::boolean from jsonb_array_elements((:'list_open')::jsonb -> 'decks') d
+       where d ->> 'deckKey' = 'paco-gyo') is true
+  and (select (d ->> 'canDownload')::boolean from jsonb_array_elements((:'list_open')::jsonb -> 'decks') d
+       where d ->> 'deckKey' = 'cerrado-gratis') is false,
+  'DC6. La lista de Gratis no abrió solo el mazo que el admin abrió');
+select pg_temp.expect((select array_agg(name order by name) from storage.objects where bucket_id = 'deck-catalog')
+  = array['paco-gyo/v2/control-prenatal.json'], 'DC6. Gratis no lee solo los archivos del mazo abierto');
+select public.record_deck_download('paco-gyo', 2, 'control-prenatal', 1200);
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''cerrado-gratis'', 1, ''control-prenatal'', 1200)') = '42501',
+  'DC6. Gratis registró una bajada de un mazo cerrado');
+-- Los bytes no pasan de lo que declara el submazo
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 2, ''control-prenatal'', 1201)') = '22023',
+  'DC6. Registró más bytes de los que tiene el submazo');
+select pg_temp.as_user(null);
+select pg_temp.expect(pg_temp.fails_with('select public.deck_catalog_list()') = '28000', 'DC6. Sin sesión vio la lista');
+rollback;
+
+-- La decisión por mazo para una cuenta sin sesión, de Gratis, de pago y con el mazo retirado o sin publicar
+begin;
+select pg_temp.as_user(:'f1');
+reset role;
+select pg_temp.expect(public.deck_catalog_can_download_deck('paco-gyo')
+  and not public.deck_catalog_can_download_deck('cerrado-gratis')
+  and not public.deck_catalog_can_download_deck('no-existe'), 'DC6. can_download_deck de Gratis');
+select pg_temp.as_user(:'p1');
+reset role;
+select pg_temp.expect(public.deck_catalog_can_download_deck('cerrado-gratis') and public.deck_catalog_can_download_deck('paco-gyo'),
+  'DC6. can_download_deck de pago');
+select pg_temp.as_user(null);
+reset role;
+select pg_temp.expect(not public.deck_catalog_can_download_deck('paco-gyo'), 'DC6. Sin sesión puede bajar un mazo abierto');
+rollback;
+-- Un mazo retirado no se baja aunque haya quedado abierto
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_set_free_access('studiare-urg', true);
+select pg_temp.as_user(:'f1');
+reset role;
+select pg_temp.expect(not public.deck_catalog_can_download_deck('studiare-urg'), 'DC6. Gratis puede bajar un mazo retirado');
+rollback;
+
+-- Una versión nueva de un mazo abierto de terceros espera al dueño y la publicada sigue a la vista
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('paco-gyo', 'third_party', '[Prueba] Otra nota') || jsonb_build_object('subjects',
+  jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as v5 \gset
+select pg_temp.expect(:'v5' = '5' and pg_temp.upload('paco-gyo/v5/control-prenatal.json', 1200), 'DC6. No registró ni subió la versión 5');
+select pg_temp.expect(pg_temp.fails_with('select public.admin_deck_catalog_publish(''paco-gyo'', 5)') = 'BK010',
+  'DC6. Publicó la versión 5 sin que el dueño la confirmara');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","authorizationConfirmedVersion":4,"pendingConfirmationVersion":5}]',
+  'DC6. El resumen no dice que la versión 5 espera la confirmación');
+select pg_temp.as_user(:'f1');
+select pg_temp.expect(public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo","version":2,"canDownload":true}]'
+  and pg_temp.visible() = 1, 'DC6. La versión 2 dejó de verse mientras la 5 espera al dueño');
+select pg_temp.as_user(:'owner');
+select public.owner_confirm_deck_version('paco-gyo', '[Prueba] Confirmé la versión 5', 5);
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_publish('paco-gyo', 5) = 'published', 'DC6. No publicó la versión 5 confirmada');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"paco-gyo","authorizationConfirmedVersion":5,"pendingConfirmationVersion":null}]',
+  'DC6. La versión 5 sigue pendiente después de publicarse');
+select pg_temp.as_user(:'f1');
+select pg_temp.expect(public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo","version":5,"canDownload":true}]',
+  'DC6. Gratis no ve la versión 5');
+commit;
+
+-- Otra nota quita la confirmación entera. Ni la lista ni Storage muestran el mazo abierto
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('paco-gyo', 'third_party', '[Prueba] Nota que cambia')) ->> 'version' as v6 \gset
+select pg_temp.expect(public.admin_deck_catalog_overview()
+  @> '[{"deckKey":"paco-gyo","authorizationConfirmedAt":null,"authorizationConfirmedVersion":null}]',
+  'DC6. Otra nota no quitó la confirmación y su versión');
+select pg_temp.as_user(:'f1');
+select pg_temp.expect(not (public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo"}]') and pg_temp.visible() = 0,
+  'DC6. Gratis vio un mazo abierto cuya confirmación se perdió');
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 5, ''control-prenatal'', 1200)') = '42501',
+  'DC6. Gratis registró una bajada de un mazo sin confirmación');
+rollback;
+
+-- Cerrar el mazo otra vez. Gratis deja de bajarlo
+begin;
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_set_free_access('paco-gyo', false) = 'paid', 'DC6. No cerró el mazo');
+select pg_temp.as_user(:'f1');
+select pg_temp.expect(public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"paco-gyo","canDownload":false}]'
+  and pg_temp.visible() = 0, 'DC6. Gratis sigue bajando un mazo que se cerró');
+rollback;
+
+-- Topes de bajadas por alumno. Con un tope de dos, la tercera en 24 horas se rechaza
+update public.platform_quota_settings set value = 2 where key = 'deck_downloads_per_day';
+begin;
+select pg_temp.as_user(:'p3');
+select public.record_deck_download('paco-gyo', 5, 'control-prenatal', 1200);
+select public.record_deck_download('paco-gyo', 5, 'control-prenatal', 1200);
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 5, ''control-prenatal'', 1200)') = 'BK012',
+  'DC6. Pasó el tope de bajadas del día');
+select pg_temp.as_user(:'p4');
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 5, ''control-prenatal'', 1200)') is null,
+  'DC6. El tope de un alumno frenó a otro');
+commit;
+select pg_temp.expect((select count(*) from public.deck_catalog_downloads where user_id = :'p3') = 2, 'DC6. Quedaron más de dos bajadas');
+-- Las bajadas de hace más de un día ya no cuentan
+update public.deck_catalog_downloads set created_at = now() - interval '25 hours' where user_id = :'p3';
+begin;
+select pg_temp.as_user(:'p3');
+select pg_temp.expect(pg_temp.fails_with('select public.record_deck_download(''paco-gyo'', 5, ''control-prenatal'', 1200)') is null,
+  'DC6. Una bajada de hace 25 horas siguió contando');
+commit;
+-- Sin fila el tope vuelve al de fábrica, y con la fila vuelve a lo que diga
+delete from public.platform_quota_settings where key = 'deck_downloads_per_day';
+select pg_temp.expect(public.platform_quota('deck_downloads_per_day') = 500 and public.platform_quota('sync_records') = 1500000
+  and public.platform_quota('sync_bytes') = 1500000000 and public.platform_quota('sync_events') = 3000000
+  and public.platform_quota('otro') is null, 'DC6. Los topes de fábrica no son los esperados');
+insert into public.platform_quota_settings (key, value) values ('deck_downloads_per_day', 500);
+select pg_temp.expect(public.platform_quota('deck_downloads_per_day') = 500, 'DC6. No quedó el tope de bajadas');
+begin;
+select pg_temp.as_user(:'p3');
+select pg_temp.expect(pg_temp.fails_with('select public.platform_quota(''sync_records'')') = '42501', 'DC6. Una sesión leyó los topes');
+rollback;
+select pg_temp.expect((select count(*) from public.platform_quota_settings) = 4
+  and (select value from public.platform_quota_settings where key = 'sync_events') = 3000000,
+  'DC6. No quedaron los cuatro topes sembrados');
+select pg_temp.expect(pg_temp.fails_with($q$ insert into public.platform_quota_settings (key, value) values ('otro', 1) $q$) = '23514'
+  and pg_temp.fails_with($q$ update public.platform_quota_settings set value = -1 where key = 'sync_bytes' $q$) = '23514',
+  'DC6. Los topes aceptaron una clave o un valor que no valen');
+
+-- ===================================================================== DC7. Nota del dueño, confirmación con versión y cierre en Gratis
+-- El escenario de la revisión. El dueño confirma con su nota, el admin registra una versión nueva con la nota original y
+-- la confirmación sigue en pie. La nota del dueño va en su columna y la del admin no se toca
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('dueno-nota', 'third_party', '[Prueba] Nota del admin') || jsonb_build_object('subjects',
+  jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as dv1 \gset
+select pg_temp.expect(:'dv1' = '1' and pg_temp.upload('dueno-nota/v1/control-prenatal.json', 1200), 'DC7. No registró ni subió la versión 1');
+select pg_temp.as_user(:'owner');
+select public.owner_confirm_deck_version('dueno-nota', '[Prueba] Nota del dueño', 1);
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_publish('dueno-nota', 1) = 'published', 'DC7. No publicó la versión 1');
+commit;
+select pg_temp.expect((select authorization_note = '[Prueba] Nota del admin' and authorization_confirmed_note = '[Prueba] Nota del dueño'
+    and authorization_confirmed_version = 1 from public.deck_catalog where deck_key = 'dueno-nota'),
+  'DC7. La nota del dueño y la del admin no quedaron cada una en su columna');
+
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('dueno-nota', 'third_party', '[Prueba] Nota del admin') || jsonb_build_object('subjects',
+  jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as dv2 \gset
+select pg_temp.expect(:'dv2' = '2', 'DC7. No registró la versión 2');
+select pg_temp.expect(public.admin_deck_catalog_overview()
+  @> '[{"deckKey":"dueno-nota","authorizationNote":"[Prueba] Nota del admin","authorizationConfirmedNote":"[Prueba] Nota del dueño","authorizationConfirmedVersion":1,"pendingConfirmationVersion":2}]',
+  'DC7. Registrar la versión 2 con la nota original del admin perdió la confirmación o la nota del dueño');
+select pg_temp.as_user(:'p1');
+select pg_temp.expect(public.deck_catalog_list() -> 'decks' @> '[{"deckKey":"dueno-nota","version":1}]',
+  'DC7. La versión publicada dejó de verse mientras la 2 espera al dueño');
+commit;
+
+-- La llamada sin versión confirma la más nueva
+begin;
+select pg_temp.as_user(:'owner');
+select public.owner_confirm_deck_authorization('dueno-nota', '[Prueba] Nota del dueño otra vez');
+commit;
+select pg_temp.expect((select authorization_confirmed_version = 2 and authorization_confirmed_note = '[Prueba] Nota del dueño otra vez'
+    and authorization_note = '[Prueba] Nota del admin' from public.deck_catalog where deck_key = 'dueno-nota'),
+  'DC7. La llamada sin versión no confirmó la más nueva');
+
+-- Cambiar la nota del admin quita la confirmación y la nota del dueño
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_register(pg_temp.manifest('dueno-nota', 'third_party', '[Prueba] Nota nueva del admin') || jsonb_build_object('subjects',
+  jsonb_build_array(pg_temp.manifest('x') -> 'subjects' -> 0))) ->> 'version' as dv3 \gset
+select pg_temp.expect(:'dv3' = '3', 'DC7. No registró la versión 3');
+select pg_temp.expect(public.admin_deck_catalog_overview()
+  @> '[{"deckKey":"dueno-nota","authorizationConfirmedAt":null,"authorizationConfirmedVersion":null,"authorizationConfirmedNote":null}]',
+  'DC7. Otra nota del admin no quitó la confirmación y la nota del dueño');
+commit;
+-- Sin la nota del dueño tampoco se publica, aunque el admin tenga la suya
+select pg_temp.expect((select authorization_confirmed_note is null and authorization_confirmed_by is null
+  from public.deck_catalog where deck_key = 'dueno-nota'), 'DC7. Quedó la nota o el autor de una confirmación perdida');
+
+-- El acceso gratis guarda quién y cuándo, retirar el mazo lo cierra y no se reabre solo con una versión nueva
+begin;
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_set_free_access('dueno-nota', true) = 'free', 'DC7. No abrió el mazo');
+commit;
+select pg_temp.expect((select free_access and free_access_changed_by = :'ad' and free_access_changed_at is not null
+  from public.deck_catalog where deck_key = 'dueno-nota'), 'DC7. No guardó quién abrió el mazo');
+select free_access_changed_at as opened_at from public.deck_catalog where deck_key = 'dueno-nota' \gset
+begin;
+select pg_temp.as_user(:'ad');
+-- Dejarlo como está no es un cambio
+select pg_temp.expect(public.admin_deck_catalog_set_free_access('dueno-nota', true) = 'free', 'DC7. No dejó el mazo abierto');
+commit;
+select pg_temp.expect((select free_access_changed_at = :'opened_at'::timestamptz from public.deck_catalog where deck_key = 'dueno-nota'),
+  'DC7. Dejarlo como estaba cambió la fecha del cambio');
+begin;
+select pg_temp.as_user(:'owner');
+select public.owner_confirm_deck_version('dueno-nota', '[Prueba] Nota del dueño de nuevo', 3);
+select pg_temp.as_user(:'ad');
+select pg_temp.expect(public.admin_deck_catalog_retire('dueno-nota') = 'retired', 'DC7. No retiró el mazo');
+select pg_temp.expect(public.admin_deck_catalog_overview() @> '[{"deckKey":"dueno-nota","status":"retired","freeAccess":false}]',
+  'DC7. Retirar el mazo no lo cerró en Gratis');
+commit;
+select pg_temp.expect((select not free_access and free_access_changed_by = :'ad' and free_access_changed_at >= :'opened_at'::timestamptz
+  from public.deck_catalog where deck_key = 'dueno-nota'), 'DC7. No guardó quién cerró el mazo al retirarlo');
+-- Reabierto estando retirado, retirar otra vez lo vuelve a cerrar
+begin;
+select pg_temp.as_user(:'ad');
+select public.admin_deck_catalog_set_free_access('dueno-nota', true);
+select pg_temp.expect(public.admin_deck_catalog_retire('dueno-nota') = 'already_retired', 'DC7. No dijo que el mazo ya estaba retirado');
+commit;
+select pg_temp.expect((select not free_access from public.deck_catalog where deck_key = 'dueno-nota'),
+  'DC7. Retirar un mazo ya retirado no lo cerró en Gratis');
+
+-- Lo que el dueño ya había confirmado antes de esta migración cubre las versiones publicadas y no las que siguen en
+-- subida, y su nota pasa a su columna. Se arman dos mazos como los dejaba la versión anterior y se vuelve a correr
+-- la migración
+insert into public.deck_catalog (deck_key, name, author, license, authorization_note, authorization_confirmed_at, status, published_version)
+  values ('legado-pub', '[Prueba] Legado publicado', 'Autor simulado', 'third_party', '[Prueba] Nota que escribió el dueño', now(), 'published', 1),
+    ('legado-sub', '[Prueba] Legado sin publicar', 'Autor simulado', 'third_party', '[Prueba] Otra nota del dueño', now(), 'draft', null);
+insert into public.deck_catalog_versions (deck_key, version, status) values
+  ('legado-pub', 1, 'published'), ('legado-pub', 2, 'uploading'), ('legado-sub', 1, 'uploading');
+select pg_temp.expect((select count(*) from public.deck_catalog
+  where deck_key like 'legado-%' and authorization_confirmed_version is null and authorization_confirmed_note is null) = 2,
+  'DC7. Los mazos de antes no se armaron sin versión ni nota');
+\i :fixtures/../../supabase/migrations/20261024000001_catalog_free_access_and_caps.sql
+select pg_temp.expect((select authorization_confirmed_version = 1 and authorization_confirmed_note = '[Prueba] Nota que escribió el dueño'
+    from public.deck_catalog where deck_key = 'legado-pub'),
+  'DC7. El relleno no confirmó solo la versión publicada ni copió la nota del dueño');
+select pg_temp.expect((select authorization_confirmed_version is null and authorization_confirmed_note = '[Prueba] Otra nota del dueño'
+    from public.deck_catalog where deck_key = 'legado-sub'),
+  'DC7. El relleno confirmó una versión que no se publicó');
+delete from public.deck_catalog_versions where deck_key like 'legado-%';
+delete from public.deck_catalog where deck_key like 'legado-%';
 
 select 'TODAS LAS PRUEBAS DEL CATALOGO DE MAZOS PASARON' as resultado;

@@ -11,7 +11,7 @@ import {
   CatalogEntrySchema,
   type CatalogEntry,
 } from '../schemas/bankCloud';
-import { ItemKindSchema, type ItemKind } from '../schemas/common';
+import { CognitiveLevelSchema, ItemKindSchema, type ItemKind } from '../schemas/common';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -50,6 +50,7 @@ export function catalogEntryOf(row: unknown): CatalogEntry | null {
   const calibration = calibrationOf(row.calibration);
   if (!questionId || !versionId || caseId === undefined || variantOf === undefined) return null;
   const kinds = Array.isArray(row.itemKinds) ? row.itemKinds : [];
+  const cognitive = CognitiveLevelSchema.safeParse(row.cognitiveLevel);
   const parsed = CatalogEntrySchema.safeParse({
     questionId,
     versionId,
@@ -59,6 +60,8 @@ export function catalogEntryOf(row: unknown): CatalogEntry | null {
     subtopic: row.subtopic,
     difficulty: row.difficulty,
     itemKinds: kinds.filter((kind): kind is ItemKind => ItemKindSchema.safeParse(kind).success),
+    // Un nivel que la app no conoce, o null, se toma como sin nivel y la fila sigue valiendo (V4-B5)
+    ...(cognitive.success ? { cognitiveLevel: cognitive.data } : {}),
     polarity: row.polarity,
     task: row.task,
     format: row.format,

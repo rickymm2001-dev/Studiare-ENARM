@@ -6,6 +6,7 @@
 // problemas no pasa a la salida. Funciones puras, sin Node ni React.
 import {
   ENGLISH_CASE_SIZES,
+  COGNITIVE_LABELS,
   ENGLISH_DEFAULT_TASK_KEY,
   EXAMPLE_PREFIX,
   HEADER_ALIASES,
@@ -789,6 +790,13 @@ export function convertSheetTable(
     if (difficultyText === '' || !Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5)
       problem('difficulty_invalid', HEADERS.difficulty, difficultyText);
 
+    // Nivel cognitivo de Bloom (V4-B5). Vacío deja la pregunta sin nivel. Un valor que no está en la lista
+    // tampoco rechaza el renglón, solo avisa, porque el nivel es opcional y nunca se adivina
+    const cognitiveText = cell('cognitiveLevel');
+    const cognitiveLevel =
+      cognitiveText === '' ? undefined : findLabeled(COGNITIVE_LABELS, cognitiveText);
+    if (cognitiveText !== '' && cognitiveLevel === undefined) notice('cognitive_unknown');
+
     const itemKinds: string[] = [];
     for (const kindText of cell('kind')
       .split(/[;,\n]/)
@@ -964,6 +972,7 @@ export function convertSheetTable(
               subtopic: subtopic.key,
               difficulty,
               itemKinds,
+              ...(cognitiveLevel === undefined ? {} : { cognitiveLevel }),
               // Vacía si no se detectó. Queda pendiente task_undetected
               task: task ?? '',
               polarity,

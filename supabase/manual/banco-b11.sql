@@ -76,8 +76,10 @@ begin
   -- Las lecturas del banco, menos las del día de estudio en curso, que cuentan para el tope de Gratis
   delete from public.bank_reads where user_id = v_user and day < public.study_day();
   get diagnostics v_reads = row_count;
-  -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
-  delete from public.deck_catalog_downloads where user_id = v_user;
+  -- Los mazos que bajó del catálogo, menos las bajadas de las últimas 24 horas, que cuentan para el tope de
+  -- bajadas del día (BK012). Lo que ya guardó en su dispositivo lo quita la app
+  delete from public.deck_catalog_downloads
+    where user_id = v_user and created_at < now() - interval '24 hours';
   get diagnostics v_downloads = row_count;
   -- Las tablas de la IA real existen desde las migraciones de B12. Si solo se desplegó el plan b11, no están,
   -- y como el delete va con execute esta función no se rompe por eso: cuenta cero (revisión del hallazgo 12)
@@ -140,7 +142,9 @@ $$;
 revoke all on function public.delete_my_data() from public, anon, authenticated, service_role;
 grant execute on function public.delete_my_data() to authenticated;
 
--- Comprobación. La columna debe salir en true
+-- Comprobación. La columna debe salir en true. Además de las lecturas del banco, revisa que conserve las bajadas
+-- de las últimas 24 horas
 select
   position('bank_reads' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0
+  and position('created_at < now() - interval ''24 hours''' in pg_get_functiondef('public.delete_my_data()'::regprocedure)) > 0
     as borrar_mis_datos_b11;

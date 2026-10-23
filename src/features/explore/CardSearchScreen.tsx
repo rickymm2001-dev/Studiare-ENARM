@@ -50,6 +50,7 @@ import {
   queryOf,
   viewFromParams,
   viewKey,
+  withKnownDeck,
   type SearchView,
 } from './searchView';
 import { useCardSearchData } from './useCardSearchData';
@@ -70,7 +71,14 @@ export function CardSearchScreen() {
 function CardSearch({ session }: { session: ReadySession }) {
   const data = useCardSearchData(session);
   const [params] = useSearchParams();
-  const [view, setView] = useState<SearchView>(() => viewFromParams(params));
+  const [pickedView, setView] = useState<SearchView>(() => viewFromParams(params));
+  // Un ?mazo= de un mazo que no existe se suelta cuando los mazos cargan, en lugar de dejar un filtro sin
+  // resultados ni nombre
+  const knownDecks = data?.decks;
+  const view = useMemo(
+    () => (knownDecks ? withKnownDeck(pickedView, knownDecks) : pickedView),
+    [pickedView, knownDecks],
+  );
   const desktop = useMediaQuery(DESKTOP_QUERY);
   const [selected, setSelected] = useState<ReadonlySet<string>>(() => new Set());
   const [openId, setOpenId] = useState<string | null>(null);

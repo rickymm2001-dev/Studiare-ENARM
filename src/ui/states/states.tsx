@@ -2,7 +2,7 @@
 // y calibrando. Calibrando siempre dice cuánto falta para llegar al umbral (4.3).
 import { CircleAlert, Gauge, Inbox, WifiOff } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { ProgressBar } from '@/ui/components/progress-bar';

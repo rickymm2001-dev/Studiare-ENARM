@@ -16,6 +16,7 @@ import { dirname, resolve } from 'node:path';
 import ExcelJS from 'exceljs';
 import { LICENSE_LABELS, PASSAGE_LICENSES } from '../../src/data/content/passageSource.ts';
 import {
+  COGNITIVE_LABELS,
   KIND_LABELS,
   LANGUAGE_LABELS,
   NO_BIAS_LABEL,
@@ -104,6 +105,12 @@ export function buildListsLayout(data: ContentTaxonomies): ListsLayout {
     },
     { header: 'Estado', values: Object.values(SHEET_STATUS_LABELS), name: 'LISTA_ESTADOS' },
     { header: 'Idioma', values: Object.values(LANGUAGE_LABELS), name: 'LISTA_IDIOMAS' },
+    // Los seis niveles de Bloom de la columna opcional Nivel cognitivo (V4-B5). Vacío es sin nivel
+    {
+      header: 'Nivel cognitivo',
+      values: Object.values(COGNITIVE_LABELS),
+      name: 'LISTA_NIVELES',
+    },
     // Las licencias que acepta Studiare para el texto de un caso de lectura en inglés (B13, 1.4)
     {
       header: 'Licencia del texto',

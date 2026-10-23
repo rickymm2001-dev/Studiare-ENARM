@@ -635,8 +635,10 @@ begin
   -- Las lecturas del banco, menos las del día de estudio en curso, que cuentan para el tope de Gratis
   delete from public.bank_reads where user_id = v_user and day < public.study_day();
   get diagnostics v_reads = row_count;
-  -- Los mazos que bajó del catálogo. Lo que ya guardó en su dispositivo lo quita la app
-  delete from public.deck_catalog_downloads where user_id = v_user;
+  -- Los mazos que bajó del catálogo, menos las bajadas de las últimas 24 horas, que cuentan para el tope de
+  -- bajadas del día (BK012). Lo que ya guardó en su dispositivo lo quita la app
+  delete from public.deck_catalog_downloads
+    where user_id = v_user and created_at < now() - interval '24 hours';
   get diagnostics v_downloads = row_count;
 
   perform set_config('app.erasing_user', '', true);

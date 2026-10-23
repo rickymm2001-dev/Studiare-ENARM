@@ -35,6 +35,7 @@ import { useFutureLoad } from '../progress/useFutureLoad';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { usePlanAllows } from '../shared/useActivePlan';
 import { useUserEvents } from '../shared/useUserEvents';
+import { BranchOrder } from './BranchOrder';
 
 const text = t.calendar;
 const WEEKS_SHOWN = 8;
@@ -355,6 +356,9 @@ function Calendar({ session }: { session: ReadySession }) {
               <CardTitle id="plan-semanas">{text.plan.title}</CardTitle>
               <CardDescription>{text.plan.hint}</CardDescription>
             </CardHeader>
+            <div className="mb-3">
+              <BranchOrder session={session} branches={topicTaxonomy.branches} />
+            </div>
             {weeks.length === 0 ? (
               <p className="text-sm text-fg-muted">{text.plan.empty}</p>
             ) : (

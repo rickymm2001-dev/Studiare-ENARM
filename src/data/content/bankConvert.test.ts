@@ -2,8 +2,9 @@
 // simulado y dice [Prueba], nunca es contenido médico.
 import { describe, expect, it } from 'vitest';
 import { biasTaxonomy, structureDictionary, taggableBiasKeys, topicTaxonomy } from '@/demo/content';
+import { COGNITIVE_LEVELS } from '@/engines/bloom';
 import { analyzeStructure } from '@/engines/structure';
-import { HEADERS, SHEET_HEADERS, optionHeaders } from './bankColumns';
+import { COGNITIVE_LABELS, HEADERS, SHEET_HEADERS, optionHeaders } from './bankColumns';
 import { convertSheetTable, sheetQuestionFormat, type SheetConvertContext } from './bankConvert';
 import { canonicalFromSheet, contentHash } from './contentHash';
 import { parsePassageSource } from './passageSource';
@@ -606,6 +607,67 @@ describe('Inglés médico (B13, 1.5 y 1.6 del plan de B13)', () => {
       expect(
         onlyEnglish({ [HEADERS.branch]: 'Rama inventada' }).problems.map((item) => item.code),
       ).toEqual(['branch_unknown']);
+    });
+  });
+
+  describe('nivel cognitivo de Bloom (V4-B5)', () => {
+    it('la lista del Sheet trae los seis niveles del motor, ni más ni menos', () => {
+      expect(Object.keys(COGNITIVE_LABELS).sort()).toEqual([...COGNITIVE_LEVELS].sort());
+    });
+
+    it('lee el nivel por su nombre, sin importar acentos ni mayúsculas, o por su clave', () => {
+      for (const [text, key] of [
+        ['Conocimiento', 'knowledge'],
+        ['comprensión', 'comprehension'],
+        ['APLICACION', 'application'],
+        ['Análisis', 'analysis'],
+        ['síntesis', 'synthesis'],
+        ['Evaluación', 'evaluation'],
+        ['evaluation', 'evaluation'],
+      ] as const) {
+        const result = only({ [SHEET_HEADERS.cognitiveLevel]: text });
+        expect(result.problems).toEqual([]);
+        expect(result.question?.cognitiveLevel).toBe(key);
+        expect(result.notices).not.toContain('cognitive_unknown');
+      }
+    });
+
+    it('vacío o sin la columna deja la pregunta sin nivel, nunca se adivina', () => {
+      expect(only({ [SHEET_HEADERS.cognitiveLevel]: '' }).question).not.toHaveProperty(
+        'cognitiveLevel',
+      );
+      // El Sheet de antes no trae la columna
+      const plain = HEADER_ROW.filter((header) => !header.startsWith(SHEET_HEADERS.cognitiveLevel));
+      const names = plain.map((header) => header.split('\n')[0] ?? '');
+      const result = convertSheetTable(
+        {
+          name: 'Preguntas',
+          headers: plain,
+          rows: [{ rowNumber: 2, cells: names.map((header) => BASE[header] ?? '') }],
+        },
+        context,
+      );
+      expect(result.rows[0]?.problems).toEqual([]);
+      expect(result.rows[0]?.question).not.toHaveProperty('cognitiveLevel');
+    });
+
+    it('un valor fuera de la lista avisa y el renglón entra sin nivel, no se rechaza', () => {
+      const result = only({ [SHEET_HEADERS.cognitiveLevel]: 'Difícil' });
+      expect(result.problems).toEqual([]);
+      expect(result.notices).toContain('cognitive_unknown');
+      expect(result.question).not.toBeNull();
+      expect(result.question).not.toHaveProperty('cognitiveLevel');
+    });
+
+    it('la huella del contenido no cambia sin nivel y cambia con él', async () => {
+      const without = only();
+      const withLevel = only({ [SHEET_HEADERS.cognitiveLevel]: 'Aplicación' });
+      if (!without.question || !withLevel.question) throw new Error('Sin pregunta');
+      const plainHash = await contentHash(canonicalFromSheet(without.question));
+      const levelHash = await contentHash(canonicalFromSheet(withLevel.question));
+      expect(levelHash).not.toBe(plainHash);
+      // Un renglón sin la columna sigue con la misma huella de siempre
+      expect(Object.keys(canonicalFromSheet(without.question))).not.toContain('cognitiveLevel');
     });
   });
 

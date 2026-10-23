@@ -85,6 +85,8 @@ const notices: Record<SyncNoticeCode | ServerNoticeCode, string> = {
     'Un caso de lectura en inglés lleva dos o tres preguntas, como en el ENARM. Este tiene otro número y entró igual.',
   language_suspect:
     'El texto de este renglón parece estar en inglés y quedó como español, sin fuente ni licencia. Si es un caso de lectura, pásalo a Inglés médico con Idioma Inglés y llena su fuente. Si es español, ignora este aviso.',
+  cognitive_unknown:
+    'El Nivel cognitivo no está en la lista. La pregunta entró sin nivel. Elige Conocimiento, Comprensión, Aplicación, Análisis, Síntesis o Evaluación.',
   not_ready:
     'Pide Lista para revisión pero le faltan pendientes o un revisor distinto del autor. Quedó en borrador.',
   author_differs:
@@ -310,7 +312,7 @@ export const bankAdminText = {
     BK008: 'Faltan casillas por confirmar.',
     BK009: 'Hay una sincronización en curso o fue muy seguida. Intenta en un minuto.',
     BK010:
-      'Un mazo de terceros necesita la autorización confirmada por el dueño antes de publicarse.',
+      'Un mazo de terceros necesita la autorización confirmada por el dueño, de esa versión, antes de publicarse.',
     BK011: 'Faltan archivos de esta versión del mazo en Storage. Vuelve a subirlos.',
   } as Record<string, string>,
 
@@ -428,10 +430,21 @@ export const bankAdminText = {
       own: 'Mazo propio, no necesita autorización.',
       pending: 'De terceros. Falta que el dueño confirme la autorización escrita.',
       confirmed: (date: string) => `Autorización confirmada por el dueño el ${date}.`,
+      confirmedUpTo: (date: string, version: number) =>
+        `Autorización confirmada por el dueño el ${date}, hasta la versión ${version}.`,
+      pendingVersion: (version: number) =>
+        `La versión ${version} espera que el dueño la confirme. Mientras tanto sigue a la vista la versión publicada.`,
       note: 'Quién autorizó, cuándo y dónde vive el documento',
       confirm: 'Confirmar autorización',
       confirmed_notice: 'Confirmaste la autorización del mazo.',
       ownerOnly: 'Solo el dueño confirma la autorización.',
+    },
+    freeAccess: {
+      label: 'Abierto en Gratis',
+      hint: 'El plan Gratis puede bajar este mazo. Los demás mazos siguen siendo de pago.',
+      badge: 'En Gratis',
+      opened: 'El mazo quedó abierto en Gratis.',
+      closed: 'El mazo quedó cerrado en Gratis.',
     },
     publish: 'Publicar esta versión',
     published: 'La versión quedó publicada. La anterior quedó retirada.',

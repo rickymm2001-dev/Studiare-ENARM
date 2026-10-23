@@ -4,7 +4,7 @@
 // venció o que ya se usó. El alumno lo descarta.
 import { CircleAlert } from 'lucide-react';
 import { isLinkError } from '@/data/cloud/oauth';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { useAccess } from '../accessState';
 

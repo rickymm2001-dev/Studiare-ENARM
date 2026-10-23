@@ -4,18 +4,28 @@
 // está en este dispositivo o porque su bitácora tiene repasos de sus tarjetas, lo sigue repasando y lo
 // puede volver a seguir, porque sus repasos son suyos.
 import { Lock } from 'lucide-react';
+import { deckCatalogText } from '@/i18n/cloudDecks';
 import { t } from '@/i18n/es-MX';
 import { LockedNote } from '../shared/LockedPreview';
 
 /**
- * El aviso de arriba de la lista. freeDeck agrega que Urgencias va abierto, y solo lo dice el catálogo
- * que viene en la app, porque el de la nube lo cierra el servidor hasta que se autorice su regla
+ * El aviso de arriba de la lista. freeDeck agrega que Urgencias va abierto, que es lo que dice el
+ * catálogo que viene en la app. El de la nube dice cuáles mazos dejó abiertos el admin con
+ * freeDeckNames, que sale solo si hay alguno
  */
-export function CatalogLockNotice({ freeDeck = false }: { freeDeck?: boolean }) {
+export function CatalogLockNotice({
+  freeDeck = false,
+  freeDeckNames = [],
+}: {
+  freeDeck?: boolean;
+  freeDeckNames?: readonly string[];
+}) {
+  const note = freeDeckNames.length > 0 ? deckCatalogText.freeDecks(freeDeckNames) : null;
   return (
     <div className="mb-3 flex flex-col gap-1">
       <LockedNote feature="catalog">{t.freePlan.catalog.notice}</LockedNote>
       {freeDeck ? <p className="text-sm text-fg-muted">{t.freePlan.catalog.freeDeckNote}</p> : null}
+      {note ? <p className="text-sm text-fg-muted">{note}</p> : null}
     </div>
   );
 }

@@ -48,11 +48,17 @@ vi.mock('@/data/import/zip', () => ({ readZip: () => ({}) }));
 const text = bankAdminText.decks;
 const AT = '2026-10-14T15:00:00.000Z';
 
-function fakeCloud(options: { note?: string } = {}): { calls: [string, unknown][] } {
+function fakeCloud(options: { note?: string; version?: boolean } = {}): {
+  calls: [string, unknown][];
+  confirmed: boolean;
+  newerVersion: boolean;
+} {
   const state = {
     calls: [] as [string, unknown][],
     confirmed: false,
     note: options.note ?? null,
+    free: false,
+    newerVersion: false,
   };
   holder.cloud = {
     rpc: (name: string, args: unknown) => {
@@ -68,6 +74,14 @@ function fakeCloud(options: { note?: string } = {}): { calls: [string, unknown][
               license: 'third_party',
               authorizationNote: state.note,
               authorizationConfirmedAt: state.confirmed ? AT : null,
+              // Un servidor anterior no manda los campos nuevos. Con version se mandan como los manda el actual
+              ...(options.version
+                ? {
+                    authorizationConfirmedVersion: state.confirmed ? 1 : null,
+                    pendingConfirmationVersion: state.confirmed ? null : 1,
+                    freeAccess: state.free,
+                  }
+                : {}),
               status: 'draft',
               publishedVersion: null,
               versions: [
@@ -100,7 +114,15 @@ function fakeCloud(options: { note?: string } = {}): { calls: [string, unknown][
             : { data: null, error: { code: '22023', details: null } },
         );
       }
-      if (name === 'owner_confirm_deck_authorization') {
+      if (name === 'admin_deck_catalog_set_free_access') {
+        state.free = (args as { p_free: boolean }).p_free;
+        return Promise.resolve({ data: state.free ? 'free' : 'paid', error: null });
+      }
+      if (name === 'owner_confirm_deck_version') {
+        // El servidor ya tiene una versión más nueva que la que ve el dueño
+        if (state.newerVersion) {
+          return Promise.resolve({ data: null, error: { code: 'BK002', details: null } });
+        }
         state.confirmed = true;
         return Promise.resolve({ data: null, error: null });
       }
@@ -182,8 +204,12 @@ describe('Catálogo de mazos', () => {
     await typing.click(confirm);
     await waitFor(() => {
       expect(state.calls).toContainEqual([
-        'owner_confirm_deck_authorization',
-        { p_deck_key: 'paco-pediatria', p_note: 'Correo de Paco del 3 de octubre, carpeta Mazos' },
+        'owner_confirm_deck_version',
+        {
+          p_deck_key: 'paco-pediatria',
+          p_note: 'Correo de Paco del 3 de octubre, carpeta Mazos',
+          p_version: 1,
+        },
       ]);
     });
     const refreshed = await screen.findByRole('region', { name: /Pediatría de Paco/ });
@@ -200,6 +226,25 @@ describe('Catálogo de mazos', () => {
     expect(await within(refreshed).findByRole('alert')).toHaveTextContent(
       bankAdminText.errors.BK011 ?? '',
     );
+  });
+
+  it('si el mazo ya tiene una versión más nueva que la que ve el dueño, avisa que recargue y no confirma', async () => {
+    usePreferences.setState({ role: 'owner' });
+    const state = fakeCloud();
+    state.newerVersion = true;
+    const typing = userEvent.setup();
+    showScreen();
+    const deck = await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    await typing.type(within(deck).getByLabelText(text.authorization.note), 'Correo de Paco');
+    await typing.click(within(deck).getByRole('button', { name: text.authorization.confirm }));
+    expect(await within(deck).findByRole('alert')).toHaveTextContent(
+      bankAdminText.errors.BK002 ?? '',
+    );
+    expect(state.confirmed).toBe(false);
+    expect(state.calls).toContainEqual([
+      'owner_confirm_deck_version',
+      { p_deck_key: 'paco-pediatria', p_note: 'Correo de Paco', p_version: 1 },
+    ]);
   });
 
   it('al volver a subir un mazo precarga su licencia y su nota, y pasarlo a propio es solo del dueño', async () => {
@@ -226,5 +271,47 @@ describe('Catálogo de mazos', () => {
     const card = screen.getByRole('region', { name: text.upload.title });
     expect(await within(card).findByRole('alert')).toHaveTextContent(text.upload.licenseOwnerOnly);
     expect(state.calls.map(([name]) => name)).toContain('admin_deck_catalog_register');
+  });
+  it('el admin abre un mazo en Gratis y lo ve en su etiqueta', async () => {
+    const typing = userEvent.setup();
+    const state = fakeCloud({ version: true });
+    showScreen();
+    const deck = await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    const toggle = within(deck).getByRole('checkbox', { name: text.freeAccess.label });
+    expect(toggle).not.toBeChecked();
+    expect(within(deck).queryByText(text.freeAccess.badge)).toBeNull();
+    await typing.click(toggle);
+    await waitFor(() => {
+      expect(state.calls).toContainEqual([
+        'admin_deck_catalog_set_free_access',
+        { p_deck_key: 'paco-pediatria', p_free: true },
+      ]);
+    });
+    expect(await within(deck).findByText(text.freeAccess.opened)).toBeVisible();
+    expect(await within(deck).findByText(text.freeAccess.badge)).toBeVisible();
+    expect(within(deck).getByRole('checkbox', { name: text.freeAccess.label })).toBeChecked();
+  });
+
+  it('dice qué versión espera la confirmación del dueño, y hasta cuál confirmó', async () => {
+    const typing = userEvent.setup();
+    usePreferences.setState({ role: 'owner' });
+    fakeCloud({ version: true, note: '[Prueba] Nota' });
+    showScreen();
+    const deck = await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    expect(within(deck).getByText(text.authorization.pendingVersion(1))).toBeVisible();
+    await typing.type(within(deck).getByLabelText(text.authorization.note), ' extra');
+    await typing.click(within(deck).getByRole('button', { name: text.authorization.confirm }));
+    expect(
+      await within(deck).findByText(text.authorization.confirmedUpTo('14/10/2026', 1)),
+    ).toBeVisible();
+    expect(within(deck).queryByText(text.authorization.pendingVersion(1))).toBeNull();
+  });
+
+  it('con un servidor anterior sin los campos nuevos el mazo va cerrado y sin versión pendiente', async () => {
+    fakeCloud();
+    showScreen();
+    const deck = await screen.findByRole('region', { name: /Pediatría de Paco/ });
+    expect(within(deck).getByRole('checkbox', { name: text.freeAccess.label })).not.toBeChecked();
+    expect(within(deck).queryByText(/espera que el dueño la confirme/)).toBeNull();
   });
 });

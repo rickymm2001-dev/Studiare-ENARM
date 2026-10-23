@@ -30,6 +30,11 @@ const DeckAdminEntrySchema = z.object({
   license: z.enum(['own', 'third_party']),
   authorizationNote: z.string().nullable(),
   authorizationConfirmedAt: z.string().nullable(),
+  // Un servidor anterior a 20261024000001 no los manda
+  authorizationConfirmedVersion: count.nullable().default(null),
+  authorizationConfirmedNote: z.string().nullable().default(null),
+  pendingConfirmationVersion: count.nullable().default(null),
+  freeAccess: z.boolean().default(false),
   status: z.enum(['draft', 'published', 'retired']),
   publishedVersion: count.nullable(),
   versions: z.array(
@@ -148,17 +153,37 @@ export function retireDeck(
   );
 }
 
-/** Solo el dueño. Con la nota de quién autorizó, cuándo y dónde vive el documento */
+/** Deja un mazo abierto o cerrado para el plan Gratis. Solo el admin */
+export function setDeckFreeAccess(
+  cloud: Cloud,
+  deckKey: string,
+  free: boolean,
+  onForbidden?: ForbiddenHandler,
+): Promise<'free' | 'paid'> {
+  return callBankRpc(
+    cloud,
+    'admin_deck_catalog_set_free_access',
+    { p_deck_key: deckKey, p_free: free },
+    z.enum(['free', 'paid']),
+    onForbidden,
+  );
+}
+
+/**
+ * Solo el dueño. Con la nota de quién autorizó, cuándo y dónde vive el documento, y la versión que ve en la pantalla.
+ * Si el mazo ya tiene una más nueva el servidor responde BK002 y la pantalla le pide recargar
+ */
 export async function confirmDeckAuthorization(
   cloud: Cloud,
   deckKey: string,
   note: string,
+  version: number | null,
   onForbidden?: ForbiddenHandler,
 ): Promise<void> {
   await callBankRpc(
     cloud,
-    'owner_confirm_deck_authorization',
-    { p_deck_key: deckKey, p_note: note.trim() },
+    'owner_confirm_deck_version',
+    { p_deck_key: deckKey, p_note: note.trim(), p_version: version },
     z.unknown(),
     onForbidden,
   );

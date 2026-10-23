@@ -33,6 +33,11 @@ export interface CanonicalContent {
   caseKey: string | null;
   caseOrder: number | null;
   caseVignette: string | null;
+  /**
+   * Nivel cognitivo de Bloom. Solo entra a la huella cuando existe, así las huellas de las preguntas de
+   * antes del nivel no cambian y no se vuelven a versionar todas (V4-B5)
+   */
+  cognitiveLevel?: string;
 }
 
 /**
@@ -65,6 +70,8 @@ export interface VersionContent {
   caseKey: string | null;
   caseOrder: number | null;
   caseVignette: string | null;
+  /** null o ausente si la versión no tiene nivel */
+  cognitiveLevel?: string | null;
 }
 
 /** Texto canónico. NFC, saltos de línea \n, sin espacios al final de cada línea ni en las orillas */
@@ -113,6 +120,8 @@ function canonical(
     caseKey: content.caseKey === null ? null : canonicalText(content.caseKey).toUpperCase(),
     caseOrder: content.caseOrder,
     caseVignette: content.caseVignette === null ? null : canonicalText(content.caseVignette),
+    // Al final y solo si existe, para no mover la huella de lo que no lo trae
+    ...(content.cognitiveLevel ? { cognitiveLevel: content.cognitiveLevel } : {}),
   };
 }
 
@@ -132,8 +141,10 @@ export function canonicalFromSheet(question: SyncQuestion): CanonicalContent {
 
 /** Forma canónica de una versión de la base o de la app */
 export function canonicalFromVersion(version: VersionContent): CanonicalContent {
+  const { cognitiveLevel, ...rest } = version;
   return canonical({
-    ...version,
+    ...rest,
+    ...(cognitiveLevel ? { cognitiveLevel } : {}),
     itemKinds: [...version.itemKinds],
     refs: [...version.refs],
     canonical: [...version.canonical],

@@ -137,7 +137,7 @@ describe('los planes del repo', () => {
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
   });
 
-  it('b11 lleva las seis migraciones del banco, la de inglés, las tres de B14, Borrar mis datos y bank-sync sin verificar JWT', () => {
+  it('b11 lleva las seis migraciones del banco, la de F2, la de inglés, las tres de B14, la del nivel cognitivo, Borrar mis datos y bank-sync sin verificar JWT', () => {
     const plan = loadPlan(ROOT, 'b11');
     expect(plan.migrations.map((step) => step.name)).toEqual([
       'bank_taxonomy',
@@ -146,10 +146,12 @@ describe('los planes del repo', () => {
       'bank_sync',
       'deck_catalog',
       'bank_sync_cron',
+      'catalog_free_access_and_caps',
       'english_section',
       'model_core',
       'calibration_job',
       'model_reads',
+      'cognitive_level',
       'manual_banco_b11',
     ]);
     expect(plan.functions).toEqual([
@@ -177,14 +179,16 @@ describe('los planes del repo', () => {
     expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
   });
 
-  it('b14 lleva las tres migraciones del modelo del alumno en orden, sin SQL manual ni Edge Functions', () => {
+  it('b14 lleva las tres migraciones del modelo del alumno y la del nivel cognitivo en orden, sin SQL manual ni Edge Functions', () => {
     const plan = loadPlan(ROOT, 'b14');
     expect(plan.migrations.map((step) => step.name)).toEqual([
       'model_core',
       'calibration_job',
       'model_reads',
+      'cognitive_level',
     ]);
     expect(plan.migrations.map((step) => step.kind)).toEqual([
+      'migration',
       'migration',
       'migration',
       'migration',
@@ -199,11 +203,12 @@ describe('los planes del repo', () => {
     }
   });
 
-  it('la comprobación de b14 va en la última migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
+  it('la comprobación de b14 va en la tercera migración, es la de docs/SUPABASE.md y no depende de lo que cambia', () => {
     const plan = loadPlan(ROOT, 'b14');
-    const [core, job, reads] = plan.migrations;
+    const [core, job, reads, level] = plan.migrations;
     expect(core?.check).toBeNull();
     expect(job?.check).toBeNull();
+    expect(level?.check).toBeNull();
     const check = reads?.check ?? {};
     // Solo hechos de la estructura. Si la calibración está encendida y en qué modo cambian con el tiempo, y
     // con ellos en la comprobación el plan no se podría volver a correr después de encenderla
@@ -651,6 +656,10 @@ const B11_STEPS = [
  *   - b17 no aplica SQL y vuelve a publicar las trece funciones, porque todas empaquetan las llaves y el CORS nuevos
  *   - b18 aplica las dos migraciones de la encuesta de los primeros días y no publica nada. No comparte ninguna
  *     función con los demás, y por eso va al final
+ *   - b11 lleva también la migración de F2 (acceso gratis por mazo y topes), porque redefine funciones del catálogo
+ *     de deck_catalog, así que f2 ya no aplica SQL ni publica nada, como b14
+ *   - b11 lleva también la migración del nivel cognitivo (V4-B5), que va después de las tres de B14 porque
+ *     redefine bank_catalog_json con la llave calibration, y por eso no tiene plan propio
  * Cuando llegue el plan de un bloque nuevo va al final de esta lista con su SQL y sus funciones, y el resto
  * de las pruebas de esta sección corre con él sin cambios
  */
@@ -665,10 +674,12 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
         'bank_sync',
         'deck_catalog',
         'bank_sync_cron',
+        'catalog_free_access_and_caps',
         'english_section',
         'model_core',
         'calibration_job',
         'model_reads',
+        'cognitive_level',
         'manual_banco_b11',
       ],
       functions: ['bank-sync'],
@@ -719,6 +730,7 @@ const FROM_B10: readonly { plan: string; sql: readonly string[]; functions: read
       ],
     },
     { plan: 'b18', sql: ['first_week_survey', 'survey_erase'], functions: [] },
+    { plan: 'f2', sql: [], functions: [] },
   ];
 
 /** Las funciones de las migraciones del repo hasta una versión, como las deja un proyecto que llegó ahí */
@@ -736,7 +748,8 @@ function functionsUpTo(version: string): Record<string, FunctionDef> {
  */
 let modelCheck: Record<string, unknown> | undefined;
 function modelCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
-  modelCheck ??= loadPlan(ROOT, 'b14').migrations.at(-1)?.check ?? {};
+  modelCheck ??=
+    loadPlan(ROOT, 'b14').migrations.find((step) => step.name === 'model_reads')?.check ?? {};
   const expected = modelCheck;
   const done = ['model_core', 'calibration_job', 'model_reads'].every((name) => applied.has(name));
   return Object.fromEntries(
@@ -787,8 +800,25 @@ function surveyCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
 }
 
 /**
+ * La fila de la comprobación de f2 según lo que se aplicó, como la de b18: lo que pide el plan cuando su migración
+ * está, y lo contrario (ceros y falsos) cuando falta
+ */
+let freeAccessCheck: Record<string, unknown> | undefined;
+function freeAccessCheckRow(applied: ReadonlySet<string>): Record<string, unknown> {
+  freeAccessCheck ??= loadPlan(ROOT, 'f2').migrations.at(-1)?.check ?? {};
+  const expected = freeAccessCheck;
+  const done = applied.has('catalog_free_access_and_caps');
+  return Object.fromEntries(
+    Object.entries(expected).map(([column, value]) => [
+      column,
+      done ? value : typeof value === 'boolean' ? !value : 0,
+    ]),
+  );
+}
+
+/**
  * La fila de cada consulta de comprobación según lo que se aplicó. Una columna que el plan no pide no estorba,
- * así que trae la de B11, la de B12, la de B14, la de B15 y la de B18 para cualquier plan de FROM_B10
+ * así que trae la de B11, la de B12, la de B14, la de B15, la de B18 y la de F2 para cualquier plan de FROM_B10
  */
 const checkRows = (applied: ReadonlySet<string>) => ({
   borrar_mis_datos_b11: applied.has('manual_banco_b11'),
@@ -796,6 +826,7 @@ const checkRows = (applied: ReadonlySet<string>) => ({
   ...modelCheckRow(applied),
   ...engagementCheckRow(applied),
   ...surveyCheckRow(applied),
+  ...freeAccessCheckRow(applied),
 });
 
 /** La base con B10 aplicado y nada del banco */
@@ -842,6 +873,7 @@ function withB13BeforeB14(): ReturnType<typeof fakeSupabase> {
   applyFunctionSql(readFileSync(join(ROOT, 'supabase/manual/banco-b11.sql'), 'utf8'), functions);
   const done = [
     ...B11_STEPS.slice(0, -1),
+    'catalog_free_access_and_caps',
     'english_section',
     'ai_proxy_v2',
     'ai_jobs',
@@ -880,9 +912,15 @@ function withB13BeforeB14(): ReturnType<typeof fakeSupabase> {
  * mis datos en la v3, todo lo de B11 a B14 registrado y las funciones de Edge de esos planes publicadas
  */
 function withB14BeforeB15(): ReturnType<typeof fakeSupabase> {
-  const functions = functionsUpTo(LAST_B14);
+  // Con la del nivel cognitivo, que b11 y b14 llevan después de las tres del modelo del alumno
+  const functions = new Map(Object.entries(functionsUpTo(LAST_B14)));
+  applyFunctionSql(
+    readFileSync(join(ROOT, 'supabase/migrations/20261031000001_cognitive_level.sql'), 'utf8'),
+    functions,
+  );
   const done = [
     ...B11_STEPS.slice(0, -1),
+    'catalog_free_access_and_caps',
     'english_section',
     'ai_proxy_v2',
     'ai_jobs',
@@ -891,6 +929,7 @@ function withB14BeforeB15(): ReturnType<typeof fakeSupabase> {
     'model_core',
     'calibration_job',
     'model_reads',
+    'cognitive_level',
     'manual_banco_b11',
     'manual_ia_b12',
   ];
@@ -903,7 +942,7 @@ function withB14BeforeB15(): ReturnType<typeof fakeSupabase> {
         name,
       })),
     ],
-    functions,
+    functions: Object.fromEntries(functions),
     anon: ['current_app_role', 'is_admin'],
     edge: {
       'bank-sync': { version: 3, verifyJwt: false },
@@ -976,8 +1015,8 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
       migrations: { file: string }[];
     };
     plan.migrations = plan.migrations.filter((step) => !step.file.endsWith('_english_section.sql'));
-    // Los siete de antes más las tres migraciones de B14
-    expect(plan.migrations).toHaveLength(B11_STEPS.length + 3);
+    // Los siete de antes más la de F2, las tres migraciones de B14 y la del nivel cognitivo
+    expect(plan.migrations).toHaveLength(B11_STEPS.length + 5);
     const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
     dirs.push(dir);
     const path = join(dir, 'b11-sin-ingles.json');
@@ -996,7 +1035,7 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
 
   it('la migración 3 de B14 redefine bank_catalog_json de B11, y el plan b11 la trae después de bank_core y de las otras dos', () => {
     const plan = loadPlan(ROOT, 'b11');
-    const reads = loadPlan(ROOT, 'b14').migrations.at(-1);
+    const reads = loadPlan(ROOT, 'b14').migrations.find((step) => step.name === 'model_reads');
     const core = plan.migrations.find((step) => step.name === 'bank_core');
     if (!reads || !core) throw new Error('Faltan los pasos del plan');
     const coreDefs = new Map<string, FunctionDef>();
@@ -1013,6 +1052,7 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
       'model_core',
       'calibration_job',
       'model_reads',
+      'cognitive_level',
       'manual_banco_b11',
     ]);
     expect(names.indexOf('model_reads')).toBeGreaterThan(names.indexOf('bank_core'));
@@ -1022,9 +1062,14 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const plan = JSON.parse(readFileSync(join(ROOT, 'deploy/b11.json'), 'utf8')) as {
       migrations: { file: string }[];
     };
-    plan.migrations = plan.migrations.filter((step) => !/\/202610280000\d\d_/.test(step.file));
-    // Los siete de antes más la de inglés y la de Borrar mis datos
-    expect(plan.migrations).toHaveLength(B11_STEPS.length + 1);
+    // También sin la del nivel cognitivo, que redefine bank_catalog_json después de la de B14. Con ella el plan ya
+    // no se detiene por esta función, porque la última versión del repo es la suya
+    plan.migrations = plan.migrations.filter(
+      (step) =>
+        !/\/202610280000\d\d_/.test(step.file) && !step.file.endsWith('_cognitive_level.sql'),
+    );
+    // Los siete de antes más la de F2 y la de inglés
+    expect(plan.migrations).toHaveLength(B11_STEPS.length + 2);
     const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
     dirs.push(dir);
     const path = join(dir, 'b11-sin-modelo.json');
@@ -1034,8 +1079,41 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const run = await runReal(fake, path);
     expect(run.code).toBe(1);
     expect(run.text).toContain(
-      'Aplicarla dejaría bank_catalog_json más vieja que supabase/migrations/20261028000003_model_reads.sql',
+      'Aplicarla dejaría bank_catalog_json más vieja que supabase/migrations/20261031000001_cognitive_level.sql',
     );
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('la migración del nivel cognitivo redefine nueve funciones del banco, y sin ella el plan b11 se detiene antes de escribir', async () => {
+    const plan = JSON.parse(readFileSync(join(ROOT, 'deploy/b11.json'), 'utf8')) as {
+      migrations: { file: string }[];
+    };
+    plan.migrations = plan.migrations.filter((step) => !step.file.endsWith('_cognitive_level.sql'));
+    // Los siete de antes más la de F2, la de inglés y las tres migraciones de B14
+    expect(plan.migrations).toHaveLength(B11_STEPS.length + 5);
+    const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
+    dirs.push(dir);
+    const path = join(dir, 'b11-sin-nivel-cognitivo.json');
+    writeFileSync(path, JSON.stringify(plan));
+
+    const fake = onlyB10();
+    const run = await runReal(fake, path);
+    expect(run.code).toBe(1);
+    for (const name of [
+      'bank_check_content',
+      'bank_insert_version',
+      'bank_draft_content',
+      'bank_version_json',
+      'bank_publish',
+      'bank_catalog_json',
+      'bank_body_json',
+      'bank_sheet_content',
+      'bank_sync_versions_content',
+    ]) {
+      expect(run.text).toContain(
+        `Aplicarla dejaría ${name} más vieja que supabase/migrations/20261031000001_cognitive_level.sql`,
+      );
+    }
     expect(fake.writes()).toEqual([]);
   });
 
@@ -1116,15 +1194,17 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
 
   it('cada plan corre solo sobre un proyecto con B11 aplicado, sin los otros dos', async () => {
     // Lo que aplica cada uno con la base de B11 de antes de B13. b11 y b13 la completan con la migración de
-    // inglés, b11 y b14 con las tres del modelo del alumno, y b12 con los suyos
-    const modelo = ['model_core', 'calibration_job', 'model_reads'];
+    // inglés, b11 y b14 con las tres del modelo del alumno y la del nivel cognitivo, b11 y f2 con la del acceso
+    // gratis, y b12 con los suyos
+    const modelo = ['model_core', 'calibration_job', 'model_reads', 'cognitive_level'];
     const expected: Record<string, readonly string[]> = {
-      b11: ['english_section', ...modelo],
+      b11: ['catalog_free_access_and_caps', 'english_section', ...modelo],
       b12: ['ai_proxy_v2', 'ai_jobs', 'ai_gate', 'ai_delete_my_data', 'manual_ia_b12'],
       b13: ['english_section'],
       b14: modelo,
       b15: ['email_reminders', 'product_analytics', 'engagement_cron', 'delete_my_data_v4'],
       b18: ['first_week_survey', 'survey_erase'],
+      f2: ['catalog_free_access_and_caps'],
     };
     for (const [plan, sql] of Object.entries(expected)) {
       const fake = withB11BeforeEnglish();
@@ -1151,14 +1231,16 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const second = await runReal(withB11, 'b11');
     expect(second.code).toBe(0);
     expect(appliedSince(withB11, 0)).toEqual([
+      'catalog_free_access_and_caps',
       'english_section',
       'model_core',
       'calibration_job',
       'model_reads',
+      'cognitive_level',
     ]);
     expect(second.text).toContain('bank_version_issues está distinta del repo en la base');
     expect(second.text).toContain(
-      'La corrige el paso 7 (supabase/migrations/20261027000001_english_section.sql)',
+      'La corrige el paso 8 (supabase/migrations/20261027000001_english_section.sql)',
     );
     expect(withB11.edge.get('bank-sync')?.version).toBe(2);
   });
@@ -1168,7 +1250,12 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const first = await runReal(withB14, 'b14');
     expect(first.text).toContain('Todo en verde.');
     expect(first.code).toBe(0);
-    expect(appliedSince(withB14, 0)).toEqual(['model_core', 'calibration_job', 'model_reads']);
+    expect(appliedSince(withB14, 0)).toEqual([
+      'model_core',
+      'calibration_job',
+      'model_reads',
+      'cognitive_level',
+    ]);
     // La comprobación de la última migración corre justo después de aplicarla, y de nuevo al final
     expect(first.text).toContain('comprobación en verde');
     expect(first.text).toContain(
@@ -1190,10 +1277,16 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const withB11 = withB13BeforeB14();
     const second = await runReal(withB11, 'b11');
     expect(second.code).toBe(0);
-    expect(appliedSince(withB11, 0)).toEqual(['model_core', 'calibration_job', 'model_reads']);
+    expect(appliedSince(withB11, 0)).toEqual([
+      'model_core',
+      'calibration_job',
+      'model_reads',
+      'cognitive_level',
+    ]);
     expect(second.text).toContain('bank_catalog_json está distinta del repo en la base');
+    // La última definición de bank_catalog_json es la de la migración del nivel cognitivo, el paso 12 del plan b11
     expect(second.text).toContain(
-      'La corrige el paso 10 (supabase/migrations/20261028000003_model_reads.sql)',
+      'La corrige el paso 12 (supabase/migrations/20261031000001_cognitive_level.sql)',
     );
     expect(withB11.edge.get('bank-sync')?.version).toBe(3);
   });
@@ -1203,7 +1296,7 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     const dry = await runReal(fake, 'b14', true);
     expect(dry.code).toBe(0);
     expect(fake.writes()).toEqual([]);
-    for (const name of ['model_core', 'calibration_job', 'model_reads']) {
+    for (const name of ['model_core', 'calibration_job', 'model_reads', 'cognitive_level']) {
       expect(dry.text).toContain(`${name}  se aplica`);
     }
     // El plan no publica funciones de Edge, y la simulación tampoco lo anuncia
@@ -1419,6 +1512,151 @@ describe('B11 a B18 desde un proyecto con solo B10', { timeout: 60_000 }, () => 
     expect(run.code).toBe(1);
     expect(run.text).toContain('su comprobación sale en rojo');
     expect(run.text).toContain('tabla_de_encuesta dio 0 y debía dar 1');
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('f2 lleva la migración del acceso gratis por mazo y los topes, sin SQL manual, Edge Functions ni secretos', () => {
+    const plan = loadPlan(ROOT, 'f2');
+    expect(plan.migrations.map((step) => step.name)).toEqual(['catalog_free_access_and_caps']);
+    expect(plan.migrations.map((step) => step.kind)).toEqual(['migration']);
+    expect(plan.functions).toEqual([]);
+    expect(plan.secrets).toBeNull();
+    expect(expectedFunctions(plan, repoMigrations(ROOT)).conflicts).toEqual([]);
+    // No lleva delete ni drop, así que el conector también la puede aplicar (D-113)
+    const code = (plan.migrations[0]?.sql ?? '').replace(/--.*$/gm, '');
+    expect(code).not.toMatch(/\bdrop\b|\bdelete\s+from\b/i);
+  });
+
+  it('la comprobación de f2 va en su migración y solo mira la estructura, no lo que el admin cambia', () => {
+    const last = loadPlan(ROOT, 'f2').migrations.at(-1);
+    const check = last?.check ?? {};
+    // Qué mazos están abiertos en Gratis y cuánto vale cada tope los cambia el admin, así que no entran. El plan se
+    // podría volver a correr después de que los mueva
+    for (const column of ['mazos_abiertos', 'tope_de_bajadas', 'tope_de_registros']) {
+      expect(Object.keys(check)).not.toContain(column);
+    }
+    expect(check).toMatchObject({
+      columnas_del_catalogo: 5,
+      topes_sembrados: 4,
+      topes_sin_permisos_directos: true,
+      admin_abre_mazos: true,
+      anonimo_abre_mazos: false,
+      api_decide_por_mazo: false,
+      api_lee_topes: false,
+      dueno_confirma_con_version: true,
+      alumno_sube_registros: true,
+      alumno_sube_eventos: true,
+    });
+    // Son las columnas de la consulta con la que cierra la migración, ni una más ni una menos
+    const query = checkQuery(last?.sql ?? '') ?? '';
+    for (const column of Object.keys(check)) expect(query, column).toContain(` as ${column}`);
+  });
+
+  it('la migración de F2 redefine siete funciones de deck_catalog, y en b11 va después de ella y antes de la de inglés', () => {
+    const plan = loadPlan(ROOT, 'b11');
+    const catalog = plan.migrations.find((step) => step.name === 'deck_catalog');
+    const freeAccess = loadPlan(ROOT, 'f2').migrations[0];
+    if (!catalog || !freeAccess) throw new Error('Faltan los pasos del plan');
+    const catalogDefs = new Map<string, FunctionDef>();
+    const freeDefs = new Map<string, FunctionDef>();
+    applyFunctionSql(catalog.sql, catalogDefs);
+    applyFunctionSql(freeAccess.sql, freeDefs);
+    for (const name of [
+      'deck_catalog_can_read',
+      'deck_catalog_list',
+      'record_deck_download',
+      'admin_deck_catalog_retire',
+      'admin_deck_catalog_publish',
+      'owner_confirm_deck_authorization',
+      'admin_deck_catalog_overview',
+    ]) {
+      const before = catalogDefs.get(name);
+      const after = freeDefs.get(name);
+      expect(before && after && !sameDef(before, after), name).toBe(true);
+    }
+    const names = plan.migrations.map((step) => step.name);
+    expect(names.indexOf('catalog_free_access_and_caps')).toBe(names.indexOf('deck_catalog') + 2);
+    expect(names.indexOf('english_section')).toBe(
+      names.indexOf('catalog_free_access_and_caps') + 1,
+    );
+  });
+
+  it('sin la migración de F2 el plan b11 se detiene antes de escribir, que es por lo que la lleva', async () => {
+    const plan = JSON.parse(readFileSync(join(ROOT, 'deploy/b11.json'), 'utf8')) as {
+      migrations: { file: string }[];
+    };
+    plan.migrations = plan.migrations.filter(
+      (step) => !step.file.endsWith('_catalog_free_access_and_caps.sql'),
+    );
+    const dir = mkdtempSync(join(tmpdir(), 'studiare-plan-'));
+    dirs.push(dir);
+    const path = join(dir, 'b11-sin-f2.json');
+    writeFileSync(path, JSON.stringify(plan));
+
+    const fake = onlyB10();
+    const run = await runReal(fake, path);
+    expect(run.code).toBe(1);
+    for (const name of ['deck_catalog_list', 'record_deck_download']) {
+      expect(run.text).toContain(
+        `Aplicarla dejaría ${name} más vieja que supabase/migrations/20261024000001_catalog_free_access_and_caps.sql`,
+      );
+    }
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it('un proyecto con B11 de antes de F2 recibe la migración con f2, no publica nada y volver a correrlo no repite SQL', async () => {
+    const fake = withB11BeforeEnglish();
+    const edgeBefore = JSON.stringify(
+      [...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]),
+    );
+    const first = await runReal(fake, 'f2');
+    expect(first.text).toContain('Todo en verde.');
+    expect(first.code).toBe(0);
+    expect(appliedSince(fake, 0)).toEqual(['catalog_free_access_and_caps']);
+    // La comprobación corre justo después de aplicarla, y de nuevo al final
+    expect(first.text).toContain(
+      'supabase/migrations/20261024000001_catalog_free_access_and_caps.sql comprobación en verde',
+    );
+    expect(first.text).not.toContain('Publicando');
+    expect(JSON.stringify([...fake.edge.entries()].map(([slug, fn]) => [slug, fn.version]))).toBe(
+      edgeBefore,
+    );
+    for (const name of [
+      'admin_deck_catalog_set_free_access',
+      'deck_catalog_can_download_deck',
+      'owner_confirm_deck_version',
+    ]) {
+      expect(fake.functions.get(name), name).toBeDefined();
+    }
+    // platform_quota es la lectura de los topes y ningún rol la llama, así que la base la trae con sus permisos cerrados
+    expect(fake.functions.get('platform_quota')?.body).toContain('deck_downloads_per_day');
+    expect(fake.functions.get('sync_push_records')?.body).toContain('SY003');
+    expect(fake.functions.get('sync_push_events')?.body).toContain('sync_events');
+
+    const before = fake.writes().length;
+    const again = await runReal(fake, 'f2');
+    expect(again.code).toBe(0);
+    expect(appliedSince(fake, before)).toEqual([]);
+    expect(again.text).toContain('ya aplicada, registrada como catalog_free_access_and_caps');
+  });
+
+  it('f2 con --dry-run solo lee: dice qué aplicaría y no escribe nada', async () => {
+    const fake = withB11BeforeEnglish();
+    const dry = await runReal(fake, 'f2', true);
+    expect(dry.code).toBe(0);
+    expect(fake.writes()).toEqual([]);
+    expect(dry.text).toContain('catalog_free_access_and_caps  se aplica');
+    expect(dry.text).not.toContain('Publicando');
+  });
+
+  it('una comprobación de f2 en rojo detiene el plan sin aplicar nada, aunque la migración ya esté registrada', async () => {
+    // Registrada por el conector, pero sin la tabla de topes: la base dice otra cosa que la historia
+    const fake = withB11BeforeEnglish();
+    fake.history.push({ version: '20261024000001', name: 'catalog_free_access_and_caps' });
+    const run = await runReal(fake, 'f2');
+    expect(run.code).toBe(1);
+    expect(run.text).toContain('su comprobación sale en rojo');
+    expect(run.text).toContain('topes_sembrados dio 0 y debía dar 4');
     expect(fake.writes()).toEqual([]);
   });
 

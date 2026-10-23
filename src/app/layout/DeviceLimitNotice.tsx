@@ -5,7 +5,7 @@ import { ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { readSupportEmail, supportMailto } from '@/config/support';
 import { describeRetryTime } from '@/i18n/device';
-import { t } from '@/i18n/es-MX';
+import { t } from '@/i18n/core';
 import { Button } from '@/ui/components/button';
 import { useCloud } from '../cloudState';
 

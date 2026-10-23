@@ -16,6 +16,11 @@
  *     aunque no gaste el cupo de la cola. Las nuevas también, y newCardsStudiedToday las cuenta aparte
  *     de reviewedToday, que deja fuera esas sesiones para no gastar el cupo
  *   - La fracción nunca pasa de 1, para no dibujar una barra más larga que su pista
+ * Alcanzable (planFeasibility). Compara el tiempo que piden las tarjetas del plan con los minutos que el
+ *   alumno declaró. Los minutos de tarjetas son la parte de su tiempo que ya usa la carga diaria
+ *   (cardsTimeShare). El tiempo por tarjeta sale de su propio historial y nunca de una referencia, porque
+ *   un aviso con tiempos inventados sería un dato falso. Sin minutos declarados o sin historial
+ *   suficiente el estado es calibrando y no avisa de nada
  * Lo que no hace. No cambia ningún límite ni la cola del día. La guía solo propone cifras y el
  * alumno decide si las aplica
  */
@@ -86,6 +91,71 @@ export function dailyPlan(input: {
     rows.push(row('questions', done.questions, capped ? cap : limits.questionsPerDay, capped));
   }
   return rows;
+}
+
+/** Tiempo por tarjeta del alumno, del estimador de la carga diaria (estimateCardTimes) */
+export interface PlanTimes {
+  secondsPerReview: number;
+  secondsPerNew: number;
+  /** true si el tiempo por repaso sale de su historial. Con la referencia no se avisa de nada */
+  measured: boolean;
+  /** true si el tiempo por tarjeta nueva también. Sin él las nuevas no se pueden contar */
+  newMeasured?: boolean;
+}
+
+export type PlanFeasibility =
+  | {
+      status: 'calibrating';
+      /** Faltan minutos declarados, repasos propios o tarjetas nuevas propias */
+      reason: 'needs_minutes' | 'needs_history' | 'needs_new_history';
+    }
+  | {
+      status: 'ok' | 'over';
+      /** Minutos que pide el trabajo de hoy, redondeados */
+      needMinutes: number;
+      /** Minutos al día que el alumno dedica a tarjetas, redondeados */
+      budgetMinutes: number;
+    };
+
+/**
+ * Si el trabajo de tarjetas de hoy cabe en el tiempo que el alumno dijo que estudia. El trabajo es el
+ * menor entre el límite y lo que de verdad hay hoy en la cola (available), igual que la sugerencia de
+ * nuevas de la carga diaria. Sin available se usan los topes, que dicen si llegar a todos cabría. Los
+ * minutos se redondean antes de compararlos, así nunca sale 30 contra 30 como advertencia
+ */
+export function planFeasibility(input: {
+  limits: PlanLimits;
+  /** Lo que hoy hay de verdad por estudiar, entre repasos y nuevas, contando lo que ya hizo */
+  available?: { reviews: number; newCards: number };
+  /** Minutos de estudio al día que declaró. null si no los ha puesto */
+  dailyMinutes: number | null;
+  times: PlanTimes;
+  /** Fracción de sus minutos que va a tarjetas, de 0 a 1 (la misma de la carga diaria) */
+  cardsTimeShare: number;
+}): PlanFeasibility {
+  const { limits, available, dailyMinutes, times } = input;
+  if (dailyMinutes === null || !Number.isFinite(dailyMinutes) || dailyMinutes <= 0) {
+    return { status: 'calibrating', reason: 'needs_minutes' };
+  }
+  if (!times.measured) return { status: 'calibrating', reason: 'needs_history' };
+  const reviews = available
+    ? Math.min(limits.reviewsPerDay, available.reviews)
+    : limits.reviewsPerDay;
+  const newLimit = limits.unlimitedNewCards ? Number.POSITIVE_INFINITY : limits.newCardsPerDay;
+  const newCards = available
+    ? Math.min(newLimit, available.newCards)
+    : limits.unlimitedNewCards
+      ? 0
+      : limits.newCardsPerDay;
+  // Las nuevas solo se cuentan con su propio ritmo. Con la referencia se inventaría el tiempo
+  if (newCards > 0 && times.newMeasured !== true) {
+    return { status: 'calibrating', reason: 'needs_new_history' };
+  }
+  const needMinutes = Math.round(
+    (reviews * times.secondsPerReview + newCards * times.secondsPerNew) / 60,
+  );
+  const budgetMinutes = Math.round(dailyMinutes * input.cardsTimeShare);
+  return { status: needMinutes > budgetMinutes ? 'over' : 'ok', needMinutes, budgetMinutes };
 }
 
 /**
