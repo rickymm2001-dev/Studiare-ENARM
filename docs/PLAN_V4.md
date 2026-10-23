@@ -435,9 +435,14 @@ Verificado en el código y las capturas el 2026-10-23.
 
 ### 11.4 Bloques
 
-#### V4-F3-B0. Dirección en HTML antes de código (S)
-- Una página HTML estática en el navegador integrado con la portada y el Inicio maquetados con el tratamiento editorial, usando los tokens reales y datos de demostración. Igual que el paso 1 de V4-B2. Ricardo aprueba o corrige antes de tocar la app
-- Se acepta cuando Ricardo elige y lo deja escrito en el chat
+#### V4-F3-B0. Presentación editable de cada pantalla antes de código (M)
+- Una presentación de PowerPoint, docs/rediseno/fase3-pantallas.pptx, con una diapositiva por pantalla que toca la fase. Portada en sus partes (hero, método, demo, perfiles, planes), Inicio con la franja nueva y lo que ya existe, Ficha de tema, Progreso, Repasar y Calendario con el barrido. En computadora y, para Inicio y la pregunta de la demo, también en teléfono
+- Cada maqueta se dibuja con formas y cuadros de texto nativos de PowerPoint, no como imagen, para que Ricardo pueda mover, borrar, cambiar textos y agregar lo que quiera. Usa los tokens reales de la app, los colores de D-128 y datos de demostración. La serif de títulos se mapea a una fuente que PowerPoint tenga seguro, con una nota que diga que en la app es Source Serif 4
+- Cada diapositiva lleva a la derecha una columna Tus cambios, vacía, y en las notas del orador la lista de los elementos que trae y de dónde sale cada uno en elementos-adoptables-enarm.md
+- La primera diapositiva explica cómo marcar cambios. Editar directo sobre la maqueta, escribir en Tus cambios o en las notas, y poner una X roja sobre lo que no quiere
+- Se publica en un PR solo con ese archivo. Ricardo lo baja de GitHub, lo edita en PowerPoint y lo sube al mismo lugar, por commit o arrastrándolo en la web de GitHub. Si prefiere, lo pega en el chat de la sesión
+- La sesión lee el archivo editado, saca cada diferencia contra el original y cada texto de Tus cambios y de las notas, y escribe en docs/rediseno/fase3-cambios-de-ricardo.md una lista numerada de lo que entendió, con lo que sí se puede hacer, lo que choca con CLAUDE.md o con una decisión, y lo que necesita aclararse. Ricardo confirma esa lista en el chat
+- Se acepta cuando Ricardo confirma la lista. Los bloques B1 a B4 se construyen con esa lista como parte de sus criterios
 
 #### V4-F3-B1. Portada editorial (M)
 - Hero con título en serif, una sola frase de valor y a la derecha una captura real de la pantalla de pregunta, sin foto de fondo
@@ -488,7 +493,7 @@ Verificado en el código y las capturas el 2026-10-23.
 
 | Orden | Bloque | Tamaño | Depende de |
 |---|---|---|---|
-| 1 | V4-F3-B0 Dirección en HTML | S | Nada |
+| 1 | V4-F3-B0 Presentación editable | M | Nada |
 | 2 | V4-F3-B1 Portada editorial | M | B0 aprobado |
 | 3 | V4-F3-B2 Inicio | L | B0 aprobado |
 | 4 | V4-F3-B3 Ficha de tema | M | B2, por el mapa |

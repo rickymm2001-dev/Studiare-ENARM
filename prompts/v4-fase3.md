@@ -1,10 +1,10 @@
 # Prompt para la sesión de la fase 3 del plan V4
 
-Pégalo tal cual como primer mensaje de una sesión nueva de Claude Code abierta en C:\Users\elchi\Proyectos\enarm-prototipo. Antes de abrirla corre npm install, porque la carpeta se sincronizó con 849 commits nuevos y las dependencias locales son viejas.
+Pégalo tal cual como primer mensaje de una sesión nueva de Claude Code en la nube sobre el repositorio Studiare-ENARM, desde main. Si algún día lo corres en tu computadora, antes haz git pull y npm install.
 
 ---
 
-Vas a ejecutar la fase 3 del plan V4. Lee, en este orden y nada más, CLAUDE.md, la sección 11 de docs/PLAN_V4.md, D-148 en DECISIONES.md, la sección Estado actual de PROGRESS.md y las secciones 1 y 6 del mismo plan V4. Las plantillas de referencia están en compilacion-plantillas-enarm.html y elementos-adoptables-enarm.md en la raíz, con capturas en capturas/. Ábrelas en el navegador integrado solo cuando un bloque necesite ver un patrón concreto. No releas V3 ni la especificación completa.
+Vas a ejecutar la fase 3 del plan V4. Lee, en este orden y nada más, CLAUDE.md, la sección 11 de docs/PLAN_V4.md, D-148 en DECISIONES.md, la sección Estado actual de PROGRESS.md y las secciones 1 y 6 del mismo plan V4. Las plantillas de referencia están en compilacion-plantillas-enarm.html y elementos-adoptables-enarm.md en la raíz, con capturas en capturas/. Ábrelas solo cuando un bloque necesite ver un patrón concreto. No releas V3 ni la especificación completa.
 
 ## Contexto que no está en los archivos
 
@@ -14,16 +14,28 @@ Vas a ejecutar la fase 3 del plan V4. Lee, en este orden y nada más, CLAUDE.md,
 - El color de acción #156082, la paleta por rama y el modo oscuro no cambian
 - Inicio tiene diseño fijo mío (D-116, D-117). D-148 autoriza solo la franja nueva arriba y la perla en lugar de la frase. Lo demás no se mueve
 - Presupuesto de JavaScript inicial bajo 300 KB. Hoy va en 245. La demo interactiva de la portada y el mapa se cargan en diferido
+- Quiero ver y corregir el diseño de cada pantalla antes de que se aplique. Por eso el bloque B0 es una presentación de PowerPoint que yo edito y tú lees de vuelta
 
-## Qué vas a hacer
+## Bloque B0, la presentación editable
 
-Los cinco bloques de la sección 11.4, en el orden de 11.6
+Es lo primero y no tocas la app hasta que yo confirme la lista de cambios.
 
-1. V4-F3-B0. Antes de tocar la app, una página HTML estática en el navegador integrado con la portada y el Inicio maquetados con el tratamiento editorial, usando los tokens reales y datos de demostración. Espera mi aprobación escrita en el chat
-2. V4-F3-B1. Portada editorial con el método como proceso 01 a 06, demo interactiva con una pregunta del banco de demostración, perfiles como lista numerada, captura real en el hero y la curva de olvido en SVG. Lugares de texto nuevos con tope en slots.ts y docs/PORTADA.md
-3. V4-F3-B2. Inicio con la franja nueva. Índice de preparación en src/engines/readiness.ts con calibrando y la leyenda obligatoria de que no predice el puntaje del ENARM, mapa de especialidades en SVG con tabla equivalente, cifras de la semana en una línea con sparkline, próximos con fecha en badge y botón, y perla del día desde el banco con la frase citada
-4. V4-F3-B3. Ficha de tema como ruta bajo Progreso con sus entradas desde Ramas, Temas para reforzar, focos y el mapa
-5. V4-F3-B4. Barrido editorial de Progreso, Repasar y Calendario sin mover nada de lugar, más el token de densidad y la unión de las etiquetas de demostración en teléfono
+1. Crea docs/rediseno/fase3-pantallas.pptx con el skill de pptx. Una diapositiva por pantalla que toca la fase, en este orden. Portada hero, portada método 01 a 06, portada demo interactiva, portada perfiles y planes, Inicio en computadora, Inicio en teléfono, Ficha de tema, Progreso con el barrido, Repasar con el barrido, Calendario con el barrido, pregunta de la demo en teléfono
+2. Cada maqueta va dibujada con formas y cuadros de texto nativos, nunca como imagen pegada, para que yo pueda mover, borrar, cambiar textos y agregar cosas. Usa los tokens reales de src/ui/tokens.css, los colores por rama de D-128 y datos de demostración con su etiqueta. La serif de títulos se mapea a Georgia o a la serif que PowerPoint tenga seguro, con una nota en la diapositiva que diga que en la app es Source Serif 4
+3. Cada diapositiva lleva a la derecha una columna vacía con el título Tus cambios, y en las notas del orador la lista de los elementos que trae y de qué plantilla sale cada uno según elementos-adoptables-enarm.md
+4. La primera diapositiva explica cómo marcar cambios. Editar directo sobre la maqueta, escribir en Tus cambios o en las notas, y poner una X roja sobre lo que no quiero
+5. Abre un PR solo con ese archivo y avísame. Yo lo bajo de GitHub, lo edito en PowerPoint y lo subo al mismo lugar, o te lo pego en el chat
+6. Cuando te diga que ya está, lee el archivo editado, compáralo con el original y saca cada diferencia, cada texto de Tus cambios y cada nota. Escribe docs/rediseno/fase3-cambios-de-ricardo.md con una lista numerada de lo que entendiste, separada en lo que sí entra, lo que choca con CLAUDE.md o con una decisión anterior y por qué, y lo que necesitas que te aclare. Pídeme confirmación en el chat
+7. Con la lista confirmada, cada bloque de B1 a B4 la incluye en sus criterios de aceptación y PROGRESS.md dice qué número de la lista cubrió
+
+## Bloques B1 a B4
+
+Los de la sección 11.4, en el orden de 11.6
+
+- V4-F3-B1. Portada editorial con el método como proceso 01 a 06, demo interactiva con una pregunta del banco de demostración, perfiles como lista numerada, captura real en el hero y la curva de olvido en SVG. Lugares de texto nuevos con tope en slots.ts y docs/PORTADA.md
+- V4-F3-B2. Inicio con la franja nueva. Índice de preparación en src/engines/readiness.ts con calibrando y la leyenda obligatoria de que no predice el puntaje del ENARM, mapa de especialidades en SVG con tabla equivalente, cifras de la semana en una línea con sparkline, próximos con fecha en badge y botón, y perla del día desde el banco con la frase citada
+- V4-F3-B3. Ficha de tema como ruta bajo Progreso con sus entradas desde Ramas, Temas para reforzar, focos y el mapa
+- V4-F3-B4. Barrido editorial de Progreso, Repasar y Calendario sin mover nada de lugar, más el token de densidad y la unión de las etiquetas de demostración en teléfono
 
 ## Reglas de trabajo
 

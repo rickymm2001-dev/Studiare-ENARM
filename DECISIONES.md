@@ -1548,4 +1548,5 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Perla del día. Sale del banco con la frase citada y el enlace a la pregunta, como permite la sección 9 del plan. Etiqueta de revisión médica pendiente mientras el banco sea demo
 - Portada. El método como proceso numerado en lugar de la rejilla de seis tarjetas, demo interactiva con una pregunta real cargada en diferido y perfiles como lista numerada. Lugares de texto nuevos para la agencia. Creador y testimonios siguen apagados
 - Ficha de tema como ruta nueva bajo Progreso, con entradas desde Ramas, Temas para reforzar, focos y el mapa
-- El trabajo se hace en la computadora de Ricardo, un PR por bloque, con la auditoría completa al final
+- El trabajo se hace en la nube desde main, un PR por bloque, con la auditoría completa al final. Ricardo cambió de la computadora a la nube el mismo día, porque ese flujo ya produjo el proyecto y evita el desfase local
+- B0 entrega una presentación de PowerPoint con una diapositiva por pantalla, dibujada con formas editables, para que Ricardo mueva, borre y anote antes de que se aplique. La sesión lee la versión editada, la convierte en una lista de cambios que Ricardo confirma, y esa lista entra a los criterios de B1 a B4
