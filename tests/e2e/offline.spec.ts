@@ -6,6 +6,7 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { enterAs } from './support/b1';
 import { expect, signUp, test } from './support/fixtures';
+import { mainNav } from './support/navigation';
 
 // Una pantalla de cada área, pensada para que su archivo no se haya bajado antes de cortar la red
 const NEVER_VISITED = [SCREENS.progress.path, SCREENS.party.path, SCREENS.outlines.path] as const;
@@ -78,10 +79,7 @@ test('en la primera visita, sin recargar, el service worker toma el control y la
 
   await context.setOffline(true);
   // Navegación dentro de la app, que baja el archivo de la pantalla con una importación diferida
-  await page
-    .getByRole('navigation', { name: t.nav.label })
-    .getByRole('link', { name: t.navItems.progress })
-    .click();
+  await mainNav(page).getByRole('link', { name: t.navItems.progress }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
   await context.setOffline(false);
 });

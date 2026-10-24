@@ -5,6 +5,7 @@ import { SCREENS } from '@/app/screens';
 import { legalText } from '@/i18n/legal';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import { mainNav } from './support/navigation';
 
 test('desde la portada se lee el aviso y los términos sin sesión, y dicen que son un borrador', async ({
   page,
@@ -59,5 +60,5 @@ test('con sesión el aviso se lee con la navegación de la app y desde Configura
   await expect(
     page.getByRole('heading', { level: 1, name: t.screens.privacyNotice.title }),
   ).toBeVisible();
-  await expect(page.getByRole('navigation', { name: t.nav.label })).toBeVisible();
+  await expect(mainNav(page)).toBeVisible();
 });

@@ -6,6 +6,7 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import { mainNav } from './support/navigation';
 
 test('la semana calibra los minutos, avisa la sobrecarga y cada ajuste cambia lo planeado', async ({
   page,
@@ -15,11 +16,8 @@ test('la semana calibra los minutos, avisa la sobrecarga y cada ajuste cambia lo
   // Seguir mazos del catálogo es de los planes de pago (4.25, B8)
   await subscribeMonthly(page);
 
-  // Progreso se abre desde la navegación, el riel en computadora y la barra de abajo en el teléfono
-  await page
-    .getByRole('navigation', { name: t.nav.label })
-    .getByRole('link', { name: t.navItems.progress, exact: true })
-    .click();
+  // Progreso se abre desde la navegación, la barra en línea en computadora y el dock en el teléfono
+  await mainNav(page).getByRole('link', { name: t.navItems.progress, exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
 
   // Siete días desde hoy. Hoy va marcado y es el único con lo hecho, los demás traen lo planeado
