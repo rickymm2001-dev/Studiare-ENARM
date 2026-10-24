@@ -50,7 +50,9 @@ describe('portada con los bloques vacíos', () => {
     expect(screen.getByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
     expect(screen.queryByRole('heading', { name: t.landing.testimonialsTitle })).toBeNull();
     expect(screen.queryByText(t.landing.sampleLabel)).toBeNull();
-    expect(screen.queryByRole('img')).toBeNull();
+    // La foto del héroe es decorativa y las capturas de la app solo salen cuando no hay foto. Lo que no
+    // debe haber es la foto del creador
+    expect(document.querySelector('img[src*="/landing/creador"]')).toBeNull();
     expect(document.querySelector('[data-slot^="creator."]')).toBeNull();
     expect(document.querySelector('[data-slot^="testimonials."]')).toBeNull();
   });
@@ -63,6 +65,13 @@ describe('portada con los bloques vacíos', () => {
       expect(element, slot.id).not.toBeNull();
       expect(element?.textContent, slot.id).toBe(slot.value);
     }
+    // Nuestro método es un tablist. El primer paso está elegido y los seis paneles están en la página,
+    // con hidden los que no se ven, para que cada texto tenga su lugar marcado
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(6);
+    expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+    expect(document.querySelectorAll('[role="tabpanel"]')).toHaveLength(6);
+    expect(document.querySelectorAll('[role="tabpanel"]:not([hidden])')).toHaveLength(1);
     // Las familias de la tabla que no son meta están todas pintadas, menos las de los bloques vacíos
     const painted = new Set(
       [...document.querySelectorAll('[data-slot]')].map((node) => node.getAttribute('data-slot')),

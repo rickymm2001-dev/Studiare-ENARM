@@ -20,8 +20,17 @@ export interface LandingContent {
   cta: string;
   login: string;
   trust: string;
+  tagline: string;
+  nav: Readonly<Record<'label' | 'home' | 'about' | 'method' | 'plans' | 'login', string>>;
+  productShotAlt: string;
+  productShotPhoneAlt: string;
   featuresTitle: string;
+  featuresIntro: string;
   features: Readonly<Record<string, readonly [string, string]>>;
+  methodTitle: string;
+  methodIntro: string;
+  methodHighlights: readonly string[];
+  method: readonly (readonly [string, string])[];
   personasTitle: string;
   personas: readonly (readonly [string, string])[];
   pricingTitle: string;
@@ -29,7 +38,10 @@ export interface LandingContent {
   founderBadge: string;
   faqTitle: string;
   faq: readonly (readonly [string, string])[];
+  branchesTitle: string;
+  branchesNote: string;
   finalTitle: string;
+  footer: Readonly<Record<'sections' | 'legal' | 'account', string>>;
   testimonialsTitle: string;
   sampleLabel: string;
   creator: LandingCreator | null;
@@ -46,6 +58,7 @@ export interface LandingBlocks {
 /** Cuántos elementos tiene cada lista. Las funciones y los perfiles llevan un ícono fijo cada uno */
 export const LANDING_COUNTS = {
   features: 6,
+  method: 6,
   personas: 6,
   faqMin: 3,
   testimonialsMax: 6,
@@ -68,8 +81,13 @@ export const SLOT_FAMILIES: readonly SlotFamily[] = [
   { id: 'hero.subtitle', max: 220 },
   { id: 'hero.cta', max: 30 },
   { id: 'hero.trust', max: 80 },
+  { id: 'hero.tagline', max: 60 },
+  { id: 'features.intro', max: 220 },
   { id: 'features.N.title', max: 40 },
   { id: 'features.N.text', max: 180 },
+  { id: 'method.intro', max: 260 },
+  { id: 'method.N.title', max: 50 },
+  { id: 'method.N.text', max: 240 },
   { id: 'personas.N.who', max: 40 },
   { id: 'personas.N.text', max: 140 },
   { id: 'creator.name', max: 60 },
@@ -105,8 +123,22 @@ export function labelEntries(content: LandingContent): { id: string; value: stri
   return [
     { id: 'label.documentTitle', value: content.documentTitle },
     { id: 'label.login', value: content.login },
+    ...Object.entries(content.nav).map(([key, value]) => ({ id: `label.nav.${key}`, value })),
+    { id: 'label.productShotAlt', value: content.productShotAlt },
+    { id: 'label.productShotPhoneAlt', value: content.productShotPhoneAlt },
     { id: 'label.featuresTitle', value: content.featuresTitle },
+    { id: 'label.methodTitle', value: content.methodTitle },
+    ...content.methodHighlights.map((value, index) => ({
+      id: `label.methodHighlights.${index + 1}`,
+      value,
+    })),
     { id: 'label.personasTitle', value: content.personasTitle },
+    { id: 'label.branchesTitle', value: content.branchesTitle },
+    { id: 'label.branchesNote', value: content.branchesNote },
+    ...Object.entries(content.footer).map(([key, value]) => ({
+      id: `label.footer.${key}`,
+      value,
+    })),
     { id: 'label.pricingTitle', value: content.pricingTitle },
     { id: 'label.bestValue', value: content.bestValue },
     { id: 'label.founderBadge', value: content.founderBadge },
@@ -151,9 +183,16 @@ export function landingSlots(
     slot('hero.subtitle', content.subtitle),
     slot('hero.cta', content.cta),
     slot('hero.trust', content.trust),
+    slot('hero.tagline', content.tagline),
+    slot('features.intro', content.featuresIntro),
     ...features.flatMap(([title, text], index) => [
       slot('features.N.title', title, index + 1),
       slot('features.N.text', text, index + 1),
+    ]),
+    slot('method.intro', content.methodIntro),
+    ...content.method.flatMap(([title, text], index) => [
+      slot('method.N.title', title, index + 1),
+      slot('method.N.text', text, index + 1),
     ]),
     ...content.personas.flatMap(([who, text], index) => [
       slot('personas.N.who', who, index + 1),
@@ -549,6 +588,15 @@ export function landingProblems(
   const problems: string[] = [];
   if (Object.keys(content.features).length !== LANDING_COUNTS.features) {
     problems.push(`features debe tener ${LANDING_COUNTS.features} funciones`);
+  }
+  if (content.method.length !== LANDING_COUNTS.method) {
+    problems.push(`method debe tener ${LANDING_COUNTS.method} pasos`);
+  }
+  // Las frases resaltadas del párrafo de Nuestro método van tal cual dentro de él, o el resaltado no sale
+  for (const phrase of content.methodHighlights) {
+    if (!content.methodIntro.includes(phrase)) {
+      problems.push(`methodHighlights, "${phrase}" no aparece en method.intro`);
+    }
   }
   if (content.personas.length !== LANDING_COUNTS.personas) {
     problems.push(`personas debe tener ${LANDING_COUNTS.personas} perfiles`);

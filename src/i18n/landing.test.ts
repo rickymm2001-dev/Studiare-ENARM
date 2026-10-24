@@ -59,6 +59,10 @@ describe('texto de la portada, forma y lugares', () => {
       'physicians',
     ]);
     expect(landingText.personas).toHaveLength(LANDING_COUNTS.personas);
+    expect(landingText.method).toHaveLength(LANDING_COUNTS.method);
+    for (const phrase of landingText.methodHighlights) {
+      expect(landingText.methodIntro).toContain(phrase);
+    }
     expect(landingText.faq.length).toBeGreaterThanOrEqual(LANDING_COUNTS.faqMin);
   });
 
@@ -79,8 +83,13 @@ describe('texto de la portada, forma y lugares', () => {
       'hero.subtitle': 220,
       'hero.cta': 30,
       'hero.trust': 80,
+      'hero.tagline': 60,
+      'features.intro': 220,
       'features.N.title': 40,
       'features.N.text': 180,
+      'method.intro': 260,
+      'method.N.title': 50,
+      'method.N.text': 240,
       'personas.N.who': 40,
       'personas.N.text': 140,
       'creator.name': 60,
@@ -101,6 +110,8 @@ describe('texto de la portada, forma y lugares', () => {
     const ids = landingSlots(withText({ creator: null, testimonials: [] })).map((slot) => slot.id);
     expect(ids.filter((id) => /^(?:creator|testimonials)\./.test(id))).toEqual([]);
     expect(ids).toContain('features.6.text');
+    expect(ids).toContain('method.6.text');
+    expect(ids).toContain('hero.tagline');
     expect(ids).toContain('personas.6.who');
     expect(ids).toContain('meta.description');
   });

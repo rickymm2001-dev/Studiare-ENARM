@@ -60,6 +60,8 @@ export function AppShell() {
   const bare =
     pathname === screenPath('onboarding') ||
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
+  // La portada de venta ocupa todo el ancho y pone sus propios márgenes (D-148)
+  const landing = pathname === screenPath('home') && session.status === 'signed-out';
   // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
   const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
   // Mientras el banco es de demostración, un aviso global en lugar de etiquetas por pantalla (4.1). Con
@@ -80,68 +82,71 @@ export function AppShell() {
       {/* En el teléfono una barra delgada con el logo. En computadora es la barra blanca de arriba,
           con el botón que oculta o muestra el menú lateral, el símbolo de Studiare y, encima, el
           título de la pantalla con la racha y el nivel, que pone ScreenHeader (D-117) */}
-      <header
-        className={cn('glass sticky top-0 z-20 border-b border-line', !bare && 'lg:h-topbar')}
-      >
-        <div
-          className={cn(
-            'flex min-h-12 items-center gap-2 px-4 py-1.5',
-            !bare && 'lg:h-full lg:gap-0 lg:p-0',
-          )}
+      {/* La portada trae su propia barra con la marca (D-148), así que aquí no va otra */}
+      {landing ? null : (
+        <header
+          className={cn('glass sticky top-0 z-20 border-b border-line', !bare && 'lg:h-topbar')}
         >
-          {bare ? null : (
-            <button
-              type="button"
-              aria-label={t.nav.toggle}
-              aria-expanded={!navCollapsed}
-              aria-controls={NAV_ID}
-              title={navCollapsed ? t.nav.show : t.nav.hide}
-              onClick={() => {
-                setNavCollapsed(!navCollapsed);
-              }}
-              className="hidden h-full w-rail shrink-0 items-center justify-center bg-primary text-primary-fg transition-colors hover:bg-primary-hover lg:flex [&_svg]:size-7"
-            >
-              <Menu aria-hidden strokeWidth={2} />
-            </button>
-          )}
-          <Link
-            to={HOME_BY_ROLE[role]}
+          <div
             className={cn(
-              'mr-auto shrink-0 rounded-sm',
-              !bare && 'lg:mr-0 lg:flex lg:w-topbar-logo lg:items-center lg:justify-center',
+              'flex min-h-12 items-center gap-2 px-4 py-1.5',
+              !bare && 'lg:h-full lg:gap-0 lg:p-0',
             )}
           >
-            {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas. En la barra de
-                computadora va solo el símbolo, junto al botón del menú */}
-            <img
-              src={logoUrl}
-              alt={t.app.logoAlt}
-              width={148}
-              height={32}
-              className={cn('h-6 w-auto sm:h-8 dark:hidden', !bare && 'lg:hidden')}
-            />
-            <img
-              src={logoDarkUrl}
-              alt={t.app.logoAlt}
-              width={148}
-              height={32}
-              className={cn(
-                'hidden h-6 w-auto sm:h-8 dark:block',
-                !bare && 'lg:hidden dark:lg:hidden',
-              )}
-            />
             {bare ? null : (
-              <img
-                src={`${import.meta.env.BASE_URL}favicon-64x64.png`}
-                alt={t.app.logoAlt}
-                width={64}
-                height={64}
-                className="hidden size-9 lg:block"
-              />
+              <button
+                type="button"
+                aria-label={t.nav.toggle}
+                aria-expanded={!navCollapsed}
+                aria-controls={NAV_ID}
+                title={navCollapsed ? t.nav.show : t.nav.hide}
+                onClick={() => {
+                  setNavCollapsed(!navCollapsed);
+                }}
+                className="hidden h-full w-rail shrink-0 items-center justify-center bg-primary text-primary-fg transition-colors hover:bg-primary-hover lg:flex [&_svg]:size-7"
+              >
+                <Menu aria-hidden strokeWidth={2} />
+              </button>
             )}
-          </Link>
-        </div>
-      </header>
+            <Link
+              to={HOME_BY_ROLE[role]}
+              className={cn(
+                'mr-auto shrink-0 rounded-sm',
+                !bare && 'lg:mr-0 lg:flex lg:w-topbar-logo lg:items-center lg:justify-center',
+              )}
+            >
+              {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas. En la barra de
+                computadora va solo el símbolo, junto al botón del menú */}
+              <img
+                src={logoUrl}
+                alt={t.app.logoAlt}
+                width={148}
+                height={32}
+                className={cn('h-6 w-auto sm:h-8 dark:hidden', !bare && 'lg:hidden')}
+              />
+              <img
+                src={logoDarkUrl}
+                alt={t.app.logoAlt}
+                width={148}
+                height={32}
+                className={cn(
+                  'hidden h-6 w-auto sm:h-8 dark:block',
+                  !bare && 'lg:hidden dark:lg:hidden',
+                )}
+              />
+              {bare ? null : (
+                <img
+                  src={`${import.meta.env.BASE_URL}favicon-64x64.png`}
+                  alt={t.app.logoAlt}
+                  width={64}
+                  height={64}
+                  className="hidden size-9 lg:block"
+                />
+              )}
+            </Link>
+          </div>
+        </header>
+      )}
 
       {/* Un solo aviso global en una línea delgada (4.1 del plan, D-121). Con el banco de
           demostración dice Versión de demostración y se va con el banco real. Con la base de
@@ -228,10 +233,12 @@ export function AppShell() {
             id="contenido"
             tabIndex={-1}
             className={
-              bare
-                ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
-                : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
-                  'mx-auto flex w-full max-w-content flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
+              landing
+                ? 'flex w-full flex-col outline-none'
+                : bare
+                  ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
+                  : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
+                    'mx-auto flex w-full max-w-content flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
             }
           >
             {/* Segundo factor del equipo y registro de Google por completar (B9) */}

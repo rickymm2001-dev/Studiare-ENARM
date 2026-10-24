@@ -21,13 +21,21 @@ function sourceFiles(dir: string): string[] {
 
 const read = (relative: string) => readFileSync(join(SRC, relative), 'utf8');
 
+/**
+ * La portada de venta es la única excepción (D-148). Sigue el boceto de Ricardo, con manchas de luz y el
+ * fundido de la foto, y sus estilos viven solos bajo .ld sin tocar los tokens de la app
+ */
+const LANDING_CSS = 'features/landing/landing.css';
+
 describe('sistema de diseño sobrio (B2, D-121)', () => {
-  it('no hay degradados en CSS, TSX ni canvas', () => {
+  it('no hay degradados en CSS, TSX ni canvas, salvo en la portada', () => {
     const pattern = /-gradient\(|create(?:Linear|Radial|Conic)Gradient\(/;
     const offenders = sourceFiles(SRC)
-      .filter((file) => pattern.test(readFileSync(file, 'utf8')))
-      .map((file) => file.slice(SRC.length));
+      .map((file) => file.slice(SRC.length))
+      .filter((relative) => relative !== LANDING_CSS && pattern.test(read(relative)));
     expect(offenders).toEqual([]);
+    // La excepción existe y sigue siendo solo la portada
+    expect(pattern.test(read(LANDING_CSS))).toBe(true);
   });
 
   it('no hay utilidades de degradado de Tailwind ni degradados de SVG', () => {

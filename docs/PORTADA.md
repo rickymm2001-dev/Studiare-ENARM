@@ -4,15 +4,19 @@ Este documento es para la agencia o el influencer que escribe el texto de venta 
 
 ## Cómo se arma la portada
 
-La portada es lo primero que ve quien entra a Studiare sin sesión. Va en este orden.
+La portada es lo primero que ve quien entra a Studiare sin sesión. Desde D-148 sigue el boceto de Ricardo, con una barra oscura arriba que lleva a las secciones de la misma página (Inicio, Conócenos, Nuestro método y Planes) y a la entrada. Va en este orden.
 
-- Título principal, con una etiqueta arriba, un párrafo, dos botones y una línea corta de confianza
-- Seis tarjetas de funciones
+- Título principal en dos líneas, con una etiqueta arriba, una raya, una frase en cursiva, un párrafo y dos botones. La línea corta de confianza va en el sello redondo sobre la imagen
+- Una introducción y seis tarjetas de funciones, que es la sección Conócenos
+- Nuestro método, con un párrafo que resalta dos frases y seis pasos numerados. Al tocar un paso se ve su texto en el panel de al lado
 - Seis perfiles de estudiante
+- Las ramas que se practican, que no son texto de venta
 - Un bloque del creador y un bloque de testimonios, que no se ven hasta que haya texto para ellos
 - Los planes y sus precios
 - Preguntas frecuentes
-- Un cierre con el botón principal y los enlaces legales
+- Un cierre con el botón principal y un pie de página con los enlaces legales
+
+La imagen del héroe es una foto que Ricardo guarda en public/landing con el nombre portada.webp. Mientras no exista, la portada muestra en su lugar capturas reales de la app con su etiqueta de datos de demostración.
 
 Hoy la página trae un texto neutro que escribió el equipo mientras llegaba el de la agencia. Ese texto se queda tal cual hasta que Ricardo apruebe el nuevo. Con los dos bloques opcionales vacíos la página se ve igual que siempre.
 
@@ -41,9 +45,14 @@ El largo máximo cuenta caracteres con espacios. Si te pasas, la prueba automát
 | `hero.title` | Título principal de la portada | 70 |
 | `hero.subtitle` | Párrafo debajo del título | 220 |
 | `hero.cta` | Botón principal. Se repite en el cierre de la página | 30 |
-| `hero.trust` | Línea corta debajo de los botones | 80 |
+| `hero.trust` | Línea corta dentro del sello redondo sobre la imagen | 80 |
+| `hero.tagline` | Frase en cursiva debajo de la raya del título | 60 |
+| `features.intro` | Párrafo que presenta las tarjetas de funciones | 220 |
 | `features.N.title` | Título de cada tarjeta de funciones, N de 1 a 6 | 40 |
 | `features.N.text` | Texto de cada tarjeta de funciones, N de 1 a 6 | 180 |
+| `method.intro` | Párrafo de Nuestro método. Las dos frases resaltadas son fijas y deben seguir dentro | 260 |
+| `method.N.title` | Nombre de cada paso del método, N de 1 a 6 | 50 |
+| `method.N.text` | Texto de cada paso del método, que se ve al elegirlo | 240 |
 | `personas.N.who` | Quién es cada perfil de estudiante, N de 1 a 6 | 40 |
 | `personas.N.text` | Texto de cada perfil de estudiante, N de 1 a 6 | 140 |
 | `creator.name` | Bloque del creador, su nombre | 60 |
@@ -76,7 +85,7 @@ Cada tarjeta lleva un ícono fijo según su posición. Si cambias de tema una ta
 ## Lo que no es un lugar de texto
 
 - Los precios, los planes, la prueba gratis, los descuentos y lo que incluye cada plan salen de la configuración del cobro y de las banderas del producto. Así el texto de venta nunca contradice lo que se cobra. No escribas precios ni condiciones de plan en tu texto
-- Los nombres de las secciones, como Planes o Preguntas frecuentes, y el botón de quien ya tiene cuenta son fijos. Si quieres cambiarlos, díselo a Ricardo
+- Los nombres de las secciones, como Planes o Preguntas frecuentes, los de la barra de arriba, las dos frases resaltadas de Nuestro método, los nombres de las ramas y el botón de quien ya tiene cuenta son fijos. Si quieres cambiarlos, díselo a Ricardo
 - La imagen que se ve al compartir el enlace no lleva texto de venta, para que no se desactualice con el tuyo
 
 ## Tono
