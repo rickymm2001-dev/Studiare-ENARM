@@ -29,7 +29,7 @@ export function Donut({
 }) {
   const total = segments.reduce((sum, segment) => sum + Math.max(segment.value, 0), 0);
   // El principio de cada rebanada es la suma de las anteriores
-  const starts = segments.reduce<number[]>((acc, segment, index) => {
+  const starts = segments.reduce<number[]>((acc, _segment, index) => {
     const previous = acc[index - 1] ?? 0;
     const before = index === 0 ? 0 : Math.max(segments[index - 1]?.value ?? 0, 0);
     acc.push(previous + (total > 0 ? before / total : 0));
