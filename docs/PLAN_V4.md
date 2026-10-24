@@ -445,6 +445,7 @@ Verificado en el código y las capturas el 2026-10-23.
 - Se acepta cuando Ricardo confirma la lista. Los bloques B1 a B4 se construyen con esa lista como parte de sus criterios
 
 #### V4-F3-B1. Portada editorial (M)
+- Nota del 2026-10-24 (D-149). Ricardo adelantó el héroe y el método con su boceto y su archivo Benchmark, ya fusionados. La portada lleva su foto en duotono con degradado, marino y azul cielo, y es siempre clara. Esa decisión manda sobre la primera viñeta de este bloque y sobre la regla sin degradados de 11.3 solo en la portada. Lo que queda de B1 son la demo interactiva, los perfiles como lista numerada y la curva de olvido en SVG
 - Hero con título en serif, una sola frase de valor y a la derecha una captura real de la pantalla de pregunta, sin foto de fondo
 - La rejilla de seis funciones se vuelve el método como proceso numerado 01 a 06 en dos columnas con líneas finas. Repaso con FSRS, preguntas con distractores etiquetados, 24 sesgos, lectura de la estructura, tutor con hipótesis ancladas, simulacros y calendario. Lugares de texto nuevos method.N.title y method.N.text con tope, en docs/PORTADA.md y en slots.ts, para que la agencia los pueda escribir
 - Demo interactiva. Una pregunta del banco de demostración con su caso, el visitante elige y ve la retroalimentación con la etiqueta del distractor. Lleva la etiqueta Demostración y la de revisión médica pendiente. Carga diferida, no entra al JavaScript inicial. Si el banco real reemplaza al demo, la pregunta se elige por id en configuración

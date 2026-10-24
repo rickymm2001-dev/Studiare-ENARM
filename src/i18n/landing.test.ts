@@ -59,6 +59,10 @@ describe('texto de la portada, forma y lugares', () => {
       'physicians',
     ]);
     expect(landingText.personas).toHaveLength(LANDING_COUNTS.personas);
+    expect(landingText.method).toHaveLength(LANDING_COUNTS.method);
+    for (const phrase of landingText.methodHighlights) {
+      expect(landingText.methodIntro).toContain(phrase);
+    }
     expect(landingText.faq.length).toBeGreaterThanOrEqual(LANDING_COUNTS.faqMin);
   });
 
@@ -79,8 +83,13 @@ describe('texto de la portada, forma y lugares', () => {
       'hero.subtitle': 220,
       'hero.cta': 30,
       'hero.trust': 80,
+      'hero.tagline': 60,
+      'features.intro': 220,
       'features.N.title': 40,
       'features.N.text': 180,
+      'method.intro': 260,
+      'method.N.title': 50,
+      'method.N.text': 240,
       'personas.N.who': 40,
       'personas.N.text': 140,
       'creator.name': 60,
@@ -101,6 +110,8 @@ describe('texto de la portada, forma y lugares', () => {
     const ids = landingSlots(withText({ creator: null, testimonials: [] })).map((slot) => slot.id);
     expect(ids.filter((id) => /^(?:creator|testimonials)\./.test(id))).toEqual([]);
     expect(ids).toContain('features.6.text');
+    expect(ids).toContain('method.6.text');
+    expect(ids).toContain('hero.tagline');
     expect(ids).toContain('personas.6.who');
     expect(ids).toContain('meta.description');
   });
@@ -127,9 +138,16 @@ describe('el texto que está publicado cumple las reglas', () => {
       // Una foto de rostro de 800 px en webp pesa muy por debajo de esto
       expect(statSync(join(PHOTO_DIR, photo.file)).size).toBeLessThan(250_000);
     }
-    // Un archivo en public/landing que ningún texto declara no se muestra nunca, y eso confunde
-    const loose = files.filter((file) => file !== photo?.file && file !== '.gitkeep');
+    // Un archivo en public/landing que ningún texto declara no se muestra nunca, y eso confunde. La foto
+    // del héroe, portada.webp, la muestra la portada sola (D-149) y pesa poco
+    const HERO_PHOTO = 'portada.webp';
+    const loose = files.filter(
+      (file) => file !== photo?.file && file !== HERO_PHOTO && file !== '.gitkeep',
+    );
     expect(loose, 'archivos de public/landing sin declarar en creator.photo').toEqual([]);
+    if (files.includes(HERO_PHOTO)) {
+      expect(statSync(join(PHOTO_DIR, HERO_PHOTO)).size).toBeLessThan(300_000);
+    }
     const marked = JSON.stringify([landingText.creator, landingText.testimonials]);
     expect(marked).not.toMatch(/prueba/i);
   });

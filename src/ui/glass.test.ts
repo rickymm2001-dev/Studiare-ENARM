@@ -13,6 +13,8 @@ const css = readFileSync(resolve(import.meta.dirname, 'tokens.css'), 'utf8');
 const GLASS_FILES = [
   'app/layout/AppShell.tsx',
   'app/layout/BottomNav.tsx',
+  // La barra fija de la portada de venta, con la pizarra como superficie (D-149)
+  'features/landing/LandingScreen.tsx',
   'ui/components/action-dock.tsx',
   'ui/components/save-bar.tsx',
 ];
