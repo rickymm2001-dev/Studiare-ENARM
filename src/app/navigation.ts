@@ -169,9 +169,37 @@ export const HOME_BY_ROLE: Record<Role, string> = {
   owner: screenPath('home'),
 };
 
-/** Lo que va en la barra del teléfono, en el orden del riel */
+/** Lo que va en la barra del teléfono, en el orden del menú */
 export function phoneBarItems(nav: RoleNav): MainNavItem[] {
   return nav.main.filter((item) => item.bar === true);
+}
+
+/** Cuántas secciones caben en línea en la barra superior de computadora. Las demás van en Más (D-150) */
+export const TOP_BAR_MAX = 6;
+
+/** Lo que va en línea en la barra superior de computadora */
+export function topBarItems(nav: RoleNav): MainNavItem[] {
+  return nav.main.slice(0, TOP_BAR_MAX);
+}
+
+/**
+ * Lo que abre Más en computadora. Las secciones que no caben en la barra, luego cada grupo con su
+ * nombre y al final Configuración. Sin bloques vacíos
+ */
+export function topMoreSections(nav: RoleNav): MoreSection[] {
+  const sections: MoreSection[] = [
+    { items: nav.main.slice(TOP_BAR_MAX) },
+    ...nav.groups,
+    { items: nav.pinned },
+  ];
+  return sections.filter((section) => section.items.length > 0);
+}
+
+/** Más de computadora queda activa cuando la pantalla abierta es una de las suyas */
+export function isTopMoreActive(nav: RoleNav, pathname: string): boolean {
+  return topMoreSections(nav).some((section) =>
+    section.items.some((item) => isNavItemActive(item, pathname)),
+  );
 }
 
 /**

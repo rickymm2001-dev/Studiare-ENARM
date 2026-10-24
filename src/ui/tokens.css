@@ -1,11 +1,11 @@
 /*
   Tokens de diseño. Único lugar donde viven colores, tipografía, radios y medidas (10.4, D-016).
-  Sistema sobrio del plan del cambio V3 (B2, D-121) con la paleta de D-128. Neutros para superficies,
-  bordes y texto, un solo color de acción, #156082, igual en claro y en oscuro con texto blanco, un
-  color propio por rama, un acento cálido para racha, nivel y XP, la escala de cinco pasos del
-  heatmap y colores de estado solo para acierto, aviso y peligro. Sin degradados ni sombras de color.
-  D-128 reemplaza a 4.7 del plan del cambio en el color por rama y el acento.
-  El modo se elige así
+  Desde D-150 la app por dentro sigue a la portada (D-149). Lienzo blanco, marino #01337a para los
+  títulos y el botón principal, azul cielo #0f96e3 para lo activo, las barras y el borde elegido,
+  pizarra #374042 en la barra superior y el dock del teléfono, y los tintes crema, panel, salvia y
+  durazno para las tarjetas. Un acento cálido para racha, nivel y XP, la escala de cinco pasos del
+  heatmap y colores de estado solo para acierto, aviso y peligro. Las seis ramas conservan su color
+  de D-128. El modo se elige así
   - Sin clase en <html>, manda la preferencia del sistema (primer pintado, antes de que cargue JS)
   - Con clase light o dark en <html>, manda la elección del alumno (src/ui/theme.ts)
 */
@@ -13,53 +13,66 @@
 :root {
   color-scheme: light;
 
-  /* Superficies. Papel cálido y tarjetas casi blancas con borde fino (V4-B2, D-145) */
-  --enarm-canvas: #f6f3ee;
-  --enarm-surface: #fffdf9;
-  --enarm-muted: #eeeae2;
-  --enarm-line: #ddd6c9;
-  /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos, 4.3 sobre blanco, 3.8 sobre muted
-     y 3.6 sobre el lienzo (H12 de la revisión de B2) */
-  --enarm-line-strong: #707b85;
+  /* Superficies. Blanco de la portada, gris muy claro para fondos de controles y bordes finos */
+  --enarm-canvas: #ffffff;
+  --enarm-surface: #ffffff;
+  --enarm-muted: #f1f4f7;
+  --enarm-line: #e3e8ee;
+  /* Borde de campos y controles. Pasa el 3 a 1 de los gráficos sobre blanco y sobre muted */
+  --enarm-line-strong: #7f8b98;
 
-  /* Texto */
-  --enarm-fg: #16212b;
-  --enarm-fg-muted: #576570;
+  /* Texto. Los títulos van en marino, como en la portada */
+  --enarm-fg: #17212b;
+  --enarm-fg-muted: #4f5b66;
+  --enarm-heading: #01337a;
 
-  /* Color de acción. El único con color. Texto blanco encima, contraste 6.9 a 1 */
-  --enarm-primary: #156082;
-  --enarm-primary-hover: #124f6c;
-  --enarm-primary-active: #0e4057;
+  /* Color de acción. Marino de la portada con texto blanco, contraste 13 a 1 */
+  --enarm-primary: #01337a;
+  --enarm-primary-hover: #02275e;
+  --enarm-primary-active: #021f4a;
   --enarm-primary-fg: #ffffff;
-  /* Para texto e íconos del color de acción sobre superficies claras */
-  --enarm-primary-ink: #156082;
-  --enarm-primary-soft: #e7eff4;
-  --enarm-focus: #156082;
+  /* Para texto e íconos de enlace sobre superficies claras. Cielo tinta, 5.9 a 1 sobre blanco y 4.5
+     sobre el cristal con negro debajo */
+  --enarm-primary-ink: #0a68a6;
+  --enarm-primary-soft: #e6f3fc;
+  --enarm-focus: #0f96e3;
   /* Indicadores que no son texto ni botón. El borde o el anillo de lo elegido, las barras y el
-     relleno de las gráficas. El heatmap usa su propia escala, abajo. En claro es el color de acción. En oscuro va un tono
-     claro, porque #156082 queda abajo del 3 a 1 que piden los gráficos (2.5 sobre la superficie,
-     2.7 sobre el lienzo y 2.2 sobre el fondo de las barras) */
-  --enarm-indicator: #156082;
+     relleno de las gráficas. Azul cielo, 3.2 a 1 sobre blanco. Solo va como relleno con texto blanco
+     en negritas de 19 px o más, como en la portada */
+  --enarm-indicator: #0f96e3;
 
-  /* Acento cálido único y sobrio para racha, nivel y XP (D-128). Sin dorado brillante */
+  /* Pizarra de la barra superior y del dock del teléfono, con su texto claro */
+  --enarm-slate: #374042;
+  --enarm-slate-deep: #2a3133;
+  --enarm-slate-fg: #f2f5f6;
+  --enarm-slate-muted: #c9d3d6;
+  /* La flama de la racha sobre la pizarra */
+  --enarm-slate-accent: #f5ab7a;
+
+  /* Tintes de las tarjetas. Crema para repasos, panel para análisis, salvia para Party */
+  --enarm-cream: #fbf7f2;
+  --enarm-panel: #dfe5ef;
+  --enarm-sage: #d6e4e1;
+
+  /* Acento cálido único y sobrio para racha, nivel y XP (D-128), con el durazno de la portada de fondo */
   --enarm-accent: #a64a13;
-  --enarm-accent-soft: #fbf0e8;
+  --enarm-accent-soft: #f5dacb;
   --enarm-accent-ink: #78320a;
   --enarm-accent-fg: #ffffff;
   --enarm-streak: #a64a13;
-  --enarm-streak-soft: #fbf0e8;
+  --enarm-streak-soft: #f5dacb;
   --enarm-streak-ink: #78320a;
 
-  /* Gráficas y heatmap (D-128). Realizados (#5687a1) pasa 3 a 1 sobre blanco (3.9 a 1) y sobre el
-     lienzo (3.6 a 1), resolviendo el hallazgo H12. El heatmap de Inicio va del paso 0, sin
-     actividad, al 4, el día más activo (HeatmapWidget.tsx) */
-  --enarm-chart-scheduled: #156082;
-  --enarm-chart-done: #5687a1;
-  --enarm-heatmap-0: #eeeae2;
-  --enarm-heatmap-1: #c4dbe6;
-  --enarm-heatmap-2: #84b7cf;
-  --enarm-heatmap-3: #428fae;
-  --enarm-heatmap-4: #156082;
+  /* Gráficas y heatmap. Cielo para lo programado o esta semana, marino para lo hecho, ámbar para la
+     comparación anterior. El heatmap de Inicio va del paso 0, sin actividad, al 4, el día más activo */
+  --enarm-chart-scheduled: #0f96e3;
+  --enarm-chart-done: #01337a;
+  --enarm-chart-compare: #b7791f;
+  --enarm-heatmap-0: #edf1f5;
+  --enarm-heatmap-1: #c6e3f7;
+  --enarm-heatmap-2: #8cc8f0;
+  --enarm-heatmap-3: #3fa6e8;
+  --enarm-heatmap-4: #0b6fb0;
 
   /* Estados. Solo para correcto e incorrecto, avisos y errores (4.7), siempre con ícono y texto */
   --enarm-success: #1b7a4a;
@@ -67,8 +80,7 @@
   --enarm-warning: #7a5200;
   --enarm-warning-soft: #fbf0d6;
   --enarm-danger: #bf2a24;
-  /* Al pasar el puntero se oscurece y no se aclara con opacidad, que bajaba el texto blanco a 4.46
-     a 1. Con este tono queda en 7.4 a 1 */
+  /* Al pasar el puntero se oscurece y no se aclara con opacidad */
   --enarm-danger-hover: #a3241f;
   --enarm-danger-soft: #fce6e4;
   --enarm-danger-fg: #ffffff;
@@ -95,17 +107,18 @@
   --enarm-urg-ink: #432462;
 
   /* Etiquetas obligatorias (4.6), en neutro con borde */
-  --enarm-demo: #eeeae2;
+  --enarm-demo: #f1f4f7;
   --enarm-demo-fg: #3f4b55;
-  --enarm-demo-line: #d2cabb;
-  --enarm-sim: #eeeae2;
+  --enarm-demo-line: #d2d9e0;
+  --enarm-sim: #f1f4f7;
   --enarm-sim-fg: #3f4b55;
-  --enarm-sim-line: #d2cabb;
+  --enarm-sim-line: #d2d9e0;
 
-  /* Sombras neutras y discretas. Los bordes finos hacen el trabajo */
-  --enarm-shadow-card: 0 1px 2px rgb(22 33 43 / 0.06);
-  --enarm-shadow-raised: 0 4px 16px -8px rgb(22 33 43 / 0.2);
-  --enarm-shadow-nav: 0 -1px 0 rgb(22 33 43 / 0.08);
+  /* Sombras. Suave al pasar el puntero por una tarjeta y marina bajo la tarjeta destacada */
+  --enarm-shadow-card: 0 1px 2px rgb(23 33 43 / 0.06);
+  --enarm-shadow-raised: 0 10px 30px -18px rgb(23 33 43 / 0.25);
+  --enarm-shadow-navy: 0 18px 40px -22px rgb(1 51 122 / 0.35);
+  --enarm-shadow-nav: 0 -1px 0 rgb(23 33 43 / 0.08);
 
   /* Cristal (V4-B2, decisión 2). Solo la barra superior, el dock inferior del teléfono y la barra de
      acciones fijas (utilidad glass, abajo). La superficie queda al 92 por ciento, así el texto pasa 4.5
@@ -124,14 +137,23 @@
     --enarm-line-strong: #66747f;
     --enarm-fg: #e8edf1;
     --enarm-fg-muted: #a3aeb8;
-    --enarm-primary: #156082;
-    --enarm-primary-hover: #1a7098;
-    --enarm-primary-active: #124f6c;
+    --enarm-heading: #c9d6ea;
+    --enarm-primary: #1a4f9c;
+    --enarm-primary-hover: #245fb3;
+    --enarm-primary-active: #163f7c;
     --enarm-primary-fg: #ffffff;
-    --enarm-primary-ink: #7fc1de;
+    --enarm-primary-ink: #7cc2ee;
     --enarm-primary-soft: #16303e;
-    --enarm-focus: #7fc1de;
-    --enarm-indicator: #7fc1de;
+    --enarm-focus: #7cc2ee;
+    --enarm-indicator: #7cc2ee;
+    --enarm-slate: #374042;
+    --enarm-slate-deep: #2a3133;
+    --enarm-slate-fg: #f2f5f6;
+    --enarm-slate-muted: #c9d3d6;
+    --enarm-slate-accent: #f5ab7a;
+    --enarm-cream: #1c232b;
+    --enarm-panel: #1b2630;
+    --enarm-sage: #19282a;
     --enarm-accent: #ea8b48;
     --enarm-accent-soft: #351d10;
     --enarm-accent-ink: #f5ab7a;
@@ -139,8 +161,9 @@
     --enarm-streak: #ea8b48;
     --enarm-streak-soft: #351d10;
     --enarm-streak-ink: #f5ab7a;
-    --enarm-chart-scheduled: #7fc1de;
-    --enarm-chart-done: #4e7f96;
+    --enarm-chart-scheduled: #7cc2ee;
+    --enarm-chart-done: #a8cdf5;
+    --enarm-chart-compare: #e0a84f;
     --enarm-heatmap-0: #202831;
     --enarm-heatmap-1: #1b4257;
     --enarm-heatmap-2: #255973;
@@ -179,7 +202,8 @@
     --enarm-sim-fg: #c4ccd3;
     --enarm-sim-line: #3a4650;
     --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
-    --enarm-shadow-raised: 0 4px 16px -8px rgb(0 0 0 / 0.6);
+    --enarm-shadow-raised: 0 10px 30px -18px rgb(0 0 0 / 0.6);
+    --enarm-shadow-navy: 0 18px 40px -22px rgb(0 0 0 / 0.7);
     --enarm-shadow-nav: 0 -1px 0 rgb(255 255 255 / 0.06);
   }
 }
@@ -193,14 +217,23 @@
   --enarm-line-strong: #66747f;
   --enarm-fg: #e8edf1;
   --enarm-fg-muted: #a3aeb8;
-  --enarm-primary: #156082;
-  --enarm-primary-hover: #1a7098;
-  --enarm-primary-active: #124f6c;
+  --enarm-heading: #c9d6ea;
+  --enarm-primary: #1a4f9c;
+  --enarm-primary-hover: #245fb3;
+  --enarm-primary-active: #163f7c;
   --enarm-primary-fg: #ffffff;
-  --enarm-primary-ink: #7fc1de;
+  --enarm-primary-ink: #7cc2ee;
   --enarm-primary-soft: #16303e;
-  --enarm-focus: #7fc1de;
-  --enarm-indicator: #7fc1de;
+  --enarm-focus: #7cc2ee;
+  --enarm-indicator: #7cc2ee;
+  --enarm-slate: #374042;
+  --enarm-slate-deep: #2a3133;
+  --enarm-slate-fg: #f2f5f6;
+  --enarm-slate-muted: #c9d3d6;
+  --enarm-slate-accent: #f5ab7a;
+  --enarm-cream: #1c232b;
+  --enarm-panel: #1b2630;
+  --enarm-sage: #19282a;
   --enarm-accent: #ea8b48;
   --enarm-accent-soft: #351d10;
   --enarm-accent-ink: #f5ab7a;
@@ -208,8 +241,9 @@
   --enarm-streak: #ea8b48;
   --enarm-streak-soft: #351d10;
   --enarm-streak-ink: #f5ab7a;
-  --enarm-chart-scheduled: #7fc1de;
-  --enarm-chart-done: #4e7f96;
+  --enarm-chart-scheduled: #7cc2ee;
+  --enarm-chart-done: #a8cdf5;
+  --enarm-chart-compare: #e0a84f;
   --enarm-heatmap-0: #202831;
   --enarm-heatmap-1: #1b4257;
   --enarm-heatmap-2: #255973;
@@ -248,7 +282,8 @@
   --enarm-sim-fg: #c4ccd3;
   --enarm-sim-line: #3a4650;
   --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
-  --enarm-shadow-raised: 0 4px 16px -8px rgb(0 0 0 / 0.6);
+  --enarm-shadow-raised: 0 10px 30px -18px rgb(0 0 0 / 0.6);
+  --enarm-shadow-navy: 0 18px 40px -22px rgb(0 0 0 / 0.7);
   --enarm-shadow-nav: 0 -1px 0 rgb(255 255 255 / 0.06);
 }
 
@@ -270,6 +305,7 @@
   --color-line-strong: var(--enarm-line-strong);
   --color-fg: var(--enarm-fg);
   --color-fg-muted: var(--enarm-fg-muted);
+  --color-heading: var(--enarm-heading);
   --color-primary: var(--enarm-primary);
   --color-primary-hover: var(--enarm-primary-hover);
   --color-primary-active: var(--enarm-primary-active);
@@ -278,6 +314,14 @@
   --color-primary-soft: var(--enarm-primary-soft);
   --color-focus: var(--enarm-focus);
   --color-indicator: var(--enarm-indicator);
+  --color-slate: var(--enarm-slate);
+  --color-slate-deep: var(--enarm-slate-deep);
+  --color-slate-fg: var(--enarm-slate-fg);
+  --color-slate-muted: var(--enarm-slate-muted);
+  --color-slate-accent: var(--enarm-slate-accent);
+  --color-cream: var(--enarm-cream);
+  --color-panel: var(--enarm-panel);
+  --color-sage: var(--enarm-sage);
   --color-success: var(--enarm-success);
   --color-success-soft: var(--enarm-success-soft);
   --color-warning: var(--enarm-warning);
@@ -302,6 +346,7 @@
   --color-streak-ink: var(--enarm-streak-ink);
   --color-chart-scheduled: var(--enarm-chart-scheduled);
   --color-chart-done: var(--enarm-chart-done);
+  --color-chart-compare: var(--enarm-chart-compare);
   --color-heatmap-0: var(--enarm-heatmap-0);
   --color-heatmap-1: var(--enarm-heatmap-1);
   --color-heatmap-2: var(--enarm-heatmap-2);
@@ -328,41 +373,67 @@
 
   --shadow-card: var(--enarm-shadow-card);
   --shadow-raised: var(--enarm-shadow-raised);
+  --shadow-navy: var(--enarm-shadow-navy);
   --shadow-nav: var(--enarm-shadow-nav);
 }
 
 @theme {
   /*
     Tipografía. Las fuentes se sirven desde la propia app, así funcionan sin conexión (D-061).
-    El texto va en la familia de lectura que elige el alumno. Los títulos van en serif, que le da a la
-    app una voz propia, salvo que el alumno elija una fuente pensada para leer mejor, Atkinson o
-    Lexend, y entonces todo va en esa (V4-B2, D-145)
+    Todo va en la familia de lectura que elige el alumno, títulos incluidos, como en la portada
+    (D-150). Quien elige la serif la tiene en todo el texto
   */
   --font-sans:
     var(--enarm-font-body), system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-display: var(--enarm-font-heading), Georgia, 'Times New Roman', serif;
+  --font-display:
+    var(--enarm-font-heading), system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Escala corta y fija. Título de pantalla de 20 px en el teléfono y 24 px desde 640 px (D-121) */
-  --text-title: 1.25rem;
-  --text-title--line-height: 1.3;
-  --text-title-lg: 1.5rem;
-  --text-title-lg--line-height: 1.25;
+  /* Escala de texto al 80 por ciento de la de Tailwind, a pedido de Ricardo (D-150), con piso de
+     11 px para que lo más chico siga legible. Los espacios no cambian, solo la letra */
+  --text-xs: 0.6875rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.7rem;
+  --text-sm--line-height: 1.05rem;
+  --text-base: 0.8rem;
+  --text-base--line-height: 1.2rem;
+  --text-lg: 0.9rem;
+  --text-lg--line-height: 1.35rem;
+  --text-xl: 1rem;
+  --text-xl--line-height: 1.4rem;
+  --text-2xl: 1.2rem;
+  --text-2xl--line-height: 1.5rem;
+  --text-3xl: 1.5rem;
+  --text-3xl--line-height: 1.8rem;
+  --text-4xl: 1.8rem;
+  --text-4xl--line-height: 2rem;
+  --text-5xl: 2.4rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 3rem;
+  --text-6xl--line-height: 1;
+
+  /* Título de pantalla en marino. 24 px en el teléfono y 32 px desde 640 px, que son los 30 y 40
+     del diseño al 80 por ciento (D-150) */
+  --text-title: 1.5rem;
+  --text-title--line-height: 1.1;
+  --text-title-lg: 2rem;
+  --text-title-lg--line-height: 1.08;
   /* Enunciado de pregunta en tamaño grande (10.4) */
-  --text-question: 1.1875rem;
+  --text-question: 0.95rem;
   --text-question--line-height: 1.6;
 
-  /* Dos radios chicos. Bordes finos en lugar de sombras y brillos */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
+  /* Radios de la portada. Campos de 12 px, tarjetas de 20 y paneles de 24. Los botones son píldoras */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.5rem;
 
   /* Medidas de interfaz. Objetivo táctil mínimo de 44 px y ancho de lectura */
   --spacing-touch: 2.75rem;
   --spacing-nav: 4.25rem;
   --spacing-rail: 5.5rem;
-  /* Barra superior en computadora, con el botón del menú, el logo, el saludo y el nivel (D-117) */
+  /* Barra superior pizarra en computadora, con el logo, el buscador, el menú y el alumno (D-150) */
   --spacing-topbar: 4rem;
   --spacing-topbar-logo: 4rem;
   --container-reading: 44rem;
@@ -370,8 +441,8 @@
   --container-session: 52rem;
   /* Ancho de trabajo para formularios y paneles que no necesitan toda la pantalla (V4-B1) */
   --container-work: 72rem;
-  /* Tope del contenido en pantallas muy anchas. En 1920 px no recorta nada (V4-B1) */
-  --container-content: 120rem;
+  /* Tope del contenido. 1280 px como la portada (D-150) */
+  --container-content: 80rem;
   /* Ancho máximo del marco de la app en computadora. Los textos largos siguen en el ancho de lectura (D-057) */
   --container-app: 88rem;
 }

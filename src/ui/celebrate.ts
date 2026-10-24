@@ -8,8 +8,8 @@ import { motionAllowed } from './appearance';
 // los retos de grupo de Party
 export type CelebrationKind = 'goal' | 'level' | 'challenge' | 'session' | 'small';
 
-// Tonos del color de acción y grises, como las gráficas (4.7 del plan del cambio)
-const COLORS = ['#156082', '#4a8aa9', '#8fb3c6', '#b7cdda', '#576570', '#ddd6c9'];
+// Marino, cielo y el acento cálido de la portada (D-150)
+const COLORS = ['#01337a', '#0f96e3', '#7cc2ee', '#bfe0f5', '#a64a13', '#f5dacb'];
 
 const NOTES: Record<CelebrationKind, number[]> = {
   small: [880],

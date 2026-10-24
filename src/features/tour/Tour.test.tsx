@@ -8,6 +8,7 @@ import { createMemoryRouter, Link, useLocation } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BottomNav } from '@/app/layout/BottomNav';
+import { TopNav } from '@/app/layout/TopNav';
 import { NAV_BY_ROLE } from '@/app/navigation';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
@@ -122,6 +123,7 @@ function renderApp({ path = '/', userId = USER }: { path?: string; userId?: stri
           <>
             <Where />
             <FakeScreen />
+            <TopNav nav={NAV_BY_ROLE.student} />
             <BottomNav nav={NAV_BY_ROLE.student} />
             <TourLauncher userId={userId} />
           </>
@@ -477,6 +479,7 @@ describe('las anclas del menú de verdad', () => {
     const anchors = [...document.querySelectorAll('[data-tour]')].map((element) =>
       element.getAttribute('data-tour'),
     );
+    // Primero el menú en línea de computadora con su Más y luego el dock del teléfono con el suyo (D-150)
     expect(anchors).toEqual([
       'nav-home',
       'nav-review',
@@ -484,10 +487,12 @@ describe('las anclas del menú de verdad', () => {
       'nav-simulatorSetup',
       'nav-progress',
       'nav-calendar',
-      'nav-tutor',
-      'nav-party',
+      'nav-more-top',
+      'nav-home',
+      'nav-review',
+      'nav-simulatorSetup',
+      'nav-progress',
       'nav-more',
-      'nav-settings',
     ]);
   });
 

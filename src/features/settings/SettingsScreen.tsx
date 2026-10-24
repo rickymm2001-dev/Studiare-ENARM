@@ -48,7 +48,6 @@ export function SettingsScreen() {
     <ScreenHeader
       title={t.screens.settings.title}
       description={t.screens.settings.description}
-      stats={false}
     />
   );
   if (redirect) return <Navigate to={redirect} replace />;

@@ -5,7 +5,7 @@
 import type { ScreenKey } from '@/app/screens';
 import type { AnalyticsEvent, PropsOf } from '@/data/analytics/catalog';
 import type { Role } from '@/data/schemas/common';
-import { NAV_MORE_ANCHOR } from './anchors';
+import { NAV_MORE_ANCHOR, NAV_TOP_MORE_ANCHOR } from './anchors';
 import { TOUR_STEPS, type TourStep } from './steps';
 
 /** Cómo empezó el recorrido. auto es al terminar el registro y settings es Ver el recorrido de Configuración */
@@ -40,9 +40,9 @@ export const STEP_SPECS: Readonly<Record<TourStep, StepSpec>> = {
     anchor: { rail: 'nav-simulatorSetup', bar: 'nav-simulatorSetup' },
   },
   progress: { screen: 'progress', anchor: { rail: 'nav-progress', bar: 'nav-progress' } },
-  party: { screen: 'party', anchor: { rail: 'nav-party', bar: NAV_MORE_ANCHOR } },
-  // En computadora es el engrane de Configuración, fijo abajo del riel
-  settings: { screen: 'settings', anchor: { rail: 'nav-settings', bar: NAV_MORE_ANCHOR } },
+  // Party y Configuración viven en Más también en computadora, desde la barra en línea (D-150)
+  party: { screen: 'party', anchor: { rail: NAV_TOP_MORE_ANCHOR, bar: NAV_MORE_ANCHOR } },
+  settings: { screen: 'settings', anchor: { rail: NAV_TOP_MORE_ANCHOR, bar: NAV_MORE_ANCHOR } },
 };
 
 /** Los roles cuyo menú tiene las secciones del alumno. El del médico es otro, y el recorrido no es suyo (8.18) */

@@ -24,7 +24,7 @@ afterEach(async () => {
 describe('aviso del banco en el marco', () => {
   it('si el archivo del aviso no llega, la pantalla sigue', async () => {
     app = await renderApp(SCREENS.home.path);
-    expect(await screen.findByRole('button', { name: t.nav.toggle })).toBeVisible();
+    expect(await screen.findByRole('searchbox', { name: t.nav.search })).toBeVisible();
     act(() => {
       useBankNotice.getState().show({ reason: 'offline', granted: 3, requested: 5, retryAt: null });
     });
@@ -34,6 +34,6 @@ describe('aviso del banco en el marco', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
     });
     expect(screen.queryAllByText(t.routeError.title)).toEqual([]);
-    expect(screen.getByRole('button', { name: t.nav.toggle })).toBeVisible();
+    expect(screen.getByRole('searchbox', { name: t.nav.search })).toBeVisible();
   });
 });

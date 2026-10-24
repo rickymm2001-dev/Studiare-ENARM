@@ -178,12 +178,12 @@ export const t = {
   },
   nav: {
     label: 'Navegación principal',
-    // Título de la hoja que abre Más en el teléfono (4.28 del plan del cambio)
+    // Título de la hoja que abre Más en el teléfono y en computadora (4.28 del plan del cambio, D-150)
     more: 'Más secciones',
     closeMore: 'Cerrar',
-    toggle: 'Menú lateral',
-    hide: 'Ocultar el menú lateral',
-    show: 'Mostrar el menú lateral',
+    // El buscador de la barra superior lleva a Buscar tarjetas (D-150)
+    search: 'Buscar un tema o una tarjeta',
+    searchPlaceholder: 'Busca un tema o una tarjeta',
   },
   studyTabs: {
     label: 'Repasar, mazos y buscar tarjetas',

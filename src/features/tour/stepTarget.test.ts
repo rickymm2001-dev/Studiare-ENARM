@@ -50,9 +50,9 @@ describe('qué hay de lo que pide un paso', () => {
     expect(probeStep('outlines', 'bar', 'student').element?.textContent).toBe('Más');
   });
 
-  it('un ancla escondida, como el riel oculto, no se resalta y no se espera', () => {
+  it('un ancla escondida, como un menú que no se ve, no se resalta y no se espera', () => {
     page(`<header data-tour-screen="settings"></header>
-      <a data-tour="nav-settings" data-hidden>Configuración</a>`);
+      <a data-tour="nav-more-top" data-hidden>Más</a>`);
     const probe = probeStep('settings', 'rail', 'student');
     expect(probe.anchor).toBe('hidden');
     expect(targetOf(probe)).toBeNull();

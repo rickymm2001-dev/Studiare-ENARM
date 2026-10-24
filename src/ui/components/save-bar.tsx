@@ -28,11 +28,12 @@ export function SaveBar({
       {dirty ? (
         <div
           className={cn(
-            'glass sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] z-10 flex flex-wrap items-center gap-2 rounded-xl border border-line p-2.5 shadow-raised lg:bottom-4',
+            // Píldora panel, como la barra de guardar del diseño (D-150)
+            'glass sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] z-10 flex flex-wrap items-center gap-2 rounded-full border border-line px-4 py-2.5 shadow-raised lg:bottom-4',
             className,
           )}
         >
-          <p className="mr-auto pl-1 text-sm font-semibold text-warning">{t.settings.unsaved}</p>
+          <p className="mr-auto text-sm font-semibold text-fg">{t.settings.unsaved}</p>
           {onDiscard ? (
             <Button type="button" variant="ghost" size="sm" onClick={onDiscard}>
               <RotateCcw aria-hidden />

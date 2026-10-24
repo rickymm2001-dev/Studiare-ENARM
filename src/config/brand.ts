@@ -8,6 +8,6 @@ export const BRAND = {
     'Studiare, la plataforma para preparar el ENARM. Repaso espaciado, simuladores tipo ENARM y seguimiento de tu técnica de examen.',
   // Deben coincidir con --enarm-primary y --enarm-canvas del modo claro de src/ui/tokens.css. Lo
   // vigila src/config/brand.test.ts
-  themeColor: '#156082',
-  backgroundColor: '#f6f3ee',
+  themeColor: '#01337a',
+  backgroundColor: '#ffffff',
 } as const;

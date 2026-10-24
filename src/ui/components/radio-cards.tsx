@@ -59,9 +59,10 @@ export function RadioCards<T extends string>({
             key={option.value}
             value={option.value}
             className={cn(
-              'flex min-h-touch w-full items-center gap-3 rounded-md border border-line bg-surface px-3 py-2 text-left text-fg',
+              // Tarjetas con esquinas grandes y borde de 2 px, en marino cuando están elegidas (D-150)
+              'card-lift flex min-h-touch w-full items-center gap-3 rounded-lg border-2 border-line bg-surface px-4 py-3 text-left text-fg',
               layout === 'row' && 'flex-col justify-center gap-1 px-2 text-center',
-              'hover:bg-muted data-[state=checked]:border-indicator data-[state=checked]:bg-primary-soft',
+              'data-[state=checked]:border-primary',
             )}
           >
             <span
@@ -71,7 +72,7 @@ export function RadioCards<T extends string>({
                 layout === 'row' && 'sr-only',
               )}
             >
-              <RadioGroup.Indicator className="size-2.5 rounded-full bg-indicator" />
+              <RadioGroup.Indicator className="size-2.5 rounded-full bg-primary" />
             </span>
             {option.icon ? (
               <span aria-hidden className="text-fg-muted [&_svg]:size-5">

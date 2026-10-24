@@ -49,7 +49,6 @@ function LegalPage({ docKey }: { docKey: LegalKey }) {
       <ScreenHeader
         title={t.screens[screenKey].title}
         description={legalText.updated(doc.updated)}
-        stats={false}
       />
       <div className="mx-auto flex w-full max-w-reading flex-col gap-4">
         <p

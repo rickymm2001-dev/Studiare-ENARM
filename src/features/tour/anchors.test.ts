@@ -1,8 +1,8 @@
 // De la ruta a las anclas del recorrido (B15, 4.3 y 7.5 del plan de B15)
 import { describe, expect, it } from 'vitest';
-import { NAV_BY_ROLE } from '@/app/navigation';
+import { NAV_BY_ROLE, topBarItems } from '@/app/navigation';
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
-import { NAV_MORE_ANCHOR, navAnchorOfPath, screenKeyOfPath } from './anchors';
+import { NAV_MORE_ANCHOR, NAV_TOP_MORE_ANCHOR, navAnchorOfPath, screenKeyOfPath } from './anchors';
 import { STEP_SPECS } from './tourMachine';
 
 describe('anclas del recorrido', () => {
@@ -25,9 +25,12 @@ describe('anclas del recorrido', () => {
     expect(NAV_MORE_ANCHOR).toBe('nav-more');
   });
 
-  it('todo lo que señala un paso existe en el menú del alumno, en el riel o en Más', () => {
+  it('todo lo que señala un paso existe en el menú del alumno, en la barra en línea o en Más', () => {
     const nav = NAV_BY_ROLE.student;
-    const inRail = new Set([...nav.main, ...nav.pinned].map((item) => navAnchorOfPath(item.path)));
+    const inRail = new Set([
+      NAV_TOP_MORE_ANCHOR,
+      ...topBarItems(nav).map((item) => navAnchorOfPath(item.path)),
+    ]);
     const inBar = new Set([
       NAV_MORE_ANCHOR,
       ...nav.main.filter((item) => item.bar === true).map((item) => navAnchorOfPath(item.path)),

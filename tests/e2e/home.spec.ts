@@ -75,19 +75,7 @@ test('en computadora el saludo va en la barra, el menú se oculta y el heatmap c
     .evaluate((element) => element.scrollWidth <= element.clientWidth + 1);
   expect(fits).toBe(true);
 
-  // Las tres barras ocultan el riel, el contenido usa todo el ancho y se recuerda al volver
-  const nav = page.getByRole('navigation', { name: t.nav.label });
-  const toggle = page.getByRole('button', { name: t.nav.toggle });
-  await expect(nav).toBeVisible();
-  const before = (await heatmap.boundingBox())?.width ?? 0;
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(nav).toBeHidden();
-  await expect.poll(async () => (await heatmap.boundingBox())?.width ?? 0).toBeGreaterThan(before);
-  await page.reload();
-  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: t.nav.label })).toBeHidden();
-  await page.getByRole('button', { name: t.nav.toggle }).click();
-  await expect(page.getByRole('navigation', { name: t.nav.label })).toBeVisible();
+  // El menú va en línea en la barra pizarra de arriba (D-150)
+  await expect(page.getByRole('navigation', { name: t.nav.label }).first()).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });

@@ -13,19 +13,20 @@ type FilterChipProps = Omit<ComponentProps<'button'>, 'onClick' | 'type'> & {
   count?: ReactNode;
 };
 
+// Píldoras como en la portada (D-150). Prendido va en marino con texto blanco
 function chipClasses(active: boolean, className?: string) {
   return cn(
-    'inline-flex min-h-9 items-center gap-1.5 rounded-md border px-3 text-sm font-semibold transition-colors',
+    'inline-flex min-h-10 items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors',
     active
-      ? 'border-indicator bg-primary-soft text-primary-ink'
-      : 'border-line bg-surface text-fg hover:bg-muted',
+      ? 'border-primary bg-primary text-primary-fg'
+      : 'border-line bg-surface text-fg hover:border-indicator',
     className,
   );
 }
 
 function ChipCount({ active, count }: { active: boolean; count: ReactNode }) {
   return (
-    <span className={cn('font-normal tabular-nums', active ? 'text-primary-ink' : 'text-fg-muted')}>
+    <span className={cn('font-normal tabular-nums', active ? 'text-primary-fg' : 'text-fg-muted')}>
       {count}
     </span>
   );

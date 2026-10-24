@@ -28,6 +28,8 @@ export const headerStatsText = {
     `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
   short: (level: number) => `Nivel ${level}`,
   titled: (level: number, title: string) => `Nivel ${level} · ${title}`,
+  // La píldora de la barra pizarra (D-150)
+  chip: (level: number, xp: number) => `Nivel ${level} · ${xp.toLocaleString('es-MX')} XP`,
   left: (xp: number, next: number) => `${xp.toLocaleString('es-MX')} XP para el nivel ${next}`,
   profile: 'Tu perfil',
   openLevels: 'Ver niveles y títulos',

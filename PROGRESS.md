@@ -939,3 +939,7 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 
 ## Pruebas
 - Ver el conteo al cierre de cada fase. Al cerrar la Fase A, 71 unitarias y 76 e2e, todas pasan
+
+## D-150. La portada por dentro, rediseño de todas las pantallas
+- Bloque 1, la base. Tokens nuevos (marino, cielo, pizarra, tintes), letra al 80 por ciento con piso de 11 px, títulos en la sans de la portada, botones y filtros en píldora, tarjetas de 20 px que suben al pasar el puntero, campos de 48 px. La barra pizarra con buscador, menú en línea y Más, el dock del teléfono en pizarra, el título de pantalla en el contenido con kicker y explicación a la vista. El riel lateral y su botón se retiran. El recorrido guiado elige la ancla que se ve. La foto del héroe de la portada sin degradado. Pruebas del sistema, del marco y del recorrido actualizadas. Unitarias, typecheck y lint en verde
+- Pendiente de este bloque. Las e2e de navegación (tests/e2e/navigation.spec.ts) todavía describen el riel y se ajustan al cerrar el rediseño

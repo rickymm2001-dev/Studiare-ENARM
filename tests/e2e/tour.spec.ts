@@ -342,28 +342,6 @@ test.describe('recorrido guiado', () => {
     await expectBackHome(page);
   });
 
-  test('si el ancla no se ve, como con el menú lateral oculto, el paso va al centro y no se rompe', async ({
-    page,
-  }) => {
-    test.skip(isPhone(page), 'El menú lateral solo existe en computadora');
-    await register(page);
-    await skipButton(page).click();
-    await expectBackHome(page);
-    await page.getByRole('button', { name: t.nav.toggle }).click();
-    await expect(page.getByRole('navigation', { name: t.nav.label })).toBeHidden();
-    await page.goto(SCREENS.settings.path);
-    await page.getByRole('button', { name: tourTexts.settings.button }).click();
-    await expect(stepDialog(page, 0)).toBeVisible();
-    await nextButton(page).click();
-    const second = stepDialog(page, 1);
-    await expect(second).toBeVisible();
-    await expect(second).toHaveAttribute('data-tour-mode', 'center');
-    await expect(page.locator('[data-tour-hole]')).toHaveCount(0);
-    await expect(skipButton(page)).toBeVisible();
-    await skipButton(page).click();
-    await expectBackHome(page);
-  });
-
   test('a 320 px de ancho, que es un zoom de 200%, el globo cabe y la página no se desborda', async ({
     page,
   }) => {

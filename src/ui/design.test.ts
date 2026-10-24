@@ -1,7 +1,7 @@
-// Reglas del sistema de diseño (B2 del plan del cambio, D-121). Sin degradados en src (CSS, canvas,
-// utilidades de Tailwind ni SVG), el color de acción es exactamente #156082 en claro y en los dos
-// modos oscuros, los tokens y utilidades de degradado y dorado ya no existen y el botón no tiene
-// variante dorada.
+// Reglas del sistema de diseño desde D-150, la portada por dentro. Degradados solo en la portada y
+// bajo la línea de la carga de repaso de Inicio, el color de acción es el marino #01337a en claro y
+// #1a4f9c en los dos modos oscuros, los tokens y utilidades de degradado y dorado ya no existen, el
+// botón es una píldora sin variante dorada, y todo lo que se pinta pasa el contraste de WCAG.
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,44 +20,48 @@ function sourceFiles(dir: string): string[] {
 }
 
 const read = (relative: string) => readFileSync(join(SRC, relative), 'utf8');
+const relativeOf = (file: string) => file.slice(SRC.length).replace(/\\/g, '/');
 
 /**
- * La portada de venta es la única excepción (D-149). Sigue el boceto de Ricardo, con manchas de luz y el
- * fundido de la foto, y sus estilos viven solos bajo .ld sin tocar los tokens de la app
+ * La portada de venta sigue el boceto de Ricardo (D-149) con manchas de luz, y la carga de repaso de
+ * Inicio lleva el sombreado degradado bajo su línea que pidió Ricardo (D-150). Nada más usa degradados
  */
-const LANDING_CSS = 'features/landing/landing.css';
+const GRADIENT_OK = new Set([
+  'features/landing/landing.css',
+  'features/home/sections/ReviewLoadCard.tsx',
+]);
 
-describe('sistema de diseño sobrio (B2, D-121)', () => {
-  it('no hay degradados en CSS, TSX ni canvas, salvo en la portada', () => {
-    const pattern = /-gradient\(|create(?:Linear|Radial|Conic)Gradient\(/;
+describe('sistema de diseño de la portada por dentro (D-150)', () => {
+  it('no hay degradados en CSS, TSX ni canvas, salvo en la portada y la carga de repaso', () => {
+    const pattern =
+      /-gradient\(|create(?:Linear|Radial|Conic)Gradient\(|<(?:linear|radial)Gradient\b/;
     const offenders = sourceFiles(SRC)
-      .map((file) => file.slice(SRC.length))
-      .filter((relative) => relative !== LANDING_CSS && pattern.test(read(relative)));
+      .map(relativeOf)
+      .filter((relative) => !GRADIENT_OK.has(relative) && pattern.test(read(relative)));
     expect(offenders).toEqual([]);
-    // La excepción existe y sigue siendo solo la portada
-    expect(pattern.test(read(LANDING_CSS))).toBe(true);
+    // La excepción de la portada existe y sigue siendo solo esa, con la carga de repaso
+    expect(pattern.test(read('features/landing/landing.css'))).toBe(true);
   });
 
-  it('no hay utilidades de degradado de Tailwind ni degradados de SVG', () => {
-    // bg-linear, bg-radial y bg-conic son las de Tailwind 4 y bg-gradient-to las de antes. En SVG un
-    // degradado se declara con linearGradient o radialGradient
-    const pattern = /\bbg-(?:linear|radial|conic)\b|\bbg-gradient-to-|<(?:linear|radial)Gradient\b/;
+  it('no hay utilidades de degradado de Tailwind', () => {
+    // bg-linear, bg-radial y bg-conic son las de Tailwind 4 y bg-gradient-to las de antes
+    const pattern = /\bbg-(?:linear|radial|conic)\b|\bbg-gradient-to-/;
     const offenders = sourceFiles(SRC).flatMap((file) =>
       readFileSync(file, 'utf8')
         .split('\n')
         .flatMap((line, index) =>
-          pattern.test(line) ? [`${file.slice(SRC.length)}:${String(index + 1)}`] : [],
+          pattern.test(line) ? [`${relativeOf(file)}:${String(index + 1)}`] : [],
         ),
     );
     expect(offenders).toEqual([]);
   });
 
-  it('el color de acción es #156082 en claro y en los dos bloques oscuros', () => {
+  it('el color de acción es el marino #01337a en claro y #1a4f9c en los dos bloques oscuros', () => {
     const tokens = read('ui/tokens.css');
     const primaries = [...tokens.matchAll(/--enarm-primary:\s*(#[0-9a-f]{6})/gi)].map((match) =>
       match[1]?.toLowerCase(),
     );
-    expect(primaries).toEqual(['#156082', '#156082', '#156082']);
+    expect(primaries).toEqual(['#01337a', '#1a4f9c', '#1a4f9c']);
     // Los botones y la navegación usan el token, nunca otro color de acción escrito a mano
     expect(read('ui/components/button.tsx')).toContain('bg-primary ');
   });
@@ -80,38 +84,18 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
     }
   });
 
-  it('el botón no tiene variante dorada ni usa píldoras', () => {
+  it('el botón es una píldora y no tiene variante dorada', () => {
     const button = read('ui/components/button.tsx');
     expect(button).not.toMatch(/\bgold\b/);
-    expect(button).not.toContain('rounded-full');
+    expect(button).toContain('rounded-full');
   });
 
-  it('sin píldoras fuera de círculos, barras y el reloj del Pomodoro (H01 de la revisión de B2)', () => {
-    // Un círculo lleva size- y no tiene relleno horizontal. Una píldora sí lo tiene. Las barras, las
-    // muestras de las gráficas y el reloj del Pomodoro viven en estos archivos y pueden ser redondos
-    const ROUND_OK = new Set([
-      'ui/components/progress-bar.tsx',
-      'features/review/CardTimerBar.tsx',
-      'app/layout/HeaderStats.tsx',
-      'features/home/sections/ReviewLoadCard.tsx',
-      'features/pomodoro/Pomodoro.tsx',
-      'features/profile/AvatarPicker.tsx',
-      'features/profile/AvatarCropper.tsx',
-    ]);
-    const offenders = sourceFiles(SRC).flatMap((file) => {
-      // En Windows la ruta llega con diagonales invertidas y ROUND_OK usa las normales
-      const relative = file.slice(SRC.length).replace(/\\/g, '/');
-      if (ROUND_OK.has(relative)) return [];
-      return readFileSync(file, 'utf8')
-        .split('\n')
-        .flatMap((line, index) => {
-          if (!line.includes('rounded-full')) return [];
-          const pill = /\bp[xlr]-/.test(line);
-          const circle = /\bsize-/.test(line) && !pill;
-          return circle ? [] : [`${relative}:${String(index + 1)}`];
-        });
-    });
-    expect(offenders).toEqual([]);
+  it('la letra va al 80 por ciento con piso de 11 px y los títulos en la fuente del texto', () => {
+    const tokens = read('ui/tokens.css');
+    expect(tokens).toMatch(/--text-base:\s*0\.8rem/);
+    expect(tokens).toMatch(/--text-xs:\s*0\.6875rem/);
+    expect(tokens).toMatch(/--font-display:\s*\n?\s*var\(--enarm-font-heading\)/);
+    expect(read('ui/appearance.ts')).not.toContain('FONT_FAMILIES.serif,');
   });
 
   it('contraste accesible de texto (>= 4.5 a 1) y elementos gráficos (>= 3 a 1) en claro y oscuro (D-128)', () => {
@@ -178,6 +162,19 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       ['--enarm-danger-fg', '--enarm-danger'],
       ['--enarm-demo-fg', '--enarm-demo'],
       ['--enarm-sim-fg', '--enarm-sim'],
+      // Títulos en marino, barra pizarra y tintes de las tarjetas (D-150)
+      ['--enarm-heading', '--enarm-surface'],
+      ['--enarm-heading', '--enarm-canvas'],
+      ['--enarm-heading', '--enarm-cream'],
+      ['--enarm-slate-fg', '--enarm-slate'],
+      ['--enarm-slate-muted', '--enarm-slate'],
+      ['--enarm-fg', '--enarm-cream'],
+      ['--enarm-fg', '--enarm-panel'],
+      ['--enarm-fg', '--enarm-sage'],
+      ['--enarm-fg-muted', '--enarm-cream'],
+      ['--enarm-fg-muted', '--enarm-panel'],
+      ['--enarm-fg-muted', '--enarm-sage'],
+      ['--enarm-primary-ink', '--enarm-cream'],
       ...branches.flatMap((b): [string, string][] => [
         [`--enarm-${b}-ink`, `--enarm-${b}-soft`],
         [`--enarm-${b}-ink`, '--enarm-surface'],
@@ -190,7 +187,10 @@ describe('sistema de diseño sobrio (B2, D-121)', () => {
       ['--enarm-chart-scheduled', '--enarm-surface'],
       ['--enarm-chart-done', '--enarm-surface'],
       ['--enarm-chart-done', '--enarm-canvas'],
+      ['--enarm-chart-compare', '--enarm-surface'],
       ['--enarm-indicator', '--enarm-surface'],
+      ['--enarm-indicator', '--enarm-cream'],
+      ['--enarm-indicator', '--enarm-slate'],
       ['--enarm-accent', '--enarm-surface'],
       // Barra de XP y de nivel sobre su riel y flama de la racha sobre su fondo suave
       ['--enarm-accent', '--enarm-muted'],

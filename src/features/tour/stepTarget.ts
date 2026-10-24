@@ -39,9 +39,12 @@ export function probeStep(
   const anchor = anchorOf(step, layout, role);
   const screenReady = root.querySelector(`[${TOUR_SCREEN_ATTRIBUTE}="${screenOf(step)}"]`) !== null;
   if (anchor === null) return { anchor: 'none', element: null, screenReady };
-  const element = root.querySelector<HTMLElement>(`[${TOUR_NAV_ATTRIBUTE}="${anchor}"]`);
-  if (element === null) return { anchor: 'missing', element: null, screenReady };
-  return isShown(element)
+  // La misma ancla vive en el menú en línea de computadora y en el dock del teléfono (D-150). Cuenta
+  // la que se ve en este ancho
+  const elements = [...root.querySelectorAll<HTMLElement>(`[${TOUR_NAV_ATTRIBUTE}="${anchor}"]`)];
+  if (elements.length === 0) return { anchor: 'missing', element: null, screenReady };
+  const element = elements.find(isShown);
+  return element
     ? { anchor: 'found', element, screenReady }
     : { anchor: 'hidden', element: null, screenReady };
 }
