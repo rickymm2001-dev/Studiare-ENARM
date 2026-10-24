@@ -1,11 +1,13 @@
 // Pregunta (pantalla 4). Caso clínico, opciones muestreadas, resaltado de negaciones en la frase de
 // la pregunta (7.5), temporizador y registro de cada cambio. Se contesta con el teclado o con el
 // ratón sin recorrer la pantalla, y la confianza previa es opcional y viene apagada (D-087).
-// Una pregunta de Inglés médico (B13, 2.3) usa siempre el diseño de lectura. El texto fijo a la izquierda
-// en computadora y arriba, plegable desde la segunda pregunta del caso, en el teléfono. El texto, la
-// pregunta y las opciones van en inglés (lang="en") con su fuente bajo el texto, y la interfaz sigue en
-// español. Además del reloj se ve el tiempo sugerido del texto y, si el alumno se pasa, una línea de
-// aviso. No detiene nada.
+// Desde D-150 comparte el lenguaje de la pregunta del examen. La banda crema con el avance y el tiempo,
+// la tarjeta grande con la rama en píldora, el caso y la pregunta en marino, las opciones como tarjetas
+// píldora y, abajo, la confianza en segmentado y el botón de responder, fijos en el teléfono.
+// Una pregunta de Inglés médico (B13, 2.3) lleva el texto de lectura dentro de la tarjeta, plegable desde
+// la segunda pregunta del caso en el teléfono. El texto, la pregunta y las opciones van en inglés
+// (lang="en") con su fuente bajo el texto, y la interfaz sigue en español. Además del reloj se ve el
+// tiempo sugerido del texto y, si el alumno se pasa, una línea de aviso. No detiene nada.
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
@@ -24,6 +26,7 @@ import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
@@ -37,6 +40,7 @@ import { correctPositionCounts, sampleForQuestion } from './optionSampling';
 import { secondsOnText, secondsOverSuggested, suggestedMsForText } from './passageTiming';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
 import { PassageTimeAdvice, ReadingPassage } from './ReadingPassage';
+import { SessionProgressBand } from './SessionProgressBand';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 import { usePassageGroup, type PassageGroup } from './usePassageGroup';
 
@@ -83,16 +87,8 @@ function Practice({ session }: { session: ReadySession }) {
     return <Navigate to={screenPath('feedback')} replace />;
   }
 
-  const header = (
-    <SessionHeader
-      title={t.screens.question.title}
-      meta={
-        active ? (
-          <span>{t.simulator.progress(practice.index + 1, practice.questionIds.length)}</span>
-        ) : undefined
-      }
-    />
-  );
+  // El avance va en la banda de la pregunta, así que el encabezado solo lleva el título
+  const header = <SessionHeader title={t.screens.question.title} />;
   // Con la retroalimentación al final, contestar la última lleva directo al resumen
   if (
     !active &&
@@ -109,9 +105,18 @@ function Practice({ session }: { session: ReadySession }) {
   const stale = bundle != null && bundle.question.id !== currentId;
   const groupPending = reading && group?.index !== practice.index;
   if (bundle === undefined || events === undefined || stale || groupPending) {
+    // La banda ya dice en qué pregunta va mientras llega la siguiente, sin la contestada debajo
+    const progressText = t.simulator.progress(practice.index + 1, practice.questionIds.length);
     return (
       <>
         {header}
+        <SessionProgressBand
+          label={progressText}
+          value={practice.index + 1}
+          max={practice.questionIds.length}
+          progressLabel={progressText}
+          className="-mt-2"
+        />
         <LoadingState />
       </>
     );
@@ -398,82 +403,79 @@ function QuestionCard({
     : isLast
       ? t.simulator.answerAndFinish
       : t.simulator.answerAndNext;
-  // Con caso clínico, en computadora el caso va a la izquierda y las opciones a la derecha, así
-  // ninguna línea pasa de unos 75 caracteres. Sin caso, la pregunta va en una columna de lectura. Una
-  // pregunta de lectura en inglés usa siempre las dos columnas, con el texto fijo a la izquierda y la
-  // pregunta y las opciones a la derecha
-  const twoColumns = Boolean(vignette) || english;
-  const prompt = (
-    <CardTitle
-      id="pregunta-frase"
-      ref={titleRef}
-      tabIndex={-1}
-      lang={lang}
-      className={cn(
-        'text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus',
-        english ? 'mb-3' : 'mt-3',
-      )}
-    >
-      <HighlightedPrompt text={question.prompt} ranges={ranges} />
-    </CardTitle>
-  );
+  const progressText = t.simulator.progress(practice.index + 1, practice.questionIds.length);
   return (
-    <Card
-      aria-labelledby="pregunta-frase"
-      className={cn(
-        'w-full',
-        twoColumns
-          ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6'
-          : 'lg:mx-auto lg:w-full lg:max-w-session',
-      )}
-    >
-      <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
-        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
-          {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones. Va en el
-              color de la rama (D-128) */}
-          <BranchBadge branch={question.branch} className="whitespace-normal">
-            {t.branchNames[question.branch] ?? question.branch} ·{' '}
-            {topicName.get(question.topic) ?? question.topic}
-          </BranchBadge>
-          <span className="flex items-center gap-1" aria-live="off">
-            <Timer aria-hidden className="size-4" />
-            {t.simulator.elapsed(formatDuration(elapsed))}
-          </span>
-        </div>
-        {english ? (
-          <div className="mt-2 flex flex-col gap-2">
-            <PassageTimeAdvice
-              position={group?.position ?? 0}
-              size={textSize}
-              suggestedSeconds={suggestedMs / 1000}
-              onTextSeconds={secondsOnText({ startedAt: textStartedAt, now })}
-              overSeconds={secondsOverSuggested({ startedAt: textStartedAt, now, suggestedMs })}
-            />
-            <ReadingPassage
-              text={vignette}
-              refs={question.gpcRefs}
-              fold={(group?.position ?? 0) > 0 ? 'phone' : 'never'}
-              scrollable
-              regionRef={passageRef}
-            />
-          </div>
-        ) : vignette ? (
-          <div className="mt-2 rounded-md bg-muted p-3">
-            <p className="eyebrow mb-1 text-fg-muted">{t.simulator.caseLabel}</p>
-            <p className="whitespace-pre-line">{vignette}</p>
-          </div>
-        ) : null}
-        {english ? null : prompt}
-      </CardHeader>
+    <>
+      <SessionProgressBand
+        label={progressText}
+        value={practice.index + 1}
+        max={practice.questionIds.length}
+        progressLabel={progressText}
+        className="-mt-2"
+      >
+        <span
+          className="flex items-center gap-1.5 text-sm text-fg-muted tabular-nums"
+          aria-live="off"
+        >
+          <Timer aria-hidden className="size-4" />
+          {t.simulator.elapsed(formatDuration(elapsed))}
+        </span>
+      </SessionProgressBand>
 
-      <div className="flex flex-col">
-        {english ? prompt : null}
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 text-sm text-fg-muted">
+      <div className="mx-auto flex w-full max-w-session flex-col gap-5">
+        <Card
+          lift={false}
+          aria-labelledby="pregunta-frase"
+          className="flex w-full flex-col gap-4 rounded-xl p-6 shadow-navy sm:p-8"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones. Va en el
+                color de la rama (D-128) */}
+            <BranchBadge branch={question.branch} className="whitespace-normal">
+              {t.branchNames[question.branch] ?? question.branch} ·{' '}
+              {topicName.get(question.topic) ?? question.topic}
+            </BranchBadge>
+            {english ? null : vignette ? (
+              <span className="text-sm text-fg-muted">{t.simulator.caseLabel}</span>
+            ) : null}
+          </div>
+          {english ? (
+            <div className="flex flex-col gap-2">
+              <PassageTimeAdvice
+                position={group?.position ?? 0}
+                size={textSize}
+                suggestedSeconds={suggestedMs / 1000}
+                onTextSeconds={secondsOnText({ startedAt: textStartedAt, now })}
+                overSeconds={secondsOverSuggested({ startedAt: textStartedAt, now, suggestedMs })}
+              />
+              <ReadingPassage
+                text={vignette}
+                refs={question.gpcRefs}
+                fold={(group?.position ?? 0) > 0 ? 'phone' : 'never'}
+                scrollable
+                regionRef={passageRef}
+              />
+            </div>
+          ) : vignette ? (
+            <p className="text-lg leading-relaxed whitespace-pre-line text-fg">{vignette}</p>
+          ) : null}
+          <CardTitle
+            id="pregunta-frase"
+            ref={titleRef}
+            tabIndex={-1}
+            lang={lang}
+            className="text-xl leading-snug font-bold tracking-tight text-heading focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus sm:text-2xl"
+          >
+            <HighlightedPrompt text={question.prompt} ranges={ranges} />
+          </CardTitle>
+        </Card>
+
+        <fieldset className="flex flex-col gap-3">
+          <legend className="mb-2 text-sm text-fg-muted">
             <span className="sr-only">{t.simulator.options}. </span>
             {t.choice.optionsHint}
           </legend>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-3">
             {shown.map((option, position) => (
               <OptionChoice
                 key={option.id}
@@ -499,39 +501,44 @@ function QuestionCard({
 
         {/* Responder queda pegado a las opciones y siempre en el mismo lugar. En el teléfono va fijo
             arriba de la navegación (D-078 y D-087) */}
-        <ActionDock className="mt-3 -mx-4 -mb-4 rounded-b-xl px-4 lg:mt-4 lg:mb-0 lg:rounded-none">
-          {settings.cardConfidenceStep ? (
-            <fieldset className="flex flex-col gap-1.5">
-              <legend className="text-sm font-medium">{t.simulator.confidenceQuestion}</legend>
-              <div className="flex flex-wrap items-center gap-2">
-                {(['guessed', 'unsure', 'sure'] as const).map((level) => (
-                  <Button
-                    key={level}
-                    className="flex-1 px-3 sm:flex-none"
-                    variant={confidence === level ? 'primary' : 'secondary'}
-                    aria-pressed={confidence === level}
-                    onClick={() => {
-                      setConfidence(confidence === level ? null : level);
-                    }}
-                  >
-                    {t.simulator.confidence[level]}
-                  </Button>
-                ))}
-              </div>
-            </fieldset>
-          ) : null}
-          <Button
-            className="w-full lg:w-auto lg:self-start"
-            size="lg"
-            aria-keyshortcuts="Enter"
-            disabled={!ready || busy}
-            onClick={() => {
-              void answer();
-            }}
-          >
-            {answerLabel}
-          </Button>
-          <KeyHint>
+        <ActionDock>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            {settings.cardConfidenceStep ? (
+              <fieldset className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <legend className="sr-only">{t.simulator.confidenceQuestion}</legend>
+                <span aria-hidden className="text-sm text-fg-muted">
+                  {t.simulator.confidenceQuestion}
+                </span>
+                <div className={segmentedList}>
+                  {(['guessed', 'unsure', 'sure'] as const).map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      aria-pressed={confidence === level}
+                      onClick={() => {
+                        setConfidence(confidence === level ? null : level);
+                      }}
+                      className={segmentedItem(confidence === level, 'min-h-9')}
+                    >
+                      {t.simulator.confidence[level]}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            ) : null}
+            <Button
+              className={cn('w-full sm:w-auto', !settings.cardConfidenceStep && 'ml-auto')}
+              size="lg"
+              aria-keyshortcuts="Enter"
+              disabled={!ready || busy}
+              onClick={() => {
+                void answer();
+              }}
+            >
+              {answerLabel}
+            </Button>
+          </div>
+          <KeyHint className="text-right">
             <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + shown.length)}</Kbd>{' '}
             {t.simulator.keys.choose} · <Kbd>{t.simulator.keys.shift}</Kbd> +{' '}
             {t.simulator.keys.letter} {t.simulator.keys.discard} · <Kbd>Enter</Kbd>{' '}
@@ -539,6 +546,6 @@ function QuestionCard({
           </KeyHint>
         </ActionDock>
       </div>
-    </Card>
+    </>
   );
 }

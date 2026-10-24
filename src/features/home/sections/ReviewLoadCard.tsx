@@ -1,14 +1,19 @@
-// Carga de repaso en Inicio (D-116). Por mes, cuántos repasos estaban programados y cuántos hizo el
-// alumno, de dos meses atrás a dos adelante, con el promedio por día de este mes y un enlace a la
-// carga completa en Progreso. Los colores salen de los tokens de la gráfica, validados para
-// daltonismo en claro y en oscuro. Para el lector de pantalla hay una tabla con los mismos datos.
+// Carga de repaso en Inicio (D-116, D-150). Por mes, cuántos repasos estaban programados y cuántos
+// hizo el alumno, de dos meses atrás a dos adelante. Es la tarjeta de cifra del rediseño, con el
+// promedio por día de este mes como cifra grande, la línea de programados en cielo con el sombreado
+// degradado hacia abajo que pidió Ricardo (la única excepción a la regla sin degradados dentro de la
+// app, junto con la portada, y la vigila src/ui/design.test.ts), la de realizados en marino, y un
+// enlace a la carga completa en Progreso. Los colores salen de los tokens de la gráfica, validados
+// para daltonismo en claro y en oscuro. Para el lector de pantalla hay una tabla con los mismos datos.
 // La gráfica mide su espacio y lo llena todo, sin estirar el texto (D-117).
+import { ChartColumn } from 'lucide-react';
 import { useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { MonthlyLoad, MonthlyLoadPoint } from '@/engines/monthlyLoad';
 import { t } from '@/i18n/es-MX';
-import { Card } from '@/ui/components/card';
+import { Button } from '@/ui/components/button';
+import { StatCard } from '@/ui/components/stat-card';
 import { useElementSize } from '@/ui/hooks/use-element-size';
 import { niceMax } from './chartScale';
 
@@ -17,45 +22,37 @@ const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', '
 const monthName = (month: string) => MONTHS[Number(month.slice(5, 7)) - 1] ?? month;
 
 /** Medida mientras no hay cómo medir, como en las pruebas con jsdom */
-const FALLBACK = { width: 320, height: 200 };
+const FALLBACK = { width: 320, height: 160 };
 const PAD = { top: 12, right: 16, bottom: 28, left: 42 };
 
-export function ReviewLoadCard({ load }: { load: MonthlyLoad }) {
-  const titleId = useId();
+export function ReviewLoadCard({ load, className }: { load: MonthlyLoad; className?: string }) {
   return (
-    <Card aria-labelledby={titleId} className="flex flex-col p-5">
-      {/* h3 como las demás tarjetas de Tus repasos, que ya tiene su h2 */}
-      <h3 id={titleId} className="mb-2 text-base font-semibold text-fg">
-        {text.title}
-      </h3>
-      <p className="text-sm sm:text-base">
-        {load.averagePerDayThisMonth > 0
-          ? text.average(load.averagePerDayThisMonth)
-          : text.averageNone}{' '}
-        {text.linkBefore}
-        <Link
-          to={screenPath('progress')}
-          aria-label={text.linkLabel}
-          className="font-semibold text-primary-ink underline underline-offset-4"
-        >
-          {text.link}
-        </Link>
-        {text.linkAfter}
-      </p>
+    <StatCard
+      icon={<ChartColumn />}
+      title={text.title}
+      value={load.averagePerDayThisMonth.toLocaleString('es-MX')}
+      caption={text.averageCaption}
+      className={className}
+    >
       {load.hasData ? (
         <LoadChart points={load.points} />
       ) : (
         // Alineado a la izquierda y sin marco punteado, como EmptyState (H17 de la revisión de B2).
         // Ocupa el lugar de la gráfica para que la tarjeta siga a la altura de su fila (D-117)
-        <p className="mt-3 grow text-sm text-fg-muted">{text.empty}</p>
+        <p className="grow text-sm text-fg-muted">{text.empty}</p>
       )}
-    </Card>
+      <Button asChild variant="link" size="sm" className="mt-auto self-start px-0">
+        <Link to={screenPath('progress')}>{text.seeAll}</Link>
+      </Button>
+    </StatCard>
   );
 }
 
 function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
   const [hover, setHover] = useState<number | null>(null);
   const box = useRef<HTMLDivElement>(null);
+  // El id del degradado no lleva los dos puntos de useId, que no caben en una referencia url()
+  const gradientId = `carga-${useId().replace(/:/g, '')}`;
   const { width: WIDTH, height: HEIGHT } = useElementSize(box, FALLBACK);
   const max = niceMax(
     Math.max(0, ...points.map((point) => Math.max(point.scheduled, point.done ?? 0))),
@@ -65,6 +62,7 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
   const step = points.length > 1 ? innerWidth / (points.length - 1) : 0;
   const x = (index: number) => PAD.left + index * step;
   const y = (value: number) => PAD.top + innerHeight - (value / max) * innerHeight;
+  const bottom = PAD.top + innerHeight;
   const ticks = [0, max / 4, max / 2, (max * 3) / 4, max];
   const line = (values: (number | null)[]) =>
     values
@@ -73,12 +71,17 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
       .join(' ');
   const scheduled = points.map((point) => point.scheduled);
   const done = points.map((point) => point.done);
+  // El área bajo la línea de programados, cerrada hasta el piso de la gráfica
+  const area =
+    scheduled.length > 0
+      ? `M${line(scheduled).split(' ').join(' L')} L${x(scheduled.length - 1)},${bottom} L${x(0)},${bottom} Z`
+      : '';
   const active = hover === null ? null : points[hover];
 
   return (
-    <figure className="mt-3 flex grow flex-col gap-2">
+    <figure className="flex grow flex-col gap-2">
       {/* La caja crece con la tarjeta y la gráfica se dibuja a su medida exacta */}
-      <div ref={box} className="relative min-h-48 grow">
+      <div ref={box} className="relative min-h-40 grow">
         <svg
           width={WIDTH}
           height={HEIGHT}
@@ -90,6 +93,21 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
             setHover(null);
           }}
         >
+          <defs>
+            {/* Del color de la línea arriba al transparente abajo, con los tokens y no con un color a mano */}
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="0"
+                style={{ stopColor: 'var(--color-chart-scheduled)' }}
+                stopOpacity={0.45}
+              />
+              <stop
+                offset="1"
+                style={{ stopColor: 'var(--color-chart-scheduled)' }}
+                stopOpacity={0}
+              />
+            </linearGradient>
+          </defs>
           {ticks.map((tick) => (
             <g key={tick}>
               <line
@@ -122,12 +140,13 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
               {monthName(point.month)}
             </text>
           ))}
+          {area ? <path d={area} fill={`url(#${gradientId})`} /> : null}
           {hover !== null ? (
             <line
               x1={x(hover)}
               x2={x(hover)}
               y1={PAD.top}
-              y2={PAD.top + innerHeight}
+              y2={bottom}
               className="stroke-line-strong"
               strokeWidth={1}
             />
@@ -136,7 +155,7 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
             points={line(scheduled)}
             fill="none"
             className="stroke-chart-scheduled"
-            strokeWidth={2}
+            strokeWidth={2.5}
             strokeLinejoin="round"
             strokeLinecap="round"
           />
@@ -206,7 +225,7 @@ function LoadChart({ points }: { points: readonly MonthlyLoadPoint[] }) {
           </div>
         ) : null}
       </div>
-      <figcaption className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-fg-muted">
+      <figcaption className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-muted">
         <span className="flex items-center gap-1.5">
           <span aria-hidden className="inline-block h-0.5 w-4 rounded-full bg-chart-scheduled" />
           {text.scheduled}

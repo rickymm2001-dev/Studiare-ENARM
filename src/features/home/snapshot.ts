@@ -24,6 +24,12 @@ export interface Snapshot {
   goal: UserSettings['dailyGoal'];
   /** Tarjetas cuyo último vencimiento ya llegó */
   dueCards: number;
+  /**
+   * Estado de las tarjetas activas para el anillo de Inicio (D-150). Las olvidadas son las que
+   * están en reaprendizaje tras un Otra vez, las vencidas las demás con vencimiento cumplido, y
+   * al día el resto, también las que todavía no se estudian. Las tres suman active
+   */
+  cardStatus: { active: number; upToDate: number; due: number; forgotten: number };
   /** Errores de opción múltiple de hoy */
   errorsToday: number;
   daysToExam: number | null;
@@ -103,10 +109,27 @@ export function buildSnapshot(input: {
   // Una tarjeta suspendida no toca hoy, y tampoco la borrada o la de un mazo que ya no se sigue
   const suspended = suspendedCardIds(events);
   let dueCards = 0;
+  let forgotten = 0;
+  let dueForgotten = 0;
   for (const [cardId, state] of latestCard) {
     if (suspended.has(cardId) || (activeCardIds && !activeCardIds.has(cardId))) continue;
-    if (new Date(state.due).getTime() < endOfToday) dueCards += 1;
+    const due = new Date(state.due).getTime() < endOfToday;
+    if (due) dueCards += 1;
+    if (state.state === 'relearning') {
+      forgotten += 1;
+      if (due) dueForgotten += 1;
+    }
   }
+  // Las activas son las de los mazos que sigue, sin las suspendidas. Sin la lista, las que ya tienen
+  // repasos. En el anillo una olvidada que también venció cuenta una sola vez, como olvidada
+  let active = 0;
+  for (const cardId of activeCardIds ?? latestCard.keys()) if (!suspended.has(cardId)) active += 1;
+  const cardStatus = {
+    active,
+    upToDate: Math.max(active - dueCards - forgotten + dueForgotten, 0),
+    due: dueCards - dueForgotten,
+    forgotten,
+  };
   const weekday = (new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7;
   const monday = addDays(today, -weekday);
   let weeklyXp = 0;
@@ -127,6 +150,7 @@ export function buildSnapshot(input: {
     todayActivity: activity[today] ?? emptyDay(),
     goal: settings.dailyGoal,
     dueCards,
+    cardStatus,
     errorsToday,
     daysToExam: daysBetween(today, examDateFor(user)),
     weeklyXp,

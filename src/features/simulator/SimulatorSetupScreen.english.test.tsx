@@ -109,8 +109,7 @@ describe('Simular con Inglés médico', () => {
     expect(within(card).queryByRole('button', { name: copy.start })).toBeNull();
     // La práctica en español no trae Inglés médico entre sus ramas ni cuenta sus reactivos
     expect(within(practice).queryByText(t.branchNames.medical_english as string)).toBeNull();
-    const stats = screen.getByRole('region', { name: t.simulator.stats.label });
-    expect(stats).toHaveTextContent(`${t.simulator.stats.available}25`);
+    expect(within(practice).getByText(new RegExp(`^${t.simulator.available(25)}`))).toBeVisible();
   });
 
   it('con dos casos de 5 reactivos está en Calibrando con 5 de 30 y no mezcla el inglés con el español', async () => {
@@ -164,28 +163,29 @@ describe('Simular con Inglés médico', () => {
     expect(within(card).getByRole('button', { name: copy.start })).toBeDisabled();
   });
 
-  it('con la bandera apagada no hay tarjeta de inglés', async () => {
+  it('con la bandera apagada no hay tarjeta de inglés ni casilla en el examen', async () => {
+    const typing = userEvent.setup();
     writeStoredFlags({ cloudBank: true, medicalEnglish: false });
     bank([...spanish(25), ...reading([2, 3], 25)]);
     app = await renderApp(SCREENS.simulatorSetup.path);
     await setup();
+    // El examen completo es el modo Examen del mismo formulario (D-150)
+    await typing.click(screen.getByRole('radio', { name: new RegExp(t.simulator.mode.exam) }));
     await waitFor(() => {
       expect(screen.getByRole('region', { name: t.exam.cardTitle })).toBeVisible();
     });
     expect(screen.queryByRole('region', { name: copy.title })).toBeNull();
     expect(screen.queryByRole('checkbox', { name: englishText.exam.include })).toBeNull();
-    // El examen completo es la única tarjeta de la fila y no deja media pantalla vacía
-    const row = screen.getByRole('region', { name: t.exam.cardTitle }).parentElement;
-    expect(row).not.toBeNull();
-    expect(row).not.toHaveClass('xl:grid-cols-2');
   });
 
-  it('con la bandera prendida la fila de las dos tarjetas va a dos columnas en pantalla ancha', async () => {
+  it('con la bandera prendida el examen ofrece su parte en inglés y la tarjeta de inglés va debajo', async () => {
+    const typing = userEvent.setup();
     bank([...spanish(25), ...reading([2, 3], 25)]);
     app = await renderApp(SCREENS.simulatorSetup.path);
     await setup();
-    await englishCard();
-    const row = screen.getByRole('region', { name: t.exam.cardTitle }).parentElement;
-    expect(row).toHaveClass('xl:grid-cols-2');
+    expect(await englishCard()).toBeVisible();
+    await typing.click(screen.getByRole('radio', { name: new RegExp(t.simulator.mode.exam) }));
+    expect(await screen.findByRole('checkbox', { name: englishText.exam.include })).toBeChecked();
+    expect(screen.getByRole('region', { name: t.exam.cardTitle })).toBeVisible();
   });
 });

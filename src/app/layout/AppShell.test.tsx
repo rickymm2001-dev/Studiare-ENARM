@@ -32,7 +32,7 @@ describe('marco con barra pizarra, buscador y menú en línea (D-150)', () => {
 
   it('el título va en el contenido, en marino, con su explicación a la vista', async () => {
     app = await renderApp(SCREENS.progress.path);
-    const title = await screen.findByRole('heading', { level: 1, name: t.screens.progress.title });
+    const title = await screen.findByRole('heading', { level: 1, name: t.progress.title });
     // Sigue en main para el salto al contenido y el foco al navegar
     expect(title.closest('main')).toHaveAttribute('id', 'contenido');
     expect(title).toHaveClass('screen-title');

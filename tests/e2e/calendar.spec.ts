@@ -20,9 +20,10 @@ test('el calendario muestra el mes, cambia de mes y arma el plan por semanas con
   test.setTimeout(180_000);
   await signUp(page);
   await page.goto(SCREENS.calendar.path);
-  await expect(page.getByRole('heading', { level: 1, name: t.screens.calendar.title })).toBeVisible(
-    { timeout: 60_000 },
-  );
+  // Desde D-150 el h1 es el título del mes y Calendario va en el kicker
+  await expect(page.getByRole('heading', { level: 1, name: t.calendar.heroTitle })).toBeVisible({
+    timeout: 60_000,
+  });
 
   // La cuadrícula es una tabla con su título y las letras de los días
   const grid = page.getByRole('table');
@@ -50,7 +51,7 @@ test('el calendario muestra el mes, cambia de mes y arma el plan por semanas con
   ).toBeVisible();
 
   // Mes siguiente y de regreso con Hoy
-  const title = page.getByRole('heading', { level: 2 }).first();
+  const title = page.getByRole('heading', { level: 2, name: /\d{4}$/ });
   const before = await title.textContent();
   await page.getByRole('button', { name: t.calendar.next }).click();
   await expect(title).not.toHaveText(before ?? '');

@@ -168,30 +168,47 @@ export function AnswerReview({
             className="mb-3"
           />
         ) : null}
+        {/* Las opciones con la forma de píldora de la pregunta (D-150). La correcta en verde suave y la
+            elegida que no lo era en rojo suave, siempre con su texto, nunca solo con el color */}
         <ul className="flex flex-col gap-2">
           {shown.map((option, position) => {
             const isChosen = option.id === answer.optionVersionId;
             const reveal = isChosen || option.isCorrect;
+            const wrong = isChosen && !option.isCorrect;
             return (
               <li
                 key={option.id}
                 className={cn(
-                  'rounded-md border border-line p-3',
+                  'flex items-start gap-3 rounded-lg border-[1.5px] border-line p-3',
                   option.isCorrect && 'border-success bg-success-soft',
-                  isChosen && !option.isCorrect && 'border-danger bg-danger-soft',
+                  wrong && 'border-danger bg-danger-soft',
                 )}
               >
-                <p>
-                  <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                  {inEnglish(option.text)}
-                  {isChosen ? (
-                    <span className="ml-2 text-sm font-medium">({t.simulator.yourAnswer})</span>
-                  ) : null}
-                  {option.isCorrect ? (
-                    <span className="ml-2 text-sm font-medium">({t.simulator.correctAnswer})</span>
-                  ) : null}
-                </p>
-                {reveal ? <p className="mt-1 text-sm text-fg-muted">{option.rationale}</p> : null}
+                <span
+                  aria-hidden
+                  className={cn(
+                    'flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-extrabold text-heading',
+                    option.isCorrect && 'bg-success text-surface',
+                    wrong && 'bg-danger text-danger-fg',
+                  )}
+                >
+                  {String.fromCharCode(65 + position)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p>
+                    <span className="sr-only">{String.fromCharCode(65 + position)}. </span>
+                    {inEnglish(option.text)}
+                    {isChosen ? (
+                      <span className="ml-2 text-sm font-medium">({t.simulator.yourAnswer})</span>
+                    ) : null}
+                    {option.isCorrect ? (
+                      <span className="ml-2 text-sm font-medium">
+                        ({t.simulator.correctAnswer})
+                      </span>
+                    ) : null}
+                  </p>
+                  {reveal ? <p className="mt-1 text-sm text-fg-muted">{option.rationale}</p> : null}
+                </div>
               </li>
             );
           })}

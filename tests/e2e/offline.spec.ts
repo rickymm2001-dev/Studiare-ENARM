@@ -80,6 +80,6 @@ test('en la primera visita, sin recargar, el service worker toma el control y la
   await context.setOffline(true);
   // Navegación dentro de la app, que baja el archivo de la pantalla con una importación diferida
   await mainNav(page).getByRole('link', { name: t.navItems.progress }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.progress.title);
   await context.setOffline(false);
 });

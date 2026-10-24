@@ -3,7 +3,13 @@
 // los resultados. Todo cambio queda en el navegador al instante, así una recarga lo retoma, y la
 // bitácora recibe lo que hace en el momento (question_shown y answer_changed). Las respuestas se
 // registran al terminar, en examSession.
-import { AlarmClock, ChevronLeft, ChevronRight, Flag, X } from 'lucide-react';
+// Desde D-150 sigue el diseño de la pregunta. La primera fila del contenido es la franja pizarra de la
+// sesión, con el título, su resumen, la etiqueta de demostración si aplica, el reloj en píldora cielo y
+// Entregar. El marco de la app es común, así que la franja vive aquí y no en AppShell. Debajo va la banda
+// crema con el avance y el aviso de ritmo del motor de alertas, y luego la pregunta en ocho columnas con
+// el mapa del examen y la técnica de examen en el lateral. En el teléfono es una columna con las acciones
+// fijas abajo.
+import { ChevronLeft, ChevronRight, Flag, TriangleAlert, X } from 'lucide-react';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
@@ -16,6 +22,7 @@ import { nextTimeAlerts, type TimeAlert } from '@/engines/timeAlerts';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { ActionDock } from '@/ui/components/action-dock';
+import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
@@ -24,6 +31,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useShortcuts } from '../shared/useShortcuts';
 import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { clock } from '../simulator/practice';
+import { SessionProgressBand } from '../simulator/SessionProgressBand';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { formatClock } from './clock';
 import { alertMessage, alertVisibleMs, stuckAfterMs } from './examAlerts';
@@ -129,6 +137,19 @@ interface Banner {
   alert: TimeAlert;
   message: string;
   at: number;
+}
+
+/** Las ramas del examen para el resumen de la franja. Dos se nombran, más se cuentan */
+function branchesSummary(bundles: Map<string, QuestionBundle>, ids: readonly string[]): string {
+  const names = [
+    ...new Set(
+      ids.flatMap((id) => {
+        const branch = bundles.get(id)?.question.branch;
+        return branch ? [t.branchNames[branch] ?? branch] : [];
+      }),
+    ),
+  ];
+  return names.length <= 2 ? names.join(' y ') : t.exam.branchesCount(names.length);
 }
 
 function ExamRunner({
@@ -330,6 +351,9 @@ function ExamRunner({
   const englishIds = new Set(
     state.questionIds.filter((id) => bundles.get(id)?.question.language === 'en'),
   );
+  // Todo contenido de demostración lleva su etiqueta a la vista (4.6)
+  const demo = state.questionIds.some((id) => bundles.get(id)?.question.isDemo === true);
+  const progressText = t.exam.progress(state.current + 1, total);
 
   // Teclado (D-087). Letras o números eligen, Mayús con la letra descarta, Enter o la flecha derecha
   // sigue, la flecha izquierda regresa y M marca. No actúa con la ventana de terminar abierta
@@ -374,7 +398,7 @@ function ExamRunner({
         highlight={state.highlight}
         askConfidence={state.askConfidence}
         nudge={nudge}
-        position={t.exam.progress(state.current + 1, total)}
+        position={progressText}
         focusPrompt={focusPrompt}
         onChoose={onChoose}
         onToggleDiscard={(optionId) => {
@@ -393,37 +417,37 @@ function ExamRunner({
       </Card>
     );
 
-  // Anterior, marcar y siguiente, siempre a la mano en el teléfono (D-078). En el teléfono marcar queda
-  // solo con su ícono, para que su texto no se parta en tres renglones, y deja el espacio a Anterior y
-  // Siguiente (H14 de la revisión de B2). Con la hoja de respuestas las letras no eligen, así que su
-  // recordatorio de teclas no las ofrece
-  const dock = (placement?: string) => (
-    <ActionDock className={cn('lg:mx-auto lg:w-full lg:max-w-session', placement)}>
-      <div className="grid grid-cols-[1fr_auto_1fr] gap-2 sm:grid-cols-3">
+  // Anterior, marcar para revisar y Siguiente, siempre a la mano en el teléfono (D-078). Marcar es el
+  // secundario y Siguiente el principal con su flecha, como en el diseño. En el teléfono marcar queda solo
+  // con su ícono para que su texto no se parta en tres renglones (H14 de la revisión de B2). Con la hoja de
+  // respuestas las letras no eligen, así que su recordatorio de teclas no las ofrece
+  const dock = (
+    <ActionDock>
+      <div className="flex flex-wrap items-center justify-end gap-2">
         <Button
-          variant="secondary"
+          variant="ghost"
           disabled={state.current === 0}
+          className="mr-auto"
           onClick={() => {
             visit(state.current - 1);
           }}
         >
           <ChevronLeft aria-hidden />
-          {t.exam.previous}
+          <span className="max-sm:sr-only">{t.exam.previous}</span>
         </Button>
         <Button
-          variant={answer.marked ? 'primary' : 'secondary'}
+          variant="secondary"
           aria-pressed={answer.marked}
           aria-label={markLabel}
-          className="h-auto min-h-touch py-1.5 text-sm whitespace-normal max-sm:px-3"
+          className={cn(answer.marked && 'bg-primary-soft')}
           onClick={() => {
             edit((current) => toggleMarked(current, currentId));
           }}
         >
-          <Flag aria-hidden />
+          <Flag aria-hidden className={cn(answer.marked && 'fill-current')} />
           <span className="max-sm:hidden">{markLabel}</span>
         </Button>
         <Button
-          variant="secondary"
           disabled={state.current >= total - 1}
           onClick={() => {
             visit(state.current + 1);
@@ -433,7 +457,7 @@ function ExamRunner({
           <ChevronRight aria-hidden />
         </Button>
       </div>
-      <KeyHint>
+      <KeyHint className="text-right">
         {state.answerSheet ? null : (
           <>
             <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
@@ -449,89 +473,119 @@ function ExamRunner({
 
   return (
     <>
-      <SessionHeader
-        title={t.screens.exam.title}
-        meta={
-          <>
-            <span>{t.exam.progress(state.current + 1, total)}</span>
-            <span>{t.exam.answeredCount(answered, total)}</span>
-          </>
-        }
-        actions={
-          <>
-            <ExamTimer startedAtMs={state.startedAtMs} totalMs={state.totalMs} />
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => {
-                setFinishOpen(true);
-              }}
-            >
-              {t.exam.finish}
-            </Button>
-          </>
-        }
-      />
-
-      {/* Los avisos de tiempo salen arriba y se leen en voz alta sin quitar el foco de la pregunta */}
-      <div role="status" aria-live="polite">
-        {banner ? (
-          <div
-            className={cn(
-              'fixed inset-x-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-40 mx-auto flex max-w-reading items-start gap-3 rounded-lg border p-3 shadow-raised lg:top-[calc(var(--spacing-topbar)+0.75rem)] lg:right-6 lg:left-auto lg:mx-0 lg:w-auto lg:max-w-md',
-              banner.alert.severity === 'critical'
-                ? 'border-danger bg-danger-soft text-fg'
-                : banner.alert.severity === 'warning'
-                  ? 'border-warning bg-warning-soft text-fg'
-                  : 'border-line bg-surface text-fg',
-            )}
-          >
-            <AlarmClock aria-hidden className="mt-0.5 size-5 shrink-0" />
-            <p className="flex-1 text-sm font-medium">{banner.message}</p>
-            <button
-              type="button"
-              aria-label={t.exam.dismiss}
-              className="flex size-8 shrink-0 items-center justify-center rounded-full hover:bg-muted"
-              onClick={() => {
-                setBanner(null);
-              }}
-            >
-              <X aria-hidden className="size-4" />
-            </button>
+      {/* La franja de la sesión y la banda de avance salen a los bordes del contenido y se pegan bajo la
+          barra pizarra en computadora. En el teléfono se quedan arriba, el reloj no estorba al leer */}
+      <div className="-mx-5 -mt-6 lg:sticky lg:top-topbar lg:z-10 lg:-mx-8 lg:-mt-8">
+        <header className="bg-slate text-slate-fg">
+          <title>{t.app.documentTitle(t.screens.exam.title)}</title>
+          <div className="mx-auto flex max-w-content flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2 lg:px-8">
+            <h1 tabIndex={-1} className="text-lg font-extrabold tracking-tight outline-none">
+              {t.screens.exam.title}
+            </h1>
+            <p className="text-sm text-slate-muted">
+              {t.exam.sessionSummary(total, branchesSummary(bundles, state.questionIds))}
+            </p>
+            <div className="ml-auto flex flex-wrap items-center gap-3">
+              {demo ? <Badge>{t.exam.demoLabel}</Badge> : null}
+              <ExamTimer startedAtMs={state.startedAtMs} totalMs={state.totalMs} />
+              <button
+                type="button"
+                className="inline-flex min-h-10 items-center justify-center rounded-full border-[1.5px] border-slate-fg/40 px-4 text-sm font-semibold text-slate-fg transition-colors hover:border-slate-fg hover:bg-slate-fg/10"
+                onClick={() => {
+                  setFinishOpen(true);
+                }}
+              >
+                {t.exam.finish}
+              </button>
+            </div>
           </div>
-        ) : null}
+        </header>
+        <SessionProgressBand
+          label={progressText}
+          value={state.current + 1}
+          max={total}
+          progressLabel={`${t.exam.progressLabel}. ${progressText}`}
+          className="mx-0 lg:mx-0"
+        >
+          <span className="text-sm text-fg-muted tabular-nums">
+            {t.exam.answeredCount(answered, total)}
+          </span>
+          {/* Los avisos de tiempo se leen en voz alta sin quitar el foco de la pregunta */}
+          <div
+            role="status"
+            aria-live="polite"
+            className="flex basis-full items-center sm:basis-auto"
+          >
+            {banner ? (
+              <p
+                className={cn(
+                  'flex items-center gap-1.5 text-sm font-bold',
+                  banner.alert.severity === 'critical'
+                    ? 'text-danger'
+                    : banner.alert.severity === 'warning'
+                      ? 'text-warning'
+                      : 'text-fg',
+                )}
+              >
+                <TriangleAlert aria-hidden className="size-4 shrink-0" />
+                <span>{banner.message}</span>
+                <button
+                  type="button"
+                  aria-label={t.exam.dismiss}
+                  className="flex size-7 shrink-0 items-center justify-center rounded-full text-fg-muted hover:bg-muted"
+                  onClick={() => {
+                    setBanner(null);
+                  }}
+                >
+                  <X aria-hidden className="size-4" />
+                </button>
+              </p>
+            ) : null}
+          </div>
+        </SessionProgressBand>
       </div>
 
-      {state.answerSheet ? (
-        // En el teléfono y la tableta es una columna con la pregunta, la hoja y al final Anterior, marcar y
-        // Siguiente, que se quedan pegados abajo mientras se recorre la hoja (D-078). Un elemento pegajoso
-        // solo se queda en pantalla si su lugar natural está debajo, así que va después de la hoja, y en
-        // una columna flex y no en una cuadrícula, donde solo se pega dentro de su propia celda. En
-        // computadora, donde ya no es pegajoso, la hoja va a un lado y el dock bajo la pregunta
-        <div className="flex flex-col gap-5 xl:grid xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start">
-          <div className="min-w-0 xl:col-start-1 xl:row-start-1">{questionNode}</div>
-          <aside className="min-w-0 xl:sticky xl:top-24 xl:col-start-2 xl:row-span-2 xl:row-start-1">
-            <AnswerSheet
-              rows={sheetRows}
-              current={state.current}
-              disabled={isFinished(state)}
-              onChoose={(index, optionId) => {
-                const id = state.questionIds[index];
-                if (id !== undefined) chooseFor(id, optionId);
-              }}
-              onGo={visit}
-            />
-          </aside>
-          {dock('xl:col-start-1 xl:row-start-2')}
-        </div>
-      ) : (
-        <>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12 xl:items-start">
+        <section
+          aria-label={t.screens.question.title}
+          className="flex min-w-0 flex-col gap-5 xl:col-span-8"
+        >
           {questionNode}
-          {dock()}
-        </>
-      )}
-
-      <ExamNavigator state={state} onGo={visit} englishIds={englishIds} />
+          {state.answerSheet ? (
+            // Con la hoja de respuestas, la hoja va entre la pregunta y las acciones, que en el teléfono se
+            // quedan pegadas abajo mientras se recorre (D-078). Un elemento pegajoso solo se queda en
+            // pantalla si su lugar natural está debajo, así que el dock va después de la hoja
+            <Card tone="cream" lift={false}>
+              <AnswerSheet
+                rows={sheetRows}
+                current={state.current}
+                disabled={isFinished(state)}
+                onChoose={(index, optionId) => {
+                  const id = state.questionIds[index];
+                  if (id !== undefined) chooseFor(id, optionId);
+                }}
+                onGo={visit}
+              />
+            </Card>
+          ) : null}
+          {dock}
+        </section>
+        <aside className="flex min-w-0 flex-col gap-4 xl:col-span-4">
+          <ExamNavigator state={state} onGo={visit} englishIds={englishIds} />
+          <Card tone="panel" lift={false} aria-labelledby="examen-tecnica">
+            <CardHeader>
+              <CardTitle id="examen-tecnica" className="text-lg">
+                {t.exam.technique}
+              </CardTitle>
+            </CardHeader>
+            <p className="text-sm leading-relaxed text-fg">{t.choice.optionsHint}</p>
+            <KeyHint className="mt-2">
+              <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter} {t.exam.keys.discard} ·{' '}
+              <Kbd>M</Kbd> {t.exam.keys.mark}
+            </KeyHint>
+          </Card>
+        </aside>
+      </div>
 
       <ExamFinishDialog
         open={finishOpen}

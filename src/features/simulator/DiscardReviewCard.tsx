@@ -46,17 +46,29 @@ export function DiscardReviewCard({
           const option = shown[position];
           if (!option) return null;
           return (
-            <li key={id} className="rounded-md border border-line p-3">
-              <p>
-                <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                {lang === undefined ? option.text : <span lang={lang}>{option.text}</span>}
-                {dropped.has(id) ? (
-                  <span className="ml-2 text-sm font-medium text-fg-muted">
-                    ({text.youDiscarded})
-                  </span>
-                ) : null}
-              </p>
-              <p className="mt-1 text-sm text-fg-muted">{option.rationale}</p>
+            <li
+              key={id}
+              className="flex items-start gap-3 rounded-lg border-[1.5px] border-line bg-muted p-3"
+            >
+              {/* La letra tachada, como la opción descartada en la pregunta (D-150) */}
+              <span
+                aria-hidden
+                className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-extrabold text-fg-muted line-through"
+              >
+                {String.fromCharCode(65 + position)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p>
+                  <span className="sr-only">{String.fromCharCode(65 + position)}. </span>
+                  {lang === undefined ? option.text : <span lang={lang}>{option.text}</span>}
+                  {dropped.has(id) ? (
+                    <span className="ml-2 text-sm font-medium text-fg-muted">
+                      ({text.youDiscarded})
+                    </span>
+                  ) : null}
+                </p>
+                <p className="mt-1 text-sm text-fg-muted">{option.rationale}</p>
+              </div>
             </li>
           );
         })}

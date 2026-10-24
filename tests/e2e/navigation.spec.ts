@@ -160,9 +160,9 @@ test('las rutas viejas de Perfil, Plan y Logros llevan a Configuración y a Prog
 }) => {
   await signUp(page);
   for (const [from, to, title] of [
-    ['/perfil', SCREENS.settings.path, t.screens.settings.title],
-    ['/planificador', SCREENS.progress.path, t.screens.progress.title],
-    ['/logros', SCREENS.progress.path, t.screens.progress.title],
+    ['/perfil', SCREENS.settings.path, t.settings.heroTitle],
+    ['/planificador', SCREENS.progress.path, t.progress.title],
+    ['/logros', SCREENS.progress.path, t.progress.title],
   ] as const) {
     await page.goto(SCREENS.review.path);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.review.title);

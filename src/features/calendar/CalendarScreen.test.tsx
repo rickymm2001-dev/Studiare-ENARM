@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-// Calendario (V4-B6 y la auditoría de V4-B10). Lo que se revisa aquí es lo que no cubre el motor. El plan
-// dice que el simulador completo es de pago en Gratis, la fecha provisional va junto a la cuenta
-// regresiva, un día más allá del horizonte de la proyección no afirma que no hay carga, el cambio de
-// mes se anuncia y cada día se nombra completo para el lector de pantalla.
+// Calendario (V4-B6, la auditoría de V4-B10 y el rediseño de D-150). Lo que se revisa aquí es lo que
+// no cubre el motor. El plan dice que el simulador completo es de pago en Gratis, la fecha provisional
+// va bajo el héroe y fuera de la tarjeta del plan, un día más allá del horizonte de la proyección no
+// afirma que no hay carga, el cambio de mes se anuncia, cada día se nombra completo para el lector de
+// pantalla, la rejilla se recorre con el teclado y las tres columnas muestran solo datos reales.
 import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -211,15 +212,17 @@ describe('ramas del plan y su orden', () => {
 });
 
 describe('fecha provisional', () => {
-  it('va junto a la cuenta regresiva y no dentro de la tarjeta del plan', async () => {
+  it('va bajo el héroe, que lleva la cuenta regresiva, y no dentro de la tarjeta del plan', async () => {
     // Sin fecha propia el plan usa la de la plataforma, que es provisional
     app = await renderApp(SCREENS.calendar.path, { user: { examDate: null } });
     const card = await plan();
     const note = await screen.findByText(text.provisionalDate, undefined, WAIT);
     expect(within(card).queryByText(text.provisionalDate)).toBeNull();
-    // Comparte contenedor con la cuenta regresiva
-    expect(note.parentElement?.textContent).toMatch(/ENARM/);
-    expect(note.parentElement?.querySelector('p.font-medium')).not.toBeNull();
+    // La cuenta regresiva va en la explicación en cursiva del héroe, justo arriba del aviso
+    const lead = note.previousElementSibling?.querySelector('.screen-lead');
+    expect(lead?.textContent).toMatch(
+      /^Repasos que ya están programados.*Faltan? \d[\d,]* días? para el ENARM\.$/,
+    );
   });
 
   it('con una fecha propia, como en la demo, no hay aviso de fecha provisional', async () => {
@@ -320,13 +323,15 @@ describe('mes y días', () => {
     await expect
       .poll(() => today?.getAttribute('aria-label') ?? '', { timeout: 15_000 })
       .toContain(text.doneLong(1));
-    // En teléfono el día lleva un punto de adorno y el texto corto solo se ve desde sm
-    expect(today?.querySelector('span[aria-hidden].sm\\:hidden')).not.toBeNull();
-    // Las abreviaturas de la vista no van en el nombre accesible
+    // La píldora abrevia y queda fuera del árbol accesible. El nombre del día dice lo completo
+    const pill = today?.querySelector('span[aria-hidden].truncate');
+    expect(pill?.textContent).toBe(text.done(1));
     expect(today?.getAttribute('aria-label')).not.toMatch(/Sim\.|~|\d hecha/);
+    // El título del detalle en marino es lo primero del día, las tarjetas hechas
+    expect(detail()).toContain(text.doneLong(1));
   });
 
-  it('los días con algo muestran un punto en teléfono y el texto solo desde sm', async () => {
+  it('el día elegido lleva el borde cielo, hoy el fondo crema y la rejilla se desplaza de lado en el teléfono', async () => {
     app = await renderApp(SCREENS.calendar.path, {
       seed: async (api, user) => {
         await changePlan(api, user, 'monthly');
@@ -334,11 +339,130 @@ describe('mes y días', () => {
     });
     await heading();
     const buttons = await dayButtons();
-    // Todos los botones tienen el área táctil de un día y el selector usa el color de indicador
     const selected = buttons.find((button) => button.getAttribute('aria-pressed') === 'true');
-    expect(selected).toHaveClass('border-indicator');
+    expect(selected).toHaveClass('border-indicator', 'bg-cream', 'rounded-[10px]');
     expect(selected?.className).not.toMatch(/border-primary/);
-    const notes = document.querySelectorAll('table button span.hidden.sm\\:block');
-    for (const note of notes) expect(note).toHaveClass('hidden');
+    // Solo el día elegido entra con tabulador, los demás con las flechas
+    expect(buttons.filter((button) => button.tabIndex === 0)).toHaveLength(1);
+    const table = screen.getByRole('table');
+    expect(table).toHaveClass('min-w-[34rem]');
+    expect(table.parentElement).toHaveClass('overflow-x-auto');
+    // La cabecera dice Lun a Dom a la vista y el nombre completo para el lector de pantalla
+    const headers = within(table).getAllByRole('columnheader');
+    expect(headers).toHaveLength(7);
+    expect(headers[0]?.textContent).toBe('lunlunes');
+  });
+
+  it('las flechas recorren la rejilla y al cruzar el fin de mes cambian el mes y conservan el foco', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.calendar.path);
+    const title = await heading();
+    const before = title.textContent;
+    const buttons = await dayButtons();
+    const last = buttons.at(-1) as HTMLElement;
+    last.focus();
+    await typing.keyboard('{ArrowRight}');
+    // El primero del mes siguiente queda elegido y con el foco
+    await waitFor(() => {
+      expect(title.textContent).not.toBe(before);
+    }, WAIT);
+    const next = (await dayButtons())[0] as HTMLElement;
+    expect(next).toHaveAttribute('aria-pressed', 'true');
+    expect(next).toHaveFocus();
+    await typing.keyboard('{ArrowLeft}');
+    await waitFor(() => {
+      expect(title.textContent).toBe(before);
+    }, WAIT);
+    expect((await dayButtons()).at(-1)).toHaveFocus();
+    // Inicio y Fin van al lunes y al domingo de la semana sin salir del mes si caben
+    await typing.keyboard('{Home}');
+    const focused = document.activeElement as HTMLElement;
+    expect(focused.getAttribute('aria-pressed')).toBe('true');
+    expect(focused.dataset.day).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+});
+
+describe('el héroe y las tres columnas (D-150)', () => {
+  it('lleva el kicker, el título del mes, la cuenta regresiva en cursiva y Nueva sesión hacia Simular', async () => {
+    app = await renderApp(SCREENS.calendar.path, { user: { examDate: '2027-09-14' } });
+    await heading();
+    expect(screen.getByRole('heading', { level: 1, name: text.heroTitle })).toBeVisible();
+    expect(screen.getByText(t.screens.calendar.title, { selector: '.eyebrow' })).toBeVisible();
+    const lead = document.querySelector('.screen-lead');
+    expect(lead?.textContent.startsWith(text.heroLead)).toBe(true);
+    expect(lead?.textContent).toMatch(/para el ENARM\.$/);
+    expect(screen.getByRole('link', { name: text.newSession })).toHaveAttribute(
+      'href',
+      SCREENS.simulatorSetup.path,
+    );
+    // No hay vistas de semana ni de día, así que no hay segmentado
+    expect(screen.queryByRole('button', { name: 'Semana' })).toBeNull();
+  });
+
+  it('sin mazos la columna de hoy lo dice en vez de inventar cifras, y Empezar ahora lleva a Simular', async () => {
+    app = await renderApp(SCREENS.calendar.path);
+    await heading();
+    const todayColumn = screen.getByRole('complementary', { name: text.detail.today });
+    expect(within(todayColumn).getByText(/^Hoy, [a-zá-ú]+$/)).toBeVisible();
+    expect(within(todayColumn).getByText(text.todayCount(0))).toBeVisible();
+    const plan = within(todayColumn).getByRole('region', { name: text.todayPlan.title });
+    expect(within(plan).getByText(text.detailNoDecks)).toBeVisible();
+    const month = within(todayColumn).getByRole('region', { name: text.month.title });
+    expect(within(month).getByText(text.month.none)).toBeVisible();
+    expect(within(month).getByText(text.detailNoDecks)).toBeVisible();
+    // El detalle en marino dice Nada programado y lleva al simulador, porque no hay repasos
+    expect(detail()).toContain(text.detail.emptyTitle);
+    expect(screen.getByRole('link', { name: text.detail.start })).toHaveAttribute(
+      'href',
+      SCREENS.simulatorSetup.path,
+    );
+    // Sin Party la tarjeta salvia es la del siguiente día cargado y tampoco inventa
+    const busy = screen.getByRole('region', { name: text.nextBusy.title });
+    expect(within(busy).getByText(text.detailNoDecks)).toBeVisible();
+    // Leyenda con las cinco clases de píldora, dentro de la tarjeta del mes
+    const monthCard = screen.getByRole('region', { name: /\d{4}$/ });
+    for (const label of Object.values(text.legendItems)) {
+      expect(within(monthCard).getByText(label)).toBeVisible();
+    }
+  });
+
+  it('una sesión terminada hoy aparece como píldora marina, en el plan de hoy y en las cifras del mes', async () => {
+    app = await renderApp(SCREENS.calendar.path, {
+      seed: async (api, user) => {
+        await api.repos.events.append(
+          createEvent(
+            'session_ended',
+            {
+              kind: 'practice',
+              reason: 'completed',
+              items: 20,
+              correct: 14,
+              durationMs: 1_440_000,
+              xp: 40,
+            },
+            { userId: user.id, tz: user.timeZone, clock: { now: () => new Date() } },
+          ),
+        );
+      },
+    });
+    await heading();
+    const buttons = await dayButtons();
+    const today = buttons.find((button) => button.getAttribute('aria-current') === 'date');
+    await expect
+      .poll(() => today?.getAttribute('aria-label') ?? '', { timeout: 15_000 })
+      .toContain(text.pills.sessionLong('practice', 20));
+    const pill = today?.querySelector('span[aria-hidden].bg-primary');
+    expect(pill?.textContent).toBe(text.pills.session('practice', 20));
+    const todayColumn = screen.getByRole('complementary', { name: text.detail.today });
+    const plan = within(todayColumn).getByRole('region', { name: text.todayPlan.title });
+    expect(within(plan).getByText(text.pills.sessionLong('practice', 20))).toBeVisible();
+    expect(within(plan).getByText(text.todayPlan.sessionHint(24))).toBeVisible();
+    expect(within(todayColumn).getByText(text.todayCount(1))).toBeVisible();
+    const month = within(todayColumn).getByRole('region', { name: text.month.title });
+    expect(within(month).getByText(text.month.sessionsDone).nextElementSibling?.textContent).toBe(
+      '1',
+    );
+    // El título del detalle es la sesión y, sin repasos pendientes, Empezar ahora sigue al simulador
+    expect(detail()).toContain(text.pills.sessionLong('practice', 20));
   });
 });

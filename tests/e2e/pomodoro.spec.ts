@@ -45,11 +45,8 @@ async function startReviewSession(page: Page) {
   await expect(page.getByRole('button', { name: t.review.show })).toBeVisible();
 }
 
-/** Abre la píldora del Pomodoro, que empieza minimizada como un ícono hasta que el alumno la abre */
+/** La tarjeta del Pomodoro, al lado de la tarjeta de repaso y a la vista desde el inicio (D-150) */
 async function openPomodoro(page: Page): Promise<Locator> {
-  await page
-    .getByRole('button', { name: t.pomodoro.show('01:00', t.pomodoro.phases.focus) })
-    .click();
   const pill = page.getByRole('group', { name: t.pomodoro.label });
   await expect(pill).toBeVisible();
   return pill;

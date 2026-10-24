@@ -113,6 +113,11 @@ const setup = () =>
   screen.findByRole('region', { name: t.simulator.setupTitle }, { timeout: 20_000 });
 const adaptiveBox = (practice: HTMLElement) =>
   within(practice).queryByRole('checkbox', { name: adaptiveTexts.label });
+/** Las preguntas se eligen en el segmentado píldora (D-150) */
+const pickCount = (practice: HTMLElement, value: string) =>
+  within(within(practice).getByRole('group', { name: t.simulator.count })).getByRole('button', {
+    name: value,
+  });
 
 describe('Adaptativo, cerca de tu nivel', () => {
   it('con pocas preguntas calibradas dice calibrando y cuántas hay, y no ofrece la casilla', async () => {
@@ -186,7 +191,7 @@ describe('Adaptativo, cerca de tu nivel', () => {
     app = await renderApp(SCREENS.simulatorSetup.path);
     const practice = await setup();
     await user.click(await within(practice).findByRole('checkbox', { name: adaptiveTexts.label }));
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '20');
+    await user.click(pickCount(practice, '20'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     await waitFor(() => {
       expect(usePractice.getState().questionIds.length).toBeGreaterThan(0);
@@ -242,7 +247,7 @@ describe('Adaptativo, cerca de tu nivel', () => {
     });
     const practice = await setup();
     await user.click(await within(practice).findByRole('checkbox', { name: adaptiveTexts.label }));
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '10');
+    await user.click(pickCount(practice, '10'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     await waitFor(() => {
       expect(usePractice.getState().questionIds.length).toBe(10);
@@ -287,21 +292,22 @@ describe('dificultad que usan los filtros (B14, 4.4)', () => {
     bank(rows);
     app = await renderApp(SCREENS.simulatorSetup.path);
     const practice = await setup();
-    const available = () =>
-      screen.getByRole('region', { name: t.simulator.stats.label }).textContent;
+    // Las disponibles con los filtros van en la nota bajo las ramas (D-150)
+    const available = (n: number) =>
+      within(practice).getByText(new RegExp(`^${t.simulator.available(n)}`));
     const level = await within(practice).findByLabelText(t.simulator.difficulty);
     await user.selectOptions(level, 'hard');
     await waitFor(() => {
-      expect(available()).toContain(`${t.simulator.stats.available}3`);
+      expect(available(3)).toBeVisible();
     });
     await user.selectOptions(level, 'easy');
     await waitFor(() => {
-      expect(available()).toContain(`${t.simulator.stats.available}1`);
+      expect(available(1)).toBeVisible();
     });
     // La que no se calibró conserva la del médico, Media, junto con las calibradas en cero
     await user.selectOptions(level, 'medium');
     await waitFor(() => {
-      expect(available()).toContain(`${t.simulator.stats.available}3`);
+      expect(available(3)).toBeVisible();
     });
   });
 });

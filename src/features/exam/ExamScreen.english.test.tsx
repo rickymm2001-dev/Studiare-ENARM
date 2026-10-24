@@ -68,12 +68,10 @@ function seedMixedExam() {
 
 describe('examen con su parte en inglés (B13, 3.5)', () => {
   it('el navegador marca los reactivos de inglés con un ícono y la palabra Inglés en su etiqueta', async () => {
-    const typing = userEvent.setup();
     app = await renderApp(SCREENS.exam.path, { seed: seedMixedExam() });
     await screen.findByText(t.exam.progress(1, 4), { exact: true });
-    const navigator = screen.getByText(t.exam.navigatorTitle);
-    await typing.click(navigator);
-    const grid = navigator.closest('details') as HTMLElement;
+    // El mapa del examen es una tarjeta siempre a la vista, con su nombre (D-150)
+    const grid = screen.getByRole('region', { name: t.exam.navigatorTitle });
     // Las de español no llevan la marca. La primera es la actual
     expect(
       within(grid).getByRole('button', { name: t.exam.goToQuestion(1, 'actual, en blanco') }),

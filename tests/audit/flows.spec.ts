@@ -10,9 +10,11 @@ import type { Page } from '@playwright/test';
 async function startPractice(page: Page, total = 5) {
   await page.goto(SCREENS.simulatorSetup.path);
   const setup = page.getByRole('region', { name: t.simulator.setupTitle });
+  // Las preguntas se eligen en el segmentado píldora (D-150)
   await setup
-    .getByRole('combobox', { name: t.simulator.count, exact: true })
-    .selectOption(String(total));
+    .getByRole('group', { name: t.simulator.count, exact: true })
+    .getByRole('button', { name: String(total), exact: true })
+    .click();
   const start = setup.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
@@ -41,7 +43,7 @@ test('volver con el navegador desde otra pantalla a media práctica deja la sesi
   await startPractice(page);
   await answerPracticeQuestion(page, 1, 5);
   await page.goto(SCREENS.progress.path);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.progress.title);
   await page.goBack();
   await page.goForward();
   await page.goBack();

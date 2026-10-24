@@ -33,12 +33,13 @@ export function ReferralInvite() {
 
   if (!code) return null;
   return (
+    // Banda cielo suave con ícono, como el aviso de invitación del diseño de la bienvenida (D-150)
     <p
       role="status"
-      className="flex items-start gap-2 rounded-md border border-line bg-surface p-3 text-sm"
+      className="flex items-start gap-3 rounded-lg bg-primary-soft p-3.5 text-sm text-primary-ink"
     >
-      <UserPlus aria-hidden className="mt-0.5 size-4 shrink-0 text-primary-ink" />
-      {t.b7.referral.invited(code)}
+      <UserPlus aria-hidden className="mt-0.5 size-5 shrink-0" />
+      <span>{t.b7.referral.invited(code)}</span>
     </p>
   );
 }

@@ -247,7 +247,8 @@ describe('rutas', () => {
 
 describe('rutas de las pantallas que se quitaron (B3)', () => {
   it.each([
-    ['/perfil', SCREENS.settings.path, t.screens.settings.title],
+    ['/perfil', SCREENS.settings.path, t.settings.heroTitle],
+    // Sin sesión, Progreso pinta su nombre con el aviso de entrar
     ['/planificador', SCREENS.progress.path, t.screens.progress.title],
     ['/logros', SCREENS.progress.path, t.screens.progress.title],
   ])('%s lleva a %s y reemplaza la entrada del historial', async (from, to, title) => {

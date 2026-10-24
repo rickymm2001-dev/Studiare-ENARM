@@ -72,6 +72,36 @@ export const featureText = {
     creating: 'Creando…',
     demoNote: 'En la demostración entras como el alumno de demostración.',
     goHome: 'Ir al inicio',
+    // La bienvenida al estilo de la portada (D-150). Panel marino a la izquierda y el formulario al lado
+    backToLanding: 'Volver a la portada',
+    haveAccount: '¿Ya tienes cuenta?',
+    enterHere: 'Entra aquí',
+    noAccountCreate: 'Crear mi cuenta',
+    panel: {
+      kicker: 'Bienvenida',
+      titleLead: 'Prepárate para el',
+      titleExam: (year: number) => `ENARM ${String(year)}`,
+      lead: 'Entrena la forma en que contestas, no solo lo que sabes.',
+      benefits: [
+        'Repaso espaciado con FSRS que decide qué repasar y cuándo',
+        'Simuladores imperfectos a propósito, como el examen real',
+        'El sesgo que te atrapa en cada distractor, con nombre y apellido',
+      ],
+      privacy:
+        'Tus datos viven en este dispositivo. Al Party y a la IA solo viaja tu alias, nunca tu nombre ni tu correo.',
+    },
+    // El mismo panel en Ya tengo cuenta, con dos cifras reales de este navegador si hay datos
+    loginPanel: {
+      kicker: 'Qué bueno verte',
+      titleLead: 'Sigue donde',
+      titleTail: 'te quedaste',
+      lead: 'Tu racha, tus tarjetas y tus simuladores te esperan en este dispositivo.',
+      daysToExam: 'Faltan para el ENARM',
+      days: (n: number) => plural(n, 'día', 'días'),
+      dueToday: 'Repasos que te esperan hoy',
+      privacy:
+        'Tu correo solo sirve para entrar y para tus recibos. Nunca se comparte ni viaja a la IA.',
+    },
   },
   home: {
     greeting: (alias: string) => `Hola, ${alias}`,
@@ -84,7 +114,7 @@ export const featureText = {
           : `Te damos la bienvenida, ${alias}`,
     reviewsTitle: 'Tus repasos',
     simulatorsTitle: 'Tus simuladores',
-    topicsTitle: 'Temas para reforzar',
+    topicsTitle: 'Temas por reforzar',
     dueTitle: 'Tienes…',
     dueCaption: (n: number) => (n === 1 ? 'Tarjeta vencida' : 'Tarjetas vencidas'),
     dueLabel: (n: number) => plural(n, 'tarjeta vencida', 'tarjetas vencidas'),
@@ -109,12 +139,120 @@ export const featureText = {
           ? `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')}`
           : `${month}, ${plural(scheduled, 'repaso programado', 'repasos programados')} y ${plural(done, 'realizado', 'realizados')}`,
       notYet: 'Todavía no llega',
+      // La tarjeta de cifra del rediseño (D-150). El promedio del mes va como cifra grande
+      averageCaption: 'al día en promedio este mes',
+      seeAll: 'Ver la carga completa en Progreso',
     },
     plan: {
-      title: 'Plan actual',
-      change: 'Cambiar tu plan',
+      title: 'Tu plan',
+      change: 'Cambiar de plan',
       upgrade: 'Mejorar tu plan',
     },
+    // El héroe de Inicio con la fecha y los botones (D-150)
+    lead: (due: number, questions: number) =>
+      `Hoy toca ${plural(due, 'repaso', 'repasos')} y ${plural(questions, 'pregunta', 'preguntas')}. Vamos con calma.`,
+    startReviews: 'Empezar repasos',
+    customize: 'Personalizar',
+    dateLabel: (date: string) => `Hoy es ${date}`,
+    asideLabel: 'Tu plan y tus retos',
+    // Estado de las tarjetas en anillo concéntrico (D-150)
+    cards: {
+      title: 'Estado de tus tarjetas',
+      active: 'Tarjetas activas',
+      upToDate: 'Al día',
+      due: 'Vencidas',
+      forgotten: 'Olvidadas',
+      label: (active: number, upToDate: number, due: number, forgotten: number) =>
+        `${plural(active, 'tarjeta activa', 'tarjetas activas')}. Al día ${upToDate.toLocaleString('es-MX')}, vencidas ${due.toLocaleString('es-MX')}, olvidadas ${forgotten.toLocaleString('es-MX')}`,
+    },
+    // Meta de hoy en anillos, con el plan de hoy adentro (D-150)
+    goal: {
+      title: 'Meta de hoy',
+      ofDay: 'del día',
+      percent: (n: number) => `${n.toLocaleString('es-MX')} %`,
+      row: (name: string, done: number, target: number) =>
+        `${name} ${done.toLocaleString('es-MX')} de ${target.toLocaleString('es-MX')}`,
+      label: (percent: number, rows: string) => `Meta de hoy al ${percent} por ciento. ${rows}`,
+    },
+    // Pulso de estudio en medidor (D-150)
+    pulse: {
+      title: 'Pulso de estudio',
+      outOf: '/100',
+      label: (score: number) => `Pulso de estudio ${score} de 100`,
+      states: { good: 'Vas bien', near: 'Cerca de la meta', low: 'Hay que ajustar' },
+      parts: (c: number, cMax: number, a: number, aMax: number, r: number, rMax: number) =>
+        `Constancia ${c} de ${cMax}, aciertos ${a} de ${aMax} y retención ${r} de ${rMax} puntos.`,
+      breakdown: 'Ver el desglose',
+      units: {
+        activeDays: 'días con actividad de los últimos 14',
+        answered: 'preguntas contestadas en 30 días',
+        reviews: 'repasos en 30 días',
+      },
+      calibratingNote: (days: number, answered: number, reviews: number) =>
+        `Para medir tu pulso faltan ${plural(days, 'día con actividad', 'días con actividad')}, ${plural(answered, 'pregunta', 'preguntas')} y ${plural(reviews, 'repaso', 'repasos')}.`,
+    },
+    simulateTopics: 'Simular estos temas',
+    // Indicadores clave. Cada uno calibra con su umbral y nunca inventa la cifra (D-150)
+    indicators: {
+      title: 'Indicadores clave',
+      seeAll: 'Ver todos en Progreso',
+      missing: (n: number, unit: string) =>
+        `Faltan ${n.toLocaleString('es-MX')} ${unit} para medirlo`,
+      retention: {
+        title: 'Retención',
+        states: { good: 'Óptima', near: 'Cerca de la meta', low: 'Por debajo de la meta' },
+        note: (goal: number) => `Meta de FSRS en ${goal} %`,
+        unit: 'repasos',
+        chartLabel: (weeks: number) => `Retención por semana de las últimas ${weeks} semanas`,
+      },
+      accuracy: {
+        title: 'Aciertos',
+        states: { good: 'En la meta', near: 'Cerca de la meta', low: 'Por debajo de la meta' },
+        ticks: ['40 %', '70 %, meta', '100 %'] as const,
+        label: (percent: number) => `Aciertos del ${percent} por ciento, con meta de 70`,
+        unit: 'preguntas',
+      },
+      pace: {
+        title: 'Tiempo por pregunta',
+        states: { good: 'Óptimo', near: 'Un poco lento', low: 'Lento' },
+        ticks: (pace: number) => ['40 s', `${pace} s, ritmo ENARM`, '120 s'] as const,
+        label: (seconds: number, pace: number) =>
+          `${seconds} segundos por pregunta, con ritmo ENARM de ${pace}`,
+        unit: 'preguntas',
+      },
+      fatigue: {
+        title: 'Fatiga',
+        states: { signal: 'Señal de fatiga', none: 'Sin señal clara' },
+        unit: 'puntos',
+        note: (sessions: number) =>
+          `Cambio de aciertos en el último tercio de ${plural(sessions, 'sesión larga', 'sesiones largas')}`,
+        calibratingNote: 'Llega con las sesiones largas, de más de 30 minutos',
+        calibratingUnit: 'sesiones largas',
+      },
+    },
+    // Tarjetas por rama en dona, o por mazo cuando una tarjeta no tiene rama (D-150)
+    branches: {
+      title: 'Tarjetas por rama',
+      byDeck: 'Tarjetas por mazo',
+      center: 'Tarjetas',
+      label: (total: number, parts: string) => `${plural(total, 'tarjeta', 'tarjetas')}. ${parts}`,
+      part: (name: string, percent: number) => `${name} ${percent} por ciento`,
+      empty: 'Sigue un mazo para ver aquí tus tarjetas por rama.',
+    },
+    // Preguntas por día, esta semana en barras contra la pasada en línea (D-150)
+    questions: {
+      title: 'Preguntas por día',
+      more: (n: number) => `${n.toLocaleString('es-MX')} más`,
+      fewer: (n: number) => `${n.toLocaleString('es-MX')} menos`,
+      same: 'igual',
+      caption: (average: number) =>
+        `que la semana pasada · promedio de ${average.toLocaleString('es-MX')} al día`,
+      weekdays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] as const,
+      thisWeek: 'Esta semana',
+      lastWeek: 'Semana pasada',
+      tableCaption: 'Preguntas por día de la semana',
+    },
+    yearTitle: 'Tu año de estudio',
     // Frases para la meta diaria. Una por día, la misma todo el día
     quotes: [
       { text: 'Caminante, no hay camino, se hace camino al andar.', author: 'Antonio Machado' },
@@ -251,6 +389,14 @@ export const featureText = {
     resume: 'Continuar',
     stop: 'Detener',
     skip: 'Saltar al siguiente',
+    // La tarjeta del Pomodoro en Repasar (D-150). Reiniciar vuelve la fase al principio sin arrancarla
+    // y Configurar abre sus ajustes dentro de Ajustes del repaso
+    reset: 'Reiniciar',
+    configure: 'Configurar',
+    ofFocus: (minutes: number, breakMinutes: number) =>
+      `de ${minutes} min. Luego ${breakMinutes} de descanso.`,
+    ofBreak: (minutes: number, focusMinutes: number) =>
+      `de ${minutes} min de descanso. Luego ${focusMinutes} de enfoque.`,
     remaining: (time: string, phase: string) => `${time} restantes de ${phase}`,
     finished: (phase: string) => `Terminó ${phase.toLowerCase()}`,
     next: (phase: string) => `Sigue ${phase.toLowerCase()}`,
@@ -280,6 +426,18 @@ export const featureText = {
   settings: {
     save: 'Guardar',
     saved: 'Guardado',
+    // Configuración al estilo de la portada (D-150). Título del héroe, la zona horaria de solo
+    // lectura en Perfil y la tarjeta Carga diaria, que solo lee lo guardado en Ajustes del repaso
+    heroTitle: 'Tu cuenta y tu forma de estudiar',
+    timeZone: 'Zona horaria',
+    dailyLoadCard: {
+      reviews: 'Repasos al día',
+      newCards: 'Tarjetas nuevas',
+      questions: 'Preguntas al día',
+      unlimited: 'Sin límite',
+      freeNote: (limit: number) =>
+        `El plan Gratis permite hasta ${String(limit)} preguntas al día. Con un plan de pago no hay tope.`,
+    },
     goalsTitle: 'Metas y repaso',
     saveChanges: 'Guardar cambios',
     unsaved: 'Tienes cambios sin guardar.',
@@ -1048,6 +1206,35 @@ export const featureText = {
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
     errorCard: 'Error de pregunta',
+    // La sesión de repaso al estilo de la portada (D-150). Avance arriba, la tarjeta en crema y a un
+    // lado lo que llevas, el Pomodoro y las acciones sobre la tarjeta
+    progress: (n: number, of: number) =>
+      `Tarjeta ${n.toLocaleString('es-MX')} de ${of.toLocaleString('es-MX')}`,
+    progressLabel: 'Avance de la sesión',
+    overdueSince: (days: number) => `Vencida hace ${plural(days, 'día', 'días')}`,
+    answer: 'Respuesta',
+    // La frase literal que respalda una tarjeta generada (4.1), con su título si lo trae
+    sourceBank: 'Fuente del banco.',
+    sourceLabel: 'Fuente.',
+    sessionStats: {
+      title: 'Esta sesión',
+      done: 'hechas',
+      good: 'bien',
+      again: 'otra vez',
+      elapsed: (minutes: number) =>
+        minutes < 1
+          ? 'Llevas menos de un minuto.'
+          : `Llevas ${plural(minutes, 'minuto', 'minutos')}.`,
+      estimate: (minutes: number) =>
+        minutes < 1
+          ? 'A este ritmo terminas en menos de un minuto.'
+          : `A este ritmo terminas en ${minutes.toLocaleString('es-MX')} más.`,
+    },
+    actions: {
+      title: 'Acciones',
+      edit: 'Editar esta tarjeta',
+      outline: 'Ver el apunte del tema',
+    },
     // Tres contadores como en Anki. Siempre con texto, nunca solo con color (D-085, fila 8)
     counters: {
       label: 'Lo que falta de la sesión',
@@ -1136,7 +1323,7 @@ export const featureText = {
       'Tu examen sin terminar tiene apartadas las preguntas que te quedaban hoy en el plan Gratis.',
     goToOpenExam: 'Ir a mi examen',
     seePlans: 'Ver planes',
-    start: 'Empezar práctica',
+    start: 'Empezar simulador',
     preparing: 'Preparando el banco…',
     noQuestions: 'No hay preguntas con estos filtros.',
     progress: (n: number, of: number) => `Pregunta ${n} de ${of}`,
@@ -1223,6 +1410,73 @@ export const featureText = {
         'Se activa cuando tus errores ya muestran qué trampas te atrapan más. Mientras tanto las opciones salen variadas.',
       none: 'Ninguna trampa se destaca todavía en tus errores, así que las opciones salen variadas.',
       loading: 'Revisando tus errores…',
+    },
+    // Armar el simulador como en el diseño de D-150. Un solo formulario con el modo, las ramas, las
+    // preguntas y el tiempo, el lateral con lo que entrena y las últimas sesiones
+    hero: {
+      title: 'Arma tu simulador',
+      lead: 'Como el examen real, con preguntas imperfectas a propósito y la presión del reloj.',
+    },
+    mode: {
+      legend: 'Modo',
+      practice: 'Práctica',
+      practiceEach: 'Retroalimentación después de cada pregunta.',
+      practiceEnd: 'Retroalimentación al final de la sesión.',
+      exam: 'Examen',
+      examDescription: 'Todo al final, con reloj y avisos de tiempo.',
+      targeted: 'Dirigido',
+      targetedDescription: 'Más preguntas con los sesgos que te atrapan.',
+    },
+    branchesExam:
+      'El examen reparte las preguntas con los pesos del ENARM por rama, así que aquí las ramas no se eligen.',
+    branchChip: (branch: string, on: number, of: number) =>
+      `${branch}, ${on} de ${of} subespecialidades`,
+    moreFilters: 'Subespecialidades y filtros',
+    moreSettings: 'Más ajustes',
+    freeNote: (limit: number, left: number) =>
+      `El plan Gratis permite ${plural(limit, 'pregunta', 'preguntas')} al día. Hoy te ${left === 1 ? 'queda' : 'quedan'} ${left}.`,
+    time: {
+      legend: 'Tiempo',
+      none: 'Sin reloj',
+      enarm: 'Ritmo ENARM',
+      noneNote:
+        'La práctica no lleva reloj. Se mide tu tiempo en cada pregunta y lo ves en el resumen. El reloj va con el modo Examen.',
+      enarmNote: (seconds: number) =>
+        `Ritmo ENARM da ${seconds} segundos por pregunta, con reloj y avisos de tiempo.`,
+    },
+    summary: (questions: number, branches: number, minutes: number | null) =>
+      `${plural(questions, 'pregunta', 'preguntas')} · ${plural(branches, 'rama', 'ramas')} · ${minutes === null ? 'sin reloj' : plural(minutes, 'minuto', 'minutos')}`,
+    trains: {
+      title: 'Con qué te entrena este simulador',
+      targeted: (name: string) =>
+        `Más opciones con ${midSentence(name)}, la trampa que más te atrapa`,
+      targetedCalibrating: (have: number, need: number) =>
+        `Las opciones dirigidas a tus trampas se activan con ${need} errores con trampa etiquetada. Llevas ${have}.`,
+      targetedNone: 'Ninguna trampa se destaca todavía, así que las opciones salen variadas',
+      feedbackEach: 'Retroalimentación después de cada pregunta, para corregir al momento',
+      feedbackEnd: 'Retroalimentación al final, para sostener la concentración como en el examen',
+      adaptive: 'Preguntas cerca de tu nivel, elegidas con la dificultad calibrada',
+      discard: 'Descartar opciones con Mayús y la letra, para contestar aun lo que no sabes',
+      clock: (seconds: number) => `Reloj con el ritmo del ENARM, ${seconds} segundos por pregunta`,
+      alerts: 'Avisos a la mitad, con 10, 5 y 1 minuto, y si vas atrasado',
+      noAlerts: 'Sin avisos de tiempo, solo el reloj, como lo pediste',
+      imperfect: 'Reactivos con datos oscuros y de control, como en el examen',
+    },
+    recent: {
+      title: 'Últimas sesiones',
+      empty: 'Todavía no hay sesiones. La primera aparece aquí cuando la termines.',
+      item: (mode: string, items: number) => `${mode} · ${plural(items, 'pregunta', 'preguntas')}`,
+      meta: (day: string, minutes: number) => `${day} · ${plural(minutes, 'minuto', 'minutos')}`,
+      modes: {
+        practice: 'Práctica',
+        targeted: 'Dirigido',
+        exam: 'Examen',
+        challenge: 'Duelo',
+      },
+      yesterday: 'Ayer',
+      unscored: 'Sin calificar',
+      accuracy: (correct: number, items: number) => `${correct} de ${items} correctas`,
+      seeAll: 'Ver todas en Progreso',
     },
   },
   appearance: {
@@ -1432,6 +1686,169 @@ export const featureText = {
       week: (start: string) => `Semana del ${start}`,
       empty: 'Todavía no sigues ningún mazo, así que no hay carga que proyectar.',
       goToDecks: 'Ir a Mazos',
+    },
+    // La pantalla rediseñada (D-150). El título va en el contenido con su kicker
+    kicker: 'Progreso',
+    title: 'Cómo vas',
+    moreTitle: 'Más de tu progreso',
+    summary: {
+      label: 'Tus cifras recientes',
+      accuracy: 'Aciertos',
+      accuracyDelta: (points: number) => `${Math.abs(points)} pts`,
+      accuracyTrendLabel: (days: number) =>
+        `Aciertos de cada día con respuestas, últimos ${days} días`,
+      retention: 'Retención',
+      retentionGoal: (percent: number) => `meta ${percent} %`,
+      questions: 'Preguntas',
+      questionsCaption: 'en 30 días',
+      questionsDelta: (percent: number) => `${Math.abs(percent)} %`,
+      questionsBarsLabel: (days: number, total: number) =>
+        `Preguntas de cada uno de los últimos ${days} días, ${total.toLocaleString('es-MX')} en total`,
+      streak: 'Racha',
+      streakDays: (days: number) => plural(days, 'día', 'días'),
+      streakBest: (days: number) => `Tu mejor racha es de ${days.toLocaleString('es-MX')}`,
+      streakBarsLabel: (days: number) =>
+        `Tarjetas y preguntas de cada uno de los últimos ${days} días`,
+      calibrating: 'Calibrando',
+      calibratingAnswers: (have: number, need: number) =>
+        `Llevas ${have.toLocaleString('es-MX')} de ${need.toLocaleString('es-MX')} respuestas en 30 días.`,
+      calibratingReviews: (have: number, need: number) =>
+        `Llevas ${have.toLocaleString('es-MX')} de ${need.toLocaleString('es-MX')} repasos de tarjetas maduras.`,
+    },
+    branchAccuracy: {
+      title: 'Aciertos por rama',
+      bar: (branch: string, percent: number) => `${branch}, dominio estimado de ${percent} %`,
+      calibrating: (branch: string, have: number, need: number) =>
+        `${branch}, calibrando con ${have} de ${need} respuestas`,
+      hint: 'El dominio estimado de cada rama con tus respuestas. Una rama con pocas preguntas todavía se mueve mucho.',
+      fewest: (branch: string, answered: number) =>
+        `${branch} es la rama con menos preguntas contestadas, ${answered.toLocaleString('es-MX')}.`,
+      empty: 'Tus ramas aparecen aquí cuando contestes tus primeras preguntas.',
+    },
+    pulse: {
+      title: 'Pulso de estudio',
+      label: (score: number) => `Pulso de estudio ${score} de 100`,
+      calibratingLabel: 'Pulso de estudio calibrando',
+      of100: '/100',
+      tone: { good: 'Vas bien', near: 'Vas regular', low: 'Hay que empujar' },
+      toneHint: {
+        good: 'Repasos al día, aciertos arriba y ritmo estable.',
+        near: 'Alguna de las tres partes flaquea. Mira cuál suma menos.',
+        low: 'Las tres partes van bajas. Vuelve al ritmo con sesiones cortas y diarias.',
+      },
+      part: (name: string, max: number) => `${name}, ${max} puntos`,
+      parts: { consistency: 'Constancia', accuracy: 'Aciertos', retention: 'Retención' },
+      calibratingHint: 'Resume tu constancia, tus aciertos y tu retención de los últimos días.',
+      needed: (activeDays: number, answered: number, reviews: number) => {
+        const parts = [
+          activeDays > 0 ? plural(activeDays, 'día con actividad', 'días con actividad') : null,
+          answered > 0 ? plural(answered, 'pregunta', 'preguntas') : null,
+          reviews > 0 ? plural(reviews, 'repaso', 'repasos') : null,
+        ].filter((part): part is string => part !== null);
+        return `Faltan ${parts.join(', ')}.`;
+      },
+    },
+    radar: {
+      title: 'Tu perfil por rama',
+      label: (now: string, before: string | null, target: number) =>
+        `Radar con el dominio estimado por rama. ${now}${before ? ` Hace un mes, ${before}` : ''} La meta está en ${target} por ciento.`,
+      point: (branch: string, percent: number) => `${branch} ${percent}`,
+      you: 'Tú, ahora',
+      before: 'Hace un mes',
+      target: (percent: number) => `Meta ${percent} %`,
+      calibrating: (ready: number, need: number) =>
+        `Calibrando. El radar aparece con ${need} ramas listas y llevas ${ready}.`,
+      short: {
+        internal_medicine: 'Med. interna',
+        pediatrics: 'Pediatría',
+        obstetrics_gynecology: 'Ginecología',
+        general_surgery: 'Cirugía',
+        family_medicine: 'Familiar',
+        emergency_medicine: 'Urgencias',
+      } as Record<string, string>,
+    },
+    weekday: {
+      title: 'Preguntas por día',
+      caption: 'Preguntas por día de la semana',
+      thisWeek: 'Esta semana',
+      lastWeek: 'Semana pasada',
+      more: (n: number) => `${n.toLocaleString('es-MX')} más`,
+      fewer: (n: number) => `${n.toLocaleString('es-MX')} menos`,
+      same: 'Igual',
+      compare: (average: number) =>
+        `que la semana pasada · promedio de ${average.toLocaleString('es-MX')} al día`,
+      days: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+    },
+    indicators: {
+      title: 'Indicadores clave',
+      calibrating: 'Calibrando',
+      names: {
+        retention: 'Retención',
+        accuracy: 'Aciertos',
+        pace: 'Tiempo por pregunta',
+        confidence: 'Confianza calibrada',
+        fatigue: 'Fatiga',
+        changes: 'Cambios de respuesta',
+      },
+      states: {
+        optimal: 'Óptima',
+        optimalM: 'Óptimo',
+        near: 'Cerca de la meta',
+        below: 'Por debajo de la meta',
+        slow: 'Algo lento',
+        verySlow: 'Lento',
+        calibrated: 'Bien',
+        overconfident: 'Sobreconfianza',
+        underconfident: 'Te falta confianza',
+        noSignal: 'Sin señal',
+        likely: 'Probable',
+        watch: 'A vigilar',
+        harmful: 'Te perjudican',
+      },
+      notes: {
+        retention: (percent: number) => `Meta de FSRS en ${percent} %`,
+        accuracy: (percent: number) => `Meta en ${percent} %`,
+        pace: (seconds: number) => `Ritmo ENARM, ${seconds} s`,
+        confidence: (nominal: number) => `Con Seguro deberías acertar ${nominal} %`,
+        fatigue: (sessions: number) =>
+          `Caída del último tercio en ${plural(sessions, 'sesión larga', 'sesiones largas')}`,
+        fatigueUnvalidated: 'El detector aún se valida con los datos de todos',
+        changes: (worse: number, total: number) =>
+          `${worse.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} cambios empeoraron`,
+      },
+      units: { percent: '%', seconds: 's', points: 'pts' },
+      bar: (name: string, value: string) => `${name}, ${value}`,
+    },
+    biases: {
+      title: { bias: 'Sesgos que te atrapan', trap: 'Trampas que te atrapan' },
+      pattern: 'Patrón',
+      seeAll: 'Ver tu perfil completo abajo',
+    },
+    weakTopics: {
+      title: 'Temas por reforzar',
+      simulate: 'Simular estos temas',
+      practice: (topic: string) => `Practicar ${topic}`,
+    },
+    sessions: {
+      title: 'Últimas sesiones',
+      columns: {
+        name: 'Sesión',
+        mode: 'Modo',
+        date: 'Fecha',
+        state: 'Estado',
+        score: 'Aciertos',
+      },
+      modes: { review: 'Repaso', practice: 'Práctica', exam: 'Examen', challenge: 'Reto' },
+      name: (kind: 'review' | 'practice' | 'exam' | 'challenge', items: number | null) => {
+        const mode = { review: 'Repaso', practice: 'Práctica', exam: 'Examen', challenge: 'Reto' }[
+          kind
+        ];
+        if (items === null) return mode;
+        return `${mode} de ${plural(items, kind === 'review' ? 'tarjeta' : 'pregunta', kind === 'review' ? 'tarjetas' : 'preguntas')}`;
+      },
+      states: { completed: 'Terminada', abandoned: 'Abandonada', open: 'Sin cerrar' },
+      empty: 'Tus sesiones aparecen aquí cuando termines tu primer repaso o práctica.',
+      seeResults: 'Ver los resultados del examen',
     },
   },
   topicPicker: {

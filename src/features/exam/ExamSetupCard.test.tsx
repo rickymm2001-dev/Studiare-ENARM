@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -64,18 +64,20 @@ function finishedExam(steps: { ended?: number; queued?: number } = {}): ExamStat
   return state;
 }
 
+/** El tamaño se elige en el segmentado píldora (D-150) */
+const sizeGroup = () => screen.getByRole('group', { name: t.exam.size });
+
 describe('tarjeta del examen en Simular', () => {
   it('con el examen completo permitido arranca en 280 y sin él en lo que le queda hoy', () => {
     card('monthly', null);
-    expect(screen.getByRole('combobox', { name: t.exam.size })).toHaveValue('280');
+    expect(within(sizeGroup()).getByRole('button', { pressed: true })).toHaveTextContent('280');
     expect(screen.queryByText(t.exam.fullLocked)).toBeNull();
   });
 
   it('en el plan Gratis no ofrece 280 y arranca en 20', () => {
     card('free', 20);
-    const select = screen.getByRole('combobox', { name: t.exam.size });
-    expect(select).toHaveValue('20');
-    expect(screen.queryByRole('option', { name: '280' })).toBeNull();
+    expect(within(sizeGroup()).getByRole('button', { pressed: true })).toHaveTextContent('20');
+    expect(within(sizeGroup()).queryByRole('button', { name: '280' })).toBeNull();
     expect(screen.getByText(t.exam.fullLocked)).toBeVisible();
   });
 
@@ -88,7 +90,7 @@ describe('tarjeta del examen en Simular', () => {
       expect.stringContaining('resultados'),
     );
     expect(screen.queryByRole('button', { name: t.exam.start })).toBeNull();
-    expect(screen.queryByRole('combobox', { name: t.exam.size })).toBeNull();
+    expect(screen.queryByRole('group', { name: t.exam.size })).toBeNull();
   });
 
   it('con el fin registrado pero sin pasar los errores al repaso todavía no se puede empezar otro', () => {

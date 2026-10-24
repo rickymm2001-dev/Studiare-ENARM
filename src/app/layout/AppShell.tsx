@@ -219,7 +219,7 @@ export function AppShell() {
             landing
               ? 'flex w-full flex-col outline-none'
               : bare
-                ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
+                ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-content' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
                 : // Los márgenes de la portada, 1280 px de ancho con 32 px a los lados (D-150)
                   'mx-auto flex w-full max-w-content flex-col gap-6 px-5 pt-6 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:px-8 lg:pt-8 lg:pb-10'
           }

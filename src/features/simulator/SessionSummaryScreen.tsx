@@ -1,5 +1,5 @@
 // Resumen de sesión (pantalla 6). Exactitud, XP, tiempo, exactitud por confianza y la revisión de
-// cada respuesta con su retroalimentación (D-087). Registra el fin de la sesión una sola vez. En modo
+// cada respuesta con su retroalimentación (D-087). Las cifras van en tarjetas de cifra (D-150). Registra el fin de la sesión una sola vez. En modo
 // enfoque (respuesta 82, B7) no muestra el XP. El enlace al resultado del duelo se queda, porque los
 // duelos siguen a la vista en modo enfoque, como un compromiso de uno a uno que el alumno eligió.
 import { CheckCircle2, Sparkles, Swords, Target, Timer, XCircle } from 'lucide-react';
@@ -16,7 +16,7 @@ import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
-import { StatCell, StatPanel } from '@/ui/components/stat-panel';
+import { StatCard } from '@/ui/components/stat-card';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { AnswerReview } from './AnswerReview';
@@ -106,28 +106,32 @@ function Summary({ session }: { session: ReadySession }) {
         <CardHeader>
           <CardTitle id="resumen-titulo">{t.simulator.summaryTitle}</CardTitle>
         </CardHeader>
-        <StatPanel label={t.simulator.summaryTitle}>
-          <StatCell
+        {/* Las cifras en tarjetas de cifra con su ícono en círculo cielo (D-150) */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <StatCard
             icon={<Target />}
-            label={t.simulator.summaryLabels.accuracy}
+            title={t.simulator.summaryLabels.accuracy}
             value={`${Math.round((correct / answers.length) * 100)}%`}
             caption={t.simulator.summaryAccuracy(correct, answers.length)}
+            tone="cream"
           />
           {focus ? null : (
-            <StatCell
-              icon={<Sparkles className="text-accent" />}
-              label={t.simulator.summaryLabels.xp}
+            <StatCard
+              icon={<Sparkles />}
+              title={t.simulator.summaryLabels.xp}
               value={`+${xp.toLocaleString('es-MX')}`}
               caption={t.simulator.summaryLabels.xpCaption}
+              tone="cream"
             />
           )}
-          <StatCell
+          <StatCard
             icon={<Timer />}
-            label={t.simulator.summaryLabels.time}
+            title={t.simulator.summaryLabels.time}
             value={formatDuration(totalMs)}
             caption={t.simulator.summaryLabels.timeCaption}
+            tone="cream"
           />
-        </StatPanel>
+        </div>
         {sentToReview > 0 ? (
           <p className="mt-3 text-sm font-medium text-fg">
             {t.simulator.summaryErrors(sentToReview)}

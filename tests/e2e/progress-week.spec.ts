@@ -18,7 +18,7 @@ test('la semana calibra los minutos, avisa la sobrecarga y cada ajuste cambia lo
 
   // Progreso se abre desde la navegación, la barra en línea en computadora y el dock en el teléfono
   await mainNav(page).getByRole('link', { name: t.navItems.progress, exact: true }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.progress.title);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.progress.title);
 
   // Siete días desde hoy. Hoy va marcado y es el único con lo hecho, los demás traen lo planeado
   const week = page.getByRole('region', { name: t.planner.weekTitle });

@@ -96,3 +96,47 @@ describe('tarjetas por repasar en Inicio', () => {
     expect(snapshotOf(events).dueCards).toBe(1);
   });
 });
+
+describe('estado de las tarjetas para el anillo de Inicio (D-150)', () => {
+  const a = newId();
+  const b = newId();
+  const c = newId();
+  const d = newId();
+  const lapsed = (cardId: string, due: string): AppEvent =>
+    event(
+      'card_reviewed',
+      {
+        cardId,
+        deckId: newId(),
+        source: 'card',
+        rating: 'again',
+        confidence: null,
+        msToReveal: 1000,
+        msToRate: 1000,
+        stateBefore: null,
+        stateAfter: state({ due, state: 'relearning', lapses: 2 }),
+      },
+      minute(10),
+    );
+
+  it('parte las activas en al día, vencidas y olvidadas, y las tres suman el total', () => {
+    const far = new Date(minute(60 * 24 * 5)).toISOString();
+    // a vence hoy, b está en reaprendizaje y además vence, c está lejos y d no se ha estudiado
+    const events = [reviewed(a), lapsed(b, new Date(minute(60)).toISOString()), lapsed(c, far)];
+    const snapshot = snapshotOf(events, new Set([a, b, c, d]));
+    expect(snapshot.cardStatus).toEqual({ active: 4, upToDate: 1, due: 1, forgotten: 2 });
+    // Para el resto de la app, la olvidada que venció sigue contando como vencida
+    expect(snapshot.dueCards).toBe(2);
+  });
+
+  it('una suspendida no es activa y sin la lista de activas cuentan las que tienen repasos', () => {
+    const suspend = event('cards_suspended', { cardIds: [a], reason: 'manual' }, minute(20));
+    expect(snapshotOf([reviewed(a), reviewed(b), suspend], new Set([a, b])).cardStatus).toEqual({
+      active: 1,
+      upToDate: 0,
+      due: 1,
+      forgotten: 0,
+    });
+    expect(snapshotOf([reviewed(a), reviewed(b)]).cardStatus.active).toBe(2);
+  });
+});

@@ -126,7 +126,11 @@ afterEach(() => {
 describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
   it('el de 280 dice 250 en español y 30 en inglés con el tiempo total de las dos secciones', () => {
     card();
-    expect(screen.getByRole('combobox', { name: t.exam.size })).toHaveValue('280');
+    expect(
+      within(screen.getByRole('group', { name: t.exam.size })).getByRole('button', {
+        pressed: true,
+      }),
+    ).toHaveTextContent('280');
     expect(screen.getByRole('checkbox', { name: copy.include })).toBeChecked();
     // 250 por 77 s y 30 por 90 s son 6 horas 5 minutos 50 segundos, que se dicen como 6 h 06 min
     expect(
@@ -143,13 +147,13 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
   it('los exámenes cortos llevan la misma proporción', async () => {
     const typing = userEvent.setup();
     card();
-    const size = screen.getByRole('combobox', { name: t.exam.size });
+    const size = screen.getByRole('group', { name: t.exam.size });
     for (const [value, spanishCount, englishCount] of [
       ['100', 89, 11],
       ['50', 45, 5],
       ['20', 18, 2],
     ] as const) {
-      await typing.selectOptions(size, value);
+      await typing.click(within(size).getByRole('button', { name: value }));
       expect(
         screen.getByText(new RegExp(copy.composition(spanishCount, englishCount))),
       ).toBeVisible();
@@ -190,8 +194,8 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
       ),
     ).toBeVisible();
     // Con los cortos piden la misma proporción, y eso no es lo que trae el examen real
-    const size = screen.getByRole('combobox', { name: t.exam.size });
-    await typing.selectOptions(size, '100');
+    const size = screen.getByRole('group', { name: t.exam.size });
+    await typing.click(within(size).getByRole('button', { name: '100' }));
     expect(
       screen.getByText(
         'Solo hay 6 reactivos de inglés de los 11 que pide este examen. Tu examen llevará 6 y el español no los rellena.',
@@ -200,7 +204,7 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(screen.queryByText(/que trae el examen real/)).toBeNull();
     expect(screen.getByText(copy.missing(6, 11, false))).toBeVisible();
     // Con 50 piden 5 y con 6 reactivos no falta ninguno, así que no hay aviso de faltantes
-    await typing.selectOptions(size, '50');
+    await typing.click(within(size).getByRole('button', { name: '50' }));
     expect(screen.queryByText(/Solo hay/)).toBeNull();
   });
 
@@ -208,19 +212,19 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     const typing = userEvent.setup();
     // Solo casos de tres preguntas, 36 reactivos. Hay más que los 30 del examen real, pero un texto entra completo
     card({ englishQuestions: english(Array.from({ length: 12 }, () => 3)) });
-    const size = screen.getByRole('combobox', { name: t.exam.size });
+    const size = screen.getByRole('group', { name: t.exam.size });
     // El de 280 pide 30 y diez casos de tres suman 30, así que no hay nada que avisar
     expect(screen.queryByText(/Con los casos que hay/)).toBeNull();
     expect(screen.getByText(new RegExp(copy.composition(250, 30)))).toBeVisible();
 
     // El de 100 pide 11 y entran tres casos, 9
-    await typing.selectOptions(size, '100');
+    await typing.click(within(size).getByRole('button', { name: '100' }));
     expect(screen.getByText(copy.fits(9, 11))).toBeVisible();
     expect(screen.getByText(new RegExp(copy.composition(91, 9)))).toBeVisible();
     expect(screen.queryByText(/Solo hay/)).toBeNull();
 
     // El de 50 pide 5 y entra un caso, 3
-    await typing.selectOptions(size, '50');
+    await typing.click(within(size).getByRole('button', { name: '50' }));
     expect(screen.getByText(copy.fits(3, 5))).toBeVisible();
     expect(
       screen.getByText(
@@ -230,7 +234,7 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(screen.getByText(new RegExp(copy.composition(47, 3)))).toBeVisible();
 
     // El de 20 pide 2 y no cabe ningún caso: sale sin inglés y lo dice
-    await typing.selectOptions(size, '20');
+    await typing.click(within(size).getByRole('button', { name: '20' }));
     expect(screen.getByText(copy.fits(0, 2))).toBeVisible();
     expect(screen.getByText(/^Con los casos que hay no entra ninguno de inglés\./)).toBeVisible();
     expect(screen.queryByText(new RegExp(' en español y .* en inglés'))).toBeNull();
@@ -242,9 +246,9 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
   it('cuando los casos suman justo lo que pide el examen no hay aviso en ningún tamaño', async () => {
     const typing = userEvent.setup();
     card();
-    const size = screen.getByRole('combobox', { name: t.exam.size });
+    const size = screen.getByRole('group', { name: t.exam.size });
     for (const value of ['280', '100', '50', '20']) {
-      await typing.selectOptions(size, value);
+      await typing.click(within(size).getByRole('button', { name: value }));
       expect(screen.queryByText(/Con los casos que hay/), value).toBeNull();
       expect(screen.queryByText(/Solo hay/), value).toBeNull();
     }
@@ -254,7 +258,9 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     const typing = userEvent.setup();
     // 6 reactivos de inglés: el de 50 pide 5 y entra un caso de 3, pero no falta inglés
     card({ englishQuestions: english([3, 3]) });
-    await typing.selectOptions(screen.getByRole('combobox', { name: t.exam.size }), '50');
+    await typing.click(
+      within(screen.getByRole('group', { name: t.exam.size })).getByRole('button', { name: '50' }),
+    );
     expect(screen.getByText(copy.fits(3, 5))).toBeVisible();
     expect(screen.queryByText(/Solo hay/)).toBeNull();
   });
@@ -280,7 +286,11 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
 
   it('en Gratis un examen chico cabe con su parte en inglés dentro de lo que le queda hoy', () => {
     card({ plan: 'free', left: 20 });
-    expect(screen.getByRole('combobox', { name: t.exam.size })).toHaveValue('20');
+    expect(
+      within(screen.getByRole('group', { name: t.exam.size })).getByRole('button', {
+        pressed: true,
+      }),
+    ).toHaveTextContent('20');
     expect(screen.getByText(new RegExp(copy.composition(18, 2)))).toBeVisible();
     expect(screen.getByText(t.exam.fullLocked)).toBeVisible();
   });
@@ -374,10 +384,11 @@ describe('tarjeta del examen con su parte en inglés (B13, 3.1 y 3.7)', () => {
     expect(state?.totalMs).toBe(18 * 77_000);
   });
 
-  it('las dos secciones y sus avisos están dentro de la tarjeta del examen', () => {
+  it('la casilla de inglés vive en los ajustes del examen y su aviso queda junto al botón', () => {
     card({ englishQuestions: english([3, 3]) });
-    const region = screen.getByRole('region', { name: t.exam.cardTitle });
-    expect(within(region).getByRole('checkbox', { name: copy.include })).toBeVisible();
-    expect(within(region).getByText(copy.missing(6, 30, true))).toBeVisible();
+    // Los ajustes finos van en su tarjeta debajo del formulario (D-150)
+    const settings = screen.getByRole('region', { name: t.exam.settings });
+    expect(within(settings).getByRole('checkbox', { name: copy.include })).toBeVisible();
+    expect(screen.getByText(copy.missing(6, 30, true))).toBeVisible();
   });
 });

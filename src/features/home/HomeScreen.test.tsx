@@ -11,7 +11,9 @@ import { newId } from '@/data/ids';
 import type { User } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
 import { changePlan } from '@/data/usecases/subscription';
+import { INDICATOR_THRESHOLDS } from '@/engines/keyIndicators';
 import { longDate } from '@/features/billing/planState';
+import { settingsPath } from '@/features/settings/sections';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
 import { homePlanText } from '@/i18n/homePlan';
@@ -61,41 +63,80 @@ async function reviewToday(api: DataApi, user: User, count: number, extra = fals
   }
 }
 
-describe('Inicio con el diseño fijo', () => {
+/** Preguntas contestadas hoy, todas correctas y en un minuto cada una */
+async function answerToday(api: DataApi, user: User, count: number) {
+  const now = new Date();
+  for (let index = 0; index < count; index += 1) {
+    const stamp = new Date(now.getTime() - (count - index) * 1000);
+    await api.repos.events.append(
+      createEvent(
+        'question_answered',
+        {
+          questionVersionId: newId(),
+          optionVersionId: newId(),
+          correct: true,
+          confidence: null,
+          msToAnswer: 60_000,
+          changeCount: 0,
+          highlightEnabled: false,
+        },
+        { userId: user.id, tz: user.timeZone, clock: { now: () => stamp } },
+      ),
+    );
+  }
+}
+
+/** La tarjeta de cifra no es región, se encuentra por su título */
+const cardOf = (title: string) =>
+  screen.getByRole('heading', { name: title }).closest('section') as HTMLElement;
+
+describe('Inicio con el canvas de D-150', () => {
   it('saluda y muestra cada parte del diseño sin inventar cifras', async () => {
     app = await renderApp(SCREENS.home.path, { user: { alias: 'Marta' } });
     expect(
       await screen.findByRole('heading', { level: 1, name: t.home.welcome('Marta', null) }),
     ).toBeVisible();
-    expect(screen.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
-    expect(screen.getByRole('heading', { level: 2, name: t.home.simulatorsTitle })).toBeVisible();
-
-    const goal = screen.getByRole('region', { name: t.widgets.names.daily_goal });
-    // La meta y la fila de nuevas del plan de hoy dicen 0 de 20, porque el límite de nuevas es el mismo
-    expect(within(goal).getAllByText(t.widgets.goal.ratio(0, 20))[0]).toBeVisible();
-    // El plan de hoy con las tres cifras de la guía, con los límites por omisión
-    expect(within(goal).getByText(t.widgets.plan.title)).toBeVisible();
-    expect(within(goal).getByText(t.widgets.plan.rows.cards)).toBeVisible();
-    expect(within(goal).getByText(t.widgets.plan.rows.questions)).toBeVisible();
-    expect(within(goal).getByText(t.widgets.goal.ratio(0, 220))).toBeVisible();
-    // La frase del día lleva su autor
-    expect(within(goal).getByRole('figure')).toBeVisible();
-
-    const due = screen.getByRole('region', { name: t.home.dueTitle });
-    expect(within(due).getByText(t.home.dueLabel(0))).toBeInTheDocument();
-    expect(within(due).getByRole('link', { name: t.widgets.today.review })).toHaveAttribute(
+    // La frase del día con cifras reales. Nada vencido y las 20 preguntas del plan Gratis
+    expect(screen.getByText(t.home.lead(0, 20))).toBeVisible();
+    expect(screen.getByRole('link', { name: t.home.startReviews })).toHaveAttribute(
       'href',
       SCREENS.review.path,
     );
+    expect(screen.getByRole('link', { name: t.home.customize })).toHaveAttribute(
+      'href',
+      settingsPath('apariencia'),
+    );
+    expect(screen.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
+    expect(screen.getByRole('heading', { level: 2, name: t.home.simulatorsTitle })).toBeVisible();
 
-    // Sin repasos la gráfica no se pinta y dice qué va a mostrar
-    const load = screen.getByRole('region', { name: t.home.load.title });
+    // Estado de las tarjetas en anillo, sin tarjetas activas
+    const cards = screen.getByRole('region', { name: t.home.cards.title });
+    expect(within(cards).getByRole('img', { name: t.home.cards.label(0, 0, 0, 0) })).toBeVisible();
+    expect(within(cards).getByText(t.home.cards.active)).toBeVisible();
+
+    // La meta de hoy con las tres filas del plan de la guía, con los límites por omisión
+    const goal = screen.getByRole('region', { name: t.home.goal.title });
+    const rows = t.widgets.plan.rows;
+    expect(within(goal).getByText(t.home.goal.row(rows.cards, 0, 220))).toBeVisible();
+    expect(within(goal).getByText(t.home.goal.row(rows.newCards, 0, 20))).toBeVisible();
+    expect(within(goal).getByText(t.home.goal.row(rows.questions, 0, 20))).toBeVisible();
+    expect(within(goal).getByText(t.home.goal.ofDay)).toBeVisible();
+    // La frase del día lleva su autor
+    expect(within(goal).getByRole('figure')).toBeVisible();
+
+    // Sin repasos la carga no pinta la gráfica y dice qué va a mostrar
+    const load = cardOf(t.home.load.title);
     expect(within(load).getByText(t.home.load.empty)).toBeVisible();
-    expect(within(load).getByText(t.home.load.averageNone, { exact: false })).toBeVisible();
-    expect(within(load).getByRole('link', { name: t.home.load.linkLabel })).toHaveAttribute(
+    expect(within(load).getByText(t.home.load.averageCaption)).toBeVisible();
+    expect(within(load).getByRole('link', { name: t.home.load.seeAll })).toHaveAttribute(
       'href',
       SCREENS.progress.path,
     );
+
+    // El pulso calibra y dice cuánto falta de cada parte
+    const pulse = screen.getByRole('region', { name: t.home.pulse.title });
+    expect(within(pulse).getByText(t.states.calibrating.title)).toBeVisible();
+    expect(within(pulse).getByText(t.home.pulse.calibratingNote(7, 50, 50))).toBeVisible();
 
     // Los análisis calibran mientras no hay respuestas suficientes
     const bias = screen.getByRole('region', { name: t.vocabulary.trap.homeTitle });
@@ -111,6 +152,10 @@ describe('Inicio con el diseño fijo', () => {
     ).toBeVisible();
     const topics = screen.getByRole('region', { name: t.home.topicsTitle });
     expect(await within(topics).findByText(t.states.calibrating.title)).toBeVisible();
+    expect(within(topics).getByRole('link', { name: t.home.simulateTopics })).toHaveAttribute(
+      'href',
+      SCREENS.simulatorSetup.path,
+    );
 
     expect(screen.getByRole('region', { name: t.widgets.names.missions })).toBeVisible();
     // En Gratis el reto de Party lleva el aviso corto del candado (respuesta 20, B8)
@@ -120,7 +165,36 @@ describe('Inicio con el diseño fijo', () => {
       'href',
       SCREENS.subscription.path,
     );
-    const heatmap = screen.getByRole('region', { name: t.widgets.names.heatmap });
+
+    // Los indicadores clave calibran con su umbral, nunca con una cifra inventada
+    const indicators = screen.getByRole('region', { name: t.home.indicators.title });
+    expect(
+      within(indicators).getByRole('link', { name: t.home.indicators.seeAll }),
+    ).toHaveAttribute('href', SCREENS.progress.path);
+    const retention = within(indicators).getByRole('heading', {
+      name: t.home.indicators.retention.title,
+    }).parentElement?.parentElement as HTMLElement;
+    expect(within(retention).getByText(t.states.calibrating.title)).toBeVisible();
+    expect(
+      within(retention).getByText(
+        t.home.indicators.missing(INDICATOR_THRESHOLDS.reviews, t.home.indicators.retention.unit),
+      ),
+    ).toBeVisible();
+    const fatigue = within(indicators).getByRole('heading', {
+      name: t.home.indicators.fatigue.title,
+    }).parentElement?.parentElement as HTMLElement;
+    expect(
+      await within(fatigue).findByText(t.home.indicators.fatigue.calibratingNote),
+    ).toBeVisible();
+
+    // Sin mazos seguidos la dona dice qué hacer, y las preguntas por día van en cero
+    const branches = screen.getByRole('region', { name: t.home.branches.title });
+    expect(within(branches).getByText(t.home.branches.empty)).toBeVisible();
+    const questions = cardOf(t.home.questions.title);
+    expect(within(questions).getByText(t.home.questions.same)).toBeVisible();
+    expect(within(questions).getByText(t.home.questions.caption(0))).toBeVisible();
+
+    const heatmap = screen.getByRole('region', { name: t.home.yearTitle });
     expect(heatmap).toBeVisible();
     // Las iniciales de lunes a domingo van a la izquierda de las filas
     expect(
@@ -195,23 +269,53 @@ describe('Inicio con el diseño fijo', () => {
     ).toBeVisible();
   });
 
-  it('con repasos hechos la carga muestra la gráfica, su tabla y el promedio del mes', async () => {
+  it('con repasos hechos la carga muestra la gráfica con su sombra, su tabla y el promedio', async () => {
     app = await renderApp(SCREENS.home.path, {
       seed: async (api, user) => {
         await reviewToday(api, user, 3);
       },
     });
-    const load = await screen.findByRole('region', { name: t.home.load.title });
-    expect(await within(load).findByRole('img', { name: t.home.load.chartLabel })).toBeVisible();
+    await screen.findByRole('heading', { level: 2, name: t.home.reviewsTitle });
+    const load = cardOf(t.home.load.title);
+    const chart = await within(load).findByRole('img', { name: t.home.load.chartLabel });
+    expect(chart).toBeVisible();
+    // El sombreado bajo la línea de programados es el único degradado dentro de la app
+    expect(chart.querySelector('linearGradient')).not.toBeNull();
     // La tabla para el lector de pantalla trae los cinco meses
     const table = within(load).getByRole('table');
     expect(within(table).getAllByRole('row')).toHaveLength(6);
     expect(
       within(load).getByText(t.home.load.scheduled, { selector: 'figcaption span' }),
     ).toBeVisible();
-    // Las tres tarjetas cuentan hoy y ninguna está vencida
-    const due = screen.getByRole('region', { name: t.home.dueTitle });
-    expect(within(due).getByText(t.widgets.today.done(3, 0))).toBeVisible();
+    // Las tres tarjetas cuentan en la meta de hoy
+    const goal = screen.getByRole('region', { name: t.home.goal.title });
+    expect(
+      within(goal).getByText(t.home.goal.row(t.widgets.plan.rows.cards, 3, 220)),
+    ).toBeVisible();
+  });
+
+  it('las preguntas por día cuentan esta semana contra la pasada con cifras reales', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await answerToday(api, user, 4);
+      },
+    });
+    await screen.findByRole('heading', { level: 2, name: t.home.reviewsTitle });
+    const questions = cardOf(t.home.questions.title);
+    // La cifra grande de la tarjeta. La tabla del lector de pantalla también trae el 4
+    expect(within(questions).getByText('4', { selector: 'p span' })).toBeVisible();
+    expect(within(questions).getByText(t.home.questions.more(4))).toBeVisible();
+    expect(
+      within(questions).getByRole('table', { name: t.home.questions.tableCaption }),
+    ).toBeInTheDocument();
+    // Cuatro preguntas no llegan al umbral de aciertos ni al de tiempo por pregunta, que siguen
+    // calibrando y dicen cuánto falta
+    const indicators = screen.getByRole('region', { name: t.home.indicators.title });
+    const missing = within(indicators).getAllByText(
+      t.home.indicators.missing(INDICATOR_THRESHOLDS.answered - 4, t.home.indicators.accuracy.unit),
+    );
+    expect(missing).toHaveLength(2);
+    expect(missing[0]).toBeVisible();
   });
 
   it('con un plan de pago el reto de Party ya no lleva el candado', async () => {
@@ -268,22 +372,21 @@ describe('Inicio con el diseño fijo', () => {
 });
 
 describe('plan de hoy en Inicio', () => {
-  const bar = (
+  const row = (
     goal: HTMLElement,
-    row: 'cards' | 'newCards' | 'questions',
+    key: 'cards' | 'newCards' | 'questions',
     done: number,
     of: number,
-  ) =>
-    within(goal).getByRole('progressbar', {
-      name: t.widgets.plan.label(t.widgets.plan.rows[row], done, of),
-    });
+  ) => within(goal).getByText(t.home.goal.row(t.widgets.plan.rows[key], done, of));
 
   it('en Gratis las preguntas del plan no pasan del tope de 20 al día y lo dice', async () => {
     app = await renderApp(SCREENS.home.path);
-    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    const goal = await screen.findByRole('region', { name: t.home.goal.title });
     // El ajuste del alumno es de 50, pero el plan Gratis solo da 20
-    expect(bar(goal, 'questions', 0, 20)).toBeVisible();
+    expect(row(goal, 'questions', 0, 20)).toBeVisible();
     expect(within(goal).getByText(homePlanText.capped(20))).toBeVisible();
+    // El anillo lo lee el lector de pantalla con las tres filas
+    expect(within(goal).getByRole('img', { name: /Meta de hoy al 0 por ciento/ })).toBeVisible();
   });
 
   it('con un plan de pago las preguntas del plan son las del ajuste y no hay tope', async () => {
@@ -292,11 +395,9 @@ describe('plan de hoy en Inicio', () => {
         await changePlan(api, user, 'monthly');
       },
     });
-    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    const goal = await screen.findByRole('region', { name: t.home.goal.title });
     expect(
-      await within(goal).findByRole('progressbar', {
-        name: t.widgets.plan.label(t.widgets.plan.rows.questions, 0, 50),
-      }),
+      await within(goal).findByText(t.home.goal.row(t.widgets.plan.rows.questions, 0, 50)),
     ).toBeVisible();
     expect(within(goal).queryByText(homePlanText.capped(20))).toBeNull();
   });
@@ -307,19 +408,17 @@ describe('plan de hoy en Inicio', () => {
         await reviewToday(api, user, 2, true);
       },
     });
-    const goal = await screen.findByRole('region', { name: t.widgets.names.daily_goal });
+    const goal = await screen.findByRole('region', { name: t.home.goal.title });
     // Dos tarjetas nuevas, las dos de una sesión por tema
     expect(
-      await within(goal).findByRole('progressbar', {
-        name: t.widgets.plan.label(t.widgets.plan.rows.newCards, 2, 20),
-      }),
+      await within(goal).findByText(t.home.goal.row(t.widgets.plan.rows.newCards, 2, 20)),
     ).toBeVisible();
-    expect(bar(goal, 'cards', 2, 220)).toBeVisible();
+    expect(row(goal, 'cards', 2, 220)).toBeVisible();
   });
 
   it('el heatmap lleva un enlace al Calendario, que sí da el detalle por día con teclado', async () => {
     app = await renderApp(SCREENS.home.path);
-    const heatmap = await screen.findByRole('region', { name: t.widgets.names.heatmap });
+    const heatmap = await screen.findByRole('region', { name: t.home.yearTitle });
     expect(within(heatmap).getByRole('link', { name: t.calendar.heatmapLink })).toHaveAttribute(
       'href',
       SCREENS.calendar.path,

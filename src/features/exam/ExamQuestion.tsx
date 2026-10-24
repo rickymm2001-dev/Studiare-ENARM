@@ -1,9 +1,13 @@
 // Pregunta del examen. Caso clínico, frase con negaciones resaltadas si el alumno lo pidió y opciones
 // que se pueden descartar. Descartar no cambia la respuesta, solo ayuda a pensar, y queda registrado
 // para medir cómo descarta (D-080). No muestra si acertó, eso llega con los resultados.
-// Una pregunta de la parte en inglés (B13, 3.5) usa el diseño de lectura de la práctica. El texto fijo a la
-// izquierda en computadora, el texto, la pregunta y las opciones en inglés (lang="en") y la línea de la
-// fuente bajo el texto. El resaltado de negaciones sigue apagado por omisión, como en español.
+// Desde D-150 sigue el diseño de la pregunta. Una tarjeta grande con esquinas de 24 px y sombra marina
+// suave con la rama en píldora de su color, el tipo de reactivo, el caso en texto de lectura y la
+// pregunta final en marino, las opciones como tarjetas píldora debajo y, si la sesión la pide, la
+// confianza en segmentado píldora.
+// Una pregunta de la parte en inglés (B13, 3.5) lleva el texto de lectura dentro de la tarjeta, con el
+// texto, la pregunta y las opciones en inglés (lang="en") y la línea de la fuente bajo el texto. El
+// resaltado de negaciones sigue apagado por omisión, como en español.
 import { Flag } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { structureDictionary } from '@/demo/content';
@@ -12,8 +16,8 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { BranchBadge } from '@/ui/components/branch-tag';
-import { Button } from '@/ui/components/button';
-import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card, CardTitle } from '@/ui/components/card';
+import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { HighlightedPrompt } from '../simulator/HighlightedPrompt';
 import { OptionChoice } from '../simulator/OptionChoice';
 import { ReadingPassage } from '../simulator/ReadingPassage';
@@ -65,7 +69,6 @@ export function ExamQuestion({
   const ranges = highlight
     ? findNegations(question.prompt, structureDictionary, english ? 'en' : 'es')
     : [];
-  const twoColumns = Boolean(vignette) || english;
   const promptRef = useRef<HTMLHeadingElement>(null);
   // La región del texto de una pregunta de lectura, que va antes del enunciado
   const passageRef = useRef<HTMLDivElement>(null);
@@ -78,35 +81,13 @@ export function ExamQuestion({
     (firstOfText ? (passageRef.current ?? promptRef.current) : promptRef.current)?.focus();
   }, [focusPrompt, firstOfText]);
 
-  const prompt = (
-    <CardTitle
-      id="examen-pregunta-frase"
-      ref={promptRef}
-      tabIndex={-1}
-      lang={lang}
-      className={cn(
-        'text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus',
-        english ? undefined : 'mt-3',
-      )}
-    >
-      <span id="examen-pregunta-lugar" className="sr-only" lang="es">
-        {position}.{' '}
-      </span>
-      <HighlightedPrompt text={question.prompt} ranges={ranges} />
-    </CardTitle>
-  );
-
   return (
-    <Card
-      aria-labelledby="examen-pregunta-frase"
-      className={cn(
-        'w-full',
-        twoColumns
-          ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6'
-          : 'lg:mx-auto lg:w-full lg:max-w-session',
-      )}
-    >
-      <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
+    <>
+      <Card
+        lift={false}
+        aria-labelledby="examen-pregunta-frase"
+        className="flex w-full flex-col gap-4 rounded-xl p-6 shadow-navy sm:p-8"
+      >
         <div className="flex flex-wrap items-center gap-2">
           {/* Rama y tema pueden ser largos, así que la etiqueta sí parte en renglones. Va en el
               color de la rama (D-128) */}
@@ -114,6 +95,11 @@ export function ExamQuestion({
             {t.branchNames[question.branch] ?? question.branch} ·{' '}
             {TOPIC_NAMES.get(question.topic) ?? question.topic}
           </BranchBadge>
+          {english ? null : (
+            <span className="text-sm text-fg-muted">
+              {vignette ? t.exam.reactiveKind : t.exam.singleQuestion}
+            </span>
+          )}
           {answer.marked ? (
             <Badge variant="warning">
               <Flag aria-hidden className="size-3 fill-current" />
@@ -129,19 +115,22 @@ export function ExamQuestion({
             scrollable
             regionRef={passageRef}
             describedBy="examen-pregunta-lugar"
-            className="mt-2"
           />
         ) : vignette ? (
-          <div className="mt-2 rounded-md bg-muted p-3">
-            <p className="mb-1 text-xs font-semibold text-fg-muted">{t.simulator.caseLabel}</p>
-            <p className="whitespace-pre-line">{vignette}</p>
-          </div>
+          <p className="text-lg leading-relaxed whitespace-pre-line text-fg">{vignette}</p>
         ) : null}
-        {english ? null : prompt}
-      </CardHeader>
-
-      <div className="flex flex-col gap-3">
-        {english ? prompt : null}
+        <CardTitle
+          id="examen-pregunta-frase"
+          ref={promptRef}
+          tabIndex={-1}
+          lang={lang}
+          className="text-xl leading-snug font-bold tracking-tight text-heading focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus sm:text-2xl"
+        >
+          <span id="examen-pregunta-lugar" className="sr-only" lang="es">
+            {position}.{' '}
+          </span>
+          <HighlightedPrompt text={question.prompt} ranges={ranges} />
+        </CardTitle>
         {nudge ? (
           <p
             role="status"
@@ -150,54 +139,61 @@ export function ExamQuestion({
             {nudge}
           </p>
         ) : null}
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 text-sm text-fg-muted">
-            {sheetMode ? t.answerSheet.readOnlyNote : t.choice.optionsHint}
-          </legend>
-          <ul className="flex flex-col gap-2">
-            {shown.map((option, position) => (
-              <OptionChoice
-                key={option.id}
-                name="opcion-examen"
-                letter={String.fromCharCode(65 + position)}
-                text={option.text}
-                lang={lang}
-                selected={answer.optionId === option.id}
-                readOnlyChoice={sheetMode}
-                discarded={answer.eliminated.includes(option.id)}
-                onChoose={() => {
-                  onChoose(option.id);
-                }}
-                onToggleDiscard={() => {
-                  onToggleDiscard(option.id);
-                }}
-              />
-            ))}
-          </ul>
-        </fieldset>
+      </Card>
 
-        {askConfidence ? (
-          <fieldset className="flex flex-col gap-1.5">
-            <legend className="text-sm font-medium">{t.exam.confidenceOptional}</legend>
-            <div className="flex flex-wrap gap-2">
-              {(['guessed', 'unsure', 'sure'] as const).map((level) => (
-                <Button
-                  key={level}
-                  size="sm"
-                  variant={answer.confidence === level ? 'primary' : 'secondary'}
-                  aria-pressed={answer.confidence === level}
-                  disabled={answer.optionId === null}
-                  onClick={() => {
-                    onConfidence(answer.confidence === level ? null : level);
-                  }}
-                >
-                  {t.simulator.confidence[level]}
-                </Button>
-              ))}
-            </div>
-          </fieldset>
-        ) : null}
-      </div>
-    </Card>
+      <fieldset className="flex flex-col gap-3">
+        <legend className={cn('text-sm text-fg-muted', sheetMode ? 'mb-2' : 'sr-only')}>
+          {sheetMode ? t.answerSheet.readOnlyNote : t.exam.optionsLegend}
+        </legend>
+        <ul className="flex flex-col gap-3">
+          {shown.map((option, index) => (
+            <OptionChoice
+              key={option.id}
+              name="opcion-examen"
+              letter={String.fromCharCode(65 + index)}
+              text={option.text}
+              lang={lang}
+              selected={answer.optionId === option.id}
+              readOnlyChoice={sheetMode}
+              discarded={answer.eliminated.includes(option.id)}
+              onChoose={() => {
+                onChoose(option.id);
+              }}
+              onToggleDiscard={() => {
+                onToggleDiscard(option.id);
+              }}
+            />
+          ))}
+        </ul>
+      </fieldset>
+
+      {askConfidence ? (
+        <fieldset className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <legend className="sr-only">{t.exam.confidenceOptional}</legend>
+          <span aria-hidden className="text-sm text-fg-muted">
+            {t.exam.confidenceOptional}
+          </span>
+          <div className={segmentedList}>
+            {(['guessed', 'unsure', 'sure'] as const).map((level) => (
+              <button
+                key={level}
+                type="button"
+                aria-pressed={answer.confidence === level}
+                disabled={answer.optionId === null}
+                onClick={() => {
+                  onConfidence(answer.confidence === level ? null : level);
+                }}
+                className={segmentedItem(
+                  answer.confidence === level,
+                  'min-h-9 disabled:cursor-not-allowed disabled:opacity-50',
+                )}
+              >
+                {t.simulator.confidence[level]}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      ) : null}
+    </>
   );
 }

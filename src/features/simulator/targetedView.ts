@@ -39,3 +39,15 @@ export function targetedFromReport(report: InsightReport): TargetedView {
     ? { kind: 'none' }
     : { kind: 'ready', tags: rows.map((row) => row.tag), names: rows.map((row) => row.name) };
 }
+
+/** Qué dice la opción con lo que hay. El modelo manda y el informe vale mientras no llegue. null mientras carga */
+export function targetedViewOf(
+  model: StudentModel | undefined,
+  report: InsightReport | undefined,
+): TargetedView | null {
+  return model !== undefined
+    ? targetedFromModel(model)
+    : report
+      ? targetedFromReport(report)
+      : null;
+}

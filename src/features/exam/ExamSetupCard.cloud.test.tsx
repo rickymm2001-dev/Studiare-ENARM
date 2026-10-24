@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useEffect } from 'react';
 import { MemoryRouter } from 'react-router';
@@ -200,7 +200,9 @@ describe('examen completo con el banco de la nube', () => {
     await source.ensureBodies([...stored], 'exam');
     server.state.offline = true;
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
-    await typing.selectOptions(screen.getByLabelText(t.exam.size), '20');
+    await typing.click(
+      within(screen.getByRole('group', { name: t.exam.size })).getByRole('button', { name: '20' }),
+    );
     await typing.click(screen.getByRole('button', { name: t.exam.start }));
     await waitFor(() => {
       expect(loadExamState(user.id)?.questionIds).toHaveLength(20);
