@@ -60,7 +60,7 @@ export function AppShell() {
   const bare =
     pathname === screenPath('onboarding') ||
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
-  // La portada de venta ocupa todo el ancho y pone sus propios márgenes (D-148)
+  // La portada de venta ocupa todo el ancho y pone sus propios márgenes (D-149)
   const landing = pathname === screenPath('home') && session.status === 'signed-out';
   // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
   const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
@@ -82,7 +82,7 @@ export function AppShell() {
       {/* En el teléfono una barra delgada con el logo. En computadora es la barra blanca de arriba,
           con el botón que oculta o muestra el menú lateral, el símbolo de Studiare y, encima, el
           título de la pantalla con la racha y el nivel, que pone ScreenHeader (D-117) */}
-      {/* La portada trae su propia barra con la marca (D-148), así que aquí no va otra */}
+      {/* La portada trae su propia barra con la marca (D-149), así que aquí no va otra */}
       {landing ? null : (
         <header
           className={cn('glass sticky top-0 z-20 border-b border-line', !bare && 'lg:h-topbar')}

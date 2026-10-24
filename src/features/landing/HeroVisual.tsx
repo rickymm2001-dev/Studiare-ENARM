@@ -1,4 +1,4 @@
-// La imagen del héroe de la portada (D-148). La foto vive en public/landing/portada.webp, ya con el
+// La imagen del héroe de la portada (D-149). La foto vive en public/landing/portada.webp, ya con el
 // recorte, el duotono marino y el contraste de la diapositiva 1 del Benchmark, y encima va el degradado
 // blanco de izquierda a derecha de esa misma diapositiva. Si la foto no carga, en su lugar van dos
 // capturas reales de la app, que ya llevan dentro su etiqueta de datos de demostración.

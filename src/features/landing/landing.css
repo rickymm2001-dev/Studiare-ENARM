@@ -1,5 +1,5 @@
 /*
-  Estilos propios de la portada de venta (D-148). La portada sigue el boceto de Ricardo, con marino,
+  Estilos propios de la portada de venta (D-149). La portada sigue el boceto de Ricardo, con marino,
   azul cielo y una barra pizarra, y toma del formato de referencia la forma de los bloques, con
   esquinas grandes, tarjetas que se encienden al pasar el puntero y bandas de color. Es la única
   pantalla con degradados y movimiento largo. La app por dentro sigue el sistema sobrio de D-121.
@@ -9,7 +9,7 @@
 */
 
 .ld {
-  /* La portada es siempre clara (D-148), como el Benchmark de Ricardo, y no sigue el modo oscuro de la app */
+  /* La portada es siempre clara (D-149), como el Benchmark de Ricardo, y no sigue el modo oscuro de la app */
   color-scheme: light;
   --ld-bg: #ffffff;
   --ld-surface: #ffffff;

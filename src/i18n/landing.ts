@@ -1,9 +1,9 @@
-// Textos de la portada de venta (D-060, D-068, D-148) y lugares marcados para el texto de la agencia o
+// Textos de la portada de venta (D-060, D-068, D-149) y lugares marcados para el texto de la agencia o
 // del influencer (B17, 5.2 y 5.3 del plan de B17). Salieron de features.ts con la misma forma de
 // t.landing, que sigue en t porque la leen la portada y varias pruebas. Cada texto tiene un id y un
 // largo máximo (src/features/landing/slots.ts) que vigila landing.test.ts, y docs/PORTADA.md es el
 // documento que se le da a quien escribe el texto. El texto del héroe y de Nuestro método es el del
-// boceto de Ricardo (D-148), ajustado a las reglas de 5.3 donde prometía un resultado. Lo que llegue
+// boceto de Ricardo (D-149), ajustado a las reglas de 5.3 donde prometía un resultado. Lo que llegue
 // de la agencia cambia aquí y en ningún otro archivo.
 //
 // Los dos bloques de abajo, creator y testimonials, no se muestran mientras estén vacíos. Con texto

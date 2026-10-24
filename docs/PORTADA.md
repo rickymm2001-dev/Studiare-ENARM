@@ -4,7 +4,7 @@ Este documento es para la agencia o el influencer que escribe el texto de venta 
 
 ## Cómo se arma la portada
 
-La portada es lo primero que ve quien entra a Studiare sin sesión. Desde D-148 sigue el boceto de Ricardo, con una barra oscura arriba que lleva a las secciones de la misma página (Inicio, Conócenos, Nuestro método y Planes) y a la entrada. Va en este orden.
+La portada es lo primero que ve quien entra a Studiare sin sesión. Desde D-149 sigue el boceto de Ricardo, con una barra oscura arriba que lleva a las secciones de la misma página (Inicio, Conócenos, Nuestro método y Planes) y a la entrada. Va en este orden.
 
 - Título principal en dos líneas, con una etiqueta arriba, una raya, una frase en cursiva, un párrafo, dos botones y una línea corta de confianza. La foto va a la derecha, fundida hacia el texto, como en el Benchmark de Ricardo
 - Una introducción y seis tarjetas de funciones, que es la sección Conócenos

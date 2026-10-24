@@ -1,4 +1,4 @@
-// Movimiento de la portada (D-148). Dos observadores de intersección, uno que marca cada bloque con
+// Movimiento de la portada (D-149). Dos observadores de intersección, uno que marca cada bloque con
 // data-reveal cuando llega a la pantalla y otro que dice qué sección de la barra está a la vista.
 // Sin IntersectionObserver, como en jsdom, o con reducir movimiento, todo se marca de entrada. El
 // bloque sin marcar solo está corrido unos píxeles, nunca transparente, así siempre se lee.

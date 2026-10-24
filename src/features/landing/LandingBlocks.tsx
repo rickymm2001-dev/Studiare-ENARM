@@ -3,7 +3,7 @@
 // y nunca como HTML. Si el contenido es de prueba lleva siempre su etiqueta visible. La foto del creador
 // solo se muestra si trae su texto alternativo. Cada elemento lleva data-slot con el id de su lugar
 // (slots.ts), solo para que quien escribe el texto lo vea al inspeccionar la página. Con la portada de
-// D-148 el creador va en una banda crema y los testimonios en tarjetas con la comilla de adorno.
+// D-149 el creador va en una banda crema y los testimonios en tarjetas con la comilla de adorno.
 import { FlaskConical } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { t } from '@/i18n/es-MX';

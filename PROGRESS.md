@@ -2,6 +2,8 @@
 
 ## Estado actual
 
+- Fase 3 del plan V4 definida el 2026-10-23 (D-148, sección 11 de docs/PLAN_V4.md). Portada e Inicio editoriales con Nature como referente, índice de preparación, mapa de especialidades, próximos, perla del día desde el banco y ficha de tema. Cinco bloques, V4-F3-B0 a B4, empezando por una presentación de PowerPoint editable por pantalla que Ricardo corrige y la sesión lee de vuelta. Prompt de arranque en prompts/v4-fase3.md. Las plantillas de referencia están en la raíz (compilacion-plantillas-enarm.html, elementos-adoptables-enarm.md, capturas/)
+- Portada nueva fusionada el 2026-10-24 (D-149). Ricardo adelantó el héroe y el método de V4-F3-B1 con su boceto y su archivo Benchmark, con foto en duotono y azul cielo, siempre clara. A B1 le quedan la demo interactiva, los perfiles como lista numerada y la curva de olvido en SVG. Detalle en docs/PORTADA.md
 - Plan V4 escrito el 2026-10-22 en docs/PLAN_V4.md (D-140). Continúa V3 y manda sobre él donde no coincidan. Siete bloques nuevos (densidad y espacio, identidad visual, repaso completo al estilo Anki, métodos y plan de hoy, Bloom y estructura del examen, calendario, comunidad por etapas) más los pendientes de Paco, y los B15, B17 y B18 de V3 se reacomodan antes de la auditoría final V4-B10. La auditoría por bloque se mueve al final por decisión de Ricardo. Nueve decisiones esperan su respuesta en la sección 8 del plan. V4-B0, V4-B1 (densidad y espacio), V4-B3 (repaso completo), V4-B4 (métodos y plan de hoy), V4-B5 (Bloom, Cómo es el examen y hoja de respuestas), V4-B6 (calendario), V4-B7 (etapa 1 ya cubierta por B14) V4-B8 (Urgencias gratis en la interfaz) y V4-B2 (identidad visual, D-145) hechos, ver el estado de cada uno en el plan y D-144. Sigue V4-B10 auditoría final
 - Plan del cambio V3 en ejecución desde el 2026-10-12 (D-119, docs/PLAN_DEL_CAMBIO.md). Manda sobre PLAN.md y sobre la especificación donde no coincidan. Ricardo dio por cerradas todas las fases que esperaban su aprobación (respuesta 98) y autorizó lo de la sección 0.1, así que los bloques van sin detenerse, un PR por bloque con el CI en verde
 - Bloques. B0 a B15 y B16 hechos y fusionados en main, ver sus secciones. B17 publicación (PR 61) también. B18 primeros alumnos (D-139) fusionado. El B19 de V3 pasó a V4-B10, la auditoría final del plan V4
@@ -52,7 +54,7 @@ Plan V4 (docs/PLAN_V4.md, D-140 a D-146). El estado de cada bloque está en su p
 - [x] V4-B8. Urgencias gratis solo en la interfaz con el catálogo de la app. La regla del servidor espera a Ricardo (D-144)
 - [ ] V4-B9. Cuentas de Ricardo, ver docs/PENDIENTES_DE_RICARDO.md
 - [x] V4-B10. Auditoría final (D-146). Revisión independiente por cuatro áreas, arreglos aplicados, suite e2e completa, capturas finales y DOMPurify al día. Falta solo lo que espera a Ricardo en docs/PENDIENTES_DE_RICARDO.md
-- [x] Portada nueva con el boceto de Ricardo (D-148). Barra pizarra con anclas, héroe en marino y azul cielo, Nuestro método con seis pasos, bandas de color y efectos. La foto del héroe ya está en public/landing/portada.webp
+- [x] Portada nueva con el boceto de Ricardo (D-149). Barra pizarra con anclas, héroe en marino y azul cielo, Nuestro método con seis pasos, bandas de color y efectos. La foto del héroe ya está en public/landing/portada.webp
 
 ### B0. Arranque
 

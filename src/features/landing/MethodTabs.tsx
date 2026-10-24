@@ -1,4 +1,4 @@
-// Nuestro método (D-148). Seis pasos numerados a la izquierda y el panel con el texto del paso elegido
+// Nuestro método (D-149). Seis pasos numerados a la izquierda y el panel con el texto del paso elegido
 // a la derecha, como en el boceto. Es un tablist vertical, se recorre con las flechas y los seis
 // paneles están en la página, con hidden los que no se ven, para que cada texto tenga su lugar
 // marcado aunque no esté a la vista.

@@ -1,4 +1,4 @@
-// Portada de venta (D-060, D-068, D-148). Lo primero que ve quien no tiene sesión. Sigue el boceto de
+// Portada de venta (D-060, D-068, D-149). Lo primero que ve quien no tiene sesión. Sigue el boceto de
 // Ricardo, con una barra pizarra fija que lleva a las secciones de la misma página y a la entrada, el
 // héroe en marino y azul cielo con la foto fundida al borde, y Nuestro método con sus seis pasos. El
 // resto toma del formato de referencia la forma de los bloques, con esquinas grandes, bandas de color

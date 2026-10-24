@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plantillas ENARM</title>
+<style>
+:root{--bg:#f4f6f7;--card:#fff;--ink:#1d2a2e;--muted:#5d6b70;--accent:#4f8a8b;--accent-soft:#e3efef;--line:#e2e7e9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px 16px 64px}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:28px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 28px}
+h2{font-size:20px;margin:40px 0 4px;padding-top:16px;border-top:1px solid var(--line)}
+h2 .n{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;padding:0 8px;margin-right:8px;font-size:14px}
+.meta{color:var(--muted);font-size:13px;margin:0 0 12px}
+.meta a{color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px;margin:12px 0}
+.grid.one{grid-template-columns:1fr}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}
+figcaption{padding:8px 12px;font-size:12px;color:var(--muted)}
+ul{margin:8px 0 0;padding-left:20px}
+li{margin:3px 0}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:1px 9px;font-size:12px;margin-left:6px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.toc a{color:var(--accent);text-decoration:none}
+.toc li{margin:2px 0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151c1f;--card:#1e272b;--ink:#e8edef;--muted:#9fb0b6;--accent:#7cc4c5;--accent-soft:#223537;--line:#2c383d}}
+:root[data-theme="dark"]{--bg:#151c1f;--card:#1e272b;--ink:#e8edef;--muted:#9fb0b6;--accent:#7cc4c5;--accent-soft:#223537;--line:#2c383d}
+</style>
+</head>
+<body>
+<main>
+<h1>Compilación de plantillas para la página ENARM</h1>
+<p class="sub">17 plantillas de Envato abiertas en Chrome · 36 capturas · base principal: <b>Panel de administración médica</b>. La lista completa numerada (160 elementos) está en <a href="elementos-adoptables-enarm.md">elementos-adoptables-enarm.md</a>.</p>
+
+<div class="box toc">
+<b>Índice</b>
+<ol>
+<li><a href="#t1">Panel de administración médica (Medicial) — base</a></li>
+<li><a href="#t2">Panel de información médica y sanitaria (Abyd Health, modo oscuro)</a></li>
+<li><a href="#t3">Carpenter — Panel de monitoreo IA</a></li>
+<li><a href="#t4">MediFlow — Telemedicina</a></li>
+<li><a href="#t5">Tablero de atención médica (Healty)</a></li>
+<li><a href="#t6">Clinically — Web UI Kit</a></li>
+<li><a href="#t7">Medlink — Panel hospitalario (13 pantallas)</a></li>
+<li><a href="#t8">ADMAX — Panel de administración</a></li>
+<li><a href="#t9">EHR Ehrity — Landing</a></li>
+<li><a href="#t10">Mediplus — Panel sanitario</a></li>
+<li><a href="#t11">Kit de panel de análisis médico</a></li>
+<li><a href="#t12">Plantilla de página de inicio médica</a></li>
+<li><a href="#t13">Panel de salud (verde lima)</a></li>
+<li><a href="#t14">Medicool — Landing</a></li>
+<li><a href="#t15">Ama — Landing médica</a></li>
+<li><a href="#t16">Folleto tríptico médico</a></li>
+<li><a href="#t17">Búsqueda Envato "medical dashboard"</a></li>
+<li><a href="#mapa">Mapa de adopción para ENARM</a></li>
+</ol>
+</div>
+
+<h2 id="t1"><span class="n">1</span>Panel de administración médica (Evlogy · "Medicial")<span class="tag">BASE</span></h2>
+<p class="meta">Figma · 1440×1024 · 1 pantalla · <a href="https://elements.envato.com/es/medical-admin-dashboard-TKNREJK">elements.envato.com/es/medical-admin-dashboard-TKNREJK</a></p>
+<div class="grid">
+<figure><img src="capturas/01-medical-admin-dashboard-1.jpg" alt=""><figcaption>Vista general con mockups responsivos</figcaption></figure>
+<figure><img src="capturas/01-medical-admin-dashboard-1-detalle.jpg" alt=""><figcaption>Detalle: top bar, KPI, Results, Condition Guides</figcaption></figure>
+<figure><img src="capturas/01-medical-admin-dashboard-2.png" alt=""><figcaption>Dashboard completo (tabla Patient Overview, chat, Heart Rate)</figcaption></figure>
+<figure><img src="capturas/01-medical-admin-dashboard-3.png" alt=""><figcaption>Mockup laptop</figcaption></figure>
+</div>
+<div class="box">
+<b>Elementos (34)</b>
+<ul>
+<li><b>Top bar:</b> logo, nav en píldora con iconos (Features | Educations), buscador global con placeholder contextual, botón "+", campana en círculo, avatar + nombre + correo + chevron.</li>
+<li><b>Encabezado:</b> título grande + "• 78 test found", botón primario oscuro con icono (Past Results), dropdowns de filtro (MRI, ubicación), botón circular de descarga.</li>
+<li><b>4 KPI cards:</b> icono en círculo + etiqueta + ⋮, número grande + delta con flecha, sparkline de área (Patient) / mini barras con barra activa (Doctors), card con dos sub-métricas (150 Bed / 390 Bed), card con visual 3D + expandir.</li>
+<li><b>Widget Results:</b> botón "Download Report", chips con miniatura (X-Ray, CT Scan, MRI), sub-grid etiqueta → valor + chevron.</li>
+<li><b>Widget Articles:</b> foto + título + extracto + "Learn More →" + dots de carrusel.</li>
+<li><b>Chat:</b> avatar + burbujas + input "Typing here..." + enviar.</li>
+<li><b>Tabla Patient Overview:</b> selector "Monthly", columnas Name/Age/DOB/Status/Phone, checkbox por fila, badge "Active", ⋮ por fila.</li>
+<li><b>Condition Guides:</b> visual 3D, stepper vertical de puntos, Pulse Rate grande, Average/Minimum/Maximum con punto de color, gráfica de rangos Heart Rate con eje de tiempo, CTA ancho "Review Results →".</li>
+<li><b>Estilo:</b> fondo gris claro + tarjetas blancas + acento teal/sage, radios 16–20 px, sombras suaves, sans moderna, iconos lineales, chips gris tenue, variantes móvil/tablet.</li>
+</ul>
+</div>
+
+<h2 id="t2"><span class="n">2</span>Panel de información médica y sanitaria (Visualabs · "Abyd Health")</h2>
+<p class="meta">Figma · 1440×1024 · 2 pantallas (oscuro y claro) · <a href="https://elements.envato.com/es/medical-healthcare-dashboard-SQ4XM3L">SQ4XM3L</a></p>
+<div class="grid">
+<figure><img src="capturas/02-medical-healthcare-dashboard-visualabs-1.png" alt=""><figcaption>Portada: modo claro + oscuro</figcaption></figure>
+<figure><img src="capturas/02-medical-healthcare-dashboard-visualabs-2.png" alt=""><figcaption>Dashboard modo oscuro completo</figcaption></figure>
+<figure><img src="capturas/02-medical-healthcare-dashboard-visualabs-3.png" alt=""><figcaption>Modal de confirmación</figcaption></figure>
+<figure><img src="capturas/02-medical-healthcare-dashboard-visualabs-4.png" alt=""><figcaption>Mockup laptop modo claro</figcaption></figure>
+</div>
+<div class="box"><ul>
+<li>Sidebar icono + etiqueta con activo resaltado y "Help & Support" al pie.</li>
+<li>Figura anatómica con hotspots (Brain, Heart, Lungs, Liver, Muscles) con estado "Good".</li>
+<li>Tarjeta destacada en color "12 New insights" con dos botones.</li>
+<li>Gauge semicircular con score 82/100 "Good"; tarjeta comparativa Biological Age (-5 años); Health Insight con CTA.</li>
+<li>Grid de biomarcadores: valor + badge Optimal/Near Optimal + mini sparkline + barra de rango gradiente con marcador.</li>
+<li>Recommended Actions (icono + texto + Start), Upcoming Appointments (fecha en badge), Care Team (avatar + chat), Daily Habits (barras con meta).</li>
+<li>Selector de fecha en cabecera; tema oscuro completo; modal centrado con check verde.</li>
+</ul></div>
+
+<h2 id="t3"><span class="n">3</span>Carpenter — Panel de monitoreo de IA (harukidesign)</h2>
+<p class="meta">Figma · 4 páginas · <a href="https://elements.envato.com/es/carpenter-ai-monitoring-dashboard-FXA76JU">FXA76JU</a></p>
+<div class="grid one"><figure><img src="capturas/03-carpenter-ai-monitoring-dashboard.png" alt=""><figcaption>Única vista previa</figcaption></figure></div>
+<div class="box"><ul>
+<li>Buscador con atajo "Ctrl+K"; saludo con fecha; selector "Last 1 hour".</li>
+<li>Donut de anillos anidados con leyenda y "32.1% from target".</li>
+<li>Mini tabla de estados con punto de color + iconos check/x; lista Uptime con badges Active/Off.</li>
+<li>"Forecast Issues" generado por IA; sidebar solo iconos; botones expandir/editar/⋯ por widget.</li>
+</ul></div>
+
+<h2 id="t4"><span class="n">4</span>MediFlow — Panel de telemedicina (CreateBigSupply)</h2>
+<p class="meta">Figma · 1 pantalla · <a href="https://elements.envato.com/es/mediflow-telemedicine-patient-care-dashboard-8R5JDRN">8R5JDRN</a></p>
+<div class="grid">
+<figure><img src="capturas/04-mediflow-telemedicina-1.png" alt=""><figcaption>Portada</figcaption></figure>
+<figure><img src="capturas/04-mediflow-telemedicina-3.png" alt=""><figcaption>Parte superior: KPI, consultas en vivo, cola</figcaption></figure>
+<figure><img src="capturas/04-mediflow-telemedicina-2.png" alt=""><figcaption>Parte inferior: tabla, timeline, recetas, métricas</figcaption></figure>
+</div>
+<div class="box"><ul>
+<li>Perfil en sidebar (avatar, estado "Available", 3 mini-stats); nav con contadores (8, 2 live, 284).</li>
+<li>Saludo + resumen en prosa del día; segmented control Overview/Calls/Patients + Export.</li>
+<li>5 KPI con sparkline y chip de comparación; tarjetas de video LIVE/WAITING con temporizador; cola con tiempos relativos.</li>
+<li>Tabla con chips de condición, estado In Call/Scheduled/Completed, "Showing 6 of 12" + paginación.</li>
+<li>Timeline vertical con puntos de color; Active Prescriptions (Active/Overdue); Health Metrics tiles; línea semanal comparativa.</li>
+<li>Botones "Start Call" / "Schedule"; etiquetas de sección en mayúsculas con punto de color.</li>
+</ul></div>
+
+<h2 id="t5"><span class="n">5</span>Tablero de atención médica "Healty" (hapsdesignspace)</h2>
+<p class="meta">Figma · 1440×900 · <a href="https://elements.envato.com/es/health-care-dashboard-TQ9V3P9">TQ9V3P9</a></p>
+<div class="grid one"><figure><img src="capturas/05-health-care-dashboard-healty.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Sidebar verde sólido con ítem activo blanco; Quick Stats con una tarjeta destacada en color + tres claras.</li>
+<li>Chip "Sort by This Month"; line chart con leyenda; tabla con avatar + sub-línea y badge Confirmed/Pending + paginación "3 Pages".</li>
+<li>Tarjeta Messages con Reply/Archive; usuario con rol "Administrator".</li>
+</ul></div>
+
+<h2 id="t6"><span class="n">6</span>Clinically — Kit web para salud (illiyinstudio)</h2>
+<p class="meta">Figma · landing + dashboard · <a href="https://elements.envato.com/es/clinically-healthcare-web-ui-kit-6SBFZYT">6SBFZYT</a></p>
+<div class="grid one"><figure><img src="capturas/06-clinically-healthcare-ui-kit.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Hero con titular en dos colores y formas geométricas; buscador de 3 campos (Service · Location · Date) + CTA.</li>
+<li>Logos "Featured with"; checklist de ventajas con check en círculo; vista móvil.</li>
+</ul></div>
+
+<h2 id="t7"><span class="n">7</span>Medlink — Panel de administración hospitalaria (peterdraw)<span class="tag">13 PANTALLAS</span></h2>
+<p class="meta">Figma · desktop/tablet/móvil · <a href="https://elements.envato.com/es/medlink-hospital-management-dashboard-ui-figma-J55G9EH">J55G9EH</a></p>
+<div class="grid">
+<figure><img src="capturas/07-medlink-hospital-1.png" alt=""><figcaption>Dashboard + Appointments</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-5.png" alt=""><figcaption>Patients, Appointments, versiones móvil</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-7.png" alt=""><figcaption>Patient Details, Doctors, Doctor Details, Add New Doctor</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-2.png" alt=""><figcaption>Departments</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-4.png" alt=""><figcaption>Department Details</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-6.png" alt=""><figcaption>Calendar, Messages, Inventory, Register</figcaption></figure>
+<figure><img src="capturas/07-medlink-hospital-3.png" alt=""><figcaption>Móvil (Doctors, Add Doctor, Department) + Login</figcaption></figure>
+</div>
+<div class="box"><ul>
+<li>KPI con icono en caja + delta en chip; barras agrupadas por edad con tabs; donut por departamento con total central; área chart Income/Expense con tooltip.</li>
+<li>Mini calendario + Agenda con fecha en badge; Doctor's Schedule; Recent Activity feed; lista Reports.</li>
+<li>Tablas con filtros (Gender, Age, Patient Type, Condition), chips de condición y estado (Discharged / In Treatment / Admitted), "Showing X of Y".</li>
+<li>Patient Details: header con datos, tiles de vitales, Medical info, Blood Pressure chart, Health Reports, Patient Note.</li>
+<li>Doctors grid de cards; Doctor Details con gauge 88 % + barras de métricas + feedback con estrellas; formulario Add New Doctor (inputs, radio, select, upload).</li>
+<li>Departments: barras apiladas por departamento + grid de cards con foto/equipo; Department Details con tabs de equipo y score 4.8/5.</li>
+<li>Calendario Month/Week/Day con panel lateral "Schedule Details"; Inventory con KPIs, tendencias, categoría y botón Reorder; Messages con lista + chat + panel de contacto.</li>
+<li>Login/Register con mockup; "Upgrade to Pro" en sidebar; Sign Out; footer con enlaces y redes; versiones tablet/móvil.</li>
+</ul></div>
+
+<h2 id="t8"><span class="n">8</span>Plantilla de panel de administración "ADMAX" (uicreativenet)</h2>
+<p class="meta">PSD/XD/Sketch · <a href="https://elements.envato.com/es/admin-dashboard-template-8C2NVVU">8C2NVVU</a></p>
+<div class="grid one"><figure><img src="capturas/08-admin-dashboard-template-admax.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Sidebar azul sólido; 3 KPI azules; calendario Day/Week/Month; Subscriber list; Total Visit con barras de progreso; módulo Inbox con carpetas; área chart degradado.</li>
+</ul></div>
+
+<h2 id="t9"><span class="n">9</span>EHR "Ehrity" — Landing de cronograma de pacientes (miraistoodio)</h2>
+<p class="meta">Figma · 1440×6580 · <a href="https://elements.envato.com/es/ehr-system-urgent-patient-timeline-landing-page-4Z68KJG">4Z68KJG</a></p>
+<div class="grid">
+<figure><img src="capturas/09-ehr-urgent-patient-timeline-1.png" alt=""><figcaption>Portada</figcaption></figure>
+<figure><img src="capturas/09-ehr-urgent-patient-timeline-2.png" alt=""><figcaption>Hero</figcaption></figure>
+<figure><img src="capturas/09-ehr-urgent-patient-timeline-3.png" alt=""><figcaption>Página completa en 3 columnas</figcaption></figure>
+<figure><img src="capturas/09-ehr-urgent-patient-timeline-5.png" alt=""><figcaption>Features + Key Benefits + footer</figcaption></figure>
+<figure><img src="capturas/09-ehr-urgent-patient-timeline-4.png" alt=""><figcaption>Vista en perspectiva</figcaption></figure>
+</div>
+<div class="box"><ul>
+<li>Nav transparente sobre foto; hero con gráfica interactiva con tooltips y CTA píldora.</li>
+<li>Grid de features con icono en círculo (una resaltada); proceso numerado 01–06 con acordeones; lista A–E + mockup.</li>
+<li>Stats "+40 % · 24/7 · +25 %" y tarjetas de beneficio con % grande; footer con chips; paleta teal oscuro + crema.</li>
+</ul></div>
+
+<h2 id="t10"><span class="n">10</span>Interfaz de panel sanitario "Mediplus" (nanoagency)</h2>
+<p class="meta">Figma · 1440×1024 · <a href="https://elements.envato.com/es/heathcare-dashboard-ui-DGS8WFC">DGS8WFC</a></p>
+<div class="grid one"><figure><img src="capturas/10-healthcare-dashboard-ui-mediplus.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>4 KPI con sparkline rojo/verde; Analytics de dos líneas; Working Status; donut Gender; Top Doctor con rating; Patient Data con estado en color.</li>
+</ul></div>
+
+<h2 id="t11"><span class="n">11</span>Kit de panel de análisis médico (creativewithjoy)</h2>
+<p class="meta">Figma · 1 pantalla · <a href="https://elements.envato.com/es/medical-analytics-dashboard-ui-kit-TCQLFGH">TCQLFGH</a></p>
+<div class="grid one"><figure><img src="capturas/11-medical-analytics-dashboard-ui-kit.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Banner hero dentro del dashboard; tiles Doctors/Patients/Report/Balance con badge contador; Hospital Survey anual.</li>
+<li>Daily Read (lectura del día); Today's Tasks checklist; mini calendario semanal con eventos; panel derecho "Next patient's details" con tabs Summary/Conditions/Notes; Upcoming Consultations con Details.</li>
+</ul></div>
+
+<h2 id="t12"><span class="n">12</span>Plantilla de página de inicio médica (uicreativenet)</h2>
+<p class="meta">PSD/XD · 800×1998 · <a href="https://elements.envato.com/es/medical-landing-page-template-4DVBYA3">4DVBYA3</a></p>
+<div class="grid one"><figure><img src="capturas/12-medical-landing-page-template.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Hero + CTA "Discovery", Welcome, Our Doctor Specialist, servicios en 3 columnas, Facilities, banda de emergencia con teléfono, footer oscuro.</li>
+</ul></div>
+
+<h2 id="t13"><span class="n">13</span>Panel de salud (arthgoods) — acento verde lima</h2>
+<p class="meta">Sketch/Figma/XD · 1920×1067 · <a href="https://elements.envato.com/es/health-dashboard-K3XBRMP">K3XBRMP</a></p>
+<div class="grid one"><figure><img src="capturas/13-health-dashboard-arthgoods.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Fecha grande en tarjeta + "Add New Widgets"; prompt de asistente IA con micrófono; Upgrade Plan; toggle claro/oscuro.</li>
+<li>Barra de progreso segmentada Poor/Good/Almost/Perfect con marcador; Heart Rate con rango; Average Steps con comparación semanal.</li>
+<li>Daily Intake donut con sub-barras %; Sleep Tracker; Meal Nutritions con anillos; Target Weight actual vs meta con historial; Blood Pressure barra de gradiente.</li>
+</ul></div>
+
+<h2 id="t14"><span class="n">14</span>Medicool — Landing de plataforma de análisis (sansdesign)</h2>
+<p class="meta">Figma · 1440×5000 · 5 secciones · <a href="https://elements.envato.com/es/medicool-healthcare-analytics-platform-F6W5H7M">F6W5H7M</a></p>
+<div class="grid">
+<figure><img src="capturas/14-medicool-healthcare-platform-1.png" alt=""><figcaption>Portada</figcaption></figure>
+<figure><img src="capturas/14-medicool-healthcare-platform-2.png" alt=""><figcaption>Hero + About + 01/02/03</figcaption></figure>
+</div>
+<div class="box"><ul>
+<li>Hero con titular enorme teal + visual 3D + tarjetas flotantes con mini-stats; chip "New · Live Analytics ↗"; logos monocromos.</li>
+<li>Tarjetas numeradas 01/02/03 por tipo de usuario; sección oscura con bubble chart y chip de seguridad; lista de features con icono.</li>
+</ul></div>
+
+<h2 id="t15"><span class="n">15</span>Ama — Landing de atención médica (C-Kav)</h2>
+<p class="meta">Figma · 1600×8000 · <a href="https://elements.envato.com/es/ama-medical-healthcare-landing-page-design-S37HSTB">S37HSTB</a></p>
+<div class="grid one"><figure><img src="capturas/15-ama-medical-landing-page.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Hero con formulario flotante "Book an appointment"; badge circular 24/7; lista lateral de departamentos con activo; cards de servicio; bloques foto + texto; team grid; testimonios; mapa + horarios; stats "70+"; footer oscuro.</li>
+</ul></div>
+
+<h2 id="t16"><span class="n">16</span>Folleto tríptico médico (print)</h2>
+<p class="meta">Plantilla de impresión · <a href="https://elements.envato.com/es/medical-trifold-brochure-template-5WE724T">5WE724T</a></p>
+<div class="grid one"><figure><img src="capturas/16-medical-trifold-brochure.png" alt=""></figure></div>
+<div class="box"><ul>
+<li>Estructura TOC · Introducción · Overview · Servicios · Catálogo · Feedback · Thank you, útil para el PDF exportable de reporte o guía de estudio. Paleta teal + blanco con bloques redondeados.</li>
+</ul></div>
+
+<h2 id="t17"><span class="n">17</span>Resultados Envato "medical dashboard" (página 8)</h2>
+<div class="grid one"><figure><img src="capturas/17-envato-busqueda-medical-dashboard-pg8.jpg" alt=""></figure></div>
+<p class="meta">Solo listado. Las otras 2 pestañas eran búsquedas de Google ("donde puedo descargar plantillas para mi pagina web", "dashboard website template"), sin plantilla que capturar.</p>
+
+<h2 id="mapa">Mapa de adopción para ENARM</h2>
+<div class="box">
+<table>
+<tr><th>Elemento de plantilla</th><th>Qué será en ENARM</th><th>Fuente</th></tr>
+<tr><td>KPI cards con sparkline y delta</td><td>Preguntas hoy · Precisión % · Racha · Tarjetas pendientes</td><td>1, 2, 4, 7, 10</td></tr>
+<tr><td>Dos sub-métricas en una card</td><td>Correctas / Incorrectas · Nuevas / Repasos</td><td>1</td></tr>
+<tr><td>Chips con miniatura (X-Ray, CT, MRI)</td><td>Especialidades (MI, Pediatría, GyO, Cirugía…)</td><td>1</td></tr>
+<tr><td>Sub-grid "tema → resultado"</td><td>Tema → nivel de dominio</td><td>1</td></tr>
+<tr><td>Gauge semicircular con score</td><td>Índice global de preparación</td><td>2, 7</td></tr>
+<tr><td>Barra de rango gradiente con marcador</td><td>Dominio por especialidad vs rango esperado</td><td>2, 13</td></tr>
+<tr><td>Figura anatómica con hotspots</td><td>Mapa de sistemas/especialidades con estado</td><td>2</td></tr>
+<tr><td>Tabla con chips de estado + filtros + paginación</td><td>Historial de sesiones / banco de preguntas</td><td>1, 4, 5, 7</td></tr>
+<tr><td>Condition Guides + stepper</td><td>Plan de estudio por fases con progreso</td><td>1</td></tr>
+<tr><td>Gráfica de rangos (Heart Rate)</td><td>Tiempo por pregunta / por sesión</td><td>1</td></tr>
+<tr><td>Articles / Daily Read</td><td>Perla del día / resumen recomendado</td><td>1, 11</td></tr>
+<tr><td>Chat / prompt de IA con micrófono</td><td>Tutor IA por pregunta</td><td>1, 13</td></tr>
+<tr><td>Recommended Actions con botón Start</td><td>Acciones de estudio sugeridas</td><td>2</td></tr>
+<tr><td>Upcoming con fecha en badge</td><td>Próximos repasos / simulacros</td><td>2, 5, 7, 11</td></tr>
+<tr><td>Daily Habits con meta</td><td>Metas diarias (preguntas, minutos, tarjetas)</td><td>2, 13</td></tr>
+<tr><td>Saludo + resumen en prosa</td><td>"Tienes 40 repasos hoy · 12 nuevos · 3 vencidos"</td><td>3, 4</td></tr>
+<tr><td>Tarjetas LIVE con temporizador</td><td>Simulacro cronometrado en curso</td><td>4</td></tr>
+<tr><td>Timeline vertical con puntos</td><td>Historial cronológico de estudio</td><td>4, 9</td></tr>
+<tr><td>Active/Overdue</td><td>Repasos vencidos</td><td>4</td></tr>
+<tr><td>Donut por departamento con %</td><td>Distribución de preguntas por especialidad</td><td>7, 10, 13</td></tr>
+<tr><td>Barras agrupadas con tabs</td><td>Preguntas por dificultad / por semana</td><td>7</td></tr>
+<tr><td>Patient Details</td><td>Ficha de tema: stats, notas, recursos, historial</td><td>7</td></tr>
+<tr><td>Doctors grid / Doctor Details</td><td>Grid de especialidades con score y métricas</td><td>7</td></tr>
+<tr><td>Calendario Month/Week/Day + panel lateral</td><td>Calendario de estudio y simulacros</td><td>7, 8</td></tr>
+<tr><td>Formulario Add New Doctor</td><td>Formulario de perfil / plan de estudio</td><td>7</td></tr>
+<tr><td>Login / Register con mockup</td><td>Acceso y registro</td><td>7</td></tr>
+<tr><td>Upgrade to Pro / Upgrade Plan</td><td>ENARM Premium</td><td>7, 13</td></tr>
+<tr><td>Forecast Issues (IA)</td><td>Predicción IA de temas en riesgo</td><td>3</td></tr>
+<tr><td>Today's Tasks checklist</td><td>Tareas de estudio de hoy</td><td>11</td></tr>
+<tr><td>Panel "Next patient's details" con tabs</td><td>Panel "Siguiente tema" (Resumen / Puntos clave / Notas)</td><td>11</td></tr>
+<tr><td>Actual vs meta con historial de fechas</td><td>Precisión actual vs meta</td><td>13</td></tr>
+<tr><td>Landing: hero 2 colores + CTA + logos + features + proceso 01–06 + stats + footer</td><td>Landing pública de ENARM</td><td>6, 9, 14, 15</td></tr>
+<tr><td>Formulario flotante en hero</td><td>"Empieza gratis" / registro rápido</td><td>15</td></tr>
+<tr><td>Tarjetas 01/02/03 por tipo de usuario</td><td>Primera vez · Repetidor · Residente</td><td>14</td></tr>
+<tr><td>Modal con check verde</td><td>"Sesión completada"</td><td>2</td></tr>
+<tr><td>Modo oscuro</td><td>Tema oscuro opcional</td><td>2, 13</td></tr>
+<tr><td>Paleta blanco + gris claro + teal; radios 16–20 px</td><td>Sistema visual base</td><td>1, 4, 7, 9</td></tr>
+</table>
+</div>
+</main>
+</body>
+</html>

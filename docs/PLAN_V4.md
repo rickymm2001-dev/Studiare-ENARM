@@ -386,3 +386,118 @@ Con la opción recomendada que se toma si no contestas.
 | 12 | V4-B10 Auditoría final y lanzamiento | L | Todo lo anterior |
 
 Son unas 14 sesiones de trabajo de código más la auditoría. Si el tiempo aprieta, lo que se puede recortar sin romper la promesa a los alumnos es V4-B7 etapa 1 (se queda la comparación por rama que ya existe), la hoja de respuestas de V4-B5 y el .ics de V4-B6.
+
+## 11. Fase 3 del plan V4. Portada e Inicio editoriales, ficha de tema y perla del día
+
+Fecha 2026-10-23. Origen R. Nace de la revisión de 17 plantillas de Envato (compilacion-plantillas-enarm.html, elementos-adoptables-enarm.md y capturas/ en la raíz) y de una entrevista con Ricardo. La queja que la mueve es la misma de D-145, que la app se vea genérica y generada por IA, ahora dirigida a la portada y al Inicio, que siguen siendo rejillas de tarjetas con icono. Decisión en D-148.
+
+### 11.1 Lo que Ricardo decidió en la entrevista
+
+- Referente visual. Editorial clínico con la revista Nature como guía. Serif con carácter en títulos y cifras grandes, sans en interfaz, números tabulares, líneas finas en vez de sombras, aire, etiquetas chicas en versalitas. Es la dirección A de D-145 llevada más lejos, no otra dirección
+- Lo que más quiere evitar. Rejillas de tarjetas iguales con icono en caja, texto motivacional, layout que grita plantilla, stock, 3D y degradados
+- Visuales permitidos. Capturas reales del producto y diagramas propios en SVG con la paleta de la marca. Nada más
+- Protagonistas nuevos del Inicio. Índice de preparación, mapa de especialidades, cifras con sparkline y próximos repasos y simulacros. Modifica el diseño fijo de D-116 y D-117 solo donde esta sección lo dice
+- Funciones nuevas. Ficha de tema y perla del día desde el banco. El calendario completo que pidió ya existe (V4-B6)
+- Portada. Método explicado como proceso numerado, demo interactiva con una pregunta real y planes con precios. Sin historia personal todavía, sin testimonios ni logos mientras no haya reales
+- Plantilla. No se compra, como ya decía la sección 6. Las plantillas se usaron solo como referencia de patrones
+
+### 11.2 Lo que ya existe y no se vuelve a hacer
+
+Verificado en el código y las capturas el 2026-10-23.
+
+| Lo que salió de la entrevista | Estado hoy | Dónde |
+|---|---|---|
+| Landing con método, personas, precios y FAQ | Existe | src/features/landing, docs/PORTADA.md, lugares de texto con tope de caracteres |
+| Identidad editorial con serif y papel cálido | Existe | D-145, src/ui/tokens.css, Source Serif 4 |
+| Escritorio con sidebar y teléfono con dock | Existe | D-117, AppShell |
+| Calendario mes y semana con panel del día | Existe | V4-B6, src/features/calendar |
+| Plan de hoy y próximos del día | Parcial | Plan de hoy en Inicio y Repasar. No hay lista de próximos con fecha ni botón por elemento |
+| KPI con cifras | Parcial | Franja de cuatro cifras en Progreso. Sin sparkline, en tarjetas con icono |
+| Acciones recomendadas con porqué | Existe | Temas para reforzar en Inicio y Tus 3 focos en Progreso |
+| Dominio por tema | Parcial | Ramas y subespecialidades en Progreso con pliegue por rama. No hay pantalla por tema |
+| Comparación por rama | Existe | ComparisonSection en Progreso |
+| Frase del día | Existe | Refranes y citas con autor en Inicio (D-116). No es contenido médico |
+| Gauge semicircular | No existe | |
+| Mapa de especialidades en SVG | No existe | |
+| Demo interactiva en la portada | No existe | |
+| Perla del día desde el banco | No existe | La sección 9 la permite solo si sale del banco con su cita |
+
+### 11.3 Principios de la fase, para todo lo que se toque
+
+1. El orden de la pantalla sigue el día de estudio. Arriba lo que hay que hacer hoy, luego cómo vas, al final lo de largo plazo
+2. Las cifras viven en texto y en tablas con líneas horizontales finas. Las tarjetas se reservan para acciones. Ninguna pantalla abre con una fila de tarjetas con icono en caja
+3. Serif para títulos y cifras grandes, sans para interfaz, números tabulares en todo lo que se compara. Las fuentes ya viajan con la app, no se descarga nada
+4. El color de acción #156082 y la paleta por rama de D-128 no cambian. Sin degradados, brillos ni sombras con color
+5. Cada gráfica lleva título que dice qué se ve, nota al pie con la fuente del dato y texto alternativo, como una figura de revista
+6. Microcopy concreta en español de México con trato de tú. Dice qué pasó, qué significa y qué hacer
+7. Todo dato de demostración y todo texto médico sin validar llevan su etiqueta visible
+8. Las capturas de la portada se toman del producto real con Playwright y se guardan en public con tamaño acotado
+
+### 11.4 Bloques
+
+#### V4-F3-B0. Presentación editable de cada pantalla antes de código (M)
+- Una presentación de PowerPoint, docs/rediseno/fase3-pantallas.pptx, con una diapositiva por pantalla que toca la fase. Portada en sus partes (hero, método, demo, perfiles, planes), Inicio con la franja nueva y lo que ya existe, Ficha de tema, Progreso, Repasar y Calendario con el barrido. En computadora y, para Inicio y la pregunta de la demo, también en teléfono
+- Cada maqueta se dibuja con formas y cuadros de texto nativos de PowerPoint, no como imagen, para que Ricardo pueda mover, borrar, cambiar textos y agregar lo que quiera. Usa los tokens reales de la app, los colores de D-128 y datos de demostración. La serif de títulos se mapea a una fuente que PowerPoint tenga seguro, con una nota que diga que en la app es Source Serif 4
+- Cada diapositiva lleva a la derecha una columna Tus cambios, vacía, y en las notas del orador la lista de los elementos que trae y de dónde sale cada uno en elementos-adoptables-enarm.md
+- La primera diapositiva explica cómo marcar cambios. Editar directo sobre la maqueta, escribir en Tus cambios o en las notas, y poner una X roja sobre lo que no quiere
+- Se publica en un PR solo con ese archivo. Ricardo lo baja de GitHub, lo edita en PowerPoint y lo sube al mismo lugar, por commit o arrastrándolo en la web de GitHub. Si prefiere, lo pega en el chat de la sesión
+- La sesión lee el archivo editado, saca cada diferencia contra el original y cada texto de Tus cambios y de las notas, y escribe en docs/rediseno/fase3-cambios-de-ricardo.md una lista numerada de lo que entendió, con lo que sí se puede hacer, lo que choca con CLAUDE.md o con una decisión, y lo que necesita aclararse. Ricardo confirma esa lista en el chat
+- Se acepta cuando Ricardo confirma la lista. Los bloques B1 a B4 se construyen con esa lista como parte de sus criterios
+
+#### V4-F3-B1. Portada editorial (M)
+- Nota del 2026-10-24 (D-149). Ricardo adelantó el héroe y el método con su boceto y su archivo Benchmark, ya fusionados. La portada lleva su foto en duotono con degradado, marino y azul cielo, y es siempre clara. Esa decisión manda sobre la primera viñeta de este bloque y sobre la regla sin degradados de 11.3 solo en la portada. Lo que queda de B1 son la demo interactiva, los perfiles como lista numerada y la curva de olvido en SVG
+- Hero con título en serif, una sola frase de valor y a la derecha una captura real de la pantalla de pregunta, sin foto de fondo
+- La rejilla de seis funciones se vuelve el método como proceso numerado 01 a 06 en dos columnas con líneas finas. Repaso con FSRS, preguntas con distractores etiquetados, 24 sesgos, lectura de la estructura, tutor con hipótesis ancladas, simulacros y calendario. Lugares de texto nuevos method.N.title y method.N.text con tope, en docs/PORTADA.md y en slots.ts, para que la agencia los pueda escribir
+- Demo interactiva. Una pregunta del banco de demostración con su caso, el visitante elige y ve la retroalimentación con la etiqueta del distractor. Lleva la etiqueta Demostración y la de revisión médica pendiente. Carga diferida, no entra al JavaScript inicial. Si el banco real reemplaza al demo, la pregunta se elige por id en configuración
+- Perfiles de alumno como lista compacta con número 01 a 06, sin icono repetido
+- Creador y testimonios siguen apagados hasta que haya texto real. Planes y FAQ se quedan como están, con el tratamiento tipográfico nuevo
+- Un diagrama SVG propio, la curva de olvido con los repasos marcados, dentro del paso del método que habla de FSRS
+- Se acepta cuando las pruebas de LandingScreen y de topes de texto pasan, la e2e de la portada pasa en teléfono y computadora, y la demo no suma al JavaScript inicial
+
+#### V4-F3-B2. Inicio con índice, mapa, cifras y próximos (L)
+- Cambia el diseño fijo de D-116 con la autorización de D-148. Entra una franja editorial arriba de Tus repasos y Tus simuladores, en una sola fila a lo ancho en computadora y apilada en teléfono. Lo que ya existe debajo no se mueve ni se quita
+- Índice de preparación. Gauge semicircular con un número de 0 a 100 y su estado. Es un motor puro nuevo, src/engines/readiness.ts, que pondera dominio por rama con el peso del examen, constancia de 30 días y cobertura de temas con datos. Muestra calibrando hasta tener 200 respuestas y 14 días de estudio, con cuánto falta. La leyenda dice que mide dominio y constancia y no predice el puntaje del ENARM. Esa frase es obligatoria por CLAUDE.md
+- Mapa de especialidades. SVG propio con las ramas como regiones y los temas como puntos, color por dominio con la paleta de D-128 y tamaño por peso. Al tocar un tema abre su ficha. Tiene tabla equivalente para lector de pantalla
+- Cifras de la semana en una sola línea de texto con sparkline de 7 días. Preguntas, exactitud, tarjetas y minutos, las mismas cuatro de Progreso. Sin tarjetas ni iconos en caja
+- Próximos. Lista con fecha en badge y botón por elemento. Repasos vencidos hoy, siguiente simulacro del calendario, siguiente sesión del plan. Sale del calendario y del plan de hoy que ya existen
+- Perla del día. Reemplaza el lugar de la frase del día dentro de Tus repasos cuando hay banco con explicaciones. Es un dato clínico tomado de la explicación de una pregunta del banco, con la frase citada tal cual y el enlace a la pregunta. Selección determinista por día de estudio en un motor puro. Lleva la etiqueta de revisión médica pendiente mientras el banco sea de demostración. Si no hay banco, sigue la frase del día
+- Se acepta cuando readiness.ts y la selección de la perla tienen pruebas, el gauge y el mapa pasan axe con su tabla equivalente, la e2e de Inicio pasa en teléfono y computadora, y el JavaScript inicial sigue bajo 300 KB
+
+#### V4-F3-B3. Ficha de tema (M)
+- Ruta nueva bajo Progreso por id de tema. Entra desde Ramas y subespecialidades, desde Temas para reforzar, desde Tus 3 focos y desde el mapa
+- Cabecera con nombre, rama con su color, peso en el examen y dominio con calibrando
+- Cifras en una línea. Preguntas respondidas, exactitud, tiempo promedio, última vez, tarjetas del tema
+- Lista de preguntas del tema con estado (pendiente, correcta, incorrecta, marcada) y botón Practicar este tema que usa Estudiar un tema
+- Tarjetas del tema con enlace a Buscar tarjetas con el filtro puesto
+- Hallazgos del tutor sobre el tema, los que ya existen filtrados por tema
+- Apuntes ligados al tema, si el apunte lleva ese tema
+- Se acepta cuando la ruta pasa la prueba de humo de rutas, la e2e de Progreso llega a una ficha y vuelve, y los estados vacío y calibrando se ven
+
+#### V4-F3-B4. Barrido editorial de lo que ya existe (M)
+- Progreso. La franja de cuatro cifras pasa a línea de texto con serif, las tarjetas de análisis pierden icono en caja y usan líneas finas. Nada cambia de lugar
+- Repasar y Calendario. Solo tipografía y superficies, sin mover nada
+- Un token de densidad de tarjeta y la unión de las dos etiquetas de demostración en teléfono, pendientes de V4-B2
+- Se acepta cuando design.test.ts pasa con las reglas nuevas y las e2e de las pantallas tocadas pasan
+
+### 11.5 Lo que no se hace en esta fase y por qué
+
+- Figura anatómica con hotspots. Es ilustración, los temas del ENARM no se mapean a órganos y el mapa de especialidades cubre la idea
+- Reporte PDF exportable y buscador con Ctrl+K. Van a IDEAS.md
+- Mensajería interna, inventario, departamentos y agenda de doctores de las plantillas. Sin equivalente de estudio
+- Modo oscuro como identidad. Sigue como opción
+- Login con mockup lateral, tarjeta Upgrade to Pro con ilustración. Ya hay cuentas y el plan actual está a la vista en Inicio
+- Pronóstico de temas en riesgo generado por IA. El motor de temas ya prioriza con porqué
+- Chat libre con IA, predicción del puntaje, stock, 3D, degradados, testimonios y logos sin respaldo. Prohibidos o sin respaldo
+- Reescribir la sidebar, el calendario o el plan de hoy. Ya existen y cumplen
+
+### 11.6 Orden
+
+| Orden | Bloque | Tamaño | Depende de |
+|---|---|---|---|
+| 1 | V4-F3-B0 Presentación editable | M | Nada |
+| 2 | V4-F3-B1 Portada editorial | M | B0 aprobado |
+| 3 | V4-F3-B2 Inicio | L | B0 aprobado |
+| 4 | V4-F3-B3 Ficha de tema | M | B2, por el mapa |
+| 5 | V4-F3-B4 Barrido editorial | M | B1 y B2, para reusar lo que salga |
+
+Cada bloque es un PR a main con el CI en verde y 5 a 10 líneas en PROGRESS.md. Las capturas completas y la revisión independiente se hacen una vez al final, como en V4-B10.

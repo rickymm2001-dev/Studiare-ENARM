@@ -22,7 +22,7 @@ function sourceFiles(dir: string): string[] {
 const read = (relative: string) => readFileSync(join(SRC, relative), 'utf8');
 
 /**
- * La portada de venta es la única excepción (D-148). Sigue el boceto de Ricardo, con manchas de luz y el
+ * La portada de venta es la única excepción (D-149). Sigue el boceto de Ricardo, con manchas de luz y el
  * fundido de la foto, y sus estilos viven solos bajo .ld sin tocar los tokens de la app
  */
 const LANDING_CSS = 'features/landing/landing.css';

@@ -139,7 +139,7 @@ describe('el texto que está publicado cumple las reglas', () => {
       expect(statSync(join(PHOTO_DIR, photo.file)).size).toBeLessThan(250_000);
     }
     // Un archivo en public/landing que ningún texto declara no se muestra nunca, y eso confunde. La foto
-    // del héroe, portada.webp, la muestra la portada sola (D-148) y pesa poco
+    // del héroe, portada.webp, la muestra la portada sola (D-149) y pesa poco
     const HERO_PHOTO = 'portada.webp';
     const loose = files.filter(
       (file) => file !== photo?.file && file !== HERO_PHOTO && file !== '.gitkeep',
