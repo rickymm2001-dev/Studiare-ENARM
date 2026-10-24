@@ -345,8 +345,10 @@ describe('mes y días', () => {
     // Solo el día elegido entra con tabulador, los demás con las flechas
     expect(buttons.filter((button) => button.tabIndex === 0)).toHaveLength(1);
     const table = screen.getByRole('table');
-    expect(table).toHaveClass('min-w-[34rem]');
-    expect(table.parentElement).toHaveClass('overflow-x-auto');
+    // El ancho mínimo va en la caja de la tabla y la que se desplaza es relative, para que los
+    // nombres largos de los días, solo para el lector de pantalla, no ensanchen la página
+    expect(table.parentElement).toHaveClass('min-w-[34rem]');
+    expect(table.parentElement?.parentElement).toHaveClass('overflow-x-auto', 'relative');
     // La cabecera dice Lun a Dom a la vista y el nombre completo para el lector de pantalla
     const headers = within(table).getAllByRole('columnheader');
     expect(headers).toHaveLength(7);
