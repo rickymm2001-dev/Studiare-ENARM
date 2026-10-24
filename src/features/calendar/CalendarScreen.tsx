@@ -457,69 +457,73 @@ function Calendar({ session }: { session: ReadySession }) {
           </div>
 
           {/* En el teléfono la rejilla se desplaza de lado para que las píldoras se lean */}
-          <div className="-mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
-            <table
-              ref={gridRef}
-              onKeyDown={onGridKeyDown}
-              className="w-full min-w-[34rem] table-fixed border-separate border-spacing-1"
-            >
-              <caption className="sr-only">
-                {text.gridLabel(monthName(cursor.year, cursor.month))}
-              </caption>
-              <thead>
-                <tr>
-                  {text.weekdaysLong.map((name) => (
-                    <th
-                      key={name}
-                      scope="col"
-                      abbr={name}
-                      className="pb-1 text-center text-xs font-bold text-fg-muted"
-                    >
-                      {/* Lun a Dom a la vista y el nombre completo para el lector de pantalla */}
-                      <span aria-hidden className="inline-block first-letter:uppercase">
-                        {name.slice(0, 3)}
-                      </span>
-                      <span className="sr-only">{name}</span>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {grid.weeks.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((day, cellIndex) => {
-                      if (day === null) {
-                        return <td key={cellIndex} className="rounded-[10px] bg-muted/60 p-0" />;
-                      }
-                      const items = itemsForDay(day, context);
-                      const isSelected = day === selected;
-                      const isToday = day === today;
-                      return (
-                        <td key={day} className="p-0 align-top">
-                          <DayCell
-                            day={day}
-                            items={items}
-                            isSelected={isSelected}
-                            isToday={isToday}
-                            tabbable={day === tabbable}
-                            branch={
-                              weekdayIndex(day) === 0 &&
-                              weekOf(day)?.branch &&
-                              !weekOf(day)?.examWeek
-                                ? branchName(weekOf(day)?.branch ?? '')
-                                : null
-                            }
-                            onSelect={() => {
-                              setSelected(day);
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+          {/* relative para que los nombres largos de los días, que solo lee el lector de pantalla y van
+              en posición absoluta, queden dentro de la caja que se desplaza y no ensanchen la página */}
+          <div className="relative -mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
+            <div className="min-w-[34rem]">
+              <table
+                ref={gridRef}
+                onKeyDown={onGridKeyDown}
+                className="w-full table-fixed border-separate border-spacing-1"
+              >
+                <caption className="sr-only">
+                  {text.gridLabel(monthName(cursor.year, cursor.month))}
+                </caption>
+                <thead>
+                  <tr>
+                    {text.weekdaysLong.map((name) => (
+                      <th
+                        key={name}
+                        scope="col"
+                        abbr={name}
+                        className="pb-1 text-center text-xs font-bold text-fg-muted"
+                      >
+                        {/* Lun a Dom a la vista y el nombre completo para el lector de pantalla */}
+                        <span aria-hidden className="inline-block first-letter:uppercase">
+                          {name.slice(0, 3)}
+                        </span>
+                        <span className="sr-only">{name}</span>
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {grid.weeks.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((day, cellIndex) => {
+                        if (day === null) {
+                          return <td key={cellIndex} className="rounded-[10px] bg-muted/60 p-0" />;
+                        }
+                        const items = itemsForDay(day, context);
+                        const isSelected = day === selected;
+                        const isToday = day === today;
+                        return (
+                          <td key={day} className="p-0 align-top">
+                            <DayCell
+                              day={day}
+                              items={items}
+                              isSelected={isSelected}
+                              isToday={isToday}
+                              tabbable={day === tabbable}
+                              branch={
+                                weekdayIndex(day) === 0 &&
+                                weekOf(day)?.branch &&
+                                !weekOf(day)?.examWeek
+                                  ? branchName(weekOf(day)?.branch ?? '')
+                                  : null
+                              }
+                              onSelect={() => {
+                                setSelected(day);
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <ul className="flex flex-wrap gap-x-3.5 gap-y-1.5 text-xs text-fg-muted">

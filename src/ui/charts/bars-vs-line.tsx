@@ -88,33 +88,37 @@ export function BarsVsLine({
           </text>
         ))}
       </svg>
-      <table className="sr-only">
-        <caption>{caption}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{caption}</th>
-            {labels.map((label) => (
-              <th key={label} scope="col">
-                {label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">{currentName}</th>
-            {current.map((value, index) => (
-              <td key={index}>{value.toLocaleString('es-MX')}</td>
-            ))}
-          </tr>
-          <tr>
-            <th scope="row">{previousName}</th>
-            {previous.map((value, index) => (
-              <td key={index}>{value.toLocaleString('es-MX')}</td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+      {/* Solo para el lector de pantalla. El sr-only va en la caja y no en la tabla, porque una tabla
+          no se deja encoger a 1 px y desbordaba la página en el teléfono */}
+      <div className="sr-only">
+        <table>
+          <caption>{caption}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{caption}</th>
+              {labels.map((label) => (
+                <th key={label} scope="col">
+                  {label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{currentName}</th>
+              {current.map((value, index) => (
+                <td key={index}>{value.toLocaleString('es-MX')}</td>
+              ))}
+            </tr>
+            <tr>
+              <th scope="row">{previousName}</th>
+              {previous.map((value, index) => (
+                <td key={index}>{value.toLocaleString('es-MX')}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
