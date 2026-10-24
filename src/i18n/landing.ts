@@ -37,7 +37,8 @@ export interface LandingTestimonial {
 
 export const landingText = {
   documentTitle: 'Prepárate para el ENARM 2027',
-  badge: 'Propiedad de Studiare',
+  /** Va seguido del logotipo completo de Studiare, que es una imagen */
+  badge: 'Propiedad de',
   title: 'Prepárate para el ENARM 2027',
   /** La frase en cursiva debajo de la raya del héroe */
   tagline: 'Tu primer día como R1 empieza aquí',
@@ -52,7 +53,7 @@ export const landingText = {
     about: 'Conócenos',
     method: 'Nuestro método',
     plans: 'Planes',
-    login: 'Inicia sesión',
+    login: 'Inicia Sesión',
   },
   /** La imagen de Inicio que se ve cuando no hay foto en public/landing */
   productShotAlt: 'Pantalla de Inicio de Studiare en computadora, con datos de demostración',

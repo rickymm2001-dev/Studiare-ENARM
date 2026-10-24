@@ -6,7 +6,7 @@ Este documento es para la agencia o el influencer que escribe el texto de venta 
 
 La portada es lo primero que ve quien entra a Studiare sin sesión. Desde D-148 sigue el boceto de Ricardo, con una barra oscura arriba que lleva a las secciones de la misma página (Inicio, Conócenos, Nuestro método y Planes) y a la entrada. Va en este orden.
 
-- Título principal en dos líneas, con una etiqueta arriba, una raya, una frase en cursiva, un párrafo y dos botones. La línea corta de confianza va en el sello redondo sobre la imagen
+- Título principal en dos líneas, con una etiqueta arriba, una raya, una frase en cursiva, un párrafo, dos botones y una línea corta de confianza. La foto va a la derecha, fundida hacia el texto, como en el Benchmark de Ricardo
 - Una introducción y seis tarjetas de funciones, que es la sección Conócenos
 - Nuestro método, con un párrafo que resalta dos frases y seis pasos numerados. Al tocar un paso se ve su texto en el panel de al lado
 - Seis perfiles de estudiante
@@ -16,7 +16,7 @@ La portada es lo primero que ve quien entra a Studiare sin sesión. Desde D-148 
 - Preguntas frecuentes
 - Un cierre con el botón principal y un pie de página con los enlaces legales
 
-La imagen del héroe es una foto que Ricardo guarda en public/landing con el nombre portada.webp. Mientras no exista, la portada muestra en su lugar capturas reales de la app con su etiqueta de datos de demostración.
+La imagen del héroe es la foto de public/landing/portada.webp, ya con el recorte y el tono marino de la diapositiva. Si no carga, la portada muestra en su lugar capturas reales de la app con su etiqueta de datos de demostración. La portada es siempre clara, aunque el alumno use la app en oscuro.
 
 Hoy la página trae un texto neutro que escribió el equipo mientras llegaba el de la agencia. Ese texto se queda tal cual hasta que Ricardo apruebe el nuevo. Con los dos bloques opcionales vacíos la página se ve igual que siempre.
 
@@ -41,11 +41,11 @@ El largo máximo cuenta caracteres con espacios. Si te pasas, la prueba automát
 
 | Lugar | Dónde se ve | Máximo |
 | --- | --- | --- |
-| `hero.badge` | Etiqueta chica arriba del título | 60 |
+| `hero.badge` | Etiqueta chica arriba del título, seguida del logotipo de Studiare | 60 |
 | `hero.title` | Título principal de la portada | 70 |
 | `hero.subtitle` | Párrafo debajo del título | 220 |
 | `hero.cta` | Botón principal. Se repite en el cierre de la página | 30 |
-| `hero.trust` | Línea corta dentro del sello redondo sobre la imagen | 80 |
+| `hero.trust` | Línea corta debajo de los botones | 80 |
 | `hero.tagline` | Frase en cursiva debajo de la raya del título | 60 |
 | `features.intro` | Párrafo que presenta las tarjetas de funciones | 220 |
 | `features.N.title` | Título de cada tarjeta de funciones, N de 1 a 6 | 40 |

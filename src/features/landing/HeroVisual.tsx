@@ -1,7 +1,7 @@
-// La imagen del héroe de la portada (D-148). Si Ricardo guarda su foto en public/landing/portada.webp
-// se muestra con el fundido del boceto. Mientras no exista, o si no carga, en su lugar van dos
-// capturas reales de la app, que ya llevan dentro su etiqueta de datos de demostración. El sello
-// redondo con la línea de confianza va encima en los dos casos.
+// La imagen del héroe de la portada (D-148). La foto vive en public/landing/portada.webp, ya con el
+// recorte, el duotono marino y el contraste de la diapositiva 1 del Benchmark, y encima va el degradado
+// blanco de izquierda a derecha de esa misma diapositiva. Si la foto no carga, en su lugar van dos
+// capturas reales de la app, que ya llevan dentro su etiqueta de datos de demostración.
 import { useState } from 'react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -11,7 +11,7 @@ const PHOTO = `${base}landing/portada.webp`;
 const DESKTOP_SHOT = `${base}screenshots/inicio-computadora.webp`;
 const PHONE_SHOT = `${base}screenshots/repasar-telefono.webp`;
 
-export function HeroVisual({ trust }: { trust: string }) {
+export function HeroVisual() {
   const [photo, setPhoto] = useState<'loading' | 'ready' | 'missing'>('loading');
   const text = t.landing;
   return (
@@ -52,9 +52,7 @@ export function HeroVisual({ trust }: { trust: string }) {
           />
         </div>
       ) : null}
-      <p className="ld-hero__seal" data-slot="hero.trust">
-        {trust}
-      </p>
+      <div className="ld-hero__fade" aria-hidden />
     </div>
   );
 }

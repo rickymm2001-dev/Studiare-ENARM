@@ -9,25 +9,28 @@
 */
 
 .ld {
-  /* Fondos y texto */
+  /* La portada es siempre clara (D-148), como el Benchmark de Ricardo, y no sigue el modo oscuro de la app */
+  color-scheme: light;
   --ld-bg: #ffffff;
   --ld-surface: #ffffff;
   --ld-fg: #17212b;
   --ld-muted: #4f5b66;
   --ld-line: #e3e8ee;
-  /* Pizarra de la barra y del pie */
-  --ld-slate: #2f3b3f;
-  --ld-slate-deep: #232c2f;
+  /* Pizarra de la barra, #374042 en la diapositiva, y una más profunda para el pie */
+  --ld-slate: #374042;
+  --ld-slate-deep: #2a3133;
   --ld-on-dark: #f2f5f6;
   --ld-on-dark-muted: #c9d3d6;
-  /* Marino del título y de los rellenos */
-  --ld-ink: #0e3a86;
-  --ld-navy: #0e3a86;
-  --ld-navy-deep: #0b2d68;
-  /* Azul cielo. El de texto grande solo va en el héroe, el de relleno lleva texto blanco */
-  --ld-sky: #0e8fd6;
-  --ld-sky-fill: #0a7cc0;
-  --ld-sky-fill-hover: #086aa6;
+  /* Marino #01337A del título, la raya, la cursiva y el botón de Ya tengo cuenta */
+  --ld-ink: #01337a;
+  --ld-navy: #01337a;
+  --ld-navy-deep: #02275e;
+  /* Azul cielo. La diapositiva usa #19A3F2, que sobre blanco queda en 2.8 a 1 y no pasa ni como texto
+     grande. #0F96E3 es el tono más cercano que pasa el 3 a 1 del texto grande (3.2 a 1), y por eso
+     ENARM 2027 y los botones del héroe van en negritas de 19 px o más */
+  --ld-sky: #0f96e3;
+  --ld-sky-fill: #0f96e3;
+  --ld-sky-fill-hover: #0c84c9;
   --ld-sky-ink: #0b6fb0;
   --ld-sky-soft: #e6f3fc;
   --ld-sky-line: #bfe0f5;
@@ -37,60 +40,51 @@
   --ld-sage: #d6e4e1;
   --ld-sage-deep: #9fc4c0;
   --ld-peach: #f5dacb;
-  --ld-shadow: 0 18px 40px -22px rgb(14 58 134 / 0.35);
+  --ld-shadow: 0 18px 40px -22px rgb(1 51 122 / 0.35);
   --ld-shadow-soft: 0 10px 30px -18px rgb(23 33 43 / 0.25);
+
+  /* Los componentes de la app que viven dentro, PlanPrice, las etiquetas y los chips de rama, leen los
+     tokens de la app. Aquí se fijan en sus valores claros de src/ui/tokens.css para que no cambien con
+     el modo oscuro */
+  --enarm-canvas: #f6f3ee;
+  --enarm-surface: #fffdf9;
+  --enarm-muted: #eeeae2;
+  --enarm-line: #ddd6c9;
+  --enarm-line-strong: #707b85;
+  --enarm-fg: #16212b;
+  --enarm-fg-muted: #576570;
+  --enarm-primary-ink: #156082;
+  --enarm-primary-soft: #e7eff4;
+  --enarm-indicator: #156082;
+  --enarm-demo: #eeeae2;
+  --enarm-demo-fg: #3f4b55;
+  --enarm-demo-line: #d2cabb;
+  --enarm-sim: #eeeae2;
+  --enarm-sim-fg: #3f4b55;
+  --enarm-sim-line: #d2cabb;
+  --enarm-mi: #1d638f;
+  --enarm-mi-soft: #e8f1f7;
+  --enarm-mi-ink: #134666;
+  --enarm-ped: #087d8a;
+  --enarm-ped-soft: #e6f5f7;
+  --enarm-ped-ink: #06545d;
+  --enarm-gyo: #8c3372;
+  --enarm-gyo-soft: #f8eaf4;
+  --enarm-gyo-ink: #60214e;
+  --enarm-cir: #4d4ba3;
+  --enarm-cir-soft: #edecf9;
+  --enarm-cir-ink: #333175;
+  --enarm-fam: #913a5a;
+  --enarm-fam-soft: #faeaf0;
+  --enarm-fam-ink: #64243b;
+  --enarm-urg: #63398c;
+  --enarm-urg-soft: #f2eaf9;
+  --enarm-urg-ink: #432462;
 
   background: var(--ld-bg);
   color: var(--ld-fg);
   font-family: var(--font-sans);
   overflow-x: clip;
-}
-
-.dark .ld,
-.dark .ld * {
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .ld {
-    --ld-bg: #0f1419;
-    --ld-surface: #171d24;
-    --ld-fg: #e8edf1;
-    --ld-muted: #a9b4be;
-    --ld-line: #2d3741;
-    --ld-ink: #a8cdf5;
-    --ld-sky: #5cb8f2;
-    --ld-sky-ink: #7fc1de;
-    --ld-sky-soft: #16303e;
-    --ld-sky-line: #26506a;
-    --ld-panel: #1b2634;
-    --ld-cream: #171d24;
-    --ld-sage: #1b2a28;
-    --ld-sage-deep: #2a4542;
-    --ld-peach: #3a2a22;
-    --ld-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.6);
-    --ld-shadow-soft: 0 10px 30px -18px rgb(0 0 0 / 0.5);
-  }
-}
-
-:root.dark .ld {
-  --ld-bg: #0f1419;
-  --ld-surface: #171d24;
-  --ld-fg: #e8edf1;
-  --ld-muted: #a9b4be;
-  --ld-line: #2d3741;
-  --ld-ink: #a8cdf5;
-  --ld-sky: #5cb8f2;
-  --ld-sky-ink: #7fc1de;
-  --ld-sky-soft: #16303e;
-  --ld-sky-line: #26506a;
-  --ld-panel: #1b2634;
-  --ld-cream: #171d24;
-  --ld-sage: #1b2a28;
-  --ld-sage-deep: #2a4542;
-  --ld-peach: #3a2a22;
-  --ld-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.6);
-  --ld-shadow-soft: 0 10px 30px -18px rgb(0 0 0 / 0.5);
 }
 
 /* Los anclas de la barra bajan suave y no quedan debajo de la barra fija */
@@ -246,47 +240,45 @@ html:has(.ld) {
   background-repeat: no-repeat;
 }
 
-.ld-mark--sm {
-  width: 1.25rem;
-  height: 1.25rem;
-  vertical-align: -0.2em;
-  margin-inline: 0.3rem 0.2rem;
-}
-
-/* Barra pizarra fija arriba. El cristal es la utilidad glass de la app (D-147), con la pizarra como
-   superficie, así lleva los mismos 6 px, su respaldo sólido y el respeto a reducir transparencia */
+/* Barra pizarra fija arriba, de 57 px como en la diapositiva. El cristal es la utilidad glass de la app
+   (D-147), con la pizarra como superficie, así lleva los mismos 6 px, su respaldo sólido y el respeto a
+   reducir transparencia */
 .ld-topbar {
   --enarm-surface: var(--ld-slate);
   position: sticky;
   top: 0;
   z-index: 30;
   color: var(--ld-on-dark);
-  box-shadow: 0 1px 0 rgb(255 255 255 / 0.06);
 }
 
 .ld-topbar__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
-  min-height: 4rem;
+  min-height: 3.5625rem;
+  padding-inline: clamp(1.25rem, 2.8vw, 2.25rem);
 }
 
 .ld-topbar__home {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
   min-height: 2.75rem;
   color: var(--ld-on-dark);
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.125rem;
 }
 
+.ld-topbar .ld-mark {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+/* Los cuatro enlaces van a la derecha, antes del botón, separados como en la diapositiva */
 .ld-nav {
   display: none;
   align-items: center;
-  gap: clamp(1rem, 2.5vw, 2.75rem);
+  gap: clamp(1.5rem, 3.7vw, 3.75rem);
+  margin-left: auto;
+  margin-right: clamp(1rem, 2.6vw, 2.5rem);
 }
 
 @media (width >= 48rem) {
@@ -302,7 +294,7 @@ html:has(.ld) {
   min-height: 2.75rem;
   padding: 0 0.125rem;
   color: var(--ld-on-dark);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   text-decoration: none;
   transition: color 160ms ease;
 }
@@ -330,16 +322,36 @@ html:has(.ld) {
   color: #ffffff;
 }
 
+/* El botón blanco de Inicia Sesión mide 30 px de alto en la diapositiva. Lo que se toca sigue siendo de
+   44 px gracias al pseudoelemento */
 .ld-topbar .ld-btn {
-  min-height: 2.75rem;
-  padding: 0 1.5rem;
-  font-size: 1rem;
+  position: relative;
+  min-height: 1.875rem;
+  margin-left: auto;
+  padding: 0 1.1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
-/* Héroe. El texto a la izquierda y la imagen pegada al borde derecho, como el boceto */
+.ld-topbar .ld-btn::before {
+  content: '';
+  position: absolute;
+  inset: -0.45rem 0;
+}
+
+@media (width >= 48rem) {
+  .ld-topbar .ld-btn {
+    margin-left: 0;
+  }
+}
+
+/* Héroe. Las medidas salen de la diapositiva 1 del Benchmark, un lienzo de 1280 por 720. El texto
+   empieza al 8.7 por ciento del ancho, la foto ocupa el 36.3 por ciento de la derecha, desde la barra
+   hasta abajo, y todo escala con el ancho de la ventana */
 .ld-hero {
   position: relative;
   isolation: isolate;
+  background: var(--ld-bg);
 }
 
 .ld-hero__grid {
@@ -349,8 +361,8 @@ html:has(.ld) {
 
 @media (width >= 64rem) {
   .ld-hero__grid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
-    min-height: 38rem;
+    grid-template-columns: 63.7fr 36.3fr;
+    min-height: clamp(36rem, 51.9vw, 50rem);
   }
 }
 
@@ -360,90 +372,106 @@ html:has(.ld) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  padding-block: clamp(2.5rem, 6vw, 5rem);
-  padding-inline: clamp(1.25rem, 4vw, 3rem);
+  padding: 2.5rem 1.25rem;
 }
 
 @media (width >= 64rem) {
   .ld-hero__copy {
-    padding-inline-start: max(3rem, calc((100% - 80rem) / 2 + 3rem));
-    padding-inline-end: 3rem;
+    padding: clamp(2rem, 3.7vw, 3.5rem) 4.2% clamp(2rem, 4vw, 3.75rem) 8.7%;
   }
 }
 
+/* Propiedad de, con el logotipo completo al lado, en marino y de 16 px */
 .ld-eyebrow {
   display: inline-flex;
   align-items: center;
-  font-size: 1.0625rem;
+  gap: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--ld-ink);
 }
 
-.ld-eyebrow__brand {
-  font-weight: 800;
-  color: var(--ld-ink);
+.ld-eyebrow__logo {
+  height: 1.3rem;
+  width: auto;
 }
 
+/* Dos líneas en negritas. 32 y 48 puntos en la diapositiva, que a 1280 px son 43 y 64 px */
 .ld-hero__title {
-  margin: 1.5rem 0 0;
+  margin: clamp(1.5rem, 3.1vw, 3rem) 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.15em;
-  font-weight: 800;
-  line-height: 1;
+  font-weight: 700;
+  line-height: 1.08;
   color: var(--ld-ink);
 }
 
 .ld-hero__title-top {
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(1.9rem, 3.33vw, 3.2rem);
+  letter-spacing: -0.015em;
 }
 
-/* El texto grande pasa 3 a 1 sobre blanco (3.55) y sobra en oscuro */
 .ld-hero__title-year {
-  font-size: clamp(3rem, 7.2vw, 5.25rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(2.75rem, 5vw, 4.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   color: var(--ld-sky);
 }
 
+/* La raya marina ocupa el ancho del texto, 651 px en la diapositiva */
 .ld-hero__rule {
-  width: min(100%, 36rem);
-  height: 2px;
-  margin: 2rem 0;
+  width: 100%;
+  height: 1.5px;
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0;
   border: 0;
   background: var(--ld-ink);
 }
 
+/* 24 puntos en cursiva marina y 16 puntos en cursiva del color del texto */
 .ld-hero__tagline {
   margin: 0;
-  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  font-size: clamp(1.375rem, 2.5vw, 2.4rem);
   font-style: italic;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.25;
   color: var(--ld-ink);
 }
 
 .ld-hero__subtitle {
-  margin: 1.25rem 0 0;
-  max-width: 34rem;
-  font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
+  margin: clamp(1rem, 1.9vw, 1.75rem) 0 0;
+  max-width: 36rem;
+  font-size: clamp(1.0625rem, 1.66vw, 1.6rem);
   font-style: italic;
-  line-height: 1.5;
+  font-weight: 400;
+  line-height: 1.4;
   color: var(--ld-fg);
 }
 
+/* Dos botones de 241 por 52 px con 35 px entre ellos */
 .ld-hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2.5rem;
+  gap: clamp(1rem, 2.7vw, 2.2rem);
+  margin-top: clamp(2.5rem, 7.8vw, 6.5rem);
+}
+
+.ld-hero__actions .ld-btn {
+  min-height: 3.25rem;
+  min-width: 15rem;
+  font-size: 1.1875rem;
+  font-weight: 700;
+}
+
+.ld-hero__trust {
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--ld-muted);
 }
 
 .ld-hero__visual {
   position: relative;
   min-height: 22rem;
-  overflow: visible;
+  overflow: hidden;
 }
 
 @media (width >= 64rem) {
@@ -452,8 +480,7 @@ html:has(.ld) {
   }
 }
 
-/* La foto. Se funde con el fondo por la izquierda y por abajo, como en el boceto, y aparece
-   cuando ya cargó */
+/* La foto ya trae el recorte, el duotono marino y el contraste de la diapositiva. Aparece cuando cargó */
 .ld-hero__photo {
   position: absolute;
   inset: 0;
@@ -463,18 +490,20 @@ html:has(.ld) {
   object-position: center top;
   opacity: 0;
   transition: opacity 600ms ease;
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, #000 42%),
-    linear-gradient(to bottom, #000 80%, transparent 100%);
-  mask-image:
-    linear-gradient(to right, transparent 0%, #000 42%),
-    linear-gradient(to bottom, #000 80%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
 }
 
 .ld-hero__photo.is-ready {
   opacity: 1;
+}
+
+/* El degradado de la diapositiva, blanco a transparente de izquierda a derecha, sobre el 80 por
+   ciento del ancho de la foto */
+.ld-hero__fade {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 80%;
+  background: linear-gradient(to right, var(--ld-bg) 0%, rgb(255 255 255 / 0) 100%);
+  pointer-events: none;
 }
 
 /* Sin foto, las capturas reales de la app en dos marcos */
@@ -517,77 +546,6 @@ html:has(.ld) {
   border: 4px solid var(--ld-surface);
   box-shadow: var(--ld-shadow);
   background: var(--ld-surface);
-}
-
-/* Sello redondo con la línea de confianza. Flota despacio */
-.ld-hero__seal {
-  position: absolute;
-  z-index: 2;
-  right: clamp(1rem, 3vw, 2.5rem);
-  top: clamp(1rem, 3vw, 2.5rem);
-  display: grid;
-  place-items: center;
-  width: 8.5rem;
-  height: 8.5rem;
-  padding: 1rem;
-  border-radius: 50%;
-  border: 4px solid var(--ld-bg);
-  background: var(--ld-navy);
-  color: #ffffff;
-  text-align: center;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.3;
-  box-shadow: var(--ld-shadow);
-  animation: ld-float 6s ease-in-out infinite;
-}
-
-/* En el teléfono el sello va abajo a la derecha, fuera de las capturas */
-@media (width < 64rem) {
-  .ld-hero__seal {
-    top: auto;
-    bottom: 0.5rem;
-    width: 8rem;
-    height: 8rem;
-    padding: 0.875rem;
-    font-size: 0.8125rem;
-  }
-}
-
-@media (width >= 64rem) {
-  .ld-hero__seal {
-    right: auto;
-    left: -2.5rem;
-    top: 18%;
-  }
-}
-
-/* Manchas de luz detrás del héroe, solo decorativas */
-.ld-blob {
-  position: absolute;
-  z-index: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(48px);
-  opacity: 0.9;
-  animation: ld-drift 14s ease-in-out infinite alternate;
-}
-
-.ld-blob--a {
-  width: 28rem;
-  height: 28rem;
-  left: -10rem;
-  top: -8rem;
-  background: radial-gradient(circle, var(--ld-sky-soft) 0%, transparent 70%);
-}
-
-.ld-blob--b {
-  width: 22rem;
-  height: 22rem;
-  left: 30%;
-  bottom: -10rem;
-  background: radial-gradient(circle, var(--ld-panel) 0%, transparent 70%);
-  animation-delay: -6s;
 }
 
 /* Lo que entra al cargar, una pieza detrás de otra */

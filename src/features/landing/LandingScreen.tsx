@@ -146,7 +146,6 @@ export function LandingScreen() {
     { id: 'planes', label: text.nav.plans },
   ];
   const markLight = style({ backgroundImage: `url(${logoDarkUrl})` });
-  const markInk = style({ backgroundImage: `url(${logoUrl})` });
 
   return (
     <div ref={root} className="ld">
@@ -175,14 +174,18 @@ export function LandingScreen() {
       </header>
 
       <section id="inicio" aria-labelledby="hero-title" className="ld-hero">
-        <div className="ld-blob ld-blob--a" aria-hidden />
-        <div className="ld-blob ld-blob--b" aria-hidden />
         <div className="ld-hero__grid">
           <div className="ld-hero__copy">
+            {/* Propiedad de, seguido del logotipo completo, como en la diapositiva */}
             <p className="ld-eyebrow ld-enter" data-slot="hero.badge">
-              <span>Propiedad de </span>
-              <span className="ld-mark ld-mark--sm" style={markInk} aria-hidden />
-              <span className="ld-eyebrow__brand">Studiare</span>
+              <span>Propiedad de</span>
+              <img
+                src={logoUrl}
+                alt={BRAND.name}
+                width={297}
+                height={64}
+                className="ld-eyebrow__logo"
+              />
             </p>
             <h1
               id="hero-title"
@@ -212,17 +215,24 @@ export function LandingScreen() {
             <div className="ld-hero__actions ld-enter" style={style({ '--d': '360ms' })}>
               <Link
                 to={screenPath('onboarding')}
-                className="ld-btn ld-btn--sky ld-btn--lg"
+                className="ld-btn ld-btn--sky"
                 data-slot="hero.cta"
               >
                 {text.cta}
               </Link>
-              <Link to={screenPath('onboarding')} className="ld-btn ld-btn--navy ld-btn--lg">
+              <Link to={screenPath('onboarding')} className="ld-btn ld-btn--navy">
                 {text.login}
               </Link>
             </div>
+            <p
+              className="ld-hero__trust ld-enter"
+              style={style({ '--d': '420ms' })}
+              data-slot="hero.trust"
+            >
+              {text.trust}
+            </p>
           </div>
-          <HeroVisual trust={text.trust} />
+          <HeroVisual />
         </div>
       </section>
 
