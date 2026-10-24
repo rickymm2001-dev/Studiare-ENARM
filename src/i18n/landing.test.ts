@@ -138,9 +138,16 @@ describe('el texto que está publicado cumple las reglas', () => {
       // Una foto de rostro de 800 px en webp pesa muy por debajo de esto
       expect(statSync(join(PHOTO_DIR, photo.file)).size).toBeLessThan(250_000);
     }
-    // Un archivo en public/landing que ningún texto declara no se muestra nunca, y eso confunde
-    const loose = files.filter((file) => file !== photo?.file && file !== '.gitkeep');
+    // Un archivo en public/landing que ningún texto declara no se muestra nunca, y eso confunde. La foto
+    // del héroe, portada.webp, la muestra la portada sola (D-148) y pesa poco
+    const HERO_PHOTO = 'portada.webp';
+    const loose = files.filter(
+      (file) => file !== photo?.file && file !== HERO_PHOTO && file !== '.gitkeep',
+    );
     expect(loose, 'archivos de public/landing sin declarar en creator.photo').toEqual([]);
+    if (files.includes(HERO_PHOTO)) {
+      expect(statSync(join(PHOTO_DIR, HERO_PHOTO)).size).toBeLessThan(300_000);
+    }
     const marked = JSON.stringify([landingText.creator, landingText.testimonials]);
     expect(marked).not.toMatch(/prueba/i);
   });

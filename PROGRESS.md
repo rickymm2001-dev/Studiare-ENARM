@@ -52,7 +52,7 @@ Plan V4 (docs/PLAN_V4.md, D-140 a D-146). El estado de cada bloque está en su p
 - [x] V4-B8. Urgencias gratis solo en la interfaz con el catálogo de la app. La regla del servidor espera a Ricardo (D-144)
 - [ ] V4-B9. Cuentas de Ricardo, ver docs/PENDIENTES_DE_RICARDO.md
 - [x] V4-B10. Auditoría final (D-146). Revisión independiente por cuatro áreas, arreglos aplicados, suite e2e completa, capturas finales y DOMPurify al día. Falta solo lo que espera a Ricardo en docs/PENDIENTES_DE_RICARDO.md
-- [x] Portada nueva con el boceto de Ricardo (D-148). Barra pizarra con anclas, héroe en marino y azul cielo, Nuestro método con seis pasos, bandas de color y efectos. La foto del héroe espera en public/landing/portada.webp
+- [x] Portada nueva con el boceto de Ricardo (D-148). Barra pizarra con anclas, héroe en marino y azul cielo, Nuestro método con seis pasos, bandas de color y efectos. La foto del héroe ya está en public/landing/portada.webp
 
 ### B0. Arranque
 

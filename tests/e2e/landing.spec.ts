@@ -97,10 +97,15 @@ for (const scheme of ['light', 'dark'] as const) {
       await expect(page.locator('[data-slot^="creator."]')).toHaveCount(0);
       await expect(page.locator('[data-slot^="testimonials."]')).toHaveCount(0);
       await expect(page.getByText(t.landing.sampleLabel)).toHaveCount(0);
-      // La foto del héroe no existe en public/landing, así que la portada muestra las capturas de la app en
-      // su lugar y no queda ningún img que apunte a esa carpeta
-      await expect(page.locator('img[src*="/landing/"]')).toHaveCount(0);
-      await expect(page.locator('img[src*="/screenshots/"]')).toHaveCount(2);
+      // La foto del héroe vive en public/landing/portada.webp y carga, así que las capturas de la app que la
+      // suplen no se muestran. La foto del creador, que es la otra de esa carpeta, no existe
+      const photo = page.locator('img[src*="/landing/portada.webp"]');
+      await expect(photo).toHaveCount(1);
+      await expect
+        .poll(() => photo.evaluate((img: HTMLImageElement) => img.naturalWidth))
+        .toBeGreaterThan(0);
+      await expect(page.locator('img[src*="/screenshots/"]')).toHaveCount(0);
+      await expect(page.locator('img[src*="/landing/creador"]')).toHaveCount(0);
       // La barra lleva a las secciones de la misma página. En el teléfono no se muestra y la página se
       // recorre con el scroll
       const nav = page.getByRole('navigation', { name: t.landing.nav.label });
