@@ -161,6 +161,22 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   useReviewPresetFromRoute();
   // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
   const panel = useReviewSettingsPanel();
+  // Subespecialidad y rama de cada nota precargada, por su ID. Se calculan una sola vez por catálogo,
+  // porque el ID estable de cada nota cuesta y esta pantalla vuelve a pintarse con cada evento de
+  // la sesión (perf.spec, 14.4). La rama es la de la nota o la del mazo cuando no la trae, como Urgencias
+  const catalogNotes = useMemo(() => {
+    const topic = new Map<string, string | null>();
+    const branch = new Map<string, string>();
+    for (const file of catalog ?? []) {
+      const fallback = deckBranch(file);
+      for (const note of file.notes) {
+        const id = deckIds.note(note.key);
+        topic.set(id, note.topic);
+        branch.set(id, note.branch ?? fallback);
+      }
+    }
+    return { topic, branch };
+  }, [catalog]);
   if (events === undefined || content === undefined || catalog === undefined)
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
@@ -230,16 +246,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     cardMatches({ deckId: unitOf(card.deckId) }, topic, candidate);
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
-  const noteTopic = new Map<string, string | null>();
-  // Rama de cada nota precargada, la suya o la del mazo cuando la nota no la trae, como Urgencias
-  const noteBranch = new Map<string, string>();
-  for (const file of catalog) {
-    const fallback = deckBranch(file);
-    for (const note of file.notes) {
-      noteTopic.set(deckIds.note(note.key), note.topic);
-      noteBranch.set(deckIds.note(note.key), note.branch ?? fallback);
-    }
-  }
+  const noteTopic = catalogNotes.topic;
+  const noteBranch = catalogNotes.branch;
   const topicOfCard = new Map(
     cards.map((card) => [
       card.id,
