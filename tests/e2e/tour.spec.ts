@@ -46,10 +46,10 @@ function expectedTarget(step: TourStep, phone: boolean): string | null {
       return t.navItems.progress;
     case 'outlines':
       return phone ? t.navItems.more : t.navItems.outlines;
+    // Party y Configuración viven en Más en los dos anchos, el dock del teléfono y la barra (D-150)
     case 'party':
-      return phone ? t.navItems.more : t.navItems.party;
     case 'settings':
-      return phone ? t.navItems.more : t.navItems.settings;
+      return t.navItems.more;
   }
 }
 
@@ -184,14 +184,15 @@ test.describe('recorrido guiado', () => {
           `${step} borde de abajo`,
         ).toBeLessThanOrEqual(2);
         await expect(dialog).toHaveAttribute('data-tour-mode', phone ? 'sheet' : 'anchored');
-        // El globo no tapa lo que señala. En el teléfono queda encima de la barra, y en computadora, a su lado
+        // El globo no tapa lo que señala. En el teléfono queda encima del dock, y en computadora,
+        // debajo de la barra de arriba (D-150)
         if (phone) {
           expect(dialogBox.y + dialogBox.height, `${step} globo`).toBeLessThanOrEqual(
             holeBox.y + 1,
           );
         } else {
-          expect(dialogBox.x, `${step} globo`).toBeGreaterThanOrEqual(
-            holeBox.x + holeBox.width - 1,
+          expect(dialogBox.y, `${step} globo`).toBeGreaterThanOrEqual(
+            holeBox.y + holeBox.height - 1,
           );
         }
       }

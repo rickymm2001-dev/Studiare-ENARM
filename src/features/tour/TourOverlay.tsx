@@ -185,8 +185,10 @@ export function TourOverlay({
           target: hole,
           size,
           viewport,
-          prefer: layout === 'rail' ? 'right' : 'top',
-          // Junto al riel el globo cuelga desde el borde de arriba del elemento y no tapa el título
+          // Desde D-150 el menú de computadora es la barra de arriba, así que el globo cuelga debajo del
+          // elemento. En el teléfono queda encima del dock
+          prefer: layout === 'rail' ? 'bottom' : 'top',
+          // El globo se alinea con el borde izquierdo del elemento y no tapa el título
           align: 'start',
         })
       : null;

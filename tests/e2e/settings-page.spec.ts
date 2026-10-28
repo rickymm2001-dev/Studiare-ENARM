@@ -51,7 +51,7 @@ test('Configuración es una sola página con exactamente cuatro secciones y ning
   // Carga diaria solo lee lo guardado en Ajustes del repaso, sin campos, y enlaza al panel
   const load = main.getByRole('region', { name: t.dailyLoad.title, exact: true });
   await expect(load.getByText(t.settings.dailyLoadCard.reviews)).toBeVisible();
-  await expect(load.getByText(t.settings.dailyLoadCard.questions)).toBeVisible();
+  await expect(load.getByText(t.settings.dailyLoadCard.questions, { exact: true })).toBeVisible();
   await expect(load.getByRole('spinbutton')).toHaveCount(0);
   await expect(load.getByRole('link', { name: text.reviewSettings.change })).toBeVisible();
   // Estudio, Pomodoro y la base de demostración ya no viven aquí

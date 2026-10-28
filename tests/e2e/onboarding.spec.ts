@@ -46,10 +46,18 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
   await page.getByRole('button', { name: t.onboarding.create }).click();
 
   await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
-  const goal = page.getByRole('region', { name: t.widgets.names.daily_goal });
-  await expect(goal).toContainText(t.widgets.goal.ratio(0, 12));
-  await expect(goal).toContainText(t.widgets.goal.metricNames.questions);
+  // Inicio abre con Meta de hoy, que lleva la carga diaria del plan (D-150). La meta de la racha
+  // elegida en la bienvenida queda guardada en Ajustes del repaso
+  const goal = page.getByRole('region', { name: t.home.goal.title });
+  await expect(
+    goal.getByText(new RegExp(`^${t.widgets.plan.rows.questions} 0 de [\\d,]+$`)),
+  ).toBeVisible();
   await expectNoSeriousA11yViolations(page);
+  await page.goto(`${SCREENS.review.path}?ajustes=1`);
+  const reviewSettings = page.getByRole('dialog', { name: t.settingsPage.reviewSettings.title });
+  await expect(reviewSettings.getByLabel(t.onboarding.goalMetric)).toHaveValue('questions');
+  await expect(reviewSettings.getByLabel(t.onboarding.goalValue)).toHaveValue('12');
+  await page.goto('/');
 
   // La sesión se recuerda al recargar
   await page.reload();

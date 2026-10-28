@@ -127,12 +127,8 @@ test.describe('Banco en la nube para el alumno', () => {
     });
     await enterWithOpenBank(page, cloud);
     const practice = await openSimulator(page, '5');
-    await expect(
-      page
-        .getByRole('region', { name: t.simulator.stats.label })
-        .getByText(t.simulator.stats.unlimited)
-        .first(),
-    ).toBeVisible();
+    // Con un plan de pago no sale la nota del tope del plan Gratis (D-150)
+    await expect(practice.getByText(/^El plan Gratis permite/)).toHaveCount(0);
     await practice.getByRole('button', { name: t.simulator.start }).click();
     // Empieza con lo concedido y el marco de la app dice por qué faltó lo demás
     await expect(page.getByText(t.simulator.progress(1, 3), { exact: true })).toBeVisible({

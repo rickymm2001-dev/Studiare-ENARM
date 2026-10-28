@@ -9,7 +9,7 @@ import { SCREENS } from '@/app/screens';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
-import { pickSegment, statValue } from '../support/b1';
+import { pickSegment } from '../support/b1';
 import { expect, test } from '../support/cloudFixtures';
 import {
   englishBank,
@@ -202,9 +202,7 @@ test.describe('Inglés médico en la práctica', () => {
     const store = englishBank(cloud, { spanish: 250, cases: 2 });
     await enterWithOpenBank(page, cloud, 'free');
     await openSimulator(page);
-    await expect(statValue(page, t.simulator.stats.label, t.simulator.stats.today)).toHaveText(
-      '20',
-    );
+    await expect(practiceCard(page).getByText(t.simulator.freeNote(20, 20))).toBeVisible();
     const card = englishCard(page);
     await expect(card.getByRole('button', { name: copy.start })).toBeEnabled({ timeout: 30_000 });
     await card.getByRole('button', { name: copy.start }).click();
@@ -216,9 +214,7 @@ test.describe('Inglés médico en la práctica', () => {
     expect(new Set(languagesRead(store))).toEqual(new Set(['en']));
 
     await openSimulator(page);
-    await expect(statValue(page, t.simulator.stats.label, t.simulator.stats.today)).toHaveText(
-      '15',
-    );
+    await expect(practiceCard(page).getByText(t.simulator.freeNote(20, 15))).toBeVisible();
     await expect(englishCard(page).getByRole('button', { name: copy.start })).toBeEnabled();
     await expectNoSeriousA11yViolations(page);
   });

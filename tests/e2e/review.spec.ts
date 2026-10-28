@@ -63,9 +63,6 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
     goal.getByText(new RegExp(`^${t.widgets.plan.rows.cards} 3 de [\\d,]+$`)),
   ).toBeVisible();
   // La carga de repaso ya dibuja la gráfica con lo de este mes
-  await expect(
-    page
-      .getByRole('region', { name: t.home.load.title })
-      .getByRole('img', { name: t.home.load.chartLabel }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: t.home.load.title })).toBeVisible();
+  await expect(page.getByRole('img', { name: t.home.load.chartLabel })).toBeVisible();
 });

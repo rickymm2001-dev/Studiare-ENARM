@@ -243,7 +243,8 @@ async function expectOneErrorDeck(page: Page, cards: number) {
  */
 async function panelText(page: Page, path: string, label: string): Promise<string> {
   await page.goto(path);
-  const panel = page.getByRole('region', { name: label });
+  // Exacto, porque Tus cifras recientes de Progreso también empieza igual (D-150)
+  const panel = page.getByRole('region', { name: label, exact: true });
   await expect(panel).toBeVisible({ timeout: 30_000 });
   let previous = await panel.innerText();
   for (let attempt = 0; attempt < 20; attempt += 1) {
