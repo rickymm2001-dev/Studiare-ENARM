@@ -966,6 +966,9 @@ html:has(.ld) {
   --enarm-fg-muted: #c9d6ea;
   --enarm-line: rgb(255 255 255 / 0.28);
   --enarm-muted: rgb(255 255 255 / 0.14);
+  /* La etiqueta neutra (Badge) lee estos dos, así se ve blanca sobre el marino y pasa el contraste */
+  --enarm-demo-fg: #ffffff;
+  --enarm-demo-line: rgb(255 255 255 / 0.4);
   background: var(--ld-navy);
   border-color: var(--ld-navy);
   color: #ffffff;
