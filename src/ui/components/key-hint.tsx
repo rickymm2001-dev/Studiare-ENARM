@@ -4,7 +4,7 @@ import { cn } from '../cn';
 /** Una tecla dentro de un texto de ayuda */
 export function Kbd({ children }: { children: ReactNode }) {
   return (
-    <kbd className="rounded border border-line bg-muted px-1 py-px font-sans text-[0.7rem] font-semibold text-fg">
+    <kbd className="rounded border border-line bg-muted px-1 py-px font-sans text-xs font-semibold text-fg">
       {children}
     </kbd>
   );

@@ -138,8 +138,8 @@
   color: var(--color-primary-ink);
 }
 
-/* Título de cada pantalla, en marino y con el peso del héroe de la portada. 24 px en el teléfono y
-   32 px desde 640 px (D-150) */
+/* Título de cada pantalla, en marino y con el peso del héroe de la portada. 20 px en el teléfono y
+   22 px desde 640 px (D-150) */
 @utility screen-title {
   font-size: var(--text-title);
   line-height: var(--text-title--line-height);
@@ -152,9 +152,9 @@
   }
 }
 
-/* Título de un grupo de tarjetas, como Tus repasos. 22 px del diseño al 80 por ciento (D-150) */
+/* Título de un grupo de tarjetas, como Tus repasos. 16 px, un paso abajo del título de pantalla (D-150) */
 @utility group-title {
-  font-size: 1.1rem;
+  font-size: var(--text-xl);
   line-height: 1.2;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -163,7 +163,7 @@
 
 /* Subtítulo en cursiva bajo el título de la pantalla, como el héroe de la portada (D-150) */
 @utility screen-lead {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   line-height: 1.4;
   font-style: italic;
   color: var(--color-fg);

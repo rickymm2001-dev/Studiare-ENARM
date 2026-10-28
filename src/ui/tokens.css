@@ -389,37 +389,38 @@
     var(--enarm-font-heading), system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Escala de texto al 80 por ciento de la de Tailwind, a pedido de Ricardo (D-150), con piso de
-     11 px para que lo más chico siga legible. Los espacios no cambian, solo la letra */
+  /* Escala de texto corta y pareja, chica a mediana, a pedido de Ricardo (D-150). El texto corriente
+     va de 11 a 13 px y lo más grande de la app, títulos y cifras, no pasa de 22 px, así nada se ve
+     desproporcionado. Los espacios no cambian, solo la letra */
   --text-xs: 0.6875rem;
   --text-xs--line-height: 1rem;
-  --text-sm: 0.7rem;
-  --text-sm--line-height: 1.05rem;
-  --text-base: 0.8rem;
-  --text-base--line-height: 1.2rem;
-  --text-lg: 0.9rem;
-  --text-lg--line-height: 1.35rem;
+  --text-sm: 0.75rem;
+  --text-sm--line-height: 1.1rem;
+  --text-base: 0.8125rem;
+  --text-base--line-height: 1.25rem;
+  --text-lg: 0.875rem;
+  --text-lg--line-height: 1.3rem;
   --text-xl: 1rem;
-  --text-xl--line-height: 1.4rem;
-  --text-2xl: 1.2rem;
-  --text-2xl--line-height: 1.5rem;
-  --text-3xl: 1.5rem;
-  --text-3xl--line-height: 1.8rem;
-  --text-4xl: 1.8rem;
-  --text-4xl--line-height: 2rem;
-  --text-5xl: 2.4rem;
-  --text-5xl--line-height: 1;
-  --text-6xl: 3rem;
-  --text-6xl--line-height: 1;
+  --text-xl--line-height: 1.35rem;
+  --text-2xl: 1.125rem;
+  --text-2xl--line-height: 1.4rem;
+  --text-3xl: 1.25rem;
+  --text-3xl--line-height: 1.5rem;
+  --text-4xl: 1.375rem;
+  --text-4xl--line-height: 1.6rem;
+  --text-5xl: 1.625rem;
+  --text-5xl--line-height: 1.1;
+  --text-6xl: 2rem;
+  --text-6xl--line-height: 1.1;
 
-  /* Título de pantalla en marino. 24 px en el teléfono y 32 px desde 640 px, que son los 30 y 40
-     del diseño al 80 por ciento (D-150) */
-  --text-title: 1.5rem;
-  --text-title--line-height: 1.1;
-  --text-title-lg: 2rem;
-  --text-title-lg--line-height: 1.08;
-  /* Enunciado de pregunta en tamaño grande (10.4) */
-  --text-question: 0.95rem;
+  /* Título de pantalla en marino. 20 px en el teléfono y 22 px desde 640 px, dentro de la escala
+     corta (D-150) */
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.15;
+  --text-title-lg: 1.375rem;
+  --text-title-lg--line-height: 1.12;
+  /* Enunciado de pregunta, un paso arriba del texto corriente (10.4) */
+  --text-question: 0.9rem;
   --text-question--line-height: 1.6;
 
   /* Radios de la portada. Campos de 12 px, tarjetas de 20 y paneles de 24. Los botones son píldoras */

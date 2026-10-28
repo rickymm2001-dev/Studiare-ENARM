@@ -90,10 +90,13 @@ describe('sistema de diseño de la portada por dentro (D-150)', () => {
     expect(button).toContain('rounded-full');
   });
 
-  it('la letra va al 80 por ciento con piso de 11 px y los títulos en la fuente del texto', () => {
+  it('la escala de letra es corta, de 11 px a 22 px, y los títulos van en la fuente del texto', () => {
     const tokens = read('ui/tokens.css');
-    expect(tokens).toMatch(/--text-base:\s*0\.8rem/);
+    expect(tokens).toMatch(/--text-base:\s*0\.8125rem/);
     expect(tokens).toMatch(/--text-xs:\s*0\.6875rem/);
+    // Lo más grande de la app, títulos de pantalla y cifras, no pasa de 22 px
+    expect(tokens).toMatch(/--text-title-lg:\s*1\.375rem/);
+    expect(tokens).toMatch(/--text-4xl:\s*1\.375rem/);
     expect(tokens).toMatch(/--font-display:\s*\n?\s*var\(--enarm-font-heading\)/);
     expect(read('ui/appearance.ts')).not.toContain('FONT_FAMILIES.serif,');
   });
