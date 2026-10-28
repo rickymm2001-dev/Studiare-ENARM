@@ -10,9 +10,13 @@ import { allowedExamSizes, defaultExamSize } from '@/features/exam/examSizes';
 import { t } from '@/i18n/es-MX';
 import {
   answerExamQuestions,
+  bankCount,
   escapeRegExp,
+  expectSegment,
   finishExam,
-  statNumber,
+  openExamSetup,
+  openPracticeSetup,
+  segmented,
   statValue,
   subscribeMonthly,
 } from './support/b1';
@@ -21,12 +25,12 @@ import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/f
 const FULL_EXAM = 280;
 const ANSWERED = 3;
 
-/** La tarjeta del examen en Simular, ya con el banco demo sembrado */
-async function examCard(page: Page) {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByRole('combobox', { name: t.exam.size })).toBeVisible({ timeout: 90_000 });
-  return card;
+/**
+ * Cuántas preguntas tiene el banco demo. La cifra va en la nota de las ramas de la práctica, porque
+ * el examen reparte por rama y no las muestra
+ */
+async function demoBank(page: Page): Promise<number> {
+  return bankCount(await openPracticeSetup(page));
 }
 
 test('en un plan de pago el examen de 280 arranca con todo el banco, el navegador lista cada pregunta y el diálogo lo termina', async ({
@@ -35,15 +39,14 @@ test('en un plan de pago el examen de 280 arranca con todo el banco, el navegado
   test.setTimeout(240_000);
   await signUp(page);
   await subscribeMonthly(page);
-  const card = await examCard(page);
+  const bank = await demoBank(page);
+  const card = await openExamSetup(page);
 
   // El tamaño por defecto es el examen completo y ya no se dice que sea de pago
-  const size = card.getByRole('combobox', { name: t.exam.size });
-  await expect(size).toHaveValue(String(FULL_EXAM));
+  await expectSegment(card, t.exam.size, t.exam.sizeOption(FULL_EXAM));
   await expect(card.getByText(t.exam.fullLocked)).toHaveCount(0);
 
   // El banco de demostración es más chico que 280, así que la tarjeta avisa de cuántas será
-  const bank = await statNumber(page, t.simulator.stats.label, t.simulator.stats.bank);
   const total = Math.min(FULL_EXAM, bank);
   if (bank < FULL_EXAM)
     await expect(card.getByText(t.exam.shortfall(FULL_EXAM, bank))).toBeVisible();
@@ -60,12 +63,9 @@ test('en un plan de pago el examen de 280 arranca con todo el banco, el navegado
   await answerExamQuestions(page, total, ANSWERED);
   await expect(page.getByText(t.exam.progress(ANSWERED + 1, total), { exact: true })).toBeVisible();
 
-  // El navegador lista todas las preguntas, con su estado, y lleva a la última
-  const navigator = page
-    .locator('details')
-    .filter({ has: page.locator('summary', { hasText: t.exam.navigatorTitle }) });
-  await expect(navigator.locator('summary')).toContainText(t.exam.navigatorSummary(ANSWERED, 0));
-  await navigator.locator('summary').click();
+  // El mapa del examen lista todas las preguntas, con su estado, y lleva a la última
+  const navigator = page.getByRole('region', { name: t.exam.navigatorTitle });
+  await expect(navigator.getByText(t.exam.navigatorSummary(ANSWERED, 0))).toBeVisible();
   await expect(navigator.locator('ol > li')).toHaveCount(total);
   await expect(
     navigator.getByRole('button', {
@@ -99,7 +99,7 @@ test('en un plan de pago el examen de 280 arranca con todo el banco, el navegado
   await expectNoSeriousA11yViolations(page);
 
   // Simular recuerda el último examen con su total
-  const again = await examCard(page);
+  const again = await openExamSetup(page);
   await expect(again.getByText(t.exam.lastTitle)).toBeVisible();
   await expect(
     again.getByText(
@@ -113,15 +113,19 @@ test('en el plan Gratis el examen de 280 no se ofrece y la tarjeta dice que es d
 }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  const card = await examCard(page);
+  const card = await openExamSetup(page);
   await expect(card.getByText(t.exam.fullLocked)).toBeVisible();
 
   // Solo los tamaños abiertos a todos, y el que cabe en las preguntas del día como el elegido
-  const size = card.getByRole('combobox', { name: t.exam.size });
-  await expect(size.getByRole('option')).toHaveText(
+  const sizes = segmented(card, t.exam.size).getByRole('button');
+  await expect(sizes).toHaveText(
     allowedExamSizes(false).map((option) => t.exam.sizeOption(option)),
   );
-  await expect(size.getByRole('option', { name: t.exam.sizeOption(FULL_EXAM) })).toHaveCount(0);
-  await expect(size).toHaveValue(String(defaultExamSize(false, PLANS.free.access.dailyQuestions)));
+  await expect(sizes.filter({ hasText: t.exam.sizeOption(FULL_EXAM) })).toHaveCount(0);
+  await expectSegment(
+    card,
+    t.exam.size,
+    t.exam.sizeOption(defaultExamSize(false, PLANS.free.access.dailyQuestions)),
+  );
   await expectNoSeriousA11yViolations(page);
 });

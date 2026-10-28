@@ -6,6 +6,7 @@ import { SCREENS } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import { t } from '@/i18n/es-MX';
+import { openPracticeSetup } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 /** Las ramas de la taxonomía. Son ocho desde B11, con Salud pública e Inglés médico */
@@ -77,11 +78,9 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       .getByText(t.states.calibrating.remaining(3, t.planner.minutesUnit)),
   ).toBeVisible();
 
-  // Simular. Dirigir las opciones a mis trampas calibra y no ofrece nada hasta tener errores
-  // etiquetados. El banco demo se siembra la primera vez que se entra y puede tardar
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await expect(practice.getByText(t.simulator.targeted.label)).toBeVisible({ timeout: 60_000 });
+  // Simular. El modo Dirigido calibra y no dirige nada hasta tener errores etiquetados. El banco
+  // demo se siembra la primera vez que se entra y puede tardar
+  const practice = await openPracticeSetup(page, { mode: 'targeted' });
   await expect(
     practice.getByText(
       t.states.calibrating.remaining(
@@ -109,9 +108,11 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       { exact: false },
     ),
   ).toBeVisible();
-  // La carga de repaso no dibuja una gráfica vacía
-  await expect(
-    page.getByRole('region', { name: t.home.load.title }).getByText(t.home.load.empty),
-  ).toBeVisible();
+  // La carga de repaso no dibuja una gráfica vacía. Es una tarjeta de cifra, que se encuentra por su
+  // título (D-150)
+  const load = page
+    .getByRole('heading', { level: 3, name: t.home.load.title })
+    .locator('xpath=ancestor::section[1]');
+  await expect(load.getByText(t.home.load.empty)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });

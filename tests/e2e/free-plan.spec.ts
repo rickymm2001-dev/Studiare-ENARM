@@ -7,7 +7,7 @@
 // Playwright. Party en la nube con el plan del servidor está en tests/e2e/cloud/free-plan.spec.ts
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { setPracticeFeedback, statValue, subscribeMonthly } from './support/b1';
+import { openPracticeSetup, setPracticeFeedback, subscribeMonthly } from './support/b1';
 import {
   expect,
   expectNoHorizontalOverflow,
@@ -159,17 +159,13 @@ test('en Gratis hay 20 preguntas al día y la explicación sale después de cont
   // Respuesta 19. La retroalimentación después de cada pregunta se elige en Ajustes del repaso, y
   // Simular solo la muestra (B3 del plan del cambio)
   await setPracticeFeedback(page, 'each');
-  await page.goto(SCREENS.simulatorSetup.path);
-  // Respuesta 18. 20 preguntas al día
-  await expect(statValue(page, t.simulator.stats.label, t.simulator.stats.today)).toHaveText('20', {
-    timeout: 60_000,
-  });
+  const setup = await openPracticeSetup(page, { count: 5 });
+  // Respuesta 18. 20 preguntas al día, y la nota del plan dice cuántas quedan hoy
+  await expect(setup.getByText(t.simulator.freeNote(20, 20))).toBeVisible();
 
   // Con esa retroalimentación la explicación sale al contestar
-  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
-  await setup.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
   const start = setup.getByRole('button', { name: t.simulator.start });
-  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await expect(start).toBeEnabled();
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible();
   await page.getByRole('radio').first().check();

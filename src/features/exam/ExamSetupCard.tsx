@@ -170,9 +170,11 @@ export function ExamSetupCard({
     previewRef.current?.({ count, branches, totalMs: preview.totalMs, alerts });
   }, [count, branches, preview.totalMs, alerts]);
 
+  // La tarjeta de un examen guardado se nombra por su estado y no por Examen completo, que ya es el
+  // nombre de la región del formulario que la contiene (D-150)
   const header = (
     <CardHeader className="mb-3">
-      <CardTitle id="examen-titulo">{text.cardTitle}</CardTitle>
+      <CardTitle>{text.cardTitle}</CardTitle>
     </CardHeader>
   );
 
@@ -181,9 +183,11 @@ export function ExamSetupCard({
     const total = stored.questionIds.length;
     const timeIsUp = remaining <= 0;
     return (
-      <Card tone="cream" lift={false} aria-labelledby="examen-titulo">
+      <Card tone="cream" lift={false} aria-labelledby="examen-en-curso">
         {header}
-        <p className="font-medium">{text.inProgressTitle}</p>
+        <p id="examen-en-curso" className="font-medium">
+          {text.inProgressTitle}
+        </p>
         <p className="mb-3 text-sm text-fg-muted">
           {text.inProgressBody(answeredCount(stored), total, remaining)}
         </p>
@@ -215,9 +219,11 @@ export function ExamSetupCard({
   // Un examen que terminó y todavía no se registra no se pisa con otro. Los resultados lo retoman
   if (stored && !isClosed(stored)) {
     return (
-      <Card tone="cream" lift={false} aria-labelledby="examen-titulo">
+      <Card tone="cream" lift={false} aria-labelledby="examen-sin-guardar">
         {header}
-        <p className="font-medium">{text.unsavedTitle}</p>
+        <p id="examen-sin-guardar" className="font-medium">
+          {text.unsavedTitle}
+        </p>
         <p className="mb-3 text-sm text-fg-muted">{text.unsavedBody}</p>
         <Button asChild className="self-start">
           <Link to={screenPath('examResults')}>{text.saveAndSee}</Link>

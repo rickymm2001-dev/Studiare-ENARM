@@ -8,6 +8,7 @@ import { SCREENS } from '@/app/screens';
 import { OVERRIDES_KEY, type StoredOverrides } from '@/config/overridesStore';
 import { DATABASE_NAMES, type DatabaseKind } from '@/data/databases';
 import type { TableName } from '@/data/db/tables';
+import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
 import { adminText } from '@/i18n/admin';
 import { expect } from './fixtures';
@@ -226,17 +227,109 @@ export const userRow = (page: Page, alias: string): Locator =>
     has: page.locator('p', { hasText: new RegExp(`^${escapeRegExp(alias)}(\\s?\\(|$)`) }),
   });
 
+/** Los modos de Armar tu simulador, las tres tarjetas del formulario (D-150) */
+export type SimulatorMode = 'practice' | 'exam' | 'targeted';
+
+/** El formulario de Simular en los modos Práctica y Dirigido, la región Configura tu práctica */
+export const practiceSetup = (page: Page): Locator =>
+  page.getByRole('region', { name: t.simulator.setupTitle });
+
+/** El formulario de Simular en el modo Examen, la región Examen completo */
+export const examSetup = (page: Page): Locator =>
+  page.getByRole('region', { name: t.exam.cardTitle });
+
+/**
+ * Elige el modo del simulador en sus tarjetas. Espera a que el formulario cargue, porque el banco
+ * demo se siembra la primera vez que se entra y puede tardar
+ */
+export async function chooseSimulatorMode(page: Page, mode: SimulatorMode): Promise<void> {
+  const group = page.getByRole('radiogroup', { name: t.simulator.mode.legend });
+  await expect(group).toBeVisible({ timeout: 90_000 });
+  const option = group.getByRole('radio', {
+    name: new RegExp(`^${escapeRegExp(t.simulator.mode[mode])}`),
+  });
+  await option.click();
+  await expect(option).toBeChecked();
+}
+
+/** Un control segmentado, el fieldset con su leyenda y un botón presionado por opción */
+export const segmented = (scope: Page | Locator, legend: string): Locator =>
+  scope.getByRole('group', { name: legend, exact: true });
+
+/** Presiona una opción de un control segmentado y espera a que quede elegida */
+export async function pickSegment(
+  scope: Page | Locator,
+  legend: string,
+  option: string,
+): Promise<void> {
+  const button = segmented(scope, legend).getByRole('button', { name: option, exact: true });
+  await button.click();
+  await expect(button).toHaveAttribute('aria-pressed', 'true');
+}
+
+/** La opción que un control segmentado tiene elegida */
+export async function expectSegment(
+  scope: Page | Locator,
+  legend: string,
+  option: string,
+): Promise<void> {
+  await expect(
+    segmented(scope, legend).getByRole('button', { name: option, exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+}
+
+/**
+ * Abre Simular en el modo Práctica o Dirigido y, si se pide, elige cuántas preguntas. Devuelve la
+ * región del formulario
+ */
+export async function openPracticeSetup(
+  page: Page,
+  options: { mode?: 'practice' | 'targeted'; count?: number } = {},
+): Promise<Locator> {
+  await page.goto(SCREENS.simulatorSetup.path);
+  await chooseSimulatorMode(page, options.mode ?? 'practice');
+  const setup = practiceSetup(page);
+  await expect(setup).toBeVisible();
+  if (options.count !== undefined) {
+    await pickSegment(setup, t.simulator.count, String(options.count));
+  }
+  return setup;
+}
+
+/** Abre Simular en el modo Examen y devuelve la región del examen completo */
+export async function openExamSetup(page: Page): Promise<Locator> {
+  await page.goto(SCREENS.simulatorSetup.path);
+  await chooseSimulatorMode(page, 'exam');
+  const setup = examSetup(page);
+  await expect(setup).toBeVisible();
+  return setup;
+}
+
+/** Un número dentro de un texto fijo de la interfaz, armado con 0 en el lugar de la cifra */
+const numberIn = async (note: Locator, template: string): Promise<number> => {
+  const pattern = new RegExp(`^${escapeRegExp(template).replace('0', '([\\d,]+)')}$`);
+  await expect(note).toHaveText(pattern);
+  const match = pattern.exec(await note.innerText());
+  return Number(match?.[1]?.replace(/,/g, ''));
+};
+
+/** Cuántas preguntas quedan con los filtros de ahora, de la nota debajo de las ramas */
+export const availableCount = (setup: Locator): Promise<number> =>
+  numberIn(setup.getByText(/preguntas? disponibles? con estos filtros$/), t.simulator.available(0));
+
+/** Cuántas preguntas tiene el banco de demostración, de la nota debajo de las ramas */
+export const bankCount = (setup: Locator): Promise<number> =>
+  numberIn(setup.getByText(/^Banco de demostración con /), t.simulator.bankNote(0));
+
 /**
  * Arma un examen completo desde Simular con el tamaño pedido y entra a él. El banco demo se siembra
  * la primera vez que se entra y puede tardar
  */
 export async function startExam(page: Page, size: number): Promise<void> {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  const sizeField = card.getByRole('combobox', { name: t.exam.size });
-  await expect(sizeField).toBeVisible({ timeout: 90_000 });
-  await sizeField.selectOption(String(size));
-  await card.getByRole('button', { name: t.exam.start }).click();
+  const setup = await openExamSetup(page);
+  await pickSegment(setup, t.exam.size, t.exam.sizeOption(size));
+  await expect(setup.getByText(t.exam.timeTotal(examTotalMs(size)))).toBeVisible();
+  await setup.getByRole('button', { name: t.exam.start }).click();
   await expect(page).toHaveURL(new RegExp(`${SCREENS.exam.path}$`));
   await expect(page.getByRole('timer')).toBeVisible();
 }

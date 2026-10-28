@@ -11,6 +11,7 @@ import {
   enterAs,
   finishExam,
   generateDemo,
+  openPracticeSetup,
   reviewSettingsPanel,
   setPracticeFeedback,
   startExam,
@@ -35,7 +36,7 @@ const STUDENT: readonly (readonly [ScreenKey, string?])[] = [
   ['decks'],
   ['explore'],
   ['outlines'],
-  ['simulatorSetup', t.exam.cardTitle],
+  ['simulatorSetup', t.simulator.setupTitle],
   ['progress', t.progress.futureLoad.title],
   ['calendar', t.calendar.plan.title],
   ['tutor', t.tutor.report.title],
@@ -126,11 +127,10 @@ test('en oscuro Inicio de una cuenta nueva y la práctica pasan axe', async ({ p
   // Retroalimentación después de cada pregunta, para ver la pregunta, la retroalimentación y el
   // resumen. Se elige en Ajustes del repaso, su único lugar
   await setPracticeFeedback(page, 'each');
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const practice = await openPracticeSetup(page, { count: 5 });
+  await expectNoSeriousA11yViolations(page);
   const start = practice.getByRole('button', { name: t.simulator.start });
-  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await expect(start).toBeEnabled();
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
   await page.getByRole('radio').first().check();

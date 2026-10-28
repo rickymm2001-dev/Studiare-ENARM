@@ -4,7 +4,8 @@
 // clic en el texto de la opción la elige y la responde, para no cruzar la pantalla hasta el botón (D-087).
 // Desde D-150 es una tarjeta píldora con la letra en un círculo. Gris con la letra en marino, marina
 // con la letra en blanco en la elegida, y gris con la letra tachada en la descartada. El radio sigue
-// ahí para el teclado y el lector de pantalla, solo que no se ve, y el foco se pinta en la tarjeta.
+// ahí para el teclado y el lector de pantalla, solo que no se ve. Cubre toda su tarjeta, invisible, así
+// un clic o un toque en cualquier parte de la opción llega al radio mismo, y el foco se pinta en la tarjeta.
 import { Ban, RotateCcw } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -48,7 +49,7 @@ export function OptionChoice({
     >
       <label
         className={cn(
-          'flex min-w-0 flex-1 items-center gap-4 py-3 pl-3.5 pr-2',
+          'relative flex min-w-0 flex-1 items-center gap-4 py-3 pl-3.5 pr-2',
           readOnlyChoice ? 'cursor-default' : 'cursor-pointer',
         )}
         onDoubleClick={readOnlyChoice ? undefined : onActivate}
@@ -56,7 +57,7 @@ export function OptionChoice({
         <input
           type="radio"
           name={name}
-          className="sr-only"
+          className="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-default"
           checked={selected}
           disabled={readOnlyChoice}
           onChange={onChoose}

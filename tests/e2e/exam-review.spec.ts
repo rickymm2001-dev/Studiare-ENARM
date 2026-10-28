@@ -3,9 +3,8 @@
 // mazo compartido no cambia. Después se marca un motivo, se cambia y Progreso muestra el último.
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
-import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
-import { followSmallestDeck, readTable } from './support/b1';
+import { followSmallestDeck, readTable, startExam } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const QUESTIONS = 20;
@@ -49,16 +48,9 @@ async function stopSendingErrors(page: Page) {
 
 /** Un examen de 20 contestado con la primera opción, terminado y guardado */
 async function takeExam(page: Page) {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
   // El tamaño se elige siempre. Con un plan de pago empieza en 280, y seguir un mazo del catálogo ya
   // contrata el mensual simulado (followSmallestDeck, B8)
-  const size = card.getByRole('combobox', { name: t.exam.size });
-  await expect(size).toBeVisible({ timeout: 60_000 });
-  await size.selectOption(String(QUESTIONS));
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible();
-  await card.getByRole('button', { name: t.exam.start }).click();
-  await expect(page.getByRole('timer')).toBeVisible();
+  await startExam(page, QUESTIONS);
   for (let index = 1; index <= QUESTIONS; index += 1) {
     await expect(page.getByText(t.exam.progress(index, QUESTIONS), { exact: true })).toBeVisible();
     await page.getByRole('radio').first().check();

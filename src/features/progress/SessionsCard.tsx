@@ -54,7 +54,13 @@ export function SessionsCard({
       {rows.length === 0 ? (
         <p className="text-sm text-fg-muted">{text.empty}</p>
       ) : (
-        <div className="overflow-x-auto">
+        // La tabla se desplaza de lado en el teléfono, así que su marco se puede enfocar con el teclado
+        <div
+          className="overflow-x-auto"
+          tabIndex={0}
+          role="group"
+          aria-labelledby="sesiones-titulo"
+        >
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="text-left text-xs text-fg-muted">

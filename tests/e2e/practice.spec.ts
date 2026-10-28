@@ -3,17 +3,15 @@
 // doble clic y sin la pregunta de confianza. Quien lo prefiere la ve después de cada pregunta, y lo
 // elige en Ajustes del repaso, su único lugar (B3 del plan del cambio).
 import type { Page } from '@playwright/test';
-import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { setPracticeFeedback } from './support/b1';
+import { openPracticeSetup, setPracticeFeedback } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 /** Abre la configuración de la práctica y empieza una de cinco preguntas */
 async function startPractice(page: Page, feedback?: 'end' | 'each') {
   if (feedback) await setPracticeFeedback(page, feedback);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
-  await setup.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  // El banco demo se siembra la primera vez que se entra y puede tardar
+  const setup = await openPracticeSetup(page, { count: 5 });
   // Simular solo dice cuándo llega la retroalimentación
   if (feedback) {
     await expect(
@@ -21,8 +19,7 @@ async function startPractice(page: Page, feedback?: 'end' | 'each') {
     ).toBeVisible();
   }
   const start = setup.getByRole('button', { name: t.simulator.start });
-  // El banco demo se siembra la primera vez que se entra y puede tardar
-  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await expect(start).toBeEnabled();
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible();
 }
