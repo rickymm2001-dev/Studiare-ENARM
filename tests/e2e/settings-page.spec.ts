@@ -1,7 +1,8 @@
-// Configuración en una sola página (B3 del plan del cambio, comentarios 5, 6 y 16). Exactamente tres
-// secciones con su subtítulo y ninguna pestaña, los enlaces viejos con ?seccion=, Editar perfil con
-// Cancelar, que regresa lo guardado, y Guardar, que se conserva al recargar, y el aviso al salir con
-// cambios sin guardar.
+// Configuración en una sola página (B3 del plan del cambio, comentarios 5, 6 y 16, y D-150).
+// Exactamente cuatro secciones con su subtítulo y ninguna pestaña, el índice lateral con sus anclas,
+// Carga diaria de solo lectura con su enlace a Ajustes del repaso, los enlaces viejos con ?seccion=,
+// Editar perfil con Cancelar, que regresa lo guardado, y Guardar, que se conserva al recargar, y el
+// aviso al salir con cambios sin guardar.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -10,12 +11,17 @@ import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/f
 import { isPhone, mainNav } from './support/navigation';
 
 const text = t.settingsPage;
-const SECTIONS = [text.sections.profile, text.sections.appearance, text.sections.privacy];
+const SECTIONS = [
+  text.sections.profile,
+  t.dailyLoad.title,
+  text.sections.appearance,
+  text.sections.privacy,
+];
 
 /** Tus datos, la tarjeta de Perfil que se edita */
 const dataCard = (page: Page) => page.getByRole('region', { name: text.profile.title });
 
-test('Configuración es una sola página con exactamente tres secciones y ninguna pestaña', async ({
+test('Configuración es una sola página con exactamente cuatro secciones y ninguna pestaña', async ({
   page,
 }) => {
   await signUp(page, 'Ana');
@@ -27,6 +33,13 @@ test('Configuración es una sola página con exactamente tres secciones y ningun
   }
   await expect(page.getByRole('tablist')).toHaveCount(0);
   await expect(page.getByRole('tab')).toHaveCount(0);
+  // El índice lleva a cada sección con su ancla y, sin ancla, marca Perfil como la actual
+  const index = page.getByRole('navigation', { name: text.indexLabel });
+  await expect(index.getByRole('link')).toHaveText(SECTIONS);
+  await expect(index.getByRole('link', { name: text.sections.profile })).toHaveAttribute(
+    'aria-current',
+    'location',
+  );
 
   // Perfil empieza con el plan y después tus datos, de solo lectura
   const profile = main.getByRole('region', { name: text.sections.profile, exact: true });
@@ -35,16 +48,36 @@ test('Configuración es una sola página con exactamente tres secciones y ningun
   await expect(dataCard(page).getByText(emailOf('Ana'))).toBeVisible();
   await expect(dataCard(page).getByRole('textbox')).toHaveCount(0);
   await expect(profile.getByRole('button', { name: t.session.signOut })).toBeVisible();
+  // Carga diaria solo lee lo guardado en Ajustes del repaso, sin campos, y enlaza al panel
+  const load = main.getByRole('region', { name: t.dailyLoad.title, exact: true });
+  await expect(load.getByText(t.settings.dailyLoadCard.reviews)).toBeVisible();
+  await expect(load.getByText(t.settings.dailyLoadCard.questions)).toBeVisible();
+  await expect(load.getByRole('spinbutton')).toHaveCount(0);
+  await expect(load.getByRole('link', { name: text.reviewSettings.change })).toBeVisible();
   // Estudio, Pomodoro y la base de demostración ya no viven aquí
   await expect(page.getByText(t.settings.cardTimerEnabled)).toHaveCount(0);
   await expect(page.getByRole('radio', { name: new RegExp(t.database.demo) })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
+  // El ancla lleva a su sección y el índice la marca como la actual
+  await page.goto(`${SCREENS.settings.path}#privacidad`);
+  await expect(
+    page.getByRole('heading', { level: 2, name: text.sections.privacy }),
+  ).toBeInViewport();
+  await expect(index.getByRole('link', { name: text.sections.privacy })).toHaveAttribute(
+    'aria-current',
+    'location',
+  );
   // Los enlaces viejos siguen funcionando. Privacidad lleva a su sección
   await page.goto(`${SCREENS.settings.path}?seccion=privacy`);
   await expect(
     page.getByRole('heading', { level: 2, name: text.sections.privacy }),
   ).toBeInViewport();
+  // Y el enlace de Carga diaria abre Ajustes del repaso, en Repasar
+  await page.goto(`${SCREENS.settings.path}#carga`);
+  await load.getByRole('link', { name: text.reviewSettings.change }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}\\?ajustes=1$`));
+  await expect(page.getByRole('dialog', { name: text.reviewSettings.title })).toBeVisible();
   // Y Estudio lleva a Ajustes del repaso, en Repasar
   await page.goto(`${SCREENS.settings.path}?seccion=study`);
   await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}\\?ajustes=1$`));

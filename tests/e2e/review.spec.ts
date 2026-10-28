@@ -55,9 +55,13 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   await expect(page.getByText(t.review.doneTitle)).toBeVisible();
   await expect(page.getByText(/Repasaste 3 tarjetas y ganaste [\d,]+ XP\./)).toBeVisible();
 
-  // Inicio ya cuenta las tres tarjetas y el XP
+  // Inicio ya cuenta las tres tarjetas en la fila de Tarjetas de Meta de hoy (D-150). El tope del
+  // día sale de los ajustes del alumno, así que solo se fija lo hecho
   await page.goto('/');
-  await expect(page.getByText(t.widgets.today.done(3, 0))).toBeVisible();
+  const goal = page.getByRole('region', { name: t.home.goal.title });
+  await expect(
+    goal.getByText(new RegExp(`^${t.widgets.plan.rows.cards} 3 de [\\d,]+$`)),
+  ).toBeVisible();
   // La carga de repaso ya dibuja la gráfica con lo de este mes
   await expect(
     page

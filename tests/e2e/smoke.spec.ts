@@ -100,7 +100,12 @@ test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', asyn
 
 test('el tema oscuro se aplica y se recuerda al recargar', async ({ page }) => {
   await page.goto(`${SCREENS.settings.path}#apariencia`);
-  await page.getByRole('radio', { name: t.theme.dark }).click();
+  // El tema es un segmentado de botones, cada uno con aria-pressed (D-150)
+  const dark = page
+    .getByRole('group', { name: t.theme.legend })
+    .getByRole('button', { name: t.theme.dark, exact: true });
+  await dark.click();
+  await expect(dark).toHaveAttribute('aria-pressed', 'true');
   // El tema se ve al instante como vista previa y se queda solo al guardar (D-078)
   await expect(page.locator('html')).toHaveClass(/\bdark\b/);
   await page.getByRole('button', { name: t.settings.saveChanges }).click();

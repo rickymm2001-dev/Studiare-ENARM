@@ -11,10 +11,13 @@ import { expect, signUp, test } from './support/fixtures';
 
 const START = /^Repasar [\d,]+ tarjetas?$/;
 
-/** Cuántas tarjetas nuevas dice el panel de lo que toca con la selección */
+/**
+ * Cuántas tarjetas nuevas dice el panel de lo que toca con la selección. Cada celda crema lleva la
+ * cifra arriba y su nombre debajo (D-150), así que la cifra es la que va antes de Nuevas
+ */
 const newCounter = async (page: Page): Promise<number> => {
   const panel = await page.getByRole('region', { name: t.reviewSetup.countersLabel }).innerText();
-  return Number(new RegExp(`${t.review.counters.new}\\s+(\\d+)`).exec(panel)?.[1]);
+  return Number(new RegExp(`(\\d+)\\s+${t.review.counters.new}`).exec(panel)?.[1]);
 };
 
 const countOf = async (page: Page): Promise<number> => {

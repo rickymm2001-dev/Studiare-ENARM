@@ -5,6 +5,7 @@
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
+import { homePlanText } from '@/i18n/homePlan';
 import { readTable, reviewSettingsPanel, subscribeMonthly } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
@@ -64,9 +65,16 @@ test('el plan de la guía se aplica con un toque y Inicio muestra las tres cifra
   await panel.getByRole('button', { name: t.settings.saveChanges }).click();
   await expect(panel.getByText(t.settings.saved, { exact: true })).toBeVisible();
 
+  // Meta de hoy en Inicio lista las tres filas del plan (D-150). Tarjetas son los 250 repasos más las
+  // 50 nuevas de la guía. Las preguntas se quedan en el tope de 20 del plan Gratis aunque el ajuste
+  // diga 50, y la fila lo avisa
   await page.goto('/');
-  const goal = page.getByRole('region', { name: t.widgets.names.daily_goal });
-  await expect(goal.getByText(t.widgets.plan.title)).toBeVisible({ timeout: 30_000 });
-  await expect(goal.getByText(t.widgets.goal.ratio(0, 300))).toBeVisible();
-  await expect(goal.getByText(t.widgets.goal.ratio(0, 50)).first()).toBeVisible();
+  const goal = page.getByRole('region', { name: t.home.goal.title });
+  const rows = t.widgets.plan.rows;
+  await expect(goal.getByText(t.home.goal.row(rows.cards, 0, 300))).toBeVisible({
+    timeout: 30_000,
+  });
+  await expect(goal.getByText(t.home.goal.row(rows.newCards, 0, 50))).toBeVisible();
+  await expect(goal.getByText(t.home.goal.row(rows.questions, 0, 20))).toBeVisible();
+  await expect(goal.getByText(homePlanText.capped(20))).toBeVisible();
 });

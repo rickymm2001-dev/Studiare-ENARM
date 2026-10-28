@@ -47,10 +47,14 @@ async function startReviewSession(page: Page) {
 
 /** La tarjeta del Pomodoro, al lado de la tarjeta de repaso y a la vista desde el inicio (D-150) */
 async function openPomodoro(page: Page): Promise<Locator> {
-  const pill = page.getByRole('group', { name: t.pomodoro.label });
-  await expect(pill).toBeVisible();
-  return pill;
+  const card = page.getByRole('group', { name: t.pomodoro.label });
+  await expect(card).toBeVisible();
+  return card;
 }
+
+/** Iniciar se busca con el nombre exacto, porque Reiniciar también lo contiene */
+const startButton = (card: Locator) =>
+  card.getByRole('button', { name: t.pomodoro.start, exact: true });
 
 /** Los eventos del Pomodoro en el orden en que se guardaron, con su fase y sus minutos planeados */
 async function pomodoroEvents(page: Page) {
@@ -76,40 +80,40 @@ test('un bloque corto se inicia, se pausa, se salta y el descanso termina solo, 
 
   await startReviewSession(page);
   await expectNoSeriousA11yViolations(page);
-  const pill = await openPomodoro(page);
+  const card = await openPomodoro(page);
   // Abierta, con el reloj y sus botones, el encabezado de la sesión se parte en dos renglones en el
   // teléfono en lugar de salirse de la pantalla (hallazgo H24 de B1)
   await expectNoHorizontalOverflow(page);
+  // Quieta hasta que el alumno la arranca. Reiniciar no tiene qué reiniciar y Configurar abre sus ajustes
+  await expect(card.getByRole('button', { name: t.pomodoro.reset })).toBeDisabled();
+  await expect(card.getByRole('button', { name: t.pomodoro.settings })).toBeVisible();
 
   // Iniciar y pausar. En pausa el botón ofrece continuar y al continuar vuelve a ofrecer pausar
-  await pill.getByRole('button', { name: t.pomodoro.start }).click();
-  await expect(pill.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
-  await pill.getByRole('button', { name: t.pomodoro.pause }).click();
-  await expect(pill.getByRole('button', { name: t.pomodoro.resume })).toBeVisible();
-  await pill.getByRole('button', { name: t.pomodoro.resume }).click();
-  await expect(pill.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
+  await startButton(card).click();
+  await expect(card.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
+  await card.getByRole('button', { name: t.pomodoro.pause }).click();
+  await expect(card.getByRole('button', { name: t.pomodoro.resume })).toBeVisible();
+  await card.getByRole('button', { name: t.pomodoro.resume }).click();
+  await expect(card.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
 
   // Saltar interrumpe el enfoque y deja listo el descanso corto, sin arrancarlo
-  await pill.getByRole('button', { name: t.pomodoro.skip }).click();
-  await expect(pill.getByText(t.pomodoro.phases.short_break, { exact: true })).toBeVisible();
-  await expect(pill.getByRole('button', { name: t.pomodoro.start })).toBeVisible();
+  await card.getByRole('button', { name: t.pomodoro.skip }).click();
+  await expect(card.getByText(t.pomodoro.phases.short_break, { exact: true })).toBeVisible();
+  await expect(startButton(card)).toBeVisible();
 
   // El descanso corre y, con el reloj un minuto adelante, termina solo con su aviso. El reloj fijo
   // solo mueve la fecha, los temporizadores siguen
-  await pill.getByRole('button', { name: t.pomodoro.start }).click();
-  await expect(pill.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
+  await startButton(card).click();
+  await expect(card.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
   await page.clock.setFixedTime(new Date(Date.now() + MINUTE_MS + 5_000));
   const notice = phaseNotice(page, t.pomodoro.phases.short_break);
   await expect(notice).toBeVisible();
   await expect(notice).toContainText(t.pomodoro.next(t.pomodoro.phases.focus));
   await expect(notice.getByRole('button', { name: t.pomodoro.startFocus })).toBeVisible();
-  await expect(pill.getByText(t.pomodoro.phases.focus, { exact: true })).toBeVisible();
-  await expect(pill.getByRole('button', { name: t.pomodoro.start })).toBeVisible();
-  // Minimizada, el ícono dice cuánto queda de la fase que sigue y el aviso se queda
-  await pill.getByRole('button', { name: t.pomodoro.minimize }).click();
-  await expect(
-    page.getByRole('button', { name: t.pomodoro.show('01:00', t.pomodoro.phases.focus) }),
-  ).toBeVisible();
+  await expect(card.getByText(t.pomodoro.phases.focus, { exact: true })).toBeVisible();
+  await expect(startButton(card)).toBeVisible();
+  // La tarjeta ya dice cuánto queda de la fase que sigue, con el reloj completo, y el aviso se queda
+  await expect(card).toContainText(t.pomodoro.remaining('01:00', t.pomodoro.phases.focus));
   await expect(notice).toBeVisible();
   await expectNoSeriousA11yViolations(page);
   await notice.getByRole('button', { name: t.pomodoro.dismiss }).click();
@@ -167,9 +171,9 @@ test('con el permiso de notificaciones negado el ajuste se apaga solo, lo demás
 
   // Un enfoque completo avisa dentro de la página, ofrece el descanso y nada se rompe
   await startReviewSession(page);
-  const pill = await openPomodoro(page);
-  await pill.getByRole('button', { name: t.pomodoro.start }).click();
-  await expect(pill.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
+  const card = await openPomodoro(page);
+  await startButton(card).click();
+  await expect(card.getByRole('button', { name: t.pomodoro.pause })).toBeVisible();
   await page.clock.setFixedTime(new Date(Date.now() + MINUTE_MS + 5_000));
   const notice = phaseNotice(page, t.pomodoro.phases.focus);
   await expect(notice).toBeVisible();

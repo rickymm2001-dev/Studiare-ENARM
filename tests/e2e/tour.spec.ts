@@ -13,7 +13,7 @@ import { screenOf } from '@/features/tour/tourMachine';
 import { t } from '@/i18n/es-MX';
 import { tourTexts } from '@/i18n/tour';
 import { expect, expectNoHorizontalOverflow, signUp, test } from './support/fixtures';
-import { isPhone } from './support/navigation';
+import { isPhone, mainNav } from './support/navigation';
 
 test.use({ tourAutoOffer: true });
 
@@ -53,10 +53,14 @@ function expectedTarget(step: TourStep, phone: boolean): string | null {
   }
 }
 
-/** El elemento del menú por lo que dice. Por CSS y no por rol, porque con el globo abierto el menú queda oculto a los lectores */
+/**
+ * El elemento del menú por lo que dice. Por CSS y no por rol, porque con el globo abierto el menú queda
+ * oculto a los lectores. Los dos menús llevan el mismo nombre, así que se toma el que se ve en este
+ * ancho, la barra en línea o el dock del teléfono (D-150)
+ */
 function menuItem(page: Page, label: string): Locator {
-  return page
-    .locator(`nav[aria-label="${t.nav.label}"] :is(a, button)`)
+  return mainNav(page)
+    .locator(':is(a, button)')
     .filter({ hasText: new RegExp(`^${label}$`) });
 }
 
@@ -227,12 +231,8 @@ test.describe('recorrido guiado', () => {
     await skipButton(page).click();
     await expectBackHome(page);
     // La página responde otra vez: el menú ya no está oculto a los lectores ni bloqueado
-    await expect(page.getByRole('navigation', { name: t.nav.label })).toBeVisible();
-    await expect(
-      page
-        .getByRole('navigation', { name: t.nav.label })
-        .getByRole('link', { name: t.navItems.review }),
-    ).toBeEnabled();
+    await expect(mainNav(page)).toBeVisible();
+    await expect(mainNav(page).getByRole('link', { name: t.navItems.review })).toBeEnabled();
   });
 
   test('Escape salta la introducción', async ({ page }) => {
