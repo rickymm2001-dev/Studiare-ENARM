@@ -9,7 +9,7 @@ import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
-import { finishExam, statValue } from '../support/b1';
+import { expectSegment, finishExam, pickSegment, statValue } from '../support/b1';
 import { expect, test } from '../support/cloudFixtures';
 import {
   englishBank,
@@ -17,7 +17,7 @@ import {
   examCard,
   examNavigator,
   isPhone,
-  openSimulator,
+  openExamSimulator,
   passageText,
 } from '../support/english';
 import { FAKE_ENGLISH_SOURCE, type FakeBankStore } from '../support/fakeBankStore';
@@ -42,12 +42,10 @@ async function startExam(page: Page, total: number): Promise<void> {
   await expect(page.getByText(t.exam.progress(1, total), { exact: true })).toBeVisible();
 }
 
-/** Abre el navegador de preguntas si está cerrado, y lo devuelve */
+/** El navegador de preguntas, que desde D-150 siempre está a la vista */
 async function openNavigator(page: Page) {
   const navigator = examNavigator(page);
-  if (!(await navigator.evaluate((element: HTMLDetailsElement) => element.open))) {
-    await navigator.locator('summary').click();
-  }
+  await expect(navigator).toBeVisible();
   return navigator;
 }
 
@@ -67,12 +65,12 @@ test.describe('Examen completo con su parte en inglés', () => {
     test.setTimeout(480_000);
     const store = englishBank(cloud, { spanish: 250, cases: 12 });
     await enterWithOpenBank(page, cloud, 'monthly');
-    await openSimulator(page);
+    await openExamSimulator(page);
 
     // La tarjeta dice la composición y el tiempo de las dos secciones, sin Calibrando
     const card = examCard(page);
-    const size = card.getByRole('combobox', { name: t.exam.size });
-    await expect(size).toHaveValue(String(TOTAL), { timeout: 60_000 });
+    await expect(card.getByText(t.states.calibrating.title)).toHaveCount(0, { timeout: 60_000 });
+    await expectSegment(card, t.exam.size, t.exam.sizeOption(TOTAL));
     await expect(card.getByRole('checkbox', { name: exam.include })).toBeChecked();
     await expect(
       card.getByText(
@@ -177,13 +175,13 @@ test.describe('Examen completo con su parte en inglés', () => {
     test.setTimeout(420_000);
     const store = englishBank(cloud, { spanish: 250, cases: 2, itemsPerCase: 3 });
     await enterWithOpenBank(page, cloud, 'monthly');
-    await openSimulator(page);
+    await openExamSimulator(page);
 
     const card = examCard(page);
-    await expect(card.getByRole('combobox', { name: t.exam.size })).toHaveValue(String(TOTAL), {
+    await expect(card.getByText(t.states.calibrating.title).first()).toBeVisible({
       timeout: 60_000,
     });
-    await expect(card.getByText(t.states.calibrating.title).first()).toBeVisible();
+    await expectSegment(card, t.exam.size, t.exam.sizeOption(TOTAL));
     await expect(
       card.getByText(/6 de 30 reactivos de inglés\. Faltan 24 reactivos de inglés/),
     ).toBeVisible();
@@ -198,12 +196,11 @@ test.describe('Examen completo con su parte en inglés', () => {
 
     // Un examen más corto pide 5 de inglés y un texto de tres entra completo, así que entran 3 y la tarjeta
     // lo dice sin hablar de faltantes. De vuelta en 280, vuelve el aviso de los 24 que faltan
-    const size = card.getByRole('combobox', { name: t.exam.size });
-    await size.selectOption('50');
+    await pickSegment(card, t.exam.size, t.exam.sizeOption(50));
     await expect(card.getByText(exam.fits(3, 5))).toBeVisible();
     await expect(card.getByText(exam.composition(47, 3))).toBeVisible();
     await expect(card.getByText(/Solo hay /)).toHaveCount(0);
-    await size.selectOption(String(TOTAL));
+    await pickSegment(card, t.exam.size, t.exam.sizeOption(TOTAL));
     await expect(card.getByText(exam.missing(6, 30, true))).toBeVisible();
     await expect(card.getByText(/Con los casos que hay/)).toHaveCount(0);
 

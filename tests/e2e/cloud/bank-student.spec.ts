@@ -8,6 +8,7 @@ import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
 import { t } from '@/i18n/es-MX';
+import { pickSegment } from '../support/b1';
 import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
 import { goOffline, openBank, seedBank, setQuota } from '../support/fakeBank';
 import { createFakeBankStore } from '../support/fakeBankStore';
@@ -37,9 +38,7 @@ async function openSimulator(page: Page, count: '5' | '10' | '20') {
   await page.goto(SCREENS.simulatorSetup.path);
   const practice = setup(page);
   await expect(practice).toBeVisible({ timeout: 30_000 });
-  await practice
-    .getByRole('combobox', { name: t.simulator.count, exact: true })
-    .selectOption(count);
+  await pickSegment(practice, t.simulator.count, count);
   return practice;
 }
 
@@ -166,7 +165,7 @@ test.describe('Banco en la nube para el alumno', () => {
     await openFromMenu(page, t.navItems.simulate);
     const offline = setup(page);
     await expect(offline).toBeVisible({ timeout: 30_000 });
-    await offline.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+    await pickSegment(offline, t.simulator.count, '5');
     await offline.getByRole('button', { name: t.simulator.start }).click();
     await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible({
       timeout: 30_000,

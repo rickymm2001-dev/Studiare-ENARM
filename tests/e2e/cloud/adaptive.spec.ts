@@ -7,7 +7,7 @@ import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { adaptiveTexts } from '@/i18n/adaptive';
 import { t } from '@/i18n/es-MX';
-import { readTable } from '../support/b1';
+import { pickSegment, readTable } from '../support/b1';
 import { enterWithLink, expect, reloadWithServerFlags, test } from '../support/cloudFixtures';
 import { openBank, seedBank } from '../support/fakeBank';
 import { createFakeBankStore } from '../support/fakeBankStore';
@@ -78,9 +78,7 @@ test.describe('Modo adaptativo de Simular', () => {
     await expectNoSeriousA11yViolations(page);
 
     // La práctica sigue como siempre y no queda marcada como adaptativa
-    await practice
-      .getByRole('combobox', { name: t.simulator.count, exact: true })
-      .selectOption('5');
+    await pickSegment(practice, t.simulator.count, '5');
     await practice.getByRole('button', { name: t.simulator.start }).click();
     await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible({
       timeout: 30_000,
@@ -108,9 +106,7 @@ test.describe('Modo adaptativo de Simular', () => {
     // Con Adaptativo el nivel lo elige la app y el filtro de dificultad lo dice
     await adaptive.check();
     await expect(practice.getByText(adaptiveTexts.difficultyLocked)).toBeVisible();
-    await practice
-      .getByRole('combobox', { name: t.simulator.count, exact: true })
-      .selectOption(String(FREE_DAILY));
+    await pickSegment(practice, t.simulator.count, String(FREE_DAILY));
     await practice.getByRole('button', { name: t.simulator.start }).click();
     await expect(page.getByText(t.simulator.progress(1, FREE_DAILY), { exact: true })).toBeVisible({
       timeout: 30_000,

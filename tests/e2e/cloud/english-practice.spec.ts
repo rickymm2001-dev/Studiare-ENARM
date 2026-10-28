@@ -9,7 +9,7 @@ import { SCREENS } from '@/app/screens';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
 import { cloudBankScreensText as bankText } from '@/i18n/cloudBankScreens';
-import { statValue } from '../support/b1';
+import { pickSegment, statValue } from '../support/b1';
 import { expect, test } from '../support/cloudFixtures';
 import {
   englishBank,
@@ -73,9 +73,7 @@ test.describe('Inglés médico en la práctica', () => {
     await expectNoSeriousA11yViolations(page);
 
     // Una práctica en español de 10 no trae ningún texto en inglés ni baja versiones de inglés
-    await practice
-      .getByRole('combobox', { name: t.simulator.count, exact: true })
-      .selectOption('10');
+    await pickSegment(practice, t.simulator.count, '10');
     await practice.getByRole('button', { name: t.simulator.start }).click();
     await expect(page.getByText(t.simulator.progress(1, 10), { exact: true })).toBeVisible({
       timeout: 30_000,
