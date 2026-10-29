@@ -27,6 +27,9 @@ import type { ExamAnswerState } from './examState';
 
 type Confidence = 'guessed' | 'unsure' | 'sure';
 
+/** El id del enunciado, que recibe el foco al cambiar de pregunta y después de marcar con el ratón */
+export const EXAM_PROMPT_ID = 'examen-pregunta-frase';
+
 export function ExamQuestion({
   bundle,
   shownIds,
@@ -85,7 +88,7 @@ export function ExamQuestion({
     <>
       <Card
         lift={false}
-        aria-labelledby="examen-pregunta-frase"
+        aria-labelledby={EXAM_PROMPT_ID}
         className="flex w-full flex-col gap-4 rounded-xl p-6 shadow-navy sm:p-8"
       >
         <div className="flex flex-wrap items-center gap-2">
@@ -120,7 +123,7 @@ export function ExamQuestion({
           <p className="text-lg leading-relaxed whitespace-pre-line text-fg">{vignette}</p>
         ) : null}
         <CardTitle
-          id="examen-pregunta-frase"
+          id={EXAM_PROMPT_ID}
           ref={promptRef}
           tabIndex={-1}
           lang={lang}

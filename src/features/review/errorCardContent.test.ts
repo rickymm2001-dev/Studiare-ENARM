@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
 import { escapeHtml } from '@/data/content/plainText';
-import { errorCardContent } from './errorCardContent';
+import { errorCardContent, quoteRepeatsBack } from './errorCardContent';
 
 function bundle() {
   const { question, options } = makeQuestionWithOptions();
@@ -55,6 +55,17 @@ describe('tarjeta de una pregunta fallada', () => {
     expect(content?.front).toContain('¿Cuál es &lt;b&gt;mayor&lt;/b&gt; &amp; &quot;mejor&quot;?');
     expect(content?.front).not.toContain('<script>');
     expect(escapeHtml("it's")).toBe('it&#39;s');
+  });
+
+  it('la frase de la fuente se reconoce cuando ya va tal cual en el reverso, y no se repite', () => {
+    const content = errorCardContent(bundle(), null);
+    if (!content) throw new Error('sin contenido');
+    // En Mis errores la explicación del banco es el reverso y la frase que lo respalda a la vez
+    expect(quoteRepeatsBack(content.back, content.quote)).toBe(true);
+    expect(quoteRepeatsBack(content.back, '  Explicación   de prueba ')).toBe(true);
+    expect(quoteRepeatsBack(content.back, 'Otra frase del banco')).toBe(false);
+    expect(quoteRepeatsBack(content.back, null)).toBe(false);
+    expect(quoteRepeatsBack(content.back, '')).toBe(false);
   });
 
   it('sin viñeta ni clave regresa lo que se puede o nada', () => {

@@ -140,10 +140,16 @@ describe('Inicio con el canvas de D-150', () => {
       SCREENS.progress.path,
     );
 
-    // El pulso calibra y dice cuánto falta de cada parte
+    // El pulso calibra con los días en la barra y dice lo que falta de las otras dos partes, sin
+    // repetir la frase de la barra
     const pulse = screen.getByRole('region', { name: t.home.pulse.title });
     expect(within(pulse).getByText(t.states.calibrating.title)).toBeVisible();
-    expect(within(pulse).getByText(t.home.pulse.calibratingNote(7, 50, 50))).toBeVisible();
+    expect(
+      within(pulse).getByText(t.states.calibrating.remaining(7, t.home.pulse.units.activeDays)),
+    ).toBeVisible();
+    expect(within(pulse).getByText(t.home.pulse.calibratingNote(0, 50, 50))).toBeVisible();
+    expect(within(pulse).queryByText(t.home.pulse.calibratingNote(7, 50, 50))).toBeNull();
+    expect(t.home.pulse.calibratingNote(0, 0, 0)).toBe('');
 
     // Los análisis calibran mientras no hay respuestas suficientes
     const bias = screen.getByRole('region', { name: t.vocabulary.trap.homeTitle });
@@ -197,6 +203,8 @@ describe('Inicio con el canvas de D-150', () => {
     // Sin mazos seguidos la dona dice qué hacer, y las preguntas por día van en cero
     const branches = screen.getByRole('region', { name: t.home.branches.title });
     expect(within(branches).getByText(t.home.branches.empty)).toBeVisible();
+    // Vacía queda a su altura y no se estira a la de Preguntas por día
+    expect(branches).toHaveClass('lg:self-start');
     const questions = cardOf(t.home.questions.title);
     expect(within(questions).getByText(t.home.questions.same)).toBeVisible();
     expect(within(questions).getByText(t.home.questions.caption(0))).toBeVisible();

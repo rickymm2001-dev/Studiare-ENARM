@@ -18,6 +18,12 @@ describe('viewFromParams', () => {
     expect(view.leech).toBe(false);
   });
 
+  it('?q= trae el texto del buscador de la barra superior, sin espacios de sobra', () => {
+    const view = viewFromParams(new URLSearchParams('q=%20sepsis%20'));
+    expect(view.text).toBe('sepsis');
+    expect(viewFromParams(new URLSearchParams('mazo=deck-abc')).text).toBe('');
+  });
+
   it('el mazo y las sanguijuelas se piden juntos', () => {
     const view = viewFromParams(new URLSearchParams('mazo=deck-abc&estado=sanguijuelas'));
     expect(view).toMatchObject({ deckId: 'deck-abc', leech: true });

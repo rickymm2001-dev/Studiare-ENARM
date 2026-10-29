@@ -73,6 +73,7 @@ import { DeckEditorDialog } from '../decks/DeckEditorDialog';
 import { CONTAINER_DECKS, deckTopicOutlines } from '../decks/topicPaths';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { CardTimerBar } from './CardTimerBar';
+import { quoteRepeatsBack } from './errorCardContent';
 import { LeechPanel } from './LeechPanel';
 import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
@@ -930,7 +931,9 @@ function ReviewSession({
                 <div className="flex flex-col gap-3">
                   <p className="eyebrow">{t.review.answer}</p>
                   <CardHtml html={back} />
-                  {note.sourceQuote ? (
+                  {/* En Mis errores la frase es la misma explicación que ya va en el reverso, así que
+                      no se repite */}
+                  {note.sourceQuote && !quoteRepeatsBack(back, note.sourceQuote) ? (
                     <p className="text-sm leading-relaxed text-fg-muted italic">
                       {isQuestionNote(note) ? t.review.sourceBank : t.review.sourceLabel} “
                       {note.sourceQuote}”{note.sourceTitle ? ` (${note.sourceTitle})` : ''}

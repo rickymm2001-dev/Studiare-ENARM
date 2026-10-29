@@ -1,7 +1,8 @@
 // Mazos que sigue el alumno.
 import type { Deck } from '@/data/schemas/decks';
 import { deckIds } from '@/demo/content/deckEntities';
-import { descendantIds } from '@/engines/deckTree';
+import { descendantIds, selectionUnitId } from '@/engines/deckTree';
+import { CONTAINER_DECKS } from './topicPaths';
 
 /**
  * Los mazos propios del alumno, como Mis errores, siempre cuentan como seguidos. En la demo los
@@ -24,4 +25,21 @@ export function followedDeckIds(
   for (const key of session.settings.followedDecks) add(deckIds.deck(key));
   for (const deck of stored) if (deck.ownerId === session.user.id) add(deck.id);
   return followed;
+}
+
+/**
+ * Cuántos mazos sigue el alumno tal como los ve en la lista, uno por unidad de selección. followed trae
+ * también los submazos, como las materias de un mazo de Paco, y esos no se cuentan aparte. Un mazo
+ * contenedor, como ENARM 2027, solo agrupa y tampoco cuenta
+ */
+export function followedTopLevelCount(
+  followed: ReadonlySet<string>,
+  stored: readonly Pick<Deck, 'id' | 'name' | 'parentId'>[],
+): number {
+  const units = new Set<string>();
+  for (const id of followed) {
+    if (CONTAINER_DECKS.has(id)) continue;
+    units.add(selectionUnitId(stored, id, CONTAINER_DECKS));
+  }
+  return units.size;
 }
