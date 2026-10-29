@@ -99,6 +99,10 @@ Cómo sabes que quedó. Pide un código de acceso desde la app a tu Gmail. Llega
 6. En Supabase, Edge Functions, Secrets, agrega POSTHOG_PROJECT_KEY y POSTHOG_HOST con los mismos valores.
 7. Avisa a la sesión. Ella prende la medición cuando llegue la beta de 20 a 50.
 
+## Decisión del 29 de octubre. Sin dominio propio por ahora
+
+Ricardo decidió no usar plexusmedica.mx todavía. El dominio está suspendido en Squarespace por verificación de correo del titular y se deja para después. Mientras tanto, la app vive en la dirección gratuita de Cloudflare Pages, el acceso de los alumnos es Entrar con Google (punto 6b, la misma cuenta de Google Cloud, con un cliente OAuth y los invitados como usuarios de prueba), Resend espera, y los buzones de privacidad y soporte son un correo que Ricardo ya tenga. Los puntos 3a y 4 de esta guía quedan en pausa. Cuando quiera retomar el dominio, primero verifica el correo del titular en Squarespace y luego sigue la sección de abajo.
+
 ## Si el dominio es el de la empresa (Plexus Medica)
 
 Studiare es un producto de Plexus Medica y el dominio de la empresa es el que se usa. Es plexusmedica.mx, comprado en Squarespace. No hace falta comprar otro. Donde la guía dice tudominio.mx, lee así.

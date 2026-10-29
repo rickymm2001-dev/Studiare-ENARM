@@ -18,8 +18,10 @@ Vas a ejecutar el plan V5, que lleva la app del estado actual al lanzamiento abi
 
 ## Estado el día de arranque (29 de octubre de 2026)
 
-- El dominio es plexusmedica.mx, comprado en Squarespace. La app va en studiare.plexusmedica.mx, el correo automático sale de mail.plexusmedica.mx y los buzones de privacidad y soporte son del dominio de la empresa. Está en docs/GUIA_DE_CUENTAS.md.
-- El token de Cloudflare del entorno ya es válido y con permisos amplios. Úsalo para meter el dominio a Cloudflare, importar sus registros, revisar que queden los de la página y el correo de la empresa, y crear lo que haga falta. Lo primero que me das, en una línea, son los dos nameservers para que yo los pegue en Squarespace, porque eso es lo que más tarda. Después sigues con B0 sin esperarme.
+- Sin dominio propio por ahora. Ricardo lo decidió el 29 de octubre de 2026. El dominio plexusmedica.mx está suspendido en Squarespace por verificación de correo y no se va a tocar hasta nuevo aviso. No le pidas nada de dominio, nameservers ni DNS.
+- La app se publica en la dirección gratuita del proyecto de Cloudflare Pages (studiare.pages.dev o la que quede libre). El token de Cloudflare del entorno ya es válido y con permisos amplios. SITE_URL, las direcciones de regreso de Supabase y APP_ORIGINS llevan esa dirección exacta de producción, nunca un comodín ni una dirección de vista previa con hash. La prueba de humo y el sitio de mudanza se adaptan a que no hay dominio.
+- Correo. Sin dominio no hay Resend. El correo de fábrica de Supabase solo llega al equipo del proyecto. Para los primeros alumnos el acceso es Entrar con Google (B9 ya lo trae apagado). Prepáralo con el proyecto de Google Cloud de la guía, pantalla de consentimiento en modo de prueba con los invitados como usuarios de prueba, y dale a Ricardo los pasos uno por uno. Los recordatorios por correo quedan apagados. Cuando exista un dominio, Resend entra en un bloque corto.
+- Buzones de privacidad y soporte. Por ahora un correo que Ricardo ya tenga y revise. Pídele cuál y ponlo en las variables de GitHub.
 - Supabase tiene conector. Stripe inyecta todavía la llave publicable, así que para configurar Stripe pide la llave restringida del punto 8 de la guía cuando llegue B7.
 - Ricardo es principiante. Cuando necesites algo de él, dale los pasos con los nombres de los menús, uno por uno, y nunca le pidas pegar una llave en el chat.
 
