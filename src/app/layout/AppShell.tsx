@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import { isFeatureEnabled } from '@/config/featureFlags';
+import { PendingExamClose } from '@/features/exam/PendingExamClose';
 import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
@@ -210,6 +211,8 @@ export function AppShell() {
       {/* La encuesta de los primeros días (B18). Solo baja algo para un alumno con la nube, fuera de estudiar */}
       <SurveyNoticeLauncher />
       <OrganizationSync />
+      {/* Un examen que terminó sin acabar de registrarse se cierra desde cualquier pantalla (V5-B0) */}
+      <PendingExamClose />
 
       <div>
         <main
