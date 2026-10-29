@@ -101,7 +101,7 @@ Cómo sabes que quedó. Pide un código de acceso desde la app a tu Gmail. Llega
 
 ## Decisión del 29 de octubre. Sin dominio propio por ahora
 
-Ricardo decidió no usar plexusmedica.mx todavía. El dominio está suspendido en Squarespace por verificación de correo del titular y se deja para después. Mientras tanto, la app vive en la dirección gratuita de Cloudflare Pages, el acceso de los alumnos es Entrar con Google (punto 6b, la misma cuenta de Google Cloud, con un cliente OAuth y los invitados como usuarios de prueba), Resend espera, y los buzones de privacidad y soporte son un correo que Ricardo ya tenga. Los puntos 3a y 4 de esta guía quedan en pausa. Cuando quiera retomar el dominio, primero verifica el correo del titular en Squarespace y luego sigue la sección de abajo.
+Ricardo decidió no usar plexusmedica.mx todavía. El dominio está suspendido en Squarespace por verificación de correo del titular y se deja para después. Mientras tanto, la app vive en la dirección gratuita de Cloudflare Pages, el acceso de los alumnos es Entrar con Google (punto 6b, la misma cuenta de Google Cloud, con un cliente OAuth y los invitados como usuarios de prueba), Resend espera, y los buzones de privacidad y soporte son un correo que Ricardo ya tenga. Los puntos 3a y 4 de esta guía quedan en pausa. El acceso principal será con correo y contraseña (bloque V5-B0b) y los correos de verificación salen sin marca, del remitente de fábrica de Supabase, hasta que haya un dominio. Para los 5 de la beta el admin crea las cuentas con el correo ya confirmado. Cuando quiera retomar el dominio, primero verifica el correo del titular en Squarespace y luego sigue la sección de abajo.
 
 ## Si el dominio es el de la empresa (Plexus Medica)
 
