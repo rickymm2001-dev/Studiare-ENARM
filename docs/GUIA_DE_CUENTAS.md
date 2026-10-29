@@ -101,12 +101,14 @@ Cómo sabes que quedó. Pide un código de acceso desde la app a tu Gmail. Llega
 
 ## Si el dominio es el de la empresa (Plexus Medica)
 
-Studiare es un producto de Plexus Medica y el dominio de la empresa es el que se usa. No hace falta comprar otro. Donde la guía dice tudominio.mx, lee así.
+Studiare es un producto de Plexus Medica y el dominio de la empresa es el que se usa. Es plexusmedica.mx, comprado en Squarespace. No hace falta comprar otro. Donde la guía dice tudominio.mx, lee así.
 
 - La app vive en studiare.plexusmedica.mx (o .com, el que exista). Es un subdominio, para no tocar la página ni el correo de la empresa. SITE_URL y las direcciones de Supabase llevan ese subdominio.
 - El correo que manda la app sale de mail.plexusmedica.mx, con remitente no-responder@mail.plexusmedica.mx. Es un subdominio aparte para que los correos automáticos no afecten la reputación del correo normal de la empresa.
 - Los buzones de privacidad y soporte son correos normales de la empresa, privacidad@plexusmedica.mx y soporte@plexusmedica.mx, creados donde ya está el correo de la empresa como alias.
 - Al meter el dominio a Cloudflare, antes de cambiar los nameservers, confirma que la lista que Cloudflare copió tenga los registros MX y TXT del correo de la empresa y el de su página, si la hay. Con eso, nada de la empresa deja de funcionar.
+- Lo único que se hace en Squarespace es cambiar los nameservers, una sola vez, cuando la sesión te dé los dos nombres de Cloudflare. En account.squarespace.com abre Domains, tu dominio, DNS. Si DNSSEC está activado, desactívalo primero. Luego Nameservers, Use custom nameservers, borra los de Squarespace, pega los dos de Cloudflare uno por línea y guarda. Desde ese momento el DNS se maneja en Cloudflare y la sesión hace el resto.
+- Si la página de la empresa está hecha en Squarespace, en Cloudflare deben quedar cuatro registros A con nombre @ hacia 198.185.159.144, 198.185.159.145, 198.49.23.144 y 198.49.23.145, y un CNAME www hacia ext-cust.squarespace.com, todos con la nube gris. La sesión los revisa al importar.
 
 ## Punto 4. Dominio en Cloudflare, token para publicar y buzones
 
