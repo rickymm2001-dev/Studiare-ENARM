@@ -13,6 +13,16 @@ function lightToken(name: string): string | undefined {
   return new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, 'i').exec(light)?.[1];
 }
 
+/** El valor de un token en el bloque oscuro por preferencia del sistema de tokens.css */
+function darkToken(name: string): string | undefined {
+  const css = read('src/ui/tokens.css');
+  const dark = css.slice(
+    css.indexOf('@media (prefers-color-scheme: dark)'),
+    css.indexOf(':root.dark'),
+  );
+  return new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, 'i').exec(dark)?.[1];
+}
+
 describe('marca Studiare (D-119, respuesta 54)', () => {
   it('se llama Studiare en el manifest y en la pestaña, sin la palabra prototipo', () => {
     expect(BRAND.name).toBe('Studiare');
@@ -25,6 +35,13 @@ describe('marca Studiare (D-119, respuesta 54)', () => {
   it('el color del tema y el fondo coinciden con los tokens del modo claro', () => {
     expect(BRAND.themeColor.toLowerCase()).toBe(lightToken('--enarm-primary')?.toLowerCase());
     expect(BRAND.backgroundColor.toLowerCase()).toBe(lightToken('--enarm-canvas')?.toLowerCase());
+  });
+
+  it('el color del tema en oscuro es el marino claro de la paleta sobre pizarra (V5, D-151)', () => {
+    expect(BRAND.themeColorDark.toLowerCase()).toBe(darkToken('--enarm-primary')?.toLowerCase());
+    expect(read('index.html')).toContain(
+      `<meta name="theme-color" media="(prefers-color-scheme: dark)" content="${BRAND.themeColorDark}" />`,
+    );
   });
 
   it('index.html dice lo mismo que la marca, para Google y WhatsApp (4.17 del plan)', () => {

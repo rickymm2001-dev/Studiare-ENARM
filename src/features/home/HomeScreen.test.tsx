@@ -10,6 +10,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import type { User } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
+import { updateProfile } from '@/data/usecases/profile';
 import { changePlan } from '@/data/usecases/subscription';
 import { INDICATOR_THRESHOLDS } from '@/engines/keyIndicators';
 import { longDate } from '@/features/billing/planState';
@@ -120,6 +121,12 @@ describe('Inicio con el canvas de D-150', () => {
     expect(within(goal).getByText(t.home.goal.row(rows.cards, 0, 220))).toBeVisible();
     expect(within(goal).getByText(t.home.goal.row(rows.newCards, 0, 20))).toBeVisible();
     expect(within(goal).getByText(t.home.goal.row(rows.questions, 0, 20))).toBeVisible();
+    // La cuarta fila es la meta de la racha, por omisión 20 tarjetas (V5, D-151)
+    expect(
+      within(goal).getByText(
+        t.home.goal.row(t.home.goal.streakRow(t.widgets.goal.metricNames.cards), 0, 20),
+      ),
+    ).toBeVisible();
     expect(within(goal).getByText(t.home.goal.ofDay)).toBeVisible();
     // La frase del día lleva su autor
     expect(within(goal).getByRole('figure')).toBeVisible();
@@ -414,6 +421,50 @@ describe('plan de hoy en Inicio', () => {
       await within(goal).findByText(t.home.goal.row(t.widgets.plan.rows.newCards, 2, 20)),
     ).toBeVisible();
     expect(row(goal, 'cards', 2, 220)).toBeVisible();
+  });
+
+  it('la cuarta fila lleva la meta de la racha con la métrica y la cifra que eligió el alumno (V5, D-151)', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await updateProfile(api, user, {
+          settings: { dailyGoal: { metric: 'questions', value: 12 } },
+        });
+      },
+    });
+    const goal = await screen.findByRole('region', { name: t.home.goal.title });
+    const streakName = t.home.goal.streakRow(t.widgets.goal.metricNames.questions);
+    expect(await within(goal).findByText(t.home.goal.row(streakName, 0, 12))).toBeVisible();
+    // La fila de preguntas del plan sigue aparte, con su propio tope
+    expect(row(goal, 'questions', 0, 20)).toBeVisible();
+    // El anillo la lee como cuarta fila, después de las tres del plan
+    expect(
+      within(goal).getByRole('img', {
+        name: new RegExp(
+          `${t.home.goal.row(t.widgets.plan.rows.questions, 0, 20)}, ${streakName} 0 de 12$`,
+        ),
+      }),
+    ).toBeVisible();
+    const items = within(goal).getAllByRole('listitem');
+    expect(items).toHaveLength(4);
+    expect(items[3]).toHaveTextContent(t.home.goal.row(streakName, 0, 12));
+  });
+
+  it('la racha cuenta lo hecho hoy en su métrica y entra en el avance del día', async () => {
+    app = await renderApp(SCREENS.home.path, {
+      seed: async (api, user) => {
+        await updateProfile(api, user, {
+          settings: { dailyGoal: { metric: 'cards', value: 2 } },
+        });
+        await reviewToday(api, user, 2);
+      },
+    });
+    const goal = await screen.findByRole('region', { name: t.home.goal.title });
+    const streakName = t.home.goal.streakRow(t.widgets.goal.metricNames.cards);
+    expect(await within(goal).findByText(t.home.goal.row(streakName, 2, 2))).toBeVisible();
+    // Las cuatro filas, con la racha al 100 y las tres del plan casi en cero, promedian 28 por ciento
+    expect(
+      within(goal).getByRole('img', { name: /^Meta de hoy al 28 por ciento\./ }),
+    ).toBeVisible();
   });
 
   it('el heatmap lleva un enlace al Calendario, que sí da el detalle por día con teclado', async () => {

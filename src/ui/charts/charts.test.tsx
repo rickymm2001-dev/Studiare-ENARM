@@ -38,6 +38,32 @@ describe('gráficas compartidas (D-150)', () => {
     expect(screen.getByText('1,226')).toBeVisible();
   });
 
+  it('el anillo dibuja hasta cuatro aros, el cuarto adentro de los demás (V5, D-151)', () => {
+    render(
+      <RingChart
+        label="Meta de hoy"
+        size={160}
+        thickness={9}
+        rings={[
+          { value: 1, max: 2, strokeClass: 'stroke-indicator' },
+          { value: 1, max: 2, strokeClass: 'stroke-chart-done' },
+          { value: 1, max: 2, strokeClass: 'stroke-success' },
+          { value: 1, max: 2, strokeClass: 'stroke-streak' },
+          { value: 1, max: 2, strokeClass: 'stroke-danger' },
+        ]}
+      />,
+    );
+    const svg = screen.getByRole('img', { name: 'Meta de hoy' });
+    const filled = [...svg.querySelectorAll('circle[stroke-dasharray]')];
+    // Cuatro aros y no más. El quinto se ignora
+    expect(filled).toHaveLength(4);
+    expect(filled[3]?.getAttribute('class')).toBe('stroke-streak');
+    // El cuarto aro queda adentro, a tres pasos del primero, y deja hueco para la cifra del centro
+    const radius = Number(filled[3]?.getAttribute('r'));
+    expect(radius).toBeCloseTo(80 - 4.5 - 3 * 15, 3);
+    expect(radius - 4.5).toBeGreaterThan(24);
+  });
+
   it('el medidor llena la mitad del arco con la mitad del valor', () => {
     render(
       <Gauge value={50} max={100} strokeClass="stroke-success" label="Pulso 50 de 100">

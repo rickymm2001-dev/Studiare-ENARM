@@ -10,4 +10,7 @@ export const BRAND = {
   // vigila src/config/brand.test.ts
   themeColor: '#01337a',
   backgroundColor: '#ffffff',
+  // El color del navegador cuando el sistema está en oscuro. Es el --enarm-primary del modo oscuro
+  // de src/ui/tokens.css, el marino claro de la paleta sobre pizarra (V5, D-151)
+  themeColorDark: '#1a4f9c',
 } as const;

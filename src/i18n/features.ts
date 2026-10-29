@@ -173,6 +173,9 @@ export const featureText = {
       row: (name: string, done: number, target: number) =>
         `${name} ${done.toLocaleString('es-MX')} de ${target.toLocaleString('es-MX')}`,
       label: (percent: number, rows: string) => `Meta de hoy al ${percent} por ciento. ${rows}`,
+      // La cuarta fila es la meta de la racha que el alumno eligió en la bienvenida, con su métrica
+      // (tarjetas, preguntas o minutos de estudio) y su cifra (V5, D-151)
+      streakRow: (metric: string) => `Racha en ${metric}`,
     },
     // Pulso de estudio en medidor (D-150)
     pulse: {

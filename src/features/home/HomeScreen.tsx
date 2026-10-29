@@ -428,12 +428,26 @@ function CardsStatusCard({ status }: { status: Snapshot['cardStatus'] }) {
   );
 }
 
-/** Color de cada fila del plan de hoy en los anillos y en su leyenda */
-const PLAN_COLORS: Record<PlanKey, { stroke: string; dot: string }> = {
+/** Color de cada fila de la meta de hoy en los anillos y en su leyenda. La racha va en su acento */
+const GOAL_COLORS: Record<GoalRowKey, { stroke: string; dot: string }> = {
   cards: { stroke: 'stroke-indicator', dot: 'bg-indicator' },
   newCards: { stroke: 'stroke-chart-done', dot: 'bg-chart-done' },
   questions: { stroke: 'stroke-success', dot: 'bg-success' },
+  streak: { stroke: 'stroke-streak', dot: 'bg-streak' },
 };
+
+type GoalRowKey = PlanKey | 'streak';
+
+/** Una fila de la meta de hoy. Las tres del plan de la guía y la cuarta de la racha (V5, D-151) */
+interface GoalRow {
+  key: GoalRowKey;
+  name: string;
+  done: number;
+  target: number;
+  /** De 0 a 1 */
+  fraction: number;
+  capped: boolean;
+}
 
 function DailyGoalCard({
   snapshot,
@@ -446,79 +460,74 @@ function DailyGoalCard({
 }) {
   const id = useId();
   const { goal } = snapshot;
-  const done = snapshot.todayActivity[goal.metric];
-  const metric = t.widgets.goal.metricNames[goal.metric];
   // Una frase por día, la misma durante todo el día de estudio
   const dayNumber = Math.floor(Date.parse(`${snapshot.today}T12:00:00Z`) / 86_400_000);
   const quote = text.quotes[dayNumber % text.quotes.length] ?? text.quotes[0];
+  // La meta de la racha que el alumno eligió en la bienvenida, con su métrica y su cifra. Siempre
+  // existe, porque el esquema la trae por omisión, así que la fila siempre se ve
+  const streakDone = snapshot.todayActivity[goal.metric];
+  const streakRow: GoalRow = {
+    key: 'streak',
+    name: text.goal.streakRow(t.widgets.goal.metricNames[goal.metric]),
+    done: streakDone,
+    target: goal.value,
+    fraction: Math.min(streakDone / goal.value, 1),
+    capped: false,
+  };
+  const rows: GoalRow[] = [
+    ...plan.map((row) => ({ ...row, name: t.widgets.plan.rows[row.key] })),
+    streakRow,
+  ];
   // El avance del día es el promedio de sus filas, cada una recortada al 100 por ciento
-  const percent =
-    plan.length > 0
-      ? Math.round((plan.reduce((sum, row) => sum + row.fraction, 0) / plan.length) * 100)
-      : Math.round((Math.min(done, goal.value) / goal.value) * 100);
-  const rows = plan.map((row) => ({
-    row,
-    name: t.widgets.plan.rows[row.key],
-    percent: Math.round(row.fraction * 100),
-  }));
-  const rings: Ring[] = plan.map((row) => ({
+  const percent = Math.round(
+    (rows.reduce((sum, row) => sum + row.fraction, 0) / rows.length) * 100,
+  );
+  const rings: Ring[] = rows.map((row) => ({
     value: row.done,
     max: row.target,
-    strokeClass: PLAN_COLORS[row.key].stroke,
+    strokeClass: GOAL_COLORS[row.key].stroke,
   }));
   return (
     <Card tone="cream" aria-labelledby={id} className="flex grow flex-col gap-3">
       <CardHeading id={id}>{text.goal.title}</CardHeading>
-      {plan.length > 0 ? (
-        <>
-          <RingChart
-            rings={rings}
-            size={140}
-            thickness={12}
-            className="self-center"
-            label={text.goal.label(
-              percent,
-              rows
-                .map((entry) => text.goal.row(entry.name, entry.row.done, entry.row.target))
-                .join(', '),
-            )}
-          >
-            <span className="text-xl font-extrabold tracking-tight tabular-nums">
-              {text.goal.percent(percent)}
+      {/* Cuatro aros más finos que los tres del estado de las tarjetas, para que la cifra quepa en el
+          centro */}
+      <RingChart
+        rings={rings}
+        size={160}
+        thickness={9}
+        className="self-center"
+        label={text.goal.label(
+          percent,
+          rows.map((row) => text.goal.row(row.name, row.done, row.target)).join(', '),
+        )}
+      >
+        <span className="text-xl font-extrabold tracking-tight tabular-nums">
+          {text.goal.percent(percent)}
+        </span>
+        <span className="text-xs text-fg-muted">{text.goal.ofDay}</span>
+      </RingChart>
+      <ul className="flex flex-col gap-1.5 text-xs">
+        {rows.map((row) => (
+          <li key={row.key} className="flex flex-col gap-0.5">
+            <span className="grid grid-cols-[0.625rem_1fr_auto] items-center gap-2">
+              <span
+                aria-hidden
+                className={cn('size-2.5 rounded-[3px]', GOAL_COLORS[row.key].dot)}
+              />
+              <span>{text.goal.row(row.name, row.done, row.target)}</span>
+              <strong className="tabular-nums">
+                {text.goal.percent(Math.round(row.fraction * 100))}
+              </strong>
             </span>
-            <span className="text-xs text-fg-muted">{text.goal.ofDay}</span>
-          </RingChart>
-          <ul className="flex flex-col gap-1.5 text-xs">
-            {rows.map((entry) => (
-              <li key={entry.row.key} className="flex flex-col gap-0.5">
-                <span className="grid grid-cols-[0.625rem_1fr_auto] items-center gap-2">
-                  <span
-                    aria-hidden
-                    className={cn('size-2.5 rounded-[3px]', PLAN_COLORS[entry.row.key].dot)}
-                  />
-                  <span>{text.goal.row(entry.name, entry.row.done, entry.row.target)}</span>
-                  <strong className="tabular-nums">{text.goal.percent(entry.percent)}</strong>
-                </span>
-                {entry.row.capped && questionsCap !== null ? (
-                  <span className="pl-[1.125rem] text-fg-muted">
-                    {homePlanText.capped(questionsCap)}
-                  </span>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        // Sin filas en el plan queda la meta mínima del alumno, como antes
-        <p className="flex flex-col">
-          <span className="text-2xl font-extrabold tabular-nums">
-            {t.widgets.goal.ratio(Math.min(done, goal.value), goal.value)}
-          </span>
-          <span className="text-sm text-fg-muted">
-            {done >= goal.value ? t.widgets.goal.met : metric}
-          </span>
-        </p>
-      )}
+            {row.capped && questionsCap !== null ? (
+              <span className="pl-[1.125rem] text-fg-muted">
+                {homePlanText.capped(questionsCap)}
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
       <figure className="mt-auto text-xs">
         <blockquote>{quote.text}</blockquote>
         <figcaption className="text-fg-muted">{quote.author}</figcaption>
@@ -589,7 +598,10 @@ function PulseCard({ pulse }: { pulse: PulseResult }) {
   );
 }
 
-/** Calibrando con la parte del umbral a la que más le falta y una frase con las tres */
+/**
+ * Calibrando con la parte del umbral a la que más le falta en la barra y, debajo, lo que falta de las
+ * otras dos. La barra ya dice cuánto falta de la primera, así que la frase no la repite
+ */
 function PulseCalibrating({
   needed,
 }: {
@@ -609,12 +621,14 @@ function PulseCalibrating({
     missing: 0,
     target: PULSE_THRESHOLDS.reviews,
   };
+  const rest = { ...needed, [lead.key]: 0 };
+  const note = text.pulse.calibratingNote(rest.activeDays, rest.answered, rest.reviews);
   return (
     <CalibratingState
       current={lead.target - lead.missing}
       target={lead.target}
       unit={text.pulse.units[lead.key]}
-      description={text.pulse.calibratingNote(needed.activeDays, needed.answered, needed.reviews)}
+      description={note === '' ? text.pulse.calibratingHint : note}
       className="py-0"
     />
   );
@@ -939,7 +953,11 @@ function BranchCard({ groups, className }: { groups: CardGroups; className?: str
     )
     .join(', ');
   return (
-    <Card aria-labelledby={id} className={cn('flex flex-col gap-4', className)}>
+    // Vacía queda a su altura y no se estira a la de Preguntas por día, que dejaría un hueco grande
+    <Card
+      aria-labelledby={id}
+      className={cn('flex flex-col gap-4', groups.total === 0 && 'lg:self-start', className)}
+    >
       <CardHeading id={id}>
         {groups.byBranch ? text.branches.title : text.branches.byDeck}
       </CardHeading>
