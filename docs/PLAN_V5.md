@@ -186,7 +186,7 @@ Cierre
 
 ## 4. Lo que Ricardo entrega el día 1 (o avisa cuándo)
 
-En el orden en que desbloquean bloques. Los pasos detallados están en docs/PENDIENTES_DE_RICARDO.md.
+En el orden en que desbloquean bloques. Los pasos para principiante, con los menús de cada servicio, están en docs/GUIA_DE_CUENTAS.md, y el detalle técnico en docs/PENDIENTES_DE_RICARDO.md.
 
 1. Supabase plan Pro y su cuenta de dueño marcada. Desbloquea B1.
 2. Clave de Anthropic en Secrets con tope de gasto. Desbloquea la IA en B1.

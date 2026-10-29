@@ -4,7 +4,7 @@ Pégalo tal cual como primer mensaje de una sesión nueva de Claude Code en la n
 
 ---
 
-Vas a ejecutar el plan V5, que lleva la app del estado actual al lanzamiento abierto con cobro. Lee, en este orden y nada más, CLAUDE.md, docs/PLAN_V5.md completo, docs/DIAGNOSTICO_BETA.md, D-150 y D-151 en DECISIONES.md, la sección D-150 de PROGRESS.md y las secciones Esta semana, Entorno de la sesión y Cuentas que solo tú puedes crear de docs/PENDIENTES_DE_RICARDO.md. No releas V3, V4 ni la especificación completa. Abre docs/DESPLIEGUE.md, docs/SUPABASE.md, docs/STRIPE.md, docs/CORREOS.md y docs/PUBLICACION.md solo cuando el bloque que los necesita empiece.
+Vas a ejecutar el plan V5, que lleva la app del estado actual al lanzamiento abierto con cobro. Lee, en este orden y nada más, CLAUDE.md, docs/PLAN_V5.md completo, docs/DIAGNOSTICO_BETA.md, docs/GUIA_DE_CUENTAS.md, D-150 y D-151 en DECISIONES.md, la sección D-150 de PROGRESS.md y las secciones Esta semana, Entorno de la sesión y Cuentas que solo tú puedes crear de docs/PENDIENTES_DE_RICARDO.md. No releas V3, V4 ni la especificación completa. Abre docs/DESPLIEGUE.md, docs/SUPABASE.md, docs/STRIPE.md, docs/CORREOS.md y docs/PUBLICACION.md solo cuando el bloque que los necesita empiece.
 
 ## Contexto que no está en los archivos
 
