@@ -48,6 +48,22 @@ Ricardo
 Cierre
 - CI en verde tres corridas seguidas sin flakes. Suite e2e completa en los cuatro proyectos. PROGRESS.md con el peso del bundle.
 
+### V5-B0b. Correo y contraseña (1 semana)
+
+Decisión de Ricardo del 29 de octubre. Entrar como en cualquier app, con correo y contraseña, y que el correo sirva solo para verificar la cuenta una vez.
+
+Sesión
+- Registro con contraseña, verificación del correo al crear la cuenta, inicio de sesión con contraseña, Olvidé mi contraseña, Cambiar contraseña en Configuración. El código por correo queda como alternativa y Entrar con Google como opción.
+- Plantillas de correo de Supabase con la marca Studiare en español, aunque el remitente siga siendo el de fábrica hasta que exista un dominio.
+- Para la beta de 5, cuentas creadas por el admin desde Usuarios con el correo confirmado y contraseña inicial, para no depender del correo de fábrica, que solo llega al equipo del proyecto.
+- Pruebas unitarias y e2e del flujo completo en teléfono y computadora.
+
+Ricardo
+- Nada. Cuando quiera correos con su remitente, un dominio (comprado en Cloudflare es lo más simple) y Resend.
+
+Cierre
+- Una cuenta nueva se crea con contraseña, confirma su correo y entra. Recuperar y cambiar contraseña funcionan. Protección de contraseñas filtradas prendida al pasar a Pro.
+
 ### V5-B1. El servidor real al día (1 a 2 semanas)
 
 Sesión
