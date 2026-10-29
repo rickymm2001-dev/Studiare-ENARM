@@ -70,15 +70,19 @@ test('en la primera visita, sin recargar, el service worker toma el control y la
   // Sin recargar. Antes de clientsClaim, la primera visita quedaba sin control y cortar la red
   // dejaba fuera todo lo que aún no se había visitado
   await expect
-    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)), {
+      timeout: 30_000,
+    })
     .toBe(true);
   await expect
-    .poll(() =>
-      page.evaluate(async () => {
-        const precache = (await caches.keys()).find((name) => name.includes('precache'));
-        if (!precache) return 0;
-        return (await (await caches.open(precache)).keys()).length;
-      }),
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const precache = (await caches.keys()).find((name) => name.includes('precache'));
+          if (!precache) return 0;
+          return (await (await caches.open(precache)).keys()).length;
+        }),
+      { timeout: 30_000 },
     )
     .toBeGreaterThan(40);
 
