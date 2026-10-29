@@ -183,7 +183,8 @@ export const t = {
     closeMore: 'Cerrar',
     // El buscador de la barra superior lleva a Buscar tarjetas (D-150)
     search: 'Buscar un tema o una tarjeta',
-    searchPlaceholder: 'Busca un tema o una tarjeta',
+    // Corto a propósito. Con un alias largo la caja se angosta y un texto largo se corta con puntos
+    searchPlaceholder: 'Buscar tarjetas',
   },
   studyTabs: {
     label: 'Repasar, mazos y buscar tarjetas',

@@ -262,14 +262,16 @@ export function AccountDataCard({
               {text.cancel}
             </Button>
           </div>
-          <UnsavedChangesGuard dirty={dirty && !saving} />
+          {/* Solo con cambios, para no tener dos bloqueadores a la vez con el de Apariencia */}
+          {dirty && !saving ? <UnsavedChangesGuard dirty /> : null}
         </form>
       ) : (
         <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           {rows.map((row) => (
             <div key={row.label} className="flex min-w-0 flex-col gap-0.5">
               <dt className="text-sm font-semibold text-fg">{row.label}</dt>
-              <dd className="truncate text-fg-muted">{row.value ?? text.notSet}</dd>
+              {/* Parte en renglones en lugar de cortarse con puntos suspensivos */}
+              <dd className="text-fg-muted break-words">{row.value ?? text.notSet}</dd>
             </div>
           ))}
         </dl>

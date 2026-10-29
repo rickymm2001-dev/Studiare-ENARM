@@ -115,6 +115,8 @@ export const cardSearchText = {
         : `${plural(total, 'tarjeta', 'tarjetas')} de ${all.toLocaleString('es-MX')}`,
     resultsLabel: 'Tarjetas encontradas',
     noResults: 'Ninguna tarjeta cumple esta búsqueda.',
+    /** Sin resultados con un texto escrito, que se repite para que se vea qué se buscó */
+    noResultsFor: (term: string) => `Sin resultados para “${term}”.`,
     showMore: (n: number) => `Mostrar ${n.toLocaleString('es-MX')} más`,
     selectAll: (n: number) => `Seleccionar las ${n.toLocaleString('es-MX')} que coinciden`,
     clearSelection: 'Quitar selección',

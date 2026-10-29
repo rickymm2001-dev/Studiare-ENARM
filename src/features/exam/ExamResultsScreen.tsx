@@ -1,8 +1,9 @@
 // Resultados del examen (pantalla 9, 10.1). Lo que hizo el alumno en este examen por rama, tema,
 // estructura de pregunta, trampa, tipo de reactivo y descarte, y la revisión de cada pregunta. Al
-// entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Son
-// cifras de este examen. No predicen el puntaje del ENARM y los patrones acumulados siguen
-// calibrando en Progreso. En modo enfoque (respuesta 82, B7) no muestra el XP.
+// entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Si el
+// alumno sale antes de que termine, PendingExamClose lo retoma al arrancar la app desde cualquier
+// pantalla (V5-B0). Son cifras de este examen. No predicen el puntaje del ENARM y los patrones
+// acumulados siguen calibrando en Progreso. En modo enfoque (respuesta 82, B7) no muestra el XP.
 // Con la parte en inglés (B13, 3.6) suma un corte por sección, como Español 180 de 250 e Inglés 22 de 30,
 // con aciertos, en blanco y tiempo medio por reactivo de cada una, e Inglés médico queda en el corte por
 // rama aparte de las siete. Sin puntaje estimado del ENARM.

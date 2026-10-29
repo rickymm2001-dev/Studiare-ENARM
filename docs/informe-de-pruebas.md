@@ -17,6 +17,8 @@ Fase F, sección 17 de la especificación, actualizado al cierre de la Fase I. R
 | Rendimiento con 200 tarjetas y el procesador 4 veces más lento | Mediana de 90 ms, p95 de 147 ms y peor de 301 ms |
 | Evaluaciones de IA con respuestas fijas | 60 casos, 100% en esquema, anclaje y rechazos |
 
+Las pruebas de rendimiento (los archivos *.performance.test.ts de src/engines, Buscar tarjetas con 10,000 y 50,000 tarjetas en menos de 100 ms y el índice de duplicados con 20,000 notas) corren aparte con npm run test:perf y en el CI van en un trabajo que no bloquea el pull request, porque miden milisegundos y en una máquina ocupada fallan sin que nada esté roto (V5-B0).
+
 ## Cobertura
 
 Medida con npm run check, que corre las pruebas con cobertura de v8.

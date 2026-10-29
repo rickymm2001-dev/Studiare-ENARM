@@ -32,7 +32,7 @@ const PURPOSES: readonly Purpose[] = [
 
 export function PrivacySection({ session }: { session: ReadySession }) {
   return (
-    <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
+    <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2 [&>*]:min-w-0">
       <ConsentsCard session={session} />
       <DataSection session={session} />
       {/* La encuesta de los primeros días (B18). Sin la línea si está apagada o no le toca */}

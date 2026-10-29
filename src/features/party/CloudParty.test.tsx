@@ -53,12 +53,16 @@ vi.mock('./duelActions', async (importOriginal) => ({
 const ANA = '2f6c4b1e-8a3d-4c7e-9b10-6d2e5f7a8b01';
 const BRUNO = '7a1d3c5e-2b4f-4a6c-8e9d-0f1a2b3c4d5e';
 const text = t.partyCloud;
-const week = () => weekStartOf(studyDayOf(new Date(), 'America/Merida'));
+// Un miércoles a media tarde. La semana de Party y los XP de hoy salen de la fecha, así que se fija
+// para que no dependa del día ni de la hora en que corre la prueba
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+const week = () => weekStartOf(studyDayOf(NOW, 'America/Merida'));
 
 let fake: FakeCloud;
 let app: RenderedApp | undefined;
 
 beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
   fake = makeFakeCloud({ session: { id: ANA, email: 'ana@ejemplo.mx' } });
   fake.aliases.set(ANA, 'Ana');
   fake.aliases.set(BRUNO, 'Bruno');
@@ -78,6 +82,7 @@ afterEach(async () => {
   cleanup();
   await resetApp(app?.api);
   app = undefined;
+  vi.useRealTimers();
   holder.cloud = null;
   useCloud.setState({ state: { status: 'off' } });
   usePlanCheck.setState({ checkedFor: null });

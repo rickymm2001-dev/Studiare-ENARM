@@ -49,6 +49,7 @@ import {
 } from './CloudBilling';
 import { PendingPaymentNotice } from './PendingPaymentNotice';
 import { longDate, liveProviderOf, trialOffered } from './planState';
+import { SimulatedManageCard } from './SimulatedManageCard';
 import { PlanPrice } from './PlanPrice';
 import { PlanStatus } from './PlanStatus';
 import { usePortal } from './usePortal';
@@ -99,7 +100,6 @@ function Billing({ session }: { session: ReadySession }) {
   const [checkout, setCheckout] = useState<OpenCheckout | null>(null);
   const [simulated, setSimulated] = useState<PlanKey | null>(null);
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState('');
   const [params, setParams] = useSearchParams();
   const portal = usePortal();
   const current = planOf(subscription);
@@ -112,6 +112,9 @@ function Billing({ session }: { session: ReadySession }) {
   // y el servidor también lo rechaza. Un mes regalado por referido sí deja pagar (D-118)
   const liveProvider = inCloud ? liveProviderOf(subscription) : null;
   const passLive = inCloud && current !== 'free' && subscription?.source === 'pass';
+  // Un plan de pago simulado vigente. Se cancela en Tu suscripción, más abajo, y nunca desde la
+  // tarjeta de Gratis (V5-B0)
+  const simulatedLive = !inCloud && !needsCloud && current !== 'free' && subscription?.isSimulated;
   const trialAvailable = trialOffered(subscription, inCloud);
   const flags = readPaymentFlags();
   const canAddPass = paymentOptionsFor(flags, true).length > 0;
@@ -168,7 +171,8 @@ function Billing({ session }: { session: ReadySession }) {
           label={t.billing.stats.plan}
           value={t.billing.plans[current]}
           caption={
-            inCloud && subscription?.periodEnd
+            // El simulado dice hasta cuándo vale solo ya cancelado, porque antes se renueva
+            subscription?.periodEnd && (inCloud || subscription.cancelAtPeriodEnd)
               ? billingCloudText.validUntil(longDate(subscription.periodEnd))
               : t.billing.periods[current]
           }
@@ -231,7 +235,6 @@ function Billing({ session }: { session: ReadySession }) {
                 void changePlan(api, user, simulated).then(() => {
                   setBusy(false);
                   setSimulated(null);
-                  setMessage('');
                 });
               }}
             >
@@ -311,6 +314,7 @@ function Billing({ session }: { session: ReadySession }) {
                       needsCloud={needsCloud}
                       inCloud={inCloud}
                       liveProvider={liveProvider}
+                      managedBelow={liveProvider !== null || simulatedLive === true}
                       passLive={passLive}
                       canAddPass={canAddPass}
                       trialAvailable={trialAvailable}
@@ -323,11 +327,6 @@ function Billing({ session }: { session: ReadySession }) {
                         if (inCloud) setCheckout({ plan: key as RegularPlanKey, passOnly });
                         else setSimulated(checkoutPlanFor(key));
                       }}
-                      onCancelSimulated={() => {
-                        void changePlan(api, user, 'free').then(() => {
-                          setMessage(t.billing.canceled);
-                        });
-                      }}
                     />
                   </div>
                 </Card>
@@ -337,11 +336,14 @@ function Billing({ session }: { session: ReadySession }) {
         </>
       )}
       <p role="status" className="text-sm text-fg-muted">
-        {portal.busy ? billingCloudText.portalOpening : (portal.error ?? message)}
+        {portal.busy ? billingCloudText.portalOpening : portal.error}
       </p>
       {inCloud && !openCheckout && liveProvider === 'stripe' ? <BillingPortalCard /> : null}
       {inCloud && !openCheckout && liveProvider === 'mercadopago' && subscription ? (
         <MercadoPagoManageCard subscription={subscription} onChanged={refresh} />
+      ) : null}
+      {simulatedLive && !simulated ? (
+        <SimulatedManageCard subscription={subscription} user={user} />
       ) : null}
       <Card aria-labelledby="recibos-titulo">
         <CardHeader>
@@ -393,7 +395,8 @@ function Billing({ session }: { session: ReadySession }) {
 
 /**
  * Lo que ofrece la tarjeta de un plan según lo que el alumno ya tiene (3.1.1). Elegir o empezar la
- * prueba, cambiar en el portal de Stripe, sumar otro pase o la nota de Mercado Pago
+ * prueba, cambiar en el portal de Stripe, sumar otro pase o la nota de Mercado Pago. Cancelar nunca
+ * está aquí, vive en la tarjeta de la suscripción vigente (V5-B0)
  */
 function PlanAction({
   planKey,
@@ -401,39 +404,35 @@ function PlanAction({
   needsCloud,
   inCloud,
   liveProvider,
+  managedBelow,
   passLive,
   canAddPass,
   trialAvailable,
   portalBusy,
   onPortal,
   onChoose,
-  onCancelSimulated,
 }: {
   planKey: PlanKey;
   isCurrent: boolean;
   needsCloud: boolean;
   inCloud: boolean;
   liveProvider: 'stripe' | 'mercadopago' | null;
+  /** Hay una suscripción vigente que se administra más abajo, en su propia tarjeta */
+  managedBelow: boolean;
   passLive: boolean;
   canAddPass: boolean;
   trialAvailable: boolean;
   portalBusy: boolean;
   onPortal: () => void;
   onChoose: (passOnly: boolean) => void;
-  onCancelSimulated: () => void;
 }) {
   const text = billingCloudText;
   if (needsCloud) return null;
   if (planKey === 'free') {
     if (isCurrent) return null;
-    if (!inCloud) {
-      return (
-        <Button variant="secondary" onClick={onCancelSimulated}>
-          {t.billing.cancel}
-        </Button>
-      );
-    }
-    return liveProvider ? <p className="text-sm text-fg-muted">{text.cancelNote}</p> : null;
+    // Cancelar nunca vive en la tarjeta de Gratis. Está en Administrar suscripción o en Tu
+    // suscripción, más abajo (V5-B0)
+    return managedBelow ? <p className="text-sm text-fg-muted">{text.cancelNote}</p> : null;
   }
   const visible = planKey as RegularPlanKey;
   // Con un pase vigente se suma otro mes o año, también al plan que ya tiene (8.10)

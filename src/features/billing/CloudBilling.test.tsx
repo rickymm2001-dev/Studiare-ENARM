@@ -2,7 +2,9 @@
 // Suscripción con la cuenta en la nube (Fase P bloque 5, D-096, y B10 del plan del cambio). Lo que
 // ofrece cada tarjeta de planes según lo que el alumno ya tiene, Administrar suscripción con Stripe o
 // con Mercado Pago, la tarjeta de quien no tiene sesión en este navegador y el aviso al volver de la
-// pasarela. La forma de pago se prueba en CheckoutOptions.test.tsx.
+// pasarela. Cancelar, con Mercado Pago o con el pago simulado, pide confirmar en un diálogo, nunca vive
+// en la tarjeta de Gratis y deja el plan hasta su fecha (V5-B0). La forma de pago se prueba en
+// CheckoutOptions.test.tsx.
 import 'fake-indexeddb/auto';
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -11,10 +13,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { planOf } from '@/config/billing';
 import { writeStoredFlags } from '@/config/featureFlags';
 import { DataProvider } from '@/data/DataProvider';
-import type { Subscription } from '@/data/schemas/people';
+import type { Subscription, User } from '@/data/schemas/people';
 import { EMPTY_DETAILS } from '@/data/usecases/account';
+import { changePlan, simulatedPeriodEnd } from '@/data/usecases/subscription';
 import { t } from '@/i18n/es-MX';
 import { billingCloudText } from '@/i18n/billingCloud';
 import {
@@ -465,6 +469,7 @@ describe('administrar la suscripción', () => {
 
 describe('cancelar la suscripción de Mercado Pago', () => {
   const mp = billingCloudText.mercadoPago;
+  const dialog = billingCloudText.cancelDialog;
   const subscription: Subscription = {
     userId: '01J9Z000000000000000000001',
     plan: 'monthly',
@@ -477,7 +482,7 @@ describe('cancelar la suscripción de Mercado Pago', () => {
     updatedAt: '2026-10-14T00:00:00.000Z',
   };
 
-  it('pide confirmar, cancela con cancel-subscription y dice hasta cuándo vale', async () => {
+  it('pide confirmar en un diálogo con lo que se pierde y la fecha, y solo cancela al confirmar (V5-B0)', async () => {
     const state = fakeCloudFor({
       invoke: () =>
         Promise.resolve({ data: { status: 'canceled', periodEnd: PERIOD_END }, error: null }),
@@ -485,16 +490,62 @@ describe('cancelar la suscripción de Mercado Pago', () => {
     const onChanged = vi.fn();
     const typing = userEvent.setup();
     render(<MercadoPagoManageCard subscription={subscription} onChanged={onChanged} />);
+    expect(screen.queryByRole('alertdialog')).toBeNull();
     await typing.click(screen.getByRole('button', { name: mp.cancel }));
-    expect(screen.getByText(mp.confirm(longDate(PERIOD_END)))).toBeVisible();
-    // Conservarla no llama a nadie
-    await typing.click(screen.getByRole('button', { name: mp.confirmNo }));
+    // Un clic no cancela. Abre el diálogo modal, con la fecha y lo que se pierde
+    const warning = await screen.findByRole('alertdialog', { name: dialog.title });
     expect(state.invokeCalls).toEqual([]);
+    expect(within(warning).getByText(mp.confirm(longDate(PERIOD_END)))).toBeVisible();
+    expect(within(warning).getByText(dialog.loses)).toBeVisible();
+    expect(
+      within(warning).getByText(
+        dialog.dailyQuestions(
+          t.billing.access.dailyQuestions(null),
+          t.billing.access.dailyQuestions(20),
+        ),
+      ),
+    ).toBeVisible();
+    for (const lost of ['fullExam', 'aiTutor', 'outlines', 'deckCatalog', 'importDecks', 'party']) {
+      expect(within(warning).getByText(t.billing.access[lost as 'party'])).toBeVisible();
+    }
+    // Conservarla es lo seguro, recibe el foco y no llama a nadie
+    expect(within(warning).getByRole('button', { name: dialog.keep })).toHaveFocus();
+    await typing.click(within(warning).getByRole('button', { name: dialog.keep }));
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).toBeNull();
+    });
+    expect(state.invokeCalls).toEqual([]);
+    expect(screen.getByRole('button', { name: mp.cancel })).toBeVisible();
+
+    // Escape también conserva
     await typing.click(screen.getByRole('button', { name: mp.cancel }));
-    await typing.click(screen.getByRole('button', { name: mp.confirmYes }));
+    await screen.findByRole('alertdialog', { name: dialog.title });
+    await typing.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).toBeNull();
+    });
+    expect(state.invokeCalls).toEqual([]);
+
+    await typing.click(screen.getByRole('button', { name: mp.cancel }));
+    await typing.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', {
+        name: dialog.confirm,
+      }),
+    );
     expect(await screen.findByText(mp.done(longDate(PERIOD_END)))).toBeVisible();
     expect(state.invokeCalls).toEqual([['cancel-subscription', { body: {} }]]);
     expect(onChanged).toHaveBeenCalledTimes(1);
+    // Ya cancelada, el botón se va aunque la nube todavía no lo refleje
+    expect(screen.queryByRole('button', { name: mp.cancel })).toBeNull();
+  });
+
+  it('sin fecha en la suscripción lo dice sin inventar una', async () => {
+    fakeCloudFor();
+    const typing = userEvent.setup();
+    render(<MercadoPagoManageCard subscription={{ ...subscription, periodEnd: null }} />);
+    await typing.click(screen.getByRole('button', { name: mp.cancel }));
+    const warning = await screen.findByRole('alertdialog', { name: dialog.title });
+    expect(within(warning).getByText(mp.confirmNoDate)).toBeVisible();
   });
 
   it('dice por qué no pudo cancelar y no avisa de un cambio', async () => {
@@ -511,9 +562,15 @@ describe('cancelar la suscripción de Mercado Pago', () => {
     const typing = userEvent.setup();
     render(<MercadoPagoManageCard subscription={subscription} onChanged={onChanged} />);
     await typing.click(screen.getByRole('button', { name: mp.cancel }));
-    await typing.click(screen.getByRole('button', { name: mp.confirmYes }));
+    await typing.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', {
+        name: dialog.confirm,
+      }),
+    );
     expect(await screen.findByText(mp.errors.no_subscription)).toBeVisible();
     expect(onChanged).not.toHaveBeenCalled();
+    // Se puede volver a intentar
+    expect(screen.getByRole('button', { name: mp.cancel })).toBeEnabled();
   });
 
   it('ya cancelada no ofrece cancelar otra vez', () => {
@@ -530,10 +587,110 @@ describe('cancelar la suscripción de Mercado Pago', () => {
     });
     expect(await screen.findByRole('button', { name: mp.cancel })).toBeVisible();
     expect(screen.queryByRole('button', { name: billingCloudText.portal.go })).toBeNull();
+    // El botón vive en Administrar suscripción y nunca en la tarjeta de Gratis
+    expect(within(region(mp.title)).getByRole('button', { name: mp.cancel })).toBeVisible();
+    expect(within(region(t.billing.plans.free)).queryByRole('button')).toBeNull();
     // Para cambiar de plan con Mercado Pago se cancela y se contrata el otro al terminar
     expect(
       within(region(t.billing.plans.annual)).getByText(billingCloudText.mercadoPagoChangeNote),
     ).toBeVisible();
+  });
+
+  it('cancelada en la nube, Suscripción sigue diciendo el plan de pago hasta su fecha y no Gratis', async () => {
+    fakeCloudFor({
+      plan: 'monthly',
+      extra: {
+        provider: 'mercadopago',
+        status: 'canceled',
+        periodEnd: PERIOD_END,
+        cancelAtPeriodEnd: true,
+      },
+    });
+    app = await renderApp(SCREENS.subscription.path, {
+      seed: mirrored({ provider: 'mercadopago', cloudStatus: 'canceled', cancelAtPeriodEnd: true }),
+    });
+    expect(
+      await screen.findByText(billingCloudText.status.canceled(longDate(PERIOD_END))),
+    ).toBeVisible();
+    expect(region(t.billing.current(t.billing.plans.monthly))).toBeVisible();
+    expect(screen.getByText(billingCloudText.validUntil(longDate(PERIOD_END)))).toBeVisible();
+    expect(screen.getByText(mp.already)).toBeVisible();
+    expect(screen.queryByRole('button', { name: mp.cancel })).toBeNull();
+  });
+});
+
+describe('cancelar el pago simulado (V5-B0)', () => {
+  const dialog = billingCloudText.cancelDialog;
+  const NOW = new Date('2026-10-14T15:00:00.000Z');
+  const END = simulatedPeriodEnd('monthly', NOW);
+  const offline = () => {
+    holder.cloud = null;
+    useCloud.setState({ state: { status: 'off' } });
+  };
+  const subscribed = async (api: RenderedApp['api'], user: User) => {
+    await changePlan(api, user, 'monthly', NOW);
+  };
+
+  it('Cancelar no vive en la tarjeta de Gratis sino en Tu suscripción, y un clic solo abre el diálogo', async () => {
+    offline();
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, { seed: subscribed });
+    const manage = await screen.findByRole('region', { name: t.billing.manage.title });
+    expect(within(manage).getByText(t.billing.manage.simulated)).toBeVisible();
+    const free = region(t.billing.plans.free);
+    expect(within(free).queryByRole('button', { name: t.billing.cancel })).toBeNull();
+    expect(within(free).getByText(billingCloudText.cancelNote)).toBeVisible();
+    expect(screen.getAllByRole('button', { name: t.billing.cancel })).toHaveLength(1);
+
+    await typing.click(within(manage).getByRole('button', { name: t.billing.cancel }));
+    const warning = await screen.findByRole('alertdialog', { name: dialog.title });
+    expect(within(warning).getByText(dialog.until(longDate(END)))).toBeVisible();
+    expect(within(warning).getByText(t.billing.access.party)).toBeVisible();
+    await typing.click(within(warning).getByRole('button', { name: dialog.keep }));
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).toBeNull();
+    });
+    // Sin confirmar nada cambia
+    const stored = await app.api.repos.subscriptions.get(app.user.id);
+    expect(stored).toMatchObject({ plan: 'monthly', status: 'active', periodEnd: END });
+    expect(stored?.cancelAtPeriodEnd).toBeUndefined();
+    expect(region(t.billing.current(t.billing.plans.monthly))).toBeVisible();
+  });
+
+  it('al confirmar, el plan sigue como Mensual hasta la fecha, con cancelAtPeriodEnd, y no baja a Gratis', async () => {
+    offline();
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.subscription.path, { seed: subscribed });
+    const manage = await screen.findByRole('region', { name: t.billing.manage.title });
+    await typing.click(within(manage).getByRole('button', { name: t.billing.cancel }));
+    await typing.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', {
+        name: dialog.confirm,
+      }),
+    );
+    expect(await screen.findByText(billingCloudText.status.canceled(longDate(END)))).toBeVisible();
+    expect(region(t.billing.current(t.billing.plans.monthly))).toBeVisible();
+    expect(screen.getByText(billingCloudText.validUntil(longDate(END)))).toBeVisible();
+    expect(screen.queryByRole('button', { name: t.billing.cancel })).toBeNull();
+    expect(within(region(t.billing.plans.monthly)).getByText(t.billing.currentPlan)).toBeVisible();
+    const stored = await app.api.repos.subscriptions.get(app.user.id);
+    expect(stored).toMatchObject({
+      plan: 'monthly',
+      status: 'active',
+      isSimulated: true,
+      periodEnd: END,
+      cancelAtPeriodEnd: true,
+    });
+    // Vigente hasta la fecha, y Gratis desde que pasa
+    expect(planOf(stored, Date.parse(END) - 1)).toBe('monthly');
+    expect(planOf(stored, Date.parse(END))).toBe('free');
+    const events = await app.api.repos.events.query({ userId: app.user.id });
+    expect(
+      events.filter((event) => event.type === 'subscription_changed').map((event) => event.payload),
+    ).toEqual([
+      expect.objectContaining({ plan: 'monthly', status: 'active' }),
+      expect.objectContaining({ plan: 'monthly', status: 'canceled', amountMxn: 0 }),
+    ]);
   });
 });
 

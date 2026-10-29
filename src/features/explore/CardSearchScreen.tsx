@@ -254,11 +254,13 @@ function CardSearch({ session }: { session: ReadySession }) {
     );
   }
   if (data.rows.length === 0) {
+    // Sin tarjetas el término que llegó de la barra se dice igual, para que no parezca que se perdió
+    const term = view.text.trim();
     return (
       <>
         {header}
         <EmptyState
-          title={t.states.empty.title}
+          title={term === '' ? t.states.empty.title : t.cardSearch.noResultsFor(term)}
           description={emptyText}
           action={
             <Button asChild>
@@ -430,7 +432,11 @@ function CardSearch({ session }: { session: ReadySession }) {
           <div ref={resultsRef}>
             {found.length === 0 ? (
               <div className="flex flex-col items-start gap-2 py-2">
-                <p className="text-fg-muted">{t.cardSearch.noResults}</p>
+                <p className="text-fg-muted">
+                  {applied.text.trim() === ''
+                    ? t.cardSearch.noResults
+                    : t.cardSearch.noResultsFor(applied.text.trim())}
+                </p>
                 {hasActiveFilters(view) ? (
                   <Button variant="secondary" size="sm" onClick={filters.onClear}>
                     {t.cardSearch.clear}

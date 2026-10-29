@@ -18,6 +18,10 @@
 // rol al equipo, y la función admin-reset-mfa. Desde B10 los planes y los pagos viven en fakeBilling.ts
 // (prueba gratis, pases, lugares Fundador, códigos, facturas y Admin, Pagos), con su pasarela, su
 // portal y Mercado Pago simulados.
+// Desde V5-B0b también la contraseña, como GoTrue: /signup con su correo de confirmación, /token con
+// grant_type=password, /recover y /resend, /verify con los tipos signup y recovery, PUT /user para
+// cambiarla, la API de administración /admin/users con la llave de servicio y la función
+// admin-create-user. La contraseña se guarda en claro porque es un doble.
 //
 // IA alojada (B12). attachAi(server, options) engancha la Edge Function ai-proxy corriendo dentro de la
 // prueba (fakeAi.ts, con el núcleo real y los dobles del paquete A). Atiende /functions/v1/ai-proxy/**
@@ -54,7 +58,7 @@
 // admin_survey_responses con las reglas de la migración, y la clave survey_first_week de platform_settings se cambia con
 // setSetting. advanceDays adelanta el reloj de la encuesta, así una cuenta recién creada cumple 7 días. Borrar mi cuenta
 // quita la respuesta y borrar mis datos no (8.4). Con cloud.survey.deployed en false esas funciones no existen.
-import { randomUUID } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import type { BrowserContext, Request, Route } from '@playwright/test';
 import type { PlanKey } from '@/config/billing';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
@@ -166,7 +170,25 @@ export interface FakeUser {
    * confirmar. Se confirma al usar el código o al abrir el enlace, y con Google desde el inicio (B9)
    */
   emailConfirmedAt: string | null;
+  /**
+   * La contraseña, en claro porque es un doble (V5-B0b). null para las cuentas que entran solo con el
+   * código, el enlace o Google, que con /token?grant_type=password contestan invalid_credentials
+   */
+  password: string | null;
+  /** Lo demás de user_metadata, como must_change_password de las cuentas que crea el admin */
+  metadata: Json;
+  /** Cuándo se mandó el último correo de confirmación y el de recuperación, como en auth.users */
+  confirmationSentAt: string | null;
+  recoverySentAt: string | null;
 }
+
+/**
+ * Qué correo de Supabase Auth es. magiclink es el de Entrar con el código a una cuenta confirmada,
+ * signup el de confirmar el correo (lo manda /signup, /resend y también /otp cuando la cuenta no está
+ * confirmada, como GoTrue) y recovery el de Olvidé mi contraseña. El tipo viaja en el fragmento del
+ * enlace, y con recovery supabase-js avisa PASSWORD_RECOVERY en lugar de SIGNED_IN
+ */
+export type EmailKind = 'magiclink' | 'signup' | 'recovery';
 
 interface Session {
   /** Va en el token como session_id, que es lo que amarra la cuenta al dispositivo */
@@ -179,12 +201,17 @@ interface Session {
   aal: 'aal1' | 'aal2';
 }
 
-/** Lo que "llegó" a un correo. El enlace abre sesión en el navegador que lo abre y el código en cualquiera */
+/**
+ * Lo que "llegó" a un correo. El enlace abre sesión en el navegador que lo abre y el código en
+ * cualquiera. El de recuperación abre la sesión con type=recovery en el fragmento, y el código se
+ * verifica con type recovery (o email)
+ */
 export interface FakeEmail {
   to: string;
   code: string;
   link: string;
   sentAt: string;
+  kind: EmailKind;
 }
 
 export interface FakeSubscription {
@@ -262,8 +289,18 @@ export interface FakeSupabaseServer {
     registered?: boolean;
     /** La versión del aviso que aceptó al registrarse. La de la app por omisión */
     noticeVersion?: string;
+    /** Con contraseña, para entrar con /token?grant_type=password (V5-B0b). Sin ella solo entra con el código */
+    password?: string;
+    /** Lo demás de user_metadata, como must_change_password en true */
+    metadata?: Json;
   }): FakeUser;
   userByEmail(email: string): FakeUser | undefined;
+  /** Deja la contraseña de una cuenta, como si la hubiera cambiado antes (V5-B0b) */
+  setPassword(email: string, password: string): void;
+  /** La contraseña de la cuenta, en claro porque es un doble. null si entra solo con el código o Google */
+  passwordOf(email: string): string | null;
+  /** Confirma el correo de una cuenta, como si hubiera abierto el enlace de confirmación en otro lado */
+  confirmEmail(email: string): void;
   /**
    * Un enlace del correo listo para abrir, como si el alumno hubiera pedido entrar y leído su correo.
    * Crea la cuenta si no existe, ya registrada como con createUser. Cada llamada abre una sesión nueva,
@@ -279,7 +316,7 @@ export interface FakeSupabaseServer {
   acceptancesOf(email: string): string[];
   /** Todos los correos "enviados", en orden */
   readonly emails: readonly FakeEmail[];
-  /** El último correo que se "mandó" a esa dirección */
+  /** El último correo que se "mandó" a esa dirección, con su código, su enlace y de qué tipo es (kind) */
   lastEmail(email: string): FakeEmail | undefined;
   deviceSessionOf(
     email: string,
@@ -443,12 +480,45 @@ const pgError = (
 const authError = (status: number, errorCode: string, message: string): Reply =>
   json({ code: status, error_code: errorCode, msg: message }, status);
 
+/**
+ * La contraseña corta, como la rechaza GoTrue con el largo mínimo del proyecto. Trae weak_password con
+ * sus razones, que supabase-js vuelve AuthWeakPasswordError (V5-B0b)
+ */
+const weakPassword = (): Reply =>
+  json(
+    {
+      code: 422,
+      error_code: 'weak_password',
+      msg: WEAK_PASSWORD_MESSAGE,
+      weak_password: { reasons: ['length'] },
+    },
+    422,
+  );
+
 const NO_SESSION = pgError('28000', 'Hace falta iniciar sesión');
 /** El mensaje del gancho Before User Created de la migración 20261020000001, con su marca */
 const INVITATION_REQUIRED =
   'Studiare está abierto solo con invitación y este correo no tiene una (invitation_required)';
 /** El código que da la app de autenticación simulada */
 const TOTP_CODE = '246810';
+/** El largo mínimo de la contraseña, el que pide el proyecto en Supabase (docs/SUPABASE.md, V5-B0b) */
+const PASSWORD_MIN_LENGTH = 8;
+const WEAK_PASSWORD_MESSAGE = `Password should be at least ${PASSWORD_MIN_LENGTH} characters.`;
+/**
+ * La contraseña inicial que reparte admin-create-user, con el largo y el alfabeto de la función real
+ * (supabase/functions/_shared/adminCreateUser.ts) y al menos una mayúscula, una minúscula y un dígito
+ */
+const INITIAL_PASSWORD_LENGTH = 16;
+const PASSWORD_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+function initialPassword(): string {
+  for (;;) {
+    const password = Array.from(
+      { length: INITIAL_PASSWORD_LENGTH },
+      () => PASSWORD_ALPHABET[randomInt(PASSWORD_ALPHABET.length)] ?? 'a',
+    ).join('');
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password)) return password;
+  }
+}
 const HEARD_FROM = [
   'instagram',
   'tiktok',
@@ -499,6 +569,25 @@ const normalizeEmail = (value: unknown): string | null => {
 function base64Url(value: string): string {
   return Buffer.from(value, 'utf8').toString('base64url');
 }
+
+/**
+ * Llave de servicio falsa, con la forma de la llave service_role anterior de Supabase (V5-B0b). Es la
+ * que una Edge Function manda como apikey y Bearer para la API de administración de Auth
+ * (/auth/v1/admin/users). Solo vive en las pruebas, nadie la verifica y no se parece a ninguna real
+ */
+export const FAKE_SUPABASE_SERVICE_KEY = [
+  base64Url(JSON.stringify({ alg: 'HS256', typ: 'JWT' })),
+  base64Url(
+    JSON.stringify({
+      iss: 'supabase-simulado',
+      ref: 'fakeproj',
+      role: 'service_role',
+      iat: 1_700_000_000,
+      exp: 4_102_444_800,
+    }),
+  ),
+  base64Url('firma simulada de servicio para las pruebas de punta a punta'),
+].join('.');
 
 /** Token de acceso con la forma de Supabase. La firma es fija porque nadie la verifica */
 function accessTokenFor(
@@ -700,6 +789,12 @@ interface Otp {
   email: string;
   code: string;
   expiresAt: number;
+  /**
+   * Con qué correo salió. Como GoTrue, el de confirmación (signup) solo lo acepta /verify con type signup
+   * o email, y los de magiclink y recovery, que comparten recovery_token en auth.users, los aceptan
+   * magiclink, recovery y email
+   */
+  kind: EmailKind;
 }
 
 interface Referral {
@@ -766,7 +861,11 @@ interface FactorRow {
 }
 
 type Auth =
-  { kind: 'anon' } | { kind: 'invalid' } | { kind: 'user'; user: FakeUser; session: Session };
+  | { kind: 'anon' }
+  | { kind: 'invalid' }
+  /** La llave de servicio, con la que una Edge Function usa la API de administración de Auth (V5-B0b) */
+  | { kind: 'service' }
+  | { kind: 'user'; user: FakeUser; session: Session };
 
 const REFERRAL_RULES = { rewardDays: 30, maxRewards: 12, redeemWindowDays: 14 };
 
@@ -884,6 +983,13 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     provider?: 'email' | 'google';
     registered?: boolean;
     noticeVersion?: string;
+    password?: string;
+    metadata?: Json;
+    /**
+     * Si nace con el correo confirmado aunque no haya completado su registro, como las cuentas que crea
+     * el admin con email_confirm (V5-B0b). Sin esto, lo decide registered y el proveedor
+     */
+    emailConfirmed?: boolean;
   }): FakeUser {
     const email = normalizeEmail(input.email);
     if (!email) throw new Error(`Correo inválido para el Supabase simulado: ${input.email}`);
@@ -891,14 +997,23 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     if (existing) return existing;
     const createdAt = new Date(now()).toISOString();
     const provider = input.provider ?? 'email';
+    const confirmed = input.emailConfirmed ?? ((input.registered ?? true) || provider === 'google');
+    // alias vive en la cuenta y user_metadata lo repite al contestar, así que no se guarda dos veces
+    const metadata: Json = { ...input.metadata };
+    const aliasFromMetadata = asString(metadata.alias)?.trim();
+    delete metadata.alias;
     const user: FakeUser = {
       id: randomUUID(),
       email,
-      alias: nonEmpty(input.alias?.trim(), 'Alumno'),
+      alias: nonEmpty(input.alias?.trim() ?? aliasFromMetadata, 'Alumno'),
       role: input.role ?? 'student',
       createdAt,
       provider,
-      emailConfirmedAt: (input.registered ?? true) || provider === 'google' ? createdAt : null,
+      emailConfirmedAt: confirmed ? createdAt : null,
+      password: input.password ?? null,
+      metadata,
+      confirmationSentAt: null,
+      recoverySentAt: null,
     };
     users.set(user.id, user);
     // Lo mismo que hace el trigger handle_new_user
@@ -937,6 +1052,26 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
   const signupAllowed = (email: string) =>
     settings.get('registration_open')?.value === true || invitations.has(email);
 
+  /**
+   * Mezcla data en user_metadata como UpdateUserMetaData de GoTrue: clave por clave, y null quita la
+   * clave. alias se queda en la cuenta, que es de donde lo toma handle_new_user
+   */
+  function applyMetadata(user: FakeUser, data: Json): void {
+    for (const [key, value] of Object.entries(data)) {
+      if (key === 'alias') {
+        if (typeof value === 'string' && value.trim() !== '') user.alias = value.trim();
+        continue;
+      }
+      if (value === null) {
+        user.metadata = Object.fromEntries(
+          Object.entries(user.metadata).filter(([name]) => name !== key),
+        );
+      } else {
+        user.metadata[key] = value;
+      }
+    }
+  }
+
   function createSession(user: FakeUser): Session {
     const id = randomUUID();
     const expiresAt = now() + SESSION_SECONDS * 1000;
@@ -968,7 +1103,17 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     return next;
   }
 
+  /** user_metadata como la deja GoTrue, con lo que mandó la app en data y lo que pone el proveedor */
+  const userMetadata = (user: FakeUser): Json => ({
+    alias: user.alias,
+    email: user.email,
+    email_verified: user.emailConfirmedAt !== null,
+    sub: user.id,
+    ...user.metadata,
+  });
+
   function userJson(user: FakeUser): Json {
+    const stamp = new Date(now()).toISOString();
     return {
       id: user.id,
       aud: 'authenticated',
@@ -976,15 +1121,58 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       email: user.email,
       email_confirmed_at: user.emailConfirmedAt,
       phone: '',
+      confirmation_sent_at: user.confirmationSentAt,
+      recovery_sent_at: user.recoverySentAt,
       confirmed_at: user.emailConfirmedAt,
-      last_sign_in_at: new Date(now()).toISOString(),
+      last_sign_in_at: stamp,
       app_metadata: { provider: user.provider, providers: [user.provider] },
-      user_metadata: { alias: user.alias, email: user.email, email_verified: true, sub: user.id },
-      identities: [],
+      user_metadata: userMetadata(user),
+      // La identidad del proveedor con el que nació la cuenta, como la devuelve GoTrue. Una cuenta
+      // repetida en /signup llega sin identidades, que es como se distingue (V5-B0b)
+      identities: [
+        {
+          identity_id: user.id,
+          id: user.id,
+          user_id: user.id,
+          identity_data: {
+            email: user.email,
+            email_verified: user.emailConfirmedAt !== null,
+            phone_verified: false,
+            sub: user.id,
+          },
+          provider: user.provider,
+          last_sign_in_at: stamp,
+          created_at: user.createdAt,
+          updated_at: user.createdAt,
+          email: user.email,
+        },
+      ],
       factors: factors.get(user.id) ?? [],
       created_at: user.createdAt,
       updated_at: user.createdAt,
       is_anonymous: false,
+    };
+  }
+
+  /**
+   * Lo que /signup contesta cuando el correo ya tiene cuenta confirmada, como sanitizeUser de GoTrue
+   * (internal/api/signup.go) con la protección contra enumerar correos. Un usuario con id nuevo, sin
+   * identidades ni confirmación, con la fecha de envío de hoy y los datos que mandó la app. No manda nada
+   */
+  function obfuscatedUser(user: FakeUser, data: Json): Json {
+    const stamp = new Date(now()).toISOString();
+    return {
+      ...userJson(user),
+      id: randomUUID(),
+      email_confirmed_at: null,
+      confirmed_at: null,
+      confirmation_sent_at: stamp,
+      recovery_sent_at: null,
+      last_sign_in_at: null,
+      user_metadata: data,
+      identities: [],
+      created_at: stamp,
+      updated_at: stamp,
     };
   }
 
@@ -999,36 +1187,80 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     };
   }
 
-  function magicLink(session: Session, redirectTo: string): string {
+  /**
+   * El enlace del correo con el flujo implícito, que es el de la app (flowType implicit). Supabase Auth
+   * regresa a redirect_to con la sesión y el tipo en el fragmento. Con type=recovery supabase-js avisa
+   * PASSWORD_RECOVERY, y con magiclink o signup, SIGNED_IN
+   */
+  function emailLink(session: Session, redirectTo: string, kind: EmailKind): string {
     const params = new URLSearchParams({
       access_token: session.accessToken,
       expires_at: String(Math.floor(session.expiresAt / 1000)),
       expires_in: String(SESSION_SECONDS),
       refresh_token: session.refreshToken,
       token_type: 'bearer',
-      type: 'magiclink',
+      type: kind,
     });
     return `${redirectTo}#${params.toString()}`;
   }
 
-  /** "Manda" el correo con enlace y código. Un código nuevo invalida el anterior, como en Supabase */
-  function sendEmail(user: FakeUser, redirectTo: string): FakeEmail {
-    const code = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0');
-    otps.set(user.email, { email: user.email, code, expiresAt: now() + SESSION_SECONDS * 1000 });
+  /** Un código de un solo uso de tantos dígitos */
+  const otpCode = (digits: number): string =>
+    Array.from({ length: digits }, () => String(randomInt(10))).join('');
+
+  /**
+   * "Manda" el correo con enlace y código. Un código nuevo invalida el anterior, como en Supabase. El de
+   * Entrar con el código (/otp) trae 6 dígitos, como antes de V5-B0b, y los de /signup, /resend y
+   * /recover traen 8, dentro de los 6 a 10 que acepta la app (EMAIL_CODE). En GoTrue todos miden lo
+   * mismo (Email OTP Length), así que la diferencia solo sirve para probar que la app acepta los dos
+   */
+  function sendEmail(
+    user: FakeUser,
+    redirectTo: string,
+    kind: EmailKind = 'magiclink',
+    digits = 6,
+  ): FakeEmail {
+    const code = otpCode(digits);
+    const stamp = new Date(now()).toISOString();
+    otps.set(user.email, {
+      email: user.email,
+      code,
+      expiresAt: now() + SESSION_SECONDS * 1000,
+      kind,
+    });
+    if (kind === 'signup') user.confirmationSentAt = stamp;
+    if (kind === 'recovery') user.recoverySentAt = stamp;
     const email: FakeEmail = {
       to: user.email,
       code,
-      link: magicLink(createSession(user), redirectTo),
-      sentAt: new Date(now()).toISOString(),
+      link: emailLink(createSession(user), redirectTo, kind),
+      sentAt: stamp,
+      kind,
     };
     emails.push(email);
     return email;
   }
 
+  /**
+   * El correo que manda pedir el código (/otp). A una cuenta sin confirmar GoTrue le manda el de
+   * confirmación, con type=signup en el enlace, y a una confirmada el enlace mágico
+   */
+  const sendSignInEmail = (user: FakeUser, redirectTo: string): FakeEmail =>
+    sendEmail(user, redirectTo, user.emailConfirmedAt === null ? 'signup' : 'magiclink');
+
+  /** Qué códigos acepta cada type de /verify, como verify.go de GoTrue */
+  const OTP_KINDS_BY_VERIFY_TYPE: Record<string, readonly EmailKind[]> = {
+    email: ['signup', 'magiclink', 'recovery'],
+    signup: ['signup'],
+    magiclink: ['magiclink', 'recovery'],
+    recovery: ['magiclink', 'recovery'],
+  };
+
   function authenticate(request: Request): Auth {
     const header = request.headers().authorization ?? '';
     const token = header.replace(/^Bearer\s+/i, '').trim();
     if (token === '' || token === FAKE_SUPABASE_ANON_KEY) return { kind: 'anon' };
+    if (token === FAKE_SUPABASE_SERVICE_KEY) return { kind: 'service' };
     const session = sessions.get(token);
     if (!session || session.expiresAt <= now()) return { kind: 'invalid' };
     const user = users.get(session.userId);
@@ -2130,28 +2362,178 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
         // Como Supabase, pedir el código crea la cuenta sin registro. Lo completa la app
         user = createUser({ email, alias: alias ?? undefined, registered: false });
       }
-      sendEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`);
+      sendSignInEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`);
+      return json({});
+    }
+    // Crear la cuenta con contraseña (V5-B0b). Como signup.go de GoTrue sin confirmación automática:
+    // manda el correo de confirmación y contesta el usuario sin sesión. Si el correo ya tiene cuenta
+    // confirmada contesta 200 con un usuario sin identidades y no manda nada, para no delatar qué
+    // correos existen. Si la tiene sin confirmar, actualiza la contraseña y los datos y vuelve a mandar
+    if (path === '/signup' && request.method() === 'POST') {
+      const email = normalizeEmail(args.email);
+      if (!email) {
+        return authError(
+          422,
+          'validation_failed',
+          'Unable to validate email address: invalid format',
+        );
+      }
+      const password = asString(args.password);
+      if (!password) {
+        return authError(422, 'validation_failed', 'Signup requires a valid password');
+      }
+      if (password.length < PASSWORD_MIN_LENGTH) return weakPassword();
+      const data: Json = isRecord(args.data) ? args.data : {};
+      const redirectTo = url.searchParams.get('redirect_to') ?? `${appUrl}/`;
+      const existing = userByEmail(email);
+      if (existing && existing.emailConfirmedAt !== null) {
+        return json(obfuscatedUser(existing, data));
+      }
+      if (!existing && !signupAllowed(email)) {
+        return authError(403, 'unexpected_failure', INVITATION_REQUIRED);
+      }
+      const user = existing ?? createUser({ email, registered: false });
+      user.password = password;
+      applyMetadata(user, data);
+      sendEmail(user, redirectTo, 'signup', 8);
+      return json(userJson(user));
+    }
+    // Olvidé mi contraseña (V5-B0b). Como recover.go: siempre 200 vacío, y solo manda el correo si el
+    // correo tiene cuenta, para no delatar cuáles existen
+    if (path === '/recover' && request.method() === 'POST') {
+      const email = normalizeEmail(args.email);
+      if (!email) {
+        return authError(
+          422,
+          'validation_failed',
+          'Unable to validate email address: invalid format',
+        );
+      }
+      const user = userByEmail(email);
+      if (user) sendEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`, 'recovery', 8);
+      return json({});
+    }
+    // Volver a mandar la confirmación (V5-B0b). Como resend.go: solo type signup con correo, 200 vacío
+    // siempre, y manda el correo solo a una cuenta que existe y no ha confirmado
+    if (path === '/resend' && request.method() === 'POST') {
+      const email = normalizeEmail(args.email);
+      const type = asString(args.type);
+      if (type !== 'signup' && type !== 'email_change') {
+        return authError(
+          400,
+          'validation_failed',
+          'Missing one of these types: signup, email_change, sms, phone_change',
+        );
+      }
+      if (!email) {
+        return authError(
+          422,
+          'validation_failed',
+          'Unable to validate email address: invalid format',
+        );
+      }
+      const user = userByEmail(email);
+      if (type === 'signup' && user?.emailConfirmedAt === null) {
+        sendEmail(user, url.searchParams.get('redirect_to') ?? `${appUrl}/`, 'signup', 8);
+      }
       return json({});
     }
     if (path === '/verify' && request.method() === 'POST') {
       const email = normalizeEmail(args.email);
       const token = asString(args.token);
-      const type = asString(args.type);
-      if (!email || !token || !['email', 'magiclink', 'signup'].includes(type ?? '')) {
+      const type = asString(args.type) ?? '';
+      const accepted = OTP_KINDS_BY_VERIFY_TYPE[type];
+      if (!email || !token || !accepted) {
         return authError(400, 'validation_failed', 'Verify requires an email and a token');
       }
       const otp = otps.get(email);
       const user = userByEmail(email);
-      if (!otp || !user || otp.code !== token || otp.expiresAt <= now()) {
+      if (
+        !otp ||
+        !user ||
+        otp.code !== token ||
+        otp.expiresAt <= now() ||
+        !accepted.includes(otp.kind)
+      ) {
         return authError(403, 'otp_expired', 'Token has expired or is invalid');
       }
       otps.delete(email);
+      // Confirmar el correo, abrir sesión con el código y recuperar la contraseña confirman la cuenta.
+      // Con type recovery supabase-js avisa PASSWORD_RECOVERY con esta misma sesión
       user.emailConfirmedAt ??= new Date(now()).toISOString();
       return json(sessionJson(createSession(user), user));
     }
     if (path === '/user' && request.method() === 'GET') {
       if (auth.kind === 'user') return json(userJson(auth.user));
       return authError(401, 'bad_jwt', 'invalid JWT: unable to parse or verify signature');
+    }
+    // Cambiar la contraseña o los datos de la cuenta con sesión (V5-B0b). Como user.go: la contraseña
+    // nueva pasa por la misma regla de largo y no puede ser la misma, y cambiarla cierra las demás
+    // sesiones de la cuenta. data se mezcla con user_metadata y null quita la clave. Cambiar el correo
+    // no se simula
+    if (path === '/user' && request.method() === 'PUT') {
+      if (auth.kind !== 'user') {
+        return authError(401, 'bad_jwt', 'invalid JWT: unable to parse or verify signature');
+      }
+      const { user, session } = auth;
+      const password = args.password === undefined ? null : asString(args.password);
+      if (args.password !== undefined && password === null) {
+        return authError(422, 'validation_failed', 'Invalid password');
+      }
+      if (password !== null) {
+        if (password.length < PASSWORD_MIN_LENGTH) return weakPassword();
+        if (user.password !== null && password === user.password) {
+          return authError(
+            422,
+            'same_password',
+            'New password should be different from the old password.',
+          );
+        }
+      }
+      if (args.data !== undefined && !isRecord(args.data)) {
+        return authError(422, 'validation_failed', 'Invalid user metadata');
+      }
+      if (password !== null) {
+        user.password = password;
+        for (const [token, item] of sessions) {
+          if (item.userId === user.id && token !== session.accessToken) sessions.delete(token);
+        }
+      }
+      if (isRecord(args.data)) applyMetadata(user, args.data);
+      return json(userJson(user));
+    }
+    // La API de administración de Auth, solo con la llave de servicio, como la usa una Edge Function
+    // (V5-B0b). Crea la cuenta con contraseña y, con email_confirm, ya confirmada. No manda correo
+    if (path === '/admin/users' && request.method() === 'POST') {
+      if (auth.kind === 'user') return authError(403, 'not_admin', 'User not allowed');
+      if (auth.kind !== 'service') {
+        return authError(401, 'no_authorization', 'This endpoint requires a valid JWT');
+      }
+      const email = normalizeEmail(args.email);
+      if (!email) {
+        return authError(
+          422,
+          'validation_failed',
+          'Unable to validate email address: invalid format',
+        );
+      }
+      const password = args.password === undefined ? null : asString(args.password);
+      if (password !== null && password.length < PASSWORD_MIN_LENGTH) return weakPassword();
+      if (userByEmail(email)) {
+        return authError(
+          422,
+          'email_exists',
+          'A user with this email address has already been registered',
+        );
+      }
+      const user = createUser({
+        email,
+        registered: false,
+        emailConfirmed: args.email_confirm === true,
+        ...(password === null ? {} : { password }),
+        metadata: isRecord(args.user_metadata) ? args.user_metadata : {},
+      });
+      return json(userJson(user));
     }
     if (path === '/logout' && request.method() === 'POST') {
       if (auth.kind === 'user') {
@@ -2167,7 +2549,23 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       return empty(204);
     }
     if (path === '/token' && request.method() === 'POST') {
-      if (url.searchParams.get('grant_type') !== 'refresh_token') {
+      const grantType = url.searchParams.get('grant_type');
+      // Entrar con correo y contraseña (V5-B0b). Como token.go: el mismo invalid_credentials para un
+      // correo sin cuenta, sin contraseña o con otra contraseña, y email_not_confirmed después de
+      // comprobarla, para no delatar qué correos existen
+      if (grantType === 'password') {
+        const email = normalizeEmail(args.email);
+        const password = asString(args.password);
+        const user = email ? userByEmail(email) : undefined;
+        if (!user || !password || user.password === null || user.password !== password) {
+          return authError(400, 'invalid_credentials', 'Invalid login credentials');
+        }
+        if (user.emailConfirmedAt === null) {
+          return authError(400, 'email_not_confirmed', 'Email not confirmed');
+        }
+        return json(sessionJson(createSession(user), user));
+      }
+      if (grantType !== 'refresh_token') {
         return authError(400, 'unsupported_grant_type', 'unsupported_grant_type');
       }
       const refreshToken = asString(args.refresh_token);
@@ -2376,6 +2774,31 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
       const reply = billing.cancelSubscription({ id: user.id, email: user.email });
       return json(reply.body, reply.status);
     }
+    // Crear una cuenta desde Usuarios con el correo confirmado y una contraseña inicial (V5-B0b). Como
+    // handleCreateUser y authorize_admin_create_user: primero la forma del cuerpo (400 invalid), luego el
+    // rol admin o dueño con su segundo factor (403 not_admin), luego el correo sin cuenta (409 exists).
+    // La cuenta nace confirmada, sin registro completo, con must_change_password en user_metadata, el
+    // correo queda invitado y la contraseña se contesta una sola vez
+    if (name === 'admin-create-user') {
+      const email = isRecord(body) ? normalizeEmail(body.email) : null;
+      const alias = isRecord(body) ? asString(body.alias)?.trim() : undefined;
+      if (!email || email.length > 254 || !alias || alias.length > 40) {
+        return json({ error: 'invalid' }, 400);
+      }
+      if (!isAdmin(user, auth.session)) return json({ error: 'not_admin' }, 403);
+      if (userByEmail(email)) return json({ error: 'exists' }, 409);
+      invitations.add(email);
+      const password = initialPassword();
+      const created = createUser({
+        email,
+        alias,
+        registered: false,
+        emailConfirmed: true,
+        password,
+        metadata: { must_change_password: true },
+      });
+      return json({ userId: created.id, email: created.email, password });
+    }
     if (name === 'admin-reset-mfa') {
       const target = isRecord(body) ? asString(body.userId) : null;
       if (!target) return json({ error: 'invalid' }, 400);
@@ -2520,7 +2943,8 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     // sin la llave pública ni sesión
     if (url.pathname === EMAIL_UNSUBSCRIBE_PATH) return handleEmailUnsubscribe(request, url);
     const apiKey = request.headers().apikey ?? url.searchParams.get('apikey');
-    if (apiKey !== FAKE_SUPABASE_ANON_KEY) {
+    // La llave de servicio solo la manda una Edge Function, y aquí la prueba que imita a una (V5-B0b)
+    if (apiKey !== FAKE_SUPABASE_ANON_KEY && apiKey !== FAKE_SUPABASE_SERVICE_KEY) {
       return json(
         {
           message: 'No API key found in request',
@@ -2672,6 +3096,16 @@ export function createFakeSupabase(options: FakeSupabaseOptions = {}): FakeSupab
     },
     createUser,
     userByEmail,
+    setPassword(email, password) {
+      requireUser(email).password = password;
+    },
+    passwordOf(email) {
+      return emailOf(email)?.password ?? null;
+    },
+    confirmEmail(email) {
+      const user = requireUser(email);
+      user.emailConfirmedAt ??= new Date(now()).toISOString();
+    },
     issueMagicLink(email, alias) {
       const user = createUser({ email, ...(alias === undefined ? {} : { alias }) });
       return sendEmail(user, `${appUrl}/`).link;

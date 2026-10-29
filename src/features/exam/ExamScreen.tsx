@@ -58,7 +58,7 @@ import { loadExamState, saveExamState } from './examStorage';
 import { ExamFinishDialog } from './ExamFinishDialog';
 import { ExamNavigator } from './ExamNavigator';
 import { AnswerSheet, type SheetRow } from './AnswerSheet';
-import { ExamQuestion } from './ExamQuestion';
+import { EXAM_PROMPT_ID, ExamQuestion } from './ExamQuestion';
 import { ExamTimer } from './ExamTimer';
 
 export function ExamScreen() {
@@ -440,8 +440,11 @@ function ExamRunner({
           aria-pressed={answer.marked}
           aria-label={markLabel}
           className={cn(answer.marked && 'bg-primary-soft')}
-          onClick={() => {
+          onClick={(event) => {
             edit((current) => toggleMarked(current, currentId));
+            // Con el ratón el foco se quedaría en el botón y Enter volvería a alternar la marca en lugar de
+            // avanzar. Pasa al enunciado, como al cambiar de pregunta. Con el teclado (detail 0) se queda
+            if (event.detail > 0) document.getElementById(EXAM_PROMPT_ID)?.focus();
           }}
         >
           <Flag aria-hidden className={cn(answer.marked && 'fill-current')} />

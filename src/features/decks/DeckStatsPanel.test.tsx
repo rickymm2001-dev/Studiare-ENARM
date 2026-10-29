@@ -31,6 +31,9 @@ const inReview = (scheduledDays: number): FsrsCardState => ({
 describe('DeckStatsPanel', () => {
   it('con pocas tarjetas en repaso la retención calibra y dice cuántas faltan', async () => {
     render(<DeckStatsPanel states={[null, null, inReview(10)]} timeZone="America/Merida" />);
+    // El resumen parte en renglones en lugar de cortarse con puntos suspensivos
+    const summary = screen.getByText(t.deckStats.summary(0, 3));
+    expect(summary).not.toHaveClass('truncate');
     await userEvent.click(screen.getByText(t.deckStats.title));
     expect(screen.getByText(t.insights.calibratingLabel)).toBeTruthy();
     expect(screen.getByText(t.deckStats.calibrating(MIN_FOR_RETENTION - 1))).toBeTruthy();

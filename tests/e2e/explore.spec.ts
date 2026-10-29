@@ -77,7 +77,8 @@ test('busca, filtra, edita en el panel y suspende varias por lote', async ({ pag
   await expect.poll(() => resultCount(page)).toBeLessThan(total);
   expect(await resultCount(page)).toBeGreaterThan(0);
   await search.fill('zzzzxqj');
-  await expect(page.getByText(text.noResults)).toBeVisible();
+  // Con un término, el estado vacío dice qué se buscó (V5-B0)
+  await expect(page.getByText(text.noResultsFor('zzzzxqj'))).toBeVisible();
   await search.fill('');
   await expect.poll(() => resultCount(page)).toBe(total);
 

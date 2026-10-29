@@ -47,10 +47,16 @@ test('de la portada a una cuenta con sesión, con validación, y vuelve a entrar
 
   await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
   // Inicio abre con Meta de hoy, que lleva la carga diaria del plan (D-150). La meta de la racha
-  // elegida en la bienvenida queda guardada en Ajustes del repaso
+  // elegida en la bienvenida es la cuarta fila, con su métrica y su cifra (V5, D-151), y queda
+  // guardada en Ajustes del repaso
   const goal = page.getByRole('region', { name: t.home.goal.title });
   await expect(
     goal.getByText(new RegExp(`^${t.widgets.plan.rows.questions} 0 de [\\d,]+$`)),
+  ).toBeVisible();
+  await expect(
+    goal.getByText(
+      t.home.goal.row(t.home.goal.streakRow(t.widgets.goal.metricNames.questions), 0, 12),
+    ),
   ).toBeVisible();
   await expectNoSeriousA11yViolations(page);
   await page.goto(`${SCREENS.review.path}?ajustes=1`);

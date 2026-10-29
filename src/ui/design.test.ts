@@ -142,6 +142,12 @@ describe('sistema de diseño de la portada por dentro (D-150)', () => {
 
     // Los dos bloques oscuros, por preferencia del sistema y por clase, son el mismo tema
     expect(blocks[1]?.tokens).toEqual(blocks[2]?.tokens);
+    // El modo oscuro es pizarra, derivada de la barra, con el marino claro como acción y la barra
+    // igual en los dos modos (V5, D-151)
+    expect(blocks[1]?.tokens.get('--enarm-canvas')).toBe('#1f2628');
+    expect(blocks[1]?.tokens.get('--enarm-surface')).toBe('#2a3234');
+    expect(blocks[1]?.tokens.get('--enarm-heading')).toBe('#c9d6ea');
+    expect(blocks[1]?.tokens.get('--enarm-slate')).toBe(blocks[0]?.tokens.get('--enarm-slate'));
 
     const branches = ['mi', 'ped', 'gyo', 'cir', 'fam', 'urg'];
 
@@ -178,6 +184,26 @@ describe('sistema de diseño de la portada por dentro (D-150)', () => {
       ['--enarm-fg-muted', '--enarm-panel'],
       ['--enarm-fg-muted', '--enarm-sage'],
       ['--enarm-primary-ink', '--enarm-cream'],
+      // Paleta propia del modo oscuro sobre pizarra (V5, D-151). Títulos y enlaces sobre cada tinte,
+      // texto tenue sobre el lienzo, estados sobre la tarjeta y sobre su fondo suave, y el texto del
+      // botón al pasar el puntero y al oprimirlo
+      ['--enarm-heading', '--enarm-panel'],
+      ['--enarm-heading', '--enarm-sage'],
+      ['--enarm-fg-muted', '--enarm-canvas'],
+      ['--enarm-primary-ink', '--enarm-canvas'],
+      ['--enarm-primary-ink', '--enarm-panel'],
+      ['--enarm-accent-ink', '--enarm-cream'],
+      ['--enarm-fg', '--enarm-accent-soft'],
+      ['--enarm-fg', '--enarm-primary-soft'],
+      ['--enarm-fg-muted', '--enarm-primary-soft'],
+      ['--enarm-success', '--enarm-surface'],
+      ['--enarm-success', '--enarm-success-soft'],
+      ['--enarm-warning', '--enarm-surface'],
+      ['--enarm-warning', '--enarm-warning-soft'],
+      ['--enarm-danger', '--enarm-surface'],
+      ['--enarm-danger', '--enarm-danger-soft'],
+      ['--enarm-primary-fg', '--enarm-primary-hover'],
+      ['--enarm-primary-fg', '--enarm-primary-active'],
       ...branches.flatMap((b): [string, string][] => [
         [`--enarm-${b}-ink`, `--enarm-${b}-soft`],
         [`--enarm-${b}-ink`, '--enarm-surface'],
@@ -199,6 +225,18 @@ describe('sistema de diseño de la portada por dentro (D-150)', () => {
       ['--enarm-accent', '--enarm-muted'],
       ['--enarm-accent', '--enarm-accent-soft'],
       ['--enarm-streak', '--enarm-surface'],
+      // El cuarto aro de Meta de hoy, la racha, sobre la crema de la tarjeta (V5, D-151), los
+      // otros aros sobre la crema, el foco y el borde de campos sobre el lienzo, el paso más alto
+      // del heatmap y la flama sobre la pizarra
+      ['--enarm-streak', '--enarm-cream'],
+      ['--enarm-chart-done', '--enarm-cream'],
+      ['--enarm-success', '--enarm-cream'],
+      ['--enarm-indicator', '--enarm-canvas'],
+      ['--enarm-focus', '--enarm-surface'],
+      ['--enarm-focus', '--enarm-canvas'],
+      ['--enarm-line-strong', '--enarm-canvas'],
+      ['--enarm-heatmap-4', '--enarm-surface'],
+      ['--enarm-slate-accent', '--enarm-slate'],
       ...branches.map((b): [string, string] => [`--enarm-${b}`, '--enarm-surface']),
     ];
 

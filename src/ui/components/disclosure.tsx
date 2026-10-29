@@ -33,7 +33,9 @@ export function Disclosure({
         <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-2">
           <span className="font-semibold">{title}</span>
           {summary ? (
-            <span className="truncate text-sm text-fg-muted sm:ml-auto">{summary}</span>
+            <span className="min-w-0 text-sm text-fg-muted sm:ml-auto sm:text-right">
+              {summary}
+            </span>
           ) : null}
         </span>
         <ChevronDown

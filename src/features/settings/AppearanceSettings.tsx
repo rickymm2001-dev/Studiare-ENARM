@@ -4,7 +4,9 @@
 // guardado. Los fondos con degradados, color o foto se quitaron en B2 del plan del cambio (comentario
 // 10). El modo enfoque (respuesta 82, B7) también vive aquí y se aplica al guardar. Desde D-150 los
 // interruptores son píldoras marinas cuando están prendidos y el tema y el tamaño del texto van como
-// segmentados en píldora, como en el diseño de Configuración.
+// segmentados en píldora, como en el diseño de Configuración. Al salir de la pantalla con cambios sin
+// guardar avisa igual que Editar perfil, con el mismo bloqueador del router, que solo se monta mientras
+// hay cambios porque el router admite un solo bloqueador a la vez.
 import { Monitor, Moon, PartyPopper, Sun } from 'lucide-react';
 import { useEffect, useId, useState, type ReactNode } from 'react';
 import { usePreferences } from '@/app/preferences';
@@ -23,6 +25,7 @@ import { Card } from '@/ui/components/card';
 import { SegmentedControl } from '@/ui/components/segmented';
 import { SaveBar } from '@/ui/components/save-bar';
 import { applyTheme, resolveTheme, useApplyTheme, type ThemePreference } from '@/ui/theme';
+import { UnsavedChangesGuard } from '../shared/UnsavedChangesGuard';
 
 const THEME_OPTIONS = [
   { value: 'system', label: t.theme.system, icon: <Monitor aria-hidden className="size-4" /> },
@@ -199,7 +202,9 @@ export function AppearanceSettings() {
           />
         </div>
 
-        <fieldset>
+        {/* min-w-0 porque un fieldset no se angosta por debajo de su contenido y con el texto Muy
+            grande desbordaría la página en la computadora */}
+        <fieldset className="min-w-0">
           <legend className="mb-2 font-semibold text-fg">{text.font}</legend>
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {FONT_CHOICES.map((font) => (
@@ -238,7 +243,7 @@ export function AppearanceSettings() {
           />
         </div>
 
-        <fieldset className="flex flex-col gap-2">
+        <fieldset className="flex min-w-0 flex-col gap-2">
           <legend className="mb-1 font-semibold text-fg">{text.motion}</legend>
           <SwitchField
             label={text.animations}
@@ -288,6 +293,7 @@ export function AppearanceSettings() {
         />
 
         <SaveBar dirty={dirty} status={status} onSave={save} onDiscard={discard} />
+        {dirty ? <UnsavedChangesGuard dirty text={text.leaveWarning} /> : null}
       </div>
     </Card>
   );

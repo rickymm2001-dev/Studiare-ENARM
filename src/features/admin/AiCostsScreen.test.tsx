@@ -2,7 +2,7 @@
 import 'fake-indexeddb/auto';
 import { cleanup, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { usePreferences } from '@/app/preferences';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
@@ -16,9 +16,17 @@ import { formatUsd } from './format';
 
 vi.setConfig({ testTimeout: 30_000 });
 
+// Un miércoles a media tarde. El gasto de hoy y la proyección por día salen de la fecha, así que se fija
+// para que la prueba no cruce la medianoche ni dependa del día del mes
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+
 let app: RenderedApp | undefined;
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
+});
 afterEach(async () => {
   cleanup();
+  vi.useRealTimers();
   vi.unstubAllGlobals();
   localStorage.clear();
   await resetApp(app?.api);
@@ -34,7 +42,7 @@ const call = (overrides: Partial<AiCallLog> = {}): AiCallLog => ({
   engine: 'forgetting',
   mode: 'real',
   model: 'claude-haiku-4-5',
-  at: new Date().toISOString(),
+  at: NOW.toISOString(),
   inputTokens: 1000,
   outputTokens: 200,
   cacheWriteTokens: 0,
@@ -58,7 +66,7 @@ async function open(calls: AiCallLog[]) {
 
 /** Calls repartidas en varios días y alumnos, las suficientes para proyectar */
 function enough(): AiCallLog[] {
-  const now = Date.now();
+  const now = NOW.getTime();
   return Array.from({ length: 36 }, (_, index) =>
     call({
       userId: index % 2 === 0 ? '01HZX0000000000000000000AA' : '01HZX0000000000000000000BB',

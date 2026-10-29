@@ -253,9 +253,30 @@ export function annualSavingsPercent(
  * preguntas, Suscripción y Tu plan los heredan sin cambiar
  */
 export function planOf(
-  subscription: { plan: PlanKey; status: string } | null | undefined,
+  subscription:
+    | {
+        plan: PlanKey;
+        status: string;
+        isSimulated?: boolean;
+        cancelAtPeriodEnd?: boolean;
+        periodEnd?: string | null;
+      }
+    | null
+    | undefined,
+  now: number = Date.now(),
 ): PlanKey {
-  return subscription?.status === 'active' ? subscription.plan : 'free';
+  if (subscription?.status !== 'active') return 'free';
+  // El pago simulado cancelado vale hasta el fin de su periodo y después es Gratis (V5-B0). Con la
+  // nube el servidor decide cuándo termina y el navegador solo lo refleja
+  if (
+    subscription.isSimulated &&
+    subscription.cancelAtPeriodEnd &&
+    subscription.periodEnd &&
+    Date.parse(subscription.periodEnd) <= now
+  ) {
+    return 'free';
+  }
+  return subscription.plan;
 }
 
 /**

@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { studyDayOf, weekStartOf } from '@/engines/studyDay';
 import { uuidToUlid } from '../cloud/cloudIds';
 import type { PartyOverview } from '../cloud/party';
@@ -34,7 +34,13 @@ function setup() {
   fake.plans.set(BRUNO, 'monthly');
   return { api, fake };
 }
+// Un miércoles a media tarde, para que la semana que se publica no dependa del día en que corre la prueba
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
+});
 afterEach(async () => {
+  vi.useRealTimers();
   await Promise.all(apis.splice(0).map((api) => api.dispose()));
 });
 
@@ -201,7 +207,7 @@ describe('cifras propias', () => {
   it('publica en la nube y no llama al servidor si nada cambió', async () => {
     const { api, fake } = setup();
     await createCloudGroup(api, fake.cloud, makeUser(), 'Guardia');
-    const weekStart = weekStartOf(studyDayOf(new Date(), 'America/Merida'));
+    const weekStart = weekStartOf(studyDayOf(NOW, 'America/Merida'));
     const { fetchPartyOverview } = await import('../cloud/party');
     const loaded = await fetchPartyOverview(fake.cloud, weekStart);
     if (!loaded.ok) throw new Error('el resumen falló');

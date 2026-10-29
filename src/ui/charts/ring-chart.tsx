@@ -1,5 +1,5 @@
-// Anillo concéntrico (D-150). Hasta tres anillos, cada uno con su parte llena sobre un riel gris,
-// como el estado de las tarjetas en Inicio. Los colores salen de los tokens por clase de trazo, así
+// Anillo concéntrico (D-150). Hasta cuatro anillos, cada uno con su parte llena sobre un riel gris,
+// como el estado de las tarjetas en Inicio o la meta de hoy con la racha como cuarto aro (V5, D-151). Los colores salen de los tokens por clase de trazo, así
 // cambian con el modo. Para el lector de pantalla va el resumen en aria-label, que pone quien lo usa.
 import { cn } from '@/ui/cn';
 
@@ -12,7 +12,7 @@ export interface Ring {
 }
 
 /** Giro de cada anillo desde las 12, para que no empiecen todos en el mismo punto, como en el diseño */
-const STAGGER = [-90, -30, 0];
+const STAGGER = [-90, -30, 0, 30];
 
 export function RingChart({
   rings,
@@ -43,7 +43,7 @@ export function RingChart({
         aria-label={label}
         className="absolute inset-0"
       >
-        {rings.slice(0, 3).map((ring, index) => {
+        {rings.slice(0, 4).map((ring, index) => {
           const radius = center - thickness / 2 - index * gap;
           const length = 2 * Math.PI * radius;
           const fraction = ring.max > 0 ? Math.min(Math.max(ring.value / ring.max, 0), 1) : 0;

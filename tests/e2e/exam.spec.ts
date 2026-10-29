@@ -43,6 +43,18 @@ const storedExams = (page: Page) =>
     () => Object.keys(localStorage).filter((name) => name.startsWith('enarm.exam.v1.')).length,
   );
 
+/** Si el examen guardado ya quedó cerrado del todo, con el fin de la sesión y los errores en el repaso */
+const storedExamClosed = (page: Page) =>
+  page.evaluate(() => {
+    const key = Object.keys(localStorage).find((name) => name.startsWith('enarm.exam.v1.'));
+    if (!key) return false;
+    const state = JSON.parse(localStorage.getItem(key) ?? '{}') as {
+      sessionEnded?: boolean;
+      queuedErrors?: number | null;
+    };
+    return state.sessionEnded === true && typeof state.queuedErrors === 'number';
+  });
+
 test('examen de 20 con descarte y marca, resultados y errores al repaso', async ({ page }) => {
   test.setTimeout(240_000);
   await signUp(page);
@@ -215,7 +227,7 @@ test('sin un examen guardado las pantallas lo dicen y llevan a configurarlo', as
   await expect(page.getByText(t.examResults.noExam)).toBeVisible();
 });
 
-test('un examen terminado que no se guardó se retoma desde Simular y no se pisa con otro', async ({
+test('un examen terminado que no se guardó se cierra solo al abrir la app y no se pisa con otro', async ({
   page,
 }) => {
   test.setTimeout(120_000);
@@ -232,22 +244,26 @@ test('un examen terminado que no se guardó se retoma desde Simular y no se pisa
     state.endReason = 'completed';
     localStorage.setItem(key, JSON.stringify(state));
   });
+
+  // Al abrir la app en Inicio, sin pasar por Resultados, el cierre pendiente se retoma solo (V5-B0,
+  // defecto 1 del diagnóstico). Quedan la respuesta, el fin de la sesión y los errores en el repaso
+  await page.goto(SCREENS.home.path);
+  await expect.poll(() => storedExamClosed(page), { timeout: 60_000 }).toBe(true);
+
+  // Simular ya no pide guardarlo. Ofrece otro examen y dice cómo le fue en el último
   const card = await openExamSetup(page);
-  await expect(card.getByText(t.exam.unsavedTitle)).toBeVisible();
-  await expect(card.getByRole('button', { name: t.exam.start })).toHaveCount(0);
+  await expect(card.getByText(t.exam.unsavedTitle)).toHaveCount(0);
+  await expect(card.getByText(t.exam.lastTitle)).toBeVisible();
+  await expect(card.getByRole('button', { name: t.exam.start })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
-  // Los resultados lo guardan y entonces sí se puede armar otro. Se espera a que cargue el resumen,
-  // porque antes de eso tampoco se ve el aviso de que está guardando
-  await card.getByRole('link', { name: t.exam.saveAndSee }).click();
-  await expect(page).toHaveURL(new RegExp(`${SCREENS.examResults.path}$`));
+  // Y Resultados abre ya guardado, sin volver a registrar nada
+  await page.goto(SCREENS.examResults.path);
   await expect(page.getByRole('region', { name: t.examResults.summaryTitle })).toBeVisible({
     timeout: 60_000,
   });
-  await expect(page.getByText(t.examResults.saving)).toHaveCount(0, { timeout: 60_000 });
-  const again = await openExamSetup(page);
-  await expect(again.getByText(t.exam.lastTitle)).toBeVisible();
-  await expect(again.getByRole('button', { name: t.exam.start })).toBeVisible();
+  await expect(page.getByText(t.examResults.saving)).toHaveCount(0);
+  await expect(page.getByText(t.examResults.saveError)).toHaveCount(0);
 });
 
 test('al borrar mis datos también se va el examen guardado en el navegador', async ({ page }) => {

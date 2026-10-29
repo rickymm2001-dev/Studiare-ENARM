@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { weekStartOf, studyDayOf } from '@/engines/studyDay';
 import { fakeRpc } from '../testing/bankCloud';
 import { FAKE_PARTY_LIMITS } from '../testing/fakePartyServer';
@@ -30,7 +30,16 @@ import {
 const ANA = '2f6c4b1e-8a3d-4c7e-9b10-6d2e5f7a8b01';
 const BRUNO = '7a1d3c5e-2b4f-4a6c-8e9d-0f1a2b3c4d5e';
 const CARLA = '9c8b7a6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d';
-const week = () => weekStartOf(studyDayOf(new Date(), 'America/Merida'));
+// Un miércoles a media tarde, para que la semana que se publica no dependa del día en que corre la prueba
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+const week = () => weekStartOf(studyDayOf(NOW, 'America/Merida'));
+
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
+});
+afterEach(() => {
+  vi.useRealTimers();
+});
 const questions = Array.from({ length: 20 }, (_, index) => `01J${String(index).padStart(23, '0')}`);
 
 /** Una nube falsa con tres alumnos. as cambia de alumno como si fuera otro navegador */

@@ -265,6 +265,44 @@ describe('Configuración en una sola página', () => {
     expect((await app.api.repos.users.get(app.user.id))?.alias).toBe('Ana');
   });
 
+  it('Apariencia con cambios sin guardar avisa al salir por un enlace y al cerrar la pestaña', async () => {
+    const typing = userEvent.setup();
+    app = await open();
+    await profile();
+    const appearance = document.getElementById('apariencia') as HTMLElement;
+    const dark = within(appearance).getByRole('button', { name: t.theme.dark });
+    await typing.click(dark);
+    expect(within(appearance).getByText(t.settings.unsaved)).toBeVisible();
+    const unload = new Event('beforeunload', { cancelable: true });
+    window.dispatchEvent(unload);
+    expect(unload.defaultPrevented).toBe(true);
+
+    await typing.click(screen.getByRole('link', { name: page.plan.change }));
+    const warning = await screen.findByRole('alertdialog', {
+      name: t.appearance.leaveWarning.title,
+    });
+    expect(within(warning).getByText(t.appearance.leaveWarning.body)).toBeVisible();
+    await typing.click(
+      within(warning).getByRole('button', { name: t.appearance.leaveWarning.stay }),
+    );
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).toBeNull();
+    });
+    expect(dark).toHaveAttribute('aria-pressed', 'true');
+
+    await typing.click(screen.getByRole('link', { name: page.plan.change }));
+    await typing.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', {
+        name: t.appearance.leaveWarning.leave,
+      }),
+    );
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.screens.subscription.title }, WAIT),
+    ).toBeVisible();
+    // Al salir sin guardar queda lo guardado
+    expect(usePreferences.getState().theme).toBe('system');
+  });
+
   it('sin sesión quedan el aviso para entrar, como en las otras pantallas, y Apariencia', async () => {
     app = await open();
     await profile();

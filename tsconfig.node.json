@@ -29,7 +29,8 @@
     "supabase/functions",
     "vite.config.ts",
     "vite.calibration.config.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "vitest.perf.config.ts"
   ],
   // La calibración nocturna usa el alias @ de los motores y se empaqueta con Vite (3.1 del plan de B14),
   // así que se revisa con tsconfig.tests.json, que lo declara

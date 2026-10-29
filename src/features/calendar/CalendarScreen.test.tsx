@@ -7,7 +7,7 @@
 import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { createEvent } from '@/data/events/createEvent';
@@ -19,11 +19,19 @@ import { t } from '@/i18n/es-MX';
 
 vi.setConfig({ testTimeout: 30_000 });
 
+// Un miércoles a media tarde, a mitad del mes, para que hoy, mañana y el mes que se ve no dependan del
+// día en que corre la prueba. Solo se fija Date, los temporizadores siguen reales para waitFor
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+
 let app: RenderedApp | undefined;
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
+});
 afterEach(async () => {
   cleanup();
   await resetApp(app?.api);
   app = undefined;
+  vi.useRealTimers();
 });
 
 const text = t.calendar;
@@ -288,7 +296,7 @@ describe('mes y días', () => {
     await resetApp(app.api);
     app = await renderApp(SCREENS.calendar.path, {
       seed: async (api, user) => {
-        const now = new Date();
+        const now = NOW;
         await api.repos.events.append(
           createEvent(
             'card_reviewed',
@@ -442,7 +450,7 @@ describe('el héroe y las tres columnas (D-150)', () => {
               durationMs: 1_440_000,
               xp: 40,
             },
-            { userId: user.id, tz: user.timeZone, clock: { now: () => new Date() } },
+            { userId: user.id, tz: user.timeZone, clock: { now: () => NOW } },
           ),
         );
       },

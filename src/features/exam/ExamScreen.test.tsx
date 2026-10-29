@@ -89,6 +89,24 @@ describe('pantalla del examen', () => {
     expect(stored?.answers[first]?.optionId).not.toBeNull();
   });
 
+  it('marcar con el ratón y después Enter avanza, sin volver a alternar la marca', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.exam.path, { seed: seedExam() });
+    await screen.findByText(t.exam.progress(1, 3), { exact: true });
+    await typing.click(screen.getByRole('button', { name: t.exam.mark }));
+    // El foco pasó al enunciado, así que Enter es el atajo de siguiente y no el botón de marcar
+    expect(screen.getByRole('heading', { level: 2, name: /Pregunta 1 de 3/ })).toHaveFocus();
+    await typing.keyboard('{Enter}');
+    expect(await screen.findByText(t.exam.progress(2, 3), { exact: true })).toBeVisible();
+    const stored = loadExamState(app.user.id);
+    expect(stored?.answers[stored.questionIds[0] ?? '']?.marked).toBe(true);
+    // Con el teclado el botón sigue siendo un botón. Enter sobre él alterna la marca de esta pregunta
+    screen.getByRole('button', { name: t.exam.mark }).focus();
+    await typing.keyboard('{Enter}');
+    expect(screen.getByRole('button', { name: t.exam.unmark })).toHaveFocus();
+    expect(screen.getByText(t.exam.progress(2, 3), { exact: true })).toBeVisible();
+  });
+
   it('terminar pide confirmar, avisa lo que queda en blanco y lleva a los resultados', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.exam.path, { seed: seedExam() });

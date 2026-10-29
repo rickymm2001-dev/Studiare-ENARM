@@ -211,6 +211,14 @@ describe('Buscar tarjetas', () => {
     expect(screen.getAllByRole('link', { name: t.studyTabs.decks })).toHaveLength(2);
   });
 
+  it('sin tarjetas y con un término desde la barra, el estado vacío dice qué se buscó', async () => {
+    app = await renderApp(`${SCREENS.explore.path}?q=sepsis`, {
+      seed: (api, user) => subscribe(api, user),
+    });
+    expect(await screen.findByText(text.noResultsFor('sepsis'), undefined, WAIT)).toBeVisible();
+    expect(screen.getByText(text.empty)).toBeVisible();
+  });
+
   it('en Gratis, sin tarjetas, sugiere crear un mazo propio y no seguir uno del catálogo', async () => {
     app = await renderApp(SCREENS.explore.path);
     expect(await screen.findByText(t.freePlan.catalog.exploreEmpty, undefined, WAIT)).toBeVisible();
@@ -254,7 +262,9 @@ describe('Buscar tarjetas', () => {
     });
     await typing.clear(search);
     await typing.type(search, 'zzzzxqj');
-    expect(await screen.findByText(text.noResults)).toBeVisible();
+    // Sin resultados repite lo que se buscó, para que se vea que no se perdió el término
+    expect(await screen.findByText(text.noResultsFor('zzzzxqj'))).toBeVisible();
+    expect(screen.queryByText(text.noResults)).toBeNull();
   });
 
   it('los chips dicen su conteo y filtran por mazo, tema, estado, vencidas y sanguijuelas', async () => {

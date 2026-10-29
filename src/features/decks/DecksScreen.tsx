@@ -42,7 +42,7 @@ import { StudyTabs } from '../review/StudyTabs';
 import { activeDeckStates, suspendedDeckStates } from '@/engines/deckStats';
 import { descendantIds, selectionUnitId } from '@/engines/deckTree';
 import { suspendedCardIds } from '@/engines/suspension';
-import { followedDeckIds } from './followed';
+import { followedDeckIds, followedTopLevelCount } from './followed';
 import { AiCardsCard } from './AiCardsCard';
 import { DeckInsights } from './DeckInsights';
 import { DeckStatsList } from './DeckStatsList';
@@ -162,7 +162,8 @@ function Decks({ session }: { session: ReadySession }) {
           <StatCell
             icon={<Layers />}
             label={t.decks.summary.followed}
-            value={followed.size.toLocaleString('es-MX')}
+            // Los de primer nivel, como se ven en la lista. Los submazos no inflan la cifra
+            value={followedTopLevelCount(followed, stored.decks).toLocaleString('es-MX')}
             caption={t.decks.summary.followedCaption}
           />
           <StatCell

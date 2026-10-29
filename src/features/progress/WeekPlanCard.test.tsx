@@ -5,7 +5,7 @@
 import 'fake-indexeddb/auto';
 import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
@@ -19,11 +19,19 @@ import { schedulerConfig } from '../review/schedulerConfig';
 // Sembrar más de cien tarjetas y abrir Progreso completo tarda más que el tiempo por defecto
 vi.setConfig({ testTimeout: 60_000 });
 
+// Un miércoles a media tarde. Lo hecho hoy y los 7 días de la semana salen de la fecha, así que se fija
+// para que la prueba no cruce la medianoche ni dependa del día de la semana
+const NOW = new Date('2026-10-14T18:00:00.000Z');
+
 let app: RenderedApp | undefined;
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: NOW });
+});
 afterEach(async () => {
   cleanup();
   await resetApp(app?.api);
   app = undefined;
+  vi.useRealTimers();
 });
 
 /** La tarjeta de la semana con sus días ya calculados */
@@ -49,7 +57,7 @@ async function settingsChanges(api: DataApi, userId: string) {
 
 /** Una tarjeta vista hoy por primera vez y 15 minutos de estudio, para que hoy tenga algo hecho */
 async function studyToday(api: DataApi, user: User, card: { cardId: string; deckId: string }) {
-  const now = new Date();
+  const now = NOW;
   await api.recordEvent(
     createEvent(
       'card_reviewed',

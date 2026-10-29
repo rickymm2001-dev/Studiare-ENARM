@@ -170,6 +170,22 @@ describe('el plan de una suscripción', () => {
     expect(planOf({ plan: 'annual', status: 'canceled' })).toBe('free');
     expect(planOf({ plan: 'free', status: 'none' })).toBe('free');
   });
+
+  it('el pago simulado cancelado vale hasta el fin de su periodo y después es Gratis (V5-B0)', () => {
+    const end = '2026-11-14T15:00:00.000Z';
+    const canceled = {
+      plan: 'monthly' as const,
+      status: 'active',
+      isSimulated: true,
+      cancelAtPeriodEnd: true,
+      periodEnd: end,
+    };
+    expect(planOf(canceled, Date.parse(end) - 1)).toBe('monthly');
+    expect(planOf(canceled, Date.parse(end))).toBe('free');
+    // Sin cancelar sigue vigente, y con la nube el servidor decide y el navegador solo refleja
+    expect(planOf({ ...canceled, cancelAtPeriodEnd: false }, Date.parse(end) + 1)).toBe('monthly');
+    expect(planOf({ ...canceled, isSimulated: false }, Date.parse(end) + 1)).toBe('monthly');
+  });
 });
 
 describe('candados del plan (B8)', () => {

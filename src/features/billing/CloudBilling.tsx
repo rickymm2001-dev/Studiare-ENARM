@@ -1,8 +1,9 @@
 // Pago real en modo prueba desde Suscripción, cuando la cuenta de la nube está conectada (Fase P
 // bloque 5, D-096, y B10 del plan del cambio). La forma de pago vive en CheckoutOptions.tsx. Aquí quedan
 // Administrar suscripción, con el portal de Stripe o la cancelación de Mercado Pago, que no tiene
-// portal, la tarjeta de quien no tiene sesión en este navegador y el aviso al volver de la pasarela, que
-// revisa el plan con la nube hasta que el aviso del pago lo confirme.
+// portal y confirma en CancelSubscriptionDialog, la tarjeta de quien no tiene sesión en este navegador
+// y el aviso al volver de la pasarela, que revisa el plan con la nube hasta que el aviso del pago lo
+// confirme.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -20,6 +21,7 @@ import { billingCloudText } from '@/i18n/billingCloud';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
+import { CancelSubscriptionDialog } from './CancelSubscriptionDialog';
 import { longDate } from './planState';
 import { usePortal } from './usePortal';
 
@@ -71,7 +73,8 @@ export function BillingPortalCard({
 
 /**
  * Para quien paga con Mercado Pago, que no tiene portal (B10, 2.5). Cancela con cancel-subscription,
- * después de confirmar. El plan vale hasta el fin de lo pagado y la app vuelve a leerlo
+ * solo después de confirmar en el diálogo que dice lo que se pierde y hasta cuándo sigue el plan
+ * (V5-B0). El plan vale hasta el fin de lo pagado y la app vuelve a leerlo
  */
 export function MercadoPagoManageCard({
   subscription,
@@ -82,26 +85,30 @@ export function MercadoPagoManageCard({
   onChanged?: () => void;
 }) {
   const mp = text.mercadoPago;
-  const [stage, setStage] = useState<'idle' | 'confirm' | 'busy'>('idle');
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  // Ya se canceló en esta tarjeta, aunque la nube todavía no lo refleje
+  const [done, setDone] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const until = subscription.periodEnd ? longDate(subscription.periodEnd) : null;
   const canceled =
-    subscription.cancelAtPeriodEnd === true || subscription.cloudStatus === 'canceled';
+    done || subscription.cancelAtPeriodEnd === true || subscription.cloudStatus === 'canceled';
 
   const cancel = async () => {
-    setStage('busy');
+    setBusy(true);
     setMessage(null);
     const cloud = await loadCloud();
     const result = cloud
       ? await cancelMercadoPagoSubscription(cloud)
       : ({ ok: false, reason: 'failed' } as const);
-    setStage('idle');
+    setBusy(false);
     if (!result.ok) {
       setMessage(mp.errors[result.reason]);
       return;
     }
     const end = result.periodEnd ?? subscription.periodEnd ?? null;
     setMessage(end ? mp.done(longDate(end)) : mp.doneNoDate);
+    setDone(true);
     onChanged?.();
   };
 
@@ -112,44 +119,34 @@ export function MercadoPagoManageCard({
         <CardDescription>{mp.description}</CardDescription>
       </CardHeader>
       <p role="status" className="mb-2 min-h-5 text-sm text-fg-muted">
-        {stage === 'busy' ? mp.canceling : (message ?? (canceled ? mp.already : null))}
+        {busy ? mp.canceling : (message ?? (canceled ? mp.already : null))}
       </p>
-      {canceled ? null : stage === 'confirm' ? (
-        <div className="flex flex-col gap-2">
-          <p className="text-sm">{until ? mp.confirm(until) : mp.confirmNoDate}</p>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="danger"
-              onClick={() => {
-                void cancel();
-              }}
-            >
-              {mp.confirmYes}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                setStage('idle');
-              }}
-            >
-              {mp.confirmNo}
-            </Button>
-          </div>
-        </div>
-      ) : (
+      {canceled ? null : (
         <div>
           <Button
             variant="secondary"
-            disabled={stage === 'busy'}
+            disabled={busy}
             onClick={() => {
-              setStage('confirm');
               setMessage(null);
+              setOpen(true);
             }}
           >
             {mp.cancel}
           </Button>
         </div>
       )}
+      <CancelSubscriptionDialog
+        open={open}
+        plan={planOf(subscription)}
+        description={until ? mp.confirm(until) : mp.confirmNoDate}
+        onKeep={() => {
+          setOpen(false);
+        }}
+        onConfirm={() => {
+          setOpen(false);
+          void cancel();
+        }}
+      />
     </Card>
   );
 }

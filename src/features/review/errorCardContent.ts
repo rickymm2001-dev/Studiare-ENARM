@@ -7,7 +7,7 @@
 // alumno. El inglés va en un span con lang="en" para que el lector de pantalla lo diga en inglés. Atrás
 // va la fuente del texto con su licencia, porque la licencia pide atribuir el texto donde se use.
 import { LICENSE_LABELS, parsePassageSource } from '@/data/content/passageSource';
-import { escapeHtml, textToHtml } from '@/data/content/plainText';
+import { escapeHtml, htmlToText, textToHtml } from '@/data/content/plainText';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
 import { shortenCase } from '../questionCards/questionCardDraft';
@@ -22,6 +22,18 @@ export interface ErrorCardContent {
 }
 
 const QUOTE_MAX = 2000;
+
+const collapse = (text: string) => text.replace(/\s+/g, ' ').trim();
+
+/**
+ * Si la frase de la fuente ya va tal cual en el reverso, como en Mis errores, donde la explicación del
+ * banco es a la vez el reverso y la frase que lo respalda. Entonces no vale la pena mostrarla dos veces
+ */
+export function quoteRepeatsBack(backHtml: string, quote: string | null | undefined): boolean {
+  if (!quote) return false;
+  const needle = collapse(quote);
+  return needle !== '' && collapse(htmlToText(backHtml)).includes(needle);
+}
 
 /** Un pedazo de HTML ya escapado que el lector de pantalla dice en inglés */
 const inEnglish = (escaped: string) => `<span lang="en">${escaped}</span>`;

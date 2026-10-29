@@ -271,7 +271,10 @@ function SettingsSectionBlock({
         {title}
       </h2>
       {columns ? (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">{children}</div>
+        // Cada tarjeta con min-w-0, para que una fila ancha no desborde la página con el texto Muy grande
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start [&>*]:min-w-0">
+          {children}
+        </div>
       ) : (
         children
       )}

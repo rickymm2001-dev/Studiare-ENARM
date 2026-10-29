@@ -5,7 +5,8 @@
   pizarra #374042 en la barra superior y el dock del teléfono, y los tintes crema, panel, salvia y
   durazno para las tarjetas. Un acento cálido para racha, nivel y XP, la escala de cinco pasos del
   heatmap y colores de estado solo para acierto, aviso y peligro. Las seis ramas conservan su color
-  de D-128. El modo se elige así
+  de D-128. El modo oscuro tiene su paleta propia sobre pizarra, documentada más abajo (V5, D-151).
+  El modo se elige así
   - Sin clase en <html>, manda la preferencia del sistema (primer pintado, antes de que cargue JS)
   - Con clase light o dark en <html>, manda la elección del alumno (src/ui/theme.ts)
 */
@@ -127,80 +128,95 @@
   --enarm-glass-opacity: 92%;
 }
 
+/*
+  Modo oscuro (V5, D-151). Paleta propia sobre el canvas de D-150, en vez de un negro azulado. El
+  lienzo es pizarra honda #1f2628 y las tarjetas pizarra #2a3234, derivadas de la #374042 de la
+  barra, que sigue igual en los dos modos junto con el dock. El marino sube a #1a4f9c como acción
+  y los títulos van en #c9d6ea. Los tintes crema, panel, salvia y durazno se oscurecen y se
+  desaturan para que sigan siendo un matiz y no un color. Todo texto pasa 4.5 a 1 y todo gráfico
+  3 a 1, lo vigila src/ui/design.test.ts y lo revisa axe en tests/e2e. Los dos bloques, por
+  preferencia del sistema y por clase, llevan los mismos valores y la prueba lo comprueba
+*/
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --enarm-canvas: #0f1419;
-    --enarm-surface: #171d24;
-    --enarm-muted: #202831;
-    --enarm-line: #2d3741;
-    --enarm-line-strong: #66747f;
-    --enarm-fg: #e8edf1;
-    --enarm-fg-muted: #a3aeb8;
+    /* Superficies. Pizarra honda de lienzo, pizarra de tarjeta y un paso más claro para controles */
+    --enarm-canvas: #1f2628;
+    --enarm-surface: #2a3234;
+    --enarm-muted: #353f42;
+    --enarm-line: #414c4f;
+    /* Borde de campos. 4.5 a 1 sobre la tarjeta y 3.7 sobre muted */
+    --enarm-line-strong: #8d9a9e;
+    --enarm-fg: #eef2f3;
+    --enarm-fg-muted: #b5c0c3;
     --enarm-heading: #c9d6ea;
+    /* Marino claro como acción, con texto blanco a 7.9 a 1 */
     --enarm-primary: #1a4f9c;
     --enarm-primary-hover: #245fb3;
     --enarm-primary-active: #163f7c;
     --enarm-primary-fg: #ffffff;
-    --enarm-primary-ink: #7cc2ee;
-    --enarm-primary-soft: #16303e;
+    /* Cielo claro para enlaces e íconos, 7.2 a 1 sobre la tarjeta */
+    --enarm-primary-ink: #8fc7f1;
+    --enarm-primary-soft: #22384d;
     --enarm-focus: #7cc2ee;
     --enarm-indicator: #7cc2ee;
+    /* La barra y el dock siguen en la pizarra de la marca, un paso más clara que las tarjetas */
     --enarm-slate: #374042;
     --enarm-slate-deep: #2a3133;
     --enarm-slate-fg: #f2f5f6;
     --enarm-slate-muted: #c9d3d6;
     --enarm-slate-accent: #f5ab7a;
-    --enarm-cream: #1c232b;
-    --enarm-panel: #1b2630;
-    --enarm-sage: #19282a;
+    /* Tintes atenuados sobre la pizarra. Crema cálida, panel azulado y salvia verdosa */
+    --enarm-cream: #33302c;
+    --enarm-panel: #2b3744;
+    --enarm-sage: #293733;
     --enarm-accent: #ea8b48;
-    --enarm-accent-soft: #351d10;
+    --enarm-accent-soft: #40291d;
     --enarm-accent-ink: #f5ab7a;
-    --enarm-accent-fg: #171d24;
+    --enarm-accent-fg: #1f2628;
     --enarm-streak: #ea8b48;
-    --enarm-streak-soft: #351d10;
+    --enarm-streak-soft: #40291d;
     --enarm-streak-ink: #f5ab7a;
     --enarm-chart-scheduled: #7cc2ee;
     --enarm-chart-done: #a8cdf5;
     --enarm-chart-compare: #e0a84f;
-    --enarm-heatmap-0: #202831;
-    --enarm-heatmap-1: #1b4257;
-    --enarm-heatmap-2: #255973;
-    --enarm-heatmap-3: #448ba8;
-    --enarm-heatmap-4: #7fc1de;
+    --enarm-heatmap-0: #353f42;
+    --enarm-heatmap-1: #244a5e;
+    --enarm-heatmap-2: #2d6480;
+    --enarm-heatmap-3: #4a95b3;
+    --enarm-heatmap-4: #83c6e2;
     --enarm-success: #6fd39b;
-    --enarm-success-soft: #123224;
+    --enarm-success-soft: #1e3a2c;
     --enarm-warning: #f0c060;
-    --enarm-warning-soft: #352a12;
+    --enarm-warning-soft: #3b3119;
     --enarm-danger: #ff8d85;
     --enarm-danger-hover: #ffa8a1;
-    --enarm-danger-soft: #3d1b18;
+    --enarm-danger-soft: #45231f;
     --enarm-danger-fg: #2b0d0a;
     --enarm-mi: #6faed6;
-    --enarm-mi-soft: #142938;
+    --enarm-mi-soft: #1f3340;
     --enarm-mi-ink: #9ecbee;
     --enarm-ped: #5bc2cf;
-    --enarm-ped-soft: #112d33;
+    --enarm-ped-soft: #1d373a;
     --enarm-ped-ink: #8ee0ec;
     --enarm-gyo: #cf6cb2;
-    --enarm-gyo-soft: #331429;
+    --enarm-gyo-soft: #3a1f32;
     --enarm-gyo-ink: #e89ed2;
     --enarm-cir: #918fe0;
-    --enarm-cir-soft: #1e1d38;
+    --enarm-cir-soft: #27283f;
     --enarm-cir-ink: #b9b8f2;
     --enarm-fam: #d67394;
-    --enarm-fam-soft: #351420;
+    --enarm-fam-soft: #3b1f28;
     --enarm-fam-ink: #eda4be;
     --enarm-urg: #a67dd4;
-    --enarm-urg-soft: #241336;
+    --enarm-urg-soft: #2d2039;
     --enarm-urg-ink: #caa9ee;
-    --enarm-demo: #202831;
-    --enarm-demo-fg: #c4ccd3;
-    --enarm-demo-line: #3a4650;
-    --enarm-sim: #202831;
-    --enarm-sim-fg: #c4ccd3;
-    --enarm-sim-line: #3a4650;
+    --enarm-demo: #353f42;
+    --enarm-demo-fg: #ccd4d8;
+    --enarm-demo-line: #4b575b;
+    --enarm-sim: #353f42;
+    --enarm-sim-fg: #ccd4d8;
+    --enarm-sim-line: #4b575b;
     --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
     --enarm-shadow-raised: 0 10px 30px -18px rgb(0 0 0 / 0.6);
     --enarm-shadow-navy: 0 18px 40px -22px rgb(0 0 0 / 0.7);
@@ -210,77 +226,83 @@
 
 :root.dark {
   color-scheme: dark;
-  --enarm-canvas: #0f1419;
-  --enarm-surface: #171d24;
-  --enarm-muted: #202831;
-  --enarm-line: #2d3741;
-  --enarm-line-strong: #66747f;
-  --enarm-fg: #e8edf1;
-  --enarm-fg-muted: #a3aeb8;
+  /* Superficies. Pizarra honda de lienzo, pizarra de tarjeta y un paso más claro para controles */
+  --enarm-canvas: #1f2628;
+  --enarm-surface: #2a3234;
+  --enarm-muted: #353f42;
+  --enarm-line: #414c4f;
+  /* Borde de campos. 4.5 a 1 sobre la tarjeta y 3.7 sobre muted */
+  --enarm-line-strong: #8d9a9e;
+  --enarm-fg: #eef2f3;
+  --enarm-fg-muted: #b5c0c3;
   --enarm-heading: #c9d6ea;
+  /* Marino claro como acción, con texto blanco a 7.9 a 1 */
   --enarm-primary: #1a4f9c;
   --enarm-primary-hover: #245fb3;
   --enarm-primary-active: #163f7c;
   --enarm-primary-fg: #ffffff;
-  --enarm-primary-ink: #7cc2ee;
-  --enarm-primary-soft: #16303e;
+  /* Cielo claro para enlaces e íconos, 7.2 a 1 sobre la tarjeta */
+  --enarm-primary-ink: #8fc7f1;
+  --enarm-primary-soft: #22384d;
   --enarm-focus: #7cc2ee;
   --enarm-indicator: #7cc2ee;
+  /* La barra y el dock siguen en la pizarra de la marca, un paso más clara que las tarjetas */
   --enarm-slate: #374042;
   --enarm-slate-deep: #2a3133;
   --enarm-slate-fg: #f2f5f6;
   --enarm-slate-muted: #c9d3d6;
   --enarm-slate-accent: #f5ab7a;
-  --enarm-cream: #1c232b;
-  --enarm-panel: #1b2630;
-  --enarm-sage: #19282a;
+  /* Tintes atenuados sobre la pizarra. Crema cálida, panel azulado y salvia verdosa */
+  --enarm-cream: #33302c;
+  --enarm-panel: #2b3744;
+  --enarm-sage: #293733;
   --enarm-accent: #ea8b48;
-  --enarm-accent-soft: #351d10;
+  --enarm-accent-soft: #40291d;
   --enarm-accent-ink: #f5ab7a;
-  --enarm-accent-fg: #171d24;
+  --enarm-accent-fg: #1f2628;
   --enarm-streak: #ea8b48;
-  --enarm-streak-soft: #351d10;
+  --enarm-streak-soft: #40291d;
   --enarm-streak-ink: #f5ab7a;
   --enarm-chart-scheduled: #7cc2ee;
   --enarm-chart-done: #a8cdf5;
   --enarm-chart-compare: #e0a84f;
-  --enarm-heatmap-0: #202831;
-  --enarm-heatmap-1: #1b4257;
-  --enarm-heatmap-2: #255973;
-  --enarm-heatmap-3: #448ba8;
-  --enarm-heatmap-4: #7fc1de;
+  --enarm-heatmap-0: #353f42;
+  --enarm-heatmap-1: #244a5e;
+  --enarm-heatmap-2: #2d6480;
+  --enarm-heatmap-3: #4a95b3;
+  --enarm-heatmap-4: #83c6e2;
   --enarm-success: #6fd39b;
-  --enarm-success-soft: #123224;
+  --enarm-success-soft: #1e3a2c;
   --enarm-warning: #f0c060;
-  --enarm-warning-soft: #352a12;
+  --enarm-warning-soft: #3b3119;
   --enarm-danger: #ff8d85;
   --enarm-danger-hover: #ffa8a1;
-  --enarm-danger-soft: #3d1b18;
+  --enarm-danger-soft: #45231f;
   --enarm-danger-fg: #2b0d0a;
   --enarm-mi: #6faed6;
-  --enarm-mi-soft: #142938;
+  --enarm-mi-soft: #1f3340;
   --enarm-mi-ink: #9ecbee;
   --enarm-ped: #5bc2cf;
-  --enarm-ped-soft: #112d33;
+  --enarm-ped-soft: #1d373a;
   --enarm-ped-ink: #8ee0ec;
   --enarm-gyo: #cf6cb2;
-  --enarm-gyo-soft: #331429;
+  --enarm-gyo-soft: #3a1f32;
   --enarm-gyo-ink: #e89ed2;
   --enarm-cir: #918fe0;
-  --enarm-cir-soft: #1e1d38;
+  --enarm-cir-soft: #27283f;
   --enarm-cir-ink: #b9b8f2;
   --enarm-fam: #d67394;
-  --enarm-fam-soft: #351420;
+  --enarm-fam-soft: #3b1f28;
   --enarm-fam-ink: #eda4be;
   --enarm-urg: #a67dd4;
-  --enarm-urg-soft: #241336;
+  --enarm-urg-soft: #2d2039;
   --enarm-urg-ink: #caa9ee;
-  --enarm-demo: #202831;
-  --enarm-demo-fg: #c4ccd3;
-  --enarm-demo-line: #3a4650;
-  --enarm-sim: #202831;
-  --enarm-sim-fg: #c4ccd3;
-  --enarm-sim-line: #3a4650;
+  --enarm-demo: #353f42;
+  --enarm-demo-fg: #ccd4d8;
+  --enarm-demo-line: #4b575b;
+  --enarm-sim: #353f42;
+  --enarm-sim-fg: #ccd4d8;
+  --enarm-sim-line: #4b575b;
   --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
   --enarm-shadow-raised: 0 10px 30px -18px rgb(0 0 0 / 0.6);
   --enarm-shadow-navy: 0 18px 40px -22px rgb(0 0 0 / 0.7);

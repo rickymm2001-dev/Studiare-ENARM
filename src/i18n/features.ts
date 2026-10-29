@@ -173,6 +173,9 @@ export const featureText = {
       row: (name: string, done: number, target: number) =>
         `${name} ${done.toLocaleString('es-MX')} de ${target.toLocaleString('es-MX')}`,
       label: (percent: number, rows: string) => `Meta de hoy al ${percent} por ciento. ${rows}`,
+      // La cuarta fila es la meta de la racha que el alumno eligió en la bienvenida, con su métrica
+      // (tarjetas, preguntas o minutos de estudio) y su cifra (V5, D-151)
+      streakRow: (metric: string) => `Racha en ${metric}`,
     },
     // Pulso de estudio en medidor (D-150)
     pulse: {
@@ -188,8 +191,23 @@ export const featureText = {
         answered: 'preguntas contestadas en 30 días',
         reviews: 'repasos en 30 días',
       },
-      calibratingNote: (days: number, answered: number, reviews: number) =>
-        `Para medir tu pulso faltan ${plural(days, 'día con actividad', 'días con actividad')}, ${plural(answered, 'pregunta', 'preguntas')} y ${plural(reviews, 'repaso', 'repasos')}.`,
+      calibratingHint: 'Resume tu constancia, tus aciertos y tu retención de los últimos días.',
+      /**
+       * Lo que falta además de la parte que va en la barra. Solo nombra las partes que faltan, para no
+       * repetir la frase de la barra. Vacío si no falta nada más
+       */
+      calibratingNote: (days: number, answered: number, reviews: number) => {
+        const parts = [
+          days > 0 ? plural(days, 'día con actividad', 'días con actividad') : null,
+          answered > 0 ? plural(answered, 'pregunta', 'preguntas') : null,
+          reviews > 0 ? plural(reviews, 'repaso', 'repasos') : null,
+        ].filter((part): part is string => part !== null);
+        if (parts.length === 0) return '';
+        const list = new Intl.ListFormat('es-MX', { style: 'long', type: 'conjunction' }).format(
+          parts,
+        );
+        return `Para medir tu pulso faltan también ${list}.`;
+      },
     },
     simulateTopics: 'Simular estos temas',
     // Indicadores clave. Cada uno calibra con su umbral y nunca inventa la cifra (D-150)
@@ -682,7 +700,13 @@ export const featureText = {
     receiptLine: (plan: string, price: string, date: string) => `${plan} · ${price} · ${date}`,
     receiptSimulated: 'SIMULADO. Sin cobro real.',
     cancel: 'Cancelar suscripción',
-    canceled: 'Tu suscripción quedó cancelada. Vuelves al plan Gratis.',
+    // Tu suscripción con el pago simulado. Cancelar vive aquí y nunca en la tarjeta de Gratis, pide
+    // confirmar y el plan sigue hasta el fin de su periodo (V5-B0)
+    manage: {
+      title: 'Tu suscripción',
+      simulated:
+        'Pago simulado. Si la cancelas no se cobra nada, tu plan sigue hasta el fin de su periodo y después vuelves a Gratis.',
+    },
     receiptsTitle: 'Recibos',
     noReceipts: 'Todavía no tienes recibos.',
   },
@@ -1492,6 +1516,13 @@ export const featureText = {
     },
     size: 'Tamaño del texto',
     sizes: { sm: 'Chico', md: 'Normal', lg: 'Grande', xl: 'Muy grande' },
+    // Aviso al salir de Configuración con cambios de Apariencia sin guardar
+    leaveWarning: {
+      title: 'Tienes cambios sin guardar',
+      body: 'Si sales ahora, se pierden los cambios de tu apariencia.',
+      stay: 'Seguir editando',
+      leave: 'Salir sin guardar',
+    },
     motion: 'Movimiento y sonido',
     animations: 'Animaciones',
     animationsHint: 'Si tu sistema pide reducir movimiento, se respetará siempre.',
