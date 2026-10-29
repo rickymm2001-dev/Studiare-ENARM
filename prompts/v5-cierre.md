@@ -16,6 +16,13 @@ Vas a ejecutar el plan V5, que lleva la app del estado actual al lanzamiento abi
 - El proyecto real de Supabase hoy tiene el esquema de B10 y 7 de 13 funciones. La cadena de despliegue b11 a b18 y f2 nunca corrió contra él. Ensáyala primero en un proyecto de prueba y aplícala con dry-run.
 - El CI tiene pruebas de tiempo que fallan bajo carga (cardSearch.performance, post-deploy, PrivacySection, CalendarScreen). Arréglalas en B0 antes que nada, porque un rojo falso tapa los rojos de verdad.
 
+## Estado el día de arranque (29 de octubre de 2026)
+
+- El dominio es plexusmedica.mx, comprado en Squarespace. La app va en studiare.plexusmedica.mx, el correo automático sale de mail.plexusmedica.mx y los buzones de privacidad y soporte son del dominio de la empresa. Está en docs/GUIA_DE_CUENTAS.md.
+- El token de Cloudflare del entorno ya es válido y con permisos amplios. Úsalo para meter el dominio a Cloudflare, importar sus registros, revisar que queden los de la página y el correo de la empresa, y crear lo que haga falta. Lo primero que me das, en una línea, son los dos nameservers para que yo los pegue en Squarespace, porque eso es lo que más tarda. Después sigues con B0 sin esperarme.
+- Supabase tiene conector. Stripe inyecta todavía la llave publicable, así que para configurar Stripe pide la llave restringida del punto 8 de la guía cuando llegue B7.
+- Ricardo es principiante. Cuando necesites algo de él, dale los pasos con los nombres de los menús, uno por uno, y nunca le pidas pegar una llave en el chat.
+
 ## Pausas
 
 Solo te detienes a pedirme confirmación en una línea en estos puntos. En todo lo demás sigues sin esperar.
