@@ -99,6 +99,15 @@ Cómo sabes que quedó. Pide un código de acceso desde la app a tu Gmail. Llega
 6. En Supabase, Edge Functions, Secrets, agrega POSTHOG_PROJECT_KEY y POSTHOG_HOST con los mismos valores.
 7. Avisa a la sesión. Ella prende la medición cuando llegue la beta de 20 a 50.
 
+## Si el dominio es el de la empresa (Plexus Medica)
+
+Studiare es un producto de Plexus Medica y el dominio de la empresa es el que se usa. No hace falta comprar otro. Donde la guía dice tudominio.mx, lee así.
+
+- La app vive en studiare.plexusmedica.mx (o .com, el que exista). Es un subdominio, para no tocar la página ni el correo de la empresa. SITE_URL y las direcciones de Supabase llevan ese subdominio.
+- El correo que manda la app sale de mail.plexusmedica.mx, con remitente no-responder@mail.plexusmedica.mx. Es un subdominio aparte para que los correos automáticos no afecten la reputación del correo normal de la empresa.
+- Los buzones de privacidad y soporte son correos normales de la empresa, privacidad@plexusmedica.mx y soporte@plexusmedica.mx, creados donde ya está el correo de la empresa como alias.
+- Al meter el dominio a Cloudflare, antes de cambiar los nameservers, confirma que la lista que Cloudflare copió tenga los registros MX y TXT del correo de la empresa y el de su página, si la hay. Con eso, nada de la empresa deja de funcionar.
+
 ## Punto 4. Dominio en Cloudflare, token para publicar y buzones
 
 Para qué. Que la app viva en tu dominio con candado, publicada por Cloudflare Pages, y que existan los correos de privacidad y soporte que exige la ley.
