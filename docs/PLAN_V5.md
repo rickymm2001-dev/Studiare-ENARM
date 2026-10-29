@@ -68,7 +68,9 @@ Ricardo
 Cierre
 - El proyecto real tiene el esquema completo, las 13 funciones y cero filas de prueba. docs/DESPLIEGUE.md con la bitácora.
 
-### V5-B2. Correo propio, publicación y monitoreo (1 semana)
+### V5-B2. Publicación, acceso y monitoreo (1 semana)
+
+Ajuste del 29 de octubre. Ricardo decidió no usar el domino propio por ahora. La app vive en la dirección gratuita de Cloudflare Pages, el acceso de los primeros alumnos es Entrar con Google y el correo propio con Resend espera a que exista un dominio. Lo que sigue se lee con ese ajuste.
 
 Sesión
 - Configurar Resend como SMTP de Supabase y como remitente de las funciones, con los registros SPF, DKIM y DMARC creados por la sesión si el token de Cloudflare tiene permiso de DNS, o entregados a Ricardo como lista si no.
