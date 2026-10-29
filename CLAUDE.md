@@ -1,6 +1,6 @@
 # Proyecto
 Studiare, plataforma integral para preparar el ENARM, en español de México. Nació como prototipo y va camino a producción con el plan del cambio V3.
-La especificación completa vive en docs/PROMPT_PROTOTIPO.md. El plan del cambio V3 vive en docs/PLAN_DEL_CAMBIO.md (D-119) y manda sobre PLAN.md y sobre la especificación donde no coincidan. El plan V4 (docs/PLAN_V4.md, D-140) continúa V3 y manda sobre él donde no coincidan. Su auditoría va una sola vez al final, en V4-B10. El avance está en PROGRESS.md y las decisiones en DECISIONES.md.
+La especificación completa vive en docs/PROMPT_PROTOTIPO.md. El plan del cambio V3 vive en docs/PLAN_DEL_CAMBIO.md (D-119) y manda sobre PLAN.md y sobre la especificación donde no coincidan. El plan V4 (docs/PLAN_V4.md, D-140) continúa V3 y manda sobre él donde no coincidan. Su auditoría va una sola vez al final, en V4-B10. El plan V5 (docs/PLAN_V5.md, D-151) continúa V4 hasta el lanzamiento abierto y manda sobre él donde no coincidan. El avance está en PROGRESS.md y las decisiones en DECISIONES.md.
 La guía de Anki y la Fase C2 (organización, carga diaria, apuntes, importación) están en docs/ANALISIS_GUIA_ANKI.md.
 Si algo es ambiguo o contradice la especificación, pregunta a Ricardo antes de suponer.
 
