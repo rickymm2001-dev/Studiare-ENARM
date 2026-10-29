@@ -23,17 +23,22 @@ test('sin conexión abre pantallas que nunca se habían visitado y la IA avisa q
   // Recarga para que el service worker controle la página y termine de guardar todo
   await page.reload();
   await expect
-    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
+    // Instalar el precache y tomar el control tarda más de 5 segundos en una máquina ocupada (V5-B0)
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)), {
+      timeout: 30_000,
+    })
     .toBe(true);
   // El precaché se llena al instalarse. Se espera a que tenga las pantallas
   await expect
-    .poll(() =>
-      page.evaluate(async () => {
-        const names = await caches.keys();
-        const precache = names.find((name) => name.includes('precache'));
-        if (!precache) return 0;
-        return (await (await caches.open(precache)).keys()).length;
-      }),
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const names = await caches.keys();
+          const precache = names.find((name) => name.includes('precache'));
+          if (!precache) return 0;
+          return (await (await caches.open(precache)).keys()).length;
+        }),
+      { timeout: 30_000 },
     )
     .toBeGreaterThan(40);
 

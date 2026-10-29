@@ -144,8 +144,11 @@ test('con un plan de pago se abren Party, el catálogo y subir mazos, y al volve
   await expect(warning.getByText(t.billing.access.party)).toBeVisible();
   await warning.getByRole('button', { name: cancelDialog.confirm }).click();
   await expect(page.getByText(CANCELED_PREFIX, { exact: false })).toBeVisible();
+  // El panel nombra el plan con su precio de fundador, por eso solo se fija el inicio del nombre
   await expect(
-    page.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
+    page.getByRole('region', {
+      name: new RegExp(`^${t.billing.current(t.billing.plans.monthly).slice(0, -1)}`),
+    }),
   ).toBeVisible();
   await page.clock.setFixedTime(new Date(Date.now() + 32 * DAY_MS));
 
