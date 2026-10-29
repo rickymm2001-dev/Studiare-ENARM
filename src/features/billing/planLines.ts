@@ -1,6 +1,7 @@
 // Los textos del estado del plan y del pago pendiente en Suscripción (B10, 3.1.3). Qué estado tiene el
-// plan lo decide planStateOf. Aquí solo se elige su línea.
-import { PLANS } from '@/config/billing';
+// plan lo decide planStateOf. Aquí solo se elige su línea. También lo que se pierde al cancelar, para
+// el diálogo de confirmación (V5-B0).
+import { canUse, PLAN_HIGHLIGHTS, PLANS, type PlanKey } from '@/config/billing';
 import type { PassMethod } from '@/data/payments/invoices';
 import type { Subscription } from '@/data/schemas/people';
 import { billingCloudText } from '@/i18n/billingCloud';
@@ -9,6 +10,28 @@ import { longDate, type PlanState } from './planState';
 
 const status = billingCloudText.status;
 const pendingText = billingCloudText.pending;
+const cancelText = billingCloudText.cancelDialog;
+
+/** Lo que el plan abre y Gratis no, con las palabras de la tabla de planes. Vacío en Gratis */
+export function lostOnCancel(plan: PlanKey): string[] {
+  const lines: string[] = [];
+  const daily = PLANS[plan].access.dailyQuestions;
+  const freeDaily = PLANS.free.access.dailyQuestions;
+  if (daily !== freeDaily) {
+    lines.push(
+      cancelText.dailyQuestions(
+        t.billing.access.dailyQuestions(daily),
+        t.billing.access.dailyQuestions(freeDaily),
+      ),
+    );
+  }
+  for (const highlight of PLAN_HIGHLIGHTS) {
+    if (canUse(plan, highlight) && !canUse('free', highlight)) {
+      lines.push(t.billing.access[highlight]);
+    }
+  }
+  return lines;
+}
 
 /** La línea principal del estado del plan */
 export function planStateLine(state: PlanState): string {

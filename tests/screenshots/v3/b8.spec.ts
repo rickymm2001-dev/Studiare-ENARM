@@ -8,6 +8,7 @@
 // b7.spec.ts
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { t } from '@/i18n/es-MX';
 import { subscribeMonthly } from '../../e2e/support/b1';
 import { resultRows, searchResults } from '../../e2e/support/cardSearch';
@@ -21,6 +22,10 @@ const FULL_WALK = (project: string) => !project.startsWith('1920') && project !=
 /** El mazo más chico del catálogo, el que siguen las e2e, y uno que nunca se sigue */
 const SMALL = 'Urgencias (Paco)';
 const BIG = 'Medicina interna (Paco)';
+const DAY_MS = 86_400_000;
+const cancelDialog = billingCloudText.cancelDialog;
+/** La línea de cancelado sin su fecha, que depende de la zona horaria del proyecto */
+const CANCELED_PREFIX = billingCloudText.status.canceled('X').split('X')[0]?.trim() ?? '';
 
 const editorOf = (page: Page) => page.getByRole('textbox', { name: t.outlines.editor.label });
 
@@ -119,10 +124,27 @@ test('B8. Los candados del plan Gratis y lo que se conserva al volver a Gratis',
     timeout: 15_000,
   });
 
-  // Vuelve a Gratis con la cancelación simulada
+  // Cancela el pago simulado. El botón vive en Tu suscripción y nunca en la tarjeta de Gratis, un clic
+  // solo abre el diálogo de confirmación y el plan sigue hasta el fin de su periodo (V5-B0). Al pasar
+  // esa fecha, con el reloj fijo un mes y pico adelante, vuelve a Gratis
   await page.goto(SCREENS.subscription.path);
-  await page.getByRole('button', { name: t.billing.cancel }).click();
-  await expect(page.getByText(t.billing.canceled)).toBeVisible();
+  await expect(
+    page
+      .getByRole('region', { name: t.billing.plans.free, exact: true })
+      .getByRole('button', { name: t.billing.cancel }),
+  ).toHaveCount(0);
+  await page
+    .getByRole('region', { name: t.billing.manage.title })
+    .getByRole('button', { name: t.billing.cancel })
+    .click();
+  const warning = page.getByRole('alertdialog', { name: cancelDialog.title });
+  await expect(warning.getByText(t.billing.access.party)).toBeVisible();
+  await warning.getByRole('button', { name: cancelDialog.confirm }).click();
+  await expect(page.getByText(CANCELED_PREFIX, { exact: false })).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
+  ).toBeVisible();
+  await page.clock.setFixedTime(new Date(Date.now() + 32 * DAY_MS));
 
   // El mazo que ya seguía se queda a su alcance y los nuevos vuelven a su candado
   await open(

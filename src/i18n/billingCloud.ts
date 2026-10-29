@@ -106,7 +106,7 @@ export const billingCloudText = {
   },
 
   // Tarjetas de planes con un plan vigente (3.1.1)
-  cancelNote: 'Para cancelar tu plan de pago usa Administrar suscripción, más abajo.',
+  cancelNote: 'Para cancelar tu plan de pago usa la tarjeta de tu suscripción, más abajo.',
   changeTo: { monthly: 'Cambiar a Mensual', annual: 'Cambiar a Anual' } satisfies Record<
     RegularPlanKey,
     string
@@ -205,12 +205,11 @@ export const billingCloudText = {
     description:
       'Tu suscripción es con Mercado Pago. Si la cancelas, no se vuelve a cobrar y tu plan vale hasta el fin de lo que ya pagaste.',
     cancel: 'Cancelar suscripción de Mercado Pago',
+    // Lo que dice el diálogo de confirmación (cancelDialog) con Mercado Pago
     confirm: (date: string) =>
-      `¿Cancelar tu suscripción de Mercado Pago? Tu plan sigue hasta el ${date} y no se vuelve a cobrar.`,
+      `Tu suscripción es con Mercado Pago. Tu plan sigue completo hasta el ${date} y no se vuelve a cobrar. Ese día vuelves al plan Gratis.`,
     confirmNoDate:
-      '¿Cancelar tu suscripción de Mercado Pago? Tu plan sigue hasta el fin de lo que ya pagaste y no se vuelve a cobrar.',
-    confirmYes: 'Sí, cancelar',
-    confirmNo: 'No, conservarla',
+      'Tu suscripción es con Mercado Pago. Tu plan sigue hasta el fin de lo que ya pagaste y no se vuelve a cobrar. Después vuelves al plan Gratis.',
     canceling: 'Cancelando tu suscripción…',
     done: (date: string) =>
       `Cancelaste tu suscripción de Mercado Pago. Tu plan vale hasta el ${date}.`,
@@ -223,6 +222,22 @@ export const billingCloudText = {
         'La cancelación con Mercado Pago todavía no está activada. Escribe al equipo de Studiare.',
       failed: 'No pudimos cancelar tu suscripción. Intenta de nuevo en unos minutos.',
     },
+  },
+
+  // Confirmación antes de cancelar, con Mercado Pago o con el pago simulado (V5-B0, defecto importante
+  // 2 de docs/DIAGNOSTICO_BETA.md). Dice lo que se pierde y hasta cuándo sigue el plan
+  cancelDialog: {
+    title: 'Cancelar tu suscripción',
+    until: (date: string) =>
+      `Tu plan sigue completo hasta el ${date} y no se vuelve a cobrar. Ese día vuelves al plan Gratis.`,
+    untilNoDate:
+      'Tu plan sigue hasta el fin de lo que ya pagaste y no se vuelve a cobrar. Después vuelves al plan Gratis.',
+    loses: 'Al volver a Gratis pierdes',
+    // Las preguntas del plan de pago contra las de Gratis, con las palabras de la tabla de planes
+    dailyQuestions: (paid: string, free: string) => `${paid}. En Gratis son ${free}.`,
+    confirm: 'Sí, cancelar',
+    keep: 'No, conservarla',
+    canceling: 'Cancelando tu suscripción…',
   },
 
   // Con la nube configurada pero este navegador sin sesión. El servidor no sabe quién paga, así que

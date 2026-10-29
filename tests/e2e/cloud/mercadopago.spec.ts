@@ -73,13 +73,35 @@ test.describe('Mercado Pago', () => {
     ).toBeVisible();
     await expectNoSeriousA11yViolations(page);
 
-    // Cancela desde la app, con confirmación. El plan vale hasta el fin de lo pagado
+    // Cancela desde la app. El botón vive en Administrar suscripción y nunca en la tarjeta de Gratis,
+    // y un clic solo abre el diálogo, que dice lo que se pierde y hasta cuándo sigue el plan (V5-B0).
+    // El plan vale hasta el fin de lo pagado
     const periodEnd = cloud.subscriptionOf(EMAIL)?.currentPeriodEnd ?? '';
-    await page.getByRole('button', { name: text.mercadoPago.cancel }).click();
     await expect(
-      page.getByText(text.mercadoPago.confirm(longDateIn(periodEnd, zone))),
+      page
+        .getByRole('region', { name: t.billing.plans.free, exact: true })
+        .getByRole('button', { name: text.mercadoPago.cancel }),
+    ).toHaveCount(0);
+    await page
+      .getByRole('region', { name: text.mercadoPago.title })
+      .getByRole('button', { name: text.mercadoPago.cancel })
+      .click();
+    const warning = page.getByRole('alertdialog', { name: text.cancelDialog.title });
+    await expect(
+      warning.getByText(text.mercadoPago.confirm(longDateIn(periodEnd, zone))),
     ).toBeVisible();
-    await page.getByRole('button', { name: text.mercadoPago.confirmYes }).click();
+    await expect(warning.getByText(t.billing.access.party)).toBeVisible();
+    expect(cloud.subscriptionOf(EMAIL)).toMatchObject({ status: 'active' });
+    // Conservarla no cancela
+    await warning.getByRole('button', { name: text.cancelDialog.keep }).click();
+    await expect(warning).toHaveCount(0);
+    expect(cloud.subscriptionOf(EMAIL)).toMatchObject({ status: 'active' });
+    await page
+      .getByRole('region', { name: text.mercadoPago.title })
+      .getByRole('button', { name: text.mercadoPago.cancel })
+      .click();
+    await expectNoSeriousA11yViolations(page);
+    await warning.getByRole('button', { name: text.cancelDialog.confirm }).click();
     await expect(page.getByText(text.mercadoPago.done(longDateIn(periodEnd, zone)))).toBeVisible();
     expect(cloud.subscriptionOf(EMAIL)).toMatchObject({
       status: 'canceled',

@@ -6,6 +6,7 @@
 // explicación después de contestar. Corre en teléfono y en computadora con los dos proyectos de
 // Playwright. Party en la nube con el plan del servidor está en tests/e2e/cloud/free-plan.spec.ts
 import { SCREENS } from '@/app/screens';
+import { billingCloudText } from '@/i18n/billingCloud';
 import { t } from '@/i18n/es-MX';
 import { openPracticeSetup, setPracticeFeedback, subscribeMonthly } from './support/b1';
 import {
@@ -19,6 +20,10 @@ import {
 const SMALL = 'Urgencias (Paco)';
 const BIG = 'Medicina interna (Paco)';
 const CLOSED_IN_FREE = ['outlines', 'deckCatalog', 'importDecks', 'party'] as const;
+const DAY_MS = 86_400_000;
+const cancelDialog = billingCloudText.cancelDialog;
+/** La línea de cancelado sin su fecha, que depende de la zona horaria del proyecto */
+const CANCELED_PREFIX = billingCloudText.status.canceled('X').split('X')[0]?.trim() ?? '';
 
 test('en Gratis cada candado muestra su vista previa y su botón lleva a los planes', async ({
   page,
@@ -122,10 +127,27 @@ test('con un plan de pago se abren Party, el catálogo y subir mazos, y al volve
     timeout: 60_000,
   });
 
-  // Vuelve a Gratis con la cancelación simulada
+  // Cancela el pago simulado. El botón vive en Tu suscripción y nunca en la tarjeta de Gratis, un clic
+  // solo abre el diálogo de confirmación y el plan sigue hasta el fin de su periodo (V5-B0). Al pasar
+  // esa fecha, con el reloj fijo un mes y pico adelante, vuelve a Gratis
   await page.goto(SCREENS.subscription.path);
-  await page.getByRole('button', { name: t.billing.cancel }).click();
-  await expect(page.getByText(t.billing.canceled)).toBeVisible();
+  await expect(
+    page
+      .getByRole('region', { name: t.billing.plans.free, exact: true })
+      .getByRole('button', { name: t.billing.cancel }),
+  ).toHaveCount(0);
+  await page
+    .getByRole('region', { name: t.billing.manage.title })
+    .getByRole('button', { name: t.billing.cancel })
+    .click();
+  const warning = page.getByRole('alertdialog', { name: cancelDialog.title });
+  await expect(warning.getByText(t.billing.access.party)).toBeVisible();
+  await warning.getByRole('button', { name: cancelDialog.confirm }).click();
+  await expect(page.getByText(CANCELED_PREFIX, { exact: false })).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: t.billing.current(t.billing.plans.monthly) }),
+  ).toBeVisible();
+  await page.clock.setFixedTime(new Date(Date.now() + 32 * DAY_MS));
 
   // Lo que ya tenía se queda. El mazo que sigue se deja y se vuelve a seguir, porque está en el
   // dispositivo. Los mazos nuevos y subir mazos vuelven a su candado

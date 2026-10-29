@@ -685,7 +685,13 @@ export const featureText = {
     receiptLine: (plan: string, price: string, date: string) => `${plan} · ${price} · ${date}`,
     receiptSimulated: 'SIMULADO. Sin cobro real.',
     cancel: 'Cancelar suscripción',
-    canceled: 'Tu suscripción quedó cancelada. Vuelves al plan Gratis.',
+    // Tu suscripción con el pago simulado. Cancelar vive aquí y nunca en la tarjeta de Gratis, pide
+    // confirmar y el plan sigue hasta el fin de su periodo (V5-B0)
+    manage: {
+      title: 'Tu suscripción',
+      simulated:
+        'Pago simulado. Si la cancelas no se cobra nada, tu plan sigue hasta el fin de su periodo y después vuelves a Gratis.',
+    },
     receiptsTitle: 'Recibos',
     noReceipts: 'Todavía no tienes recibos.',
   },
