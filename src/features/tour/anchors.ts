@@ -4,8 +4,10 @@
 // junto con steps.ts, así que es chico y no importa React.
 import { SCREENS, SCREEN_KEYS, type ScreenKey } from '@/app/screens';
 
-/** El valor de data-tour en el botón Más de la barra del teléfono */
+/** El valor de data-tour en el botón Más del dock del teléfono */
 export const NAV_MORE_ANCHOR = 'nav-more';
+/** El valor de data-tour en el botón Más de la barra superior de computadora (D-150) */
+export const NAV_TOP_MORE_ANCHOR = 'nav-more-top';
 
 const KEY_BY_PATH: ReadonlyMap<string, ScreenKey> = new Map(
   SCREEN_KEYS.map((key) => [SCREENS[key].path, key]),

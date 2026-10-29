@@ -13,7 +13,7 @@ import { screenOf } from '@/features/tour/tourMachine';
 import { t } from '@/i18n/es-MX';
 import { tourTexts } from '@/i18n/tour';
 import { expect, expectNoHorizontalOverflow, signUp, test } from './support/fixtures';
-import { isPhone } from './support/navigation';
+import { isPhone, mainNav } from './support/navigation';
 
 test.use({ tourAutoOffer: true });
 
@@ -46,17 +46,21 @@ function expectedTarget(step: TourStep, phone: boolean): string | null {
       return t.navItems.progress;
     case 'outlines':
       return phone ? t.navItems.more : t.navItems.outlines;
+    // Party y Configuración viven en Más en los dos anchos, el dock del teléfono y la barra (D-150)
     case 'party':
-      return phone ? t.navItems.more : t.navItems.party;
     case 'settings':
-      return phone ? t.navItems.more : t.navItems.settings;
+      return t.navItems.more;
   }
 }
 
-/** El elemento del menú por lo que dice. Por CSS y no por rol, porque con el globo abierto el menú queda oculto a los lectores */
+/**
+ * El elemento del menú por lo que dice. Por CSS y no por rol, porque con el globo abierto el menú queda
+ * oculto a los lectores. Los dos menús llevan el mismo nombre, así que se toma el que se ve en este
+ * ancho, la barra en línea o el dock del teléfono (D-150)
+ */
 function menuItem(page: Page, label: string): Locator {
-  return page
-    .locator(`nav[aria-label="${t.nav.label}"] :is(a, button)`)
+  return mainNav(page)
+    .locator(':is(a, button)')
     .filter({ hasText: new RegExp(`^${label}$`) });
 }
 
@@ -180,14 +184,15 @@ test.describe('recorrido guiado', () => {
           `${step} borde de abajo`,
         ).toBeLessThanOrEqual(2);
         await expect(dialog).toHaveAttribute('data-tour-mode', phone ? 'sheet' : 'anchored');
-        // El globo no tapa lo que señala. En el teléfono queda encima de la barra, y en computadora, a su lado
+        // El globo no tapa lo que señala. En el teléfono queda encima del dock, y en computadora,
+        // debajo de la barra de arriba (D-150)
         if (phone) {
           expect(dialogBox.y + dialogBox.height, `${step} globo`).toBeLessThanOrEqual(
             holeBox.y + 1,
           );
         } else {
-          expect(dialogBox.x, `${step} globo`).toBeGreaterThanOrEqual(
-            holeBox.x + holeBox.width - 1,
+          expect(dialogBox.y, `${step} globo`).toBeGreaterThanOrEqual(
+            holeBox.y + holeBox.height - 1,
           );
         }
       }
@@ -227,12 +232,8 @@ test.describe('recorrido guiado', () => {
     await skipButton(page).click();
     await expectBackHome(page);
     // La página responde otra vez: el menú ya no está oculto a los lectores ni bloqueado
-    await expect(page.getByRole('navigation', { name: t.nav.label })).toBeVisible();
-    await expect(
-      page
-        .getByRole('navigation', { name: t.nav.label })
-        .getByRole('link', { name: t.navItems.review }),
-    ).toBeEnabled();
+    await expect(mainNav(page)).toBeVisible();
+    await expect(mainNav(page).getByRole('link', { name: t.navItems.review })).toBeEnabled();
   });
 
   test('Escape salta la introducción', async ({ page }) => {
@@ -339,28 +340,6 @@ test.describe('recorrido guiado', () => {
       await expect(stepDialog(page, index)).toBeVisible();
       await nextButton(page).click();
     }
-    await expectBackHome(page);
-  });
-
-  test('si el ancla no se ve, como con el menú lateral oculto, el paso va al centro y no se rompe', async ({
-    page,
-  }) => {
-    test.skip(isPhone(page), 'El menú lateral solo existe en computadora');
-    await register(page);
-    await skipButton(page).click();
-    await expectBackHome(page);
-    await page.getByRole('button', { name: t.nav.toggle }).click();
-    await expect(page.getByRole('navigation', { name: t.nav.label })).toBeHidden();
-    await page.goto(SCREENS.settings.path);
-    await page.getByRole('button', { name: tourTexts.settings.button }).click();
-    await expect(stepDialog(page, 0)).toBeVisible();
-    await nextButton(page).click();
-    const second = stepDialog(page, 1);
-    await expect(second).toBeVisible();
-    await expect(second).toHaveAttribute('data-tour-mode', 'center');
-    await expect(page.locator('[data-tour-hole]')).toHaveCount(0);
-    await expect(skipButton(page)).toBeVisible();
-    await skipButton(page).click();
     await expectBackHome(page);
   });
 

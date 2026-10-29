@@ -66,21 +66,32 @@ const dataCard = async () =>
   within(await profile()).getByRole('region', { name: page.profile.title });
 
 describe('Configuración en una sola página', () => {
-  it('tiene exactamente tres secciones con subtítulo y ninguna pestaña', async () => {
+  it('tiene exactamente cuatro secciones con subtítulo, un índice que las enlaza y ninguna pestaña', async () => {
     app = await open();
     await profile();
+    // El héroe del diseño (D-150). Kicker, título en marino y la explicación en cursiva
+    expect(screen.getByRole('heading', { level: 1, name: t.settings.heroTitle })).toBeVisible();
+    expect(screen.getByText(t.screens.settings.description)).toBeVisible();
     const titles = screen.getAllByRole('heading', { level: 2 }).map((title) => title.textContent);
     expect(titles).toEqual([
       page.sections.profile,
+      t.dailyLoad.title,
       page.sections.appearance,
       page.sections.privacy,
     ]);
     expect(screen.queryByRole('tablist')).toBeNull();
     expect(screen.queryAllByRole('tab')).toHaveLength(0);
-    // Una línea entre secciones, desde la segunda
-    expect(document.getElementById('perfil')).not.toHaveClass('border-t');
-    expect(document.getElementById('apariencia')).toHaveClass('border-t');
-    expect(document.getElementById('privacidad')).toHaveClass('border-t');
+    // El índice en tarjeta lleva a cada sección real, con Perfil marcada mientras no se pide otra
+    const index = screen.getByRole('navigation', { name: page.indexLabel });
+    const links = within(index).getAllByRole('link');
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '#perfil',
+      '#carga',
+      '#apariencia',
+      '#privacidad',
+    ]);
+    expect(links[0]).toHaveAttribute('aria-current', 'location');
+    expect(links[1]).not.toHaveAttribute('aria-current');
     // Lo de estudio, Pomodoro y la base de demostración ya no está aquí
     expect(screen.queryByText(t.settings.cardTimerEnabled)).toBeNull();
     expect(screen.queryByLabelText(t.pomodoro.focusMinutes)).toBeNull();
@@ -88,8 +99,30 @@ describe('Configuración en una sola página', () => {
     expect(screen.queryByText(t.ai.cardTitle)).toBeNull();
   });
 
+  it('Carga diaria solo lee los límites guardados y enlaza a Ajustes del repaso', async () => {
+    const { user } = (app = await open());
+    const load = await screen.findByRole('region', { name: t.dailyLoad.title }, WAIT);
+    const card = t.settings.dailyLoadCard;
+    const { reviewsPerDay, newCardsPerDay, questionsPerDay } = user.settings;
+    for (const [label, value] of [
+      [card.reviews, reviewsPerDay],
+      [card.newCards, newCardsPerDay],
+      [card.questions, questionsPerDay],
+    ] as const) {
+      expect(within(load).getByText(label)).toBeVisible();
+      expect(within(load).getByText(value.toLocaleString('es-MX'))).toBeVisible();
+    }
+    // El tope real del plan Gratis y ningún campo para escribir, porque se cambia en el panel
+    expect(within(load).getByText(card.freeNote(20))).toBeVisible();
+    expect(within(load).queryByRole('spinbutton')).toBeNull();
+    expect(within(load).getByRole('link', { name: page.reviewSettings.change })).toHaveAttribute(
+      'href',
+      `${SCREENS.review.path}?ajustes=1`,
+    );
+  });
+
   it('Perfil empieza con el plan y muestra tus datos de solo lectura con Editar perfil', async () => {
-    app = await open();
+    const { user } = (app = await open());
     const section = await profile();
     const plan = within(section).getByRole('region', { name: page.plan.title });
     expect(within(plan).getByText(t.billing.plans.free)).toBeVisible();
@@ -109,6 +142,9 @@ describe('Configuración en una sola página', () => {
     const data = await dataCard();
     expect(within(data).getByText('Ana')).toBeVisible();
     expect(await within(data).findByText('ana@ejemplo.mx')).toBeVisible();
+    // La zona horaria con la que se cuentan sus días de estudio, de solo lectura (D-150)
+    expect(within(data).getByText(t.settings.timeZone)).toBeVisible();
+    expect(within(data).getByText(user.timeZone)).toBeVisible();
     for (const value of [
       t.account.sexes.female,
       '1999',

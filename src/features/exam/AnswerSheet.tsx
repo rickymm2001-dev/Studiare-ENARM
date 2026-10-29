@@ -153,14 +153,14 @@ export function AnswerSheet({
         aria-label={text.listLabel}
         onKeyDown={onKeyDown}
         onFocus={onFocus}
-        className="grid max-h-[60dvh] grid-cols-1 content-start gap-x-3 overflow-y-auto rounded-lg border border-line p-2 sm:grid-cols-2 xl:grid-cols-1"
+        className="grid max-h-[60dvh] grid-cols-1 content-start gap-x-3 overflow-y-auto rounded-lg border border-line bg-surface p-2 sm:grid-cols-2 xl:grid-cols-1"
       >
         {rows.map((row, index) => (
           <li
             key={row.number}
             className={cn(
               'flex items-center gap-2 rounded-md px-1 py-0.5',
-              index === current && 'bg-muted',
+              index === current && 'bg-primary-soft',
             )}
           >
             {/* Con el teclado se llega a una pregunta con las flechas del examen o con su cuadrícula,
@@ -202,8 +202,8 @@ export function AnswerSheet({
                       className={cn(
                         'flex size-11 items-center justify-center rounded-full border text-sm leading-none font-semibold sm:size-7 sm:text-xs',
                         filled
-                          ? 'border-fg bg-fg text-surface'
-                          : 'border-line-strong bg-surface text-fg-muted enabled:hover:border-fg',
+                          ? 'border-primary bg-primary text-primary-fg'
+                          : 'border-line-strong bg-surface text-fg-muted enabled:hover:border-primary',
                         optionId === null && 'opacity-50',
                       )}
                     >

@@ -33,10 +33,7 @@ export function LeechPanel({
 }) {
   const text = t.review.leech;
   return (
-    <Card
-      aria-labelledby="sanguijuela-titulo"
-      className="w-full lg:mx-auto lg:w-full lg:max-w-session"
-    >
+    <Card aria-labelledby="sanguijuela-titulo" tone="cream" className="w-full">
       <CardHeader>
         <CardTitle id="sanguijuela-titulo">{text.title}</CardTitle>
         <CardDescription>{text.body(lapses)}</CardDescription>

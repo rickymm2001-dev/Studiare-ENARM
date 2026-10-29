@@ -3,20 +3,16 @@
 // real. Una burbuja solo se llena si la pregunta ya se vio y el llenado sobrevive a una recarga.
 import type { Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
-import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
+import { openExamSetup, startExam } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 import { isPhone } from './support/navigation';
 
 const QUESTIONS = 20;
 
 async function startWithSheet(page: Page) {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible({
-    timeout: 60_000,
-  });
-  await card.getByText(t.exam.settings, { exact: true }).click();
+  const card = await openExamSetup(page);
+  // La hoja se enciende en los ajustes del examen, la tarjeta debajo del formulario
   await card.getByLabel(t.answerSheet.optionLabel).check();
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page).toHaveURL(new RegExp(`${SCREENS.exam.path}$`));
@@ -72,13 +68,7 @@ test('la respuesta se llena en la hoja y no en la opción de la pregunta', async
 test('sin la opción encendida el examen se contesta tocando la opción', async ({ page }) => {
   test.setTimeout(180_000);
   await signUp(page);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible({
-    timeout: 60_000,
-  });
-  await card.getByRole('button', { name: t.exam.start }).click();
-  await expect(page.getByRole('timer')).toBeVisible();
+  await startExam(page, QUESTIONS);
   await expect(page.getByRole('region', { name: t.answerSheet.title })).toHaveCount(0);
   await page.getByRole('radio').first().check();
   await expect(page.getByRole('radio').first()).toBeChecked();

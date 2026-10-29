@@ -5,7 +5,15 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { generateDemo, subscribeMonthly, switchDatabase } from './support/b1';
+import {
+  chooseSimulatorMode,
+  examSetup,
+  generateDemo,
+  pickSegment,
+  practiceSetup,
+  subscribeMonthly,
+  switchDatabase,
+} from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -37,11 +45,11 @@ test('con el banco de demostración hay un solo aviso global y ninguna etiqueta 
   // siembra la primera vez que se entra y puede tardar
   await page.goto(SCREENS.simulatorSetup.path);
   await expect(demoVersion(page)).toBeVisible();
-  // El examen de abajo también pregunta cuántas preguntas, así que se busca dentro de la práctica
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  await chooseSimulatorMode(page, 'practice');
+  const practice = practiceSetup(page);
+  await pickSegment(practice, t.simulator.count, '5');
   const start = practice.getByRole('button', { name: t.simulator.start });
-  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await expect(start).toBeEnabled();
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
   await expect(demoVersion(page)).toBeVisible();
@@ -64,8 +72,9 @@ test('con el banco de demostración hay un solo aviso global y ninguna etiqueta 
 
   // El examen completo, en curso
   await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByRole('button', { name: t.exam.start })).toBeEnabled({ timeout: 60_000 });
+  await chooseSimulatorMode(page, 'exam');
+  const card = examSetup(page);
+  await expect(card.getByRole('button', { name: t.exam.start })).toBeEnabled();
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(demoVersion(page)).toBeVisible();

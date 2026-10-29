@@ -1,11 +1,12 @@
 // Secciones de Configuración, una sola página (B3 del plan del cambio, comentario 5). Cada sección
 // tiene su ancla en español, como las rutas (D-035). Los enlaces viejos con ?seccion= siguen
 // funcionando. Los de Cuenta, Apariencia y Privacidad llevan a su sección, el de Estudio a Ajustes del
-// repaso, en Repasar, donde vive ahora, y el de Pomodoro a la parte del Pomodoro de ese panel.
+// repaso, en Repasar, donde vive ahora, y el de Pomodoro a la parte del Pomodoro de ese panel. Carga
+// diaria (D-150) solo lee lo guardado en Ajustes del repaso y enlaza al panel para cambiarlo.
 import { screenPath } from '@/app/screens';
 import { reviewSettingsPath, type ReviewSettingsFocus } from '../review/settings/panelParam';
 
-export const SETTINGS_SECTIONS = ['perfil', 'apariencia', 'privacidad'] as const;
+export const SETTINGS_SECTIONS = ['perfil', 'carga', 'apariencia', 'privacidad'] as const;
 export type SettingsSection = (typeof SETTINGS_SECTIONS)[number];
 
 /** Las pestañas de antes y la sección donde quedó lo que tenían */

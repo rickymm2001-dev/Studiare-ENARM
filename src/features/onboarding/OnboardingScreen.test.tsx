@@ -16,6 +16,7 @@ import { DEFAULT_PREFERENCES, usePreferences } from '@/app/preferences';
 import { routes } from '@/app/router';
 import { SCREENS } from '@/app/screens';
 import { writeStoredFlags } from '@/config/featureFlags';
+import { ENARM_EXAM } from '@/config/exam';
 import { PRIVACY_NOTICE_VERSION } from '@/config/legal';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { PENDING_SIGNUP_KEY } from '@/data/cloud/pendingSignup';
@@ -409,5 +410,42 @@ describe('Continuar con Google (B9)', () => {
       expect(fake.oauthRequests).toHaveLength(1);
     });
     expect(sessionStorage.getItem(PENDING_SIGNUP_KEY)).toBeNull();
+  });
+});
+
+// La bienvenida al estilo de la portada (D-150). Panel marino con el año real del ENARM y, en Ya tengo
+// cuenta, Sigue donde te quedaste. Las pestañas siguen siendo pestañas y el enlace Entra aquí cambia
+describe('bienvenida al estilo de la portada (D-150)', () => {
+  it('el panel toma el año del ENARM de la plataforma y Entra aquí abre Ya tengo cuenta', async () => {
+    const fake = phoneOnlyCloud();
+    const typing = userEvent.setup();
+    mount(fake);
+    const year = new Date(`${ENARM_EXAM.date}T12:00:00`).getFullYear();
+    const title = await screen.findByRole('heading', { level: 1 });
+    expect(title).toHaveTextContent(t.onboarding.panel.titleLead);
+    expect(title).toHaveTextContent(t.onboarding.panel.titleExam(year));
+    for (const benefit of t.onboarding.panel.benefits) {
+      expect(screen.getByText(benefit)).toBeVisible();
+    }
+    expect(screen.getByRole('link', { name: t.onboarding.backToLanding })).toHaveAttribute(
+      'href',
+      SCREENS.home.path,
+    );
+    expect(screen.getByRole('tab', { name: t.onboarding.createTab })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+
+    await typing.click(screen.getByRole('button', { name: t.onboarding.enterHere }));
+    expect(screen.getByRole('tab', { name: t.onboarding.loginTab })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      t.onboarding.loginPanel.titleTail,
+    );
+    expect(screen.getByRole('heading', { level: 2, name: t.onboarding.signInTitle })).toBeVisible();
+    // Sin perfiles en este navegador no hay cifras que mostrar
+    expect(screen.queryByText(t.onboarding.loginPanel.dueToday)).toBeNull();
   });
 });

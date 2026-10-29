@@ -38,26 +38,19 @@ export const FONT_FAMILIES: Record<FontChoice, string> = {
   serif: "'Source Serif 4 Variable'",
 };
 
-/**
- * Los títulos van en serif. Quien elige Atkinson o Lexend, fuentes hechas para leer mejor, las pide
- * en todo el texto y los títulos las siguen (V4-B2)
- */
-const HEADING_FOLLOWS_BODY: ReadonlySet<FontChoice> = new Set(['atkinson', 'lexend']);
-
 /** Donde una versión anterior guardaba la foto del fondo personalizado. Se borra para liberar espacio */
 const OLD_BACKGROUND_IMAGE_KEY = 'enarm.background-image.v1';
 
+/**
+ * Los títulos van en la misma fuente que el texto, como en la portada (D-150). Quien elige la serif
+ * la tiene en todo
+ */
 export function applyAppearance(root: HTMLElement, appearance: Appearance): void {
   root.dataset.font = appearance.font;
   root.dataset.size = appearance.size;
   root.dataset.motion = appearance.animations ? 'on' : 'off';
   root.style.setProperty('--enarm-font-body', FONT_FAMILIES[appearance.font]);
-  root.style.setProperty(
-    '--enarm-font-heading',
-    HEADING_FOLLOWS_BODY.has(appearance.font)
-      ? FONT_FAMILIES[appearance.font]
-      : FONT_FAMILIES.serif,
-  );
+  root.style.setProperty('--enarm-font-heading', FONT_FAMILIES[appearance.font]);
 }
 
 export function useApplyAppearance(appearance: Appearance): void {

@@ -1,16 +1,21 @@
-// Bienvenida (pantalla 1, D-059, D-068). Página aparte, sin navegación. Crear cuenta con alias,
-// correo, meta diaria, especialidad, datos opcionales, permisos opcionales, la edad mínima y un solo
-// aviso de privacidad, o entrar con el correo. Con Supabase configurado la cuenta también se guarda en
-// la nube y se entra con un enlace al correo, sin contraseña (D-075), o con Google cuando la bandera
-// googleSignIn está prendida (B9). Mientras el registro esté cerrado solo entran los correos
-// invitados, y lo decide el servidor. Sin Supabase la cuenta vive solo en este navegador (D-060).
-import { LogIn, MailCheck, UserPlus } from 'lucide-react';
+// Bienvenida (pantalla 1, D-059, D-068, D-150). Página aparte, sin navegación, al estilo de la
+// portada. A la izquierda un panel marino con el kicker, el título en dos líneas, la frase en cursiva,
+// los beneficios y la nota de privacidad. En Ya tengo cuenta el panel dice Sigue donde te quedaste con
+// dos cifras reales de este navegador, si hay datos. A la derecha las pestañas en píldora y el
+// formulario en una tarjeta blanca. Crear cuenta con alias, correo, meta diaria, especialidad, datos
+// opcionales, permisos opcionales, la edad mínima y un solo aviso de privacidad, o entrar con el
+// correo. Con Supabase configurado la cuenta también se guarda en la nube y se entra con un enlace al
+// correo, sin contraseña (D-075), o con Google cuando la bandera googleSignIn está prendida (B9).
+// Mientras el registro esté cerrado solo entran los correos invitados, y lo decide el servidor. Sin
+// Supabase la cuenta vive solo en este navegador (D-060).
+import { ArrowRight, Check, ChevronLeft, Info, Lock, MailCheck, TriangleAlert } from 'lucide-react';
 import { useEffect, useRef, useState, type SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useCloud } from '@/app/cloudState';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
+import { ENARM_EXAM, examDateFor } from '@/config/exam';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { trackSignupCompleted } from '@/data/analytics/control';
 import { requestEmailLink, type LinkResult } from '@/data/cloud/account';
@@ -27,16 +32,19 @@ import {
   registerAccount,
   type AccountDetails,
 } from '@/data/usecases/account';
+import { daysBetween, studyDayOf } from '@/engines/studyDay';
 import { markTourPending } from '@/features/tour/steps';
 import { t } from '@/i18n/es-MX';
 import { legalText } from '@/i18n/legal';
 import { celebrate } from '@/ui/celebrate';
 import { cn } from '@/ui/cn';
+import { Avatar } from '@/ui/components/avatar';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { segmentedItem, segmentedList } from '@/ui/components/segmented-classes';
 import { AccountDetailsFields } from '../profile/AccountDetailsFields';
+import { buildDueSnapshot } from '../review/dueSnapshot';
 import { EmailCodeForm } from '../shared/EmailCodeForm';
 import { GoogleSignInButton } from '../shared/GoogleSignInButton';
 import {
@@ -54,12 +62,22 @@ import {
 import { ReferralInvite } from './ReferralInvite';
 
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
+type Tab = 'create' | 'login';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
 const validEmail = (email: string) => AccountSchema.shape.email.safeParse(email.trim()).success;
 /** A dónde regresa el enlace del correo o Google. La raíz de la app, con o sin dominio propio */
 const redirectTo = () => new URL(import.meta.env.BASE_URL, window.location.origin).toString();
 /** Entrar con Google solo con la nube configurada y la bandera prendida (B9) */
 const googleEnabled = () => cloudConfigured() && isFeatureEnabled('googleSignIn');
+/** El año del ENARM que ya tiene la plataforma (D-059), para el título del panel */
+const examYear = () => new Date(`${ENARM_EXAM.date}T12:00:00`).getFullYear();
+/** Una fecha AAAA-MM-DD en palabras */
+const longDate = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
 async function sendLink(email: string, alias?: string): Promise<LinkResult | null> {
   const cloud = await loadCloud();
@@ -107,7 +125,7 @@ export function OnboardingScreen() {
   const api = useDataApi();
   const navigate = useNavigate();
   const signIn = usePreferences((state) => state.signIn);
-  const [tab, setTab] = useState<'create' | 'login'>('create');
+  const [tab, setTab] = useState<Tab>('create');
 
   if (api.repos.kind === 'demo') {
     return (
@@ -133,35 +151,162 @@ export function OnboardingScreen() {
 
   return (
     <>
-      <ScreenHeader title={t.screens.onboarding.title} description={t.onboarding.intro} />
-      {/* Quien llega con el enlace de un compañero guarda su código para canjearlo al entrar (B7) */}
-      <ReferralInvite />
-      {/* Mismas pestañas que el resto de la app (H01 de la revisión de B2), a todo lo ancho */}
-      <div role="tablist" aria-label={t.onboarding.tabs} className={cn(segmentedList, 'flex')}>
-        {(['create', 'login'] as const).map((value) => (
-          <button
-            key={value}
-            role="tab"
-            type="button"
-            aria-selected={tab === value}
-            onClick={() => {
-              setTab(value);
-            }}
-            className={segmentedItem(tab === value, 'flex-1')}
-          >
-            {value === 'create' ? t.onboarding.createTab : t.onboarding.loginTab}
-          </button>
-        ))}
+      {/* El título de la pestaña del navegador. El h1 vive en el panel marino */}
+      <title>{t.app.documentTitle(t.screens.onboarding.title)}</title>
+      {/* El marco solo pinta la barra con el logo, así que el camino de vuelta a la portada va aquí */}
+      <div className="flex justify-end">
+        <Link
+          to={screenPath('home')}
+          className="inline-flex min-h-touch items-center gap-1.5 text-sm font-semibold text-primary-ink underline-offset-4 hover:underline"
+        >
+          <ChevronLeft aria-hidden className="size-4" />
+          {t.onboarding.backToLanding}
+        </Link>
       </div>
-      {tab === 'create' ? (
-        <CreateAccountForm onCreated={enter} />
-      ) : (
-        <LoginForm onFound={enter} onLinked={enterLinked} />
-      )}
-      <p className="text-center text-xs text-fg-muted">
-        {cloudConfigured() ? t.cloud.loginNote : t.session.simulatedLogin}
-      </p>
+      {/* Dos columnas que se acomodan solas, el panel marino y el formulario (D-150) */}
+      <div className="flex flex-wrap items-start gap-8">
+        <WelcomePanel tab={tab} />
+        <div className="flex min-w-0 flex-[999_1_30rem] flex-col gap-5">
+          {/* Quien llega con el enlace de un compañero guarda su código para canjearlo al entrar (B7) */}
+          <ReferralInvite />
+          {/* Mismas pestañas que el resto de la app (H01 de la revisión de B2), en píldora */}
+          <div
+            role="tablist"
+            aria-label={t.onboarding.tabs}
+            className={cn(segmentedList, 'self-start')}
+          >
+            {(['create', 'login'] as const).map((value) => (
+              <button
+                key={value}
+                role="tab"
+                type="button"
+                aria-selected={tab === value}
+                onClick={() => {
+                  setTab(value);
+                }}
+                className={segmentedItem(tab === value, 'min-h-touch px-6 text-base')}
+              >
+                {value === 'create' ? t.onboarding.createTab : t.onboarding.loginTab}
+              </button>
+            ))}
+          </div>
+          {tab === 'create' ? (
+            <CreateAccountForm
+              onCreated={enter}
+              onSwitchToLogin={() => {
+                setTab('login');
+              }}
+            />
+          ) : (
+            <LoginForm
+              onFound={enter}
+              onLinked={enterLinked}
+              onSwitchToCreate={() => {
+                setTab('create');
+              }}
+            />
+          )}
+          <p className="text-center text-xs text-fg-muted">
+            {cloudConfigured() ? t.cloud.loginNote : t.session.simulatedLogin}
+          </p>
+        </div>
+      </div>
     </>
+  );
+}
+
+/**
+ * El panel marino de la izquierda (D-150). En Crear cuenta presenta Studiare con el año del ENARM que
+ * ya tiene la plataforma. En Ya tengo cuenta dice Sigue donde te quedaste con dos cifras reales de
+ * este navegador, si hay un perfil guardado. Lleva el h1 de la pantalla
+ */
+function WelcomePanel({ tab }: { tab: Tab }) {
+  const create = t.onboarding.panel;
+  const login = t.onboarding.loginPanel;
+  const isCreate = tab === 'create';
+  return (
+    <Card
+      tone="navy"
+      lift={false}
+      aria-labelledby="bienvenida-titulo"
+      className="flex max-w-md flex-[1_1_21rem] flex-col gap-6 rounded-xl p-8 sm:p-10"
+    >
+      <span className="text-xs font-bold tracking-[0.12em] text-primary-fg/80 uppercase">
+        {isCreate ? create.kicker : login.kicker}
+      </span>
+      <h1
+        id="bienvenida-titulo"
+        tabIndex={-1}
+        className="flex flex-col leading-[1.08] outline-none"
+      >
+        <span className="text-2xl font-bold sm:text-3xl">
+          {isCreate ? create.titleLead : login.titleLead}
+        </span>
+        {/* La segunda línea en cielo. Es texto grande, así que el cielo pasa el contraste sobre marino */}
+        <span className="text-4xl font-extrabold text-indicator sm:text-5xl">
+          {isCreate ? create.titleExam(examYear()) : login.titleTail}
+        </span>
+      </h1>
+      <hr className="h-px w-full border-0 bg-primary-fg/35" />
+      <p className="text-lg leading-snug italic">{isCreate ? create.lead : login.lead}</p>
+      {isCreate ? (
+        <ul className="flex flex-col gap-3 text-base leading-relaxed text-primary-fg/90">
+          {create.benefits.map((benefit) => (
+            <li key={benefit} className="flex gap-2.5">
+              <Check aria-hidden className="mt-0.5 size-5 shrink-0 text-indicator" />
+              {benefit}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <LoginFigures />
+      )}
+      <p className="flex items-center gap-3 rounded-lg bg-primary-fg/10 p-3.5 text-sm leading-relaxed text-primary-fg/90">
+        <Lock aria-hidden className="size-5 shrink-0 text-indicator" />
+        {isCreate ? create.privacy : login.privacy}
+      </p>
+    </Card>
+  );
+}
+
+/**
+ * Dos cifras reales del perfil más reciente de este navegador, los días que faltan para el ENARM y los
+ * repasos que le esperan hoy, con la misma cuenta que Repasar. Sin perfiles no pinta nada
+ */
+function LoginFigures() {
+  const api = useDataApi();
+  const text = t.onboarding.loginPanel;
+  const figures = useLiveData(async () => {
+    const users = await api.repos.users.list();
+    const latest = [...users].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+    if (!latest) return null;
+    const today = studyDayOf(new Date(), latest.timeZone);
+    const snapshot = await buildDueSnapshot(api, latest.id, latest.timeZone);
+    return {
+      daysToExam: daysBetween(today, examDateFor(latest)),
+      dueToday: snapshot?.days[0]?.due ?? 0,
+    };
+  }, [api]);
+  if (!figures) return null;
+  const rows = [
+    // Con el examen ya pasado la cuenta regresiva no dice nada útil
+    ...(figures.daysToExam >= 0
+      ? [{ label: text.daysToExam, value: text.days(figures.daysToExam) }]
+      : []),
+    { label: text.dueToday, value: figures.dueToday.toLocaleString('es-MX') },
+  ];
+  return (
+    <dl className="flex flex-col gap-2.5">
+      {rows.map((row) => (
+        <div
+          key={row.label}
+          className="flex items-center justify-between gap-3 rounded-lg bg-primary-fg/10 px-4 py-3 text-sm"
+        >
+          <dt className="text-primary-fg/80">{row.label}</dt>
+          <dd className="font-bold">{row.value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -176,7 +321,16 @@ function OrDivider() {
   );
 }
 
-function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void }) {
+/** La tarjeta blanca del formulario, de 24 px con sombra suave (D-150) */
+const formCard = 'rounded-xl p-6 shadow-raised sm:p-9';
+
+function CreateAccountForm({
+  onCreated,
+  onSwitchToLogin,
+}: {
+  onCreated: (userId: string) => void;
+  onSwitchToLogin: () => void;
+}) {
   const api = useDataApi();
   const [alias, setAlias] = useState('');
   const [email, setEmail] = useState('');
@@ -300,15 +454,21 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
   }
 
   return (
-    <Card aria-labelledby="crear-titulo">
-      <CardHeader>
-        <CardTitle id="crear-titulo">{t.onboarding.createTitle}</CardTitle>
+    <Card aria-labelledby="crear-titulo" lift={false} className={formCard}>
+      <CardHeader className="mb-5 gap-1.5">
+        <CardTitle id="crear-titulo" className="text-2xl text-heading">
+          {t.onboarding.createTitle}
+        </CardTitle>
         <CardDescription>{t.onboarding.createDescription}</CardDescription>
       </CardHeader>
       {registrationClosed ? (
-        <p className="mb-4 rounded-md bg-muted p-3 text-sm">{t.accounts.signup.invitationOnly}</p>
+        // El aviso de invitación en banda cielo suave con ícono (D-150)
+        <p className="mb-5 flex items-start gap-3 rounded-lg bg-primary-soft p-3.5 text-sm leading-relaxed text-primary-ink">
+          <Info aria-hidden className="mt-0.5 size-5 shrink-0" />
+          <span>{t.accounts.signup.invitationOnly}</span>
+        </p>
       ) : null}
-      <form className="flex flex-col gap-4" noValidate onSubmit={(event) => void onSubmit(event)}>
+      <form className="flex flex-col gap-5" noValidate onSubmit={(event) => void onSubmit(event)}>
         <TextField
           label={t.onboarding.alias}
           hint={t.onboarding.aliasHint}
@@ -342,7 +502,7 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
             setDetails({ ...details, targetSpecialty });
           }}
         />
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <SelectField
             label={t.onboarding.goalMetric}
             value={goalMetric}
@@ -369,31 +529,32 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
           />
         </div>
         <HeardFromFields value={heardFrom} onChange={setHeardFrom} showErrors={showErrors} />
-        <details className="group rounded-lg border border-line p-3">
+        <details className="group rounded-lg border border-line p-4">
           <summary className="cursor-pointer font-semibold">
             {t.account.detailsTitle}
             <span className="ml-2 text-sm font-normal text-fg-muted">{t.account.detailsHint}</span>
           </summary>
-          <div className="mt-3">
+          <div className="mt-4">
             <AccountDetailsFields value={details} onChange={setDetails} withSpecialty={false} />
           </div>
         </details>
         <OptionalConsentsFields value={consents} onChange={setConsents} />
+        {/* La aceptación del aviso en una banda crema con sus casillas (D-150) */}
         <section
           aria-labelledby="aviso-titulo"
-          className="flex flex-col gap-2 rounded-md bg-muted p-3"
+          className="flex flex-col gap-2 rounded-lg bg-cream p-4"
         >
           <h3 id="aviso-titulo" className="font-semibold">
             {t.onboarding.privacyTitle}
           </h3>
-          <p className="text-sm text-fg-muted">{t.onboarding.privacyBody}</p>
+          <p className="text-sm leading-relaxed text-fg-muted">{t.onboarding.privacyBody}</p>
           {/* Se abren en otra pestaña para no perder lo que ya escribió en el formulario */}
           <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
             <Link
               to={screenPath('privacyNotice')}
               target="_blank"
               rel="noopener"
-              className="underline underline-offset-4"
+              className="font-bold text-primary-ink underline underline-offset-4"
             >
               {legalText.onboarding.read}
               <span className="sr-only"> ({legalText.onboarding.newTab})</span>
@@ -402,7 +563,7 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
               to={screenPath('terms')}
               target="_blank"
               rel="noopener"
-              className="underline underline-offset-4"
+              className="font-bold text-primary-ink underline underline-offset-4"
             >
               {legalText.onboarding.readTerms}
               <span className="sr-only"> ({legalText.onboarding.newTab})</span>
@@ -423,14 +584,26 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
           ) : null}
         </section>
         {problem === 'invitation' ? (
-          <p role="alert" className="rounded-md bg-danger-soft p-3 text-sm text-danger">
+          <p role="alert" className="rounded-lg bg-danger-soft p-3.5 text-sm text-danger">
             {t.accounts.signup.invitationRequired}
           </p>
         ) : null}
-        <Button type="submit" size="lg" disabled={busy !== null}>
-          <UserPlus aria-hidden />
-          {busy === 'email' ? t.onboarding.creating : t.onboarding.create}
-        </Button>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button type="submit" size="lg" disabled={busy !== null}>
+            {busy === 'email' ? t.onboarding.creating : t.onboarding.create}
+            <ArrowRight aria-hidden />
+          </Button>
+          <p className="text-sm text-fg-muted">
+            {t.onboarding.haveAccount}{' '}
+            <button
+              type="button"
+              onClick={onSwitchToLogin}
+              className="font-bold text-primary-ink underline-offset-4 hover:underline"
+            >
+              {t.onboarding.enterHere}
+            </button>
+          </p>
+        </div>
         {google ? (
           <>
             <OrDivider />
@@ -451,9 +624,11 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
 function LoginForm({
   onFound,
   onLinked,
+  onSwitchToCreate,
 }: {
   onFound: (userId: string) => void;
   onLinked: () => void;
+  onSwitchToCreate: () => void;
 }) {
   const api = useDataApi();
   const [email, setEmail] = useState('');
@@ -529,60 +704,93 @@ function LoginForm({
   }
 
   return (
-    <Card aria-labelledby="entrar-titulo">
-      <CardHeader>
-        <CardTitle id="entrar-titulo">{t.onboarding.signInTitle}</CardTitle>
-        <CardDescription>
-          {cloud ? t.cloud.signInDescription : t.onboarding.signInDescription}
-        </CardDescription>
-      </CardHeader>
-      <form className="flex flex-col gap-3" noValidate onSubmit={(event) => void onSubmit(event)}>
-        <TextField
-          label={t.account.email}
-          type="email"
-          value={email}
-          autoComplete="email"
-          inputMode="email"
-          onChange={(event) => {
-            setEmail(event.target.value);
-            setMessage('');
-          }}
-        />
-        <Button type="submit">
-          <LogIn aria-hidden />
-          {cloud ? t.cloud.sendLink : t.onboarding.signIn}
-        </Button>
-        {message ? (
-          <p role="status" className="text-sm text-danger">
-            {message}
-          </p>
-        ) : null}
-      </form>
-      {google ? (
-        <div className="mt-3 flex flex-col gap-3">
-          <OrDivider />
-          <GoogleSignInButton busy={googleBusy} onClick={() => void onGoogle()} />
-        </div>
-      ) : null}
-      {legacy && legacy.length > 0 ? (
-        <div className="mt-4 flex flex-col gap-2 border-t border-line pt-4">
-          <p className="text-sm font-semibold">{t.onboarding.legacyTitle}</p>
-          {legacy.map((profile) => (
-            <Button
-              key={profile.id}
-              variant="secondary"
-              className="justify-start"
-              onClick={() => {
-                onFound(profile.id);
-              }}
+    <>
+      <Card aria-labelledby="entrar-titulo" lift={false} className={formCard}>
+        <CardHeader className="mb-5 gap-1.5">
+          <CardTitle id="entrar-titulo" className="text-2xl text-heading">
+            {t.onboarding.signInTitle}
+          </CardTitle>
+          <CardDescription>
+            {cloud ? t.cloud.signInDescription : t.onboarding.signInDescription}
+          </CardDescription>
+        </CardHeader>
+        <form className="flex flex-col gap-5" noValidate onSubmit={(event) => void onSubmit(event)}>
+          <TextField
+            label={t.account.email}
+            type="email"
+            value={email}
+            autoComplete="email"
+            inputMode="email"
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setMessage('');
+            }}
+          />
+          <Button type="submit" size="lg">
+            {cloud ? t.cloud.sendLink : t.onboarding.signIn}
+            <ArrowRight aria-hidden />
+          </Button>
+          {message ? (
+            // El aviso en banda de advertencia con ícono (D-150). Sin cuenta en este navegador ofrece crearla
+            <p
+              role="status"
+              className="flex items-start gap-3 rounded-lg bg-warning-soft p-3.5 text-sm leading-relaxed text-warning"
             >
-              <LogIn aria-hidden />
-              {t.onboarding.signInAs(profile.alias)}
-            </Button>
-          ))}
-        </div>
+              <TriangleAlert aria-hidden className="mt-0.5 size-5 shrink-0" />
+              <span>{message}</span>
+              {message === t.onboarding.noAccount ? (
+                <button
+                  type="button"
+                  onClick={onSwitchToCreate}
+                  className="font-bold underline underline-offset-4"
+                >
+                  {t.onboarding.noAccountCreate}
+                </button>
+              ) : null}
+            </p>
+          ) : null}
+        </form>
+        {google ? (
+          <div className="mt-5 flex flex-col gap-4">
+            <OrDivider />
+            <GoogleSignInButton busy={googleBusy} onClick={() => void onGoogle()} />
+          </div>
+        ) : null}
+      </Card>
+      {legacy && legacy.length > 0 ? (
+        // Los perfiles de antes como tarjetas con su avatar, en crema (D-150)
+        <Card tone="cream" lift={false} aria-labelledby="perfiles-titulo">
+          <h3 id="perfiles-titulo" className="mb-3 text-base font-bold">
+            {t.onboarding.legacyTitle}
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {legacy.map((profile) => (
+              <button
+                key={profile.id}
+                type="button"
+                className="card-lift flex min-h-touch items-center gap-3 rounded-lg border-[1.5px] border-line bg-surface px-3.5 py-3 text-left text-fg"
+                onClick={() => {
+                  onFound(profile.id);
+                }}
+              >
+                <Avatar
+                  name={profile.alias}
+                  className="size-10 shrink-0 bg-primary text-sm font-extrabold text-primary-fg ring-0"
+                />
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <strong className="text-sm">{t.onboarding.signInAs(profile.alias)}</strong>
+                  <span className="text-xs text-fg-muted">
+                    {profile.examDate
+                      ? t.onboarding.examOn(longDate(profile.examDate))
+                      : t.onboarding.noExamDate}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </Card>
       ) : null}
-    </Card>
+    </>
   );
 }
 
@@ -602,9 +810,9 @@ function LinkSentCard({
 }) {
   const ok = result.ok;
   return (
-    <Card aria-labelledby="enlace-titulo">
+    <Card aria-labelledby="enlace-titulo" lift={false} className={formCard}>
       <CardHeader>
-        <CardTitle id="enlace-titulo" className="flex items-center gap-2">
+        <CardTitle id="enlace-titulo" className="flex items-center gap-2 text-2xl text-heading">
           <MailCheck aria-hidden className="text-fg-muted" />
           {ok ? t.cloud.sentTitle : t.cloud.failedTitle}
         </CardTitle>

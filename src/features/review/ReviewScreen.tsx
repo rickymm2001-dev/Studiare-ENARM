@@ -1,13 +1,14 @@
 // Repaso de tarjetas (pantalla 3, 7.1). Cola del día con el motor real de FSRS, confianza previa
 // (apagada por defecto, D-087), los cuatro botones con su intervalo, causa después de fallar,
 // tiempos y XP. Todo se puede hacer con el teclado. Cada repaso queda como evento card_reviewed con
-// su estado FSRS antes y después.
-import { BookOpen, CheckCircle2, Plus, Shuffle } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+// su estado FSRS antes y después. La sesión sigue el diseño de la portada por dentro (D-150). Arriba
+// las pestañas con el avance, la tarjeta en crema con su rama y a un lado Esta sesión, el Pomodoro y
+// las acciones sobre la tarjeta.
+import { BookOpen, CheckCircle2, Pencil, Plus, Shuffle } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useFocusMode } from '@/app/focusMode';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { draftOf, isFromOutline } from '@/data/usecases/manualDecks';
@@ -44,13 +45,16 @@ import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
 import { useShortcuts } from '../shared/useShortcuts';
 import { useStudyClock } from '../shared/useStudyClock';
-import { PomodoroNotice, PomodoroPill } from '../pomodoro/Pomodoro';
+import { PomodoroCard, PomodoroNotice } from '../pomodoro/Pomodoro';
 import { celebrate } from '@/ui/celebrate';
+import { cn } from '@/ui/cn';
 import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
+import { BranchBadge } from '@/ui/components/branch-tag';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Kbd, KeyHint } from '@/ui/components/key-hint';
+import { ProgressBar } from '@/ui/components/progress-bar';
 import { resolveControversy } from '@/data/usecases/aiCards';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
@@ -61,18 +65,20 @@ import { FeatureGate } from '../shared/FeatureGate';
 import { useActivePlan, usePlanText } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { deckPath, selectionUnitId } from '@/engines/deckTree';
+import { deckBranch } from '../decks/deckBranch';
 import { DeckEditorDialog } from '../decks/DeckEditorDialog';
 import { CONTAINER_DECKS, deckTopicOutlines } from '../decks/topicPaths';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
-import { ReviewCounters } from './ReviewCounters';
 import { buildTopicQueue } from '@/engines/topicStudy';
 import { DailyLoadPanel } from './DailyLoadPanel';
 import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
+import { SessionStatsCard } from './SessionStatsCard';
 import { useReviewPresetFromRoute } from './reviewPreset';
 import { TodayPlanCard } from './TodayPlanCard';
 import { useReviewSettingsPanel } from './settings/panelParam';
@@ -97,6 +103,20 @@ type Confidence = 'dont_know' | 'unsure' | 'sure';
 const CARD_TIME_CAP_MS = DEFAULT_THRESHOLDS.daily.cardTimeCapSeconds * 1000;
 type Cause = keyof typeof t.review.causes;
 const RATINGS: FsrsRating[] = ['again', 'hard', 'good', 'easy'];
+/** Color del nombre de cada calificación. Bien va rellena en marino y no lleva color propio */
+const RATING_TONE: Record<FsrsRating, string> = {
+  again: 'text-danger',
+  hard: 'text-warning',
+  good: '',
+  easy: 'text-success',
+};
+/** Rama de la taxonomía a la que pertenece cada tema, para la etiqueta de las tarjetas de Mis errores */
+const BRANCH_OF_TOPIC = new Map(
+  topicTaxonomy.branches.flatMap((branch) =>
+    branch.topics.map((topic) => [topic.key, branch.key] as const),
+  ),
+);
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Reloj de la sesión. Solo se llama desde manejadores de eventos */
 function clock(): number {
@@ -141,6 +161,22 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   useReviewPresetFromRoute();
   // Ajustes del repaso se abren con ?ajustes en la dirección (B3 del plan del cambio)
   const panel = useReviewSettingsPanel();
+  // Subespecialidad y rama de cada nota precargada, por su ID. Se calculan una sola vez por catálogo,
+  // porque el ID estable de cada nota cuesta y esta pantalla vuelve a pintarse con cada evento de
+  // la sesión (perf.spec, 14.4). La rama es la de la nota o la del mazo cuando no la trae, como Urgencias
+  const catalogNotes = useMemo(() => {
+    const topic = new Map<string, string | null>();
+    const branch = new Map<string, string>();
+    for (const file of catalog ?? []) {
+      const fallback = deckBranch(file);
+      for (const note of file.notes) {
+        const id = deckIds.note(note.key);
+        topic.set(id, note.topic);
+        branch.set(id, note.branch ?? fallback);
+      }
+    }
+    return { topic, branch };
+  }, [catalog]);
   if (events === undefined || content === undefined || catalog === undefined)
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
@@ -181,7 +217,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         />
         <StudyTabs />
         {settingsPanel}
-        <Card aria-labelledby="sin-mazos">
+        <Card tone="cream" aria-labelledby="sin-mazos" className="lg:max-w-session">
           <CardHeader>
             <CardTitle id="sin-mazos">
               {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
@@ -210,14 +246,24 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     cardMatches({ deckId: unitOf(card.deckId) }, topic, candidate);
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
-  const noteTopic = new Map<string, string | null>();
-  for (const file of catalog)
-    for (const note of file.notes) noteTopic.set(deckIds.note(note.key), note.topic);
+  const noteTopic = catalogNotes.topic;
+  const noteBranch = catalogNotes.branch;
   const topicOfCard = new Map(
     cards.map((card) => [
       card.id,
       noteTopic.get(card.noteId) ?? topicFromTags(noteById.get(card.noteId)?.tags),
     ]),
+  );
+  // Rama para la etiqueta de la tarjeta. Las de Mis errores la sacan del tema de su etiqueta. Una
+  // tarjeta propia sin rama conocida no lleva etiqueta, nunca una inventada
+  const branchOfCard = new Map(
+    cards.map((card) => {
+      const topic = topicOfCard.get(card.id) ?? null;
+      return [
+        card.id,
+        noteBranch.get(card.noteId) ?? (topic ? (BRANCH_OF_TOPIC.get(topic) ?? null) : null),
+      ];
+    }),
   );
   const config = schedulerConfig(session);
   const cardStates = latestCardStates(events);
@@ -329,6 +375,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           )
         }
         deckNames={deckNames}
+        branches={branchOfCard}
         initialEvents={events}
         onChangeSelection={() => {
           setSelection(null);
@@ -406,6 +453,7 @@ function ReviewSession({
   notes,
   editableDecks,
   deckNames,
+  branches,
   initialEvents,
   onChangeSelection,
 }: {
@@ -420,6 +468,8 @@ function ReviewSession({
   /** Mazos hechos a mano por el alumno, los únicos cuyas tarjetas se editan desde aquí */
   editableDecks: ReadonlyMap<string, Deck>;
   deckNames: Map<string, string>;
+  /** Rama de cada tarjeta para su etiqueta, o null si no se conoce */
+  branches: ReadonlyMap<string, string | null>;
   initialEvents: AppEvent[];
   /** Volver a elegir qué repasar. Lo ya calificado queda guardado */
   onChangeSelection: () => void;
@@ -451,9 +501,15 @@ function ReviewSession({
   const [leech, setLeech] = useState<{ cardId: string; lapses: number } | null>(null);
   // Tarjetas que se suspendieron durante esta sesión y ya no deben volver a salir
   const [removed, setRemoved] = useState<ReadonlySet<string>>(() => new Set());
-  const [editingLeech, setEditingLeech] = useState<{ deck: Deck; noteId: string } | null>(null);
+  // La tarjeta que se está editando. advance dice si al cerrar sigue con la siguiente, como al editar
+  // una sanguijuela, o se queda en la misma, como al editarla desde Acciones
+  const [editing, setEditing] = useState<{ deck: Deck; noteId: string; advance: boolean } | null>(
+    null,
+  );
   const [leechBusy, setLeechBusy] = useState(false);
   const [reviewed, setReviewed] = useState(0);
+  // Cuántas recordaste, Bien o Fácil, y cuántas fallaste, para Esta sesión
+  const [tally, setTally] = useState({ good: 0, again: 0 });
   const [xpGained, setXpGained] = useState(0);
   const [lastXp, setLastXp] = useState(0);
   const sessionId = useRef<string | null>(null);
@@ -579,6 +635,10 @@ function ReviewSession({
     setXpGained((value) => value + gained);
     setLastXp(gained);
     setReviewed((value) => value + 1);
+    setTally((current) => ({
+      good: current.good + (rating === 'good' || rating === 'easy' ? 1 : 0),
+      again: current.again + (rating === 'again' ? 1 : 0),
+    }));
     setStates((current) => new Map(current).set(card.id, outcome.state));
     // Una tarjeta fallada vuelve al final de la sesión
     if (rating === 'again') {
@@ -669,7 +729,7 @@ function ReviewSession({
     if (canEditLeech) {
       keys['2'] = () => {
         const deck = editableDecks.get(leechCard.deckId);
-        if (deck) setEditingLeech({ deck, noteId: leechNote.id });
+        if (deck) setEditing({ deck, noteId: leechNote.id, advance: true });
       };
     }
     const keep = () => {
@@ -693,30 +753,23 @@ function ReviewSession({
   }
   useShortcuts(
     keys,
-    card !== undefined &&
-      step !== 'done' &&
-      !study.paused &&
-      editingLeech === null &&
-      !settingsOpen,
+    card !== undefined && step !== 'done' && !study.paused && editing === null && !settingsOpen,
   );
 
-  const sessionActions = (
-    <>
-      <Button
-        variant="secondary"
-        size="sm"
-        // En el teléfono solo se ve el ícono, así que el nombre va en la etiqueta (axe, button-name)
-        aria-label={t.reviewSetup.change}
-        onClick={() => {
-          // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
-          void finish({ celebrate: false }).then(onChangeSelection);
-        }}
-      >
-        <Shuffle aria-hidden />
-        <span className="hidden sm:inline">{t.reviewSetup.change}</span>
-      </Button>
-      <PomodoroPill session={session} onOpenSettings={onOpenSettings} />
-    </>
+  const changeSelection = (
+    <Button
+      variant="ghost"
+      size="sm"
+      // En el teléfono solo se ve el ícono, así que el nombre va en la etiqueta (axe, button-name)
+      aria-label={t.reviewSetup.change}
+      onClick={() => {
+        // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
+        void finish({ celebrate: false }).then(onChangeSelection);
+      }}
+    >
+      <Shuffle aria-hidden />
+      <span className="hidden sm:inline">{t.reviewSetup.change}</span>
+    </Button>
   );
   const extras = (
     <>
@@ -733,24 +786,30 @@ function ReviewSession({
       ) : null}
     </>
   );
-  const header = (
-    <>
-      <ScreenHeader
-        title={t.screens.review.title}
-        description={t.screens.review.description}
-        actions={sessionActions}
-      />
-      {extras}
-    </>
+  // Modo enfoque (D-078) al estilo de la portada (D-150). Las pestañas arriba con el avance y las
+  // acciones de la sesión. El título de la pantalla queda para el lector de pantalla y la pestaña
+  // del navegador, el caso va arriba
+  const sessionBar = (actions: ReactNode) => (
+    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+      <title>{t.app.documentTitle(t.screens.review.title)}</title>
+      <h1 tabIndex={-1} className="sr-only">
+        {t.screens.review.title}
+      </h1>
+      <StudyTabs />
+      <div className="flex max-w-full min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+        {actions}
+      </div>
+    </header>
   );
 
   if (step === 'done' || !card || !note) {
     return (
       <>
-        {header}
-        <Card aria-labelledby="fin-repaso">
+        {sessionBar(changeSelection)}
+        {extras}
+        <Card tone="cream" aria-labelledby="fin-repaso" className="lg:max-w-session">
           <CardHeader>
-            <CardTitle id="fin-repaso" className="flex items-center gap-2">
+            <CardTitle id="fin-repaso" className="flex items-center gap-2 text-heading">
               <CheckCircle2 aria-hidden className="size-6 text-success" />
               {t.review.doneTitle}
             </CardTitle>
@@ -776,6 +835,7 @@ function ReviewSession({
     );
   }
 
+  const now = new Date();
   const state = states.get(card.id) ?? null;
   const isNew = state === null || state.state === 'new';
   const reveal = step === 'back' || step === 'cause' || step === 'leech';
@@ -786,219 +846,320 @@ function ReviewSession({
     (id) => states.get(id) ?? null,
   );
   const leechBefore = isLeech(state, config.thresholds);
-  const preview = reveal ? previewReview(state, new Date(), config, cardId) : null;
+  const preview = reveal ? previewReview(state, now, config, cardId) : null;
   const suggestions = leech ? leechSuggestions(checkCardQuality(draftOf(note))) : [];
+  // Días completos que lleva vencida una tarjeta ya programada. Las nuevas no vencen
+  const overdueDays = isNew
+    ? 0
+    : Math.floor((now.getTime() - new Date(state.due).getTime()) / DAY_MS);
+  const branch = branches.get(card.id) ?? null;
+  const deckName = deckNames.get(card.deckId) ?? '';
+  // Acciones sobre esta tarjeta. Editar solo las del propio alumno, y abrir el apunte si sale de uno
+  const editableDeck = editableDecks.get(card.deckId);
+  const canEditCard =
+    editableDeck !== undefined && note.origin !== 'preloaded' && !isFromOutline(note);
+  const outlineId = isFromOutline(note) ? note.outlineId : (note.sourceOutlineId ?? null);
+  const actionClass =
+    'flex min-h-touch items-center gap-2.5 rounded-md text-sm font-semibold text-fg hover:text-primary-ink';
+  const actionIconClass =
+    'flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-ink [&_svg]:size-4';
 
   return (
     <>
-      {/* Modo enfoque (D-078). Sin racha, nivel ni descripción mientras se repasa */}
-      <SessionHeader
-        title={t.screens.review.title}
-        meta={
-          <>
-            <ReviewCounters counters={counters} current={counterKindOf(state)} />
-            {/* El XP va en el acento cálido (D-128). El verde queda para lo correcto */}
-            <span aria-live="polite" className="font-semibold text-accent-ink">
-              {lastXp > 0 && !focus ? t.review.xpGained(lastXp) : ''}
-            </span>
-          </>
-        }
-        actions={
-          <>
-            {sessionActions}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                void finish();
-              }}
-            >
-              {t.review.finish}
-            </Button>
-          </>
-        }
-      />
-      {extras}
-      <Card
-        aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}
-        className="w-full lg:mx-auto lg:w-full lg:max-w-session"
-      >
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <Badge variant={isNew ? 'info' : 'neutral'}>
-            {isNew ? t.review.newCard : t.review.reviewCard}
-          </Badge>
-          {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
-          {leechBefore ? <Badge variant="danger">{t.review.leech.badge}</Badge> : null}
-          {isAiNote(note) ? <Badge variant="warning">{t.aiCards.draftLabel}</Badge> : null}
-          <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
-        </div>
-        <CardHtml html={front} />
-        {reveal ? (
-          <>
-            <hr className="my-4 border-line" />
-            <CardHtml html={back} />
-          </>
-        ) : null}
-      </Card>
-
-      {note.controversy ? (
-        <div className="lg:mx-auto lg:w-full lg:max-w-session">
-          <ControversySignal
-            controversy={note.controversy}
-            onVerify={async () => {
-              await resolveControversy(api, user, note.id, 'verified');
-            }}
-            {...(editableDecks.has(card.deckId)
-              ? {
-                  onEdit: () => {
-                    const deck = editableDecks.get(card.deckId);
-                    if (deck) setEditingLeech({ deck, noteId: note.id });
-                  },
-                }
-              : {})}
-          />
-        </div>
-      ) : null}
-
-      {timerRuns ? (
-        <div className="lg:mx-auto lg:w-full lg:max-w-session">
-          <CardTimerBar
-            remainingMs={timer.remainingMs}
-            totalSeconds={settings.cardTimer.seconds}
-            expired={timer.expired}
-          />
-        </div>
-      ) : null}
-
-      {step === 'leech' && leech ? (
-        <LeechPanel
-          lapses={leech.lapses}
-          suggestions={suggestions}
-          canEdit={canEditLeech}
-          outlineId={isFromOutline(note) ? note.outlineId : null}
-          busy={leechBusy}
-          onSuspend={() => {
-            void suspendLeech();
-          }}
-          onEdit={() => {
-            const deck = editableDecks.get(card.deckId);
-            if (deck) setEditingLeech({ deck, noteId: note.id });
-          }}
-          onKeep={() => {
-            closeLeech();
-          }}
-        />
-      ) : step === 'cause' ? (
-        <fieldset className="flex flex-col gap-2 lg:mx-auto lg:w-full lg:max-w-session">
-          <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {(Object.keys(t.review.causes) as Cause[]).map((cause) => (
-              <Button
-                key={cause}
-                variant="secondary"
-                className="justify-start"
-                onClick={() => {
-                  void reportCause(cause);
-                }}
-              >
-                {t.review.causes[cause]}
-              </Button>
-            ))}
-          </div>
+      {sessionBar(
+        <>
+          <span className="text-sm text-fg-muted">
+            {t.review.progress(position + 1, queue.length)}
+          </span>
+          {changeSelection}
           <Button
-            variant="ghost"
-            className="self-start"
-            aria-keyshortcuts="Space Enter Escape"
+            variant="secondary"
+            size="sm"
             onClick={() => {
-              void reportCause(null);
+              void finish();
             }}
           >
-            {t.review.skipCause}
+            {t.review.finish}
           </Button>
-          <KeyHint>
-            <Kbd>1</Kbd> a <Kbd>{Object.keys(t.review.causes).length}</Kbd> {t.review.keys.cause} ·{' '}
-            <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.skip}
-          </KeyHint>
-        </fieldset>
-      ) : (
-        // Confianza, revelar y calificar, siempre a la mano en el teléfono (D-078)
-        <ActionDock className="lg:mx-auto lg:w-full lg:max-w-session">
-          {step === 'confidence' ? (
-            <>
-              <p className="text-sm font-medium">{t.review.confidenceQuestion}</p>
-              <div className="grid grid-cols-3 gap-2">
-                {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value, index) => (
+        </>,
+      )}
+      <ProgressBar
+        value={position}
+        max={queue.length}
+        label={t.review.progressLabel}
+        className="h-2"
+      />
+      {extras}
+      {/* En el teléfono es una columna, la tarjeta, luego calificar fijo abajo y al final el lado. En
+          computadora son doce columnas, ocho para la tarjeta y cuatro para el lado (D-150) */}
+      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6">
+        <div className="order-1 flex min-w-0 flex-col gap-5 lg:col-span-8 lg:col-start-1">
+          <Card
+            tone="cream"
+            lift={false}
+            aria-label={t.review.deck(deckName)}
+            className="flex flex-col gap-5 rounded-xl p-6 shadow-navy sm:px-10 sm:py-9"
+          >
+            <div className="flex flex-wrap items-center gap-2.5">
+              {branch ? (
+                <BranchBadge branch={branch}>
+                  <span aria-hidden className="size-2 rounded-full bg-current" />
+                  {t.branchNames[branch] ?? branch}
+                </BranchBadge>
+              ) : null}
+              <Badge variant={isNew ? 'info' : 'neutral'}>
+                {isNew ? t.review.newCard : t.review.reviewCard}
+              </Badge>
+              {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
+              {leechBefore ? <Badge variant="danger">{t.review.leech.badge}</Badge> : null}
+              {isAiNote(note) ? <Badge variant="warning">{t.aiCards.draftLabel}</Badge> : null}
+              <span className="text-sm text-fg-muted">{deckName}</span>
+              {overdueDays > 0 ? (
+                <span className="ml-auto text-sm font-semibold text-primary-ink">
+                  {t.review.overdueSince(overdueDays)}
+                </span>
+              ) : null}
+            </div>
+            <CardHtml
+              html={front}
+              className="text-2xl leading-snug font-bold tracking-tight text-heading"
+            />
+            {reveal ? (
+              <>
+                <hr className="h-[1.5px] w-full border-0 bg-heading" />
+                <div className="flex flex-col gap-3">
+                  <p className="eyebrow">{t.review.answer}</p>
+                  <CardHtml html={back} />
+                  {note.sourceQuote ? (
+                    <p className="text-sm leading-relaxed text-fg-muted italic">
+                      {isQuestionNote(note) ? t.review.sourceBank : t.review.sourceLabel} “
+                      {note.sourceQuote}”{note.sourceTitle ? ` (${note.sourceTitle})` : ''}
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : null}
+          </Card>
+
+          {note.controversy ? (
+            <ControversySignal
+              controversy={note.controversy}
+              onVerify={async () => {
+                await resolveControversy(api, user, note.id, 'verified');
+              }}
+              {...(editableDeck
+                ? {
+                    onEdit: () => {
+                      setEditing({ deck: editableDeck, noteId: note.id, advance: true });
+                    },
+                  }
+                : {})}
+            />
+          ) : null}
+
+          {timerRuns ? (
+            <CardTimerBar
+              remainingMs={timer.remainingMs}
+              totalSeconds={settings.cardTimer.seconds}
+              expired={timer.expired}
+            />
+          ) : null}
+        </div>
+
+        <div className="order-2 min-w-0 lg:col-span-8 lg:col-start-1">
+          {step === 'leech' && leech ? (
+            <LeechPanel
+              lapses={leech.lapses}
+              suggestions={suggestions}
+              canEdit={canEditLeech}
+              outlineId={isFromOutline(note) ? note.outlineId : null}
+              busy={leechBusy}
+              onSuspend={() => {
+                void suspendLeech();
+              }}
+              onEdit={() => {
+                if (editableDeck)
+                  setEditing({ deck: editableDeck, noteId: note.id, advance: true });
+              }}
+              onKeep={() => {
+                closeLeech();
+              }}
+            />
+          ) : step === 'cause' ? (
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {(Object.keys(t.review.causes) as Cause[]).map((cause) => (
                   <Button
-                    key={value}
+                    key={cause}
                     variant="secondary"
-                    aria-keyshortcuts={String(index + 1)}
+                    className="justify-start"
                     onClick={() => {
-                      setConfidence(value);
-                      setStep('front');
+                      void reportCause(cause);
                     }}
                   >
-                    {t.review.confidence[value]}
+                    {t.review.causes[cause]}
                   </Button>
                 ))}
               </div>
-              <KeyHint>
-                <Kbd>1</Kbd> a <Kbd>3</Kbd> {t.review.keys.confidence}
-              </KeyHint>
-            </>
-          ) : null}
-
-          {step === 'front' ? (
-            <>
-              <Button size="lg" aria-keyshortcuts="Space Enter" onClick={showAnswer}>
-                <BookOpen aria-hidden />
-                {t.review.show}
+              <Button
+                variant="ghost"
+                className="self-start"
+                aria-keyshortcuts="Space Enter Escape"
+                onClick={() => {
+                  void reportCause(null);
+                }}
+              >
+                {t.review.skipCause}
               </Button>
               <KeyHint>
-                <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.show}
+                <Kbd>1</Kbd> a <Kbd>{Object.keys(t.review.causes).length}</Kbd>{' '}
+                {t.review.keys.cause} · <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.skip}
               </KeyHint>
-            </>
-          ) : null}
+            </fieldset>
+          ) : (
+            // Confianza, revelar y calificar, siempre a la mano en el teléfono (D-078)
+            <ActionDock>
+              {step === 'confidence' ? (
+                <>
+                  <p className="text-sm font-semibold text-fg-muted">
+                    {t.review.confidenceQuestion}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value, index) => (
+                      <Button
+                        key={value}
+                        variant="secondary"
+                        aria-keyshortcuts={String(index + 1)}
+                        onClick={() => {
+                          setConfidence(value);
+                          setStep('front');
+                        }}
+                      >
+                        {t.review.confidence[value]}
+                      </Button>
+                    ))}
+                  </div>
+                  <KeyHint>
+                    <Kbd>1</Kbd> a <Kbd>3</Kbd> {t.review.keys.confidence}
+                  </KeyHint>
+                </>
+              ) : null}
 
-          {step === 'back' && preview ? (
-            <>
-              <p className="text-sm font-medium">{t.review.rateQuestion}</p>
-              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                {RATINGS.map((rating, index) => (
-                  <Button
-                    key={rating}
-                    aria-keyshortcuts={String(index + 1)}
-                    variant={
-                      rating === 'again' ? 'danger' : rating === 'good' ? 'primary' : 'secondary'
-                    }
-                    className="flex-col gap-0 px-1 py-1.5 text-sm whitespace-normal sm:px-3 sm:text-base"
-                    onClick={() => {
-                      void rate(rating);
-                    }}
-                  >
-                    <span>{t.review.ratings[rating]}</span>
-                    {/* Sin opacidad. Sobre el rojo de Otra vez bajaba la letra chica a 4.2 a 1 */}
-                    <span className="text-xs">
-                      {t.review.interval(intervalLabel(preview[rating].state, new Date()))}
-                    </span>
+              {step === 'front' ? (
+                <>
+                  <Button size="lg" aria-keyshortcuts="Space Enter" onClick={showAnswer}>
+                    <BookOpen aria-hidden />
+                    {t.review.show}
                   </Button>
-                ))}
-              </div>
-              <KeyHint>
-                <Kbd>1</Kbd> a <Kbd>4</Kbd> {t.review.keys.rate} · <Kbd>{t.review.keys.space}</Kbd>{' '}
-                {t.review.keys.good}
-              </KeyHint>
-            </>
+                  <KeyHint>
+                    <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.show}
+                  </KeyHint>
+                </>
+              ) : null}
+
+              {step === 'back' && preview ? (
+                <>
+                  <p className="text-sm font-semibold text-fg-muted">{t.review.rateQuestion}</p>
+                  {/* Cuatro tarjetas de calificar (D-150). Otra vez en rojo, Difícil en ámbar, Bien
+                      rellena en marino y Fácil en verde, cada una con su intervalo y su tecla */}
+                  <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                    {RATINGS.map((rating, index) => (
+                      <button
+                        key={rating}
+                        type="button"
+                        aria-keyshortcuts={String(index + 1)}
+                        className={cn(
+                          'flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-[1rem] border-[1.5px] px-1.5 py-2.5 text-center transition-[border-color,background-color,transform] duration-150 hover:-translate-y-px active:translate-y-0 sm:px-3',
+                          rating === 'good'
+                            ? 'border-primary bg-primary text-primary-fg hover:bg-primary-hover'
+                            : 'border-line bg-surface hover:border-indicator hover:bg-primary-soft',
+                        )}
+                        onClick={() => {
+                          void rate(rating);
+                        }}
+                      >
+                        <span className={cn('text-base font-bold', RATING_TONE[rating])}>
+                          {t.review.ratings[rating]}{' '}
+                          {/* La tecla solo se ve donde hay teclado, como KeyHint (D-087) */}
+                          <span className="hidden font-semibold [@media(hover:hover)_and_(pointer:fine)]:inline">
+                            [{index + 1}]
+                          </span>
+                        </span>{' '}
+                        {/* Sin opacidad. Sobre el marino de Bien bajaba la letra chica de 4.5 a 1 */}
+                        <span
+                          className={cn(
+                            'text-xs',
+                            rating === 'good' ? 'text-primary-fg' : 'text-fg-muted',
+                          )}
+                        >
+                          {t.review.interval(intervalLabel(preview[rating].state, now))}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <KeyHint>
+                    <Kbd>1</Kbd> a <Kbd>4</Kbd> {t.review.keys.rate} ·{' '}
+                    <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.good}
+                  </KeyHint>
+                </>
+              ) : null}
+            </ActionDock>
+          )}
+        </div>
+
+        <aside className="order-3 flex min-w-0 flex-col gap-4 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1">
+          <SessionStatsCard
+            done={reviewed}
+            good={tally.good}
+            again={tally.again}
+            counters={counters}
+            current={counterKindOf(state)}
+            activeMs={study.activeMs}
+            xpText={lastXp > 0 && !focus ? t.review.xpGained(lastXp) : ''}
+          />
+          <PomodoroCard session={session} onOpenSettings={onOpenSettings} />
+          {canEditCard || outlineId ? (
+            <Card aria-labelledby="acciones-tarjeta" className="flex flex-col gap-1">
+              <CardTitle id="acciones-tarjeta">{t.review.actions.title}</CardTitle>
+              {canEditCard ? (
+                <button
+                  type="button"
+                  className={actionClass}
+                  onClick={() => {
+                    setEditing({ deck: editableDeck, noteId: note.id, advance: false });
+                  }}
+                >
+                  <span aria-hidden className={actionIconClass}>
+                    <Pencil />
+                  </span>
+                  {t.review.actions.edit}
+                </button>
+              ) : null}
+              {outlineId ? (
+                <Link
+                  to={`${screenPath('outlines')}?apunte=${encodeURIComponent(outlineId)}`}
+                  className={actionClass}
+                >
+                  <span aria-hidden className={actionIconClass}>
+                    <BookOpen />
+                  </span>
+                  {t.review.actions.outline}
+                </Link>
+              ) : null}
+            </Card>
           ) : null}
-        </ActionDock>
-      )}
-      {editingLeech ? (
+        </aside>
+      </div>
+      {editing ? (
         <DeckEditorDialog
           session={session}
-          deck={editingLeech.deck}
-          initialNoteId={editingLeech.noteId}
+          deck={editing.deck}
+          initialNoteId={editing.noteId}
           onClose={() => {
-            setEditingLeech(null);
-            closeLeech();
+            const { advance } = editing;
+            setEditing(null);
+            if (advance) closeLeech();
           }}
         />
       ) : null}

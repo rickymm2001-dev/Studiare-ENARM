@@ -496,16 +496,6 @@ html:has(.ld) {
   opacity: 1;
 }
 
-/* El degradado de la diapositiva, blanco a transparente de izquierda a derecha, sobre el 80 por
-   ciento del ancho de la foto */
-.ld-hero__fade {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 80%;
-  background: linear-gradient(to right, var(--ld-bg) 0%, rgb(255 255 255 / 0) 100%);
-  pointer-events: none;
-}
-
 /* Sin foto, las capturas reales de la app en dos marcos */
 .ld-collage {
   position: absolute;
@@ -976,6 +966,9 @@ html:has(.ld) {
   --enarm-fg-muted: #c9d6ea;
   --enarm-line: rgb(255 255 255 / 0.28);
   --enarm-muted: rgb(255 255 255 / 0.14);
+  /* La etiqueta neutra (Badge) lee estos dos, así se ve blanca sobre el marino y pasa el contraste */
+  --enarm-demo-fg: #ffffff;
+  --enarm-demo-line: rgb(255 255 255 / 0.4);
   background: var(--ld-navy);
   border-color: var(--ld-navy);
   color: #ffffff;

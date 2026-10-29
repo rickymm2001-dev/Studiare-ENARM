@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-// Menú de cada rol en computadora y en el teléfono (B3 del plan del cambio). jsdom no aplica los
-// estilos, así que lo que solo se ve en un ancho se revisa por sus clases, como el resto de la app.
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+// Menú de cada rol en computadora y en el teléfono (B3 del plan del cambio, D-150). jsdom no aplica
+// los estilos, así que lo que solo se ve en un ancho se revisa por sus clases, como el resto de la app.
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, useLocation } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
@@ -11,11 +11,20 @@ import { UnsavedChangesGuard } from '@/features/shared/UnsavedChangesGuard';
 import { t } from '@/i18n/es-MX';
 import { NAV_BY_ROLE } from '../navigation';
 import { SCREENS } from '../screens';
-import { BottomNav, NAV_ID } from './BottomNav';
+import { BottomNav } from './BottomNav';
+import { TopNav, TOP_NAV_ID } from './TopNav';
 
 function Where() {
   const { pathname } = useLocation();
   return <output aria-label="ruta">{pathname}</output>;
+}
+
+function renderTop(role: Role, path: string) {
+  const router = createMemoryRouter([{ path: '*', element: <TopNav nav={NAV_BY_ROLE[role]} /> }], {
+    initialEntries: [path],
+  });
+  render(<RouterProvider router={router} />);
+  return screen.getByRole('navigation', { name: t.nav.label });
 }
 
 function renderNav(role: Role, path: string) {
@@ -38,7 +47,7 @@ function renderNav(role: Role, path: string) {
 }
 
 const textOf = (elements: HTMLElement[]) => elements.map((element) => element.textContent);
-/** Lo que se ve en la barra del teléfono, sin lo que solo vive en el riel */
+/** Lo que se ve en el dock del teléfono */
 const phoneBar = (nav: HTMLElement) =>
   [...(nav.querySelector('ul')?.children ?? [])]
     .filter((item) => !item.classList.contains('hidden'))
@@ -72,70 +81,79 @@ const ADMIN_GROUP = [
   t.screens.demoData.title,
 ];
 
-describe('riel de computadora', () => {
-  it('alumno. Ocho secciones arriba y Configuración sola al final, separada y con el engrane', () => {
-    const nav = renderNav('student', SCREENS.home.path);
-    expect(nav).toHaveAttribute('id', NAV_ID);
-    expect(textOf(within(nav).getAllByRole('link'))).toEqual([
-      ...STUDENT_RAIL,
+describe('menú en línea de computadora (D-150)', () => {
+  it('alumno. Seis secciones en línea y Tutor, Party y Configuración desde Más', async () => {
+    const user = userEvent.setup();
+    const nav = renderTop('student', SCREENS.home.path);
+    expect(nav).toHaveAttribute('id', TOP_NAV_ID);
+    expect(textOf(within(nav).getAllByRole('link'))).toEqual(STUDENT_RAIL.slice(0, 6));
+    expect(within(nav).getByRole('link', { name: t.navItems.home })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    const more = within(nav).getByRole('button', { name: t.navItems.more });
+    expect(more).toHaveAttribute('aria-haspopup', 'dialog');
+    await user.click(more);
+    const sheet = await screen.findByRole('dialog', { name: t.nav.more });
+    expect(textOf(within(sheet).getAllByRole('link'))).toEqual([
+      t.navItems.tutor,
+      t.navItems.party,
       t.navItems.settings,
     ]);
-    const pinned = nav.lastElementChild as HTMLElement;
-    expect(pinned.tagName).toBe('UL');
-    expect(pinned).toHaveClass('lg:border-t', 'lg:shrink-0');
-    expect(textOf(within(pinned).getAllByRole('link'))).toEqual([t.navItems.settings]);
-    expect(pinned.querySelector('svg')).toHaveClass('lucide-settings');
     // El engrane es solo de Configuración
-    expect(nav.querySelectorAll('svg.lucide-settings')).toHaveLength(1);
-    for (const gone of ['Plan', 'Logros', 'Perfil']) expect(nav).not.toHaveTextContent(gone);
+    expect(sheet.querySelectorAll('svg.lucide-settings')).toHaveLength(1);
+    for (const gone of ['Plan', 'Logros', 'Perfil']) expect(sheet).not.toHaveTextContent(gone);
   });
 
   it.each(['admin', 'owner'] as const)(
-    '%s. Lo del alumno, su grupo de administración con nombre y Configuración al final',
-    (role) => {
-      const nav = renderNav(role, SCREENS.home.path);
-      expect(textOf(within(nav).getAllByRole('link'))).toEqual([
-        ...STUDENT_RAIL,
+    '%s. Lo del alumno en línea y Más con su grupo de administración con nombre antes de Configuración',
+    async (role) => {
+      const user = userEvent.setup();
+      const nav = renderTop(role, SCREENS.home.path);
+      expect(textOf(within(nav).getAllByRole('link'))).toEqual(STUDENT_RAIL.slice(0, 6));
+      await user.click(within(nav).getByRole('button', { name: t.navItems.more }));
+      const sheet = await screen.findByRole('dialog', { name: t.nav.more });
+      expect(textOf(within(sheet).getAllByRole('link'))).toEqual([
+        t.navItems.tutor,
+        t.navItems.party,
         ...ADMIN_GROUP,
         t.navItems.settings,
       ]);
-      const admin = within(nav).getByRole('list', { name: t.navItems.admin });
+      const admin = within(sheet).getByRole('list', { name: t.navItems.admin });
       expect(textOf(within(admin).getAllByRole('link'))).toEqual(ADMIN_GROUP);
       // Plataforma no usa el engrane
       expect(
         within(admin).getByRole('link', { name: t.navItems.platform }).querySelector('svg'),
       ).not.toHaveClass('lucide-settings');
-      expect(nav.querySelectorAll('svg.lucide-settings')).toHaveLength(1);
-      expect(textOf(within(nav.lastElementChild as HTMLElement).getAllByRole('link'))).toEqual([
-        t.navItems.settings,
-      ]);
+      expect(sheet.querySelectorAll('svg.lucide-settings')).toHaveLength(1);
     },
   );
 
-  it('médico. Sus cuatro secciones, la Auditoría de la IA y Configuración al final, sin Perfil', () => {
-    const nav = renderNav('physician', SCREENS.questionBank.path);
+  it('médico. Sus cinco secciones en línea y solo Configuración desde Más', async () => {
+    const user = userEvent.setup();
+    const nav = renderTop('physician', SCREENS.questionBank.path);
     expect(textOf(within(nav).getAllByRole('link'))).toEqual([
       t.navItems.bank,
       t.navItems.agreement,
       t.navItems.drafts,
       t.navItems.reports,
       t.navItems.audit,
-      t.navItems.settings,
     ]);
     expect(within(nav).getByRole('link', { name: t.navItems.bank })).toHaveAttribute(
       'aria-current',
       'page',
     );
+    await user.click(within(nav).getByRole('button', { name: t.navItems.more }));
+    const sheet = await screen.findByRole('dialog', { name: t.nav.more });
+    expect(textOf(within(sheet).getAllByRole('link'))).toEqual([t.navItems.settings]);
   });
 
-  it('lo que es del teléfono no se ve en el riel y lo del riel no se ve en el teléfono', () => {
-    const nav = renderNav('admin', SCREENS.home.path);
-    const more = within(nav).getByRole('button', { name: t.navItems.more });
-    expect(more.closest('li')).toHaveClass('lg:hidden');
-    expect(within(nav).getByRole('list', { name: t.navItems.admin }).parentElement).toHaveClass(
-      'hidden',
-    );
-    expect(nav.lastElementChild).toHaveClass('hidden', 'lg:flex');
+  it('el menú en línea solo se ve en computadora y el dock solo en el teléfono', () => {
+    const top = renderTop('student', SCREENS.home.path);
+    expect(top).toHaveClass('hidden', 'lg:flex');
+    cleanup();
+    const dock = renderNav('student', SCREENS.home.path);
+    expect(dock).toHaveClass('lg:hidden');
   });
 });
 

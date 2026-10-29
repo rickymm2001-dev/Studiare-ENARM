@@ -130,7 +130,7 @@ describe('pantalla y ancla de cada paso', () => {
     ]);
   });
 
-  it('en computadora señala el riel, con el engrane de Configuración al final', () => {
+  it('en computadora señala la barra en línea y, para Party y Configuración, su Más (D-150)', () => {
     expect(TOUR_STEPS.map((step) => anchorOf(step, 'rail'))).toEqual([
       null,
       'nav-home',
@@ -138,8 +138,8 @@ describe('pantalla y ancla de cada paso', () => {
       'nav-outlines',
       'nav-simulatorSetup',
       'nav-progress',
-      'nav-party',
-      'nav-settings',
+      'nav-more-top',
+      'nav-more-top',
     ]);
   });
 

@@ -9,6 +9,7 @@ import { t } from '@/i18n/es-MX';
 import {
   answerExamQuestions,
   finishExam,
+  openPracticeSetup,
   readTable,
   startExam,
   subscribeMonthly,
@@ -98,9 +99,8 @@ test('en el plan Gratis, con las preguntas del día gastadas por el examen, no o
   await expectNoSeriousA11yViolations(page);
 
   // Simular dice lo mismo y manda a los planes
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await expect(practice.getByText(t.simulator.limitReached)).toBeVisible({ timeout: 60_000 });
+  const practice = await openPracticeSetup(page);
+  await expect(practice.getByText(t.simulator.limitReached)).toBeVisible();
   await expect(practice.getByRole('link', { name: t.simulator.seePlans })).toBeVisible();
   await expect(practice.getByRole('button', { name: t.simulator.start })).toHaveCount(0);
 });

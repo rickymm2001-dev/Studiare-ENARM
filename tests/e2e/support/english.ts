@@ -5,6 +5,7 @@ import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
+import { chooseSimulatorMode } from './b1';
 import { enterWithLink, expect, reloadWithServerFlags } from './cloudFixtures';
 import { openBank, seedBank } from './fakeBank';
 import { createFakeBankStore, seedEnglishCases, type FakeBankStore } from './fakeBankStore';
@@ -71,11 +72,16 @@ export async function openSimulator(page: Page): Promise<void> {
   await expect(practiceCard(page)).toBeVisible({ timeout: 60_000 });
 }
 
-/** El navegador del examen, la lista plegable para ir a cualquier pregunta */
+/** Abre Simular en el modo Examen y espera la tarjeta del examen completo (D-150) */
+export async function openExamSimulator(page: Page): Promise<void> {
+  await openSimulator(page);
+  await chooseSimulatorMode(page, 'exam');
+  await expect(examCard(page)).toBeVisible({ timeout: 60_000 });
+}
+
+/** El navegador del examen, la región con un botón por pregunta (D-150) */
 export const examNavigator = (page: Page) =>
-  page
-    .locator('details')
-    .filter({ has: page.locator('summary', { hasText: t.exam.navigatorTitle }) });
+  page.getByRole('region', { name: t.exam.navigatorTitle });
 
 /**
  * El texto que se está leyendo en inglés. Es el único elemento con lang="en" que lleva el texto del

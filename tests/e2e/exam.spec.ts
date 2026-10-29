@@ -3,8 +3,8 @@
 // los resultados esperan a que se guarden antes de revisar el repaso.
 import type { Locator, Page } from '@playwright/test';
 import { SCREENS } from '@/app/screens';
-import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
+import { openExamSetup, openPracticeSetup, startExam } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const QUESTIONS = 20;
@@ -21,18 +21,6 @@ async function expectStat(summary: Locator, label: string, value: number) {
   await expect(summary.locator('section > div').filter({ hasText: label })).toContainText(
     String(value),
   );
-}
-
-async function startExam(page: Page) {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  // El banco demo se siembra la primera vez que se entra y puede tardar
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible({
-    timeout: 60_000,
-  });
-  await card.getByRole('button', { name: t.exam.start }).click();
-  await expect(page).toHaveURL(new RegExp(`${SCREENS.exam.path}$`));
-  await expect(page.getByRole('timer')).toBeVisible();
 }
 
 /** Mueve el inicio del examen guardado para que queden `remainingMs` de tiempo */
@@ -58,7 +46,7 @@ const storedExams = (page: Page) =>
 test('examen de 20 con descarte y marca, resultados y errores al repaso', async ({ page }) => {
   test.setTimeout(240_000);
   await signUp(page);
-  await startExam(page);
+  await startExam(page, QUESTIONS);
   await expect(progress(page, 1)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
@@ -85,17 +73,20 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
   }
   await expect(progress(page, QUESTIONS)).toBeVisible();
 
-  // La cuadrícula muestra el estado de cada pregunta y lleva a cualquiera
-  await page.getByText(t.exam.navigatorTitle).click();
+  // El mapa del examen muestra el estado de cada pregunta y lleva a cualquiera
+  const navigator = page.getByRole('region', { name: t.exam.navigatorTitle });
+  await expect(navigator.getByText(t.exam.navigatorSummary(QUESTIONS - 1, 1))).toBeVisible();
   await expect(
-    page.getByRole('button', {
+    navigator.getByRole('button', {
       name: t.exam.goToQuestion(1, `${t.exam.status.answered}, ${t.exam.status.marked}`),
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole('button', { name: t.exam.goToQuestion(2, t.exam.status.blank) }),
+    navigator.getByRole('button', { name: t.exam.goToQuestion(2, t.exam.status.blank) }),
   ).toBeVisible();
-  await page.getByRole('button', { name: new RegExp(`^${t.exam.goToQuestion(2, '')}`) }).click();
+  await navigator
+    .getByRole('button', { name: new RegExp(`^${t.exam.goToQuestion(2, '')}`) })
+    .click();
   await expect(progress(page, 2)).toBeVisible();
 
   // Al terminar avisa cuántas quedan en blanco y cuántas marcó
@@ -153,8 +144,7 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
   await expect(own.getByText(t.errorCards.deckName)).toBeVisible();
 
   // En el plan Gratis las respuestas del examen cuentan para el límite del día
-  await page.goto(SCREENS.simulatorSetup.path);
-  const setup = page.getByRole('region', { name: t.exam.cardTitle });
+  const setup = await openExamSetup(page);
   await expect(setup.getByText(t.exam.limitedTo(1))).toBeVisible();
   // El último examen dice cuántas acertó del total y no cuántas contestó
   await expect(setup.getByText(t.exam.lastTitle)).toBeVisible();
@@ -172,7 +162,7 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
 test('con poco tiempo avisa y al acabarse cierra solo', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await startExam(page);
+  await startExam(page, QUESTIONS);
   await page.getByRole('radio').first().check();
 
   // Quedan 4 minutos. Se cruzaron varios avisos de golpe y sale el más urgente
@@ -197,12 +187,8 @@ test('con poco tiempo avisa y al acabarse cierra solo', async ({ page }) => {
 test('con las alarmas apagadas el reloj sigue pero no avisa', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.exam.timeTotal(examTotalMs(QUESTIONS)))).toBeVisible({
-    timeout: 60_000,
-  });
-  await card.getByText(t.exam.settings).click();
+  const card = await openExamSetup(page);
+  // Las alarmas se apagan en los ajustes del examen, la tarjeta debajo del formulario
   await card.getByLabel(t.exam.alerts).uncheck();
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page.getByRole('timer')).toBeVisible();
@@ -234,7 +220,7 @@ test('un examen terminado que no se guardó se retoma desde Simular y no se pisa
 }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await startExam(page);
+  await startExam(page, QUESTIONS);
   await page.getByRole('radio').first().check();
 
   // El examen terminó pero se cerró la pestaña antes de guardar sus respuestas
@@ -246,9 +232,8 @@ test('un examen terminado que no se guardó se retoma desde Simular y no se pisa
     state.endReason = 'completed';
     localStorage.setItem(key, JSON.stringify(state));
   });
-  await page.goto(SCREENS.simulatorSetup.path);
-  const card = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(card.getByText(t.exam.unsavedTitle)).toBeVisible({ timeout: 60_000 });
+  const card = await openExamSetup(page);
+  await expect(card.getByText(t.exam.unsavedTitle)).toBeVisible();
   await expect(card.getByRole('button', { name: t.exam.start })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
@@ -260,16 +245,15 @@ test('un examen terminado que no se guardó se retoma desde Simular y no se pisa
     timeout: 60_000,
   });
   await expect(page.getByText(t.examResults.saving)).toHaveCount(0, { timeout: 60_000 });
-  await page.goto(SCREENS.simulatorSetup.path);
-  await expect(page.getByRole('region', { name: t.exam.cardTitle })).toBeVisible();
-  await expect(card.getByText(t.exam.lastTitle)).toBeVisible();
-  await expect(card.getByRole('button', { name: t.exam.start })).toBeVisible();
+  const again = await openExamSetup(page);
+  await expect(again.getByText(t.exam.lastTitle)).toBeVisible();
+  await expect(again.getByRole('button', { name: t.exam.start })).toBeVisible();
 });
 
 test('al borrar mis datos también se va el examen guardado en el navegador', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await startExam(page);
+  await startExam(page, QUESTIONS);
   await page.getByRole('radio').first().check();
   expect(await storedExams(page)).toBe(1);
 
@@ -282,12 +266,11 @@ test('al borrar mis datos también se va el examen guardado en el navegador', as
 test('un examen sin terminar aparta las preguntas del día del plan Gratis', async ({ page }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await startExam(page);
+  await startExam(page, QUESTIONS);
 
   // El examen de 20 gasta todas las del día aunque todavía no estén en la bitácora
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await expect(practice.getByText(t.simulator.limitUsedByExam)).toBeVisible({ timeout: 60_000 });
+  const practice = await openPracticeSetup(page);
+  await expect(practice.getByText(t.simulator.limitUsedByExam)).toBeVisible();
   await expect(practice.getByRole('link', { name: t.simulator.goToOpenExam })).toBeVisible();
   await expect(practice.getByRole('button', { name: t.simulator.start })).toHaveCount(0);
 

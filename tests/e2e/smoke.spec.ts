@@ -27,7 +27,16 @@ for (const key of SCREEN_KEYS) {
       await expect(page).toHaveTitle(t.app.documentTitle(t.landing.documentTitle));
       await expect(nav).toHaveCount(0);
     } else {
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
+      // La bienvenida y Configuración llevan su propio título grande desde D-150. La pestaña sigue
+      // diciendo el nombre de la pantalla
+      const h1 = page.getByRole('heading', { level: 1 });
+      if (key === 'onboarding') {
+        await expect(h1).toContainText(t.onboarding.panel.titleLead);
+      } else if (key === 'settings') {
+        await expect(h1).toHaveText(t.settings.heroTitle);
+      } else {
+        await expect(h1).toHaveText(t.screens[key].title);
+      }
       await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));
       // El aviso de privacidad, los términos y la baja de los recordatorios (B15) también se abren sin sesión y
       // sin navegación (Fase G)
@@ -100,7 +109,12 @@ test('los estados vacío y calibrando se ven en sus pantallas y pasan axe', asyn
 
 test('el tema oscuro se aplica y se recuerda al recargar', async ({ page }) => {
   await page.goto(`${SCREENS.settings.path}#apariencia`);
-  await page.getByRole('radio', { name: t.theme.dark }).click();
+  // El tema es un segmentado de botones, cada uno con aria-pressed (D-150)
+  const dark = page
+    .getByRole('group', { name: t.theme.legend })
+    .getByRole('button', { name: t.theme.dark, exact: true });
+  await dark.click();
+  await expect(dark).toHaveAttribute('aria-pressed', 'true');
   // El tema se ve al instante como vista previa y se queda solo al guardar (D-078)
   await expect(page.locator('html')).toHaveClass(/\bdark\b/);
   await page.getByRole('button', { name: t.settings.saveChanges }).click();

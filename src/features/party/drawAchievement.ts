@@ -1,6 +1,6 @@
 // Dibuja el resumen de la semana como una imagen PNG cuadrada con el canvas del navegador (respuesta
 // 83 del plan del cambio, B7). Diseño sobrio de B2 (D-121). Superficie blanca, una franja lisa del
-// color de acción #156082 con la marca y la semana, y las cifras en cuadros neutros con borde fino.
+// marino #01337a de la portada con la marca y la semana, y las cifras en cuadros neutros con borde fino.
 // Sin degradados ni dorado. Los colores son fijos y salen de la paleta del modo claro, así la imagen se
 // ve igual sin importar el tema de quien la comparte. Solo corre en el navegador, por eso quien la usa
 // la recibe por parámetro.
@@ -13,17 +13,17 @@ const GAP = 24;
 const BAND = 300;
 const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
-/** Paleta de src/ui/tokens.css en modo claro. Un solo color de acción y neutros (B2, D-121) */
+/** Paleta de src/ui/tokens.css en modo claro. Marino de la portada y neutros (D-150) */
 const COLOR = {
   surface: '#ffffff',
-  action: '#156082',
+  action: '#01337a',
   onAction: '#ffffff',
   onActionSoft: 'rgba(255, 255, 255, 0.85)',
-  tile: '#f6f3ee',
-  line: '#ddd6c9',
-  ink: '#16212b',
-  muted: '#576570',
-  sim: '#eeeae2',
+  tile: '#fbf7f2',
+  line: '#e3e8ee',
+  ink: '#17212b',
+  muted: '#4f5b66',
+  sim: '#f1f4f7',
   simInk: '#3f4b55',
 } as const;
 

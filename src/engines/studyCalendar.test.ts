@@ -1,12 +1,23 @@
 import { describe, expect, it } from 'vitest';
+import { createEvent } from '@/data/events/createEvent';
+import type { AppEvent } from '@/data/schemas/events';
+import { newId } from '@/data/testing/fixtures';
 import {
+  challengesByDay,
   FINAL_SIMULATOR_SUNDAYS,
   icsOf,
   MAX_PLAN_WEEKS,
+  monthBounds,
   monthGrid,
+  monthSummary,
+  moveDayByKey,
+  nextBusyDay,
   planEvents,
+  sessionsByDay,
+  shiftMonth,
   studyWeeks,
   weekdayIndex,
+  yearMonthOf,
 } from './studyCalendar';
 
 describe('monthGrid', () => {
@@ -214,5 +225,143 @@ describe('planEvents e icsOf', () => {
     expect(lines.every((line) => new TextEncoder().encode(line).length <= 75)).toBe(true);
     const unfolded = ics.replace(/\r\n /g, '');
     expect(unfolded).toContain(`SUMMARY:${title}`);
+  });
+});
+
+describe('el mes del Calendario rediseñado (D-150)', () => {
+  const TZ = 'America/Mexico_City';
+  const USER = newId();
+  const sessionEnded = (
+    at: string,
+    kind: 'review' | 'practice' | 'exam' | 'challenge',
+    items: number,
+    reason: 'completed' | 'abandoned' = 'completed',
+  ): AppEvent =>
+    createEvent(
+      'session_ended',
+      { kind, reason, items, correct: Math.floor(items / 2), durationMs: 60_000 * items, xp: 10 },
+      { userId: USER, tz: TZ, clock: { now: () => new Date(at) } },
+    );
+
+  it('shiftMonth cruza de año hacia adelante y hacia atrás y yearMonthOf lee un día', () => {
+    expect(shiftMonth(2026, 12, 1)).toEqual({ year: 2027, month: 1 });
+    expect(shiftMonth(2026, 1, -1)).toEqual({ year: 2025, month: 12 });
+    expect(shiftMonth(2026, 10, 14)).toEqual({ year: 2027, month: 12 });
+    expect(shiftMonth(2026, 10, 0)).toEqual({ year: 2026, month: 10 });
+    expect(yearMonthOf('2026-10-24')).toEqual({ year: 2026, month: 10 });
+  });
+
+  it('monthBounds da el primero y el último día, con febrero bisiesto', () => {
+    expect(monthBounds(2026, 10)).toEqual({ first: '2026-10-01', last: '2026-10-31' });
+    expect(monthBounds(2028, 2)).toEqual({ first: '2028-02-01', last: '2028-02-29' });
+  });
+
+  it('sessionsByDay agrupa las sesiones por día de estudio y una de madrugada cae en el día anterior', () => {
+    // A las 2 a. m. de la Ciudad de México todavía es el día de estudio anterior (corte a las 4)
+    const events = [
+      sessionEnded('2026-10-24T20:00:00.000Z', 'practice', 20),
+      sessionEnded('2026-10-25T08:30:00.000Z', 'exam', 50, 'abandoned'),
+      sessionEnded('2026-10-24T23:00:00.000Z', 'review', 12),
+      createEvent(
+        'xp_awarded',
+        { amount: 5, reason: 'card_review', sourceEventId: null },
+        { userId: USER, tz: TZ, clock: { now: () => new Date('2026-10-24T20:00:00.000Z') } },
+      ),
+    ];
+    const byDay = sessionsByDay(events);
+    expect([...byDay.keys()]).toEqual(['2026-10-24']);
+    expect(byDay.get('2026-10-24')?.map((session) => session.kind)).toEqual([
+      'practice',
+      'exam',
+      'review',
+    ]);
+    expect(byDay.get('2026-10-24')?.[1]).toMatchObject({
+      items: 50,
+      reason: 'abandoned',
+      correct: 25,
+      durationMs: 3_000_000,
+    });
+  });
+
+  it('monthSummary suma lo programado desde hoy, elige el día más cargado y cuenta las sesiones sin las de repaso', () => {
+    const forecast = new Map([
+      ['2026-10-20', 90],
+      ['2026-10-24', 38],
+      ['2026-10-27', 44],
+      ['2026-10-30', 44],
+      ['2026-11-02', 70],
+    ]);
+    const sessions = sessionsByDay([
+      sessionEnded('2026-10-03T20:00:00.000Z', 'practice', 20),
+      sessionEnded('2026-10-10T20:00:00.000Z', 'review', 20),
+      sessionEnded('2026-10-24T20:00:00.000Z', 'exam', 50),
+      sessionEnded('2026-09-30T20:00:00.000Z', 'practice', 20),
+    ]);
+    const summary = monthSummary({
+      year: 2026,
+      month: 10,
+      today: '2026-10-24',
+      forecast,
+      forecastEnd: '2026-12-22',
+      sessions,
+    });
+    // El 20 ya pasó y noviembre es otro mes
+    expect(summary.scheduled).toBe(38 + 44 + 44);
+    // Con empate gana el primero
+    expect(summary.busiest).toEqual({ day: '2026-10-27', count: 44 });
+    expect(summary.sessionsDone).toBe(2);
+    expect(summary.forecastCovers).toBe(true);
+  });
+
+  it('monthSummary dice cuando la proyección no alcanza el fin del mes, salvo en un mes ya pasado', () => {
+    const base = { today: '2026-10-24', forecast: new Map<string, number>(), sessions: new Map() };
+    expect(
+      monthSummary({ ...base, year: 2026, month: 12, forecastEnd: '2026-12-22' }),
+    ).toMatchObject({ scheduled: 0, busiest: null, sessionsDone: 0, forecastCovers: false });
+    expect(monthSummary({ ...base, year: 2026, month: 9, forecastEnd: null }).forecastCovers).toBe(
+      true,
+    );
+    expect(monthSummary({ ...base, year: 2026, month: 10, forecastEnd: null }).forecastCovers).toBe(
+      false,
+    );
+  });
+
+  it('nextBusyDay es el día que sigue con más carga, sin contar hoy ni los días sin carga', () => {
+    const forecast = new Map([
+      ['2026-10-24', 99],
+      ['2026-10-25', 0],
+      ['2026-10-26', 30],
+      ['2026-10-28', 44],
+      ['2026-10-29', 44],
+    ]);
+    expect(nextBusyDay(forecast, '2026-10-24')).toEqual({ day: '2026-10-28', count: 44 });
+    expect(nextBusyDay(forecast, '2026-10-29')).toBeNull();
+    expect(nextBusyDay(new Map(), '2026-10-24')).toBeNull();
+  });
+
+  it('challengesByDay pone cada reto en el día de estudio en que termina', () => {
+    const byDay = challengesByDay(
+      [
+        { id: 'a', endsAt: '2026-10-25T05:59:00.000Z' },
+        { id: 'b', endsAt: '2026-10-25T18:00:00.000Z' },
+        { id: 'c', endsAt: '2026-10-25T23:00:00.000Z' },
+      ],
+      TZ,
+    );
+    // A las 23:59 del 24 en la Ciudad de México todavía es 24
+    expect(byDay.get('2026-10-24')?.map((item) => item.id)).toEqual(['a']);
+    expect(byDay.get('2026-10-25')?.map((item) => item.id)).toEqual(['b', 'c']);
+  });
+
+  it('moveDayByKey recorre la rejilla con flechas, Inicio y Fin, y no hace nada con otras teclas', () => {
+    // El 24 de octubre de 2026 es sábado
+    expect(moveDayByKey('2026-10-24', 'ArrowLeft')).toBe('2026-10-23');
+    expect(moveDayByKey('2026-10-24', 'ArrowRight')).toBe('2026-10-25');
+    expect(moveDayByKey('2026-10-24', 'ArrowUp')).toBe('2026-10-17');
+    expect(moveDayByKey('2026-10-24', 'ArrowDown')).toBe('2026-10-31');
+    expect(moveDayByKey('2026-10-24', 'Home')).toBe('2026-10-19');
+    expect(moveDayByKey('2026-10-24', 'End')).toBe('2026-10-25');
+    expect(moveDayByKey('2026-10-31', 'ArrowRight')).toBe('2026-11-01');
+    expect(moveDayByKey('2026-10-24', 'Enter')).toBeNull();
   });
 });

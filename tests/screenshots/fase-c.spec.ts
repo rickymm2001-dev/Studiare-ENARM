@@ -56,7 +56,11 @@ async function startPractice(page: Page, feedback: 'end' | 'each') {
   await setPracticeFeedback(page, feedback);
   await page.goto(SCREENS.simulatorSetup.path);
   const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  // Las preguntas se eligen en el segmentado píldora (D-150)
+  await practice
+    .getByRole('group', { name: t.simulator.count, exact: true })
+    .getByRole('button', { name: '5', exact: true })
+    .click();
   const start = practice.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
@@ -81,10 +85,10 @@ test('pantallas del alumno con la demostración', async ({ page }, info) => {
   const screens: [string, string, string][] = [
     ['02-repasar', SCREENS.review.path, t.screens.review.title],
     ['03-simular', SCREENS.simulatorSetup.path, t.screens.simulatorSetup.title],
-    ['04-progreso', SCREENS.progress.path, t.screens.progress.title],
+    ['04-progreso', SCREENS.progress.path, t.progress.title],
     ['06-tutor', SCREENS.tutor.path, t.screens.tutor.title],
     ['07-mazos', SCREENS.decks.path, t.screens.decks.title],
-    ['09-configuracion', SCREENS.settings.path, t.screens.settings.title],
+    ['09-configuracion', SCREENS.settings.path, t.settings.heroTitle],
     ['10-suscripcion', SCREENS.subscription.path, t.screens.subscription.title],
   ];
   for (const [name, path, title] of screens) {

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCloud } from '@/app/cloudState';
 import { SCREENS } from '@/app/screens';
+import { PLANS } from '@/config/billing';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { writeStoredFlags } from '@/config/featureFlags';
 import type { CatalogRow } from '@/data/bank/contracts';
@@ -70,6 +71,11 @@ afterEach(async () => {
 
 const setup = () =>
   screen.findByRole('region', { name: t.simulator.setupTitle }, { timeout: 20_000 });
+/** Las preguntas se eligen en el segmentado píldora (D-150) */
+const pickCount = (practice: HTMLElement, value: string) =>
+  within(within(practice).getByRole('group', { name: t.simulator.count })).getByRole('button', {
+    name: value,
+  });
 
 describe('Simular con el banco de la nube', () => {
   it('elige del catálogo, sin el aviso de demostración y con el tope del servidor', async () => {
@@ -81,11 +87,10 @@ describe('Simular con el banco de la nube', () => {
     // El banco de la nube no es de demostración y no lo dice
     expect(within(practice).getByText(bankText.bankNote(25))).toBeVisible();
     expect(within(practice).queryByText(t.simulator.bankNote(25))).toBeNull();
-    const stats = screen.getByRole('region', { name: t.simulator.stats.label });
+    // La nota del plan Gratis dice el tope del día y lo que le queda, que lo limita el servidor
+    const limit = PLANS.free.access.dailyQuestions as number;
     await waitFor(() => {
-      expect(stats).toHaveTextContent(
-        `${t.simulator.stats.today}2${t.simulator.stats.todayCaption}`,
-      );
+      expect(within(practice).getByText(t.simulator.freeNote(limit, 2))).toBeVisible();
     });
     expect(screen.queryByRole('region', { name: t.labels.demoVersion })).toBeNull();
     // Nunca pidió cuerpos solo por abrir la pantalla
@@ -134,7 +139,7 @@ describe('Simular con el banco de la nube', () => {
     for (const row of catalog.slice(0, 2)) server.state.deny.set(row.versionId, 'retired');
     app = await renderApp(SCREENS.simulatorSetup.path);
     const practice = await setup();
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '5');
+    await user.click(pickCount(practice, '5'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     await waitFor(() => {
       expect(usePractice.getState().questionIds).toHaveLength(3);
@@ -171,7 +176,7 @@ describe('Simular con el banco de la nube', () => {
       },
     });
     const practice = await setup();
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '5');
+    await user.click(pickCount(practice, '5'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     release();
     holder.sdkLoading = null;
@@ -201,7 +206,7 @@ describe('Simular con el banco de la nube', () => {
     const practice = await setup();
     server.state.offline = true;
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '10');
+    await user.click(pickCount(practice, '10'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     await waitFor(() => {
       expect(usePractice.getState().questionIds).toHaveLength(8);
@@ -218,7 +223,7 @@ describe('Simular con el banco de la nube', () => {
     const practice = await setup();
     // El navegador cree que hay red, pero la petición no llega
     server.state.offline = true;
-    await user.selectOptions(within(practice).getByLabelText(t.simulator.count), '5');
+    await user.click(pickCount(practice, '5'));
     await user.click(within(practice).getByRole('button', { name: t.simulator.start }));
     await waitFor(() => {
       expect(usePractice.getState().questionIds).toHaveLength(5);

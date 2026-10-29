@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
-import { t } from '@/i18n/es-MX';
-import { cn } from '@/ui/cn';
-import { TOP_BAR_SLOT, useInTopBar } from './TopBarContext';
+import { t } from '@/i18n/core';
 
 interface SessionHeaderProps {
   title: string;
@@ -16,12 +14,10 @@ interface SessionHeaderProps {
  * solo el título, el avance y las acciones, para que el caso clínico quede arriba
  */
 export function SessionHeader({ title, meta, actions }: SessionHeaderProps) {
-  // Dentro del marco va en la barra blanca de arriba, igual que ScreenHeader (D-117)
-  const inBar = useInTopBar();
   return (
-    <header className={cn('flex flex-wrap items-center gap-x-3 gap-y-1', inBar && TOP_BAR_SLOT)}>
+    <header className="flex flex-wrap items-center gap-x-3 gap-y-1">
       <title>{t.app.documentTitle(title)}</title>
-      <h1 tabIndex={-1} className="screen-title shrink-0 text-fg outline-none">
+      <h1 tabIndex={-1} className="screen-title shrink-0 outline-none">
         {title}
       </h1>
       {meta ? (

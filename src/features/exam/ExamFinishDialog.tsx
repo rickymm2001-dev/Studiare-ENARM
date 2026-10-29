@@ -31,8 +31,8 @@ export function ExamFinishDialog({
         <Dialog.Content className="animate-rise fixed top-1/2 left-1/2 z-50 flex max-h-[90dvh] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-xl border border-line bg-surface p-5 shadow-raised">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-1">
-              <Dialog.Title className="flex items-center gap-2 text-xl font-extrabold">
-                <Flag aria-hidden className="size-5 text-fg-muted" />
+              <Dialog.Title className="flex items-center gap-2 text-xl font-extrabold tracking-tight text-heading">
+                <Flag aria-hidden className="size-5 text-primary-ink" />
                 {t.exam.finishTitle}
               </Dialog.Title>
               <Dialog.Description className="text-fg-muted">

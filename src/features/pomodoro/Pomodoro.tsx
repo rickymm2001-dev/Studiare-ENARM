@@ -1,19 +1,20 @@
-// Pomodoro en Repasar (9.2, D-062, D-063). Opcional. Empieza como ícono y el alumno lo abre y lo
-// arranca si quiere. Píldora a la altura del título, minimizable para no ver el tiempo. Su engrane
+// Pomodoro en Repasar (9.2, D-062, D-063). Opcional. Vive en una tarjeta panel al lado de la tarjeta
+// de repaso (D-150) con el reloj grande en marino, quieto hasta que el alumno lo arranca. Configurar
 // abre Ajustes del repaso en la parte del Pomodoro, el único lugar donde se guardan sus ajustes (B3
 // del plan del cambio). Al terminar una fase aparece un aviso con el botón para empezar la siguiente.
-import { Maximize2, Minimize2, Pause, Play, Settings2, SkipForward, Timer, X } from 'lucide-react';
+import { Maximize2, Pause, Play, RotateCcw, Settings2, SkipForward, Timer, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
+import { Card, CardTitle } from '@/ui/components/card';
 import { CheckboxField, TextField } from '@/ui/components/field';
 import { SaveBar } from '@/ui/components/save-bar';
 import type { ReadySession } from '../shared/RequireSession';
-import { formatClock } from './timer';
+import { formatClock, nextPhase, phaseMinutes } from './timer';
 import { usePomodoro, usePomodoroUi } from './usePomodoro';
 
-export function PomodoroPill({
+export function PomodoroCard({
   session,
   onOpenSettings,
 }: {
@@ -21,103 +22,88 @@ export function PomodoroPill({
   /** Abre Ajustes del repaso en la parte del Pomodoro */
   onOpenSettings: () => void;
 }) {
-  const pomodoro = usePomodoro(session);
-  const { state, left, start, pause, resume, stop } = pomodoro;
-  const minimized = usePomodoroUi((ui) => ui.minimized);
-  const setMinimized = usePomodoroUi((ui) => ui.setMinimized);
+  const { state, config, left, start, pause, resume, stop } = usePomodoro(session);
   const isBreak = state.phase !== 'focus';
   const phaseName = t.pomodoro.phases[state.phase];
   const running = state.status === 'running';
-
-  if (minimized) {
-    return (
-      <button
-        type="button"
-        onClick={() => {
-          setMinimized(false);
-        }}
-        aria-label={t.pomodoro.show(formatClock(left), phaseName)}
-        className="relative flex size-touch items-center justify-center rounded-full border border-line bg-surface shadow-card"
-      >
-        <Timer
-          aria-hidden
-          className={cn('size-5', isBreak ? 'text-fg-muted' : 'text-primary-ink')}
-        />
-        {running ? (
-          <span
-            aria-hidden
-            className={cn(
-              'absolute top-1.5 right-1.5 size-2.5 animate-pulse rounded-full',
-              isBreak ? 'bg-line-strong' : 'bg-indicator',
-            )}
-          />
-        ) : null}
-      </button>
-    );
-  }
-
+  const idle = state.status === 'idle';
+  const minutes = phaseMinutes(state.phase, config);
+  // Lo que sigue a esta fase, para decir cuánto dura. En enfoque es el descanso que toca, corto o
+  // largo según el ciclo, y en descanso vuelve el enfoque
+  const following = phaseMinutes(nextPhase(state, config).phase, config);
   return (
-    <div
+    <Card
+      tone="panel"
+      lift={false}
       role="group"
       aria-label={t.pomodoro.label}
-      className={cn(
-        'flex items-center gap-1 rounded-full border bg-surface py-1 pr-1 pl-3 shadow-card',
-        isBreak ? 'border-line' : 'border-indicator/30',
-      )}
+      className="flex flex-col gap-3"
     >
-      <span
-        aria-hidden
-        className={cn(
-          'size-2.5 rounded-full',
-          isBreak ? 'bg-line-strong' : 'bg-indicator',
-          running && 'animate-pulse',
-        )}
-      />
-      <span className="flex flex-col leading-none">
-        <span className="font-mono text-lg font-bold tabular-nums" aria-hidden>
+      <CardTitle>{t.pomodoro.label}</CardTitle>
+      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1">
+        <span
+          aria-hidden
+          className="text-4xl leading-none font-extrabold tracking-tight text-heading tabular-nums"
+        >
           {formatClock(left)}
         </span>
-        <span className="text-xs font-semibold tracking-wide text-fg-muted">{phaseName}</span>
-      </span>
-      <span className="sr-only">{t.pomodoro.remaining(formatClock(left), phaseName)}</span>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={
-          state.status === 'idle'
-            ? t.pomodoro.start
-            : running
-              ? t.pomodoro.pause
-              : t.pomodoro.resume
-        }
-        onClick={state.status === 'idle' ? start : running ? pause : resume}
-      >
-        {running ? <Pause aria-hidden /> : <Play aria-hidden />}
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t.pomodoro.skip}
-        onClick={() => {
-          stop(true);
-        }}
-      >
-        <SkipForward aria-hidden />
-      </Button>
-      <Button variant="ghost" size="icon" aria-label={t.pomodoro.settings} onClick={onOpenSettings}>
-        <Settings2 aria-hidden />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t.pomodoro.minimize}
-        onClick={() => {
-          setMinimized(true);
-        }}
-      >
-        <Minimize2 aria-hidden />
-      </Button>
-    </div>
+        <span className="sr-only">{t.pomodoro.remaining(formatClock(left), phaseName)}</span>
+        <span className="text-sm text-fg-muted">
+          {isBreak
+            ? t.pomodoro.ofBreak(minutes, following)
+            : t.pomodoro.ofFocus(minutes, following)}
+        </span>
+      </div>
+      <p className="flex items-center gap-2 text-sm font-semibold">
+        <span
+          aria-hidden
+          className={cn(
+            'size-2.5 rounded-full',
+            isBreak ? 'bg-line-strong' : 'bg-indicator',
+            running && 'animate-pulse',
+          )}
+        />
+        {phaseName}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" onClick={idle ? start : running ? pause : resume}>
+          {running ? <Pause aria-hidden /> : <Play aria-hidden />}
+          {idle ? t.pomodoro.start : running ? t.pomodoro.pause : t.pomodoro.resume}
+        </Button>
+        {/* Cielo tinta con el texto del lienzo, que es blanco en claro y oscuro en oscuro, así el
+            contraste pasa en los dos modos sin un token nuevo (D-150, edición de Ricardo) */}
+        <Button
+          size="sm"
+          disabled={idle}
+          className="bg-primary-ink text-canvas hover:bg-primary-ink active:bg-primary-ink"
+          onClick={() => {
+            stop(false);
+          }}
+        >
+          <RotateCcw aria-hidden />
+          {t.pomodoro.reset}
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          aria-label={t.pomodoro.settings}
+          onClick={onOpenSettings}
+        >
+          <Settings2 aria-hidden />
+          {t.pomodoro.configure}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => {
+            stop(true);
+          }}
+        >
+          <SkipForward aria-hidden />
+          {t.pomodoro.skip}
+        </Button>
+      </div>
+    </Card>
   );
 }
 

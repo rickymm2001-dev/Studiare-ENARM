@@ -4,6 +4,7 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { enterAs } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
+import { mainNav } from './support/navigation';
 
 test('elegir Médico lleva al banco con la navegación del médico y se recuerda', async ({
   page,
@@ -15,7 +16,7 @@ test('elegir Médico lleva al banco con la navegación del médico y se recuerda
 
   await expect(page).toHaveURL(new RegExp(`${HOME_BY_ROLE.physician}$`));
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.questionBank.title);
-  const nav = page.getByRole('navigation', { name: t.nav.label });
+  const nav = mainNav(page);
   await expect(nav.getByRole('link', { name: t.navItems.agreement })).toBeVisible();
   await expect(nav.getByRole('link', { name: t.navItems.review })).toHaveCount(0);
 

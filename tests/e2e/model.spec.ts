@@ -7,7 +7,7 @@
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { modelTexts } from '@/i18n/model';
-import { escapeRegExp, generateDemo } from './support/b1';
+import { escapeRegExp, generateDemo, openPracticeSetup } from './support/b1';
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
 
 /** Lo que estas secciones nunca dicen (5.5 del plan de B14) */
@@ -63,12 +63,11 @@ test('la demostración enseña la comparación y los temas del modelo con los ot
   await expect(page.getByText(modelTexts.bias.populationNote)).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
-  // Simular. Las opciones dirigidas leen el modelo y dicen a qué trampas se dirigen
-  await page.goto(SCREENS.simulatorSetup.path);
-  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
-  const targeted = setup.getByRole('checkbox', { name: t.simulator.targeted.label });
-  await expect(targeted).toBeVisible({ timeout: 60_000 });
-  await expect(targeted).toHaveAccessibleDescription(/Sube las opciones con las trampas/);
+  // Simular. El modo Dirigido lee el modelo y dice a qué trampas se dirigen las opciones
+  const setup = await openPracticeSetup(page, { mode: 'targeted' });
+  await expect(
+    setup.getByRole('status').filter({ hasText: /Sube las opciones con las trampas/ }),
+  ).toBeVisible();
 
   // Tutor. La fatiga dice en qué estado está el detector, que en la demostración se validó con alumnos simulados
   await page.goto(SCREENS.tutor.path);

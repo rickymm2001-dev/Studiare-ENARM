@@ -2,6 +2,10 @@
 // práctica y el examen, así tachar una opción se ve y se lee igual en los dos. Descartar no cambia
 // la respuesta, solo ayuda a pensar, y queda registrado para medir cómo descarta (D-080). Un doble
 // clic en el texto de la opción la elige y la responde, para no cruzar la pantalla hasta el botón (D-087).
+// Desde D-150 es una tarjeta píldora con la letra en un círculo. Gris con la letra en marino, marina
+// con la letra en blanco en la elegida, y gris con la letra tachada en la descartada. El radio sigue
+// ahí para el teclado y el lector de pantalla, solo que no se ve. Cubre toda su tarjeta, invisible, así
+// un clic o un toque en cualquier parte de la opción llega al radio mismo, y el foco se pinta en la tarjeta.
 import { Ban, RotateCcw } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -36,28 +40,47 @@ export function OptionChoice({
   return (
     <li
       className={cn(
-        'flex items-stretch rounded-md border border-line',
-        selected && 'border-indicator bg-primary-soft',
-        discarded && 'bg-muted',
+        'flex items-stretch rounded-lg border-[1.5px] border-line bg-surface transition-colors',
+        'has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-focus',
+        !readOnlyChoice && !selected && 'hover:border-indicator',
+        selected && 'border-primary bg-primary-soft',
+        discarded && !selected && 'bg-muted',
       )}
     >
       <label
         className={cn(
-          'flex min-w-0 flex-1 items-start gap-3 p-3',
-          readOnlyChoice ? 'cursor-default' : 'cursor-pointer hover:bg-muted/60',
+          'relative flex min-w-0 flex-1 items-center gap-4 py-3 pl-3.5 pr-2',
+          readOnlyChoice ? 'cursor-default' : 'cursor-pointer',
         )}
         onDoubleClick={readOnlyChoice ? undefined : onActivate}
       >
         <input
           type="radio"
           name={name}
-          className="mt-1"
+          className="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-default"
           checked={selected}
           disabled={readOnlyChoice}
           onChange={onChoose}
         />
-        <span className={cn(discarded && 'text-fg-muted line-through')}>
-          <span className="mr-1 font-semibold">{letter}.</span>
+        {/* La letra se lee junto con el texto, abajo. El círculo es su versión visible */}
+        <span
+          aria-hidden
+          className={cn(
+            'flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-extrabold text-heading tabular-nums',
+            selected && 'bg-primary text-primary-fg',
+            discarded && !selected && 'text-fg-muted line-through',
+          )}
+        >
+          {letter}
+        </span>
+        <span
+          className={cn(
+            'text-base leading-relaxed',
+            selected && 'font-semibold',
+            discarded && 'text-fg-muted line-through',
+          )}
+        >
+          <span className="sr-only">{letter}. </span>
           {lang === undefined ? text : <span lang={lang}>{text}</span>}
           {discarded ? <span className="sr-only"> ({t.choice.discardedLabel})</span> : null}
         </span>
@@ -70,7 +93,7 @@ export function OptionChoice({
         disabled={selected}
         onClick={onToggleDiscard}
         className={cn(
-          'flex w-11 shrink-0 items-center justify-center rounded-r-md border-l border-line text-fg-muted hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40',
+          'my-1.5 mr-1.5 flex w-10 shrink-0 items-center justify-center rounded-full text-fg-muted hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40',
           discarded && 'text-danger',
         )}
       >

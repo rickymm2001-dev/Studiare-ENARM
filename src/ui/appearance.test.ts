@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { applyAppearance, DEFAULT_APPEARANCE, FONT_FAMILIES } from './appearance';
+import { applyAppearance, DEFAULT_APPEARANCE, FONT_CHOICES, FONT_FAMILIES } from './appearance';
 
 function applied(font: keyof typeof FONT_FAMILIES) {
   const root = document.createElement('html');
@@ -8,17 +8,9 @@ function applied(font: keyof typeof FONT_FAMILIES) {
   return root;
 }
 
-describe('fuente de títulos (V4-B2)', () => {
-  it('con la fuente de siempre o la serif, los títulos van en serif', () => {
-    for (const font of ['jakarta', 'serif'] as const) {
-      expect(applied(font).style.getPropertyValue('--enarm-font-heading')).toBe(
-        FONT_FAMILIES.serif,
-      );
-    }
-  });
-
-  it('con Atkinson o Lexend, los títulos siguen a la fuente del texto', () => {
-    for (const font of ['atkinson', 'lexend'] as const) {
+describe('fuente de títulos (D-150)', () => {
+  it('los títulos siguen siempre a la fuente del texto, como en la portada', () => {
+    for (const font of FONT_CHOICES) {
       const root = applied(font);
       expect(root.style.getPropertyValue('--enarm-font-heading')).toBe(FONT_FAMILIES[font]);
       expect(root.style.getPropertyValue('--enarm-font-body')).toBe(FONT_FAMILIES[font]);

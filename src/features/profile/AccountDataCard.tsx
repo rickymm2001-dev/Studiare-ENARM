@@ -128,14 +128,41 @@ export function AccountDataCard({
     }
   };
 
+  // Lo que se lee del perfil, en dos columnas como los campos del diseño (D-150). El alias y el correo
+  // primero, la especialidad a la vista (B9), la fecha del examen, la zona horaria con la que se
+  // cuentan sus días de estudio y al final los datos opcionales de la cuenta
+  const rows = [
+    { label: t.onboarding.alias, value: user.alias },
+    { label: t.account.email, value: account?.email ?? text.noEmail },
+    ...(hasAccountFields
+      ? [
+          {
+            label: t.account.targetSpecialty,
+            value: specialtyName(detailsOf(account)) ?? t.accounts.profile.specialtyEmpty,
+          },
+        ]
+      : []),
+    { label: text.examDate, value: examDateLabel(user) },
+    { label: t.settings.timeZone, value: user.timeZone },
+    ...accountRows(detailsOf(account), { withSpecialty: !hasAccountFields }),
+  ];
+
   return (
-    <Card aria-labelledby="datos-titulo">
-      <CardHeader className="flex-row flex-wrap items-start justify-between gap-2">
-        <div className="flex min-w-0 flex-col gap-0.5">
-          <CardTitle as="h3" id="datos-titulo">
-            {text.title}
-          </CardTitle>
-          <CardDescription>{text.description}</CardDescription>
+    <Card aria-labelledby="datos-titulo" lift={false}>
+      <CardHeader className="mb-4 flex-row flex-wrap items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-4">
+          {/* La foto grande en círculo marino con las iniciales, o la foto que eligió (D-150) */}
+          <Avatar
+            name={user.alias}
+            avatar={account?.avatar}
+            className="size-16 shrink-0 bg-primary text-2xl font-extrabold text-primary-fg ring-0"
+          />
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <CardTitle as="h3" id="datos-titulo">
+              {text.title}
+            </CardTitle>
+            <CardDescription>{text.description}</CardDescription>
+          </div>
         </div>
         {editing ? null : (
           <Button
@@ -238,40 +265,14 @@ export function AccountDataCard({
           <UnsavedChangesGuard dirty={dirty && !saving} />
         </form>
       ) : (
-        <div className="flex flex-col gap-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <Avatar
-              name={user.alias}
-              avatar={account?.avatar}
-              className="size-14 shrink-0 text-lg"
-            />
-            <div className="flex min-w-0 flex-col">
-              <p className="truncate text-lg font-bold">{user.alias}</p>
-              <p className="truncate text-sm text-fg-muted">{account?.email ?? text.noEmail}</p>
+        <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+          {rows.map((row) => (
+            <div key={row.label} className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-sm font-semibold text-fg">{row.label}</dt>
+              <dd className="truncate text-fg-muted">{row.value ?? text.notSet}</dd>
             </div>
-          </div>
-          {hasAccountFields ? (
-            <div className="flex min-w-0 flex-col rounded-md bg-muted p-3">
-              <p className="text-sm text-fg-muted">{t.account.targetSpecialty}</p>
-              {specialtyName(detailsOf(account)) ? (
-                <p className="text-lg font-bold">{specialtyName(detailsOf(account))}</p>
-              ) : (
-                <p className="text-sm">{t.accounts.profile.specialtyEmpty}</p>
-              )}
-            </div>
-          ) : null}
-          <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-            {[
-              ...accountRows(detailsOf(account), { withSpecialty: !hasAccountFields }),
-              { label: text.examDate, value: examDateLabel(user) },
-            ].map((row) => (
-              <div key={row.label} className="flex min-w-0 flex-col">
-                <dt className="text-sm text-fg-muted">{row.label}</dt>
-                <dd className="font-medium">{row.value ?? text.notSet}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+          ))}
+        </dl>
       )}
       {/* Un solo aviso para los dos modos, así el lector de pantalla oye Guardamos tu perfil */}
       <p role="status" className={status ? 'mt-3 text-sm text-fg-muted' : 'sr-only'}>

@@ -50,6 +50,7 @@ export function HeatmapWidget({
   summaryAtEnd = false,
   fluid = false,
   detailLink,
+  header,
 }: {
   snapshot: Snapshot;
   settings: HeatmapSettings;
@@ -59,6 +60,11 @@ export function HeatmapWidget({
   summaryAtEnd?: boolean;
   /** Las celdas crecen hasta llenar el ancho, como en Inicio (D-117) */
   fluid?: boolean;
+  /**
+   * El título de la tarjeta. Con él, la escala de Menos a Más sube a su misma fila, como en el diseño
+   * de Inicio (D-150), y abajo solo queda el resumen
+   */
+  header?: ReactNode;
   /**
    * Un enlace que sigue al resumen. El detalle de cada día del calendario solo se alcanza con ratón o
    * toque, porque es un calendario oculto al lector de pantalla, así que este enlace lleva a donde ese
@@ -139,8 +145,23 @@ export function HeatmapWidget({
       {detailLink ? <> {detailLink}</> : null}
     </p>
   );
+  const scale = (
+    <div className="flex items-center gap-1 text-xs text-fg-muted" aria-hidden>
+      <span>{t.widgets.heatmap.less}</span>
+      {HEATMAP_LEVELS.map((level) => (
+        <span key={level} className={cn('size-3 rounded-[3px]', level)} />
+      ))}
+      <span>{t.widgets.heatmap.more}</span>
+    </div>
+  );
   return (
     <div className="flex flex-col gap-2">
+      {header ? (
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          {header}
+          {scale}
+        </div>
+      ) : null}
       {summaryAtEnd ? null : summary}
       <div ref={scroller} className="overflow-x-auto" aria-hidden>
         <div className={cn('flex gap-2', fluid && 'w-full')}>
@@ -221,13 +242,7 @@ export function HeatmapWidget({
       ) : null}
       <div className="flex flex-wrap items-center justify-between gap-2">
         {summaryAtEnd ? summary : <span />}
-        <div className="flex items-center gap-1 text-xs text-fg-muted" aria-hidden>
-          <span>{t.widgets.heatmap.less}</span>
-          {HEATMAP_LEVELS.map((level) => (
-            <span key={level} className={cn('size-3 rounded-[3px]', level)} />
-          ))}
-          <span>{t.widgets.heatmap.more}</span>
-        </div>
+        {header ? null : scale}
       </div>
     </div>
   );

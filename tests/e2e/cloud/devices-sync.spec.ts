@@ -12,7 +12,7 @@ import { SCREENS } from '@/app/screens';
 import { consentTexts } from '@/i18n/consents';
 import { t } from '@/i18n/es-MX';
 import { studentSyncTexts } from '@/i18n/studentSync';
-import { escapeRegExp, reviewSettingsPanel } from '../support/b1';
+import { escapeRegExp, pickSegment, reviewSettingsPanel } from '../support/b1';
 import {
   enterWithLink,
   expect,
@@ -179,9 +179,7 @@ async function practice(page: Page, wrong: number) {
   await page.goto(SCREENS.simulatorSetup.path);
   const setup = page.getByRole('region', { name: t.simulator.setupTitle });
   await expect(setup).toBeVisible({ timeout: 30_000 });
-  await setup
-    .getByRole('combobox', { name: t.simulator.count, exact: true })
-    .selectOption(String(QUESTIONS));
+  await pickSegment(setup, t.simulator.count, String(QUESTIONS));
   await setup.getByRole('button', { name: t.simulator.start }).click();
   await expect(page.getByText(t.simulator.progress(1, QUESTIONS), { exact: true })).toBeVisible({
     timeout: 30_000,
@@ -245,7 +243,8 @@ async function expectOneErrorDeck(page: Page, cards: number) {
  */
 async function panelText(page: Page, path: string, label: string): Promise<string> {
   await page.goto(path);
-  const panel = page.getByRole('region', { name: label });
+  // Exacto, porque Tus cifras recientes de Progreso también empieza igual (D-150)
+  const panel = page.getByRole('region', { name: label, exact: true });
   await expect(panel).toBeVisible({ timeout: 30_000 });
   let previous = await panel.innerText();
   for (let attempt = 0; attempt < 20; attempt += 1) {

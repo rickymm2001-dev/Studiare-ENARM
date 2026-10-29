@@ -1,9 +1,12 @@
-// Progreso (pantalla 10). Cifras en una fila, tus focos de la semana con atajo a practicar, Conócete
-// con las lecturas del motor de autoconocimiento (D-074), el dominio por rama troncal y por
-// subespecialidad con el modelo beta-binomial del motor topics (D-066) y por qué fallas en cada rama
-// con los siete motivos (B5). Todo en una sola página con filas que se abren al tocarlas (D-078).
-// Cada dato muestra calibrando hasta tener datos suficientes. Inglés médico tiene su tarjeta aparte de las
-// ramas, con sus propias cifras (B13, 2.7).
+// Progreso (pantalla 10) con el diseño de la portada por dentro (D-150). Arriba el título con su
+// kicker, la fila de cifras (aciertos, retención, preguntas y racha), los aciertos por rama en barras,
+// el pulso de estudio en medidor, el perfil por rama en radar, las preguntas por día contra la semana
+// pasada, los indicadores clave, los sesgos y los temas por reforzar y la tabla de últimas sesiones.
+// Abajo sigue todo lo que la pantalla ya ofrecía, tus focos de la semana con atajo a practicar,
+// Conócete (D-074), el dominio por rama troncal y por subespecialidad con el modelo beta-binomial del
+// motor topics (D-066), la dificultad, el nivel cognitivo, los motivos (B5), la carga futura, la
+// comparación con otros, el plan de la semana y el puntaje oficial. Cada dato muestra calibrando con
+// su umbral hasta tener datos suficientes y nada se inventa. Inglés médico tiene su tarjeta aparte (B13).
 import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from 'lucide-react';
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -16,6 +19,15 @@ import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { cognitiveRows } from '@/engines/bloom';
 import { summarizeEnglish } from '@/engines/englishSection';
+import {
+  branchAccuracyInWindow,
+  progressSummary,
+  recentSessions,
+  SUMMARY_WINDOW,
+} from '@/engines/progressSummary';
+import { questionsByWeekday } from '@/engines/questionsByDay';
+import { studyDayOf } from '@/engines/studyDay';
+import { pulseInputFromEvents, studyPulse } from '@/engines/studyPulse';
 import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
@@ -27,23 +39,34 @@ import { LoadingState } from '@/ui/states/states';
 import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { useDecksAndCards } from '../decks/useDecksAndCards';
+import { isFinished } from '../exam/examState';
+import { loadExamState } from '../exam/examStorage';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useBiasVocabulary } from '../shared/useBiasVocabulary';
 import { useUserEvents } from '../shared/useUserEvents';
 import { CognitiveCard } from './CognitiveCard';
 import { DifficultyCard } from './DifficultyCard';
 import { EnglishProgressCard } from './EnglishProgressCard';
 import { difficultyRows } from './difficultyView';
+import { BiasesCard, IndicatorsSection, WeakTopicsCard } from './FocusCards';
 import { FutureLoadSection } from './FutureLoadSection';
+import { indicatorRows } from './indicatorsView';
 import { WeekPlanCard } from './WeekPlanCard';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
 import { masteryDot } from './masteryChip';
 import { MotivesCard } from './MotivesCard';
 import { motivesByBranch } from './motivesView';
 import { OfficialScoreCard } from './OfficialScoreCard';
+import { BranchAccuracyCard, BranchProfileCard, PulseCard, WeekdayCard } from './OverviewCards';
+import { SessionsCard } from './SessionsCard';
+import { SummaryCards } from './SummaryCards';
 import { useAnalysis } from './useAnalysis';
 import { useEnglishCases } from './useEnglishCases';
 import { useMotiveBranches } from './useMotiveBranches';
+
+/** Cuántas sesiones caben en la tabla */
+const SESSIONS_SHOWN = 6;
 
 // La comparación con otros alumnos se baja cuando la pantalla llega a su tarjeta (B14, 5.4)
 const ComparisonSection = lazy(() => import('./ComparisonSection'));
@@ -76,8 +99,16 @@ function Progress({ session }: { session: ReadySession }) {
   const englishOn = isFeatureEnabled('medicalEnglish');
   const englishCases = useEnglishCases(englishOn);
 
+  // El vocabulario de los sesgos o trampas, según el acuerdo entre médicos (4.4)
+  const vocabulary = useBiasVocabulary();
+
   const header = (
-    <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
+    <ScreenHeader
+      kicker={t.progress.kicker}
+      title={t.progress.title}
+      documentTitle={t.screens.progress.title}
+      description={t.progress.description}
+    />
   );
   if (
     events === undefined ||
@@ -125,6 +156,7 @@ function Progress({ session }: { session: ReadySession }) {
   );
   const correct = responses.filter((response) => response.correct).length;
 
+  const minPerCategory = DEFAULT_THRESHOLDS.structure.minResponsesPerCategory;
   const byBranch = new Map(
     analyzeCategories({
       responses: responses.map((response) => ({
@@ -132,13 +164,80 @@ function Progress({ session }: { session: ReadySession }) {
         correct: response.correct,
       })),
       thresholds: DEFAULT_THRESHOLDS.topics,
-      minResponsesPerCategory: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+      minResponsesPerCategory: minPerCategory,
     }).map((entry) => [entry.category, entry]),
   );
+
+  // Lo nuevo del diseño (D-150), con los motores puros sobre la misma bitácora
+  const timeZone = user.timeZone;
+  const today = studyDayOf(new Date(), timeZone);
+  const summary = progressSummary({ events, timeZone, today });
+  const pulse = studyPulse(pulseInputFromEvents({ events, timeZone, today }));
+  const week = questionsByWeekday({ events, timeZone, today });
+  // Los aciertos por rama de hace un mes, de 30 a 59 días atrás, para la segunda serie del radar
+  const branchesBefore = branchAccuracyInWindow({
+    events,
+    branchOf: (questionVersionId) => analysis.bank.questions.get(questionVersionId)?.branch,
+    timeZone,
+    today,
+    from: SUMMARY_WINDOW.days * 2 - 1,
+    to: SUMMARY_WINDOW.days,
+  });
+  const indicators = indicatorRows({
+    report,
+    answers: { total: responses.length, correct },
+    desiredRetention: settings.desiredRetention,
+    fatigueValidation: analysis.model.model.fatigue.validation,
+  });
+  const sessions = recentSessions({ events, limit: SESSIONS_SHOWN });
+  // El botón a los resultados solo cuando hay un examen terminado que abrir
+  const storedExam = loadExamState(user.id);
+  const examResultsAvailable = storedExam !== null && isFinished(storedExam);
 
   return (
     <>
       {header}
+      <SummaryCards
+        summary={summary}
+        report={report}
+        desiredRetention={settings.desiredRetention}
+        streak={snapshot.streak}
+      />
+
+      {/* La rejilla de doce columnas del diseño. En el teléfono todo va en una columna */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+        <BranchAccuracyCard
+          byBranch={byBranch}
+          minResponses={minPerCategory}
+          className="lg:col-span-7"
+        />
+        <PulseCard pulse={pulse} className="lg:col-span-5" />
+        <BranchProfileCard
+          byBranch={byBranch}
+          before={branchesBefore}
+          minResponses={minPerCategory}
+          className="lg:col-span-5"
+        />
+        <WeekdayCard week={week} className="lg:col-span-7" />
+        <IndicatorsSection rows={indicators} className="lg:col-span-7" />
+        <div className="flex min-w-0 flex-col gap-5 lg:col-span-5">
+          <BiasesCard report={report} vocabulary={vocabulary} />
+          <WeakTopicsCard
+            weakTopics={weakTopics}
+            byTopic={byTopic}
+            minResponses={DEFAULT_THRESHOLDS.topics.minResponsesPerTopic}
+          />
+        </div>
+        <SessionsCard
+          rows={sessions}
+          timeZone={timeZone}
+          examResultsAvailable={examResultsAvailable}
+          className="lg:col-span-12"
+        />
+      </div>
+
+      {/* Lo que la pantalla ya ofrecía, con el mismo lenguaje visual */}
+      <h2 className="group-title">{t.progress.moreTitle}</h2>
       <StatPanel label={t.progress.statsLabel}>
         <StatCell
           phoneIcon={false}

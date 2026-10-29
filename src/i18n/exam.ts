@@ -40,7 +40,7 @@ export const examText = {
     askConfidenceHint: 'Apagado se parece más al examen real.',
     alerts: 'Alarmas de tiempo y de ritmo',
     alertsHint: 'Avisos a la mitad, con 10, 5 y 1 minuto, y si vas atrasado.',
-    start: 'Empezar examen',
+    start: 'Empezar simulador',
     starting: 'Armando tu examen…',
     startError: 'No se pudo armar el examen. Intenta de nuevo.',
     inProgressTitle: 'Tienes un examen en curso',
@@ -78,12 +78,22 @@ export const examText = {
     mark: 'Marcar para revisar',
     unmark: 'Quitar marca',
     marked: 'Marcada para revisar',
-    finish: 'Terminar examen',
+    finish: 'Entregar',
+    // Franja de la sesión y banda de avance (D-150)
+    sessionSummary: (count: number, branches: string) =>
+      `Examen · ${plural(count, 'pregunta', 'preguntas')} · ${branches}`,
+    branchesCount: (n: number) => plural(n, 'rama', 'ramas'),
+    demoLabel: 'Datos de demostración',
+    progressLabel: 'Avance del examen',
+    optionsLegend: 'Opciones de respuesta',
+    technique: 'Técnica de examen',
+    reactiveKind: 'Caso clínico',
+    singleQuestion: 'Pregunta directa',
     confidenceOptional: '¿Qué tan seguro estás? (opcional)',
     stuck: (time: string) =>
       `Llevas ${time} en esta pregunta, más del doble de tu ritmo. Elige la opción más probable, márcala para revisar y sigue.`,
     dismiss: 'Cerrar aviso',
-    navigatorTitle: 'Ir a una pregunta',
+    navigatorTitle: 'Preguntas',
     navigatorSummary: (answered: number, marked: number) =>
       marked > 0
         ? `${plural(answered, 'contestada', 'contestadas')} · ${plural(marked, 'marcada', 'marcadas')}`
@@ -91,7 +101,7 @@ export const examText = {
     legend: {
       answered: 'Contestada',
       marked: 'Marcada',
-      blank: 'En blanco',
+      blank: 'Pendiente',
       current: 'Actual',
     },
     goToQuestion: (n: number, status: string) => `Pregunta ${n}, ${status}`,

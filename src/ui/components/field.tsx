@@ -1,10 +1,10 @@
-// Campos de formulario accesibles con etiqueta visible, ayuda y error asociados (4.8). Con borde
-// fino y radio chico, como el resto de los controles (B2 del plan del cambio).
+// Campos de formulario accesibles con etiqueta visible, ayuda y error asociados (4.8). De 48 px con
+// radio de 12 px y borde de 1.5 px, como los de la bienvenida del diseño (D-150).
 import { Fragment, useId, type ComponentProps, type ReactNode } from 'react';
 import { cn } from '@/ui/cn';
 
 const control =
-  'min-h-touch w-full rounded-md border border-line-strong bg-surface px-3 text-base text-fg placeholder:text-fg-muted focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-50';
+  'min-h-12 w-full rounded-md border-[1.5px] border-line-strong bg-surface px-4 text-base text-fg placeholder:text-fg-muted focus-visible:border-indicator focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-50';
 
 interface FieldShell {
   label: string;
@@ -32,7 +32,7 @@ function Shell({
   const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
   return (
     <div className={cn('flex flex-col gap-1', className)}>
-      <label htmlFor={id} className={labelHidden ? 'sr-only' : 'font-medium text-fg'}>
+      <label htmlFor={id} className={labelHidden ? 'sr-only' : 'font-semibold text-fg'}>
         {label}
       </label>
       {children(describedBy)}
@@ -179,7 +179,7 @@ export function CheckboxField({
         {...props}
       />
       <div className="flex flex-col">
-        <label htmlFor={id} className="font-medium text-fg">
+        <label htmlFor={id} className="font-semibold text-fg">
           {label}
         </label>
         {hint ? (

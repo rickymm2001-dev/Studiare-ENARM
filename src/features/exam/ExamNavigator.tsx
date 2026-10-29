@@ -1,35 +1,50 @@
-// Cuadrícula para ir a cualquier pregunta del examen. Muestra cuáles ya contestó, cuáles marcó para
-// revisar y cuáles siguen en blanco. Va plegada para no ocupar lugar y se abre cuando hace falta. Los
-// reactivos de la parte en inglés llevan un ícono y la palabra Inglés en su etiqueta accesible (B13, 3.5).
+// Mapa del examen para ir a cualquier pregunta. Tarjeta crema con la rejilla de cinco columnas del
+// diseño (D-150). Contestada en marino, marcada para revisar en durazno, pendiente en blanco con borde y
+// la actual con borde cielo. En computadora va en el lateral de la pregunta y en el teléfono debajo. Con
+// un examen largo la rejilla se desplaza dentro de la tarjeta. Los reactivos de la parte en inglés llevan
+// un ícono y la palabra Inglés en su etiqueta accesible (B13, 3.5).
 import { Flag, Languages } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { englishText } from '@/i18n/english';
 import { cn } from '@/ui/cn';
-import { Disclosure } from '@/ui/components/disclosure';
+import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { answeredCount, answerOf, markedCount, type ExamState } from './examState';
 
 export function ExamNavigator({
   state,
   onGo,
   englishIds,
+  className,
 }: {
   state: ExamState;
   onGo: (index: number) => void;
   /** Los reactivos de la parte en inglés. Sin ellos no se marca ninguno */
   englishIds?: ReadonlySet<string>;
+  className?: string;
 }) {
   return (
-    <Disclosure
-      title={t.exam.navigatorTitle}
-      summary={t.exam.navigatorSummary(answeredCount(state), markedCount(state))}
+    <Card
+      tone="cream"
+      lift={false}
+      aria-labelledby="examen-mapa"
+      className={cn('gap-3', className)}
     >
-      <ol className="grid max-h-64 grid-cols-7 gap-1.5 overflow-y-auto p-0.5 sm:grid-cols-10 lg:grid-cols-14">
+      <CardHeader className="mb-0 flex-row flex-wrap items-baseline justify-between gap-x-3">
+        <CardTitle id="examen-mapa" className="text-lg">
+          {t.exam.navigatorTitle}
+        </CardTitle>
+        <p className="text-sm text-fg-muted">
+          {t.exam.navigatorSummary(answeredCount(state), markedCount(state))}
+        </p>
+      </CardHeader>
+      <ol className="mt-3 grid max-h-72 grid-cols-5 gap-2 overflow-y-auto p-0.5 sm:grid-cols-10 xl:grid-cols-5">
         {state.questionIds.map((id, index) => {
           const answer = answerOf(state, id);
           const isCurrent = index === state.current;
+          const answered = answer.optionId !== null;
           const status = [
             isCurrent ? t.exam.status.current : null,
-            answer.optionId !== null ? t.exam.status.answered : t.exam.status.blank,
+            answered ? t.exam.status.answered : t.exam.status.blank,
             answer.marked ? t.exam.status.marked : null,
             englishIds?.has(id) ? englishText.exam.navigatorTag : null,
           ]
@@ -45,24 +60,22 @@ export function ExamNavigator({
                   onGo(index);
                 }}
                 className={cn(
-                  'relative flex size-9 w-full items-center justify-center rounded-md border text-sm font-semibold',
-                  answer.optionId !== null
-                    ? 'border-indicator bg-primary-soft text-primary-ink'
-                    : 'border-line bg-surface text-fg-muted hover:bg-muted',
-                  isCurrent && 'ring-2 ring-indicator ring-offset-1 ring-offset-surface',
+                  'relative flex min-h-11 w-full items-center justify-center rounded-md border-[1.5px] text-sm font-bold tabular-nums transition-colors',
+                  answered
+                    ? 'border-primary bg-primary text-primary-fg'
+                    : 'border-line-strong bg-surface text-fg hover:bg-muted',
+                  answer.marked && 'border-accent bg-accent-soft text-accent-ink',
+                  isCurrent && 'border-2 border-indicator bg-primary-soft text-heading',
                 )}
               >
                 {index + 1}
                 {answer.marked ? (
-                  <Flag
-                    aria-hidden
-                    className="absolute -top-1 -right-1 size-3.5 fill-warning text-warning"
-                  />
+                  <Flag aria-hidden className="absolute top-1 right-1 size-3 fill-current" />
                 ) : null}
                 {englishIds?.has(id) ? (
                   <Languages
                     aria-hidden
-                    className="absolute -right-1 -bottom-1 size-3.5 rounded-full bg-surface text-primary-ink"
+                    className="absolute right-1 bottom-1 size-3.5 rounded-full bg-surface text-primary-ink"
                   />
                 ) : null}
               </button>
@@ -70,26 +83,23 @@ export function ExamNavigator({
           );
         })}
       </ol>
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-muted">
+      <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-fg-muted">
         <li className="flex items-center gap-1.5">
-          <span
-            aria-hidden
-            className="size-3.5 rounded-sm border border-indicator bg-primary-soft"
-          />
+          <span aria-hidden className="size-3 rounded-sm bg-primary" />
           {t.exam.legend.answered}
         </li>
         <li className="flex items-center gap-1.5">
-          <Flag aria-hidden className="size-3.5 fill-warning text-warning" />
+          <span aria-hidden className="size-3 rounded-sm border border-accent bg-accent-soft" />
           {t.exam.legend.marked}
         </li>
         <li className="flex items-center gap-1.5">
-          <span aria-hidden className="size-3.5 rounded-sm border border-line bg-surface" />
+          <span aria-hidden className="size-3 rounded-sm border border-line-strong bg-surface" />
           {t.exam.legend.blank}
         </li>
         <li className="flex items-center gap-1.5">
           <span
             aria-hidden
-            className="size-3.5 rounded-sm border border-line bg-surface ring-2 ring-indicator"
+            className="size-3 rounded-sm border-2 border-indicator bg-primary-soft"
           />
           {t.exam.legend.current}
         </li>
@@ -100,6 +110,6 @@ export function ExamNavigator({
           </li>
         ) : null}
       </ul>
-    </Disclosure>
+    </Card>
   );
 }

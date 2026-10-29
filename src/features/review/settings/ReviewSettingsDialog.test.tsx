@@ -214,17 +214,13 @@ describe('Ajustes del repaso', () => {
     expect(app.router.state.historyAction).toBe('REPLACE');
   });
 
-  it('el engrane del Pomodoro abre el panel en la parte del Pomodoro', async () => {
+  it('Configurar en la tarjeta del Pomodoro abre el panel en la parte del Pomodoro', async () => {
     const typing = userEvent.setup();
     app = await renderApp(SCREENS.review.path, withCards(1));
     await typing.click(await screen.findByRole('button', { name: t.reviewSetup.start(1) }, WAIT));
-    await typing.click(
-      await screen.findByRole('button', {
-        name: t.pomodoro.show('25:00', t.pomodoro.phases.focus),
-      }),
-    );
-    const pill = screen.getByRole('group', { name: t.pomodoro.label });
-    await typing.click(within(pill).getByRole('button', { name: t.pomodoro.settings }));
+    // La tarjeta del Pomodoro va al lado de la tarjeta de repaso, a la vista desde el inicio (D-150)
+    const card = await screen.findByRole('group', { name: t.pomodoro.label });
+    await typing.click(within(card).getByRole('button', { name: t.pomodoro.settings }));
     const dialog = await panel();
     const pomodoro = within(dialog).getByRole('region', { name: t.settings.pomodoroTitle });
     await waitFor(() => {

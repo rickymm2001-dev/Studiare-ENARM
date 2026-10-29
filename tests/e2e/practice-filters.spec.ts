@@ -1,16 +1,15 @@
 // Práctica por dificultad y muestreo dirigido (pantalla 7, D-080). Con el filtro en Difícil, la
 // cifra de disponibles baja a las preguntas de 4 y 5 del banco, la práctica solo trae de esas y la
-// bitácora anota el filtro. Sin errores con trampa etiquetada, el muestreo dirigido dice que
-// calibra, cuánto le falta, y no se puede encender, así las opciones salen variadas. Adaptativo también
-// dice que calibra, con su propia nota, porque el banco de demostración no tiene preguntas con
-// dificultad calculada por otros alumnos (B14, 4.5).
-import { SCREENS } from '@/app/screens';
+// bitácora anota el filtro. Sin errores con trampa etiquetada, el modo Dirigido dice que calibra,
+// cuánto le falta, y no dirige nada, así las opciones salen variadas. Adaptativo también dice que
+// calibra, con su propia nota, porque el banco de demostración no tiene preguntas con dificultad
+// calculada por otros alumnos (B14, 4.5).
 import { FACTORY_MODEL_SETTINGS } from '@/config/modelSettings';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { PRACTICE_STORAGE_KEY } from '@/features/simulator/practice';
 import { adaptiveTexts } from '@/i18n/adaptive';
 import { t } from '@/i18n/es-MX';
-import { readTable, statNumber } from './support/b1';
+import { availableCount, openPracticeSetup, pickSegment, readTable } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -49,27 +48,23 @@ test('la práctica por dificultad solo trae preguntas de ese nivel y la bitácor
 }) => {
   test.setTimeout(180_000);
   await signUp(page);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
-  const start = setup.getByRole('button', { name: t.simulator.start });
   // El banco demo se siembra la primera vez que se entra y puede tardar
-  await expect(start).toBeEnabled({ timeout: 90_000 });
-  const all = await statNumber(page, t.simulator.stats.label, t.simulator.stats.available);
+  const setup = await openPracticeSetup(page);
+  const start = setup.getByRole('button', { name: t.simulator.start });
+  await expect(start).toBeEnabled();
+  const all = await availableCount(setup);
 
-  // Con el filtro en Difícil quedan solo las de 4 y 5, que son las mismas que tiene el banco
+  // Con el filtro en Difícil, en Más ajustes, quedan solo las de 4 y 5, que son las mismas que tiene
+  // el banco
   await setup.getByRole('combobox', { name: t.simulator.difficulty }).selectOption('hard');
   const pool = practicePool(await readTable<StoredQuestion>(page, 'questions'));
   const hard = pool.filter((question) => question.physicianDifficulty >= HARD_FROM);
   expect(hard.length).toBeGreaterThan(0);
   expect(hard.length).toBeLessThan(all);
-  await expect
-    .poll(() => statNumber(page, t.simulator.stats.label, t.simulator.stats.available))
-    .toBe(hard.length);
+  await expect.poll(() => availableCount(setup)).toBe(hard.length);
   await expectNoSeriousA11yViolations(page);
 
-  await setup
-    .getByRole('combobox', { name: t.simulator.count, exact: true })
-    .selectOption(String(COUNT));
+  await pickSegment(setup, t.simulator.count, String(COUNT));
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, COUNT), { exact: true })).toBeVisible();
   await expectNoSeriousA11yViolations(page);
@@ -108,15 +103,13 @@ test('la práctica por dificultad solo trae preguntas de ese nivel y la bitácor
   await answerPracticeQuestion(page, 1, COUNT);
 });
 
-test('sin errores con trampa etiquetada, el muestreo dirigido calibra, dice cuánto falta y no se enciende', async ({
+test('sin errores con trampa etiquetada, el modo Dirigido calibra, dice cuánto falta y no dirige nada', async ({
   page,
 }) => {
   test.setTimeout(120_000);
   await signUp(page);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const setup = page.getByRole('region', { name: t.simulator.setupTitle });
+  const setup = await openPracticeSetup(page, { mode: 'targeted' });
   const text = t.simulator.targeted;
-  await expect(setup.getByText(text.label)).toBeVisible({ timeout: 90_000 });
 
   // No hay casilla que encender, solo la nota de calibración con el umbral del motor de sesgos
   await expect(setup.getByRole('checkbox', { name: text.label })).toHaveCount(0);
@@ -144,8 +137,15 @@ test('sin errores con trampa etiquetada, el muestreo dirigido calibra, dice cuá
   await expect(setup.getByRole('checkbox', { name: adaptiveTexts.label })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 
+  // El lateral dice cuántos errores faltan para que el modo dirija de verdad
+  await expect(
+    page.getByText(
+      t.simulator.trains.targetedCalibrating(0, DEFAULT_THRESHOLDS.bias.minTaggedErrors),
+    ),
+  ).toBeVisible();
+
   // Una práctica que arranca así queda con el muestreo variado
-  await setup.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  await pickSegment(setup, t.simulator.count, '5');
   await setup.getByRole('button', { name: t.simulator.start }).click();
   await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible();
   const events = await readTable<{ type: string; payload: { config?: Record<string, unknown> } }>(

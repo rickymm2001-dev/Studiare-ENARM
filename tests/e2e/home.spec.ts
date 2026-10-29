@@ -1,8 +1,8 @@
-// Inicio con el diseño fijo de Ricardo (D-116). Saludo, Tus repasos, Tus simuladores, el plan con su
-// botón para mejorarlo, misiones, Party y el heatmap. Sin tablero que editar, sin desborde en el
-// teléfono y sin violaciones de accesibilidad, en claro y en oscuro. En computadora, la barra blanca
-// de arriba con el saludo y el nivel, el menú lateral que se oculta y el heatmap a todo el ancho
-// (D-117).
+// Inicio con el diseño de Ricardo (D-116, D-150). Saludo, Tus repasos, Tus simuladores, el plan con su
+// botón para mejorarlo, misiones, Party, indicadores, tarjetas por rama, preguntas por día y el heatmap.
+// Sin tablero que editar, sin desborde en el teléfono y sin violaciones de accesibilidad, en claro y
+// en oscuro. En computadora, la barra pizarra de arriba con el nivel y el menú en línea, el título en
+// el contenido y el heatmap a todo el ancho.
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import {
@@ -21,17 +21,18 @@ test('Inicio muestra cada parte del diseño y el plan lleva a Suscripción', asy
   await expect(page).toHaveTitle(t.app.documentTitle(t.screens.home.title));
   await expect(page.getByRole('heading', { level: 2, name: t.home.simulatorsTitle })).toBeVisible();
   for (const name of [
-    t.widgets.names.daily_goal,
-    t.home.dueTitle,
-    t.home.load.title,
+    t.home.cards.title,
+    t.home.goal.title,
+    t.home.pulse.title,
     t.home.topicsTitle,
     t.home.plan.title,
     t.widgets.names.missions,
     t.widgets.names.party_challenge,
-    t.widgets.names.heatmap,
+    t.home.yearTitle,
   ]) {
     await expect(page.getByRole('region', { name })).toBeVisible();
   }
+  await expect(page.getByRole('heading', { level: 3, name: t.home.load.title })).toBeVisible();
   // Las misiones de hoy siguen en Inicio con su avance aunque Logros se quitó (4.12, B3)
   await expect(
     page.getByRole('region', { name: t.widgets.names.missions }).getByRole('progressbar').first(),
@@ -55,39 +56,27 @@ test('Inicio en modo oscuro pasa la revisión de accesibilidad', async ({ page }
   await expectNoSeriousA11yViolations(page);
 });
 
-test('en computadora el saludo va en la barra, el menú se oculta y el heatmap cabe completo', async ({
+test('en computadora el nivel va en la barra, el saludo en el contenido y el heatmap cabe completo', async ({
   page,
 }) => {
-  test.skip((page.viewportSize()?.width ?? 0) < 1024, 'La barra y el riel son de computadora');
+  test.skip((page.viewportSize()?.width ?? 0) < 1024, 'La barra en línea es de computadora');
   await signUp(page, 'Ana');
   const title = page.getByRole('heading', { level: 1, name: t.home.welcome('Ana', null) });
   const titleBox = await title.boundingBox();
-  // La barra mide 4rem, 64 px. El saludo y el nivel quedan dentro de ella
-  expect(titleBox?.y ?? 999).toBeLessThan(64);
+  // La barra mide 4rem, 64 px. El nivel queda dentro de ella y el saludo debajo, en el contenido (D-150)
+  expect(titleBox?.y ?? 0).toBeGreaterThanOrEqual(64);
   const level = page.getByRole('button', { name: new RegExp(t.headerStats.openLevels) });
   expect((await level.boundingBox())?.y ?? 999).toBeLessThan(64);
 
   // El año entero cabe sin desplazarse y las celdas llenan el ancho de la tarjeta
-  const heatmap = page.getByRole('region', { name: t.widgets.names.heatmap });
+  const heatmap = page.getByRole('region', { name: t.home.yearTitle });
   await expect(heatmap.getByText('L', { exact: true })).toBeVisible();
   const fits = await heatmap
     .locator('.overflow-x-auto')
     .evaluate((element) => element.scrollWidth <= element.clientWidth + 1);
   expect(fits).toBe(true);
 
-  // Las tres barras ocultan el riel, el contenido usa todo el ancho y se recuerda al volver
-  const nav = page.getByRole('navigation', { name: t.nav.label });
-  const toggle = page.getByRole('button', { name: t.nav.toggle });
-  await expect(nav).toBeVisible();
-  const before = (await heatmap.boundingBox())?.width ?? 0;
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(nav).toBeHidden();
-  await expect.poll(async () => (await heatmap.boundingBox())?.width ?? 0).toBeGreaterThan(before);
-  await page.reload();
-  await expect(page.getByRole('heading', { level: 2, name: t.home.reviewsTitle })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: t.nav.label })).toBeHidden();
-  await page.getByRole('button', { name: t.nav.toggle }).click();
-  await expect(page.getByRole('navigation', { name: t.nav.label })).toBeVisible();
+  // El menú va en línea en la barra pizarra de arriba (D-150)
+  await expect(page.getByRole('navigation', { name: t.nav.label }).first()).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 });

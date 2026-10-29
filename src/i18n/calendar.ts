@@ -52,6 +52,89 @@ export const calendarText = {
     unknownBranch: 'Otra rama',
     provisionalDate:
       'La fecha del ENARM es provisional hasta que se publique la convocatoria. El plan se recalcula solo cuando cambie.',
+    // El mes rediseñado (D-150). Héroe, columna de hoy, píldoras de la rejilla y detalle del día
+    heroTitle: 'Tu mes de estudio',
+    heroLead: 'Repasos que ya están programados y simuladores que tú agendas.',
+    heroCountdown: (days: number) =>
+      days === 0
+        ? 'Tu ENARM es hoy.'
+        : days === 1
+          ? 'Falta 1 día para el ENARM.'
+          : `Faltan ${days.toLocaleString('es-MX')} días para el ENARM.`,
+    newSession: 'Nueva sesión',
+    todayPill: (weekday: string) => `Hoy, ${weekday}`,
+    todayCount: (n: number) =>
+      n === 0 ? 'Nada en tu día todavía' : n === 1 ? '1 cosa en tu día' : `${n} cosas en tu día`,
+    todayPlan: {
+      title: 'Plan de hoy',
+      reviewsHint: 'Lo que FSRS programó',
+      newCardsHint: 'Entran hoy según tu límite',
+      sessionHint: (minutes: number) =>
+        `Hecha · ${minutes.toLocaleString('es-MX')} ${minutes === 1 ? 'minuto' : 'minutos'}`,
+      planHint: 'Del plan por semanas',
+      partyHint: 'Termina hoy',
+      empty: 'Hoy no tienes nada programado.',
+    },
+    month: {
+      title: 'Este mes',
+      sessionsDone: 'Sesiones hechas',
+      scheduled: 'Repasos programados',
+      busiest: 'Día más cargado',
+      none: 'Sin carga',
+      partial: (days: number) =>
+        `La proyección llega a ${days.toLocaleString('es-MX')} días, así que el resto del mes todavía no cuenta.`,
+    },
+    pills: {
+      reviews: (n: number) => (n === 1 ? '1 repaso' : `${n.toLocaleString('es-MX')} repasos`),
+      newCards: (n: number) =>
+        n === 1 ? '1 tarjeta nueva' : `${n.toLocaleString('es-MX')} tarjetas nuevas`,
+      session: (kind: 'review' | 'practice' | 'exam' | 'challenge', items: number) => {
+        const names = {
+          review: 'Repaso',
+          practice: 'Simulador',
+          exam: 'Examen',
+          challenge: 'Reto',
+        };
+        return `${names[kind]} ${items.toLocaleString('es-MX')}`;
+      },
+      sessionLong: (kind: 'review' | 'practice' | 'exam' | 'challenge', items: number) => {
+        const names = {
+          review: 'Sesión de repaso',
+          practice: 'Simulador',
+          exam: 'Examen',
+          challenge: 'Reto',
+        };
+        return `${names[kind]} de ${items.toLocaleString('es-MX')} ${items === 1 ? 'reactivo hecho' : 'reactivos hecho'}`;
+      },
+      planSimulator: 'Simulador completo',
+      party: 'Reto de Party',
+      partyLong: (title: string) => `Termina el reto de Party ${title}`,
+    },
+    legendItems: {
+      reviews: 'Repasos programados',
+      done: 'Tarjetas hechas',
+      sessions: 'Sesiones hechas',
+      plan: 'Plan hasta el examen',
+      party: 'Party',
+    },
+    detail: {
+      today: 'Hoy',
+      emptyTitle: 'Nada programado',
+      pending: (reviews: number, news: number) =>
+        `Te quedan ${reviews.toLocaleString('es-MX')} repasos y ${news.toLocaleString('es-MX')} tarjetas nuevas hoy.`,
+      start: 'Empezar ahora',
+    },
+    nextBusy: {
+      title: 'Siguiente día cargado',
+      body: (day: string, n: number) =>
+        `${n.toLocaleString('es-MX')} ${n === 1 ? 'repaso' : 'repasos'} el ${day}.`,
+      empty: 'Todavía no hay un día cargado en la proyección.',
+    },
+    partyCard: {
+      title: 'Reto de Party',
+      ends: (day: string) => `Termina el ${day}.`,
+      go: 'Ver el Party',
+    },
     plan: {
       title: 'Plan por semanas hasta el examen',
       hint: 'Cada semana te enfocas en una rama, para hacer tus bloques de preguntas siempre de la misma especialidad. Los simuladores de todas las especialidades llegan al final y solo en domingo.',

@@ -1,9 +1,8 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
-import { FlaskConical, Info, Menu, WifiOff } from 'lucide-react';
+import { FlaskConical, Info, Search, WifiOff } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Link, Outlet, useLocation } from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
-import logoUrl from '@/assets/brand/studiare-logo.png';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { t } from '@/i18n/core';
 import { cn } from '@/ui/cn';
@@ -18,7 +17,7 @@ import { isPublicScreenPath, screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { AccessGate } from './AccessGate';
-import { BottomNav, NAV_ID } from './BottomNav';
+import { BottomNav } from './BottomNav';
 import { ConfigUpdateNotice } from './ConfigUpdateNotice';
 import { NoticeUpdateNotice } from './NoticeUpdateNotice';
 import { DeviceLimitNotice } from './DeviceLimitNotice';
@@ -29,7 +28,8 @@ import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 import { SyncVersionNotice } from './SyncVersionNotice';
 import { SurveyNoticeLauncher } from './SurveyNoticeLauncher';
-import { TopBarContext } from './TopBarContext';
+import { HeaderStats } from './HeaderStats';
+import { TopNav } from './TopNav';
 
 // El aviso de una sesión con menos preguntas se carga solo cuando hay aviso (B11, 5.4). Si su archivo
 // no llega, como sin red antes de que el service worker lo guarde, no se ve, pero la pantalla sigue
@@ -45,11 +45,10 @@ export function AppShell() {
   const role = usePreferences((state) => state.role);
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
-  const navCollapsed = usePreferences((state) => state.navCollapsed);
-  const setNavCollapsed = usePreferences((state) => state.setNavCollapsed);
   useApplyTheme(theme);
   useApplyAppearance(usePreferences((state) => state.appearance));
   const online = useOnlineStatus();
+  const navigate = useNavigate();
   useFocusHeadingOnNavigation();
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const { pathname } = useLocation();
@@ -62,8 +61,6 @@ export function AppShell() {
     ((pathname === screenPath('home') || legal) && session.status === 'signed-out');
   // La portada de venta ocupa todo el ancho y pone sus propios márgenes (D-149)
   const landing = pathname === screenPath('home') && session.status === 'signed-out';
-  // Con el menú lateral oculto el contenido usa todo el ancho (D-117)
-  const rail = bare || navCollapsed ? '' : 'lg:pl-rail';
   // Mientras el banco es de demostración, un aviso global en lugar de etiquetas por pantalla (4.1). Con
   // el banco de la nube se va solo, sin que haga falta apagar demoBank (B11, 5.1)
   const sourceKind = useQuestionSourceKind();
@@ -79,71 +76,59 @@ export function AppShell() {
         {t.app.skipToContent}
       </a>
 
-      {/* En el teléfono una barra delgada con el logo. En computadora es la barra blanca de arriba,
-          con el botón que oculta o muestra el menú lateral, el símbolo de Studiare y, encima, el
-          título de la pantalla con la racha y el nivel, que pone ScreenHeader (D-117) */}
-      {/* La portada trae su propia barra con la marca (D-149), así que aquí no va otra */}
+      {/* La barra pizarra de la portada, por dentro (D-150). El logo blanco, el buscador que lleva a
+          Buscar tarjetas, las secciones en línea con Más, la racha y el chip del alumno. En el
+          teléfono quedan el logo y los chips, y el menú va en el dock de abajo. La portada trae su
+          propia barra con la marca (D-149), así que aquí no va otra */}
       {landing ? null : (
-        <header
-          className={cn('glass sticky top-0 z-20 border-b border-line', !bare && 'lg:h-topbar')}
-        >
+        <header className="glass sticky top-0 z-20 [--enarm-surface:var(--enarm-slate)] text-slate-fg">
           <div
             className={cn(
-              'flex min-h-12 items-center gap-2 px-4 py-1.5',
-              !bare && 'lg:h-full lg:gap-0 lg:p-0',
+              'mx-auto flex min-h-14 w-full max-w-content items-center gap-3 px-5 py-1.5 lg:gap-4 lg:px-8',
+              !bare && 'lg:min-h-topbar',
             )}
           >
-            {bare ? null : (
-              <button
-                type="button"
-                aria-label={t.nav.toggle}
-                aria-expanded={!navCollapsed}
-                aria-controls={NAV_ID}
-                title={navCollapsed ? t.nav.show : t.nav.hide}
-                onClick={() => {
-                  setNavCollapsed(!navCollapsed);
-                }}
-                className="hidden h-full w-rail shrink-0 items-center justify-center bg-primary text-primary-fg transition-colors hover:bg-primary-hover lg:flex [&_svg]:size-7"
-              >
-                <Menu aria-hidden strokeWidth={2} />
-              </button>
-            )}
-            <Link
-              to={HOME_BY_ROLE[role]}
-              className={cn(
-                'mr-auto shrink-0 rounded-sm',
-                !bare && 'lg:mr-0 lg:flex lg:w-topbar-logo lg:items-center lg:justify-center',
-              )}
-            >
-              {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas. En la barra de
-                computadora va solo el símbolo, junto al botón del menú */}
-              <img
-                src={logoUrl}
-                alt={t.app.logoAlt}
-                width={148}
-                height={32}
-                className={cn('h-6 w-auto sm:h-8 dark:hidden', !bare && 'lg:hidden')}
-              />
+            <Link to={HOME_BY_ROLE[role]} className="shrink-0 rounded-sm">
+              {/* Sobre la pizarra va siempre la versión con letras blancas */}
               <img
                 src={logoDarkUrl}
                 alt={t.app.logoAlt}
                 width={148}
                 height={32}
-                className={cn(
-                  'hidden h-6 w-auto sm:h-8 dark:block',
-                  !bare && 'lg:hidden dark:lg:hidden',
-                )}
+                className="h-6 w-auto sm:h-7"
               />
-              {bare ? null : (
-                <img
-                  src={`${import.meta.env.BASE_URL}favicon-64x64.png`}
-                  alt={t.app.logoAlt}
-                  width={64}
-                  height={64}
-                  className="hidden size-9 lg:block"
-                />
-              )}
             </Link>
+            {bare ? null : (
+              <>
+                <form
+                  role="search"
+                  className="hidden min-w-0 flex-[0_1_15rem] items-center gap-2 rounded-full bg-white/12 px-3.5 lg:flex"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const query = new FormData(event.currentTarget).get('q');
+                    const q = typeof query === 'string' ? query.trim() : '';
+                    void navigate(
+                      q
+                        ? `${screenPath('explore')}?q=${encodeURIComponent(q)}`
+                        : screenPath('explore'),
+                    );
+                  }}
+                >
+                  <Search aria-hidden className="size-4 shrink-0 text-slate-muted" />
+                  <input
+                    type="search"
+                    name="q"
+                    aria-label={t.nav.search}
+                    placeholder={t.nav.searchPlaceholder}
+                    className="min-h-10 min-w-0 flex-1 bg-transparent text-sm text-slate-fg outline-none placeholder:text-slate-muted"
+                  />
+                </form>
+                <TopNav nav={navForRole(role)} />
+                <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
+                  <HeaderStats />
+                </div>
+              </>
+            )}
           </div>
         </header>
       )}
@@ -161,7 +146,6 @@ export function AppShell() {
             database === 'demo'
               ? 'border-sim-line bg-sim text-sim-fg'
               : 'border-demo-line bg-demo text-demo-fg',
-            rail,
           )}
         >
           {/* Sin sesión no hay aviso del banco */}
@@ -200,7 +184,7 @@ export function AppShell() {
       {online ? null : (
         <div
           role="status"
-          className={`flex items-center justify-center gap-2 border-b border-line bg-warning-soft px-4 py-2 text-sm text-warning ${rail}`}
+          className={`flex items-center justify-center gap-2 border-b border-line bg-warning-soft px-4 py-2 text-sm text-warning`}
         >
           <WifiOff aria-hidden className="size-4" />
           {t.offlineBanner}
@@ -209,47 +193,45 @@ export function AppShell() {
 
       {/* Una región viva siempre presente para que el aviso se anuncie al llegar. Con aria-live y no
           con role status, para no sumar un estado vacío a cada pantalla */}
-      <div aria-live="polite" aria-atomic="true" className={rail}>
+      <div aria-live="polite" aria-atomic="true">
         {bankNotice ? (
           <Suspense fallback={null}>
             <BankNoticeBanner />
           </Suspense>
         ) : null}
       </div>
-      <OtherDeviceNotice className={rail} />
-      <DeviceLimitNotice className={rail} />
-      <OAuthErrorNotice className={rail} />
-      <ConfigUpdateNotice className={rail} />
-      <NoticeUpdateNotice className={rail} />
+      <OtherDeviceNotice />
+      <DeviceLimitNotice />
+      <OAuthErrorNotice />
+      <ConfigUpdateNotice />
+      <NoticeUpdateNotice />
       {/* La mudanza de la demo de GitHub Pages (B17). Sin las variables del build no pinta ni baja nada */}
-      <MovedNoticeLauncher className={rail} />
+      <MovedNoticeLauncher />
       {/* La encuesta de los primeros días (B18). Solo baja algo para un alumno con la nube, fuera de estudiar */}
-      <SurveyNoticeLauncher className={rail} />
+      <SurveyNoticeLauncher />
       <OrganizationSync />
 
-      <div className={rail}>
-        <TopBarContext value={!bare}>
-          <main
-            id="contenido"
-            tabIndex={-1}
-            className={
-              landing
-                ? 'flex w-full flex-col outline-none'
-                : bare
-                  ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
-                  : // Medio centímetro (1.25rem) de separación en todos lados (D-117)
-                    'mx-auto flex w-full max-w-content flex-col gap-5 px-5 pt-5 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.25rem)] outline-none lg:pb-5'
-            }
-          >
-            {/* Segundo factor del equipo y registro de Google por completar (B9) */}
-            <AccessGate>
-              <Outlet />
-            </AccessGate>
-          </main>
-        </TopBarContext>
+      <div>
+        <main
+          id="contenido"
+          tabIndex={-1}
+          className={
+            landing
+              ? 'flex w-full flex-col outline-none'
+              : bare
+                ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-content' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
+                : // Los márgenes de la portada, 1280 px de ancho con 32 px a los lados (D-150)
+                  'mx-auto flex w-full max-w-content flex-col gap-6 px-5 pt-6 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:px-8 lg:pt-8 lg:pb-10'
+          }
+        >
+          {/* Segundo factor del equipo y registro de Google por completar (B9) */}
+          <AccessGate>
+            <Outlet />
+          </AccessGate>
+        </main>
       </div>
 
-      {bare ? null : <BottomNav nav={navForRole(role)} collapsed={navCollapsed} />}
+      {bare ? null : <BottomNav nav={navForRole(role)} />}
       <PwaUpdatePrompt />
       <SyncVersionNotice />
       {/* El recorrido guiado (B15). Solo esto va en el JavaScript inicial, el recorrido se baja al empezar */}

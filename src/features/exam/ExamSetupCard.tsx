@@ -1,7 +1,11 @@
-// Tarjeta del examen completo en Simular (pantalla 7). Elegir cuántas preguntas, ver el tiempo total
+// El examen completo en Armar tu simulador (pantalla 7). Elegir cuántas preguntas, ver el tiempo total
 // y empezar, o seguir con un examen en curso y ver el último. El plan Gratis se limita a las
 // preguntas que le quedan hoy y el examen de 280 es de los planes de pago. Son banderas de acceso,
 // la interfaz no pregunta por el plan.
+// Desde D-150 no es una tarjeta aparte. Es lo que el formulario muestra en el modo Examen, con los mismos
+// grupos del diseño, Preguntas en segmentado píldora, Tiempo con el control que le pasa la pantalla y el
+// botón grande con su resumen. Sus ajustes finos van en una tarjeta debajo. La pantalla recibe con
+// onPreview lo que arma, para decir en el lateral con qué entrena.
 // Desde B11 el examen se reparte por los pesos de rama del ENARM (5.4). Con el banco de la nube se bajan
 // todos sus cuerpos antes de empezar, en tandas, así el examen corre sin conexión. Si llega menos de lo
 // armado, empieza con lo concedido y el marco de la app dice por qué.
@@ -11,7 +15,7 @@
 // que pide el umbral lleva la marca Calibrando y dice cuántos hay, y si no hay ninguno el examen es solo
 // en español y lo avisa. El español no rellena lo que falte de inglés.
 import { Play } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { PLANS, type PlanKey } from '@/config/billing';
@@ -26,6 +30,7 @@ import { topicTaxonomy } from '@/demo/content';
 import {
   buildExam,
   englishTargetFor,
+  EXAM_SECONDS_PER_QUESTION,
   sectionOf,
   type ExamPlan,
   type ExamQuestion,
@@ -36,8 +41,8 @@ import { t } from '@/i18n/es-MX';
 import { englishText } from '@/i18n/english';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { Disclosure } from '@/ui/components/disclosure';
-import { CheckboxField, SelectField } from '@/ui/components/field';
+import { CheckboxField } from '@/ui/components/field';
+import { SegmentedControl } from '@/ui/components/segmented';
 import { CalibratingNote } from '@/ui/states/states';
 import { useBankNotice } from '../shared/bankNotice';
 import { chooseWithBodies } from '../shared/chooseWithBodies';
@@ -57,6 +62,14 @@ import {
 } from './examState';
 import { loadExamState, saveExamState } from './examStorage';
 
+/** Lo que el examen armado le dice a la pantalla, para el lateral de con qué entrena */
+export interface ExamPreviewInfo {
+  count: number;
+  branches: number;
+  totalMs: number;
+  alerts: boolean;
+}
+
 /** La pregunta del pool como la arma buildExam, con la sección que dice su idioma */
 const toExamQuestion = (question: PoolQuestion): ExamQuestion => ({
   id: question.id,
@@ -72,6 +85,8 @@ export function ExamSetupCard({
   englishQuestions = [],
   plan,
   left,
+  timeControl,
+  onPreview,
 }: {
   session: ReadySession;
   /** Las preguntas en español que entran al examen */
@@ -81,6 +96,10 @@ export function ExamSetupCard({
   plan: PlanKey;
   /** Preguntas que le quedan hoy en su plan. null es sin límite */
   left: number | null;
+  /** El segmentado de Tiempo de la pantalla, que va a la derecha de Preguntas */
+  timeControl?: ReactNode;
+  /** Avisa qué examen quedó armado con las opciones de ahora */
+  onPreview?: (info: ExamPreviewInfo) => void;
 }) {
   const api = useDataApi();
   const source = useQuestionSource();
@@ -130,14 +149,32 @@ export function ExamSetupCard({
     [questions, englishQuestions, requested, withEnglish],
   );
   const count = preview.questionIds.length;
+  // Cuántas ramas trae lo armado, para el resumen del botón. Es lo que de verdad eligió buildExam
+  const branches = useMemo(() => {
+    const picked = new Set(preview.questionIds);
+    return new Set(
+      [...questions, ...englishQuestions]
+        .filter((question) => picked.has(question.id))
+        .map((question) => question.branch),
+    ).size;
+  }, [preview, questions, englishQuestions]);
   // El tope de Gratis es lo que limita el examen cuando le quedan menos preguntas que el tamaño pedido y que
   // las que hay en el banco, contando las de inglés si entran
   const inBank = questions.length + (withEnglish ? englishQuestions.length : 0);
   const limitedByPlan = left !== null && left < Math.min(size, inBank);
 
+  // La pantalla se entera de lo armado sin que su cambio de estado vuelva a disparar este aviso
+  const previewRef = useRef(onPreview);
+  previewRef.current = onPreview;
+  useEffect(() => {
+    previewRef.current?.({ count, branches, totalMs: preview.totalMs, alerts });
+  }, [count, branches, preview.totalMs, alerts]);
+
+  // La tarjeta de un examen guardado se nombra por su estado y no por Examen completo, que ya es el
+  // nombre de la región del formulario que la contiene (D-150)
   const header = (
     <CardHeader className="mb-3">
-      <CardTitle id="examen-titulo">{text.cardTitle}</CardTitle>
+      <CardTitle>{text.cardTitle}</CardTitle>
     </CardHeader>
   );
 
@@ -146,9 +183,11 @@ export function ExamSetupCard({
     const total = stored.questionIds.length;
     const timeIsUp = remaining <= 0;
     return (
-      <Card aria-labelledby="examen-titulo">
+      <Card tone="cream" lift={false} aria-labelledby="examen-en-curso">
         {header}
-        <p className="font-medium">{text.inProgressTitle}</p>
+        <p id="examen-en-curso" className="font-medium">
+          {text.inProgressTitle}
+        </p>
         <p className="mb-3 text-sm text-fg-muted">
           {text.inProgressBody(answeredCount(stored), total, remaining)}
         </p>
@@ -180,9 +219,11 @@ export function ExamSetupCard({
   // Un examen que terminó y todavía no se registra no se pisa con otro. Los resultados lo retoman
   if (stored && !isClosed(stored)) {
     return (
-      <Card aria-labelledby="examen-titulo">
+      <Card tone="cream" lift={false} aria-labelledby="examen-sin-guardar">
         {header}
-        <p className="font-medium">{text.unsavedTitle}</p>
+        <p id="examen-sin-guardar" className="font-medium">
+          {text.unsavedTitle}
+        </p>
         <p className="mb-3 text-sm text-fg-muted">{text.unsavedBody}</p>
         <Button asChild className="self-start">
           <Link to={screenPath('examResults')}>{text.saveAndSee}</Link>
@@ -192,6 +233,7 @@ export function ExamSetupCard({
   }
 
   const sizes = allowedExamSizes(access.fullExam);
+  const minutes = Math.max(1, Math.round(preview.totalMs / 60_000));
 
   const start = async () => {
     setBusy(true);
@@ -261,51 +303,27 @@ export function ExamSetupCard({
   };
 
   return (
-    <Card aria-labelledby="examen-titulo">
-      {header}
-      <CardDescription className="mb-3">{text.cardIntro}</CardDescription>
-      <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <SelectField
+    <>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-3">
+          <p className="group-title mb-3">{text.size}</p>
+          <SegmentedControl
             label={text.size}
-            value={String(Math.min(size, sizes.at(-1) ?? size))}
-            options={sizes.map((option) => ({
-              value: String(option),
-              label: text.sizeOption(option),
-            }))}
-            onChange={(event) => {
-              setSize(Number(event.target.value));
-            }}
+            options={sizes.map((option) => ({ value: option, label: text.sizeOption(option) }))}
+            value={Math.min(size, sizes.at(-1) ?? size)}
+            onChange={setSize}
+            className="flex w-full"
+            itemClassName="flex-1"
           />
+          {limitedByPlan ? <p className="text-sm text-fg-muted">{text.limitedTo(left)}</p> : null}
+          {access.fullExam ? null : <p className="text-sm text-fg-muted">{text.fullLocked}</p>}
+          {preview.sections.clinical.shortfall > 0 && count > 0 ? (
+            <p className="text-sm text-fg-muted">{text.shortfall(size, count)}</p>
+          ) : null}
         </div>
-        {englishFlag ? (
-          <CheckboxField
-            label={englishText.exam.include}
-            hint={englishText.exam.includeHint}
-            checked={includeEnglish}
-            onChange={(event) => {
-              setIncludeEnglish(event.target.checked);
-            }}
-          />
-        ) : null}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          {left === 0 ? (
-            <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link to={lockedCta.path}>{lockedCta.label}</Link>
-            </Button>
-          ) : (
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              disabled={count === 0 || busy}
-              onClick={() => {
-                void start();
-              }}
-            >
-              <Play aria-hidden />
-              {busy ? text.starting : text.start}
-            </Button>
-          )}
+        <div className="flex min-w-0 flex-col gap-3">
+          <p className="group-title mb-3">{t.simulator.time.legend}</p>
+          {timeControl}
           <p className="text-sm text-fg-muted">
             {count > 0 ? text.timeTotal(preview.totalMs) : t.simulator.noQuestions}
             {count > 0 && preview.sections.english.picked > 0 ? (
@@ -318,74 +336,115 @@ export function ExamSetupCard({
               </>
             ) : null}
           </p>
+          {count > 0 ? (
+            <p className="text-sm text-fg-muted">
+              {t.simulator.time.enarmNote(EXAM_SECONDS_PER_QUESTION)}
+            </p>
+          ) : null}
         </div>
-        {failed ? (
-          <p role="alert" className="text-sm font-medium text-danger">
-            {failed}
-          </p>
-        ) : null}
-        {preview.sections.clinical.shortfall > 0 && count > 0 ? (
-          <p className="text-sm text-fg-muted">{text.shortfall(size, count)}</p>
-        ) : null}
-        {englishFlag && includeEnglish ? (
-          <EnglishExamNotes
-            have={englishQuestions.length}
-            preview={preview}
-            min={thresholds.examMinItems}
-          />
-        ) : null}
-        {limitedByPlan ? <p className="text-sm text-fg-muted">{text.limitedTo(left)}</p> : null}
-        {access.fullExam ? null : <p className="text-sm text-fg-muted">{text.fullLocked}</p>}
-        <Disclosure title={text.settings} summary={text.settingsSummary}>
-          <CheckboxField
-            label={text.highlight}
-            checked={highlight}
-            onChange={(event) => {
-              setHighlight(event.target.checked);
+      </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
+        {left === 0 ? (
+          <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+            <Link to={lockedCta.path}>{lockedCta.label}</Link>
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            className="w-full sm:w-auto"
+            disabled={count === 0 || busy}
+            onClick={() => {
+              void start();
             }}
-          />
-          <CheckboxField
-            label={text.askConfidence}
-            hint={text.askConfidenceHint}
-            checked={askConfidence}
-            onChange={(event) => {
-              setAskConfidence(event.target.checked);
-            }}
-          />
-          <CheckboxField
-            label={text.alerts}
-            hint={text.alertsHint}
-            checked={alerts}
-            onChange={(event) => {
-              setAlerts(event.target.checked);
-            }}
-          />
-          <CheckboxField
-            label={t.answerSheet.optionLabel}
-            hint={t.answerSheet.optionHint}
-            checked={answerSheet}
-            onChange={(event) => {
-              setAnswerSheet(event.target.checked);
-            }}
-          />
-        </Disclosure>
-        {stored ? (
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted p-3">
-            <div>
-              <p className="font-medium">{text.lastTitle}</p>
-              <p className="text-sm text-fg-muted">
-                {stored.correct === null
-                  ? text.lastBodyUnscored(answeredCount(stored), stored.questionIds.length)
-                  : text.lastBody(stored.correct, stored.questionIds.length)}
-              </p>
-            </div>
-            <Button asChild variant="secondary" size="sm">
-              <Link to={screenPath('examResults')}>{text.seeResults}</Link>
-            </Button>
-          </div>
+          >
+            <Play aria-hidden />
+            {busy ? text.starting : text.start}
+          </Button>
+        )}
+        {count > 0 ? (
+          <p className="text-sm text-fg-muted">{t.simulator.summary(count, branches, minutes)}</p>
         ) : null}
       </div>
-    </Card>
+      {failed ? (
+        <p role="alert" className="text-sm font-medium text-danger">
+          {failed}
+        </p>
+      ) : null}
+      {englishFlag && includeEnglish ? (
+        <EnglishExamNotes
+          have={englishQuestions.length}
+          preview={preview}
+          min={thresholds.examMinItems}
+        />
+      ) : null}
+
+      {/* Lo que no está en el diseño del formulario va debajo, en su tarjeta (D-150) */}
+      <Card lift={false} aria-labelledby="examen-ajustes" className="flex flex-col gap-3">
+        <CardHeader className="mb-0">
+          <CardTitle id="examen-ajustes" as="h3" className="text-lg">
+            {text.settings}
+          </CardTitle>
+          <CardDescription>{text.settingsSummary}</CardDescription>
+        </CardHeader>
+        {englishFlag ? (
+          <CheckboxField
+            label={englishText.exam.include}
+            hint={englishText.exam.includeHint}
+            checked={includeEnglish}
+            onChange={(event) => {
+              setIncludeEnglish(event.target.checked);
+            }}
+          />
+        ) : null}
+        <CheckboxField
+          label={text.highlight}
+          checked={highlight}
+          onChange={(event) => {
+            setHighlight(event.target.checked);
+          }}
+        />
+        <CheckboxField
+          label={text.askConfidence}
+          hint={text.askConfidenceHint}
+          checked={askConfidence}
+          onChange={(event) => {
+            setAskConfidence(event.target.checked);
+          }}
+        />
+        <CheckboxField
+          label={text.alerts}
+          hint={text.alertsHint}
+          checked={alerts}
+          onChange={(event) => {
+            setAlerts(event.target.checked);
+          }}
+        />
+        <CheckboxField
+          label={t.answerSheet.optionLabel}
+          hint={t.answerSheet.optionHint}
+          checked={answerSheet}
+          onChange={(event) => {
+            setAnswerSheet(event.target.checked);
+          }}
+        />
+      </Card>
+      {stored ? (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-cream p-3">
+          <div>
+            <p className="font-medium">{text.lastTitle}</p>
+            <p className="text-sm text-fg-muted">
+              {stored.correct === null
+                ? text.lastBodyUnscored(answeredCount(stored), stored.questionIds.length)
+                : text.lastBody(stored.correct, stored.questionIds.length)}
+            </p>
+          </div>
+          <Button asChild variant="secondary" size="sm">
+            <Link to={screenPath('examResults')}>{text.seeResults}</Link>
+          </Button>
+        </div>
+      ) : null}
+    </>
   );
 }
 

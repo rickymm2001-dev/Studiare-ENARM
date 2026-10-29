@@ -3,11 +3,10 @@
 // siembra en la bitácora del alumno lo que hizo en los días anteriores. Contestar 24 preguntas en cinco días no cabe en
 // una prueba, y los eventos que se escriben son los de la app, validados con createEvent. Todo es simulado.
 import type { Page } from '@playwright/test';
-import { SCREENS } from '@/app/screens';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/testing/fixtures';
 import { t } from '@/i18n/es-MX';
-import { putRows, readTable } from './b1';
+import { openPracticeSetup, putRows, readTable } from './b1';
 import { enterWithLink, expect, reloadWithServerFlags } from './cloudFixtures';
 import { openBank, seedBank } from './fakeBank';
 import { createFakeBankStore } from './fakeBankStore';
@@ -57,10 +56,7 @@ export async function enterWithOpenBank(page: Page, cloud: FakeSupabaseServer) {
 
 /** Empieza una práctica corta, que baja y guarda preguntas del banco en la cuenta, y vuelve a Inicio */
 export async function downloadQuestions(page: Page): Promise<void> {
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await expect(practice).toBeVisible({ timeout: 30_000 });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const practice = await openPracticeSetup(page, { count: 5 });
   await practice.getByRole('button', { name: t.simulator.start }).click();
   await expect(page.getByText(t.simulator.progress(1, 5), { exact: true })).toBeVisible({
     timeout: 30_000,

@@ -9,7 +9,7 @@ import { HEADERS, optionHeaders } from '@/data/content/bankColumns';
 import { t } from '@/i18n/es-MX';
 import { physicianText } from '@/i18n/physician';
 import { newId } from '@/data/ids';
-import { putRows, readTable } from './support/b1';
+import { openPracticeSetup, putRows, readTable } from './support/b1';
 import {
   answerPracticeQuestion,
   expect,
@@ -94,11 +94,9 @@ test('editor de pregunta. El admin la abre desde el banco y solo la lee', async 
 test('reportes. El alumno reporta un error y desde la bandeja se resuelve', async ({ page }) => {
   test.setTimeout(240_000);
   await signUp(page);
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const practice = await openPracticeSetup(page, { count: 5 });
   const start = practice.getByRole('button', { name: t.simulator.start });
-  await expect(start).toBeEnabled({ timeout: 90_000 });
+  await expect(start).toBeEnabled();
   await start.click();
   for (let index = 1; index <= 5; index += 1) await answerPracticeQuestion(page, index, 5);
 

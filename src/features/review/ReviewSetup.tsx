@@ -4,7 +4,7 @@
 // comentario 8). La última selección se recuerda en este dispositivo. Aquí solo se elige lo de esta
 // sesión. Los límites de cada día se leen aquí y se cambian en Ajustes del repaso, el único lugar de
 // cada ajuste (B3 del plan).
-import { CalendarCheck, Play, RotateCw, Sparkles } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import type { DailyCounters } from '@/engines/counters';
@@ -18,11 +18,11 @@ import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField } from '@/ui/components/field';
 import { SegmentedControl } from '@/ui/components/segmented';
-import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { DeckTopics } from '../decks/DeckTopics';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
+import { CreamStat } from './SessionStatsCard';
 
 const MODES: readonly ReviewMode[] = ['today', 'due', 'new', 'topic'];
 
@@ -142,31 +142,24 @@ export function ReviewSetup({
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
       <div className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-24">
+        {/* Lo que toca con esta selección, en celdas crema como las de Esta sesión (D-150) */}
         {total > 0 ? (
-          <StatPanel label={text.countersLabel}>
-            <StatCell
-              icon={<Sparkles />}
-              label={t.review.counters.new}
-              value={counters.new.toLocaleString('es-MX')}
-            />
-            <StatCell
-              icon={<RotateCw />}
+          <Card aria-label={text.countersLabel} className="grid grid-cols-3 gap-2.5 p-3 sm:p-4">
+            <CreamStat label={t.review.counters.new} value={counters.new.toLocaleString('es-MX')} />
+            <CreamStat
               label={t.review.counters.learning}
               value={counters.learning.toLocaleString('es-MX')}
             />
-            <StatCell
-              icon={<CalendarCheck />}
+            <CreamStat
               label={t.review.counters.review}
               value={counters.review.toLocaleString('es-MX')}
             />
-          </StatPanel>
+          </Card>
         ) : null}
         {plan}
-        <Card aria-labelledby="que-repasar">
+        <Card aria-labelledby="que-repasar" lift={false}>
           <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
-            <CardTitle id="que-repasar" className="text-base sm:text-lg">
-              {text.title}
-            </CardTitle>
+            <CardTitle id="que-repasar">{text.title}</CardTitle>
             {addDeck}
           </CardHeader>
           <div className="flex flex-col gap-3">
@@ -228,11 +221,9 @@ export function ReviewSetup({
       </div>
 
       {desktop ? (
-        <Card aria-labelledby="mazos-y-temas" className="flex min-w-0 flex-col">
+        <Card aria-labelledby="mazos-y-temas" lift={false} className="flex min-w-0 flex-col">
           <CardHeader className="mb-3 flex-row flex-wrap items-baseline justify-between gap-2">
-            <CardTitle id="mazos-y-temas" className="text-base sm:text-lg">
-              {text.filters}
-            </CardTitle>
+            <CardTitle id="mazos-y-temas">{text.filters}</CardTitle>
             <span className="text-sm text-fg-muted">{filtersSummary}</span>
           </CardHeader>
           {/* La lista completa de temas es larga. Se desplaza dentro de la tarjeta para que el botón de

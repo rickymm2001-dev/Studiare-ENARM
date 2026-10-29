@@ -127,9 +127,13 @@ describe('rutas', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
-    const nav = screen.getByRole('navigation', { name: t.nav.label });
+    // El menú en línea de computadora y el dock del teléfono (D-150)
+    const [top, dock] = screen.getAllByRole('navigation', { name: t.nav.label });
+    expect(top).toBeDefined();
+    expect(dock).toBeDefined();
+    if (!top || !dock) return;
     expect(
-      within(nav)
+      within(top)
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
@@ -139,14 +143,19 @@ describe('rutas', () => {
       t.navItems.simulate,
       t.navItems.progress,
       t.navItems.calendar,
-      t.navItems.tutor,
-      t.navItems.party,
-      t.navItems.settings,
     ]);
-    expect(within(nav).getByRole('button', { name: t.navItems.more })).toBeInTheDocument();
-    for (const gone of ['Plan', 'Logros', 'Perfil']) expect(nav).not.toHaveTextContent(gone);
-    // Mazos no es una sección aparte, es una pestaña de Repasar
-    expect(nav).not.toHaveTextContent(t.navItems.decks);
+    expect(within(top).getByRole('button', { name: t.navItems.more })).toBeInTheDocument();
+    expect(
+      within(dock)
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual([t.navItems.home, t.navItems.review, t.navItems.simulate, t.navItems.progress]);
+    expect(within(dock).getByRole('button', { name: t.navItems.more })).toBeInTheDocument();
+    for (const nav of [top, dock]) {
+      for (const gone of ['Plan', 'Logros', 'Perfil']) expect(nav).not.toHaveTextContent(gone);
+      // Mazos no es una sección aparte, es una pestaña de Repasar
+      expect(nav).not.toHaveTextContent(t.navItems.decks);
+    }
   });
 
   it('Repasar sigue activa cuando el alumno está en Mazos', async () => {
@@ -154,11 +163,12 @@ describe('rutas', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.decks.title }),
     ).toBeVisible();
-    const nav = screen.getByRole('navigation', { name: t.nav.label });
-    expect(within(nav).getByRole('link', { name: t.navItems.review })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    for (const nav of screen.getAllByRole('navigation', { name: t.nav.label })) {
+      expect(within(nav).getByRole('link', { name: t.navItems.review })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    }
   });
 
   it('Apuntes es su propia sección, Repasar ya no queda activa ahí y en el teléfono se marca Más', async () => {
@@ -166,15 +176,20 @@ describe('rutas', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.outlines.title }),
     ).toBeVisible();
-    const nav = screen.getByRole('navigation', { name: t.nav.label });
-    expect(within(nav).getByRole('link', { name: t.navItems.outlines })).toHaveAttribute(
+    const [top, dock] = screen.getAllByRole('navigation', { name: t.nav.label });
+    expect(top).toBeDefined();
+    expect(dock).toBeDefined();
+    if (!top || !dock) return;
+    expect(within(top).getByRole('link', { name: t.navItems.outlines })).toHaveAttribute(
       'aria-current',
       'page',
     );
-    expect(within(nav).getByRole('link', { name: t.navItems.review })).not.toHaveAttribute(
-      'aria-current',
-    );
-    expect(within(nav).getByRole('button', { name: t.navItems.more })).toHaveAttribute(
+    for (const nav of [top, dock]) {
+      expect(within(nav).getByRole('link', { name: t.navItems.review })).not.toHaveAttribute(
+        'aria-current',
+      );
+    }
+    expect(within(dock).getByRole('button', { name: t.navItems.more })).toHaveAttribute(
       'aria-current',
       'true',
     );
@@ -193,9 +208,10 @@ describe('rutas', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.questionBank.title }),
     ).toBeVisible();
-    const nav = screen.getByRole('navigation', { name: t.nav.label });
-    expect(nav).toHaveTextContent(t.navItems.bank);
-    expect(nav).not.toHaveTextContent(t.navItems.review);
+    for (const nav of screen.getAllByRole('navigation', { name: t.nav.label })) {
+      expect(nav).toHaveTextContent(t.navItems.bank);
+      expect(nav).not.toHaveTextContent(t.navItems.review);
+    }
     // Espera a que el banco demo termine de guardarse. Si la prueba acaba antes, la carga diferida
     // corre con el entorno ya cerrado y Vitest reporta un error de cierre intermitente (D-091)
     expect(
@@ -231,7 +247,8 @@ describe('rutas', () => {
 
 describe('rutas de las pantallas que se quitaron (B3)', () => {
   it.each([
-    ['/perfil', SCREENS.settings.path, t.screens.settings.title],
+    ['/perfil', SCREENS.settings.path, t.settings.heroTitle],
+    // Sin sesión, Progreso pinta su nombre con el aviso de entrar
     ['/planificador', SCREENS.progress.path, t.screens.progress.title],
     ['/logros', SCREENS.progress.path, t.screens.progress.title],
   ])('%s lleva a %s y reemplaza la entrada del historial', async (from, to, title) => {

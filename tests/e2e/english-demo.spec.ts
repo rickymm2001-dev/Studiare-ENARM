@@ -12,7 +12,14 @@ import { SCREENS } from '@/app/screens';
 import { examTotalMs } from '@/engines/exam';
 import { englishText } from '@/i18n/english';
 import { t } from '@/i18n/es-MX';
-import { statNumber, subscribeMonthly } from './support/b1';
+import {
+  bankCount,
+  chooseSimulatorMode,
+  examSetup,
+  expectSegment,
+  practiceSetup,
+  subscribeMonthly,
+} from './support/b1';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const practice = englishText.practice;
@@ -42,18 +49,19 @@ test('con el banco de demostración la tarjeta dice Sin textos y el examen compl
   await expect(card).not.toContainText(/vocabulario/i);
   await expect(card.getByRole('button', { name: practice.start })).toHaveCount(0);
   // La práctica en español no ofrece Inglés médico entre sus ramas
-  const spanish = page.getByRole('region', { name: t.simulator.setupTitle });
+  await chooseSimulatorMode(page, 'practice');
+  const spanish = practiceSetup(page);
   await expect(spanish.getByText(t.branchNames.medical_english as string)).toHaveCount(0);
+  // El banco demo, de la nota de las ramas. El examen reparte por rama y no la muestra
+  const bank = await bankCount(spanish);
 
   // El examen completo lleva la casilla de la parte en inglés, pero sin textos corre solo en español
-  const examCard = page.getByRole('region', { name: t.exam.cardTitle });
-  await expect(examCard.getByRole('combobox', { name: t.exam.size })).toHaveValue(
-    String(FULL_EXAM),
-  );
+  await chooseSimulatorMode(page, 'exam');
+  const examCard = examSetup(page);
+  await expectSegment(examCard, t.exam.size, t.exam.sizeOption(FULL_EXAM));
   await expect(examCard.getByRole('checkbox', { name: exam.include })).toBeChecked();
   await expect(examCard.getByText(exam.onlySpanish)).toBeVisible();
   await expect(examCard.getByText(/0 de 30 reactivos de inglés/)).toBeVisible();
-  const bank = await statNumber(page, t.simulator.stats.label, t.simulator.stats.bank);
   const total = Math.min(FULL_EXAM, bank);
   await expect(examCard.getByText(t.exam.timeTotal(examTotalMs(total)))).toBeVisible();
   await expect(examCard.getByText(/ en español y .* en inglés/)).toHaveCount(0);
@@ -65,10 +73,7 @@ test('con el banco de demostración la tarjeta dice Sin textos y el examen compl
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(page.getByText(t.exam.progress(1, total), { exact: true })).toBeVisible();
   await expect(page.getByText(englishText.reading.label, { exact: true })).toHaveCount(0);
-  const navigator = page
-    .locator('details')
-    .filter({ has: page.locator('summary', { hasText: t.exam.navigatorTitle }) });
-  await navigator.locator('summary').click();
+  const navigator = page.getByRole('region', { name: t.exam.navigatorTitle });
   await expect(navigator.locator('ol > li')).toHaveCount(total);
   await expect(navigator.locator('ol svg.lucide-languages')).toHaveCount(0);
   await expect(navigator.getByRole('button', { name: /, Inglés$/ })).toHaveCount(0);

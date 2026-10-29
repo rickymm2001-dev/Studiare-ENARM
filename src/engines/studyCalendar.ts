@@ -23,7 +23,8 @@
  *     calendario actualiza los eventos en vez de duplicarlos
  * Lo que no hace. No cambia lo que le toca repasar a nadie. Es un mapa, no una cola
  */
-import { addDays, daysBetween } from './studyDay';
+import type { AppEvent } from '@/data/schemas/events';
+import { addDays, daysBetween, studyDayOf } from './studyDay';
 
 /** Simuladores completos del final. La guía dice de 8 a 10, aquí el tope */
 export const FINAL_SIMULATOR_SUNDAYS = 10;
@@ -235,4 +236,165 @@ export function icsOf(events: readonly CalendarEvent[], now: Date): string {
   });
   lines.push('END:VCALENDAR');
   return `${lines.flatMap(fold).join('\r\n')}\r\n`;
+}
+
+/*
+ * Lo que el mes del Calendario rediseñado necesita además (D-150). Mover el mes, resumirlo, agrupar las
+ * sesiones hechas por día de estudio, encontrar el siguiente día cargado, poner los retos de Party en
+ * el día en que terminan y recorrer la rejilla con el teclado. Todo puro, sin fechas del sistema.
+ */
+
+export interface YearMonth {
+  year: number;
+  /** 1 a 12 */
+  month: number;
+}
+
+/** El mes que queda delta meses después, con el año corregido. delta negativo retrocede */
+export function shiftMonth(year: number, month: number, delta: number): YearMonth {
+  const index = year * 12 + (month - 1) + delta;
+  return { year: Math.floor(index / 12), month: (index % 12) + 1 };
+}
+
+/** El mes de un AAAA-MM-DD */
+export function yearMonthOf(day: string): YearMonth {
+  return { year: Number(day.slice(0, 4)), month: Number(day.slice(5, 7)) };
+}
+
+/** Primer y último día del mes, AAAA-MM-DD */
+export function monthBounds(year: number, month: number): { first: string; last: string } {
+  const pad = (n: number, size = 2) => String(n).padStart(size, '0');
+  const length = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return {
+    first: `${pad(year, 4)}-${pad(month)}-01`,
+    last: `${pad(year, 4)}-${pad(month)}-${pad(length)}`,
+  };
+}
+
+/** Una sesión que terminó, de session_ended, con el día de estudio en que cayó */
+export interface SessionDone {
+  day: string;
+  kind: 'review' | 'practice' | 'exam' | 'challenge';
+  items: number;
+  correct: number | null;
+  durationMs: number;
+  reason: 'completed' | 'abandoned';
+}
+
+/**
+ * Las sesiones terminadas agrupadas por su día de estudio, en el orden en que pasaron. Las de repaso
+ * también entran, quien pinta decide si las muestra, porque las tarjetas hechas ya las cuentan
+ */
+export function sessionsByDay(events: readonly AppEvent[]): Map<string, SessionDone[]> {
+  const byDay = new Map<string, SessionDone[]>();
+  for (const event of events) {
+    if (event.type !== 'session_ended') continue;
+    const day = studyDayOf(new Date(event.at), event.tz);
+    const list = byDay.get(day) ?? [];
+    list.push({
+      day,
+      kind: event.payload.kind,
+      items: event.payload.items,
+      correct: event.payload.correct,
+      durationMs: event.payload.durationMs,
+      reason: event.payload.reason,
+    });
+    byDay.set(day, list);
+  }
+  return byDay;
+}
+
+export interface MonthSummary {
+  /** Repasos y nuevas proyectados de hoy al fin del mes, hasta donde llega la proyección */
+  scheduled: number;
+  /** El día del mes con más carga proyectada desde hoy, o null si no hay carga */
+  busiest: { day: string; count: number } | null;
+  /** Sesiones terminadas en el mes hasta hoy, sin las de repaso */
+  sessionsDone: number;
+  /** false cuando la proyección no alcanza el fin del mes y por eso lo programado se queda corto */
+  forecastCovers: boolean;
+}
+
+/**
+ * Las cifras de la tarjeta Este mes. La proyección manda en lo programado y las sesiones en lo hecho.
+ * forecastEnd es el último día que la proyección alcanza, o null sin proyección
+ */
+export function monthSummary(input: {
+  year: number;
+  month: number;
+  today: string;
+  forecast: ReadonlyMap<string, number>;
+  forecastEnd: string | null;
+  sessions: ReadonlyMap<string, readonly SessionDone[]>;
+}): MonthSummary {
+  const { first, last } = monthBounds(input.year, input.month);
+  let scheduled = 0;
+  let busiest: MonthSummary['busiest'] = null;
+  for (const [day, count] of input.forecast) {
+    if (day < first || day > last || day < input.today || count <= 0) continue;
+    scheduled += count;
+    if (busiest === null || count > busiest.count) busiest = { day, count };
+  }
+  let sessionsDone = 0;
+  for (const [day, list] of input.sessions) {
+    if (day < first || day > last || day > input.today) continue;
+    sessionsDone += list.filter((session) => session.kind !== 'review').length;
+  }
+  // Un mes ya pasado no necesita proyección. Uno que sigue la necesita hasta su último día
+  const forecastCovers =
+    last < input.today || (input.forecastEnd !== null && input.forecastEnd >= last);
+  return { scheduled, busiest, sessionsDone, forecastCovers };
+}
+
+/** El día después de hoy con más carga proyectada. Con empate gana el más cercano. null sin carga */
+export function nextBusyDay(
+  forecast: ReadonlyMap<string, number>,
+  today: string,
+): { day: string; count: number } | null {
+  let best: { day: string; count: number } | null = null;
+  const days = [...forecast.keys()].sort();
+  for (const day of days) {
+    const count = forecast.get(day) ?? 0;
+    if (day <= today || count <= 0) continue;
+    if (best === null || count > best.count) best = { day, count };
+  }
+  return best;
+}
+
+/** Los retos agrupados por el día de estudio en que terminan, que es cuando cuentan en el mes */
+export function challengesByDay<T extends { endsAt: string }>(
+  challenges: readonly T[],
+  timeZone: string,
+): Map<string, T[]> {
+  const byDay = new Map<string, T[]>();
+  for (const challenge of challenges) {
+    const day = studyDayOf(new Date(challenge.endsAt), timeZone);
+    const list = byDay.get(day) ?? [];
+    list.push(challenge);
+    byDay.set(day, list);
+  }
+  return byDay;
+}
+
+/**
+ * A qué día pasa el foco con una tecla en la rejilla del mes. Flechas un día o una semana, Inicio y
+ * Fin al lunes y al domingo de la misma semana. null con cualquier otra tecla
+ */
+export function moveDayByKey(day: string, key: string): string | null {
+  switch (key) {
+    case 'ArrowLeft':
+      return addDays(day, -1);
+    case 'ArrowRight':
+      return addDays(day, 1);
+    case 'ArrowUp':
+      return addDays(day, -7);
+    case 'ArrowDown':
+      return addDays(day, 7);
+    case 'Home':
+      return addDays(day, -weekdayIndex(day));
+    case 'End':
+      return addDays(day, 6 - weekdayIndex(day));
+    default:
+      return null;
+  }
 }
