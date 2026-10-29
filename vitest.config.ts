@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
@@ -29,6 +29,10 @@ export default defineConfig({
       'tests/content/**/*.test.ts',
       'tests/integration/**/*.test.ts',
     ],
+    // Las pruebas de rendimiento (Buscar tarjetas y el índice de duplicados) miden milisegundos y en una
+    // máquina ocupada fallan sin que nada esté roto. Corren aparte con npm run test:perf
+    // (vitest.perf.config.ts) y en el CI no bloquean el pull request (V5-B0)
+    exclude: [...configDefaults.exclude, '**/*.performance.test.{ts,tsx}'],
     setupFiles: ['./tests/setup/vitest.setup.ts'],
     restoreMocks: true,
     coverage: {

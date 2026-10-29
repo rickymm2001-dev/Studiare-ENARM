@@ -1,7 +1,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { buildHeadersFile } from '../../src/config/csp.ts';
 import { applySiteMetadata, siteFiles } from '../site-files.ts';
 import { startPagesServer, type RunningPagesServer } from './local-pages.ts';
@@ -18,6 +18,12 @@ import {
   type SmokeReport,
   type SmokeArgs,
 } from './post-deploy.ts';
+
+// Las esperas entre reintentos de --strict se inyectan (NO_WAIT), así que nada aquí duerme de verdad.
+// Lo que sí cuesta es la red local: cada corrida hace una decena de peticiones HTTP al servidor que
+// imita a Pages y la de --strict hasta seis corridas. En una máquina ocupada eso pasa de los 5 segundos
+// por defecto sin que nada esté roto (V5-B0)
+vi.setConfig({ testTimeout: 60_000, hookTimeout: 60_000 });
 
 /** Salida capturada, para revisar qué imprime main sin ensuciar la consola de la prueba */
 function capture() {

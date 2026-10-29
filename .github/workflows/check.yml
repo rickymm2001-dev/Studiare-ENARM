@@ -69,6 +69,26 @@ jobs:
       - run: npm ci
       - run: npm run audit:high
 
+  # Pruebas de rendimiento (V5-B0). Miden milisegundos con un tope fijo, como Buscar tarjetas con 10,000
+  # y 50,000 tarjetas en menos de 100 ms o el índice de duplicados con 20,000 notas, y en una máquina
+  # ocupada fallan sin que nada esté roto. Por eso van fuera de npm run check y aquí con continue-on-error,
+  # para que midan la velocidad sin bloquear el pull request. Si fallan seguido en el CI, es señal de
+  # revisar el motor, no de subir el tope
+  perf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:perf
+
   # Pruebas de punta a punta en Chromium, en teléfono y escritorio, contra el build de producción y
   # con el proxy de IA en modo simulado (14.1). Los navegadores van dentro del proyecto (D-033)
   e2e:

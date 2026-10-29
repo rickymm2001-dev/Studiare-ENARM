@@ -80,7 +80,13 @@ describe('Medición de uso en Privacidad (B15, 1.2)', () => {
   it('los otros permisos no cambian cuando se toca este', async () => {
     const typing = userEvent.setup();
     const { api, user } = (app = await open());
-    await typing.click(await screen.findByRole('checkbox', { name: USAGE }, WAIT));
+    const usage = await screen.findByRole('checkbox', { name: USAGE }, WAIT);
+    // Las casillas se pintan deshabilitadas mientras los permisos se leen de la base, y un clic en una
+    // casilla deshabilitada no hace nada. En una máquina ocupada la lectura llega después del clic
+    await waitFor(() => {
+      expect(usage).toBeEnabled();
+    }, WAIT);
+    await typing.click(usage);
     await waitFor(async () => {
       expect((await currentConsents(api, user.id)).product_analytics).toBe(true);
     }, WAIT);
