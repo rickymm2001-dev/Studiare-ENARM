@@ -30,6 +30,22 @@ Actualizado el 25 de noviembre de 2026. Es el resumen ejecutivo del reporte comp
 - **Vigencia.** 4 años
 - **De paso.** Activa el Buzón Tributario antes del **31 de diciembre de 2026**. Desde 2027 la multa va de $3,850 a $11,540
 
+## 1b. Si vas a sucursal sin e.firma
+
+Búsqueda adicional del 25 de noviembre de 2026. Ir a sucursal **no elimina el requisito en BBVA, Banamex, Banorte ni Banregio**, porque su lista de documentos para persona moral incluye la e.firma sin importar el canal ([BBVA, requisitos Maestra Pyme](https://www.bbva.mx/empresas/landings/requisitos-cuenta-maestra-pyme.html)).
+
+| Banco en sucursal | ¿La lista pide e.firma? | Apertura mínima y costo | Fuente |
+|---|---|---|---|
+| **Scotiabank Cuenta Única Empresarial / Plus** | **No**, pide RFC y cédula fiscal, acta inscrita, poderes notariados, identificación de representantes y comprobante de domicilio | $10,000 de apertura. La versión Total PM aparece sin comisión de manejo | [Scotiabank Única Empresarial](https://www.scotiabank.com.mx/empresas-y-gobierno/cuentas-bancarias/cuenta-unica-empresarial.aspx), [Única Plus](https://www.scotiabank.com.mx/empresas-y-gobierno/cuentas-bancarias/cuenta-unica-plus.aspx) |
+| Santander PyME | No aparece en la lista de un tercero | $520 al mes de administración, salvo saldo alto | [Rankia](https://www.rankia.mx/blog/mejores-cuentas-mexico/3369854-mejores-cuentas-para-empresas-mexico) |
+| BanBajío Conecta | No aparece en la lista de un tercero | Saldo de $5,000 o $50,000 según versión | [Rankia BanBajío](https://www.rankia.mx/blog/mejores-certificados-deposito/2939910-banco-bajio-apertura-cuenta-tarjetas-credito-banca-electronica) |
+| HSBC, Afirme, Inbursa | Sin información pública | Caras para empresa sin ventas | Sin fuente |
+| BBVA, Banamex, Banorte, Banregio, Hey | **Sí** | | Ver tabla anterior |
+
+**Recomendación para sucursal sin e.firma.** **Scotiabank Cuenta Única** como primera opción, porque es la única con lista oficial sin e.firma y sin comisión fija en su versión Total PM. Lleva $10,000 para la apertura y pregunta si piden referencia o "conocimiento de firma" de otro banco, que una búsqueda mencionó sin confirmar. Si no te la abren, Santander es la segunda opción, aunque cuesta $520 al mes.
+
+**Lo que no cambia.** Vas a necesitar la e.firma de todos modos para facturar (CSD), para el Buzón Tributario y para cualquier crédito. Cuando la tengas, abre Hey Negocios para la tarjeta con garantía y el rendimiento.
+
 ## 2. Comparativo de las opciones que sí vale la pena considerar
 
 Calificación de 1 a 5 contra tus cuatro prioridades. Las cifras vienen del reporte completo y la mayoría hay que confirmarlas en el folleto vigente.
